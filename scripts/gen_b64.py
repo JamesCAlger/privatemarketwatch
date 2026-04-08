@@ -1,0 +1,1 @@
+import base64,sys; sys.stdout.buffer.write(base64.b64encode(sys.stdin.buffer.read()))

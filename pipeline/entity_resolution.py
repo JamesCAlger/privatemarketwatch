@@ -1,0 +1,733 @@
+"""Entity resolution for private markets holdings.
+
+Maps each issuer_name variant to a canonical entity_id and canonical_name,
+enabling cross-filer and cross-source entity counting.
+
+Pipeline:
+  1. Build variant table (DuckDB GROUP BY on 1.3M holdings)
+  2. Extract company names (Python regex on 273K variant rows)
+  3. Normalise names (Python on 273K rows)
+  4. Exact dedup (group by normalised name -> ~55-65K entities)
+  5. Fuzzy clustering (rapidfuzz within-source, threshold 85)
+  6. Cross-source linking (fuzzy match BDC vs N-PORT, threshold 80)
+  7. Write entity_lookup.csv and enrich private_markets_holdings.csv
+"""
+
+import logging
+import re
+import time
+from collections import defaultdict
+from pathlib import Path
+from typing import Optional
+
+import duckdb
+import pandas as pd
+from rapidfuzz import fuzz
+
+from pipeline.config import (
+    ENTITY_LOOKUP_FILE,
+    ENTITY_STATS_FILE,
+    UNIFIED_HOLDINGS_FILE,
+)
+from pipeline.utils import UnionFind
+
+logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Step 1: Name extraction
+# ---------------------------------------------------------------------------
+
+# Tier 1: Legal suffixes (preferred cutoff point)
+_LEGAL_SUFFIX_RE = re.compile(
+    r"(?i)(?:"
+    r"\b(?:incorporated|corporation)\b"
+    r"|,?\s*inc\.?,?"
+    r"|,?\s*(?:l\.?l\.?c\.?)\b"
+    r"|,?\s*corp\.?,?"
+    r"|,?\s*ltd\.?,?"
+    r"|,?\s*l\.p\.?,?"
+    r"|,?\s*\blp\b"
+    r"|,?\s*co\.\s?"
+    r"|\b(?:plc|s\.a\.|n\.v\.|gmbh|ag|b\.v\.|s\.r\.l\.|s\.a\.r\.l\.|pty|s\.a\.s)\b"
+    r")"
+)
+
+# Tier 2: Generic markers (fallback if no legal suffix)
+_GENERIC_MARKER_RE = re.compile(r"(?i)\b(?:holdings|group)\b")
+
+# N-PORT facility suffixes to strip
+_NPORT_FACILITY_RE = re.compile(
+    r"\s+(?:T/?L|DL|REVOLVER|REV|RC|RCF|DD)\b.*$", re.IGNORECASE
+)
+_NPORT_TRAILING_SLASH = re.compile(r"\s*/\s*$")
+
+# Metadata blob keywords
+_METADATA_KEYWORDS = ["investment type", "interest rate", "maturity date"]
+
+# Leading "Investment," prefix pattern
+_INVESTMENT_PREFIX_RE = re.compile(
+    r"^Investment,\s*(?:Non-Affiliated Issuer|Affiliated Issuer|Control Investment)"
+    r"(?:,\s*(?:First Lien Debt|Second Lien Debt|Subordinated Debt|Unsecured Debt"
+    r"|Equity|Preferred Equity|Common Equity|Warrant|Fund Investment"
+    r"|[^,]+?Debt|[^,]+?Equity|[^,]+?Loan|[^,]+?Note))?[,;]\s*",
+    re.IGNORECASE,
+)
+
+# Trailing number/parenthetical: " 1", " 2", " (1)", " (2)"
+_TRAILING_NUMBER_RE = re.compile(r"\s+(?:\d+|\(\d+\))\s*$")
+
+
+def extract_company_name(issuer_name: str, source: str = "bdc") -> str:
+    """Extract the real company name from a polluted issuer_name string.
+
+    For BDC names: cuts after the first legal suffix (Inc., LLC, etc.)
+    or generic marker (Holdings, Group). Handles metadata blobs and
+    "Investment," prefixes.
+
+    For N-PORT names: strips facility suffixes (TL, REVOLVER, etc.)
+    and trailing slashes.
+    """
+    if not issuer_name or not isinstance(issuer_name, str):
+        return ""
+
+    name = issuer_name.strip()
+    if not name:
+        return ""
+
+    if source == "nport":
+        return _extract_nport_name(name)
+    return _extract_bdc_name(name)
+
+
+def _extract_nport_name(name: str) -> str:
+    """Extract company name from N-PORT issuer_name."""
+    # Strip facility suffixes: "FINASTRA USA INC TL 1L VISTA /" -> "FINASTRA USA INC"
+    # First try legal suffix cutoff (many N-PORT names have Inc/LLC)
+    m = _LEGAL_SUFFIX_RE.search(name)
+    if m:
+        extracted = name[: m.end()].strip().rstrip(",")
+        if len(extracted) >= 2:
+            return extracted
+
+    # Strip facility suffixes
+    cleaned = _NPORT_FACILITY_RE.sub("", name)
+    # Strip trailing slash
+    cleaned = _NPORT_TRAILING_SLASH.sub("", cleaned)
+    # Strip trailing whitespace and common delimiters
+    cleaned = cleaned.strip().rstrip("-/|,")
+    return cleaned.strip() if cleaned.strip() else name
+
+
+def _extract_bdc_name(name: str) -> str:
+    """Extract company name from BDC issuer_name."""
+    # Phase 1: Handle "Investment," prefix
+    inv_match = _INVESTMENT_PREFIX_RE.match(name)
+    if inv_match:
+        name = name[inv_match.end():].strip()
+        if not name:
+            return issuer_name_fallback(name)
+
+    # Phase 2: Check for metadata blob
+    name_lower = name.lower()
+    is_blob = any(kw in name_lower for kw in _METADATA_KEYWORDS)
+
+    if is_blob:
+        # Find legal suffix in blob and extract name ending there
+        m = _LEGAL_SUFFIX_RE.search(name)
+        if m:
+            extracted = name[: m.end()].strip().rstrip(",")
+            # Walk backward from the suffix to find name start
+            # (skip past any leading metadata like "Software Zendesk")
+            # Heuristic: if there's a repeated word before the suffix,
+            # start from the second occurrence
+            if len(extracted) >= 2:
+                return _strip_trailing_number(extracted)
+        # No legal suffix in blob -- return as-is (rare)
+        return _strip_trailing_number(name)
+
+    # Phase 3: Tier 1 -- legal suffix cutoff
+    m = _LEGAL_SUFFIX_RE.search(name)
+    if m:
+        extracted = name[: m.end()].strip().rstrip(",")
+        if len(extracted) >= 2:
+            return _strip_trailing_number(extracted)
+
+    # Phase 4: Tier 2 -- generic marker cutoff (Holdings, Group)
+    m = _GENERIC_MARKER_RE.search(name)
+    if m:
+        extracted = name[: m.end()].strip().rstrip(",")
+        if len(extracted) >= 2:
+            return _strip_trailing_number(extracted)
+
+    # Phase 5: No marker found -- return as-is (stripped of trailing numbers)
+    return _strip_trailing_number(name)
+
+
+def _strip_trailing_number(name: str) -> str:
+    """Strip trailing ` 1`, ` 2`, ` (1)` etc. from extracted names."""
+    return _TRAILING_NUMBER_RE.sub("", name).strip()
+
+
+def issuer_name_fallback(name: str) -> str:
+    """Fallback for empty extraction result."""
+    return name.strip() if name else ""
+
+
+# ---------------------------------------------------------------------------
+# Step 2: Normalisation
+# ---------------------------------------------------------------------------
+
+_LEGAL_SUFFIXES_NORM = [
+    " incorporated", " corporation", " limited",
+    " inc", " llc", " l.l.c.", " corp", " ltd",
+    " l.p.", " lp", " co.",
+    " plc", " s.a.", " n.v.", " gmbh", " ag",
+    " b.v.", " s.r.l.", " s.a.r.l.", " pty", " s.a.s",
+    " holdings", " group",
+]
+
+_PARENTHETICAL_RE = re.compile(r"\([^)]*\)")
+_PUNCTUATION_RE = re.compile(r"[^a-z0-9\s]")
+_WHITESPACE_RE = re.compile(r"\s+")
+_LEADING_THE_RE = re.compile(r"^the\s+")
+
+
+def normalise_entity_name(name: str) -> str:
+    """Normalise a company name for exact dedup matching.
+
+    Steps:
+      1. Lowercase
+      2. Remove parenthetical content
+      3. Strip legal suffixes
+      4. Remove all punctuation
+      5. Collapse whitespace
+      6. Strip leading "the "
+    """
+    if not name or not isinstance(name, str):
+        return ""
+
+    n = name.lower().strip()
+    # Remove parenthetical content
+    n = _PARENTHETICAL_RE.sub("", n)
+    # Strip legal suffixes (iterate in order, longest first handled by list)
+    for suffix in _LEGAL_SUFFIXES_NORM:
+        n = n.replace(suffix, "")
+    # Remove punctuation
+    n = _PUNCTUATION_RE.sub("", n)
+    # Collapse whitespace
+    n = _WHITESPACE_RE.sub(" ", n).strip()
+    # Strip leading "the "
+    n = _LEADING_THE_RE.sub("", n)
+    return n
+
+
+# ---------------------------------------------------------------------------
+# Step 3: Exact dedup
+# ---------------------------------------------------------------------------
+
+def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
+    """Build variant table from unified holdings using DuckDB.
+
+    Groups by (issuer_name, source) and aggregates occurrence count,
+    first non-null CUSIP and LEI.
+
+    Returns a DataFrame with columns:
+      issuer_name, source, occurrence_count, cusip, lei
+    """
+    con = duckdb.connect()
+    try:
+        df = con.execute("""
+            SELECT
+                issuer_name,
+                source,
+                COUNT(*) as occurrence_count,
+                FIRST(cusip) FILTER (
+                    WHERE cusip IS NOT NULL AND cusip <> ''
+                ) as cusip,
+                FIRST(lei) FILTER (
+                    WHERE lei IS NOT NULL AND lei <> ''
+                ) as lei
+            FROM read_csv_auto(?, header=true, all_varchar=true)
+            WHERE issuer_name IS NOT NULL AND issuer_name <> ''
+            GROUP BY issuer_name, source
+            ORDER BY occurrence_count DESC
+        """, [str(holdings_path)]).fetchdf()
+    finally:
+        con.close()
+
+    df["occurrence_count"] = df["occurrence_count"].astype(int)
+    return df
+
+
+def _exact_dedup(variants: pd.DataFrame) -> pd.DataFrame:
+    """Group variants by normalised name and assign entity IDs.
+
+    Adds columns: extracted_name, normalized_name, entity_num, canonical_name
+    """
+    # Apply extraction and normalisation (Python on ~273K rows)
+    variants = variants.copy()
+    variants["extracted_name"] = [
+        extract_company_name(row["issuer_name"], row["source"])
+        for _, row in variants.iterrows()
+    ]
+    variants["normalized_name"] = variants["extracted_name"].apply(
+        normalise_entity_name
+    )
+
+    # Group by normalized_name: assign entity_num and pick canonical
+    # Canonical = extracted_name with highest occurrence_count, preferring
+    # names with a legal suffix
+    grouped = (
+        variants.groupby("normalized_name", sort=True)
+        .apply(_pick_canonical, include_groups=False)
+        .reset_index()
+        .rename(columns={0: "canonical_name"})
+    )
+    grouped["entity_num"] = range(1, len(grouped) + 1)
+
+    # Merge back
+    variants = variants.merge(
+        grouped[["normalized_name", "entity_num", "canonical_name"]],
+        on="normalized_name",
+        how="left",
+    )
+
+    return variants
+
+
+def _pick_canonical(group: pd.DataFrame) -> str:
+    """Pick the best canonical name from a group of variants."""
+    # Prefer names with legal suffixes
+    has_suffix = group["extracted_name"].apply(
+        lambda n: bool(_LEGAL_SUFFIX_RE.search(n)) if isinstance(n, str) else False
+    )
+    candidates = group[has_suffix] if has_suffix.any() else group
+    # Among candidates, pick highest occurrence_count
+    best_idx = candidates["occurrence_count"].idxmax()
+    return candidates.at[best_idx, "extracted_name"]
+
+
+# ---------------------------------------------------------------------------
+# Step 4: Fuzzy clustering
+# ---------------------------------------------------------------------------
+
+def _fuzzy_cluster(
+    variants: pd.DataFrame,
+    threshold: int = 85,
+    max_block_size: int = 500,
+) -> pd.DataFrame:
+    """Merge entities with similar normalised names using fuzzy matching.
+
+    Blocking: first 4 chars of normalized_name.
+    Matching: rapidfuzz.fuzz.token_sort_ratio >= threshold.
+    Clustering: Union-Find (connected components).
+    """
+    if len(variants) <= 1:
+        return variants
+
+    # Build entity-level table: one row per (normalized_name, entity_num)
+    entity_df = (
+        variants.groupby("entity_num")
+        .agg(
+            normalized_name=("normalized_name", "first"),
+            canonical_name=("canonical_name", "first"),
+            total_count=("occurrence_count", "sum"),
+            source=("source", "first"),
+        )
+        .reset_index()
+    )
+
+    if len(entity_df) <= 1:
+        return variants
+
+    # Build blocks by first 4 chars
+    entity_df["block_key"] = entity_df["normalized_name"].str[:4]
+    blocks = entity_df.groupby("block_key")["entity_num"].apply(list).to_dict()
+
+    uf = UnionFind()
+    comparisons = 0
+    merges = 0
+
+    for block_key, members in blocks.items():
+        if len(members) <= 1:
+            continue
+        if len(members) > max_block_size:
+            continue  # Skip oversized blocks
+
+        # Get normalized names for this block
+        block_data = entity_df[entity_df["entity_num"].isin(members)]
+        names = dict(zip(block_data["entity_num"], block_data["normalized_name"]))
+
+        member_list = list(names.keys())
+        for i in range(len(member_list)):
+            for j in range(i + 1, len(member_list)):
+                a, b = member_list[i], member_list[j]
+                comparisons += 1
+                score = fuzz.token_sort_ratio(names[a], names[b])
+                if score >= threshold:
+                    uf.union(a, b)
+                    merges += 1
+
+    if merges == 0:
+        return variants
+
+    logger.info("  Fuzzy clustering: %d comparisons, %d merges", comparisons, merges)
+
+    # Remap entity_nums: all members of a component get the same entity_num
+    components = uf.components()
+    remap = {}
+    for root, members in components.items():
+        if len(members) <= 1:
+            continue
+        # Pick canonical: member with highest total_count, prefer legal suffix
+        member_data = entity_df[entity_df["entity_num"].isin(members)]
+        has_suffix = member_data["canonical_name"].apply(
+            lambda n: bool(_LEGAL_SUFFIX_RE.search(n)) if isinstance(n, str) else False
+        )
+        candidates = member_data[has_suffix] if has_suffix.any() else member_data
+        best_idx = candidates["total_count"].idxmax()
+        best_num = candidates.at[best_idx, "entity_num"]
+        best_name = candidates.at[best_idx, "canonical_name"]
+
+        for m in members:
+            if m != best_num:
+                remap[m] = (best_num, best_name)
+
+    # Apply remap to variants
+    variants = variants.copy()
+    for old_num, (new_num, new_name) in remap.items():
+        mask = variants["entity_num"] == old_num
+        variants.loc[mask, "entity_num"] = new_num
+        variants.loc[mask, "canonical_name"] = new_name
+        variants.loc[mask, "cluster_method"] = "fuzzy"
+
+    return variants
+
+
+# ---------------------------------------------------------------------------
+# Step 5: Cross-source linking
+# ---------------------------------------------------------------------------
+
+def _cross_source_link(
+    variants: pd.DataFrame,
+    threshold: int = 80,
+    max_block_size: int = 500,
+) -> pd.DataFrame:
+    """Link entities across BDC and N-PORT sources.
+
+    1. Structured ID matching (CUSIP, LEI)
+    2. Fuzzy name matching (block by first 4 chars, lower threshold)
+    """
+    # Entity-level aggregation with source info
+    entity_df = (
+        variants.groupby("entity_num")
+        .agg(
+            normalized_name=("normalized_name", "first"),
+            canonical_name=("canonical_name", "first"),
+            total_count=("occurrence_count", "sum"),
+            sources=("source", lambda x: set(x)),
+            cusip=("cusip", lambda x: next((v for v in x if pd.notna(v) and v != ""), None)),
+            lei=("lei", lambda x: next((v for v in x if pd.notna(v) and v != ""), None)),
+        )
+        .reset_index()
+    )
+
+    # Separate BDC-only and NPORT-only entities
+    bdc_only = entity_df[entity_df["sources"].apply(lambda s: s == {"bdc"})].copy()
+    nport_only = entity_df[entity_df["sources"].apply(lambda s: s == {"nport"})].copy()
+
+    if bdc_only.empty or nport_only.empty:
+        return variants
+
+    uf = UnionFind()
+    merges = 0
+
+    # Phase 1: Structured ID matching (CUSIP, LEI)
+    # Build lookup from NPORT structured IDs
+    cusip_to_nport = {}
+    lei_to_nport = {}
+    for _, row in nport_only.iterrows():
+        if row["cusip"] and pd.notna(row["cusip"]):
+            cusip_to_nport[row["cusip"]] = row["entity_num"]
+        if row["lei"] and pd.notna(row["lei"]):
+            lei_to_nport[row["lei"]] = row["entity_num"]
+
+    for _, row in bdc_only.iterrows():
+        if row["cusip"] and pd.notna(row["cusip"]) and row["cusip"] in cusip_to_nport:
+            uf.union(row["entity_num"], cusip_to_nport[row["cusip"]])
+            merges += 1
+        if row["lei"] and pd.notna(row["lei"]) and row["lei"] in lei_to_nport:
+            uf.union(row["entity_num"], lei_to_nport[row["lei"]])
+            merges += 1
+
+    # Phase 2: Fuzzy name matching (blocked by first 4 chars)
+    bdc_only["block_key"] = bdc_only["normalized_name"].str[:4]
+    nport_only["block_key"] = nport_only["normalized_name"].str[:4]
+
+    # Build block index for NPORT
+    nport_blocks = defaultdict(list)
+    for _, row in nport_only.iterrows():
+        nport_blocks[row["block_key"]].append(
+            (row["entity_num"], row["normalized_name"])
+        )
+
+    comparisons = 0
+    for _, bdc_row in bdc_only.iterrows():
+        bk = bdc_row["block_key"]
+        if bk not in nport_blocks:
+            continue
+        nport_in_block = nport_blocks[bk]
+        if len(nport_in_block) > max_block_size:
+            continue
+
+        for nport_num, nport_name in nport_in_block:
+            comparisons += 1
+            score = fuzz.token_sort_ratio(
+                bdc_row["normalized_name"], nport_name
+            )
+            if score >= threshold:
+                uf.union(bdc_row["entity_num"], nport_num)
+                merges += 1
+
+    if merges == 0:
+        return variants
+
+    logger.info(
+        "  Cross-source linking: %d comparisons, %d merges",
+        comparisons, merges,
+    )
+
+    # Apply remap
+    components = uf.components()
+    remap = {}
+    for root, members in components.items():
+        if len(members) <= 1:
+            continue
+        # Pick canonical from higher-count member
+        member_data = entity_df[entity_df["entity_num"].isin(members)]
+        has_suffix = member_data["canonical_name"].apply(
+            lambda n: bool(_LEGAL_SUFFIX_RE.search(n)) if isinstance(n, str) else False
+        )
+        candidates = member_data[has_suffix] if has_suffix.any() else member_data
+        best_idx = candidates["total_count"].idxmax()
+        best_num = candidates.at[best_idx, "entity_num"]
+        best_name = candidates.at[best_idx, "canonical_name"]
+
+        for m in members:
+            if m != best_num:
+                remap[m] = (best_num, best_name)
+
+    variants = variants.copy()
+    for old_num, (new_num, new_name) in remap.items():
+        mask = variants["entity_num"] == old_num
+        variants.loc[mask, "entity_num"] = new_num
+        variants.loc[mask, "canonical_name"] = new_name
+        variants.loc[mask, "cluster_method"] = "cross_source"
+
+    return variants
+
+
+# ---------------------------------------------------------------------------
+# Step 6: Output
+# ---------------------------------------------------------------------------
+
+def _format_entity_id(num: int) -> str:
+    """Format entity number as ENT-00000001."""
+    return f"ENT-{num:08d}"
+
+
+def _write_entity_lookup(variants: pd.DataFrame, output_path: Path) -> None:
+    """Write entity_lookup.csv from the variant table."""
+    out = pd.DataFrame({
+        "entity_id": variants["entity_num"].apply(_format_entity_id),
+        "canonical_name": variants["canonical_name"],
+        "normalized_name": variants["normalized_name"],
+        "issuer_name_variant": variants["issuer_name"],
+        "source": variants["source"],
+        "occurrence_count": variants["occurrence_count"],
+        "cluster_method": variants.get("cluster_method", "exact"),
+        "cusip": variants["cusip"].fillna(""),
+        "lei": variants["lei"].fillna(""),
+    })
+    out.to_csv(output_path, index=False)
+    logger.info("Wrote entity lookup: %s (%d rows)", output_path.name, len(out))
+
+
+def _write_stats(variants: pd.DataFrame, output_path: Path) -> None:
+    """Write entity_resolution_stats.csv."""
+    total_variants = len(variants)
+    total_entities = variants["entity_num"].nunique()
+    bdc_variants = (variants["source"] == "bdc").sum()
+    nport_variants = (variants["source"] == "nport").sum()
+
+    bdc_entities = variants[variants["source"] == "bdc"]["entity_num"].nunique()
+    nport_entities = variants[variants["source"] == "nport"]["entity_num"].nunique()
+
+    # Count cross-source entities (entity_num appears in both sources)
+    source_per_entity = variants.groupby("entity_num")["source"].apply(set)
+    cross_source_count = (source_per_entity.apply(len) > 1).sum()
+
+    fuzzy_merges = (variants.get("cluster_method", pd.Series(dtype=str)) == "fuzzy").sum()
+    cross_source_merges = (variants.get("cluster_method", pd.Series(dtype=str)) == "cross_source").sum()
+
+    stats = pd.DataFrame([{
+        "total_variants": total_variants,
+        "total_entities": total_entities,
+        "bdc_variants": bdc_variants,
+        "nport_variants": nport_variants,
+        "bdc_entities": bdc_entities,
+        "nport_entities": nport_entities,
+        "cross_source_entities": cross_source_count,
+        "fuzzy_merges": fuzzy_merges,
+        "cross_source_merges": cross_source_merges,
+    }])
+    stats.to_csv(output_path, index=False)
+    logger.info("Wrote stats: %s", output_path.name)
+
+
+def _enrich_holdings(
+    holdings_path: Path,
+    lookup_path: Path,
+    output_path: Optional[Path] = None,
+) -> None:
+    """Join entity_id and canonical_name onto the holdings CSV using DuckDB."""
+    if output_path is None:
+        output_path = holdings_path
+
+    con = duckdb.connect()
+    try:
+        # Read both CSVs
+        holdings_str = str(holdings_path).replace("\\", "/")
+        lookup_str = str(lookup_path).replace("\\", "/")
+        output_str = str(output_path).replace("\\", "/")
+
+        con.execute(f"""
+            COPY (
+                SELECT h.*,
+                       COALESCE(e.entity_id, '') as entity_id,
+                       COALESCE(e.canonical_name, '') as canonical_name
+                FROM read_csv_auto('{holdings_str}', header=true, all_varchar=true) h
+                LEFT JOIN read_csv_auto('{lookup_str}', header=true, all_varchar=true) e
+                  ON h.issuer_name = e.issuer_name_variant
+                  AND h.source = e.source
+            ) TO '{output_str}' (HEADER, DELIMITER ',')
+        """)
+    finally:
+        con.close()
+
+    logger.info("Enriched holdings written to %s", output_path.name)
+
+
+# ---------------------------------------------------------------------------
+# Public entry point
+# ---------------------------------------------------------------------------
+
+def build_entity_lookup(
+    holdings_path: Optional[Path] = None,
+    fuzzy_threshold: int = 85,
+    cross_source_threshold: int = 80,
+    enrich: bool = True,
+) -> pd.DataFrame:
+    """Build the entity lookup table from unified holdings.
+
+    Args:
+        holdings_path: Path to private_markets_holdings.csv.
+            Defaults to UNIFIED_HOLDINGS_FILE.
+        fuzzy_threshold: Similarity threshold for within-source fuzzy matching.
+        cross_source_threshold: Similarity threshold for cross-source linking.
+        enrich: If True, join entity_id/canonical_name onto holdings CSV.
+
+    Returns:
+        The entity lookup DataFrame.
+    """
+    t0 = time.time()
+    if holdings_path is None:
+        holdings_path = UNIFIED_HOLDINGS_FILE
+
+    logger.info("=" * 60)
+    logger.info("ENTITY RESOLUTION")
+    logger.info("=" * 60)
+    logger.info("Input: %s", holdings_path.name)
+
+    # Step 1: Build variant table
+    logger.info("")
+    logger.info("Step 1: Building variant table...")
+    t1 = time.time()
+    variants = _build_variant_table(holdings_path)
+    logger.info(
+        "  %d unique (issuer_name, source) pairs in %.1f s",
+        len(variants), time.time() - t1,
+    )
+
+    # Step 2-3: Exact dedup (includes name extraction + normalisation)
+    logger.info("")
+    logger.info("Step 2-3: Name extraction + exact dedup...")
+    t2 = time.time()
+    variants = _exact_dedup(variants)
+    # Initialize cluster_method
+    if "cluster_method" not in variants.columns:
+        variants["cluster_method"] = "exact"
+    else:
+        variants["cluster_method"] = variants["cluster_method"].fillna("exact")
+    entity_count_exact = variants["entity_num"].nunique()
+    logger.info(
+        "  %d provisional entities (exact dedup) in %.1f s",
+        entity_count_exact, time.time() - t2,
+    )
+
+    # Step 4: Fuzzy clustering
+    logger.info("")
+    logger.info("Step 4: Fuzzy clustering (threshold=%d)...", fuzzy_threshold)
+    t3 = time.time()
+    variants = _fuzzy_cluster(variants, threshold=fuzzy_threshold)
+    entity_count_fuzzy = variants["entity_num"].nunique()
+    logger.info(
+        "  %d entities after fuzzy merge (%d merged) in %.1f s",
+        entity_count_fuzzy,
+        entity_count_exact - entity_count_fuzzy,
+        time.time() - t3,
+    )
+
+    # Step 5: Cross-source linking
+    logger.info("")
+    logger.info("Step 5: Cross-source linking (threshold=%d)...", cross_source_threshold)
+    t4 = time.time()
+    variants = _cross_source_link(variants, threshold=cross_source_threshold)
+    entity_count_final = variants["entity_num"].nunique()
+    logger.info(
+        "  %d entities after cross-source linking (%d merged) in %.1f s",
+        entity_count_final,
+        entity_count_fuzzy - entity_count_final,
+        time.time() - t4,
+    )
+
+    # Renumber entity_nums to be consecutive
+    unique_nums = sorted(variants["entity_num"].unique())
+    num_remap = {old: new for new, old in enumerate(unique_nums, 1)}
+    variants["entity_num"] = variants["entity_num"].map(num_remap)
+
+    # Step 6: Write outputs
+    logger.info("")
+    logger.info("Step 6: Writing outputs...")
+    _write_entity_lookup(variants, ENTITY_LOOKUP_FILE)
+    _write_stats(variants, ENTITY_STATS_FILE)
+
+    # Enrich holdings
+    if enrich:
+        logger.info("")
+        logger.info("Step 7: Enriching holdings...")
+        t5 = time.time()
+        # Write to temp file then replace (avoid reading and writing same file)
+        import tempfile
+        tmp_path = holdings_path.parent / f".{holdings_path.name}.tmp"
+        _enrich_holdings(holdings_path, ENTITY_LOOKUP_FILE, tmp_path)
+        tmp_path.replace(holdings_path)
+        logger.info("  Enriched in %.1f s", time.time() - t5)
+
+    elapsed = time.time() - t0
+    logger.info("")
+    logger.info("Entity resolution complete in %.1f s", elapsed)
+    logger.info("  Total variants: %d", len(variants))
+    logger.info("  Total entities: %d", entity_count_final)
+
+    return variants

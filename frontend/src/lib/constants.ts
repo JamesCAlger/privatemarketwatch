@@ -1,0 +1,46 @@
+export const SITE_NAME = 'Evergreen Private Markets Index';
+export const SITE_DESCRIPTION =
+  'The definitive benchmarks for the evergreen fund universe -- BDCs, interval funds, and tender offer funds -- the registered vehicles bringing private markets to wealth management.';
+
+export interface IndexMeta {
+  key: string;
+  name: string;
+  shortName: string;
+  slug: string;
+  color: string;       // hex
+  tailwindColor: string;
+  description: string;
+}
+
+export const INDICES: IndexMeta[] = [
+  {
+    key: 'DIRECT_LENDING',
+    name: 'Direct Lending Index',
+    shortName: 'Direct Lending',
+    slug: 'direct-lending',
+    color: '#2A9D8F',
+    tailwindColor: 'text-teal',
+    description:
+      'The largest position-level benchmark for middle-market direct lending.',
+  },
+  {
+    key: 'DIRECT_EQUITY',
+    name: 'Direct Equity Index',
+    shortName: 'Direct Equity',
+    slug: 'direct-equity',
+    color: '#E76F51',
+    tailwindColor: 'text-orange-600',
+    description:
+      'Direct equity co-investments and minority stakes in private companies, held by registered closed-end vehicles.',
+  },
+  // Private Credit Fund and Private Equity Fund indices hidden for now
+  // (fund-of-fund allocations include leverage effects)
+];
+
+export function getIndexBySlug(slug: string): IndexMeta | undefined {
+  return INDICES.find((i) => i.slug === slug);
+}
+
+export function getIndexByKey(key: string): IndexMeta | undefined {
+  return INDICES.find((i) => i.key === key);
+}

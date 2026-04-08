@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+*.egg
+dist/
+build/
+venv/
+.venv/
+
+# Environment
+.env
+.env.local
+
+# Data (large SEC filings and pipeline outputs)
+data/raw/
+data/output/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Claude
+.claude/
+
+# Misc scratch files
+_audit_*.py
+analysis_full.py
+gen_script.py
