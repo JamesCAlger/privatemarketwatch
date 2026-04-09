@@ -133,16 +133,16 @@ export default function HomePage() {
                     <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
                       Level
                     </th>
-                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
+                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider w-[10%]">
                       QoQ
                     </th>
-                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
+                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider w-[10%]">
                       12M
                     </th>
-                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
+                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider w-[10%]">
                       YTD
                     </th>
-                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
+                    <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider whitespace-nowrap w-[10%]">
                       Since Inception
                     </th>
                     <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
