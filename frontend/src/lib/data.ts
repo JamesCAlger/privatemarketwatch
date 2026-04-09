@@ -7,6 +7,8 @@ import type {
   SectorBreakdownData,
   VehicleContributionData,
   PortfolioCharacteristics,
+  ConcentrationData,
+  ConcentrationCurveData,
   Metadata,
 } from './types';
 
@@ -42,6 +44,90 @@ export function getPortfolioCharacteristics(): PortfolioCharacteristics {
   return readJson<PortfolioCharacteristics>('portfolio_characteristics.json');
 }
 
+export function getManagerConcentration(): ConcentrationData {
+  return readJson<ConcentrationData>('manager_concentration.json');
+}
+
+export function getVehicleConcentration(): ConcentrationData {
+  return readJson<ConcentrationData>('vehicle_concentration.json');
+}
+
+export function getInvesteeConcentration(): ConcentrationData {
+  return readJson<ConcentrationData>('investee_concentration.json');
+}
+
+export function getPositionConcentration(): ConcentrationData {
+  return readJson<ConcentrationData>('position_concentration.json');
+}
+
+export function getConcentrationCurve(): ConcentrationCurveData {
+  return readJson<ConcentrationCurveData>('concentration_curve.json');
+}
+
 export function getMetadata(): Metadata {
   return readJson<Metadata>('metadata.json');
+}
+
+/** Merge concentration rows across indices, re-ranking top 10 + Other. */
+export function combineConcentration(
+  data: ConcentrationData,
+  indices: string[],
+): import('./types').ConcentrationRow[] {
+  // Aggregate by name across requested indices
+  const byName = new Map<string, { totalFv: number; positionCount: number; fundCount: number }>();
+  for (const idx of indices) {
+    for (const row of data[idx] ?? []) {
+      const existing = byName.get(row.name);
+      if (existing) {
+        existing.totalFv += row.totalFv;
+        existing.positionCount += row.positionCount;
+        existing.fundCount = Math.max(existing.fundCount, row.fundCount ?? 0);
+      } else {
+        byName.set(row.name, {
+          totalFv: row.totalFv,
+          positionCount: row.positionCount,
+          fundCount: row.fundCount ?? 0,
+        });
+      }
+    }
+  }
+
+  // Pull out any pre-existing "Other" bucket from source data so it doesn't
+  // compete for a top-10 slot — it will be merged into the final "Other".
+  const otherEntry = byName.get('Other');
+  byName.delete('Other');
+
+  const sorted = [...byName.entries()]
+    .sort((a, b) => b[1].totalFv - a[1].totalFv);
+
+  const totalFv = sorted.reduce((s, [, v]) => s + v.totalFv, 0)
+    + (otherEntry?.totalFv ?? 0);
+  const top10 = sorted.slice(0, 10);
+  const rest = sorted.slice(10);
+
+  const rows: import('./types').ConcentrationRow[] = top10.map(([name, v]) => ({
+    name,
+    totalFv: v.totalFv,
+    pctOfIndex: totalFv > 0 ? v.totalFv / totalFv : 0,
+    positionCount: v.positionCount,
+    fundCount: v.fundCount,
+  }));
+
+  // Combine leftover named entries + the pre-existing "Other" bucket
+  let otherFv = rest.reduce((s, [, v]) => s + v.totalFv, 0);
+  let otherPos = rest.reduce((s, [, v]) => s + v.positionCount, 0);
+  if (otherEntry) {
+    otherFv += otherEntry.totalFv;
+    otherPos += otherEntry.positionCount;
+  }
+  if (otherFv > 0) {
+    rows.push({
+      name: 'Other',
+      totalFv: otherFv,
+      pctOfIndex: totalFv > 0 ? otherFv / totalFv : 0,
+      positionCount: otherPos,
+    });
+  }
+
+  return rows;
 }

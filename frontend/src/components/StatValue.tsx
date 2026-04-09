@@ -18,7 +18,7 @@ export default function StatValue({
       <p className="text-xs text-muted mb-0.5">{label}</p>
       <p
         className={`font-bold text-navy tabular-nums ${
-          size === 'lg' ? 'text-2xl' : 'text-lg'
+          size === 'lg' ? 'text-stat-lg' : 'text-lg'
         } ${delta != null ? returnColor(delta) : ''}`}
       >
         {value}

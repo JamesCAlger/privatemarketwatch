@@ -23,6 +23,7 @@ export interface IndexSummary {
   ytd: number | null;
   annualized: number | null;
   constituents: number | null;
+  uniqueCompanies: number | null;
   totalFv: number | null;
   latestQuarter: string;
   sparkline: number[];
@@ -83,6 +84,29 @@ export interface PortfolioCharacteristics {
   };
 }
 
+/** Shared shape for concentration charts (manager, vehicle, investee) */
+export interface ConcentrationRow {
+  name: string;
+  totalFv: number;
+  pctOfIndex: number;
+  positionCount: number;
+  fundCount?: number;
+}
+export type ConcentrationData = Record<string, ConcentrationRow[]>;
+
+/** Shape of concentration_curve.json — pie-chart-ready brackets */
+export interface ConcentrationBracket {
+  label: string;
+  fvPct: number;
+  count: number;
+  totalCount: number;
+}
+export interface ConcentrationCurveEntry {
+  investee?: ConcentrationBracket[];
+  position?: ConcentrationBracket[];
+}
+export type ConcentrationCurveData = Record<string, ConcentrationCurveEntry>;
+
 /** Shape of metadata.json */
 export interface Metadata {
   asOfQuarter: string | null;
@@ -94,5 +118,6 @@ export interface Metadata {
   tenderOfferCount: number;
   holdingsCount: number;
   cikCount: number;
+  uniqueIssuers: number;
   dataVintage: string;
 }

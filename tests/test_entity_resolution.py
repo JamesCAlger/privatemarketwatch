@@ -23,6 +23,7 @@ import pytest
 
 from pipeline.entity_resolution import (
     UnionFind,
+    _OPAQUE_NUMERIC_ID_RE,
     _build_variant_table,
     _cross_source_link,
     _exact_dedup,
@@ -270,7 +271,7 @@ class TestBuildVariantTable:
         path = Path(tmp_dir) / "test_holdings.csv"
         df = pd.DataFrame(rows)
         # Ensure required columns exist
-        for col in ["issuer_name", "source", "cusip", "lei"]:
+        for col in ["issuer_name", "source", "cusip", "lei", "bdc_investment_identifier"]:
             if col not in df.columns:
                 df[col] = ""
         df.to_csv(path, index=False)
@@ -694,17 +695,17 @@ class TestBuildEntityLookup:
         path = Path(tmp_dir) / "test_holdings.csv"
         rows = [
             {"source": "bdc", "issuer_name": "Zendesk, Inc., First Lien",
-             "cusip": "", "lei": "", "fair_value": "1000"},
+             "cusip": "", "lei": "", "fair_value": "1000", "bdc_investment_identifier": ""},
             {"source": "bdc", "issuer_name": "Zendesk, Inc., Second Lien",
-             "cusip": "", "lei": "", "fair_value": "2000"},
+             "cusip": "", "lei": "", "fair_value": "2000", "bdc_investment_identifier": ""},
             {"source": "bdc", "issuer_name": "ZENDESK INC",
-             "cusip": "", "lei": "", "fair_value": "3000"},
+             "cusip": "", "lei": "", "fair_value": "3000", "bdc_investment_identifier": ""},
             {"source": "nport", "issuer_name": "ZENDESK INC TL 1L",
-             "cusip": "Z123", "lei": "", "fair_value": "500"},
+             "cusip": "Z123", "lei": "", "fair_value": "500", "bdc_investment_identifier": ""},
             {"source": "bdc", "issuer_name": "Acme Corp., Term Loan",
-             "cusip": "", "lei": "", "fair_value": "1500"},
+             "cusip": "", "lei": "", "fair_value": "1500", "bdc_investment_identifier": ""},
             {"source": "nport", "issuer_name": "TOTALLY DIFFERENT CO",
-             "cusip": "D456", "lei": "", "fair_value": "800"},
+             "cusip": "D456", "lei": "", "fair_value": "800", "bdc_investment_identifier": ""},
         ]
         df = pd.DataFrame(rows)
         df.to_csv(path, index=False)
@@ -922,3 +923,274 @@ class TestCli:
         with patch("sys.argv", ["main"]):
             args = _parse_args()
             assert args.entities is False
+
+
+# ---------------------------------------------------------------------------
+# Fix 1: LLM-extracted names preferred over regex
+# ---------------------------------------------------------------------------
+
+class TestLlmNameExtraction:
+    """LLM extraction cache integration in _exact_dedup()."""
+
+    def _make_variants(self, rows):
+        df = pd.DataFrame(rows)
+        for col in ["cusip", "lei", "bdc_investment_identifier"]:
+            if col not in df.columns:
+                df[col] = ""
+        return df
+
+    def test_llm_name_preferred_over_regex(self, tmp_path):
+        """BDC variant with bdc_investment_identifier uses LLM name."""
+        # Create a mock LLM lookup CSV
+        llm_path = tmp_path / "identifier_extraction_lookup.csv"
+        pd.DataFrame({
+            "bdc_investment_identifier": ["Zendesk, Inc., First Lien Senior Secured Loan SOFR 5.0%"],
+            "extracted_company_name": ["Zendesk, Inc."],
+        }).to_csv(llm_path, index=False)
+
+        variants = self._make_variants([{
+            "issuer_name": "Zendesk, Inc., First Lien Senior Secured Loan SOFR 5.0%",
+            "source": "bdc",
+            "occurrence_count": 50,
+            "bdc_investment_identifier": "Zendesk, Inc., First Lien Senior Secured Loan SOFR 5.0%",
+        }])
+
+        with patch("pipeline.entity_resolution.IDENTIFIER_EXTRACTION_LOOKUP_FILE", llm_path):
+            result = _exact_dedup(variants)
+
+        assert result.iloc[0]["extracted_name"] == "Zendesk, Inc."
+
+    def test_llm_fallback_to_regex(self, tmp_path):
+        """BDC variant not in LLM cache falls back to regex."""
+        # Create an LLM lookup that does NOT contain our identifier
+        llm_path = tmp_path / "identifier_extraction_lookup.csv"
+        pd.DataFrame({
+            "bdc_investment_identifier": ["SomethingElse"],
+            "extracted_company_name": ["SomethingElse"],
+        }).to_csv(llm_path, index=False)
+
+        variants = self._make_variants([{
+            "issuer_name": "Acme Corp., Term Loan B",
+            "source": "bdc",
+            "occurrence_count": 10,
+            "bdc_investment_identifier": "Acme Corp., Term Loan B",
+        }])
+
+        with patch("pipeline.entity_resolution.IDENTIFIER_EXTRACTION_LOOKUP_FILE", llm_path):
+            result = _exact_dedup(variants)
+
+        # Regex should extract "Acme Corp."
+        assert result.iloc[0]["extracted_name"] == "Acme Corp."
+
+    def test_nport_unaffected_by_llm(self, tmp_path):
+        """N-PORT variants always use regex, never LLM."""
+        llm_path = tmp_path / "identifier_extraction_lookup.csv"
+        pd.DataFrame({
+            "bdc_investment_identifier": ["WIDGET INC TL 1L"],
+            "extracted_company_name": ["LLM Override"],
+        }).to_csv(llm_path, index=False)
+
+        variants = self._make_variants([{
+            "issuer_name": "WIDGET INC TL 1L",
+            "source": "nport",
+            "occurrence_count": 5,
+            "bdc_investment_identifier": "",
+        }])
+
+        with patch("pipeline.entity_resolution.IDENTIFIER_EXTRACTION_LOOKUP_FILE", llm_path):
+            result = _exact_dedup(variants)
+
+        # N-PORT regex: legal suffix "INC" -> "WIDGET INC"
+        assert result.iloc[0]["extracted_name"] == "WIDGET INC"
+
+    def test_llm_cache_missing_file(self, tmp_path):
+        """When LLM cache file doesn't exist, falls back to regex gracefully."""
+        llm_path = tmp_path / "nonexistent.csv"
+
+        variants = self._make_variants([{
+            "issuer_name": "Acme, Inc., First Lien",
+            "source": "bdc",
+            "occurrence_count": 10,
+            "bdc_investment_identifier": "Acme, Inc., First Lien",
+        }])
+
+        with patch("pipeline.entity_resolution.IDENTIFIER_EXTRACTION_LOOKUP_FILE", llm_path):
+            result = _exact_dedup(variants)
+
+        assert result.iloc[0]["extracted_name"] == "Acme, Inc."
+
+
+# ---------------------------------------------------------------------------
+# Fix 2: Opaque numeric ID filtering
+# ---------------------------------------------------------------------------
+
+class TestOpaqueNumericIdFilter:
+    """Filtering of opaque numeric IDs like 1824445.SQ.RVR."""
+
+    def test_numeric_id_matches_regex(self):
+        """Regex correctly identifies opaque numeric IDs."""
+        assert _OPAQUE_NUMERIC_ID_RE.match("1824445.SQ.RVR")
+        assert _OPAQUE_NUMERIC_ID_RE.match("99999999.AB.CD")
+        assert _OPAQUE_NUMERIC_ID_RE.match("12345.X.YZ")
+
+    def test_real_names_not_matched(self):
+        """Normal company names are not matched by the regex."""
+        assert not _OPAQUE_NUMERIC_ID_RE.match("Acme Corp")
+        assert not _OPAQUE_NUMERIC_ID_RE.match("123 Industries, Inc.")
+        assert not _OPAQUE_NUMERIC_ID_RE.match("First National Bank")
+
+    def test_numeric_ids_excluded_from_variant_table(self, tmp_path):
+        """Opaque numeric IDs are excluded from the variant table."""
+        path = tmp_path / "holdings.csv"
+        pd.DataFrame({
+            "issuer_name": ["1824445.SQ.RVR", "Acme Corp", "99999.AB.CD"],
+            "source": ["bdc", "bdc", "bdc"],
+            "cusip": ["", "", ""],
+            "lei": ["", "", ""],
+            "bdc_investment_identifier": ["", "", ""],
+        }).to_csv(path, index=False)
+
+        result = _build_variant_table(path)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+    def test_short_numeric_not_excluded(self, tmp_path):
+        """Short numeric strings (< 5 digits) are not excluded."""
+        path = tmp_path / "holdings.csv"
+        pd.DataFrame({
+            "issuer_name": ["1234.AB.CD", "Acme Corp"],
+            "source": ["bdc", "bdc"],
+            "cusip": ["", ""],
+            "lei": ["", ""],
+            "bdc_investment_identifier": ["", ""],
+        }).to_csv(path, index=False)
+
+        result = _build_variant_table(path)
+        # "1234.AB.CD" has only 4 digits, should NOT be excluded
+        assert len(result) == 2
+
+
+# ---------------------------------------------------------------------------
+# Fix 3: Regex improvements -- pipe splitting
+# ---------------------------------------------------------------------------
+
+class TestPipeSplitting:
+    """Phase 0: Split BDC names on pipe delimiter."""
+
+    def test_pipe_split_basic(self):
+        result = _extract_bdc_name("Acme, Inc. | Non-Affiliated Issuer")
+        assert result == "Acme, Inc."
+
+    def test_pipe_split_no_space(self):
+        result = _extract_bdc_name("Energy Equipment & Services|9.11%")
+        assert "Energy Equipment & Services" == result
+
+    def test_pipe_split_lien_type(self):
+        result = _extract_bdc_name("ACACIA BUYERCO V LLC | First Lien")
+        assert result == "ACACIA BUYERCO V LLC"
+
+    def test_pipe_at_start_ignored(self):
+        """Pipe at position 0 should not trigger split (pipe_idx > 0)."""
+        result = _extract_bdc_name("|Some Name, Inc.")
+        # Falls through to normal extraction; legal suffix found
+        assert "Inc" in result
+
+
+# ---------------------------------------------------------------------------
+# Fix 3: Regex improvements -- prefix stripping
+# ---------------------------------------------------------------------------
+
+class TestPrefixStripping:
+    """New prefix patterns for BDC name extraction."""
+
+    def test_debt_prefix_stripped(self):
+        result = _extract_bdc_name(
+            "Debt Investments, First Lien Senior Secured, OneCare Media, LLC"
+        )
+        assert "OneCare Media" in result
+
+    def test_controlled_prefix_stripped(self):
+        result = _extract_bdc_name(
+            "Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+            "Industry Energy, Company Acme, Inc."
+        )
+        assert "Acme" in result
+
+    def test_related_party_prefix(self):
+        result = _extract_bdc_name("Related Party PSLF First Lien Secured Debt")
+        assert result == "PSLF"
+
+    def test_non_controlled_prefix(self):
+        result = _extract_bdc_name(
+            "Non-Controlled Investments, Senior Secured Loans, "
+            "Industry Healthcare, Company Beta, LLC"
+        )
+        assert "Beta" in result
+
+
+# ---------------------------------------------------------------------------
+# Fix 3: Regex improvements -- trailing instrument stripping
+# ---------------------------------------------------------------------------
+
+class TestTrailingInstrumentStripping:
+    """Trailing instrument keywords stripped when no legal suffix found."""
+
+    def test_trailing_lien_stripped(self):
+        result = _extract_bdc_name("PSLF First Lien Secured Debt")
+        assert result == "PSLF"
+
+    def test_trailing_term_loan_stripped(self):
+        result = _extract_bdc_name("Acme Widgets Term Loan")
+        assert result == "Acme Widgets"
+
+    def test_trailing_senior_secured_stripped(self):
+        result = _extract_bdc_name("XYZ Corp Senior Secured Loan B")
+        # "Corp" without dot matches legal suffix regex (corp\.?,?)
+        assert result == "XYZ Corp"
+
+    def test_no_false_positive_first_national(self):
+        """'First National Bank' should NOT be stripped."""
+        result = _extract_bdc_name("First National Bank")
+        # "First" is followed by "National", not "Lien"
+        assert result == "First National Bank"
+
+    def test_no_false_positive_first_citizens(self):
+        """'First Citizens BancShares' should NOT be stripped."""
+        result = _extract_bdc_name("First Citizens BancShares")
+        assert result == "First Citizens BancShares"
+
+    def test_legal_suffix_takes_priority(self):
+        """When a legal suffix exists, trailing instrument is irrelevant."""
+        result = _extract_bdc_name("Acme, Inc. First Lien Term Loan")
+        assert result == "Acme, Inc."
+
+
+# ---------------------------------------------------------------------------
+# Fix 3: Regex improvements -- N-PORT facility expansion
+# ---------------------------------------------------------------------------
+
+class TestNportFacilityExpansion:
+    """Extended N-PORT facility suffix stripping."""
+
+    def test_nport_term_loan_full_word(self):
+        result = _extract_nport_name("ACME WIDGETS TERM LOAN B")
+        assert result == "ACME WIDGETS"
+
+    def test_nport_delayed_draw(self):
+        result = _extract_nport_name("ACME CORP DELAYED DRAW 2025")
+        assert "ACME CORP" in result
+
+    def test_nport_credit_facility(self):
+        result = _extract_nport_name("BETA LLC CREDIT FACILITY")
+        # "LLC" is a legal suffix, so it should be caught first
+        assert result == "BETA LLC"
+
+    def test_nport_existing_tl_still_works(self):
+        """Existing TL pattern should still work."""
+        result = _extract_nport_name("FINASTRA USA INC TL 1L VISTA /")
+        assert result == "FINASTRA USA INC"
+
+    def test_nport_existing_revolver_still_works(self):
+        """Existing REVOLVER pattern should still work."""
+        result = _extract_nport_name("ACME WIDGETS REVOLVER 2024")
+        assert result == "ACME WIDGETS"

@@ -21,15 +21,15 @@ export const INDICES: IndexMeta[] = [
     color: '#2A9D8F',
     tailwindColor: 'text-teal',
     description:
-      'The largest position-level benchmark for middle-market direct lending.',
+      'The largest publicly available benchmark of middle-market direct loans.',
   },
   {
     key: 'DIRECT_EQUITY',
     name: 'Direct Equity Index',
     shortName: 'Direct Equity',
     slug: 'direct-equity',
-    color: '#E76F51',
-    tailwindColor: 'text-orange-600',
+    color: '#0F1B2D',
+    tailwindColor: 'text-blue-500',
     description:
       'Direct equity co-investments and minority stakes in private companies, held by registered closed-end vehicles.',
   },

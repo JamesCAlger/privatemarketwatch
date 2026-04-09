@@ -20,7 +20,7 @@ const columns: Column<VehicleRow>[] = [
   },
   {
     key: 'positionCount',
-    header: 'Positions',
+    header: 'Holdings',
     align: 'right',
     format: (v) => formatNumber(v as number),
   },

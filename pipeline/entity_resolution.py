@@ -27,6 +27,7 @@ from rapidfuzz import fuzz
 from pipeline.config import (
     ENTITY_LOOKUP_FILE,
     ENTITY_STATS_FILE,
+    IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
 from pipeline.utils import UnionFind
@@ -57,7 +58,9 @@ _GENERIC_MARKER_RE = re.compile(r"(?i)\b(?:holdings|group)\b")
 
 # N-PORT facility suffixes to strip
 _NPORT_FACILITY_RE = re.compile(
-    r"\s+(?:T/?L|DL|REVOLVER|REV|RC|RCF|DD)\b.*$", re.IGNORECASE
+    r"\s+(?:T/?L|DL|REVOLVER|REV|RC|RCF|DD"
+    r"|TERM\s+LOAN|DELAYED\s+DRAW|CREDIT\s+FACIL(?:ITY)?)\b.*$",
+    re.IGNORECASE,
 )
 _NPORT_TRAILING_SLASH = re.compile(r"\s*/\s*$")
 
@@ -72,6 +75,38 @@ _INVESTMENT_PREFIX_RE = re.compile(
     r"|[^,]+?Debt|[^,]+?Equity|[^,]+?Loan|[^,]+?Note))?[,;]\s*",
     re.IGNORECASE,
 )
+
+# Debt prefix: "Debt Investments, First Lien Senior Secured, <company>"
+_DEBT_PREFIX_RE = re.compile(
+    r"^(?:D?Debt(?:\s+Debt)?\s+)?(?:Debt\s+)?Investments?\s*,\s*"
+    r"(?:First Lien|Second Lien|Senior Secured|Subordinated|Unsecured)[^,]*,\s*",
+    re.IGNORECASE,
+)
+
+# Controlled/Non-Affiliated prefix
+_CONTROLLED_PREFIX_RE = re.compile(
+    r"^(?:Non-?)?Control(?:led)?(?:/Non-?Affiliated)?\s+Investments?\s*,"
+    r"\s*Senior[^,]*,\s*(?:Industry\s+[^,]*,\s*)?(?:Company\s+)?",
+    re.IGNORECASE,
+)
+
+# Related Party prefix: strip only "Related Party" leaving the company name
+_RELATED_PARTY_PREFIX_RE = re.compile(
+    r"^Related\s+Party\s+",
+    re.IGNORECASE,
+)
+
+# Trailing instrument keywords (only applied when no legal suffix found)
+_TRAILING_INSTRUMENT_RE = re.compile(
+    r"\s+(?:First|Second|Third)\s+Lien\b.*$"
+    r"|\s+Senior\s+Secured\b.*$"
+    r"|\s+(?:Term\s+Loan|Revolver|Delayed\s+Draw|Credit\s+Facility"
+    r"|Secured\s+Debt|Unsecured\s+Debt|Unitranche)\b.*$",
+    re.IGNORECASE,
+)
+
+# Opaque numeric IDs (e.g. "1824445.SQ.RVR" from marketplace lending CIKs)
+_OPAQUE_NUMERIC_ID_RE = re.compile(r"^\d{5,}\.\w{1,4}\.\w{2,4}$")
 
 # Trailing number/parenthetical: " 1", " 2", " (1)", " (2)"
 _TRAILING_NUMBER_RE = re.compile(r"\s+(?:\d+|\(\d+\))\s*$")
@@ -120,12 +155,42 @@ def _extract_nport_name(name: str) -> str:
 
 def _extract_bdc_name(name: str) -> str:
     """Extract company name from BDC issuer_name."""
+    original_name = name
+
+    # Phase 0: Split on pipe delimiter
+    pipe_idx = name.find("|")
+    if pipe_idx > 0:
+        name = name[:pipe_idx].strip().rstrip(",")
+        if not name:
+            return _strip_trailing_number(original_name)
+
     # Phase 1: Handle "Investment," prefix
     inv_match = _INVESTMENT_PREFIX_RE.match(name)
     if inv_match:
         name = name[inv_match.end():].strip()
         if not name:
             return issuer_name_fallback(name)
+
+    # Phase 1b: Handle "Debt Investments, First Lien ..., <company>" prefix
+    debt_match = _DEBT_PREFIX_RE.match(name)
+    if debt_match:
+        name = name[debt_match.end():].strip()
+        if not name:
+            return issuer_name_fallback(original_name)
+
+    # Phase 1c: Handle "Controlled/Non-Affiliated Investments, Senior ..., Company <name>" prefix
+    ctrl_match = _CONTROLLED_PREFIX_RE.match(name)
+    if ctrl_match:
+        name = name[ctrl_match.end():].strip()
+        if not name:
+            return issuer_name_fallback(original_name)
+
+    # Phase 1d: Handle "Related Party PSLF ..." prefix
+    rp_match = _RELATED_PARTY_PREFIX_RE.match(name)
+    if rp_match:
+        name = name[rp_match.end():].strip()
+        if not name:
+            return issuer_name_fallback(original_name)
 
     # Phase 2: Check for metadata blob
     name_lower = name.lower()
@@ -159,7 +224,12 @@ def _extract_bdc_name(name: str) -> str:
         if len(extracted) >= 2:
             return _strip_trailing_number(extracted)
 
-    # Phase 5: No marker found -- return as-is (stripped of trailing numbers)
+    # Phase 5: No marker found -- try trailing instrument stripping
+    cleaned = _TRAILING_INSTRUMENT_RE.sub("", name).strip()
+    if cleaned and cleaned != name:
+        return _strip_trailing_number(cleaned)
+
+    # Phase 6: Return as-is (stripped of trailing numbers)
     return _strip_trailing_number(name)
 
 
@@ -229,10 +299,12 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
     """Build variant table from unified holdings using DuckDB.
 
     Groups by (issuer_name, source) and aggregates occurrence count,
-    first non-null CUSIP and LEI.
+    first non-null CUSIP, LEI, and bdc_investment_identifier.
+
+    Filters out opaque numeric IDs (e.g. "1824445.SQ.RVR").
 
     Returns a DataFrame with columns:
-      issuer_name, source, occurrence_count, cusip, lei
+      issuer_name, source, occurrence_count, cusip, lei, bdc_investment_identifier
     """
     con = duckdb.connect()
     try:
@@ -246,9 +318,14 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
                 ) as cusip,
                 FIRST(lei) FILTER (
                     WHERE lei IS NOT NULL AND lei <> ''
-                ) as lei
+                ) as lei,
+                FIRST(bdc_investment_identifier) FILTER (
+                    WHERE bdc_investment_identifier IS NOT NULL
+                    AND bdc_investment_identifier <> ''
+                ) as bdc_investment_identifier
             FROM read_csv_auto(?, header=true, all_varchar=true)
             WHERE issuer_name IS NOT NULL AND issuer_name <> ''
+              AND NOT regexp_matches(issuer_name, '^\\d{5,}\\.\\w{1,4}\\.\\w{2,4}$')
             GROUP BY issuer_name, source
             ORDER BY occurrence_count DESC
         """, [str(holdings_path)]).fetchdf()
@@ -262,14 +339,46 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
 def _exact_dedup(variants: pd.DataFrame) -> pd.DataFrame:
     """Group variants by normalised name and assign entity IDs.
 
+    For BDC variants, prefers LLM-extracted company names from the
+    identifier_extraction_lookup.csv cache over regex extraction.
+
     Adds columns: extracted_name, normalized_name, entity_num, canonical_name
     """
     # Apply extraction and normalisation (Python on ~273K rows)
     variants = variants.copy()
-    variants["extracted_name"] = [
-        extract_company_name(row["issuer_name"], row["source"])
-        for _, row in variants.iterrows()
-    ]
+
+    # Load LLM extraction cache if available
+    llm_lookup = {}
+    if IDENTIFIER_EXTRACTION_LOOKUP_FILE.exists():
+        try:
+            llm_df = pd.read_csv(
+                IDENTIFIER_EXTRACTION_LOOKUP_FILE,
+                usecols=["bdc_investment_identifier", "extracted_company_name"],
+                dtype=str,
+            )
+            llm_df = llm_df.dropna(subset=["bdc_investment_identifier", "extracted_company_name"])
+            llm_df = llm_df[llm_df["extracted_company_name"].str.strip() != ""]
+            llm_lookup = dict(zip(
+                llm_df["bdc_investment_identifier"],
+                llm_df["extracted_company_name"],
+            ))
+            logger.info("  Loaded %d LLM-extracted names from cache", len(llm_lookup))
+        except Exception:
+            logger.warning("  Could not load LLM extraction cache; falling back to regex")
+
+    extracted_names = []
+    for _, row in variants.iterrows():
+        issuer = row["issuer_name"]
+        source = row["source"]
+        bdc_id = row.get("bdc_investment_identifier", "")
+
+        # For BDC variants, prefer LLM-extracted name
+        if source == "bdc" and bdc_id and pd.notna(bdc_id) and bdc_id in llm_lookup:
+            extracted_names.append(llm_lookup[bdc_id])
+        else:
+            extracted_names.append(extract_company_name(issuer, source))
+
+    variants["extracted_name"] = extracted_names
     variants["normalized_name"] = variants["extracted_name"].apply(
         normalise_entity_name
     )
@@ -601,9 +710,17 @@ def _enrich_holdings(
         lookup_str = str(lookup_path).replace("\\", "/")
         output_str = str(output_path).replace("\\", "/")
 
+        # Check if holdings already has entity_id/canonical_name columns
+        cols = con.execute(
+            f"SELECT column_name FROM (DESCRIBE SELECT * FROM read_csv_auto('{holdings_str}', header=true, all_varchar=true))"
+        ).fetchall()
+        col_names = {c[0] for c in cols}
+        exclude_cols = [c for c in ("entity_id", "canonical_name") if c in col_names]
+        exclude_clause = f" EXCLUDE ({', '.join(exclude_cols)})" if exclude_cols else ""
+
         con.execute(f"""
             COPY (
-                SELECT h.*,
+                SELECT h.*{exclude_clause},
                        COALESCE(e.entity_id, '') as entity_id,
                        COALESCE(e.canonical_name, '') as canonical_name
                 FROM read_csv_auto('{holdings_str}', header=true, all_varchar=true) h

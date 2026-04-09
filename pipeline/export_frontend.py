@@ -16,7 +16,13 @@ from typing import Any
 
 import duckdb
 
-from pipeline.config import INDEX_DISPLAY_END_QUARTER, OUTPUT_DIR, PROJECT_ROOT
+from pipeline.config import (
+    CIK_TO_MANAGER_BRAND,
+    INDEX_DISPLAY_END_QUARTER,
+    OUTPUT_DIR,
+    PROJECT_ROOT,
+)
+from pipeline.index_returns import MIN_BEGIN_FV
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +78,15 @@ def _quarter_to_date(q: str) -> str:
     return f"{year}-12-31"
 
 
+def _prev_quarter(q: str) -> str:
+    """Return the quarter label immediately before *q*.  '2020q1' -> '2019q4'."""
+    year = int(q[:4])
+    qn = int(q[5])
+    if qn == 1:
+        return f"{year - 1}q4"
+    return f"{year}q{qn - 1}"
+
+
 def _safe_round(val: Any, digits: int = 4) -> Any:
     """Round floats, pass through None/str."""
     if val is None:
@@ -80,6 +95,40 @@ def _safe_round(val: Any, digits: int = 4) -> Any:
         return round(float(val), digits)
     except (ValueError, TypeError):
         return val
+
+
+def _valid_positions_sql() -> str:
+    """SQL CTEs ``latest`` and ``valid`` for deduplicated index positions.
+
+    Applies the same filters as the index calculation:
+    - quarterly_total_return IS NOT NULL
+    - begin_fair_value >= MIN_BEGIN_FV ($100K)
+    - Deduplicated: one row per (index_classification, cik, issuer_name)
+      keeping the row with the highest end_fair_value.
+    """
+    return f"""latest AS (
+            SELECT index_classification, MAX(end_quarter) AS q
+            FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}')
+            WHERE index_classification IS NOT NULL
+              {_quarter_cutoff_sql('end_quarter')}
+            GROUP BY index_classification
+        ),
+        valid AS (
+            SELECT * FROM (
+                SELECT pr.*,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY pr.index_classification, pr.cik, pr.issuer_name
+                        ORDER BY pr.end_fair_value DESC NULLS LAST
+                    ) AS _dedup_rn
+                FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}') pr
+                JOIN latest l
+                  ON pr.index_classification = l.index_classification
+                 AND pr.end_quarter = l.q
+                WHERE pr.quarterly_total_return IS NOT NULL
+                  AND pr.begin_fair_value >= {MIN_BEGIN_FV}
+            )
+            WHERE _dedup_rn = 1
+        )"""
 
 
 # ---------------------------------------------------------------------------
@@ -130,15 +179,70 @@ def _export_index_returns(con: duckdb.DuckDBPyConnection) -> list[dict]:
             "levelCost": _safe_round(row["index_level_cost"], 2),
         })
 
+    # Prepend a synthetic baseline point (level=100) one quarter before
+    # each index's first real data so charts visually start at 100.
+    for idx, series in out.items():
+        if series:
+            first_q = series[0]["quarter"]
+            series.insert(0, {
+                "quarter": _prev_quarter(first_q),
+                "fvReturn": 0.0,
+                "eqReturn": 0.0,
+                "costReturn": 0.0,
+                "constituents": 0,
+                "totalBeginFv": 0,
+                "totalEndFv": 0,
+                "levelFv": 100.0,
+                "levelEqual": 100.0,
+                "levelCost": 100.0,
+            })
+
     _write_json("index_returns.json", out)
     return raw
 
 
-def _export_index_summary(raw_returns: list[dict]) -> None:
+def _export_index_summary(
+    raw_returns: list[dict],
+    con: duckdb.DuckDBPyConnection,
+) -> None:
     """Compute summary stats per index from the index_returns data."""
     if not raw_returns:
         _write_json("index_summary.json", [])
         return
+
+    # Count unique companies and unique positions per index (latest quarter).
+    # position_returns has one row per match pair -- the same end-period
+    # position can appear in multiple pairs (different span lengths), so we
+    # deduplicate to unique (cik, issuer_name) before counting.
+    unique_companies: dict[str, int] = {}
+    unique_positions: dict[str, int] = {}
+    if POSITION_RETURNS_CSV.exists():
+        uc_rows = con.execute(f"""
+            WITH latest AS (
+                SELECT index_classification, MAX(end_quarter) AS q
+                FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}')
+                WHERE index_classification IS NOT NULL
+                  {_quarter_cutoff_sql('end_quarter')}
+                GROUP BY index_classification
+            ),
+            deduped AS (
+                SELECT DISTINCT pr.index_classification, pr.cik, pr.issuer_name
+                FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}') pr
+                JOIN latest l
+                  ON pr.index_classification = l.index_classification
+                 AND pr.end_quarter = l.q
+                WHERE pr.quarterly_total_return IS NOT NULL
+                  AND pr.begin_fair_value >= {MIN_BEGIN_FV}
+            )
+            SELECT index_classification,
+                   COUNT(DISTINCT issuer_name) AS n_companies,
+                   COUNT(*) AS n_positions
+            FROM deduped
+            GROUP BY index_classification
+        """).fetchall()
+        for idx_name, n_co, n_pos in uc_rows:
+            unique_companies[idx_name] = n_co
+            unique_positions[idx_name] = n_pos
 
     # Group by index
     by_idx: dict[str, list[dict]] = {}
@@ -205,7 +309,8 @@ def _export_index_summary(raw_returns: list[dict]) -> None:
             "trailing12m": _safe_round(trail_12m, 6),
             "ytd": _safe_round(ytd, 6),
             "annualized": _safe_round(annualized, 6),
-            "constituents": latest["constituent_count"],
+            "constituents": unique_positions.get(idx, latest["constituent_count"]),
+            "uniqueCompanies": unique_companies.get(idx, 0),
             "totalFv": _safe_round(latest["total_end_fv"], 0),
             "latestQuarter": latest["quarter"],
             "sparkline": spark,
@@ -221,12 +326,7 @@ def _export_top_constituents(con: duckdb.DuckDBPyConnection) -> None:
         return
 
     rows = con.execute(f"""
-        WITH latest AS (
-            SELECT index_classification, MAX(end_quarter) AS q
-            FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}')
-            WHERE index_classification IS NOT NULL
-            GROUP BY index_classification
-        ),
+        WITH {_valid_positions_sql()},
         ranked AS (
             SELECT
                 pr.index_classification,
@@ -247,10 +347,7 @@ def _export_top_constituents(con: duckdb.DuckDBPyConnection) -> None:
                     PARTITION BY pr.index_classification
                     ORDER BY pr.end_fair_value DESC NULLS LAST
                 ) AS rn
-            FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}') pr
-            JOIN latest l
-              ON pr.index_classification = l.index_classification
-             AND pr.end_quarter = l.q
+            FROM valid pr
         )
         SELECT * FROM ranked WHERE rn <= 20
     """).fetchall()
@@ -286,22 +383,14 @@ def _export_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
         return
 
     rows = con.execute(f"""
-        WITH latest AS (
-            SELECT index_classification, MAX(end_quarter) AS q
-            FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}')
-            WHERE index_classification IS NOT NULL
-            GROUP BY index_classification
-        ),
+        WITH {_valid_positions_sql()},
         agg AS (
             SELECT
                 pr.index_classification,
                 COALESCE(pr.asset_category, 'OTHER') AS asset_category,
                 COUNT(*) AS position_count,
                 SUM(pr.end_fair_value) AS total_fv
-            FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}') pr
-            JOIN latest l
-              ON pr.index_classification = l.index_classification
-             AND pr.end_quarter = l.q
+            FROM valid pr
             GROUP BY pr.index_classification, COALESCE(pr.asset_category, 'OTHER')
         )
         SELECT
@@ -340,12 +429,7 @@ def _export_vehicle_contribution(con: duckdb.DuckDBPyConnection) -> None:
         return
 
     rows = con.execute(f"""
-        WITH latest AS (
-            SELECT index_classification, MAX(end_quarter) AS q
-            FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}')
-            WHERE index_classification IS NOT NULL
-            GROUP BY index_classification
-        ),
+        WITH {_valid_positions_sql()},
         agg AS (
             SELECT
                 pr.index_classification,
@@ -353,10 +437,7 @@ def _export_vehicle_contribution(con: duckdb.DuckDBPyConnection) -> None:
                 pr.entity_name,
                 COUNT(*) AS position_count,
                 SUM(pr.end_fair_value) AS total_fv
-            FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}') pr
-            JOIN latest l
-              ON pr.index_classification = l.index_classification
-             AND pr.end_quarter = l.q
+            FROM valid pr
             GROUP BY pr.index_classification, pr.cik, pr.entity_name
         ),
         univ AS (
@@ -434,8 +515,14 @@ def _export_portfolio_characteristics(
             WHERE index_classification = 'DIRECT_LENDING'
               AND TRY_CAST(fair_value AS DOUBLE) > 0
         ),
+        cutoff AS (
+            SELECT CASE WHEN '{INDEX_DISPLAY_END_QUARTER}' = 'None' THEN NULL
+                        ELSE '{_quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else "9999-12-31"}'
+                   END AS max_date
+        ),
         latest_q AS (
             SELECT MAX(report_date) AS q FROM dl
+            WHERE report_date <= (SELECT COALESCE(max_date, '9999-12-31') FROM cutoff)
         ),
         cur AS (
             SELECT * FROM dl
@@ -483,7 +570,7 @@ def _export_portfolio_characteristics(
                      THEN fair_value ELSE 0 END) AS unsecured_fv,
 
             -- Rate type split
-            SUM(CASE WHEN LOWER(coupon_type) = 'floating'
+            SUM(CASE WHEN LOWER(coupon_type) IN ('floating', 'variable')
                      THEN fair_value ELSE 0 END) AS floating_fv,
             SUM(CASE WHEN LOWER(coupon_type) = 'fixed'
                      THEN fair_value ELSE 0 END) AS fixed_fv,
@@ -552,10 +639,12 @@ def _export_metadata(
         latest_quarter = max(r["quarter"] for r in raw_returns)
 
     if latest_quarter is None and UNIFIED_HOLDINGS_CSV.exists():
+        cutoff_date = _quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else '9999-12-31'
         result = con.execute(f"""
             SELECT MAX(report_date) FROM read_csv_auto(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
+            WHERE report_date <= '{cutoff_date}'
         """).fetchone()
         if result and result[0]:
             # Convert date to quarter format
@@ -585,7 +674,9 @@ def _export_metadata(
     total_aum = 0
     holdings_count = 0
     cik_count = 0
+    issuer_count = 0
     if UNIFIED_HOLDINGS_CSV.exists():
+        cutoff_date = _quarter_to_date(INDEX_DISPLAY_END_QUARTER) if INDEX_DISPLAY_END_QUARTER else '9999-12-31'
         aum_row = con.execute(f"""
             WITH raw AS (
                 SELECT * FROM read_csv_auto(
@@ -594,6 +685,7 @@ def _export_metadata(
             ),
             latest AS (
                 SELECT MAX(report_date) AS q FROM raw
+                WHERE report_date <= '{cutoff_date}'
             )
             SELECT
                 SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv,
@@ -607,6 +699,26 @@ def _export_metadata(
             holdings_count = aum_row[1] or 0
             cik_count = aum_row[2] or 0
 
+    # Unique issuers among index constituents (position_returns with begin_fv >= 100K)
+    if POSITION_RETURNS_CSV.exists():
+        ir_row = con.execute(f"""
+            WITH pr AS (
+                SELECT * FROM read_csv_auto(
+                    '{POSITION_RETURNS_CSV.as_posix()}', all_varchar=true
+                )
+                WHERE index_classification IS NOT NULL
+                  AND index_classification != 'UNCLASSIFIED'
+                  AND TRY_CAST(begin_fair_value AS DOUBLE) >= 100000
+                  {_quarter_cutoff_sql('end_quarter')}
+            ),
+            latest AS (SELECT MAX(end_quarter) AS q FROM pr)
+            SELECT COUNT(DISTINCT issuer_name)
+            FROM pr
+            WHERE end_quarter = (SELECT q FROM latest)
+        """).fetchone()
+        if ir_row:
+            issuer_count = ir_row[0] or 0
+
     _write_json("metadata.json", {
         "asOfQuarter": latest_quarter,
         "asOfDate": _quarter_to_date(latest_quarter) if latest_quarter else None,
@@ -617,8 +729,427 @@ def _export_metadata(
         "tenderOfferCount": vehicle_counts.get("tender_offer_fund", 0),
         "holdingsCount": holdings_count,
         "cikCount": cik_count,
+        "uniqueIssuers": issuer_count,
         "dataVintage": datetime.now(timezone.utc).isoformat(),
     })
+
+
+def _top_n_with_other(
+    rows: list[dict],
+    *,
+    name_key: str,
+    n: int = 10,
+    extra_keys: list[str] | None = None,
+) -> list[dict]:
+    """Keep top *n* entries by ``rn``, lump the rest into "Other".
+
+    Each row dict must have ``rn``, ``total_fv``, ``pct_of_index``,
+    ``position_count``, and the field named by *name_key*.
+    *extra_keys* are summed into the Other bucket as ints.
+    """
+    extra = extra_keys or []
+    top: list[dict] = []
+    other_fv = 0.0
+    other_pos = 0
+    other_extra = {k: 0 for k in extra}
+    total_fv = sum(float(r["total_fv"] or 0) for r in rows)
+
+    for r in rows:
+        if r["rn"] <= n:
+            entry: dict = {
+                "name": r[name_key],
+                "totalFv": _safe_round(r["total_fv"], 0),
+                "pctOfIndex": _safe_round(r["pct_of_index"], 4),
+                "positionCount": int(r["position_count"] or 0),
+            }
+            for k in extra:
+                entry[k] = int(r.get(k) or 0)
+            top.append(entry)
+        else:
+            other_fv += float(r["total_fv"] or 0)
+            other_pos += int(r["position_count"] or 0)
+            for k in extra:
+                other_extra[k] += int(r.get(k) or 0)
+
+    if other_fv > 0:
+        entry = {
+            "name": "Other",
+            "totalFv": _safe_round(other_fv, 0),
+            "pctOfIndex": _safe_round(other_fv / total_fv if total_fv else 0, 4),
+            "positionCount": other_pos,
+        }
+        for k in extra:
+            entry[k] = other_extra[k]
+        top.append(entry)
+
+    return top
+
+
+def _export_manager_concentration(con: duckdb.DuckDBPyConnection) -> None:
+    """Manager (brand) concentration per index, latest quarter."""
+    if not POSITION_RETURNS_CSV.exists():
+        _write_json("manager_concentration.json", {})
+        return
+
+    brand_values = ", ".join(
+        f"('{cik}', '{brand}')" for cik, brand in CIK_TO_MANAGER_BRAND.items()
+    )
+
+    rows = con.execute(f"""
+        WITH {_valid_positions_sql()},
+        brand_map(cik_mapped, brand) AS (
+            VALUES {brand_values}
+        ),
+        per_cik AS (
+            SELECT
+                pr.index_classification,
+                pr.cik,
+                pr.entity_name,
+                COUNT(*) AS position_count,
+                SUM(pr.end_fair_value) AS total_fv
+            FROM valid pr
+            GROUP BY pr.index_classification, pr.cik, pr.entity_name
+        ),
+        branded AS (
+            SELECT
+                pc.index_classification,
+                COALESCE(bm.brand, pc.entity_name) AS manager,
+                pc.position_count,
+                pc.total_fv,
+                pc.cik
+            FROM per_cik pc
+            LEFT JOIN brand_map bm
+              ON CAST(TRY_CAST(pc.cik AS BIGINT) AS VARCHAR)
+               = CAST(TRY_CAST(bm.cik_mapped AS BIGINT) AS VARCHAR)
+        ),
+        by_manager AS (
+            SELECT
+                index_classification,
+                manager,
+                SUM(total_fv) AS total_fv,
+                SUM(position_count) AS position_count,
+                COUNT(DISTINCT cik) AS fund_count
+            FROM branded
+            GROUP BY index_classification, manager
+        ),
+        with_pct AS (
+            SELECT *,
+                total_fv / NULLIF(SUM(total_fv) OVER (
+                    PARTITION BY index_classification
+                ), 0) AS pct_of_index,
+                ROW_NUMBER() OVER (
+                    PARTITION BY index_classification
+                    ORDER BY total_fv DESC
+                ) AS rn
+            FROM by_manager
+        )
+        SELECT index_classification, manager, total_fv, pct_of_index,
+               position_count, fund_count, rn
+        FROM with_pct
+        ORDER BY index_classification, rn
+    """).fetchall()
+
+    cols = ["index_classification", "manager", "total_fv", "pct_of_index",
+            "position_count", "fund_count", "rn"]
+
+    by_idx: dict[str, list[dict]] = {}
+    for row in rows:
+        d = dict(zip(cols, row))
+        by_idx.setdefault(d["index_classification"], []).append(d)
+
+    out: dict[str, list[dict]] = {}
+    for idx, mgrs in by_idx.items():
+        out[idx] = _top_n_with_other(
+            mgrs, name_key="manager", extra_keys=["fund_count"],
+        )
+
+    _write_json("manager_concentration.json", out)
+
+
+def _export_vehicle_concentration(con: duckdb.DuckDBPyConnection) -> None:
+    """Per-fund concentration per index, latest quarter (top 10 + Other)."""
+    if not POSITION_RETURNS_CSV.exists():
+        _write_json("vehicle_concentration.json", {})
+        return
+
+    rows = con.execute(f"""
+        WITH {_valid_positions_sql()},
+        agg AS (
+            SELECT
+                pr.index_classification,
+                pr.entity_name,
+                COUNT(*) AS position_count,
+                SUM(pr.end_fair_value) AS total_fv
+            FROM valid pr
+            GROUP BY pr.index_classification, pr.entity_name
+        ),
+        with_pct AS (
+            SELECT *,
+                total_fv / NULLIF(SUM(total_fv) OVER (
+                    PARTITION BY index_classification
+                ), 0) AS pct_of_index,
+                ROW_NUMBER() OVER (
+                    PARTITION BY index_classification
+                    ORDER BY total_fv DESC
+                ) AS rn
+            FROM agg
+        )
+        SELECT index_classification, entity_name, total_fv, pct_of_index,
+               position_count, rn
+        FROM with_pct
+        ORDER BY index_classification, rn
+    """).fetchall()
+
+    cols = ["index_classification", "entity_name", "total_fv", "pct_of_index",
+            "position_count", "rn"]
+
+    by_idx: dict[str, list[dict]] = {}
+    for row in rows:
+        d = dict(zip(cols, row))
+        by_idx.setdefault(d["index_classification"], []).append(d)
+
+    out: dict[str, list[dict]] = {}
+    for idx, vehicles in by_idx.items():
+        out[idx] = _top_n_with_other(vehicles, name_key="entity_name")
+
+    _write_json("vehicle_concentration.json", out)
+
+
+def _export_investee_concentration(con: duckdb.DuckDBPyConnection) -> None:
+    """Top investees (borrowers/companies) per index, latest quarter."""
+    if not POSITION_RETURNS_CSV.exists():
+        _write_json("investee_concentration.json", {})
+        return
+
+    rows = con.execute(f"""
+        WITH {_valid_positions_sql()},
+        agg AS (
+            SELECT
+                pr.index_classification,
+                pr.issuer_name,
+                COUNT(*) AS position_count,
+                SUM(pr.end_fair_value) AS total_fv,
+                COUNT(DISTINCT pr.cik) AS fund_count
+            FROM valid pr
+            GROUP BY pr.index_classification, pr.issuer_name
+        ),
+        with_pct AS (
+            SELECT *,
+                total_fv / NULLIF(SUM(total_fv) OVER (
+                    PARTITION BY index_classification
+                ), 0) AS pct_of_index,
+                ROW_NUMBER() OVER (
+                    PARTITION BY index_classification
+                    ORDER BY total_fv DESC
+                ) AS rn
+            FROM agg
+        )
+        SELECT index_classification, issuer_name, total_fv, pct_of_index,
+               position_count, fund_count, rn
+        FROM with_pct
+        ORDER BY index_classification, rn
+    """).fetchall()
+
+    cols = ["index_classification", "issuer_name", "total_fv", "pct_of_index",
+            "position_count", "fund_count", "rn"]
+
+    by_idx: dict[str, list[dict]] = {}
+    for row in rows:
+        d = dict(zip(cols, row))
+        by_idx.setdefault(d["index_classification"], []).append(d)
+
+    out: dict[str, list[dict]] = {}
+    for idx, investees in by_idx.items():
+        out[idx] = _top_n_with_other(
+            investees, name_key="issuer_name", extra_keys=["fund_count"],
+        )
+
+    _write_json("investee_concentration.json", out)
+
+
+def _compute_brackets(
+    ranked_rows: list[tuple],
+    thresholds: list[int],
+) -> list[dict]:
+    """Compute incremental FV brackets from ranked (rn, total_count, grand_total, cum_fv) rows.
+
+    Returns pie-chart-ready slices: "Top 1%", "Top 1-5%", ..., "Bottom 50%".
+    Each slice has the *incremental* FV share (not cumulative).
+    """
+    total_count = ranked_rows[0][1]
+    grand_total = float(ranked_rows[0][2])
+    if grand_total <= 0:
+        return []
+
+    # Compute cumulative FV at each threshold
+    cum_at: dict[int, float] = {}
+    for pct in thresholds:
+        cutoff_rank = max(1, int(total_count * pct / 100))
+        if cutoff_rank <= len(ranked_rows):
+            cum_at[pct] = float(ranked_rows[cutoff_rank - 1][3])
+        else:
+            cum_at[pct] = grand_total
+
+    # Build incremental slices
+    brackets = []
+    prev_cum = 0.0
+    prev_pct = 0
+    for pct in thresholds:
+        incr = cum_at[pct] - prev_cum
+        lo = prev_pct
+        hi = pct
+        label = f"Top {hi}%" if lo == 0 else f"Top {lo}-{hi}%"
+        count_lo = max(1, int(total_count * lo / 100)) if lo > 0 else 0
+        count_hi = max(1, int(total_count * hi / 100))
+        brackets.append({
+            "label": label,
+            "fvPct": _safe_round(incr / grand_total, 6),
+            "count": count_hi - count_lo,
+            "totalCount": total_count,
+        })
+        prev_cum = cum_at[pct]
+        prev_pct = pct
+
+    return brackets
+
+
+def _ranked_query(
+    con: duckdb.DuckDBPyConnection,
+    *,
+    group_col: str,
+    where_clause: str = "",
+) -> list[tuple]:
+    """Query position_returns for ranked entities with cumulative FV.
+
+    Uses the same positions that feed the index: deduplicated position_returns
+    for the latest quarter (one row per position, FV > 0).
+    """
+    rows = con.execute(f"""
+        WITH {_valid_positions_sql()},
+        cur AS (
+            SELECT * FROM valid
+            WHERE end_fair_value > 0
+              {where_clause}
+        ),
+        agg AS (
+            SELECT
+                {group_col} AS entity,
+                SUM(end_fair_value) AS total_fv
+            FROM cur
+            GROUP BY {group_col}
+        ),
+        ranked AS (
+            SELECT *,
+                ROW_NUMBER() OVER (ORDER BY total_fv DESC) AS rn,
+                COUNT(*) OVER () AS total_count,
+                SUM(total_fv) OVER () AS grand_total,
+                SUM(total_fv) OVER (
+                    ORDER BY total_fv DESC
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+                ) AS cum_fv
+            FROM agg
+        )
+        SELECT rn, total_count, grand_total, cum_fv
+        FROM ranked
+        ORDER BY rn
+    """).fetchall()
+    return rows
+
+
+def _export_concentration_curve(con: duckdb.DuckDBPyConnection) -> None:
+    """Pie-chart-ready concentration brackets from position_returns.
+
+    Uses the same positions as the indices (deduplicated position_returns
+    for the latest quarter, FV > 0).  Two views: by company (issuer_name)
+    and by position (issuer_name + cik).
+    """
+    if not POSITION_RETURNS_CSV.exists():
+        _write_json("concentration_curve.json", {})
+        return
+
+    thresholds = [1, 5, 10, 20, 50, 100]
+    out: dict[str, dict] = {}
+
+    # Per-index + combined DL+DE
+    index_filters = [
+        ("DIRECT_LENDING", "AND index_classification = 'DIRECT_LENDING'"),
+        ("DIRECT_EQUITY", "AND index_classification = 'DIRECT_EQUITY'"),
+        ("PRIVATE_CREDIT_FUND", "AND index_classification = 'PRIVATE_CREDIT_FUND'"),
+        ("PRIVATE_EQUITY_FUND", "AND index_classification = 'PRIVATE_EQUITY_FUND'"),
+        ("COMBINED", "AND index_classification IN ('DIRECT_LENDING', 'DIRECT_EQUITY')"),
+    ]
+
+    for idx_key, where in index_filters:
+        entry: dict[str, list[dict]] = {}
+
+        # By company (issuer_name across all funds)
+        rows = _ranked_query(
+            con, group_col="issuer_name", where_clause=where,
+        )
+        if rows:
+            entry["investee"] = _compute_brackets(rows, thresholds)
+
+        # By position (issuer_name within a single fund)
+        rows = _ranked_query(
+            con,
+            group_col="issuer_name || '|' || cik",
+            where_clause=where,
+        )
+        if rows:
+            entry["position"] = _compute_brackets(rows, thresholds)
+
+        if entry:
+            out[idx_key] = entry
+
+    _write_json("concentration_curve.json", out)
+
+
+def _export_position_concentration(con: duckdb.DuckDBPyConnection) -> None:
+    """Top individual positions per index, latest quarter (no company grouping)."""
+    if not POSITION_RETURNS_CSV.exists():
+        _write_json("position_concentration.json", {})
+        return
+
+    rows = con.execute(f"""
+        WITH {_valid_positions_sql()},
+        positions AS (
+            SELECT
+                pr.index_classification,
+                pr.issuer_name || ' (' || pr.entity_name || ')' AS position_label,
+                pr.end_fair_value AS total_fv,
+                1 AS position_count
+            FROM valid pr
+        ),
+        with_pct AS (
+            SELECT *,
+                total_fv / NULLIF(SUM(total_fv) OVER (
+                    PARTITION BY index_classification
+                ), 0) AS pct_of_index,
+                ROW_NUMBER() OVER (
+                    PARTITION BY index_classification
+                    ORDER BY total_fv DESC
+                ) AS rn
+            FROM positions
+        )
+        SELECT index_classification, position_label, total_fv, pct_of_index,
+               position_count, rn
+        FROM with_pct
+        ORDER BY index_classification, rn
+    """).fetchall()
+
+    cols = ["index_classification", "position_label", "total_fv", "pct_of_index",
+            "position_count", "rn"]
+
+    by_idx: dict[str, list[dict]] = {}
+    for row in rows:
+        d = dict(zip(cols, row))
+        by_idx.setdefault(d["index_classification"], []).append(d)
+
+    out: dict[str, list[dict]] = {}
+    for idx, positions in by_idx.items():
+        out[idx] = _top_n_with_other(positions, name_key="position_label")
+
+    _write_json("position_concentration.json", out)
 
 
 # ---------------------------------------------------------------------------
@@ -636,10 +1167,15 @@ def export_all() -> None:
     con = duckdb.connect()
 
     ir = _export_index_returns(con)
-    _export_index_summary(ir)
+    _export_index_summary(ir, con)
     _export_top_constituents(con)
     _export_sector_breakdown(con)
     _export_vehicle_contribution(con)
+    _export_manager_concentration(con)
+    _export_vehicle_concentration(con)
+    _export_investee_concentration(con)
+    _export_position_concentration(con)
+    _export_concentration_curve(con)
     _export_portfolio_characteristics(con)
     _export_metadata(con, ir)
 

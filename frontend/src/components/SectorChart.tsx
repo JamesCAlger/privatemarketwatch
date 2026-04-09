@@ -25,7 +25,7 @@ export default function SectorChart({ data, color }: SectorChartProps) {
           <div className="flex items-center justify-between text-sm mb-1">
             <span className="font-medium text-navy">{CATEGORY_LABELS[row.assetCategory] ?? row.assetCategory}</span>
             <span className="text-muted tabular-nums">
-              {formatPercent(row.pctOfIndex)} ({formatNumber(row.positionCount)} constituent positions)
+              {formatPercent(row.pctOfIndex)} ({formatNumber(row.positionCount)} constituent holdings)
             </span>
           </div>
           <div className="h-2 bg-surface-muted rounded-full overflow-hidden">

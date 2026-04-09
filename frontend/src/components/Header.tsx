@@ -28,39 +28,55 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`bg-navy sticky top-0 z-50 transition-transform duration-300 ${
+    <header className={`bg-navy sticky top-0 z-50 transition-transform duration-300 border-b border-teal/30 ${
       hidden ? '-translate-y-full' : 'translate-y-0'
     }`}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex h-14 md:h-[84px] items-center gap-10">
+        <div className="flex h-14 md:h-16 items-center gap-8">
           {/* Logo */}
-          <Link href="/" className="font-bold text-white text-lg md:text-xl shrink-0">
-            Private Market Watch
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="shrink-0">
+              <path d="M4 7L12 14L4 21" stroke="#2A9D8F" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 7L20 14L12 21" stroke="#3DB8A9" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
+            </svg>
+            <span className="font-bold text-white text-base md:text-lg tracking-tight">
+              Private Market Watch
+            </span>
           </Link>
 
-          {/* Desktop nav -- beside the logo */}
-          <nav className="hidden md:flex items-center gap-6 text-sm">
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1 text-sm flex-1">
             <div
               className="relative"
               onMouseEnter={() => setIndicesOpen(true)}
               onMouseLeave={() => setIndicesOpen(false)}
             >
-              <button className={`hover:text-teal transition-colors ${
-                pathname.startsWith('/indices') ? 'text-teal font-medium' : 'text-white/70'
+              <button className={`relative px-3 py-5 hover:text-teal transition-colors ${
+                pathname.startsWith('/indices') ? 'text-white font-medium' : 'text-white/70'
               }`}>
                 Indices
+                <svg className="inline-block ml-1 w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+                {pathname.startsWith('/indices') && (
+                  <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal rounded-full" />
+                )}
               </button>
               {indicesOpen && (
-                <div className="absolute top-full left-0 pt-1">
-                  <div className="bg-white border border-surface-muted rounded-md shadow-lg py-1 min-w-[220px]">
+                <div className="absolute top-full left-0 pt-0.5">
+                  <div className="bg-white border border-surface-muted rounded-lg shadow-panel py-1.5 min-w-[240px]">
                     {INDICES.map((idx) => (
                       <Link
                         key={idx.slug}
                         href={`/indices/${idx.slug}`}
-                        className="block px-4 py-2 text-sm text-navy hover:bg-surface transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-navy hover:bg-surface transition-colors"
                         onClick={() => setIndicesOpen(false)}
                       >
-                        {idx.shortName}
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{ backgroundColor: idx.color }}
+                        />
+                        <span>{idx.shortName}</span>
                       </Link>
                     ))}
                   </div>
@@ -75,7 +91,12 @@ export default function Header() {
             </NavLink>
           </nav>
 
-          {/* Spacer to push hamburger right */}
+          {/* As-of date indicator (desktop) */}
+          <div className="hidden md:block text-xs text-white/40 shrink-0">
+            As of Q4 2025
+          </div>
+
+          {/* Spacer for mobile */}
           <div className="flex-1 md:hidden" />
 
           {/* Mobile hamburger */}
@@ -96,16 +117,16 @@ export default function Header() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <nav className="md:hidden pb-4 border-t border-white/10 pt-3 space-y-2">
+          <nav className="md:hidden pb-4 border-t border-white/10 pt-3 space-y-1">
             {INDICES.map((idx) => (
               <Link
                 key={idx.slug}
                 href={`/indices/${idx.slug}`}
-                className="block px-2 py-1.5 text-sm text-white/80 hover:text-teal"
+                className="flex items-center gap-2.5 px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 <span
-                  className="inline-block w-2 h-2 rounded-full mr-2"
+                  className="w-2 h-2 rounded-full shrink-0"
                   style={{ backgroundColor: idx.color }}
                 />
                 {idx.name}
@@ -113,18 +134,21 @@ export default function Header() {
             ))}
             <Link
               href="/methodology"
-              className="block px-2 py-1.5 text-sm text-white/80 hover:text-teal"
+              className="block px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               Methodology
             </Link>
             <Link
               href="/about"
-              className="block px-2 py-1.5 text-sm text-white/80 hover:text-teal"
+              className="block px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               About
             </Link>
+            <div className="pt-2 px-2 text-xs text-white/30">
+              As of Q4 2025
+            </div>
           </nav>
         )}
       </div>
@@ -145,11 +169,14 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`hover:text-teal transition-colors ${
-        isActive ? 'text-teal font-medium' : 'text-white/70'
+      className={`relative px-3 py-5 hover:text-teal transition-colors ${
+        isActive ? 'text-white font-medium' : 'text-white/70'
       }`}
     >
       {children}
+      {isActive && (
+        <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal rounded-full" />
+      )}
     </Link>
   );
 }

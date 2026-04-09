@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { INDICES } from '@/lib/constants';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://private-markets-index.vercel.app';
+  const base = 'https://privatemarketwatch.com';
 
   return [
     { url: base, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },

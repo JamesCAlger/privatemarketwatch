@@ -2,15 +2,17 @@
 
 import { useState, useMemo } from 'react';
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  ReferenceLine,
 } from 'recharts';
 import { formatLevel, formatQuarter } from '@/lib/format';
+import { useInView } from '@/lib/useInView';
 
 interface Series {
   key: string;
@@ -33,6 +35,32 @@ interface TimeSeriesChartProps {
   defaultVisible?: string[];
 }
 
+// Recharts tooltip props are untyped
+function CustomTooltip(props: {
+  active?: boolean;
+  payload?: { dataKey: string; color: string; value: number }[];
+  label?: string;
+  seriesMap: Record<string, string>;
+}) {
+  const { active, payload, label, seriesMap } = props;
+  if (!active || !payload || payload.length === 0) return null;
+  return (
+    <div className="bg-navy rounded-lg px-3 py-2 shadow-panel text-xs">
+      <p className="text-white/60 mb-1">{formatQuarter(label)}</p>
+      {payload.map((entry) => (
+        <div key={entry.dataKey} className="flex items-center gap-2 text-white">
+          <span
+            className="w-2 h-2 rounded-full shrink-0"
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-white/70">{seriesMap[entry.dataKey] ?? entry.dataKey}:</span>
+          <span className="font-medium tabular-nums">{formatLevel(entry.value)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function TimeSeriesChart({
   series,
   defaultVisible,
@@ -42,6 +70,7 @@ export default function TimeSeriesChart({
     new Set(defaultVisible ?? allKeys),
   );
   const [period, setPeriod] = useState<Period>('all');
+  const [ref, inView] = useInView(0.15);
 
   const toggleSeries = (key: string) => {
     setVisible((prev) => {
@@ -54,6 +83,13 @@ export default function TimeSeriesChart({
       return next;
     });
   };
+
+  // Build name lookup for tooltip
+  const seriesMap = useMemo(() => {
+    const m: Record<string, string> = {};
+    for (const s of series) m[s.key] = s.name;
+    return m;
+  }, [series]);
 
   // Merge all series into unified data points by quarter
   const allData = useMemo(() => {
@@ -89,7 +125,7 @@ export default function TimeSeriesChart({
   }
 
   return (
-    <div>
+    <div ref={ref}>
       {/* Period tabs + legend toggles */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex gap-1">
@@ -97,7 +133,7 @@ export default function TimeSeriesChart({
             <button
               key={p.key}
               onClick={() => setPeriod(p.key)}
-              className={`text-xs px-3 py-1 rounded-md transition-colors ${
+              className={`text-xs px-3 py-1.5 rounded-md transition-colors ${
                 period === p.key
                   ? 'bg-navy text-white font-medium'
                   : 'text-muted hover:text-navy hover:bg-surface'
@@ -130,43 +166,55 @@ export default function TimeSeriesChart({
       </div>
 
       <ResponsiveContainer width="100%" height={360}>
-        <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#E9ECEF" />
-          <XAxis
-            dataKey="quarter"
-            tickFormatter={formatQuarter}
-            tick={{ fontSize: 11, fill: '#6C757D' }}
-            interval="preserveStartEnd"
-          />
-          <YAxis
-            tick={{ fontSize: 11, fill: '#6C757D' }}
-            tickFormatter={(v: number) => formatLevel(v)}
-            domain={['auto', 'auto']}
-          />
-          <Tooltip
-            formatter={(value: number, name: string) => [
-              formatLevel(value),
-              series.find((s) => s.key === name)?.name ?? name,
-            ]}
-            labelFormatter={formatQuarter}
-            contentStyle={{ fontSize: 12 }}
-          />
-          {series.map(
-            (s) =>
-              visible.has(s.key) && (
-                <Line
-                  key={s.key}
-                  type="monotone"
-                  dataKey={s.key}
-                  stroke={s.color}
-                  strokeWidth={2}
-                  dot={false}
-                  activeDot={{ r: 4 }}
-                  connectNulls
-                />
-              ),
-          )}
-        </LineChart>
+        {inView ? (
+          <AreaChart data={chartData}>
+            <defs>
+              {series.map((s) => (
+                <linearGradient key={s.key} id={`grad-${s.key}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={s.color} stopOpacity={0.15} />
+                  <stop offset="100%" stopColor={s.color} stopOpacity={0.01} />
+                </linearGradient>
+              ))}
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#E9ECEF" />
+            <XAxis
+              dataKey="quarter"
+              tickFormatter={formatQuarter}
+              tick={{ fontSize: 11, fill: '#6C757D' }}
+              interval="preserveStartEnd"
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: '#6C757D' }}
+              tickFormatter={(v: number) => formatLevel(v)}
+              domain={['auto', 'auto']}
+            />
+            <ReferenceLine y={100} stroke="#6C757D" strokeDasharray="4 4" strokeOpacity={0.5} />
+            <Tooltip
+              content={<CustomTooltip seriesMap={seriesMap} />}
+              cursor={{ stroke: '#6C757D', strokeDasharray: '3 3' }}
+            />
+            {series.map(
+              (s) =>
+                visible.has(s.key) && (
+                  <Area
+                    key={s.key}
+                    type="monotone"
+                    dataKey={s.key}
+                    stroke={s.color}
+                    strokeWidth={2}
+                    fill={`url(#grad-${s.key})`}
+                    dot={false}
+                    activeDot={{ r: 4, fill: s.color, stroke: '#fff', strokeWidth: 2 }}
+                    connectNulls
+                    animationDuration={1500}
+                    animationEasing="ease-out"
+                  />
+                ),
+            )}
+          </AreaChart>
+        ) : (
+          <svg width="100%" height={360} />
+        )}
       </ResponsiveContainer>
     </div>
   );

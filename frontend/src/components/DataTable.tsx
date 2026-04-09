@@ -52,18 +52,24 @@ export default function DataTable<T extends Record<string, any>>({  // eslint-di
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-surface-muted">
+          <tr className="bg-surface/80">
             {columns.map((col) => (
               <th
                 key={col.key}
-                className={`py-2 px-3 font-medium text-muted text-xs uppercase tracking-wider ${
+                className={`py-2.5 px-3 font-medium text-navy/60 text-xs uppercase tracking-wider ${
                   col.align === 'right' ? 'text-right' : 'text-left'
                 } ${sortable ? 'cursor-pointer select-none hover:text-navy' : ''}`}
                 onClick={() => handleSort(col.key)}
               >
                 {col.header}
                 {sortable && sortKey === col.key && (
-                  <span className="ml-1">{sortAsc ? '\u2191' : '\u2193'}</span>
+                  <svg className="inline-block ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {sortAsc ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    )}
+                  </svg>
                 )}
               </th>
             ))}
@@ -73,12 +79,14 @@ export default function DataTable<T extends Record<string, any>>({  // eslint-di
           {sorted.map((row, i) => (
             <tr
               key={i}
-              className="border-b border-surface last:border-0 hover:bg-surface transition-colors"
+              className={`border-b border-surface last:border-0 hover:bg-teal/[0.03] transition-colors ${
+                i % 2 === 1 ? 'bg-surface/30' : ''
+              }`}
             >
               {columns.map((col) => (
                 <td
                   key={col.key}
-                  className={`py-2 px-3 tabular-nums ${
+                  className={`py-2.5 px-3 tabular-nums ${
                     col.align === 'right' ? 'text-right' : 'text-left'
                   }`}
                 >

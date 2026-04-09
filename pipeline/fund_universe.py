@@ -1049,42 +1049,44 @@ def _build_fund_universe_fast(client: EdgarClient) -> pd.DataFrame:
 
     Used when --exhaustive is not specified.
     """
-    # Method A: N-CEN (single quarter — use latest available)
-    dest = SEC_DATASETS_DIR / "ncen_data.zip"
-    try:
-        client.download_file(NCEN_DATASET_URL, dest)
-    except Exception as exc:
-        logger.warning("Could not download N-CEN data set: %s", exc)
-        alt_urls = [
-            "https://www.sec.gov/files/dera/data/form-n-cen-data-sets/2025q3_ncen.zip",
-            "https://www.sec.gov/files/dera/data/form-n-cen-data-sets/2025q2_ncen.zip",
-        ]
-        downloaded = False
-        for alt in alt_urls:
+    # Method A: N-CEN (4 quarters — one per quarter-of-year to catch all
+    # annual filers regardless of which quarter they file in)
+    dataset_year = NCEN_DATASET_URL.rsplit("/", 1)[-1][:4]  # e.g. "2025"
+    all_ncen_records: list[dict] = []
+    for qnum in (1, 2, 3, 4):
+        # Find latest cached file for this quarter-of-year
+        candidates = sorted(
+            SEC_DATASETS_DIR.glob(f"*q{qnum}_ncen.zip"),
+            reverse=True,
+        )
+        chosen = candidates[0] if candidates else None
+        if chosen is None:
+            # Try downloading latest year
+            url = (
+                "https://www.sec.gov/files/dera/data/"
+                f"form-n-cen-data-sets/{dataset_year}q{qnum}_ncen.zip"
+            )
+            dest = SEC_DATASETS_DIR / f"{dataset_year}q{qnum}_ncen.zip"
             try:
-                client.download_file(alt, dest)
-                downloaded = True
-                break
+                client.download_file(url, dest)
+                chosen = dest
             except Exception:
+                logger.debug("N-CEN Q%d not available, skipping", qnum)
                 continue
-        if not downloaded:
-            logger.warning("N-CEN data set unavailable — falling back to EFTS search")
-            df_a = _ncen_via_efts(client)
-
-    if dest.exists():
         try:
-            records = _parse_ncen_zip(dest, "latest")
-            df_a = pd.DataFrame(records)
-            if not df_a.empty:
-                df_a = df_a.drop(columns=["quarter"], errors="ignore")
-                df_a = df_a.drop_duplicates(
-                    subset=["cik"] + (["series_id"] if "series_id" in df_a.columns else []),
-                    keep="first",
-                )
-            logger.info("Method A (fast): %d interval funds from N-CEN", len(df_a))
+            recs = _parse_ncen_zip(chosen, chosen.stem.replace("_ncen", ""))
+            all_ncen_records.extend(recs)
+            logger.info("  N-CEN %s: %d interval funds", chosen.stem, len(recs))
         except Exception as exc:
-            logger.error("Error parsing N-CEN: %s", exc)
-            df_a = _ncen_via_efts(client)
+            logger.warning("  N-CEN %s: parse error - %s", chosen.stem, exc)
+
+    if all_ncen_records:
+        df_a = pd.DataFrame(all_ncen_records)
+        df_a = df_a.sort_values("quarter", ascending=False)
+        dedup_cols = ["cik"] + (["series_id"] if "series_id" in df_a.columns else [])
+        df_a = df_a.drop_duplicates(subset=dedup_cols, keep="first")
+        df_a = df_a.drop(columns=["quarter"], errors="ignore")
+        logger.info("Method A (fast-4q): %d interval funds from N-CEN", len(df_a))
     else:
         df_a = _ncen_via_efts(client)
 
@@ -1176,7 +1178,9 @@ def _search_n2_via_efts(client: EdgarClient) -> pd.DataFrame:
 
     # Get N-CEN registrants of type N-2
     n2_ciks: dict[str, str] = {}
-    ncen_zip = SEC_DATASETS_DIR / "ncen_data.zip"
+    # Use the latest cached N-CEN ZIP (prefer properly-named quarterly files)
+    ncen_candidates = sorted(SEC_DATASETS_DIR.glob("*_ncen.zip"), reverse=True)
+    ncen_zip = ncen_candidates[0] if ncen_candidates else SEC_DATASETS_DIR / "ncen_data.zip"
     if ncen_zip.exists():
         try:
             with zipfile.ZipFile(ncen_zip) as zf:

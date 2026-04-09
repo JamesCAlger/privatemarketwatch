@@ -196,3 +196,221 @@ NPORT_DATASET_URL_TEMPLATE = (
 # ---------------------------------------------------------------------------
 BDC_XBRL_START_YEAR = 2013
 BDC_FILING_FORM_TYPES = {"10-K", "10-K/A", "10-Q", "10-Q/A"}
+
+# ---------------------------------------------------------------------------
+# CIK-to-manager-brand mapping (curated for manager concentration charts)
+# Only CIKs with actual position-level holdings data are included.
+# Unmapped CIKs fall back to entity_name in the frontend export.
+# ---------------------------------------------------------------------------
+CIK_TO_MANAGER_BRAND: dict[str, str] = {
+    # Ares
+    "0001287750": "Ares",
+    "0001918712": "Ares",
+    "0002031750": "Ares",
+    # Apollo
+    "0001837532": "Apollo",
+    "0002052152": "Apollo",
+    "0002052153": "Apollo",
+    # Bain Capital
+    "0001899017": "Bain Capital",
+    "0001655050": "Bain Capital",
+    # Barings
+    "0001379785": "Barings",
+    "0001811972": "Barings",
+    "0001859919": "Barings",
+    # BlackRock
+    "0001326003": "BlackRock",
+    "0001370755": "BlackRock",
+    # Blackstone
+    "0001803498": "Blackstone",
+    "0002049733": "Blackstone",
+    "0001736035": "Blackstone",
+    # Blue Owl
+    "0001655888": "Blue Owl",
+    "0001655887": "Blue Owl",
+    "0001807427": "Blue Owl",
+    "0001812554": "Blue Owl",
+    "0001747777": "Blue Owl",
+    "0001889668": "Blue Owl",
+    "0001869453": "Blue Owl",
+    # Carlyle
+    "0001702510": "Carlyle",
+    "0001851277": "Carlyle",
+    "0001544206": "Carlyle",
+    # Crescent Capital
+    "0001633336": "Crescent Capital",
+    "0001954360": "Crescent Capital",
+    # Eagle Point
+    "0002013536": "Eagle Point",
+    "0001992148": "Eagle Point",
+    "0002027033": "Eagle Point",
+    # Franklin BSP
+    "0001825248": "Franklin BSP",
+    "0001490927": "Franklin BSP",
+    "0002063946": "Franklin BSP",
+    "0002018545": "Franklin BSP",
+    # FS KKR
+    "0001422183": "FS KKR",
+    "0001501729": "FS KKR",
+    # Gladstone
+    "0001143513": "Gladstone",
+    "0001321741": "Gladstone",
+    # Golub Capital
+    "0001476765": "Golub Capital",
+    "0001868878": "Golub Capital",
+    "0001715268": "Golub Capital",
+    "0001901612": "Golub Capital",
+    "0001901606": "Golub Capital",
+    "0001930087": "Golub Capital",
+    # Goldman Sachs
+    "0001572694": "Goldman Sachs",
+    "0001865174": "Goldman Sachs",
+    "0001920145": "Goldman Sachs",
+    "0001796242": "Goldman Sachs",
+    # HPS
+    "0001989817": "HPS",
+    "0001838126": "HPS",
+    # Hercules Capital
+    "0001280784": "Hercules Capital",
+    # KKR
+    "0002012839": "KKR",
+    "0001930679": "KKR",
+    "0001975736": "KKR",
+    "0001803958": "KKR",
+    "0002040315": "KKR",
+    "0002040318": "KKR",
+    # Main Street
+    "0001396440": "Main Street Capital",
+    # MidCap
+    "0002006758": "MidCap",
+    "0001278752": "MidCap",
+    # Monroe Capital
+    "0001512931": "Monroe Capital",
+    "0001742313": "Monroe Capital",
+    # Morgan Stanley
+    "0001782524": "Morgan Stanley",
+    # Neuberger Berman
+    "0001487610": "Neuberger Berman",
+    "0001818105": "Neuberger Berman",
+    "0002041175": "Neuberger Berman",
+    # New Mountain
+    "0001496099": "New Mountain",
+    "0001781870": "New Mountain",
+    "0001925531": "New Mountain",
+    "0001976719": "New Mountain",
+    "0002037804": "New Mountain",
+    "0001766037": "New Mountain",
+    # Nuveen Churchill
+    "0002071136": "Nuveen Churchill",
+    "0001737924": "Nuveen Churchill",
+    "0001911066": "Nuveen Churchill",
+    # Oaktree
+    "0001414932": "Oaktree",
+    "0001872371": "Oaktree",
+    "0001974793": "Oaktree",
+    # PennantPark
+    "0001383414": "PennantPark",
+    "0001504619": "PennantPark",
+    # PIMCO
+    "0001905824": "PIMCO",
+    # Prospect Capital
+    "0001287032": "Prospect Capital",
+    "0002027076": "Prospect Capital",
+    "0001521945": "Prospect Capital",
+    # SLR
+    "0001825590": "SLR",
+    "0002028686": "SLR",
+    "0001832148": "SLR",
+    "0001418076": "SLR",
+    "0001932591": "SLR",
+    # Stellus
+    "0001551901": "Stellus",
+    "0001901037": "Stellus",
+    # Stone Point
+    "0001825384": "Stone Point",
+    "0002031283": "Stone Point",
+    # T. Rowe Price / OHA
+    "0001955010": "T. Rowe Price",
+    "0001901164": "T. Rowe Price",
+    # TCW
+    "0001603480": "TCW",
+    "0001715933": "TCW",
+    # TPG
+    "0001913724": "TPG",
+    # TriplePoint
+    "0001792509": "TriplePoint",
+    "0001580345": "TriplePoint",
+    # Trinity Capital
+    "0001786108": "Trinity Capital",
+    # Varagon
+    "0001784700": "Varagon",
+    # WhiteHorse
+    "0001552198": "WhiteHorse",
+    # WTI
+    "0001850938": "WTI",
+    "0001987731": "WTI",
+    # Kayne Anderson
+    "0001747172": "Kayne Anderson",
+    "0001850787": "Kayne Anderson",
+    # Cliffwater
+    "0001735964": "Cliffwater",
+    # PGIM
+    "0001923622": "PGIM",
+    # AG Twin Brook
+    "0001666384": "AG Twin Brook",
+    # Kennedy Lewis
+    "0001911321": "Kennedy Lewis",
+    # Investcorp
+    "0001578348": "Investcorp",
+    "0001948565": "Investcorp",
+    # Partners Group
+    "0001447247": "Partners Group",
+    # Lord Abbett
+    "0002008748": "Lord Abbett",
+    # CION
+    "0001534254": "CION",
+    # Saratoga
+    "0001377936": "Saratoga",
+    # Capital Southwest
+    "0000017313": "Capital Southwest",
+    # AB (AllianceBernstein)
+    "0001634452": "AllianceBernstein",
+    "0001982701": "AllianceBernstein",
+    # Antares
+    "0001976336": "Antares",
+    "0001993402": "Antares",
+    # Palmer Square
+    "0001608016": "Palmer Square",
+    "0001794776": "Palmer Square",
+    # Fortress
+    "0002012139": "Fortress",
+    # Manulife
+    "0001988280": "Manulife",
+    # OFS Capital
+    "0001487918": "OFS Capital",
+    # Horizon Technology
+    "0001487428": "Horizon Technology",
+    # First Trust
+    "0002021979": "First Trust",
+    # Audax
+    "0001633858": "Audax",
+    # BC Partners
+    "0001726548": "BC Partners",
+    # RiverNorth
+    "0001501072": "RiverNorth",
+    "0001678130": "RiverNorth",
+    "0001644771": "RiverNorth",
+    # StepStone
+    "0002066799": "StepStone",
+    # HarbourVest
+    "0002020407": "HarbourVest",
+    # Coller
+    "0002033620": "Coller",
+    "0001969180": "Coller",
+    # Vista
+    "0001919369": "Vista",
+    # Chicago Atlantic
+    "0001843162": "Chicago Atlantic",
+    # Brightwood
+    "0001895316": "Brightwood",
+}

@@ -792,8 +792,19 @@ def match_positions(
         CAST(u.coupon_type AS VARCHAR) AS coupon_type"""
 
     # Part 1: Tier A annotation via bdc_investment_identifier
+    # Override begin/end_issuer_name with the cleaned issuer_name from
+    # unified_base (Tier A stores raw investment_identifier in those cols).
     sql_a = f"""
-    SELECT {_select_cols('a')},
+    SELECT a.cik, a.entity_name, a.source,
+        a.begin_quarter, a.begin_report_date,
+        COALESCE(CAST(u.issuer_name AS VARCHAR), a.begin_issuer_name) AS begin_issuer_name,
+        a.begin_fair_value, a.begin_cost, a.begin_principal_amount,
+        a.begin_interest_rate, a.begin_basis_spread, a.begin_shares_held,
+        a.end_quarter, a.end_report_date,
+        COALESCE(CAST(u.issuer_name AS VARCHAR), a.end_issuer_name) AS end_issuer_name,
+        a.end_fair_value, a.end_cost, a.end_principal_amount,
+        a.end_interest_rate, a.end_basis_spread, a.end_shares_held,
+        a.match_method, a.match_key, a.match_score, a.span_months,
         {_class_cols}
     FROM tier_a a
     LEFT JOIN unified_base u

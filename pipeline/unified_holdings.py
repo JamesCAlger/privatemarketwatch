@@ -131,6 +131,21 @@ _BDC_AGGREGATE_PATTERNS = [
     "total preferred equity",
     "total equity/",
     "total equity investment",
+    # Affiliation-level subtotals (2026-04-09 audit)
+    "total controlled affiliates",
+    "total affiliated investments",
+    "total controlled investments",
+    "total controlled/affiliated",
+    "total non controlled non affiliated",
+    # Fund-level aggregates (2026-04-09 audit)
+    "investment fund after cash",
+    "portfolio company investment in securities",
+    "five largest loan exposures",
+    "five largest portfolio",
+    "investments in controlled, affiliated",
+    "investments in controlled affiliated",
+    "net asset value at fair value",
+    "cash and investments",
     # XBRL dimension member labels (category-level tags, not investee-level)
     "[member]",
 ]
@@ -166,7 +181,29 @@ _BDC_AGGREGATE_EXACT = {
     "second lien - secured debt",
     "unsecured debt",
     "u.s. 1st lien/junior secured debt",
+    # Bare instrument-type headers (Kennedy Lewis, SLR HC BDC, Ares Core Infra)
+    "first and second lien debt",
+    "bank debt/senior secured loans",
+    "senior subordinated loans",
+    "senior secured loans - first lien",
+    "first lien/senior",
+    "portfolio investments and cash equivalents",
+    "liabilities less other assets",
+    # Standalone category headers that are subtotals (2026-04-09 audit)
+    "first lien secured debt",
+    "first lien/senior secured debt",
 }
+
+# Suffix patterns for industry-prefixed subtotals.
+# Identifiers ENDING with these strings (no rate/maturity/company after)
+# are category-level subtotals, e.g. "Oil, Gas & Consumable Fuels First and Second Lien Debt".
+# Real positions always have SOFR/Spread/Interest Rate/Due after the instrument type.
+# NOTE: Only include patterns that do NOT appear at the end of real position identifiers.
+# "first lien senior secured term loan" is too broad (real positions end with it too).
+_BDC_AGGREGATE_SUFFIXES = [
+    "first and second lien debt",
+    "equity investments",
+]
 
 # Issuer names that are industry/geography labels (not companies).
 # Single-word entries are filtered only when the identifier IS a single word.
@@ -290,6 +327,7 @@ _CREDIT_FUND_SIGNALS = [
     "senior", "direct lending", "floating rate", "yield",
     "distressed", "mezzanine", "high yield", "fixed income",
     "leveraged", "structured credit", "private credit",
+    "asset management",
 ]
 _PE_FUND_SIGNALS = [
     "equity", "buyout", "growth", "venture", "private equity",
@@ -310,6 +348,18 @@ _NPORT_CREDIT_FUND_NAME_KEYWORDS = [
     "bdc", "private credit", "senior loan", "lending fund",
     "credit fund", "credit corp", "direct lend",
 ]
+
+# BDC fund vehicle / manager detection: equity-type positions in entities
+# whose names match these signals should have issuer_category = FUND.
+# "asset management" uses a position guard (must appear within first 30 chars)
+# to avoid false positives from compound multi-entity names.
+_BDC_FUND_VEHICLE_KEYWORDS = [
+    "asset management",
+    "senior loan program",
+]
+# Max character position for "asset management" match (guards against compound
+# names like "Microstar Logistics LLC, Microstar Global Asset Management LLC")
+_BDC_FUND_VEHICLE_POS_GUARD = 30
 
 # Named co-invest / LP interest reclassification
 # Operating company markers -- if the issuer name contains one of these,
@@ -351,6 +401,28 @@ _AFFILIATION_TAGS = {
     "non-control/non-affiliate", "control", "affiliate",
 }
 
+# Instrument-type keywords for 3-pipe format detection.  When segment 3
+# matches one of these, it is an instrument description, NOT a company name.
+_PIPE_INSTRUMENT_KEYWORDS = [
+    "term loan", "revolving", "credit facility", "delayed draw",
+    "first lien", "second lien", "senior secured", "unsecured debt",
+    "subordinated", "mezzanine",
+    "common stock", "preferred stock", "preferred class",
+    "common units", "preferred units",
+    "membership interest", "llc interest", "lp interest",
+    "limited liability co", "limited partnership",
+    "class a ", "class b ", "class c ",
+    "warrant",
+]
+
+# Regex for legal entity suffixes at end of string (optionally followed by
+# parenthetical, trailing digits, or a trailing number suffix like "LLC 1").
+# Used to detect company names in pipe-delimited segments.
+_LEGAL_SUFFIX_RE_SQL = (
+    r"\b(inc\.?|llc\.?|corp\.?|ltd\.?|l\.?p\.?|gmbh|company|corporation"
+    r"|incorporated)\s*(\(.*\))?\s*\d*\s*$"
+)
+
 # Regex to strip leading quantity/dollar amounts from instrument descriptions
 _QTY_PREFIX_RE = re.compile(r"^\$?[\d,.]+ ?")
 
@@ -379,6 +451,13 @@ def _sql_starts_with_any(col: str, prefixes: list[str]) -> str:
     return "(" + " OR ".join(clauses) + ")"
 
 
+def _sql_ends_with_any(col: str, suffixes: list[str]) -> str:
+    """Generate SQL OR chain: suffix_of(col, 's1') OR suffix_of(col, 's2') ..."""
+    clauses = [f"ends_with({col}, '{s.replace(chr(39), chr(39)+chr(39))}')"
+               for s in suffixes]
+    return "(" + " OR ".join(clauses) + ")"
+
+
 def _sql_is_bdc_aggregate() -> str:
     """Generate SQL boolean expression for aggregate row detection."""
     parts = []
@@ -402,6 +481,37 @@ def _sql_is_bdc_aggregate() -> str:
     parts.append(f"(NOT contains(_raw_id, ' - ') AND {cat_sql})")
     # Identifiers ending with a percentage are always subtotals/allocations
     parts.append("regexp_matches(_lower_id, '\\d+\\.?\\d*%\\s*$')")
+    # "Total ..." industry subtotals: starts with "total " but does NOT contain
+    # any company suffix (Inc., LLC, Corp., Ltd., LP, Holdings, Group, Solutions,
+    # Fund, Partners, Term, Loan, Note, Stock, Warrant, Debt, Common, Preferred).
+    # This catches "Total Software", "Total Healthcare & Pharmaceuticals" etc.
+    # while preserving "Total Access Elevator, Inc.", "Total Safety U.S. Inc."
+    _total_company_signals = [
+        "inc.", "inc,", "llc", "corp.", "corp,", "ltd.", "ltd,",
+        ", lp", " lp,", "holdings", "group", "solutions",
+        "technologies",
+        "term loan", "term debt", "revolver", "delayed draw",
+    ]
+    company_guards = " AND ".join(
+        f"NOT contains(_lower_id, '{s}')" for s in _total_company_signals
+    )
+    parts.append(
+        f"(starts_with(_lower_id, 'total ') AND {company_guards})"
+    )
+    # Also catch pipe-delimited subtotals where "Total X" is in the last
+    # segment, e.g. "Corporate Bonds | Automotive | Total Automotive"
+    last_seg = "trim(string_split(_lower_id, ' | ')[-1])"
+    last_seg_guards = " AND ".join(
+        f"NOT contains({last_seg}, '{s}')" for s in _total_company_signals
+    )
+    parts.append(
+        f"(contains(_lower_id, ' | ') AND starts_with({last_seg}, 'total ') "
+        f"AND {last_seg_guards})"
+    )
+    # Industry-prefixed subtotals: identifier ENDS with instrument type
+    # (real positions always have rate/maturity after the instrument type)
+    suffix_sql = _sql_ends_with_any("_lower_id", _BDC_AGGREGATE_SUFFIXES)
+    parts.append(suffix_sql)
     # Single-word industry/geography labels
     single_word_labels = sorted(v for v in _INDUSTRY_LABELS if " " not in v)
     multi_word_labels = sorted(v for v in _INDUSTRY_LABELS if " " in v)
@@ -555,10 +665,15 @@ def _sql_industry_label_in() -> str:
 def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
     """Split a BDC investment_identifier into (issuer_name, instrument_description).
 
-    Handles three formats:
-    1. Pipe-separated (SLR): "Type | Industry | Company | Instrument" -> issuer = segment 3
-    2. Industry-prefix: "Industry - Company - Instrument" -> issuer = segment 2
-    3. Default: "Company - Instrument" -> issuer = segment 1
+    Handles five pipe sub-formats (3-pipe):
+    1. affil_last:    "Company | Instrument | Affiliation"  -> issuer = seg1
+    2. company_first: "Company | Industry | Instrument"     -> issuer = seg1
+    3. company_seg2:  "Category | Company | Instrument"     -> issuer = seg2
+    4. slr:           "Type | Industry | Company | ..."     -> issuer = seg3
+
+    Plus dash-based:
+    5. Industry-prefix: "Industry - Company - Instrument"   -> issuer = seg2
+    6. Default: "Company - Instrument"                      -> issuer = seg1
 
     Returns ("", "") for empty/null input.
     """
@@ -575,14 +690,42 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
                 issuer = pipe_parts[0].strip()
                 instrument = pipe_parts[1].strip()
                 return (issuer, instrument)
-            else:
-                # SLR format: "Type | Industry | Company | ..."
-                issuer = pipe_parts[2].strip()
-                other_parts = [pipe_parts[0].strip(), pipe_parts[1].strip()]
-                if len(pipe_parts) >= 4:
-                    other_parts.extend(p.strip() for p in pipe_parts[3:])
-                instrument = ", ".join(other_parts)
-                return (issuer, instrument)
+
+            # 3-pipe sub-format detection
+            if len(pipe_parts) == 3:
+                seg1 = pipe_parts[0].strip()
+                seg2 = pipe_parts[1].strip()
+                seg3 = pipe_parts[2].strip()
+                _suffix_re = re.compile(
+                    _LEGAL_SUFFIX_RE_SQL, re.IGNORECASE
+                )
+                seg1_is_company = bool(_suffix_re.search(seg1))
+                seg2_is_company = bool(_suffix_re.search(seg2))
+                seg3_is_instrument = any(
+                    kw in seg3.lower() for kw in _PIPE_INSTRUMENT_KEYWORDS
+                )
+                if seg1_is_company:
+                    # company_first: "Company | Industry | Instrument"
+                    return (seg1, seg3)
+                if seg3_is_instrument and seg2_is_company:
+                    # company_seg2: "Category | Company | Instrument"
+                    return (seg2, seg3)
+                if seg3_is_instrument and seg2.lower() in _INDUSTRY_LABELS:
+                    # company_first without legal suffix: seg2 is known industry
+                    return (seg1, seg3)
+
+            # SLR format: "Type | Industry | Company | ..."
+            issuer = pipe_parts[2].strip()
+            other_parts = [pipe_parts[0].strip(), pipe_parts[1].strip()]
+            if len(pipe_parts) >= 4:
+                other_parts.extend(p.strip() for p in pipe_parts[3:])
+            instrument = ", ".join(other_parts)
+            return (issuer, instrument)
+        elif len(pipe_parts) == 2:
+            # 2-segment pipe: "Company | Instrument" or "Company | Affiliation"
+            issuer = pipe_parts[0].strip()
+            instrument = pipe_parts[1].strip()
+            return (issuer, instrument)
 
     if " - " not in identifier:
         return (identifier.strip(), "")
@@ -652,6 +795,31 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
     # e.g. "Debt Investment 96.8%", "United States - 1.60%"
     if re.search(r"\d+\.?\d*%\s*$", lower):
         return True
+
+    # Industry-prefixed subtotals: identifier ends with instrument type
+    # (real positions always have rate/maturity after)
+    for suffix in _BDC_AGGREGATE_SUFFIXES:
+        if lower.endswith(suffix):
+            return True
+
+    # "Total ..." industry subtotals: starts with "total " but does NOT contain
+    # any company suffix (Inc., LLC, Corp., etc.)
+    _total_co_signals = [
+        "inc.", "inc,", "llc", "corp.", "corp,", "ltd.", "ltd,",
+        ", lp", " lp,", "holdings", "group", "solutions",
+        "technologies",
+        "term loan", "term debt", "revolver", "delayed draw",
+    ]
+    if lower.startswith("total "):
+        if not any(s in lower for s in _total_co_signals):
+            return True
+    # Also catch pipe-delimited subtotals where "Total X" is in the last
+    # segment, e.g. "Corporate Bonds | Automotive | Total Automotive"
+    if " | " in lower:
+        last_seg = lower.rsplit(" | ", 1)[-1].strip()
+        if last_seg.startswith("total "):
+            if not any(s in last_seg for s in _total_co_signals):
+                return True
 
     # Single-word industry/geography labels (bare identifiers only)
     if " " not in lower and lower in _INDUSTRY_LABELS:
@@ -747,14 +915,28 @@ def _classify_nport_asset(asset_cat: str) -> str:
 # Issuer classification
 # ---------------------------------------------------------------------------
 
-def _classify_bdc_issuer(asset_category: str) -> str:
-    """Infer BDC issuer category from asset category.
+def _classify_bdc_issuer(asset_category: str, issuer_name: str = "") -> str:
+    """Infer BDC issuer category from asset category and issuer name.
 
     BDC investees are overwhelmingly private operating companies.
-    Only FUND assets map to FUND issuer category.
+    FUND assets map to FUND issuer category.  Additionally, equity-type
+    positions in fund managers / lending vehicles (detected by name keywords)
+    are reclassified as FUND.
     """
     if asset_category == "FUND":
         return "FUND"
+    # Equity stakes in fund managers/vehicles
+    if asset_category in ("EQUITY_COMMON", "EQUITY_PREFERRED", "OTHER"):
+        if issuer_name and isinstance(issuer_name, str):
+            name_lower = issuer_name.lower()
+            for kw in _BDC_FUND_VEHICLE_KEYWORDS:
+                pos = name_lower.find(kw)
+                if pos < 0:
+                    continue
+                # "asset management" requires position guard
+                if kw == "asset management" and pos >= _BDC_FUND_VEHICLE_POS_GUARD:
+                    continue
+                return "FUND"
     return "CORPORATE"
 
 
@@ -986,7 +1168,40 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     affil_in = _sql_exact_match(
         "lower(trim(string_split(_raw_id, ' | ')[-1]))", _AFFILIATION_TAGS
     )
+    # 3-pipe format detection helpers
+    seg1_has_suffix = (
+        f"regexp_matches(lower(trim(string_split(_raw_id, ' | ')[1])), "
+        f"'{_LEGAL_SUFFIX_RE_SQL}')"
+    )
+    seg2_has_suffix = (
+        f"regexp_matches(lower(trim(string_split(_raw_id, ' | ')[2])), "
+        f"'{_LEGAL_SUFFIX_RE_SQL}')"
+    )
+    seg3_is_instrument = _sql_keyword_check(
+        "lower(trim(string_split(_raw_id, ' | ')[3]))", _PIPE_INSTRUMENT_KEYWORDS
+    )
+    seg2_is_industry = _sql_exact_match(
+        "lower(trim(string_split(_raw_id, ' | ')[2]))", _INDUSTRY_LABELS
+    )
     name_norm = _sql_normalize_name("issuer_name")
+
+    # Fund vehicle/manager detection: equity-type positions with these name
+    # signals get issuer_category = FUND (overrides the default CORPORATE).
+    fund_vehicle_clauses = []
+    for kw in _BDC_FUND_VEHICLE_KEYWORDS:
+        kw_escaped = kw.replace("'", "''")
+        if kw == "asset management":
+            # Position guard: must appear within first N chars
+            fund_vehicle_clauses.append(
+                f"(strpos(lower(CAST(issuer_name AS VARCHAR)), '{kw_escaped}') > 0"
+                f" AND strpos(lower(CAST(issuer_name AS VARCHAR)), '{kw_escaped}')"
+                f" <= {_BDC_FUND_VEHICLE_POS_GUARD})"
+            )
+        else:
+            fund_vehicle_clauses.append(
+                f"contains(lower(CAST(issuer_name AS VARCHAR)), '{kw_escaped}')"
+            )
+    fund_vehicle_sql = " OR ".join(fund_vehicle_clauses)
 
     # Filter comparative-period rows if the 'period' column exists
     has_period = "period" in bdc_df.columns
@@ -1087,30 +1302,66 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 WHEN NOT contains(_raw_id, ' - ') THEN lower(trim(_raw_id))
                 ELSE lower(trim(string_split(_raw_id, ' - ')[1]))
             END AS _issuer_lower,
-            -- Pipe-separator detection: two formats
-            -- Affiliation format: "Company | Instrument | Affiliation" -> issuer = segment 1
-            -- SLR format: "Type | Industry | Company | ..." -> issuer = segment 3
+            -- Pipe-separator detection: four 3-pipe sub-formats
+            --   affil_last:    "Company | Instrument | Affiliation"  -> issuer = seg1
+            --   company_first: "Company | Industry | Instrument"     -> issuer = seg1
+            --   company_seg2:  "Category | Company | Instrument"     -> issuer = seg2
+            --   slr:           "Type | Industry | Company | ..."     -> issuer = seg3
             CASE
+                -- 3+ pipes: last segment is affiliation tag
                 WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
                      AND {affil_in}
                 THEN trim(string_split(_raw_id, ' | ')[1])
+                -- 3 pipes: seg1 has legal suffix -> company-first
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                     AND {seg1_has_suffix}
+                THEN trim(string_split(_raw_id, ' | ')[1])
+                -- 3 pipes: seg3 is instrument AND seg2 has legal suffix -> company in seg2
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                     AND {seg3_is_instrument}
+                     AND {seg2_has_suffix}
+                THEN trim(string_split(_raw_id, ' | ')[2])
+                -- 3 pipes: seg3 is instrument AND seg2 is known industry -> company in seg1
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                     AND {seg3_is_instrument}
+                     AND {seg2_is_industry}
+                THEN trim(string_split(_raw_id, ' | ')[1])
+                -- 3+ pipes: default SLR -> issuer = seg3
                 WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
                 THEN trim(string_split(_raw_id, ' | ')[3])
+                -- 2 pipes
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 2
+                THEN trim(string_split(_raw_id, ' | ')[1])
                 ELSE NULL
             END AS _pipe_issuer,
-            -- Track which pipe variant for instrument_description
+            -- Track which pipe variant for instrument_description assembly
             CASE
                 WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
                      AND {affil_in}
-                THEN TRUE
-                ELSE FALSE
-            END AS _pipe_is_affiliation,
+                THEN 'affil_last'
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                     AND {seg1_has_suffix}
+                THEN 'company_first'
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                     AND {seg3_is_instrument}
+                     AND {seg2_has_suffix}
+                THEN 'company_seg2'
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                     AND {seg3_is_instrument}
+                     AND {seg2_is_industry}
+                THEN 'company_first'
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
+                THEN 'slr'
+                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 2
+                THEN 'two_pipe'
+                ELSE NULL
+            END AS _pipe_format,
         FROM no_subtotals
     ),
 
     -- CTE 5b: Re-parse with industry-prefix detection and pipe-format override
     parsed AS (
-        SELECT * EXCLUDE (_issuer_raw, _issuer_lower, _pipe_issuer, _pipe_is_affiliation, _segments),
+        SELECT * EXCLUDE (_issuer_raw, _issuer_lower, _pipe_issuer, _pipe_format, _segments),
             CASE
                 -- Pipe format takes priority
                 WHEN _pipe_issuer IS NOT NULL THEN _pipe_issuer
@@ -1122,11 +1373,20 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 ELSE _issuer_raw
             END AS issuer_name,
             CASE
-                -- Affiliation pipe format: instrument = segment 2
-                WHEN _pipe_issuer IS NOT NULL AND _pipe_is_affiliation
+                -- 2-pipe: instrument = segment 2
+                WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'two_pipe'
                 THEN trim(string_split(_raw_id, ' | ')[2])
-                -- SLR pipe format: combine segments 1, 2, and 4+ as instrument
-                WHEN _pipe_issuer IS NOT NULL AND NOT _pipe_is_affiliation
+                -- Affiliation-last (3+): instrument = segment 2
+                WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'affil_last'
+                THEN trim(string_split(_raw_id, ' | ')[2])
+                -- Company-first (3): instrument = segment 3
+                WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'company_first'
+                THEN trim(string_split(_raw_id, ' | ')[3])
+                -- Company in seg2 (3): instrument = segment 3
+                WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'company_seg2'
+                THEN trim(string_split(_raw_id, ' | ')[3])
+                -- SLR (3+): combine segments 1, 2, and 4+ as instrument
+                WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'slr'
                 THEN trim(string_split(_raw_id, ' | ')[1]) || ', ' || trim(string_split(_raw_id, ' | ')[2])
                      || CASE
                          WHEN len(string_split(_raw_id, ' | ')) >= 4
@@ -1174,8 +1434,14 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     -- CTE 7: Classify issuer
     with_issuer AS (
         SELECT *,
-            CASE WHEN asset_category = 'FUND' THEN 'FUND' ELSE 'CORPORATE' END
-                AS issuer_category
+            CASE
+                WHEN asset_category = 'FUND' THEN 'FUND'
+                -- Equity stakes in fund managers / lending vehicles
+                WHEN asset_category IN ('EQUITY_COMMON', 'EQUITY_PREFERRED', 'OTHER')
+                     AND ({fund_vehicle_sql})
+                THEN 'FUND'
+                ELSE 'CORPORATE'
+            END AS issuer_category
         FROM with_asset
     ),
 
@@ -1278,7 +1544,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                  WHEN _bs IS NOT NULL AND _bs <= 0.50 THEN _bs * 100
                  WHEN _bs IS NOT NULL AND _bs > 50 THEN _bs / 100
                  ELSE _bs END AS basis_spread,
-            COALESCE(NULLIF(reference_rate_type, ''), _text_ref_rate, '')
+            COALESCE(NULLIF(CAST(reference_rate_type AS VARCHAR), ''), _text_ref_rate, '')
                 AS reference_rate_type,
             coupon_type,
             CASE WHEN _pik IS NOT NULL AND _pik < 0 THEN NULL
@@ -1286,8 +1552,8 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                  WHEN _pik IS NOT NULL AND _pik > 50 THEN _pik / 100
                  ELSE _pik END AS pik_rate,
             CASE
-                WHEN maturity_date IS NOT NULL AND maturity_date != ''
-                    THEN maturity_date
+                WHEN maturity_date IS NOT NULL AND CAST(maturity_date AS VARCHAR) != ''
+                    THEN CAST(maturity_date AS VARCHAR)
                 WHEN _text_maturity_raw IS NOT NULL THEN
                     strftime(
                         CASE WHEN LENGTH(regexp_extract(
@@ -1395,7 +1661,9 @@ def _prepare_nport(nport_df: pd.DataFrame) -> pd.DataFrame:
     pe_signal_checks = " OR ".join(
         f"contains(lower(CAST(issuer_name AS VARCHAR)), '{s}')" for s in _PE_FUND_SIGNALS
     )
-    name_norm = _sql_normalize_name("issuer_name")
+    # Fall back to issuer_title when issuer_name is NULL/empty (rescues ~9K rows)
+    _name_coalesce = "COALESCE(NULLIF(TRIM(CAST(issuer_name AS VARCHAR)), ''), issuer_title)"
+    name_norm = _sql_normalize_name(_name_coalesce)
 
     sql = f"""
     WITH
@@ -1494,7 +1762,10 @@ def _prepare_nport(nport_df: pd.DataFrame) -> pd.DataFrame:
             filing_date,
             report_date,
             {name_norm} AS issuer_name,
-            issuer_title AS instrument_description,
+            CASE WHEN TRIM(CAST(issuer_name AS VARCHAR)) IS NOT NULL
+                      AND TRIM(CAST(issuer_name AS VARCHAR)) != ''
+                 THEN issuer_title
+                 ELSE '' END AS instrument_description,
             issuer_cusip AS cusip,
             identifier_isin AS isin,
             issuer_lei AS lei,

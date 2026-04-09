@@ -68,7 +68,11 @@ def rebuild_returns():
     logger.info("=== Assigning position IDs ===")
     t1 = time.time()
     unified_df = pd.read_csv("data/output/private_markets_holdings.csv", dtype=str)
-    assign_position_ids(unified_df, matches_df)
+    unified_df, matches_df = assign_position_ids(unified_df, matches_df)
+    # Save unified holdings with position_ids populated
+    unified_df.to_csv("data/output/private_markets_holdings.csv", index=False)
+    # Save matches with position_ids populated
+    matches_df.to_csv("data/output/position_matches.csv", index=False)
     logger.info("Position IDs assigned in %.1f s", time.time() - t1)
 
     logger.info("=== Rebuilding index returns ===")
@@ -78,6 +82,16 @@ def rebuild_returns():
                 len(pos_df), len(idx_df), time.time() - t2)
 
     return pos_df, idx_df
+
+
+def rebuild_frontend():
+    """Regenerate frontend JSON data from output CSVs."""
+    from pipeline.export_frontend import export_all
+
+    logger.info("=== Rebuilding frontend data ===")
+    t0 = time.time()
+    export_all()
+    logger.info("Frontend export complete in %.1f s", time.time() - t0)
 
 
 def main():
@@ -90,10 +104,12 @@ def main():
                         help="Rebuild fund income + fee uplift only")
     parser.add_argument("--returns", action="store_true",
                         help="Rebuild position matches + index returns only")
+    parser.add_argument("--frontend", action="store_true",
+                        help="Rebuild frontend JSON data only")
     args = parser.parse_args()
 
     # If no flags, rebuild everything
-    rebuild_all = not (args.unified or args.income or args.returns)
+    rebuild_all = not (args.unified or args.income or args.returns or args.frontend)
 
     t_start = time.time()
 
@@ -105,6 +121,9 @@ def main():
 
     if rebuild_all or args.returns:
         rebuild_returns()
+
+    if rebuild_all or args.frontend:
+        rebuild_frontend()
 
     total = time.time() - t_start
     logger.info("=== All rebuilds complete in %.1f s ===", total)
