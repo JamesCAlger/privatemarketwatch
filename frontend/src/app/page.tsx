@@ -40,9 +40,12 @@ export default function HomePage() {
   const combinedInvesteeCurve = concentrationCurve['COMBINED']?.investee ?? [];
   const combinedPositionCurve = concentrationCurve['COMBINED']?.position ?? [];
 
-  // Derive private markets stats from actual index data
-  const totalFv = summaries.reduce((sum, s) => sum + (s.totalFv ?? 0), 0);
-  const totalPositions = summaries.reduce((sum, s) => sum + (s.constituents ?? 0), 0);
+  // Scope all stats to visible indices only (DL + DE)
+  const visibleKeys = new Set(INDICES.map((i) => i.key));
+  const visibleSummaries = summaries.filter((s) => visibleKeys.has(s.index));
+  const totalFv = visibleSummaries.reduce((sum, s) => sum + (s.totalFv ?? 0), 0);
+  const totalPositions = visibleSummaries.reduce((sum, s) => sum + (s.constituents ?? 0), 0);
+  const totalCompanies = visibleSummaries.reduce((sum, s) => sum + (s.uniqueCompanies ?? 0), 0);
   // Per-index stats
   const dlSummary = summaries.find((s) => s.index === 'DIRECT_LENDING');
   const deSummary = summaries.find((s) => s.index === 'DIRECT_EQUITY');
@@ -151,7 +154,7 @@ export default function HomePage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {summaries.filter((s) => getIndexByKey(s.index)).map((s, i) => {
+                  {visibleSummaries.map((s, i) => {
                     const meta = getIndexByKey(s.index);
                     return (
                       <tr
@@ -229,7 +232,7 @@ export default function HomePage() {
             totalFv={totalFv}
             fundCount={metadata.cikCount}
             positionCount={totalPositions}
-            issuerCount={metadata.uniqueIssuers}
+            issuerCount={totalCompanies}
           />
           <p className="text-xs text-muted mt-3">
             Counts reflect the latest quarter across all SEC-registered BDCs,
@@ -244,36 +247,19 @@ export default function HomePage() {
               <Link
                 key={idx.key}
                 href={`/indices/${idx.slug}`}
-                className="group relative overflow-hidden rounded-lg p-6 transition-all hover:shadow-panel"
-                style={{
-                  backgroundColor: idx.key === 'DIRECT_LENDING' ? '#0F1B2D' : '#F8F9FA',
-                }}
+                className="group relative overflow-hidden rounded-lg bg-white p-6 transition-all hover:shadow-panel shadow-card flex flex-col"
               >
                 <div
                   className="absolute top-0 left-0 h-1 w-full"
                   style={{ backgroundColor: idx.color }}
                 />
-                <h3
-                  className={`text-lg font-semibold mb-1 ${
-                    idx.key === 'DIRECT_LENDING' ? 'text-white' : 'text-navy'
-                  }`}
-                >
+                <h3 className="text-lg font-semibold mb-1 text-navy">
                   {idx.name}
                 </h3>
-                <p
-                  className={`text-sm mb-4 ${
-                    idx.key === 'DIRECT_LENDING' ? 'text-white/60' : 'text-muted'
-                  }`}
-                >
+                <p className="text-sm mb-4 text-muted flex-1">
                   {idx.description}
                 </p>
-                <span
-                  className={`inline-flex items-center gap-1 text-sm font-medium transition-colors ${
-                    idx.key === 'DIRECT_LENDING'
-                      ? 'text-teal-light group-hover:text-teal'
-                      : 'text-teal group-hover:text-teal-dark'
-                  }`}
-                >
+                <span className="inline-flex items-center gap-1 text-base font-medium text-teal group-hover:text-teal-dark transition-colors">
                   View full index
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

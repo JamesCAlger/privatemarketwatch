@@ -69,13 +69,9 @@ export default function Header() {
                       <Link
                         key={idx.slug}
                         href={`/indices/${idx.slug}`}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-navy hover:bg-surface transition-colors"
+                        className="flex items-center px-4 py-2.5 text-sm text-navy hover:bg-surface transition-colors"
                         onClick={() => setIndicesOpen(false)}
                       >
-                        <span
-                          className="w-2 h-2 rounded-full shrink-0"
-                          style={{ backgroundColor: idx.color }}
-                        />
                         <span>{idx.shortName}</span>
                       </Link>
                     ))}
