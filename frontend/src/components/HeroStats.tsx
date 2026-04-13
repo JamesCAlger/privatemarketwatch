@@ -17,7 +17,7 @@ export default function HeroStats({ totalFv, loanCount, equityCount }: HeroStats
   const [ref, inView] = useInView(0.3);
 
   return (
-    <div ref={ref} className="grid grid-cols-3 gap-4 md:gap-6 max-w-2xl mx-auto">
+    <div ref={ref} className="grid grid-cols-3 gap-4 md:gap-6 max-w-2xl mx-auto text-center">
       <div>
         <p className="text-white/60 text-xs uppercase tracking-wider mb-1">Total Assets</p>
         <p className="font-bold tabular-nums text-stat-sm text-white">
