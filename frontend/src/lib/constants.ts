@@ -15,7 +15,7 @@ export interface IndexMeta {
 export const INDICES: IndexMeta[] = [
   {
     key: 'DIRECT_LENDING',
-    name: 'Direct Lending Index',
+    name: 'Direct Lending Total Return Index',
     shortName: 'Direct Lending',
     slug: 'direct-lending',
     color: '#2A9D8F',
@@ -24,14 +24,24 @@ export const INDICES: IndexMeta[] = [
       'The largest publicly available benchmark of middle-market direct loans.',
   },
   {
-    key: 'DIRECT_EQUITY',
-    name: 'Direct Equity Index',
-    shortName: 'Direct Equity',
-    slug: 'direct-equity',
+    key: 'PREFERRED_EQUITY',
+    name: 'Preferred Equity Total Return Index',
+    shortName: 'Preferred Equity',
+    slug: 'preferred-equity',
+    color: '#E76F51',
+    tailwindColor: 'text-orange-500',
+    description:
+      'Preferred equity positions in private companies with stated dividend rates, held by registered closed-end vehicles.',
+  },
+  {
+    key: 'COMMON_EQUITY',
+    name: 'Common Equity Price Return Index',
+    shortName: 'Common Equity',
+    slug: 'common-equity',
     color: '#0F1B2D',
     tailwindColor: 'text-blue-500',
     description:
-      'Direct equity co-investments and minority stakes in private companies, held by registered closed-end vehicles.',
+      'Direct common equity co-investments and minority stakes in private companies, held by registered closed-end vehicles.',
   },
   // Private Credit Fund and Private Equity Fund indices hidden for now
   // (fund-of-fund allocations include leverage effects)

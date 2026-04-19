@@ -8,7 +8,8 @@ index construction and dashboard analytics.
 import logging
 import re
 import time
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 
 import duckdb
 import pandas as pd
@@ -16,6 +17,8 @@ import pandas as pd
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     ENTITY_LOOKUP_FILE,
+    IDENTIFIER_EXTRACTION_LOOKUP_FILE,
+    NPORT_EXCLUDE_CIKS,
     NPORT_HOLDINGS_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
@@ -53,6 +56,9 @@ UNIFIED_COLUMNS = [
     "nport_holding_id", "nport_series_name", "nport_series_id",
     "nport_asset_cat", "nport_issuer_type", "nport_payoff_profile",
     "nport_investment_country", "nport_is_restricted", "nport_quarter",
+    "nport_is_default", "nport_are_interest_payments_in_arrears",
+    "nport_is_paid_in_kind", "nport_currency_code",
+    "nport_liquidity_classification",
     # Entity resolution (populated by --entities step)
     "entity_id", "canonical_name",
     # LLM-extracted fields (populated by --extract step)
@@ -593,7 +599,8 @@ def _sql_classify_index() -> str:
 
     return f"""CASE
   WHEN asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE' THEN 'DIRECT_LENDING'
-  WHEN asset_category IN ('EQUITY_COMMON', 'EQUITY_PREFERRED') AND issuer_category = 'CORPORATE' THEN 'DIRECT_EQUITY'
+  WHEN asset_category = 'EQUITY_PREFERRED' AND issuer_category = 'CORPORATE' THEN 'PREFERRED_EQUITY'
+  WHEN asset_category = 'EQUITY_COMMON' AND issuer_category = 'CORPORATE' THEN 'COMMON_EQUITY'
   WHEN issuer_category = 'FUND' AND {has_credit} AND NOT {has_pe} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {has_pe} AND NOT {has_credit} THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND {has_credit} AND {has_pe} AND {credit_count} >= {pe_count} THEN 'PRIVATE_CREDIT_FUND'
@@ -954,11 +961,12 @@ def _classify_nport_issuer(issuer_type: str) -> str:
 
 def _classify_index(asset_category: str, issuer_category: str,
                     issuer_name: str, instrument_description: str) -> str:
-    """Assign one of the four private market indices (or UNCLASSIFIED).
+    """Assign one of the five private market indices (or UNCLASSIFIED).
 
     Rules:
       DIRECT_LENDING:      LOAN/DEBT + CORPORATE
-      DIRECT_EQUITY:       EQUITY_COMMON/EQUITY_PREFERRED + CORPORATE
+      PREFERRED_EQUITY:    EQUITY_PREFERRED + CORPORATE
+      COMMON_EQUITY:       EQUITY_COMMON + CORPORATE
       PRIVATE_CREDIT_FUND: FUND issuer + credit signals in name
       PRIVATE_EQUITY_FUND: FUND issuer + PE signals in name
       UNCLASSIFIED:        everything else
@@ -966,8 +974,11 @@ def _classify_index(asset_category: str, issuer_category: str,
     if asset_category in ("LOAN", "DEBT") and issuer_category == "CORPORATE":
         return "DIRECT_LENDING"
 
-    if asset_category in ("EQUITY_COMMON", "EQUITY_PREFERRED") and issuer_category == "CORPORATE":
-        return "DIRECT_EQUITY"
+    if asset_category == "EQUITY_PREFERRED" and issuer_category == "CORPORATE":
+        return "PREFERRED_EQUITY"
+
+    if asset_category == "EQUITY_COMMON" and issuer_category == "CORPORATE":
+        return "COMMON_EQUITY"
 
     if issuer_category == "FUND":
         # Combine issuer name + instrument description for signal matching
@@ -1097,7 +1108,7 @@ def _reclassify_named_fund_positions(df: pd.DataFrame) -> pd.DataFrame:
       - asset_category -> EQUITY_PREFERRED if "preferred" in name, else EQUITY_COMMON
       - issuer_category -> CORPORATE
 
-    This ensures _classify_index() returns DIRECT_EQUITY for these rows.
+    This ensures _classify_index() returns PREFERRED_EQUITY or COMMON_EQUITY for these rows.
     """
     if "asset_category" not in df.columns or len(df) == 0:
         return df
@@ -1579,6 +1590,11 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             '' AS nport_investment_country,
             '' AS nport_is_restricted,
             '' AS nport_quarter,
+            '' AS nport_is_default,
+            '' AS nport_are_interest_payments_in_arrears,
+            '' AS nport_is_paid_in_kind,
+            '' AS nport_currency_code,
+            '' AS nport_liquidity_classification,
             '' AS entity_id,
             '' AS canonical_name,
             '' AS extracted_industry,
@@ -1622,18 +1638,77 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
 # N-PORT preparation
 # ---------------------------------------------------------------------------
 
-def _prepare_nport(nport_df: pd.DataFrame) -> pd.DataFrame:
+def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     """Filter to Level 3, classify, and map N-PORT holdings to unified schema.
 
     Uses a DuckDB CTE pipeline for all data manipulation.
+
+    Parameters
+    ----------
+    nport_input : pd.DataFrame | Path | str
+        Either a pre-loaded DataFrame or a path to the N-PORT CSV file.
+        When a path is provided, the CSV is loaded directly by DuckDB
+        (avoids pandas memory overhead for large files).
     """
-    logger.info("Preparing N-PORT holdings: %d input rows", len(nport_df))
-
-    if nport_df.empty:
-        return pd.DataFrame(columns=UNIFIED_COLUMNS)
-
     con = duckdb.connect()
-    con.register("nport_raw", nport_df)
+    _nport_loaded_from_file = False
+
+    if isinstance(nport_input, (str, Path)):
+        _nport_loaded_from_file = True
+        nport_path = str(nport_input).replace("\\", "/")
+        # Use CREATE TABLE (not VIEW) so DuckDB loads the CSV once into its
+        # memory-efficient columnar format.  A VIEW would re-scan the 5 GB+
+        # file for every downstream query.
+        exclude_clause = ""
+        if NPORT_EXCLUDE_CIKS:
+            cik_list = ", ".join(f"'{c}'" for c in NPORT_EXCLUDE_CIKS)
+            exclude_clause = f"WHERE LTRIM(CAST(cik AS VARCHAR), '0') NOT IN ({cik_list})"
+        con.execute(f"""
+            CREATE TABLE nport_raw AS
+            SELECT * FROM read_csv_auto('{nport_path}',
+                                        header=true, all_varchar=true)
+            {exclude_clause}
+        """)
+        row_count = con.execute("SELECT COUNT(*) FROM nport_raw").fetchone()[0]
+        logger.info("Preparing N-PORT holdings: %d input rows", row_count)
+        if row_count == 0:
+            con.close()
+            return pd.DataFrame(columns=UNIFIED_COLUMNS)
+
+        # Ensure expected columns exist (handles older nport_holdings.csv)
+        existing_cols = {r[0] for r in con.execute(
+            "SELECT column_name FROM information_schema.columns "
+            "WHERE table_name = 'nport_raw'"
+        ).fetchall()}
+        for col in ["are_any_interest_payment",
+                     "is_any_portion_interest_paid",
+                     "liquidity_classification",
+                     "is_default", "currency_code"]:
+            if col not in existing_cols:
+                con.execute(f"ALTER TABLE nport_raw ADD COLUMN {col} VARCHAR DEFAULT ''")
+    else:
+        nport_df = nport_input
+        # Filter excluded CIKs from DataFrame path too
+        if NPORT_EXCLUDE_CIKS and "cik" in nport_df.columns:
+            before = len(nport_df)
+            nport_df = nport_df[
+                ~nport_df["cik"].astype(str).str.lstrip("0").isin(NPORT_EXCLUDE_CIKS)
+            ]
+            if len(nport_df) < before:
+                logger.info("  Excluded %d rows from %d CIKs",
+                            before - len(nport_df), len(NPORT_EXCLUDE_CIKS))
+        logger.info("Preparing N-PORT holdings: %d input rows", len(nport_df))
+        if nport_df.empty:
+            con.close()
+            return pd.DataFrame(columns=UNIFIED_COLUMNS)
+
+        # Ensure expected columns exist (handles older nport_holdings.csv)
+        for col in ["are_any_interest_payment", "is_any_portion_interest_paid",
+                     "liquidity_classification", "is_default", "currency_code"]:
+            if col not in nport_df.columns:
+                nport_df[col] = ""
+
+        con.register("nport_raw", nport_df)
 
     # Build CASE WHEN for asset_cat mapping
     asset_cases = "\n".join(
@@ -1801,6 +1876,11 @@ def _prepare_nport(nport_df: pd.DataFrame) -> pd.DataFrame:
             investment_country AS nport_investment_country,
             is_restricted_security AS nport_is_restricted,
             quarter AS nport_quarter,
+            COALESCE(CAST(is_default AS VARCHAR), '') AS nport_is_default,
+            COALESCE(CAST(are_any_interest_payment AS VARCHAR), '') AS nport_are_interest_payments_in_arrears,
+            COALESCE(CAST(is_any_portion_interest_paid AS VARCHAR), '') AS nport_is_paid_in_kind,
+            COALESCE(CAST(currency_code AS VARCHAR), '') AS nport_currency_code,
+            COALESCE(CAST(liquidity_classification AS VARCHAR), '') AS nport_liquidity_classification,
             '' AS entity_id,
             '' AS canonical_name,
             '' AS extracted_industry,
@@ -1813,6 +1893,19 @@ def _prepare_nport(nport_df: pd.DataFrame) -> pd.DataFrame:
     """
 
     result = con.execute(sql).fetchdf()
+
+    # Log rate cap stats (count from input, since SQL already capped)
+    if _nport_loaded_from_file:
+        rate_capped = con.execute(
+            "SELECT COUNT(*) FROM nport_raw "
+            "WHERE TRY_CAST(annualized_rate AS DOUBLE) > 50"
+        ).fetchone()[0]
+    else:
+        rate_capped = 0
+        if "annualized_rate" in nport_df.columns:
+            raw_rates = pd.to_numeric(nport_df["annualized_rate"], errors="coerce")
+            rate_capped = int((raw_rates > 50).sum())
+
     con.close()
 
     # Drop internal row id column
@@ -1820,12 +1913,8 @@ def _prepare_nport(nport_df: pd.DataFrame) -> pd.DataFrame:
 
     logger.info("  After Level 3 + hedge fund filter: %d rows", len(result))
 
-    # Log rate cap stats (count from input, since SQL already capped)
-    if "annualized_rate" in nport_df.columns:
-        raw_rates = pd.to_numeric(nport_df["annualized_rate"], errors="coerce")
-        rate_capped = (raw_rates > 50).sum()
-        if rate_capped > 0:
-            logger.info("  N-PORT rates capped at 50%%: %d rows", rate_capped)
+    if rate_capped > 0:
+        logger.info("  N-PORT rates capped at 50%%: %d rows", rate_capped)
 
     if result.empty:
         return pd.DataFrame(columns=UNIFIED_COLUMNS)
@@ -1866,19 +1955,18 @@ def build_unified_holdings(
                 bdc_df[col] = pd.to_numeric(bdc_df[col], errors="coerce")
         logger.info("  Loaded %d BDC rows", len(bdc_df))
 
+    # Determine N-PORT input: use file path (DuckDB) for disk loads to avoid
+    # pandas OOM on very large CSVs; use DataFrame if already provided.
+    nport_input: Union[pd.DataFrame, Path]
     if nport_df is None:
-        logger.info("Loading N-PORT holdings from %s", NPORT_HOLDINGS_FILE.name)
-        nport_df = pd.read_csv(NPORT_HOLDINGS_FILE, dtype=str)
-        # Restore numeric columns
-        for col in ["currency_value", "percentage", "annualized_rate",
-                     "fair_value_level", "balance", "exchange_rate"]:
-            if col in nport_df.columns:
-                nport_df[col] = pd.to_numeric(nport_df[col], errors="coerce")
-        logger.info("  Loaded %d N-PORT rows", len(nport_df))
+        logger.info("Loading N-PORT holdings from %s (via DuckDB)", NPORT_HOLDINGS_FILE.name)
+        nport_input = NPORT_HOLDINGS_FILE
+    else:
+        nport_input = nport_df
 
     # Prepare each source
     bdc_unified = _prepare_bdc(bdc_df)
-    nport_unified = _prepare_nport(nport_df)
+    nport_unified = _prepare_nport(nport_input)
 
     # Combine via DuckDB UNION ALL + index classification
     con = duckdb.connect()
@@ -2096,6 +2184,35 @@ def build_unified_holdings(
         logger.info("Entity enrichment: %d/%d rows (%.1f%%) with entity_id",
                      eid_count, len(combined),
                      100 * eid_count / len(combined) if len(combined) else 0)
+
+    # Industry enrichment: join against identifier_extraction_lookup if available
+    if IDENTIFIER_EXTRACTION_LOOKUP_FILE.exists():
+        con3 = duckdb.connect()
+        con3.register("holdings", combined)
+        ilookup_str = str(IDENTIFIER_EXTRACTION_LOOKUP_FILE).replace("\\", "/")
+        combined = con3.execute(f"""
+            SELECT h.* EXCLUDE (extracted_industry),
+                   CASE
+                       WHEN (h.extracted_industry IS NULL
+                             OR CAST(h.extracted_industry AS VARCHAR) = '')
+                            AND e.extracted_industry IS NOT NULL
+                            AND e.extracted_industry != ''
+                            AND e.extracted_industry != 'None'
+                       THEN e.extracted_industry
+                       ELSE COALESCE(h.extracted_industry, '')
+                   END AS extracted_industry
+            FROM holdings h
+            LEFT JOIN read_csv_auto('{ilookup_str}',
+                          header=true, all_varchar=true) e
+              ON CAST(h.bdc_investment_identifier AS VARCHAR)
+               = CAST(e.bdc_investment_identifier AS VARCHAR)
+        """).fetchdf()
+        con3.close()
+        combined = combined[UNIFIED_COLUMNS]
+        ind_count = (combined["extracted_industry"] != "").sum()
+        logger.info("Industry enrichment: %d/%d rows (%.1f%%) with extracted_industry",
+                     ind_count, len(combined),
+                     100 * ind_count / len(combined) if len(combined) else 0)
 
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)

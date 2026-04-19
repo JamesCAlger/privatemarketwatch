@@ -9,6 +9,7 @@ Usage:
     python scripts/rebuild_outputs.py --unified     # Only unified holdings
     python scripts/rebuild_outputs.py --returns     # Only matching + returns
     python scripts/rebuild_outputs.py --income      # Only fund income + fee uplift
+    python scripts/rebuild_outputs.py --html        # Only HTML template extraction ($0)
 """
 
 import argparse
@@ -84,6 +85,18 @@ def rebuild_returns():
     return pos_df, idx_df
 
 
+def rebuild_html():
+    """Re-run HTML template extraction (Phase 2 only, $0)."""
+    from pipeline.html_template import extract_all_html
+
+    logger.info("=== Rebuilding HTML template extractions ===")
+    t0 = time.time()
+    df = extract_all_html()
+    rows = len(df) if not df.empty else 0
+    logger.info("HTML extractions: %d rows in %.1f s", rows, time.time() - t0)
+    return df
+
+
 def rebuild_frontend():
     """Regenerate frontend JSON data from output CSVs."""
     from pipeline.export_frontend import export_all
@@ -104,12 +117,17 @@ def main():
                         help="Rebuild fund income + fee uplift only")
     parser.add_argument("--returns", action="store_true",
                         help="Rebuild position matches + index returns only")
+    parser.add_argument("--html", action="store_true",
+                        help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--frontend", action="store_true",
                         help="Rebuild frontend JSON data only")
     args = parser.parse_args()
 
     # If no flags, rebuild everything
-    rebuild_all = not (args.unified or args.income or args.returns or args.frontend)
+    rebuild_all = not (
+        args.unified or args.income or args.returns
+        or args.html or args.frontend
+    )
 
     t_start = time.time()
 
@@ -121,6 +139,9 @@ def main():
 
     if rebuild_all or args.returns:
         rebuild_returns()
+
+    if args.html:
+        rebuild_html()
 
     if rebuild_all or args.frontend:
         rebuild_frontend()

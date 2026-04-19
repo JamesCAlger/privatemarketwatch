@@ -218,8 +218,10 @@ def summarize_classification_by_cik(df: pd.DataFrame) -> pd.DataFrame:
         SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fair_value,
         ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'DIRECT_LENDING') / COUNT(*), 1)
             AS pct_direct_lending,
-        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'DIRECT_EQUITY') / COUNT(*), 1)
-            AS pct_direct_equity,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'PREFERRED_EQUITY') / COUNT(*), 1)
+            AS pct_preferred_equity,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'COMMON_EQUITY') / COUNT(*), 1)
+            AS pct_common_equity,
         ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'PRIVATE_CREDIT_FUND') / COUNT(*), 1)
             AS pct_credit_fund,
         ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'PRIVATE_EQUITY_FUND') / COUNT(*), 1)

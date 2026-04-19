@@ -146,7 +146,7 @@ def compute_returns(
           ON m.cik = pk._pk_cik
          AND m.begin_report_date = pk._pk_date
          AND LOWER(TRIM(m.begin_issuer_name)) = pk._pk_name
-        WHERE m.index_classification = 'DIRECT_LENDING'
+        WHERE m.index_classification IN ('DIRECT_LENDING', 'PREFERRED_EQUITY')
           AND COALESCE(
                 TRY_CAST(m.begin_interest_rate AS DOUBLE),
                 TRY_CAST(m.begin_basis_spread AS DOUBLE) + s.sofr
@@ -209,16 +209,16 @@ def compute_returns(
                      AND bpa IS NOT NULL AND bpa > 0
                      AND epa IS NOT NULL AND epa > 0
                 THEN (efv / epa - bfv / bpa) / (bfv / bpa)
-                -- DE with both share counts: price = FV / shares
+                -- Equity with both share counts: price = FV / shares
                 -- Guard: skip per-unit when shares ratio > 5x (unit mismatch)
-                WHEN index_classification = 'DIRECT_EQUITY'
+                WHEN index_classification IN ('PREFERRED_EQUITY', 'COMMON_EQUITY')
                      AND bsh IS NOT NULL AND bsh > 0
                      AND esh IS NOT NULL AND esh > 0
                      AND esh / bsh <= 5 AND bsh / esh <= 5
                 THEN (efv / esh - bfv / bsh) / (bfv / bsh)
-                -- DE with both cost bases: price = FV / cost
+                -- Equity with both cost bases: price = FV / cost
                 -- Guard: skip when shares jumped > 5x (cost scales with shares)
-                WHEN index_classification = 'DIRECT_EQUITY'
+                WHEN index_classification IN ('PREFERRED_EQUITY', 'COMMON_EQUITY')
                      AND bc IS NOT NULL AND bc > 0
                      AND ec IS NOT NULL AND ec > 0
                      AND (bsh IS NULL OR esh IS NULL
@@ -231,15 +231,15 @@ def compute_returns(
 
             -- Income return: depends on index classification
             CASE
-                -- Direct Lending: coupon + PIK + fee/OID uplift, scaled by span
-                WHEN index_classification = 'DIRECT_LENDING'
+                -- Direct Lending + Preferred Equity: coupon/dividend + PIK + fee/OID uplift, scaled by span
+                WHEN index_classification IN ('DIRECT_LENDING', 'PREFERRED_EQUITY')
                 THEN (COALESCE(bpa, bfv)
                       * (COALESCE(effective_rate, 0) + pik_rate_pct + fee_uplift_pct)
                       / 100.0 * COALESCE(sm, 3) / 12.0) / bfv
                 -- Fund vehicles: return-of-capital proxy
                 WHEN index_classification IN ('PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND')
                 THEN GREATEST(0, COALESCE(bc, bfv) - COALESCE(ec, efv)) / bfv
-                -- Direct Equity, Unclassified: no income
+                -- Common Equity, Unclassified: no income
                 ELSE 0
             END AS income_return
         FROM typed

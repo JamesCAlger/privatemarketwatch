@@ -312,7 +312,8 @@ def _process_quarter_tsv(
             debt_cols = [c for c in debt.columns if c != "ACCESSION_NUMBER" or c == "HOLDING_ID"]
             # Keep only meaningful debt columns + HOLDING_ID
             debt_keep = ["HOLDING_ID"]
-            for c in ["MATURITY_DATE", "COUPON_TYPE", "ANNUALIZED_RATE", "IS_DEFAULT"]:
+            for c in ["MATURITY_DATE", "COUPON_TYPE", "ANNUALIZED_RATE", "IS_DEFAULT",
+                       "ARE_ANY_INTEREST_PAYMENT", "IS_ANY_PORTION_INTEREST_PAID"]:
                 if c in debt.columns:
                     debt_keep.append(c)
             debt_sub = debt[debt_keep].drop_duplicates(subset=["HOLDING_ID"], keep="first")

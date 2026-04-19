@@ -341,6 +341,9 @@ def _apply_enrichment(
         h.nport_holding_id, h.nport_series_name, h.nport_series_id,
         h.nport_asset_cat, h.nport_issuer_type, h.nport_payoff_profile,
         h.nport_investment_country, h.nport_is_restricted, h.nport_quarter,
+        h.nport_is_default, h.nport_are_interest_payments_in_arrears,
+        h.nport_is_paid_in_kind, h.nport_currency_code,
+        h.nport_liquidity_classification,
         h.entity_id, h.canonical_name,
         -- extracted_industry: fill from lookup
         CASE

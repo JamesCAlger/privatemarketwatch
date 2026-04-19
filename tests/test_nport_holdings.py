@@ -100,10 +100,10 @@ HOLDING_TSV = (
 )
 
 DEBT_SECURITY_TSV = (
-    "ACCESSION_NUMBER\tHOLDING_ID\tMATURITY_DATE\tCOUPON_TYPE\tANNUALIZED_RATE\tIS_DEFAULT\n"
-    "0001234567-24-000001\tH001\t15-JUN-2028\tFloating\t0.0925\tN\n"
-    "0001234567-24-000002\tH003\t01-MAR-2027\tFixed\t0.0500\tN\n"
-    "0009999999-24-000001\tH099\t31-DEC-2025\tFixed\t0.0300\tN\n"
+    "ACCESSION_NUMBER\tHOLDING_ID\tMATURITY_DATE\tCOUPON_TYPE\tANNUALIZED_RATE\tIS_DEFAULT\tARE_ANY_INTEREST_PAYMENT\tIS_ANY_PORTION_INTEREST_PAID\n"
+    "0001234567-24-000001\tH001\t15-JUN-2028\tFloating\t0.0925\tN\tN\tN\n"
+    "0001234567-24-000002\tH003\t01-MAR-2027\tFixed\t0.0500\tN\tN\tN\n"
+    "0009999999-24-000001\tH099\t31-DEC-2025\tFixed\t0.0300\tN\tY\tY\n"
 )
 
 IDENTIFIERS_TSV = (
@@ -300,6 +300,25 @@ class TestProcessQuarterTsv:
         if not h001.empty and "maturity_date" in h001.columns:
             mat = h001.iloc[0]["maturity_date"]
             assert mat == "2028-06-15", f"Unexpected maturity: {mat}"
+
+    def test_debt_security_interest_columns(self, test_zip_path: Path):
+        """New debt security interest columns should be joined onto holdings."""
+        target_ciks = {"1234567", "9999999"}
+        holdings, _, _ = _process_quarter_tsv(
+            test_zip_path, "2024q3", target_ciks,
+        )
+        assert "are_any_interest_payment" in holdings.columns
+        assert "is_any_portion_interest_paid" in holdings.columns
+        # H099 should have Y for both
+        h099 = holdings[holdings["holding_id"] == "H099"]
+        if not h099.empty:
+            assert h099.iloc[0]["are_any_interest_payment"] == "Y"
+            assert h099.iloc[0]["is_any_portion_interest_paid"] == "Y"
+        # H001 should have N for both
+        h001 = holdings[holdings["holding_id"] == "H001"]
+        if not h001.empty:
+            assert h001.iloc[0]["are_any_interest_payment"] == "N"
+            assert h001.iloc[0]["is_any_portion_interest_paid"] == "N"
 
     def test_identifiers_join(self, test_zip_path: Path):
         """Identifier columns should be joined onto holdings."""

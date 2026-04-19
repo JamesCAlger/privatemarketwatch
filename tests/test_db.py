@@ -154,7 +154,7 @@ class TestCsvLoading:
             _write_csv(csv_path, _INDEX_RETURNS_COLS, [
                 ["DIRECT_LENDING", "2025q1", "0.025", "0.018", "0.022",
                  "8500", "50000000", "51250000", "142.6", "140.1", "138.5"],
-                ["DIRECT_EQUITY", "2025q1", "0.031", "0.028", "0.030",
+                ["COMMON_EQUITY", "2025q1", "0.031", "0.028", "0.030",
                  "1200", "10000000", "10310000", "121.6", "118.2", "115.0"],
             ])
             with mock.patch("pipeline.db.INDEX_RETURNS_FILE", csv_path):

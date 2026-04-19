@@ -119,6 +119,11 @@ def _parse_args() -> argparse.Namespace:
              "Requires --unified or existing unified holdings file.",
     )
     parser.add_argument(
+        "--extract-html",
+        action="store_true",
+        help="Extract pre-XBRL filings using per-CIK templates (no LLM, $0).",
+    )
+    parser.add_argument(
         "--load-db",
         action="store_true",
         help="Load pipeline CSVs into Postgres (requires DATABASE_URL).",
@@ -164,6 +169,8 @@ def main() -> None:
         mode_parts.append("LLM-REVIEW-DRY-RUN")
     if args.entities:
         mode_parts.append("ENTITIES")
+    if args.extract_html:
+        mode_parts.append("EXTRACT-HTML")
     if args.returns:
         mode_parts.append("RETURNS")
     if args.load_db:
@@ -266,6 +273,24 @@ def main() -> None:
         except Exception as exc:
             logger.error("N-PORT holdings extraction failed: %s", exc, exc_info=True)
         logger.info("N-PORT step completed in %.1f s", time.time() - t6)
+
+    # ── Step 6b: HTML template extraction (optional) ──
+    if args.extract_html:
+        logger.info("")
+        t6b = time.time()
+        try:
+            from pipeline.html_template import extract_all_html
+
+            cik_filter = args.ciks if args.ciks else None
+            extract_all_html(
+                client=client,
+                cik_filter=cik_filter,
+            )
+        except Exception as exc:
+            logger.error("HTML template extraction failed: %s", exc,
+                         exc_info=True)
+        logger.info("HTML template extraction step completed in %.1f s",
+                     time.time() - t6b)
 
     # ── Step 7: Unified private markets holdings (optional) ──
     unified_df = None
@@ -508,6 +533,8 @@ def main() -> None:
         ])
     if args.unified:
         output_files.append(OUTPUT_DIR / "private_markets_holdings.csv")
+    if args.extract_html:
+        output_files.append(OUTPUT_DIR / "html_extraction_holdings.csv")
     if args.extract:
         output_files.append(OUTPUT_DIR / "identifier_extraction_lookup.csv")
     if args.validate:

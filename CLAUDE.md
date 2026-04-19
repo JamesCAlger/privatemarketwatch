@@ -155,57 +155,23 @@ data/
 
 ## Unified Holdings -- Validation
 
-`data/output/private_markets_holdings.csv` (835,067 rows). V1-V5 are implemented. Run via `python -m pipeline.main --unified --validate`.
+`data/output/private_markets_holdings.csv` (835,067 rows). Run via `python -m pipeline.main --unified --validate`.
 
-### V1. Reduce UNCLASSIFIED rate (currently 1.9%, 23K rows)
+**Status:** V1-V5 all implemented.
+- **V1 (UNCLASSIFIED reduction):** Implemented. 1.9% UNCLASSIFIED (down from 16.3%). BDC financial field fallback, N-PORT issuer defaulting, named co-invest reclassification, expanded fund keyword lists.
+- **V2 (Spot-check accuracy):** Manual validation against top BDCs and interval/tender funds HTML/PDF filings.
+- **V3 (Aggregate filtering):** Manual pattern discovery and filter expansion.
+- **V4 (Cross-source dedup):** Implemented. Jaro-Winkler name matching + FV proximity. BDC source preferred. Output: `holdings_cross_source.csv`.
+- **V5 (Coverage):** Implemented. Total assets ratio validation (0.8-1.2x expected). Output: `holdings_coverage.csv`, `holdings_total_assets.csv`.
 
-V1 heuristics are now **implemented**: BDC financial field fallback (interest_rate/basis_spread/principal -> LOAN, shares -> EQUITY), N-PORT LON/DBT+OTHER issuer defaulting to CORPORATE, named co-invest reclassification (~1K rows FUND->EQUITY), expanded credit/PE fund keyword lists. UNCLASSIFIED reduced from 16.3% to 1.9%.
-
-**Implemented:** Named co-invest/LP interest reclassification -- ~1,056 FUND rows with identifiable operating companies (Inc., LLC, Corp., Holdings, etc.) are reclassified to EQUITY_COMMON/EQUITY_PREFERRED + CORPORATE, resulting in DIRECT_EQUITY index classification. Opaque fund positions remain as PRIVATE_CREDIT_FUND/PRIVATE_EQUITY_FUND.
-
-**Target:** Reduce UNCLASSIFIED from 16.3% to < 5%.
-
-### V2. Spot-check classification accuracy
-
-For the top 10 BDCs by AUM (Ares Capital, Owl Rock, FS KKR, Blue Owl, Golub, Blackstone Secured Lending, etc.):
-
-1. Pull one recent 10-K filing's schedule of investments (HTML or PDF)
-2. Compare a sample of 20-30 holdings against `private_markets_holdings.csv` rows for that CIK/period
-3. Verify: issuer_name matches, asset_class correct, fair_value matches, no duplicate/missing rows
-4. Document error rate per filer and any systematic misclassifications
-
-For the top 5 interval/tender offer funds by AUM:
-
-1. Pull one recent N-PORT filing
-2. Compare 20-30 holdings against the unified dataset
-3. Verify issuer_type and asset_cat mapping to index classification
-
-### V3. Aggregate/subtotal filtering
-
-1. Sample 20 BDC filers and grep their `investment_identifier` values for subtotal patterns (e.g., "Total", "Sub-total", "Subtotal", category headers like "Senior Secured First Lien")
-2. Identify any new subtotal patterns not caught by the current 6-pattern filter
-3. Add new patterns and re-run; measure row count change
-
-### V4. Cross-source deduplication -- IMPLEMENTED
-
-**Detection (`validate_holdings.py`):** `check_cross_source_overlap()` now returns two DataFrames: overlap summary (CIKs with row counts per source) and duplicate holdings (pairs matched by CIK + report_date + jaro_winkler_similarity > 0.85 on issuer_name, with pct_diff on fair_value). Saved to `holdings_cross_source.csv`.
-
-**Dedup (`unified_holdings.py`):** `build_unified_holdings()` includes a dedup CTE after UNION ALL. Within the same CIK + report_date + issuer_name + ROUND(fair_value, -2), only the BDC-source row is kept (BDC XBRL preferred over N-PORT TSV for BDCs that file both).
-
-### V5. Coverage and completeness -- IMPLEMENTED
-
-**Coverage (`validate_holdings.py`):** `check_coverage()` now includes total assets comparison:
-- N-PORT: `reported_net_assets` from `nport_fund_info.csv` (max net_assets per CIK)
-- BDC: estimated from `sum(fair_value) / (sum(pct_of_net_assets) / 100)` for the latest report_date
-- `holdings_to_assets_ratio` column: expected 0.8-1.2x for healthy CIKs; outliers flagged at > 2.0 or < 0.3
-
-All validation functions use DuckDB SQL (no pandas .iterrows/.apply). Output CSVs: `holdings_coverage.csv`, `holdings_total_assets.csv`.
+All validation functions use DuckDB SQL (no pandas .iterrows/.apply). See MEMORY.md for detailed implementation notes.
 
 ## Known Limitations
 
 - **BDC XBRL coverage starts ~2022-2023.** The SEC phased in investment-level XBRL tagging for BDCs. Pre-2022 filings are plain HTML with no structured data. Some 2022-2023 filings have only aggregate XBRL (category-level totals, not individual positions).
 - **Industry/type/affiliation are mostly empty.** Most BDCs embed this metadata in the `investment_identifier` string (e.g., "Senior Secured Loans | First Lien | Acme Corp | Technology") rather than using separate XBRL dimensions. Parsing these out requires string splitting, which is filer-specific.
 - **N-PORT holdings not yet extracted.** The SEC's quarterly N-PORT data set covers only one quarter per ZIP. Full historical coverage requires downloading multiple quarters.
+- **N-PORT consumer/marketplace lending positions.** Three N-PORT CIKs (0001678130 RiverNorth/DoubleLine, 0001644771 RiverNorth series, 0002041175 NB Asset-Based Credit) report individual consumer loans with opaque numeric IDs (e.g., "9980668.SQ.RVR", "99904958.LC.RVR"). These represent ~380K rows (75% of N-PORT, ~45% of total unified) but only ~$2B FV (<1% of total). They are classified as DIRECT_LENDING but are consumer/marketplace loans, NOT direct lending to operating companies. Entity resolution already excludes them from the variant table via `_OPAQUE_NUMERIC_ID_RE`. **Any analytics or index computation should exclude these positions.** They inflate row counts and constituent counts without contributing meaningful FV. Position matching cannot match them across quarters (numeric IDs don't carry).
 
 ## Resumability
 
@@ -223,6 +189,55 @@ All three phases of holdings extraction are resumable:
 - **DuckDB for large-dataset manipulation:** All data transformations on datasets >10K rows must use DuckDB SQL (CTEs, native string/numeric functions) rather than pandas .apply(), .iterrows(), or row-by-row lambdas. Python keyword constants remain the single source of truth; SQL is generated from them. Pandas is acceptable for final logging/summary only.
 - **Tests overwrite output CSVs:** Several integration tests (e.g., `test_bdc_fund_income.py::test_single_filing_integration`, `test_index_returns.py`, `test_fee_uplift.py`) call pipeline functions that write to the real output files (`bdc_fund_income.csv`, `fee_uplift.csv`, `position_matches.csv`, `position_returns.csv`, `index_returns.csv`). Running `pytest` will overwrite production data with test fixtures. After running the test suite, run `python scripts/rebuild_outputs.py` to regenerate all output files from cached data.
 - **Do NOT download data unless explicitly asked:** When rebuilding outputs, use `scripts/rebuild_outputs.py` or call pipeline functions directly (e.g., `build_unified_holdings()`, `compute_returns()`). Do NOT run `python -m pipeline.main` with download flags or call functions that trigger SEC EDGAR downloads unless the user explicitly requests it. All raw data is already cached on disk.
+
+## HTML Template Extraction
+
+Per-CIK JSON templates in `data/raw/filing_templates/<CIK>.json` map HTML schedule-of-investments tables to standardized fields. Created via `scripts/learn_template.py` following `scripts/learn_template_prompt.md`.
+
+### PIK Rate Parsing (DO NOT REVERT)
+
+`pipeline/html_template.py` handles three PIK formats in coupon cells:
+
+| Format | Example | interest_rate | pik_rate |
+|---|---|---|---|
+| Number after PIK | `PIK 5.00%` | 5.00 | 5.00 |
+| Pure PIK (number before) | `14.00 % PIK` | 14.00 | 14.00 |
+| Partial PIK (parenthetical) | `9.42 % ( 3.00 % PIK)` | 9.42 | 3.00 |
+
+Four regexes implement this: `_PIK_PARTIAL_RE` (checked first), `_PIK_AFTER_RE`, `_PIK_BEFORE_RE` for extraction, and `_PIK_STRIP_RE` to clean the cell before passing to `_parse_rate`. The strip step is critical -- without it, `_parse_rate("14.00 % PIK")` fails because `float()` chokes on the trailing " PIK" text. All three extraction patterns plus the strip must remain together.
+
+`pipeline/html_holdings.py` `_to_bdc_holdings_schema()` passes `pik_rate` through via `row.get("pik_rate")`. Do not hardcode this to `None`.
+
+### Engine Amendments & Per-CIK Template Reference
+
+All engine amendments (numbered proposals, implemented changes, and deferred items) plus detailed per-CIK template notes (Ares Capital format reference, variant eras, grid positions, extraction quality metrics) are maintained in **[`HTML_ENGINE_AMENDMENTS.md`](./HTML_ENGINE_AMENDMENTS.md)**.
+
+Refer to that file when:
+- Adding a new amendment proposal (append with the next available number; do NOT reuse existing numbers).
+- Implementing an amendment (change its header to `[IMPLEMENTED]` and record files changed + observed impact).
+- Looking up per-CIK template details (column layouts, variant selection, quality metrics, known limitations).
+- Cross-referencing an amendment number from code comments or template `filer_quirks`.
+
+Do NOT duplicate amendment text or per-CIK template notes back into this file.
+
+### HTML-vs-XBRL Cross-Validation
+
+Position-level accuracy metrics for HTML template extraction validated against XBRL structured data are maintained in **[`HTML_XBRL_VALIDATION_FINDINGS.md`](./HTML_XBRL_VALIDATION_FINDINGS.md)**.
+
+Refer to that file for:
+- Per-CIK recall, FV accuracy, rate accuracy, and quality tiers (Tier 1-4)
+- Root cause analysis (dollar unit mismatches, wrong table selection, template drift, name matching failures)
+- Prioritized fix list for improving extraction quality
+- Index error bar implications
+- How to run the validator (`python -m scripts.validate_html_xbrl`)
+
+**Key stats (2026-04-18):** 668 filings, 47 CIKs, 60.5% overall recall. 12 Tier 1 CIKs at 93.6% recall covering 44.9% of validated positions.
+
+## Next Steps & Roadmap
+
+Product roadmap, data cleanup priorities, and feature plan maintained in **[`NEXT_STEPS.md`](./NEXT_STEPS.md)**.
+
+Covers: data cleanup (consumer CIK exclusion, 2022+ cutoff, N-PORT reclassification, entity_id fix), fund financials from companyfacts API, fund pages, investee/cap table pages, credit quality analytics, and monetization path.
 
 ## Data Investigations
 

@@ -715,11 +715,11 @@ class TestClassifyIndex:
     def test_direct_lending_debt(self):
         assert _classify_index("DEBT", "CORPORATE", "Acme Corp", "Senior Notes") == "DIRECT_LENDING"
 
-    def test_direct_equity_common(self):
-        assert _classify_index("EQUITY_COMMON", "CORPORATE", "Acme Corp", "Common Stock") == "DIRECT_EQUITY"
+    def test_common_equity(self):
+        assert _classify_index("EQUITY_COMMON", "CORPORATE", "Acme Corp", "Common Stock") == "COMMON_EQUITY"
 
-    def test_direct_equity_preferred(self):
-        assert _classify_index("EQUITY_PREFERRED", "CORPORATE", "Acme Corp", "Preferred") == "DIRECT_EQUITY"
+    def test_preferred_equity(self):
+        assert _classify_index("EQUITY_PREFERRED", "CORPORATE", "Acme Corp", "Preferred") == "PREFERRED_EQUITY"
 
     def test_private_credit_fund(self):
         assert _classify_index("FUND", "FUND", "Blue Owl Credit Fund", "") == "PRIVATE_CREDIT_FUND"
@@ -2040,6 +2040,206 @@ class TestEntityEnrichment:
             result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
 
         assert list(result.columns) == UNIFIED_COLUMNS
+
+
+# ---------------------------------------------------------------------------
+# Industry enrichment in build_unified_holdings
+# ---------------------------------------------------------------------------
+
+class TestIndustryEnrichment:
+    """Tests for extracted_industry population via identifier_extraction_lookup join."""
+
+    def _make_bdc_df(self):
+        return pd.DataFrame([{
+            "cik": "123", "entity_name": "Test BDC",
+            "accession_number": "0001-23", "form_type": "10-K",
+            "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "investment_identifier": "Acme Corp | Technology | First Lien Term Loan",
+            "fair_value": 1000000.0, "cost": 990000.0,
+            "principal_amount": 1000000.0, "interest_rate": 8.5,
+            "basis_spread": 3.5, "reference_rate_type": "SOFR",
+            "maturity_date": "2028-01-15", "pct_of_net_assets": 0.05,
+            "pik_rate": None, "shares_held": None,
+            "unrealized_gain_loss": 10000.0, "dimensions_raw": "x=y",
+            "investment_type": "", "industry": "", "affiliation": "",
+            "period": "2023-03-31",
+        }])
+
+    def _make_nport_df(self):
+        return pd.DataFrame(columns=[
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "currency_value", "percentage",
+            "asset_cat", "issuer_type", "investment_country",
+            "is_restricted_security", "fair_value_level", "maturity_date",
+            "coupon_type", "annualized_rate", "identifier_isin",
+            "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+            "filing_date", "report_date", "series_name", "series_id",
+            "quarter", "balance", "unit", "other_unit_desc", "exchange_rate",
+            "other_asset", "other_issuer", "sub_type", "derivative_cat",
+            "is_default", "other_identifier", "currency_code",
+        ])
+
+    def test_industry_populated_when_lookup_exists(self, tmp_path):
+        """When identifier_extraction_lookup.csv exists, extracted_industry is filled."""
+        bdc_df = self._make_bdc_df()
+        nport_df = self._make_nport_df()
+
+        lookup_path = tmp_path / "identifier_extraction_lookup.csv"
+        pd.DataFrame([{
+            "bdc_investment_identifier": "Acme Corp | Technology | First Lien Term Loan",
+            "extracted_company": "Acme Corp",
+            "extracted_industry": "Technology",
+            "extracted_maturity_date": "",
+        }]).to_csv(lookup_path, index=False)
+
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "output.csv"), \
+             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE",
+                    tmp_path / "nonexistent.csv"), \
+             patch("pipeline.unified_holdings.IDENTIFIER_EXTRACTION_LOOKUP_FILE",
+                    lookup_path):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+
+        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert acme["extracted_industry"] == "Technology"
+
+    def test_industry_empty_when_no_lookup(self, tmp_path):
+        """When no lookup file exists, extracted_industry stays empty."""
+        bdc_df = self._make_bdc_df()
+        nport_df = self._make_nport_df()
+
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "output.csv"), \
+             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE",
+                    tmp_path / "nonexistent.csv"), \
+             patch("pipeline.unified_holdings.IDENTIFIER_EXTRACTION_LOOKUP_FILE",
+                    tmp_path / "nonexistent_lookup.csv"):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+
+        assert (result["extracted_industry"] == "").all()
+
+    def test_nport_rows_not_affected(self, tmp_path):
+        """N-PORT rows should not get industry from BDC lookup."""
+        bdc_df = self._make_bdc_df()
+        nport_df = pd.DataFrame([{
+            "accession_number": "0002-45", "holding_id": "H001",
+            "issuer_name": "Some Borrower", "issuer_lei": "",
+            "issuer_title": "Term Loan", "issuer_cusip": "",
+            "currency_value": 1000000, "percentage": 0.01,
+            "asset_cat": "LON", "issuer_type": "CORP",
+            "investment_country": "US", "is_restricted_security": "N",
+            "fair_value_level": 3, "maturity_date": "",
+            "coupon_type": "", "annualized_rate": 5.0,
+            "identifier_isin": "", "identifier_ticker": "",
+            "payoff_profile": "Long", "cik": "456",
+            "registrant_name": "Test Fund", "filing_date": "2023-07-15",
+            "report_date": "2023-06-30", "series_name": "S1",
+            "series_id": "S001", "quarter": "2023q2",
+            "balance": 1000000, "unit": "PA",
+        }])
+
+        lookup_path = tmp_path / "identifier_extraction_lookup.csv"
+        pd.DataFrame([{
+            "bdc_investment_identifier": "Acme Corp | Technology | First Lien Term Loan",
+            "extracted_company": "Acme Corp",
+            "extracted_industry": "Technology",
+            "extracted_maturity_date": "",
+        }]).to_csv(lookup_path, index=False)
+
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "output.csv"), \
+             patch("pipeline.unified_holdings.ENTITY_LOOKUP_FILE",
+                    tmp_path / "nonexistent.csv"), \
+             patch("pipeline.unified_holdings.IDENTIFIER_EXTRACTION_LOOKUP_FILE",
+                    lookup_path):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+
+        nport_rows = result[result["source"] == "nport"]
+        assert (nport_rows["extracted_industry"] == "").all()
+
+
+# ---------------------------------------------------------------------------
+# New N-PORT unified columns
+# ---------------------------------------------------------------------------
+
+class TestNewNportUnifiedColumns:
+    """Tests for nport_is_default, nport_are_interest_payments_in_arrears, etc."""
+
+    def _make_nport_df(self, rows):
+        cols = [
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "currency_value", "percentage",
+            "asset_cat", "issuer_type", "investment_country",
+            "is_restricted_security", "fair_value_level", "maturity_date",
+            "coupon_type", "annualized_rate", "identifier_isin",
+            "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+            "filing_date", "report_date", "series_name", "series_id",
+            "quarter", "balance", "unit",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_new_columns_present(self):
+        """New nport_* columns should appear in unified output."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "LON", "issuer_type": "CORP",
+            "issuer_name": "Test Co", "currency_value": 1000000,
+            "is_default": "N", "currency_code": "USD",
+            "liquidity_classification": "Moderately Liquid",
+            "are_any_interest_payment": "Y",
+            "is_any_portion_interest_paid": "N",
+        }])
+        result = _prepare_nport(df)
+        assert "nport_is_default" in result.columns
+        assert "nport_are_interest_payments_in_arrears" in result.columns
+        assert "nport_is_paid_in_kind" in result.columns
+        assert "nport_currency_code" in result.columns
+        assert "nport_liquidity_classification" in result.columns
+        row = result.iloc[0]
+        assert row["nport_is_default"] == "N"
+        assert row["nport_are_interest_payments_in_arrears"] == "Y"
+        assert row["nport_is_paid_in_kind"] == "N"
+        assert row["nport_currency_code"] == "USD"
+        assert row["nport_liquidity_classification"] == "Moderately Liquid"
+
+    def test_bdc_side_empty(self):
+        """BDC rows should have empty nport_* columns."""
+        bdc_df = pd.DataFrame([{
+            "cik": "123", "entity_name": "Test BDC",
+            "accession_number": "0001-23", "form_type": "10-K",
+            "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "investment_identifier": "TestCo | Loan",
+            "fair_value": 1000000.0, "cost": 990000.0,
+            "principal_amount": 1000000.0, "interest_rate": 8.5,
+            "basis_spread": 3.5, "reference_rate_type": "SOFR",
+            "maturity_date": "2028-01-15", "pct_of_net_assets": 0.05,
+            "pik_rate": None, "shares_held": None,
+            "unrealized_gain_loss": 10000.0, "dimensions_raw": "x=y",
+            "investment_type": "", "industry": "", "affiliation": "",
+            "period": "2023-03-31",
+        }])
+        from pipeline.unified_holdings import _prepare_bdc
+        result = _prepare_bdc(bdc_df)
+        assert result.iloc[0]["nport_is_default"] == ""
+        assert result.iloc[0]["nport_currency_code"] == ""
+        assert result.iloc[0]["nport_liquidity_classification"] == ""
+
+    def test_missing_columns_handled(self):
+        """When nport_df lacks new columns, they default to empty."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "LON", "issuer_type": "CORP",
+            "issuer_name": "Test Co", "currency_value": 1000000,
+        }])
+        # No is_default, currency_code, etc. -- column guard should add them
+        result = _prepare_nport(df)
+        assert result.iloc[0]["nport_is_default"] == ""
+        assert result.iloc[0]["nport_currency_code"] == ""
 
 
 # ---------------------------------------------------------------------------

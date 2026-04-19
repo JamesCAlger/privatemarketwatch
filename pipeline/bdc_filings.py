@@ -160,6 +160,22 @@ def _build_filings_index(
 
     df.drop_duplicates(subset=["accession_number"], inplace=True)
     df.sort_values(["cik", "filing_date"], inplace=True)
+
+    # Merge with existing index to preserve data for CIKs not in this run
+    # (e.g. when called via --ciks with a subset of the universe).
+    if BDC_FILINGS_INDEX_FILE.exists():
+        existing = pd.read_csv(BDC_FILINGS_INDEX_FILE, dtype=str)
+        new_cik_set = set(df["cik"].astype(str).str.strip())
+        keep = existing[~existing["cik"].astype(str).str.strip().isin(new_cik_set)]
+        if len(keep) > 0:
+            df = pd.concat([keep, df], ignore_index=True)
+            df.sort_values(["cik", "filing_date"], inplace=True)
+            logger.info(
+                "Merged with existing index: preserved %d rows for %d other CIKs",
+                len(keep),
+                keep["cik"].nunique(),
+            )
+
     df.to_csv(BDC_FILINGS_INDEX_FILE, index=False)
     logger.info(
         "Filings index built: %d filings across %d CIKs -> %s",
@@ -230,6 +246,15 @@ def _download_xbrl_instances(
                 "  XBRL download progress: %d / %d  (%.1f/s, ETA %.0f s)",
                 i, total, rate, eta,
             )
+
+        # Skip rows preserved from a previous run (via merge in _build_filings_index)
+        prev_status = row.get("xbrl_download_status")
+        if pd.notna(prev_status) and prev_status in (
+            "cached", "downloaded", "not_found",
+        ):
+            statuses.append(prev_status)
+            local_paths.append(row.get("xbrl_local_path", "") or "")
+            continue
 
         cik_stripped = str(row["cik"]).lstrip("0") or "0"
         acc_no_dashes = str(row["accession_number"]).replace("-", "")

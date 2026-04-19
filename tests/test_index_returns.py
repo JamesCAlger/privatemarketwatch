@@ -82,11 +82,11 @@ class TestReturnCalculation:
         # Total: 0.01 + 0.025 = 0.035
         assert abs(row["total_return"] - 0.035) < 0.001
 
-    def test_direct_equity_capital_only(self):
-        """Direct Equity: no income component."""
+    def test_common_equity_capital_only(self):
+        """Common Equity: no income component."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "Startup Inc", "end_issuer_name": "Startup Inc",
@@ -103,6 +103,29 @@ class TestReturnCalculation:
         # Income: 0
         assert row["income_return"] == 0
         assert abs(row["total_return"] - 0.10) < 0.001
+
+    def test_preferred_equity_has_income(self):
+        """Preferred Equity: income from stated dividend rate."""
+        matches = _make_matches([{
+            "cik": "100", "entity_name": "BDC1", "source": "bdc",
+            "index_classification": "PREFERRED_EQUITY",
+            "begin_quarter": "2024q1", "end_quarter": "2024q2",
+            "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Pref Co", "end_issuer_name": "Pref Co",
+            "begin_fair_value": "1000000", "end_fair_value": "1010000",
+            "begin_cost": "1000000", "end_cost": "1000000",
+            "begin_interest_rate": "8",
+            "span_months": "3",
+            "match_method": "B2_exact_name",
+            "asset_category": "EQUITY_PREFERRED",
+        }])
+        pos, _ = _compute(matches)
+        row = pos.iloc[0]
+        # Capital: (1.01M - 1M) / 1M = 0.01
+        assert abs(row["capital_return"] - 0.01) < 0.001
+        # Income: (1M * 8 / 100 * 3/12) / 1M = 0.02
+        assert abs(row["income_return"] - 0.02) < 0.001
+        assert abs(row["total_return"] - 0.03) < 0.001
 
     def test_fund_vehicle_distribution(self):
         """Fund vehicles: distribution = max(0, begin_cost - end_cost)."""
@@ -187,7 +210,7 @@ class TestReturnCalculation:
         """Returns above 200% should be set to NULL."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "Moonshot", "end_issuer_name": "Moonshot",
@@ -207,7 +230,7 @@ class TestReturnCalculation:
         """Returns below -99% should be capped."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "Bankrupt Co", "end_issuer_name": "Bankrupt Co",
@@ -484,7 +507,7 @@ class TestPerUnitPriceReturn:
         """DE with stable cost (no shares): raw FV change is correct."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "Equity Co", "end_issuer_name": "Equity Co",
@@ -505,7 +528,7 @@ class TestPerUnitPriceReturn:
         """DE partial sale: shares drop 50%, FV drops 50%, price return = 0."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "SaleCo", "end_issuer_name": "SaleCo",
@@ -525,7 +548,7 @@ class TestPerUnitPriceReturn:
         """DE additional purchase + price increase: isolates price change."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "GrowthCo", "end_issuer_name": "GrowthCo",
@@ -546,7 +569,7 @@ class TestPerUnitPriceReturn:
         """DE with cost change but no shares: uses FV/cost as price proxy."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "CostCo", "end_issuer_name": "CostCo",
@@ -566,7 +589,7 @@ class TestPerUnitPriceReturn:
         """DE cost halves but FV drops less: positive price return."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "MarkUpCo", "end_issuer_name": "MarkUpCo",
@@ -586,7 +609,7 @@ class TestPerUnitPriceReturn:
         """DE with no shares and no cost: raw FV fallback."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "NoCostCo", "end_issuer_name": "NoCostCo",
@@ -604,7 +627,7 @@ class TestPerUnitPriceReturn:
         """When both shares and cost available, shares path is used."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "BothCo", "end_issuer_name": "BothCo",
@@ -627,7 +650,7 @@ class TestPerUnitPriceReturn:
         """DE with 10x shares jump falls back to raw FV, not per-unit."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "UnitMismatch Co",
@@ -648,7 +671,7 @@ class TestPerUnitPriceReturn:
         """DE with 1000x shares drop falls back to raw FV."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "InverseMismatch",
@@ -668,7 +691,7 @@ class TestPerUnitPriceReturn:
         """DE with >5x shares jump skips cost-based fallback too."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "CostScaledCo",
@@ -690,7 +713,7 @@ class TestPerUnitPriceReturn:
         """DE with shares change within 5x still uses per-unit return."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "DoubleCo", "end_issuer_name": "DoubleCo",
@@ -710,7 +733,7 @@ class TestPerUnitPriceReturn:
         """DE cost-based fallback still works when shares are absent."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "NoSharesCo",
@@ -1108,10 +1131,10 @@ class TestFeeUplift:
         assert abs(row["income_return"] - 0.03) < 0.001
 
     def test_uplift_only_for_dl(self):
-        """Fee uplift does not affect DIRECT_EQUITY income."""
+        """Fee uplift does not affect COMMON_EQUITY income."""
         matches = _make_matches([{
             "cik": "100", "entity_name": "BDC1", "source": "bdc",
-            "index_classification": "DIRECT_EQUITY",
+            "index_classification": "COMMON_EQUITY",
             "begin_quarter": "2024q1", "end_quarter": "2024q2",
             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
             "begin_issuer_name": "Equity Co", "end_issuer_name": "Equity Co",
@@ -1126,7 +1149,7 @@ class TestFeeUplift:
         }])
         pos, _ = _compute(matches, fee_uplift_df=uplift)
         row = pos.iloc[0]
-        # DE income should still be 0 regardless of uplift
+        # CE income should still be 0 regardless of uplift
         assert row["income_return"] == 0
 
     def test_fund_vehicles_unaffected(self):

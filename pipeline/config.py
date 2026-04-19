@@ -23,10 +23,21 @@ BDC_XBRL_CACHE_DIR = RAW_DIR / "filings" / "bdc_xbrl"
 NPORT_TSV_CACHE_DIR = SEC_DATASETS_DIR / "nport_quarterly"
 NPORT_XML_CACHE_DIR = RAW_DIR / "filings" / "nport_xml"
 
+# HTML holdings extraction cache (pre-XBRL 10-K/10-Q filings)
+BDC_HTML_CACHE_DIR = RAW_DIR / "filings" / "bdc_html"
+
+# HTML template-based extraction
+HTML_TEMPLATE_DIR = RAW_DIR / "filing_templates"
+
+# companyfacts API cache (one JSON per CIK, ~100KB each)
+COMPANYFACTS_CACHE_DIR = RAW_DIR / "companyfacts_cache"
+
 # Ensure directories exist on import
 for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           N2_HEADERS_CACHE_DIR, BDC_XBRL_CACHE_DIR,
-          NPORT_TSV_CACHE_DIR, NPORT_XML_CACHE_DIR]:
+          NPORT_TSV_CACHE_DIR, NPORT_XML_CACHE_DIR,
+          BDC_HTML_CACHE_DIR, HTML_TEMPLATE_DIR,
+          COMPANYFACTS_CACHE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -151,6 +162,13 @@ LLM_REVIEW_LOOKUP_FILE = OUTPUT_DIR / "llm_review_lookup.csv"
 # Identifier extraction outputs
 IDENTIFIER_EXTRACTION_LOOKUP_FILE = OUTPUT_DIR / "identifier_extraction_lookup.csv"
 
+# HTML holdings extraction outputs
+HTML_EXTRACTION_FILE = OUTPUT_DIR / "html_extraction_holdings.csv"
+HTML_EXTRACTION_EXPERIMENT_FILE = OUTPUT_DIR / "html_extraction_experiment.csv"
+
+# HTML template validation (aggregate FV + carry rate checks)
+HTML_TEMPLATE_VALIDATION_FILE = OUTPUT_DIR / "html_template_validation.csv"
+
 # ---------------------------------------------------------------------------
 # Database (for --load-db)
 # ---------------------------------------------------------------------------
@@ -190,6 +208,13 @@ NPORT_DATASET_URL_TEMPLATE = (
     "https://www.sec.gov/files/dera/data/"
     "form-n-port-data-sets/{quarter}_nport.zip"
 )
+
+# CIKs to exclude from unified holdings (consumer/marketplace lending funds
+# that report millions of individual loan rows with opaque numeric IDs).
+# Data is kept in nport_holdings.csv but filtered out during --unified.
+NPORT_EXCLUDE_CIKS: set[str] = {
+    "1658645",   # Stone Ridge Trust V (~20M consumer loan rows)
+}
 
 # ---------------------------------------------------------------------------
 # BDC XBRL holdings extraction settings

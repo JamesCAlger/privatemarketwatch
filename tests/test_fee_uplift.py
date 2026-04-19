@@ -285,7 +285,7 @@ class TestFeeUplift:
                 "cik": "100", "report_date": "2024-03-31",
                 "issuer_name": "Equity B", "fair_value": "50000000",
                 "interest_rate": None,
-                "index_classification": "DIRECT_EQUITY",
+                "index_classification": "COMMON_EQUITY",
             },
         ])
 

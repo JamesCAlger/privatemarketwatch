@@ -129,11 +129,10 @@ export default function IndexDetailPage({
           <p className="text-white/60 max-w-2xl text-lg">
             {idx.description}
           </p>
-          {idx.key === 'DIRECT_EQUITY' && (
+          {idx.key === 'COMMON_EQUITY' && (
             <p className="text-white/35 text-sm mt-3 max-w-2xl">
               Returns reflect price appreciation only. Dividend income is not
-              included except for preferred equity positions where the stated rate
-              is disclosed.
+              included for common equity positions.
             </p>
           )}
         </div>

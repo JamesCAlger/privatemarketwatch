@@ -33,8 +33,8 @@ export default function HomePage() {
   const metadata = getMetadata();
   const vehicles = getVehicleContribution();
 
-  // Combined concentration across DL + DE
-  const combinedIndices = ['DIRECT_LENDING', 'DIRECT_EQUITY'];
+  // Combined concentration across DL + PE + CE
+  const combinedIndices = ['DIRECT_LENDING', 'PREFERRED_EQUITY', 'COMMON_EQUITY'];
   const managerData = combineConcentration(getManagerConcentration(), combinedIndices);
   const concentrationCurve = getConcentrationCurve();
   const combinedInvesteeCurve = concentrationCurve['COMBINED']?.investee ?? [];
@@ -48,7 +48,8 @@ export default function HomePage() {
   const totalCompanies = visibleSummaries.reduce((sum, s) => sum + (s.uniqueCompanies ?? 0), 0);
   // Per-index stats
   const dlSummary = summaries.find((s) => s.index === 'DIRECT_LENDING');
-  const deSummary = summaries.find((s) => s.index === 'DIRECT_EQUITY');
+  const peSummary = summaries.find((s) => s.index === 'PREFERRED_EQUITY');
+  const ceSummary = summaries.find((s) => s.index === 'COMMON_EQUITY');
 
   // Build chart series from index_returns
   const chartSeries = INDICES.map((idx) => ({
@@ -80,7 +81,8 @@ export default function HomePage() {
             <HeroStats
               totalFv={totalFv}
               loanCount={dlSummary?.constituents ?? 0}
-              equityCount={deSummary?.constituents ?? 0}
+              prefEquityCount={peSummary?.constituents ?? 0}
+              commonEquityCount={ceSummary?.constituents ?? 0}
             />
           </div>
         </div>
@@ -90,7 +92,7 @@ export default function HomePage() {
         {/* Performance */}
         <section className="mb-14">
           {/* Index Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
             {INDICES.map((idx) => {
               const summary = summaries.find((s) => s.index === idx.key);
               return (
@@ -114,7 +116,7 @@ export default function HomePage() {
           <div className="bg-white rounded-lg p-4 sm:p-6 shadow-card">
             <TimeSeriesChart
               series={chartSeries}
-              defaultVisible={['DIRECT_LENDING', 'DIRECT_EQUITY']}
+              defaultVisible={['DIRECT_LENDING', 'PREFERRED_EQUITY', 'COMMON_EQUITY']}
             />
           </div>
         </section>
@@ -242,7 +244,7 @@ export default function HomePage() {
 
         {/* Index CTAs */}
         <section className="mt-14 mb-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {INDICES.map((idx) => (
               <Link
                 key={idx.key}

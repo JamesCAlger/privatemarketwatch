@@ -818,6 +818,78 @@ class TestBuildFilingsIndex:
 
         assert result.empty
 
+    def test_merge_preserves_other_ciks(self, tmp_dir):
+        """When building index for a subset, rows for other CIKs are preserved."""
+        from pipeline.bdc_filings import _build_filings_index
+
+        output_file = tmp_dir / "filings_index.csv"
+
+        # Pre-populate with CIK 999 data (simulating a full prior run)
+        pd.DataFrame({
+            "cik": ["999", "999"],
+            "entity_name": ["Existing Corp", "Existing Corp"],
+            "accession_number": ["old-acc-1", "old-acc-2"],
+            "form_type": ["10-K", "10-Q"],
+            "filing_date": ["2023-06-15", "2023-12-15"],
+            "report_date": ["2023-06-30", "2023-12-31"],
+            "primary_document": ["d.htm", "d2.htm"],
+            "xbrl_download_status": ["cached", "not_found"],
+            "xbrl_local_path": ["/some/path.xml", ""],
+        }).to_csv(output_file, index=False)
+        # Make the file appear old so the 24h cache check is bypassed
+        import os
+        old_time = os.path.getmtime(str(output_file)) - 90_000
+        os.utime(str(output_file), (old_time, old_time))
+
+        client = self._mock_client()  # returns data for CIK 1418076
+        universe = pd.DataFrame({"cik": ["1418076"]})
+
+        with patch("pipeline.bdc_filings.BDC_FILINGS_INDEX_FILE", output_file):
+            result = _build_filings_index(client, universe)
+
+        # Result should have BOTH CIK 999 (preserved) and CIK 1418076 (new)
+        ciks = set(result["cik"].astype(str).str.strip())
+        assert "999" in ciks, "Existing CIK 999 should be preserved"
+        assert "1418076" in ciks, "New CIK 1418076 should be added"
+
+        # CIK 999 rows should retain xbrl_download_status from the old file
+        cik999 = result[result["cik"].astype(str).str.strip() == "999"]
+        assert len(cik999) == 2
+        assert list(cik999["xbrl_download_status"]) == ["cached", "not_found"]
+
+    def test_download_skips_preserved_rows(self, tmp_dir):
+        """_download_xbrl_instances skips rows that already have a status."""
+        from pipeline.bdc_filings import _download_xbrl_instances
+
+        output_file = tmp_dir / "idx.csv"
+
+        # DataFrame with one pre-existing row (preserved) and one new row
+        index = pd.DataFrame({
+            "cik": ["999", "1418076"],
+            "accession_number": ["old-acc-1", "new-acc-1"],
+            "primary_document": ["d.htm", "d2.htm"],
+            "form_type": ["10-K", "10-K"],
+            "xbrl_download_status": ["not_found", pd.NA],
+            "xbrl_local_path": ["", pd.NA],
+        })
+
+        # Client should only be called for the NEW row (CIK 1418076)
+        client = MagicMock(spec=EdgarClient)
+        client.get_safe.return_value = None  # nothing found
+
+        with (
+            patch("pipeline.bdc_filings.BDC_FILINGS_INDEX_FILE", output_file),
+            patch("pipeline.bdc_filings.BDC_XBRL_CACHE_DIR", tmp_dir / "xbrl"),
+        ):
+            result = _download_xbrl_instances(client, index)
+
+        # CIK 999 should keep its old "not_found" status
+        row999 = result[result["cik"] == "999"].iloc[0]
+        assert row999["xbrl_download_status"] == "not_found"
+
+        # Client should have been called for CIK 1418076 only
+        # (3 attempts: _htm.xml, .xml, filing index)
+        assert client.get_safe.call_count >= 1
 
 
 # ---------------------------------------------------------------------------

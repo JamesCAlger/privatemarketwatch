@@ -37,7 +37,8 @@ COMBINED_UNIVERSE_CSV = OUTPUT_DIR / "combined_universe.csv"
 # Index display order
 INDEX_ORDER = [
     "DIRECT_LENDING",
-    "DIRECT_EQUITY",
+    "PREFERRED_EQUITY",
+    "COMMON_EQUITY",
     "PRIVATE_CREDIT_FUND",
     "PRIVATE_EQUITY_FUND",
 ]
@@ -1073,10 +1074,11 @@ def _export_concentration_curve(con: duckdb.DuckDBPyConnection) -> None:
     # Per-index + combined DL+DE
     index_filters = [
         ("DIRECT_LENDING", "AND index_classification = 'DIRECT_LENDING'"),
-        ("DIRECT_EQUITY", "AND index_classification = 'DIRECT_EQUITY'"),
+        ("PREFERRED_EQUITY", "AND index_classification = 'PREFERRED_EQUITY'"),
+        ("COMMON_EQUITY", "AND index_classification = 'COMMON_EQUITY'"),
         ("PRIVATE_CREDIT_FUND", "AND index_classification = 'PRIVATE_CREDIT_FUND'"),
         ("PRIVATE_EQUITY_FUND", "AND index_classification = 'PRIVATE_EQUITY_FUND'"),
-        ("COMBINED", "AND index_classification IN ('DIRECT_LENDING', 'DIRECT_EQUITY')"),
+        ("COMBINED", "AND index_classification IN ('DIRECT_LENDING', 'PREFERRED_EQUITY', 'COMMON_EQUITY')"),
     ]
 
     for idx_key, where in index_filters:
