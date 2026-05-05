@@ -251,6 +251,26 @@ def _process_quarter_tsv(
         else:
             mtr = pd.DataFrame(columns=["ACCESSION_NUMBER"])
 
+        # 4b) BORROW_AGGREGATE -- total borrowings detail
+        borrow_agg = _read_tsv_from_zip(zf, "BORROW_AGGREGATE.tsv")
+        if not borrow_agg.empty:
+            borrow_agg.columns = borrow_agg.columns.str.strip()
+            if "ACCESSION_NUMBER" in borrow_agg.columns:
+                borrow_agg = borrow_agg[
+                    borrow_agg["ACCESSION_NUMBER"].isin(acc_set)
+                ]
+        else:
+            borrow_agg = pd.DataFrame(columns=["ACCESSION_NUMBER"])
+
+        # 4c) INTEREST_RATE_RISK -- DV01 at various tenors
+        irr = _read_tsv_from_zip(zf, "INTEREST_RATE_RISK.tsv")
+        if not irr.empty:
+            irr.columns = irr.columns.str.strip()
+            if "ACCESSION_NUMBER" in irr.columns:
+                irr = irr[irr["ACCESSION_NUMBER"].isin(acc_set)]
+        else:
+            irr = pd.DataFrame(columns=["ACCESSION_NUMBER"])
+
         # 5) FUND_REPORTED_HOLDING -- read in chunks for memory efficiency
         holding_chunks: list[pd.DataFrame] = []
         reader = _read_tsv_from_zip(
@@ -300,10 +320,53 @@ def _process_quarter_tsv(
             idents = pd.DataFrame()
 
     # -- Amendment dedup: keep only the latest accession per filing group --
+    # Enrich fri with CIK + REPORT_DATE before amendment dedup so grouping
+    # doesn't collapse all empty-SERIES_ID rows into one group.
+    if not fri.empty:
+        if not reg.empty and "CIK" in reg.columns:
+            _reg_cik = reg[["ACCESSION_NUMBER", "CIK"]].drop_duplicates(
+                subset=["ACCESSION_NUMBER"], keep="first",
+            )
+            fri = fri.merge(_reg_cik, on="ACCESSION_NUMBER", how="left")
+        if not sub.empty and "REPORT_DATE" in sub.columns:
+            _sub_rd = sub[["ACCESSION_NUMBER", "REPORT_DATE"]].drop_duplicates(
+                subset=["ACCESSION_NUMBER"], keep="first",
+            )
+            fri = fri.merge(_sub_rd, on="ACCESSION_NUMBER", how="left")
+    if not holdings.empty:
+        if not reg.empty and "CIK" in reg.columns:
+            _reg_cik_h = reg[["ACCESSION_NUMBER", "CIK"]].drop_duplicates(
+                subset=["ACCESSION_NUMBER"], keep="first",
+            )
+            holdings = holdings.merge(
+                _reg_cik_h, on="ACCESSION_NUMBER", how="left",
+            )
+        if not sub.empty and "REPORT_DATE" in sub.columns:
+            _sub_rd_h = sub[["ACCESSION_NUMBER", "REPORT_DATE"]].drop_duplicates(
+                subset=["ACCESSION_NUMBER"], keep="first",
+            )
+            holdings = holdings.merge(
+                _sub_rd_h, on="ACCESSION_NUMBER", how="left",
+            )
+        # Enrich with SERIES_ID from FRI so dedup groups by
+        # (CIK, REPORT_DATE, SERIES_ID) -- multi-series CIKs preserved.
+        if not fri.empty and "SERIES_ID" in fri.columns:
+            _fri_sid = fri[["ACCESSION_NUMBER", "SERIES_ID"]].drop_duplicates(
+                subset=["ACCESSION_NUMBER"], keep="first",
+            )
+            holdings = holdings.merge(
+                _fri_sid, on="ACCESSION_NUMBER", how="left",
+            )
     if not holdings.empty:
         holdings = _dedup_amendments(holdings, "holdings")
+        for _tmp_h in ("CIK", "REPORT_DATE", "SERIES_ID"):
+            if _tmp_h in holdings.columns:
+                holdings = holdings.drop(columns=[_tmp_h])
     if not fri.empty:
         fri = _dedup_amendments(fri, "fund_info")
+        for _tmp in ("CIK", "REPORT_DATE"):
+            if _tmp in fri.columns:
+                fri = fri.drop(columns=[_tmp])
 
     # -- Build holdings output --
     if not holdings.empty:
@@ -381,6 +444,63 @@ def _process_quarter_tsv(
         # Join monthly returns
         if not mtr.empty and "ACCESSION_NUMBER" in mtr.columns:
             fund_info = fund_info.merge(mtr, on="ACCESSION_NUMBER", how="left")
+
+        # Join BORROW_AGGREGATE: sum AMOUNT per accession
+        if (not borrow_agg.empty
+                and "ACCESSION_NUMBER" in borrow_agg.columns
+                and "AMOUNT" in borrow_agg.columns):
+            ba = borrow_agg.copy()
+            ba["AMOUNT"] = pd.to_numeric(ba["AMOUNT"], errors="coerce")
+            ba_sum = (
+                ba.groupby("ACCESSION_NUMBER")["AMOUNT"]
+                .sum()
+                .reset_index()
+                .rename(columns={"AMOUNT": "TOTAL_BORROWINGS_DETAIL"})
+            )
+            fund_info = fund_info.merge(
+                ba_sum, on="ACCESSION_NUMBER", how="left",
+            )
+
+        # Join INTEREST_RATE_RISK: DV01 and DV100 at all tenors (USD)
+        if (not irr.empty
+                and "ACCESSION_NUMBER" in irr.columns):
+            irr_filt = irr.copy()
+            # Filter to USD if CURRENCY_CODE column exists
+            if "CURRENCY_CODE" in irr_filt.columns:
+                irr_filt = irr_filt[irr_filt["CURRENCY_CODE"] == "USD"]
+
+            _IRR_RENAME = {
+                "INTRST_RATE_CHANGE_3MON_DV01": "DV01_3MON",
+                "INTRST_RATE_CHANGE_1YR_DV01": "DV01_1YR",
+                "INTRST_RATE_CHANGE_5YR_DV01": "DV01_5YR",
+                "INTRST_RATE_CHANGE_10YR_DV01": "DV01_10YR",
+                "INTRST_RATE_CHANGE_30YR_DV01": "DV01_30YR",
+                "INTRST_RATE_CHANGE_3MON_DV100": "DV100_3MON",
+                "INTRST_RATE_CHANGE_1YR_DV100": "DV100_1YR",
+                "INTRST_RATE_CHANGE_5YR_DV100": "DV100_5YR",
+                "INTRST_RATE_CHANGE_10YR_DV100": "DV100_10YR",
+                "INTRST_RATE_CHANGE_30YR_DV100": "DV100_30YR",
+            }
+            rename_map = {
+                src: dst for src, dst in _IRR_RENAME.items()
+                if src in irr_filt.columns
+            }
+            if rename_map:
+                irr_sub = irr_filt[
+                    ["ACCESSION_NUMBER"] + list(rename_map.keys())
+                ].copy()
+                irr_sub = irr_sub.rename(columns=rename_map)
+                for col in rename_map.values():
+                    irr_sub[col] = pd.to_numeric(irr_sub[col], errors="coerce")
+                irr_agg = (
+                    irr_sub.groupby("ACCESSION_NUMBER")
+                    .sum(numeric_only=True)
+                    .reset_index()
+                )
+                fund_info = fund_info.merge(
+                    irr_agg, on="ACCESSION_NUMBER", how="left",
+                )
+
         fund_info["QUARTER"] = quarter
 
     # -- Build filings_index output --

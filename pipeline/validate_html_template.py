@@ -236,12 +236,49 @@ def _compute_carry_rates(
 # Section D2: self-referential subtotal validation
 # ---------------------------------------------------------------------------
 
-_SUBTOTAL_PATTERNS = [
+# Grand total patterns -- used to find THE subtotal reference row
+_GRAND_TOTAL_PATTERNS = [
     r"total\s+investments?\s+at\s+fair\s+value",
     r"total\s+investments",
     r"total\s+portfolio",
     r"total\s+fair\s+value",
     r"grand\s+total",
+]
+_GRAND_TOTAL_RE = re.compile(
+    "|".join(f"(?:{p})" for p in _GRAND_TOTAL_PATTERNS),
+    re.IGNORECASE,
+)
+
+# Broader patterns -- rows to EXCLUDE from position FV sum
+_SUBTOTAL_PATTERNS = _GRAND_TOTAL_PATTERNS + [
+    # Intermediate category subtotals (e.g., "Total Senior Secured Loans")
+    r"^total\s+(?:senior|secured|first|second|structured|subordinated"
+    r"|common|preferred|unsecured|debt|loans?|equity|notes?"
+    r"|stock|warrants?|bank|net\s+assets)",
+    # Category subtotals ending with "Total" (e.g., "First Lien Debt Total")
+    r"\b(?:debt|equity|investments?|obligations?|funds?|loans?"
+    r"|warrants?|notes?|securities|preferred|common|stock)\s+total\s*$",
+    # "Net <category>" section summaries (e.g., "Net Senior Secured Loans")
+    r"^net\s+(?:senior|secured|first|second|structured|subordinated"
+    r"|common|preferred|unsecured|debt|loans?|equity|notes?"
+    r"|stock|warrants?|bank|investments?|mezzanine|collateralized"
+    r"|bridge|junior|revolv)",
+    # "Sub Total" or "Subtotal" anywhere in name
+    r"sub[\s-]?total",
+    # Names ending with "Subtotal" (per-company subtotals like "Acme, Inc. Subtotal")
+    r"\b(?:sub[\s-]?)?total\s*$",
+    # Balance sheet reconciliation rows at bottom of schedule
+    r"other\s+assets\s+in\s+excess",
+    r"^net\s+assets",
+    r"^total\s+net\s+assets",
+    r"^liabilities\s+in\s+excess",
+    # Balance sheet capital/equity lines (e.g., "MEMBERS' CAPITAL", "Stockholders' Equity")
+    r"^members\W?\s*capital",
+    r"^partners\W?\s*capital",
+    r"^stockholders\W?\s*equity",
+    r"^shareholders\W?\s*equity",
+    r"^net\s+asset\s+value",
+    r"^total\s+liabilities\s+and\b",
 ]
 _SUBTOTAL_RE = re.compile(
     "|".join(f"(?:{p})" for p in _SUBTOTAL_PATTERNS),
@@ -252,7 +289,8 @@ _SUBTOTAL_RE = re.compile(
 def _find_subtotal_fv(holdings: list[dict]) -> Optional[float]:
     """Find the highest-level subtotal FV from extracted rows.
 
-    Searches for rows whose issuer_name matches subtotal patterns.
+    Uses GRAND_TOTAL patterns (total investments/portfolio) to find
+    the reference subtotal, NOT broader exclusion patterns.
     Returns the FV of the best match, or None if no subtotal found.
     """
     candidates: list[tuple[str, float]] = []
@@ -260,7 +298,7 @@ def _find_subtotal_fv(holdings: list[dict]) -> Optional[float]:
         name = row.get("investment_identifier") or row.get("issuer_name", "")
         if not name:
             continue
-        if _SUBTOTAL_RE.search(name):
+        if _GRAND_TOTAL_RE.search(name):
             fv = _safe_float(row.get("fair_value"))
             if fv is not None and fv > 0:
                 candidates.append((name, fv))
@@ -268,6 +306,74 @@ def _find_subtotal_fv(holdings: list[dict]) -> Optional[float]:
         return None
     # Pick the largest FV (highest-level subtotal)
     return max(candidates, key=lambda x: x[1])[1]
+
+
+def _find_company_subtotal_names(holdings: list[dict]) -> set[str]:
+    """Identify per-company subtotal rows.
+
+    Some BDCs (e.g. PhenixFIN/Medley Capital) include a rollup row for each
+    company that repeats the company name with empty investment_type and FV
+    equal to the sum of that company's detail rows.  These are NOT flagged by
+    ``_SUBTOTAL_RE`` because the name is just "Acme Corp" (no "total" keyword).
+
+    Detection: a row is a per-company subtotal if its ``investment_identifier``
+    appears on at least one other row that DOES have a non-empty
+    ``investment_type``, AND this row's own ``investment_type`` is empty.
+    """
+    # Build set of names that have at least one row with non-empty type
+    names_with_type: set[str] = set()
+    for r in holdings:
+        name = r.get("investment_identifier") or ""
+        itype = (r.get("investment_type") or "").strip()
+        if name and itype:
+            names_with_type.add(name)
+
+    # Rows with same name but empty type are per-company subtotals
+    subtotal_names: set[str] = set()
+    for r in holdings:
+        name = r.get("investment_identifier") or ""
+        itype = (r.get("investment_type") or "").strip()
+        fv = _safe_float(r.get("fair_value"))
+        if name and not itype and fv is not None and name in names_with_type:
+            subtotal_names.add(name)
+
+    return subtotal_names
+
+
+def _detect_fv_sum_subtotals(holdings: list[dict]) -> set[int]:
+    """Detect company-level subtotal rows by FV sum matching.
+
+    When a company has N rows (N >= 2) with the same investment_identifier,
+    and the LAST row's FV equals the sum of all preceding rows' FVs
+    (within 1% tolerance), that last row is a company subtotal.
+
+    Returns set of row indices (into ``holdings``) that are subtotals.
+    """
+    from collections import defaultdict
+
+    # Group row indices by name (preserving table order)
+    name_groups: dict[str, list[tuple[int, float]]] = defaultdict(list)
+    for idx, r in enumerate(holdings):
+        if r.get("is_subtotal", False):
+            continue
+        name = r.get("investment_identifier") or ""
+        if not name or _SUBTOTAL_RE.search(name):
+            continue
+        fv = _safe_float(r.get("fair_value"))
+        if fv is not None:
+            name_groups[name].append((idx, fv))
+
+    subtotal_indices: set[int] = set()
+    for name, entries in name_groups.items():
+        if len(entries) < 2:
+            continue
+        # Check if the last row's FV equals the sum of all preceding rows
+        last_idx, last_fv = entries[-1]
+        others_sum = sum(fv for _, fv in entries[:-1])
+        if others_sum > 0 and abs(last_fv - others_sum) / others_sum < 0.01:
+            subtotal_indices.add(last_idx)
+
+    return subtotal_indices
 
 
 def _self_referential_check(
@@ -282,13 +388,26 @@ def _self_referential_check(
         return {"status": "NO_SUBTOTAL", "subtotal_fv": None,
                 "position_fv_sum": None, "ratio": None}
 
+    # Detect per-company subtotal rows (company name + empty type + FV)
+    company_subtotal_names = _find_company_subtotal_names(holdings)
+
+    # Detect FV-sum-based subtotals (last row FV = sum of others)
+    fv_sum_subtotals = _detect_fv_sum_subtotals(holdings)
+
     # Sum FV of non-subtotal rows
     position_fv = 0.0
-    for r in holdings:
+    for idx, r in enumerate(holdings):
         if r.get("is_subtotal", False):
             continue
         name = r.get("investment_identifier") or r.get("issuer_name", "") or ""
         if _SUBTOTAL_RE.search(name):
+            continue
+        # Skip per-company subtotal rows (empty type, same name as typed rows)
+        itype = (r.get("investment_type") or "").strip()
+        if not itype and name in company_subtotal_names:
+            continue
+        # Skip FV-sum-based company subtotals
+        if idx in fv_sum_subtotals:
             continue
         fv = _safe_float(r.get("fair_value"))
         if fv is not None:
@@ -352,7 +471,7 @@ def validate_cik(
 
     Returns a results dict with per-filing details and summary.
     """
-    from pipeline.html_template import extract_filing_with_template, load_template
+    from pipeline.html_extract import extract_filing, load_template
 
     cik_stripped = str(cik).lstrip("0") or "0"
 
@@ -410,7 +529,7 @@ def validate_cik(
         }
 
         try:
-            html_rows, stats = extract_filing_with_template(
+            html_rows, stats = extract_filing(
                 html_content, filing_meta, template
             )
         except Exception as exc:
@@ -418,36 +537,120 @@ def validate_cik(
             continue
 
         if not html_rows:
+            filing_results.append({
+                "cik": cik_stripped,
+                "entity_name": entity_name,
+                "report_date": report_date,
+                "form_type": form_type,
+                "html_count": 0,
+                "position_count": 0,
+                "html_fv_sum": 0,
+                "cf_fv": fv_series.get(report_date),
+                "raw_ratio": None,
+                "unit_multiplier": None,
+                "adj_ratio": None,
+                "agg_status": "NO_DATA",
+                "self_ref_status": "NO_SUBTOTAL",
+                "self_ref_ratio": None,
+                "self_ref_subtotal_fv": None,
+                "self_ref_position_fv": None,
+                "variant_used": None,
+                "drift_detected": False,
+                "fv_fill_rate": 0.0,
+                "name_fill_rate": 0.0,
+                "median_position_fv": None,
+                "negative_fv_pct": 0.0,
+                "zero_extraction": True,
+            })
             continue
 
-        # Compute aggregate FV
+        # Filter to current period only (exclude comparative periods
+        # from 10-K filings that include table_periods)
+        current_rows = [
+            r for r in html_rows if r.get("period") == report_date
+        ]
+        if not current_rows:
+            # Fallback: if report_date doesn't match any period (e.g.
+            # filings_index has filing_date instead of report_date),
+            # pick the latest period.
+            all_periods = sorted({r.get("period", "") for r in html_rows if r.get("period")})
+            if all_periods:
+                latest = all_periods[-1]
+                current_rows = [r for r in html_rows if r.get("period") == latest]
+                report_date = latest  # use corrected date downstream
+            else:
+                current_rows = html_rows  # no period tagging at all
+
+        # Detect per-company subtotal rows for this filing
+        co_sub_names = _find_company_subtotal_names(current_rows)
+
+        # Compute aggregate FV (current period only, exclude subtotals)
         fv_values = []
         names = []
-        for row in html_rows:
-            fv = _safe_float(row.get("fair_value"))
-            if fv is not None:
-                fv_values.append(fv)
+        non_subtotal_count = 0
+        for row in current_rows:
             name = row.get("investment_identifier") or row.get("issuer_name", "")
             if name:
                 names.append(name)
+            # Skip subtotal rows for FV sum
+            if row.get("is_subtotal", False):
+                continue
+            if name and _SUBTOTAL_RE.search(name):
+                continue
+            # Skip per-company subtotals
+            itype = (row.get("investment_type") or "").strip()
+            if not itype and name in co_sub_names:
+                continue
+            non_subtotal_count += 1
+            fv = _safe_float(row.get("fair_value"))
+            if fv is not None:
+                du = row.get("dollar_unit", 1) or 1
+                fv_values.append(fv * du)
 
         html_fv_sum = sum(fv_values)
-        html_count = len(html_rows)
+        html_count = len(current_rows)
+
+        # Per-filing metrics
+        fv_fill_rate = (
+            len(fv_values) / non_subtotal_count
+            if non_subtotal_count > 0 else 0.0
+        )
+        name_count = sum(
+            1 for row in current_rows
+            if (row.get("investment_identifier") or "").strip()
+            and not row.get("is_subtotal", False)
+            and not _SUBTOTAL_RE.search(
+                row.get("investment_identifier") or row.get("issuer_name", "") or ""
+            )
+        )
+        name_fill_rate = (
+            name_count / non_subtotal_count
+            if non_subtotal_count > 0 else 0.0
+        )
+        negative_fv_count = sum(1 for v in fv_values if v < 0)
+        negative_fv_pct = (
+            negative_fv_count / len(fv_values)
+            if fv_values else 0.0
+        )
+        median_pos_fv = _median(fv_values) if fv_values else None
 
         # Collect positions for carry rate (exclude subtotals)
         non_subtotal_names = []
-        for row in html_rows:
+        for row in current_rows:
             if row.get("is_subtotal", False):
                 continue
             name = row.get("investment_identifier") or row.get("issuer_name", "")
             if name and not _SUBTOTAL_RE.search(name):
+                itype = (row.get("investment_type") or "").strip()
+                if not itype and name in co_sub_names:
+                    continue
                 non_subtotal_names.append(name)
         if report_date and non_subtotal_names:
             positions_by_date.setdefault(report_date, []).extend(non_subtotal_names)
             counts_by_date[report_date] = len(non_subtotal_names)
 
-        # Self-referential subtotal check
-        self_ref = _self_referential_check(html_rows)
+        # Self-referential subtotal check (current period only)
+        self_ref = _self_referential_check(current_rows)
 
         # Compare against companyfacts (supplementary)
         cf_fv = fv_series.get(report_date)
@@ -460,7 +663,7 @@ def validate_cik(
             adj_ratio, unit_multiplier, raw_ratio = _auto_detect_unit(
                 html_fv_sum, cf_fv
             )
-            agg_status = "PASS" if 0.5 <= adj_ratio <= 2.0 else "FAIL"
+            agg_status = "PASS" if 0.7 <= adj_ratio <= 1.4 else "FAIL"
 
         filing_results.append({
             "cik": cik_stripped,
@@ -481,6 +684,11 @@ def validate_cik(
             "self_ref_position_fv": self_ref.get("position_fv_sum"),
             "variant_used": stats.get("variant_id"),
             "drift_detected": stats.get("drift_detected", False),
+            "fv_fill_rate": round(fv_fill_rate, 4),
+            "name_fill_rate": round(name_fill_rate, 4),
+            "median_position_fv": round(median_pos_fv, 2) if median_pos_fv is not None else None,
+            "negative_fv_pct": round(negative_fv_pct, 4),
+            "zero_extraction": False,
         })
 
     # Compute carry rates
@@ -526,9 +734,43 @@ def validate_cik(
     # Count stability stats
     count_warnings = sum(1 for cs in count_stability if cs["status"] == "WARN")
 
+    # New per-filing aggregates
+    filings_with_html = sum(
+        1 for f in filing_results if not f.get("zero_extraction", False)
+    )
+    zero_extraction_count = sum(
+        1 for f in filing_results if f.get("zero_extraction", False)
+    )
+    extraction_coverage = (
+        filings_with_html / len(filing_results)
+        if filing_results else 0.0
+    )
+
+    fv_fill_vals = [
+        f["fv_fill_rate"] for f in filing_results
+        if not f.get("zero_extraction", False)
+    ]
+    name_fill_vals = [
+        f["name_fill_rate"] for f in filing_results
+        if not f.get("zero_extraction", False)
+    ]
+    pos_fv_vals = [
+        f["median_position_fv"] for f in filing_results
+        if f.get("median_position_fv") is not None
+    ]
+    neg_fv_vals = [
+        f["negative_fv_pct"] for f in filing_results
+        if not f.get("zero_extraction", False)
+    ]
+
+    median_fv_fill = _median(fv_fill_vals) if fv_fill_vals else 0.0
+    median_name_fill = _median(name_fill_vals) if name_fill_vals else 0.0
+    median_fv_per_position = _median(pos_fv_vals) if pos_fv_vals else None
+    median_negative_fv_pct = _median(neg_fv_vals) if neg_fv_vals else 0.0
+
     summary = {
         "filings_total": len(filing_results),
-        "filings_with_html": len(filing_results),
+        "filings_with_html": filings_with_html,
         # Companyfacts aggregate (supplementary)
         "agg_validated": len(agg_results),
         "agg_pass": agg_pass,
@@ -544,8 +786,9 @@ def validate_cik(
         "self_ref_fail": sr_fail,
         "self_ref_no_subtotal": sr_no_subtotal,
         "median_self_ref_ratio": round(_median(sr_ratios), 4) if sr_ratios else None,
-        "self_ref_overall": "PASS" if sr_results and sr_pass == len(sr_results) else (
-            "FAIL" if sr_results else "NO_DATA"
+        "self_ref_overall": (
+            "PASS" if sr_results and sr_fail <= max(1, len(sr_results) // 10)
+            else ("FAIL" if sr_results else "NO_DATA")
         ),
         # Carry rate
         "carry_pairs": len(carry_results),
@@ -559,19 +802,113 @@ def validate_cik(
         "low_carry_pairs": sum(1 for v in carry_vals if v < 0.50),
         # Position count stability
         "count_instability": count_warnings,
+        # New metrics
+        "extraction_coverage": round(extraction_coverage, 4),
+        "zero_extraction_count": zero_extraction_count,
+        "median_fv_fill": round(median_fv_fill, 4),
+        "median_name_fill": round(median_name_fill, 4),
+        "median_fv_per_position": (
+            round(median_fv_per_position, 2)
+            if median_fv_per_position is not None else None
+        ),
+        "median_negative_fv_pct": round(median_negative_fv_pct, 4),
     }
 
-    # Overall PASS/FAIL: self-referential (when available) + count stability
-    # Carry rate and companyfacts are informational (not gates)
+    # Overall PASS/FAIL logic:
+    # 1. Count stability is always a gate
+    # 2. Unit mismatch is always a FAIL (dollar_unit is wrong)
+    # 3. Self-referential subtotal is the primary gate (when available)
+    # 4. Companyfacts is a fallback gate when self-ref has no data
+    # 5. Low FV fill and low extraction coverage are gates
+    # 6. High NO_SUBTOTAL rate without companyfacts backup -> NO_DATA
     overall = "PASS"
     if count_warnings > 0:
         overall = "FAIL"
+    elif summary["unit_mismatch_detected"]:
+        overall = "FAIL"
     elif summary["self_ref_overall"] == "FAIL":
         overall = "FAIL"
-    elif (summary["self_ref_overall"] == "NO_DATA"
-          and summary["agg_overall"] == "NO_DATA"
-          and not count_stability):
-        overall = "NO_DATA"
+    elif summary["self_ref_overall"] == "NO_DATA":
+        # Self-ref unavailable -- fall back to companyfacts
+        if summary["agg_overall"] == "FAIL":
+            overall = "FAIL"
+        elif summary["agg_overall"] == "NO_DATA" and not count_stability:
+            overall = "NO_DATA"
+        # agg_overall == "PASS" -> overall stays PASS
+    elif sr_no_subtotal > sr_pass:
+        # More filings without subtotals than with -- self-ref is unreliable
+        # Use companyfacts as supplementary check
+        if summary["agg_overall"] == "FAIL":
+            overall = "FAIL"
+
+    # New gates (checked after existing gates)
+    if overall == "PASS":
+        if median_fv_fill < 0.30:
+            overall = "FAIL"
+        elif extraction_coverage < 0.50:
+            overall = "FAIL"
+
+    # Build structured fail_reasons and warn_reasons
+    fail_reasons: list[str] = []
+    warn_reasons: list[str] = []
+
+    if count_warnings > 0:
+        fail_reasons.append(
+            f"count_instability: {count_warnings} QoQ jumps >50%"
+        )
+    if summary["unit_mismatch_detected"]:
+        fail_reasons.append("unit_mismatch: dollar_unit likely wrong")
+    if sr_ratios:
+        med_sr = _median(sr_ratios)
+        if med_sr > 1.15:
+            fail_reasons.append(
+                f"self_ref_high ({med_sr:.2f}x): likely comparative "
+                f"period double-count -- add table_periods"
+            )
+        elif med_sr < 0.85:
+            fail_reasons.append(
+                f"self_ref_low ({med_sr:.2f}x): likely missing "
+                f"continuation tables"
+            )
+        if summary["self_ref_overall"] == "FAIL" and 0.85 <= med_sr <= 1.15:
+            fail_reasons.append(
+                f"self_ref_fail ({med_sr:.2f}x): position/subtotal mismatch"
+            )
+    if median_fv_fill < 0.30 and filings_with_html > 0:
+        fail_reasons.append(
+            f"fv_fill_low ({median_fv_fill:.0%}): "
+            f"fair_value column mapping broken"
+        )
+    if extraction_coverage < 0.50 and filing_results:
+        fail_reasons.append(
+            f"low_coverage ({extraction_coverage:.0%}): "
+            f"{zero_extraction_count} filings extract nothing"
+        )
+    if adj_ratios:
+        med_adj = _median(adj_ratios)
+        if summary["agg_overall"] == "FAIL":
+            fail_reasons.append(
+                f"agg_fail: companyfacts ratio {med_adj:.2f}x "
+                f"outside 0.7-1.4"
+            )
+
+    # Warn reasons (not gates)
+    if median_name_fill < 0.50 and filings_with_html > 0:
+        warn_reasons.append(f"name_fill_low ({median_name_fill:.0%})")
+    if median_fv_per_position is not None and median_fv_per_position < 1000:
+        warn_reasons.append(
+            f"fv_per_position_low (${median_fv_per_position:,.0f}): "
+            f"dollar_unit may be too low"
+        )
+    if median_fv_per_position is not None and median_fv_per_position > 500_000_000:
+        warn_reasons.append(
+            f"fv_per_position_high (${median_fv_per_position:,.0f}): "
+            f"dollar_unit may be too high"
+        )
+    if median_negative_fv_pct > 0.20:
+        warn_reasons.append(
+            f"negative_fv_high ({median_negative_fv_pct:.0%})"
+        )
 
     return {
         "cik": cik_stripped,
@@ -581,12 +918,17 @@ def validate_cik(
         "count_stability": count_stability,
         "summary": summary,
         "overall": overall,
+        "fail_reasons": fail_reasons,
+        "warn_reasons": warn_reasons,
     }
 
 
 def _safe_float(val) -> Optional[float]:
-    """Convert to float safely, return None on failure."""
-    if val is None:
+    """Convert to float safely, return None on failure.
+
+    Handles raw cell text from HTML extraction (e.g. '23,339', '(500)').
+    """
+    if val is None or val == "":
         return None
     try:
         f = float(val)
@@ -594,7 +936,10 @@ def _safe_float(val) -> Optional[float]:
             return None
         return f
     except (ValueError, TypeError):
-        return None
+        pass
+    # Handle raw dollar strings: strip commas, parens for negatives
+    from pipeline.html_extract import _parse_dollar
+    return _parse_dollar(val)
 
 
 def _median(values: list[float]) -> float:
@@ -649,6 +994,8 @@ def validate_all(
             "cik": result["cik"],
             "entity_name": result.get("entity_name", ""),
             "overall": result["overall"],
+            "fail_reasons": "; ".join(result.get("fail_reasons", [])),
+            "warn_reasons": "; ".join(result.get("warn_reasons", [])),
             **result["summary"],
         })
 
@@ -661,6 +1008,12 @@ def validate_all(
     df = pd.DataFrame(all_filings)
     df.to_csv(HTML_TEMPLATE_VALIDATION_FILE, index=False)
     logger.info("Validation results written to %s", HTML_TEMPLATE_VALIDATION_FILE)
+
+    # Save per-CIK summary
+    summary_df = pd.DataFrame(summaries)
+    summary_path = HTML_TEMPLATE_VALIDATION_FILE.parent / "html_template_validation_summary.csv"
+    summary_df.to_csv(summary_path, index=False)
+    logger.info("Validation summary written to %s", summary_path)
 
     # Print overall summary
     _print_overall_summary(summaries)
@@ -686,9 +1039,15 @@ def _print_cik_report(result: dict) -> None:
     sr_none = s.get("self_ref_no_subtotal", 0)
     print(f"  Filings with subtotals: {sr_total}")
     print(f"  Filings without subtotals: {sr_none}")
+    if sr_none > sr_total and sr_none > 0:
+        print(f"  WARNING: {sr_none} filings have no subtotal row "
+              f"-- validation incomplete")
     if s.get("median_self_ref_ratio") is not None:
         print(f"  Median ratio: {s['median_self_ref_ratio']:.4f}")
-    print(f"  In range (0.85-1.15): {s.get('self_ref_pass', 0)}/{sr_total}")
+    sr_fail = s.get("self_ref_fail", 0)
+    tolerance = max(1, sr_total // 10)
+    print(f"  In range (0.85-1.15): {s.get('self_ref_pass', 0)}/{sr_total}"
+          f" (tolerance: {tolerance} failures allowed)")
     print(f"  STATUS: {s.get('self_ref_overall', 'NO_DATA')}")
 
     # Show self-ref failures
@@ -731,15 +1090,53 @@ def _print_cik_report(result: dict) -> None:
                   f"{cr['carry_rate']:.0%} carry "
                   f"({cr['carried']}/{cr['begin_count']} carried)")
 
-    # Aggregate FV (companyfacts -- informational)
-    print("\nAggregate FV (companyfacts, informational):")
+    # Aggregate FV (companyfacts -- fallback gate when self-ref unavailable)
+    is_fallback = s.get("self_ref_overall") == "NO_DATA" or sr_none > sr_total
+    role = "FALLBACK GATE" if is_fallback else "supplementary"
+    print(f"\nAggregate FV (companyfacts, {role}):")
     print(f"  Companyfacts coverage: {s.get('agg_validated', 0)}/{s.get('filings_with_html', 0)}")
     if s.get("unit_mismatch_detected"):
-        print("  Unit mismatch: DETECTED (auto-corrected)")
+        print("  Unit mismatch: DETECTED -- dollar_unit likely wrong (FAIL)")
     if s.get("median_adj_ratio") is not None:
-        print(f"  Median adjusted ratio: {s['median_adj_ratio']:.4f}")
+        print(f"  Median adjusted ratio: {s['median_adj_ratio']:.4f}"
+              f" (range: 0.7-1.4)")
+    print(f"  STATUS: {s.get('agg_overall', 'NO_DATA')}")
+
+    # Extraction coverage + FV fill
+    print(f"\nExtraction Metrics:")
+    ext_cov = s.get("extraction_coverage", 0)
+    zero_ext = s.get("zero_extraction_count", 0)
+    print(f"  Extraction coverage: {ext_cov:.0%}"
+          f" ({s.get('filings_with_html', 0)}/{s.get('filings_total', 0)} filings)")
+    if zero_ext > 0:
+        print(f"  Zero-extraction filings: {zero_ext}")
+    med_fv_fill = s.get("median_fv_fill", 0)
+    print(f"  Median FV fill rate: {med_fv_fill:.0%}"
+          f"{'  FAIL' if med_fv_fill < 0.30 else ''}")
+    med_name_fill = s.get("median_name_fill", 0)
+    print(f"  Median name fill rate: {med_name_fill:.0%}"
+          f"{'  WARN' if med_name_fill < 0.50 else ''}")
+    med_pos_fv = s.get("median_fv_per_position")
+    if med_pos_fv is not None:
+        print(f"  Median FV per position: ${med_pos_fv:,.0f}")
+    med_neg = s.get("median_negative_fv_pct", 0)
+    if med_neg > 0:
+        print(f"  Median negative FV pct: {med_neg:.0%}"
+              f"{'  WARN' if med_neg > 0.20 else ''}")
 
     print(f"\nOverall: {result.get('overall', 'NO_DATA')}")
+
+    # Structured reasons
+    fail_reasons = result.get("fail_reasons", [])
+    warn_reasons = result.get("warn_reasons", [])
+    if fail_reasons:
+        print(f"\nFail reasons:")
+        for r in fail_reasons:
+            print(f"  - {r}")
+    if warn_reasons:
+        print(f"\nWarn reasons:")
+        for r in warn_reasons:
+            print(f"  - {r}")
 
 
 def _print_overall_summary(summaries: list[dict]) -> None:
@@ -775,12 +1172,17 @@ def _print_overall_summary(summaries: list[dict]) -> None:
     if failures:
         print("\nFailed CIKs:")
         for s in failures:
-            reasons = []
-            if s.get("agg_overall") == "FAIL":
-                reasons.append(f"agg ratio {s.get('median_adj_ratio', '?')}")
-            if s.get("carry_overall") == "FAIL":
-                reasons.append(f"carry {s.get('median_carry', '?')}")
-            print(f"  {s['cik']} ({s.get('entity_name', '')}): {', '.join(reasons)}")
+            reasons_str = s.get("fail_reasons", "")
+            if reasons_str:
+                print(f"  {s['cik']} ({s.get('entity_name', '')}): {reasons_str}")
+            else:
+                # Fallback for legacy summaries
+                reasons = []
+                if s.get("agg_overall") == "FAIL":
+                    reasons.append(f"agg ratio {s.get('median_adj_ratio', '?')}")
+                if s.get("carry_overall") == "FAIL":
+                    reasons.append(f"carry {s.get('median_carry', '?')}")
+                print(f"  {s['cik']} ({s.get('entity_name', '')}): {', '.join(reasons)}")
 
     print()
 

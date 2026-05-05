@@ -28,6 +28,7 @@ from pipeline.unified_holdings import (
     _classify_index,
     _classify_nport_asset,
     _classify_nport_issuer,
+    _enforce_schema,
     _infer_coupon_type,
     _INDUSTRY_LABELS,
     _is_bdc_aggregate_row,
@@ -37,6 +38,8 @@ from pipeline.unified_holdings import (
     _prepare_bdc,
     _prepare_nport,
     _reclassify_named_fund_positions,
+    _sql_classify_exposure_type,
+    _sql_classify_asset_class,
     build_unified_holdings,
     UNIFIED_COLUMNS,
 )
@@ -444,6 +447,61 @@ class TestIsBdcAggregateRow:
             "Debt | Total Solutions Holdings LLC"
         )
 
+    # --- Non-control dimension-path false positive fix (2026-05-04) ---
+    def test_long_noncontrol_dimension_path_kept(self):
+        """Long dimension-path identifier (>=150 chars) with 'non-controlled' should NOT be filtered."""
+        long_id = (
+            "Non-Controlled/Non-Affiliated Investments Senior Secured First Lien Loans "
+            "Industry Commercial Services & Supplies Company Advanced Web Technologies "
+            "Holding Company Delayed Draw SOFR Spread 5.75"
+        )
+        assert len(long_id) >= 150  # sanity check
+        assert not _is_bdc_aggregate_row(long_id)
+
+    def test_short_noncontrol_without_entity_signals_filtered(self):
+        """Short 'non-control' without entity-name signals should be filtered."""
+        assert _is_bdc_aggregate_row("Non-Control/Non-Affiliate Debt")
+
+    def test_medium_noncontrol_without_entity_signals_filtered(self):
+        """Medium-length non-control identifier (no company name) should be filtered."""
+        assert _is_bdc_aggregate_row(
+            "Non-Controlled/Non-Affiliated Investments, Healthcare & Pharmaceuticals, "
+            "First Lien - Secured Debt"
+        )
+
+    def test_short_noncontrol_with_llc_signal_kept(self):
+        """Short 'non-control' with LLC signal should NOT be filtered."""
+        assert not _is_bdc_aggregate_row(
+            "Non-Controlled | Acme Holdings LLC"
+        )
+
+    def test_noncontrol_with_inc_signal_kept(self):
+        """Non-control with ' Inc.' entity signal should NOT be filtered."""
+        assert not _is_bdc_aggregate_row(
+            "Non-Controlled/Non-Affiliated Investments, Acme Corp Inc. First Lien"
+        )
+
+    def test_noncontrol_with_group_signal_kept(self):
+        """Non-control with 'group' entity signal should NOT be filtered."""
+        assert not _is_bdc_aggregate_row(
+            "Non-Controlled | First Lien | Acme Group | Senior Loan"
+        )
+
+    def test_noncontrol_without_instrument_signals_filtered(self):
+        """Non-control with instrument signals but no entity signals should be filtered.
+        'senior secured' and 'term loan' are NOT entity signals."""
+        assert _is_bdc_aggregate_row(
+            "Non-Controlled/Non-Affiliated Investments of Senior Secured Debt"
+        )
+
+    # --- "Investments Investments" parsing artifact (CIK 0001849894) ---
+    def test_investments_investments_pattern_filtered(self):
+        """'Investments Investments - ...' hierarchy artifact should be filtered."""
+        assert _is_bdc_aggregate_row(
+            "Investments Investments - non-controlled/non-affiliated "
+            "First Lien Debt Capital Equipment"
+        )
+
 
 # ---------------------------------------------------------------------------
 # _classify_bdc_asset
@@ -724,8 +782,8 @@ class TestClassifyIndex:
     def test_private_credit_fund(self):
         assert _classify_index("FUND", "FUND", "Blue Owl Credit Fund", "") == "PRIVATE_CREDIT_FUND"
 
-    def test_private_credit_fund_clo(self):
-        assert _classify_index("FUND", "FUND", "CLO Holdings", "") == "PRIVATE_CREDIT_FUND"
+    def test_structured_credit_clo(self):
+        assert _classify_index("FUND", "FUND", "CLO Holdings", "") == "STRUCTURED_CREDIT"
 
     def test_private_credit_fund_lending(self):
         assert _classify_index("FUND", "FUND", "Direct Lending Partners", "") == "PRIVATE_CREDIT_FUND"
@@ -739,14 +797,14 @@ class TestClassifyIndex:
     def test_private_equity_fund_venture(self):
         assert _classify_index("FUND", "FUND", "Venture Capital Partners", "") == "PRIVATE_EQUITY_FUND"
 
-    def test_unclassified_fund_no_signals(self):
-        assert _classify_index("FUND", "FUND", "ABC Partners", "") == "UNCLASSIFIED"
+    def test_hedge_fund_no_signals(self):
+        assert _classify_index("FUND", "FUND", "ABC Partners", "") == "HEDGE_FUND"
 
     def test_unclassified_other_asset(self):
         assert _classify_index("OTHER", "CORPORATE", "Acme", "") == "UNCLASSIFIED"
 
-    def test_unclassified_government(self):
-        assert _classify_index("DEBT", "GOVERNMENT", "US Treasury", "") == "UNCLASSIFIED"
+    def test_government_cash(self):
+        assert _classify_index("DEBT", "GOVERNMENT", "US Treasury", "") == "CASH"
 
     def test_ambiguous_fund_credit_wins(self):
         # More credit signals than PE
@@ -1232,6 +1290,22 @@ class TestPrepareBdc:
         result = _prepare_bdc(df)
         assert result.iloc[0]["asset_category"] == "FUND"
         assert result.iloc[0]["issuer_category"] == "FUND"
+
+    def test_long_noncontrol_dimension_path_survives(self):
+        """Long dimension-path identifier (>=150 chars) with 'non-controlled' survives _prepare_bdc."""
+        long_id = (
+            "Non-Controlled/Non-Affiliated Investments Senior Secured First Lien Loans "
+            "Industry Commercial Services & Supplies Company Advanced Web Technologies "
+            "Holding Company Delayed Draw SOFR Spread 5.75"
+        )
+        df = self._make_bdc_df([
+            {"investment_identifier": long_id,
+             "cik": "123", "fair_value": 5000000,
+             "interest_rate": 10.5, "basis_spread": 5.0},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["bdc_investment_identifier"] == long_id
 
 
 # ---------------------------------------------------------------------------
@@ -3079,8 +3153,8 @@ class TestNportNullFvlAndHedgeFund:
         assert len(result) == 1
         assert result.iloc[0]["issuer_category"] == "CORPORATE"
 
-    def test_hedge_fund_excluded(self):
-        """PF+OTHER named holdings with no credit/PE signal are excluded."""
+    def test_hedge_fund_flows_through(self):
+        """PF+OTHER named holdings with no credit/PE signal now flow through (not excluded)."""
         df = self._make_nport_df([
             {"fair_value_level": "3", "cik": "100", "asset_cat": "OTHER",
              "issuer_type": "PF",
@@ -3088,7 +3162,7 @@ class TestNportNullFvlAndHedgeFund:
              "currency_value": 5000000},
         ])
         result = _prepare_nport(df)
-        assert len(result) == 0
+        assert len(result) == 1
 
     def test_pf_credit_signal_kept(self):
         """PF+OTHER named holdings WITH credit signal are kept."""
@@ -3910,3 +3984,698 @@ class TestThreePipeFormatDetection:
         result = _prepare_bdc(df)
         assert result.iloc[0]["issuer_name"] == "Kickapoo Ranch Pet Resort"
         assert result.iloc[0]["instrument_description"] == "First Lien Term Loan"
+
+
+# ---------------------------------------------------------------------------
+# _enforce_schema
+# ---------------------------------------------------------------------------
+
+def _make_valid_row(**overrides):
+    """Build a single-row DataFrame that passes all schema checks."""
+    row = {
+        "source": "bdc",
+        "cik": "0001234567",
+        "entity_name": "Test BDC",
+        "accession_number": "0001234567-24-000001",
+        "filing_date": "2024-03-15",
+        "report_date": "2024-03-31",
+        "issuer_name": "Acme Corp",
+        "instrument_description": "First Lien Term Loan",
+        "cusip": "",
+        "isin": "",
+        "lei": "",
+        "ticker": "",
+        "fair_value": 1000000.0,
+        "cost": 990000.0,
+        "pct_of_net_assets": 2.5,
+        "shares_held": "",
+        "principal_amount": 1000000.0,
+        "asset_category": "LOAN",
+        "issuer_category": "CORPORATE",
+        "index_classification": "DIRECT_LENDING",
+        "exposure_type": "DIRECT",
+        "asset_class": "PRIVATE_CREDIT",
+        "fair_value_level": "",
+        "interest_rate": 10.5,
+        "basis_spread": 5.5,
+        "reference_rate_type": "SOFR",
+        "coupon_type": "Floating",
+        "pik_rate": "",
+        "maturity_date": "2027-06-30",
+        "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+        "bdc_form_type": "10-K",
+        "bdc_dimensions_raw": "",
+        "bdc_unrealized_gain_loss": "",
+        "nport_holding_id": "",
+        "nport_series_name": "",
+        "nport_series_id": "",
+        "nport_asset_cat": "",
+        "nport_issuer_type": "",
+        "nport_payoff_profile": "",
+        "nport_investment_country": "",
+        "nport_is_restricted": "",
+        "nport_quarter": "",
+        "nport_is_default": "",
+        "nport_are_interest_payments_in_arrears": "",
+        "nport_is_paid_in_kind": "",
+        "nport_currency_code": "",
+        "nport_liquidity_classification": "",
+        "entity_id": "",
+        "canonical_name": "",
+        "extracted_industry": "",
+        "position_id": "",
+    }
+    row.update(overrides)
+    return pd.DataFrame([row])
+
+
+class TestEnforceSchema:
+    """Tests for _enforce_schema()."""
+
+    def test_clean_passes_all_checks(self):
+        df = _make_valid_row()
+        violations = _enforce_schema(df)
+        assert violations == []
+
+    def test_empty_dataframe_passes(self):
+        df = pd.DataFrame()
+        violations = _enforce_schema(df)
+        assert violations == []
+
+    def test_bad_cik_length(self):
+        df = _make_valid_row(cik="12345")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "cik_format" in names
+
+    def test_bad_cik_alpha(self):
+        df = _make_valid_row(cik="000123456A")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "cik_format" in names
+
+    def test_bad_source(self):
+        df = _make_valid_row(source="xbrl")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "source_enum" in names
+
+    def test_bad_asset_category(self):
+        df = _make_valid_row(asset_category="BOND")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "asset_category_enum" in names
+
+    def test_bad_index_classification(self):
+        df = _make_valid_row(index_classification="DIRECT_EQUITY")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "index_classification_enum" in names
+
+    def test_unparseable_report_date(self):
+        df = _make_valid_row(report_date="not-a-date")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "report_date_parseable" in names
+
+    def test_null_fair_value(self):
+        """NaN in pandas becomes NULL in DuckDB -- should be caught."""
+        df = _make_valid_row(fair_value=float("nan"))
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "fair_value_is_null" in names
+
+    def test_none_fair_value(self):
+        df = _make_valid_row(fair_value=None)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "fair_value_is_null" in names
+
+    def test_bad_coupon_type(self):
+        df = _make_valid_row(coupon_type="Variable")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "coupon_type_enum" in names
+
+    def test_interest_rate_too_high(self):
+        df = _make_valid_row(interest_rate=60.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "interest_rate_range" in names
+
+    def test_interest_rate_negative(self):
+        df = _make_valid_row(interest_rate=-1.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "interest_rate_range" in names
+
+    def test_basis_spread_too_high(self):
+        df = _make_valid_row(basis_spread=35.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "basis_spread_range" in names
+
+    def test_pik_rate_too_high(self):
+        df = _make_valid_row(pik_rate=30.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "pik_rate_range" in names
+
+    def test_pct_net_assets_extreme(self):
+        df = _make_valid_row(pct_of_net_assets=200.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "pct_net_assets_range" in names
+
+    def test_negative_shares(self):
+        df = _make_valid_row(shares_held=-100.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "shares_not_negative" in names
+
+    def test_negative_principal(self):
+        df = _make_valid_row(principal_amount=-500000.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "principal_not_negative" in names
+
+    def test_bdc_missing_identifier(self):
+        df = _make_valid_row(bdc_investment_identifier="")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "bdc_has_identifier" in names
+
+    def test_dl_wrong_asset_category(self):
+        """DIRECT_LENDING with asset_category=EQUITY_COMMON is a violation."""
+        df = _make_valid_row(
+            index_classification="DIRECT_LENDING",
+            asset_category="EQUITY_COMMON",
+        )
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "dl_implies_loan_or_debt_corporate" in names
+
+    def test_dl_wrong_issuer_category(self):
+        """DIRECT_LENDING with issuer_category=FUND is a violation."""
+        df = _make_valid_row(
+            index_classification="DIRECT_LENDING",
+            asset_category="LOAN",
+            issuer_category="FUND",
+        )
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "dl_implies_loan_or_debt_corporate" in names
+
+    def test_fund_index_wrong_issuer(self):
+        """PRIVATE_CREDIT_FUND with issuer_category=CORPORATE is a violation."""
+        df = _make_valid_row(
+            index_classification="PRIVATE_CREDIT_FUND",
+            issuer_category="CORPORATE",
+            asset_category="FUND",
+        )
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "fund_index_implies_fund_issuer" in names
+
+    def test_nport_no_identifier_ok(self):
+        """N-PORT rows don't need bdc_investment_identifier."""
+        df = _make_valid_row(
+            source="nport",
+            bdc_investment_identifier="",
+            bdc_form_type="",
+        )
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "bdc_has_identifier" not in names
+
+    def test_valid_boundary_values(self):
+        """Boundary values that should pass: rate=50, spread=30, pik=25."""
+        df = _make_valid_row(interest_rate=50.0, basis_spread=30.0, pik_rate=25.0)
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "interest_rate_range" not in names
+        assert "basis_spread_range" not in names
+        assert "pik_rate_range" not in names
+
+    def test_multiple_violations(self):
+        """A row with multiple problems produces multiple violations."""
+        df = _make_valid_row(
+            cik="123",
+            source="unknown",
+            interest_rate=99.0,
+        )
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert len(violations) >= 3
+        assert "cik_format" in names
+        assert "source_enum" in names
+        assert "interest_rate_range" in names
+
+
+# ---------------------------------------------------------------------------
+# 2-Axis Classification Tests
+# ---------------------------------------------------------------------------
+
+def _sql_classify(rows):
+    """Helper: run exposure_type and asset_class SQL classification on test rows.
+
+    Each row is a dict with keys: asset_category, issuer_category,
+    issuer_name, instrument_description, nport_issuer_type (optional).
+    Returns list of (exposure_type, asset_class) tuples.
+    """
+    import duckdb
+
+    cols = ["asset_category", "issuer_category", "issuer_name",
+            "instrument_description", "nport_issuer_type", "nport_asset_cat"]
+    data = []
+    for r in rows:
+        data.append({c: r.get(c, "") for c in cols})
+    df = pd.DataFrame(data)
+
+    con = duckdb.connect()
+    con.register("t", df)
+
+    # Precompute _combined_fund_text (same as build_unified_holdings)
+    con.execute("""
+        CREATE TABLE test_data AS
+        SELECT *,
+            COALESCE(lower(trim(issuer_name)), '') || ' ' ||
+            COALESCE(lower(trim(instrument_description)), '') AS _combined_fund_text
+        FROM t
+    """)
+
+    exp_sql = _sql_classify_exposure_type()
+    ac_sql = _sql_classify_asset_class()
+
+    results = con.execute(f"""
+        SELECT {exp_sql} AS exposure_type, {ac_sql} AS asset_class
+        FROM test_data
+    """).fetchall()
+    con.close()
+    return results
+
+
+class TestExposureType:
+    """Tests for _sql_classify_exposure_type."""
+
+    def test_direct_corporate_loan(self):
+        result = _sql_classify([
+            {"asset_category": "LOAN", "issuer_category": "CORPORATE",
+             "issuer_name": "Acme Corp", "instrument_description": "First Lien"}
+        ])
+        assert result[0][0] == "DIRECT"
+
+    def test_direct_corporate_equity(self):
+        result = _sql_classify([
+            {"asset_category": "EQUITY_COMMON", "issuer_category": "CORPORATE",
+             "issuer_name": "Tech Holdings Inc", "instrument_description": "Common Stock"}
+        ])
+        assert result[0][0] == "DIRECT"
+
+    def test_fund_issuer_category(self):
+        result = _sql_classify([
+            {"asset_category": "FUND", "issuer_category": "FUND",
+             "issuer_name": "Blackstone PE Fund III", "instrument_description": ""}
+        ])
+        assert result[0][0] == "FUND"
+
+    def test_liquid_government(self):
+        result = _sql_classify([
+            {"asset_category": "DEBT", "issuer_category": "GOVERNMENT",
+             "issuer_name": "US Treasury Note", "instrument_description": ""}
+        ])
+        assert result[0][0] == "LIQUID"
+
+    def test_liquid_cash_keyword(self):
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "OTHER",
+             "issuer_name": "Financial Square Money Market Fund",
+             "instrument_description": ""}
+        ])
+        assert result[0][0] == "LIQUID"
+
+    def test_liquid_treasury_keyword(self):
+        result = _sql_classify([
+            {"asset_category": "DEBT", "issuer_category": "CORPORATE",
+             "issuer_name": "U.S. Treasury Bills",
+             "instrument_description": "T-Bill 3M"}
+        ])
+        assert result[0][0] == "LIQUID"
+
+    def test_fund_via_issuer_category(self):
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "Millennium International Ltd.",
+             "instrument_description": ""}
+        ])
+        assert result[0][0] == "FUND"
+
+    def test_direct_other_corporate(self):
+        """OTHER asset + CORPORATE issuer -> DIRECT (not FUND/LIQUID)."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "CORPORATE",
+             "issuer_name": "Widget Corp", "instrument_description": "Warrant"}
+        ])
+        assert result[0][0] == "DIRECT"
+
+    def test_direct_not_triggered_by_property_corporate(self):
+        """'National Property Solutions LLC' is CORPORATE -> DIRECT (not LIQUID/FUND)."""
+        result = _sql_classify([
+            {"asset_category": "LOAN", "issuer_category": "CORPORATE",
+             "issuer_name": "National Property Solutions LLC",
+             "instrument_description": "First Lien Term Loan"}
+        ])
+        assert result[0][0] == "DIRECT"
+
+
+class TestAssetClass:
+    """Tests for _sql_classify_asset_class."""
+
+    def test_private_credit_loan_corporate(self):
+        result = _sql_classify([
+            {"asset_category": "LOAN", "issuer_category": "CORPORATE",
+             "issuer_name": "Acme Corp", "instrument_description": "Senior Secured"}
+        ])
+        assert result[0][1] == "PRIVATE_CREDIT"
+
+    def test_private_credit_debt_corporate(self):
+        result = _sql_classify([
+            {"asset_category": "DEBT", "issuer_category": "CORPORATE",
+             "issuer_name": "Widget Inc", "instrument_description": "Unsecured Note"}
+        ])
+        assert result[0][1] == "PRIVATE_CREDIT"
+
+    def test_private_equity_common_corporate(self):
+        result = _sql_classify([
+            {"asset_category": "EQUITY_COMMON", "issuer_category": "CORPORATE",
+             "issuer_name": "Tech Holdings Inc", "instrument_description": "Common Stock"}
+        ])
+        assert result[0][1] == "PRIVATE_EQUITY"
+
+    def test_private_equity_preferred_corporate(self):
+        result = _sql_classify([
+            {"asset_category": "EQUITY_PREFERRED", "issuer_category": "CORPORATE",
+             "issuer_name": "Startup Inc", "instrument_description": "Series A Preferred"}
+        ])
+        assert result[0][1] == "PRIVATE_EQUITY"
+
+    def test_private_equity_fund_pe_signals(self):
+        result = _sql_classify([
+            {"asset_category": "FUND", "issuer_category": "FUND",
+             "issuer_name": "Blackstone Private Equity Partners VIII",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "PRIVATE_EQUITY"
+
+    def test_private_credit_fund_credit_signals(self):
+        result = _sql_classify([
+            {"asset_category": "FUND", "issuer_category": "FUND",
+             "issuer_name": "Apollo Senior Credit Fund III",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "PRIVATE_CREDIT"
+
+    def test_real_estate_reit_keyword(self):
+        result = _sql_classify([
+            {"asset_category": "FUND", "issuer_category": "FUND",
+             "issuer_name": "Blackstone Real Estate Partners",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "REAL_ESTATE"
+
+    def test_real_estate_fund_only_property(self):
+        """'property' keyword only triggers RE when issuer_category=FUND."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "National Property Trust",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "REAL_ESTATE"
+
+    def test_property_corporate_not_real_estate(self):
+        """'National Property Solutions LLC' (CORPORATE) should NOT be REAL_ESTATE.
+        LOAN+CORPORATE -> PRIVATE_CREDIT takes priority."""
+        result = _sql_classify([
+            {"asset_category": "LOAN", "issuer_category": "CORPORATE",
+             "issuer_name": "National Property Solutions LLC",
+             "instrument_description": "First Lien Term Loan"}
+        ])
+        assert result[0][1] == "PRIVATE_CREDIT"
+
+    def test_structured_credit_clo(self):
+        result = _sql_classify([
+            {"asset_category": "DEBT", "issuer_category": "CORPORATE",
+             "issuer_name": "Barings CLO Ltd 2024-1",
+             "instrument_description": "CLO Senior Notes"}
+        ])
+        assert result[0][1] == "STRUCTURED_CREDIT"
+
+    def test_structured_credit_loan_note_issuer(self):
+        result = _sql_classify([
+            {"asset_category": "DEBT", "issuer_category": "CORPORATE",
+             "issuer_name": "MidOcean Credit CLO Loan Note Issuer",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "STRUCTURED_CREDIT"
+
+    def test_cash_government(self):
+        result = _sql_classify([
+            {"asset_category": "DEBT", "issuer_category": "GOVERNMENT",
+             "issuer_name": "U.S. Treasury Bond",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "CASH"
+
+    def test_cash_money_market_keyword(self):
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "OTHER",
+             "issuer_name": "Goldman Sachs Financial Square Money Market Fund",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "CASH"
+
+    def test_hedge_fund_no_signals(self):
+        """Fund with no credit/PE signals -> HEDGE_FUND."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "Millennium International Ltd.",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "HEDGE_FUND"
+
+    def test_hedge_fund_explicit_keyword(self):
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "Citadel Multi-Strategy Fund",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "HEDGE_FUND"
+
+    def test_other_fallback(self):
+        """OTHER asset + OTHER issuer with no keywords -> OTHER."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "OTHER",
+             "issuer_name": "Unknown Entity ABC",
+             "instrument_description": ""}
+        ])
+        assert result[0][1] == "OTHER"
+
+    # -- nport_asset_cat refinement (SQL-level) --
+
+    def test_nac_ec_fund_pe_sql(self):
+        """FUND + nport_asset_cat=EC -> PRIVATE_EQUITY (not HEDGE_FUND)."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "Bain Capital Fund VII L.P.",
+             "instrument_description": "", "nport_asset_cat": "EC"}
+        ])
+        assert result[0][1] == "PRIVATE_EQUITY"
+
+    def test_nac_re_fund_re_sql(self):
+        """FUND + nport_asset_cat=RE -> REAL_ESTATE."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "IQHQ Inc.",
+             "instrument_description": "", "nport_asset_cat": "RE"}
+        ])
+        assert result[0][1] == "REAL_ESTATE"
+
+    def test_nac_dbt_fund_pc_sql(self):
+        """FUND + nport_asset_cat=DBT -> PRIVATE_CREDIT."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "IQHQ Notes 12%",
+             "instrument_description": "", "nport_asset_cat": "DBT"}
+        ])
+        assert result[0][1] == "PRIVATE_CREDIT"
+
+    def test_nac_other_still_hf_sql(self):
+        """FUND + nport_asset_cat=OTHER -> still HEDGE_FUND."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "KKR European Fund V",
+             "instrument_description": "", "nport_asset_cat": "OTHER"}
+        ])
+        assert result[0][1] == "HEDGE_FUND"
+
+    def test_nac_credit_keyword_wins_over_nac_ec_sql(self):
+        """Credit keyword takes priority over nport_asset_cat=EC."""
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "Apollo Senior Credit Fund",
+             "instrument_description": "", "nport_asset_cat": "EC"}
+        ])
+        assert result[0][1] == "PRIVATE_CREDIT"
+
+
+class TestExpandedIndexClassification:
+    """Tests for new index_classification values."""
+
+    def test_real_estate_fund(self):
+        result = _classify_index("FUND", "FUND", "Blackstone Real Estate Trust", "")
+        assert result == "REAL_ESTATE_FUND"
+
+    def test_real_estate_fund_property_keyword(self):
+        result = _classify_index("FUND", "FUND", "Prologis Logistics Fund", "")
+        assert result == "REAL_ESTATE_FUND"
+
+    def test_structured_credit_clo_fund(self):
+        """CLO with FUND issuer -> STRUCTURED_CREDIT (before credit fund)."""
+        result = _classify_index("FUND", "FUND", "Barings CLO Ltd 2024-1", "")
+        assert result == "STRUCTURED_CREDIT"
+
+    def test_structured_credit_clo_other(self):
+        """CLO with OTHER category -> STRUCTURED_CREDIT."""
+        result = _classify_index("OTHER", "OTHER", "Barings CLO Ltd 2024-1", "")
+        assert result == "STRUCTURED_CREDIT"
+
+    def test_direct_lending_still_wins_over_clo(self):
+        """LOAN/DEBT + CORPORATE fires before CLO check (DL has highest priority)."""
+        result = _classify_index("DEBT", "CORPORATE", "Barings CLO Ltd", "")
+        assert result == "DIRECT_LENDING"
+
+    def test_hedge_fund_no_signals(self):
+        result = _classify_index("FUND", "FUND", "ABC Partners", "")
+        assert result == "HEDGE_FUND"
+
+    def test_hedge_fund_explicit_keyword(self):
+        result = _classify_index("OTHER", "FUND", "Citadel Multi-Strategy Fund", "")
+        assert result == "HEDGE_FUND"
+
+    # -- nport_asset_cat refinement (Fix 1) --
+
+    def test_nac_ec_fund_becomes_pe_fund(self):
+        """FUND + nport_asset_cat=EC -> PRIVATE_EQUITY_FUND (not HEDGE_FUND)."""
+        result = _classify_index("OTHER", "FUND", "Bain Capital Fund VII L.P.", "",
+                                 nport_asset_cat="EC")
+        assert result == "PRIVATE_EQUITY_FUND"
+
+    def test_nac_ep_fund_becomes_pe_fund(self):
+        """FUND + nport_asset_cat=EP -> PRIVATE_EQUITY_FUND."""
+        result = _classify_index("OTHER", "FUND", "Silver Cup Holdings V L.P.", "",
+                                 nport_asset_cat="EP")
+        assert result == "PRIVATE_EQUITY_FUND"
+
+    def test_nac_re_fund_becomes_re_fund(self):
+        """FUND + nport_asset_cat=RE -> REAL_ESTATE_FUND (not HEDGE_FUND)."""
+        result = _classify_index("OTHER", "FUND", "IQHQ Inc.", "",
+                                 nport_asset_cat="RE")
+        assert result == "REAL_ESTATE_FUND"
+
+    def test_nac_dbt_fund_becomes_pc_fund(self):
+        """FUND + nport_asset_cat=DBT -> PRIVATE_CREDIT_FUND."""
+        result = _classify_index("OTHER", "FUND", "IQHQ Notes 12%", "",
+                                 nport_asset_cat="DBT")
+        assert result == "PRIVATE_CREDIT_FUND"
+
+    def test_nac_lon_fund_becomes_pc_fund(self):
+        """FUND + nport_asset_cat=LON -> PRIVATE_CREDIT_FUND."""
+        result = _classify_index("OTHER", "FUND", "Some Loan Fund", "",
+                                 nport_asset_cat="LON")
+        assert result == "PRIVATE_CREDIT_FUND"
+
+    def test_nac_other_fund_still_hedge_fund(self):
+        """FUND + nport_asset_cat=OTHER -> HEDGE_FUND (catch-all unchanged)."""
+        result = _classify_index("OTHER", "FUND", "KKR European Fund V", "",
+                                 nport_asset_cat="OTHER")
+        assert result == "HEDGE_FUND"
+
+    def test_nac_keyword_still_wins_over_nac(self):
+        """Credit keyword signal takes priority over nport_asset_cat=EC."""
+        result = _classify_index("OTHER", "FUND", "Apollo Senior Credit Fund", "",
+                                 nport_asset_cat="EC")
+        assert result == "PRIVATE_CREDIT_FUND"
+
+    def test_nac_pe_keyword_wins_over_nac_dbt(self):
+        """PE keyword signal takes priority over nport_asset_cat=DBT."""
+        result = _classify_index("OTHER", "FUND", "Growth Equity Partners", "",
+                                 nport_asset_cat="DBT")
+        assert result == "PRIVATE_EQUITY_FUND"
+
+    def test_direct_real_estate_corporate(self):
+        """CORPORATE + RE keywords (not LOAN/DEBT) -> DIRECT_REAL_ESTATE."""
+        result = _classify_index("OTHER", "CORPORATE", "PRISA Real Estate Fund", "")
+        assert result == "DIRECT_REAL_ESTATE"
+
+    def test_cash_government(self):
+        result = _classify_index("DEBT", "GOVERNMENT", "U.S. Treasury", "")
+        assert result == "CASH"
+
+    def test_cash_keyword_nongovernment(self):
+        result = _classify_index("OTHER", "OTHER", "Financial Square Money Market Fund", "")
+        assert result == "CASH"
+
+    def test_existing_direct_lending_unchanged(self):
+        result = _classify_index("LOAN", "CORPORATE", "Acme Corp", "First Lien TL")
+        assert result == "DIRECT_LENDING"
+
+    def test_existing_common_equity_unchanged(self):
+        result = _classify_index("EQUITY_COMMON", "CORPORATE", "Tech Inc", "Common")
+        assert result == "COMMON_EQUITY"
+
+    def test_existing_preferred_equity_unchanged(self):
+        result = _classify_index("EQUITY_PREFERRED", "CORPORATE", "Startup", "Pref")
+        assert result == "PREFERRED_EQUITY"
+
+    def test_existing_credit_fund_unchanged(self):
+        result = _classify_index("FUND", "FUND", "Direct Lending Partners", "")
+        assert result == "PRIVATE_CREDIT_FUND"
+
+    def test_existing_pe_fund_unchanged(self):
+        result = _classify_index("FUND", "FUND", "Growth Equity Partners", "")
+        assert result == "PRIVATE_EQUITY_FUND"
+
+
+class TestEnforceSchemaNewColumns:
+    """Tests for schema enforcement of new columns."""
+
+    def test_valid_exposure_type(self):
+        df = _make_valid_row(exposure_type="FUND")
+        violations = _enforce_schema(df)
+        assert violations == []
+
+    def test_invalid_exposure_type(self):
+        df = _make_valid_row(exposure_type="INDIRECT")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "exposure_type_enum" in names
+
+    def test_valid_asset_class(self):
+        df = _make_valid_row(asset_class="HEDGE_FUND")
+        violations = _enforce_schema(df)
+        assert violations == []
+
+    def test_invalid_asset_class(self):
+        df = _make_valid_row(asset_class="COMMODITIES")
+        violations = _enforce_schema(df)
+        names = [v[0] for v in violations]
+        assert "asset_class_enum" in names
+
+    def test_new_index_values_pass(self):
+        """New index classification values pass schema check."""
+        for val in ["REAL_ESTATE_FUND", "DIRECT_REAL_ESTATE",
+                    "STRUCTURED_CREDIT", "HEDGE_FUND", "CASH"]:
+            df = _make_valid_row(index_classification=val)
+            violations = _enforce_schema(df)
+            names = [v[0] for v in violations]
+            assert "index_classification_enum" not in names, f"{val} should be valid"

@@ -124,6 +124,11 @@ def _parse_args() -> argparse.Namespace:
         help="Extract pre-XBRL filings using per-CIK templates (no LLM, $0).",
     )
     parser.add_argument(
+        "--financials",
+        action="store_true",
+        help="Build fund-level financials from companyfacts + N-PORT fund info.",
+    )
+    parser.add_argument(
         "--load-db",
         action="store_true",
         help="Load pipeline CSVs into Postgres (requires DATABASE_URL).",
@@ -171,6 +176,8 @@ def main() -> None:
         mode_parts.append("ENTITIES")
     if args.extract_html:
         mode_parts.append("EXTRACT-HTML")
+    if args.financials:
+        mode_parts.append("FINANCIALS")
     if args.returns:
         mode_parts.append("RETURNS")
     if args.load_db:
@@ -279,7 +286,7 @@ def main() -> None:
         logger.info("")
         t6b = time.time()
         try:
-            from pipeline.html_template import extract_all_html
+            from pipeline.html_extract import extract_all_html
 
             cik_filter = args.ciks if args.ciks else None
             extract_all_html(
@@ -308,7 +315,27 @@ def main() -> None:
             logger.error("Unified holdings build failed: %s", exc, exc_info=True)
         logger.info("Unified holdings step completed in %.1f s", time.time() - t7)
 
-    # ── Step 7b: LLM identifier extraction (optional) ──
+    # ── Step 7b: Fund financials (optional) ──
+    if args.financials:
+        logger.info("")
+        t7b_fin = time.time()
+        try:
+            from pipeline.fund_financials import build_fund_financials
+            build_fund_financials(client=client)
+        except Exception as exc:
+            logger.error("Fund financials build failed: %s", exc,
+                         exc_info=True)
+
+        try:
+            from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+            extract_bdc_sector_breakdown()
+        except Exception as exc:
+            logger.error("BDC sector breakdown failed: %s", exc,
+                         exc_info=True)
+        logger.info("Fund financials step completed in %.1f s",
+                     time.time() - t7b_fin)
+
+    # ── Step 7c: LLM identifier extraction (optional) ──
     if args.extract:
         logger.info("")
         t7b = time.time()
@@ -535,6 +562,9 @@ def main() -> None:
         output_files.append(OUTPUT_DIR / "private_markets_holdings.csv")
     if args.extract_html:
         output_files.append(OUTPUT_DIR / "html_extraction_holdings.csv")
+    if args.financials:
+        output_files.append(OUTPUT_DIR / "fund_financials.csv")
+        output_files.append(OUTPUT_DIR / "bdc_sector_breakdown.csv")
     if args.extract:
         output_files.append(OUTPUT_DIR / "identifier_extraction_lookup.csv")
     if args.validate:

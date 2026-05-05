@@ -18,6 +18,7 @@ import duckdb
 import pandas as pd
 
 from pipeline.config import (
+    CLASSIFICATION_VALIDATION_FILE,
     COMBINED_UNIVERSE_FILE,
     HOLDINGS_COVERAGE_FILE,
     HOLDINGS_CROSS_SOURCE_FILE,
@@ -226,6 +227,16 @@ def summarize_classification_by_cik(df: pd.DataFrame) -> pd.DataFrame:
             AS pct_credit_fund,
         ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'PRIVATE_EQUITY_FUND') / COUNT(*), 1)
             AS pct_equity_fund,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'REAL_ESTATE_FUND') / COUNT(*), 1)
+            AS pct_real_estate_fund,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'DIRECT_REAL_ESTATE') / COUNT(*), 1)
+            AS pct_direct_real_estate,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'STRUCTURED_CREDIT') / COUNT(*), 1)
+            AS pct_structured_credit,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'HEDGE_FUND') / COUNT(*), 1)
+            AS pct_hedge_fund,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'CASH') / COUNT(*), 1)
+            AS pct_cash,
         ROUND(100.0 * COUNT(*) FILTER (WHERE index_classification = 'UNCLASSIFIED') / COUNT(*), 1)
             AS pct_unclassified,
         MODE(index_classification) AS dominant_index,
@@ -561,7 +572,392 @@ def check_coverage(
 
 
 # ---------------------------------------------------------------------------
-# 6. Orchestrator
+# 6. Classification cross-reference validation
+# ---------------------------------------------------------------------------
+
+# Expected mappings: N-PORT structured codes -> exposure_type / asset_class.
+# These are deterministic ground truth from the SEC filing format.
+_EXPOSURE_RULES = {
+    # (issuer_category from our mapping) -> expected exposure_type
+    "GOVERNMENT": "LIQUID",
+    "FUND": "FUND",
+    # CORPORATE and OTHER -> DIRECT (unless cash keywords override)
+}
+_ASSET_CLASS_RULES = [
+    # (condition_sql, expected_asset_class, description)
+    ("issuer_category = 'GOVERNMENT'", "CASH", "Government issuers should be CASH"),
+    ("asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE'",
+     "PRIVATE_CREDIT", "LOAN/DEBT + CORPORATE should be PRIVATE_CREDIT"),
+    ("asset_category IN ('EQUITY_COMMON', 'EQUITY_PREFERRED') AND issuer_category = 'CORPORATE'",
+     "PRIVATE_EQUITY", "Equity + CORPORATE should be PRIVATE_EQUITY"),
+]
+
+
+def validate_classification(
+    unified_df: Optional[pd.DataFrame] = None,
+) -> pd.DataFrame:
+    """Cross-reference exposure_type and asset_class against structural ground truth.
+
+    Uses N-PORT's issuer_type/asset_cat codes and BDC asset/issuer categories
+    as deterministic validators. Reports disagreements per rule.
+
+    Returns a DataFrame with columns:
+      rule, expected, actual, disagreement_count, disagreement_pct, sample_names
+    """
+    if unified_df is None:
+        if not UNIFIED_HOLDINGS_FILE.exists():
+            logger.error("Unified holdings file not found")
+            return pd.DataFrame()
+        unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
+
+    con = duckdb.connect()
+    con.register("h", unified_df)
+
+    rules_results = []
+
+    # --- Exposure type cross-reference ---
+    # Rule E1: GOVERNMENT issuer -> LIQUID
+    rules_results.append(_check_rule(
+        con, "E1: GOVERNMENT -> LIQUID",
+        "exposure_type", "LIQUID",
+        "issuer_category = 'GOVERNMENT'",
+    ))
+    # Rule E2: FUND issuer -> FUND
+    rules_results.append(_check_rule(
+        con, "E2: FUND issuer -> FUND",
+        "exposure_type", "FUND",
+        "issuer_category = 'FUND'",
+    ))
+    # Rule E3: CORPORATE issuer (no cash keywords) -> DIRECT
+    rules_results.append(_check_rule(
+        con, "E3: CORPORATE -> DIRECT",
+        "exposure_type", "DIRECT",
+        "issuer_category = 'CORPORATE' AND asset_class != 'CASH'",
+    ))
+
+    # --- Asset class cross-reference ---
+    # Rule A1: GOVERNMENT -> CASH
+    rules_results.append(_check_rule(
+        con, "A1: GOVERNMENT -> CASH",
+        "asset_class", "CASH",
+        "issuer_category = 'GOVERNMENT'",
+    ))
+    # Rule A2: LOAN/DEBT + CORPORATE -> PRIVATE_CREDIT (unless structured credit)
+    rules_results.append(_check_rule(
+        con, "A2: LOAN/DEBT+CORP -> PRIVATE_CREDIT",
+        "asset_class", "PRIVATE_CREDIT",
+        "asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE'"
+        " AND asset_class != 'STRUCTURED_CREDIT' AND asset_class != 'REAL_ESTATE'",
+    ))
+    # Rule A3: EQUITY + CORPORATE -> PRIVATE_EQUITY (unless RE)
+    rules_results.append(_check_rule(
+        con, "A3: EQUITY+CORP -> PRIVATE_EQUITY",
+        "asset_class", "PRIVATE_EQUITY",
+        "asset_category IN ('EQUITY_COMMON', 'EQUITY_PREFERRED')"
+        " AND issuer_category = 'CORPORATE'"
+        " AND asset_class != 'REAL_ESTATE'",
+    ))
+    # Rule A4: N-PORT issuer_type=PF with no credit/PE signal -> HEDGE_FUND
+    rules_results.append(_check_rule(
+        con, "A4: nport PF+no signal -> HEDGE_FUND",
+        "asset_class", "HEDGE_FUND",
+        "source = 'nport'"
+        " AND UPPER(TRIM(CAST(nport_issuer_type AS VARCHAR))) = 'PF'"
+        " AND UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) = 'OTHER'"
+        " AND index_classification = 'HEDGE_FUND'",
+    ))
+
+    # --- Index classification consistency ---
+    # Rule I1: DIRECT_LENDING -> exposure_type=DIRECT, asset_class=PRIVATE_CREDIT
+    rules_results.append(_check_rule(
+        con, "I1: DL -> DIRECT",
+        "exposure_type", "DIRECT",
+        "index_classification = 'DIRECT_LENDING'",
+    ))
+    rules_results.append(_check_rule(
+        con, "I2: DL -> PRIVATE_CREDIT",
+        "asset_class", "PRIVATE_CREDIT",
+        "index_classification = 'DIRECT_LENDING'"
+        " AND asset_class != 'STRUCTURED_CREDIT' AND asset_class != 'REAL_ESTATE'",
+    ))
+    # Rule I3: fund indices -> exposure_type=FUND
+    rules_results.append(_check_rule(
+        con, "I3: fund idx -> FUND exposure",
+        "exposure_type", "FUND",
+        "index_classification IN ('PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND',"
+        " 'REAL_ESTATE_FUND', 'HEDGE_FUND')",
+    ))
+
+    con.close()
+
+    result = pd.DataFrame(rules_results)
+    logger.info("Classification cross-reference: %d rules checked", len(result))
+    passing = (result["disagreement_count"] == 0).sum()
+    logger.info("  %d/%d rules pass (0 disagreements)", passing, len(result))
+    failing = result[result["disagreement_count"] > 0]
+    for _, row in failing.iterrows():
+        logger.warning("  DISAGREE %s: %d rows (%.1f%%) -- samples: %s",
+                       row["rule"], row["disagreement_count"],
+                       row["disagreement_pct"], row["sample_names"])
+
+    return result
+
+
+def _check_rule(con, rule_name: str, column: str, expected: str,
+                condition: str) -> dict:
+    """Check a single cross-reference rule. Returns dict with results."""
+    sql = f"""
+    SELECT
+        COUNT(*) AS total,
+        COUNT(*) FILTER (WHERE CAST({column} AS VARCHAR) != '{expected}') AS disagree,
+        ROUND(100.0 * COUNT(*) FILTER (WHERE CAST({column} AS VARCHAR) != '{expected}')
+              / GREATEST(COUNT(*), 1), 2) AS pct,
+        ARRAY_AGG(DISTINCT issuer_name ORDER BY issuer_name)
+            FILTER (WHERE CAST({column} AS VARCHAR) != '{expected}')[:5]
+            AS samples,
+        ARRAY_AGG(DISTINCT CAST({column} AS VARCHAR))
+            FILTER (WHERE CAST({column} AS VARCHAR) != '{expected}')[:3]
+            AS actual_values
+    FROM h
+    WHERE {condition}
+    """
+    try:
+        row = con.execute(sql).fetchone()
+        return {
+            "rule": rule_name,
+            "expected": expected,
+            "condition": condition,
+            "total_rows": row[0],
+            "disagreement_count": row[1],
+            "disagreement_pct": row[2],
+            "sample_names": str(row[3] or []),
+            "actual_values": str(row[4] or []),
+        }
+    except Exception as exc:
+        logger.warning("Rule '%s' failed: %s", rule_name, exc)
+        return {
+            "rule": rule_name,
+            "expected": expected,
+            "condition": condition,
+            "total_rows": -1,
+            "disagreement_count": -1,
+            "disagreement_pct": -1,
+            "sample_names": f"ERROR: {exc}",
+            "actual_values": "",
+        }
+
+
+def validate_classification_llm(
+    unified_df: Optional[pd.DataFrame] = None,
+    sample_size: int = 200,
+    dry_run: bool = False,
+) -> pd.DataFrame:
+    """LLM-based accuracy audit of exposure_type and asset_class.
+
+    Samples positions from boundary categories (HEDGE_FUND, REAL_ESTATE,
+    STRUCTURED_CREDIT, OTHER, UNCLASSIFIED) and asks GPT-4o-mini to
+    classify them independently. Compares LLM output against rule-based.
+
+    Args:
+        unified_df: The unified holdings DataFrame. Loaded from disk if None.
+        sample_size: Total number of positions to sample (stratified).
+        dry_run: If True, builds sample and prompt but skips API call.
+
+    Returns DataFrame with columns:
+        issuer_name, instrument_description, rule_exposure_type,
+        rule_asset_class, rule_index_classification,
+        llm_exposure_type, llm_asset_class, agrees_exposure, agrees_asset
+    """
+    try:
+        from openai import OpenAI
+    except ImportError:
+        OpenAI = None
+
+    if unified_df is None:
+        if not UNIFIED_HOLDINGS_FILE.exists():
+            logger.error("Unified holdings file not found")
+            return pd.DataFrame()
+        unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
+
+    con = duckdb.connect()
+    con.register("h", unified_df)
+
+    # Stratified sample: oversample boundary categories
+    # 40% from HEDGE_FUND/REAL_ESTATE/STRUCTURED_CREDIT/CASH/UNCLASSIFIED
+    # 30% from FUND exposure_type
+    # 30% from DIRECT (random)
+    boundary_n = int(sample_size * 0.4)
+    fund_n = int(sample_size * 0.3)
+    direct_n = sample_size - boundary_n - fund_n
+
+    _cols = """issuer_name, instrument_description, asset_category,
+            issuer_category, index_classification, exposure_type, asset_class,
+            nport_asset_cat, nport_issuer_type, source"""
+    sample_sql = f"""
+    (SELECT {_cols} FROM (
+        SELECT {_cols} FROM h
+        WHERE index_classification IN ('HEDGE_FUND', 'REAL_ESTATE_FUND',
+              'STRUCTURED_CREDIT', 'CASH', 'UNCLASSIFIED', 'DIRECT_REAL_ESTATE')
+     ) USING SAMPLE {boundary_n})
+    UNION ALL
+    (SELECT {_cols} FROM (
+        SELECT {_cols} FROM h
+        WHERE exposure_type = 'FUND'
+          AND index_classification NOT IN ('HEDGE_FUND', 'REAL_ESTATE_FUND',
+              'STRUCTURED_CREDIT', 'CASH', 'UNCLASSIFIED', 'DIRECT_REAL_ESTATE')
+     ) USING SAMPLE {fund_n})
+    UNION ALL
+    (SELECT {_cols} FROM (
+        SELECT {_cols} FROM h
+        WHERE exposure_type = 'DIRECT'
+     ) USING SAMPLE {direct_n})
+    """
+    sample = con.execute(sample_sql).fetchdf()
+    con.close()
+
+    logger.info("Classification LLM audit: sampled %d positions", len(sample))
+    logger.info("  Boundary: %d, Fund: %d, Direct: %d",
+                (sample["index_classification"].isin([
+                    "HEDGE_FUND", "REAL_ESTATE_FUND", "STRUCTURED_CREDIT",
+                    "CASH", "UNCLASSIFIED", "DIRECT_REAL_ESTATE"
+                ])).sum(),
+                ((sample["exposure_type"] == "FUND") & ~sample["index_classification"].isin([
+                    "HEDGE_FUND", "REAL_ESTATE_FUND", "STRUCTURED_CREDIT",
+                    "CASH", "UNCLASSIFIED", "DIRECT_REAL_ESTATE"
+                ])).sum(),
+                (sample["exposure_type"] == "DIRECT").sum())
+
+    if dry_run:
+        logger.info("  Dry run -- returning sample without LLM calls")
+        sample["llm_exposure_type"] = ""
+        sample["llm_asset_class"] = ""
+        sample["agrees_exposure"] = ""
+        sample["agrees_asset"] = ""
+        return sample
+
+    if OpenAI is None:
+        logger.error("openai SDK not installed. Install with: pip install openai")
+        return sample
+
+    # Build batches (50 positions per batch to stay within context)
+    import json
+    import time
+    batch_size = 50
+    client = OpenAI()
+    all_results = []
+
+    system_prompt = """You are a financial classification expert. For each position, provide:
+1. exposure_type: How the investor gains exposure.
+   - DIRECT: A direct loan, bond, or equity stake in an operating company.
+   - FUND: An interest in a pooled investment vehicle (LP interest, fund shares).
+   - LIQUID: Government securities, money market funds, cash equivalents.
+
+2. asset_class: What the underlying economic exposure is.
+   - PRIVATE_CREDIT: Loans, bonds, or debt from/to private companies.
+   - PRIVATE_EQUITY: Equity stakes in private companies.
+   - REAL_ESTATE: Real estate funds, REITs, property investments.
+   - STRUCTURED_CREDIT: CLOs, CDOs, ABS, securitized products.
+   - HEDGE_FUND: Hedge fund interests (long/short, macro, multi-strategy, no clear PE/RE/credit signal).
+   - CASH: Government bonds, treasury bills, money market.
+   - OTHER: Cannot determine from available information.
+
+Input fields:
+- issuer_name: Name of the investment position.
+- instrument_description: Description of the instrument type (may be empty).
+- source: "bdc" (from BDC 10-K/10-Q filings) or "nport" (from N-PORT filings).
+- issuer_category: CORPORATE (operating company), FUND (pooled vehicle), GOVERNMENT, or OTHER.
+- asset_category: LOAN, DEBT, EQUITY_COMMON, EQUITY_PREFERRED, or OTHER.
+- nport_asset_cat (N-PORT only): EC=equity common, EP=equity preferred, DBT=debt, ABS-O=other ABS, ABS-MBS=mortgage-backed, RE=real estate, OTHER=other.
+- nport_issuer_type (N-PORT only): CORP=corporate, PF=private fund, RF=registered fund, SOV=sovereign, MUN=municipal.
+
+Use ALL available fields to make your determination. Do NOT default to OTHER when structural codes provide clear signal.
+
+Respond with JSON array. Each element: {"id": N, "exposure_type": "...", "asset_class": "..."}"""
+
+    for batch_start in range(0, len(sample), batch_size):
+        batch = sample.iloc[batch_start:batch_start + batch_size]
+        positions = []
+        for i, (_, row) in enumerate(batch.iterrows()):
+            pos = {
+                "id": batch_start + i,
+                "issuer_name": str(row.get("issuer_name", "")),
+                "instrument_description": str(row.get("instrument_description", "")),
+                "source": str(row.get("source", "")),
+                "issuer_category": str(row.get("issuer_category", "")),
+                "asset_category": str(row.get("asset_category", "")),
+            }
+            if row.get("nport_asset_cat") and str(row["nport_asset_cat"]) != "nan":
+                pos["nport_asset_cat"] = str(row["nport_asset_cat"])
+            if row.get("nport_issuer_type") and str(row["nport_issuer_type"]) != "nan":
+                pos["nport_issuer_type"] = str(row["nport_issuer_type"])
+            positions.append(pos)
+
+        prompt = f"Classify these {len(positions)} positions:\n\n{json.dumps(positions, indent=1)}"
+
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                max_tokens=4096,
+                temperature=0,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            content = response.choices[0].message.content or ""
+            # Extract JSON from response
+            start = content.find("[")
+            end = content.rfind("]") + 1
+            if start >= 0 and end > start:
+                parsed = json.loads(content[start:end])
+                all_results.extend(parsed)
+            else:
+                logger.warning("  Batch %d: no JSON array in response",
+                               batch_start // batch_size + 1)
+        except Exception as exc:
+            logger.error("  Batch %d failed: %s", batch_start // batch_size + 1, exc)
+
+        if batch_start + batch_size < len(sample):
+            time.sleep(0.5)
+
+    # Merge LLM results back
+    llm_map = {r["id"]: r for r in all_results if isinstance(r, dict) and "id" in r}
+    llm_exp = []
+    llm_ac = []
+    for i in range(len(sample)):
+        r = llm_map.get(i, {})
+        llm_exp.append(r.get("exposure_type", ""))
+        llm_ac.append(r.get("asset_class", ""))
+
+    sample["llm_exposure_type"] = llm_exp
+    sample["llm_asset_class"] = llm_ac
+    sample["agrees_exposure"] = sample["exposure_type"] == sample["llm_exposure_type"]
+    sample["agrees_asset"] = sample["asset_class"] == sample["llm_asset_class"]
+
+    # Log accuracy
+    valid = sample[sample["llm_exposure_type"] != ""]
+    if len(valid) > 0:
+        exp_acc = valid["agrees_exposure"].mean() * 100
+        ac_acc = valid["agrees_asset"].mean() * 100
+        logger.info("  LLM agreement: exposure_type %.1f%%, asset_class %.1f%% (%d positions)",
+                    exp_acc, ac_acc, len(valid))
+
+        # Per-category breakdown for asset_class
+        for cat in ["PRIVATE_CREDIT", "PRIVATE_EQUITY", "HEDGE_FUND",
+                    "REAL_ESTATE", "STRUCTURED_CREDIT", "CASH", "OTHER"]:
+            subset = valid[valid["asset_class"] == cat]
+            if len(subset) > 0:
+                acc = subset["agrees_asset"].mean() * 100
+                logger.info("    %s: %.1f%% (%d positions)",
+                            cat, acc, len(subset))
+    else:
+        logger.warning("  No LLM responses received")
+
+    return sample
+
+
+# ---------------------------------------------------------------------------
+# 7. Orchestrator
 # ---------------------------------------------------------------------------
 
 def validate_holdings(
@@ -652,5 +1048,13 @@ def validate_holdings(
         if len(assets_df) > 0:
             assets_df.to_csv(HOLDINGS_TOTAL_ASSETS_FILE, index=False)
             logger.info("  Saved %s", HOLDINGS_TOTAL_ASSETS_FILE.name)
+
+    # 6. Classification cross-reference (free, runs every time)
+    logger.info("Validating classification cross-reference...")
+    class_val = validate_classification(unified_df)
+    reports["classification_validation"] = class_val
+    if len(class_val) > 0:
+        class_val.to_csv(CLASSIFICATION_VALIDATION_FILE, index=False)
+        logger.info("  Saved %s", CLASSIFICATION_VALIDATION_FILE.name)
 
     return reports

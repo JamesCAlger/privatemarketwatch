@@ -289,7 +289,8 @@ def _parse_ncen_zip(zip_path: Any, quarter: str) -> list[dict]:
         # Join with ADVISER
         if (adv is not None and "ADVISER_NAME" in adv.columns
                 and "FUND_ID" in adv.columns and "FUND_ID" in merged.columns):
-            first_adv = adv.drop_duplicates(subset=["FUND_ID"], keep="first")
+            adv_valid = adv[adv["FUND_ID"].notna() & (adv["FUND_ID"].str.strip() != "")]
+            first_adv = adv_valid.drop_duplicates(subset=["FUND_ID"], keep="first")
             merged = merged.merge(
                 first_adv[["FUND_ID", "ADVISER_NAME"]],
                 on="FUND_ID", how="left",

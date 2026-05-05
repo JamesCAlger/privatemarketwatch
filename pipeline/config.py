@@ -8,6 +8,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
+REFERENCE_DIR = DATA_DIR / "reference"
 SEC_DATASETS_DIR = RAW_DIR / "sec_datasets"
 FILINGS_DIR = RAW_DIR / "filings"
 THIRD_PARTY_DIR = RAW_DIR / "third_party"
@@ -37,7 +38,7 @@ for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           N2_HEADERS_CACHE_DIR, BDC_XBRL_CACHE_DIR,
           NPORT_TSV_CACHE_DIR, NPORT_XML_CACHE_DIR,
           BDC_HTML_CACHE_DIR, HTML_TEMPLATE_DIR,
-          COMPANYFACTS_CACHE_DIR]:
+          COMPANYFACTS_CACHE_DIR, REFERENCE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -145,6 +146,7 @@ HOLDINGS_SPOT_CHECK_FILE = OUTPUT_DIR / "holdings_spot_check.csv"
 HOLDINGS_COVERAGE_FILE = OUTPUT_DIR / "holdings_coverage.csv"
 HOLDINGS_CROSS_SOURCE_FILE = OUTPUT_DIR / "holdings_cross_source.csv"
 HOLDINGS_TOTAL_ASSETS_FILE = OUTPUT_DIR / "holdings_total_assets.csv"
+CLASSIFICATION_VALIDATION_FILE = OUTPUT_DIR / "classification_validation.csv"
 
 # Position matching and index returns
 POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
@@ -154,6 +156,13 @@ INDEX_RETURNS_FILE = OUTPUT_DIR / "index_returns.csv"
 # Fund-level income and fee uplift
 BDC_FUND_INCOME_FILE = OUTPUT_DIR / "bdc_fund_income.csv"
 FEE_UPLIFT_FILE = OUTPUT_DIR / "fee_uplift.csv"
+FUND_FINANCIALS_FILE = OUTPUT_DIR / "fund_financials.csv"
+FUND_IDENTITY_FILE = OUTPUT_DIR / "fund_identity.csv"
+BDC_SECTOR_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_sector_breakdown.csv"
+
+# GICS industry mapping
+GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"
+GICS_LABEL_CACHE_FILE = OUTPUT_DIR / "gics_label_cache.csv"
 
 # LLM review outputs
 LLM_REVIEW_CANDIDATES_FILE = OUTPUT_DIR / "llm_review_candidates.csv"
@@ -214,6 +223,9 @@ NPORT_DATASET_URL_TEMPLATE = (
 # Data is kept in nport_holdings.csv but filtered out during --unified.
 NPORT_EXCLUDE_CIKS: set[str] = {
     "1658645",   # Stone Ridge Trust V (~20M consumer loan rows)
+    "1644771",   # RiverNorth Marketplace Lending (opaque numeric IDs, <$1B FV)
+    "1678130",   # RiverNorth/DoubleLine Strategic Opp (opaque numeric IDs, <$1B FV)
+    "2041175",   # NB Direct Private Lending (opaque numeric IDs, <$0.5B FV)
 }
 
 # ---------------------------------------------------------------------------

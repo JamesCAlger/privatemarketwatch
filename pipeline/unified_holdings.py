@@ -43,6 +43,7 @@ UNIFIED_COLUMNS = [
     "shares_held", "principal_amount",
     # Classification
     "asset_category", "issuer_category", "index_classification",
+    "exposure_type", "asset_class",
     "fair_value_level",
     # Rate/spread
     "interest_rate", "basis_spread", "reference_rate_type",
@@ -69,9 +70,9 @@ UNIFIED_COLUMNS = [
 
 # BDC aggregate row patterns (case-insensitive substring)
 _BDC_AGGREGATE_PATTERNS = [
-    "non-control",
     "affiliate investments",
     "control investments",
+    "controlled investments",
     "total investments",
     "net assets",
     "subtotal",
@@ -89,7 +90,8 @@ _BDC_AGGREGATE_PATTERNS = [
     "investment unsecured",
     "placeholder",
     "controlled affiliated",
-    "non-controlled",
+    # CIK 0001849894 (Blue Owl): parsing artifact "Investments Investments - non-controlled/..."
+    "investments investments",
     # Category-level subtotals from hierarchical XBRL filings
     "portfolio company debt securities",
     "portfolio company equity investments",
@@ -129,6 +131,7 @@ _BDC_AGGREGATE_PATTERNS = [
     "total unsecured",
     # Audit A3 gaps (2026-04-06)
     "sub-total",
+    "sub total",
     "total senior unsecured",
     "total mezzanine",
     "total unitranche",
@@ -398,6 +401,49 @@ _NAMED_LP_PATTERNS = [
     "llc interest | non-affiliated", "llc interest | affiliated",
 ]
 
+# ---------------------------------------------------------------------------
+# 2-axis classification keyword lists
+# ---------------------------------------------------------------------------
+
+# Real estate keywords (trigger for any issuer)
+_REAL_ESTATE_KEYWORDS = [
+    "real estate", "reit", "multifamily", "timberland",
+    "prisa", "clarion", "cbre", "brookfield premier",
+    "sentinel real", "morgan stanley prime", "core mob",
+]
+
+# Real estate keywords that only trigger when issuer_category='FUND'
+# (avoids "National Property Solutions LLC" which is a corporate borrower)
+_REAL_ESTATE_FUND_KEYWORDS = [
+    "property", "prologis", "logistics fund", "logistics partner",
+    "industrial trust", "industrial fund", "housing",
+    "national property",
+]
+
+# Structured credit keywords
+_STRUCTURED_CREDIT_KEYWORDS = [
+    "clo ", " clo,", "clo/", "loan note issuer",
+    "structured note", "subordinated note", "sub note",
+]
+
+# Cash/liquid keywords (safe for any issuer)
+_CASH_KEYWORDS = [
+    "t-bill", "money market", "financial square", "gvmxx",
+    "treasury fund", "treasury bill", "treasury note", "treasury bond",
+    "u.s. treasury", "us treasury",
+]
+# Cash keywords that only trigger when issuer_category != CORPORATE
+# (avoids "Apex Group Treasury LLC" false positives)
+_CASH_CORPORATE_GUARD_KEYWORDS = [
+    "treasury",
+]
+
+# Hedge fund keywords (negative signal -- NOT credit or PE)
+_HEDGE_FUND_KEYWORDS = [
+    "hedge", "macro", "long/short", "long short", "market neutral",
+    "arbitrage", "event driven", "multi-strategy",
+]
+
 # Pipe-format direction detection: if the last pipe-segment matches one of
 # these tags, the format is "Company | Instrument | Affiliation" (Blue Owl,
 # Golub, TriplePoint) rather than "Type | Industry | Company" (SLR).
@@ -471,6 +517,26 @@ def _sql_is_bdc_aggregate() -> str:
     parts.append("_lower_id = ''")
     # Named aggregate patterns (substring)
     parts.append(_sql_keyword_check("_lower_id", _BDC_AGGREGATE_PATTERNS))
+    # Qualified non-control check: filter identifiers with "non-control" that are
+    # short (<150 chars) and lack entity-name signals. Long identifiers (>=150) are
+    # dimension-path positions with embedded company names, rates, maturities.
+    # Only use entity-name suffixes as guards (NOT instrument signals like
+    # "term loan" / "senior secured" which appear in both positions and subtotals).
+    _nonctrl_entity_signals = [
+        "inc.", "inc,", " inc ", " inc-",
+        "llc", "l.l.c",
+        "corp.", "corp,",
+        "ltd.", "ltd,", " ltd ",
+        ", lp", " lp,", "l.p.",
+        "holdings", "group",
+        "gmbh", " co.", " plc",
+    ]
+    nonctrl_no_signal = " AND ".join(
+        f"NOT contains(_lower_id, '{s}')" for s in _nonctrl_entity_signals
+    )
+    parts.append(
+        f"(contains(_lower_id, 'non-control') AND LENGTH(_raw_id) < 150 AND {nonctrl_no_signal})"
+    )
     # Exact match section headers
     parts.append(_sql_exact_match("_lower_id", _BDC_AGGREGATE_EXACT))
     # Category header prefixes (only when no ' - ' separator)
@@ -582,6 +648,19 @@ def _sql_classify_index() -> str:
     """Generate CASE WHEN for index classification.
 
     Mirrors _classify_index() logic including fund signal counting.
+    Priority order:
+    1. DIRECT_LENDING (LOAN/DEBT + CORPORATE)
+    2. PREFERRED_EQUITY (EQUITY_PREFERRED + CORPORATE)
+    3. COMMON_EQUITY (EQUITY_COMMON + CORPORATE)
+    4. REAL_ESTATE_FUND (FUND + RE keywords)
+    5. STRUCTURED_CREDIT (CLO keywords)
+    6. PRIVATE_CREDIT_FUND (FUND + credit signals)
+    7. PRIVATE_EQUITY_FUND (FUND + PE signals)
+    8. Fund tiebreaker (credit vs PE count)
+    9. HEDGE_FUND (FUND + no credit/PE signal, or hedge keywords)
+    10. DIRECT_REAL_ESTATE (CORPORATE + RE keywords)
+    11. CASH (GOVERNMENT or cash keywords)
+    12. UNCLASSIFIED (fallback)
     """
     # Build credit/PE signal checks on _combined_fund_text
     credit_checks = [f"contains(_combined_fund_text, '{s}')" for s in _CREDIT_FUND_SIGNALS]
@@ -597,14 +676,39 @@ def _sql_classify_index() -> str:
     credit_count = "(" + " + ".join(credit_count_parts) + ")"
     pe_count = "(" + " + ".join(pe_count_parts) + ")"
 
+    # Real estate keyword checks
+    re_kw = _sql_keyword_check("_combined_fund_text", _REAL_ESTATE_KEYWORDS)
+    re_fund_kw = _sql_keyword_check("_combined_fund_text", _REAL_ESTATE_FUND_KEYWORDS)
+    # Structured credit keyword checks
+    sc_kw = _sql_keyword_check("_combined_fund_text", _STRUCTURED_CREDIT_KEYWORDS)
+    # Cash keyword checks
+    cash_kw = _sql_keyword_check("_combined_fund_text", _CASH_KEYWORDS)
+    cash_guard_kw = _sql_keyword_check("_combined_fund_text", _CASH_CORPORATE_GUARD_KEYWORDS)
+    # Hedge fund keyword checks
+    hedge_kw = _sql_keyword_check("_combined_fund_text", _HEDGE_FUND_KEYWORDS)
+
+    # nport_asset_cat structural signal for funds without keyword signal
+    nac_re = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) = 'RE'"
+    nac_dbt = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) IN ('DBT', 'LON')"
+    nac_eq = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) IN ('EC', 'EP')"
+
     return f"""CASE
   WHEN asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE' THEN 'DIRECT_LENDING'
   WHEN asset_category = 'EQUITY_PREFERRED' AND issuer_category = 'CORPORATE' THEN 'PREFERRED_EQUITY'
   WHEN asset_category = 'EQUITY_COMMON' AND issuer_category = 'CORPORATE' THEN 'COMMON_EQUITY'
+  WHEN issuer_category = 'FUND' AND ({re_kw} OR {re_fund_kw}) THEN 'REAL_ESTATE_FUND'
+  WHEN issuer_category = 'FUND' AND {nac_re} THEN 'REAL_ESTATE_FUND'
+  WHEN {sc_kw} THEN 'STRUCTURED_CREDIT'
   WHEN issuer_category = 'FUND' AND {has_credit} AND NOT {has_pe} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {has_pe} AND NOT {has_credit} THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND {has_credit} AND {has_pe} AND {credit_count} >= {pe_count} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {has_credit} AND {has_pe} AND {credit_count} < {pe_count} THEN 'PRIVATE_EQUITY_FUND'
+  WHEN issuer_category = 'FUND' AND {nac_dbt} THEN 'PRIVATE_CREDIT_FUND'
+  WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY_FUND'
+  WHEN issuer_category = 'FUND' AND ({hedge_kw} OR (NOT {has_credit} AND NOT {has_pe})) THEN 'HEDGE_FUND'
+  WHEN issuer_category = 'CORPORATE' AND ({re_kw} OR {re_fund_kw}) THEN 'DIRECT_REAL_ESTATE'
+  WHEN issuer_category = 'GOVERNMENT' OR {cash_kw} THEN 'CASH'
+  WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'CASH'
   ELSE 'UNCLASSIFIED'
 END"""
 
@@ -634,6 +738,78 @@ def _sql_is_named_coinvest() -> str:
     path2 = f"({strict_marker_check} AND {no_fund} AND {lp_interest_check})"
 
     return f"(asset_category = 'FUND' AND ({path1} OR {path2}))"
+
+
+def _sql_classify_exposure_type() -> str:
+    """Generate CASE WHEN for exposure_type classification.
+
+    Three values:
+    - LIQUID: Government issuers or cash-like instruments
+    - FUND: Fund vehicles (issuer_category='FUND' or nport PF/RF)
+    - DIRECT: Everything else (direct positions in operating companies)
+    """
+    cash_kw = _sql_keyword_check("_combined_fund_text", _CASH_KEYWORDS)
+    cash_guard_kw = _sql_keyword_check("_combined_fund_text", _CASH_CORPORATE_GUARD_KEYWORDS)
+    return f"""CASE
+  WHEN issuer_category = 'GOVERNMENT' THEN 'LIQUID'
+  WHEN {cash_kw} THEN 'LIQUID'
+  WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'LIQUID'
+  WHEN issuer_category = 'FUND' THEN 'FUND'
+  ELSE 'DIRECT'
+END"""
+
+
+def _sql_classify_asset_class() -> str:
+    """Generate CASE WHEN for asset_class classification.
+
+    Priority order:
+    1. CASH -- government + cash keywords
+    2. REAL_ESTATE -- RE keywords (generic any issuer, fund-only gated)
+       + nport_asset_cat=RE for funds without keyword signal
+    3. STRUCTURED_CREDIT -- CLO keywords
+    4. PRIVATE_CREDIT -- LOAN/DEBT+CORPORATE or credit fund signals
+       + nport_asset_cat=DBT for funds without keyword signal
+    5. PRIVATE_EQUITY -- EQUITY+CORPORATE or PE fund signals
+       + nport_asset_cat=EC/EP for funds without keyword signal
+    6. HEDGE_FUND -- fund with no credit/PE signals AND no nport_asset_cat
+       signal, or hedge fund keywords
+    7. OTHER -- fallback
+    """
+    cash_kw = _sql_keyword_check("_combined_fund_text", _CASH_KEYWORDS)
+    cash_guard_kw = _sql_keyword_check("_combined_fund_text", _CASH_CORPORATE_GUARD_KEYWORDS)
+    re_kw = _sql_keyword_check("_combined_fund_text", _REAL_ESTATE_KEYWORDS)
+    re_fund_kw = _sql_keyword_check("_combined_fund_text", _REAL_ESTATE_FUND_KEYWORDS)
+    sc_kw = _sql_keyword_check("_combined_fund_text", _STRUCTURED_CREDIT_KEYWORDS)
+    hedge_kw = _sql_keyword_check("_combined_fund_text", _HEDGE_FUND_KEYWORDS)
+
+    # Credit/PE signal checks (reuse existing lists)
+    credit_checks = [f"contains(_combined_fund_text, '{s}')" for s in _CREDIT_FUND_SIGNALS]
+    pe_checks = [f"contains(_combined_fund_text, '{s}')" for s in _PE_FUND_SIGNALS]
+    has_credit = "(" + " OR ".join(credit_checks) + ")"
+    has_pe = "(" + " OR ".join(pe_checks) + ")"
+
+    # nport_asset_cat structural signal for funds without keyword signal
+    nac_re = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) = 'RE'"
+    nac_dbt = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) IN ('DBT', 'LON')"
+    nac_eq = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) IN ('EC', 'EP')"
+
+    return f"""CASE
+  WHEN issuer_category = 'GOVERNMENT' OR {cash_kw} THEN 'CASH'
+  WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'CASH'
+  WHEN {re_kw} THEN 'REAL_ESTATE'
+  WHEN issuer_category = 'FUND' AND {re_fund_kw} THEN 'REAL_ESTATE'
+  WHEN issuer_category = 'FUND' AND {nac_re} THEN 'REAL_ESTATE'
+  WHEN {sc_kw} THEN 'STRUCTURED_CREDIT'
+  WHEN asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE' THEN 'PRIVATE_CREDIT'
+  WHEN issuer_category = 'FUND' AND {has_credit} THEN 'PRIVATE_CREDIT'
+  WHEN issuer_category = 'FUND' AND {nac_dbt} THEN 'PRIVATE_CREDIT'
+  WHEN asset_category IN ('EQUITY_COMMON', 'EQUITY_PREFERRED') AND issuer_category = 'CORPORATE' THEN 'PRIVATE_EQUITY'
+  WHEN issuer_category = 'FUND' AND {has_pe} THEN 'PRIVATE_EQUITY'
+  WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY'
+  WHEN {hedge_kw} THEN 'HEDGE_FUND'
+  WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} THEN 'HEDGE_FUND'
+  ELSE 'OTHER'
+END"""
 
 
 def _sql_normalize_name(col: str) -> str:
@@ -775,6 +951,24 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
     # Named aggregate patterns (substring)
     for pattern in _BDC_AGGREGATE_PATTERNS:
         if pattern in lower:
+            return True
+
+    # Qualified non-control check: filter identifiers with "non-control" that are
+    # short (<150 chars) and lack entity-name signals. Long identifiers (>=150) are
+    # dimension-path positions with embedded company names, rates, maturities.
+    # Only use entity-name suffixes as guards (NOT instrument signals like
+    # "term loan" / "senior secured" which appear in both positions and subtotals).
+    _nonctrl_entity_signals = [
+        "inc.", "inc,", " inc ", " inc-",
+        "llc", "l.l.c",
+        "corp.", "corp,",
+        "ltd.", "ltd,", " ltd ",
+        ", lp", " lp,", "l.p.",
+        "holdings", "group",
+        "gmbh", " co.", " plc",
+    ]
+    if "non-control" in lower:
+        if len(identifier.strip()) < 150 and not any(s in lower for s in _nonctrl_entity_signals):
             return True
 
     # Exact match section headers
@@ -960,17 +1154,33 @@ def _classify_nport_issuer(issuer_type: str) -> str:
 # ---------------------------------------------------------------------------
 
 def _classify_index(asset_category: str, issuer_category: str,
-                    issuer_name: str, instrument_description: str) -> str:
-    """Assign one of the five private market indices (or UNCLASSIFIED).
+                    issuer_name: str, instrument_description: str,
+                    nport_asset_cat: str = "") -> str:
+    """Assign index classification.
 
-    Rules:
-      DIRECT_LENDING:      LOAN/DEBT + CORPORATE
-      PREFERRED_EQUITY:    EQUITY_PREFERRED + CORPORATE
-      COMMON_EQUITY:       EQUITY_COMMON + CORPORATE
-      PRIVATE_CREDIT_FUND: FUND issuer + credit signals in name
-      PRIVATE_EQUITY_FUND: FUND issuer + PE signals in name
-      UNCLASSIFIED:        everything else
+    Priority order:
+      1. DIRECT_LENDING:      LOAN/DEBT + CORPORATE
+      2. PREFERRED_EQUITY:    EQUITY_PREFERRED + CORPORATE
+      3. COMMON_EQUITY:       EQUITY_COMMON + CORPORATE
+      4. REAL_ESTATE_FUND:    FUND + RE keywords or nport_asset_cat=RE
+      5. STRUCTURED_CREDIT:   CLO keywords
+      6. PRIVATE_CREDIT_FUND: FUND + credit signals or nport_asset_cat=DBT/LON
+      7. PRIVATE_EQUITY_FUND: FUND + PE signals or nport_asset_cat=EC/EP
+      8. HEDGE_FUND:          FUND + no credit/PE signal + no nport_asset_cat
+                              signal, or hedge keywords
+      9. DIRECT_REAL_ESTATE:  CORPORATE + RE keywords
+      10. CASH:               GOVERNMENT or cash keywords
+      11. UNCLASSIFIED:       everything else
     """
+    # Combine issuer name + instrument description for signal matching
+    combined = ""
+    if issuer_name and isinstance(issuer_name, str):
+        combined += issuer_name.lower()
+    if instrument_description and isinstance(instrument_description, str):
+        combined += " " + instrument_description.lower()
+
+    nac = (nport_asset_cat or "").strip().upper()
+
     if asset_category in ("LOAN", "DEBT") and issuer_category == "CORPORATE":
         return "DIRECT_LENDING"
 
@@ -980,14 +1190,20 @@ def _classify_index(asset_category: str, issuer_category: str,
     if asset_category == "EQUITY_COMMON" and issuer_category == "CORPORATE":
         return "COMMON_EQUITY"
 
-    if issuer_category == "FUND":
-        # Combine issuer name + instrument description for signal matching
-        combined = ""
-        if issuer_name and isinstance(issuer_name, str):
-            combined += issuer_name.lower()
-        if instrument_description and isinstance(instrument_description, str):
-            combined += " " + instrument_description.lower()
+    # Real estate fund
+    has_re = any(kw in combined for kw in _REAL_ESTATE_KEYWORDS)
+    has_re_fund = any(kw in combined for kw in _REAL_ESTATE_FUND_KEYWORDS)
+    if issuer_category == "FUND" and (has_re or has_re_fund):
+        return "REAL_ESTATE_FUND"
+    if issuer_category == "FUND" and nac == "RE":
+        return "REAL_ESTATE_FUND"
 
+    # Structured credit
+    has_sc = any(kw in combined for kw in _STRUCTURED_CREDIT_KEYWORDS)
+    if has_sc:
+        return "STRUCTURED_CREDIT"
+
+    if issuer_category == "FUND":
         has_credit = any(sig in combined for sig in _CREDIT_FUND_SIGNALS)
         has_pe = any(sig in combined for sig in _PE_FUND_SIGNALS)
 
@@ -995,16 +1211,33 @@ def _classify_index(asset_category: str, issuer_category: str,
             return "PRIVATE_CREDIT_FUND"
         if has_pe and not has_credit:
             return "PRIVATE_EQUITY_FUND"
-        # Ambiguous or no signals -- still classify by what's stronger
         if has_credit and has_pe:
-            # Count matches -- more signals wins
             credit_count = sum(1 for s in _CREDIT_FUND_SIGNALS if s in combined)
             pe_count = sum(1 for s in _PE_FUND_SIGNALS if s in combined)
             if credit_count >= pe_count:
                 return "PRIVATE_CREDIT_FUND"
             return "PRIVATE_EQUITY_FUND"
-        # No signals at all
-        return "UNCLASSIFIED"
+        # nport_asset_cat fallback before hedge fund catch-all
+        if nac in ("DBT", "LON"):
+            return "PRIVATE_CREDIT_FUND"
+        if nac in ("EC", "EP"):
+            return "PRIVATE_EQUITY_FUND"
+        # Hedge fund: no credit/PE signal, or explicit hedge keywords
+        has_hedge = any(kw in combined for kw in _HEDGE_FUND_KEYWORDS)
+        if has_hedge or (not has_credit and not has_pe):
+            return "HEDGE_FUND"
+
+    # Direct real estate (CORPORATE + RE keywords)
+    if issuer_category == "CORPORATE" and (has_re or has_re_fund):
+        return "DIRECT_REAL_ESTATE"
+
+    # Cash
+    has_cash = any(kw in combined for kw in _CASH_KEYWORDS)
+    has_cash_guard = any(kw in combined for kw in _CASH_CORPORATE_GUARD_KEYWORDS)
+    if issuer_category == "GOVERNMENT" or has_cash:
+        return "CASH"
+    if issuer_category != "CORPORATE" and has_cash_guard:
+        return "CASH"
 
     return "UNCLASSIFIED"
 
@@ -1214,14 +1447,21 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             )
     fund_vehicle_sql = " OR ".join(fund_vehicle_clauses)
 
-    # Filter comparative-period rows if the 'period' column exists
+    # Filter comparative-period rows if the 'period' column exists.
+    # Also exclude pre-2022 BDC data (unreliable partial XBRL coverage).
+    # Rows with NULL/empty report_date pass the cutoff (test compatibility).
     has_period = "period" in bdc_df.columns
-    period_filter = (
-        """WHERE TRY_CAST(period AS DATE) = TRY_CAST(report_date AS DATE)
-           OR period IS NULL
-           OR CAST(period AS VARCHAR) = ''"""
-        if has_period else ""
-    )
+    date_cutoff = ("AND (TRY_CAST(report_date AS DATE) >= '2022-01-01'"
+                   " OR TRY_CAST(report_date AS DATE) IS NULL)")
+    if has_period:
+        period_filter = (
+            f"""WHERE (TRY_CAST(period AS DATE) = TRY_CAST(report_date AS DATE)
+               OR period IS NULL
+               OR CAST(period AS VARCHAR) = '')
+            {date_cutoff}"""
+        )
+    else:
+        period_filter = f"WHERE TRUE {date_cutoff}"
 
     sql = f"""
     WITH
@@ -1546,6 +1786,8 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             asset_category_final AS asset_category,
             issuer_category_final AS issuer_category,
             '' AS index_classification,
+            '' AS exposure_type,
+            '' AS asset_class,
             '' AS fair_value_level,
             CASE WHEN _ir IS NOT NULL AND _ir < 0 THEN NULL
                  WHEN _ir IS NOT NULL AND _ir <= 0.50 THEN _ir * 100
@@ -1729,13 +1971,6 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     credit_fund_kw_checks = " OR ".join(
         f"contains(lower(issuer_name), '{kw}')" for kw in _NPORT_CREDIT_FUND_NAME_KEYWORDS
     )
-    # Build hedge fund exclusion signal checks
-    credit_signal_checks = " OR ".join(
-        f"contains(lower(CAST(issuer_name AS VARCHAR)), '{s}')" for s in _CREDIT_FUND_SIGNALS
-    )
-    pe_signal_checks = " OR ".join(
-        f"contains(lower(CAST(issuer_name AS VARCHAR)), '{s}')" for s in _PE_FUND_SIGNALS
-    )
     # Fall back to issuer_title when issuer_name is NULL/empty (rescues ~9K rows)
     _name_coalesce = "COALESCE(NULLIF(TRIM(CAST(issuer_name AS VARCHAR)), ''), issuer_title)"
     name_norm = _sql_normalize_name(_name_coalesce)
@@ -1813,20 +2048,6 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
         FROM adjusted
     ),
 
-    -- CTE 4c: Exclude hedge fund LP interests
-    -- PF+OTHER named holdings with no credit/PE signal are likely hedge funds
-    no_hedge_funds AS (
-        SELECT * FROM with_fund_detect
-        WHERE NOT (
-            upper(trim(CAST(issuer_type AS VARCHAR))) = 'PF'
-            AND upper(trim(CAST(asset_cat AS VARCHAR))) = 'OTHER'
-            AND issuer_name IS NOT NULL
-            AND TRIM(CAST(issuer_name AS VARCHAR)) != ''
-            AND NOT ({credit_signal_checks})
-            AND NOT ({pe_signal_checks})
-        )
-    ),
-
     -- CTE 5: Map to unified schema
     unified AS (
         SELECT
@@ -1851,6 +2072,8 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             asset_category_final AS asset_category,
             issuer_category_reclassed AS issuer_category,
             '' AS index_classification,
+            '' AS exposure_type,
+            '' AS asset_class,
             CAST(TRY_CAST(fair_value_level AS INTEGER) AS VARCHAR) AS fair_value_level,
             CASE WHEN TRY_CAST(annualized_rate AS DOUBLE) > 50 THEN NULL
                  ELSE TRY_CAST(annualized_rate AS DOUBLE) END AS interest_rate,
@@ -1886,7 +2109,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS extracted_industry,
             '' AS position_id,
             _row_id
-        FROM no_hedge_funds
+        FROM with_fund_detect
     )
 
     SELECT * FROM unified ORDER BY _row_id
@@ -1911,7 +2134,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     # Drop internal row id column
     result.drop(columns=["_row_id"], inplace=True)
 
-    logger.info("  After Level 3 + hedge fund filter: %d rows", len(result))
+    logger.info("  After Level 3 filter: %d rows", len(result))
 
     if rate_capped > 0:
         logger.info("  N-PORT rates capped at 50%%: %d rows", rate_capped)
@@ -1974,7 +2197,10 @@ def build_unified_holdings(
     con.register("nport_part", nport_unified)
 
     idx_case = _sql_classify_index()
-    col_list = ", ".join(c for c in UNIFIED_COLUMNS if c != "index_classification")
+    exposure_case = _sql_classify_exposure_type()
+    asset_class_case = _sql_classify_asset_class()
+    _classification_cols = {"index_classification", "exposure_type", "asset_class"}
+    col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _classification_cols)
     # Use explicit column list for UNION ALL to avoid positional mismatch
     union_cols = ", ".join(UNIFIED_COLUMNS)
 
@@ -2008,7 +2234,9 @@ def build_unified_holdings(
     ),
     classified AS (
         SELECT *,
-            {idx_case} AS _index_class
+            {idx_case} AS _index_class,
+            {exposure_case} AS _exposure_type,
+            {asset_class_case} AS _asset_class
         FROM with_fund_text
     ),
     -- Cost proxy: fill NULL/zero cost with first observed fair_value
@@ -2092,7 +2320,9 @@ def build_unified_holdings(
     )
     SELECT
         {col_list},
-        _index_class AS index_classification
+        _index_class AS index_classification,
+        _exposure_type AS exposure_type,
+        _asset_class AS asset_class
     FROM with_shares_fix
     """
 
@@ -2219,6 +2449,15 @@ def build_unified_holdings(
     logger.info("  Cost coverage: %d rows (%.1f%%)",
                 cost_filled.sum(), 100 * cost_filled.sum() / len(combined) if len(combined) else 0)
 
+    # Schema enforcement
+    violations = _enforce_schema(combined)
+    if violations:
+        logger.warning("Schema enforcement: %d check(s) failed", len(violations))
+        for name, count in violations:
+            logger.warning("  FAIL %s: %d rows", name, count)
+    else:
+        logger.info("Schema enforcement: all checks passed")
+
     # Save
     combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
     logger.info("Saved to %s (%.1f MB)",
@@ -2232,6 +2471,124 @@ def build_unified_holdings(
     logger.info("Unified holdings built in %.1f s", elapsed)
 
     return combined
+
+
+def _enforce_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
+    """Run schema assertions on the unified output.
+
+    Returns [(check_name, fail_count), ...] for any check with violations > 0.
+    Checks are non-fatal -- callers decide how to handle violations.
+    """
+    if df.empty:
+        return []
+
+    con = duckdb.connect()
+    con.register("unified", df)
+
+    # --- Layer 1: Type and format (should never fail) ---
+    checks: list[tuple[str, str]] = [
+        ("cik_format",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE LENGTH(CAST(cik AS VARCHAR)) != 10"
+         "    OR regexp_matches(CAST(cik AS VARCHAR), '[^0-9]')"),
+        ("source_enum",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(source AS VARCHAR) NOT IN ('bdc', 'nport')"),
+        ("asset_category_enum",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(asset_category AS VARCHAR) NOT IN"
+         " ('LOAN','DEBT','EQUITY_COMMON','EQUITY_PREFERRED','FUND','OTHER')"),
+        ("issuer_category_enum",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(issuer_category AS VARCHAR) NOT IN"
+         " ('CORPORATE','FUND','GOVERNMENT','OTHER')"),
+        ("index_classification_enum",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(index_classification AS VARCHAR) NOT IN"
+         " ('DIRECT_LENDING','COMMON_EQUITY','PREFERRED_EQUITY',"
+         "  'PRIVATE_CREDIT_FUND','PRIVATE_EQUITY_FUND',"
+         "  'REAL_ESTATE_FUND','DIRECT_REAL_ESTATE',"
+         "  'STRUCTURED_CREDIT','HEDGE_FUND','CASH','UNCLASSIFIED')"),
+        ("exposure_type_enum",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(exposure_type AS VARCHAR) NOT IN"
+         " ('DIRECT','FUND','LIQUID')"),
+        ("asset_class_enum",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(asset_class AS VARCHAR) NOT IN"
+         " ('PRIVATE_CREDIT','PRIVATE_EQUITY','REAL_ESTATE',"
+         "  'STRUCTURED_CREDIT','HEDGE_FUND','CASH','OTHER')"),
+        ("report_date_parseable",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(report_date AS VARCHAR) IS NOT NULL"
+         "   AND CAST(report_date AS VARCHAR) != ''"
+         "   AND TRY_CAST(report_date AS DATE) IS NULL"),
+        ("fair_value_is_null",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(fair_value AS DOUBLE) IS NULL"),
+        ("coupon_type_enum",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(coupon_type AS VARCHAR) NOT IN ('Fixed', 'Floating', '')"),
+
+        # --- Layer 2: Domain range (catches transform errors) ---
+        ("interest_rate_range",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(interest_rate AS DOUBLE) IS NOT NULL"
+         "   AND (TRY_CAST(interest_rate AS DOUBLE) < 0"
+         "        OR TRY_CAST(interest_rate AS DOUBLE) > 50)"),
+        ("basis_spread_range",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(basis_spread AS DOUBLE) IS NOT NULL"
+         "   AND (TRY_CAST(basis_spread AS DOUBLE) < 0"
+         "        OR TRY_CAST(basis_spread AS DOUBLE) > 30)"),
+        ("pik_rate_range",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(pik_rate AS DOUBLE) IS NOT NULL"
+         "   AND (TRY_CAST(pik_rate AS DOUBLE) < 0"
+         "        OR TRY_CAST(pik_rate AS DOUBLE) > 25)"),
+        ("pct_net_assets_range",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(pct_of_net_assets AS DOUBLE) IS NOT NULL"
+         "   AND ABS(TRY_CAST(pct_of_net_assets AS DOUBLE)) > 150"),
+        ("shares_not_negative",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(shares_held AS DOUBLE) IS NOT NULL"
+         "   AND TRY_CAST(shares_held AS DOUBLE) < 0"),
+        ("principal_not_negative",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(principal_amount AS DOUBLE) IS NOT NULL"
+         "   AND TRY_CAST(principal_amount AS DOUBLE) < 0"),
+
+        # --- Layer 3: Relational / logical (catches transform logic bugs) ---
+        ("bdc_has_identifier",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(source AS VARCHAR) = 'bdc'"
+         "   AND (bdc_investment_identifier IS NULL"
+         "        OR CAST(bdc_investment_identifier AS VARCHAR) = '')"),
+        ("dl_implies_loan_or_debt_corporate",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(index_classification AS VARCHAR) = 'DIRECT_LENDING'"
+         "   AND (CAST(asset_category AS VARCHAR) NOT IN ('LOAN', 'DEBT')"
+         "        OR CAST(issuer_category AS VARCHAR) != 'CORPORATE')"),
+        ("fund_index_implies_fund_issuer",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE CAST(index_classification AS VARCHAR)"
+         "       IN ('PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'REAL_ESTATE_FUND', 'HEDGE_FUND')"
+         "   AND CAST(issuer_category AS VARCHAR) != 'FUND'"),
+    ]
+
+    violations: list[tuple[str, int]] = []
+    for name, sql in checks:
+        try:
+            count = con.execute(sql).fetchone()[0]
+            if count > 0:
+                violations.append((name, count))
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Schema check '%s' failed to execute: %s", name, exc)
+            violations.append((name, -1))
+
+    con.close()
+    return violations
 
 
 def _log_summary(df: pd.DataFrame) -> None:

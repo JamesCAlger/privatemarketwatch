@@ -22,6 +22,7 @@ from pipeline.config import (
     BDC_FILING_FORM_TYPES,
     BDC_FILINGS_INDEX_FILE,
     BDC_HOLDINGS_FILE,
+    BDC_HTML_CACHE_DIR,
     BDC_PARSE_PROGRESS_FILE,
     BDC_UNIVERSE_FILE,
     BDC_XBRL_CACHE_DIR,
@@ -36,6 +37,9 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Keys are lowercase substrings matched against the local name of each XBRL
 # element.  Order matters -- first match wins.
+# WARNING: Longer/more-specific patterns MUST appear before shorter ones.
+# e.g. "investmentinterestratepaidinkind" before "investmentinterestrate",
+# otherwise PIK rate silently maps to interest_rate.
 CONCEPT_MAP: list[tuple[str, str]] = [
     # Fair value
     ("investmentownedatfairvalue", "fair_value"),
@@ -398,7 +402,8 @@ def _find_xbrl_in_filing_index(
 def _local_name(tag: str) -> str:
     """Strip namespace URI from an lxml tag string like ``{uri}localname``.
 
-    Returns empty string for non-string tags (e.g. lxml Comment/PI nodes).
+    Returns empty string for non-string tags (e.g. lxml Comment/PI nodes
+    whose ``.tag`` is a callable, not a string -- ``root.iter()`` yields these).
     """
     if not isinstance(tag, str):
         return ""
@@ -809,3 +814,42 @@ def extract_bdc_holdings(
         logger.warning("  No holdings extracted")
 
     return holdings
+
+
+# ===========================================================================
+# HTML download (pre-XBRL filings)
+# ===========================================================================
+
+def download_html_filing(
+    client: EdgarClient,
+    cik: str,
+    accession: str,
+    primary_doc: str,
+) -> Path | None:
+    """Download the HTML primary document for a filing.
+
+    Caches to BDC_HTML_CACHE_DIR / cik / {accession_nodashes}.html.
+    Returns cached file path or None on failure.
+    """
+    cik_stripped = cik.lstrip("0") or "0"
+    acc_nodashes = accession.replace("-", "")
+    cache_dir = BDC_HTML_CACHE_DIR / cik_stripped
+    cache_file = cache_dir / f"{acc_nodashes}.html"
+
+    if cache_file.exists() and cache_file.stat().st_size > 1024:
+        return cache_file
+
+    url = (
+        f"https://www.sec.gov/Archives/edgar/data/"
+        f"{cik_stripped}/{acc_nodashes}/{primary_doc}"
+    )
+
+    try:
+        resp = client.get(url)
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_file.write_bytes(resp.content)
+        logger.debug("Downloaded HTML: %s -> %s", url, cache_file)
+        return cache_file
+    except Exception as exc:
+        logger.debug("HTML download failed for %s: %s", url, exc)
+        return None

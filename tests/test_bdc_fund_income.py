@@ -244,6 +244,16 @@ class TestFactExtraction:
         facts = _extract_fund_income_facts(tree, contexts)
         assert len(facts) == 0
 
+    def test_incentive_fee_expense_concept(self):
+        """IncentiveFeeExpense maps to incentive_fee column."""
+        ctx_xml = _duration_ctx("d1", "2024-01-01", "2024-03-31")
+        facts_xml = _fact("IncentiveFeeExpense", "d1", "5000000")
+        tree = _build_xbrl(ctx_xml, facts_xml)
+        contexts = _parse_income_contexts(tree)
+        facts = _extract_fund_income_facts(tree, contexts)
+        assert len(facts) == 1
+        assert facts[0]["incentive_fee"] == 5000000.0
+
 
 # ---------------------------------------------------------------------------
 # Quarterly derivation tests

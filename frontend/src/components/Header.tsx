@@ -46,12 +46,15 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1 text-sm flex-1">
+            <NavLink href="/" current={pathname}>
+              Funds
+            </NavLink>
             <div
               className="relative"
               onMouseEnter={() => setIndicesOpen(true)}
               onMouseLeave={() => setIndicesOpen(false)}
             >
-              <button className={`relative px-3 py-5 hover:text-teal transition-colors ${
+              <Link href="/indices" className={`relative px-3 py-5 hover:text-teal transition-colors inline-block ${
                 pathname.startsWith('/indices') ? 'text-white font-medium' : 'text-white/70'
               }`}>
                 Indices
@@ -61,7 +64,7 @@ export default function Header() {
                 {pathname.startsWith('/indices') && (
                   <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal rounded-full" />
                 )}
-              </button>
+              </Link>
               {indicesOpen && (
                 <div className="absolute top-full left-0 pt-0.5">
                   <div className="bg-white border border-surface-muted rounded-lg shadow-panel py-1.5 min-w-[240px]">
@@ -114,6 +117,14 @@ export default function Header() {
         {/* Mobile menu */}
         {menuOpen && (
           <nav className="md:hidden pb-4 border-t border-white/10 pt-3 space-y-1">
+            <Link
+              href="/"
+              className="block px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors font-medium"
+              onClick={() => setMenuOpen(false)}
+            >
+              Fund Universe
+            </Link>
+            <div className="px-2 pt-2 pb-1 text-xs text-white/50 uppercase tracking-wider">Indices</div>
             {INDICES.map((idx) => (
               <Link
                 key={idx.slug}
@@ -161,7 +172,9 @@ function NavLink({
   current: string;
   children: React.ReactNode;
 }) {
-  const isActive = current === href;
+  const isActive = href === '/'
+    ? current === '/' || current.startsWith('/funds')
+    : current === href;
   return (
     <Link
       href={href}

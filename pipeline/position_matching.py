@@ -1,10 +1,11 @@
 """Position matching -- link the same instrument across consecutive quarters.
 
-4-tier matching cascade with row-ID-based 1:1 enforcement:
+5-tier matching cascade with row-ID-based 1:1 enforcement:
   A: BDC within-filing comparatives (exact)
   B: Exact name / CUSIP match (exact)
   C: Regex-normalized name match (exact after normalization)
   D: Jaro-Winkler fuzzy match (approximate)
+  E: Entity-constrained fingerprint match (entity_id + classification + principal bucket)
 
 All data manipulation uses DuckDB SQL CTEs.
 """
@@ -677,6 +678,191 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Tier E: Entity-Constrained Fingerprint Matching
+# ---------------------------------------------------------------------------
+
+def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
+    """Tier E: Entity-constrained fingerprint matching.
+
+    Matches positions with same entity_id across consecutive quarters using
+    index_classification + principal_amount_bucket as a composite key.
+    Catches name changes and disambiguates multi-position entities.
+
+    Returns the name of the result table.
+    """
+    next_qtr = _next_quarter_sql("b.quarter")
+
+    sql = f"""
+    CREATE OR REPLACE TEMP TABLE tier_e AS
+    WITH
+    all_used AS (
+        SELECT _row_id FROM tier_a_unified_ids
+        UNION
+        SELECT _begin_row_id AS _row_id FROM tier_b
+        UNION
+        SELECT _end_row_id AS _row_id FROM tier_b
+        UNION
+        SELECT _begin_row_id AS _row_id FROM tier_c
+        UNION
+        SELECT _end_row_id AS _row_id FROM tier_c
+        UNION
+        SELECT _begin_row_id AS _row_id FROM tier_d
+        UNION
+        SELECT _end_row_id AS _row_id FROM tier_d
+    ),
+    remaining AS (
+        SELECT u.*,
+            CAST(entity_id AS VARCHAR) AS _entity_id,
+            CAST(ROUND(COALESCE(pa, 0) / 500000.0, 0) AS INTEGER) AS _prin_bucket
+        FROM unified_base u
+        WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
+          AND CAST(entity_id AS VARCHAR) IS NOT NULL
+          AND CAST(entity_id AS VARCHAR) != ''
+    ),
+    -- Count positions per entity_id + CIK + quarter + classification
+    -- Single-position entities don't need fingerprint disambiguation
+    entity_counts AS (
+        SELECT cik, source, quarter, _entity_id,
+            CAST(index_classification AS VARCHAR) AS _ic,
+            COUNT(*) AS n
+        FROM remaining
+        GROUP BY cik, source, quarter, _entity_id,
+            CAST(index_classification AS VARCHAR)
+    ),
+    -- E1: Single-position entities -- no principal bucket needed
+    pairs_single AS (
+        SELECT
+            e.cik, e.entity_name, e.source,
+            b.quarter AS begin_quarter,
+            CAST(b.report_date AS VARCHAR) AS begin_report_date,
+            CAST(b.issuer_name AS VARCHAR) AS begin_issuer_name,
+            b.fv AS begin_fair_value, b.cost_val AS begin_cost,
+            b.pa AS begin_principal_amount, b.ir AS begin_interest_rate,
+            b.bs AS begin_basis_spread, b.sh AS begin_shares_held,
+            e.quarter AS end_quarter,
+            CAST(e.report_date AS VARCHAR) AS end_report_date,
+            CAST(e.issuer_name AS VARCHAR) AS end_issuer_name,
+            e.fv AS end_fair_value, e.cost_val AS end_cost,
+            e.pa AS end_principal_amount, e.ir AS end_interest_rate,
+            e.bs AS end_basis_spread, e.sh AS end_shares_held,
+            'E_entity_fingerprint' AS match_method,
+            CAST(b._entity_id || '|' || COALESCE(CAST(b.index_classification AS VARCHAR), '')
+                AS VARCHAR) AS match_key,
+            1.0 AS match_score,
+            3 AS span_months,
+            b._row_id AS _begin_row_id,
+            e._row_id AS _end_row_id,
+            {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
+            ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
+            {_fv_proximity_sql('COALESCE(b.pa, 1.0)', 'COALESCE(e.pa, 1.0)')}
+                AS _pa_prox
+        FROM remaining b
+        JOIN remaining e
+          ON b.cik = e.cik
+         AND e.quarter = ({next_qtr})
+         AND b.source = e.source
+         AND b._entity_id = e._entity_id
+         AND CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR)
+         AND b.fv > 0 AND e.fv > 0
+         AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+        -- Both sides must be single-position for this entity+classification
+        JOIN entity_counts bc
+          ON b.cik = bc.cik AND b.source = bc.source
+         AND b.quarter = bc.quarter AND b._entity_id = bc._entity_id
+         AND CAST(b.index_classification AS VARCHAR) = bc._ic
+         AND bc.n = 1
+        JOIN entity_counts ec
+          ON e.cik = ec.cik AND e.source = ec.source
+         AND e.quarter = ec.quarter AND e._entity_id = ec._entity_id
+         AND CAST(e.index_classification AS VARCHAR) = ec._ic
+         AND ec.n = 1
+    ),
+    -- E2: Multi-position entities -- require principal bucket match
+    pairs_multi AS (
+        SELECT
+            e.cik, e.entity_name, e.source,
+            b.quarter AS begin_quarter,
+            CAST(b.report_date AS VARCHAR) AS begin_report_date,
+            CAST(b.issuer_name AS VARCHAR) AS begin_issuer_name,
+            b.fv AS begin_fair_value, b.cost_val AS begin_cost,
+            b.pa AS begin_principal_amount, b.ir AS begin_interest_rate,
+            b.bs AS begin_basis_spread, b.sh AS begin_shares_held,
+            e.quarter AS end_quarter,
+            CAST(e.report_date AS VARCHAR) AS end_report_date,
+            CAST(e.issuer_name AS VARCHAR) AS end_issuer_name,
+            e.fv AS end_fair_value, e.cost_val AS end_cost,
+            e.pa AS end_principal_amount, e.ir AS end_interest_rate,
+            e.bs AS end_basis_spread, e.sh AS end_shares_held,
+            'E_entity_fingerprint' AS match_method,
+            CAST(b._entity_id || '|' || COALESCE(CAST(b.index_classification AS VARCHAR), '')
+                || '|' || CAST(b._prin_bucket AS VARCHAR) AS VARCHAR) AS match_key,
+            1.0 AS match_score,
+            3 AS span_months,
+            b._row_id AS _begin_row_id,
+            e._row_id AS _end_row_id,
+            {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
+            ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
+            {_fv_proximity_sql('COALESCE(b.pa, 1.0)', 'COALESCE(e.pa, 1.0)')}
+                AS _pa_prox
+        FROM remaining b
+        JOIN remaining e
+          ON b.cik = e.cik
+         AND e.quarter = ({next_qtr})
+         AND b.source = e.source
+         AND b._entity_id = e._entity_id
+         AND CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR)
+         AND ABS(b._prin_bucket - e._prin_bucket) <= 1
+         AND b.fv > 0 AND e.fv > 0
+         AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+        -- At least one side is multi-position (not caught by E1)
+        JOIN entity_counts bc
+          ON b.cik = bc.cik AND b.source = bc.source
+         AND b.quarter = bc.quarter AND b._entity_id = bc._entity_id
+         AND CAST(b.index_classification AS VARCHAR) = bc._ic
+        JOIN entity_counts ec
+          ON e.cik = ec.cik AND e.source = ec.source
+         AND e.quarter = ec.quarter AND e._entity_id = ec._entity_id
+         AND CAST(e.index_classification AS VARCHAR) = ec._ic
+        WHERE bc.n > 1 OR ec.n > 1
+    ),
+    -- Combine E1 + E2
+    all_pairs AS (
+        SELECT * FROM pairs_single
+        UNION ALL
+        SELECT * FROM pairs_multi
+    ),
+    rn_begin AS (
+        SELECT *,
+            ROW_NUMBER() OVER (
+                PARTITION BY _begin_row_id
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC
+            ) AS rn_b
+        FROM all_pairs
+    ),
+    rn_end AS (
+        SELECT *,
+            ROW_NUMBER() OVER (
+                PARTITION BY _end_row_id
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC
+            ) AS rn_e
+        FROM rn_begin WHERE rn_b = 1
+    )
+    SELECT cik, entity_name, source,
+        begin_quarter, begin_report_date, begin_issuer_name,
+        begin_fair_value, begin_cost, begin_principal_amount,
+        begin_interest_rate, begin_basis_spread, begin_shares_held,
+        end_quarter, end_report_date, end_issuer_name,
+        end_fair_value, end_cost, end_principal_amount,
+        end_interest_rate, end_basis_spread, end_shares_held,
+        match_method, match_key, match_score, span_months,
+        _begin_row_id, _end_row_id
+    FROM rn_end WHERE rn_e = 1
+    """
+    con.execute(sql)
+    return "tier_e"
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -769,6 +955,12 @@ def match_positions(
     tier_d_count = con.execute("SELECT COUNT(*) FROM tier_d").fetchone()[0]
     logger.info("  Tier D: %d pairs", tier_d_count)
 
+    # --- Tier E: Entity fingerprint ---
+    logger.info("Running Tier E: Entity-constrained fingerprint matching...")
+    _match_entity_fingerprint(con)
+    tier_e_count = con.execute("SELECT COUNT(*) FROM tier_e").fetchone()[0]
+    logger.info("  Tier E: %d pairs", tier_e_count)
+
     # --- Combine all tiers and annotate with classification ---
     # Two separate queries to avoid conditional JOIN anti-pattern:
     #   1. Tier A: join via bdc_investment_identifier (raw identifier)
@@ -814,7 +1006,7 @@ def match_positions(
      AND u.source = 'bdc'
     """
 
-    # Part 2: Tiers B/C/D annotation via _row_id
+    # Part 2: Tiers B/C/D/E annotation via _row_id
     sql_bcd = f"""
     WITH bcd AS (
         SELECT * FROM tier_b
@@ -822,6 +1014,8 @@ def match_positions(
         SELECT * FROM tier_c
         UNION ALL
         SELECT * FROM tier_d
+        UNION ALL
+        SELECT * FROM tier_e
     )
     SELECT {_select_cols('m')},
         {_class_cols}

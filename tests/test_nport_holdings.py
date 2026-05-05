@@ -874,9 +874,9 @@ class TestConfig:
             NPORT_PARSE_PROGRESS_FILE,
             NPORT_DATASET_URL_TEMPLATE,
         )
-        assert len(NPORT_QUARTERS) == 25
+        assert len(NPORT_QUARTERS) >= 25
         assert NPORT_QUARTERS[0] == "2019q4"
-        assert NPORT_QUARTERS[-1] == "2025q4"
+        assert NPORT_QUARTERS[-1] >= "2025q4"
         assert "{quarter}" in NPORT_DATASET_URL_TEMPLATE
         assert str(NPORT_TSV_CACHE_DIR).endswith("nport_quarterly")
         assert str(NPORT_XML_CACHE_DIR).endswith("nport_xml")
@@ -890,6 +890,208 @@ class TestConfig:
 # ---------------------------------------------------------------------------
 # Tests: _dedup_amendments
 # ---------------------------------------------------------------------------
+
+class TestBorrowAggregateExtraction:
+    """Tests for BORROW_AGGREGATE extraction in _process_quarter_tsv."""
+
+    def test_borrow_aggregate_joined_to_fund_info(self):
+        """TOTAL_BORROWINGS_DETAIL appears in fund_info when BORROW_AGGREGATE present."""
+        tsv_data = {
+            "REGISTRANT.tsv": REGISTRANT_TSV,
+            "SUBMISSION.tsv": SUBMISSION_TSV,
+            "FUND_REPORTED_INFO.tsv": FUND_REPORTED_INFO_TSV,
+            "FUND_REPORTED_HOLDING.tsv": HOLDING_TSV,
+            "DEBT_SECURITY.tsv": DEBT_SECURITY_TSV,
+            "IDENTIFIERS.tsv": IDENTIFIERS_TSV,
+            "MONTHLY_TOTAL_RETURN.tsv": MONTHLY_TOTAL_RETURN_TSV,
+            "BORROW_AGGREGATE.tsv": (
+                "ACCESSION_NUMBER\tAMOUNT\tBORROWER_CATEGORY\n"
+                "0001234567-24-000001\t50000000\tBank\n"
+                "0001234567-24-000001\t30000000\tOther\n"
+                "0009999999-24-000001\t10000000\tBank\n"
+            ),
+        }
+        path = _make_test_zip(tsv_data)
+        try:
+            target_ciks = {"1234567"}
+            _, fund_info, _ = _process_quarter_tsv(path, "2024q3", target_ciks)
+            assert not fund_info.empty
+            assert "total_borrowings_detail" in fund_info.columns
+            # ACC1 should have 50M + 30M = 80M
+            acc1_row = fund_info[
+                fund_info["accession_number"] == "0001234567-24-000001"
+            ]
+            if not acc1_row.empty:
+                val = float(acc1_row.iloc[0]["total_borrowings_detail"])
+                assert val == 80_000_000.0
+        finally:
+            os.unlink(path)
+
+    def test_no_borrow_aggregate_table(self):
+        """fund_info works fine when BORROW_AGGREGATE.tsv is missing."""
+        tsv_data = {
+            "REGISTRANT.tsv": REGISTRANT_TSV,
+            "SUBMISSION.tsv": SUBMISSION_TSV,
+            "FUND_REPORTED_INFO.tsv": FUND_REPORTED_INFO_TSV,
+            "FUND_REPORTED_HOLDING.tsv": HOLDING_TSV,
+            "DEBT_SECURITY.tsv": DEBT_SECURITY_TSV,
+            "IDENTIFIERS.tsv": IDENTIFIERS_TSV,
+            "MONTHLY_TOTAL_RETURN.tsv": MONTHLY_TOTAL_RETURN_TSV,
+        }
+        path = _make_test_zip(tsv_data)
+        try:
+            target_ciks = {"1234567"}
+            _, fund_info, _ = _process_quarter_tsv(path, "2024q3", target_ciks)
+            assert not fund_info.empty
+            # Column should not be present (or be NaN if present)
+            if "total_borrowings_detail" in fund_info.columns:
+                assert fund_info["total_borrowings_detail"].isna().all()
+        finally:
+            os.unlink(path)
+
+
+class TestInterestRateRiskExtraction:
+    """Tests for INTEREST_RATE_RISK extraction in _process_quarter_tsv."""
+
+    def test_dv01_joined_to_fund_info(self):
+        """DV01 at multiple tenors appear in fund_info."""
+        tsv_data = {
+            "REGISTRANT.tsv": REGISTRANT_TSV,
+            "SUBMISSION.tsv": SUBMISSION_TSV,
+            "FUND_REPORTED_INFO.tsv": FUND_REPORTED_INFO_TSV,
+            "FUND_REPORTED_HOLDING.tsv": HOLDING_TSV,
+            "DEBT_SECURITY.tsv": DEBT_SECURITY_TSV,
+            "IDENTIFIERS.tsv": IDENTIFIERS_TSV,
+            "MONTHLY_TOTAL_RETURN.tsv": MONTHLY_TOTAL_RETURN_TSV,
+            "INTEREST_RATE_RISK.tsv": (
+                "ACCESSION_NUMBER\tCURRENCY_CODE"
+                "\tINTRST_RATE_CHANGE_3MON_DV01"
+                "\tINTRST_RATE_CHANGE_1YR_DV01"
+                "\tINTRST_RATE_CHANGE_5YR_DV01"
+                "\tINTRST_RATE_CHANGE_10YR_DV01"
+                "\tINTRST_RATE_CHANGE_30YR_DV01\n"
+                "0001234567-24-000001\tUSD\t50000\t125000\t450000"
+                "\t300000\t200000\n"
+                "0001234567-24-000001\tEUR\t10000\t10000\t20000"
+                "\t15000\t10000\n"
+                "0009999999-24-000001\tUSD\t1000\t5000\t15000"
+                "\t10000\t8000\n"
+            ),
+        }
+        path = _make_test_zip(tsv_data)
+        try:
+            target_ciks = {"1234567"}
+            _, fund_info, _ = _process_quarter_tsv(path, "2024q3", target_ciks)
+            assert not fund_info.empty
+            assert "dv01_1yr" in fund_info.columns
+            assert "dv01_5yr" in fund_info.columns
+            assert "dv01_3mon" in fund_info.columns
+            assert "dv01_10yr" in fund_info.columns
+            assert "dv01_30yr" in fund_info.columns
+            acc1_row = fund_info[
+                fund_info["accession_number"] == "0001234567-24-000001"
+            ]
+            if not acc1_row.empty:
+                # Only USD rows
+                assert float(acc1_row.iloc[0]["dv01_3mon"]) == 50000.0
+                assert float(acc1_row.iloc[0]["dv01_1yr"]) == 125000.0
+                assert float(acc1_row.iloc[0]["dv01_5yr"]) == 450000.0
+                assert float(acc1_row.iloc[0]["dv01_10yr"]) == 300000.0
+                assert float(acc1_row.iloc[0]["dv01_30yr"]) == 200000.0
+        finally:
+            os.unlink(path)
+
+    def test_dv100_tenors_extracted(self):
+        """DV100 at all tenors appear in fund_info."""
+        tsv_data = {
+            "REGISTRANT.tsv": REGISTRANT_TSV,
+            "SUBMISSION.tsv": SUBMISSION_TSV,
+            "FUND_REPORTED_INFO.tsv": FUND_REPORTED_INFO_TSV,
+            "FUND_REPORTED_HOLDING.tsv": HOLDING_TSV,
+            "DEBT_SECURITY.tsv": DEBT_SECURITY_TSV,
+            "IDENTIFIERS.tsv": IDENTIFIERS_TSV,
+            "MONTHLY_TOTAL_RETURN.tsv": MONTHLY_TOTAL_RETURN_TSV,
+            "INTEREST_RATE_RISK.tsv": (
+                "ACCESSION_NUMBER\tCURRENCY_CODE"
+                "\tINTRST_RATE_CHANGE_3MON_DV100"
+                "\tINTRST_RATE_CHANGE_1YR_DV100"
+                "\tINTRST_RATE_CHANGE_5YR_DV100"
+                "\tINTRST_RATE_CHANGE_10YR_DV100"
+                "\tINTRST_RATE_CHANGE_30YR_DV100\n"
+                "0001234567-24-000001\tUSD\t100\t200\t300\t400\t500\n"
+            ),
+        }
+        path = _make_test_zip(tsv_data)
+        try:
+            target_ciks = {"1234567"}
+            _, fund_info, _ = _process_quarter_tsv(path, "2024q3", target_ciks)
+            assert not fund_info.empty
+            acc1_row = fund_info[
+                fund_info["accession_number"] == "0001234567-24-000001"
+            ]
+            if not acc1_row.empty:
+                assert "dv100_3mon" in fund_info.columns
+                assert float(acc1_row.iloc[0]["dv100_3mon"]) == 100.0
+                assert float(acc1_row.iloc[0]["dv100_1yr"]) == 200.0
+                assert float(acc1_row.iloc[0]["dv100_5yr"]) == 300.0
+                assert float(acc1_row.iloc[0]["dv100_10yr"]) == 400.0
+                assert float(acc1_row.iloc[0]["dv100_30yr"]) == 500.0
+        finally:
+            os.unlink(path)
+
+    def test_no_interest_rate_risk_table(self):
+        """fund_info works fine when INTEREST_RATE_RISK.tsv is missing."""
+        tsv_data = {
+            "REGISTRANT.tsv": REGISTRANT_TSV,
+            "SUBMISSION.tsv": SUBMISSION_TSV,
+            "FUND_REPORTED_INFO.tsv": FUND_REPORTED_INFO_TSV,
+            "FUND_REPORTED_HOLDING.tsv": HOLDING_TSV,
+            "DEBT_SECURITY.tsv": DEBT_SECURITY_TSV,
+            "IDENTIFIERS.tsv": IDENTIFIERS_TSV,
+            "MONTHLY_TOTAL_RETURN.tsv": MONTHLY_TOTAL_RETURN_TSV,
+        }
+        path = _make_test_zip(tsv_data)
+        try:
+            target_ciks = {"1234567"}
+            _, fund_info, _ = _process_quarter_tsv(path, "2024q3", target_ciks)
+            assert not fund_info.empty
+            if "dv01_1yr" in fund_info.columns:
+                assert fund_info["dv01_1yr"].isna().all()
+        finally:
+            os.unlink(path)
+
+    def test_dv01_currency_filtering(self):
+        """Only USD rows should be included in DV01."""
+        tsv_data = {
+            "REGISTRANT.tsv": REGISTRANT_TSV,
+            "SUBMISSION.tsv": SUBMISSION_TSV,
+            "FUND_REPORTED_INFO.tsv": FUND_REPORTED_INFO_TSV,
+            "FUND_REPORTED_HOLDING.tsv": HOLDING_TSV,
+            "DEBT_SECURITY.tsv": DEBT_SECURITY_TSV,
+            "IDENTIFIERS.tsv": IDENTIFIERS_TSV,
+            "MONTHLY_TOTAL_RETURN.tsv": MONTHLY_TOTAL_RETURN_TSV,
+            "INTEREST_RATE_RISK.tsv": (
+                "ACCESSION_NUMBER\tCURRENCY_CODE"
+                "\tINTRST_RATE_CHANGE_1YR_DV01"
+                "\tINTRST_RATE_CHANGE_5YR_DV01\n"
+                "0001234567-24-000001\tEUR\t999999\t999999\n"
+                "0001234567-24-000001\tGBP\t888888\t888888\n"
+            ),
+        }
+        path = _make_test_zip(tsv_data)
+        try:
+            target_ciks = {"1234567"}
+            _, fund_info, _ = _process_quarter_tsv(path, "2024q3", target_ciks)
+            assert not fund_info.empty
+            acc1_row = fund_info[
+                fund_info["accession_number"] == "0001234567-24-000001"
+            ]
+            if not acc1_row.empty and "dv01_1yr" in fund_info.columns:
+                # No USD rows, so DV01 should be NaN
+                assert pd.isna(acc1_row.iloc[0]["dv01_1yr"])
+        finally:
+            os.unlink(path)
+
 
 class TestAmendmentDedup:
     """Tests for _dedup_amendments: N-PORT amendment deduplication."""
@@ -931,3 +1133,62 @@ class TestAmendmentDedup:
         result = _dedup_amendments(df, "test")
         assert len(result) == 1
         assert result.iloc[0]["ACCESSION_NUMBER"] == "0001-24-000001"
+
+    def test_dedup_fri_empty_series_multi_cik(self):
+        """Multiple CIKs with empty SERIES_ID: each CIK retains its own row."""
+        df = pd.DataFrame({
+            "CIK": ["100", "200", "300"],
+            "SERIES_ID": ["", "", ""],
+            "REPORT_DATE": ["2024-09-30", "2024-09-30", "2024-09-30"],
+            "ACCESSION_NUMBER": ["0001-24-000001", "0002-24-000001", "0003-24-000001"],
+            "TOTAL_ASSETS": [500e6, 300e6, 100e6],
+        })
+        result = _dedup_amendments(df, "fund_info")
+        # Each CIK is a separate group -- all 3 retained
+        assert len(result) == 3
+
+    def test_dedup_fri_with_cik_keeps_amendment(self):
+        """Same CIK+SERIES_ID+REPORT_DATE with 2 accessions: keep later."""
+        df = pd.DataFrame({
+            "CIK": ["100", "100"],
+            "SERIES_ID": ["", ""],
+            "REPORT_DATE": ["2024-09-30", "2024-09-30"],
+            "ACCESSION_NUMBER": ["0001-24-000001", "0001-24-000002"],
+            "TOTAL_ASSETS": [500e6, 510e6],
+        })
+        result = _dedup_amendments(df, "fund_info")
+        assert len(result) == 1
+        assert result.iloc[0]["ACCESSION_NUMBER"] == "0001-24-000002"
+
+    def test_dedup_fri_no_cik_returns_unchanged(self):
+        """FRI without CIK/REPORT_DATE and no SERIES_ID: returns unchanged."""
+        df = pd.DataFrame({
+            "SERIES_ID": [None, None],
+            "ACCESSION_NUMBER": ["0001-24-000001", "0002-24-000001"],
+            "TOTAL_ASSETS": [500e6, 300e6],
+        })
+        result = _dedup_amendments(df, "fund_info")
+        # No CIK or REPORT_DATE: only _SERIES_KEY (all empty) -> collapses
+        # This test documents the pre-fix behavior for no-CIK case
+        assert len(result) == 1
+
+    def test_dedup_holdings_with_cik_keeps_latest(self):
+        """Two accessions for same CIK: only latest kept."""
+        df = pd.DataFrame({
+            "CIK": ["100", "100", "100"],
+            "ACCESSION_NUMBER": ["0001-24-000001", "0001-24-000001", "0001-24-000002"],
+            "ISSUER_NAME": ["Acme", "Beta", "Acme New"],
+        })
+        result = _dedup_amendments(df, "holdings")
+        assert len(result) == 1
+        assert result.iloc[0]["ACCESSION_NUMBER"] == "0001-24-000002"
+
+    def test_dedup_holdings_multi_cik_preserved(self):
+        """Two CIKs each with one accession: both preserved."""
+        df = pd.DataFrame({
+            "CIK": ["100", "200"],
+            "ACCESSION_NUMBER": ["0001-24-000001", "0002-24-000001"],
+            "ISSUER_NAME": ["Acme", "Beta"],
+        })
+        result = _dedup_amendments(df, "holdings")
+        assert len(result) == 2

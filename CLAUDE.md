@@ -40,17 +40,23 @@ Cross-validated against third-party lists (Interval Fund Tracker, Tender Offer F
 
 ### Phase 3 Complete: Unified Holdings & Validation
 
-`data/output/private_markets_holdings.csv` (326 MB) unifies BDC + N-PORT into **835,067 rows** with asset/issuer/index classification and cross-source dedup. Built via `python -m pipeline.main --unified` using DuckDB SQL CTEs (no pandas .apply).
+`data/output/private_markets_holdings.csv` unifies BDC + N-PORT into **631,020 rows** with 2-axis classification (`exposure_type`, `asset_class`) + `index_classification` and cross-source dedup. Built via `python -m pipeline.main --unified` using DuckDB SQL CTEs (no pandas .apply).
 
-| Index | Rows | % |
-|---|---|---|
-| DIRECT_LENDING | 753,334 | 90.2% |
-| DIRECT_EQUITY | 57,746 | 6.9% |
-| UNCLASSIFIED | 17,840 | 2.1% |
-| PRIVATE_EQUITY_FUND | 4,803 | 0.6% |
-| PRIVATE_CREDIT_FUND | 1,344 | 0.2% |
+| Index | Rows | % | FV ($B) |
+|---|---|---|---|
+| DIRECT_LENDING | 502,999 | 79.7% | 4,463 |
+| COMMON_EQUITY | 58,485 | 9.3% | 506 |
+| PREFERRED_EQUITY | 20,509 | 3.3% | 202 |
+| UNCLASSIFIED | 18,261 | 2.9% | 130 |
+| HEDGE_FUND | 11,069 | 1.8% | 265 |
+| PRIVATE_EQUITY_FUND | 10,552 | 1.7% | 151 |
+| STRUCTURED_CREDIT | 3,040 | 0.5% | 62 |
+| PRIVATE_CREDIT_FUND | 2,564 | 0.4% | 111 |
+| REAL_ESTATE_FUND | 2,487 | 0.4% | 163 |
+| CASH | 968 | 0.2% | 5 |
+| DIRECT_REAL_ESTATE | 86 | 0.0% | 10 |
 
-Sources: N-PORT 460,802 (55.2%) + BDC 374,265 (44.8%). 22,327 cross-source dupes removed. 237 CIKs with holdings / 583 universe entities. Quarters: 2019q4-2025q4.
+Quarters: 2019q4-2026q1.
 
 **Validation status:** V1-V5 all implemented. See "Unified Holdings -- Validation" section below.
 
@@ -88,19 +94,48 @@ python -m pipeline.main --unified        # Build unified private markets holding
 | `pipeline/fund_universe.py` | Interval/tender fund discovery (6 methods) |
 | `pipeline/third_party.py` | Cross-validation lists |
 | `pipeline/merge.py` | Universe merge, dedup, validation |
-| `pipeline/bdc_filings.py` | BDC 10-K/10-Q XBRL download and parse |
+| `pipeline/bdc_filings.py` | BDC 10-K/10-Q XBRL download and parse; HTML filing download |
+| `pipeline/html_extract.py` | v3.0 HTML template extraction engine |
+| `pipeline/validate_html_template.py` | HTML template validation: self-referential subtotal check, companyfacts aggregate check, carry rate, position count stability, FV fill, extraction coverage. Structured fail_reasons/warn_reasons. |
 | `pipeline/nport_holdings.py` | N-PORT quarterly TSV extraction |
 | `pipeline/unified_holdings.py` | Unified BDC + N-PORT holdings with classification, named co-invest reclassification, and cross-source dedup |
-| `pipeline/validate_holdings.py` | Holdings validation: spot-check, classification summary, aggregate audit, cross-source overlap, coverage |
+| `pipeline/validate_holdings.py` | Holdings validation: spot-check, classification summary, aggregate audit, cross-source overlap, coverage, 2-axis classification cross-reference + LLM audit |
+| `pipeline/position_matching.py` | 4-tier position matching cascade (within-filing, CUSIP, exact name, normalized/fuzzy) |
+| `pipeline/index_returns.py` | Index return computation: per-unit price return, income return (3-tier rate imputation + PIK + fee uplift) |
+| `pipeline/bdc_fund_income.py` | Fund-level income extraction from cached XBRL (no network) |
+| `pipeline/bdc_sector_breakdown.py` | Per-industry aggregate data (FV, cost, % of net assets) from XBRL `EquitySecuritiesByIndustryAxis`. See [`docs/bdc_sector_breakdown.md`](./docs/bdc_sector_breakdown.md) |
+| `pipeline/fee_uplift.py` | Per-CIK fee uplift: residual between fund income yield and coupon yield |
+| `pipeline/fund_financials.py` | Fund financial data from companyfacts/N-PORT/N-CEN with YTD conversion, seed filtering, scale harmonization, schema enforcement |
+| `pipeline/entity_resolution.py` | Entity resolution across data sources |
+| `pipeline/identifier_extraction.py` | BDC investment identifier parsing (company name, type, industry extraction) |
+| `pipeline/llm_review.py` | LLM-assisted review of unclassified/ambiguous holdings |
+| `pipeline/export_frontend.py` | Export pipeline data to frontend JSON format |
+| `pipeline/utils.py` | Shared utilities (UnionFind for position ID chaining) |
+| `pipeline/db.py` | Database utilities |
 | `pipeline/main.py` | CLI orchestrator |
 
 ### Tests
 
-`tests/test_bdc_filings.py` — 88 tests covering XBRL parsing, concept mapping, filing index building, download logic, and CLI integration.
-`tests/test_nport_holdings.py` — 60 tests covering TSV reading, date normalisation, quarter processing, XML parsing, and CLI integration.
-`tests/test_unified_holdings.py` — 155 tests covering identifier parsing, aggregate filtering, asset/issuer/index classification, coupon type inference, named co-invest/LP reclassification, BDC/N-PORT preparation, and full integration.
-`tests/test_validate_holdings.py` — 32 tests covering spot-check sampling, per-CIK summary, aggregate leak audit, cross-source overlap with duplicate detection, coverage with total assets ratio, and orchestrator integration.
-Run with `pytest tests/`.
+**1,309 tests** across 16 test files. Run with `pytest tests/`.
+
+| Test file | Tests | Coverage |
+|---|---|---|
+| `test_unified_holdings.py` | 509 | Identifier parsing, aggregate filtering, classification (2-axis + nport_asset_cat refinement), dedup, shares normalization, cost proxy |
+| `test_entity_resolution.py` | 119 | Entity resolution across sources |
+| `test_bdc_filings.py` | 90 | XBRL parsing, concept mapping, filing index, download, CLI |
+| `test_html_extract.py` | 81 | v3.0 extraction engine, table parsing, column mapping, dollar/rate parsing |
+| `test_nport_holdings.py` | 64 | TSV reading, date normalization, quarter processing, XML parsing |
+| `test_validate_html_template.py` | 49 | Template validation gates, fail_reasons, summary persistence |
+| `test_position_matching.py` | 46 | 4-tier cascade, 1:1 enforcement, position ID chaining |
+| `test_index_returns.py` | 45 | Per-unit price return, income imputation, PIK, fee uplift |
+| `test_fund_financials.py` | 97 | Fund financial data extraction, YTD conversion, seed filter, scale harmonization, schema enforcement |
+| `test_bdc_sector_breakdown.py` | 35 | Context parsing, member name normalization, fact extraction, integration |
+| `test_validate_holdings.py` | 32 | Spot-check, aggregate audit, cross-source overlap, coverage |
+| `test_llm_review.py` | 32 | LLM review candidate selection and processing |
+| `test_bdc_fund_income.py` | 26 | Fund income extraction from XBRL |
+| `test_identifier_extraction.py` | 24 | BDC identifier parsing |
+| `test_db.py` | 10 | Database utilities |
+| `test_fee_uplift.py` | 9 | Fee uplift computation and guard rails |
 
 ## Data Layout
 
@@ -115,14 +150,34 @@ data/
     bdc_holdings.csv                   # 1,040,369 investee-level positions (365 MB)
     nport_holdings.csv                 # 835,234 N-PORT holdings
     private_markets_holdings.csv       # 835,067 unified holdings (326 MB)
-    bdc_parse_progress.csv             # Resumability checkpoint
+    position_matches.csv               # Position matching pairs (541K pairs)
+    position_returns.csv               # Per-position total returns
+    index_returns.csv                  # Quarterly index returns (4 indices, 25 quarters)
+    bdc_fund_income.csv                # Fund-level income from XBRL
+    fee_uplift.csv                     # Per-CIK fee uplift (128 CIKs)
+    fund_financials.csv                # Fund financial data from companyfacts
+    bdc_sector_breakdown.csv           # Per-CIK per-industry aggregate FV/cost/% from XBRL
+    xbrl_data_availability.md          # XBRL concept coverage matrix across all sources
+    companyfacts_concept_catalog.md    # Full catalog of 1,262 XBRL concepts from companyfacts
+    html_template_validation.csv       # Per-filing HTML extraction results
+    html_template_validation_summary.csv  # Per-CIK validation summary (PASS/FAIL + reasons)
+    template_claims.json               # CIK claim status for template work (done/claimed)
+    html_template_extract_progress.csv # HTML extraction progress checkpoint
+    entity_lookup.csv                  # Entity resolution lookup
+    identifier_extraction_lookup.csv   # BDC identifier parsing results
+    bdc_parse_progress.csv             # XBRL parse resumability checkpoint
     validation_report.csv              # Third-party cross-validation
     pipeline.log                       # Last run log
   raw/
     filings/bdc_xbrl/{cik}/*.xml       # Cached XBRL instance documents (~2,775 files)
+    filings/bdc_html/{cik}/*.html      # Cached HTML filings for template extraction
+    filings/bdc_html/{cik}/*.grids.json # Parsed table grids (cell text arrays)
     sec_datasets/                      # SEC bulk data ZIPs (BDC, N-CEN, N-PORT)
     n2_headers_cache/                  # Downloaded N-2 cover pages
     third_party/                       # Interval Fund Tracker, Sure Dividend CSVs
+    filing_templates/<CIK>.json        # v3.0 HTML extraction templates (~201 CIKs)
+    filing_templates/<CIK>.auto_detect.txt  # Context output for template validation
+    filing_templates/v2_archived/      # Archived v2.0 templates
 ```
 
 ## BDC Holdings Schema (`bdc_holdings.csv`)
@@ -157,21 +212,23 @@ data/
 
 `data/output/private_markets_holdings.csv` (835,067 rows). Run via `python -m pipeline.main --unified --validate`.
 
-**Status:** V1-V5 all implemented.
-- **V1 (UNCLASSIFIED reduction):** Implemented. 1.9% UNCLASSIFIED (down from 16.3%). BDC financial field fallback, N-PORT issuer defaulting, named co-invest reclassification, expanded fund keyword lists.
+**Status:** V1-V6 all implemented.
+- **V1 (UNCLASSIFIED reduction):** Implemented. 2.9% UNCLASSIFIED (down from 16.3%). BDC financial field fallback, N-PORT issuer defaulting, named co-invest reclassification, expanded fund keyword lists.
 - **V2 (Spot-check accuracy):** Manual validation against top BDCs and interval/tender funds HTML/PDF filings.
 - **V3 (Aggregate filtering):** Manual pattern discovery and filter expansion.
 - **V4 (Cross-source dedup):** Implemented. Jaro-Winkler name matching + FV proximity. BDC source preferred. Output: `holdings_cross_source.csv`.
 - **V5 (Coverage):** Implemented. Total assets ratio validation (0.8-1.2x expected). Output: `holdings_coverage.csv`, `holdings_total_assets.csv`.
+- **V6 (2-axis classification):** Implemented. Two new columns: `exposure_type` (DIRECT/FUND/LIQUID) and `asset_class` (PRIVATE_CREDIT/PRIVATE_EQUITY/REAL_ESTATE/STRUCTURED_CREDIT/HEDGE_FUND/CASH/OTHER). Expanded `index_classification` with 5 new values (REAL_ESTATE_FUND, DIRECT_REAL_ESTATE, STRUCTURED_CREDIT, HEDGE_FUND, CASH). Uses `nport_asset_cat` (EC/EP/RE/DBT/LON) to refine HEDGE_FUND catch-all. Cross-reference validation (10 rules, runs with `--validate`) + one-time LLM audit (GPT-4o-mini). Output: `classification_validation.csv`, `classification_llm_audit.csv`. Known residual: 80 DE + 55 STIV positions in HEDGE_FUND ($5.8B).
 
 All validation functions use DuckDB SQL (no pandas .iterrows/.apply). See MEMORY.md for detailed implementation notes.
 
 ## Known Limitations
 
-- **BDC XBRL coverage starts ~2022-2023.** The SEC phased in investment-level XBRL tagging for BDCs. Pre-2022 filings are plain HTML with no structured data. Some 2022-2023 filings have only aggregate XBRL (category-level totals, not individual positions).
+- **BDC XBRL coverage starts ~2022-2023.** The SEC phased in investment-level XBRL tagging for BDCs. Pre-2022 filings are plain HTML with no structured data. Some 2022-2023 filings have only aggregate XBRL (category-level totals, not individual positions). HTML template extraction covers pre-XBRL filings back to 2013.
+- **HTML template coverage is per-CIK.** Each BDC requires a v3.0 template mapping its specific table layout. ~3,662 pre-XBRL filings across ~190 CIKs need templates. Templates are created via `--auto-detect` + manual validation.
 - **Industry/type/affiliation are mostly empty.** Most BDCs embed this metadata in the `investment_identifier` string (e.g., "Senior Secured Loans | First Lien | Acme Corp | Technology") rather than using separate XBRL dimensions. Parsing these out requires string splitting, which is filer-specific.
-- **N-PORT holdings not yet extracted.** The SEC's quarterly N-PORT data set covers only one quarter per ZIP. Full historical coverage requires downloading multiple quarters.
 - **N-PORT consumer/marketplace lending positions.** Three N-PORT CIKs (0001678130 RiverNorth/DoubleLine, 0001644771 RiverNorth series, 0002041175 NB Asset-Based Credit) report individual consumer loans with opaque numeric IDs (e.g., "9980668.SQ.RVR", "99904958.LC.RVR"). These represent ~380K rows (75% of N-PORT, ~45% of total unified) but only ~$2B FV (<1% of total). They are classified as DIRECT_LENDING but are consumer/marketplace loans, NOT direct lending to operating companies. Entity resolution already excludes them from the variant table via `_OPAQUE_NUMERIC_ID_RE`. **Any analytics or index computation should exclude these positions.** They inflate row counts and constituent counts without contributing meaningful FV. Position matching cannot match them across quarters (numeric IDs don't carry).
+- **20 BDCs with holdings but missing from unified.** These CIKs have `bdc_holdings.csv` rows but do not appear in `private_markets_holdings.csv` (2022Q4+). Likely cause: all their holdings predate the unified cutoff or have only aggregate XBRL (no position-level data in the unified period). See Investigation #5 in `data/output/data_investigation_results.md` for the full CIK list and row counts.
 
 ## Resumability
 
@@ -180,64 +237,44 @@ All three phases of holdings extraction are resumable:
 - **XBRL downloads:** Cached per-file in `data/raw/filings/bdc_xbrl/`, skipped if file exists and > 1KB
 - **Parsing:** Progress tracked in `bdc_parse_progress.csv`, only unparsed filings are processed
 
-## Key Technical Notes
+## Contracts
 
-- **Windows cp1252:** All log messages must use ASCII only — no Unicode box-drawing, arrows, em-dashes, or ellipsis characters.
-- **CONCEPT_MAP ordering:** Longer XBRL concept substrings must appear before shorter ones (e.g., `investmentinterestratepaidinkind` before `investmentinterestrate`) because matching is first-match-wins.
-- **lxml Comment nodes:** `root.iter()` yields Comment/PI nodes whose `.tag` is a callable, not a string. Always guard with `isinstance(tag, str)`.
-- **SEC rate limit:** 10 req/sec max. Client uses 0.11s delay between requests.
-- **DuckDB for large-dataset manipulation:** All data transformations on datasets >10K rows must use DuckDB SQL (CTEs, native string/numeric functions) rather than pandas .apply(), .iterrows(), or row-by-row lambdas. Python keyword constants remain the single source of truth; SQL is generated from them. Pandas is acceptable for final logging/summary only.
-- **Tests overwrite output CSVs:** Several integration tests (e.g., `test_bdc_fund_income.py::test_single_filing_integration`, `test_index_returns.py`, `test_fee_uplift.py`) call pipeline functions that write to the real output files (`bdc_fund_income.csv`, `fee_uplift.csv`, `position_matches.csv`, `position_returns.csv`, `index_returns.csv`). Running `pytest` will overwrite production data with test fixtures. After running the test suite, run `python scripts/rebuild_outputs.py` to regenerate all output files from cached data.
-- **Do NOT download data unless explicitly asked:** When rebuilding outputs, use `scripts/rebuild_outputs.py` or call pipeline functions directly (e.g., `build_unified_holdings()`, `compute_returns()`). Do NOT run `python -m pipeline.main` with download flags or call functions that trigger SEC EDGAR downloads unless the user explicitly requests it. All raw data is already cached on disk.
+These are harm-category restrictions. Violating them causes data loss, silent corruption, or external service abuse.
 
-## HTML Template Extraction
+- **No unwanted network calls.** Do not trigger SEC EDGAR downloads unless the user explicitly asks. All raw data is cached on disk. Use `scripts/rebuild_outputs.py` or call pipeline functions directly to rebuild outputs.
+- **No production data corruption.** Running `pytest` overwrites output CSVs with test fixtures. After running tests, run `python scripts/rebuild_outputs.py` to regenerate. Never treat post-test output files as production data.
+- **No SEC rate-limit violations.** The existing `edgar_client.py` enforces 10 req/sec. Do not bypass it or add parallel request paths.
+- **No encoding crashes.** All log messages must use ASCII only — Windows cp1252 cannot render Unicode box-drawing, em-dashes, or ellipsis characters.
+- **No slow transforms on large datasets.** Avoid pandas `.apply()`, `.iterrows()`, or row-level Python loops on datasets with >10K rows — the pipeline's 800K+ row datasets will hang for minutes. Use DuckDB SQL or vectorized operations. Pandas is fine for small summaries and logging.
 
-Per-CIK JSON templates in `data/raw/filing_templates/<CIK>.json` map HTML schedule-of-investments tables to standardized fields. Created via `scripts/learn_template.py` following `scripts/learn_template_prompt.md`.
+## HTML Template Extraction (v3.0)
 
-### PIK Rate Parsing (DO NOT REVERT)
+Per-CIK JSON templates in `data/raw/filing_templates/<CIK>.json` map HTML schedule-of-investments tables to standardized fields.
 
-`pipeline/html_template.py` handles three PIK formats in coupon cells:
+- **Engine:** `pipeline/html_extract.py` (~580 lines). Simple table reader: template specifies tables and columns.
+- **Validation:** `pipeline/validate_html_template.py`. Multi-gate checks (self-referential FV, companyfacts, carry rate, position stability, FV fill, coverage).
+- **Template format, creation workflow, and validation details:** See `prompts/html_extraction/learn_template_prompt.md`.
+- **Fixing failing templates:** See `prompts/html_extraction/rework_template_prompt.md`.
+- **Period tagging:** See `prompts/html_extraction/tag_periods_prompt.md`.
+- **CLI:** `scripts/learn_template.py` (`--auto-detect`, `--validate`, `--next`, `--inspect`, `--accept`, `--revalidate-all`, `--add-periods`, `--list`).
 
-| Format | Example | interest_rate | pik_rate |
-|---|---|---|---|
-| Number after PIK | `PIK 5.00%` | 5.00 | 5.00 |
-| Pure PIK (number before) | `14.00 % PIK` | 14.00 | 14.00 |
-| Partial PIK (parenthetical) | `9.42 % ( 3.00 % PIK)` | 9.42 | 3.00 |
+## XBRL Data Source Discovery (Complete)
 
-Four regexes implement this: `_PIK_PARTIAL_RE` (checked first), `_PIK_AFTER_RE`, `_PIK_BEFORE_RE` for extraction, and `_PIK_STRIP_RE` to clean the cell before passing to `_parse_rate`. The strip step is critical -- without it, `_parse_rate("14.00 % PIK")` fails because `float()` chokes on the trailing " PIK" text. All three extraction patterns plus the strip must remain together.
+Full coverage matrix produced in `data/output/xbrl_data_availability.md` and `data/output/companyfacts_concept_catalog.md` (2026-05-03). Key findings:
 
-`pipeline/html_holdings.py` `_to_bdc_holdings_schema()` passes `pik_rate` through via `row.get("pik_rate")`. Do not hardcode this to `None`.
+- **BDC companyfacts**: Rich -- 80+ XBRL concepts covering balance sheet, income statement, distributions, fees, portfolio metrics. 191 CIKs with data. Already extracted by `fund_financials.py`.
+- **Interval/tender fund companyfacts**: Empty -- these funds file N-PORT/N-CEN, not 10-K/10-Q, so companyfacts API returns no data.
+- **N-CEN**: 103+ fields not yet extracted (expense ratios, flow data, leverage, board/adviser details). Covers interval/tender funds that companyfacts misses.
+- **N-PORT**: Monthly NAV, total assets, borrowings already extracted. Additional fields available (credit ratings, liquidity classification, delta, DV01).
+- **BDC bulk datasets**: Monthly TSVs with balance sheet, income statement, per-share data. Partially overlaps companyfacts but at different granularity.
 
-### Engine Amendments & Per-CIK Template Reference
+## Oversubscription / Redemption Pressure
 
-All engine amendments (numbered proposals, implemented changes, and deferred items) plus detailed per-CIK template notes (Ares Capital format reference, variant eras, grid positions, extraction quality metrics) are maintained in **[`HTML_ENGINE_AMENDMENTS.md`](./HTML_ENGINE_AMENDMENTS.md)**.
+See **[`docs/oversubscription_data.md`](./docs/oversubscription_data.md)** for full analysis of data availability for fund-level oversubscription rates. Summary: N-PORT gives a binary cap signal for interval funds (already in `fund_financials.csv` as `redemption_pressure`); exact demand-side data requires parsing SC TO-I/A filings (non-traded BDCs, tender offer funds) and N-CSR/N-CSRS narratives (interval funds).
 
-Refer to that file when:
-- Adding a new amendment proposal (append with the next available number; do NOT reuse existing numbers).
-- Implementing an amendment (change its header to `[IMPLEMENTED]` and record files changed + observed impact).
-- Looking up per-CIK template details (column layouts, variant selection, quality metrics, known limitations).
-- Cross-referencing an amendment number from code comments or template `filer_quirks`.
+## Next Steps
 
-Do NOT duplicate amendment text or per-CIK template notes back into this file.
-
-### HTML-vs-XBRL Cross-Validation
-
-Position-level accuracy metrics for HTML template extraction validated against XBRL structured data are maintained in **[`HTML_XBRL_VALIDATION_FINDINGS.md`](./HTML_XBRL_VALIDATION_FINDINGS.md)**.
-
-Refer to that file for:
-- Per-CIK recall, FV accuracy, rate accuracy, and quality tiers (Tier 1-4)
-- Root cause analysis (dollar unit mismatches, wrong table selection, template drift, name matching failures)
-- Prioritized fix list for improving extraction quality
-- Index error bar implications
-- How to run the validator (`python -m scripts.validate_html_xbrl`)
-
-**Key stats (2026-04-18):** 668 filings, 47 CIKs, 60.5% overall recall. 12 Tier 1 CIKs at 93.6% recall covering 44.9% of validated positions.
-
-## Next Steps & Roadmap
-
-Product roadmap, data cleanup priorities, and feature plan maintained in **[`NEXT_STEPS.md`](./NEXT_STEPS.md)**.
-
-Covers: data cleanup (consumer CIK exclusion, 2022+ cutoff, N-PORT reclassification, entity_id fix), fund financials from companyfacts API, fund pages, investee/cap table pages, credit quality analytics, and monetization path.
+See **[`NEXT_STEPS.md`](./NEXT_STEPS.md)** for the longer-term product roadmap (fund pages, investee pages, credit quality analytics, monetization).
 
 ## Data Investigations
 
@@ -258,3 +295,4 @@ npm run build             # Static export to frontend/out/
 | Script | Purpose | Usage |
 |---|---|---|
 | `scripts/rebuild_outputs.py` | Rebuild all output CSVs from cached data (no downloads). Use after running tests. | `python scripts/rebuild_outputs.py` (all), `--unified`, `--income`, `--returns` |
+| `scripts/learn_template.py` | Manage per-CIK HTML extraction templates. Auto-detect, validate, inspect, accept, batch revalidate. | `--auto-detect <CIK>`, `--auto-detect-all`, `--validate <CIK>`, `--validate-only <CIK>`, `--next`, `--inspect <CIK>`, `--accept <CIK> --justification "..."`, `--revalidate-all`, `--add-periods <CIK\|ALL>`, `--list` |

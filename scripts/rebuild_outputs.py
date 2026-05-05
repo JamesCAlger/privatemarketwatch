@@ -85,9 +85,29 @@ def rebuild_returns():
     return pos_df, idx_df
 
 
+def rebuild_financials():
+    """Rebuild fund financials from cached companyfacts + N-PORT fund info."""
+    from pipeline.fund_financials import build_fund_financials
+
+    logger.info("=== Rebuilding fund financials ===")
+    t0 = time.time()
+    df = build_fund_financials()  # No client = cache-only, no downloads
+    logger.info("Fund financials: %d rows in %.1f s", len(df), time.time() - t0)
+
+    from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+
+    logger.info("=== Rebuilding BDC sector breakdown ===")
+    t1 = time.time()
+    sector_df = extract_bdc_sector_breakdown()
+    logger.info("Sector breakdown: %d rows in %.1f s",
+                len(sector_df), time.time() - t1)
+
+    return df
+
+
 def rebuild_html():
     """Re-run HTML template extraction (Phase 2 only, $0)."""
-    from pipeline.html_template import extract_all_html
+    from pipeline.html_extract import extract_all_html
 
     logger.info("=== Rebuilding HTML template extractions ===")
     t0 = time.time()
@@ -119,6 +139,8 @@ def main():
                         help="Rebuild position matches + index returns only")
     parser.add_argument("--html", action="store_true",
                         help="Rebuild HTML template extractions only ($0)")
+    parser.add_argument("--financials", action="store_true",
+                        help="Rebuild fund financials only (cache-only)")
     parser.add_argument("--frontend", action="store_true",
                         help="Rebuild frontend JSON data only")
     args = parser.parse_args()
@@ -126,7 +148,7 @@ def main():
     # If no flags, rebuild everything
     rebuild_all = not (
         args.unified or args.income or args.returns
-        or args.html or args.frontend
+        or args.html or args.frontend or args.financials
     )
 
     t_start = time.time()
@@ -136,6 +158,9 @@ def main():
 
     if rebuild_all or args.income:
         rebuild_income()
+
+    if rebuild_all or args.financials:
+        rebuild_financials()
 
     if rebuild_all or args.returns:
         rebuild_returns()

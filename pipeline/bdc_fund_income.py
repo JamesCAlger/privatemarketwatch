@@ -43,6 +43,7 @@ FUND_INCOME_CONCEPT_MAP = [
     ("investmentincomenet", "net_investment_income"),
     ("managementfeeexpense", "management_fee"),
     ("performancebasedincentivefee", "incentive_fee"),
+    ("incentivefeeexpense", "incentive_fee"),
     ("interestexpenseborrowings", "interest_expense"),
     ("interestexpense", "interest_expense"),
     ("investmentincomeinvestmentexpense", "total_expenses"),

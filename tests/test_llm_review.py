@@ -143,6 +143,28 @@ class TestExtractReviewCandidates:
         assert len(result) == 1
         assert result.iloc[0]["review_type"] == "suspected_aggregate"
 
+    def test_null_identifiers_not_collapsed(self):
+        """Two positions with all-NULL identifiers produce two review records."""
+        df = _make_unified_df([
+            {"source": "bdc", "cik": "100", "issuer_name": None,
+             "instrument_description": None,
+             "bdc_investment_identifier": None,
+             "asset_category": "OTHER", "index_classification": "UNCLASSIFIED",
+             "fair_value": "100000"},
+            {"source": "bdc", "cik": "100", "issuer_name": None,
+             "instrument_description": None,
+             "bdc_investment_identifier": None,
+             "asset_category": "OTHER", "index_classification": "UNCLASSIFIED",
+             "fair_value": "200000"},
+        ])
+        result = extract_review_candidates(df)
+        # Each null-identifier position should be its own review record
+        assert len(result) == 2
+        # Sentinels cleaned from output
+        for _, row in result.iterrows():
+            assert not str(row["issuer_name"]).startswith("__NULL_")
+            assert not str(row["bdc_investment_identifier"]).startswith("__NULL_")
+
 
 # ---------------------------------------------------------------------------
 # build_review_batches

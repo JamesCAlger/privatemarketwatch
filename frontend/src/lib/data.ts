@@ -10,6 +10,9 @@ import type {
   ConcentrationData,
   ConcentrationCurveData,
   Metadata,
+  FundListItem,
+  FundSummary,
+  FundDetail,
 } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
@@ -66,6 +69,39 @@ export function getConcentrationCurve(): ConcentrationCurveData {
 
 export function getMetadata(): Metadata {
   return readJson<Metadata>('metadata.json');
+}
+
+export function getFundList(): FundListItem[] {
+  const filePath = path.join(DATA_DIR, 'fund_list.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<FundListItem[]>('fund_list.json');
+}
+
+export function getFundSummary(): FundSummary {
+  const filePath = path.join(DATA_DIR, 'fund_summary.json');
+  if (!fs.existsSync(filePath)) {
+    return {
+      totalFunds: 0, bdcCount: 0, intervalFundCount: 0, tenderOfferCount: 0,
+      totalAum: null, avgLeverageRatio: null, avgExpenseRatioPct: null,
+      fundsWithReturns: 0, fundsWithDistributions: 0, totalQuarters: 0,
+    };
+  }
+  return readJson<FundSummary>('fund_summary.json');
+}
+
+export function getFundDetail(cik: string): FundDetail | null {
+  const filePath = path.join(DATA_DIR, 'fund_details', `${cik}.json`);
+  if (!fs.existsSync(filePath)) return null;
+  const raw = fs.readFileSync(filePath, 'utf-8');
+  return JSON.parse(raw) as FundDetail;
+}
+
+export function getFundDetailCiks(): string[] {
+  const dir = path.join(DATA_DIR, 'fund_details');
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace('.json', ''));
 }
 
 /** Merge concentration rows across indices, re-ranking top 10 + Other. */

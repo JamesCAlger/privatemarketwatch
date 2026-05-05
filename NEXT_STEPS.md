@@ -17,10 +17,13 @@ Priority data fixes before any frontend work.
 - N-PORT starts 2019q4 and is structured from day one — keep all
 - Net effect: cleaner dataset, accurate date range disclosure
 
-### 1.3 Reclassify N-PORT UNCLASSIFIED
-- $433B FV (26% of N-PORT) sitting in UNCLASSIFIED
-- Audit `OTHER` ($198B), `EC` ($108B), `RE` ($87B) asset_cat codes
-- Many are likely classifiable as DIRECT_EQUITY, PRIVATE_EQUITY_FUND, or a new REAL_ESTATE category
+### 1.3 ~~Reclassify N-PORT UNCLASSIFIED~~ DONE
+- 2-axis classification implemented: `exposure_type` (DIRECT/FUND/LIQUID) + `asset_class` (7 values) + expanded `index_classification` (11 values)
+- `nport_asset_cat` refinement: EC/EP -> PRIVATE_EQUITY, RE -> REAL_ESTATE, DBT/LON -> PRIVATE_CREDIT (before HEDGE_FUND catch-all)
+- HEDGE_FUND reduced from 15,333/$338B to 11,069/$265B (4.4% of FV). Remaining are genuine: nport_asset_cat=OTHER fund vehicles
+- UNCLASSIFIED at 2.9% (18,261 rows, $130B) — mostly opaque fund structures and exotic N-PORT codes
+- Cross-reference validation (10 rules, auto-runs with `--validate`) + one-time LLM audit (GPT-4o-mini, 200 positions) confirm ~85-90% accuracy
+- Known residual: 80 DE (derivative-equity) + 55 STIV (short-term vehicle) positions remain in HEDGE_FUND ($5.8B combined) — not worth adding a DERIVATIVE category for 0.02% of rows
 
 ### 1.4 Fix N-PORT Entity Resolution
 - entity_id coverage: 97.5% for BDC but only 46.4% for N-PORT

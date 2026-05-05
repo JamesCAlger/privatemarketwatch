@@ -191,6 +191,15 @@ def extract_review_candidates(
     for col in group_cols:
         candidates[col] = candidates[col].fillna("").astype(str)
 
+    # Rows where ALL group columns are empty would collapse into one group.
+    # Use unique per-row sentinels for the primary identifier to prevent this.
+    all_empty_mask = True
+    for col in group_cols:
+        all_empty_mask = all_empty_mask & (candidates[col].str.strip() == "")
+    candidates.loc[all_empty_mask, "issuer_name"] = (
+        "__NULL_" + candidates.loc[all_empty_mask].index.astype(str) + "__"
+    )
+
     grouped = candidates.groupby(group_cols, sort=False)
 
     records = []
@@ -198,7 +207,7 @@ def extract_review_candidates(
         sample = g.iloc[0]
         records.append({
             "review_id": idx,
-            "issuer_name": key[0],
+            "issuer_name": "" if str(key[0]).startswith("__NULL_") else key[0],
             "instrument_description": key[1],
             "bdc_investment_identifier": key[2],
             "source": sample.get("source", ""),

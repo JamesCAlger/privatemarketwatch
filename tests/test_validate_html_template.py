@@ -307,9 +307,9 @@ class TestSafeFloat:
 # ---------------------------------------------------------------------------
 
 class TestValidateCik:
-    @patch("pipeline.html_template.load_template")
+    @patch("pipeline.html_extract.load_template")
     @patch("pipeline.validate_html_template._fetch_companyfacts")
-    @patch("pipeline.html_template.extract_filing_with_template")
+    @patch("pipeline.html_extract.extract_filing")
     def test_basic_pass(
         self,
         mock_extract,
@@ -392,7 +392,7 @@ class TestValidateCik:
         assert filing["html_fv_sum"] == 1000000
         assert filing["agg_status"] == "PASS"
 
-    @patch("pipeline.html_template.load_template")
+    @patch("pipeline.html_extract.load_template")
     def test_no_template(self, mock_template):
         """Missing template returns error."""
         mock_template.return_value = None
@@ -400,7 +400,7 @@ class TestValidateCik:
         assert result["error"] == "no_template"
         assert result["filings"] == []
 
-    @patch("pipeline.html_template.load_template")
+    @patch("pipeline.html_extract.load_template")
     def test_no_filings_index(self, mock_template, tmp_path):
         """Missing filings index returns error."""
         import pipeline.validate_html_template as mod
@@ -609,6 +609,44 @@ class TestSelfReferentialCheck:
             {"issuer_name": "Total Investments at Fair Value", "fair_value": 500},
         ]
         assert _find_subtotal_fv(holdings) == 500
+
+    def test_members_capital_excluded(self):
+        """MEMBERS' CAPITAL rows are excluded from position FV sum."""
+        holdings = [
+            {"issuer_name": "Acme Corp", "fair_value": 100, "is_subtotal": False},
+            {"issuer_name": "MEMBERS' CAPITAL", "fair_value": 500,
+             "is_subtotal": True},
+            {"issuer_name": "Total Investments", "fair_value": 100,
+             "is_subtotal": True},
+        ]
+        result = _self_referential_check(holdings)
+        assert result["status"] == "PASS"
+        assert result["position_fv_sum"] == 100
+
+    def test_stockholders_equity_excluded(self):
+        """Stockholders' Equity rows are excluded from position FV sum."""
+        holdings = [
+            {"issuer_name": "Acme Corp", "fair_value": 200, "is_subtotal": False},
+            {"issuer_name": "Stockholders\u2019 Equity", "fair_value": 800,
+             "is_subtotal": True},
+            {"issuer_name": "Total Investments", "fair_value": 200,
+             "is_subtotal": True},
+        ]
+        result = _self_referential_check(holdings)
+        assert result["status"] == "PASS"
+        assert result["position_fv_sum"] == 200
+
+    def test_total_liabilities_and_excluded(self):
+        """'Total liabilities and members capital' rows are excluded."""
+        from pipeline.validate_html_template import _SUBTOTAL_RE
+        assert _SUBTOTAL_RE.search("Total liabilities and members' capital")
+        assert _SUBTOTAL_RE.search("TOTAL LIABILITIES AND STOCKHOLDERS' EQUITY")
+
+    def test_net_asset_value_excluded(self):
+        """Net asset value rows are excluded from position FV sum."""
+        from pipeline.validate_html_template import _SUBTOTAL_RE
+        assert _SUBTOTAL_RE.search("Net Asset Value")
+        assert _SUBTOTAL_RE.search("NET ASSET VALUE PER UNIT")
 
     def test_excludes_subtotals_from_position_sum(self):
         """Subtotal rows are excluded from the position FV sum."""
