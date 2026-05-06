@@ -119,6 +119,22 @@ def _parse_args() -> argparse.Namespace:
              "Requires --unified or existing unified holdings file.",
     )
     parser.add_argument(
+        "--classify-gics",
+        action="store_true",
+        help="Run position-level GICS industry classification on unified holdings. "
+             "Requires OPENAI_API_KEY for LLM phase.",
+    )
+    parser.add_argument(
+        "--gics-web-search",
+        type=int,
+        nargs="?",
+        const=5000,
+        default=None,
+        metavar="N",
+        help="Reclassify top N unclassified companies using OpenAI web search. "
+             "Default N=5000. Requires OPENAI_API_KEY.",
+    )
+    parser.add_argument(
         "--extract-html",
         action="store_true",
         help="Extract pre-XBRL filings using per-CIK templates (no LLM, $0).",
@@ -319,6 +335,43 @@ def main() -> None:
     if args.financials:
         logger.info("")
         t7b_fin = time.time()
+
+        # N-CSR discovery + download + extraction (interval/tender funds)
+        try:
+            from pipeline.ncsr_financials import (
+                build_ncsr_filings_index,
+                download_ncsr_filings,
+                extract_ncsr_financials,
+            )
+            import pandas as pd
+
+            # Get interval/tender CIKs from universe
+            ncsr_universe = None
+            if combined is not None and not combined.empty:
+                ncsr_universe = combined
+            else:
+                from pipeline.config import COMBINED_UNIVERSE_FILE
+                if COMBINED_UNIVERSE_FILE.exists():
+                    ncsr_universe = pd.read_csv(COMBINED_UNIVERSE_FILE, dtype=str)
+
+            if ncsr_universe is not None and not ncsr_universe.empty:
+                interval_tender = ncsr_universe[
+                    ncsr_universe["vehicle_type"].isin(
+                        ["interval_fund", "tender_offer_fund"]
+                    )
+                ]
+                ncsr_ciks = interval_tender["cik"].dropna().unique().tolist()
+                if ncsr_ciks:
+                    ncsr_index = build_ncsr_filings_index(client, ncsr_ciks)
+                    ncsr_index = download_ncsr_filings(client, ncsr_index)
+                    extract_ncsr_financials(ncsr_index)
+                else:
+                    logger.info("No interval/tender CIKs for N-CSR extraction")
+            else:
+                logger.info("No universe available for N-CSR extraction")
+        except Exception as exc:
+            logger.error("N-CSR extraction failed: %s", exc, exc_info=True)
+
         try:
             from pipeline.fund_financials import build_fund_financials
             build_fund_financials(client=client)
@@ -350,6 +403,39 @@ def main() -> None:
                          exc_info=True)
         logger.info("Identifier extraction step completed in %.1f s",
                      time.time() - t7b)
+
+    # ── Step 7d: GICS industry classification (optional) ──
+    if args.classify_gics:
+        logger.info("")
+        t7d = time.time()
+        try:
+            from pipeline.gics_classification import classify_gics
+            unified_df = classify_gics(unified_df=unified_df)
+        except Exception as exc:
+            logger.error("GICS classification failed: %s", exc, exc_info=True)
+        logger.info("GICS classification step completed in %.1f s",
+                     time.time() - t7d)
+
+    # ── Step 7e: GICS web search reclassification (optional) ──
+    if args.gics_web_search is not None:
+        logger.info("")
+        t7e = time.time()
+        try:
+            from pipeline.gics_classification import reclassify_with_web_search
+            ws_results = reclassify_with_web_search(
+                n=args.gics_web_search, unified_df=unified_df
+            )
+            non_other = (ws_results["gics_sub_industry"] != "Other").sum() if not ws_results.empty else 0
+            logger.info("Web search: %d/%d reclassified", non_other, len(ws_results))
+            # Re-apply GICS to holdings from updated cache
+            from pipeline.gics_classification import _apply_gics_to_holdings, _load_cache
+            cache = _load_cache()
+            unified_df = _apply_gics_to_holdings(unified_df, cache)
+            unified_df.to_csv(OUTPUT_DIR / "private_markets_holdings.csv", index=False)
+        except Exception as exc:
+            logger.error("GICS web search failed: %s", exc, exc_info=True)
+        logger.info("GICS web search step completed in %.1f s",
+                     time.time() - t7e)
 
     # ── Step 8: Holdings validation (optional) ──
     reports = None
@@ -563,6 +649,8 @@ def main() -> None:
     if args.extract_html:
         output_files.append(OUTPUT_DIR / "html_extraction_holdings.csv")
     if args.financials:
+        output_files.append(OUTPUT_DIR / "ncsr_filings_index.csv")
+        output_files.append(OUTPUT_DIR / "ncsr_financials.csv")
         output_files.append(OUTPUT_DIR / "fund_financials.csv")
         output_files.append(OUTPUT_DIR / "bdc_sector_breakdown.csv")
     if args.extract:

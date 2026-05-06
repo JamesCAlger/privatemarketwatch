@@ -85,9 +85,23 @@ def rebuild_returns():
     return pos_df, idx_df
 
 
+def rebuild_ncsr():
+    """Rebuild N-CSR financials from cached HTML files."""
+    from pipeline.ncsr_financials import extract_ncsr_financials
+
+    logger.info("=== Rebuilding N-CSR financials ===")
+    t0 = time.time()
+    df = extract_ncsr_financials()
+    logger.info("N-CSR financials: %d rows in %.1f s", len(df), time.time() - t0)
+    return df
+
+
 def rebuild_financials():
     """Rebuild fund financials from cached companyfacts + N-PORT fund info."""
     from pipeline.fund_financials import build_fund_financials
+
+    # Rebuild N-CSR first so it's available for fund_financials
+    rebuild_ncsr()
 
     logger.info("=== Rebuilding fund financials ===")
     t0 = time.time()
@@ -117,6 +131,19 @@ def rebuild_html():
     return df
 
 
+def rebuild_gics():
+    """Run GICS industry classification on unified holdings."""
+    from pipeline.gics_classification import classify_gics
+
+    logger.info("=== Running GICS classification ===")
+    t0 = time.time()
+    df = classify_gics()
+    classified = (df["gics_sub_industry"] != "").sum()
+    logger.info("GICS classification: %d/%d rows classified in %.1f s",
+                classified, len(df), time.time() - t0)
+    return df
+
+
 def rebuild_frontend():
     """Regenerate frontend JSON data from output CSVs."""
     from pipeline.export_frontend import export_all
@@ -141,6 +168,8 @@ def main():
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
                         help="Rebuild fund financials only (cache-only)")
+    parser.add_argument("--gics", action="store_true",
+                        help="Run GICS industry classification only")
     parser.add_argument("--frontend", action="store_true",
                         help="Rebuild frontend JSON data only")
     args = parser.parse_args()
@@ -148,7 +177,7 @@ def main():
     # If no flags, rebuild everything
     rebuild_all = not (
         args.unified or args.income or args.returns
-        or args.html or args.frontend or args.financials
+        or args.html or args.frontend or args.financials or args.gics
     )
 
     t_start = time.time()
@@ -167,6 +196,9 @@ def main():
 
     if args.html:
         rebuild_html()
+
+    if args.gics:
+        rebuild_gics()
 
     if rebuild_all or args.frontend:
         rebuild_frontend()

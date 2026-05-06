@@ -26,6 +26,7 @@ from pipeline.config import (
     FUND_FINANCIALS_FILE,
     FUND_IDENTITY_FILE,
     NCEN_QUARTERS,
+    NCSR_FINANCIALS_FILE,
     NPORT_FUND_INFO_FILE,
     SEC_DATASETS_DIR,
 )
@@ -38,7 +39,7 @@ logger = logging.getLogger(__name__)
 OUTPUT_COLUMNS = [
     "cik", "entity_name", "vehicle_type", "source",
     "report_quarter", "report_date",
-    "total_assets", "net_assets", "total_liabilities",
+    "total_assets", "net_assets", "total_liabilities", "investments_at_fair_value",
     "nav_per_share", "shares_outstanding", "borrowings",
     "total_investment_income", "net_investment_income",
     "management_fee", "incentive_fee", "interest_expense", "total_expenses",
@@ -49,11 +50,13 @@ OUTPUT_COLUMNS = [
     "leverage_ratio", "quarterly_return",
     "management_fee_pct", "expense_ratio_pct",
     "market_price_per_share", "monthly_avg_net_assets",
-    # Distributions (BDC from companyfacts)
+    # Distributions (BDC from companyfacts, interval/tender from N-CSR)
     "distribution_per_share",
     "dividends_declared_per_share",
     "distribution_ordinary_income",
     "distribution_return_of_capital",
+    "distribution_from_nii",
+    "distribution_from_gains",
     # Performance
     "total_return_pct",
     "gain_loss_per_share",
@@ -349,6 +352,12 @@ _BALANCE_SHEET_CONCEPTS = {
         "fallback": [],
         "unit": "USD", "instant": True,
     },
+    "investments_at_fair_value": {
+        "exact": ["InvestmentOwnedAtFairValue"],
+        "fallback": ["InvestmentsAtFairValueAggregate",
+                      "InvestmentsFairValueDisclosure"],
+        "unit": "USD", "instant": True,
+    },
 }
 
 
@@ -585,6 +594,7 @@ def _extract_all_companyfacts(
         return pd.DataFrame(columns=[
             "cik", "report_date", "total_assets", "total_liabilities",
             "net_assets", "nav_per_share", "shares_outstanding", "borrowings",
+            "investments_at_fair_value",
         ] + _EXTENDED_FIELDS)
 
     return pd.DataFrame(all_rows)
@@ -597,6 +607,7 @@ def _extract_all_companyfacts(
 def _prepare_nport(
     nport_fund_info_df: pd.DataFrame,
     ncen_df: pd.DataFrame | None = None,
+    ncsr_df: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Aggregate N-PORT fund info from series-level to CIK-quarter level.
 
@@ -609,6 +620,11 @@ def _prepare_nport(
         When provided, enriches N-PORT rows with management_fee_pct,
         expense_ratio_pct, nav_per_share, market_price_per_share,
         monthly_avg_net_assets via temporal LEFT JOIN.
+    ncsr_df : DataFrame, optional
+        N-CSR Financial Highlights from ``extract_ncsr_financials()``.
+        When provided, enriches N-PORT rows with per-share NII,
+        distribution decomposition, total return, expense ratio,
+        income yield via temporal LEFT JOIN.
     """
     if nport_fund_info_df is None or nport_fund_info_df.empty:
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
@@ -619,6 +635,10 @@ def _prepare_nport(
     has_ncen = ncen_df is not None and not ncen_df.empty
     if has_ncen:
         con.register("ncen", ncen_df)
+
+    has_ncsr = ncsr_df is not None and not ncsr_df.empty
+    if has_ncsr:
+        con.register("ncsr", ncsr_df)
 
     # Borrowing detail + DV01 from N-PORT fund_info (if columns exist)
     _has_borrow = (
@@ -726,10 +746,22 @@ def _prepare_nport(
         GROUP BY cik, quarter
     )"""
 
+    # Fields that are explicitly emitted in the SELECT (not via ext_nulls)
+    _NCSR_EXPLICIT_FIELDS = {
+        "distribution_per_share", "dividends_declared_per_share",
+        "distribution_ordinary_income", "distribution_return_of_capital",
+        "distribution_from_nii", "distribution_from_gains",
+        "total_return_pct", "gain_loss_per_share", "nav_change_per_share",
+        "income_per_share", "income_yield_pct", "gross_investment_income",
+        "portfolio_turnover",
+    }
+
     # NULL columns for BDC-only companyfacts fields in N-PORT rows
+    # (excludes fields that are explicitly emitted in the SELECT)
     _nport_ext_nulls = "\n        ".join(
         f"CAST(NULL AS DOUBLE) AS {f},"
         for f in _EXTENDED_FIELDS
+        if f not in _NCSR_EXPLICIT_FIELDS
     )
 
     # Common computed metrics for N-PORT
@@ -802,6 +834,73 @@ def _prepare_nport(
         _dv_select = ",\n        ".join(f"cq.{c}" for c in _DV_COLS)
         _cs_select = ",\n        ".join(f"cq.{c}" for c in _CS_COLS)
 
+        # Build optional N-CSR CTE
+        _ncsr_cte = ""
+        _ncsr_join = ""
+        _ncsr_nav = "COALESCE(nr.ncen_nav, CAST(NULL AS DOUBLE))"
+        _ncsr_dist_per_share = "CAST(NULL AS DOUBLE) AS distribution_per_share,"
+        _ncsr_dist_from_nii = "CAST(NULL AS DOUBLE) AS distribution_from_nii,"
+        _ncsr_dist_from_gains = "CAST(NULL AS DOUBLE) AS distribution_from_gains,"
+        _ncsr_dist_roc = "CAST(NULL AS DOUBLE) AS distribution_return_of_capital,"
+        _ncsr_total_return = "CAST(NULL AS DOUBLE) AS total_return_pct,"
+        _ncsr_gain_loss = "CAST(NULL AS DOUBLE) AS gain_loss_per_share,"
+        _ncsr_nav_change = "CAST(NULL AS DOUBLE) AS nav_change_per_share,"
+        _ncsr_income_ps = "CAST(NULL AS DOUBLE) AS income_per_share,"
+        _ncsr_income_yield = "CAST(NULL AS DOUBLE) AS income_yield_pct,"
+        _ncsr_portfolio_turnover = "CAST(NULL AS DOUBLE) AS portfolio_turnover,"
+        _ncsr_expense_ratio = "nr.expense_ratio_pct,"
+
+        if has_ncsr:
+            _ncsr_cte = """,
+    ncsr_ranked AS (
+        SELECT
+            LPAD(CAST(ns.cik AS VARCHAR), 10, '0') AS cik,
+            cq.report_quarter AS nport_quarter,
+            TRY_CAST(ns.nav_end_per_share AS DOUBLE) AS ncsr_nav,
+            TRY_CAST(ns.distribution_per_share AS DOUBLE) AS ncsr_dist_per_share,
+            TRY_CAST(ns.distribution_from_nii AS DOUBLE) AS ncsr_dist_from_nii,
+            TRY_CAST(ns.distribution_from_gains AS DOUBLE) AS ncsr_dist_from_gains,
+            TRY_CAST(ns.distribution_return_of_capital AS DOUBLE) AS ncsr_dist_roc,
+            TRY_CAST(ns.total_return_pct AS DOUBLE) AS ncsr_total_return,
+            TRY_CAST(ns.gain_loss_per_share AS DOUBLE) AS ncsr_gain_loss,
+            TRY_CAST(ns.nii_per_share AS DOUBLE) AS ncsr_income_ps,
+            TRY_CAST(ns.income_yield_pct AS DOUBLE) AS ncsr_income_yield,
+            TRY_CAST(ns.expense_ratio_pct AS DOUBLE) AS ncsr_expense_ratio,
+            TRY_CAST(ns.portfolio_turnover AS DOUBLE) AS ncsr_portfolio_turnover,
+            ROW_NUMBER() OVER (
+                PARTITION BY LPAD(CAST(ns.cik AS VARCHAR), 10, '0'),
+                    cq.report_quarter
+                ORDER BY ns.report_date DESC
+            ) AS rn
+        FROM cik_quarter cq
+        JOIN ncsr ns
+            ON LPAD(CAST(ns.cik AS VARCHAR), 10, '0') = cq.cik
+            AND CAST(ns.report_date AS DATE) <= CAST(cq.report_date AS DATE)
+    )"""
+            _ncsr_join = """
+    LEFT JOIN ncsr_ranked nsr
+        ON cq.cik = nsr.cik
+        AND cq.report_quarter = nsr.nport_quarter
+        AND nsr.rn = 1"""
+            _ncsr_nav = "COALESCE(nsr.ncsr_nav, nr.ncen_nav, CAST(NULL AS DOUBLE))"
+            _ncsr_dist_per_share = "nsr.ncsr_dist_per_share AS distribution_per_share,"
+            _ncsr_dist_from_nii = "nsr.ncsr_dist_from_nii AS distribution_from_nii,"
+            _ncsr_dist_from_gains = "nsr.ncsr_dist_from_gains AS distribution_from_gains,"
+            _ncsr_dist_roc = "nsr.ncsr_dist_roc AS distribution_return_of_capital,"
+            _ncsr_total_return = "nsr.ncsr_total_return AS total_return_pct,"
+            _ncsr_gain_loss = "nsr.ncsr_gain_loss AS gain_loss_per_share,"
+            _ncsr_nav_change = """CASE
+            WHEN nsr.ncsr_income_ps IS NOT NULL
+                OR nsr.ncsr_gain_loss IS NOT NULL
+            THEN COALESCE(nsr.ncsr_income_ps, 0)
+                 + COALESCE(nsr.ncsr_gain_loss, 0)
+            ELSE NULL
+        END AS nav_change_per_share,"""
+            _ncsr_income_ps = "nsr.ncsr_income_ps AS income_per_share,"
+            _ncsr_income_yield = "COALESCE(nsr.ncsr_income_yield, CAST(NULL AS DOUBLE)) AS income_yield_pct,"
+            _ncsr_portfolio_turnover = "COALESCE(nsr.ncsr_portfolio_turnover, CAST(NULL AS DOUBLE)) AS portfolio_turnover,"
+            _ncsr_expense_ratio = "COALESCE(nsr.ncsr_expense_ratio, nr.expense_ratio_pct) AS expense_ratio_pct,"
+
         sql = f"""{base_cte},
     ncen_ranked AS (
         SELECT
@@ -824,11 +923,11 @@ def _prepare_nport(
         JOIN ncen nc
             ON cq.cik = nc.cik
             AND CAST(nc.report_date AS DATE) <= CAST(cq.report_date AS DATE)
-    )
+    ){_ncsr_cte}
     SELECT
         cq.cik, cq.entity_name, cq.report_quarter, cq.report_date,
         cq.total_assets, cq.net_assets, cq.total_liabilities,
-        COALESCE(nr.ncen_nav, CAST(NULL AS DOUBLE)) AS nav_per_share,
+        {_ncsr_nav} AS nav_per_share,
         CAST(NULL AS DOUBLE) AS shares_outstanding,
         cq.borrowings,
         CAST(NULL AS DOUBLE) AS total_investment_income,
@@ -849,11 +948,26 @@ def _prepare_nport(
         {qr_sql} AS quarterly_return,
         'nport' AS source,
         nr.management_fee_pct,
-        nr.expense_ratio_pct,
+        {_ncsr_expense_ratio}
         nr.market_price_per_share,
         nr.monthly_avg_net_assets,
         -- Extended companyfacts (NULL for N-PORT)
         {_nport_ext_nulls}
+        -- Distributions (from N-CSR if available)
+        {_ncsr_dist_per_share}
+        CAST(NULL AS DOUBLE) AS dividends_declared_per_share,
+        CAST(NULL AS DOUBLE) AS distribution_ordinary_income,
+        {_ncsr_dist_roc}
+        {_ncsr_dist_from_nii}
+        {_ncsr_dist_from_gains}
+        -- Performance (from N-CSR if available)
+        {_ncsr_total_return}
+        {_ncsr_gain_loss}
+        {_ncsr_nav_change}
+        {_ncsr_income_ps}
+        {_ncsr_income_yield}
+        CAST(NULL AS DOUBLE) AS gross_investment_income,
+        {_ncsr_portfolio_turnover}
         -- N-PORT risk
         cq.total_borrowings_detail,
         {_dv_select},
@@ -868,7 +982,7 @@ def _prepare_nport(
     LEFT JOIN ncen_ranked nr
         ON cq.cik = nr.cik
         AND cq.report_quarter = nr.nport_quarter
-        AND nr.rn = 1
+        AND nr.rn = 1{_ncsr_join}
     """
     else:
         qr_sql = """CASE
@@ -935,6 +1049,21 @@ def _prepare_nport(
         CAST(NULL AS DOUBLE) AS monthly_avg_net_assets,
         -- Extended companyfacts (NULL for N-PORT)
         {_nport_ext_nulls}
+        -- Distributions (NULL without N-CSR)
+        CAST(NULL AS DOUBLE) AS distribution_per_share,
+        CAST(NULL AS DOUBLE) AS dividends_declared_per_share,
+        CAST(NULL AS DOUBLE) AS distribution_ordinary_income,
+        CAST(NULL AS DOUBLE) AS distribution_return_of_capital,
+        CAST(NULL AS DOUBLE) AS distribution_from_nii,
+        CAST(NULL AS DOUBLE) AS distribution_from_gains,
+        -- Performance (NULL without N-CSR)
+        CAST(NULL AS DOUBLE) AS total_return_pct,
+        CAST(NULL AS DOUBLE) AS gain_loss_per_share,
+        CAST(NULL AS DOUBLE) AS nav_change_per_share,
+        CAST(NULL AS DOUBLE) AS income_per_share,
+        CAST(NULL AS DOUBLE) AS income_yield_pct,
+        CAST(NULL AS DOUBLE) AS gross_investment_income,
+        CAST(NULL AS DOUBLE) AS portfolio_turnover,
         -- N-PORT risk
         total_borrowings_detail,
         {_dv_select_noalias},
@@ -1635,12 +1764,65 @@ def _prepare_bdc(
         {_seed_cases}
         -- _is_seed flag not carried forward
         FROM no_seed
+    ),
+    -- CTE 4: Derive NAV from net_assets/shares_outstanding where direct is NULL
+    -- Guards: (a) CIK median derived/direct ratio must be 0.7-1.4x,
+    -- (b) derived value within 2x of direct median, (c) range $2-$200 if no history
+    with_derived_nav AS (
+        SELECT *,
+            CASE
+                WHEN net_assets IS NOT NULL AND net_assets > 0
+                    AND shares_outstanding IS NOT NULL
+                    AND shares_outstanding > 1000
+                THEN net_assets / shares_outstanding
+                ELSE NULL
+            END AS _raw_derived_nav,
+            MEDIAN(nav_per_share) OVER (PARTITION BY cik) AS _median_direct_nav,
+            COUNT(nav_per_share) OVER (PARTITION BY cik) AS _direct_nav_count,
+            -- Median derived NAV across all derivable rows for this CIK
+            MEDIAN(CASE
+                WHEN net_assets IS NOT NULL AND net_assets > 0
+                    AND shares_outstanding IS NOT NULL AND shares_outstanding > 1000
+                THEN net_assets / shares_outstanding
+                ELSE NULL
+            END) OVER (PARTITION BY cik) AS _median_derived_nav
+        FROM cleaned
+    ),
+    nav_filled AS (
+        SELECT * EXCLUDE (_raw_derived_nav, _median_direct_nav, _direct_nav_count,
+                          _median_derived_nav, nav_per_share),
+            COALESCE(
+                nav_per_share,
+                CASE
+                    -- CIK has direct NAV history: derived must be within 2x
+                    -- AND CIK's median derived/direct ratio must be ~1x
+                    WHEN _direct_nav_count >= 2
+                        AND _raw_derived_nav IS NOT NULL
+                        AND _raw_derived_nav >= _median_direct_nav * 0.5
+                        AND _raw_derived_nav <= _median_direct_nav * 2.0
+                        AND _median_derived_nav IS NOT NULL
+                        AND _median_direct_nav IS NOT NULL
+                        AND _median_direct_nav > 0
+                        AND (_median_derived_nav / _median_direct_nav) >= 0.7
+                        AND (_median_derived_nav / _median_direct_nav) <= 1.4
+                    THEN _raw_derived_nav
+                    -- No direct NAV history: use range guard $2-$200
+                    WHEN _direct_nav_count < 2
+                        AND _raw_derived_nav IS NOT NULL
+                        AND _raw_derived_nav >= 2.0
+                        AND _raw_derived_nav <= 200.0
+                    THEN _raw_derived_nav
+                    ELSE NULL
+                END
+            ) AS nav_per_share
+        FROM with_derived_nav
     )
     -- Final output with cleaned leverage_ratio + extended + computed
     SELECT
         cik, report_date, report_quarter,
         total_assets, net_assets, total_liabilities,
-        nav_per_share, shares_outstanding, borrowings,
+        nav_per_share,
+        shares_outstanding, borrowings,
         total_investment_income, net_investment_income,
         management_fee, incentive_fee, interest_expense, total_expenses,
         CAST(NULL AS DOUBLE) AS monthly_return_1,
@@ -1691,6 +1873,9 @@ def _prepare_bdc(
         CAST(NULL AS DOUBLE) AS credit_spread_5yr_noninvest,
         CAST(NULL AS DOUBLE) AS credit_spread_10yr_noninvest,
         CAST(NULL AS DOUBLE) AS credit_spread_30yr_noninvest,
+        -- N-CSR distribution decomposition (NULL for BDC)
+        CAST(NULL AS DOUBLE) AS distribution_from_nii,
+        CAST(NULL AS DOUBLE) AS distribution_from_gains,
         -- N-CEN flags (NULL for BDC)
         CAST(NULL AS BOOLEAN) AS is_debt_default,
         CAST(NULL AS BOOLEAN) AS is_dividend_arrears,
@@ -1715,7 +1900,7 @@ def _prepare_bdc(
             THEN TRUE
             ELSE FALSE
         END AS is_formation_stage
-    FROM cleaned
+    FROM nav_filled
     """
 
     result = con.execute(clean_sql).fetchdf()
@@ -1995,10 +2180,21 @@ def build_fund_financials(
     # 5b. Extract N-CEN identity (adviser, ticker)
     _parse_ncen_identity(universe_ciks)
 
-    # 6. Prepare N-PORT side (enriched with N-CEN)
+    # 5c. Load N-CSR financials (from disk, no network)
+    ncsr_raw_df = pd.DataFrame()
+    if NCSR_FINANCIALS_FILE.exists():
+        ncsr_raw_df = pd.read_csv(NCSR_FINANCIALS_FILE, dtype=str)
+        logger.info(
+            "N-CSR financials: %d rows, %d CIKs",
+            len(ncsr_raw_df),
+            ncsr_raw_df["cik"].nunique() if not ncsr_raw_df.empty else 0,
+        )
+
+    # 6. Prepare N-PORT side (enriched with N-CEN + N-CSR)
     nport_df = _prepare_nport(
         nport_fund_info_df,
         ncen_df=ncen_raw_df if not ncen_raw_df.empty else None,
+        ncsr_df=ncsr_raw_df if not ncsr_raw_df.empty else None,
     )
     logger.info("N-PORT financials: %d rows", len(nport_df))
 
@@ -2045,11 +2241,29 @@ def build_fund_financials(
     union_cols = [c for c in OUTPUT_COLUMNS
                   if c not in ("entity_name", "vehicle_type")]
 
+    # Collect column sets for each registered table
+    _table_cols = {}
+    if has_bdc:
+        _table_cols["bdc_fin"] = set(bdc_df.columns)
+    if has_nport:
+        _table_cols["nport_fin"] = set(nport_df.columns)
+    if has_ncen:
+        _table_cols["ncen_fin"] = set(ncen_only_df.columns)
+
     def _select_cols(table: str) -> str:
         """Build SELECT with NULLs for missing columns."""
+        available = _table_cols.get(table, set())
         parts = []
         for col in union_cols:
-            if col == "cik":
+            if col not in available and col != "cik":
+                # Column missing from source -> NULL
+                if col in _str_cols:
+                    parts.append(f"CAST(NULL AS VARCHAR) AS {col}")
+                elif col in _bool_cols:
+                    parts.append(f"CAST(NULL AS BOOLEAN) AS {col}")
+                else:
+                    parts.append(f"CAST(NULL AS DOUBLE) AS {col}")
+            elif col == "cik":
                 parts.append(
                     f"LPAD(CAST({table}.cik AS VARCHAR), 10, '0') AS cik")
             elif col in _str_cols:

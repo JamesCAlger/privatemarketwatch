@@ -38,7 +38,8 @@ for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           N2_HEADERS_CACHE_DIR, BDC_XBRL_CACHE_DIR,
           NPORT_TSV_CACHE_DIR, NPORT_XML_CACHE_DIR,
           BDC_HTML_CACHE_DIR, HTML_TEMPLATE_DIR,
-          COMPANYFACTS_CACHE_DIR, REFERENCE_DIR]:
+          COMPANYFACTS_CACHE_DIR, REFERENCE_DIR,
+          RAW_DIR / "filings" / "ncsr_html"]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -147,6 +148,7 @@ HOLDINGS_COVERAGE_FILE = OUTPUT_DIR / "holdings_coverage.csv"
 HOLDINGS_CROSS_SOURCE_FILE = OUTPUT_DIR / "holdings_cross_source.csv"
 HOLDINGS_TOTAL_ASSETS_FILE = OUTPUT_DIR / "holdings_total_assets.csv"
 CLASSIFICATION_VALIDATION_FILE = OUTPUT_DIR / "classification_validation.csv"
+HOLDINGS_GAV_RECONCILIATION_FILE = OUTPUT_DIR / "holdings_gav_reconciliation.csv"
 
 # Position matching and index returns
 POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
@@ -163,6 +165,7 @@ BDC_SECTOR_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_sector_breakdown.csv"
 # GICS industry mapping
 GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"
 GICS_LABEL_CACHE_FILE = OUTPUT_DIR / "gics_label_cache.csv"
+COMPANY_GICS_CACHE_FILE = OUTPUT_DIR / "company_gics_cache.csv"
 
 # LLM review outputs
 LLM_REVIEW_CANDIDATES_FILE = OUTPUT_DIR / "llm_review_candidates.csv"
@@ -170,6 +173,11 @@ LLM_REVIEW_LOOKUP_FILE = OUTPUT_DIR / "llm_review_lookup.csv"
 
 # Identifier extraction outputs
 IDENTIFIER_EXTRACTION_LOOKUP_FILE = OUTPUT_DIR / "identifier_extraction_lookup.csv"
+
+# N-CSR filing and financial highlights extraction
+NCSR_HTML_CACHE_DIR = RAW_DIR / "filings" / "ncsr_html"
+NCSR_FILINGS_INDEX_FILE = OUTPUT_DIR / "ncsr_filings_index.csv"
+NCSR_FINANCIALS_FILE = OUTPUT_DIR / "ncsr_financials.csv"
 
 # HTML holdings extraction outputs
 HTML_EXTRACTION_FILE = OUTPUT_DIR / "html_extraction_holdings.csv"
