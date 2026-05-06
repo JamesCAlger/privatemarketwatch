@@ -32,6 +32,7 @@ from pipeline.ncsr_financials import (
     _parse_value,
     _pick_largest_class,
     _read_cell_value,
+    _try_split_table_extraction,
     build_ncsr_filings_index,
     download_ncsr_filings,
     extract_ncsr_financials,
@@ -1016,3 +1017,197 @@ class TestFindMergedHeaders:
         idx, merged = _find_merged_headers(rows)
         # Data row should not be included in merged headers
         assert "10.00" not in merged[1]
+
+
+# ===================================================================
+# 11. Split-table extraction
+# ===================================================================
+
+class TestSplitTableExtraction:
+    """Tests for _try_split_table_extraction (split label + data tables)."""
+
+    def _build_split_table_html(self):
+        """Build HTML with separate label and data tables (split layout).
+
+        Mimics SEC filings where FH labels are in a narrow 1-col table
+        and values are in a wide table with 3+ periods (9+ columns).
+        """
+        # Label table: 1-column with FH row labels
+        label_rows = [
+            "<tr><td></td></tr>",
+            "<tr><td>Net asset value, beginning of year</td></tr>",
+            "<tr><td>Net investment income</td></tr>",
+            "<tr><td>Net realized and unrealized gains</td></tr>",
+            "<tr><td>Total from investment operations</td></tr>",
+            "<tr><td></td></tr>",
+            "<tr><td>Less distributions:</td></tr>",
+            "<tr><td>Net investment income</td></tr>",
+            "<tr><td>Total distributions</td></tr>",
+            "<tr><td></td></tr>",
+            "<tr><td>Net asset value, end of year</td></tr>",
+            "<tr><td></td></tr>",
+            "<tr><td>Total return</td></tr>",
+            "<tr><td>Expense ratio to average net assets</td></tr>",
+            "<tr><td>Net assets, end of period</td></tr>",
+        ]
+        label_table = "<table>\n" + "\n".join(label_rows) + "\n</table>"
+
+        # Data table: 9 columns (3 periods x 3 cols each: $ + value + spacer)
+        data_rows = [
+            "<tr><td colspan='9'>For the years ended December 31,</td></tr>",
+            "<tr><td>2024</td><td></td><td></td><td>2023</td><td></td><td></td><td>2022</td><td></td><td></td></tr>",
+            "<tr><td>$</td><td>10.50</td><td></td><td>$</td><td>9.80</td><td></td><td>$</td><td>9.00</td><td></td></tr>",
+            "<tr><td></td><td>0.42</td><td></td><td></td><td>0.38</td><td></td><td></td><td>0.30</td><td></td></tr>",
+            "<tr><td></td><td>0.15</td><td></td><td></td><td>0.72</td><td></td><td></td><td>0.55</td><td></td></tr>",
+            "<tr><td></td><td>0.57</td><td></td><td></td><td>1.10</td><td></td><td></td><td>0.85</td><td></td></tr>",
+            "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>",
+            "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>",
+            "<tr><td></td><td>(0.40)</td><td></td><td></td><td>(0.35)</td><td></td><td></td><td>(0.28)</td><td></td></tr>",
+            "<tr><td></td><td>(0.40)</td><td></td><td></td><td>(0.35)</td><td></td><td></td><td>(0.28)</td><td></td></tr>",
+            "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>",
+            "<tr><td>$</td><td>10.67</td><td></td><td>$</td><td>10.50</td><td></td><td>$</td><td>9.80</td><td></td></tr>",
+            "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>",
+            "<tr><td></td><td>5.43</td><td></td><td></td><td>11.22</td><td></td><td></td><td>9.44</td><td></td></tr>",
+            "<tr><td></td><td>1.25</td><td></td><td></td><td>1.30</td><td></td><td></td><td>1.35</td><td></td></tr>",
+            "<tr><td>$</td><td>500,000</td><td></td><td>$</td><td>450,000</td><td></td><td>$</td><td>400,000</td><td></td></tr>",
+        ]
+        data_table = "<table>\n" + "\n".join(data_rows) + "\n</table>"
+
+        html = f"""<html><body>
+        <p><b>Financial Highlights</b></p>
+        {label_table}
+        <table><tr><td>(1) footnote</td></tr></table>
+        {data_table}
+        </body></html>"""
+        return html
+
+    def test_split_table_merges_correctly(self, tmp_path):
+        """Split label+data tables should merge and extract multiple periods."""
+        html = self._build_split_table_html()
+        path = tmp_path / "split.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        assert len(records) == 3  # 2024, 2023, and 2022
+
+    def test_split_table_extracts_nav(self, tmp_path):
+        """NAV begin/end should be extracted from merged split tables."""
+        html = self._build_split_table_html()
+        path = tmp_path / "split.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        r2024 = next((r for r in records if r.get("period_label") == "2024"), None)
+        assert r2024 is not None
+        assert r2024["nav_begin_per_share"] == 10.50
+        assert r2024["nav_end_per_share"] == 10.67
+
+    def test_split_table_extracts_nii(self, tmp_path):
+        """NII should be extracted from merged split tables."""
+        html = self._build_split_table_html()
+        path = tmp_path / "split.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        r2024 = next((r for r in records if r.get("period_label") == "2024"), None)
+        assert r2024 is not None
+        assert r2024["nii_per_share"] == 0.42
+
+    def test_split_table_extracts_distributions(self, tmp_path):
+        """Distributions should be negative (parentheses)."""
+        html = self._build_split_table_html()
+        path = tmp_path / "split.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        r2024 = next((r for r in records if r.get("period_label") == "2024"), None)
+        assert r2024 is not None
+        assert r2024["distribution_per_share"] == -0.40
+
+    def test_split_table_not_triggered_for_normal_tables(self, tmp_path):
+        """Normal vertical tables should NOT trigger split-table path."""
+        rows = [
+            ("", "Year Ended Dec 31, 2024", "Year Ended Dec 31, 2023"),
+            ("Net asset value, beginning of period", "$10.00", "$9.50"),
+            ("Net investment income", "0.40", "0.35"),
+            ("Net asset value, end of period", "$10.50", "$9.80"),
+            ("Total return", "5.00%", "3.16%"),
+            ("Expense ratio to average net assets", "1.25%", "1.30%"),
+            ("Net assets, end of period", "$500,000", "$400,000"),
+        ]
+        html = _build_fh_html(rows)
+        path = tmp_path / "normal.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        # Should extract normally without needing split-table
+        assert len(records) == 2
+        assert records[0]["nav_begin_per_share"] == 10.00
+
+
+# ===================================================================
+# 12. Bare year period detection
+# ===================================================================
+
+class TestBareYearPeriods:
+    """Tests for bare year detection in _find_period_columns."""
+
+    def test_bare_year_detected(self):
+        """Bare years like '2024' should be detected as period columns."""
+        row = ["", "2024", "", "", "2023", "", "", "2022"]
+        cols = _find_period_columns(row)
+        assert len(cols) >= 3
+        labels = [label for _, label in cols]
+        assert "2024" in labels
+        assert "2023" in labels
+
+    def test_bare_year_skips_col_zero(self):
+        """Bare year in col 0 should not be detected (label column)."""
+        row = ["2024", "10.00", "0.40"]
+        cols = _find_period_columns(row)
+        assert len(cols) == 0
+
+    def test_invalid_years_not_detected(self):
+        """Years outside 2010-2029 should not be detected."""
+        row = ["", "1999", "3000", "2024"]
+        cols = _find_period_columns(row)
+        assert len(cols) == 1
+        assert cols[0][1] == "2024"
+
+
+# ===================================================================
+# 13. Element-level heading fallback
+# ===================================================================
+
+class TestElementLevelHeadingFallback:
+    """Tests for element-level get_text() fallback in _find_fh_tables."""
+
+    def test_split_text_node_found(self, tmp_path):
+        """Heading split across child elements should still be found."""
+        # "Financial Highlights" split into two <b> elements within a <div>
+        html = """<html><body>
+        <div><b>Financial</b> <b>Highlights</b></div>
+        <table>
+        <tr><td>Net asset value, beginning of period</td><td>$10.00</td></tr>
+        <tr><td>Net investment income</td><td>0.40</td></tr>
+        <tr><td>Net asset value, end of period</td><td>$10.50</td></tr>
+        <tr><td>Total return</td><td>5.00%</td></tr>
+        <tr><td>Expense ratio to average net assets</td><td>1.25%</td></tr>
+        <tr><td>Net assets, end of period</td><td>$500,000</td></tr>
+        </table>
+        </body></html>"""
+        path = tmp_path / "split_heading.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        assert len(records) >= 1
+        assert records[0]["nav_begin_per_share"] == 10.00
+
+    def test_normal_heading_still_works(self, tmp_path):
+        """Normal single-text-node heading should still work."""
+        html = """<html><body>
+        <p>Financial Highlights</p>
+        <table>
+        <tr><td>Net asset value, beginning of period</td><td>$10.00</td></tr>
+        <tr><td>Net investment income</td><td>0.40</td></tr>
+        <tr><td>Net asset value, end of period</td><td>$10.50</td></tr>
+        </table>
+        </body></html>"""
+        path = tmp_path / "normal_heading.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        assert len(records) >= 1

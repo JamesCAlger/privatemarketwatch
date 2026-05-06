@@ -453,6 +453,12 @@ def _parse_financial_highlights(html_path: str) -> list[dict]:
                 records = _extract_table(next_sib, dollar_unit)
         all_records.extend(records)
 
+    # If no records from any table, try split-table merge.
+    # Some filings render the FH table as two adjacent tables:
+    # a narrow labels-only table + a wide data-only table.
+    if not all_records:
+        all_records = _try_split_table_extraction(tables, soup, dollar_unit)
+
     if not all_records:
         return []
 
@@ -509,6 +515,34 @@ def _find_fh_tables(soup: BeautifulSoup) -> list[Tag]:
             tables.append(table)
             seen_tables.add(id(table))
 
+    # Fallback: if text-node search found nothing (split text nodes where
+    # "Financial" and "Highlights" are in separate child elements), search
+    # by element get_text() instead.
+    if not tables:
+        for tag in soup.find_all(
+            ["div", "p", "span", "b", "strong", "font", "td", "th", "h1",
+             "h2", "h3", "h4", "caption"],
+        ):
+            # Only check small elements (avoid scanning huge wrappers)
+            if len(list(tag.children)) > 10:
+                continue
+            tag_text = tag.get_text(" ", strip=True)
+            if not _FH_HEADING_RE.search(tag_text):
+                continue
+            if len(tag_text) > 80:
+                continue
+            # Same skip filters
+            if tag.name == "a" and tag.get("href"):
+                continue
+            td_p = tag.find_parent("td")
+            if td_p and td_p.find("a", href=True):
+                continue
+
+            table = _find_next_table(tag)
+            if table is not None and id(table) not in seen_tables:
+                tables.append(table)
+                seen_tables.add(id(table))
+
     return tables
 
 
@@ -529,6 +563,146 @@ def _find_next_table(element: Tag) -> Tag | None:
         if current is None or current.name == "[document]":
             break
     return None
+
+
+def _try_split_table_extraction(
+    fh_tables: list[Tag],
+    soup: BeautifulSoup,
+    dollar_unit: float,
+) -> list[dict]:
+    """Handle split-table layout: labels in one table, values in another.
+
+    Some filers render Financial Highlights as two side-by-side tables:
+    - A narrow (1-2 col) table with row labels (NAV, NII, distributions, etc.)
+    - A wide (10+ col) table with numeric values (one group per period)
+
+    This function detects the pattern, merges the tables row-by-row, and
+    runs normal vertical extraction on the merged result.
+    """
+    # Classify the FH tables we already found
+    label_tables: list[tuple[Tag, list[list[str]]]] = []
+    data_tables: list[tuple[Tag, list[list[str]]]] = []
+
+    for table in fh_tables:
+        rows = _get_table_rows(table)
+        if len(rows) < 3:
+            continue
+        max_cols = max(len(r) for r in rows) if rows else 0
+        labels = sum(
+            1 for r in rows[:25]
+            if r and _match_row_label(r[0].strip())
+        )
+        if labels >= 3 and max_cols <= 3:
+            label_tables.append((table, rows))
+        elif max_cols >= 8 and labels == 0:
+            data_tables.append((table, rows))
+
+    # Also search nearby tables in the document for a data companion
+    if label_tables and not data_tables:
+        for label_tbl, _ in label_tables:
+            # Search forward through siblings for a wide table
+            for sib in label_tbl.find_next_siblings("table"):
+                sib_rows = _get_table_rows(sib)
+                if len(sib_rows) < 10:
+                    continue
+                max_c = max(len(r) for r in sib_rows) if sib_rows else 0
+                if max_c >= 8:
+                    data_tables.append((sib, sib_rows))
+                    break
+
+    # If we have data tables but no label tables, search backwards
+    if data_tables and not label_tables:
+        for data_tbl, data_rows in data_tables:
+            # Search all tables before this one for a label companion
+            all_doc_tables = soup.find_all("table")
+            data_idx = None
+            for i, t in enumerate(all_doc_tables):
+                if t is data_tbl:
+                    data_idx = i
+                    break
+            if data_idx is None:
+                continue
+            # Search backwards (up to 5 tables before)
+            for j in range(data_idx - 1, max(data_idx - 6, -1), -1):
+                prev_rows = _get_table_rows(all_doc_tables[j])
+                if len(prev_rows) < 10:
+                    continue
+                # Must have labels AND include NAV pattern (to avoid
+                # matching Statement of Operations or other tables)
+                has_nav = any(
+                    re.search(r"net\s+asset\s+value", r[0], re.I)
+                    for r in prev_rows[:25] if r and r[0].strip()
+                )
+                if not has_nav:
+                    continue
+                prev_labels = sum(
+                    1 for r in prev_rows[:25]
+                    if r and _match_row_label(r[0].strip())
+                )
+                if prev_labels >= 3:
+                    label_tables.append((all_doc_tables[j], prev_rows))
+                    break
+
+    if not label_tables or not data_tables:
+        return []
+
+    # Merge: pair label table with data table
+    _, label_rows = label_tables[0]
+    _, data_rows = data_tables[0]
+
+    # Find where labels start (skip empty leading rows)
+    label_start = 0
+    for i, r in enumerate(label_rows):
+        if r and r[0].strip():
+            label_start = i
+            break
+
+    # Find where data header rows end (period text / year numbers).
+    # These header rows need to be KEPT in the merged output so that
+    # _extract_vertical can detect period columns from them.
+    data_header_end = 0
+    for i, r in enumerate(data_rows[:5]):
+        if not r:
+            continue
+        # Normalize cell text (collapse internal whitespace)
+        cell0 = re.sub(r"\s+", " ", r[0]).strip().lower() if r else ""
+        # Period header ("For the years ended...")
+        if cell0.startswith("for the") or cell0.startswith("for "):
+            data_header_end = i + 1
+            continue
+        # Row of bare year numbers (2023, 2024, ...)
+        has_year = any(
+            re.match(r"^20\d{2}$", c.strip()) for c in r if c.strip()
+        )
+        if has_year:
+            data_header_end = i + 1
+            continue
+        break
+
+    # Build merged rows:
+    # 1. Header rows from data (with empty label) - preserved for period detection
+    # 2. Value rows: label from label_table + data from data_table
+    merged: list[list[str]] = []
+
+    # Add data header rows with empty label prefix
+    for i in range(data_header_end):
+        merged.append([""] + list(data_rows[i]))
+
+    # Add value rows: pair labels with data
+    n_value_rows = len(data_rows) - data_header_end
+    for i in range(n_value_rows):
+        li = label_start + i
+        di = data_header_end + i
+        label_text = ""
+        if li < len(label_rows) and label_rows[li]:
+            label_text = label_rows[li][0].strip()
+        data_cells = data_rows[di] if di < len(data_rows) else []
+        merged.append([label_text] + list(data_cells))
+
+    if len(merged) < 5:
+        return []
+
+    return _extract_vertical(merged, dollar_unit)
 
 
 def _detect_dollar_unit(text: str) -> float:
@@ -866,6 +1040,7 @@ def _find_period_columns(row: list[str]) -> list[tuple[int, str]]:
     """Find columns that contain period date headings.
 
     Returns list of (column_index, date_text) tuples.
+    Recognizes both full dates ("December 31, 2024") and bare years ("2024").
     """
     date_re = re.compile(
         r"(?:(?:year|six\s+months?|period|twelve\s+months?|semi[\s-]?annual"
@@ -874,6 +1049,9 @@ def _find_period_columns(row: list[str]) -> list[tuple[int, str]]:
         r"(\w+\.?\s+\d{1,2},?\s+\d{4})",
         re.I,
     )
+    # Bare year pattern: "2019" through "2029"
+    bare_year_re = re.compile(r"^20[12]\d$")
+
     cols = []
     for ci, cell in enumerate(row):
         if ci == 0:
@@ -882,6 +1060,8 @@ def _find_period_columns(row: list[str]) -> list[tuple[int, str]]:
         if not cell:
             continue
         if date_re.search(cell):
+            cols.append((ci, cell))
+        elif bare_year_re.match(cell):
             cols.append((ci, cell))
     return cols
 
