@@ -17,6 +17,7 @@ import pandas as pd
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     ENTITY_LOOKUP_FILE,
+    FUND_FINANCIALS_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_EXCLUDE_CIKS,
     NPORT_HOLDINGS_FILE,
@@ -60,10 +61,14 @@ UNIFIED_COLUMNS = [
     "nport_is_default", "nport_are_interest_payments_in_arrears",
     "nport_is_paid_in_kind", "nport_currency_code",
     "nport_liquidity_classification",
+    # Subsidiary flag (BDC only -- nonconsolidated JV/subsidiary positions)
+    "is_subsidiary",
     # Entity resolution (populated by --entities step)
     "entity_id", "canonical_name",
     # LLM-extracted fields (populated by --extract step)
     "extracted_industry",
+    # GICS classification (populated by --classify-gics step)
+    "gics_sub_industry",
     # Position tracking (populated by --returns step)
     "position_id",
 ]
@@ -90,8 +95,9 @@ _BDC_AGGREGATE_PATTERNS = [
     "investment unsecured",
     "placeholder",
     "controlled affiliated",
-    # CIK 0001849894 (Blue Owl): parsing artifact "Investments Investments - non-controlled/..."
-    "investments investments",
+    # NOTE: "investments investments" removed from patterns -- it appears in real
+    # dimension-path identifiers (CIK 1849894, 1899996, 1920453, etc.) containing
+    # company names. Handled by entity-signal-gated category prefix logic below.
     # Category-level subtotals from hierarchical XBRL filings
     "portfolio company debt securities",
     "portfolio company equity investments",
@@ -157,6 +163,13 @@ _BDC_AGGREGATE_PATTERNS = [
     "cash and investments",
     # XBRL dimension member labels (category-level tags, not investee-level)
     "[member]",
+    # Affiliation-category subtotals (2026-05-06 audit)
+    "investments in non-controlled",
+    "investments in non-affiliated",
+    "investments in affiliated",
+    # Dimension-path subtotals (CIK 1959604/1959568)
+    "total non-controlled",
+    "total non-affiliated",
 ]
 
 # Bare issuer names that are section headers or industry labels (exact match, lower)
@@ -201,6 +214,12 @@ _BDC_AGGREGATE_EXACT = {
     # Standalone category headers that are subtotals (2026-04-09 audit)
     "first lien secured debt",
     "first lien/senior secured debt",
+    # Category-level subtotals from Carlyle/SL Investment (2026-05-06 audit)
+    "first lien debt",
+    "second lien debt",
+    "subordinated debt",
+    "mezzanine debt",
+    "investments debt investments",
 }
 
 # Suffix patterns for industry-prefixed subtotals.
@@ -271,6 +290,53 @@ _INDUSTRY_LABELS = {
     "canada", "europe", "australia", "asia",
     "united states", "united kingdom",
 }
+
+# Post-extraction bad issuer name filter (catches extraction artifacts where
+# dimension-path positions produce bare category labels as issuer_name).
+_BAD_ISSUER_NAMES_EXACT = {
+    "investments", "debt investments", "equity investments",
+    "equity securities", "debt securities", "short-term investments",
+    "cash equivalents", "cash", "investment",
+    "non-controlled", "non-affiliated",
+    "controlled investments", "affiliated investments",
+    "non-controlled/non-affiliated investments",
+    "non-control/non-affiliate investments",
+    "non-control investments",
+    "non-affiliate investments",
+    "control investments",
+    "affiliate investments",
+    "first lien debt", "second lien debt",
+    "subordinated debt", "mezzanine debt",
+    "senior secured loans", "senior secured notes",
+}
+
+_BAD_ISSUER_PREFIXES = [
+    "non-controlled/", "non-controlled-",
+    "non-controlled, non-affiliated",
+    "non-affiliated/",
+    "investments non-controlled",
+    "investments non-controlled/",
+    "investments, investments",
+]
+
+# Affiliation prefixes/suffixes in dash-delimited identifiers (PhenixFIN-style)
+# e.g. "Non-Controlled/Non-Affiliated Investments - Acme Corp - Term Loan"
+# DuckDB regexp_replace patterns (case-insensitive via (?i))
+_AFFILIATION_PREFIX_RE = (
+    r"(?i)^(?:Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))?"
+    r" Investments|Control(?:led)? Investments|Affiliat(?:e|ed)"
+    r" Investments) - "
+)
+_AFFILIATION_SUFFIX_RE = (
+    r"(?i) - (?:Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))?"
+    r"|Control(?:led)?|Affiliat(?:e|ed))$"
+)
+
+# Entity signals that indicate a real company name (guards for prefix filter)
+_BAD_ISSUER_ENTITY_SIGNALS = [
+    "inc.", "inc,", "llc", "corp.", "corp,", "holdings", "holding",
+    "ltd.", "ltd,", "l.p.", "gmbh", "co.", "plc", "company",
+]
 
 # N-PORT asset_cat -> unified asset_category
 _NPORT_ASSET_MAP = {
@@ -510,19 +576,68 @@ def _sql_ends_with_any(col: str, suffixes: list[str]) -> str:
     return "(" + " OR ".join(clauses) + ")"
 
 
-def _sql_is_bdc_aggregate() -> str:
-    """Generate SQL boolean expression for aggregate row detection."""
+def _sql_is_bad_issuer_name() -> str:
+    """Generate SQL boolean expression for post-extraction bad issuer name filter.
+
+    Catches extraction artifacts where dimension-path identifiers produce bare
+    category labels (e.g., "Investments", "First Lien Debt") as issuer_name.
+
+    Three rules:
+    1. Exact match against _BAD_ISSUER_NAMES_EXACT
+    2. No alphabetic characters (date-only "01/15/2025", percentage-only "1.00%")
+    3. Starts with _BAD_ISSUER_PREFIXES AND lacks entity signals
+    """
+    # Strip trailing commas/semicolons (pipe-parser may leave them)
+    col = "lower(TRIM(TRAILING ',' FROM TRIM(TRAILING ';' FROM trim(CAST(issuer_name AS VARCHAR)))))"
     parts = []
-    # NULL/empty identifiers are always aggregates (matches Python _is_bdc_aggregate_row)
-    parts.append("_lower_id = ''")
-    # Named aggregate patterns (substring)
-    parts.append(_sql_keyword_check("_lower_id", _BDC_AGGREGATE_PATTERNS))
-    # Qualified non-control check: filter identifiers with "non-control" that are
-    # short (<150 chars) and lack entity-name signals. Long identifiers (>=150) are
-    # dimension-path positions with embedded company names, rates, maturities.
-    # Only use entity-name suffixes as guards (NOT instrument signals like
-    # "term loan" / "senior secured" which appear in both positions and subtotals).
-    _nonctrl_entity_signals = [
+    # Rule 1: exact match
+    parts.append(_sql_exact_match(col, _BAD_ISSUER_NAMES_EXACT))
+    # Rule 2: no alphabetic characters (catches dates, percentages, numbers)
+    parts.append(
+        f"(LENGTH(trim(CAST(issuer_name AS VARCHAR))) >= 1"
+        f" AND NOT regexp_matches(trim(CAST(issuer_name AS VARCHAR)), '[a-zA-Z]'))"
+    )
+    # Rule 3: bad prefix + no entity signals
+    prefix_check = _sql_starts_with_any(col, _BAD_ISSUER_PREFIXES)
+    entity_guards = " AND ".join(
+        f"NOT contains({col}, '{s}')" for s in _BAD_ISSUER_ENTITY_SIGNALS
+    )
+    parts.append(f"({prefix_check} AND {entity_guards})")
+    return " OR ".join(f"({p})" for p in parts)
+
+
+def _is_bad_issuer_name(issuer_name: str) -> bool:
+    """Python mirror of _sql_is_bad_issuer_name for tests."""
+    if not issuer_name or not isinstance(issuer_name, str):
+        return False
+    name = issuer_name.strip().rstrip(",").rstrip(";").strip()
+    lower = name.lower()
+    # Rule 1: exact match
+    if lower in _BAD_ISSUER_NAMES_EXACT:
+        return True
+    # Rule 2: no alphabetic characters
+    if len(name) >= 1 and not re.search(r"[a-zA-Z]", name):
+        return True
+    # Rule 3: bad prefix without entity signals
+    for prefix in _BAD_ISSUER_PREFIXES:
+        if lower.startswith(prefix):
+            if not any(s in lower for s in _BAD_ISSUER_ENTITY_SIGNALS):
+                return True
+    return False
+
+
+def _sql_is_bdc_aggregate() -> str:
+    """Generate SQL boolean expression for aggregate row detection.
+
+    Mirrors _is_bdc_aggregate_row() Python logic. Entity-signal guard prevents
+    filtering real positions that embed aggregate-sounding category names in
+    their dimension paths.
+    """
+    # ------------------------------------------------------------------
+    # Entity signal: if the identifier contains a company name suffix
+    # (LLC, Inc, Corp, etc.), most aggregate checks are skipped.
+    # ------------------------------------------------------------------
+    _entity_signals = [
         "inc.", "inc,", " inc ", " inc-",
         "llc", "l.l.c",
         "corp.", "corp,",
@@ -531,15 +646,26 @@ def _sql_is_bdc_aggregate() -> str:
         "holdings", "group",
         "gmbh", " co.", " plc",
     ]
-    nonctrl_no_signal = " AND ".join(
-        f"NOT contains(_lower_id, '{s}')" for s in _nonctrl_entity_signals
+    has_entity_sql = " OR ".join(
+        f"contains(_lower_id, '{s}')" for s in _entity_signals
     )
+    has_entity = f"({has_entity_sql})"
+    no_entity = f"NOT {has_entity}"
+
+    parts = []
+    # NULL/empty identifiers are always aggregates
+    parts.append("_lower_id = ''")
+    # Unconditional: [member] tag always means aggregate
+    parts.append("contains(_lower_id, '[member]')")
+    # Named aggregate patterns -- only when no entity signals
+    parts.append(f"({no_entity} AND ({_sql_keyword_check('_lower_id', _BDC_AGGREGATE_PATTERNS)}))")
+    # Qualified non-control check
     parts.append(
-        f"(contains(_lower_id, 'non-control') AND LENGTH(_raw_id) < 150 AND {nonctrl_no_signal})"
+        f"(contains(_lower_id, 'non-control') AND LENGTH(_raw_id) < 150 AND {no_entity})"
     )
-    # Exact match section headers
+    # Exact match section headers (always apply -- short strings won't have entity signals)
     parts.append(_sql_exact_match("_lower_id", _BDC_AGGREGATE_EXACT))
-    # Category header prefixes (only when no ' - ' separator)
+    # Category header prefixes (only when no entity signals and no separators)
     _cat_prefixes = [
         "debt investments ", "debt investments,",
         "debt securities ",
@@ -550,14 +676,11 @@ def _sql_is_bdc_aggregate() -> str:
         "debt investment ",  # singular with industry/pct suffix
     ]
     cat_sql = _sql_starts_with_any("_lower_id", _cat_prefixes)
-    parts.append(f"(NOT contains(_raw_id, ' - ') AND {cat_sql})")
-    # Identifiers ending with a percentage are always subtotals/allocations
-    parts.append("regexp_matches(_lower_id, '\\d+\\.?\\d*%\\s*$')")
+    parts.append(f"({no_entity} AND NOT contains(_raw_id, ' - ') AND NOT contains(_raw_id, ' -- ') AND {cat_sql})")
+    # Identifiers ending with a percentage -- only when no entity signals
+    parts.append(f"({no_entity} AND regexp_matches(_lower_id, '\\d+\\.?\\d*%\\s*$'))")
     # "Total ..." industry subtotals: starts with "total " but does NOT contain
-    # any company suffix (Inc., LLC, Corp., Ltd., LP, Holdings, Group, Solutions,
-    # Fund, Partners, Term, Loan, Note, Stock, Warrant, Debt, Common, Preferred).
-    # This catches "Total Software", "Total Healthcare & Pharmaceuticals" etc.
-    # while preserving "Total Access Elevator, Inc.", "Total Safety U.S. Inc."
+    # any company suffix
     _total_company_signals = [
         "inc.", "inc,", "llc", "corp.", "corp,", "ltd.", "ltd,",
         ", lp", " lp,", "holdings", "group", "solutions",
@@ -570,8 +693,7 @@ def _sql_is_bdc_aggregate() -> str:
     parts.append(
         f"(starts_with(_lower_id, 'total ') AND {company_guards})"
     )
-    # Also catch pipe-delimited subtotals where "Total X" is in the last
-    # segment, e.g. "Corporate Bonds | Automotive | Total Automotive"
+    # Also catch pipe-delimited subtotals where "Total X" is in the last segment
     last_seg = "trim(string_split(_lower_id, ' | ')[-1])"
     last_seg_guards = " AND ".join(
         f"NOT contains({last_seg}, '{s}')" for s in _total_company_signals
@@ -580,10 +702,9 @@ def _sql_is_bdc_aggregate() -> str:
         f"(contains(_lower_id, ' | ') AND starts_with({last_seg}, 'total ') "
         f"AND {last_seg_guards})"
     )
-    # Industry-prefixed subtotals: identifier ENDS with instrument type
-    # (real positions always have rate/maturity after the instrument type)
+    # Industry-prefixed subtotals -- only when no entity signals
     suffix_sql = _sql_ends_with_any("_lower_id", _BDC_AGGREGATE_SUFFIXES)
-    parts.append(suffix_sql)
+    parts.append(f"({no_entity} AND {suffix_sql})")
     # Single-word industry/geography labels
     single_word_labels = sorted(v for v in _INDUSTRY_LABELS if " " not in v)
     multi_word_labels = sorted(v for v in _INDUSTRY_LABELS if " " in v)
@@ -937,6 +1058,11 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
 def _is_bdc_aggregate_row(identifier: str) -> bool:
     """Return True if this BDC identifier is an aggregate/subtotal row.
 
+    Many BDCs use hierarchical XBRL dimension paths that embed category names
+    (e.g., "Investments Non-Controlled First Lien Debt") followed by the actual
+    company name, rate, maturity, etc. Entity-name signals (LLC, Inc, Corp, etc.)
+    are the strongest indicator that an identifier represents a real position.
+
     Filters:
     1. Named aggregate substring patterns (e.g., "total investments")
     2. Exact-match section headers (e.g., "Investments", "Debt Investments")
@@ -948,17 +1074,15 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
 
     lower = identifier.lower().strip()
 
-    # Named aggregate patterns (substring)
-    for pattern in _BDC_AGGREGATE_PATTERNS:
-        if pattern in lower:
-            return True
-
-    # Qualified non-control check: filter identifiers with "non-control" that are
-    # short (<150 chars) and lack entity-name signals. Long identifiers (>=150) are
-    # dimension-path positions with embedded company names, rates, maturities.
-    # Only use entity-name suffixes as guards (NOT instrument signals like
-    # "term loan" / "senior secured" which appear in both positions and subtotals).
-    _nonctrl_entity_signals = [
+    # ------------------------------------------------------------------
+    # Entity-signal guard: identifiers containing company name suffixes
+    # are almost always real positions, even if they contain aggregate-
+    # sounding substrings (e.g., "1st Lien/Senior Secured Debt" embedded
+    # in "Investment 1st Lien/Senior Secured Debt Acme LLC Term Loan").
+    # Only truly unambiguous aggregate markers ([member], "total investments",
+    # percentage endings) can override this guard.
+    # ------------------------------------------------------------------
+    _entity_signals = [
         "inc.", "inc,", " inc ", " inc-",
         "llc", "l.l.c",
         "corp.", "corp,",
@@ -967,8 +1091,22 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
         "holdings", "group",
         "gmbh", " co.", " plc",
     ]
+    has_entity = any(s in lower for s in _entity_signals)
+
+    # Unconditional aggregate markers (override entity guard)
+    if "[member]" in lower:
+        return True
+
+    # Named aggregate patterns — only apply to identifiers WITHOUT entity signals
+    if not has_entity:
+        for pattern in _BDC_AGGREGATE_PATTERNS:
+            if pattern in lower:
+                return True
+
+    # Qualified non-control check: filter identifiers with "non-control" that are
+    # short (<150 chars) and lack entity-name signals.
     if "non-control" in lower:
-        if len(identifier.strip()) < 150 and not any(s in lower for s in _nonctrl_entity_signals):
+        if len(identifier.strip()) < 150 and not has_entity:
             return True
 
     # Exact match section headers
@@ -977,8 +1115,9 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
 
     # Category headers: "Debt Investments <Industry>", "Debt Securities <Industry>",
     # "Equity Securities <Industry>", "Investment <Type>" etc.
-    # These have no ' - ' separator and are always subtotals.
-    if " - " not in identifier:
+    # These have no ' - ' or ' -- ' separator and are always subtotals.
+    # Only apply when no entity signals present.
+    if not has_entity and " - " not in identifier and " -- " not in identifier:
         _cat_prefixes = (
             "debt investments ", "debt investments,",
             "debt securities ",
@@ -994,14 +1133,17 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
 
     # Identifiers ending with a percentage are always subtotals/allocations
     # e.g. "Debt Investment 96.8%", "United States - 1.60%"
-    if re.search(r"\d+\.?\d*%\s*$", lower):
+    # Exception: entity-signal identifiers that happen to embed a pct-of-NAV
+    # in the dimension path (e.g., "Investments 176% of Net Assets, Company LLC")
+    if not has_entity and re.search(r"\d+\.?\d*%\s*$", lower):
         return True
 
     # Industry-prefixed subtotals: identifier ends with instrument type
     # (real positions always have rate/maturity after)
-    for suffix in _BDC_AGGREGATE_SUFFIXES:
-        if lower.endswith(suffix):
-            return True
+    if not has_entity:
+        for suffix in _BDC_AGGREGATE_SUFFIXES:
+            if lower.endswith(suffix):
+                return True
 
     # "Total ..." industry subtotals: starts with "total " but does NOT contain
     # any company suffix (Inc., LLC, Corp., etc.)
@@ -1405,6 +1547,18 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
 
     # Pre-generate SQL fragments from Python constants
     agg_filter = _sql_is_bdc_aggregate()
+    bad_issuer_filter = _sql_is_bad_issuer_name()
+    # Entity signal check on raw identifier -- when issuer_name is bad but raw
+    # has company signals (LLC, Inc, etc.), keep the row with raw as issuer_name
+    _entity_sigs = [
+        "inc.", "inc,", " inc ", " inc-",
+        "llc", "l.l.c", "corp.", "corp,",
+        "ltd.", "ltd,", " ltd ", ", lp", " lp,", "l.p.",
+        "holdings", "group", "gmbh", " co.", " plc",
+    ]
+    _sql_has_entity_in_raw = " OR ".join(
+        f"contains(lower(_raw_id), '{s}')" for s in _entity_sigs
+    )
     asset_case = _sql_classify_bdc_asset()
     coinvest_expr = _sql_is_named_coinvest()
     mm_check = _sql_money_market_check()
@@ -1512,9 +1666,39 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         WHERE ranked._amd_rank = 1
     ),
 
+    -- CTE 1c: Strip affiliation prefixes/suffixes from _raw_id
+    -- Handles PhenixFIN-style identifiers where the XBRL identifier
+    -- has the affiliation category as a prefix or suffix, e.g.:
+    --   "Non-Controlled/Non-Affiliated Investments - Acme Corp - Term Loan"
+    --   -> "Acme Corp - Term Loan"
+    -- Must run BEFORE aggregate filter so cleaned _raw_id/_lower_id
+    -- are used for aggregate detection.
+    strip_affil AS (
+        SELECT * EXCLUDE (_raw_id, _lower_id),
+            regexp_replace(
+                regexp_replace(
+                    _raw_id,
+                    '{_AFFILIATION_PREFIX_RE}',
+                    ''
+                ),
+                '{_AFFILIATION_SUFFIX_RE}',
+                ''
+            ) AS _raw_id,
+            lower(trim(regexp_replace(
+                regexp_replace(
+                    _raw_id,
+                    '{_AFFILIATION_PREFIX_RE}',
+                    ''
+                ),
+                '{_AFFILIATION_SUFFIX_RE}',
+                ''
+            ))) AS _lower_id
+        FROM no_amendments
+    ),
+
     -- CTE 2: Filter aggregate/subtotal rows
     no_aggregates AS (
-        SELECT * FROM no_amendments
+        SELECT * FROM strip_affil
         WHERE NOT ({agg_filter})
     ),
 
@@ -1662,6 +1846,42 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         FROM initial_split
     ),
 
+    -- CTE 5c: Fix bad issuer names (extraction artifacts from dimension paths)
+    -- When issuer_name is a generic label (e.g., "Investments") but the raw
+    -- identifier contains entity signals (LLC, Inc, etc.), replace issuer_name
+    -- with the full raw identifier to preserve the position data.
+    -- Only filter rows where both issuer_name AND raw identifier are generic.
+    no_bad_issuers AS (
+        SELECT * EXCLUDE (issuer_name),
+            CASE
+                WHEN ({bad_issuer_filter})
+                     AND ({_sql_has_entity_in_raw})
+                THEN _raw_id
+                ELSE issuer_name
+            END AS issuer_name
+        FROM parsed
+        WHERE NOT (({bad_issuer_filter}) AND NOT ({_sql_has_entity_in_raw}))
+    ),
+
+    -- CTE 5d: Affiliation-axis dedup -- same position tagged under multiple
+    -- affiliation dimension members (e.g. Non-Controlled vs Affiliated) in
+    -- the same filing produces duplicate rows with identical issuer_name + FV.
+    -- Keep one row per (cik, report_date, issuer_name, FV), preferring the
+    -- shortest _raw_id (the one without affiliation tags).
+    no_affil_dupes AS (
+        SELECT * FROM (
+            SELECT *,
+                ROW_NUMBER() OVER (
+                    PARTITION BY cik, report_date,
+                                 lower(trim(CAST(issuer_name AS VARCHAR))),
+                                 ROUND(COALESCE(_fv, 0), 0)
+                    ORDER BY LENGTH(COALESCE(CAST(_raw_id AS VARCHAR), ''))
+                ) AS _affil_rank
+            FROM no_bad_issuers
+        ) sub
+        WHERE _affil_rank = 1
+    ),
+
     -- CTE 6: Classify asset category
     classified AS (
         SELECT *,
@@ -1673,7 +1893,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             (_sh IS NOT NULL AND _sh != 0) AS _has_shares,
             (_bs IS NOT NULL AND _bs != 0) AS _has_basis_spread,
             (_pa IS NOT NULL AND _pa != 0) AS _has_principal_amount
-        FROM parsed
+        FROM no_affil_dupes
     ),
 
     with_asset AS (
@@ -1837,9 +2057,15 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             '' AS nport_is_paid_in_kind,
             '' AS nport_currency_code,
             '' AS nport_liquidity_classification,
+            CASE WHEN lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
+                          LIKE '%nonconsolidatedsubsidiar%'
+                      OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
+                          LIKE '%subsidiar%'
+                 THEN 1 ELSE 0 END AS is_subsidiary,
             '' AS entity_id,
             '' AS canonical_name,
             '' AS extracted_industry,
+            '' AS gics_sub_industry,
             '' AS position_id,
             _row_id
         FROM with_enrichment
@@ -1986,6 +2212,13 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
            OR TRIM(CAST(fair_value_level AS VARCHAR)) = ''
     ),
 
+    -- CTE 1b: Filter out negative fair_value rows (borrowings/liabilities)
+    no_negative_fv AS (
+        SELECT * FROM level3
+        WHERE TRY_CAST(currency_value AS DOUBLE) >= 0
+           OR TRY_CAST(currency_value AS DOUBLE) IS NULL
+    ),
+
     -- CTE 2: Classify assets
     with_asset AS (
         SELECT *,
@@ -1993,7 +2226,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
 {asset_cases}
                 ELSE 'OTHER'
             END AS asset_category
-        FROM level3
+        FROM no_negative_fv
     ),
 
     -- CTE 3: Classify issuers
@@ -2104,9 +2337,11 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             COALESCE(CAST(is_any_portion_interest_paid AS VARCHAR), '') AS nport_is_paid_in_kind,
             COALESCE(CAST(currency_code AS VARCHAR), '') AS nport_currency_code,
             COALESCE(CAST(liquidity_classification AS VARCHAR), '') AS nport_liquidity_classification,
+            0 AS is_subsidiary,
             '' AS entity_id,
             '' AS canonical_name,
             '' AS extracted_industry,
+            '' AS gics_sub_industry,
             '' AS position_id,
             _row_id
         FROM with_fund_detect
@@ -2145,6 +2380,226 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     logger.info("  N-PORT asset breakdown:")
     for cat, count in result["asset_category"].value_counts().items():
         logger.info("    %s: %d (%.1f%%)", cat, count, 100 * count / len(result))
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Classification stabilization
+# ---------------------------------------------------------------------------
+
+
+def _stabilize_classification(df: pd.DataFrame) -> pd.DataFrame:
+    """Stabilize QoQ classification flips using 2x majority rule.
+
+    For each (cik, issuer_name) group that has multiple distinct values for
+    index_classification (or exposure_type / asset_class), if the most frequent
+    value has >= 2x the quarter-count of the second most frequent, override all
+    minority rows to the majority value.
+
+    This prevents spurious flips caused by BDC identifier format changes between
+    filings (e.g., pipe vs comma delimiters, 10-K vs 10-Q naming differences).
+    """
+    if df.empty:
+        return df
+
+    con = duckdb.connect()
+    con.register("src", df)
+
+    # Build stabilization CTEs for all three classification columns
+    cte_parts = []
+    select_overrides = []
+    join_clauses = []
+
+    for i, col in enumerate(("index_classification", "exposure_type", "asset_class")):
+        alias = f"_stab{i}"
+        cte_parts.append(f"""
+        {alias}_counts AS (
+            SELECT cik, issuer_name,
+                   CAST({col} AS VARCHAR) AS cls, COUNT(*) AS n_q
+            FROM src
+            WHERE {col} IS NOT NULL
+              AND CAST({col} AS VARCHAR) != ''
+            GROUP BY 1, 2, 3
+        ),
+        {alias}_ranked AS (
+            SELECT *,
+                ROW_NUMBER() OVER (
+                    PARTITION BY cik, issuer_name
+                    ORDER BY n_q DESC, cls
+                ) AS rn
+            FROM {alias}_counts
+        ),
+        {alias}_stable AS (
+            SELECT r1.cik, r1.issuer_name, r1.cls AS stable_val
+            FROM {alias}_ranked r1
+            JOIN {alias}_ranked r2
+              ON r1.cik = r2.cik
+             AND r1.issuer_name = r2.issuer_name
+             AND r2.rn = 2
+            WHERE r1.rn = 1
+              AND r1.n_q >= 2 * r2.n_q
+        )""")
+        select_overrides.append(
+            f"COALESCE({alias}.stable_val, CAST(s.{col} AS VARCHAR)) AS {col}"
+        )
+        join_clauses.append(
+            f"LEFT JOIN {alias}_stable {alias}"
+            f" ON s.cik = {alias}.cik AND s.issuer_name = {alias}.issuer_name"
+        )
+
+    # Build list of columns to pass through (everything except the 3 we override)
+    override_set = {"index_classification", "exposure_type", "asset_class"}
+    pass_cols = [f"s.{c}" for c in UNIFIED_COLUMNS if c not in override_set]
+
+    sql = "WITH " + ",".join(cte_parts) + f"""
+    SELECT {', '.join(pass_cols)},
+           {', '.join(select_overrides)}
+    FROM src s
+    {chr(10).join(join_clauses)}
+    """
+
+    result = con.execute(sql).fetchdf()
+
+    # Log stabilization impact
+    for col in ("index_classification", "exposure_type", "asset_class"):
+        changed = (df[col].astype(str) != result[col].astype(str)).sum()
+        if changed > 0:
+            logger.info("  Classification stabilization: %d rows changed for %s",
+                        changed, col)
+
+    con.close()
+
+    # Restore column order
+    result = result[UNIFIED_COLUMNS]
+    return result
+
+
+# ---------------------------------------------------------------------------
+# pct_of_net_assets correction for multi-entity BDCs
+# ---------------------------------------------------------------------------
+
+
+def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
+    """Correct pct_of_net_assets for multi-entity BDCs using consolidated net_assets.
+
+    Multi-entity BDCs (holding companies with multiple subsidiaries) report
+    pct_of_net_assets per sub-entity rather than consolidated, causing
+    pct_sum per CIK-quarter to reach 200-5000%.  Where consolidated
+    net_assets is available from fund_financials.csv, recalculate
+    pct_of_net_assets = fair_value / net_assets * 100.
+    """
+    if not FUND_FINANCIALS_FILE.exists():
+        logger.info("pct_of_net_assets correction: no fund_financials file, skipping")
+        return df
+
+    con = duckdb.connect()
+    con.register("holdings", df)
+    ff_path = str(FUND_FINANCIALS_FILE).replace("\\", "/")
+
+    # Step 1: Find BDC CIK-quarters with pct_sum > 200%
+    # Step 2: Join to fund_financials for net_assets
+    # Step 3: Recalculate pct_of_net_assets where possible
+    sql = f"""
+    WITH pct_sums AS (
+        SELECT cik, report_date,
+               SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS pct_sum
+        FROM holdings
+        WHERE source = 'bdc'
+          AND pct_of_net_assets IS NOT NULL
+          AND CAST(pct_of_net_assets AS VARCHAR) != ''
+        GROUP BY cik, report_date
+    ),
+    high_pct AS (
+        SELECT cik, report_date, pct_sum
+        FROM pct_sums
+        WHERE pct_sum > 200
+    ),
+    ff AS (
+        SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+               CAST(report_date AS VARCHAR) AS report_date,
+               TRY_CAST(net_assets AS DOUBLE) AS net_assets
+        FROM read_csv_auto('{ff_path}', header=true, all_varchar=true)
+        WHERE net_assets IS NOT NULL
+          AND CAST(net_assets AS VARCHAR) != ''
+          AND TRY_CAST(net_assets AS DOUBLE) > 0
+    ),
+    corrections AS (
+        SELECT h.cik, h.report_date, ff.net_assets
+        FROM high_pct h
+        INNER JOIN ff ON h.cik = ff.cik AND h.report_date = ff.report_date
+    )
+    SELECT h.* EXCLUDE (pct_of_net_assets),
+        CASE
+            WHEN c.net_assets IS NOT NULL
+                 AND TRY_CAST(h.fair_value AS DOUBLE) IS NOT NULL
+                 AND TRY_CAST(h.fair_value AS DOUBLE) != 0
+            THEN TRY_CAST(h.fair_value AS DOUBLE) / c.net_assets * 100
+            ELSE TRY_CAST(h.pct_of_net_assets AS DOUBLE)
+        END AS pct_of_net_assets
+    FROM holdings h
+    LEFT JOIN corrections c
+        ON h.cik = c.cik AND h.report_date = c.report_date
+        AND h.source = 'bdc'
+    """
+
+    result = con.execute(sql).fetchdf()
+
+    # Log stats
+    try:
+        stats = con.execute(f"""
+        WITH pct_sums AS (
+            SELECT cik, report_date,
+                   SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS pct_sum
+            FROM holdings
+            WHERE source = 'bdc'
+              AND pct_of_net_assets IS NOT NULL
+              AND CAST(pct_of_net_assets AS VARCHAR) != ''
+            GROUP BY cik, report_date
+        ),
+        high_pct AS (
+            SELECT cik, report_date FROM pct_sums WHERE pct_sum > 200
+        ),
+        ff AS (
+            SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                   CAST(report_date AS VARCHAR) AS report_date,
+                   TRY_CAST(net_assets AS DOUBLE) AS net_assets
+            FROM read_csv_auto('{ff_path}', header=true, all_varchar=true)
+            WHERE net_assets IS NOT NULL
+              AND CAST(net_assets AS VARCHAR) != ''
+              AND TRY_CAST(net_assets AS DOUBLE) > 0
+        ),
+        correctable AS (
+            SELECT h.cik, h.report_date
+            FROM high_pct h
+            INNER JOIN ff ON h.cik = ff.cik AND h.report_date = ff.report_date
+        ),
+        affected_rows AS (
+            SELECT COUNT(*) AS n
+            FROM holdings h
+            INNER JOIN correctable c ON h.cik = c.cik AND h.report_date = c.report_date
+            WHERE h.source = 'bdc'
+        )
+        SELECT
+            (SELECT COUNT(*) FROM high_pct) AS n_high_pct,
+            (SELECT COUNT(*) FROM correctable) AS n_correctable,
+            (SELECT n FROM affected_rows) AS n_rows_affected
+        """).fetchone()
+        if stats:
+            logger.info("pct_of_net_assets correction: %d high-pct CIK-quarters, "
+                        "%d correctable (have net_assets), %d rows affected",
+                        stats[0], stats[1], stats[2])
+    except Exception:
+        pass  # Diagnostic only
+
+    con.close()
+
+    # Restore column order
+    result = result[[c for c in UNIFIED_COLUMNS if c in result.columns]]
+    for col in UNIFIED_COLUMNS:
+        if col not in result.columns:
+            result[col] = ""
+    result = result[UNIFIED_COLUMNS]
 
     return result
 
@@ -2226,11 +2681,26 @@ def build_unified_holdings(
     no_dupes AS (
         SELECT * FROM deduped WHERE _dedup_rank = 1
     ),
+    -- Within-filing subsidiary dedup: when the same position appears under
+    -- both parent entity and subsidiary/JV contexts (same CIK, report_date,
+    -- issuer_name), keep the parent row and discard the subsidiary duplicate.
+    -- Subsidiary-only positions (no matching parent row) are preserved.
+    no_sub_dupes AS (
+        SELECT * FROM no_dupes
+        WHERE COALESCE(TRY_CAST(is_subsidiary AS INT), 0) = 0
+           OR NOT EXISTS (
+               SELECT 1 FROM no_dupes nd2
+               WHERE nd2.cik = no_dupes.cik
+                 AND nd2.report_date = no_dupes.report_date
+                 AND nd2.issuer_name = no_dupes.issuer_name
+                 AND COALESCE(TRY_CAST(nd2.is_subsidiary AS INT), 0) = 0
+           )
+    ),
     with_fund_text AS (
         SELECT *,
             COALESCE(lower(trim(issuer_name)), '') || ' ' ||
             COALESCE(lower(trim(instrument_description)), '') AS _combined_fund_text
-        FROM no_dupes
+        FROM no_sub_dupes
     ),
     classified AS (
         SELECT *,
@@ -2392,6 +2862,12 @@ def build_unified_holdings(
     logger.info("Combined: %d total rows (BDC %d + N-PORT %d, %d cross-source dupes removed)",
                 len(combined), len(bdc_unified), len(nport_unified), dedup_removed)
 
+    # Log subsidiary stats
+    if "is_subsidiary" in combined.columns:
+        sub_count = (combined["is_subsidiary"].astype(str) == "1").sum()
+        if sub_count > 0:
+            logger.info("  Subsidiary positions: %d rows flagged (is_subsidiary=1)", sub_count)
+
     # Entity enrichment: join against existing entity_lookup if available
     if ENTITY_LOOKUP_FILE.exists():
         con2 = duckdb.connect()
@@ -2443,6 +2919,13 @@ def build_unified_holdings(
         logger.info("Industry enrichment: %d/%d rows (%.1f%%) with extracted_industry",
                      ind_count, len(combined),
                      100 * ind_count / len(combined) if len(combined) else 0)
+
+    # Classification stabilization: override QoQ flips where one class
+    # has >= 2x the quarters of the second-most-frequent for same position.
+    combined = _stabilize_classification(combined)
+
+    # Correct pct_of_net_assets for multi-entity BDCs
+    combined = _correct_pct_of_net_assets(combined)
 
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)

@@ -28,9 +28,11 @@ from pipeline.unified_holdings import (
     _classify_index,
     _classify_nport_asset,
     _classify_nport_issuer,
+    _correct_pct_of_net_assets,
     _enforce_schema,
     _infer_coupon_type,
     _INDUSTRY_LABELS,
+    _is_bad_issuer_name,
     _is_bdc_aggregate_row,
     _is_named_coinvest,
     _normalize_rate,
@@ -40,6 +42,7 @@ from pipeline.unified_holdings import (
     _reclassify_named_fund_positions,
     _sql_classify_exposure_type,
     _sql_classify_asset_class,
+    _stabilize_classification,
     build_unified_holdings,
     UNIFIED_COLUMNS,
 )
@@ -4679,3 +4682,929 @@ class TestEnforceSchemaNewColumns:
             violations = _enforce_schema(df)
             names = [v[0] for v in violations]
             assert "index_classification_enum" not in names, f"{val} should be valid"
+
+
+# ---------------------------------------------------------------------------
+# _stabilize_classification
+# ---------------------------------------------------------------------------
+
+
+def _make_stabilization_df(rows_spec):
+    """Helper: create a DataFrame suitable for _stabilize_classification.
+
+    rows_spec: list of (issuer_name, report_date, index_classification,
+                        exposure_type, asset_class)
+    All rows get cik='0001234567' and source='bdc' by default.
+    """
+    rows = []
+    for issuer, rdate, ic, et, ac in rows_spec:
+        row = {col: "" for col in UNIFIED_COLUMNS}
+        row["cik"] = "0001234567"
+        row["issuer_name"] = issuer
+        row["report_date"] = rdate
+        row["index_classification"] = ic
+        row["exposure_type"] = et
+        row["asset_class"] = ac
+        row["source"] = "bdc"
+        row["fair_value"] = "1000000"
+        rows.append(row)
+    return pd.DataFrame(rows)[UNIFIED_COLUMNS]
+
+
+class TestStabilizeClassification:
+    """Tests for QoQ classification stabilization (2x majority rule)."""
+
+    def test_clear_majority_overrides_minority(self):
+        """6 quarters DL, 1 quarter CE -> all become DL."""
+        spec = [
+            ("Acme Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(6)
+        ] + [
+            ("Acme Corp", "2024-07-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY"),
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert (result["index_classification"] == "DIRECT_LENDING").all()
+        assert (result["asset_class"] == "PRIVATE_CREDIT").all()
+
+    def test_exact_tie_no_change(self):
+        """4 quarters DL, 4 quarters CE -> no change (tie)."""
+        spec = [
+            ("Tied Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(4)
+        ] + [
+            ("Tied Corp", f"2024-0{i+5}-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY")
+            for i in range(4)
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        # First 4 should remain DL, last 4 should remain CE
+        assert result.iloc[:4]["index_classification"].tolist() == ["DIRECT_LENDING"] * 4
+        assert result.iloc[4:]["index_classification"].tolist() == ["COMMON_EQUITY"] * 4
+
+    def test_majority_not_2x_no_change(self):
+        """3 quarters DL, 2 quarters CE -> no change (3 < 2*2)."""
+        spec = [
+            ("Close Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(3)
+        ] + [
+            ("Close Corp", f"2024-0{i+4}-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY")
+            for i in range(2)
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert result.iloc[:3]["index_classification"].tolist() == ["DIRECT_LENDING"] * 3
+        assert result.iloc[3:]["index_classification"].tolist() == ["COMMON_EQUITY"] * 2
+
+    def test_single_quarter_no_change(self):
+        """Position with only 1 quarter -> no change."""
+        spec = [("Solo Corp", "2024-01-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY")]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert result.iloc[0]["index_classification"] == "COMMON_EQUITY"
+
+    def test_never_changes_no_effect(self):
+        """Position always DL -> no change (no second class)."""
+        spec = [
+            ("Stable Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(5)
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert (result["index_classification"] == "DIRECT_LENDING").all()
+
+    def test_pcf_to_ce_flip_stabilized(self):
+        """OCIC SLF pattern: 6 quarters PCF, 1 quarter CE -> all PCF."""
+        spec = [
+            ("OCIC SLF LLC", f"2024-0{i+1}-31",
+             "PRIVATE_CREDIT_FUND", "FUND", "PRIVATE_CREDIT")
+            for i in range(6)
+        ] + [
+            ("OCIC SLF LLC", "2024-07-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY"),
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert (result["index_classification"] == "PRIVATE_CREDIT_FUND").all()
+        assert (result["exposure_type"] == "FUND").all()
+        assert (result["asset_class"] == "PRIVATE_CREDIT").all()
+
+    def test_multiple_positions_independent(self):
+        """Two positions in same CIK stabilized independently."""
+        spec = [
+            # Position A: 4:1 DL:CE -> stabilize to DL
+            ("Pos A", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(4)
+        ] + [
+            ("Pos A", "2024-05-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY"),
+        ] + [
+            # Position B: 1:4 DL:CE -> stabilize to CE
+            ("Pos B", "2024-01-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT"),
+        ] + [
+            ("Pos B", f"2024-0{i+2}-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY")
+            for i in range(4)
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        a_rows = result[result["issuer_name"] == "Pos A"]
+        b_rows = result[result["issuer_name"] == "Pos B"]
+        assert (a_rows["index_classification"] == "DIRECT_LENDING").all()
+        assert (b_rows["index_classification"] == "COMMON_EQUITY").all()
+
+    def test_three_classes_majority_wins(self):
+        """Position with 3 classifications: 6 DL, 2 CE, 1 PE -> DL wins (6 >= 2*2)."""
+        spec = [
+            ("Multi Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(6)
+        ] + [
+            ("Multi Corp", "2024-07-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY"),
+            ("Multi Corp", "2024-08-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY"),
+            ("Multi Corp", "2024-09-30", "PREFERRED_EQUITY", "DIRECT", "PRIVATE_EQUITY"),
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert (result["index_classification"] == "DIRECT_LENDING").all()
+
+    def test_empty_dataframe(self):
+        """Empty DataFrame passes through without error."""
+        df = pd.DataFrame(columns=UNIFIED_COLUMNS)
+        result = _stabilize_classification(df)
+        assert result.empty
+
+    def test_boundary_exactly_2x(self):
+        """Exactly 2x threshold: 4 quarters DL, 2 quarters CE -> stabilize (4 >= 2*2)."""
+        spec = [
+            ("Boundary Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(4)
+        ] + [
+            ("Boundary Corp", f"2024-0{i+5}-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY")
+            for i in range(2)
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert (result["index_classification"] == "DIRECT_LENDING").all()
+
+    def test_boundary_just_below_2x(self):
+        """Just below 2x: 3 quarters DL, 2 quarters CE -> no change (3 < 2*2)."""
+        spec = [
+            ("Below Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(3)
+        ] + [
+            ("Below Corp", f"2024-0{i+4}-31", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY")
+            for i in range(2)
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        # No stabilization: 3 < 4
+        assert result.iloc[:3]["index_classification"].tolist() == ["DIRECT_LENDING"] * 3
+        assert result.iloc[3:]["index_classification"].tolist() == ["COMMON_EQUITY"] * 2
+
+    def test_column_order_preserved(self):
+        """Output column order matches UNIFIED_COLUMNS."""
+        spec = [
+            ("Order Corp", f"2024-0{i+1}-31", "DIRECT_LENDING", "DIRECT", "PRIVATE_CREDIT")
+            for i in range(3)
+        ] + [
+            ("Order Corp", "2024-04-30", "COMMON_EQUITY", "DIRECT", "PRIVATE_EQUITY"),
+        ]
+        df = _make_stabilization_df(spec)
+        result = _stabilize_classification(df)
+        assert list(result.columns) == UNIFIED_COLUMNS
+
+
+# ---------------------------------------------------------------------------
+# A1: Expanded aggregate pattern tests
+# ---------------------------------------------------------------------------
+
+class TestExpandedAggregatePatterns:
+    """Tests for newly added _BDC_AGGREGATE_PATTERNS and _BDC_AGGREGATE_EXACT."""
+
+    def test_investments_in_non_controlled(self):
+        assert _is_bdc_aggregate_row(
+            "Investments in Non-Controlled/Non-Affiliated Portfolio Companies"
+        )
+
+    def test_investments_in_non_affiliated(self):
+        assert _is_bdc_aggregate_row("Investments in Non-Affiliated Issuers")
+
+    def test_investments_in_affiliated(self):
+        assert _is_bdc_aggregate_row("Investments in Affiliated Issuers")
+
+    def test_first_lien_debt_exact(self):
+        assert _is_bdc_aggregate_row("First Lien Debt")
+
+    def test_second_lien_debt_exact(self):
+        assert _is_bdc_aggregate_row("Second Lien Debt")
+
+    def test_subordinated_debt_exact(self):
+        assert _is_bdc_aggregate_row("Subordinated Debt")
+
+    def test_mezzanine_debt_exact(self):
+        assert _is_bdc_aggregate_row("Mezzanine Debt")
+
+    def test_investments_debt_investments_exact(self):
+        assert _is_bdc_aggregate_row("Investments Debt Investments")
+
+    # Guard: real positions should NOT be filtered
+    def test_real_position_with_lien_keyword_kept(self):
+        assert not _is_bdc_aggregate_row(
+            "Acme Corp - First Lien Term Loan"
+        )
+
+    def test_real_position_with_mezzanine_kept(self):
+        assert not _is_bdc_aggregate_row(
+            "Beta Holdings LLC - Mezzanine Debt - Due 12/15/2027"
+        )
+
+
+# ---------------------------------------------------------------------------
+# A2: Bad issuer name filter tests
+# ---------------------------------------------------------------------------
+
+class TestIsBadIssuerName:
+    """Tests for _is_bad_issuer_name Python mirror."""
+
+    # Rule 1: exact match
+    def test_exact_investments(self):
+        assert _is_bad_issuer_name("Investments")
+
+    def test_exact_debt_investments(self):
+        assert _is_bad_issuer_name("Debt Investments")
+
+    def test_exact_equity_securities(self):
+        assert _is_bad_issuer_name("Equity Securities")
+
+    def test_exact_cash(self):
+        assert _is_bad_issuer_name("Cash")
+
+    def test_exact_non_controlled(self):
+        assert _is_bad_issuer_name("Non-Controlled")
+
+    def test_exact_first_lien_debt(self):
+        assert _is_bad_issuer_name("First Lien Debt")
+
+    def test_exact_case_insensitive(self):
+        assert _is_bad_issuer_name("INVESTMENTS")
+
+    def test_exact_with_whitespace(self):
+        assert _is_bad_issuer_name("  investments  ")
+
+    # Rule 2: no alphabetic characters
+    def test_date_only(self):
+        assert _is_bad_issuer_name("01/15/2025")
+
+    def test_percentage_only(self):
+        assert _is_bad_issuer_name("1.00%")
+
+    def test_number_only(self):
+        assert _is_bad_issuer_name("12345")
+
+    # Rule 3: bad prefix without entity signals
+    def test_prefix_non_controlled_slash(self):
+        assert _is_bad_issuer_name("Non-Controlled/Non-Affiliated Debt Investments")
+
+    def test_prefix_investments_non_controlled(self):
+        assert _is_bad_issuer_name("Investments Non-Controlled Portfolio")
+
+    def test_prefix_with_entity_signal_kept(self):
+        """Bad prefix but has entity signal (LLC) -> NOT filtered."""
+        assert not _is_bad_issuer_name("Non-Controlled/Non-Affiliated Acme LLC")
+
+    def test_prefix_with_holdings_signal_kept(self):
+        assert not _is_bad_issuer_name(
+            "Investments Non-Controlled Beta Holdings Corp."
+        )
+
+    # Guards: real companies should NOT be filtered
+    def test_real_company_kept(self):
+        assert not _is_bad_issuer_name("Acme Corp.")
+
+    def test_real_company_with_llc_kept(self):
+        assert not _is_bad_issuer_name("Total Safety Holdings LLC")
+
+    def test_none_input(self):
+        assert not _is_bad_issuer_name(None)
+
+    def test_empty_string(self):
+        assert not _is_bad_issuer_name("")
+
+
+class TestBadIssuerNameInPrepareBdc:
+    """Integration test: bad issuer names filtered in _prepare_bdc."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_filters_bare_investments_issuer(self):
+        """Position with issuer_name='Investments' after extraction is removed."""
+        df = self._make_bdc_df([
+            # This will parse to issuer_name="Investments" (bare category)
+            {"investment_identifier": "Investments",
+             "cik": "123", "fair_value": 50000000},
+            {"investment_identifier": "Acme Corp - Term Loan",
+             "cik": "123", "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        # "Investments" should be caught by both aggregate filter AND bad issuer
+        assert len(result) == 1
+        assert "Acme" in result.iloc[0]["issuer_name"]
+
+    def test_keeps_real_company_through_bad_issuer_filter(self):
+        """Real company names with entity signals survive the filter."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Investment Corp. - First Lien Term Loan",
+             "cik": "123", "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+
+
+# ---------------------------------------------------------------------------
+# A3: N-PORT negative FV filter tests
+# ---------------------------------------------------------------------------
+
+class TestNportNegativeFvFilter:
+    """Tests for negative fair_value filtering in _prepare_nport."""
+
+    def _make_nport_df(self, rows):
+        cols = [
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "currency_value", "percentage",
+            "asset_cat", "issuer_type", "investment_country",
+            "is_restricted_security", "fair_value_level", "maturity_date",
+            "coupon_type", "annualized_rate", "identifier_isin",
+            "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+            "filing_date", "report_date", "series_name", "series_id",
+            "quarter", "balance", "unit",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_removes_negative_fv(self):
+        """N-PORT rows with negative fair_value (borrowings) are filtered."""
+        df = self._make_nport_df([
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "currency_value": -50000000,
+             "issuer_name": "Senior Secured Notes"},
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "currency_value": 1000000,
+             "issuer_name": "Good Loan Corp"},
+        ])
+        result = _prepare_nport(df)
+        assert len(result) == 1
+        assert "Good Loan" in result.iloc[0]["issuer_name"]
+
+    def test_keeps_null_fv(self):
+        """N-PORT rows with NULL fair_value are kept (not erroneously removed)."""
+        df = self._make_nport_df([
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "currency_value": "",
+             "issuer_name": "Null FV Corp"},
+        ])
+        result = _prepare_nport(df)
+        assert len(result) == 1
+
+    def test_keeps_zero_fv(self):
+        """Zero fair_value positions are kept."""
+        df = self._make_nport_df([
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "currency_value": 0,
+             "issuer_name": "Zero FV Corp"},
+        ])
+        result = _prepare_nport(df)
+        assert len(result) == 1
+
+
+# ---------------------------------------------------------------------------
+# Subsidiary flag (is_subsidiary) in _prepare_bdc
+# ---------------------------------------------------------------------------
+
+class TestSubsidiaryFlag:
+    """Tests for is_subsidiary detection in _prepare_bdc."""
+
+    def _make_bdc_row(self, **overrides):
+        base = {
+            "cik": "123", "entity_name": "Test BDC",
+            "accession_number": "0001-23", "form_type": "10-K",
+            "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "investment_identifier": "Acme Corp - First Lien",
+            "fair_value": 1000000.0, "cost": 990000.0,
+            "principal_amount": 1000000.0, "interest_rate": 8.5,
+            "basis_spread": 3.5, "reference_rate_type": "SOFR",
+            "maturity_date": "2028-01-15", "pct_of_net_assets": 0.05,
+            "pik_rate": None, "shares_held": None,
+            "unrealized_gain_loss": 10000.0, "dimensions_raw": "axis=value",
+            "investment_type": "", "industry": "", "affiliation": "",
+            "period": "2023-03-31",
+        }
+        base.update(overrides)
+        return base
+
+    def test_subsidiary_detected_nonconsolidated(self):
+        """Rows with nonconsolidatedsubsidiaryaxis are flagged is_subsidiary=1."""
+        rows = [self._make_bdc_row(
+            dimensions_raw="nonconsolidatedsubsidiaryaxis=JVEntity",
+        )]
+        df = pd.DataFrame(rows)
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 1
+
+    def test_subsidiary_detected_subsidiary_keyword(self):
+        """Rows with 'subsidiary' in dimensions are flagged."""
+        rows = [self._make_bdc_row(
+            dimensions_raw="consolidatedsubsidiaryaxis=SubCo",
+        )]
+        df = pd.DataFrame(rows)
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 1
+
+    def test_non_subsidiary_not_flagged(self):
+        """Normal rows without subsidiary dimensions are is_subsidiary=0."""
+        rows = [self._make_bdc_row(
+            dimensions_raw="investmentIdentifierAxis=AcmeCorp",
+        )]
+        df = pd.DataFrame(rows)
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 0
+
+    def test_null_dimensions_not_flagged(self):
+        """Rows with NULL/empty dimensions_raw are is_subsidiary=0."""
+        rows = [self._make_bdc_row(dimensions_raw="")]
+        df = pd.DataFrame(rows)
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 0
+
+    def test_nport_always_zero(self):
+        """N-PORT rows always have is_subsidiary=0."""
+        nport_rows = [{
+            "accession_number": "0002-45", "holding_id": "H001",
+            "issuer_name": "Private Borrower LLC",
+            "issuer_lei": "", "issuer_title": "Senior Secured Loan",
+            "issuer_cusip": "ABC123", "currency_value": 2000000.0,
+            "percentage": 0.03, "asset_cat": "LON", "issuer_type": "CORP",
+            "investment_country": "US", "is_restricted_security": "Y",
+            "fair_value_level": 3, "maturity_date": "2027-06-15",
+            "coupon_type": "Floating", "annualized_rate": 9.0,
+            "identifier_isin": "", "identifier_ticker": "",
+            "payoff_profile": "Long", "cik": "456",
+            "registrant_name": "Test Fund",
+            "filing_date": "2023-07-15", "report_date": "2023-06-30",
+            "series_name": "Test Series", "series_id": "S001",
+            "quarter": "2023q2", "balance": 2000000, "unit": "PA",
+            "other_unit_desc": "", "exchange_rate": None,
+            "other_asset": "", "other_issuer": "", "sub_type": "",
+            "derivative_cat": "", "is_default": "N",
+            "other_identifier": "", "currency_code": "USD",
+            "liquidity_classification": "",
+            "are_any_interest_payment": "",
+            "is_any_portion_interest_paid": "",
+        }]
+        result = _prepare_nport(pd.DataFrame(nport_rows))
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 0
+
+
+# ---------------------------------------------------------------------------
+# Within-filing subsidiary dedup in build_unified_holdings
+# ---------------------------------------------------------------------------
+
+class TestSubsidiaryDedup:
+    """Tests for within-filing subsidiary dedup in build_unified_holdings."""
+
+    def _make_bdc_df(self, rows):
+        base_cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation", "period",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in base_cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_dedup_removes_duplicate_subsidiary(self, tmp_path):
+        """When same position exists under parent AND subsidiary, remove subsidiary."""
+        bdc_df = self._make_bdc_df([
+            # Parent row
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - First Lien",
+             "fair_value": 1000000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0, "interest_rate": 8.5,
+             "basis_spread": 3.5, "dimensions_raw": "investmentAxis=value",
+             "period": "2023-03-31"},
+            # Subsidiary duplicate of same position
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - First Lien",
+             "fair_value": 1000000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0, "interest_rate": 8.5,
+             "basis_spread": 3.5,
+             "dimensions_raw": "nonconsolidatedsubsidiaryaxis=JV1",
+             "period": "2023-03-31"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=bdc_df, nport_df=pd.DataFrame())
+        # Only 1 row: the parent. The subsidiary duplicate is removed.
+        acme = result[result["issuer_name"] == "Acme Corp"]
+        assert len(acme) == 1
+        assert int(acme.iloc[0]["is_subsidiary"]) == 0
+
+    def test_preserves_subsidiary_only_position(self, tmp_path):
+        """Subsidiary-only positions (no matching parent) are preserved."""
+        bdc_df = self._make_bdc_df([
+            # Parent row for a different position
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Alpha Corp - Term Loan",
+             "fair_value": 500000.0, "cost": 490000.0,
+             "principal_amount": 500000.0, "interest_rate": 7.0,
+             "basis_spread": 2.0, "dimensions_raw": "investmentAxis=value",
+             "period": "2023-03-31"},
+            # Subsidiary-only position (no parent match)
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "JV-Only Holdings - Equity",
+             "fair_value": 200000.0, "cost": 180000.0,
+             "principal_amount": "", "interest_rate": "",
+             "basis_spread": "",
+             "dimensions_raw": "nonconsolidatedsubsidiaryaxis=JV1",
+             "period": "2023-03-31"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=bdc_df, nport_df=pd.DataFrame())
+        # Both rows preserved (different issuer_name)
+        assert len(result) == 2
+        jv_only = result[result["issuer_name"].str.contains("JV-Only")]
+        assert len(jv_only) == 1
+        assert int(jv_only.iloc[0]["is_subsidiary"]) == 1
+
+    def test_no_subsidiary_passthrough(self, tmp_path):
+        """When no subsidiary rows exist, all rows pass through unchanged."""
+        bdc_df = self._make_bdc_df([
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - First Lien",
+             "fair_value": 1000000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0, "interest_rate": 8.5,
+             "basis_spread": 3.5, "dimensions_raw": "investmentAxis=value",
+             "period": "2023-03-31"},
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Beta Inc - Second Lien",
+             "fair_value": 800000.0, "cost": 790000.0,
+             "principal_amount": 800000.0, "interest_rate": 10.0,
+             "basis_spread": 5.0, "dimensions_raw": "investmentAxis=value2",
+             "period": "2023-03-31"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=bdc_df, nport_df=pd.DataFrame())
+        assert len(result) == 2
+        assert all(result["is_subsidiary"].astype(int) == 0)
+
+
+# ---------------------------------------------------------------------------
+# Affiliation prefix stripping tests
+# ---------------------------------------------------------------------------
+
+
+class TestAffiliationPrefixStrip:
+    """Tests for affiliation prefix/suffix stripping in _prepare_bdc()."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_strip_prefix(self):
+        """Affiliation prefix is stripped -> issuer_name is the real company."""
+        df = self._make_bdc_df([{
+            "cik": "100", "investment_identifier":
+                "Non-Controlled/Non-Affiliated Investments - Acme Corp - Term Loan",
+            "fair_value": 1000000,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+    def test_strip_suffix(self):
+        """Affiliation suffix is stripped -> issuer_name is correct."""
+        df = self._make_bdc_df([{
+            "cik": "100", "investment_identifier":
+                "Acme Corp - Term Loan - Non-Controlled/Non-Affiliated",
+            "fair_value": 1000000,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+    def test_no_strip_normal(self):
+        """Normal identifier without affiliation prefix is unchanged."""
+        df = self._make_bdc_df([{
+            "cik": "100", "investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": 1000000,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+    def test_strip_controlled_prefix(self):
+        """'Controlled Investments - ...' prefix is stripped."""
+        df = self._make_bdc_df([{
+            "cik": "100", "investment_identifier":
+                "Controlled Investments - Beta LLC - Senior Secured",
+            "fair_value": 500000,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Beta LLC"
+
+    def test_strip_affiliate_prefix(self):
+        """'Affiliate Investments - ...' prefix is stripped."""
+        df = self._make_bdc_df([{
+            "cik": "100", "investment_identifier":
+                "Affiliate Investments - Gamma Inc - Revolver",
+            "fair_value": 300000,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Gamma Inc"
+
+
+# ---------------------------------------------------------------------------
+# Affiliation dedup tests
+# ---------------------------------------------------------------------------
+
+
+class TestAffiliationDedup:
+    """Tests for affiliation-axis dedup in _prepare_bdc()."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_dedup_same_issuer_fv(self):
+        """Two rows, same issuer + FV, different _raw_id lengths -> 1 row kept."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - Term Loan",
+             "fair_value": 1000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier":
+                 "Non-Controlled/Non-Affiliated Investments - Acme Corp - Term Loan",
+             "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        # The shorter _raw_id (after prefix strip) should be preferred
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+    def test_keep_different_fv(self):
+        """Two rows, same issuer but different FV -> both kept."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - First Lien Term Loan",
+             "fair_value": 1000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - Second Lien Term Loan",
+             "fair_value": 500000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+
+    def test_keep_different_issuer(self):
+        """Two rows, different issuer same FV -> both kept."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - Term Loan",
+             "fair_value": 1000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Beta Inc - Term Loan",
+             "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+
+
+# ---------------------------------------------------------------------------
+# Expanded bad issuer names tests
+# ---------------------------------------------------------------------------
+
+
+class TestBadIssuerNamesExpanded:
+    """Tests for the expanded _BAD_ISSUER_NAMES_EXACT set."""
+
+    def test_saratoga_bare_tag(self):
+        """'Non-control/Non-affiliate investments' is filtered as bad issuer."""
+        assert _is_bad_issuer_name("Non-control/Non-affiliate investments")
+
+    def test_control_investments(self):
+        """'Control investments' is filtered as bad issuer."""
+        assert _is_bad_issuer_name("Control investments")
+
+    def test_non_control_investments(self):
+        """'Non-control investments' is filtered as bad issuer."""
+        assert _is_bad_issuer_name("Non-control investments")
+
+    def test_affiliate_investments(self):
+        """'Affiliate investments' is filtered as bad issuer."""
+        assert _is_bad_issuer_name("Affiliate investments")
+
+    def test_non_affiliate_investments(self):
+        """'Non-affiliate investments' is filtered as bad issuer."""
+        assert _is_bad_issuer_name("Non-affiliate investments")
+
+
+# ---------------------------------------------------------------------------
+# pct_of_net_assets correction tests
+# ---------------------------------------------------------------------------
+
+
+class TestCorrectPctOfNetAssets:
+    """Tests for _correct_pct_of_net_assets() multi-entity BDC correction."""
+
+    def _make_holdings_df(self, rows):
+        """Build a minimal unified holdings DataFrame."""
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in UNIFIED_COLUMNS}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_high_pct_corrected(self, tmp_path):
+        """CIK with pct_sum=300% + net_assets available -> pct recalculated."""
+        # Create a BDC with 3 positions, each showing 100% of sub-entity net assets
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000100", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 1000000,
+             "pct_of_net_assets": 100.0},
+            {"source": "bdc", "cik": "0000000100", "report_date": "2023-03-31",
+             "issuer_name": "Beta Inc", "fair_value": 2000000,
+             "pct_of_net_assets": 100.0},
+            {"source": "bdc", "cik": "0000000100", "report_date": "2023-03-31",
+             "issuer_name": "Gamma LLC", "fair_value": 500000,
+             "pct_of_net_assets": 100.0},
+        ])
+
+        # Create a fund_financials CSV with net_assets = 5,000,000
+        ff_path = tmp_path / "fund_financials.csv"
+        ff_df = pd.DataFrame([{
+            "cik": "100", "report_date": "2023-03-31",
+            "net_assets": "5000000",
+        }])
+        ff_df.to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        assert len(result) == 3
+        # pct should be recalculated: fair_value / 5M * 100
+        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert abs(float(acme["pct_of_net_assets"]) - 20.0) < 0.01
+        beta = result[result["issuer_name"] == "Beta Inc"].iloc[0]
+        assert abs(float(beta["pct_of_net_assets"]) - 40.0) < 0.01
+        gamma = result[result["issuer_name"] == "Gamma LLC"].iloc[0]
+        assert abs(float(gamma["pct_of_net_assets"]) - 10.0) < 0.01
+
+    def test_normal_pct_unchanged(self, tmp_path):
+        """CIK with pct_sum=120% -> pct unchanged (below 200% threshold)."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000200", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 600000,
+             "pct_of_net_assets": 60.0},
+            {"source": "bdc", "cik": "0000000200", "report_date": "2023-03-31",
+             "issuer_name": "Beta Inc", "fair_value": 600000,
+             "pct_of_net_assets": 60.0},
+        ])
+
+        ff_path = tmp_path / "fund_financials.csv"
+        ff_df = pd.DataFrame([{
+            "cik": "200", "report_date": "2023-03-31",
+            "net_assets": "1000000",
+        }])
+        ff_df.to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        # pct should be unchanged (sum=120% < 200% threshold)
+        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert abs(float(acme["pct_of_net_assets"]) - 60.0) < 0.01
+
+    def test_no_fund_financials(self, tmp_path):
+        """No fund_financials file -> pct unchanged."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000300", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 1000000,
+             "pct_of_net_assets": 150.0},
+            {"source": "bdc", "cik": "0000000300", "report_date": "2023-03-31",
+             "issuer_name": "Beta Inc", "fair_value": 1000000,
+             "pct_of_net_assets": 150.0},
+        ])
+
+        missing_path = tmp_path / "nonexistent_fund_financials.csv"
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", missing_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        # Unchanged - no fund_financials file exists
+        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert abs(float(acme["pct_of_net_assets"]) - 150.0) < 0.01
+
+    def test_nport_rows_unchanged(self, tmp_path):
+        """N-PORT rows are never corrected, even in high-pct CIK-quarters."""
+        holdings = self._make_holdings_df([
+            {"source": "nport", "cik": "0000000400", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 1000000,
+             "pct_of_net_assets": 250.0},
+        ])
+
+        ff_path = tmp_path / "fund_financials.csv"
+        ff_df = pd.DataFrame([{
+            "cik": "400", "report_date": "2023-03-31",
+            "net_assets": "1000000",
+        }])
+        ff_df.to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        # N-PORT rows should be unchanged regardless
+        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert abs(float(acme["pct_of_net_assets"]) - 250.0) < 0.01
