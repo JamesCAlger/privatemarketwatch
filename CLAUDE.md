@@ -105,7 +105,8 @@ python -m pipeline.main --unified        # Build unified private markets holding
 | `pipeline/bdc_fund_income.py` | Fund-level income extraction from cached XBRL (no network) |
 | `pipeline/bdc_sector_breakdown.py` | Per-industry aggregate data (FV, cost, % of net assets) from XBRL `EquitySecuritiesByIndustryAxis`. See [`docs/bdc_sector_breakdown.md`](./docs/bdc_sector_breakdown.md) |
 | `pipeline/fee_uplift.py` | Per-CIK fee uplift: residual between fund income yield and coupon yield |
-| `pipeline/fund_financials.py` | Fund financial data from companyfacts/N-PORT/N-CEN with YTD conversion, seed filtering, scale harmonization, schema enforcement |
+| `pipeline/ncsr_financials.py` | N-CSR/N-CSRS Financial Highlights parser: filing discovery, HTML download, FH table extraction (vertical/horizontal/split-table/broadened search), per-share NII, distributions, NAV, expense ratios, total return |
+| `pipeline/fund_financials.py` | Fund financial data from companyfacts/N-PORT/N-CEN/N-CSR with YTD conversion, seed filtering, scale harmonization, schema enforcement |
 | `pipeline/entity_resolution.py` | Entity resolution across data sources |
 | `pipeline/identifier_extraction.py` | BDC investment identifier parsing (company name, type, industry extraction) |
 | `pipeline/llm_review.py` | LLM-assisted review of unclassified/ambiguous holdings |
@@ -116,26 +117,30 @@ python -m pipeline.main --unified        # Build unified private markets holding
 
 ### Tests
 
-**1,326 tests** across 16 test files. Run with `pytest tests/`.
+**1,665 tests** across 20 test files. Run with `pytest tests/`.
 
 | Test file | Tests | Coverage |
 |---|---|---|
 | `test_unified_holdings.py` | 580 | Identifier parsing, aggregate filtering, classification (2-axis + nport_asset_cat refinement), dedup, shares normalization, cost proxy, affiliation prefix strip, affiliation dedup, pct_of_net_assets correction |
+| `test_ncsr_financials.py` | 135 | N-CSR FH parsing: row labels, value parsing, period detection, layout detection, table finding, vertical/horizontal/split-table extraction, broadened search, dollar units, guard rails, dedup, filing index |
 | `test_entity_resolution.py` | 119 | Entity resolution across sources |
-| `test_bdc_filings.py` | 90 | XBRL parsing, concept mapping, filing index, download, CLI |
-| `test_html_extract.py` | 81 | v3.0 extraction engine, table parsing, column mapping, dollar/rate parsing |
-| `test_nport_holdings.py` | 64 | TSV reading, date normalization, quarter processing, XML parsing |
-| `test_validate_html_template.py` | 49 | Template validation gates, fail_reasons, summary persistence |
+| `test_fund_financials.py` | 111 | Fund financial data extraction, YTD conversion, seed filter, scale harmonization, schema enforcement |
+| `test_bdc_filings.py` | 96 | XBRL parsing, concept mapping, filing index, download, CLI |
+| `test_html_extract.py` | 88 | v3.0 extraction engine, table parsing, column mapping, dollar/rate parsing |
+| `test_nport_holdings.py` | 75 | TSV reading, date normalization, quarter processing, XML parsing |
+| `test_gics_classification.py` | 67 | GICS sector/industry classification |
+| `test_validate_holdings.py` | 56 | Spot-check, aggregate audit, cross-source overlap, coverage |
+| `test_validate_html_template.py` | 53 | Template validation gates, fail_reasons, summary persistence |
+| `test_gics_mapping.py` | 50 | GICS code mapping and lookup |
 | `test_position_matching.py` | 46 | 4-tier cascade, 1:1 enforcement, position ID chaining |
 | `test_index_returns.py` | 45 | Per-unit price return, income imputation, PIK, fee uplift |
-| `test_fund_financials.py` | 97 | Fund financial data extraction, YTD conversion, seed filter, scale harmonization, schema enforcement |
 | `test_bdc_sector_breakdown.py` | 35 | Context parsing, member name normalization, fact extraction, integration |
-| `test_validate_holdings.py` | 32 | Spot-check, aggregate audit, cross-source overlap, coverage |
-| `test_llm_review.py` | 32 | LLM review candidate selection and processing |
-| `test_bdc_fund_income.py` | 26 | Fund income extraction from XBRL |
+| `test_llm_review.py` | 33 | LLM review candidate selection and processing |
+| `test_bdc_fund_income.py` | 27 | Fund income extraction from XBRL |
 | `test_identifier_extraction.py` | 24 | BDC identifier parsing |
 | `test_db.py` | 10 | Database utilities |
 | `test_fee_uplift.py` | 9 | Fee uplift computation and guard rails |
+| `test_gold_standard.py` | 6 | Gold standard validation |
 
 ## Data Layout
 
@@ -155,7 +160,9 @@ data/
     index_returns.csv                  # Quarterly index returns (4 indices, 25 quarters)
     bdc_fund_income.csv                # Fund-level income from XBRL
     fee_uplift.csv                     # Per-CIK fee uplift (128 CIKs)
-    fund_financials.csv                # Fund financial data from companyfacts
+    ncsr_filings_index.csv             # 2,376 N-CSR/N-CSRS filing metadata
+    ncsr_financials.csv                # 1,974 Financial Highlights records (177 CIKs)
+    fund_financials.csv                # Fund financial data from companyfacts/N-CSR
     bdc_sector_breakdown.csv           # Per-CIK per-industry aggregate FV/cost/% from XBRL
     xbrl_data_availability.md          # XBRL concept coverage matrix across all sources
     companyfacts_concept_catalog.md    # Full catalog of 1,262 XBRL concepts from companyfacts
@@ -172,6 +179,7 @@ data/
     filings/bdc_xbrl/{cik}/*.xml       # Cached XBRL instance documents (~2,775 files)
     filings/bdc_html/{cik}/*.html      # Cached HTML filings for template extraction
     filings/bdc_html/{cik}/*.grids.json # Parsed table grids (cell text arrays)
+    filings/ncsr_html/{cik}/*.html     # Cached N-CSR/N-CSRS HTML filings
     sec_datasets/                      # SEC bulk data ZIPs (BDC, N-CEN, N-PORT)
     n2_headers_cache/                  # Downloaded N-2 cover pages
     third_party/                       # Interval Fund Tracker, Sure Dividend CSVs
