@@ -459,6 +459,31 @@ def _parse_financial_highlights(html_path: str) -> list[dict]:
     if not all_records:
         all_records = _try_split_table_extraction(tables, soup, dollar_unit)
 
+    # Broadened search: scan all document tables for FH content.
+    # Catches cases where _find_fh_tables linked to the wrong table
+    # (portfolio schedule, statement of operations, etc.) but the real
+    # FH table exists elsewhere in the document.
+    if not all_records:
+        tried = {id(t) for t in tables}
+        for t in tables:
+            sib = t.find_next_sibling("table")
+            if sib:
+                tried.add(id(sib))
+        candidates_tried = 0
+        for doc_table in soup.find_all("table"):
+            if id(doc_table) in tried:
+                continue
+            rows = _get_table_rows(doc_table)
+            if not _is_fh_candidate(rows):
+                continue
+            records = _extract_table(doc_table, dollar_unit)
+            if records:
+                all_records = records
+                break
+            candidates_tried += 1
+            if candidates_tried >= 10:
+                break
+
     if not all_records:
         return []
 
@@ -777,6 +802,25 @@ def _detect_vertical_layout(rows: list[list[str]]) -> bool:
                 label_hits += 1
                 break
     return label_hits >= 2
+
+
+def _is_fh_candidate(rows: list[list[str]], min_labels: int = 3) -> bool:
+    """Quick check: does column 0 have enough FH row labels?
+
+    Used as a pre-filter when scanning document tables to avoid running
+    full extraction on portfolio schedules or statements of operations.
+    """
+    if len(rows) < 5:
+        return False
+    hits = 0
+    for r in rows[:25]:
+        if not r or not r[0].strip():
+            continue
+        if _match_row_label(r[0].strip()):
+            hits += 1
+            if hits >= min_labels:
+                return True
+    return False
 
 
 def _extract_vertical(

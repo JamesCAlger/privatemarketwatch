@@ -25,6 +25,7 @@ from pipeline.ncsr_financials import (
     _find_fh_tables,
     _find_merged_headers,
     _find_period_columns,
+    _is_fh_candidate,
     _looks_numeric,
     _match_row_label,
     _parse_financial_highlights,
@@ -1211,3 +1212,164 @@ class TestElementLevelHeadingFallback:
         path.write_text(html, encoding="utf-8")
         records = _parse_financial_highlights(str(path))
         assert len(records) >= 1
+
+
+# ===================================================================
+# 14. FH candidate detection
+# ===================================================================
+
+class TestIsFhCandidate:
+    """Tests for _is_fh_candidate pre-filter."""
+
+    def test_fh_table_is_candidate(self):
+        """Table with NAV/NII/distributions/expense/turnover is a candidate."""
+        rows = [
+            ["", "Year Ended Dec 31, 2024"],
+            ["Net asset value, beginning of period", "$25.00"],
+            ["Net investment income", "$1.00"],
+            ["Net realized and unrealized gain (loss)", "$0.50"],
+            ["Distributions from net investment income", "$(0.80)"],
+            ["Total distributions", "$(0.80)"],
+            ["Net asset value, end of period", "$25.70"],
+            ["Total return", "5.25%"],
+            ["Ratio of expenses to average net assets", "1.50%"],
+            ["Net assets, end of period", "$500,000"],
+        ]
+        assert _is_fh_candidate(rows) is True
+
+    def test_portfolio_schedule_not_candidate(self):
+        """Portfolio schedule (company names, no FH labels) is not a candidate."""
+        rows = [
+            ["Company", "Industry", "Fair Value"],
+            ["Acme Corp", "Technology", "$10,000"],
+            ["Beta Inc", "Healthcare", "$8,000"],
+            ["Gamma LLC", "Energy", "$12,000"],
+            ["Delta Co", "Finance", "$5,000"],
+            ["Epsilon Ltd", "Consumer", "$7,000"],
+            ["Zeta Partners", "Real Estate", "$9,000"],
+        ]
+        assert _is_fh_candidate(rows) is False
+
+    def test_statement_of_operations_not_candidate(self):
+        """Statement of Operations has NII but only 1-2 FH labels."""
+        rows = [
+            ["Investment Income:", ""],
+            ["Interest income", "$5,000,000"],
+            ["Dividend income", "$200,000"],
+            ["Total investment income", "$5,200,000"],
+            ["Expenses:", ""],
+            ["Management fees", "$1,000,000"],
+            ["Net investment income", "$3,500,000"],
+            ["Realized gain on investments", "$500,000"],
+        ]
+        assert _is_fh_candidate(rows) is False
+
+    def test_too_short_table(self):
+        """Table with fewer than 5 rows is not a candidate."""
+        rows = [
+            ["Net asset value, beginning of period", "$25.00"],
+            ["Net investment income", "$1.00"],
+            ["Total return", "5.25%"],
+        ]
+        assert _is_fh_candidate(rows) is False
+
+    def test_min_labels_parameter(self):
+        """Threshold parameter works (min_labels=2 vs default 3)."""
+        rows = [
+            ["", "2024"],
+            ["Net asset value, beginning of period", "$25.00"],
+            ["Net investment income", "$1.00"],
+            ["Some other row", "value"],
+            ["Another row", "value"],
+        ]
+        assert _is_fh_candidate(rows, min_labels=2) is True
+        assert _is_fh_candidate(rows, min_labels=3) is False
+
+
+# ===================================================================
+# 15. Broadened document-wide FH table search
+# ===================================================================
+
+class TestBroadenedSearch:
+    """Tests for broadened search fallback in _parse_financial_highlights."""
+
+    def test_wrong_table_linked_finds_real_fh(self, tmp_path):
+        """FH heading leads to wrong table, real FH table later in doc."""
+        html = """<html><body>
+        <p><b>Financial Highlights</b></p>
+        <!-- Wrong table: portfolio schedule -->
+        <table>
+            <tr><td>Company</td><td>Fair Value</td></tr>
+            <tr><td>Acme Corp</td><td>$10,000</td></tr>
+            <tr><td>Beta Inc</td><td>$8,000</td></tr>
+        </table>
+        <!-- Some intervening content -->
+        <p>Notes to Financial Statements</p>
+        <table>
+            <tr><td>Note 1</td><td>Details</td></tr>
+        </table>
+        <!-- Real FH table further in the document -->
+        <table>
+            <tr><td></td><td>Year Ended Dec 31, 2024</td></tr>
+            <tr><td>Net asset value, beginning of period</td><td>$25.00</td></tr>
+            <tr><td>Net investment income</td><td>$1.00</td></tr>
+            <tr><td>Net realized and unrealized gain (loss)</td><td>$0.50</td></tr>
+            <tr><td>Distributions from net investment income</td><td>$(0.80)</td></tr>
+            <tr><td>Total distributions</td><td>$(0.80)</td></tr>
+            <tr><td>Net asset value, end of period</td><td>$25.70</td></tr>
+            <tr><td>Total return</td><td>5.25%</td></tr>
+            <tr><td>Ratio of expenses to average net assets</td><td>1.50%</td></tr>
+            <tr><td>Net assets, end of period</td><td>$500,000</td></tr>
+        </table>
+        </body></html>"""
+        path = tmp_path / "wrong_table.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        assert len(records) >= 1
+        r = records[0]
+        assert r["nav_begin_per_share"] == 25.0
+        assert r["total_return_pct"] == 5.25
+
+    def test_no_fh_table_returns_empty(self, tmp_path):
+        """No FH table in doc at all returns empty list."""
+        html = """<html><body>
+        <p><b>Financial Highlights</b></p>
+        <table>
+            <tr><td>Company</td><td>Fair Value</td></tr>
+            <tr><td>Acme Corp</td><td>$10,000</td></tr>
+        </table>
+        <table>
+            <tr><td>Note 1</td><td>Details</td></tr>
+        </table>
+        </body></html>"""
+        path = tmp_path / "no_fh.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        assert records == []
+
+    def test_primary_extraction_not_broadened(self, tmp_path):
+        """When primary extraction succeeds, broadened search is NOT triggered."""
+        html = """<html><body>
+        <p><b>Financial Highlights</b></p>
+        <table>
+            <tr><td></td><td>Year Ended Dec 31, 2024</td></tr>
+            <tr><td>Net asset value, beginning of period</td><td>$25.00</td></tr>
+            <tr><td>Net investment income</td><td>$1.00</td></tr>
+            <tr><td>Net asset value, end of period</td><td>$26.00</td></tr>
+            <tr><td>Total return</td><td>5.25%</td></tr>
+        </table>
+        <!-- Another FH-like table that should NOT be picked up -->
+        <table>
+            <tr><td></td><td>Year Ended Dec 31, 2023</td></tr>
+            <tr><td>Net asset value, beginning of period</td><td>$99.00</td></tr>
+            <tr><td>Net investment income</td><td>$9.00</td></tr>
+            <tr><td>Net asset value, end of period</td><td>$99.99</td></tr>
+            <tr><td>Total return</td><td>99.99%</td></tr>
+        </table>
+        </body></html>"""
+        path = tmp_path / "primary_ok.html"
+        path.write_text(html, encoding="utf-8")
+        records = _parse_financial_highlights(str(path))
+        # Should have 1 record from primary extraction only
+        assert len(records) == 1
+        assert records[0]["nav_begin_per_share"] == 25.0
