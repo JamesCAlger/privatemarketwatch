@@ -406,6 +406,13 @@ class TestApplyGuards:
         assert pd.isna(result.loc[2, "nav_begin_per_share"])
         assert pd.isna(result.loc[1, "nav_end_per_share"])
 
+    def test_nii_out_of_range(self):
+        df = pd.DataFrame({"nii_per_share": [-600.0, 0.50, 1264550.0]})
+        result = _apply_guards(df)
+        assert pd.isna(result.loc[0, "nii_per_share"])
+        assert result.loc[1, "nii_per_share"] == 0.50
+        assert pd.isna(result.loc[2, "nii_per_share"])
+
     def test_total_return_out_of_range(self):
         df = pd.DataFrame({"total_return_pct": [-70.0, 5.0, 150.0]})
         result = _apply_guards(df)

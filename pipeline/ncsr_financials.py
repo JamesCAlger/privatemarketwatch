@@ -1257,6 +1257,14 @@ def _apply_guards(df: pd.DataFrame) -> pd.DataFrame:
             mask = (vals < 0.50) | (vals > 5000)
             df.loc[mask, col] = None
 
+    # NII per share: -$500 to $500
+    # Outliers (28 rows across 3 CIKs) have aggregate fund-level NII
+    # parsed instead of per-share (values in the millions).
+    if "nii_per_share" in df.columns:
+        vals = pd.to_numeric(df["nii_per_share"], errors="coerce")
+        mask = (vals < -500) | (vals > 500)
+        df.loc[mask, "nii_per_share"] = None
+
     # Total return: -60% to +100%
     if "total_return_pct" in df.columns:
         vals = pd.to_numeric(df["total_return_pct"], errors="coerce")
