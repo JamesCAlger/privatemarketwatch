@@ -149,6 +149,9 @@ HOLDINGS_CROSS_SOURCE_FILE = OUTPUT_DIR / "holdings_cross_source.csv"
 HOLDINGS_TOTAL_ASSETS_FILE = OUTPUT_DIR / "holdings_total_assets.csv"
 CLASSIFICATION_VALIDATION_FILE = OUTPUT_DIR / "classification_validation.csv"
 HOLDINGS_GAV_RECONCILIATION_FILE = OUTPUT_DIR / "holdings_gav_reconciliation.csv"
+HOLDINGS_PCT_SUM_FILE = OUTPUT_DIR / "holdings_pct_sum.csv"
+HOLDINGS_COUNT_STABILITY_FILE = OUTPUT_DIR / "holdings_count_stability.csv"
+HOLDINGS_INCOME_YIELD_FILE = OUTPUT_DIR / "holdings_income_yield.csv"
 
 # Position matching and index returns
 POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
@@ -170,6 +173,11 @@ COMPANY_GICS_CACHE_FILE = OUTPUT_DIR / "company_gics_cache.csv"
 # LLM review outputs
 LLM_REVIEW_CANDIDATES_FILE = OUTPUT_DIR / "llm_review_candidates.csv"
 LLM_REVIEW_LOOKUP_FILE = OUTPUT_DIR / "llm_review_lookup.csv"
+
+# LLM fund classification validation
+LLM_FUND_VALIDATION_CACHE_FILE = OUTPUT_DIR / "llm_fund_validation_cache.csv"
+LLM_FUND_VALIDATION_RESULTS_FILE = OUTPUT_DIR / "llm_fund_validation_results.csv"
+LLM_FUND_CLASSIFICATION_REVIEW_FILE = OUTPUT_DIR / "llm_fund_classification_review.csv"
 
 # Identifier extraction outputs
 IDENTIFIER_EXTRACTION_LOOKUP_FILE = OUTPUT_DIR / "identifier_extraction_lookup.csv"

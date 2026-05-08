@@ -154,6 +154,19 @@ def _parse_args() -> argparse.Namespace:
         action="store_true",
         help="Export aggregated JSON for the static Next.js frontend.",
     )
+    parser.add_argument(
+        "--llm-fund-validation",
+        action="store_true",
+        help="Run blind LLM validation of fund classification accuracy. "
+             "Requires OPENAI_API_KEY in .env.",
+    )
+    parser.add_argument(
+        "--classify-funds",
+        action="store_true",
+        help="Classify UNCLASSIFIED fund positions via LLM. Auto-applies "
+             "PE/Credit/RE (high precision), writes HF/SC to review CSV. "
+             "Requires OPENAI_API_KEY in .env.",
+    )
     return parser.parse_args()
 
 
@@ -200,6 +213,10 @@ def main() -> None:
         mode_parts.append("LOAD-DB")
     if args.export_frontend:
         mode_parts.append("EXPORT-FRONTEND")
+    if args.llm_fund_validation:
+        mode_parts.append("LLM-FUND-VALIDATION")
+    if args.classify_funds:
+        mode_parts.append("CLASSIFY-FUNDS")
     if args.ciks:
         mode_parts.append(f"CIKs: {', '.join(args.ciks)}")
     logger.info("  Mode: %s", " + ".join(mode_parts) if mode_parts else "FAST")
@@ -538,6 +555,32 @@ def main() -> None:
         except Exception as exc:
             logger.error("Database load failed: %s", exc, exc_info=True)
         logger.info("Database load step completed in %.1f s", time.time() - t12)
+
+    # ── Step 12b: LLM fund classification validation (optional) ──
+    if args.llm_fund_validation:
+        logger.info("")
+        t12b = time.time()
+        try:
+            from pipeline.llm_fund_validation import run_fund_validation
+            run_fund_validation()
+        except Exception as exc:
+            logger.error("LLM fund validation failed: %s", exc,
+                         exc_info=True)
+        logger.info("LLM fund validation step completed in %.1f s",
+                     time.time() - t12b)
+
+    # ── Step 12c: Classify unclassified fund positions (optional) ──
+    if args.classify_funds:
+        logger.info("")
+        t12c = time.time()
+        try:
+            from pipeline.llm_fund_validation import classify_unclassified_funds
+            classify_unclassified_funds()
+        except Exception as exc:
+            logger.error("Fund classification failed: %s", exc,
+                         exc_info=True)
+        logger.info("Fund classification step completed in %.1f s",
+                     time.time() - t12c)
 
     # ── Step 13: Export frontend JSON (optional) ──
     if args.export_frontend:
