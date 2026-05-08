@@ -16,6 +16,7 @@ import pytest
 from pipeline.position_matching import (
     MATCH_COLUMNS,
     MAX_CUSIP_MULTIPLICITY,
+    MAX_NAME_MULTIPLICITY,
     MIN_JW_SIMILARITY,
     MAX_FV_RATIO,
     assign_position_ids,
@@ -298,6 +299,95 @@ class TestTierB:
         result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
         b2 = result[result["match_method"] == "B2_exact_name"]
         assert len(b2) == 1
+
+    def test_high_multiplicity_name_excluded(self):
+        """Names appearing > MAX_NAME_MULTIPLICITY times excluded from B2."""
+        bdc_raw = _make_bdc_raw([])
+        n = MAX_NAME_MULTIPLICITY + 1
+        rows = []
+        # Q1: n positions with the same generic name
+        for i in range(n):
+            rows.append({
+                "source": "bdc", "cik": "200", "entity_name": "BDC2",
+                "report_date": "2024-03-31",
+                "issuer_name": "Investment 1st Lien/Senior Secured Debt",
+                "fair_value": str(100000 + i * 1000),
+            })
+        # Q2: n positions with the same generic name
+        for i in range(n):
+            rows.append({
+                "source": "bdc", "cik": "200", "entity_name": "BDC2",
+                "report_date": "2024-06-30",
+                "issuer_name": "Investment 1st Lien/Senior Secured Debt",
+                "fair_value": str(101000 + i * 1000),
+            })
+        unified = _make_unified(rows)
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 0, f"Expected 0 B2 matches for high-mult name, got {len(b2)}"
+
+    def test_below_multiplicity_threshold_still_matches(self):
+        """Names at or below MAX_NAME_MULTIPLICITY still match via B2."""
+        bdc_raw = _make_bdc_raw([])
+        n = MAX_NAME_MULTIPLICITY  # exactly at threshold -- should pass
+        rows = []
+        for i in range(n):
+            rows.append({
+                "source": "bdc", "cik": "200", "entity_name": "BDC2",
+                "report_date": "2024-03-31",
+                "issuer_name": "Acme Corp First Lien",
+                "fair_value": str(100000 + i * 10000),
+            })
+        for i in range(n):
+            rows.append({
+                "source": "bdc", "cik": "200", "entity_name": "BDC2",
+                "report_date": "2024-06-30",
+                "issuer_name": "Acme Corp First Lien",
+                "fair_value": str(101000 + i * 10000),
+            })
+        unified = _make_unified(rows)
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        # At threshold, 1:1 enforcement yields min(n, n) = n matches
+        assert len(b2) == n, f"Expected {n} B2 matches, got {len(b2)}"
+
+    def test_high_multiplicity_name_does_not_block_other_names(self):
+        """High-mult name exclusion doesn't affect other normal names."""
+        bdc_raw = _make_bdc_raw([])
+        n = MAX_NAME_MULTIPLICITY + 1
+        rows = []
+        # Generic name: above threshold
+        for i in range(n):
+            rows.append({
+                "source": "bdc", "cik": "200", "entity_name": "BDC2",
+                "report_date": "2024-03-31",
+                "issuer_name": "Generic Category Header",
+                "fair_value": str(100000 + i * 1000),
+            })
+        for i in range(n):
+            rows.append({
+                "source": "bdc", "cik": "200", "entity_name": "BDC2",
+                "report_date": "2024-06-30",
+                "issuer_name": "Generic Category Header",
+                "fair_value": str(101000 + i * 1000),
+            })
+        # Normal name: should still match
+        rows.append({
+            "source": "bdc", "cik": "200", "entity_name": "BDC2",
+            "report_date": "2024-03-31", "issuer_name": "Real Company LLC",
+            "fair_value": "500000",
+        })
+        rows.append({
+            "source": "bdc", "cik": "200", "entity_name": "BDC2",
+            "report_date": "2024-06-30", "issuer_name": "Real Company LLC",
+            "fair_value": "510000",
+        })
+        unified = _make_unified(rows)
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        # Only the normal name should match
+        assert len(b2) == 1
+        assert b2.iloc[0]["match_key"] == "real company llc"
 
 
 # ---------------------------------------------------------------------------

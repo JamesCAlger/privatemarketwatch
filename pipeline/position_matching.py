@@ -29,6 +29,13 @@ logger = logging.getLogger(__name__)
 # Maximum times a CUSIP may appear per CIK/quarter before being excluded
 MAX_CUSIP_MULTIPLICITY = 5
 
+# Maximum times an issuer_name may appear per CIK/quarter before being
+# excluded from exact/normalized/fuzzy name matching.  Generic category
+# headers (e.g. "Investment 1st Lien/Senior Secured Debt") can appear
+# 100+ times per CIK-quarter and create thousands of false match pairs.
+# P99 of legitimate name multiplicity is ~4; threshold of 10 is generous.
+MAX_NAME_MULTIPLICITY = 10
+
 # Jaro-Winkler threshold for fuzzy matching
 MIN_JW_SIMILARITY = 0.88
 
@@ -379,6 +386,18 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT * FROM with_cusip
         WHERE _row_id NOT IN (SELECT _row_id FROM cusip_used)
     ),
+    -- Name multiplicity: exclude generic names appearing too often
+    name_counts AS (
+        SELECT cik, quarter, _name_lower, COUNT(*) AS n
+        FROM name_remaining
+        WHERE _name_lower IS NOT NULL AND _name_lower != ''
+        GROUP BY cik, quarter, _name_lower
+    ),
+    high_mult_names AS (
+        SELECT cik, quarter, _name_lower
+        FROM name_counts
+        WHERE n > {MAX_NAME_MULTIPLICITY}
+    ),
     pairs_name AS (
         SELECT
             e.cik, e.entity_name, e.source,
@@ -411,6 +430,14 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
          AND b._name_lower = e._name_lower
          AND b._name_lower != ''
          AND b.source = e.source
+        WHERE b._name_lower NOT IN (
+            SELECT _name_lower FROM high_mult_names
+            WHERE cik = b.cik AND quarter = b.quarter
+        )
+        AND e._name_lower NOT IN (
+            SELECT _name_lower FROM high_mult_names
+            WHERE cik = e.cik AND quarter = e.quarter
+        )
     ),
     -- B2: 1:1 enforcement (composite tiebreaker: FV + rate + principal)
     name_rn_begin AS (
@@ -493,6 +520,22 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         FROM unified_base u
         WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
     ),
+    -- Normalized-name multiplicity cap
+    norm_name_counts AS (
+        SELECT cik, quarter, _norm_name, COUNT(*) AS n
+        FROM (
+            SELECT cik, quarter, {norm_sql} AS _norm_name
+            FROM unified_base
+            WHERE _row_id NOT IN (SELECT _row_id FROM all_used)
+        )
+        WHERE _norm_name IS NOT NULL AND _norm_name != ''
+        GROUP BY cik, quarter, _norm_name
+    ),
+    high_mult_norm AS (
+        SELECT cik, quarter, _norm_name
+        FROM norm_name_counts
+        WHERE n > {MAX_NAME_MULTIPLICITY}
+    ),
     pairs AS (
         SELECT
             e.cik, e.entity_name, e.source,
@@ -522,6 +565,14 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
          AND b._norm_name = e._norm_name
          AND b._norm_name != ''
          AND b.source = e.source
+        WHERE b._norm_name NOT IN (
+            SELECT _norm_name FROM high_mult_norm
+            WHERE cik = b.cik AND quarter = b.quarter
+        )
+        AND e._norm_name NOT IN (
+            SELECT _norm_name FROM high_mult_norm
+            WHERE cik = e.cik AND quarter = e.quarter
+        )
     ),
     rn_begin AS (
         SELECT *,
@@ -586,6 +637,22 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
         FROM unified_base u
         WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
     ),
+    -- Normalized-name multiplicity cap for fuzzy matching
+    d_norm_counts AS (
+        SELECT cik, quarter, _norm_name, COUNT(*) AS n
+        FROM (
+            SELECT cik, quarter, {norm_sql} AS _norm_name
+            FROM unified_base
+            WHERE _row_id NOT IN (SELECT _row_id FROM all_used)
+        )
+        WHERE _norm_name IS NOT NULL AND _norm_name != ''
+        GROUP BY cik, quarter, _norm_name
+    ),
+    d_high_mult_norm AS (
+        SELECT cik, quarter, _norm_name
+        FROM d_norm_counts
+        WHERE n > {MAX_NAME_MULTIPLICITY}
+    ),
     -- Prefix-blocking: only compare pairs sharing first 4 chars
     blocked AS (
         SELECT
@@ -612,6 +679,14 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
          AND b._norm_name != ''
          AND e._norm_name != ''
          AND LEFT(b._norm_name, 4) = LEFT(e._norm_name, 4)
+        WHERE b._norm_name NOT IN (
+            SELECT _norm_name FROM d_high_mult_norm
+            WHERE cik = b.cik AND quarter = b.quarter
+        )
+        AND e._norm_name NOT IN (
+            SELECT _norm_name FROM d_high_mult_norm
+            WHERE cik = e.cik AND quarter = e.quarter
+        )
     ),
     scored AS (
         SELECT *,
