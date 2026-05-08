@@ -753,7 +753,8 @@ class TestNportIssuerMapping:
         assert _classify_nport_issuer("USGA") == "GOVERNMENT"
 
     def test_nuss(self):
-        assert _classify_nport_issuer("NUSS") == "GOVERNMENT"
+        # NUSS maps to OTHER at function level; GOVERNMENT is name-gated in SQL
+        assert _classify_nport_issuer("NUSS") == "OTHER"
 
     def test_unknown(self):
         assert _classify_nport_issuer("XYZ") == "OTHER"
@@ -800,8 +801,8 @@ class TestClassifyIndex:
     def test_private_equity_fund_venture(self):
         assert _classify_index("FUND", "FUND", "Venture Capital Partners", "") == "PRIVATE_EQUITY_FUND"
 
-    def test_hedge_fund_no_signals(self):
-        assert _classify_index("FUND", "FUND", "ABC Partners", "") == "HEDGE_FUND"
+    def test_fund_no_signals_unclassified(self):
+        assert _classify_index("FUND", "FUND", "ABC Partners", "") == "UNCLASSIFIED"
 
     def test_unclassified_other_asset(self):
         assert _classify_index("OTHER", "CORPORATE", "Acme", "") == "UNCLASSIFIED"
@@ -3309,6 +3310,39 @@ class TestNportFundDetection:
         result = _prepare_nport(df)
         assert result.iloc[0]["issuer_category"] == "FUND"
 
+    def test_lp_without_fund_signal_stays_corporate(self):
+        """OTHER+CORP with 'L.P.' but no fund co-keyword -> stays CORPORATE."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "OTHER", "issuer_type": "CORP",
+            "issuer_name": "ALP CFO 2024, L.P.",
+            "currency_value": 2000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "CORPORATE"
+
+    def test_nuss_govt_name_becomes_government(self):
+        """NUSS with government keyword in name -> GOVERNMENT."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "DBT", "issuer_type": "NUSS",
+            "issuer_name": "RUSSIAN GOVT",
+            "currency_value": 5000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "GOVERNMENT"
+
+    def test_nuss_corporate_name_stays_corporate(self):
+        """NUSS with corporate name -> CORPORATE (via LON/DBT+OTHER -> CORPORATE)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "LON", "issuer_type": "NUSS",
+            "issuer_name": "Waratek Ltd",
+            "currency_value": 3000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "CORPORATE"
+
 
 # ---------------------------------------------------------------------------
 # Rate cap tests
@@ -4457,14 +4491,14 @@ class TestAssetClass:
         ])
         assert result[0][1] == "CASH"
 
-    def test_hedge_fund_no_signals(self):
-        """Fund with no credit/PE signals -> HEDGE_FUND."""
+    def test_fund_no_signals_other(self):
+        """Fund with no credit/PE signals -> OTHER (asset_class)."""
         result = _sql_classify([
             {"asset_category": "OTHER", "issuer_category": "FUND",
              "issuer_name": "Millennium International Ltd.",
              "instrument_description": ""}
         ])
-        assert result[0][1] == "HEDGE_FUND"
+        assert result[0][1] == "OTHER"
 
     def test_hedge_fund_explicit_keyword(self):
         result = _sql_classify([
@@ -4512,14 +4546,14 @@ class TestAssetClass:
         ])
         assert result[0][1] == "PRIVATE_CREDIT"
 
-    def test_nac_other_still_hf_sql(self):
-        """FUND + nport_asset_cat=OTHER -> still HEDGE_FUND."""
+    def test_nac_other_vintage_pe_sql(self):
+        """FUND + nport_asset_cat=OTHER + vintage series -> PRIVATE_EQUITY."""
         result = _sql_classify([
             {"asset_category": "OTHER", "issuer_category": "FUND",
              "issuer_name": "KKR European Fund V",
              "instrument_description": "", "nport_asset_cat": "OTHER"}
         ])
-        assert result[0][1] == "HEDGE_FUND"
+        assert result[0][1] == "PRIVATE_EQUITY"
 
     def test_nac_credit_keyword_wins_over_nac_ec_sql(self):
         """Credit keyword takes priority over nport_asset_cat=EC."""
@@ -4557,9 +4591,9 @@ class TestExpandedIndexClassification:
         result = _classify_index("DEBT", "CORPORATE", "Barings CLO Ltd", "")
         assert result == "DIRECT_LENDING"
 
-    def test_hedge_fund_no_signals(self):
+    def test_fund_no_signals_unclassified(self):
         result = _classify_index("FUND", "FUND", "ABC Partners", "")
-        assert result == "HEDGE_FUND"
+        assert result == "UNCLASSIFIED"
 
     def test_hedge_fund_explicit_keyword(self):
         result = _classify_index("OTHER", "FUND", "Citadel Multi-Strategy Fund", "")
@@ -4597,11 +4631,11 @@ class TestExpandedIndexClassification:
                                  nport_asset_cat="LON")
         assert result == "PRIVATE_CREDIT_FUND"
 
-    def test_nac_other_fund_still_hedge_fund(self):
-        """FUND + nport_asset_cat=OTHER -> HEDGE_FUND (catch-all unchanged)."""
+    def test_nac_other_vintage_pe_fund(self):
+        """FUND + nport_asset_cat=OTHER + vintage series -> PRIVATE_EQUITY_FUND."""
         result = _classify_index("OTHER", "FUND", "KKR European Fund V", "",
                                  nport_asset_cat="OTHER")
-        assert result == "HEDGE_FUND"
+        assert result == "PRIVATE_EQUITY_FUND"
 
     def test_nac_keyword_still_wins_over_nac(self):
         """Credit keyword signal takes priority over nport_asset_cat=EC."""

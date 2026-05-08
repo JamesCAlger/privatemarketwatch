@@ -357,7 +357,7 @@ _NPORT_ISSUER_MAP = {
     "MUN": "GOVERNMENT",
     "UST": "GOVERNMENT",
     "USGA": "GOVERNMENT",
-    "NUSS": "GOVERNMENT",
+    "NUSS": "OTHER",  # name-gated: only GOVERNMENT if name has govt keyword (see CTE 4)
 }
 
 # BDC keyword -> asset_category (priority order matters)
@@ -406,7 +406,7 @@ _CREDIT_FUND_SIGNALS = [
 ]
 _PE_FUND_SIGNALS = [
     "equity", "buyout", "growth", "venture", "private equity",
-    "capital partners", "co-invest",
+    "capital partners", "co-invest", "coinvest", "aggregator",
     "secondaries", "infrastructure", "real assets", "opportunistic",
     "lp interest", "lp interests", "partnership interest",
 ]
@@ -422,6 +422,18 @@ _NPORT_FUND_NAME_KEYWORDS = [
 _NPORT_CREDIT_FUND_NAME_KEYWORDS = [
     "bdc", "private credit", "senior loan", "lending fund",
     "credit fund", "credit corp", "direct lend",
+]
+
+# NUSS name-gated government detection: only map NUSS to GOVERNMENT when the
+# issuer name contains an explicit government keyword.  Most NUSS-tagged
+# positions are corporate (filer mis-tagged).
+_NPORT_GOVT_NAME_RE = r"\bGOVT\b|\bGOVERNMENT\b|REPUBLIC OF|KINGDOM OF|SOVEREIGN"
+
+# L.P. suffix fund co-keywords: an L.P. entity is only reclassified as FUND
+# when the name also contains one of these fund-signaling keywords.
+_NPORT_LP_FUND_CO_KEYWORDS = [
+    "fund", "partners", "capital", "venture", "buyout",
+    "growth equity", "credit", "investment",
 ]
 
 # BDC fund vehicle / manager detection: equity-type positions in entities
@@ -509,6 +521,13 @@ _HEDGE_FUND_KEYWORDS = [
     "hedge", "macro", "long/short", "long short", "market neutral",
     "arbitrage", "event driven", "multi-strategy",
 ]
+
+# Roman numeral vintage fund pattern -- "Fund IV", "Fund XII", etc.
+# Overwhelmingly PE vintage year fund series.
+_VINTAGE_FUND_RE = re.compile(
+    r'\bfund\s+(i{1,3}|iv|vi{0,3}|viii|ix|xi{0,3}|xiv|xv|x)\b',
+    re.IGNORECASE,
+)
 
 # Pipe-format direction detection: if the last pipe-segment matches one of
 # these tags, the format is "Company | Instrument | Affiliation" (Blue Owl,
@@ -778,10 +797,12 @@ def _sql_classify_index() -> str:
     6. PRIVATE_CREDIT_FUND (FUND + credit signals)
     7. PRIVATE_EQUITY_FUND (FUND + PE signals)
     8. Fund tiebreaker (credit vs PE count)
-    9. HEDGE_FUND (FUND + no credit/PE signal, or hedge keywords)
-    10. DIRECT_REAL_ESTATE (CORPORATE + RE keywords)
-    11. CASH (GOVERNMENT or cash keywords)
-    12. UNCLASSIFIED (fallback)
+    9. HEDGE_FUND (FUND + explicit hedge keywords)
+    10. PRIVATE_EQUITY_FUND (FUND + roman numeral vintage series)
+    11. UNCLASSIFIED (FUND + no signal)
+    12. DIRECT_REAL_ESTATE (CORPORATE + RE keywords)
+    13. CASH (GOVERNMENT or cash keywords)
+    14. UNCLASSIFIED (fallback)
     """
     # Build credit/PE signal checks on _combined_fund_text
     credit_checks = [f"contains(_combined_fund_text, '{s}')" for s in _CREDIT_FUND_SIGNALS]
@@ -826,7 +847,9 @@ def _sql_classify_index() -> str:
   WHEN issuer_category = 'FUND' AND {has_credit} AND {has_pe} AND {credit_count} < {pe_count} THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND {nac_dbt} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY_FUND'
-  WHEN issuer_category = 'FUND' AND ({hedge_kw} OR (NOT {has_credit} AND NOT {has_pe})) THEN 'HEDGE_FUND'
+  WHEN issuer_category = 'FUND' AND {hedge_kw} THEN 'HEDGE_FUND'
+  WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} AND regexp_matches(_combined_fund_text, '\\bfund\\s+(i{{1,3}}|iv|vi{{0,3}}|viii|ix|xi{{0,3}}|xiv|xv|x)\\b') THEN 'PRIVATE_EQUITY_FUND'
+  WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} THEN 'UNCLASSIFIED'
   WHEN issuer_category = 'CORPORATE' AND ({re_kw} OR {re_fund_kw}) THEN 'DIRECT_REAL_ESTATE'
   WHEN issuer_category = 'GOVERNMENT' OR {cash_kw} THEN 'CASH'
   WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'CASH'
@@ -892,9 +915,8 @@ def _sql_classify_asset_class() -> str:
        + nport_asset_cat=DBT for funds without keyword signal
     5. PRIVATE_EQUITY -- EQUITY+CORPORATE or PE fund signals
        + nport_asset_cat=EC/EP for funds without keyword signal
-    6. HEDGE_FUND -- fund with no credit/PE signals AND no nport_asset_cat
-       signal, or hedge fund keywords
-    7. OTHER -- fallback
+    6. HEDGE_FUND -- fund with explicit hedge fund keywords
+    7. OTHER -- fund with no signals, or general fallback
     """
     cash_kw = _sql_keyword_check("_combined_fund_text", _CASH_KEYWORDS)
     cash_guard_kw = _sql_keyword_check("_combined_fund_text", _CASH_CORPORATE_GUARD_KEYWORDS)
@@ -928,7 +950,8 @@ def _sql_classify_asset_class() -> str:
   WHEN issuer_category = 'FUND' AND {has_pe} THEN 'PRIVATE_EQUITY'
   WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY'
   WHEN {hedge_kw} THEN 'HEDGE_FUND'
-  WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} THEN 'HEDGE_FUND'
+  WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} AND regexp_matches(_combined_fund_text, '\\bfund\\s+(i{{1,3}}|iv|vi{{0,3}}|viii|ix|xi{{0,3}}|xiv|xv|x)\\b') THEN 'PRIVATE_EQUITY'
+  WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} THEN 'OTHER'
   ELSE 'OTHER'
 END"""
 
@@ -1308,11 +1331,12 @@ def _classify_index(asset_category: str, issuer_category: str,
       5. STRUCTURED_CREDIT:   CLO keywords
       6. PRIVATE_CREDIT_FUND: FUND + credit signals or nport_asset_cat=DBT/LON
       7. PRIVATE_EQUITY_FUND: FUND + PE signals or nport_asset_cat=EC/EP
-      8. HEDGE_FUND:          FUND + no credit/PE signal + no nport_asset_cat
-                              signal, or hedge keywords
-      9. DIRECT_REAL_ESTATE:  CORPORATE + RE keywords
-      10. CASH:               GOVERNMENT or cash keywords
-      11. UNCLASSIFIED:       everything else
+      8. HEDGE_FUND:          FUND + explicit hedge keywords only
+      9. PRIVATE_EQUITY_FUND: FUND + roman numeral vintage series (Fund IV, etc.)
+      10. UNCLASSIFIED:       FUND + no signal at all
+      11. DIRECT_REAL_ESTATE: CORPORATE + RE keywords
+      12. CASH:               GOVERNMENT or cash keywords
+      13. UNCLASSIFIED:       everything else
     """
     # Combine issuer name + instrument description for signal matching
     combined = ""
@@ -1364,10 +1388,16 @@ def _classify_index(asset_category: str, issuer_category: str,
             return "PRIVATE_CREDIT_FUND"
         if nac in ("EC", "EP"):
             return "PRIVATE_EQUITY_FUND"
-        # Hedge fund: no credit/PE signal, or explicit hedge keywords
+        # Explicit hedge fund keywords
         has_hedge = any(kw in combined for kw in _HEDGE_FUND_KEYWORDS)
-        if has_hedge or (not has_credit and not has_pe):
+        if has_hedge:
             return "HEDGE_FUND"
+        # Roman numeral vintage fund series (Fund IV, Fund XII, etc.) -> PE
+        if _VINTAGE_FUND_RE.search(combined):
+            return "PRIVATE_EQUITY_FUND"
+        # No signal at all -> UNCLASSIFIED (not HEDGE_FUND)
+        if not has_credit and not has_pe:
+            return "UNCLASSIFIED"
 
     # Direct real estate (CORPORATE + RE keywords)
     if issuer_category == "CORPORATE" and (has_re or has_re_fund):
@@ -2197,6 +2227,10 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     credit_fund_kw_checks = " OR ".join(
         f"contains(lower(issuer_name), '{kw}')" for kw in _NPORT_CREDIT_FUND_NAME_KEYWORDS
     )
+    # Build L.P. fund co-keyword SQL (L.P. only triggers FUND when paired with these)
+    lp_co_kw_checks = " OR ".join(
+        f"contains(lower(issuer_name), '{kw}')" for kw in _NPORT_LP_FUND_CO_KEYWORDS
+    )
     # Fall back to issuer_title when issuer_name is NULL/empty (rescues ~9K rows)
     _name_coalesce = "COALESCE(NULLIF(TRIM(CAST(issuer_name AS VARCHAR)), ''), issuer_title)"
     name_norm = _sql_normalize_name(_name_coalesce)
@@ -2239,7 +2273,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
         FROM with_asset
     ),
 
-    -- CTE 4: RE + FUND -> OTHER; LON/DBT + OTHER -> CORPORATE
+    -- CTE 4: RE + FUND -> OTHER; LON/DBT + OTHER -> CORPORATE; NUSS name-gated GOVERNMENT
     adjusted AS (
         SELECT *,
             CASE
@@ -2247,6 +2281,10 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
                 ELSE asset_category
             END AS asset_category_final,
             CASE
+                -- NUSS with government keyword in name -> GOVERNMENT
+                WHEN upper(trim(issuer_type)) = 'NUSS'
+                     AND regexp_matches(upper(COALESCE(issuer_name, '')), '{_NPORT_GOVT_NAME_RE}')
+                THEN 'GOVERNMENT'
                 WHEN asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'OTHER'
                     THEN 'CORPORATE'
                 ELSE issuer_category
@@ -2261,11 +2299,12 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
                 WHEN asset_category_final = 'OTHER'
                      AND issuer_category_final = 'CORPORATE'
                      AND (
-                         -- L.P. suffix is a strong fund signal (but exclude operating companies)
+                         -- L.P. suffix + fund co-keyword (but exclude operating companies)
                          (contains(lower(issuer_name), 'l.p.')
                           AND NOT (contains(lower(issuer_name), 'inc.')
                                 OR contains(lower(issuer_name), 'llc')
-                                OR contains(lower(issuer_name), 'corp.')))
+                                OR contains(lower(issuer_name), 'corp.'))
+                          AND ({lp_co_kw_checks}))
                          -- Explicit fund keywords
                          OR regexp_matches(lower(issuer_name), '\\bfunds?\\b')
                          OR {fund_kw_checks}
