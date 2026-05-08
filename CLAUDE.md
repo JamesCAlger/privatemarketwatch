@@ -40,20 +40,20 @@ Cross-validated against third-party lists (Interval Fund Tracker, Tender Offer F
 
 ### Phase 3 Complete: Unified Holdings & Validation
 
-`data/output/private_markets_holdings.csv` unifies BDC + N-PORT into **690,674 rows** with 2-axis classification (`exposure_type`, `asset_class`) + `index_classification`, cross-source dedup, affiliation-axis dedup, and pct_of_net_assets correction. Built via `python -m pipeline.main --unified` using DuckDB SQL CTEs (no pandas .apply).
+`data/output/private_markets_holdings.csv` unifies BDC + N-PORT into **690,674 rows** with 2-axis classification (`exposure_type`, `asset_class`) + `index_classification`, cross-source dedup, affiliation-axis dedup, pct_of_net_assets correction, NUSS name-gated government mapping, and L.P. co-keyword fund detection. Built via `python -m pipeline.main --unified` using DuckDB SQL CTEs (no pandas .apply).
 
 | Index | Rows | % |
 |---|---|---|
-| DIRECT_LENDING | 556,591 | 80.6% |
-| COMMON_EQUITY | 63,445 | 9.2% |
+| DIRECT_LENDING | 556,854 | 80.6% |
+| COMMON_EQUITY | 63,446 | 9.2% |
+| UNCLASSIFIED | 26,515 | 3.8% |
 | PREFERRED_EQUITY | 22,052 | 3.2% |
-| UNCLASSIFIED | 17,541 | 2.5% |
-| HEDGE_FUND | 11,030 | 1.6% |
-| PRIVATE_EQUITY_FUND | 10,610 | 1.5% |
-| STRUCTURED_CREDIT | 3,204 | 0.5% |
-| PRIVATE_CREDIT_FUND | 2,606 | 0.4% |
+| PRIVATE_EQUITY_FUND | 12,646 | 1.8% |
+| STRUCTURED_CREDIT | 3,203 | 0.5% |
+| PRIVATE_CREDIT_FUND | 2,599 | 0.4% |
 | REAL_ESTATE_FUND | 2,523 | 0.4% |
-| CASH | 976 | 0.1% |
+| CASH | 612 | 0.1% |
+| HEDGE_FUND | 128 | 0.0% |
 | DIRECT_REAL_ESTATE | 96 | 0.0% |
 
 Quarters: 2019q4-2026q1.
@@ -117,11 +117,11 @@ python -m pipeline.main --unified        # Build unified private markets holding
 
 ### Tests
 
-**1,665 tests** across 20 test files. Run with `pytest tests/`.
+**1,668 tests** across 20 test files. Run with `pytest tests/`.
 
 | Test file | Tests | Coverage |
 |---|---|---|
-| `test_unified_holdings.py` | 580 | Identifier parsing, aggregate filtering, classification (2-axis + nport_asset_cat refinement), dedup, shares normalization, cost proxy, affiliation prefix strip, affiliation dedup, pct_of_net_assets correction |
+| `test_unified_holdings.py` | 583 | Identifier parsing, aggregate filtering, classification (2-axis + nport_asset_cat refinement + NUSS name-gating + L.P. co-keyword), dedup, shares normalization, cost proxy, affiliation prefix strip, affiliation dedup, pct_of_net_assets correction |
 | `test_ncsr_financials.py` | 135 | N-CSR FH parsing: row labels, value parsing, period detection, layout detection, table finding, vertical/horizontal/split-table extraction, broadened search, dollar units, guard rails, dedup, filing index |
 | `test_entity_resolution.py` | 119 | Entity resolution across sources |
 | `test_fund_financials.py` | 111 | Fund financial data extraction, YTD conversion, seed filter, scale harmonization, schema enforcement |
@@ -218,7 +218,7 @@ data/
 
 ## Unified Holdings -- Validation
 
-`data/output/private_markets_holdings.csv` (835,067 rows). Run via `python -m pipeline.main --unified --validate`.
+`data/output/private_markets_holdings.csv` (690,674 rows). Run via `python -m pipeline.main --unified --validate`.
 
 **Status:** V1-V7 all implemented.
 - **V1 (UNCLASSIFIED reduction):** Implemented. 2.5% UNCLASSIFIED (down from 16.3%). BDC financial field fallback, N-PORT issuer defaulting, named co-invest reclassification, expanded fund keyword lists.
@@ -226,7 +226,7 @@ data/
 - **V3 (Aggregate filtering):** Manual pattern discovery and filter expansion.
 - **V4 (Cross-source dedup):** Implemented. Jaro-Winkler name matching + FV proximity. BDC source preferred. Output: `holdings_cross_source.csv`.
 - **V5 (Coverage):** Implemented. Total assets ratio validation (0.8-1.2x expected). Output: `holdings_coverage.csv`, `holdings_total_assets.csv`.
-- **V6 (2-axis classification):** Implemented. Two new columns: `exposure_type` (DIRECT/FUND/LIQUID) and `asset_class` (PRIVATE_CREDIT/PRIVATE_EQUITY/REAL_ESTATE/STRUCTURED_CREDIT/HEDGE_FUND/CASH/OTHER). Expanded `index_classification` with 5 new values (REAL_ESTATE_FUND, DIRECT_REAL_ESTATE, STRUCTURED_CREDIT, HEDGE_FUND, CASH). Uses `nport_asset_cat` (EC/EP/RE/DBT/LON) to refine HEDGE_FUND catch-all. Cross-reference validation (10 rules, runs with `--validate`) + one-time LLM audit (GPT-4o-mini). Output: `classification_validation.csv`, `classification_llm_audit.csv`. Known residual: 80 DE + 55 STIV positions in HEDGE_FUND ($5.8B).
+- **V6 (2-axis classification):** Implemented. Two new columns: `exposure_type` (DIRECT/FUND/LIQUID) and `asset_class` (PRIVATE_CREDIT/PRIVATE_EQUITY/REAL_ESTATE/STRUCTURED_CREDIT/HEDGE_FUND/CASH/OTHER). Expanded `index_classification` with 5 new values (REAL_ESTATE_FUND, DIRECT_REAL_ESTATE, STRUCTURED_CREDIT, HEDGE_FUND, CASH). Uses `nport_asset_cat` (EC/EP/RE/DBT/LON) to refine HEDGE_FUND catch-all. Cross-reference validation (10 rules, runs with `--validate`) + one-time LLM audit (GPT-4o-mini). Output: `classification_validation.csv`, `classification_llm_audit.csv`. NUSS issuer_type is now name-gated (only GOVERNMENT when name has govt keyword; eliminates A1/E1 disagreements). L.P. suffix requires fund co-keyword to trigger FUND reclassification (prevents SPV misclassification). Known residual: 231 E2 disagreements (issuer_category=FUND but exposure_type!=FUND) from three causes: (1) 86 money market fund positions (Goldman Sachs Financial Square, Vanguard Federal Money Market, etc.) that have issuer_category=FUND but exposure_type=LIQUID+asset_class=CASH -- correctly classified for index purposes; (2) 43 BDC aggregate headers ("Investments in Non-Controlled, Non-Affiliated Portfolio Companies") that leaked through aggregate filtering and carry issuer_category=FUND from the affiliation dimension; (3) 90 misc positions where issuer_category=FUND comes from N-PORT PF/RF tagging but the position is a direct lending/equity position in an operating company (e.g., "AffiniPay Intermediate Holdings, LLC" tagged PF by filer).
 - **V7 (Affiliation-axis dedup + pct correction):** Implemented. Fixes FV inflation from affiliation-axis duplication (12 CIKs) via 3 mechanisms: affiliation prefix/suffix stripping from `_raw_id`, expanded `_BAD_ISSUER_NAMES_EXACT`, and ROW_NUMBER dedup over (cik, report_date, issuer_name, FV). Corrects `pct_of_net_assets` for multi-dimension-path BDCs (263 CIK-quarters, 116K rows) by recalculating with consolidated `net_assets` from `fund_financials.csv`. Known residual: some BDCs still show duplicates from different dimension paths that parse into different `issuer_name` values (requires cross-path entity matching to resolve).
 
 All validation functions use DuckDB SQL (no pandas .iterrows/.apply). See MEMORY.md for detailed implementation notes.
