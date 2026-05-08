@@ -10,6 +10,7 @@ Usage:
 
 import json
 import logging
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -18,17 +19,33 @@ import duckdb
 
 from pipeline.config import (
     BDC_SECTOR_BREAKDOWN_FILE,
+    CLASSIFICATION_VALIDATION_FILE,
     CIK_TO_MANAGER_BRAND,
+    FEE_UPLIFT_FILE,
     FUND_IDENTITY_FILE,
+    HOLDINGS_GAV_RECONCILIATION_FILE,
     INDEX_DISPLAY_END_QUARTER,
+    LLM_FUND_VALIDATION_RESULTS_FILE,
     OUTPUT_DIR,
     PROJECT_ROOT,
+    VALIDATION_REPORT_FILE,
 )
 from pipeline.index_returns import MIN_BEGIN_FV
 
 logger = logging.getLogger(__name__)
 
 FRONTEND_DATA_DIR = PROJECT_ROOT / "frontend" / "public" / "data"
+
+# Consumer/marketplace lending CIKs -- these report individual consumer loans
+# (~380K rows, <1% of total FV) that inflate counts without meaningful data.
+CONSUMER_LENDING_EXCLUDE_CIKS = {"0001678130", "0001644771", "0002041175"}
+
+
+def _exclude_consumer_lending_sql(cik_col: str = "cik") -> str:
+    """SQL fragment to exclude consumer/marketplace lending CIKs."""
+    ciks = ", ".join(f"'{c}'" for c in CONSUMER_LENDING_EXCLUDE_CIKS)
+    return f" AND {cik_col} NOT IN ({ciks})"
+
 
 # Source CSVs
 INDEX_RETURNS_CSV = OUTPUT_DIR / "index_returns.csv"
@@ -59,11 +76,28 @@ def _quarter_cutoff_sql(col: str = "quarter") -> str:
         return ""
     return f" AND {col} <= '{INDEX_DISPLAY_END_QUARTER}'"
 
+def _write_bytes_retry(path: Path, payload: bytes, retries: int = 5) -> None:
+    """Write bytes with atomic rename + retry for Windows file-locking."""
+    tmp = path.with_suffix(".tmp")
+    for attempt in range(retries):
+        try:
+            tmp.write_bytes(payload)
+            tmp.replace(path)
+            return
+        except OSError:
+            if attempt < retries - 1:
+                time.sleep(0.1 * (attempt + 1))
+            else:
+                raise
+
+
 def _write_json(name: str, data: Any) -> Path:
     """Write *data* as compact JSON to ``FRONTEND_DATA_DIR / name``."""
     path = FRONTEND_DATA_DIR / name
-    path.write_text(json.dumps(data, default=str, separators=(",", ":")),
-                    encoding="utf-8")
+    _write_bytes_retry(
+        path,
+        json.dumps(data, default=str, separators=(",", ":")).encode("utf-8"),
+    )
     size_kb = path.stat().st_size / 1024
     logger.info("  Wrote %s (%.1f KB)", name, size_kb)
     return path
@@ -103,6 +137,57 @@ def _safe_round(val: Any, digits: int = 4) -> Any:
         return val
 
 
+# Standard 1.0-centred histogram bucket edges & labels
+_STD_EDGES = [0.3, 0.5, 0.65, 0.8, 0.9, 0.95, 0.98, 1.02, 1.05, 1.1, 1.2, 1.5, 2.0]
+_STD_LABELS = [
+    "<0.3", "0.3-0.5", "0.5-0.65", "0.65-0.8", "0.8-0.9",
+    "0.9-0.95", "0.95-0.98", "0.98-1.02", "1.02-1.05",
+    "1.05-1.1", "1.1-1.2", "1.2-1.5", "1.5-2.0", ">2.0",
+]
+
+
+def _build_recon_hist(
+    values: list[float],
+    metric_id: str,
+    title: str,
+    subtitle: str,
+    edges: list[float] | None = None,
+    labels: list[str] | None = None,
+    center: float = 1.0,
+) -> dict[str, Any] | None:
+    """Bucket *values* into a histogram dict for the frontend."""
+    if not values:
+        return None
+    if edges is None:
+        edges = _STD_EDGES
+    if labels is None:
+        labels = _STD_LABELS
+    n = len(values)
+    vs = sorted(values)
+    med = vs[n // 2]
+    counts = [0] * len(labels)
+    for v in values:
+        placed = False
+        for i, edge in enumerate(edges):
+            if v < edge:
+                counts[i] += 1
+                placed = True
+                break
+        if not placed:
+            counts[-1] += 1
+    return {
+        "id": metric_id,
+        "title": title,
+        "subtitle": subtitle,
+        "n": n,
+        "median": round(med, 3),
+        "centerValue": center,
+        "histogram": [
+            {"bucket": labels[i], "count": counts[i]} for i in range(len(labels))
+        ],
+    }
+
+
 def _valid_positions_sql() -> str:
     """SQL CTEs ``latest`` and ``valid`` for deduplicated index positions.
 
@@ -132,6 +217,7 @@ def _valid_positions_sql() -> str:
                  AND pr.end_quarter = l.q
                 WHERE pr.quarterly_total_return IS NOT NULL
                   AND pr.begin_fair_value >= {MIN_BEGIN_FV}
+                  {_exclude_consumer_lending_sql('pr.cik')}
             )
             WHERE _dedup_rn = 1
         )"""
@@ -346,8 +432,8 @@ def _export_top_constituents(con: duckdb.DuckDBPyConnection) -> None:
                 pr.cik,
                 pr.entity_name,
                 pr.quarterly_total_return AS total_return,
-                CASE WHEN pr.begin_basis_spread IS NOT NULL AND pr.begin_basis_spread > 0 THEN 'Floating'
-                     WHEN pr.begin_interest_rate IS NOT NULL AND pr.begin_interest_rate > 0 THEN 'Fixed'
+                CASE WHEN TRY_CAST(pr.begin_basis_spread AS DOUBLE) > 0 THEN 'Floating'
+                     WHEN TRY_CAST(pr.begin_interest_rate AS DOUBLE) > 0 THEN 'Fixed'
                 END AS rate_type,
                 ROW_NUMBER() OVER (
                     PARTITION BY pr.index_classification
@@ -1866,9 +1952,9 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
         }
 
         path = details_dir / f"{cik_val}.json"
-        path.write_text(
-            json.dumps(fund_data, default=str, separators=(",", ":")),
-            encoding="utf-8",
+        _write_bytes_retry(
+            path,
+            json.dumps(fund_data, default=str, separators=(",", ":")).encode("utf-8"),
         )
         count += 1
 
@@ -2061,6 +2147,1170 @@ def _export_industry_breakdown(con: duckdb.DuckDBPyConnection) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Data quality dashboard
+# ---------------------------------------------------------------------------
+
+def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
+    """Export data quality metrics for the data quality dashboard page."""
+    out: dict[str, Any] = {}
+
+    # -- 1. GAV reconciliation histogram --
+    if HOLDINGS_GAV_RECONCILIATION_FILE.exists():
+        gav_rows = con.execute(f"""
+            WITH raw AS (
+                SELECT *,
+                    TRY_CAST(gav_ratio_adjusted AS DOUBLE) AS adj,
+                    TRY_CAST(gav_ratio AS DOUBLE) AS orig
+                FROM read_csv_auto(
+                    '{HOLDINGS_GAV_RECONCILIATION_FILE.as_posix()}',
+                    all_varchar=true
+                )
+                WHERE comparison_source = 'investments_at_fair_value'
+            ),
+            with_ratio AS (
+                SELECT COALESCE(adj, orig) AS ratio FROM raw
+            )
+            SELECT
+                COUNT(*) AS total,
+                MEDIAN(ratio) AS med,
+                COUNT(CASE WHEN ratio >= 0.95 AND ratio <= 1.05 THEN 1 END) AS w95_105,
+                COUNT(CASE WHEN ratio >= 0.80 AND ratio <= 1.20 THEN 1 END) AS w80_120,
+                COUNT(CASE WHEN ratio < 0.3 THEN 1 END) AS b_lt03,
+                COUNT(CASE WHEN ratio >= 0.3 AND ratio < 0.5 THEN 1 END) AS b_03_05,
+                COUNT(CASE WHEN ratio >= 0.5 AND ratio < 0.65 THEN 1 END) AS b_05_065,
+                COUNT(CASE WHEN ratio >= 0.65 AND ratio < 0.8 THEN 1 END) AS b_065_08,
+                COUNT(CASE WHEN ratio >= 0.8 AND ratio < 0.9 THEN 1 END) AS b_08_09,
+                COUNT(CASE WHEN ratio >= 0.9 AND ratio < 0.95 THEN 1 END) AS b_09_095,
+                COUNT(CASE WHEN ratio >= 0.95 AND ratio < 0.98 THEN 1 END) AS b_095_098,
+                COUNT(CASE WHEN ratio >= 0.98 AND ratio <= 1.02 THEN 1 END) AS b_098_102,
+                COUNT(CASE WHEN ratio > 1.02 AND ratio <= 1.05 THEN 1 END) AS b_102_105,
+                COUNT(CASE WHEN ratio > 1.05 AND ratio <= 1.1 THEN 1 END) AS b_105_11,
+                COUNT(CASE WHEN ratio > 1.1 AND ratio <= 1.2 THEN 1 END) AS b_11_12,
+                COUNT(CASE WHEN ratio > 1.2 AND ratio <= 1.5 THEN 1 END) AS b_12_15,
+                COUNT(CASE WHEN ratio > 1.5 AND ratio <= 2.0 THEN 1 END) AS b_15_20,
+                COUNT(CASE WHEN ratio > 2.0 THEN 1 END) AS b_gt20
+            FROM with_ratio
+        """).fetchone()
+
+        if gav_rows and gav_rows[0]:
+            total = gav_rows[0]
+            out["gavReconciliation"] = {
+                "histogram": [
+                    {"bucket": "<0.3x", "count": gav_rows[4]},
+                    {"bucket": "0.3-0.5x", "count": gav_rows[5]},
+                    {"bucket": "0.5-0.65x", "count": gav_rows[6]},
+                    {"bucket": "0.65-0.8x", "count": gav_rows[7]},
+                    {"bucket": "0.8-0.9x", "count": gav_rows[8]},
+                    {"bucket": "0.9-0.95x", "count": gav_rows[9]},
+                    {"bucket": "0.95-0.98x", "count": gav_rows[10]},
+                    {"bucket": "0.98-1.02x", "count": gav_rows[11]},
+                    {"bucket": "1.02-1.05x", "count": gav_rows[12]},
+                    {"bucket": "1.05-1.1x", "count": gav_rows[13]},
+                    {"bucket": "1.1-1.2x", "count": gav_rows[14]},
+                    {"bucket": "1.2-1.5x", "count": gav_rows[15]},
+                    {"bucket": "1.5-2x", "count": gav_rows[16]},
+                    {"bucket": ">2x", "count": gav_rows[17]},
+                ],
+                "totalCikQuarters": total,
+                "median": _safe_round(gav_rows[1], 3),
+                "within95_105Pct": _safe_round(
+                    gav_rows[2] / total * 100 if total else 0, 1
+                ),
+                "within80_120Pct": _safe_round(
+                    gav_rows[3] / total * 100 if total else 0, 1
+                ),
+            }
+
+    # -- 2. Classification accuracy (cross-reference rules) --
+    if CLASSIFICATION_VALIDATION_FILE.exists():
+        cls_rows = con.execute(f"""
+            SELECT rule, expected, condition,
+                   TRY_CAST(total_rows AS INT) AS total_rows,
+                   TRY_CAST(disagreement_count AS INT) AS disagreements,
+                   TRY_CAST(disagreement_pct AS DOUBLE) AS pct
+            FROM read_csv_auto(
+                '{CLASSIFICATION_VALIDATION_FILE.as_posix()}',
+                all_varchar=true
+            )
+            ORDER BY rule
+        """).fetchall()
+
+        out["classificationRules"] = [
+            {
+                "rule": r[0],
+                "description": f"{r[1]} -> {r[2]}",
+                "totalRows": r[3] or 0,
+                "disagreements": r[4] or 0,
+                "pct": _safe_round(r[5], 2),
+            }
+            for r in cls_rows
+        ]
+
+    # -- 3. Field fill rates + holdings by quarter + pipeline summary --
+    if UNIFIED_HOLDINGS_CSV.exists():
+        fill = con.execute(f"""
+            WITH raw AS (
+                SELECT * FROM read_csv_auto(
+                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+                )
+            )
+            SELECT
+                COUNT(*) AS total,
+                COUNT(DISTINCT cik) AS n_ciks,
+                MIN(report_date) AS earliest,
+                MAX(report_date) AS latest,
+                -- Field fill rates
+                SUM(CASE WHEN TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+                         AND TRY_CAST(fair_value AS DOUBLE) != 0 THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_fair_value,
+                SUM(CASE WHEN TRY_CAST(cost AS DOUBLE) IS NOT NULL
+                         AND TRY_CAST(cost AS DOUBLE) != 0 THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_cost,
+                SUM(CASE WHEN TRY_CAST(interest_rate AS DOUBLE) IS NOT NULL
+                         AND TRY_CAST(interest_rate AS DOUBLE) > 0 THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_interest_rate,
+                SUM(CASE WHEN TRY_CAST(basis_spread AS DOUBLE) IS NOT NULL
+                         AND TRY_CAST(basis_spread AS DOUBLE) > 0 THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_basis_spread,
+                SUM(CASE WHEN TRY_CAST(principal_amount AS DOUBLE) IS NOT NULL
+                         AND TRY_CAST(principal_amount AS DOUBLE) != 0 THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_principal,
+                SUM(CASE WHEN maturity_date IS NOT NULL
+                         AND TRIM(maturity_date) != '' THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_maturity,
+                SUM(CASE WHEN TRY_CAST(shares_held AS DOUBLE) IS NOT NULL
+                         AND TRY_CAST(shares_held AS DOUBLE) != 0 THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_shares,
+                SUM(CASE WHEN TRY_CAST(pik_rate AS DOUBLE) IS NOT NULL
+                         AND TRY_CAST(pik_rate AS DOUBLE) > 0 THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS fill_pik_rate,
+                -- Source split
+                SUM(CASE WHEN source = 'bdc' THEN 1 ELSE 0 END) AS bdc_rows,
+                SUM(CASE WHEN source = 'nport' THEN 1 ELSE 0 END) AS nport_rows,
+                -- Unclassified rate
+                SUM(CASE WHEN index_classification = 'UNCLASSIFIED'
+                              OR index_classification IS NULL THEN 1 ELSE 0 END)
+                    * 1.0 / COUNT(*) AS unclassified_pct
+            FROM raw
+        """).fetchone()
+
+        if fill:
+            out["fieldFillRates"] = [
+                {"field": "Fair Value", "fillPct": _safe_round(fill[4], 4)},
+                {"field": "Cost Basis", "fillPct": _safe_round(fill[5], 4)},
+                {"field": "Interest Rate", "fillPct": _safe_round(fill[6], 4)},
+                {"field": "Basis Spread", "fillPct": _safe_round(fill[7], 4)},
+                {"field": "Principal", "fillPct": _safe_round(fill[8], 4)},
+                {"field": "Maturity Date", "fillPct": _safe_round(fill[9], 4)},
+                {"field": "Shares Held", "fillPct": _safe_round(fill[10], 4)},
+                {"field": "PIK Rate", "fillPct": _safe_round(fill[11], 4)},
+            ]
+            out["pipelineSummary"] = {
+                "totalHoldings": fill[0],
+                "totalCiks": fill[1],
+                "earliestDate": str(fill[2]),
+                "latestDate": str(fill[3]),
+                "bdcRows": fill[12],
+                "nportRows": fill[13],
+                "unclassifiedPct": _safe_round(fill[14], 4),
+            }
+
+        # Holdings by quarter
+        qtr_rows = con.execute(f"""
+            WITH raw AS (
+                SELECT *,
+                    CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                        || 'q'
+                        || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                    AS quarter
+                FROM read_csv_auto(
+                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+                )
+            )
+            SELECT quarter,
+                SUM(CASE WHEN source = 'bdc' THEN 1 ELSE 0 END) AS bdc,
+                SUM(CASE WHEN source = 'nport' THEN 1 ELSE 0 END) AS nport,
+                SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv,
+                COUNT(DISTINCT cik) AS cik_count
+            FROM raw
+            GROUP BY quarter
+            ORDER BY quarter
+        """).fetchall()
+
+        out["holdingsByQuarter"] = [
+            {
+                "quarter": r[0],
+                "bdc": r[1],
+                "nport": r[2],
+                "totalFv": _safe_round(r[3], 0),
+                "cikCount": r[4],
+            }
+            for r in qtr_rows
+        ]
+
+        # Classification breakdown (latest quarter-end date)
+        cls_breakdown = con.execute(f"""
+            WITH raw AS (
+                SELECT * FROM read_csv_auto(
+                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+                )
+            ),
+            latest AS (
+                SELECT MAX(report_date) AS d FROM raw
+                WHERE CAST(SUBSTRING(report_date, 9, 2) AS INT) >= 28
+                  AND SUBSTRING(report_date, 6, 2)
+                      IN ('03', '06', '09', '12')
+            )
+            SELECT
+                COALESCE(index_classification, 'UNCLASSIFIED') AS cls,
+                COUNT(*) AS n,
+                SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+            FROM raw
+            WHERE report_date = (SELECT d FROM latest)
+            GROUP BY cls
+            ORDER BY fv DESC NULLS LAST
+        """).fetchall()
+
+        total_fv = sum(float(r[2] or 0) for r in cls_breakdown)
+        out["classificationBreakdown"] = [
+            {
+                "classification": r[0],
+                "rows": r[1],
+                "fv": _safe_round(r[2], 0),
+                "fvPct": _safe_round(
+                    float(r[2] or 0) / total_fv if total_fv else 0, 4
+                ),
+            }
+            for r in cls_breakdown
+        ]
+
+    # -- 4. Third-party validation --
+    if VALIDATION_REPORT_FILE.exists():
+        tp_rows = con.execute(f"""
+            SELECT source,
+                COUNT(*) AS total,
+                SUM(CASE WHEN issue = 'third_party_not_in_universe' THEN 1 ELSE 0 END)
+                    AS missed
+            FROM read_csv_auto(
+                '{VALIDATION_REPORT_FILE.as_posix()}', all_varchar=true
+            )
+            GROUP BY source
+        """).fetchall()
+
+        out["thirdPartyValidation"] = [
+            {
+                "source": r[0],
+                "total": r[1],
+                "missed": r[2],
+                "matchPct": _safe_round(
+                    (r[1] - r[2]) / r[1] * 100 if r[1] else 0, 1
+                ),
+            }
+            for r in tp_rows
+        ]
+
+    # -- 5. Reconciliation histogram grid (8 metrics) --
+    recon_hists: list[dict[str, Any]] = []
+
+    # 5a. GAV -- reuse already-computed data
+    if "gavReconciliation" in out:
+        g = out["gavReconciliation"]
+        recon_hists.append({
+            "id": "gav",
+            "title": "GAV Reconciliation",
+            "subtitle": "sum(FV) / reported investments at FV",
+            "n": g["totalCikQuarters"],
+            "median": g["median"],
+            "centerValue": 1.0,
+            "histogram": g["histogram"],
+        })
+
+    # Create temp tables so the 326 MB CSV is read only once
+    uh_ok = False
+    if UNIFIED_HOLDINGS_CSV.exists():
+        try:
+            con.execute(
+                "CREATE OR REPLACE TEMP TABLE _uh AS SELECT * FROM "
+                f"read_csv_auto('{UNIFIED_HOLDINGS_CSV.as_posix()}', "
+                "all_varchar=true)"
+            )
+            uh_ok = True
+        except Exception as exc:
+            logger.warning("histogram: could not load unified holdings: %s", exc)
+
+    ff_ok = False
+    if FUND_FINANCIALS_CSV.exists():
+        try:
+            con.execute(
+                "CREATE OR REPLACE TEMP TABLE _ff AS SELECT * FROM "
+                f"read_csv_auto('{FUND_FINANCIALS_CSV.as_posix()}', "
+                "all_varchar=true)"
+            )
+            ff_ok = True
+        except Exception as exc:
+            logger.warning("histogram: could not load fund_financials: %s", exc)
+
+    # 5b. % of Net Assets Sum (BDC only, /100 so 1.0 = 100%)
+    if uh_ok:
+        try:
+            rows = con.execute("""
+                SELECT SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) / 100.0
+                FROM _uh
+                WHERE source = 'bdc'
+                  AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NOT NULL
+                  AND TRY_CAST(pct_of_net_assets AS DOUBLE) != 0
+                GROUP BY cik, report_date
+                HAVING COUNT(*) >= 5
+            """).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+            h = _build_recon_hist(
+                vals, "pct_net_assets", "% Net Assets Sum",
+                "sum(pct_of_net_assets)/100, BDC only (>1 = levered)",
+                edges=[0.5, 0.7, 0.9, 1.0, 1.1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.5, 3.0],
+                labels=[
+                    "<0.5", "0.5-0.7", "0.7-0.9", "0.9-1.0", "1.0-1.1",
+                    "1.1-1.2", "1.2-1.4", "1.4-1.6", "1.6-1.8", "1.8-2.0",
+                    "2.0-2.5", "2.5-3.0", ">3.0",
+                ],
+            )
+            if h:
+                recon_hists.append(h)
+        except Exception as exc:
+            logger.debug("histogram pct_net_assets skipped: %s", exc)
+
+    # 5c. Position Count Ratio (QoQ)
+    if uh_ok:
+        try:
+            rows = con.execute("""
+                WITH q AS (
+                    SELECT cik, report_date, COUNT(*) AS cnt
+                    FROM _uh
+                    WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+                    GROUP BY cik, report_date
+                ),
+                wl AS (
+                    SELECT *,
+                        LAG(cnt) OVER (PARTITION BY cik ORDER BY report_date) AS prev
+                    FROM q
+                )
+                SELECT cnt * 1.0 / prev FROM wl
+                WHERE prev IS NOT NULL AND prev > 0
+            """).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+            h = _build_recon_hist(
+                vals, "count_ratio", "Position Count Ratio",
+                "QoQ position count change per CIK (1.0 = stable)",
+            )
+            if h:
+                recon_hists.append(h)
+        except Exception as exc:
+            logger.debug("histogram count_ratio skipped: %s", exc)
+
+    # 5d. FV Ratio (QoQ)
+    if uh_ok:
+        try:
+            rows = con.execute("""
+                WITH q AS (
+                    SELECT cik, report_date,
+                        SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                    FROM _uh
+                    WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+                    GROUP BY cik, report_date
+                    HAVING SUM(TRY_CAST(fair_value AS DOUBLE)) > 0
+                ),
+                wl AS (
+                    SELECT *,
+                        LAG(fv) OVER (PARTITION BY cik ORDER BY report_date) AS prev
+                    FROM q
+                )
+                SELECT fv / prev FROM wl
+                WHERE prev IS NOT NULL AND prev > 0
+            """).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+            h = _build_recon_hist(
+                vals, "fv_ratio", "FV Ratio",
+                "QoQ total fair value change per CIK (1.0 = stable)",
+            )
+            if h:
+                recon_hists.append(h)
+        except Exception as exc:
+            logger.debug("histogram fv_ratio skipped: %s", exc)
+
+    # 5e. Yield Ratio (fund income / median position coupon)
+    if FEE_UPLIFT_FILE.exists():
+        try:
+            rows = con.execute(f"""
+                SELECT TRY_CAST(total_income_yield AS DOUBLE)
+                       / NULLIF(TRY_CAST(median_all_in_coupon AS DOUBLE), 0)
+                FROM read_csv_auto(
+                    '{FEE_UPLIFT_FILE.as_posix()}', all_varchar=true
+                )
+                WHERE TRY_CAST(total_income_yield AS DOUBLE) IS NOT NULL
+                  AND TRY_CAST(median_all_in_coupon AS DOUBLE) > 0
+            """).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+            h = _build_recon_hist(
+                vals, "yield_ratio", "Yield Ratio",
+                "fund income yield / median position coupon",
+            )
+            if h:
+                recon_hists.append(h)
+        except Exception as exc:
+            logger.debug("histogram yield_ratio skipped: %s", exc)
+
+    # 5f. Cost-to-FV Ratio (sum(cost) / sum(FV) per CIK-quarter)
+    if uh_ok:
+        try:
+            rows = con.execute("""
+                SELECT SUM(TRY_CAST(cost AS DOUBLE))
+                       / NULLIF(SUM(TRY_CAST(fair_value AS DOUBLE)), 0)
+                FROM _uh
+                WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+                  AND TRY_CAST(cost AS DOUBLE) IS NOT NULL
+                  AND TRY_CAST(cost AS DOUBLE) != 0
+                GROUP BY cik, report_date
+                HAVING COUNT(*) >= 5
+                  AND SUM(TRY_CAST(fair_value AS DOUBLE)) > 0
+            """).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+            h = _build_recon_hist(
+                vals, "cost_to_fv", "Cost / FV Ratio",
+                "sum(cost) / sum(FV) per CIK-qtr (1.0 = at par)",
+            )
+            if h:
+                recon_hists.append(h)
+        except Exception as exc:
+            logger.debug("histogram cost_to_fv skipped: %s", exc)
+
+    # 5g. Distribution Coverage (income yield / distribution rate)
+    if ff_ok:
+        try:
+            rows = con.execute("""
+                SELECT TRY_CAST(income_yield_pct AS DOUBLE)
+                       / NULLIF(TRY_CAST(distribution_rate AS DOUBLE), 0)
+                FROM _ff
+                WHERE TRY_CAST(income_yield_pct AS DOUBLE) IS NOT NULL
+                  AND TRY_CAST(income_yield_pct AS DOUBLE) > 0
+                  AND TRY_CAST(distribution_rate AS DOUBLE) > 0
+            """).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+            h = _build_recon_hist(
+                vals, "dist_coverage", "Distribution Coverage",
+                "income yield / distribution rate (mixed period basis)",
+            )
+            if h:
+                recon_hists.append(h)
+        except Exception as exc:
+            logger.debug("histogram dist_coverage skipped: %s", exc)
+
+    # 5h. Leverage Reconciliation (implied vs reported leverage)
+    if uh_ok and ff_ok:
+        try:
+            rows = con.execute("""
+                WITH hsums AS (
+                    SELECT cik, report_date,
+                        SUM(TRY_CAST(fair_value AS DOUBLE)) AS sum_fv
+                    FROM _uh
+                    WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+                    GROUP BY cik, report_date
+                    HAVING SUM(TRY_CAST(fair_value AS DOUBLE)) > 0
+                ),
+                fin AS (
+                    SELECT cik, report_date,
+                        TRY_CAST(net_assets AS DOUBLE) AS na,
+                        TRY_CAST(leverage_ratio AS DOUBLE) AS lev
+                    FROM _ff
+                    WHERE TRY_CAST(net_assets AS DOUBLE) > 0
+                      AND TRY_CAST(leverage_ratio AS DOUBLE) > 0.01
+                )
+                SELECT (h.sum_fv - f.na) / h.sum_fv / f.lev
+                FROM hsums h
+                JOIN fin f ON h.cik = f.cik AND h.report_date = f.report_date
+                WHERE h.sum_fv > f.na
+            """).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+            h = _build_recon_hist(
+                vals, "leverage_recon", "Leverage Reconciliation",
+                "implied leverage / reported leverage (1.0 = matches)",
+            )
+            if h:
+                recon_hists.append(h)
+        except Exception as exc:
+            logger.debug("histogram leverage_recon skipped: %s", exc)
+
+    # Clean up temp tables
+    for tbl in ("_uh", "_ff"):
+        try:
+            con.execute(f"DROP TABLE IF EXISTS {tbl}")
+        except Exception:
+            pass
+
+    # Drop histograms with too few observations to be meaningful
+    recon_hists = [h for h in recon_hists if h["n"] >= 10]
+
+    if recon_hists:
+        out["reconciliationHistograms"] = recon_hists
+
+    # -- 6. LLM fund classification validation --
+    if LLM_FUND_VALIDATION_RESULTS_FILE.exists():
+        try:
+            import json as _json
+            import pandas as pd
+            res_df = pd.read_csv(LLM_FUND_VALIDATION_RESULTS_FILE, dtype=str)
+            overall_row = res_df[res_df["metric"] == "overall"]
+            if not overall_row.empty:
+                overall = _json.loads(overall_row.iloc[0]["value"])
+                class_rows = res_df[res_df["metric"].str.startswith("class_")]
+                per_class = []
+                for _, cr in class_rows.iterrows():
+                    m = _json.loads(cr["value"])
+                    per_class.append({
+                        "label": m["label"],
+                        "precision": _safe_round(m["precision"], 4),
+                        "recall": _safe_round(m["recall"], 4),
+                        "f1": _safe_round(m["f1"], 4),
+                        "support": m["support"],
+                    })
+                out["llmFundValidation"] = {
+                    "overallAccuracy": _safe_round(
+                        overall["overallAccuracy"], 4
+                    ),
+                    "totalSamples": overall["totalSamples"],
+                    "labels": overall["labels"],
+                    "confusionMatrix": overall["confusionMatrix"],
+                    "perClassMetrics": per_class,
+                }
+                logger.info("  LLM fund validation: %.1f%% accuracy (%d samples)",
+                            overall["overallAccuracy"] * 100,
+                            overall["totalSamples"])
+        except Exception as exc:
+            logger.warning("  LLM fund validation export failed: %s", exc)
+
+    _write_json("data_quality.json", out)
+
+
+# ---------------------------------------------------------------------------
+# Landing page data visualizations
+# ---------------------------------------------------------------------------
+
+def _export_fund_index_returns(con: duckdb.DuckDBPyConnection) -> None:
+    """Fund-level (NAV-based) index returns, chain-linked to index levels.
+
+    Uses quarterly_return from fund_financials.csv (N-PORT total return for
+    interval/tender funds, NAV-based reconstruction for BDCs).
+    FV-weighted aggregate returns per quarter using total_assets as weight.
+    """
+    if not FUND_FINANCIALS_CSV.exists():
+        logger.warning("fund_financials.csv not found -- skipping fund_index_returns")
+        _write_json("fund_index_returns.json", {})
+        return
+
+    rows = con.execute(f"""
+        WITH ff AS (
+            SELECT * FROM read_csv_auto(
+                '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
+            )
+        ),
+        typed AS (
+            SELECT
+                cik,
+                vehicle_type,
+                report_quarter,
+                TRY_CAST(quarterly_return AS DOUBLE) AS quarterly_return,
+                TRY_CAST(total_assets AS DOUBLE) AS total_assets,
+                TRY_CAST(nav_per_share AS DOUBLE) AS nav_per_share,
+                TRY_CAST(distribution_per_share AS DOUBLE) AS dist_per_share
+            FROM ff
+            WHERE report_quarter >= '2022q4'
+              {_quarter_cutoff_sql('report_quarter')}
+              AND TRY_CAST(total_assets AS DOUBLE) > 1000000
+        ),
+        with_return AS (
+            SELECT
+                cik,
+                vehicle_type,
+                report_quarter,
+                total_assets,
+                COALESCE(
+                    quarterly_return,
+                    CASE
+                        WHEN nav_per_share IS NOT NULL AND nav_per_share > 0 THEN
+                            (nav_per_share
+                             + COALESCE(dist_per_share, 0)
+                             - LAG(nav_per_share) OVER (PARTITION BY cik ORDER BY report_quarter))
+                            / NULLIF(LAG(nav_per_share) OVER (PARTITION BY cik ORDER BY report_quarter), 0)
+                    END
+                ) AS qtr_return
+            FROM typed
+        ),
+        valid AS (
+            SELECT * FROM with_return
+            WHERE qtr_return IS NOT NULL
+              AND ABS(qtr_return) < 0.5
+        ),
+        agg AS (
+            SELECT
+                report_quarter,
+                CASE WHEN vehicle_type = 'bdc' THEN 'bdc'
+                     WHEN vehicle_type = 'interval_fund' THEN 'interval_fund'
+                     WHEN vehicle_type = 'tender_offer_fund' THEN 'tender_offer_fund'
+                     ELSE 'other'
+                END AS vtype,
+                SUM(total_assets * qtr_return) / NULLIF(SUM(total_assets), 0) AS weighted_return,
+                COUNT(DISTINCT cik) AS fund_count,
+                SUM(total_assets) AS total_aum
+            FROM valid
+            GROUP BY report_quarter, vtype
+        ),
+        combined AS (
+            SELECT
+                report_quarter,
+                'combined' AS vtype,
+                SUM(total_assets * qtr_return) / NULLIF(SUM(total_assets), 0) AS weighted_return,
+                COUNT(DISTINCT cik) AS fund_count,
+                SUM(total_assets) AS total_aum
+            FROM valid
+            GROUP BY report_quarter
+        ),
+        all_series AS (
+            SELECT * FROM agg WHERE vtype != 'other'
+            UNION ALL
+            SELECT * FROM combined
+        )
+        SELECT vtype, report_quarter, weighted_return, fund_count, total_aum
+        FROM all_series
+        ORDER BY vtype, report_quarter
+    """).fetchall()
+
+    # Group by series and chain-link to levels
+    by_series: dict[str, list[dict]] = {}
+    for vtype, quarter, ret, fund_count, total_aum in rows:
+        by_series.setdefault(vtype, []).append({
+            "quarter": quarter,
+            "return": _safe_round(ret, 6),
+            "fundCount": fund_count,
+            "totalAum": _safe_round(total_aum, 0),
+        })
+
+    out: dict[str, list[dict]] = {}
+    for vtype, series in by_series.items():
+        series.sort(key=lambda x: x["quarter"])
+        level = 100.0
+        for row in series:
+            r = row["return"] or 0
+            level *= (1 + r)
+            row["level"] = _safe_round(level, 2)
+        # Prepend baseline
+        if series:
+            first_q = series[0]["quarter"]
+            series.insert(0, {
+                "quarter": _prev_quarter(first_q),
+                "return": 0.0,
+                "level": 100.0,
+                "fundCount": 0,
+                "totalAum": 0,
+            })
+        out[vtype] = series
+
+    _write_json("fund_index_returns.json", out)
+    logger.info("  fund_index_returns: %d series, %d total points",
+                len(out), sum(len(v) for v in out.values()))
+
+
+def _export_aum_time_series(con: duckdb.DuckDBPyConnection) -> None:
+    """AUM growth by vehicle type over time."""
+    if not FUND_FINANCIALS_CSV.exists():
+        logger.warning("fund_financials.csv not found -- skipping aum_time_series")
+        _write_json("aum_time_series.json", [])
+        return
+
+    rows = con.execute(f"""
+        WITH ff AS (
+            SELECT * FROM read_csv_auto(
+                '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
+            )
+        ),
+        typed AS (
+            SELECT
+                cik,
+                vehicle_type,
+                report_quarter,
+                TRY_CAST(total_assets AS DOUBLE) AS total_assets
+            FROM ff
+            WHERE report_quarter >= '2022q4'
+              {_quarter_cutoff_sql('report_quarter')}
+              AND TRY_CAST(total_assets AS DOUBLE) > 1000000
+        )
+        SELECT
+            report_quarter,
+            SUM(CASE WHEN vehicle_type = 'bdc' THEN total_assets ELSE 0 END) AS bdc_aum,
+            SUM(CASE WHEN vehicle_type = 'interval_fund' THEN total_assets ELSE 0 END) AS if_aum,
+            SUM(CASE WHEN vehicle_type = 'tender_offer_fund' THEN total_assets ELSE 0 END) AS tof_aum,
+            SUM(total_assets) AS total_aum,
+            COUNT(DISTINCT CASE WHEN vehicle_type = 'bdc' THEN cik END) AS bdc_count,
+            COUNT(DISTINCT CASE WHEN vehicle_type = 'interval_fund' THEN cik END) AS if_count,
+            COUNT(DISTINCT CASE WHEN vehicle_type = 'tender_offer_fund' THEN cik END) AS tof_count
+        FROM typed
+        GROUP BY report_quarter
+        ORDER BY report_quarter
+    """).fetchall()
+
+    out = []
+    for (quarter, bdc_aum, if_aum, tof_aum, total_aum,
+         bdc_count, if_count, tof_count) in rows:
+        out.append({
+            "quarter": quarter,
+            "bdc": _safe_round(bdc_aum, 0),
+            "intervalFund": _safe_round(if_aum, 0),
+            "tenderOffer": _safe_round(tof_aum, 0),
+            "total": _safe_round(total_aum, 0),
+            "bdcCount": bdc_count,
+            "intervalCount": if_count,
+            "tenderCount": tof_count,
+        })
+
+    _write_json("aum_time_series.json", out)
+    logger.info("  aum_time_series: %d quarters", len(out))
+
+
+def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
+    """GICS sector breakdown from BDC XBRL industry-axis data.
+
+    Top 15 sectors + Other + Unclassified (N-PORT holdings without sector).
+    """
+    bdc_sector_csv = BDC_SECTOR_BREAKDOWN_FILE
+    if not bdc_sector_csv.exists():
+        logger.warning("bdc_sector_breakdown.csv not found -- skipping gics_sector_breakdown")
+        _write_json("gics_sector_breakdown.json", [])
+        return
+
+    # Get total FV across all holdings for denominator
+    total_fv = 0.0
+    if UNIFIED_HOLDINGS_CSV.exists():
+        cutoff_date = (
+            _quarter_to_date(INDEX_DISPLAY_END_QUARTER)
+            if INDEX_DISPLAY_END_QUARTER else "9999-12-31"
+        )
+        total_row = con.execute(f"""
+            WITH raw AS (
+                SELECT * FROM read_csv_auto(
+                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+                )
+            ),
+            latest AS (
+                SELECT MAX(report_date) AS q FROM raw
+                WHERE report_date <= '{cutoff_date}'
+            )
+            SELECT SUM(TRY_CAST(fair_value AS DOUBLE))
+            FROM raw
+            WHERE report_date = (SELECT q FROM latest)
+              {_exclude_consumer_lending_sql('cik')}
+        """).fetchone()
+        if total_row and total_row[0]:
+            total_fv = float(total_row[0])
+
+    # Aggregate BDC sector data
+    rows = con.execute(f"""
+        WITH raw AS (
+            SELECT * FROM read_csv_auto(
+                '{bdc_sector_csv.as_posix()}', all_varchar=true
+            )
+        ),
+        typed AS (
+            SELECT
+                industry_sector,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value,
+                cik,
+                report_date
+            FROM raw
+            WHERE TRY_CAST(fair_value AS DOUBLE) > 0
+              {_exclude_consumer_lending_sql('cik')}
+        ),
+        cutoff AS (
+            SELECT MAX(report_date) AS q FROM typed
+        ),
+        latest AS (
+            SELECT * FROM typed
+            WHERE report_date = (SELECT q FROM cutoff)
+        ),
+        agg AS (
+            SELECT
+                industry_sector AS sector,
+                SUM(fair_value) AS total_fv,
+                COUNT(DISTINCT cik) AS fund_count
+            FROM latest
+            GROUP BY industry_sector
+        )
+        SELECT sector, total_fv, fund_count
+        FROM agg
+        ORDER BY total_fv DESC
+    """).fetchall()
+
+    if not rows:
+        _write_json("gics_sector_breakdown.json", [])
+        return
+
+    classified_fv = sum(float(r[1]) for r in rows)
+    grand_total = total_fv if total_fv > 0 else classified_fv
+
+    # Top 15 + Other
+    top_15 = rows[:15]
+    other_rows = rows[15:]
+    other_fv = sum(float(r[1]) for r in other_rows)
+
+    out = []
+    for sector, fv, fund_count in top_15:
+        out.append({
+            "sector": sector,
+            "totalFv": _safe_round(fv, 0),
+            "pctOfTotal": _safe_round(float(fv) / grand_total, 4) if grand_total > 0 else 0,
+            "fundCount": fund_count,
+        })
+
+    if other_fv > 0:
+        out.append({
+            "sector": "Other",
+            "totalFv": _safe_round(other_fv, 0),
+            "pctOfTotal": _safe_round(other_fv / grand_total, 4) if grand_total > 0 else 0,
+            "fundCount": None,
+        })
+
+    # Unclassified = grand total - classified
+    unclassified_fv = grand_total - classified_fv
+    if unclassified_fv > 0:
+        out.append({
+            "sector": "Unclassified",
+            "totalFv": _safe_round(unclassified_fv, 0),
+            "pctOfTotal": _safe_round(unclassified_fv / grand_total, 4) if grand_total > 0 else 0,
+            "fundCount": None,
+        })
+
+    _write_json("gics_sector_breakdown.json", out)
+    logger.info("  gics_sector_breakdown: %d sectors, $%.1fB classified of $%.1fB total",
+                len(out), classified_fv / 1e9, grand_total / 1e9)
+
+
+def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
+    """Credit risk / distress time series for DIRECT_LENDING positions.
+
+    Uses FV/par (fair value / principal amount) as the distress metric,
+    which is the standard market convention for credit quality assessment
+    (price relative to par, not to purchase cost).  This works uniformly
+    across both BDC and N-PORT sources since both report principal_amount.
+
+    4 mutually exclusive tiers (priority order):
+    1. Deep distress: FV/par < 80%
+    2. Distressed: 80% <= FV/par < 90%
+    3. FV deterioration: 90% <= FV/par < 95%
+    4. PIK active: pik_rate > 0 or nport_is_paid_in_kind='Y', not in 1-3
+
+    Positions without usable par data (principal < $10K, or principal
+    outside 0.1-10x of FV) are excluded from price tiers but still
+    contribute to PIK.
+
+    GAV filter: CIK-quarters where either DL-only or all-position FV /
+    total_assets is between 0.7 and 1.3 are included.
+    """
+    if not UNIFIED_HOLDINGS_CSV.exists():
+        logger.warning("unified holdings not found -- skipping credit_risk")
+        _write_json("credit_risk.json", [])
+        return
+
+    has_fund_financials = FUND_FINANCIALS_CSV.exists()
+
+    # GAV filter: include CIK-quarters where DL-only or all-position FV
+    # reconciles to 70-130% of fund total assets.
+    gav_cte = ""
+    gav_join = ""
+    if has_fund_financials:
+        gav_cte = f""",
+        ff AS (
+            SELECT cik, report_quarter,
+                   TRY_CAST(total_assets AS DOUBLE) AS total_assets
+            FROM read_csv_auto('{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true)
+            WHERE TRY_CAST(total_assets AS DOUBLE) > 0
+        ),
+        dl_gav AS (
+            SELECT cik, report_quarter, SUM(fair_value) AS dl_fv
+            FROM dl
+            GROUP BY cik, report_quarter
+        ),
+        all_positions AS (
+            SELECT cik,
+                CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                || 'q'
+                || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value
+            FROM read_csv_auto('{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true)
+            WHERE TRY_CAST(fair_value AS DOUBLE) > 0
+              AND report_date >= '2022-10-01'
+              {_exclude_consumer_lending_sql('cik')}
+        ),
+        all_gav AS (
+            SELECT cik, report_quarter, SUM(fair_value) AS all_fv
+            FROM all_positions
+            GROUP BY cik, report_quarter
+        ),
+        good_ciks AS (
+            SELECT d.cik, d.report_quarter
+            FROM dl_gav d
+            JOIN all_gav a ON d.cik = a.cik AND d.report_quarter = a.report_quarter
+            JOIN ff ON d.cik = ff.cik AND d.report_quarter = ff.report_quarter
+            WHERE d.dl_fv / ff.total_assets BETWEEN 0.7 AND 1.3
+               OR a.all_fv / ff.total_assets BETWEEN 0.7 AND 1.3
+        )"""
+        gav_join = """INNER JOIN good_ciks gc
+              ON dl.cik = gc.cik AND dl.report_quarter = gc.report_quarter"""
+
+    rows = con.execute(f"""
+        WITH raw AS (
+            SELECT * FROM read_csv_auto(
+                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+            )
+        ),
+        dl AS (
+            SELECT
+                cik,
+                report_date,
+                CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                || 'q'
+                || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value,
+                TRY_CAST(principal_amount AS DOUBLE) AS principal,
+                TRY_CAST(pik_rate AS DOUBLE) AS pik_rate,
+                nport_is_paid_in_kind
+            FROM raw
+            WHERE index_classification = 'DIRECT_LENDING'
+              AND TRY_CAST(fair_value AS DOUBLE) > 0
+              AND report_date >= '2022-10-01'
+              {_exclude_consumer_lending_sql('cik')}
+        )
+        {gav_cte},
+        -- Assign tiers using FV/par (principal amount).
+        -- Positions with usable par: principal > $10K and between
+        -- 0.1x and 10x of FV (filters out share counts and bad data).
+        with_tiers AS (
+            SELECT
+                dl.report_quarter,
+                dl.fair_value,
+                CASE
+                    WHEN dl.principal > 10000
+                         AND dl.principal BETWEEN dl.fair_value * 0.1
+                                              AND dl.fair_value * 10.0
+                    THEN CASE
+                        WHEN dl.fair_value / dl.principal < 0.80 THEN 'deepDistress'
+                        WHEN dl.fair_value / dl.principal < 0.90 THEN 'distressed'
+                        WHEN dl.fair_value / dl.principal < 0.95 THEN 'fvDeterioration'
+                        WHEN (COALESCE(dl.pik_rate, 0) > 0
+                              OR dl.nport_is_paid_in_kind = 'Y') THEN 'pikActive'
+                        ELSE 'healthy'
+                    END
+                    WHEN (COALESCE(dl.pik_rate, 0) > 0
+                          OR dl.nport_is_paid_in_kind = 'Y') THEN 'pikActive'
+                    ELSE 'healthy'
+                END AS tier
+            FROM dl
+            {gav_join}
+            WHERE dl.report_quarter IS NOT NULL
+              {_quarter_cutoff_sql('dl.report_quarter')}
+        )
+        SELECT
+            report_quarter,
+            tier,
+            COUNT(*) AS cnt,
+            SUM(fair_value) AS tier_fv,
+            SUM(COUNT(*)) OVER (PARTITION BY report_quarter) AS total_positions,
+            SUM(SUM(fair_value)) OVER (PARTITION BY report_quarter) AS total_fv
+        FROM with_tiers
+        GROUP BY report_quarter, tier
+        ORDER BY report_quarter, tier
+    """).fetchall()
+
+    # Group by quarter
+    by_q: dict[str, dict] = {}
+    for quarter, tier, cnt, tier_fv, total_positions, total_fv_q in rows:
+        if quarter not in by_q:
+            by_q[quarter] = {
+                "quarter": quarter,
+                "totalPositions": total_positions,
+                "totalFv": _safe_round(total_fv_q, 0),
+                "byCount": {},
+                "byFv": {},
+            }
+        entry = by_q[quarter]
+        total_pos = float(total_positions) if total_positions else 1
+        total_fv_f = float(total_fv_q) if total_fv_q else 1
+        entry["byCount"][tier] = _safe_round(float(cnt) / total_pos, 4)
+        entry["byFv"][tier] = _safe_round(float(tier_fv) / total_fv_f, 4)
+
+    # Ensure all tiers present in each quarter
+    all_tiers = ["deepDistress", "distressed",
+                 "fvDeterioration", "pikActive", "healthy"]
+    out = []
+    for q in sorted(by_q.keys()):
+        entry = by_q[q]
+        for t in all_tiers:
+            entry["byCount"].setdefault(t, 0)
+            entry["byFv"].setdefault(t, 0)
+        out.append(entry)
+
+    _write_json("credit_risk.json", out)
+    logger.info("  credit_risk: %d quarters", len(out))
+
+
+def _export_distribution_histogram(con: duckdb.DuckDBPyConnection) -> None:
+    """Distribution rate histogram, latest quarter per CIK."""
+    if not FUND_FINANCIALS_CSV.exists():
+        logger.warning("fund_financials.csv not found -- skipping distribution_histogram")
+        _write_json("distribution_histogram.json", {})
+        return
+
+    rows = con.execute(f"""
+        WITH ff AS (
+            SELECT * FROM read_csv_auto(
+                '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
+            )
+        ),
+        typed AS (
+            SELECT
+                cik,
+                vehicle_type,
+                report_quarter,
+                TRY_CAST(distribution_rate AS DOUBLE) AS distribution_rate,
+                TRY_CAST(total_assets AS DOUBLE) AS total_assets,
+                ROW_NUMBER() OVER (PARTITION BY cik ORDER BY report_quarter DESC) AS rn
+            FROM ff
+            WHERE TRY_CAST(distribution_rate AS DOUBLE) > 0
+              AND TRY_CAST(total_assets AS DOUBLE) > 1000000
+              {_quarter_cutoff_sql('report_quarter')}
+        ),
+        latest AS (
+            SELECT * FROM typed WHERE rn = 1
+        )
+        SELECT
+            cik, vehicle_type, distribution_rate
+        FROM latest
+        ORDER BY distribution_rate
+    """).fetchall()
+
+    if not rows:
+        _write_json("distribution_histogram.json", {})
+        return
+
+    # Build buckets: 0-2%, 2-4%, ..., 18-20%, 20%+
+    # distribution_rate is stored in percentage form (e.g. 10.0 = 10%)
+    bucket_edges = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    bucket_labels = [
+        "0-2%", "2-4%", "4-6%", "6-8%", "8-10%",
+        "10-12%", "12-14%", "14-16%", "16-18%", "18-20%", "20%+",
+    ]
+    buckets = [{"bucket": label, "bdc": 0, "nonBdc": 0, "total": 0}
+               for label in bucket_labels]
+
+    rates = []
+    for _, vehicle_type, dist_rate in rows:
+        rate = float(dist_rate)
+        rates.append(rate)
+        is_bdc = vehicle_type == "bdc"
+        placed = False
+        for i, edge in enumerate(bucket_edges):
+            if rate < edge:
+                buckets[i]["bdc" if is_bdc else "nonBdc"] += 1
+                buckets[i]["total"] += 1
+                placed = True
+                break
+        if not placed:
+            buckets[-1]["bdc" if is_bdc else "nonBdc"] += 1
+            buckets[-1]["total"] += 1
+
+    rates.sort()
+    median = rates[len(rates) // 2] if rates else 0
+
+    _write_json("distribution_histogram.json", {
+        # Store median as decimal (0.10 = 10%) for frontend formatPercent()
+        "median": _safe_round(median / 100, 4),
+        "total": len(rates),
+        "buckets": buckets,
+    })
+    logger.info("  distribution_histogram: %d funds, median %.1f%%",
+                len(rates), median)
+
+
+def _export_leverage_histogram(con: duckdb.DuckDBPyConnection) -> None:
+    """Leverage ratio histogram, latest quarter per CIK."""
+    if not FUND_FINANCIALS_CSV.exists():
+        logger.warning("fund_financials.csv not found -- skipping leverage_histogram")
+        _write_json("leverage_histogram.json", {})
+        return
+
+    rows = con.execute(f"""
+        WITH ff AS (
+            SELECT * FROM read_csv_auto(
+                '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
+            )
+        ),
+        typed AS (
+            SELECT
+                cik,
+                vehicle_type,
+                report_quarter,
+                TRY_CAST(leverage_ratio AS DOUBLE) AS leverage_ratio,
+                TRY_CAST(total_assets AS DOUBLE) AS total_assets,
+                ROW_NUMBER() OVER (PARTITION BY cik ORDER BY report_quarter DESC) AS rn
+            FROM ff
+            WHERE TRY_CAST(leverage_ratio AS DOUBLE) IS NOT NULL
+              AND TRY_CAST(leverage_ratio AS DOUBLE) >= 0
+              AND TRY_CAST(total_assets AS DOUBLE) > 1000000
+              {_quarter_cutoff_sql('report_quarter')}
+        ),
+        latest AS (
+            SELECT * FROM typed WHERE rn = 1
+        )
+        SELECT
+            cik, vehicle_type, leverage_ratio
+        FROM latest
+        ORDER BY leverage_ratio
+    """).fetchall()
+
+    if not rows:
+        _write_json("leverage_histogram.json", {})
+        return
+
+    bucket_edges = [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
+    bucket_labels = ["<0.2x", "0.2-0.4x", "0.4-0.6x", "0.6-0.8x",
+                     "0.8-1.0x", "1.0-1.2x", "1.2x+"]
+    buckets = [{"bucket": label, "bdc": 0, "nonBdc": 0, "total": 0}
+               for label in bucket_labels]
+
+    ratios = []
+    for _, vehicle_type, lev_ratio in rows:
+        ratio = float(lev_ratio)
+        ratios.append(ratio)
+        is_bdc = vehicle_type == "bdc"
+        placed = False
+        for i, edge in enumerate(bucket_edges):
+            if ratio < edge:
+                buckets[i]["bdc" if is_bdc else "nonBdc"] += 1
+                buckets[i]["total"] += 1
+                placed = True
+                break
+        if not placed:
+            buckets[-1]["bdc" if is_bdc else "nonBdc"] += 1
+            buckets[-1]["total"] += 1
+
+    ratios.sort()
+    median = ratios[len(ratios) // 2] if ratios else 0
+
+    _write_json("leverage_histogram.json", {
+        "median": _safe_round(median, 4),
+        "total": len(ratios),
+        "buckets": buckets,
+    })
+    logger.info("  leverage_histogram: %d funds, median %.2fx",
+                len(ratios), median)
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -2090,6 +3340,15 @@ def export_all() -> None:
     _export_fund_details(con)
     _export_fund_summary(con)
     _export_industry_breakdown(con)
+    _export_data_quality(con)
+
+    # Landing page visualizations
+    _export_fund_index_returns(con)
+    _export_aum_time_series(con)
+    _export_gics_sector_breakdown(con)
+    _export_credit_risk(con)
+    _export_distribution_histogram(con)
+    _export_leverage_histogram(con)
 
     con.close()
     logger.info("Frontend export complete -- %d JSON files in %s",
