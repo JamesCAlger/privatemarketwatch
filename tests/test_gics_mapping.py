@@ -27,11 +27,15 @@ from pipeline.gics_mapping import (
     _FUZZY_THRESHOLD,
     _fuzzy_match,
     _gics_lookup_key,
+    _is_aggregate,
     _load_cache,
+    _load_gics_hierarchy,
     _load_gics_names,
     _normalize_label,
     _parse_llm_text_response,
     _save_cache,
+    _try_remap_stale,
+    get_industry_group,
     map_to_gics,
 )
 
@@ -42,11 +46,13 @@ from pipeline.gics_mapping import (
 
 @pytest.fixture(autouse=True)
 def _reset_gics_cache():
-    """Reset the module-level GICS names cache between tests."""
+    """Reset the module-level GICS names and hierarchy caches between tests."""
     import pipeline.gics_mapping as mod
     mod._gics_names = None
+    mod._gics_hierarchy = None
     yield
     mod._gics_names = None
+    mod._gics_hierarchy = None
 
 
 @pytest.fixture
@@ -447,3 +453,272 @@ class TestIntegration:
         assert "Aerospace & Defense" in gics_names
         assert "Application Software" in gics_names
         assert "Biotechnology" in gics_names
+
+
+# ---------------------------------------------------------------------------
+# GICS hierarchy
+# ---------------------------------------------------------------------------
+
+class TestGicsHierarchy:
+    def test_hierarchy_loads(self):
+        """Hierarchy file loads and has expected entries."""
+        hierarchy = _load_gics_hierarchy()
+        assert len(hierarchy) >= 150
+        assert "Application Software" in hierarchy
+        assert "Aerospace & Defense" in hierarchy
+
+    def test_hierarchy_structure(self):
+        """Each entry has sector, industry_group, and industry."""
+        hierarchy = _load_gics_hierarchy()
+        for sub_ind, entry in hierarchy.items():
+            assert "sector" in entry, f"Missing sector for {sub_ind}"
+            assert "industry_group" in entry, f"Missing industry_group for {sub_ind}"
+            assert "industry" in entry, f"Missing industry for {sub_ind}"
+
+    def test_software_hierarchy(self):
+        hierarchy = _load_gics_hierarchy()
+        entry = hierarchy["Application Software"]
+        assert entry["sector"] == "Information Technology"
+        assert entry["industry_group"] == "Software & Services"
+        assert entry["industry"] == "Software"
+
+    def test_aerospace_hierarchy(self):
+        hierarchy = _load_gics_hierarchy()
+        entry = hierarchy["Aerospace & Defense"]
+        assert entry["sector"] == "Industrials"
+        assert entry["industry_group"] == "Capital Goods"
+
+    def test_health_care_services_hierarchy(self):
+        hierarchy = _load_gics_hierarchy()
+        entry = hierarchy["Health Care Services"]
+        assert entry["sector"] == "Health Care"
+        assert entry["industry_group"] == "Health Care Equipment & Services"
+
+    def test_get_industry_group_known(self):
+        assert get_industry_group("Application Software") == "Software & Services"
+        assert get_industry_group("Aerospace & Defense") == "Capital Goods"
+        assert get_industry_group("Broadline Retail") == "Consumer Discretionary Distribution & Retail"
+
+    def test_get_industry_group_unknown(self):
+        """Unknown sub-industry returns itself."""
+        assert get_industry_group("Not A Real Sub-Industry") == "Not A Real Sub-Industry"
+
+    def test_get_industry_group_other(self):
+        """'Other' is not in hierarchy, returns itself."""
+        assert get_industry_group("Other") == "Other"
+
+    def test_all_gics_names_in_hierarchy(self):
+        """Every sub-industry from the reference list is in the hierarchy."""
+        gics_names = _load_gics_names()
+        hierarchy = _load_gics_hierarchy()
+        for name in gics_names:
+            assert name in hierarchy, f"GICS sub-industry '{name}' missing from hierarchy"
+
+    def test_unique_industry_groups(self):
+        """Hierarchy should produce ~24 unique industry groups."""
+        hierarchy = _load_gics_hierarchy()
+        groups = set(entry["industry_group"] for entry in hierarchy.values())
+        assert 20 <= len(groups) <= 30, f"Expected ~24 industry groups, got {len(groups)}"
+
+
+# ---------------------------------------------------------------------------
+# Expanded aggregate label detection
+# ---------------------------------------------------------------------------
+
+class TestExpandedAggregates:
+    def test_common_stock_is_aggregate(self):
+        result = map_to_gics(["common stock"])
+        assert result["common stock"] == "Other"
+
+    def test_preferred_stock_is_aggregate(self):
+        result = map_to_gics(["preferred stock"])
+        assert result["preferred stock"] == "Other"
+
+    def test_warrants_is_aggregate(self):
+        result = map_to_gics(["warrants"])
+        assert result["warrants"] == "Other"
+
+    def test_senior_secured_loans_is_aggregate(self):
+        result = map_to_gics(["senior secured loans"])
+        assert result["senior secured loans"] == "Other"
+
+    def test_collateralized_loan_obligation_is_aggregate(self):
+        result = map_to_gics(["collateralized loan obligation"])
+        assert result["collateralized loan obligation"] == "Other"
+
+    def test_geographic_labels_are_aggregate(self):
+        for label in ["northeast", "midwest", "southeast", "west", "germany", "united kingdom"]:
+            result = map_to_gics([label])
+            assert result[label] == "Other", f"'{label}' should be aggregate"
+
+    def test_vague_labels_are_aggregate(self):
+        for label in ["service", "services", "business", "other", "product"]:
+            result = map_to_gics([label])
+            assert result[label] == "Other", f"'{label}' should be aggregate"
+
+    def test_money_market_fund_is_aggregate(self):
+        result = map_to_gics(["money market fund"])
+        assert result["money market fund"] == "Other"
+
+    def test_class_prefix_is_aggregate(self):
+        result = map_to_gics(["class a common stock"])
+        assert result["class a common stock"] == "Other"
+
+    def test_net_assets_is_aggregate(self):
+        result = map_to_gics(["net assets"])
+        assert result["net assets"] == "Other"
+
+    def test_forward_contract_is_aggregate(self):
+        result = map_to_gics(["forward contract"])
+        assert result["forward contract"] == "Other"
+
+
+# ---------------------------------------------------------------------------
+# Regex-based aggregate detection
+# ---------------------------------------------------------------------------
+
+class TestRegexAggregates:
+    def test_llc_label_is_aggregate(self):
+        assert _is_aggregate("acme holdings llc", "acme holdings llc")
+
+    def test_inc_label_is_aggregate(self):
+        assert _is_aggregate("acme inc.", "acme inc.")
+
+    def test_lp_label_is_aggregate(self):
+        assert _is_aggregate("acme fund l.p.", "acme fund l.p.")
+
+    def test_percent_label_is_aggregate(self):
+        assert _is_aggregate("5 percent notes", "5 percent notes")
+
+    def test_treasury_bill_is_aggregate(self):
+        assert _is_aggregate("treasury bill", "treasury bill")
+
+    def test_government_securities_is_aggregate(self):
+        assert _is_aggregate("government securities", "government securities")
+
+    def test_fidelity_is_aggregate(self):
+        assert _is_aggregate("fidelity money market", "fidelity money market")
+
+    def test_real_industry_is_not_aggregate(self):
+        assert not _is_aggregate("software", "software")
+        assert not _is_aggregate("healthcare", "healthcare")
+        assert not _is_aggregate("aerospace", "aerospace")
+
+
+# ---------------------------------------------------------------------------
+# Expanded alias map
+# ---------------------------------------------------------------------------
+
+class TestExpandedAliases:
+    def test_retailing_and_distribution(self):
+        result = map_to_gics(["retailing and distribution"])
+        assert result["retailing and distribution"] == "Broadline Retail"
+
+    def test_consumer_goods_non_durable(self):
+        result = map_to_gics(["consumer goods non durable"])
+        assert result["consumer goods non durable"] == "Packaged Foods & Meats"
+
+    def test_consumer_goods_durable(self):
+        result = map_to_gics(["consumer goods durable"])
+        assert result["consumer goods durable"] == "Home Furnishings"
+
+    def test_media_diversified_and_production(self):
+        result = map_to_gics(["media diversified and production"])
+        assert result["media diversified and production"] == "Movies & Entertainment"
+
+    def test_cannabis(self):
+        result = map_to_gics(["cannabis"])
+        assert result["cannabis"] == "Agricultural Products & Services"
+
+    def test_insurance_sectors(self):
+        result = map_to_gics(["insurance sectors"])
+        assert result["insurance sectors"] == "Property & Casualty Insurance"
+
+    def test_green_technology(self):
+        result = map_to_gics(["green technology"])
+        assert result["green technology"] == "Renewable Electricity"
+
+    def test_artificial_intelligence(self):
+        result = map_to_gics(["artificial intelligence"])
+        assert result["artificial intelligence"] == "Application Software"
+
+    def test_ecommerce(self):
+        result = map_to_gics(["ecommerce"])
+        assert result["ecommerce"] == "Broadline Retail"
+
+    def test_wholesale(self):
+        result = map_to_gics(["wholesale"])
+        assert result["wholesale"] == "Distributors"
+
+    def test_franchising(self):
+        result = map_to_gics(["franchising"])
+        assert result["franchising"] == "Restaurants"
+
+    def test_infrastructure(self):
+        result = map_to_gics(["infrastructure"])
+        assert result["infrastructure"] == "Construction & Engineering"
+
+    def test_food_and_staples(self):
+        result = map_to_gics(["food and staples"])
+        assert result["food and staples"] == "Packaged Foods & Meats"
+
+
+# ---------------------------------------------------------------------------
+# Cache invalidation for stale LLM entries
+# ---------------------------------------------------------------------------
+
+class TestCacheInvalidation:
+    def test_stale_llm_other_remapped_to_alias(self, tmp_path, monkeypatch):
+        """A stale LLM 'Other' entry that now has an alias gets remapped."""
+        cache_file = tmp_path / "test_cache.csv"
+        monkeypatch.setattr(
+            "pipeline.gics_mapping.GICS_LABEL_CACHE_FILE", cache_file,
+        )
+
+        # Pre-populate cache with stale LLM "Other" for a label we now have an alias for
+        cache = {"retailing and distribution": ("Other", "llm")}
+        _save_cache(cache)
+
+        result = map_to_gics(["retailing and distribution"])
+        assert result["retailing and distribution"] == "Broadline Retail"
+
+        # Verify cache was updated
+        loaded = _load_cache()
+        assert loaded["retailing and distribution"][0] == "Broadline Retail"
+        assert loaded["retailing and distribution"][1] == "alias"
+
+    def test_stale_llm_other_aggregate_stays_other(self, tmp_path, monkeypatch):
+        """A stale LLM 'Other' for an aggregate label stays 'Other' (source updated)."""
+        cache_file = tmp_path / "test_cache.csv"
+        monkeypatch.setattr(
+            "pipeline.gics_mapping.GICS_LABEL_CACHE_FILE", cache_file,
+        )
+
+        cache = {"common stock": ("Other", "llm")}
+        _save_cache(cache)
+
+        result = map_to_gics(["common stock"])
+        assert result["common stock"] == "Other"
+
+        loaded = _load_cache()
+        assert loaded["common stock"][1] == "aggregate"
+
+    def test_non_stale_llm_entry_preserved(self, tmp_path, monkeypatch):
+        """A cached LLM entry with a real GICS mapping is not invalidated."""
+        cache_file = tmp_path / "test_cache.csv"
+        monkeypatch.setattr(
+            "pipeline.gics_mapping.GICS_LABEL_CACHE_FILE", cache_file,
+        )
+
+        cache = {"some custom label": ("Biotechnology", "llm")}
+        _save_cache(cache)
+
+        result = map_to_gics(["some custom label"])
+        assert result["some custom label"] == "Biotechnology"
+
+    def test_try_remap_stale_returns_none_for_unknown(self):
+        """_try_remap_stale returns None if no better mapping found."""
+        gics_names = _load_gics_names()
+        gics_exact = {n.strip().lower().replace("&", "and"): n for n in gics_names}
+        result = _try_remap_stale("zzz unknown xyzzy 999", gics_exact, gics_names)
+        assert result is None

@@ -167,6 +167,7 @@ BDC_SECTOR_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_sector_breakdown.csv"
 
 # GICS industry mapping
 GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"
+GICS_HIERARCHY_FILE = REFERENCE_DIR / "gics_hierarchy.json"
 GICS_LABEL_CACHE_FILE = OUTPUT_DIR / "gics_label_cache.csv"
 COMPANY_GICS_CACHE_FILE = OUTPUT_DIR / "company_gics_cache.csv"
 

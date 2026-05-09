@@ -44,7 +44,7 @@ try:
 except ImportError:
     OpenAI = None  # type: ignore[assignment,misc]
 
-from pipeline.config import GICS_LABEL_CACHE_FILE, GICS_REFERENCE_FILE
+from pipeline.config import GICS_HIERARCHY_FILE, GICS_LABEL_CACHE_FILE, GICS_REFERENCE_FILE
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +63,38 @@ def _load_gics_names() -> list[str]:
     with open(GICS_REFERENCE_FILE, encoding="utf-8") as f:
         _gics_names = json.load(f)
     return _gics_names
+
+
+# ---------------------------------------------------------------------------
+# GICS hierarchy (sub-industry -> industry group)
+# ---------------------------------------------------------------------------
+
+_gics_hierarchy: dict[str, dict[str, str]] | None = None
+
+
+def _load_gics_hierarchy() -> dict[str, dict[str, str]]:
+    """Load the GICS hierarchy mapping from JSON.
+
+    Returns dict: sub_industry_name -> {"sector", "industry_group", "industry"}.
+    """
+    global _gics_hierarchy
+    if _gics_hierarchy is not None:
+        return _gics_hierarchy
+    with open(GICS_HIERARCHY_FILE, encoding="utf-8") as f:
+        _gics_hierarchy = json.load(f)
+    return _gics_hierarchy
+
+
+def get_industry_group(sub_industry: str) -> str:
+    """Map a GICS sub-industry name to its parent industry group.
+
+    Returns the industry group name, or the original sub-industry if not found.
+    """
+    hierarchy = _load_gics_hierarchy()
+    entry = hierarchy.get(sub_industry)
+    if entry is not None:
+        return entry["industry_group"]
+    return sub_industry
 
 
 # ---------------------------------------------------------------------------
@@ -99,6 +131,7 @@ _STRIP_PREFIXES = [
 
 # Labels that are aggregates, not real industries -- map to "Other"
 _AGGREGATE_LABELS = {
+    # Aggregate / subtotal labels
     "all industries",
     "all other industries",
     "all other industry sectors",
@@ -119,6 +152,50 @@ _AGGREGATE_LABELS = {
     "secured debt",
     "investment holdings and cash equivalents",
     "sub total",
+    # Structural / instrument types (not industries)
+    "common stock",
+    "preferred stock",
+    "equity",
+    "warrants",
+    "class a shares",
+    "class a units",
+    "subordinated notes",
+    "delayed draw",
+    # Debt type labels
+    "senior secured loans",
+    "first lien term loan",
+    "senior lien",
+    "junior lien",
+    "unsecured debt",
+    # Structured product labels
+    "structured credit",
+    "structured products",
+    "structured note",
+    "collateralized loan obligation",
+    "credit card abs",
+    # Fund / vehicle labels
+    "short term funds",
+    "money market fund",
+    "mutual fund",
+    "fixed income funds",
+    "controlled investment",
+    # Geographic labels (not industries)
+    "northeast",
+    "midwest",
+    "southeast",
+    "west",
+    "germany",
+    "united kingdom",
+    # Vague / non-industry labels
+    "service",
+    "services",
+    "business",
+    "other",
+    "product",
+    # Financial statement labels
+    "net assets",
+    "liabilities in excess of other assets",
+    "forward contract",
 }
 
 # Prefix patterns that indicate aggregate/subtotal labels
@@ -128,6 +205,19 @@ _AGGREGATE_PREFIXES = [
     "sub-total",
     "subtotal",
     "investments in ",
+    "class ",
+]
+
+# Regex patterns that indicate non-industry labels (company names, percentages, etc.)
+_AGGREGATE_REGEXES = [
+    re.compile(r"\b(?:llc|inc\.|l\.p\.|l\.l\.c\.)(?:\s|$)", re.IGNORECASE),  # entity names
+    re.compile(r"\d+\s*percent", re.IGNORECASE),  # percentage labels
+    re.compile(r"at\s+\w+\s+point\s+\w+\s+percent", re.IGNORECASE),  # rate labels
+    re.compile(r"\btreasury\s+bill\b", re.IGNORECASE),  # govt securities
+    re.compile(r"\bgovernment\s+securities?\b", re.IGNORECASE),
+    re.compile(r"\bfirst\s+american\s+treasury\b", re.IGNORECASE),  # money market funds
+    re.compile(r"\bmorgan\s+stanley\s+institutional\b", re.IGNORECASE),
+    re.compile(r"\bfidelity\b", re.IGNORECASE),
 ]
 
 # Hardcoded alias map: raw label (lowercase) -> GICS sub-industry name.
@@ -388,6 +478,65 @@ _ALIAS_MAP: dict[str, str] = {
     "communications": "Integrated Telecommunication Services",
     # Fire / finance
     "fire finance": "Specialized Finance",
+    # Retail / Consumer (unmapped high-FV labels)
+    "retailing and distribution": "Broadline Retail",
+    "retail and consumer products": "Broadline Retail",
+    "consumer retail": "Broadline Retail",
+    "ecommerce": "Broadline Retail",
+    "consumer goods non durable": "Packaged Foods & Meats",
+    "consumer goods durable": "Home Furnishings",
+    "consumer products and services": "Specialized Consumer Services",
+    "consumer product": "Specialized Consumer Services",
+    "consumer brands": "Specialized Consumer Services",
+    "consumer goods and services": "Specialized Consumer Services",
+    # Media / Entertainment
+    "media diversified and production": "Movies & Entertainment",
+    "media and marketing": "Advertising",
+    "entertainment service": "Movies & Entertainment",
+    "media and telecommunications": "Integrated Telecommunication Services",
+    # Cannabis -> Agriculture (closest GICS)
+    "cannabis": "Agricultural Products & Services",
+    # Insurance
+    "insurance sectors": "Property & Casualty Insurance",
+    # Commercial / Professional services
+    "commercial professional services": "Diversified Support Services",
+    "diversified business services": "Diversified Support Services",
+    "professional and business services": "Diversified Support Services",
+    # Green / Renewable
+    "green technology": "Renewable Electricity",
+    # Technology
+    "artificial intelligence": "Application Software",
+    "supply chain technology": "Application Software",
+    "space technology": "Aerospace & Defense",
+    # Transportation
+    "transportation technology": "Cargo Ground Transportation",
+    "transportation consumer": "Cargo Ground Transportation",
+    # Automotive
+    "automotive services": "Automobile Parts & Equipment",
+    # Energy
+    "energy service": "Oil & Gas Equipment & Services",
+    # Services (specific)
+    "information services": "Data Processing & Outsourced Services",
+    "legal services": "Research & Consulting Services",
+    "roofing services": "Construction & Engineering",
+    "hvac consulting distribution": "Distributors",
+    # Manufacturing / Industrial
+    "manufacturing basic industries": "Industrial Machinery & Supplies & Components",
+    "diversified manufacturing": "Industrial Conglomerates",
+    # Food & Staples
+    "food and staples": "Packaged Foods & Meats",
+    # Wholesale / Distribution
+    "wholesale": "Distributors",
+    # Franchising
+    "franchising": "Restaurants",
+    # Forest / Paper
+    "paper forest products": "Paper & Plastic Packaging Products & Materials",
+    # Personal goods
+    "personal goods": "Personal Care Products",
+    # Fitness / Leisure
+    "fitness and leisure": "Leisure Facilities",
+    # Infrastructure
+    "infrastructure": "Construction & Engineering",
 }
 
 # Regex to strip trailing digits and numbering suffixes like "one", "two", "1"
@@ -666,6 +815,55 @@ def _save_cache(cache: dict[str, tuple[str, str]]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Aggregate detection helper
+# ---------------------------------------------------------------------------
+
+def _is_aggregate(raw_lower: str, cleaned: str) -> bool:
+    """Return True if the label is an aggregate / non-industry label."""
+    if raw_lower in _AGGREGATE_LABELS or cleaned in _AGGREGATE_LABELS:
+        return True
+    if any(raw_lower.startswith(p) for p in _AGGREGATE_PREFIXES):
+        return True
+    # Regex-based detection (company names, percentages, money market funds)
+    for pattern in _AGGREGATE_REGEXES:
+        if pattern.search(raw_lower):
+            return True
+    return False
+
+
+def _try_remap_stale(
+    raw_label: str,
+    gics_exact: dict[str, str],
+    gics_names: list[str],
+) -> tuple[str, str] | None:
+    """Try to remap a stale LLM 'Other' cache entry using updated rules.
+
+    Returns (gics_sub_industry, source) if a better mapping is found, else None.
+    """
+    cleaned = _normalize_label(raw_label)
+    raw_lower = raw_label.lower().strip()
+
+    # Check if it's now recognized as aggregate
+    if _is_aggregate(raw_lower, cleaned):
+        return ("Other", "aggregate")
+
+    # Check alias map
+    alias_result = _ALIAS_MAP.get(cleaned)
+    if alias_result is None:
+        alias_result = _ALIAS_MAP.get(raw_lower)
+    if alias_result is not None:
+        return (alias_result, "alias")
+
+    # Check exact GICS match
+    exact_key = _gics_lookup_key(cleaned)
+    if exact_key in gics_exact:
+        return (gics_exact[exact_key], "exact")
+
+    # No better mapping found
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -704,19 +902,24 @@ def map_to_gics(labels: list[str]) -> dict[str, str]:
     cache_updated = False
 
     for raw_label in unique_labels:
-        # Check cache first
+        # Check cache first -- but invalidate stale LLM "Other" entries
         if raw_label in cache:
-            result[raw_label] = cache[raw_label][0]
+            cached_gics, cached_source = cache[raw_label]
+            if cached_source == "llm" and cached_gics == "Other":
+                # Re-check against updated aggregate/alias rules
+                new_mapping = _try_remap_stale(raw_label, gics_exact, gics_names)
+                if new_mapping is not None:
+                    result[raw_label] = new_mapping[0]
+                    cache[raw_label] = new_mapping
+                    cache_updated = True
+                    continue
+            result[raw_label] = cached_gics
             continue
 
         # Phase 1a: Check if it's an aggregate label
         cleaned = _normalize_label(raw_label)
         raw_lower = raw_label.lower().strip()
-        is_aggregate = (
-            raw_lower in _AGGREGATE_LABELS
-            or cleaned in _AGGREGATE_LABELS
-            or any(raw_lower.startswith(p) for p in _AGGREGATE_PREFIXES)
-        )
+        is_aggregate = _is_aggregate(raw_lower, cleaned)
         if is_aggregate:
             result[raw_label] = "Other"
             cache[raw_label] = ("Other", "aggregate")

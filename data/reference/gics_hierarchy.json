@@ -1,0 +1,807 @@
+{
+  "Oil & Gas Drilling": {
+    "sector": "Energy",
+    "industry_group": "Energy",
+    "industry": "Energy Equipment & Services"
+  },
+  "Oil & Gas Equipment & Services": {
+    "sector": "Energy",
+    "industry_group": "Energy",
+    "industry": "Energy Equipment & Services"
+  },
+  "Integrated Oil & Gas": {
+    "sector": "Energy",
+    "industry_group": "Energy",
+    "industry": "Oil, Gas & Consumable Fuels"
+  },
+  "Oil & Gas Exploration & Production": {
+    "sector": "Energy",
+    "industry_group": "Energy",
+    "industry": "Oil, Gas & Consumable Fuels"
+  },
+  "Oil & Gas Refining & Marketing": {
+    "sector": "Energy",
+    "industry_group": "Energy",
+    "industry": "Oil, Gas & Consumable Fuels"
+  },
+  "Oil & Gas Storage & Transportation": {
+    "sector": "Energy",
+    "industry_group": "Energy",
+    "industry": "Oil, Gas & Consumable Fuels"
+  },
+  "Coal & Consumable Fuels": {
+    "sector": "Energy",
+    "industry_group": "Energy",
+    "industry": "Oil, Gas & Consumable Fuels"
+  },
+  "Commodity Chemicals": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Chemicals"
+  },
+  "Diversified Chemicals": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Chemicals"
+  },
+  "Fertilizers & Agricultural Chemicals": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Chemicals"
+  },
+  "Industrial Gases": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Chemicals"
+  },
+  "Specialty Chemicals": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Chemicals"
+  },
+  "Construction Materials": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Construction Materials"
+  },
+  "Metal, Glass & Plastic Containers": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Containers & Packaging"
+  },
+  "Paper & Plastic Packaging Products & Materials": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Containers & Packaging"
+  },
+  "Copper": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Metals & Mining"
+  },
+  "Diversified Metals & Mining": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Metals & Mining"
+  },
+  "Gold": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Metals & Mining"
+  },
+  "Precious Metals & Minerals": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Metals & Mining"
+  },
+  "Silver": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Metals & Mining"
+  },
+  "Aluminum": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Metals & Mining"
+  },
+  "Steel": {
+    "sector": "Materials",
+    "industry_group": "Materials",
+    "industry": "Metals & Mining"
+  },
+  "Aerospace & Defense": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Aerospace & Defense"
+  },
+  "Building Products": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Building Products"
+  },
+  "Construction & Engineering": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Construction & Engineering"
+  },
+  "Electrical Components & Equipment": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Electrical Equipment"
+  },
+  "Heavy Electrical Equipment": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Electrical Equipment"
+  },
+  "Industrial Conglomerates": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Industrial Conglomerates"
+  },
+  "Construction Machinery & Heavy Transportation Equipment": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Machinery"
+  },
+  "Agricultural & Farm Machinery": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Machinery"
+  },
+  "Industrial Machinery & Supplies & Components": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Machinery"
+  },
+  "Trading Companies & Distributors": {
+    "sector": "Industrials",
+    "industry_group": "Capital Goods",
+    "industry": "Trading Companies & Distributors"
+  },
+  "Commercial Printing": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Commercial Services & Supplies"
+  },
+  "Environmental & Facilities Services": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Commercial Services & Supplies"
+  },
+  "Office Services & Supplies": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Commercial Services & Supplies"
+  },
+  "Diversified Support Services": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Commercial Services & Supplies"
+  },
+  "Security & Alarm Services": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Commercial Services & Supplies"
+  },
+  "Human Resource & Employment Services": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Professional Services"
+  },
+  "Research & Consulting Services": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Professional Services"
+  },
+  "Data Processing & Outsourced Services": {
+    "sector": "Industrials",
+    "industry_group": "Commercial & Professional Services",
+    "industry": "Professional Services"
+  },
+  "Air Freight & Logistics": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Air Freight & Logistics"
+  },
+  "Passenger Airlines": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Passenger Airlines"
+  },
+  "Marine Transportation": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Marine Transportation"
+  },
+  "Rail Transportation": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Ground Transportation"
+  },
+  "Cargo Ground Transportation": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Ground Transportation"
+  },
+  "Passenger Ground Transportation": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Ground Transportation"
+  },
+  "Airport Services": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Transportation Infrastructure"
+  },
+  "Highways & Railtracks": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Transportation Infrastructure"
+  },
+  "Marine Ports & Services": {
+    "sector": "Industrials",
+    "industry_group": "Transportation",
+    "industry": "Transportation Infrastructure"
+  },
+  "Automobile Parts & Equipment": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Automobiles & Components",
+    "industry": "Automobile Components"
+  },
+  "Tires & Rubber": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Automobiles & Components",
+    "industry": "Automobile Components"
+  },
+  "Automobile Manufacturers": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Automobiles & Components",
+    "industry": "Automobiles"
+  },
+  "Motorcycle Manufacturers": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Automobiles & Components",
+    "industry": "Automobiles"
+  },
+  "Consumer Electronics": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Household Durables"
+  },
+  "Home Furnishings": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Household Durables"
+  },
+  "Homebuilding": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Household Durables"
+  },
+  "Household Appliances": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Household Durables"
+  },
+  "Housewares & Specialties": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Household Durables"
+  },
+  "Leisure Products": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Leisure Products"
+  },
+  "Apparel, Accessories & Luxury Goods": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Textiles, Apparel & Luxury Goods"
+  },
+  "Footwear": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Textiles, Apparel & Luxury Goods"
+  },
+  "Textiles": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Durables & Apparel",
+    "industry": "Textiles, Apparel & Luxury Goods"
+  },
+  "Casinos & Gaming": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Services",
+    "industry": "Hotels, Restaurants & Leisure"
+  },
+  "Hotels, Resorts & Cruise Lines": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Services",
+    "industry": "Hotels, Restaurants & Leisure"
+  },
+  "Leisure Facilities": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Services",
+    "industry": "Hotels, Restaurants & Leisure"
+  },
+  "Restaurants": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Services",
+    "industry": "Hotels, Restaurants & Leisure"
+  },
+  "Education Services": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Services",
+    "industry": "Diversified Consumer Services"
+  },
+  "Specialized Consumer Services": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Services",
+    "industry": "Diversified Consumer Services"
+  },
+  "Distributors": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Distributors"
+  },
+  "Broadline Retail": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Broadline Retail"
+  },
+  "Specialty Stores": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Specialty Retail"
+  },
+  "Apparel Retail": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Specialty Retail"
+  },
+  "Computer & Electronics Retail": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Specialty Retail"
+  },
+  "Home Improvement Retail": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Specialty Retail"
+  },
+  "Automotive Retail": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Specialty Retail"
+  },
+  "Homefurnishing Retail": {
+    "sector": "Consumer Discretionary",
+    "industry_group": "Consumer Discretionary Distribution & Retail",
+    "industry": "Specialty Retail"
+  },
+  "Food Distributors": {
+    "sector": "Consumer Staples",
+    "industry_group": "Food, Beverage & Tobacco",
+    "industry": "Food Products"
+  },
+  "Food Retail": {
+    "sector": "Consumer Staples",
+    "industry_group": "Consumer Staples Distribution & Retail",
+    "industry": "Consumer Staples Distribution & Retail"
+  },
+  "Consumer Staples Merchandise Retail": {
+    "sector": "Consumer Staples",
+    "industry_group": "Consumer Staples Distribution & Retail",
+    "industry": "Consumer Staples Distribution & Retail"
+  },
+  "Drug Retail": {
+    "sector": "Consumer Staples",
+    "industry_group": "Consumer Staples Distribution & Retail",
+    "industry": "Consumer Staples Distribution & Retail"
+  },
+  "Agricultural Products & Services": {
+    "sector": "Consumer Staples",
+    "industry_group": "Food, Beverage & Tobacco",
+    "industry": "Food Products"
+  },
+  "Packaged Foods & Meats": {
+    "sector": "Consumer Staples",
+    "industry_group": "Food, Beverage & Tobacco",
+    "industry": "Food Products"
+  },
+  "Tobacco": {
+    "sector": "Consumer Staples",
+    "industry_group": "Food, Beverage & Tobacco",
+    "industry": "Tobacco"
+  },
+  "Soft Drinks & Non-alcoholic Beverages": {
+    "sector": "Consumer Staples",
+    "industry_group": "Food, Beverage & Tobacco",
+    "industry": "Beverages"
+  },
+  "Brewers": {
+    "sector": "Consumer Staples",
+    "industry_group": "Food, Beverage & Tobacco",
+    "industry": "Beverages"
+  },
+  "Distillers & Vintners": {
+    "sector": "Consumer Staples",
+    "industry_group": "Food, Beverage & Tobacco",
+    "industry": "Beverages"
+  },
+  "Household Products": {
+    "sector": "Consumer Staples",
+    "industry_group": "Household & Personal Products",
+    "industry": "Household Products"
+  },
+  "Personal Care Products": {
+    "sector": "Consumer Staples",
+    "industry_group": "Household & Personal Products",
+    "industry": "Personal Care Products"
+  },
+  "Health Care Equipment": {
+    "sector": "Health Care",
+    "industry_group": "Health Care Equipment & Services",
+    "industry": "Health Care Equipment & Supplies"
+  },
+  "Health Care Supplies": {
+    "sector": "Health Care",
+    "industry_group": "Health Care Equipment & Services",
+    "industry": "Health Care Equipment & Supplies"
+  },
+  "Health Care Distributors": {
+    "sector": "Health Care",
+    "industry_group": "Health Care Equipment & Services",
+    "industry": "Health Care Providers & Services"
+  },
+  "Health Care Services": {
+    "sector": "Health Care",
+    "industry_group": "Health Care Equipment & Services",
+    "industry": "Health Care Providers & Services"
+  },
+  "Health Care Facilities": {
+    "sector": "Health Care",
+    "industry_group": "Health Care Equipment & Services",
+    "industry": "Health Care Providers & Services"
+  },
+  "Managed Health Care": {
+    "sector": "Health Care",
+    "industry_group": "Health Care Equipment & Services",
+    "industry": "Health Care Providers & Services"
+  },
+  "Health Care Technology": {
+    "sector": "Health Care",
+    "industry_group": "Health Care Equipment & Services",
+    "industry": "Health Care Technology"
+  },
+  "Biotechnology": {
+    "sector": "Health Care",
+    "industry_group": "Pharmaceuticals, Biotechnology & Life Sciences",
+    "industry": "Biotechnology"
+  },
+  "Pharmaceuticals": {
+    "sector": "Health Care",
+    "industry_group": "Pharmaceuticals, Biotechnology & Life Sciences",
+    "industry": "Pharmaceuticals"
+  },
+  "Life Sciences Tools & Services": {
+    "sector": "Health Care",
+    "industry_group": "Pharmaceuticals, Biotechnology & Life Sciences",
+    "industry": "Life Sciences Tools & Services"
+  },
+  "Diversified Banks": {
+    "sector": "Financials",
+    "industry_group": "Banks",
+    "industry": "Banks"
+  },
+  "Regional Banks": {
+    "sector": "Financials",
+    "industry_group": "Banks",
+    "industry": "Banks"
+  },
+  "Diversified Financial Services": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Financial Services"
+  },
+  "Multi-Sector Holdings": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Financial Services"
+  },
+  "Specialized Finance": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Financial Services"
+  },
+  "Commercial & Residential Mortgage Finance": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Financial Services"
+  },
+  "Transaction & Payment Processing Services": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Financial Services"
+  },
+  "Consumer Finance": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Consumer Finance"
+  },
+  "Asset Management & Custody Banks": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Capital Markets"
+  },
+  "Investment Banking & Brokerage": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Capital Markets"
+  },
+  "Diversified Capital Markets": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Capital Markets"
+  },
+  "Financial Exchanges & Data": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Capital Markets"
+  },
+  "Mortgage REITs": {
+    "sector": "Financials",
+    "industry_group": "Financial Services",
+    "industry": "Mortgage Real Estate Investment Trusts"
+  },
+  "Insurance Brokers": {
+    "sector": "Financials",
+    "industry_group": "Insurance",
+    "industry": "Insurance"
+  },
+  "Life & Health Insurance": {
+    "sector": "Financials",
+    "industry_group": "Insurance",
+    "industry": "Insurance"
+  },
+  "Multi-line Insurance": {
+    "sector": "Financials",
+    "industry_group": "Insurance",
+    "industry": "Insurance"
+  },
+  "Property & Casualty Insurance": {
+    "sector": "Financials",
+    "industry_group": "Insurance",
+    "industry": "Insurance"
+  },
+  "Reinsurance": {
+    "sector": "Financials",
+    "industry_group": "Insurance",
+    "industry": "Insurance"
+  },
+  "IT Consulting & Other Services": {
+    "sector": "Information Technology",
+    "industry_group": "Software & Services",
+    "industry": "IT Services"
+  },
+  "Internet Services & Infrastructure": {
+    "sector": "Information Technology",
+    "industry_group": "Software & Services",
+    "industry": "IT Services"
+  },
+  "Application Software": {
+    "sector": "Information Technology",
+    "industry_group": "Software & Services",
+    "industry": "Software"
+  },
+  "Systems Software": {
+    "sector": "Information Technology",
+    "industry_group": "Software & Services",
+    "industry": "Software"
+  },
+  "Communications Equipment": {
+    "sector": "Information Technology",
+    "industry_group": "Technology Hardware & Equipment",
+    "industry": "Communications Equipment"
+  },
+  "Technology Hardware, Storage & Peripherals": {
+    "sector": "Information Technology",
+    "industry_group": "Technology Hardware & Equipment",
+    "industry": "Technology Hardware, Storage & Peripherals"
+  },
+  "Electronic Equipment & Instruments": {
+    "sector": "Information Technology",
+    "industry_group": "Technology Hardware & Equipment",
+    "industry": "Electronic Equipment, Instruments & Components"
+  },
+  "Electronic Components": {
+    "sector": "Information Technology",
+    "industry_group": "Technology Hardware & Equipment",
+    "industry": "Electronic Equipment, Instruments & Components"
+  },
+  "Electronic Manufacturing Services": {
+    "sector": "Information Technology",
+    "industry_group": "Technology Hardware & Equipment",
+    "industry": "Electronic Equipment, Instruments & Components"
+  },
+  "Technology Distributors": {
+    "sector": "Information Technology",
+    "industry_group": "Technology Hardware & Equipment",
+    "industry": "Electronic Equipment, Instruments & Components"
+  },
+  "Semiconductor Materials & Equipment": {
+    "sector": "Information Technology",
+    "industry_group": "Semiconductors & Semiconductor Equipment",
+    "industry": "Semiconductors & Semiconductor Equipment"
+  },
+  "Semiconductors": {
+    "sector": "Information Technology",
+    "industry_group": "Semiconductors & Semiconductor Equipment",
+    "industry": "Semiconductors & Semiconductor Equipment"
+  },
+  "Alternative Carriers": {
+    "sector": "Communication Services",
+    "industry_group": "Telecommunication Services",
+    "industry": "Diversified Telecommunication Services"
+  },
+  "Integrated Telecommunication Services": {
+    "sector": "Communication Services",
+    "industry_group": "Telecommunication Services",
+    "industry": "Diversified Telecommunication Services"
+  },
+  "Wireless Telecommunication Services": {
+    "sector": "Communication Services",
+    "industry_group": "Telecommunication Services",
+    "industry": "Wireless Telecommunication Services"
+  },
+  "Electric Utilities": {
+    "sector": "Utilities",
+    "industry_group": "Utilities",
+    "industry": "Electric Utilities"
+  },
+  "Gas Utilities": {
+    "sector": "Utilities",
+    "industry_group": "Utilities",
+    "industry": "Gas Utilities"
+  },
+  "Multi-Utilities": {
+    "sector": "Utilities",
+    "industry_group": "Utilities",
+    "industry": "Multi-Utilities"
+  },
+  "Water Utilities": {
+    "sector": "Utilities",
+    "industry_group": "Utilities",
+    "industry": "Water Utilities"
+  },
+  "Independent Power Producers & Energy Traders": {
+    "sector": "Utilities",
+    "industry_group": "Utilities",
+    "industry": "Independent Power and Renewable Electricity Producers"
+  },
+  "Renewable Electricity": {
+    "sector": "Utilities",
+    "industry_group": "Utilities",
+    "industry": "Independent Power and Renewable Electricity Producers"
+  },
+  "Diversified REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Diversified REITs"
+  },
+  "Industrial REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Industrial REITs"
+  },
+  "Hotel & Resort REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Hotel & Resort REITs"
+  },
+  "Office REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Office REITs"
+  },
+  "Health Care REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Health Care REITs"
+  },
+  "Residential REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Residential REITs"
+  },
+  "Retail REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Retail REITs"
+  },
+  "Specialized REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Specialized REITs"
+  },
+  "Other Specialized REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Specialized REITs"
+  },
+  "Timber REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Specialized REITs"
+  },
+  "Telecom Tower REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Specialized REITs"
+  },
+  "Data Center REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Specialized REITs"
+  },
+  "Self-Storage REITs": {
+    "sector": "Real Estate",
+    "industry_group": "Equity Real Estate Investment Trusts (REITs)",
+    "industry": "Specialized REITs"
+  },
+  "Real Estate Operating Companies": {
+    "sector": "Real Estate",
+    "industry_group": "Real Estate Management & Development",
+    "industry": "Real Estate Management & Development"
+  },
+  "Real Estate Development": {
+    "sector": "Real Estate",
+    "industry_group": "Real Estate Management & Development",
+    "industry": "Real Estate Management & Development"
+  },
+  "Real Estate Services": {
+    "sector": "Real Estate",
+    "industry_group": "Real Estate Management & Development",
+    "industry": "Real Estate Management & Development"
+  },
+  "Diversified Real Estate Activities": {
+    "sector": "Real Estate",
+    "industry_group": "Real Estate Management & Development",
+    "industry": "Real Estate Management & Development"
+  },
+  "Interactive Media & Services": {
+    "sector": "Communication Services",
+    "industry_group": "Media & Entertainment",
+    "industry": "Interactive Media & Services"
+  },
+  "Movies & Entertainment": {
+    "sector": "Communication Services",
+    "industry_group": "Media & Entertainment",
+    "industry": "Entertainment"
+  },
+  "Broadcasting": {
+    "sector": "Communication Services",
+    "industry_group": "Media & Entertainment",
+    "industry": "Media"
+  },
+  "Cable & Satellite": {
+    "sector": "Communication Services",
+    "industry_group": "Media & Entertainment",
+    "industry": "Media"
+  },
+  "Publishing": {
+    "sector": "Communication Services",
+    "industry_group": "Media & Entertainment",
+    "industry": "Media"
+  },
+  "Advertising": {
+    "sector": "Communication Services",
+    "industry_group": "Media & Entertainment",
+    "industry": "Media"
+  },
+  "Interactive Home Entertainment": {
+    "sector": "Communication Services",
+    "industry_group": "Media & Entertainment",
+    "industry": "Entertainment"
+  }
+}
