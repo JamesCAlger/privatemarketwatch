@@ -321,11 +321,18 @@ _BAD_ISSUER_PREFIXES = [
 
 # Affiliation prefixes/suffixes in dash-delimited identifiers (PhenixFIN-style)
 # e.g. "Non-Controlled/Non-Affiliated Investments - Acme Corp - Term Loan"
+# Also handles inverted format used by PennantPark et al.:
+# "Investments in Non-Controlled, Non-Affiliated Portfolio Companies - Acme Corp"
 # DuckDB regexp_replace patterns (case-insensitive via (?i))
 _AFFILIATION_PREFIX_RE = (
-    r"(?i)^(?:Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))?"
-    r" Investments|Control(?:led)? Investments|Affiliat(?:e|ed)"
-    r" Investments) - "
+    r"(?i)^(?:"
+    r"Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))? Investments"
+    r"|Control(?:led)? Investments"
+    r"|Affiliat(?:e|ed) Investments"
+    r"|Investments in (?:Non-)?Control(?:led)?(?:[,/] ?(?:Non-)?Affiliat(?:e|ed))?"
+    r" Portfolio Companies"
+    r")"
+    "(?:\\s*-\\s*|\\s*\u2014\\s*|\\s+)"
 )
 _AFFILIATION_SUFFIX_RE = (
     r"(?i) - (?:Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))?"
@@ -415,13 +422,14 @@ _PE_FUND_SIGNALS = [
 # patterns are likely PE/VC fund interests, not operating companies.
 _NPORT_FUND_NAME_KEYWORDS = [
     "capital partners", "buyout", "ventures", "growth equity",
+    "secondaries",
 ]
 
 # N-PORT credit fund name detection: EC+CORPORATE holdings with these
 # keywords in issuer_name are likely BDC/credit fund interests, not operating cos.
 _NPORT_CREDIT_FUND_NAME_KEYWORDS = [
     "bdc", "private credit", "senior loan", "lending fund",
-    "credit fund", "credit corp", "direct lend",
+    "credit fund", "credit corp", "direct lend", "debt fund",
 ]
 
 # NUSS name-gated government detection: only map NUSS to GOVERNMENT when the
@@ -519,7 +527,8 @@ _CASH_CORPORATE_GUARD_KEYWORDS = [
 # Hedge fund keywords (negative signal -- NOT credit or PE)
 _HEDGE_FUND_KEYWORDS = [
     "hedge", "macro", "long/short", "long short", "market neutral",
-    "arbitrage", "event driven", "multi-strategy",
+    "arbitrage", "event driven", "multi-strategy", "multi strategy",
+    "absolute return",
 ]
 
 # Roman numeral vintage fund pattern -- "Fund IV", "Fund XII", etc.
@@ -835,19 +844,19 @@ def _sql_classify_index() -> str:
     nac_eq = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) IN ('EC', 'EP')"
 
     return f"""CASE
+  WHEN {sc_kw} THEN 'STRUCTURED_CREDIT'
   WHEN asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE' THEN 'DIRECT_LENDING'
   WHEN asset_category = 'EQUITY_PREFERRED' AND issuer_category = 'CORPORATE' THEN 'PREFERRED_EQUITY'
   WHEN asset_category = 'EQUITY_COMMON' AND issuer_category = 'CORPORATE' THEN 'COMMON_EQUITY'
   WHEN issuer_category = 'FUND' AND ({re_kw} OR {re_fund_kw}) THEN 'REAL_ESTATE_FUND'
   WHEN issuer_category = 'FUND' AND {nac_re} THEN 'REAL_ESTATE_FUND'
-  WHEN {sc_kw} THEN 'STRUCTURED_CREDIT'
   WHEN issuer_category = 'FUND' AND {has_credit} AND NOT {has_pe} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {has_pe} AND NOT {has_credit} THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND {has_credit} AND {has_pe} AND {credit_count} >= {pe_count} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {has_credit} AND {has_pe} AND {credit_count} < {pe_count} THEN 'PRIVATE_EQUITY_FUND'
+  WHEN issuer_category = 'FUND' AND {hedge_kw} THEN 'HEDGE_FUND'
   WHEN issuer_category = 'FUND' AND {nac_dbt} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY_FUND'
-  WHEN issuer_category = 'FUND' AND {hedge_kw} THEN 'HEDGE_FUND'
   WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} AND regexp_matches(_combined_fund_text, '\\bfund\\s+(i{{1,3}}|iv|vi{{0,3}}|viii|ix|xi{{0,3}}|xiv|xv|x)\\b') THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} THEN 'UNCLASSIFIED'
   WHEN issuer_category = 'CORPORATE' AND ({re_kw} OR {re_fund_kw}) THEN 'DIRECT_REAL_ESTATE'
@@ -948,8 +957,8 @@ def _sql_classify_asset_class() -> str:
   WHEN issuer_category = 'FUND' AND {nac_dbt} THEN 'PRIVATE_CREDIT'
   WHEN asset_category IN ('EQUITY_COMMON', 'EQUITY_PREFERRED') AND issuer_category = 'CORPORATE' THEN 'PRIVATE_EQUITY'
   WHEN issuer_category = 'FUND' AND {has_pe} THEN 'PRIVATE_EQUITY'
-  WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY'
   WHEN {hedge_kw} THEN 'HEDGE_FUND'
+  WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY'
   WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} AND regexp_matches(_combined_fund_text, '\\bfund\\s+(i{{1,3}}|iv|vi{{0,3}}|viii|ix|xi{{0,3}}|xiv|xv|x)\\b') THEN 'PRIVATE_EQUITY'
   WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} THEN 'OTHER'
   ELSE 'OTHER'
@@ -1324,19 +1333,21 @@ def _classify_index(asset_category: str, issuer_category: str,
     """Assign index classification.
 
     Priority order:
-      1. DIRECT_LENDING:      LOAN/DEBT + CORPORATE
-      2. PREFERRED_EQUITY:    EQUITY_PREFERRED + CORPORATE
-      3. COMMON_EQUITY:       EQUITY_COMMON + CORPORATE
-      4. REAL_ESTATE_FUND:    FUND + RE keywords or nport_asset_cat=RE
-      5. STRUCTURED_CREDIT:   CLO keywords
-      6. PRIVATE_CREDIT_FUND: FUND + credit signals or nport_asset_cat=DBT/LON
-      7. PRIVATE_EQUITY_FUND: FUND + PE signals or nport_asset_cat=EC/EP
-      8. HEDGE_FUND:          FUND + explicit hedge keywords only
-      9. PRIVATE_EQUITY_FUND: FUND + roman numeral vintage series (Fund IV, etc.)
-      10. UNCLASSIFIED:       FUND + no signal at all
-      11. DIRECT_REAL_ESTATE: CORPORATE + RE keywords
-      12. CASH:               GOVERNMENT or cash keywords
-      13. UNCLASSIFIED:       everything else
+      1. STRUCTURED_CREDIT:   CLO keywords (before DIRECT_LENDING to catch CLO tranches)
+      2. DIRECT_LENDING:      LOAN/DEBT + CORPORATE
+      3. PREFERRED_EQUITY:    EQUITY_PREFERRED + CORPORATE
+      4. COMMON_EQUITY:       EQUITY_COMMON + CORPORATE
+      5. REAL_ESTATE_FUND:    FUND + RE keywords or nport_asset_cat=RE
+      6. PRIVATE_CREDIT_FUND: FUND + credit signals
+      7. PRIVATE_EQUITY_FUND: FUND + PE signals
+      8. HEDGE_FUND:          FUND + explicit hedge keywords (before nac fallback)
+      9. PRIVATE_CREDIT_FUND: FUND + nport_asset_cat=DBT/LON
+      10. PRIVATE_EQUITY_FUND: FUND + nport_asset_cat=EC/EP
+      11. PRIVATE_EQUITY_FUND: FUND + roman numeral vintage series (Fund IV, etc.)
+      12. UNCLASSIFIED:       FUND + no signal at all
+      13. DIRECT_REAL_ESTATE: CORPORATE + RE keywords
+      14. CASH:               GOVERNMENT or cash keywords
+      15. UNCLASSIFIED:       everything else
     """
     # Combine issuer name + instrument description for signal matching
     combined = ""
@@ -1346,6 +1357,11 @@ def _classify_index(asset_category: str, issuer_category: str,
         combined += " " + instrument_description.lower()
 
     nac = (nport_asset_cat or "").strip().upper()
+
+    # Structured credit (check first -- CLO tranches should not fall into DIRECT_LENDING)
+    has_sc = any(kw in combined for kw in _STRUCTURED_CREDIT_KEYWORDS)
+    if has_sc:
+        return "STRUCTURED_CREDIT"
 
     if asset_category in ("LOAN", "DEBT") and issuer_category == "CORPORATE":
         return "DIRECT_LENDING"
@@ -1364,11 +1380,6 @@ def _classify_index(asset_category: str, issuer_category: str,
     if issuer_category == "FUND" and nac == "RE":
         return "REAL_ESTATE_FUND"
 
-    # Structured credit
-    has_sc = any(kw in combined for kw in _STRUCTURED_CREDIT_KEYWORDS)
-    if has_sc:
-        return "STRUCTURED_CREDIT"
-
     if issuer_category == "FUND":
         has_credit = any(sig in combined for sig in _CREDIT_FUND_SIGNALS)
         has_pe = any(sig in combined for sig in _PE_FUND_SIGNALS)
@@ -1383,15 +1394,15 @@ def _classify_index(asset_category: str, issuer_category: str,
             if credit_count >= pe_count:
                 return "PRIVATE_CREDIT_FUND"
             return "PRIVATE_EQUITY_FUND"
-        # nport_asset_cat fallback before hedge fund catch-all
+        # Explicit hedge fund keywords (check before nac fallback)
+        has_hedge = any(kw in combined for kw in _HEDGE_FUND_KEYWORDS)
+        if has_hedge:
+            return "HEDGE_FUND"
+        # nport_asset_cat fallback
         if nac in ("DBT", "LON"):
             return "PRIVATE_CREDIT_FUND"
         if nac in ("EC", "EP"):
             return "PRIVATE_EQUITY_FUND"
-        # Explicit hedge fund keywords
-        has_hedge = any(kw in combined for kw in _HEDGE_FUND_KEYWORDS)
-        if has_hedge:
-            return "HEDGE_FUND"
         # Roman numeral vintage fund series (Fund IV, Fund XII, etc.) -> PE
         if _VINTAGE_FUND_RE.search(combined):
             return "PRIVATE_EQUITY_FUND"
@@ -2296,7 +2307,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     with_fund_detect AS (
         SELECT *,
             CASE
-                WHEN asset_category_final = 'OTHER'
+                WHEN asset_category_final IN ('OTHER', 'EQUITY_COMMON')
                      AND issuer_category_final = 'CORPORATE'
                      AND (
                          -- L.P. suffix + fund co-keyword (but exclude operating companies)
@@ -2310,7 +2321,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
                          OR {fund_kw_checks}
                      )
                 THEN 'FUND'
-                -- EC+CORPORATE with BDC/credit fund name -> FUND
+                -- EC+CORPORATE with BDC/credit fund name -> FUND (fast path)
                 WHEN asset_category_final = 'EQUITY_COMMON'
                      AND issuer_category_final = 'CORPORATE'
                      AND ({credit_fund_kw_checks})

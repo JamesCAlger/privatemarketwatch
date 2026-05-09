@@ -3343,6 +3343,74 @@ class TestNportFundDetection:
         result = _prepare_nport(df)
         assert result.iloc[0]["issuer_category"] == "CORPORATE"
 
+    # -- P2/P4/P5: EC+CORP LP fund detection --
+
+    def test_ec_corp_lp_with_fund_cokw_reclassed_to_fund(self):
+        """EC+CORP with 'L.P.' + fund co-keyword -> FUND (P2/P4/P5 fix)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "EC", "issuer_type": "CORP",
+            "issuer_name": "TPG Partners VIII, L.P.",
+            "currency_value": 5000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "FUND"
+
+    def test_ec_corp_lp_real_estate_fund_reclassed(self):
+        """EC+CORP RE fund LP -> FUND (P2 fix)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "EC", "issuer_type": "CORP",
+            "issuer_name": "Brookfield Real Estate Partners IV, L.P.",
+            "currency_value": 8000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "FUND"
+
+    def test_ec_corp_debt_fund_keyword_reclassed(self):
+        """EC+CORP with 'debt fund' keyword -> FUND (P4 fix)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "EC", "issuer_type": "CORP",
+            "issuer_name": "BSP Debt Fund IV",
+            "currency_value": 3000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "FUND"
+
+    def test_ec_corp_secondaries_keyword_reclassed(self):
+        """EC+CORP with 'secondaries' keyword -> FUND (P5 fix)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "EC", "issuer_type": "CORP",
+            "issuer_name": "Coller International Partners Secondaries",
+            "currency_value": 4000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "FUND"
+
+    def test_ec_corp_normal_company_stays_corporate(self):
+        """EC+CORP with normal company name -> stays CORPORATE (no false positive)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "EC", "issuer_type": "CORP",
+            "issuer_name": "Johnson Controls International PLC",
+            "currency_value": 2000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "CORPORATE"
+
+    def test_ec_corp_lp_with_llc_stays_corporate(self):
+        """EC+CORP with 'L.P.' + 'LLC' -> stays CORPORATE (operating company)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "EC", "issuer_type": "CORP",
+            "issuer_name": "AffiniPay Intermediate Holdings LLC, L.P.",
+            "currency_value": 1000000,
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_category"] == "CORPORATE"
+
 
 # ---------------------------------------------------------------------------
 # Rate cap tests
@@ -4586,10 +4654,10 @@ class TestExpandedIndexClassification:
         result = _classify_index("OTHER", "OTHER", "Barings CLO Ltd 2024-1", "")
         assert result == "STRUCTURED_CREDIT"
 
-    def test_direct_lending_still_wins_over_clo(self):
-        """LOAN/DEBT + CORPORATE fires before CLO check (DL has highest priority)."""
+    def test_structured_credit_wins_over_direct_lending(self):
+        """CLO keyword fires before DIRECT_LENDING (SC has highest priority)."""
         result = _classify_index("DEBT", "CORPORATE", "Barings CLO Ltd", "")
-        assert result == "DIRECT_LENDING"
+        assert result == "STRUCTURED_CREDIT"
 
     def test_fund_no_signals_unclassified(self):
         result = _classify_index("FUND", "FUND", "ABC Partners", "")
@@ -4681,6 +4749,38 @@ class TestExpandedIndexClassification:
     def test_existing_pe_fund_unchanged(self):
         result = _classify_index("FUND", "FUND", "Growth Equity Partners", "")
         assert result == "PRIVATE_EQUITY_FUND"
+
+    # -- P1 regression: regular corporate loan still DIRECT_LENDING --
+
+    def test_regular_corporate_loan_still_direct_lending(self):
+        """LOAN+CORPORATE without CLO keyword -> DIRECT_LENDING."""
+        result = _classify_index("LOAN", "CORPORATE", "Acme Holdings LLC", "Senior Secured First Lien")
+        assert result == "DIRECT_LENDING"
+
+    def test_clo_in_instrument_desc_structured_credit(self):
+        """LOAN+CORPORATE but CLO in instrument_description -> STRUCTURED_CREDIT."""
+        result = _classify_index("LOAN", "CORPORATE",
+                                 "Barings CLO Ltd 2024-1",
+                                 "Collateralized Loan Obligation")
+        assert result == "STRUCTURED_CREDIT"
+
+    # -- P3: hedge fund keyword additions --
+
+    def test_hedge_fund_multi_strategy_no_hyphen(self):
+        """FUND + 'multi strategy' (no hyphen) -> HEDGE_FUND."""
+        result = _classify_index("OTHER", "FUND", "AQR Multi Strategy Fund LP", "")
+        assert result == "HEDGE_FUND"
+
+    def test_hedge_fund_absolute_return(self):
+        """FUND + 'absolute return' -> HEDGE_FUND."""
+        result = _classify_index("OTHER", "FUND", "Bridgewater Absolute Return Fund", "")
+        assert result == "HEDGE_FUND"
+
+    def test_hedge_fund_keyword_wins_over_nac_ec(self):
+        """FUND + hedge keyword + nac=EC -> HEDGE_FUND (not PE)."""
+        result = _classify_index("OTHER", "FUND", "Citadel Multi Strategy Fund", "",
+                                 nport_asset_cat="EC")
+        assert result == "HEDGE_FUND"
 
 
 class TestEnforceSchemaNewColumns:
