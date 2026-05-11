@@ -1199,7 +1199,7 @@ class TestPrepareBdc:
         """Bare names with interest_rate are classified as LOAN via heuristic."""
         df = self._make_bdc_df([
             {"investment_identifier": "Acme Corp", "cik": "123",
-             "interest_rate": 8.5, "basis_spread": 3.0},
+             "fair_value": 1000000, "interest_rate": 8.5, "basis_spread": 3.0},
         ])
         result = _prepare_bdc(df)
         assert result.iloc[0]["asset_category"] == "LOAN"
@@ -1210,7 +1210,7 @@ class TestPrepareBdc:
         """Bare names with shares_held are classified as EQUITY_COMMON."""
         df = self._make_bdc_df([
             {"investment_identifier": "Acme Corp", "cik": "123",
-             "shares_held": 50000},
+             "fair_value": 500000, "shares_held": 50000},
         ])
         result = _prepare_bdc(df)
         assert result.iloc[0]["asset_category"] == "EQUITY_COMMON"
@@ -1249,14 +1249,14 @@ class TestPrepareBdc:
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Real Corp"
 
-    def test_keeps_row_with_interest_rate_only(self):
-        """Rows with interest_rate but no fair_value should be kept."""
+    def test_filters_row_with_interest_rate_only_no_fv(self):
+        """Rows with interest_rate but no fair_value are filtered (C101)."""
         df = self._make_bdc_df([
             {"investment_identifier": "Acme Corp", "cik": "123",
              "fair_value": None, "interest_rate": 8.5},
         ])
         result = _prepare_bdc(df)
-        assert len(result) == 1
+        assert len(result) == 0
 
     def test_has_all_unified_columns(self):
         df = self._make_bdc_df([
@@ -1515,6 +1515,7 @@ class TestPrepareNport:
         data = []
         for row in rows:
             full_row = {c: "" for c in cols}
+            full_row["currency_value"] = 1000000
             full_row.update(row)
             data.append(full_row)
         return pd.DataFrame(data)
@@ -1522,11 +1523,11 @@ class TestPrepareNport:
     def test_level_3_filter(self):
         df = self._make_nport_df([
             {"fair_value_level": "1", "cik": "100", "asset_cat": "DBT",
-             "issuer_type": "CORP"},
+             "issuer_type": "CORP", "currency_value": 1000000},
             {"fair_value_level": "2", "cik": "100", "asset_cat": "DBT",
-             "issuer_type": "CORP"},
+             "issuer_type": "CORP", "currency_value": 2000000},
             {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
-             "issuer_type": "CORP"},
+             "issuer_type": "CORP", "currency_value": 3000000},
         ])
         result = _prepare_nport(df)
         assert len(result) == 1
@@ -1670,7 +1671,7 @@ class TestPrepareNport:
         row = {c: "" for c in bdc_cols}
         row.update({
             "investment_identifier": "Acme Corp - Common Stock",
-            "cik": "123", "shares_held": 5000,
+            "cik": "123", "fair_value": 500000, "shares_held": 5000,
         })
         bdc_df = pd.DataFrame([row])
         result = _prepare_bdc(bdc_df)
@@ -1849,6 +1850,80 @@ class TestTextEnrichment:
         }])
         result = _prepare_bdc(df)
         assert result.iloc[0]["maturity_date"] == "2025-11-01"
+
+    # -- C402: maturity date guard (reject pre-1950 dates) ----------------
+
+    def test_maturity_date_3digit_year_rejected(self):
+        """3-digit year typo '6/28/225' should be rejected (C402 Bug A)."""
+        df = self._make_bdc_df([{
+            "investment_identifier":
+                "Acme Corp, First Lien Debt, Due 6/28/225",
+            "cik": "1", "fair_value": 1000000,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["maturity_date"] == ""
+
+    def test_maturity_date_1899_sentinel_rejected(self):
+        """Filer sentinel date 1899-12-31 should be rejected (C402 Bug B)."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp, Equity",
+            "cik": "1", "fair_value": 500000,
+            "maturity_date": "1899-12-31",
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["maturity_date"] == ""
+
+    def test_maturity_date_valid_passes_guard(self):
+        """Normal maturity dates should pass through the guard."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp, First Lien Debt",
+            "cik": "1", "fair_value": 1000000,
+            "maturity_date": "2028-06-30",
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["maturity_date"] == "2028-06-30"
+
+    def test_maturity_date_year_0225_from_text_rejected(self):
+        """Text-extracted date parsing to year 0225 should be rejected."""
+        df = self._make_bdc_df([{
+            "investment_identifier":
+                "Acme Corp, Senior Note, Due 6/28/225",
+            "cik": "1", "fair_value": 1000000,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["maturity_date"] == ""
+
+    # -- C101: null fair_value rows filtered ----------------------------
+
+    def test_null_fv_row_filtered(self):
+        """Rows with NULL fair_value are excluded (C101)."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Unfunded Revolver - Acme Corp",
+             "cik": "1", "fair_value": None, "principal_amount": 5000000},
+            {"investment_identifier": "Real Corp - Term Loan",
+             "cik": "1", "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Real Corp"
+
+    def test_null_fv_with_shares_filtered(self):
+        """Even rows with shares but no FV should be excluded."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Warrant - Acme Corp",
+             "cik": "1", "fair_value": None, "shares_held": 100},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 0
+
+    def test_zero_fv_row_kept(self):
+        """Rows with fair_value=0 are NOT filtered (different from NULL)."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Written Off - Acme Corp",
+             "cik": "1", "fair_value": 0, "cost": 500000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
 
 
 # ---------------------------------------------------------------------------
@@ -3649,6 +3724,7 @@ class TestRateCap:
         data = []
         for row in rows:
             full_row = {c: "" for c in cols}
+            full_row["currency_value"] = 1000000
             full_row.update(row)
             data.append(full_row)
         return pd.DataFrame(data)
@@ -3722,6 +3798,7 @@ class TestNameNormalization:
         data = []
         for row in rows:
             full_row = {c: "" for c in cols}
+            full_row["currency_value"] = 1000000
             full_row.update(row)
             data.append(full_row)
         return pd.DataFrame(data)
@@ -5387,7 +5464,7 @@ class TestBadIssuerNameInPrepareBdc:
 # ---------------------------------------------------------------------------
 
 class TestNportNegativeFvFilter:
-    """Tests for negative fair_value filtering in _prepare_nport."""
+    """Tests for negative fair_value and NULL fair_value filtering in _prepare_nport."""
 
     def _make_nport_df(self, rows):
         cols = [
@@ -5403,6 +5480,7 @@ class TestNportNegativeFvFilter:
         data = []
         for row in rows:
             full_row = {c: "" for c in cols}
+            full_row["currency_value"] = 1000000
             full_row.update(row)
             data.append(full_row)
         return pd.DataFrame(data)
@@ -5421,15 +5499,15 @@ class TestNportNegativeFvFilter:
         assert len(result) == 1
         assert "Good Loan" in result.iloc[0]["issuer_name"]
 
-    def test_keeps_null_fv(self):
-        """N-PORT rows with NULL fair_value are kept (not erroneously removed)."""
+    def test_filters_null_fv(self):
+        """N-PORT rows with NULL fair_value are filtered (C101)."""
         df = self._make_nport_df([
             {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
              "issuer_type": "CORP", "currency_value": "",
              "issuer_name": "Null FV Corp"},
         ])
         result = _prepare_nport(df)
-        assert len(result) == 1
+        assert len(result) == 0
 
     def test_keeps_zero_fv(self):
         """Zero fair_value positions are kept."""

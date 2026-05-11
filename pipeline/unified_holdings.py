@@ -1800,9 +1800,16 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
            OR _sh IS NOT NULL
     ),
 
+    -- CTE 3b: Require fair value (removes unfunded commitments,
+    -- tranche detail duplicates, and equity stubs with no FV)
+    has_fv AS (
+        SELECT * FROM no_artifacts
+        WHERE _fv IS NOT NULL
+    ),
+
     -- CTE 4: Filter hierarchical prefix subtotals via self-join
     no_subtotals AS (
-        SELECT a.* FROM no_artifacts a
+        SELECT a.* FROM has_fv a
         WHERE NOT EXISTS (
             SELECT 1 FROM no_artifacts b
             WHERE a.cik = b.cik
@@ -2164,17 +2171,30 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                  WHEN _pik IS NOT NULL AND _pik <= 0.50 THEN _pik * 100
                  WHEN _pik IS NOT NULL AND _pik > 50 THEN _pik / 100
                  ELSE _pik END AS pik_rate,
+            -- Maturity date with guard: reject dates before 1950
+            -- (catches 3-digit year typos like "6/28/225" and
+            -- filer sentinel dates like 12/31/1899)
             CASE
                 WHEN maturity_date IS NOT NULL AND CAST(maturity_date AS VARCHAR) != ''
+                     AND TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
                     THEN CAST(maturity_date AS VARCHAR)
+                WHEN maturity_date IS NOT NULL AND CAST(maturity_date AS VARCHAR) != ''
+                    THEN ''
                 WHEN _text_maturity_raw IS NOT NULL THEN
-                    strftime(
+                    CASE WHEN (
+                        CASE WHEN LENGTH(regexp_extract(
+                                 _text_maturity_raw, '/(\\d+)$', 1)) <= 2
+                             THEN TRY_STRPTIME(_text_maturity_raw, '%m/%d/%y')
+                             ELSE TRY_STRPTIME(_text_maturity_raw, '%m/%d/%Y')
+                        END) >= DATE '1950-01-01'
+                    THEN strftime(
                         CASE WHEN LENGTH(regexp_extract(
                                  _text_maturity_raw, '/(\\d+)$', 1)) <= 2
                              THEN TRY_STRPTIME(_text_maturity_raw, '%m/%d/%y')
                              ELSE TRY_STRPTIME(_text_maturity_raw, '%m/%d/%Y')
                         END,
                         '%Y-%m-%d')
+                    ELSE '' END
                 ELSE ''
             END AS maturity_date,
             _sh AS shares_held,
@@ -2363,6 +2383,12 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
            OR TRY_CAST(currency_value AS DOUBLE) IS NULL
     ),
 
+    -- CTE 1c: Require fair value (removes derivatives/stubs with no FV)
+    has_fv AS (
+        SELECT * FROM no_negative_fv
+        WHERE TRY_CAST(currency_value AS DOUBLE) IS NOT NULL
+    ),
+
     -- CTE 2: Classify assets
     with_asset AS (
         SELECT *,
@@ -2370,7 +2396,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
 {asset_cases}
                 ELSE 'OTHER'
             END AS asset_category
-        FROM no_negative_fv
+        FROM has_fv
     ),
 
     -- CTE 3: Classify issuers
@@ -2463,7 +2489,8 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS reference_rate_type,
             coupon_type,
             NULL AS pik_rate,
-            maturity_date,
+            CASE WHEN TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
+                 THEN maturity_date ELSE '' END AS maturity_date,
             CASE WHEN upper(trim(unit)) = 'NS'
                  THEN TRY_CAST(balance AS DOUBLE) END AS shares_held,
             CASE WHEN upper(trim(unit)) = 'PA'
