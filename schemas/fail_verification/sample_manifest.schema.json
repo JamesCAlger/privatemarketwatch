@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "verification_id",
+    "rule_id",
+    "sampling_unit",
+    "cik",
+    "report_date",
+    "row_key",
+    "source",
+    "sample_weight",
+    "random_seed",
+    "source_file",
+    "source_file_sha256"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "verification_id": { "type": "string", "minLength": 1 },
+    "rule_id": { "enum": ["C101", "X06", "X09", "C402", "GAV01", "GAV_BDC01", "GAV_NPORT01"] },
+    "sampling_unit": { "enum": ["issue_row", "cik_quarter"] },
+    "cik": { "type": "string", "pattern": "^[0-9]{10}$" },
+    "report_date": { "type": "string", "minLength": 1 },
+    "row_key": { "type": "string" },
+    "source": { "type": "string" },
+    "sample_weight": { "type": "string" },
+    "random_seed": { "type": "string" },
+    "source_file": { "type": "string" },
+    "source_file_sha256": { "type": "string" }
+  }
+}

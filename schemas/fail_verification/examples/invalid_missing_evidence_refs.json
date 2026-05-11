@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "verification_id": "C402_0000000001_2025-03-31_example000005",
+  "bundle_id": "C402_0000000001_2025-03-31_example000005",
+  "bundle_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "created_at": "2026-05-11T00:00:00+00:00",
+  "rule_id": "C402",
+  "cik": "0000000001",
+  "report_date": "2025-03-31",
+  "row_key": "13",
+  "verdict": "CONFIRMED_DATA_ERROR",
+  "confidence": "high",
+  "mechanism": "Date parsing produced a pre-1900 maturity date.",
+  "validator_assessment": {
+    "rule_condition_true": true,
+    "validator_correct": true,
+    "material_risk_real": true,
+    "root_cause": "EXTRACTION_GAP"
+  },
+  "determination_rationale": {
+    "why_this_verdict": "The parsed value is unsafe.",
+    "why_not_alternative": "The row does not look like a perpetual sentinel.",
+    "residual_uncertainty": "None stated."
+  },
+  "evidence_refs": [],
+  "recommended_next_action": {
+    "action_type": "PIPELINE_REMEDIATION_REVIEW",
+    "summary": "Review date parsing."
+  },
+  "agent_notes": "",
+  "anti_sycophancy_check": "No alternative was properly tested."
+}

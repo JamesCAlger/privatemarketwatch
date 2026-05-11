@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "verification_id",
+    "bundle_id",
+    "bundle_sha256",
+    "created_at",
+    "rule_id",
+    "cik",
+    "report_date",
+    "row_key",
+    "verdict",
+    "confidence",
+    "mechanism",
+    "epistemic_assessment",
+    "validator_assessment",
+    "determination_rationale",
+    "evidence_refs",
+    "recommended_next_action",
+    "agent_notes",
+    "anti_sycophancy_check"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "verification_id": { "type": "string", "minLength": 1 },
+    "bundle_id": { "type": "string", "minLength": 1 },
+    "bundle_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "created_at": { "type": "string", "minLength": 1 },
+    "rule_id": { "enum": ["C101", "X06", "X09", "C402", "GAV01", "GAV_BDC01", "GAV_NPORT01"] },
+    "cik": { "type": "string", "pattern": "^[0-9]{10}$" },
+    "report_date": { "type": "string", "minLength": 1 },
+    "row_key": { "type": "string" },
+    "verdict": {
+      "enum": [
+        "CONFIRMED_DATA_ERROR",
+        "CONFIRMED_VALID_EXCEPTION",
+        "VALIDATOR_FALSE_POSITIVE",
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    "confidence": { "enum": ["low", "medium", "high"] },
+    "mechanism": { "type": "string", "minLength": 10 },
+    "epistemic_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmed_mechanism",
+        "evidence_chain",
+        "ruled_out_alternatives",
+        "missing_evidence"
+      ],
+      "properties": {
+        "confirmed_mechanism": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["summary", "support_strength", "evidence_refs"],
+          "properties": {
+            "summary": { "type": "string" },
+            "support_strength": {
+              "enum": [
+                "DIRECT_SOURCE_EVIDENCE",
+                "DETERMINISTIC_RECONCILIATION",
+                "CORROBORATED_INFERENCE",
+                "ABSENCE_OF_CONTRARY_EVIDENCE",
+                "NONE"
+              ]
+            },
+            "evidence_refs": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "evidence_chain": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["claim", "evidence_id", "supports"],
+            "properties": {
+              "claim": { "type": "string", "minLength": 5 },
+              "evidence_id": { "type": "string", "minLength": 1 },
+              "supports": { "type": "string", "minLength": 5 }
+            }
+          }
+        },
+        "ruled_out_alternatives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["alternative", "evidence_id", "reason"],
+            "properties": {
+              "alternative": { "type": "string", "minLength": 5 },
+              "evidence_id": { "type": "string", "minLength": 1 },
+              "reason": { "type": "string", "minLength": 5 }
+            }
+          }
+        },
+        "missing_evidence": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 5 }
+        }
+      }
+    },
+    "validator_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_condition_true", "validator_correct", "material_risk_real", "root_cause"],
+      "properties": {
+        "rule_condition_true": { "type": "boolean" },
+        "validator_correct": { "type": "boolean" },
+        "material_risk_real": { "type": "boolean" },
+        "root_cause": {
+          "enum": [
+            "SOURCE_MISSING_VALUE",
+            "EXTRACTION_GAP",
+            "CLASSIFICATION_ERROR",
+            "DIMENSION_PATH_DUPLICATION",
+            "SCALE_MISMATCH",
+            "SOURCE_COMPARISON_ERROR",
+            "VALID_SOURCE_EXCEPTION",
+            "UNKNOWN"
+          ]
+        }
+      }
+    },
+    "determination_rationale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["why_this_verdict", "why_not_alternative", "residual_uncertainty"],
+      "properties": {
+        "why_this_verdict": { "type": "string", "minLength": 10 },
+        "why_not_alternative": { "type": "string", "minLength": 10 },
+        "residual_uncertainty": { "type": "string", "minLength": 1 }
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "supports"],
+        "properties": {
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "supports": { "type": "string", "minLength": 5 }
+        }
+      }
+    },
+    "recommended_next_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action_type", "summary"],
+      "properties": {
+        "action_type": {
+          "enum": [
+            "PIPELINE_REMEDIATION_REVIEW",
+            "ACCEPT_RESIDUAL_REVIEW",
+            "VALIDATOR_REVIEW",
+            "MANUAL_SOURCE_REVIEW",
+            "NO_ACTION"
+          ]
+        },
+        "summary": { "type": "string", "minLength": 5 }
+      }
+    },
+    "agent_notes": { "type": "string" },
+    "anti_sycophancy_check": { "type": "string", "minLength": 10 }
+  }
+}

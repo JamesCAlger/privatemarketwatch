@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "verification_id": "X09_0000000001_2025-03-31_example000001",
+  "bundle_id": "X09_0000000001_2025-03-31_example000001",
+  "bundle_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "created_at": "2026-05-11T00:00:00+00:00",
+  "rule_id": "X09",
+  "cik": "0000000001",
+  "report_date": "2025-03-31",
+  "row_key": "10",
+  "verdict": "CONFIRMED_DATA_ERROR",
+  "confidence": "high",
+  "mechanism": "Duplicate dimension paths inflate pct_of_net_assets and fair value.",
+  "epistemic_assessment": {
+    "confirmed_mechanism": {
+      "summary": "Duplicate dimension paths are directly supported by holdings and nearby context evidence.",
+      "support_strength": "DETERMINISTIC_RECONCILIATION",
+      "evidence_refs": ["holdings_row", "nearby_holdings"]
+    },
+    "evidence_chain": [
+      {
+        "claim": "The sampled row has pct_of_net_assets above 100.",
+        "evidence_id": "holdings_row",
+        "supports": "Shows the flagged percentage on the sampled row."
+      },
+      {
+        "claim": "Nearby rows show duplicated fair-value context.",
+        "evidence_id": "nearby_holdings",
+        "supports": "Shows matching fair-value rows in the same filing."
+      }
+    ],
+    "ruled_out_alternatives": [
+      {
+        "alternative": "Near-zero net assets denominator",
+        "evidence_id": "nearby_holdings",
+        "reason": "The example mechanism is duplicated-row inflation rather than denominator-only math."
+      }
+    ],
+    "missing_evidence": []
+  },
+  "validator_assessment": {
+    "rule_condition_true": true,
+    "validator_correct": true,
+    "material_risk_real": true,
+    "root_cause": "DIMENSION_PATH_DUPLICATION"
+  },
+  "determination_rationale": {
+    "why_this_verdict": "The same position appears in multiple evidence rows with matching fair value.",
+    "why_not_alternative": "Near-zero net assets does not explain the CIK-quarter pct sum.",
+    "residual_uncertainty": "Source tagging may contain additional duplicate paths not shown here."
+  },
+  "evidence_refs": [
+    { "evidence_id": "holdings_row", "supports": "Shows pct_of_net_assets above 100." },
+    { "evidence_id": "nearby_holdings", "supports": "Shows matching fair-value rows in the same filing." }
+  ],
+  "recommended_next_action": {
+    "action_type": "PIPELINE_REMEDIATION_REVIEW",
+    "summary": "Review cross-path entity matching for this CIK/date."
+  },
+  "agent_notes": "",
+  "anti_sycophancy_check": "A leveraged fund explanation was considered but does not explain duplicated rows."
+}

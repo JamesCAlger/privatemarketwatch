@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "created_at",
+    "source_artifacts",
+    "sample_manifest_row",
+    "evidence_items"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "bundle_id": { "type": "string", "minLength": 1 },
+    "created_at": { "type": "string", "minLength": 1 },
+    "source_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string" },
+          "status": { "enum": ["present", "missing"] }
+        }
+      }
+    },
+    "sample_manifest_row": { "type": "object" },
+    "evidence_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "kind", "description", "data"],
+        "additionalProperties": false,
+        "properties": {
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "kind": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "data": {}
+        }
+      }
+    }
+  }
+}

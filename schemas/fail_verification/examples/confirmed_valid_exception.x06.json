@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "verification_id": "X06_0000000001_2025-03-31_example000002",
+  "bundle_id": "X06_0000000001_2025-03-31_example000002",
+  "bundle_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "created_at": "2026-05-11T00:00:00+00:00",
+  "rule_id": "X06",
+  "cik": "0000000001",
+  "report_date": "2025-03-31",
+  "row_key": "11",
+  "verdict": "CONFIRMED_VALID_EXCEPTION",
+  "confidence": "medium",
+  "mechanism": "Principal reflects total commitment while fair value reflects drawn marked amount.",
+  "epistemic_assessment": {
+    "confirmed_mechanism": {
+      "summary": "The raw source wording supports a revolver or commitment-style exception.",
+      "support_strength": "DIRECT_SOURCE_EVIDENCE",
+      "evidence_refs": ["raw_source_rows"]
+    },
+    "evidence_chain": [
+      {
+        "claim": "The raw source values match the unified values.",
+        "evidence_id": "raw_source_rows",
+        "supports": "Shows the same principal and fair value in the source."
+      },
+      {
+        "claim": "The sampled row has the high principal-to-fair-value ratio.",
+        "evidence_id": "holdings_row",
+        "supports": "Shows the flagged X06 condition."
+      }
+    ],
+    "ruled_out_alternatives": [
+      {
+        "alternative": "Filing-wide scale mismatch",
+        "evidence_id": "holdings_row",
+        "reason": "The accepted mechanism is instrument-specific source treatment."
+      }
+    ],
+    "missing_evidence": []
+  },
+  "validator_assessment": {
+    "rule_condition_true": true,
+    "validator_correct": true,
+    "material_risk_real": false,
+    "root_cause": "VALID_SOURCE_EXCEPTION"
+  },
+  "determination_rationale": {
+    "why_this_verdict": "Raw source and unified rows agree, and instrument wording indicates a revolver.",
+    "why_not_alternative": "A scale mismatch is less likely because peer rows in the filing have normal ratios.",
+    "residual_uncertainty": "The commitment wording is inferred from the source identifier."
+  },
+  "evidence_refs": [
+    { "evidence_id": "holdings_row", "supports": "Shows the flagged principal/FV ratio." },
+    { "evidence_id": "raw_source_rows", "supports": "Shows the same source values and revolver wording." }
+  ],
+  "recommended_next_action": {
+    "action_type": "ACCEPT_RESIDUAL_REVIEW",
+    "summary": "Review whether unfunded commitment disclosure should identify this exception."
+  },
+  "agent_notes": "",
+  "anti_sycophancy_check": "A parser scale error was considered but other rows do not show a shared scale pattern."
+}
