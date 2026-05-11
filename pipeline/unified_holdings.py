@@ -21,6 +21,7 @@ from pipeline.config import (
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_EXCLUDE_CIKS,
     NPORT_HOLDINGS_FILE,
+    ROW_CORRECTIONS_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
 
@@ -73,11 +74,11 @@ UNIFIED_COLUMNS = [
     "position_id",
 ]
 
-# BDC aggregate row patterns (case-insensitive substring)
+# BDC aggregate row patterns (case-insensitive substring).
+# Affiliation-only labels such as "affiliate investments" are handled as exact
+# headers below.  They are intentionally not substring patterns because valid
+# source FV bucket rows can end with "Non-Affiliate Investments".
 _BDC_AGGREGATE_PATTERNS = [
-    "affiliate investments",
-    "control investments",
-    "controlled investments",
     "total investments",
     "net assets",
     "subtotal",
@@ -176,7 +177,16 @@ _BDC_AGGREGATE_PATTERNS = [
 _BDC_AGGREGATE_EXACT = {
     "investments", "debt investments", "equity securities",
     "equity investments", "cash equivalents", "cash",
-    "controlled investments", "controlled affiliated investments",
+    "affiliate investments", "affiliated investments",
+    "affiliate investments at fair value",
+    "affiliated investments at fair value",
+    "control investments", "controlled investments",
+    "control investments at fair value",
+    "controlled investments at fair value",
+    "non-affiliate investments", "non-affiliated investments",
+    "non-control/non-affiliate investments",
+    "non-controlled/non-affiliated investments",
+    "controlled affiliated investments",
     "debt securities", "short-term investments",
     "total portfolio company commitments",
     "total short-term investments",
@@ -308,6 +318,12 @@ _BAD_ISSUER_NAMES_EXACT = {
     "first lien debt", "second lien debt",
     "subordinated debt", "mezzanine debt",
     "senior secured loans", "senior secured notes",
+    # Goldman Sachs 4-level hierarchy category headers (safety net)
+    "investment debt investments",
+    "investment 1st lien/senior secured debt",
+    "investment 2nd lien/senior secured debt",
+    "investment equity securities",
+    "investment unsecured debt",
 }
 
 _BAD_ISSUER_PREFIXES = [
@@ -1063,7 +1079,27 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
             instrument = pipe_parts[1].strip()
             return (issuer, instrument)
 
+    # Normalise en-dash (U+2013) to hyphen-minus before splitting
+    identifier = identifier.replace("\u2013", "-")
+
+    _GS_PCT_RE = re.compile(r"^-?\d[\d.]*%\s+\S")
+    _GS_KEYWORD_RE = re.compile(
+        r"^(.+?)\s+(?:Industry|Interest Rate|Reference Rate|Maturity|Floor|PIK)\b"
+    )
+
     if " - " not in identifier:
+        # Goldman Sachs 1-segment (no dash): "Investment <type> <pct>% <co> Industry ..."
+        if identifier.lower().strip().startswith("investment ") and re.search(
+            r"\d[\d.]*%\s+\S", identifier
+        ):
+            text = re.sub(r"^.*?\d[\d.]*%\s+", "", identifier.strip())
+            m = _GS_KEYWORD_RE.match(text)
+            issuer = m.group(1) if m else text
+            # instrument: text between "Investment " and the percentage
+            inst_text = re.sub(r"^investment\s+", "", identifier.strip(), flags=re.IGNORECASE)
+            inst_m = re.match(r"^(.+?)\s+\d[\d.]*%", inst_text)
+            instrument = inst_m.group(1) if inst_m else ""
+            return (issuer, instrument)
         return (identifier.strip(), "")
 
     segments = identifier.split(" - ")
@@ -1074,6 +1110,18 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
         issuer = segments[1].strip()
         instrument = " - ".join(s.strip() for s in segments[2:])
         instrument = _QTY_PREFIX_RE.sub("", instrument).strip()
+        return (issuer, instrument)
+
+    # Goldman Sachs hierarchical format (2-4 segments):
+    # seg[1] starts with "Investment ", last segment has "<pct>% <company> Industry ..."
+    if (len(segments) >= 2
+            and first_seg.lower().startswith("investment ")
+            and _GS_PCT_RE.match(segments[-1].strip())):
+        last_text = re.sub(r"^-?\d[\d.]*%\s+", "", segments[-1].strip())
+        m = _GS_KEYWORD_RE.match(last_text)
+        issuer = m.group(1) if m else last_text
+        # instrument: seg[1] minus "Investment " prefix
+        instrument = re.sub(r"^investment\s+", "", first_seg, flags=re.IGNORECASE)
         return (issuer, instrument)
 
     # Default: first segment is issuer, rest is instrument
@@ -1767,16 +1815,20 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     ),
 
     -- CTE 5a: Initial split + helper columns for re-parsing
+    -- Normalise en-dash (U+2013) to hyphen-minus before splitting so that
+    -- Goldman Sachs BDCs (which use en-dash delimiters) are handled consistently.
     initial_split AS (
         SELECT *,
-            string_split(_raw_id, ' - ') AS _segments,
+            string_split(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ') AS _segments,
             CASE
-                WHEN NOT contains(_raw_id, ' - ') THEN trim(_raw_id)
-                ELSE trim(string_split(_raw_id, ' - ')[1])
+                WHEN NOT contains(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')
+                THEN trim(_raw_id)
+                ELSE trim(string_split(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')[1])
             END AS _issuer_raw,
             CASE
-                WHEN NOT contains(_raw_id, ' - ') THEN lower(trim(_raw_id))
-                ELSE lower(trim(string_split(_raw_id, ' - ')[1]))
+                WHEN NOT contains(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')
+                THEN lower(trim(_raw_id))
+                ELSE lower(trim(string_split(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')[1]))
             END AS _issuer_lower,
             -- Pipe-separator detection: four 3-pipe sub-formats
             --   affil_last:    "Company | Instrument | Affiliation"  -> issuer = seg1
@@ -1845,6 +1897,36 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 WHEN {industry_in}
                      AND len(_segments) >= 3
                 THEN trim(_segments[2])
+                -- Goldman Sachs hierarchical format (2-4 segments):
+                -- seg[1] starts with "Investment ", last segment has
+                -- "<pct>% <company> Industry ..." or "<pct>% <company> Interest Rate ..."
+                -- Works for 2-seg ("Investment <type> - <pct>% <co> ..."),
+                -- 3-seg ("Investment <cat> - <pct>% <geo+type> - <pct>% <co> ..."),
+                -- 4-seg ("Investment <cat> - <pct>% <geo> - <pct>% <type> - <pct>% <co> ...").
+                WHEN len(_segments) >= 2
+                     AND _issuer_lower LIKE 'investment %'
+                     AND regexp_matches(trim(_segments[-1]), '^-?\d[\d.]*%\s+\S')
+                THEN COALESCE(
+                    NULLIF(regexp_extract(
+                        regexp_replace(trim(_segments[-1]), '^-?\d[\d.]*%\s+', ''),
+                        '^(.+?)\s+(?:Industry|Interest Rate|Reference Rate|Maturity|Floor|PIK)(?:\s|$)',
+                        1
+                    ), ''),
+                    regexp_replace(trim(_segments[-1]), '^-?\d[\d.]*%\s+', '')
+                )
+                -- Goldman Sachs 1-segment (no dash separator):
+                -- "Investment <type> <pct>% <company> Industry ..."
+                WHEN NOT contains(_raw_id, ' - ')
+                     AND _issuer_lower LIKE 'investment %'
+                     AND regexp_matches(_raw_id, '\d[\d.]*%\s+\S')
+                THEN COALESCE(
+                    NULLIF(regexp_extract(
+                        regexp_replace(_raw_id, '^.*?\d[\d.]*%\s+', ''),
+                        '^(.+?)\s+(?:Industry|Interest Rate|Reference Rate|Maturity|Floor|PIK)(?:\s|$)',
+                        1
+                    ), ''),
+                    regexp_replace(_raw_id, '^.*?\d[\d.]*%\s+', '')
+                )
                 -- Default: first segment
                 ELSE _issuer_raw
             END AS issuer_name,
@@ -1875,6 +1957,23 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 THEN regexp_replace(
                     trim(array_to_string(_segments[3:], ' - ')),
                     '^\\$?[\\d,.]+ ?', ''
+                )
+                -- Goldman Sachs multi-segment: instrument = seg[1] minus "Investment " prefix
+                WHEN len(_segments) >= 2
+                     AND _issuer_lower LIKE 'investment %'
+                     AND regexp_matches(trim(_segments[-1]), '^-?\d[\d.]*%\s+\S')
+                THEN regexp_replace(trim(_segments[1]), '^(?i)Investment\s+', '')
+                -- Goldman Sachs 1-segment: instrument from "Investment <type> ..."
+                WHEN NOT contains(_raw_id, ' - ')
+                     AND _issuer_lower LIKE 'investment %'
+                     AND regexp_matches(_raw_id, '\d[\d.]*%\s+\S')
+                THEN COALESCE(
+                    NULLIF(regexp_extract(
+                        regexp_replace(_raw_id, '^(?i)Investment\s+', ''),
+                        '^(.+?)\s+\d[\d.]*%',
+                        1
+                    ), ''),
+                    ''
                 )
                 -- No dash: empty instrument
                 WHEN NOT contains(_raw_id, ' - ') THEN ''
@@ -2574,10 +2673,25 @@ def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
           AND CAST(net_assets AS VARCHAR) != ''
           AND TRY_CAST(net_assets AS DOUBLE) > 0
     ),
+    -- Total FV per CIK-quarter to sanity-check net_assets
+    fv_totals AS (
+        SELECT cik, report_date,
+               SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
+        FROM holdings
+        WHERE source = 'bdc'
+          AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+        GROUP BY cik, report_date
+    ),
     corrections AS (
         SELECT h.cik, h.report_date, ff.net_assets
         FROM high_pct h
         INNER JOIN ff ON h.cik = ff.cik AND h.report_date = ff.report_date
+        INNER JOIN fv_totals fv ON h.cik = fv.cik AND h.report_date = fv.report_date
+        -- Guard: reject net_assets that would make pct_sum worse (higher)
+        -- than the original.  If net_assets is implausibly small (e.g. $1M
+        -- against $335M in holdings), the recalculated pct_sum would be
+        -- enormous and the correction is skipped.
+        WHERE (fv.total_fv / ff.net_assets * 100) < h.pct_sum
     )
     SELECT h.* EXCLUDE (pct_of_net_assets),
         CASE
@@ -2619,10 +2733,21 @@ def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
               AND CAST(net_assets AS VARCHAR) != ''
               AND TRY_CAST(net_assets AS DOUBLE) > 0
         ),
+        fv_totals AS (
+            SELECT cik, report_date,
+                   SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
+            FROM holdings
+            WHERE source = 'bdc'
+              AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+            GROUP BY cik, report_date
+        ),
         correctable AS (
             SELECT h.cik, h.report_date
             FROM high_pct h
             INNER JOIN ff ON h.cik = ff.cik AND h.report_date = ff.report_date
+            INNER JOIN fv_totals fv ON h.cik = fv.cik AND h.report_date = fv.report_date
+            INNER JOIN pct_sums ps ON h.cik = ps.cik AND h.report_date = ps.report_date
+            WHERE (fv.total_fv / ff.net_assets * 100) < ps.pct_sum
         ),
         affected_rows AS (
             SELECT COUNT(*) AS n
@@ -2977,6 +3102,9 @@ def build_unified_holdings(
     # Correct pct_of_net_assets for multi-entity BDCs
     combined = _correct_pct_of_net_assets(combined)
 
+    # Apply manual row corrections (last data-modifying step before schema check)
+    combined = _apply_row_corrections(combined)
+
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
     logger.info("  Cost coverage: %d rows (%.1f%%)",
@@ -3004,6 +3132,135 @@ def build_unified_holdings(
     logger.info("Unified holdings built in %.1f s", elapsed)
 
     return combined
+
+
+# Fields that row_corrections.csv is allowed to override.
+_CORRECTABLE_FIELDS = frozenset({
+    "fair_value", "cost", "principal_amount",
+    "interest_rate", "basis_spread", "pik_rate", "shares_held",
+    "index_classification", "exposure_type", "asset_class",
+    "issuer_name", "instrument_description",
+})
+
+# Required columns in row_corrections.csv.
+_CORRECTIONS_REQUIRED_COLS = {
+    "cik", "report_date", "accession_number",
+    "bdc_investment_identifier", "field", "value",
+    "reason", "source_evidence", "author", "date_added",
+}
+
+
+def _apply_row_corrections(
+    df: pd.DataFrame,
+    corrections_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """Apply manual row-level corrections from an override CSV.
+
+    Each row in the corrections file identifies one (row, field) to patch.
+    Match key: (cik, report_date, accession_number, bdc_investment_identifier).
+
+    Returns the dataframe with corrections applied.  Logs every correction
+    applied and warns on unmatched correction rows.
+    """
+    path = corrections_path or ROW_CORRECTIONS_FILE
+    if not path.exists():
+        return df
+
+    corrections = pd.read_csv(path, dtype=str).fillna("")
+
+    # --- Schema validation ---------------------------------------------------
+    missing_cols = _CORRECTIONS_REQUIRED_COLS - set(corrections.columns)
+    if missing_cols:
+        logger.warning(
+            "row_corrections.csv missing required columns: %s -- skipping",
+            ", ".join(sorted(missing_cols)),
+        )
+        return df
+
+    if corrections.empty:
+        return df
+
+    bad_fields = set(corrections["field"].unique()) - _CORRECTABLE_FIELDS
+    if bad_fields:
+        logger.warning(
+            "row_corrections.csv contains uncorrectable field(s): %s -- "
+            "these rows will be skipped",
+            ", ".join(sorted(bad_fields)),
+        )
+        corrections = corrections[corrections["field"].isin(_CORRECTABLE_FIELDS)]
+
+    if corrections.empty:
+        return df
+
+    # --- Normalize match keys ------------------------------------------------
+    # Pad CIK to 10 digits to match unified holdings format.
+    corrections["cik"] = corrections["cik"].str.strip().str.zfill(10)
+
+    # Build a match key in the unified dataframe.
+    key_cols = ["cik", "report_date", "accession_number",
+                "bdc_investment_identifier"]
+    df["_corr_key"] = (
+        df["cik"].astype(str).str.strip().str.zfill(10) + "|"
+        + df["report_date"].astype(str).str.strip() + "|"
+        + df["accession_number"].astype(str).str.strip() + "|"
+        + df["bdc_investment_identifier"].astype(str).str.strip()
+    )
+
+    corrections["_corr_key"] = (
+        corrections["cik"] + "|"
+        + corrections["report_date"].str.strip() + "|"
+        + corrections["accession_number"].str.strip() + "|"
+        + corrections["bdc_investment_identifier"].str.strip()
+    )
+
+    # --- Apply corrections ---------------------------------------------------
+    n_applied = 0
+    n_unmatched = 0
+
+    # Group corrections by key for efficient lookup.
+    corr_by_key: dict[str, list[tuple[str, str, str]]] = {}
+    for _, row in corrections.iterrows():
+        corr_by_key.setdefault(row["_corr_key"], []).append(
+            (row["field"], row["value"], row["reason"])
+        )
+
+    # Build a set of keys present in the dataframe for fast membership test.
+    df_keys = set(df["_corr_key"])
+
+    for key, patches in corr_by_key.items():
+        if key not in df_keys:
+            for field, value, reason in patches:
+                logger.warning(
+                    "Row correction unmatched: field=%s reason=%r key=%s",
+                    field, reason, key,
+                )
+            n_unmatched += len(patches)
+            continue
+
+        mask = df["_corr_key"] == key
+        match_count = mask.sum()
+        if match_count > 1:
+            logger.warning(
+                "Row correction matches %d rows (expected 1): key=%s -- "
+                "applying to all matches",
+                match_count, key,
+            )
+
+        for field, value, reason in patches:
+            df.loc[mask, field] = value
+            n_applied += 1
+            logger.info(
+                "Row correction applied: field=%s value=%s reason=%r key=%s",
+                field, value, reason, key,
+            )
+
+    df.drop(columns=["_corr_key"], inplace=True)
+
+    logger.info(
+        "Row corrections: %d applied, %d unmatched (from %s)",
+        n_applied, n_unmatched, path.name,
+    )
+    return df
 
 
 def _enforce_schema(df: pd.DataFrame) -> list[tuple[str, int]]:

@@ -23,11 +23,13 @@ import pytest
 
 from pipeline.unified_holdings import (
     _AFFILIATION_TAGS,
+    _apply_row_corrections,
     _classify_bdc_asset,
     _classify_bdc_issuer,
     _classify_index,
     _classify_nport_asset,
     _classify_nport_issuer,
+    _CORRECTABLE_FIELDS,
     _correct_pct_of_net_assets,
     _enforce_schema,
     _infer_coupon_type,
@@ -118,6 +120,15 @@ class TestIsBdcAggregateRow:
 
     def test_control_investments(self):
         assert _is_bdc_aggregate_row("Control Investments")
+
+    def test_affiliation_bucket_with_economic_detail_not_substring_filtered(self):
+        assert not _is_bdc_aggregate_row(
+            "Construction & Engineering First Lien Senior Secured Term Loan "
+            "Non-Affiliate Investments"
+        )
+
+    def test_bare_affiliation_header_still_filtered(self):
+        assert _is_bdc_aggregate_row("Non-Affiliate Investments")
 
     def test_subtotal(self):
         assert _is_bdc_aggregate_row("Subtotal - First Lien")
@@ -1296,9 +1307,18 @@ class TestPrepareBdc:
         assert result.iloc[0]["issuer_category"] == "FUND"
 
     def test_long_noncontrol_dimension_path_survives(self):
-        """Long dimension-path identifier (>=150 chars) with 'non-controlled' survives _prepare_bdc."""
+        """Long dimension-path identifier (>=150 chars) with 'non-controlled' survives _prepare_bdc.
+
+        The affiliation prefix is stripped from _raw_id (CTE 1c), so
+        bdc_investment_identifier loses the prefix but the row is kept.
+        """
         long_id = (
             "Non-Controlled/Non-Affiliated Investments Senior Secured First Lien Loans "
+            "Industry Commercial Services & Supplies Company Advanced Web Technologies "
+            "Holding Company Delayed Draw SOFR Spread 5.75"
+        )
+        stripped_id = (
+            "Senior Secured First Lien Loans "
             "Industry Commercial Services & Supplies Company Advanced Web Technologies "
             "Holding Company Delayed Draw SOFR Spread 5.75"
         )
@@ -1309,7 +1329,7 @@ class TestPrepareBdc:
         ])
         result = _prepare_bdc(df)
         assert len(result) == 1
-        assert result.iloc[0]["bdc_investment_identifier"] == long_id
+        assert result.iloc[0]["bdc_investment_identifier"] == stripped_id
 
 
 # ---------------------------------------------------------------------------
@@ -2526,6 +2546,109 @@ class TestParseBdcIdentifierIndustryPrefix:
         assert issuer == "WidgetCo"
         assert instr == "First Lien Term Loan"
 
+    # Goldman Sachs hierarchical format (multiple segment counts)
+    def test_gs_4segment_regular_dash(self):
+        """Goldman Sachs 4-segment format with regular dashes."""
+        raw = (
+            "Investment Debt Investments - 116.03% United States"
+            " - 105.72% 1st Lien/Senior Secured Debt"
+            " - 95.93% Physician Partners LLC Industry Software"
+            " Interest Rate 9.46%"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "Physician Partners LLC"
+        assert "Debt Investments" in instr
+
+    def test_gs_4segment_en_dash(self):
+        """Goldman Sachs 4-segment format with en-dash delimiters."""
+        raw = (
+            "Investment Debt Investments \u2013 116.03% United States"
+            " \u2013 105.72% 1st Lien/Senior Secured Debt"
+            " \u2013 95.93% Physician Partners LLC Industry Software"
+            " Interest Rate 9.46%"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "Physician Partners LLC"
+        assert "Debt Investments" in instr
+
+    def test_gs_4segment_equity(self):
+        """Goldman Sachs equity format."""
+        raw = (
+            "Investment Equity Securities - 10.31% United States"
+            " - 10.31% Common Stock"
+            " - 3.78% Acme Holdings Inc Interest Rate 0.00%"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "Acme Holdings Inc"
+        assert "Equity Securities" in instr
+
+    def test_gs_4segment_no_keyword_fallback(self):
+        """Company name with no financial-term keyword -> take full text."""
+        raw = (
+            "Investment Debt Investments - 50.00% United States"
+            " - 40.00% 2nd Lien/Senior Secured Debt"
+            " - 5.00% Beta Corp LLC"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "Beta Corp LLC"
+
+    def test_gs_2segment(self):
+        """Goldman Sachs 2-segment format."""
+        raw = (
+            "Investment 1st Lien/Senior Secured Debt"
+            " - 103.88% Ankura Consulting Group, LLC"
+            " Industry Commercial Services Interest Rate 9.93%"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "Ankura Consulting Group, LLC"
+        assert "1st Lien/Senior Secured Debt" in instr
+
+    def test_gs_2segment_unitranche(self):
+        """Goldman Sachs 2-segment unitranche format."""
+        raw = (
+            "Investment 1st Lien/Last-Out Unitranche (11)"
+            " - 6.64% Doxim, Inc. Industry Financial Services"
+            " Interest Rate 11.86%"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "Doxim, Inc."
+        assert "1st Lien/Last-Out Unitranche (11)" in instr
+
+    def test_gs_3segment(self):
+        """Goldman Sachs 3-segment format."""
+        raw = (
+            "Investment Debt Investments"
+            " - 194.03% United Kingdom -2.36% 1st Lien/Senior Secured Debt"
+            " - 2.36% Bigchange Group Limited Industry Software"
+            " Interest Rate 11.20%"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "Bigchange Group Limited"
+
+    def test_gs_1segment_no_dash(self):
+        """Goldman Sachs 1-segment (no dash separator)."""
+        raw = (
+            "Investment Unsecured Debt 0.52% CivicPlus LLC"
+            " Industry Software Interest Rate 17.09%"
+        )
+        issuer, instr = _parse_bdc_identifier(raw)
+        assert issuer == "CivicPlus LLC"
+        assert "Unsecured Debt" in instr
+
+    def test_existing_3segment_industry_unaffected(self):
+        """Existing 3-segment industry-prefix format is unchanged by GS logic."""
+        issuer, instr = _parse_bdc_identifier(
+            "Healthcare - MedCo Inc - First Lien - Term Loan"
+        )
+        assert issuer == "MedCo Inc"
+        assert "First Lien" in instr
+
+    def test_existing_2segment_unaffected(self):
+        """Existing 2-segment format is unchanged by GS logic."""
+        issuer, instr = _parse_bdc_identifier("Acme Corp - Term Loan")
+        assert issuer == "Acme Corp"
+        assert instr == "Term Loan"
+
 
 # ---------------------------------------------------------------------------
 # Part 2: Pipe-format parsing (Python parser)
@@ -2709,6 +2832,99 @@ class TestIndustryPrefixSqlPath:
         issuers = set(result["issuer_name"].tolist())
         assert "WidgetCo" in issuers
         assert "Acme Corp" in issuers
+
+    def test_gs_4segment_format_sql(self):
+        """Goldman Sachs 4-segment format parsed correctly via SQL."""
+        raw = (
+            "Investment Debt Investments - 116.03% United States"
+            " - 105.72% 1st Lien/Senior Secured Debt"
+            " - 95.93% Physician Partners LLC Industry Software"
+            " Interest Rate 9.46%"
+        )
+        df = self._make_bdc_df([{
+            "investment_identifier": raw,
+            "cik": "1920145", "fair_value": 5000000, "interest_rate": 9.46,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Physician Partners LLC"
+        assert "Debt Investments" in result.iloc[0]["instrument_description"]
+
+    def test_gs_4segment_en_dash_sql(self):
+        """Goldman Sachs en-dash delimiters normalised and parsed."""
+        raw = (
+            "Investment Debt Investments \u2013 116.03% United States"
+            " \u2013 105.72% 1st Lien/Senior Secured Debt"
+            " \u2013 95.93% Physician Partners LLC Industry Software"
+            " Interest Rate 9.46%"
+        )
+        df = self._make_bdc_df([{
+            "investment_identifier": raw,
+            "cik": "1920145", "fair_value": 5000000, "interest_rate": 9.46,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Physician Partners LLC"
+
+    def test_gs_4segment_equity_sql(self):
+        """Goldman Sachs equity identifier."""
+        raw = (
+            "Investment Equity Securities - 10.31% United States"
+            " - 10.31% Common Stock"
+            " - 3.78% Acme Holdings Inc Interest Rate 0.00%"
+        )
+        df = self._make_bdc_df([{
+            "investment_identifier": raw,
+            "cik": "1920145", "fair_value": 2000000, "shares_held": 10000,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Holdings Inc"
+        assert "Equity Securities" in result.iloc[0]["instrument_description"]
+
+    def test_gs_2segment_format_sql(self):
+        """Goldman Sachs 2-segment format via SQL."""
+        raw = (
+            "Investment 1st Lien/Senior Secured Debt"
+            " - 103.88% Ankura Consulting Group, LLC"
+            " Industry Commercial Services Interest Rate 9.93%"
+        )
+        df = self._make_bdc_df([{
+            "investment_identifier": raw,
+            "cik": "1920145", "fair_value": 3000000, "interest_rate": 9.93,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Ankura Consulting Group, LLC"
+        assert "1st Lien/Senior Secured Debt" in result.iloc[0]["instrument_description"]
+
+    def test_gs_1segment_format_sql(self):
+        """Goldman Sachs 1-segment (no dash) via SQL."""
+        raw = (
+            "Investment Unsecured Debt 0.52% CivicPlus LLC"
+            " Industry Software Interest Rate 17.09%"
+        )
+        df = self._make_bdc_df([{
+            "investment_identifier": raw,
+            "cik": "1920145", "fair_value": 1000000, "interest_rate": 17.09,
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "CivicPlus LLC"
+
+    def test_existing_formats_unaffected_by_gs_logic(self):
+        """Normal 2-segment and 3-segment identifiers unchanged."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - First Lien Term Loan",
+             "cik": "999", "fair_value": 1000000, "interest_rate": 8.0},
+            {"investment_identifier": "Technology - DataCo LLC - Revolver",
+             "cik": "999", "fair_value": 500000, "interest_rate": 7.0},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+        issuers = set(result["issuer_name"].tolist())
+        assert "Acme Corp" in issuers
+        assert "DataCo LLC" in issuers
 
 
 # ---------------------------------------------------------------------------
@@ -5742,3 +5958,399 @@ class TestCorrectPctOfNetAssets:
         # N-PORT rows should be unchanged regardless
         acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
         assert abs(float(acme["pct_of_net_assets"]) - 250.0) < 0.01
+
+    def test_bad_net_assets_skipped(self, tmp_path):
+        """CIK with pct_sum=334% but bad net_assets ($1M vs $335M FV) -> skipped."""
+        # Simulates CIK 0002012139: 30 positions totalling ~$335M, pct_sum=334%
+        # fund_financials has net_assets=$1M (garbage), which would make pct_sum
+        # 33,500% -- worse than 334%.  Guard should skip the correction.
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0002012139", "report_date": "2025-06-30",
+             "issuer_name": "Alpha Corp", "fair_value": 200000000,
+             "pct_of_net_assets": 200.0},
+            {"source": "bdc", "cik": "0002012139", "report_date": "2025-06-30",
+             "issuer_name": "Beta Inc", "fair_value": 100000000,
+             "pct_of_net_assets": 100.0},
+            {"source": "bdc", "cik": "0002012139", "report_date": "2025-06-30",
+             "issuer_name": "Gamma LLC", "fair_value": 35000000,
+             "pct_of_net_assets": 34.0},
+        ])
+
+        ff_path = tmp_path / "fund_financials.csv"
+        ff_df = pd.DataFrame([{
+            "cik": "2012139", "report_date": "2025-06-30",
+            "net_assets": "1004000",  # Bad value: ~750x too low
+        }])
+        ff_df.to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        # Original pct values should be preserved (correction skipped)
+        alpha = result[result["issuer_name"] == "Alpha Corp"].iloc[0]
+        assert abs(float(alpha["pct_of_net_assets"]) - 200.0) < 0.01
+        beta = result[result["issuer_name"] == "Beta Inc"].iloc[0]
+        assert abs(float(beta["pct_of_net_assets"]) - 100.0) < 0.01
+        gamma = result[result["issuer_name"] == "Gamma LLC"].iloc[0]
+        assert abs(float(gamma["pct_of_net_assets"]) - 34.0) < 0.01
+
+    def test_good_net_assets_applied(self, tmp_path):
+        """CIK with pct_sum=400% and good net_assets -> correction applied."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000500", "report_date": "2023-06-30",
+             "issuer_name": "Acme Corp", "fair_value": 2000000,
+             "pct_of_net_assets": 200.0},
+            {"source": "bdc", "cik": "0000000500", "report_date": "2023-06-30",
+             "issuer_name": "Beta Inc", "fair_value": 2000000,
+             "pct_of_net_assets": 200.0},
+        ])
+
+        ff_path = tmp_path / "fund_financials.csv"
+        ff_df = pd.DataFrame([{
+            "cik": "500", "report_date": "2023-06-30",
+            "net_assets": "10000000",  # Good: recalculated pct_sum = 40% < 400%
+        }])
+        ff_df.to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        # pct should be recalculated: 2M / 10M * 100 = 20%
+        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert abs(float(acme["pct_of_net_assets"]) - 20.0) < 0.01
+        beta = result[result["issuer_name"] == "Beta Inc"].iloc[0]
+        assert abs(float(beta["pct_of_net_assets"]) - 20.0) < 0.01
+
+    def test_below_threshold_no_correction(self, tmp_path):
+        """CIK with pct_sum=150% -> below 200% threshold, no correction."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000600", "report_date": "2023-06-30",
+             "issuer_name": "Acme Corp", "fair_value": 800000,
+             "pct_of_net_assets": 80.0},
+            {"source": "bdc", "cik": "0000000600", "report_date": "2023-06-30",
+             "issuer_name": "Beta Inc", "fair_value": 700000,
+             "pct_of_net_assets": 70.0},
+        ])
+
+        ff_path = tmp_path / "fund_financials.csv"
+        ff_df = pd.DataFrame([{
+            "cik": "600", "report_date": "2023-06-30",
+            "net_assets": "1000000",
+        }])
+        ff_df.to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        # pct unchanged (sum=150% < 200% threshold)
+        acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert abs(float(acme["pct_of_net_assets"]) - 80.0) < 0.01
+
+
+# ---------------------------------------------------------------------------
+# _apply_row_corrections
+# ---------------------------------------------------------------------------
+
+class TestApplyRowCorrections:
+    """Tests for row_corrections.csv overlay."""
+
+    def _make_holdings_df(self, rows):
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in UNIFIED_COLUMNS}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def _write_corrections(self, tmp_path, rows):
+        import csv
+        path = tmp_path / "row_corrections.csv"
+        cols = [
+            "cik", "report_date", "accession_number",
+            "bdc_investment_identifier", "field", "value",
+            "reason", "source_evidence", "author", "date_added",
+        ]
+        with open(path, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=cols)
+            w.writeheader()
+            for r in rows:
+                full = {c: "" for c in cols}
+                full.update(r)
+                w.writerows([full])
+        return path
+
+    def test_correction_applied(self, tmp_path):
+        """Matching correction row updates the target field."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "",
+            "issuer_name": "Acme Corp",
+        }])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "1234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "field": "fair_value",
+            "value": "5000000",
+            "reason": "test correction",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["fair_value"] == "5000000"
+
+    def test_non_matching_correction_skipped(self, tmp_path):
+        """Correction with no matching row is skipped (logged as warning)."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "1000000",
+            "issuer_name": "Acme Corp",
+        }])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "9999",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000099-24-000001",
+            "bdc_investment_identifier": "No Such Position",
+            "field": "fair_value",
+            "value": "5000000",
+            "reason": "unmatched correction",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        # Original value unchanged
+        assert result.iloc[0]["fair_value"] == "1000000"
+
+    def test_empty_corrections_file_noop(self, tmp_path):
+        """Empty corrections CSV is a no-op."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "1000000",
+        }])
+        corr_path = self._write_corrections(tmp_path, [])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["fair_value"] == "1000000"
+
+    def test_missing_corrections_file_noop(self, tmp_path):
+        """Non-existent corrections file is a no-op."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "1000000",
+        }])
+        missing = tmp_path / "nonexistent.csv"
+        result = _apply_row_corrections(df, corrections_path=missing)
+        assert result.iloc[0]["fair_value"] == "1000000"
+
+    def test_multiple_fields_same_row(self, tmp_path):
+        """Two corrections on the same row update both fields."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "",
+            "principal_amount": "",
+            "issuer_name": "Acme Corp",
+        }])
+        corr_path = self._write_corrections(tmp_path, [
+            {
+                "cik": "1234",
+                "report_date": "2024-06-30",
+                "accession_number": "0000000001-24-000001",
+                "bdc_investment_identifier": "Acme Corp - Term Loan",
+                "field": "fair_value",
+                "value": "5000000",
+                "reason": "FV correction",
+                "source_evidence": "test",
+                "author": "test",
+                "date_added": "2026-01-01",
+            },
+            {
+                "cik": "1234",
+                "report_date": "2024-06-30",
+                "accession_number": "0000000001-24-000001",
+                "bdc_investment_identifier": "Acme Corp - Term Loan",
+                "field": "principal_amount",
+                "value": "5100000",
+                "reason": "PA correction",
+                "source_evidence": "test",
+                "author": "test",
+                "date_added": "2026-01-01",
+            },
+        ])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["fair_value"] == "5000000"
+        assert result.iloc[0]["principal_amount"] == "5100000"
+
+    def test_invalid_field_skipped(self, tmp_path):
+        """Correction for a non-correctable field is skipped."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "1000000",
+            "issuer_name": "Acme Corp",
+        }])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "1234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "field": "cik",
+            "value": "9999999999",
+            "reason": "should not be allowed",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        # CIK unchanged -- field not in _CORRECTABLE_FIELDS
+        assert result.iloc[0]["cik"] == "0000001234"
+
+    def test_missing_required_columns_skipped(self, tmp_path):
+        """Corrections file missing required columns is skipped entirely."""
+        # Write a malformed CSV missing 'reason' and 'source_evidence'
+        path = tmp_path / "bad_corrections.csv"
+        pd.DataFrame([{
+            "cik": "1234",
+            "report_date": "2024-06-30",
+            "field": "fair_value",
+            "value": "9999",
+        }]).to_csv(path, index=False)
+
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "1000000",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=path)
+        # No correction applied -- schema validation failed
+        assert result.iloc[0]["fair_value"] == "1000000"
+
+    def test_cik_zero_padding(self, tmp_path):
+        """CIK with and without zero-padding matches correctly."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000845385",
+            "report_date": "2025-06-30",
+            "accession_number": "0001213900-25-075759",
+            "bdc_investment_identifier": "Rockfish - Revolving Loan",
+            "fair_value": "",
+        }])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "845385",
+            "report_date": "2025-06-30",
+            "accession_number": "0001213900-25-075759",
+            "bdc_investment_identifier": "Rockfish - Revolving Loan",
+            "field": "fair_value",
+            "value": "2251000",
+            "reason": "CIK padding test",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["fair_value"] == "2251000"
+
+    def test_other_rows_unchanged(self, tmp_path):
+        """Correction only affects the matched row; others are untouched."""
+        df = self._make_holdings_df([
+            {
+                "source": "bdc",
+                "cik": "0000001234",
+                "report_date": "2024-06-30",
+                "accession_number": "0000000001-24-000001",
+                "bdc_investment_identifier": "Acme Corp - Term Loan",
+                "fair_value": "",
+                "issuer_name": "Acme Corp",
+            },
+            {
+                "source": "bdc",
+                "cik": "0000001234",
+                "report_date": "2024-06-30",
+                "accession_number": "0000000001-24-000001",
+                "bdc_investment_identifier": "Beta Inc - Revolver",
+                "fair_value": "2000000",
+                "issuer_name": "Beta Inc",
+            },
+        ])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "1234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "field": "fair_value",
+            "value": "5000000",
+            "reason": "test",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["fair_value"] == "5000000"
+        assert result.iloc[1]["fair_value"] == "2000000"
+
+    def test_correctable_fields_includes_key_fields(self):
+        """Spot-check that _CORRECTABLE_FIELDS includes the expected set."""
+        for f in ("fair_value", "cost", "principal_amount",
+                  "interest_rate", "basis_spread", "index_classification"):
+            assert f in _CORRECTABLE_FIELDS
+
+    def test_no_corr_key_column_leaked(self, tmp_path):
+        """The internal _corr_key column is not present in the output."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "",
+        }])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "1234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "field": "fair_value",
+            "value": "5000000",
+            "reason": "test",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert "_corr_key" not in result.columns
