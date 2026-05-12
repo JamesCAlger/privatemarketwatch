@@ -297,7 +297,13 @@ def validate_column_contracts(
             "principal_amount", "X06", SEVERITY_FAIL, EVIDENCE_MODERATE,
             ACTION_REVIEW,
             "TRY_CAST(fair_value AS DOUBLE) > 0 "
-            "AND TRY_CAST(principal_amount AS DOUBLE) > 10 * TRY_CAST(fair_value AS DOUBLE)",
+            "AND TRY_CAST(principal_amount AS DOUBLE) > 10 * TRY_CAST(fair_value AS DOUBLE) "
+            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%revolver%' "
+            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%unfunded%' "
+            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%undrawn%' "
+            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%commitment%' "
+            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%delayed draw%' "
+            "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%credit facility%'",
             "principal_amount is more than 10x fair_value",
             "likely scale error; can corrupt income and return analytics",
         ),

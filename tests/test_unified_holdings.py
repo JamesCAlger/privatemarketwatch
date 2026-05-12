@@ -1195,6 +1195,100 @@ class TestPrepareBdc:
         ids = result["bdc_investment_identifier"].tolist()
         assert all("Drawn" in i or "Undrawn" in i for i in ids)
 
+    def test_prefix_subtotal_no_fv_child_kept(self):
+        """Row is NOT removed when the longer 'child' has no fair_value.
+
+        CIK 845385 pattern: same position tagged twice -- once with FV
+        ("Rockfish - First Lien Loan") and once with industry suffix but no
+        FV ("Rockfish - First Lien Loan - Casual Dining").  The industry-
+        tagged row is metadata only and should not trigger subtotal removal.
+        """
+        df = self._make_bdc_df([
+            # Parent: has FV (should survive)
+            {"investment_identifier": "Rockfish Seafood Grill, Inc. - First Lien Loan",
+             "cik": "845", "accession_number": "A01",
+             "fair_value": 6219954, "cost": 6500000},
+            # Industry-tagged: has cost/rate but no FV (metadata only)
+            {"investment_identifier":
+             "Rockfish Seafood Grill, Inc. - First Lien Loan - Casual Dining",
+             "cik": "845", "accession_number": "A01",
+             "fair_value": "", "cost": 6500000, "interest_rate": 9.0},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Rockfish Seafood Grill, Inc."
+        assert abs(result.iloc[0]["fair_value"] - 6219954) < 1
+
+    def test_prefix_subtotal_both_have_fv_still_removed(self):
+        """Genuine subtotal (both parent and child have FV) is still removed."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Medallia, Inc.",
+             "cik": "123", "accession_number": "001",
+             "fair_value": 2000000},
+            {"investment_identifier": "Medallia, Inc., First Lien Term Loan",
+             "cik": "123", "accession_number": "001",
+             "fair_value": 2000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert "First Lien" in result.iloc[0]["bdc_investment_identifier"]
+
+    def test_1000x_scale_correction(self):
+        """CIK-quarter with 1000x inflated FV is auto-corrected to /1000."""
+        rows = []
+        # Normal quarters (4 of them)
+        for rd in ["2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31"]:
+            rows.append({
+                "investment_identifier": "Del Real LLC - First Lien Term Loan",
+                "cik": "9999", "entity_name": "Test BDC",
+                "accession_number": f"ACC-{rd}", "form_type": "10-Q",
+                "filing_date": rd, "report_date": rd,
+                "fair_value": 40000000, "cost": 42000000,
+                "principal_amount": 45000000,
+            })
+        # Inflated quarter: 1000x
+        rows.append({
+            "investment_identifier": "Del Real LLC - First Lien Term Loan",
+            "cik": "9999", "entity_name": "Test BDC",
+            "accession_number": "ACC-2023-03-31", "form_type": "10-Q",
+            "filing_date": "2023-03-31", "report_date": "2023-03-31",
+            "fair_value": 40000000000,  # 40B = 1000x of 40M
+            "cost": 42000000000,
+            "principal_amount": 45000000000,
+        })
+        df = self._make_bdc_df(rows)
+        result = _prepare_bdc(df)
+        inflated = result[result["report_date"].astype(str) == "2023-03-31"]
+        assert len(inflated) == 1
+        # After correction: FV should be ~40M, not 40B
+        assert inflated.iloc[0]["fair_value"] < 1e9
+        assert abs(inflated.iloc[0]["fair_value"] - 40000000) < 1
+        assert abs(inflated.iloc[0]["cost"] - 42000000) < 1
+
+    def test_1000x_scale_no_false_positive_on_growth(self):
+        """CIK with only 2 quarters does NOT trigger scale correction."""
+        rows = []
+        # Just 2 quarters: one small, one large (genuine growth)
+        rows.append({
+            "investment_identifier": "GrowCo LLC - Term Loan",
+            "cik": "8888", "entity_name": "Test BDC",
+            "accession_number": "ACC-Q1", "form_type": "10-Q",
+            "filing_date": "2023-03-31", "report_date": "2023-03-31",
+            "fair_value": 1000000,
+        })
+        rows.append({
+            "investment_identifier": "GrowCo LLC - Term Loan",
+            "cik": "8888", "entity_name": "Test BDC",
+            "accession_number": "ACC-Q2", "form_type": "10-Q",
+            "filing_date": "2023-06-30", "report_date": "2023-06-30",
+            "fair_value": 500000000,  # 500x but only 2 quarters
+        })
+        df = self._make_bdc_df(rows)
+        result = _prepare_bdc(df)
+        large = result[result["report_date"].astype(str) == "2023-06-30"]
+        # Should NOT be corrected (only 2 quarters, guard prevents it)
+        assert abs(large.iloc[0]["fair_value"] - 500000000) < 1
+
     def test_bare_name_classified_by_rate(self):
         """Bare names with interest_rate are classified as LOAN via heuristic."""
         df = self._make_bdc_df([
@@ -6432,3 +6526,366 @@ class TestApplyRowCorrections:
 
         result = _apply_row_corrections(df, corrections_path=corr_path)
         assert "_corr_key" not in result.columns
+
+
+# ---------------------------------------------------------------------------
+# Fix X06: principal_amount nulled for equity positions
+# ---------------------------------------------------------------------------
+
+class TestEquityPrincipalAmountNulled:
+    """Equity positions should have principal_amount = NULL in unified output.
+
+    XBRL parser sometimes maps non-dollar facts (shares, percentages) to
+    principal_amount for equity positions where par/principal is meaningless.
+    """
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row["period"] = ""
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_equity_position_pa_nulled(self, tmp_path):
+        """Equity position with spurious PA should have PA = NULL in output."""
+        bdc_df = self._make_bdc_df([{
+            "cik": "123", "entity_name": "Test BDC",
+            "accession_number": "0001-23", "form_type": "10-K",
+            "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "investment_identifier": "Acme Corp - Common Stock",
+            "fair_value": 394000.0, "cost": 352000.0,
+            "principal_amount": 351500000.0,  # spurious
+            "shares_held": 50000, "period": "2023-03-31",
+        }])
+        nport_df = pd.DataFrame()
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test_output.csv"):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+        row = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert row["index_classification"] == "COMMON_EQUITY"
+        assert pd.isna(row["principal_amount"])
+
+    def test_preferred_equity_pa_nulled(self, tmp_path):
+        """PREFERRED_EQUITY position with PA should have PA = NULL."""
+        bdc_df = self._make_bdc_df([{
+            "cik": "123", "entity_name": "Test BDC",
+            "accession_number": "0001-23", "form_type": "10-K",
+            "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "investment_identifier": "Acme Corp - Preferred Stock",
+            "fair_value": 500000.0, "cost": 480000.0,
+            "principal_amount": 999999.0,  # spurious
+            "shares_held": 10000, "period": "2023-03-31",
+        }])
+        nport_df = pd.DataFrame()
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test_output.csv"):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+        row = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert row["index_classification"] == "PREFERRED_EQUITY"
+        assert pd.isna(row["principal_amount"])
+
+    def test_fund_position_pa_nulled(self, tmp_path):
+        """FUND positions with spurious PA should have PA = NULL."""
+        bdc_df = self._make_bdc_df([{
+            "cik": "123", "entity_name": "Test BDC",
+            "accession_number": "0001-23", "form_type": "10-K",
+            "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "investment_identifier": "WhiteHawk Evergreen Fund, LP - LP Interest",
+            "fair_value": 7664000.0, "cost": 7500000.0,
+            "principal_amount": 7500000000.0,  # spurious 1000x
+            "shares_held": "", "period": "2023-03-31",
+        }])
+        nport_df = pd.DataFrame()
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test_output.csv"):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+        row = result[result["issuer_name"].str.contains("WhiteHawk")].iloc[0]
+        assert row["index_classification"] == "PRIVATE_EQUITY_FUND"
+        assert pd.isna(row["principal_amount"])
+
+    def test_debt_position_pa_preserved(self, tmp_path):
+        """Debt position with valid PA should keep PA intact."""
+        bdc_df = self._make_bdc_df([{
+            "cik": "123", "entity_name": "Test BDC",
+            "accession_number": "0001-23", "form_type": "10-K",
+            "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "investment_identifier": "Acme Corp - First Lien Term Loan",
+            "fair_value": 1000000.0, "cost": 990000.0,
+            "principal_amount": 1000000.0,
+            "interest_rate": 8.5, "basis_spread": 3.5,
+            "reference_rate_type": "SOFR",
+            "maturity_date": "2028-01-15", "period": "2023-03-31",
+        }])
+        nport_df = pd.DataFrame()
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test_output.csv"):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+        row = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert row["index_classification"] == "DIRECT_LENDING"
+        assert float(row["principal_amount"]) == 1000000.0
+
+
+# ---------------------------------------------------------------------------
+# Percentage-prefix category subtotal aggregate detection
+# ---------------------------------------------------------------------------
+
+class TestPctPrefixCategorySubtotals:
+    """Percentage-prefix category subtotals like '177.4% Common Equity/...'
+    should be detected as aggregate rows."""
+
+    def test_pct_prefix_slash_category_is_aggregate(self):
+        """'177.4% Common Equity/Partnership Interests/Warrants' -> aggregate."""
+        assert _is_bdc_aggregate_row(
+            "177.4% Common Equity/Partnership Interests/Warrants"
+        )
+
+    def test_pct_prefix_first_lien_slash_is_aggregate(self):
+        """'148.3% First Lien/Senior Secured Debt' -> aggregate."""
+        assert _is_bdc_aggregate_row(
+            "148.3% First Lien/Senior Secured Debt"
+        )
+
+    def test_pct_prefix_with_entity_signal_not_aggregate(self):
+        """'89.2% FedHC InvestCo LP' has entity signal 'LP' -> NOT aggregate."""
+        assert not _is_bdc_aggregate_row(
+            "89.2% FedHC InvestCo LP"
+        )
+
+    def test_pct_prefix_with_dash_separator_not_aggregate(self):
+        """'229.3% - Company Name - Instrument' has dash -> NOT aggregate."""
+        assert not _is_bdc_aggregate_row(
+            "229.3% - Company Name - Instrument"
+        )
+
+    def test_pct_prefix_with_llc_not_aggregate(self):
+        """'95.93% Company LLC Industry Software' has entity 'LLC' -> NOT aggregate."""
+        assert not _is_bdc_aggregate_row(
+            "95.93% Company LLC Industry Software"
+        )
+
+    def test_pennantpark_real_equity_position_kept(self):
+        """PennantPark real equity position with pct prefix but entity signal."""
+        assert not _is_bdc_aggregate_row(
+            "160.9% North Haven Saints Equity Holdings, LP Business Services"
+        )
+
+    def test_aggregate_pattern_common_equity_partnership(self):
+        """'common equity/partnership interests' substring pattern matches."""
+        assert _is_bdc_aggregate_row(
+            "Common Equity/Partnership Interests Total"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Pct-prefix identifier parsing (PennantPark / Blue Owl / Saratoga)
+# ---------------------------------------------------------------------------
+
+class TestPctPrefixParsing:
+    """Percentage-prefix category identifiers should skip the category segment
+    and extract the real company name from the next segment."""
+
+    def test_pennantpark_dash_format(self):
+        """PennantPark: 'NNN.N% Category - NNN.N% Issuer Name Company Maturity ...'"""
+        issuer, instrument = _parse_bdc_identifier(
+            "184.3% First Lien Secured Debt - 112.9% Issuer Name "
+            "Seaway Buyer, LLC Maturity 06/13/2029 Industry Chemicals"
+        )
+        assert issuer == "Seaway Buyer, LLC"
+        assert "First Lien Secured Debt" in instrument
+
+    def test_pennantpark_dash_no_issuer_label(self):
+        """PennantPark without 'Issuer Name' label: company follows pct prefix."""
+        issuer, instrument = _parse_bdc_identifier(
+            "148.3% First Lien/Senior Secured Debt - 95.93% "
+            "Company LLC Industry Software"
+        )
+        assert issuer == "Company LLC"
+        assert "First Lien/Senior Secured Debt" in instrument
+
+    def test_pennantpark_emdash_format(self):
+        """PennantPark em-dash variant (U+2014) should be normalised to ' - '."""
+        issuer, instrument = _parse_bdc_identifier(
+            "177.4% Common Equity/Partnership Interests/Warrants"
+            "\u2014"
+            "23.0% SP L2 Holdings, LLC Industry Consumer Products"
+        )
+        assert issuer == "SP L2 Holdings, LLC"
+        assert "Common Equity/Partnership Interests/Warrants" in instrument
+
+    def test_pennantpark_emdash_no_keyword_boundary(self):
+        """Em-dash variant without keyword boundary: entire text after pct is issuer."""
+        issuer, instrument = _parse_bdc_identifier(
+            "177.4% Common Equity/Partnership Interests/Warrants"
+            "\u2014"
+            "23.0% SP L2 Holdings, LLC Consumer Products"
+        )
+        # No keyword boundary -> entire text becomes issuer
+        assert "SP L2 Holdings, LLC" in issuer
+        assert "Common Equity/Partnership Interests/Warrants" in instrument
+
+    def test_no_dash_issuer_name_label(self):
+        """No-dash format with 'Issuer Name' label boundary."""
+        issuer, instrument = _parse_bdc_identifier(
+            "Common Equity/Partnership Interests/Warrants "
+            "Issuer Name SP L2 Holdings, LLC Industry Consumer Products"
+        )
+        assert issuer == "SP L2 Holdings, LLC"
+        assert "Common Equity/Partnership Interests/Warrants" in instrument
+
+    def test_blue_owl_geography_with_industry(self):
+        """Blue Owl CIK 1817825: pct + geography + industry + company."""
+        issuer, instrument = _parse_bdc_identifier(
+            "208.9% of Shareholder's Equity - Investments made in Ireland "
+            "- Hotel, Gaming & Leisure - Flutter Entertainment plc "
+            "- First Lien - Term Loan"
+        )
+        assert issuer == "Flutter Entertainment plc"
+
+    def test_blue_owl_geography_no_industry(self):
+        """Blue Owl geography prefix where seg[3] is company, not industry."""
+        issuer, instrument = _parse_bdc_identifier(
+            "150.0% of Shareholder's Equity - Investments made in USA "
+            "- Acme Corp - Senior Secured Term Loan"
+        )
+        assert issuer == "Acme Corp"
+
+    def test_saratoga_not_affected(self):
+        """Saratoga: bare pct '10.2%' with no category text after it.
+        Does NOT match pct-prefix-with-text pattern, so default parse applies."""
+        issuer, instrument = _parse_bdc_identifier(
+            "10.2% - Pepper Palace, Inc. - Specialty Food Retailer "
+            "- First Lien Term Loan"
+        )
+        # Default parse: first seg = "10.2%" as issuer (known limitation)
+        assert issuer == "10.2%"
+
+    def test_entity_signal_in_seg1_preserves_default(self):
+        """Seg[1] with entity signal (LLC) should NOT trigger pct-prefix skip."""
+        issuer, instrument = _parse_bdc_identifier(
+            "150% Acme Holdings, LLC - Senior Loan"
+        )
+        assert issuer == "150% Acme Holdings, LLC"
+        assert instrument == "Senior Loan"
+
+    def test_normal_identifier_unaffected(self):
+        """Normal identifiers without pct prefix are unchanged."""
+        issuer, instrument = _parse_bdc_identifier(
+            "Acme Corp - First Lien Term Loan"
+        )
+        assert issuer == "Acme Corp"
+        assert instrument == "First Lien Term Loan"
+
+    def test_pennantpark_keyword_boundary_maturity(self):
+        """Keyword boundary stops at 'Maturity'."""
+        issuer, instrument = _parse_bdc_identifier(
+            "184.3% First Lien Secured Debt - 112.9% "
+            "GlobalTech Solutions, Inc. Maturity 12/15/2028"
+        )
+        assert issuer == "GlobalTech Solutions, Inc."
+
+    def test_pennantpark_keyword_boundary_interest_rate(self):
+        """Keyword boundary stops at 'Interest Rate'."""
+        issuer, instrument = _parse_bdc_identifier(
+            "160.0% First Lien Secured Debt - 80.5% "
+            "FooBar Holdings LLC Interest Rate 10.50%"
+        )
+        assert issuer == "FooBar Holdings LLC"
+
+    def test_no_dash_issuer_name_with_pct_prefix(self):
+        """No-dash format with pct prefix before category text."""
+        issuer, instrument = _parse_bdc_identifier(
+            "177.4% Common Equity/Partnership Interests/Warrants "
+            "Issuer Name Widget Co., Inc. Industry Technology"
+        )
+        assert issuer == "Widget Co., Inc."
+        assert "Common Equity/Partnership Interests/Warrants" in instrument
+
+
+class TestPctPrefixSqlPath:
+    """Integration tests verifying pct-prefix parsing through the SQL path."""
+
+    def _run_prepare_bdc(self, identifier, fair_value=1000000.0):
+        """Helper: run a single identifier through _prepare_bdc."""
+        df = pd.DataFrame([{
+            "cik": "0001504619",
+            "entity_name": "PennantPark",
+            "accession_number": "0001504619-24-000001",
+            "form_type": "10-K",
+            "filing_date": "2024-03-15",
+            "report_date": "2024-01-31",
+            "period": "2024-01-31",
+            "investment_identifier": identifier,
+            "fair_value": fair_value,
+            "cost": fair_value,
+            "principal_amount": None,
+            "interest_rate": None,
+            "basis_spread": None,
+            "reference_rate_type": None,
+            "maturity_date": None,
+            "shares_held": None,
+            "pct_of_net_assets": None,
+            "unrealized_gain_loss": None,
+            "pik_rate": None,
+            "industry": None,
+            "investment_type": None,
+            "affiliation": None,
+            "dimensions_raw": None,
+        }])
+        result = _prepare_bdc(df)
+        return result
+
+    def test_pennantpark_dash_sql(self):
+        """SQL path produces correct issuer_name for PennantPark dash format."""
+        result = self._run_prepare_bdc(
+            "184.3% First Lien Secured Debt - 112.9% Issuer Name "
+            "Seaway Buyer, LLC Maturity 06/13/2029 Industry Chemicals"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Seaway Buyer, LLC"
+
+    def test_pennantpark_emdash_sql(self):
+        """SQL path normalises em-dash and extracts correct issuer."""
+        result = self._run_prepare_bdc(
+            "177.4% Common Equity/Partnership Interests/Warrants"
+            "\u2014"
+            "23.0% SP L2 Holdings, LLC Industry Consumer Products"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "SP L2 Holdings, LLC"
+
+    def test_blue_owl_geography_sql(self):
+        """SQL path handles Blue Owl geography prefix."""
+        result = self._run_prepare_bdc(
+            "208.9% of Shareholder's Equity - Investments made in Ireland "
+            "- Hotel, Gaming & Leisure - Flutter Entertainment plc "
+            "- First Lien - Term Loan"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Flutter Entertainment plc"
+
+    def test_entity_signal_preserves_default_sql(self):
+        """Entity signal in seg[1] prevents pct-prefix skip in SQL path."""
+        result = self._run_prepare_bdc(
+            "150% Acme Holdings, LLC - Senior Loan"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "150% Acme Holdings, LLC"
+
+    def test_normal_identifier_sql(self):
+        """Normal identifiers unchanged through SQL path."""
+        result = self._run_prepare_bdc(
+            "Acme Corp - First Lien Term Loan"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"

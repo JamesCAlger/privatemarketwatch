@@ -18,6 +18,10 @@ from pipeline.validate_holdings import (
     audit_aggregate_leaks,
     check_coverage,
     check_cross_source_overlap,
+    check_gav_reconciliation,
+    check_income_yield_consistency,
+    check_pct_of_net_assets_sum,
+    check_position_count_stability,
     spot_check_top_ciks,
     summarize_classification_by_cik,
     validate_holdings,
@@ -483,12 +487,18 @@ class TestValidateHoldings:
         coverage_file = tmp_path / "coverage.csv"
         cross_source_file = tmp_path / "cross_source.csv"
         total_assets_file = tmp_path / "total_assets.csv"
+        row_issues_file = tmp_path / "row_issues.csv"
+        column_metrics_file = tmp_path / "column_metrics.csv"
+        quality_metrics_file = tmp_path / "quality_metrics.csv"
 
         with patch("pipeline.validate_holdings.HOLDINGS_VALIDATION_REPORT_FILE", report_file), \
              patch("pipeline.validate_holdings.HOLDINGS_SPOT_CHECK_FILE", spot_file), \
              patch("pipeline.validate_holdings.HOLDINGS_COVERAGE_FILE", coverage_file), \
              patch("pipeline.validate_holdings.HOLDINGS_CROSS_SOURCE_FILE", cross_source_file), \
-             patch("pipeline.validate_holdings.HOLDINGS_TOTAL_ASSETS_FILE", total_assets_file):
+             patch("pipeline.validate_holdings.HOLDINGS_TOTAL_ASSETS_FILE", total_assets_file), \
+             patch("pipeline.validate_holdings.ROW_VALIDATION_ISSUES_FILE", row_issues_file), \
+             patch("pipeline.validate_holdings.COLUMN_QUALITY_METRICS_FILE", column_metrics_file), \
+             patch("pipeline.validate_holdings.DATA_QUALITY_METRICS_FILE", quality_metrics_file):
             reports = validate_holdings(unified_df=df, universe_df=universe)
 
         assert "spot_check" in reports
@@ -497,11 +507,17 @@ class TestValidateHoldings:
         assert "cross_source_overlap" in reports
         assert "duplicate_holdings" in reports
         assert "coverage" in reports
+        assert "row_validation_issues" in reports
+        assert "column_quality_metrics" in reports
+        assert "data_quality_metrics" in reports
 
         # CSVs should be saved
         assert report_file.exists()
         assert spot_file.exists()
         assert coverage_file.exists()
+        assert row_issues_file.exists()
+        assert column_metrics_file.exists()
+        assert quality_metrics_file.exists()
 
     def test_returns_empty_dict_when_no_data(self, tmp_path):
         """When unified file doesn't exist and no df provided, returns empty."""
@@ -509,3 +525,506 @@ class TestValidateHoldings:
         with patch("pipeline.validate_holdings.UNIFIED_HOLDINGS_FILE", fake_path):
             reports = validate_holdings()
         assert reports == {}
+
+
+# ---------------------------------------------------------------------------
+# check_gav_reconciliation
+# ---------------------------------------------------------------------------
+
+class TestCheckGavReconciliation:
+    def test_basic_reconciliation(self):
+        """Holdings FV sum matches fund_financials investments_at_fair_value."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc"},
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "3000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "8000000",
+            "total_assets": "10000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert len(result) == 1
+        assert result.iloc[0]["comparison_source"] == "investments_at_fair_value"
+        assert result.iloc[0]["holdings_source"] == "bdc"
+        assert result.iloc[0]["holdings_scope"] == "bdc_schedule"
+        assert result.iloc[0]["denominator_scope"] == "investment_fair_value"
+        assert result.iloc[0]["gav_rule_id"] == "GAV_BDC01"
+        ratio = float(result.iloc[0]["gav_ratio"])
+        assert abs(ratio - 1.0) < 0.01
+        assert result.iloc[0]["flag"] == "ok"
+
+    def test_falls_back_to_total_assets(self):
+        """When investments_at_fair_value is missing, uses total_assets."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "",
+            "total_assets": "10000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert len(result) == 1
+        assert result.iloc[0]["comparison_source"] == "total_assets_companyfacts"
+        ratio = float(result.iloc[0]["gav_ratio"])
+        assert abs(ratio - 0.5) < 0.01
+
+    def test_flags_over_coverage(self):
+        """Holdings FV >> comparison -> over_coverage flag."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "15000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "10000000",
+            "total_assets": "",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert result.iloc[0]["flag"] == "over_coverage"
+
+    def test_flags_under_coverage(self):
+        """Holdings FV << comparison -> under_coverage flag."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "1000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "50000000",
+            "total_assets": "",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert result.iloc[0]["flag"] == "under_coverage"
+
+    def test_bdc_source_reconciliation_distinguishes_non_indexable_source_fv(self):
+        """Source FV can reconcile even when indexable holdings remain undercovered."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "1000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "10000000",
+            "total_assets": "",
+        }])
+        bdc_source = pd.DataFrame([
+            {
+                "cik": "100",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "accession_number": "acc-001",
+                "form_type": "10-Q",
+                "filing_date": "2024-05-01",
+            },
+            {
+                "cik": "100",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "fair_value": "9000000",
+                "accession_number": "acc-001",
+                "form_type": "10-Q",
+                "filing_date": "2024-05-01",
+            },
+        ])
+
+        result = check_gav_reconciliation(
+            holdings,
+            fund_financials_df=ff,
+            bdc_source_df=bdc_source,
+        )
+
+        row = result.iloc[0]
+        assert row["flag"] == "under_coverage"
+        assert row["bdc_source_reconciliation_flag"] == "ok"
+        assert row["gav_evidence_scope"] == "source_fv_present_not_indexable"
+        assert float(row["bdc_source_reconciliation_ratio"]) == 1.0
+        assert int(row["bdc_source_reconciliation_rows"]) == 2
+
+    def test_no_comparison_flag(self):
+        """When no fund_financials data, flag is no_comparison."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc"},
+        ])
+        result = check_gav_reconciliation(
+            holdings, fund_financials_df=pd.DataFrame(),
+            nport_fund_info_df=pd.DataFrame(),
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["flag"] == "no_comparison"
+
+    def test_nport_fallback(self):
+        """Falls back to N-PORT total_assets when no fund_financials."""
+        holdings = _make_unified_df([
+            {"cik": "0000000100", "entity_name": "Fund A",
+             "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "nport"},
+        ])
+        nport_fi = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "total_assets": "6000000",
+        }])
+        result = check_gav_reconciliation(
+            holdings, fund_financials_df=pd.DataFrame(),
+            nport_fund_info_df=nport_fi,
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["comparison_source"] == "total_assets_nport"
+        assert result.iloc[0]["holdings_source"] == "nport"
+        assert result.iloc[0]["holdings_scope"] == "nport_private_markets_filter"
+        assert result.iloc[0]["denominator_scope"] == "full_fund_assets"
+        assert result.iloc[0]["gav_rule_id"] == "GAV_NPORT01"
+
+    def test_ex_sub_ratio_excludes_subsidiary(self):
+        """Adjusted ratio excludes is_subsidiary=1 positions from numerator."""
+        holdings = _make_unified_df([
+            # Parent position
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc", "is_subsidiary": "0"},
+            # Subsidiary duplicate
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "3000000", "source": "bdc", "is_subsidiary": "1"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "5000000",
+            "total_assets": "6000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert len(result) == 1
+        # Raw ratio = (5M+3M)/5M = 1.6
+        raw_ratio = float(result.iloc[0]["gav_ratio"])
+        assert abs(raw_ratio - 1.6) < 0.01
+        # Adjusted ratio = 5M/5M = 1.0 (excludes subsidiary)
+        adj_ratio = float(result.iloc[0]["gav_ratio_adjusted"])
+        assert abs(adj_ratio - 1.0) < 0.01
+        assert result.iloc[0]["flag"] == "ok"
+        assert int(result.iloc[0]["has_subsidiary_positions"]) == 1
+
+    def test_unreliable_inv_fv_falls_back(self):
+        """When inv_fv is wildly different from total_assets, use total_assets."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            # inv_fv is 66x total_assets (unreliable, like Kayne)
+            "investments_at_fair_value": "330000000",
+            "total_assets": "5000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert len(result) == 1
+        # Should fall back to total_assets, not use unreliable inv_fv
+        assert result.iloc[0]["comparison_source"] == "total_assets_companyfacts"
+        ratio = float(result.iloc[0]["gav_ratio"])
+        assert abs(ratio - 1.0) < 0.01
+
+    def test_corroboration_overrides_gate_when_holdings_match_inv_fv(self):
+        """When inv_fv/total_assets fails the gate but holdings sum corroborates
+        inv_fv (ratio 0.3-5.0x), use inv_fv anyway (e.g. NEWT bank/BDC hybrid)."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "26000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            # inv_fv is only 2% of total_assets (gate fires)
+            # but holdings sum matches inv_fv exactly
+            "investments_at_fair_value": "26000000",
+            "total_assets": "1300000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert len(result) == 1
+        # Should use inv_fv due to corroboration, not total_assets
+        assert result.iloc[0]["comparison_source"] == "investments_at_fair_value"
+        ratio = float(result.iloc[0]["gav_ratio"])
+        assert abs(ratio - 1.0) < 0.01
+
+    def test_corroboration_does_not_override_when_holdings_disagree(self):
+        """When inv_fv/total_assets fails the gate AND holdings sum does NOT
+        corroborate inv_fv, fall back to total_assets (e.g. Kayne subset)."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "430000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            # inv_fv captures only a subset; holdings >> inv_fv
+            "investments_at_fair_value": "14000000",
+            "total_assets": "466000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert len(result) == 1
+        # holdings_sum/inv_fv = 430M/14M = 30.7 (outside 0.3-5.0)
+        # Should fall back to total_assets
+        assert result.iloc[0]["comparison_source"] == "total_assets_companyfacts"
+        ratio = float(result.iloc[0]["gav_ratio"])
+        assert abs(ratio - 0.923) < 0.01
+
+    def test_adjusted_flag_uses_adjusted_ratio(self):
+        """Flag uses adjusted ratio when subsidiary positions exist."""
+        holdings = _make_unified_df([
+            # Parent: 5M
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc", "is_subsidiary": "0"},
+            # Subsidiary: 8M (makes raw total 13M, over_coverage raw)
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "8000000", "source": "bdc", "is_subsidiary": "1"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "5500000",
+            "total_assets": "6000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        # Raw ratio = 13M/5.5M = 2.36 -> would be over_coverage
+        # Adjusted ratio = 5M/5.5M = 0.91 -> ok
+        assert result.iloc[0]["flag"] == "ok"
+        adj_ratio = float(result.iloc[0]["gav_ratio_adjusted"])
+        assert abs(adj_ratio - 0.909) < 0.01
+
+    def test_no_subsidiary_passthrough(self):
+        """When no subsidiary positions, adjusted ratio equals raw ratio."""
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "5000000", "source": "bdc", "is_subsidiary": "0"},
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "3000000", "source": "bdc", "is_subsidiary": "0"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "8000000",
+            "total_assets": "10000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        raw_ratio = float(result.iloc[0]["gav_ratio"])
+        adj_ratio = float(result.iloc[0]["gav_ratio_adjusted"])
+        assert abs(raw_ratio - adj_ratio) < 0.001
+        assert int(result.iloc[0]["has_subsidiary_positions"]) == 0
+
+
+# ---------------------------------------------------------------------------
+# check_pct_of_net_assets_sum
+# ---------------------------------------------------------------------------
+
+class TestCheckPctOfNetAssetsSum:
+    def test_normal_sum(self):
+        """10 BDC positions with pct=12% each -> sum=120%, flag=ok."""
+        rows = []
+        for i in range(10):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "1000000",
+                "pct_of_net_assets": "12.0",
+                "report_date": "2024-03-31",
+            })
+        df = _make_unified_df(rows)
+        result = check_pct_of_net_assets_sum(df)
+        assert len(result) == 1
+        assert abs(float(result.iloc[0]["pct_sum"]) - 120.0) < 0.1
+        assert result.iloc[0]["flag"] == "ok"
+
+    def test_high_sum_subtotal_leak(self):
+        """Positions + subtotal row with pct -> sum >200, flag=high_pct_sum."""
+        rows = []
+        # 8 normal positions with 15% each = 120%
+        for i in range(8):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "1000000",
+                "pct_of_net_assets": "15.0",
+                "report_date": "2024-03-31",
+            })
+        # Subtotal row that leaked through with 120%
+        rows.append({
+            "source": "bdc", "cik": "100", "entity_name": "BDC A",
+            "issuer_name": "Total First Lien",
+            "fair_value": "8000000",
+            "pct_of_net_assets": "120.0",
+            "report_date": "2024-03-31",
+        })
+        df = _make_unified_df(rows)
+        result = check_pct_of_net_assets_sum(df)
+        assert len(result) == 1
+        assert float(result.iloc[0]["pct_sum"]) > 200
+        assert result.iloc[0]["flag"] == "high_pct_sum"
+
+    def test_low_sum(self):
+        """5 positions with pct=8% each -> sum=40%, flag=low_pct_sum."""
+        rows = []
+        for i in range(5):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "500000",
+                "pct_of_net_assets": "8.0",
+                "report_date": "2024-03-31",
+            })
+        df = _make_unified_df(rows)
+        result = check_pct_of_net_assets_sum(df)
+        assert len(result) == 1
+        assert float(result.iloc[0]["pct_sum"]) < 50
+        assert result.iloc[0]["flag"] == "low_pct_sum"
+
+    def test_nport_excluded(self):
+        """N-PORT positions are ignored (no pct_of_net_assets typically)."""
+        rows = []
+        for i in range(10):
+            rows.append({
+                "source": "nport", "cik": "200", "entity_name": "Fund A",
+                "issuer_name": f"Borrower {i}",
+                "fair_value": "1000000",
+                "pct_of_net_assets": "10.0",
+                "report_date": "2024-06-30",
+            })
+        df = _make_unified_df(rows)
+        result = check_pct_of_net_assets_sum(df)
+        assert len(result) == 0
+
+    def test_empty_input(self):
+        df = _make_unified_df([])
+        result = check_pct_of_net_assets_sum(df)
+        assert len(result) == 0
+        assert "flag" in result.columns
+
+
+# ---------------------------------------------------------------------------
+# check_position_count_stability
+# ---------------------------------------------------------------------------
+
+class TestCheckPositionCountStability:
+    def test_stable_count(self):
+        """Same CIK with 50, 52, 48 positions -> all ok."""
+        rows = []
+        for report_date, count in [("2024-03-31", 50), ("2024-06-30", 52), ("2024-09-30", 48)]:
+            for i in range(count):
+                rows.append({
+                    "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                    "issuer_name": f"Company {i}",
+                    "fair_value": "1000000",
+                    "report_date": report_date,
+                })
+        df = _make_unified_df(rows)
+        result = check_position_count_stability(df)
+        # 2 transitions: Q1->Q2, Q2->Q3
+        assert len(result) == 2
+        assert all(result["flag"] == "ok")
+
+    def test_unstable_jump(self):
+        """50 then 150 positions -> flag=unstable_count."""
+        rows = []
+        for i in range(50):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "1000000",
+                "report_date": "2024-03-31",
+            })
+        for i in range(150):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "1000000",
+                "report_date": "2024-06-30",
+            })
+        df = _make_unified_df(rows)
+        result = check_position_count_stability(df)
+        assert len(result) == 1
+        assert result.iloc[0]["flag"] == "unstable_count"
+
+    def test_count_fv_divergence(self):
+        """Count doubles but FV stable -> flag=count_fv_divergence."""
+        rows = []
+        # Q1: 50 positions, each $1M -> total $50M
+        for i in range(50):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "1000000",
+                "report_date": "2024-03-31",
+            })
+        # Q2: 110 positions, each ~$455K -> total ~$50M (FV stable, count >2x)
+        for i in range(110):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "454545",
+                "report_date": "2024-06-30",
+            })
+        df = _make_unified_df(rows)
+        result = check_position_count_stability(df)
+        assert len(result) == 1
+        assert result.iloc[0]["flag"] == "count_fv_divergence"
+
+    def test_single_period(self):
+        """CIK with one period only -> no output."""
+        rows = []
+        for i in range(20):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "1000000",
+                "report_date": "2024-03-31",
+            })
+        df = _make_unified_df(rows)
+        result = check_position_count_stability(df)
+        assert len(result) == 0
+
+    def test_empty_input(self):
+        df = _make_unified_df([])
+        result = check_position_count_stability(df)
+        assert len(result) == 0
+        assert "flag" in result.columns
+
+
+# ---------------------------------------------------------------------------
+# check_income_yield_consistency
+# ---------------------------------------------------------------------------
+
+class TestCheckIncomeYieldConsistency:
+    def test_normal_yield(self, tmp_path):
+        """yield ratio ~1.1 -> ok."""
+        fee_csv = tmp_path / "fee_uplift.csv"
+        fee_csv.write_text(
+            "cik,total_income_yield,median_all_in_coupon\n"
+            "100,0.11,0.10\n"
+        )
+        result = check_income_yield_consistency(fee_uplift_path=fee_csv)
+        assert len(result) == 1
+        assert result.iloc[0]["flag"] == "ok"
+        ratio = float(result.iloc[0]["yield_ratio"])
+        assert abs(ratio - 1.1) < 0.01
+
+    def test_high_yield(self, tmp_path):
+        """yield ratio 3.0 -> yield_outlier."""
+        fee_csv = tmp_path / "fee_uplift.csv"
+        fee_csv.write_text(
+            "cik,total_income_yield,median_all_in_coupon\n"
+            "100,0.30,0.10\n"
+        )
+        result = check_income_yield_consistency(fee_uplift_path=fee_csv)
+        assert len(result) == 1
+        assert result.iloc[0]["flag"] == "yield_outlier"
+
+    def test_no_fee_uplift_file(self, tmp_path):
+        """File missing -> returns empty DataFrame."""
+        fake_path = tmp_path / "nonexistent.csv"
+        result = check_income_yield_consistency(fee_uplift_path=fake_path)
+        assert len(result) == 0
+        assert "flag" in result.columns
+
+    def test_empty_input(self, tmp_path):
+        """Empty fee_uplift file -> returns empty DataFrame."""
+        fee_csv = tmp_path / "fee_uplift.csv"
+        fee_csv.write_text("cik,total_income_yield,median_all_in_coupon\n")
+        result = check_income_yield_consistency(fee_uplift_path=fee_csv)
+        assert len(result) == 0

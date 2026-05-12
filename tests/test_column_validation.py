@@ -86,6 +86,21 @@ class TestColumnContracts:
         assert len(result) == 1
         assert result.iloc[0]["severity"] == SEVERITY_FAIL
 
+    def test_principal_scale_error_exempt_for_unfunded_revolver(self):
+        """Unfunded/revolver/delayed-draw positions exempt from X06."""
+        for keyword in [
+            "Revolver", "Unfunded", "Undrawn", "Commitment",
+            "Delayed Draw", "Credit Facility",
+        ]:
+            df = _make_unified_df([{
+                "fair_value": "1000",
+                "principal_amount": "100000000",
+                "issuer_name": f"Acme Corp - {keyword} Term Loan",
+            }])
+            issues, _ = validate_column_contracts(df)
+            result = _issues_by_rule(issues, "X06")
+            assert len(result) == 0, f"X06 should not fire for '{keyword}'"
+
     def test_rate_percentage_scale_passes_and_high_rate_warns(self):
         ok_df = _make_unified_df([{"interest_rate": "9.8"}])
         ok_issues, _ = validate_column_contracts(ok_df)

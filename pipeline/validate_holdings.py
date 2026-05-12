@@ -19,13 +19,23 @@ import pandas as pd
 
 from pipeline.config import (
     CLASSIFICATION_VALIDATION_FILE,
+    COLUMN_QUALITY_METRICS_FILE,
     COMBINED_UNIVERSE_FILE,
+    DATA_QUALITY_METRICS_FILE,
+    FEE_UPLIFT_FILE,
+    BDC_HOLDINGS_FILE,
+    FUND_FINANCIALS_FILE,
+    HOLDINGS_COUNT_STABILITY_FILE,
     HOLDINGS_COVERAGE_FILE,
     HOLDINGS_CROSS_SOURCE_FILE,
+    HOLDINGS_GAV_RECONCILIATION_FILE,
+    HOLDINGS_INCOME_YIELD_FILE,
+    HOLDINGS_PCT_SUM_FILE,
     HOLDINGS_SPOT_CHECK_FILE,
     HOLDINGS_TOTAL_ASSETS_FILE,
     HOLDINGS_VALIDATION_REPORT_FILE,
     NPORT_FUND_INFO_FILE,
+    ROW_VALIDATION_ISSUES_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
 
@@ -514,8 +524,8 @@ def check_coverage(
             END AS estimated_total_assets
         FROM holdings
         WHERE source = 'bdc'
-          AND pct_of_net_assets IS NOT NULL
-          AND pct_of_net_assets != ''
+          AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NOT NULL
+          AND TRY_CAST(pct_of_net_assets AS DOUBLE) != 0
         GROUP BY cik, report_date
     ),
     bdc_latest_assets AS (
@@ -960,6 +970,635 @@ Respond with JSON array. Each element: {"id": N, "exposure_type": "...", "asset_
 # 7. Orchestrator
 # ---------------------------------------------------------------------------
 
+def check_gav_reconciliation(
+    unified_df: Optional[pd.DataFrame] = None,
+    fund_financials_df: Optional[pd.DataFrame] = None,
+    nport_fund_info_df: Optional[pd.DataFrame] = None,
+    bdc_source_df: Optional[pd.DataFrame] = None,
+) -> pd.DataFrame:
+    """Per-quarter GAV reconciliation: compare holdings FV sum against reported values.
+
+    For each (CIK, report_date), computes sum(fair_value) from holdings and
+    compares to:
+    1. investments_at_fair_value from fund_financials (preferred)
+    2. total_assets from fund_financials (BDC fallback)
+    3. total_assets from N-PORT fund info (N-PORT fallback)
+
+    For BDC rows, also computes a source-reconciliation numerator from the
+    raw BDC extraction artifact before the unified aggregate/indexability
+    filters.  That source numerator is evidence for whether source FV exists;
+    it does not make source bucket rows indexable constituents.
+    """
+    if unified_df is None:
+        if not UNIFIED_HOLDINGS_FILE.exists():
+            logger.error("Unified holdings file not found")
+            return pd.DataFrame()
+        unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
+
+    if fund_financials_df is None and FUND_FINANCIALS_FILE.exists():
+        try:
+            fund_financials_df = pd.read_csv(FUND_FINANCIALS_FILE, dtype=str)
+        except Exception:
+            fund_financials_df = None
+
+    # Ensure investments_at_fair_value column exists (may be missing in older files)
+    if (fund_financials_df is not None and not fund_financials_df.empty
+            and "investments_at_fair_value" not in fund_financials_df.columns):
+        fund_financials_df["investments_at_fair_value"] = ""
+
+    if nport_fund_info_df is None and NPORT_FUND_INFO_FILE.exists():
+        try:
+            nport_fund_info_df = pd.read_csv(NPORT_FUND_INFO_FILE, dtype=str)
+        except Exception:
+            nport_fund_info_df = None
+
+    if bdc_source_df is None and BDC_HOLDINGS_FILE.exists():
+        try:
+            bdc_source_df = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
+        except Exception:
+            bdc_source_df = None
+
+    con = duckdb.connect()
+    con.register("holdings", unified_df)
+
+    if bdc_source_df is not None and not bdc_source_df.empty:
+        bdc_source_df = bdc_source_df.copy()
+        for col in [
+            "cik",
+            "report_date",
+            "period",
+            "fair_value",
+            "accession_number",
+            "form_type",
+            "filing_date",
+        ]:
+            if col not in bdc_source_df.columns:
+                bdc_source_df[col] = ""
+        con.register("bdc_source", bdc_source_df)
+        bdc_source_cte = """
+        bdc_source_rows AS (
+            SELECT
+                *,
+                LPAD(CAST(cik AS VARCHAR), 10, '0') AS _cik,
+                CAST(report_date AS VARCHAR) AS _report_date,
+                TRY_CAST(fair_value AS DOUBLE) AS _source_fv
+            FROM bdc_source
+            WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+              AND TRY_CAST(report_date AS DATE) >= '2022-01-01'
+              AND (
+                  TRY_CAST(period AS DATE) = TRY_CAST(report_date AS DATE)
+                  OR period IS NULL
+                  OR CAST(period AS VARCHAR) = ''
+              )
+        ),
+        bdc_source_current AS (
+            SELECT r.* FROM bdc_source_rows r
+            INNER JOIN (
+                SELECT _cik, _report_date, accession_number,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY _cik, _report_date,
+                            REGEXP_REPLACE(CAST(form_type AS VARCHAR), '/A$', '')
+                        ORDER BY CAST(filing_date AS VARCHAR) DESC
+                    ) AS _amd_rank
+                FROM bdc_source_rows
+                GROUP BY _cik, _report_date, accession_number, form_type, filing_date
+            ) ranked
+              ON r._cik = ranked._cik
+             AND r._report_date = ranked._report_date
+             AND r.accession_number = ranked.accession_number
+            WHERE ranked._amd_rank = 1
+        ),
+        bdc_source_agg AS (
+            SELECT
+                _cik AS cik,
+                _report_date AS report_date,
+                SUM(_source_fv) AS bdc_source_reconciliation_fv,
+                COUNT(*) AS bdc_source_reconciliation_rows
+            FROM bdc_source_current
+            GROUP BY _cik, _report_date
+        ),
+        """
+    else:
+        bdc_source_cte = """
+        bdc_source_agg AS (
+            SELECT CAST(NULL AS VARCHAR) AS cik,
+                   CAST(NULL AS VARCHAR) AS report_date,
+                   CAST(NULL AS DOUBLE) AS bdc_source_reconciliation_fv,
+                   CAST(NULL AS BIGINT) AS bdc_source_reconciliation_rows
+            WHERE false
+        ),
+        """
+
+    # Build fund_financials CTE
+    if fund_financials_df is not None and not fund_financials_df.empty:
+        con.register("fund_fin", fund_financials_df)
+        ff_cte = """
+        ff_values AS (
+            SELECT
+                LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                CAST(report_date AS VARCHAR) AS report_date,
+                TRY_CAST(investments_at_fair_value AS DOUBLE) AS inv_fv,
+                TRY_CAST(total_assets AS DOUBLE) AS total_assets
+            FROM fund_fin
+            WHERE report_date IS NOT NULL AND report_date != ''
+        ),
+        """
+    else:
+        ff_cte = """
+        ff_values AS (
+            SELECT CAST(NULL AS VARCHAR) AS cik,
+                   CAST(NULL AS VARCHAR) AS report_date,
+                   CAST(NULL AS DOUBLE) AS inv_fv,
+                   CAST(NULL AS DOUBLE) AS total_assets
+            WHERE false
+        ),
+        """
+
+    # Build N-PORT fund info CTE
+    if (nport_fund_info_df is not None and not nport_fund_info_df.empty
+            and len(nport_fund_info_df.columns) > 0):
+        con.register("nport_fi", nport_fund_info_df)
+        nport_cte = """
+        nport_values AS (
+            SELECT
+                LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                CAST(report_date AS VARCHAR) AS report_date,
+                TRY_CAST(total_assets AS DOUBLE) AS nport_total_assets
+            FROM nport_fi
+            WHERE total_assets IS NOT NULL AND total_assets != ''
+        ),
+        """
+    else:
+        nport_cte = """
+        nport_values AS (
+            SELECT CAST(NULL AS VARCHAR) AS cik,
+                   CAST(NULL AS VARCHAR) AS report_date,
+                   CAST(NULL AS DOUBLE) AS nport_total_assets
+            WHERE false
+        ),
+        """
+
+    sql = f"""
+    WITH holdings_agg AS (
+        SELECT
+            LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+            FIRST(entity_name) AS entity_name,
+            CAST(report_date AS VARCHAR) AS report_date,
+            SUM(TRY_CAST(fair_value AS DOUBLE)) AS sum_holdings_fv,
+            SUM(CASE WHEN COALESCE(TRY_CAST(is_subsidiary AS INT), 0) = 0
+                     THEN TRY_CAST(fair_value AS DOUBLE) ELSE 0 END)
+                AS sum_holdings_fv_ex_sub,
+            MAX(CASE WHEN COALESCE(TRY_CAST(is_subsidiary AS INT), 0) = 1
+                     THEN 1 ELSE 0 END) AS has_subsidiary_positions,
+            MAX(CASE WHEN LOWER(CAST(source AS VARCHAR)) = 'bdc'
+                     THEN 1 ELSE 0 END) AS has_bdc_positions,
+            MAX(CASE WHEN LOWER(CAST(source AS VARCHAR)) = 'nport'
+                     THEN 1 ELSE 0 END) AS has_nport_positions
+        FROM holdings
+        WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+          AND TRY_CAST(report_date AS DATE) >= '2022-01-01'
+        GROUP BY cik, report_date
+    ),
+    {bdc_source_cte}
+    {ff_cte}
+    {nport_cte}
+    joined AS (
+        SELECT
+            h.cik,
+            h.entity_name,
+            h.report_date,
+            h.sum_holdings_fv,
+            h.sum_holdings_fv_ex_sub,
+            h.has_subsidiary_positions,
+            h.has_bdc_positions,
+            h.has_nport_positions,
+            s.bdc_source_reconciliation_fv,
+            s.bdc_source_reconciliation_rows,
+            -- Reliability gate: inv_fv that is <10% or >5x of total_assets
+            -- is likely partial/wrong (catches Kayne 66x, SCP 13x outliers).
+            -- Corroboration: if the gate rejects inv_fv BUT holdings sum
+            -- corroborates it (ratio 0.3-5.0x), use inv_fv anyway -- the
+            -- fund genuinely has a small investment book relative to total
+            -- assets (e.g. NEWT bank/BDC hybrid).
+            CASE WHEN f.inv_fv IS NOT NULL AND f.total_assets IS NOT NULL
+                      AND f.total_assets > 0
+                      AND (f.inv_fv / f.total_assets < 0.1
+                           OR f.inv_fv / f.total_assets > 5)
+                      AND NOT (f.inv_fv > 0
+                               AND h.sum_holdings_fv / f.inv_fv BETWEEN 0.3 AND 5.0)
+                 THEN NULL ELSE f.inv_fv END AS inv_fv_checked,
+            f.inv_fv AS inv_fv_raw,
+            COALESCE(
+                CASE WHEN f.inv_fv IS NOT NULL AND f.total_assets IS NOT NULL
+                          AND f.total_assets > 0
+                          AND (f.inv_fv / f.total_assets < 0.1
+                               OR f.inv_fv / f.total_assets > 5)
+                          AND NOT (f.inv_fv > 0
+                                   AND h.sum_holdings_fv / f.inv_fv BETWEEN 0.3 AND 5.0)
+                     THEN NULL ELSE f.inv_fv END,
+                f.total_assets,
+                n.nport_total_assets
+            ) AS comparison_value,
+            CASE
+                WHEN f.inv_fv IS NOT NULL
+                     AND (f.total_assets IS NULL OR f.total_assets = 0
+                          OR (f.inv_fv / f.total_assets >= 0.1
+                              AND f.inv_fv / f.total_assets <= 5)
+                          OR (f.inv_fv > 0
+                              AND h.sum_holdings_fv / f.inv_fv BETWEEN 0.3 AND 5.0))
+                     THEN 'investments_at_fair_value'
+                WHEN f.total_assets IS NOT NULL THEN 'total_assets_companyfacts'
+                WHEN n.nport_total_assets IS NOT NULL THEN 'total_assets_nport'
+                ELSE NULL
+            END AS comparison_source
+        FROM holdings_agg h
+        LEFT JOIN bdc_source_agg s
+            ON h.cik = s.cik AND h.report_date = s.report_date
+        LEFT JOIN ff_values f
+            ON h.cik = f.cik AND h.report_date = f.report_date
+        LEFT JOIN nport_values n
+            ON h.cik = n.cik AND h.report_date = n.report_date
+    )
+    SELECT
+        cik, entity_name, report_date,
+        sum_holdings_fv,
+        sum_holdings_fv AS indexable_position_fv,
+        sum_holdings_fv_ex_sub,
+        bdc_source_reconciliation_fv,
+        bdc_source_reconciliation_rows,
+        has_subsidiary_positions,
+        CASE
+            WHEN has_bdc_positions = 1 AND has_nport_positions = 0 THEN 'bdc'
+            WHEN has_nport_positions = 1 AND has_bdc_positions = 0 THEN 'nport'
+            WHEN has_bdc_positions = 1 AND has_nport_positions = 1 THEN 'mixed'
+            ELSE ''
+        END AS holdings_source,
+        CASE
+            WHEN has_bdc_positions = 1 AND has_nport_positions = 0 THEN 'bdc_schedule'
+            WHEN has_nport_positions = 1 AND has_bdc_positions = 0 THEN 'nport_private_markets_filter'
+            WHEN has_bdc_positions = 1 AND has_nport_positions = 1 THEN 'mixed_holdings'
+            ELSE ''
+        END AS holdings_scope,
+        comparison_value,
+        comparison_source,
+        CASE
+            WHEN comparison_source = 'investments_at_fair_value' THEN 'investment_fair_value'
+            WHEN comparison_source IN ('total_assets_companyfacts', 'total_assets_nport') THEN 'full_fund_assets'
+            ELSE ''
+        END AS denominator_scope,
+        CASE
+            WHEN has_bdc_positions = 1 AND has_nport_positions = 0 THEN 'GAV_BDC01'
+            WHEN has_nport_positions = 1 AND has_bdc_positions = 0 THEN 'GAV_NPORT01'
+            ELSE 'GAV_SCOPE01'
+        END AS gav_rule_id,
+        CASE WHEN comparison_value > 0
+             THEN ROUND(sum_holdings_fv / comparison_value, 4)
+        END AS gav_ratio,
+        CASE WHEN comparison_value > 0 AND bdc_source_reconciliation_fv IS NOT NULL
+             THEN ROUND(bdc_source_reconciliation_fv / comparison_value, 4)
+        END AS bdc_source_reconciliation_ratio,
+        -- Adjusted ratio: use ex-sub numerator when CIK has subsidiary positions
+        CASE WHEN comparison_value > 0 AND has_subsidiary_positions = 1
+             THEN ROUND(sum_holdings_fv_ex_sub / comparison_value, 4)
+             WHEN comparison_value > 0
+             THEN ROUND(sum_holdings_fv / comparison_value, 4)
+        END AS gav_ratio_adjusted,
+        CASE
+            WHEN comparison_value IS NULL THEN 'no_comparison'
+            WHEN comparison_value > 0
+                 AND (CASE WHEN has_subsidiary_positions = 1
+                           THEN sum_holdings_fv_ex_sub
+                           ELSE sum_holdings_fv END)
+                     / comparison_value > 1.2 THEN 'over_coverage'
+            WHEN comparison_value > 0
+                 AND (CASE WHEN has_subsidiary_positions = 1
+                           THEN sum_holdings_fv_ex_sub
+                           ELSE sum_holdings_fv END)
+                     / comparison_value < 0.3 THEN 'under_coverage'
+            ELSE 'ok'
+        END AS flag,
+        CASE
+            WHEN has_bdc_positions != 1 THEN ''
+            WHEN comparison_value IS NULL THEN 'no_comparison'
+            WHEN bdc_source_reconciliation_fv IS NULL THEN 'no_source_fv'
+            WHEN comparison_value > 0
+                 AND bdc_source_reconciliation_fv / comparison_value > 1.2
+                THEN 'over_coverage'
+            WHEN comparison_value > 0
+                 AND bdc_source_reconciliation_fv / comparison_value < 0.3
+                THEN 'under_coverage'
+            ELSE 'ok'
+        END AS bdc_source_reconciliation_flag,
+        CASE
+            WHEN has_bdc_positions = 1
+                 AND comparison_value > 0
+                 AND bdc_source_reconciliation_fv IS NOT NULL
+                 AND bdc_source_reconciliation_fv / comparison_value BETWEEN 0.3 AND 1.2
+                 AND (CASE WHEN has_subsidiary_positions = 1
+                           THEN sum_holdings_fv_ex_sub
+                           ELSE sum_holdings_fv END) / comparison_value < 0.3
+                THEN 'source_fv_present_not_indexable'
+            WHEN has_bdc_positions = 1
+                 AND comparison_value > 0
+                 AND (bdc_source_reconciliation_fv IS NULL
+                      OR bdc_source_reconciliation_fv / comparison_value < 0.3)
+                THEN 'source_fv_missing_or_under_extracted'
+            WHEN has_bdc_positions = 1 THEN 'indexable_fv_reconciled'
+            ELSE ''
+        END AS gav_evidence_scope
+    FROM joined
+    ORDER BY cik, report_date
+    """
+
+    result = con.execute(sql).fetchdf()
+    con.close()
+
+    if not result.empty:
+        with_comparison = result[result["comparison_source"].notna()
+                                 & (result["comparison_source"] != "")]
+        if len(with_comparison) > 0:
+            ratio = pd.to_numeric(with_comparison["gav_ratio"], errors="coerce").dropna()
+            adj_ratio = pd.to_numeric(
+                with_comparison["gav_ratio_adjusted"], errors="coerce"
+            ).dropna()
+            if len(ratio) > 0:
+                logger.info("  GAV reconciliation: %d CIK-quarters with comparison, "
+                            "median ratio %.3f (adjusted %.3f)",
+                            len(ratio), ratio.median(),
+                            adj_ratio.median() if len(adj_ratio) > 0 else 0)
+                in_range = ((adj_ratio >= 0.8) & (adj_ratio <= 1.2)).sum()
+                logger.info("  GAV within 0.8-1.2x: %d/%d (%.1f%%)",
+                            in_range, len(adj_ratio),
+                            100 * in_range / len(adj_ratio) if len(adj_ratio) else 0)
+                over = (with_comparison["flag"] == "over_coverage").sum()
+                under = (with_comparison["flag"] == "under_coverage").sum()
+                if over > 0 or under > 0:
+                    logger.warning("  GAV outliers: %d over_coverage, %d under_coverage",
+                                   over, under)
+                # Log subsidiary impact
+                sub_ciks = with_comparison[
+                    with_comparison["has_subsidiary_positions"].astype(str) == "1"
+                ]
+                if len(sub_ciks) > 0:
+                    logger.info("  GAV subsidiary adjustment: %d CIK-quarters affected",
+                                len(sub_ciks))
+        else:
+            logger.info("  GAV reconciliation: no comparison values available")
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# 8. Pct of net assets sum
+# ---------------------------------------------------------------------------
+
+def check_pct_of_net_assets_sum(df: pd.DataFrame) -> pd.DataFrame:
+    """Sum pct_of_net_assets per (CIK, report_date) for BDC positions.
+
+    BDCs are levered, so the sum should typically be 100-170%.
+    Catches subtotal leakage (inflates sum) and missing positions (deflates sum).
+
+    Flag logic:
+      - pct_sum > 200 -> high_pct_sum
+      - pct_sum < 50  -> low_pct_sum
+      - else           -> ok
+
+    Returns DataFrame with columns: cik, report_date, pct_sum, position_count,
+    total_fv, flag
+    """
+    empty = pd.DataFrame(columns=[
+        "cik", "report_date", "pct_sum", "position_count", "total_fv", "flag",
+    ])
+
+    if df.empty or "source" not in df.columns:
+        return empty
+
+    if not (df["source"] == "bdc").any():
+        return empty
+
+    con = duckdb.connect()
+    con.register("holdings", df)
+
+    sql = """
+    WITH agg AS (
+        SELECT cik, report_date,
+            SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS pct_sum,
+            COUNT(*) AS position_count,
+            SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
+        FROM holdings
+        WHERE source = 'bdc'
+          AND TRY_CAST(pct_of_net_assets AS DOUBLE) IS NOT NULL
+          AND TRY_CAST(pct_of_net_assets AS DOUBLE) != 0
+        GROUP BY cik, report_date
+        HAVING COUNT(*) >= 5
+    )
+    SELECT *,
+        CASE
+            WHEN pct_sum > 200 THEN 'high_pct_sum'
+            WHEN pct_sum < 50 THEN 'low_pct_sum'
+            ELSE 'ok'
+        END AS flag
+    FROM agg
+    ORDER BY cik, report_date
+    """
+
+    result = con.execute(sql).fetchdf()
+    con.close()
+
+    if result.empty:
+        return empty
+
+    if len(result) > 0:
+        high = (result["flag"] == "high_pct_sum").sum()
+        low = (result["flag"] == "low_pct_sum").sum()
+        ok = (result["flag"] == "ok").sum()
+        logger.info("  Pct-of-net-assets sum: %d CIK-quarters (%d ok, %d high, %d low)",
+                    len(result), ok, high, low)
+        if high > 0:
+            logger.warning("  %d CIK-quarters with pct_sum > 200%% (possible subtotal leak)",
+                          high)
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# 9. Position count stability
+# ---------------------------------------------------------------------------
+
+def check_position_count_stability(df: pd.DataFrame) -> pd.DataFrame:
+    """QoQ position count stability per CIK.
+
+    Position count shouldn't jump >2.5x or drop <0.4x without M&A.
+    Also flags count_fv_divergence: count changes >2x but FV is stable
+    (count_ratio >2 AND fv_ratio BETWEEN 0.7 AND 1.3), which suggests
+    subtotal rows crept in or a parsing issue doubled positions.
+
+    Returns DataFrame with columns: cik, report_date, position_count,
+    total_fv, prev_count, prev_fv, count_ratio, fv_ratio, flag
+    """
+    empty = pd.DataFrame(columns=[
+        "cik", "report_date", "position_count", "total_fv",
+        "prev_count", "prev_fv", "count_ratio", "fv_ratio", "flag",
+    ])
+
+    if df.empty or "fair_value" not in df.columns:
+        return empty
+
+    con = duckdb.connect()
+    con.register("holdings", df)
+
+    sql = """
+    WITH quarterly AS (
+        SELECT cik, report_date,
+            COUNT(*) AS position_count,
+            SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
+        FROM holdings
+        WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+        GROUP BY cik, report_date
+    ),
+    with_lag AS (
+        SELECT *,
+            LAG(position_count) OVER (PARTITION BY cik ORDER BY report_date) AS prev_count,
+            LAG(total_fv) OVER (PARTITION BY cik ORDER BY report_date) AS prev_fv
+        FROM quarterly
+    ),
+    flagged AS (
+        SELECT *,
+            position_count * 1.0 / NULLIF(prev_count, 0) AS count_ratio,
+            total_fv / NULLIF(prev_fv, 0) AS fv_ratio,
+            CASE
+                WHEN prev_count IS NULL THEN NULL
+                WHEN (position_count * 1.0 / NULLIF(prev_count, 0) > 2.0)
+                     AND (total_fv / NULLIF(prev_fv, 0) BETWEEN 0.7 AND 1.3)
+                     THEN 'count_fv_divergence'
+                WHEN position_count * 1.0 / NULLIF(prev_count, 0) > 2.5
+                     OR position_count * 1.0 / NULLIF(prev_count, 0) < 0.4
+                     THEN 'unstable_count'
+                ELSE 'ok'
+            END AS flag
+        FROM with_lag
+    )
+    SELECT * FROM flagged
+    WHERE prev_count IS NOT NULL
+    ORDER BY cik, report_date
+    """
+
+    result = con.execute(sql).fetchdf()
+    con.close()
+
+    if result.empty:
+        return empty
+
+    if len(result) > 0:
+        unstable = (result["flag"] == "unstable_count").sum()
+        diverge = (result["flag"] == "count_fv_divergence").sum()
+        ok = (result["flag"] == "ok").sum()
+        logger.info("  Position count stability: %d transitions (%d ok, %d unstable, %d divergence)",
+                    len(result), ok, unstable, diverge)
+        if unstable > 0:
+            logger.warning("  %d transitions with count ratio outside 0.4-2.5x", unstable)
+        if diverge > 0:
+            logger.warning("  %d transitions with count >2x but FV stable (possible subtotal leak)",
+                          diverge)
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# 10. Income yield consistency
+# ---------------------------------------------------------------------------
+
+def check_income_yield_consistency(
+    unified_df: Optional[pd.DataFrame] = None,
+    fee_uplift_path=None,
+) -> pd.DataFrame:
+    """Check income yield consistency using fee_uplift.csv.
+
+    Derives yield_ratio = total_income_yield / median_all_in_coupon from
+    fee_uplift.csv. This tests rate and principal fields against fund-level
+    income, completely independent from FV-based GAV.
+
+    Only covers BDCs with DL positions and fund income data (~128 CIKs).
+
+    Flag logic:
+      - yield_ratio < 0.5 or > 2.5 -> yield_outlier
+      - else                        -> ok
+
+    Returns DataFrame with columns: cik, total_income_yield,
+    median_all_in_coupon, yield_ratio, flag
+    """
+    empty = pd.DataFrame(columns=[
+        "cik", "total_income_yield", "median_all_in_coupon",
+        "yield_ratio", "flag",
+    ])
+
+    fee_path = fee_uplift_path if fee_uplift_path is not None else FEE_UPLIFT_FILE
+
+    if not fee_path.exists():
+        logger.info("  Income yield: fee_uplift file not found, skipping")
+        return empty
+
+    try:
+        fee_df = pd.read_csv(fee_path, dtype=str)
+    except Exception:
+        logger.warning("  Income yield: failed to read fee_uplift file")
+        return empty
+
+    if fee_df.empty:
+        return empty
+
+    # Need both columns to compute ratio
+    if "total_income_yield" not in fee_df.columns or "median_all_in_coupon" not in fee_df.columns:
+        logger.info("  Income yield: required columns not in fee_uplift, skipping")
+        return empty
+
+    con = duckdb.connect()
+    con.register("fee", fee_df)
+
+    sql = """
+    SELECT
+        cik,
+        total_income_yield,
+        median_all_in_coupon,
+        CASE WHEN TRY_CAST(median_all_in_coupon AS DOUBLE) > 0
+             THEN ROUND(TRY_CAST(total_income_yield AS DOUBLE)
+                        / TRY_CAST(median_all_in_coupon AS DOUBLE), 4)
+        END AS yield_ratio,
+        CASE
+            WHEN TRY_CAST(median_all_in_coupon AS DOUBLE) IS NULL
+                 OR TRY_CAST(median_all_in_coupon AS DOUBLE) = 0
+                 THEN 'no_coupon_data'
+            WHEN TRY_CAST(total_income_yield AS DOUBLE)
+                 / TRY_CAST(median_all_in_coupon AS DOUBLE) < 0.5
+                 THEN 'yield_outlier'
+            WHEN TRY_CAST(total_income_yield AS DOUBLE)
+                 / TRY_CAST(median_all_in_coupon AS DOUBLE) > 2.5
+                 THEN 'yield_outlier'
+            ELSE 'ok'
+        END AS flag
+    FROM fee
+    WHERE TRY_CAST(total_income_yield AS DOUBLE) IS NOT NULL
+    ORDER BY cik
+    """
+
+    result = con.execute(sql).fetchdf()
+    con.close()
+
+    if result.empty:
+        return empty
+
+    if len(result) > 0:
+        outliers = (result["flag"] == "yield_outlier").sum()
+        ok = (result["flag"] == "ok").sum()
+        no_data = (result["flag"] == "no_coupon_data").sum()
+        logger.info("  Income yield consistency: %d CIKs (%d ok, %d outliers, %d no coupon data)",
+                    len(result), ok, outliers, no_data)
+        if outliers > 0:
+            logger.warning("  %d CIKs with yield_ratio outside 0.5-2.5x", outliers)
+
+    return result
+
+
 def validate_holdings(
     unified_df: Optional[pd.DataFrame] = None,
     universe_df: Optional[pd.DataFrame] = None,
@@ -1056,5 +1695,62 @@ def validate_holdings(
     if len(class_val) > 0:
         class_val.to_csv(CLASSIFICATION_VALIDATION_FILE, index=False)
         logger.info("  Saved %s", CLASSIFICATION_VALIDATION_FILE.name)
+
+    # 7. GAV reconciliation
+    logger.info("Running GAV reconciliation...")
+    gav = check_gav_reconciliation(unified_df)
+    reports["gav_reconciliation"] = gav
+    if len(gav) > 0:
+        gav.to_csv(HOLDINGS_GAV_RECONCILIATION_FILE, index=False)
+        logger.info("  Saved %s", HOLDINGS_GAV_RECONCILIATION_FILE.name)
+
+    # 8. Pct of net assets sum
+    logger.info("Checking pct_of_net_assets sum...")
+    pct_sum = check_pct_of_net_assets_sum(unified_df)
+    reports["pct_sum"] = pct_sum
+    if len(pct_sum) > 0:
+        pct_sum.to_csv(HOLDINGS_PCT_SUM_FILE, index=False)
+        logger.info("  Saved %s", HOLDINGS_PCT_SUM_FILE.name)
+
+    # 9. Position count stability
+    logger.info("Checking position count stability...")
+    stability = check_position_count_stability(unified_df)
+    reports["count_stability"] = stability
+    if len(stability) > 0:
+        stability.to_csv(HOLDINGS_COUNT_STABILITY_FILE, index=False)
+        logger.info("  Saved %s", HOLDINGS_COUNT_STABILITY_FILE.name)
+
+    # 10. Income yield consistency
+    logger.info("Checking income yield consistency...")
+    income = check_income_yield_consistency(unified_df)
+    reports["income_yield"] = income
+    if len(income) > 0:
+        income.to_csv(HOLDINGS_INCOME_YIELD_FILE, index=False)
+        logger.info("  Saved %s", HOLDINGS_INCOME_YIELD_FILE.name)
+
+    # 11. Column-level quality contract + unified issue schema
+    logger.info("Running column-level quality validation...")
+    try:
+        from pipeline.column_validation import run_column_quality_validation
+
+        quality_reports = run_column_quality_validation(
+            unified_df,
+            existing_reports=reports,
+        )
+        reports.update(quality_reports)
+
+        row_issues = quality_reports["row_validation_issues"]
+        column_metrics = quality_reports["column_quality_metrics"]
+        quality_summary = quality_reports["data_quality_metrics"]
+
+        row_issues.to_csv(ROW_VALIDATION_ISSUES_FILE, index=False)
+        logger.info("  Saved %s", ROW_VALIDATION_ISSUES_FILE.name)
+        column_metrics.to_csv(COLUMN_QUALITY_METRICS_FILE, index=False)
+        logger.info("  Saved %s", COLUMN_QUALITY_METRICS_FILE.name)
+        quality_summary.to_csv(DATA_QUALITY_METRICS_FILE, index=False)
+        logger.info("  Saved %s", DATA_QUALITY_METRICS_FILE.name)
+    except Exception as exc:
+        logger.error("Column-level quality validation failed: %s", exc,
+                     exc_info=True)
 
     return reports

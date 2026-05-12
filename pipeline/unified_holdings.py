@@ -171,6 +171,9 @@ _BDC_AGGREGATE_PATTERNS = [
     # Dimension-path subtotals (CIK 1959604/1959568)
     "total non-controlled",
     "total non-affiliated",
+    # PennantPark/similar: percentage-prefix category headers without slash
+    "common equity/partnership interests",
+    "partnership interests/warrants",
 ]
 
 # Bare issuer names that are section headers or industry labels (exact match, lower)
@@ -746,6 +749,13 @@ def _sql_is_bdc_aggregate() -> str:
         f"(contains(_lower_id, ' | ') AND starts_with({last_seg}, 'total ') "
         f"AND {last_seg_guards})"
     )
+    # Percentage-prefix category subtotals: starts with "NNN.NN% " followed by
+    # slash-separated category terms (no entity signals, no dash separators).
+    # Example: "177.4% Common Equity/Partnership Interests/Warrants"
+    pct_prefix = "regexp_matches(_lower_id, '^\\d[\\d.]*%\\s+')"
+    has_slash = "contains(_lower_id, '/')"
+    no_dash = "NOT contains(_raw_id, ' - ') AND NOT contains(_raw_id, ' -- ')"
+    parts.append(f"({pct_prefix} AND {no_entity} AND {no_dash} AND {has_slash})")
     # Industry-prefixed subtotals -- only when no entity signals
     suffix_sql = _sql_ends_with_any("_lower_id", _BDC_AGGREGATE_SUFFIXES)
     parts.append(f"({no_entity} AND {suffix_sql})")
@@ -1079,13 +1089,27 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
             instrument = pipe_parts[1].strip()
             return (issuer, instrument)
 
-    # Normalise en-dash (U+2013) to hyphen-minus before splitting
+    # Normalise em-dash (U+2014) and en-dash (U+2013) before splitting
+    identifier = identifier.replace("\u2014", " - ")
     identifier = identifier.replace("\u2013", "-")
 
     _GS_PCT_RE = re.compile(r"^-?\d[\d.]*%\s+\S")
     _GS_KEYWORD_RE = re.compile(
         r"^(.+?)\s+(?:Industry|Interest Rate|Reference Rate|Maturity|Floor|PIK)\b"
     )
+    # Extended keyword boundary for pct-prefix extraction (adds Current Coupon, Basis Point)
+    _PCT_KEYWORD_RE = re.compile(
+        r"^(.+?)\s+(?:Industry|Interest Rate|Current Coupon|Maturity"
+        r"|Reference Rate|Basis Point|Floor|PIK)(?:\s|$)"
+    )
+    _PCT_PREFIX_RE = re.compile(r"^\d[\d.]*%\s+")
+    # Entity signals for pct-prefix guard (same list used in aggregate detection)
+    _pct_entity_sigs = [
+        "inc.", "inc,", " inc ", " inc-",
+        "llc", "l.l.c", "corp.", "corp,",
+        "ltd.", "ltd,", " ltd ", ", lp", " lp,", "l.p.",
+        "holdings", "group", "gmbh", " co.", " plc",
+    ]
 
     if " - " not in identifier:
         # Goldman Sachs 1-segment (no dash): "Investment <type> <pct>% <co> Industry ..."
@@ -1100,6 +1124,22 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
             inst_m = re.match(r"^(.+?)\s+\d[\d.]*%", inst_text)
             instrument = inst_m.group(1) if inst_m else ""
             return (issuer, instrument)
+        # No-dash "Issuer Name" label format (PennantPark variant):
+        # "Common Equity/... Issuer Name SP L2 Holdings, LLC Industry ..."
+        # Guard: must NOT start with "investment " (Goldman Sachs format)
+        stripped = identifier.strip()
+        if (not stripped.lower().startswith("investment ")
+                and re.search(r"(?i)\bissuer name\s+", stripped)):
+            # Extract company name after "Issuer Name" label
+            after_label = re.split(r"(?i)\bIssuer Name\s+", stripped, maxsplit=1)
+            if len(after_label) == 2:
+                company_text = after_label[1]
+                m = _PCT_KEYWORD_RE.match(company_text)
+                issuer = m.group(1).strip() if m else company_text.strip()
+                instrument = after_label[0].strip()
+                # Strip pct prefix from instrument if present
+                instrument = _PCT_PREFIX_RE.sub("", instrument).strip()
+                return (issuer, instrument)
         return (identifier.strip(), "")
 
     segments = identifier.split(" - ")
@@ -1111,6 +1151,48 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
         instrument = " - ".join(s.strip() for s in segments[2:])
         instrument = _QTY_PREFIX_RE.sub("", instrument).strip()
         return (issuer, instrument)
+
+    # Pct-prefix category skip (PennantPark / Blue Owl):
+    # seg[1] = "NNN.N% Category Name", seg[2] = "NNN.N% Company ... Industry ..."
+    # Condition: seg[1] starts with pct prefix, has NO entity signals, and
+    # seg[2] also starts with pct prefix (confirming hierarchical pct format).
+    # Entity signal in seg[1] means it's a real company name like "150% Acme LLC"
+    # -- NOT a category prefix -- so we skip this branch.
+    if (len(segments) >= 2
+            and _PCT_PREFIX_RE.match(first_seg)
+            and not any(s in first_seg.lower() for s in _pct_entity_sigs)):
+        seg2 = segments[1].strip()
+        # Blue Owl CIK 1817825: seg[2] = "Investments made in <Country>"
+        if seg2.lower().startswith("investments made in") and len(segments) >= 4:
+            # seg[3] might be industry or company; seg[4] might be company
+            seg3 = segments[2].strip()
+            if seg3.lower() in _INDUSTRY_LABELS and len(segments) >= 5:
+                issuer = segments[3].strip()
+                instrument = " - ".join(s.strip() for s in segments[4:])
+            else:
+                issuer = seg3
+                instrument = " - ".join(s.strip() for s in segments[3:])
+            # Category from seg[1] (minus pct prefix)
+            category = _PCT_PREFIX_RE.sub("", first_seg).strip()
+            if category:
+                instrument = category + " - " + instrument if instrument else category
+            return (issuer, instrument)
+        # Standard PennantPark: seg[2] starts with pct prefix
+        if _PCT_PREFIX_RE.match(seg2):
+            # Strip pct prefix from seg[2] to get company text
+            company_text = _PCT_PREFIX_RE.sub("", seg2).strip()
+            # Strip "Issuer Name " label if present
+            company_text = re.sub(
+                r"^Issuer Name\s+", "", company_text, flags=re.IGNORECASE
+            )
+            # Extract company via keyword boundary
+            m = _PCT_KEYWORD_RE.match(company_text)
+            issuer = m.group(1).strip() if m else company_text
+            # Instrument = category from seg[1] (minus pct) + remaining segments
+            category = _PCT_PREFIX_RE.sub("", first_seg).strip()
+            rest = " - ".join(s.strip() for s in segments[2:])
+            instrument = category if category else rest
+            return (issuer, instrument)
 
     # Goldman Sachs hierarchical format (2-4 segments):
     # seg[1] starts with "Investment ", last segment has "<pct>% <company> Industry ..."
@@ -1243,6 +1325,15 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
         if last_seg.startswith("total "):
             if not any(s in last_seg for s in _total_co_signals):
                 return True
+
+    # Percentage-prefix category subtotals: starts with "NNN.NN% " followed by
+    # slash-separated category terms (no entity signals, no dash separators).
+    # Example: "177.4% Common Equity/Partnership Interests/Warrants"
+    if (not has_entity
+            and re.match(r"^\d[\d.]*%\s+", lower)
+            and " - " not in identifier and " -- " not in identifier
+            and "/" in lower):
+        return True
 
     # Single-word industry/geography labels (bare identifiers only)
     if " " not in lower and lower in _INDUSTRY_LABELS:
@@ -1672,6 +1763,25 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     )
     name_norm = _sql_normalize_name("issuer_name")
 
+    # Normalised raw identifier: em-dash -> ' - ', en-dash -> '-'
+    _norm_raw = "regexp_replace(replace(_raw_id, '\u2014', ' - '), '\u2013', '-', 'g')"
+
+    # Entity signal check on seg[1] (for pct-prefix category detection)
+    _seg1_entity_sql = " OR ".join(
+        f"contains(lower(trim(_segments[1])), '{s}')" for s in _entity_sigs
+    )
+
+    # Keyword boundary regex for extracting company name from pct-prefix segments
+    _kw_boundary_re = (
+        r"^(.+?)\s+(?:Industry|Interest Rate|Current Coupon|Maturity"
+        r"|Reference Rate|Basis Point|Floor|PIK)(?:\s|$)"
+    )
+
+    # Industry label check on seg[3] (for geography-prefix detection in Blue Owl)
+    _seg3_is_industry = _sql_exact_match(
+        "lower(trim(_segments[3]))", _INDUSTRY_LABELS
+    )
+
     # Fund vehicle/manager detection: equity-type positions with these name
     # signals get issuer_category = FUND (overrides the default CORPORATE).
     fund_vehicle_clauses = []
@@ -1732,13 +1842,50 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         {period_filter}
     ),
 
+    -- CTE 1a-i: Detect 1000x scale errors by comparing each CIK-quarter's
+    -- total FV against the CIK's median across all quarters.  Requires >= 3
+    -- quarters so the median is robust.  Only fires when ratio > 100x, which
+    -- catches clear filer errors (observed: CIK 1825265/2023-03-31 and
+    -- CIK 1916608/2023-06-30) without risking false positives on genuine
+    -- portfolio growth.
+    _quarterly_fv AS (
+        SELECT cik, CAST(report_date AS VARCHAR) AS report_date,
+               SUM(_fv) AS total_fv
+        FROM raw
+        WHERE _fv IS NOT NULL AND _fv > 0
+        GROUP BY cik, CAST(report_date AS VARCHAR)
+    ),
+    _cik_medians AS (
+        SELECT cik, MEDIAN(total_fv) AS median_fv, COUNT(*) AS n_quarters
+        FROM _quarterly_fv
+        GROUP BY cik
+    ),
+    _scale_errors AS (
+        SELECT q.cik, q.report_date
+        FROM _quarterly_fv q
+        JOIN _cik_medians m ON q.cik = m.cik
+        WHERE m.n_quarters >= 3
+          AND m.median_fv > 0
+          AND q.total_fv / m.median_fv > 100
+    ),
+    scale_corrected AS (
+        SELECT r.* EXCLUDE (_fv, _cost, _pa),
+            CASE WHEN s.cik IS NOT NULL THEN r._fv / 1000 ELSE r._fv END AS _fv,
+            CASE WHEN s.cik IS NOT NULL THEN r._cost / 1000 ELSE r._cost END AS _cost,
+            CASE WHEN s.cik IS NOT NULL THEN r._pa / 1000 ELSE r._pa END AS _pa
+        FROM raw r
+        LEFT JOIN _scale_errors s
+          ON r.cik = s.cik
+         AND CAST(r.report_date AS VARCHAR) = s.report_date
+    ),
+
     -- CTE 1b: Amendment dedup -- when a CIK has both a 10-K and 10-K/A
     -- (or 10-Q and 10-Q/A) for the same report_date, keep only the rows
     -- from the latest-filed accession.  If the amendment's XBRL had no
     -- investment data (common: 21/27 amendments in our dataset), the
     -- original is the only accession with rows and is kept automatically.
     no_amendments AS (
-        SELECT r.* FROM raw r
+        SELECT r.* FROM scale_corrected r
         INNER JOIN (
             SELECT cik, report_date, accession_number,
                 ROW_NUMBER() OVER (
@@ -1746,7 +1893,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                         REGEXP_REPLACE(CAST(form_type AS VARCHAR), '/A$', '')
                     ORDER BY CAST(filing_date AS VARCHAR) DESC
                 ) AS _amd_rank
-            FROM raw
+            FROM scale_corrected
             GROUP BY cik, report_date, accession_number, form_type, filing_date
         ) ranked
           ON r.cik = ranked.cik
@@ -1808,10 +1955,15 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     ),
 
     -- CTE 4: Filter hierarchical prefix subtotals via self-join
+    -- Requires the child row to also carry fair value (has_fv) to avoid
+    -- false removal when an industry-suffixed metadata row (no FV) extends
+    -- the identifier of a FV-carrying parent (e.g. CIK 845385:
+    -- "Rockfish Seafood Grill, Inc. - First Lien Loan" vs
+    -- "...First Lien Loan - Casual Dining" which has cost but no FV).
     no_subtotals AS (
         SELECT a.* FROM has_fv a
         WHERE NOT EXISTS (
-            SELECT 1 FROM no_artifacts b
+            SELECT 1 FROM has_fv b
             WHERE a.cik = b.cik
               AND a.accession_number = b.accession_number
               AND b._raw_id LIKE a._raw_id || '%'
@@ -1822,20 +1974,21 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     ),
 
     -- CTE 5a: Initial split + helper columns for re-parsing
-    -- Normalise en-dash (U+2013) to hyphen-minus before splitting so that
-    -- Goldman Sachs BDCs (which use en-dash delimiters) are handled consistently.
+    -- Normalise em-dash (U+2014) to ' - ' and en-dash (U+2013) to '-' before
+    -- splitting so that PennantPark (em-dash) and Goldman Sachs (en-dash) BDCs
+    -- are handled consistently.
     initial_split AS (
         SELECT *,
-            string_split(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ') AS _segments,
+            string_split({_norm_raw}, ' - ') AS _segments,
             CASE
-                WHEN NOT contains(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')
+                WHEN NOT contains({_norm_raw}, ' - ')
                 THEN trim(_raw_id)
-                ELSE trim(string_split(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')[1])
+                ELSE trim(string_split({_norm_raw}, ' - ')[1])
             END AS _issuer_raw,
             CASE
-                WHEN NOT contains(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')
+                WHEN NOT contains({_norm_raw}, ' - ')
                 THEN lower(trim(_raw_id))
-                ELSE lower(trim(string_split(regexp_replace(_raw_id, '\u2013', '-', 'g'), ' - ')[1]))
+                ELSE lower(trim(string_split({_norm_raw}, ' - ')[1]))
             END AS _issuer_lower,
             -- Pipe-separator detection: four 3-pipe sub-formats
             --   affil_last:    "Company | Instrument | Affiliation"  -> issuer = seg1
@@ -1904,6 +2057,55 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 WHEN {industry_in}
                      AND len(_segments) >= 3
                 THEN trim(_segments[2])
+                -- Pct-prefix category + geography prefix (Blue Owl CIK 1817825):
+                -- seg[1] = "NNN.N% of Shareholder's Equity", seg[2] = "Investments made in <Country>",
+                -- seg[3] = <Industry>, seg[4] = <Company>
+                WHEN len(_segments) >= 5
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%\s+')
+                     AND NOT ({_seg1_entity_sql})
+                     AND lower(trim(_segments[2])) LIKE 'investments made in%'
+                     AND {_seg3_is_industry}
+                THEN trim(_segments[4])
+                -- Pct-prefix category + geography prefix (non-industry seg[3]):
+                -- seg[3] = <Company> (not a known industry label)
+                WHEN len(_segments) >= 4
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%\s+')
+                     AND NOT ({_seg1_entity_sql})
+                     AND lower(trim(_segments[2])) LIKE 'investments made in%'
+                THEN trim(_segments[3])
+                -- Pct-prefix category skip (PennantPark / Blue Owl):
+                -- seg[1] = "NNN.N% Category", seg[2] = "NNN.N% Company ... Industry ..."
+                WHEN len(_segments) >= 2
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%\s+')
+                     AND NOT ({_seg1_entity_sql})
+                     AND regexp_matches(trim(_segments[2]), '^\d[\d.]*%')
+                THEN COALESCE(
+                    NULLIF(regexp_extract(
+                        regexp_replace(
+                            regexp_replace(trim(_segments[2]), '^\d[\d.]*%\s+', ''),
+                            '^(?i)Issuer Name\s+', ''
+                        ),
+                        '{_kw_boundary_re}',
+                        1
+                    ), ''),
+                    regexp_replace(
+                        regexp_replace(trim(_segments[2]), '^\d[\d.]*%\s+', ''),
+                        '^(?i)Issuer Name\s+', ''
+                    )
+                )
+                -- No-dash "Issuer Name" label (PennantPark variant):
+                -- "Category Issuer Name <Company> Industry ..."
+                WHEN NOT contains({_norm_raw}, ' - ')
+                     AND NOT _issuer_lower LIKE 'investment %'
+                     AND regexp_matches(_raw_id, '(?i)\\bIssuer Name\\s+')
+                THEN COALESCE(
+                    NULLIF(regexp_extract(
+                        regexp_replace(_raw_id, '^.*?(?i)\\bIssuer Name\\s+', ''),
+                        '{_kw_boundary_re}',
+                        1
+                    ), ''),
+                    regexp_replace(_raw_id, '^.*?(?i)\\bIssuer Name\\s+', '')
+                )
                 -- Goldman Sachs hierarchical format (2-4 segments):
                 -- seg[1] starts with "Investment ", last segment has
                 -- "<pct>% <company> Industry ..." or "<pct>% <company> Interest Rate ..."
@@ -1964,6 +2166,39 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 THEN regexp_replace(
                     trim(array_to_string(_segments[3:], ' - ')),
                     '^\\$?[\\d,.]+ ?', ''
+                )
+                -- Pct-prefix + geography + industry: instrument = category + segs 5+
+                WHEN len(_segments) >= 5
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%\s+')
+                     AND NOT ({_seg1_entity_sql})
+                     AND lower(trim(_segments[2])) LIKE 'investments made in%'
+                     AND {_seg3_is_industry}
+                THEN regexp_replace(trim(_segments[1]), '^\d[\d.]*%\s+', '')
+                     || CASE WHEN len(_segments) >= 6
+                        THEN ' - ' || trim(array_to_string(_segments[5:], ' - '))
+                        ELSE '' END
+                -- Pct-prefix + geography (non-industry seg[3]): instrument = category + segs 4+
+                WHEN len(_segments) >= 4
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%\s+')
+                     AND NOT ({_seg1_entity_sql})
+                     AND lower(trim(_segments[2])) LIKE 'investments made in%'
+                THEN regexp_replace(trim(_segments[1]), '^\d[\d.]*%\s+', '')
+                     || CASE WHEN len(_segments) >= 5
+                        THEN ' - ' || trim(array_to_string(_segments[4:], ' - '))
+                        ELSE '' END
+                -- Pct-prefix category skip: instrument = category from seg[1]
+                WHEN len(_segments) >= 2
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%\s+')
+                     AND NOT ({_seg1_entity_sql})
+                     AND regexp_matches(trim(_segments[2]), '^\d[\d.]*%')
+                THEN regexp_replace(trim(_segments[1]), '^\d[\d.]*%\s+', '')
+                -- No-dash "Issuer Name" label: instrument = text before "Issuer Name"
+                WHEN NOT contains({_norm_raw}, ' - ')
+                     AND NOT _issuer_lower LIKE 'investment %'
+                     AND regexp_matches(_raw_id, '(?i)\\bIssuer Name\\s+')
+                THEN regexp_replace(
+                    regexp_replace(_raw_id, '(?i)\\bIssuer Name\\s+.*$', ''),
+                    '^\d[\d.]*%\s+', ''
                 )
                 -- Goldman Sachs multi-segment: instrument = seg[1] minus "Investment " prefix
                 WHEN len(_segments) >= 2
@@ -2235,6 +2470,25 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     """
 
     result = con.execute(sql).fetchdf()
+
+    # Log 1000x scale corrections (if any)
+    try:
+        scale_log = con.execute("""
+            SELECT q.cik, q.report_date, q.total_fv, m.median_fv,
+                   ROUND(q.total_fv / m.median_fv, 0) AS ratio
+            FROM _quarterly_fv q
+            JOIN _cik_medians m ON q.cik = m.cik
+            WHERE m.n_quarters >= 3 AND m.median_fv > 0
+              AND q.total_fv / m.median_fv > 100
+        """).fetchdf()
+        for _, row in scale_log.iterrows():
+            logger.info("  1000x scale correction: CIK %s %s "
+                        "(total_fv=%.0f, median=%.0f, ratio=%.0fx)",
+                        row["cik"], row["report_date"],
+                        row["total_fv"], row["median_fv"], row["ratio"])
+    except Exception:
+        pass  # Diagnostic only
+
     con.close()
 
     # Drop internal row id column
@@ -2856,8 +3110,8 @@ def build_unified_holdings(
     idx_case = _sql_classify_index()
     exposure_case = _sql_classify_exposure_type()
     asset_class_case = _sql_classify_asset_class()
-    _classification_cols = {"index_classification", "exposure_type", "asset_class"}
-    col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _classification_cols)
+    _special_cols = {"index_classification", "exposure_type", "asset_class", "principal_amount"}
+    col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _special_cols)
     # Use explicit column list for UNION ALL to avoid positional mismatch
     union_cols = ", ".join(UNIFIED_COLUMNS)
 
@@ -2992,6 +3246,11 @@ def build_unified_holdings(
     )
     SELECT
         {col_list},
+        CASE WHEN _index_class IN (
+                 'COMMON_EQUITY', 'PREFERRED_EQUITY',
+                 'PRIVATE_EQUITY_FUND', 'PRIVATE_CREDIT_FUND',
+                 'REAL_ESTATE_FUND', 'HEDGE_FUND'
+             ) THEN NULL ELSE principal_amount END AS principal_amount,
         _index_class AS index_classification,
         _exposure_type AS exposure_type,
         _asset_class AS asset_class
