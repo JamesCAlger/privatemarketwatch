@@ -189,14 +189,16 @@ def _classify_from_extracted_industry(
     con = duckdb.connect()
     con.register("unified", unified_df)
 
-    # Get unique (issuer_name, extracted_industry) for CORPORATE rows
+    # Get (issuer_name, extracted_industry) counts for CORPORATE rows
     pairs = con.execute("""
-        SELECT DISTINCT
+        SELECT
             CAST(issuer_name AS VARCHAR) AS issuer_name,
-            CAST(extracted_industry AS VARCHAR) AS extracted_industry
+            CAST(extracted_industry AS VARCHAR) AS extracted_industry,
+            COUNT(*) AS vote_count
         FROM unified
         WHERE CAST(extracted_industry AS VARCHAR) != ''
           AND CAST(issuer_category AS VARCHAR) = 'CORPORATE'
+        GROUP BY 1, 2
     """).fetchdf()
     con.close()
 
@@ -218,7 +220,8 @@ def _classify_from_extracted_industry(
             continue
         if name_norm not in name_votes:
             name_votes[name_norm] = {}
-        name_votes[name_norm][gics] = name_votes[name_norm].get(gics, 0) + 1
+        count = int(row["vote_count"])
+        name_votes[name_norm][gics] = name_votes[name_norm].get(gics, 0) + count
 
     # Pick majority for each name
     result: dict[str, str] = {}

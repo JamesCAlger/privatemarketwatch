@@ -94,8 +94,8 @@ class TestGetCandidates:
         assert len(result) == 1
         assert result.iloc[0] == raw_id
 
-    def test_skips_parsed_identifiers(self):
-        """BDC rows where issuer_name != bdc_investment_identifier are NOT candidates."""
+    def test_includes_parsed_identifiers(self):
+        """Parsed BDC identifiers are still candidates for LLM enrichment."""
         df = _make_unified_df([
             _make_unified_row(
                 issuer_name="Acme Corp",
@@ -103,7 +103,8 @@ class TestGetCandidates:
             ),
         ])
         result = _get_candidates(df)
-        assert len(result) == 0
+        assert len(result) == 1
+        assert result.iloc[0] == "Acme Corp - First Lien Term Loan"
 
     def test_skips_nport_rows(self):
         """N-PORT rows are never candidates."""
