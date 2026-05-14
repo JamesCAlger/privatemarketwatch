@@ -16,6 +16,7 @@ venv/
 # Data (large SEC filings and pipeline outputs)
 data/raw/
 data/output/
+data/snapshots/
 
 # IDE
 .vscode/
