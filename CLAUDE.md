@@ -252,7 +252,7 @@ All three phases of holdings extraction are resumable:
 These are harm-category restrictions. Violating them causes data loss, silent corruption, or external service abuse.
 
 - **No unwanted network calls.** Do not trigger SEC EDGAR downloads unless the user explicitly asks. All raw data is cached on disk. Use `scripts/rebuild_outputs.py` or call pipeline functions directly to rebuild outputs.
-- **No production data corruption.** Running `pytest` overwrites output CSVs with test fixtures. After running tests, run `python scripts/rebuild_outputs.py` to regenerate. Never treat post-test output files as production data.
+- **No production data corruption.** Pytest installs a fail-fast guard that blocks writes under `data/output/` and `frontend/public/data/`. After running tests, still run `python scripts/diff_outputs.py`; it is the required backstop for detecting any artifact drift the Python-level guard cannot intercept.
 - **No SEC rate-limit violations.** The existing `edgar_client.py` enforces 10 req/sec. Do not bypass it or add parallel request paths.
 - **No encoding crashes.** All log messages must use ASCII only — Windows cp1252 cannot render Unicode box-drawing, em-dashes, or ellipsis characters.
 - **No slow transforms on large datasets.** Avoid pandas `.apply()`, `.iterrows()`, or row-level Python loops on datasets with >10K rows — the pipeline's 800K+ row datasets will hang for minutes. Use DuckDB SQL or vectorized operations. Pandas is fine for small summaries and logging.

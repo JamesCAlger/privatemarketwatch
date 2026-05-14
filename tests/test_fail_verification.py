@@ -1,6 +1,5 @@
 import csv
 import json
-import shutil
 from pathlib import Path
 
 import pytest
@@ -57,11 +56,8 @@ def _write_single_fund_manifest(output_dir: Path, rule_id: str, cik: str = "0000
 
 
 @pytest.fixture()
-def fail_output_dir(monkeypatch):
-    base = fv.PROJECT_ROOT / "data" / "output" / "_fail_verification_pytest"
-    if base.exists():
-        shutil.rmtree(base)
-    out = base / "output"
+def fail_output_dir(monkeypatch, tmp_path):
+    out = tmp_path / "_fail_verification_pytest" / "output"
     rows = [
         {
             "dataset": "private_markets_holdings",
@@ -506,8 +502,6 @@ def fail_output_dir(monkeypatch):
 
     monkeypatch.setattr(fv, "_write_run_guard", write_guard)
     yield out
-    if base.exists():
-        shutil.rmtree(base)
 
 
 def test_build_sample_manifest_filters_and_dedupes_gav(fail_output_dir):

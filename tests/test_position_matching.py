@@ -24,6 +24,22 @@ from pipeline.position_matching import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _redirect_position_matching_output(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.position_matching.POSITION_MATCHES_FILE",
+        tmp_path / "position_matches.csv",
+    )
+    monkeypatch.setattr(
+        "pipeline.index_returns.POSITION_RETURNS_FILE",
+        tmp_path / "position_returns.csv",
+    )
+    monkeypatch.setattr(
+        "pipeline.index_returns.INDEX_RETURNS_FILE",
+        tmp_path / "index_returns.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Helpers -- synthetic DataFrames
 # ---------------------------------------------------------------------------

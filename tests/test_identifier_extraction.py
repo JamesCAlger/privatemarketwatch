@@ -32,6 +32,14 @@ from pipeline.identifier_extraction import (
 from pipeline.unified_holdings import UNIFIED_COLUMNS
 
 
+@pytest.fixture(autouse=True)
+def _redirect_identifier_outputs(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.identifier_extraction.IDENTIFIER_EXTRACTION_LOOKUP_FILE",
+        tmp_path / "identifier_extraction_lookup.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

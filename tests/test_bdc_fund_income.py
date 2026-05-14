@@ -28,6 +28,14 @@ from pipeline.bdc_fund_income import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _redirect_bdc_fund_income_output(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.bdc_fund_income.BDC_FUND_INCOME_FILE",
+        tmp_path / "bdc_fund_income.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Helper: minimal XBRL XML builder
 # ---------------------------------------------------------------------------

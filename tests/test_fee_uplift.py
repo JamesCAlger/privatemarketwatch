@@ -18,6 +18,14 @@ from pipeline.fee_uplift import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _redirect_fee_uplift_output(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.fee_uplift.FEE_UPLIFT_FILE",
+        tmp_path / "fee_uplift.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Helper
 # ---------------------------------------------------------------------------

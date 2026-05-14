@@ -10,15 +10,14 @@ build_fund_financials(income_df, nport_fund_info_df, universe_df, client)
     -> pd.DataFrame
 """
 
-import json
 import logging
 import time
-import zipfile
 from typing import Optional
 
 import duckdb
 import pandas as pd
 
+from pipeline import extract_companyfacts, extract_ncen
 from pipeline.config import (
     BDC_FUND_INCOME_FILE,
     COMBINED_UNIVERSE_FILE,
@@ -96,20 +95,18 @@ OUTPUT_COLUMNS = [
 
 
 # ---------------------------------------------------------------------------
-# A. Companyfacts helpers
+# A. Companyfacts compatibility wrappers
 # ---------------------------------------------------------------------------
+
+_EXTENDED_FIELDS = extract_companyfacts._EXTENDED_FIELDS
+
 
 def _load_companyfacts_cached(cik: str) -> dict:
     """Read companyfacts JSON from disk cache. No network calls."""
-    cik_padded = str(cik).zfill(10)
-    cache_path = COMPANYFACTS_CACHE_DIR / f"{cik_padded}.json"
-    if not cache_path.exists():
-        return {}
-    try:
-        with open(cache_path) as f:
-            return json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return {}
+    return extract_companyfacts._load_companyfacts_cached(
+        cik,
+        companyfacts_cache_dir=COMPANYFACTS_CACHE_DIR,
+    )
 
 
 def _months_between(start: str, end: str) -> int:
@@ -123,11 +120,7 @@ def _months_between(start: str, end: str) -> int:
 
 
 def _prior_quarter_end(end_date: str) -> str:
-    """Subtract 3 months from an ISO end_date, snap to month-end.
-
-    Financial period end dates are always month-end, so we return
-    the last day of the target month. E.g. 2024-06-30 -> 2024-03-31.
-    """
+    """Subtract 3 months from an ISO end_date, snap to month-end."""
     import calendar
     try:
         y, m = int(end_date[:4]), int(end_date[5:7])
@@ -146,113 +139,10 @@ def _extract_duration_series(
     concept_names: list[str],
     unit_key: str = "USD",
 ) -> dict[str, float]:
-    """Extract quarterly values from duration concepts.
-
-    XBRL duration facts are often YTD cumulative. This function:
-    1. Collects all (start, end, value) triples
-    2. For each end_date, prefers the shortest period (single-quarter)
-    3. When only YTD exists, deltas against prior quarter's YTD
-    4. Fallback: divides by period length in quarters
-    """
-    if not facts:
-        return {}
-
-    all_facts = facts.get("facts", {})
-    names_lower = {n.lower() for n in concept_names}
-
-    # Collect all (start, end, value) triples across matching concepts
-    # entries_by_end: {end_date: [(start_date, value), ...]}
-    entries_by_end: dict[str, list[tuple[str, float]]] = {}
-    best_count = 0
-
-    for _taxonomy, concepts in all_facts.items():
-        if not isinstance(concepts, dict):
-            continue
-        for concept_name, concept_data in concepts.items():
-            if concept_name.lower() not in names_lower:
-                continue
-            units = concept_data.get("units", {})
-            entries = units.get(unit_key, [])
-            if not entries:
-                continue
-
-            # Check if this concept has enough data to be the best
-            concept_entries: dict[str, list[tuple[str, float]]] = {}
-            for entry in entries:
-                end_date = entry.get("end")
-                start_date = entry.get("start")
-                val = entry.get("val")
-                if not end_date or not start_date or val is None:
-                    continue
-                try:
-                    fval = float(val)
-                except (ValueError, TypeError):
-                    continue
-                concept_entries.setdefault(end_date, []).append(
-                    (start_date, fval),
-                )
-
-            if not concept_entries:
-                continue
-            # Pick concept with most end_dates
-            if len(concept_entries) > best_count:
-                best_count = len(concept_entries)
-                entries_by_end = concept_entries
-
-    if not entries_by_end:
-        return {}
-
-    # Phase 2+3: For each end_date (chronological), convert to quarterly
-    result: dict[str, float] = {}
-    ytd_at: dict[tuple[str, str], float] = {}  # YTD values keyed by (start_date, end_date)
-
-    for end_date in sorted(entries_by_end):
-        candidates = entries_by_end[end_date]
-        # Sort by period length ascending (shortest first)
-        best_start, best_value = min(
-            candidates, key=lambda x: _months_between(x[0], end_date),
-        )
-        span = _months_between(best_start, end_date)
-
-        if span <= 4:
-            # Already single-quarter (3-month or stub) -- use directly
-            result[end_date] = best_value
-        else:
-            # YTD cumulative -- find longest-period entry with same start
-            # for the current end_date (this IS the YTD value)
-            ytd_at[(best_start, end_date)] = best_value
-
-            # Try to find a longer (or same-start) entry that represents
-            # the YTD at the same fiscal year for the prior quarter
-            prior_end = _prior_quarter_end(end_date)
-
-            # Look for prior quarter's YTD with the same start_date
-            if (best_start, prior_end) in ytd_at:
-                result[end_date] = best_value - ytd_at[(best_start, prior_end)]
-            elif prior_end in entries_by_end:
-                # Prior end exists but wasn't YTD -- check if any entry
-                # shares same start_date (same fiscal year)
-                prior_candidates = entries_by_end[prior_end]
-                same_fy = [
-                    (s, v) for s, v in prior_candidates if s == best_start
-                ]
-                if same_fy:
-                    _, prior_ytd = max(
-                        same_fy,
-                        key=lambda x: _months_between(x[0], prior_end),
-                    )
-                    ytd_at[(best_start, prior_end)] = prior_ytd
-                    result[end_date] = best_value - prior_ytd
-                else:
-                    # No same-FY prior YTD; divide by quarters
-                    n_quarters = max(1, round(span / 3))
-                    result[end_date] = best_value / n_quarters
-            else:
-                # No prior quarter data at all (Q1 or annual-only filer)
-                n_quarters = max(1, round(span / 3))
-                result[end_date] = best_value / n_quarters
-
-    return result
+    """Extract quarterly values from duration concepts."""
+    return extract_companyfacts._extract_duration_series(
+        facts, concept_names, unit_key,
+    )
 
 
 def _extract_concept_series(
@@ -261,343 +151,27 @@ def _extract_concept_series(
     unit_key: str = "USD",
     instant_only: bool = True,
 ) -> dict[str, float]:
-    """Extract time-series for the best-matching concept from companyfacts.
-
-    Searches all taxonomies for exact concept name matches (case-insensitive).
-    Filters by unit_key and instant/duration.  Returns the concept variant
-    with the most data points as ``{end_date: value}``.
-    When tied on data points, prefers the shorter concept name.
-    """
-    if not facts:
-        return {}
-
-    all_facts = facts.get("facts", {})
-    best_series: dict[str, float] = {}
-    best_concept_name: str = ""
-
-    names_lower = {n.lower() for n in concept_names}
-
-    for _taxonomy, concepts in all_facts.items():
-        if not isinstance(concepts, dict):
-            continue
-        for concept_name, concept_data in concepts.items():
-            if concept_name.lower() not in names_lower:
-                continue
-
-            units = concept_data.get("units", {})
-            entries = units.get(unit_key, [])
-            if not entries:
-                continue
-
-            series: dict[str, float] = {}
-            for entry in entries:
-                end_date = entry.get("end")
-                start_date = entry.get("start")
-                val = entry.get("val")
-                if not end_date or val is None:
-                    continue
-                if instant_only and start_date:
-                    continue
-                if not instant_only and not start_date:
-                    continue
-                try:
-                    series[end_date] = float(val)
-                except (ValueError, TypeError):
-                    continue
-
-            if not series:
-                continue
-            # Pick by most data points; tiebreak by shorter concept name
-            if (len(series) > len(best_series)
-                    or (len(series) == len(best_series)
-                        and len(concept_name) < len(best_concept_name))):
-                best_series = series
-                best_concept_name = concept_name
-
-    return best_series
-
-
-# Concept definitions for BDC balance sheet
-_BALANCE_SHEET_CONCEPTS = {
-    "total_assets": {
-        "exact": ["Assets"],
-        "fallback": ["TotalAssets", "AssetsNet"],
-        "unit": "USD", "instant": True,
-    },
-    "total_liabilities": {
-        "exact": ["Liabilities"],
-        "fallback": ["TotalLiabilities"],
-        "unit": "USD", "instant": True,
-    },
-    "net_assets": {
-        "exact": ["StockholdersEquity", "NetAssetsOrNetAssets",
-                  "MembersCapital", "PartnersCapital"],
-        "fallback": [],
-        "unit": "USD", "instant": True,
-    },
-    "nav_per_share": {
-        "exact": ["NetAssetValuePerShare"],
-        "fallback": [],
-        "unit": "USD/shares", "instant": True,
-    },
-    "shares_outstanding": {
-        "exact": ["CommonStockSharesOutstanding",
-                  "EntityCommonStockSharesOutstanding"],
-        "fallback": [],
-        "unit": "shares", "instant": True,
-    },
-    "borrowings": {
-        "exact": ["LongTermDebt", "LineOfCredit",
-                  "DebtInstrumentCarryingAmount"],
-        "fallback": [],
-        "unit": "USD", "instant": True,
-    },
-    "investments_at_fair_value": {
-        "exact": ["InvestmentOwnedAtFairValue"],
-        "fallback": ["InvestmentsAtFairValueAggregate",
-                      "InvestmentsFairValueDisclosure"],
-        "unit": "USD", "instant": True,
-    },
-}
-
-
-# Distribution & dividend concepts (instant = per-share snapshots)
-_DISTRIBUTION_CONCEPTS = {
-    "distribution_per_share": {
-        "exact": ["InvestmentCompanyDistributionToShareholdersPerShare"],
-        "fallback": [],
-        "unit": "USD/shares", "instant": False,
-    },
-    "dividends_declared_per_share": {
-        "exact": ["CommonStockDividendsPerShareDeclared"],
-        "fallback": [],
-        "unit": "USD/shares", "instant": False,
-    },
-    "distribution_ordinary_income": {
-        "exact": ["InvestmentCompanyDistributionOrdinaryIncome"],
-        "fallback": [],
-        "unit": "USD", "instant": False,
-    },
-    "distribution_return_of_capital": {
-        "exact": ["InvestmentCompanyTaxReturnOfCapitalDistribution"],
-        "fallback": [],
-        "unit": "USD", "instant": False,
-    },
-}
-
-# Performance concepts (duration = period totals)
-_PERFORMANCE_CONCEPTS = {
-    "total_return_pct": {
-        "exact": ["InvestmentCompanyTotalReturn"],
-        "fallback": [],
-        "unit": "pure", "instant": False,
-    },
-    "gain_loss_per_share": {
-        "exact": ["InvestmentCompanyGainLossOnInvestmentPerShare"],
-        "fallback": [],
-        "unit": "USD/shares", "instant": False,
-    },
-    "nav_change_per_share": {
-        "exact": [
-            "InvestmentCompanyNetAssetValuePerSharePeriodIncreaseDecrease",
-        ],
-        "fallback": [],
-        "unit": "USD/shares", "instant": False,
-    },
-}
-
-# Income & yield concepts (duration)
-_INCOME_CONCEPTS = {
-    "income_per_share": {
-        "exact": ["InvestmentCompanyInvestmentIncomeLossPerShare"],
-        "fallback": [],
-        "unit": "USD/shares", "instant": False,
-    },
-    "income_yield_pct": {
-        "exact": ["InvestmentCompanyInvestmentIncomeLossRatio"],
-        "fallback": [],
-        "unit": "pure", "instant": False,
-    },
-    "gross_investment_income": {
-        "exact": ["GrossInvestmentIncomeOperating"],
-        "fallback": [],
-        "unit": "USD", "instant": False,
-    },
-}
-
-# Portfolio & risk concepts (mixed instant/duration)
-_PORTFOLIO_CONCEPTS = {
-    "portfolio_turnover": {
-        "exact": ["InvestmentCompanyPortfolioTurnover"],
-        "fallback": [],
-        "unit": "pure", "instant": False,
-    },
-    "asset_coverage_ratio": {
-        "exact": [
-            "InvestmentCompanySeniorSecurityIndebtednessAssetCoverageRatio",
-        ],
-        "fallback": [],
-        "unit": "pure", "instant": True,
-    },
-    "unfunded_commitments": {
-        "exact": ["InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount"],
-        "fallback": [],
-        "unit": "USD", "instant": True,
-    },
-    "unrealized_appreciation": {
-        "exact": ["TaxBasisOfInvestmentsGrossUnrealizedAppreciation"],
-        "fallback": [],
-        "unit": "USD", "instant": True,
-    },
-    "unrealized_depreciation": {
-        "exact": ["TaxBasisOfInvestmentsGrossUnrealizedDepreciation"],
-        "fallback": [],
-        "unit": "USD", "instant": True,
-    },
-    "debt_weighted_avg_rate": {
-        "exact": ["DebtWeightedAverageInterestRate"],
-        "fallback": [],
-        "unit": "pure", "instant": True,
-    },
-}
-
-# All extended concept groups (beyond balance sheet)
-_EXTENDED_CONCEPT_GROUPS = [
-    _DISTRIBUTION_CONCEPTS,
-    _PERFORMANCE_CONCEPTS,
-    _INCOME_CONCEPTS,
-    _PORTFOLIO_CONCEPTS,
-]
-
-# Fields that are in extended concept groups (used in extraction)
-_EXTENDED_FIELDS = sorted({
-    field
-    for group in _EXTENDED_CONCEPT_GROUPS
-    for field in group
-})
+    """Extract time-series for the best-matching companyfacts concept."""
+    return extract_companyfacts._extract_concept_series(
+        facts, concept_names, unit_key, instant_only,
+    )
 
 
 def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
-    """Extract balance-sheet + extended time series from one CIK's companyfacts."""
-    if not facts:
-        return []
-
-    # Extract each concept series (exact match first, then fallback)
-    concept_series: dict[str, dict[str, float]] = {}
-
-    # Balance sheet (instant)
-    for field, spec in _BALANCE_SHEET_CONCEPTS.items():
-        series = _extract_concept_series(
-            facts, spec["exact"], spec["unit"], spec["instant"],
-        )
-        if not series and spec.get("fallback"):
-            series = _extract_concept_series(
-                facts, spec["fallback"], spec["unit"], spec["instant"],
-            )
-        concept_series[field] = series
-
-    # Extended concepts (distributions, performance, income, portfolio)
-    for group in _EXTENDED_CONCEPT_GROUPS:
-        for field, spec in group.items():
-            if spec["instant"]:
-                series = _extract_concept_series(
-                    facts, spec["exact"], spec["unit"], True,
-                )
-                if not series and spec.get("fallback"):
-                    series = _extract_concept_series(
-                        facts, spec["fallback"], spec["unit"], True,
-                    )
-            else:
-                # Duration concepts: use YTD -> quarterly conversion
-                series = _extract_duration_series(
-                    facts, spec["exact"], spec["unit"],
-                )
-                if not series and spec.get("fallback"):
-                    series = _extract_duration_series(
-                        facts, spec["fallback"], spec["unit"],
-                    )
-            concept_series[field] = series
-
-    # Collect all end_dates
-    all_dates: set[str] = set()
-    for series in concept_series.values():
-        all_dates.update(series.keys())
-
-    if not all_dates:
-        return []
-
-    # Build rows
-    rows = []
-    cik_padded = str(cik).zfill(10)
-    for end_date in sorted(all_dates):
-        row: dict = {"cik": cik_padded, "report_date": end_date}
-        has_value = False
-        for field, series in concept_series.items():
-            val = series.get(end_date)
-            row[field] = val
-            if val is not None:
-                has_value = True
-        if has_value:
-            rows.append(row)
-
-    return rows
+    """Extract balance-sheet + extended time series from one CIK."""
+    return extract_companyfacts._extract_bdc_balance_sheet(cik, facts)
 
 
 def _extract_all_companyfacts(
     bdc_ciks: list[str],
     client: object | None = None,
 ) -> pd.DataFrame:
-    """Extract balance-sheet data for all BDC CIKs from companyfacts.
-
-    Reads from disk cache first. If a client is provided, missing CIKs are
-    fetched from the SEC companyfacts API and cached. If client is None this is
-    strictly cache-only and missing CIKs are skipped.
-    """
-    all_rows: list[dict] = []
-
-    # Identify CIKs needing fetch
-    uncached = []
-    for cik in bdc_ciks:
-        cik_padded = str(cik).zfill(10)
-        cache_path = COMPANYFACTS_CACHE_DIR / f"{cik_padded}.json"
-        if not cache_path.exists():
-            uncached.append(cik)
-
-    if uncached:
-        if client is None:
-            logger.info(
-                "Companyfacts: %d/%d BDC CIKs uncached; skipping because client=None cache-only mode",
-                len(uncached), len(bdc_ciks),
-            )
-        else:
-            from pipeline.validate_html_template import _fetch_companyfacts
-
-            logger.info(
-                "Companyfacts: %d/%d BDC CIKs uncached, fetching from SEC...",
-                len(uncached), len(bdc_ciks),
-            )
-            for i, cik in enumerate(uncached, 1):
-                _fetch_companyfacts(cik, client)
-                if i % 50 == 0:
-                    logger.info("  Fetched %d/%d...", i, len(uncached))
-            logger.info("Companyfacts: fetched %d new CIKs from SEC", len(uncached))
-
-    # Now read everything from cache
-    for cik in bdc_ciks:
-        facts = _load_companyfacts_cached(cik)
-        if not facts:
-            continue
-        rows = _extract_bdc_balance_sheet(cik, facts)
-        all_rows.extend(rows)
-
-    if not all_rows:
-        return pd.DataFrame(columns=[
-            "cik", "report_date", "total_assets", "total_liabilities",
-            "net_assets", "nav_per_share", "shares_outstanding", "borrowings",
-            "investments_at_fair_value",
-        ] + _EXTENDED_FIELDS)
-
-    return pd.DataFrame(all_rows)
+    """Extract balance-sheet data for all BDC CIKs from companyfacts."""
+    return extract_companyfacts._extract_all_companyfacts(
+        bdc_ciks,
+        client=client,
+        companyfacts_cache_dir=COMPANYFACTS_CACHE_DIR,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1083,410 +657,34 @@ def _prepare_nport(
 
 
 # ---------------------------------------------------------------------------
-# B2. N-CEN financial data extraction
+# B2. N-CEN extraction compatibility wrappers
 # ---------------------------------------------------------------------------
 
-_NCEN_DATE_MONTHS = {
-    "JAN": "01", "FEB": "02", "MAR": "03", "APR": "04",
-    "MAY": "05", "JUN": "06", "JUL": "07", "AUG": "08",
-    "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12",
-}
+_NCEN_DATE_MONTHS = extract_ncen._NCEN_DATE_MONTHS
 
 
 def _parse_ncen_date(raw: str) -> str | None:
     """Convert N-CEN date '31-JUL-2025' to ISO '2025-07-31'."""
-    if not raw or not isinstance(raw, str):
-        return None
-    parts = raw.strip().split("-")
-    if len(parts) != 3:
-        return None
-    day, mon, year = parts
-    month_num = _NCEN_DATE_MONTHS.get(mon.upper())
-    if not month_num:
-        return None
-    return f"{year}-{month_num}-{day.zfill(2)}"
+    return extract_ncen._parse_ncen_date(raw)
 
 
 def _parse_ncen_financials(universe_ciks: set[str]) -> pd.DataFrame:
-    """Extract financial fields from cached N-CEN ZIPs for universe CIKs.
-
-    N-CEN is filed annually by investment companies. FUND_REPORTED_INFO
-    contains management fee (%), expense ratio (%), NAV per share, etc.
-    Only N-2 registrants (closed-end funds) are extracted.
-
-    Parameters
-    ----------
-    universe_ciks : set of str
-        CIKs (10-digit padded) to include.
-
-    Returns
-    -------
-    DataFrame with columns: cik, entity_name, report_date, report_quarter,
-        management_fee_pct, expense_ratio_pct, nav_per_share,
-        market_price_per_share, monthly_avg_net_assets.
-    """
-    empty_cols = [
-        "cik", "entity_name", "report_date", "report_quarter",
-        "management_fee_pct", "expense_ratio_pct", "nav_per_share",
-        "market_price_per_share", "monthly_avg_net_assets",
-        "is_debt_default", "is_dividend_arrears",
-        "is_fund_of_fund", "is_non_diversified",
-    ]
-    if not universe_ciks:
-        return pd.DataFrame(columns=empty_cols)
-
-    all_rows: list[dict] = []
-
-    for quarter in NCEN_QUARTERS:
-        year, q = quarter[:4], quarter[5:]
-        zip_path = SEC_DATASETS_DIR / f"{year}q{q}_ncen.zip"
-        if not zip_path.exists():
-            continue
-
-        try:
-            with zipfile.ZipFile(zip_path) as zf:
-                names = zf.namelist()
-                if ("FUND_REPORTED_INFO.tsv" not in names
-                        or "SUBMISSION.tsv" not in names):
-                    continue
-
-                def _read_tsv(filename: str) -> pd.DataFrame:
-                    with zf.open(filename) as fh:
-                        return pd.read_csv(
-                            fh, sep="\t", dtype=str, on_bad_lines="skip",
-                        )
-
-                fri = _read_tsv("FUND_REPORTED_INFO.tsv")
-                sub = _read_tsv("SUBMISSION.tsv")
-
-                reg = None
-                if "REGISTRANT.tsv" in names:
-                    reg = _read_tsv("REGISTRANT.tsv")
-
-                # Join FRI -> SUBMISSION for CIK + report date
-                if "ACCESSION_NUMBER" not in fri.columns:
-                    continue
-                merged = fri.merge(
-                    sub[["ACCESSION_NUMBER", "CIK", "REPORT_ENDING_PERIOD"]],
-                    on="ACCESSION_NUMBER", how="left",
-                )
-
-                # Join -> REGISTRANT for name + company type filter
-                if (reg is not None
-                        and "INVESTMENT_COMPANY_TYPE" in reg.columns):
-                    reg_cols = ["ACCESSION_NUMBER", "REGISTRANT_NAME",
-                                "INVESTMENT_COMPANY_TYPE"]
-                    reg_cols = [c for c in reg_cols if c in reg.columns]
-                    merged = merged.merge(
-                        reg[reg_cols], on="ACCESSION_NUMBER", how="left",
-                    )
-                else:
-                    continue  # Can't filter to N-2 without company type
-
-                # Filter to N-2 registrants
-                if "INVESTMENT_COMPANY_TYPE" not in merged.columns:
-                    continue
-                merged = merged[
-                    merged["INVESTMENT_COMPANY_TYPE"] == "N-2"
-                ]
-
-                if merged.empty:
-                    continue
-
-                # Filter to universe CIKs
-                merged["cik_padded"] = (
-                    merged["CIK"].str.strip().str.zfill(10)
-                )
-                merged = merged[merged["cik_padded"].isin(universe_ciks)]
-
-                if merged.empty:
-                    continue
-
-                for _, row in merged.iterrows():
-                    report_date = _parse_ncen_date(
-                        row.get("REPORT_ENDING_PERIOD", ""),
-                    )
-                    if not report_date:
-                        continue
-
-                    cik = row["cik_padded"]
-                    entity_name = str(
-                        row.get("REGISTRANT_NAME", "")
-                    ).strip()
-
-                    # Parse date to derive quarter
-                    try:
-                        month = int(report_date.split("-")[1])
-                        year_str = report_date.split("-")[0]
-                        q_num = (month - 1) // 3 + 1
-                        report_quarter = f"{year_str}q{q_num}"
-                    except (ValueError, IndexError):
-                        continue
-
-                    def _to_float(val):
-                        if val is None or str(val).strip() in ("", "nan"):
-                            return None
-                        try:
-                            return float(val)
-                        except (ValueError, TypeError):
-                            return None
-
-                    all_rows.append({
-                        "cik": cik,
-                        "entity_name": entity_name,
-                        "report_date": report_date,
-                        "report_quarter": report_quarter,
-                        "management_fee_pct": _to_float(
-                            row.get("MANAGEMENT_FEE"),
-                        ),
-                        "expense_ratio_pct": _to_float(
-                            row.get("NET_OPERATING_EXPENSES"),
-                        ),
-                        "nav_per_share": _to_float(
-                            row.get("NAV_PER_SHARE"),
-                        ),
-                        "market_price_per_share": _to_float(
-                            row.get("MARKET_PRICE_PER_SHARE"),
-                        ),
-                        "monthly_avg_net_assets": _to_float(
-                            row.get("MONTHLY_AVG_NET_ASSETS"),
-                        ),
-                        "is_debt_default": (
-                            str(row.get("IS_LONG_TERM_DEBT_DEFAULT", ""))
-                            .strip().upper() == "Y"
-                        ),
-                        "is_dividend_arrears": (
-                            str(row.get(
-                                "IS_ACCUM_DIVIDEND_IN_ARREARS", ""))
-                            .strip().upper() == "Y"
-                        ),
-                        "is_fund_of_fund": (
-                            str(row.get("IS_FUND_OF_FUND", ""))
-                            .strip().upper() == "Y"
-                        ),
-                        "is_non_diversified": (
-                            str(row.get("IS_NON_DIVERSIFIED", ""))
-                            .strip().upper() == "Y"
-                        ),
-                    })
-        except (zipfile.BadZipFile, OSError) as exc:
-            logger.warning("Failed to read %s: %s", zip_path.name, exc)
-            continue
-
-    if not all_rows:
-        return pd.DataFrame(columns=empty_cols)
-
-    df = pd.DataFrame(all_rows)
-
-    # Dedup by (cik, report_date), keep first occurrence
-    df = df.drop_duplicates(subset=["cik", "report_date"], keep="first")
-
-    # ----- Guard rails for N-CEN data quality -----
-    # 1. Negative management_fee_pct -> 0 (fee waivers)
-    neg_fee = (df["management_fee_pct"] < 0).sum()
-    if neg_fee:
-        logger.info("N-CEN: clamped %d negative management_fee_pct to 0", neg_fee)
-        df.loc[df["management_fee_pct"] < 0, "management_fee_pct"] = 0.0
-
-    # 2. Expense ratio > 20% -> NULL (dollar value filed as pct, or stub)
-    high_exp = (df["expense_ratio_pct"] > 20).sum()
-    if high_exp:
-        logger.info("N-CEN: nulled %d expense_ratio_pct > 20%%", high_exp)
-        df.loc[df["expense_ratio_pct"] > 20, "expense_ratio_pct"] = None
-
-    # 3. Zero NAV per share -> NULL (not yet launched or error)
-    zero_nav = (df["nav_per_share"] == 0).sum()
-    if zero_nav:
-        logger.info("N-CEN: nulled %d zero nav_per_share", zero_nav)
-        df.loc[df["nav_per_share"] == 0, "nav_per_share"] = None
-
-    # 4. Zero market_price_per_share -> NULL (non-listed funds)
-    zero_mkt = (df["market_price_per_share"] == 0).sum()
-    if zero_mkt:
-        logger.info(
-            "N-CEN: nulled %d zero market_price_per_share", zero_mkt,
-        )
-        df.loc[df["market_price_per_share"] == 0,
-               "market_price_per_share"] = None
-
-    return df
-
-
-# ---------------------------------------------------------------------------
-# B2b. N-CEN identity extraction (adviser, ticker)
-# ---------------------------------------------------------------------------
-
-_IDENTITY_COLUMNS = [
-    "cik", "entity_name", "adviser_name", "adviser_crd_number",
-    "ticker", "class_name",
-]
+    """Extract financial fields from cached N-CEN ZIPs for universe CIKs."""
+    return extract_ncen._parse_ncen_financials(
+        universe_ciks,
+        sec_datasets_dir=SEC_DATASETS_DIR,
+        ncen_quarters=NCEN_QUARTERS,
+    )
 
 
 def _parse_ncen_identity(universe_ciks: set[str]) -> pd.DataFrame:
-    """Extract fund identity from N-CEN ADVISER and SHARES_OUTSTANDING tables.
-
-    Returns one row per CIK with the latest available identity fields.
-    Saved to ``fund_identity.csv``.
-
-    Parameters
-    ----------
-    universe_ciks : set of str
-        CIKs (10-digit padded) to include.
-
-    Returns
-    -------
-    DataFrame with columns: cik, entity_name, adviser_name,
-        adviser_crd_number, ticker, class_name.
-    """
-    if not universe_ciks:
-        return pd.DataFrame(columns=_IDENTITY_COLUMNS)
-
-    all_rows: list[dict] = []
-
-    for quarter in NCEN_QUARTERS:
-        year, q = quarter[:4], quarter[5:]
-        zip_path = SEC_DATASETS_DIR / f"{year}q{q}_ncen.zip"
-        if not zip_path.exists():
-            continue
-
-        try:
-            with zipfile.ZipFile(zip_path) as zf:
-                names = zf.namelist()
-                if "SUBMISSION.tsv" not in names:
-                    continue
-
-                def _read_tsv(filename: str) -> pd.DataFrame:
-                    with zf.open(filename) as fh:
-                        return pd.read_csv(
-                            fh, sep="\t", dtype=str, on_bad_lines="skip",
-                        )
-
-                sub = _read_tsv("SUBMISSION.tsv")
-
-                reg = None
-                if "REGISTRANT.tsv" in names:
-                    reg = _read_tsv("REGISTRANT.tsv")
-
-                if reg is None or "INVESTMENT_COMPANY_TYPE" not in reg.columns:
-                    continue
-
-                # Filter to N-2 registrants in universe
-                merged_sub = sub[["ACCESSION_NUMBER", "CIK"]].copy()
-                merged_sub["cik_padded"] = (
-                    merged_sub["CIK"].str.strip().str.zfill(10)
-                )
-                merged_sub = merged_sub[
-                    merged_sub["cik_padded"].isin(universe_ciks)
-                ]
-                if merged_sub.empty:
-                    continue
-
-                acc_set = set(merged_sub["ACCESSION_NUMBER"].unique())
-
-                # N-2 filter
-                reg_n2 = reg[reg["INVESTMENT_COMPANY_TYPE"] == "N-2"]
-                n2_accs = set(reg_n2["ACCESSION_NUMBER"].unique())
-                acc_set = acc_set & n2_accs
-                if not acc_set:
-                    continue
-
-                # ADVISER table (joins via FUND_ID which embeds
-                # accession number as first component)
-                adviser_name = {}
-                adviser_crd = {}
-                if "ADVISER.tsv" in names:
-                    adv = _read_tsv("ADVISER.tsv")
-                    if not adv.empty and "FUND_ID" in adv.columns:
-                        # Extract accession from FUND_ID
-                        adv["_acc"] = (
-                            adv["FUND_ID"]
-                            .str.split("_")
-                            .str[0]
-                        )
-                        adv = adv[adv["_acc"].isin(acc_set)]
-                        for _, row in adv.iterrows():
-                            acc = row.get("_acc", "")
-                            name = str(
-                                row.get("ADVISER_NAME", ""),
-                            ).strip()
-                            crd = str(
-                                row.get("CRD_NUM", ""),
-                            ).strip()
-                            if acc and name and name != "nan":
-                                adviser_name[acc] = name
-                            if acc and crd and crd != "nan":
-                                adviser_crd[acc] = crd
-
-                # SHARES_OUTSTANDING table (has TICKER,
-                # joins via FUND_ID)
-                ticker_map = {}
-                class_map = {}
-                if "SHARES_OUTSTANDING.tsv" in names:
-                    so = _read_tsv("SHARES_OUTSTANDING.tsv")
-                    if not so.empty and "FUND_ID" in so.columns:
-                        so["_acc"] = (
-                            so["FUND_ID"]
-                            .str.split("_")
-                            .str[0]
-                        )
-                        so = so[so["_acc"].isin(acc_set)]
-                        for _, row in so.iterrows():
-                            acc = row.get("_acc", "")
-                            tkr = str(row.get("TICKER", "")).strip()
-                            cls = str(
-                                row.get("CLASS_NAME", ""),
-                            ).strip()
-                            if acc and tkr and tkr != "nan":
-                                ticker_map[acc] = tkr
-                            if acc and cls and cls != "nan":
-                                class_map[acc] = cls
-
-                # Registrant name
-                reg_name_map = {}
-                if "REGISTRANT_NAME" in reg.columns:
-                    for _, row in reg_n2.iterrows():
-                        acc = row.get("ACCESSION_NUMBER", "")
-                        if acc in acc_set:
-                            rname = str(
-                                row.get("REGISTRANT_NAME", ""),
-                            ).strip()
-                            if rname:
-                                reg_name_map[acc] = rname
-
-                # Build identity rows by CIK
-                for _, srow in merged_sub.iterrows():
-                    acc = srow["ACCESSION_NUMBER"]
-                    if acc not in acc_set:
-                        continue
-                    cik = srow["cik_padded"]
-                    all_rows.append({
-                        "cik": cik,
-                        "entity_name": reg_name_map.get(acc, ""),
-                        "adviser_name": adviser_name.get(acc, ""),
-                        "adviser_crd_number": adviser_crd.get(acc, ""),
-                        "ticker": ticker_map.get(acc, ""),
-                        "class_name": class_map.get(acc, ""),
-                    })
-
-        except (zipfile.BadZipFile, OSError) as exc:
-            logger.warning("N-CEN identity: failed %s: %s",
-                           zip_path.name, exc)
-            continue
-
-    if not all_rows:
-        return pd.DataFrame(columns=_IDENTITY_COLUMNS)
-
-    df = pd.DataFrame(all_rows)
-
-    # Keep latest per CIK (later quarters override earlier)
-    df = df.drop_duplicates(subset=["cik"], keep="last")
-
-    # Save to disk
-    df.to_csv(FUND_IDENTITY_FILE, index=False)
-    logger.info("Fund identity: %d CIKs saved to %s",
-                len(df), FUND_IDENTITY_FILE.name)
-
-    return df
+    """Extract fund identity from cached N-CEN datasets."""
+    return extract_ncen._parse_ncen_identity(
+        universe_ciks,
+        sec_datasets_dir=SEC_DATASETS_DIR,
+        ncen_quarters=NCEN_QUARTERS,
+        fund_identity_file=FUND_IDENTITY_FILE,
+    )
 
 
 # ---------------------------------------------------------------------------

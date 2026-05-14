@@ -28,6 +28,28 @@ from pipeline.validate_holdings import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _redirect_validate_holdings_outputs(monkeypatch, tmp_path):
+    output_files = {
+        "HOLDINGS_VALIDATION_REPORT_FILE": "holdings_validation_report.csv",
+        "HOLDINGS_SPOT_CHECK_FILE": "holdings_spot_check.csv",
+        "HOLDINGS_COVERAGE_FILE": "holdings_coverage.csv",
+        "HOLDINGS_CROSS_SOURCE_FILE": "holdings_cross_source.csv",
+        "HOLDINGS_TOTAL_ASSETS_FILE": "holdings_total_assets.csv",
+        "CLASSIFICATION_VALIDATION_FILE": "classification_validation.csv",
+        "HOLDINGS_GAV_RECONCILIATION_FILE": "holdings_gav_reconciliation.csv",
+        "HOLDINGS_PCT_SUM_FILE": "holdings_pct_sum.csv",
+        "HOLDINGS_COUNT_STABILITY_FILE": "holdings_count_stability.csv",
+        "HOLDINGS_INCOME_YIELD_FILE": "holdings_income_yield.csv",
+        "ROW_VALIDATION_ISSUES_FILE": "row_validation_issues.csv",
+        "COLUMN_QUALITY_METRICS_FILE": "column_quality_metrics.csv",
+        "DATA_QUALITY_METRICS_FILE": "data_quality_metrics.csv",
+        "FEE_UPLIFT_FILE": "fee_uplift.csv",
+    }
+    for name, filename in output_files.items():
+        monkeypatch.setattr(f"pipeline.validate_holdings.{name}", tmp_path / filename)
+
+
 def _make_unified_df(rows):
     """Helper to create a minimal unified DataFrame."""
     from pipeline.unified_holdings import UNIFIED_COLUMNS

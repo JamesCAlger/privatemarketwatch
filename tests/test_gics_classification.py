@@ -26,6 +26,18 @@ from pipeline.gics_classification import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _redirect_gics_outputs(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.gics_classification.COMPANY_GICS_CACHE_FILE",
+        tmp_path / "company_gics_cache.csv",
+    )
+    monkeypatch.setattr(
+        "pipeline.gics_classification.UNIFIED_HOLDINGS_FILE",
+        tmp_path / "private_markets_holdings.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # TestNormalizeCompanyName
 # ---------------------------------------------------------------------------

@@ -25,6 +25,18 @@ from pipeline.index_returns import (
 from pipeline.position_matching import MATCH_COLUMNS
 
 
+@pytest.fixture(autouse=True)
+def _redirect_index_return_outputs(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.index_returns.POSITION_RETURNS_FILE",
+        tmp_path / "position_returns.csv",
+    )
+    monkeypatch.setattr(
+        "pipeline.index_returns.INDEX_RETURNS_FILE",
+        tmp_path / "index_returns.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Helper
 # ---------------------------------------------------------------------------

@@ -23,6 +23,22 @@ from pipeline.fund_financials import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _redirect_fund_financials_outputs(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.fund_financials.FUND_FINANCIALS_FILE",
+        tmp_path / "fund_financials.csv",
+    )
+    monkeypatch.setattr(
+        "pipeline.fund_financials.BDC_FUND_INCOME_FILE",
+        tmp_path / "bdc_fund_income.csv",
+    )
+    monkeypatch.setattr(
+        "pipeline.fund_financials.FUND_IDENTITY_FILE",
+        tmp_path / "fund_identity.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Helpers -- mock companyfacts JSON
 # ---------------------------------------------------------------------------

@@ -30,6 +30,14 @@ from pipeline.bdc_sector_breakdown import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _redirect_bdc_sector_breakdown_output(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "pipeline.bdc_sector_breakdown.BDC_SECTOR_BREAKDOWN_FILE",
+        tmp_path / "bdc_sector_breakdown.csv",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Helper: minimal XBRL XML builder
 # ---------------------------------------------------------------------------
