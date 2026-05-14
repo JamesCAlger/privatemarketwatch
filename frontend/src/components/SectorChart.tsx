@@ -28,9 +28,9 @@ export default function SectorChart({ data, color }: SectorChartProps) {
               {formatPercent(row.pctOfIndex)} ({formatNumber(row.positionCount)} constituent holdings)
             </span>
           </div>
-          <div className="h-2 bg-surface-muted rounded-full overflow-hidden">
+          <div className="h-2 bg-surface-muted overflow-hidden">
             <div
-              className="h-full rounded-full transition-all"
+              className="h-full transition-all"
               style={{
                 width: `${(row.pctOfIndex / maxPct) * 100}%`,
                 backgroundColor: color,

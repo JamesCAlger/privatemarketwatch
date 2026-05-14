@@ -6,4 +6,5 @@ rapidfuzz>=3.0
 duckdb>=0.9
 openai>=1.0
 python-dotenv>=1.0
+jsonschema>=4.24
 psycopg2-binary>=2.9

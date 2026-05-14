@@ -62,12 +62,12 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
                 {pathname.startsWith('/indices') && (
-                  <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal rounded-full" />
+                  <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal" />
                 )}
               </Link>
               {indicesOpen && (
                 <div className="absolute top-full left-0 pt-0.5">
-                  <div className="bg-white border border-surface-muted rounded-lg shadow-panel py-1.5 min-w-[240px]">
+                  <div className="bg-white border border-surface-muted shadow-panel py-1.5 min-w-[240px]">
                     {INDICES.map((idx) => (
                       <Link
                         key={idx.slug}
@@ -87,6 +87,9 @@ export default function Header() {
             </NavLink>
             <NavLink href="/about" current={pathname}>
               About
+            </NavLink>
+            <NavLink href="/data-quality" current={pathname}>
+              Data Quality
             </NavLink>
           </nav>
 
@@ -119,7 +122,7 @@ export default function Header() {
           <nav className="md:hidden pb-4 border-t border-white/10 pt-3 space-y-1">
             <Link
               href="/"
-              className="block px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors font-medium"
+              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors font-medium"
               onClick={() => setMenuOpen(false)}
             >
               Fund Universe
@@ -129,7 +132,7 @@ export default function Header() {
               <Link
                 key={idx.slug}
                 href={`/indices/${idx.slug}`}
-                className="flex items-center gap-2.5 px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors"
+                className="flex items-center gap-2.5 px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 <span
@@ -141,17 +144,24 @@ export default function Header() {
             ))}
             <Link
               href="/methodology"
-              className="block px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors"
+              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               Methodology
             </Link>
             <Link
               href="/about"
-              className="block px-2 py-2 text-sm text-white/80 hover:text-teal rounded-md hover:bg-white/5 transition-colors"
+              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               About
+            </Link>
+            <Link
+              href="/data-quality"
+              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              Data Quality
             </Link>
             <div className="pt-2 px-2 text-xs text-white/30">
               As of Q4 2025
@@ -184,7 +194,7 @@ function NavLink({
     >
       {children}
       {isActive && (
-        <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal rounded-full" />
+        <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal" />
       )}
     </Link>
   );

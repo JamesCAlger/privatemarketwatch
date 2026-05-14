@@ -7,6 +7,7 @@ from pipeline.fund_financials import (
     OUTPUT_COLUMNS,
     _EXTENDED_FIELDS,
     _enforce_schema,
+    _extract_all_companyfacts,
     _extract_bdc_balance_sheet,
     _extract_concept_series,
     _extract_duration_series,
@@ -52,6 +53,21 @@ def _make_facts_multi_unit(concept_name: str, unit_key: str,
             },
         },
     }
+
+
+def test_extract_all_companyfacts_client_none_is_cache_only(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        "pipeline.fund_financials.COMPANYFACTS_CACHE_DIR",
+        tmp_path / "companyfacts_cache",
+    )
+    monkeypatch.setattr(
+        "pipeline.validate_html_template._fetch_companyfacts",
+        lambda *args, **kwargs: pytest.fail("client=None must not fetch companyfacts"),
+    )
+
+    result = _extract_all_companyfacts(["123"], client=None)
+
+    assert result.empty
 
 
 # ===================================================================

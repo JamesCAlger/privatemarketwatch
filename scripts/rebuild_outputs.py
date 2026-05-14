@@ -16,6 +16,11 @@ import argparse
 import logging
 import sys
 import time
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 logging.basicConfig(
     level=logging.INFO,
@@ -96,25 +101,41 @@ def rebuild_ncsr():
     return df
 
 
-def rebuild_financials():
+def rebuild_financials(
+    refresh_ncsr: bool = False,
+    include_sector_breakdown: bool = False,
+):
     """Rebuild fund financials from cached companyfacts + N-PORT fund info."""
     from pipeline.fund_financials import build_fund_financials
+    from pipeline.config import NCSR_FINANCIALS_FILE
 
-    # Rebuild N-CSR first so it's available for fund_financials
-    rebuild_ncsr()
+    # Full N-CSR HTML parsing is intentionally opt-in; it is serial over
+    # thousands of cached filings and can take over an hour on Windows.
+    if refresh_ncsr or not NCSR_FINANCIALS_FILE.exists():
+        rebuild_ncsr()
+    else:
+        logger.info(
+            "=== Reusing cached N-CSR financials (%s); pass --refresh-ncsr to reparse HTML ===",
+            NCSR_FINANCIALS_FILE,
+        )
 
     logger.info("=== Rebuilding fund financials ===")
     t0 = time.time()
     df = build_fund_financials()  # No client = cache-only, no downloads
     logger.info("Fund financials: %d rows in %.1f s", len(df), time.time() - t0)
 
-    from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+    if include_sector_breakdown:
+        from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
 
-    logger.info("=== Rebuilding BDC sector breakdown ===")
-    t1 = time.time()
-    sector_df = extract_bdc_sector_breakdown()
-    logger.info("Sector breakdown: %d rows in %.1f s",
-                len(sector_df), time.time() - t1)
+        logger.info("=== Rebuilding BDC sector breakdown ===")
+        t1 = time.time()
+        sector_df = extract_bdc_sector_breakdown()
+        logger.info("Sector breakdown: %d rows in %.1f s",
+                    len(sector_df), time.time() - t1)
+    else:
+        logger.info(
+            "=== Skipping BDC sector breakdown; pass --sector-breakdown to rebuild it ==="
+        )
 
     return df
 
@@ -168,6 +189,10 @@ def main():
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
                         help="Rebuild fund financials only (cache-only)")
+    parser.add_argument("--refresh-ncsr", action="store_true",
+                        help="With --financials/all, reparse cached N-CSR HTML before rebuilding fund financials")
+    parser.add_argument("--sector-breakdown", action="store_true",
+                        help="With --financials/all, rebuild BDC sector breakdown")
     parser.add_argument("--gics", action="store_true",
                         help="Run GICS industry classification only")
     parser.add_argument("--frontend", action="store_true",
@@ -189,7 +214,10 @@ def main():
         rebuild_income()
 
     if rebuild_all or args.financials:
-        rebuild_financials()
+        rebuild_financials(
+            refresh_ncsr=args.refresh_ncsr,
+            include_sector_breakdown=args.sector_breakdown,
+        )
 
     if rebuild_all or args.returns:
         rebuild_returns()

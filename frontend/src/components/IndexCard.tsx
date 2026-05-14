@@ -28,7 +28,7 @@ export default function IndexCard({
   return (
     <Link
       href={`/indices/${slug}`}
-      className="block bg-white rounded-lg shadow-card hover:shadow-card-hover transition-all overflow-hidden"
+      className="block bg-white shadow-card hover:shadow-card-hover transition-all overflow-hidden"
     >
       <div className="flex">
         {/* Left accent border */}

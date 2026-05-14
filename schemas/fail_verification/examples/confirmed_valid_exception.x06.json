@@ -1,5 +1,6 @@
 {
   "schema_version": "1.0",
+  "dataset": "private_markets_holdings",
   "verification_id": "X06_0000000001_2025-03-31_example000002",
   "bundle_id": "X06_0000000001_2025-03-31_example000002",
   "bundle_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -48,6 +49,24 @@
     "why_this_verdict": "Raw source and unified rows agree, and instrument wording indicates a revolver.",
     "why_not_alternative": "A scale mismatch is less likely because peer rows in the filing have normal ratios.",
     "residual_uncertainty": "The commitment wording is inferred from the source identifier."
+  },
+  "evidence_inventory": [
+    {
+      "evidence_id": "holdings_row",
+      "reviewed": true,
+      "classification": "VALID_EXCEPTION",
+      "assessment": "Shows the flagged principal/FV ratio."
+    },
+    {
+      "evidence_id": "raw_source_rows",
+      "reviewed": true,
+      "classification": "VALID_EXCEPTION",
+      "assessment": "Shows source values and wording supporting the exception."
+    }
+  ],
+  "already_present_evidence_assessment": {
+    "required_for_insufficient": false,
+    "assessment": []
   },
   "evidence_refs": [
     { "evidence_id": "holdings_row", "supports": "Shows the flagged principal/FV ratio." },

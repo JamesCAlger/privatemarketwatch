@@ -45,7 +45,7 @@ function CustomTooltip(props: {
   const { active, payload, label, seriesMap } = props;
   if (!active || !payload || payload.length === 0) return null;
   return (
-    <div className="bg-navy rounded-lg px-3 py-2 shadow-panel text-xs">
+    <div className="bg-navy px-3 py-2 shadow-panel text-xs">
       <p className="text-white/60 mb-1">{formatQuarter(label)}</p>
       {payload.map((entry) => (
         <div key={entry.dataKey} className="flex items-center gap-2 text-white">
@@ -118,7 +118,7 @@ export default function TimeSeriesChart({
 
   if (allData.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 border border-surface-muted rounded-lg bg-surface text-muted text-sm">
+      <div className="flex items-center justify-center h-64 border border-surface-muted bg-surface text-muted text-sm">
         No data available yet. Run the pipeline with --returns to generate index data.
       </div>
     );
@@ -133,7 +133,7 @@ export default function TimeSeriesChart({
             <button
               key={p.key}
               onClick={() => setPeriod(p.key)}
-              className={`text-xs px-3 py-1.5 rounded-md transition-colors ${
+              className={`text-xs px-3 py-1.5 transition-colors ${
                 period === p.key
                   ? 'bg-navy text-white font-medium'
                   : 'text-muted hover:text-navy hover:bg-surface'
@@ -148,7 +148,7 @@ export default function TimeSeriesChart({
             <button
               key={s.key}
               onClick={() => toggleSeries(s.key)}
-              className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border transition-all ${
+              className={`flex items-center gap-1.5 text-xs px-2.5 py-1 border transition-all ${
                 visible.has(s.key)
                   ? 'border-current opacity-100'
                   : 'border-surface-muted opacity-40'

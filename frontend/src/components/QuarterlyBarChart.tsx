@@ -30,7 +30,7 @@ function CustomTooltip(props: {
   if (!active || !payload || payload.length === 0) return null;
   const value = payload[0]?.value;
   return (
-    <div className="bg-navy rounded-lg px-3 py-2 shadow-panel text-xs">
+    <div className="bg-navy px-3 py-2 shadow-panel text-xs">
       <p className="text-white/60 mb-1">{formatQuarter(label)}</p>
       <p className="text-white font-medium tabular-nums">{formatPercent(value, 2)}</p>
     </div>
@@ -46,7 +46,7 @@ export default function QuarterlyBarChart({
 
   if (data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-48 border border-surface-muted rounded-lg bg-surface text-muted text-sm">
+      <div className="flex items-center justify-center h-48 border border-surface-muted bg-surface text-muted text-sm">
         No quarterly return data available
       </div>
     );
@@ -73,7 +73,7 @@ export default function QuarterlyBarChart({
               content={<CustomTooltip />}
               cursor={{ fill: 'rgba(15, 27, 45, 0.04)' }}
             />
-            <Bar dataKey="return" radius={[3, 3, 0, 0]} animationDuration={1000} animationEasing="ease-out">
+            <Bar dataKey="return" radius={0} animationDuration={1000} animationEasing="ease-out">
               {data.map((d, i) => (
                 <Cell
                   key={i}

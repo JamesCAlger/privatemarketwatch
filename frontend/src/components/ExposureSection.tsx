@@ -4,10 +4,11 @@ import type { FundExposure } from '@/lib/types';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatPercent } from '@/lib/format';
 
-const ASSET_CLASS_COLORS = ['#2A9D8F', '#E76F51', '#7C3AED', '#64748B', '#D97706', '#16A34A', '#94A3B8'];
-const EXPOSURE_TYPE_COLORS = ['#1E3A5F', '#2A9D8F', '#94A3B8'];
-const LIEN_COLORS = ['#1A5F56', '#3DB0A3', '#B8ECE7'];
-const RATE_COLORS = ['#2A9D8F', '#E9A820'];
+// Monochromatic teal ramp — matches indices concentration charts
+const ASSET_CLASS_COLORS = ['#1A5F56', '#1F7268', '#2A9D8F', '#3DB0A3', '#7ACEC5', '#99DDD6', '#D6F5F2'];
+const EXPOSURE_TYPE_COLORS = ['#1A5F56', '#2A9D8F', '#99DDD6'];
+const LIEN_COLORS = ['#1A5F56', '#2A9D8F', '#99DDD6'];
+const RATE_COLORS = ['#1A5F56', '#5BBFB4'];
 
 interface ExposureSectionProps {
   exposure: FundExposure;
@@ -34,7 +35,7 @@ function MiniDonut({
   if (filtered.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-card">
+    <div className="bg-white p-4 shadow-card">
       <p className="text-sm font-medium text-navy mb-2 text-center">{title}</p>
       <ResponsiveContainer width="100%" height={180}>
         <PieChart>
@@ -60,7 +61,7 @@ function MiniDonut({
               if (!active || !payload?.length) return null;
               const d = payload[0].payload;
               return (
-                <div className="bg-white rounded-lg shadow-panel px-3 py-2 text-xs border border-surface-muted">
+                <div className="bg-white shadow-panel px-4 py-3 text-sm border border-surface-muted">
                   <p className="font-semibold text-navy">{d.name}</p>
                   <p className="text-muted">{formatPercent(d.value)}</p>
                 </div>
@@ -73,7 +74,7 @@ function MiniDonut({
         {filtered.map((d) => (
           <span key={d.name} className="flex items-center gap-1">
             <span
-              className="inline-block w-2 h-2 rounded-sm"
+              className="inline-block w-2 h-2"
               style={{ backgroundColor: d.color }}
             />
             <span className="text-navy">{d.name}</span>
@@ -146,7 +147,7 @@ export default function ExposureSection({ exposure }: ExposureSectionProps) {
     <div className={`grid ${gridCols} gap-5`}>
       <MiniDonut
         data={assetClassData}
-        colors={acSplit ? ASSET_CLASS_COLORS : ['#2A9D8F', '#E76F51', '#7C3AED', '#94A3B8']}
+        colors={acSplit ? ASSET_CLASS_COLORS : ['#1A5F56', '#2A9D8F', '#5BBFB4', '#99DDD6']}
         title={acSplit ? 'Asset Class' : 'Asset Type'}
       />
       {showExposureType && (

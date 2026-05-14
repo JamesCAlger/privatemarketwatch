@@ -257,6 +257,185 @@ export interface FundSeriesEntry {
   [key: string]: string | number | null | undefined;
 }
 
+/** Data quality dashboard */
+export interface GavHistogramBucket {
+  bucket: string;
+  count: number;
+}
+export interface GavReconciliation {
+  histogram: GavHistogramBucket[];
+  totalCikQuarters: number;
+  median: number;
+  within95_105Pct: number;
+  within80_120Pct: number;
+}
+export interface ClassificationRule {
+  rule: string;
+  description: string;
+  totalRows: number;
+  disagreements: number;
+  pct: number;
+}
+export interface FieldFillRate {
+  field: string;
+  fillPct: number;
+}
+export interface ValidationTierCount {
+  tier: string;
+  count: number;
+}
+export interface IssueSeverityCount {
+  severity: string;
+  count: number;
+}
+export interface IssueEvidenceCount {
+  evidenceStrength: string;
+  count: number;
+}
+export interface TopIssueColumn {
+  column: string;
+  severity: string;
+  count: number;
+}
+export interface ColumnQualityMetric {
+  column: string;
+  totalRows: number;
+  fillRate: number | null;
+  parseRate: number | null;
+  validRate: number | null;
+  failCount: number;
+  warnCount: number;
+}
+export interface QuarterHoldings {
+  quarter: string;
+  bdc: number;
+  nport: number;
+  totalFv: number;
+  cikCount: number;
+}
+export interface ClassificationRow {
+  classification: string;
+  rows: number;
+  fv: number;
+  fvPct: number;
+}
+export interface ThirdPartyValidation {
+  source: string;
+  total: number;
+  missed: number;
+  matchPct: number;
+}
+export interface PipelineSummary {
+  totalHoldings: number;
+  totalCiks: number;
+  earliestDate: string;
+  latestDate: string;
+  bdcRows: number;
+  nportRows: number;
+  unclassifiedPct: number;
+}
+export interface ReconciliationHistogram {
+  id: string;
+  title: string;
+  subtitle: string;
+  n: number;
+  median: number | null;
+  centerValue: number;
+  histogram: GavHistogramBucket[];
+}
+export interface LlmFundValidationMetric {
+  label: string;
+  precision: number;
+  recall: number;
+  f1: number;
+  support: number;
+}
+export interface LlmFundValidation {
+  overallAccuracy: number;
+  totalSamples: number;
+  labels: string[];
+  confusionMatrix: number[][];
+  perClassMetrics: LlmFundValidationMetric[];
+}
+export interface DataQuality {
+  gavReconciliation?: GavReconciliation;
+  classificationRules?: ClassificationRule[];
+  fieldFillRates?: FieldFillRate[];
+  holdingsByQuarter?: QuarterHoldings[];
+  classificationBreakdown?: ClassificationRow[];
+  pipelineSummary?: PipelineSummary;
+  validationTierCounts?: ValidationTierCount[];
+  issueSeverityCounts?: IssueSeverityCount[];
+  issueEvidenceCounts?: IssueEvidenceCount[];
+  topIssueColumns?: TopIssueColumn[];
+  columnQualityMetrics?: ColumnQualityMetric[];
+  thirdPartyValidation?: ThirdPartyValidation[];
+  reconciliationHistograms?: ReconciliationHistogram[];
+  llmFundValidation?: LlmFundValidation;
+}
+
+/** Fund-level index return row from fund_index_returns.json */
+export interface FundIndexReturnRow {
+  quarter: string;
+  return: number;
+  level: number;
+  fundCount: number;
+  totalAum: number;
+}
+export type FundIndexReturnsData = Record<string, FundIndexReturnRow[]>;
+
+/** AUM time series row from aum_time_series.json */
+export interface AumTimeSeriesRow {
+  quarter: string;
+  bdc: number;
+  intervalFund: number;
+  tenderOffer: number;
+  total: number;
+  bdcCount: number;
+  intervalCount: number;
+  tenderCount: number;
+}
+
+/** GICS sector row from gics_sector_breakdown.json */
+export interface GicsSectorRow {
+  sector: string;
+  totalFv: number;
+  pctOfTotal: number;
+  fundCount: number | null;
+}
+
+/** Credit risk tier values (fractions summing to 1.0) */
+export interface CreditRiskTiers {
+  deepDistress: number;
+  nonAccrual: number;
+  pikActive: number;
+  healthy: number;
+}
+
+/** Credit risk row from credit_risk.json */
+export interface CreditRiskRow {
+  quarter: string;
+  byCount: CreditRiskTiers;
+  byFv: CreditRiskTiers;
+  totalPositions: number;
+  totalFv: number;
+}
+
+/** Histogram bucket for distribution/leverage histograms */
+export interface HistogramBucket {
+  bucket: string;
+  bdc: number;
+  nonBdc: number;
+  total: number;
+}
+
+/** Histogram data from distribution_histogram.json / leverage_histogram.json */
+export interface HistogramData {
+  median: number;
+  total: number;
+  buckets: HistogramBucket[];
+}
+
 /** Full fund detail from fund_details/{cik}.json */
 export interface FundDetail {
   cik: string;

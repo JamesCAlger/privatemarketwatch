@@ -37,7 +37,7 @@ export default function FundTopHoldings({ holdings }: FundTopHoldingsProps) {
   const showLien = hasLien / n >= 0.3;
 
   return (
-    <div className="bg-white rounded-lg shadow-card overflow-x-auto">
+    <div className="bg-white shadow-card overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-navy">
@@ -87,7 +87,7 @@ export default function FundTopHoldings({ holdings }: FundTopHoldingsProps) {
               {showLien && (
                 <td className="py-2.5 px-4 text-xs">
                   {h.lienPosition ? (
-                    <span className="inline-block px-2 py-0.5 rounded-full bg-surface text-navy text-[11px] font-medium">
+                    <span className="inline-block px-2 py-0.5 bg-surface text-navy text-[11px] font-medium">
                       {h.lienPosition}
                     </span>
                   ) : '--'}

@@ -13,6 +13,12 @@ import type {
   FundListItem,
   FundSummary,
   FundDetail,
+  DataQuality,
+  FundIndexReturnsData,
+  AumTimeSeriesRow,
+  GicsSectorRow,
+  CreditRiskRow,
+  HistogramData,
 } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
@@ -94,6 +100,52 @@ export function getFundDetail(cik: string): FundDetail | null {
   if (!fs.existsSync(filePath)) return null;
   const raw = fs.readFileSync(filePath, 'utf-8');
   return JSON.parse(raw) as FundDetail;
+}
+
+export function getDataQuality(): DataQuality {
+  const filePath = path.join(DATA_DIR, 'data_quality.json');
+  if (!fs.existsSync(filePath)) return {};
+  return readJson<DataQuality>('data_quality.json');
+}
+
+export function getFundIndexReturns(): FundIndexReturnsData {
+  const filePath = path.join(DATA_DIR, 'fund_index_returns.json');
+  if (!fs.existsSync(filePath)) return {};
+  return readJson<FundIndexReturnsData>('fund_index_returns.json');
+}
+
+export function getAumTimeSeries(): AumTimeSeriesRow[] {
+  const filePath = path.join(DATA_DIR, 'aum_time_series.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<AumTimeSeriesRow[]>('aum_time_series.json');
+}
+
+export function getGicsSectorBreakdown(): GicsSectorRow[] {
+  const filePath = path.join(DATA_DIR, 'gics_sector_breakdown.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<GicsSectorRow[]>('gics_sector_breakdown.json');
+}
+
+export function getCreditRisk(): CreditRiskRow[] {
+  const filePath = path.join(DATA_DIR, 'credit_risk.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<CreditRiskRow[]>('credit_risk.json');
+}
+
+export function getDistributionHistogram(): HistogramData | null {
+  const filePath = path.join(DATA_DIR, 'distribution_histogram.json');
+  if (!fs.existsSync(filePath)) return null;
+  const data = readJson<HistogramData>('distribution_histogram.json');
+  if (!data.buckets) return null;
+  return data;
+}
+
+export function getLeverageHistogram(): HistogramData | null {
+  const filePath = path.join(DATA_DIR, 'leverage_histogram.json');
+  if (!fs.existsSync(filePath)) return null;
+  const data = readJson<HistogramData>('leverage_histogram.json');
+  if (!data.buckets) return null;
+  return data;
 }
 
 export function getFundDetailCiks(): string[] {

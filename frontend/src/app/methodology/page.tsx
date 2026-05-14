@@ -418,7 +418,7 @@ function Section({
 
 function Callout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border-l-3 border-teal bg-teal/5 rounded-r-lg px-4 py-3 my-4 text-sm text-navy/80" style={{ borderLeftWidth: '3px' }}>
+    <div className="border-l-3 border-teal bg-teal/5 px-4 py-3 my-4 text-sm text-navy/80" style={{ borderLeftWidth: '3px' }}>
       {children}
     </div>
   );

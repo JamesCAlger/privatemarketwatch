@@ -549,12 +549,10 @@ def _extract_all_companyfacts(
 ) -> pd.DataFrame:
     """Extract balance-sheet data for all BDC CIKs from companyfacts.
 
-    Reads from disk cache first.  For CIKs with no cache file, fetches
-    from the SEC companyfacts API and caches the result (rate-limited,
-    ~0.11 s per request).
+    Reads from disk cache first. If a client is provided, missing CIKs are
+    fetched from the SEC companyfacts API and cached. If client is None this is
+    strictly cache-only and missing CIKs are skipped.
     """
-    from pipeline.validate_html_template import _fetch_companyfacts
-
     all_rows: list[dict] = []
 
     # Identify CIKs needing fetch
@@ -566,21 +564,23 @@ def _extract_all_companyfacts(
             uncached.append(cik)
 
     if uncached:
-        logger.info(
-            "Companyfacts: %d/%d BDC CIKs uncached, fetching from SEC...",
-            len(uncached), len(bdc_ciks),
-        )
-        # Use provided client, or create one shared client for all fetches
-        fetch_client = client
-        if fetch_client is None:
-            from pipeline.edgar_client import EdgarClient
-            fetch_client = EdgarClient()
+        if client is None:
+            logger.info(
+                "Companyfacts: %d/%d BDC CIKs uncached; skipping because client=None cache-only mode",
+                len(uncached), len(bdc_ciks),
+            )
+        else:
+            from pipeline.validate_html_template import _fetch_companyfacts
 
-        for i, cik in enumerate(uncached, 1):
-            _fetch_companyfacts(cik, fetch_client)
-            if i % 50 == 0:
-                logger.info("  Fetched %d/%d...", i, len(uncached))
-        logger.info("Companyfacts: fetched %d new CIKs from SEC", len(uncached))
+            logger.info(
+                "Companyfacts: %d/%d BDC CIKs uncached, fetching from SEC...",
+                len(uncached), len(bdc_ciks),
+            )
+            for i, cik in enumerate(uncached, 1):
+                _fetch_companyfacts(cik, client)
+                if i % 50 == 0:
+                    logger.info("  Fetched %d/%d...", i, len(uncached))
+            logger.info("Companyfacts: fetched %d new CIKs from SEC", len(uncached))
 
     # Now read everything from cache
     for cik in bdc_ciks:
@@ -1561,6 +1561,9 @@ def _prepare_bdc(
     for f in _EXTENDED_FIELDS:
         if f not in cf_balance_df.columns:
             cf_balance_df[f] = None
+    # Ensure balance-sheet fields that may be missing in tests
+    if "investments_at_fair_value" not in cf_balance_df.columns:
+        cf_balance_df["investments_at_fair_value"] = None
 
     con.register("cf_balance", cf_balance_df)
 
@@ -1578,6 +1581,7 @@ def _prepare_bdc(
             || CAST(CEIL(MONTH(TRY_CAST(report_date AS DATE)) / 3.0) AS INTEGER)
             AS report_quarter,
         total_assets, total_liabilities, net_assets,
+        investments_at_fair_value,
         nav_per_share, shares_outstanding, borrowings,
         {_ext_select}
     FROM cf_balance
@@ -1636,6 +1640,7 @@ def _prepare_bdc(
             COALESCE(cf.report_quarter, inc.report_quarter)
                 AS report_quarter,
             cf.total_assets, cf.net_assets, cf.total_liabilities,
+            cf.investments_at_fair_value,
             cf.nav_per_share, cf.shares_outstanding, cf.borrowings,
             inc.total_investment_income, inc.net_investment_income,
             inc.management_fee, inc.incentive_fee,
@@ -1650,6 +1655,7 @@ def _prepare_bdc(
         SELECT
             cik, report_date, report_quarter,
             total_assets, net_assets, total_liabilities,
+            investments_at_fair_value,
             nav_per_share, shares_outstanding, borrowings,
             CAST(NULL AS DOUBLE) AS total_investment_income,
             CAST(NULL AS DOUBLE) AS net_investment_income,
@@ -1671,6 +1677,7 @@ def _prepare_bdc(
     # All financial fields that should be NULLed for seed capital rows
     _seed_null_fields = [
         "total_assets", "net_assets", "total_liabilities",
+        "investments_at_fair_value",
         "nav_per_share", "shares_outstanding", "borrowings",
         "total_investment_income", "net_investment_income",
         "management_fee", "incentive_fee", "interest_expense", "total_expenses",
@@ -1821,6 +1828,7 @@ def _prepare_bdc(
     SELECT
         cik, report_date, report_quarter,
         total_assets, net_assets, total_liabilities,
+        investments_at_fair_value,
         nav_per_share,
         shares_outstanding, borrowings,
         total_investment_income, net_investment_income,

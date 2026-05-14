@@ -21,7 +21,7 @@ export default function VehicleTypeBadge({ vehicleType, size = 'sm' }: VehicleTy
     : 'text-[11px] px-2 py-0.5';
 
   return (
-    <span className={`inline-block rounded-full font-medium whitespace-nowrap ${config.bg} ${config.text} ${sizeClasses}`}>
+    <span className={`inline-block font-medium whitespace-nowrap ${config.bg} ${config.text} ${sizeClasses}`}>
       {config.label}
     </span>
   );

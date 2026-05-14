@@ -4,6 +4,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version",
+    "dataset",
     "bundle_id",
     "created_at",
     "source_artifacts",
@@ -12,6 +13,7 @@
   ],
   "properties": {
     "schema_version": { "type": "string" },
+    "dataset": { "enum": ["private_markets_holdings", "fund_financials"] },
     "bundle_id": { "type": "string", "minLength": 1 },
     "created_at": { "type": "string", "minLength": 1 },
     "source_artifacts": {
@@ -37,7 +39,11 @@
         "additionalProperties": false,
         "properties": {
           "evidence_id": { "type": "string", "minLength": 1 },
-          "kind": { "type": "string", "minLength": 1 },
+          "kind": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Evidence item kind. Known fail-verification kinds include fund_metric_source_trace, raw_to_unified_holdings_reconciliation, nport_pct_denominator_trace, position_transition_trace, and coverage_provenance_matrix."
+          },
           "description": { "type": "string" },
           "data": {}
         }

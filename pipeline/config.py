@@ -13,6 +13,7 @@ SEC_DATASETS_DIR = RAW_DIR / "sec_datasets"
 FILINGS_DIR = RAW_DIR / "filings"
 THIRD_PARTY_DIR = RAW_DIR / "third_party"
 OUTPUT_DIR = DATA_DIR / "output"
+OVERRIDES_DIR = DATA_DIR / "overrides"
 
 # Cache for downloaded N-2 cover pages (150KB each)
 N2_HEADERS_CACHE_DIR = RAW_DIR / "n2_headers_cache"
@@ -39,7 +40,8 @@ for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           NPORT_TSV_CACHE_DIR, NPORT_XML_CACHE_DIR,
           BDC_HTML_CACHE_DIR, HTML_TEMPLATE_DIR,
           COMPANYFACTS_CACHE_DIR, REFERENCE_DIR,
-          RAW_DIR / "filings" / "ncsr_html"]:
+          RAW_DIR / "filings" / "ncsr_html",
+          OVERRIDES_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -137,6 +139,9 @@ NPORT_PARSE_PROGRESS_FILE = OUTPUT_DIR / "nport_parse_progress.csv"
 # Unified private markets holdings
 UNIFIED_HOLDINGS_FILE = OUTPUT_DIR / "private_markets_holdings.csv"
 
+# Manual row-level corrections overlay (checked into data/overrides/)
+ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
+
 # Entity resolution outputs
 ENTITY_LOOKUP_FILE = OUTPUT_DIR / "entity_lookup.csv"
 ENTITY_STATS_FILE = OUTPUT_DIR / "entity_resolution_stats.csv"
@@ -152,6 +157,9 @@ HOLDINGS_GAV_RECONCILIATION_FILE = OUTPUT_DIR / "holdings_gav_reconciliation.csv
 HOLDINGS_PCT_SUM_FILE = OUTPUT_DIR / "holdings_pct_sum.csv"
 HOLDINGS_COUNT_STABILITY_FILE = OUTPUT_DIR / "holdings_count_stability.csv"
 HOLDINGS_INCOME_YIELD_FILE = OUTPUT_DIR / "holdings_income_yield.csv"
+COLUMN_QUALITY_METRICS_FILE = OUTPUT_DIR / "column_quality_metrics.csv"
+ROW_VALIDATION_ISSUES_FILE = OUTPUT_DIR / "row_validation_issues.csv"
+DATA_QUALITY_METRICS_FILE = OUTPUT_DIR / "data_quality_metrics.csv"
 
 # Position matching and index returns
 POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
@@ -164,6 +172,9 @@ FEE_UPLIFT_FILE = OUTPUT_DIR / "fee_uplift.csv"
 FUND_FINANCIALS_FILE = OUTPUT_DIR / "fund_financials.csv"
 FUND_IDENTITY_FILE = OUTPUT_DIR / "fund_identity.csv"
 BDC_SECTOR_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_sector_breakdown.csv"
+FUND_FINANCIALS_VALIDATION_CURRENT_FILE = OUTPUT_DIR / "fund_financials_validation_current.csv"
+FUND_FINANCIALS_QUALITY_METRICS_FILE = OUTPUT_DIR / "fund_financials_quality_metrics.csv"
+FUND_FINANCIALS_CROSS_LEVEL_FILE = OUTPUT_DIR / "fund_financials_cross_level.csv"
 
 # GICS industry mapping
 GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"

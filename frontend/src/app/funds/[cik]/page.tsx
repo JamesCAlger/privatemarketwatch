@@ -91,6 +91,12 @@ function pickLineChart(series: FundSeriesEntry[], vehicleType: string) {
 // Maturity bar chart (simple CSS bars)
 // ---------------------------------------------------------------------------
 
+// Teal ramp from light (short maturity) to dark (long maturity)
+const MATURITY_COLORS = [
+  '#B8ECE7', '#99DDD6', '#7ACEC5', '#5BBFB4',
+  '#3DB0A3', '#2A9D8F', '#1F7268', '#1A5F56',
+];
+
 function MaturityChart({ buckets, coverage }: {
   buckets: { label: string; pct: number }[];
   coverage: number;
@@ -100,81 +106,44 @@ function MaturityChart({ buckets, coverage }: {
   const maxPct = Math.max(...buckets.map((b) => b.pct));
 
   return (
-    <div className="bg-white rounded-lg shadow-card p-5">
-      <div className="flex items-baseline justify-between mb-4">
+    <div className="bg-white shadow-card p-5">
+      <div className="flex items-baseline justify-between mb-5">
         <p className="text-sm font-medium text-navy">Maturity Profile</p>
         <p className="text-[10px] text-muted">
-          {(coverage * 100).toFixed(0)}% of positions have maturity data
+          {(coverage * 100).toFixed(0)}% coverage
         </p>
       </div>
-      {/* Bar chart area */}
-      <div className="flex gap-2">
-        {buckets.map((b) => {
+      <div className="flex items-end gap-1.5" style={{ height: '140px' }}>
+        {buckets.map((b, i) => {
           const barH = maxPct > 0 ? (b.pct / maxPct) * 100 : 0;
+          const color = MATURITY_COLORS[i % MATURITY_COLORS.length];
           return (
-            <div key={b.label} className="flex-1 flex flex-col items-center">
-              {/* Label above bar */}
-              <span className="text-[10px] text-muted tabular-nums mb-1 h-4">
-                {b.pct > 0 ? `${(b.pct * 100).toFixed(0)}%` : ''}
-              </span>
-              {/* Bar container — fixed height, bars grow upward */}
-              <div className="w-full h-28 flex items-end">
-                <div
-                  className="w-full rounded-t bg-teal/80"
-                  style={{
-                    height: `${barH}%`,
-                    minHeight: b.pct > 0 ? '4px' : '0px',
-                  }}
-                />
-              </div>
-              {/* X-axis label */}
-              <span className="text-[10px] text-muted mt-1">{b.label}</span>
+            <div key={b.label} className="flex-1 flex flex-col items-center h-full justify-end">
+              {b.pct > 0 && (
+                <span className="text-[10px] text-navy font-medium tabular-nums mb-1">
+                  {(b.pct * 100).toFixed(0)}%
+                </span>
+              )}
+              <div
+                className="w-full transition-all"
+                style={{
+                  height: `${barH}%`,
+                  minHeight: b.pct > 0 ? '3px' : '0px',
+                  backgroundColor: color,
+                }}
+              />
             </div>
           );
         })}
       </div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// FV Hierarchy bar
-// ---------------------------------------------------------------------------
-
-function FvHierarchyBar({ hierarchy }: { hierarchy: NonNullable<FundExposure['fvHierarchy']> }) {
-  const levels = [
-    { label: 'Level 1', pct: hierarchy.level1 ?? 0, color: '#16A34A' },
-    { label: 'Level 2', pct: hierarchy.level2 ?? 0, color: '#2A9D8F' },
-    { label: 'Level 3', pct: hierarchy.level3 ?? 0, color: '#E76F51' },
-  ];
-  const nonZero = levels.filter((l) => l.pct > 0);
-  if (nonZero.length === 0) return null;
-
-  return (
-    <div>
-      <p className="text-[11px] text-muted uppercase tracking-wider mb-2">Fair Value Hierarchy</p>
-      <div className="flex rounded-md overflow-hidden h-5 mb-2">
-        {levels.map((l) => {
-          if (l.pct <= 0) return null;
-          return (
-            <div
-              key={l.label}
-              className="flex items-center justify-center text-[10px] text-white font-medium"
-              style={{ width: `${l.pct * 100}%`, backgroundColor: l.color }}
-              title={`${l.label}: ${(l.pct * 100).toFixed(1)}%`}
-            >
-              {l.pct >= 0.08 ? `L${l.label.slice(-1)}` : ''}
-            </div>
-          );
-        })}
-      </div>
-      <div className="flex gap-3 text-[10px]">
-        {levels.filter((l) => l.pct > 0).map((l) => (
-          <span key={l.label} className="flex items-center gap-1">
-            <span className="inline-block w-1.5 h-1.5 rounded-sm" style={{ backgroundColor: l.color }} />
-            <span className="text-muted">{l.label}</span>
-            <span className="text-navy tabular-nums">{(l.pct * 100).toFixed(1)}%</span>
-          </span>
+      {/* Baseline */}
+      <div className="h-px bg-surface-muted" />
+      {/* X-axis labels */}
+      <div className="flex gap-1.5 mt-1.5">
+        {buckets.map((b) => (
+          <div key={b.label} className="flex-1 text-center">
+            <span className="text-[10px] text-muted">{b.label}</span>
+          </div>
         ))}
       </div>
     </div>
@@ -186,19 +155,22 @@ function FvHierarchyBar({ hierarchy }: { hierarchy: NonNullable<FundExposure['fv
 // ---------------------------------------------------------------------------
 
 function PortfolioAnalytics({ exposure }: { exposure: FundExposure }) {
-  const { wac, wacCoverage, was, wam, wamCoverage, maturityBuckets, concentration, pikExposure, fvHierarchy, creditFlags } = exposure;
+  const { wac, wacCoverage, was, wam, wamCoverage, maturityBuckets, concentration, pikExposure, creditFlags } = exposure;
 
   const hasWamData = wamCoverage != null && wamCoverage > 0.1;
   const hasMaturity = hasWamData && maturityBuckets && maturityBuckets.some((b) => b.pct > 0);
   const hasPik = pikExposure && pikExposure.pctOfDebtFv != null && pikExposure.pctOfDebtFv > 0;
-  const hasFvH = fvHierarchy && fvHierarchy.coverage != null && fvHierarchy.coverage > 0.1;
-  const hasCreditFlags = creditFlags && creditFlags.coverage != null && creditFlags.coverage > 0.1;
+  const hasDefault = creditFlags && creditFlags.coverage != null && creditFlags.coverage > 0.1
+    && creditFlags.pctInDefault != null && creditFlags.pctInDefault > 0;
+  const hasArrears = creditFlags && creditFlags.coverage != null && creditFlags.coverage > 0.1
+    && creditFlags.pctInArrears != null && creditFlags.pctInArrears > 0;
+  const hasCreditFlags = hasDefault || hasArrears;
   // Hide WAC/WAS if coverage is too low to be meaningful
   const MIN_COVERAGE = 0.6;
   const showWac = wac != null && (wacCoverage ?? 0) >= MIN_COVERAGE;
   const showWas = was != null && (wacCoverage ?? 0) >= MIN_COVERAGE;
   const hasRow1 = showWac || showWas || wam != null || concentration?.top10Pct != null;
-  const hasRow3 = hasPik || hasFvH || hasCreditFlags;
+  const hasRow3 = hasPik || hasCreditFlags;
 
   if (!hasRow1 && !hasMaturity && !hasRow3) return null;
 
@@ -209,7 +181,7 @@ function PortfolioAnalytics({ exposure }: { exposure: FundExposure }) {
     <>
       {/* Row 1: Core metrics */}
       {hasRow1 && (
-        <div className="bg-white rounded-lg shadow-card p-5 mb-4">
+        <div className="bg-white shadow-card p-5 mb-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             {showWac && (
               <StatItem
@@ -242,7 +214,7 @@ function PortfolioAnalytics({ exposure }: { exposure: FundExposure }) {
 
       {/* Row 3: Risk metrics */}
       {hasRow3 && (
-        <div className="bg-white rounded-lg shadow-card p-5">
+        <div className="bg-white shadow-card p-5">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
             {hasPik && pikExposure && (
               <StatItem
@@ -250,30 +222,21 @@ function PortfolioAnalytics({ exposure }: { exposure: FundExposure }) {
                 value={formatPercent(pikExposure.pctOfDebtFv)}
               />
             )}
-            {hasCreditFlags && creditFlags && (
-              <>
-                {creditFlags.pctInDefault != null && creditFlags.pctInDefault > 0 && (
-                  <StatItem
-                    label="In Default"
-                    value={formatPercent(creditFlags.pctInDefault)}
-                    color="text-red-600"
-                  />
-                )}
-                {creditFlags.pctInArrears != null && creditFlags.pctInArrears > 0 && (
-                  <StatItem
-                    label="In Arrears"
-                    value={formatPercent(creditFlags.pctInArrears)}
-                    color="text-amber-600"
-                  />
-                )}
-              </>
+            {hasDefault && creditFlags && (
+              <StatItem
+                label="In Default"
+                value={formatPercent(creditFlags.pctInDefault!)}
+                color="text-red-600"
+              />
+            )}
+            {hasArrears && creditFlags && (
+              <StatItem
+                label="In Arrears"
+                value={formatPercent(creditFlags.pctInArrears!)}
+                color="text-amber-600"
+              />
             )}
           </div>
-          {hasFvH && fvHierarchy && (
-            <div className="mt-5 pt-4 border-t border-surface">
-              <FvHierarchyBar hierarchy={fvHierarchy} />
-            </div>
-          )}
         </div>
       )}
     </>
@@ -391,16 +354,19 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   // Hero stats -- adaptive by vehicle type
   const heroStats: { label: string; value: string }[] = [];
   if (latest?.total_assets != null) {
-    heroStats.push({ label: 'AUM', value: formatDollar(latest.total_assets) });
+    heroStats.push({ label: 'GAV', value: formatDollar(latest.total_assets) });
+  }
+  if (latest?.net_assets != null) {
+    heroStats.push({ label: 'NAV', value: formatDollar(latest.net_assets) });
+  }
+  if (latest?.leverage_ratio != null) {
+    heroStats.push({ label: 'Leverage', value: formatPercent(latest.leverage_ratio) });
   }
   if (trail1y != null) {
     heroStats.push({
       label: '1Y Return',
       value: `${trail1y >= 0 ? '+' : ''}${(trail1y * 100).toFixed(1)}%`,
     });
-  }
-  if (latest?.leverage_ratio != null) {
-    heroStats.push({ label: 'Leverage', value: formatPercent(latest.leverage_ratio) });
   }
   if (isBdc) {
     if (latest?.nav_per_share != null) {
@@ -428,7 +394,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   return (
     <div>
       {/* Identity banner */}
-      <div className="hero-gradient-home hero-pattern">
+      <div className="hero-gradient hero-pattern">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
           <div className="flex flex-col items-start gap-3">
             <VehicleTypeBadge vehicleType={fund.vehicleType} size="md" />
@@ -456,8 +422,8 @@ export default function FundPage({ params }: { params: { cik: string } }) {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
         {/* Hero stats */}
         {heroStats.length > 0 && (
-          <section className="mb-10 -mt-8">
-            <div className="bg-white rounded-lg shadow-card p-5">
+          <section className="mb-14 -mt-8">
+            <div className="bg-white shadow-card p-5">
               <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 ${
                 heroStats.length > 4 ? 'lg:grid-cols-8' : ''
               }`}>
@@ -474,27 +440,19 @@ export default function FundPage({ params }: { params: { cik: string } }) {
 
         {/* Composition / Exposure */}
         {exposure && (
-          <section className="mb-10">
+          <section className="mb-14">
             <SectionHeading>Portfolio Composition</SectionHeading>
             <ExposureSection exposure={exposure} />
           </section>
         )}
 
-        {/* Portfolio Analytics */}
-        {exposure && (
-          <section className="mb-10">
-            <SectionHeading>Portfolio Analytics</SectionHeading>
-            <PortfolioAnalytics exposure={exposure} />
-          </section>
-        )}
-
         {/* Performance */}
-        <section className="mb-10">
+        <section className="mb-14">
           <SectionHeading>Performance</SectionHeading>
           <FundPerformanceTable series={fund.series} />
 
           {lineData.length >= 2 && (
-            <div className="mt-6 bg-white rounded-lg p-4 sm:p-6 shadow-card">
+            <div className="mt-6 bg-white p-4 sm:p-6 shadow-card">
               <p className="text-sm font-medium text-navy mb-3">Total Return</p>
               <TotalReturnChart
                 lineData={lineData}
@@ -505,7 +463,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
           )}
 
           {distData.length >= 2 && (
-            <div className="mt-6 bg-white rounded-lg p-4 sm:p-6 shadow-card">
+            <div className="mt-6 bg-white p-4 sm:p-6 shadow-card">
               <p className="text-sm font-medium text-navy mb-3">Distribution History ($/Share)</p>
               <TotalReturnChart
                 lineData={[]}
@@ -517,15 +475,23 @@ export default function FundPage({ params }: { params: { cik: string } }) {
           )}
         </section>
 
+        {/* Portfolio Analytics */}
+        {exposure && (
+          <section className="mb-14">
+            <SectionHeading>Portfolio Analytics</SectionHeading>
+            <PortfolioAnalytics exposure={exposure} />
+          </section>
+        )}
+
         {/* Risk & Leverage */}
         {(latest?.leverage_ratio != null ||
           latest?.asset_coverage_ratio != null ||
           latest?.unfunded_commitments != null ||
           latest?.redemption_pressure != null ||
           latest?.expense_ratio_pct != null) && (
-          <section className="mb-10">
+          <section className="mb-14">
             <SectionHeading>Risk & Leverage</SectionHeading>
-            <div className="bg-white rounded-lg shadow-card p-5">
+            <div className="bg-white shadow-card p-5">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                 {latest?.leverage_ratio != null && (
                   <StatItem label="Leverage Ratio" value={formatPercent(latest.leverage_ratio)} />
@@ -546,7 +512,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
 
         {/* Top Holdings */}
         {topHoldings && topHoldings.length > 0 && (
-          <section className="mb-10">
+          <section className="mb-14">
             <SectionHeading>Top Holdings</SectionHeading>
             <FundTopHoldings holdings={topHoldings} />
           </section>
@@ -558,8 +524,8 @@ export default function FundPage({ params }: { params: { cik: string } }) {
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-xl font-semibold text-navy mb-6 flex items-center gap-3">
-      <span className="w-1 h-5 bg-teal rounded-full" />
+    <h2 className="text-2xl font-semibold text-navy mb-8 flex items-center gap-3">
+      <span className="w-1 h-5 bg-teal" />
       {children}
     </h2>
   );

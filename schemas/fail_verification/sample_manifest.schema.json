@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "required": [
+    "dataset",
     "verification_id",
     "rule_id",
     "sampling_unit",
@@ -16,9 +17,12 @@
   ],
   "additionalProperties": true,
   "properties": {
+    "dataset": { "enum": ["private_markets_holdings", "fund_financials"] },
     "verification_id": { "type": "string", "minLength": 1 },
-    "rule_id": { "enum": ["C101", "X06", "X09", "C402", "GAV01", "GAV_BDC01", "GAV_NPORT01"] },
-    "sampling_unit": { "enum": ["issue_row", "cik_quarter"] },
+    "rule_id": {
+      "pattern": "^(C101|X06|X09|C402|GAV01|GAV_BDC01|GAV_NPORT01|F[0-9]+)$"
+    },
+    "sampling_unit": { "enum": ["issue_row", "cik_quarter", "fund_period", "frontend_export"] },
     "cik": { "type": "string", "pattern": "^[0-9]{10}$" },
     "report_date": { "type": "string", "minLength": 1 },
     "row_key": { "type": "string" },

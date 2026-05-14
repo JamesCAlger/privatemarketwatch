@@ -11,6 +11,7 @@ extract_bdc_holdings(client, bdc_universe=None) -> pd.DataFrame
 import logging
 import re
 import time
+from collections import Counter
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -83,6 +84,14 @@ CONCEPT_MAP: list[tuple[str, str]] = [
 
 # All possible output value columns (used to initialise empty records)
 _VALUE_COLUMNS = sorted({col for _, col in CONCEPT_MAP})
+
+# Monetary columns (USD-denominated) subject to decimals normalization.
+# When a filing mixes decimals attributes (e.g. most facts at decimals="-3"
+# but a few at decimals="-6"), the outlier facts are likely 1000x inflated.
+_MONETARY_COLUMNS = frozenset({
+    "fair_value", "cost", "principal_amount", "face_amount",
+    "unrealized_gain_loss", "realized_gain_loss",
+})
 
 # Dimension local-name substrings used to identify the investment axis
 _INVESTMENT_ID_DIMS = ("investmentidentifier", "investmentcompany")
@@ -515,6 +524,10 @@ def _extract_investment_facts(
     # Accumulate facts by context ID
     facts_by_ctx: dict[str, dict[str, Any]] = {}
 
+    # Track decimals attribute for monetary facts (for cross-fact normalization)
+    decimals_tracker: list[int] = []
+    monetary_facts_stored: list[tuple[str, str, int]] = []  # (ctx_ref, col, dec)
+
     root = tree.getroot()
     for elem in root.iter():
         ctx_ref = elem.get("contextRef")
@@ -539,11 +552,69 @@ def _extract_investment_facts(
         # Parse value
         value = _parse_fact_value(col, raw_text)
 
+        # Read decimals attribute for monetary columns
+        dec_val: int | None = None
+        if col in _MONETARY_COLUMNS and isinstance(value, (int, float)):
+            dec_attr = elem.get("decimals")
+            if dec_attr is not None:
+                try:
+                    dec_val = int(dec_attr)
+                except ValueError:
+                    pass
+
         if ctx_ref not in facts_by_ctx:
             facts_by_ctx[ctx_ref] = {}
         # Keep first non-None value per column (some filings duplicate facts)
         if col not in facts_by_ctx[ctx_ref] or facts_by_ctx[ctx_ref][col] is None:
             facts_by_ctx[ctx_ref][col] = value
+            if dec_val is not None:
+                decimals_tracker.append(dec_val)
+                monetary_facts_stored.append((ctx_ref, col, dec_val))
+
+    # --- Normalize mixed-decimals monetary facts ---
+    # Some filers tag a handful of facts with decimals="-6" while the majority
+    # use decimals="-3".  The outlier values are 1000x too large.  Correct by
+    # scaling outlier facts to match the dominant decimals.
+    # Guard rails:
+    #   1. >= 5 monetary facts total
+    #   2. Dominant decimals represents >= 75% of facts
+    #   3. Decimals diff >= 3 (1000x+ scale difference)
+    #   4. Outlier value must be > 100x the median of dominant-decimals values
+    #      (prevents false corrections when decimals differ only in precision)
+    if len(decimals_tracker) >= 5:
+        dec_counts = Counter(decimals_tracker)
+        dominant_dec, dominant_count = dec_counts.most_common(1)[0]
+        # Require dominant to represent >= 75% of monetary facts
+        if dominant_count / len(decimals_tracker) >= 0.75:
+            # Compute median abs value at dominant scale for value guard
+            dominant_abs_vals = []
+            for ctx_ref, col, fact_dec in monetary_facts_stored:
+                if fact_dec == dominant_dec:
+                    val = facts_by_ctx[ctx_ref].get(col)
+                    if isinstance(val, (int, float)) and val != 0:
+                        dominant_abs_vals.append(abs(val))
+            dominant_abs_vals.sort()
+            median_dominant = (
+                dominant_abs_vals[len(dominant_abs_vals) // 2]
+                if dominant_abs_vals
+                else 0
+            )
+
+            for ctx_ref, col, fact_dec in monetary_facts_stored:
+                diff = fact_dec - dominant_dec  # e.g. -6 - (-3) = -3
+                if abs(diff) >= 3:
+                    val = facts_by_ctx[ctx_ref].get(col)
+                    if val is not None and isinstance(val, (int, float)):
+                        # Only correct if value is wildly out of range
+                        if median_dominant > 0 and abs(val) / median_dominant > 100:
+                            corrected = val * (10 ** diff)
+                            facts_by_ctx[ctx_ref][col] = corrected
+                            logger.debug(
+                                "Decimals normalization: ctx=%s col=%s "
+                                "decimals=%d (dominant=%d) %s -> %s",
+                                ctx_ref, col, fact_dec, dominant_dec,
+                                val, corrected,
+                            )
 
     # Build output records
     records: list[dict[str, Any]] = []
@@ -614,6 +685,126 @@ def _parse_single_filing(
         rec["report_date"] = filing_meta.get("report_date", "")
 
     return facts
+
+
+_DEDUP_KEY_COLUMNS = ["accession_number", "investment_identifier", "period"]
+_DEDUP_CONFLICT_COLUMNS = [
+    "fair_value",
+    "cost",
+    "principal_amount",
+    "shares_held",
+]
+
+
+def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
+    """Collapse duplicate XBRL contexts without keeping sparse rows first.
+
+    Some filers report the same investment identifier in multiple contexts: one
+    sparse context may carry text/rate fields while another carries FV/cost/
+    principal.  A plain ``drop_duplicates(keep='first')`` can therefore discard
+    the economic facts.  This helper keeps the most complete row, fills missing
+    non-conflicting values from sibling contexts, and marks economic conflicts
+    for downstream QA instead of hiding them.
+    """
+    if df.empty:
+        return df
+
+    missing = [col for col in _DEDUP_KEY_COLUMNS if col not in df.columns]
+    if missing:
+        logger.warning("BDC dedupe skipped; missing key columns: %s", missing)
+        return df
+
+    result = df.copy()
+    value_cols = [col for col in _VALUE_COLUMNS if col in result.columns]
+    score_cols = [col for col in value_cols if col not in {"unrealized_gain_loss"}]
+
+    result["_dedupe_row_order"] = range(len(result))
+    result["_dedupe_score"] = 0
+    for col in score_cols:
+        as_text = result[col].astype("string").str.strip()
+        result["_dedupe_score"] += as_text.notna() & (as_text != "")
+
+    group_sizes = result.groupby(_DEDUP_KEY_COLUMNS, dropna=False)[
+        "_dedupe_row_order"
+    ].transform("size")
+    result["dedupe_context_count"] = group_sizes
+
+    conflict_fields_by_col: dict[str, pd.Series] = {}
+    for col in [c for c in _DEDUP_CONFLICT_COLUMNS if c in result.columns]:
+        numeric = pd.to_numeric(result[col], errors="coerce").round(6)
+        normalized = numeric.astype("string").where(
+            numeric.notna(),
+            result[col].astype("string").str.strip(),
+        )
+        normalized = normalized.mask(normalized.isna() | (normalized == ""), pd.NA)
+        nunique = normalized.groupby(
+            [result[k] for k in _DEDUP_KEY_COLUMNS],
+            dropna=False,
+        ).transform("nunique")
+        conflict_fields_by_col[col] = nunique > 1
+
+    result["dedupe_conflict_fields"] = ""
+    for col, mask in conflict_fields_by_col.items():
+        result.loc[mask, "dedupe_conflict_fields"] = (
+            result.loc[mask, "dedupe_conflict_fields"]
+            .astype("string")
+            .fillna("")
+            .map(lambda val, field=col: field if val == "" else f"{val},{field}")
+        )
+
+    fill_values = (
+        result.replace("", pd.NA)
+        .sort_values(
+            by=["_dedupe_score", "_dedupe_row_order"],
+            ascending=[False, True],
+            kind="mergesort",
+        )
+        .groupby(_DEDUP_KEY_COLUMNS, dropna=False)[value_cols]
+        .first()
+        .reset_index()
+    )
+
+    picked = (
+        result.sort_values(
+            by=["_dedupe_score", "_dedupe_row_order"],
+            ascending=[False, True],
+            kind="mergesort",
+        )
+        .drop_duplicates(subset=_DEDUP_KEY_COLUMNS, keep="first")
+        .merge(
+            fill_values,
+            on=_DEDUP_KEY_COLUMNS,
+            how="left",
+            suffixes=("", "_dedupe_fill"),
+        )
+    )
+
+    for col in value_cols:
+        fill_col = f"{col}_dedupe_fill"
+        if fill_col not in picked.columns:
+            continue
+        has_conflict = picked["dedupe_conflict_fields"].astype("string").str.contains(
+            rf"(?:^|,){re.escape(col)}(?:,|$)",
+            regex=True,
+            na=False,
+        )
+        missing_value = (
+            picked[col].isna()
+            | (picked[col].astype("string").str.strip() == "")
+        )
+        picked.loc[missing_value & ~has_conflict, col] = picked.loc[
+            missing_value & ~has_conflict, fill_col
+        ]
+        picked.drop(columns=[fill_col], inplace=True)
+
+    conflicts = picked["dedupe_conflict_fields"].astype("string").str.len().fillna(0) > 0
+    if conflicts.any():
+        logger.warning(
+            "BDC dedupe found %d investment groups with conflicting economic facts",
+            int(conflicts.sum()),
+        )
+
+    return picked.drop(columns=["_dedupe_row_order", "_dedupe_score"])
 
 
 # ===========================================================================
@@ -697,11 +888,9 @@ def _parse_all_filings(filings_index: pd.DataFrame) -> pd.DataFrame:
     else:
         combined = new_df
 
-    # Always deduplicate (same investment can appear in multiple contexts)
-    combined.drop_duplicates(
-        subset=["accession_number", "investment_identifier", "period"],
-        inplace=True,
-    )
+    # Always deduplicate (same investment can appear in multiple contexts).
+    # Use completeness-aware selection so sparse context rows do not discard FV.
+    combined = _deduplicate_bdc_holdings(combined)
     combined.to_csv(BDC_HOLDINGS_FILE, index=False)
     logger.info(
         "Holdings saved: %d total rows -> %s",

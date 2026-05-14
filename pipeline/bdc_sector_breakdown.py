@@ -38,15 +38,29 @@ SECTOR_CONCEPT_MAP = [
     ("concentrationriskpercentage1", "pct_of_net_assets"),
 ]
 
-# Dimension local-name for the industry axis
-INDUSTRY_AXIS = "equitysecuritiesbyindustryaxis"
+# Dimension local-names for the industry axis (standard + custom filer axes)
+INDUSTRY_AXES = {
+    "equitysecuritiesbyindustryaxis",                       # us-gaap (188 CIKs)
+    "investmentsclassificationbyindustryaxis",              # NexPoint/Blue Owl (CIK 1588272)
+    "typeofindustryaxis",                                   # SLR Private Credit II (CIK 1932591)
+    "classificationofindustrybasedonnatureofbusinessaxis",  # PIMCO Capital Solutions (CIK 1905824)
+}
 
 # Axes whose members we want to capture alongside industry
 INVESTMENT_TYPE_AXIS = "investmenttypeaxis"
 AFFILIATION_AXIS = "investmentissueraffiliationaxis"
 
 # Axes that mark position-level contexts (skip these)
-POSITION_AXES = {"investmentidentifieraxis"}
+POSITION_AXES = {
+    "investmentidentifieraxis",
+    "investmentissuernameaxis",
+    "investmentsecondarycategorizationaxis",
+    "portfoliocompaniesaxis",
+    "legalentityaxis",
+    "ownershipaxis",
+    "relatedpartytransactionsbyrelatedpartyaxis",
+    "scheduleofequitymethodinvestmentequitymethodinvesteenameaxis",
+}
 
 # Output columns
 SECTOR_COLUMNS = [
@@ -178,7 +192,7 @@ def _parse_sector_contexts(tree: etree._ElementTree) -> dict:
                 dim_local = _local_name(dim_attr).lower()
                 member_val = (seg.text or "").strip()
 
-                if dim_local == INDUSTRY_AXIS:
+                if dim_local in INDUSTRY_AXES:
                     industry_member = member_val
                 elif dim_local == INVESTMENT_TYPE_AXIS:
                     investment_type_member = member_val

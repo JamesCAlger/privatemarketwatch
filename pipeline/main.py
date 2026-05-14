@@ -170,6 +170,56 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _is_validate_only(args: argparse.Namespace) -> bool:
+    return (
+        args.validate
+        and not args.exhaustive
+        and not args.holdings
+        and not args.ciks
+        and not args.nport
+        and not args.nport_xml
+        and not args.unified
+        and not args.extract
+        and not args.llm_review
+        and not args.llm_review_dry_run
+        and not args.entities
+        and not args.returns
+        and not args.classify_gics
+        and args.gics_web_search is None
+        and not args.extract_html
+        and not args.financials
+        and not args.load_db
+        and not args.export_frontend
+        and not args.llm_fund_validation
+        and not args.classify_funds
+    )
+
+
+def _run_cached_validation(logger: logging.Logger) -> None:
+    import pandas as pd
+
+    unified_path = OUTPUT_DIR / "private_markets_holdings.csv"
+    if not unified_path.exists():
+        logger.error("Unified holdings file not found: %s", unified_path)
+        return
+
+    t = time.time()
+    unified_df = pd.read_csv(unified_path, dtype=str)
+    logger.info("Loaded cached unified holdings: %d rows", len(unified_df))
+
+    from pipeline.validate_holdings import validate_holdings
+    reports = validate_holdings(unified_df=unified_df)
+    for name, report_df in reports.items():
+        logger.info("  Validation '%s': %d rows", name, len(report_df))
+
+    from pipeline.validate_fund_financials import validate_fund_financials
+    fund_reports = validate_fund_financials(holdings_df=unified_df)
+    for name, report_df in fund_reports.items():
+        logger.info("  Fund validation '%s': %d rows", name, len(report_df))
+
+    logger.info("Cached validation completed in %.1f s", time.time() - t)
+
+
 def main() -> None:
     args = _parse_args()
     _setup_logging()
@@ -222,6 +272,12 @@ def main() -> None:
     logger.info("  Mode: %s", " + ".join(mode_parts) if mode_parts else "FAST")
     logger.info("=" * 70)
     t0 = time.time()
+
+    if _is_validate_only(args):
+        _run_cached_validation(logger)
+        total = time.time() - t0
+        logger.info("=== Pipeline complete in %.1f s ===", total)
+        return
 
     client = EdgarClient()
 
@@ -466,6 +522,14 @@ def main() -> None:
                 logger.info("  Validation '%s': %d rows", name, len(report_df))
         except Exception as exc:
             logger.error("Holdings validation failed: %s", exc, exc_info=True)
+        try:
+            from pipeline.validate_fund_financials import validate_fund_financials
+            fund_reports = validate_fund_financials(holdings_df=unified_df)
+            for name, report_df in fund_reports.items():
+                logger.info("  Fund validation '%s': %d rows", name, len(report_df))
+        except Exception as exc:
+            logger.error("Fund financials validation failed: %s", exc,
+                         exc_info=True)
         logger.info("Validation step completed in %.1f s", time.time() - t8)
 
     # ── Step 9: LLM-assisted review (optional) ──
@@ -703,6 +767,12 @@ def main() -> None:
             OUTPUT_DIR / "holdings_validation_report.csv",
             OUTPUT_DIR / "holdings_spot_check.csv",
             OUTPUT_DIR / "holdings_coverage.csv",
+            OUTPUT_DIR / "row_validation_issues.csv",
+            OUTPUT_DIR / "column_quality_metrics.csv",
+            OUTPUT_DIR / "data_quality_metrics.csv",
+            OUTPUT_DIR / "fund_financials_validation_current.csv",
+            OUTPUT_DIR / "fund_financials_quality_metrics.csv",
+            OUTPUT_DIR / "fund_financials_cross_level.csv",
         ])
     if args.llm_review or args.llm_review_dry_run:
         output_files.extend([

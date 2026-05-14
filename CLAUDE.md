@@ -117,7 +117,7 @@ python -m pipeline.main --unified        # Build unified private markets holding
 
 ### Tests
 
-**1,668 tests** across 20 test files. Run with `pytest tests/`.
+**1,672 tests** across 20 test files. Run with `pytest tests/`.
 
 | Test file | Tests | Coverage |
 |---|---|---|
@@ -132,7 +132,7 @@ python -m pipeline.main --unified        # Build unified private markets holding
 | `test_validate_holdings.py` | 56 | Spot-check, aggregate audit, cross-source overlap, coverage |
 | `test_validate_html_template.py` | 53 | Template validation gates, fail_reasons, summary persistence |
 | `test_gics_mapping.py` | 50 | GICS code mapping and lookup |
-| `test_position_matching.py` | 46 | 4-tier cascade, 1:1 enforcement, position ID chaining |
+| `test_position_matching.py` | 49 | 4-tier cascade, 1:1 enforcement, name multiplicity cap, position ID chaining |
 | `test_index_returns.py` | 45 | Per-unit price return, income imputation, PIK, fee uplift |
 | `test_bdc_sector_breakdown.py` | 35 | Context parsing, member name normalization, fact extraction, integration |
 | `test_llm_review.py` | 33 | LLM review candidate selection and processing |

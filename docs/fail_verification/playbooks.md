@@ -117,3 +117,118 @@ for FAIL purposes and retain it as a scoped WARN/DISCLOSE signal. Only classify
 as CONFIRMED_DATA_ERROR when the evidence shows the N-PORT export was intended
 to represent the full portfolio or the source rows prove missing/duplicated
 private-market holdings.
+
+## Fund Accounting And Period Checks: F10-F13, F17, F18
+
+These rules validate fund-period accounting identities and regulatory/accounting
+relationships in `fund_financials.csv`.
+
+Required evidence:
+- `validation_rows`, `fund_financials_row`, and `nearby_fund_rows`.
+- Cached source-specific rows when available: companyfacts cache,
+  `bdc_fund_income.csv`, `nport_fund_info.csv`, `ncsr_financials.csv`,
+  `combined_universe.csv`, and `fund_identity.csv`.
+
+Common valid exceptions:
+- F11 can fail when NAV per share is class-level but shares outstanding are
+  aggregate across multiple share classes.
+- F12 can fail when borrowings exclude notes, securitizations, preferred stock,
+  or other leverage-like instruments used in the reported leverage ratio.
+- F18 is a business/regulatory flag; low asset coverage can be real rather than
+  an extraction defect.
+
+False-positive mechanisms:
+- Wrong-period source facts selected into `fund_financials.csv`.
+- Comparative-period facts mixed with current-period facts.
+- Consolidated versus unconsolidated balance-sheet concepts.
+
+Escalate as `INSUFFICIENT_EVIDENCE` when the bundle lacks direct source facts or
+enough adjacent-period context to distinguish source reporting from extraction
+or period-selection error.
+
+## Fund Cross-Level Checks: F20-F28
+
+These rules compare fund-level facts with position-level holdings. They are
+high-value because failures can indicate missing holdings, aggregate leakage,
+dimension-path duplication, denominator errors, or coverage gaps.
+
+Required evidence:
+- `fund_financials_row`, `holdings_aggregate`, `holdings_examples`.
+- Same-period holdings validation artifacts, GAV reconciliation, pct sum, and
+  count stability evidence where present.
+- Rule-specific detail evidence when present, such as
+  `f20_gav_reconciliation_detail`, `f21_net_assets_scope_reconciliation`,
+  `f22_pct_sum_detail`, `f23_reported_vs_computed_pct_detail`,
+  `f24_position_count_stability_detail`,
+  `f25_holdings_fv_stability_detail`, `f26_leverage_two_view_sources`,
+  `f27_wac_income_yield_sources`, and
+  `f28_coverage_completeness_sources`.
+- Source-specific rows only from cached artifacts. Do not fetch filings.
+
+Common valid exceptions:
+- Full-fund assets include cash, receivables, liquid securities, or assets that
+  are intentionally outside private-market holdings scope.
+- BDC leverage means holdings FV can exceed net assets.
+- F27 can fail when income yield includes fee, dividend, or non-interest income,
+  or when holdings WAC coverage is thin.
+- F28 can be a known coverage gap for pre-XBRL BDCs or funds outside the
+  holdings extraction scope.
+
+False-positive mechanisms:
+- Using full-fund total assets as a denominator for scoped private-market
+  holdings.
+- Incorrect fund-period alignment between holdings and fund financials.
+- Duplicate dimension paths or subtotal rows inflating holdings FV or pct sums.
+
+Use `CONFIRMED_DATA_ERROR` only when the bundle shows the mechanism, not merely
+an extreme ratio. Use `VALIDATOR_FALSE_POSITIVE` when the comparison is scoped
+wrongly or uses an unreliable denominator. Use `INSUFFICIENT_EVIDENCE` when the
+bundle does not include enough source or reconciliation evidence.
+
+For F21, if `f21_net_assets_scope_reconciliation` flags
+`scope_mismatch_candidate=true`, the verdict must address whether full-fund net
+assets are being compared with private-market-filtered holdings. Ignoring that
+signal is a validation failure.
+
+## Fund Range And Anomaly Checks: F30-F42
+
+These rules are screening flags for implausible rates, returns, NAVs, leverage,
+quarter changes, stale data, entity mismatches, and income/distribution
+relationships.
+
+Required evidence:
+- `validation_rows`, `fund_financials_row`, `nearby_fund_rows`, and any cached
+  source-specific rows in the bundle.
+- Rule-specific evidence when present: F30 NAV/share source candidates, F32
+  expense-ratio scale sources, and F33 distribution-rate source facts and
+  adjacent periods.
+
+Common valid exceptions:
+- Distress, restructurings, reverse splits, special distributions, mergers,
+  liquidations, and newly launched funds can create extreme but real values.
+- Decimal versus percent scale ambiguity is common for rates and returns.
+
+False-positive mechanisms:
+- A threshold is a proxy rather than a correctness proof.
+- Sparse or stale source data can make quarter-over-quarter comparisons noisy.
+
+Do not force an accounting conclusion from a range flag alone. If the bundle
+only shows that a value is unusual, return `INSUFFICIENT_EVIDENCE` unless source
+or deterministic reconciliation evidence identifies the mechanism.
+
+## Frontend-Derived Fund Checks: F1-F8
+
+F1-F8 are export-gate checks. They use `sampling_unit=frontend_export` when
+implemented. A FAIL should normally be treated as a hard export/data contract
+problem, but the verifier still needs evidence from the bundle before assigning
+`CONFIRMED_DATA_ERROR`.
+
+Required evidence:
+- The validation row, the fund row, and the relevant generated export/source
+  rows if the bundle includes them.
+- For F1, review the export value trace showing raw `fund_financials.csv`
+  values, parsed numeric state, serialized export-facing values, and generated
+  frontend JSON rows when available.
+
+Escalate as `INSUFFICIENT_EVIDENCE` if the bundle does not show the generated
+export condition or the upstream fund row that produced it.

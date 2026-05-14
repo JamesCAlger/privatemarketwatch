@@ -30,7 +30,7 @@ function ChartTooltip({
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="bg-white rounded-lg shadow-panel px-4 py-3 text-sm border border-surface-muted">
+    <div className="bg-white shadow-panel px-4 py-3 text-sm border border-surface-muted">
       <p className="font-semibold text-navy mb-1">{d.label}</p>
       <p className="text-muted">
         FV Share:{' '}
@@ -103,7 +103,7 @@ export default function ConcentrationCurve({ data, title }: ConcentrationCurvePr
         {data.map((d, i) => (
           <span key={d.label} className="flex items-center gap-1">
             <span
-              className="inline-block w-2 h-2 rounded-sm flex-shrink-0"
+              className="inline-block w-2 h-2 flex-shrink-0"
               style={{ backgroundColor: BRACKET_COLORS[i % BRACKET_COLORS.length] }}
             />
             <span className="text-navy">{d.label}</span>

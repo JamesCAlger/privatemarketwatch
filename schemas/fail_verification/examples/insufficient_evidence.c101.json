@@ -1,5 +1,6 @@
 {
   "schema_version": "1.0",
+  "dataset": "private_markets_holdings",
   "verification_id": "C101_0000000001_2025-03-31_example000004",
   "bundle_id": "C101_0000000001_2025-03-31_example000004",
   "bundle_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
@@ -33,12 +34,29 @@
     "rule_condition_true": true,
     "validator_correct": true,
     "material_risk_real": true,
-    "root_cause": "UNKNOWN"
+    "root_cause": "BUNDLE_MISSING_LOCAL_EVIDENCE"
   },
   "determination_rationale": {
     "why_this_verdict": "The unified row is unsafe, but the raw row could not be located.",
     "why_not_alternative": "A confirmed extraction gap requires a raw source value that is not in the bundle.",
     "residual_uncertainty": "The missing raw source row prevents determining whether fair value was absent at source or lost during extraction."
+  },
+  "evidence_inventory": [
+    {
+      "evidence_id": "holdings_row",
+      "reviewed": true,
+      "classification": "INSUFFICIENT",
+      "assessment": "Shows the unsafe output row but not the source mechanism."
+    }
+  ],
+  "already_present_evidence_assessment": {
+    "required_for_insufficient": true,
+    "assessment": [
+      {
+        "evidence_id": "holdings_row",
+        "why_not_determinative": "The output row proves the condition but not whether source omission or extraction loss caused it."
+      }
+    ]
   },
   "evidence_refs": [
     { "evidence_id": "holdings_row", "supports": "Shows missing fair value on an indexable row." }

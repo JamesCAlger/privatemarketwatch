@@ -1,0 +1,57 @@
+[
+  {
+    "cik": "0001287750",
+    "name": "Ares Capital Corp",
+    "report_date": "2024-03-31",
+    "expected_position_count": null,
+    "expected_total_fv": null,
+    "tolerance_count": 0.05,
+    "tolerance_fv": 0.05,
+    "spot_checks": [],
+    "notes": "TODO: verify against 10-K filing"
+  },
+  {
+    "cik": "0001422183",
+    "name": "FS KKR Capital Corp",
+    "report_date": "2024-03-31",
+    "expected_position_count": null,
+    "expected_total_fv": null,
+    "tolerance_count": 0.05,
+    "tolerance_fv": 0.05,
+    "spot_checks": [],
+    "notes": "TODO: verify against 10-K filing"
+  },
+  {
+    "cik": "0001280784",
+    "name": "Hercules Capital",
+    "report_date": "2024-03-31",
+    "expected_position_count": null,
+    "expected_total_fv": null,
+    "tolerance_count": 0.05,
+    "tolerance_fv": 0.05,
+    "spot_checks": [],
+    "notes": "TODO: verify against 10-K filing"
+  },
+  {
+    "cik": "0001396440",
+    "name": "Main Street Capital",
+    "report_date": "2024-03-31",
+    "expected_position_count": null,
+    "expected_total_fv": null,
+    "tolerance_count": 0.05,
+    "tolerance_fv": 0.05,
+    "spot_checks": [],
+    "notes": "TODO: verify against 10-K filing"
+  },
+  {
+    "cik": "0001735964",
+    "name": "Cliffwater Corporate Lending Fund",
+    "report_date": "2024-06-30",
+    "expected_position_count": null,
+    "expected_total_fv": null,
+    "tolerance_count": 0.05,
+    "tolerance_fv": 0.05,
+    "spot_checks": [],
+    "notes": "TODO: verify against N-PORT filing (interval fund)"
+  }
+]

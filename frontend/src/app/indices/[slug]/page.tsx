@@ -153,7 +153,7 @@ export default function IndexDetailPage({
 
         {/* Performance Chart */}
         <section className="mb-14">
-          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-card">
+          <div className="bg-white p-4 sm:p-6 shadow-card">
             <TimeSeriesChart series={chartSeries} />
           </div>
         </section>
@@ -161,7 +161,7 @@ export default function IndexDetailPage({
         {/* Quarterly Returns */}
         <section className="mb-14">
           <SectionHeading>Quarterly Returns</SectionHeading>
-          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-card">
+          <div className="bg-white p-4 sm:p-6 shadow-card">
             <QuarterlyBarChart data={quarterlyReturns} />
           </div>
         </section>
@@ -172,17 +172,17 @@ export default function IndexDetailPage({
             <SectionHeading>Concentration</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {managerData.length > 0 && (
-                <div className="bg-white rounded-lg p-5 shadow-card">
+                <div className="bg-white p-5 shadow-card">
                   <ConcentrationPieChart data={managerData} title="By Manager" colors={COLORS_TEAL_RAMP} />
                 </div>
               )}
               {investeeCurve.length > 0 && (
-                <div className="bg-white rounded-lg p-5 shadow-card">
+                <div className="bg-white p-5 shadow-card">
                   <ConcentrationCurve data={investeeCurve} title="By Company" />
                 </div>
               )}
               {positionCurve.length > 0 && (
-                <div className="bg-white rounded-lg p-5 shadow-card">
+                <div className="bg-white p-5 shadow-card">
                   <ConcentrationCurve data={positionCurve} title="By Holding" />
                 </div>
               )}
@@ -195,7 +195,7 @@ export default function IndexDetailPage({
           <section className="mb-14">
             <SectionHeading>Portfolio Characteristics</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg p-5 shadow-card">
+              <div className="bg-white p-5 shadow-card">
                 <h3 className="text-sm font-medium text-navy mb-3">
                   Key Metrics
                 </h3>
@@ -224,7 +224,7 @@ export default function IndexDetailPage({
                   </div>
                 </div>
               </div>
-              <div className="bg-white rounded-lg p-5 shadow-card">
+              <div className="bg-white p-5 shadow-card">
                 <h3 className="text-sm font-medium text-navy mb-3">
                   Rate Type Split
                 </h3>
@@ -249,7 +249,7 @@ export default function IndexDetailPage({
         {sectors.length > 0 && idx.key !== 'DIRECT_LENDING' && (
           <section className="mb-14">
             <SectionHeading>Asset Category Breakdown</SectionHeading>
-            <div className="bg-white rounded-lg p-5 shadow-card">
+            <div className="bg-white p-5 shadow-card">
               <SectorChart data={sectors} color={idx.color} />
             </div>
           </section>
@@ -259,7 +259,7 @@ export default function IndexDetailPage({
         {constituents.length > 0 && (
           <section className="mb-14">
             <SectionHeading>Largest 20 Holdings</SectionHeading>
-            <div className="bg-white rounded-lg p-1 shadow-card">
+            <div className="bg-white p-1 shadow-card">
               <ConstituentTable data={constituents} indexKey={idx.key} />
             </div>
           </section>
@@ -272,7 +272,7 @@ export default function IndexDetailPage({
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2 className="text-2xl font-semibold text-navy mb-8 flex items-center gap-3">
-      <span className="w-1 h-5 bg-teal rounded-full" />
+      <span className="w-1 h-5 bg-teal" />
       {children}
     </h2>
   );
@@ -293,9 +293,9 @@ function SplitBar({
         <span className="text-navy">{label}</span>
         <span className="text-muted tabular-nums">{formatPercent(pct)}</span>
       </div>
-      <div className="h-1.5 bg-surface-muted rounded-full overflow-hidden">
+      <div className="h-1.5 bg-surface-muted overflow-hidden">
         <div
-          className="h-full rounded-full"
+          className="h-full"
           style={{ width: `${pct * 100}%`, backgroundColor: color }}
         />
       </div>

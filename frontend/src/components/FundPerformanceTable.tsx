@@ -43,7 +43,7 @@ function getQuarterlyGrossReturns(series: FundSeriesEntry[]): { quarter: string;
 
 export { getQuarterlyReturns };
 
-/** Compute summary cells (QTD, YTD, 1Y, 3Y ann., SI ann.) from quarterly returns. */
+/** Compute summary cells (QTD, YTD, 1Y, 3Y ann., Cumulative) from quarterly returns. */
 function computeSummaryCells(qReturns: { quarter: string; ret: number }[]): { label: string; value: number | null }[] {
   if (qReturns.length === 0) {
     return [
@@ -51,7 +51,7 @@ function computeSummaryCells(qReturns: { quarter: string; ret: number }[]): { la
       { label: 'YTD', value: null },
       { label: '1 Year', value: null },
       { label: '3 Year (Ann.)', value: null },
-      { label: 'Since Inception (Ann.)', value: null },
+      { label: 'Cumulative', value: null },
     ];
   }
 
@@ -74,18 +74,14 @@ function computeSummaryCells(qReturns: { quarter: string; ret: number }[]): { la
     ? Math.pow(1 + compound(last12), 1 / 3) - 1
     : null;
 
-  const total = compound(returns);
-  const years = returns.length / 4;
-  const sinceInception = years >= 1
-    ? Math.pow(1 + total, 1 / years) - 1
-    : total;
+  const cumulative = compound(returns);
 
   return [
     { label: 'QTD', value: latest },
     { label: 'YTD', value: ytd },
     { label: '1 Year', value: trail1y },
     { label: '3 Year (Ann.)', value: trail3y },
-    { label: 'Since Inception (Ann.)', value: sinceInception },
+    { label: 'Cumulative', value: cumulative },
   ];
 }
 
@@ -103,7 +99,7 @@ export default function FundPerformanceTable({ series }: FundPerformanceTablePro
 
   const renderCell = (c: { label: string; value: number | null }) => (
     c.value != null ? (
-      <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+      <span className={`inline-block px-2 py-0.5text-xs font-medium ${
         c.value >= 0 ? 'bg-teal/10 text-teal' : 'bg-red/10 text-red'
       }`}>
         {c.value >= 0 ? '+' : ''}{(c.value * 100).toFixed(1)}%
@@ -114,7 +110,7 @@ export default function FundPerformanceTable({ series }: FundPerformanceTablePro
   );
 
   return (
-    <div className="bg-white rounded-lg shadow-card overflow-hidden">
+    <div className="bg-white shadow-card overflow-hidden">
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-navy">

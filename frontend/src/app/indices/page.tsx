@@ -118,7 +118,7 @@ export default function IndicesPage() {
           </div>
 
           {/* Chart */}
-          <div className="bg-white rounded-lg p-4 sm:p-6 shadow-card">
+          <div className="bg-white p-4 sm:p-6 shadow-card">
             <TimeSeriesChart
               series={chartSeries}
               defaultVisible={['DIRECT_LENDING', 'PREFERRED_EQUITY', 'COMMON_EQUITY']}
@@ -130,7 +130,7 @@ export default function IndicesPage() {
         {summaries.length > 0 && (
           <section className="mb-14">
             <SectionHeading>Returns Summary</SectionHeading>
-            <div className="bg-white rounded-lg shadow-card overflow-x-auto">
+            <div className="bg-white shadow-card overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-navy">
@@ -213,17 +213,17 @@ export default function IndicesPage() {
             <SectionHeading>Concentration</SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {managerData.length > 0 && (
-                <div className="bg-white rounded-lg p-5 shadow-card">
+                <div className="bg-white p-5 shadow-card">
                   <ConcentrationPieChart data={managerData} title="By Manager" colors={COLORS_TEAL_RAMP} />
                 </div>
               )}
               {combinedInvesteeCurve.length > 0 && (
-                <div className="bg-white rounded-lg p-5 shadow-card">
+                <div className="bg-white p-5 shadow-card">
                   <ConcentrationCurve data={combinedInvesteeCurve} title="By Company" />
                 </div>
               )}
               {combinedPositionCurve.length > 0 && (
-                <div className="bg-white rounded-lg p-5 shadow-card">
+                <div className="bg-white p-5 shadow-card">
                   <ConcentrationCurve data={combinedPositionCurve} title="By Holding" />
                 </div>
               )}
@@ -254,7 +254,7 @@ export default function IndicesPage() {
               <Link
                 key={idx.key}
                 href={`/indices/${idx.slug}`}
-                className="group relative overflow-hidden rounded-lg bg-white p-6 transition-all hover:shadow-panel shadow-card flex flex-col"
+                className="group relative overflow-hidden bg-white p-6 transition-all hover:shadow-panel shadow-card flex flex-col"
               >
                 <div
                   className="absolute top-0 left-0 h-1 w-full"
@@ -287,7 +287,7 @@ function ReturnBadge({ value }: { value: number | null | undefined }) {
   if (value == null || isNaN(value)) return <span className="text-muted">--</span>;
   const isPositive = value >= 0;
   return (
-    <span className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${
+    <span className={`inline-block px-1.5 py-0.5 text-xs font-medium ${
       isPositive
         ? 'bg-teal/10 text-teal'
         : 'bg-red/10 text-red'
@@ -300,7 +300,7 @@ function ReturnBadge({ value }: { value: number | null | undefined }) {
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2 className="text-xl font-semibold text-navy mb-6 flex items-center gap-3">
-      <span className="w-1 h-5 bg-teal rounded-full" />
+      <span className="w-1 h-5 bg-teal" />
       {children}
     </h2>
   );

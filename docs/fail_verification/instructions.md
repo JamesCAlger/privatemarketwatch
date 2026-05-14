@@ -31,6 +31,21 @@ Verdicts:
 The anti-sycophancy check must state the strongest alternative explanation and
 why it was rejected or left unresolved.
 
+## Mandatory Evidence Inventory
+
+Every verdict must include `evidence_inventory`. It must list every
+`evidence_items[].evidence_id` in the bundle, mark it reviewed, and classify the
+item as one of:
+
+- `DATA_ERROR`
+- `VALID_EXCEPTION`
+- `FALSE_POSITIVE`
+- `INSUFFICIENT`
+
+Do this inventory before choosing `INSUFFICIENT_EVIDENCE`. A reviewer may not
+skip already-bundled source rows, denominators, reconciliation rows, adjacent
+periods, or direct playbook signals.
+
 ## Epistemic Contract
 
 Every verdict must separate positive evidence from ruled-out alternatives.
@@ -53,4 +68,8 @@ Confidence caps:
 - `ABSENCE_OF_CONTRARY_EVIDENCE` cannot support a positive verdict.
 - `CORROBORATED_INFERENCE` cannot support `high` confidence.
 - `DETERMINISTIC_RECONCILIATION` needs at least two evidence references.
-- `INSUFFICIENT_EVIDENCE` must list the missing evidence.
+- `INSUFFICIENT_EVIDENCE` must list the missing evidence, set
+  `validator_assessment.root_cause` to either
+  `BUNDLE_MISSING_LOCAL_EVIDENCE` or `RULE_OR_MODEL_NOT_DETERMINATIVE`, and
+  fill `already_present_evidence_assessment` with why each bundled item did not
+  settle the mechanism.

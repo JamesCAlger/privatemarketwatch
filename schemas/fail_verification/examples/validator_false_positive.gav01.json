@@ -1,5 +1,6 @@
 {
   "schema_version": "1.0",
+  "dataset": "private_markets_holdings",
   "verification_id": "GAV01_0000000001_2025-03-31_example000003",
   "bundle_id": "GAV01_0000000001_2025-03-31_example000003",
   "bundle_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
@@ -48,6 +49,24 @@
     "why_this_verdict": "Holdings are internally consistent, but the comparison source is wrong-period data.",
     "why_not_alternative": "Missing fair value is not supported by the related row-level FAIL counts.",
     "residual_uncertainty": "Manual source review could still identify a parent/subsidiary mismatch."
+  },
+  "evidence_inventory": [
+    {
+      "evidence_id": "gav_reconciliation",
+      "reviewed": true,
+      "classification": "FALSE_POSITIVE",
+      "assessment": "Identifies the comparison source and ratio under review."
+    },
+    {
+      "evidence_id": "fund_financials",
+      "reviewed": true,
+      "classification": "FALSE_POSITIVE",
+      "assessment": "Shows stale or wrong-period comparison context."
+    }
+  ],
+  "already_present_evidence_assessment": {
+    "required_for_insufficient": false,
+    "assessment": []
   },
   "evidence_refs": [
     { "evidence_id": "gav_reconciliation", "supports": "Identifies the comparison source and ratio." },

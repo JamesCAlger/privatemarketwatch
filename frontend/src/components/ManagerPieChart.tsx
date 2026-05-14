@@ -29,7 +29,7 @@ function ChartTooltip({
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="bg-white rounded-lg shadow-panel px-4 py-3 text-sm border border-surface-muted">
+    <div className="bg-white shadow-panel px-4 py-3 text-sm border border-surface-muted">
       <p className="font-semibold text-navy mb-1">{d.name}</p>
       <p className="text-muted">
         Fair Value: <span className="text-navy font-medium">{formatDollar(d.totalFv)}</span>
@@ -55,7 +55,7 @@ function ChartLegend({ items }: { items: { name: string; color: string; pct: num
       {items.map((entry) => (
         <span key={entry.name} className="flex items-center gap-1">
           <span
-            className="inline-block w-2 h-2 rounded-sm flex-shrink-0"
+            className="inline-block w-2 h-2 flex-shrink-0"
             style={{ backgroundColor: entry.color }}
           />
           <span className="text-navy">{entry.name}</span>

@@ -20,6 +20,8 @@ import duckdb
 from pipeline.config import (
     BDC_SECTOR_BREAKDOWN_FILE,
     CLASSIFICATION_VALIDATION_FILE,
+    COLUMN_QUALITY_METRICS_FILE,
+    DATA_QUALITY_METRICS_FILE,
     CIK_TO_MANAGER_BRAND,
     FEE_UPLIFT_FILE,
     FUND_IDENTITY_FILE,
@@ -28,6 +30,7 @@ from pipeline.config import (
     LLM_FUND_VALIDATION_RESULTS_FILE,
     OUTPUT_DIR,
     PROJECT_ROOT,
+    ROW_VALIDATION_ISSUES_FILE,
     VALIDATION_REPORT_FILE,
 )
 from pipeline.index_returns import MIN_BEGIN_FV
@@ -2384,6 +2387,110 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
             }
             for r in cls_breakdown
         ]
+
+    # -- 3b. Unified quality tiers and column-level issue metrics --
+    if DATA_QUALITY_METRICS_FILE.exists():
+        try:
+            tier_rows = con.execute(f"""
+                SELECT validation_tier, COUNT(*) AS n
+                FROM read_csv_auto(
+                    '{DATA_QUALITY_METRICS_FILE.as_posix()}',
+                    all_varchar=true
+                )
+                GROUP BY validation_tier
+                ORDER BY validation_tier
+            """).fetchall()
+            out["validationTierCounts"] = [
+                {"tier": r[0], "count": r[1]} for r in tier_rows
+            ]
+        except Exception as exc:
+            logger.warning("  data quality tier export failed: %s", exc)
+
+    if ROW_VALIDATION_ISSUES_FILE.exists():
+        try:
+            sev_rows = con.execute(f"""
+                SELECT severity, COUNT(*) AS n
+                FROM read_csv_auto(
+                    '{ROW_VALIDATION_ISSUES_FILE.as_posix()}',
+                    all_varchar=true,
+                    quote='"'
+                )
+                GROUP BY severity
+                ORDER BY severity
+            """).fetchall()
+            out["issueSeverityCounts"] = [
+                {"severity": r[0], "count": r[1]} for r in sev_rows
+            ]
+
+            evidence_rows = con.execute(f"""
+                SELECT evidence_strength, COUNT(*) AS n
+                FROM read_csv_auto(
+                    '{ROW_VALIDATION_ISSUES_FILE.as_posix()}',
+                    all_varchar=true,
+                    quote='"'
+                )
+                GROUP BY evidence_strength
+                ORDER BY evidence_strength
+            """).fetchall()
+            out["issueEvidenceCounts"] = [
+                {"evidenceStrength": r[0], "count": r[1]}
+                for r in evidence_rows
+            ]
+
+            top_cols = con.execute(f"""
+                SELECT "column", severity, COUNT(*) AS n
+                FROM read_csv_auto(
+                    '{ROW_VALIDATION_ISSUES_FILE.as_posix()}',
+                    all_varchar=true,
+                    quote='"'
+                )
+                WHERE "column" IS NOT NULL AND "column" != ''
+                GROUP BY "column", severity
+                ORDER BY n DESC
+                LIMIT 20
+            """).fetchall()
+            out["topIssueColumns"] = [
+                {"column": r[0], "severity": r[1], "count": r[2]}
+                for r in top_cols
+            ]
+        except Exception as exc:
+            logger.warning("  row validation issue export failed: %s", exc)
+
+    if COLUMN_QUALITY_METRICS_FILE.exists():
+        try:
+            col_rows = con.execute(f"""
+                SELECT
+                    "column",
+                    SUM(TRY_CAST(total_rows AS BIGINT)) AS total_rows,
+                    SUM(TRY_CAST(filled_count AS BIGINT))
+                        / NULLIF(SUM(TRY_CAST(total_rows AS BIGINT)), 0) AS fill_rate,
+                    SUM(TRY_CAST(parseable_count AS BIGINT))
+                        / NULLIF(SUM(TRY_CAST(filled_count AS BIGINT)), 0) AS parse_rate,
+                    SUM(TRY_CAST(valid_count AS BIGINT))
+                        / NULLIF(SUM(TRY_CAST(total_rows AS BIGINT)), 0) AS valid_rate,
+                    SUM(TRY_CAST(fail_count AS BIGINT)) AS fail_count,
+                    SUM(TRY_CAST(warn_count AS BIGINT)) AS warn_count
+                FROM read_csv_auto(
+                    '{COLUMN_QUALITY_METRICS_FILE.as_posix()}',
+                    all_varchar=true
+                )
+                GROUP BY "column"
+                ORDER BY fail_count DESC, warn_count DESC, "column"
+            """).fetchall()
+            out["columnQualityMetrics"] = [
+                {
+                    "column": r[0],
+                    "totalRows": r[1] or 0,
+                    "fillRate": _safe_round(r[2], 4),
+                    "parseRate": _safe_round(r[3], 4),
+                    "validRate": _safe_round(r[4], 4),
+                    "failCount": r[5] or 0,
+                    "warnCount": r[6] or 0,
+                }
+                for r in col_rows
+            ]
+        except Exception as exc:
+            logger.warning("  column quality metric export failed: %s", exc)
 
     # -- 4. Third-party validation --
     if VALIDATION_REPORT_FILE.exists():

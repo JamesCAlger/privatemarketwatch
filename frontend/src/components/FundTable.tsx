@@ -115,14 +115,14 @@ export default function FundTable({ funds }: FundTableProps) {
           placeholder="Search by name, adviser, or ticker..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 px-4 py-2 text-sm border border-surface-muted rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal"
+          className="flex-1 px-4 py-2 text-sm border border-surface-muted bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal"
         />
         <div className="flex gap-1">
           {FILTERS.map((f) => (
             <button
               key={f.key}
               onClick={() => setVehicleFilter(f.key)}
-              className={`text-xs px-3 py-2 rounded-md transition-colors ${
+              className={`text-xs px-3 py-2 transition-colors ${
                 vehicleFilter === f.key
                   ? 'bg-navy text-white font-medium'
                   : 'text-muted hover:text-navy hover:bg-surface bg-white border border-surface-muted'
@@ -135,7 +135,7 @@ export default function FundTable({ funds }: FundTableProps) {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-lg shadow-card overflow-x-auto">
+      <div className="bg-white shadow-card overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-navy">
@@ -189,7 +189,7 @@ export default function FundTable({ funds }: FundTableProps) {
                 </td>
                 <td className="py-3 px-4 text-right tabular-nums">
                   {fund.quarterlyReturn != null ? (
-                    <span className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${
+                    <span className={`inline-block px-1.5 py-0.5text-xs font-medium ${
                       fund.quarterlyReturn >= 0
                         ? 'bg-teal/10 text-teal'
                         : 'bg-red/10 text-red'

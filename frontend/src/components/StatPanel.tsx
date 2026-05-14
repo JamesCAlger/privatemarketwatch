@@ -19,12 +19,12 @@ export default function StatPanel({ stats, accentColor }: StatPanelProps) {
   const secondary = stats.slice(1);
 
   return (
-    <div className="bg-white rounded-lg shadow-card overflow-hidden">
+    <div className="bg-white shadow-card overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-center">
         {/* Featured stat */}
         <div className="flex items-center gap-4 p-6 md:pr-8 md:border-r border-b md:border-b-0 border-surface-muted">
           {accentColor && (
-            <div className="hidden md:block w-1 h-12 rounded-full" style={{ backgroundColor: accentColor }} />
+            <div className="hidden md:block w-1 h-12" style={{ backgroundColor: accentColor }} />
           )}
           <StatValue label={featured.label} value={featured.value} delta={featured.delta} size="lg" />
         </div>

@@ -66,7 +66,7 @@ export default function AboutPage() {
         <div className="space-y-8 text-sm text-navy/80 leading-relaxed prose-content">
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal rounded-full" />
+              <span className="w-1 h-5 bg-teal" />
               About the Index Family
             </h2>
             <p>
@@ -90,7 +90,7 @@ export default function AboutPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal rounded-full" />
+              <span className="w-1 h-5 bg-teal" />
               Why Evergreen Vehicles?
             </h2>
             <Callout>
@@ -112,7 +112,7 @@ export default function AboutPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal rounded-full" />
+              <span className="w-1 h-5 bg-teal" />
               Index Construction
             </h2>
             <p>
@@ -148,7 +148,7 @@ export default function AboutPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal rounded-full" />
+              <span className="w-1 h-5 bg-teal" />
               Update Frequency
             </h2>
             <p>
@@ -168,7 +168,7 @@ export default function AboutPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal rounded-full" />
+              <span className="w-1 h-5 bg-teal" />
               Disclaimer
             </h2>
             <p>
@@ -189,7 +189,7 @@ export default function AboutPage() {
 
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal rounded-full" />
+              <span className="w-1 h-5 bg-teal" />
               Learn More
             </h2>
             <p>
@@ -211,7 +211,7 @@ export default function AboutPage() {
 
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-white rounded-lg p-4 shadow-card">
+    <div className="bg-white p-4 shadow-card">
       <p className="text-xs text-muted mb-1">{label}</p>
       <p className="text-lg font-bold text-navy tabular-nums">{value}</p>
     </div>
@@ -220,7 +220,7 @@ function MiniStat({ label, value }: { label: string; value: string }) {
 
 function Callout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border-l-3 border-teal bg-teal/5 rounded-r-lg px-4 py-3 my-4 text-sm text-navy/80" style={{ borderLeftWidth: '3px' }}>
+    <div className="border-l-3 border-teal bg-teal/5 px-4 py-3 my-4 text-sm text-navy/80" style={{ borderLeftWidth: '3px' }}>
       {children}
     </div>
   );

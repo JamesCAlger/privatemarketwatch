@@ -649,6 +649,329 @@ class TestExtractInvestmentFacts:
 
 
 # ---------------------------------------------------------------------------
+# 6b. Decimals normalization in _extract_investment_facts
+# ---------------------------------------------------------------------------
+
+# Filing with mixed decimals: 5 positions at decimals="-3" (correct) and
+# 1 position at decimals="-6" (1000x inflated -- filer error).
+XBRL_MIXED_DECIMALS = textwrap.dedent("""\
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xbrl
+        xmlns="http://www.xbrl.org/2003/instance"
+        xmlns:xbrli="http://www.xbrl.org/2003/instance"
+        xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+        xmlns:cik="http://example.com/cik"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+        <!-- 5 normal positions (decimals="-3") -->
+        <xbrli:context id="ctx_a">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Normal Corp A</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_b">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Normal Corp B</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_c">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Normal Corp C</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_d">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Normal Corp D</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_e">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Normal Corp E</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+
+        <!-- 1 outlier position (decimals="-6", value 1000x too large) -->
+        <xbrli:context id="ctx_outlier">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Outlier Corp</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+
+        <!-- Normal facts (decimals="-3") -->
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_a" unitRef="usd" decimals="-3">10000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtCost contextRef="ctx_a" unitRef="usd" decimals="-3">9500000</cik:InvestmentOwnedAtCost>
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_b" unitRef="usd" decimals="-3">20000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtCost contextRef="ctx_b" unitRef="usd" decimals="-3">19000000</cik:InvestmentOwnedAtCost>
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_c" unitRef="usd" decimals="-3">15000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_d" unitRef="usd" decimals="-3">12000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_e" unitRef="usd" decimals="-3">8000000</cik:InvestmentOwnedAtFairValue>
+
+        <!-- Outlier facts (decimals="-6", 1000x inflated) -->
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_outlier" unitRef="usd" decimals="-6">25000000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtCost contextRef="ctx_outlier" unitRef="usd" decimals="-6">24000000000</cik:InvestmentOwnedAtCost>
+
+        <!-- Non-monetary fact on outlier (should NOT be corrected) -->
+        <cik:InvestmentInterestRate contextRef="ctx_outlier" unitRef="pure" decimals="4">0.085</cik:InvestmentInterestRate>
+    </xbrl>
+""")
+
+# Filing where ALL facts have the same decimals -- no correction needed.
+XBRL_UNIFORM_DECIMALS = textwrap.dedent("""\
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xbrl
+        xmlns="http://www.xbrl.org/2003/instance"
+        xmlns:xbrli="http://www.xbrl.org/2003/instance"
+        xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+        xmlns:cik="http://example.com/cik">
+
+        <xbrli:context id="ctx_u1">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Uniform A</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-06-30</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_u2">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Uniform B</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-06-30</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_u3">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001234567</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                        <cik:InvestmentIdentifierDomain>Uniform C</cik:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2023-06-30</xbrli:instant></xbrli:period>
+        </xbrli:context>
+
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_u1" unitRef="usd" decimals="-3">10000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtCost contextRef="ctx_u1" unitRef="usd" decimals="-3">9000000</cik:InvestmentOwnedAtCost>
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_u2" unitRef="usd" decimals="-3">20000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtCost contextRef="ctx_u2" unitRef="usd" decimals="-3">19000000</cik:InvestmentOwnedAtCost>
+        <cik:InvestmentOwnedAtFairValue contextRef="ctx_u3" unitRef="usd" decimals="-3">30000000</cik:InvestmentOwnedAtFairValue>
+        <cik:InvestmentOwnedAtCost contextRef="ctx_u3" unitRef="usd" decimals="-3">28000000</cik:InvestmentOwnedAtCost>
+    </xbrl>
+""")
+
+
+class TestDecimalsNormalization:
+    """Tests for mixed-decimals normalization in _extract_investment_facts."""
+
+    def test_outlier_corrected(self):
+        """Facts with decimals=-6 amid dominant -3 are scaled down 1000x."""
+        from pipeline.bdc_filings import _parse_xbrl_contexts, _extract_investment_facts
+        tree = _parse_tree(XBRL_MIXED_DECIMALS)
+        contexts = _parse_xbrl_contexts(tree)
+        facts = _extract_investment_facts(tree, contexts)
+
+        outlier = [f for f in facts if "Outlier" in f.get("investment_identifier", "")]
+        assert len(outlier) == 1
+        o = outlier[0]
+        # 25000000000 * 10^(-6 - (-3)) = 25000000000 * 10^-3 = 25000000
+        assert o["fair_value"] == pytest.approx(25000000.0, rel=1e-6)
+        assert o["cost"] == pytest.approx(24000000.0, rel=1e-6)
+
+    def test_normal_positions_unchanged(self):
+        """Positions with dominant decimals are not modified."""
+        from pipeline.bdc_filings import _parse_xbrl_contexts, _extract_investment_facts
+        tree = _parse_tree(XBRL_MIXED_DECIMALS)
+        contexts = _parse_xbrl_contexts(tree)
+        facts = _extract_investment_facts(tree, contexts)
+
+        normal_a = [f for f in facts if "Normal Corp A" in f.get("investment_identifier", "")]
+        assert len(normal_a) == 1
+        assert normal_a[0]["fair_value"] == 10000000.0
+        assert normal_a[0]["cost"] == 9500000.0
+
+    def test_non_monetary_not_corrected(self):
+        """Non-monetary fields (rates, dates) are never scaled."""
+        from pipeline.bdc_filings import _parse_xbrl_contexts, _extract_investment_facts
+        tree = _parse_tree(XBRL_MIXED_DECIMALS)
+        contexts = _parse_xbrl_contexts(tree)
+        facts = _extract_investment_facts(tree, contexts)
+
+        outlier = [f for f in facts if "Outlier" in f.get("investment_identifier", "")]
+        assert outlier[0]["interest_rate"] == 0.085  # unchanged
+
+    def test_uniform_decimals_no_change(self):
+        """When all facts share the same decimals, nothing changes."""
+        from pipeline.bdc_filings import _parse_xbrl_contexts, _extract_investment_facts
+        tree = _parse_tree(XBRL_UNIFORM_DECIMALS)
+        contexts = _parse_xbrl_contexts(tree)
+        facts = _extract_investment_facts(tree, contexts)
+
+        assert len(facts) == 3
+        fv_values = sorted([f["fair_value"] for f in facts])
+        assert fv_values == [10000000.0, 20000000.0, 30000000.0]
+
+    def test_too_few_facts_skips_normalization(self):
+        """Fewer than 5 monetary facts -> no normalization applied."""
+        from pipeline.bdc_filings import _parse_xbrl_contexts, _extract_investment_facts
+        # XBRL_ALT_DIMENSION has just 2 monetary facts (FV + cost) -- below threshold
+        tree = _parse_tree(XBRL_ALT_DIMENSION)
+        contexts = _parse_xbrl_contexts(tree)
+        facts = _extract_investment_facts(tree, contexts)
+
+        assert len(facts) == 1
+        assert facts[0]["fair_value"] == 3000000.0  # raw value preserved
+
+    def test_precision_only_difference_not_corrected(self):
+        """When decimals differ but values are NOT inflated, skip correction.
+
+        This covers CIK 1521945 (Prospect Floating Rate) where dominant is
+        decimals=0 and a few facts have decimals=-3 with normal-range values.
+        """
+        from pipeline.bdc_filings import _parse_xbrl_contexts, _extract_investment_facts
+
+        # 5 positions at decimals=0, 1 at decimals=-3 with a normal value
+        xml = textwrap.dedent("""\
+            <?xml version="1.0" encoding="UTF-8"?>
+            <xbrl
+                xmlns="http://www.xbrl.org/2003/instance"
+                xmlns:xbrli="http://www.xbrl.org/2003/instance"
+                xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+                xmlns:cik="http://example.com/cik">
+
+                <xbrli:context id="ctx_p1">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">0001521945</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                                <cik:InvestmentIdentifierDomain>Position A</cik:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period>
+                </xbrli:context>
+                <xbrli:context id="ctx_p2">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">0001521945</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                                <cik:InvestmentIdentifierDomain>Position B</cik:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period>
+                </xbrli:context>
+                <xbrli:context id="ctx_p3">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">0001521945</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                                <cik:InvestmentIdentifierDomain>Position C</cik:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period>
+                </xbrli:context>
+                <xbrli:context id="ctx_p4">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">0001521945</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                                <cik:InvestmentIdentifierDomain>Position D</cik:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period>
+                </xbrli:context>
+                <xbrli:context id="ctx_p5">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">0001521945</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                                <cik:InvestmentIdentifierDomain>Position E</cik:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period>
+                </xbrli:context>
+                <xbrli:context id="ctx_diff">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">0001521945</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="cik:InvestmentIdentifierAxis">
+                                <cik:InvestmentIdentifierDomain>Position DiffPrec</cik:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period>
+                </xbrli:context>
+
+                <!-- 5 facts at decimals=0 -->
+                <cik:InvestmentOwnedAtFairValue contextRef="ctx_p1" unitRef="usd" decimals="0">15000000</cik:InvestmentOwnedAtFairValue>
+                <cik:InvestmentOwnedAtFairValue contextRef="ctx_p2" unitRef="usd" decimals="0">20000000</cik:InvestmentOwnedAtFairValue>
+                <cik:InvestmentOwnedAtFairValue contextRef="ctx_p3" unitRef="usd" decimals="0">12000000</cik:InvestmentOwnedAtFairValue>
+                <cik:InvestmentOwnedAtFairValue contextRef="ctx_p4" unitRef="usd" decimals="0">8000000</cik:InvestmentOwnedAtFairValue>
+                <cik:InvestmentOwnedAtFairValue contextRef="ctx_p5" unitRef="usd" decimals="0">25000000</cik:InvestmentOwnedAtFairValue>
+
+                <!-- 1 fact at decimals=-3 with NORMAL value (not inflated) -->
+                <cik:InvestmentOwnedAtFairValue contextRef="ctx_diff" unitRef="usd" decimals="-3">18000000</cik:InvestmentOwnedAtFairValue>
+            </xbrl>
+        """)
+
+        tree = _parse_tree(xml)
+        contexts = _parse_xbrl_contexts(tree)
+        facts = _extract_investment_facts(tree, contexts)
+
+        diff_pos = [f for f in facts if "DiffPrec" in f.get("investment_identifier", "")]
+        assert len(diff_pos) == 1
+        # Value should NOT be corrected -- 18M is in-range (not 100x the median)
+        assert diff_pos[0]["fair_value"] == 18000000.0
+
+
+# ---------------------------------------------------------------------------
 # 7. _parse_single_filing (end-to-end single file)
 # ---------------------------------------------------------------------------
 
@@ -986,6 +1309,67 @@ class TestDownloadXBRLInstances:
 # ---------------------------------------------------------------------------
 
 class TestParseAllFilings:
+    def test_dedupe_prefers_complete_context_and_fills_sparse_values(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "",
+                "cost": "",
+                "principal_amount": "",
+                "interest_rate": "SOFR+500",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "interest_rate": "",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["fair_value"] == "1000000"
+        assert row["cost"] == "990000"
+        assert row["principal_amount"] == "1000000"
+        assert row["interest_rate"] == "SOFR+500"
+        assert int(row["dedupe_context_count"]) == 2
+        assert row["dedupe_conflict_fields"] == ""
+
+    def test_dedupe_marks_conflicting_economic_facts(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "2000000",
+                "cost": "990000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 1
+        assert result.iloc[0]["fair_value"] == "1000000"
+        assert result.iloc[0]["dedupe_conflict_fields"] == "fair_value"
+
     @patch("pipeline.bdc_filings.BDC_HOLDINGS_FILE")
     @patch("pipeline.bdc_filings.BDC_PARSE_PROGRESS_FILE")
     def test_parses_and_saves(self, mock_progress, mock_holdings, tmp_dir):

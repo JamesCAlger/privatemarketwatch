@@ -10,10 +10,13 @@ and scoped N-PORT GAV coverage review under `GAV_NPORT01`.
 ## Commands
 
 ```powershell
-python scripts/fail_verification/build_sample_manifest.py
+python scripts/fail_verification/build_sample_manifest.py --dataset holdings
+python scripts/fail_verification/build_sample_manifest.py --dataset funds
+python scripts/fail_verification/build_evidence_bundle.py --dataset funds --all --overwrite
 python scripts/fail_verification/build_evidence_bundle.py --verification-id <id>
+python scripts/fail_verification/validate_verdict.py --all --dataset funds
 python scripts/fail_verification/validate_verdict.py --verdict data/output/fail_verification/verdicts/<id>.json
-python scripts/fail_verification/summarize_verdicts.py
+python scripts/fail_verification/summarize_verdicts.py --dataset funds
 ```
 
 Use `--all` on `build_evidence_bundle.py` only when the source-file hashing

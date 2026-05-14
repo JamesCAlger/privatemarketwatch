@@ -1,5 +1,6 @@
 {
   "schema_version": "1.0",
+  "dataset": "private_markets_holdings",
   "verification_id": "C402_0000000001_2025-03-31_example000005",
   "bundle_id": "C402_0000000001_2025-03-31_example000005",
   "bundle_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -11,6 +12,22 @@
   "verdict": "CONFIRMED_DATA_ERROR",
   "confidence": "high",
   "mechanism": "Date parsing produced a pre-1900 maturity date.",
+  "epistemic_assessment": {
+    "confirmed_mechanism": {
+      "summary": "The parsed maturity date is invalid and source evidence is claimed.",
+      "support_strength": "DIRECT_SOURCE_EVIDENCE",
+      "evidence_refs": ["missing_evidence_id"]
+    },
+    "evidence_chain": [
+      {
+        "claim": "The sampled row has an invalid maturity date.",
+        "evidence_id": "missing_evidence_id",
+        "supports": "This evidence ID is intentionally absent from the bundle."
+      }
+    ],
+    "ruled_out_alternatives": [],
+    "missing_evidence": []
+  },
   "validator_assessment": {
     "rule_condition_true": true,
     "validator_correct": true,
@@ -22,7 +39,24 @@
     "why_not_alternative": "The row does not look like a perpetual sentinel.",
     "residual_uncertainty": "None stated."
   },
-  "evidence_refs": [],
+  "evidence_inventory": [
+    {
+      "evidence_id": "missing_evidence_id",
+      "reviewed": true,
+      "classification": "DATA_ERROR",
+      "assessment": "This evidence ID is intentionally absent from the bundle."
+    }
+  ],
+  "already_present_evidence_assessment": {
+    "required_for_insufficient": false,
+    "assessment": []
+  },
+  "evidence_refs": [
+    {
+      "evidence_id": "missing_evidence_id",
+      "supports": "This evidence ID is intentionally absent from the bundle."
+    }
+  ],
   "recommended_next_action": {
     "action_type": "PIPELINE_REMEDIATION_REVIEW",
     "summary": "Review date parsing."

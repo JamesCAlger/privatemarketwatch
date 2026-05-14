@@ -46,7 +46,7 @@ function CustomTooltip(props: {
   const retEntry = payload.find((p) => p.dataKey === 'return');
 
   return (
-    <div className="bg-navy rounded-lg px-3 py-2 shadow-panel text-xs">
+    <div className="bg-navy px-3 py-2 shadow-panel text-xs">
       <p className="text-white/60 mb-1">{formatQuarter(label)}</p>
       {levelEntry && (
         <div className="flex items-center gap-2 text-white">
@@ -114,7 +114,7 @@ export default function TotalReturnChart({
           <button
             key={p.key}
             onClick={() => setPeriod(p.key)}
-            className={`text-xs px-3 py-1.5 rounded-md transition-colors ${
+            className={`text-xs px-3 py-1.5 transition-colors ${
               period === p.key
                 ? 'bg-navy text-white font-medium'
                 : 'text-muted hover:text-navy hover:bg-surface'
@@ -140,7 +140,7 @@ export default function TotalReturnChart({
             <XAxis
               dataKey="quarter"
               tickFormatter={formatQuarter}
-              tick={{ fontSize: 10, fill: '#6C757D' }}
+              tick={{ fontSize: 11, fill: '#6C757D' }}
               interval="preserveStartEnd"
             />
             {/* Left axis: index level */}
@@ -148,7 +148,7 @@ export default function TotalReturnChart({
               <YAxis
                 yAxisId="level"
                 orientation="left"
-                tick={{ fontSize: 10, fill: '#6C757D' }}
+                tick={{ fontSize: 11, fill: '#6C757D' }}
                 tickFormatter={(v: number) => formatLevel(v)}
                 domain={['auto', 'auto']}
               />
@@ -158,7 +158,7 @@ export default function TotalReturnChart({
               <YAxis
                 yAxisId="return"
                 orientation={hasLine ? 'right' : 'left'}
-                tick={{ fontSize: 10, fill: '#6C757D' }}
+                tick={{ fontSize: 11, fill: '#6C757D' }}
                 tickFormatter={(v: number) => formatPercent(v, 1)}
               />
             )}
@@ -173,7 +173,7 @@ export default function TotalReturnChart({
               <Bar
                 yAxisId="return"
                 dataKey="return"
-                radius={[2, 2, 0, 0]}
+                radius={0}
                 animationDuration={1000}
                 animationEasing="ease-out"
                 opacity={hasLine ? 0.5 : 1}
