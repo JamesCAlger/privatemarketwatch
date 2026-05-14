@@ -1,8 +1,8 @@
 {
   "artifact_counts": {
-    "byte_identical": 3680,
-    "excluded_with_reason": 77,
-    "total": 3757
+    "byte_identical": 3677,
+    "excluded_with_reason": 76,
+    "total": 3753
   },
   "artifacts": [
     {
@@ -11,38 +11,6 @@
       "sha256": "4cdc91d3f12a109a9eb8b5aa9c9e7b9421b764307fa01b75b7ef35810b5d6f30",
       "size_bytes": 333693,
       "snapshot_path": "data/snapshots/baseline/data/output/_gics_worklist.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/_pytest_cache/.gitignore",
-      "sha256": "e7c6bb30148cf667606dcd63e7ca77acaa3cfb0c8303bf09e6419e1e1669dc6d",
-      "size_bytes": 39,
-      "snapshot_path": "data/snapshots/baseline/data/output/_pytest_cache/.gitignore",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/_pytest_cache/CACHEDIR.TAG",
-      "sha256": "37dc88ef9a0abeddbe81053a6dd8fdfb13afb613045ea1eb4a5c815a74a3bde4",
-      "size_bytes": 191,
-      "snapshot_path": "data/snapshots/baseline/data/output/_pytest_cache/CACHEDIR.TAG",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/_pytest_cache/README.md",
-      "reason": "investigation note, not a deterministic data artifact",
-      "sha256": "420e808d79a6c25d3cda0af33bc4782314a14949866682c68ce8149e89b66b70",
-      "size_bytes": 310,
-      "status": "excluded_with_reason"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/_pytest_cache/v/cache/nodeids",
-      "sha256": "9695e75bce7c89805a876af0c532b3ce3b1921880a0f3c3e80bdcc681d468bfc",
-      "size_bytes": 581,
-      "snapshot_path": "data/snapshots/baseline/data/output/_pytest_cache/v/cache/nodeids",
       "status": "byte_identical"
     },
     {
@@ -22792,7 +22760,7 @@
     {
       "artifact_class": "data_output",
       "path": "data/output/fee_uplift.csv",
-      "sha256": "f81fb67d1801aa0760c302e3c6e7f11cad65d39f1f2a8588c85206f9aee275c4",
+      "sha256": "db7b63f6ff0faf098d21715bf3125e07d620e69bb0902ca8033c1d8e2c60cfc2",
       "size_bytes": 134642,
       "snapshot_path": "data/snapshots/baseline/data/output/fee_uplift.csv",
       "status": "byte_identical"
@@ -22816,8 +22784,8 @@
     {
       "artifact_class": "data_output",
       "path": "data/output/fund_financials.csv",
-      "sha256": "691b27d219624846f9dec54e4a4eae8304ace5bd3544a35d50e2fc60a6f6540e",
-      "size_bytes": 2710017,
+      "sha256": "e4113ad7ce03bef81b48a1b5fff9874185be3a6bd78f5fb40abd78b15c0e9143",
+      "size_bytes": 2710562,
       "snapshot_path": "data/snapshots/baseline/data/output/fund_financials.csv",
       "status": "byte_identical"
     },
@@ -26128,8 +26096,8 @@
     {
       "artifact_class": "data_output",
       "path": "data/output/index_returns.csv",
-      "sha256": "8e70657115fc568f778174f6a0eff66bf0bd97823064b0dca9b32c4bc8188d1d",
-      "size_bytes": 37770,
+      "sha256": "36d71246c6c4955bd867a6778197644e57fde4733d4c3aaddad1a006c95aa42c",
+      "size_bytes": 37685,
       "snapshot_path": "data/snapshots/baseline/data/output/index_returns.csv",
       "status": "byte_identical"
     },
@@ -26240,24 +26208,24 @@
     {
       "artifact_class": "data_output",
       "path": "data/output/position_matches.csv",
-      "sha256": "a40cf64ff3af455827dadd6d54c1aa358e62f16f74b0ba43b12ddaebd1fc2a82",
-      "size_bytes": 204719110,
+      "sha256": "48c08d9ab4fb0220ec20ff2be67d6dc7bb13b9af475ba1127da2201a0c592786",
+      "size_bytes": 204721977,
       "snapshot_path": "data/snapshots/baseline/data/output/position_matches.csv",
       "status": "byte_identical"
     },
     {
       "artifact_class": "data_output",
       "path": "data/output/position_returns.csv",
-      "sha256": "528c04a458abc3a2b5a053d015e57f2bb02cbad48e18c211507b0dd7de966bd8",
-      "size_bytes": 176906443,
+      "sha256": "f8fd5cca177da21b92bd3466b4a3be470b0ac3e0d691acedb312b86a8ce72bb7",
+      "size_bytes": 176903700,
       "snapshot_path": "data/snapshots/baseline/data/output/position_returns.csv",
       "status": "byte_identical"
     },
     {
       "artifact_class": "data_output",
       "path": "data/output/private_markets_holdings.csv",
-      "sha256": "3410348f68838a37bd69b83fb417e6ea2812360bed7222c71e36eefebb8af7bf",
-      "size_bytes": 384703050,
+      "sha256": "ab4275108213630d78be4afa91421db6331b84ca2a776ff67fa92f02f4a0d6b1",
+      "size_bytes": 384702070,
       "snapshot_path": "data/snapshots/baseline/data/output/private_markets_holdings.csv",
       "status": "byte_identical"
     },
@@ -26792,7 +26760,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/aum_time_series.json",
-      "sha256": "1628290fae588bf001cac1cc165900f6e815c7e179675e0d3206d9f4d5178b04",
+      "sha256": "cdebc903bba573ad1947bbab476271612a544cdd6fa78a6723630db663321d4d",
       "size_bytes": 2270,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/aum_time_series.json",
       "status": "byte_identical"
@@ -26800,7 +26768,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/concentration_curve.json",
-      "sha256": "62f6e4caaf72b198c6234068dacb8030d48e372c085724a575ba452df282295c",
+      "sha256": "c031d1e70e7908396c25cf813d5c21f0bba22c1b535f04bc00024f02da92b554",
       "size_bytes": 5242,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/concentration_curve.json",
       "status": "byte_identical"
@@ -26808,15 +26776,15 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/credit_risk.json",
-      "sha256": "6d774715eca3d3c4c5dc20df8cac1bf482d03c04754c47dffea6084d3cde1803",
-      "size_bytes": 3187,
+      "sha256": "91549d290a369851b28c460335e4c68093a456eee9c940d430db86e2577a0a5c",
+      "size_bytes": 3189,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/credit_risk.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/data_quality.json",
-      "sha256": "044d7bd863bcb2ebcb7502486a45cdd3cec8cde903c373017570182eb488445c",
+      "sha256": "2e4b637af68dad138e0c3632d0f616a516be1a4a5fe124bb1b4abc4a8d1f6c7a",
       "size_bytes": 15993,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/data_quality.json",
       "status": "byte_identical"
@@ -26832,16 +26800,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0000017313.json",
-      "sha256": "80005704c517f3a237248d34abf6039d58bdfccd8548a3aead242d519f0e3a23",
-      "size_bytes": 15066,
+      "sha256": "6dc3583c98ef06587558997ded9e22f012aba8f47c11b90548b6f77de73fbd9d",
+      "size_bytes": 15067,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0000017313.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0000081955.json",
-      "sha256": "23308c1f1034fdb8f98d23772d6f6031043cc720a3c2875766951b8d82f003a8",
-      "size_bytes": 15182,
+      "sha256": "b800380aa7cf71898fa65ac4a92dc4e9b6326646e0c9bf2b7a73b09286d05234",
+      "size_bytes": 15181,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0000081955.json",
       "status": "byte_identical"
     },
@@ -26880,7 +26848,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0000853180.json",
-      "sha256": "33f9ea30eca987bba536bedc1a8de5a466ffa530f6a65081d91742369cca894d",
+      "sha256": "b6d30aa7a017297ba76acbc6e803cacfc994e2ad1d3932b4d1a4ede356c505db",
       "size_bytes": 16445,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0000853180.json",
       "status": "byte_identical"
@@ -26904,7 +26872,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001061353.json",
-      "sha256": "a1e55b61ec0bee180f9a93103ba87b1e522ee10be7593ae3c2ced9ea34e4e251",
+      "sha256": "e491b27e770e147de731b3ff089c1313ba3d31fefc7e3b06035ac44183366b6d",
       "size_bytes": 16318,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001061353.json",
       "status": "byte_identical"
@@ -26936,8 +26904,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001143513.json",
-      "sha256": "582510b7c74ca299a537e5ee437d97b7c741bbb17bd06eab118083aefdb297a9",
-      "size_bytes": 15505,
+      "sha256": "f15f8fcdf833e57963696eb049371b434ab6245279a4ae0f6b2b8ec900399ded",
+      "size_bytes": 15472,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001143513.json",
       "status": "byte_identical"
     },
@@ -26984,16 +26952,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001278752.json",
-      "sha256": "89af5b36a88b827f7c8a604d63889902f94de43667eedde3ad46290e77ca613a",
-      "size_bytes": 16629,
+      "sha256": "02b5735897c5cca6d73d190cf2692e7f1bf7a8f7b026daf6b83e3a53b5087152",
+      "size_bytes": 16631,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001278752.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001279014.json",
-      "sha256": "599a4e6491df022902365f68f489da4943362e50d64a4a9591cd74e7893cae06",
-      "size_bytes": 13330,
+      "sha256": "6f0a61a39799d51ed58f74f47faa4668147d18a44bf07b327da9d5a063aacf9f",
+      "size_bytes": 13329,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001279014.json",
       "status": "byte_identical"
     },
@@ -27016,7 +26984,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001287032.json",
-      "sha256": "ef8da0304614eba5fa483100eb434e02741136abc65b88742c9154deed96a16e",
+      "sha256": "2d32805a31a88436fb23290889cf842dd2a4c00e5ae3917204d6730c39b39cfc",
       "size_bytes": 15598,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001287032.json",
       "status": "byte_identical"
@@ -27048,15 +27016,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001321741.json",
-      "sha256": "3ba047172591f47979c073866b9c22c841c2964ecf83f622235c5ace4bfa31cb",
-      "size_bytes": 15601,
+      "sha256": "5708239c98f55f01c826eb273ad90f08af014d557c0e5855dfa5e770c36a7acf",
+      "size_bytes": 15650,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001321741.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001326003.json",
-      "sha256": "5298de2272d4e278201dc6f3ac92bd4c9d822940193f25e4f15ad8c04870cd23",
+      "sha256": "88b41ed84249e07312ac93a87437e23f2b7a2df7386adda911bcbe872a513e40",
       "size_bytes": 9159,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001326003.json",
       "status": "byte_identical"
@@ -27080,15 +27048,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001370755.json",
-      "sha256": "67ac820493e053183859f4e37bf6271cdfcb3bb252e1ac4ccc9ab5f832af576e",
-      "size_bytes": 18377,
+      "sha256": "0e99539f47f1a26c112dd2ccd2aa5aa43a1c8e50e5faaaeceb9f052833fb0240",
+      "size_bytes": 18393,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001370755.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001372807.json",
-      "sha256": "b0ce1860bfca551a76e6338142f2a634ed2600e331dcbf999056f9cbd47c7b3c",
+      "sha256": "f6ca74fd7d94acd62fce56a5975f1676a088061f05b7bbf81ee858273d6067dc",
       "size_bytes": 18141,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001372807.json",
       "status": "byte_identical"
@@ -27104,56 +27072,56 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001379785.json",
-      "sha256": "367032fa82194eb56fe775291d62c065320fd48265c106c2cc7d1da1004aadce",
-      "size_bytes": 15253,
+      "sha256": "0ee82232b9a60a2cea2b88a7c6395ceb77a9dbf85e4b3536cb50d88caa33f11c",
+      "size_bytes": 15254,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001379785.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001383414.json",
-      "sha256": "1583152cc68b66984557a5fbcb8695df83fe31d7d314cb66eb9ca90f6005ac0a",
-      "size_bytes": 16062,
+      "sha256": "eb3d75f1c866e69965d7ddaab9619e84838a976660e85d9b1e34552718ac70a0",
+      "size_bytes": 16089,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001383414.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001396440.json",
-      "sha256": "6d063314925380cf803a51d5259378929babb797638acffaec77501994089430",
-      "size_bytes": 15597,
+      "sha256": "db09ef8e7e18b2996674fb9733c2e4de27356f9e138c98d3152002e14115e5ac",
+      "size_bytes": 15624,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001396440.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001400897.json",
-      "sha256": "3f16d2377bed50e8bd21713728c46c28ffde59515e258096f199eee054663f93",
-      "size_bytes": 12748,
+      "sha256": "e09c868bd6875a69491b0011e122025fbfe3e58b610e9beee34315b3cb9ef8a0",
+      "size_bytes": 12749,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001400897.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001414932.json",
-      "sha256": "ab23c696ecfb7a15ddcbf8b61db10512312f2baf06b92e8064f6ddf6bf5dc8cd",
-      "size_bytes": 16802,
+      "sha256": "a20d343572ea4d2fad6e5b47747c6bb00b147a657af5fba0f92569bdc4b60ec6",
+      "size_bytes": 16781,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001414932.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001418076.json",
-      "sha256": "a5ffc1c374f5c794e30682fbf1d14b510a62da4dfca1659338af87b758150df8",
-      "size_bytes": 15360,
+      "sha256": "2d829e7baead7de4c91cb9182a19670a38a369b3a9312845e814ed412e4103c4",
+      "size_bytes": 15384,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001418076.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001422183.json",
-      "sha256": "c6199bbb8186f2d7e0951a2efb52be13511de824e434d58c4e5ce49783b3bbd2",
-      "size_bytes": 15243,
+      "sha256": "0bede5902081e69ae36008e745ae23200f18dc886d8b5a6ef8f0321ae1998b3b",
+      "size_bytes": 15268,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001422183.json",
       "status": "byte_identical"
     },
@@ -27168,7 +27136,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001447247.json",
-      "sha256": "94c481f8aabbe46aa6ed1c6305369324c9663b3a26cecb60f969301e49916073",
+      "sha256": "5328a82d75e26cba0ba48a5352e099cef50997b812caaa0b7f37d62be89fb9de",
       "size_bytes": 16237,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001447247.json",
       "status": "byte_identical"
@@ -27176,15 +27144,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001467631.json",
-      "sha256": "f953a590c49e42bfa5b32c8e3ab3021b8103e86499574970ad832f242c83339b",
-      "size_bytes": 11472,
+      "sha256": "0ff5334e1e3179a943fee616809ec717024a504c271a74333e590611de54bf2b",
+      "size_bytes": 11474,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001467631.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001476765.json",
-      "sha256": "471dccc57cb57694cd531987d75ee0c7e14e7b63df8b7c99a3f51ce88e9c8ad6",
+      "sha256": "38a5f2e50f15ecb9d208947e213c36e0151ef1e7c33f627b533bdab977046f0a",
       "size_bytes": 15656,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001476765.json",
       "status": "byte_identical"
@@ -27200,8 +27168,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001487918.json",
-      "sha256": "e93bb0d6ca7f1ff826c3791779f737502514bde6defbc74dc186047b07a211c3",
-      "size_bytes": 15700,
+      "sha256": "fa51108a56d7bc63268d10c7aa6fbf73dd7d040becd92bf8451711a3e2e4c031",
+      "size_bytes": 15699,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001487918.json",
       "status": "byte_identical"
     },
@@ -27216,7 +27184,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001490927.json",
-      "sha256": "b8b3d5f71d52029853b0d2c75e00e620761e3d2852b73c377a31ff9205d74e0a",
+      "sha256": "f9162776896e7ed91c4c811a05a303b81501d6d83227ba4372b15a4e0fdb2714",
       "size_bytes": 8553,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001490927.json",
       "status": "byte_identical"
@@ -27224,23 +27192,23 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001495584.json",
-      "sha256": "e08d8db8499d974b6d22fbaff7a909c3801f72c2d23c3213413b351a1393eac8",
-      "size_bytes": 16370,
+      "sha256": "444129abfc8aa67552ba1bc83a258a3c0bd03383f55eeed36c8de87ddea5dfb7",
+      "size_bytes": 16365,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001495584.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001496099.json",
-      "sha256": "057cca873b4ee755901471096859d2b55f3fae9591c063ecd73dda064f516e97",
-      "size_bytes": 15616,
+      "sha256": "5bba901f256140e2d4d7dcfffbde872a3ebc7b18ad8b3dbd1e513d7a5692063b",
+      "size_bytes": 15648,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001496099.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001496254.json",
-      "sha256": "af9385a13792f1d25dcfe8f454fc342f43e14a0ca01850cfc63be5656054af87",
+      "sha256": "a5daf5f5e5094a2f137d3219dc7c4b6f74f66a7e5c9f0cfcbc178fd2ec1476b2",
       "size_bytes": 12705,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001496254.json",
       "status": "byte_identical"
@@ -27264,8 +27232,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001501072.json",
-      "sha256": "74676dba54441bfb99457407b8da6f791d167e5cb81e43ee9e70479de1987ffe",
-      "size_bytes": 11985,
+      "sha256": "4724e4775dcc1e50d6be20d1c329101c211743f596a27ebe6bb13833d168f6d3",
+      "size_bytes": 11986,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001501072.json",
       "status": "byte_identical"
     },
@@ -27280,24 +27248,24 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001504619.json",
-      "sha256": "4beda43d81a2d6b7dcc681fe5137033c1be2f0a1f0930d49502858b55b6b29f9",
-      "size_bytes": 19113,
+      "sha256": "f4224d361ddbb90ee472a03204a0d3a10a7f3573f69ec9f439260b2428d02012",
+      "size_bytes": 19114,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001504619.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001506488.json",
-      "sha256": "c719d67dcbcac7c6e26776883a4a4a9c4ee8584d5d34c3203202486917feef90",
-      "size_bytes": 11596,
+      "sha256": "860aa83dce72652441277e164eadc7352da5755e380392c65fe25bb215a6c5ff",
+      "size_bytes": 11591,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001506488.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001508655.json",
-      "sha256": "e3e1e2965370a7fd982af9a583011e02b8b4ea1e0c5b5c43302e7044101a5952",
-      "size_bytes": 21593,
+      "sha256": "e2622c48e621b23560bfbf1ec55825949579ebd27b8d4fc19b465e23446a47a4",
+      "size_bytes": 21576,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001508655.json",
       "status": "byte_identical"
     },
@@ -27312,7 +27280,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001512931.json",
-      "sha256": "73fdac27478081b13578d53f24ab6b0964a96b9c0bdd34bb779fa6199cac64c0",
+      "sha256": "978ebd72c91c3f206cf52985e38c9a426e9687c369b0c2f4ea0833cf7c7b0741",
       "size_bytes": 15579,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001512931.json",
       "status": "byte_identical"
@@ -27344,15 +27312,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001521945.json",
-      "sha256": "1ed921748632edf1617d7618b2cf95816133f85720da3d6d4f1bd4835e2e3d8d",
-      "size_bytes": 15532,
+      "sha256": "d7eb65a4559cdc02d07680c7f65211266502e25b645feb16da43f8bf77a4796d",
+      "size_bytes": 15525,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001521945.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001534254.json",
-      "sha256": "7246f6f9d24bcd2491f780b49b77bc6d9d0cd6d2ba484db0b3502fc091c97ca3",
+      "sha256": "500cb281b2126d9b7685f6fd5b6d5233037aa8c9ff773993faec3370564d672f",
       "size_bytes": 16700,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001534254.json",
       "status": "byte_identical"
@@ -27360,8 +27328,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001535778.json",
-      "sha256": "d8501e6c4c019fe479ba032906f91c88956d01aaa103a2e309de552096f07b18",
-      "size_bytes": 16249,
+      "sha256": "0bb2fcc005db5c2b5dba00fa3cd54ebe43ed34c11b114d4bc2c829c18fe332a0",
+      "size_bytes": 16275,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001535778.json",
       "status": "byte_identical"
     },
@@ -27376,8 +27344,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001547580.json",
-      "sha256": "b045d3b817aa0e9c2313cccc36e997e34508ce02808fcd43dc7f825dfd5a7425",
-      "size_bytes": 15448,
+      "sha256": "becd71477690c46ed86d248e73436238c9feb15da971c89a091bd540758b5921",
+      "size_bytes": 15447,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001547580.json",
       "status": "byte_identical"
     },
@@ -27392,8 +27360,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001551047.json",
-      "sha256": "d1403914e12d1bf8ec8cdb47edef4a34e237541fa3dd4e4dcc25a1d243f9ffa2",
-      "size_bytes": 16539,
+      "sha256": "e605e51105aba1930609bd5c66c0c155fbacce5a2fcfdcd21318e3e31f181ada",
+      "size_bytes": 16535,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001551047.json",
       "status": "byte_identical"
     },
@@ -27416,7 +27384,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001557265.json",
-      "sha256": "c237fe6407f1ee074e746890271da9046738d5cb8a65aae0ed50b8987249966a",
+      "sha256": "b789b6f03f292984a51ce7a8eb2c35f227edb61998d98679b1e132ebaa02e89e",
       "size_bytes": 16653,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001557265.json",
       "status": "byte_identical"
@@ -27424,7 +27392,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001571329.json",
-      "sha256": "78ab8ff8ea53b80fa38496a3d462459fb2e0c485fa565289ae30740d5e933414",
+      "sha256": "5049cc9b0666cfde17bdb6a713c0356de438c4b51634ddc4b1f11de8fa8d8e93",
       "size_bytes": 15233,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001571329.json",
       "status": "byte_identical"
@@ -27432,8 +27400,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001572694.json",
-      "sha256": "883833ca89dbc7fb1bd97752fcdd554f2045818eb10f337a429d863d383e420d",
-      "size_bytes": 15972,
+      "sha256": "13f848f88a642dbb6b82f8d0fd502ec6324b8dd908aa38933f0a173b15967478",
+      "size_bytes": 15973,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001572694.json",
       "status": "byte_identical"
     },
@@ -27448,7 +27416,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001578348.json",
-      "sha256": "20c7b9d18c3f0f3ccae0a4800c5a38f85b8a2768fa33a3a921a23850d22ab379",
+      "sha256": "00ca43242b2e3243336926bea67bd8824af7322f94b9a21e55619e00141532b7",
       "size_bytes": 18666,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001578348.json",
       "status": "byte_identical"
@@ -27456,7 +27424,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001580345.json",
-      "sha256": "80c87f4c3573f736c6c3ca1b6e52ed3c54ff889efb165532215ab0be916bcd46",
+      "sha256": "01eaadecf72cec7f89e75a02e874b6c441d7adbef620c5ebe3a35e9579ae4148",
       "size_bytes": 15363,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001580345.json",
       "status": "byte_identical"
@@ -27464,7 +27432,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001581005.json",
-      "sha256": "fb5a8f6457522c5d97985fc8f73ed3113f03abad96557706c241f9041c644ca2",
+      "sha256": "944c000c2bdafc0d2b8d77cd8f084dc2f61900be2cc1ade68a4a915966256aed",
       "size_bytes": 14055,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001581005.json",
       "status": "byte_identical"
@@ -27472,7 +27440,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001582138.json",
-      "sha256": "c599050d2af67be8dac9c44eb1458f4875c53a12967a80277791483bbfa92f38",
+      "sha256": "019735725591fbf3ac01c18c030c11ba0df91a2d590582f896d1df7f437323d1",
       "size_bytes": 16292,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001582138.json",
       "status": "byte_identical"
@@ -27480,7 +27448,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001586009.json",
-      "sha256": "a9e72542a89a9298f3abe27659676ed637f12796f7690e78ca472c09b6504b51",
+      "sha256": "d9720ce103dada6fb8c0d5d3f31a158129553a64a1d45a68ab918d2478c073ac",
       "size_bytes": 16116,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001586009.json",
       "status": "byte_identical"
@@ -27520,23 +27488,23 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001603480.json",
-      "sha256": "4767f5ee60c74875f82ea473be4ed5c259c00123de0ae693172f9e3b02680354",
-      "size_bytes": 17658,
+      "sha256": "1a5c7f02812e402e759c1272d4aff7e248fc65b4d2e8c6f55b52642f58bc6ab6",
+      "size_bytes": 17733,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001603480.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001608016.json",
-      "sha256": "121dea61852ebc7d214b8c0039a1c0f383b23868c10e08231935a361554edd88",
-      "size_bytes": 13076,
+      "sha256": "bee2232d62671a1e207abcddf21280bf362c407c51b943710775ca09ef98a940",
+      "size_bytes": 13080,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001608016.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001616037.json",
-      "sha256": "ee7ed12da30ed1a325d55ccf110686cd48dd3ead06991c100dbf38dc79b51534",
+      "sha256": "e43e64625d0a525b573b27c5d2272fdd0a1c66b84159ead999d96e498c1075a3",
       "size_bytes": 15245,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001616037.json",
       "status": "byte_identical"
@@ -27568,7 +27536,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001628040.json",
-      "sha256": "cbd147f73860cd1a9a3a2f23e4ebfee34ec68fe3cc2a48189c799b49f657b1b4",
+      "sha256": "e08a38618370c3d7a74e7b4ce14725bc1a8d7267842101376e3485931279c1c8",
       "size_bytes": 16576,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001628040.json",
       "status": "byte_identical"
@@ -27592,8 +27560,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001634452.json",
-      "sha256": "a33856bdaa6933b582f32694e84fde99ab32ba4faf361e7c4a28e90a77df66db",
-      "size_bytes": 15632,
+      "sha256": "557282a3d9e62c5a298fadb0a9d7d137a7b7da8cd3e83a6a718eed20df1910c0",
+      "size_bytes": 15629,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001634452.json",
       "status": "byte_identical"
     },
@@ -27632,23 +27600,23 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001655050.json",
-      "sha256": "3ff5fcf2d885eee51836d03db1fe876e195832e1663da9e35563366ebc3a6382",
-      "size_bytes": 17553,
+      "sha256": "03619504a4f3d9e4130fe99e3b7bf881cc6c4160deb5a216827c2372a7014689",
+      "size_bytes": 17527,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001655050.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001655887.json",
-      "sha256": "df69343867bdf9857b730f12278c75c70dd7f4f99892d47c1b041d3a54c67ab4",
-      "size_bytes": 15582,
+      "sha256": "82f6468a78e709eee8040e0ac07dd8b249a1d711e635f9513b4570be79b769f0",
+      "size_bytes": 15580,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001655887.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001655888.json",
-      "sha256": "6885a61702a7082a1b911aed32a9145fefcca3352445f3541c85dcb6bc8fccf5",
+      "sha256": "4e8570047eddb23b69241034d2acdf56ba122a908a348068862b7519a4ca8cc8",
       "size_bytes": 15819,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001655888.json",
       "status": "byte_identical"
@@ -27704,7 +27672,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001676197.json",
-      "sha256": "794c1fca52ed750c7346d3f67e4d04eb4be3b2a8bf95c56b414700ba611f980f",
+      "sha256": "6d68169ebdbc7c32321ce89078420b3631a34b2fd09c08e0a698fed3807646a7",
       "size_bytes": 16545,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001676197.json",
       "status": "byte_identical"
@@ -27712,31 +27680,31 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001678124.json",
-      "sha256": "629caa5af04dff2dee5a775dbb07e8b89c916cfd51f53a8fc5cd8c5c9559469f",
-      "size_bytes": 16576,
+      "sha256": "845792666e2646079443863f07afed49518b97eba6d2230025bcf1c78b6ddc38",
+      "size_bytes": 16577,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001678124.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001681717.json",
-      "sha256": "767a57daa700172325df8816b4ce517f144d4971c7e775c885ac9f1eee278190",
-      "size_bytes": 16493,
+      "sha256": "4c30ea832492eebf28f29c82b2ccb140075c1ef4059931d0caef70ad8e7c884e",
+      "size_bytes": 16492,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001681717.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001687898.json",
-      "sha256": "0e8a3cc6850b51dd351e07aae3c156c13690ac5b7b1e7bce3fc9a06a6e0df3e7",
-      "size_bytes": 16444,
+      "sha256": "a33d2ea6b2e13e710d1d5dd247a9a42a6003963ba81fc85f3ff10aa630029850",
+      "size_bytes": 16442,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001687898.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001688554.json",
-      "sha256": "b32e9c40a358b2c97ce3d261c4e73877385a296356ebda5fb816f7dca2c9de09",
+      "sha256": "d34b0a253856f7e427cd32ed02c99306e3073bc6f6bbfef01084a790279a2cea",
       "size_bytes": 16514,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001688554.json",
       "status": "byte_identical"
@@ -27744,7 +27712,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001688897.json",
-      "sha256": "22c161e6411ae63f9da0a414e3cd9683eb72d5c7cea39a3c2cb8b94b6383ed62",
+      "sha256": "3bca1e1dce00bca085afd13d9eb8c1bd28fbcd2c95d82a1015013fe98bf52af0",
       "size_bytes": 15491,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001688897.json",
       "status": "byte_identical"
@@ -27768,16 +27736,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001702510.json",
-      "sha256": "7ad0c4fc7ac1edcf5670bfc611e523fa0892ee744fc5b6822428e8114b8c4bb3",
-      "size_bytes": 17316,
+      "sha256": "e024c5dcfa474920292f957830a99c3bf601cfbae003d06542a6dd06fbc7c9c3",
+      "size_bytes": 17317,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001702510.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001703079.json",
-      "sha256": "37626a79173b76cd667c6a449c4389084c758f735eadf14d2a2b7b2c88091e9d",
-      "size_bytes": 12898,
+      "sha256": "bc7f90327b1aca42415e0b55f1dcdd6b0636dd32c5084ff8658c406b93d9d32e",
+      "size_bytes": 12900,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001703079.json",
       "status": "byte_identical"
     },
@@ -27792,7 +27760,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001715933.json",
-      "sha256": "decaf935951c6c31951dc3a9888b4c17b98a7d03d97bc2106997e31f57980b3e",
+      "sha256": "e914eff2c2565a97c11e1a01dde4cb40c8c5cc23d2212559730dff740adaf4ea",
       "size_bytes": 17586,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001715933.json",
       "status": "byte_identical"
@@ -27816,7 +27784,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001722837.json",
-      "sha256": "8028d6a4b36ce71298ce517f0b5285b2ed4f23d6ef3e5d4a816984f5da7141e7",
+      "sha256": "53f220b5522b814759df349998a405d302907d1f31f02394d9686c196c9469b4",
       "size_bytes": 16330,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001722837.json",
       "status": "byte_identical"
@@ -27824,7 +27792,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001723701.json",
-      "sha256": "9704a4f99e93196b67b6dbfdc87bbc51b5d6b9b9aaafc531deab01f6f7e37f13",
+      "sha256": "4a20b174364db9db17e8668f65bd0ca2548ebbcf3b803c2c874655b3c96b57fc",
       "size_bytes": 16550,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001723701.json",
       "status": "byte_identical"
@@ -27832,15 +27800,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001725295.json",
-      "sha256": "780c2629e5fa850fc98da4cdbcccf1e234e0d59f7671241b3cee391965989881",
-      "size_bytes": 13065,
+      "sha256": "f7f98004e6f45123a84ff46f76101e3ed3fb2c85b664462f8df2f00b57aab5e8",
+      "size_bytes": 13062,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001725295.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001725472.json",
-      "sha256": "c2ddc7b2eefe62d4fc998d78eddd620eaa5b3e85bee69cef21eae8c747cf9347",
+      "sha256": "29bd0eaf4720f7ad6c2995150a87b7041af9c3f939be20888ea04e61af1b8660",
       "size_bytes": 16238,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001725472.json",
       "status": "byte_identical"
@@ -27848,7 +27816,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001726548.json",
-      "sha256": "900a72c07e89a54dd5321255eabf4eaf61231fb38b5fa2b63c766434fcdd1a09",
+      "sha256": "af8db105b79c3443ae2ac8cb1eb7cf7b2ec19a5c98ff3c82f94158b0cc72ddd3",
       "size_bytes": 15570,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001726548.json",
       "status": "byte_identical"
@@ -27856,7 +27824,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001732078.json",
-      "sha256": "aaeceb25555dcf529ff00fff851295b03b6f50f7bacaafaefaeca3c6389d9490",
+      "sha256": "49786a7daa1b3170f2e27c86f2e9c959f2f786b92f6ea6e668e9d45ec46dd8a0",
       "size_bytes": 16432,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001732078.json",
       "status": "byte_identical"
@@ -27864,31 +27832,31 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001735964.json",
-      "sha256": "411958d09adaf04c1e0169e7692c2df68ef0831cd4ef220b0073f1f674286894",
-      "size_bytes": 16781,
+      "sha256": "b6275b10c995682d8d072642bde51a2067c26575fe150f90614ec700b99ddb3a",
+      "size_bytes": 16763,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001735964.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001736035.json",
-      "sha256": "2344a24cd654bb2108e0497e349b0cfbbf4880f610bec4ff4221a4ca1e3aabba",
-      "size_bytes": 15536,
+      "sha256": "022b507c8cd9233ca5758098ea3c64575022b016944a6268d14d114842d239ab",
+      "size_bytes": 15568,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001736035.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001736510.json",
-      "sha256": "d0f1f877bbe8d28510d2cefc5f336d7fba01f50494379adc1b67ef65c50b9d91",
-      "size_bytes": 16406,
+      "sha256": "9a5536b08860f5949833498431841df67df2ddc65753cde0bea577dd50c684b2",
+      "size_bytes": 16408,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001736510.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001737924.json",
-      "sha256": "8e7457de6b4b6739d8b031bade27c0a5863250900ae2d5504980df5ddba5f676",
+      "sha256": "c016cbebbd821c055194f89582953a227b3f1eae79ce0b71a8a1c61269d09262",
       "size_bytes": 15677,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001737924.json",
       "status": "byte_identical"
@@ -27896,8 +27864,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001737936.json",
-      "sha256": "b41ed17d98a2bc3b657b70c0716b20e37be3c474e45804fedfef7d488a45c1cd",
-      "size_bytes": 16258,
+      "sha256": "6a944e345d17ffd7e8354b93a67e9b6c9672cf26e8ac68816e4585c0d4de176e",
+      "size_bytes": 16260,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001737936.json",
       "status": "byte_identical"
     },
@@ -27928,16 +27896,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001747777.json",
-      "sha256": "15596da712ddd11d3f0a84335f74f88bd9fa2f296c5ec41053957231aa3ab249",
-      "size_bytes": 15867,
+      "sha256": "3132813af8d8e060ce3a35fe4e2ebf182999cd8bcb39a99ad696f0cb8aafb58c",
+      "size_bytes": 15883,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001747777.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001748680.json",
-      "sha256": "535f799a6541209bd1249a318d006eda46d3d40cd9f0c9eaeebf316ae0f35a67",
-      "size_bytes": 15744,
+      "sha256": "e7bff92c92dc67657eac923d0edb05eb708b6149905e85f0b7bd85068dee06ae",
+      "size_bytes": 15741,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001748680.json",
       "status": "byte_identical"
     },
@@ -27952,7 +27920,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001752019.json",
-      "sha256": "631595ddaee70b5380931a5a61549a335b71b9d62e6adc3ff8437afab96b850d",
+      "sha256": "e8c0fd314f4cf452eacd711bd9b8db1f65311b6e0fb7acf4a42092815eb33b9e",
       "size_bytes": 16300,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001752019.json",
       "status": "byte_identical"
@@ -27968,16 +27936,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001754927.json",
-      "sha256": "a12e9ad22ffe8118964d1c273560d8a4589246ab6642e7907f061b022b8acf35",
-      "size_bytes": 12106,
+      "sha256": "d36f3a85edd02f2f269abb3ca4bee0ca158fd69e2379998dc6594b49199f5709",
+      "size_bytes": 12105,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001754927.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001756404.json",
-      "sha256": "58bb25d4fe345f3c8fa055088b6a782dab7ea310d2ad25b6adf1f9f7f7605b30",
-      "size_bytes": 15761,
+      "sha256": "5291d9932de4e90100844f8354a6cf680eac97cd3a9db2a81eea09e5cf68128f",
+      "size_bytes": 15763,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001756404.json",
       "status": "byte_identical"
     },
@@ -28008,24 +27976,24 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001767074.json",
-      "sha256": "3dcd0db8a30e187572c920d5047e723d17ea7ab7cf1e7525d466a9b4c17b03b7",
-      "size_bytes": 16458,
+      "sha256": "3009698caae9bc57233deacd51285300fd8f8c2c1896e93c2518000a1636154a",
+      "size_bytes": 16456,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001767074.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001772704.json",
-      "sha256": "1ff77cfe17a56bdc5e5a7515313b1708b68cfc4047b06b1aae7ab96a3b27808f",
-      "size_bytes": 16060,
+      "sha256": "384c9c9a0a5af35f4abf1120e8a0fcfb4a495af8a1e9e63f5db56fd7271fa984",
+      "size_bytes": 16061,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001772704.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001777529.json",
-      "sha256": "14a6b9feb6eeb5344ef5fcb7dab1949e9c7dd2a5fe559116cddb4e49edf99967",
-      "size_bytes": 13704,
+      "sha256": "3de9cfde7bae26c80c803cd662c310a751e1277228cc2686a44b41ba1f1e5de5",
+      "size_bytes": 13700,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001777529.json",
       "status": "byte_identical"
     },
@@ -28048,7 +28016,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001781870.json",
-      "sha256": "b04d8d2605626b3c375b939f55bba0e25c1d11d0e900f313343624fb4c0ec4de",
+      "sha256": "39422eb4aa84c0b8c01b9f593f8ccea22c66a00a7820b925fe6c66a08dc8fce6",
       "size_bytes": 12264,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001781870.json",
       "status": "byte_identical"
@@ -28056,8 +28024,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001782524.json",
-      "sha256": "d11d80275580ea21b53caf96ae17df334a37a224f43d4766a5ed9cce9ad940c1",
-      "size_bytes": 19636,
+      "sha256": "14f6e4e1f47468b4a67e33d2a5874df0c9af7e3a3fd5f083938aabbda95f5db2",
+      "size_bytes": 19666,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001782524.json",
       "status": "byte_identical"
     },
@@ -28072,15 +28040,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001786108.json",
-      "sha256": "92e5ee1a02408423c300f18c215e42c90259a92f6f015eae3feaf6a5264aa2a6",
-      "size_bytes": 19609,
+      "sha256": "73e04ebe96f3ecbd23e931f62a4fe157399820f906cfcbbd4102010c293d9e8b",
+      "size_bytes": 19656,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001786108.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001786835.json",
-      "sha256": "fabba0c950118cf394681fc9519f4fdad3952399d4357b6b612f7c8424fc2a8f",
+      "sha256": "c909104d36b3a3f925276271cce5cf167e01aac4f5364e6e626e8e5a4723c798",
       "size_bytes": 17211,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001786835.json",
       "status": "byte_identical"
@@ -28088,15 +28056,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001787621.json",
-      "sha256": "70def7f07e7a973af7928e8c2700bb7b2f12576e265e76086c582f2e4166160e",
-      "size_bytes": 16757,
+      "sha256": "4ac5bd188ceb9274853c3d8816cbc1deb172d9f963de62ebef6ec645f9d4d595",
+      "size_bytes": 16758,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001787621.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001792509.json",
-      "sha256": "7f596263cab53a35c41e7646245ced6287615be43edeb3429da735ee05f345a6",
+      "sha256": "3ec733ddc7f9cb0959070e5c0be2dfc1e342137e6e93d48acb220db6992c36e9",
       "size_bytes": 15998,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001792509.json",
       "status": "byte_identical"
@@ -28112,7 +28080,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001794041.json",
-      "sha256": "4bc5ce7164b7915003e8d94d86f6a0206b5b05971702912ff0175d895a61d7b8",
+      "sha256": "7a0b09dad26bd05b04f87255a9c830888afc426b63489e6d23439d27321d0083",
       "size_bytes": 15670,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001794041.json",
       "status": "byte_identical"
@@ -28120,8 +28088,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001794776.json",
-      "sha256": "b3a323cb84370cf880c6be27f62c509f9bdcb041761c66929a824c34e0aedcf4",
-      "size_bytes": 18019,
+      "sha256": "9ef78bc9a0895042b40ad8fa4af4ed2a91e83c71f2cc1857ef4a63f751df5a67",
+      "size_bytes": 17993,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001794776.json",
       "status": "byte_identical"
     },
@@ -28152,8 +28120,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001803958.json",
-      "sha256": "7c90c003fb9e953ac2fc1c8b09c630df5e7c07876c7ac30605c50b4494abbe29",
-      "size_bytes": 16267,
+      "sha256": "543d9924d3fab8d734dc185dbf1b3c289b49a066b71f4b8fdd819d752bc56b84",
+      "size_bytes": 16269,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001803958.json",
       "status": "byte_identical"
     },
@@ -28192,15 +28160,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001811972.json",
-      "sha256": "f5a15cdb743f415f49a51e8de7ddf948b4340ca8c2376713167a3dd0a4845d94",
-      "size_bytes": 15978,
+      "sha256": "2d50b06917f639bcf3110e84ff21d25c0dce2c84e13e006e98ab5fc17b9cf580",
+      "size_bytes": 15960,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001811972.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001812286.json",
-      "sha256": "d5504d562de07c606717445696b8ded9fdada3da585cfecc20ddd78fc1e551e0",
+      "sha256": "2af52ccf6b8783b716c2d36b1843bd4d6d77edd7e9db9b72933f8ef7f89454f9",
       "size_bytes": 10763,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001812286.json",
       "status": "byte_identical"
@@ -28208,31 +28176,31 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001812554.json",
-      "sha256": "54c103afdd7ce0e6c5bb3878bdfaa71ba3a4c8ec6306f37e309e2c17acb18333",
-      "size_bytes": 15568,
+      "sha256": "b4a1265f5459fa84bca0ccba868f07e32abfacd05653d310cfad33f6d4430ac2",
+      "size_bytes": 15569,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001812554.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001814390.json",
-      "sha256": "9d460f561cb779381b8b5c3c5be9fbb6154d59f1c0c75844fa68e587bfb01d8b",
-      "size_bytes": 16570,
+      "sha256": "863de61ae204c6290a370c02020f56f47ed18640b82928ee04c54db7172effa7",
+      "size_bytes": 16569,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001814390.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001815609.json",
-      "sha256": "ebea52ea87d929437b9be27e9bc881ae9856328e1e56cc8224a383700deef3ce",
-      "size_bytes": 16044,
+      "sha256": "04d72307f09b51810c2ad8bcff4348ce419e86f5005c136b28807f45158398de",
+      "size_bytes": 16042,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001815609.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001817825.json",
-      "sha256": "88ee5038551b6ef76fea479a64354380be229da02075fad6de6339616f35b4f7",
+      "sha256": "7cdcab315a1e46cb036310d31a3d9257b612c00679bc4f02431f501809cddb7c",
       "size_bytes": 15502,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001817825.json",
       "status": "byte_identical"
@@ -28248,8 +28216,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001818416.json",
-      "sha256": "4404f48eb8ae1105fe86e60c989deedcb3257c54f18a84475b5280bd36daa8f4",
-      "size_bytes": 16686,
+      "sha256": "84369b29f2c6121c16f567c6a2f93d59606181346fdae87b4042036e31e5dda3",
+      "size_bytes": 16685,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001818416.json",
       "status": "byte_identical"
     },
@@ -28272,7 +28240,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001825248.json",
-      "sha256": "29037d826ccb7659e3909ee01f3c2ec825bbbc9d603992d45934fcf0e9aa6b04",
+      "sha256": "450f39aab78e2d3f6616eaf63d3a75bce6b9ea736582fab014bb7b045fab5fbd",
       "size_bytes": 15798,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001825248.json",
       "status": "byte_identical"
@@ -28304,7 +28272,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001830926.json",
-      "sha256": "19107804c6dc07aed5a4b4a1df82ed136605a48055bcb99afd381d72ca4b18c9",
+      "sha256": "52bfca9b23eebc553b664ff6ae7867e3883fa91ec81ec24d61c9545db9da615b",
       "size_bytes": 14902,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001830926.json",
       "status": "byte_identical"
@@ -28328,8 +28296,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001837532.json",
-      "sha256": "3d5fa690ff2c7a56f5894fa5f072cff41df5f9bbb2fbe5279d69628b373a0f94",
-      "size_bytes": 17150,
+      "sha256": "85c4d1bd38180fe0d1e92628b384b24e7bc52eff9490b35f0e91dafbaaa5640e",
+      "size_bytes": 17149,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001837532.json",
       "status": "byte_identical"
     },
@@ -28344,7 +28312,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001841514.json",
-      "sha256": "c42d02a740ca55ca13a3748d0e434f67764e46ce2c4d78c4339d4bd60b557545",
+      "sha256": "cc97fd5a2b1838dcc28f32a0daf6942d4c4e3360933a6982b6d75ce956cf3541",
       "size_bytes": 16686,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001841514.json",
       "status": "byte_identical"
@@ -28352,8 +28320,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001842754.json",
-      "sha256": "41299fdecbe6e871e392eec07f03483a6d6e03902de3dc38aba8afa95f2dba64",
-      "size_bytes": 16472,
+      "sha256": "ce2ce4f0236a4186ecd15fc46a91b402fba2fb461b13e74b3914e0487516c638",
+      "size_bytes": 16471,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001842754.json",
       "status": "byte_identical"
     },
@@ -28376,7 +28344,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001849089.json",
-      "sha256": "d3e2e1909fa595035068d6b8fa55bef57479f26b265ad29fa331eb41648fd37d",
+      "sha256": "f35e60a3f352496da8f88bd14fed97b8df6f896bb25162af8862a03603500118",
       "size_bytes": 15533,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001849089.json",
       "status": "byte_identical"
@@ -28384,7 +28352,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001849894.json",
-      "sha256": "b25311c994f112357f3b1b6b3f14cda525304b37a59759fd9851d6cfe753a317",
+      "sha256": "308c069b61a817172f4254474b91ff794bf6ba5165ced4ed41b89d9936885691",
       "size_bytes": 15751,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001849894.json",
       "status": "byte_identical"
@@ -28408,8 +28376,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001851077.json",
-      "sha256": "7d3cb1744a32c2bbe79ba85199c448ebec16344174e0b08703a007a27ae7ff7d",
-      "size_bytes": 15955,
+      "sha256": "affde5b4a0f06444120a10d16818dd200c61159fd13cb838df67e0b65ff4bff8",
+      "size_bytes": 15954,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001851077.json",
       "status": "byte_identical"
     },
@@ -28432,7 +28400,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001854370.json",
-      "sha256": "4b2f66254f4b863f64d8efd7bd1c17c335327ded535224e2c706a5b2f0338d03",
+      "sha256": "a3f19211770b3ece2b5dada67bbb6bcc4584b104873a1ad638220d198541e61d",
       "size_bytes": 16262,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001854370.json",
       "status": "byte_identical"
@@ -28448,7 +28416,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001857314.json",
-      "sha256": "8d532ab44136bb573434a49d874b937766fdf0f80757428828ba8ed803440c07",
+      "sha256": "65ae09e4faf23288fad77b5c82acd1b5233316bd9a5b0ca3e5a4492cf4a1a341",
       "size_bytes": 16502,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001857314.json",
       "status": "byte_identical"
@@ -28456,15 +28424,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001859919.json",
-      "sha256": "123c31bf91d23743abaeda2baeb93ed379b522f13f9b1dab230a0c3e623f40c3",
-      "size_bytes": 15181,
+      "sha256": "6bcfd8a556564ab6453af42734bc70be1a62171a7eb984086e72a574bb994401",
+      "size_bytes": 15182,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001859919.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001860151.json",
-      "sha256": "190c3e189ccc8b83b21ef02a148876f115f0ab67927d6c921e833fb1a806c85f",
+      "sha256": "257506f6a61075b320d0cb2e68c5b8cca1fc6b84223fae7844d330fc32a0c828",
       "size_bytes": 16577,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001860151.json",
       "status": "byte_identical"
@@ -28480,7 +28448,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001864609.json",
-      "sha256": "45a9706e7121c751e0bb3796d6eb45326fe731bf5fc6ea1c9334a0ebec126ea0",
+      "sha256": "cc1bdd8e55735c3c743275f81cdeb3251e02c77bec69150105be2fe39ed93563",
       "size_bytes": 16278,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001864609.json",
       "status": "byte_identical"
@@ -28488,7 +28456,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001865174.json",
-      "sha256": "6f4b635c70c85a77ed0b9570b2a13fd3d344daec91a8e919e564e24914ca956b",
+      "sha256": "7b98144ff05ca62e405dd0eb4d7f465f6aecd13203ac870e0570a9f473d62c42",
       "size_bytes": 14335,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001865174.json",
       "status": "byte_identical"
@@ -28496,8 +28464,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001865389.json",
-      "sha256": "c232d06b03930bfdac5d48d51f1a04128826621f253b6d0b7bd790e6508b1e55",
-      "size_bytes": 13367,
+      "sha256": "e0cf68fb1a7374cff737af6c8211e4c205f1c1951184178492714043c2be9ce3",
+      "size_bytes": 13370,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001865389.json",
       "status": "byte_identical"
     },
@@ -28520,7 +28488,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001868950.json",
-      "sha256": "e3a859e76bc04d5c35efbe34539d59fe96aac330d621409624dde98c44debba2",
+      "sha256": "3f1ed3214ae49117fc09b6a7f0a53edac09ba362aab86994e90c5be3736c3b22",
       "size_bytes": 15932,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001868950.json",
       "status": "byte_identical"
@@ -28536,7 +28504,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001869453.json",
-      "sha256": "5c81fa8529eea0c94bb03744039d2ef91c62b1adc11b2d5de4e720d869027e2e",
+      "sha256": "67aa3570713888db677d38ded509b909a8810f60d2a0eb160a573e57c18d41c5",
       "size_bytes": 15651,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001869453.json",
       "status": "byte_identical"
@@ -28544,7 +28512,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001870267.json",
-      "sha256": "814715dc1f55e9677039c947b452e4ee44396bf7e44b90360b4d344857009274",
+      "sha256": "5a19171c48d356ee553a8f3a87fe0e308fc50efe639544a55572e732de8c5e10",
       "size_bytes": 14836,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001870267.json",
       "status": "byte_identical"
@@ -28552,7 +28520,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001870714.json",
-      "sha256": "771297d65c91d1e5faa7df4910e5a189b252cc407d1115e23ad79647532ed59e",
+      "sha256": "f10b620d705d3eeb59ded008a104dab041b3bea055ec0febbf6368c915729563",
       "size_bytes": 16471,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001870714.json",
       "status": "byte_identical"
@@ -28560,31 +28528,31 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001872371.json",
-      "sha256": "d595f2283cf92ceaf7fc4046af034b3067dacb75494a7e2c421bb9a2595d3db6",
-      "size_bytes": 16186,
+      "sha256": "70112fa8bc1d77ce1437ee59d1190705c2d083c8d6e37749d185134517ae5ac4",
+      "size_bytes": 16168,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001872371.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001876006.json",
-      "sha256": "aade81c6ba633276ce3bbb4f3ab45e26485e2e46d41cc18bf916bf328d5cce93",
-      "size_bytes": 16251,
+      "sha256": "bc3df936ea339ca0f8f0272bba274691f5af3056c20e33f0ddd6c64c2d18e4e1",
+      "size_bytes": 16252,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001876006.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001881739.json",
-      "sha256": "921cc48e81985b502976e23ae1716f611546781a42080c90118acc63b8dd335e",
-      "size_bytes": 16159,
+      "sha256": "40cc4abe3cecefbb85897fe9b12c6644566a6793befef5b1713fc9738babff90",
+      "size_bytes": 16160,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001881739.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001885551.json",
-      "sha256": "07d4f96c430a13c3b0a5c7a4cabfc6bc38d8ef43ea9c0fc205d4880b042f920d",
+      "sha256": "3df94dd1141cb5721fea98f39042de6aa6ab9f0954dac6e2ac60c93fe2d1dfd7",
       "size_bytes": 16295,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001885551.json",
       "status": "byte_identical"
@@ -28616,8 +28584,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001892443.json",
-      "sha256": "e5dcc671f0c654a742b52e71be7272ec33b69aa4d261ce25222746793c01ee9a",
-      "size_bytes": 16287,
+      "sha256": "39d15e7bdccec2f4d58052169122b89ef9b444f6b35d961259b77a5ab80d8c7e",
+      "size_bytes": 16293,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001892443.json",
       "status": "byte_identical"
     },
@@ -28640,8 +28608,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001897540.json",
-      "sha256": "ac407c3d3fea98230e2430ca506f4413abd94c6eb30faaee7fd31f949706b1bf",
-      "size_bytes": 15923,
+      "sha256": "8d8af5c0ffe48fcd0044d4a28c70aaacb194899013c50611af49cf07b8bbc60a",
+      "size_bytes": 15927,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001897540.json",
       "status": "byte_identical"
     },
@@ -28688,16 +28656,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001901606.json",
-      "sha256": "ea934105601fe8e9c976fd00118d1004c5b27ed5e98a753338edad1bc8aa1f64",
-      "size_bytes": 15356,
+      "sha256": "b5b8a7cf773efd774f0c40c4b1b2cd71d6e699bcca4607e560ddff0c081166a9",
+      "size_bytes": 15374,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001901606.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001901612.json",
-      "sha256": "d601f75014d695c91f99f319c2ba53f48a034f2b8b608c30a8dd7cf1317da664",
-      "size_bytes": 15867,
+      "sha256": "da88e5011f8722156b1ac765f9a230adc4934c2a0da62fa7068ed78b16e83746",
+      "size_bytes": 15851,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001901612.json",
       "status": "byte_identical"
     },
@@ -28720,7 +28688,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001905088.json",
-      "sha256": "958bed7e00ef388b67a3a5dd2b180a219ae1e9332c68275c3e79ebe36be3d690",
+      "sha256": "b67048c63ef137ab72797e4f4502064054c210285a7d8acfd76cec170048f5d6",
       "size_bytes": 15907,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001905088.json",
       "status": "byte_identical"
@@ -28736,7 +28704,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001907437.json",
-      "sha256": "e0686e97c7466e6b76ec2ee80490fb9e0fc45e69b8673a70dc78447df90be7a4",
+      "sha256": "d661cfbb38297519871743f875c940b64679c7b1cfa10a14b70b79a866ec6b8c",
       "size_bytes": 16443,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001907437.json",
       "status": "byte_identical"
@@ -28744,7 +28712,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001911066.json",
-      "sha256": "58fc76688b34d62b5aafde68d8b1ba9c92b17c4a30d6394d3766f73dfe5c8b5d",
+      "sha256": "07f44eea60748456e414450864498c6bfcc01e8496d2e6fa283e96c146e6be8d",
       "size_bytes": 15354,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001911066.json",
       "status": "byte_identical"
@@ -28760,15 +28728,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001911795.json",
-      "sha256": "8bf914338433d322ca0580e5efa92c3ae4adaa9eeb43621133e5374e20658678",
-      "size_bytes": 15555,
+      "sha256": "0f84100cd6f0753e49dba1479d487ba477c3e85f5b196bd855c67a0a0db6709d",
+      "size_bytes": 15556,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001911795.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001912963.json",
-      "sha256": "12445684a2e4f38e45c4fa1bc757c3ea7745cc69fbf768664b82fda51f9f9dd3",
+      "sha256": "169a4414cb31aa417776707cf0d207a3a9f034899068307fcdf83093f7e6d34e",
       "size_bytes": 16314,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001912963.json",
       "status": "byte_identical"
@@ -28816,7 +28784,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001920145.json",
-      "sha256": "004912e48e04e00d161b70f08584602ed4c03e829b320b98bf353a498db63413",
+      "sha256": "6c667582df65856f53e1fa4eef2390930b99f9256520c87ec6b1a177ec19a933",
       "size_bytes": 15891,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001920145.json",
       "status": "byte_identical"
@@ -28840,23 +28808,23 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001923622.json",
-      "sha256": "20ba7bac8dcc3870ba86a4cfed8b3911bc50105f9d072f7c1580a304d870c71c",
-      "size_bytes": 15830,
+      "sha256": "607d13a0b8e2dcef49e43675dc2143734f3273cc87c15c986f18a2cacf759183",
+      "size_bytes": 15829,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001923622.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001925309.json",
-      "sha256": "db17e015d542fc0d52b0f0e20549c0b2647e3563cef3095b6fdf76ee86e1f4e9",
-      "size_bytes": 19008,
+      "sha256": "82a302eedaafe8a210d8cbae44829f1bbf33bf4e93e2b405ba04a2a25c783cac",
+      "size_bytes": 19026,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001925309.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001925531.json",
-      "sha256": "7e09518d98839b02291427b49dac375cb1e4b092829b3ff68588c1cedea92701",
+      "sha256": "11a87bcdabc40cad1e085f3e759afc5d8e8e82aabb2eda252b4cd2f8c59c560d",
       "size_bytes": 15768,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001925531.json",
       "status": "byte_identical"
@@ -28864,7 +28832,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001925779.json",
-      "sha256": "634b63ab66f2d4c8d6d21812c7c8d56498fd66a532aa17c2b2aeb7419b4f4a0e",
+      "sha256": "cbee6988aaf27f815070e81bfbf47740f1611294e2ab0db46dac5cc7826b455a",
       "size_bytes": 15025,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001925779.json",
       "status": "byte_identical"
@@ -28872,7 +28840,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001929777.json",
-      "sha256": "8c603a1b792bd1107a2c757c577907f89bf7fc9b94f70076d21e76e214f131ea",
+      "sha256": "d5b23a2b2494e38c7f5e86616d6d7ea922d12bf07daa148c74a939ebcf4b3803",
       "size_bytes": 14001,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001929777.json",
       "status": "byte_identical"
@@ -28888,7 +28856,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001930679.json",
-      "sha256": "28c81b1d14902113d5e339fe362809a625a3017d1f67c48d52a5374a62928884",
+      "sha256": "682951e6023f9545d6adbe514871f7c9006cf54c29d8655e1256c602f35e2200",
       "size_bytes": 15165,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001930679.json",
       "status": "byte_identical"
@@ -28896,16 +28864,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001932591.json",
-      "sha256": "b8256386e4b38c5c4f1f41bd38fa52524a9aabc8becdfdcbca13b12ab679452d",
-      "size_bytes": 15147,
+      "sha256": "aaa5d9dadf61ff7b8e7e6bac6f6030ac9f3c20409fd1642831b33d4df5503249",
+      "size_bytes": 15165,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001932591.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001937073.json",
-      "sha256": "0971fad64025ed713865014bf6e9c70c49968d8c16556232fde56f79e8c5c294",
-      "size_bytes": 14102,
+      "sha256": "04077b69b29b76ddac6f051b334a702a66c788427bc21f3c523cbeb26d950ce4",
+      "size_bytes": 14100,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001937073.json",
       "status": "byte_identical"
     },
@@ -28928,7 +28896,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001944664.json",
-      "sha256": "6454b45b4983428eca20adcb24a093a65a56713d54c4760d7d6f06aeb9b9ba47",
+      "sha256": "a489d06b7dd6be3569094cdeaf919cf6082872016cc982a1dcd1a944a113cb25",
       "size_bytes": 14730,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001944664.json",
       "status": "byte_identical"
@@ -28936,7 +28904,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001944831.json",
-      "sha256": "b77492ae38f02c0daf54cc23108b946da4ac68b7497f813a1b04394c36d66f5c",
+      "sha256": "e67a8115dc49eca396727b2ca213c7e7670ec61d0e05efc84854221a62e58b2e",
       "size_bytes": 11883,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001944831.json",
       "status": "byte_identical"
@@ -28944,8 +28912,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001948368.json",
-      "sha256": "6700a508527c96bfa37fa4ab248d9e091f9aceb8c0421bdd8c75624b951919b9",
-      "size_bytes": 15953,
+      "sha256": "bfa1ddc4d05225daaf334d5ec79aadf50905f21698a77a1531634312f3866998",
+      "size_bytes": 15954,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001948368.json",
       "status": "byte_identical"
     },
@@ -28976,7 +28944,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001950803.json",
-      "sha256": "49f316520036464650c755512774c73314749bbc596432c002d0e597acf11038",
+      "sha256": "60bfa0900310db5013b0aa006c65b253b745d7a52eeb76769a94bb6ac2ded7c3",
       "size_bytes": 14006,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001950803.json",
       "status": "byte_identical"
@@ -29016,7 +28984,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001959172.json",
-      "sha256": "d9eb4d76cb2378239f86cbfc2d9c2b8ab38042f1a9c4439ecce250fc099e6b4c",
+      "sha256": "25a042242ad66fcb46075bd7ee1701c73ef9c9f843bdf50744a552b7b7831885",
       "size_bytes": 13902,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001959172.json",
       "status": "byte_identical"
@@ -29064,8 +29032,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001969180.json",
-      "sha256": "7c07d1a91da55f2ca98c4071b406eea0d44c0e9dc5a0253672bf5bbfa5e80ccf",
-      "size_bytes": 10415,
+      "sha256": "197d607a10cf20b6b8ee9ae94d86fe33c56b22619c272741657c2cfce868bcf4",
+      "size_bytes": 10417,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001969180.json",
       "status": "byte_identical"
     },
@@ -29096,16 +29064,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001974793.json",
-      "sha256": "597d587f0d46e72f28eb3e26b72826e689f1ef143c7002aa08688f41b1132081",
-      "size_bytes": 13856,
+      "sha256": "424e819d85710f35f5819ebb02a62477e16f0eee6daef3b12c7b2e5d27d905f6",
+      "size_bytes": 13838,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001974793.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001975736.json",
-      "sha256": "e55a4ee40cc60a24b518d6b74162a29cfb97ebdada375aa7e8780e73b9abb6b7",
-      "size_bytes": 11935,
+      "sha256": "1e113d43f7b663f59f34db681a59fe99b7a0364ec186d549e8e5402aebb5662a",
+      "size_bytes": 11936,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001975736.json",
       "status": "byte_identical"
     },
@@ -29128,7 +29096,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001976719.json",
-      "sha256": "266b5acfd8eaed294eb1c63f614ba9d1f93046413773bd48c1e361dc1d629803",
+      "sha256": "e3947bce926fde40fb4efa35ecb758cc9a599bf811acff0baf6afcdb6532d1e7",
       "size_bytes": 14040,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001976719.json",
       "status": "byte_identical"
@@ -29144,7 +29112,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001982467.json",
-      "sha256": "07cb66bc11e031a8c13542c762801681a045fd62a01217c9cac6f73ed11e6ad3",
+      "sha256": "f47a91d4979bea0931000e414bb0c1778aa0d777460174714b72f22a4a105f67",
       "size_bytes": 12135,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001982467.json",
       "status": "byte_identical"
@@ -29152,7 +29120,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001982701.json",
-      "sha256": "f182a59e92f6987949e2a01f95e2ac1df6024355754b7b160e71b105d918142b",
+      "sha256": "185fdbcfbfa42cb325a4132dafedc746f0b88197a22aca80ce2c98246eb3452f",
       "size_bytes": 13431,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001982701.json",
       "status": "byte_identical"
@@ -29168,8 +29136,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001985375.json",
-      "sha256": "997d979ca968d8b315a97640a03f86ff1aa4dcdef7027e34fdac7e1070789a4b",
-      "size_bytes": 13020,
+      "sha256": "48fd73146f54c9ff82f53250b25e88b63b05b09727b863195047a9b29742ae8e",
+      "size_bytes": 13021,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001985375.json",
       "status": "byte_identical"
     },
@@ -29192,8 +29160,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001988280.json",
-      "sha256": "c47e7a6eb63ab3b3c106141f2e0f4bd404d2b10ebb69c9b4768f60d8f795e323",
-      "size_bytes": 13597,
+      "sha256": "dcf629df082a307f3c7496def88d37cf334ae637a01b16977a120a2b7a7f93f1",
+      "size_bytes": 13615,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001988280.json",
       "status": "byte_identical"
     },
@@ -29208,8 +29176,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001989582.json",
-      "sha256": "8648a7e0f1bf4465915322f277476e95edb265efd01717aa7987d55bf4df45c9",
-      "size_bytes": 12071,
+      "sha256": "baf756ec8c59a69aab47b54fedaec27d0d5da47723c27102f18d7696736d3bea",
+      "size_bytes": 12072,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001989582.json",
       "status": "byte_identical"
     },
@@ -29232,8 +29200,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001992148.json",
-      "sha256": "1c18c8801a4b548595410a2d0b95c3aeac96c9edc38e5ed8a4b40e020ec86e2c",
-      "size_bytes": 10648,
+      "sha256": "ede0e23afeb6bd96814bdf07ab13c2feceadcf3174add7ef6ddfd2a0b0661f81",
+      "size_bytes": 10647,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001992148.json",
       "status": "byte_identical"
     },
@@ -29272,7 +29240,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001996211.json",
-      "sha256": "2a149a4c7407f3f0f71143d730ac45dcb1f8b05535d673977651fb68086dbae9",
+      "sha256": "b6ef96825bb8a8f9b16f8747288e81cd5627ac6c0490130d0e7c8ae330e84a48",
       "size_bytes": 8647,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001996211.json",
       "status": "byte_identical"
@@ -29296,8 +29264,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0001999538.json",
-      "sha256": "dbe6d676f2741a31ef01405893e7f28293c973589c507d532fe6c598704d1978",
-      "size_bytes": 7714,
+      "sha256": "4f4bd4da20b2c22af83a6aea0749080dde476bc1fc4ea175af27823531c7b52e",
+      "size_bytes": 7732,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0001999538.json",
       "status": "byte_identical"
     },
@@ -29320,7 +29288,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002001586.json",
-      "sha256": "c2cc6c7491beabc33932af0342304624f24a67692ffb8451fb870e11ebc7614a",
+      "sha256": "9ec75f4def7f74a17df802ec3fa7613684d4fcbcbce6e7de612fae77c363d3a9",
       "size_bytes": 8517,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002001586.json",
       "status": "byte_identical"
@@ -29352,7 +29320,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002005563.json",
-      "sha256": "606d0415910b2b023b26d34bf92ce3b989d26cfb8a4c87761f1a98030b4e53f5",
+      "sha256": "3d6999fb5516c50835decc2eb92303192f10f555de11e8de992c98c3b74f831a",
       "size_bytes": 8247,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002005563.json",
       "status": "byte_identical"
@@ -29360,7 +29328,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002006100.json",
-      "sha256": "d3eb746ca554340103cd26533c9b3b4f3eb527dd8986d9765ce5e6edd2551636",
+      "sha256": "b29455a8b012ce4d859767aa1eb241ad66601de02b43fe4ccd3b26c4cd08dfec",
       "size_bytes": 10823,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002006100.json",
       "status": "byte_identical"
@@ -29408,8 +29376,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002012326.json",
-      "sha256": "1d1571d194bafa59706e4c08bea1b8d296b9a06f87d9cb0dc46f7309b28d494b",
-      "size_bytes": 11168,
+      "sha256": "2059028e97a5a74c849601683c11770efadc20a00fdb253e3da9a8ed01d4f8cc",
+      "size_bytes": 11170,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002012326.json",
       "status": "byte_identical"
     },
@@ -29424,8 +29392,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002013536.json",
-      "sha256": "79bed8387d51f266fb1fc6bf82d8f82915a04cea7ab233edc0726f7414248925",
-      "size_bytes": 6795,
+      "sha256": "eadcdd6bc75c07673307b3d50c3f3521cbd6816202dcb01c77054e97787b9b1c",
+      "size_bytes": 6796,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002013536.json",
       "status": "byte_identical"
     },
@@ -29440,16 +29408,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002015849.json",
-      "sha256": "ada9add1a7d0afb7f2498c6d9faf8180f660e66a66c69a137caebc12d16007d5",
-      "size_bytes": 8306,
+      "sha256": "12b0f4ba2dd376fb0a52ffd551498290a7e272f3095fdb75abcf0ebc60a9ef97",
+      "size_bytes": 8307,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002015849.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002016900.json",
-      "sha256": "b3ecbf639b28e6327ac613bd12eaaf551ae15b12b26b65c21d55f2e0e7a930b1",
-      "size_bytes": 10821,
+      "sha256": "75c814712b3242387bab8c2fa4241596a5bcf5a4a1097efd1cdbf9d46cb6ded8",
+      "size_bytes": 10820,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002016900.json",
       "status": "byte_identical"
     },
@@ -29464,8 +29432,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002017579.json",
-      "sha256": "4dcf4e601a458ff003e76cd87cd7b09690f373dec050b81f8a356690c714a51d",
-      "size_bytes": 9889,
+      "sha256": "82b1cc8e95496c9eaf9f62a7aa5fef3d5cd6efa32f3e2bfac147ece2dfad9dab",
+      "size_bytes": 9887,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002017579.json",
       "status": "byte_identical"
     },
@@ -29504,7 +29472,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002020928.json",
-      "sha256": "b2bf3b0afa4eb49311ed86ab100d7f3232ad3ed231449ff50d0b81ba8825ce9f",
+      "sha256": "c768c8e49c00a06a5ac128a4a6449363b0c205ac13171f5a3406b410f3a1c00e",
       "size_bytes": 8803,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002020928.json",
       "status": "byte_identical"
@@ -29512,16 +29480,16 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002021225.json",
-      "sha256": "d63d24819271caf6bec2758b1a68f6d3639162ae43ea6179c62f55225c79a2e4",
-      "size_bytes": 2904,
+      "sha256": "ed49c1b8ec8319156fb0e39a23ab1de8b428cdafc5ad070b1507f603f99b7ce4",
+      "size_bytes": 2901,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002021225.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002021966.json",
-      "sha256": "105891f45b89304a4c4410cdb99c74c9509145e880ee998577bd5f7bb8d1219f",
-      "size_bytes": 4936,
+      "sha256": "0e4cb7e8bfc35b132e15e908b69adf493550f77c0cb068ba0631aa0b5b27a15c",
+      "size_bytes": 4958,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002021966.json",
       "status": "byte_identical"
     },
@@ -29544,7 +29512,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002022674.json",
-      "sha256": "13d23be6fc5a5a56aaa26ae46bb1d2cf601aa93e5e592674c15bce8cd0207d7a",
+      "sha256": "7107d3b157624c4039ef1a0035ba1570900ba5cbe3b56574002a5359100bdf64",
       "size_bytes": 8989,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002022674.json",
       "status": "byte_identical"
@@ -29568,8 +29536,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002026098.json",
-      "sha256": "d9c57fe93dc7d3da3b9d71969429043d029e3e7893b5b3993e6f3f70e9af37e3",
-      "size_bytes": 8155,
+      "sha256": "c1f90ebcae69956dde8f73a3fa81108eaaceed00ef193f57e731456ebdb18f78",
+      "size_bytes": 8154,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002026098.json",
       "status": "byte_identical"
     },
@@ -29592,8 +29560,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002028436.json",
-      "sha256": "bd68538b2d7102d117f7a7c394e8866bf2e9332f3158d10cf7b4d9850ba8fab7",
-      "size_bytes": 9811,
+      "sha256": "ed5cd53c7c946cad056f532735ecadec3a6268bf1b65b1d1331af6444d5e265a",
+      "size_bytes": 9812,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002028436.json",
       "status": "byte_identical"
     },
@@ -29616,7 +29584,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002029852.json",
-      "sha256": "d154123bb1a41300fc56165ba0f49d7dcc8c1a9750511138025c05e81c05e805",
+      "sha256": "99d5350fe6797f099556bd70e1047fd5d028c9f41004d926576926516aff365e",
       "size_bytes": 5398,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002029852.json",
       "status": "byte_identical"
@@ -29624,8 +29592,8 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002031283.json",
-      "sha256": "1ce94ae3ef831ca59062d4f9a07c4b5cdc05958600e82d80473690ab7cdb7a00",
-      "size_bytes": 9566,
+      "sha256": "0dc8950a6e7f019d2721d808306c923cb7a96d5802c966e88add43c84e7d440a",
+      "size_bytes": 9567,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002031283.json",
       "status": "byte_identical"
     },
@@ -29696,7 +29664,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002037804.json",
-      "sha256": "66082313caf193b47e4568930c80a889c1d04ab07ce6792a9160d20a43a80fba",
+      "sha256": "4ee5d04e789759f673923bb2560f51777ddd771b963f089d3d576a3fdc651119",
       "size_bytes": 12772,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002037804.json",
       "status": "byte_identical"
@@ -29800,15 +29768,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002051511.json",
-      "sha256": "d8ae0ffb03a0cc1ba41996365a30254dd90af86ce49701e89ecd959a26ef471b",
-      "size_bytes": 5488,
+      "sha256": "f4d6b00e831eb24620fbd437ddd4149339414cc9c0e62d55e78c0b2df2f4cc90",
+      "size_bytes": 5484,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002051511.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002052152.json",
-      "sha256": "d6fad4418a6153a4d2401ddefce6c337c2ffccb64f5e59886072a726cd3c5100",
+      "sha256": "b8b0c18f3de78e10c130abb739115a6d3c701eb3cd714e97bf0d5b70b7a083b4",
       "size_bytes": 10696,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002052152.json",
       "status": "byte_identical"
@@ -29816,31 +29784,31 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002052153.json",
-      "sha256": "c88cea2438edfa867248d3e83060a019155702bd32fc5457d64d2e9074c08da5",
-      "size_bytes": 10538,
+      "sha256": "10b8d1b1c1eeeabaebba84ab8510d79e4477f1c31cc6183b5c8bf66377585fb0",
+      "size_bytes": 10537,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002052153.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002052250.json",
-      "sha256": "5fbdd9a8b92381471540b72c1c12ac8c64dac0aedb4b0908899c5bff681e67b6",
-      "size_bytes": 6568,
+      "sha256": "4b6fd62938a5fc6f4f2f0a6e3218c1cc60484cf04b3b0490dfd31a51efbfe337",
+      "size_bytes": 6569,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002052250.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002054992.json",
-      "sha256": "f3ceb528b6cdaaa04d251cc41dcd40e2e73224c5582321300f2bd37b7ca121d5",
-      "size_bytes": 6517,
+      "sha256": "6f938f55d3e75e03b474ddc4ef9be9c32e97ca6e444ef279be41ef8b872cc489",
+      "size_bytes": 6518,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002054992.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002055004.json",
-      "sha256": "abbce31e9f0805a7e493e3d67b8a83352b5be47d2453e91dab19a6ec9abb5a6a",
+      "sha256": "592f4ce4da92c3d9e7760e279f35db95ad2392efb0256f73a155e80b7f583544",
       "size_bytes": 5955,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002055004.json",
       "status": "byte_identical"
@@ -29848,7 +29816,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002061174.json",
-      "sha256": "e22cdec64c0f921a6a608a2f095bf5dcf004daeea2c9e9e25bb6449c3e66577a",
+      "sha256": "60f3d6e5a274727788a950f2f7f122065d3bee1e64fbd24e2c8f1ec82457c1c7",
       "size_bytes": 8748,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002061174.json",
       "status": "byte_identical"
@@ -29864,7 +29832,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002063706.json",
-      "sha256": "5815c089f7773a755dd0f5a8699e0751dc50f9d6c5516d97bd8569e0e99e0817",
+      "sha256": "c1cc9d6542ec46f0bb1304f867b7687dc9d72b03750c260f80b4266d82799ee1",
       "size_bytes": 5571,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002063706.json",
       "status": "byte_identical"
@@ -29888,7 +29856,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002066799.json",
-      "sha256": "10e2c47e279d30d56b5b637081a091c9870ca94c7f59d8b204ce59e3a4594fc6",
+      "sha256": "34551173f3ccd0e2e929cf3ab00868147f4e209fac64dd5688392edcf05ab8d9",
       "size_bytes": 6454,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002066799.json",
       "status": "byte_identical"
@@ -29896,7 +29864,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002071136.json",
-      "sha256": "4717b8ba7dbadeb32e0c800292eb24a7f0657dc76787c181e8448c756c918328",
+      "sha256": "8c4a06b2007dce2cedfaefff5936a5d4d50be94349e1281104b4eb4b8e03538e",
       "size_bytes": 6521,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002071136.json",
       "status": "byte_identical"
@@ -29904,7 +29872,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002082557.json",
-      "sha256": "ea182fdadfab187d27817d740495a28a33cc6d7279d1830dc0936c720151d394",
+      "sha256": "f8c99fa36c9d90b14c8cdff60f03045f434e91e5326b22a4f2b8cad7d45d9cdd",
       "size_bytes": 6352,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002082557.json",
       "status": "byte_identical"
@@ -29912,7 +29880,7 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002082559.json",
-      "sha256": "ad6aef6372e82f28b1e1dea48b643e3bdcea2da3bbc825ab6396c88fe3dc72a2",
+      "sha256": "1e4e0348e86bddb11b88f0fdacd162c6796ec4f9516e1150b8b6cc969aaaee0c",
       "size_bytes": 6340,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002082559.json",
       "status": "byte_identical"
@@ -29920,15 +29888,15 @@
     {
       "artifact_class": "frontend_fund_detail_json",
       "path": "frontend/public/data/fund_details/0002089126.json",
-      "sha256": "c34eab274aeec8fe1770dba903c548503699fdf516f93d7c1943ef18f3022e8b",
-      "size_bytes": 9749,
+      "sha256": "7eca7a75c56cee2a320197ea954778b90b75bc710bfcaf50a1ecfef4fdfa4972",
+      "size_bytes": 9767,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_details/0002089126.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/fund_index_returns.json",
-      "sha256": "f4b2ae88ce67c379852d45dadd3c4cfca32050e3be44a698728a8b4b4a6e3780",
+      "sha256": "c5578e85488ea6b6b1147342f01647700ec00d919282ac8ced179e1b7f90b2b4",
       "size_bytes": 4960,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_index_returns.json",
       "status": "byte_identical"
@@ -29936,15 +29904,15 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/fund_list.json",
-      "sha256": "d0667f4658e609a9cf61b06f43f12174832d23a81f89a060bc1b5b9c74e04a55",
-      "size_bytes": 150174,
+      "sha256": "89f1f946ef8aa1341909d6fb1667a167535b23fc7ea317c0788dc335a3848a5d",
+      "size_bytes": 150439,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_list.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/fund_summary.json",
-      "sha256": "1f0d616a56df6693c56f3437986ae6b864086a572ca642030be4fb70ed0cac02",
+      "sha256": "5f23c93bc94b2a0a1a1b5c0346780f8146995497ce45961cd42e3a4ae0c983ef",
       "size_bytes": 228,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/fund_summary.json",
       "status": "byte_identical"
@@ -29952,7 +29920,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/gics_sector_breakdown.json",
-      "sha256": "a51233acac3685bab63609dd7c8a096878b134ac910e85a66dfe851abde5fcd5",
+      "sha256": "89c297ca66f155e43b11e38ea5dd2db2ec76c6ff5f0b9e1a7206846eb54032c4",
       "size_bytes": 190,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/gics_sector_breakdown.json",
       "status": "byte_identical"
@@ -29960,16 +29928,16 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/index_returns.json",
-      "sha256": "be94c9c6643d7a48a06f4fbf8540013a17aadb3a1706a6473bfb21afbf93f41d",
-      "size_bytes": 45283,
+      "sha256": "ce33dc102de16fd7318b1b27ffb66062a0a65f93fbb01c85ba26ab12da9ecc27",
+      "size_bytes": 45275,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/index_returns.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/index_summary.json",
-      "sha256": "63c2a176b9bdf6a4660ad36be8f84ca6dfc644a7b76a319cd3483ec31f9768b8",
-      "size_bytes": 1525,
+      "sha256": "1dc9cdcc3e4ba996f991d10e38ac9557f650b33ba38c9157841197e9ebf36355",
+      "size_bytes": 1523,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/index_summary.json",
       "status": "byte_identical"
     },
@@ -29984,8 +29952,8 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/investee_concentration.json",
-      "sha256": "d871e8302f8838667f1ca1e4d017a9e8add0eb110610634d3be92b0cbcfed6f0",
-      "size_bytes": 14280,
+      "sha256": "649caf5ccc6685fe34ccd8473672e4096b95cff8d3f014ca04304a3446271052",
+      "size_bytes": 14282,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/investee_concentration.json",
       "status": "byte_identical"
     },
@@ -30000,7 +29968,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/manager_concentration.json",
-      "sha256": "bd5f5b7e7df3dbde49d202b4796952b26361a4fe815b1d4d2e60f76e6d8987cd",
+      "sha256": "62afa9166d7596825f7a05c1913c00634d83b2c6f6a3d6406541ce8582b3671c",
       "size_bytes": 11667,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/manager_concentration.json",
       "status": "byte_identical"
@@ -30008,7 +29976,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/metadata.json",
-      "sha256": "ded1e6a95ec980814c164dbf8bc6c8418d4bb93c373942f5008f2b534cdc239c",
+      "sha256": "60942b8a8a5fd9c201539b2aeb5a1b3beaaf389b4ca8c545972fed8d6c35572f",
       "size_bytes": 262,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/metadata.json",
       "status": "byte_identical"
@@ -30016,7 +29984,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/portfolio_characteristics.json",
-      "sha256": "7be4202307f9bdbac2afc32634c390eaa2131bb3a7a16051bd603a3cce3f1957",
+      "sha256": "01af7f5e6832e5a0e3348797110ed923150a4b3f640e4087920cc8b8b5863c46",
       "size_bytes": 286,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/portfolio_characteristics.json",
       "status": "byte_identical"
@@ -30024,7 +29992,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/position_concentration.json",
-      "sha256": "c1d2910b4791b72f72c95a39fc53bd9701a3a269f73c53fa4fb745b40fede3a9",
+      "sha256": "19103df0ffc2617ab16ac2cbc451c7c76bc7a5cf6c2082cf5e54ada44af4ee23",
       "size_bytes": 16354,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/position_concentration.json",
       "status": "byte_identical"
@@ -30032,7 +30000,7 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/sector_breakdown.json",
-      "sha256": "44e513ccf28e5ae01696bfd92c7244b0221a0622d862d12bf1d5ce963e668e1d",
+      "sha256": "51b4d76ac85018a0b8831ad1c32ba8f431c3b333b72261f92c5925390aa10661",
       "size_bytes": 4304,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/sector_breakdown.json",
       "status": "byte_identical"
@@ -30040,15 +30008,15 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/top_constituents.json",
-      "sha256": "bcc7d95994e1ca1e03bd6c2619733b454e0108b2c20182866bd4b69d73387bf8",
-      "size_bytes": 45325,
+      "sha256": "ed38236a48758b43e5dfa5a0b2101c2114208662e34926e37ecad49e2f611efc",
+      "size_bytes": 45320,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/top_constituents.json",
       "status": "byte_identical"
     },
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/vehicle_concentration.json",
-      "sha256": "1605e0919147fff0fa3743c19deea83957efef25f8a064064443b1be76df7d80",
+      "sha256": "dd05acbbbf77da9ab18659d74c54df1adb63a7d1c88ae6f74478bfd3f29ef35f",
       "size_bytes": 11093,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/vehicle_concentration.json",
       "status": "byte_identical"
@@ -30056,13 +30024,13 @@
     {
       "artifact_class": "frontend_top_level_json",
       "path": "frontend/public/data/vehicle_contribution.json",
-      "sha256": "865d43fcab7426ec2981ea423a98b386023ef171f6fe26f574b847b7480bf6f4",
-      "size_bytes": 135548,
+      "sha256": "b2b86ecbefd587904a33cdf3bfabf00b3fdb427ae682af3109430135e75c8b54",
+      "size_bytes": 135549,
       "snapshot_path": "data/snapshots/baseline/frontend/public/data/vehicle_contribution.json",
       "status": "byte_identical"
     }
   ],
-  "created_at_utc": "2026-05-13T19:52:42.242983+00:00",
+  "created_at_utc": "2026-05-14T13:50:53.791307+00:00",
   "generated_sql": [
     {
       "name": "classification_index.sql",
@@ -30089,46 +30057,24 @@
       "status": "byte_identical"
     }
   ],
-  "git_head": "36059112581a3fc3e73d4dd04b8d555b53897768",
+  "git_head": "ea28585be273646278bcd56948055b4e053e176f",
   "git_status_short": [
-    "M .gitignore",
-    " M CLAUDE.md",
-    " M docs/fail_verification/README.md",
-    " M docs/fail_verification/codex_batch_instructions.md",
-    " M docs/fail_verification/instructions.md",
-    " M docs/fail_verification/playbooks.md",
-    " M frontend/public/data/aum_time_series.json",
+    "M frontend/public/data/aum_time_series.json",
     " M frontend/public/data/concentration_curve.json",
     " M frontend/public/data/credit_risk.json",
     " M frontend/public/data/data_quality.json",
     " M frontend/public/data/fund_details/0000017313.json",
     " M frontend/public/data/fund_details/0000081955.json",
-    " M frontend/public/data/fund_details/0000810943.json",
-    " M frontend/public/data/fund_details/0000813623.json",
-    " M frontend/public/data/fund_details/0000818851.json",
-    " M frontend/public/data/fund_details/0000845385.json",
     " M frontend/public/data/fund_details/0000853180.json",
-    " M frontend/public/data/fund_details/0000863900.json",
-    " M frontend/public/data/fund_details/0000897419.json",
     " M frontend/public/data/fund_details/0001061353.json",
-    " M frontend/public/data/fund_details/0001124959.json",
     " M frontend/public/data/fund_details/0001143513.json",
-    " M frontend/public/data/fund_details/0001176984.json",
-    " M frontend/public/data/fund_details/0001232860.json",
-    " M frontend/public/data/fund_details/0001259429.json",
-    " M frontend/public/data/fund_details/0001261166.json",
     " M frontend/public/data/fund_details/0001278752.json",
     " M frontend/public/data/fund_details/0001279014.json",
-    " M frontend/public/data/fund_details/0001280784.json",
     " M frontend/public/data/fund_details/0001287032.json",
-    " M frontend/public/data/fund_details/0001287750.json",
-    " M frontend/public/data/fund_details/0001300391.json",
     " M frontend/public/data/fund_details/0001321741.json",
     " M frontend/public/data/fund_details/0001326003.json",
-    " M frontend/public/data/fund_details/0001336050.json",
     " M frontend/public/data/fund_details/0001370755.json",
     " M frontend/public/data/fund_details/0001372807.json",
-    " M frontend/public/data/fund_details/0001377936.json",
     " M frontend/public/data/fund_details/0001379785.json",
     " M frontend/public/data/fund_details/0001383414.json",
     " M frontend/public/data/fund_details/0001396440.json",
@@ -30136,88 +30082,49 @@
     " M frontend/public/data/fund_details/0001414932.json",
     " M frontend/public/data/fund_details/0001418076.json",
     " M frontend/public/data/fund_details/0001422183.json",
-    " M frontend/public/data/fund_details/0001425355.json",
     " M frontend/public/data/fund_details/0001447247.json",
     " M frontend/public/data/fund_details/0001467631.json",
     " M frontend/public/data/fund_details/0001476765.json",
-    " M frontend/public/data/fund_details/0001487428.json",
     " M frontend/public/data/fund_details/0001487918.json",
-    " M frontend/public/data/fund_details/0001490349.json",
     " M frontend/public/data/fund_details/0001490927.json",
     " M frontend/public/data/fund_details/0001495584.json",
     " M frontend/public/data/fund_details/0001496099.json",
     " M frontend/public/data/fund_details/0001496254.json",
-    " M frontend/public/data/fund_details/0001500233.json",
-    " M frontend/public/data/fund_details/0001500234.json",
     " M frontend/public/data/fund_details/0001501072.json",
-    " M frontend/public/data/fund_details/0001501729.json",
     " M frontend/public/data/fund_details/0001504619.json",
     " M frontend/public/data/fund_details/0001506488.json",
     " M frontend/public/data/fund_details/0001508655.json",
-    " M frontend/public/data/fund_details/0001509470.json",
     " M frontend/public/data/fund_details/0001512931.json",
-    " M frontend/public/data/fund_details/0001513363.json",
-    " M frontend/public/data/fund_details/0001514183.json",
-    " M frontend/public/data/fund_details/0001515001.json",
     " M frontend/public/data/fund_details/0001521945.json",
     " M frontend/public/data/fund_details/0001534254.json",
     " M frontend/public/data/fund_details/0001535778.json",
-    " M frontend/public/data/fund_details/0001544206.json",
     " M frontend/public/data/fund_details/0001547580.json",
-    " M frontend/public/data/fund_details/0001550913.json",
     " M frontend/public/data/fund_details/0001551047.json",
-    " M frontend/public/data/fund_details/0001551901.json",
-    " M frontend/public/data/fund_details/0001552198.json",
     " M frontend/public/data/fund_details/0001557265.json",
     " M frontend/public/data/fund_details/0001571329.json",
     " M frontend/public/data/fund_details/0001572694.json",
-    " M frontend/public/data/fund_details/0001577134.json",
     " M frontend/public/data/fund_details/0001578348.json",
     " M frontend/public/data/fund_details/0001580345.json",
     " M frontend/public/data/fund_details/0001581005.json",
     " M frontend/public/data/fund_details/0001582138.json",
     " M frontend/public/data/fund_details/0001586009.json",
-    " M frontend/public/data/fund_details/0001587987.json",
-    " M frontend/public/data/fund_details/0001588272.json",
-    " M frontend/public/data/fund_details/0001589390.json",
-    " M frontend/public/data/fund_details/0001597634.json",
     " M frontend/public/data/fund_details/0001603480.json",
     " M frontend/public/data/fund_details/0001608016.json",
     " M frontend/public/data/fund_details/0001616037.json",
-    " M frontend/public/data/fund_details/0001618694.json",
-    " M frontend/public/data/fund_details/0001618696.json",
-    " M frontend/public/data/fund_details/0001618697.json",
     " M frontend/public/data/fund_details/0001628040.json",
-    " M frontend/public/data/fund_details/0001633336.json",
-    " M frontend/public/data/fund_details/0001633858.json",
     " M frontend/public/data/fund_details/0001634452.json",
-    " M frontend/public/data/fund_details/0001638600.json",
-    " M frontend/public/data/fund_details/0001642862.json",
-    " M frontend/public/data/fund_details/0001646614.json",
-    " M frontend/public/data/fund_details/0001653384.json",
     " M frontend/public/data/fund_details/0001655050.json",
     " M frontend/public/data/fund_details/0001655887.json",
     " M frontend/public/data/fund_details/0001655888.json",
-    " M frontend/public/data/fund_details/0001658645.json",
-    " M frontend/public/data/fund_details/0001661306.json",
-    " M frontend/public/data/fund_details/0001663712.json",
-    " M frontend/public/data/fund_details/0001666384.json",
-    " M frontend/public/data/fund_details/0001674760.json",
-    " M frontend/public/data/fund_details/0001675033.json",
     " M frontend/public/data/fund_details/0001676197.json",
     " M frontend/public/data/fund_details/0001678124.json",
     " M frontend/public/data/fund_details/0001681717.json",
     " M frontend/public/data/fund_details/0001687898.json",
     " M frontend/public/data/fund_details/0001688554.json",
     " M frontend/public/data/fund_details/0001688897.json",
-    " M frontend/public/data/fund_details/0001690996.json",
-    " M frontend/public/data/fund_details/0001691570.json",
     " M frontend/public/data/fund_details/0001702510.json",
     " M frontend/public/data/fund_details/0001703079.json",
-    " M frontend/public/data/fund_details/0001715268.json",
     " M frontend/public/data/fund_details/0001715933.json",
-    " M frontend/public/data/fund_details/0001716885.json",
-    " M frontend/public/data/fund_details/0001717310.json",
     " M frontend/public/data/fund_details/0001722837.json",
     " M frontend/public/data/fund_details/0001723701.json",
     " M frontend/public/data/fund_details/0001725295.json",
@@ -30229,85 +30136,46 @@
     " M frontend/public/data/fund_details/0001736510.json",
     " M frontend/public/data/fund_details/0001737924.json",
     " M frontend/public/data/fund_details/0001737936.json",
-    " M frontend/public/data/fund_details/0001742313.json",
-    " M frontend/public/data/fund_details/0001743415.json",
-    " M frontend/public/data/fund_details/0001747172.json",
     " M frontend/public/data/fund_details/0001747777.json",
     " M frontend/public/data/fund_details/0001748680.json",
-    " M frontend/public/data/fund_details/0001751156.json",
     " M frontend/public/data/fund_details/0001752019.json",
-    " M frontend/public/data/fund_details/0001753712.json",
     " M frontend/public/data/fund_details/0001754927.json",
     " M frontend/public/data/fund_details/0001756404.json",
-    " M frontend/public/data/fund_details/0001758583.json",
-    " M frontend/public/data/fund_details/0001762562.json",
-    " M frontend/public/data/fund_details/0001766037.json",
     " M frontend/public/data/fund_details/0001767074.json",
     " M frontend/public/data/fund_details/0001772704.json",
     " M frontend/public/data/fund_details/0001777529.json",
-    " M frontend/public/data/fund_details/0001777677.json",
-    " M frontend/public/data/fund_details/0001779523.json",
     " M frontend/public/data/fund_details/0001781870.json",
     " M frontend/public/data/fund_details/0001782524.json",
-    " M frontend/public/data/fund_details/0001784700.json",
     " M frontend/public/data/fund_details/0001786108.json",
     " M frontend/public/data/fund_details/0001786835.json",
     " M frontend/public/data/fund_details/0001787621.json",
     " M frontend/public/data/fund_details/0001792509.json",
-    " M frontend/public/data/fund_details/0001793855.json",
     " M frontend/public/data/fund_details/0001794041.json",
     " M frontend/public/data/fund_details/0001794776.json",
-    " M frontend/public/data/fund_details/0001796242.json",
-    " M frontend/public/data/fund_details/0001802293.json",
-    " M frontend/public/data/fund_details/0001803498.json",
     " M frontend/public/data/fund_details/0001803958.json",
-    " M frontend/public/data/fund_details/0001807333.json",
-    " M frontend/public/data/fund_details/0001807334.json",
-    " M frontend/public/data/fund_details/0001807427.json",
-    " M frontend/public/data/fund_details/0001810256.json",
     " M frontend/public/data/fund_details/0001811972.json",
     " M frontend/public/data/fund_details/0001812286.json",
     " M frontend/public/data/fund_details/0001812554.json",
     " M frontend/public/data/fund_details/0001814390.json",
     " M frontend/public/data/fund_details/0001815609.json",
     " M frontend/public/data/fund_details/0001817825.json",
-    " M frontend/public/data/fund_details/0001818105.json",
     " M frontend/public/data/fund_details/0001818416.json",
-    " M frontend/public/data/fund_details/0001820378.json",
-    " M frontend/public/data/fund_details/0001822523.json",
     " M frontend/public/data/fund_details/0001825248.json",
-    " M frontend/public/data/fund_details/0001825265.json",
-    " M frontend/public/data/fund_details/0001825384.json",
-    " M frontend/public/data/fund_details/0001825590.json",
     " M frontend/public/data/fund_details/0001830926.json",
-    " M frontend/public/data/fund_details/0001832148.json",
-    " M frontend/public/data/fund_details/0001834543.json",
     " M frontend/public/data/fund_details/0001837532.json",
-    " M frontend/public/data/fund_details/0001838126.json",
     " M frontend/public/data/fund_details/0001841514.json",
     " M frontend/public/data/fund_details/0001842754.json",
-    " M frontend/public/data/fund_details/0001843162.json",
-    " M frontend/public/data/fund_details/0001843499.json",
     " M frontend/public/data/fund_details/0001849089.json",
     " M frontend/public/data/fund_details/0001849894.json",
-    " M frontend/public/data/fund_details/0001850787.json",
-    " M frontend/public/data/fund_details/0001850938.json",
     " M frontend/public/data/fund_details/0001851077.json",
-    " M frontend/public/data/fund_details/0001851277.json",
-    " M frontend/public/data/fund_details/0001851322.json",
     " M frontend/public/data/fund_details/0001854370.json",
-    " M frontend/public/data/fund_details/0001855299.json",
     " M frontend/public/data/fund_details/0001857314.json",
     " M frontend/public/data/fund_details/0001859919.json",
     " M frontend/public/data/fund_details/0001860151.json",
-    " M frontend/public/data/fund_details/0001860424.json",
     " M frontend/public/data/fund_details/0001864609.json",
     " M frontend/public/data/fund_details/0001865174.json",
     " M frontend/public/data/fund_details/0001865389.json",
-    " M frontend/public/data/fund_details/0001867714.json",
-    " M frontend/public/data/fund_details/0001868878.json",
     " M frontend/public/data/fund_details/0001868950.json",
-    " M frontend/public/data/fund_details/0001869040.json",
     " M frontend/public/data/fund_details/0001869453.json",
     " M frontend/public/data/fund_details/0001870267.json",
     " M frontend/public/data/fund_details/0001870714.json",
@@ -30315,158 +30183,66 @@
     " M frontend/public/data/fund_details/0001876006.json",
     " M frontend/public/data/fund_details/0001881739.json",
     " M frontend/public/data/fund_details/0001885551.json",
-    " M frontend/public/data/fund_details/0001885968.json",
-    " M frontend/public/data/fund_details/0001889668.json",
-    " M frontend/public/data/fund_details/0001890107.json",
     " M frontend/public/data/fund_details/0001892443.json",
-    " M frontend/public/data/fund_details/0001895316.json",
-    " M frontend/public/data/fund_details/0001896329.json",
     " M frontend/public/data/fund_details/0001897540.json",
-    " M frontend/public/data/fund_details/0001898303.json",
-    " M frontend/public/data/fund_details/0001899017.json",
-    " M frontend/public/data/fund_details/0001899996.json",
-    " M frontend/public/data/fund_details/0001901037.json",
-    " M frontend/public/data/fund_details/0001901164.json",
     " M frontend/public/data/fund_details/0001901606.json",
     " M frontend/public/data/fund_details/0001901612.json",
-    " M frontend/public/data/fund_details/0001902649.json",
-    " M frontend/public/data/fund_details/0001902944.json",
     " M frontend/public/data/fund_details/0001905088.json",
-    " M frontend/public/data/fund_details/0001905824.json",
     " M frontend/public/data/fund_details/0001907437.json",
     " M frontend/public/data/fund_details/0001911066.json",
-    " M frontend/public/data/fund_details/0001911321.json",
     " M frontend/public/data/fund_details/0001911795.json",
     " M frontend/public/data/fund_details/0001912963.json",
-    " M frontend/public/data/fund_details/0001913724.json",
-    " M frontend/public/data/fund_details/0001916099.json",
-    " M frontend/public/data/fund_details/0001916608.json",
-    " M frontend/public/data/fund_details/0001918712.json",
-    " M frontend/public/data/fund_details/0001919369.json",
     " M frontend/public/data/fund_details/0001920145.json",
-    " M frontend/public/data/fund_details/0001920453.json",
-    " M frontend/public/data/fund_details/0001922947.json",
     " M frontend/public/data/fund_details/0001923622.json",
     " M frontend/public/data/fund_details/0001925309.json",
     " M frontend/public/data/fund_details/0001925531.json",
     " M frontend/public/data/fund_details/0001925779.json",
     " M frontend/public/data/fund_details/0001929777.json",
-    " M frontend/public/data/fund_details/0001930087.json",
     " M frontend/public/data/fund_details/0001930679.json",
     " M frontend/public/data/fund_details/0001932591.json",
     " M frontend/public/data/fund_details/0001937073.json",
-    " M frontend/public/data/fund_details/0001938649.json",
-    " M frontend/public/data/fund_details/0001940499.json",
     " M frontend/public/data/fund_details/0001944664.json",
     " M frontend/public/data/fund_details/0001944831.json",
     " M frontend/public/data/fund_details/0001948368.json",
-    " M frontend/public/data/fund_details/0001948565.json",
-    " M frontend/public/data/fund_details/0001949594.json",
-    " M frontend/public/data/fund_details/0001950572.json",
     " M frontend/public/data/fund_details/0001950803.json",
-    " M frontend/public/data/fund_details/0001950976.json",
-    " M frontend/public/data/fund_details/0001954360.json",
-    " M frontend/public/data/fund_details/0001955010.json",
-    " M frontend/public/data/fund_details/0001957892.json",
     " M frontend/public/data/fund_details/0001959172.json",
-    " M frontend/public/data/fund_details/0001959568.json",
-    " M frontend/public/data/fund_details/0001959604.json",
-    " M frontend/public/data/fund_details/0001965934.json",
-    " M frontend/public/data/fund_details/0001965985.json",
-    " M frontend/public/data/fund_details/0001968178.json",
     " M frontend/public/data/fund_details/0001969180.json",
-    " M frontend/public/data/fund_details/0001969229.json",
-    " M frontend/public/data/fund_details/0001970466.json",
-    " M frontend/public/data/fund_details/0001973476.json",
     " M frontend/public/data/fund_details/0001974793.json",
     " M frontend/public/data/fund_details/0001975736.json",
-    " M frontend/public/data/fund_details/0001976336.json",
-    " M frontend/public/data/fund_details/0001976685.json",
     " M frontend/public/data/fund_details/0001976719.json",
-    " M frontend/public/data/fund_details/0001979306.json",
     " M frontend/public/data/fund_details/0001982467.json",
     " M frontend/public/data/fund_details/0001982701.json",
-    " M frontend/public/data/fund_details/0001983514.json",
     " M frontend/public/data/fund_details/0001985375.json",
-    " M frontend/public/data/fund_details/0001987221.json",
-    " M frontend/public/data/fund_details/0001987731.json",
     " M frontend/public/data/fund_details/0001988280.json",
-    " M frontend/public/data/fund_details/0001988752.json",
     " M frontend/public/data/fund_details/0001989582.json",
-    " M frontend/public/data/fund_details/0001989817.json",
-    " M frontend/public/data/fund_details/0001990685.json",
     " M frontend/public/data/fund_details/0001992148.json",
-    " M frontend/public/data/fund_details/0001993402.json",
-    " M frontend/public/data/fund_details/0001995568.json",
-    " M frontend/public/data/fund_details/0001995668.json",
-    " M frontend/public/data/fund_details/0001995940.json",
     " M frontend/public/data/fund_details/0001996211.json",
-    " M frontend/public/data/fund_details/0001997906.json",
-    " M frontend/public/data/fund_details/0001998387.json",
     " M frontend/public/data/fund_details/0001999538.json",
-    " M frontend/public/data/fund_details/0002000182.json",
-    " M frontend/public/data/fund_details/0002000645.json",
     " M frontend/public/data/fund_details/0002001586.json",
-    " M frontend/public/data/fund_details/0002003497.json",
-    " M frontend/public/data/fund_details/0002003867.json",
-    " M frontend/public/data/fund_details/0002004413.json",
     " M frontend/public/data/fund_details/0002005563.json",
     " M frontend/public/data/fund_details/0002006100.json",
-    " M frontend/public/data/fund_details/0002006758.json",
-    " M frontend/public/data/fund_details/0002007649.json",
-    " M frontend/public/data/fund_details/0002008748.json",
-    " M frontend/public/data/fund_details/0002011498.json",
-    " M frontend/public/data/fund_details/0002012139.json",
     " M frontend/public/data/fund_details/0002012326.json",
-    " M frontend/public/data/fund_details/0002012839.json",
     " M frontend/public/data/fund_details/0002013536.json",
-    " M frontend/public/data/fund_details/0002013732.json",
     " M frontend/public/data/fund_details/0002015849.json",
     " M frontend/public/data/fund_details/0002016900.json",
-    " M frontend/public/data/fund_details/0002017577.json",
     " M frontend/public/data/fund_details/0002017579.json",
-    " M frontend/public/data/fund_details/0002017636.json",
-    " M frontend/public/data/fund_details/0002018545.json",
-    " M frontend/public/data/fund_details/0002020354.json",
     " M frontend/public/data/fund_details/0002020928.json",
     " M frontend/public/data/fund_details/0002021225.json",
     " M frontend/public/data/fund_details/0002021966.json",
-    " M frontend/public/data/fund_details/0002022290.json",
-    " M frontend/public/data/fund_details/0002022625.json",
     " M frontend/public/data/fund_details/0002022674.json",
-    " M frontend/public/data/fund_details/0002023164.json",
-    " M frontend/public/data/fund_details/0002025933.json",
     " M frontend/public/data/fund_details/0002026098.json",
-    " M frontend/public/data/fund_details/0002027033.json",
-    " M frontend/public/data/fund_details/0002027076.json",
     " M frontend/public/data/fund_details/0002028436.json",
-    " M frontend/public/data/fund_details/0002028686.json",
     " M frontend/public/data/fund_details/0002029852.json",
     " M frontend/public/data/fund_details/0002031283.json",
-    " M frontend/public/data/fund_details/0002031546.json",
-    " M frontend/public/data/fund_details/0002031750.json",
-    " M frontend/public/data/fund_details/0002033164.json",
-    " M frontend/public/data/fund_details/0002033362.json",
-    " M frontend/public/data/fund_details/0002033620.json",
-    " M frontend/public/data/fund_details/0002035713.json",
-    " M frontend/public/data/fund_details/0002035726.json",
-    " M frontend/public/data/fund_details/0002036648.json",
     " M frontend/public/data/fund_details/0002037804.json",
-    " M frontend/public/data/fund_details/0002041841.json",
-    " M frontend/public/data/fund_details/0002041900.json",
-    " M frontend/public/data/fund_details/0002043133.json",
-    " M frontend/public/data/fund_details/0002043759.json",
-    " M frontend/public/data/fund_details/0002045370.json",
-    " M frontend/public/data/fund_details/0002049733.json",
+    " M frontend/public/data/fund_details/0002051511.json",
     " M frontend/public/data/fund_details/0002052152.json",
     " M frontend/public/data/fund_details/0002052153.json",
     " M frontend/public/data/fund_details/0002052250.json",
     " M frontend/public/data/fund_details/0002054992.json",
     " M frontend/public/data/fund_details/0002055004.json",
     " M frontend/public/data/fund_details/0002061174.json",
-    " M frontend/public/data/fund_details/0002061670.json",
     " M frontend/public/data/fund_details/0002063706.json",
-    " M frontend/public/data/fund_details/0002065397.json",
     " M frontend/public/data/fund_details/0002066799.json",
     " M frontend/public/data/fund_details/0002071136.json",
     " M frontend/public/data/fund_details/0002082557.json",
@@ -30479,7 +30255,6 @@
     " M frontend/public/data/index_returns.json",
     " M frontend/public/data/index_summary.json",
     " M frontend/public/data/investee_concentration.json",
-    " M frontend/public/data/leverage_histogram.json",
     " M frontend/public/data/manager_concentration.json",
     " M frontend/public/data/metadata.json",
     " M frontend/public/data/portfolio_characteristics.json",
@@ -30487,186 +30262,7 @@
     " M frontend/public/data/sector_breakdown.json",
     " M frontend/public/data/top_constituents.json",
     " M frontend/public/data/vehicle_concentration.json",
-    " M frontend/public/data/vehicle_contribution.json",
-    " M frontend/src/app/about/page.tsx",
-    " M frontend/src/app/funds/[cik]/page.tsx",
-    " M frontend/src/app/indices/[slug]/page.tsx",
-    " M frontend/src/app/indices/page.tsx",
-    " M frontend/src/app/methodology/page.tsx",
-    " M frontend/src/app/not-found.tsx",
-    " M frontend/src/app/page.tsx",
-    " M frontend/src/components/ConcentrationCurve.tsx",
-    " M frontend/src/components/ExposureSection.tsx",
-    " M frontend/src/components/FundPerformanceTable.tsx",
-    " M frontend/src/components/FundTable.tsx",
-    " M frontend/src/components/FundTopHoldings.tsx",
-    " M frontend/src/components/Header.tsx",
-    " M frontend/src/components/IndexCard.tsx",
-    " M frontend/src/components/ManagerPieChart.tsx",
-    " M frontend/src/components/QuarterlyBarChart.tsx",
-    " M frontend/src/components/SectorChart.tsx",
-    " M frontend/src/components/StatPanel.tsx",
-    " M frontend/src/components/TimeSeriesChart.tsx",
-    " M frontend/src/components/TotalReturnChart.tsx",
-    " M frontend/src/components/VehicleTypeBadge.tsx",
-    " M frontend/src/lib/data.ts",
-    " M frontend/src/lib/types.ts",
-    " M pipeline/bdc_filings.py",
-    " M pipeline/bdc_sector_breakdown.py",
-    " M pipeline/config.py",
-    " M pipeline/export_frontend.py",
-    " M pipeline/fail_verification.py",
-    " M pipeline/fund_financials.py",
-    " M pipeline/main.py",
-    " M pipeline/unified_holdings.py",
-    " M requirements.txt",
-    " M schemas/fail_verification/evidence_bundle.schema.json",
-    " M schemas/fail_verification/examples/confirmed_data_error.x09.json",
-    " M schemas/fail_verification/examples/confirmed_valid_exception.x06.json",
-    " M schemas/fail_verification/examples/insufficient_evidence.c101.json",
-    " M schemas/fail_verification/examples/invalid_missing_evidence_refs.json",
-    " M schemas/fail_verification/examples/validator_false_positive.gav01.json",
-    " M schemas/fail_verification/sample_manifest.schema.json",
-    " M schemas/fail_verification/verdict.schema.json",
-    " M scripts/rebuild_outputs.py",
-    " M tests/test_bdc_filings.py",
-    " M tests/test_fail_verification.py",
-    " M tests/test_fund_financials.py",
-    "?? .codex/",
-    "?? .pytest_tmp/",
-    "?? AGENTS.md",
-    "?? \"C\\357\\200\\272UsersalgerDocumentstemp_val_1259429.txt\"",
-    "?? \"C\\357\\200\\272UsersalgerDocumentstemp_validate.txt\"",
-    "?? \"C\\357\\200\\272UsersalgerDocumentstemp_validation.txt\"",
-    "?? \"C\\357\\200\\272UsersalgerDocumentstemp_validation_1259429.txt\"",
-    "?? _tmp_apply_review.py",
-    "?? _tmp_b64.txt",
-    "?? _tmp_b64_script.txt",
-    "?? _tmp_bdc_sector_match.py",
-    "?? _tmp_boot.py",
-    "?? _tmp_bootstrap.py",
-    "?? _tmp_bootstrap_leak.py",
-    "?? _tmp_bs_scan.py",
-    "?? _tmp_build_sim.py",
-    "?? _tmp_c101_detail.py",
-    "?? _tmp_classification_instability.py",
-    "?? _tmp_cls1.py",
-    "?? _tmp_cls_part1.py",
-    "?? _tmp_composition_check.py",
-    "?? _tmp_cost_scan.py",
-    "?? _tmp_data.b64",
-    "?? _tmp_decode_boot.py",
-    "?? _tmp_extract_nonaccrual.py",
-    "?? _tmp_extract_nonaccrual2.py",
-    "?? _tmp_field_coverage.py",
-    "?? _tmp_field_scan.py",
-    "?? _tmp_firstlien_compare.py",
-    "?? _tmp_fv_par.py",
-    "?? _tmp_gav_analysis.py",
-    "?? _tmp_gav_analysis2.py",
-    "?? _tmp_gen.py",
-    "?? _tmp_gen2.py",
-    "?? _tmp_gen3.py",
-    "?? _tmp_gen4.py",
-    "?? _tmp_gen5.py",
-    "?? _tmp_gen_leak.py",
-    "?? _tmp_get_corrections.py",
-    "?? _tmp_get_worklist.py",
-    "?? _tmp_hf_analysis.py",
-    "?? _tmp_leak_b64.txt",
-    "?? _tmp_leak_deep.py",
-    "?? _tmp_leak_detail.py",
-    "?? _tmp_leak_scan.py",
-    "?? _tmp_leaked_subtotals.py",
-    "?? _tmp_leaked_subtotals2.py",
-    "?? _tmp_marginal.py",
-    "?? _tmp_match_raw.py",
-    "?? _tmp_match_sector.py",
-    "?? _tmp_match_uh.py",
-    "?? _tmp_ncsr_diag.py",
-    "?? _tmp_ncsr_diag2.py",
-    "?? _tmp_nonaccrual_concepts.py",
-    "?? _tmp_nonaccrual_extract.py",
-    "?? _tmp_nonaccrual_html.py",
-    "?? _tmp_nonaccrual_xbrl.py",
-    "?? _tmp_nonaccrual_xbrl2.py",
-    "?? _tmp_nonaccrual_xbrl3.py",
-    "?? _tmp_nonaccrual_xbrl_detail.py",
-    "?? _tmp_nport_credit.py",
-    "?? _tmp_nport_fv_princ.py",
-    "?? _tmp_other_analysis.py",
-    "?? _tmp_other_analysis2.py",
-    "?? _tmp_other_analysis3.py",
-    "?? _tmp_pct_analysis.py",
-    "?? _tmp_pitchbook_comparison.py",
-    "?? _tmp_pitchbook_firstlien.py",
-    "?? _tmp_pitchbook_replicate.py",
-    "?? _tmp_prospect_check.py",
-    "?? _tmp_run_b64.py",
-    "?? _tmp_save_batch.py",
-    "?? _tmp_save_round.py",
-    "?? _tmp_structural.py",
-    "?? _tmp_subtotal_hypothesis.py",
-    "?? _tmp_test.py",
-    "?? _tmp_test2.py",
-    "?? _tmp_tie_analysis.py",
-    "?? _tmp_val_b64.txt",
-    "?? _tmp_validation_analysis.py",
-    "?? _tmp_verify.py",
-    "?? _tmp_vintage_cohort.py",
-    "?? _tmp_write_corrections.py",
-    "?? _tmp_write_script.py",
-    "?? data/overrides/",
-    "?? dataoutputval_1633858.txt",
-    "?? dataoutputval_1655888.txt",
-    "?? docs/agentic_data_quality.md",
-    "?? docs/data_accuracy_plan.md",
-    "?? docs/fund_financials_frontend_validation_plan.md",
-    "?? docs/refactoring/",
-    "?? docs/source_fact_selection_conflict.md",
-    "?? frontend/src/app/data-quality/",
-    "?? frontend/src/components/DistressBarChart.tsx",
-    "?? frontend/src/components/GicsSectorChart.tsx",
-    "?? frontend/src/components/HistogramChart.tsx",
-    "?? frontend/src/components/HomepageSparkline.tsx",
-    "?? frontend/src/components/StackedAreaChart.tsx",
-    "?? pipeline/bdc_identifier.py",
-    "?? pipeline/classification.py",
-    "?? pipeline/gics_classification.py",
-    "?? pipeline/staging_bdc.py",
-    "?? pipeline/staging_nport.py",
-    "?? pipeline/validate_fund_financials.py",
-    "?? prompts/gics_review_prompt.md",
-    "?? screenshot_data_quality.png",
-    "?? scripts/_tmp_analyze.py",
-    "?? scripts/_tmp_audit_ff.py",
-    "?? scripts/_tmp_b64_loader.py",
-    "?? scripts/_tmp_builder.py",
-    "?? scripts/_tmp_holdings_gap_analysis.py",
-    "?? scripts/_tmp_two_axis.py",
-    "?? scripts/diff_outputs.py",
-    "?? scripts/snapshot_outputs.py",
-    "?? scripts/telegram_bridge.py",
-    "?? scripts/test_gics_web_search.py",
-    "?? scripts/validate_funds.py",
-    "?? temp_gen_template.py",
-    "?? temp_soi_analysis.json",
-    "?? tests/fixtures/",
-    "?? tests/test_gics_classification.py",
-    "?? tests/test_gold_standard.py",
-    "?? tests/test_validate_fund_financials.py",
-    "?? tmp_build_bundles_gav_raw.log",
-    "?? tmp_build_bundles_gav_split.log",
-    "?? tmp_build_template.py",
-    "?? tmp_build_template2.py",
-    "?? tmp_check_fv.py",
-    "?? tmp_fix_template.py",
-    "?? tmp_fix_template2.py",
-    "?? tmp_pytest_gav_fixes_full/",
-    "?? tmp_pytest_gav_split/",
-    "?? tmp_scan_tables.py",
-    "?? tmp_sr_detail.txt",
-    "?? tmp_validate_output.txt"
+    " M frontend/public/data/vehicle_contribution.json"
   ],
   "snapshot_root": "data/snapshots/baseline"
 }
