@@ -5391,6 +5391,72 @@ class TestStabilizeClassification:
         result = _stabilize_classification(df)
         assert list(result.columns) == UNIFIED_COLUMNS
 
+    def test_same_borrower_different_instruments_do_not_leak(self):
+        rows = []
+        for i in range(4):
+            row = {col: "" for col in UNIFIED_COLUMNS}
+            row.update({
+                "cik": "0001234567", "source": "bdc",
+                "issuer_name": "Capital Southwest Style Borrower",
+                "instrument_description": "First Lien Term Loan",
+                "asset_category": "LOAN", "issuer_category": "CORPORATE",
+                "report_date": f"2024-0{i+1}-30",
+                "index_classification": "DIRECT_LENDING",
+                "exposure_type": "DIRECT", "asset_class": "PRIVATE_CREDIT",
+            })
+            rows.append(row)
+        for instrument, asset_category, index_class in [
+            ("Common Equity", "EQUITY_COMMON", "COMMON_EQUITY"),
+            ("Preferred Equity", "EQUITY_PREFERRED", "PREFERRED_EQUITY"),
+        ]:
+            row = {col: "" for col in UNIFIED_COLUMNS}
+            row.update({
+                "cik": "0001234567", "source": "bdc",
+                "issuer_name": "Capital Southwest Style Borrower",
+                "instrument_description": instrument,
+                "asset_category": asset_category,
+                "issuer_category": "CORPORATE",
+                "report_date": "2024-06-30",
+                "index_classification": index_class,
+                "exposure_type": "DIRECT", "asset_class": "PRIVATE_EQUITY",
+            })
+            rows.append(row)
+
+        result = _stabilize_classification(pd.DataFrame(rows)[UNIFIED_COLUMNS])
+        equity = result[result["asset_category"].str.startswith("EQUITY")]
+        assert equity["index_classification"].tolist() == [
+            "COMMON_EQUITY", "PREFERRED_EQUITY",
+        ]
+        assert (equity["asset_class"] == "PRIVATE_EQUITY").all()
+
+    def test_same_loan_punctuation_case_stabilizes(self):
+        rows = []
+        for report_date, instrument, index_class in [
+            ("2023-03-31", "First-Lien Term Loan", "DIRECT_LENDING"),
+            ("2023-06-30", "first lien term loan", "DIRECT_LENDING"),
+            ("2023-09-30", "First Lien Term Loan", "DIRECT_LENDING"),
+            ("2023-12-31", "FIRST LIEN TERM LOAN", "COMMON_EQUITY"),
+        ]:
+            row = {col: "" for col in UNIFIED_COLUMNS}
+            row.update({
+                "cik": "0001234567", "source": "bdc",
+                "issuer_name": "Acme Corp",
+                "instrument_description": instrument,
+                "asset_category": "LOAN", "issuer_category": "CORPORATE",
+                "report_date": report_date,
+                "index_classification": index_class,
+                "exposure_type": "DIRECT",
+                "asset_class": (
+                    "PRIVATE_CREDIT" if index_class == "DIRECT_LENDING"
+                    else "PRIVATE_EQUITY"
+                ),
+            })
+            rows.append(row)
+
+        result = _stabilize_classification(pd.DataFrame(rows)[UNIFIED_COLUMNS])
+        assert (result["index_classification"] == "DIRECT_LENDING").all()
+        assert (result["asset_class"] == "PRIVATE_CREDIT").all()
+
 
 # ---------------------------------------------------------------------------
 # A1: Expanded aggregate pattern tests
@@ -5825,6 +5891,228 @@ class TestSubsidiaryDedup:
 
 
 # ---------------------------------------------------------------------------
+# BDC dimension-path duplicate dedup in build_unified_holdings
+# ---------------------------------------------------------------------------
+
+class TestDimensionPathDedup:
+    """Tests for BDC-only dimension-path duplicate handling."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation", "period",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update({
+                "cik": "0000000200",
+                "entity_name": "Test BDC",
+                "accession_number": "acc1",
+                "form_type": "10-K",
+                "filing_date": "2023-06-01",
+                "report_date": "2023-03-31",
+                "period": "2023-03-31",
+                "dimensions_raw": "investmentaxis=member",
+            })
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def _make_nport_df(self, rows):
+        cols = [
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "currency_value", "percentage",
+            "asset_cat", "issuer_type", "investment_country",
+            "is_restricted_security", "fair_value_level", "maturity_date",
+            "coupon_type", "annualized_rate", "identifier_isin",
+            "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+            "filing_date", "report_date", "series_name", "series_id",
+            "quarter", "balance", "unit", "other_unit_desc", "exchange_rate",
+            "other_asset", "other_issuer", "sub_type", "derivative_cat",
+            "is_default", "other_identifier", "currency_code",
+            "liquidity_classification", "are_any_interest_payment",
+            "is_any_portion_interest_paid",
+        ]
+        data = []
+        for i, row in enumerate(rows, start=1):
+            full_row = {c: "" for c in cols}
+            full_row.update({
+                "accession_number": "nport-acc",
+                "holding_id": f"H{i:03d}",
+                "issuer_lei": "",
+                "issuer_cusip": "",
+                "currency_value": 1000000.0,
+                "percentage": 0.01,
+                "asset_cat": "LON",
+                "issuer_type": "CORP",
+                "investment_country": "US",
+                "is_restricted_security": "Y",
+                "fair_value_level": 3,
+                "annualized_rate": 9.0,
+                "payoff_profile": "Long",
+                "cik": "0000000300",
+                "registrant_name": "Test Fund",
+                "filing_date": "2023-05-31",
+                "report_date": "2023-03-31",
+                "series_name": "Test Series",
+                "series_id": "S001",
+                "quarter": "2023q1",
+                "balance": 1000000.0,
+                "unit": "PA",
+                "currency_code": "USD",
+            })
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def _build(self, tmp_path, bdc_rows=None, nport_rows=None):
+        bdc_df = self._make_bdc_df(bdc_rows or [])
+        nport_df = self._make_nport_df(nport_rows or [])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "test.csv"):
+            return build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+
+    def test_case_variant_same_fv_different_cost_collapses(self, tmp_path):
+        result = self._build(tmp_path, bdc_rows=[
+            {"investment_identifier": "ARBORWORKS, LLC - Term Loan",
+             "fair_value": 1000000.0, "cost": 900000.0,
+             "principal_amount": 1000000.0},
+            {"investment_identifier": "ArborWorks, LLC - Term Loan",
+             "fair_value": 1000000.0, "cost": 950000.0,
+             "principal_amount": 1000000.0},
+        ])
+        rows = result[result["issuer_name"].str.contains("arborworks", case=False)]
+        assert len(rows) == 1
+
+    def test_punctuation_variant_same_position_collapses(self, tmp_path):
+        result = self._build(tmp_path, bdc_rows=[
+            {"investment_identifier": "Celebration Bidco, LLC ,Common Stock",
+             "fair_value": 250000.0, "cost": 200000.0,
+             "shares_held": 1000.0},
+            {"investment_identifier": "Celebration Bidco, LLC, Common Stock",
+             "fair_value": 250000.0, "cost": 210000.0,
+             "shares_held": 1000.0},
+        ])
+        rows = result[result["issuer_name"].str.contains("Celebration Bidco")]
+        assert len(rows) == 1
+
+    def test_same_issuer_fv_different_tranches_preserved(self, tmp_path):
+        result = self._build(tmp_path, bdc_rows=[
+            {"investment_identifier": "Acme Corp - Term Loan A",
+             "fair_value": 1000000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0},
+            {"investment_identifier": "Acme Corp - Term Loan B",
+             "fair_value": 1000000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0},
+        ])
+        acme = result[result["issuer_name"] == "Acme Corp"]
+        assert len(acme) == 2
+        assert set(acme["instrument_description"]) == {"Term Loan A", "Term Loan B"}
+
+    def test_same_issuer_fv_different_shares_preserved(self, tmp_path):
+        result = self._build(tmp_path, bdc_rows=[
+            {"investment_identifier": "Acme Corp - Common Stock",
+             "fair_value": 1000000.0, "cost": 900000.0,
+             "shares_held": 1000.0},
+            {"investment_identifier": "Acme Corp - Common Stock",
+             "fair_value": 1000000.0, "cost": 900000.0,
+             "shares_held": 2000.0},
+        ])
+        acme = result[result["issuer_name"] == "Acme Corp"]
+        assert len(acme) == 2
+
+    def test_same_issuer_different_fv_preserved(self, tmp_path):
+        result = self._build(tmp_path, bdc_rows=[
+            {"investment_identifier": "Acme Corp - Term Loan",
+             "fair_value": 1000000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0},
+            {"investment_identifier": "Acme Corp - Term Loan",
+             "fair_value": 1100000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0},
+        ])
+        acme = result[result["issuer_name"] == "Acme Corp"]
+        assert len(acme) == 2
+
+    def test_nport_distinct_cusip_not_collapsed(self, tmp_path):
+        """N-PORT rows with same normalized issuer but different CUSIPs are
+        genuinely distinct positions and must be preserved."""
+        result = self._build(tmp_path, nport_rows=[
+            {"holding_id": "H001", "issuer_name": "ArborWorks, LLC",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0, "issuer_cusip": "00300H105"},
+            {"holding_id": "H002", "issuer_name": "ARBORWORKS LLC",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0, "issuer_cusip": "00300H204"},
+        ])
+        nport = result[result["source"] == "nport"]
+        assert len(nport) == 2
+
+    def test_nport_same_key_cross_quarter_collapsed(self, tmp_path):
+        """N-PORT rows that are cross-quarter duplicates (same position in two
+        quarterly bulk datasets) should be collapsed to one."""
+        result = self._build(tmp_path, nport_rows=[
+            {"holding_id": "H001", "issuer_name": "ArborWorks, LLC",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0, "quarter": "2023q1",
+             "accession_number": "acc-q1"},
+            {"holding_id": "H002", "issuer_name": "ArborWorks, LLC",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0, "quarter": "2023q2",
+             "accession_number": "acc-q2"},
+        ])
+        nport = result[result["source"] == "nport"]
+        assert len(nport) == 1
+
+    def test_nport_case_variant_same_filing_collapsed(self, tmp_path):
+        """N-PORT rows with same normalized key within the same filing
+        are duplicates and should be collapsed."""
+        result = self._build(tmp_path, nport_rows=[
+            {"holding_id": "H001", "issuer_name": "ArborWorks, LLC",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0},
+            {"holding_id": "H002", "issuer_name": "ARBORWORKS LLC",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0},
+        ])
+        nport = result[result["source"] == "nport"]
+        assert len(nport) == 1
+
+    def test_nport_distinct_maturity_not_collapsed(self, tmp_path):
+        """N-PORT rows with same issuer/FV but different maturity dates are
+        different tranches and must be preserved."""
+        result = self._build(tmp_path, nport_rows=[
+            {"holding_id": "H001", "issuer_name": "Acme Corp",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0, "maturity_date": "2027-01-15"},
+            {"holding_id": "H002", "issuer_name": "Acme Corp",
+             "issuer_title": "Term Loan", "currency_value": 1000000.0,
+             "balance": 1000000.0, "maturity_date": "2028-07-15"},
+        ])
+        nport = result[result["source"] == "nport"]
+        assert len(nport) == 2
+
+    def test_nport_distinct_asset_cat_not_collapsed(self, tmp_path):
+        """N-PORT rows with same issuer/FV but different asset categories are
+        different security types and must be preserved."""
+        result = self._build(tmp_path, nport_rows=[
+            {"holding_id": "H001", "issuer_name": "Acme Corp",
+             "issuer_title": "Acme Corp", "currency_value": 1000000.0,
+             "balance": 1000000.0, "asset_cat": "EC"},
+            {"holding_id": "H002", "issuer_name": "Acme Corp",
+             "issuer_title": "Acme Corp", "currency_value": 1000000.0,
+             "balance": 1000000.0, "asset_cat": "LON"},
+        ])
+        nport = result[result["source"] == "nport"]
+        assert len(nport) == 2
+
+
+# ---------------------------------------------------------------------------
 # Affiliation prefix stripping tests
 # ---------------------------------------------------------------------------
 
@@ -5982,6 +6270,45 @@ class TestAffiliationDedup:
         ])
         result = _prepare_bdc(df)
         assert len(result) == 2
+
+    def test_keep_same_issuer_same_fv_different_tranches(self):
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - Term Loan A",
+             "fair_value": 1000000, "cost": 990000,
+             "principal_amount": 1000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - Term Loan B",
+             "fair_value": 1000000, "cost": 990000,
+             "principal_amount": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+        assert set(result["instrument_description"]) == {"Term Loan A", "Term Loan B"}
+
+    def test_dedup_same_position_across_affiliation_members(self):
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - Term Loan",
+             "fair_value": 1000000, "cost": 990000,
+             "principal_amount": 1000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier":
+                 "Affiliated Investments - Acme Corp - Term Loan",
+             "fair_value": 1000000, "cost": 990000,
+             "principal_amount": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["bdc_investment_identifier"] == "Acme Corp - Term Loan"
 
 
 # ---------------------------------------------------------------------------

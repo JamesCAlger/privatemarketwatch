@@ -1073,6 +1073,63 @@ class TestPositionIds:
         # Also check MATCH_COLUMNS includes it
         assert "position_id" in MATCH_COLUMNS
 
+    def test_match_positions_stable_when_input_shuffled(self):
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-03-31", "issuer_name": "Alpha Inc",
+             "instrument_description": "First Lien Loan",
+             "fair_value": "500000", "cusip": "111111111"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Alpha Inc",
+             "instrument_description": "First Lien Loan",
+             "fair_value": "510000", "cusip": "111111111"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-03-31", "issuer_name": "Beta Inc",
+             "instrument_description": "Second Lien Loan",
+             "fair_value": "700000", "cusip": "222222222"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Beta Inc",
+             "instrument_description": "Second Lien Loan",
+             "fair_value": "720000", "cusip": "222222222"},
+        ])
+        first = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        shuffled = unified.sample(frac=1, random_state=7).reset_index(drop=True)
+        second = match_positions(unified_df=shuffled, bdc_raw_df=bdc_raw)
+        pd.testing.assert_frame_equal(first, second)
+
+    def test_assign_position_ids_stable_when_input_shuffled(self):
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-03-31", "issuer_name": "Alpha Inc",
+             "instrument_description": "First Lien Loan",
+             "fair_value": "500000", "cusip": "111111111"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Alpha Inc",
+             "instrument_description": "First Lien Loan",
+             "fair_value": "510000", "cusip": "111111111"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-03-31", "issuer_name": "Beta Inc",
+             "instrument_description": "Second Lien Loan",
+             "fair_value": "700000", "cusip": "222222222"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Beta Inc",
+             "instrument_description": "Second Lien Loan",
+             "fair_value": "720000", "cusip": "222222222"},
+        ])
+        matches = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        first_unified, first_matches = assign_position_ids(unified, matches)
+
+        shuffled_unified = unified.sample(frac=1, random_state=11).reset_index(drop=True)
+        shuffled_matches = matches.sample(frac=1, random_state=13).reset_index(drop=True)
+        second_unified, second_matches = assign_position_ids(
+            shuffled_unified, shuffled_matches,
+        )
+
+        pd.testing.assert_frame_equal(first_unified, second_unified)
+        pd.testing.assert_frame_equal(first_matches, second_matches)
+
     def test_no_fan_out(self):
         """Join doesn't create duplicate rows in unified output."""
         bdc_raw = _make_bdc_raw([])

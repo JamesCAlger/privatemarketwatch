@@ -359,6 +359,73 @@ class TestPrepareNport:
         result = _prepare_nport(None)
         assert result.empty
 
+    def test_ncsr_amendment_latest_filing_wins(self):
+        """When two N-CSR rows exist for the same share class (amendment),
+        the latest filing wins rather than discarding both."""
+        nport_df = self._make_nport_df([{
+            "cik": "7777", "quarter": "2024q1",
+            "report_date": "2024-03-31",
+        }])
+        ncen_df = pd.DataFrame([{
+            "cik": "0000007777", "report_date": "2024-03-31",
+            "management_fee_pct": None, "expense_ratio_pct": "1.25",
+            "nav_per_share": "20.0", "market_price_per_share": None,
+            "monthly_avg_net_assets": None,
+            "is_debt_default": False, "is_dividend_arrears": False,
+            "is_fund_of_fund": False, "is_non_diversified": False,
+        }])
+        ncsr_df = pd.DataFrame([
+            {"cik": "7777", "report_date": "2024-02-29",
+             "filing_date": "2024-03-15", "accession_number": "a1",
+             "share_class": "A", "nav_end_per_share": "21.00",
+             "nii_per_share": "0.30", "total_return_pct": "2.0"},
+            {"cik": "7777", "report_date": "2024-02-29",
+             "filing_date": "2024-03-16", "accession_number": "a2",
+             "share_class": "A", "nav_end_per_share": "99.00",
+             "nii_per_share": "9.99", "total_return_pct": "99.0"},
+        ])
+
+        result = _prepare_nport(nport_df, ncen_df=ncen_df, ncsr_df=ncsr_df)
+        row = result.iloc[0]
+        # Latest filing (a2, filed 2024-03-16) wins over older (a1)
+        assert float(row["nav_per_share"]) == 99.0
+        assert float(row["income_per_share"]) == 9.99
+        assert float(row["total_return_pct"]) == 99.0
+
+    def test_ncsr_ranking_is_deterministic_and_not_stale(self):
+        nport_df = self._make_nport_df([
+            {"cik": "8888", "quarter": "2024q1",
+             "report_date": "2024-03-31"},
+            {"cik": "8888", "quarter": "2025q4",
+             "report_date": "2025-12-31", "accession_number": "ACC2"},
+        ])
+        ncen_df = pd.DataFrame([{
+            "cik": "0000008888", "report_date": "2024-03-31",
+            "management_fee_pct": None, "expense_ratio_pct": "1.50",
+            "nav_per_share": "20.0", "market_price_per_share": None,
+            "monthly_avg_net_assets": None,
+            "is_debt_default": False, "is_dividend_arrears": False,
+            "is_fund_of_fund": False, "is_non_diversified": False,
+        }])
+        ncsr_df = pd.DataFrame([
+            {"cik": "8888", "report_date": "2024-02-29",
+             "filing_date": "2024-03-10", "accession_number": "a-old",
+             "share_class": "Z", "nav_end_per_share": "21.00",
+             "nii_per_share": "0.20", "total_return_pct": "1.0"},
+            {"cik": "8888", "report_date": "2024-02-29",
+             "filing_date": "2024-03-12", "accession_number": "a-new",
+             "share_class": "A", "nav_end_per_share": "22.00",
+             "nii_per_share": "0.30", "total_return_pct": "2.0"},
+        ])
+
+        result = _prepare_nport(nport_df, ncen_df=ncen_df, ncsr_df=ncsr_df)
+        current = result[result["report_quarter"] == "2024q1"].iloc[0]
+        stale = result[result["report_quarter"] == "2025q4"].iloc[0]
+        assert float(current["nav_per_share"]) == 22.0
+        assert float(current["income_per_share"]) == 0.30
+        assert float(stale["nav_per_share"]) == 20.0
+        assert pd.isna(stale["income_per_share"])
+
 
 # ===================================================================
 # 4. _prepare_bdc tests
@@ -616,6 +683,51 @@ class TestBuildFundFinancials:
             client=None,
         )
         assert result.iloc[0]["vehicle_type"] == "tender_offer_fund"
+
+    def test_duplicate_cik_universe_preserves_source_name(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(
+            "pipeline.fund_financials.FUND_FINANCIALS_FILE",
+            tmp_path / "fund_financials.csv",
+        )
+        monkeypatch.setattr(
+            "pipeline.fund_financials.COMPANYFACTS_CACHE_DIR",
+            tmp_path / "cf_cache",
+        )
+        (tmp_path / "cf_cache").mkdir()
+
+        nport_df = pd.DataFrame([{
+            "accession_number": "ACC1", "series_name": "Fund A",
+            "series_id": "S1", "cik": "4444",
+            "registrant_name": "Current Source Fund",
+            "quarter": "2024q1", "report_date": "2024-01-31",
+            "class_id": "C1", "total_assets": "1000",
+            "net_assets": "800", "total_liabilities": "200",
+            "borrowing_pay_within_1yr": "0",
+            "borrowing_pay_after_1yr": "0",
+            "monthly_total_return1": "1.0",
+            "monthly_total_return2": "0.5",
+            "monthly_total_return3": "0.3",
+            "sales_flow_mon1": "0", "sales_flow_mon2": "0",
+            "sales_flow_mon3": "0", "redemption_flow_mon1": "0",
+            "redemption_flow_mon2": "0", "redemption_flow_mon3": "0",
+        }])
+        universe_df = pd.DataFrame([
+            {"cik": "4444", "entity_name": "Old BDC Name",
+             "vehicle_type": "bdc"},
+            {"cik": "4444", "entity_name": "Current Universe Name",
+             "vehicle_type": "interval_fund"},
+        ])
+
+        result = build_fund_financials(
+            income_df=pd.DataFrame(),
+            nport_fund_info_df=nport_df,
+            universe_df=universe_df,
+            client=None,
+        )
+        assert len(result[result["cik"] == "0000004444"]) == 1
+        row = result[result["cik"] == "0000004444"].iloc[0]
+        assert row["entity_name"] == "Current Source Fund"
+        assert row["vehicle_type"] == "interval_fund"
 
     def test_dedup_prefers_companyfacts(self, tmp_path, monkeypatch):
         """When same CIK+quarter in both sources, companyfacts wins."""

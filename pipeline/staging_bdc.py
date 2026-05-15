@@ -626,17 +626,36 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
 
     -- CTE 5d: Affiliation-axis dedup -- same position tagged under multiple
     -- affiliation dimension members (e.g. Non-Controlled vs Affiliated) in
-    -- the same filing produces duplicate rows with identical issuer_name + FV.
-    -- Keep one row per (cik, report_date, issuer_name, FV), preferring the
-    -- shortest _raw_id (the one without affiliation tags).
+    -- the same filing.  This must stay position-level: distinct instruments
+    -- for the same issuer and FV are separate holdings.
     no_affil_dupes AS (
         SELECT * FROM (
             SELECT *,
                 ROW_NUMBER() OVER (
-                    PARTITION BY cik, report_date,
-                                 lower(trim(CAST(issuer_name AS VARCHAR))),
-                                 ROUND(COALESCE(_fv, 0), 0)
-                    ORDER BY LENGTH(COALESCE(CAST(_raw_id AS VARCHAR), ''))
+                    PARTITION BY cik, accession_number, report_date,
+                                 regexp_replace(
+                                     lower(trim(CAST(issuer_name AS VARCHAR))),
+                                     '[^a-z0-9]+', ' ', 'g'
+                                 ),
+                                 regexp_replace(
+                                     lower(trim(CAST(instrument_description AS VARCHAR))),
+                                     '[^a-z0-9]+', ' ', 'g'
+                                 ),
+                                 ROUND(COALESCE(_fv, 0), 0),
+                                 ROUND(COALESCE(_cost, 0), 0),
+                                 ROUND(COALESCE(_pa, 0), 0),
+                                 ROUND(COALESCE(_sh, 0), 0)
+                    ORDER BY
+                        CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'non-controlled') THEN 1 ELSE 0 END
+                      + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'non-control') THEN 1 ELSE 0 END
+                      + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'non-affiliated') THEN 1 ELSE 0 END
+                      + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'non-affiliate') THEN 1 ELSE 0 END
+                      + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'affiliated') THEN 1 ELSE 0 END
+                      + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'affiliate') THEN 1 ELSE 0 END
+                      + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'controlled') THEN 1 ELSE 0 END
+                      + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'control') THEN 1 ELSE 0 END,
+                        LENGTH(COALESCE(CAST(_raw_id AS VARCHAR), '')),
+                        COALESCE(CAST(_raw_id AS VARCHAR), '')
                 ) AS _affil_rank
             FROM no_bad_issuers
         ) sub

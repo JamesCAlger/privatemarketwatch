@@ -111,13 +111,16 @@ from pipeline.staging_nport import _prepare_nport  # noqa: F401
 def _stabilize_classification(df: pd.DataFrame) -> pd.DataFrame:
     """Stabilize QoQ classification flips using 2x majority rule.
 
-    For each (cik, issuer_name) group that has multiple distinct values for
+    For each position-level group that has multiple distinct values for
     index_classification (or exposure_type / asset_class), if the most frequent
     value has >= 2x the quarter-count of the second most frequent, override all
     minority rows to the majority value.
 
     This prevents spurious flips caused by BDC identifier format changes between
     filings (e.g., pipe vs comma delimiters, 10-K vs 10-Q naming differences).
+    Stabilization is intentionally keyed below borrower level so a loan,
+    common equity stake, and preferred equity stake in the same borrower do not
+    overwrite each other's classifications.
     """
     if df.empty:
         return df
@@ -133,28 +136,51 @@ def _stabilize_classification(df: pd.DataFrame) -> pd.DataFrame:
     for i, col in enumerate(("index_classification", "exposure_type", "asset_class")):
         alias = f"_stab{i}"
         cte_parts.append(f"""
-        {alias}_counts AS (
-            SELECT cik, issuer_name,
-                   CAST({col} AS VARCHAR) AS cls, COUNT(*) AS n_q
+        {alias}_base AS (
+            SELECT *,
+                regexp_replace(
+                    lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
+                    '[^a-z0-9]+', ' ', 'g'
+                ) AS _stab_issuer,
+                regexp_replace(
+                    lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                    '[^a-z0-9]+', ' ', 'g'
+                ) AS _stab_instrument,
+                COALESCE(CAST(source AS VARCHAR), '') AS _stab_source,
+                COALESCE(CAST(asset_category AS VARCHAR), '') AS _stab_asset,
+                COALESCE(CAST(issuer_category AS VARCHAR), '') AS _stab_issuer_cat
             FROM src
+        ),
+        {alias}_counts AS (
+            SELECT cik, _stab_source, _stab_issuer, _stab_instrument,
+                   _stab_asset, _stab_issuer_cat,
+                   CAST({col} AS VARCHAR) AS cls, COUNT(*) AS n_q
+            FROM {alias}_base
             WHERE {col} IS NOT NULL
               AND CAST({col} AS VARCHAR) != ''
-            GROUP BY 1, 2, 3
+            GROUP BY 1, 2, 3, 4, 5, 6, 7
         ),
         {alias}_ranked AS (
             SELECT *,
                 ROW_NUMBER() OVER (
-                    PARTITION BY cik, issuer_name
+                    PARTITION BY cik, _stab_source, _stab_issuer,
+                        _stab_instrument, _stab_asset, _stab_issuer_cat
                     ORDER BY n_q DESC, cls
                 ) AS rn
             FROM {alias}_counts
         ),
         {alias}_stable AS (
-            SELECT r1.cik, r1.issuer_name, r1.cls AS stable_val
+            SELECT r1.cik, r1._stab_source, r1._stab_issuer,
+                   r1._stab_instrument, r1._stab_asset,
+                   r1._stab_issuer_cat, r1.cls AS stable_val
             FROM {alias}_ranked r1
             JOIN {alias}_ranked r2
               ON r1.cik = r2.cik
-             AND r1.issuer_name = r2.issuer_name
+             AND r1._stab_source = r2._stab_source
+             AND r1._stab_issuer = r2._stab_issuer
+             AND r1._stab_instrument = r2._stab_instrument
+             AND r1._stab_asset = r2._stab_asset
+             AND r1._stab_issuer_cat = r2._stab_issuer_cat
              AND r2.rn = 2
             WHERE r1.rn = 1
               AND r1.n_q >= 2 * r2.n_q
@@ -164,7 +190,12 @@ def _stabilize_classification(df: pd.DataFrame) -> pd.DataFrame:
         )
         join_clauses.append(
             f"LEFT JOIN {alias}_stable {alias}"
-            f" ON s.cik = {alias}.cik AND s.issuer_name = {alias}.issuer_name"
+            f" ON s.cik = {alias}.cik"
+            f" AND COALESCE(CAST(s.source AS VARCHAR), '') = {alias}._stab_source"
+            f" AND regexp_replace(lower(trim(COALESCE(CAST(s.issuer_name AS VARCHAR), ''))), '[^a-z0-9]+', ' ', 'g') = {alias}._stab_issuer"
+            f" AND regexp_replace(lower(trim(COALESCE(CAST(s.instrument_description AS VARCHAR), ''))), '[^a-z0-9]+', ' ', 'g') = {alias}._stab_instrument"
+            f" AND COALESCE(CAST(s.asset_category AS VARCHAR), '') = {alias}._stab_asset"
+            f" AND COALESCE(CAST(s.issuer_category AS VARCHAR), '') = {alias}._stab_issuer_cat"
         )
 
     # Build list of columns to pass through (everything except the 3 we override)
@@ -405,26 +436,89 @@ def build_unified_holdings(
     union_cols = ", ".join(UNIFIED_COLUMNS)
 
     sql = f"""
-    WITH combined AS (
+    WITH nport_deduped AS (
+        -- N-PORT within-source dedup: the same monthly filing can appear in
+        -- adjacent quarterly bulk datasets (e.g. Nov-2021 in both 2021q4 and
+        -- 2022q1 TSVs), and the same position can appear multiple times
+        -- within a single filing.  Collapse these duplicates before
+        -- cross-source dedup so the _source_count guard below only protects
+        -- genuinely distinct positions (different CUSIPs/maturities/types).
+        SELECT * EXCLUDE (_nport_rank) FROM (
+            SELECT *,
+                ROW_NUMBER() OVER (
+                    PARTITION BY cik, report_date,
+                        regexp_replace(
+                            lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
+                            '[^a-z0-9]+', ' ', 'g'
+                        ),
+                        regexp_replace(
+                            lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                            '[^a-z0-9]+', ' ', 'g'
+                        ),
+                        ROUND(TRY_CAST(fair_value AS DOUBLE), -2),
+                        ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
+                        ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0),
+                        COALESCE(CAST(maturity_date AS VARCHAR), ''),
+                        COALESCE(CAST(nport_asset_cat AS VARCHAR), ''),
+                        COALESCE(
+                            NULLIF(NULLIF(NULLIF(CAST(cusip AS VARCHAR), ''),
+                                         '000000000'), '999999999'),
+                            ''
+                        )
+                    ORDER BY
+                        COALESCE(CAST(nport_quarter AS VARCHAR), '') DESC,
+                        COALESCE(CAST(accession_number AS VARCHAR), '') DESC
+                ) AS _nport_rank
+            FROM nport_part
+        ) sub
+        WHERE _nport_rank = 1
+    ),
+    combined AS (
         SELECT {union_cols} FROM bdc_part
         UNION ALL
-        SELECT {union_cols} FROM nport_part
+        SELECT {union_cols} FROM nport_deduped
     ),
     -- Cross-source dedup: if the same holding appears in both BDC and N-PORT
     -- (same CIK + period + similar issuer name + similar fair_value),
-    -- keep the BDC source row.
+    -- keep the BDC source row.  The _source_count guard preserves
+    -- same-source groups (genuinely distinct positions that share the
+    -- narrower cross-source key, e.g. different CUSIPs / maturities).
     deduped AS (
         SELECT *,
+            COUNT(DISTINCT source) OVER (
+                PARTITION BY cik, report_date,
+                    regexp_replace(
+                        lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
+                        '[^a-z0-9]+', ' ', 'g'
+                    ),
+                    regexp_replace(
+                        lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                        '[^a-z0-9]+', ' ', 'g'
+                    ),
+                    ROUND(TRY_CAST(fair_value AS DOUBLE), -2),
+                    ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
+                    ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
+            ) AS _source_count,
             ROW_NUMBER() OVER (
-                PARTITION BY cik, report_date, issuer_name,
-                             ROUND(TRY_CAST(fair_value AS DOUBLE), -2)
+                PARTITION BY cik, report_date,
+                    regexp_replace(
+                        lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
+                        '[^a-z0-9]+', ' ', 'g'
+                    ),
+                    regexp_replace(
+                        lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                        '[^a-z0-9]+', ' ', 'g'
+                    ),
+                    ROUND(TRY_CAST(fair_value AS DOUBLE), -2),
+                    ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
+                    ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
                 ORDER BY
                     CASE WHEN source = 'bdc' THEN 0 ELSE 1 END
             ) AS _dedup_rank
         FROM combined
     ),
     no_dupes AS (
-        SELECT * FROM deduped WHERE _dedup_rank = 1
+        SELECT * FROM deduped WHERE _source_count = 1 OR _dedup_rank = 1
     ),
     -- Within-filing subsidiary dedup: when the same position appears under
     -- both parent entity and subsidiary/JV contexts (same CIK, report_date,
@@ -441,11 +535,48 @@ def build_unified_holdings(
                  AND COALESCE(TRY_CAST(nd2.is_subsidiary AS INT), 0) = 0
            )
     ),
+    -- BDC-only dimension-path dedup: same XBRL position can appear under
+    -- multiple dimension paths with case/punctuation issuer variants and
+    -- occasionally different cost values. Keep cost out of this key so the
+    -- duplicate residue collapses without collapsing real tranches.
+    bdc_dim_ranked AS (
+        SELECT *,
+            ROW_NUMBER() OVER (
+                PARTITION BY cik, accession_number, report_date,
+                    regexp_replace(
+                        lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
+                        '[^a-z0-9]+', ' ', 'g'
+                    ),
+                    regexp_replace(
+                        lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                        '[^a-z0-9]+', ' ', 'g'
+                    ),
+                    ROUND(COALESCE(TRY_CAST(fair_value AS DOUBLE), 0), 0),
+                    ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
+                    ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
+                ORDER BY
+                    LENGTH(COALESCE(CAST(issuer_name AS VARCHAR), '')),
+                    COALESCE(CAST(issuer_name AS VARCHAR), ''),
+                    COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
+                    COALESCE(CAST(accession_number AS VARCHAR), '')
+            ) AS _dim_rank
+        FROM no_sub_dupes
+        WHERE source = 'bdc'
+    ),
+    no_dim_dupes AS (
+        SELECT * EXCLUDE (_dim_rank)
+        FROM bdc_dim_ranked
+        WHERE _dim_rank = 1
+        UNION ALL
+        SELECT *
+        FROM no_sub_dupes
+        WHERE source != 'bdc'
+    ),
     with_fund_text AS (
         SELECT *,
             COALESCE(lower(trim(issuer_name)), '') || ' ' ||
             COALESCE(lower(trim(instrument_description)), '') AS _combined_fund_text
-        FROM no_sub_dupes
+        FROM no_dim_dupes
     ),
     classified AS (
         SELECT *,
@@ -558,14 +689,40 @@ def build_unified_holdings(
         ),
         deduped AS (
             SELECT *,
+                COUNT(DISTINCT source) OVER (
+                    PARTITION BY cik, report_date,
+                        regexp_replace(
+                            lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
+                            '[^a-z0-9]+', ' ', 'g'
+                        ),
+                        regexp_replace(
+                            lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                            '[^a-z0-9]+', ' ', 'g'
+                        ),
+                        ROUND(TRY_CAST(fair_value AS DOUBLE), -2),
+                        ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
+                        ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
+                ) AS _source_count,
                 ROW_NUMBER() OVER (
-                    PARTITION BY cik, report_date, issuer_name,
-                                 ROUND(TRY_CAST(fair_value AS DOUBLE), -2)
+                    PARTITION BY cik, report_date,
+                        regexp_replace(
+                            lower(trim(COALESCE(CAST(issuer_name AS VARCHAR), ''))),
+                            '[^a-z0-9]+', ' ', 'g'
+                        ),
+                        regexp_replace(
+                            lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                            '[^a-z0-9]+', ' ', 'g'
+                        ),
+                        ROUND(TRY_CAST(fair_value AS DOUBLE), -2),
+                        ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
+                        ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
                     ORDER BY CASE WHEN source = 'bdc' THEN 0 ELSE 1 END
                 ) AS _dedup_rank
             FROM combined
         ),
-        no_dupes AS (SELECT * FROM deduped WHERE _dedup_rank = 1),
+        no_dupes AS (
+            SELECT * FROM deduped WHERE _source_count = 1 OR _dedup_rank = 1
+        ),
         _sh_check AS (
             SELECT
                 TRY_CAST(shares_held AS DOUBLE) AS orig_sh,
@@ -693,6 +850,21 @@ def build_unified_holdings(
             logger.warning("  FAIL %s: %d rows", name, count)
     else:
         logger.info("Schema enforcement: all checks passed")
+
+    # Keep downstream position IDs stable across DuckDB/pandas incidental
+    # ordering changes.  These columns identify source row identity before
+    # returns populate position_id.
+    sort_cols = [
+        "source", "cik", "report_date", "filing_date", "accession_number",
+        "bdc_investment_identifier", "nport_holding_id", "issuer_name",
+        "instrument_description", "fair_value", "cost", "principal_amount",
+        "shares_held",
+    ]
+    combined = combined.sort_values(
+        [c for c in sort_cols if c in combined.columns],
+        kind="mergesort",
+        na_position="last",
+    ).reset_index(drop=True)
 
     # Save
     combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)

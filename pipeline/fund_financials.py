@@ -93,6 +93,8 @@ OUTPUT_COLUMNS = [
     "is_formation_stage",
 ]
 
+NCSR_MAX_STALENESS_DAYS = 370
+
 
 # ---------------------------------------------------------------------------
 # A. Companyfacts compatibility wrappers
@@ -212,6 +214,17 @@ def _prepare_nport(
 
     has_ncsr = ncsr_df is not None and not ncsr_df.empty
     if has_ncsr:
+        ncsr_df = ncsr_df.copy()
+        for col in [
+            "cik", "report_date", "filing_date", "accession_number",
+            "share_class", "nav_end_per_share", "distribution_per_share",
+            "distribution_from_nii", "distribution_from_gains",
+            "distribution_return_of_capital", "total_return_pct",
+            "gain_loss_per_share", "nii_per_share", "income_yield_pct",
+            "expense_ratio_pct", "portfolio_turnover",
+        ]:
+            if col not in ncsr_df.columns:
+                ncsr_df[col] = None
         con.register("ncsr", ncsr_df)
 
     # Borrowing detail + DV01 from N-PORT fund_info (if columns exist)
@@ -401,7 +414,7 @@ def _prepare_nport(
             net_assets_ref="cq.net_assets",
             qr_ref=qr_sql,
             mkt_ref="nr.market_price_per_share",
-            nav_ref="COALESCE(nr.ncen_nav, CAST(NULL AS DOUBLE))",
+            nav_ref="COALESCE(TRY_CAST(nr.ncen_nav AS DOUBLE), CAST(NULL AS DOUBLE))",
         )
 
         # DV + CS column references for SELECT (from cik_quarter)
@@ -411,7 +424,7 @@ def _prepare_nport(
         # Build optional N-CSR CTE
         _ncsr_cte = ""
         _ncsr_join = ""
-        _ncsr_nav = "COALESCE(nr.ncen_nav, CAST(NULL AS DOUBLE))"
+        _ncsr_nav = "COALESCE(TRY_CAST(nr.ncen_nav AS DOUBLE), CAST(NULL AS DOUBLE))"
         _ncsr_dist_per_share = "CAST(NULL AS DOUBLE) AS distribution_per_share,"
         _ncsr_dist_from_nii = "CAST(NULL AS DOUBLE) AS distribution_from_nii,"
         _ncsr_dist_from_gains = "CAST(NULL AS DOUBLE) AS distribution_from_gains,"
@@ -425,7 +438,7 @@ def _prepare_nport(
         _ncsr_expense_ratio = "nr.expense_ratio_pct,"
 
         if has_ncsr:
-            _ncsr_cte = """,
+            _ncsr_cte = f""",
     ncsr_ranked AS (
         SELECT
             LPAD(CAST(ns.cik AS VARCHAR), 10, '0') AS cik,
@@ -444,19 +457,25 @@ def _prepare_nport(
             ROW_NUMBER() OVER (
                 PARTITION BY LPAD(CAST(ns.cik AS VARCHAR), 10, '0'),
                     cq.report_quarter
-                ORDER BY ns.report_date DESC
+                ORDER BY
+                    TRY_CAST(ns.report_date AS DATE) DESC NULLS LAST,
+                    TRY_CAST(ns.filing_date AS DATE) DESC NULLS LAST,
+                    COALESCE(CAST(ns.accession_number AS VARCHAR), '') DESC,
+                    COALESCE(CAST(ns.share_class AS VARCHAR), '') ASC
             ) AS rn
         FROM cik_quarter cq
         JOIN ncsr ns
             ON LPAD(CAST(ns.cik AS VARCHAR), 10, '0') = cq.cik
             AND CAST(ns.report_date AS DATE) <= CAST(cq.report_date AS DATE)
+            AND date_diff('day', CAST(ns.report_date AS DATE),
+                          CAST(cq.report_date AS DATE)) <= {NCSR_MAX_STALENESS_DAYS}
     )"""
             _ncsr_join = """
     LEFT JOIN ncsr_ranked nsr
         ON cq.cik = nsr.cik
         AND cq.report_quarter = nsr.nport_quarter
         AND nsr.rn = 1"""
-            _ncsr_nav = "COALESCE(nsr.ncsr_nav, nr.ncen_nav, CAST(NULL AS DOUBLE))"
+            _ncsr_nav = "COALESCE(nsr.ncsr_nav, TRY_CAST(nr.ncen_nav AS DOUBLE), CAST(NULL AS DOUBLE))"
             _ncsr_dist_per_share = "nsr.ncsr_dist_per_share AS distribution_per_share,"
             _ncsr_dist_from_nii = "nsr.ncsr_dist_from_nii AS distribution_from_nii,"
             _ncsr_dist_from_gains = "nsr.ncsr_dist_from_gains AS distribution_from_gains,"
@@ -473,7 +492,7 @@ def _prepare_nport(
             _ncsr_income_ps = "nsr.ncsr_income_ps AS income_per_share,"
             _ncsr_income_yield = "COALESCE(nsr.ncsr_income_yield, CAST(NULL AS DOUBLE)) AS income_yield_pct,"
             _ncsr_portfolio_turnover = "COALESCE(nsr.ncsr_portfolio_turnover, CAST(NULL AS DOUBLE)) AS portfolio_turnover,"
-            _ncsr_expense_ratio = "COALESCE(nsr.ncsr_expense_ratio, nr.expense_ratio_pct) AS expense_ratio_pct,"
+            _ncsr_expense_ratio = "COALESCE(nsr.ncsr_expense_ratio, TRY_CAST(nr.expense_ratio_pct AS DOUBLE)) AS expense_ratio_pct,"
 
         sql = f"""{base_cte},
     ncen_ranked AS (
@@ -1438,14 +1457,13 @@ def build_fund_financials(
         con.register("ncen_fin", ncen_only_df)
 
     # Build explicit column list for UNION ALL alignment
-    _str_cols = {"cik", "report_quarter", "report_date", "source"}
+    _str_cols = {"cik", "entity_name", "report_quarter", "report_date", "source"}
     _bool_cols = {
         "is_formation_stage",
         "is_debt_default", "is_dividend_arrears",
         "is_fund_of_fund", "is_non_diversified",
     }
-    union_cols = [c for c in OUTPUT_COLUMNS
-                  if c not in ("entity_name", "vehicle_type")]
+    union_cols = [c for c in OUTPUT_COLUMNS if c != "vehicle_type"]
 
     # Collect column sets for each registered table
     _table_cols = {}
@@ -1508,10 +1526,20 @@ def build_fund_financials(
         WITH combined AS ({union_sql}),
         univ AS (
             SELECT
-                LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
-                entity_name AS univ_entity_name,
+                cik,
+                univ_entity_name,
                 vehicle_type
-            FROM universe
+            FROM (
+                SELECT
+                    LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                    entity_name AS univ_entity_name,
+                    vehicle_type,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY LPAD(CAST(cik AS VARCHAR), 10, '0')
+                        ORDER BY LENGTH(entity_name) DESC, entity_name ASC
+                    ) AS _rn
+                FROM universe
+            ) WHERE _rn = 1
         ),
         enriched AS (
             SELECT
@@ -1538,7 +1566,7 @@ def build_fund_financials(
         )
         SELECT
             cik,
-            COALESCE(univ_entity_name, '') AS entity_name,
+            COALESCE(NULLIF(entity_name, ''), univ_entity_name, '') AS entity_name,
             COALESCE(vehicle_type, '') AS vehicle_type,
             source, report_quarter, report_date,
             {_final_cols_sql}
@@ -1567,7 +1595,7 @@ def build_fund_financials(
         )
         SELECT
             cik,
-            '' AS entity_name,
+            COALESCE(entity_name, '') AS entity_name,
             '' AS vehicle_type,
             source, report_quarter, report_date,
             {_final_cols_sql}

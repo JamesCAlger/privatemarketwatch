@@ -59,6 +59,30 @@ MATCH_COLUMNS = [
     "position_id",
 ]
 
+UNIFIED_SORT_COLUMNS = [
+    "source", "cik", "report_date", "filing_date", "accession_number",
+    "bdc_investment_identifier", "nport_holding_id", "issuer_name",
+    "instrument_description", "fair_value", "cost", "principal_amount",
+    "shares_held",
+]
+
+MATCH_SORT_COLUMNS = [c for c in MATCH_COLUMNS if c != "position_id"]
+
+
+def _sort_existing(
+    df: pd.DataFrame,
+    columns: list[str],
+) -> pd.DataFrame:
+    """Return df sorted by the subset of columns it has."""
+    sort_cols = [c for c in columns if c in df.columns]
+    if not sort_cols or df.empty:
+        return df.reset_index(drop=True)
+    return df.sort_values(
+        sort_cols,
+        kind="mergesort",
+        na_position="last",
+    ).reset_index(drop=True)
+
 
 # ---------------------------------------------------------------------------
 # SQL helpers
@@ -139,7 +163,16 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
     WITH
     raw AS (
         SELECT *,
-            ROW_NUMBER() OVER () AS _raw_row_id,
+            ROW_NUMBER() OVER (
+                ORDER BY
+                    CAST(cik AS VARCHAR),
+                    CAST(accession_number AS VARCHAR),
+                    CAST(report_date AS VARCHAR),
+                    CAST(period AS VARCHAR),
+                    CAST(investment_identifier AS VARCHAR),
+                    TRY_CAST(fair_value AS DOUBLE),
+                    TRY_CAST(cost AS DOUBLE)
+            ) AS _raw_row_id,
             {_quarter_label_sql('report_date')} AS qtr,
             {_quarter_label_sql('period')} AS period_qtr,
             TRY_CAST(fair_value AS DOUBLE) AS fv,
@@ -239,7 +272,7 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_raw_id
-                ORDER BY span_months ASC
+                ORDER BY span_months ASC, _begin_raw_id ASC
             ) AS rn
         FROM pairs
     )
@@ -360,7 +393,7 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _fv_prox ASC
+                ORDER BY _fv_prox ASC, _end_row_id ASC
             ) AS rn_b
         FROM pairs_cusip
     ),
@@ -368,7 +401,7 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _fv_prox ASC
+                ORDER BY _fv_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM cusip_rn_begin WHERE rn_b = 1
     ),
@@ -444,7 +477,8 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
+                    _end_row_id ASC
             ) AS rn_b
         FROM pairs_name
     ),
@@ -452,7 +486,8 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
+                    _begin_row_id ASC
             ) AS rn_e
         FROM name_rn_begin WHERE rn_b = 1
     ),
@@ -578,7 +613,7 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _fv_prox ASC
+                ORDER BY _fv_prox ASC, _end_row_id ASC
             ) AS rn_b
         FROM pairs
     ),
@@ -586,7 +621,7 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _fv_prox ASC
+                ORDER BY _fv_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM rn_begin WHERE rn_b = 1
     )
@@ -725,7 +760,7 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY match_score DESC, _fv_prox ASC
+                ORDER BY match_score DESC, _fv_prox ASC, _end_row_id ASC
             ) AS rn_b
         FROM with_output
     ),
@@ -733,7 +768,7 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY match_score DESC, _fv_prox ASC
+                ORDER BY match_score DESC, _fv_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM rn_begin WHERE rn_b = 1
     )
@@ -910,7 +945,8 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
+                    _end_row_id ASC
             ) AS rn_b
         FROM all_pairs
     ),
@@ -918,7 +954,8 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
+                    _begin_row_id ASC
             ) AS rn_e
         FROM rn_begin WHERE rn_b = 1
     )
@@ -975,6 +1012,8 @@ def match_positions(
         logger.warning("Empty unified holdings -- nothing to match")
         return pd.DataFrame(columns=MATCH_COLUMNS)
 
+    unified_df = _sort_existing(unified_df, UNIFIED_SORT_COLUMNS)
+
     con = duckdb.connect()
     con.register("unified", unified_df)
     con.register("bdc_raw", bdc_raw_df)
@@ -983,7 +1022,22 @@ def match_positions(
     sql = f"""
     CREATE OR REPLACE TEMP TABLE unified_base AS
     SELECT *,
-        ROW_NUMBER() OVER () AS _row_id,
+        ROW_NUMBER() OVER (
+            ORDER BY
+                CAST(source AS VARCHAR),
+                CAST(cik AS VARCHAR),
+                CAST(report_date AS VARCHAR),
+                CAST(filing_date AS VARCHAR),
+                CAST(accession_number AS VARCHAR),
+                CAST(bdc_investment_identifier AS VARCHAR),
+                CAST(nport_holding_id AS VARCHAR),
+                CAST(issuer_name AS VARCHAR),
+                CAST(instrument_description AS VARCHAR),
+                TRY_CAST(fair_value AS DOUBLE),
+                TRY_CAST(cost AS DOUBLE),
+                TRY_CAST(principal_amount AS DOUBLE),
+                TRY_CAST(shares_held AS DOUBLE)
+        ) AS _row_id,
         {_quarter_label_sql('report_date')} AS quarter,
         TRY_CAST(fair_value AS DOUBLE) AS fv,
         TRY_CAST(cost AS DOUBLE) AS cost_val,
@@ -1110,6 +1164,7 @@ def match_positions(
         if col not in result.columns:
             result[col] = None
     result = result[MATCH_COLUMNS]
+    result = _sort_existing(result, MATCH_SORT_COLUMNS)
 
     # Save
     result.to_csv(POSITION_MATCHES_FILE, index=False)
@@ -1160,7 +1215,7 @@ def assign_position_ids(
 
     if matches_df.empty:
         # All singletons
-        unified_df = unified_df.copy()
+        unified_df = _sort_existing(unified_df.copy(), UNIFIED_SORT_COLUMNS)
         unified_df["position_id"] = [
             f"POS-{i:08d}" for i in range(1, len(unified_df) + 1)
         ]
@@ -1170,10 +1225,10 @@ def assign_position_ids(
     # ------------------------------------------------------------------
     # Step 1: Add stable integer row indices
     # ------------------------------------------------------------------
-    unified_df = unified_df.copy()
+    unified_df = _sort_existing(unified_df.copy(), UNIFIED_SORT_COLUMNS)
     unified_df["_uid"] = range(len(unified_df))
 
-    matches_df = matches_df.copy()
+    matches_df = _sort_existing(matches_df.copy(), MATCH_SORT_COLUMNS)
     matches_df["_midx"] = range(len(matches_df))
 
     # ------------------------------------------------------------------
@@ -1235,7 +1290,7 @@ def assign_position_ids(
         ranked_match AS (
             SELECT *,
                 ROW_NUMBER() OVER (
-                    PARTITION BY _midx ORDER BY _fv_diff ASC
+                    PARTITION BY _midx ORDER BY _fv_diff ASC, _uid ASC
                 ) AS _rn_m
             FROM all_cand
         ),
@@ -1243,7 +1298,7 @@ def assign_position_ids(
         ranked_uid AS (
             SELECT *,
                 ROW_NUMBER() OVER (
-                    PARTITION BY _uid ORDER BY _fv_diff ASC
+                    PARTITION BY _uid ORDER BY _fv_diff ASC, _midx ASC
                 ) AS _rn_u
             FROM ranked_match WHERE _rn_m = 1
         )
@@ -1349,12 +1404,16 @@ def assign_position_ids(
     ),
     rn_a AS (
         SELECT *,
-            ROW_NUMBER() OVER (PARTITION BY uid_a ORDER BY fv_prox ASC) AS rn1
+            ROW_NUMBER() OVER (
+                PARTITION BY uid_a ORDER BY fv_prox ASC, uid_b ASC
+            ) AS rn1
         FROM pairs
     ),
     rn_b AS (
         SELECT *,
-            ROW_NUMBER() OVER (PARTITION BY uid_b ORDER BY fv_prox ASC) AS rn2
+            ROW_NUMBER() OVER (
+                PARTITION BY uid_b ORDER BY fv_prox ASC, uid_a ASC
+            ) AS rn2
         FROM rn_a WHERE rn1 = 1
     )
     SELECT uid_a, uid_b FROM rn_b WHERE rn2 = 1
@@ -1379,12 +1438,16 @@ def assign_position_ids(
     # ------------------------------------------------------------------
     components = uf.components()
     uid_to_pid: dict[int, str] = {}
-    for i, (root, members) in enumerate(sorted(components.items()), 1):
+    ordered_components = sorted(
+        (sorted(members) for members in components.values()),
+        key=lambda members: members[0],
+    )
+    for i, members in enumerate(ordered_components, 1):
         pid = f"POS-{i:08d}"
         for uid in members:
             uid_to_pid[uid] = pid
 
-    n_components = len(components)
+    n_components = len(ordered_components)
 
     # Singletons: unified rows not in any component
     next_id = n_components + 1
@@ -1428,6 +1491,8 @@ def assign_position_ids(
         if col not in unified_df.columns:
             unified_df[col] = ""
     unified_df = unified_df[UNIFIED_COLUMNS]
+    unified_df = _sort_existing(unified_df, UNIFIED_SORT_COLUMNS)
+    matches_df = _sort_existing(matches_df, MATCH_SORT_COLUMNS)
 
     elapsed = time.time() - t0
     logger.info("Position IDs assigned in %.1f s", elapsed)

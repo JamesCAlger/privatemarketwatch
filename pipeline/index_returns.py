@@ -99,6 +99,10 @@ def compute_returns(
                             len(unified_pik_df))
 
     con = duckdb.connect()
+    # Floating-point reductions can vary at the last digits under parallel
+    # aggregation.  The refactor parity gate is byte-level, so keep this
+    # deterministic.
+    con.execute("PRAGMA threads=1")
     con.register("matches", matches_df)
     con.register("fee_uplift", fee_uplift_df)
     con.register("unified_pik", unified_pik_df)
@@ -331,6 +335,14 @@ def compute_returns(
             logger.info("  DL fee uplift: %d positions (%.1f%%), median %.1f%%",
                          has_uplift.sum(), 100 * has_uplift.mean(),
                          dl.loc[has_uplift, "fee_uplift_pct"].median() if has_uplift.any() else 0)
+
+    # Save position returns in deterministic order. The aggregation is order
+    # independent, but byte-parity checks and downstream reviews are not.
+    position_returns = position_returns.sort_values(
+        list(position_returns.columns),
+        kind="mergesort",
+        na_position="last",
+    ).reset_index(drop=True)
 
     # Save position returns
     position_returns.to_csv(POSITION_RETURNS_FILE, index=False)
