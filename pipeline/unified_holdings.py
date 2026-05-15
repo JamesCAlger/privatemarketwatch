@@ -586,7 +586,11 @@ def build_unified_holdings(
         FROM with_fund_text
     ),
     -- Cost proxy: fill NULL/zero cost with first observed fair_value
-    -- for that position (cik + issuer_name), ordered by report_date.
+    -- for that specific position, ordered by report_date.  The partition
+    -- key includes instrument_description and cusip so each tranche gets
+    -- its own proxy (e.g. Term Loan A vs Term Loan B).  The tiebreaker
+    -- fair_value makes the result deterministic when multiple rows share
+    -- the earliest report_date.
     with_cost AS (
         SELECT * EXCLUDE (cost),
             COALESCE(
@@ -595,8 +599,13 @@ def build_unified_holdings(
                     NULLIF(TRY_CAST(fair_value AS DOUBLE), 0)
                     IGNORE NULLS
                 ) OVER (
-                    PARTITION BY cik, issuer_name
-                    ORDER BY report_date
+                    PARTITION BY cik, issuer_name,
+                        regexp_replace(
+                            lower(trim(COALESCE(CAST(instrument_description AS VARCHAR), ''))),
+                            '[^a-z0-9]+', ' ', 'g'
+                        ),
+                        COALESCE(NULLIF(CAST(cusip AS VARCHAR), ''), '')
+                    ORDER BY report_date, fair_value
                     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                 )
             ) AS cost
