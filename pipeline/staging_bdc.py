@@ -862,9 +862,40 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             '' AS position_id,
             _row_id
         FROM with_enrichment
+    ),
+
+    -- CTE 12: Normalize issuer_name casing within each CIK.
+    -- When the same issuer appears with different casing across XBRL
+    -- dimension paths, pick the most frequent variant per CIK.
+    -- Tiebreak: prefer mixed-case over ALL-CAPS, then alphabetical.
+    _casing_vote AS (
+        SELECT cik, issuer_name, COUNT(*) AS _cnt
+        FROM unified
+        WHERE issuer_name IS NOT NULL AND issuer_name != ''
+        GROUP BY cik, issuer_name
+    ),
+    _canonical_casing AS (
+        SELECT cik,
+            LOWER(issuer_name) AS _name_lower,
+            issuer_name AS _canonical
+        FROM _casing_vote
+        QUALIFY ROW_NUMBER() OVER (
+            PARTITION BY cik, LOWER(issuer_name)
+            ORDER BY _cnt DESC,
+                CASE WHEN issuer_name = UPPER(issuer_name) THEN 1 ELSE 0 END,
+                issuer_name
+        ) = 1
+    ),
+    with_casing AS (
+        SELECT u.* EXCLUDE (issuer_name),
+            COALESCE(cc._canonical, u.issuer_name) AS issuer_name
+        FROM unified u
+        LEFT JOIN _canonical_casing cc
+            ON u.cik = cc.cik
+            AND LOWER(u.issuer_name) = cc._name_lower
     )
 
-    SELECT * FROM unified ORDER BY _row_id
+    SELECT * FROM with_casing ORDER BY _row_id
     """
 
     result = con.execute(sql).fetchdf()

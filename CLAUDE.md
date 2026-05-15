@@ -40,21 +40,21 @@ Cross-validated against third-party lists (Interval Fund Tracker, Tender Offer F
 
 ### Phase 3 Complete: Unified Holdings & Validation
 
-`data/output/private_markets_holdings.csv` unifies BDC + N-PORT into **690,674 rows** with 2-axis classification (`exposure_type`, `asset_class`) + `index_classification`, cross-source dedup, affiliation-axis dedup, pct_of_net_assets correction, NUSS name-gated government mapping, and L.P. co-keyword fund detection. Built via `python -m pipeline.main --unified` using DuckDB SQL CTEs (no pandas .apply).
+`data/output/private_markets_holdings.csv` unifies BDC + N-PORT into **718,089 rows** with 2-axis classification (`exposure_type`, `asset_class`) + `index_classification`, cross-source dedup, affiliation-axis dedup, pct_of_net_assets correction, NUSS name-gated government mapping, and L.P. co-keyword fund detection. Built via `python -m pipeline.main --unified` using DuckDB SQL CTEs (no pandas .apply).
 
 | Index | Rows | % |
 |---|---|---|
-| DIRECT_LENDING | 556,854 | 80.6% |
-| COMMON_EQUITY | 63,446 | 9.2% |
-| UNCLASSIFIED | 26,515 | 3.8% |
-| PREFERRED_EQUITY | 22,052 | 3.2% |
-| PRIVATE_EQUITY_FUND | 12,646 | 1.8% |
-| STRUCTURED_CREDIT | 3,203 | 0.5% |
-| PRIVATE_CREDIT_FUND | 2,599 | 0.4% |
-| REAL_ESTATE_FUND | 2,523 | 0.4% |
-| CASH | 612 | 0.1% |
-| HEDGE_FUND | 128 | 0.0% |
-| DIRECT_REAL_ESTATE | 96 | 0.0% |
+| DIRECT_LENDING | 561,450 | 78.2% |
+| COMMON_EQUITY | 66,921 | 9.3% |
+| UNCLASSIFIED | 26,772 | 3.7% |
+| PREFERRED_EQUITY | 25,762 | 3.6% |
+| STRUCTURED_CREDIT | 15,245 | 2.1% |
+| PRIVATE_EQUITY_FUND | 15,211 | 2.1% |
+| PRIVATE_CREDIT_FUND | 3,013 | 0.4% |
+| REAL_ESTATE_FUND | 2,733 | 0.4% |
+| CASH | 617 | 0.1% |
+| HEDGE_FUND | 261 | 0.0% |
+| DIRECT_REAL_ESTATE | 104 | 0.0% |
 
 Quarters: 2019q4-2026q1.
 
@@ -154,7 +154,7 @@ data/
     bdc_filings_index.csv              # 6,437 filing metadata records
     bdc_holdings.csv                   # 1,040,369 investee-level positions (365 MB)
     nport_holdings.csv                 # 835,234 N-PORT holdings
-    private_markets_holdings.csv       # 835,067 unified holdings (326 MB)
+    private_markets_holdings.csv       # 718,089 unified holdings (326 MB)
     position_matches.csv               # Position matching pairs (541K pairs)
     position_returns.csv               # Per-position total returns
     index_returns.csv                  # Quarterly index returns (4 indices, 25 quarters)
@@ -218,7 +218,7 @@ data/
 
 ## Unified Holdings -- Validation
 
-`data/output/private_markets_holdings.csv` (690,674 rows). Run via `python -m pipeline.main --unified --validate`.
+`data/output/private_markets_holdings.csv` (718,089 rows). Run via `python -m pipeline.main --unified --validate`.
 
 **Status:** V1-V7 all implemented.
 - **V1 (UNCLASSIFIED reduction):** Implemented. 2.5% UNCLASSIFIED (down from 16.3%). BDC financial field fallback, N-PORT issuer defaulting, named co-invest reclassification, expanded fund keyword lists.
@@ -227,7 +227,7 @@ data/
 - **V4 (Cross-source dedup):** Implemented. Jaro-Winkler name matching + FV proximity. BDC source preferred. Output: `holdings_cross_source.csv`.
 - **V5 (Coverage):** Implemented. Total assets ratio validation (0.8-1.2x expected). Output: `holdings_coverage.csv`, `holdings_total_assets.csv`.
 - **V6 (2-axis classification):** Implemented. Two new columns: `exposure_type` (DIRECT/FUND/LIQUID) and `asset_class` (PRIVATE_CREDIT/PRIVATE_EQUITY/REAL_ESTATE/STRUCTURED_CREDIT/HEDGE_FUND/CASH/OTHER). Expanded `index_classification` with 5 new values (REAL_ESTATE_FUND, DIRECT_REAL_ESTATE, STRUCTURED_CREDIT, HEDGE_FUND, CASH). Uses `nport_asset_cat` (EC/EP/RE/DBT/LON) to refine HEDGE_FUND catch-all. Cross-reference validation (10 rules, runs with `--validate`) + one-time LLM audit (GPT-4o-mini). Output: `classification_validation.csv`, `classification_llm_audit.csv`. NUSS issuer_type is now name-gated (only GOVERNMENT when name has govt keyword; eliminates A1/E1 disagreements). L.P. suffix requires fund co-keyword to trigger FUND reclassification (prevents SPV misclassification). Known residual: 231 E2 disagreements (issuer_category=FUND but exposure_type!=FUND) from three causes: (1) 86 money market fund positions (Goldman Sachs Financial Square, Vanguard Federal Money Market, etc.) that have issuer_category=FUND but exposure_type=LIQUID+asset_class=CASH -- correctly classified for index purposes; (2) 43 BDC aggregate headers ("Investments in Non-Controlled, Non-Affiliated Portfolio Companies") that leaked through aggregate filtering and carry issuer_category=FUND from the affiliation dimension; (3) 90 misc positions where issuer_category=FUND comes from N-PORT PF/RF tagging but the position is a direct lending/equity position in an operating company (e.g., "AffiniPay Intermediate Holdings, LLC" tagged PF by filer).
-- **V7 (Affiliation-axis dedup + pct correction):** Implemented. Fixes FV inflation from affiliation-axis duplication (12 CIKs) via 3 mechanisms: affiliation prefix/suffix stripping from `_raw_id`, expanded `_BAD_ISSUER_NAMES_EXACT`, and ROW_NUMBER dedup over (cik, report_date, issuer_name, FV). Corrects `pct_of_net_assets` for multi-dimension-path BDCs (263 CIK-quarters, 116K rows) by recalculating with consolidated `net_assets` from `fund_financials.csv`. Known residual: some BDCs still show duplicates from different dimension paths that parse into different `issuer_name` values (requires cross-path entity matching to resolve).
+- **V7 (Affiliation-axis dedup + pct correction):** Implemented. Fixes FV inflation from affiliation-axis duplication (12 CIKs) via 3 mechanisms: affiliation prefix/suffix stripping from `_raw_id`, expanded `_BAD_ISSUER_NAMES_EXACT`, and ROW_NUMBER dedup over (cik, report_date, issuer_name, FV). Corrects `pct_of_net_assets` for multi-dimension-path BDCs (263 CIK-quarters, 116K rows) by recalculating with consolidated `net_assets` from `fund_financials.csv`. Dimension-path duplicates resolved by `no_dim_dupes` CTE (case/punctuation-normalized key excluding cost) + majority casing vote in `_prepare_bdc` + N-PORT cross-quarter dedup via `nport_deduped` CTE. Cost proxy made deterministic with per-tranche partition key (instrument_description + cusip) and fair_value tiebreaker. Tier A within-filing position matching case-folded to recover 2,386 cross-period pairs that previously fell to lower-confidence tiers.
 
 All validation functions use DuckDB SQL (no pandas .iterrows/.apply). See MEMORY.md for detailed implementation notes.
 
@@ -236,9 +236,9 @@ All validation functions use DuckDB SQL (no pandas .iterrows/.apply). See MEMORY
 - **BDC XBRL coverage starts ~2022-2023.** The SEC phased in investment-level XBRL tagging for BDCs. Pre-2022 filings are plain HTML with no structured data. Some 2022-2023 filings have only aggregate XBRL (category-level totals, not individual positions). HTML template extraction covers pre-XBRL filings back to 2013.
 - **HTML template coverage is per-CIK.** Each BDC requires a v3.0 template mapping its specific table layout. ~3,662 pre-XBRL filings across ~190 CIKs need templates. Templates are created via `--auto-detect` + manual validation.
 - **Industry/type/affiliation are mostly empty.** Most BDCs embed this metadata in the `investment_identifier` string (e.g., "Senior Secured Loans | First Lien | Acme Corp | Technology") rather than using separate XBRL dimensions. Parsing these out requires string splitting, which is filer-specific.
-- **N-PORT consumer/marketplace lending positions.** Three N-PORT CIKs (0001678130 RiverNorth/DoubleLine, 0001644771 RiverNorth series, 0002041175 NB Asset-Based Credit) report individual consumer loans with opaque numeric IDs (e.g., "9980668.SQ.RVR", "99904958.LC.RVR"). These represent ~380K rows (75% of N-PORT, ~45% of total unified) but only ~$2B FV (<1% of total). They are classified as DIRECT_LENDING but are consumer/marketplace loans, NOT direct lending to operating companies. Entity resolution already excludes them from the variant table via `_OPAQUE_NUMERIC_ID_RE`. **Any analytics or index computation should exclude these positions.** They inflate row counts and constituent counts without contributing meaningful FV. Position matching cannot match them across quarters (numeric IDs don't carry).
-- **20 BDCs with holdings but missing from unified.** These CIKs have `bdc_holdings.csv` rows but do not appear in `private_markets_holdings.csv` (2022Q4+). Likely cause: all their holdings predate the unified cutoff or have only aggregate XBRL (no position-level data in the unified period). See Investigation #5 in `data/output/data_investigation_results.md` for the full CIK list and row counts.
-- **Multi-dimension-path BDC duplicates.** Some BDCs (Carlyle, Star Mountain, WhiteHorse, Franklin BSP, etc.) tag the same position under multiple XBRL dimension hierarchies (e.g., "First Lien Debt, Company, Industry" and "Company - Term Loan"). The affiliation-axis dedup catches duplicates with matching `issuer_name` + FV, but some survive when different dimension paths parse into different `issuer_name` values. These BDCs show `pct_of_net_assets` sums of 200-400% (corrected using consolidated `net_assets` from fund_financials). This is NOT sub-fund data from separate portfolios -- it's the same consolidated schedule tagged redundantly. Fully resolving requires cross-path entity matching.
+- **N-PORT consumer/marketplace lending positions.** Four N-PORT CIKs (0001658645 Stone Ridge Trust V, 0001678130 RiverNorth/DoubleLine, 0001644771 RiverNorth series, 0002041175 NB Asset-Based Credit) report individual consumer loans with opaque numeric IDs. These are excluded from unified holdings at the staging level via `NPORT_EXCLUDE_CIKS` in `config.py`. The data is preserved in `nport_holdings.csv` but filtered out during `--unified`. The frontend export additionally filters via `CONSUMER_LENDING_EXCLUDE_CIKS` in `pipeline/export/helpers.py`.
+- **2 BDCs with holdings but missing from unified.** Two CIKs have `bdc_holdings.csv` rows but do not appear in `private_markets_holdings.csv`: (1) Terra Income Fund 6 (0001577134, 10 rows) -- all rows are prior-period comparatives with no current-period data; (2) Lord Abbett Private Credit Fund S (0002041841, 157 rows) -- aggregate-only XBRL where position-level rows have NULL across all financial fields. Both exclusions are correct. Lord Abbett is a candidate for HTML template extraction (~55 positions, $319M total). The original 20 missing CIKs (Investigation #5) were reduced to 2 by aggregate filter improvements.
+- **Multi-dimension-path BDC duplicates (resolved).** BDCs that tag the same position under multiple XBRL dimension hierarchies are handled by the `no_dim_dupes` CTE in `unified_holdings.py` (case/punctuation-normalized partition key excluding cost) and the `_canonical_casing` CTE in `staging_bdc.py` (majority casing vote per CIK). These BDCs show `pct_of_net_assets` sums of 200-400% (corrected using consolidated `net_assets` from fund_financials). Residual: 48 rows with non-deterministic cost proxy from upstream dedup tie-breaking (0.007% of total).
 
 ## Resumability
 

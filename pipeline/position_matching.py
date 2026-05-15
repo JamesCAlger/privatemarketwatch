@@ -262,7 +262,7 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
         FROM current_rows c
         JOIN comparative_rows comp
           ON c._acc = comp._acc
-         AND c._inv_id = comp._inv_id
+         AND LOWER(c._inv_id) = LOWER(comp._inv_id)
          AND c._cik = comp._cik
         WHERE {_span_months_sql('comp.period', 'c.report_date')} >= 2
           AND {_span_months_sql('comp.period', 'c.report_date')} <= 13
