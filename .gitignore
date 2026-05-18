@@ -34,3 +34,8 @@ nul
 _audit_*.py
 analysis_full.py
 gen_script.py
+scripts/_*.py
+%TEMP%*
+phase6_compat_cleanup.patch
+frontend/start-test.*.log
+frontend/.npm-localappdata/
