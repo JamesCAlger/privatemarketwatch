@@ -140,6 +140,7 @@ def _export_fund_index_returns(con: duckdb.DuckDBPyConnection) -> None:
                 cik,
                 vehicle_type,
                 report_quarter,
+                TRY_CAST(report_date AS DATE) AS report_date,
                 TRY_CAST(quarterly_return AS DOUBLE) AS quarterly_return,
                 TRY_CAST(total_assets AS DOUBLE) AS total_assets,
                 TRY_CAST(nav_per_share AS DOUBLE) AS nav_per_share,
@@ -154,6 +155,7 @@ def _export_fund_index_returns(con: duckdb.DuckDBPyConnection) -> None:
                 cik,
                 vehicle_type,
                 report_quarter,
+                report_date,
                 total_assets,
                 COALESCE(
                     quarterly_return,
@@ -161,8 +163,8 @@ def _export_fund_index_returns(con: duckdb.DuckDBPyConnection) -> None:
                         WHEN nav_per_share IS NOT NULL AND nav_per_share > 0 THEN
                             (nav_per_share
                              + COALESCE(dist_per_share, 0)
-                             - LAG(nav_per_share) OVER (PARTITION BY cik ORDER BY report_quarter))
-                            / NULLIF(LAG(nav_per_share) OVER (PARTITION BY cik ORDER BY report_quarter), 0)
+                             - LAG(nav_per_share) OVER (PARTITION BY cik ORDER BY report_date))
+                            / NULLIF(LAG(nav_per_share) OVER (PARTITION BY cik ORDER BY report_date), 0)
                     END
                 ) AS qtr_return
             FROM typed
@@ -259,6 +261,7 @@ def _export_aum_time_series(con: duckdb.DuckDBPyConnection) -> None:
                 cik,
                 vehicle_type,
                 report_quarter,
+                TRY_CAST(report_date AS DATE) AS report_date,
                 TRY_CAST(total_assets AS DOUBLE) AS total_assets
             FROM ff
             WHERE report_quarter >= '2022q4'

@@ -107,7 +107,9 @@ def _export_manager_concentration(con: duckdb.DuckDBPyConnection) -> None:
                 ), 0) AS pct_of_index,
                 ROW_NUMBER() OVER (
                     PARTITION BY index_classification
-                    ORDER BY total_fv DESC
+                    ORDER BY
+                        total_fv DESC NULLS LAST,
+                        manager ASC NULLS LAST
                 ) AS rn
             FROM by_manager
         )
@@ -158,7 +160,9 @@ def _export_vehicle_concentration(con: duckdb.DuckDBPyConnection) -> None:
                 ), 0) AS pct_of_index,
                 ROW_NUMBER() OVER (
                     PARTITION BY index_classification
-                    ORDER BY total_fv DESC
+                    ORDER BY
+                        total_fv DESC NULLS LAST,
+                        entity_name ASC NULLS LAST
                 ) AS rn
             FROM agg
         )
@@ -208,7 +212,9 @@ def _export_investee_concentration(con: duckdb.DuckDBPyConnection) -> None:
                 ), 0) AS pct_of_index,
                 ROW_NUMBER() OVER (
                     PARTITION BY index_classification
-                    ORDER BY total_fv DESC
+                    ORDER BY
+                        total_fv DESC NULLS LAST,
+                        issuer_name ASC NULLS LAST
                 ) AS rn
             FROM agg
         )
@@ -308,11 +314,17 @@ def _ranked_query(
         ),
         ranked AS (
             SELECT *,
-                ROW_NUMBER() OVER (ORDER BY total_fv DESC) AS rn,
+                ROW_NUMBER() OVER (
+                    ORDER BY
+                        total_fv DESC NULLS LAST,
+                        entity ASC NULLS LAST
+                ) AS rn,
                 COUNT(*) OVER () AS total_count,
                 SUM(total_fv) OVER () AS grand_total,
                 SUM(total_fv) OVER (
-                    ORDER BY total_fv DESC
+                    ORDER BY
+                        total_fv DESC NULLS LAST,
+                        entity ASC NULLS LAST
                     ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
                 ) AS cum_fv
             FROM agg
@@ -396,7 +408,9 @@ def _export_position_concentration(con: duckdb.DuckDBPyConnection) -> None:
                 ), 0) AS pct_of_index,
                 ROW_NUMBER() OVER (
                     PARTITION BY index_classification
-                    ORDER BY total_fv DESC
+                    ORDER BY
+                        total_fv DESC NULLS LAST,
+                        position_label ASC NULLS LAST
                 ) AS rn
             FROM positions
         )
@@ -776,6 +790,7 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
                 '{VALIDATION_REPORT_FILE.as_posix()}', all_varchar=true
             )
             GROUP BY source
+            ORDER BY source
         """).fetchall()
 
         out["thirdPartyValidation"] = [
@@ -1077,97 +1092,103 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
 
 
 def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
-    """GICS sector breakdown from BDC XBRL industry-axis data.
+    """GICS sector breakdown from unified holdings industry data.
 
-    Aggregates sub-industries to GICS Industry Group level (~24 groups)
-    so all groups fit without a top-N cutoff.
+    Sources industry from gics_sub_industry (populated by --classify-gics)
+    with fallback to extracted_industry (populated by identifier parsing).
+    Aggregates to GICS Industry Group level, top-10 + Other + Unclassified.
     """
     from pipeline.gics_mapping import _load_gics_hierarchy
 
-    bdc_sector_csv = BDC_SECTOR_BREAKDOWN_FILE
-    if not bdc_sector_csv.exists():
-        logger.warning("bdc_sector_breakdown.csv not found -- skipping gics_sector_breakdown")
+    if not UNIFIED_HOLDINGS_CSV.exists():
+        logger.warning("unified holdings not found -- skipping gics_sector_breakdown")
         _write_json("gics_sector_breakdown.json", [])
         return
 
-    # Get total FV across all holdings for denominator
-    total_fv = 0.0
-    if UNIFIED_HOLDINGS_CSV.exists():
-        cutoff_date = (
-            _quarter_to_date(INDEX_DISPLAY_END_QUARTER)
-            if INDEX_DISPLAY_END_QUARTER else "9999-12-31"
-        )
-        total_row = con.execute(f"""
-            WITH raw AS (
-                SELECT * FROM read_csv_auto(
-                    '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
-                )
-            ),
-            latest AS (
-                SELECT MAX(report_date) AS q FROM raw
-                WHERE report_date <= '{cutoff_date}'
-            )
-            SELECT SUM(TRY_CAST(fair_value AS DOUBLE))
-            FROM raw
-            WHERE report_date = (SELECT q FROM latest)
-              {_exclude_consumer_lending_sql('cik')}
-        """).fetchone()
-        if total_row and total_row[0]:
-            total_fv = float(total_row[0])
+    cutoff_date = (
+        _quarter_to_date(INDEX_DISPLAY_END_QUARTER)
+        if INDEX_DISPLAY_END_QUARTER else "9999-12-31"
+    )
 
-    # Load GICS hierarchy and register as a DuckDB lookup table
+    # Load GICS hierarchy and register as a DuckDB lookup table.
+    # Aggregate to GICS sector level (11 categories) for a clean chart.
     hierarchy = _load_gics_hierarchy()
-    hierarchy_rows = [
-        (sub_ind, entry["industry_group"])
-        for sub_ind, entry in hierarchy.items()
-    ]
+    seen_sectors: set[str] = set()
+    hierarchy_rows: list[tuple[str, str]] = []
+    for sub_ind, entry in hierarchy.items():
+        sector = entry["sector"]
+        hierarchy_rows.append((sub_ind, sector))
+        seen_sectors.add(sector)
+    # Also map industry group names to their sector (for extracted_industry fallback)
+    seen_keys: set[str] = {r[0] for r in hierarchy_rows}
+    for sub_ind, entry in hierarchy.items():
+        grp = entry["industry_group"]
+        if grp not in seen_keys:
+            hierarchy_rows.append((grp, entry["sector"]))
+            seen_keys.add(grp)
+    # Identity mappings for sector names themselves
+    for sector in seen_sectors:
+        hierarchy_rows.append((sector, sector))
     con.execute("DROP TABLE IF EXISTS _gics_hierarchy")
     con.execute(
-        "CREATE TEMP TABLE _gics_hierarchy (sub_industry VARCHAR, industry_group VARCHAR)"
+        "CREATE TEMP TABLE _gics_hierarchy (sub_industry VARCHAR, sector VARCHAR)"
     )
     con.executemany(
         "INSERT INTO _gics_hierarchy VALUES (?, ?)", hierarchy_rows
     )
 
-    # Aggregate BDC sector data by GICS industry group
+    # Aggregate from unified holdings using gics_sub_industry or extracted_industry,
+    # with index_classification as a sector-level fallback for fund-type positions.
     rows = con.execute(f"""
         WITH raw AS (
             SELECT * FROM read_csv_auto(
-                '{bdc_sector_csv.as_posix()}', all_varchar=true
+                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
         ),
-        typed AS (
-            SELECT
-                COALESCE(NULLIF(gics_sub_industry, ''), 'Other') AS gics_sector,
-                TRY_CAST(fair_value AS DOUBLE) AS fair_value,
-                cik,
-                report_date
-            FROM raw
-            WHERE TRY_CAST(fair_value AS DOUBLE) > 0
-              {_exclude_consumer_lending_sql('cik')}
-        ),
-        cutoff AS (
-            SELECT MAX(report_date) AS q FROM typed
+        latest_q AS (
+            SELECT MAX(report_date) AS q FROM raw
+            WHERE report_date <= '{cutoff_date}'
         ),
         latest AS (
-            SELECT * FROM typed
-            WHERE report_date = (SELECT q FROM cutoff)
-        ),
-        with_group AS (
             SELECT
-                COALESCE(h.industry_group, latest.gics_sector) AS industry_group,
+                cik,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value,
+                COALESCE(
+                    NULLIF(gics_sub_industry, ''),
+                    NULLIF(extracted_industry, '')
+                ) AS raw_industry,
+                index_classification
+            FROM raw
+            WHERE report_date = (SELECT q FROM latest_q)
+              AND TRY_CAST(fair_value AS DOUBLE) > 0
+              {_exclude_consumer_lending_sql('cik')}
+        ),
+        with_sector AS (
+            SELECT
+                COALESCE(
+                    h.sector,
+                    CASE latest.index_classification
+                        WHEN 'PRIVATE_EQUITY_FUND' THEN 'Financials'
+                        WHEN 'PRIVATE_CREDIT_FUND' THEN 'Financials'
+                        WHEN 'HEDGE_FUND' THEN 'Financials'
+                        WHEN 'STRUCTURED_CREDIT' THEN 'Financials'
+                        WHEN 'REAL_ESTATE_FUND' THEN 'Real Estate'
+                        WHEN 'DIRECT_REAL_ESTATE' THEN 'Real Estate'
+                        ELSE NULL
+                    END
+                ) AS gics_sector,
                 latest.fair_value,
                 latest.cik
             FROM latest
-            LEFT JOIN _gics_hierarchy h ON latest.gics_sector = h.sub_industry
+            LEFT JOIN _gics_hierarchy h ON latest.raw_industry = h.sub_industry
         ),
         agg AS (
             SELECT
-                industry_group AS sector,
+                COALESCE(gics_sector, '_unclassified_') AS sector,
                 SUM(fair_value) AS total_fv,
                 COUNT(DISTINCT cik) AS fund_count
-            FROM with_group
-            GROUP BY industry_group
+            FROM with_sector
+            GROUP BY gics_sector
         )
         SELECT sector, total_fv, fund_count
         FROM agg
@@ -1178,33 +1199,26 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
         _write_json("gics_sector_breakdown.json", [])
         return
 
-    classified_fv = sum(float(r[1]) for r in rows)
-    grand_total = total_fv if total_fv > 0 else classified_fv
+    grand_total = sum(float(r[1]) for r in rows)
 
-    # Separate "Other" (unmapped) from real industry groups -- no top-N cutoff
-    out = []
-    other_fv = 0.0
+    # Separate classified sectors and unclassified; show all sectors (no top-N cutoff)
+    classified = []
+    unclassified_fv = 0.0
     for sector, fv, fund_count in rows:
-        if sector == "Other":
-            other_fv += float(fv)
+        if sector == "_unclassified_":
+            unclassified_fv += float(fv)
         else:
-            out.append({
-                "sector": sector,
-                "totalFv": _safe_round(fv, 0),
-                "pctOfTotal": _safe_round(float(fv) / grand_total, 4) if grand_total > 0 else 0,
-                "fundCount": fund_count,
-            })
+            classified.append((sector, float(fv), fund_count))
 
-    if other_fv > 0:
+    out = []
+    for sector, fv, fund_count in classified:
         out.append({
-            "sector": "Other",
-            "totalFv": _safe_round(other_fv, 0),
-            "pctOfTotal": _safe_round(other_fv / grand_total, 4) if grand_total > 0 else 0,
-            "fundCount": None,
+            "sector": sector,
+            "totalFv": _safe_round(fv, 0),
+            "pctOfTotal": _safe_round(fv / grand_total, 4) if grand_total > 0 else 0,
+            "fundCount": fund_count,
         })
 
-    # Unclassified = grand total - classified
-    unclassified_fv = grand_total - classified_fv
     if unclassified_fv > 0:
         out.append({
             "sector": "Unclassified",
@@ -1213,24 +1227,25 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
             "fundCount": None,
         })
 
+    classified_fv = grand_total - unclassified_fv
     _write_json("gics_sector_breakdown.json", out)
-    logger.info("  gics_sector_breakdown: %d industry groups, $%.1fB classified of $%.1fB total",
-                len(out), classified_fv / 1e9, grand_total / 1e9)
+    logger.info("  gics_sector_breakdown: %d groups, $%.1fB classified of $%.1fB total (%.0f%%)",
+                len(out), classified_fv / 1e9, grand_total / 1e9,
+                classified_fv / grand_total * 100 if grand_total > 0 else 0)
 
 
 def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
-    """Credit risk / distress time series for DIRECT_LENDING positions.
+    """BDC direct-lending credit stress signal time series.
 
-    3 mutually exclusive stress tiers (priority order):
+    Signals are independent, not mutually exclusive:
     1. Deep distress: FV/par < 80%
-    2. Non-accrual: flagged in BDC XBRL footnotes/dimensions (BDC only),
-       not already in deep distress
-    3. PIK active: pik_rate > 0 or nport_is_paid_in_kind='Y', not in 1-2
+    2. Non-accrual: flagged in BDC XBRL footnotes/dimensions
+    3. Marked below cost: FV/cost < 90%
 
     Non-accrual flags are extracted from ``nonaccrual_flags.csv`` which is
     produced by parsing XBRL footnote links and dimension members across
     all BDC filings.  118 CIKs (~61% of BDC universe) have non-accrual
-    data.  N-PORT has ``is_default`` but it is nearly empty (<0.1%).
+    data.  N-PORT is excluded from this export.
 
     GAV filter: CIK-quarters where either DL-only or all-position FV /
     total_assets is between 0.7 and 1.3 are included.
@@ -1321,10 +1336,10 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
                 || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value,
                 TRY_CAST(principal_amount AS DOUBLE) AS principal,
-                TRY_CAST(pik_rate AS DOUBLE) AS pik_rate,
-                nport_is_paid_in_kind
+                TRY_CAST(cost AS DOUBLE) AS cost
             FROM raw
-            WHERE index_classification = 'DIRECT_LENDING'
+            WHERE source = 'bdc'
+              AND index_classification = 'DIRECT_LENDING'
               AND TRY_CAST(fair_value AS DOUBLE) > 0
               AND report_date >= '2022-10-01'
               {_exclude_consumer_lending_sql('cik')}
@@ -1337,75 +1352,69 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
                 dl.fair_value,
                 {na_select},
                 CASE
-                    -- Tier 1: deep distress (FV/par < 80%)
                     WHEN dl.principal > 10000
                          AND dl.principal BETWEEN dl.fair_value * 0.1
                                               AND dl.fair_value * 10.0
                          AND dl.fair_value / dl.principal < 0.80
-                    THEN 'deepDistress'
-                    ELSE NULL
-                END AS price_tier,
-                CASE
-                    WHEN (COALESCE(dl.pik_rate, 0) > 0
-                          OR dl.nport_is_paid_in_kind = 'Y')
                     THEN 1 ELSE 0
-                END AS is_pik
+                END AS is_deep_distress,
+                CASE
+                    WHEN dl.cost > 10000
+                         AND dl.cost BETWEEN dl.fair_value * 0.1
+                                         AND dl.fair_value * 10.0
+                         AND dl.fair_value / dl.cost < 0.90
+                    THEN 1 ELSE 0
+                END AS is_marked_below_cost
             FROM dl
             {na_join}
             {gav_join}
             WHERE dl.report_quarter IS NOT NULL
               {_quarter_cutoff_sql('dl.report_quarter')}
-        ),
-        final_tier AS (
-            SELECT
-                report_quarter,
-                fair_value,
-                CASE
-                    WHEN price_tier = 'deepDistress' THEN 'deepDistress'
-                    WHEN is_nonaccrual = 1 THEN 'nonAccrual'
-                    WHEN is_pik = 1 THEN 'pikActive'
-                    ELSE 'healthy'
-                END AS tier
-            FROM with_tiers
         )
         SELECT
             report_quarter,
-            tier,
-            COUNT(*) AS cnt,
-            SUM(fair_value) AS tier_fv,
-            SUM(COUNT(*)) OVER (PARTITION BY report_quarter) AS total_positions,
-            SUM(SUM(fair_value)) OVER (PARTITION BY report_quarter) AS total_fv
-        FROM final_tier
-        GROUP BY report_quarter, tier
-        ORDER BY report_quarter, tier
+            COUNT(*) AS total_positions,
+            SUM(fair_value) AS total_fv,
+            SUM(is_deep_distress) AS deep_distress_count,
+            SUM(is_nonaccrual) AS nonaccrual_count,
+            SUM(is_marked_below_cost) AS marked_below_cost_count,
+            SUM(CASE WHEN is_deep_distress = 1 THEN fair_value ELSE 0 END) AS deep_distress_fv,
+            SUM(CASE WHEN is_nonaccrual = 1 THEN fair_value ELSE 0 END) AS nonaccrual_fv,
+            SUM(CASE WHEN is_marked_below_cost = 1 THEN fair_value ELSE 0 END) AS marked_below_cost_fv
+        FROM with_tiers
+        GROUP BY report_quarter
+        ORDER BY report_quarter
     """).fetchall()
 
-    # Group by quarter
-    by_q: dict[str, dict] = {}
-    for quarter, tier, cnt, tier_fv, total_positions, total_fv_q in rows:
-        if quarter not in by_q:
-            by_q[quarter] = {
-                "quarter": quarter,
-                "totalPositions": total_positions,
-                "totalFv": _safe_round(total_fv_q, 0),
-                "byCount": {},
-                "byFv": {},
-            }
-        entry = by_q[quarter]
+    out = []
+    for (
+        quarter,
+        total_positions,
+        total_fv_q,
+        deep_distress_count,
+        nonaccrual_count,
+        marked_below_cost_count,
+        deep_distress_fv,
+        nonaccrual_fv,
+        marked_below_cost_fv,
+    ) in rows:
         total_pos = float(total_positions) if total_positions else 1
         total_fv_f = float(total_fv_q) if total_fv_q else 1
-        entry["byCount"][tier] = _safe_round(float(cnt) / total_pos, 4)
-        entry["byFv"][tier] = _safe_round(float(tier_fv) / total_fv_f, 4)
-
-    # Ensure all tiers present in each quarter
-    all_tiers = ["deepDistress", "nonAccrual", "pikActive", "healthy"]
-    out = []
-    for q in sorted(by_q.keys()):
-        entry = by_q[q]
-        for t in all_tiers:
-            entry["byCount"].setdefault(t, 0)
-            entry["byFv"].setdefault(t, 0)
-        out.append(entry)
+        out.append({
+            "quarter": quarter,
+            "totalPositions": int(total_positions or 0),
+            "totalFv": _safe_round(total_fv_q, 0),
+            "byCount": {
+                "deepDistress": _safe_round(float(deep_distress_count or 0) / total_pos, 4),
+                "nonAccrual": _safe_round(float(nonaccrual_count or 0) / total_pos, 4),
+                "markedBelowCost": _safe_round(float(marked_below_cost_count or 0) / total_pos, 4),
+            },
+            "byFv": {
+                "deepDistress": _safe_round(float(deep_distress_fv or 0) / total_fv_f, 4),
+                "nonAccrual": _safe_round(float(nonaccrual_fv or 0) / total_fv_f, 4),
+                "markedBelowCost": _safe_round(float(marked_below_cost_fv or 0) / total_fv_f, 4),
+            },
+        })
 
     _write_json("credit_risk.json", out)
     logger.info("  credit_risk: %d quarters", len(out))
@@ -1429,9 +1438,14 @@ def _export_distribution_histogram(con: duckdb.DuckDBPyConnection) -> None:
                 cik,
                 vehicle_type,
                 report_quarter,
+                TRY_CAST(report_date AS DATE) AS report_date,
                 TRY_CAST(distribution_rate AS DOUBLE) AS distribution_rate,
                 TRY_CAST(total_assets AS DOUBLE) AS total_assets,
-                ROW_NUMBER() OVER (PARTITION BY cik ORDER BY report_quarter DESC) AS rn
+                ROW_NUMBER() OVER (
+                    PARTITION BY cik
+                    ORDER BY TRY_CAST(report_date AS DATE) DESC NULLS LAST,
+                             report_quarter DESC NULLS LAST
+                ) AS rn
             FROM ff
             WHERE TRY_CAST(distribution_rate AS DOUBLE) > 0
               AND TRY_CAST(total_assets AS DOUBLE) > 1000000
@@ -1507,9 +1521,14 @@ def _export_leverage_histogram(con: duckdb.DuckDBPyConnection) -> None:
                 cik,
                 vehicle_type,
                 report_quarter,
+                TRY_CAST(report_date AS DATE) AS report_date,
                 TRY_CAST(leverage_ratio AS DOUBLE) AS leverage_ratio,
                 TRY_CAST(total_assets AS DOUBLE) AS total_assets,
-                ROW_NUMBER() OVER (PARTITION BY cik ORDER BY report_quarter DESC) AS rn
+                ROW_NUMBER() OVER (
+                    PARTITION BY cik
+                    ORDER BY TRY_CAST(report_date AS DATE) DESC NULLS LAST,
+                             report_quarter DESC NULLS LAST
+                ) AS rn
             FROM ff
             WHERE TRY_CAST(leverage_ratio AS DOUBLE) IS NOT NULL
               AND TRY_CAST(leverage_ratio AS DOUBLE) >= 0

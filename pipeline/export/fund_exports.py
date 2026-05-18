@@ -35,16 +35,27 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
             )
         ),
         latest AS (
-            SELECT cik, MAX(report_quarter) AS q
+            SELECT cik, MAX(TRY_CAST(report_date AS DATE)) AS d
             FROM ff
             GROUP BY cik
             HAVING MAX(TRY_CAST(total_assets AS DOUBLE)) > 1000000
-               AND MAX(report_quarter) >= '2022q4'
+               AND MAX(TRY_CAST(report_date AS DATE)) >= DATE '2022-10-01'
         ),
         snap AS (
-            SELECT f.*
+            SELECT * FROM (
+                SELECT f.*,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY f.cik
+                        ORDER BY
+                            TRY_CAST(f.report_date AS DATE) DESC NULLS LAST,
+                            f.report_quarter DESC NULLS LAST
+                    ) AS rn
             FROM ff f
-            JOIN latest l ON f.cik = l.cik AND f.report_quarter = l.q
+                JOIN latest l
+                  ON f.cik = l.cik
+                 AND TRY_CAST(f.report_date AS DATE) = l.d
+            )
+            WHERE rn = 1
         )
         SELECT
             f.cik,
@@ -65,7 +76,10 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
              WHERE cik = f.cik AND report_quarter >= '2022q4') AS quarters_of_data
         FROM snap f
         {identity_join}
-        ORDER BY TRY_CAST(f.total_assets AS DOUBLE) DESC NULLS LAST
+        ORDER BY
+            TRY_CAST(f.total_assets AS DOUBLE) DESC NULLS LAST,
+            COALESCE(f.entity_name, '') ASC,
+            f.cik ASC
     """).fetchall()
 
     cols = [
@@ -314,7 +328,12 @@ def _compute_fund_exposure(
     top10_row = con.execute(f"""
         WITH ranked AS (
             SELECT fair_value,
-                   ROW_NUMBER() OVER (ORDER BY fair_value DESC) AS rn
+                   ROW_NUMBER() OVER (
+                       ORDER BY
+                           fair_value DESC NULLS LAST,
+                           issuer_name ASC NULLS LAST,
+                           index_classification ASC NULLS LAST
+                   ) AS rn
             FROM _holdings_latest
             WHERE cik = '{cik}' AND fair_value > 0
         ),
@@ -460,12 +479,19 @@ def _compute_fund_top_holdings(
                      THEN 'First Lien'
                      ELSE NULL
                 END AS lien_position,
-                ROW_NUMBER() OVER (ORDER BY fair_value DESC) AS rn
+                ROW_NUMBER() OVER (
+                    ORDER BY
+                        fair_value DESC NULLS LAST,
+                        issuer_name ASC NULLS LAST,
+                        index_classification ASC NULLS LAST,
+                        maturity_date ASC NULLS LAST
+                ) AS rn
             FROM cur
         )
         SELECT issuer_name, fair_value, pct_of_portfolio,
                index_classification, interest_rate, maturity_date_clean, lien_position
         FROM ranked WHERE rn <= 20
+        ORDER BY rn
     """).fetchall()
 
     if not rows:
@@ -558,14 +584,15 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
         SELECT cik FROM (
             SELECT cik,
                    MAX(TRY_CAST(total_assets AS DOUBLE)) AS max_assets,
-                   MAX(report_quarter) AS last_q
+                   MAX(TRY_CAST(report_date AS DATE)) AS last_report_date
             FROM read_csv_auto(
                 '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
             )
             WHERE cik IS NOT NULL
             GROUP BY cik
         )
-        WHERE max_assets > 1000000 AND last_q >= '2022q4'
+        WHERE max_assets > 1000000 AND last_report_date >= DATE '2022-10-01'
+        ORDER BY cik
     """).fetchall()
 
     # Numeric columns to export in time series
@@ -631,8 +658,9 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
             SELECT * FROM read_csv_auto(
                 '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
             )
-            WHERE cik = '{cik_val}' AND report_quarter >= '2022q4'
-            ORDER BY report_quarter
+            WHERE cik = '{cik_val}'
+              AND TRY_CAST(report_date AS DATE) >= DATE '2022-10-01'
+            ORDER BY TRY_CAST(report_date AS DATE), report_quarter
         """).fetchdf()
 
         if rows.empty:
@@ -731,16 +759,27 @@ def _export_fund_summary(con: duckdb.DuckDBPyConnection) -> None:
             )
         ),
         latest AS (
-            SELECT cik, MAX(report_quarter) AS q
+            SELECT cik, MAX(TRY_CAST(report_date AS DATE)) AS d
             FROM ff
             GROUP BY cik
             HAVING MAX(TRY_CAST(total_assets AS DOUBLE)) > 1000000
-               AND MAX(report_quarter) >= '2022q4'
+               AND MAX(TRY_CAST(report_date AS DATE)) >= DATE '2022-10-01'
         ),
         snap AS (
-            SELECT f.*
+            SELECT * FROM (
+                SELECT f.*,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY f.cik
+                        ORDER BY
+                            TRY_CAST(f.report_date AS DATE) DESC NULLS LAST,
+                            f.report_quarter DESC NULLS LAST
+                    ) AS rn
             FROM ff f
-            JOIN latest l ON f.cik = l.cik AND f.report_quarter = l.q
+                JOIN latest l
+                  ON f.cik = l.cik
+                 AND TRY_CAST(f.report_date AS DATE) = l.d
+            )
+            WHERE rn = 1
         )
         SELECT
             COUNT(DISTINCT snap.cik) AS total_funds,

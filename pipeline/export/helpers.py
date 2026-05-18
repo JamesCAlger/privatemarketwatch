@@ -213,7 +213,14 @@ def _valid_positions_sql() -> str:
                 SELECT pr.*,
                     ROW_NUMBER() OVER (
                         PARTITION BY pr.index_classification, pr.cik, pr.issuer_name
-                        ORDER BY pr.end_fair_value DESC NULLS LAST
+                        ORDER BY
+                            pr.end_fair_value DESC NULLS LAST,
+                            pr.end_cost DESC NULLS LAST,
+                            pr.end_quarter DESC NULLS LAST,
+                            pr.asset_category ASC NULLS LAST,
+                            pr.entity_name ASC NULLS LAST,
+                            pr.cik ASC NULLS LAST,
+                            pr.issuer_name ASC NULLS LAST
                     ) AS _dedup_rn
                 FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}') pr
                 JOIN latest l

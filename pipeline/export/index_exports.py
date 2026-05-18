@@ -212,11 +212,18 @@ def _export_top_constituents(con: duckdb.DuckDBPyConnection) -> None:
                 END AS rate_type,
                 ROW_NUMBER() OVER (
                     PARTITION BY pr.index_classification
-                    ORDER BY pr.end_fair_value DESC NULLS LAST
+                    ORDER BY
+                        pr.end_fair_value DESC NULLS LAST,
+                        pr.end_cost DESC NULLS LAST,
+                        pr.issuer_name ASC NULLS LAST,
+                        pr.cik ASC NULLS LAST,
+                        pr.entity_name ASC NULLS LAST,
+                        pr.asset_category ASC NULLS LAST
                 ) AS rn
             FROM valid pr
         )
         SELECT * FROM ranked WHERE rn <= 20
+        ORDER BY index_classification, rn
     """).fetchall()
 
     cols = [
@@ -309,7 +316,10 @@ def _export_vehicle_contribution(con: duckdb.DuckDBPyConnection) -> None:
         ),
         univ AS (
             SELECT cik, vehicle_type,
-                   ROW_NUMBER() OVER (PARTITION BY cik ORDER BY cik) AS rn
+                   ROW_NUMBER() OVER (
+                       PARTITION BY cik
+                       ORDER BY vehicle_type ASC NULLS LAST, cik
+                   ) AS rn
             FROM read_csv_auto('{COMBINED_UNIVERSE_CSV.as_posix()}')
         ),
         univ_dedup AS (
@@ -329,7 +339,13 @@ def _export_vehicle_contribution(con: duckdb.DuckDBPyConnection) -> None:
         LEFT JOIN univ_dedup u
           ON CAST(TRY_CAST(a.cik AS BIGINT) AS VARCHAR)
            = CAST(TRY_CAST(u.cik AS BIGINT) AS VARCHAR)
-        ORDER BY a.index_classification, a.total_fv DESC
+        ORDER BY
+            a.index_classification,
+            a.total_fv DESC NULLS LAST,
+            a.position_count DESC NULLS LAST,
+            a.cik ASC NULLS LAST,
+            a.entity_name ASC NULLS LAST,
+            COALESCE(u.vehicle_type, 'unknown') ASC
     """).fetchall()
 
     cols = ["index_classification", "cik", "entity_name", "vehicle_type",
@@ -586,6 +602,18 @@ def _export_metadata(
         if ir_row:
             issuer_count = ir_row[0] or 0
 
+    data_vintage = None
+    if UNIFIED_HOLDINGS_CSV.exists():
+        vintage_row = con.execute(f"""
+            SELECT MAX(filing_date)
+            FROM read_csv_auto(
+                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+            )
+            WHERE filing_date IS NOT NULL AND TRIM(filing_date) != ''
+        """).fetchone()
+        if vintage_row and vintage_row[0]:
+            data_vintage = str(vintage_row[0])
+
     _write_json("metadata.json", {
         "asOfQuarter": latest_quarter,
         "asOfDate": _quarter_to_date(latest_quarter) if latest_quarter else None,
@@ -597,7 +625,7 @@ def _export_metadata(
         "holdingsCount": holdings_count,
         "cikCount": cik_count,
         "uniqueIssuers": issuer_count,
-        "dataVintage": datetime.now(timezone.utc).isoformat(),
+        "dataVintage": data_vintage,
     })
 
 
