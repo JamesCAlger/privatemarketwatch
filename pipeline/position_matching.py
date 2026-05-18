@@ -213,9 +213,18 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
         WHERE ranked._amd_rank = 1
     ),
     current_rows AS (
-        SELECT * FROM no_amendments
-        WHERE TRY_CAST(period AS DATE) = TRY_CAST(report_date AS DATE)
-          AND fv IS NOT NULL AND fv != 0
+        SELECT r.* FROM no_amendments r
+        WHERE TRY_CAST(r.period AS DATE) = TRY_CAST(r.report_date AS DATE)
+          AND r.fv IS NOT NULL AND r.fv != 0
+          AND EXISTS (
+              SELECT 1
+              FROM unified_base u
+              WHERE u.source = 'bdc'
+                AND LPAD(REGEXP_REPLACE(CAST(u.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+                  = LPAD(REGEXP_REPLACE(r._cik, '[^0-9]', '', 'g'), 10, '0')
+                AND CAST(u.report_date AS VARCHAR) = CAST(r.report_date AS VARCHAR)
+                AND CAST(u.bdc_investment_identifier AS VARCHAR) = r._inv_id
+          )
     ),
     comparative_rows AS (
         SELECT * FROM no_amendments
@@ -273,14 +282,22 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
           AND comp.fv > 0 AND c.fv > 0
           AND comp.fv / c.fv BETWEEN (1.0 / {MAX_FV_RATIO_WITHIN_FILING}) AND {MAX_FV_RATIO_WITHIN_FILING}
     ),
-    -- 1:1 enforcement: prefer shortest span for each current-period row
-    one_to_one AS (
+    -- 1:1 enforcement: double ROW_NUMBER on both end-side and begin-side
+    rn_end AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_raw_id
                 ORDER BY span_months ASC, _begin_raw_id ASC
-            ) AS rn
+            ) AS rn_e
         FROM pairs
+    ),
+    rn_begin AS (
+        SELECT *,
+            ROW_NUMBER() OVER (
+                PARTITION BY _begin_raw_id
+                ORDER BY span_months ASC, _end_raw_id ASC
+            ) AS rn_b
+        FROM rn_end WHERE rn_e = 1
     )
     SELECT cik, entity_name, source,
         begin_quarter, begin_report_date, begin_issuer_name,
@@ -290,8 +307,8 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
         end_fair_value, end_cost, end_principal_amount,
         end_interest_rate, end_basis_spread, end_shares_held,
         match_method, match_key, match_score, span_months
-    FROM one_to_one
-    WHERE rn = 1
+    FROM rn_begin
+    WHERE rn_b = 1
     """
     con.execute(sql)
     return "tier_a"
@@ -1127,24 +1144,56 @@ def match_positions(
     # Part 1: Tier A annotation via bdc_investment_identifier
     # Override begin/end_issuer_name with the cleaned issuer_name from
     # unified_base (Tier A stores raw investment_identifier in those cols).
+    # Dedup: ROW_NUMBER picks the closest FV match when multiple unified rows
+    # share the same (cik, report_date, bdc_investment_identifier).
     sql_a = f"""
-    SELECT a.cik, a.entity_name, a.source,
-        a.begin_quarter, a.begin_report_date,
-        COALESCE(CAST(u.issuer_name AS VARCHAR), a.begin_issuer_name) AS begin_issuer_name,
-        a.begin_fair_value, a.begin_cost, a.begin_principal_amount,
-        a.begin_interest_rate, a.begin_basis_spread, a.begin_shares_held,
-        a.end_quarter, a.end_report_date,
-        COALESCE(CAST(u.issuer_name AS VARCHAR), a.end_issuer_name) AS end_issuer_name,
-        a.end_fair_value, a.end_cost, a.end_principal_amount,
-        a.end_interest_rate, a.end_basis_spread, a.end_shares_held,
-        a.match_method, a.match_key, a.match_score, a.span_months,
-        {_class_cols}
-    FROM tier_a a
-    LEFT JOIN unified_base u
-      ON a.cik = u.cik
-     AND a.end_report_date = CAST(u.report_date AS VARCHAR)
-     AND a.end_issuer_name = CAST(u.bdc_investment_identifier AS VARCHAR)
-     AND u.source = 'bdc'
+    WITH tier_a_candidates AS (
+        SELECT a.cik, a.entity_name, a.source,
+            a.begin_quarter, a.begin_report_date, a.begin_issuer_name,
+            a.begin_fair_value, a.begin_cost, a.begin_principal_amount,
+            a.begin_interest_rate, a.begin_basis_spread, a.begin_shares_held,
+            a.end_quarter, a.end_report_date, a.end_issuer_name,
+            a.end_fair_value, a.end_cost, a.end_principal_amount,
+            a.end_interest_rate, a.end_basis_spread, a.end_shares_held,
+            a.match_method, a.match_key, a.match_score, a.span_months,
+            CAST(u.issuer_name AS VARCHAR) AS _u_issuer_name,
+            CAST(u.index_classification AS VARCHAR) AS _u_index_classification,
+            CAST(u.asset_category AS VARCHAR) AS _u_asset_category,
+            CAST(u.issuer_category AS VARCHAR) AS _u_issuer_category,
+            CAST(u.maturity_date AS VARCHAR) AS _u_maturity_date,
+            CAST(u.coupon_type AS VARCHAR) AS _u_coupon_type,
+            u._row_id AS _u_row_id,
+            ROW_NUMBER() OVER (
+                PARTITION BY a.cik, a.end_report_date, a.end_issuer_name,
+                             a.begin_report_date, a.begin_issuer_name
+                ORDER BY ABS(COALESCE(TRY_CAST(a.end_fair_value AS DOUBLE), 0)
+                             - COALESCE(u.fv, 0)) ASC,
+                         COALESCE(u._row_id, 0) ASC
+            ) AS _rn
+        FROM tier_a a
+        LEFT JOIN unified_base u
+          ON a.cik = u.cik
+         AND a.end_report_date = CAST(u.report_date AS VARCHAR)
+         AND a.end_issuer_name = CAST(u.bdc_investment_identifier AS VARCHAR)
+         AND u.source = 'bdc'
+    )
+    SELECT cik, entity_name, source,
+        begin_quarter, begin_report_date,
+        COALESCE(_u_issuer_name, begin_issuer_name) AS begin_issuer_name,
+        begin_fair_value, begin_cost, begin_principal_amount,
+        begin_interest_rate, begin_basis_spread, begin_shares_held,
+        end_quarter, end_report_date,
+        COALESCE(_u_issuer_name, end_issuer_name) AS end_issuer_name,
+        end_fair_value, end_cost, end_principal_amount,
+        end_interest_rate, end_basis_spread, end_shares_held,
+        match_method, match_key, match_score, span_months,
+        _u_index_classification AS index_classification,
+        _u_asset_category AS asset_category,
+        _u_issuer_category AS issuer_category,
+        _u_maturity_date AS maturity_date,
+        _u_coupon_type AS coupon_type
+    FROM tier_a_candidates
+    WHERE _rn = 1
     """
 
     # Part 2: Tiers B/C/D/E annotation via _row_id
@@ -1169,7 +1218,22 @@ def match_positions(
     result_bcd = con.execute(sql_bcd).fetchdf()
     result = pd.concat([result_a, result_bcd], ignore_index=True)
     con.close()
-    con.close()
+
+    # B3: Diagnostic logging for residual duplicates (safety net)
+    if len(result) > 0:
+        for side, date_col, name_col in [
+            ("begin", "begin_report_date", "begin_issuer_name"),
+            ("end", "end_report_date", "end_issuer_name"),
+        ]:
+            key_cols = ["cik", "source", date_col, name_col,
+                        f"{side}_fair_value"]
+            dup_count = result.duplicated(subset=key_cols, keep=False).sum()
+            if dup_count > 0:
+                logger.warning(
+                    "  Residual %s-side duplicates: %d rows "
+                    "(same cik/source/date/name/fv appear in multiple pairs)",
+                    side, dup_count,
+                )
 
     # Ensure column order
     for col in MATCH_COLUMNS:

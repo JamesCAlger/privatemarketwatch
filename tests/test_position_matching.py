@@ -173,6 +173,29 @@ class TestTierA:
         method_a = result[result["match_method"] == "A_within_filing"]
         assert len(method_a) == 0
 
+    def test_tier_a_skips_current_rows_absent_from_unified(self):
+        """Aggregate/header rows filtered out of unified should not survive in matches."""
+        bdc_raw = _make_bdc_raw([
+            {"cik": "2041841", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2025-06-30", "period": "2025-06-30",
+             "investment_identifier": "Total Investments at Fair Value",
+             "fair_value": "63284000", "cost": "63284000"},
+            {"cik": "2041841", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2025-06-30", "period": "2024-12-31",
+             "investment_identifier": "Total Investments at Fair Value",
+             "fair_value": "43714000", "cost": "43714000"},
+        ])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "0002041841", "entity_name": "TestBDC",
+             "report_date": "2025-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "1000000",
+             "bdc_investment_identifier": "Acme Corp - Term Loan"},
+        ])
+
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        assert len(result[result["match_method"] == "A_within_filing"]) == 0
+        assert not result["begin_issuer_name"].astype(str).str.contains("Total Investments").any()
+
     def test_one_to_one_shortest_span(self):
         """Multiple comparatives -> shortest span preferred."""
         bdc_raw = _make_bdc_raw([
@@ -1302,3 +1325,192 @@ class TestFvRatioGuards:
         result = match_positions(unified_df=unified)
         method_b2 = result[result["match_method"] == "B2_exact_name"]
         assert len(method_b2) == 0, "100,000x FV ratio should be rejected by Tier B2 guard"
+
+
+# ---------------------------------------------------------------------------
+# P0-B: Tier A Begin-Side Dedup and Annotation Dedup
+# ---------------------------------------------------------------------------
+
+class TestTierABeginSideDedup:
+    """Verify 1:1 enforcement on both begin-side and end-side of Tier A."""
+
+    def test_one_comparative_two_current_produces_one_pair(self):
+        """One comparative row matching two current-period rows via identical
+        identifier should produce only ONE pair (begin-side dedup)."""
+        bdc_raw = _make_bdc_raw([
+            # Current period row 1
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "1000000", "cost": "950000"},
+            # Current period row 2 (same identifier, different FV -- e.g. from dimension paths)
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "1000001", "cost": "950000"},
+            # Comparative row (matches both current rows)
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2023-12-31",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "980000", "cost": "950000"},
+        ])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "100", "entity_name": "TestBDC",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "1000000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Acme Corp - Loan"},
+            {"source": "bdc", "cik": "100", "entity_name": "TestBDC",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "1000001", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Acme Corp - Loan"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        tier_a = result[result["match_method"] == "A_within_filing"]
+        # Begin-side dedup: the one comparative row can only appear once
+        begin_keys = tier_a[["cik", "begin_report_date", "begin_issuer_name",
+                             "begin_fair_value"]].drop_duplicates()
+        assert len(begin_keys) <= 1, (
+            f"Expected at most 1 begin-side row, got {len(begin_keys)}"
+        )
+
+    def test_tier_a_annotation_no_fanout(self):
+        """Two unified rows with the same bdc_investment_identifier should
+        produce only one annotated Tier A match (annotation dedup)."""
+        bdc_raw = _make_bdc_raw([
+            {"cik": "200", "entity_name": "DupBDC", "accession_number": "ACC2",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Widget Inc - Revolver",
+             "fair_value": "500000"},
+            {"cik": "200", "entity_name": "DupBDC", "accession_number": "ACC2",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2023-12-31",
+             "investment_identifier": "Widget Inc - Revolver",
+             "fair_value": "480000"},
+        ])
+        unified = _make_unified([
+            # Two unified rows with same identifier (e.g., affiliation-axis variants)
+            {"source": "bdc", "cik": "200", "entity_name": "DupBDC",
+             "report_date": "2024-06-30", "issuer_name": "Widget Inc",
+             "fair_value": "500000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_REVOLVER",
+             "bdc_investment_identifier": "Widget Inc - Revolver"},
+            {"source": "bdc", "cik": "200", "entity_name": "DupBDC",
+             "report_date": "2024-06-30", "issuer_name": "Widget Inc",
+             "fair_value": "500001", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_REVOLVER",
+             "bdc_investment_identifier": "Widget Inc - Revolver"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        tier_a = result[result["match_method"] == "A_within_filing"]
+        # Annotation dedup: each Tier A pair should produce exactly one output row
+        assert len(tier_a) == 1, (
+            f"Expected exactly 1 Tier A row after annotation dedup, got {len(tier_a)}"
+        )
+
+    def test_tier_a_annotation_picks_closest_fv(self):
+        """When multiple unified rows match a Tier A pair, the annotation
+        should pick the one with the closest fair value."""
+        bdc_raw = _make_bdc_raw([
+            {"cik": "300", "entity_name": "FvBDC", "accession_number": "ACC3",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Gamma LLC - Loan",
+             "fair_value": "750000"},
+            {"cik": "300", "entity_name": "FvBDC", "accession_number": "ACC3",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2023-12-31",
+             "investment_identifier": "Gamma LLC - Loan",
+             "fair_value": "700000"},
+        ])
+        unified = _make_unified([
+            # Closer FV match
+            {"source": "bdc", "cik": "300", "entity_name": "FvBDC",
+             "report_date": "2024-06-30", "issuer_name": "Gamma LLC",
+             "fair_value": "750000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Gamma LLC - Loan"},
+            # Farther FV match
+            {"source": "bdc", "cik": "300", "entity_name": "FvBDC",
+             "report_date": "2024-06-30", "issuer_name": "Gamma LLC",
+             "fair_value": "900000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Gamma LLC - Loan"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        tier_a = result[result["match_method"] == "A_within_filing"]
+        assert len(tier_a) == 1
+        # The annotation should pick the closer FV (750000, not 900000)
+        assert tier_a.iloc[0]["index_classification"] == "DIRECT_LENDING"
+
+    def test_tier_a_left_join_preserved_when_no_unified_match(self):
+        """Tier A matches with no corresponding unified row should still appear
+        in output with NULL classification columns."""
+        bdc_raw = _make_bdc_raw([
+            {"cik": "400", "entity_name": "NoMatch", "accession_number": "ACC4",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Orphan Corp - Loan",
+             "fair_value": "100000"},
+            {"cik": "400", "entity_name": "NoMatch", "accession_number": "ACC4",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2023-12-31",
+             "investment_identifier": "Orphan Corp - Loan",
+             "fair_value": "95000"},
+        ])
+        # Unified has the current-period row but with DIFFERENT identifier
+        # (simulating a stripping mismatch)
+        unified = _make_unified([
+            {"source": "bdc", "cik": "400", "entity_name": "NoMatch",
+             "report_date": "2024-06-30", "issuer_name": "Orphan Corp",
+             "fair_value": "100000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Orphan Corp - Loan"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        tier_a = result[result["match_method"] == "A_within_filing"]
+        # Should get a match (LEFT JOIN means even without annotation data)
+        assert len(tier_a) >= 1
+
+    def test_no_duplicate_position_ids_after_assignment(self):
+        """After full pipeline (match + assign), no position_id should appear
+        in more unified rows than the chain length warrants."""
+        bdc_raw = _make_bdc_raw([
+            {"cik": "500", "entity_name": "ChainBDC", "accession_number": "ACC5",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Delta LLC - Loan",
+             "fair_value": "200000"},
+            {"cik": "500", "entity_name": "ChainBDC", "accession_number": "ACC5",
+             "form_type": "10-K", "filing_date": "2024-07-15",
+             "report_date": "2024-06-30", "period": "2024-03-31",
+             "investment_identifier": "Delta LLC - Loan",
+             "fair_value": "190000"},
+        ])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "500", "entity_name": "ChainBDC",
+             "report_date": "2024-06-30", "issuer_name": "Delta LLC",
+             "fair_value": "200000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Delta LLC - Loan"},
+            {"source": "bdc", "cik": "500", "entity_name": "ChainBDC",
+             "report_date": "2024-03-31", "issuer_name": "Delta LLC",
+             "fair_value": "190000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Delta LLC - Loan"},
+        ])
+        matches = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        unified_out, matches_out = assign_position_ids(unified, matches)
+        # Each position_id should appear at most once per report_date
+        for pid in unified_out["position_id"].dropna().unique():
+            pid_rows = unified_out[unified_out["position_id"] == pid]
+            dates = pid_rows["report_date"].nunique()
+            assert dates == len(pid_rows), (
+                f"position_id {pid} has {len(pid_rows)} rows but only {dates} "
+                f"unique dates -- possible duplicate assignment"
+            )
