@@ -992,7 +992,11 @@ def check_gav_reconciliation(
     filters.  That source numerator is evidence for whether source FV exists;
     it does not make source bucket rows indexable constituents.
     """
-    load_default_sources = unified_df is None
+    load_default_sources = (
+        fund_financials_df is None
+        and nport_fund_info_df is None
+        and bdc_source_df is None
+    )
     if unified_df is None:
         if not UNIFIED_HOLDINGS_FILE.exists():
             logger.error("Unified holdings file not found")

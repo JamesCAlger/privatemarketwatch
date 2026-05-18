@@ -101,8 +101,8 @@ def _apply_universe_gate(
     orphan_path: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Remove holdings for CIKs outside combined_universe and write review residuals."""
-    path = universe_path or COMBINED_UNIVERSE_FILE
-    out_path = orphan_path or UNIVERSE_ORPHAN_HOLDINGS_FILE
+    path = universe_path or (UNIFIED_HOLDINGS_FILE.parent / COMBINED_UNIVERSE_FILE.name)
+    out_path = orphan_path or (UNIFIED_HOLDINGS_FILE.parent / UNIVERSE_ORPHAN_HOLDINGS_FILE.name)
     if df.empty:
         _write_empty_orphan_report(out_path)
         return df
@@ -120,6 +120,7 @@ def _apply_universe_gate(
     allowed = set(_normalize_cik_series(universe["cik"]))
     gated = df.copy()
     gated["_norm_cik"] = _normalize_cik_series(gated["cik"])
+    gated["cik"] = gated["_norm_cik"]
     orphan_mask = ~gated["_norm_cik"].isin(allowed)
     orphan_rows = gated[orphan_mask].copy()
 
@@ -526,6 +527,13 @@ def build_unified_holdings(
     # Prepare each source
     bdc_unified = staging_bdc._prepare_bdc(bdc_df)
     nport_unified = staging_nport._prepare_nport(nport_input)
+    if bdc_unified.empty and nport_unified.empty:
+        combined = pd.DataFrame(columns=UNIFIED_COLUMNS)
+        _write_empty_orphan_report(UNIFIED_HOLDINGS_FILE.parent / UNIVERSE_ORPHAN_HOLDINGS_FILE.name)
+        UNIFIED_HOLDINGS_FILE.parent.mkdir(parents=True, exist_ok=True)
+        combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
+        logger.info("Unified holdings built with no eligible rows")
+        return combined
 
     # Combine via DuckDB UNION ALL + index classification
     con = duckdb.connect()

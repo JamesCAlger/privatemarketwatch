@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Methodology',
   description:
-    'How the Evergreen Private Markets Index family is constructed from mandatory SEC regulatory filings.',
+    'How Private Market Watch constructs its data platform and indices from mandatory SEC regulatory filings.',
 };
 
 const sections = [
@@ -27,8 +27,8 @@ export default function MethodologyPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
           <h1 className="text-display-sm md:text-display-lg text-white mb-3">Methodology</h1>
           <p className="text-white/60 max-w-2xl text-lg">
-            A detailed description of how the Private Markets Index
-            family is constructed, from data sourcing through return calculation.
+            How the data platform and index family are constructed,
+            from data sourcing through return calculation.
           </p>
         </div>
       </div>
@@ -63,11 +63,12 @@ export default function MethodologyPage() {
           <article className="flex-1 min-w-0 prose-content">
             <Section num={1} id="overview" title="Overview">
               <p>
-                The Evergreen Private Markets Index family provides transparent,
-                rules-based benchmarks for private credit and equity markets as
-                accessed through registered evergreen vehicles. Unlike traditional
-                private markets indices that rely on voluntary manager submissions,
-                these indices are constructed entirely from mandatory SEC filings,
+                Private Market Watch is a data platform covering SEC-registered
+                evergreen vehicles investing in private markets. It provides
+                fund-level analytics, portfolio data, and position-level indices
+                for private credit and equity. Unlike traditional private markets
+                indices that rely on voluntary manager submissions, the data and
+                indices are constructed entirely from mandatory SEC filings,
                 ensuring complete and unbiased coverage of the registered vehicle
                 universe.
               </p>

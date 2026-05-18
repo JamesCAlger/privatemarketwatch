@@ -196,6 +196,10 @@ def run_validate_all():
     import pandas as pd
 
     from pipeline.config import UNIFIED_HOLDINGS_FILE
+    from pipeline.validation_status import (
+        status_from_reports,
+        status_from_rule_aggregate,
+    )
     from pipeline.validate_fund_financials import validate_fund_financials
     from pipeline.validate_holdings import validate_holdings
 
@@ -208,14 +212,14 @@ def run_validate_all():
     aggregate_df, detail_df = run_validation_rules()
 
     rows = [
-        ("fund_financials", sum(len(df) for df in fund_reports.values())),
-        ("holdings", sum(len(df) for df in holdings_reports.values())),
-        ("validation_rules", len(detail_df)),
+        ("fund_financials", status_from_reports(fund_reports), sum(len(df) for df in fund_reports.values())),
+        ("holdings", status_from_reports(holdings_reports), sum(len(df) for df in holdings_reports.values())),
+        ("validation_rules", status_from_rule_aggregate(aggregate_df), len(detail_df)),
     ]
     logger.info("Validation summary:")
-    logger.info("  %-28s %10s", "check", "rows")
-    for name, count in rows:
-        logger.info("  %-28s %10d", name, count)
+    logger.info("  %-28s %-8s %10s", "check", "status", "rows")
+    for name, status, count in rows:
+        logger.info("  %-28s %-8s %10d", name, status, count)
     logger.info("Validate-all complete in %.1f s", time.time() - t0)
     return aggregate_df, detail_df
 

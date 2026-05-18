@@ -1,8 +1,8 @@
-# Private Markets Index — SEC XBRL Pipeline
+# Private Markets Data Platform — SEC XBRL Pipeline
 
 ## Project Goal
 
-Build private market indices from SEC regulatory filings. The pipeline discovers all SEC-registered vehicles investing in private markets (BDCs, interval funds, tender offer funds) and extracts investee-level portfolio holdings from their structured filings.
+Build a data platform for SEC-registered private markets vehicles (BDCs, interval funds, tender offer funds) with private markets indices derived from the data. The pipeline discovers all such vehicles, extracts investee-level portfolio holdings from their structured filings, and computes fund-level analytics, portfolio characteristics, and position-level indices.
 
 **IMPORTANT: The indices are at the POSITION level -- each constituent is an individual loan or equity investment (e.g., "Acme Corp Senior Secured First Lien Term Loan"), NOT aggregated at the company/borrower level.** A single company may appear multiple times in the index if a fund holds multiple positions in it (e.g., a first lien term loan, a second lien term loan, and an equity co-invest are three separate index constituents). This mirrors how public credit indices like the Morningstar LSTA Leveraged Loan Index work: each loan tranche is a separate constituent, not rolled up to the issuer.
 

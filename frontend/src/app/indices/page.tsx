@@ -29,7 +29,7 @@ import ConcentrationCurve from '@/components/ConcentrationCurve';
 
 export const metadata = {
   title: 'Indices | Private Market Watch',
-  description: 'Private market index performance, concentration, and universe coverage.',
+  description: 'Position-level private market index performance, concentration, and universe coverage.',
 };
 
 export default function IndicesPage() {

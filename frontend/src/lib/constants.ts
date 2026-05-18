@@ -1,6 +1,6 @@
-export const SITE_NAME = 'Evergreen Private Markets Index';
+export const SITE_NAME = 'Private Market Watch';
 export const SITE_DESCRIPTION =
-  'The definitive benchmarks for the evergreen fund universe -- BDCs, interval funds, and tender offer funds -- the registered vehicles bringing private markets to wealth management.';
+  'Data and indices for the evergreen fund universe -- BDCs, interval funds, and tender offer funds -- the registered vehicles bringing private markets to wealth management.';
 
 export interface IndexMeta {
   key: string;

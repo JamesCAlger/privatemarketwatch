@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "calibration_id",
+    "candidate_id",
+    "created_at",
+    "candidate",
+    "threshold",
+    "summary_stats",
+    "top_findings",
+    "source_rows",
+    "current_overlapping_validation_rule_findings",
+    "input_file_hashes",
+    "allowed_review_actions"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "calibration_id": { "type": "string", "minLength": 1 },
+    "candidate_id": { "enum": ["DIST01", "DIST02", "DIST04", "DIST05", "MONO03", "MONO05"] },
+    "created_at": { "type": "string", "minLength": 1 },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "version", "rationale", "status", "promotion_policy"],
+      "properties": {
+        "title": { "type": "string" },
+        "version": { "type": "string" },
+        "rationale": { "type": "string" },
+        "status": { "enum": ["report_only"] },
+        "promotion_policy": { "type": "string" }
+      }
+    },
+    "threshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "grid_row"],
+      "properties": {
+        "value": { "type": "number" },
+        "grid_row": { "type": "object" }
+      }
+    },
+    "summary_stats": { "type": "object" },
+    "top_findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "source_rows": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "current_overlapping_validation_rule_findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "input_file_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["path", "sha256", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string" },
+          "status": { "enum": ["present", "missing"] }
+        }
+      }
+    },
+    "allowed_review_actions": {
+      "type": "array",
+      "items": {
+        "enum": ["drop", "keep_report_only", "add_as_unpromoted_rule", "refine_and_retest", "promote_to_warn"]
+      }
+    }
+  }
+}

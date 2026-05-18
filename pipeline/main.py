@@ -293,16 +293,18 @@ def _run_cached_validation(logger: logging.Logger) -> None:
 
 
 def _status_from_reports(reports: dict[str, object]) -> str:
-    if any(len(df) for df in reports.values()):
-        return "WARN"
-    return "PASS"
+    from pipeline.validation_status import status_from_reports
+
+    return status_from_reports(reports)
 
 
 def _log_validation_summary(logger: logging.Logger, rows: list[tuple[str, str, int]]) -> None:
+    from pipeline.validation_status import normalize_status
+
     logger.info("Validation summary:")
     logger.info("  %-28s %-8s %10s", "check", "status", "rows")
     for name, status, count in rows:
-        logger.info("  %-28s %-8s %10d", name, status, count)
+        logger.info("  %-28s %-8s %10d", name, normalize_status(status), count)
 
 
 def _run_validate_all(logger: logging.Logger) -> None:
@@ -327,15 +329,10 @@ def _run_validate_all(logger: logging.Logger) -> None:
     rows.append(("holdings", _status_from_reports(holding_reports), holding_count))
 
     from pipeline.validation_rules import run_all
+    from pipeline.validation_status import status_from_rule_aggregate
+
     aggregate_df, detail_df = run_all()
-    if (aggregate_df["status"] == "FAIL").any():
-        rules_status = "FAIL"
-    elif (aggregate_df["status"] == "WARN").any():
-        rules_status = "WARN"
-    elif (aggregate_df["status"] == "SKIPPED").any():
-        rules_status = "SKIPPED"
-    else:
-        rules_status = "PASS"
+    rules_status = status_from_rule_aggregate(aggregate_df)
     rows.append(("validation_rules", rules_status, len(detail_df)))
     _log_validation_summary(logger, rows)
     logger.info("Validate-all completed in %.1f s", time.time() - t)
@@ -981,6 +978,7 @@ def main() -> None:
             OUTPUT_DIR / "validation_rules_aggregate.csv",
             OUTPUT_DIR / "validation_rules_detail.csv",
             OUTPUT_DIR / "validation_rules_history.csv",
+            OUTPUT_DIR / "validation_rules_trend.csv",
         ])
 
     for path in output_files:

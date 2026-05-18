@@ -16,8 +16,8 @@ export default function Footer() {
               <span className="font-bold text-white text-base">Private Market Watch</span>
             </div>
             <p className="text-white/50 text-xs leading-relaxed max-w-xs">
-              Independent, rules-based benchmarks for private credit and equity
-              markets -- built entirely from mandatory SEC filings.
+              Fund data, portfolio analytics, and position-level indices for
+              private credit and equity markets -- built from mandatory SEC filings.
             </p>
           </div>
 

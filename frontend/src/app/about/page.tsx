@@ -6,7 +6,7 @@ import { formatNumber, formatDollar, formatQuarter } from '@/lib/format';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'About the Evergreen Private Markets Index family and its construction methodology.',
+    'About Private Market Watch -- a data platform for SEC-registered private markets vehicles with position-level indices.',
 };
 
 const STEPS = [
@@ -49,7 +49,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
           <h1 className="text-display-sm md:text-display-lg text-white mb-3">About</h1>
           <p className="text-white/60 max-w-2xl text-lg">
-            About the Private Markets Index family and how it is constructed.
+            About Private Market Watch and how the data platform and indices are constructed.
           </p>
         </div>
       </div>
@@ -67,15 +67,15 @@ export default function AboutPage() {
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
               <span className="w-1 h-5 bg-teal" />
-              About the Index Family
+              About Private Market Watch
             </h2>
             <p>
-              The Evergreen Private Markets Index family provides transparent,
-              position-level benchmarks for the portfolio holdings of
+              Private Market Watch is a data platform covering all
               SEC-registered evergreen vehicles: business development
-              companies (BDCs), interval funds, and tender offer funds. These are
-              the registered, wealth-accessible vehicles that have opened private
-              credit and equity markets to a broader investor base.
+              companies (BDCs), interval funds, and tender offer funds. It provides
+              fund-level analytics, portfolio data, and transparent position-level
+              indices. These are the registered, wealth-accessible vehicles that
+              have opened private credit and equity markets to a broader investor base.
             </p>
             <p>
               The index currently tracks{' '}
@@ -101,12 +101,12 @@ export default function AboutPage() {
             <p>
               Existing benchmarks rely on voluntary manager
               surveys or track only a subset of the market.
-              By constructing indices from the mandatory portfolio disclosures of
-              every registered vehicle, the Evergreen Private Markets Index
+              By sourcing all data from mandatory portfolio disclosures of
+              every registered vehicle, Private Market Watch
               provides complete, unbiased coverage of this rapidly growing market
-              segment, at the individual position level, mirroring the
-              granularity of public credit benchmarks like the Morningstar LSTA
-              Leveraged Loan Index.
+              segment -- from fund-level analytics down to individual position-level
+              indices that mirror the granularity of public credit benchmarks
+              like the Morningstar LSTA Leveraged Loan Index.
             </p>
           </section>
 

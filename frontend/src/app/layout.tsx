@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     template: '%s | Private Market Watch',
   },
   description:
-    'Independent, rules-based benchmarks for private credit and equity markets -- built from mandatory SEC filings across 587 registered funds.',
+    'Fund data, portfolio analytics, and position-level indices for private credit and equity markets -- built from mandatory SEC filings across 587 registered funds.',
   metadataBase: new URL('https://privatemarketwatch.com'),
   openGraph: {
     title: 'Private Market Watch',
     description:
-      'Independent benchmarks tracking private credit and equity performance from SEC filings.',
+      'Fund data, portfolio analytics, and indices for private credit and equity markets from SEC filings.',
     url: 'https://privatemarketwatch.com',
     siteName: 'Private Market Watch',
     type: 'website',

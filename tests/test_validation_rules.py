@@ -6,12 +6,20 @@ import csv
 import sys
 from pathlib import Path
 
+import pandas as pd
+
 from pipeline import config
+from pipeline.validation_rules.trend import compute_trends
 from pipeline.validation_rules import (
     AGGREGATE_COLUMNS,
     DETAIL_COLUMNS,
     RULE_REGISTRY,
     run_all,
+)
+from pipeline.validation_status import (
+    normalize_status,
+    status_from_reports,
+    status_from_rule_aggregate,
 )
 
 
@@ -249,6 +257,8 @@ def test_all_sql_executes_on_minimal_fixtures(tmp_path):
     assert list(detail.columns) == DETAIL_COLUMNS
     assert len(aggregate) == 94
     assert set(aggregate["status"]).issubset({"PASS", "WARN", "FAIL", "SKIPPED"})
+    pc02 = aggregate.set_index("rule_id").loc["PC02"]
+    assert pc02["affected_outputs"] == "position_returns;frontend_index;index_returns;data_quality_dashboard"
 
 
 def test_promoted_fail_rules_trigger_and_zero_hit(tmp_path):
@@ -340,6 +350,7 @@ def test_cli_entrypoint_writes_stable_schema(tmp_path, monkeypatch):
     aggregate_path = tmp_path / "validation_rules_aggregate.csv"
     detail_path = tmp_path / "validation_rules_detail.csv"
     history_path = tmp_path / "validation_rules_history.csv"
+    trend_path = tmp_path / "validation_rules_trend.csv"
 
     import pipeline.validation_rules as vr
     from pipeline import main as pipeline_main
@@ -349,6 +360,7 @@ def test_cli_entrypoint_writes_stable_schema(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "VALIDATION_RULES_AGGREGATE_FILE", aggregate_path)
     monkeypatch.setattr(config, "VALIDATION_RULES_DETAIL_FILE", detail_path)
     monkeypatch.setattr(config, "VALIDATION_RULES_HISTORY_FILE", history_path)
+    monkeypatch.setattr(config, "VALIDATION_RULES_TREND_FILE", trend_path)
     monkeypatch.setattr(sys, "argv", [
         "pipeline.main", "--validate-rules", "--rules-category", "PC",
     ])
@@ -357,19 +369,150 @@ def test_cli_entrypoint_writes_stable_schema(tmp_path, monkeypatch):
 
     assert aggregate_path.exists()
     assert detail_path.exists()
+    assert history_path.exists()
+    assert trend_path.exists()
     with aggregate_path.open(newline="", encoding="utf-8") as fh:
         assert next(csv.reader(fh)) == AGGREGATE_COLUMNS
     with detail_path.open(newline="", encoding="utf-8") as fh:
         assert next(csv.reader(fh)) == DETAIL_COLUMNS
+    trend_df = pd.read_csv(trend_path)
+    assert {"rule_id", "trend_flag", "consecutive_non_pass_runs"}.issubset(trend_df.columns)
 
 
-def test_pc06_uses_instrument_and_cusip_in_duplicate_key(tmp_path):
+def _trend_history(rows: list[dict]) -> pd.DataFrame:
+    return pd.DataFrame(rows, columns=[
+        "rule_id", "category", "run_id", "run_timestamp", "status",
+        "hit_count", "hit_rate", "affected_fair_value",
+    ])
+
+
+def _trend_current(**overrides) -> pd.DataFrame:
+    row = {
+        "rule_id": "PC01",
+        "category": "PC",
+        "status": "PASS",
+        "hit_count": 0,
+        "affected_fair_value": 0,
+        "run_id": "current",
+        "run_timestamp": "2024-01-05T00:00:00+00:00",
+    }
+    row.update(overrides)
+    return pd.DataFrame([row])
+
+
+def test_compute_trends_new_and_zero_prior_delta_blank():
+    trends = compute_trends(pd.DataFrame(), _trend_current())
+    row = trends.iloc[0]
+    assert row["trend_flag"] == "NEW"
+    assert pd.isna(row["delta_pct"])
+    assert pd.isna(row["affected_fair_value_delta_pct"])
+
+    history = _trend_history([{
+        "rule_id": "PC01", "category": "PC", "run_id": "prior",
+        "run_timestamp": "2024-01-01T00:00:00+00:00", "status": "PASS",
+        "hit_count": 0, "hit_rate": 0, "affected_fair_value": 0,
+    }])
+    trends = compute_trends(history, _trend_current(status="WARN", hit_count=1, affected_fair_value=10))
+    row = trends.iloc[0]
+    assert row["trend_flag"] == "REGRESSION"
+    assert pd.isna(row["delta_pct"])
+    assert pd.isna(row["affected_fair_value_delta_pct"])
+
+
+def test_compute_trends_regression_improving_stable_and_blank_numeric_fields():
+    history = _trend_history([
+        {
+            "rule_id": "PC01", "category": "PC", "run_id": "prior",
+            "run_timestamp": "2024-01-01T00:00:00+00:00", "status": "WARN",
+            "hit_count": 10, "hit_rate": "", "affected_fair_value": 100,
+        },
+        {
+            "rule_id": "PC02", "category": "PC", "run_id": "prior",
+            "run_timestamp": "2024-01-01T00:00:00+00:00", "status": "WARN",
+            "hit_count": 10, "hit_rate": "", "affected_fair_value": 100,
+        },
+        {
+            "rule_id": "PC03", "category": "PC", "run_id": "prior",
+            "run_timestamp": "2024-01-01T00:00:00+00:00", "status": "WARN",
+            "hit_count": 10, "hit_rate": "", "affected_fair_value": "",
+        },
+    ])
+    current = pd.DataFrame([
+        {"rule_id": "PC01", "category": "PC", "status": "WARN", "hit_count": 16, "affected_fair_value": 101, "run_id": "current"},
+        {"rule_id": "PC02", "category": "PC", "status": "WARN", "hit_count": 4, "affected_fair_value": 70, "run_id": "current"},
+        {"rule_id": "PC03", "category": "PC", "status": "WARN", "hit_count": 10, "affected_fair_value": "", "run_id": "current"},
+    ])
+    trends = compute_trends(history, current).set_index("rule_id")
+    assert trends.loc["PC01", "trend_flag"] == "REGRESSION"
+    assert trends.loc["PC02", "trend_flag"] == "IMPROVING"
+    assert trends.loc["PC03", "trend_flag"] == "STABLE"
+    assert trends.loc["PC03", "current_affected_fair_value"] == 0.0
+
+
+def test_compute_trends_chronic_after_four_non_pass_runs():
+    history = _trend_history([
+        {
+            "rule_id": "PC01", "category": "PC", "run_id": f"prior-{i}",
+            "run_timestamp": f"2024-01-0{i + 1}T00:00:00+00:00",
+            "status": "WARN", "hit_count": 2, "hit_rate": 0,
+            "affected_fair_value": 100,
+        }
+        for i in range(3)
+    ])
+    trends = compute_trends(
+        history,
+        _trend_current(status="WARN", hit_count=2, affected_fair_value=100),
+    )
+    row = trends.iloc[0]
+    assert row["consecutive_non_pass_runs"] == 4
+    assert row["trend_flag"] == "CHRONIC"
+
+
+def test_status_display_normalization_helpers():
+    assert normalize_status("SKIPPED") == "SKIP"
+    assert normalize_status("skip") == "SKIP"
+    assert status_from_reports({"empty": pd.DataFrame()}) == "PASS"
+    assert status_from_reports({"warn": pd.DataFrame([{"x": 1}])}) == "WARN"
+    aggregate = pd.DataFrame({"status": ["PASS", "SKIPPED"]})
+    assert status_from_rule_aggregate(aggregate) == "SKIP"
+
+
+def test_catalog_generation_includes_affected_outputs_and_trend(tmp_path):
+    from pipeline.validation_rules.__main__ import generate_catalog
+
+    trend_path = tmp_path / "validation_rules_trend.csv"
+    pd.DataFrame([{
+        "rule_id": "PC01",
+        "category": "PC",
+        "prior_hit_count": 1,
+        "current_hit_count": 2,
+        "delta_pct": 1.0,
+        "prior_affected_fair_value": 100,
+        "current_affected_fair_value": 200,
+        "affected_fair_value_delta_pct": 1.0,
+        "consecutive_non_pass_runs": 2,
+        "trend_flag": "REGRESSION",
+    }]).to_csv(trend_path, index=False)
+    catalog_path = tmp_path / "rule_catalog.md"
+
+    generate_catalog(catalog_path, trend_path=trend_path)
+
+    text = catalog_path.read_text(encoding="utf-8")
+    assert "Affected outputs" in text
+    assert "Trend" in text
+    assert "REGRESSION" in text
+    assert "data_quality_dashboard" in text
+
+
+def test_pc06_uses_instrument_and_cusip_in_duplicate_key_and_ignores_zero_fv(tmp_path):
     paths = _fixtures(tmp_path)
     _write_csv(paths["holdings"], [
         _base_holding(issuer_name="Same Borrower", instrument_description="First lien", cusip="111111AA1", position_id="A"),
         _base_holding(issuer_name="Same Borrower", instrument_description="Second lien", cusip="222222BB2", position_id="B"),
         _base_holding(issuer_name="True Duplicate", instrument_description="Term loan", cusip="333333CC3", position_id="C"),
         _base_holding(issuer_name="True Duplicate", instrument_description="Term loan", cusip="333333CC3", position_id="D"),
+        _base_holding(issuer_name="Zero Duplicate", instrument_description="Term loan", cusip="444444DD4", position_id="Z1", fair_value="0"),
+        _base_holding(issuer_name="Zero Duplicate", instrument_description="Term loan", cusip="444444DD4", position_id="Z2", fair_value="0"),
     ])
 
     aggregate, detail = run_all(categories=["PC"], table_paths=paths, write=False)
@@ -379,6 +522,8 @@ def test_pc06_uses_instrument_and_cusip_in_duplicate_key(tmp_path):
     assert pc06["hit_count"] == 1
     assert len(pc06_detail) == 1
     assert pc06_detail.iloc[0]["issuer_name"] == "true duplicate"
+    assert pc06_detail.iloc[0]["affected_fair_value"] == 1000000
+    assert "duplicate_count=2" in pc06_detail.iloc[0]["evidence_hint"]
 
 
 def test_pc07_pct_sum_high_keeps_known_residual_annotation(tmp_path):
@@ -394,6 +539,8 @@ def test_pc07_pct_sum_high_keeps_known_residual_annotation(tmp_path):
 
     assert pc07["hit_count"] == 1
     assert pc07_detail["hit_rate"] == 300.0
+    assert pc07_detail["denominator"] == 3
+    assert "row_count=3" in pc07_detail["evidence_hint"]
     assert "Known multi-entity BDC residual" in pc07_detail["evidence_hint"]
 
 
@@ -550,7 +697,47 @@ def test_t04_classification_shift_fires(tmp_path):
 
     aggregate, detail = run_all(categories=["T"], table_paths=paths, write=False)
     t04 = aggregate.set_index("rule_id").loc["T04"]
-    assert t04["hit_count"] == 1
+    t04_detail = detail[detail["rule_id"] == "T04"]
+    assert t04["hit_count"] == 5
+    assert len(t04_detail) == 5
+    assert set(t04_detail["position_id"]) == {f"P{i}" for i in range(5)}
+    assert t04_detail.iloc[0]["denominator"] == 20
+    assert t04_detail.iloc[0]["hit_rate"] == 0.25
+    assert "prior_classification=DIRECT_LENDING" in t04_detail.iloc[0]["evidence_hint"]
+    assert "current_classification=COMMON_EQUITY" in t04_detail.iloc[0]["evidence_hint"]
+
+
+def test_t05_rate_regression_includes_fill_counts_and_current_fv(tmp_path):
+    paths = _fixtures(tmp_path)
+    prior = [
+        _base_holding(
+            quarter="2024q1", report_date="2024-03-31",
+            issuer_name=f"Prior {i}", position_id=f"P{i}",
+            interest_rate="8", fair_value="1000000",
+        )
+        for i in range(10)
+    ]
+    current = [
+        _base_holding(
+            quarter="2024q2", report_date="2024-06-30",
+            issuer_name=f"Current {i}", position_id=f"C{i}",
+            interest_rate="", basis_spread="", fair_value="2000000",
+        )
+        for i in range(10)
+    ]
+    _write_csv(paths["holdings"], prior + current)
+
+    aggregate, detail = run_all(categories=["T"], table_paths=paths, write=False)
+    t05 = aggregate.set_index("rule_id").loc["T05"]
+    t05_detail = detail[detail["rule_id"] == "T05"].iloc[0]
+
+    assert t05["hit_count"] == 1
+    assert t05_detail["affected_fair_value"] == 20000000
+    assert "prior_quarter=2024q1" in t05_detail["evidence_hint"]
+    assert "prior_fill=100.0%" in t05_detail["evidence_hint"]
+    assert "current_fill=0.0%" in t05_detail["evidence_hint"]
+    assert "prior_count=10" in t05_detail["evidence_hint"]
+    assert "current_count=10" in t05_detail["evidence_hint"]
 
 
 def test_s02_bdc_equity_overweight_fires(tmp_path):
@@ -628,6 +815,81 @@ def test_f06_fund_financials_coverage_fires(tmp_path):
     assert f06["hit_count"] == 1
 
 
+def test_f02_dedupes_universe_and_uses_distinct_date_cutoff(tmp_path):
+    paths = _fixtures(tmp_path)
+    _write_csv(paths["combined_universe"], [
+        _base_universe(cik="100", status="active"),
+        _base_universe(cik="100", status="active"),
+        _base_universe(cik="200", status="active"),
+    ])
+    rows = [
+        _base_holding(cik="100", quarter="2024q1", report_date="2024-03-31", position_id="OLD"),
+        _base_holding(cik="100", quarter="2024q1", report_date="2024-03-31", position_id="OLD-DUP"),
+        _base_holding(cik="200", quarter="2024q2", report_date="2024-06-30", position_id="P2"),
+        _base_holding(cik="200", quarter="2024q3", report_date="2024-09-30", position_id="P3"),
+        _base_holding(cik="200", quarter="2024q4", report_date="2024-12-31", position_id="P4"),
+    ]
+    _write_csv(paths["holdings"], rows)
+
+    aggregate, detail = run_all(categories=["F"], table_paths=paths, write=False)
+    f02 = aggregate.set_index("rule_id").loc["F02"]
+    f02_detail = detail[detail["rule_id"] == "F02"]
+
+    assert f02["hit_count"] == 1
+    assert len(f02_detail) == 1
+    assert f02_detail.iloc[0]["cik"] == "100"
+    assert "stale_cutoff=2024q2" in f02_detail.iloc[0]["evidence_hint"]
+
+
+def test_f03_groups_by_source_and_normalized_quarter(tmp_path):
+    paths = _fixtures(tmp_path)
+    rows = []
+    for i in range(5):
+        rows.append(_base_holding(
+            cik=str(100 + i), source="bdc",
+            quarter="2024-03-31" if i % 2 == 0 else "2024-02-29",
+            report_date="2024-03-31" if i % 2 == 0 else "2024-02-29",
+            position_id=f"B{i}",
+        ))
+    rows.append(_base_holding(cik="100", source="bdc", quarter="2024q2", report_date="2024-06-30", position_id="B-Q2"))
+    rows.append(_base_holding(cik="900", source="nport", quarter="2024-03-31", report_date="2024-03-31", position_id="N-Q1"))
+    rows.append(_base_holding(cik="900", source="nport", quarter="2024q2", report_date="2024-06-30", position_id="N-Q2"))
+    _write_csv(paths["holdings"], rows)
+
+    aggregate, detail = run_all(categories=["F"], table_paths=paths, write=False)
+    f03 = aggregate.set_index("rule_id").loc["F03"]
+    f03_detail = detail[detail["rule_id"] == "F03"]
+
+    assert f03["hit_count"] == 1
+    assert f03_detail.iloc[0]["granularity_key"] == "bdc|2024q2"
+    assert f03_detail.iloc[0]["denominator"] == 5
+    assert "source=bdc" in f03_detail.iloc[0]["evidence_hint"]
+
+
+def test_f08_emits_source_level_missing_entity_coverage_with_fv(tmp_path):
+    paths = _fixtures(tmp_path)
+    rows = []
+    for i in range(101):
+        rows.append(_base_holding(
+            source="bdc",
+            issuer_name=f"Issuer {i}",
+            position_id=f"P{i}",
+            fair_value="1000000",
+            entity_id="" if i < 6 else f"E{i}",
+        ))
+    _write_csv(paths["holdings"], rows)
+
+    aggregate, detail = run_all(categories=["F"], table_paths=paths, write=False)
+    f08 = aggregate.set_index("rule_id").loc["F08"]
+    f08_detail = detail[detail["rule_id"] == "F08"].iloc[0]
+
+    assert f08["hit_count"] == 1
+    assert f08_detail["granularity_key"] == "bdc|2024q1"
+    assert f08_detail["affected_fair_value"] == 6000000
+    assert "missing_count=6" in f08_detail["evidence_hint"]
+    assert "total_rows=101" in f08_detail["evidence_hint"]
+
+
 def test_m01_cusip_collision_fires(tmp_path):
     paths = _fixtures(tmp_path)
     _write_csv(paths["holdings"], [
@@ -638,6 +900,26 @@ def test_m01_cusip_collision_fires(tmp_path):
     aggregate, detail = run_all(categories=["M"], table_paths=paths, write=False)
     m01 = aggregate.set_index("rule_id").loc["M01"]
     assert m01["hit_count"] == 1
+
+
+def test_m08_uses_cik_specific_reporting_dates_for_chain_breaks(tmp_path):
+    paths = _fixtures(tmp_path)
+    rows = [
+        _base_holding(cik="100", quarter="2024q1", report_date="2024-03-31", position_id="TRUE-GAP"),
+        _base_holding(cik="100", quarter="2024q2", report_date="2024-06-30", position_id="OTHER"),
+        _base_holding(cik="100", quarter="2024q3", report_date="2024-09-30", position_id="TRUE-GAP"),
+        _base_holding(cik="200", quarter="2024q1", report_date="2024-03-31", position_id="NO-GLOBAL-GAP"),
+        _base_holding(cik="200", quarter="2024q3", report_date="2024-09-30", position_id="NO-GLOBAL-GAP"),
+    ]
+    _write_csv(paths["holdings"], rows)
+
+    aggregate, detail = run_all(categories=["M"], table_paths=paths, write=False)
+    m08 = aggregate.set_index("rule_id").loc["M08"]
+    m08_detail = detail[detail["rule_id"] == "M08"]
+
+    assert m08["hit_count"] == 1
+    assert m08_detail.iloc[0]["position_id"] == "TRUE-GAP"
+    assert m08_detail.iloc[0]["quarter"] == "2024q2"
 
 
 def test_category_isolation_t_only_loads_needed_tables(tmp_path):

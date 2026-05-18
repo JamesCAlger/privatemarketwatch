@@ -172,6 +172,7 @@ INDEX_RETURNS_FILE = OUTPUT_DIR / "index_returns.csv"
 VALIDATION_RULES_AGGREGATE_FILE = OUTPUT_DIR / "validation_rules_aggregate.csv"
 VALIDATION_RULES_DETAIL_FILE = OUTPUT_DIR / "validation_rules_detail.csv"
 VALIDATION_RULES_HISTORY_FILE = OUTPUT_DIR / "validation_rules_history.csv"
+VALIDATION_RULES_TREND_FILE = OUTPUT_DIR / "validation_rules_trend.csv"
 
 # Fund-level income and fee uplift
 BDC_FUND_INCOME_FILE = OUTPUT_DIR / "bdc_fund_income.csv"

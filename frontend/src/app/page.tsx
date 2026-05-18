@@ -106,17 +106,16 @@ export default function HomePage() {
           {/* Tagline + value prop */}
           <div className="max-w-3xl">
             <p className="text-teal text-xs font-semibold uppercase tracking-[0.15em] mb-4">
-              Independent Benchmarks
+              Data &amp; Indices
             </p>
             <h1 className="text-display-sm md:text-display-lg text-white mb-5 leading-tight">
-              Transparent indices for{' '}
+              The data platform for{' '}
               <span className="text-teal">private markets</span>
             </h1>
             <p className="text-white/55 text-base md:text-lg leading-relaxed max-w-2xl mb-10">
-              Rules-based total return indices tracking{' '}
-              {formatNumber(dlSummary?.constituents)} direct loans,{' '}
-              equity co-investments, and fund allocations across{' '}
-              {formatNumber(summary.totalFunds)} SEC-registered vehicles.
+              Fund analytics, portfolio data, and position-level indices
+              across {formatNumber(summary.totalFunds)} SEC-registered BDCs,
+              interval funds, and tender offer funds.
               Built entirely from mandatory regulatory filings.
             </p>
           </div>

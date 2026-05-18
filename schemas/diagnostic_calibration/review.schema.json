@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "calibration_id",
+    "verdict",
+    "confidence",
+    "mechanism_assessment",
+    "false_positive_assessment",
+    "threshold_assessment",
+    "examples_reviewed",
+    "evidence_refs",
+    "recommended_action",
+    "rationale",
+    "residual_risk",
+    "anti_sycophancy_check"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "candidate_id": { "enum": ["DIST01", "DIST02", "DIST04", "DIST05", "MONO03", "MONO05"] },
+    "calibration_id": { "type": "string", "minLength": 1 },
+    "verdict": {
+      "enum": ["useful_signal", "too_noisy", "needs_refinement", "insufficient_evidence"]
+    },
+    "confidence": { "enum": ["low", "medium", "high"] },
+    "mechanism_assessment": { "type": "string", "minLength": 10 },
+    "false_positive_assessment": { "type": "string", "minLength": 10 },
+    "threshold_assessment": { "type": "string", "minLength": 10 },
+    "examples_reviewed": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "supports"],
+        "properties": {
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "supports": { "type": "string", "minLength": 5 }
+        }
+      }
+    },
+    "recommended_action": {
+      "enum": ["drop", "keep_report_only", "add_as_unpromoted_rule", "refine_and_retest", "promote_to_warn"]
+    },
+    "rationale": { "type": "string", "minLength": 10 },
+    "residual_risk": { "type": "string", "minLength": 10 },
+    "anti_sycophancy_check": { "type": "string", "minLength": 10 }
+  }
+}

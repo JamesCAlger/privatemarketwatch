@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 AGGREGATE_COLUMNS = [
     "rule_id", "category", "title", "severity", "promoted", "status",
-    "hit_count", "hit_rate", "affected_fair_value", "run_id",
-    "run_timestamp", "skipped_reason",
+    "hit_count", "hit_rate", "affected_fair_value", "affected_outputs",
+    "run_id", "run_timestamp", "skipped_reason",
 ]
 
 DETAIL_COLUMNS = [
@@ -48,6 +48,7 @@ class ValidationRule:
     required_tables: tuple[str, ...]
     sql: str
     depends_on: tuple[str, ...] = ()
+    affected_outputs: tuple[str, ...] = ()
 
 
 TABLE_PATHS = {
@@ -120,6 +121,26 @@ EXPECTED_COLUMNS = {
         "entity_id", "canonical_name", "issuer_name_variant", "cusip",
     ],
 }
+
+
+def _affected_outputs(rule: ValidationRule) -> tuple[str, ...]:
+    """Return explicit or inferred downstream outputs affected by a rule."""
+    if rule.affected_outputs:
+        return tuple(dict.fromkeys((*rule.affected_outputs, "data_quality_dashboard")))
+    outputs: list[str] = []
+    required = set(rule.required_tables)
+    if "holdings" in required:
+        outputs.extend(["private_markets_holdings", "frontend_fund_detail"])
+    if required.intersection({"position_returns", "position_matches"}):
+        outputs.extend(["position_returns", "frontend_index"])
+    if "index_returns" in required:
+        outputs.extend(["index_returns", "frontend_index"])
+    outputs.append("data_quality_dashboard")
+    return tuple(dict.fromkeys(outputs))
+
+
+def _affected_outputs_text(rule: ValidationRule) -> str:
+    return ";".join(_affected_outputs(rule))
 
 
 def _detail_sql(
@@ -313,16 +334,16 @@ def _pc_and_existing_rules() -> list[ValidationRule]:
                        upper(trim(COALESCE(cusip, ''))) AS norm_cusip,
                        TRY_CAST(fair_value AS DOUBLE) AS fv, COUNT(*) AS n
                 FROM holdings
-                WHERE issuer_name IS NOT NULL AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+                WHERE issuer_name IS NOT NULL AND TRY_CAST(fair_value AS DOUBLE) > 0
                 GROUP BY cik, report_date, source, issuer, instrument, norm_cusip, fv
                 HAVING n > 1
             )
             SELECT {_detail_sql("holding_key", "cik || '|' || report_date || '|' || source || '|' || issuer || '|' || instrument || '|' || norm_cusip || '|' || fv",
             cik="cik", report_date="report_date", issuer="issuer", source="source",
-            affected_fv="fv", denominator="n",
+            affected_fv="(n - 1) * fv", denominator="n",
             priority="ROW_NUMBER() OVER (ORDER BY n DESC, fv DESC, cik)",
             detail="'Same CIK/date/source/issuer/instrument/CUSIP/FV appears multiple times'",
-            evidence="'Potential duplicated XBRL dimension path after tranche/CUSIP disambiguation'",
+            evidence="'duplicate_count=' || n || ' source=' || source || ' key=' || issuer || '|' || instrument || '|' || norm_cusip || '|' || fv",
             source_file="'private_markets_holdings.csv'")} FROM g"""),
         ValidationRule("PC07", "PC", "CIK-quarter pct-of-net-assets sum high", "WARN", False, ("holdings",),
             f"""WITH g AS (
@@ -330,14 +351,16 @@ def _pc_and_existing_rules() -> list[ValidationRule]:
                        LPAD(REGEXP_REPLACE(cik, '[^0-9]', '', 'g'), 10, '0') AS norm_cik,
                        COALESCE(quarter, report_date) AS q,
                        SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS pct_sum,
-                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv,
+                       COUNT(*) AS n
                 FROM holdings GROUP BY cik, norm_cik, q HAVING pct_sum > 250
             )
             SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
             cik="cik", quarter="q", affected_fv="fv", hit_rate="pct_sum",
+            denominator="n",
             priority="ROW_NUMBER() OVER (ORDER BY pct_sum DESC, cik, q)",
             detail="'pct_of_net_assets sums above 250% for CIK-quarter'",
-            evidence="CASE WHEN norm_cik IN ('0001786835', '0001825248', '0001551901') THEN 'Known multi-entity BDC residual pending fund financials population; do not exclude without reconciliation' ELSE 'Likely subtotal leakage or duplicate dimensions' END",
+            evidence="'pct_sum=' || ROUND(pct_sum, 2) || ' row_count=' || n || CASE WHEN norm_cik IN ('0001786835', '0001825248', '0001551901') THEN ' Known multi-entity BDC residual pending fund financials population; do not exclude without reconciliation' ELSE ' Likely subtotal leakage or duplicate dimensions' END",
             source_file="'private_markets_holdings.csv'")} FROM g"""),
         ValidationRule("PC08", "PC", "Loaded table schema and numeric casts", "WARN", False,
             ("holdings", "position_returns", "index_returns"),
@@ -613,50 +636,66 @@ def _temporal_rules() -> list[ValidationRule]:
         ValidationRule("T04", "T", "Classification shift", "WARN", False, ("holdings",),
             f"""WITH classified AS (
                 SELECT cik, COALESCE(quarter, report_date) AS q, position_id,
+                       issuer_name, source, TRY_CAST(fair_value AS DOUBLE) AS fv,
                        index_classification
                 FROM holdings
                 WHERE COALESCE(position_id, '') <> ''
                   AND COALESCE(index_classification, '') <> ''
             ), paired AS (
-                SELECT a.cik, a.q AS q2, b.q AS q1,
-                       COUNT(*) AS total,
-                       SUM(CASE WHEN a.index_classification <> b.index_classification THEN 1 ELSE 0 END) AS shifted
+                SELECT a.cik, a.q AS q2, b.q AS q1, a.position_id,
+                       a.issuer_name, a.source, a.fv,
+                       b.index_classification AS prior_classification,
+                       a.index_classification AS current_classification
                 FROM classified a
                 JOIN classified b ON a.cik = b.cik AND a.position_id = b.position_id AND a.q > b.q
                 WHERE NOT EXISTS (
                     SELECT 1 FROM classified c
                     WHERE c.cik = a.cik AND c.position_id = a.position_id AND c.q > b.q AND c.q < a.q
                 )
-                GROUP BY a.cik, a.q, b.q
+            ), flagged AS (
+                SELECT cik, q2, q1, COUNT(*) AS total,
+                       SUM(CASE WHEN current_classification <> prior_classification THEN 1 ELSE 0 END) AS shifted
+                FROM paired
+                GROUP BY cik, q2, q1
                 HAVING total > 10 AND shifted::DOUBLE / total > 0.15
+            ), shifted_positions AS (
+                SELECT p.*, f.total, f.shifted, f.shifted::DOUBLE / f.total AS shift_rate
+                FROM paired p
+                JOIN flagged f ON p.cik = f.cik AND p.q2 = f.q2 AND p.q1 = f.q1
+                WHERE p.current_classification <> p.prior_classification
             )
-            SELECT {_detail_sql("cik_quarter", "cik || '|' || q2",
-            cik="cik", quarter="q2", denominator="total",
-            hit_rate="shifted::DOUBLE / total",
-            priority="ROW_NUMBER() OVER (ORDER BY shifted::DOUBLE / total DESC, cik, q2)",
-            detail="'More than 15% of matched positions changed classification QoQ'",
-            evidence="'Check reclassification logic or data source change'",
-            source_file="'private_markets_holdings.csv'")} FROM paired"""),
+            SELECT {_detail_sql("position", "cik || '|' || q2 || '|' || position_id",
+            cik="cik", quarter="q2", issuer="issuer_name", position_id="position_id",
+            source="source", affected_fv="fv", denominator="total",
+            hit_rate="shift_rate",
+            priority="ROW_NUMBER() OVER (ORDER BY shift_rate DESC, fv DESC, cik, q2, position_id)",
+            detail="'Position classification changed in CIK-quarter where >15% of matched positions shifted'",
+            evidence="'prior_quarter=' || q1 || ' prior_classification=' || prior_classification || ' current_quarter=' || q2 || ' current_classification=' || current_classification || ' shift_rate=' || ROUND(shift_rate * 100, 1) || '%'",
+            source_file="'private_markets_holdings.csv'")} FROM shifted_positions"""),
         ValidationRule("T05", "T", "Rate population regression", "WARN", False, ("holdings",),
             f"""WITH g AS (
                 SELECT cik, COALESCE(quarter, report_date) AS q,
                        COUNT(*) AS n,
                        SUM(CASE WHEN TRY_CAST(interest_rate AS DOUBLE) > 0
-                                  OR TRY_CAST(basis_spread AS DOUBLE) > 0 THEN 1 ELSE 0 END) AS has_rate
+                                  OR TRY_CAST(basis_spread AS DOUBLE) > 0 THEN 1 ELSE 0 END) AS has_rate,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
                 FROM holdings
                 WHERE index_classification = 'DIRECT_LENDING'
                 GROUP BY cik, q
                 HAVING n >= 10
             ), lagged AS (
                 SELECT *, has_rate::DOUBLE / n AS fill,
+                       LAG(q) OVER (PARTITION BY cik ORDER BY q) AS prev_q,
+                       LAG(n) OVER (PARTITION BY cik ORDER BY q) AS prev_n,
+                       LAG(has_rate) OVER (PARTITION BY cik ORDER BY q) AS prev_has_rate,
                        LAG(has_rate::DOUBLE / n) OVER (PARTITION BY cik ORDER BY q) AS prev_fill
                 FROM g
             )
             SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
-            cik="cik", quarter="q", denominator="n", hit_rate="fill",
+            cik="cik", quarter="q", affected_fv="fv", denominator="n", hit_rate="fill",
             priority="ROW_NUMBER() OVER (ORDER BY prev_fill - fill DESC, cik, q)",
             detail="'Rate fill dropped from >80% to <30% in one quarter'",
-            evidence="'Check extraction completeness or source change'",
+            evidence="'prior_quarter=' || prev_q || ' prior_fill=' || ROUND(prev_fill * 100, 1) || '% current_fill=' || ROUND(fill * 100, 1) || '% prior_count=' || prev_n || ' current_count=' || n || ' prior_rate_count=' || prev_has_rate || ' current_rate_count=' || has_rate || ' current_direct_lending_fv=' || COALESCE(fv, 0)",
             source_file="'private_markets_holdings.csv'")} FROM lagged
             WHERE prev_fill > 0.8 AND fill < 0.3"""),
         ValidationRule("T06", "T", "New position without origination", "WARN", False, ("holdings",),
@@ -1483,32 +1522,51 @@ def _freshness_rules() -> list[ValidationRule]:
             f"""WITH latest AS (
                 SELECT cik, MAX(COALESCE(quarter, report_date)) AS last_q
                 FROM holdings GROUP BY cik
+            ), distinct_q AS (
+                SELECT DISTINCT COALESCE(quarter, report_date) AS q FROM holdings
+            ), stale_cutoff AS (
+                SELECT q AS cutoff_q FROM distinct_q ORDER BY q DESC LIMIT 1 OFFSET 2
             ), max_q AS (
                 SELECT MAX(COALESCE(quarter, report_date)) AS global_max FROM holdings
+            ), universe AS (
+                SELECT cik, MAX(COALESCE(status, '')) AS status
+                FROM combined_universe GROUP BY cik
             )
             SELECT {_detail_sql("cik", "l.cik",
             cik="l.cik", quarter="l.last_q",
             priority="ROW_NUMBER() OVER (ORDER BY l.last_q ASC, l.cik)",
             detail="'CIK last data is >2 quarters old'",
-            evidence="'last_q=' || l.last_q || ' global_max=' || m.global_max",
+            evidence="'last_q=' || l.last_q || ' stale_cutoff=' || sc.cutoff_q || ' global_max=' || m.global_max",
             source_file="'private_markets_holdings.csv;combined_universe.csv'")}
             FROM latest l CROSS JOIN max_q m
-            JOIN combined_universe u ON l.cik = u.cik
-            WHERE l.last_q < (SELECT COALESCE(quarter, report_date) FROM holdings ORDER BY COALESCE(quarter, report_date) DESC LIMIT 1 OFFSET 2)
+            CROSS JOIN stale_cutoff sc
+            JOIN universe u ON l.cik = u.cik
+            WHERE l.last_q < sc.cutoff_q
               AND LOWER(COALESCE(u.status, '')) NOT IN ('withdrawn', 'inactive')"""),
         ValidationRule("F03", "F", "Source coverage drop", "WARN", False, ("holdings",),
-            f"""WITH q_counts AS (
-                SELECT COALESCE(quarter, report_date) AS q, COUNT(DISTINCT cik) AS n_ciks
-                FROM holdings GROUP BY q
+            f"""WITH normalized AS (
+                SELECT source,
+                       CASE
+                           WHEN REGEXP_MATCHES(LOWER(COALESCE(quarter, report_date)), '^[0-9]{{4}}q[1-4]$')
+                               THEN LOWER(COALESCE(quarter, report_date))
+                           WHEN TRY_CAST(COALESCE(report_date, quarter) AS DATE) IS NOT NULL
+                               THEN CAST(YEAR(TRY_CAST(COALESCE(report_date, quarter) AS DATE)) AS VARCHAR) || 'q' || CAST(QUARTER(TRY_CAST(COALESCE(report_date, quarter) AS DATE)) AS VARCHAR)
+                           ELSE LOWER(COALESCE(quarter, report_date))
+                       END AS q,
+                       cik
+                FROM holdings
+            ), q_counts AS (
+                SELECT source, q, COUNT(DISTINCT cik) AS n_ciks
+                FROM normalized GROUP BY source, q
             ), stats AS (
-                SELECT *, MAX(n_ciks) OVER () AS max_ciks
+                SELECT *, MAX(n_ciks) OVER (PARTITION BY source) AS max_ciks
                 FROM q_counts
             )
-            SELECT {_detail_sql("quarter", "q",
-            quarter="q", denominator="max_ciks", hit_rate="n_ciks::DOUBLE / max_ciks",
-            priority="ROW_NUMBER() OVER (ORDER BY n_ciks::DOUBLE / max_ciks ASC, q)",
-            detail="'Quarter CIK count < 80% of historical max'",
-            evidence="'n_ciks=' || n_ciks || ' max=' || max_ciks",
+            SELECT {_detail_sql("source_quarter", "source || '|' || q",
+            quarter="q", source="source", denominator="max_ciks", hit_rate="n_ciks::DOUBLE / max_ciks",
+            priority="ROW_NUMBER() OVER (ORDER BY n_ciks::DOUBLE / max_ciks ASC, source, q)",
+            detail="'Source-quarter CIK count < 80% of source historical max'",
+            evidence="'source=' || source || ' n_ciks=' || n_ciks || ' source_max=' || max_ciks",
             source_file="'private_markets_holdings.csv'")} FROM stats
             WHERE n_ciks::DOUBLE / max_ciks < 0.80"""),
         ValidationRule("F04", "F", "N-PORT quarterly gap", "WARN", False, ("holdings",),
@@ -1595,17 +1653,18 @@ def _freshness_rules() -> list[ValidationRule]:
             source_file="'private_markets_holdings.csv'")} FROM g"""),
         ValidationRule("F08", "F", "Entity resolution coverage", "WARN", False, ("holdings",),
             f"""WITH g AS (
-                SELECT COALESCE(quarter, report_date) AS q,
+                SELECT COALESCE(quarter, report_date) AS q, source,
                        COUNT(*) AS n,
-                       SUM(CASE WHEN COALESCE(entity_id, '') = '' THEN 1 ELSE 0 END) AS missing
-                FROM holdings GROUP BY q
+                       SUM(CASE WHEN COALESCE(entity_id, '') = '' THEN 1 ELSE 0 END) AS missing,
+                       SUM(CASE WHEN COALESCE(entity_id, '') = '' THEN TRY_CAST(fair_value AS DOUBLE) ELSE 0 END) AS missing_fv
+                FROM holdings GROUP BY q, source
                 HAVING n > 100 AND missing::DOUBLE / n > 0.05
             )
-            SELECT {_detail_sql("quarter", "q",
-            quarter="q", denominator="n", hit_rate="missing::DOUBLE / n",
-            priority="ROW_NUMBER() OVER (ORDER BY missing::DOUBLE / n DESC, q)",
-            detail="'More than 5% of positions lack entity_id'",
-            evidence="'Entity resolution coverage gap'",
+            SELECT {_detail_sql("source_quarter", "source || '|' || q",
+            quarter="q", source="source", affected_fv="missing_fv", denominator="n", hit_rate="missing::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY missing::DOUBLE / n DESC, source, q)",
+            detail="'More than 5% of source-quarter positions lack entity_id'",
+            evidence="'source=' || source || ' missing_count=' || missing || ' total_rows=' || n",
             source_file="'private_markets_holdings.csv'")} FROM g"""),
         ValidationRule("F09", "F", "Position ID coverage", "WARN", False, ("holdings",),
             f"""WITH multi_q AS (
@@ -1767,12 +1826,12 @@ def _matching_rules() -> list[ValidationRule]:
                 SELECT DISTINCT cik, position_id, COALESCE(quarter, report_date) AS q
                 FROM holdings
                 WHERE COALESCE(position_id, '') <> ''
-            ), all_q AS (
-                SELECT DISTINCT COALESCE(quarter, report_date) AS q FROM holdings
+            ), cik_q AS (
+                SELECT DISTINCT cik, COALESCE(quarter, report_date) AS q FROM holdings
             ), expected AS (
-                SELECT p.cik, p.position_id, a.q
+                SELECT p.cik, p.position_id, cq.q
                 FROM (SELECT DISTINCT cik, position_id FROM pid_q) p
-                CROSS JOIN all_q a
+                JOIN cik_q cq ON p.cik = cq.cik
             ), presence AS (
                 SELECT e.cik, e.position_id, e.q,
                        CASE WHEN pq.q IS NOT NULL THEN 1 END AS has_data,
@@ -2053,6 +2112,13 @@ def _write_history(aggregate_df: pd.DataFrame) -> None:
     )
 
 
+def _read_history(path: str | Path | None = None) -> pd.DataFrame:
+    history_path = Path(path or config.VALIDATION_RULES_HISTORY_FILE)
+    if not history_path.exists():
+        return pd.DataFrame()
+    return pd.read_csv(history_path, dtype=str)
+
+
 def _skip_row(rule: ValidationRule, run_id: str, ts: str, reason: str) -> dict:
     return {
         "rule_id": rule.rule_id,
@@ -2064,6 +2130,7 @@ def _skip_row(rule: ValidationRule, run_id: str, ts: str, reason: str) -> dict:
         "hit_count": 0,
         "hit_rate": 0.0,
         "affected_fair_value": 0.0,
+        "affected_outputs": _affected_outputs_text(rule),
         "run_id": run_id,
         "run_timestamp": ts,
         "skipped_reason": reason,
@@ -2124,6 +2191,7 @@ def _run_rule(
         "hit_count": hit_count,
         "hit_rate": hit_rate,
         "affected_fair_value": affected,
+        "affected_outputs": _affected_outputs_text(rule),
         "run_id": run_id,
         "run_timestamp": ts,
         "skipped_reason": "",
@@ -2194,12 +2262,19 @@ def run_all(
     if write:
         aggregate_path = config.VALIDATION_RULES_AGGREGATE_FILE
         detail_path = config.VALIDATION_RULES_DETAIL_FILE
+        trend_path = config.VALIDATION_RULES_TREND_FILE
+        prior_history_df = _read_history()
         aggregate_path.parent.mkdir(parents=True, exist_ok=True)
         aggregate_df.to_csv(aggregate_path, index=False)
         detail_df.to_csv(detail_path, index=False)
         _write_history(aggregate_df)
+        from pipeline.validation_rules.trend import compute_trends
+        trend_df = compute_trends(prior_history_df, aggregate_df)
+        trend_path.parent.mkdir(parents=True, exist_ok=True)
+        trend_df.to_csv(trend_path, index=False)
         logger.info("Wrote validation rules aggregate: %s (%d rows)", aggregate_path, len(aggregate_df))
         logger.info("Wrote validation rules detail: %s (%d rows)", detail_path, len(detail_df))
+        logger.info("Wrote validation rules trend: %s (%d rows)", trend_path, len(trend_df))
 
     return aggregate_df, detail_df
 
@@ -2219,6 +2294,7 @@ __all__ = [
     "DETAIL_COLUMNS",
     "RULE_REGISTRY",
     "ValidationRule",
+    "_affected_outputs",
     "_select_rules",
     "_topological_order",
     "run_all",
