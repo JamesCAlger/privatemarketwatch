@@ -55,6 +55,10 @@ TABLE_PATHS = {
     "index_returns": config.INDEX_RETURNS_FILE,
     "fee_uplift": config.FEE_UPLIFT_FILE,
     "fund_financials": config.FUND_FINANCIALS_FILE,
+    "combined_universe": config.COMBINED_UNIVERSE_FILE,
+    "position_matches": config.POSITION_MATCHES_FILE,
+    "bdc_filings_index": config.BDC_FILINGS_INDEX_FILE,
+    "entity_lookup": config.ENTITY_LOOKUP_FILE,
 }
 
 EXPECTED_COLUMNS = {
@@ -62,6 +66,10 @@ EXPECTED_COLUMNS = {
         "cik", "quarter", "report_date", "issuer_name", "position_id",
         "instrument_description", "cusip", "source", "fair_value", "cost",
         "pct_of_net_assets", "index_classification", "asset_category",
+        "interest_rate", "basis_spread", "pik_rate", "maturity_date",
+        "coupon_type", "principal_amount", "shares_held",
+        "exposure_type", "asset_class", "entity_id",
+        "gics_sub_industry", "entity_name",
     ],
     "position_returns": [
         "cik", "entity_name", "source", "begin_quarter", "end_quarter",
@@ -80,6 +88,21 @@ EXPECTED_COLUMNS = {
     ],
     "fee_uplift": ["cik", "quarter", "effective_uplift"],
     "fund_financials": ["cik", "report_date", "quarter", "total_assets"],
+    "combined_universe": [
+        "cik", "entity_name", "vehicle_type", "status",
+    ],
+    "position_matches": [
+        "cik", "source", "begin_quarter", "end_quarter",
+        "begin_issuer_name", "end_issuer_name",
+        "begin_fair_value", "end_fair_value",
+        "match_method", "position_id",
+    ],
+    "bdc_filings_index": [
+        "cik", "entity_name", "form_type", "filing_date", "report_date",
+    ],
+    "entity_lookup": [
+        "entity_id", "canonical_name", "issuer_name_variant", "cusip",
+    ],
 }
 
 
@@ -119,7 +142,7 @@ def _detail_sql(
     """
 
 
-def _rules() -> list[ValidationRule]:
+def _pc_and_existing_rules() -> list[ValidationRule]:
     excluded = ", ".join(f"'{c.zfill(10)}'" for c in config.NPORT_EXCLUDE_CIKS)
     consumer = ", ".join(
         f"'{c}'" for c in sorted({"0001678130", "0001644771", "0002041175"})
@@ -400,7 +423,9 @@ def _rules() -> list[ValidationRule]:
                   AND COALESCE(index_classification, '') NOT IN ('', 'UNCLASSIFIED')
                   AND TRY_CAST(begin_fair_value AS DOUBLE) >= {MIN_BEGIN_FV}
             ), g AS (
-                SELECT *, bfv / NULLIF(SUM(bfv) OVER (PARTITION BY index_classification, end_quarter), 0) AS weight
+                SELECT *,
+                    bfv / NULLIF(SUM(bfv) OVER (PARTITION BY index_classification, end_quarter), 0) AS weight,
+                    COUNT(*) OVER (PARTITION BY index_classification, end_quarter) AS n_constituents
                 FROM valid
             )
             SELECT {_detail_sql("position", "index_classification || '|' || end_quarter || '|' || COALESCE(position_id, issuer_name)",
@@ -409,7 +434,7 @@ def _rules() -> list[ValidationRule]:
             priority="ROW_NUMBER() OVER (ORDER BY weight DESC, bfv DESC)",
             detail="'Single eligible position exceeds 50% of index-quarter FV'",
             evidence="'Concentration may make index return fragile'",
-            source_file="'position_returns.csv'")} FROM g WHERE weight > 0.50"""),
+            source_file="'position_returns.csv'")} FROM g WHERE weight > 0.50 AND n_constituents >= 20"""),
         ValidationRule("IDX07", "IDX", "Negative beginning FV eligible for index", "WARN", True, ("position_returns",),
             f"""WITH g AS (
                 SELECT *, TRY_CAST(begin_fair_value AS DOUBLE) AS bfv
@@ -466,7 +491,7 @@ def _rules() -> list[ValidationRule]:
             detail="'Direct-lending quarter-equivalent income return exceeds 20%'",
             evidence="'Span-adjusted income screen; check rate scale, PIK, fee uplift, and period length'",
             source_file="'position_returns.csv'")} FROM g"""),
-        ValidationRule("T01", "PC", "CIK position count changes more than 50% QoQ", "WARN", False, ("holdings",),
+        ValidationRule("T01", "T", "CIK position count changes more than 50% QoQ", "WARN", False, ("holdings",),
             f"""WITH g AS (
                 SELECT cik, COALESCE(quarter, report_date) AS q,
                        COUNT(*) AS n, SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
@@ -483,7 +508,7 @@ def _rules() -> list[ValidationRule]:
             evidence="'Check extraction completeness, source period, and true portfolio turnover'",
             source_file="'private_markets_holdings.csv'")} FROM lagged
             WHERE prev_n > 0 AND ABS(n - prev_n)::DOUBLE / prev_n > 0.5"""),
-        ValidationRule("T02", "PC", "CIK total FV jumps more than 3x or drops more than 70% QoQ", "WARN", False, ("holdings",),
+        ValidationRule("T02", "T", "CIK total FV jumps more than 3x or drops more than 70% QoQ", "WARN", False, ("holdings",),
             f"""WITH g AS (
                 SELECT cik, COALESCE(quarter, report_date) AS q,
                        SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
@@ -500,7 +525,7 @@ def _rules() -> list[ValidationRule]:
             evidence="'Check filing period, source completeness, and GAV reconciliation'",
             source_file="'private_markets_holdings.csv'")} FROM lagged
             WHERE prev_fv > 0 AND (fv / prev_fv > 3 OR fv / prev_fv < 0.3)"""),
-        ValidationRule("R07", "PC", "Single position FV exceeds fund total assets", "WARN", False, ("holdings", "fund_financials"),
+        ValidationRule("R07", "R", "Single position FV exceeds fund total assets", "WARN", False, ("holdings", "fund_financials"),
             f"""WITH ff AS (
                 SELECT cik, COALESCE(report_date, quarter) AS d,
                        MAX(TRY_CAST(total_assets AS DOUBLE)) AS total_assets
@@ -518,7 +543,7 @@ def _rules() -> list[ValidationRule]:
             detail="'Single position fair value exceeds fund total_assets'",
             evidence="'Check FV scale, fund financial scale, and filing period alignment'",
             source_file="'private_markets_holdings.csv;fund_financials.csv'")} FROM g"""),
-        ValidationRule("M02", "PC", "Matched-pair begin/end FV ratio extreme", "WARN", False, ("position_returns",),
+        ValidationRule("M02", "M", "Matched-pair begin/end FV ratio extreme", "WARN", False, ("position_returns",),
             f"""WITH g AS (
                 SELECT *, TRY_CAST(begin_fair_value AS DOUBLE) AS bfv,
                        TRY_CAST(end_fair_value AS DOUBLE) AS efv
@@ -538,6 +563,1265 @@ def _rules() -> list[ValidationRule]:
             source_file="'position_returns.csv'")} FROM g"""),
     ])
     return rules
+
+
+
+def _temporal_rules() -> list[ValidationRule]:
+    """Temporal coherence rules (T03-T10)."""
+    return [
+        ValidationRule("T03", "T", "Disappearance without exit", "WARN", False, ("holdings",),
+            f"""WITH presence AS (
+                SELECT cik, position_id, COALESCE(quarter, report_date) AS q,
+                       TRY_CAST(fair_value AS DOUBLE) AS fv,
+                       COUNT(*) OVER (PARTITION BY cik, position_id) AS appearances
+                FROM holdings
+                WHERE COALESCE(position_id, '') <> ''
+            ), last_seen AS (
+                SELECT cik, position_id, MAX(q) AS last_q,
+                       MAX(fv) AS last_fv, MAX(appearances) AS apps
+                FROM presence GROUP BY cik, position_id
+                HAVING apps >= 3
+            ), latest_q AS (
+                SELECT cik, MAX(COALESCE(quarter, report_date)) AS max_q
+                FROM holdings GROUP BY cik
+            )
+            SELECT {_detail_sql("position", "g.cik || '|' || g.position_id",
+            cik="g.cik", quarter="g.last_q", position_id="g.position_id",
+            affected_fv="g.last_fv",
+            priority="ROW_NUMBER() OVER (ORDER BY g.last_fv DESC, g.cik)",
+            detail="'Position present 3+ quarters vanished with last FV > $100K'",
+            evidence="'No paydown signal detected; check if exited or extraction gap'",
+            source_file="'private_markets_holdings.csv'")}
+            FROM last_seen g JOIN latest_q lq ON g.cik = lq.cik
+            WHERE g.last_q < lq.max_q AND g.last_fv > 100000"""),
+        ValidationRule("T04", "T", "Classification shift", "WARN", False, ("holdings",),
+            f"""WITH classified AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, position_id,
+                       index_classification
+                FROM holdings
+                WHERE COALESCE(position_id, '') <> ''
+                  AND COALESCE(index_classification, '') <> ''
+            ), paired AS (
+                SELECT a.cik, a.q AS q2, b.q AS q1,
+                       COUNT(*) AS total,
+                       SUM(CASE WHEN a.index_classification <> b.index_classification THEN 1 ELSE 0 END) AS shifted
+                FROM classified a
+                JOIN classified b ON a.cik = b.cik AND a.position_id = b.position_id AND a.q > b.q
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM classified c
+                    WHERE c.cik = a.cik AND c.position_id = a.position_id AND c.q > b.q AND c.q < a.q
+                )
+                GROUP BY a.cik, a.q, b.q
+                HAVING total > 10 AND shifted::DOUBLE / total > 0.15
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q2",
+            cik="cik", quarter="q2", denominator="total",
+            hit_rate="shifted::DOUBLE / total",
+            priority="ROW_NUMBER() OVER (ORDER BY shifted::DOUBLE / total DESC, cik, q2)",
+            detail="'More than 15% of matched positions changed classification QoQ'",
+            evidence="'Check reclassification logic or data source change'",
+            source_file="'private_markets_holdings.csv'")} FROM paired"""),
+        ValidationRule("T05", "T", "Rate population regression", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN TRY_CAST(interest_rate AS DOUBLE) > 0
+                                  OR TRY_CAST(basis_spread AS DOUBLE) > 0 THEN 1 ELSE 0 END) AS has_rate
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                GROUP BY cik, q
+                HAVING n >= 10
+            ), lagged AS (
+                SELECT *, has_rate::DOUBLE / n AS fill,
+                       LAG(has_rate::DOUBLE / n) OVER (PARTITION BY cik ORDER BY q) AS prev_fill
+                FROM g
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", denominator="n", hit_rate="fill",
+            priority="ROW_NUMBER() OVER (ORDER BY prev_fill - fill DESC, cik, q)",
+            detail="'Rate fill dropped from >80% to <30% in one quarter'",
+            evidence="'Check extraction completeness or source change'",
+            source_file="'private_markets_holdings.csv'")} FROM lagged
+            WHERE prev_fill > 0.8 AND fill < 0.3"""),
+        ValidationRule("T06", "T", "New position without origination", "WARN", False, ("holdings",),
+            f"""WITH first_seen AS (
+                SELECT cik, position_id, MIN(COALESCE(quarter, report_date)) AS first_q,
+                       MIN(TRY_CAST(cost AS DOUBLE)) AS first_cost
+                FROM holdings
+                WHERE COALESCE(position_id, '') <> ''
+                GROUP BY cik, position_id
+            ), not_first_q AS (
+                SELECT cik, MIN(COALESCE(quarter, report_date)) AS min_q
+                FROM holdings GROUP BY cik
+            )
+            SELECT {_detail_sql("position", "g.cik || '|' || g.position_id",
+            cik="g.cik", quarter="g.first_q", position_id="g.position_id",
+            affected_fv="g.first_cost",
+            priority="ROW_NUMBER() OVER (ORDER BY g.first_cost DESC, g.cik)",
+            detail="'Position appears for first time with cost > 0 but fund had prior data'",
+            evidence="'Expected for new originations; flag for review if unexpected'",
+            source_file="'private_markets_holdings.csv'")}
+            FROM first_seen g JOIN not_first_q nfq ON g.cik = nfq.cik
+            WHERE g.first_q > nfq.min_q AND g.first_cost > 1000000"""),
+        ValidationRule("T07", "T", "Maturity cliff", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN TRY_CAST(maturity_date AS DATE) <= TRY_CAST(report_date AS DATE)
+                                 AND TRY_CAST(fair_value AS DOUBLE) > 0 THEN 1 ELSE 0 END) AS past_mat,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                  AND maturity_date IS NOT NULL AND maturity_date <> ''
+                GROUP BY cik, q
+                HAVING n >= 10 AND past_mat::DOUBLE / n > 0.20
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="fv", denominator="n",
+            hit_rate="past_mat::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY past_mat::DOUBLE / n DESC, cik, q)",
+            detail="'More than 20% of positions have maturity_date <= report_date at full FV'",
+            evidence="'Past-maturity positions may indicate stale data or extensions'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("T08", "T", "Issuer name drift", "WARN", False, ("position_matches",),
+            f"""WITH g AS (
+                SELECT *,
+                       LENGTH(begin_issuer_name) AS len_b,
+                       LENGTH(end_issuer_name) AS len_e,
+                       levenshtein(LOWER(begin_issuer_name), LOWER(end_issuer_name)) AS dist
+                FROM position_matches
+                WHERE begin_issuer_name IS NOT NULL AND end_issuer_name IS NOT NULL
+                  AND LENGTH(begin_issuer_name) > 5 AND LENGTH(end_issuer_name) > 5
+            )
+            SELECT {_detail_sql("position", "cik || '|' || position_id || '|' || end_quarter",
+            cik="cik", quarter="end_quarter", position_id="position_id",
+            issuer="end_issuer_name",
+            hit_rate="dist::DOUBLE / GREATEST(len_b, len_e)",
+            priority="ROW_NUMBER() OVER (ORDER BY dist::DOUBLE / GREATEST(len_b, len_e) DESC, cik)",
+            detail="'Matched position has large name drift between quarters'",
+            evidence="'levenshtein > 40% of name length; possible mismatch'",
+            source_file="'position_matches.csv'")} FROM g
+            WHERE dist::DOUBLE / GREATEST(len_b, len_e) > 0.4"""),
+        ValidationRule("T09", "T", "Sector composition stability", "WARN", False, ("holdings",),
+            f"""WITH sector_share AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COALESCE(gics_sub_industry, 'Unknown') AS sector,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS sector_fv,
+                       SUM(SUM(TRY_CAST(fair_value AS DOUBLE))) OVER (PARTITION BY cik, COALESCE(quarter, report_date)) AS total_fv
+                FROM holdings GROUP BY cik, q, sector
+            ), shares AS (
+                SELECT *, sector_fv / NULLIF(total_fv, 0) AS share
+                FROM sector_share WHERE total_fv > 0
+            ), lagged AS (
+                SELECT a.cik, a.q, a.sector, a.share,
+                       b.share AS prev_share, a.share - b.share AS delta
+                FROM shares a
+                JOIN shares b ON a.cik = b.cik AND a.sector = b.sector AND a.q > b.q
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM shares c WHERE c.cik = a.cik AND c.sector = a.sector AND c.q > b.q AND c.q < a.q
+                )
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q || '|' || sector",
+            cik="cik", quarter="q", hit_rate="ABS(delta)",
+            detail="'Top sector share shifted more than 25pp QoQ'",
+            evidence="'Sector: ' || sector || '; prior=' || ROUND(prev_share*100,1) || '% now=' || ROUND(share*100,1) || '%'",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(delta) DESC, cik, q)",
+            source_file="'private_markets_holdings.csv'")} FROM lagged
+            WHERE ABS(delta) > 0.25"""),
+        ValidationRule("T10", "T", "Average position size shift", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       MEDIAN(TRY_CAST(fair_value AS DOUBLE)) AS med_fv
+                FROM holdings
+                WHERE TRY_CAST(fair_value AS DOUBLE) > 0
+                GROUP BY cik, q
+            ), lagged AS (
+                SELECT *, LAG(med_fv) OVER (PARTITION BY cik ORDER BY q) AS prev_med
+                FROM g
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="med_fv", denominator="prev_med",
+            hit_rate="med_fv / NULLIF(prev_med, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(LOG(med_fv / NULLIF(prev_med, 0))) DESC, cik, q)",
+            detail="'Median FV per CIK changed more than 3x QoQ'",
+            evidence="'Check extraction completeness or aggregation change'",
+            source_file="'private_markets_holdings.csv'")} FROM lagged
+            WHERE prev_med > 0 AND (med_fv / prev_med > 3 OR med_fv / prev_med < 0.333)"""),
+    ]
+
+
+def _strategy_rules() -> list[ValidationRule]:
+    """Strategy vs holdings rules (S01-S10)."""
+    return [
+        ValidationRule("S01", "S", "Strategy-classification mismatch", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH fund_class AS (
+                SELECT h.cik, COALESCE(h.quarter, h.report_date) AS q,
+                       SUM(CASE WHEN h.asset_class = 'REAL_ESTATE' THEN TRY_CAST(h.fair_value AS DOUBLE) ELSE 0 END) AS re_fv,
+                       SUM(TRY_CAST(h.fair_value AS DOUBLE)) AS total_fv
+                FROM holdings h
+                GROUP BY h.cik, q
+            ), re_funds AS (
+                SELECT u.cik
+                FROM combined_universe u
+                WHERE LOWER(COALESCE(u.entity_name, '')) LIKE '%real estate%'
+                   OR LOWER(COALESCE(u.vehicle_type, '')) LIKE '%real estate%'
+            )
+            SELECT {_detail_sql("cik_quarter", "fc.cik || '|' || fc.q",
+            cik="fc.cik", quarter="fc.q", affected_fv="fc.total_fv",
+            hit_rate="fc.re_fv / NULLIF(fc.total_fv, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY fc.re_fv / NULLIF(fc.total_fv, 0) ASC, fc.cik)",
+            detail="'Fund with real estate in name has <30% RE classification'",
+            evidence="'Strategy label vs actual portfolio composition diverges'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")}
+            FROM fund_class fc JOIN re_funds rf ON fc.cik = rf.cik
+            WHERE fc.total_fv > 0 AND fc.re_fv / fc.total_fv < 0.30"""),
+        ValidationRule("S02", "S", "BDC equity overweight", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH g AS (
+                SELECT h.cik, COALESCE(h.quarter, h.report_date) AS q,
+                       SUM(CASE WHEN h.index_classification = 'COMMON_EQUITY' THEN TRY_CAST(h.fair_value AS DOUBLE) ELSE 0 END) AS eq_fv,
+                       SUM(TRY_CAST(h.fair_value AS DOUBLE)) AS total_fv
+                FROM holdings h
+                JOIN combined_universe u ON h.cik = u.cik
+                WHERE LOWER(COALESCE(u.vehicle_type, '')) LIKE '%bdc%'
+                GROUP BY h.cik, q
+                HAVING total_fv > 0 AND eq_fv / total_fv > 0.40
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="eq_fv",
+            hit_rate="eq_fv / NULLIF(total_fv, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY eq_fv / NULLIF(total_fv, 0) DESC, cik, q)",
+            detail="'BDC with >40% COMMON_EQUITY by FV'",
+            evidence="'Unusual for a credit-focused BDC; verify classification'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")} FROM g"""),
+        ValidationRule("S03", "S", "Credit fund with majority fund-of-funds", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH g AS (
+                SELECT h.cik, COALESCE(h.quarter, h.report_date) AS q,
+                       SUM(CASE WHEN h.index_classification IN ('PRIVATE_EQUITY_FUND', 'PRIVATE_CREDIT_FUND')
+                            THEN TRY_CAST(h.fair_value AS DOUBLE) ELSE 0 END) AS fund_fv,
+                       SUM(TRY_CAST(h.fair_value AS DOUBLE)) AS total_fv
+                FROM holdings h
+                JOIN combined_universe u ON h.cik = u.cik
+                WHERE LOWER(COALESCE(u.vehicle_type, '')) LIKE '%bdc%'
+                GROUP BY h.cik, q
+                HAVING total_fv > 0 AND fund_fv / total_fv > 0.30
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="fund_fv",
+            hit_rate="fund_fv / NULLIF(total_fv, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY fund_fv / NULLIF(total_fv, 0) DESC, cik, q)",
+            detail="'BDC with >30% fund-of-funds exposure'",
+            evidence="'Check if this is a holding company or fund-of-funds structure'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")} FROM g"""),
+        ValidationRule("S04", "S", "Sector concentration", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COALESCE(gics_sub_industry, 'Unknown') AS sector,
+                       COUNT(*) AS sector_n,
+                       SUM(COUNT(*)) OVER (PARTITION BY cik, COALESCE(quarter, report_date)) AS total_n
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                GROUP BY cik, q, sector
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q || '|' || sector",
+            cik="cik", quarter="q", hit_rate="sector_n::DOUBLE / total_n",
+            priority="ROW_NUMBER() OVER (ORDER BY sector_n::DOUBLE / total_n DESC, cik, q)",
+            detail="'Fund with >80% of positions in single GICS sector'",
+            evidence="'Sector: ' || sector",
+            source_file="'private_markets_holdings.csv'")} FROM g
+            WHERE total_n >= 20 AND sector_n::DOUBLE / total_n > 0.80"""),
+        ValidationRule("S05", "S", "Vehicle type vs exposure type", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH g AS (
+                SELECT h.cik, COALESCE(h.quarter, h.report_date) AS q,
+                       SUM(CASE WHEN h.exposure_type = 'LIQUID' THEN TRY_CAST(h.fair_value AS DOUBLE) ELSE 0 END) AS liq_fv,
+                       SUM(TRY_CAST(h.fair_value AS DOUBLE)) AS total_fv
+                FROM holdings h
+                JOIN combined_universe u ON h.cik = u.cik
+                WHERE LOWER(COALESCE(u.vehicle_type, '')) LIKE '%bdc%'
+                GROUP BY h.cik, q
+                HAVING total_fv > 0 AND liq_fv / total_fv > 0.20
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="liq_fv",
+            hit_rate="liq_fv / NULLIF(total_fv, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY liq_fv / NULLIF(total_fv, 0) DESC, cik, q)",
+            detail="'BDC with >20% LIQUID exposure'",
+            evidence="'Check if liquid holdings are correctly classified'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")} FROM g"""),
+        ValidationRule("S06", "S", "Interval fund with majority direct lending", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH g AS (
+                SELECT h.cik, COALESCE(h.quarter, h.report_date) AS q,
+                       SUM(CASE WHEN h.index_classification = 'DIRECT_LENDING' THEN TRY_CAST(h.fair_value AS DOUBLE) ELSE 0 END) AS dl_fv,
+                       SUM(TRY_CAST(h.fair_value AS DOUBLE)) AS total_fv
+                FROM holdings h
+                JOIN combined_universe u ON h.cik = u.cik
+                WHERE LOWER(COALESCE(u.vehicle_type, '')) IN ('interval_fund', 'tender_offer_fund')
+                GROUP BY h.cik, q
+                HAVING total_fv > 0 AND dl_fv / total_fv > 0.70
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="dl_fv",
+            hit_rate="dl_fv / NULLIF(total_fv, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY dl_fv / NULLIF(total_fv, 0) DESC, cik, q)",
+            detail="'Interval/tender fund has >70% DIRECT_LENDING'",
+            evidence="'Unusual for registered fund; verify classification accuracy'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")} FROM g"""),
+        ValidationRule("S07", "S", "Fund size vs position count sparse", "WARN", False, ("holdings", "fund_financials"),
+            f"""WITH h_agg AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, COUNT(*) AS n
+                FROM holdings GROUP BY cik, q
+            ), ff AS (
+                SELECT cik, COALESCE(report_date, quarter) AS d,
+                       MAX(TRY_CAST(total_assets AS DOUBLE)) AS ta
+                FROM fund_financials GROUP BY cik, d
+            )
+            SELECT {_detail_sql("cik_quarter", "h.cik || '|' || h.q",
+            cik="h.cik", quarter="h.q", affected_fv="ff.ta", denominator="h.n",
+            priority="ROW_NUMBER() OVER (ORDER BY ff.ta DESC, h.cik, h.q)",
+            detail="'Fund with >$5B total assets but <50 positions'",
+            evidence="'May indicate incomplete extraction'",
+            source_file="'private_markets_holdings.csv;fund_financials.csv'")}
+            FROM h_agg h JOIN ff ON h.cik = ff.cik AND h.q = ff.d
+            WHERE ff.ta > 5000000000 AND h.n < 50"""),
+        ValidationRule("S08", "S", "Fund size vs position count dense", "WARN", False, ("holdings", "fund_financials"),
+            f"""WITH h_agg AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, COUNT(*) AS n
+                FROM holdings GROUP BY cik, q
+            ), ff AS (
+                SELECT cik, COALESCE(report_date, quarter) AS d,
+                       MAX(TRY_CAST(total_assets AS DOUBLE)) AS ta
+                FROM fund_financials GROUP BY cik, d
+            )
+            SELECT {_detail_sql("cik_quarter", "h.cik || '|' || h.q",
+            cik="h.cik", quarter="h.q", affected_fv="ff.ta", denominator="h.n",
+            priority="ROW_NUMBER() OVER (ORDER BY h.n DESC, h.cik, h.q)",
+            detail="'Fund with <$100M total assets but >500 positions'",
+            evidence="'May indicate consumer lending or granular loan pool'",
+            source_file="'private_markets_holdings.csv;fund_financials.csv'")}
+            FROM h_agg h JOIN ff ON h.cik = ff.cik AND h.q = ff.d
+            WHERE ff.ta < 100000000 AND ff.ta > 0 AND h.n > 500"""),
+        ValidationRule("S09", "S", "Tender offer fund with public securities", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH g AS (
+                SELECT h.cik, COALESCE(h.quarter, h.report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN COALESCE(h.cusip, '') <> '' THEN 1 ELSE 0 END) AS has_cusip
+                FROM holdings h
+                JOIN combined_universe u ON h.cik = u.cik
+                WHERE LOWER(COALESCE(u.vehicle_type, '')) = 'tender_offer_fund'
+                GROUP BY h.cik, q
+                HAVING n >= 10 AND has_cusip::DOUBLE / n > 0.50
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", denominator="n",
+            hit_rate="has_cusip::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY has_cusip::DOUBLE / n DESC, cik, q)",
+            detail="'Tender offer fund has >50% positions with CUSIP'",
+            evidence="'High CUSIP density suggests public market exposure'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")} FROM g"""),
+        ValidationRule("S10", "S", "Income fund without rate data", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH g AS (
+                SELECT h.cik, COALESCE(h.quarter, h.report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN TRY_CAST(h.interest_rate AS DOUBLE) > 0
+                                  OR TRY_CAST(h.basis_spread AS DOUBLE) > 0
+                                  OR TRY_CAST(h.pik_rate AS DOUBLE) > 0 THEN 1 ELSE 0 END) AS has_rate
+                FROM holdings h
+                JOIN combined_universe u ON h.cik = u.cik
+                WHERE LOWER(COALESCE(u.vehicle_type, '')) LIKE '%bdc%'
+                GROUP BY h.cik, q
+                HAVING n >= 10 AND has_rate::DOUBLE / n < 0.50
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", denominator="n",
+            hit_rate="has_rate::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY has_rate::DOUBLE / n ASC, cik, q)",
+            detail="'BDC has <50% positions with any rate data'",
+            evidence="'Income fund should have rate data for income estimation'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")} FROM g"""),
+    ]
+
+
+def _relational_rules() -> list[ValidationRule]:
+    """Relational integrity rules (R01-R06, R08-R15)."""
+    return [
+        ValidationRule("R01", "R", "Maturity before origination", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv
+                FROM holdings
+                WHERE TRY_CAST(fair_value AS DOUBLE) > 0
+                  AND maturity_date IS NOT NULL AND maturity_date <> ''
+                  AND report_date IS NOT NULL
+                  AND TRY_CAST(maturity_date AS DATE) < TRY_CAST(report_date AS DATE) - INTERVAL 5 YEAR
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            priority="ROW_NUMBER() OVER (ORDER BY fv DESC, cik)",
+            detail="'maturity_date is more than 5 years before report_date'",
+            evidence="'Likely data error in maturity parsing'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R02", "R", "Rate change for fixed coupon", "WARN", False, ("position_matches",),
+            f"""WITH g AS (
+                SELECT pm.*,
+                       TRY_CAST(pm.begin_fair_value AS DOUBLE) AS bfv
+                FROM position_matches pm
+                WHERE pm.match_method IS NOT NULL
+            )
+            SELECT {_detail_sql("position", "cik || '|' || position_id || '|' || end_quarter",
+            cik="cik", quarter="end_quarter", position_id="position_id",
+            affected_fv="bfv",
+            priority="ROW_NUMBER() OVER (ORDER BY bfv DESC, cik)",
+            detail="'Matched position rate data needs review (placeholder)'",
+            evidence="'Rate change detection requires coupon_type in position_matches'",
+            source_file="'position_matches.csv'")} FROM g WHERE 1=0"""),
+        ValidationRule("R03", "R", "Cost/FV ratio extreme", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv, TRY_CAST(cost AS DOUBLE) AS c
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                  AND TRY_CAST(fair_value AS DOUBLE) > 100000
+                  AND TRY_CAST(cost AS DOUBLE) > 100000
+                  AND (TRY_CAST(cost AS DOUBLE) / TRY_CAST(fair_value AS DOUBLE) > 3
+                       OR TRY_CAST(cost AS DOUBLE) / TRY_CAST(fair_value AS DOUBLE) < 0.2)
+                  AND LOWER(COALESCE(source, '')) != 'nport'
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            hit_rate="c / fv",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(LOG(c / fv)) DESC, cik)",
+            detail="'DIRECT_LENDING cost/FV ratio > 3 or < 0.2 (excludes N-PORT proxy cost)'",
+            evidence="'Extreme cost/FV divergence for a loan position'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R04", "R", "Principal on equity", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv,
+                       TRY_CAST(principal_amount AS DOUBLE) AS pa
+                FROM holdings
+                WHERE index_classification = 'COMMON_EQUITY'
+                  AND TRY_CAST(principal_amount AS DOUBLE) > 0
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            hit_rate="pa",
+            priority="ROW_NUMBER() OVER (ORDER BY pa DESC, cik)",
+            detail="'COMMON_EQUITY position has principal_amount populated'",
+            evidence="'Equity should not have principal; check classification'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R05", "R", "Spread without floating type", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv
+                FROM holdings
+                WHERE TRY_CAST(basis_spread AS DOUBLE) > 0
+                  AND coupon_type IS NOT NULL AND coupon_type <> ''
+                  AND LOWER(coupon_type) <> 'floating'
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            priority="ROW_NUMBER() OVER (ORDER BY fv DESC, cik)",
+            detail="'basis_spread > 0 but coupon_type is not Floating'",
+            evidence="'coupon_type=' || coupon_type",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R06", "R", "Zero rate for credit", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                  AND COALESCE(interest_rate, '') <> '' AND TRY_CAST(interest_rate AS DOUBLE) = 0
+                  AND COALESCE(basis_spread, '') <> '' AND TRY_CAST(basis_spread AS DOUBLE) = 0
+                  AND COALESCE(pik_rate, '') <> '' AND TRY_CAST(pik_rate AS DOUBLE) = 0
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            priority="ROW_NUMBER() OVER (ORDER BY fv DESC, cik)",
+            detail="'DIRECT_LENDING with all rate fields explicitly zero'",
+            evidence="'Loan with zero interest unlikely; check rate extraction'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R08", "R", "Negative shares", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv
+                FROM holdings
+                WHERE TRY_CAST(shares_held AS DOUBLE) < 0
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(TRY_CAST(shares_held AS DOUBLE)) DESC, cik)",
+            detail="'shares_held is negative'",
+            evidence="'shares=' || shares_held",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R09", "R", "Maturity in distant future", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                  AND maturity_date IS NOT NULL AND maturity_date <> ''
+                  AND report_date IS NOT NULL
+                  AND TRY_CAST(maturity_date AS DATE) > TRY_CAST(report_date AS DATE) + INTERVAL 30 YEAR
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            priority="ROW_NUMBER() OVER (ORDER BY fv DESC, cik)",
+            detail="'Loan maturity_date > 30 years from report_date'",
+            evidence="'maturity=' || maturity_date",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R10", "R", "PIK rate exceeds total rate", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv
+                FROM holdings
+                WHERE TRY_CAST(pik_rate AS DOUBLE) > 0
+                  AND TRY_CAST(interest_rate AS DOUBLE) > 0
+                  AND TRY_CAST(pik_rate AS DOUBLE) > TRY_CAST(interest_rate AS DOUBLE)
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            hit_rate="TRY_CAST(pik_rate AS DOUBLE)",
+            priority="ROW_NUMBER() OVER (ORDER BY TRY_CAST(pik_rate AS DOUBLE) DESC, cik)",
+            detail="'PIK rate exceeds total interest rate'",
+            evidence="'pik=' || pik_rate || ' rate=' || interest_rate",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R11", "R", "Pct > 25% with many positions", "WARN", False, ("holdings",),
+            f"""WITH counts AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, COUNT(*) AS n
+                FROM holdings GROUP BY cik, q HAVING n > 100
+            ), g AS (
+                SELECT h.*, TRY_CAST(h.fair_value AS DOUBLE) AS fv,
+                       TRY_CAST(h.pct_of_net_assets AS DOUBLE) AS pct
+                FROM holdings h
+                JOIN counts c ON h.cik = c.cik AND COALESCE(h.quarter, h.report_date) = c.q
+                WHERE TRY_CAST(h.pct_of_net_assets AS DOUBLE) > 25
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            hit_rate="pct",
+            priority="ROW_NUMBER() OVER (ORDER BY pct DESC, cik)",
+            detail="'pct_of_net_assets > 25% for CIK-quarter with >100 positions'",
+            evidence="'Likely scale error in pct_of_net_assets'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R12", "R", "Cost equals FV exactly for bulk", "WARN", False, ("holdings",),
+            f"""WITH has_real_cost AS (
+                SELECT DISTINCT cik FROM holdings
+                WHERE TRY_CAST(cost AS DOUBLE) > 0
+                  AND TRY_CAST(cost AS DOUBLE) != TRY_CAST(fair_value AS DOUBLE)
+            ), g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN TRY_CAST(cost AS DOUBLE) = TRY_CAST(fair_value AS DOUBLE)
+                                 AND TRY_CAST(fair_value AS DOUBLE) > 0 THEN 1 ELSE 0 END) AS exact_match,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE TRY_CAST(fair_value AS DOUBLE) > 0
+                  AND cik IN (SELECT cik FROM has_real_cost)
+                GROUP BY cik, q
+                HAVING n > 10 AND exact_match::DOUBLE / n > 0.9
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="fv", denominator="n",
+            hit_rate="exact_match::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY exact_match::DOUBLE / n DESC, cik, q)",
+            detail="'CIK-quarter with >90% cost==FV exactly (>10 positions, excludes proxy-only CIKs)'",
+            evidence="'May indicate cost proxy fallback or stale marks'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R13", "R", "Duplicate CUSIP within CIK-quarter", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, cusip,
+                       COUNT(*) AS n, SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                GROUP BY cik, q, cusip
+                HAVING n > 3
+            )
+            SELECT {_detail_sql("cik_quarter_cusip", "cik || '|' || q || '|' || cusip",
+            cik="cik", quarter="q", affected_fv="fv", denominator="n",
+            priority="ROW_NUMBER() OVER (ORDER BY n DESC, fv DESC, cik, q)",
+            detail="'Same CUSIP appears >3 times in one CIK-quarter'",
+            evidence="'CUSIP=' || cusip || ' count=' || n",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R14", "R", "Interest rate exceeds 50%", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv,
+                       TRY_CAST(interest_rate AS DOUBLE) AS rate
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                  AND TRY_CAST(interest_rate AS DOUBLE) > 50
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            hit_rate="rate",
+            priority="ROW_NUMBER() OVER (ORDER BY rate DESC, cik)",
+            detail="'DIRECT_LENDING interest_rate > 50 (likely bps vs pct error)'",
+            evidence="'rate=' || interest_rate",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("R15", "R", "Principal equals zero for debt", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT *, TRY_CAST(fair_value AS DOUBLE) AS fv
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                  AND COALESCE(principal_amount, '') <> ''
+                  AND TRY_CAST(principal_amount AS DOUBLE) = 0
+                  AND TRY_CAST(fair_value AS DOUBLE) > 100000
+            )
+            SELECT {_detail_sql("position", "COALESCE(position_id, cik || '|' || issuer_name || '|' || report_date)",
+            cik="cik", quarter="quarter", report_date="report_date", issuer="issuer_name",
+            position_id="position_id", source="source", affected_fv="fv",
+            priority="ROW_NUMBER() OVER (ORDER BY fv DESC, cik)",
+            detail="'DIRECT_LENDING with principal_amount explicitly = 0'",
+            evidence="'Loan with zero principal at >$100K FV is unusual'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+    ]
+
+
+def _cross_source_rules() -> list[ValidationRule]:
+    """Cross-source agreement rules (XS01-XS06)."""
+    return [
+        ValidationRule("XS01", "XS", "FV divergence", "WARN", False, ("holdings",),
+            f"""WITH by_source AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, source,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings GROUP BY cik, q, source
+            ), paired AS (
+                SELECT a.cik, a.q, a.fv AS bdc_fv, b.fv AS nport_fv
+                FROM by_source a
+                JOIN by_source b ON a.cik = b.cik AND a.q = b.q
+                WHERE LOWER(a.source) = 'bdc' AND LOWER(b.source) = 'nport'
+                  AND a.fv > 0 AND b.fv > 0
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", affected_fv="GREATEST(bdc_fv, nport_fv)",
+            hit_rate="ABS(bdc_fv - nport_fv) / GREATEST(bdc_fv, nport_fv)",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(bdc_fv - nport_fv) / GREATEST(bdc_fv, nport_fv) DESC, cik, q)",
+            detail="'Same CIK-quarter from BDC + N-PORT, total FV differs >20%'",
+            evidence="'bdc_fv=' || ROUND(bdc_fv) || ' nport_fv=' || ROUND(nport_fv)",
+            source_file="'private_markets_holdings.csv'")} FROM paired
+            WHERE ABS(bdc_fv - nport_fv) / GREATEST(bdc_fv, nport_fv) > 0.20"""),
+        ValidationRule("XS02", "XS", "Position count divergence", "WARN", False, ("holdings",),
+            f"""WITH by_source AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, source, COUNT(*) AS n
+                FROM holdings GROUP BY cik, q, source
+            ), paired AS (
+                SELECT a.cik, a.q, a.n AS bdc_n, b.n AS nport_n
+                FROM by_source a
+                JOIN by_source b ON a.cik = b.cik AND a.q = b.q
+                WHERE LOWER(a.source) = 'bdc' AND LOWER(b.source) = 'nport'
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", denominator="GREATEST(bdc_n, nport_n)",
+            hit_rate="ABS(bdc_n - nport_n)::DOUBLE / GREATEST(bdc_n, nport_n)",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(bdc_n - nport_n)::DOUBLE / GREATEST(bdc_n, nport_n) DESC, cik, q)",
+            detail="'Same CIK-quarter from both sources, counts differ >30%'",
+            evidence="'bdc_n=' || bdc_n || ' nport_n=' || nport_n",
+            source_file="'private_markets_holdings.csv'")} FROM paired
+            WHERE ABS(bdc_n - nport_n)::DOUBLE / GREATEST(bdc_n, nport_n) > 0.30"""),
+        ValidationRule("XS03", "XS", "Classification disagreement", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, cusip,
+                       MIN(CASE WHEN LOWER(source) = 'bdc' THEN index_classification END) AS bdc_class,
+                       MIN(CASE WHEN LOWER(source) = 'nport' THEN index_classification END) AS nport_class,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                GROUP BY cik, q, cusip
+                HAVING bdc_class IS NOT NULL AND nport_class IS NOT NULL AND bdc_class <> nport_class
+            )
+            SELECT {_detail_sql("cusip_quarter", "cik || '|' || q || '|' || cusip",
+            cik="cik", quarter="q", affected_fv="fv",
+            priority="ROW_NUMBER() OVER (ORDER BY fv DESC, cik, q)",
+            detail="'Same CUSIP from both sources has different classification'",
+            evidence="'bdc=' || bdc_class || ' nport=' || nport_class || ' cusip=' || cusip",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("XS04", "XS", "Rate disagreement", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, cusip,
+                       MIN(CASE WHEN LOWER(source) = 'bdc' THEN TRY_CAST(interest_rate AS DOUBLE) END) AS bdc_rate,
+                       MIN(CASE WHEN LOWER(source) = 'nport' THEN TRY_CAST(interest_rate AS DOUBLE) END) AS nport_rate,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                GROUP BY cik, q, cusip
+                HAVING bdc_rate IS NOT NULL AND nport_rate IS NOT NULL
+                   AND ABS(bdc_rate - nport_rate) > 2
+            )
+            SELECT {_detail_sql("cusip_quarter", "cik || '|' || q || '|' || cusip",
+            cik="cik", quarter="q", affected_fv="fv",
+            hit_rate="ABS(bdc_rate - nport_rate)",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(bdc_rate - nport_rate) DESC, cik, q)",
+            detail="'Same CUSIP from both sources, interest_rate differs >2pp'",
+            evidence="'bdc_rate=' || ROUND(bdc_rate,2) || ' nport_rate=' || ROUND(nport_rate,2) || ' cusip=' || cusip",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("XS05", "XS", "Issuer name disagreement", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, cusip,
+                       MIN(CASE WHEN LOWER(source) = 'bdc' THEN issuer_name END) AS bdc_name,
+                       MIN(CASE WHEN LOWER(source) = 'nport' THEN issuer_name END) AS nport_name,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                  AND issuer_name IS NOT NULL
+                GROUP BY cik, q, cusip
+                HAVING bdc_name IS NOT NULL AND nport_name IS NOT NULL
+                   AND LENGTH(bdc_name) > 3 AND LENGTH(nport_name) > 3
+            )
+            SELECT {_detail_sql("cusip_quarter", "cik || '|' || q || '|' || cusip",
+            cik="cik", quarter="q", affected_fv="fv",
+            hit_rate="levenshtein(LOWER(bdc_name), LOWER(nport_name))::DOUBLE / GREATEST(LENGTH(bdc_name), LENGTH(nport_name))",
+            priority="ROW_NUMBER() OVER (ORDER BY levenshtein(LOWER(bdc_name), LOWER(nport_name))::DOUBLE / GREATEST(LENGTH(bdc_name), LENGTH(nport_name)) DESC, cik, q)",
+            detail="'Same CUSIP from both sources, name levenshtein > 40%'",
+            evidence="'bdc=' || bdc_name || ' nport=' || nport_name",
+            source_file="'private_markets_holdings.csv'")} FROM g
+            WHERE levenshtein(LOWER(bdc_name), LOWER(nport_name))::DOUBLE / GREATEST(LENGTH(bdc_name), LENGTH(nport_name)) > 0.4"""),
+        ValidationRule("XS06", "XS", "Maturity disagreement", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, cusip,
+                       MIN(CASE WHEN LOWER(source) = 'bdc' THEN TRY_CAST(maturity_date AS DATE) END) AS bdc_mat,
+                       MIN(CASE WHEN LOWER(source) = 'nport' THEN TRY_CAST(maturity_date AS DATE) END) AS nport_mat,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                  AND maturity_date IS NOT NULL AND maturity_date <> ''
+                GROUP BY cik, q, cusip
+                HAVING bdc_mat IS NOT NULL AND nport_mat IS NOT NULL
+                   AND ABS(DATEDIFF('day', bdc_mat, nport_mat)) > 90
+            )
+            SELECT {_detail_sql("cusip_quarter", "cik || '|' || q || '|' || cusip",
+            cik="cik", quarter="q", affected_fv="fv",
+            hit_rate="ABS(DATEDIFF('day', bdc_mat, nport_mat))",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(DATEDIFF('day', bdc_mat, nport_mat)) DESC, cik, q)",
+            detail="'Same CUSIP from both sources, maturity differs >90 days'",
+            evidence="'bdc_mat=' || bdc_mat || ' nport_mat=' || nport_mat || ' cusip=' || cusip",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+    ]
+
+
+def _idx_new_rules() -> list[ValidationRule]:
+    """New index-level rules (IDX10-IDX15)."""
+    return [
+        ValidationRule("IDX10", "IDX", "Constituent count QoQ stability", "WARN", False, ("index_returns",),
+            f"""WITH lagged AS (
+                SELECT *,
+                       TRY_CAST(constituent_count AS DOUBLE) AS cnt,
+                       LAG(TRY_CAST(constituent_count AS DOUBLE)) OVER (PARTITION BY index_classification ORDER BY quarter) AS prev_cnt
+                FROM index_returns
+            )
+            SELECT {_detail_sql("index_quarter", "index_classification || '|' || quarter",
+            quarter="quarter", affected_fv="TRY_CAST(total_begin_fv AS DOUBLE)",
+            hit_rate="(prev_cnt - cnt) / NULLIF(prev_cnt, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY (prev_cnt - cnt) / NULLIF(prev_cnt, 0) DESC, index_classification, quarter)",
+            detail="'Constituent count dropped >20% QoQ'",
+            evidence="'prev=' || CAST(prev_cnt AS INT) || ' curr=' || CAST(cnt AS INT)",
+            source_file="'index_returns.csv'")} FROM lagged
+            WHERE prev_cnt > 0 AND (prev_cnt - cnt) / prev_cnt > 0.20"""),
+        ValidationRule("IDX11", "IDX", "Index coverage gap", "WARN", False, ("index_returns",),
+            f"""WITH lagged AS (
+                SELECT *,
+                       TRY_CAST(total_begin_fv AS DOUBLE) AS bfv,
+                       LAG(TRY_CAST(total_end_fv AS DOUBLE)) OVER (PARTITION BY index_classification ORDER BY quarter) AS prev_end_fv
+                FROM index_returns
+            )
+            SELECT {_detail_sql("index_quarter", "index_classification || '|' || quarter",
+            quarter="quarter", affected_fv="bfv",
+            hit_rate="bfv / NULLIF(prev_end_fv, 0)",
+            priority="ROW_NUMBER() OVER (ORDER BY bfv / NULLIF(prev_end_fv, 0) ASC, index_classification, quarter)",
+            detail="'total_begin_fv < 80% of prior quarter total_end_fv'",
+            evidence="'Coverage gap suggests missing constituents'",
+            source_file="'index_returns.csv'")} FROM lagged
+            WHERE prev_end_fv > 0 AND bfv / prev_end_fv < 0.80"""),
+        ValidationRule("IDX12", "IDX", "Vehicle type dominance shift", "WARN", False, ("position_returns", "combined_universe"),
+            f"""WITH pr_vt AS (
+                SELECT pr.index_classification, pr.end_quarter AS quarter,
+                       COALESCE(u.vehicle_type, 'unknown') AS vtype,
+                       SUM(TRY_CAST(pr.begin_fair_value AS DOUBLE)) AS vt_fv,
+                       SUM(SUM(TRY_CAST(pr.begin_fair_value AS DOUBLE))) OVER (PARTITION BY pr.index_classification, pr.end_quarter) AS total_fv
+                FROM position_returns pr
+                LEFT JOIN combined_universe u ON pr.cik = u.cik
+                WHERE TRY_CAST(pr.begin_fair_value AS DOUBLE) >= {MIN_BEGIN_FV}
+                GROUP BY pr.index_classification, pr.end_quarter, vtype
+            ), shares AS (
+                SELECT *, vt_fv / NULLIF(total_fv, 0) AS share
+                FROM pr_vt WHERE total_fv > 0
+            ), lagged AS (
+                SELECT *,
+                       LAG(share) OVER (PARTITION BY index_classification, vtype ORDER BY quarter) AS prev_share
+                FROM shares
+            )
+            SELECT {_detail_sql("index_quarter", "index_classification || '|' || quarter || '|' || vtype",
+            quarter="quarter", hit_rate="share",
+            priority="ROW_NUMBER() OVER (ORDER BY share - COALESCE(prev_share, 0) DESC, index_classification, quarter)",
+            detail="'Single vehicle_type went from <50% to >80% of index FV'",
+            evidence="'vtype=' || vtype || ' prev=' || ROUND(COALESCE(prev_share,0)*100,1) || '% now=' || ROUND(share*100,1) || '%'",
+            source_file="'position_returns.csv;combined_universe.csv'")} FROM lagged
+            WHERE COALESCE(prev_share, 0) < 0.50 AND share > 0.80"""),
+        ValidationRule("IDX13", "IDX", "Return dispersion", "WARN", False, ("position_returns",),
+            f"""WITH g AS (
+                SELECT index_classification, end_quarter AS quarter,
+                       STDDEV_POP(TRY_CAST(quarterly_total_return AS DOUBLE)) AS ret_std,
+                       COUNT(*) AS n,
+                       SUM(TRY_CAST(begin_fair_value AS DOUBLE)) AS fv
+                FROM position_returns
+                WHERE TRY_CAST(quarterly_total_return AS DOUBLE) IS NOT NULL
+                  AND COALESCE(index_classification, '') NOT IN ('', 'UNCLASSIFIED')
+                  AND TRY_CAST(begin_fair_value AS DOUBLE) >= {MIN_BEGIN_FV}
+                GROUP BY index_classification, end_quarter
+                HAVING n >= {MIN_CONSTITUENTS} AND ret_std > 1.0
+            )
+            SELECT {_detail_sql("index_quarter", "index_classification || '|' || quarter",
+            quarter="quarter", affected_fv="fv", denominator="n",
+            hit_rate="ret_std",
+            priority="ROW_NUMBER() OVER (ORDER BY ret_std DESC, index_classification, quarter)",
+            detail="'Cross-sectional std dev of quarterly returns > 100%'",
+            evidence="'Extreme dispersion may indicate data quality issues'",
+            source_file="'position_returns.csv'")} FROM g"""),
+        ValidationRule("IDX14", "IDX", "Index vs fund NAV return", "WARN", False, ("index_returns", "fund_financials", "position_returns"),
+            f"""WITH idx AS (
+                SELECT index_classification, quarter,
+                       TRY_CAST(fv_weighted_return AS DOUBLE) AS idx_ret
+                FROM index_returns
+            ), fund_ret AS (
+                SELECT ff.cik, ff.quarter,
+                       (TRY_CAST(ff.total_assets AS DOUBLE) - LAG(TRY_CAST(ff.total_assets AS DOUBLE)) OVER (PARTITION BY ff.cik ORDER BY ff.quarter))
+                       / NULLIF(LAG(TRY_CAST(ff.total_assets AS DOUBLE)) OVER (PARTITION BY ff.cik ORDER BY ff.quarter), 0) AS nav_ret
+                FROM fund_financials ff
+            ), cik_idx AS (
+                SELECT DISTINCT cik, index_classification
+                FROM position_returns
+                WHERE COALESCE(index_classification, '') NOT IN ('', 'UNCLASSIFIED')
+            ), avg_fund AS (
+                SELECT ci.index_classification, fr.quarter,
+                       AVG(fr.nav_ret) AS avg_nav_ret
+                FROM fund_ret fr
+                JOIN cik_idx ci ON fr.cik = ci.cik
+                WHERE fr.nav_ret IS NOT NULL
+                GROUP BY ci.index_classification, fr.quarter
+                HAVING COUNT(*) >= 3
+            )
+            SELECT {_detail_sql("index_quarter", "i.index_classification || '|' || i.quarter",
+            quarter="i.quarter", hit_rate="ABS(i.idx_ret - af.avg_nav_ret)",
+            priority="ROW_NUMBER() OVER (ORDER BY ABS(i.idx_ret - af.avg_nav_ret) DESC, i.index_classification, i.quarter)",
+            detail="'Index return diverges >500bps from weighted avg fund return'",
+            evidence="'idx=' || ROUND(i.idx_ret*100,2) || '% fund_avg=' || ROUND(af.avg_nav_ret*100,2) || '%'",
+            source_file="'index_returns.csv;fund_financials.csv'")}
+            FROM idx i JOIN avg_fund af ON i.index_classification = af.index_classification AND i.quarter = af.quarter
+            WHERE ABS(i.idx_ret - af.avg_nav_ret) > 0.05"""),
+        ValidationRule("IDX15", "IDX", "Negative income return for direct lending", "WARN", False, ("position_returns",),
+            f"""WITH g AS (
+                SELECT end_quarter AS quarter,
+                       SUM(TRY_CAST(income_return AS DOUBLE) * TRY_CAST(begin_fair_value AS DOUBLE))
+                       / NULLIF(SUM(TRY_CAST(begin_fair_value AS DOUBLE)), 0) AS wt_income,
+                       SUM(TRY_CAST(begin_fair_value AS DOUBLE)) AS fv
+                FROM position_returns
+                WHERE index_classification = 'DIRECT_LENDING'
+                  AND TRY_CAST(quarterly_total_return AS DOUBLE) IS NOT NULL
+                  AND TRY_CAST(begin_fair_value AS DOUBLE) >= {MIN_BEGIN_FV}
+                GROUP BY end_quarter
+                HAVING COUNT(*) >= {MIN_CONSTITUENTS} AND wt_income < 0
+            )
+            SELECT {_detail_sql("index_quarter", "'DIRECT_LENDING|' || quarter",
+            quarter="quarter", affected_fv="fv", hit_rate="wt_income",
+            priority="ROW_NUMBER() OVER (ORDER BY wt_income ASC, quarter)",
+            detail="'DIRECT_LENDING index-quarter has negative weighted income return'",
+            evidence="'Credit index should have positive income'",
+            source_file="'position_returns.csv'")} FROM g"""),
+    ]
+
+
+def _freshness_rules() -> list[ValidationRule]:
+    """Freshness and completeness rules (F01-F10)."""
+    return [
+        ValidationRule("F01", "F", "Missing quarter", "WARN", False, ("holdings",),
+            f"""WITH cik_quarters AS (
+                SELECT DISTINCT cik, COALESCE(quarter, report_date) AS q
+                FROM holdings
+            ), all_q AS (
+                SELECT DISTINCT COALESCE(quarter, report_date) AS q FROM holdings
+            ), expected AS (
+                SELECT c.cik, a.q
+                FROM (SELECT DISTINCT cik FROM cik_quarters) c
+                CROSS JOIN all_q a
+            ), present AS (
+                SELECT cik, q, 1 AS has_data FROM cik_quarters
+            ), gaps AS (
+                SELECT e.cik, e.q, p.has_data,
+                       LAG(p.has_data) OVER (PARTITION BY e.cik ORDER BY e.q) AS prev_has,
+                       LEAD(p.has_data) OVER (PARTITION BY e.cik ORDER BY e.q) AS next_has
+                FROM expected e
+                LEFT JOIN present p ON e.cik = p.cik AND e.q = p.q
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q",
+            priority="ROW_NUMBER() OVER (ORDER BY cik, q)",
+            detail="'CIK present in adjacent quarters but absent in between'",
+            evidence="'Missing data point in time series'",
+            source_file="'private_markets_holdings.csv'")} FROM gaps
+            WHERE has_data IS NULL AND prev_has = 1 AND next_has = 1"""),
+        ValidationRule("F02", "F", "Stale filing", "WARN", False, ("holdings", "combined_universe"),
+            f"""WITH latest AS (
+                SELECT cik, MAX(COALESCE(quarter, report_date)) AS last_q
+                FROM holdings GROUP BY cik
+            ), max_q AS (
+                SELECT MAX(COALESCE(quarter, report_date)) AS global_max FROM holdings
+            )
+            SELECT {_detail_sql("cik", "l.cik",
+            cik="l.cik", quarter="l.last_q",
+            priority="ROW_NUMBER() OVER (ORDER BY l.last_q ASC, l.cik)",
+            detail="'CIK last data is >2 quarters old'",
+            evidence="'last_q=' || l.last_q || ' global_max=' || m.global_max",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")}
+            FROM latest l CROSS JOIN max_q m
+            JOIN combined_universe u ON l.cik = u.cik
+            WHERE l.last_q < (SELECT COALESCE(quarter, report_date) FROM holdings ORDER BY COALESCE(quarter, report_date) DESC LIMIT 1 OFFSET 2)
+              AND LOWER(COALESCE(u.status, '')) NOT IN ('withdrawn', 'inactive')"""),
+        ValidationRule("F03", "F", "Source coverage drop", "WARN", False, ("holdings",),
+            f"""WITH q_counts AS (
+                SELECT COALESCE(quarter, report_date) AS q, COUNT(DISTINCT cik) AS n_ciks
+                FROM holdings GROUP BY q
+            ), stats AS (
+                SELECT *, MAX(n_ciks) OVER () AS max_ciks
+                FROM q_counts
+            )
+            SELECT {_detail_sql("quarter", "q",
+            quarter="q", denominator="max_ciks", hit_rate="n_ciks::DOUBLE / max_ciks",
+            priority="ROW_NUMBER() OVER (ORDER BY n_ciks::DOUBLE / max_ciks ASC, q)",
+            detail="'Quarter CIK count < 80% of historical max'",
+            evidence="'n_ciks=' || n_ciks || ' max=' || max_ciks",
+            source_file="'private_markets_holdings.csv'")} FROM stats
+            WHERE n_ciks::DOUBLE / max_ciks < 0.80"""),
+        ValidationRule("F04", "F", "N-PORT quarterly gap", "WARN", False, ("holdings",),
+            f"""WITH nport_q AS (
+                SELECT DISTINCT cik, COALESCE(quarter, report_date) AS q
+                FROM holdings WHERE LOWER(source) = 'nport'
+            ), all_nport_q AS (
+                SELECT DISTINCT q FROM nport_q
+            ), expected AS (
+                SELECT c.cik, a.q
+                FROM (SELECT DISTINCT cik FROM nport_q) c CROSS JOIN all_nport_q a
+            ), present AS (
+                SELECT cik, q, 1 AS has_data FROM nport_q
+            ), gaps AS (
+                SELECT e.cik, e.q, p.has_data,
+                       LAG(p.has_data) OVER (PARTITION BY e.cik ORDER BY e.q) AS prev_has,
+                       LEAD(p.has_data) OVER (PARTITION BY e.cik ORDER BY e.q) AS next_has
+                FROM expected e
+                LEFT JOIN present p ON e.cik = p.cik AND e.q = p.q
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q",
+            priority="ROW_NUMBER() OVER (ORDER BY cik, q)",
+            detail="'N-PORT CIK present in adjacent quarters but absent in between'",
+            evidence="'Quarterly filing gap for N-PORT filer'",
+            source_file="'private_markets_holdings.csv'")} FROM gaps
+            WHERE has_data IS NULL AND prev_has = 1 AND next_has = 1"""),
+        ValidationRule("F05", "F", "BDC filing gap", "WARN", False, ("bdc_filings_index",),
+            f"""WITH filings AS (
+                SELECT cik, report_date,
+                       UPPER(COALESCE(form_type, '')) AS ft
+                FROM bdc_filings_index
+                WHERE form_type IS NOT NULL
+            ), annual AS (
+                SELECT DISTINCT cik, LEFT(report_date, 4) AS yr
+                FROM filings WHERE ft LIKE '%10-K%'
+            ), quarterly AS (
+                SELECT DISTINCT cik, report_date
+                FROM filings WHERE ft LIKE '%10-Q%'
+            ), expected AS (
+                SELECT a.cik, a.yr
+                FROM annual a
+            )
+            SELECT {_detail_sql("cik_year", "e.cik || '|' || e.yr",
+            cik="e.cik", quarter="e.yr",
+            priority="ROW_NUMBER() OVER (ORDER BY e.cik, e.yr)",
+            detail="'BDC has 10-K but fewer than 2 10-Qs in same year'",
+            evidence="'Check filing completeness'",
+            source_file="'bdc_filings_index.csv'")}
+            FROM expected e
+            WHERE (SELECT COUNT(*) FROM quarterly q WHERE q.cik = e.cik AND LEFT(q.report_date, 4) = e.yr) < 2"""),
+        ValidationRule("F06", "F", "Fund financials coverage", "WARN", False, ("holdings", "fund_financials", "combined_universe"),
+            f"""WITH h_ciks AS (
+                SELECT DISTINCT cik FROM holdings
+            ), ff_ciks AS (
+                SELECT DISTINCT cik FROM fund_financials
+            )
+            SELECT {_detail_sql("cik", "h.cik",
+            cik="h.cik",
+            priority="ROW_NUMBER() OVER (ORDER BY COALESCE(u.vehicle_type, 'ZZZ'), h.cik)",
+            detail="'CIK in holdings but missing from fund_financials (vehicle_type=' || COALESCE(u.vehicle_type, 'unknown') || ')'",
+            evidence="CASE WHEN COALESCE(u.vehicle_type, '') = 'BDC' THEN 'BDC should have companyfacts data - investigate'"
+                     " ELSE 'N-PORT-only filer - structural gap (no companyfacts)' END",
+            source_file="'private_markets_holdings.csv;fund_financials.csv'")}
+            FROM h_ciks h
+            LEFT JOIN ff_ciks ff ON h.cik = ff.cik
+            LEFT JOIN combined_universe u ON h.cik = u.cik
+            WHERE ff.cik IS NULL"""),
+        ValidationRule("F07", "F", "GICS coverage", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN COALESCE(gics_sub_industry, '') = '' THEN 1 ELSE 0 END) AS missing
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                GROUP BY q
+                HAVING n > 100 AND missing::DOUBLE / n > 0.10
+            )
+            SELECT {_detail_sql("quarter", "q",
+            quarter="q", denominator="n", hit_rate="missing::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY missing::DOUBLE / n DESC, q)",
+            detail="'More than 10% of DIRECT_LENDING positions lack gics_sub_industry'",
+            evidence="'GICS classification coverage gap'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("F08", "F", "Entity resolution coverage", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN COALESCE(entity_id, '') = '' THEN 1 ELSE 0 END) AS missing
+                FROM holdings GROUP BY q
+                HAVING n > 100 AND missing::DOUBLE / n > 0.05
+            )
+            SELECT {_detail_sql("quarter", "q",
+            quarter="q", denominator="n", hit_rate="missing::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY missing::DOUBLE / n DESC, q)",
+            detail="'More than 5% of positions lack entity_id'",
+            evidence="'Entity resolution coverage gap'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("F09", "F", "Position ID coverage", "WARN", False, ("holdings",),
+            f"""WITH multi_q AS (
+                SELECT cik, COUNT(DISTINCT COALESCE(quarter, report_date)) AS n_q
+                FROM holdings GROUP BY cik HAVING n_q > 1
+            ), g AS (
+                SELECT h.cik,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN COALESCE(h.position_id, '') = '' THEN 1 ELSE 0 END) AS missing
+                FROM holdings h
+                JOIN multi_q m ON h.cik = m.cik
+                GROUP BY h.cik
+                HAVING n > 20 AND missing::DOUBLE / n > 0.25
+            )
+            SELECT {_detail_sql("cik", "cik",
+            cik="cik", denominator="n", hit_rate="missing::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY missing::DOUBLE / n DESC, cik)",
+            detail="'More than 25% of multi-quarter CIK positions lack position_id'",
+            evidence="'Position matching under-coverage'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("F10", "F", "New CIK without history", "WARN", False, ("holdings",),
+            f"""WITH latest_q AS (
+                SELECT MAX(COALESCE(quarter, report_date)) AS max_q FROM holdings
+            ), cik_first AS (
+                SELECT cik, MIN(COALESCE(quarter, report_date)) AS first_q,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
+                FROM holdings GROUP BY cik
+            )
+            SELECT {_detail_sql("cik", "cf.cik",
+            cik="cf.cik", quarter="cf.first_q", affected_fv="cf.total_fv",
+            priority="ROW_NUMBER() OVER (ORDER BY cf.total_fv DESC, cf.cik)",
+            detail="'CIK appears for first time in latest quarter with >$100M FV'",
+            evidence="'New entrant needs review for data quality'",
+            source_file="'private_markets_holdings.csv'")}
+            FROM cik_first cf CROSS JOIN latest_q lq
+            WHERE cf.first_q = lq.max_q AND cf.total_fv > 100000000"""),
+    ]
+
+
+def _matching_rules() -> list[ValidationRule]:
+    """Matching quality rules (M01, M03-M10)."""
+    return [
+        ValidationRule("M01", "M", "CUSIP collision", "WARN", False, ("holdings",),
+            f"""WITH cusip_names AS (
+                SELECT cusip, issuer_name, SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                  AND issuer_name IS NOT NULL AND LENGTH(issuer_name) > 3
+                GROUP BY cusip, issuer_name
+            ), multi_name_cusips AS (
+                SELECT cusip FROM cusip_names GROUP BY cusip
+                HAVING COUNT(*) BETWEEN 2 AND 10
+            ), filtered AS (
+                SELECT cn.* FROM cusip_names cn
+                JOIN multi_name_cusips mc ON cn.cusip = mc.cusip
+            ), pairs AS (
+                SELECT a.cusip, a.issuer_name AS name_a, b.issuer_name AS name_b,
+                       a.fv + b.fv AS total_fv,
+                       levenshtein(LOWER(a.issuer_name), LOWER(b.issuer_name)) AS dist,
+                       GREATEST(LENGTH(a.issuer_name), LENGTH(b.issuer_name)) AS max_len
+                FROM filtered a
+                JOIN filtered b ON a.cusip = b.cusip AND a.issuer_name < b.issuer_name
+            )
+            SELECT {_detail_sql("cusip", "cusip",
+            affected_fv="total_fv",
+            hit_rate="dist::DOUBLE / max_len",
+            priority="ROW_NUMBER() OVER (ORDER BY dist::DOUBLE / max_len DESC, cusip)",
+            detail="'Same CUSIP maps to names with levenshtein > 50% of length'",
+            evidence="'a=' || name_a || ' b=' || name_b",
+            source_file="'private_markets_holdings.csv'")} FROM pairs
+            WHERE dist::DOUBLE / max_len > 0.5"""),
+        ValidationRule("M03", "M", "1:many match over cap", "WARN", False, ("position_matches",),
+            f"""WITH g AS (
+                SELECT position_id, COUNT(*) AS n,
+                       SUM(TRY_CAST(begin_fair_value AS DOUBLE)) AS fv
+                FROM position_matches
+                WHERE COALESCE(position_id, '') <> ''
+                GROUP BY position_id
+                HAVING n > 3
+            )
+            SELECT {_detail_sql("position", "position_id",
+            position_id="position_id", affected_fv="fv", denominator="n",
+            priority="ROW_NUMBER() OVER (ORDER BY n DESC, fv DESC)",
+            detail="'Position matched to >3 others'",
+            evidence="'Possible over-matching or chain contamination'",
+            source_file="'position_matches.csv'")} FROM g"""),
+        ValidationRule("M04", "M", "Identifier parse failure", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN issuer_name IS NOT NULL
+                                 AND instrument_description IS NOT NULL
+                                 AND issuer_name = instrument_description THEN 1 ELSE 0 END) AS unparsed
+                FROM holdings
+                WHERE LOWER(source) = 'bdc'
+                GROUP BY cik, q
+                HAVING n >= 10 AND unparsed::DOUBLE / n > 0.20
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", denominator="n",
+            hit_rate="unparsed::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY unparsed::DOUBLE / n DESC, cik, q)",
+            detail="'More than 20% of BDC positions have issuer_name == instrument_description'",
+            evidence="'Identifier parsing may have failed for this CIK'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("M05", "M", "Entity resolution fragmentation", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cusip, COUNT(DISTINCT entity_id) AS n_entities,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                  AND COALESCE(entity_id, '') <> ''
+                GROUP BY cusip
+                HAVING n_entities > 3
+            )
+            SELECT {_detail_sql("cusip", "cusip",
+            affected_fv="fv", denominator="n_entities",
+            priority="ROW_NUMBER() OVER (ORDER BY n_entities DESC, fv DESC)",
+            detail="'Same CUSIP has >3 distinct entity_ids'",
+            evidence="'Entity resolution may be fragmenting a single issuer'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("M06", "M", "Instrument description empty", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN COALESCE(instrument_description, '') = '' THEN 1 ELSE 0 END) AS missing
+                FROM holdings
+                WHERE index_classification = 'DIRECT_LENDING'
+                GROUP BY cik, q
+                HAVING n >= 10 AND missing::DOUBLE / n > 0.50
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", denominator="n",
+            hit_rate="missing::DOUBLE / n",
+            priority="ROW_NUMBER() OVER (ORDER BY missing::DOUBLE / n DESC, cik, q)",
+            detail="'More than 50% of DIRECT_LENDING positions lack instrument_description'",
+            evidence="'Missing tranche/security type information'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("M07", "M", "CUSIP coverage drop", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q,
+                       COUNT(*) AS n,
+                       SUM(CASE WHEN COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6 THEN 1 ELSE 0 END) AS has_cusip
+                FROM holdings GROUP BY cik, q HAVING n >= 10
+            ), lagged AS (
+                SELECT *, has_cusip::DOUBLE / n AS fill,
+                       LAG(has_cusip::DOUBLE / n) OVER (PARTITION BY cik ORDER BY q) AS prev_fill
+                FROM g
+            )
+            SELECT {_detail_sql("cik_quarter", "cik || '|' || q",
+            cik="cik", quarter="q", denominator="n", hit_rate="fill",
+            priority="ROW_NUMBER() OVER (ORDER BY prev_fill - fill DESC, cik, q)",
+            detail="'CUSIP fill dropped from >60% to <20% QoQ'",
+            evidence="'prev_fill=' || ROUND(prev_fill*100,1) || '% now=' || ROUND(fill*100,1) || '%'",
+            source_file="'private_markets_holdings.csv'")} FROM lagged
+            WHERE prev_fill > 0.6 AND fill < 0.2"""),
+        ValidationRule("M08", "M", "Position ID chain break", "WARN", False, ("holdings",),
+            f"""WITH pid_q AS (
+                SELECT DISTINCT cik, position_id, COALESCE(quarter, report_date) AS q
+                FROM holdings
+                WHERE COALESCE(position_id, '') <> ''
+            ), all_q AS (
+                SELECT DISTINCT COALESCE(quarter, report_date) AS q FROM holdings
+            ), expected AS (
+                SELECT p.cik, p.position_id, a.q
+                FROM (SELECT DISTINCT cik, position_id FROM pid_q) p
+                CROSS JOIN all_q a
+            ), presence AS (
+                SELECT e.cik, e.position_id, e.q,
+                       CASE WHEN pq.q IS NOT NULL THEN 1 END AS has_data,
+                       LAG(CASE WHEN pq.q IS NOT NULL THEN 1 END) OVER (PARTITION BY e.cik, e.position_id ORDER BY e.q) AS prev_has,
+                       LEAD(CASE WHEN pq.q IS NOT NULL THEN 1 END) OVER (PARTITION BY e.cik, e.position_id ORDER BY e.q) AS next_has
+                FROM expected e
+                LEFT JOIN pid_q pq ON e.cik = pq.cik AND e.position_id = pq.position_id AND e.q = pq.q
+            )
+            SELECT {_detail_sql("position_quarter", "cik || '|' || position_id || '|' || q",
+            cik="cik", quarter="q", position_id="position_id",
+            priority="ROW_NUMBER() OVER (ORDER BY cik, position_id, q)",
+            detail="'position_id present in Q-1 and Q+1 but not Q'",
+            evidence="'Chain break in position time series'",
+            source_file="'private_markets_holdings.csv'")} FROM presence
+            WHERE has_data IS NULL AND prev_has = 1 AND next_has = 1"""),
+        ValidationRule("M09", "M", "Duplicate entity_id for different issuers", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT cik, COALESCE(quarter, report_date) AS q, entity_id,
+                       COUNT(DISTINCT LOWER(TRIM(issuer_name))) AS n_names,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(entity_id, '') <> ''
+                  AND issuer_name IS NOT NULL
+                GROUP BY cik, q, entity_id
+                HAVING n_names > 1
+            )
+            SELECT {_detail_sql("cik_quarter_entity", "cik || '|' || q || '|' || entity_id",
+            cik="cik", quarter="q", affected_fv="fv", denominator="n_names",
+            priority="ROW_NUMBER() OVER (ORDER BY n_names DESC, fv DESC, cik, q)",
+            detail="'Two distinct issuer_names share entity_id within CIK-quarter'",
+            evidence="'entity_id=' || entity_id",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("M10", "M", "Name normalization collision", "WARN", False, ("holdings",),
+            f"""WITH g AS (
+                SELECT LOWER(TRIM(issuer_name)) AS norm_name,
+                       COUNT(DISTINCT cusip) AS n_cusips,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings
+                WHERE COALESCE(cusip, '') <> '' AND LENGTH(cusip) >= 6
+                  AND issuer_name IS NOT NULL AND LENGTH(issuer_name) > 3
+                GROUP BY norm_name
+                HAVING n_cusips > 2
+            )
+            SELECT {_detail_sql("issuer", "norm_name",
+            issuer="norm_name", affected_fv="fv", denominator="n_cusips",
+            priority="ROW_NUMBER() OVER (ORDER BY n_cusips DESC, fv DESC)",
+            detail="'Same normalized issuer_name maps to >2 distinct CUSIPs'",
+            evidence="'May indicate different tranches or normalization collision'",
+            source_file="'private_markets_holdings.csv'")} FROM g"""),
+    ]
+
+
+
+def _rules() -> list[ValidationRule]:
+    """Combine all rule categories."""
+    return (
+        _pc_and_existing_rules()
+        + _temporal_rules()
+        + _strategy_rules()
+        + _relational_rules()
+        + _cross_source_rules()
+        + _idx_new_rules()
+        + _freshness_rules()
+        + _matching_rules()
+    )
 
 
 RULE_REGISTRY = {rule.rule_id: rule for rule in _rules()}
@@ -571,7 +1855,7 @@ def _load_tables(
             f"""
             CREATE TEMP VIEW {raw} AS
             SELECT * FROM read_csv(
-                '{csv_path}', header=true, all_varchar=true, ignore_errors=false
+                '{csv_path}', header=true, all_varchar=true, ignore_errors=true
             )
             """
         )
@@ -670,7 +1954,7 @@ def run_all(
     run_id: str | None = None,
     write: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    selected = {c.upper() for c in (categories or ("PC", "IDX"))}
+    selected = {c.upper() for c in (categories or ("PC", "IDX", "T", "S", "R", "XS", "F", "M"))}
     run_id = run_id or uuid4().hex[:12]
     ts = datetime.now(timezone.utc).isoformat()
 
