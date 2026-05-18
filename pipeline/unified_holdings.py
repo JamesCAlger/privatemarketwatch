@@ -6,7 +6,6 @@ index construction and dashboard analytics.
 """
 
 import logging
-import re
 import time
 from pathlib import Path
 from typing import Optional, Union
@@ -14,6 +13,7 @@ from typing import Optional, Union
 import duckdb
 import pandas as pd
 
+from pipeline import classification, staging_bdc, staging_nport
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     ENTITY_LOOKUP_FILE,
@@ -73,40 +73,6 @@ UNIFIED_COLUMNS = [
     # Position tracking (populated by --returns step)
     "position_id",
 ]
-
-# BDC aggregate row patterns (case-insensitive substring).
-# Affiliation-only labels such as "affiliate investments" are handled as exact
-# headers below.  They are intentionally not substring patterns because valid
-# source FV bucket rows can end with "Non-Affiliate Investments".
-
-# Re-exports for backward compatibility during unified-holdings decomposition.
-# Remove after downstream imports have been migrated.
-from pipeline.classification import (  # noqa: F401
-    _INDUSTRY_LABELS,
-    _classify_bdc_asset,
-    _classify_bdc_issuer,
-    _classify_index,
-    _classify_nport_asset,
-    _classify_nport_issuer,
-    _infer_coupon_type,
-    _is_named_coinvest,
-    _normalize_rate,
-    _sql_classify_asset_class,
-    _sql_classify_exposure_type,
-    _sql_classify_index,
-)
-from pipeline.bdc_identifier import (  # noqa: F401
-    _AFFILIATION_TAGS,
-    _is_bad_issuer_name,
-    _is_bdc_aggregate_row,
-    _parse_bdc_identifier,
-    _sql_is_bdc_aggregate,
-)
-from pipeline.staging_bdc import (  # noqa: F401
-    _prepare_bdc,
-    _reclassify_named_fund_positions,
-)
-from pipeline.staging_nport import _prepare_nport  # noqa: F401
 
 def _stabilize_classification(df: pd.DataFrame) -> pd.DataFrame:
     """Stabilize QoQ classification flips using 2x majority rule.
@@ -221,6 +187,69 @@ def _stabilize_classification(df: pd.DataFrame) -> pd.DataFrame:
     con.close()
 
     # Restore column order
+    result = result[UNIFIED_COLUMNS]
+    return result
+
+
+def _restore_deterministic_classification_rules(df: pd.DataFrame) -> pd.DataFrame:
+    """Reapply high-confidence deterministic rules after QoQ stabilization.
+
+    Stabilization is useful for noisy issuer/instrument parsing, but it should
+    not erase explicit current-row signals such as structured-credit keywords
+    or BDC fund-vehicle names.
+    """
+    if df.empty:
+        return df
+
+    con = duckdb.connect()
+    con.register("src", df)
+
+    idx_case = classification._sql_classify_index()
+    asset_class_case = classification._sql_classify_asset_class()
+    sc_kw = classification._sql_keyword_check(
+        "_combined_fund_text",
+        classification._STRUCTURED_CREDIT_KEYWORDS,
+    )
+    bdc_vehicle_fund = classification._sql_is_bdc_vehicle_fund()
+    restore_predicate = f"({sc_kw} OR {bdc_vehicle_fund})"
+
+    override_set = {"index_classification", "asset_class"}
+    pass_cols = [f"s.{c}" for c in UNIFIED_COLUMNS if c not in override_set]
+    sql = f"""
+    WITH keyed AS (
+        SELECT *,
+            COALESCE(lower(trim(issuer_name)), '') || ' ' ||
+            COALESCE(lower(trim(instrument_description)), '') AS _combined_fund_text
+        FROM src
+    ),
+    reclassified AS (
+        SELECT *,
+            {idx_case} AS _rule_index_classification,
+            {asset_class_case} AS _rule_asset_class,
+            {restore_predicate} AS _restore_classification
+        FROM keyed
+    )
+    SELECT {', '.join(pass_cols)},
+           CASE WHEN _restore_classification
+                THEN _rule_index_classification
+                ELSE CAST(s.index_classification AS VARCHAR)
+           END AS index_classification,
+           CASE WHEN _restore_classification
+                THEN _rule_asset_class
+                ELSE CAST(s.asset_class AS VARCHAR)
+           END AS asset_class
+    FROM reclassified s
+    """
+
+    result = con.execute(sql).fetchdf()
+    con.close()
+
+    for col in ("index_classification", "asset_class"):
+        changed = (df[col].astype(str) != result[col].astype(str)).sum()
+        if changed > 0:
+            logger.info("  Deterministic classification restore: %d rows changed for %s",
+                        changed, col)
+
     result = result[UNIFIED_COLUMNS]
     return result
 
@@ -419,18 +448,18 @@ def build_unified_holdings(
         nport_input = nport_df
 
     # Prepare each source
-    bdc_unified = _prepare_bdc(bdc_df)
-    nport_unified = _prepare_nport(nport_input)
+    bdc_unified = staging_bdc._prepare_bdc(bdc_df)
+    nport_unified = staging_nport._prepare_nport(nport_input)
 
     # Combine via DuckDB UNION ALL + index classification
     con = duckdb.connect()
     con.register("bdc_part", bdc_unified)
     con.register("nport_part", nport_unified)
 
-    idx_case = _sql_classify_index()
-    exposure_case = _sql_classify_exposure_type()
-    asset_class_case = _sql_classify_asset_class()
-    _special_cols = {"index_classification", "exposure_type", "asset_class", "principal_amount"}
+    idx_case = classification._sql_classify_index()
+    exposure_case = classification._sql_classify_exposure_type()
+    asset_class_case = classification._sql_classify_asset_class()
+    _special_cols = {"index_classification", "exposure_type", "asset_class", "principal_amount", "cusip"}
     col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _special_cols)
     # Use explicit column list for UNION ALL to avoid positional mismatch
     union_cols = ", ".join(UNIFIED_COLUMNS)
@@ -465,9 +494,14 @@ def build_unified_holdings(
                                          '000000000'), '999999999'),
                             ''
                         )
-                    ORDER BY
-                        COALESCE(CAST(nport_quarter AS VARCHAR), '') DESC,
-                        COALESCE(CAST(accession_number AS VARCHAR), '') DESC
+                ORDER BY
+                    COALESCE(CAST(nport_quarter AS VARCHAR), '') DESC,
+                    COALESCE(CAST(accession_number AS VARCHAR), '') DESC,
+                    COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                    COALESCE(CAST(cusip AS VARCHAR), ''),
+                    COALESCE(CAST(fair_value AS VARCHAR), ''),
+                    COALESCE(CAST(cost AS VARCHAR), ''),
+                    COALESCE(CAST(shares_held AS VARCHAR), '')
                 ) AS _nport_rank
             FROM nport_part
         ) sub
@@ -513,7 +547,14 @@ def build_unified_holdings(
                     ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
                     ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
                 ORDER BY
-                    CASE WHEN source = 'bdc' THEN 0 ELSE 1 END
+                    CASE WHEN source = 'bdc' THEN 0 ELSE 1 END,
+                    COALESCE(CAST(accession_number AS VARCHAR), '') DESC,
+                    COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
+                    COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                    COALESCE(CAST(cusip AS VARCHAR), ''),
+                    COALESCE(CAST(fair_value AS VARCHAR), ''),
+                    COALESCE(CAST(cost AS VARCHAR), ''),
+                    COALESCE(CAST(shares_held AS VARCHAR), '')
             ) AS _dedup_rank
         FROM combined
     ),
@@ -605,7 +646,13 @@ def build_unified_holdings(
                             '[^a-z0-9]+', ' ', 'g'
                         ),
                         COALESCE(NULLIF(CAST(cusip AS VARCHAR), ''), '')
-                    ORDER BY report_date, fair_value
+                    ORDER BY
+                        report_date,
+                        fair_value,
+                        COALESCE(CAST(accession_number AS VARCHAR), ''),
+                        COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
+                        COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                        COALESCE(CAST(shares_held AS VARCHAR), '')
                     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                 )
             ) AS cost
@@ -622,12 +669,24 @@ def build_unified_holdings(
                     -- Nearest previous non-outlier shares
                     LAST_VALUE(CASE WHEN NOT _is_outlier THEN _sh_val END
                         IGNORE NULLS) OVER (
-                        PARTITION BY cik, issuer_name ORDER BY report_date
+                        PARTITION BY cik, issuer_name
+                        ORDER BY
+                            report_date,
+                            COALESCE(CAST(accession_number AS VARCHAR), ''),
+                            COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
+                            COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                            COALESCE(CAST(_sh_val AS VARCHAR), '')
                         ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING),
                     -- Nearest following non-outlier shares
                     FIRST_VALUE(CASE WHEN NOT _is_outlier THEN _sh_val END
                         IGNORE NULLS) OVER (
-                        PARTITION BY cik, issuer_name ORDER BY report_date
+                        PARTITION BY cik, issuer_name
+                        ORDER BY
+                            report_date,
+                            COALESCE(CAST(accession_number AS VARCHAR), ''),
+                            COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
+                            COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                            COALESCE(CAST(_sh_val AS VARCHAR), '')
                         ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING)
                 )
                 ELSE _sh_val
@@ -675,6 +734,8 @@ def build_unified_holdings(
     )
     SELECT
         {col_list},
+        CASE WHEN COALESCE(CAST(cusip AS VARCHAR), '') IN ('999999999', '000000000', '00000000')
+             THEN NULL ELSE cusip END AS cusip,
         CASE WHEN _index_class IN (
                  'COMMON_EQUITY', 'PREFERRED_EQUITY',
                  'PRIVATE_EQUITY_FUND', 'PRIVATE_CREDIT_FUND',
@@ -725,7 +786,15 @@ def build_unified_holdings(
                         ROUND(TRY_CAST(fair_value AS DOUBLE), -2),
                         ROUND(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0), 0),
                         ROUND(COALESCE(TRY_CAST(shares_held AS DOUBLE), 0), 0)
-                    ORDER BY CASE WHEN source = 'bdc' THEN 0 ELSE 1 END
+                    ORDER BY
+                        CASE WHEN source = 'bdc' THEN 0 ELSE 1 END,
+                        COALESCE(CAST(accession_number AS VARCHAR), '') DESC,
+                        COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
+                        COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                        COALESCE(CAST(cusip AS VARCHAR), ''),
+                        COALESCE(CAST(fair_value AS VARCHAR), ''),
+                        COALESCE(CAST(cost AS VARCHAR), ''),
+                        COALESCE(CAST(shares_held AS VARCHAR), '')
                 ) AS _dedup_rank
             FROM combined
         ),
@@ -839,6 +908,7 @@ def build_unified_holdings(
     # Classification stabilization: override QoQ flips where one class
     # has >= 2x the quarters of the second-most-frequent for same position.
     combined = _stabilize_classification(combined)
+    combined = _restore_deterministic_classification_rules(combined)
 
     # Correct pct_of_net_assets for multi-entity BDCs
     combined = _correct_pct_of_net_assets(combined)

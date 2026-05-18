@@ -21,29 +21,37 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from pipeline.unified_holdings import (
+from pipeline.bdc_identifier import (
     _AFFILIATION_TAGS,
-    _apply_row_corrections,
+    _is_bad_issuer_name,
+    _is_bdc_aggregate_row,
+    _parse_bdc_identifier,
+)
+from pipeline.classification import (
+    _INDUSTRY_LABELS,
     _classify_bdc_asset,
     _classify_bdc_issuer,
     _classify_index,
     _classify_nport_asset,
     _classify_nport_issuer,
+    _infer_coupon_type,
+    _is_named_coinvest,
+    _normalize_rate,
+    _sql_classify_asset_class,
+    _sql_classify_exposure_type,
+    _sql_classify_index,
+)
+from pipeline.staging_bdc import (
+    _prepare_bdc,
+    _reclassify_named_fund_positions,
+)
+from pipeline.staging_nport import _prepare_nport
+from pipeline.unified_holdings import (
+    _apply_row_corrections,
     _CORRECTABLE_FIELDS,
     _correct_pct_of_net_assets,
     _enforce_schema,
-    _infer_coupon_type,
-    _INDUSTRY_LABELS,
-    _is_bad_issuer_name,
-    _is_bdc_aggregate_row,
-    _is_named_coinvest,
-    _normalize_rate,
-    _parse_bdc_identifier,
-    _prepare_bdc,
-    _prepare_nport,
-    _reclassify_named_fund_positions,
-    _sql_classify_exposure_type,
-    _sql_classify_asset_class,
+    _restore_deterministic_classification_rules,
     _stabilize_classification,
     build_unified_holdings,
     UNIFIED_COLUMNS,
@@ -2490,7 +2498,7 @@ class TestNewNportUnifiedColumns:
             "investment_type": "", "industry": "", "affiliation": "",
             "period": "2023-03-31",
         }])
-        from pipeline.unified_holdings import _prepare_bdc
+        from pipeline.staging_bdc import _prepare_bdc
         result = _prepare_bdc(bdc_df)
         assert result.iloc[0]["nport_is_default"] == ""
         assert result.iloc[0]["nport_currency_code"] == ""
@@ -3184,8 +3192,12 @@ class TestNormalizeRate:
         """0.50 is in the decimal band (<=0.50), so *100 = 50.0."""
         assert _normalize_rate(0.50) == pytest.approx(50.0)
 
+    def test_boundary_exactly_50(self):
+        """50 is implausible as a percentage rate; treated as bps, /100 = 0.50."""
+        assert _normalize_rate(50.0) == pytest.approx(0.50)
+
     def test_boundary_just_above_50(self):
-        """50.01 is in the bps band (>50), so /100 = 0.5001."""
+        """50.01 is in the bps band (>=50), so /100 = 0.5001."""
         assert _normalize_rate(50.01) == pytest.approx(0.5001)
 
     def test_negative_decimal(self):
@@ -3822,6 +3834,16 @@ class TestRateCap:
             full_row.update(row)
             data.append(full_row)
         return pd.DataFrame(data)
+
+    def test_nport_rate_exactly_50_capped_to_null(self):
+        """annualized_rate=50 -> interest_rate is NULL (>= 50 boundary)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "LON", "issuer_type": "CORP",
+            "annualized_rate": 50.0,
+        }])
+        result = _prepare_nport(df)
+        assert pd.isna(result.iloc[0]["interest_rate"])
 
     def test_nport_rate_above_50_capped_to_null(self):
         """annualized_rate=100 -> interest_rate is NULL."""
@@ -4728,12 +4750,13 @@ class TestEnforceSchema:
 # 2-Axis Classification Tests
 # ---------------------------------------------------------------------------
 
-def _sql_classify(rows):
+def _sql_classify(rows, include_index=False):
     """Helper: run exposure_type and asset_class SQL classification on test rows.
 
     Each row is a dict with keys: asset_category, issuer_category,
     issuer_name, instrument_description, nport_issuer_type (optional).
-    Returns list of (exposure_type, asset_class) tuples.
+    Returns list of (exposure_type, asset_class) tuples, or
+    (index_classification, exposure_type, asset_class) tuples when requested.
     """
     import duckdb
 
@@ -4758,9 +4781,17 @@ def _sql_classify(rows):
 
     exp_sql = _sql_classify_exposure_type()
     ac_sql = _sql_classify_asset_class()
+    idx_sql = _sql_classify_index()
+
+    select_cols = f"{exp_sql} AS exposure_type, {ac_sql} AS asset_class"
+    if include_index:
+        select_cols = (
+            f"{idx_sql} AS index_classification, "
+            f"{exp_sql} AS exposure_type, {ac_sql} AS asset_class"
+        )
 
     results = con.execute(f"""
-        SELECT {exp_sql} AS exposure_type, {ac_sql} AS asset_class
+        SELECT {select_cols}
         FROM test_data
     """).fetchall()
     con.close()
@@ -4992,6 +5023,35 @@ class TestAssetClass:
         ])
         assert result[0][1] == "REAL_ESTATE"
 
+    def test_nac_re_corporate_re_sql(self):
+        """CORPORATE + nport_asset_cat=RE -> REAL_ESTATE (not PRIVATE_EQUITY)."""
+        result = _sql_classify([
+            {"asset_category": "EQUITY_COMMON", "issuer_category": "CORPORATE",
+             "issuer_name": "Prime ST - HQ @ First",
+             "instrument_description": "", "nport_asset_cat": "RE"}
+        ])
+        assert result[0][1] == "REAL_ESTATE"
+
+    def test_nac_re_corporate_index_sql(self):
+        """CORPORATE + nport_asset_cat=RE -> DIRECT_REAL_ESTATE index."""
+        result = _sql_classify([
+            {"asset_category": "EQUITY_COMMON", "issuer_category": "CORPORATE",
+             "issuer_name": "Prime ST - HQ @ First",
+             "instrument_description": "", "nport_asset_cat": "RE"}
+        ], include_index=True)
+        assert result[0][0] == "DIRECT_REAL_ESTATE"
+        assert result[0][2] == "REAL_ESTATE"
+
+    def test_nac_re_loan_corporate_stays_lending_sql(self):
+        """LOAN + CORPORATE + nport_asset_cat=RE -> DIRECT_LENDING index, REAL_ESTATE asset_class."""
+        result = _sql_classify([
+            {"asset_category": "LOAN", "issuer_category": "CORPORATE",
+             "issuer_name": "RE SPV Mortgage",
+             "instrument_description": "", "nport_asset_cat": "RE"}
+        ], include_index=True)
+        assert result[0][0] == "DIRECT_LENDING"
+        assert result[0][2] == "REAL_ESTATE"
+
     def test_nac_dbt_fund_pc_sql(self):
         """FUND + nport_asset_cat=DBT -> PRIVATE_CREDIT."""
         result = _sql_classify([
@@ -5018,6 +5078,22 @@ class TestAssetClass:
              "instrument_description": "", "nport_asset_cat": "EC"}
         ])
         assert result[0][1] == "PRIVATE_CREDIT"
+
+    def test_bdc_vehicle_fund_sql_updates_index_and_asset_class(self):
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "Golub Capital BDC 4 Inc",
+             "instrument_description": "", "nport_asset_cat": "EC"}
+        ], include_index=True)
+        assert result[0] == ("PRIVATE_CREDIT_FUND", "FUND", "PRIVATE_CREDIT")
+
+    def test_bdc_advisory_fund_sql_excluded_from_bdc_vehicle_rule(self):
+        result = _sql_classify([
+            {"asset_category": "OTHER", "issuer_category": "FUND",
+             "issuer_name": "Stellus Private BDC Advisory LLC",
+             "instrument_description": "", "nport_asset_cat": "EC"}
+        ], include_index=True)
+        assert result[0] == ("PRIVATE_EQUITY_FUND", "FUND", "PRIVATE_EQUITY")
 
 
 class TestExpandedIndexClassification:
@@ -5046,6 +5122,12 @@ class TestExpandedIndexClassification:
         result = _classify_index("DEBT", "CORPORATE", "Barings CLO Ltd", "")
         assert result == "STRUCTURED_CREDIT"
 
+    def test_subordinate_note_structured_credit(self):
+        result = _classify_index(
+            "OTHER", "OTHER", "GPG Loan Funding, LL", "Subordinate Note"
+        )
+        assert result == "STRUCTURED_CREDIT"
+
     def test_fund_no_signals_unclassified(self):
         result = _classify_index("FUND", "FUND", "ABC Partners", "")
         assert result == "UNCLASSIFIED"
@@ -5060,6 +5142,18 @@ class TestExpandedIndexClassification:
         """FUND + nport_asset_cat=EC -> PRIVATE_EQUITY_FUND (not HEDGE_FUND)."""
         result = _classify_index("OTHER", "FUND", "Bain Capital Fund VII L.P.", "",
                                  nport_asset_cat="EC")
+        assert result == "PRIVATE_EQUITY_FUND"
+
+    def test_bdc_vehicle_fund_becomes_private_credit_fund(self):
+        result = _classify_index(
+            "OTHER", "FUND", "Golub Capital BDC 4 Inc", "", nport_asset_cat="EC"
+        )
+        assert result == "PRIVATE_CREDIT_FUND"
+
+    def test_bdc_advisory_fund_uses_existing_fallback(self):
+        result = _classify_index(
+            "OTHER", "FUND", "Stellus Private BDC Advisory LLC", "", nport_asset_cat="EC"
+        )
         assert result == "PRIVATE_EQUITY_FUND"
 
     def test_nac_ep_fund_becomes_pe_fund(self):
@@ -5108,6 +5202,27 @@ class TestExpandedIndexClassification:
         """CORPORATE + RE keywords (not LOAN/DEBT) -> DIRECT_REAL_ESTATE."""
         result = _classify_index("OTHER", "CORPORATE", "PRISA Real Estate Fund", "")
         assert result == "DIRECT_REAL_ESTATE"
+
+    def test_direct_real_estate_nac_re_equity(self):
+        """CORPORATE + nport_asset_cat=RE + EQUITY_COMMON -> DIRECT_REAL_ESTATE."""
+        result = _classify_index("EQUITY_COMMON", "CORPORATE",
+                                 "Prime ST - HQ @ First", "",
+                                 nport_asset_cat="RE")
+        assert result == "DIRECT_REAL_ESTATE"
+
+    def test_direct_real_estate_nac_re_preferred(self):
+        """CORPORATE + nport_asset_cat=RE + EQUITY_PREFERRED -> DIRECT_REAL_ESTATE."""
+        result = _classify_index("EQUITY_PREFERRED", "CORPORATE",
+                                 "Industrial AIP-PMR 3-Pack", "",
+                                 nport_asset_cat="RE")
+        assert result == "DIRECT_REAL_ESTATE"
+
+    def test_direct_lending_nac_re_loan(self):
+        """LOAN + CORPORATE + nport_asset_cat=RE -> DIRECT_LENDING (loan takes priority)."""
+        result = _classify_index("LOAN", "CORPORATE",
+                                 "RE SPV Mortgage Loan", "",
+                                 nport_asset_cat="RE")
+        assert result == "DIRECT_LENDING"
 
     def test_cash_government(self):
         result = _classify_index("DEBT", "GOVERNMENT", "U.S. Treasury", "")
@@ -5345,6 +5460,52 @@ class TestStabilizeClassification:
         result = _stabilize_classification(df)
         assert (result["index_classification"] == "DIRECT_LENDING").all()
 
+
+class TestRestoreDeterministicClassificationRules:
+    def test_subordinate_note_restored_after_stabilization(self):
+        row = {col: "" for col in UNIFIED_COLUMNS}
+        row.update({
+            "cik": "0001234567",
+            "source": "nport",
+            "issuer_name": "GPG Loan Funding, LL Subordinate Note /",
+            "instrument_description": "GPG Loan Funding, LL Subordinate Note /",
+            "asset_category": "OTHER",
+            "issuer_category": "CORPORATE",
+            "nport_asset_cat": "ABS-MBS",
+            "index_classification": "UNCLASSIFIED",
+            "exposure_type": "DIRECT",
+            "asset_class": "OTHER",
+        })
+        result = _restore_deterministic_classification_rules(
+            pd.DataFrame([row])[UNIFIED_COLUMNS]
+        )
+        assert result.iloc[0]["index_classification"] == "STRUCTURED_CREDIT"
+        assert result.iloc[0]["asset_class"] == "STRUCTURED_CREDIT"
+        assert result.iloc[0]["exposure_type"] == "DIRECT"
+
+    def test_bdc_vehicle_restored_after_stabilization(self):
+        row = {col: "" for col in UNIFIED_COLUMNS}
+        row.update({
+            "cik": "0001234567",
+            "source": "nport",
+            "issuer_name": "GOLUB CAPITAL BDC 4, Inc. /",
+            "instrument_description": "GOLUB CAPITAL BDC 4, Inc. /",
+            "asset_category": "OTHER",
+            "issuer_category": "FUND",
+            "nport_asset_cat": "EC",
+            "index_classification": "PRIVATE_EQUITY_FUND",
+            "exposure_type": "FUND",
+            "asset_class": "PRIVATE_EQUITY",
+        })
+        result = _restore_deterministic_classification_rules(
+            pd.DataFrame([row])[UNIFIED_COLUMNS]
+        )
+        assert result.iloc[0]["index_classification"] == "PRIVATE_CREDIT_FUND"
+        assert result.iloc[0]["asset_class"] == "PRIVATE_CREDIT"
+        assert result.iloc[0]["exposure_type"] == "FUND"
+
+
+class TestStabilizeClassificationMore:
     def test_empty_dataframe(self):
         """Empty DataFrame passes through without error."""
         df = pd.DataFrame(columns=UNIFIED_COLUMNS)
@@ -7216,3 +7377,325 @@ class TestPctPrefixSqlPath:
         )
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+
+# ---------------------------------------------------------------------------
+# Rate boundary fix: exactly 50 treated as bps (#6)
+# ---------------------------------------------------------------------------
+
+class TestRateBoundary50SqlPath:
+    """Rate=50 is implausible as percentage; treated as bps /100 = 0.50."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_interest_rate_50_normalized(self):
+        """interest_rate=50 -> 0.50% (bps band)."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan",
+            "cik": "123", "fair_value": 1000000, "interest_rate": 50,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["interest_rate"] == pytest.approx(0.50)
+
+    def test_basis_spread_50_normalized(self):
+        """basis_spread=50 -> 0.50% (bps band)."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan",
+            "cik": "123", "fair_value": 1000000,
+            "interest_rate": 8.0, "basis_spread": 50,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["basis_spread"] == pytest.approx(0.50)
+
+    def test_pik_rate_50_normalized(self):
+        """pik_rate=50 -> 0.50% (bps band)."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan",
+            "cik": "123", "fair_value": 1000000,
+            "interest_rate": 8.0, "pik_rate": 50,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate"] == pytest.approx(0.50)
+
+
+# ---------------------------------------------------------------------------
+# Maturity sentinel: year 2099 nullified (#11)
+# ---------------------------------------------------------------------------
+
+class TestMaturitySentinel2099:
+    """Maturity year 2099 (perpetual sentinel) is nullified."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_maturity_2099_nullified(self):
+        """maturity_date with year 2099 is treated as empty."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Equity",
+            "cik": "123", "fair_value": 1000000,
+            "maturity_date": "2099-12-31",
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["maturity_date"] == ""
+
+    def test_maturity_2098_kept(self):
+        """maturity_date with year 2098 is preserved (only 2099 is sentinel)."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan",
+            "cik": "123", "fair_value": 1000000,
+            "maturity_date": "2098-06-30",
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["maturity_date"] == "2098-06-30"
+
+    def test_maturity_normal_preserved(self):
+        """Normal maturity date (2027) is preserved."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan",
+            "cik": "123", "fair_value": 1000000,
+            "maturity_date": "2027-03-15",
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["maturity_date"] == "2027-03-15"
+
+
+# ---------------------------------------------------------------------------
+# CUSIP placeholder nullification (#4)
+# ---------------------------------------------------------------------------
+
+class TestCusipPlaceholderNullification:
+    """Placeholder CUSIPs (999999999, 000000000) nullified in output."""
+
+    def _make_nport_raw(self, rows):
+        """Create raw N-PORT DataFrame (pre-staging format)."""
+        cols = [
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "balance", "unit",
+            "other_unit_desc", "currency_code", "currency_value",
+            "exchange_rate", "percentage", "payoff_profile", "asset_cat",
+            "other_asset", "issuer_type", "other_issuer",
+            "investment_country", "is_restricted_security",
+            "fair_value_level", "derivative_cat", "maturity_date",
+            "coupon_type", "annualized_rate", "is_default",
+            "are_any_interest_payment", "is_any_portion_interest_paid",
+            "identifier_isin", "identifier_ticker", "other_identifier",
+            "cik", "registrant_name", "filing_date", "report_date",
+            "sub_type", "series_name", "series_id", "quarter",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_placeholder_999_nullified(self, tmp_path):
+        """CUSIP '999999999' is nullified in unified output."""
+        nport_df = self._make_nport_raw([{
+            "cik": "1234567", "registrant_name": "Test Fund",
+            "accession_number": "ACC1", "holding_id": "H1",
+            "filing_date": "2024-04-15", "report_date": "2024-03-31",
+            "issuer_name": "Acme Corp", "issuer_title": "Bond",
+            "issuer_cusip": "999999999",
+            "currency_value": "1000000", "percentage": "5.0",
+            "asset_cat": "DBT", "issuer_type": "CORP",
+            "payoff_profile": "Long", "investment_country": "US",
+            "annualized_rate": "8.5", "coupon_type": "Fixed",
+            "maturity_date": "2027-01-01", "balance": "1000000",
+            "unit": "PA", "series_name": "S1", "series_id": "SID1",
+            "quarter": "2024q1",
+        }])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test_cusip.csv"):
+            result = build_unified_holdings(
+                bdc_df=pd.DataFrame(),
+                nport_df=nport_df,
+            )
+        row = result[result["issuer_name"].str.contains("Acme", na=False)]
+        assert len(row) >= 1
+        cusip_val = row.iloc[0]["cusip"]
+        # Placeholder CUSIP should be nullified (None, NaN, or empty)
+        assert pd.isna(cusip_val) or str(cusip_val).strip() == ""
+
+    def test_normal_cusip_preserved(self, tmp_path):
+        """Normal CUSIP values are preserved."""
+        nport_df = self._make_nport_raw([{
+            "cik": "1234567", "registrant_name": "Test Fund",
+            "accession_number": "ACC1", "holding_id": "H2",
+            "filing_date": "2024-04-15", "report_date": "2024-03-31",
+            "issuer_name": "Beta Corp", "issuer_title": "Bond",
+            "issuer_cusip": "12345X789",
+            "currency_value": "500000", "percentage": "2.5",
+            "asset_cat": "DBT", "issuer_type": "CORP",
+            "payoff_profile": "Long", "investment_country": "US",
+            "annualized_rate": "7.0", "coupon_type": "Fixed",
+            "maturity_date": "2028-06-15", "balance": "500000",
+            "unit": "PA", "series_name": "S1", "series_id": "SID1",
+            "quarter": "2024q1",
+        }])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test_cusip.csv"):
+            result = build_unified_holdings(
+                bdc_df=pd.DataFrame(),
+                nport_df=nport_df,
+            )
+        row = result[result["issuer_name"].str.contains("Beta", na=False)]
+        assert len(row) >= 1
+        assert row.iloc[0]["cusip"] == "12345X789"
+
+
+# ---------------------------------------------------------------------------
+# N-PORT maturity sentinel: year 2099 nullified (Finding A)
+# ---------------------------------------------------------------------------
+
+class TestNportMaturitySentinel2099:
+    """N-PORT maturity year 2099 (perpetual sentinel) is nullified."""
+
+    def _make_nport_df(self, rows):
+        cols = [
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "currency_value", "percentage",
+            "asset_cat", "issuer_type", "investment_country",
+            "is_restricted_security", "fair_value_level", "maturity_date",
+            "coupon_type", "annualized_rate", "identifier_isin",
+            "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+            "filing_date", "report_date", "series_name", "series_id",
+            "quarter", "balance", "unit",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row["currency_value"] = 1000000
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_nport_maturity_2099_nullified(self):
+        """maturity_date with year 2099 is treated as empty in N-PORT."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "LON", "issuer_type": "CORP",
+            "maturity_date": "2099-12-31",
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["maturity_date"] == ""
+
+    def test_nport_maturity_2098_kept(self):
+        """maturity_date with year 2098 is preserved (only 2099 is sentinel)."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "LON", "issuer_type": "CORP",
+            "maturity_date": "2098-06-30",
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["maturity_date"] == "2098-06-30"
+
+    def test_nport_maturity_normal_preserved(self):
+        """Normal maturity date is preserved in N-PORT."""
+        df = self._make_nport_df([{
+            "fair_value_level": "3", "cik": "100",
+            "asset_cat": "LON", "issuer_type": "CORP",
+            "maturity_date": "2027-03-15",
+        }])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["maturity_date"] == "2027-03-15"
+
+
+# ---------------------------------------------------------------------------
+# PIK rate post-normalization cap (Finding B)
+# ---------------------------------------------------------------------------
+
+class TestPikRatePostNormalization:
+    """PIK rates at boundary (raw 0.20-0.50) are fixed when they exceed
+    the total interest rate after normalization."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_pik_0_5_with_rate_10_becomes_0_5(self):
+        """Raw pik=0.5 (50 bps) with interest_rate=0.1025 (10.25%).
+        After normalization: pik=50 > rate=10.25, so pik/100 = 0.50."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan (50 PIK)",
+            "cik": "123", "fair_value": 1000000,
+            "interest_rate": 0.1025, "pik_rate": 0.5,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate"] == pytest.approx(0.50)
+        assert result.iloc[0]["interest_rate"] == pytest.approx(10.25)
+
+    def test_pik_0_25_with_rate_10_becomes_0_25(self):
+        """Raw pik=0.25 (25 bps) with interest_rate=0.1086 (10.86%).
+        After normalization: pik=25 > rate=10.86, so pik/100 = 0.25."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan (25 PIK)",
+            "cik": "123", "fair_value": 1000000,
+            "interest_rate": 0.1086, "pik_rate": 0.25,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate"] == pytest.approx(0.25)
+
+    def test_pik_100pct_loan_not_capped(self):
+        """100% PIK loan: pik=0.1350 (13.5%) with rate=0.1350 (13.5%).
+        After normalization: pik=13.5 == rate=13.5, no cap needed."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - PIK Loan",
+            "cik": "123", "fair_value": 1000000,
+            "interest_rate": 0.1350, "pik_rate": 0.1350,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate"] == pytest.approx(13.50)
+        assert result.iloc[0]["interest_rate"] == pytest.approx(13.50)
+
+    def test_pik_below_20_not_capped(self):
+        """PIK=15% with rate=10% is not capped (< 20 threshold)."""
+        df = self._make_bdc_df([{
+            "investment_identifier": "Acme Corp - Term Loan",
+            "cik": "123", "fair_value": 1000000,
+            "interest_rate": 0.10, "pik_rate": 0.15,
+        }])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate"] == pytest.approx(15.0)

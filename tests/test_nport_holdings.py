@@ -344,6 +344,38 @@ class TestProcessQuarterTsv:
         if not filings_index.empty:
             assert "quarter" in filings_index.columns
 
+    def test_quarter_uses_report_date_not_sec_dataset_quarter(self):
+        """SEC bulk quarter is provenance; report_date defines period."""
+        zip_path = _make_test_zip({
+            "REGISTRANT.tsv": (
+                "ACCESSION_NUMBER\tCIK\tENTITY_NAME\n"
+                "0001234567-26-000001\t1234567\tTarget Fund Inc\n"
+            ),
+            "SUBMISSION.tsv": (
+                "ACCESSION_NUMBER\tFILING_DATE\tREPORT_DATE\tSUB_TYPE\n"
+                "0001234567-26-000001\t15-JAN-2026\t31-DEC-2025\tNPORT-P\n"
+            ),
+            "FUND_REPORTED_INFO.tsv": (
+                "ACCESSION_NUMBER\tSERIES_NAME\tSERIES_ID\tTOTAL_ASSETS\tNET_ASSETS\n"
+                "0001234567-26-000001\tTarget Growth Fund\tS000012345\t500000000\t450000000\n"
+            ),
+            "FUND_REPORTED_HOLDING.tsv": (
+                "ACCESSION_NUMBER\tHOLDING_ID\tISSUER_NAME\tCURRENCY_VALUE\n"
+                "0001234567-26-000001\tH001\tAcme Corp\t9800000\n"
+            ),
+        })
+        try:
+            holdings, fund_info, filings_index = _process_quarter_tsv(
+                zip_path, "2026q1", {"1234567"},
+            )
+        finally:
+            os.unlink(zip_path)
+
+        for df in [holdings, fund_info, filings_index]:
+            assert not df.empty
+            assert df["quarter"].iloc[0] == "2025q4"
+            assert df["sec_dataset_quarter"].iloc[0] == "2026q1"
+
     def test_fund_info_output(self, test_zip_path: Path):
         """Fund info should contain series data and monthly returns."""
         target_ciks = {"1234567"}

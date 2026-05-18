@@ -186,6 +186,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     date_cutoff = ("AND (TRY_CAST(report_date AS DATE) >= '2022-01-01'"
                    " OR TRY_CAST(report_date AS DATE) IS NULL)")
     if has_period:
+        period_sort_expr = "COALESCE(CAST(period AS VARCHAR), '')"
         period_filter = (
             f"""WHERE (TRY_CAST(period AS DATE) = TRY_CAST(report_date AS DATE)
                OR period IS NULL
@@ -193,6 +194,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             {date_cutoff}"""
         )
     else:
+        period_sort_expr = "''"
         period_filter = f"WHERE TRUE {date_cutoff}"
 
     sql = f"""
@@ -205,7 +207,21 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     raw AS (
         SELECT
             *,
-            ROW_NUMBER() OVER () AS _row_id,
+            ROW_NUMBER() OVER (
+                ORDER BY
+                    COALESCE(CAST(cik AS VARCHAR), ''),
+                    COALESCE(CAST(report_date AS VARCHAR), ''),
+                    COALESCE(CAST(filing_date AS VARCHAR), ''),
+                    COALESCE(CAST(accession_number AS VARCHAR), ''),
+                    COALESCE(CAST(form_type AS VARCHAR), ''),
+                    {period_sort_expr},
+                    COALESCE(CAST(investment_identifier AS VARCHAR), ''),
+                    COALESCE(CAST(dimensions_raw AS VARCHAR), ''),
+                    COALESCE(CAST(fair_value AS VARCHAR), ''),
+                    COALESCE(CAST(cost AS VARCHAR), ''),
+                    COALESCE(CAST(principal_amount AS VARCHAR), ''),
+                    COALESCE(CAST(shares_held AS VARCHAR), '')
+            ) AS _row_id,
             COALESCE(CAST(investment_identifier AS VARCHAR), '') AS _raw_id,
             COALESCE(lower(trim(CAST(investment_identifier AS VARCHAR))), '') AS _lower_id,
             TRY_CAST(fair_value AS DOUBLE) AS _fv,
@@ -270,7 +286,9 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 ROW_NUMBER() OVER (
                     PARTITION BY cik, CAST(report_date AS VARCHAR),
                         REGEXP_REPLACE(CAST(form_type AS VARCHAR), '/A$', '')
-                    ORDER BY CAST(filing_date AS VARCHAR) DESC
+                    ORDER BY
+                        CAST(filing_date AS VARCHAR) DESC,
+                        COALESCE(CAST(accession_number AS VARCHAR), '') DESC
                 ) AS _amd_rank
             FROM scale_corrected
             GROUP BY cik, report_date, accession_number, form_type, filing_date
@@ -655,7 +673,10 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                       + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'controlled') THEN 1 ELSE 0 END
                       + CASE WHEN contains(COALESCE(lower(CAST(_raw_id AS VARCHAR)), ''), 'control') THEN 1 ELSE 0 END,
                         LENGTH(COALESCE(CAST(_raw_id AS VARCHAR), '')),
-                        COALESCE(CAST(_raw_id AS VARCHAR), '')
+                        COALESCE(CAST(_raw_id AS VARCHAR), ''),
+                        COALESCE(CAST(dimensions_raw AS VARCHAR), ''),
+                        COALESCE(CAST(affiliation AS VARCHAR), ''),
+                        _row_id
                 ) AS _affil_rank
             FROM no_bad_issuers
         ) sub
@@ -791,25 +812,25 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             '' AS fair_value_level,
             CASE WHEN _ir IS NOT NULL AND _ir < 0 THEN NULL
                  WHEN _ir IS NOT NULL AND _ir <= 0.50 THEN _ir * 100
-                 WHEN _ir IS NOT NULL AND _ir > 50 THEN _ir / 100
+                 WHEN _ir IS NOT NULL AND _ir >= 50 THEN _ir / 100
                  ELSE _ir END AS interest_rate,
             CASE WHEN _bs IS NOT NULL AND _bs < 0 THEN NULL
                  WHEN _bs IS NOT NULL AND _bs <= 0.50 THEN _bs * 100
-                 WHEN _bs IS NOT NULL AND _bs > 50 THEN _bs / 100
+                 WHEN _bs IS NOT NULL AND _bs >= 50 THEN _bs / 100
                  ELSE _bs END AS basis_spread,
             COALESCE(NULLIF(CAST(reference_rate_type AS VARCHAR), ''), _text_ref_rate, '')
                 AS reference_rate_type,
             coupon_type,
             CASE WHEN _pik IS NOT NULL AND _pik < 0 THEN NULL
                  WHEN _pik IS NOT NULL AND _pik <= 0.50 THEN _pik * 100
-                 WHEN _pik IS NOT NULL AND _pik > 50 THEN _pik / 100
+                 WHEN _pik IS NOT NULL AND _pik >= 50 THEN _pik / 100
                  ELSE _pik END AS pik_rate,
             -- Maturity date with guard: reject dates before 1950
-            -- (catches 3-digit year typos like "6/28/225" and
-            -- filer sentinel dates like 12/31/1899)
+            -- and sentinel year 2099 (BDC convention for perpetual instruments)
             CASE
                 WHEN maturity_date IS NOT NULL AND CAST(maturity_date AS VARCHAR) != ''
                      AND TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
+                     AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
                     THEN CAST(maturity_date AS VARCHAR)
                 WHEN maturity_date IS NOT NULL AND CAST(maturity_date AS VARCHAR) != ''
                     THEN ''
@@ -820,6 +841,12 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                              THEN TRY_STRPTIME(_text_maturity_raw, '%m/%d/%y')
                              ELSE TRY_STRPTIME(_text_maturity_raw, '%m/%d/%Y')
                         END) >= DATE '1950-01-01'
+                    AND YEAR(
+                        CASE WHEN LENGTH(regexp_extract(
+                                 _text_maturity_raw, '/(\\d+)$', 1)) <= 2
+                             THEN TRY_STRPTIME(_text_maturity_raw, '%m/%d/%y')
+                             ELSE TRY_STRPTIME(_text_maturity_raw, '%m/%d/%Y')
+                        END) < 2099
                     THEN strftime(
                         CASE WHEN LENGTH(regexp_extract(
                                  _text_maturity_raw, '/(\\d+)$', 1)) <= 2
@@ -864,13 +891,26 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         FROM with_enrichment
     ),
 
+    -- CTE 12a: Fix PIK rate boundary errors.
+    -- Raw XBRL pik_rate at 0.20-0.50 (20-50 bps) gets wrongly *100'd to 20-50%.
+    -- If normalized pik_rate >= 20 and exceeds interest_rate, it was bps: /100.
+    unified_pik_fixed AS (
+        SELECT * EXCLUDE (pik_rate),
+            CASE WHEN pik_rate >= 20
+                  AND interest_rate IS NOT NULL
+                  AND pik_rate > interest_rate
+                 THEN pik_rate / 100
+                 ELSE pik_rate END AS pik_rate
+        FROM unified
+    ),
+
     -- CTE 12: Normalize issuer_name casing within each CIK.
     -- When the same issuer appears with different casing across XBRL
     -- dimension paths, pick the most frequent variant per CIK.
     -- Tiebreak: prefer mixed-case over ALL-CAPS, then alphabetical.
     _casing_vote AS (
         SELECT cik, issuer_name, COUNT(*) AS _cnt
-        FROM unified
+        FROM unified_pik_fixed
         WHERE issuer_name IS NOT NULL AND issuer_name != ''
         GROUP BY cik, issuer_name
     ),
@@ -889,7 +929,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     with_casing AS (
         SELECT u.* EXCLUDE (issuer_name),
             COALESCE(cc._canonical, u.issuer_name) AS issuer_name
-        FROM unified u
+        FROM unified_pik_fixed u
         LEFT JOIN _canonical_casing cc
             ON u.cik = cc.cik
             AND LOWER(u.issuer_name) = cc._name_lower

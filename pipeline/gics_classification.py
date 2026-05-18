@@ -637,11 +637,44 @@ def _get_candidates(
 # ---------------------------------------------------------------------------
 
 
+_LOAN_DESCRIPTORS = re.compile(
+    r",\s*("
+    r"first lien|second lien|third lien|"
+    r"senior secured|senior unsecured|senior subordinated|"
+    r"subordinated|unitranche|mezzanine|"
+    r"term loan|revolver|delayed draw|"
+    r"one stop|common equity|preferred (stock|equity|shares)|"
+    r"member interest|affiliated issuer|"
+    r"series [a-z]|class [a-z]"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def _extract_short_name(name: str) -> str:
+    """Extract company name portion from a BDC identifier that may include loan descriptors.
+
+    Example: "KnowBe4, Inc., First Lien Term Loan" -> normalize("KnowBe4, Inc.") -> "knowbe4"
+    """
+    # Try splitting at first loan descriptor
+    m = _LOAN_DESCRIPTORS.search(name.lower())
+    if m:
+        company_part = name[: m.start()].strip().rstrip(",").strip()
+        if company_part:
+            return _normalize_company_name(company_part)
+    return ""
+
+
 def _apply_gics_to_holdings(
     unified_df: pd.DataFrame,
     cache: dict[str, tuple[str, str, str]],
 ) -> pd.DataFrame:
-    """Apply GICS classification to unified holdings via DuckDB JOIN."""
+    """Apply GICS classification to unified holdings via DuckDB JOIN.
+
+    Uses two-pass matching:
+    1. Exact match on full normalized issuer_name
+    2. Fallback: extract company name portion (strip loan descriptors) and match
+    """
     # Build lookup DataFrame
     lookup_records = [
         {"company_name_norm": name, "gics_sub_industry": gics}
@@ -656,12 +689,18 @@ def _apply_gics_to_holdings(
     lookup_df = pd.DataFrame(lookup_records)
 
     # Pre-compute name normalization mapping (avoids DuckDB UDF overhead)
+    # Includes both full-name normalization and short-name extraction
     unique_names = unified_df["issuer_name"].dropna().unique()
     name_map_records = []
     for name in unique_names:
         norm = _normalize_company_name(str(name))
+        short = _extract_short_name(str(name))
         if norm:
-            name_map_records.append({"issuer_name": str(name), "_name_norm": norm})
+            name_map_records.append({
+                "issuer_name": str(name),
+                "_name_norm": norm,
+                "_name_short": short if short else norm,
+            })
 
     if not name_map_records:
         return unified_df
@@ -679,13 +718,16 @@ def _apply_gics_to_holdings(
 
     result = con.execute("""
         SELECT h.* EXCLUDE (gics_sub_industry, _row_idx),
-               COALESCE(g.gics_sub_industry, '') AS gics_sub_industry,
+               COALESCE(g1.gics_sub_industry, g2.gics_sub_industry, '') AS gics_sub_industry,
                h._row_idx
         FROM holdings h
         LEFT JOIN name_map nm
           ON CAST(h.issuer_name AS VARCHAR) = nm.issuer_name
-        LEFT JOIN gics_lookup g
-          ON nm._name_norm = g.company_name_norm
+        LEFT JOIN gics_lookup g1
+          ON nm._name_norm = g1.company_name_norm
+        LEFT JOIN gics_lookup g2
+          ON nm._name_short = g2.company_name_norm
+          AND g1.gics_sub_industry IS NULL
         ORDER BY h._row_idx
     """).fetchdf()
     con.close()

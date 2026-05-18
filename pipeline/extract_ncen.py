@@ -58,6 +58,7 @@ def _parse_ncen_financials(
     """
     empty_cols = [
         "cik", "entity_name", "report_date", "report_quarter",
+        "accession_number",
         "management_fee_pct", "expense_ratio_pct", "nav_per_share",
         "market_price_per_share", "monthly_avg_net_assets",
         "is_debt_default", "is_dividend_arrears",
@@ -165,6 +166,9 @@ def _parse_ncen_financials(
                     all_rows.append({
                         "cik": cik,
                         "entity_name": entity_name,
+                        "accession_number": str(
+                            row.get("ACCESSION_NUMBER", "")
+                        ).strip(),
                         "report_date": report_date,
                         "report_quarter": report_quarter,
                         "management_fee_pct": _to_float(
@@ -209,8 +213,27 @@ def _parse_ncen_financials(
 
     df = pd.DataFrame(all_rows)
 
-    # Dedup by (cik, report_date), keep first occurrence
-    df = df.drop_duplicates(subset=["cik", "report_date"], keep="first")
+    # Dedup by (cik, report_date) deterministically.  The same filing can
+    # appear in adjacent SEC quarterly ZIPs, and keep='first' depends on read
+    # order rather than source evidence.
+    df = (
+        df.sort_values(
+            [
+                "cik",
+                "report_date",
+                "accession_number",
+                "entity_name",
+                "nav_per_share",
+                "expense_ratio_pct",
+                "management_fee_pct",
+            ],
+            ascending=[True, True, False, True, False, False, False],
+            na_position="last",
+            kind="mergesort",
+        )
+        .drop_duplicates(subset=["cik", "report_date"], keep="first")
+        .reset_index(drop=True)
+    )
 
     # ----- Guard rails for N-CEN data quality -----
     # 1. Negative management_fee_pct -> 0 (fee waivers)

@@ -16,9 +16,11 @@ import pytest
 from pipeline.position_matching import (
     MATCH_COLUMNS,
     MAX_CUSIP_MULTIPLICITY,
+    MAX_FV_RATIO,
+    MAX_FV_RATIO_IDENTIFIER,
+    MAX_FV_RATIO_WITHIN_FILING,
     MAX_NAME_MULTIPLICITY,
     MIN_JW_SIMILARITY,
-    MAX_FV_RATIO,
     assign_position_ids,
     match_positions,
 )
@@ -1206,3 +1208,97 @@ class TestPositionIds:
         pos, _ = compute_returns(matches_df=matches)
         assert "position_id" in pos.columns
         assert pos["position_id"].iloc[0] == "POS-00000001"
+
+
+# ---------------------------------------------------------------------------
+# FV ratio guards (#3)
+# ---------------------------------------------------------------------------
+
+class TestFvRatioGuards:
+    """Extreme FV ratio pairs are rejected by tier-specific guards."""
+
+    def test_tier_a_rejects_1000x_fv_ratio(self):
+        """Tier A rejects within-filing pair with 1000x FV ratio."""
+        bdc_raw = _make_bdc_raw([
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "1000000000"},  # $1B
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2024-06-30", "period": "2023-12-31",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "1000"},  # $1K -- 1,000,000x ratio
+        ])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "100", "entity_name": "TestBDC",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "1000000000",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Acme Corp - Loan"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        method_a = result[result["match_method"] == "A_within_filing"]
+        assert len(method_a) == 0, "1000x FV ratio pair should be rejected by Tier A guard"
+
+    def test_tier_a_accepts_normal_fv_ratio(self):
+        """Tier A accepts within-filing pair with 2x FV ratio."""
+        bdc_raw = _make_bdc_raw([
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "2000000"},
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2024-06-30", "period": "2023-12-31",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "1000000"},
+        ])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "100", "entity_name": "TestBDC",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "2000000",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Acme Corp - Loan"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        method_a = result[result["match_method"] == "A_within_filing"]
+        assert len(method_a) == 1, "2x FV ratio pair should be accepted by Tier A"
+
+    def test_tier_b1_rejects_extreme_fv_ratio(self):
+        """Tier B1 (CUSIP) rejects pair with >50x FV ratio."""
+        unified = _make_unified([
+            # Q1
+            {"source": "nport", "cik": "200", "entity_name": "TestFund",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp",
+             "fair_value": "100", "cusip": "12345X789",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            # Q2 -- 100,000x larger FV
+            {"source": "nport", "cik": "200", "entity_name": "TestFund",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "10000000", "cusip": "12345X789",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified)
+        method_b1 = result[result["match_method"] == "B1_cusip"]
+        assert len(method_b1) == 0, "100,000x FV ratio should be rejected by Tier B1 guard"
+
+    def test_tier_b2_rejects_extreme_fv_ratio(self):
+        """Tier B2 (exact name) rejects pair with >50x FV ratio."""
+        unified = _make_unified([
+            {"source": "nport", "cik": "300", "entity_name": "TestFund",
+             "report_date": "2024-03-31", "issuer_name": "Unique Acme Co",
+             "fair_value": "500", "cusip": "",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "nport", "cik": "300", "entity_name": "TestFund",
+             "report_date": "2024-06-30", "issuer_name": "Unique Acme Co",
+             "fair_value": "50000000", "cusip": "",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified)
+        method_b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(method_b2) == 0, "100,000x FV ratio should be rejected by Tier B2 guard"

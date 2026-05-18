@@ -242,13 +242,14 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS exposure_type,
             '' AS asset_class,
             CAST(TRY_CAST(fair_value_level AS INTEGER) AS VARCHAR) AS fair_value_level,
-            CASE WHEN TRY_CAST(annualized_rate AS DOUBLE) > 50 THEN NULL
+            CASE WHEN TRY_CAST(annualized_rate AS DOUBLE) >= 50 THEN NULL
                  ELSE TRY_CAST(annualized_rate AS DOUBLE) END AS interest_rate,
             NULL AS basis_spread,
             '' AS reference_rate_type,
             coupon_type,
             NULL AS pik_rate,
             CASE WHEN TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
+                      AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
                  THEN maturity_date ELSE '' END AS maturity_date,
             CASE WHEN upper(trim(unit)) = 'NS'
                  THEN TRY_CAST(balance AS DOUBLE) END AS shares_held,
@@ -266,7 +267,11 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             payoff_profile AS nport_payoff_profile,
             investment_country AS nport_investment_country,
             is_restricted_security AS nport_is_restricted,
-            quarter AS nport_quarter,
+            CASE WHEN TRY_CAST(report_date AS DATE) IS NOT NULL THEN
+                CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                || 'q'
+                || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+            ELSE quarter END AS nport_quarter,
             COALESCE(CAST(is_default AS VARCHAR), '') AS nport_is_default,
             COALESCE(CAST(are_any_interest_payment AS VARCHAR), '') AS nport_are_interest_payments_in_arrears,
             COALESCE(CAST(is_any_portion_interest_paid AS VARCHAR), '') AS nport_is_paid_in_kind,

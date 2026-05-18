@@ -68,6 +68,29 @@ def _normalise_date(val: str) -> str:
     return val
 
 
+def _quarter_from_report_date(val: object) -> str:
+    """Return calendar quarter label for a normalized report date."""
+    norm = _normalise_date(val) if isinstance(val, str) else val
+    dt = pd.to_datetime(norm, errors="coerce")
+    if pd.isna(dt):
+        return ""
+    return f"{dt.year}q{((dt.month - 1) // 3) + 1}"
+
+
+def _set_economic_quarter(df: pd.DataFrame, sec_dataset_quarter: str) -> pd.DataFrame:
+    """Set public quarter from report_date and retain SEC bulk quarter."""
+    if df.empty:
+        return df
+    df = df.copy()
+    df["sec_dataset_quarter"] = sec_dataset_quarter
+    if "report_date" in df.columns:
+        derived = df["report_date"].apply(_quarter_from_report_date)
+        df["quarter"] = derived.where(derived.astype(str) != "", sec_dataset_quarter)
+    else:
+        df["quarter"] = sec_dataset_quarter
+    return df
+
+
 # ===========================================================================
 # TSV reading helper
 # ===========================================================================
@@ -556,18 +579,21 @@ def _process_quarter_tsv(
         for dc in ["filing_date", "report_date", "maturity_date"]:
             if dc in holdings.columns:
                 holdings[dc] = holdings[dc].apply(_normalise_date)
+        holdings = _set_economic_quarter(holdings, quarter)
 
     if not fund_info.empty:
         fund_info.columns = fund_info.columns.str.lower()
         for dc in ["filing_date", "report_date"]:
             if dc in fund_info.columns:
                 fund_info[dc] = fund_info[dc].apply(_normalise_date)
+        fund_info = _set_economic_quarter(fund_info, quarter)
 
     if not filings_index.empty:
         filings_index.columns = filings_index.columns.str.lower()
         for dc in ["filing_date", "report_date"]:
             if dc in filings_index.columns:
                 filings_index[dc] = filings_index[dc].apply(_normalise_date)
+        filings_index = _set_economic_quarter(filings_index, quarter)
 
     return holdings, fund_info, filings_index
 

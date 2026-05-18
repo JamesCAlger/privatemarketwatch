@@ -96,6 +96,17 @@ def _parse_args() -> argparse.Namespace:
              "coverage analysis). Requires --unified or existing unified holdings file.",
     )
     parser.add_argument(
+        "--validate-rules",
+        action="store_true",
+        help="Run report-only V1 DuckDB validation rules over output CSV artifacts.",
+    )
+    parser.add_argument(
+        "--rules-category",
+        nargs="+",
+        choices=["PC", "IDX", "T", "S", "R", "XS", "F", "M"],
+        help="Limit --validate-rules to one or more rule categories.",
+    )
+    parser.add_argument(
         "--llm-review",
         action="store_true",
         help="Run LLM-assisted classification on remaining UNCLASSIFIED holdings. "
@@ -180,6 +191,33 @@ def _is_validate_only(args: argparse.Namespace) -> bool:
         and not args.nport_xml
         and not args.unified
         and not args.extract
+        and not args.validate_rules
+        and not args.llm_review
+        and not args.llm_review_dry_run
+        and not args.entities
+        and not args.returns
+        and not args.classify_gics
+        and args.gics_web_search is None
+        and not args.extract_html
+        and not args.financials
+        and not args.load_db
+        and not args.export_frontend
+        and not args.llm_fund_validation
+        and not args.classify_funds
+    )
+
+
+def _is_validate_rules_only(args: argparse.Namespace) -> bool:
+    return (
+        args.validate_rules
+        and not args.exhaustive
+        and not args.holdings
+        and not args.ciks
+        and not args.nport
+        and not args.nport_xml
+        and not args.unified
+        and not args.extract
+        and not args.validate
         and not args.llm_review
         and not args.llm_review_dry_run
         and not args.entities
@@ -247,6 +285,11 @@ def main() -> None:
         mode_parts.append("EXTRACT")
     if args.validate:
         mode_parts.append("VALIDATE")
+    if args.validate_rules:
+        if args.rules_category:
+            mode_parts.append("VALIDATE-RULES:" + ",".join(args.rules_category))
+        else:
+            mode_parts.append("VALIDATE-RULES")
     if args.llm_review:
         mode_parts.append("LLM-REVIEW")
     if args.llm_review_dry_run:
@@ -275,6 +318,19 @@ def main() -> None:
 
     if _is_validate_only(args):
         _run_cached_validation(logger)
+        total = time.time() - t0
+        logger.info("=== Pipeline complete in %.1f s ===", total)
+        return
+
+    if _is_validate_rules_only(args):
+        from pipeline.validation_rules import run_all
+
+        aggregate_df, detail_df = run_all(categories=args.rules_category)
+        logger.info(
+            "Validation rules completed: %d aggregate rows, %d detail rows",
+            len(aggregate_df),
+            len(detail_df),
+        )
         total = time.time() - t0
         logger.info("=== Pipeline complete in %.1f s ===", total)
         return
@@ -658,6 +714,26 @@ def main() -> None:
         logger.info("Frontend export step completed in %.1f s",
                      time.time() - t13)
 
+    validation_rules_aggregate_df = None
+    validation_rules_detail_df = None
+    if args.validate_rules:
+        logger.info("")
+        t14 = time.time()
+        try:
+            from pipeline.validation_rules import run_all
+
+            validation_rules_aggregate_df, validation_rules_detail_df = run_all(
+                categories=args.rules_category,
+            )
+            logger.info(
+                "Validation rules: %d aggregate rows, %d detail rows",
+                len(validation_rules_aggregate_df),
+                len(validation_rules_detail_df),
+            )
+        except Exception as exc:
+            logger.error("Validation rules failed: %s", exc, exc_info=True)
+        logger.info("Validation rules step completed in %.1f s", time.time() - t14)
+
     # ── Summary ──
     total_time = time.time() - t0
     logger.info("")
@@ -726,6 +802,11 @@ def main() -> None:
         logger.info("  Position returns: %d", len(position_returns_df))
     if index_returns_df is not None and not index_returns_df.empty:
         logger.info("  Index return quarters: %d", len(index_returns_df))
+    if validation_rules_aggregate_df is not None:
+        logger.info("  Validation rule rows: %d aggregate, %d detail",
+                    len(validation_rules_aggregate_df),
+                    len(validation_rules_detail_df)
+                    if validation_rules_detail_df is not None else 0)
 
     logger.info("")
     logger.info("Output files:")
@@ -796,6 +877,11 @@ def main() -> None:
         from pipeline.export_frontend import FRONTEND_DATA_DIR
         for jf in sorted(FRONTEND_DATA_DIR.glob("*.json")):
             output_files.append(jf)
+    if args.validate_rules:
+        output_files.extend([
+            OUTPUT_DIR / "validation_rules_aggregate.csv",
+            OUTPUT_DIR / "validation_rules_detail.csv",
+        ])
 
     for path in output_files:
         if path.exists():

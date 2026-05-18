@@ -271,8 +271,11 @@ _REAL_ESTATE_FUND_KEYWORDS = [
 # Structured credit keywords
 _STRUCTURED_CREDIT_KEYWORDS = [
     "clo ", " clo,", "clo/", "loan note issuer",
-    "structured note", "subordinated note", "sub note",
+    "structured note", "subordinate note", "subordinated note", "sub note",
 ]
+
+_BDC_VEHICLE_RE = re.compile(r"\bbdc\b", re.IGNORECASE)
+_BDC_MANAGER_RE = re.compile(r"\b(advisory|management|manager)\b", re.IGNORECASE)
 
 # Cash/liquid keywords (safe for any issuer)
 _CASH_KEYWORDS = [
@@ -331,6 +334,24 @@ def _sql_keyword_check(col: str, keywords: list[str]) -> str:
     clauses = [f"contains({col}, '{kw.replace(chr(39), chr(39)+chr(39))}')"
                for kw in keywords]
     return "(" + " OR ".join(clauses) + ")"
+
+
+def _sql_is_bdc_vehicle_fund() -> str:
+    """BDC-named fund vehicle, excluding adviser/manager economics."""
+    return (
+        "(issuer_category = 'FUND' "
+        "AND regexp_matches(_combined_fund_text, '\\bbdc\\b') "
+        "AND NOT regexp_matches(_combined_fund_text, '\\b(advisory|management|manager)\\b'))"
+    )
+
+
+def _is_bdc_vehicle_fund(issuer_category: str, combined_text: str) -> bool:
+    """Return True for BDC vehicle rows that should be private credit funds."""
+    return (
+        issuer_category == "FUND"
+        and bool(_BDC_VEHICLE_RE.search(combined_text))
+        and not _BDC_MANAGER_RE.search(combined_text)
+    )
 
 
 def _sql_exact_match(col: str, values: set[str]) -> str:
@@ -439,18 +460,18 @@ def _sql_classify_index() -> str:
 
     Mirrors _classify_index() logic including fund signal counting.
     Priority order:
-    1. DIRECT_LENDING (LOAN/DEBT + CORPORATE)
-    2. PREFERRED_EQUITY (EQUITY_PREFERRED + CORPORATE)
-    3. COMMON_EQUITY (EQUITY_COMMON + CORPORATE)
-    4. REAL_ESTATE_FUND (FUND + RE keywords)
-    5. STRUCTURED_CREDIT (CLO keywords)
-    6. PRIVATE_CREDIT_FUND (FUND + credit signals)
-    7. PRIVATE_EQUITY_FUND (FUND + PE signals)
-    8. Fund tiebreaker (credit vs PE count)
-    9. HEDGE_FUND (FUND + explicit hedge keywords)
-    10. PRIVATE_EQUITY_FUND (FUND + roman numeral vintage series)
-    11. UNCLASSIFIED (FUND + no signal)
-    12. DIRECT_REAL_ESTATE (CORPORATE + RE keywords)
+    1. STRUCTURED_CREDIT (CLO keywords)
+    2. DIRECT_LENDING (LOAN/DEBT + CORPORATE)
+    3. DIRECT_REAL_ESTATE (CORPORATE + nport_asset_cat=RE or RE keywords)
+    4. PREFERRED_EQUITY (EQUITY_PREFERRED + CORPORATE)
+    5. COMMON_EQUITY (EQUITY_COMMON + CORPORATE)
+    6. REAL_ESTATE_FUND (FUND + RE keywords or nport_asset_cat=RE)
+    7. PRIVATE_CREDIT_FUND (FUND + credit signals)
+    8. PRIVATE_EQUITY_FUND (FUND + PE signals)
+    9. Fund tiebreaker (credit vs PE count)
+    10. HEDGE_FUND (FUND + explicit hedge keywords)
+    11. PRIVATE_EQUITY_FUND (FUND + roman numeral vintage series)
+    12. UNCLASSIFIED (FUND + no signal)
     13. CASH (GOVERNMENT or cash keywords)
     14. UNCLASSIFIED (fallback)
     """
@@ -473,6 +494,7 @@ def _sql_classify_index() -> str:
     re_fund_kw = _sql_keyword_check("_combined_fund_text", _REAL_ESTATE_FUND_KEYWORDS)
     # Structured credit keyword checks
     sc_kw = _sql_keyword_check("_combined_fund_text", _STRUCTURED_CREDIT_KEYWORDS)
+    bdc_vehicle_fund = _sql_is_bdc_vehicle_fund()
     # Cash keyword checks
     cash_kw = _sql_keyword_check("_combined_fund_text", _CASH_KEYWORDS)
     cash_guard_kw = _sql_keyword_check("_combined_fund_text", _CASH_CORPORATE_GUARD_KEYWORDS)
@@ -487,10 +509,12 @@ def _sql_classify_index() -> str:
     return f"""CASE
   WHEN {sc_kw} THEN 'STRUCTURED_CREDIT'
   WHEN asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE' THEN 'DIRECT_LENDING'
+  WHEN issuer_category = 'CORPORATE' AND ({nac_re} OR {re_kw} OR {re_fund_kw}) THEN 'DIRECT_REAL_ESTATE'
   WHEN asset_category = 'EQUITY_PREFERRED' AND issuer_category = 'CORPORATE' THEN 'PREFERRED_EQUITY'
   WHEN asset_category = 'EQUITY_COMMON' AND issuer_category = 'CORPORATE' THEN 'COMMON_EQUITY'
   WHEN issuer_category = 'FUND' AND ({re_kw} OR {re_fund_kw}) THEN 'REAL_ESTATE_FUND'
   WHEN issuer_category = 'FUND' AND {nac_re} THEN 'REAL_ESTATE_FUND'
+  WHEN {bdc_vehicle_fund} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {has_credit} AND NOT {has_pe} THEN 'PRIVATE_CREDIT_FUND'
   WHEN issuer_category = 'FUND' AND {has_pe} AND NOT {has_credit} THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND {has_credit} AND {has_pe} AND {credit_count} >= {pe_count} THEN 'PRIVATE_CREDIT_FUND'
@@ -500,7 +524,6 @@ def _sql_classify_index() -> str:
   WHEN issuer_category = 'FUND' AND {nac_eq} THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} AND regexp_matches(_combined_fund_text, '\\bfund\\s+(i{{1,3}}|iv|vi{{0,3}}|viii|ix|xi{{0,3}}|xiv|xv|x)\\b') THEN 'PRIVATE_EQUITY_FUND'
   WHEN issuer_category = 'FUND' AND NOT {has_credit} AND NOT {has_pe} THEN 'UNCLASSIFIED'
-  WHEN issuer_category = 'CORPORATE' AND ({re_kw} OR {re_fund_kw}) THEN 'DIRECT_REAL_ESTATE'
   WHEN issuer_category = 'GOVERNMENT' OR {cash_kw} THEN 'CASH'
   WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'CASH'
   ELSE 'UNCLASSIFIED'
@@ -558,8 +581,8 @@ def _sql_classify_asset_class() -> str:
 
     Priority order:
     1. CASH -- government + cash keywords
-    2. REAL_ESTATE -- RE keywords (generic any issuer, fund-only gated)
-       + nport_asset_cat=RE for funds without keyword signal
+    2. REAL_ESTATE -- RE keywords (generic any issuer)
+       + nport_asset_cat=RE (any issuer, including CORPORATE)
     3. STRUCTURED_CREDIT -- CLO keywords
     4. PRIVATE_CREDIT -- LOAN/DEBT+CORPORATE or credit fund signals
        + nport_asset_cat=DBT for funds without keyword signal
@@ -573,6 +596,7 @@ def _sql_classify_asset_class() -> str:
     re_kw = _sql_keyword_check("_combined_fund_text", _REAL_ESTATE_KEYWORDS)
     re_fund_kw = _sql_keyword_check("_combined_fund_text", _REAL_ESTATE_FUND_KEYWORDS)
     sc_kw = _sql_keyword_check("_combined_fund_text", _STRUCTURED_CREDIT_KEYWORDS)
+    bdc_vehicle_fund = _sql_is_bdc_vehicle_fund()
     hedge_kw = _sql_keyword_check("_combined_fund_text", _HEDGE_FUND_KEYWORDS)
 
     # Credit/PE signal checks (reuse existing lists)
@@ -591,9 +615,10 @@ def _sql_classify_asset_class() -> str:
   WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'CASH'
   WHEN {re_kw} THEN 'REAL_ESTATE'
   WHEN issuer_category = 'FUND' AND {re_fund_kw} THEN 'REAL_ESTATE'
-  WHEN issuer_category = 'FUND' AND {nac_re} THEN 'REAL_ESTATE'
+  WHEN {nac_re} THEN 'REAL_ESTATE'
   WHEN {sc_kw} THEN 'STRUCTURED_CREDIT'
   WHEN asset_category IN ('LOAN', 'DEBT') AND issuer_category = 'CORPORATE' THEN 'PRIVATE_CREDIT'
+  WHEN {bdc_vehicle_fund} THEN 'PRIVATE_CREDIT'
   WHEN issuer_category = 'FUND' AND {has_credit} THEN 'PRIVATE_CREDIT'
   WHEN issuer_category = 'FUND' AND {nac_dbt} THEN 'PRIVATE_CREDIT'
   WHEN asset_category IN ('EQUITY_COMMON', 'EQUITY_PREFERRED') AND issuer_category = 'CORPORATE' THEN 'PRIVATE_EQUITY'
@@ -764,17 +789,17 @@ def _classify_index(asset_category: str, issuer_category: str,
     Priority order:
       1. STRUCTURED_CREDIT:   CLO keywords (before DIRECT_LENDING to catch CLO tranches)
       2. DIRECT_LENDING:      LOAN/DEBT + CORPORATE
-      3. PREFERRED_EQUITY:    EQUITY_PREFERRED + CORPORATE
-      4. COMMON_EQUITY:       EQUITY_COMMON + CORPORATE
-      5. REAL_ESTATE_FUND:    FUND + RE keywords or nport_asset_cat=RE
-      6. PRIVATE_CREDIT_FUND: FUND + credit signals
-      7. PRIVATE_EQUITY_FUND: FUND + PE signals
-      8. HEDGE_FUND:          FUND + explicit hedge keywords (before nac fallback)
-      9. PRIVATE_CREDIT_FUND: FUND + nport_asset_cat=DBT/LON
-      10. PRIVATE_EQUITY_FUND: FUND + nport_asset_cat=EC/EP
-      11. PRIVATE_EQUITY_FUND: FUND + roman numeral vintage series (Fund IV, etc.)
-      12. UNCLASSIFIED:       FUND + no signal at all
-      13. DIRECT_REAL_ESTATE: CORPORATE + RE keywords
+      3. DIRECT_REAL_ESTATE:  CORPORATE + nport_asset_cat=RE or RE keywords
+      4. PREFERRED_EQUITY:    EQUITY_PREFERRED + CORPORATE
+      5. COMMON_EQUITY:       EQUITY_COMMON + CORPORATE
+      6. REAL_ESTATE_FUND:    FUND + RE keywords or nport_asset_cat=RE
+      7. PRIVATE_CREDIT_FUND: FUND + credit signals
+      8. PRIVATE_EQUITY_FUND: FUND + PE signals
+      9. HEDGE_FUND:          FUND + explicit hedge keywords (before nac fallback)
+      10. PRIVATE_CREDIT_FUND: FUND + nport_asset_cat=DBT/LON
+      11. PRIVATE_EQUITY_FUND: FUND + nport_asset_cat=EC/EP
+      12. PRIVATE_EQUITY_FUND: FUND + roman numeral vintage series (Fund IV, etc.)
+      13. UNCLASSIFIED:       FUND + no signal at all
       14. CASH:               GOVERNMENT or cash keywords
       15. UNCLASSIFIED:       everything else
     """
@@ -795,19 +820,24 @@ def _classify_index(asset_category: str, issuer_category: str,
     if asset_category in ("LOAN", "DEBT") and issuer_category == "CORPORATE":
         return "DIRECT_LENDING"
 
+    # Direct real estate (CORPORATE + nport_asset_cat=RE or RE keywords)
+    has_re = any(kw in combined for kw in _REAL_ESTATE_KEYWORDS)
+    has_re_fund = any(kw in combined for kw in _REAL_ESTATE_FUND_KEYWORDS)
+    if issuer_category == "CORPORATE" and (nac == "RE" or has_re or has_re_fund):
+        return "DIRECT_REAL_ESTATE"
+
     if asset_category == "EQUITY_PREFERRED" and issuer_category == "CORPORATE":
         return "PREFERRED_EQUITY"
 
     if asset_category == "EQUITY_COMMON" and issuer_category == "CORPORATE":
         return "COMMON_EQUITY"
-
-    # Real estate fund
-    has_re = any(kw in combined for kw in _REAL_ESTATE_KEYWORDS)
-    has_re_fund = any(kw in combined for kw in _REAL_ESTATE_FUND_KEYWORDS)
     if issuer_category == "FUND" and (has_re or has_re_fund):
         return "REAL_ESTATE_FUND"
     if issuer_category == "FUND" and nac == "RE":
         return "REAL_ESTATE_FUND"
+
+    if _is_bdc_vehicle_fund(issuer_category, combined):
+        return "PRIVATE_CREDIT_FUND"
 
     if issuer_category == "FUND":
         has_credit = any(sig in combined for sig in _CREDIT_FUND_SIGNALS)
@@ -838,10 +868,6 @@ def _classify_index(asset_category: str, issuer_category: str,
         # No signal at all -> UNCLASSIFIED (not HEDGE_FUND)
         if not has_credit and not has_pe:
             return "UNCLASSIFIED"
-
-    # Direct real estate (CORPORATE + RE keywords)
-    if issuer_category == "CORPORATE" and (has_re or has_re_fund):
-        return "DIRECT_REAL_ESTATE"
 
     # Cash
     has_cash = any(kw in combined for kw in _CASH_KEYWORDS)
@@ -880,14 +906,14 @@ def _normalize_rate(raw: Optional[float]) -> Optional[float]:
 
     BDC XBRL rates arrive in three bands:
       <= 0.50   -> decimal (multiply by 100)
-      > 0.50 and <= 50 -> already percentage (leave as-is)
-      > 50      -> basis points (divide by 100)
+      > 0.50 and < 50 -> already percentage (leave as-is)
+      >= 50     -> basis points (divide by 100)
     """
     if raw is None:
         return None
     if raw <= 0.50:
         return raw * 100
-    if raw > 50:
+    if raw >= 50:
         return raw / 100
     return raw  # already percentage
 
@@ -943,4 +969,3 @@ def _is_named_coinvest(issuer_name: str, instrument_description: str,
             return True
 
     return False
-

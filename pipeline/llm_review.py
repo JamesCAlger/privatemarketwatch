@@ -60,6 +60,7 @@ else:
     Classification = None  # type: ignore[assignment,misc]
     ClassificationResponse = None  # type: ignore[assignment,misc]
 
+from pipeline.classification import _classify_bdc_issuer, _classify_index
 from pipeline.config import (
     LLM_REVIEW_CANDIDATES_FILE,
     LLM_REVIEW_LOOKUP_FILE,
@@ -433,8 +434,6 @@ def apply_llm_classifications(
     - Rows where llm_asset_class != UNKNOWN and confidence != low: reclassified
     - Adds 'llm_reviewed' column
     """
-    from pipeline.unified_holdings import _classify_bdc_issuer, _classify_index
-
     df = unified_df.copy()
     df["llm_reviewed"] = False
 

@@ -42,6 +42,10 @@ MIN_JW_SIMILARITY = 0.88
 # Max FV ratio for fuzzy match candidates (prevents nonsense matches)
 MAX_FV_RATIO = 5.0
 
+# FV ratio guards for higher-confidence tiers (catches unit-scale mismatches)
+MAX_FV_RATIO_WITHIN_FILING = 100.0  # Tier A: generous (same filing)
+MAX_FV_RATIO_IDENTIFIER = 50.0     # Tiers B1/B2/C: tighter
+
 # ---------------------------------------------------------------------------
 # Output schema
 # ---------------------------------------------------------------------------
@@ -231,11 +235,11 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
             comp.pa AS begin_principal_amount,
             CASE WHEN comp.ir IS NOT NULL AND comp.ir < 0 THEN NULL
                  WHEN comp.ir IS NOT NULL AND comp.ir <= 0.50 THEN comp.ir * 100
-                 WHEN comp.ir IS NOT NULL AND comp.ir > 50 THEN comp.ir / 100
+                 WHEN comp.ir IS NOT NULL AND comp.ir >= 50 THEN comp.ir / 100
                  ELSE comp.ir END AS begin_interest_rate,
             CASE WHEN comp.bs IS NOT NULL AND comp.bs < 0 THEN NULL
                  WHEN comp.bs IS NOT NULL AND comp.bs <= 0.50 THEN comp.bs * 100
-                 WHEN comp.bs IS NOT NULL AND comp.bs > 50 THEN comp.bs / 100
+                 WHEN comp.bs IS NOT NULL AND comp.bs >= 50 THEN comp.bs / 100
                  ELSE comp.bs END AS begin_basis_spread,
             comp.sh AS begin_shares_held,
             c.qtr AS end_quarter,
@@ -246,11 +250,11 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
             c.pa AS end_principal_amount,
             CASE WHEN c.ir IS NOT NULL AND c.ir < 0 THEN NULL
                  WHEN c.ir IS NOT NULL AND c.ir <= 0.50 THEN c.ir * 100
-                 WHEN c.ir IS NOT NULL AND c.ir > 50 THEN c.ir / 100
+                 WHEN c.ir IS NOT NULL AND c.ir >= 50 THEN c.ir / 100
                  ELSE c.ir END AS end_interest_rate,
             CASE WHEN c.bs IS NOT NULL AND c.bs < 0 THEN NULL
                  WHEN c.bs IS NOT NULL AND c.bs <= 0.50 THEN c.bs * 100
-                 WHEN c.bs IS NOT NULL AND c.bs > 50 THEN c.bs / 100
+                 WHEN c.bs IS NOT NULL AND c.bs >= 50 THEN c.bs / 100
                  ELSE c.bs END AS end_basis_spread,
             c.sh AS end_shares_held,
             'A_within_filing' AS match_method,
@@ -266,6 +270,8 @@ def _match_bdc_within_filing(con: duckdb.DuckDBPyConnection) -> str:
          AND c._cik = comp._cik
         WHERE {_span_months_sql('comp.period', 'c.report_date')} >= 2
           AND {_span_months_sql('comp.period', 'c.report_date')} <= 13
+          AND comp.fv > 0 AND c.fv > 0
+          AND comp.fv / c.fv BETWEEN (1.0 / {MAX_FV_RATIO_WITHIN_FILING}) AND {MAX_FV_RATIO_WITHIN_FILING}
     ),
     -- 1:1 enforcement: prefer shortest span for each current-period row
     one_to_one AS (
@@ -387,6 +393,8 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
          AND b.clean_cusip IS NOT NULL
          AND b.clean_cusip = e.clean_cusip
          AND b.source = e.source
+        WHERE b.fv > 0 AND e.fv > 0
+          AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
     ),
     -- B1: 1:1 enforcement
     cusip_rn_begin AS (
@@ -471,6 +479,8 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
             SELECT _name_lower FROM high_mult_names
             WHERE cik = e.cik AND quarter = e.quarter
         )
+        AND b.fv > 0 AND e.fv > 0
+        AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
     ),
     -- B2: 1:1 enforcement (composite tiebreaker: FV + rate + principal)
     name_rn_begin AS (
@@ -608,6 +618,8 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
             SELECT _norm_name FROM high_mult_norm
             WHERE cik = e.cik AND quarter = e.quarter
         )
+        AND b.fv > 0 AND e.fv > 0
+        AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
     ),
     rn_begin AS (
         SELECT *,
