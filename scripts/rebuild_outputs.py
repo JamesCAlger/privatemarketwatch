@@ -175,6 +175,22 @@ def rebuild_frontend():
     logger.info("Frontend export complete in %.1f s", time.time() - t0)
 
 
+def run_validation_rules(categories: list[str] | None = None):
+    """Run report-only V1 validation rules against cached output CSVs."""
+    from pipeline.validation_rules import run_all
+
+    logger.info("=== Running validation rules ===")
+    t0 = time.time()
+    aggregate_df, detail_df = run_all(categories=categories)
+    logger.info(
+        "Validation rules: %d aggregate rows, %d detail rows in %.1f s",
+        len(aggregate_df),
+        len(detail_df),
+        time.time() - t0,
+    )
+    return aggregate_df, detail_df
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Rebuild pipeline outputs from cached data (no downloads)."
@@ -197,12 +213,17 @@ def main():
                         help="Run GICS industry classification only")
     parser.add_argument("--frontend", action="store_true",
                         help="Rebuild frontend JSON data only")
+    parser.add_argument("--validate-rules", action="store_true",
+                        help="Run report-only V1 validation rules against cached outputs")
+    parser.add_argument("--rules-category", nargs="+", choices=["PC", "IDX"],
+                        help="Limit --validate-rules to one or more rule categories")
     args = parser.parse_args()
 
     # If no flags, rebuild everything
     rebuild_all = not (
         args.unified or args.income or args.returns
         or args.html or args.frontend or args.financials or args.gics
+        or args.validate_rules
     )
 
     t_start = time.time()
@@ -230,6 +251,9 @@ def main():
 
     if rebuild_all or args.frontend:
         rebuild_frontend()
+
+    if args.validate_rules:
+        run_validation_rules(categories=args.rules_category)
 
     total = time.time() - t_start
     logger.info("=== All rebuilds complete in %.1f s ===", total)

@@ -22,6 +22,7 @@ MANIFEST_FILE = ROOT / "docs" / "refactoring" / "baseline_manifest.json"
 
 EXCLUDE_NAMES = {
     "pipeline.log": "log file with run-specific timestamps",
+    "semantic_diff_report.json": "generated comparison report, not a source output",
 }
 EXCLUDE_SUFFIXES = {
     ".log": "operator log artifact",
@@ -93,10 +94,10 @@ def _capture_generated_sql() -> list[dict[str, str]]:
     sql_dir = SNAPSHOT_DIR / "generated_sql"
     sql_dir.mkdir(parents=True, exist_ok=True)
     specs = [
-        ("classification_index.sql", "pipeline.unified_holdings", "_sql_classify_index"),
-        ("classification_exposure_type.sql", "pipeline.unified_holdings", "_sql_classify_exposure_type"),
-        ("classification_asset_class.sql", "pipeline.unified_holdings", "_sql_classify_asset_class"),
-        ("bdc_aggregate.sql", "pipeline.unified_holdings", "_sql_is_bdc_aggregate"),
+        ("classification_index.sql", "pipeline.classification", "_sql_classify_index"),
+        ("classification_exposure_type.sql", "pipeline.classification", "_sql_classify_exposure_type"),
+        ("classification_asset_class.sql", "pipeline.classification", "_sql_classify_asset_class"),
+        ("bdc_aggregate.sql", "pipeline.bdc_identifier", "_sql_is_bdc_aggregate"),
     ]
     captured: list[dict[str, str]] = []
     for filename, module_name, func_name in specs:

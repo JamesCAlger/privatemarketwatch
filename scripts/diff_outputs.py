@@ -17,10 +17,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 MANIFEST_FILE = ROOT / "docs" / "refactoring" / "baseline_manifest.json"
 SQL_SPECS = [
-    ("classification_index.sql", "pipeline.unified_holdings", "_sql_classify_index"),
-    ("classification_exposure_type.sql", "pipeline.unified_holdings", "_sql_classify_exposure_type"),
-    ("classification_asset_class.sql", "pipeline.unified_holdings", "_sql_classify_asset_class"),
-    ("bdc_aggregate.sql", "pipeline.unified_holdings", "_sql_is_bdc_aggregate"),
+    ("classification_index.sql", "pipeline.classification", "_sql_classify_index"),
+    ("classification_exposure_type.sql", "pipeline.classification", "_sql_classify_exposure_type"),
+    ("classification_asset_class.sql", "pipeline.classification", "_sql_classify_asset_class"),
+    ("bdc_aggregate.sql", "pipeline.bdc_identifier", "_sql_is_bdc_aggregate"),
 ]
 SEMANTIC_REPORT_FILE = ROOT / "data" / "output" / "semantic_diff_report.json"
 SEMANTIC_ARTIFACTS = {
@@ -90,6 +90,19 @@ def _numeric_delta(current: object, baseline: object) -> float | None:
     return c - b
 
 
+def _is_material_delta(col: str, delta: float | None, current: object, baseline: object) -> bool:
+    """Return True for semantic changes that exceed numeric noise."""
+    if delta is None:
+        return current != baseline
+    if col == "row_count" or col.endswith("_count"):
+        return delta != 0
+
+    current_f = 0.0 if current is None else float(current)
+    baseline_f = 0.0 if baseline is None else float(baseline)
+    scale = max(abs(current_f), abs(baseline_f), 1.0)
+    return abs(delta) > max(1e-6, scale * 1e-12)
+
+
 def _compare_summary(
     current_rows: list[dict],
     baseline_rows: list[dict],
@@ -109,7 +122,7 @@ def _compare_summary(
             row[f"{col}_current"] = cur.get(col)
             row[f"{col}_baseline"] = base.get(col)
             row[f"{col}_delta"] = delta
-            if delta not in (0, 0.0, None):
+            if _is_material_delta(col, delta, cur.get(col), base.get(col)):
                 changed = True
         if changed:
             deltas.append(row)
@@ -204,6 +217,11 @@ def semantic_diff(manifest: dict) -> int:
         artifact_report = {}
         if not current.exists() or baseline is None or not baseline.exists():
             artifact_report["status"] = "skipped_missing_current_or_baseline"
+            report["artifacts"][artifact] = artifact_report
+            continue
+        if _sha256(current) == entry.get("sha256") and filecmp.cmp(current, baseline, shallow=False):
+            for query_name in artifact_queries[artifact]:
+                artifact_report[query_name] = []
             report["artifacts"][artifact] = artifact_report
             continue
 
