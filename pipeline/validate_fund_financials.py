@@ -205,6 +205,20 @@ def validate_fund_source(df: pd.DataFrame) -> pd.DataFrame:
         "future report_date",
     )
 
+    expected_quarter = report_dates.apply(
+        lambda d: f"{d.year}q{d.quarter}" if pd.notna(d) else "",
+    )
+    f3_missing = report_dates.isna() | (fund["report_quarter"].str.strip() == "")
+    f3_fail = fund["report_quarter"].str.strip() != expected_quarter
+    _append_threshold_results(
+        rows, fund, "F3", fund["report_quarter"],
+        f3_fail, f3_missing,
+        "report_quarter equals calendar quarter of report_date",
+        SEVERITY_FAIL,
+        EVIDENCE_STRONG,
+        "report_quarter inconsistent with report_date",
+    )
+
     total_assets = _num(fund["total_assets"])
     net_assets = _num(fund["net_assets"])
     liabilities = _num(fund["total_liabilities"])
@@ -611,4 +625,3 @@ def validate_fund_financials(
         "fund_quality": quality[QUALITY_COLUMNS],
         "fund_cross_level": cross_results[RESULT_COLUMNS],
     }
-

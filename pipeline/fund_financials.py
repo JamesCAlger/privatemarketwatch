@@ -12,6 +12,8 @@ build_fund_financials(income_df, nport_fund_info_df, universe_df, client)
 
 import logging
 import time
+import xml.etree.ElementTree as ET
+from pathlib import Path
 from typing import Optional
 
 import duckdb
@@ -20,9 +22,11 @@ import pandas as pd
 from pipeline import extract_companyfacts, extract_ncen
 from pipeline.config import (
     BDC_FUND_INCOME_FILE,
+    BDC_XBRL_CACHE_DIR,
     COMBINED_UNIVERSE_FILE,
     COMPANYFACTS_CACHE_DIR,
     FUND_FINANCIALS_FILE,
+    FUND_FINANCIALS_SCALE_OVERRIDES,
     FUND_IDENTITY_FILE,
     NCEN_QUARTERS,
     NCSR_FINANCIALS_FILE,
@@ -96,83 +100,237 @@ OUTPUT_COLUMNS = [
 NCSR_MAX_STALENESS_DAYS = 370
 
 
-# ---------------------------------------------------------------------------
-# A. Companyfacts compatibility wrappers
-# ---------------------------------------------------------------------------
-
 _EXTENDED_FIELDS = extract_companyfacts._EXTENDED_FIELDS
 
 
-def _load_companyfacts_cached(cik: str) -> dict:
-    """Read companyfacts JSON from disk cache. No network calls."""
-    return extract_companyfacts._load_companyfacts_cached(
-        cik,
-        companyfacts_cache_dir=COMPANYFACTS_CACHE_DIR,
-    )
+_TOTAL_RETURN_CLASS_PRIORITY = {
+    "CommonClassIMember": 0,
+    "": 1,
+    "CommonClassDMember": 2,
+    "CommonClassSMember": 3,
+}
 
 
-def _months_between(start: str, end: str) -> int:
-    """Return the number of months between two ISO date strings."""
+def _xml_local_name(tag: str) -> str:
+    """Return the local XML tag name without namespace."""
+    return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def _xml_text_by_local_name(parent: ET.Element, name: str) -> str | None:
+    for child in parent.iter():
+        if _xml_local_name(child.tag) == name:
+            return child.text
+    return None
+
+
+def _class_member_rank(member: str | None) -> tuple[int, str]:
+    clean = (member or "").split(":")[-1]
+    return (_TOTAL_RETURN_CLASS_PRIORITY.get(clean, 4), clean)
+
+
+def _quarter_from_date(date_value: str) -> str:
+    year = int(date_value[:4])
+    month = int(date_value[5:7])
+    return f"{year}q{((month - 1) // 3) + 1}"
+
+
+def _duration_months(start_date: str, end_date: str) -> int:
+    return extract_companyfacts._months_between(start_date, end_date)
+
+
+def _normalize_total_return_fact_value(value: float) -> float:
+    """Normalize XBRL total-return facts to decimal return units.
+
+    Most filers use decimal returns (0.019 = 1.9%), but some cached XBRL
+    facts use percentage points (1.9 = 1.9%). Keep impossible/extreme values
+    visible after normalization; range validation decides whether they are
+    chart-grade.
+    """
+    if abs(value) > 1.0:
+        return value / 100.0
+    return value
+
+
+def _extract_bdc_total_return_facts_from_xml(path: Path) -> list[dict]:
+    """Extract raw InvestmentCompanyTotalReturn facts from one cached XBRL file."""
     try:
-        sy, sm = int(start[:4]), int(start[5:7])
-        ey, em = int(end[:4]), int(end[5:7])
-        return (ey - sy) * 12 + (em - sm)
-    except (ValueError, IndexError):
-        return 0
+        root = ET.parse(path).getroot()
+    except (ET.ParseError, OSError) as exc:
+        logger.debug("BDC total return: skipped unparsable XML %s: %s", path, exc)
+        return []
+
+    contexts: dict[str, dict] = {}
+    for ctx in root.iter():
+        if _xml_local_name(ctx.tag) != "context":
+            continue
+        context_id = ctx.attrib.get("id")
+        if not context_id:
+            continue
+
+        start_date = _xml_text_by_local_name(ctx, "startDate")
+        end_date = _xml_text_by_local_name(ctx, "endDate")
+        if not start_date or not end_date:
+            continue
+
+        cik = _xml_text_by_local_name(ctx, "identifier")
+        class_member = ""
+        for member_el in ctx.iter():
+            if _xml_local_name(member_el.tag) != "explicitMember":
+                continue
+            dimension = member_el.attrib.get("dimension", "")
+            if dimension.split(":")[-1] == "StatementClassOfStockAxis":
+                class_member = (member_el.text or "").split(":")[-1]
+                break
+
+        contexts[context_id] = {
+            "cik": str(cik or path.parent.name).zfill(10),
+            "start_date": start_date,
+            "end_date": end_date,
+            "class_member": class_member,
+        }
+
+    rows: list[dict] = []
+    accession = path.stem
+    for fact in root.iter():
+        if _xml_local_name(fact.tag) != "InvestmentCompanyTotalReturn":
+            continue
+        context = contexts.get(fact.attrib.get("contextRef", ""))
+        if not context:
+            continue
+        try:
+            raw_value = float((fact.text or "").strip())
+        except (TypeError, ValueError):
+            continue
+        rows.append({
+            **context,
+            "raw_value": raw_value,
+            "value": _normalize_total_return_fact_value(raw_value),
+            "accession": accession,
+            "path": str(path),
+        })
+
+    if rows:
+        filing_end_date = max(str(r["end_date"]) for r in rows)
+        for row in rows:
+            row["is_current_filing_period"] = row["end_date"] == filing_end_date
+
+    return rows
 
 
-def _prior_quarter_end(end_date: str) -> str:
-    """Subtract 3 months from an ISO end_date, snap to month-end."""
-    import calendar
-    try:
-        y, m = int(end_date[:4]), int(end_date[5:7])
-        m -= 3
-        if m <= 0:
-            m += 12
-            y -= 1
-        d = calendar.monthrange(y, m)[1]
-        return f"{y:04d}-{m:02d}-{d:02d}"
-    except (ValueError, IndexError):
-        return ""
-
-
-def _extract_duration_series(
-    facts: dict,
-    concept_names: list[str],
-    unit_key: str = "USD",
-) -> dict[str, float]:
-    """Extract quarterly values from duration concepts."""
-    return extract_companyfacts._extract_duration_series(
-        facts, concept_names, unit_key,
-    )
-
-
-def _extract_concept_series(
-    facts: dict,
-    concept_names: list[str],
-    unit_key: str = "USD",
-    instant_only: bool = True,
-) -> dict[str, float]:
-    """Extract time-series for the best-matching companyfacts concept."""
-    return extract_companyfacts._extract_concept_series(
-        facts, concept_names, unit_key, instant_only,
-    )
-
-
-def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
-    """Extract balance-sheet + extended time series from one CIK."""
-    return extract_companyfacts._extract_bdc_balance_sheet(cik, facts)
-
-
-def _extract_all_companyfacts(
-    bdc_ciks: list[str],
-    client: object | None = None,
+def extract_bdc_total_return_quarterly(
+    bdc_ciks: list[str] | None = None,
+    xbrl_cache_dir: Path | None = None,
 ) -> pd.DataFrame:
-    """Extract balance-sheet data for all BDC CIKs from companyfacts."""
-    return extract_companyfacts._extract_all_companyfacts(
-        bdc_ciks,
-        client=client,
-        companyfacts_cache_dir=COMPANYFACTS_CACHE_DIR,
+    """Extract BDC shareholder total-return facts and convert YTD to quarters.
+
+    Values are returned as percentage points, matching ``quarterly_return`` in
+    ``fund_financials.csv`` and N-PORT monthly return compounding.
+    """
+    columns = ["cik", "report_quarter", "quarterly_return"]
+    if xbrl_cache_dir is None:
+        xbrl_cache_dir = BDC_XBRL_CACHE_DIR
+    if not xbrl_cache_dir.exists():
+        return pd.DataFrame(columns=columns)
+
+    cik_filter = {str(c).zfill(10) for c in bdc_ciks or []}
+    raw_rows: list[dict] = []
+    cik_dirs = [p for p in xbrl_cache_dir.iterdir() if p.is_dir()]
+    for cik_dir in cik_dirs:
+        cik = cik_dir.name.zfill(10)
+        if cik_filter and cik not in cik_filter:
+            continue
+        for xml_path in sorted(cik_dir.glob("*.xml")):
+            raw_rows.extend(_extract_bdc_total_return_facts_from_xml(xml_path))
+
+    if not raw_rows:
+        return pd.DataFrame(columns=columns)
+
+    raw = pd.DataFrame(raw_rows)
+    class_ranks = raw["class_member"].map(_class_member_rank)
+    raw["class_rank"] = class_ranks.map(lambda item: item[0])
+    raw["class_sort"] = class_ranks.map(lambda item: item[1])
+    raw["duration_months"] = [
+        _duration_months(str(start), str(end))
+        for start, end in zip(raw["start_date"], raw["end_date"])
+    ]
+    raw["is_ytd"] = (
+        raw["start_date"].astype(str).str[5:10].eq("01-01")
+        & raw["start_date"].astype(str).str[:4].eq(
+            raw["end_date"].astype(str).str[:4]
+        )
+    )
+
+    # For each CIK/end date choose the best class, prefer YTD/FY duration
+    # facts, then the latest cached accession.
+    raw = raw.sort_values(
+        [
+            "cik", "end_date", "class_rank", "class_sort",
+            "is_ytd", "duration_months", "is_current_filing_period",
+            "accession",
+        ],
+        ascending=[True, True, True, True, False, False, False, False],
+        kind="mergesort",
+    )
+    selected = raw.drop_duplicates(["cik", "end_date"], keep="first").copy()
+
+    non_priority = selected[
+        ~selected["class_member"].fillna("").isin(_TOTAL_RETURN_CLASS_PRIORITY)
+        & selected["class_member"].notna()
+        & (selected["class_member"] != "")
+    ]
+    if not non_priority.empty:
+        examples = (
+            non_priority[["cik", "class_member"]]
+            .drop_duplicates()
+            .head(10)
+            .to_dict("records")
+        )
+        logger.info(
+            "BDC total return: selected non-priority class members: %s",
+            examples,
+        )
+
+    out_rows: list[dict] = []
+    for cik, grp in selected.sort_values(["cik", "end_date"]).groupby("cik"):
+        ytd_by_year_quarter: dict[tuple[int, int], float] = {}
+        for _, row in grp.iterrows():
+            end_date = str(row["end_date"])
+            year = int(end_date[:4])
+            quarter = int(_quarter_from_date(end_date).split("q")[1])
+            value = float(row["value"])
+            duration = int(row["duration_months"] or 0)
+            is_ytd = bool(row["is_ytd"])
+
+            quarterly_value: float | None = None
+            if is_ytd and quarter == 1:
+                quarterly_value = value
+            elif is_ytd and quarter in (2, 3, 4):
+                prior = ytd_by_year_quarter.get((year, quarter - 1))
+                if prior is not None:
+                    quarterly_value = ((1 + value) / (1 + prior) - 1)
+            elif duration <= 4:
+                quarterly_value = value
+
+            if is_ytd:
+                ytd_by_year_quarter[(year, quarter)] = value
+
+            out_rows.append({
+                "cik": cik,
+                "report_quarter": _quarter_from_date(end_date),
+                "quarterly_return": (
+                    quarterly_value * 100.0
+                    if quarterly_value is not None
+                    else None
+                ),
+            })
+
+    result = pd.DataFrame(out_rows, columns=columns)
+    if result.empty:
+        return result
+    return (
+        result.sort_values(["cik", "report_quarter"], kind="mergesort")
+        .drop_duplicates(["cik", "report_quarter"], keep="last")
+        .reset_index(drop=True)
     )
 
 
@@ -205,11 +363,22 @@ def _prepare_nport(
     if nport_fund_info_df is None or nport_fund_info_df.empty:
         return pd.DataFrame(columns=OUTPUT_COLUMNS)
 
+    nport_fund_info_df = nport_fund_info_df.copy()
+    for col in [
+        "accession_number", "series_name", "series_id", "class_id",
+        "filing_date", "report_date", "quarter", "cik", "registrant_name",
+    ]:
+        if col not in nport_fund_info_df.columns:
+            nport_fund_info_df[col] = None
+
     con = duckdb.connect()
     con.register("nport_raw", nport_fund_info_df)
 
     has_ncen = ncen_df is not None and not ncen_df.empty
     if has_ncen:
+        ncen_df = ncen_df.copy()
+        if "accession_number" not in ncen_df.columns:
+            ncen_df["accession_number"] = ""
         con.register("ncen", ncen_df)
 
     has_ncsr = ncsr_df is not None and not ncsr_df.empty
@@ -281,20 +450,50 @@ def _prepare_nport(
             _cs_parts.append(f"CAST(NULL AS DOUBLE) AS {csc}")
     _cs_cols = ",\n            ".join(_cs_parts)
 
-    # Base CTE: aggregate N-PORT to CIK-quarter
+    # Base CTE: aggregate N-PORT to CIK economic reporting period.
+    # The SEC bulk dataset quarter is provenance only; report_date defines
+    # the fund financial period.
     base_cte = f"""
-    WITH series_dedup AS (
-        -- Dedup class-level rows: same (accession_number, series_name)
-        SELECT DISTINCT ON (accession_number, series_name) *
+    WITH raw_norm AS (
+        SELECT
+            *,
+            LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik_norm,
+            TRY_CAST(report_date AS DATE) AS report_date_dt,
+            COALESCE(CAST(series_id AS VARCHAR), '')
+                || '|'
+                || COALESCE(CAST(series_name AS VARCHAR), '') AS series_key
         FROM nport_raw
-        ORDER BY accession_number, series_name, class_id
+        WHERE TRY_CAST(report_date AS DATE) IS NOT NULL
+    ),
+    class_dedup AS (
+        -- Dedup class-level rows: same accession and fund series.
+        SELECT DISTINCT ON (accession_number, series_key) *
+        FROM raw_norm
+        ORDER BY accession_number, series_key, class_id
+    ),
+    amendment_ranked AS (
+        SELECT *,
+            ROW_NUMBER() OVER (
+                PARTITION BY cik_norm, report_date_dt, series_key
+                ORDER BY
+                    TRY_CAST(filing_date AS DATE) DESC NULLS LAST,
+                    COALESCE(CAST(accession_number AS VARCHAR), '') DESC
+            ) AS amendment_rn
+        FROM class_dedup
+    ),
+    series_dedup AS (
+        SELECT * FROM amendment_ranked
+        WHERE amendment_rn = 1
     ),
     cik_quarter AS (
         SELECT
-            LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+            cik_norm AS cik,
             MAX(registrant_name) AS entity_name,
-            quarter AS report_quarter,
-            MAX(report_date) AS report_date,
+            CAST(YEAR(report_date_dt) AS VARCHAR)
+                || 'q'
+                || CAST(QUARTER(report_date_dt) AS VARCHAR)
+                AS report_quarter,
+            CAST(report_date_dt AS VARCHAR) AS report_date,
             SUM(TRY_CAST(total_assets AS DOUBLE)) AS total_assets,
             SUM(TRY_CAST(net_assets AS DOUBLE)) AS net_assets,
             SUM(TRY_CAST(total_liabilities AS DOUBLE)) AS total_liabilities,
@@ -330,7 +529,7 @@ def _prepare_nport(
             {_dv01_cols},
             {_cs_cols}
         FROM series_dedup
-        GROUP BY cik, quarter
+        GROUP BY cik_norm, report_date_dt
     )"""
 
     # Fields that are explicitly emitted in the SELECT (not via ext_nulls)
@@ -443,6 +642,7 @@ def _prepare_nport(
         SELECT
             LPAD(CAST(ns.cik AS VARCHAR), 10, '0') AS cik,
             cq.report_quarter AS nport_quarter,
+            cq.report_date AS nport_report_date,
             TRY_CAST(ns.nav_end_per_share AS DOUBLE) AS ncsr_nav,
             TRY_CAST(ns.distribution_per_share AS DOUBLE) AS ncsr_dist_per_share,
             TRY_CAST(ns.distribution_from_nii AS DOUBLE) AS ncsr_dist_from_nii,
@@ -456,12 +656,21 @@ def _prepare_nport(
             TRY_CAST(ns.portfolio_turnover AS DOUBLE) AS ncsr_portfolio_turnover,
             ROW_NUMBER() OVER (
                 PARTITION BY LPAD(CAST(ns.cik AS VARCHAR), 10, '0'),
-                    cq.report_quarter
+                    cq.report_date
                 ORDER BY
                     TRY_CAST(ns.report_date AS DATE) DESC NULLS LAST,
                     TRY_CAST(ns.filing_date AS DATE) DESC NULLS LAST,
                     COALESCE(CAST(ns.accession_number AS VARCHAR), '') DESC,
-                    COALESCE(CAST(ns.share_class AS VARCHAR), '') ASC
+                    COALESCE(CAST(ns.share_class AS VARCHAR), '') ASC,
+                    TRY_CAST(ns.nav_end_per_share AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.total_return_pct AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.expense_ratio_pct AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.nii_per_share AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.gain_loss_per_share AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.distribution_per_share AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.distribution_from_nii AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.distribution_from_gains AS DOUBLE) DESC NULLS LAST,
+                    TRY_CAST(ns.distribution_return_of_capital AS DOUBLE) DESC NULLS LAST
             ) AS rn
         FROM cik_quarter cq
         JOIN ncsr ns
@@ -473,7 +682,7 @@ def _prepare_nport(
             _ncsr_join = """
     LEFT JOIN ncsr_ranked nsr
         ON cq.cik = nsr.cik
-        AND cq.report_quarter = nsr.nport_quarter
+        AND cq.report_date = nsr.nport_report_date
         AND nsr.rn = 1"""
             _ncsr_nav = "COALESCE(nsr.ncsr_nav, TRY_CAST(nr.ncen_nav AS DOUBLE), CAST(NULL AS DOUBLE))"
             _ncsr_dist_per_share = "nsr.ncsr_dist_per_share AS distribution_per_share,"
@@ -499,6 +708,7 @@ def _prepare_nport(
         SELECT
             nc.cik,
             cq.report_quarter AS nport_quarter,
+            cq.report_date AS nport_report_date,
             nc.management_fee_pct,
             nc.expense_ratio_pct,
             nc.nav_per_share AS ncen_nav,
@@ -509,8 +719,13 @@ def _prepare_nport(
             nc.is_fund_of_fund,
             nc.is_non_diversified,
             ROW_NUMBER() OVER (
-                PARTITION BY nc.cik, cq.report_quarter
-                ORDER BY nc.report_date DESC
+                PARTITION BY nc.cik, cq.report_date
+                ORDER BY
+                    nc.report_date DESC,
+                    COALESCE(CAST(nc.accession_number AS VARCHAR), '') DESC,
+                    COALESCE(CAST(nc.nav_per_share AS VARCHAR), '') DESC,
+                    COALESCE(CAST(nc.expense_ratio_pct AS VARCHAR), '') DESC,
+                    COALESCE(CAST(nc.management_fee_pct AS VARCHAR), '') DESC
             ) AS rn
         FROM cik_quarter cq
         JOIN ncen nc
@@ -574,7 +789,7 @@ def _prepare_nport(
     FROM cik_quarter cq
     LEFT JOIN ncen_ranked nr
         ON cq.cik = nr.cik
-        AND cq.report_quarter = nr.nport_quarter
+        AND cq.report_date = nr.nport_report_date
         AND nr.rn = 1{_ncsr_join}
     """
     else:
@@ -673,37 +888,6 @@ def _prepare_nport(
     result = con.execute(sql).fetchdf()
     con.close()
     return result
-
-
-# ---------------------------------------------------------------------------
-# B2. N-CEN extraction compatibility wrappers
-# ---------------------------------------------------------------------------
-
-_NCEN_DATE_MONTHS = extract_ncen._NCEN_DATE_MONTHS
-
-
-def _parse_ncen_date(raw: str) -> str | None:
-    """Convert N-CEN date '31-JUL-2025' to ISO '2025-07-31'."""
-    return extract_ncen._parse_ncen_date(raw)
-
-
-def _parse_ncen_financials(universe_ciks: set[str]) -> pd.DataFrame:
-    """Extract financial fields from cached N-CEN ZIPs for universe CIKs."""
-    return extract_ncen._parse_ncen_financials(
-        universe_ciks,
-        sec_datasets_dir=SEC_DATASETS_DIR,
-        ncen_quarters=NCEN_QUARTERS,
-    )
-
-
-def _parse_ncen_identity(universe_ciks: set[str]) -> pd.DataFrame:
-    """Extract fund identity from cached N-CEN datasets."""
-    return extract_ncen._parse_ncen_identity(
-        universe_ciks,
-        sec_datasets_dir=SEC_DATASETS_DIR,
-        ncen_quarters=NCEN_QUARTERS,
-        fund_identity_file=FUND_IDENTITY_FILE,
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -924,9 +1108,52 @@ def _prepare_bdc(
     _ext_passthrough = [f for f in _EXTENDED_FIELDS if f not in _pct_fields]
     _ext_passthrough_list = ", ".join(_ext_passthrough)
 
+    # ----- Manual scale overrides -----
+    # For CIKs with too few rows for MEDIAN-based detection, apply a
+    # multiplier when the row's TA (and NA) are >100x smaller than the
+    # CIK's maximum, indicating a unit-scale error.
+    _override_cik_sql = ", ".join(
+        f"'{c}'" for c in FUND_FINANCIALS_SCALE_OVERRIDES
+    ) if FUND_FINANCIALS_SCALE_OVERRIDES else "'__none__'"
+    _override_mult_sql = " ".join(
+        f"WHEN b.cik = '{c}' THEN {m}"
+        for c, m in FUND_FINANCIALS_SCALE_OVERRIDES.items()
+    )
+
     # ----- Data cleaning CTEs -----
     clean_sql = f"""
     WITH
+    -- CTE 0: Manual scale overrides for CIKs where automatic detection fails
+    _max_ta AS (
+        SELECT cik, MAX(total_assets) AS max_ta, MAX(net_assets) AS max_na
+        FROM bdc_joined
+        WHERE cik IN ({_override_cik_sql})
+        GROUP BY cik
+    ),
+    manual_scaled AS (
+        SELECT b.* EXCLUDE (total_assets, total_liabilities, net_assets),
+            CASE WHEN m.cik IS NOT NULL
+                 AND b.total_assets IS NOT NULL AND b.total_assets > 0
+                 AND m.max_ta > 0
+                 AND b.total_assets < m.max_ta / 100
+                 THEN b.total_assets * (CASE {_override_mult_sql} ELSE 1 END)
+                 ELSE b.total_assets END AS total_assets,
+            CASE WHEN m.cik IS NOT NULL
+                 AND b.total_liabilities IS NOT NULL AND b.total_liabilities > 0
+                 AND m.max_ta > 0
+                 AND b.total_assets IS NOT NULL AND b.total_assets > 0
+                 AND b.total_assets < m.max_ta / 100
+                 THEN b.total_liabilities * (CASE {_override_mult_sql} ELSE 1 END)
+                 ELSE b.total_liabilities END AS total_liabilities,
+            CASE WHEN m.cik IS NOT NULL
+                 AND b.net_assets IS NOT NULL AND b.net_assets > 0
+                 AND m.max_na > 0
+                 AND b.net_assets < m.max_na / 100
+                 THEN b.net_assets * (CASE {_override_mult_sql} ELSE 1 END)
+                 ELSE b.net_assets END AS net_assets
+        FROM bdc_joined b
+        LEFT JOIN _max_ta m ON b.cik = m.cik
+    ),
     -- CTE 1: Power-of-10 scale fix using TA/NA ratio as anchor.
     -- If a quarter's TA/NA ratio deviates >30x from the CIK's median,
     -- correct total_assets (and total_liabilities) by the ratio.
@@ -935,7 +1162,7 @@ def _prepare_bdc(
             MEDIAN(ABS(total_assets / NULLIF(net_assets, 0)))
                 OVER (PARTITION BY cik) AS _med_ratio,
             ABS(total_assets / NULLIF(net_assets, 0)) AS _this_ratio
-        FROM bdc_joined
+        FROM manual_scaled
     ),
     scaled AS (
         SELECT * EXCLUDE (total_assets, total_liabilities,
@@ -1382,11 +1609,34 @@ def build_fund_financials(
     logger.info("BDC CIKs for companyfacts: %d", len(bdc_ciks))
 
     # 3. Extract companyfacts balance sheet
-    cf_balance_df = _extract_all_companyfacts(bdc_ciks, client)
+    cf_balance_df = extract_companyfacts._extract_all_companyfacts(
+        bdc_ciks,
+        client=client,
+        companyfacts_cache_dir=COMPANYFACTS_CACHE_DIR,
+    )
     logger.info("Companyfacts balance sheet: %d rows", len(cf_balance_df))
 
     # 4. Prepare BDC side
     bdc_df = _prepare_bdc(cf_balance_df, income_df)
+    bdc_total_return_df = extract_bdc_total_return_quarterly(bdc_ciks)
+    if not bdc_df.empty and not bdc_total_return_df.empty:
+        con = duckdb.connect()
+        con.register("bdc", bdc_df)
+        con.register("tr", bdc_total_return_df)
+        bdc_df = con.execute("""
+            SELECT
+                b.* EXCLUDE (quarterly_return),
+                tr.quarterly_return AS quarterly_return
+            FROM bdc b
+            LEFT JOIN tr
+                ON LPAD(CAST(b.cik AS VARCHAR), 10, '0') = tr.cik
+                AND b.report_quarter = tr.report_quarter
+        """).fetchdf()
+        con.close()
+        logger.info(
+            "BDC XBRL total returns: populated quarterly_return for %d rows",
+            bdc_df["quarterly_return"].notna().sum(),
+        )
     logger.info("BDC financials: %d rows", len(bdc_df))
 
     # 5. Extract N-CEN financials
@@ -1395,7 +1645,11 @@ def build_fund_financials(
         universe_ciks = set(
             universe_df["cik"].dropna().astype(str).str.zfill(10).unique()
         )
-    ncen_raw_df = _parse_ncen_financials(universe_ciks)
+    ncen_raw_df = extract_ncen._parse_ncen_financials(
+        universe_ciks,
+        sec_datasets_dir=SEC_DATASETS_DIR,
+        ncen_quarters=NCEN_QUARTERS,
+    )
     logger.info(
         "N-CEN financials: %d rows, %d CIKs",
         len(ncen_raw_df),
@@ -1403,7 +1657,12 @@ def build_fund_financials(
     )
 
     # 5b. Extract N-CEN identity (adviser, ticker)
-    _parse_ncen_identity(universe_ciks)
+    extract_ncen._parse_ncen_identity(
+        universe_ciks,
+        sec_datasets_dir=SEC_DATASETS_DIR,
+        ncen_quarters=NCEN_QUARTERS,
+        fund_identity_file=FUND_IDENTITY_FILE,
+    )
 
     # 5c. Load N-CSR financials (from disk, no network)
     ncsr_raw_df = pd.DataFrame()
@@ -1560,7 +1819,10 @@ def build_fund_financials(
                             WHEN 'ncen' THEN 3
                             ELSE 4
                         END,
-                        report_date DESC NULLS LAST
+                        report_date DESC NULLS LAST,
+                        entity_name ASC,
+                        total_assets DESC NULLS LAST,
+                        net_assets DESC NULLS LAST
                 ) AS rn
             FROM enriched
         )
@@ -1589,7 +1851,10 @@ def build_fund_financials(
                             WHEN 'ncen' THEN 3
                             ELSE 4
                         END,
-                        report_date DESC NULLS LAST
+                        report_date DESC NULLS LAST,
+                        entity_name ASC,
+                        total_assets DESC NULLS LAST,
+                        net_assets DESC NULLS LAST
                 ) AS rn
             FROM combined
         )
@@ -1609,6 +1874,11 @@ def build_fund_financials(
 
     # ----- Computed return waterfall (fill total_return_pct gaps) -----
     result = _fill_computed_returns(result)
+    result = result.sort_values(
+        ["cik", "report_quarter", "report_date", "source", "entity_name"],
+        kind="mergesort",
+        na_position="last",
+    ).reset_index(drop=True)
 
     # Schema enforcement (non-fatal warnings)
     violations = _enforce_schema(result)

@@ -93,6 +93,18 @@ def test_validate_fund_source_flags_balance_sheet_and_return_mismatch():
     assert f17["evidence_strength"] == "STRONG"
 
 
+def test_validate_fund_source_flags_report_quarter_date_mismatch():
+    result = validate_fund_source(_fund_df([{
+        "source": "nport",
+        "report_quarter": "2026q1",
+        "report_date": "2025-12-31",
+    }]))
+
+    f3 = result[result["check_code"] == "F3"].iloc[0]
+    assert f3["status"] == STATUS_FAIL
+    assert f3["evidence_strength"] == "STRONG"
+
+
 def test_validate_cross_level_includes_fund_holdings_reconciliation():
     fund = _fund_df([{}])
     holdings = _holdings_df([{}, {}])

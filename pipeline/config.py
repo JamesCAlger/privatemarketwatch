@@ -166,6 +166,11 @@ POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
 POSITION_RETURNS_FILE = OUTPUT_DIR / "position_returns.csv"
 INDEX_RETURNS_FILE = OUTPUT_DIR / "index_returns.csv"
 
+# V1 report-only validation rules engine
+VALIDATION_RULES_AGGREGATE_FILE = OUTPUT_DIR / "validation_rules_aggregate.csv"
+VALIDATION_RULES_DETAIL_FILE = OUTPUT_DIR / "validation_rules_detail.csv"
+VALIDATION_RULES_HISTORY_FILE = OUTPUT_DIR / "validation_rules_history.csv"
+
 # Fund-level income and fee uplift
 BDC_FUND_INCOME_FILE = OUTPUT_DIR / "bdc_fund_income.csv"
 FEE_UPLIFT_FILE = OUTPUT_DIR / "fee_uplift.csv"
@@ -254,6 +259,14 @@ NPORT_EXCLUDE_CIKS: set[str] = {
     "1644771",   # RiverNorth Marketplace Lending (opaque numeric IDs, <$1B FV)
     "1678130",   # RiverNorth/DoubleLine Strategic Opp (opaque numeric IDs, <$1B FV)
     "2041175",   # NB Direct Private Lending (opaque numeric IDs, <$0.5B FV)
+    "1500234",   # Ironwood Multi-Strategy Fund (feeder: single $3B+ position in master fund)
+}
+
+# Manual scale overrides for fund_financials when automatic detection fails.
+# Maps CIK (zero-padded) to multiplier applied to total_assets/total_liabilities/net_assets.
+# Used for CIKs with too few rows for MEDIAN-based scale detection.
+FUND_FINANCIALS_SCALE_OVERRIDES: dict[str, int] = {
+    "0002012139": 1000,  # Owl Rock Core Income Corp: 2025-06-30 reported in raw dollars
 }
 
 # ---------------------------------------------------------------------------

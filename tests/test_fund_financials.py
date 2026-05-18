@@ -3,23 +3,28 @@
 import pandas as pd
 import pytest
 
-from pipeline.fund_financials import (
-    OUTPUT_COLUMNS,
+from pipeline.extract_companyfacts import (
     _EXTENDED_FIELDS,
-    _enforce_schema,
     _extract_all_companyfacts,
     _extract_bdc_balance_sheet,
     _extract_concept_series,
     _extract_duration_series,
     _months_between,
+    _prior_quarter_end,
+)
+from pipeline.extract_ncen import (
     _parse_ncen_date,
     _parse_ncen_financials,
     _parse_ncen_identity,
+)
+from pipeline.fund_financials import (
+    OUTPUT_COLUMNS,
+    _enforce_schema,
     _prepare_bdc,
     _prepare_ncen,
     _prepare_nport,
-    _prior_quarter_end,
     build_fund_financials,
+    extract_bdc_total_return_quarterly,
 )
 
 
@@ -36,6 +41,10 @@ def _redirect_fund_financials_outputs(monkeypatch, tmp_path):
     monkeypatch.setattr(
         "pipeline.fund_financials.FUND_IDENTITY_FILE",
         tmp_path / "fund_identity.csv",
+    )
+    monkeypatch.setattr(
+        "pipeline.fund_financials.BDC_XBRL_CACHE_DIR",
+        tmp_path / "bdc_xbrl",
     )
 
 
@@ -59,6 +68,44 @@ def _make_facts(concepts: dict) -> dict:
     }
 
 
+def _write_total_return_xml(path, cik: str, facts: list[dict]):
+    """Write a small XBRL file with InvestmentCompanyTotalReturn facts."""
+    contexts = []
+    values = []
+    for idx, fact in enumerate(facts, start=1):
+        class_member = fact.get("class_member")
+        segment = ""
+        if class_member is not None:
+            segment = f"""
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:StatementClassOfStockAxis">test:{class_member}</xbrldi:explicitMember>
+            </segment>"""
+        contexts.append(f"""
+    <context id="c-{idx}">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">{cik}</identifier>
+            {segment}
+        </entity>
+        <period>
+            <startDate>{fact["start"]}</startDate>
+            <endDate>{fact["end"]}</endDate>
+        </period>
+    </context>""")
+        values.append(f"""
+    <us-gaap:InvestmentCompanyTotalReturn contextRef="c-{idx}" unitRef="number">{fact["value"]}</us-gaap:InvestmentCompanyTotalReturn>""")
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(f"""<?xml version="1.0" encoding="utf-8"?>
+<xbrl xmlns="http://www.xbrl.org/2003/instance"
+      xmlns:us-gaap="http://fasb.org/us-gaap/2025"
+      xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+      xmlns:test="http://example.com/test">
+{''.join(contexts)}
+{''.join(values)}
+</xbrl>
+""", encoding="utf-8")
+
+
 def _make_facts_multi_unit(concept_name: str, unit_key: str,
                            entries: list[dict]) -> dict:
     """Build companyfacts JSON with a specific unit key."""
@@ -73,15 +120,15 @@ def _make_facts_multi_unit(concept_name: str, unit_key: str,
 
 def test_extract_all_companyfacts_client_none_is_cache_only(tmp_path, monkeypatch):
     monkeypatch.setattr(
-        "pipeline.fund_financials.COMPANYFACTS_CACHE_DIR",
-        tmp_path / "companyfacts_cache",
-    )
-    monkeypatch.setattr(
         "pipeline.validate_html_template._fetch_companyfacts",
         lambda *args, **kwargs: pytest.fail("client=None must not fetch companyfacts"),
     )
 
-    result = _extract_all_companyfacts(["123"], client=None)
+    result = _extract_all_companyfacts(
+        ["123"],
+        client=None,
+        companyfacts_cache_dir=tmp_path / "companyfacts_cache",
+    )
 
     assert result.empty
 
@@ -305,6 +352,44 @@ class TestPrepareNport:
         assert len(result) == 1
         assert float(result.iloc[0]["total_assets"]) == 1000000.0
         assert float(result.iloc[0]["net_assets"]) == 800000.0
+
+    def test_same_bulk_quarter_different_report_dates_are_separate_periods(self):
+        df = self._make_nport_df([
+            {"accession_number": "ACC1", "report_date": "2025-09-30",
+             "quarter": "2026q1", "total_assets": "900000",
+             "net_assets": "700000", "total_liabilities": "200000"},
+            {"accession_number": "ACC2", "report_date": "2025-12-31",
+             "quarter": "2026q1", "total_assets": "1100000",
+             "net_assets": "800000", "total_liabilities": "300000"},
+        ])
+        result = _prepare_nport(df).sort_values("report_date")
+
+        assert list(result["report_date"]) == ["2025-09-30", "2025-12-31"]
+        assert list(result["report_quarter"]) == ["2025q3", "2025q4"]
+        assert list(result["total_assets"].astype(float)) == [900000.0, 1100000.0]
+
+    def test_same_report_date_amendment_latest_accession_wins(self):
+        df = self._make_nport_df([
+            {"accession_number": "OLD", "filing_date": "2026-01-10",
+             "report_date": "2025-12-31", "quarter": "2026q1",
+             "total_assets": "1000000", "net_assets": "800000",
+             "total_liabilities": "200000", "borrowing_pay_within_1yr": "100000",
+             "monthly_total_return1": "1.0"},
+            {"accession_number": "NEW", "filing_date": "2026-01-20",
+             "report_date": "2025-12-31", "quarter": "2026q1",
+             "total_assets": "1200000", "net_assets": "900000",
+             "total_liabilities": "300000", "borrowing_pay_within_1yr": "250000",
+             "monthly_total_return1": "2.0"},
+        ])
+        result = _prepare_nport(df)
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["report_quarter"] == "2025q4"
+        assert float(row["total_assets"]) == 1200000.0
+        assert float(row["net_assets"]) == 900000.0
+        assert float(row["borrowings"]) == 350000.0
+        assert float(row["monthly_return_1"]) == 2.0
 
     def test_class_level_dedup(self):
         """Same accession + series but different class_ids should dedup."""
@@ -1006,6 +1091,58 @@ class TestBdcCleaning:
         row0 = result[result["report_date"] == "2023-03-31"].iloc[0]
         assert float(row0["total_assets"]) == 2_000_000.0
 
+    def test_manual_scale_override(self):
+        """Manual scale override for CIK with too few rows for MEDIAN detection."""
+        import pipeline.config as config
+        orig = config.FUND_FINANCIALS_SCALE_OVERRIDES.copy()
+        try:
+            config.FUND_FINANCIALS_SCALE_OVERRIDES["0000000999"] = 1000
+            cf_df = pd.DataFrame([
+                # First quarter: correct scale
+                {"cik": "0000000999", "report_date": "2023-09-30",
+                 "total_assets": 500_000_000.0, "total_liabilities": 200_000_000.0,
+                 "net_assets": 300_000_000.0,
+                 "nav_per_share": None, "shares_outstanding": None,
+                 "borrowings": None},
+                # Second quarter: 1000x too small (reported in raw units)
+                {"cik": "0000000999", "report_date": "2023-12-31",
+                 "total_assets": 520_000.0, "total_liabilities": 210_000.0,
+                 "net_assets": 310_000.0,
+                 "nav_per_share": None, "shares_outstanding": None,
+                 "borrowings": None},
+            ])
+            result = _prepare_bdc(cf_df, pd.DataFrame())
+            q4 = result[result["report_date"] == "2023-12-31"].iloc[0]
+            # Should be corrected to ~520M, not 520K
+            assert float(q4["total_assets"]) > 100_000_000
+        finally:
+            config.FUND_FINANCIALS_SCALE_OVERRIDES = orig
+
+    def test_manual_scale_override_no_false_positive(self):
+        """Scale override does not fire on correctly-scaled quarters."""
+        import pipeline.config as config
+        orig = config.FUND_FINANCIALS_SCALE_OVERRIDES.copy()
+        try:
+            config.FUND_FINANCIALS_SCALE_OVERRIDES["0000000998"] = 1000
+            cf_df = pd.DataFrame([
+                {"cik": "0000000998", "report_date": "2023-09-30",
+                 "total_assets": 500_000_000.0, "total_liabilities": 200_000_000.0,
+                 "net_assets": 300_000_000.0,
+                 "nav_per_share": None, "shares_outstanding": None,
+                 "borrowings": None},
+                {"cik": "0000000998", "report_date": "2023-12-31",
+                 "total_assets": 510_000_000.0, "total_liabilities": 210_000_000.0,
+                 "net_assets": 300_000_000.0,
+                 "nav_per_share": None, "shares_outstanding": None,
+                 "borrowings": None},
+            ])
+            result = _prepare_bdc(cf_df, pd.DataFrame())
+            q4 = result[result["report_date"] == "2023-12-31"].iloc[0]
+            # Should NOT be multiplied (510M is already correct)
+            assert float(q4["total_assets"]) == pytest.approx(510_000_000.0)
+        finally:
+            config.FUND_FINANCIALS_SCALE_OVERRIDES = orig
+
     def test_negative_total_assets_nulled(self):
         """Negative total_assets set to NULL."""
         cf_df = pd.DataFrame([{
@@ -1122,11 +1259,6 @@ def _make_ncen_zip(tmp_path, quarter, fri_rows, sub_rows, reg_rows):
 class TestParseNcenFinancials:
 
     def test_extracts_n2_financials(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "pipeline.fund_financials.SEC_DATASETS_DIR", tmp_path)
-        monkeypatch.setattr(
-            "pipeline.fund_financials.NCEN_QUARTERS", ["2025q3"])
-
         _make_ncen_zip(tmp_path, "2025q3",
             fri_rows=[{
                 "ACCESSION_NUMBER": "ACC1", "FUND_ID": "F1",
@@ -1150,7 +1282,11 @@ class TestParseNcenFinancials:
             }],
         )
 
-        result = _parse_ncen_financials({"0001234567"})
+        result = _parse_ncen_financials(
+            {"0001234567"},
+            sec_datasets_dir=tmp_path,
+            ncen_quarters=["2025q3"],
+        )
         assert len(result) == 1
         row = result.iloc[0]
         assert row["cik"] == "0001234567"
@@ -1163,11 +1299,6 @@ class TestParseNcenFinancials:
         assert row["report_quarter"] == "2025q2"
 
     def test_filters_non_n2(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "pipeline.fund_financials.SEC_DATASETS_DIR", tmp_path)
-        monkeypatch.setattr(
-            "pipeline.fund_financials.NCEN_QUARTERS", ["2025q3"])
-
         _make_ncen_zip(tmp_path, "2025q3",
             fri_rows=[{
                 "ACCESSION_NUMBER": "ACC1", "FUND_ID": "F1",
@@ -1191,15 +1322,14 @@ class TestParseNcenFinancials:
             }],
         )
 
-        result = _parse_ncen_financials({"0009999999"})
+        result = _parse_ncen_financials(
+            {"0009999999"},
+            sec_datasets_dir=tmp_path,
+            ncen_quarters=["2025q3"],
+        )
         assert result.empty
 
     def test_filters_non_universe_ciks(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "pipeline.fund_financials.SEC_DATASETS_DIR", tmp_path)
-        monkeypatch.setattr(
-            "pipeline.fund_financials.NCEN_QUARTERS", ["2025q3"])
-
         _make_ncen_zip(tmp_path, "2025q3",
             fri_rows=[{
                 "ACCESSION_NUMBER": "ACC1", "FUND_ID": "F1",
@@ -1224,16 +1354,14 @@ class TestParseNcenFinancials:
         )
 
         # CIK not in universe set
-        result = _parse_ncen_financials({"0009999999"})
+        result = _parse_ncen_financials(
+            {"0009999999"},
+            sec_datasets_dir=tmp_path,
+            ncen_quarters=["2025q3"],
+        )
         assert result.empty
 
     def test_dedup_by_cik_report_date(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "pipeline.fund_financials.SEC_DATASETS_DIR", tmp_path)
-        monkeypatch.setattr(
-            "pipeline.fund_financials.NCEN_QUARTERS",
-            ["2025q2", "2025q3"])
-
         # Same CIK+date in two quarter ZIPs
         for q in ["2025q2", "2025q3"]:
             _make_ncen_zip(tmp_path, q,
@@ -1259,7 +1387,11 @@ class TestParseNcenFinancials:
                 }],
             )
 
-        result = _parse_ncen_financials({"0002222222"})
+        result = _parse_ncen_financials(
+            {"0002222222"},
+            sec_datasets_dir=tmp_path,
+            ncen_quarters=["2025q2", "2025q3"],
+        )
         # Should be deduplicated to 1 row
         assert len(result) == 1
         assert result.iloc[0]["cik"] == "0002222222"
@@ -1645,6 +1777,108 @@ class TestExtendedConcepts:
 
 
 # ===================================================================
+# 13b. BDC XBRL total return extraction
+# ===================================================================
+
+class TestBdcXbrlTotalReturns:
+
+    def test_class_i_selected_over_s_and_d(self, tmp_path):
+        cik = "0000001234"
+        _write_total_return_xml(tmp_path / cik / "0001.xml", cik, [
+            {
+                "start": "2025-01-01", "end": "2025-03-31",
+                "class_member": "CommonClassSMember", "value": "0.011",
+            },
+            {
+                "start": "2025-01-01", "end": "2025-03-31",
+                "class_member": "CommonClassDMember", "value": "0.012",
+            },
+            {
+                "start": "2025-01-01", "end": "2025-03-31",
+                "class_member": "CommonClassIMember", "value": "0.019",
+            },
+        ])
+
+        result = extract_bdc_total_return_quarterly([cik], tmp_path)
+
+        assert len(result) == 1
+        assert result.iloc[0]["report_quarter"] == "2025q1"
+        assert abs(float(result.iloc[0]["quarterly_return"]) - 1.9) < 0.001
+
+    def test_bcred_style_ytd_facts_convert_to_quarterly_returns(self, tmp_path):
+        cik = "0001803498"
+        _write_total_return_xml(tmp_path / cik / "0001.xml", cik, [
+            {
+                "start": "2025-01-01", "end": "2025-03-31",
+                "class_member": "CommonClassIMember", "value": "0.019",
+            },
+            {
+                "start": "2025-01-01", "end": "2025-06-30",
+                "class_member": "CommonClassIMember", "value": "0.043",
+            },
+            {
+                "start": "2025-01-01", "end": "2025-09-30",
+                "class_member": "CommonClassIMember", "value": "0.062",
+            },
+            {
+                "start": "2025-01-01", "end": "2025-12-31",
+                "class_member": "CommonClassIMember", "value": "0.080",
+            },
+        ])
+
+        result = extract_bdc_total_return_quarterly([cik], tmp_path)
+        by_quarter = dict(zip(result["report_quarter"], result["quarterly_return"]))
+
+        assert abs(by_quarter["2025q1"] - 1.9) < 0.001
+        assert abs(by_quarter["2025q2"] - 2.355) < 0.01
+        assert abs(by_quarter["2025q3"] - 1.821) < 0.01
+        assert abs(by_quarter["2025q4"] - 1.695) < 0.01
+
+    def test_missing_prior_ytd_leaves_quarter_null(self, tmp_path):
+        cik = "0000001234"
+        _write_total_return_xml(tmp_path / cik / "0001.xml", cik, [
+            {
+                "start": "2025-01-01", "end": "2025-09-30",
+                "class_member": "CommonClassIMember", "value": "0.062",
+            },
+        ])
+
+        result = extract_bdc_total_return_quarterly([cik], tmp_path)
+
+        assert len(result) == 1
+        assert result.iloc[0]["report_quarter"] == "2025q3"
+        assert pd.isna(result.iloc[0]["quarterly_return"])
+
+    def test_no_class_facts_work_for_single_class_bdc(self, tmp_path):
+        cik = "0000001234"
+        _write_total_return_xml(tmp_path / cik / "0001.xml", cik, [
+            {
+                "start": "2025-01-01", "end": "2025-03-31",
+                "class_member": None, "value": "0.021",
+            },
+        ])
+
+        result = extract_bdc_total_return_quarterly([cik], tmp_path)
+
+        assert len(result) == 1
+        assert abs(float(result.iloc[0]["quarterly_return"]) - 2.1) < 0.001
+
+    def test_percent_point_fact_values_are_normalized(self, tmp_path):
+        cik = "0000001234"
+        _write_total_return_xml(tmp_path / cik / "0001.xml", cik, [
+            {
+                "start": "2025-01-01", "end": "2025-03-31",
+                "class_member": "CommonClassIMember", "value": "1.3",
+            },
+        ])
+
+        result = extract_bdc_total_return_quarterly([cik], tmp_path)
+
+        assert len(result) == 1
+        assert abs(float(result.iloc[0]["quarterly_return"]) - 1.3) < 0.001
+
+
+# ===================================================================
 # 14. Computed metrics tests
 # ===================================================================
 
@@ -1825,15 +2059,6 @@ class TestNcenIdentity:
         import io
         import zipfile as zf
 
-        monkeypatch.setattr(
-            "pipeline.fund_financials.SEC_DATASETS_DIR", tmp_path)
-        monkeypatch.setattr(
-            "pipeline.fund_financials.NCEN_QUARTERS", ["2025q3"])
-        monkeypatch.setattr(
-            "pipeline.fund_financials.FUND_IDENTITY_FILE",
-            tmp_path / "fund_identity.csv",
-        )
-
         zip_path = tmp_path / "2025q3_ncen.zip"
         with zf.ZipFile(zip_path, "w") as z:
             # SUBMISSION
@@ -1876,7 +2101,12 @@ class TestNcenIdentity:
             so.to_csv(buf, sep="\t", index=False)
             z.writestr("SHARES_OUTSTANDING.tsv", buf.getvalue())
 
-        result = _parse_ncen_identity({"0001234567"})
+        result = _parse_ncen_identity(
+            {"0001234567"},
+            sec_datasets_dir=tmp_path,
+            ncen_quarters=["2025q3"],
+            fund_identity_file=tmp_path / "fund_identity.csv",
+        )
         assert len(result) == 1
         row = result.iloc[0]
         assert row["cik"] == "0001234567"
@@ -1886,12 +2116,12 @@ class TestNcenIdentity:
         assert row["class_name"] == "Class A"
         assert (tmp_path / "fund_identity.csv").exists()
 
-    def test_empty_universe(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(
-            "pipeline.fund_financials.SEC_DATASETS_DIR", tmp_path)
-        monkeypatch.setattr(
-            "pipeline.fund_financials.NCEN_QUARTERS", ["2025q3"])
-        result = _parse_ncen_identity(set())
+    def test_empty_universe(self, tmp_path):
+        result = _parse_ncen_identity(
+            set(),
+            sec_datasets_dir=tmp_path,
+            ncen_quarters=["2025q3"],
+        )
         assert result.empty
 
 
