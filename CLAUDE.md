@@ -64,6 +64,24 @@ Quarters: 2019q4-2026q1.
 
 Full data quality and code-level transformation audit completed (`data/output/audit_data_quality.md`). All FAIL and WARN findings have been actioned and resolved.
 
+### Phase 6 Complete: Compatibility Cleanup Refactor
+
+Phase 6 removed compatibility wrappers and completed the classification/staging decomposition without changing current-cache outputs. Verification is documented in `docs/2026-05-16/phase6_current_cache_parity.md`.
+
+Required evidence:
+- Phase-6-only current-cache parity: `Diff clean: 418 checked`, `Semantic delta rows: 0`.
+- Same-code reproducibility after determinism fixes: clean, `418 checked`, `0` semantic deltas.
+- Full tests: `1868 passed, 13 skipped`.
+- Active official baseline refreshed after archiving the stale baseline.
+
+The old official baseline is historical-only:
+- `data/snapshots/baseline_pre_phase6_stale_2026-05-16/`
+- `docs/refactoring/baseline_manifest_pre_phase6_stale_2026-05-16.json`
+
+The active baseline is deterministic post-Phase-6 output:
+- `data/snapshots/baseline/`
+- `docs/refactoring/baseline_manifest.json`
+
 ### Phase 4 Complete: Position Matching & Index Construction
 
 See `private_markets_index_spec.md` Phase 4 for full detail. Key findings from data analysis:
@@ -117,7 +135,7 @@ python -m pipeline.main --unified        # Build unified private markets holding
 
 ### Tests
 
-**1,672 tests** across 20 test files. Run with `pytest tests/`.
+**1,956 passing tests** across 27 test files, with 13 skips in the latest full run (2026-05-18). Run with `pytest tests/`. Tests cannot overwrite production data -- a monkeypatch guard in `tests/conftest.py` intercepts `builtins.open` and `io.open` at import time and raises `AssertionError` on any write-mode open targeting `data/output/` or `frontend/public/data/`. The guard is validated by 8 dedicated tests in `test_test_output_isolation.py`.
 
 | Test file | Tests | Coverage |
 |---|---|---|
@@ -252,7 +270,8 @@ All three phases of holdings extraction are resumable:
 These are harm-category restrictions. Violating them causes data loss, silent corruption, or external service abuse.
 
 - **No unwanted network calls.** Do not trigger SEC EDGAR downloads unless the user explicitly asks. All raw data is cached on disk. Use `scripts/rebuild_outputs.py` or call pipeline functions directly to rebuild outputs.
-- **No production data corruption.** Pytest installs a fail-fast guard that blocks writes under `data/output/` and `frontend/public/data/`. After running tests, still run `python scripts/diff_outputs.py`; it is the required backstop for detecting any artifact drift the Python-level guard cannot intercept.
+- **No production data corruption.** Pytest installs a monkeypatch guard (`tests/conftest.py`) that replaces `builtins.open` and `io.open` with wrappers blocking any write-mode open (`w`, `a`, `x`, `+`) to `data/output/` or `frontend/public/data/`. This covers all standard Python write paths (`open()`, `Path.write_text()`, `pandas.to_csv()`, `json.dump()`, etc.). Verified 2026-05-18: 1,956 tests passed with zero production files modified. After running tests, run `python scripts/diff_outputs.py --semantic` as a backstop to confirm no artifact drift.
+- **Baseline governance.** The active baseline is the deterministic post-Phase-6 snapshot. Do not compare new work against `baseline_pre_phase6_stale_2026-05-16` except for historical investigation. Refresh `data/snapshots/baseline/` only after rebuilding from cached inputs, running `python scripts/diff_outputs.py --semantic`, documenting semantic deltas, and preserving the prior baseline if it is being retired.
 - **No SEC rate-limit violations.** The existing `edgar_client.py` enforces 10 req/sec. Do not bypass it or add parallel request paths.
 - **No encoding crashes.** All log messages must use ASCII only — Windows cp1252 cannot render Unicode box-drawing, em-dashes, or ellipsis characters.
 - **No slow transforms on large datasets.** Avoid pandas `.apply()`, `.iterrows()`, or row-level Python loops on datasets with >10K rows — the pipeline's 800K+ row datasets will hang for minutes. Use DuckDB SQL or vectorized operations. Pandas is fine for small summaries and logging.
@@ -305,4 +324,7 @@ npm run build             # Static export to frontend/out/
 | Script | Purpose | Usage |
 |---|---|---|
 | `scripts/rebuild_outputs.py` | Rebuild all output CSVs from cached data (no downloads). Use after running tests. | `python scripts/rebuild_outputs.py` (all), `--unified`, `--income`, `--returns` |
+| `scripts/snapshot_outputs.py` | Refresh the active deterministic official baseline after approval. Archive the prior baseline first if retiring it. | `python scripts/snapshot_outputs.py --clean` |
+| `scripts/diff_outputs.py` | Compare current outputs with the active official baseline, including generated SQL and optional semantic summaries. | `python scripts/diff_outputs.py --semantic` |
+| `scripts/current_cache_phase6_parity.py` | One-off current-cache pre/post comparator for Phase 6-style refactor parity. Use named snapshots under `data/snapshots/`, not the official baseline. | `snapshot --clean --snapshot-dir ...`, `diff --semantic --snapshot-dir ...` |
 | `scripts/learn_template.py` | Manage per-CIK HTML extraction templates. Auto-detect, validate, inspect, accept, batch revalidate. | `--auto-detect <CIK>`, `--auto-detect-all`, `--validate <CIK>`, `--validate-only <CIK>`, `--next`, `--inspect <CIK>`, `--accept <CIK> --justification "..."`, `--revalidate-all`, `--add-periods <CIK\|ALL>`, `--list` |
