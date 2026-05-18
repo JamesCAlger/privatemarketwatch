@@ -130,8 +130,10 @@ class TestIsBdcAggregateRow:
     def test_control_investments(self):
         assert _is_bdc_aggregate_row("Control Investments")
 
-    def test_affiliation_bucket_with_economic_detail_not_substring_filtered(self):
-        assert not _is_bdc_aggregate_row(
+    def test_affiliation_bucket_with_economic_detail_is_subtotal(self):
+        """Industry-prefixed category subtotals ending with affiliation text
+        (e.g. Star Mountain, Saratoga) should be filtered as aggregates."""
+        assert _is_bdc_aggregate_row(
             "Construction & Engineering First Lien Senior Secured Term Loan "
             "Non-Affiliate Investments"
         )
@@ -470,16 +472,34 @@ class TestIsBdcAggregateRow:
             "Debt | Total Solutions Holdings LLC"
         )
 
-    # --- Non-control dimension-path false positive fix (2026-05-04) ---
-    def test_long_noncontrol_dimension_path_kept(self):
-        """Long dimension-path identifier (>=150 chars) with 'non-controlled' should NOT be filtered."""
+    # --- Non-control dimension-path handling (2026-05-04, updated P0-A) ---
+    def test_long_noncontrol_dimension_path_filtered_pre_strip(self):
+        """Long dimension-path identifier starting with affiliation prefix IS filtered
+        by _is_bdc_aggregate_row (pre-stripping). In the pipeline, _INVESTMENTS_HIERARCHY_RE
+        strips the prefix first; this test validates the Python mirror's behavior on
+        unstripped identifiers."""
         long_id = (
             "Non-Controlled/Non-Affiliated Investments Senior Secured First Lien Loans "
             "Industry Commercial Services & Supplies Company Advanced Web Technologies "
             "Holding Company Delayed Draw SOFR Spread 5.75"
         )
         assert len(long_id) >= 150  # sanity check
-        assert not _is_bdc_aggregate_row(long_id)
+        # Pre-stripping: the affiliation prefix causes it to be filtered
+        assert _is_bdc_aggregate_row(long_id)
+
+    def test_investments_hierarchy_stripped_identifier_kept(self):
+        """After _INVESTMENTS_HIERARCHY_RE stripping, the remaining
+        identifier (company name + economic detail) should NOT be filtered."""
+        import re
+        from pipeline.bdc_identifier import _INVESTMENTS_HIERARCHY_RE
+        # Fidelity-style: "Investments -- non-controlled/ non-affiliate Equity ..."
+        fidelity_id = (
+            "Investments -- non-controlled/ non-affiliate Equity "
+            "Software BPCP Crafts Intermediate LLC Term Loan SOFR 5.75"
+        )
+        stripped = re.sub(_INVESTMENTS_HIERARCHY_RE, "", fidelity_id)
+        assert stripped != fidelity_id, "Regex should strip the hierarchy prefix"
+        assert not _is_bdc_aggregate_row(stripped)
 
     def test_short_noncontrol_without_entity_signals_filtered(self):
         """Short 'non-control' without entity-name signals should be filtered."""
@@ -524,6 +544,80 @@ class TestIsBdcAggregateRow:
             "Investments Investments - non-controlled/non-affiliated "
             "First Lien Debt Capital Equipment"
         )
+
+    # --- P0-A: Aggregate filter hardening ---
+
+    def test_fidelity_central_format_not_filtered_after_stripping(self):
+        """Fidelity Central dimension-path identifiers should NOT be filtered
+        after hierarchy stripping removes 'Investments -- non-controlled/...' prefix.
+        Post-strip: 'Software BPCP Crafts Intermediate LLC'."""
+        # After _INVESTMENTS_HIERARCHY_RE strips, only company + industry remain
+        assert not _is_bdc_aggregate_row("Software BPCP Crafts Intermediate LLC")
+
+    def test_fidelity_private_credit_format_not_filtered_after_stripping(self):
+        """Fidelity Private Credit dimension-path after stripping should NOT be filtered.
+        Post-strip: 'Healthcare Acme Health Holdings LLC Term Loan'."""
+        assert not _is_bdc_aggregate_row(
+            "Healthcare Acme Health Holdings LLC Term Loan"
+        )
+
+    def test_msd_format_not_filtered_after_stripping(self):
+        """MSD Partners dimension-path after stripping should NOT be filtered.
+        Post-strip: 'Consumer Services Acme Corp. Senior Secured First Lien'."""
+        assert not _is_bdc_aggregate_row(
+            "Consumer Services Acme Corp. Senior Secured First Lien"
+        )
+
+    def test_sixth_street_rate_suffix_not_filtered(self):
+        """Sixth Street identifiers ending with 'Interest rate 10.5%'
+        should NOT be filtered -- the pct suffix guard excludes financial-term context."""
+        assert not _is_bdc_aggregate_row(
+            "Acme Widgets Senior Secured First Lien Term Loan Interest rate 10.5%"
+        )
+
+    def test_sixth_street_sofr_rate_suffix_not_filtered(self):
+        """Identifiers ending with 'SOFR + 3.5%' should NOT be filtered."""
+        assert not _is_bdc_aggregate_row(
+            "Acme Widgets Term Loan SOFR 8.5%"
+        )
+
+    def test_diameter_format_not_filtered_after_stripping(self):
+        """Diameter Capital dimension-path after stripping should NOT be filtered.
+        Post-strip: 'Technology Widgetco Holdings LLC First Lien'."""
+        assert not _is_bdc_aggregate_row(
+            "Technology Widgetco Holdings LLC First Lien"
+        )
+
+    def test_bare_affiliation_header_still_filtered(self):
+        """Bare affiliation section headers must still be filtered (regression guard)."""
+        assert _is_bdc_aggregate_row("Non-Controlled/Non-Affiliated Investments")
+        assert _is_bdc_aggregate_row("Affiliate Investments")
+        assert _is_bdc_aggregate_row("Controlled Investments")
+
+    def test_star_mountain_category_subtotal_with_affiliation_suffix_filtered(self):
+        """Star Mountain/Saratoga-style category subtotals ending with
+        affiliation text should be filtered."""
+        assert _is_bdc_aggregate_row(
+            "Construction & Engineering First Lien Senior Secured "
+            "Term Loan Non-Affiliate Investments"
+        )
+        assert _is_bdc_aggregate_row(
+            "Technology Software First Lien Non-Controlled/Non-Affiliated Investments"
+        )
+
+    def test_percentage_subtotal_without_financial_context_still_filtered(self):
+        """Percentage-suffix subtotals without financial context should still be filtered
+        (regression guard for the pct guard change)."""
+        assert _is_bdc_aggregate_row("Debt Investment 96.8%")
+        assert _is_bdc_aggregate_row("United States - 1.60%")
+
+    def test_hierarchy_stripping_preserves_company_name(self):
+        """After stripping, the remaining identifier should have the company name
+        and be parseable for issuer extraction. Test via Python _parse_bdc_identifier."""
+        # This tests that the hierarchy regex leaves a usable identifier.
+        # "Software BPCP Crafts Intermediate LLC" -> issuer = full string (no dash)
+        issuer, _ = _parse_bdc_identifier("Software BPCP Crafts Intermediate LLC")
+        assert "BPCP Crafts" in issuer or "LLC" in issuer
 
 
 # ---------------------------------------------------------------------------

@@ -12,6 +12,7 @@ from pipeline.bdc_identifier import (
     _AFFILIATION_PREFIX_RE,
     _AFFILIATION_SUFFIX_RE,
     _AFFILIATION_TAGS,
+    _INVESTMENTS_HIERARCHY_RE,
     _sql_is_bdc_aggregate,
 )
 from pipeline.classification import (
@@ -369,20 +370,28 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         SELECT * EXCLUDE (_raw_id, _lower_id),
             regexp_replace(
                 regexp_replace(
-                    _raw_id,
-                    '{_AFFILIATION_PREFIX_RE}',
+                    regexp_replace(
+                        _raw_id,
+                        '{_AFFILIATION_PREFIX_RE}',
+                        ''
+                    ),
+                    '{_AFFILIATION_SUFFIX_RE}',
                     ''
                 ),
-                '{_AFFILIATION_SUFFIX_RE}',
+                '{_INVESTMENTS_HIERARCHY_RE}',
                 ''
             ) AS _raw_id,
             lower(trim(regexp_replace(
                 regexp_replace(
-                    _raw_id,
-                    '{_AFFILIATION_PREFIX_RE}',
+                    regexp_replace(
+                        _raw_id,
+                        '{_AFFILIATION_PREFIX_RE}',
+                        ''
+                    ),
+                    '{_AFFILIATION_SUFFIX_RE}',
                     ''
                 ),
-                '{_AFFILIATION_SUFFIX_RE}',
+                '{_INVESTMENTS_HIERARCHY_RE}',
                 ''
             ))) AS _lower_id
         FROM no_amendments

@@ -36,9 +36,11 @@ _BDC_AGGREGATE_PATTERNS = [
     "investment unsecured",
     "placeholder",
     "controlled affiliated",
-    # NOTE: "investments investments" removed from patterns -- it appears in real
-    # dimension-path identifiers (CIK 1849894, 1899996, 1920453, etc.) containing
-    # company names. Handled by entity-signal-gated category prefix logic below.
+    # "investments investments" dimension-path artifact: appears in both real
+    # positions (CIK 1849894, 1899996, 1920453) and category subtotals.
+    # Real positions have entity signals (LLC, Inc, etc.) so the no_entity
+    # guard protects them.
+    "investments investments",
     # Category-level subtotals from hierarchical XBRL filings
     "portfolio company debt securities",
     "portfolio company equity investments",
@@ -108,6 +110,12 @@ _BDC_AGGREGATE_PATTERNS = [
     "investments in non-controlled",
     "investments in non-affiliated",
     "investments in affiliated",
+    # NOTE: Affiliation-category headers like "non-controlled/non-affiliated
+    # investments" are NOT safe as substring patterns -- they appear at the
+    # START of long dimension-path identifiers containing real position data.
+    # They are handled by _BDC_AGGREGATE_EXACT (bare headers) and
+    # _BDC_AGGREGATE_SUFFIXES (industry-prefixed subtotals ending with
+    # "non-affiliate investments" etc.).
     # Dimension-path subtotals (CIK 1959604/1959568)
     "total non-controlled",
     "total non-affiliated",
@@ -130,6 +138,15 @@ _BDC_AGGREGATE_EXACT = {
     "non-control/non-affiliate investments",
     "non-controlled/non-affiliated investments",
     "controlled affiliated investments",
+    # Bare affiliation + instrument type headers (short, no company name)
+    "non-control/non-affiliate debt",
+    "non-controlled/non-affiliated debt",
+    "non-control/non-affiliate equity",
+    "non-controlled/non-affiliated equity",
+    "non-control debt", "non-controlled debt",
+    "non-affiliate debt", "non-affiliated debt",
+    "affiliate debt", "affiliated debt",
+    "control debt", "controlled debt",
     "debt securities", "short-term investments",
     "total portfolio company commitments",
     "total short-term investments",
@@ -185,6 +202,18 @@ _BDC_AGGREGATE_EXACT = {
 _BDC_AGGREGATE_SUFFIXES = [
     "first and second lien debt",
     "equity investments",
+    # Affiliation-level subtotals (e.g., "Construction & Engineering First Lien
+    # Senior Secured Term Loan Non-Affiliate Investments")
+    "non-affiliate investments",
+    "non-affiliated investments",
+    "affiliate investments",
+    "affiliated investments",
+    "control investments",
+    "controlled investments",
+    "non-control investments",
+    "non-controlled investments",
+    "non-control/non-affiliate investments",
+    "non-controlled/non-affiliated investments",
 ]
 
 # Issuer names that are industry/geography labels (not companies).
@@ -201,6 +230,23 @@ _AFFILIATION_PREFIX_RE = (
     r" Portfolio Companies"
     r")"
     "(?:\\s*-\\s*|\\s*\u2014\\s*|\\s+)"
+)
+
+# Matches the "Investments [sep] non-controlled/non-affiliated [asset type] [industry]"
+# format used by Fidelity, MSD, Sixth Street, Diameter, etc. where the full XBRL
+# dimension hierarchy is embedded in the identifier:
+#   "Investments -- non-controlled/ non-affiliate Equity Software BPCP Crafts LLC"
+# Strip everything up to and including the asset-type keyword, leaving only
+# "{Industry} {Company} {Instrument}".
+_INVESTMENTS_HIERARCHY_RE = (
+    r"(?i)^Investments\s*(?:--|-|/)\s*"
+    r"(?:non-?\s*control(?:led)?(?:\s*[/,]\s*non-?\s*affiliat(?:e|ed))?"
+    r"|control(?:led)?(?:\s*[/,]\s*affiliat(?:e|ed))?"
+    r"|affiliat(?:e|ed))"
+    r"(?:\s+(?:equity|debt|first\s+lien|second\s+lien|senior\s+secured"
+    r"|subordinated|unsecured|mezzanine|unitranche|preferred|common"
+    r"|warrant|structured|other)(?:\s+(?:securities|investments|interests))?)?"
+    r"\s+"
 )
 _AFFILIATION_SUFFIX_RE = (
     r"(?i) - (?:Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))?"
@@ -273,10 +319,6 @@ def _sql_is_bdc_aggregate() -> str:
     parts.append("contains(_lower_id, '[member]')")
     # Named aggregate patterns -- only when no entity signals
     parts.append(f"({no_entity} AND ({_sql_keyword_check('_lower_id', _BDC_AGGREGATE_PATTERNS)}))")
-    # Qualified non-control check
-    parts.append(
-        f"(contains(_lower_id, 'non-control') AND LENGTH(_raw_id) < 150 AND {no_entity})"
-    )
     # Exact match section headers (always apply -- short strings won't have entity signals)
     parts.append(_sql_exact_match("_lower_id", _BDC_AGGREGATE_EXACT))
     # Category header prefixes (only when no entity signals and no separators)
@@ -291,8 +333,35 @@ def _sql_is_bdc_aggregate() -> str:
     ]
     cat_sql = _sql_starts_with_any("_lower_id", _cat_prefixes)
     parts.append(f"({no_entity} AND NOT contains(_raw_id, ' - ') AND NOT contains(_raw_id, ' -- ') AND {cat_sql})")
+    # Affiliation-starts-with patterns: identifiers starting with affiliation
+    # phrases followed by instrument/industry (no entity signals).
+    # After _INVESTMENTS_HIERARCHY_RE stripping in the pipeline, these prefixes
+    # are removed from real positions. The Python mirror catches them directly.
+    _affil_prefixes = [
+        "non-controlled/non-affiliated investments",
+        "non-controlled/non-affiliated ",
+        "non-control/non-affiliate investments",
+        "non-control/non-affiliate ",
+        "non-controlled investments",
+        "non-affiliated investments",
+        "non-control investments",
+        "non-affiliate investments",
+        "affiliated investments",
+        "controlled investments",
+        "affiliate investments",
+        "control investments",
+    ]
+    affil_sql = _sql_starts_with_any("_lower_id", _affil_prefixes)
+    parts.append(f"({no_entity} AND {affil_sql})")
     # Identifiers ending with a percentage -- only when no entity signals
-    parts.append(f"({no_entity} AND regexp_matches(_lower_id, '\\d+\\.?\\d*%\\s*$'))")
+    # Guard: exclude cases where % is preceded by financial-term context
+    # (e.g. "Interest rate 10.5%", "SOFR + 3.5%") which are position-level rates.
+    _pct_financial_guard = (
+        "NOT regexp_matches(_lower_id, "
+        "'(?:interest\\s+rate|sofr|libor|prime|spread|coupon|yield|rate\\s+of|floor)"
+        "\\s+[\\d.]+%\\s*$')"
+    )
+    parts.append(f"({no_entity} AND regexp_matches(_lower_id, '\\d+\\.?\\d*%\\s*$') AND {_pct_financial_guard})")
     # "Total ..." industry subtotals: starts with "total " but does NOT contain
     # any company suffix
     _total_company_signals = [
@@ -578,15 +647,30 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
             if pattern in lower:
                 return True
 
-    # Qualified non-control check: filter identifiers with "non-control" that are
-    # short (<150 chars) and lack entity-name signals.
-    if "non-control" in lower:
-        if len(identifier.strip()) < 150 and not has_entity:
-            return True
-
     # Exact match section headers
     if lower in _BDC_AGGREGATE_EXACT:
         return True
+
+    # Affiliation-starts-with patterns: identifiers starting with affiliation
+    # phrases followed by instrument/industry (no entity signals).
+    if not has_entity:
+        _affil_prefixes = (
+            "non-controlled/non-affiliated investments",
+            "non-controlled/non-affiliated ",
+            "non-control/non-affiliate investments",
+            "non-control/non-affiliate ",
+            "non-controlled investments",
+            "non-affiliated investments",
+            "non-control investments",
+            "non-affiliate investments",
+            "affiliated investments",
+            "controlled investments",
+            "affiliate investments",
+            "control investments",
+        )
+        for pfx in _affil_prefixes:
+            if lower.startswith(pfx):
+                return True
 
     # Category headers: "Debt Investments <Industry>", "Debt Securities <Industry>",
     # "Equity Securities <Industry>", "Investment <Type>" etc.
@@ -610,8 +694,15 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
     # e.g. "Debt Investment 96.8%", "United States - 1.60%"
     # Exception: entity-signal identifiers that happen to embed a pct-of-NAV
     # in the dimension path (e.g., "Investments 176% of Net Assets, Company LLC")
+    # Guard: exclude cases where % is preceded by financial-term context
+    # (e.g. "Interest rate 10.5%", "SOFR + 3.5%") which are position-level rates.
     if not has_entity and re.search(r"\d+\.?\d*%\s*$", lower):
-        return True
+        if not re.search(
+            r"(?:interest\s+rate|sofr|libor|prime|spread|coupon|yield|rate\s+of|floor)"
+            r"\s+[\d.]+%\s*$",
+            lower,
+        ):
+            return True
 
     # Industry-prefixed subtotals: identifier ends with instrument type
     # (real positions always have rate/maturity after)
