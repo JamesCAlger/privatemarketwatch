@@ -25,21 +25,23 @@ export function generateMetadata({ params }: { params: { cik: string } }) {
 // Chart data builders
 // ---------------------------------------------------------------------------
 
-/** Build a total return index by chaining monthly returns (base = 100). */
+/** Build a total return index by chaining quarterly or monthly returns. */
 function buildTotalReturnIndex(series: FundSeriesEntry[]): { quarter: string; level: number }[] {
   let level = 100;
   const result: { quarter: string; level: number }[] = [];
 
   for (const s of series) {
-    const months = [s.monthly_return_1, s.monthly_return_2, s.monthly_return_3];
-    let anyReturn = false;
-    for (const m of months) {
-      if (typeof m === 'number') {
-        level *= 1 + m / 100; // monthly returns stored as percentage points
-        anyReturn = true;
-      }
+    if (typeof s.quarterly_return === 'number') {
+      level *= 1 + s.quarterly_return / 100;
+      result.push({ quarter: s.quarter, level: Math.round(level * 100) / 100 });
+      continue;
     }
-    if (anyReturn) {
+
+    const months = [s.monthly_return_1, s.monthly_return_2, s.monthly_return_3];
+    if (months.every((m) => typeof m === 'number')) {
+      for (const m of months) {
+        level *= 1 + (m as number) / 100;
+      }
       result.push({ quarter: s.quarter, level: Math.round(level * 100) / 100 });
     }
   }
@@ -56,8 +58,8 @@ function buildNavSeries(series: FundSeriesEntry[]): { quarter: string; level: nu
 
 /**
  * Pick the best line chart to show:
- * - Interval/tender with monthly returns: total return index (chained monthly)
- * - BDCs with quarterly NAV: NAV/share
+ * - Fund rows with quarterly or monthly returns: total return index
+ * - Fallback: NAV/share index when return data is unavailable
  * - Fallback: whichever has more data points
  */
 function pickLineChart(series: FundSeriesEntry[], vehicleType: string) {
@@ -69,18 +71,18 @@ function pickLineChart(series: FundSeriesEntry[], vehicleType: string) {
   const navIsGenuineQuarterly = distinctNavs >= navIndex.length * 0.5;
 
   if (vehicleType === 'bdc') {
-    if (navIndex.length >= 2) {
-      return { data: navIndex, label: 'NAV/Share', key: 'nav' };
-    }
     if (trIndex.length >= 2) {
       return { data: trIndex, label: 'Total Return', key: 'tr' };
+    }
+    if (navIndex.length >= 2) {
+      return { data: navIndex, label: 'NAV/Share Index', key: 'nav' };
     }
   } else {
     if (trIndex.length >= 2) {
       return { data: trIndex, label: 'Total Return', key: 'tr' };
     }
     if (navIndex.length >= 2 && navIsGenuineQuarterly) {
-      return { data: navIndex, label: 'NAV/Share', key: 'nav' };
+      return { data: navIndex, label: 'NAV/Share Index', key: 'nav' };
     }
   }
 
@@ -97,16 +99,17 @@ const MATURITY_COLORS = [
   '#3DB0A3', '#2A9D8F', '#1F7268', '#1A5F56',
 ];
 
-function MaturityChart({ buckets, coverage }: {
+function MaturityChart({ buckets, coverage, embedded = false }: {
   buckets: { label: string; pct: number }[];
   coverage: number;
+  embedded?: boolean;
 }) {
   const nonZero = buckets.filter((b) => b.pct > 0);
   if (nonZero.length === 0) return null;
   const maxPct = Math.max(...buckets.map((b) => b.pct));
 
   return (
-    <div className="bg-white shadow-card p-5">
+    <div className={embedded ? '' : 'bg-white shadow-card p-5'}>
       <div className="flex items-baseline justify-between mb-5">
         <p className="text-sm font-medium text-navy">Maturity Profile</p>
         <p className="text-[10px] text-muted">
@@ -154,7 +157,7 @@ function MaturityChart({ buckets, coverage }: {
 // Portfolio Analytics section
 // ---------------------------------------------------------------------------
 
-function PortfolioAnalytics({ exposure }: { exposure: FundExposure }) {
+function PortfolioAnalytics({ exposure, embedded = false }: { exposure: FundExposure; embedded?: boolean }) {
   const { wac, wacCoverage, was, wam, wamCoverage, maturityBuckets, concentration, pikExposure, creditFlags } = exposure;
 
   const hasWamData = wamCoverage != null && wamCoverage > 0.1;
@@ -181,7 +184,7 @@ function PortfolioAnalytics({ exposure }: { exposure: FundExposure }) {
     <>
       {/* Row 1: Core metrics */}
       {hasRow1 && (
-        <div className="bg-white shadow-card p-5 mb-4">
+        <div className={embedded ? 'border-b border-surface-muted pb-5 mb-5' : 'bg-white shadow-card p-5 mb-4'}>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             {showWac && (
               <StatItem
@@ -207,14 +210,14 @@ function PortfolioAnalytics({ exposure }: { exposure: FundExposure }) {
 
       {/* Row 2: Maturity chart */}
       {hasMaturity && maturityBuckets && (
-        <div className="mb-4">
-          <MaturityChart buckets={maturityBuckets} coverage={wamCoverage ?? 0} />
+        <div className={hasRow3 ? 'border-b border-surface-muted pb-5 mb-5' : ''}>
+          <MaturityChart buckets={maturityBuckets} coverage={wamCoverage ?? 0} embedded={embedded} />
         </div>
       )}
 
       {/* Row 3: Risk metrics */}
       {hasRow3 && (
-        <div className="bg-white shadow-card p-5">
+        <div className={embedded ? '' : 'bg-white shadow-card p-5'}>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
             {hasPik && pikExposure && (
               <StatItem
@@ -279,6 +282,12 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   const distData = fund.series
     .filter((s) => s.distribution_per_share != null && (s.distribution_per_share as number) > 0)
     .map((s) => ({ quarter: s.quarter, return: s.distribution_per_share as number }));
+
+  const hasRiskMetrics = latest?.leverage_ratio != null ||
+    latest?.asset_coverage_ratio != null ||
+    latest?.unfunded_commitments != null ||
+    latest?.redemption_pressure != null ||
+    latest?.expense_ratio_pct != null;
 
   // Trailing 1Y return (compound last 4 quarterly returns)
   const returns = qReturns.map((q) => q.ret);
@@ -453,11 +462,14 @@ export default function FundPage({ params }: { params: { cik: string } }) {
 
           {lineData.length >= 2 && (
             <div className="mt-6 bg-white p-4 sm:p-6 shadow-card">
-              <p className="text-sm font-medium text-navy mb-3">Total Return</p>
+              <p className="text-sm font-medium text-navy mb-3">
+                {lineChart?.label ?? 'Total Return'}
+              </p>
               <TotalReturnChart
                 lineData={lineData}
                 barData={barData}
                 lineLabel={lineChart?.label ?? 'Total Return'}
+                showBars={false}
               />
             </div>
           )}
@@ -475,37 +487,37 @@ export default function FundPage({ params }: { params: { cik: string } }) {
           )}
         </section>
 
-        {/* Portfolio Analytics */}
-        {exposure && (
-          <section className="mb-14">
-            <SectionHeading>Portfolio Analytics</SectionHeading>
-            <PortfolioAnalytics exposure={exposure} />
-          </section>
-        )}
+        {(exposure || hasRiskMetrics) && (
+          <section className="mb-14 bg-white shadow-card p-5 sm:p-6">
+            <div className="grid gap-8 xl:grid-cols-[minmax(0,2fr)_minmax(260px,1fr)] xl:items-start">
+              {/* Portfolio Analytics */}
+              {exposure && (
+                <div>
+                  <SectionHeading>Portfolio Analytics</SectionHeading>
+                  <PortfolioAnalytics exposure={exposure} embedded />
+                </div>
+              )}
 
-        {/* Risk & Leverage */}
-        {(latest?.leverage_ratio != null ||
-          latest?.asset_coverage_ratio != null ||
-          latest?.unfunded_commitments != null ||
-          latest?.redemption_pressure != null ||
-          latest?.expense_ratio_pct != null) && (
-          <section className="mb-14">
-            <SectionHeading>Risk & Leverage</SectionHeading>
-            <div className="bg-white shadow-card p-5">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                {latest?.leverage_ratio != null && (
-                  <StatItem label="Leverage Ratio" value={formatPercent(latest.leverage_ratio)} />
-                )}
-                {latest?.asset_coverage_ratio != null && (
-                  <StatItem label="Asset Coverage" value={`${latest.asset_coverage_ratio.toFixed(0)}%`} />
-                )}
-                {latest?.unfunded_commitments != null && (
-                  <StatItem label="Unfunded Commitments" value={formatDollar(latest.unfunded_commitments)} />
-                )}
-                {latest?.redemption_pressure != null && (
-                  <StatItem label="Redemption Pressure" value={`${latest.redemption_pressure.toFixed(1)}%`} />
-                )}
-              </div>
+              {/* Risk & Leverage */}
+              {hasRiskMetrics && (
+                <div>
+                  <SectionHeading>Risk & Leverage</SectionHeading>
+                  <div className="grid grid-cols-2 gap-6">
+                    {latest?.leverage_ratio != null && (
+                      <StatItem label="Leverage Ratio" value={formatPercent(latest.leverage_ratio)} />
+                    )}
+                    {latest?.asset_coverage_ratio != null && (
+                      <StatItem label="Asset Coverage" value={`${latest.asset_coverage_ratio.toFixed(0)}%`} />
+                    )}
+                    {latest?.unfunded_commitments != null && (
+                      <StatItem label="Unfunded Commitments" value={formatDollar(latest.unfunded_commitments)} />
+                    )}
+                    {latest?.redemption_pressure != null && (
+                      <StatItem label="Redemption Pressure" value={`${latest.redemption_pressure.toFixed(1)}%`} />
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </section>
         )}

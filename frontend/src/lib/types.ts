@@ -243,6 +243,9 @@ export interface FundSeriesEntry {
   net_assets?: number | null;
   nav_per_share?: number | null;
   leverage_ratio?: number | null;
+  monthly_return_1?: number | null;
+  monthly_return_2?: number | null;
+  monthly_return_3?: number | null;
   quarterly_return?: number | null;
   distribution_rate?: number | null;
   distribution_per_share?: number | null;
@@ -404,19 +407,18 @@ export interface GicsSectorRow {
   fundCount: number | null;
 }
 
-/** Credit risk tier values (fractions summing to 1.0) */
-export interface CreditRiskTiers {
+/** Credit stress signal values (independent fractions, not additive) */
+export interface CreditRiskSignals {
   deepDistress: number;
   nonAccrual: number;
-  pikActive: number;
-  healthy: number;
+  markedBelowCost: number;
 }
 
 /** Credit risk row from credit_risk.json */
 export interface CreditRiskRow {
   quarter: string;
-  byCount: CreditRiskTiers;
-  byFv: CreditRiskTiers;
+  byCount: CreditRiskSignals;
+  byFv: CreditRiskSignals;
   totalPositions: number;
   totalFv: number;
 }

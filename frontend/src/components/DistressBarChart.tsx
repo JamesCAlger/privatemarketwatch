@@ -21,7 +21,7 @@ interface DistressBarChartProps {
 const TIERS = [
   { key: 'deepDistress', label: 'Deep Distress (<80% par)', color: '#9B2226' },
   { key: 'nonAccrual', label: 'Non-Accrual', color: '#CA6702' },
-  { key: 'pikActive', label: 'PIK Active', color: '#EEC643' },
+  { key: 'markedBelowCost', label: 'Marked Below Cost (<90%)', color: '#EEC643' },
 ] as const;
 
 type ViewMode = 'count' | 'fv';
@@ -38,7 +38,7 @@ function CustomTooltip({
   viewMode: ViewMode;
 }) {
   if (!active || !payload || payload.length === 0) return null;
-  const total = payload.reduce((s, e) => s + (e.value ?? 0), 0);
+  const cumulative = payload.reduce((s, e) => s + (e.value ?? 0), 0);
   return (
     <div className="bg-navy px-3 py-2 shadow-panel text-xs">
       <p className="text-white/60 mb-1">
@@ -58,14 +58,14 @@ function CustomTooltip({
         );
       })}
       <div className="border-t border-white/20 mt-1 pt-1 text-white font-medium tabular-nums">
-        Total stressed: {formatPercent(total)}
+        Cumulative signals: {formatPercent(cumulative)}
       </div>
     </div>
   );
 }
 
 export default function DistressBarChart({ data }: DistressBarChartProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>('count');
+  const [viewMode, setViewMode] = useState<ViewMode>('fv');
   const [ref, inView] = useInView(0.15);
 
   if (data.length === 0) {
@@ -76,14 +76,15 @@ export default function DistressBarChart({ data }: DistressBarChartProps) {
     );
   }
 
-  // Transform data for chart -- each bar sums stress tiers (not including healthy)
+  // Signals are independent. The stacked height is cumulative signal incidence,
+  // so positions with multiple signals can contribute to multiple segments.
   const chartData = data.map((row) => {
     const source = viewMode === 'count' ? row.byCount : row.byFv;
     return {
       quarter: row.quarter,
       deepDistress: source.deepDistress ?? 0,
       nonAccrual: source.nonAccrual ?? 0,
-      pikActive: source.pikActive ?? 0,
+      markedBelowCost: source.markedBelowCost ?? 0,
     };
   });
 

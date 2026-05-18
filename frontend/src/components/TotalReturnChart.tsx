@@ -29,6 +29,7 @@ interface TotalReturnChartProps {
   lineData: { quarter: string; level: number }[];
   barData: { quarter: string; return: number | null }[];
   lineLabel: string;
+  showBars?: boolean;
   positiveColor?: string;
   negativeColor?: string;
 }
@@ -70,6 +71,7 @@ export default function TotalReturnChart({
   lineData,
   barData,
   lineLabel,
+  showBars = true,
   positiveColor = '#2A9D8F',
   negativeColor = '#E63946',
 }: TotalReturnChartProps) {
@@ -77,7 +79,7 @@ export default function TotalReturnChart({
   const [ref, inView] = useInView(0.15);
 
   const hasLine = lineData.length >= 2;
-  const hasBars = barData.length >= 2;
+  const hasBars = showBars && barData.length >= 2;
 
   // Merge line + bar into unified data array
   const allData = useMemo(() => {
@@ -85,13 +87,15 @@ export default function TotalReturnChart({
     for (const d of lineData) {
       byQuarter.set(d.quarter, { ...byQuarter.get(d.quarter), level: d.level });
     }
-    for (const d of barData) {
-      byQuarter.set(d.quarter, { ...byQuarter.get(d.quarter), return: d.return });
+    if (showBars) {
+      for (const d of barData) {
+        byQuarter.set(d.quarter, { ...byQuarter.get(d.quarter), return: d.return });
+      }
     }
     return Array.from(byQuarter.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([q, vals]) => ({ quarter: q, ...vals }));
-  }, [lineData, barData]);
+  }, [lineData, barData, showBars]);
 
   // Filter by period
   const chartData = useMemo(() => {
@@ -104,7 +108,7 @@ export default function TotalReturnChart({
 
   if (allData.length === 0) return null;
 
-  const chartHeight = hasLine && hasBars ? 400 : 280;
+  const chartHeight = hasLine ? 400 : 280;
 
   return (
     <div ref={ref}>

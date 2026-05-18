@@ -242,7 +242,7 @@ export default function HomePage() {
                 Industry Exposure
               </h2>
               <span className="text-xs text-muted">
-                BDC XBRL industry-axis data (latest quarter)
+                Holdings-level industry classification (latest quarter)
               </span>
             </div>
             <div className="bg-white shadow-card p-5">
@@ -302,7 +302,7 @@ export default function HomePage() {
                 Credit Risk &amp; Distress
               </h2>
               <span className="text-xs text-muted">
-                Direct Lending: % of positions by stress tier
+                BDC Direct Lending: cumulative % by credit stress signal
               </span>
             </div>
             <div className="bg-white shadow-card p-5">
