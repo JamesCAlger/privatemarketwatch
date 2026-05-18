@@ -527,6 +527,32 @@ class TestClassifyGicsE2E:
         mock_llm.assert_not_called()
 
     @patch("pipeline.gics_classification._run_llm_classification")
+    def test_cache_only_mode_leaves_uncached_names_blank(self, mock_llm, tmp_path, monkeypatch):
+        from pipeline.unified_holdings import UNIFIED_COLUMNS
+
+        cache_file = tmp_path / "cache.csv"
+        monkeypatch.setattr(
+            "pipeline.gics_classification.COMPANY_GICS_CACHE_FILE", cache_file
+        )
+        unified_file = tmp_path / "unified.csv"
+        monkeypatch.setattr(
+            "pipeline.gics_classification.UNIFIED_HOLDINGS_FILE", unified_file
+        )
+
+        _save_cache({"acme": ("Restaurants", "high", "review")})
+
+        df = pd.DataFrame({col: ["", ""] for col in UNIFIED_COLUMNS})
+        df["issuer_name"] = ["Acme Corp", "Unknown Dental LLC"]
+        df["issuer_category"] = ["CORPORATE", "CORPORATE"]
+        df["extracted_industry"] = ["", ""]
+        df["nport_asset_cat"] = ["", ""]
+
+        result = classify_gics(unified_df=df, cache_only=True)
+
+        assert result["gics_sub_industry"].tolist() == ["Restaurants", ""]
+        mock_llm.assert_not_called()
+
+    @patch("pipeline.gics_classification._run_llm_classification")
     def test_column_in_output(self, mock_llm, tmp_path, monkeypatch):
         from pipeline.unified_holdings import UNIFIED_COLUMNS
 

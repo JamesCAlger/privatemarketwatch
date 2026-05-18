@@ -752,6 +752,7 @@ def _apply_gics_to_holdings(
 
 def classify_gics(
     unified_df: Optional[pd.DataFrame] = None,
+    cache_only: bool = False,
 ) -> pd.DataFrame:
     """Add gics_sub_industry column to unified holdings.
 
@@ -782,15 +783,20 @@ def classify_gics(
     if "gics_sub_industry" not in unified_df.columns:
         unified_df["gics_sub_industry"] = ""
 
+    cache_only = cache_only or os.environ.get("GICS_CACHE_ONLY", "").lower() in {
+        "1", "true", "yes"
+    }
     gics_names = _load_gics_names()
     cache = _load_cache()
     initial_cache_size = len(cache)
 
     logger.info("  Loaded cache: %d entries", initial_cache_size)
+    if cache_only:
+        logger.info("  Cache-only mode: applying existing company_gics_cache.csv only")
 
     # ── Phase 1a: Map extracted_industry to GICS ──
     logger.info("Phase 1a: Mapping extracted_industry labels...")
-    industry_map = _classify_from_extracted_industry(unified_df)
+    industry_map = {} if cache_only else _classify_from_extracted_industry(unified_df)
     new_from_industry = 0
     for name_norm, gics in industry_map.items():
         if name_norm not in cache:
@@ -812,14 +818,15 @@ def classify_gics(
     con.close()
 
     new_from_keywords = 0
-    for raw_name in corp_names["issuer_name"]:
-        norm = _normalize_company_name(str(raw_name))
-        if not norm or norm in cache:
-            continue
-        gics = _classify_by_keyword(norm)
-        if gics:
-            cache[norm] = (gics, "medium", "keyword")
-            new_from_keywords += 1
+    if not cache_only:
+        for raw_name in corp_names["issuer_name"]:
+            norm = _normalize_company_name(str(raw_name))
+            if not norm or norm in cache:
+                continue
+            gics = _classify_by_keyword(norm)
+            if gics:
+                cache[norm] = (gics, "medium", "keyword")
+                new_from_keywords += 1
     logger.info("  Phase 1b: %d new classifications from keywords",
                 new_from_keywords)
 
@@ -830,7 +837,9 @@ def classify_gics(
 
     # ── Phase 2: LLM batch classification ──
     already_classified = set(cache.keys())
-    candidates = _get_candidates(unified_df, already_classified, skip_names)
+    candidates = [] if cache_only else _get_candidates(
+        unified_df, already_classified, skip_names
+    )
 
     if candidates:
         logger.info("Phase 2: LLM classification for %d unique company names...",

@@ -138,6 +138,7 @@ NPORT_PARSE_PROGRESS_FILE = OUTPUT_DIR / "nport_parse_progress.csv"
 
 # Unified private markets holdings
 UNIFIED_HOLDINGS_FILE = OUTPUT_DIR / "private_markets_holdings.csv"
+UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 
 # Manual row-level corrections overlay (checked into data/overrides/)
 ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
@@ -159,6 +160,7 @@ HOLDINGS_COUNT_STABILITY_FILE = OUTPUT_DIR / "holdings_count_stability.csv"
 HOLDINGS_INCOME_YIELD_FILE = OUTPUT_DIR / "holdings_income_yield.csv"
 COLUMN_QUALITY_METRICS_FILE = OUTPUT_DIR / "column_quality_metrics.csv"
 ROW_VALIDATION_ISSUES_FILE = OUTPUT_DIR / "row_validation_issues.csv"
+VALIDATE_ALL_RESIDUAL_SUMMARY_FILE = OUTPUT_DIR / "validate_all_residual_summary.csv"
 DATA_QUALITY_METRICS_FILE = OUTPUT_DIR / "data_quality_metrics.csv"
 
 # Position matching and index returns
@@ -260,6 +262,7 @@ NPORT_EXCLUDE_CIKS: set[str] = {
     "1678130",   # RiverNorth/DoubleLine Strategic Opp (opaque numeric IDs, <$1B FV)
     "2041175",   # NB Direct Private Lending (opaque numeric IDs, <$0.5B FV)
     "1500234",   # Ironwood Multi-Strategy Fund (feeder: single $3B+ position in master fund)
+    "1547580",   # Victory Portfolios II (broad registered fund denominator contaminant)
 }
 
 # Manual scale overrides for fund_financials when automatic detection fails.
@@ -268,6 +271,12 @@ NPORT_EXCLUDE_CIKS: set[str] = {
 FUND_FINANCIALS_SCALE_OVERRIDES: dict[str, int] = {
     "0002012139": 1000,  # Owl Rock Core Income Corp: 2025-06-30 reported in raw dollars
 }
+
+# Optional audited exceptions for BDC aggregate/header row filtering.
+# Rows are matched by CIK plus substring match_text, with optional report_date
+# and accession_number narrowing.  Intended only for rows that cannot be
+# classified safely by global rules.
+BDC_AGGREGATE_ROW_OVERRIDES_FILE = OUTPUT_DIR / "bdc_aggregate_row_overrides.json"
 
 # ---------------------------------------------------------------------------
 # BDC XBRL holdings extraction settings

@@ -42,6 +42,7 @@ def _redirect_validate_holdings_outputs(monkeypatch, tmp_path):
         "HOLDINGS_COUNT_STABILITY_FILE": "holdings_count_stability.csv",
         "HOLDINGS_INCOME_YIELD_FILE": "holdings_income_yield.csv",
         "ROW_VALIDATION_ISSUES_FILE": "row_validation_issues.csv",
+        "VALIDATE_ALL_RESIDUAL_SUMMARY_FILE": "validate_all_residual_summary.csv",
         "COLUMN_QUALITY_METRICS_FILE": "column_quality_metrics.csv",
         "DATA_QUALITY_METRICS_FILE": "data_quality_metrics.csv",
         "FEE_UPLIFT_FILE": "fee_uplift.csv",
@@ -512,6 +513,7 @@ class TestValidateHoldings:
         row_issues_file = tmp_path / "row_issues.csv"
         column_metrics_file = tmp_path / "column_metrics.csv"
         quality_metrics_file = tmp_path / "quality_metrics.csv"
+        residual_summary_file = tmp_path / "residual_summary.csv"
 
         with patch("pipeline.validate_holdings.HOLDINGS_VALIDATION_REPORT_FILE", report_file), \
              patch("pipeline.validate_holdings.HOLDINGS_SPOT_CHECK_FILE", spot_file), \
@@ -520,7 +522,8 @@ class TestValidateHoldings:
              patch("pipeline.validate_holdings.HOLDINGS_TOTAL_ASSETS_FILE", total_assets_file), \
              patch("pipeline.validate_holdings.ROW_VALIDATION_ISSUES_FILE", row_issues_file), \
              patch("pipeline.validate_holdings.COLUMN_QUALITY_METRICS_FILE", column_metrics_file), \
-             patch("pipeline.validate_holdings.DATA_QUALITY_METRICS_FILE", quality_metrics_file):
+             patch("pipeline.validate_holdings.DATA_QUALITY_METRICS_FILE", quality_metrics_file), \
+             patch("pipeline.validate_holdings.VALIDATE_ALL_RESIDUAL_SUMMARY_FILE", residual_summary_file):
             reports = validate_holdings(unified_df=df, universe_df=universe)
 
         assert "spot_check" in reports
@@ -532,6 +535,7 @@ class TestValidateHoldings:
         assert "row_validation_issues" in reports
         assert "column_quality_metrics" in reports
         assert "data_quality_metrics" in reports
+        assert "validate_all_residual_summary" in reports
 
         # CSVs should be saved
         assert report_file.exists()
@@ -540,6 +544,7 @@ class TestValidateHoldings:
         assert row_issues_file.exists()
         assert column_metrics_file.exists()
         assert quality_metrics_file.exists()
+        assert residual_summary_file.exists()
 
     def test_returns_empty_dict_when_no_data(self, tmp_path):
         """When unified file doesn't exist and no df provided, returns empty."""
@@ -665,8 +670,71 @@ class TestCheckGavReconciliation:
         assert row["flag"] == "under_coverage"
         assert row["bdc_source_reconciliation_flag"] == "ok"
         assert row["gav_evidence_scope"] == "source_fv_present_not_indexable"
+        assert float(row["bdc_source_raw_fv"]) == 10000000.0
+        assert float(row["bdc_source_aggregate_filtered_fv"]) == 0.0
+        assert float(row["bdc_source_non_indexable_filtered_fv"]) == 9000000.0
+        assert row["comparison_denominator_source"] == "investments_at_fair_value"
+        assert row["comparison_denominator_scope"] == "investment_fair_value"
         assert float(row["bdc_source_reconciliation_ratio"]) == 1.0
         assert int(row["bdc_source_reconciliation_rows"]) == 2
+
+    def test_bdc_source_reconciliation_separates_aggregate_filtered_fv(self):
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "1000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "6000000",
+            "total_assets": "",
+        }])
+        bdc_source = pd.DataFrame([
+            {
+                "cik": "100", "report_date": "2024-03-31", "period": "2024-03-31",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000", "accession_number": "acc-001",
+                "form_type": "10-Q", "filing_date": "2024-05-01",
+            },
+            {
+                "cik": "100", "report_date": "2024-03-31", "period": "2024-03-31",
+                "investment_identifier": "Total Debt Investments, First Lien Debt",
+                "fair_value": "5000000", "accession_number": "acc-001",
+                "form_type": "10-Q", "filing_date": "2024-05-01",
+            },
+        ])
+
+        result = check_gav_reconciliation(
+            holdings,
+            fund_financials_df=ff,
+            bdc_source_df=bdc_source,
+        )
+
+        row = result.iloc[0]
+        assert float(row["bdc_source_raw_fv"]) == 6000000.0
+        assert float(row["bdc_source_aggregate_filtered_fv"]) == 5000000.0
+        assert float(row["bdc_source_reconciliation_fv"]) == 1000000.0
+        assert row["bdc_source_reconciliation_flag"] == "under_coverage"
+
+    def test_nport_non_indexable_denominator_is_not_ordinary_undercoverage(self):
+        holdings = _make_unified_df([
+            {"cik": "0001547580", "entity_name": "Victory Portfolios II",
+             "report_date": "2024-03-31", "fair_value": "1000000", "source": "nport"},
+        ])
+        nport_fi = pd.DataFrame([{
+            "cik": "1547580", "report_date": "2024-03-31",
+            "total_assets": "20000000",
+        }])
+
+        result = check_gav_reconciliation(
+            holdings,
+            fund_financials_df=pd.DataFrame(),
+            nport_fund_info_df=nport_fi,
+        )
+
+        row = result.iloc[0]
+        assert row["gav_rule_id"] == "GAV_NPORT01"
+        assert row["flag"] == "non_indexable_denominator"
+        assert row["gav_evidence_scope"] == "non_indexable_denominator"
 
     def test_no_comparison_flag(self):
         """When no fund_financials data, flag is no_comparison."""

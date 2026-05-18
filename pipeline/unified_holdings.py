@@ -16,6 +16,7 @@ import pandas as pd
 from pipeline import classification, staging_bdc, staging_nport
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
+    COMBINED_UNIVERSE_FILE,
     ENTITY_LOOKUP_FILE,
     FUND_FINANCIALS_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
@@ -23,6 +24,7 @@ from pipeline.config import (
     NPORT_HOLDINGS_FILE,
     ROW_CORRECTIONS_FILE,
     UNIFIED_HOLDINGS_FILE,
+    UNIVERSE_ORPHAN_HOLDINGS_FILE,
 )
 
 logger = logging.getLogger(__name__)
@@ -73,6 +75,80 @@ UNIFIED_COLUMNS = [
     # Position tracking (populated by --returns step)
     "position_id",
 ]
+
+ORPHAN_HOLDINGS_COLUMNS = [
+    "cik", "entity_name", "source", "first_report_date", "last_report_date",
+    "row_count", "fair_value", "reason",
+]
+
+
+def _normalize_cik_series(series: pd.Series) -> pd.Series:
+    return (
+        series.astype(str)
+        .str.replace(r"[^0-9]", "", regex=True)
+        .str.zfill(10)
+    )
+
+
+def _write_empty_orphan_report(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(columns=ORPHAN_HOLDINGS_COLUMNS).to_csv(path, index=False)
+
+
+def _apply_universe_gate(
+    df: pd.DataFrame,
+    universe_path: Optional[Path] = None,
+    orphan_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """Remove holdings for CIKs outside combined_universe and write review residuals."""
+    path = universe_path or COMBINED_UNIVERSE_FILE
+    out_path = orphan_path or UNIVERSE_ORPHAN_HOLDINGS_FILE
+    if df.empty:
+        _write_empty_orphan_report(out_path)
+        return df
+    if not path.exists():
+        logger.warning("Combined universe file not found; skipping universe gate: %s", path)
+        _write_empty_orphan_report(out_path)
+        return df
+
+    universe = pd.read_csv(path, dtype=str)
+    if "cik" not in universe.columns:
+        logger.warning("Combined universe file missing cik column; skipping universe gate: %s", path)
+        _write_empty_orphan_report(out_path)
+        return df
+
+    allowed = set(_normalize_cik_series(universe["cik"]))
+    gated = df.copy()
+    gated["_norm_cik"] = _normalize_cik_series(gated["cik"])
+    orphan_mask = ~gated["_norm_cik"].isin(allowed)
+    orphan_rows = gated[orphan_mask].copy()
+
+    if orphan_rows.empty:
+        _write_empty_orphan_report(out_path)
+        return gated.drop(columns=["_norm_cik"])
+
+    orphan_rows["fair_value"] = pd.to_numeric(orphan_rows["fair_value"], errors="coerce")
+    orphan_summary = (
+        orphan_rows.groupby(["_norm_cik", "entity_name", "source"], dropna=False)
+        .agg(
+            first_report_date=("report_date", "min"),
+            last_report_date=("report_date", "max"),
+            row_count=("source", "size"),
+            fair_value=("fair_value", "sum"),
+        )
+        .reset_index()
+        .rename(columns={"_norm_cik": "cik"})
+    )
+    orphan_summary["reason"] = "cik_absent_from_combined_universe"
+    orphan_summary = orphan_summary[ORPHAN_HOLDINGS_COLUMNS]
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    orphan_summary.to_csv(out_path, index=False)
+
+    logger.warning(
+        "Universe gate removed %d holdings across %d CIK/source groups; review %s",
+        len(orphan_rows), len(orphan_summary), out_path.name,
+    )
+    return gated[~orphan_mask].drop(columns=["_norm_cik"]).reset_index(drop=True)
 
 def _stabilize_classification(df: pd.DataFrame) -> pd.DataFrame:
     """Stabilize QoQ classification flips using 2x majority rule.
@@ -846,6 +922,8 @@ def build_unified_holdings(
     dedup_removed = pre_dedup - len(combined)
     logger.info("Combined: %d total rows (BDC %d + N-PORT %d, %d cross-source dupes removed)",
                 len(combined), len(bdc_unified), len(nport_unified), dedup_removed)
+
+    combined = _apply_universe_gate(combined)
 
     # Log subsidiary stats
     if "is_subsidiary" in combined.columns:

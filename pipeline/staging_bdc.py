@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 
 import duckdb
@@ -29,8 +30,64 @@ from pipeline.classification import (
     _sql_money_market_check,
     _sql_normalize_name,
 )
+from pipeline.config import BDC_AGGREGATE_ROW_OVERRIDES_FILE
 
 logger = logging.getLogger(__name__)
+
+_AGGREGATE_OVERRIDE_COLUMNS = [
+    "cik",
+    "report_date",
+    "accession_number",
+    "match_text",
+    "action",
+    "reason",
+    "evidence",
+    "review_id",
+    "updated_at",
+]
+
+
+def _load_bdc_aggregate_overrides() -> pd.DataFrame:
+    """Load audited aggregate-row include/exclude overrides, if present."""
+    if not BDC_AGGREGATE_ROW_OVERRIDES_FILE.exists():
+        return pd.DataFrame(columns=[*_AGGREGATE_OVERRIDE_COLUMNS, "match_text_lower"])
+    try:
+        with BDC_AGGREGATE_ROW_OVERRIDES_FILE.open(encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except Exception as exc:
+        raise ValueError(
+            f"Could not read {BDC_AGGREGATE_ROW_OVERRIDES_FILE}"
+        ) from exc
+
+    records = payload.get("overrides", payload) if isinstance(payload, dict) else payload
+    if not isinstance(records, list):
+        raise ValueError("BDC aggregate overrides must be a JSON list or {'overrides': [...]}")
+
+    df = pd.DataFrame(records)
+    for col in _AGGREGATE_OVERRIDE_COLUMNS:
+        if col not in df.columns:
+            df[col] = ""
+    required = ["cik", "match_text", "action", "reason", "evidence", "review_id", "updated_at"]
+    missing = {
+        col for col in required
+        if df[col].fillna("").astype(str).str.strip().eq("").any()
+    }
+    if missing:
+        raise ValueError(
+            "BDC aggregate overrides missing required values: "
+            + ", ".join(sorted(missing))
+        )
+    bad_actions = set(df["action"].astype(str).str.lower()) - {"include", "exclude"}
+    if bad_actions:
+        raise ValueError(f"Invalid BDC aggregate override action(s): {sorted(bad_actions)}")
+
+    df = df[_AGGREGATE_OVERRIDE_COLUMNS].copy()
+    df["cik"] = df["cik"].astype(str).str.replace(r"[^0-9]", "", regex=True).str.zfill(10)
+    for col in ["report_date", "accession_number", "match_text", "action"]:
+        df[col] = df[col].fillna("").astype(str).str.strip()
+    df["match_text_lower"] = df["match_text"].str.lower()
+    df["action"] = df["action"].str.lower()
+    return df
 
 
 def _reclassify_named_fund_positions(df: pd.DataFrame) -> pd.DataFrame:
@@ -103,6 +160,8 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
 
     con = duckdb.connect()
     con.register("bdc_raw", bdc_df)
+    aggregate_overrides = _load_bdc_aggregate_overrides()
+    con.register("bdc_aggregate_overrides", aggregate_overrides)
 
     # Pre-generate SQL fragments from Python constants
     agg_filter = _sql_is_bdc_aggregate()
@@ -329,10 +388,27 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         FROM no_amendments
     ),
 
+    aggregate_override_matches AS (
+        SELECT
+            s._row_id,
+            MAX(CASE WHEN o.action = 'include' THEN 1 ELSE 0 END) AS force_include,
+            MAX(CASE WHEN o.action = 'exclude' THEN 1 ELSE 0 END) AS force_exclude
+        FROM strip_affil s
+        JOIN bdc_aggregate_overrides o
+          ON LPAD(REGEXP_REPLACE(CAST(s.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = o.cik
+         AND (o.report_date = '' OR CAST(s.report_date AS VARCHAR) = o.report_date)
+         AND (o.accession_number = '' OR CAST(s.accession_number AS VARCHAR) = o.accession_number)
+         AND contains(lower(CAST(s._raw_id AS VARCHAR)), o.match_text_lower)
+        GROUP BY s._row_id
+    ),
+
     -- CTE 2: Filter aggregate/subtotal rows
     no_aggregates AS (
-        SELECT * FROM strip_affil
-        WHERE NOT ({agg_filter})
+        SELECT s.* FROM strip_affil s
+        LEFT JOIN aggregate_override_matches o
+          ON s._row_id = o._row_id
+        WHERE COALESCE(o.force_exclude, 0) = 0
+          AND (COALESCE(o.force_include, 0) = 1 OR NOT ({agg_filter}))
     ),
 
     -- CTE 3: Filter XBRL artifacts (no financial data at all)

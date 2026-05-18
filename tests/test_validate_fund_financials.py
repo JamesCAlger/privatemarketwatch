@@ -79,6 +79,35 @@ def test_validate_fund_source_passes_core_identities():
     assert _status(result, "F17") == STATUS_PASS
 
 
+def test_validate_fund_source_f1_allows_empty_numeric_exports():
+    result = validate_fund_source(_fund_df([{
+        "total_investment_income": "",
+        "net_investment_income": None,
+        "distribution_per_share": pd.NA,
+    }]))
+
+    f1 = result[result["check_code"] == "F1"].iloc[0]
+    assert f1["status"] == STATUS_PASS
+
+
+def test_validate_fund_source_f1_rejects_invalid_and_nonfinite_values():
+    result = validate_fund_source(_fund_df([{
+        "total_assets": "nan",
+        "net_assets": "inf",
+        "borrowings": "-inf",
+        "quarterly_return": "not-a-number",
+    }]))
+
+    f1 = result[result["check_code"] == "F1"].iloc[0]
+    assert f1["status"] == STATUS_FAIL
+    assert set(f1["value"].split(",")) == {
+        "total_assets",
+        "net_assets",
+        "borrowings",
+        "quarterly_return",
+    }
+
+
 def test_validate_fund_source_flags_balance_sheet_and_return_mismatch():
     result = validate_fund_source(_fund_df([{
         "net_assets": "500000",

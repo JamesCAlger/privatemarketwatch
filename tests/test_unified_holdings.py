@@ -47,6 +47,7 @@ from pipeline.staging_bdc import (
 )
 from pipeline.staging_nport import _prepare_nport
 from pipeline.unified_holdings import (
+    _apply_universe_gate,
     _apply_row_corrections,
     _CORRECTABLE_FIELDS,
     _correct_pct_of_net_assets,
@@ -7014,6 +7015,118 @@ class TestApplyRowCorrections:
 
         result = _apply_row_corrections(df, corrections_path=corr_path)
         assert "_corr_key" not in result.columns
+
+
+# ---------------------------------------------------------------------------
+# Universe gating for index-facing unified holdings
+# ---------------------------------------------------------------------------
+
+class TestUniverseGate:
+    def _make_unified_rows(self, rows):
+        data = []
+        for row in rows:
+            full = {col: "" for col in UNIFIED_COLUMNS}
+            full.update({
+                "source": "nport",
+                "cik": "0000000100",
+                "entity_name": "Test Fund",
+                "report_date": "2024-03-31",
+                "issuer_name": "Acme Corp",
+                "fair_value": "1000000",
+                "asset_category": "LOAN",
+                "issuer_category": "CORPORATE",
+                "index_classification": "DIRECT_LENDING",
+                "exposure_type": "DIRECT",
+                "asset_class": "PRIVATE_CREDIT",
+            })
+            full.update(row)
+            data.append(full)
+        return pd.DataFrame(data, columns=UNIFIED_COLUMNS)
+
+    def test_non_universe_nport_holdings_excluded_and_reported(self, tmp_path):
+        holdings = self._make_unified_rows([
+            {"cik": "100", "entity_name": "In Universe", "fair_value": "10"},
+            {"cik": "2040315", "entity_name": "Needs Verification", "fair_value": "25"},
+        ])
+        universe_path = tmp_path / "combined_universe.csv"
+        orphan_path = tmp_path / "universe_orphan_holdings.csv"
+        pd.DataFrame([{"cik": "0000000100", "entity_name": "In Universe"}]).to_csv(
+            universe_path, index=False
+        )
+
+        result = _apply_universe_gate(
+            holdings,
+            universe_path=universe_path,
+            orphan_path=orphan_path,
+        )
+        orphans = pd.read_csv(orphan_path, dtype=str)
+
+        assert set(result["cik"]) == {"0000000100"}
+        assert orphans.iloc[0]["cik"] == "0002040315"
+        assert orphans.iloc[0]["row_count"] == "1"
+        assert orphans.iloc[0]["reason"] == "cik_absent_from_combined_universe"
+
+    def test_missing_universe_file_keeps_rows_but_writes_empty_report(self, tmp_path):
+        holdings = self._make_unified_rows([{"cik": "2040315"}])
+        orphan_path = tmp_path / "universe_orphan_holdings.csv"
+
+        result = _apply_universe_gate(
+            holdings,
+            universe_path=tmp_path / "missing.csv",
+            orphan_path=orphan_path,
+        )
+
+        assert len(result) == 1
+        assert list(pd.read_csv(orphan_path).columns) == [
+            "cik", "entity_name", "source", "first_report_date",
+            "last_report_date", "row_count", "fair_value", "reason",
+        ]
+
+
+def test_nport_exclude_cik_filtered_before_unified_output(tmp_path):
+    bdc_df = pd.DataFrame()
+    nport_df = pd.DataFrame([{
+        "cik": "1547580",
+        "registrant_name": "Victory Portfolios II",
+        "accession_number": "0001547580-24-000001",
+        "filing_date": "2024-05-01",
+        "report_date": "2024-03-31",
+        "issuer_name": "Broad Fund",
+        "issuer_title": "Broad Fund",
+        "issuer_cusip": "",
+        "identifier_isin": "",
+        "issuer_lei": "",
+        "identifier_ticker": "",
+        "currency_value": "1000000",
+        "percentage": "1",
+        "asset_cat": "LON",
+        "issuer_type": "CORP",
+        "fair_value_level": "3",
+        "annualized_rate": "8",
+        "coupon_type": "Fixed",
+        "maturity_date": "2028-03-31",
+        "unit": "PA",
+        "balance": "1000000",
+        "holding_id": "H1",
+        "series_name": "",
+        "series_id": "",
+        "payoff_profile": "",
+        "investment_country": "",
+        "is_restricted_security": "",
+        "quarter": "2024q1",
+    }])
+
+    with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE", tmp_path / "unified.csv"), \
+         patch("pipeline.unified_holdings.COMBINED_UNIVERSE_FILE", tmp_path / "missing_universe.csv"), \
+         patch("pipeline.unified_holdings.UNIVERSE_ORPHAN_HOLDINGS_FILE", tmp_path / "orphans.csv"):
+        result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
+
+    assert result.empty
+
+
+def test_total_investments_at_fair_value_is_aggregate_header():
+    assert _is_bdc_aggregate_row("Total Investments at Fair Value")
+    assert not _is_bdc_aggregate_row("Total Expert Inc.")
 
 
 # ---------------------------------------------------------------------------

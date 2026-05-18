@@ -17,6 +17,7 @@ from typing import Optional
 import duckdb
 import pandas as pd
 
+from pipeline.bdc_identifier import _sql_is_bdc_aggregate
 from pipeline.config import (
     CLASSIFICATION_VALIDATION_FILE,
     COLUMN_QUALITY_METRICS_FILE,
@@ -35,8 +36,10 @@ from pipeline.config import (
     HOLDINGS_TOTAL_ASSETS_FILE,
     HOLDINGS_VALIDATION_REPORT_FILE,
     NPORT_FUND_INFO_FILE,
+    NPORT_EXCLUDE_CIKS,
     ROW_VALIDATION_ISSUES_FILE,
     UNIFIED_HOLDINGS_FILE,
+    VALIDATE_ALL_RESIDUAL_SUMMARY_FILE,
 )
 
 logger = logging.getLogger(__name__)
@@ -989,6 +992,7 @@ def check_gav_reconciliation(
     filters.  That source numerator is evidence for whether source FV exists;
     it does not make source bucket rows indexable constituents.
     """
+    load_default_sources = unified_df is None
     if unified_df is None:
         if not UNIFIED_HOLDINGS_FILE.exists():
             logger.error("Unified holdings file not found")
@@ -1006,13 +1010,13 @@ def check_gav_reconciliation(
             and "investments_at_fair_value" not in fund_financials_df.columns):
         fund_financials_df["investments_at_fair_value"] = ""
 
-    if nport_fund_info_df is None and NPORT_FUND_INFO_FILE.exists():
+    if nport_fund_info_df is None and load_default_sources and NPORT_FUND_INFO_FILE.exists():
         try:
             nport_fund_info_df = pd.read_csv(NPORT_FUND_INFO_FILE, dtype=str)
         except Exception:
             nport_fund_info_df = None
 
-    if bdc_source_df is None and BDC_HOLDINGS_FILE.exists():
+    if bdc_source_df is None and load_default_sources and BDC_HOLDINGS_FILE.exists():
         try:
             bdc_source_df = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
         except Exception:
@@ -1020,28 +1024,40 @@ def check_gav_reconciliation(
 
     con = duckdb.connect()
     con.register("holdings", unified_df)
+    nport_non_indexable_ciks = {str(c).zfill(10) for c in NPORT_EXCLUDE_CIKS}
+    nport_non_indexable_ciks.add("0001547580")
+    nport_non_indexable_sql = ", ".join(
+        f"'{c}'" for c in sorted(nport_non_indexable_ciks)
+    ) or "''"
 
     if bdc_source_df is not None and not bdc_source_df.empty:
+        bdc_aggregate_filter = _sql_is_bdc_aggregate()
         bdc_source_df = bdc_source_df.copy()
+        had_investment_identifier = "investment_identifier" in bdc_source_df.columns
         for col in [
             "cik",
             "report_date",
             "period",
             "fair_value",
+            "investment_identifier",
             "accession_number",
             "form_type",
             "filing_date",
         ]:
             if col not in bdc_source_df.columns:
-                bdc_source_df[col] = ""
+                bdc_source_df[col] = "__missing_identifier__" if col == "investment_identifier" else ""
+        if not had_investment_identifier:
+            bdc_source_df["investment_identifier"] = "__missing_identifier__"
         con.register("bdc_source", bdc_source_df)
-        bdc_source_cte = """
+        bdc_source_cte = f"""
         bdc_source_rows AS (
             SELECT
                 *,
                 LPAD(CAST(cik AS VARCHAR), 10, '0') AS _cik,
                 CAST(report_date AS VARCHAR) AS _report_date,
-                TRY_CAST(fair_value AS DOUBLE) AS _source_fv
+                TRY_CAST(fair_value AS DOUBLE) AS _source_fv,
+                COALESCE(CAST(investment_identifier AS VARCHAR), '') AS _raw_id,
+                COALESCE(lower(trim(CAST(investment_identifier AS VARCHAR))), '') AS _lower_id
             FROM bdc_source
             WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
               AND TRY_CAST(report_date AS DATE) >= '2022-01-01'
@@ -1072,8 +1088,14 @@ def check_gav_reconciliation(
             SELECT
                 _cik AS cik,
                 _report_date AS report_date,
-                SUM(_source_fv) AS bdc_source_reconciliation_fv,
-                COUNT(*) AS bdc_source_reconciliation_rows
+                SUM(_source_fv) AS bdc_source_raw_fv,
+                SUM(CASE WHEN {bdc_aggregate_filter} THEN _source_fv ELSE 0 END)
+                    AS bdc_source_aggregate_filtered_fv,
+                SUM(CASE WHEN NOT ({bdc_aggregate_filter}) THEN _source_fv ELSE 0 END)
+                    AS bdc_source_reconciliation_fv,
+                COUNT(*) AS bdc_source_reconciliation_rows,
+                SUM(CASE WHEN {bdc_aggregate_filter} THEN 1 ELSE 0 END)
+                    AS bdc_source_aggregate_filtered_rows
             FROM bdc_source_current
             GROUP BY _cik, _report_date
         ),
@@ -1083,8 +1105,11 @@ def check_gav_reconciliation(
         bdc_source_agg AS (
             SELECT CAST(NULL AS VARCHAR) AS cik,
                    CAST(NULL AS VARCHAR) AS report_date,
+                   CAST(NULL AS DOUBLE) AS bdc_source_raw_fv,
+                   CAST(NULL AS DOUBLE) AS bdc_source_aggregate_filtered_fv,
                    CAST(NULL AS DOUBLE) AS bdc_source_reconciliation_fv,
-                   CAST(NULL AS BIGINT) AS bdc_source_reconciliation_rows
+                   CAST(NULL AS BIGINT) AS bdc_source_reconciliation_rows,
+                   CAST(NULL AS BIGINT) AS bdc_source_aggregate_filtered_rows
             WHERE false
         ),
         """
@@ -1172,8 +1197,11 @@ def check_gav_reconciliation(
             h.has_subsidiary_positions,
             h.has_bdc_positions,
             h.has_nport_positions,
+            s.bdc_source_raw_fv,
+            s.bdc_source_aggregate_filtered_fv,
             s.bdc_source_reconciliation_fv,
             s.bdc_source_reconciliation_rows,
+            s.bdc_source_aggregate_filtered_rows,
             -- Reliability gate: inv_fv that is <10% or >5x of total_assets
             -- is likely partial/wrong (catches Kayne 66x, SCP 13x outliers).
             -- Corroboration: if the gate rejects inv_fv BUT holdings sum
@@ -1225,7 +1253,15 @@ def check_gav_reconciliation(
         sum_holdings_fv AS indexable_position_fv,
         sum_holdings_fv_ex_sub,
         bdc_source_reconciliation_fv,
+        bdc_source_reconciliation_fv AS bdc_source_indexable_candidate_fv,
+        bdc_source_raw_fv,
+        bdc_source_aggregate_filtered_fv,
+        GREATEST(
+            COALESCE(bdc_source_reconciliation_fv, 0) - COALESCE(sum_holdings_fv, 0),
+            0
+        ) AS bdc_source_non_indexable_filtered_fv,
         bdc_source_reconciliation_rows,
+        bdc_source_aggregate_filtered_rows,
         has_subsidiary_positions,
         CASE
             WHEN has_bdc_positions = 1 AND has_nport_positions = 0 THEN 'bdc'
@@ -1241,11 +1277,17 @@ def check_gav_reconciliation(
         END AS holdings_scope,
         comparison_value,
         comparison_source,
+        comparison_source AS comparison_denominator_source,
         CASE
             WHEN comparison_source = 'investments_at_fair_value' THEN 'investment_fair_value'
             WHEN comparison_source IN ('total_assets_companyfacts', 'total_assets_nport') THEN 'full_fund_assets'
             ELSE ''
         END AS denominator_scope,
+        CASE
+            WHEN comparison_source = 'investments_at_fair_value' THEN 'investment_fair_value'
+            WHEN comparison_source IN ('total_assets_companyfacts', 'total_assets_nport') THEN 'full_fund_assets'
+            ELSE ''
+        END AS comparison_denominator_scope,
         CASE
             WHEN has_bdc_positions = 1 AND has_nport_positions = 0 THEN 'GAV_BDC01'
             WHEN has_nport_positions = 1 AND has_bdc_positions = 0 THEN 'GAV_NPORT01'
@@ -1265,6 +1307,10 @@ def check_gav_reconciliation(
         END AS gav_ratio_adjusted,
         CASE
             WHEN comparison_value IS NULL THEN 'no_comparison'
+            WHEN has_nport_positions = 1
+                 AND has_bdc_positions = 0
+                 AND cik IN ({nport_non_indexable_sql})
+                THEN 'non_indexable_denominator'
             WHEN comparison_value > 0
                  AND (CASE WHEN has_subsidiary_positions = 1
                            THEN sum_holdings_fv_ex_sub
@@ -1304,6 +1350,10 @@ def check_gav_reconciliation(
                       OR bdc_source_reconciliation_fv / comparison_value < 0.3)
                 THEN 'source_fv_missing_or_under_extracted'
             WHEN has_bdc_positions = 1 THEN 'indexable_fv_reconciled'
+            WHEN has_nport_positions = 1
+                 AND has_bdc_positions = 0
+                 AND cik IN ({nport_non_indexable_sql})
+                THEN 'non_indexable_denominator'
             ELSE ''
         END AS gav_evidence_scope
     FROM joined
@@ -1742,6 +1792,7 @@ def validate_holdings(
         row_issues = quality_reports["row_validation_issues"]
         column_metrics = quality_reports["column_quality_metrics"]
         quality_summary = quality_reports["data_quality_metrics"]
+        residual_summary = quality_reports["validate_all_residual_summary"]
 
         row_issues.to_csv(ROW_VALIDATION_ISSUES_FILE, index=False)
         logger.info("  Saved %s", ROW_VALIDATION_ISSUES_FILE.name)
@@ -1749,6 +1800,8 @@ def validate_holdings(
         logger.info("  Saved %s", COLUMN_QUALITY_METRICS_FILE.name)
         quality_summary.to_csv(DATA_QUALITY_METRICS_FILE, index=False)
         logger.info("  Saved %s", DATA_QUALITY_METRICS_FILE.name)
+        residual_summary.to_csv(VALIDATE_ALL_RESIDUAL_SUMMARY_FILE, index=False)
+        logger.info("  Saved %s", VALIDATE_ALL_RESIDUAL_SUMMARY_FILE.name)
     except Exception as exc:
         logger.error("Column-level quality validation failed: %s", exc,
                      exc_info=True)

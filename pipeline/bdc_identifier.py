@@ -168,6 +168,7 @@ _BDC_AGGREGATE_EXACT = {
     "first lien secured debt",
     "first lien/senior secured debt",
     # Category-level subtotals from Carlyle/SL Investment (2026-05-06 audit)
+    "senior secured debt",
     "first lien debt",
     "second lien debt",
     "subordinated debt",

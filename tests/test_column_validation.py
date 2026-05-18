@@ -8,6 +8,7 @@ from pipeline.column_validation import (
     SEVERITY_WARN,
     adapt_validation_reports,
     build_quality_summary,
+    build_residual_summary,
     run_column_quality_validation,
     validate_column_contracts,
 )
@@ -278,3 +279,46 @@ class TestQualitySummary:
             ]),
         )
         assert summary.iloc[0]["validation_tier"] == "VERIFIED"
+
+
+class TestResidualSummary:
+    def test_x06_residual_summary_groups_without_suppressing_fail(self):
+        df = _make_unified_df([
+            {
+                "issuer_name": "Scale Problem LLC",
+                "fair_value": "1000000",
+                "principal_amount": "250000000",
+            },
+            {
+                "issuer_name": "Normal Loan LLC",
+                "fair_value": "1000000",
+                "principal_amount": "1000000",
+            },
+        ])
+        reports = run_column_quality_validation(df)
+        issues = reports["row_validation_issues"]
+        x06 = _issues_by_rule(issues, "X06")
+        residual = reports["validate_all_residual_summary"]
+
+        assert len(x06) == 1
+        assert x06.iloc[0]["severity"] == SEVERITY_FAIL
+        assert set(residual["rule_id"]) == {"X06"}
+        assert residual.iloc[0]["ratio_band"] == "100x-1000x"
+        assert residual.iloc[0]["issue_count"] == 1
+        assert "Scale Problem LLC" in residual.iloc[0]["top_issuer_samples"]
+
+    def test_agg01_residual_summary_groups_adapter_warnings(self):
+        df = _make_unified_df([{}])
+        agg = pd.DataFrame([{
+            "cik": "0000000100",
+            "report_date": "2024-03-31",
+            "issuer_name": "Total Investments at Fair Value",
+            "reason": "keyword: total investments",
+        }])
+        issues = adapt_validation_reports({"aggregate_leaks": agg})
+        residual = build_residual_summary(df, issues)
+
+        assert residual.iloc[0]["rule_id"] == "AGG01"
+        assert residual.iloc[0]["ratio_band"] == "not_applicable"
+        assert residual.iloc[0]["warn_count"] == 1
+        assert "Total Investments" in residual.iloc[0]["top_issuer_samples"]

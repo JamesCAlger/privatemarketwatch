@@ -9,6 +9,7 @@ without mutating source data.
 from __future__ import annotations
 
 import logging
+import math
 from datetime import date
 from typing import Optional
 
@@ -96,6 +97,21 @@ def _num(series: pd.Series) -> pd.Series:
     return pd.to_numeric(series, errors="coerce")
 
 
+def _is_present_finite_number(raw: object) -> bool:
+    """Return True for blank/null or a parseable finite numeric value."""
+    if raw is None:
+        return True
+    if pd.isna(raw):
+        return True
+    text = str(raw).strip()
+    if text == "":
+        return True
+    try:
+        return math.isfinite(float(text))
+    except (TypeError, ValueError):
+        return False
+
+
 def _quarter_from_date_sql(date_expr: str) -> str:
     return f"""
         CASE WHEN TRY_CAST({date_expr} AS DATE) IS NOT NULL THEN
@@ -175,10 +191,7 @@ def validate_fund_source(df: pd.DataFrame) -> pd.DataFrame:
         bad_cols = []
         for col in NUMERIC_EXPORT_COLUMNS:
             raw = row.get(col, "")
-            if raw is None or str(raw).strip() == "":
-                continue
-            val = pd.to_numeric(pd.Series([raw]), errors="coerce").iloc[0]
-            if pd.isna(val) or val in (float("inf"), float("-inf")):
+            if not _is_present_finite_number(raw):
                 bad_cols.append(col)
         if bad_cols:
             rows.append(_result(

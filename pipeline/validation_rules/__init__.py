@@ -47,14 +47,18 @@ class ValidationRule:
     promoted: bool
     required_tables: tuple[str, ...]
     sql: str
+    depends_on: tuple[str, ...] = ()
 
 
 TABLE_PATHS = {
     "holdings": config.UNIFIED_HOLDINGS_FILE,
+    "bdc_holdings": config.BDC_HOLDINGS_FILE,
+    "bdc_fund_income": config.BDC_FUND_INCOME_FILE,
     "position_returns": config.POSITION_RETURNS_FILE,
     "index_returns": config.INDEX_RETURNS_FILE,
     "fee_uplift": config.FEE_UPLIFT_FILE,
     "fund_financials": config.FUND_FINANCIALS_FILE,
+    "fund_financials_cross_level": config.FUND_FINANCIALS_CROSS_LEVEL_FILE,
     "combined_universe": config.COMBINED_UNIVERSE_FILE,
     "position_matches": config.POSITION_MATCHES_FILE,
     "bdc_filings_index": config.BDC_FILINGS_INDEX_FILE,
@@ -80,6 +84,14 @@ EXPECTED_COLUMNS = {
         "income_return", "capital_return", "total_return",
         "quarterly_total_return", "position_id", "span_months",
     ],
+    "bdc_holdings": [
+        "cik", "quarter", "report_date", "issuer_name", "fair_value",
+        "accession_number", "source",
+    ],
+    "bdc_fund_income": [
+        "cik", "quarter", "report_date", "investment_income",
+        "interest_income", "total_investment_income", "source",
+    ],
     "index_returns": [
         "index_classification", "quarter", "fv_weighted_return",
         "equal_weighted_return", "cost_weighted_return",
@@ -87,7 +99,11 @@ EXPECTED_COLUMNS = {
         "index_level_fv", "index_level_equal", "index_level_cost",
     ],
     "fee_uplift": ["cik", "quarter", "effective_uplift"],
-    "fund_financials": ["cik", "report_date", "quarter", "total_assets"],
+    "fund_financials": ["cik", "report_date", "quarter", "report_quarter", "total_assets"],
+    "fund_financials_cross_level": [
+        "cik", "quarter", "report_quarter", "report_date", "metric",
+        "source_value", "fund_financials_value", "status",
+    ],
     "combined_universe": [
         "cik", "entity_name", "vehicle_type", "status",
     ],
@@ -259,8 +275,8 @@ def _pc_and_existing_rules() -> list[ValidationRule]:
             detail="'More than 5% of direct-lending positions lack usable income_rate'",
             evidence="'Inspect position_returns income_rate and upstream rate extraction'",
             source_file="'position_returns.csv'")} FROM g"""),
-        ValidationRule("PC02", "PC", "Cost-weighted index return reconciles", "FAIL", True, ("position_returns", "index_returns"), pc02_recon),
-        ValidationRule("PC03", "PC", "Index aggregate fields reconcile", "FAIL", True, ("position_returns", "index_returns"), pc03_recon),
+        ValidationRule("PC02", "PC", "Cost-weighted index return reconciles", "FAIL", True, ("position_returns", "index_returns"), pc02_recon, ("RI04",)),
+        ValidationRule("PC03", "PC", "Index aggregate fields reconcile", "FAIL", True, ("position_returns", "index_returns"), pc03_recon, ("RI04",)),
         ValidationRule("PC04", "PC", "Sparse high-FV CIK-quarter holdings", "WARN", False, ("holdings",),
             f"""WITH g AS (
                 SELECT cik, COALESCE(quarter, report_date) AS q, COUNT(*) AS n,
@@ -343,7 +359,7 @@ def _pc_and_existing_rules() -> list[ValidationRule]:
             priority="ROW_NUMBER() OVER (ORDER BY tbl, col, cik, q)",
             detail="'Non-empty numeric contract field failed TRY_CAST'",
             evidence="'Check CSV schema and type normalization'",
-            source_file="tbl || '.csv'")} FROM bad"""),
+            source_file="tbl || '.csv'")} FROM bad""", ("RI04",)),
         ValidationRule("PC09", "PC", "Multi-quarter holdings missing position_id", "WARN", False, ("holdings",),
             f"""WITH multi AS (
                 SELECT lower(trim(issuer_name)) AS issuer, cik, COUNT(DISTINCT report_date) AS periods
@@ -1809,10 +1825,115 @@ def _matching_rules() -> list[ValidationRule]:
     ]
 
 
+def _referential_integrity_rules() -> list[ValidationRule]:
+    """Source and artifact referential-integrity rules (RI01-RI06)."""
+    norm_cik = "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')"
+    hq = "COALESCE(NULLIF(quarter, ''), CASE WHEN TRY_CAST(report_date AS DATE) IS NOT NULL THEN CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR) || 'q' || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) ELSE report_date END)"
+    ffq = "COALESCE(NULLIF(report_quarter, ''), NULLIF(quarter, ''), CASE WHEN TRY_CAST(report_date AS DATE) IS NOT NULL THEN CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR) || 'q' || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) ELSE report_date END)"
+    return [
+        ValidationRule("RI01", "RI", "Holdings CIKs exist in combined universe", "FAIL", True, ("holdings", "combined_universe"),
+            f"""WITH h AS (
+                SELECT {norm_cik} AS norm_cik, COUNT(*) AS n,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                FROM holdings GROUP BY norm_cik
+            ), u AS (
+                SELECT DISTINCT {norm_cik} AS norm_cik FROM combined_universe
+            ), g AS (
+                SELECT h.* FROM h LEFT JOIN u USING (norm_cik) WHERE u.norm_cik IS NULL
+            )
+            SELECT {_detail_sql("cik", "norm_cik", cik="norm_cik",
+            affected_fv="fv", denominator="n",
+            priority="ROW_NUMBER() OVER (ORDER BY fv DESC, norm_cik)",
+            detail="'Holdings CIK is absent from combined_universe'",
+            evidence="'Normalize CIK to 10 digits before comparing'",
+            source_file="'private_markets_holdings.csv;combined_universe.csv'")} FROM g"""),
+        ValidationRule("RI02", "RI", "Position matches CIKs exist in holdings", "FAIL", True, ("position_matches", "holdings"),
+            f"""WITH m AS (
+                SELECT {norm_cik} AS norm_cik, COUNT(*) AS n
+                FROM position_matches GROUP BY norm_cik
+            ), h AS (
+                SELECT DISTINCT {norm_cik} AS norm_cik FROM holdings
+            ), g AS (
+                SELECT m.* FROM m LEFT JOIN h USING (norm_cik) WHERE h.norm_cik IS NULL
+            )
+            SELECT {_detail_sql("cik", "norm_cik", cik="norm_cik",
+            denominator="n", priority="ROW_NUMBER() OVER (ORDER BY n DESC, norm_cik)",
+            detail="'position_matches CIK is absent from holdings'",
+            evidence="'Position matching should be downstream of unified holdings'",
+            source_file="'position_matches.csv;private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("RI03", "RI", "Cross-level financial CIK-quarters exist in fund financials", "FAIL", True, ("fund_financials_cross_level", "fund_financials"),
+            f"""WITH x AS (
+                SELECT {norm_cik} AS norm_cik, {ffq} AS q, COUNT(*) AS n
+                FROM fund_financials_cross_level GROUP BY norm_cik, q
+            ), f AS (
+                SELECT DISTINCT {norm_cik} AS norm_cik, {ffq} AS q
+                FROM fund_financials
+            ), g AS (
+                SELECT x.* FROM x LEFT JOIN f USING (norm_cik, q) WHERE f.norm_cik IS NULL
+            )
+            SELECT {_detail_sql("cik_quarter", "norm_cik || '|' || q",
+            cik="norm_cik", quarter="q", denominator="n",
+            priority="ROW_NUMBER() OVER (ORDER BY n DESC, norm_cik, q)",
+            detail="'fund_financials_cross_level CIK-quarter is absent from fund_financials'",
+            evidence="'Cross-level diagnostics must reference an existing fund financial row'",
+            source_file="'fund_financials_cross_level.csv;fund_financials.csv'")} FROM g"""),
+        ValidationRule("RI04", "RI", "Index return quarters fall within holdings quarter range", "FAIL", True, ("index_returns", "holdings"),
+            f"""WITH h_range AS (
+                SELECT MIN({hq}) AS min_q, MAX({hq}) AS max_q FROM holdings
+            ), g AS (
+                SELECT i.*, h.min_q, h.max_q
+                FROM index_returns i CROSS JOIN h_range h
+                WHERE COALESCE(i.quarter, '') <> ''
+                  AND (h.min_q IS NULL OR i.quarter < h.min_q OR i.quarter > h.max_q)
+            )
+            SELECT {_detail_sql("index_quarter", "index_classification || '|' || quarter",
+            quarter="quarter", hit_rate="0",
+            priority="ROW_NUMBER() OVER (ORDER BY quarter, index_classification)",
+            detail="'index_returns quarter falls outside holdings quarter range'",
+            evidence="'holdings_range=' || COALESCE(min_q, '') || '..' || COALESCE(max_q, '')",
+            source_file="'index_returns.csv;private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("RI05", "RI", "Fee uplift CIKs exist in holdings", "FAIL", True, ("fee_uplift", "holdings"),
+            f"""WITH fu AS (
+                SELECT {norm_cik} AS norm_cik, COUNT(*) AS n
+                FROM fee_uplift GROUP BY norm_cik
+            ), h AS (
+                SELECT DISTINCT {norm_cik} AS norm_cik FROM holdings
+            ), g AS (
+                SELECT fu.* FROM fu LEFT JOIN h USING (norm_cik) WHERE h.norm_cik IS NULL
+            )
+            SELECT {_detail_sql("cik", "norm_cik", cik="norm_cik",
+            denominator="n", priority="ROW_NUMBER() OVER (ORDER BY n DESC, norm_cik)",
+            detail="'fee_uplift CIK is absent from holdings'",
+            evidence="'Fee uplift should only exist for funds with holdings'",
+            source_file="'fee_uplift.csv;private_markets_holdings.csv'")} FROM g"""),
+        ValidationRule("RI06", "RI", "Index-used BDC income CIKs exist in BDC holdings", "FAIL", True, ("bdc_fund_income", "bdc_holdings", "fee_uplift"),
+            f"""WITH index_used_income AS (
+                SELECT DISTINCT fi.*
+                FROM bdc_fund_income fi
+                JOIN fee_uplift fu
+                  ON {norm_cik.replace('cik', 'fi.cik')} = {norm_cik.replace('cik', 'fu.cik')}
+            ), fi AS (
+                SELECT {norm_cik} AS norm_cik, COUNT(*) AS n
+                FROM index_used_income GROUP BY norm_cik
+            ), bh AS (
+                SELECT DISTINCT {norm_cik} AS norm_cik FROM bdc_holdings
+            ), g AS (
+                SELECT fi.* FROM fi LEFT JOIN bh USING (norm_cik) WHERE bh.norm_cik IS NULL
+            )
+            SELECT {_detail_sql("cik", "norm_cik", cik="norm_cik",
+            denominator="n", priority="ROW_NUMBER() OVER (ORDER BY n DESC, norm_cik)",
+            detail="'index-used bdc_fund_income CIK is absent from bdc_holdings'",
+            evidence="'RI06 is scoped to income CIKs used by fee_uplift; RI05 covers fee_uplift CIKs absent from unified holdings'",
+            source_file="'bdc_fund_income.csv;fee_uplift.csv;bdc_holdings.csv'")} FROM g"""),
+    ]
+
+
 
 def _rules() -> list[ValidationRule]:
     """Combine all rule categories."""
     return (
+        _referential_integrity_rules()
+        +
         _pc_and_existing_rules()
         + _temporal_rules()
         + _strategy_rules()
@@ -1825,6 +1946,7 @@ def _rules() -> list[ValidationRule]:
 
 
 RULE_REGISTRY = {rule.rule_id: rule for rule in _rules()}
+DEFAULT_CATEGORIES = ("PC", "IDX", "T", "S", "R", "XS", "F", "M", "RI")
 
 
 def _empty_detail() -> pd.DataFrame:
@@ -1833,14 +1955,13 @@ def _empty_detail() -> pd.DataFrame:
 
 def _load_tables(
     con: duckdb.DuckDBPyConnection,
-    categories: set[str],
+    rules: Iterable[ValidationRule],
     table_paths: dict[str, str | Path] | None,
 ) -> dict[str, str]:
     paths = {**TABLE_PATHS, **(table_paths or {})}
     needed = {
         table
-        for rule in RULE_REGISTRY.values()
-        if rule.category in categories
+        for rule in rules
         for table in rule.required_tables
     }
     missing: dict[str, str] = {}
@@ -1868,6 +1989,68 @@ def _load_tables(
                 selects.append(f"CAST(NULL AS VARCHAR) AS {col}")
         con.execute(f"CREATE TEMP VIEW {table} AS SELECT {', '.join(selects)} FROM {raw}")
     return missing
+
+
+def _select_rules(categories: set[str]) -> list[ValidationRule]:
+    """Return category-selected rules plus transitive dependencies in stable order."""
+    selected_ids = {
+        rule.rule_id for rule in RULE_REGISTRY.values() if rule.category in categories
+    }
+    stack = list(selected_ids)
+    while stack:
+        rule_id = stack.pop()
+        rule = RULE_REGISTRY.get(rule_id)
+        if rule is None:
+            raise ValueError(f"Unknown validation rule dependency: {rule_id}")
+        for dep in rule.depends_on:
+            if dep not in RULE_REGISTRY:
+                raise ValueError(f"Unknown validation rule dependency: {rule_id} -> {dep}")
+            if dep not in selected_ids:
+                selected_ids.add(dep)
+                stack.append(dep)
+    return _topological_order(selected_ids)
+
+
+def _topological_order(rule_ids: set[str]) -> list[ValidationRule]:
+    order_index = {rule_id: i for i, rule_id in enumerate(RULE_REGISTRY)}
+    visiting: set[str] = set()
+    visited: set[str] = set()
+    ordered: list[str] = []
+
+    def visit(rule_id: str) -> None:
+        if rule_id in visited:
+            return
+        if rule_id in visiting:
+            cycle = " -> ".join(list(visiting) + [rule_id])
+            raise ValueError(f"Validation rule dependency cycle detected: {cycle}")
+        visiting.add(rule_id)
+        rule = RULE_REGISTRY[rule_id]
+        for dep in sorted(rule.depends_on, key=lambda value: order_index[value]):
+            if dep in rule_ids:
+                visit(dep)
+        visiting.remove(rule_id)
+        visited.add(rule_id)
+        ordered.append(rule_id)
+
+    for rule_id in sorted(rule_ids, key=lambda value: order_index[value]):
+        visit(rule_id)
+    return [RULE_REGISTRY[rule_id] for rule_id in ordered]
+
+
+def _write_history(aggregate_df: pd.DataFrame) -> None:
+    history_path = config.VALIDATION_RULES_HISTORY_FILE
+    history_cols = [
+        "rule_id", "category", "run_id", "run_timestamp", "status",
+        "hit_count", "hit_rate", "affected_fair_value",
+    ]
+    history_path.parent.mkdir(parents=True, exist_ok=True)
+    header = not history_path.exists()
+    aggregate_df.loc[:, history_cols].to_csv(
+        history_path,
+        mode="a",
+        header=header,
+        index=False,
+    )
 
 
 def _skip_row(rule: ValidationRule, run_id: str, ts: str, reason: str) -> dict:
@@ -1954,30 +2137,49 @@ def run_all(
     run_id: str | None = None,
     write: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    selected = {c.upper() for c in (categories or ("PC", "IDX", "T", "S", "R", "XS", "F", "M"))}
+    selected = {c.upper() for c in (categories or DEFAULT_CATEGORIES)}
+    selected_rules = _select_rules(selected)
     run_id = run_id or uuid4().hex[:12]
     ts = datetime.now(timezone.utc).isoformat()
 
     con = duckdb.connect()
     con.execute("PRAGMA threads=1")
-    missing = _load_tables(con, selected, table_paths)
+    missing = _load_tables(con, selected_rules, table_paths)
 
     aggregate_rows = []
     detail_frames = []
-    for rule in RULE_REGISTRY.values():
-        if rule.category not in selected:
+    status_by_rule: dict[str, str] = {}
+    for rule in selected_rules:
+        failed_deps = [
+            dep for dep in rule.depends_on
+            if status_by_rule.get(dep) == "FAIL"
+        ]
+        if failed_deps:
+            aggregate = _skip_row(
+                rule,
+                run_id,
+                ts,
+                "failed dependency: " + ", ".join(failed_deps),
+            )
+            aggregate_rows.append(aggregate)
+            status_by_rule[rule.rule_id] = aggregate["status"]
             continue
         missing_for_rule = [missing[t] for t in rule.required_tables if t in missing]
         if missing_for_rule:
-            aggregate_rows.append(_skip_row(rule, run_id, ts, "; ".join(missing_for_rule)))
+            aggregate = _skip_row(rule, run_id, ts, "; ".join(missing_for_rule))
+            aggregate_rows.append(aggregate)
+            status_by_rule[rule.rule_id] = aggregate["status"]
             continue
         try:
             aggregate, detail = _run_rule(con, rule, run_id, ts)
         except Exception as exc:
-            aggregate_rows.append(_skip_row(rule, run_id, ts, f"execution error: {exc}"))
+            aggregate = _skip_row(rule, run_id, ts, f"execution error: {exc}")
+            aggregate_rows.append(aggregate)
+            status_by_rule[rule.rule_id] = aggregate["status"]
             logger.exception("Validation rule %s failed", rule.rule_id)
             continue
         aggregate_rows.append(aggregate)
+        status_by_rule[rule.rule_id] = aggregate["status"]
         if not detail.empty:
             detail_frames.append(detail)
     con.close()
@@ -1995,6 +2197,7 @@ def run_all(
         aggregate_path.parent.mkdir(parents=True, exist_ok=True)
         aggregate_df.to_csv(aggregate_path, index=False)
         detail_df.to_csv(detail_path, index=False)
+        _write_history(aggregate_df)
         logger.info("Wrote validation rules aggregate: %s (%d rows)", aggregate_path, len(aggregate_df))
         logger.info("Wrote validation rules detail: %s (%d rows)", detail_path, len(detail_df))
 
@@ -2012,9 +2215,12 @@ def run_category(
 
 __all__ = [
     "AGGREGATE_COLUMNS",
+    "DEFAULT_CATEGORIES",
     "DETAIL_COLUMNS",
     "RULE_REGISTRY",
     "ValidationRule",
+    "_select_rules",
+    "_topological_order",
     "run_all",
     "run_category",
 ]

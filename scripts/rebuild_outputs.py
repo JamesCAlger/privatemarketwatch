@@ -158,7 +158,7 @@ def rebuild_gics():
 
     logger.info("=== Running GICS classification ===")
     t0 = time.time()
-    df = classify_gics()
+    df = classify_gics(cache_only=True)
     classified = (df["gics_sub_industry"] != "").sum()
     logger.info("GICS classification: %d/%d rows classified in %.1f s",
                 classified, len(df), time.time() - t0)
@@ -191,6 +191,35 @@ def run_validation_rules(categories: list[str] | None = None):
     return aggregate_df, detail_df
 
 
+def run_validate_all():
+    """Run cached fund financial, holdings, and rule-registry validation."""
+    import pandas as pd
+
+    from pipeline.config import UNIFIED_HOLDINGS_FILE
+    from pipeline.validate_fund_financials import validate_fund_financials
+    from pipeline.validate_holdings import validate_holdings
+
+    logger.info("=== Running cached validate-all ===")
+    t0 = time.time()
+    unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
+
+    fund_reports = validate_fund_financials(holdings_df=unified_df)
+    holdings_reports = validate_holdings(unified_df=unified_df)
+    aggregate_df, detail_df = run_validation_rules()
+
+    rows = [
+        ("fund_financials", sum(len(df) for df in fund_reports.values())),
+        ("holdings", sum(len(df) for df in holdings_reports.values())),
+        ("validation_rules", len(detail_df)),
+    ]
+    logger.info("Validation summary:")
+    logger.info("  %-28s %10s", "check", "rows")
+    for name, count in rows:
+        logger.info("  %-28s %10d", name, count)
+    logger.info("Validate-all complete in %.1f s", time.time() - t0)
+    return aggregate_df, detail_df
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Rebuild pipeline outputs from cached data (no downloads)."
@@ -215,7 +244,9 @@ def main():
                         help="Rebuild frontend JSON data only")
     parser.add_argument("--validate-rules", action="store_true",
                         help="Run report-only V1 validation rules against cached outputs")
-    parser.add_argument("--rules-category", nargs="+", choices=["PC", "IDX"],
+    parser.add_argument("--validate-all", action="store_true",
+                        help="Run cached fund financial, holdings, and validation-rule checks")
+    parser.add_argument("--rules-category", nargs="+", choices=["PC", "IDX", "T", "S", "R", "XS", "F", "M", "RI"],
                         help="Limit --validate-rules to one or more rule categories")
     args = parser.parse_args()
 
@@ -223,7 +254,7 @@ def main():
     rebuild_all = not (
         args.unified or args.income or args.returns
         or args.html or args.frontend or args.financials or args.gics
-        or args.validate_rules
+        or args.validate_rules or args.validate_all
     )
 
     t_start = time.time()
@@ -254,6 +285,9 @@ def main():
 
     if args.validate_rules:
         run_validation_rules(categories=args.rules_category)
+
+    if args.validate_all:
+        run_validate_all()
 
     total = time.time() - t_start
     logger.info("=== All rebuilds complete in %.1f s ===", total)

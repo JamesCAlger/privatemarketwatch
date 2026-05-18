@@ -101,9 +101,14 @@ def _parse_args() -> argparse.Namespace:
         help="Run report-only V1 DuckDB validation rules over output CSV artifacts.",
     )
     parser.add_argument(
+        "--validate-all",
+        action="store_true",
+        help="Run cached fund financial, holdings, and rule-registry validation.",
+    )
+    parser.add_argument(
         "--rules-category",
         nargs="+",
-        choices=["PC", "IDX", "T", "S", "R", "XS", "F", "M"],
+        choices=["PC", "IDX", "T", "S", "R", "XS", "F", "M", "RI"],
         help="Limit --validate-rules to one or more rule categories.",
     )
     parser.add_argument(
@@ -192,6 +197,7 @@ def _is_validate_only(args: argparse.Namespace) -> bool:
         and not args.unified
         and not args.extract
         and not args.validate_rules
+        and not args.validate_all
         and not args.llm_review
         and not args.llm_review_dry_run
         and not args.entities
@@ -218,6 +224,34 @@ def _is_validate_rules_only(args: argparse.Namespace) -> bool:
         and not args.unified
         and not args.extract
         and not args.validate
+        and not args.validate_all
+        and not args.llm_review
+        and not args.llm_review_dry_run
+        and not args.entities
+        and not args.returns
+        and not args.classify_gics
+        and args.gics_web_search is None
+        and not args.extract_html
+        and not args.financials
+        and not args.load_db
+        and not args.export_frontend
+        and not args.llm_fund_validation
+        and not args.classify_funds
+    )
+
+
+def _is_validate_all_only(args: argparse.Namespace) -> bool:
+    return (
+        args.validate_all
+        and not args.exhaustive
+        and not args.holdings
+        and not args.ciks
+        and not args.nport
+        and not args.nport_xml
+        and not args.unified
+        and not args.extract
+        and not args.validate
+        and not args.validate_rules
         and not args.llm_review
         and not args.llm_review_dry_run
         and not args.entities
@@ -258,6 +292,55 @@ def _run_cached_validation(logger: logging.Logger) -> None:
     logger.info("Cached validation completed in %.1f s", time.time() - t)
 
 
+def _status_from_reports(reports: dict[str, object]) -> str:
+    if any(len(df) for df in reports.values()):
+        return "WARN"
+    return "PASS"
+
+
+def _log_validation_summary(logger: logging.Logger, rows: list[tuple[str, str, int]]) -> None:
+    logger.info("Validation summary:")
+    logger.info("  %-28s %-8s %10s", "check", "status", "rows")
+    for name, status, count in rows:
+        logger.info("  %-28s %-8s %10d", name, status, count)
+
+
+def _run_validate_all(logger: logging.Logger) -> None:
+    import pandas as pd
+
+    unified_path = OUTPUT_DIR / "private_markets_holdings.csv"
+    if not unified_path.exists():
+        logger.error("Unified holdings file not found: %s", unified_path)
+        return
+    t = time.time()
+    unified_df = pd.read_csv(unified_path, dtype=str)
+    rows: list[tuple[str, str, int]] = []
+
+    from pipeline.validate_fund_financials import validate_fund_financials
+    fund_reports = validate_fund_financials(holdings_df=unified_df)
+    fund_count = sum(len(df) for df in fund_reports.values())
+    rows.append(("fund_financials", _status_from_reports(fund_reports), fund_count))
+
+    from pipeline.validate_holdings import validate_holdings
+    holding_reports = validate_holdings(unified_df=unified_df)
+    holding_count = sum(len(df) for df in holding_reports.values())
+    rows.append(("holdings", _status_from_reports(holding_reports), holding_count))
+
+    from pipeline.validation_rules import run_all
+    aggregate_df, detail_df = run_all()
+    if (aggregate_df["status"] == "FAIL").any():
+        rules_status = "FAIL"
+    elif (aggregate_df["status"] == "WARN").any():
+        rules_status = "WARN"
+    elif (aggregate_df["status"] == "SKIPPED").any():
+        rules_status = "SKIPPED"
+    else:
+        rules_status = "PASS"
+    rows.append(("validation_rules", rules_status, len(detail_df)))
+    _log_validation_summary(logger, rows)
+    logger.info("Validate-all completed in %.1f s", time.time() - t)
+
+
 def main() -> None:
     args = _parse_args()
     _setup_logging()
@@ -290,6 +373,8 @@ def main() -> None:
             mode_parts.append("VALIDATE-RULES:" + ",".join(args.rules_category))
         else:
             mode_parts.append("VALIDATE-RULES")
+    if args.validate_all:
+        mode_parts.append("VALIDATE-ALL")
     if args.llm_review:
         mode_parts.append("LLM-REVIEW")
     if args.llm_review_dry_run:
@@ -331,6 +416,12 @@ def main() -> None:
             len(aggregate_df),
             len(detail_df),
         )
+        total = time.time() - t0
+        logger.info("=== Pipeline complete in %.1f s ===", total)
+        return
+
+    if _is_validate_all_only(args):
+        _run_validate_all(logger)
         total = time.time() - t0
         logger.info("=== Pipeline complete in %.1f s ===", total)
         return
@@ -588,6 +679,13 @@ def main() -> None:
                          exc_info=True)
         logger.info("Validation step completed in %.1f s", time.time() - t8)
 
+    if args.validate_all:
+        logger.info("")
+        try:
+            _run_validate_all(logger)
+        except Exception as exc:
+            logger.error("Validate-all failed: %s", exc, exc_info=True)
+
     # ── Step 9: LLM-assisted review (optional) ──
     if args.llm_review or args.llm_review_dry_run:
         logger.info("")
@@ -843,12 +941,13 @@ def main() -> None:
         output_files.append(OUTPUT_DIR / "bdc_sector_breakdown.csv")
     if args.extract:
         output_files.append(OUTPUT_DIR / "identifier_extraction_lookup.csv")
-    if args.validate:
+    if args.validate or args.validate_all:
         output_files.extend([
             OUTPUT_DIR / "holdings_validation_report.csv",
             OUTPUT_DIR / "holdings_spot_check.csv",
             OUTPUT_DIR / "holdings_coverage.csv",
             OUTPUT_DIR / "row_validation_issues.csv",
+            OUTPUT_DIR / "validate_all_residual_summary.csv",
             OUTPUT_DIR / "column_quality_metrics.csv",
             OUTPUT_DIR / "data_quality_metrics.csv",
             OUTPUT_DIR / "fund_financials_validation_current.csv",
@@ -877,10 +976,11 @@ def main() -> None:
         from pipeline.export_frontend import FRONTEND_DATA_DIR
         for jf in sorted(FRONTEND_DATA_DIR.glob("*.json")):
             output_files.append(jf)
-    if args.validate_rules:
+    if args.validate_rules or args.validate_all:
         output_files.extend([
             OUTPUT_DIR / "validation_rules_aggregate.csv",
             OUTPUT_DIR / "validation_rules_detail.csv",
+            OUTPUT_DIR / "validation_rules_history.csv",
         ])
 
     for path in output_files:

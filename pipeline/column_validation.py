@@ -47,12 +47,19 @@ METRIC_COLUMNS = [
     "dataset", "source", "cik", "quarter", "column", "total_rows",
     "filled_count", "parseable_count", "valid_count", "fill_rate",
     "parse_rate", "valid_rate", "fail_count", "warn_count",
+    "contract_level", "expected_fill_rate", "contract_status",
 ]
 
 SUMMARY_COLUMNS = [
     "dataset", "source", "cik", "report_date", "quarter", "row_count",
     "validation_tier", "fail_count", "warn_count", "info_count",
     "strong_issue_count", "moderate_issue_count", "weak_issue_count",
+]
+
+RESIDUAL_SUMMARY_COLUMNS = [
+    "rule_id", "source", "cik", "quarter", "report_date", "ratio_band",
+    "issue_count", "fail_count", "warn_count", "affected_fair_value",
+    "max_principal_to_fv", "top_issuer_samples",
 ]
 
 REQUIRED_COLUMNS = [
@@ -72,6 +79,23 @@ NUMERIC_COLUMNS = {
 }
 
 DATE_COLUMNS = {"filing_date", "report_date", "maturity_date"}
+
+COLUMN_CONTRACTS = {
+    "source": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "cik": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "report_date": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "entity_name": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "issuer_name": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "index_classification": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "exposure_type": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "asset_class": {"level": "REQUIRED", "expected_fill_rate": 1.0},
+    "fair_value": {"level": "REQUIRED_INDEXABLE", "expected_fill_rate": 1.0},
+    "cost": {"level": "SOURCE_AWARE", "expected_fill_rate": 0.70},
+    "interest_rate": {"level": "SOURCE_AWARE", "expected_fill_rate": 0.60},
+    "basis_spread": {"level": "SOURCE_AWARE", "expected_fill_rate": 0.40},
+    "cusip": {"level": "SOURCE_AWARE", "expected_fill_rate": 0.50},
+    "pct_of_net_assets": {"level": "SOURCE_AWARE", "expected_fill_rate": 0.60},
+}
 
 ENUM_VALUES = {
     "source": {"bdc", "nport", "html"},
@@ -637,6 +661,7 @@ def _build_column_metrics(
     if issues.empty:
         metrics["fail_count"] = 0
         metrics["warn_count"] = 0
+        metrics = _apply_column_contract_metadata(metrics)
         return metrics[METRIC_COLUMNS]
 
     issue_counts = issues.copy()
@@ -662,7 +687,29 @@ def _build_column_metrics(
     )
     metrics["fail_count"] = metrics["fail_count"].fillna(0).astype(int)
     metrics["warn_count"] = metrics["warn_count"].fillna(0).astype(int)
+    metrics = _apply_column_contract_metadata(metrics)
     return metrics[METRIC_COLUMNS]
+
+
+def _apply_column_contract_metadata(metrics: pd.DataFrame) -> pd.DataFrame:
+    if metrics.empty:
+        return _empty_metrics()
+    metrics = metrics.copy()
+    metrics["contract_level"] = metrics["column"].map(
+        lambda col: COLUMN_CONTRACTS.get(col, {}).get("level", "OBSERVED")
+    )
+    metrics["expected_fill_rate"] = metrics["column"].map(
+        lambda col: COLUMN_CONTRACTS.get(col, {}).get("expected_fill_rate", "")
+    )
+    metrics["contract_status"] = "METRIC"
+    expected = pd.to_numeric(metrics["expected_fill_rate"], errors="coerce")
+    fill = pd.to_numeric(metrics["fill_rate"], errors="coerce")
+    source_aware = metrics["contract_level"] == "SOURCE_AWARE"
+    required = metrics["contract_level"].isin(["REQUIRED", "REQUIRED_INDEXABLE"])
+    metrics.loc[source_aware & expected.notna() & (fill < expected), "contract_status"] = "WARN"
+    metrics.loc[required & expected.notna() & (fill < expected), "contract_status"] = "FAIL"
+    metrics.loc[expected.notna() & (fill >= expected), "contract_status"] = "PASS"
+    return metrics
 
 
 def _quarter_from_date_string(value: Any) -> str:
@@ -1008,6 +1055,79 @@ def build_quality_summary(
     return summary[SUMMARY_COLUMNS]
 
 
+def build_residual_summary(
+    unified_df: pd.DataFrame,
+    issues: pd.DataFrame,
+    rule_ids: tuple[str, ...] = ("X06", "AGG01"),
+) -> pd.DataFrame:
+    """Group unresolved high-risk row issues without changing issue severity."""
+    if issues.empty:
+        return pd.DataFrame(columns=RESIDUAL_SUMMARY_COLUMNS)
+
+    prepared = _prepare_df(unified_df)
+    con = duckdb.connect()
+    con.register("issues", issues)
+    con.register("holdings", prepared)
+    rule_list = ", ".join("'" + r.replace("'", "''") + "'" for r in rule_ids)
+    summary = con.execute(f"""
+        WITH joined AS (
+            SELECT
+                i.rule_id,
+                COALESCE(NULLIF(i.source, ''), h.source, '') AS source,
+                COALESCE(NULLIF(i.cik, ''), h.cik, '') AS cik,
+                COALESCE(NULLIF(i.report_date, ''), h.report_date, '') AS report_date,
+                i.severity,
+                COALESCE(NULLIF(h.issuer_name, ''), NULLIF(i.value, ''), '') AS issuer_name,
+                TRY_CAST(h.fair_value AS DOUBLE) AS fair_value,
+                TRY_CAST(h.principal_amount AS DOUBLE) AS principal_amount
+            FROM issues i
+            LEFT JOIN holdings h
+              ON CAST(h._row_key AS VARCHAR) = CAST(i.row_key AS VARCHAR)
+            WHERE i.rule_id IN ({rule_list})
+        ), enriched AS (
+            SELECT *,
+                CASE WHEN TRY_CAST(report_date AS DATE) IS NOT NULL THEN
+                    CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                    || 'q'
+                    || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                ELSE '' END AS quarter,
+                CASE
+                    WHEN rule_id != 'X06' THEN 'not_applicable'
+                    WHEN fair_value IS NULL OR fair_value = 0 OR principal_amount IS NULL THEN 'unknown'
+                    WHEN principal_amount / fair_value >= 1000 THEN '>=1000x'
+                    WHEN principal_amount / fair_value >= 100 THEN '100x-1000x'
+                    WHEN principal_amount / fair_value > 10 THEN '10x-100x'
+                    ELSE '<=10x'
+                END AS ratio_band,
+                CASE
+                    WHEN fair_value IS NULL OR fair_value = 0 OR principal_amount IS NULL THEN NULL
+                    ELSE principal_amount / fair_value
+                END AS principal_to_fv
+            FROM joined
+        ), grouped AS (
+            SELECT
+                rule_id, source, cik, quarter, report_date, ratio_band,
+                COUNT(*) AS issue_count,
+                SUM(CASE WHEN severity = '{SEVERITY_FAIL}' THEN 1 ELSE 0 END) AS fail_count,
+                SUM(CASE WHEN severity = '{SEVERITY_WARN}' THEN 1 ELSE 0 END) AS warn_count,
+                SUM(COALESCE(fair_value, 0)) AS affected_fair_value,
+                MAX(principal_to_fv) AS max_principal_to_fv,
+                STRING_AGG(DISTINCT issuer_name, '; ' ORDER BY issuer_name) AS top_issuer_samples
+            FROM enriched
+            GROUP BY rule_id, source, cik, quarter, report_date, ratio_band
+        )
+        SELECT
+            rule_id, source, cik, quarter, report_date, ratio_band,
+            issue_count, fail_count, warn_count, affected_fair_value,
+            max_principal_to_fv,
+            SUBSTR(COALESCE(top_issuer_samples, ''), 1, 500) AS top_issuer_samples
+        FROM grouped
+        ORDER BY rule_id, issue_count DESC, affected_fair_value DESC, cik, quarter
+    """).fetchdf()
+    con.close()
+    return summary[RESIDUAL_SUMMARY_COLUMNS]
+
+
 def run_column_quality_validation(
     unified_df: pd.DataFrame,
     existing_reports: Optional[dict[str, pd.DataFrame]] = None,
@@ -1020,12 +1140,14 @@ def run_column_quality_validation(
         ignore_index=True,
     ) if not column_issues.empty or not adapter_issues.empty else _empty_issues()
     summary = build_quality_summary(unified_df, all_issues)
+    residual_summary = build_residual_summary(unified_df, all_issues)
     logger.info(
-        "Column validation: %d issues, %d metric rows, %d CIK-date summaries",
-        len(all_issues), len(metrics), len(summary),
+        "Column validation: %d issues, %d metric rows, %d CIK-date summaries, %d residual groups",
+        len(all_issues), len(metrics), len(summary), len(residual_summary),
     )
     return {
         "row_validation_issues": all_issues[ISSUE_COLUMNS],
         "column_quality_metrics": metrics[METRIC_COLUMNS],
         "data_quality_metrics": summary[SUMMARY_COLUMNS],
+        "validate_all_residual_summary": residual_summary[RESIDUAL_SUMMARY_COLUMNS],
     }

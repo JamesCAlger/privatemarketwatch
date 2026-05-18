@@ -139,7 +139,10 @@ def _base_position(**overrides) -> dict:
 
 
 def _fixtures(tmp_path: Path, *, bad_index: bool = False) -> dict[str, Path]:
-    holdings = _write_csv(tmp_path / "private_markets_holdings.csv", [_base_holding()])
+    holdings = _write_csv(tmp_path / "private_markets_holdings.csv", [
+        _base_holding(quarter="2024q2", report_date="2024-06-30")
+    ])
+    bdc_holdings = _write_csv(tmp_path / "bdc_holdings.csv", [_base_holding()])
     pos_rows = []
     for i in range(10):
         pos_rows.append(_base_position(**{
@@ -182,18 +185,41 @@ def _fixtures(tmp_path: Path, *, bad_index: bool = False) -> dict[str, Path]:
         "cik": "100",
         "report_date": "2024-03-31",
         "quarter": "2024q1",
+        "report_quarter": "2024q1",
         "total_assets": "2000000",
+    }])
+    fund_financials_cross_level = _write_csv(tmp_path / "fund_financials_cross_level.csv", [{
+        "cik": "100",
+        "report_date": "2024-03-31",
+        "quarter": "2024q1",
+        "report_quarter": "2024q1",
+        "metric": "total_assets",
+        "source_value": "2000000",
+        "fund_financials_value": "2000000",
+        "status": "PASS",
     }])
     combined_universe = _write_csv(tmp_path / "combined_universe.csv", [_base_universe()])
     position_matches = _write_csv(tmp_path / "position_matches.csv", [_base_match()])
     bdc_filings_index = _write_csv(tmp_path / "bdc_filings_index.csv", [_base_filing()])
     entity_lookup = _write_csv(tmp_path / "entity_lookup.csv", [_base_entity()])
+    bdc_fund_income = _write_csv(tmp_path / "bdc_fund_income.csv", [{
+        "cik": "100",
+        "quarter": "2024q1",
+        "report_date": "2024-03-31",
+        "investment_income": "100000",
+        "interest_income": "100000",
+        "total_investment_income": "100000",
+        "source": "bdc",
+    }])
     return {
         "holdings": holdings,
+        "bdc_holdings": bdc_holdings,
+        "bdc_fund_income": bdc_fund_income,
         "position_returns": position_returns,
         "index_returns": index_returns,
         "fee_uplift": fee_uplift,
         "fund_financials": fund_financials,
+        "fund_financials_cross_level": fund_financials_cross_level,
         "combined_universe": combined_universe,
         "position_matches": position_matches,
         "bdc_filings_index": bdc_filings_index,
@@ -202,8 +228,9 @@ def _fixtures(tmp_path: Path, *, bad_index: bool = False) -> dict[str, Path]:
 
 
 def test_registry_contains_all_rules():
-    assert len(RULE_REGISTRY) == 88
+    assert len(RULE_REGISTRY) == 94
     expected = set()
+    expected.update(f"RI{i:02d}" for i in range(1, 7))
     expected.update(f"PC{i:02d}" for i in range(1, 13))
     expected.update(f"IDX{i:02d}" for i in range(1, 16))
     expected.update(f"T{i:02d}" for i in range(1, 11))
@@ -220,7 +247,7 @@ def test_all_sql_executes_on_minimal_fixtures(tmp_path):
 
     assert list(aggregate.columns) == AGGREGATE_COLUMNS
     assert list(detail.columns) == DETAIL_COLUMNS
-    assert len(aggregate) == 88
+    assert len(aggregate) == 94
     assert set(aggregate["status"]).issubset({"PASS", "WARN", "FAIL", "SKIPPED"})
 
 
@@ -258,10 +285,61 @@ def test_missing_optional_tables_produce_skipped_rows(tmp_path):
     assert "missing file" in pc10["skipped_reason"]
 
 
+def test_ri06_ignores_income_only_cik_not_used_by_fee_uplift(tmp_path):
+    paths = _fixtures(tmp_path)
+    _write_csv(paths["bdc_fund_income"], [
+        {
+            "cik": "100",
+            "quarter": "2024q1",
+            "report_date": "2024-03-31",
+            "investment_income": "100000",
+            "interest_income": "100000",
+            "total_investment_income": "100000",
+            "source": "bdc",
+        },
+        {
+            "cik": "999",
+            "quarter": "2020q1",
+            "report_date": "2020-03-31",
+            "investment_income": "100000",
+            "interest_income": "100000",
+            "total_investment_income": "100000",
+            "source": "bdc",
+        },
+    ])
+
+    aggregate, _ = run_all(categories=["RI"], table_paths=paths, write=False)
+    assert aggregate.set_index("rule_id").loc["RI06", "status"] == "PASS"
+
+
+def test_ri06_fails_when_fee_uplift_uses_income_cik_without_bdc_holdings(tmp_path):
+    paths = _fixtures(tmp_path)
+    _write_csv(paths["bdc_fund_income"], [
+        {
+            "cik": "999",
+            "quarter": "2024q1",
+            "report_date": "2024-03-31",
+            "investment_income": "100000",
+            "interest_income": "100000",
+            "total_investment_income": "100000",
+            "source": "bdc",
+        },
+    ])
+    _write_csv(paths["fee_uplift"], [{
+        "cik": "999", "quarter": "2024q1", "effective_uplift": "1",
+    }])
+
+    aggregate, detail = run_all(categories=["RI"], table_paths=paths, write=False)
+    by_rule = aggregate.set_index("rule_id")
+    assert by_rule.loc["RI06", "status"] == "FAIL"
+    assert "0000000999" in set(detail[detail["rule_id"] == "RI06"]["cik"])
+
+
 def test_cli_entrypoint_writes_stable_schema(tmp_path, monkeypatch):
     paths = _fixtures(tmp_path / "inputs")
     aggregate_path = tmp_path / "validation_rules_aggregate.csv"
     detail_path = tmp_path / "validation_rules_detail.csv"
+    history_path = tmp_path / "validation_rules_history.csv"
 
     import pipeline.validation_rules as vr
     from pipeline import main as pipeline_main
@@ -270,6 +348,7 @@ def test_cli_entrypoint_writes_stable_schema(tmp_path, monkeypatch):
     monkeypatch.setattr(pipeline_main, "OUTPUT_DIR", tmp_path)
     monkeypatch.setattr(config, "VALIDATION_RULES_AGGREGATE_FILE", aggregate_path)
     monkeypatch.setattr(config, "VALIDATION_RULES_DETAIL_FILE", detail_path)
+    monkeypatch.setattr(config, "VALIDATION_RULES_HISTORY_FILE", history_path)
     monkeypatch.setattr(sys, "argv", [
         "pipeline.main", "--validate-rules", "--rules-category", "PC",
     ])
