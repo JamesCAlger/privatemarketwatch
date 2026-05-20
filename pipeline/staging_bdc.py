@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 
 import duckdb
 import pandas as pd
@@ -12,6 +13,7 @@ from pipeline.bdc_identifier import (
     _AFFILIATION_PREFIX_RE,
     _AFFILIATION_SUFFIX_RE,
     _AFFILIATION_TAGS,
+    _CRESCENT_HIERARCHY_INDUSTRIES,
     _INVESTMENTS_HIERARCHY_RE,
     _sql_is_bdc_aggregate,
 )
@@ -219,6 +221,40 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     # Industry label check on seg[3] (for geography-prefix detection in Blue Owl)
     _seg3_is_industry = _sql_exact_match(
         "lower(trim(_segments[3]))", _INDUSTRY_LABELS
+    )
+    _crescent_cik_sql = (
+        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+        "IN ('0001633336', '0001954360')"
+    )
+    _crescent_clean_raw = (
+        "regexp_replace(replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '), '\\s+', ' ', 'g')"
+    )
+    _crescent_industry_re = "|".join(
+        re.escape(label).replace("\\ ", "\\s+")
+        for label in _CRESCENT_HIERARCHY_INDUSTRIES
+    )
+    _crescent_issuer_re = (
+        r"^Investments\s+.+?\s+(?:Debt|Equity)\s+Investments\s+"
+        rf"(?:{_crescent_industry_re})\s+(.+?)\s+Investment\s+Type\s+"
+    )
+    _crescent_instrument_re = (
+        r"Investment\s+Type\s+(.+?)(?:\s+Interest\s+Term\b|\s+Interest\s+Rate\b|"
+        r"\s+Maturity\s*/\s*Dissolution\s+Date\b|\s+Maturity\b|$)"
+    )
+    _crescent_trailing_re = (
+        r"Maturity\s*/\s*Dissolution\s+Date\s+\d{1,2}/\d{4}\s+(.+)$"
+    )
+    _crescent_condition = (
+        f"{_crescent_cik_sql} "
+        f"AND starts_with(lower({_crescent_clean_raw}), 'investments ') "
+        f"AND contains(lower({_crescent_clean_raw}), ' investment type ') "
+        f"AND regexp_matches(lower({_crescent_clean_raw}), "
+        "'\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|"
+        "delayed\\s+draw|revolver|revolving|senior\\s+secured|subordinated|"
+        "notes?|bonds?|common\\s+(stock|equity)|preferred|warrants?|equity)\\b') "
+        f"AND regexp_matches(lower({_crescent_clean_raw}), "
+        "'\\b(interest\\s+(term|rate)|reference\\s+rate|sofr|libor|euribor|"
+        "maturity\\s*/\\s*dissolution|maturity|due)\\b')"
     )
 
     # Fund vehicle/manager detection: equity-type positions with these name
@@ -436,23 +472,35 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         WHERE _fv IS NOT NULL
     ),
 
-    -- CTE 4: Filter hierarchical prefix subtotals via self-join
-    -- Requires the child row to also carry fair value (has_fv) to avoid
-    -- false removal when an industry-suffixed metadata row (no FV) extends
-    -- the identifier of a FV-carrying parent (e.g. CIK 845385:
-    -- "Rockfish Seafood Grill, Inc. - First Lien Loan" vs
-    -- "...First Lien Loan - Casual Dining" which has cost but no FV).
+    -- CTE 4: Filter deterministic hierarchical prefix rollups.
+    -- A shorter row is removed only when at least two FV-carrying child rows
+    -- extend the identifier and their fair values tie exactly to the parent.
+    -- This avoids dropping real same-borrower positions just because another
+    -- position starts with the same text.
+    prefix_rollup_parents AS (
+        SELECT
+            a._row_id,
+            COUNT(b._row_id) AS child_count,
+            SUM(b._fv) AS child_fv
+        FROM has_fv a
+        JOIN has_fv b
+          ON a.cik = b.cik
+         AND a.accession_number = b.accession_number
+         AND b._raw_id LIKE a._raw_id || '%'
+         AND LENGTH(b._raw_id) >= LENGTH(a._raw_id) + 10
+         AND a._raw_id IS NOT NULL
+         AND LENGTH(a._raw_id) >= 3
+        GROUP BY a._row_id, a._fv
+        HAVING COUNT(b._row_id) >= 2
+           AND abs(a._fv - SUM(b._fv))
+               <= greatest(1.0, 0.0001 * greatest(abs(a._fv), abs(SUM(b._fv))))
+    ),
+
     no_subtotals AS (
         SELECT a.* FROM has_fv a
-        WHERE NOT EXISTS (
-            SELECT 1 FROM has_fv b
-            WHERE a.cik = b.cik
-              AND a.accession_number = b.accession_number
-              AND b._raw_id LIKE a._raw_id || '%'
-              AND LENGTH(b._raw_id) > LENGTH(a._raw_id) + 10
-              AND a._raw_id IS NOT NULL
-              AND LENGTH(a._raw_id) >= 3
-        )
+        LEFT JOIN prefix_rollup_parents p
+          ON a._row_id = p._row_id
+        WHERE p._row_id IS NULL
     ),
 
     -- CTE 5a: Initial split + helper columns for re-parsing
@@ -535,6 +583,15 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             CASE
                 -- Pipe format takes priority
                 WHEN _pipe_issuer IS NOT NULL THEN _pipe_issuer
+                -- Crescent-family hierarchy rows:
+                -- Investments {{country}} {{Debt/Equity Investments}} {{industry}}
+                -- {{issuer}} Investment Type {{instrument}} Interest/Maturity ...
+                WHEN {_crescent_condition}
+                THEN trim(regexp_extract(
+                    {_crescent_clean_raw},
+                    '{_crescent_issuer_re}',
+                    1
+                ))
                 -- Industry prefix with 3+ segments: take segment 2 as issuer
                 WHEN {industry_in}
                      AND len(_segments) >= 3
@@ -642,6 +699,23 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                          THEN ', ' || trim(array_to_string(string_split(_raw_id, ' | ')[4:], ' | '))
                          ELSE ''
                      END
+                -- Crescent-family hierarchy rows. If a trailing tranche label
+                -- follows the month/year maturity (e.g. One/Four/Five), keep it
+                -- in the instrument key so equal-FV borrower tranches do not
+                -- collapse during staging deduplication.
+                WHEN {_crescent_condition}
+                THEN trim(regexp_extract(
+                    {_crescent_clean_raw},
+                    '{_crescent_instrument_re}',
+                    1
+                )) || COALESCE(
+                    NULLIF(' - ' || trim(regexp_extract(
+                        {_crescent_clean_raw},
+                        '{_crescent_trailing_re}',
+                        1
+                    )), ' - '),
+                    ''
+                )
                 -- Industry prefix with 3+ segments: segments 3+ as instrument
                 WHEN {industry_in}
                      AND len(_segments) >= 3
@@ -865,7 +939,12 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                     '(\\d{{1,2}}/\\d{{1,2}}/\\d{{2,4}})\\s+[Mm]aturity', 1), ''),
                 NULLIF(regexp_extract(_raw_id,
                     '(?:[Mm]aturity|[Dd]ue)\\s+(?:[Dd]ate\\s+)?(\\d{{1,2}}/\\d{{1,2}}/\\d{{2,4}})', 1), '')
-            ) AS _text_maturity_raw
+            ) AS _text_maturity_raw,
+            NULLIF(regexp_extract(
+                replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '),
+                '(?:[Mm]aturity\\s*/\\s*[Dd]issolution\\s+[Dd]ate|[Mm]aturity/\\s*[Dd]issolution\\s+[Dd]ate)\\s+(\\d{{1,2}}/\\d{{4}})',
+                1
+            ), '') AS _text_maturity_month_raw
         FROM with_coupon
     ),
 
@@ -939,6 +1018,11 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                              ELSE TRY_STRPTIME(_text_maturity_raw, '%m/%d/%Y')
                         END,
                         '%Y-%m-%d')
+                    ELSE '' END
+                WHEN _text_maturity_month_raw IS NOT NULL THEN
+                    CASE WHEN last_day(TRY_STRPTIME(_text_maturity_month_raw, '%m/%Y')) >= DATE '1950-01-01'
+                          AND YEAR(last_day(TRY_STRPTIME(_text_maturity_month_raw, '%m/%Y'))) < 2099
+                    THEN strftime(last_day(TRY_STRPTIME(_text_maturity_month_raw, '%m/%Y')), '%Y-%m-%d')
                     ELSE '' END
                 ELSE ''
             END AS maturity_date,

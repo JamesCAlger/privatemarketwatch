@@ -24,7 +24,12 @@ from pipeline.config import (
     COMBINED_UNIVERSE_FILE,
     DATA_QUALITY_METRICS_FILE,
     FEE_UPLIFT_FILE,
+    FUND_STRATEGY_CORRECTION_CANDIDATES_FILE,
     BDC_HOLDINGS_FILE,
+    FUND_STRATEGY_HOLDINGS_MIX_FILE,
+    FUND_STRATEGY_REFERENCE_FILE,
+    FUND_STRATEGY_REVIEW_QUEUE_FILE,
+    FUND_STRATEGY_VALIDATION_FILE,
     FUND_FINANCIALS_FILE,
     HOLDINGS_COUNT_STABILITY_FILE,
     HOLDINGS_COVERAGE_FILE,
@@ -37,7 +42,17 @@ from pipeline.config import (
     HOLDINGS_VALIDATION_REPORT_FILE,
     NPORT_FUND_INFO_FILE,
     NPORT_EXCLUDE_CIKS,
+    POSITION_PURITY_DIAGNOSTICS_FILE,
+    POSITION_PURITY_METRICS_FILE,
     ROW_VALIDATION_ISSUES_FILE,
+    SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE,
+    SOURCE_RECONCILIATION_DETAIL_FILE,
+    SOURCE_RECONCILIATION_METRICS_FILE,
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
     UNIFIED_HOLDINGS_FILE,
     VALIDATE_ALL_RESIDUAL_SUMMARY_FILE,
 )
@@ -1208,25 +1223,30 @@ def check_gav_reconciliation(
             s.bdc_source_aggregate_filtered_rows,
             -- Reliability gate: inv_fv that is <10% or >5x of total_assets
             -- is likely partial/wrong (catches Kayne 66x, SCP 13x outliers).
-            -- Corroboration: if the gate rejects inv_fv BUT holdings sum
-            -- corroborates it (ratio 0.3-5.0x), use inv_fv anyway -- the
-            -- fund genuinely has a small investment book relative to total
-            -- assets (e.g. NEWT bank/BDC hybrid).
+            -- For BDCs, a suspect investment-FV denominator can only be
+            -- rescued by same-scope raw BDC source FV.  The holdings numerator
+            -- cannot corroborate its own denominator.
             CASE WHEN f.inv_fv IS NOT NULL AND f.total_assets IS NOT NULL
                       AND f.total_assets > 0
+                      AND h.has_bdc_positions = 1
                       AND (f.inv_fv / f.total_assets < 0.1
                            OR f.inv_fv / f.total_assets > 5)
                       AND NOT (f.inv_fv > 0
-                               AND h.sum_holdings_fv / f.inv_fv BETWEEN 0.3 AND 5.0)
+                               AND s.bdc_source_reconciliation_fv IS NOT NULL
+                               AND s.bdc_source_reconciliation_fv / f.inv_fv
+                                   BETWEEN 0.3 AND 5.0)
                  THEN NULL ELSE f.inv_fv END AS inv_fv_checked,
             f.inv_fv AS inv_fv_raw,
             COALESCE(
                 CASE WHEN f.inv_fv IS NOT NULL AND f.total_assets IS NOT NULL
                           AND f.total_assets > 0
+                          AND h.has_bdc_positions = 1
                           AND (f.inv_fv / f.total_assets < 0.1
                                OR f.inv_fv / f.total_assets > 5)
                           AND NOT (f.inv_fv > 0
-                                   AND h.sum_holdings_fv / f.inv_fv BETWEEN 0.3 AND 5.0)
+                                   AND s.bdc_source_reconciliation_fv IS NOT NULL
+                                   AND s.bdc_source_reconciliation_fv / f.inv_fv
+                                       BETWEEN 0.3 AND 5.0)
                      THEN NULL ELSE f.inv_fv END,
                 f.total_assets,
                 n.nport_total_assets
@@ -1234,10 +1254,13 @@ def check_gav_reconciliation(
             CASE
                 WHEN f.inv_fv IS NOT NULL
                      AND (f.total_assets IS NULL OR f.total_assets = 0
+                          OR h.has_bdc_positions != 1
                           OR (f.inv_fv / f.total_assets >= 0.1
                               AND f.inv_fv / f.total_assets <= 5)
                           OR (f.inv_fv > 0
-                              AND h.sum_holdings_fv / f.inv_fv BETWEEN 0.3 AND 5.0))
+                              AND s.bdc_source_reconciliation_fv IS NOT NULL
+                              AND s.bdc_source_reconciliation_fv / f.inv_fv
+                                  BETWEEN 0.3 AND 5.0))
                      THEN 'investments_at_fair_value'
                 WHEN f.total_assets IS NOT NULL THEN 'total_assets_companyfacts'
                 WHEN n.nport_total_assets IS NOT NULL THEN 'total_assets_nport'
@@ -1284,12 +1307,12 @@ def check_gav_reconciliation(
         comparison_source AS comparison_denominator_source,
         CASE
             WHEN comparison_source = 'investments_at_fair_value' THEN 'investment_fair_value'
-            WHEN comparison_source IN ('total_assets_companyfacts', 'total_assets_nport') THEN 'full_fund_assets'
+            WHEN comparison_source IN ('total_assets_companyfacts', 'total_assets_nport') THEN 'full_fund_assets_proxy'
             ELSE ''
         END AS denominator_scope,
         CASE
             WHEN comparison_source = 'investments_at_fair_value' THEN 'investment_fair_value'
-            WHEN comparison_source IN ('total_assets_companyfacts', 'total_assets_nport') THEN 'full_fund_assets'
+            WHEN comparison_source IN ('total_assets_companyfacts', 'total_assets_nport') THEN 'full_fund_assets_proxy'
             ELSE ''
         END AS comparison_denominator_scope,
         CASE
@@ -1368,6 +1391,68 @@ def check_gav_reconciliation(
     con.close()
 
     if not result.empty:
+        ratio = pd.to_numeric(result.get("gav_ratio_adjusted"), errors="coerce")
+        raw_ratio = pd.to_numeric(result.get("gav_ratio"), errors="coerce")
+        ratio = ratio.fillna(raw_ratio)
+        comparison = pd.to_numeric(result.get("comparison_value"), errors="coerce")
+        numerator = pd.to_numeric(result.get("sum_holdings_fv_ex_sub"), errors="coerce")
+        if "has_subsidiary_positions" in result.columns:
+            has_sub = pd.to_numeric(
+                result["has_subsidiary_positions"], errors="coerce"
+            ).fillna(0).astype(int) == 1
+            numerator = numerator.where(has_sub, pd.to_numeric(
+                result.get("sum_holdings_fv"), errors="coerce"
+            ))
+        result["residual_fv"] = (numerator - comparison).round(4)
+        result["residual_pct"] = ((numerator - comparison) / comparison).round(6)
+
+        comparison_source = result["comparison_source"].fillna("").astype(str)
+        result["comparison_confidence"] = "WEAK"
+        result.loc[
+            comparison_source == "investments_at_fair_value",
+            "comparison_confidence",
+        ] = "STRONG"
+        result.loc[
+            comparison_source == "total_assets_companyfacts",
+            "comparison_confidence",
+        ] = "MODERATE"
+
+        flag = result["flag"].fillna("").astype(str)
+        evidence_scope = result["gav_evidence_scope"].fillna("").astype(str)
+        failure_scope = flag.where(flag != "ok", "")
+        evidence_failures = evidence_scope.isin([
+            "source_fv_present_not_indexable",
+            "source_fv_missing_or_under_extracted",
+            "non_indexable_denominator",
+        ])
+        failure_scope = failure_scope.where(~evidence_failures, evidence_scope)
+        result["failure_scope"] = failure_scope
+
+        holdings_source = result["holdings_source"].fillna("").astype(str).str.lower()
+        status = pd.Series("PASS", index=result.index, dtype=object)
+        status[comparison_source == ""] = "SKIP"
+        status[(holdings_source == "bdc") & ((ratio < 0.3) | (ratio > 5.0))] = "FAIL"
+        status[
+            (holdings_source == "bdc")
+            & status.eq("PASS")
+            & ((ratio < 0.8) | (ratio > 1.2))
+        ] = "WARN"
+        status[
+            (holdings_source == "nport")
+            & comparison_source.ne("")
+            & (ratio > 1.2)
+        ] = "FAIL"
+        status[
+            (holdings_source == "nport")
+            & status.eq("PASS")
+            & ((ratio < 0.8) | (evidence_scope == "non_indexable_denominator"))
+        ] = "WARN"
+        result["reconciliation_status"] = status
+        result["blocks_verified"] = (
+            ((holdings_source == "bdc") & status.isin(["FAIL", "WARN", "SKIP"]))
+            | ((holdings_source == "nport") & status.eq("FAIL"))
+        )
+
         with_comparison = result[result["comparison_source"].notna()
                                  & (result["comparison_source"] != "")]
         if len(with_comparison) > 0:
@@ -1782,7 +1867,164 @@ def validate_holdings(
         income.to_csv(HOLDINGS_INCOME_YIELD_FILE, index=False)
         logger.info("  Saved %s", HOLDINGS_INCOME_YIELD_FILE.name)
 
-    # 11. Column-level quality contract + unified issue schema
+    # 11. BDC source reconciliation
+    logger.info("Running BDC source row reconciliation...")
+    try:
+        from pipeline.source_reconciliation import (
+            build_reconciliation_calibration_review,
+            build_source_only_blocker_clusters,
+            build_source_only_blocker_detail,
+            build_source_only_blocker_markdown,
+            build_source_reconciliation_residual_classification,
+            build_source_reconciliation_residual_classification_markdown,
+            run_bdc_source_reconciliation,
+        )
+
+        source_recon_detail, source_recon_metrics = run_bdc_source_reconciliation(
+            unified_df=unified_df,
+        )
+        source_recon_review = build_reconciliation_calibration_review(source_recon_detail)
+        source_recon_residual_classification = (
+            build_source_reconciliation_residual_classification(source_recon_detail)
+        )
+        source_recon_residual_md = (
+            build_source_reconciliation_residual_classification_markdown(
+                source_recon_residual_classification
+            )
+        )
+        source_only_detail = build_source_only_blocker_detail(source_recon_detail)
+        source_only_clusters = build_source_only_blocker_clusters(source_only_detail)
+        source_only_md = build_source_only_blocker_markdown(
+            source_only_detail,
+            source_only_clusters,
+        )
+        reports["source_reconciliation_detail"] = source_recon_detail
+        reports["source_reconciliation_metrics"] = source_recon_metrics
+        reports["source_reconciliation_calibration_review"] = source_recon_review
+        reports["source_reconciliation_residual_classification"] = (
+            source_recon_residual_classification
+        )
+        reports["source_reconciliation_source_only_detail"] = source_only_detail
+        reports["source_reconciliation_source_only_clusters"] = source_only_clusters
+        source_recon_detail.to_csv(SOURCE_RECONCILIATION_DETAIL_FILE, index=False)
+        logger.info("  Saved %s", SOURCE_RECONCILIATION_DETAIL_FILE.name)
+        source_recon_metrics.to_csv(SOURCE_RECONCILIATION_METRICS_FILE, index=False)
+        logger.info("  Saved %s", SOURCE_RECONCILIATION_METRICS_FILE.name)
+        source_recon_review.to_csv(
+            SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE.name)
+        source_recon_residual_classification.to_csv(
+            SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE.name)
+        SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE.write_text(
+            source_recon_residual_md,
+            encoding="utf-8",
+        )
+        logger.info(
+            "  Saved %s",
+            SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE.name,
+        )
+        source_only_detail.to_csv(
+            SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE.name)
+        source_only_clusters.to_csv(
+            SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE.name)
+        SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE.write_text(
+            source_only_md,
+            encoding="utf-8",
+        )
+        logger.info(
+            "  Saved %s",
+            SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE.name,
+        )
+        if len(source_recon_metrics) > 0:
+            blocking = int(source_recon_metrics["blocking_issue_count"].sum())
+            logger.info(
+                "  Source reconciliation: %d CIK-quarters, %d blocking issues",
+                len(source_recon_metrics),
+                blocking,
+            )
+    except Exception as exc:
+        logger.error("BDC source row reconciliation failed: %s", exc, exc_info=True)
+
+    # 12. Diagnostic-only position purity layer
+    logger.info("Building position purity diagnostics...")
+    try:
+        from pipeline.position_purity import build_position_purity_diagnostics
+
+        purity_diagnostics, purity_metrics = build_position_purity_diagnostics(
+            unified_df,
+        )
+        reports["position_purity_diagnostics"] = purity_diagnostics
+        reports["position_purity_metrics"] = purity_metrics
+        purity_diagnostics.to_csv(POSITION_PURITY_DIAGNOSTICS_FILE, index=False)
+        logger.info("  Saved %s", POSITION_PURITY_DIAGNOSTICS_FILE.name)
+        purity_metrics.to_csv(POSITION_PURITY_METRICS_FILE, index=False)
+        logger.info("  Saved %s", POSITION_PURITY_METRICS_FILE.name)
+        logger.info(
+            "  Position purity: %d diagnostic rows across %d CIK-dates",
+            len(purity_diagnostics),
+            len(purity_metrics[purity_metrics["issue_rows"] > 0])
+            if len(purity_metrics) > 0 and "issue_rows" in purity_metrics.columns
+            else 0,
+        )
+    except Exception as exc:
+        logger.error("Position purity diagnostics failed: %s", exc, exc_info=True)
+
+    # 13. Report-only fund strategy validation
+    logger.info("Running fund strategy validation...")
+    try:
+        from pipeline.fund_strategy_validation import run_fund_strategy_validation
+
+        strategy_reports = run_fund_strategy_validation(
+            unified_df,
+            universe_df=universe_df,
+            output=False,
+        )
+        reports.update(strategy_reports)
+        strategy_reports["fund_strategy_reference"].to_csv(
+            FUND_STRATEGY_REFERENCE_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", FUND_STRATEGY_REFERENCE_FILE.name)
+        strategy_reports["fund_strategy_holdings_mix"].to_csv(
+            FUND_STRATEGY_HOLDINGS_MIX_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", FUND_STRATEGY_HOLDINGS_MIX_FILE.name)
+        strategy_reports["fund_strategy_validation"].to_csv(
+            FUND_STRATEGY_VALIDATION_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", FUND_STRATEGY_VALIDATION_FILE.name)
+        strategy_reports["fund_strategy_review_queue"].to_csv(
+            FUND_STRATEGY_REVIEW_QUEUE_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", FUND_STRATEGY_REVIEW_QUEUE_FILE.name)
+        strategy_reports["fund_strategy_correction_candidates"].to_csv(
+            FUND_STRATEGY_CORRECTION_CANDIDATES_FILE,
+            index=False,
+        )
+        logger.info("  Saved %s", FUND_STRATEGY_CORRECTION_CANDIDATES_FILE.name)
+        under_review = strategy_reports["fund_strategy_review_queue"]
+        logger.info(
+            "  Fund strategy validation: %d CIK-dates under review",
+            len(under_review),
+        )
+    except Exception as exc:
+        logger.error("Fund strategy validation failed: %s", exc, exc_info=True)
+
+    # 14. Column-level quality contract + unified issue schema
     logger.info("Running column-level quality validation...")
     try:
         from pipeline.column_validation import run_column_quality_validation

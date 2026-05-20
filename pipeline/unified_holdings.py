@@ -487,6 +487,41 @@ def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
+# GICS cache application (zero-cost, no LLM)
+# ---------------------------------------------------------------------------
+
+
+def _apply_gics_cache(combined: pd.DataFrame) -> pd.DataFrame:
+    """Apply cached GICS classifications from company_gics_cache.csv.
+
+    This runs automatically during --unified so that GICS data survives
+    rebuilds without requiring a separate --classify-gics step.  No LLM
+    calls are made -- only the on-disk cache is read.
+    """
+    from pipeline.config import COMPANY_GICS_CACHE_FILE
+
+    if not COMPANY_GICS_CACHE_FILE.exists():
+        return combined
+
+    from pipeline.gics_classification import (
+        _apply_gics_to_holdings,
+        _load_cache,
+    )
+
+    cache = _load_cache()
+    if not cache:
+        return combined
+
+    logger.info("Applying GICS cache (%d entries) to unified holdings...", len(cache))
+    combined = _apply_gics_to_holdings(combined, cache)
+    classified = (combined["gics_sub_industry"] != "").sum()
+    logger.info("  GICS: %d/%d rows (%.1f%%) classified from cache",
+                classified, len(combined),
+                100 * classified / len(combined) if len(combined) else 0)
+    return combined
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -646,17 +681,39 @@ def build_unified_holdings(
         SELECT * FROM deduped WHERE _source_count = 1 OR _dedup_rank = 1
     ),
     -- Within-filing subsidiary dedup: when the same position appears under
-    -- both parent entity and subsidiary/JV contexts (same CIK, report_date,
-    -- issuer_name), keep the parent row and discard the subsidiary duplicate.
-    -- Subsidiary-only positions (no matching parent row) are preserved.
+    -- both parent entity and subsidiary/JV contexts, keep the parent row and
+    -- discard the subsidiary duplicate.  The match must be position-level:
+    -- same accession/report date, same issuer, same instrument, and matching
+    -- economics.  Subsidiary/JV rows for the same issuer but different
+    -- tranches or fair values are separate positions and must be preserved.
     no_sub_dupes AS (
         SELECT * FROM no_dupes
         WHERE COALESCE(TRY_CAST(is_subsidiary AS INT), 0) = 0
            OR NOT EXISTS (
                SELECT 1 FROM no_dupes nd2
                WHERE nd2.cik = no_dupes.cik
+                 AND nd2.accession_number = no_dupes.accession_number
                  AND nd2.report_date = no_dupes.report_date
-                 AND nd2.issuer_name = no_dupes.issuer_name
+                 AND regexp_replace(
+                         lower(trim(COALESCE(CAST(nd2.issuer_name AS VARCHAR), ''))),
+                         '[^a-z0-9]+', ' ', 'g'
+                     ) = regexp_replace(
+                         lower(trim(COALESCE(CAST(no_dupes.issuer_name AS VARCHAR), ''))),
+                         '[^a-z0-9]+', ' ', 'g'
+                     )
+                 AND regexp_replace(
+                         lower(trim(COALESCE(CAST(nd2.instrument_description AS VARCHAR), ''))),
+                         '[^a-z0-9]+', ' ', 'g'
+                     ) = regexp_replace(
+                         lower(trim(COALESCE(CAST(no_dupes.instrument_description AS VARCHAR), ''))),
+                         '[^a-z0-9]+', ' ', 'g'
+                     )
+                 AND ROUND(COALESCE(TRY_CAST(nd2.fair_value AS DOUBLE), 0), 0)
+                     = ROUND(COALESCE(TRY_CAST(no_dupes.fair_value AS DOUBLE), 0), 0)
+                 AND ROUND(COALESCE(TRY_CAST(nd2.principal_amount AS DOUBLE), 0), 0)
+                     = ROUND(COALESCE(TRY_CAST(no_dupes.principal_amount AS DOUBLE), 0), 0)
+                 AND ROUND(COALESCE(TRY_CAST(nd2.shares_held AS DOUBLE), 0), 0)
+                     = ROUND(COALESCE(TRY_CAST(no_dupes.shares_held AS DOUBLE), 0), 0)
                  AND COALESCE(TRY_CAST(nd2.is_subsidiary AS INT), 0) = 0
            )
     ),
@@ -1030,6 +1087,9 @@ def build_unified_holdings(
         kind="mergesort",
         na_position="last",
     ).reset_index(drop=True)
+
+    # Apply cached GICS classifications (if cache exists on disk)
+    combined = _apply_gics_cache(combined)
 
     # Save
     combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)

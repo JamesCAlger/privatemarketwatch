@@ -215,12 +215,25 @@ class TestReportAdapters:
                 "denominator_scope": "full_fund_assets",
                 "gav_rule_id": "GAV_NPORT01",
             },
+            {
+                "cik": "0000000104",
+                "report_date": "2024-03-31",
+                "gav_ratio": "",
+                "gav_ratio_adjusted": "",
+                "holdings_source": "bdc",
+                "comparison_source": "",
+                "reconciliation_status": "SKIP",
+                "blocks_verified": True,
+                "failure_scope": "no_comparison",
+                "gav_rule_id": "GAV_BDC01",
+            },
         ])
         issues = adapt_validation_reports({"gav_reconciliation": gav})
         assert _issues_by_rule(issues, "GAV_BDC01").iloc[0]["severity"] == SEVERITY_FAIL
         assert _issues_by_rule(issues, "GAV_BDC02").iloc[0]["severity"] == SEVERITY_WARN
+        assert (_issues_by_rule(issues, "GAV_BDC02")["action"] == "BLOCK_VERIFIED").any()
         assert _issues_by_rule(issues, "GAV_NPORT01").iloc[0]["severity"] == SEVERITY_WARN
-        assert len(issues) == 3
+        assert len(issues) == 4
 
     def test_aggregate_adapter_suspects_are_warns(self):
         agg = pd.DataFrame([
@@ -253,6 +266,85 @@ class TestReportAdapters:
         result = _issues_by_rule(issues, "CLS_I2")
         assert len(result) == 1
         assert result.iloc[0]["severity"] == SEVERITY_WARN
+
+    def test_source_reconciliation_adapter_blocks_verified(self):
+        detail = pd.DataFrame([
+            {
+                "status": "missing_from_pipeline",
+                "cik": "0000000100",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Acme Corp - Term Loan",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "collapsed_duplicate_dimension_path",
+                "cik": "0000000100",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Acme Corp - Term Loan",
+                "evidence": "same economic facts reported on multiple dimension paths",
+            },
+            {
+                "status": "value_mismatch",
+                "blocking_issue": False,
+                "calibrated_status": "diagnostic_field_mismatch",
+                "cik": "0000000100",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Diagnostic Co - Equity",
+                "mismatched_fields": "principal_amount",
+                "calibration_reason": "principal_amount differs on equity position; tracked as diagnostic",
+            },
+        ])
+        issues = adapt_validation_reports({"source_reconciliation_detail": detail})
+        result = _issues_by_rule(issues, "SRC_BDC01")
+        assert len(result) == 1
+        assert result.iloc[0]["severity"] == SEVERITY_FAIL
+        assert result.iloc[0]["action"] == "BLOCK_VERIFIED"
+        assert len(_issues_by_rule(issues, "collapsed_duplicate_dimension_path")) == 0
+        assert len(_issues_by_rule(issues, "SRC_BDC03")) == 0
+
+    def test_position_purity_adapter_warns_without_blocking_verified(self):
+        diagnostics = pd.DataFrame([
+            {
+                "issue_family": "subtotal_candidate",
+                "source": "bdc",
+                "cik": "0000000100",
+                "report_date": "2024-03-31",
+                "row_key": "0",
+                "bdc_investment_identifier": "Total Senior Secured Loans",
+                "issuer_name": "Total Senior Secured Loans",
+                "evidence": "identifier matched diagnostic subtotal logic",
+            },
+            {
+                "issue_family": "duplicate_dimension_candidate",
+                "source": "bdc",
+                "cik": "0000000100",
+                "report_date": "2024-03-31",
+                "row_key": "1",
+                "bdc_investment_identifier": "Acme Corp - First Lien Loan",
+                "issuer_name": "Acme Corp",
+                "evidence": "same normalized position identity",
+            },
+            {
+                "issue_family": "comparative_period",
+                "source": "bdc",
+                "cik": "0000000100",
+                "report_date": "2024-03-31",
+                "row_key": "2",
+                "bdc_investment_identifier": "Prior Co - Loan",
+                "issuer_name": "Prior Co",
+                "evidence": "period before report_date",
+            },
+        ])
+        issues = adapt_validation_reports({
+            "position_purity_diagnostics": diagnostics,
+        })
+        assert set(issues["rule_id"]) == {"PP01", "PP02", "PP03"}
+        assert set(issues["severity"]) == {SEVERITY_WARN}
+        assert set(issues[issues["rule_id"].isin(["PP01", "PP02"])]["action"]) == {"REVIEW"}
+
+        summary = build_quality_summary(_make_unified_df([{}]), issues)
+        assert summary.iloc[0]["validation_tier"] == "VERIFIED"
+        assert summary.iloc[0]["warn_count"] == 0
 
 
 class TestQualitySummary:

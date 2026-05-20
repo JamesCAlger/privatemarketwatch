@@ -248,6 +248,25 @@ _INVESTMENTS_HIERARCHY_RE = (
     r"|warrant|structured|other)(?:\s+(?:securities|investments|interests))?)?"
     r"\s+"
 )
+
+_CRESCENT_HIERARCHY_INDUSTRIES = [
+    "Pharmaceuticals, Biotechnology and Life Sciences",
+    "Pharmaceuticals, Biotechnology & Life Sciences",
+    "Commercial and Professional Services",
+    "Commercial & Professional Services",
+    "Health Care Equipment & Services",
+    "Consumer Durables & Apparel",
+    "Telecommunication Services",
+    "Automobile & Components",
+    "Diversified Financials",
+    "Consumer Services",
+    "Financial Services",
+    "Software & Services",
+    "Capital Goods",
+    "Transportation",
+    "Retailing",
+    "Energy",
+]
 _AFFILIATION_SUFFIX_RE = (
     r"(?i) - (?:Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))?"
     r"|Control(?:led)?|Affiliat(?:e|ed))$"
@@ -310,7 +329,27 @@ def _sql_is_bdc_aggregate() -> str:
         f"contains(_lower_id, '{s}')" for s in _entity_signals
     )
     has_entity = f"({has_entity_sql})"
+    # Strict leaf evidence for hierarchy rows that begin with category text
+    # but contain terminal position data. This guard is intentionally narrow:
+    # it requires Investment Type plus loan/equity instrument text and either
+    # rate or maturity evidence, so ordinary country/category rollups still
+    # flow through aggregate filtering.
+    leaf_text = "regexp_replace(replace(_lower_id, '\u00a0', ' '), '\\s+', ' ', 'g')"
+    leaf_detail_signal = (
+        "("
+        f"contains({leaf_text}, 'investment type') "
+        f"AND regexp_matches({leaf_text}, "
+        "'\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|"
+        "delayed\\s+draw|revolver|revolving|senior\\s+secured|subordinated|"
+        "notes?|bonds?|common\\s+(stock|equity)|preferred|warrants?|"
+        "equity)\\b') "
+        f"AND regexp_matches({leaf_text}, "
+        "'\\b(interest\\s+(term|rate)|reference\\s+rate|sofr|libor|euribor|"
+        "maturity\\s*/\\s*dissolution|maturity|due)\\b')"
+        ")"
+    )
     no_entity = f"NOT {has_entity}"
+    no_leaf_detail = f"NOT {leaf_detail_signal}"
 
     parts = []
     # NULL/empty identifiers are always aggregates
@@ -318,7 +357,7 @@ def _sql_is_bdc_aggregate() -> str:
     # Unconditional: [member] tag always means aggregate
     parts.append("contains(_lower_id, '[member]')")
     # Named aggregate patterns -- only when no entity signals
-    parts.append(f"({no_entity} AND ({_sql_keyword_check('_lower_id', _BDC_AGGREGATE_PATTERNS)}))")
+    parts.append(f"({no_entity} AND {no_leaf_detail} AND ({_sql_keyword_check('_lower_id', _BDC_AGGREGATE_PATTERNS)}))")
     # Exact match section headers (always apply -- short strings won't have entity signals)
     parts.append(_sql_exact_match("_lower_id", _BDC_AGGREGATE_EXACT))
     # Category header prefixes (only when no entity signals and no separators)
@@ -332,7 +371,7 @@ def _sql_is_bdc_aggregate() -> str:
         "debt investment ",  # singular with industry/pct suffix
     ]
     cat_sql = _sql_starts_with_any("_lower_id", _cat_prefixes)
-    parts.append(f"({no_entity} AND NOT contains(_raw_id, ' - ') AND NOT contains(_raw_id, ' -- ') AND {cat_sql})")
+    parts.append(f"({no_entity} AND {no_leaf_detail} AND NOT contains(_raw_id, ' - ') AND NOT contains(_raw_id, ' -- ') AND {cat_sql})")
     # Affiliation-starts-with patterns: identifiers starting with affiliation
     # phrases followed by instrument/industry (no entity signals).
     # After _INVESTMENTS_HIERARCHY_RE stripping in the pipeline, these prefixes
@@ -352,7 +391,7 @@ def _sql_is_bdc_aggregate() -> str:
         "control investments",
     ]
     affil_sql = _sql_starts_with_any("_lower_id", _affil_prefixes)
-    parts.append(f"({no_entity} AND {affil_sql})")
+    parts.append(f"({no_entity} AND {no_leaf_detail} AND {affil_sql})")
     # Identifiers ending with a percentage -- only when no entity signals
     # Guard: exclude cases where % is preceded by financial-term context
     # (e.g. "Interest rate 10.5%", "SOFR + 3.5%") which are position-level rates.
@@ -361,7 +400,7 @@ def _sql_is_bdc_aggregate() -> str:
         "'(?:interest\\s+rate|sofr|libor|prime|spread|coupon|yield|rate\\s+of|floor)"
         "\\s+[\\d.]+%\\s*$')"
     )
-    parts.append(f"({no_entity} AND regexp_matches(_lower_id, '\\d+\\.?\\d*%\\s*$') AND {_pct_financial_guard})")
+    parts.append(f"({no_entity} AND {no_leaf_detail} AND regexp_matches(_lower_id, '\\d+\\.?\\d*%\\s*$') AND {_pct_financial_guard})")
     # "Total ..." industry subtotals: starts with "total " but does NOT contain
     # any company suffix
     _total_company_signals = [
@@ -391,10 +430,10 @@ def _sql_is_bdc_aggregate() -> str:
     pct_prefix = "regexp_matches(_lower_id, '^\\d[\\d.]*%\\s+')"
     has_slash = "contains(_lower_id, '/')"
     no_dash = "NOT contains(_raw_id, ' - ') AND NOT contains(_raw_id, ' -- ')"
-    parts.append(f"({pct_prefix} AND {no_entity} AND {no_dash} AND {has_slash})")
+    parts.append(f"({pct_prefix} AND {no_entity} AND {no_leaf_detail} AND {no_dash} AND {has_slash})")
     # Industry-prefixed subtotals -- only when no entity signals
     suffix_sql = _sql_ends_with_any("_lower_id", _BDC_AGGREGATE_SUFFIXES)
-    parts.append(f"({no_entity} AND {suffix_sql})")
+    parts.append(f"({no_entity} AND {no_leaf_detail} AND {suffix_sql})")
     # Single-word industry/geography labels
     single_word_labels = sorted(v for v in _INDUSTRY_LABELS if " " not in v)
     multi_word_labels = sorted(v for v in _INDUSTRY_LABELS if " " in v)
@@ -595,6 +634,26 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
     return (first_seg, instrument)
 
 
+def _leaf_detail_signal(identifier: str) -> bool:
+    if not identifier or not isinstance(identifier, str):
+        return False
+    lower = re.sub(r"\s+", " ", identifier.replace("\xa0", " ")).lower().strip()
+    return bool(
+        "investment type" in lower
+        and re.search(
+            r"\b(unitranche|first\s+lien|second\s+lien|term\s+loan|"
+            r"delayed\s+draw|revolver|revolving|senior\s+secured|subordinated|"
+            r"notes?|bonds?|common\s+(stock|equity)|preferred|warrants?|equity)\b",
+            lower,
+        )
+        and re.search(
+            r"\b(interest\s+(term|rate)|reference\s+rate|sofr|libor|euribor|"
+            r"maturity\s*/\s*dissolution|maturity|due)\b",
+            lower,
+        )
+    )
+
+
 # ---------------------------------------------------------------------------
 # BDC aggregate/subtotal detection
 # ---------------------------------------------------------------------------
@@ -636,13 +695,14 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
         "gmbh", " co.", " plc",
     ]
     has_entity = any(s in lower for s in _entity_signals)
+    leaf_detail_signal = _leaf_detail_signal(identifier)
 
     # Unconditional aggregate markers (override entity guard)
     if "[member]" in lower:
         return True
 
     # Named aggregate patterns — only apply to identifiers WITHOUT entity signals
-    if not has_entity:
+    if not has_entity and not leaf_detail_signal:
         for pattern in _BDC_AGGREGATE_PATTERNS:
             if pattern in lower:
                 return True
@@ -653,7 +713,7 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
 
     # Affiliation-starts-with patterns: identifiers starting with affiliation
     # phrases followed by instrument/industry (no entity signals).
-    if not has_entity:
+    if not has_entity and not leaf_detail_signal:
         _affil_prefixes = (
             "non-controlled/non-affiliated investments",
             "non-controlled/non-affiliated ",
@@ -676,7 +736,7 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
     # "Equity Securities <Industry>", "Investment <Type>" etc.
     # These have no ' - ' or ' -- ' separator and are always subtotals.
     # Only apply when no entity signals present.
-    if not has_entity and " - " not in identifier and " -- " not in identifier:
+    if not has_entity and not leaf_detail_signal and " - " not in identifier and " -- " not in identifier:
         _cat_prefixes = (
             "debt investments ", "debt investments,",
             "debt securities ",
@@ -696,7 +756,7 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
     # in the dimension path (e.g., "Investments 176% of Net Assets, Company LLC")
     # Guard: exclude cases where % is preceded by financial-term context
     # (e.g. "Interest rate 10.5%", "SOFR + 3.5%") which are position-level rates.
-    if not has_entity and re.search(r"\d+\.?\d*%\s*$", lower):
+    if not has_entity and not leaf_detail_signal and re.search(r"\d+\.?\d*%\s*$", lower):
         if not re.search(
             r"(?:interest\s+rate|sofr|libor|prime|spread|coupon|yield|rate\s+of|floor)"
             r"\s+[\d.]+%\s*$",
@@ -706,7 +766,7 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
 
     # Industry-prefixed subtotals: identifier ends with instrument type
     # (real positions always have rate/maturity after)
-    if not has_entity:
+    if not has_entity and not leaf_detail_signal:
         for suffix in _BDC_AGGREGATE_SUFFIXES:
             if lower.endswith(suffix):
                 return True
@@ -734,6 +794,7 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
     # slash-separated category terms (no entity signals, no dash separators).
     # Example: "177.4% Common Equity/Partnership Interests/Warrants"
     if (not has_entity
+            and not leaf_detail_signal
             and re.match(r"^\d[\d.]*%\s+", lower)
             and " - " not in identifier and " -- " not in identifier
             and "/" in lower):

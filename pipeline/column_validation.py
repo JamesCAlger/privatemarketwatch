@@ -731,8 +731,10 @@ def adapt_validation_reports(reports: dict[str, pd.DataFrame]) -> pd.DataFrame:
         _adapt_income_yield(reports.get("income_yield")),
         _adapt_classification(reports.get("classification_validation")),
         _adapt_aggregate_leaks(reports.get("aggregate_leaks")),
+        _adapt_position_purity(reports.get("position_purity_diagnostics")),
         _adapt_coverage(reports.get("coverage")),
         _adapt_cross_source_duplicates(reports.get("duplicate_holdings")),
+        _adapt_source_reconciliation(reports.get("source_reconciliation_detail")),
     ]
     issue_frames = [df for df in issue_frames if df is not None and not df.empty]
     return pd.concat(issue_frames, ignore_index=True) if issue_frames else _empty_issues()
@@ -768,17 +770,39 @@ def _adapt_gav(df: Optional[pd.DataFrame]) -> pd.DataFrame:
         ratio = pd.to_numeric(row.get("gav_ratio_adjusted"), errors="coerce")
         if pd.isna(ratio):
             ratio = pd.to_numeric(row.get("gav_ratio"), errors="coerce")
-        if pd.isna(ratio):
-            continue
         rule_hint = str(row.get("gav_rule_id", "") or "")
         holdings_source = str(row.get("holdings_source", "") or row.get("source", "") or "").lower()
         is_nport_scope = rule_hint == GAV_NPORT_SCOPE_RULE or holdings_source == "nport"
         comparison_source = row.get("comparison_source", "")
+        status = str(row.get("reconciliation_status", "") or "").upper()
+        blocks_verified = str(row.get("blocks_verified", "") or "").lower() in {
+            "true", "1", "yes",
+        }
+        failure_scope = str(row.get("failure_scope", "") or row.get("flag", "") or "")
         evidence = (
             f"comparison_source={comparison_source}; "
             f"holdings_scope={row.get('holdings_scope', '')}; "
-            f"denominator_scope={row.get('denominator_scope', '')}"
+            f"denominator_scope={row.get('denominator_scope', '')}; "
+            f"failure_scope={failure_scope}; "
+            f"confidence={row.get('comparison_confidence', '')}"
         )
+        if status == "SKIP" and holdings_source == "bdc":
+            rows.append({
+                "source": "bdc",
+                "cik": row.get("cik", ""),
+                "report_date": row.get("report_date", ""),
+                "column": "fair_value",
+                "rule_id": GAV_BDC_WARN_RULE,
+                "severity": SEVERITY_WARN,
+                "evidence_strength": EVIDENCE_MODERATE,
+                "action": ACTION_BLOCK_VERIFIED,
+                "value": "no_comparison",
+                "message": "BDC GAV reconciliation has no comparison denominator",
+                "evidence": evidence,
+            })
+            continue
+        if pd.isna(ratio):
+            continue
         if is_nport_scope and (ratio < 0.8 or ratio > 1.2):
             rows.append({
                 "source": "nport",
@@ -786,9 +810,9 @@ def _adapt_gav(df: Optional[pd.DataFrame]) -> pd.DataFrame:
                 "report_date": row.get("report_date", ""),
                 "column": "fair_value",
                 "rule_id": GAV_NPORT_SCOPE_RULE,
-                "severity": SEVERITY_WARN,
+                "severity": SEVERITY_FAIL if status == "FAIL" else SEVERITY_WARN,
                 "evidence_strength": EVIDENCE_MODERATE,
-                "action": ACTION_DISCLOSE,
+                "action": ACTION_BLOCK_VERIFIED if status == "FAIL" else ACTION_DISCLOSE,
                 "value": str(ratio),
                 "message": (
                     "N-PORT private-market holdings coverage ratio is outside "
@@ -811,7 +835,7 @@ def _adapt_gav(df: Optional[pd.DataFrame]) -> pd.DataFrame:
                 "message": "BDC GAV reconciliation ratio is extreme",
                 "evidence": evidence,
             })
-        elif ratio < 0.8 or ratio > 1.2:
+        elif ratio < 0.8 or ratio > 1.2 or (blocks_verified and status == "WARN"):
             rows.append({
                 "source": "bdc" if holdings_source == "bdc" else "",
                 "cik": row.get("cik", ""),
@@ -820,7 +844,7 @@ def _adapt_gav(df: Optional[pd.DataFrame]) -> pd.DataFrame:
                 "rule_id": GAV_BDC_WARN_RULE,
                 "severity": SEVERITY_WARN,
                 "evidence_strength": EVIDENCE_MODERATE,
-                "action": ACTION_REVIEW,
+                "action": ACTION_BLOCK_VERIFIED if holdings_source == "bdc" else ACTION_REVIEW,
                 "value": str(ratio),
                 "message": "BDC GAV reconciliation ratio outside 0.8-1.2",
                 "evidence": evidence,
@@ -951,6 +975,51 @@ def _adapt_aggregate_leaks(df: Optional[pd.DataFrame]) -> pd.DataFrame:
     return _make_issue_frame(rows)
 
 
+def _adapt_position_purity(df: Optional[pd.DataFrame]) -> pd.DataFrame:
+    if df is None or df.empty or "issue_family" not in df.columns:
+        return _empty_issues()
+    rule_map = {
+        "subtotal_candidate": (
+            "PP01",
+            "position purity subtotal candidate",
+            "candidate subtotal/header row detected by diagnostic layer",
+        ),
+        "duplicate_dimension_candidate": (
+            "PP02",
+            "position purity duplicate dimension candidate",
+            "same normalized position identity and numeric facts on multiple dimension paths",
+        ),
+        "comparative_period": (
+            "PP03",
+            "position purity comparative-period row",
+            "period precedes report_date; tracked separately from duplicates",
+        ),
+    }
+    rows = []
+    for _, row in df[df["issue_family"].isin(rule_map)].iterrows():
+        rule_id, message, fallback_evidence = rule_map[str(row.get("issue_family", ""))]
+        action = (
+            ACTION_TRACK_ONLY
+            if str(row.get("issue_family", "")) == "comparative_period"
+            else ACTION_REVIEW
+        )
+        rows.append({
+            "source": row.get("source", ""),
+            "cik": row.get("cik", ""),
+            "report_date": row.get("report_date", ""),
+            "row_key": str(row.get("row_key", "")),
+            "column": "bdc_investment_identifier",
+            "rule_id": rule_id,
+            "severity": SEVERITY_WARN,
+            "evidence_strength": EVIDENCE_MODERATE,
+            "action": action,
+            "value": str(row.get("bdc_investment_identifier", "") or row.get("issuer_name", "")),
+            "message": message,
+            "evidence": str(row.get("evidence", "") or fallback_evidence),
+        })
+    return _make_issue_frame(rows)
+
+
 def _adapt_coverage(df: Optional[pd.DataFrame]) -> pd.DataFrame:
     if df is None or df.empty or "issue" not in df.columns:
         return _empty_issues()
@@ -993,6 +1062,49 @@ def _adapt_cross_source_duplicates(df: Optional[pd.DataFrame]) -> pd.DataFrame:
     return _make_issue_frame(rows)
 
 
+def _adapt_source_reconciliation(df: Optional[pd.DataFrame]) -> pd.DataFrame:
+    if df is None or df.empty or "status" not in df.columns:
+        return _empty_issues()
+    rule_by_status = {
+        "missing_from_pipeline": "SRC_BDC01",
+        "extra_in_pipeline": "SRC_BDC02",
+        "value_mismatch": "SRC_BDC03",
+    }
+    message_by_status = {
+        "missing_from_pipeline": "current-period BDC source row is missing from pipeline output",
+        "extra_in_pipeline": "pipeline BDC row has no matching current-period source fact",
+        "value_mismatch": "matched BDC source/output row has materially different numeric value",
+    }
+    rows = []
+    flagged = df[df["status"].isin(rule_by_status)]
+    if "blocking_issue" in flagged.columns:
+        raw_blocking = flagged["blocking_issue"]
+        if raw_blocking.dtype == object:
+            blocking = raw_blocking.astype(str).str.lower().isin(["true", "1", "yes"])
+        else:
+            blocking = raw_blocking.fillna(False).astype(bool)
+        legacy_missing = raw_blocking.isna()
+        blocking = blocking | legacy_missing
+        flagged = flagged[blocking]
+    for _, row in flagged.iterrows():
+        status = str(row.get("status", ""))
+        rows.append({
+            "source": "bdc",
+            "cik": row.get("cik", ""),
+            "report_date": row.get("report_date", ""),
+            "row_key": str(row.get("output_row_id", "")),
+            "column": "fair_value" if status != "value_mismatch" else str(row.get("mismatched_fields", "")),
+            "rule_id": rule_by_status[status],
+            "severity": SEVERITY_FAIL,
+            "evidence_strength": EVIDENCE_STRONG,
+            "action": ACTION_BLOCK_VERIFIED,
+            "value": str(row.get("raw_investment_identifier", "")),
+            "message": message_by_status[status],
+            "evidence": str(row.get("calibration_reason", "") or row.get("evidence", "")),
+        })
+    return _make_issue_frame(rows)
+
+
 def build_quality_summary(
     unified_df: pd.DataFrame,
     issues: pd.DataFrame,
@@ -1031,9 +1143,21 @@ def build_quality_summary(
     issue_data["source"] = issue_data["source"].fillna("")
     issue_data["cik"] = issue_data["cik"].fillna("")
     issue_data["report_date"] = issue_data["report_date"].fillna("")
+    tier_issue_data = issue_data[
+        ~issue_data["rule_id"].astype(str).isin(["PP01", "PP02", "PP03"])
+    ].copy()
+    if tier_issue_data.empty:
+        base["validation_tier"] = "VERIFIED"
+        base["fail_count"] = 0
+        base["warn_count"] = 0
+        base["info_count"] = 0
+        base["strong_issue_count"] = 0
+        base["moderate_issue_count"] = 0
+        base["weak_issue_count"] = 0
+        return base[SUMMARY_COLUMNS]
 
     group_cols = ["source", "cik", "report_date", "quarter"]
-    grouped = issue_data.groupby(group_cols, dropna=False).agg(
+    grouped = tier_issue_data.groupby(group_cols, dropna=False).agg(
         fail_count=("severity", lambda s: int((s == SEVERITY_FAIL).sum())),
         warn_count=("severity", lambda s: int((s == SEVERITY_WARN).sum())),
         info_count=("severity", lambda s: int((s == SEVERITY_INFO).sum())),

@@ -147,6 +147,17 @@ def test_validate_cross_level_includes_fund_holdings_reconciliation():
     assert _status(result, "F28") == STATUS_PASS
 
 
+def test_validate_cross_level_f20_uses_canonical_gav_status():
+    fund = _fund_df([{}])
+    holdings = _holdings_df([{"fair_value": "100000"}])
+
+    result = validate_cross_level(fund, holdings)
+
+    f20 = result[result["check_code"] == "F20"].iloc[0]
+    assert f20["status"] == STATUS_FAIL
+    assert "canonical GAV reconciliation status=FAIL" in f20["note"]
+
+
 def test_validate_cross_level_flags_coverage_mismatch():
     fund = _fund_df([{}])
     holdings = _holdings_df([{

@@ -7,6 +7,7 @@ rebuilds from existing cached files on disk.
 Usage:
     python scripts/rebuild_outputs.py              # Rebuild everything
     python scripts/rebuild_outputs.py --unified     # Only unified holdings
+    python scripts/rebuild_outputs.py --bdc-holdings # Only cached BDC XBRL holdings
     python scripts/rebuild_outputs.py --returns     # Only matching + returns
     python scripts/rebuild_outputs.py --income      # Only fund income + fee uplift
     python scripts/rebuild_outputs.py --html        # Only HTML template extraction ($0)
@@ -28,6 +29,17 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 logger = logging.getLogger("rebuild")
+
+
+def rebuild_bdc_holdings():
+    """Rebuild BDC holdings from cached XBRL instance files only."""
+    from pipeline.bdc_filings import rebuild_cached_bdc_holdings
+
+    logger.info("=== Rebuilding cached BDC holdings ===")
+    t0 = time.time()
+    df = rebuild_cached_bdc_holdings()
+    logger.info("BDC holdings: %d rows in %.1f s", len(df), time.time() - t0)
+    return df
 
 
 def rebuild_unified():
@@ -228,6 +240,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Rebuild pipeline outputs from cached data (no downloads)."
     )
+    parser.add_argument("--bdc-holdings", action="store_true",
+                        help="Rebuild BDC holdings from cached XBRL only")
     parser.add_argument("--unified", action="store_true",
                         help="Rebuild unified holdings only")
     parser.add_argument("--income", action="store_true",
@@ -256,12 +270,15 @@ def main():
 
     # If no flags, rebuild everything
     rebuild_all = not (
-        args.unified or args.income or args.returns
+        args.bdc_holdings or args.unified or args.income or args.returns
         or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all
     )
 
     t_start = time.time()
+
+    if rebuild_all or args.bdc_holdings:
+        rebuild_bdc_holdings()
 
     if rebuild_all or args.unified:
         rebuild_unified()

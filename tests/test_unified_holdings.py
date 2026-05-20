@@ -1266,8 +1266,8 @@ class TestPrepareBdc:
         result = _prepare_bdc(df)
         assert len(result) == 2
 
-    def test_prefix_subtotal_removed(self):
-        """Short identifier that is a prefix of a longer one is a subtotal."""
+    def test_prefix_parent_with_one_suffix_child_is_retained(self):
+        """A prefix parent is not dropped unless FV evidence proves a rollup."""
         df = self._make_bdc_df([
             {"investment_identifier": "Medallia, Inc.", "cik": "123",
              "accession_number": "001", "interest_rate": 11.0,
@@ -1277,8 +1277,10 @@ class TestPrepareBdc:
              "interest_rate": 11.0, "fair_value": 1000000},
         ])
         result = _prepare_bdc(df)
-        assert len(result) == 1
-        assert "Emerald" in result.iloc[0]["bdc_investment_identifier"]
+        assert len(result) == 2
+        ids = set(result["bdc_investment_identifier"])
+        assert "Medallia, Inc." in ids
+        assert "Medallia, Inc., Emerald JV LP" in ids
 
     def test_prefix_subtotal_keeps_child(self):
         """Prefix filter keeps the longer child, removes the shorter parent."""
@@ -1322,8 +1324,8 @@ class TestPrepareBdc:
         assert result.iloc[0]["issuer_name"] == "Rockfish Seafood Grill, Inc."
         assert abs(result.iloc[0]["fair_value"] - 6219954) < 1
 
-    def test_prefix_subtotal_both_have_fv_still_removed(self):
-        """Genuine subtotal (both parent and child have FV) is still removed."""
+    def test_prefix_parent_with_one_fv_child_is_retained(self):
+        """One child with matching FV is not enough to prove a subtotal."""
         df = self._make_bdc_df([
             {"investment_identifier": "Medallia, Inc.",
              "cik": "123", "accession_number": "001",
@@ -1333,8 +1335,48 @@ class TestPrepareBdc:
              "fair_value": 2000000},
         ])
         result = _prepare_bdc(df)
-        assert len(result) == 1
-        assert "First Lien" in result.iloc[0]["bdc_investment_identifier"]
+        assert len(result) == 2
+        assert set(result["bdc_investment_identifier"]) == {
+            "Medallia, Inc.",
+            "Medallia, Inc., First Lien Term Loan",
+        }
+
+    def test_prefix_parent_with_two_children_summing_exactly_is_removed(self):
+        """A prefix parent is dropped when two child rows exactly sum to it."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Kaseya Inc., First Lien", "cik": "456",
+             "accession_number": "002", "basis_spread": 0.035,
+             "fair_value": 63000000},
+            {"investment_identifier": "Kaseya Inc., First Lien - Drawn 1",
+             "cik": "456", "accession_number": "002", "basis_spread": 0.035,
+             "fair_value": 50000000},
+            {"investment_identifier": "Kaseya Inc., First Lien - Undrawn 1",
+             "cik": "456", "accession_number": "002",
+             "fair_value": 13000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+        ids = set(result["bdc_investment_identifier"])
+        assert "Kaseya Inc., First Lien" not in ids
+        assert "Kaseya Inc., First Lien - Drawn 1" in ids
+        assert "Kaseya Inc., First Lien - Undrawn 1" in ids
+
+    def test_blackstone_cambium_parent_and_emerald_child_survive(self):
+        """Cambium-style parent and Emerald JV child both survive absent rollup FV evidence."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Cambium Learning Group, Inc.",
+             "cik": "123", "accession_number": "001",
+             "fair_value": 2000000},
+            {"investment_identifier": "Cambium Learning Group, Inc., Emerald JV LP",
+             "cik": "123", "accession_number": "001",
+             "fair_value": 250000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+        assert set(result["bdc_investment_identifier"]) == {
+            "Cambium Learning Group, Inc.",
+            "Cambium Learning Group, Inc., Emerald JV LP",
+        }
 
     def test_1000x_scale_correction(self):
         """CIK-quarter with 1000x inflated FV is auto-corrected to /1000."""
@@ -6118,6 +6160,37 @@ class TestSubsidiaryDedup:
         assert len(jv_only) == 1
         assert int(jv_only.iloc[0]["is_subsidiary"]) == 1
 
+    def test_preserves_same_issuer_distinct_subsidiary_position(self, tmp_path):
+        """Same-issuer subsidiary rows are kept when economics differ."""
+        bdc_df = self._make_bdc_df([
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - First Lien",
+             "fair_value": 1000000.0, "cost": 990000.0,
+             "principal_amount": 1000000.0, "interest_rate": 8.5,
+             "basis_spread": 3.5, "dimensions_raw": "investmentAxis=value",
+             "period": "2023-03-31"},
+            {"cik": "100", "entity_name": "Test BDC",
+             "accession_number": "0001-23", "form_type": "10-K",
+             "filing_date": "2023-06-01", "report_date": "2023-03-31",
+             "investment_identifier": "Acme Corp - First Lien",
+             "fair_value": 250000.0, "cost": 249000.0,
+             "principal_amount": 250000.0, "interest_rate": 8.5,
+             "basis_spread": 3.5,
+             "dimensions_raw": "nonconsolidatedsubsidiaryaxis=JV1",
+             "period": "2023-03-31"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=bdc_df, nport_df=pd.DataFrame())
+
+        acme = result[result["issuer_name"] == "Acme Corp"]
+        assert len(acme) == 2
+        assert set(acme["fair_value"].astype(float)) == {1000000.0, 250000.0}
+        assert set(acme["is_subsidiary"].astype(int)) == {0, 1}
+
     def test_no_subsidiary_passthrough(self, tmp_path):
         """When no subsidiary rows exist, all rows pass through unchanged."""
         bdc_df = self._make_bdc_df([
@@ -7381,6 +7454,26 @@ class TestPctPrefixCategorySubtotals:
             "Common Equity/Partnership Interests Total"
         )
 
+    def test_crescent_leaf_hierarchy_not_aggregate(self):
+        assert not _is_bdc_aggregate_row(
+            "Investments Australia Debt Investments Retailing "
+            "Greencross (Vermont Aus Pty Ltd) Investment Type Unitranche "
+            "First Lien Term Loan Interest Term B + 575 Interest Rate 9.52% "
+            "Maturity/ Dissolution Date 03/2028"
+        )
+
+    def test_debt_investments_pct_rollup_still_aggregate(self):
+        assert _is_bdc_aggregate_row("Debt Investments (184.96%)")
+
+    def test_investment_country_pct_rollup_still_aggregate(self):
+        assert _is_bdc_aggregate_row("Investment United States - 141.4%")
+
+    def test_total_safety_holdings_not_aggregate(self):
+        assert not _is_bdc_aggregate_row("Total Safety Holdings LLC")
+
+    def test_generic_crescent_style_header_without_leaf_evidence_aggregate(self):
+        assert _is_bdc_aggregate_row("Investments Canada Debt Investments")
+
 
 # ---------------------------------------------------------------------------
 # Pct-prefix identifier parsing (PennantPark / Blue Owl / Saratoga)
@@ -7584,6 +7677,102 @@ class TestPctPrefixSqlPath:
         )
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+
+class TestCrescentHierarchySqlPath:
+    """Crescent-family identifiers should parse as real leaf positions."""
+
+    def _run_prepare_bdc(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "period", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "shares_held", "pct_of_net_assets", "unrealized_gain_loss",
+            "pik_rate", "industry", "investment_type", "affiliation",
+            "dimensions_raw",
+        ]
+        data = []
+        for i, row in enumerate(rows):
+            full_row = {c: "" for c in cols}
+            full_row.update({
+                "cik": "0001633336",
+                "entity_name": "Crescent Capital BDC",
+                "accession_number": "0001633336-24-000001",
+                "form_type": "10-K",
+                "filing_date": "2024-03-01",
+                "report_date": "2023-12-31",
+                "period": "2023-12-31",
+                "fair_value": 1000000 + i,
+                "cost": 1000000 + i,
+            })
+            full_row.update(row)
+            data.append(full_row)
+        return _prepare_bdc(pd.DataFrame(data))
+
+    def test_crescent_capital_legal_suffix_row(self):
+        result = self._run_prepare_bdc([{
+            "investment_identifier": (
+                "Investments Australia Debt Investments Retailing "
+                "Greencross (Vermont Aus Pty Ltd) Investment\u00a0Type "
+                "Unitranche First Lien Term Loan Interest Term\u00a0B + 575 "
+                "Interest Rate 9.52% Maturity/ Dissolution Date 03/2028"
+            )
+        }])
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Greencross (Vermont Aus Pty Ltd)"
+        assert row["instrument_description"] == "Unitranche First Lien Term Loan"
+        assert row["maturity_date"] == "2028-03-31"
+
+    def test_crescent_private_credit_no_legal_suffix_row(self):
+        result = self._run_prepare_bdc([{
+            "cik": "0001954360",
+            "entity_name": "Crescent Private Credit Income Corp.",
+            "accession_number": "0001954360-24-000001",
+            "investment_identifier": (
+                "Investments United States Debt Investments Software & Services "
+                "Playgreen Investment Type Unitranche First Lien Term Loan "
+                "Interest Term S + 625 Interest Rate 11.91% "
+                "Maturity/Dissolution Date 04/2031"
+            ),
+        }])
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Playgreen"
+        assert row["instrument_description"] == "Unitranche First Lien Term Loan"
+        assert row["maturity_date"] == "2031-04-30"
+
+    def test_multi_tranche_borrower_rows_remain_distinct_positions(self):
+        base = (
+            "Investments Canada Debt Investments Health Care Equipment & Services "
+            "VetStrategy Investment Type Unitranche First Lien Delayed Draw "
+            "Term Loan Interest Term C + 700 (100 Floor) Interest Rate 11.95% "
+            "Maturity/ Dissolution Date 07/2027"
+        )
+        result = self._run_prepare_bdc([
+            {"investment_identifier": f"{base} One", "fair_value": 1252000, "cost": 1252000},
+            {"investment_identifier": f"{base} Two", "fair_value": 1252000, "cost": 1252000},
+            {"investment_identifier": f"{base} Five", "fair_value": 4375000, "cost": 4375000},
+        ])
+
+        rows = result[result["issuer_name"] == "VetStrategy"]
+        assert len(rows) == 3
+        assert set(rows["instrument_description"]) == {
+            "Unitranche First Lien Delayed Draw Term Loan - One",
+            "Unitranche First Lien Delayed Draw Term Loan - Two",
+            "Unitranche First Lien Delayed Draw Term Loan - Five",
+        }
+
+    def test_crescent_style_header_without_investment_type_filtered(self):
+        result = self._run_prepare_bdc([{
+            "investment_identifier": "Investments Canada Debt Investments",
+            "fair_value": 5000000,
+            "cost": 5000000,
+        }])
+        assert result.empty
 
 
 # ---------------------------------------------------------------------------

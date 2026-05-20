@@ -441,6 +441,34 @@ def validate_cross_level(
     """).fetchdf()
     con.close()
 
+    try:
+        from pipeline.gav_reconciliation import build_gav_reconciliation
+
+        gav_holdings = holdings_df.copy()
+        for col, default in {
+            "entity_name": "",
+            "source": "bdc",
+            "is_subsidiary": "0",
+        }.items():
+            if col not in gav_holdings.columns:
+                gav_holdings[col] = default
+        gav = build_gav_reconciliation(
+            unified_df=gav_holdings,
+            fund_financials_df=fund_df,
+            nport_fund_info_df=pd.DataFrame(),
+            bdc_source_df=pd.DataFrame(),
+        )
+    except Exception as exc:
+        logger.warning("F20 canonical GAV reconciliation unavailable: %s", exc)
+        gav = pd.DataFrame()
+    gav_by_pair: dict[tuple[str, str], pd.Series] = {}
+    if not gav.empty:
+        for _, gav_row in gav.iterrows():
+            gav_by_pair[(
+                str(gav_row.get("cik", "")).zfill(10),
+                str(gav_row.get("report_date", "")),
+            )] = gav_row
+
     rows: list[dict] = []
     for _, row in cross.iterrows():
         base = {
@@ -465,14 +493,30 @@ def validate_cross_level(
         pct_sum = row.get("pct_sum")
         position_count = row.get("position_count")
 
-        if pd.isna(holdings_fv) or pd.isna(inv_fv) or inv_fv <= 0:
-            add("F20", STATUS_SKIP, expected="0.8 <= holdings_fv / investments_at_fair_value <= 1.2")
+        gav_key = (str(base["cik"]).zfill(10), str(base["report_date"]))
+        gav_row = gav_by_pair.get(gav_key)
+        if gav_row is None:
+            add("F20", STATUS_SKIP, expected="canonical GAV reconciliation row exists")
         else:
-            ratio = holdings_fv / inv_fv
-            add("F20", STATUS_FAIL if ratio < 0.8 or ratio > 1.2 else STATUS_PASS,
-                value=round(ratio, 4),
-                expected="0.8 <= holdings_fv / investments_at_fair_value <= 1.2",
-                note="holdings FV does not reconcile to investments at fair value")
+            gav_status = str(gav_row.get("reconciliation_status", "") or "").upper()
+            status = STATUS_PASS if gav_status == "PASS" else (
+                STATUS_SKIP if gav_status == "SKIP" else STATUS_FAIL
+            )
+            severity = SEVERITY_FAIL if gav_status == "FAIL" else SEVERITY_WARN
+            evidence = EVIDENCE_STRONG if gav_status == "FAIL" else EVIDENCE_MODERATE
+            add(
+                "F20",
+                status,
+                value=gav_row.get("gav_ratio_adjusted") or gav_row.get("gav_ratio") or "",
+                expected="canonical GAV reconciliation_status is PASS",
+                severity=severity,
+                evidence=evidence,
+                note=(
+                    "canonical GAV reconciliation status="
+                    f"{gav_status}; source={gav_row.get('comparison_source', '')}; "
+                    f"scope={gav_row.get('failure_scope', '')}"
+                ),
+            )
 
         if pd.isna(holdings_fv) or pd.isna(net_assets) or net_assets <= 0:
             add("F21", STATUS_SKIP, expected="0.5 <= holdings_fv / net_assets <= 2.5")
