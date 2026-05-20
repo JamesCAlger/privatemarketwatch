@@ -1,5 +1,10 @@
 """Frontend export helpers split from pipeline.export_frontend."""
 
+from pipeline.bdc_identifier import (
+    _AFFILIATION_PREFIX_RE,
+    _AFFILIATION_SUFFIX_RE,
+    _INVESTMENTS_HIERARCHY_RE,
+)
 from pipeline.export.helpers import *
 
 def _top_n_with_other(
@@ -485,6 +490,60 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
 
         if gav_rows and gav_rows[0]:
             total = gav_rows[0]
+            gav_header = (
+                HOLDINGS_GAV_RECONCILIATION_FILE.read_text(
+                    encoding="utf-8", errors="ignore"
+                ).splitlines()[0].split(",")
+                if HOLDINGS_GAV_RECONCILIATION_FILE.stat().st_size
+                else []
+            )
+            status_counts: list[dict[str, Any]] = []
+            source_counts: list[dict[str, Any]] = []
+            strong_cq = 0
+            proxy_cq = 0
+            if "reconciliation_status" in gav_header:
+                status_counts = [
+                    {"status": r[0], "count": r[1]}
+                    for r in con.execute(f"""
+                        SELECT reconciliation_status, COUNT(*)
+                        FROM read_csv_auto(
+                            '{HOLDINGS_GAV_RECONCILIATION_FILE.as_posix()}',
+                            all_varchar=true
+                        )
+                        GROUP BY reconciliation_status
+                        ORDER BY reconciliation_status
+                    """).fetchall()
+                ]
+            if "comparison_source" in gav_header:
+                source_counts = [
+                    {"source": r[0] or "none", "count": r[1]}
+                    for r in con.execute(f"""
+                        SELECT COALESCE(comparison_source, ''), COUNT(*)
+                        FROM read_csv_auto(
+                            '{HOLDINGS_GAV_RECONCILIATION_FILE.as_posix()}',
+                            all_varchar=true
+                        )
+                        GROUP BY COALESCE(comparison_source, '')
+                        ORDER BY COALESCE(comparison_source, '')
+                    """).fetchall()
+                ]
+            if "comparison_confidence" in gav_header:
+                strong_cq = con.execute(f"""
+                    SELECT COUNT(*)
+                    FROM read_csv_auto(
+                        '{HOLDINGS_GAV_RECONCILIATION_FILE.as_posix()}',
+                        all_varchar=true
+                    )
+                    WHERE comparison_confidence = 'STRONG'
+                """).fetchone()[0] or 0
+                proxy_cq = con.execute(f"""
+                    SELECT COUNT(*)
+                    FROM read_csv_auto(
+                        '{HOLDINGS_GAV_RECONCILIATION_FILE.as_posix()}',
+                        all_varchar=true
+                    )
+                    WHERE comparison_confidence IN ('MODERATE', 'WEAK')
+                """).fetchone()[0] or 0
             out["gavReconciliation"] = {
                 "histogram": [
                     {"bucket": "<0.3x", "count": gav_rows[4]},
@@ -510,6 +569,10 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
                 "within80_120Pct": _safe_round(
                     gav_rows[3] / total * 100 if total else 0, 1
                 ),
+                "statusCounts": status_counts,
+                "comparisonSourceCounts": source_counts,
+                "strongCikQuarters": strong_cq,
+                "proxyCikQuarters": proxy_cq,
             }
 
     # -- 2. Classification accuracy (cross-reference rules) --
@@ -778,6 +841,31 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
             ]
         except Exception as exc:
             logger.warning("  column quality metric export failed: %s", exc)
+
+    if POSITION_PURITY_METRICS_FILE.exists():
+        try:
+            purity = con.execute(f"""
+                SELECT
+                    SUM(TRY_CAST(subtotal_candidate_rows AS BIGINT)) AS subtotal_rows,
+                    SUM(TRY_CAST(duplicate_dimension_candidate_rows AS BIGINT)) AS duplicate_rows,
+                    SUM(TRY_CAST(comparative_period_rows AS BIGINT)) AS comparative_rows,
+                    COUNT(CASE WHEN TRY_CAST(issue_rows AS BIGINT) > 0 THEN 1 END) AS affected_cik_quarters
+                FROM read_csv_auto(
+                    '{POSITION_PURITY_METRICS_FILE.as_posix()}',
+                    all_varchar=true
+                )
+            """).fetchone()
+            if purity:
+                out["positionPurity"] = {
+                    "issueCounts": {
+                        "subtotalCandidate": int(purity[0] or 0),
+                        "duplicateDimensionCandidate": int(purity[1] or 0),
+                        "comparativePeriod": int(purity[2] or 0),
+                    },
+                    "affectedCikQuarters": int(purity[3] or 0),
+                }
+        except Exception as exc:
+            logger.warning("  position purity export failed: %s", exc)
 
     # -- 4. Third-party validation --
     if VALIDATION_REPORT_FILE.exists():
@@ -1264,7 +1352,17 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
     if has_nonaccrual:
         na_cte = f""",
         na_flags AS (
-            SELECT DISTINCT cik, report_date, investment_identifier
+            SELECT DISTINCT cik, report_date,
+                regexp_replace(
+                    regexp_replace(
+                        regexp_replace(
+                            investment_identifier,
+                            '{_AFFILIATION_PREFIX_RE}', ''
+                        ),
+                        '{_AFFILIATION_SUFFIX_RE}', ''
+                    ),
+                    '{_INVESTMENTS_HIERARCHY_RE}', ''
+                ) AS investment_identifier
             FROM read_csv_auto('{NONACCRUAL_FLAGS_CSV.as_posix()}', all_varchar=true)
         )"""
         na_select = ("CASE WHEN na.cik IS NOT NULL THEN 1 ELSE 0 END "
