@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cik",
+    "report_dates",
+    "correction_type",
+    "mechanism",
+    "evidence",
+    "source_reconciliation_effect",
+    "gav_reconciliation_effect",
+    "acceptance_checks",
+    "confidence",
+    "residual_risk"
+  ],
+  "properties": {
+    "schema_version": { "const": "bdc-cik-draft-correction.v1" },
+    "cik": { "type": "string", "pattern": "^[0-9]{10}$" },
+    "report_dates": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "correction_type": {
+      "enum": [
+        "subtotal_pattern",
+        "not_aggregate_override",
+        "dedup_config",
+        "identifier_format",
+        "rate_scale",
+        "row_correction",
+        "classification_override",
+        "escalation"
+      ]
+    },
+    "mechanism": { "type": "string", "minLength": 10 },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "claim", "supports"],
+        "properties": {
+          "evidence_id": { "type": "string", "minLength": 1 },
+          "claim": { "type": "string", "minLength": 5 },
+          "supports": { "type": "string", "minLength": 5 }
+        }
+      }
+    },
+    "source_reconciliation_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_effect", "row_level_evidence_refs", "worsens_row_level_reconciliation"],
+      "properties": {
+        "expected_effect": { "enum": ["improves", "no_change", "worsens", "unknown"] },
+        "row_level_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "worsens_row_level_reconciliation": { "const": false }
+      }
+    },
+    "gav_reconciliation_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_effect",
+        "gate_role",
+        "denominator_strength",
+        "expected_adjusted_ratio_direction",
+        "is_primary_justification",
+        "source_gav_conflict_classification",
+        "residual_if_source_and_gav_disagree"
+      ],
+      "properties": {
+        "expected_effect": { "enum": ["improves", "no_change", "worsens", "unknown"] },
+        "gate_role": { "enum": ["strong_gate", "moderate_gate", "context_only"] },
+        "denominator_strength": {
+          "enum": [
+            "investments_at_fair_value",
+            "clear_total_assets",
+            "ambiguous_total_assets",
+            "non_indexable_denominator",
+            "missing"
+          ]
+        },
+        "expected_adjusted_ratio_direction": {
+          "enum": ["toward_range", "away_from_range", "unchanged", "unknown"]
+        },
+        "is_primary_justification": { "const": false },
+        "source_gav_conflict_classification": {
+          "enum": [
+            "none",
+            "denominator_scope",
+            "non_indexable_holdings",
+            "duplicate_or_subtotal_leakage",
+            "unresolved"
+          ]
+        },
+        "residual_if_source_and_gav_disagree": { "type": "string", "minLength": 5 }
+      }
+    },
+    "acceptance_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "not_accepted_on_gav_improvement_alone",
+        "row_level_source_evidence_required",
+        "strong_gav_residual_explained_when_claiming_completeness",
+        "weak_denominator_not_hard_gate"
+      ],
+      "properties": {
+        "not_accepted_on_gav_improvement_alone": { "const": true },
+        "row_level_source_evidence_required": { "const": true },
+        "strong_gav_residual_explained_when_claiming_completeness": { "const": true },
+        "weak_denominator_not_hard_gate": { "const": true }
+      }
+    },
+    "confidence": { "enum": ["low", "medium", "high"] },
+    "residual_risk": { "type": "string", "minLength": 10 }
+  }
+}
