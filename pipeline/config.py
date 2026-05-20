@@ -158,6 +158,36 @@ HOLDINGS_GAV_RECONCILIATION_FILE = OUTPUT_DIR / "holdings_gav_reconciliation.csv
 HOLDINGS_PCT_SUM_FILE = OUTPUT_DIR / "holdings_pct_sum.csv"
 HOLDINGS_COUNT_STABILITY_FILE = OUTPUT_DIR / "holdings_count_stability.csv"
 HOLDINGS_INCOME_YIELD_FILE = OUTPUT_DIR / "holdings_income_yield.csv"
+SOURCE_RECONCILIATION_DETAIL_FILE = OUTPUT_DIR / "source_reconciliation_detail.csv"
+SOURCE_RECONCILIATION_METRICS_FILE = OUTPUT_DIR / "source_reconciliation_metrics.csv"
+SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE = (
+    OUTPUT_DIR / "source_reconciliation_calibration_review.csv"
+)
+SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE = (
+    OUTPUT_DIR / "source_reconciliation_residual_classification.csv"
+)
+SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE = (
+    OUTPUT_DIR / "source_reconciliation_residual_classification.md"
+)
+SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE = (
+    OUTPUT_DIR / "source_reconciliation_source_only_detail.csv"
+)
+SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE = (
+    OUTPUT_DIR / "source_reconciliation_source_only_clusters.csv"
+)
+SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE = (
+    OUTPUT_DIR / "source_reconciliation_source_only_classification.md"
+)
+POSITION_PURITY_DIAGNOSTICS_FILE = OUTPUT_DIR / "position_purity_diagnostics.csv"
+POSITION_PURITY_METRICS_FILE = OUTPUT_DIR / "position_purity_metrics.csv"
+FUND_STRATEGY_REFERENCE_FILE = OUTPUT_DIR / "fund_strategy_reference.csv"
+FUND_STRATEGY_HOLDINGS_MIX_FILE = OUTPUT_DIR / "fund_strategy_holdings_mix.csv"
+FUND_STRATEGY_VALIDATION_FILE = OUTPUT_DIR / "fund_strategy_validation.csv"
+FUND_STRATEGY_REVIEW_QUEUE_FILE = OUTPUT_DIR / "fund_strategy_review_queue.csv"
+FUND_STRATEGY_CORRECTION_CANDIDATES_FILE = (
+    OUTPUT_DIR / "fund_strategy_correction_candidates.csv"
+)
+FUND_STRATEGY_OVERRIDES_FILE = OVERRIDES_DIR / "fund_strategy_overrides.json"
 COLUMN_QUALITY_METRICS_FILE = OUTPUT_DIR / "column_quality_metrics.csv"
 ROW_VALIDATION_ISSUES_FILE = OUTPUT_DIR / "row_validation_issues.csv"
 VALIDATE_ALL_RESIDUAL_SUMMARY_FILE = OUTPUT_DIR / "validate_all_residual_summary.csv"
@@ -189,6 +219,11 @@ GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"
 GICS_HIERARCHY_FILE = REFERENCE_DIR / "gics_hierarchy.json"
 GICS_LABEL_CACHE_FILE = OUTPUT_DIR / "gics_label_cache.csv"
 COMPANY_GICS_CACHE_FILE = OUTPUT_DIR / "company_gics_cache.csv"
+
+# GICS + aggregate header CC skill
+AGGREGATE_HEADER_FLAGS_FILE = OUTPUT_DIR / "aggregate_header_flags.csv"
+GICS_SKILL_BATCHES_DIR = OUTPUT_DIR / "gics_skill_batches"
+GICS_SKILL_CLAIMS_FILE = OUTPUT_DIR / "gics_skill_claims.json"
 
 # LLM review outputs
 LLM_REVIEW_CANDIDATES_FILE = OUTPUT_DIR / "llm_review_candidates.csv"

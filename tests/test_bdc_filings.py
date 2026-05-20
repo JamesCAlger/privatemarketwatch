@@ -537,6 +537,63 @@ class TestParseXBRLContexts:
         assert raw  # non-empty
         assert "investmentidentifier" in raw.lower()
 
+    def test_date_like_investment_identifier_uses_portfolio_company_axis(self):
+        from pipeline.bdc_filings import _parse_xbrl_contexts
+
+        xml = textwrap.dedent("""\
+            <xbrl
+                xmlns="http://www.xbrl.org/2003/instance"
+                xmlns:xbrli="http://www.xbrl.org/2003/instance"
+                xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+                xmlns:test="http://example.com/test">
+                <xbrli:context id="ctx_bad_id">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">1</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                                <test:InvestmentIdentifierDomain>01/03/2020</test:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                            <xbrldi:explicitMember dimension="test:PortfolioCompaniesAxis">
+                                test:FarmersBusinessNetworkIncMember
+                            </xbrldi:explicitMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-03-31</xbrli:instant></xbrli:period>
+                </xbrli:context>
+            </xbrl>
+        """)
+        contexts = _parse_xbrl_contexts(_parse_tree(xml))
+
+        assert contexts["ctx_bad_id"]["investment_identifier"] == (
+            "FarmersBusinessNetworkIncMember"
+        )
+
+    def test_date_like_investment_identifier_kept_without_company_axis(self):
+        from pipeline.bdc_filings import _parse_xbrl_contexts
+
+        xml = textwrap.dedent("""\
+            <xbrl
+                xmlns="http://www.xbrl.org/2003/instance"
+                xmlns:xbrli="http://www.xbrl.org/2003/instance"
+                xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+                xmlns:test="http://example.com/test">
+                <xbrli:context id="ctx_date_only">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">1</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                                <test:InvestmentIdentifierDomain>01/03/2020</test:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-03-31</xbrli:instant></xbrli:period>
+                </xbrli:context>
+            </xbrl>
+        """)
+        contexts = _parse_xbrl_contexts(_parse_tree(xml))
+
+        assert contexts["ctx_date_only"]["investment_identifier"] == "01/03/2020"
+
 
 # ---------------------------------------------------------------------------
 # 6. _extract_investment_facts
@@ -1369,6 +1426,62 @@ class TestParseAllFilings:
         assert len(result) == 1
         assert result.iloc[0]["fair_value"] == "1000000"
         assert result.iloc[0]["dedupe_conflict_fields"] == "fair_value"
+
+    def test_dedupe_preserves_distinct_legal_entity_dimensions(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Blackstone Senior Debt Fund",
+                "period": "2024-03-31",
+                "dimensions_raw": (
+                    "investmentidentifier=BlackstoneSeniorDebtFund|"
+                    "legalentityaxis=EntityA"
+                ),
+                "fair_value": "1000000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Blackstone Senior Debt Fund",
+                "period": "2024-03-31",
+                "dimensions_raw": (
+                    "investmentidentifier=BlackstoneSeniorDebtFund|"
+                    "legalentityaxis=EntityB"
+                ),
+                "fair_value": "2000000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 2
+        assert set(result["fair_value"]) == {"1000000", "2000000"}
+
+    def test_dedupe_collapses_exact_duplicate_dimension_path(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "dimensions_raw": "investmentidentifier=Acme|legalentityaxis=EntityA",
+                "fair_value": "1000000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "dimensions_raw": "investmentidentifier=Acme|legalentityaxis=EntityA",
+                "fair_value": "1000000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 1
+        assert int(result.iloc[0]["dedupe_context_count"]) == 2
 
     @patch("pipeline.bdc_filings.BDC_HOLDINGS_FILE")
     @patch("pipeline.bdc_filings.BDC_PARSE_PROGRESS_FILE")

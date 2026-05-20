@@ -95,9 +95,29 @@ _MONETARY_COLUMNS = frozenset({
 
 # Dimension local-name substrings used to identify the investment axis
 _INVESTMENT_ID_DIMS = ("investmentidentifier", "investmentcompany")
+_COMPANY_ID_DIMS = ("portfoliocompan", "portfolioinvestment", "issuer")
 _INDUSTRY_DIMS = ("industr",)
 _TYPE_DIMS = ("investmenttype", "investmentinstrument")
 _AFFILIATION_DIMS = ("issueraffiliation", "affiliationstatus")
+
+_DATE_LIKE_IDENTIFIER_RE = re.compile(
+    r"^(\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}[/-]\d{1,2}[/-]\d{1,2}|"
+    r"(19|20)\d{2}q[1-4]|q[1-4]\s+(19|20)\d{2})$",
+    re.IGNORECASE,
+)
+_PLACEHOLDER_IDENTIFIER_RE = re.compile(
+    r"^(n/?a|none|null|unknown|various|multiple|misc\.?|miscellaneous|other|"
+    r"placeholder|not applicable|tbd)$",
+    re.IGNORECASE,
+)
+_CATEGORY_IDENTIFIER_RE = re.compile(
+    r"^(software|health\s*care|healthcare|financials?|industrials?|energy|"
+    r"consumer|business services|technology|media|telecommunications|"
+    r"first lien|first lien debt|second lien|second lien debt|subordinated debt|"
+    r"senior secured loans?|secured loans?|unsecured loans?|equity securities|"
+    r"preferred equity|common equity|warrants?)$",
+    re.IGNORECASE,
+)
 
 
 # ===========================================================================
@@ -455,6 +475,7 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
 
         # -- Dimensions --
         investment_id = ""
+        company_id = ""
         industry = ""
         investment_type = ""
         affiliation = ""
@@ -479,6 +500,8 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
                 if any(kw in dim_ln for kw in _INVESTMENT_ID_DIMS):
                     investment_id = val
                     is_investment = True
+                elif any(kw in dim_ln for kw in _COMPANY_ID_DIMS):
+                    company_id = val
 
             elif seg_ln == "explicitMember":
                 dim_attr = seg.get("dimension", "")
@@ -495,6 +518,12 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
                 elif any(kw in dim_ln for kw in _AFFILIATION_DIMS):
                     affiliation = member_ln
 
+                if any(kw in dim_ln for kw in _COMPANY_ID_DIMS) and not company_id:
+                    company_id = member_ln
+
+        if company_id and _is_non_position_identifier(investment_id):
+            investment_id = company_id
+
         contexts[ctx_id] = {
             "period": period_str,
             "investment_identifier": investment_id,
@@ -506,6 +535,75 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
         }
 
     return contexts
+
+
+def _is_non_position_identifier(value: str) -> bool:
+    """Return true when an XBRL investment identifier is not position identity."""
+    text = str(value or "").strip()
+    lower = text.lower()
+    if not text:
+        return True
+    if _DATE_LIKE_IDENTIFIER_RE.match(lower):
+        return True
+    if _PLACEHOLDER_IDENTIFIER_RE.match(lower):
+        return True
+    if _CATEGORY_IDENTIFIER_RE.match(lower):
+        return True
+    if len(text) > 140 and ("axis" in lower or "=" in lower):
+        return True
+    return False
+
+
+def _normalize_mixed_decimals_monetary_facts(
+    facts_by_ctx: dict[str, dict[str, Any]],
+    monetary_facts_stored: list[tuple[str, str, int]],
+) -> None:
+    """Normalize rare mixed-decimals monetary outliers in-place.
+
+    Some filings tag most monetary investment facts at one decimals scale and
+    a small number at a coarser scale.  When the outlier value is wildly larger
+    than the dominant scale, align it with the dominant decimals.
+    """
+    if len(monetary_facts_stored) < 5:
+        return
+
+    decimals_tracker = [dec for _, _, dec in monetary_facts_stored]
+    dec_counts = Counter(decimals_tracker)
+    dominant_dec, dominant_count = dec_counts.most_common(1)[0]
+    if dominant_count / len(decimals_tracker) < 0.75:
+        return
+
+    dominant_abs_vals = []
+    for ctx_ref, col, fact_dec in monetary_facts_stored:
+        if fact_dec != dominant_dec:
+            continue
+        val = facts_by_ctx[ctx_ref].get(col)
+        if isinstance(val, (int, float)) and val != 0:
+            dominant_abs_vals.append(abs(val))
+    dominant_abs_vals.sort()
+    median_dominant = (
+        dominant_abs_vals[len(dominant_abs_vals) // 2]
+        if dominant_abs_vals
+        else 0
+    )
+    if median_dominant <= 0:
+        return
+
+    for ctx_ref, col, fact_dec in monetary_facts_stored:
+        diff = fact_dec - dominant_dec
+        if abs(diff) < 3:
+            continue
+        val = facts_by_ctx[ctx_ref].get(col)
+        if val is None or not isinstance(val, (int, float)):
+            continue
+        if abs(val) / median_dominant > 100:
+            corrected = val * (10 ** diff)
+            facts_by_ctx[ctx_ref][col] = corrected
+            logger.debug(
+                "Decimals normalization: ctx=%s col=%s decimals=%d "
+                "(dominant=%d) %s -> %s",
+                ctx_ref, col, fact_dec, dominant_dec, val, corrected,
+            )
 
 
 def _extract_investment_facts(
@@ -525,7 +623,6 @@ def _extract_investment_facts(
     facts_by_ctx: dict[str, dict[str, Any]] = {}
 
     # Track decimals attribute for monetary facts (for cross-fact normalization)
-    decimals_tracker: list[int] = []
     monetary_facts_stored: list[tuple[str, str, int]] = []  # (ctx_ref, col, dec)
 
     root = tree.getroot()
@@ -568,7 +665,6 @@ def _extract_investment_facts(
         if col not in facts_by_ctx[ctx_ref] or facts_by_ctx[ctx_ref][col] is None:
             facts_by_ctx[ctx_ref][col] = value
             if dec_val is not None:
-                decimals_tracker.append(dec_val)
                 monetary_facts_stored.append((ctx_ref, col, dec_val))
 
     # --- Normalize mixed-decimals monetary facts ---
@@ -581,40 +677,7 @@ def _extract_investment_facts(
     #   3. Decimals diff >= 3 (1000x+ scale difference)
     #   4. Outlier value must be > 100x the median of dominant-decimals values
     #      (prevents false corrections when decimals differ only in precision)
-    if len(decimals_tracker) >= 5:
-        dec_counts = Counter(decimals_tracker)
-        dominant_dec, dominant_count = dec_counts.most_common(1)[0]
-        # Require dominant to represent >= 75% of monetary facts
-        if dominant_count / len(decimals_tracker) >= 0.75:
-            # Compute median abs value at dominant scale for value guard
-            dominant_abs_vals = []
-            for ctx_ref, col, fact_dec in monetary_facts_stored:
-                if fact_dec == dominant_dec:
-                    val = facts_by_ctx[ctx_ref].get(col)
-                    if isinstance(val, (int, float)) and val != 0:
-                        dominant_abs_vals.append(abs(val))
-            dominant_abs_vals.sort()
-            median_dominant = (
-                dominant_abs_vals[len(dominant_abs_vals) // 2]
-                if dominant_abs_vals
-                else 0
-            )
-
-            for ctx_ref, col, fact_dec in monetary_facts_stored:
-                diff = fact_dec - dominant_dec  # e.g. -6 - (-3) = -3
-                if abs(diff) >= 3:
-                    val = facts_by_ctx[ctx_ref].get(col)
-                    if val is not None and isinstance(val, (int, float)):
-                        # Only correct if value is wildly out of range
-                        if median_dominant > 0 and abs(val) / median_dominant > 100:
-                            corrected = val * (10 ** diff)
-                            facts_by_ctx[ctx_ref][col] = corrected
-                            logger.debug(
-                                "Decimals normalization: ctx=%s col=%s "
-                                "decimals=%d (dominant=%d) %s -> %s",
-                                ctx_ref, col, fact_dec, dominant_dec,
-                                val, corrected,
-                            )
+    _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored)
 
     # Build output records
     records: list[dict[str, Any]] = []
@@ -687,7 +750,9 @@ def _parse_single_filing(
     return facts
 
 
-_DEDUP_KEY_COLUMNS = ["accession_number", "investment_identifier", "period"]
+_DEDUP_KEY_COLUMNS = [
+    "accession_number", "investment_identifier", "period", "dimensions_raw",
+]
 _DEDUP_CONFLICT_COLUMNS = [
     "fair_value",
     "cost",
@@ -711,10 +776,14 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
 
     missing = [col for col in _DEDUP_KEY_COLUMNS if col not in df.columns]
     if missing:
-        logger.warning("BDC dedupe skipped; missing key columns: %s", missing)
-        return df
+        logger.warning("BDC dedupe filling missing key columns: %s", missing)
+        df = df.copy()
+        for col in missing:
+            df[col] = ""
 
     result = df.copy()
+    for col in _DEDUP_KEY_COLUMNS:
+        result[col] = result[col].fillna("").astype(str)
     value_cols = [col for col in _VALUE_COLUMNS if col in result.columns]
     score_cols = [col for col in value_cols if col not in {"unrealized_gain_loss"}]
 
@@ -752,8 +821,10 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             .map(lambda val, field=col: field if val == "" else f"{val},{field}")
         )
 
+    fill_source = result.copy()
+    fill_source[value_cols] = fill_source[value_cols].replace("", pd.NA)
     fill_values = (
-        result.replace("", pd.NA)
+        fill_source
         .sort_values(
             by=["_dedupe_score", "_dedupe_row_order"],
             ascending=[False, True],
@@ -897,6 +968,57 @@ def _parse_all_filings(filings_index: pd.DataFrame) -> pd.DataFrame:
         len(combined), BDC_HOLDINGS_FILE.name,
     )
     return combined
+
+
+def rebuild_cached_bdc_holdings(
+    filings_index: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """Rebuild ``bdc_holdings.csv`` from already-cached XBRL files only.
+
+    This intentionally does not call EDGAR or use the parse progress file.  It
+    is for parser/dedupe changes where every cached instance should be
+    reinterpreted with current code.
+    """
+    if filings_index is None:
+        if not BDC_FILINGS_INDEX_FILE.exists():
+            raise FileNotFoundError(
+                f"BDC filings index file not found: {BDC_FILINGS_INDEX_FILE}"
+            )
+        filings_index = pd.read_csv(BDC_FILINGS_INDEX_FILE, dtype=str)
+
+    if filings_index.empty or "xbrl_local_path" not in filings_index.columns:
+        logger.warning("No cached BDC filings available for holdings rebuild")
+        return pd.DataFrame()
+
+    records: list[dict[str, Any]] = []
+    total = len(filings_index)
+    parsed = 0
+    for i, (_, row) in enumerate(filings_index.iterrows(), 1):
+        status = str(row.get("xbrl_download_status", "") or "")
+        if status not in ("downloaded", "cached"):
+            continue
+        xml_path = str(row.get("xbrl_local_path", "") or "").strip()
+        if not xml_path or not Path(xml_path).exists():
+            continue
+        parsed += 1
+        records.extend(_parse_single_filing(xml_path, row.to_dict()))
+        if i % 100 == 0 or i == total:
+            logger.info(
+                "  Cached BDC parse progress: %d / %d filings (%d holdings)",
+                i, total, len(records),
+            )
+
+    if not records:
+        logger.warning("No BDC holdings rebuilt from cached XBRL files")
+        return pd.DataFrame()
+
+    holdings = _deduplicate_bdc_holdings(pd.DataFrame(records))
+    holdings.to_csv(BDC_HOLDINGS_FILE, index=False)
+    logger.info(
+        "Cached BDC holdings rebuilt: %d rows from %d filings -> %s",
+        len(holdings), parsed, BDC_HOLDINGS_FILE.name,
+    )
+    return holdings
 
 
 def _save_parse_progress(

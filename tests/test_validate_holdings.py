@@ -26,6 +26,19 @@ from pipeline.validate_holdings import (
     summarize_classification_by_cik,
     validate_holdings,
 )
+from pipeline.position_purity import build_position_purity_diagnostics
+from pipeline.source_reconciliation import (
+    INTENTIONAL_SOURCE_STATUSES,
+    RESIDUAL_CLASSIFICATION_COLUMNS,
+    _extract_single_xbrl_source_file,
+    build_source_only_blocker_clusters,
+    build_source_only_blocker_detail,
+    build_source_only_blocker_markdown,
+    build_source_reconciliation_residual_classification,
+    build_source_reconciliation_residual_classification_markdown,
+    build_source_reconciliation_metrics,
+    reconcile_bdc_source_to_holdings,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -41,6 +54,21 @@ def _redirect_validate_holdings_outputs(monkeypatch, tmp_path):
         "HOLDINGS_PCT_SUM_FILE": "holdings_pct_sum.csv",
         "HOLDINGS_COUNT_STABILITY_FILE": "holdings_count_stability.csv",
         "HOLDINGS_INCOME_YIELD_FILE": "holdings_income_yield.csv",
+        "SOURCE_RECONCILIATION_DETAIL_FILE": "source_reconciliation_detail.csv",
+        "SOURCE_RECONCILIATION_METRICS_FILE": "source_reconciliation_metrics.csv",
+        "SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE": "source_reconciliation_calibration_review.csv",
+        "SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE": "source_reconciliation_residual_classification.csv",
+        "SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE": "source_reconciliation_residual_classification.md",
+        "SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE": "source_reconciliation_source_only_detail.csv",
+        "SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE": "source_reconciliation_source_only_clusters.csv",
+        "SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE": "source_reconciliation_source_only_classification.md",
+        "POSITION_PURITY_DIAGNOSTICS_FILE": "position_purity_diagnostics.csv",
+        "POSITION_PURITY_METRICS_FILE": "position_purity_metrics.csv",
+        "FUND_STRATEGY_REFERENCE_FILE": "fund_strategy_reference.csv",
+        "FUND_STRATEGY_HOLDINGS_MIX_FILE": "fund_strategy_holdings_mix.csv",
+        "FUND_STRATEGY_VALIDATION_FILE": "fund_strategy_validation.csv",
+        "FUND_STRATEGY_REVIEW_QUEUE_FILE": "fund_strategy_review_queue.csv",
+        "FUND_STRATEGY_CORRECTION_CANDIDATES_FILE": "fund_strategy_correction_candidates.csv",
         "ROW_VALIDATION_ISSUES_FILE": "row_validation_issues.csv",
         "VALIDATE_ALL_RESIDUAL_SUMMARY_FILE": "validate_all_residual_summary.csv",
         "COLUMN_QUALITY_METRICS_FILE": "column_quality_metrics.csv",
@@ -98,6 +126,1470 @@ def _make_basic_holdings(n_bdc=10, n_nport=5):
             "report_date": "2024-06-30",
         })
     return _make_unified_df(rows)
+
+
+def _make_bdc_source(rows):
+    defaults = {
+        "cik": "100",
+        "entity_name": "Test BDC",
+        "report_date": "2024-03-31",
+        "period": "2024-03-31",
+        "accession_number": "000100-24-000001",
+        "form_type": "10-Q",
+        "filing_date": "2024-05-01",
+        "context_id": "ctx1",
+        "investment_identifier": "Acme Corp - First Lien Term Loan",
+        "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+        "concept_names": "InvestmentOwnedAtFairValue",
+        "fair_value": "1000000",
+        "cost": "990000",
+        "principal_amount": "1000000",
+        "shares_held": "",
+        "interest_rate": "8.5",
+        "basis_spread": "3.5",
+        "pik_rate": "",
+    }
+    return pd.DataFrame([{**defaults, **row} for row in rows])
+
+
+def _make_bdc_output(rows):
+    prepared = []
+    for row in rows:
+        prepared.append({
+            "source": "bdc",
+            "cik": "0000000100",
+            "entity_name": "Test BDC",
+            "report_date": "2024-03-31",
+            "accession_number": "000100-24-000001",
+            "filing_date": "2024-05-01",
+            "bdc_form_type": "10-Q",
+            "issuer_name": "Acme Corp",
+            "instrument_description": "First Lien Term Loan",
+            "fair_value": "1000000",
+            "cost": "990000",
+            "principal_amount": "1000000",
+            "shares_held": "",
+            "interest_rate": "8.5",
+            "basis_spread": "3.5",
+            "pik_rate": "",
+            "asset_category": "LOAN",
+            "issuer_category": "CORPORATE",
+            "index_classification": "DIRECT_LENDING",
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+            **row,
+        })
+    return _make_unified_df(prepared)
+
+
+# ---------------------------------------------------------------------------
+# BDC source reconciliation
+# ---------------------------------------------------------------------------
+
+class TestBdcSourceReconciliation:
+    def test_source_extraction_applies_mixed_decimals_normalization(self, tmp_path):
+        contexts = []
+        facts = []
+        for i, value, decimals in [
+            (1, "1000000", "-3"),
+            (2, "1100000", "-3"),
+            (3, "1200000", "-3"),
+            (4, "1300000", "-3"),
+            (5, "1400000000", "-6"),
+        ]:
+            contexts.append(f"""
+                <xbrli:context id="ctx{i}">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">100</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                                <test:InvestmentIdentifierDomain>Company {i} - Term Loan</test:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2024-03-31</xbrli:instant></xbrli:period>
+                </xbrli:context>
+            """)
+            facts.append(
+                f'<test:InvestmentOwnedAtFairValue contextRef="ctx{i}" '
+                f'unitRef="usd" decimals="{decimals}">{value}</test:InvestmentOwnedAtFairValue>'
+            )
+        xml = (
+            '<xbrl xmlns="http://www.xbrl.org/2003/instance" '
+            'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+            'xmlns:xbrldi="http://xbrl.org/2006/xbrldi" '
+            'xmlns:test="http://example.com/test">'
+            + "".join(contexts)
+            + "".join(facts)
+            + "</xbrl>"
+        )
+        path = tmp_path / "mixed_decimals.xml"
+        path.write_text(xml, encoding="utf-8")
+
+        rows = _extract_single_xbrl_source_file(
+            path,
+            {
+                "cik": "100",
+                "entity_name": "Test BDC",
+                "accession_number": "acc",
+                "form_type": "10-Q",
+                "filing_date": "2024-05-01",
+                "report_date": "2024-03-31",
+            },
+        )
+
+        by_identifier = {row["investment_identifier"]: row for row in rows}
+        assert by_identifier["Company 5 - Term Loan"]["fair_value"] == 1400000.0
+
+    def test_exact_source_to_output_match(self):
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]),
+            _make_bdc_output([{}]),
+        )
+        assert set(detail["status"]) == {"matched"}
+        assert detail.iloc[0]["match_tier"] == "exact_dimensions_raw"
+        assert detail.iloc[0]["blocking_issue"] == False
+        assert metrics.iloc[0]["matched_rows"] == 1
+        assert metrics.iloc[0]["strong_issue_count"] == 0
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_affiliation_prefix_source_matches_staging_normalized_output(self):
+        source = _make_bdc_source([{
+            "investment_identifier": (
+                "Investments in Non-Controlled, Non-Affiliated Portfolio Companies - "
+                "Acme Corp - First Lien Term Loan"
+            ),
+            "dimensions_raw": "source_dimensions=full_prefix",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "pipeline_dimensions=stripped",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        assert set(detail["status"]) == {"matched"}
+        assert detail.iloc[0]["match_tier"] == "staging_normalized_identifier"
+        assert metrics.iloc[0]["missing_from_pipeline_rows"] == 0
+        assert metrics.iloc[0]["extra_in_pipeline_rows"] == 0
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_numeric_identity_matches_transformed_identifiers_one_to_one(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Acme Corp 2027 Secured Note Source Label",
+            "dimensions_raw": "source_dimensions=opaque_identifier_123",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp / First Lien TL-B Pipeline Label",
+            "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias_456",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert set(detail["status"]) == {"matched"}
+        row = detail.iloc[0]
+        assert row["match_tier"] == "reconciled_numeric_identity"
+        assert row["blocking_issue"] == False
+        assert "numeric identity" in row["evidence"]
+        assert metrics.iloc[0]["matched_rows"] == 1
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_numeric_identity_requires_matching_cost(self):
+        """Numeric identity tier requires cost match, but fv_only tier can catch it."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Acme Corp Source Alias",
+            "dimensions_raw": "source_dimensions=opaque_identifier_123",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp Pipeline Alias",
+            "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias_456",
+            "fair_value": "1000000",
+            "cost": "980000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        # Numeric identity tier still requires cost -- not used here
+        assert "reconciled_numeric_identity" not in set(detail["match_tier"])
+        # But a lower tier matches on FV + name (strict 1:1)
+        source_row = detail[detail["source_row_id"] != ""]
+        assert len(source_row) == 1
+        assert source_row.iloc[0]["match_tier"] in (
+            "reconciled_issuer_name_extraction",
+            "reconciled_fv_only_identity",
+            "reconciled_partial_name_fv",
+        )
+        # Cost mismatch surfaces as diagnostic
+        assert source_row.iloc[0]["status"] == "diagnostic_field_mismatch"
+        assert source_row.iloc[0]["blocking_issue"] == False
+
+    def test_numeric_identity_two_candidate_outputs_remains_blocking(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Zephyr Opaque Source 2027",
+            "dimensions_raw": "source_dimensions=opaque_identifier_123",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Vortex Pipeline Alias A",
+                "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias_a",
+                "issuer_name": "Vortex Capital",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "bdc_investment_identifier": "Nebula Pipeline Alias B",
+                "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias_b",
+                "issuer_name": "Nebula Holdings",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["status"] == "missing_from_pipeline"].iloc[0]
+
+        assert "reconciled_numeric_identity" not in set(detail["match_tier"])
+        assert "blocking numeric identity candidate" in source_row["evidence"]
+        # 1 source missing + 2 outputs extra = 3 blocking
+        assert metrics.iloc[0]["blocking_issue_count"] == 3
+
+    def test_numeric_identity_two_candidate_sources_remains_blocking(self):
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_a",
+                "investment_identifier": "Zephyr Widgets Inc. Source Opaque A",
+                "dimensions_raw": "source_dimensions=opaque_identifier_a",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "context_id": "ctx_b",
+                "investment_identifier": "Quasar Dynamics LLC Source Opaque B",
+                "dimensions_raw": "source_dimensions=opaque_identifier_b",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Nebula Holdings Pipeline Alias",
+            "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias",
+            "issuer_name": "Nebula Holdings",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_rows = detail[detail["status"] == "missing_from_pipeline"]
+
+        assert "reconciled_numeric_identity" not in set(detail["match_tier"])
+        assert len(source_rows) == 2
+        assert all(source_rows["evidence"].str.contains("blocking numeric identity candidate"))
+        assert metrics.iloc[0]["blocking_issue_count"] == 3
+
+    def test_numeric_identity_does_not_cross_accession_cik_or_report_date(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Acme Corp Source Alias",
+            "dimensions_raw": "source_dimensions=opaque_identifier_123",
+            "accession_number": "acc-source",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp Pipeline Alias",
+            "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias_456",
+            "accession_number": "acc-output",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert "reconciled_numeric_identity" not in set(detail["match_tier"])
+        assert {"missing_from_pipeline", "extra_in_pipeline"} == set(detail["status"])
+        assert metrics.iloc[0]["blocking_issue_count"] == 2
+
+    def test_numeric_identity_does_not_relabel_existing_identifier_match(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Acme Corp - First Lien Term Loan",
+            "dimensions_raw": "source_dimensions=alias",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "pipeline_dimensions=alias",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+
+        detail, _ = reconcile_bdc_source_to_holdings(source, output)
+
+        assert set(detail["status"]) == {"matched"}
+        assert detail.iloc[0]["match_tier"] == "exact_identifier"
+
+    def test_ambiguous_numeric_identity_candidates_have_separate_mechanism(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Zephyr Opaque Source 2027 First Lien Note",
+            "dimensions_raw": "source_dimensions=opaque_identifier_123",
+            "fair_value": "1000000",
+            "cost": "990000",
+        }])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Vortex Capital Pipeline Alias A",
+                "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias_a",
+                "issuer_name": "Vortex Capital",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "bdc_investment_identifier": "Nebula Holdings Pipeline Alias B",
+                "bdc_dimensions_raw": "pipeline_dimensions=parsed_alias_b",
+                "issuer_name": "Nebula Holdings",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+        ])
+
+        detail, _ = reconcile_bdc_source_to_holdings(source, output)
+        classified = build_source_reconciliation_residual_classification(detail)
+
+        assert "blocking_numeric_multi_output_collision" in set(classified["mechanism"])
+        by_mechanism = dict(zip(classified["mechanism"], classified["issue_count"]))
+        assert by_mechanism["blocking_numeric_multi_output_collision"] == 1
+
+    def test_secondary_field_mismatch_is_diagnostic_not_blocking(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Capital Southwest Co - Equity",
+            "dimensions_raw": "investmentidentifier=Capital Southwest Co - Equity",
+            "fair_value": "1000000",
+            "principal_amount": "5000000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Capital Southwest Co - Equity",
+            "bdc_dimensions_raw": "investmentidentifier=Capital Southwest Co - Equity",
+            "issuer_name": "Capital Southwest Co",
+            "instrument_description": "Equity",
+            "fair_value": "1000000",
+            "principal_amount": "",
+            "asset_category": "EQUITY_COMMON",
+            "issuer_category": "CORPORATE",
+            "index_classification": "COMMON_EQUITY",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        row = detail.iloc[0]
+        assert row["status"] == "diagnostic_field_mismatch"
+        assert row["calibrated_status"] == "diagnostic_field_mismatch"
+        assert row["blocking_issue"] == False
+        assert row["issue_severity"] == "WARN"
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+        assert metrics.iloc[0]["diagnostic_issue_count"] == 1
+        assert metrics.iloc[0]["reconciliation_status"] == "RECONCILED"
+
+    def test_prefixed_and_stripped_source_duplicates_collapse_before_matching(self):
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_prefixed",
+                "investment_identifier": (
+                    "Investments in Non-Controlled, Non-Affiliated Portfolio Companies - "
+                    "Acme Corp - First Lien Term Loan"
+                ),
+                "dimensions_raw": "source_dimensions=full_prefix",
+            },
+            {
+                "context_id": "ctx_stripped",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "dimensions_raw": "source_dimensions=stripped",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "pipeline_dimensions=stripped",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        assert set(detail["status"]) == {"matched", "collapsed_duplicate_dimension_path"}
+        assert metrics.iloc[0]["matched_rows"] == 1
+        assert metrics.iloc[0]["missing_from_pipeline_rows"] == 0
+        assert metrics.iloc[0]["extra_in_pipeline_rows"] == 0
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+        duplicate = detail[detail["status"] == "collapsed_duplicate_dimension_path"].iloc[0]
+        assert "canonical_source_row_id=" in duplicate["evidence"]
+
+    def test_duplicate_dimension_paths_with_different_cost_are_non_blocking(self):
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_a",
+                "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan|affiliation=NonControl",
+                "cost": "990000",
+            },
+            {
+                "context_id": "ctx_b",
+                "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan|industry=Software",
+                "cost": "950000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, _make_bdc_output([{}]))
+        assert set(detail["status"]) == {"matched", "collapsed_duplicate_dimension_path"}
+        assert metrics.iloc[0]["collapsed_duplicate_dimension_path_rows"] == 1
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_same_borrower_distinct_tranches_are_not_collapsed(self):
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_first",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+            {
+                "context_id": "ctx_second",
+                "investment_identifier": "Acme Corp - Second Lien Term Loan",
+                "dimensions_raw": "investmentidentifier=Acme Corp - Second Lien Term Loan",
+                "fair_value": "1000000",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+                "bdc_dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+            {
+                "bdc_investment_identifier": "Acme Corp - Second Lien Term Loan",
+                "bdc_dimensions_raw": "investmentidentifier=Acme Corp - Second Lien Term Loan",
+                "fair_value": "1000000",
+                "issuer_name": "Acme Corp",
+                "instrument_description": "Second Lien Term Loan",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        assert set(detail["status"]) == {"matched"}
+        assert metrics.iloc[0]["matched_rows"] == 2
+        assert metrics.iloc[0]["collapsed_duplicate_dimension_path_rows"] == 0
+
+    def test_missing_source_row_extra_pipeline_row_and_numeric_mismatch(self):
+        source = _make_bdc_source([
+            {"investment_identifier": "Missing Co LLC - Term Loan", "context_id": "ctx_missing", "fair_value": "750000"},
+            {"investment_identifier": "Mismatch Co - Term Loan", "context_id": "ctx_mismatch", "fair_value": "1000000"},
+        ])
+        output = _make_bdc_output([
+            {"bdc_investment_identifier": "Extra Co - Term Loan", "issuer_name": "Extra Co", "fair_value": "500000"},
+            {"bdc_investment_identifier": "Mismatch Co - Term Loan", "issuer_name": "Mismatch Co", "fair_value": "1500000"},
+        ])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        statuses = set(detail["status"])
+        assert {"missing_from_pipeline", "extra_in_pipeline", "value_mismatch"}.issubset(statuses)
+        assert metrics.iloc[0]["missing_from_pipeline_rows"] == 1
+        assert metrics.iloc[0]["extra_in_pipeline_rows"] == 1
+        assert metrics.iloc[0]["value_mismatch_rows"] == 1
+        assert metrics.iloc[0]["strong_issue_count"] == 3
+        assert metrics.iloc[0]["blocking_issue_count"] == 3
+
+    def test_comparative_period_and_superseded_amendment_are_documented(self):
+        source = _make_bdc_source([
+            {"investment_identifier": "Prior Co - Term Loan", "period": "2023-12-31", "context_id": "ctx_prior"},
+            {"investment_identifier": "Old Amendment Co - Term Loan", "form_type": "10-Q", "filing_date": "2024-04-15", "accession_number": "old", "context_id": "ctx_old"},
+            {"investment_identifier": "Current Amendment Co - Term Loan", "form_type": "10-Q/A", "filing_date": "2024-05-15", "accession_number": "new", "context_id": "ctx_new"},
+        ])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, _make_bdc_output([]))
+        assert "excluded_comparative_period" in set(detail["status"])
+        assert "superseded_amendment" in set(detail["status"])
+        assert metrics.iloc[0]["excluded_comparative_period_rows"] == 1
+        assert metrics.iloc[0]["superseded_amendment_rows"] == 1
+
+    def test_aggregate_candidate_and_no_fair_value_are_documented(self):
+        source = _make_bdc_source([
+            {"investment_identifier": "Total Investments at Fair Value", "context_id": "ctx_total"},
+            {"investment_identifier": "No FV Co - Revolver", "fair_value": "", "context_id": "ctx_no_fv"},
+        ])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, _make_bdc_output([]))
+        assert "excluded_aggregate_candidate" in set(detail["status"])
+        assert "excluded_no_fair_value" in set(detail["status"])
+        assert metrics.iloc[0]["excluded_aggregate_candidate_rows"] == 1
+        assert metrics.iloc[0]["excluded_no_fair_value_rows"] == 1
+
+    def test_source_rollup_is_non_blocking_when_fv_ties_children(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Total First Lien Debt",
+            "context_id": "ctx_total_first_lien",
+            "fair_value": "3000000",
+        }])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Acme Corp - First Lien",
+                "bdc_dimensions_raw": "investmentidentifier=Acme",
+                "issuer_name": "Acme Corp",
+                "fair_value": "1000000",
+            },
+            {
+                "bdc_investment_identifier": "Beta Corp - First Lien",
+                "bdc_dimensions_raw": "investmentidentifier=Beta",
+                "issuer_name": "Beta Corp",
+                "fair_value": "2000000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert set(detail["status"]) == {"documented_source_rollup_exact"}
+        row = detail.iloc[0]
+        assert row["blocking_issue"] == False
+        assert "child_output_count=2" in row["evidence"]
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+        assert metrics.iloc[0]["documented_source_rollup_exact_rows"] == 1
+
+    def test_source_rollup_remains_blocking_when_fv_tie_fails(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Total First Lien Debt",
+            "context_id": "ctx_total_first_lien",
+            "fair_value": "4000000",
+        }])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Acme Corp - First Lien",
+                "bdc_dimensions_raw": "investmentidentifier=Acme",
+                "issuer_name": "Acme Corp",
+                "fair_value": "1000000",
+            },
+            {
+                "bdc_investment_identifier": "Beta Corp - First Lien",
+                "bdc_dimensions_raw": "investmentidentifier=Beta",
+                "issuer_name": "Beta Corp",
+                "fair_value": "2000000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert "missing_from_pipeline" in set(detail["status"])
+        assert "extra_in_pipeline" in set(detail["status"])
+        assert metrics.iloc[0]["blocking_issue_count"] == 3
+
+    def test_source_rollup_does_not_consume_matched_parent_with_distinct_children(self):
+        source = _make_bdc_source([{
+            "investment_identifier": "Cambium Learning Group, Inc.",
+            "dimensions_raw": "investmentidentifier=Cambium Learning Group, Inc.",
+            "context_id": "ctx_parent",
+            "fair_value": "3000000",
+            "cost": "2900000",
+        }])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Cambium Learning Group, Inc.",
+                "bdc_dimensions_raw": "investmentidentifier=Cambium Learning Group, Inc.",
+                "issuer_name": "Cambium Learning Group, Inc.",
+                "fair_value": "3000000",
+                "cost": "2900000",
+            },
+            {
+                "bdc_investment_identifier": "Cambium Learning Group, Inc., Emerald JV LP",
+                "bdc_dimensions_raw": "investmentidentifier=Cambium Emerald",
+                "issuer_name": "Cambium Learning Group, Inc., Emerald JV LP",
+                "fair_value": "1000000",
+                "cost": "1000000",
+            },
+            {
+                "bdc_investment_identifier": "Cambium Learning Group, Inc., Second Lien",
+                "bdc_dimensions_raw": "investmentidentifier=Cambium Second Lien",
+                "issuer_name": "Cambium Learning Group, Inc.",
+                "instrument_description": "Second Lien",
+                "fair_value": "2000000",
+                "cost": "1900000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert "documented_source_rollup_exact" not in set(detail["status"])
+        assert "matched" in set(detail["status"])
+        assert int(metrics.iloc[0]["extra_in_pipeline_rows"]) == 2
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 2
+
+    def test_duplicate_dimension_paths_collapse_to_one_output_row(self):
+        source = _make_bdc_source([
+            {"context_id": "ctx_a", "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan|affiliation=NonControl"},
+            {"context_id": "ctx_b", "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan|industry=Software"},
+        ])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, _make_bdc_output([{}]))
+        assert "matched" in set(detail["status"])
+        assert "collapsed_duplicate_dimension_path" in set(detail["status"])
+        assert metrics.iloc[0]["matched_rows"] == 1
+        assert metrics.iloc[0]["collapsed_duplicate_dimension_path_rows"] == 1
+        assert metrics.iloc[0]["strong_issue_count"] == 0
+
+    def test_self_referential_subtotal_is_non_blocking(self):
+        """Source row whose identifier is a prefix of 2+ child source rows is excluded."""
+        # Parent FV deliberately != sum of children to avoid source_rollup matching
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_parent",
+                "investment_identifier": "Equity Investments Consumer Services",
+                "fair_value": "5000000",
+            },
+            {
+                "context_id": "ctx_child1",
+                "investment_identifier": "Equity Investments Consumer Services Acme Corp Inc. Common Stock",
+                "fair_value": "1500000",
+            },
+            {
+                "context_id": "ctx_child2",
+                "investment_identifier": "Equity Investments Consumer Services Beta LLC Term Loan",
+                "fair_value": "2500000",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Equity Investments Consumer Services Acme Corp Inc. Common Stock",
+                "bdc_dimensions_raw": "investmentidentifier=Equity Investments Consumer Services Acme Corp Inc. Common Stock",
+                "issuer_name": "Acme Corp Inc.",
+                "fair_value": "1500000",
+            },
+            {
+                "bdc_investment_identifier": "Equity Investments Consumer Services Beta LLC Term Loan",
+                "bdc_dimensions_raw": "investmentidentifier=Equity Investments Consumer Services Beta LLC Term Loan",
+                "issuer_name": "Beta LLC",
+                "fair_value": "2500000",
+            },
+        ])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        statuses = set(detail["status"])
+        assert "excluded_self_referential_subtotal" in statuses
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_hierarchy_header_is_non_blocking(self):
+        """Source row starting with known category prefix is excluded as hierarchy header."""
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_header",
+                "investment_identifier": "Equity Investments",
+                "fair_value": "5000000",
+            },
+            {
+                "context_id": "ctx_real",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+            "fair_value": "1000000",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        statuses = set(detail["status"])
+        # "Equity Investments" is caught by aggregate filter, hierarchy header, or bad issuer
+        non_blocking = statuses - {"matched"}
+        assert all(s in INTENTIONAL_SOURCE_STATUSES for s in non_blocking), \
+            f"Expected non-blocking status for header, got {non_blocking}"
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_money_market_fund_is_non_blocking(self):
+        """Source row with money market fund keyword is excluded."""
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_mm",
+                "investment_identifier": "Goldman Sachs Financial Square Government Money Market Fund",
+                "fair_value": "10000000",
+            },
+            {
+                "context_id": "ctx_real",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+            "fair_value": "1000000",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        statuses = set(detail["status"])
+        assert "excluded_money_market_fund" in statuses
+        mm_row = detail[detail["status"] == "excluded_money_market_fund"].iloc[0]
+        assert mm_row["blocking_issue"] == False
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_bad_issuer_name_is_non_blocking(self):
+        """Source row with generic issuer name is excluded."""
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_bad",
+                "investment_identifier": "Investments",
+                "fair_value": "50000000",
+            },
+            {
+                "context_id": "ctx_real",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+            "fair_value": "1000000",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        statuses = set(detail["status"])
+        assert "excluded_bad_issuer_name" in statuses
+        bad_row = detail[detail["status"] == "excluded_bad_issuer_name"].iloc[0]
+        assert bad_row["blocking_issue"] == False
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_affiliation_dedup_is_non_blocking(self):
+        """Source row that is an affiliation-axis duplicate of a matched row is excluded."""
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_matched",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+            {
+                "context_id": "ctx_affil_dup",
+                "investment_identifier": "Non-Controlled Acme Corp - First Lien TL",
+                "dimensions_raw": "affiliation=Non-Controlled;investmentidentifier=Acme Corp",
+                "fair_value": "1000000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+            "fair_value": "1000000",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        statuses = set(detail["status"])
+        assert "matched" in statuses
+        assert "excluded_affiliation_dedup" in statuses
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_issuer_name_extraction_matches_embedded_company_name(self):
+        """Source identifier with pipe-separated company name matches output issuer_name."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Senior Secured Loans | First Lien | Acme Industries Inc. | Technology",
+            "dimensions_raw": "source_dimensions=pipe_format",
+            "fair_value": "2000000",
+            "cost": "1800000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Industries Inc. - First Lien Term Loan",
+            "bdc_dimensions_raw": "pipeline_dimensions=parsed",
+            "issuer_name": "Acme Industries Inc.",
+            "fair_value": "2000000",
+            "cost": "1900000",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"] != ""].iloc[0]
+        # Numeric identity won't match (different cost), so issuer name extraction fires
+        assert source_row["match_tier"] == "reconciled_issuer_name_extraction"
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_fv_only_identity_strict_one_to_one(self):
+        """FV-only matching works when exactly 1 source maps to 1 output."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Completely Opaque Source Label 2027",
+            "dimensions_raw": "source_dimensions=opaque",
+            "fair_value": "7777777",
+            "cost": "7000000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Totally Different Pipeline Label",
+            "bdc_dimensions_raw": "pipeline_dimensions=different",
+            "issuer_name": "Unrelated Company",
+            "fair_value": "7777777",
+            "cost": "7500000",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"] != ""].iloc[0]
+        assert source_row["match_tier"] == "reconciled_fv_only_identity"
+        # Cost mismatch is diagnostic, not blocking
+        assert source_row["status"] == "diagnostic_field_mismatch"
+        assert source_row["blocking_issue"] == False
+
+    def test_fv_only_identity_rejects_ambiguous_matches(self):
+        """FV-only matching rejects when multiple candidates exist."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Opaque Source Label Inc.",
+            "dimensions_raw": "source_dimensions=opaque",
+            "fair_value": "5555555",
+            "cost": "5000000",
+        }])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Output A Inc.",
+                "bdc_dimensions_raw": "pipeline_dimensions=a",
+                "issuer_name": "Output A Inc.",
+                "fair_value": "5555555",
+                "cost": "5000000",
+            },
+            {
+                "bdc_investment_identifier": "Output B Inc.",
+                "bdc_dimensions_raw": "pipeline_dimensions=b",
+                "issuer_name": "Output B Inc.",
+                "fair_value": "5555555",
+                "cost": "5000000",
+            },
+        ])
+        detail, _ = reconcile_bdc_source_to_holdings(source, output)
+        assert "reconciled_fv_only_identity" not in set(detail["match_tier"])
+
+    def test_partial_name_fv_matches_shared_tokens(self):
+        """Partial name + FV matching works when 2+ significant tokens overlap."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Meridian Healthcare Solutions LLC - Senior Secured",
+            "dimensions_raw": "source_dimensions=long_format",
+            "fair_value": "3333333",
+            "cost": "3000000",
+        }])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Meridian Healthcare Group - First Lien TL",
+            "bdc_dimensions_raw": "pipeline_dimensions=parsed",
+            "issuer_name": "Meridian Healthcare Group",
+            "fair_value": "3333333",
+            "cost": "3100000",
+        }])
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"] != ""].iloc[0]
+        # Numeric identity won't match (different cost); one of the new tiers fires
+        assert source_row["match_tier"] in (
+            "reconciled_issuer_name_extraction",
+            "reconciled_fv_only_identity",
+            "reconciled_partial_name_fv",
+        )
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_metrics_aggregate_detail_rows_by_cik_quarter(self):
+        detail = pd.DataFrame([
+            {"cik": "0000000100", "entity_name": "Test BDC", "report_date": "2024-03-31", "status": "matched", "source_row_id": "1", "output_row_id": "1"},
+            {"cik": "0000000100", "entity_name": "Test BDC", "report_date": "2024-03-31", "status": "missing_from_pipeline", "source_row_id": "2", "output_row_id": ""},
+            {"cik": "0000000100", "entity_name": "Test BDC", "report_date": "2024-03-31", "status": "excluded_no_fair_value", "source_row_id": "3", "output_row_id": ""},
+        ])
+        metrics = build_source_reconciliation_metrics(detail)
+        assert len(metrics) == 1
+        assert metrics.iloc[0]["source_rows"] == 3
+        assert metrics.iloc[0]["matched_rows"] == 1
+        assert metrics.iloc[0]["missing_from_pipeline_rows"] == 1
+        assert metrics.iloc[0]["excluded_no_fair_value_rows"] == 1
+        assert metrics.iloc[0]["reconciliation_status"] == "UNDER_REVIEW"
+
+    def test_residual_classification_empty_input_has_stable_schema(self):
+        classified = build_source_reconciliation_residual_classification(pd.DataFrame())
+        assert list(classified.columns) == RESIDUAL_CLASSIFICATION_COLUMNS
+        assert classified.empty
+
+        markdown = build_source_reconciliation_residual_classification_markdown(classified)
+        assert "No non-plain source reconciliation residual groups" in markdown
+
+    def test_residual_classification_documents_known_non_blocking_mechanisms(self):
+        detail = pd.DataFrame([
+            {
+                "status": "excluded_comparative_period",
+                "residual_class": "documented_exclusion",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2023-12-31",
+                "raw_investment_identifier": "Prior Co - Term Loan",
+                "source_fair_value": "100",
+                "accession_number": "acc-1",
+            },
+            {
+                "status": "excluded_no_fair_value",
+                "residual_class": "documented_exclusion",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "No FV Co - Term Loan",
+                "accession_number": "acc-1",
+            },
+            {
+                "status": "documented_source_rollup_exact",
+                "residual_class": "documented_exclusion",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Total Investments",
+                "source_fair_value": "500",
+                "accession_number": "acc-1",
+            },
+            {
+                "status": "excluded_aggregate_candidate",
+                "residual_class": "documented_exclusion",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Total Investments",
+                "source_fair_value": "500",
+                "accession_number": "acc-1",
+            },
+            {
+                "status": "superseded_amendment",
+                "residual_class": "documented_exclusion",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Old Amendment Co",
+                "source_fair_value": "200",
+                "accession_number": "old",
+            },
+            {
+                "status": "collapsed_duplicate_dimension_path",
+                "residual_class": "documented_exclusion",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Duplicate Co",
+                "source_fair_value": "300",
+                "accession_number": "acc-1",
+            },
+        ])
+
+        mechanisms = set(build_source_reconciliation_residual_classification(detail)["mechanism"])
+        assert {
+            "documented_comparative_period",
+            "documented_no_fair_value",
+            "documented_aggregate_candidate",
+            "documented_source_rollup_exact",
+            "documented_superseded_amendment",
+            "documented_duplicate_dimension_path",
+        } == mechanisms
+
+    def test_residual_classification_covers_diagnostics_and_normalized_matches(self):
+        detail = pd.DataFrame([
+            {
+                "status": "diagnostic_field_mismatch",
+                "residual_class": "field_diagnostic",
+                "calibrated_status": "diagnostic_field_mismatch",
+                "match_tier": "exact_dimensions_raw",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Diagnostic Co - Equity",
+                "source_fair_value": "1000",
+                "output_fair_value": "1000",
+            },
+            {
+                "status": "matched",
+                "residual_class": "reconciled",
+                "calibrated_status": "reconciled",
+                "match_tier": "staging_normalized_identifier",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Investments in Non-Controlled - Acme Co",
+                "source_fair_value": "2000",
+                "output_fair_value": "2000",
+            },
+            {
+                "status": "matched",
+                "residual_class": "reconciled",
+                "calibrated_status": "reconciled",
+                "match_tier": "exact_dimensions_raw",
+                "blocking_issue": False,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Plain Exact Co",
+                "source_fair_value": "3000",
+                "output_fair_value": "3000",
+            },
+        ])
+
+        classified = build_source_reconciliation_residual_classification(detail)
+        assert set(classified["mechanism"]) == {
+            "diagnostic_secondary_field_mismatch",
+            "reconciled_identifier_normalization",
+        }
+        assert "Plain Exact Co" not in "|".join(classified["sample_identifiers"].fillna(""))
+
+    def test_residual_classification_covers_row_identity_blockers(self):
+        detail = pd.DataFrame([
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Acme Co - Term Loan",
+                "source_fair_value": "1000",
+            },
+            {
+                "status": "extra_in_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Extra Co - Term Loan",
+                "output_fair_value": "2000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "2024-03-31",
+                "source_fair_value": "3000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Software",
+                "source_fair_value": "4000",
+            },
+        ])
+
+        classified = build_source_reconciliation_residual_classification(detail)
+        by_mechanism = dict(zip(classified["mechanism"], classified["issue_count"]))
+        assert by_mechanism["blocking_source_position_like_parser_mismatch"] == 1
+        assert by_mechanism["blocking_pipeline_only_position"] == 1
+        assert by_mechanism["blocking_identifier_parse_artifact"] == 2
+
+    def test_source_only_blocker_detail_classifies_headers_and_false_positives(self):
+        detail = pd.DataFrame([
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "s1",
+                "raw_investment_identifier": "TOTAL INVESTMENTS - 114.8%",
+                "source_fair_value": "5000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "s2",
+                "raw_investment_identifier": "Goldman Sachs Financial Square Government Institutional Fund",
+                "source_fair_value": "100",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "s3",
+                "raw_investment_identifier": "Total Safety Holdings LLC",
+                "source_fair_value": "1000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "s4",
+                "raw_investment_identifier": "Total Cash and Investments - 218.4%",
+                "source_fair_value": "5000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "s5",
+                "raw_investment_identifier": "First Lien - Secured Debt",
+                "source_fair_value": "5000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "s6",
+                "raw_investment_identifier": (
+                    "Non-Controlled/Non-Affiliated Investments, Insurance, "
+                    "First Lien - Secured Debt"
+                ),
+                "source_fair_value": "5000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "period": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "s7",
+                "raw_investment_identifier": (
+                    "Senior Secured Notes - Materials - Veritiv Operating Company - "
+                    "first lien senior secured notes"
+                ),
+                "source_fair_value": "5000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+        ])
+
+        classified = build_source_only_blocker_detail(detail)
+        by_id = dict(zip(classified["raw_investment_identifier"], classified["mechanism"]))
+        assert by_id["TOTAL INVESTMENTS - 114.8%"] == "documented_source_pct_total_header"
+        assert by_id["Total Cash and Investments - 218.4%"] == "documented_source_pct_total_header"
+        assert by_id["First Lien - Secured Debt"] == "documented_source_category_header"
+        assert (
+            by_id[
+                "Non-Controlled/Non-Affiliated Investments, Insurance, "
+                "First Lien - Secured Debt"
+            ]
+            == "documented_source_category_header"
+        )
+        assert (
+            by_id["Goldman Sachs Financial Square Government Institutional Fund"]
+            == "documented_source_cash_or_money_market_bucket"
+        )
+        assert by_id["Total Safety Holdings LLC"] == "blocking_source_position_like_parser_mismatch"
+        assert (
+            by_id[
+                "Senior Secured Notes - Materials - Veritiv Operating Company - "
+                "first lien senior secured notes"
+            ]
+            == "blocking_source_position_like_parser_mismatch"
+        )
+        assert bool(
+            classified.loc[
+                classified["raw_investment_identifier"].eq("Total Safety Holdings LLC"),
+                "is_blocking",
+            ].iloc[0]
+        ) is True
+
+    def test_source_only_blocker_detail_splits_terminal_pct_rollups_from_leaf_rows(self):
+        detail = pd.DataFrame([
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "total-pct",
+                "raw_investment_identifier": "Net Assets-100.0%",
+                "source_fair_value": "1000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "category-pct",
+                "raw_investment_identifier": "Debt Investments (184.96%)",
+                "source_fair_value": "2000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "geo-pct",
+                "raw_investment_identifier": "Investment United States - 141.4%",
+                "source_fair_value": "3000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "security-pct",
+                "raw_investment_identifier": "Investment 1st Lien/Senior Secured Debt - 136.5%",
+                "source_fair_value": "4000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "leaf-pct",
+                "raw_investment_identifier": "Acme Holdings LLC First Lien Term Loan - 12.0%",
+                "source_fair_value": "5000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "ambiguous-pct",
+                "raw_investment_identifier": "North - 10.0%",
+                "source_fair_value": "6000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "numeric-alias-pct",
+                "raw_investment_identifier": "TOTAL INVESTMENTS - 134.4%",
+                "source_fair_value": "7000",
+                "evidence": "blocking numeric identity candidate; already_matched_output_count=1",
+            },
+        ])
+
+        classified = build_source_only_blocker_detail(detail)
+        mechanisms = dict(zip(classified["source_row_id"], classified["mechanism"]))
+        assert mechanisms["total-pct"] == "documented_source_pct_total_header"
+        assert mechanisms["category-pct"] == "documented_source_pct_category_rollup"
+        assert mechanisms["geo-pct"] == "documented_source_pct_category_rollup"
+        assert mechanisms["security-pct"] == "documented_source_pct_category_rollup"
+        assert mechanisms["leaf-pct"] == "blocking_source_pct_leaf_parser_mismatch"
+        assert mechanisms["ambiguous-pct"] == "blocking_source_pct_ambiguous_after_review"
+        assert mechanisms["numeric-alias-pct"] == "blocking_numeric_already_matched_output_alias"
+
+    def test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking(self):
+        detail = pd.DataFrame([
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "accession_number": "acc-1",
+                "source_row_id": "seybert",
+                "raw_investment_identifier": "Seybert's Billiards Corporation - Term Note at 12%",
+                "source_fair_value": "1000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001655050",
+                "entity_name": "Bain Capital Specialty Finance, Inc.",
+                "report_date": "2025-09-30",
+                "accession_number": "acc-bain",
+                "source_row_id": "bain",
+                "raw_investment_identifier": (
+                    "Aerospace & Defense ATS First Lien Senior Secured Loan "
+                    "SOFR Spread 5.75% Interest Rate 10.07% Maturity Date 7/12/2029"
+                ),
+                "source_fair_value": "2000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001954360",
+                "entity_name": "Crescent Private Credit Income Corp",
+                "report_date": "2025-09-30",
+                "accession_number": "acc-crescent",
+                "source_row_id": "crescent",
+                "raw_investment_identifier": (
+                    "Investments Netherlands Debt Investments Commercial Services "
+                    "Playgreen Investment Type Unitranche First Lien Term Loan "
+                    "Interest Rate 9.60% Maturity/Dissolution Date 04/2031"
+                ),
+                "source_fair_value": "3000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001849894",
+                "entity_name": "MSD Investment Corp.",
+                "report_date": "2025-09-30",
+                "accession_number": "acc-msd",
+                "source_row_id": "msd",
+                "raw_investment_identifier": (
+                    "Investments Investments - non-controlled/non-affiliated First Lien Debt "
+                    "7Ridge Investments Reference Rate and Spread S + 8.00% "
+                    "Interest Rate 11.67% Maturity Date 7/7/2028"
+                ),
+                "source_fair_value": "4000",
+            },
+        ])
+
+        classified = build_source_only_blocker_detail(detail)
+        mechanisms = dict(zip(classified["source_row_id"], classified["mechanism"]))
+        assert set(mechanisms.values()) == {"blocking_source_pct_leaf_parser_mismatch"}
+        assert classified["is_blocking"].all()
+
+    def test_source_only_blocker_detail_classifies_cik_style_parser_residuals(self):
+        detail = pd.DataFrame([
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001954360",
+                "entity_name": "Crescent Private Credit Income Corp",
+                "report_date": "2025-09-30",
+                "accession_number": "acc-crescent",
+                "source_row_id": "crescent-header",
+                "raw_investment_identifier": "Investments Netherlands Debt Investments Financial Services",
+                "source_fair_value": "0",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001959568",
+                "entity_name": "Senior Credit Investments, LLC",
+                "report_date": "2023-12-31",
+                "accession_number": "acc-msd",
+                "source_row_id": "msd-header",
+                "raw_investment_identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments High Tech Industries",
+                "source_fair_value": "0",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001965934",
+                "entity_name": "Overland Advantage",
+                "report_date": "2025-06-30",
+                "accession_number": "acc-long",
+                "source_row_id": "long-position",
+                "raw_investment_identifier": (
+                    "Investments Non-controlled/non-affiliated senior secured debt Debt "
+                    "investments Consumer Finance Maxitransfers Blocker Corp Second lien "
+                    "senior secured term loan Interest Rate SOFR + 6.75% Maturity Date 6/18/2030"
+                ),
+                "source_fair_value": "1000",
+            },
+        ])
+
+        classified = build_source_only_blocker_detail(detail)
+        mechanisms = dict(zip(classified["source_row_id"], classified["mechanism"]))
+        assert mechanisms["crescent-header"] == "documented_source_country_industry_header"
+        assert mechanisms["msd-header"] == "documented_source_category_header"
+        assert mechanisms["long-position"] == "blocking_source_pct_leaf_parser_mismatch"
+
+        clusters = build_source_only_blocker_clusters(classified)
+        markdown = build_source_only_blocker_markdown(classified, clusters)
+        assert "Pct Leaf Parser Queue" in markdown
+        assert "Pct Rollup/Header Exclusions" in markdown
+        assert "Unclassifiable After Review" in markdown
+
+    def test_source_only_unclassifiable_remains_blocking_with_required_fields(self):
+        detail = pd.DataFrame([{
+            "status": "missing_from_pipeline",
+            "residual_class": "row_identity",
+            "blocking_issue": True,
+            "cik": "0000000100",
+            "entity_name": "Test BDC",
+            "report_date": "2024-03-31",
+            "accession_number": "acc-1",
+            "source_row_id": "s1",
+            "raw_investment_identifier": "North",
+            "source_fair_value": "1000",
+        }])
+
+        classified = build_source_only_blocker_detail(detail)
+        row = classified.iloc[0]
+        assert row["mechanism"] == "blocking_source_short_plain_unresolved"
+        assert bool(row["is_blocking"]) is True
+        for col in [
+            "evidence_reviewed",
+            "hypotheses_tested",
+            "why_not_cleared",
+            "recommended_action",
+        ]:
+            assert row[col]
+
+    def test_residual_classification_covers_fair_value_mismatch_mechanisms(self):
+        detail = pd.DataFrame([
+            {
+                "status": "value_mismatch",
+                "residual_class": "fair_value",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Scale Co - Term Loan",
+                "source_fair_value": "1000",
+                "output_fair_value": "1000000",
+            },
+            {
+                "status": "value_mismatch",
+                "residual_class": "fair_value",
+                "blocking_issue": True,
+                "cik": "0000000100",
+                "entity_name": "Test BDC",
+                "report_date": "2024-03-31",
+                "raw_investment_identifier": "Disagree Co - Term Loan",
+                "source_fair_value": "1000",
+                "output_fair_value": "1400",
+            },
+        ])
+
+        classified = build_source_reconciliation_residual_classification(detail)
+        assert set(classified["mechanism"]) == {
+            "blocking_fair_value_scale_or_unit_candidate",
+            "blocking_fair_value_disagreement",
+        }
+        markdown = build_source_reconciliation_residual_classification_markdown(classified)
+        assert "Fair-Value Mismatch Groups" in markdown
+        assert "Recommended Next Fixes" in markdown
 
 
 # ---------------------------------------------------------------------------
@@ -523,7 +2015,9 @@ class TestValidateHoldings:
              patch("pipeline.validate_holdings.ROW_VALIDATION_ISSUES_FILE", row_issues_file), \
              patch("pipeline.validate_holdings.COLUMN_QUALITY_METRICS_FILE", column_metrics_file), \
              patch("pipeline.validate_holdings.DATA_QUALITY_METRICS_FILE", quality_metrics_file), \
-             patch("pipeline.validate_holdings.VALIDATE_ALL_RESIDUAL_SUMMARY_FILE", residual_summary_file):
+             patch("pipeline.validate_holdings.VALIDATE_ALL_RESIDUAL_SUMMARY_FILE", residual_summary_file), \
+             patch("pipeline.source_reconciliation.run_bdc_source_reconciliation",
+                   return_value=(pd.DataFrame(), pd.DataFrame())):
             reports = validate_holdings(unified_df=df, universe_df=universe)
 
         assert "spot_check" in reports
@@ -536,6 +2030,11 @@ class TestValidateHoldings:
         assert "column_quality_metrics" in reports
         assert "data_quality_metrics" in reports
         assert "validate_all_residual_summary" in reports
+        assert "fund_strategy_reference" in reports
+        assert "fund_strategy_holdings_mix" in reports
+        assert "fund_strategy_validation" in reports
+        assert "fund_strategy_review_queue" in reports
+        assert "fund_strategy_correction_candidates" in reports
 
         # CSVs should be saved
         assert report_file.exists()
@@ -552,6 +2051,166 @@ class TestValidateHoldings:
         with patch("pipeline.validate_holdings.UNIFIED_HOLDINGS_FILE", fake_path):
             reports = validate_holdings()
         assert reports == {}
+
+
+# ---------------------------------------------------------------------------
+# position purity diagnostics
+# ---------------------------------------------------------------------------
+
+class TestPositionPurityDiagnostics:
+    def test_subtotal_candidate_flags_aggregate_identifier_only(self):
+        df = _make_unified_df([
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-03-31",
+                "accession_number": "000100-24-000001",
+                "issuer_name": "Total Senior Secured Loans",
+                "bdc_investment_identifier": "Total Senior Secured Loans",
+                "fair_value": "1000000",
+            },
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-03-31",
+                "accession_number": "000100-24-000001",
+                "issuer_name": "Total Safety Holdings LLC",
+                "bdc_investment_identifier": "Total Safety Holdings LLC - First Lien Loan",
+                "instrument_description": "First Lien Loan",
+                "fair_value": "2000000",
+            },
+        ])
+        diagnostics, metrics = build_position_purity_diagnostics(df, pd.DataFrame())
+
+        subtotal = diagnostics[diagnostics["issue_family"] == "subtotal_candidate"]
+        assert len(subtotal) == 1
+        assert subtotal.iloc[0]["issuer_name"] == "Total Senior Secured Loans"
+        assert len(df) == 2
+        assert int(metrics.iloc[0]["subtotal_candidate_rows"]) == 1
+
+    def test_duplicate_dimension_candidate_requires_same_position_and_facts(self):
+        df = _make_unified_df([
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-03-31",
+                "accession_number": "000100-24-000001",
+                "issuer_name": "Acme Corp",
+                "instrument_description": "First Lien Term Loan",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+                "bdc_dimensions_raw": "axis=AcmeMember|type=DebtMember",
+            },
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-03-31",
+                "accession_number": "000100-24-000001",
+                "issuer_name": "Acme Corp",
+                "instrument_description": "First Lien Term Loan",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+                "bdc_dimensions_raw": "axis=AcmeAltMember|type=DebtMember",
+            },
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-03-31",
+                "accession_number": "000100-24-000001",
+                "issuer_name": "Acme Corp",
+                "instrument_description": "Second Lien Term Loan",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "bdc_investment_identifier": "Acme Corp - Second Lien Term Loan",
+                "bdc_dimensions_raw": "axis=AcmeSecondLienMember",
+            },
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-03-31",
+                "accession_number": "000100-24-000001",
+                "issuer_name": "Acme Corp",
+                "instrument_description": "First Lien Term Loan",
+                "fair_value": "1100000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+                "bdc_dimensions_raw": "axis=AcmeDifferentFvMember",
+            },
+        ])
+        diagnostics, _ = build_position_purity_diagnostics(df, pd.DataFrame())
+
+        dupes = diagnostics[
+            diagnostics["issue_family"] == "duplicate_dimension_candidate"
+        ]
+        assert len(dupes) == 2
+        assert set(dupes["instrument_description"]) == {"First Lien Term Loan"}
+        assert set(dupes["fair_value"]) == {"1000000"}
+
+    def test_comparative_period_is_separate_from_duplicate_candidates(self):
+        holdings = _make_unified_df([
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-06-30",
+                "accession_number": "000100-24-000002",
+                "issuer_name": "Acme Corp",
+                "instrument_description": "First Lien Term Loan",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+                "bdc_dimensions_raw": "axis=current",
+            },
+            {
+                "source": "bdc",
+                "cik": "0000000100",
+                "entity_name": "BDC A",
+                "report_date": "2024-06-30",
+                "accession_number": "000100-24-000002",
+                "issuer_name": "Acme Corp",
+                "instrument_description": "First Lien Term Loan",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+                "bdc_dimensions_raw": "axis=prior",
+            },
+        ])
+        source = _make_bdc_source([
+            {
+                "report_date": "2024-06-30",
+                "period": "2024-06-30",
+                "accession_number": "000100-24-000002",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "dimensions_raw": "axis=current",
+            },
+            {
+                "report_date": "2024-06-30",
+                "period": "2024-03-31",
+                "accession_number": "000100-24-000002",
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "dimensions_raw": "axis=prior",
+            },
+        ])
+        diagnostics, _ = build_position_purity_diagnostics(holdings, source)
+
+        assert len(diagnostics[diagnostics["issue_family"] == "comparative_period"]) == 1
+        assert len(diagnostics[
+            diagnostics["issue_family"] == "duplicate_dimension_candidate"
+        ]) == 0
 
 
 # ---------------------------------------------------------------------------
@@ -579,6 +2238,9 @@ class TestCheckGavReconciliation:
         assert result.iloc[0]["holdings_scope"] == "bdc_schedule"
         assert result.iloc[0]["denominator_scope"] == "investment_fair_value"
         assert result.iloc[0]["gav_rule_id"] == "GAV_BDC01"
+        assert result.iloc[0]["reconciliation_status"] == "PASS"
+        assert result.iloc[0]["comparison_confidence"] == "STRONG"
+        assert result.iloc[0]["blocks_verified"] == False
         ratio = float(result.iloc[0]["gav_ratio"])
         assert abs(ratio - 1.0) < 0.01
         assert result.iloc[0]["flag"] == "ok"
@@ -597,6 +2259,8 @@ class TestCheckGavReconciliation:
         result = check_gav_reconciliation(holdings, fund_financials_df=ff)
         assert len(result) == 1
         assert result.iloc[0]["comparison_source"] == "total_assets_companyfacts"
+        assert result.iloc[0]["denominator_scope"] == "full_fund_assets_proxy"
+        assert result.iloc[0]["comparison_confidence"] == "MODERATE"
         ratio = float(result.iloc[0]["gav_ratio"])
         assert abs(ratio - 0.5) < 0.01
 
@@ -748,6 +2412,8 @@ class TestCheckGavReconciliation:
         )
         assert len(result) == 1
         assert result.iloc[0]["flag"] == "no_comparison"
+        assert result.iloc[0]["reconciliation_status"] == "SKIP"
+        assert result.iloc[0]["blocks_verified"] == True
 
     def test_nport_fallback(self):
         """Falls back to N-PORT total_assets when no fund_financials."""
@@ -768,7 +2434,7 @@ class TestCheckGavReconciliation:
         assert result.iloc[0]["comparison_source"] == "total_assets_nport"
         assert result.iloc[0]["holdings_source"] == "nport"
         assert result.iloc[0]["holdings_scope"] == "nport_private_markets_filter"
-        assert result.iloc[0]["denominator_scope"] == "full_fund_assets"
+        assert result.iloc[0]["denominator_scope"] == "full_fund_assets_proxy"
         assert result.iloc[0]["gav_rule_id"] == "GAV_NPORT01"
 
     def test_ex_sub_ratio_excludes_subsidiary(self):
@@ -816,9 +2482,8 @@ class TestCheckGavReconciliation:
         ratio = float(result.iloc[0]["gav_ratio"])
         assert abs(ratio - 1.0) < 0.01
 
-    def test_corroboration_overrides_gate_when_holdings_match_inv_fv(self):
-        """When inv_fv/total_assets fails the gate but holdings sum corroborates
-        inv_fv (ratio 0.3-5.0x), use inv_fv anyway (e.g. NEWT bank/BDC hybrid)."""
+    def test_raw_source_corroboration_overrides_gate_when_source_matches_inv_fv(self):
+        """A suspect inv_fv denominator needs raw source FV corroboration."""
         holdings = _make_unified_df([
             {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
              "fair_value": "26000000", "source": "bdc"},
@@ -830,12 +2495,37 @@ class TestCheckGavReconciliation:
             "investments_at_fair_value": "26000000",
             "total_assets": "1300000000",
         }])
-        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        bdc_source = pd.DataFrame([{
+            "cik": "100",
+            "report_date": "2024-03-31",
+            "period": "2024-03-31",
+            "fair_value": "26000000",
+            "accession_number": "acc-001",
+            "form_type": "10-Q",
+            "filing_date": "2024-05-01",
+        }])
+        result = check_gav_reconciliation(
+            holdings,
+            fund_financials_df=ff,
+            bdc_source_df=bdc_source,
+        )
         assert len(result) == 1
-        # Should use inv_fv due to corroboration, not total_assets
         assert result.iloc[0]["comparison_source"] == "investments_at_fair_value"
         ratio = float(result.iloc[0]["gav_ratio"])
         assert abs(ratio - 1.0) < 0.01
+
+    def test_holdings_only_corroboration_does_not_override_suspect_inv_fv(self):
+        holdings = _make_unified_df([
+            {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+             "fair_value": "26000000", "source": "bdc"},
+        ])
+        ff = pd.DataFrame([{
+            "cik": "100", "report_date": "2024-03-31",
+            "investments_at_fair_value": "26000000",
+            "total_assets": "1300000000",
+        }])
+        result = check_gav_reconciliation(holdings, fund_financials_df=ff)
+        assert result.iloc[0]["comparison_source"] == "total_assets_companyfacts"
 
     def test_corroboration_does_not_override_when_holdings_disagree(self):
         """When inv_fv/total_assets fails the gate AND holdings sum does NOT
