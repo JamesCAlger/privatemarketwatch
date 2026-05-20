@@ -33,7 +33,10 @@ from pipeline.classification import (
     _sql_money_market_check,
     _sql_normalize_name,
 )
-from pipeline.config import BDC_AGGREGATE_ROW_OVERRIDES_FILE
+from pipeline.config import (
+    AGGREGATE_HEADER_FLAGS_FILE,
+    BDC_AGGREGATE_ROW_OVERRIDES_FILE,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +94,33 @@ def _load_bdc_aggregate_overrides() -> pd.DataFrame:
     df["match_text_lower"] = df["match_text"].str.lower()
     df["action"] = df["action"].str.lower()
     return df
+
+
+def _load_aggregate_header_flags() -> pd.DataFrame:
+    """Load CC-reviewed aggregate header flags, if present.
+
+    Returns a DataFrame with a ``name_norm`` column (lowercase, legal
+    suffixes stripped) for joining against normalised issuer names.
+    Only rows with verdict = 'AGGREGATE_HEADER' and confidence in
+    ('high', 'medium') are returned -- JV_SUBSIDIARY and UNRESOLVABLE
+    verdicts are informational and do NOT trigger exclusion.
+    """
+    if not AGGREGATE_HEADER_FLAGS_FILE.exists():
+        return pd.DataFrame(columns=["name_norm"])
+    try:
+        df = pd.read_csv(AGGREGATE_HEADER_FLAGS_FILE, dtype=str)
+    except Exception:
+        return pd.DataFrame(columns=["name_norm"])
+    if "verdict" not in df.columns or "name_norm" not in df.columns:
+        return pd.DataFrame(columns=["name_norm"])
+    mask = (
+        (df["verdict"] == "AGGREGATE_HEADER")
+        & df["confidence"].isin(["high", "medium"])
+    )
+    result = df.loc[mask, ["name_norm"]].copy()
+    result["name_norm"] = result["name_norm"].str.strip().str.lower()
+    result = result[result["name_norm"].str.len() > 0].drop_duplicates()
+    return result
 
 
 def _reclassify_named_fund_positions(df: pd.DataFrame) -> pd.DataFrame:
@@ -165,6 +195,9 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     con.register("bdc_raw", bdc_df)
     aggregate_overrides = _load_bdc_aggregate_overrides()
     con.register("bdc_aggregate_overrides", aggregate_overrides)
+    agg_header_flags = _load_aggregate_header_flags()
+    con.register("cc_aggregate_header_flags", agg_header_flags)
+    _has_agg_flags = len(agg_header_flags) > 0
 
     # Pre-generate SQL fragments from Python constants
     agg_filter = _sql_is_bdc_aggregate()
@@ -292,6 +325,40 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     else:
         period_sort_expr = "''"
         period_filter = f"WHERE TRUE {date_cutoff}"
+
+    # Conditional CTE for CC-reviewed aggregate header exclusion.
+    # When the aggregate_header_flags.csv file has entries, inject a CTE
+    # that LEFT JOINs against the flags and filters out matches.
+    # The SQL-side name normalization mirrors _normalize_company_name():
+    # lowercase, strip legal suffixes, collapse whitespace.
+    _legal_suffix_sql = (
+        r",?\s*\b(llc|l\.l\.c\.|inc\.?|incorporated|corp\.?|corporation"
+        r"|ltd\.?|limited|l\.p\.?|lp|co\.?|company|holdings|holding"
+        r"|group|enterprises?|plc|p\.l\.c\.|n\.v\.|s\.a\.|ag|gmbh"
+        r"|international|intl\.?)\b\.?\s*$"
+    )
+    if _has_agg_flags:
+        _cc_agg_header_cte = (
+            "-- CTE 5c2: Exclude CC-reviewed aggregate headers.\n"
+            "    -- Only AGGREGATE_HEADER verdicts with high/medium confidence.\n"
+            "    -- JV_SUBSIDIARY and UNRESOLVABLE are NOT excluded.\n"
+            "    no_cc_agg_headers AS (\n"
+            "        SELECT n.* FROM no_bad_issuers n\n"
+            "        LEFT JOIN cc_aggregate_header_flags f\n"
+            "            ON TRIM(REGEXP_REPLACE(\n"
+            "                   REGEXP_REPLACE(\n"
+            "                       lower(TRIM(CAST(n.issuer_name AS VARCHAR))),\n"
+            f"                       '{_legal_suffix_sql}',\n"
+            "                       '', 'i'),\n"
+            "                   '\\s+', ' ', 'g')\n"
+            "               ) = f.name_norm\n"
+            "        WHERE f.name_norm IS NULL\n"
+            "    ),"
+        )
+        _affil_dedup_source = "no_cc_agg_headers"
+    else:
+        _cc_agg_header_cte = "-- (no aggregate header flags loaded)"
+        _affil_dedup_source = "no_bad_issuers"
 
     sql = f"""
     WITH
@@ -801,6 +868,8 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         WHERE NOT (({bad_issuer_filter}) AND NOT ({_sql_has_entity_in_raw}))
     ),
 
+    {_cc_agg_header_cte}
+
     -- CTE 5d: Affiliation-axis dedup -- same position tagged under multiple
     -- affiliation dimension members (e.g. Non-Controlled vs Affiliated) in
     -- the same filing.  This must stay position-level: distinct instruments
@@ -837,7 +906,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                         COALESCE(CAST(affiliation AS VARCHAR), ''),
                         _row_id
                 ) AS _affil_rank
-            FROM no_bad_issuers
+            FROM {_affil_dedup_source}
         ) sub
         WHERE _affil_rank = 1
     ),

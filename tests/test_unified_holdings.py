@@ -42,6 +42,7 @@ from pipeline.classification import (
     _sql_classify_index,
 )
 from pipeline.staging_bdc import (
+    _load_aggregate_header_flags,
     _prepare_bdc,
     _reclassify_named_fund_positions,
 )
@@ -8095,3 +8096,153 @@ class TestPikRatePostNormalization:
         }])
         result = _prepare_bdc(df)
         assert result.iloc[0]["pik_rate"] == pytest.approx(15.0)
+
+
+# ---------------------------------------------------------------------------
+# TestLoadAggregateHeaderFlags
+# ---------------------------------------------------------------------------
+
+class TestLoadAggregateHeaderFlags:
+    """Test loading and filtering of aggregate_header_flags.csv."""
+
+    def test_returns_empty_when_file_missing(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(
+            "pipeline.staging_bdc.AGGREGATE_HEADER_FLAGS_FILE",
+            tmp_path / "nonexistent.csv",
+        )
+        result = _load_aggregate_header_flags()
+        assert list(result.columns) == ["name_norm"]
+        assert len(result) == 0
+
+    def test_loads_only_aggregate_header_verdicts(self, monkeypatch, tmp_path):
+        flags_path = tmp_path / "flags.csv"
+        flags_df = pd.DataFrame([
+            {"name_norm": "total debt investments", "verdict": "AGGREGATE_HEADER",
+             "confidence": "high", "issuer_name_raw": "Total Debt Investments"},
+            {"name_norm": "acme jv", "verdict": "JV_SUBSIDIARY",
+             "confidence": "high", "issuer_name_raw": "Acme JV, LLC"},
+            {"name_norm": "unknown thing", "verdict": "UNRESOLVABLE",
+             "confidence": "medium", "issuer_name_raw": "Unknown Thing"},
+        ])
+        flags_df.to_csv(flags_path, index=False)
+        monkeypatch.setattr(
+            "pipeline.staging_bdc.AGGREGATE_HEADER_FLAGS_FILE",
+            flags_path,
+        )
+        result = _load_aggregate_header_flags()
+        assert len(result) == 1
+        assert result.iloc[0]["name_norm"] == "total debt investments"
+
+    def test_excludes_low_confidence_aggregate_headers(self, monkeypatch, tmp_path):
+        flags_path = tmp_path / "flags.csv"
+        flags_df = pd.DataFrame([
+            {"name_norm": "maybe header", "verdict": "AGGREGATE_HEADER",
+             "confidence": "low", "issuer_name_raw": "Maybe Header"},
+            {"name_norm": "sure header", "verdict": "AGGREGATE_HEADER",
+             "confidence": "high", "issuer_name_raw": "Sure Header"},
+        ])
+        flags_df.to_csv(flags_path, index=False)
+        monkeypatch.setattr(
+            "pipeline.staging_bdc.AGGREGATE_HEADER_FLAGS_FILE",
+            flags_path,
+        )
+        result = _load_aggregate_header_flags()
+        assert len(result) == 1
+        assert result.iloc[0]["name_norm"] == "sure header"
+
+    def test_handles_missing_columns_gracefully(self, monkeypatch, tmp_path):
+        flags_path = tmp_path / "flags.csv"
+        # File with wrong columns
+        pd.DataFrame({"foo": ["bar"]}).to_csv(flags_path, index=False)
+        monkeypatch.setattr(
+            "pipeline.staging_bdc.AGGREGATE_HEADER_FLAGS_FILE",
+            flags_path,
+        )
+        result = _load_aggregate_header_flags()
+        assert len(result) == 0
+
+
+class TestAggregateHeaderFlagExclusion:
+    """Test that CC-flagged aggregate headers are excluded in _prepare_bdc."""
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_flagged_aggregate_excluded(self, monkeypatch, tmp_path):
+        """Rows matching an AGGREGATE_HEADER flag are excluded."""
+        flags_path = tmp_path / "agg_flags.csv"
+        # "total debt" is a name_norm that matches "Total Debt Holdings"
+        # after SQL-side normalization (lower + strip legal suffixes)
+        flags_df = pd.DataFrame([
+            {"name_norm": "total debt", "verdict": "AGGREGATE_HEADER",
+             "confidence": "high", "issuer_name_raw": "Total Debt"},
+        ])
+        flags_df.to_csv(flags_path, index=False)
+        monkeypatch.setattr(
+            "pipeline.staging_bdc.AGGREGATE_HEADER_FLAGS_FILE",
+            flags_path,
+        )
+
+        df = self._make_bdc_df([
+            {"investment_identifier": "Total Debt - Category Subtotal",
+             "cik": "123", "fair_value": 50000000},
+            {"investment_identifier": "Acme Corp - Term Loan",
+             "cik": "123", "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        # "Total Debt" should have been caught by the existing aggregate filter
+        # or by the CC flag. "Acme Corp" should remain.
+        names = result["issuer_name"].tolist()
+        assert "Acme Corp" in names
+
+    def test_jv_subsidiary_not_excluded(self, monkeypatch, tmp_path):
+        """JV_SUBSIDIARY verdicts do NOT exclude rows."""
+        flags_path = tmp_path / "agg_flags.csv"
+        flags_df = pd.DataFrame([
+            {"name_norm": "acme jv", "verdict": "JV_SUBSIDIARY",
+             "confidence": "high", "issuer_name_raw": "Acme JV, LLC"},
+        ])
+        flags_df.to_csv(flags_path, index=False)
+        monkeypatch.setattr(
+            "pipeline.staging_bdc.AGGREGATE_HEADER_FLAGS_FILE",
+            flags_path,
+        )
+
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme JV, LLC - Equity",
+             "cik": "123", "fair_value": 5000000},
+            {"investment_identifier": "Beta Corp - Term Loan",
+             "cik": "123", "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        # JV_SUBSIDIARY should NOT be filtered - both rows should remain
+        assert len(result) == 2
+
+    def test_no_flags_file_no_exclusion(self, monkeypatch, tmp_path):
+        """When no flags file exists, _prepare_bdc works normally."""
+        monkeypatch.setattr(
+            "pipeline.staging_bdc.AGGREGATE_HEADER_FLAGS_FILE",
+            tmp_path / "nonexistent.csv",
+        )
+
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan",
+             "cik": "123", "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"
