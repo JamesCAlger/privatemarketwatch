@@ -28,6 +28,48 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
             " COALESCE(id.ticker, '') AS ticker"
         )
 
+    has_gav = HOLDINGS_GAV_RECONCILIATION_FILE.exists()
+    gav_cte = ""
+    gav_join = ""
+    gav_cols = (
+        "CAST(NULL AS VARCHAR) AS validation_tier,"
+        " CAST(NULL AS VARCHAR) AS gav_status"
+    )
+    if has_gav:
+        gav_header = (
+            HOLDINGS_GAV_RECONCILIATION_FILE.read_text(
+                encoding="utf-8", errors="ignore"
+            ).splitlines()[0].split(",")
+            if HOLDINGS_GAV_RECONCILIATION_FILE.stat().st_size
+            else []
+        )
+        if "reconciliation_status" in gav_header:
+            gav_cte = f""",
+        gav AS (
+            SELECT
+                LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                CAST(report_date AS VARCHAR) AS report_date,
+                reconciliation_status,
+                CASE
+                    WHEN reconciliation_status = 'PASS' THEN 'VERIFIED'
+                    WHEN reconciliation_status = 'WARN' THEN 'VALIDATED_WITH_WARNINGS'
+                    ELSE 'UNDER_REVIEW'
+                END AS validation_tier
+            FROM read_csv_auto(
+                '{HOLDINGS_GAV_RECONCILIATION_FILE.as_posix()}',
+                all_varchar=true
+            )
+        )"""
+            gav_join = """
+        LEFT JOIN gav
+          ON LPAD(CAST(f.cik AS VARCHAR), 10, '0') = gav.cik
+         AND CAST(f.report_date AS VARCHAR) = gav.report_date
+        """
+            gav_cols = (
+                "COALESCE(gav.validation_tier, '') AS validation_tier,"
+                " COALESCE(gav.reconciliation_status, '') AS gav_status"
+            )
+
     rows = con.execute(f"""
         WITH ff AS (
             SELECT * FROM read_csv_auto(
@@ -57,11 +99,13 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
             )
             WHERE rn = 1
         )
+        {gav_cte}
         SELECT
             f.cik,
             COALESCE(f.entity_name, '') AS name,
             COALESCE(f.vehicle_type, '') AS vehicle_type,
             {identity_cols},
+            {gav_cols},
             TRY_CAST(f.total_assets AS DOUBLE) AS total_assets,
             TRY_CAST(f.nav_per_share AS DOUBLE) AS nav_per_share,
             TRY_CAST(f.distribution_rate AS DOUBLE) AS distribution_rate,
@@ -76,6 +120,7 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
              WHERE cik = f.cik AND report_quarter >= '2022q4') AS quarters_of_data
         FROM snap f
         {identity_join}
+        {gav_join}
         ORDER BY
             TRY_CAST(f.total_assets AS DOUBLE) DESC NULLS LAST,
             COALESCE(f.entity_name, '') ASC,
@@ -84,6 +129,7 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
 
     cols = [
         "cik", "name", "vehicle_type", "adviser", "ticker",
+        "validation_tier", "gav_status",
         "total_assets", "nav_per_share", "distribution_rate",
         "leverage_ratio", "quarterly_return", "expense_ratio_pct",
         "redemption_pressure", "total_return_pct", "income_yield_pct",
@@ -98,6 +144,8 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
             "vehicleType": d["vehicle_type"],
             "adviser": d["adviser"],
             "ticker": d["ticker"],
+            "validationTier": d["validation_tier"] or None,
+            "gavStatus": d["gav_status"] or None,
             "totalAssets": _safe_round(d["total_assets"], 0),
             "navPerShare": _safe_round(d["nav_per_share"], 2),
             "distributionRate": _safe_round(d["distribution_rate"], 2),
@@ -652,6 +700,42 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 "duration_months": _to_float(dm),
             }
 
+    gav_lookup: dict[tuple[str, str], dict[str, Any]] = {}
+    if HOLDINGS_GAV_RECONCILIATION_FILE.exists():
+        gav_header = (
+            HOLDINGS_GAV_RECONCILIATION_FILE.read_text(
+                encoding="utf-8", errors="ignore"
+            ).splitlines()[0].split(",")
+            if HOLDINGS_GAV_RECONCILIATION_FILE.stat().st_size
+            else []
+        )
+        if "reconciliation_status" in gav_header:
+            gav_rows = con.execute(f"""
+                SELECT
+                    cik,
+                    report_date,
+                    reconciliation_status,
+                    comparison_source,
+                    TRY_CAST(gav_ratio_adjusted AS DOUBLE),
+                    TRY_CAST(gav_ratio AS DOUBLE)
+                FROM read_csv_auto(
+                    '{HOLDINGS_GAV_RECONCILIATION_FILE.as_posix()}',
+                    all_varchar=true
+                )
+            """).fetchall()
+            for cik_g, date_g, status_g, source_g, adj_g, raw_g in gav_rows:
+                tier = (
+                    "VERIFIED" if status_g == "PASS"
+                    else "VALIDATED_WITH_WARNINGS" if status_g == "WARN"
+                    else "UNDER_REVIEW"
+                )
+                gav_lookup[(str(cik_g).zfill(10), str(date_g))] = {
+                    "validationTier": tier,
+                    "gavStatus": status_g,
+                    "gavComparisonSource": source_g,
+                    "gavRatio": _safe_round(adj_g if adj_g is not None else raw_g, 4),
+                }
+
     count = 0
     for (cik_val,) in ciks:
         rows = con.execute(f"""
@@ -711,6 +795,10 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 er = entry.get("expense_ratio_pct")
                 if qr is not None and er is not None:
                     entry["gross_return_pct"] = round(qr + er / 4, 4)
+
+            gav_entry = gav_lookup.get((str(cik_val).zfill(10), str(entry["reportDate"])))
+            if gav_entry:
+                entry.update(gav_entry)
 
             series.append(entry)
 

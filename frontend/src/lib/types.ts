@@ -129,6 +129,8 @@ export interface FundListItem {
   vehicleType: string;
   adviser: string | null;
   ticker: string | null;
+  validationTier?: string | null;
+  gavStatus?: string | null;
   totalAssets: number | null;
   navPerShare: number | null;
   distributionRate: number | null;
@@ -257,6 +259,10 @@ export interface FundSeriesEntry {
   redemption_pressure?: number | null;
   premium_discount_pct?: number | null;
   gross_return_pct?: number | null;
+  validationTier?: string | null;
+  gavRatio?: number | null;
+  gavStatus?: string | null;
+  gavComparisonSource?: string | null;
   [key: string]: string | number | null | undefined;
 }
 
@@ -271,6 +277,10 @@ export interface GavReconciliation {
   median: number;
   within95_105Pct: number;
   within80_120Pct: number;
+  statusCounts?: { status: string; count: number }[];
+  comparisonSourceCounts?: { source: string; count: number }[];
+  strongCikQuarters?: number;
+  proxyCikQuarters?: number;
 }
 export interface ClassificationRule {
   rule: string;
