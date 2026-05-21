@@ -20,6 +20,7 @@ from pipeline.config import (
     ENTITY_LOOKUP_FILE,
     FUND_FINANCIALS_FILE,
     FUND_STRATEGY_CORRECTION_CANDIDATES_FILE,
+    FUND_STRATEGY_REFERENCE_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_EXCLUDE_CIKS,
     NPORT_HOLDINGS_FILE,
@@ -1063,6 +1064,10 @@ def build_unified_holdings(
     # Apply fund strategy correction candidates (if file exists on disk)
     combined = _apply_fund_strategy_corrections(combined)
 
+    # Fund-level asset_class override for RE-strategy funds (runs last so it
+    # catches everything the row-level correction system missed)
+    combined = _apply_fund_strategy_asset_class_override(combined)
+
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
     logger.info("  Cost coverage: %d rows (%.1f%%)",
@@ -1138,6 +1143,76 @@ def _apply_fund_strategy_corrections(
         len(candidates),
     )
     return apply_fund_strategy_correction_candidates(df, candidates)
+
+
+# Asset classes that should NOT be overridden by the fund-level RE strategy.
+_RE_OVERRIDE_BLOCKED_ASSET_CLASSES = frozenset({"CASH", "STRUCTURED_CREDIT", "HEDGE_FUND"})
+
+
+def _apply_fund_strategy_asset_class_override(
+    df: pd.DataFrame,
+    reference_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """Override asset_class to REAL_ESTATE for all holdings in RE-strategy funds.
+
+    The row-level classification system assigns asset_class based on instrument
+    type (loans -> PRIVATE_CREDIT, equity -> PRIVATE_EQUITY) without considering
+    the underlying collateral.  Real estate mortgage loans, mezzanine loans, and
+    property SPV equity are indistinguishable from corporate credit/equity at the
+    row level.
+
+    This fund-level override sets asset_class='REAL_ESTATE' for all positions in
+    funds whose strategy is REAL_ESTATE, except positions with asset_class in
+    {CASH, STRUCTURED_CREDIT, HEDGE_FUND} which are explicitly blocked.
+
+    index_classification and exposure_type are left unchanged -- the instrument
+    type is correct, only the asset_class dimension needs the fund-level signal.
+    """
+    path = reference_path or FUND_STRATEGY_REFERENCE_FILE
+    if not path.exists():
+        logger.info("Fund strategy asset_class override: no reference file, skipping")
+        return df
+
+    if df.empty:
+        return df
+
+    ref = pd.read_csv(path, dtype=str).fillna("")
+    if ref.empty or "strategy" not in ref.columns or "cik" not in ref.columns:
+        return df
+
+    re_ciks = set(
+        ref.loc[ref["strategy"] == "REAL_ESTATE", "cik"]
+        .str.strip()
+        .str.zfill(10)
+    )
+    if not re_ciks:
+        return df
+
+    blocked = _RE_OVERRIDE_BLOCKED_ASSET_CLASSES
+    norm_cik = df["cik"].astype(str).str.strip().str.zfill(10)
+    mask = norm_cik.isin(re_ciks) & ~df["asset_class"].isin(blocked)
+
+    n_affected = mask.sum()
+    if n_affected == 0:
+        logger.info("Fund strategy asset_class override: 0 rows matched RE-strategy CIKs")
+        return df
+
+    # Log breakdown by previous asset_class
+    prev_classes = df.loc[mask, "asset_class"].value_counts()
+    fv_affected = pd.to_numeric(df.loc[mask, "fair_value"], errors="coerce").sum()
+    logger.info(
+        "Fund strategy asset_class override: %d rows (FV $%.1fB) across %d RE-strategy CIKs",
+        n_affected,
+        fv_affected / 1e9 if pd.notna(fv_affected) else 0,
+        norm_cik[mask].nunique(),
+    )
+    for cls, count in prev_classes.items():
+        if cls != "REAL_ESTATE":
+            logger.info("  %s -> REAL_ESTATE: %d rows", cls, count)
+
+    df.loc[mask, "asset_class"] = "REAL_ESTATE"
+
+    return df
 
 
 # Fields that row_corrections.csv is allowed to override.

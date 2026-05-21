@@ -10,6 +10,7 @@ from pipeline.fund_strategy_validation import (
     build_fund_strategy_validation,
     run_fund_strategy_validation,
 )
+from pipeline.unified_holdings import _apply_fund_strategy_asset_class_override
 
 
 def _holdings(rows):
@@ -603,3 +604,141 @@ def test_apply_excludes_bad_signal_ciks():
     # Normal CIK applied
     assert credit["index_classification"] == "PRIVATE_CREDIT_FUND"
     assert credit["asset_class"] == "PRIVATE_CREDIT"
+
+
+# ---------------------------------------------------------------------------
+# Tests for _apply_fund_strategy_asset_class_override
+# ---------------------------------------------------------------------------
+
+
+def _make_reference_csv(tmp_path, rows):
+    """Write a minimal fund_strategy_reference.csv and return its path."""
+    defaults = {
+        "cik": "0000000100",
+        "entity_name": "Test Fund",
+        "fund_name": "Test Fund",
+        "vehicle_type": "interval_fund",
+        "strategy": "REAL_ESTATE",
+        "sub_strategy": "",
+        "strategy_source": "FUND_NAME_SIGNAL",
+        "confidence": "MEDIUM",
+        "evidence": "",
+        "review_status": "",
+    }
+    df = pd.DataFrame([{**defaults, **r} for r in rows])
+    path = tmp_path / "fund_strategy_reference.csv"
+    df.to_csv(path, index=False)
+    return path
+
+
+def test_re_override_sets_asset_class_for_matching_cik(tmp_path):
+    """RE-strategy CIK holdings get asset_class=REAL_ESTATE."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "asset_class": "PRIVATE_CREDIT", "index_classification": "DIRECT_LENDING"},
+        {"cik": "100", "asset_class": "PRIVATE_EQUITY", "index_classification": "COMMON_EQUITY"},
+    ])
+
+    result = _apply_fund_strategy_asset_class_override(holdings, reference_path=ref_path)
+
+    assert result.iloc[0]["asset_class"] == "REAL_ESTATE"
+    assert result.iloc[1]["asset_class"] == "REAL_ESTATE"
+    # index_classification must be preserved
+    assert result.iloc[0]["index_classification"] == "DIRECT_LENDING"
+    assert result.iloc[1]["index_classification"] == "COMMON_EQUITY"
+
+
+def test_re_override_blocks_cash_structured_hedge(tmp_path):
+    """CASH, STRUCTURED_CREDIT, HEDGE_FUND asset_classes are NOT overridden."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "asset_class": "CASH", "index_classification": "CASH"},
+        {"cik": "100", "asset_class": "STRUCTURED_CREDIT", "index_classification": "STRUCTURED_CREDIT"},
+        {"cik": "100", "asset_class": "HEDGE_FUND", "index_classification": "HEDGE_FUND"},
+        {"cik": "100", "asset_class": "PRIVATE_CREDIT", "index_classification": "DIRECT_LENDING"},
+    ])
+
+    result = _apply_fund_strategy_asset_class_override(holdings, reference_path=ref_path)
+
+    assert result.iloc[0]["asset_class"] == "CASH"
+    assert result.iloc[1]["asset_class"] == "STRUCTURED_CREDIT"
+    assert result.iloc[2]["asset_class"] == "HEDGE_FUND"
+    assert result.iloc[3]["asset_class"] == "REAL_ESTATE"
+
+
+def test_re_override_leaves_non_re_strategy_ciks_unchanged(tmp_path):
+    """CIKs with non-RE strategy are not affected."""
+    ref_path = _make_reference_csv(tmp_path, [
+        {"cik": "0000000100", "strategy": "REAL_ESTATE"},
+        {"cik": "0000000200", "strategy": "PRIVATE_CREDIT"},
+    ])
+    holdings = _holdings([
+        {"cik": "100", "asset_class": "PRIVATE_CREDIT"},
+        {"cik": "200", "asset_class": "PRIVATE_CREDIT"},
+    ])
+
+    result = _apply_fund_strategy_asset_class_override(holdings, reference_path=ref_path)
+
+    assert result.iloc[0]["asset_class"] == "REAL_ESTATE"
+    assert result.iloc[1]["asset_class"] == "PRIVATE_CREDIT"
+
+
+def test_re_override_preserves_exposure_type(tmp_path):
+    """exposure_type is never changed by the override."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "asset_class": "PRIVATE_CREDIT", "exposure_type": "DIRECT",
+         "index_classification": "DIRECT_LENDING"},
+        {"cik": "100", "asset_class": "PRIVATE_EQUITY", "exposure_type": "FUND",
+         "index_classification": "PRIVATE_EQUITY_FUND"},
+    ])
+
+    result = _apply_fund_strategy_asset_class_override(holdings, reference_path=ref_path)
+
+    assert result.iloc[0]["exposure_type"] == "DIRECT"
+    assert result.iloc[1]["exposure_type"] == "FUND"
+
+
+def test_re_override_missing_reference_file_returns_unchanged(tmp_path):
+    """If the reference file doesn't exist, return holdings unchanged."""
+    holdings = _holdings([{"cik": "100", "asset_class": "PRIVATE_CREDIT"}])
+
+    result = _apply_fund_strategy_asset_class_override(
+        holdings, reference_path=tmp_path / "nonexistent.csv"
+    )
+
+    assert result.iloc[0]["asset_class"] == "PRIVATE_CREDIT"
+
+
+def test_re_override_empty_reference_returns_unchanged(tmp_path):
+    """If the reference file is empty, return holdings unchanged."""
+    path = tmp_path / "fund_strategy_reference.csv"
+    pd.DataFrame(columns=["cik", "strategy"]).to_csv(path, index=False)
+    holdings = _holdings([{"cik": "100", "asset_class": "PRIVATE_CREDIT"}])
+
+    result = _apply_fund_strategy_asset_class_override(holdings, reference_path=path)
+
+    assert result.iloc[0]["asset_class"] == "PRIVATE_CREDIT"
+
+
+def test_re_override_already_real_estate_rows_unchanged(tmp_path):
+    """Rows already classified as REAL_ESTATE stay REAL_ESTATE (no-op)."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "asset_class": "REAL_ESTATE", "index_classification": "DIRECT_REAL_ESTATE"},
+    ])
+
+    result = _apply_fund_strategy_asset_class_override(holdings, reference_path=ref_path)
+
+    assert result.iloc[0]["asset_class"] == "REAL_ESTATE"
+    assert result.iloc[0]["index_classification"] == "DIRECT_REAL_ESTATE"
+
+
+def test_re_override_empty_holdings_returns_empty(tmp_path):
+    """Empty holdings DataFrame returns empty."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = pd.DataFrame(columns=["cik", "asset_class", "fair_value"])
+
+    result = _apply_fund_strategy_asset_class_override(holdings, reference_path=ref_path)
+
+    assert result.empty
