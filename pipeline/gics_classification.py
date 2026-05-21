@@ -671,9 +671,10 @@ def _apply_gics_to_holdings(
 ) -> pd.DataFrame:
     """Apply GICS classification to unified holdings via DuckDB JOIN.
 
-    Uses two-pass matching:
+    Uses three-pass matching:
     1. Exact match on full normalized issuer_name
     2. Fallback: extract company name portion (strip loan descriptors) and match
+    3. Fallback: normalized canonical_name from entity resolution
     """
     # Build lookup DataFrame
     lookup_records = [
@@ -707,18 +708,51 @@ def _apply_gics_to_holdings(
 
     name_map_df = pd.DataFrame(name_map_records)
 
+    # Pre-compute canonical_name normalization mapping
+    canonical_map_records = []
+    if "canonical_name" in unified_df.columns:
+        unique_canonicals = unified_df["canonical_name"].dropna().unique()
+        for cn in unique_canonicals:
+            cn_str = str(cn).strip()
+            if cn_str:
+                norm = _normalize_company_name(cn_str)
+                short = _extract_short_name(cn_str)
+                if norm:
+                    canonical_map_records.append({
+                        "canonical_name": cn_str,
+                        "_canon_norm": norm,
+                        "_canon_short": short if short else norm,
+                    })
+
+    canonical_map_df = pd.DataFrame(
+        canonical_map_records,
+        columns=["canonical_name", "_canon_norm", "_canon_short"],
+    ) if canonical_map_records else pd.DataFrame(
+        columns=["canonical_name", "_canon_norm", "_canon_short"],
+    )
+
     # Add row index to preserve order through JOIN
     unified_df = unified_df.copy()
     unified_df["_row_idx"] = range(len(unified_df))
+    # Ensure canonical_name column exists for the JOIN
+    if "canonical_name" not in unified_df.columns:
+        unified_df["canonical_name"] = None
 
     con = duckdb.connect()
     con.register("holdings", unified_df)
     con.register("gics_lookup", lookup_df)
     con.register("name_map", name_map_df)
+    con.register("canonical_map", canonical_map_df)
 
     result = con.execute("""
         SELECT h.* EXCLUDE (gics_sub_industry, _row_idx),
-               COALESCE(g1.gics_sub_industry, g2.gics_sub_industry, '') AS gics_sub_industry,
+               COALESCE(
+                   g1.gics_sub_industry,
+                   g2.gics_sub_industry,
+                   g3.gics_sub_industry,
+                   g4.gics_sub_industry,
+                   ''
+               ) AS gics_sub_industry,
                h._row_idx
         FROM holdings h
         LEFT JOIN name_map nm
@@ -728,6 +762,19 @@ def _apply_gics_to_holdings(
         LEFT JOIN gics_lookup g2
           ON nm._name_short = g2.company_name_norm
           AND g1.gics_sub_industry IS NULL
+        LEFT JOIN canonical_map cm
+          ON CAST(h.canonical_name AS VARCHAR) = cm.canonical_name
+          AND g1.gics_sub_industry IS NULL
+          AND g2.gics_sub_industry IS NULL
+        LEFT JOIN gics_lookup g3
+          ON cm._canon_norm = g3.company_name_norm
+          AND g1.gics_sub_industry IS NULL
+          AND g2.gics_sub_industry IS NULL
+        LEFT JOIN gics_lookup g4
+          ON cm._canon_short = g4.company_name_norm
+          AND g1.gics_sub_industry IS NULL
+          AND g2.gics_sub_industry IS NULL
+          AND g3.gics_sub_industry IS NULL
         ORDER BY h._row_idx
     """).fetchdf()
     con.close()
