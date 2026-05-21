@@ -374,3 +374,232 @@ def test_apply_helper_mutates_only_apply_candidates_and_supports_nport_keys():
     assert first["asset_class"] == "REAL_ESTATE"
     assert second["index_classification"] == "COMMON_EQUITY"
     assert second["asset_class"] == "PRIVATE_EQUITY"
+
+
+def test_apply_excludes_re_fund_to_pc_fund_transition():
+    """RE_FUND -> PC_FUND transitions are excluded (investees are genuine RE)."""
+    holdings = _holdings([
+        {
+            "source": "nport",
+            "nport_holding_id": "nport-1",
+            "issuer_name": "EPIC Dallas",
+            "index_classification": "REAL_ESTATE_FUND",
+            "asset_class": "REAL_ESTATE",
+        },
+        {
+            "source": "nport",
+            "nport_holding_id": "nport-2",
+            "issuer_name": "Apollo Co-investment",
+            "index_classification": "PRIVATE_EQUITY_FUND",
+            "asset_class": "PRIVATE_EQUITY",
+        },
+    ])
+    candidates = pd.DataFrame([
+        {
+            "correction_status": "APPLY",
+            "current_index_classification": "REAL_ESTATE_FUND",
+            "cik": "100",
+            "report_date": "2024-03-31",
+            "source": "nport",
+            "accession_number": "000100-24-000001",
+            "bdc_investment_identifier": "Issuer - Investment",
+            "nport_holding_id": "nport-1",
+            "proposed_index_classification": "PRIVATE_CREDIT_FUND",
+            "proposed_asset_class": "PRIVATE_CREDIT",
+        },
+        {
+            "correction_status": "APPLY",
+            "current_index_classification": "PRIVATE_EQUITY_FUND",
+            "cik": "100",
+            "report_date": "2024-03-31",
+            "source": "nport",
+            "accession_number": "000100-24-000001",
+            "bdc_investment_identifier": "Issuer - Investment",
+            "nport_holding_id": "nport-2",
+            "proposed_index_classification": "PRIVATE_CREDIT_FUND",
+            "proposed_asset_class": "PRIVATE_CREDIT",
+        },
+    ])
+
+    result = apply_fund_strategy_correction_candidates(holdings, candidates)
+
+    re_row = result[result["nport_holding_id"] == "nport-1"].iloc[0]
+    pe_row = result[result["nport_holding_id"] == "nport-2"].iloc[0]
+    # RE_FUND -> PC_FUND should be blocked
+    assert re_row["index_classification"] == "REAL_ESTATE_FUND"
+    assert re_row["asset_class"] == "REAL_ESTATE"
+    # PE_FUND -> PC_FUND should be applied
+    assert pe_row["index_classification"] == "PRIVATE_CREDIT_FUND"
+    assert pe_row["asset_class"] == "PRIVATE_CREDIT"
+
+
+def test_apply_handles_pc_fund_to_re_fund_transition():
+    """PC_FUND -> RE_FUND transitions are applied (RE debt funds correctly reclassified)."""
+    holdings = _holdings([
+        {
+            "source": "nport",
+            "nport_holding_id": "nport-1",
+            "issuer_name": "Heitman Core RE Debt Inc",
+            "index_classification": "PRIVATE_CREDIT_FUND",
+            "asset_class": "PRIVATE_CREDIT",
+        },
+    ])
+    candidates = pd.DataFrame([
+        {
+            "correction_status": "APPLY",
+            "current_index_classification": "PRIVATE_CREDIT_FUND",
+            "cik": "100",
+            "report_date": "2024-03-31",
+            "source": "nport",
+            "accession_number": "000100-24-000001",
+            "bdc_investment_identifier": "Issuer - Investment",
+            "nport_holding_id": "nport-1",
+            "proposed_index_classification": "REAL_ESTATE_FUND",
+            "proposed_asset_class": "REAL_ESTATE",
+        },
+    ])
+
+    result = apply_fund_strategy_correction_candidates(holdings, candidates)
+
+    row = result[result["nport_holding_id"] == "nport-1"].iloc[0]
+    assert row["index_classification"] == "REAL_ESTATE_FUND"
+    assert row["asset_class"] == "REAL_ESTATE"
+
+
+def test_apply_returns_unchanged_when_all_excluded():
+    """If all APPLY candidates are excluded transitions, return holdings unchanged."""
+    holdings = _holdings([
+        {
+            "source": "nport",
+            "nport_holding_id": "nport-1",
+            "issuer_name": "Sora Multifamily Residential",
+            "index_classification": "REAL_ESTATE_FUND",
+            "asset_class": "REAL_ESTATE",
+        },
+    ])
+    candidates = pd.DataFrame([
+        {
+            "correction_status": "APPLY",
+            "current_index_classification": "REAL_ESTATE_FUND",
+            "cik": "100",
+            "report_date": "2024-03-31",
+            "source": "nport",
+            "accession_number": "000100-24-000001",
+            "bdc_investment_identifier": "Issuer - Investment",
+            "nport_holding_id": "nport-1",
+            "proposed_index_classification": "PRIVATE_CREDIT_FUND",
+            "proposed_asset_class": "PRIVATE_CREDIT",
+        },
+    ])
+
+    result = apply_fund_strategy_correction_candidates(holdings, candidates)
+    assert result.iloc[0]["index_classification"] == "REAL_ESTATE_FUND"
+    assert result.iloc[0]["asset_class"] == "REAL_ESTATE"
+
+
+def test_apply_preserves_unmatched_holdings():
+    """Holdings rows not in the candidates table are left unchanged."""
+    holdings = _holdings([
+        {
+            "source": "bdc",
+            "bdc_investment_identifier": "Acme Corp - First Lien",
+            "nport_holding_id": "",
+            "issuer_name": "Acme Corp",
+            "index_classification": "DIRECT_LENDING",
+            "asset_class": "PRIVATE_CREDIT",
+        },
+        {
+            "source": "bdc",
+            "bdc_investment_identifier": "Beta Corp - Equity",
+            "nport_holding_id": "",
+            "issuer_name": "Beta Corp",
+            "index_classification": "COMMON_EQUITY",
+            "asset_class": "PRIVATE_EQUITY",
+        },
+    ])
+    candidates = pd.DataFrame([
+        {
+            "correction_status": "APPLY",
+            "current_index_classification": "COMMON_EQUITY",
+            "cik": "100",
+            "report_date": "2024-03-31",
+            "source": "bdc",
+            "accession_number": "000100-24-000001",
+            "bdc_investment_identifier": "Beta Corp - Equity",
+            "nport_holding_id": "",
+            "proposed_index_classification": "PRIVATE_EQUITY_FUND",
+            "proposed_asset_class": "PRIVATE_EQUITY",
+        },
+    ])
+
+    result = apply_fund_strategy_correction_candidates(holdings, candidates)
+
+    acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+    beta = result[result["issuer_name"] == "Beta Corp"].iloc[0]
+    # Acme unchanged
+    assert acme["index_classification"] == "DIRECT_LENDING"
+    assert acme["asset_class"] == "PRIVATE_CREDIT"
+    # Beta updated
+    assert beta["index_classification"] == "PRIVATE_EQUITY_FUND"
+    assert beta["asset_class"] == "PRIVATE_EQUITY"
+
+
+def test_apply_excludes_bad_signal_ciks():
+    """CIKs in _EXCLUDED_CIKS are blocked (false FUND_NAME_SIGNAL)."""
+    holdings = _holdings([
+        {
+            "cik": "1793855",  # abrdn Global Infrastructure
+            "source": "nport",
+            "bdc_investment_identifier": "",
+            "nport_holding_id": "nport-infra",
+            "issuer_name": "Cresta Highline Co-Invest Fund I LP",
+            "index_classification": "PRIVATE_EQUITY_FUND",
+            "asset_class": "PRIVATE_EQUITY",
+        },
+        {
+            "cik": "200",  # normal credit fund
+            "source": "nport",
+            "bdc_investment_identifier": "",
+            "nport_holding_id": "nport-credit",
+            "issuer_name": "Some Credit Fund LP",
+            "index_classification": "PRIVATE_EQUITY_FUND",
+            "asset_class": "PRIVATE_EQUITY",
+        },
+    ])
+    candidates = pd.DataFrame([
+        {
+            "correction_status": "APPLY",
+            "current_index_classification": "PRIVATE_EQUITY_FUND",
+            "cik": "1793855",
+            "report_date": "2024-03-31",
+            "source": "nport",
+            "accession_number": "000100-24-000001",
+            "bdc_investment_identifier": "",
+            "nport_holding_id": "nport-infra",
+            "proposed_index_classification": "PRIVATE_CREDIT_FUND",
+            "proposed_asset_class": "PRIVATE_CREDIT",
+        },
+        {
+            "correction_status": "APPLY",
+            "current_index_classification": "PRIVATE_EQUITY_FUND",
+            "cik": "200",
+            "report_date": "2024-03-31",
+            "source": "nport",
+            "accession_number": "000100-24-000001",
+            "bdc_investment_identifier": "",
+            "nport_holding_id": "nport-credit",
+            "proposed_index_classification": "PRIVATE_CREDIT_FUND",
+            "proposed_asset_class": "PRIVATE_CREDIT",
+        },
+    ])
+
+    result = apply_fund_strategy_correction_candidates(holdings, candidates)
+
+    infra = result[result["nport_holding_id"] == "nport-infra"].iloc[0]
+    credit = result[result["nport_holding_id"] == "nport-credit"].iloc[0]
+    # abrdn infrastructure CIK blocked
+    assert infra["index_classification"] == "PRIVATE_EQUITY_FUND"
+    assert infra["asset_class"] == "PRIVATE_EQUITY"
+    # Normal CIK applied
+    assert credit["index_classification"] == "PRIVATE_CREDIT_FUND"
+    assert credit["asset_class"] == "PRIVATE_CREDIT"

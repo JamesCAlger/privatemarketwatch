@@ -19,6 +19,7 @@ from pipeline.config import (
     COMBINED_UNIVERSE_FILE,
     ENTITY_LOOKUP_FILE,
     FUND_FINANCIALS_FILE,
+    FUND_STRATEGY_CORRECTION_CANDIDATES_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_EXCLUDE_CIKS,
     NPORT_HOLDINGS_FILE,
@@ -1056,8 +1057,11 @@ def build_unified_holdings(
     # Correct pct_of_net_assets for multi-entity BDCs
     combined = _correct_pct_of_net_assets(combined)
 
-    # Apply manual row corrections (last data-modifying step before schema check)
+    # Apply manual row corrections
     combined = _apply_row_corrections(combined)
+
+    # Apply fund strategy correction candidates (if file exists on disk)
+    combined = _apply_fund_strategy_corrections(combined)
 
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
@@ -1104,6 +1108,36 @@ def build_unified_holdings(
     logger.info("Unified holdings built in %.1f s", elapsed)
 
     return combined
+
+
+def _apply_fund_strategy_corrections(
+    df: pd.DataFrame,
+    candidates_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """Apply fund strategy correction candidates from disk (if file exists).
+
+    Loads the correction candidates CSV, delegates to
+    ``fund_strategy_validation.apply_fund_strategy_correction_candidates``
+    which handles APPLY filtering, excluded-transition guards, and DuckDB join.
+    """
+    path = candidates_path or FUND_STRATEGY_CORRECTION_CANDIDATES_FILE
+    if not path.exists():
+        return df
+
+    from pipeline.fund_strategy_validation import (
+        apply_fund_strategy_correction_candidates,
+    )
+
+    candidates = pd.read_csv(path, dtype=str).fillna("")
+    if candidates.empty:
+        return df
+
+    logger.info(
+        "Applying fund strategy corrections from %s (%d candidate rows)",
+        path.name,
+        len(candidates),
+    )
+    return apply_fund_strategy_correction_candidates(df, candidates)
 
 
 # Fields that row_corrections.csv is allowed to override.

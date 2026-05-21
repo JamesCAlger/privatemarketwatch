@@ -764,6 +764,24 @@ def build_fund_strategy_correction_candidates(
     return result.reindex(columns=CORRECTION_CANDIDATE_COLUMNS).fillna("")
 
 
+# Transitions excluded from automatic application.  Spot-check found that
+# RE_FUND -> PC_FUND corrections use the parent fund's credit strategy to
+# override genuinely real-estate investees (EPIC Dallas, Sora Multifamily,
+# Mavik RE Special Opportunities, Kennedy Lewis Residential Property, etc.).
+_EXCLUDED_TRANSITIONS: set[tuple[str, str]] = {
+    ("REAL_ESTATE_FUND", "PRIVATE_CREDIT_FUND"),
+}
+
+# CIKs excluded from fund strategy corrections.  The FUND_NAME_SIGNAL for
+# these funds is wrong -- "Income" in the name does not imply private credit.
+# abrdn Global Infrastructure Income Fund: infrastructure, not credit.
+# Mexico Equity & Income Fund Inc: Mexican equity, not credit.
+_EXCLUDED_CIKS: set[str] = {
+    "0001793855",  # abrdn Global Infrastructure Income Fund
+    "0000863900",  # Mexico Equity & Income Fund Inc
+}
+
+
 def apply_fund_strategy_correction_candidates(
     holdings_df: pd.DataFrame,
     candidates_df: pd.DataFrame,
@@ -772,6 +790,10 @@ def apply_fund_strategy_correction_candidates(
 
     This is deliberately separate from candidate generation so REVIEW/REJECT
     diagnostics cannot mutate data.  The key supports both BDC and N-PORT rows.
+    Uses DuckDB for the join instead of row-level Python loops.
+
+    Transitions listed in ``_EXCLUDED_TRANSITIONS`` are skipped (logged as
+    excluded) because spot-check found them to be incorrect.
     """
     if holdings_df.empty or candidates_df is None or candidates_df.empty:
         return holdings_df
@@ -789,12 +811,47 @@ def apply_fund_strategy_correction_candidates(
         )
         return holdings_df
 
+    # Filter to APPLY-only rows
     apply_rows = candidates_df[
         candidates_df["correction_status"].astype(str).str.upper() == "APPLY"
     ].copy()
     if apply_rows.empty:
         return holdings_df
 
+    # Exclude known-bad transitions
+    if "current_index_classification" in apply_rows.columns:
+        excl_mask = apply_rows.apply(
+            lambda r: (
+                str(r.get("current_index_classification", "")),
+                str(r.get("proposed_index_classification", "")),
+            ) in _EXCLUDED_TRANSITIONS,
+            axis=1,
+        )
+        n_excl_trans = int(excl_mask.sum())
+        if n_excl_trans:
+            logger.info(
+                "Fund strategy corrections: excluded %d rows with bad transitions",
+                n_excl_trans,
+            )
+            apply_rows = apply_rows[~excl_mask]
+
+    # Exclude CIKs with known-bad FUND_NAME_SIGNAL strategy assignments
+    if _EXCLUDED_CIKS:
+        norm_ciks = apply_rows["cik"].map(_normalize_cik)
+        cik_mask = norm_ciks.isin(_EXCLUDED_CIKS)
+        n_excl_cik = int(cik_mask.sum())
+        if n_excl_cik:
+            logger.info(
+                "Fund strategy corrections: excluded %d rows from %d bad-signal CIKs",
+                n_excl_cik, int(norm_ciks[cik_mask].nunique()),
+            )
+            apply_rows = apply_rows[~cik_mask]
+
+    if apply_rows.empty:
+        logger.info("Fund strategy correction candidates: no eligible APPLY rows after exclusion")
+        return holdings_df
+
+    # Ensure required columns exist in holdings
     df = holdings_df.copy()
     for col in [
         "cik", "report_date", "source", "accession_number",
@@ -803,44 +860,77 @@ def apply_fund_strategy_correction_candidates(
     ]:
         if col not in df.columns:
             df[col] = ""
-    df["_strategy_corr_key"] = (
-        df["cik"].map(_normalize_cik) + "|"
-        + df["report_date"].astype(str).str.strip() + "|"
-        + df["source"].astype(str).str.strip() + "|"
-        + df["accession_number"].astype(str).str.strip() + "|"
-        + df["bdc_investment_identifier"].astype(str).str.strip() + "|"
-        + df["nport_holding_id"].astype(str).str.strip()
-    )
-    apply_rows["_strategy_corr_key"] = (
-        apply_rows["cik"].map(_normalize_cik) + "|"
-        + apply_rows["report_date"].astype(str).str.strip() + "|"
-        + apply_rows["source"].astype(str).str.strip() + "|"
-        + apply_rows["accession_number"].astype(str).str.strip() + "|"
-        + apply_rows["bdc_investment_identifier"].astype(str).str.strip() + "|"
-        + apply_rows["nport_holding_id"].astype(str).str.strip()
-    )
 
-    patch_cols = [
-        ("index_classification", "proposed_index_classification"),
-        ("asset_class", "proposed_asset_class"),
-    ]
-    n_applied = 0
-    for row in apply_rows.to_dict("records"):
-        mask = df["_strategy_corr_key"] == row["_strategy_corr_key"]
-        if not mask.any():
-            logger.warning(
-                "Fund strategy correction candidate unmatched: key=%s",
-                row["_strategy_corr_key"],
-            )
-            continue
-        for target, proposed in patch_cols:
-            value = str(row.get(proposed, ""))
-            if value and value != str(df.loc[mask, target].iloc[0]):
-                df.loc[mask, target] = value
-                n_applied += int(mask.sum())
+    # Prepare the patch table with only the columns we need
+    patch = apply_rows[[
+        "cik", "report_date", "source", "accession_number",
+        "bdc_investment_identifier", "nport_holding_id",
+        "proposed_index_classification", "proposed_asset_class",
+    ]].copy()
 
-    df = df.drop(columns=["_strategy_corr_key"])
-    logger.info("Fund strategy correction candidates applied: %d field updates", n_applied)
+    # DuckDB join to apply corrections vectorially
+    con = duckdb.connect()
+    con.register("h", df)
+    con.register("p", patch)
+
+    result = con.execute("""
+        WITH h_keyed AS (
+            SELECT h.*,
+                ROW_NUMBER() OVER () AS _rn,
+                lpad(regexp_replace(COALESCE(CAST(cik AS VARCHAR), ''), '[^0-9]', '', 'g'), 10, '0')
+                    AS _norm_cik
+            FROM h
+        ),
+        p_keyed AS (
+            SELECT *,
+                lpad(regexp_replace(COALESCE(CAST(cik AS VARCHAR), ''), '[^0-9]', '', 'g'), 10, '0')
+                    AS _norm_cik
+            FROM p
+        ),
+        matched AS (
+            SELECT
+                h._rn,
+                p.proposed_index_classification,
+                p.proposed_asset_class
+            FROM h_keyed h
+            JOIN p_keyed p
+              ON h._norm_cik = p._norm_cik
+             AND CAST(h.report_date AS VARCHAR) = CAST(p.report_date AS VARCHAR)
+             AND CAST(h.source AS VARCHAR) = CAST(p.source AS VARCHAR)
+             AND CAST(h.accession_number AS VARCHAR) = CAST(p.accession_number AS VARCHAR)
+             AND CAST(h.bdc_investment_identifier AS VARCHAR) = CAST(p.bdc_investment_identifier AS VARCHAR)
+             AND CAST(h.nport_holding_id AS VARCHAR) = CAST(p.nport_holding_id AS VARCHAR)
+        )
+        SELECT
+            CASE WHEN m._rn IS NOT NULL AND m.proposed_index_classification != ''
+                      AND m.proposed_index_classification != CAST(h.index_classification AS VARCHAR)
+                 THEN m.proposed_index_classification
+                 ELSE CAST(h.index_classification AS VARCHAR)
+            END AS _new_ic,
+            CASE WHEN m._rn IS NOT NULL AND m.proposed_asset_class != ''
+                      AND m.proposed_asset_class != CAST(h.asset_class AS VARCHAR)
+                 THEN m.proposed_asset_class
+                 ELSE CAST(h.asset_class AS VARCHAR)
+            END AS _new_ac,
+            CASE WHEN m._rn IS NOT NULL THEN 1 ELSE 0 END AS _matched
+        FROM h_keyed h
+        LEFT JOIN matched m ON h._rn = m._rn
+        ORDER BY h._rn
+    """).fetchdf()
+    con.close()
+
+    n_matched = int(result["_matched"].sum())
+    n_ic_changed = int((result["_new_ic"] != df["index_classification"].astype(str)).sum())
+    n_ac_changed = int((result["_new_ac"] != df["asset_class"].astype(str)).sum())
+
+    df["index_classification"] = result["_new_ic"].values
+    df["asset_class"] = result["_new_ac"].values
+
+    logger.info(
+        "Fund strategy correction candidates: %d rows matched, "
+        "%d index_classification updates, %d asset_class updates",
+        n_matched, n_ic_changed, n_ac_changed,
+    )
     return df
 
 
