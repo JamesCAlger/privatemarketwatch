@@ -1,4 +1,4 @@
-import { formatPercent, formatDollar } from '@/lib/format';
+import { formatPercent } from '@/lib/format';
 import type { GicsSectorRow } from '@/lib/types';
 
 interface GicsSectorChartProps {
@@ -18,7 +18,7 @@ const SECTOR_COLORS = [
   '#A8DADC', // light teal
 ];
 const OTHER_COLOR = '#6C757D';
-const UNCLASSIFIED_COLOR = '#ADB5BD';
+const UNKNOWN_COLOR = '#ADB5BD';
 
 export default function GicsSectorChart({ data }: GicsSectorChartProps) {
   if (data.length === 0) {
@@ -26,10 +26,10 @@ export default function GicsSectorChart({ data }: GicsSectorChartProps) {
   }
 
   const segments = data.map((row, i) => {
-    const isUnclassified = row.sector === 'Unclassified';
+    const isUnknown = row.sector === 'Unknown';
     const isOther = row.sector === 'Other';
-    const color = isUnclassified
-      ? UNCLASSIFIED_COLOR
+    const color = isUnknown
+      ? UNKNOWN_COLOR
       : isOther
         ? OTHER_COLOR
         : SECTOR_COLORS[i % SECTOR_COLORS.length];
@@ -49,7 +49,7 @@ export default function GicsSectorChart({ data }: GicsSectorChartProps) {
               backgroundColor: seg.color,
               minWidth: seg.pctOfTotal > 0 ? '2px' : '0',
             }}
-            title={`${seg.sector}: ${formatPercent(seg.pctOfTotal)} (${formatDollar(seg.totalFv)})`}
+            title={`${seg.sector}: ${formatPercent(seg.pctOfTotal)}`}
           />
         ))}
       </div>
@@ -57,7 +57,7 @@ export default function GicsSectorChart({ data }: GicsSectorChartProps) {
       {/* Legend */}
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1.5">
         {segments.map((seg) => {
-          const isUnclassified = seg.sector === 'Unclassified';
+          const isUnknown = seg.sector === 'Unknown';
           return (
             <div key={seg.sector} className="flex items-center gap-2 text-sm">
               <span
@@ -65,12 +65,12 @@ export default function GicsSectorChart({ data }: GicsSectorChartProps) {
                 style={{ backgroundColor: seg.color }}
               />
               <span
-                className={`truncate ${isUnclassified ? 'text-muted italic' : 'text-navy'}`}
+                className={`truncate ${isUnknown ? 'text-muted italic' : 'text-navy'}`}
               >
                 {seg.sector}
               </span>
               <span className="ml-auto text-muted tabular-nums text-xs whitespace-nowrap">
-                {formatPercent(seg.pctOfTotal)} ({formatDollar(seg.totalFv)})
+                {formatPercent(seg.pctOfTotal)}
               </span>
             </div>
           );

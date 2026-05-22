@@ -415,6 +415,11 @@ export interface GicsSectorRow {
   totalFv: number;
   pctOfTotal: number;
   fundCount: number | null;
+  sourceBreakdown?: {
+    bdcSectorReconciledFv: number;
+    bdcHoldingsFallbackFv: number;
+    nportHoldingsFv: number;
+  };
 }
 
 /** Credit stress signal values (independent fractions, not additive) */
