@@ -250,3 +250,239 @@ def test_credit_risk_nonaccrual_affiliation_prefix_stripped(monkeypatch, tmp_pat
     # Both positions should be flagged as non-accrual after prefix stripping
     assert q["byCount"]["nonAccrual"] == 1.0
     assert q["byFv"]["nonAccrual"] == 1.0
+
+
+def test_gics_sector_export_uses_reconciled_bdc_before_holdings(monkeypatch, tmp_path):
+    holdings = tmp_path / "private_markets_holdings.csv"
+    reconciliation = tmp_path / "bdc_sector_reconciliation.csv"
+    reconciled = tmp_path / "bdc_sector_breakdown_reconciled.csv"
+    missing_raw_sector = tmp_path / "missing_bdc_sector_breakdown.csv"
+    frontend_dir = tmp_path / "frontend"
+    frontend_dir.mkdir(parents=True)
+
+    _write_rows(holdings, [
+        {
+            "source": "bdc",
+            "cik": "0000000001",
+            "report_date": "2025-03-31",
+            "issuer_name": "Accepted BDC Holding",
+            "fair_value": "100",
+            "gics_sub_industry": "Energy",
+            "extracted_industry": "",
+            "index_classification": "DIRECT_LENDING",
+        },
+        {
+            "source": "bdc",
+            "cik": "0000000002",
+            "report_date": "2025-03-31",
+            "issuer_name": "Failed BDC Holding",
+            "fair_value": "200",
+            "gics_sub_industry": "Health Care",
+            "extracted_industry": "",
+            "index_classification": "DIRECT_LENDING",
+        },
+        {
+            "source": "nport",
+            "cik": "0000000003",
+            "report_date": "2025-03-31",
+            "issuer_name": "NPORT Holding",
+            "fair_value": "300",
+            "gics_sub_industry": "Financials",
+            "extracted_industry": "",
+            "index_classification": "DIRECT_LENDING",
+        },
+    ])
+    _write_rows(reconciliation, [
+        {
+            "cik": "0000000001",
+            "report_date": "2025-03-31",
+            "holdings_fair_value": "100",
+            "raw_sector_fair_value": "100",
+            "absolute_delta": "0",
+            "relative_delta": "0",
+            "sector_row_count": "1",
+            "holdings_row_count": "1",
+            "reconciliation_status": "PASS",
+        },
+        {
+            "cik": "0000000002",
+            "report_date": "2025-03-31",
+            "holdings_fair_value": "200",
+            "raw_sector_fair_value": "500",
+            "absolute_delta": "300",
+            "relative_delta": "1.5",
+            "sector_row_count": "1",
+            "holdings_row_count": "1",
+            "reconciliation_status": "FAIL_REVIEW",
+        },
+    ])
+    _write_rows(reconciled, [
+        {
+            "cik": "0000000001",
+            "entity_name": "Accepted BDC",
+            "report_date": "2025-03-31",
+            "industry_sector": "software",
+            "investment_type": "",
+            "gics_sub_industry": "Industrials",
+            "raw_sector_fair_value": "100",
+            "reconciled_fair_value": "100",
+            "reconciliation_status": "PASS",
+            "scale_factor": "1",
+        },
+    ])
+
+    monkeypatch.setattr(analytics_exports, "UNIFIED_HOLDINGS_CSV", holdings)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_RECONCILIATION_FILE", reconciliation)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_BREAKDOWN_RECONCILED_FILE", reconciled)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_BREAKDOWN_FILE", missing_raw_sector)
+    monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(analytics_exports, "INDEX_DISPLAY_END_QUARTER", "2025q1")
+    monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+
+    con = duckdb.connect(":memory:")
+    analytics_exports._export_gics_sector_breakdown(con)
+
+    exported = json.loads((frontend_dir / "gics_sector_breakdown.json").read_text(encoding="utf-8"))
+    by_sector = {row["sector"]: row for row in exported}
+    assert by_sector["Industrials"]["totalFv"] == 100
+    assert by_sector["Industrials"]["sourceBreakdown"]["bdcSectorReconciledFv"] == 100
+    assert by_sector["Health Care"]["totalFv"] == 200
+    assert by_sector["Health Care"]["sourceBreakdown"]["bdcHoldingsFallbackFv"] == 200
+    assert by_sector["Financials"]["totalFv"] == 300
+    assert by_sector["Financials"]["sourceBreakdown"]["nportHoldingsFv"] == 300
+    assert sum(row["totalFv"] for row in exported) == 600
+    assert sum(row["pctOfTotal"] for row in exported) == 1.0
+
+
+def test_gics_sector_export_falls_back_when_bdc_reconciliation_fails(monkeypatch, tmp_path):
+    holdings = tmp_path / "private_markets_holdings.csv"
+    reconciliation = tmp_path / "bdc_sector_reconciliation.csv"
+    reconciled = tmp_path / "bdc_sector_breakdown_reconciled.csv"
+    missing_raw_sector = tmp_path / "missing_bdc_sector_breakdown.csv"
+    frontend_dir = tmp_path / "frontend"
+    frontend_dir.mkdir(parents=True)
+
+    _write_rows(holdings, [
+        {
+            "source": "bdc",
+            "cik": "0000000001",
+            "report_date": "2025-03-31",
+            "issuer_name": "Failed BDC Holding",
+            "fair_value": "100",
+            "gics_sub_industry": "Energy",
+            "extracted_industry": "",
+            "index_classification": "DIRECT_LENDING",
+        },
+    ])
+    _write_rows(reconciliation, [
+        {
+            "cik": "0000000001",
+            "report_date": "2025-03-31",
+            "holdings_fair_value": "100",
+            "raw_sector_fair_value": "500",
+            "absolute_delta": "400",
+            "relative_delta": "4",
+            "sector_row_count": "1",
+            "holdings_row_count": "1",
+            "reconciliation_status": "FAIL_REVIEW",
+        },
+    ])
+    _write_rows(reconciled, [
+        {
+            "cik": "0000000009",
+            "entity_name": "Other BDC",
+            "report_date": "2025-03-31",
+            "industry_sector": "software",
+            "investment_type": "",
+            "gics_sub_industry": "Industrials",
+            "raw_sector_fair_value": "999",
+            "reconciled_fair_value": "999",
+            "reconciliation_status": "PASS",
+            "scale_factor": "1",
+        },
+    ])
+
+    monkeypatch.setattr(analytics_exports, "UNIFIED_HOLDINGS_CSV", holdings)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_RECONCILIATION_FILE", reconciliation)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_BREAKDOWN_RECONCILED_FILE", reconciled)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_BREAKDOWN_FILE", missing_raw_sector)
+    monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(analytics_exports, "INDEX_DISPLAY_END_QUARTER", "2025q1")
+    monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+
+    con = duckdb.connect(":memory:")
+    analytics_exports._export_gics_sector_breakdown(con)
+
+    exported = json.loads((frontend_dir / "gics_sector_breakdown.json").read_text(encoding="utf-8"))
+    assert exported == [{
+        "sector": "Energy",
+        "totalFv": 100.0,
+        "pctOfTotal": 1.0,
+        "fundCount": 1,
+        "sourceBreakdown": {
+            "bdcSectorReconciledFv": 0.0,
+            "bdcHoldingsFallbackFv": 100.0,
+            "nportHoldingsFv": 0.0,
+        },
+    }]
+
+
+def test_gics_sector_export_labels_unknown_and_uses_total_denominator(monkeypatch, tmp_path):
+    holdings = tmp_path / "private_markets_holdings.csv"
+    missing_reconciliation = tmp_path / "missing_bdc_sector_reconciliation.csv"
+    missing_reconciled = tmp_path / "missing_bdc_sector_breakdown_reconciled.csv"
+    missing_raw_sector = tmp_path / "missing_bdc_sector_breakdown.csv"
+    frontend_dir = tmp_path / "frontend"
+    frontend_dir.mkdir(parents=True)
+
+    _write_rows(holdings, [
+        {
+            "source": "nport",
+            "cik": "0000000001",
+            "report_date": "2025-03-31",
+            "issuer_name": "Classified One",
+            "fair_value": "100",
+            "gics_sub_industry": "Energy",
+            "extracted_industry": "",
+            "index_classification": "DIRECT_LENDING",
+        },
+        {
+            "source": "nport",
+            "cik": "0000000002",
+            "report_date": "2025-03-31",
+            "issuer_name": "Classified Two",
+            "fair_value": "300",
+            "gics_sub_industry": "Health Care",
+            "extracted_industry": "",
+            "index_classification": "DIRECT_LENDING",
+        },
+        {
+            "source": "nport",
+            "cik": "0000000003",
+            "report_date": "2025-03-31",
+            "issuer_name": "Unknown",
+            "fair_value": "600",
+            "gics_sub_industry": "",
+            "extracted_industry": "",
+            "index_classification": "DIRECT_LENDING",
+        },
+    ])
+
+    monkeypatch.setattr(analytics_exports, "UNIFIED_HOLDINGS_CSV", holdings)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_RECONCILIATION_FILE", missing_reconciliation)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_BREAKDOWN_RECONCILED_FILE", missing_reconciled)
+    monkeypatch.setattr(analytics_exports, "BDC_SECTOR_BREAKDOWN_FILE", missing_raw_sector)
+    monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(analytics_exports, "INDEX_DISPLAY_END_QUARTER", "2025q1")
+    monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+
+    con = duckdb.connect(":memory:")
+    analytics_exports._export_gics_sector_breakdown(con)
+
+    exported = json.loads((frontend_dir / "gics_sector_breakdown.json").read_text(encoding="utf-8"))
+    by_sector = {row["sector"]: row for row in exported}
+    assert "Unclassified" not in by_sector
+    assert by_sector["Energy"]["pctOfTotal"] == 0.1
+    assert by_sector["Health Care"]["pctOfTotal"] == 0.3
+    assert by_sector["Unknown"]["pctOfTotal"] == 0.6
+    assert sum(row["totalFv"] for row in exported) == 1000

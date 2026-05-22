@@ -5,21 +5,59 @@ from pipeline.export.helpers import *
 def _export_industry_breakdown(con: duckdb.DuckDBPyConnection) -> None:
     """Export XBRL-derived industry sector breakdown.
 
-    Reads ``bdc_sector_breakdown.csv`` and produces:
+    Prefers reconciled BDC sector rows when available and produces:
     - Index-level aggregate (sum FV per sector across all CIKs, latest quarter)
     - Per-CIK breakdown (for fund detail pages)
+    - Per-CIK reconciliation status detail
     """
-    if not BDC_SECTOR_BREAKDOWN_FILE.exists():
+    source_file = (
+        BDC_SECTOR_BREAKDOWN_RECONCILED_FILE
+        if BDC_SECTOR_BREAKDOWN_RECONCILED_FILE.exists()
+        else BDC_SECTOR_BREAKDOWN_FILE
+    )
+
+    if not source_file.exists():
         logger.warning("bdc_sector_breakdown.csv not found -- skipping")
         _write_json("industry_breakdown.json", {})
         return
+
+    fv_col = (
+        "reconciled_fair_value"
+        if source_file == BDC_SECTOR_BREAKDOWN_RECONCILED_FILE
+        else "fair_value"
+    )
+    cost_expr = (
+        "TRY_CAST(cost AS DOUBLE)"
+        if source_file == BDC_SECTOR_BREAKDOWN_FILE
+        else "CAST(NULL AS DOUBLE)"
+    )
+    pct_expr = (
+        "TRY_CAST(pct_of_net_assets AS DOUBLE)"
+        if source_file == BDC_SECTOR_BREAKDOWN_FILE
+        else "CAST(NULL AS DOUBLE)"
+    )
+    status_expr = (
+        "NULLIF(reconciliation_status, '')"
+        if source_file == BDC_SECTOR_BREAKDOWN_RECONCILED_FILE
+        else "CAST(NULL AS VARCHAR)"
+    )
+
+    if (
+        BDC_SECTOR_BREAKDOWN_FILE.exists()
+        and not BDC_SECTOR_RECONCILIATION_FILE.exists()
+    ):
+        from pipeline.bdc_sector_reconciliation import (
+            reconcile_bdc_sector_breakdown,
+        )
+
+        reconcile_bdc_sector_breakdown()
 
     # Index-level: aggregate FV by GICS sub-industry for latest report_date.
     # Falls back to raw industry_sector if gics_sub_industry is missing.
     rows = con.execute(f"""
         WITH raw AS (
             SELECT * FROM read_csv_auto(
-                '{BDC_SECTOR_BREAKDOWN_FILE.as_posix()}', all_varchar=true
+                '{source_file.as_posix()}', all_varchar=true
             )
         ),
         latest AS (
@@ -35,12 +73,12 @@ def _export_industry_breakdown(con: duckdb.DuckDBPyConnection) -> None:
                     NULLIF(gics_sub_industry, ''),
                     industry_sector
                 ) AS sector_label,
-                SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv,
-                SUM(TRY_CAST(cost AS DOUBLE)) AS total_cost,
-                AVG(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS avg_pct,
+                SUM(TRY_CAST({fv_col} AS DOUBLE)) AS total_fv,
+                SUM({cost_expr}) AS total_cost,
+                AVG({pct_expr}) AS avg_pct,
                 COUNT(DISTINCT cik) AS fund_count
             FROM cur
-            WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+            WHERE TRY_CAST({fv_col} AS DOUBLE) IS NOT NULL
             GROUP BY sector_label
         ),
         with_pct AS (
@@ -73,7 +111,7 @@ def _export_industry_breakdown(con: duckdb.DuckDBPyConnection) -> None:
     cik_rows = con.execute(f"""
         WITH raw AS (
             SELECT * FROM read_csv_auto(
-                '{BDC_SECTOR_BREAKDOWN_FILE.as_posix()}', all_varchar=true
+                '{source_file.as_posix()}', all_varchar=true
             )
         ),
         per_cik_latest AS (
@@ -88,26 +126,54 @@ def _export_industry_breakdown(con: duckdb.DuckDBPyConnection) -> None:
         SELECT
             cik,
             COALESCE(NULLIF(gics_sub_industry, ''), industry_sector) AS sector,
-            TRY_CAST(fair_value AS DOUBLE) AS fair_value,
-            TRY_CAST(cost AS DOUBLE) AS cost,
-            TRY_CAST(pct_of_net_assets AS DOUBLE) AS pct_of_net_assets
+            TRY_CAST({fv_col} AS DOUBLE) AS fair_value,
+            {cost_expr} AS cost,
+            {pct_expr} AS pct_of_net_assets,
+            {status_expr} AS reconciliation_status
         FROM cur
-        WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
-        ORDER BY cik, TRY_CAST(fair_value AS DOUBLE) DESC NULLS LAST
+        WHERE TRY_CAST({fv_col} AS DOUBLE) IS NOT NULL
+        ORDER BY cik, TRY_CAST({fv_col} AS DOUBLE) DESC NULLS LAST
     """).fetchall()
 
     by_cik: dict[str, list[dict]] = {}
-    for cik, sector, fv, cost_val, pct in cik_rows:
+    for cik, sector, fv, cost_val, pct, status in cik_rows:
         by_cik.setdefault(cik, []).append({
             "sector": sector,
             "fairValue": _safe_round(fv, 0),
             "cost": _safe_round(cost_val, 0),
             "pctOfNetAssets": _safe_round(pct, 4),
+            "reconciliationStatus": status,
         })
+
+    reconciliation_detail: dict[str, list[dict]] = {}
+    if BDC_SECTOR_RECONCILIATION_FILE.exists():
+        recon_rows = con.execute(f"""
+            SELECT
+                cik,
+                report_date,
+                reconciliation_status,
+                TRY_CAST(holdings_fair_value AS DOUBLE) AS holdings_fair_value,
+                TRY_CAST(raw_sector_fair_value AS DOUBLE) AS raw_sector_fair_value,
+                TRY_CAST(relative_delta AS DOUBLE) AS relative_delta
+            FROM read_csv_auto(
+                '{BDC_SECTOR_RECONCILIATION_FILE.as_posix()}',
+                all_varchar=true
+            )
+            ORDER BY cik, report_date DESC
+        """).fetchall()
+        for cik, report_date, status, holdings_fv, raw_sector_fv, relative_delta in recon_rows:
+            reconciliation_detail.setdefault(cik, []).append({
+                "reportDate": report_date,
+                "status": status,
+                "holdingsFairValue": _safe_round(holdings_fv, 0),
+                "rawSectorFairValue": _safe_round(raw_sector_fv, 0),
+                "relativeDelta": _safe_round(relative_delta, 4),
+            })
 
     _write_json("industry_breakdown.json", {
         "indexLevel": index_level,
         "byCik": by_cik,
+        "reconciliation": reconciliation_detail,
     })
 
 

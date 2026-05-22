@@ -1180,11 +1180,11 @@ def _export_data_quality(con: duckdb.DuckDBPyConnection) -> None:
 
 
 def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
-    """GICS sector breakdown from unified holdings industry data.
+    """GICS sector breakdown from reconciled BDC sectors plus holdings fallback.
 
-    Sources industry from gics_sub_industry (populated by --classify-gics)
-    with fallback to extracted_industry (populated by identifier parsing).
-    Aggregates to GICS Industry Group level, top-10 + Other + Unclassified.
+    BDC CIK-quarters use reconciled sector filings when the CIK-quarter passes
+    sector-to-holdings reconciliation.  Rejected or missing BDC CIK-quarters
+    fall back to holdings-level GICS, and N-PORT always uses holdings-level GICS.
     """
     from pipeline.gics_mapping import _load_gics_hierarchy
 
@@ -1192,6 +1192,16 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
         logger.warning("unified holdings not found -- skipping gics_sector_breakdown")
         _write_json("gics_sector_breakdown.json", [])
         return
+
+    if (
+        BDC_SECTOR_BREAKDOWN_FILE.exists()
+        and not BDC_SECTOR_RECONCILIATION_FILE.exists()
+    ):
+        from pipeline.bdc_sector_reconciliation import (
+            reconcile_bdc_sector_breakdown,
+        )
+
+        reconcile_bdc_sector_breakdown()
 
     cutoff_date = (
         _quarter_to_date(INDEX_DISPLAY_END_QUARTER)
@@ -1216,7 +1226,9 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
             seen_keys.add(grp)
     # Identity mappings for sector names themselves
     for sector in seen_sectors:
-        hierarchy_rows.append((sector, sector))
+        if sector not in seen_keys:
+            hierarchy_rows.append((sector, sector))
+            seen_keys.add(sector)
     con.execute("DROP TABLE IF EXISTS _gics_hierarchy")
     con.execute(
         "CREATE TEMP TABLE _gics_hierarchy (sub_industry VARCHAR, sector VARCHAR)"
@@ -1225,8 +1237,58 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
         "INSERT INTO _gics_hierarchy VALUES (?, ?)", hierarchy_rows
     )
 
-    # Aggregate from unified holdings using gics_sub_industry or extracted_industry,
-    # with index_classification as a sector-level fallback for fund-type positions.
+    has_reconciled = BDC_SECTOR_BREAKDOWN_RECONCILED_FILE.exists()
+    has_reconciliation = BDC_SECTOR_RECONCILIATION_FILE.exists()
+    bdc_reconciled_cte = ""
+    accepted_join = ""
+    accepted_where = ""
+    if has_reconciled and has_reconciliation:
+        bdc_reconciled_cte = f""",
+        reconciliation AS (
+            SELECT *
+            FROM read_csv_auto(
+                '{BDC_SECTOR_RECONCILIATION_FILE.as_posix()}',
+                all_varchar=true
+            )
+        ),
+        accepted_bdc AS (
+            SELECT DISTINCT cik, report_date
+            FROM reconciliation
+            WHERE reconciliation_status IN ('PASS', 'SCALE')
+        ),
+        bdc_sector AS (
+            SELECT
+                r.cik,
+                r.report_date,
+                TRY_CAST(r.reconciled_fair_value AS DOUBLE) AS fair_value,
+                r.gics_sub_industry AS raw_industry,
+                'bdc_sector_reconciled' AS source_bucket
+            FROM read_csv_auto(
+                '{BDC_SECTOR_BREAKDOWN_RECONCILED_FILE.as_posix()}',
+                all_varchar=true
+            ) r
+            JOIN accepted_bdc ab
+              ON r.cik = ab.cik AND r.report_date = ab.report_date
+            JOIN latest_q l ON r.report_date = l.q
+            WHERE TRY_CAST(r.reconciled_fair_value AS DOUBLE) > 0
+        )"""
+        accepted_join = """
+            LEFT JOIN accepted_bdc ab
+              ON latest.cik = ab.cik AND latest.report_date = ab.report_date
+        """
+        accepted_where = "AND ab.cik IS NULL"
+    else:
+        bdc_reconciled_cte = """,
+        bdc_sector AS (
+            SELECT
+                CAST(NULL AS VARCHAR) AS cik,
+                CAST(NULL AS VARCHAR) AS report_date,
+                CAST(NULL AS DOUBLE) AS fair_value,
+                CAST(NULL AS VARCHAR) AS raw_industry,
+                CAST(NULL AS VARCHAR) AS source_bucket
+            WHERE FALSE
+        )"""
+
     rows = con.execute(f"""
         WITH raw AS (
             SELECT * FROM read_csv_auto(
@@ -1240,22 +1302,63 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
         latest AS (
             SELECT
                 cik,
+                report_date,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value,
                 COALESCE(
                     NULLIF(gics_sub_industry, ''),
                     NULLIF(extracted_industry, '')
                 ) AS raw_industry,
-                index_classification
+                index_classification,
+                source
             FROM raw
             WHERE report_date = (SELECT q FROM latest_q)
               AND TRY_CAST(fair_value AS DOUBLE) > 0
               {_exclude_consumer_lending_sql('cik')}
+        )
+        {bdc_reconciled_cte},
+        bdc_holdings_fallback AS (
+            SELECT
+                latest.cik,
+                latest.report_date,
+                latest.fair_value,
+                latest.raw_industry,
+                'bdc_holdings_fallback' AS source_bucket,
+                latest.index_classification
+            FROM latest
+            {accepted_join}
+            WHERE latest.source = 'bdc'
+              {accepted_where}
+        ),
+        nport_holdings AS (
+            SELECT
+                cik,
+                report_date,
+                fair_value,
+                raw_industry,
+                'nport_holdings' AS source_bucket,
+                index_classification
+            FROM latest
+            WHERE source <> 'bdc'
+        ),
+        hybrid AS (
+            SELECT
+                cik,
+                report_date,
+                fair_value,
+                raw_industry,
+                source_bucket,
+                CAST(NULL AS VARCHAR) AS index_classification
+            FROM bdc_sector
+            UNION ALL
+            SELECT * FROM bdc_holdings_fallback
+            UNION ALL
+            SELECT * FROM nport_holdings
         ),
         with_sector AS (
             SELECT
                 COALESCE(
                     h.sector,
-                    CASE latest.index_classification
+                    CASE hybrid.index_classification
                         WHEN 'PRIVATE_EQUITY_FUND' THEN 'Financials'
                         WHEN 'PRIVATE_CREDIT_FUND' THEN 'Financials'
                         WHEN 'HEDGE_FUND' THEN 'Financials'
@@ -1265,20 +1368,28 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
                         ELSE NULL
                     END
                 ) AS gics_sector,
-                latest.fair_value,
-                latest.cik
-            FROM latest
-            LEFT JOIN _gics_hierarchy h ON latest.raw_industry = h.sub_industry
+                hybrid.fair_value,
+                hybrid.cik,
+                hybrid.source_bucket
+            FROM hybrid
+            LEFT JOIN _gics_hierarchy h ON hybrid.raw_industry = h.sub_industry
         ),
         agg AS (
             SELECT
                 COALESCE(gics_sector, '_unclassified_') AS sector,
                 SUM(fair_value) AS total_fv,
-                COUNT(DISTINCT cik) AS fund_count
+                COUNT(DISTINCT cik) AS fund_count,
+                SUM(CASE WHEN source_bucket = 'bdc_sector_reconciled'
+                         THEN fair_value ELSE 0 END) AS bdc_sector_reconciled_fv,
+                SUM(CASE WHEN source_bucket = 'bdc_holdings_fallback'
+                         THEN fair_value ELSE 0 END) AS bdc_holdings_fallback_fv,
+                SUM(CASE WHEN source_bucket = 'nport_holdings'
+                         THEN fair_value ELSE 0 END) AS nport_holdings_fv
             FROM with_sector
             GROUP BY gics_sector
         )
-        SELECT sector, total_fv, fund_count
+        SELECT sector, total_fv, fund_count, bdc_sector_reconciled_fv,
+               bdc_holdings_fallback_fv, nport_holdings_fv
         FROM agg
         ORDER BY total_fv DESC
     """).fetchall()
@@ -1289,36 +1400,59 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
 
     grand_total = sum(float(r[1]) for r in rows)
 
-    # Separate classified sectors and unclassified; show all sectors (no top-N cutoff)
+    # Separate classified sectors and the unknown residual. The public chart
+    # displays shares on a total-FV denominator.
     classified = []
     unclassified_fv = 0.0
-    for sector, fv, fund_count in rows:
+    unclassified_sources = [0.0, 0.0, 0.0]
+    for sector, fv, fund_count, bdc_sector_fv, bdc_fallback_fv, nport_fv in rows:
         if sector == "_unclassified_":
             unclassified_fv += float(fv)
+            unclassified_sources[0] += float(bdc_sector_fv or 0)
+            unclassified_sources[1] += float(bdc_fallback_fv or 0)
+            unclassified_sources[2] += float(nport_fv or 0)
         else:
-            classified.append((sector, float(fv), fund_count))
+            classified.append((
+                sector,
+                float(fv),
+                fund_count,
+                float(bdc_sector_fv or 0),
+                float(bdc_fallback_fv or 0),
+                float(nport_fv or 0),
+            ))
 
     out = []
-    for sector, fv, fund_count in classified:
+    for sector, fv, fund_count, bdc_sector_fv, bdc_fallback_fv, nport_fv in classified:
         out.append({
             "sector": sector,
             "totalFv": _safe_round(fv, 0),
             "pctOfTotal": _safe_round(fv / grand_total, 4) if grand_total > 0 else 0,
             "fundCount": fund_count,
+            "sourceBreakdown": {
+                "bdcSectorReconciledFv": _safe_round(bdc_sector_fv, 0),
+                "bdcHoldingsFallbackFv": _safe_round(bdc_fallback_fv, 0),
+                "nportHoldingsFv": _safe_round(nport_fv, 0),
+            },
         })
 
     if unclassified_fv > 0:
         out.append({
-            "sector": "Unclassified",
+            "sector": "Unknown",
             "totalFv": _safe_round(unclassified_fv, 0),
             "pctOfTotal": _safe_round(unclassified_fv / grand_total, 4) if grand_total > 0 else 0,
             "fundCount": None,
+            "sourceBreakdown": {
+                "bdcSectorReconciledFv": _safe_round(unclassified_sources[0], 0),
+                "bdcHoldingsFallbackFv": _safe_round(unclassified_sources[1], 0),
+                "nportHoldingsFv": _safe_round(unclassified_sources[2], 0),
+            },
         })
 
     classified_fv = grand_total - unclassified_fv
     _write_json("gics_sector_breakdown.json", out)
-    logger.info("  gics_sector_breakdown: %d groups, $%.1fB classified of $%.1fB total (%.0f%%)",
-                len(out), classified_fv / 1e9, grand_total / 1e9,
+    logger.info("  gics_sector_breakdown: %d classified groups + %s, $%.1fB classified of $%.1fB total (%.0f%%)",
+                len(classified), "Unknown" if unclassified_fv > 0 else "no Unknown",
+                classified_fv / 1e9, grand_total / 1e9,
                 classified_fv / grand_total * 100 if grand_total > 0 else 0)
 
 
