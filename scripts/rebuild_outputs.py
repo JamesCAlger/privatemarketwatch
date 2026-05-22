@@ -138,18 +138,52 @@ def rebuild_financials(
 
     if include_sector_breakdown:
         from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+        from pipeline.bdc_sector_reconciliation import (
+            reconcile_bdc_sector_breakdown,
+        )
 
         logger.info("=== Rebuilding BDC sector breakdown ===")
         t1 = time.time()
         sector_df = extract_bdc_sector_breakdown()
         logger.info("Sector breakdown: %d rows in %.1f s",
                     len(sector_df), time.time() - t1)
+        logger.info("=== Rebuilding BDC sector reconciliation ===")
+        t2 = time.time()
+        reconciliation_df, reconciled_df = reconcile_bdc_sector_breakdown()
+        logger.info(
+            "Sector reconciliation: %d CIK-quarters, %d rows in %.1f s",
+            len(reconciliation_df),
+            len(reconciled_df),
+            time.time() - t2,
+        )
     else:
         logger.info(
             "=== Skipping BDC sector breakdown; pass --sector-breakdown to rebuild it ==="
         )
 
     return df
+
+
+def rebuild_sector_breakdown():
+    """Rebuild BDC sector breakdown and reconciliation from cached outputs."""
+    from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+    from pipeline.bdc_sector_reconciliation import reconcile_bdc_sector_breakdown
+
+    logger.info("=== Rebuilding BDC sector breakdown ===")
+    t0 = time.time()
+    sector_df = extract_bdc_sector_breakdown()
+    logger.info("Sector breakdown: %d rows in %.1f s", len(sector_df), time.time() - t0)
+
+    logger.info("=== Rebuilding BDC sector reconciliation ===")
+    t1 = time.time()
+    reconciliation_df, reconciled_df = reconcile_bdc_sector_breakdown()
+    logger.info(
+        "Sector reconciliation: %d CIK-quarters, %d rows in %.1f s",
+        len(reconciliation_df),
+        len(reconciled_df),
+        time.time() - t1,
+    )
+    return reconciliation_df, reconciled_df
 
 
 def rebuild_html():
@@ -255,7 +289,7 @@ def main():
     parser.add_argument("--refresh-ncsr", action="store_true",
                         help="With --financials/all, reparse cached N-CSR HTML before rebuilding fund financials")
     parser.add_argument("--sector-breakdown", action="store_true",
-                        help="With --financials/all, rebuild BDC sector breakdown")
+                        help="Rebuild BDC sector breakdown and reconciliation")
     parser.add_argument("--gics", action="store_true",
                         help="Run GICS industry classification only")
     parser.add_argument("--frontend", action="store_true",
@@ -272,7 +306,7 @@ def main():
     rebuild_all = not (
         args.bdc_holdings or args.unified or args.income or args.returns
         or args.html or args.frontend or args.financials or args.gics
-        or args.validate_rules or args.validate_all
+        or args.validate_rules or args.validate_all or args.sector_breakdown
     )
 
     t_start = time.time()
@@ -289,8 +323,11 @@ def main():
     if rebuild_all or args.financials:
         rebuild_financials(
             refresh_ncsr=args.refresh_ncsr,
-            include_sector_breakdown=args.sector_breakdown,
+            include_sector_breakdown=rebuild_all,
         )
+
+    if args.sector_breakdown:
+        rebuild_sector_breakdown()
 
     if rebuild_all or args.returns:
         rebuild_returns()

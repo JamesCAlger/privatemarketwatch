@@ -1100,6 +1100,10 @@ def build_unified_holdings(
     # Apply cached GICS classifications (if cache exists on disk)
     combined = _apply_gics_cache(combined)
 
+    # Remap GICS sub-industry for RE-strategy fund holdings (runs after
+    # _apply_gics_cache so that the LLM-assigned codes are already in place)
+    combined = _apply_re_fund_gics_overrides(combined)
+
     # Save
     combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
     logger.info("Saved to %s (%.1f MB)",
@@ -1211,6 +1215,93 @@ def _apply_fund_strategy_asset_class_override(
             logger.info("  %s -> REAL_ESTATE: %d rows", cls, count)
 
     df.loc[mask, "asset_class"] = "REAL_ESTATE"
+
+    return df
+
+
+# GICS sub-industry remapping for holdings in RE-strategy funds.
+# The LLM classifier assigns GICS based on issuer name without fund context,
+# so e.g. "BX Trust 2022-GPA" (a CMBS trust) gets "Asset Management & Custody
+# Banks" instead of a mortgage-finance code.  These 11 rules correct the most
+# common misclassifications (693 rows, $33.6B FV).
+_RE_FUND_GICS_REMAP = {
+    "Diversified Financial Services": "Diversified Real Estate Activities",
+    "Publishing": "Diversified Real Estate Activities",
+    "Industrial Conglomerates": "Industrial REITs",
+    "Diversified Support Services": "Industrial REITs",
+    "Asset Management & Custody Banks": "Commercial & Residential Mortgage Finance",
+    "Health Care Facilities": "Health Care REITs",
+    "Health Care Equipment": "Health Care REITs",
+    "Agricultural Products & Services": "Diversified Real Estate Activities",
+    "Air Freight & Logistics": "Industrial REITs",
+    "Health Care Services": "Health Care REITs",
+    "Data Processing & Outsourced Services": "Data Center REITs",
+}
+
+
+def _apply_re_fund_gics_overrides(
+    df: pd.DataFrame,
+    reference_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """Override GICS sub-industry for holdings in RE-strategy funds.
+
+    The LLM GICS classifier assigns codes based on issuer name without fund
+    context.  For RE-strategy funds, many holdings have misleading names
+    (e.g. "Industrial - Lambert Farms" -> "Industrial Conglomerates" when it
+    is actually a warehouse property).  This remaps the 11 most common
+    misclassified GICS sub-industries to their correct RE-sector equivalents.
+
+    Only applies to holdings where:
+    - The fund CIK is in the RE-strategy set (from fund_strategy_reference.csv)
+    - The current gics_sub_industry matches one of the 11 remapping rules
+    """
+    path = reference_path or FUND_STRATEGY_REFERENCE_FILE
+    if not path.exists():
+        logger.info("RE fund GICS override: no reference file, skipping")
+        return df
+
+    if df.empty:
+        return df
+
+    ref = pd.read_csv(path, dtype=str).fillna("")
+    if ref.empty or "strategy" not in ref.columns or "cik" not in ref.columns:
+        return df
+
+    re_ciks = set(
+        ref.loc[ref["strategy"] == "REAL_ESTATE", "cik"]
+        .str.strip()
+        .str.zfill(10)
+    )
+    if not re_ciks:
+        return df
+
+    norm_cik = df["cik"].astype(str).str.strip().str.zfill(10)
+    gics_col = df.get("gics_sub_industry")
+    if gics_col is None:
+        return df
+
+    mask = norm_cik.isin(re_ciks) & gics_col.isin(_RE_FUND_GICS_REMAP)
+
+    n_affected = mask.sum()
+    if n_affected == 0:
+        logger.info("RE fund GICS override: 0 rows matched")
+        return df
+
+    # Log breakdown by old -> new GICS
+    old_gics = df.loc[mask, "gics_sub_industry"].value_counts()
+    fv_affected = pd.to_numeric(df.loc[mask, "fair_value"], errors="coerce").sum()
+    logger.info(
+        "RE fund GICS override: %d rows (FV $%.1fB) remapped",
+        n_affected,
+        fv_affected / 1e9 if pd.notna(fv_affected) else 0,
+    )
+    for old_val, count in old_gics.items():
+        new_val = _RE_FUND_GICS_REMAP[old_val]
+        logger.info("  %s -> %s: %d rows", old_val, new_val, count)
+
+    df.loc[mask, "gics_sub_industry"] = df.loc[mask, "gics_sub_industry"].map(
+        _RE_FUND_GICS_REMAP
+    )
 
     return df
 

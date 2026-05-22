@@ -267,6 +267,33 @@ def _is_validate_all_only(args: argparse.Namespace) -> bool:
     )
 
 
+def _is_export_frontend_only(args: argparse.Namespace) -> bool:
+    return (
+        args.export_frontend
+        and not args.exhaustive
+        and not args.holdings
+        and not args.ciks
+        and not args.nport
+        and not args.nport_xml
+        and not args.unified
+        and not args.extract
+        and not args.validate
+        and not args.validate_rules
+        and not args.validate_all
+        and not args.llm_review
+        and not args.llm_review_dry_run
+        and not args.entities
+        and not args.returns
+        and not args.classify_gics
+        and args.gics_web_search is None
+        and not args.extract_html
+        and not args.financials
+        and not args.load_db
+        and not args.llm_fund_validation
+        and not args.classify_funds
+    )
+
+
 def _run_cached_validation(logger: logging.Logger) -> None:
     import pandas as pd
 
@@ -419,6 +446,14 @@ def main() -> None:
 
     if _is_validate_all_only(args):
         _run_validate_all(logger)
+        total = time.time() - t0
+        logger.info("=== Pipeline complete in %.1f s ===", total)
+        return
+
+    if _is_export_frontend_only(args):
+        from pipeline.export_frontend import export_all as export_frontend
+
+        export_frontend()
         total = time.time() - t0
         logger.info("=== Pipeline complete in %.1f s ===", total)
         return
@@ -598,7 +633,11 @@ def main() -> None:
 
         try:
             from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+            from pipeline.bdc_sector_reconciliation import (
+                reconcile_bdc_sector_breakdown,
+            )
             extract_bdc_sector_breakdown()
+            reconcile_bdc_sector_breakdown()
         except Exception as exc:
             logger.error("BDC sector breakdown failed: %s", exc,
                          exc_info=True)
