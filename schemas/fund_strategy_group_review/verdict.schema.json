@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evergreen.local/schemas/fund_strategy_group_review/verdict.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "group_id",
+    "verdict",
+    "confidence",
+    "mechanism",
+    "evidence_refs",
+    "recommended_next_action",
+    "residual_risk",
+    "reviewer_notes"
+  ],
+  "properties": {
+    "group_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "KEEP_REVIEW",
+        "CONFIRMED_RULE_GAP",
+        "SOURCE_CONFLICT",
+        "INSUFFICIENT_EVIDENCE",
+        "ALREADY_CLASSIFIED_CONSISTENTLY"
+      ]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "mechanism": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "recommended_next_action": {
+      "type": "string",
+      "enum": ["GLOBAL_DETERMINISTIC_RULE", "PER_CIK_CONFIG", "MANUAL_REVIEW", "NO_ACTION"]
+    },
+    "residual_risk": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewer_notes": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "CONFIRMED_RULE_GAP"
+          }
+        },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "evidence_refs": {
+            "minItems": 1
+          },
+          "recommended_next_action": {
+            "enum": ["GLOBAL_DETERMINISTIC_RULE", "PER_CIK_CONFIG", "MANUAL_REVIEW"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "ALREADY_CLASSIFIED_CONSISTENTLY"
+          }
+        },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "recommended_next_action": {
+            "const": "NO_ACTION"
+          }
+        }
+      }
+    }
+  ]
+}

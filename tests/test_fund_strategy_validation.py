@@ -10,7 +10,10 @@ from pipeline.fund_strategy_validation import (
     build_fund_strategy_validation,
     run_fund_strategy_validation,
 )
-from pipeline.unified_holdings import _apply_fund_strategy_asset_class_override
+from pipeline.unified_holdings import (
+    _apply_fund_strategy_asset_class_override,
+    _apply_re_fund_gics_overrides,
+)
 
 
 def _holdings(rows):
@@ -742,3 +745,151 @@ def test_re_override_empty_holdings_returns_empty(tmp_path):
     result = _apply_fund_strategy_asset_class_override(holdings, reference_path=ref_path)
 
     assert result.empty
+
+
+# ---------------------------------------------------------------------------
+# Tests for _apply_re_fund_gics_overrides
+# ---------------------------------------------------------------------------
+
+
+def test_re_gics_override_remaps_matching_sub_industries(tmp_path):
+    """All 11 remapping rules are applied for RE-strategy CIKs."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "gics_sub_industry": "Diversified Financial Services"},
+        {"cik": "100", "gics_sub_industry": "Publishing"},
+        {"cik": "100", "gics_sub_industry": "Industrial Conglomerates"},
+        {"cik": "100", "gics_sub_industry": "Diversified Support Services"},
+        {"cik": "100", "gics_sub_industry": "Asset Management & Custody Banks"},
+        {"cik": "100", "gics_sub_industry": "Health Care Facilities"},
+        {"cik": "100", "gics_sub_industry": "Health Care Equipment"},
+        {"cik": "100", "gics_sub_industry": "Agricultural Products & Services"},
+        {"cik": "100", "gics_sub_industry": "Air Freight & Logistics"},
+        {"cik": "100", "gics_sub_industry": "Health Care Services"},
+        {"cik": "100", "gics_sub_industry": "Data Processing & Outsourced Services"},
+    ])
+
+    result = _apply_re_fund_gics_overrides(holdings, reference_path=ref_path)
+
+    expected = [
+        "Diversified Real Estate Activities",
+        "Diversified Real Estate Activities",
+        "Industrial REITs",
+        "Industrial REITs",
+        "Commercial & Residential Mortgage Finance",
+        "Health Care REITs",
+        "Health Care REITs",
+        "Diversified Real Estate Activities",
+        "Industrial REITs",
+        "Health Care REITs",
+        "Data Center REITs",
+    ]
+    assert result["gics_sub_industry"].tolist() == expected
+
+
+def test_re_gics_override_excludes_non_remapped_codes(tmp_path):
+    """GICS codes not in the remap table are NOT changed (e.g. telecom, marine)."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "gics_sub_industry": "Integrated Telecommunication Services"},
+        {"cik": "100", "gics_sub_industry": "Marine Transportation"},
+        {"cik": "100", "gics_sub_industry": "Specialty Stores"},
+        {"cik": "100", "gics_sub_industry": "Investment Banking & Brokerage"},
+    ])
+
+    result = _apply_re_fund_gics_overrides(holdings, reference_path=ref_path)
+
+    assert result["gics_sub_industry"].tolist() == [
+        "Integrated Telecommunication Services",
+        "Marine Transportation",
+        "Specialty Stores",
+        "Investment Banking & Brokerage",
+    ]
+
+
+def test_re_gics_override_non_re_ciks_unaffected(tmp_path):
+    """CIKs with non-RE strategy are not affected even with remappable GICS."""
+    ref_path = _make_reference_csv(tmp_path, [
+        {"cik": "0000000100", "strategy": "REAL_ESTATE"},
+        {"cik": "0000000200", "strategy": "PRIVATE_CREDIT"},
+    ])
+    holdings = _holdings([
+        {"cik": "100", "gics_sub_industry": "Diversified Financial Services"},
+        {"cik": "200", "gics_sub_industry": "Diversified Financial Services"},
+    ])
+
+    result = _apply_re_fund_gics_overrides(holdings, reference_path=ref_path)
+
+    assert result.iloc[0]["gics_sub_industry"] == "Diversified Real Estate Activities"
+    assert result.iloc[1]["gics_sub_industry"] == "Diversified Financial Services"
+
+
+def test_re_gics_override_missing_reference_file(tmp_path):
+    """If the reference file doesn't exist, return holdings unchanged."""
+    holdings = _holdings([{"cik": "100", "gics_sub_industry": "Publishing"}])
+
+    result = _apply_re_fund_gics_overrides(
+        holdings, reference_path=tmp_path / "nonexistent.csv"
+    )
+
+    assert result.iloc[0]["gics_sub_industry"] == "Publishing"
+
+
+def test_re_gics_override_empty_gics_not_affected(tmp_path):
+    """Rows with empty gics_sub_industry are not touched."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "gics_sub_industry": ""},
+    ])
+
+    result = _apply_re_fund_gics_overrides(holdings, reference_path=ref_path)
+
+    assert result.iloc[0]["gics_sub_industry"] == ""
+
+
+def test_re_gics_override_already_correct_re_gics(tmp_path):
+    """Already-correct RE GICS codes (e.g. Residential REITs) are unchanged."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([
+        {"cik": "100", "gics_sub_industry": "Residential REITs"},
+        {"cik": "100", "gics_sub_industry": "Diversified Real Estate Activities"},
+        {"cik": "100", "gics_sub_industry": "Industrial REITs"},
+    ])
+
+    result = _apply_re_fund_gics_overrides(holdings, reference_path=ref_path)
+
+    assert result["gics_sub_industry"].tolist() == [
+        "Residential REITs",
+        "Diversified Real Estate Activities",
+        "Industrial REITs",
+    ]
+
+
+def test_re_gics_override_empty_holdings(tmp_path):
+    """Empty holdings DataFrame returns empty."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = pd.DataFrame(columns=["cik", "gics_sub_industry", "fair_value"])
+
+    result = _apply_re_fund_gics_overrides(holdings, reference_path=ref_path)
+
+    assert result.empty
+
+
+def test_re_gics_override_preserves_other_columns(tmp_path):
+    """The override only changes gics_sub_industry, not other classification columns."""
+    ref_path = _make_reference_csv(tmp_path, [{"cik": "0000000100", "strategy": "REAL_ESTATE"}])
+    holdings = _holdings([{
+        "cik": "100",
+        "gics_sub_industry": "Industrial Conglomerates",
+        "index_classification": "DIRECT_LENDING",
+        "asset_class": "REAL_ESTATE",
+        "issuer_name": "Industrial - Lambert Farms",
+    }])
+
+    result = _apply_re_fund_gics_overrides(holdings, reference_path=ref_path)
+
+    row = result.iloc[0]
+    assert row["gics_sub_industry"] == "Industrial REITs"
+    assert row["index_classification"] == "DIRECT_LENDING"
+    assert row["asset_class"] == "REAL_ESTATE"
+    assert row["issuer_name"] == "Industrial - Lambert Farms"
