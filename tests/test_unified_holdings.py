@@ -8111,7 +8111,8 @@ class TestLoadAggregateHeaderFlags:
             tmp_path / "nonexistent.csv",
         )
         result = _load_aggregate_header_flags()
-        assert list(result.columns) == ["name_norm"]
+        assert "name_norm" in result.columns
+        assert "identifier_raw" in result.columns
         assert len(result) == 0
 
     def test_loads_only_aggregate_header_verdicts(self, monkeypatch, tmp_path):

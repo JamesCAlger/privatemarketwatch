@@ -99,26 +99,37 @@ def _load_bdc_aggregate_overrides() -> pd.DataFrame:
 def _load_aggregate_header_flags() -> pd.DataFrame:
     """Load CC-reviewed aggregate header flags, if present.
 
-    Returns a DataFrame with a ``name_norm`` column (lowercase, legal
-    suffixes stripped) for joining against normalised issuer names.
+    Returns a DataFrame with ``name_norm`` (lowercase, legal suffixes
+    stripped) and ``identifier_raw`` (lowercased raw investment_identifier
+    from bdc_holdings, populated by backfill script) columns.  The CTE
+    join uses ``identifier_raw`` for exact matching against ``_lower_id``
+    when available, falling back to normalised ``issuer_name`` matching
+    via ``name_norm``.
+
     Only rows with verdict = 'AGGREGATE_HEADER' and confidence in
     ('high', 'medium') are returned -- JV_SUBSIDIARY and UNRESOLVABLE
     verdicts are informational and do NOT trigger exclusion.
     """
     if not AGGREGATE_HEADER_FLAGS_FILE.exists():
-        return pd.DataFrame(columns=["name_norm"])
+        return pd.DataFrame(columns=["name_norm", "identifier_raw"])
     try:
         df = pd.read_csv(AGGREGATE_HEADER_FLAGS_FILE, dtype=str)
     except Exception:
-        return pd.DataFrame(columns=["name_norm"])
+        return pd.DataFrame(columns=["name_norm", "identifier_raw"])
     if "verdict" not in df.columns or "name_norm" not in df.columns:
-        return pd.DataFrame(columns=["name_norm"])
+        return pd.DataFrame(columns=["name_norm", "identifier_raw"])
     mask = (
         (df["verdict"] == "AGGREGATE_HEADER")
         & df["confidence"].isin(["high", "medium"])
     )
-    result = df.loc[mask, ["name_norm"]].copy()
+    cols = ["name_norm"]
+    if "identifier_raw" in df.columns:
+        cols.append("identifier_raw")
+    result = df.loc[mask, cols].copy()
     result["name_norm"] = result["name_norm"].str.strip().str.lower()
+    if "identifier_raw" not in result.columns:
+        result["identifier_raw"] = ""
+    result["identifier_raw"] = result["identifier_raw"].fillna("").str.strip().str.lower()
     result = result[result["name_norm"].str.len() > 0].drop_duplicates()
     return result
 
@@ -329,30 +340,45 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     # Conditional CTE for CC-reviewed aggregate header exclusion.
     # When the aggregate_header_flags.csv file has entries, inject a CTE
     # that LEFT JOINs against the flags and filters out matches.
-    # The SQL-side name normalization mirrors _normalize_company_name():
-    # lowercase, strip legal suffixes, collapse whitespace.
+    # Two-pass matching:
+    #   1. Exact match on identifier_raw (backfilled raw investment_identifier)
+    #      against _lower_id -- precise, no normalization loss.
+    #   2. Fallback: normalized issuer_name against name_norm (original logic).
+    # Safety guard: skip exclusion when the row has position-level detail
+    # fields (interest_rate, maturity, principal, shares) to prevent
+    # false positives from normalization collisions.
     _legal_suffix_sql = (
         r",?\s*\b(llc|l\.l\.c\.|inc\.?|incorporated|corp\.?|corporation"
         r"|ltd\.?|limited|l\.p\.?|lp|co\.?|company|holdings|holding"
         r"|group|enterprises?|plc|p\.l\.c\.|n\.v\.|s\.a\.|ag|gmbh"
         r"|international|intl\.?)\b\.?\s*$"
     )
+    _detail_guard = (
+        "n._ir IS NULL "
+        "AND n._pa IS NULL AND n._sh IS NULL"
+    )
     if _has_agg_flags:
         _cc_agg_header_cte = (
             "-- CTE 5c2: Exclude CC-reviewed aggregate headers.\n"
-            "    -- Only AGGREGATE_HEADER verdicts with high/medium confidence.\n"
-            "    -- JV_SUBSIDIARY and UNRESOLVABLE are NOT excluded.\n"
+            "    -- Two-pass: (1) exact identifier_raw match on _lower_id,\n"
+            "    -- (2) fallback normalized issuer_name match on name_norm.\n"
+            "    -- Safety guard: rows with detail fields are never excluded.\n"
             "    no_cc_agg_headers AS (\n"
             "        SELECT n.* FROM no_bad_issuers n\n"
-            "        LEFT JOIN cc_aggregate_header_flags f\n"
-            "            ON TRIM(REGEXP_REPLACE(\n"
+            "        LEFT JOIN cc_aggregate_header_flags f1\n"
+            "            ON f1.identifier_raw != ''\n"
+            "            AND lower(TRIM(CAST(n._lower_id AS VARCHAR))) = f1.identifier_raw\n"
+            "        LEFT JOIN cc_aggregate_header_flags f2\n"
+            "            ON f1.identifier_raw IS NULL\n"
+            "            AND TRIM(REGEXP_REPLACE(\n"
             "                   REGEXP_REPLACE(\n"
             "                       lower(TRIM(CAST(n.issuer_name AS VARCHAR))),\n"
             f"                       '{_legal_suffix_sql}',\n"
             "                       '', 'i'),\n"
             "                   '\\s+', ' ', 'g')\n"
-            "               ) = f.name_norm\n"
-            "        WHERE f.name_norm IS NULL\n"
+            "               ) = f2.name_norm\n"
+            "        WHERE (f1.identifier_raw IS NULL AND f2.name_norm IS NULL)\n"
+            f"           OR NOT ({_detail_guard})\n"
             "    ),"
         )
         _affil_dedup_source = "no_cc_agg_headers"
