@@ -3,6 +3,7 @@
 import DataTable, { type Column } from './DataTable';
 import { formatDollarFull, returnSign } from '@/lib/format';
 import type { TopConstituent } from '@/lib/types';
+import { formatDisplayName, getFundNameParts } from '@/lib/nameFormat';
 
 const CATEGORY_LABELS: Record<string, string> = {
   EQUITY_COMMON: 'Common',
@@ -14,7 +15,8 @@ function makeColumns(indexKey: string): Column<TopConstituent>[] {
     {
       key: 'issuerName',
       header: 'Issuer',
-      format: (v) => String(v ?? '--'),
+      format: (v) => formatDisplayName(v, { kind: 'issuer' }) || '--',
+      sortValue: (v) => formatDisplayName(v, { kind: 'issuer' }).toLowerCase(),
     },
   ];
 
@@ -45,7 +47,17 @@ function makeColumns(indexKey: string): Column<TopConstituent>[] {
     {
       key: 'vehicleName',
       header: 'Vehicle',
-      format: (v) => String(v ?? '--'),
+      format: (v) => {
+        const parts = getFundNameParts(v);
+        if (!parts.displayName) return '--';
+        return (
+          <div>
+            <div>{parts.displayName}</div>
+            {parts.ticker && <div className="text-xs text-muted">{parts.ticker}</div>}
+          </div>
+        );
+      },
+      sortValue: (v) => getFundNameParts(v).displayName.toLowerCase(),
     },
     {
       key: 'totalReturn',

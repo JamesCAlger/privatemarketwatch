@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getFundDetail, getFundDetailCiks } from '@/lib/data';
 import { formatDollar, formatPercent, formatNumber, formatYears, formatQuarter } from '@/lib/format';
+import { formatDisplayName, getFundNameParts } from '@/lib/nameFormat';
 import type { FundSeriesEntry, FundExposure } from '@/lib/types';
 import VehicleTypeBadge from '@/components/VehicleTypeBadge';
 import FundPerformanceTable, { getQuarterlyReturns } from '@/components/FundPerformanceTable';
@@ -15,9 +16,10 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { cik: string } }) {
   const fund = getFundDetail(params.cik);
   if (!fund) return { title: 'Fund Not Found' };
+  const fundName = getFundNameParts(fund.name, fund.ticker).displayName;
   return {
-    title: `${fund.name} | Private Market Watch`,
-    description: `Fund one-pager for ${fund.name} (${fund.vehicleType}).`,
+    title: `${fundName} | Private Market Watch`,
+    description: `Fund one-pager for ${fundName} (${fund.vehicleType}).`,
   };
 }
 
@@ -258,6 +260,8 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   const exposure = fund.exposure;
   const topHoldings = fund.topHoldings;
   const isBdc = fund.vehicleType === 'bdc';
+  const fundNameParts = getFundNameParts(fund.name, fund.ticker);
+  const adviserName = formatDisplayName(fund.adviser, { kind: 'manager' });
 
   // Line chart (adaptive)
   const lineChart = pickLineChart(fund.series, fund.vehicleType);
@@ -356,8 +360,8 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   if (exposureStyle) {
     heroIdentity.push({ label: 'Exposure', value: exposureStyle });
   }
-  if (fund.adviser) {
-    heroIdentity.push({ label: 'Manager', value: fund.adviser });
+  if (adviserName) {
+    heroIdentity.push({ label: 'Manager', value: adviserName });
   }
 
   // Hero stats -- adaptive by vehicle type
@@ -408,10 +412,10 @@ export default function FundPage({ params }: { params: { cik: string } }) {
           <div className="flex flex-col items-start gap-3">
             <VehicleTypeBadge vehicleType={fund.vehicleType} size="md" />
             <h1 className="text-display-sm md:text-display-md text-white">
-              {fund.name}
+              {fundNameParts.displayName}
             </h1>
             <div className="flex flex-wrap items-center gap-4 text-sm text-white/60">
-              {fund.ticker && <span className="font-medium text-white/80">{fund.ticker}</span>}
+              {fundNameParts.ticker && <span className="font-medium text-white/80">{fundNameParts.ticker}</span>}
               <span>CIK {fund.cik}</span>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import type { ConcentrationRow } from '@/lib/types';
 import { formatDollar, formatPercent, formatNumber } from '@/lib/format';
 import { useInView } from '@/lib/useInView';
+import { formatDisplayName } from '@/lib/nameFormat';
 
 interface ConcentrationPieChartProps {
   data: ConcentrationRow[];
@@ -28,9 +29,10 @@ function ChartTooltip({
 }) {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
+  const displayName = formatDisplayName(d.name, { kind: 'manager' });
   return (
     <div className="bg-white shadow-panel px-4 py-3 text-sm border border-surface-muted">
-      <p className="font-semibold text-navy mb-1">{d.name}</p>
+      <p className="font-semibold text-navy mb-1">{displayName}</p>
       <p className="text-muted">
         Fair Value: <span className="text-navy font-medium">{formatDollar(d.totalFv)}</span>
       </p>
@@ -75,7 +77,7 @@ export default function ConcentrationPieChart({ data, title, colors }: Concentra
   }
 
   const legendItems = data.map((d, i) => ({
-    name: d.name,
+    name: formatDisplayName(d.name, { kind: 'manager' }),
     color: palette[i % palette.length],
     pct: d.pctOfIndex,
   }));

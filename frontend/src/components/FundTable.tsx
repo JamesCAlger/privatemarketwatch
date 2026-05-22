@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { FundListItem } from '@/lib/types';
 import { formatDollar, formatPercent, formatNumber } from '@/lib/format';
+import { formatDisplayName, getFundNameParts } from '@/lib/nameFormat';
 import VehicleTypeBadge from './VehicleTypeBadge';
 
 type SortKey = 'name' | 'totalAssets' | 'navPerShare' | 'distributionRate' | 'liquidity' | 'quarterlyReturn';
@@ -40,10 +41,18 @@ export default function FundTable({ funds }: FundTableProps) {
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(
-        (f) =>
-          f.name.toLowerCase().includes(q) ||
-          (f.adviser ?? '').toLowerCase().includes(q) ||
-          (f.ticker ?? '').toLowerCase().includes(q),
+        (f) => {
+          const fundParts = getFundNameParts(f.name, f.ticker);
+          const adviserDisplay = formatDisplayName(f.adviser, { kind: 'manager' });
+          return (
+            f.name.toLowerCase().includes(q) ||
+            fundParts.displayName.toLowerCase().includes(q) ||
+            (fundParts.ticker ?? '').toLowerCase().includes(q) ||
+            (f.ticker ?? '').toLowerCase().includes(q) ||
+            (f.adviser ?? '').toLowerCase().includes(q) ||
+            adviserDisplay.toLowerCase().includes(q)
+          );
+        },
       );
     }
 
@@ -51,8 +60,8 @@ export default function FundTable({ funds }: FundTableProps) {
       let av: number | string | null;
       let bv: number | string | null;
       if (sortKey === 'name') {
-        av = a.name.toLowerCase();
-        bv = b.name.toLowerCase();
+        av = getFundNameParts(a.name, a.ticker).displayName.toLowerCase();
+        bv = getFundNameParts(b.name, b.ticker).displayName.toLowerCase();
       } else if (sortKey === 'liquidity') {
         av = LIQUIDITY_ORDER[LIQUIDITY_LABEL[a.vehicleType] ?? ''] ?? 99;
         bv = LIQUIDITY_ORDER[LIQUIDITY_LABEL[b.vehicleType] ?? ''] ?? 99;
@@ -156,7 +165,9 @@ export default function FundTable({ funds }: FundTableProps) {
                 </td>
               </tr>
             )}
-            {filtered.map((fund, i) => (
+            {filtered.map((fund, i) => {
+              const fundParts = getFundNameParts(fund.name, fund.ticker);
+              return (
               <tr
                 key={fund.cik}
                 onClick={() => router.push(`/funds/${fund.cik}`)}
@@ -165,9 +176,9 @@ export default function FundTable({ funds }: FundTableProps) {
                 }`}
               >
                 <td className="py-3 px-4">
-                  <div className="font-medium text-navy truncate max-w-[280px]">{fund.name}</div>
-                  {fund.ticker && (
-                    <span className="text-xs text-muted">{fund.ticker}</span>
+                  <div className="font-medium text-navy truncate max-w-[280px]">{fundParts.displayName}</div>
+                  {fundParts.ticker && (
+                    <span className="text-xs text-muted">{fundParts.ticker}</span>
                   )}
                 </td>
                 <td className="py-3 px-4">
@@ -202,7 +213,8 @@ export default function FundTable({ funds }: FundTableProps) {
                   )}
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

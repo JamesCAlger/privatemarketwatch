@@ -1,12 +1,14 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import { useState, useMemo } from 'react';
 
 export interface Column<T> {
   key: keyof T & string;
   header: string;
   align?: 'left' | 'right';
-  format?: (value: any) => string;  // eslint-disable-line
+  format?: (value: any, row: T) => ReactNode;  // eslint-disable-line
+  sortValue?: (value: any, row: T) => string | number | null | undefined;  // eslint-disable-line
 }
 
 interface DataTableProps<T> {
@@ -25,9 +27,10 @@ export default function DataTable<T extends Record<string, any>>({  // eslint-di
 
   const sorted = useMemo(() => {
     if (!sortable || !sortKey) return data;
+    const sortColumn = columns.find((col) => col.key === sortKey);
     return [...data].sort((a, b) => {
-      const av = a[sortKey];
-      const bv = b[sortKey];
+      const av = sortColumn?.sortValue ? sortColumn.sortValue(a[sortKey], a) : a[sortKey];
+      const bv = sortColumn?.sortValue ? sortColumn.sortValue(b[sortKey], b) : b[sortKey];
       if (av == null && bv == null) return 0;
       if (av == null) return 1;
       if (bv == null) return -1;
@@ -36,7 +39,7 @@ export default function DataTable<T extends Record<string, any>>({  // eslint-di
         : String(av).localeCompare(String(bv));
       return sortAsc ? cmp : -cmp;
     });
-  }, [data, sortKey, sortAsc, sortable]);
+  }, [columns, data, sortKey, sortAsc, sortable]);
 
   const handleSort = (key: string) => {
     if (!sortable) return;
@@ -91,7 +94,7 @@ export default function DataTable<T extends Record<string, any>>({  // eslint-di
                   }`}
                 >
                   {col.format
-                    ? col.format(row[col.key])
+                    ? col.format(row[col.key], row)
                     : String(row[col.key] ?? '--')}
                 </td>
               ))}

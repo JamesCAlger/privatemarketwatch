@@ -241,7 +241,7 @@ export default function HomePage() {
                 Industry Exposure
               </h2>
               <span className="text-xs text-muted">
-                Holdings-level industry classification (latest quarter)
+                Reconciled BDC sector filings + holdings-level N-PORT
               </span>
             </div>
             <div className="bg-white shadow-card p-5">

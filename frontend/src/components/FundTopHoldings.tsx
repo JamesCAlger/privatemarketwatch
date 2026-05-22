@@ -1,5 +1,6 @@
 import type { FundHolding } from '@/lib/types';
 import { formatDollar, formatPercent } from '@/lib/format';
+import { formatDisplayName } from '@/lib/nameFormat';
 
 interface FundTopHoldingsProps {
   holdings: FundHolding[];
@@ -79,7 +80,7 @@ export default function FundTopHoldings({ holdings }: FundTopHoldingsProps) {
               }`}
             >
               <td className="py-2.5 px-4 font-medium text-navy max-w-[240px] truncate">
-                {h.issuerName}
+                {formatDisplayName(h.issuerName, { kind: 'issuer' })}
               </td>
               <td className="py-2.5 px-4 text-muted text-xs">
                 {formatCategory(h.assetCategory)}
