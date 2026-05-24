@@ -416,12 +416,12 @@ def _sql_is_bdc_aggregate() -> str:
         f"(starts_with(_lower_id, 'total ') AND {company_guards})"
     )
     # Also catch pipe-delimited subtotals where "Total X" is in the last segment
-    last_seg = "trim(string_split(_lower_id, ' | ')[-1])"
+    last_seg = "trim(regexp_split_to_array(_lower_id, '\\s*\\|\\s*')[-1])"
     last_seg_guards = " AND ".join(
         f"NOT contains({last_seg}, '{s}')" for s in _total_company_signals
     )
     parts.append(
-        f"(contains(_lower_id, ' | ') AND starts_with({last_seg}, 'total ') "
+        f"(regexp_matches(_lower_id, '\\|') AND starts_with({last_seg}, 'total ') "
         f"AND {last_seg_guards})"
     )
     # Percentage-prefix category subtotals: starts with "NNN.NN% " followed by
@@ -464,8 +464,8 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
         return ("", "")
 
     # Pipe-separator format
-    if " | " in identifier:
-        pipe_parts = identifier.split(" | ")
+    if "|" in identifier:
+        pipe_parts = [part.strip() for part in re.split(r"\s*\|\s*", identifier)]
         if len(pipe_parts) >= 3:
             last_seg = pipe_parts[-1].strip().lower()
             if last_seg in _AFFILIATION_TAGS:
@@ -496,6 +496,25 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
                 if seg3_is_instrument and seg2.lower() in _INDUSTRY_LABELS:
                     # company_first without legal suffix: seg2 is known industry
                     return (seg1, seg3)
+
+            seg1_lower = pipe_parts[0].strip().lower()
+            seg2_lower = pipe_parts[1].strip().lower()
+            slr_equipment_seg2_leaf = (
+                re.match(r"^equipment\s+financing\s*-\s*-?\d[\d.]*%$", seg1_lower)
+                and not seg2_lower.startswith("total ")
+                and seg2_lower not in _INDUSTRY_LABELS
+                and not re.match(
+                    r"^(?:sofr|libor|euribor|prime|s\s*\+|e\s*\+|\d|maturity|interest|reference\s+rate)",
+                    seg2_lower,
+                )
+            )
+            if slr_equipment_seg2_leaf:
+                issuer = pipe_parts[1].strip()
+                other_parts = [pipe_parts[0].strip()]
+                if len(pipe_parts) >= 3:
+                    other_parts.extend(p.strip() for p in pipe_parts[2:])
+                instrument = ", ".join(other_parts)
+                return (issuer, instrument)
 
             # SLR format: "Type | Industry | Company | ..."
             issuer = pipe_parts[2].strip()
@@ -784,8 +803,8 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
             return True
     # Also catch pipe-delimited subtotals where "Total X" is in the last
     # segment, e.g. "Corporate Bonds | Automotive | Total Automotive"
-    if " | " in lower:
-        last_seg = lower.rsplit(" | ", 1)[-1].strip()
+    if "|" in lower:
+        last_seg = re.split(r"\s*\|\s*", lower)[-1].strip()
         if last_seg.startswith("total "):
             if not any(s in last_seg for s in _total_co_signals):
                 return True

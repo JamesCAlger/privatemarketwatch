@@ -259,6 +259,69 @@ def _make_bdc_output(rows):
     return _make_unified_df(prepared)
 
 
+def _make_source_only_detail(identifiers):
+    rows = []
+    for idx, identifier in enumerate(identifiers):
+        row = {c: "" for c in RESIDUAL_CLASSIFICATION_COLUMNS}
+        row.update({
+            "status": "missing_from_pipeline",
+            "blocking_issue": True,
+            "cik": "0000000100",
+            "entity_name": "Test BDC",
+            "report_date": "2024-03-31",
+            "period": "2024-03-31",
+            "accession_number": "acc-001",
+            "source_row_id": str(idx),
+            "raw_investment_identifier": identifier,
+            "source_fair_value": "1000000",
+            "evidence": "eligible current-period source row has no pipeline output row",
+        })
+        rows.append(row)
+    from pipeline.source_reconciliation import DETAIL_COLUMNS
+    return pd.DataFrame([{col: row.get(col, "") for col in DETAIL_COLUMNS} for row in rows])
+
+
+class TestSourceOnlyBlockerClassification:
+    def _classified(self, identifier):
+        return build_source_only_blocker_detail(
+            _make_source_only_detail([identifier])
+        ).iloc[0]
+
+    def test_total_affiliates_documented_nonblocking(self):
+        row = self._classified("Total Affiliates")
+        assert row["mechanism"] == "documented_source_total_header"
+        assert row["is_blocking"] == False
+
+    def test_standalone_united_states_documented_nonblocking(self):
+        row = self._classified("United States")
+        assert row["mechanism"] == "documented_source_country_industry_header"
+        assert row["is_blocking"] == False
+
+    @pytest.mark.parametrize("identifier", [
+        "Total Investments - 215.2%",
+        "Total Investments - 208.7%",
+        "Equipment Financing - 24.1% | Total Equipment Financing",
+    ])
+    def test_slr_total_rows_documented_nonblocking(self, identifier):
+        row = self._classified(identifier)
+        assert row["mechanism"] in {
+            "documented_source_total_header",
+            "documented_source_pct_total_header",
+        }
+        assert row["is_blocking"] == False
+
+    def test_position_like_rate_row_remains_blocking(self):
+        row = self._classified(
+            "Equipment Financing - 24.1% | Air Methods Corporation | Airlines | "
+            "First Lien Term Loan | SOFR + 6.00% | 12/31/2028"
+        )
+        assert row["is_blocking"] == True
+        assert row["mechanism"] in {
+            "blocking_source_pct_leaf_parser_mismatch",
+            "blocking_source_position_like_parser_mismatch",
+        }
+
+
 # ---------------------------------------------------------------------------
 # BDC source reconciliation
 # ---------------------------------------------------------------------------
@@ -329,6 +392,52 @@ class TestBdcSourceReconciliation:
         assert metrics.iloc[0]["matched_rows"] == 1
         assert metrics.iloc[0]["strong_issue_count"] == 0
         assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_exact_override_exclude_is_documented_with_output_rows(self, monkeypatch, tmp_path):
+        import json
+        overrides_path = tmp_path / "bdc_aggregate_row_overrides.json"
+        overrides_path.write_text(json.dumps({"overrides": [{
+            "cik": "0001287032",
+            "report_date": "2024-03-31",
+            "accession_number": "0001287032-24-000152",
+            "match_text": "InterDent, Inc.",
+            "match_mode": "exact",
+            "action": "exclude",
+            "reason": "test audited parent row",
+            "evidence": "unit test",
+            "review_id": "test",
+            "updated_at": "2026-05-24",
+        }]}), encoding="utf-8")
+        monkeypatch.setattr(
+            "pipeline.bdc_aggregate_overrides.BDC_AGGREGATE_ROW_OVERRIDES_FILE",
+            overrides_path,
+        )
+        source = _make_bdc_source([{
+            "cik": "1287032",
+            "entity_name": "Prospect Capital Corporation",
+            "report_date": "2024-03-31",
+            "period": "2024-03-31",
+            "accession_number": "0001287032-24-000152",
+            "investment_identifier": "InterDent, Inc.",
+            "dimensions_raw": "investmentidentifier=InterDent, Inc.",
+            "fair_value": "5000000",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001287032",
+            "entity_name": "Prospect Capital Corporation",
+            "report_date": "2024-03-31",
+            "accession_number": "0001287032-24-000152",
+            "issuer_name": "InterDent, Inc.",
+            "bdc_investment_identifier": "InterDent, Inc. - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=InterDent, Inc. - First Lien Term Loan",
+            "fair_value": "1000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"] != ""].iloc[0]
+        assert source_row["status"] == "excluded_aggregate_candidate"
+        assert source_row["blocking_issue"] == False
+        assert "audited exact override" in source_row["evidence"]
 
     def test_affiliation_prefix_source_matches_staging_normalized_output(self):
         source = _make_bdc_source([{

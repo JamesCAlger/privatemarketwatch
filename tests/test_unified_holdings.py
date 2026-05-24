@@ -111,6 +111,30 @@ class TestParseBdcIdentifier:
         assert issuer == "Acme Corp"
         assert instrument == "Term Loan"
 
+    def test_flexible_pipe_spacing(self):
+        issuer, instrument = _parse_bdc_identifier(
+            "Acme Corp|Software|First Lien Term Loan"
+        )
+        assert issuer == "Acme Corp"
+        assert instrument == "First Lien Term Loan"
+
+    def test_slr_equipment_financing_seg2_leaf(self):
+        issuer, instrument = _parse_bdc_identifier(
+            "Equipment Financing - 24.1% | Air Methods Corporation |Airlines| "
+            "First Lien Term Loan | SOFR + 6.00% | 12/31/2028"
+        )
+        assert issuer == "Air Methods Corporation"
+        assert "Equipment Financing - 24.1%" in instrument
+        assert "Airlines" in instrument
+
+    def test_slr_equipment_financing_industry_not_issuer(self):
+        issuer, instrument = _parse_bdc_identifier(
+            "Equipment Financing - 24.1% | Diversified Consumer Services| "
+            "Total Diversified Consumer Services"
+        )
+        assert issuer == "Total Diversified Consumer Services"
+        assert "Diversified Consumer Services" in instrument
+
 
 # ---------------------------------------------------------------------------
 # _is_bdc_aggregate_row
@@ -245,6 +269,11 @@ class TestIsBdcAggregateRow:
     def test_total_equipment_financing(self):
         assert _is_bdc_aggregate_row(
             "Equipment Financing | Total Equipment Financing"
+        )
+
+    def test_total_equipment_financing_flexible_pipe_spacing(self):
+        assert _is_bdc_aggregate_row(
+            "Equipment Financing - 24.1% |Total Equipment Financing"
         )
 
     def test_total_unsecured(self):
@@ -8376,3 +8405,120 @@ class TestAggregateHeaderFlagExclusion:
         result = _prepare_bdc(df)
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+
+class TestBdcAggregateOverrides:
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def _write_overrides(self, tmp_path, overrides):
+        path = tmp_path / "bdc_aggregate_row_overrides.json"
+        import json
+        path.write_text(json.dumps({"overrides": overrides}), encoding="utf-8")
+        return path
+
+    def test_exact_exclude_preserves_detailed_same_issuer_position(self, monkeypatch, tmp_path):
+        overrides_path = self._write_overrides(tmp_path, [{
+            "cik": "0001287032",
+            "report_date": "2024-03-31",
+            "accession_number": "0001287032-24-000152",
+            "match_text": "InterDent, Inc.",
+            "match_mode": "exact",
+            "action": "exclude",
+            "reason": "test audited parent row",
+            "evidence": "unit test",
+            "review_id": "test",
+            "updated_at": "2026-05-24",
+        }])
+        monkeypatch.setattr(
+            "pipeline.bdc_aggregate_overrides.BDC_AGGREGATE_ROW_OVERRIDES_FILE",
+            overrides_path,
+        )
+
+        df = self._make_bdc_df([
+            {
+                "cik": "1287032", "report_date": "2024-03-31",
+                "accession_number": "0001287032-24-000152",
+                "investment_identifier": "InterDent, Inc.",
+                "fair_value": "5000000",
+            },
+            {
+                "cik": "1287032", "report_date": "2024-03-31",
+                "accession_number": "0001287032-24-000152",
+                "investment_identifier": "InterDent, Inc. - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+        ])
+        result = _prepare_bdc(df)
+        assert result["bdc_investment_identifier"].tolist() == [
+            "InterDent, Inc. - First Lien Term Loan"
+        ]
+
+    def test_exact_match_mode_is_not_substring(self, monkeypatch, tmp_path):
+        overrides_path = self._write_overrides(tmp_path, [{
+            "cik": "0001287032",
+            "match_text": "InterDent, Inc.",
+            "match_mode": "exact",
+            "action": "exclude",
+            "reason": "test audited parent row",
+            "evidence": "unit test",
+            "review_id": "test",
+            "updated_at": "2026-05-24",
+        }])
+        monkeypatch.setattr(
+            "pipeline.bdc_aggregate_overrides.BDC_AGGREGATE_ROW_OVERRIDES_FILE",
+            overrides_path,
+        )
+
+        df = self._make_bdc_df([{
+            "cik": "1287032",
+            "investment_identifier": "InterDent, Inc. - First Lien Term Loan",
+            "fair_value": "1000000",
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "InterDent, Inc."
+
+    def test_slr_equipment_financing_leaf_staged_from_seg2(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(
+            "pipeline.bdc_aggregate_overrides.BDC_AGGREGATE_ROW_OVERRIDES_FILE",
+            tmp_path / "missing.json",
+        )
+        df = self._make_bdc_df([{
+            "cik": "814585",
+            "investment_identifier": (
+                "Equipment Financing - 24.1% | Air Methods Corporation |Airlines| "
+                "First Lien Term Loan | SOFR + 6.00% | 12/31/2028"
+            ),
+            "fair_value": "1000000",
+        }])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Air Methods Corporation"
+
+    def test_slr_total_pipe_row_excluded(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(
+            "pipeline.bdc_aggregate_overrides.BDC_AGGREGATE_ROW_OVERRIDES_FILE",
+            tmp_path / "missing.json",
+        )
+        df = self._make_bdc_df([{
+            "cik": "814585",
+            "investment_identifier": "Equipment Financing - 24.1% | Total Equipment Financing",
+            "fair_value": "1000000",
+        }])
+        result = _prepare_bdc(df)
+        assert result.empty

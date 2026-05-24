@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import logging
 import re
 
@@ -17,6 +16,7 @@ from pipeline.bdc_identifier import (
     _INVESTMENTS_HIERARCHY_RE,
     _sql_is_bdc_aggregate,
 )
+from pipeline.bdc_aggregate_overrides import load_bdc_aggregate_overrides
 from pipeline.classification import (
     _INDUSTRY_LABELS,
     _BDC_FUND_VEHICLE_KEYWORDS,
@@ -35,67 +35,10 @@ from pipeline.classification import (
 )
 from pipeline.config import (
     AGGREGATE_HEADER_FLAGS_FILE,
-    BDC_AGGREGATE_ROW_OVERRIDES_FILE,
     FX_RATES_FILE,
 )
 
 logger = logging.getLogger(__name__)
-
-_AGGREGATE_OVERRIDE_COLUMNS = [
-    "cik",
-    "report_date",
-    "accession_number",
-    "match_text",
-    "action",
-    "reason",
-    "evidence",
-    "review_id",
-    "updated_at",
-]
-
-
-def _load_bdc_aggregate_overrides() -> pd.DataFrame:
-    """Load audited aggregate-row include/exclude overrides, if present."""
-    if not BDC_AGGREGATE_ROW_OVERRIDES_FILE.exists():
-        return pd.DataFrame(columns=[*_AGGREGATE_OVERRIDE_COLUMNS, "match_text_lower"])
-    try:
-        with BDC_AGGREGATE_ROW_OVERRIDES_FILE.open(encoding="utf-8") as fh:
-            payload = json.load(fh)
-    except Exception as exc:
-        raise ValueError(
-            f"Could not read {BDC_AGGREGATE_ROW_OVERRIDES_FILE}"
-        ) from exc
-
-    records = payload.get("overrides", payload) if isinstance(payload, dict) else payload
-    if not isinstance(records, list):
-        raise ValueError("BDC aggregate overrides must be a JSON list or {'overrides': [...]}")
-
-    df = pd.DataFrame(records)
-    for col in _AGGREGATE_OVERRIDE_COLUMNS:
-        if col not in df.columns:
-            df[col] = ""
-    required = ["cik", "match_text", "action", "reason", "evidence", "review_id", "updated_at"]
-    missing = {
-        col for col in required
-        if df[col].fillna("").astype(str).str.strip().eq("").any()
-    }
-    if missing:
-        raise ValueError(
-            "BDC aggregate overrides missing required values: "
-            + ", ".join(sorted(missing))
-        )
-    bad_actions = set(df["action"].astype(str).str.lower()) - {"include", "exclude"}
-    if bad_actions:
-        raise ValueError(f"Invalid BDC aggregate override action(s): {sorted(bad_actions)}")
-
-    df = df[_AGGREGATE_OVERRIDE_COLUMNS].copy()
-    df["cik"] = df["cik"].astype(str).str.replace(r"[^0-9]", "", regex=True).str.zfill(10)
-    for col in ["report_date", "accession_number", "match_text", "action"]:
-        df[col] = df[col].fillna("").astype(str).str.strip()
-    df["match_text_lower"] = df["match_text"].str.lower()
-    df["action"] = df["action"].str.lower()
-    return df
-
 
 def _load_aggregate_header_flags() -> pd.DataFrame:
     """Load CC-reviewed aggregate header flags, if present.
@@ -227,7 +170,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         con.register("fx_rates", pd.DataFrame(columns=[
             "currency", "rate_date", "usd_per_currency",
         ]))
-    aggregate_overrides = _load_bdc_aggregate_overrides()
+    aggregate_overrides = load_bdc_aggregate_overrides()
     con.register("bdc_aggregate_overrides", aggregate_overrides)
     agg_header_flags = _load_aggregate_header_flags()
     con.register("cc_aggregate_header_flags", agg_header_flags)
@@ -251,23 +194,35 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     coinvest_expr = _sql_is_named_coinvest()
     mm_check = _sql_money_market_check()
     industry_in = _sql_industry_label_in()
+    pipe_parts = "regexp_split_to_array(_raw_id, '\\s*\\|\\s*')"
+    has_pipe = "regexp_matches(_raw_id, '\\|')"
     affil_in = _sql_exact_match(
-        "lower(trim(string_split(_raw_id, ' | ')[-1]))", _AFFILIATION_TAGS
+        f"lower(trim({pipe_parts}[-1]))", _AFFILIATION_TAGS
     )
     # 3-pipe format detection helpers
     seg1_has_suffix = (
-        f"regexp_matches(lower(trim(string_split(_raw_id, ' | ')[1])), "
+        f"regexp_matches(lower(trim({pipe_parts}[1])), "
         f"'{_LEGAL_SUFFIX_RE_SQL}')"
     )
     seg2_has_suffix = (
-        f"regexp_matches(lower(trim(string_split(_raw_id, ' | ')[2])), "
+        f"regexp_matches(lower(trim({pipe_parts}[2])), "
         f"'{_LEGAL_SUFFIX_RE_SQL}')"
     )
     seg3_is_instrument = _sql_keyword_check(
-        "lower(trim(string_split(_raw_id, ' | ')[3]))", _PIPE_INSTRUMENT_KEYWORDS
+        f"lower(trim({pipe_parts}[3]))", _PIPE_INSTRUMENT_KEYWORDS
     )
     seg2_is_industry = _sql_exact_match(
-        "lower(trim(string_split(_raw_id, ' | ')[2]))", _INDUSTRY_LABELS
+        f"lower(trim({pipe_parts}[2]))", _INDUSTRY_LABELS
+    )
+    slr_seg2_is_leaf_issuer = (
+        f"len({pipe_parts}) >= 3 "
+        "AND regexp_matches(lower(trim("
+        f"{pipe_parts}[1])), '^equipment\\s+financing\\s*-\\s*-?\\d[\\d.]*%$') "
+        "AND NOT starts_with(lower(trim("
+        f"{pipe_parts}[2])), 'total ') "
+        f"AND NOT {_sql_exact_match(f'lower(trim({pipe_parts}[2]))', _INDUSTRY_LABELS)} "
+        "AND NOT regexp_matches(lower(trim("
+        f"{pipe_parts}[2])), '^(?:sofr|libor|euribor|prime|s\\s*\\+|e\\s*\\+|\\d|maturity|interest|reference\\s+rate)')"
     )
     name_norm = _sql_normalize_name("issuer_name")
 
@@ -559,7 +514,10 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
           ON LPAD(REGEXP_REPLACE(CAST(s.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = o.cik
          AND (o.report_date = '' OR CAST(s.report_date AS VARCHAR) = o.report_date)
          AND (o.accession_number = '' OR CAST(s.accession_number AS VARCHAR) = o.accession_number)
-         AND contains(lower(CAST(s._raw_id AS VARCHAR)), o.match_text_lower)
+         AND (
+             (o.match_mode = 'exact' AND lower(trim(CAST(s._raw_id AS VARCHAR))) = o.match_text_lower)
+             OR (o.match_mode = 'contains' AND contains(lower(CAST(s._raw_id AS VARCHAR)), o.match_text_lower))
+         )
         GROUP BY s._row_id
     ),
 
@@ -643,50 +601,55 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             --   slr:           "Type | Industry | Company | ..."     -> issuer = seg3
             CASE
                 -- 3+ pipes: last segment is affiliation tag
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
+                WHEN {has_pipe} AND len({pipe_parts}) >= 3
                      AND {affil_in}
-                THEN trim(string_split(_raw_id, ' | ')[1])
+                THEN trim({pipe_parts}[1])
                 -- 3 pipes: seg1 has legal suffix -> company-first
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                WHEN {has_pipe} AND len({pipe_parts}) = 3
                      AND {seg1_has_suffix}
-                THEN trim(string_split(_raw_id, ' | ')[1])
+                THEN trim({pipe_parts}[1])
                 -- 3 pipes: seg3 is instrument AND seg2 has legal suffix -> company in seg2
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                WHEN {has_pipe} AND len({pipe_parts}) = 3
                      AND {seg3_is_instrument}
                      AND {seg2_has_suffix}
-                THEN trim(string_split(_raw_id, ' | ')[2])
+                THEN trim({pipe_parts}[2])
                 -- 3 pipes: seg3 is instrument AND seg2 is known industry -> company in seg1
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                WHEN {has_pipe} AND len({pipe_parts}) = 3
                      AND {seg3_is_instrument}
                      AND {seg2_is_industry}
-                THEN trim(string_split(_raw_id, ' | ')[1])
+                THEN trim({pipe_parts}[1])
+                -- SLR equipment-financing leaf: "Equipment Financing - 24.1% | Company | Industry | ..."
+                WHEN {has_pipe} AND {slr_seg2_is_leaf_issuer}
+                THEN trim({pipe_parts}[2])
                 -- 3+ pipes: default SLR -> issuer = seg3
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
-                THEN trim(string_split(_raw_id, ' | ')[3])
+                WHEN {has_pipe} AND len({pipe_parts}) >= 3
+                THEN trim({pipe_parts}[3])
                 -- 2 pipes
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 2
-                THEN trim(string_split(_raw_id, ' | ')[1])
+                WHEN {has_pipe} AND len({pipe_parts}) = 2
+                THEN trim({pipe_parts}[1])
                 ELSE NULL
             END AS _pipe_issuer,
             -- Track which pipe variant for instrument_description assembly
             CASE
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
+                WHEN {has_pipe} AND len({pipe_parts}) >= 3
                      AND {affil_in}
                 THEN 'affil_last'
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                WHEN {has_pipe} AND len({pipe_parts}) = 3
                      AND {seg1_has_suffix}
                 THEN 'company_first'
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                WHEN {has_pipe} AND len({pipe_parts}) = 3
                      AND {seg3_is_instrument}
                      AND {seg2_has_suffix}
                 THEN 'company_seg2'
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 3
+                WHEN {has_pipe} AND len({pipe_parts}) = 3
                      AND {seg3_is_instrument}
                      AND {seg2_is_industry}
                 THEN 'company_first'
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) >= 3
+                WHEN {has_pipe} AND {slr_seg2_is_leaf_issuer}
+                THEN 'slr_seg2_leaf'
+                WHEN {has_pipe} AND len({pipe_parts}) >= 3
                 THEN 'slr'
-                WHEN contains(_raw_id, ' | ') AND len(string_split(_raw_id, ' | ')) = 2
+                WHEN {has_pipe} AND len({pipe_parts}) = 2
                 THEN 'two_pipe'
                 ELSE NULL
             END AS _pipe_format,
@@ -797,22 +760,30 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             CASE
                 -- 2-pipe: instrument = segment 2
                 WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'two_pipe'
-                THEN trim(string_split(_raw_id, ' | ')[2])
+                THEN trim({pipe_parts}[2])
                 -- Affiliation-last (3+): instrument = segment 2
                 WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'affil_last'
-                THEN trim(string_split(_raw_id, ' | ')[2])
+                THEN trim({pipe_parts}[2])
                 -- Company-first (3): instrument = segment 3
                 WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'company_first'
-                THEN trim(string_split(_raw_id, ' | ')[3])
+                THEN trim({pipe_parts}[3])
                 -- Company in seg2 (3): instrument = segment 3
                 WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'company_seg2'
-                THEN trim(string_split(_raw_id, ' | ')[3])
+                THEN trim({pipe_parts}[3])
+                -- SLR equipment-financing leaf: issuer = seg2, instrument = seg1 + seg3+
+                WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'slr_seg2_leaf'
+                THEN trim({pipe_parts}[1])
+                     || CASE
+                         WHEN len({pipe_parts}) >= 3
+                         THEN ', ' || trim(array_to_string({pipe_parts}[3:], ' | '))
+                         ELSE ''
+                     END
                 -- SLR (3+): combine segments 1, 2, and 4+ as instrument
                 WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'slr'
-                THEN trim(string_split(_raw_id, ' | ')[1]) || ', ' || trim(string_split(_raw_id, ' | ')[2])
+                THEN trim({pipe_parts}[1]) || ', ' || trim({pipe_parts}[2])
                      || CASE
-                         WHEN len(string_split(_raw_id, ' | ')) >= 4
-                         THEN ', ' || trim(array_to_string(string_split(_raw_id, ' | ')[4:], ' | '))
+                         WHEN len({pipe_parts}) >= 4
+                         THEN ', ' || trim(array_to_string({pipe_parts}[4:], ' | '))
                          ELSE ''
                      END
                 -- Crescent-family hierarchy rows. If a trailing tranche label

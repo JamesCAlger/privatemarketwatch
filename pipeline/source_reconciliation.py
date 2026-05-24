@@ -24,6 +24,7 @@ from pipeline.bdc_filings import (
     _parse_xbrl_contexts,
     _normalize_mixed_decimals_monetary_facts,
 )
+from pipeline.bdc_aggregate_overrides import load_bdc_aggregate_overrides
 from pipeline.bdc_identifier import (
     _AFFILIATION_PREFIX_RE,
     _AFFILIATION_SUFFIX_RE,
@@ -34,6 +35,7 @@ from pipeline.classification import (
     _BAD_ISSUER_ENTITY_SIGNALS,
     _BAD_ISSUER_NAMES_EXACT,
     _BAD_ISSUER_PREFIXES,
+    _INDUSTRY_LABELS,
     _MONEY_MARKET_KEYWORDS,
     _sql_exact_match,
     _sql_keyword_check,
@@ -382,8 +384,18 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
             r"investments?|portfolio investments?|debt investments?|equity investments?|"
             r"cash equivalents?|cash and investments?|cash and cash equivalents|"
             r"assets?|net assets?|liabilities|"
-            r"affiliate investments?|control investments?|non control non affiliate investments?"
+            r"affiliates?|affiliate investments?|control investments?|non control non affiliate investments?"
             r")(\s+at fair value)?(\s*[\u2014-]?\s*\(?-?\d+(?:\.\d+)?%\)?)?$",
+            na=False,
+        )
+    )
+    total_pipe_segment = (
+        ~entity_signal
+        & raw_lower.str.contains(r"\|", regex=True, na=False)
+        & raw_lower.str.contains(r"(^|\|)\s*total\s+[^|]+", regex=True, na=False)
+        & ~raw_lower.str.contains(
+            r"\b(total\s+\w+\s+(inc|inc\.|llc|corp|corp\.|ltd|holdings|group))\b",
+            regex=True,
             na=False,
         )
     )
@@ -456,7 +468,10 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
     )
     country_industry_header = (
         hierarchy_header_without_entity
-        & raw_lower.str.match(r"^investments\s+[a-z][a-z\s,&/-]{2,80}\s+(debt|equity)\s+investments", na=False)
+        & (
+            raw_lower.isin(_INDUSTRY_LABELS)
+            | raw_lower.str.match(r"^investments\s+[a-z][a-z\s,&/-]{2,80}\s+(debt|equity)\s+investments", na=False)
+        )
     )
     pct_total_documented = (
         ~numeric_alias
@@ -545,6 +560,7 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         True,
     )
     assign(total_header, "documented_source_total_header", "SRCONLY_TOTAL_HEADER_EXACT", "high", False)
+    assign(total_pipe_segment, "documented_source_total_header", "SRCONLY_TOTAL_PIPE_HEADER", "high", False)
     assign(cash_bucket, "documented_source_cash_or_money_market_bucket", "SRCONLY_CASH_MM_BUCKET", "high", False)
     assign(affiliation_header, "documented_source_affiliation_header", "SRCONLY_AFFILIATION_HEADER", "high", False)
     assign(country_industry_header, "documented_source_country_industry_header", "SRCONLY_COUNTRY_INDUSTRY_HEADER", "high", False)
@@ -967,6 +983,8 @@ def reconcile_bdc_source_to_holdings(
     con = duckdb.connect()
     con.register("source_raw", source)
     con.register("output_raw", output)
+    aggregate_overrides = load_bdc_aggregate_overrides()
+    con.register("bdc_aggregate_overrides", aggregate_overrides)
     agg_filter = (
         _sql_is_bdc_aggregate()
         .replace("_lower_id", "lower_id")
@@ -1074,9 +1092,31 @@ def reconcile_bdc_source_to_holdings(
                     ELSE ''
                 END AS period_status
             FROM source_prepared
+        ), aggregate_override_matches AS (
+            SELECT
+                s.source_row_id,
+                MAX(CASE WHEN o.action = 'include' THEN 1 ELSE 0 END) AS force_include,
+                MAX(CASE WHEN o.action = 'exclude' THEN 1 ELSE 0 END) AS force_exclude,
+                MAX(CASE WHEN o.action = 'exclude' AND o.match_mode = 'exact' THEN 1 ELSE 0 END)
+                    AS exact_force_exclude
+            FROM source_ranked s
+            JOIN bdc_aggregate_overrides o
+              ON s.cik = o.cik
+             AND (o.report_date = '' OR s.report_date = o.report_date)
+             AND (o.accession_number = '' OR s.accession_number = o.accession_number)
+             AND (
+                 (o.match_mode = 'exact' AND lower(trim(CAST(s.raw_investment_identifier AS VARCHAR))) = o.match_text_lower)
+                 OR (o.match_mode = 'contains' AND contains(lower(CAST(s.raw_investment_identifier AS VARCHAR)), o.match_text_lower))
+             )
+            GROUP BY s.source_row_id
         ), source_classified AS (
             SELECT *,
-                {agg_filter} AS is_aggregate_candidate,
+                CASE
+                    WHEN COALESCE(aom.force_include, 0) = 1 THEN false
+                    WHEN COALESCE(aom.force_exclude, 0) = 1 THEN true
+                    ELSE {agg_filter}
+                END AS is_aggregate_candidate,
+                COALESCE(aom.exact_force_exclude, 0) = 1 AS is_exact_override_exclude,
                 {_money_market_check_sql('lower_id')} AS is_money_market,
                 ({_bad_issuer_name_sql('staging_normalized_investment_identifier')}) AS is_bad_issuer_candidate,
                 CASE WHEN (
@@ -1096,6 +1136,8 @@ def reconcile_bdc_source_to_holdings(
                     ELSE ''
                 END AS source_exclusion_status
             FROM source_ranked
+            LEFT JOIN aggregate_override_matches aom
+              ON source_ranked.source_row_id = aom.source_row_id
         ), source_duplicate_marked AS (
             SELECT *,
                 ROW_NUMBER() OVER (
@@ -1639,7 +1681,8 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL
                         THEN 'excluded_self_referential_subtotal'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
-                         AND COALESCE(oac.output_count, 0) = 0
+                         AND (COALESCE(s.is_exact_override_exclude, false)
+                              OR COALESCE(oac.output_count, 0) = 0)
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false)
                         THEN 'excluded_money_market_fund'
@@ -1662,7 +1705,8 @@ def reconcile_bdc_source_to_holdings(
                          OR (m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL)
                          OR (
                              COALESCE(s.is_aggregate_candidate, false)
-                             AND COALESCE(oac.output_count, 0) = 0
+                             AND (COALESCE(s.is_exact_override_exclude, false)
+                                  OR COALESCE(oac.output_count, 0) = 0)
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
@@ -1681,7 +1725,8 @@ def reconcile_bdc_source_to_holdings(
                          OR (m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL)
                          OR (
                              COALESCE(s.is_aggregate_candidate, false)
-                             AND COALESCE(oac.output_count, 0) = 0
+                             AND (COALESCE(s.is_exact_override_exclude, false)
+                                  OR COALESCE(oac.output_count, 0) = 0)
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
@@ -1700,7 +1745,8 @@ def reconcile_bdc_source_to_holdings(
                          OR (m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL)
                          OR (
                              COALESCE(s.is_aggregate_candidate, false)
-                             AND COALESCE(oac.output_count, 0) = 0
+                             AND (COALESCE(s.is_exact_override_exclude, false)
+                                  OR COALESCE(oac.output_count, 0) = 0)
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
@@ -1720,7 +1766,8 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL
                         THEN 'excluded_self_referential_subtotal'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
-                         AND COALESCE(oac.output_count, 0) = 0
+                         AND (COALESCE(s.is_exact_override_exclude, false)
+                              OR COALESCE(oac.output_count, 0) = 0)
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false)
                         THEN 'excluded_money_market_fund'
@@ -1744,8 +1791,13 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL
                         THEN 'self-referential subtotal whose identifier is prefix of multiple child source rows'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
-                         AND COALESCE(oac.output_count, 0) = 0
-                        THEN 'aggregate source row has no current pipeline output rows for this accession'
+                         AND (COALESCE(s.is_exact_override_exclude, false)
+                              OR COALESCE(oac.output_count, 0) = 0)
+                        THEN CASE
+                            WHEN COALESCE(s.is_exact_override_exclude, false)
+                            THEN 'aggregate source row excluded by audited exact override'
+                            ELSE 'aggregate source row has no current pipeline output rows for this accession'
+                        END
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false)
                         THEN 'money market fund position filtered during BDC staging'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false)
@@ -1823,8 +1875,13 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL THEN
                         'self-referential subtotal; identifier is prefix of multiple child source rows'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
-                         AND COALESCE(oac.output_count, 0) = 0 THEN
-                        'aggregate source row documented because accession has no current pipeline output rows'
+                         AND (COALESCE(s.is_exact_override_exclude, false)
+                              OR COALESCE(oac.output_count, 0) = 0) THEN
+                        CASE
+                            WHEN COALESCE(s.is_exact_override_exclude, false)
+                            THEN 'aggregate source row documented by audited exact override'
+                            ELSE 'aggregate source row documented because accession has no current pipeline output rows'
+                        END
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false) THEN
                         'money market fund filtered during staging'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false) THEN
