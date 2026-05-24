@@ -1460,7 +1460,7 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
     """BDC direct-lending credit stress signal time series.
 
     Signals are independent, not mutually exclusive:
-    1. Deep distress: FV/par < 80%
+    1. Deep distress: FV/principal_amount_usd < 80%
     2. Non-accrual: flagged in BDC XBRL footnotes/dimensions
     3. Marked below cost: FV/cost < 90%
 
@@ -1567,7 +1567,7 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
                 || 'q'
                 || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value,
-                TRY_CAST(principal_amount AS DOUBLE) AS principal,
+                TRY_CAST(principal_amount_usd AS DOUBLE) AS principal,
                 TRY_CAST(cost AS DOUBLE) AS cost
             FROM raw
             WHERE source = 'bdc'
