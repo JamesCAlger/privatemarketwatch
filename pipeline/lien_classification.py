@@ -75,21 +75,26 @@ _FIRST_LIEN_KEYWORDS: list[str] = [
 def _sql_classify_lien() -> str:
     """Generate DuckDB CASE WHEN for lien position classification.
 
-    Operates on ``_combined_fund_text`` (already computed in the
-    ``with_fund_text`` CTE of unified_holdings.py) and ``_index_class``
-    (computed in the ``classified`` CTE).
+    Searches both ``_combined_fund_text`` (issuer_name + instrument_description)
+    and ``bdc_investment_identifier`` (the full XBRL typed-member string which
+    often embeds lien tier in the hierarchy, e.g.
+    "... 1st Lien/Senior Secured Debt - 125.7% Acme Corp ...").
 
-    Returns NULL for non-DIRECT_LENDING positions and for DIRECT_LENDING
-    positions where no lien keyword is found.
+    Returns NULL when no lien keyword is found.
     """
-    second = _sql_keyword_check("_combined_fund_text", _SECOND_LIEN_KEYWORDS)
-    unsecured = _sql_keyword_check("_combined_fund_text", _UNSECURED_KEYWORDS)
-    first = _sql_keyword_check("_combined_fund_text", _FIRST_LIEN_KEYWORDS)
+    _bid = "LOWER(COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''))"
+
+    second_cft = _sql_keyword_check("_combined_fund_text", _SECOND_LIEN_KEYWORDS)
+    second_bid = _sql_keyword_check(_bid, _SECOND_LIEN_KEYWORDS)
+    unsecured_cft = _sql_keyword_check("_combined_fund_text", _UNSECURED_KEYWORDS)
+    unsecured_bid = _sql_keyword_check(_bid, _UNSECURED_KEYWORDS)
+    first_cft = _sql_keyword_check("_combined_fund_text", _FIRST_LIEN_KEYWORDS)
+    first_bid = _sql_keyword_check(_bid, _FIRST_LIEN_KEYWORDS)
 
     return f"""CASE
-  WHEN {second} THEN 'Second Lien'
-  WHEN {unsecured} THEN 'Unsecured'
-  WHEN {first} THEN 'First Lien'
+  WHEN ({second_cft} OR {second_bid}) THEN 'Second Lien'
+  WHEN ({unsecured_cft} OR {unsecured_bid}) THEN 'Unsecured'
+  WHEN ({first_cft} OR {first_bid}) THEN 'First Lien'
   ELSE NULL
 END"""
 
@@ -102,11 +107,16 @@ def classify_lien(
     issuer_name: Optional[str],
     instrument_desc: Optional[str],
     index_classification: str = "DIRECT_LENDING",
+    bdc_investment_identifier: Optional[str] = None,
 ) -> Optional[str]:
     """Classify lien position from text fields.
 
     Returns 'First Lien', 'Second Lien', 'Unsecured', or None.
     Only classifies DIRECT_LENDING positions; returns None for all others.
+
+    Searches both issuer_name + instrument_desc (combined text) and the
+    full ``bdc_investment_identifier`` which may embed lien tier from the
+    XBRL dimension hierarchy.
     """
     if index_classification != "DIRECT_LENDING":
         return None
@@ -114,16 +124,17 @@ def classify_lien(
     combined = (
         (issuer_name or "").lower() + " " + (instrument_desc or "").lower()
     )
+    bid = (bdc_investment_identifier or "").lower()
 
     # Priority order: second lien > unsecured > first lien
     for kw in _SECOND_LIEN_KEYWORDS:
-        if kw in combined:
+        if kw in combined or kw in bid:
             return "Second Lien"
     for kw in _UNSECURED_KEYWORDS:
-        if kw in combined:
+        if kw in combined or kw in bid:
             return "Unsecured"
     for kw in _FIRST_LIEN_KEYWORDS:
-        if kw in combined:
+        if kw in combined or kw in bid:
             return "First Lien"
     return None
 
