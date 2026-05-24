@@ -214,31 +214,13 @@ def _compute_fund_exposure(
             SUM(CASE WHEN exposure_type = 'DIRECT' THEN fair_value ELSE 0 END) AS et_direct,
             SUM(CASE WHEN exposure_type = 'FUND' THEN fair_value ELSE 0 END) AS et_fund,
             SUM(CASE WHEN exposure_type = 'LIQUID' THEN fair_value ELSE 0 END) AS et_liquid,
-            -- Lien position (debt only)
-            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
-                      AND (LOWER(issuer_name) LIKE '%second lien%'
-                           OR LOWER(issuer_name) LIKE '%2nd lien%'
-                           OR LOWER(issuer_name) LIKE '%junior lien%'
-                           OR LOWER(issuer_name) LIKE '%junior secured%')
+            -- Lien position (debt only, from pre-computed lien_position column)
+            SUM(CASE WHEN lien_position = 'Second Lien'
                      THEN fair_value ELSE 0 END) AS second_lien_fv,
-            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
-                      AND (LOWER(issuer_name) LIKE '%unsecured%'
-                           OR LOWER(issuer_name) LIKE '%subordinat%'
-                           OR LOWER(issuer_name) LIKE '%mezzanine%')
+            SUM(CASE WHEN lien_position = 'Unsecured'
                      THEN fair_value ELSE 0 END) AS unsecured_fv,
-            -- Lien coverage: FV of positions with ANY explicit lien keyword
-            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
-                      AND (LOWER(issuer_name) LIKE '%first lien%'
-                           OR LOWER(issuer_name) LIKE '%1st lien%'
-                           OR LOWER(issuer_name) LIKE '%senior secured%'
-                           OR LOWER(issuer_name) LIKE '%second lien%'
-                           OR LOWER(issuer_name) LIKE '%2nd lien%'
-                           OR LOWER(issuer_name) LIKE '%junior lien%'
-                           OR LOWER(issuer_name) LIKE '%junior secured%'
-                           OR LOWER(issuer_name) LIKE '%unsecured%'
-                           OR LOWER(issuer_name) LIKE '%subordinat%'
-                           OR LOWER(issuer_name) LIKE '%mezzanine%'
-                           OR LOWER(issuer_name) LIKE '%unitranche%')
+            -- Lien coverage: FV of positions with ANY lien classification
+            SUM(CASE WHEN lien_position IS NOT NULL
                      THEN fair_value ELSE 0 END) AS lien_identified_fv,
             -- Rate type (debt only)
             SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
@@ -513,20 +495,7 @@ def _compute_fund_top_holdings(
                           AND TRY_CAST(maturity_date AS DATE) < TRY_CAST(report_date AS DATE) + INTERVAL 30 YEAR
                      THEN maturity_date ELSE NULL
                 END AS maturity_date_clean,
-                CASE WHEN LOWER(issuer_name) LIKE '%second lien%'
-                          OR LOWER(issuer_name) LIKE '%2nd lien%'
-                          OR LOWER(issuer_name) LIKE '%junior%'
-                     THEN 'Second Lien'
-                     WHEN LOWER(issuer_name) LIKE '%unsecured%'
-                          OR LOWER(issuer_name) LIKE '%subordinat%'
-                          OR LOWER(issuer_name) LIKE '%mezzanine%'
-                     THEN 'Unsecured'
-                     WHEN LOWER(issuer_name) LIKE '%first lien%'
-                          OR LOWER(issuer_name) LIKE '%1st lien%'
-                          OR LOWER(issuer_name) LIKE '%senior secured%'
-                     THEN 'First Lien'
-                     ELSE NULL
-                END AS lien_position,
+                lien_position,
                 ROW_NUMBER() OVER (
                     ORDER BY
                         fair_value DESC NULLS LAST,

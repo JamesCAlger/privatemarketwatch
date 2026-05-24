@@ -441,15 +441,10 @@ def _export_portfolio_characteristics(
                               THEN fair_value END), 0)
             AS wam,
 
-            -- Lien split by FV (parse lien position from issuer_name text)
-            SUM(CASE WHEN LOWER(issuer_name) LIKE '%second lien%'
-                       OR LOWER(issuer_name) LIKE '%2nd lien%'
-                       OR LOWER(issuer_name) LIKE '%junior lien%'
-                       OR LOWER(issuer_name) LIKE '%junior secured%'
+            -- Lien split by FV (from pre-computed lien_position column)
+            SUM(CASE WHEN lien_position = 'Second Lien'
                      THEN fair_value ELSE 0 END) AS second_lien_fv,
-            SUM(CASE WHEN LOWER(issuer_name) LIKE '%unsecured%'
-                       OR LOWER(issuer_name) LIKE '%subordinat%'
-                       OR LOWER(issuer_name) LIKE '%mezzanine%'
+            SUM(CASE WHEN lien_position = 'Unsecured'
                      THEN fair_value ELSE 0 END) AS unsecured_fv,
 
             -- Rate type split

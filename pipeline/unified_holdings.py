@@ -13,7 +13,7 @@ from typing import Optional, Union
 import duckdb
 import pandas as pd
 
-from pipeline import classification, staging_bdc, staging_nport
+from pipeline import classification, lien_classification, staging_bdc, staging_nport
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     COMBINED_UNIVERSE_FILE,
@@ -47,6 +47,9 @@ UNIFIED_COLUMNS = [
     # Valuation
     "fair_value", "cost", "pct_of_net_assets",
     "shares_held", "principal_amount",
+    "fair_value_currency", "cost_currency",
+    "principal_amount_currency", "principal_amount_usd",
+    "principal_fx_rate_to_usd", "principal_fx_status",
     # Classification
     "asset_category", "issuer_category", "index_classification",
     "exposure_type", "asset_class",
@@ -74,6 +77,8 @@ UNIFIED_COLUMNS = [
     "extracted_industry",
     # GICS classification (populated by --classify-gics step)
     "gics_sub_industry",
+    # Lien position (First Lien / Second Lien / Unsecured; DIRECT_LENDING only)
+    "lien_position",
     # Position tracking (populated by --returns step)
     "position_id",
 ]
@@ -292,7 +297,9 @@ def _restore_deterministic_classification_rules(df: pd.DataFrame) -> pd.DataFram
     bdc_vehicle_fund = classification._sql_is_bdc_vehicle_fund()
     restore_predicate = f"({sc_kw} OR {bdc_vehicle_fund})"
 
-    override_set = {"index_classification", "asset_class"}
+    lien_case = lien_classification._sql_classify_lien()
+
+    override_set = {"index_classification", "asset_class", "lien_position"}
     pass_cols = [f"s.{c}" for c in UNIFIED_COLUMNS if c not in override_set]
     sql = f"""
     WITH keyed AS (
@@ -305,6 +312,7 @@ def _restore_deterministic_classification_rules(df: pd.DataFrame) -> pd.DataFram
         SELECT *,
             {idx_case} AS _rule_index_classification,
             {asset_class_case} AS _rule_asset_class,
+            {lien_case} AS _rule_lien,
             {restore_predicate} AS _restore_classification
         FROM keyed
     )
@@ -316,7 +324,12 @@ def _restore_deterministic_classification_rules(df: pd.DataFrame) -> pd.DataFram
            CASE WHEN _restore_classification
                 THEN _rule_asset_class
                 ELSE CAST(s.asset_class AS VARCHAR)
-           END AS asset_class
+           END AS asset_class,
+           CASE WHEN _restore_classification
+                THEN CASE WHEN _rule_index_classification = 'DIRECT_LENDING'
+                          THEN CAST(_rule_lien AS VARCHAR) ELSE NULL END
+                ELSE CAST(s.lien_position AS VARCHAR)
+           END AS lien_position
     FROM reclassified s
     """
 
@@ -523,6 +536,21 @@ def _apply_gics_cache(combined: pd.DataFrame) -> pd.DataFrame:
     return combined
 
 
+def _apply_lien_cache(combined: pd.DataFrame) -> pd.DataFrame:
+    """Apply cached lien position classifications from lien_cache.csv.
+
+    Runs automatically during --unified so that agent-reviewed lien data
+    survives rebuilds.  No LLM calls -- only the on-disk cache is read.
+    """
+    from pipeline.config import LIEN_CACHE_FILE
+
+    if not LIEN_CACHE_FILE.exists():
+        return combined
+
+    result = lien_classification._apply_lien_cache(combined)
+    return result
+
+
 # ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
@@ -580,7 +608,11 @@ def build_unified_holdings(
     idx_case = classification._sql_classify_index()
     exposure_case = classification._sql_classify_exposure_type()
     asset_class_case = classification._sql_classify_asset_class()
-    _special_cols = {"index_classification", "exposure_type", "asset_class", "principal_amount", "cusip"}
+    lien_case = lien_classification._sql_classify_lien()
+    _special_cols = {
+        "index_classification", "exposure_type", "asset_class", "lien_position",
+        "principal_amount", "principal_amount_usd", "principal_fx_status", "cusip",
+    }
     col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _special_cols)
     # Use explicit column list for UNION ALL to avoid positional mismatch
     union_cols = ", ".join(UNIFIED_COLUMNS)
@@ -766,7 +798,8 @@ def build_unified_holdings(
         SELECT *,
             {idx_case} AS _index_class,
             {exposure_case} AS _exposure_type,
-            {asset_class_case} AS _asset_class
+            {asset_class_case} AS _asset_class,
+            {lien_case} AS _lien_raw
         FROM with_fund_text
     ),
     -- Cost proxy: fill NULL/zero cost with first observed fair_value
@@ -884,9 +917,21 @@ def build_unified_holdings(
                  'PRIVATE_EQUITY_FUND', 'PRIVATE_CREDIT_FUND',
                  'REAL_ESTATE_FUND', 'HEDGE_FUND'
              ) THEN NULL ELSE principal_amount END AS principal_amount,
+        CASE WHEN _index_class IN (
+                 'COMMON_EQUITY', 'PREFERRED_EQUITY',
+                 'PRIVATE_EQUITY_FUND', 'PRIVATE_CREDIT_FUND',
+                 'REAL_ESTATE_FUND', 'HEDGE_FUND'
+             ) THEN NULL ELSE principal_amount_usd END AS principal_amount_usd,
+        CASE WHEN _index_class IN (
+                 'COMMON_EQUITY', 'PREFERRED_EQUITY',
+                 'PRIVATE_EQUITY_FUND', 'PRIVATE_CREDIT_FUND',
+                 'REAL_ESTATE_FUND', 'HEDGE_FUND'
+             ) THEN '' ELSE principal_fx_status END AS principal_fx_status,
         _index_class AS index_classification,
         _exposure_type AS exposure_type,
-        _asset_class AS asset_class
+        _asset_class AS asset_class,
+        CASE WHEN _index_class = 'DIRECT_LENDING' THEN _lien_raw
+             ELSE NULL END AS lien_position
     FROM with_shares_fix
     """
 
@@ -1100,6 +1145,9 @@ def build_unified_holdings(
     # Apply cached GICS classifications (if cache exists on disk)
     combined = _apply_gics_cache(combined)
 
+    # Apply cached lien position classifications (if cache exists on disk)
+    combined = _apply_lien_cache(combined)
+
     # Remap GICS sub-industry for RE-strategy fund holdings (runs after
     # _apply_gics_cache so that the LLM-assigned codes are already in place)
     combined = _apply_re_fund_gics_overrides(combined)
@@ -1308,7 +1356,8 @@ def _apply_re_fund_gics_overrides(
 
 # Fields that row_corrections.csv is allowed to override.
 _CORRECTABLE_FIELDS = frozenset({
-    "fair_value", "cost", "principal_amount",
+    "fair_value", "cost", "principal_amount", "principal_amount_usd",
+    "principal_amount_currency", "principal_fx_rate_to_usd", "principal_fx_status",
     "interest_rate", "basis_spread", "pik_rate", "shares_held",
     "index_classification", "exposure_type", "asset_class",
     "issuer_name", "instrument_description",
@@ -1520,6 +1569,10 @@ def _enforce_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
          "SELECT COUNT(*) FROM unified"
          " WHERE TRY_CAST(principal_amount AS DOUBLE) IS NOT NULL"
          "   AND TRY_CAST(principal_amount AS DOUBLE) < 0"),
+        ("principal_usd_not_negative",
+         "SELECT COUNT(*) FROM unified"
+         " WHERE TRY_CAST(principal_amount_usd AS DOUBLE) IS NOT NULL"
+         "   AND TRY_CAST(principal_amount_usd AS DOUBLE) < 0"),
 
         # --- Layer 3: Relational / logical (catches transform logic bugs) ---
         ("bdc_has_identifier",
@@ -1586,6 +1639,8 @@ def _log_summary(df: pd.DataFrame) -> None:
             pct = 100 * filled.sum() / total if total else 0
             logger.info("  %-30s %.1f%%", label + ":", pct)
 
+    _log_fx_coverage(df)
+
     # Quarter range
     quarters = set()
     # From N-PORT quarter column
@@ -1604,3 +1659,33 @@ def _log_summary(df: pd.DataFrame) -> None:
     if quarters:
         sorted_q = sorted(quarters)
         logger.info("  Quarters covered: %s - %s", sorted_q[0], sorted_q[-1])
+
+
+def _log_fx_coverage(df: pd.DataFrame) -> None:
+    """Log USD-normalized principal coverage for rows with source-native par."""
+    if df.empty or "principal_amount" not in df.columns:
+        return
+
+    principal = pd.to_numeric(df.get("principal_amount"), errors="coerce")
+    principal_usd = pd.to_numeric(df.get("principal_amount_usd"), errors="coerce")
+    fair_value = pd.to_numeric(df.get("fair_value"), errors="coerce").fillna(0)
+    currency = df.get("principal_amount_currency", pd.Series("", index=df.index))
+    currency = currency.fillna("").astype(str).str.upper().str.strip()
+
+    has_principal = principal.notna()
+    non_usd = has_principal & ~currency.isin(["", "USD"])
+    converted = has_principal & principal_usd.notna()
+    missing = has_principal & principal_usd.isna()
+    affected_fv = float(fair_value[non_usd].sum())
+    total_fv = float(fair_value.sum())
+    affected_share = affected_fv / total_fv if total_fv else 0
+
+    logger.info(
+        "  Principal FX coverage: %d rows with principal, %d non-USD, "
+        "%d converted, %d missing USD principal, %.2f%% FV non-USD affected",
+        int(has_principal.sum()),
+        int(non_usd.sum()),
+        int((non_usd & converted).sum()),
+        int((non_usd & missing).sum()),
+        affected_share * 100,
+    )

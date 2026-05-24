@@ -9,6 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 REFERENCE_DIR = DATA_DIR / "reference"
+FX_RATES_FILE = REFERENCE_DIR / "fx_rates.csv"
 SEC_DATASETS_DIR = RAW_DIR / "sec_datasets"
 FILINGS_DIR = RAW_DIR / "filings"
 THIRD_PARTY_DIR = RAW_DIR / "third_party"
@@ -226,6 +227,17 @@ COMPANY_GICS_CACHE_FILE = OUTPUT_DIR / "company_gics_cache.csv"
 AGGREGATE_HEADER_FLAGS_FILE = OUTPUT_DIR / "aggregate_header_flags.csv"
 GICS_SKILL_BATCHES_DIR = OUTPUT_DIR / "gics_skill_batches"
 GICS_SKILL_CLAIMS_FILE = OUTPUT_DIR / "gics_skill_claims.json"
+
+# Unclassified review CC skill
+UNCLASSIFIED_SKILL_BATCHES_DIR = OUTPUT_DIR / "unclassified_skill_batches"
+UNCLASSIFIED_SKILL_CLAIMS_FILE = OUTPUT_DIR / "unclassified_skill_claims.json"
+UNCLASSIFIED_NEEDS_REVIEW_FILE = OUTPUT_DIR / "unclassified_needs_review.csv"
+UNCLASSIFIED_REVIEW_CACHE_FILE = OUTPUT_DIR / "unclassified_review_cache.csv"
+
+# Lien position classification
+LIEN_CACHE_FILE = OUTPUT_DIR / "lien_cache.csv"
+LIEN_SKILL_BATCHES_DIR = OUTPUT_DIR / "lien_skill_batches"
+LIEN_SKILL_CLAIMS_FILE = OUTPUT_DIR / "lien_skill_claims.json"
 
 # LLM review outputs
 LLM_REVIEW_CANDIDATES_FILE = OUTPUT_DIR / "llm_review_candidates.csv"
