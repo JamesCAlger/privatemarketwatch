@@ -128,6 +128,83 @@ def _make_basic_holdings(n_bdc=10, n_nport=5):
     return _make_unified_df(rows)
 
 
+def test_column_validation_uses_principal_amount_usd_for_par_ratio():
+    from pipeline.column_validation import validate_column_contracts
+
+    df = _make_unified_df([{
+        "source": "bdc",
+        "cik": "0000000100",
+        "entity_name": "Test BDC",
+        "issuer_name": "Acme Corp",
+        "instrument_description": "First Lien Term Loan",
+        "report_date": "2024-03-31",
+        "accession_number": "acc",
+        "fair_value": "900",
+        "principal_amount": "15000",
+        "principal_amount_currency": "CAD",
+        "principal_amount_usd": "1000",
+        "principal_fx_status": "reference_fx",
+        "index_classification": "DIRECT_LENDING",
+        "exposure_type": "DIRECT",
+        "asset_class": "PRIVATE_CREDIT",
+        "asset_category": "LOAN",
+        "issuer_category": "CORPORATE",
+    }])
+
+    issues, _ = validate_column_contracts(df)
+    assert "X06" not in set(issues["rule_id"])
+
+
+def test_column_validation_flags_fx_residuals():
+    from pipeline.column_validation import validate_column_contracts
+
+    df = _make_unified_df([
+        {
+            "source": "bdc",
+            "cik": "0000000100",
+            "entity_name": "Test BDC",
+            "issuer_name": "Acme Corp",
+            "instrument_description": "First Lien Term Loan",
+            "report_date": "2024-03-31",
+            "accession_number": "acc",
+            "fair_value": "900",
+            "cost": "850",
+            "fair_value_currency": "EUR",
+            "cost_currency": "CAD",
+            "principal_amount": "1000",
+            "principal_amount_currency": "EUR",
+            "principal_amount_usd": "",
+            "principal_fx_status": "missing_reference_fx",
+            "index_classification": "DIRECT_LENDING",
+            "exposure_type": "DIRECT",
+            "asset_class": "PRIVATE_CREDIT",
+            "asset_category": "LOAN",
+            "issuer_category": "CORPORATE",
+        },
+        {
+            "source": "nport",
+            "cik": "0000000200",
+            "entity_name": "Test Fund",
+            "issuer_name": "Beta Corp",
+            "instrument_description": "Term Loan",
+            "report_date": "2024-03-31",
+            "fair_value": "900",
+            "principal_amount": "1000",
+            "principal_amount_currency": "CAD",
+            "principal_amount_usd": "",
+            "principal_fx_status": "invalid_nport_exchange_rate",
+            "index_classification": "DIRECT_LENDING",
+            "exposure_type": "DIRECT",
+            "asset_class": "PRIVATE_CREDIT",
+            "asset_category": "LOAN",
+            "issuer_category": "CORPORATE",
+        },
+    ])
+
+    issues, _ = validate_column_contracts(df)
+    assert {"FX01", "FX02", "FX03", "FX04"}.issubset(set(issues["rule_id"]))
+
+
 def _make_bdc_source(rows):
     defaults = {
         "cik": "100",

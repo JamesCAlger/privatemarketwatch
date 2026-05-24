@@ -70,7 +70,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
         for col in ["are_any_interest_payment",
                      "is_any_portion_interest_paid",
                      "liquidity_classification",
-                     "is_default", "currency_code"]:
+                     "is_default", "currency_code", "exchange_rate"]:
             if col not in existing_cols:
                 con.execute(f"ALTER TABLE nport_raw ADD COLUMN {col} VARCHAR DEFAULT ''")
     else:
@@ -91,7 +91,8 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
 
         # Ensure expected columns exist (handles older nport_holdings.csv)
         for col in ["are_any_interest_payment", "is_any_portion_interest_paid",
-                     "liquidity_classification", "is_default", "currency_code"]:
+                     "liquidity_classification", "is_default", "currency_code",
+                     "exchange_rate"]:
             if col not in nport_df.columns:
                 nport_df[col] = ""
 
@@ -255,6 +256,41 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
                  THEN TRY_CAST(balance AS DOUBLE) END AS shares_held,
             CASE WHEN upper(trim(unit)) = 'PA'
                  THEN TRY_CAST(balance AS DOUBLE) END AS principal_amount,
+            CASE WHEN upper(trim(unit)) = 'PA'
+                 THEN COALESCE(NULLIF(upper(trim(CAST(currency_code AS VARCHAR))), ''), 'USD')
+                 ELSE '' END AS principal_amount_currency,
+            CASE
+                WHEN upper(trim(unit)) = 'PA'
+                     AND (currency_code IS NULL OR trim(CAST(currency_code AS VARCHAR)) = ''
+                          OR upper(trim(CAST(currency_code AS VARCHAR))) = 'USD')
+                THEN TRY_CAST(balance AS DOUBLE)
+                WHEN upper(trim(unit)) = 'PA'
+                     AND TRY_CAST(exchange_rate AS DOUBLE) > 0
+                THEN TRY_CAST(balance AS DOUBLE) / TRY_CAST(exchange_rate AS DOUBLE)
+                ELSE NULL
+            END AS principal_amount_usd,
+            CASE
+                WHEN upper(trim(unit)) = 'PA'
+                     AND upper(trim(CAST(currency_code AS VARCHAR))) NOT IN ('', 'USD')
+                     AND TRY_CAST(exchange_rate AS DOUBLE) > 0
+                THEN 1.0 / TRY_CAST(exchange_rate AS DOUBLE)
+                WHEN upper(trim(unit)) = 'PA'
+                     AND (currency_code IS NULL OR trim(CAST(currency_code AS VARCHAR)) = ''
+                          OR upper(trim(CAST(currency_code AS VARCHAR))) = 'USD')
+                THEN 1.0
+                ELSE NULL
+            END AS principal_fx_rate_to_usd,
+            CASE
+                WHEN upper(trim(unit)) != 'PA' THEN ''
+                WHEN currency_code IS NULL OR trim(CAST(currency_code AS VARCHAR)) = ''
+                     OR upper(trim(CAST(currency_code AS VARCHAR))) = 'USD' THEN 'source_usd'
+                WHEN TRY_CAST(exchange_rate AS DOUBLE) > 0 THEN 'nport_exchange_rate'
+                ELSE 'invalid_nport_exchange_rate'
+            END AS principal_fx_status,
+            CASE WHEN upper(trim(unit)) = 'PA'
+                 THEN COALESCE(NULLIF(upper(trim(CAST(currency_code AS VARCHAR))), ''), 'USD')
+                 ELSE '' END AS fair_value_currency,
+            '' AS cost_currency,
             '' AS bdc_investment_identifier,
             '' AS bdc_form_type,
             '' AS bdc_dimensions_raw,
@@ -282,6 +318,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS canonical_name,
             '' AS extracted_industry,
             '' AS gics_sub_industry,
+            '' AS lien_position,
             '' AS position_id,
             _row_id
         FROM with_fund_detect

@@ -67,7 +67,7 @@ UNIFIED_SORT_COLUMNS = [
     "source", "cik", "report_date", "filing_date", "accession_number",
     "bdc_investment_identifier", "nport_holding_id", "issuer_name",
     "instrument_description", "fair_value", "cost", "principal_amount",
-    "shares_held",
+    "principal_amount_usd", "shares_held",
 ]
 
 MATCH_SORT_COLUMNS = [c for c in MATCH_COLUMNS if c != "position_id"]
@@ -1041,6 +1041,10 @@ def match_positions(
         logger.warning("Empty unified holdings -- nothing to match")
         return pd.DataFrame(columns=MATCH_COLUMNS)
 
+    if "principal_amount_usd" not in unified_df.columns:
+        unified_df = unified_df.copy()
+        unified_df["principal_amount_usd"] = unified_df.get("principal_amount", "")
+
     unified_df = _sort_existing(unified_df, UNIFIED_SORT_COLUMNS)
 
     con = duckdb.connect()
@@ -1064,13 +1068,16 @@ def match_positions(
                 CAST(instrument_description AS VARCHAR),
                 TRY_CAST(fair_value AS DOUBLE),
                 TRY_CAST(cost AS DOUBLE),
-                TRY_CAST(principal_amount AS DOUBLE),
+                TRY_CAST(COALESCE(principal_amount_usd, principal_amount) AS DOUBLE),
                 TRY_CAST(shares_held AS DOUBLE)
         ) AS _row_id,
         {_quarter_label_sql('report_date')} AS quarter,
         TRY_CAST(fair_value AS DOUBLE) AS fv,
         TRY_CAST(cost AS DOUBLE) AS cost_val,
-        TRY_CAST(principal_amount AS DOUBLE) AS pa,
+        COALESCE(
+            TRY_CAST(principal_amount_usd AS DOUBLE),
+            TRY_CAST(principal_amount AS DOUBLE)
+        ) AS pa,
         TRY_CAST(interest_rate AS DOUBLE) AS ir,
         TRY_CAST(basis_spread AS DOUBLE) AS bs,
         TRY_CAST(shares_held AS DOUBLE) AS sh,

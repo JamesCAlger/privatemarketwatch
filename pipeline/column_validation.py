@@ -66,7 +66,10 @@ REQUIRED_COLUMNS = [
     "source", "cik", "accession_number", "filing_date", "report_date",
     "entity_name", "issuer_name", "instrument_description", "cusip", "isin",
     "entity_id", "bdc_investment_identifier", "fair_value", "cost",
-    "principal_amount", "interest_rate", "basis_spread", "pik_rate",
+    "fair_value_currency", "cost_currency",
+    "principal_amount", "principal_amount_currency", "principal_amount_usd",
+    "principal_fx_rate_to_usd", "principal_fx_status",
+    "interest_rate", "basis_spread", "pik_rate",
     "shares_held", "index_classification", "asset_category",
     "issuer_category", "exposure_type", "asset_class", "coupon_type",
     "maturity_date", "pct_of_net_assets", "reference_rate_type",
@@ -74,8 +77,9 @@ REQUIRED_COLUMNS = [
 ]
 
 NUMERIC_COLUMNS = {
-    "fair_value", "cost", "principal_amount", "interest_rate",
-    "basis_spread", "pik_rate", "shares_held", "pct_of_net_assets",
+    "fair_value", "cost", "principal_amount", "principal_amount_usd",
+    "principal_fx_rate_to_usd", "interest_rate", "basis_spread", "pik_rate",
+    "shares_held", "pct_of_net_assets",
 }
 
 DATE_COLUMNS = {"filing_date", "report_date", "maturity_date"}
@@ -321,15 +325,47 @@ def validate_column_contracts(
             "principal_amount", "X06", SEVERITY_FAIL, EVIDENCE_MODERATE,
             ACTION_REVIEW,
             "TRY_CAST(fair_value AS DOUBLE) > 0 "
-            "AND TRY_CAST(principal_amount AS DOUBLE) > 10 * TRY_CAST(fair_value AS DOUBLE) "
+            "AND TRY_CAST(principal_amount_usd AS DOUBLE) > 10 * TRY_CAST(fair_value AS DOUBLE) "
             "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%revolver%' "
             "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%unfunded%' "
             "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%undrawn%' "
             "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%commitment%' "
             "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%delayed draw%' "
             "AND LOWER(COALESCE(issuer_name, '')) NOT LIKE '%credit facility%'",
-            "principal_amount is more than 10x fair_value",
-            "likely scale error; can corrupt income and return analytics",
+            "principal_amount_usd is more than 10x fair_value",
+            "likely scale or FX error; can corrupt income and return analytics",
+            value_expr="principal_amount_usd",
+        ),
+        _issue_query(
+            "principal_amount_usd", "FX01", SEVERITY_WARN, EVIDENCE_STRONG,
+            ACTION_REVIEW,
+            "index_classification = 'DIRECT_LENDING' "
+            "AND NOT (TRIM(COALESCE(CAST(principal_amount_currency AS VARCHAR), '')) IN ('', 'USD')) "
+            "AND TRY_CAST(principal_amount AS DOUBLE) IS NOT NULL "
+            f"AND {_blank_sql('principal_amount_usd')}",
+            "non-USD debt principal is missing principal_amount_usd",
+            "non-USD source par requires explicit FX conversion before par analytics",
+        ),
+        _issue_query(
+            "fair_value_currency", "FX02", SEVERITY_WARN, EVIDENCE_STRONG,
+            ACTION_REVIEW,
+            "source = 'bdc' AND NOT (TRIM(COALESCE(CAST(fair_value_currency AS VARCHAR), '')) IN ('', 'USD'))",
+            "BDC fair_value XBRL unit is not USD",
+            "BDC valuation fields are expected to be USD-denominated",
+        ),
+        _issue_query(
+            "cost_currency", "FX03", SEVERITY_WARN, EVIDENCE_STRONG,
+            ACTION_REVIEW,
+            "source = 'bdc' AND NOT (TRIM(COALESCE(CAST(cost_currency AS VARCHAR), '')) IN ('', 'USD'))",
+            "BDC cost XBRL unit is not USD",
+            "BDC valuation fields are expected to be USD-denominated",
+        ),
+        _issue_query(
+            "principal_fx_status", "FX04", SEVERITY_WARN, EVIDENCE_STRONG,
+            ACTION_REVIEW,
+            "source = 'nport' AND principal_fx_status = 'invalid_nport_exchange_rate'",
+            "non-USD N-PORT principal has missing or invalid exchange_rate",
+            "N-PORT non-USD balance requires positive exchange_rate for USD par",
         ),
         _issue_query(
             "principal_amount", "C110", SEVERITY_WARN, EVIDENCE_MODERATE,
@@ -1203,7 +1239,7 @@ def build_residual_summary(
                 i.severity,
                 COALESCE(NULLIF(h.issuer_name, ''), NULLIF(i.value, ''), '') AS issuer_name,
                 TRY_CAST(h.fair_value AS DOUBLE) AS fair_value,
-                TRY_CAST(h.principal_amount AS DOUBLE) AS principal_amount
+                TRY_CAST(h.principal_amount_usd AS DOUBLE) AS principal_amount
             FROM issues i
             LEFT JOIN holdings h
               ON CAST(h._row_key AS VARCHAR) = CAST(i.row_key AS VARCHAR)

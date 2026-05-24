@@ -7405,6 +7405,135 @@ class TestEquityPrincipalAmountNulled:
         assert float(row["principal_amount"]) == 1000000.0
 
 
+def test_prepare_bdc_converts_non_usd_principal_with_reference_fx(tmp_path, monkeypatch):
+    fx_file = tmp_path / "fx_rates.csv"
+    fx_file.write_text(
+        "currency,rate_date,usd_per_currency,source,source_detail\n"
+        "CAD,2024-03-31,0.75,test,fixture\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("pipeline.staging_bdc.FX_RATES_FILE", fx_file)
+
+    df = pd.DataFrame([{
+        "cik": "123",
+        "entity_name": "Test BDC",
+        "accession_number": "0001-24",
+        "form_type": "10-Q",
+        "filing_date": "2024-05-01",
+        "report_date": "2024-03-31",
+        "period": "2024-03-31",
+        "investment_identifier": "Acme Corp - First Lien Term Loan",
+        "fair_value": 740.0,
+        "cost": 730.0,
+        "principal_amount": 1000.0,
+        "principal_amount_unit": "cad",
+        "fair_value_unit": "usd",
+        "cost_unit": "usd",
+        "shares_held": "",
+        "interest_rate": 8.5,
+        "basis_spread": 3.0,
+        "pik_rate": "",
+        "pct_of_net_assets": "",
+        "unrealized_gain_loss": "",
+        "maturity_date": "",
+        "reference_rate_type": "",
+        "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+        "industry": "",
+        "investment_type": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+    row = result.iloc[0]
+    assert row["principal_amount"] == 1000.0
+    assert row["principal_amount_currency"] == "CAD"
+    assert row["principal_amount_usd"] == 750.0
+    assert row["principal_fx_rate_to_usd"] == 0.75
+    assert row["principal_fx_status"] == "reference_fx"
+    assert row["fair_value_currency"] == "USD"
+    assert row["cost_currency"] == "USD"
+
+
+def test_prepare_bdc_flags_missing_reference_fx(tmp_path, monkeypatch):
+    fx_file = tmp_path / "fx_rates.csv"
+    fx_file.write_text(
+        "currency,rate_date,usd_per_currency,source,source_detail\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("pipeline.staging_bdc.FX_RATES_FILE", fx_file)
+
+    df = pd.DataFrame([{
+        "cik": "123",
+        "entity_name": "Test BDC",
+        "accession_number": "0001-24",
+        "form_type": "10-Q",
+        "filing_date": "2024-05-01",
+        "report_date": "2024-03-31",
+        "period": "2024-03-31",
+        "investment_identifier": "Acme Corp - First Lien Term Loan",
+        "fair_value": 740.0,
+        "cost": 730.0,
+        "principal_amount": 1000.0,
+        "principal_amount_unit": "eur",
+        "fair_value_unit": "usd",
+        "cost_unit": "usd",
+        "shares_held": "",
+        "interest_rate": 8.5,
+        "basis_spread": 3.0,
+        "pik_rate": "",
+        "pct_of_net_assets": "",
+        "unrealized_gain_loss": "",
+        "maturity_date": "",
+        "reference_rate_type": "",
+        "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+        "industry": "",
+        "investment_type": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+    row = result.iloc[0]
+    assert row["principal_amount_currency"] == "EUR"
+    assert pd.isna(row["principal_amount_usd"])
+    assert row["principal_fx_status"] == "missing_reference_fx"
+
+
+def test_prepare_nport_converts_non_usd_balance_with_exchange_rate():
+    cols = [
+        "accession_number", "holding_id", "issuer_name", "issuer_lei",
+        "issuer_title", "issuer_cusip", "currency_value", "percentage",
+        "asset_cat", "issuer_type", "investment_country",
+        "is_restricted_security", "fair_value_level", "maturity_date",
+        "coupon_type", "annualized_rate", "identifier_isin",
+        "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+        "filing_date", "report_date", "series_name", "series_id",
+        "quarter", "balance", "unit", "currency_code", "exchange_rate",
+    ]
+    row = {c: "" for c in cols}
+    row.update({
+        "cik": "123",
+        "registrant_name": "Test Fund",
+        "issuer_name": "Acme Corp",
+        "issuer_title": "Term Loan",
+        "currency_value": 750.0,
+        "asset_cat": "LON",
+        "issuer_type": "CORP",
+        "fair_value_level": "3",
+        "report_date": "2024-03-31",
+        "balance": 1000.0,
+        "unit": "PA",
+        "currency_code": "CAD",
+        "exchange_rate": 1.25,
+    })
+
+    result = _prepare_nport(pd.DataFrame([row]))
+    out = result.iloc[0]
+    assert out["principal_amount"] == 1000.0
+    assert out["principal_amount_currency"] == "CAD"
+    assert out["principal_amount_usd"] == 800.0
+    assert out["principal_fx_status"] == "nport_exchange_rate"
+
+
 # ---------------------------------------------------------------------------
 # Percentage-prefix category subtotal aggregate detection
 # ---------------------------------------------------------------------------

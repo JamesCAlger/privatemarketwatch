@@ -36,6 +36,7 @@ from pipeline.classification import (
 from pipeline.config import (
     AGGREGATE_HEADER_FLAGS_FILE,
     BDC_AGGREGATE_ROW_OVERRIDES_FILE,
+    FX_RATES_FILE,
 )
 
 logger = logging.getLogger(__name__)
@@ -202,8 +203,30 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         from pipeline.unified_holdings import UNIFIED_COLUMNS
         return pd.DataFrame(columns=UNIFIED_COLUMNS)
 
+    bdc_df = bdc_df.copy()
+    for col in (
+        "fair_value_unit", "cost_unit", "principal_amount_unit",
+        "industry", "investment_type", "affiliation",
+    ):
+        if col not in bdc_df.columns:
+            bdc_df[col] = ""
+
     con = duckdb.connect()
     con.register("bdc_raw", bdc_df)
+    if FX_RATES_FILE.exists():
+        fx_path = str(FX_RATES_FILE).replace("\\", "/")
+        con.execute(f"""
+            CREATE TEMP TABLE fx_rates AS
+            SELECT upper(trim(CAST(currency AS VARCHAR))) AS currency,
+                   CAST(rate_date AS VARCHAR) AS rate_date,
+                   TRY_CAST(usd_per_currency AS DOUBLE) AS usd_per_currency
+            FROM read_csv_auto('{fx_path}', header=true, all_varchar=true)
+            WHERE TRY_CAST(usd_per_currency AS DOUBLE) > 0
+        """)
+    else:
+        con.register("fx_rates", pd.DataFrame(columns=[
+            "currency", "rate_date", "usd_per_currency",
+        ]))
     aggregate_overrides = _load_bdc_aggregate_overrides()
     con.register("bdc_aggregate_overrides", aggregate_overrides)
     agg_header_flags = _load_aggregate_header_flags()
@@ -1060,6 +1083,8 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             '' AS ticker,
             _fv AS fair_value,
             _cost AS cost,
+            upper(trim(regexp_replace(COALESCE(CAST(fair_value_unit AS VARCHAR), ''), '^.*:', ''))) AS fair_value_currency,
+            upper(trim(regexp_replace(COALESCE(CAST(cost_unit AS VARCHAR), ''), '^.*:', ''))) AS cost_currency,
             CASE WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN _pct * 100
                  WHEN _pct IS NOT NULL AND _pct > 50 THEN _pct / 100
                  ELSE _pct END AS pct_of_net_assets,
@@ -1123,6 +1148,27 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             END AS maturity_date,
             _sh AS shares_held,
             _pa AS principal_amount,
+            upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) AS principal_amount_currency,
+            CASE
+                WHEN _pa IS NULL THEN NULL
+                WHEN upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) IN ('', 'USD')
+                THEN _pa
+                WHEN fx.usd_per_currency IS NOT NULL THEN _pa * fx.usd_per_currency
+                ELSE NULL
+            END AS principal_amount_usd,
+            CASE
+                WHEN _pa IS NULL THEN NULL
+                WHEN upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) IN ('', 'USD')
+                THEN 1.0
+                ELSE fx.usd_per_currency
+            END AS principal_fx_rate_to_usd,
+            CASE
+                WHEN _pa IS NULL THEN ''
+                WHEN upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) IN ('', 'USD')
+                THEN 'source_usd'
+                WHEN fx.usd_per_currency IS NOT NULL THEN 'reference_fx'
+                ELSE 'missing_reference_fx'
+            END AS principal_fx_status,
             _raw_id AS bdc_investment_identifier,
             form_type AS bdc_form_type,
             dimensions_raw AS bdc_dimensions_raw,
@@ -1150,9 +1196,13 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             '' AS canonical_name,
             '' AS extracted_industry,
             '' AS gics_sub_industry,
+            '' AS lien_position,
             '' AS position_id,
             _row_id
-        FROM with_enrichment
+        FROM with_enrichment w
+        LEFT JOIN fx_rates fx
+          ON upper(trim(regexp_replace(COALESCE(CAST(w.principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) = fx.currency
+         AND CAST(w.report_date AS VARCHAR) = fx.rate_date
     ),
 
     -- CTE 12a: Fix PIK rate boundary errors.

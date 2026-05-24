@@ -97,6 +97,41 @@ XBRL_MINIMAL = textwrap.dedent("""\
 """)
 
 
+def test_extract_investment_facts_preserves_xbrl_units():
+    """Principal may be non-USD while valuation facts remain USD."""
+    from pipeline.bdc_filings import _extract_investment_facts, _parse_xbrl_contexts
+
+    xml = textwrap.dedent("""\
+        <xbrl xmlns="http://www.xbrl.org/2003/instance"
+              xmlns:xbrli="http://www.xbrl.org/2003/instance"
+              xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+              xmlns:test="http://example.com/test">
+            <xbrli:context id="ctx_cad">
+                <xbrli:entity>
+                    <xbrli:identifier scheme="http://www.sec.gov/CIK">100</xbrli:identifier>
+                    <xbrli:segment>
+                        <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                            <test:InvestmentIdentifierDomain>Acme - Term Loan</test:InvestmentIdentifierDomain>
+                        </xbrldi:typedMember>
+                    </xbrli:segment>
+                </xbrli:entity>
+                <xbrli:period><xbrli:instant>2024-03-31</xbrli:instant></xbrli:period>
+            </xbrli:context>
+            <test:InvestmentOwnedAtFairValue contextRef="ctx_cad" unitRef="usd" decimals="0">750</test:InvestmentOwnedAtFairValue>
+            <test:InvestmentOwnedAtCost contextRef="ctx_cad" unitRef="usd" decimals="0">700</test:InvestmentOwnedAtCost>
+            <test:InvestmentOwnedBalancePrincipalAmount contextRef="ctx_cad" unitRef="cad" decimals="0">1000</test:InvestmentOwnedBalancePrincipalAmount>
+        </xbrl>
+    """)
+    tree = etree.ElementTree(etree.fromstring(xml.encode("utf-8")))
+    facts = _extract_investment_facts(tree, _parse_xbrl_contexts(tree))
+
+    assert len(facts) == 1
+    row = facts[0]
+    assert row["fair_value_unit"] == "usd"
+    assert row["cost_unit"] == "usd"
+    assert row["principal_amount_unit"] == "cad"
+
+
 # XBRL with duration period (startDate/endDate) instead of instant
 XBRL_DURATION_PERIOD = textwrap.dedent("""\
     <?xml version="1.0" encoding="UTF-8"?>

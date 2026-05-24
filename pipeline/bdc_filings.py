@@ -84,6 +84,7 @@ CONCEPT_MAP: list[tuple[str, str]] = [
 
 # All possible output value columns (used to initialise empty records)
 _VALUE_COLUMNS = sorted({col for _, col in CONCEPT_MAP})
+_UNIT_COLUMNS = [f"{col}_unit" for col in ("fair_value", "cost", "principal_amount")]
 
 # Monetary columns (USD-denominated) subject to decimals normalization.
 # When a filing mixes decimals attributes (e.g. most facts at decimals="-3"
@@ -664,6 +665,8 @@ def _extract_investment_facts(
         # Keep first non-None value per column (some filings duplicate facts)
         if col not in facts_by_ctx[ctx_ref] or facts_by_ctx[ctx_ref][col] is None:
             facts_by_ctx[ctx_ref][col] = value
+            if col in ("fair_value", "cost", "principal_amount"):
+                facts_by_ctx[ctx_ref][f"{col}_unit"] = elem.get("unitRef", "") or ""
             if dec_val is not None:
                 monetary_facts_stored.append((ctx_ref, col, dec_val))
 
@@ -694,6 +697,8 @@ def _extract_investment_facts(
         # Initialise all value columns to None then overlay parsed facts
         for vc in _VALUE_COLUMNS:
             record[vc] = fact_vals.get(vc)
+        for uc in _UNIT_COLUMNS:
+            record[uc] = fact_vals.get(uc, "")
         records.append(record)
 
     return records
