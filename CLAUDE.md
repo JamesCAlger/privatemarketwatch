@@ -275,6 +275,7 @@ These are harm-category restrictions. Violating them causes data loss, silent co
 - **No SEC rate-limit violations.** The existing `edgar_client.py` enforces 10 req/sec. Do not bypass it or add parallel request paths.
 - **No encoding crashes.** All log messages must use ASCII only — Windows cp1252 cannot render Unicode box-drawing, em-dashes, or ellipsis characters.
 - **No slow transforms on large datasets.** Avoid pandas `.apply()`, `.iterrows()`, or row-level Python loops on datasets with >10K rows — the pipeline's 800K+ row datasets will hang for minutes. Use DuckDB SQL or vectorized operations. Pandas is fine for small summaries and logging.
+- **Commit messages.** Include a short subject line plus a brief body (2-4 bullet points or sentences) explaining what changed and why. Keep it concise -- no walls of text.
 
 ## HTML Template Extraction (v3.0)
 

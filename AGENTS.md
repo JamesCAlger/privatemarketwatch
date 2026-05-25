@@ -186,6 +186,10 @@ Choose verification proportional to the change:
 
 Always report what was and was not run.
 
+## Commit Guidance
+
+When asked to commit changes, include both a concise subject and a reasonably sized commit body. The body should explain what changed, why it changed, and what verification was run or skipped. Keep it focused; do not paste long command output, generated diffs, or unrelated investigation notes into the commit message.
+
 ## Files Worth Reading First
 
 - `CLAUDE.md`: current state, contracts, schemas, and operational warnings.
