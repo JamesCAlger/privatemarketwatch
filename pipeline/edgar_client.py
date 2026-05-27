@@ -3,7 +3,6 @@
 import logging
 import re
 import time
-from datetime import datetime
 from typing import Any
 
 import requests
@@ -164,99 +163,6 @@ class EdgarClient:
             return None
 
     # ------------------------------------------------------------------
-    # Quarterly index scan — find all N-2 filings from full-index files
-    # ------------------------------------------------------------------
-    def scan_quarterly_indices(
-        self,
-        since_year: int = 2015,
-        form_types: tuple[str, ...] | None = None,
-    ) -> list[dict]:
-        """Scan EDGAR quarterly company.idx files for filings of given form types.
-
-        Iterates https://www.sec.gov/Archives/edgar/full-index/{year}/QTR{qtr}/company.idx
-        from *since_year* Q1 through the current quarter.
-
-        Returns list of dicts with keys: cik, company_name, accession_number,
-        filing_date, form_type.
-        """
-        if form_types is None:
-            form_types = ("N-2", "N-2/A", "N-2ASR", "N-2MEF")
-
-        form_set = set(form_types)
-        now = datetime.now()
-        current_year = now.year
-        current_qtr = (now.month - 1) // 3 + 1
-
-        results: list[dict] = []
-        seen: set[tuple[str, str]] = set()  # (cik, accession_number)
-
-        for year in range(since_year, current_year + 1):
-            max_qtr = current_qtr if year == current_year else 4
-            for qtr in range(1, max_qtr + 1):
-                url = (
-                    f"https://www.sec.gov/Archives/edgar/full-index/"
-                    f"{year}/QTR{qtr}/company.idx"
-                )
-                resp = self.get_safe(url)
-                if resp is None:
-                    logger.debug("Index not available: %s", url)
-                    continue
-
-                text = resp.text
-                # company.idx is fixed-width: skip header lines (lines starting with
-                # dashes or containing "Company Name")
-                in_data = False
-                count = 0
-                for line in text.splitlines():
-                    if not in_data:
-                        if line.startswith("---"):
-                            in_data = True
-                        continue
-
-                    # Fixed-width format:
-                    # Company Name          Form Type  CIK         Date Filed  Filename
-                    # Cols: 0-61 name, 62-73 form, 74-85 CIK, 86-97 date, 98+ filename
-                    if len(line) < 98:
-                        continue
-
-                    company_name = line[:62].strip()
-                    form_type = line[62:74].strip()
-                    cik_str = line[74:86].strip()
-                    filing_date = line[86:98].strip()
-                    filename = line[98:].strip()
-
-                    if form_type not in form_set:
-                        continue
-
-                    # Extract accession number from filename
-                    # e.g. edgar/data/1234567/0001234567-23-012345.txt
-                    parts = filename.replace("\\", "/").split("/")
-                    acc_file = parts[-1] if parts else ""
-                    accession = acc_file.replace(".txt", "")
-
-                    key = (cik_str, accession)
-                    if key in seen:
-                        continue
-                    seen.add(key)
-
-                    results.append({
-                        "cik": cik_str,
-                        "company_name": company_name,
-                        "accession_number": accession,
-                        "filing_date": filing_date,
-                        "form_type": form_type,
-                    })
-                    count += 1
-
-                if count:
-                    logger.info("  Index %d/QTR%d: %d %s filings",
-                                year, qtr, count, "/".join(form_types))
-
-        logger.info("Quarterly index scan: %d total filings from %d to %d",
-                     len(results), since_year, current_year)
-        return results
-
-    # ------------------------------------------------------------------
     # Resolve the primary document URL from a filing index page
     # ------------------------------------------------------------------
     def resolve_filing_document_url(
@@ -361,55 +267,3 @@ class EdgarClient:
             logger.debug("Partial download failed for %s: %s", url, exc)
             return None
 
-    # ------------------------------------------------------------------
-    # XBRL company facts — IntervalFundFlag scan
-    # ------------------------------------------------------------------
-    def scan_xbrl_interval_fund_flags(self) -> list[dict]:
-        """Scan XBRL frames API for entities that reported IntervalFundFlag = true.
-
-        Tries multiple calendar years via the frames endpoint:
-        https://data.sec.gov/api/xbrl/frames/cef/IntervalFundFlag/bool/CY{year}.json
-        """
-        results: list[dict] = []
-        seen_ciks: set[str] = set()
-        now = datetime.now()
-
-        for year in range(now.year, now.year - 5, -1):
-            url = (
-                f"https://data.sec.gov/api/xbrl/frames/"
-                f"cef/IntervalFundFlag/bool/CY{year}.json"
-            )
-            resp = self.get_safe(url)
-            if resp is None:
-                logger.debug("XBRL frames not available for CY%d", year)
-                continue
-
-            try:
-                data = resp.json()
-            except Exception:
-                continue
-
-            entries = data.get("data", [])
-            for entry in entries:
-                cik = str(entry.get("cik", ""))
-                if not cik or cik in seen_ciks:
-                    continue
-
-                val = entry.get("val")
-                # val can be True/1/"true" for interval fund flag
-                if val in (True, 1, "true", "1"):
-                    seen_ciks.add(cik)
-                    results.append({
-                        "cik": cik,
-                        "entity_name": entry.get("entityName", ""),
-                        "concept": "IntervalFundFlag",
-                        "value": val,
-                        "filing_date": entry.get("end", ""),
-                    })
-
-            logger.info("XBRL frames CY%d: %d entries, %d interval flags",
-                        year, len(entries), len([e for e in entries
-                        if e.get("val") in (True, 1, "true", "1")]))
-
-        logger.info("XBRL IntervalFundFlag scan: %d unique CIKs", len(results))
-        return results

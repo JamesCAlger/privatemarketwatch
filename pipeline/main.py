@@ -2,7 +2,6 @@
 
 Usage:
     python -m pipeline.main
-    python -m pipeline.main --exhaustive
     python pipeline/main.py
 """
 
@@ -48,12 +47,6 @@ def _setup_logging() -> None:
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Private Markets Universe Builder — SEC EDGAR pipeline",
-    )
-    parser.add_argument(
-        "--exhaustive",
-        action="store_true",
-        help="Run all 6 discovery methods for maximum fund coverage "
-             "(slower, ~45-60 min first run). Default runs the fast subset.",
     )
     parser.add_argument(
         "--holdings",
@@ -219,7 +212,7 @@ def _snapshot_outputs(logger: logging.Logger) -> Path | None:
 def _is_validate_only(args: argparse.Namespace) -> bool:
     return (
         args.validate
-        and not args.exhaustive
+
         and not args.holdings
         and not args.ciks
         and not args.nport
@@ -246,7 +239,7 @@ def _is_validate_only(args: argparse.Namespace) -> bool:
 def _is_validate_rules_only(args: argparse.Namespace) -> bool:
     return (
         args.validate_rules
-        and not args.exhaustive
+
         and not args.holdings
         and not args.ciks
         and not args.nport
@@ -273,7 +266,7 @@ def _is_validate_rules_only(args: argparse.Namespace) -> bool:
 def _is_validate_all_only(args: argparse.Namespace) -> bool:
     return (
         args.validate_all
-        and not args.exhaustive
+
         and not args.holdings
         and not args.ciks
         and not args.nport
@@ -300,7 +293,7 @@ def _is_validate_all_only(args: argparse.Namespace) -> bool:
 def _is_export_frontend_only(args: argparse.Namespace) -> bool:
     return (
         args.export_frontend
-        and not args.exhaustive
+
         and not args.holdings
         and not args.ciks
         and not args.nport
@@ -408,8 +401,6 @@ def main() -> None:
     logger.info("=" * 70)
     logger.info("PRIVATE MARKETS UNIVERSE BUILDER — STARTING")
     mode_parts = []
-    if args.exhaustive:
-        mode_parts.append("EXHAUSTIVE")
     if args.holdings:
         mode_parts.append("HOLDINGS")
     if args.nport:
@@ -519,7 +510,7 @@ def main() -> None:
         logger.info("")
         t2 = time.time()
         try:
-            fund_df = build_fund_universe(client, exhaustive=args.exhaustive)
+            fund_df = build_fund_universe(client)
         except Exception as exc:
             logger.error("Fund universe build failed: %s", exc, exc_info=True)
             fund_df = None
@@ -1005,8 +996,6 @@ def main() -> None:
             OUTPUT_DIR / "combined_universe.json",
             OUTPUT_DIR / "validation_report.csv",
         ])
-        if args.exhaustive:
-            output_files.append(OUTPUT_DIR / "exhaustive_fund_universe.csv")
     if args.holdings:
         output_files.extend([
             OUTPUT_DIR / "bdc_filings_index.csv",

@@ -95,8 +95,7 @@ See `private_markets_index_spec.md` Phase 4 for full detail. Key findings from d
 ## Pipeline Architecture
 
 ```
-python -m pipeline.main                  # Fast universe discovery (~5 min)
-python -m pipeline.main --exhaustive     # All 6 discovery methods (~45-60 min)
+python -m pipeline.main                  # Universe discovery (~5 min)
 python -m pipeline.main --holdings       # + BDC XBRL extraction (~1-3 hrs first run)
 python -m pipeline.main --ciks 1418076   # Holdings for specific CIKs only
 python -m pipeline.main --unified        # Build unified private markets holdings (~60s)

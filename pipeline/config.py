@@ -68,23 +68,6 @@ NCEN_QUARTERS = [
     "2025q1", "2025q2", "2025q3", "2025q4",
 ]
 
-# N-2 index scan range
-INDEX_SCAN_START_YEAR = 2015
-
-# Activity confirmation — months back to consider "active"
-ACTIVITY_LOOKBACK_MONTHS = 18
-
-# EFTS text search queries for interval/tender discovery
-EFTS_INTERVAL_QUERIES = [
-    '"interval fund"',
-    '"Rule 23c-3"',
-    '"periodic repurchase offer"',
-]
-EFTS_TENDER_QUERIES = [
-    '"tender offer fund"',
-    '"periodic tender offer"',
-]
-
 # ---------------------------------------------------------------------------
 # SEC bulk data sets (DERA)
 # Quarterly ZIPs — format: {year}q{quarter}_{type}.zip
@@ -127,7 +110,6 @@ FUND_UNIVERSE_FILE = OUTPUT_DIR / "fund_universe.csv"
 COMBINED_UNIVERSE_FILE = OUTPUT_DIR / "combined_universe.csv"
 COMBINED_UNIVERSE_JSON = OUTPUT_DIR / "combined_universe.json"
 VALIDATION_REPORT_FILE = OUTPUT_DIR / "validation_report.csv"
-EXHAUSTIVE_FUND_UNIVERSE_FILE = OUTPUT_DIR / "exhaustive_fund_universe.csv"
 BDC_FILINGS_INDEX_FILE = OUTPUT_DIR / "bdc_filings_index.csv"
 BDC_HOLDINGS_FILE = OUTPUT_DIR / "bdc_holdings.csv"
 BDC_PARSE_PROGRESS_FILE = OUTPUT_DIR / "bdc_parse_progress.csv"

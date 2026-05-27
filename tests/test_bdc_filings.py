@@ -1833,10 +1833,10 @@ class TestCLIHoldingsFlag:
         import pipeline.main as main_mod
         importlib.reload(main_mod)
 
-        with patch("sys.argv", ["main", "--exhaustive", "--holdings"]):
+        with patch("sys.argv", ["main", "--holdings", "--nport"]):
             args = main_mod._parse_args()
-        assert args.exhaustive is True
         assert args.holdings is True
+        assert args.nport is True
 
 
 # ---------------------------------------------------------------------------

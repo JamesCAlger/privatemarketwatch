@@ -47,7 +47,7 @@ npm run build
 
 - Do not make unrequested network calls to SEC EDGAR or third-party sites. Use cached data unless the user explicitly asks for downloads.
 - Do not bypass `pipeline.edgar_client.EdgarClient` or its rate limiting.
-- Do not run broad extraction/download commands casually. `--holdings`, `--nport`, `--financials`, and exhaustive discovery can be slow and may hit external services.
+- Do not run broad extraction/download commands casually. `--holdings`, `--nport`, and `--financials` can be slow and may hit external services.
 - `pytest tests/` can overwrite output CSVs with fixtures. After running tests, rebuild production outputs before treating `data/output/` or `frontend/public/data/` as production data.
 - Do not use pandas `.apply()`, `.iterrows()`, or row-level Python loops on large holdings datasets. Use DuckDB SQL or vectorized operations.
 - Keep log output ASCII-safe. Windows console encoding has previously failed on Unicode punctuation and box drawing.

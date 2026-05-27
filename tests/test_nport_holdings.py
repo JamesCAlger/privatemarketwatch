@@ -873,10 +873,9 @@ class TestCliArgs:
 
     def test_all_flags_together(self):
         from pipeline.main import _parse_args
-        with patch("sys.argv", ["main", "--exhaustive", "--holdings", "--nport",
+        with patch("sys.argv", ["main", "--holdings", "--nport",
                                  "--nport-xml", "--ciks", "1234567"]):
             args = _parse_args()
-        assert args.exhaustive is True
         assert args.holdings is True
         assert args.nport is True
         assert args.nport_xml is True
