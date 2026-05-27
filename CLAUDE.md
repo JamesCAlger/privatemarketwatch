@@ -60,6 +60,27 @@ Quarters: 2019q4-2026q1.
 
 **Validation status:** V1-V5 all implemented. See "Unified Holdings -- Validation" section below.
 
+### Current Blocker Accounting
+
+When asked how many "blockers" remain, use the latest source reconciliation residual artifacts as the default source of truth, not only the reviewed `bdc_cik_review` batch.
+
+Relevant artifacts:
+- `data/output/source_reconciliation_residual_classification.md`
+- `data/output/source_reconciliation_residual_classification.csv`
+- `data/output/source_reconciliation_source_only_classification.md`
+- `data/output/source_reconciliation_source_only_detail.csv`
+- `data/output/bdc_cik_review/worklist.csv`
+- `data/output/bdc_cik_review/summary.csv`
+
+As of the 2026-05-27 check:
+- `bdc_cik_review` had 25 bundles, all with `PATCH_PROPOSED` verdicts.
+- That 25-bundle batch is only a reviewed slice, not the full remaining blocker pool.
+- The current source-only blocking pool was 1,156 CIK-quarter-mechanism packets and 7,337 blocking rows.
+- Broader residual blockers, including pipeline-only rows, were 1,251 blocking groups and 7,785 blocking rows.
+- Effective unreviewed source-only blockers by the existing agentic workflow were about 1,155 packets and 7,336 rows, because only one current source-only packet cleanly overlapped the old 25-bundle reviewed batch.
+
+If the user asks to launch an agent to review blockers, regenerate or inspect the latest queue from the residual artifacts first. At the 2026-05-27 check, the top next packet was `0001849894 | MSD Investment Corp. | 2025-12-31 | blocking_source_pct_leaf_parser_mismatch | 83 rows`.
+
 ### Phase 5 Complete: Data Quality Audit
 
 Full data quality and code-level transformation audit completed (`data/output/audit_data_quality.md`). All FAIL and WARN findings have been actioned and resolved.

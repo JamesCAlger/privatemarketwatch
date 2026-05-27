@@ -143,6 +143,28 @@ Every agent-authored correction should answer:
 
 Escalation is better than pretending. If no mechanism is found after bounded attempts, document the hypotheses tested and stop.
 
+## Blocker Accounting
+
+When the user asks how many "blockers" remain, default to the current validation residual pool, not the narrow reviewed agent batch. Read the latest generated artifacts before answering:
+
+- `data/output/source_reconciliation_residual_classification.md`
+- `data/output/source_reconciliation_residual_classification.csv`
+- `data/output/source_reconciliation_source_only_classification.md`
+- `data/output/source_reconciliation_source_only_detail.csv`
+- `data/output/bdc_cik_review/worklist.csv`
+- `data/output/bdc_cik_review/summary.csv`
+
+As of the 2026-05-27 check, the existing `bdc_cik_review` batch contained 25 bundles and all 25 had `PATCH_PROPOSED` verdicts. That does not mean blockers are cleared. It only means that reviewed slice has verdicts.
+
+The broader current residual artifacts showed:
+
+- Source-only blocking pool: 1,156 CIK-quarter-mechanism packets, 7,337 blocking rows.
+- Broader residual blockers including pipeline-only rows: 1,251 blocking groups, 7,785 blocking rows.
+- Existing reviewed agent batch: 25 bundles.
+- Effective unreviewed source-only pool by the current agentic workflow: about 1,155 packets and 7,336 rows, because only one current source-only packet cleanly overlapped the old reviewed batch.
+
+If asked to launch or continue blocker review, regenerate or inspect the latest worklist from the residual artifacts rather than assuming `data/output/bdc_cik_review/worklist.csv` is complete. The next packet at the 2026-05-27 check was `0001849894 | MSD Investment Corp. | 2025-12-31 | blocking_source_pct_leaf_parser_mismatch | 83 rows`. Always state which artifact and timestamp/count basis you used.
+
 ## Data Investigation Practice
 
 For ad-hoc investigations:
