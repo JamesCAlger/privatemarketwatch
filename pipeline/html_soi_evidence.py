@@ -418,6 +418,19 @@ def _source_row_search_terms(source_row: dict[str, Any]) -> list[str]:
     normalized = normalize_text(source_row.get("normalized_investment_identifier"))
     terms: list[str] = []
 
+    entity_match = re.search(
+        r"([A-Z][A-Za-z0-9&.,()' -]+?\b(?:Inc\.?|LLC|Ltd\.?|Corporation|Corp\.?|"
+        r"Company|Co\.?|Holdings|Buyer|Partners|Technologies|Brands|SASU))\s+Instrument\b",
+        raw,
+    )
+    if entity_match:
+        entity_candidate = entity_match.group(1).strip()
+        terms.append(entity_candidate)
+        entity_words = entity_candidate.split()
+        for n in [5, 4, 3, 2]:
+            if len(entity_words) >= n:
+                terms.append(" ".join(entity_words[-n:]))
+
     for text in [raw, normalized]:
         cleaned = _GENERIC_TERM_RE.sub(" ", text)
         cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,-")
