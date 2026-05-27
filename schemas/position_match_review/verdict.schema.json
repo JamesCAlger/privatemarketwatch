@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evergreen.local/schemas/position_match_review/verdict.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_id",
+    "source",
+    "cik",
+    "quarter",
+    "index_classification",
+    "verdict",
+    "confidence",
+    "primary_justification",
+    "evidence_refs",
+    "changed_files",
+    "rule_scope",
+    "rule_type",
+    "rule_summary",
+    "deterministic_conditions",
+    "positive_examples",
+    "false_positive_examples",
+    "guardrails",
+    "expected_coverage_effect",
+    "false_match_risk",
+    "tests_validation_plan",
+    "requires_human_merge",
+    "missing_evidence",
+    "residual_risk",
+    "reviewer_notes"
+  ],
+  "properties": {
+    "review_id": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "cik": { "type": "string", "minLength": 1 },
+    "quarter": { "type": "string", "minLength": 1 },
+    "index_classification": { "type": "string", "minLength": 1 },
+    "verdict": {
+      "type": "string",
+      "enum": ["RULE_PROPOSED", "NO_RULE_NEEDED", "INSUFFICIENT_EVIDENCE", "ESCALATE"]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "primary_justification": { "type": "string", "minLength": 1 },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "changed_files": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "rule_scope": { "type": "string" },
+    "rule_type": {
+      "type": "string",
+      "enum": [
+        "",
+        "identifier_parser",
+        "issuer_normalization",
+        "tranche_key",
+        "alias_map",
+        "raw_field_correction",
+        "documented_exclusion",
+        "table_selection",
+        "period_assignment",
+        "row_classification",
+        "continuation_row_merge",
+        "aggregate_subtotal_exclusion"
+      ]
+    },
+    "rule_summary": { "type": "string" },
+    "deterministic_conditions": { "type": "string" },
+    "positive_examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "evidence_ref": { "type": "string", "minLength": 1 },
+          "table_index": { "type": "integer", "minimum": 0 },
+          "row_index": { "type": "integer", "minimum": 0 },
+          "cell_indices": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 },
+            "minItems": 1
+          },
+          "row_classification": {
+            "type": "string",
+            "enum": [
+              "POSITION_ROW",
+              "AGGREGATE_HEADER",
+              "SUBTOTAL_ROW",
+              "CONTINUATION_ROW",
+              "COMPARATIVE_PERIOD_ROW",
+              "UNCLASSIFIABLE",
+              "INSUFFICIENT_EVIDENCE"
+            ]
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "false_positive_examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "evidence_ref": { "type": "string", "minLength": 1 },
+          "table_index": { "type": "integer", "minimum": 0 },
+          "row_index": { "type": "integer", "minimum": 0 },
+          "cell_indices": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 },
+            "minItems": 1
+          },
+          "row_classification": {
+            "type": "string",
+            "enum": [
+              "POSITION_ROW",
+              "AGGREGATE_HEADER",
+              "SUBTOTAL_ROW",
+              "CONTINUATION_ROW",
+              "COMPARATIVE_PERIOD_ROW",
+              "UNCLASSIFIABLE",
+              "INSUFFICIENT_EVIDENCE"
+            ]
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "html_citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_ref", "table_index", "row_index", "cell_indices", "reason"],
+        "properties": {
+          "evidence_ref": { "type": "string", "minLength": 1 },
+          "table_index": { "type": "integer", "minimum": 0 },
+          "row_index": { "type": "integer", "minimum": 0 },
+          "cell_indices": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 },
+            "minItems": 1
+          },
+          "row_classification": {
+            "type": "string",
+            "enum": [
+              "POSITION_ROW",
+              "AGGREGATE_HEADER",
+              "SUBTOTAL_ROW",
+              "CONTINUATION_ROW",
+              "COMPARATIVE_PERIOD_ROW",
+              "UNCLASSIFIABLE",
+              "INSUFFICIENT_EVIDENCE"
+            ]
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "guardrails": { "type": "string" },
+    "expected_coverage_effect": { "type": "string" },
+    "false_match_risk": { "type": "string" },
+    "tests_validation_plan": { "type": "string" },
+    "requires_human_merge": { "type": "boolean" },
+    "missing_evidence": { "type": "string" },
+    "residual_risk": { "type": "string", "minLength": 1 },
+    "reviewer_notes": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "verdict": { "const": "RULE_PROPOSED" } },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "changed_files": { "minItems": 1 },
+          "rule_scope": { "minLength": 1 },
+          "rule_type": { "minLength": 1 },
+          "rule_summary": { "minLength": 1 },
+          "deterministic_conditions": { "minLength": 1 },
+          "positive_examples": { "minItems": 1 },
+          "false_positive_examples": { "minItems": 1 },
+          "guardrails": { "minLength": 1 },
+          "expected_coverage_effect": { "minLength": 1 },
+          "false_match_risk": { "minLength": 1 },
+          "tests_validation_plan": { "minLength": 1 },
+          "requires_human_merge": { "const": true }
+        },
+        "required": [
+          "changed_files",
+          "rule_scope",
+          "rule_type",
+          "rule_summary",
+          "deterministic_conditions",
+          "positive_examples",
+          "false_positive_examples",
+          "guardrails",
+          "expected_coverage_effect",
+          "false_match_risk",
+          "tests_validation_plan",
+          "requires_human_merge"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": { "verdict": { "enum": ["INSUFFICIENT_EVIDENCE", "ESCALATE"] } },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "missing_evidence": { "minLength": 10 }
+        }
+      }
+    }
+  ]
+}
