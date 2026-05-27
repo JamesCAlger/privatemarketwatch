@@ -241,6 +241,8 @@ FUND_FINANCIALS_CROSS_LEVEL_FILE = OUTPUT_DIR / "fund_financials_cross_level.csv
 BDC_POSITION_PIK_EVIDENCE_FILE = OUTPUT_DIR / "bdc_position_pik_evidence.csv"
 POSITION_PIK_STATUS_FILE = OUTPUT_DIR / "position_pik_status.csv"
 PIK_TRANSITIONS_FILE = OUTPUT_DIR / "pik_transitions.csv"
+PIK_SCHEDULE_PROXY_SUMMARY_FILE = OUTPUT_DIR / "pik_schedule_proxy_summary.csv"
+PIK_SCHEDULE_PROXY_TRANSITIONS_FILE = OUTPUT_DIR / "pik_schedule_proxy_transitions.csv"
 
 # GICS industry mapping
 GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"

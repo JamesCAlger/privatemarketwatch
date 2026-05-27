@@ -24,6 +24,8 @@ Core commands:
 python -m pipeline.main --unified --validate
 python scripts/rebuild_outputs.py
 python scripts/rebuild_outputs.py --unified
+python scripts/rebuild_outputs.py --pik-status
+python scripts/rebuild_outputs.py --pik-proxy
 python -m pipeline.main --export-frontend
 pytest tests/
 cd frontend
@@ -38,6 +40,8 @@ npm run build
 - BDC XBRL data is strongest from roughly 2022 onward. Pre-XBRL HTML extraction depends on per-CIK templates and validation.
 - Consumer/marketplace lending CIKs with opaque individual loan IDs are intentionally excluded from index-facing unified outputs because they inflate row counts while contributing little FV.
 - Comparative-period BDC rows can be legitimate prior-period facts, not duplicates. Confirm `period`, `report_date`, accession, and dimension path before removing them.
+- PIK has two separate meanings in this repo. `pik_current_status` is strict current-payment/accrual evidence from N-PORT paid-in-kind flags or BDC position-level PIK income/accrual/capitalization facts. `pik_terms_flag` / `pik_terms_rate` is a schedule-rate proxy for disclosed PIK terms, comparable to S&P-style BDC PIK exposure, but not proof of current PIK income.
+- Do not label `pik_terms_started` as confirmed "bad PIK." It is a public-filing proxy that PIK terms appeared on an existing matched position. Confirmed bad PIK requires amendment/origination evidence showing cash-pay terms were changed because of borrower stress.
 
 ## Guardrails
 
@@ -48,6 +52,7 @@ npm run build
 - Do not use pandas `.apply()`, `.iterrows()`, or row-level Python loops on large holdings datasets. Use DuckDB SQL or vectorized operations.
 - Keep log output ASCII-safe. Windows console encoding has previously failed on Unicode punctuation and box drawing.
 - Do not edit generated frontend JSON directly unless the task is explicitly about generated artifacts. Prefer fixing `pipeline/export_frontend.py` or upstream CSV generation.
+- Do not collapse strict current PIK evidence and PIK schedule-rate proxy metrics into one public label. Show the proxy status and residual uncertainty explicitly.
 - Do not revert user changes. This repository often has a dirty worktree with active experiments, generated data, and ad-hoc scripts.
 
 ## Anti-Sycophancy Requirement
@@ -195,6 +200,8 @@ When asked to commit changes, include both a concise subject and a reasonably si
 - `CLAUDE.md`: current state, contracts, schemas, and operational warnings.
 - `docs/agentic_data_quality.md`: proposed agentic validation architecture.
 - `pipeline/unified_holdings.py`: central holdings construction and classification.
+- `pipeline/bdc_position_pik.py`: cache-only BDC XBRL extractor for position-level PIK income/accrual/capitalization evidence.
+- `pipeline/pik_status.py`: strict current PIK status, PIK schedule-rate proxy summary, and PIK terms-started transition outputs.
 - `pipeline/validate_holdings.py`: validation suite and output files.
 - `pipeline/export_frontend.py`: public JSON aggregation.
 - `pipeline/main.py`: orchestration and command flags.
@@ -213,6 +220,7 @@ Known high-value risks to keep in mind:
 - Fund-level strategy/taxonomy errors that holdings-level rules cannot catch.
 - N-PORT source fields that are mislabeled by filers.
 - Rate scale ambiguity.
+- PIK terminology ambiguity: disclosed PIK terms, current PIK payment/accrual evidence, and "bad PIK" transitions are different metrics with different evidence strength.
 - Entity resolution undercoverage, especially N-PORT.
 - Public frontend charts implying precision that validation does not support.
 

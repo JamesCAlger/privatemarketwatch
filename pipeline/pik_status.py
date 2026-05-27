@@ -10,6 +10,8 @@ import pandas as pd
 
 from pipeline.config import (
     BDC_POSITION_PIK_EVIDENCE_FILE,
+    PIK_SCHEDULE_PROXY_SUMMARY_FILE,
+    PIK_SCHEDULE_PROXY_TRANSITIONS_FILE,
     PIK_TRANSITIONS_FILE,
     POSITION_PIK_STATUS_FILE,
     UNIFIED_HOLDINGS_FILE,
@@ -30,6 +32,23 @@ TRANSITION_COLUMNS = [
     "prior_report_date", "current_report_date", "prior_status",
     "current_status", "prior_evidence", "current_evidence",
     "prior_fair_value", "current_fair_value",
+]
+
+SCHEDULE_PROXY_SUMMARY_COLUMNS = [
+    "scope", "source", "index_classification", "report_date",
+    "report_quarter", "total_rows", "pik_terms_rows",
+    "pik_terms_row_pct", "total_fair_value", "pik_terms_fair_value",
+    "pik_terms_fair_value_pct", "unique_positions",
+    "pik_terms_unique_positions", "first_seen_with_pik_terms_rows",
+    "first_seen_with_pik_terms_positions",
+]
+
+SCHEDULE_PROXY_TRANSITION_COLUMNS = [
+    "transition_type", "source", "cik", "entity_name", "position_id",
+    "prior_report_date", "current_report_date", "issuer_name",
+    "index_classification", "prior_pik_terms_flag",
+    "current_pik_terms_flag", "prior_pik_terms_rate",
+    "current_pik_terms_rate", "prior_fair_value", "current_fair_value",
 ]
 
 
@@ -54,6 +73,16 @@ def _normalize_cik(series: pd.Series) -> pd.Series:
 
 def _bool_text(series: pd.Series) -> pd.Series:
     return series.map({True: "True", False: "False"}).fillna("")
+
+
+def _parse_bool_series(series: pd.Series) -> pd.Series:
+    return (
+        series.fillna("")
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .isin(["true", "1", "yes", "y"])
+    )
 
 
 def _amount_summary(series: pd.Series) -> float | None:
@@ -325,3 +354,227 @@ def build_pik_transitions(status_df: pd.DataFrame) -> pd.DataFrame:
         ["transition_type", "source", "cik", "position_id", "current_report_date"],
         kind="mergesort",
     ).reset_index(drop=True)
+
+
+def _prepare_schedule_proxy_status(status_df: pd.DataFrame) -> pd.DataFrame:
+    df = status_df.copy()
+    for col in [
+        "source", "cik", "entity_name", "position_id", "report_date",
+        "report_quarter", "issuer_name", "index_classification",
+        "fair_value", "pik_terms_flag", "pik_terms_rate",
+    ]:
+        if col not in df.columns:
+            df[col] = ""
+    if "report_quarter" not in status_df.columns or df["report_quarter"].fillna("").eq("").all():
+        df["report_quarter"] = _quarter_label(df["report_date"])
+    df["_date"] = pd.to_datetime(df["report_date"], errors="coerce")
+    df["_fair_value"] = pd.to_numeric(df["fair_value"], errors="coerce").fillna(0.0)
+    df["_pik_terms_rate"] = pd.to_numeric(df["pik_terms_rate"], errors="coerce")
+    df["_pik_terms_flag"] = _parse_bool_series(df["pik_terms_flag"]) | df["_pik_terms_rate"].fillna(0).gt(0)
+    df["_pik_terms_fair_value"] = df["_fair_value"].where(df["_pik_terms_flag"], 0.0)
+    df["_has_position_id"] = df["position_id"].fillna("").astype(str).str.strip().ne("")
+    return df
+
+
+def _first_seen_with_terms_counts(df: pd.DataFrame, group_cols: list[str]) -> pd.DataFrame:
+    base = df[df["_has_position_id"]].sort_values(
+        ["source", "cik", "position_id", "_date"],
+        kind="mergesort",
+    ).copy()
+    if base.empty:
+        return pd.DataFrame(columns=group_cols + [
+            "first_seen_with_pik_terms_rows",
+            "first_seen_with_pik_terms_positions",
+        ])
+    first_idx = base.groupby(["source", "cik", "position_id"], dropna=False).head(1).index
+    first = base.loc[first_idx]
+    first = first[first["_pik_terms_flag"]]
+    if first.empty:
+        return pd.DataFrame(columns=group_cols + [
+            "first_seen_with_pik_terms_rows",
+            "first_seen_with_pik_terms_positions",
+        ])
+    return first.groupby(group_cols, dropna=False).agg(
+        first_seen_with_pik_terms_rows=("position_id", "size"),
+        first_seen_with_pik_terms_positions=("position_id", "nunique"),
+    ).reset_index()
+
+
+def _build_schedule_summary_for_scope(
+    df: pd.DataFrame,
+    scope: str,
+    group_cols: list[str],
+) -> pd.DataFrame:
+    work = df.copy()
+    for col in group_cols:
+        if col not in work.columns:
+            work[col] = "ALL"
+    grouped = work.groupby(group_cols, dropna=False)
+    summary = grouped.agg(
+        total_rows=("position_id", "size"),
+        pik_terms_rows=("_pik_terms_flag", "sum"),
+        total_fair_value=("_fair_value", "sum"),
+        pik_terms_fair_value=("_pik_terms_fair_value", "sum"),
+        unique_positions=("position_id", lambda s: s[work.loc[s.index, "_has_position_id"]].nunique()),
+        pik_terms_unique_positions=(
+            "position_id",
+            lambda s: s[
+                work.loc[s.index, "_has_position_id"]
+                & work.loc[s.index, "_pik_terms_flag"]
+            ].nunique(),
+        ),
+    ).reset_index()
+    summary["pik_terms_row_pct"] = summary["pik_terms_rows"] / summary["total_rows"].where(summary["total_rows"] != 0)
+    summary["pik_terms_fair_value_pct"] = (
+        summary["pik_terms_fair_value"]
+        / summary["total_fair_value"].where(summary["total_fair_value"] != 0)
+    )
+    first_seen = _first_seen_with_terms_counts(work, group_cols)
+    summary = summary.merge(first_seen, on=group_cols, how="left")
+    summary["first_seen_with_pik_terms_rows"] = (
+        pd.to_numeric(summary["first_seen_with_pik_terms_rows"], errors="coerce")
+        .fillna(0)
+        .astype(int)
+    )
+    summary["first_seen_with_pik_terms_positions"] = (
+        pd.to_numeric(summary["first_seen_with_pik_terms_positions"], errors="coerce")
+        .fillna(0)
+        .astype(int)
+    )
+    summary["scope"] = scope
+    for col in ["source", "index_classification"]:
+        if col not in summary.columns:
+            summary[col] = "ALL"
+    return summary
+
+
+def build_pik_schedule_proxy_summary(status_df: pd.DataFrame) -> pd.DataFrame:
+    """Build researcher-comparable PIK terms exposure summary.
+
+    This is a schedule-rate proxy: ``pik_terms_rate > 0`` indicates disclosed
+    PIK terms, not independently verified current PIK income/accrual.
+    """
+    if status_df.empty:
+        return pd.DataFrame(columns=SCHEDULE_PROXY_SUMMARY_COLUMNS)
+    df = _prepare_schedule_proxy_status(status_df)
+
+    all_df = df.assign(source="ALL", index_classification="ALL")
+    by_source = df.assign(index_classification="ALL")
+    by_index = df.assign(source="ALL")
+    bdc_dl = df[
+        (df["source"].str.lower() == "bdc")
+        & (df["index_classification"] == "DIRECT_LENDING")
+    ].copy()
+    if not bdc_dl.empty:
+        bdc_dl = bdc_dl.assign(source="bdc", index_classification="DIRECT_LENDING")
+
+    pieces = [
+        _build_schedule_summary_for_scope(
+            all_df,
+            "all",
+            ["report_date", "report_quarter", "source", "index_classification"],
+        ),
+        _build_schedule_summary_for_scope(
+            by_source,
+            "by_source",
+            ["report_date", "report_quarter", "source", "index_classification"],
+        ),
+        _build_schedule_summary_for_scope(
+            by_index,
+            "by_index",
+            ["report_date", "report_quarter", "source", "index_classification"],
+        ),
+        _build_schedule_summary_for_scope(
+            df,
+            "by_source_index",
+            ["report_date", "report_quarter", "source", "index_classification"],
+        ),
+    ]
+    if not bdc_dl.empty:
+        pieces.append(_build_schedule_summary_for_scope(
+            bdc_dl,
+            "bdc_direct_lending_headline",
+            ["report_date", "report_quarter", "source", "index_classification"],
+        ))
+
+    result = pd.concat(pieces, ignore_index=True)
+    for col in SCHEDULE_PROXY_SUMMARY_COLUMNS:
+        if col not in result.columns:
+            result[col] = ""
+    return result[SCHEDULE_PROXY_SUMMARY_COLUMNS].sort_values(
+        ["report_date", "scope", "source", "index_classification"],
+        kind="mergesort",
+        na_position="last",
+    ).reset_index(drop=True)
+
+
+def build_pik_schedule_proxy_transitions(status_df: pd.DataFrame) -> pd.DataFrame:
+    """Build same-position no-PIK-terms to PIK-terms transition proxy."""
+    if status_df.empty:
+        return pd.DataFrame(columns=SCHEDULE_PROXY_TRANSITION_COLUMNS)
+    df = _prepare_schedule_proxy_status(status_df)
+    df = df[df["_has_position_id"]].copy()
+    if df.empty:
+        logger.warning("PIK schedule proxy transitions skipped: no nonblank position_id coverage")
+        return pd.DataFrame(columns=SCHEDULE_PROXY_TRANSITION_COLUMNS)
+
+    df = df.sort_values(["source", "cik", "position_id", "_date"], kind="mergesort")
+    group_cols = ["source", "cik", "position_id"]
+    for col in [
+        "report_date", "pik_terms_flag", "_pik_terms_flag", "pik_terms_rate",
+        "fair_value", "issuer_name", "entity_name", "index_classification",
+    ]:
+        df[f"prior_{col}"] = df.groupby(group_cols, dropna=False)[col].shift(1)
+
+    starts = df[
+        (df["prior__pik_terms_flag"] == False)
+        & (df["_pik_terms_flag"] == True)
+    ].copy()
+    if starts.empty:
+        return pd.DataFrame(columns=SCHEDULE_PROXY_TRANSITION_COLUMNS)
+
+    result = pd.DataFrame({
+        "transition_type": "pik_terms_started",
+        "source": starts["source"],
+        "cik": starts["cik"],
+        "entity_name": starts["entity_name"].fillna(starts["prior_entity_name"]),
+        "position_id": starts["position_id"],
+        "prior_report_date": starts["prior_report_date"],
+        "current_report_date": starts["report_date"],
+        "issuer_name": starts["issuer_name"].fillna(starts["prior_issuer_name"]),
+        "index_classification": starts["index_classification"].fillna(starts["prior_index_classification"]),
+        "prior_pik_terms_flag": _bool_text(starts["prior__pik_terms_flag"]),
+        "current_pik_terms_flag": _bool_text(starts["_pik_terms_flag"]),
+        "prior_pik_terms_rate": starts["prior_pik_terms_rate"],
+        "current_pik_terms_rate": starts["pik_terms_rate"],
+        "prior_fair_value": starts["prior_fair_value"],
+        "current_fair_value": starts["fair_value"],
+    })
+    return result[SCHEDULE_PROXY_TRANSITION_COLUMNS].sort_values(
+        ["source", "cik", "position_id", "current_report_date"],
+        kind="mergesort",
+        na_position="last",
+    ).reset_index(drop=True)
+
+
+def build_pik_schedule_proxy_outputs(
+    status_df: pd.DataFrame | None = None,
+    summary_path: Path = PIK_SCHEDULE_PROXY_SUMMARY_FILE,
+    transitions_path: Path = PIK_SCHEDULE_PROXY_TRANSITIONS_FILE,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Write PIK schedule-rate proxy summary and transition artifacts."""
+    t0 = time.time()
+    if status_df is None:
+        status_df = pd.read_csv(POSITION_PIK_STATUS_FILE, dtype=str)
+    summary = build_pik_schedule_proxy_summary(status_df)
+    transitions = build_pik_schedule_proxy_transitions(status_df)
+
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    transitions_path.parent.mkdir(parents=True, exist_ok=True)
+    summary.to_csv(summary_path, index=False)
+    transitions.to_csv(transitions_path, index=False)
+    logger.info(
+        "PIK schedule proxy: %d summary rows, %d transition rows in %.1f s",
+        len(summary), len(transitions), time.time() - t0,
+    )
+    return summary, transitions

@@ -10,6 +10,7 @@ Usage:
     python scripts/rebuild_outputs.py --bdc-holdings # Only cached BDC XBRL holdings
     python scripts/rebuild_outputs.py --returns     # Only matching + returns
     python scripts/rebuild_outputs.py --pik-status  # Only current PIK status artifacts
+    python scripts/rebuild_outputs.py --pik-proxy   # Only PIK schedule-rate proxy artifacts
     python scripts/rebuild_outputs.py --income      # Only fund income + fee uplift
     python scripts/rebuild_outputs.py --html        # Only HTML template extraction ($0)
 """
@@ -135,6 +136,22 @@ def rebuild_pik_status():
         time.time() - t1,
     )
     return status_df, transitions_df
+
+
+def rebuild_pik_proxy():
+    """Rebuild researcher-comparable PIK schedule-rate proxy artifacts."""
+    from pipeline.pik_status import build_pik_schedule_proxy_outputs
+
+    logger.info("=== Rebuilding PIK schedule-rate proxy ===")
+    t0 = time.time()
+    summary_df, transitions_df = build_pik_schedule_proxy_outputs()
+    logger.info(
+        "PIK schedule proxy: %d summary rows, %d transitions in %.1f s",
+        len(summary_df),
+        len(transitions_df),
+        time.time() - t0,
+    )
+    return summary_df, transitions_df
 
 
 def rebuild_ncsr():
@@ -319,6 +336,8 @@ def main():
                         help="Rebuild position matches + index returns only")
     parser.add_argument("--pik-status", action="store_true",
                         help="Rebuild current PIK status artifacts only")
+    parser.add_argument("--pik-proxy", action="store_true",
+                        help="Rebuild PIK schedule-rate proxy artifacts only")
     parser.add_argument("--html", action="store_true",
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
@@ -342,7 +361,7 @@ def main():
     # If no flags, rebuild everything
     rebuild_all = not (
         args.bdc_holdings or args.unified or args.income or args.returns
-        or args.pik_status or args.html or args.frontend or args.financials or args.gics
+        or args.pik_status or args.pik_proxy or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
     )
 
@@ -371,6 +390,9 @@ def main():
 
     if rebuild_all or args.pik_status:
         rebuild_pik_status()
+
+    if rebuild_all or args.pik_proxy:
+        rebuild_pik_proxy()
 
     if args.html:
         rebuild_html()

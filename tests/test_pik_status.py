@@ -9,7 +9,13 @@ from pipeline.bdc_position_pik import (
     extract_bdc_position_pik_evidence,
 )
 from pipeline.bdc_filings import _parse_xbrl_contexts
-from pipeline.pik_status import build_pik_transitions, build_position_pik_status
+from pipeline.pik_status import (
+    build_pik_schedule_proxy_outputs,
+    build_pik_schedule_proxy_summary,
+    build_pik_schedule_proxy_transitions,
+    build_pik_transitions,
+    build_position_pik_status,
+)
 
 
 def _unified(rows: list[dict]) -> pd.DataFrame:
@@ -227,3 +233,99 @@ def test_extract_bdc_position_pik_evidence_cache_only(tmp_path, monkeypatch):
     assert len(result) == 1
     assert Path(tmp_path / "evidence.csv").exists()
     assert result.iloc[0]["matched_identifier"] == "Acme Loan"
+
+
+def test_schedule_proxy_summary_uses_terms_without_changing_current_status():
+    status = pd.DataFrame([
+        {"source": "bdc", "cik": "1", "report_date": "2024-03-31",
+         "report_quarter": "2024q1", "position_id": "P1",
+         "fair_value": "100", "index_classification": "DIRECT_LENDING",
+         "pik_current_status": "unknown", "pik_terms_flag": "True",
+         "pik_terms_rate": "2.5"},
+        {"source": "bdc", "cik": "1", "report_date": "2024-03-31",
+         "report_quarter": "2024q1", "position_id": "P2",
+         "fair_value": "300", "index_classification": "DIRECT_LENDING",
+         "pik_current_status": "unknown", "pik_terms_flag": "False",
+         "pik_terms_rate": ""},
+    ])
+    summary = build_pik_schedule_proxy_summary(status)
+    headline = summary[
+        (summary["scope"] == "bdc_direct_lending_headline")
+        & (summary["report_date"] == "2024-03-31")
+    ].iloc[0]
+    assert headline["total_rows"] == 2
+    assert headline["pik_terms_rows"] == 1
+    assert headline["pik_terms_fair_value"] == 100
+    assert headline["pik_terms_fair_value_pct"] == 0.25
+    assert set(status["pik_current_status"]) == {"unknown"}
+
+
+def test_schedule_proxy_terms_started_excludes_first_seen_with_terms():
+    status = pd.DataFrame([
+        {"source": "bdc", "cik": "1", "entity_name": "BDC", "position_id": "P1",
+         "report_date": "2024-03-31", "report_quarter": "2024q1",
+         "issuer_name": "Acme", "index_classification": "DIRECT_LENDING",
+         "pik_terms_flag": "False", "pik_terms_rate": "", "fair_value": "10"},
+        {"source": "bdc", "cik": "1", "entity_name": "BDC", "position_id": "P1",
+         "report_date": "2024-06-30", "report_quarter": "2024q2",
+         "issuer_name": "Acme", "index_classification": "DIRECT_LENDING",
+         "pik_terms_flag": "True", "pik_terms_rate": "3.0", "fair_value": "11"},
+        {"source": "bdc", "cik": "1", "entity_name": "BDC", "position_id": "P2",
+         "report_date": "2024-06-30", "report_quarter": "2024q2",
+         "issuer_name": "First Seen", "index_classification": "DIRECT_LENDING",
+         "pik_terms_flag": "True", "pik_terms_rate": "4.0", "fair_value": "20"},
+    ])
+    transitions = build_pik_schedule_proxy_transitions(status)
+    assert len(transitions) == 1
+    row = transitions.iloc[0]
+    assert row["transition_type"] == "pik_terms_started"
+    assert row["position_id"] == "P1"
+    assert row["prior_pik_terms_flag"] == "False"
+    assert row["current_pik_terms_flag"] == "True"
+    assert row["current_pik_terms_rate"] == "3.0"
+
+    summary = build_pik_schedule_proxy_summary(status)
+    q2_all = summary[
+        (summary["scope"] == "all")
+        & (summary["report_date"] == "2024-06-30")
+    ].iloc[0]
+    assert q2_all["first_seen_with_pik_terms_rows"] == 1
+    assert q2_all["first_seen_with_pik_terms_positions"] == 1
+
+
+def test_schedule_proxy_does_not_transition_across_source_or_cik():
+    status = pd.DataFrame([
+        {"source": "bdc", "cik": "1", "position_id": "P1",
+         "report_date": "2024-03-31", "pik_terms_flag": "False",
+         "pik_terms_rate": "", "fair_value": "10"},
+        {"source": "bdc", "cik": "2", "position_id": "P1",
+         "report_date": "2024-06-30", "pik_terms_flag": "True",
+         "pik_terms_rate": "3.0", "fair_value": "11"},
+        {"source": "nport", "cik": "1", "position_id": "P1",
+         "report_date": "2024-09-30", "pik_terms_flag": "True",
+         "pik_terms_rate": "3.0", "fair_value": "12"},
+    ])
+    transitions = build_pik_schedule_proxy_transitions(status)
+    assert transitions.empty
+
+
+def test_schedule_proxy_outputs_write_files(tmp_path):
+    status = pd.DataFrame([
+        {"source": "bdc", "cik": "1", "entity_name": "BDC", "position_id": "P1",
+         "report_date": "2024-03-31", "report_quarter": "2024q1",
+         "issuer_name": "Acme", "index_classification": "DIRECT_LENDING",
+         "pik_terms_flag": "False", "pik_terms_rate": "", "fair_value": "10"},
+        {"source": "bdc", "cik": "1", "entity_name": "BDC", "position_id": "P1",
+         "report_date": "2024-06-30", "report_quarter": "2024q2",
+         "issuer_name": "Acme", "index_classification": "DIRECT_LENDING",
+         "pik_terms_flag": "True", "pik_terms_rate": "3.0", "fair_value": "11"},
+    ])
+    summary, transitions = build_pik_schedule_proxy_outputs(
+        status_df=status,
+        summary_path=tmp_path / "summary.csv",
+        transitions_path=tmp_path / "transitions.csv",
+    )
+    assert not summary.empty
+    assert len(transitions) == 1
+    assert (tmp_path / "summary.csv").exists()
+    assert (tmp_path / "transitions.csv").exists()

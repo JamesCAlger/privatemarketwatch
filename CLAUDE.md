@@ -100,6 +100,8 @@ python -m pipeline.main --exhaustive     # All 6 discovery methods (~45-60 min)
 python -m pipeline.main --holdings       # + BDC XBRL extraction (~1-3 hrs first run)
 python -m pipeline.main --ciks 1418076   # Holdings for specific CIKs only
 python -m pipeline.main --unified        # Build unified private markets holdings (~60s)
+python scripts/rebuild_outputs.py --pik-status  # Strict current PIK status artifacts
+python scripts/rebuild_outputs.py --pik-proxy   # S&P-style schedule-rate PIK proxy artifacts
 ```
 
 ### Modules
@@ -121,6 +123,8 @@ python -m pipeline.main --unified        # Build unified private markets holding
 | `pipeline/position_matching.py` | 4-tier position matching cascade (within-filing, CUSIP, exact name, normalized/fuzzy) |
 | `pipeline/index_returns.py` | Index return computation: per-unit price return, income return (3-tier rate imputation + PIK + fee uplift) |
 | `pipeline/bdc_fund_income.py` | Fund-level income extraction from cached XBRL (no network) |
+| `pipeline/bdc_position_pik.py` | Position-level BDC PIK income/accrual/capitalization evidence extraction from cached XBRL (no network) |
+| `pipeline/pik_status.py` | Strict current PIK status plus researcher-comparable PIK schedule-rate proxy summaries and terms-started transitions |
 | `pipeline/bdc_sector_breakdown.py` | Per-industry aggregate data (FV, cost, % of net assets) from XBRL `EquitySecuritiesByIndustryAxis`. See [`docs/bdc_sector_breakdown.md`](./docs/bdc_sector_breakdown.md) |
 | `pipeline/fee_uplift.py` | Per-CIK fee uplift: residual between fund income yield and coupon yield |
 | `pipeline/ncsr_financials.py` | N-CSR/N-CSRS Financial Highlights parser: filing discovery, HTML download, FH table extraction (vertical/horizontal/split-table/broadened search), per-share NII, distributions, NAV, expense ratios, total return |
@@ -176,6 +180,11 @@ data/
     position_matches.csv               # Position matching pairs (541K pairs)
     position_returns.csv               # Per-position total returns
     index_returns.csv                  # Quarterly index returns (4 indices, 25 quarters)
+    bdc_position_pik_evidence.csv      # Raw BDC position-level PIK income/accrual/capitalization evidence
+    position_pik_status.csv            # Strict current PIK status plus separate PIK terms flags per holding-quarter
+    pik_transitions.csv                # Strict current-evidence not_paying/new evidence -> paying transitions
+    pik_schedule_proxy_summary.csv     # S&P-style PIK schedule-rate proxy summary (1,834 rows in latest rebuild)
+    pik_schedule_proxy_transitions.csv # PIK terms-started proxy transitions (3,706 rows in latest rebuild)
     bdc_fund_income.csv                # Fund-level income from XBRL
     fee_uplift.csv                     # Per-CIK fee uplift (128 CIKs)
     ncsr_filings_index.csv             # 2,376 N-CSR/N-CSRS filing metadata
@@ -233,6 +242,15 @@ data/
 | `investment_type` | str | Investment type axis (rarely populated) |
 | `affiliation` | str | Issuer affiliation (rarely populated) |
 | `dimensions_raw` | str | Full XBRL dimension string for audit |
+
+## Position-Level PIK Status
+
+PIK outputs intentionally separate strict current-payment/accrual evidence from schedule-rate proxy metrics:
+
+- `position_pik_status.csv` is one row per holding-quarter. `pik_current_status` is `paying`, `not_paying`, or `unknown` based on N-PORT paid-in-kind flags or BDC position-level PIK income/accrual/capitalization facts. BDC fund-level PIK income does not mark individual positions as paying.
+- `pik_terms_flag` and `pik_terms_rate` come from disclosed schedule PIK terms (`pik_rate > 0`). These are useful for research comparability but are not proof of current-period PIK income.
+- `pik_schedule_proxy_summary.csv` is the S&P-style public-filing proxy. The headline comparable denominator is BDC direct-lending fair value. Latest rebuild: 2025-12-31 BDC direct lending has 3,939 PIK-terms rows out of 50,200, with PIK-terms FV of $57.27B on $512.58B total FV (11.17%).
+- `pik_schedule_proxy_transitions.csv` reports `pik_terms_started`, meaning the same `position_id` moved from no PIK terms to PIK terms. This is a "PIK terms started proxy," not confirmed bad PIK. Confirmed bad PIK needs amendment/origination evidence showing cash-pay terms changed due to borrower stress.
 
 ## Unified Holdings -- Validation
 
