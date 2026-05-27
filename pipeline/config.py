@@ -15,6 +15,7 @@ FILINGS_DIR = RAW_DIR / "filings"
 THIRD_PARTY_DIR = RAW_DIR / "third_party"
 OUTPUT_DIR = DATA_DIR / "output"
 OVERRIDES_DIR = DATA_DIR / "overrides"
+OUTPUT_CACHE_DIR = OUTPUT_DIR / "cache"
 
 # Cache for downloaded N-2 cover pages (150KB each)
 N2_HEADERS_CACHE_DIR = RAW_DIR / "n2_headers_cache"
@@ -42,7 +43,7 @@ for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           BDC_HTML_CACHE_DIR, HTML_TEMPLATE_DIR,
           COMPANYFACTS_CACHE_DIR, REFERENCE_DIR,
           RAW_DIR / "filings" / "ncsr_html",
-          OVERRIDES_DIR]:
+          OVERRIDES_DIR, OUTPUT_CACHE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -179,6 +180,21 @@ SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE = (
 SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE = (
     OUTPUT_DIR / "source_reconciliation_source_only_classification.md"
 )
+BDC_SOURCE_FACTS_CACHE_DIR = OUTPUT_CACHE_DIR / "bdc_source_facts"
+BDC_SOURCE_FACTS_CACHE_MANIFEST_FILE = BDC_SOURCE_FACTS_CACHE_DIR / "manifest.csv"
+SOURCE_RECONCILIATION_CACHE_DIR = OUTPUT_CACHE_DIR / "source_reconciliation"
+SOURCE_RECONCILIATION_DETAIL_BY_CIK_DIR = (
+    SOURCE_RECONCILIATION_CACHE_DIR / "detail_by_cik"
+)
+SOURCE_RECONCILIATION_METRICS_BY_CIK_DIR = (
+    SOURCE_RECONCILIATION_CACHE_DIR / "metrics_by_cik"
+)
+SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE = (
+    SOURCE_RECONCILIATION_CACHE_DIR / "manifest.csv"
+)
+SOURCE_RECONCILIATION_CACHE_STATUS_FILE = (
+    SOURCE_RECONCILIATION_CACHE_DIR / "cache_status.csv"
+)
 POSITION_PURITY_DIAGNOSTICS_FILE = OUTPUT_DIR / "position_purity_diagnostics.csv"
 POSITION_PURITY_METRICS_FILE = OUTPUT_DIR / "position_purity_metrics.csv"
 FUND_STRATEGY_REFERENCE_FILE = OUTPUT_DIR / "fund_strategy_reference.csv"
@@ -198,6 +214,10 @@ DATA_QUALITY_METRICS_FILE = OUTPUT_DIR / "data_quality_metrics.csv"
 POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
 POSITION_RETURNS_FILE = OUTPUT_DIR / "position_returns.csv"
 INDEX_RETURNS_FILE = OUTPUT_DIR / "index_returns.csv"
+POSITION_ID_EDGES_FILE = OUTPUT_DIR / "position_id_edges.csv"
+POSITION_MATCH_COVERAGE_FILE = OUTPUT_DIR / "position_match_coverage.csv"
+POSITION_MATCH_UNMATCHED_SUMMARY_FILE = OUTPUT_DIR / "position_match_unmatched_summary.csv"
+POSITION_MATCH_RESIDUALS_FILE = OUTPUT_DIR / "position_match_residuals.csv"
 
 # V1 report-only validation rules engine
 VALIDATION_RULES_AGGREGATE_FILE = OUTPUT_DIR / "validation_rules_aggregate.csv"
@@ -216,6 +236,11 @@ BDC_SECTOR_BREAKDOWN_RECONCILED_FILE = OUTPUT_DIR / "bdc_sector_breakdown_reconc
 FUND_FINANCIALS_VALIDATION_CURRENT_FILE = OUTPUT_DIR / "fund_financials_validation_current.csv"
 FUND_FINANCIALS_QUALITY_METRICS_FILE = OUTPUT_DIR / "fund_financials_quality_metrics.csv"
 FUND_FINANCIALS_CROSS_LEVEL_FILE = OUTPUT_DIR / "fund_financials_cross_level.csv"
+
+# Position-level PIK status
+BDC_POSITION_PIK_EVIDENCE_FILE = OUTPUT_DIR / "bdc_position_pik_evidence.csv"
+POSITION_PIK_STATUS_FILE = OUTPUT_DIR / "position_pik_status.csv"
+PIK_TRANSITIONS_FILE = OUTPUT_DIR / "pik_transitions.csv"
 
 # GICS industry mapping
 GICS_REFERENCE_FILE = REFERENCE_DIR / "gics_sub_industries.json"
@@ -326,7 +351,8 @@ FUND_FINANCIALS_SCALE_OVERRIDES: dict[str, int] = {
 # Rows are matched by CIK plus substring match_text, with optional report_date
 # and accession_number narrowing.  Intended only for rows that cannot be
 # classified safely by global rules.
-BDC_AGGREGATE_ROW_OVERRIDES_FILE = OUTPUT_DIR / "bdc_aggregate_row_overrides.json"
+BDC_AGGREGATE_ROW_OVERRIDES_FILE = OVERRIDES_DIR / "bdc_aggregate_row_overrides.json"
+LEGACY_BDC_AGGREGATE_ROW_OVERRIDES_FILE = OUTPUT_DIR / "bdc_aggregate_row_overrides.json"
 
 # ---------------------------------------------------------------------------
 # BDC XBRL holdings extraction settings

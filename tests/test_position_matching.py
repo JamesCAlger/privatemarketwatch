@@ -24,6 +24,7 @@ from pipeline.position_matching import (
     assign_position_ids,
     match_positions,
 )
+from pipeline.match_reconciliation import build_position_match_reconciliation
 
 
 @pytest.fixture(autouse=True)
@@ -1231,6 +1232,73 @@ class TestPositionIds:
         pos, _ = compute_returns(matches_df=matches)
         assert "position_id" in pos.columns
         assert pos["position_id"].iloc[0] == "POS-00000001"
+
+
+class TestPositionMatchReconciliation:
+    def test_reports_short_and_any_span_coverage_and_residual_bucket(self):
+        holdings = _make_unified([
+            {"source": "bdc", "cik": "100", "entity_name": "BDC",
+             "report_date": "2024-03-31", "quarter": "2024q1",
+             "issuer_name": "Acme Corp", "fair_value": "1000000",
+             "bdc_investment_identifier": "Acme Corp",
+             "cusip": "111111111", "index_classification": "DIRECT_LENDING",
+             "position_id": "P1"},
+            {"source": "bdc", "cik": "100", "entity_name": "BDC",
+             "report_date": "2024-06-30", "quarter": "2024q2",
+             "issuer_name": "Acme Corp", "fair_value": "1010000",
+             "bdc_investment_identifier": "Acme Corp",
+             "cusip": "111111111", "index_classification": "DIRECT_LENDING",
+             "position_id": "P1"},
+            {"source": "bdc", "cik": "100", "entity_name": "BDC",
+             "report_date": "2024-06-30", "quarter": "2024q2",
+             "issuer_name": "Beta Corp", "fair_value": "500000",
+             "bdc_investment_identifier": "Beta Corp",
+             "cusip": "222222222", "index_classification": "DIRECT_LENDING",
+             "position_id": "P2"},
+            {"source": "bdc", "cik": "100", "entity_name": "BDC",
+             "report_date": "2024-09-30", "quarter": "2024q3",
+             "issuer_name": "Acme Corp", "fair_value": "1020000",
+             "bdc_investment_identifier": "Acme Corp",
+             "cusip": "111111111", "index_classification": "DIRECT_LENDING",
+             "position_id": "P1"},
+            {"source": "bdc", "cik": "100", "entity_name": "BDC",
+             "report_date": "2024-09-30", "quarter": "2024q3",
+             "issuer_name": "Beta Corp", "fair_value": "550000",
+             "bdc_investment_identifier": "Beta Corp",
+             "cusip": "222222222", "index_classification": "DIRECT_LENDING",
+             "position_id": "P2"},
+        ])
+        matches = pd.DataFrame([{
+            "cik": "100", "source": "bdc", "end_quarter": "2024q2",
+            "end_report_date": "2024-06-30", "end_issuer_name": "Acme Corp",
+            "end_fair_value": "1010000", "position_id": "P1",
+            "span_months": "3",
+        }, {
+            "cik": "100", "source": "bdc", "end_quarter": "2024q3",
+            "end_report_date": "2024-09-30", "end_issuer_name": "Acme Corp",
+            "end_fair_value": "1020000", "position_id": "P1",
+            "span_months": "12",
+        }])
+
+        coverage, unmatched, residuals = build_position_match_reconciliation(
+            holdings_df=holdings,
+            matches_df=matches,
+            write=False,
+        )
+
+        q2 = coverage.set_index("quarter").loc["2024q2"]
+        assert q2["eligible_backward_rows"] == 2
+        assert q2["any_span_matched_rows"] == 1
+        assert q2["short_span_matched_rows"] == 1
+        q3 = coverage.set_index("quarter").loc["2024q3"]
+        assert q3["eligible_backward_rows"] == 2
+        assert q3["any_span_matched_rows"] == 1
+        assert q3["short_span_matched_rows"] == 0
+
+        assert unmatched.set_index("quarter").loc["2024q3", "unmatched_rows"] == 1
+        buckets = dict(zip(residuals["quarter"], residuals["residual_bucket"]))
+        assert buckets["2024q2"] == "likely_new_or_exit"
+        assert buckets["2024q3"] == "cusip_existed_unmatched"
 
 
 # ---------------------------------------------------------------------------

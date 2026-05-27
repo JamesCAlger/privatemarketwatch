@@ -9,6 +9,7 @@ Usage:
     python scripts/rebuild_outputs.py --unified     # Only unified holdings
     python scripts/rebuild_outputs.py --bdc-holdings # Only cached BDC XBRL holdings
     python scripts/rebuild_outputs.py --returns     # Only matching + returns
+    python scripts/rebuild_outputs.py --pik-status  # Only current PIK status artifacts
     python scripts/rebuild_outputs.py --income      # Only fund income + fee uplift
     python scripts/rebuild_outputs.py --html        # Only HTML template extraction ($0)
 """
@@ -76,6 +77,7 @@ def rebuild_returns():
     import pandas as pd
 
     from pipeline.index_returns import compute_returns
+    from pipeline.match_reconciliation import build_position_match_reconciliation
     from pipeline.position_matching import assign_position_ids, match_positions
 
     logger.info("=== Rebuilding position matches ===")
@@ -93,6 +95,17 @@ def rebuild_returns():
     matches_df.to_csv("data/output/position_matches.csv", index=False)
     logger.info("Position IDs assigned in %.1f s", time.time() - t1)
 
+    logger.info("=== Rebuilding position match reconciliation ===")
+    t1b = time.time()
+    coverage_df, unmatched_df, residuals_df = build_position_match_reconciliation(
+        holdings_df=unified_df,
+        matches_df=matches_df,
+    )
+    logger.info(
+        "Match reconciliation: %d coverage rows, %d unmatched groups, %d residual rows in %.1f s",
+        len(coverage_df), len(unmatched_df), len(residuals_df), time.time() - t1b,
+    )
+
     logger.info("=== Rebuilding index returns ===")
     t2 = time.time()
     pos_df, idx_df = compute_returns()
@@ -100,6 +113,28 @@ def rebuild_returns():
                 len(pos_df), len(idx_df), time.time() - t2)
 
     return pos_df, idx_df
+
+
+def rebuild_pik_status():
+    """Rebuild position-level current PIK status artifacts from cached outputs."""
+    from pipeline.bdc_position_pik import extract_bdc_position_pik_evidence
+    from pipeline.pik_status import build_position_pik_status
+
+    logger.info("=== Rebuilding BDC position PIK evidence ===")
+    t0 = time.time()
+    evidence_df = extract_bdc_position_pik_evidence()
+    logger.info("BDC PIK evidence: %d rows in %.1f s", len(evidence_df), time.time() - t0)
+
+    logger.info("=== Rebuilding position PIK status ===")
+    t1 = time.time()
+    status_df, transitions_df = build_position_pik_status(bdc_evidence_df=evidence_df)
+    logger.info(
+        "PIK status: %d rows, %d transitions in %.1f s",
+        len(status_df),
+        len(transitions_df),
+        time.time() - t1,
+    )
+    return status_df, transitions_df
 
 
 def rebuild_ncsr():
@@ -282,6 +317,8 @@ def main():
                         help="Rebuild fund income + fee uplift only")
     parser.add_argument("--returns", action="store_true",
                         help="Rebuild position matches + index returns only")
+    parser.add_argument("--pik-status", action="store_true",
+                        help="Rebuild current PIK status artifacts only")
     parser.add_argument("--html", action="store_true",
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
@@ -305,7 +342,7 @@ def main():
     # If no flags, rebuild everything
     rebuild_all = not (
         args.bdc_holdings or args.unified or args.income or args.returns
-        or args.html or args.frontend or args.financials or args.gics
+        or args.pik_status or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
     )
 
@@ -331,6 +368,9 @@ def main():
 
     if rebuild_all or args.returns:
         rebuild_returns()
+
+    if rebuild_all or args.pik_status:
+        rebuild_pik_status()
 
     if args.html:
         rebuild_html()

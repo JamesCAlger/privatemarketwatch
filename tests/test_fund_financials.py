@@ -876,6 +876,50 @@ class TestBuildFundFinancials:
         assert overlap.iloc[0]["source"] == "companyfacts"
         assert float(overlap.iloc[0]["total_assets"]) == 999_999.0
 
+    def test_post_withdrawal_bdc_companyfacts_filtered(self, tmp_path, monkeypatch):
+        """Companyfacts after BDC withdrawal are not fund financial rows."""
+        monkeypatch.setattr(
+            "pipeline.fund_financials.FUND_FINANCIALS_FILE",
+            tmp_path / "fund_financials.csv",
+        )
+        monkeypatch.setattr(
+            "pipeline.fund_financials.COMPANYFACTS_CACHE_DIR",
+            tmp_path / "cf_cache",
+        )
+        (tmp_path / "cf_cache").mkdir()
+
+        import json
+        facts = {
+            "facts": {
+                "us-gaap": {
+                    "Assets": {"units": {"USD": [
+                        {"end": "2005-12-31", "val": 900_000},
+                        {"end": "2014-12-31", "val": 999_999},
+                    ]}},
+                },
+            },
+        }
+        (tmp_path / "cf_cache" / "0000006666.json").write_text(
+            json.dumps(facts),
+        )
+
+        universe_df = pd.DataFrame([{
+            "cik": "6666",
+            "entity_name": "Withdrawn BDC",
+            "vehicle_type": "bdc",
+            "withdrawal_date": "2006-01-05",
+        }])
+
+        result = build_fund_financials(
+            income_df=pd.DataFrame(),
+            nport_fund_info_df=pd.DataFrame(),
+            universe_df=universe_df,
+            client=None,
+        )
+
+        rows = result[result["cik"] == "0000006666"]
+        assert rows["report_date"].tolist() == ["2005-12-31"]
+
     def test_empty_inputs(self, tmp_path, monkeypatch):
         monkeypatch.setattr(
             "pipeline.fund_financials.FUND_FINANCIALS_FILE",
@@ -980,10 +1024,21 @@ class TestConceptSelectionExactMatch:
         # Both have 1 point; MembersCapital is shorter (14 < 18)
         assert result["2023-12-31"] == 600
 
-    def test_fallback_used_when_no_exact(self):
-        """'AssetsNet' found via fallback when 'Assets' absent."""
+    def test_assets_net_not_used_as_total_assets(self):
+        """'AssetsNet' is equity/net-assets context, not total_assets."""
         facts = _make_facts({
             "AssetsNet": [
+                {"end": "2023-12-31", "val": 960_000_000},
+                {"end": "2024-03-31", "val": 970_000_000},
+            ],
+        })
+        rows = _extract_bdc_balance_sheet("1234", facts)
+        assert rows == []
+
+    def test_total_assets_fallback_used_when_assets_absent(self):
+        """'TotalAssets' remains a valid total_assets fallback."""
+        facts = _make_facts({
+            "TotalAssets": [
                 {"end": "2023-12-31", "val": 960_000_000},
                 {"end": "2024-03-31", "val": 970_000_000},
             ],
@@ -1186,6 +1241,20 @@ class TestBdcCleaning:
         result = _prepare_bdc(cf_df, pd.DataFrame())
         q2 = result[result["report_date"] == "2023-06-30"].iloc[0]
         assert pd.isna(q2["total_assets"])
+
+    def test_total_assets_equal_net_assets_with_liabilities_nulled(self):
+        """TA=NA with positive liabilities means an equity concept leaked."""
+        cf_df = pd.DataFrame([{
+            "cik": "501", "report_date": "2023-12-31",
+            "total_assets": 1_000_000.0,
+            "total_liabilities": 250_000.0,
+            "net_assets": 1_000_000.0,
+            "nav_per_share": None,
+            "shares_outstanding": None,
+            "borrowings": None,
+        }])
+        result = _prepare_bdc(cf_df, pd.DataFrame())
+        assert pd.isna(result.iloc[0]["total_assets"])
 
     def test_clean_data_unchanged(self):
         """Well-formed data passes through untouched."""

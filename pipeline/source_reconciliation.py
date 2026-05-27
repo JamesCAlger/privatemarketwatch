@@ -8,6 +8,9 @@ additive validation: it does not mutate unified holdings.
 from __future__ import annotations
 
 import logging
+import hashlib
+import inspect
+import time
 from pathlib import Path
 from typing import Any, Optional
 
@@ -24,7 +27,10 @@ from pipeline.bdc_filings import (
     _parse_xbrl_contexts,
     _normalize_mixed_decimals_monetary_facts,
 )
-from pipeline.bdc_aggregate_overrides import load_bdc_aggregate_overrides
+from pipeline.bdc_aggregate_overrides import (
+    load_bdc_aggregate_overrides,
+    resolve_bdc_aggregate_overrides_file,
+)
 from pipeline.bdc_identifier import (
     _AFFILIATION_PREFIX_RE,
     _AFFILIATION_SUFFIX_RE,
@@ -41,7 +47,24 @@ from pipeline.classification import (
     _sql_keyword_check,
     _sql_starts_with_any,
 )
-from pipeline.config import BDC_FILINGS_INDEX_FILE, UNIFIED_HOLDINGS_FILE
+from pipeline.config import (
+    BDC_FILINGS_INDEX_FILE,
+    BDC_SOURCE_FACTS_CACHE_DIR,
+    BDC_SOURCE_FACTS_CACHE_MANIFEST_FILE,
+    SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE,
+    SOURCE_RECONCILIATION_CACHE_STATUS_FILE,
+    SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE,
+    SOURCE_RECONCILIATION_DETAIL_BY_CIK_DIR,
+    SOURCE_RECONCILIATION_DETAIL_FILE,
+    SOURCE_RECONCILIATION_METRICS_BY_CIK_DIR,
+    SOURCE_RECONCILIATION_METRICS_FILE,
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
+    UNIFIED_HOLDINGS_FILE,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -2633,6 +2656,549 @@ def build_source_reconciliation_residual_classification_markdown(
         lines.append("")
 
     return "\n".join(lines)
+
+
+SOURCE_FACT_COLUMNS = [
+    "cik", "entity_name", "accession_number", "form_type", "filing_date",
+    "report_date", "context_id", "period", "investment_identifier", "industry",
+    "investment_type", "affiliation", "dimensions_raw", "concept_names",
+    *_VALUE_COLUMNS,
+]
+
+SOURCE_FACT_MANIFEST_COLUMNS = [
+    "accession_number", "cik", "report_date", "xbrl_local_path", "file_size",
+    "file_hash", "filing_metadata_hash", "parse_status", "fact_row_count",
+    "artifact_path", "computed_at",
+]
+
+RECONCILIATION_MANIFEST_COLUMNS = [
+    "cik", "source_hash", "holdings_hash", "logic_hash", "override_hash",
+    "detail_row_count", "metrics_row_count", "detail_artifact_path",
+    "metrics_artifact_path", "computed_at",
+]
+
+RECONCILIATION_CACHE_STATUS_COLUMNS = [
+    "computed_at", "run_mode", "dirty_cik_count", "clean_cik_count",
+    "force", "full_invalidation", "elapsed_seconds",
+]
+
+LEGACY_RECONCILIATION_OUTPUTS = [
+    SOURCE_RECONCILIATION_DETAIL_FILE,
+    SOURCE_RECONCILIATION_METRICS_FILE,
+    SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE,
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE,
+]
+
+
+def _now_iso() -> str:
+    return pd.Timestamp.utcnow().isoformat()
+
+
+def _normalize_cik(value: Any) -> str:
+    digits = "".join(ch for ch in str(value or "") if ch.isdigit())
+    return digits.zfill(10) if digits else ""
+
+
+def _safe_partition_name(value: Any) -> str:
+    text = str(value or "").strip()
+    safe = "".join(ch if ch.isalnum() else "_" for ch in text)
+    return safe or "unknown"
+
+
+def _sql_ident(name: str) -> str:
+    return '"' + str(name).replace('"', '""') + '"'
+
+
+def _file_sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _df_content_hash(df: pd.DataFrame, columns: list[str]) -> str:
+    if df.empty:
+        return hashlib.sha256(b"").hexdigest()
+    work = df.copy()
+    for col in columns:
+        if col not in work.columns:
+            work[col] = ""
+    con = duckdb.connect()
+    con.register("hash_input", work[columns])
+    select_expr = " || chr(31) || ".join(
+        f"COALESCE(CAST({_sql_ident(col)} AS VARCHAR), '')"
+        for col in columns
+    )
+    order_expr = ", ".join(_sql_ident(col) for col in columns)
+    value = con.execute(f"""
+        SELECT sha256(COALESCE(string_agg({select_expr}, chr(30) ORDER BY {order_expr}), ''))
+        FROM hash_input
+    """).fetchone()[0]
+    con.close()
+    return str(value)
+
+
+def _write_df_parquet_atomic(df: pd.DataFrame, path: Path, columns: Optional[list[str]] = None) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = df.copy()
+    if columns is not None:
+        for col in columns:
+            if col not in out.columns:
+                out[col] = ""
+        out = out[columns]
+    tmp_path = path.with_name(f".{path.name}.{time.time_ns()}.tmp")
+    con = duckdb.connect()
+    con.register("out_df", out)
+    con.execute(
+        f"COPY (SELECT * FROM out_df) TO '{str(tmp_path).replace(chr(39), chr(39) * 2)}' (FORMAT PARQUET)"
+    )
+    con.close()
+    tmp_path.replace(path)
+
+
+def _read_parquet_glob(paths: list[Path], columns: Optional[list[str]] = None) -> pd.DataFrame:
+    existing = [p for p in paths if p.exists()]
+    if not existing:
+        return pd.DataFrame(columns=columns or [])
+    path_list = "[" + ",".join(f"'{str(p).replace(chr(39), chr(39) * 2)}'" for p in existing) + "]"
+    select_cols = "*" if columns is None else ", ".join(_sql_ident(c) for c in columns)
+    con = duckdb.connect()
+    df = con.execute(
+        f"SELECT {select_cols} FROM read_parquet({path_list}, union_by_name=true)"
+    ).fetchdf()
+    con.close()
+    return df
+
+
+def _read_csv_manifest(path: Path, columns: list[str]) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame(columns=columns)
+    df = pd.read_csv(path, dtype=str)
+    for col in columns:
+        if col not in df.columns:
+            df[col] = ""
+    return df[columns]
+
+
+def _write_csv_atomic(df: pd.DataFrame, path: Path, columns: Optional[list[str]] = None) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    out = df.copy()
+    if columns is not None:
+        for col in columns:
+            if col not in out.columns:
+                out[col] = ""
+        out = out[columns]
+    tmp_path = path.with_name(f".{path.name}.{time.time_ns()}.tmp")
+    out.to_csv(tmp_path, index=False)
+    tmp_path.replace(path)
+
+
+def _filing_metadata_hash(filing: dict[str, Any]) -> str:
+    keys = ["cik", "entity_name", "accession_number", "form_type", "filing_date", "report_date"]
+    payload = "\x1f".join(str(filing.get(k, "") or "") for k in keys)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _extract_single_xbrl_source_file_cached(
+    xml_path: Path,
+    filing_meta: dict[str, Any],
+) -> tuple[pd.DataFrame, str]:
+    try:
+        etree.parse(str(xml_path))
+    except Exception as exc:
+        logger.debug("Source reconciliation XML parse failed for %s: %s", xml_path, exc)
+        return pd.DataFrame(columns=SOURCE_FACT_COLUMNS), "parse_failed"
+    rows = _extract_single_xbrl_source_file(xml_path, filing_meta)
+    status = "ok" if rows else "no_facts"
+    df = pd.DataFrame(rows)
+    for col in SOURCE_FACT_COLUMNS:
+        if col not in df.columns:
+            df[col] = ""
+    return df[SOURCE_FACT_COLUMNS], status
+
+
+def extract_bdc_source_facts_cached(
+    force: bool = False,
+    filings_index_df: Optional[pd.DataFrame] = None,
+    filings_index_path: Optional[Path] = None,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Extract source facts from cached XBRL files with accession-level Parquet reuse."""
+    BDC_SOURCE_FACTS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    if filings_index_df is None:
+        index_path = filings_index_path or BDC_FILINGS_INDEX_FILE
+        if not index_path.exists():
+            return pd.DataFrame(columns=SOURCE_FACT_COLUMNS), pd.DataFrame(columns=SOURCE_FACT_MANIFEST_COLUMNS)
+        filings_index_df = pd.read_csv(index_path, dtype=str)
+    if filings_index_df.empty or "xbrl_local_path" not in filings_index_df.columns:
+        return pd.DataFrame(columns=SOURCE_FACT_COLUMNS), pd.DataFrame(columns=SOURCE_FACT_MANIFEST_COLUMNS)
+
+    previous = _read_csv_manifest(
+        BDC_SOURCE_FACTS_CACHE_MANIFEST_FILE,
+        SOURCE_FACT_MANIFEST_COLUMNS,
+    )
+    previous_by_accession = {
+        str(row["accession_number"]): row for row in previous.to_dict("records")
+    }
+    manifest_rows: list[dict[str, Any]] = []
+    artifact_paths: list[Path] = []
+
+    for _, filing_row in filings_index_df.iterrows():
+        filing = filing_row.to_dict()
+        xml_path_text = str(filing.get("xbrl_local_path", "") or "").strip()
+        if not xml_path_text:
+            continue
+        xml_path = Path(xml_path_text)
+        if not xml_path.exists():
+            continue
+        accession = str(filing.get("accession_number", "") or "").strip()
+        if not accession:
+            accession = xml_path.stem
+        artifact = BDC_SOURCE_FACTS_CACHE_DIR / f"{_safe_partition_name(accession)}.parquet"
+        file_size = str(xml_path.stat().st_size)
+        file_hash = _file_sha256(xml_path)
+        meta_hash = _filing_metadata_hash(filing)
+        prev = previous_by_accession.get(accession)
+        reuse = (
+            not force
+            and prev is not None
+            and prev.get("xbrl_local_path", "") == str(xml_path)
+            and prev.get("file_size", "") == file_size
+            and prev.get("file_hash", "") == file_hash
+            and prev.get("filing_metadata_hash", "") == meta_hash
+            and artifact.exists()
+        )
+        if reuse:
+            parse_status = prev.get("parse_status", "")
+            fact_count = prev.get("fact_row_count", "0")
+        else:
+            facts, parse_status = _extract_single_xbrl_source_file_cached(xml_path, filing)
+            facts = facts.astype({col: "string" for col in SOURCE_FACT_COLUMNS})
+            fact_count = str(len(facts))
+            _write_df_parquet_atomic(facts, artifact, SOURCE_FACT_COLUMNS)
+        manifest_rows.append({
+            "accession_number": accession,
+            "cik": _normalize_cik(filing.get("cik", "")),
+            "report_date": str(filing.get("report_date", "") or ""),
+            "xbrl_local_path": str(xml_path),
+            "file_size": file_size,
+            "file_hash": file_hash,
+            "filing_metadata_hash": meta_hash,
+            "parse_status": parse_status,
+            "fact_row_count": fact_count,
+            "artifact_path": str(artifact),
+            "computed_at": _now_iso(),
+        })
+        artifact_paths.append(artifact)
+
+    manifest = pd.DataFrame(manifest_rows, columns=SOURCE_FACT_MANIFEST_COLUMNS)
+    _write_csv_atomic(manifest, BDC_SOURCE_FACTS_CACHE_MANIFEST_FILE, SOURCE_FACT_MANIFEST_COLUMNS)
+    return _read_parquet_glob(artifact_paths, SOURCE_FACT_COLUMNS), manifest
+
+
+def compute_bdc_holdings_hashes(unified_df: pd.DataFrame) -> pd.DataFrame:
+    """Hash per-CIK BDC holdings columns used by source reconciliation."""
+    columns = [
+        "source", "cik", "entity_name", "report_date", "period",
+        "accession_number", "filing_date", "bdc_form_type",
+        "bdc_investment_identifier", "bdc_dimensions_raw", "issuer_name",
+        "instrument_description", "index_classification", "asset_category",
+        "issuer_category", "maturity_date", *VALUE_COLUMNS, *RATE_COLUMNS,
+    ]
+    df = unified_df.copy()
+    for col in columns:
+        if col not in df.columns:
+            df[col] = ""
+    con = duckdb.connect()
+    con.register("holdings", df[columns])
+    value_expr = " || chr(31) || ".join(
+        f"COALESCE(CAST({_sql_ident(col)} AS VARCHAR), '')"
+        for col in columns
+    )
+    order_expr = ", ".join(_sql_ident(col) for col in columns)
+    hashes = con.execute(f"""
+        SELECT
+            LPAD(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') AS cik,
+            sha256(COALESCE(string_agg({value_expr}, chr(30) ORDER BY {order_expr}), '')) AS holdings_hash,
+            COUNT(*) AS holdings_row_count
+        FROM holdings
+        WHERE lower(CAST(source AS VARCHAR)) = 'bdc'
+        GROUP BY 1
+    """).fetchdf()
+    con.close()
+    return hashes
+
+
+def _compute_source_hashes(source_manifest: pd.DataFrame) -> pd.DataFrame:
+    if source_manifest.empty:
+        return pd.DataFrame(columns=["cik", "source_hash", "source_accession_count"])
+    con = duckdb.connect()
+    con.register("source_manifest", source_manifest)
+    hashes = con.execute("""
+        SELECT
+            cik,
+            sha256(COALESCE(string_agg(
+                accession_number || chr(31) || file_hash || chr(31) || filing_metadata_hash
+                || chr(31) || parse_status || chr(31) || fact_row_count,
+                chr(30) ORDER BY accession_number
+            ), '')) AS source_hash,
+            COUNT(*) AS source_accession_count
+        FROM source_manifest
+        GROUP BY cik
+    """).fetchdf()
+    con.close()
+    return hashes
+
+
+def compute_reconciliation_logic_hash() -> str:
+    """Hash the reconciliation code paths that affect source/output matching."""
+    pieces = [
+        inspect.getsource(reconcile_bdc_source_to_holdings),
+        inspect.getsource(build_source_reconciliation_metrics),
+        inspect.getsource(_coerce_source_df),
+        inspect.getsource(_coerce_output_df),
+        inspect.getsource(_norm_identifier_sql),
+        inspect.getsource(_staging_clean_identifier_sql),
+        inspect.getsource(_material_mismatch_sql),
+    ]
+    return hashlib.sha256("\n\n".join(pieces).encode("utf-8")).hexdigest()
+
+
+def _compute_override_hash() -> str:
+    overrides_file = resolve_bdc_aggregate_overrides_file()
+    if not overrides_file.exists():
+        return hashlib.sha256(b"").hexdigest()
+    return _file_sha256(overrides_file)
+
+
+def plan_dirty_reconciliation_ciks(
+    source_manifest: pd.DataFrame,
+    holdings_hashes: pd.DataFrame,
+    logic_hash: str,
+    override_hash: str,
+    force: bool = False,
+) -> pd.DataFrame:
+    """Compare current hashes with the CIK-level reconciliation manifest."""
+    source_hashes = _compute_source_hashes(source_manifest)
+    current = pd.merge(source_hashes, holdings_hashes, on="cik", how="outer").fillna("")
+    previous = _read_csv_manifest(
+        SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE,
+        RECONCILIATION_MANIFEST_COLUMNS,
+    )
+    previous_by_cik = {str(row["cik"]): row for row in previous.to_dict("records")}
+    rows: list[dict[str, Any]] = []
+    for row in current.to_dict("records"):
+        cik = str(row.get("cik", ""))
+        prev = previous_by_cik.get(cik)
+        detail_artifact = SOURCE_RECONCILIATION_DETAIL_BY_CIK_DIR / f"{_safe_partition_name(cik)}.parquet"
+        metrics_artifact = SOURCE_RECONCILIATION_METRICS_BY_CIK_DIR / f"{_safe_partition_name(cik)}.parquet"
+        reason = []
+        if force:
+            reason.append("force")
+        if prev is None:
+            reason.append("missing_manifest")
+        else:
+            if prev.get("source_hash", "") != str(row.get("source_hash", "")):
+                reason.append("source_hash")
+            if prev.get("holdings_hash", "") != str(row.get("holdings_hash", "")):
+                reason.append("holdings_hash")
+            if prev.get("logic_hash", "") != logic_hash:
+                reason.append("logic_hash")
+            if prev.get("override_hash", "") != override_hash:
+                reason.append("override_hash")
+            if not Path(prev.get("detail_artifact_path", "")).exists():
+                reason.append("missing_detail_artifact")
+            if not Path(prev.get("metrics_artifact_path", "")).exists():
+                reason.append("missing_metrics_artifact")
+        rows.append({
+            "cik": cik,
+            "source_hash": str(row.get("source_hash", "")),
+            "holdings_hash": str(row.get("holdings_hash", "")),
+            "logic_hash": logic_hash,
+            "override_hash": override_hash,
+            "dirty": bool(reason),
+            "dirty_reason": "|".join(reason),
+            "detail_artifact_path": str(detail_artifact),
+            "metrics_artifact_path": str(metrics_artifact),
+        })
+    return pd.DataFrame(rows)
+
+
+def _legacy_outputs_exist() -> bool:
+    return all(path.exists() for path in LEGACY_RECONCILIATION_OUTPUTS)
+
+
+def _assemble_legacy_reconciliation_outputs(detail: pd.DataFrame, metrics: pd.DataFrame) -> None:
+    source_recon_review = build_reconciliation_calibration_review(detail)
+    residual = build_source_reconciliation_residual_classification(detail)
+    residual_md = build_source_reconciliation_residual_classification_markdown(residual)
+    source_only_detail = build_source_only_blocker_detail(detail)
+    source_only_clusters = build_source_only_blocker_clusters(source_only_detail)
+    source_only_md = build_source_only_blocker_markdown(source_only_detail, source_only_clusters)
+
+    detail.to_csv(SOURCE_RECONCILIATION_DETAIL_FILE, index=False)
+    metrics.to_csv(SOURCE_RECONCILIATION_METRICS_FILE, index=False)
+    source_recon_review.to_csv(SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE, index=False)
+    residual.to_csv(SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE, index=False)
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE.write_text(residual_md, encoding="utf-8")
+    source_only_detail.to_csv(SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE, index=False)
+    source_only_clusters.to_csv(SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE, index=False)
+    SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE.write_text(source_only_md, encoding="utf-8")
+
+
+def _read_cached_detail_for_adapter() -> pd.DataFrame:
+    artifacts = sorted(SOURCE_RECONCILIATION_DETAIL_BY_CIK_DIR.glob("*.parquet"))
+    if not artifacts:
+        return _empty_detail()
+    path_list = "[" + ",".join(f"'{str(p).replace(chr(39), chr(39) * 2)}'" for p in artifacts) + "]"
+    con = duckdb.connect()
+    df = con.execute(f"""
+        SELECT {", ".join(_sql_ident(c) for c in DETAIL_COLUMNS)}
+        FROM read_parquet({path_list}, union_by_name=true)
+        WHERE status IN ('missing_from_pipeline', 'extra_in_pipeline', 'value_mismatch')
+          AND COALESCE(blocking_issue, false)
+    """).fetchdf()
+    con.close()
+    return df
+
+
+def run_bdc_source_reconciliation_cached(
+    unified_df: Optional[pd.DataFrame] = None,
+    filings_index_df: Optional[pd.DataFrame] = None,
+    force: bool = False,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Run CIK-partitioned cached BDC source reconciliation."""
+    started = time.time()
+    SOURCE_RECONCILIATION_DETAIL_BY_CIK_DIR.mkdir(parents=True, exist_ok=True)
+    SOURCE_RECONCILIATION_METRICS_BY_CIK_DIR.mkdir(parents=True, exist_ok=True)
+    if unified_df is None:
+        if not UNIFIED_HOLDINGS_FILE.exists():
+            return _empty_detail(), _empty_metrics(), pd.DataFrame(columns=RECONCILIATION_CACHE_STATUS_COLUMNS)
+        unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
+
+    source_df, source_manifest = extract_bdc_source_facts_cached(
+        force=force,
+        filings_index_df=filings_index_df,
+    )
+    holdings_hashes = compute_bdc_holdings_hashes(unified_df)
+    logic_hash = compute_reconciliation_logic_hash()
+    override_hash = _compute_override_hash()
+    plan = plan_dirty_reconciliation_ciks(
+        source_manifest,
+        holdings_hashes,
+        logic_hash,
+        override_hash,
+        force=force,
+    )
+    dirty_ciks = set(plan.loc[plan["dirty"], "cik"].astype(str)) if not plan.empty else set()
+    full_invalidation = bool(
+        force
+        or (not plan.empty and plan["dirty_reason"].astype(str).str.contains("logic_hash|override_hash", regex=True).any())
+    )
+
+    previous_manifest = _read_csv_manifest(
+        SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE,
+        RECONCILIATION_MANIFEST_COLUMNS,
+    )
+    previous_by_cik = {str(row["cik"]): row for row in previous_manifest.to_dict("records")}
+    manifest_rows: list[dict[str, Any]] = []
+    batch_recomputed_detail: Optional[pd.DataFrame] = None
+    batch_recomputed_metrics: Optional[pd.DataFrame] = None
+    batch_recompute = full_invalidation or len(dirty_ciks) > 20
+    if dirty_ciks and batch_recompute:
+        batch_recomputed_detail, batch_recomputed_metrics = reconcile_bdc_source_to_holdings(
+            source_df,
+            unified_df,
+        )
+        if not batch_recomputed_detail.empty:
+            batch_recomputed_detail["cik"] = batch_recomputed_detail["cik"].astype(str).map(_normalize_cik)
+        if not batch_recomputed_metrics.empty:
+            batch_recomputed_metrics["cik"] = batch_recomputed_metrics["cik"].astype(str).map(_normalize_cik)
+
+    for row in plan.to_dict("records"):
+        cik = str(row["cik"])
+        detail_artifact = Path(row["detail_artifact_path"])
+        metrics_artifact = Path(row["metrics_artifact_path"])
+        if cik in dirty_ciks:
+            if batch_recompute:
+                detail_part = (
+                    batch_recomputed_detail[batch_recomputed_detail["cik"].eq(cik)].copy()
+                    if batch_recomputed_detail is not None and not batch_recomputed_detail.empty
+                    else _empty_detail()
+                )
+                metrics_part = (
+                    batch_recomputed_metrics[batch_recomputed_metrics["cik"].eq(cik)].copy()
+                    if batch_recomputed_metrics is not None and not batch_recomputed_metrics.empty
+                    else _empty_metrics()
+                )
+            else:
+                source_part = source_df[source_df.get("cik", pd.Series(dtype=str)).astype(str).map(_normalize_cik).eq(cik)].copy()
+                holdings_part = unified_df[
+                    unified_df.get("cik", pd.Series(dtype=str)).astype(str).map(_normalize_cik).eq(cik)
+                    & unified_df.get("source", pd.Series(dtype=str)).astype(str).str.lower().eq("bdc")
+                ].copy()
+                detail_part, metrics_part = reconcile_bdc_source_to_holdings(source_part, holdings_part)
+            _write_df_parquet_atomic(detail_part, detail_artifact, DETAIL_COLUMNS)
+            _write_df_parquet_atomic(metrics_part, metrics_artifact, METRIC_COLUMNS)
+            detail_count = len(detail_part)
+            metrics_count = len(metrics_part)
+        else:
+            prev = previous_by_cik.get(cik, {})
+            detail_count = prev.get("detail_row_count", "")
+            metrics_count = prev.get("metrics_row_count", "")
+        manifest_rows.append({
+            "cik": cik,
+            "source_hash": row["source_hash"],
+            "holdings_hash": row["holdings_hash"],
+            "logic_hash": logic_hash,
+            "override_hash": override_hash,
+            "detail_row_count": detail_count,
+            "metrics_row_count": metrics_count,
+            "detail_artifact_path": str(detail_artifact),
+            "metrics_artifact_path": str(metrics_artifact),
+            "computed_at": _now_iso(),
+        })
+
+    manifest = pd.DataFrame(manifest_rows, columns=RECONCILIATION_MANIFEST_COLUMNS)
+    _write_csv_atomic(manifest, SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE, RECONCILIATION_MANIFEST_COLUMNS)
+
+    all_metrics = _read_parquet_glob(
+        [Path(p) for p in manifest["metrics_artifact_path"].tolist()],
+        METRIC_COLUMNS,
+    )
+    if not all_metrics.empty:
+        all_metrics = all_metrics[METRIC_COLUMNS].sort_values(["cik", "report_date"]).reset_index(drop=True)
+
+    need_legacy = bool(dirty_ciks) or not _legacy_outputs_exist()
+    if need_legacy:
+        all_detail = _read_parquet_glob(
+            [Path(p) for p in manifest["detail_artifact_path"].tolist()],
+            DETAIL_COLUMNS,
+        )
+        if not all_detail.empty:
+            all_detail = all_detail[DETAIL_COLUMNS].sort_values(
+                ["cik", "report_date", "accession_number", "raw_investment_identifier", "status"]
+            ).reset_index(drop=True)
+        _assemble_legacy_reconciliation_outputs(all_detail, all_metrics)
+        detail_for_reports = all_detail
+    else:
+        detail_for_reports = _read_cached_detail_for_adapter()
+
+    status = pd.DataFrame([{
+        "computed_at": _now_iso(),
+        "run_mode": "force" if force else ("dirty" if dirty_ciks else "clean"),
+        "dirty_cik_count": len(dirty_ciks),
+        "clean_cik_count": max(len(plan) - len(dirty_ciks), 0),
+        "force": force,
+        "full_invalidation": full_invalidation,
+        "elapsed_seconds": round(time.time() - started, 3),
+    }], columns=RECONCILIATION_CACHE_STATUS_COLUMNS)
+    _write_csv_atomic(status, SOURCE_RECONCILIATION_CACHE_STATUS_FILE, RECONCILIATION_CACHE_STATUS_COLUMNS)
+    return detail_for_reports, all_metrics, status
 
 
 def run_bdc_source_reconciliation(

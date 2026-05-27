@@ -8,8 +8,10 @@ Usage:
 
 import argparse
 import logging
+import shutil
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 # Ensure project root is on sys.path when run as a script
@@ -106,6 +108,11 @@ def _parse_args() -> argparse.Namespace:
         help="Run cached fund financial, holdings, and rule-registry validation.",
     )
     parser.add_argument(
+        "--reconcile-full",
+        action="store_true",
+        help="Force BDC source-fact extraction and all source reconciliation CIK partitions.",
+    )
+    parser.add_argument(
         "--rules-category",
         nargs="+",
         choices=["PC", "IDX", "T", "S", "R", "XS", "F", "M", "RI"],
@@ -184,6 +191,29 @@ def _parse_args() -> argparse.Namespace:
              "Requires OPENAI_API_KEY in .env.",
     )
     return parser.parse_args()
+
+
+def _snapshot_outputs(logger: logging.Logger) -> Path | None:
+    """Copy existing output CSVs/JSONs to a timestamped snapshot directory.
+
+    Returns the snapshot directory path, or None if there was nothing to copy.
+    """
+    stamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    snapshot_dir = OUTPUT_DIR.parent / "snapshots" / f"pre_run_{stamp}"
+    sources = [
+        p for p in OUTPUT_DIR.iterdir()
+        if p.is_file() and p.suffix in (".csv", ".json")
+    ]
+    if not sources:
+        logger.info("No existing output files to snapshot")
+        return None
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+    for src in sources:
+        shutil.copy2(src, snapshot_dir / src.name)
+    logger.info(
+        "Snapshot: %d files saved to %s", len(sources), snapshot_dir.name
+    )
+    return snapshot_dir
 
 
 def _is_validate_only(args: argparse.Namespace) -> bool:
@@ -294,7 +324,7 @@ def _is_export_frontend_only(args: argparse.Namespace) -> bool:
     )
 
 
-def _run_cached_validation(logger: logging.Logger) -> None:
+def _run_cached_validation(logger: logging.Logger, reconcile_full: bool = False) -> None:
     import pandas as pd
 
     unified_path = OUTPUT_DIR / "private_markets_holdings.csv"
@@ -307,7 +337,7 @@ def _run_cached_validation(logger: logging.Logger) -> None:
     logger.info("Loaded cached unified holdings: %d rows", len(unified_df))
 
     from pipeline.validate_holdings import validate_holdings
-    reports = validate_holdings(unified_df=unified_df)
+    reports = validate_holdings(unified_df=unified_df, reconcile_full=reconcile_full)
     for name, report_df in reports.items():
         logger.info("  Validation '%s': %d rows", name, len(report_df))
 
@@ -334,7 +364,7 @@ def _log_validation_summary(logger: logging.Logger, rows: list[tuple[str, str, i
         logger.info("  %-28s %-8s %10d", name, normalize_status(status), count)
 
 
-def _run_validate_all(logger: logging.Logger) -> None:
+def _run_validate_all(logger: logging.Logger, reconcile_full: bool = False) -> None:
     import pandas as pd
 
     unified_path = OUTPUT_DIR / "private_markets_holdings.csv"
@@ -351,7 +381,7 @@ def _run_validate_all(logger: logging.Logger) -> None:
     rows.append(("fund_financials", _status_from_reports(fund_reports), fund_count))
 
     from pipeline.validate_holdings import validate_holdings
-    holding_reports = validate_holdings(unified_df=unified_df)
+    holding_reports = validate_holdings(unified_df=unified_df, reconcile_full=reconcile_full)
     holding_count = sum(len(df) for df in holding_reports.values())
     rows.append(("holdings", _status_from_reports(holding_reports), holding_count))
 
@@ -399,6 +429,8 @@ def main() -> None:
             mode_parts.append("VALIDATE-RULES")
     if args.validate_all:
         mode_parts.append("VALIDATE-ALL")
+    if args.reconcile_full:
+        mode_parts.append("RECONCILE-FULL")
     if args.llm_review:
         mode_parts.append("LLM-REVIEW")
     if args.llm_review_dry_run:
@@ -425,8 +457,18 @@ def main() -> None:
     logger.info("=" * 70)
     t0 = time.time()
 
+    # Snapshot existing outputs before any overwrites (skip read-only modes)
+    _read_only = (
+        _is_validate_only(args)
+        or _is_validate_rules_only(args)
+        or _is_validate_all_only(args)
+        or _is_export_frontend_only(args)
+    )
+    if not _read_only:
+        _snapshot_outputs(logger)
+
     if _is_validate_only(args):
-        _run_cached_validation(logger)
+        _run_cached_validation(logger, reconcile_full=args.reconcile_full)
         total = time.time() - t0
         logger.info("=== Pipeline complete in %.1f s ===", total)
         return
@@ -445,7 +487,7 @@ def main() -> None:
         return
 
     if _is_validate_all_only(args):
-        _run_validate_all(logger)
+        _run_validate_all(logger, reconcile_full=args.reconcile_full)
         total = time.time() - t0
         logger.info("=== Pipeline complete in %.1f s ===", total)
         return
@@ -700,7 +742,10 @@ def main() -> None:
         t8 = time.time()
         try:
             from pipeline.validate_holdings import validate_holdings
-            reports = validate_holdings(unified_df=unified_df)
+            reports = validate_holdings(
+                unified_df=unified_df,
+                reconcile_full=args.reconcile_full,
+            )
             for name, report_df in reports.items():
                 logger.info("  Validation '%s': %d rows", name, len(report_df))
         except Exception as exc:
@@ -718,7 +763,7 @@ def main() -> None:
     if args.validate_all:
         logger.info("")
         try:
-            _run_validate_all(logger)
+            _run_validate_all(logger, reconcile_full=args.reconcile_full)
         except Exception as exc:
             logger.error("Validate-all failed: %s", exc, exc_info=True)
 
@@ -760,6 +805,9 @@ def main() -> None:
                 match_positions, assign_position_ids,
             )
             from pipeline.index_returns import compute_returns
+            from pipeline.match_reconciliation import (
+                build_position_match_reconciliation,
+            )
 
             matches_df = match_positions(unified_df=unified_df)
 
@@ -779,6 +827,10 @@ def main() -> None:
             # Re-save matches with position_id column
             matches_df.to_csv(
                 OUTPUT_DIR / "position_matches.csv", index=False,
+            )
+            build_position_match_reconciliation(
+                holdings_df=unified_df,
+                matches_df=matches_df,
             )
 
             # Extract fund-level income and compute fee uplift

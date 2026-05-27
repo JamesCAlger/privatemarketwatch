@@ -531,7 +531,7 @@ def _protected_edit(path_text: str) -> bool:
 def validate_verdict_file(verdict_file: Path, output_dir: Path = REVIEW_DIR, schema_file: Path = SCHEMA_FILE) -> list[str]:
     errors: list[str] = []
     try:
-        verdict = json.loads(verdict_file.read_text(encoding="utf-8"))
+        verdict = json.loads(verdict_file.read_text(encoding="utf-8-sig"))
     except json.JSONDecodeError as exc:
         return [f"Invalid JSON: {exc}"]
 
@@ -591,7 +591,7 @@ def validate_all_verdicts(output_dir: Path = REVIEW_DIR, schema_file: Path = SCH
     errors: list[dict[str, str]] = []
     for path in sorted(verdict_dir.glob("*.json")):
         try:
-            verdict = json.loads(path.read_text(encoding="utf-8"))
+            verdict = json.loads(path.read_text(encoding="utf-8-sig"))
             review_id = normalize_text(verdict.get("review_id"))
             if review_id in seen:
                 errors.append({"verdict_file": display_path(path), "error": f"Duplicate verdict for review_id: {review_id}"})
@@ -633,7 +633,7 @@ def summarize_verdicts(output_dir: Path = REVIEW_DIR, schema_file: Path = SCHEMA
     worklist = {row["review_id"]: row for row in read_csv_rows(output_dir / "worklist.csv")}
     rows: list[dict[str, Any]] = []
     for path in sorted((output_dir / "verdicts").glob("*.json")):
-        verdict = json.loads(path.read_text(encoding="utf-8"))
+        verdict = json.loads(path.read_text(encoding="utf-8-sig"))
         work = worklist[verdict["review_id"]]
         rows.append({
             "review_id": verdict["review_id"],

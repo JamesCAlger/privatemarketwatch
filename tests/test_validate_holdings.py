@@ -2202,8 +2202,8 @@ class TestValidateHoldings:
              patch("pipeline.validate_holdings.COLUMN_QUALITY_METRICS_FILE", column_metrics_file), \
              patch("pipeline.validate_holdings.DATA_QUALITY_METRICS_FILE", quality_metrics_file), \
              patch("pipeline.validate_holdings.VALIDATE_ALL_RESIDUAL_SUMMARY_FILE", residual_summary_file), \
-             patch("pipeline.source_reconciliation.run_bdc_source_reconciliation",
-                   return_value=(pd.DataFrame(), pd.DataFrame())):
+             patch("pipeline.source_reconciliation.run_bdc_source_reconciliation_cached",
+                   return_value=(pd.DataFrame(), pd.DataFrame(), pd.DataFrame())):
             reports = validate_holdings(unified_df=df, universe_df=universe)
 
         assert "spot_check" in reports

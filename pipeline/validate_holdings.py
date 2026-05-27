@@ -1741,6 +1741,7 @@ def check_income_yield_consistency(
 def validate_holdings(
     unified_df: Optional[pd.DataFrame] = None,
     universe_df: Optional[pd.DataFrame] = None,
+    reconcile_full: bool = False,
 ) -> dict:
     """Run all validation checks and save CSVs.
 
@@ -1877,11 +1878,14 @@ def validate_holdings(
             build_source_only_blocker_markdown,
             build_source_reconciliation_residual_classification,
             build_source_reconciliation_residual_classification_markdown,
-            run_bdc_source_reconciliation,
+            run_bdc_source_reconciliation_cached,
         )
 
-        source_recon_detail, source_recon_metrics = run_bdc_source_reconciliation(
+        source_recon_detail, source_recon_metrics, source_recon_cache_status = (
+            run_bdc_source_reconciliation_cached(
             unified_df=unified_df,
+            force=reconcile_full,
+            )
         )
         source_recon_review = build_reconciliation_calibration_review(source_recon_detail)
         source_recon_residual_classification = (
@@ -1906,46 +1910,16 @@ def validate_holdings(
         )
         reports["source_reconciliation_source_only_detail"] = source_only_detail
         reports["source_reconciliation_source_only_clusters"] = source_only_clusters
-        source_recon_detail.to_csv(SOURCE_RECONCILIATION_DETAIL_FILE, index=False)
-        logger.info("  Saved %s", SOURCE_RECONCILIATION_DETAIL_FILE.name)
-        source_recon_metrics.to_csv(SOURCE_RECONCILIATION_METRICS_FILE, index=False)
-        logger.info("  Saved %s", SOURCE_RECONCILIATION_METRICS_FILE.name)
-        source_recon_review.to_csv(
-            SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE,
-            index=False,
-        )
-        logger.info("  Saved %s", SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE.name)
-        source_recon_residual_classification.to_csv(
-            SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
-            index=False,
-        )
-        logger.info("  Saved %s", SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE.name)
-        SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE.write_text(
-            source_recon_residual_md,
-            encoding="utf-8",
-        )
-        logger.info(
-            "  Saved %s",
-            SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_MD_FILE.name,
-        )
-        source_only_detail.to_csv(
-            SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
-            index=False,
-        )
-        logger.info("  Saved %s", SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE.name)
-        source_only_clusters.to_csv(
-            SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
-            index=False,
-        )
-        logger.info("  Saved %s", SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE.name)
-        SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE.write_text(
-            source_only_md,
-            encoding="utf-8",
-        )
-        logger.info(
-            "  Saved %s",
-            SOURCE_RECONCILIATION_SOURCE_ONLY_CLASSIFICATION_MD_FILE.name,
-        )
+        reports["source_reconciliation_cache_status"] = source_recon_cache_status
+        if len(source_recon_cache_status) > 0:
+            status_row = source_recon_cache_status.iloc[0]
+            logger.info(
+                "  Source reconciliation cache: %s run, %s dirty CIKs, %s clean CIKs, %.1f s",
+                status_row.get("run_mode", ""),
+                status_row.get("dirty_cik_count", 0),
+                status_row.get("clean_cik_count", 0),
+                float(status_row.get("elapsed_seconds", 0) or 0),
+            )
         if len(source_recon_metrics) > 0:
             blocking = int(source_recon_metrics["blocking_issue_count"].sum())
             logger.info(

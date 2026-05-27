@@ -14,6 +14,7 @@ Covers:
 - CLI: --unified flag parsing
 """
 
+import json
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
@@ -50,6 +51,7 @@ from pipeline.staging_nport import _prepare_nport
 from pipeline.unified_holdings import (
     _apply_universe_gate,
     _apply_row_corrections,
+    _apply_unclassified_cache,
     _CORRECTABLE_FIELDS,
     _correct_pct_of_net_assets,
     _enforce_schema,
@@ -5487,6 +5489,75 @@ class TestEnforceSchemaNewColumns:
             assert "index_classification_enum" not in names, f"{val} should be valid"
 
 
+class TestApplyUnclassifiedCache:
+    def _make_unified_df(self, rows):
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in UNIFIED_COLUMNS}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_reclassifies_only_unclassified_and_flags_jv(self, monkeypatch, tmp_path):
+        cache_path = tmp_path / "unclassified_review_cache.csv"
+        pd.DataFrame([
+            {
+                "name_norm": "alpha",
+                "verdict": "CLASSIFIED",
+                "confidence": "high",
+                "new_index_classification": "DIRECT_LENDING",
+                "asset_class": "LOAN",
+            },
+            {
+                "name_norm": "beta",
+                "verdict": "CLASSIFIED",
+                "confidence": "high",
+                "new_index_classification": "STRUCTURED_CREDIT",
+                "asset_class": "LOAN",
+            },
+            {
+                "name_norm": "gamma",
+                "verdict": "JV_SUBSIDIARY",
+                "confidence": "high",
+                "new_index_classification": "",
+                "asset_class": "",
+            },
+        ]).to_csv(cache_path, index=False)
+        monkeypatch.setattr(
+            "pipeline.unified_holdings.UNCLASSIFIED_REVIEW_CACHE_FILE",
+            cache_path,
+        )
+
+        df = self._make_unified_df([
+            {
+                "issuer_name": "Alpha",
+                "index_classification": "UNCLASSIFIED",
+                "exposure_type": "OTHER",
+                "asset_class": "OTHER",
+            },
+            {
+                "issuer_name": "Beta",
+                "index_classification": "PRIVATE_EQUITY",
+                "exposure_type": "DIRECT",
+                "asset_class": "PRIVATE_EQUITY",
+            },
+            {
+                "issuer_name": "Gamma",
+                "index_classification": "UNCLASSIFIED",
+                "exposure_type": "OTHER",
+                "asset_class": "OTHER",
+            },
+        ])
+
+        result = _apply_unclassified_cache(df)
+
+        assert result.loc[0, "index_classification"] == "DIRECT_LENDING"
+        assert result.loc[0, "exposure_type"] == "DIRECT"
+        assert result.loc[0, "asset_class"] == "PRIVATE_CREDIT"
+        assert result.loc[1, "index_classification"] == "PRIVATE_EQUITY"
+        assert result.loc[2, "jv_subsidiary"] == "Y"
+
+
 # ---------------------------------------------------------------------------
 # _stabilize_classification
 # ---------------------------------------------------------------------------
@@ -8492,6 +8563,49 @@ class TestBdcAggregateOverrides:
         result = _prepare_bdc(df)
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "InterDent, Inc."
+
+    def test_override_loader_prefers_primary_and_falls_back_to_legacy(self, monkeypatch, tmp_path):
+        from pipeline.bdc_aggregate_overrides import (
+            load_bdc_aggregate_overrides,
+            resolve_bdc_aggregate_overrides_file,
+        )
+
+        primary = tmp_path / "data" / "overrides" / "bdc_aggregate_row_overrides.json"
+        legacy = tmp_path / "data" / "output" / "bdc_aggregate_row_overrides.json"
+        primary.parent.mkdir(parents=True)
+        legacy.parent.mkdir(parents=True)
+        legacy.write_text(json.dumps({"overrides": [{
+            "cik": "1",
+            "match_text": "Legacy",
+            "action": "exclude",
+            "reason": "legacy fallback",
+            "evidence": "unit test",
+            "review_id": "legacy",
+            "updated_at": "2026-05-27",
+        }]}), encoding="utf-8")
+
+        monkeypatch.setattr(
+            "pipeline.bdc_aggregate_overrides.BDC_AGGREGATE_ROW_OVERRIDES_FILE",
+            primary,
+        )
+        monkeypatch.setattr(
+            "pipeline.bdc_aggregate_overrides.LEGACY_BDC_AGGREGATE_ROW_OVERRIDES_FILE",
+            legacy,
+        )
+        assert resolve_bdc_aggregate_overrides_file() == legacy
+        assert load_bdc_aggregate_overrides().iloc[0]["match_text"] == "Legacy"
+
+        primary.write_text(json.dumps({"overrides": [{
+            "cik": "1",
+            "match_text": "Primary",
+            "action": "exclude",
+            "reason": "primary config",
+            "evidence": "unit test",
+            "review_id": "primary",
+            "updated_at": "2026-05-27",
+        }]}), encoding="utf-8")
+        assert resolve_bdc_aggregate_overrides_file() == primary
+        assert load_bdc_aggregate_overrides().iloc[0]["match_text"] == "Primary"
 
     def test_slr_equipment_financing_leaf_staged_from_seg2(self, monkeypatch, tmp_path):
         monkeypatch.setattr(

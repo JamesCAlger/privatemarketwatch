@@ -25,6 +25,7 @@ from pipeline.config import (
     NPORT_EXCLUDE_CIKS,
     NPORT_HOLDINGS_FILE,
     ROW_CORRECTIONS_FILE,
+    UNCLASSIFIED_REVIEW_CACHE_FILE,
     UNIFIED_HOLDINGS_FILE,
     UNIVERSE_ORPHAN_HOLDINGS_FILE,
 )
@@ -71,6 +72,8 @@ UNIFIED_COLUMNS = [
     "nport_liquidity_classification",
     # Subsidiary flag (BDC only -- nonconsolidated JV/subsidiary positions)
     "is_subsidiary",
+    # JV/subsidiary flag from agent review of unclassified positions
+    "jv_subsidiary",
     # Entity resolution (populated by --entities step)
     "entity_id", "canonical_name",
     # LLM-extracted fields (populated by --extract step)
@@ -548,6 +551,152 @@ def _apply_lien_cache(combined: pd.DataFrame) -> pd.DataFrame:
         return combined
 
     result = lien_classification._apply_lien_cache(combined)
+    return result
+
+
+# Mapping from agent asset_class + new_index_classification to unified schema
+_AGENT_EXPOSURE_MAP = {
+    "FUND": "FUND",
+    "LOAN": "DIRECT",
+    "EQUITY_COMMON": "DIRECT",
+    "EQUITY_PREFERRED": "DIRECT",
+    "CASH": "LIQUID",
+}
+
+_AGENT_ASSET_CLASS_MAP: dict[tuple[str, str], str] = {
+    ("FUND", "HEDGE_FUND"): "HEDGE_FUND",
+    ("FUND", "PRIVATE_EQUITY_FUND"): "PRIVATE_EQUITY",
+    ("FUND", "PRIVATE_CREDIT_FUND"): "PRIVATE_CREDIT",
+    ("FUND", "REAL_ESTATE_FUND"): "REAL_ESTATE",
+    ("LOAN", "DIRECT_LENDING"): "PRIVATE_CREDIT",
+    ("LOAN", "STRUCTURED_CREDIT"): "STRUCTURED_CREDIT",
+    ("EQUITY_COMMON", "COMMON_EQUITY"): "PRIVATE_EQUITY",
+    ("EQUITY_PREFERRED", "PREFERRED_EQUITY"): "PRIVATE_EQUITY",
+    ("CASH", "CASH"): "CASH",
+}
+
+
+def _apply_unclassified_cache(combined: pd.DataFrame) -> pd.DataFrame:
+    """Apply agent-reviewed classifications to UNCLASSIFIED holdings.
+
+    Loads ``unclassified_review_cache.csv`` and applies:
+    - CLASSIFIED/AUTO_CLASSIFIED verdicts: reclassify UNCLASSIFIED rows
+    - JV_SUBSIDIARY verdicts: flag rows with ``jv_subsidiary='Y'``
+
+    Only updates rows where ``index_classification='UNCLASSIFIED'``.
+    Existing classifications are never changed.
+    """
+    if not UNCLASSIFIED_REVIEW_CACHE_FILE.exists():
+        if "jv_subsidiary" not in combined.columns:
+            combined["jv_subsidiary"] = ""
+        return combined
+
+    from pipeline.gics_classification import _normalize_company_name
+
+    cache = pd.read_csv(UNCLASSIFIED_REVIEW_CACHE_FILE, dtype=str).fillna("")
+
+    # Split into classification and JV lookups
+    classify_mask = (
+        cache["verdict"].isin(["CLASSIFIED", "AUTO_CLASSIFIED"])
+        & cache["confidence"].isin(["high", "medium"])
+        & (cache["new_index_classification"] != "")
+    )
+    jv_mask = cache["verdict"] == "JV_SUBSIDIARY"
+
+    classify_cache = cache.loc[classify_mask, ["name_norm", "new_index_classification", "asset_class"]].copy()
+    jv_cache = cache.loc[jv_mask, ["name_norm"]].copy()
+
+    if classify_cache.empty and jv_cache.empty:
+        if "jv_subsidiary" not in combined.columns:
+            combined["jv_subsidiary"] = ""
+        return combined
+
+    # Build classification lookup with derived exposure_type and unified asset_class.
+    classify_df = classify_cache.rename(
+        columns={
+            "new_index_classification": "new_idx",
+            "asset_class": "agent_asset_class",
+        }
+    ).copy()
+    classify_df["name_norm"] = classify_df["name_norm"].str.strip()
+    classify_df["new_idx"] = classify_df["new_idx"].str.strip()
+    classify_df["agent_asset_class"] = classify_df["agent_asset_class"].str.strip()
+    classify_df["new_exp"] = (
+        classify_df["agent_asset_class"].map(_AGENT_EXPOSURE_MAP).fillna("DIRECT")
+    )
+    classify_df["new_ac"] = [
+        _AGENT_ASSET_CLASS_MAP.get((asset_class, index_classification), "OTHER")
+        for asset_class, index_classification in zip(
+            classify_df["agent_asset_class"],
+            classify_df["new_idx"],
+        )
+    ]
+    classify_df = classify_df[
+        ["name_norm", "new_idx", "new_exp", "new_ac"]
+    ].drop_duplicates(subset=["name_norm"], keep="first")
+
+    jv_names = set(jv_cache["name_norm"].str.strip().values)
+
+    # Pre-compute normalized issuer_name for matching
+    combined = combined.copy()
+    combined["_row_idx"] = range(len(combined))
+    issuer_col = combined["issuer_name"].fillna("").astype(str)
+    combined["_name_norm"] = issuer_col.map(_normalize_company_name)
+
+    # Build JV flag column
+    combined["jv_subsidiary"] = ""
+    combined.loc[combined["_name_norm"].isin(jv_names), "jv_subsidiary"] = "Y"
+
+    if classify_df.empty:
+        combined = combined.drop(columns=["_row_idx", "_name_norm"])
+        logger.info("Unclassified cache: 0 classify entries, %d JV flags applied",
+                    (combined["jv_subsidiary"] == "Y").sum())
+        return combined
+
+    # Use DuckDB for efficient LEFT JOIN reclassification
+    con = duckdb.connect()
+    con.register("holdings", combined)
+    con.register("unclass_lookup", classify_df)
+
+    result = con.execute("""
+        SELECT h.* EXCLUDE (index_classification, exposure_type, asset_class,
+                            _row_idx, _name_norm),
+               CASE WHEN CAST(h.index_classification AS VARCHAR) = 'UNCLASSIFIED'
+                         AND ul.new_idx IS NOT NULL
+                    THEN ul.new_idx
+                    ELSE CAST(h.index_classification AS VARCHAR)
+               END AS index_classification,
+               CASE WHEN CAST(h.index_classification AS VARCHAR) = 'UNCLASSIFIED'
+                         AND ul.new_exp IS NOT NULL
+                    THEN ul.new_exp
+                    ELSE CAST(h.exposure_type AS VARCHAR)
+               END AS exposure_type,
+               CASE WHEN CAST(h.index_classification AS VARCHAR) = 'UNCLASSIFIED'
+                         AND ul.new_ac IS NOT NULL
+                    THEN ul.new_ac
+                    ELSE CAST(h.asset_class AS VARCHAR)
+               END AS asset_class
+        FROM holdings h
+        LEFT JOIN unclass_lookup ul ON h._name_norm = ul.name_norm
+        ORDER BY h._row_idx
+    """).fetchdf()
+    con.close()
+
+    # Restore column order (EXCLUDE moves overridden columns to end)
+    result = result[[c for c in UNIFIED_COLUMNS if c in result.columns]]
+
+    # Count reclassifications
+    before_unclass = (combined["index_classification"].astype(str) == "UNCLASSIFIED").sum()
+    after_unclass = (result["index_classification"].astype(str) == "UNCLASSIFIED").sum()
+    reclassified = before_unclass - after_unclass
+    jv_count = (result["jv_subsidiary"] == "Y").sum()
+
+    logger.info(
+        "Unclassified cache: %d classify entries, reclassified %d rows "
+        "(UNCLASSIFIED %d -> %d), %d JV flags",
+        len(classify_df), reclassified, before_unclass, after_unclass, jv_count,
+    )
+
     return result
 
 
@@ -1148,6 +1297,9 @@ def build_unified_holdings(
     # Apply cached lien position classifications (if cache exists on disk)
     combined = _apply_lien_cache(combined)
 
+    # Apply agent-reviewed unclassified reclassifications + JV flags
+    combined = _apply_unclassified_cache(combined)
+
     # Remap GICS sub-industry for RE-strategy fund holdings (runs after
     # _apply_gics_cache so that the LLM-assigned codes are already in place)
     combined = _apply_re_fund_gics_overrides(combined)
@@ -1492,6 +1644,12 @@ def _enforce_schema(df: pd.DataFrame) -> list[tuple[str, int]]:
     """
     if df.empty:
         return []
+
+    missing_columns = [col for col in UNIFIED_COLUMNS if col not in df.columns]
+    if missing_columns:
+        df = df.copy()
+        for col in missing_columns:
+            df[col] = ""
 
     con = duckdb.connect()
     con.register("unified", df)

@@ -1193,6 +1193,14 @@ def _prepare_bdc(
             CASE
                 -- Non-positive total_assets -> NULL
                 WHEN total_assets <= 0 THEN NULL
+                -- TA equal to NA with material liabilities means an equity/net-assets
+                -- concept leaked into total_assets. Leave TA unresolved.
+                WHEN net_assets IS NOT NULL
+                    AND net_assets > 0
+                    AND total_liabilities IS NOT NULL
+                    AND ABS(total_liabilities) > ABS(net_assets) * 0.01
+                    AND ABS(total_assets - net_assets) <= ABS(net_assets) * 0.01
+                THEN NULL
                 -- TA < 0.8 * NA (structural impossibility) -> NULL
                 WHEN net_assets IS NOT NULL
                     AND net_assets > 0
@@ -1600,6 +1608,9 @@ def build_fund_financials(
         else:
             logger.warning("No combined_universe.csv; vehicle_type unavailable")
             universe_df = pd.DataFrame()
+    if not universe_df.empty and "withdrawal_date" not in universe_df.columns:
+        universe_df = universe_df.copy()
+        universe_df["withdrawal_date"] = ""
 
     # 2. BDC CIKs from universe
     bdc_ciks: list[str] = []
@@ -1787,12 +1798,14 @@ def build_fund_financials(
             SELECT
                 cik,
                 univ_entity_name,
-                vehicle_type
+                vehicle_type,
+                withdrawal_date
             FROM (
                 SELECT
                     LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik,
                     entity_name AS univ_entity_name,
                     vehicle_type,
+                    TRY_CAST(withdrawal_date AS DATE) AS withdrawal_date,
                     ROW_NUMBER() OVER (
                         PARTITION BY LPAD(CAST(cik AS VARCHAR), 10, '0')
                         ORDER BY LENGTH(entity_name) DESC, entity_name ASC
@@ -1804,9 +1817,16 @@ def build_fund_financials(
             SELECT
                 c.*,
                 u.univ_entity_name,
-                u.vehicle_type
+                u.vehicle_type,
+                u.withdrawal_date
             FROM combined c
             LEFT JOIN univ u ON c.cik = u.cik
+            WHERE NOT (
+                c.source = 'companyfacts'
+                AND LOWER(COALESCE(u.vehicle_type, '')) = 'bdc'
+                AND u.withdrawal_date IS NOT NULL
+                AND TRY_CAST(c.report_date AS DATE) > u.withdrawal_date
+            )
         ),
         deduped AS (
             SELECT *,

@@ -1163,6 +1163,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                       OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
                           LIKE '%subsidiar%'
                  THEN 1 ELSE 0 END AS is_subsidiary,
+            '' AS jv_subsidiary,
             '' AS entity_id,
             '' AS canonical_name,
             '' AS extracted_industry,

@@ -1885,7 +1885,7 @@ def _matching_rules() -> list[ValidationRule]:
 
 
 def _referential_integrity_rules() -> list[ValidationRule]:
-    """Source and artifact referential-integrity rules (RI01-RI06)."""
+    """Source and artifact referential-integrity rules (RI01-RI07)."""
     norm_cik = "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')"
     hq = "COALESCE(NULLIF(quarter, ''), CASE WHEN TRY_CAST(report_date AS DATE) IS NOT NULL THEN CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR) || 'q' || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) ELSE report_date END)"
     ffq = "COALESCE(NULLIF(report_quarter, ''), NULLIF(quarter, ''), CASE WHEN TRY_CAST(report_date AS DATE) IS NOT NULL THEN CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR) || 'q' || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) ELSE report_date END)"
@@ -1984,6 +1984,30 @@ def _referential_integrity_rules() -> list[ValidationRule]:
             detail="'index-used bdc_fund_income CIK is absent from bdc_holdings'",
             evidence="'RI06 is scoped to income CIKs used by fee_uplift; RI05 covers fee_uplift CIKs absent from unified holdings'",
             source_file="'bdc_fund_income.csv;fee_uplift.csv;bdc_holdings.csv'")} FROM g"""),
+        ValidationRule("RI07", "RI", "Returns build left holdings position IDs blank", "FAIL", True, ("holdings", "position_returns"),
+            f"""WITH returns_present AS (
+                SELECT COUNT(*) AS n FROM position_returns
+            ), multi_q AS (
+                SELECT cik, COUNT(DISTINCT COALESCE(quarter, report_date)) AS n_q
+                FROM holdings GROUP BY cik HAVING n_q > 1
+            ), g AS (
+                SELECT h.cik,
+                       COUNT(*) AS missing_rows,
+                       SUM(ABS(COALESCE(TRY_CAST(h.fair_value AS DOUBLE), 0))) AS missing_fv
+                FROM holdings h
+                JOIN multi_q m ON h.cik = m.cik
+                CROSS JOIN returns_present rp
+                WHERE rp.n > 0
+                  AND COALESCE(h.position_id, '') = ''
+                  AND COALESCE(TRY_CAST(h.fair_value AS DOUBLE), 0) <> 0
+                GROUP BY h.cik
+            )
+            SELECT {_detail_sql("cik", "cik",
+            cik="cik", affected_fv="missing_fv", denominator="missing_rows",
+            priority="ROW_NUMBER() OVER (ORDER BY missing_fv DESC, cik)",
+            detail="'position_returns exists but multi-quarter holdings have blank position_id'",
+            evidence="'Run the returns path so assign_position_ids rewrites private_markets_holdings.csv'",
+            source_file="'private_markets_holdings.csv;position_returns.csv'")} FROM g"""),
     ]
 
 

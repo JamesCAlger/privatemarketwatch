@@ -235,7 +235,7 @@ def _extract_concept_series(
 _BALANCE_SHEET_CONCEPTS = {
     "total_assets": {
         "exact": ["Assets"],
-        "fallback": ["TotalAssets", "AssetsNet"],
+        "fallback": ["TotalAssets"],
         "unit": "USD", "instant": True,
     },
     "total_liabilities": {

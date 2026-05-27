@@ -236,9 +236,9 @@ def _fixtures(tmp_path: Path, *, bad_index: bool = False) -> dict[str, Path]:
 
 
 def test_registry_contains_all_rules():
-    assert len(RULE_REGISTRY) == 94
+    assert len(RULE_REGISTRY) == 95
     expected = set()
-    expected.update(f"RI{i:02d}" for i in range(1, 7))
+    expected.update(f"RI{i:02d}" for i in range(1, 8))
     expected.update(f"PC{i:02d}" for i in range(1, 13))
     expected.update(f"IDX{i:02d}" for i in range(1, 16))
     expected.update(f"T{i:02d}" for i in range(1, 11))
@@ -255,10 +255,42 @@ def test_all_sql_executes_on_minimal_fixtures(tmp_path):
 
     assert list(aggregate.columns) == AGGREGATE_COLUMNS
     assert list(detail.columns) == DETAIL_COLUMNS
-    assert len(aggregate) == 94
+    assert len(aggregate) == 95
     assert set(aggregate["status"]).issubset({"PASS", "WARN", "FAIL", "SKIPPED"})
     pc02 = aggregate.set_index("rule_id").loc["PC02"]
     assert pc02["affected_outputs"] == "position_returns;frontend_index;index_returns;data_quality_dashboard"
+
+
+def test_ri07_fails_when_returns_exist_but_holdings_position_ids_blank(tmp_path):
+    paths = _fixtures(tmp_path)
+    _write_csv(paths["holdings"], [
+        _base_holding(
+            cik="100",
+            quarter="2024q1",
+            report_date="2024-03-31",
+            issuer_name="Acme",
+            position_id="",
+        ),
+        _base_holding(
+            cik="100",
+            quarter="2024q2",
+            report_date="2024-06-30",
+            issuer_name="Acme",
+            position_id="",
+        ),
+    ])
+
+    aggregate, detail = run_all(
+        categories=["RI"],
+        table_paths=paths,
+        write=False,
+    )
+
+    by_rule = aggregate.set_index("rule_id")
+    assert by_rule.loc["RI07", "status"] == "FAIL"
+    ri07 = detail[detail["rule_id"] == "RI07"]
+    assert len(ri07) == 1
+    assert ri07.iloc[0]["cik"] == "100"
 
 
 def test_promoted_fail_rules_trigger_and_zero_hit(tmp_path):

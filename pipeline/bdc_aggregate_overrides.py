@@ -6,7 +6,12 @@ import json
 
 import pandas as pd
 
-from pipeline.config import BDC_AGGREGATE_ROW_OVERRIDES_FILE
+from pathlib import Path
+
+from pipeline.config import (
+    BDC_AGGREGATE_ROW_OVERRIDES_FILE,
+    LEGACY_BDC_AGGREGATE_ROW_OVERRIDES_FILE,
+)
 
 
 AGGREGATE_OVERRIDE_COLUMNS = [
@@ -23,17 +28,27 @@ AGGREGATE_OVERRIDE_COLUMNS = [
 ]
 
 
+def resolve_bdc_aggregate_overrides_file() -> Path:
+    """Return the active audited aggregate-row override file path."""
+    if BDC_AGGREGATE_ROW_OVERRIDES_FILE.exists():
+        return BDC_AGGREGATE_ROW_OVERRIDES_FILE
+    if LEGACY_BDC_AGGREGATE_ROW_OVERRIDES_FILE.exists():
+        return LEGACY_BDC_AGGREGATE_ROW_OVERRIDES_FILE
+    return BDC_AGGREGATE_ROW_OVERRIDES_FILE
+
+
 def load_bdc_aggregate_overrides() -> pd.DataFrame:
     """Load audited aggregate-row include/exclude overrides, if present."""
     columns = [*AGGREGATE_OVERRIDE_COLUMNS, "match_text_lower"]
-    if not BDC_AGGREGATE_ROW_OVERRIDES_FILE.exists():
+    overrides_file = resolve_bdc_aggregate_overrides_file()
+    if not overrides_file.exists():
         return pd.DataFrame(columns=columns)
     try:
-        with BDC_AGGREGATE_ROW_OVERRIDES_FILE.open(encoding="utf-8-sig") as fh:
+        with overrides_file.open(encoding="utf-8-sig") as fh:
             payload = json.load(fh)
     except Exception as exc:
         raise ValueError(
-            f"Could not read {BDC_AGGREGATE_ROW_OVERRIDES_FILE}"
+            f"Could not read {overrides_file}"
         ) from exc
 
     records = payload.get("overrides", payload) if isinstance(payload, dict) else payload
