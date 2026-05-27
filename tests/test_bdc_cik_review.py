@@ -151,9 +151,12 @@ def test_build_bundle_includes_packet_artifacts_and_stable_evidence_ids(tmp_path
     bundle = json.loads((review_dir / "bundles" / f"{manifest[0]['review_id']}.json").read_text(encoding="utf-8"))
     evidence_ids = [item["evidence_id"] for item in bundle["evidence_items"]]
     assert "cik_validation_packet" in evidence_ids
+    assert "html_artifact" in evidence_ids
     assert len(evidence_ids) == len(set(evidence_ids))
     assert bundle["evidence_items"][1]["data"]["source_reconciliation"]["blocker_count"] == 2
     assert bundle["artifact_hashes"]
+    html_item = next(item for item in bundle["evidence_items"] if item["evidence_id"] == "html_artifact")
+    assert html_item["data"]["status"] == "missing_cached_html"
 
 
 def test_validate_verdict_rejects_missing_bundle_unknown_evidence_gav_primary_and_protected_edits(tmp_path):
@@ -241,3 +244,46 @@ def test_validate_accepts_insufficient_evidence_and_summary_counts(tmp_path):
     rows = _read_csv(output / "summary.csv")
     assert rows[0]["missing_evidence"].startswith("Need source filing")
     assert (output / "summary.md").exists()
+
+
+def test_validate_rejects_html_refs_without_coordinates_and_accepts_missing_artifact(tmp_path):
+    output = tmp_path / "review"
+    (output / "bundles").mkdir(parents=True)
+    (output / "verdicts").mkdir(parents=True)
+    review_id = "BDCSRC_0000000001_2025-03-31_M1_abc"
+    (output / "worklist.csv").write_text(
+        "review_id,cik,report_date,mechanism,affected_source_fair_value\n"
+        f"{review_id},0000000001,2025-03-31,m1,100\n",
+        encoding="utf-8",
+    )
+    (output / "bundles" / f"{review_id}.json").write_text(
+        json.dumps({"review_id": review_id, "cik": "0000000001", "report_date": "2025-03-31", "evidence_items": [{"evidence_id": "html_table_grid_excerpt"}, {"evidence_id": "html_artifact"}]}),
+        encoding="utf-8",
+    )
+    verdict = {
+        "review_id": review_id,
+        "cik": "0000000001",
+        "report_date": "2025-03-31",
+        "verdict": "INSUFFICIENT_EVIDENCE",
+        "confidence": "LOW",
+        "primary_justification": "HTML evidence is unresolved.",
+        "evidence_refs": ["html_table_grid_excerpt"],
+        "changed_files": [],
+        "patch_summary": "",
+        "source_reconciliation_effect": "",
+        "gav_effect": "",
+        "tests_validation_plan": "",
+        "requires_human_merge": False,
+        "missing_evidence": "Need table coordinates rather than free-text HTML search hits.",
+        "residual_risk": "No parser patch should be merged.",
+        "reviewer_notes": "Reject free-text-only HTML citation.",
+    }
+    verdict_path = output / "verdicts" / f"{review_id}.json"
+    verdict_path.write_text(json.dumps(verdict), encoding="utf-8")
+
+    errors = review.validate_verdict_file(verdict_path, output)
+    assert any("requires table_index,row_index,cell_indices" in error for error in errors)
+
+    verdict["evidence_refs"] = ["html_artifact"]
+    verdict_path.write_text(json.dumps(verdict), encoding="utf-8")
+    assert review.validate_all_verdicts(output) == []

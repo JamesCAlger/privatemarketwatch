@@ -34,6 +34,21 @@
       "enum": ["LOW", "MEDIUM", "HIGH"]
     },
     "primary_justification": { "type": "string", "minLength": 1 },
+    "reconciliation_diagnosis": {
+      "type": "string",
+      "enum": [
+        "",
+        "REAL_POSITION_MISSING_FROM_UNIFIED",
+        "HTML_PRESENT_TABLE_NOT_PARSED",
+        "AGGREGATE_OR_HEADER",
+        "COMPARATIVE_PERIOD",
+        "ZERO_OR_UNFUNDED_NON_INDEX_ROW",
+        "DUPLICATE_DIMENSION_PATH",
+        "XBRL_ONLY_NO_HTML_COORDINATE",
+        "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
     "evidence_refs": {
       "type": "array",
       "items": { "type": "string", "minLength": 1 },
@@ -43,6 +58,48 @@
       "type": "array",
       "items": { "type": "string", "minLength": 1 },
       "uniqueItems": true
+    },
+    "rule_type": {
+      "type": "string",
+      "enum": [
+        "",
+        "table_selection",
+        "period_assignment",
+        "row_classification",
+        "continuation_row_merge",
+        "aggregate_subtotal_exclusion"
+      ]
+    },
+    "html_citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_ref", "table_index", "row_index", "cell_indices", "reason"],
+        "properties": {
+          "evidence_ref": { "type": "string", "minLength": 1 },
+          "table_index": { "type": "integer", "minimum": 0 },
+          "row_index": { "type": "integer", "minimum": 0 },
+          "cell_indices": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 },
+            "minItems": 1
+          },
+          "row_classification": {
+            "type": "string",
+            "enum": [
+              "POSITION_ROW",
+              "AGGREGATE_HEADER",
+              "SUBTOTAL_ROW",
+              "CONTINUATION_ROW",
+              "COMPARATIVE_PERIOD_ROW",
+              "UNCLASSIFIABLE",
+              "INSUFFICIENT_EVIDENCE"
+            ]
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
     },
     "patch_summary": { "type": "string" },
     "source_reconciliation_effect": { "type": "string" },

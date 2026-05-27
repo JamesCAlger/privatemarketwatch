@@ -22,6 +22,7 @@ import pandas as pd
 
 from pipeline import config
 from pipeline.bdc_cik_validator import build_cik_validation_packet, gav_gate_role
+from pipeline.html_soi_evidence import HTML_EVIDENCE_IDS, build_html_soi_evidence, resolve_accessions_from_rows
 
 REVIEW_DIR = config.OUTPUT_DIR / "bdc_cik_review"
 SCHEMA_FILE = config.PROJECT_ROOT / "schemas" / "bdc_cik_review" / "verdict.schema.json"
@@ -77,6 +78,26 @@ PROTECTED_GENERATED_PATHS = {
     "data/output/source_reconciliation_residual_classification.csv",
     "data/output/source_reconciliation_source_only_detail.csv",
     "data/output/row_validation_issues.csv",
+}
+
+RECONCILIATION_DIAGNOSES = {
+    "",
+    "REAL_POSITION_MISSING_FROM_UNIFIED",
+    "HTML_PRESENT_TABLE_NOT_PARSED",
+    "AGGREGATE_OR_HEADER",
+    "COMPARATIVE_PERIOD",
+    "ZERO_OR_UNFUNDED_NON_INDEX_ROW",
+    "DUPLICATE_DIMENSION_PATH",
+    "XBRL_ONLY_NO_HTML_COORDINATE",
+    "RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED",
+    "INSUFFICIENT_EVIDENCE",
+}
+HTML_BASED_DIAGNOSES = {
+    "REAL_POSITION_MISSING_FROM_UNIFIED",
+    "HTML_PRESENT_TABLE_NOT_PARSED",
+    "AGGREGATE_OR_HEADER",
+    "COMPARATIVE_PERIOD",
+    "ZERO_OR_UNFUNDED_NON_INDEX_ROW",
 }
 
 
@@ -461,6 +482,33 @@ def build_bundles(
             _evidence_item("pct_of_net_assets", "pct_of_net_assets aggregate validation row.", pct_rows),
             _evidence_item("position_purity", "Position purity metrics row.", purity_rows),
         ]
+        accession_candidates = resolve_accessions_from_rows(residual_rows + source_only_rows + detail_rows + holdings_rows)
+        accession = accession_candidates[0] if accession_candidates else ""
+        evidence_items.extend(
+            build_html_soi_evidence(
+                source="bdc",
+                cik=cik,
+                report_date=report_date,
+                accession=accession,
+                residual_names=[
+                    row.get("sample_identifiers", ""),
+                    *[r.get("sample_identifiers", "") for r in residual_rows],
+                    *[r.get("investment_identifier", "") for r in source_only_rows],
+                    *[r.get("issuer_name", "") for r in detail_rows],
+                ],
+                fair_values=[
+                    row.get("affected_source_fair_value", ""),
+                    *[r.get("source_fair_value", "") for r in source_only_rows],
+                    *[r.get("source_fair_value", "") for r in detail_rows],
+                ],
+                source_identifiers=accession_candidates,
+                source_rows=source_only_rows,
+                xbrl_rows_same_accession=[
+                    r for r in holdings_rows if not accession or normalize_text(r.get("accession_number")) == accession
+                ],
+                max_rows=max_rows,
+            )
+        )
         bundle = {
             "schema_version": "bdc-cik-review-bundle.v1",
             "created_at": now_iso(),
@@ -528,6 +576,59 @@ def _protected_edit(path_text: str) -> bool:
     return any(normalized.startswith(prefix) for prefix in PROTECTED_GENERATED_PATH_PREFIXES)
 
 
+def _valid_html_citation(value: Any, evidence_ref: str | None = None) -> bool:
+    if not isinstance(value, dict):
+        return False
+    if evidence_ref is not None and normalize_text(value.get("evidence_ref")) != evidence_ref:
+        return False
+    return (
+        normalize_text(value.get("evidence_ref")) in HTML_EVIDENCE_IDS
+        and isinstance(value.get("table_index"), int)
+        and isinstance(value.get("row_index"), int)
+        and isinstance(value.get("cell_indices"), list)
+        and bool(value.get("cell_indices"))
+        and all(isinstance(idx, int) for idx in value.get("cell_indices", []))
+        and bool(normalize_text(value.get("reason")))
+    )
+
+
+def _html_coord_validation_errors(verdict: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    citations = verdict.get("html_citations", [])
+    if citations and not isinstance(citations, list):
+        return ["html_citations must be an array of coordinate citations"]
+    citation_refs = {
+        normalize_text(c.get("evidence_ref"))
+        for c in citations
+        if _valid_html_citation(c)
+    }
+    coordinate_required_refs = set(verdict.get("evidence_refs", [])) & (HTML_EVIDENCE_IDS - {"html_artifact", "xbrl_rows_same_accession"})
+    for ref in sorted(coordinate_required_refs - citation_refs):
+        errors.append(f"HTML evidence_ref {ref} requires table_index,row_index,cell_indices coordinate citation")
+
+    for idx, citation in enumerate(citations if isinstance(citations, list) else []):
+        row_class = normalize_text(citation.get("row_classification")).upper() if isinstance(citation, dict) else ""
+        if row_class == "POSITION_ROW":
+            text = json.dumps(citation, sort_keys=True).lower()
+            if "aggregate_header" in text or "subtotal_row" in text or "subtotal" in text or "aggregate header" in text:
+                errors.append(f"html_citations[{idx}] cannot classify aggregate/header/subtotal HTML row as POSITION_ROW")
+        diagnosis = normalize_text(verdict.get("reconciliation_diagnosis")).upper()
+        if diagnosis == "REAL_POSITION_MISSING_FROM_UNIFIED" and row_class in {
+            "AGGREGATE_HEADER",
+            "SUBTOTAL_ROW",
+            "COMPARATIVE_PERIOD_ROW",
+            "UNCLASSIFIABLE",
+            "INSUFFICIENT_EVIDENCE",
+        }:
+            errors.append(f"html_citations[{idx}] cannot support REAL_POSITION_MISSING_FROM_UNIFIED with {row_class}")
+    diagnosis = normalize_text(verdict.get("reconciliation_diagnosis")).upper()
+    if diagnosis in HTML_BASED_DIAGNOSES and not citations:
+        errors.append(f"{diagnosis} requires coordinate-level html_citations")
+    if diagnosis in {"XBRL_ONLY_NO_HTML_COORDINATE", "INSUFFICIENT_EVIDENCE"} and coordinate_required_refs:
+        errors.append(f"{diagnosis} cannot rely on free-text HTML coordinate evidence")
+    return errors
+
+
 def validate_verdict_file(verdict_file: Path, output_dir: Path = REVIEW_DIR, schema_file: Path = SCHEMA_FILE) -> list[str]:
     errors: list[str] = []
     try:
@@ -555,6 +656,11 @@ def validate_verdict_file(verdict_file: Path, output_dir: Path = REVIEW_DIR, sch
     for ref in verdict.get("evidence_refs", []):
         if ref not in evidence_ids:
             errors.append(f"unknown evidence_ref: {ref}")
+    errors.extend(_html_coord_validation_errors(verdict))
+
+    diagnosis = normalize_text(verdict.get("reconciliation_diagnosis")).upper()
+    if diagnosis and diagnosis not in RECONCILIATION_DIAGNOSES:
+        errors.append(f"invalid reconciliation_diagnosis: {diagnosis}")
 
     primary = normalize_text(verdict.get("primary_justification")).lower()
     if "gav" in primary:
@@ -614,6 +720,7 @@ SUMMARY_COLUMNS = [
     "report_date",
     "mechanism",
     "verdict",
+    "reconciliation_diagnosis",
     "confidence",
     "affected_source_fair_value",
     "changed_files",
@@ -641,6 +748,7 @@ def summarize_verdicts(output_dir: Path = REVIEW_DIR, schema_file: Path = SCHEMA
             "report_date": verdict["report_date"],
             "mechanism": work.get("mechanism", ""),
             "verdict": verdict["verdict"],
+            "reconciliation_diagnosis": verdict.get("reconciliation_diagnosis", ""),
             "confidence": verdict["confidence"],
             "affected_source_fair_value": work.get("affected_source_fair_value", "0"),
             "changed_files": " | ".join(verdict.get("changed_files", [])),
@@ -652,6 +760,7 @@ def summarize_verdicts(output_dir: Path = REVIEW_DIR, schema_file: Path = SCHEMA
     write_csv_rows(output_dir / "summary.csv", rows, SUMMARY_COLUMNS)
 
     counts = Counter(row["verdict"] for row in rows)
+    diagnosis_counts = Counter(row["reconciliation_diagnosis"] or "UNSPECIFIED_LEGACY" for row in rows)
     by_mechanism = Counter((row["mechanism"], row["verdict"]) for row in rows)
     by_confidence = Counter((row["confidence"], row["verdict"]) for row in rows)
     fv_by_verdict: dict[str, float] = defaultdict(float)
@@ -669,6 +778,9 @@ def summarize_verdicts(output_dir: Path = REVIEW_DIR, schema_file: Path = SCHEMA
     ]
     for verdict, count in sorted(counts.items()):
         md.append(f"- {verdict}: {count} reviews, affected source FV ${fv_by_verdict[verdict]:,.0f}")
+    md.extend(["", "## Reconciliation Diagnosis Counts", ""])
+    for diagnosis, count in sorted(diagnosis_counts.items()):
+        md.append(f"- {diagnosis}: {count} reviews")
     md.extend(["", "## Proposed Patches", ""])
     for row in rows:
         if row["verdict"] == "PATCH_PROPOSED":
@@ -683,6 +795,7 @@ def summarize_verdicts(output_dir: Path = REVIEW_DIR, schema_file: Path = SCHEMA
         "verdict_count": len(rows),
         "counts": dict(counts),
         "fv_by_verdict": dict(fv_by_verdict),
+        "diagnosis_counts": dict(diagnosis_counts),
         "by_mechanism": {" | ".join(key): value for key, value in by_mechanism.items()},
         "by_confidence": {" | ".join(key): value for key, value in by_confidence.items()},
     }
