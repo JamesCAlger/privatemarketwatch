@@ -1025,6 +1025,7 @@ def main() -> None:
     if args.financials:
         output_files.append(OUTPUT_DIR / "ncsr_filings_index.csv")
         output_files.append(OUTPUT_DIR / "ncsr_financials.csv")
+        output_files.append(OUTPUT_DIR / "ncsr_parse_progress.csv")
         output_files.append(OUTPUT_DIR / "fund_financials.csv")
         output_files.append(OUTPUT_DIR / "bdc_sector_breakdown.csv")
     if args.extract:

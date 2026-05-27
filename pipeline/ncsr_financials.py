@@ -28,6 +28,7 @@ from pipeline.config import (
     NCSR_FINANCIALS_FILE,
     NCSR_FILINGS_INDEX_FILE,
     NCSR_HTML_CACHE_DIR,
+    NCSR_PARSE_PROGRESS_FILE,
 )
 from pipeline.edgar_client import EdgarClient
 
@@ -300,6 +301,10 @@ def extract_ncsr_financials(
 ) -> pd.DataFrame:
     """Parse Financial Highlights from cached N-CSR HTML files.
 
+    Resumable: tracks parsed accessions in ``ncsr_parse_progress.csv``.
+    On restart, only unprocessed filings are parsed and merged with
+    existing results.
+
     Parameters
     ----------
     filings_index : DataFrame, optional
@@ -326,27 +331,70 @@ def extract_ncsr_financials(
         empty.to_csv(NCSR_FINANCIALS_FILE, index=False)
         return empty
 
-    all_rows: list[dict] = []
+    # ── Load progress checkpoint ──
+    parsed_accessions: set[str] = set()
+    if NCSR_PARSE_PROGRESS_FILE.exists():
+        prog_df = pd.read_csv(NCSR_PARSE_PROGRESS_FILE, dtype=str)
+        parsed_accessions = set(prog_df["accession_number"].dropna())
+
+    # ── Filter to unprocessed filings ──
+    to_parse = filings_index[
+        ~filings_index["accession_number"].isin(parsed_accessions)
+    ]
+
+    # Early exit: nothing new to parse
+    if to_parse.empty:
+        if NCSR_FINANCIALS_FILE.exists():
+            logger.info(
+                "N-CSR extraction: all %d filings already processed, "
+                "loading cached output",
+                len(filings_index),
+            )
+            return pd.read_csv(NCSR_FINANCIALS_FILE, dtype=str)
+        # Progress file exists but output was deleted -- fall through
+        # to rebuild from scratch by clearing progress
+        parsed_accessions = set()
+        to_parse = filings_index
+
+    logger.info(
+        "N-CSR extraction: %d filings to parse (%d already done)",
+        len(to_parse), len(parsed_accessions),
+    )
+
+    # ── Parse loop (only unprocessed filings) ──
+    new_rows: list[dict] = []
+    progress_records: list[dict[str, str]] = []
     ok_count = 0
     fail_count = 0
     skip_count = 0
-    total = len(filings_index)
+    total = len(to_parse)
     max_file_bytes = 50 * 1024 * 1024  # 50 MB
 
-    for i, (_, row) in enumerate(filings_index.iterrows(), 1):
+    for i, (_, row) in enumerate(to_parse.iterrows(), 1):
+        accession = str(row.get("accession_number", "")).strip()
         html_path = str(row.get("html_local_path", "") or "")
+
         if not html_path or not Path(html_path).exists():
+            progress_records.append({
+                "accession_number": accession,
+                "status": "no_html",
+                "count": "0",
+            })
             continue
 
         # Skip very large files (BeautifulSoup too slow on 100MB+ HTML)
         file_size = Path(html_path).stat().st_size
         if file_size > max_file_bytes:
             skip_count += 1
+            progress_records.append({
+                "accession_number": accession,
+                "status": "skipped_large",
+                "count": "0",
+            })
             continue
 
         cik = str(row.get("cik", "")).strip()
         entity_name = str(row.get("entity_name", "")).strip()
-        accession = str(row.get("accession_number", "")).strip()
         form_type = str(row.get("form_type", "")).strip()
         filing_date = str(row.get("filing_date", "")).strip()
         report_date = str(row.get("report_date", "")).strip()
@@ -360,33 +408,65 @@ def extract_ncsr_financials(
                 rec["form_type"] = form_type
                 rec["filing_date"] = filing_date
                 rec["report_date"] = report_date
-                all_rows.append(rec)
+                new_rows.append(rec)
             if records:
                 ok_count += 1
+                progress_records.append({
+                    "accession_number": accession,
+                    "status": "ok",
+                    "count": str(len(records)),
+                })
             else:
                 fail_count += 1
+                progress_records.append({
+                    "accession_number": accession,
+                    "status": "no_data",
+                    "count": "0",
+                })
         except Exception as exc:
             logger.debug(
                 "Failed to parse %s (CIK %s): %s", accession, cik, exc,
             )
             fail_count += 1
+            progress_records.append({
+                "accession_number": accession,
+                "status": "error",
+                "count": "0",
+            })
 
-        if i % 200 == 0 or i == total:
+        if i % 200 == 0:
+            _save_ncsr_progress(progress_records, parsed_accessions)
             logger.info(
                 "  N-CSR extraction progress: %d / %d (ok=%d, fail=%d, skip=%d)",
                 i, total, ok_count, fail_count, skip_count,
             )
 
+    # Final progress save
+    _save_ncsr_progress(progress_records, parsed_accessions)
+
     logger.info(
-        "N-CSR extraction: %d filings parsed, %d failed, %d skipped (>50MB), %d total records",
-        ok_count, fail_count, skip_count, len(all_rows),
+        "N-CSR extraction: %d filings parsed, %d failed, %d skipped (>50MB), "
+        "%d new records",
+        ok_count, fail_count, skip_count, len(new_rows),
     )
 
-    if not all_rows:
+    # ── Merge with existing output ──
+    if new_rows:
+        new_df = pd.DataFrame(new_rows)
+        if NCSR_FINANCIALS_FILE.exists() and len(parsed_accessions) > 0:
+            existing = pd.read_csv(NCSR_FINANCIALS_FILE, dtype=str)
+            combined = pd.concat([existing, new_df], ignore_index=True)
+        else:
+            combined = new_df
+    elif NCSR_FINANCIALS_FILE.exists():
+        combined = pd.read_csv(NCSR_FINANCIALS_FILE, dtype=str)
+    else:
+        combined = pd.DataFrame(columns=_OUTPUT_COLS)
+
+    if combined.empty:
         result = pd.DataFrame(columns=_OUTPUT_COLS)
     else:
-        result = pd.DataFrame(all_rows)
-        result = _apply_guards(result)
+        result = _apply_guards(combined)
         result = _derive_report_quarter(result)
         result = _dedup_filings(result)
 
@@ -406,6 +486,25 @@ def extract_ncsr_financials(
         elapsed,
     )
     return result
+
+
+def _save_ncsr_progress(
+    new_records: list[dict[str, str]],
+    existing_accessions: set[str],
+) -> None:
+    """Append new progress records to the N-CSR progress file."""
+    if not new_records:
+        return
+    new_df = pd.DataFrame(new_records)
+    if NCSR_PARSE_PROGRESS_FILE.exists():
+        existing = pd.read_csv(NCSR_PARSE_PROGRESS_FILE, dtype=str)
+        combined = pd.concat([existing, new_df], ignore_index=True)
+        combined.drop_duplicates(
+            subset=["accession_number"], keep="last", inplace=True,
+        )
+    else:
+        combined = new_df
+    combined.to_csv(NCSR_PARSE_PROGRESS_FILE, index=False)
 
 
 _OUTPUT_COLS = [

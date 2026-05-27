@@ -608,7 +608,9 @@ class TestExtractNcsrFinancials:
         }])
 
         with patch("pipeline.ncsr_financials.NCSR_FINANCIALS_FILE",
-                    tmp_path / "ncsr_financials.csv"):
+                    tmp_path / "ncsr_financials.csv"), \
+             patch("pipeline.ncsr_financials.NCSR_PARSE_PROGRESS_FILE",
+                    tmp_path / "ncsr_parse_progress.csv"):
             result = extract_ncsr_financials(filings_index=index_df)
 
         assert len(result) >= 1

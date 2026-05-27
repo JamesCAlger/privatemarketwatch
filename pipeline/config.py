@@ -132,6 +132,9 @@ BDC_FILINGS_INDEX_FILE = OUTPUT_DIR / "bdc_filings_index.csv"
 BDC_HOLDINGS_FILE = OUTPUT_DIR / "bdc_holdings.csv"
 BDC_PARSE_PROGRESS_FILE = OUTPUT_DIR / "bdc_parse_progress.csv"
 
+# N-CSR output files
+NCSR_PARSE_PROGRESS_FILE = OUTPUT_DIR / "ncsr_parse_progress.csv"
+
 # N-PORT output files
 NPORT_HOLDINGS_FILE = OUTPUT_DIR / "nport_holdings.csv"
 NPORT_FILINGS_INDEX_FILE = OUTPUT_DIR / "nport_filings_index.csv"
