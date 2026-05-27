@@ -15,6 +15,14 @@ not auto-merged; `requires_human_merge` must be `true` for `PATCH_PROPOSED`.
 Every verdict must cite bundled `evidence_id` values in `evidence_refs`.
 GAV improvement is context only and cannot be the primary justification. The
 primary mechanism must be source-reconciliation evidence.
+HTML evidence is for identity, classification, and coordinate support only;
+XBRL and raw source rows remain the numeric source of truth.
+
+When the bundle contains `html_source_row_coordinate_candidates`, use it before
+free-text HTML evidence. If you rely on HTML, cite exact `table_index`,
+`row_index`, and `cell_indices` in `html_citations`. Do not classify aggregate,
+header, subtotal, comparative-period, or financial-statement rows as production
+positions.
 
 Allowed verdicts:
 
@@ -27,6 +35,18 @@ Allowed verdicts:
 - `ESCALATE`: ambiguity or risk requires human review. State the escalation
   reason and missing evidence.
 
+Also set `reconciliation_diagnosis` to one of:
+
+- `REAL_POSITION_MISSING_FROM_UNIFIED`
+- `HTML_PRESENT_TABLE_NOT_PARSED`
+- `AGGREGATE_OR_HEADER`
+- `COMPARATIVE_PERIOD`
+- `ZERO_OR_UNFUNDED_NON_INDEX_ROW`
+- `DUPLICATE_DIMENSION_PATH`
+- `XBRL_ONLY_NO_HTML_COORDINATE`
+- `RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED`
+- `INSUFFICIENT_EVIDENCE`
+
 Verdict JSON shape:
 
 ```json
@@ -37,7 +57,18 @@ Verdict JSON shape:
   "verdict": "PATCH_PROPOSED",
   "confidence": "MEDIUM",
   "primary_justification": "Source-reconciliation evidence supports ...",
-  "evidence_refs": ["worklist_row", "source_residual_rows"],
+  "reconciliation_diagnosis": "HTML_PRESENT_TABLE_NOT_PARSED",
+  "evidence_refs": ["worklist_row", "source_residual_rows", "html_source_row_coordinate_candidates"],
+  "html_citations": [
+    {
+      "evidence_ref": "html_source_row_coordinate_candidates",
+      "table_index": 14,
+      "row_index": 4,
+      "cell_indices": [0, 1, 2, 3],
+      "row_classification": "POSITION_ROW",
+      "reason": "Source-only blocker row is visible in an SOI continuation table outside the selected table set."
+    }
+  ],
   "changed_files": ["pipeline/example.py", "tests/test_example.py"],
   "patch_summary": "Bounded parser/config/test change attempted.",
   "source_reconciliation_effect": "Expected to reduce blocker rows for this CIK/date/mechanism without clearing unrelated residuals.",

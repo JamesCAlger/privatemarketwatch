@@ -142,6 +142,44 @@ def test_missing_cached_html_creates_explicit_missing_evidence(monkeypatch, tmp_
     assert items[0]["data"]["accession_number"] == "0001-25-999999"
 
 
+def test_source_row_coordinate_candidates_search_all_tables(monkeypatch, tmp_path):
+    cache, templates = _patch_paths(monkeypatch, tmp_path)
+    accession = "0001-25-000005"
+    _write_html(
+        cache,
+        "1",
+        accession,
+        _soi_table([["Selected Issuer", "Loan", "1", "1", "1", "2029", "10%", ""] for _ in range(6)])
+        + _soi_table([["EdgeCo Buyer, Inc.", "First Lien Delayed Draw Term Loan A", "216", "214", "214", "2028", "8.80%", ""] for _ in range(6)]),
+    )
+    (templates / "1.json").write_text(
+        json.dumps({"version": "3.0", "cik": "1", "filings": {accession: {"tables": [0]}}}),
+        encoding="utf-8",
+    )
+
+    items = evidence.build_html_soi_evidence(
+        source="bdc",
+        cik="1",
+        report_date="2025-06-30",
+        accession=accession,
+        source_rows=[
+            {
+                "source_row_id": "42",
+                "raw_investment_identifier": "Debt Investments Electrical Equipment EdgeCo Buyer, Inc. Instrument First Lien Delayed Draw Term Loan A Ref SOFR(Q)",
+                "source_fair_value": "214124",
+            }
+        ],
+    )
+    by_id = {item["evidence_id"]: item["data"] for item in items}
+
+    candidates = by_id["html_source_row_coordinate_candidates"]
+    assert any(row["source_row_id"] == "42" and row["table_index"] == 1 for row in candidates)
+    target = next(row for row in candidates if row["source_row_id"] == "42" and row["table_index"] == 1)
+    assert target["selected_by_template_or_detector"] is False
+    assert target["cell_indices"]
+    assert "POSITION_ROW" in target["classification_candidates"]
+
+
 def test_non_bdc_skips_html_evidence(monkeypatch, tmp_path):
     _patch_paths(monkeypatch, tmp_path)
     assert evidence.build_html_soi_evidence(source="nport", cik="1", report_date="2025-06-30", accession="x") == []

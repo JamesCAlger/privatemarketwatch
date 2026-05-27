@@ -287,3 +287,113 @@ def test_validate_rejects_html_refs_without_coordinates_and_accepts_missing_arti
     verdict["evidence_refs"] = ["html_artifact"]
     verdict_path.write_text(json.dumps(verdict), encoding="utf-8")
     assert review.validate_all_verdicts(output) == []
+
+
+def test_validate_reconciliation_diagnosis_requires_coordinate_html_evidence(tmp_path):
+    output = tmp_path / "review"
+    (output / "bundles").mkdir(parents=True)
+    (output / "verdicts").mkdir(parents=True)
+    review_id = "BDCSRC_0000000001_2025-03-31_M1_abc"
+    (output / "worklist.csv").write_text(
+        "review_id,cik,report_date,mechanism,affected_source_fair_value\n"
+        f"{review_id},0000000001,2025-03-31,m1,100\n",
+        encoding="utf-8",
+    )
+    (output / "bundles" / f"{review_id}.json").write_text(
+        json.dumps(
+            {
+                "review_id": review_id,
+                "cik": "0000000001",
+                "report_date": "2025-03-31",
+                "evidence_items": [
+                    {"evidence_id": "worklist_row"},
+                    {"evidence_id": "html_source_row_coordinate_candidates"},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    verdict = {
+        "review_id": review_id,
+        "cik": "0000000001",
+        "report_date": "2025-03-31",
+        "verdict": "PATCH_PROPOSED",
+        "confidence": "HIGH",
+        "primary_justification": "Source reconciliation row is visible in HTML.",
+        "reconciliation_diagnosis": "REAL_POSITION_MISSING_FROM_UNIFIED",
+        "evidence_refs": ["worklist_row", "html_source_row_coordinate_candidates"],
+        "changed_files": ["pipeline/source_reconciliation.py"],
+        "patch_summary": "Use source evidence to fix parser path.",
+        "source_reconciliation_effect": "Expected to reduce the source-only blocker.",
+        "gav_effect": "Context only.",
+        "tests_validation_plan": "pytest tests/test_validate_holdings.py",
+        "requires_human_merge": True,
+        "missing_evidence": "",
+        "residual_risk": "Scope must remain CIK/date bounded.",
+        "reviewer_notes": "Coordinate citation required.",
+    }
+    verdict_path = output / "verdicts" / f"{review_id}.json"
+    verdict_path.write_text(json.dumps(verdict), encoding="utf-8")
+
+    errors = review.validate_verdict_file(verdict_path, output)
+    assert any("requires table_index,row_index,cell_indices" in error for error in errors)
+
+    verdict["html_citations"] = [
+        {
+            "evidence_ref": "html_source_row_coordinate_candidates",
+            "table_index": 1,
+            "row_index": 2,
+            "cell_indices": [0, 1],
+            "row_classification": "AGGREGATE_HEADER",
+            "reason": "Aggregate row.",
+        }
+    ]
+    verdict_path.write_text(json.dumps(verdict), encoding="utf-8")
+    errors = review.validate_verdict_file(verdict_path, output)
+    assert any("cannot support REAL_POSITION_MISSING_FROM_UNIFIED" in error for error in errors)
+
+    verdict["html_citations"][0]["row_classification"] = "POSITION_ROW"
+    verdict["html_citations"][0]["reason"] = "Visible source row is a position row."
+    verdict_path.write_text(json.dumps(verdict), encoding="utf-8")
+    assert review.validate_all_verdicts(output) == []
+
+
+def test_summary_includes_reconciliation_diagnosis_counts(tmp_path):
+    output = tmp_path / "review"
+    (output / "bundles").mkdir(parents=True)
+    (output / "verdicts").mkdir(parents=True)
+    review_id = "BDCSRC_0000000001_2025-03-31_M1_abc"
+    _write_csv(
+        output / "worklist.csv",
+        [{"review_id": review_id, "cik": "0000000001", "report_date": "2025-03-31", "mechanism": "m1", "affected_source_fair_value": "100"}],
+    )
+    (output / "bundles" / f"{review_id}.json").write_text(
+        json.dumps({"review_id": review_id, "cik": "0000000001", "report_date": "2025-03-31", "evidence_items": [{"evidence_id": "worklist_row"}]}),
+        encoding="utf-8",
+    )
+    verdict = {
+        "review_id": review_id,
+        "cik": "0000000001",
+        "report_date": "2025-03-31",
+        "verdict": "INSUFFICIENT_EVIDENCE",
+        "confidence": "LOW",
+        "primary_justification": "Source evidence is ambiguous.",
+        "reconciliation_diagnosis": "INSUFFICIENT_EVIDENCE",
+        "evidence_refs": ["worklist_row"],
+        "changed_files": [],
+        "patch_summary": "",
+        "source_reconciliation_effect": "",
+        "gav_effect": "",
+        "tests_validation_plan": "",
+        "requires_human_merge": False,
+        "missing_evidence": "Need coordinate-level source filing evidence.",
+        "residual_risk": "No bounded mechanism.",
+        "reviewer_notes": "Do not force a patch.",
+    }
+    (output / "verdicts" / f"{review_id}.json").write_text(json.dumps(verdict), encoding="utf-8")
+
+    summary = review.summarize_verdicts(output)
+    assert summary["diagnosis_counts"] == {"INSUFFICIENT_EVIDENCE": 1}
+    rows = _read_csv(output / "summary.csv")
+    assert rows[0]["reconciliation_diagnosis"] == "INSUFFICIENT_EVIDENCE"
+    assert "INSUFFICIENT_EVIDENCE: 1 reviews" in (output / "summary.md").read_text(encoding="utf-8")
