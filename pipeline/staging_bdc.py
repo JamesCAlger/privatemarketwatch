@@ -228,6 +228,34 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
 
     # Normalised raw identifier: em-dash -> ' - ', en-dash -> '-'
     _norm_raw = "regexp_replace(replace(_raw_id, '\u2014', ' - '), '\u2013', '-', 'g')"
+    _msd_extra_industry_labels = {
+        "Beverage, Food & Tobacco",
+        "Capital Equipment",
+        "Chemicals, Plastics & Rubber",
+        "Consumer",
+        "Environmental Industries",
+    }
+    _industry_prefix_re = "|".join(
+        re.escape(label).replace(r"\ ", r"\s+")
+        for label in sorted(_INDUSTRY_LABELS | _msd_extra_industry_labels, key=len, reverse=True)
+    )
+    _msd_hierarchy_prefix_re = (
+        r"(?i)^Investments\s+Investments\s*-\s*"
+        r"(?:non-?\s*control(?:led)?(?:\s*/\s*non-?\s*affiliat(?:e|ed))?"
+        r"|control(?:led)?(?:\s*/\s*affiliat(?:e|ed))?"
+        r"|affiliat(?:e|ed))"
+        r"\s+"
+        r"(?:first\s+lien\s+debt|second\s+lien\s+debt|subordinated\s+debt"
+        r"|senior\s+secured\s+debt|common\s+equity|preferred\s+equity"
+        r"|equity|debt|warrants?)"
+        r"\s+"
+        rf"(?:{_industry_prefix_re})\s+"
+    )
+    _msd_hierarchy_condition = (
+        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = '0001849894' "
+        f"AND regexp_matches(_raw_id, '{_msd_hierarchy_prefix_re}')"
+    )
+    _msd_clean_raw = f"regexp_replace(_raw_id, '{_msd_hierarchy_prefix_re}', '')"
 
     # Entity signal check on seg[1] (for pct-prefix category detection)
     _seg1_entity_sql = " OR ".join(
@@ -527,7 +555,11 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         LEFT JOIN aggregate_override_matches o
           ON s._row_id = o._row_id
         WHERE COALESCE(o.force_exclude, 0) = 0
-          AND (COALESCE(o.force_include, 0) = 1 OR NOT ({agg_filter}))
+          AND (
+              COALESCE(o.force_include, 0) = 1
+              OR ({_msd_hierarchy_condition})
+              OR NOT ({agg_filter})
+          )
     ),
 
     -- CTE 3: Filter XBRL artifacts (no financial data at all)
@@ -671,6 +703,19 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                     '{_crescent_issuer_re}',
                     1
                 ))
+                -- MSD Investment Corp. embeds the full SOI hierarchy in one
+                -- typed-dimension value. Valid borrowers often lack LLC/Inc
+                -- suffixes, so parse only this CIK's hierarchy instead of
+                -- widening the generic bad-issuer guard.
+                WHEN {_msd_hierarchy_condition}
+                THEN COALESCE(
+                    NULLIF(regexp_extract(
+                        {_msd_clean_raw},
+                        '^(.+?)\\s+(?:-|Reference Rate|Rate and Spread|Interest Rate|Maturity Date|Equity Interest Rate)(?:\\s|$)',
+                        1
+                    ), ''),
+                    {_msd_clean_raw}
+                )
                 -- Industry prefix with 3+ segments: take segment 2 as issuer
                 WHEN {industry_in}
                      AND len(_segments) >= 3
@@ -803,6 +848,16 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                     )), ' - '),
                     ''
                 )
+                WHEN {_msd_hierarchy_condition}
+                THEN trim(COALESCE(
+                    NULLIF(regexp_extract({_msd_clean_raw}, '^.+?\\s+-\\s+(.+)$', 1), ''),
+                    NULLIF(regexp_extract(
+                        {_msd_clean_raw},
+                        '^.+?\\s+((?:Reference Rate|Rate and Spread|Interest Rate|Maturity Date|Equity Interest Rate).+)$',
+                        1
+                    ), ''),
+                    ''
+                ))
                 -- Industry prefix with 3+ segments: segments 3+ as instrument
                 WHEN {industry_in}
                      AND len(_segments) >= 3

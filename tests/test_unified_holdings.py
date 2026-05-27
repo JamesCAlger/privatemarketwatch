@@ -1298,6 +1298,70 @@ class TestPrepareBdc:
         result = _prepare_bdc(df)
         assert len(result) == 2
 
+    def test_msd_hierarchy_leaf_rows_without_legal_suffix_are_kept(self):
+        """MSD hierarchy rows are position leaves even when issuer lacks LLC/Inc."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0001849894",
+                "entity_name": "MSD Investment Corp.",
+                "accession_number": "0001193125-26-124538",
+                "report_date": "2025-12-31",
+                "investment_identifier": (
+                    "Investments Investments - non-controlled/non-affiliated "
+                    "First Lien Debt Banking, Finance, Insurance & Real Estate "
+                    "7Ridge Investments - Delayed Draw Term Loan Reference Rate "
+                    "and Spread S + 8.00% Interest Rate Floor 1.00% Interest "
+                    "Rate 11.67% Maturity Date 7/7/2028"
+                ),
+                "fair_value": 11123000,
+                "cost": 11123000,
+                "principal_amount": 11277000,
+                "interest_rate": 0.1167,
+            },
+            {
+                "cik": "0001849894",
+                "entity_name": "MSD Investment Corp.",
+                "accession_number": "0001193125-26-124538",
+                "report_date": "2025-12-31",
+                "investment_identifier": (
+                    "Investments Investments - non-controlled/non-affiliated "
+                    "Common Equity Services: Business S.A.F.E. Management "
+                    "Equity Interest Rate 0.00% Maturity Date 11/24/2031"
+                ),
+                "fair_value": 3478000,
+                "cost": 3478000,
+                "principal_amount": 3478000,
+            },
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+        by_issuer = {row["issuer_name"]: row for _, row in result.iterrows()}
+        assert "7Ridge Investments" in by_issuer
+        assert by_issuer["7Ridge Investments"]["instrument_description"].startswith(
+            "Delayed Draw Term Loan"
+        )
+        assert "S.A.F.E. Management" in by_issuer
+        assert by_issuer["S.A.F.E. Management"]["asset_category"] == "EQUITY_COMMON"
+
+    def test_msd_hierarchy_parser_is_cik_scoped_false_positive_guard(self):
+        """The MSD hierarchy exception does not globally admit generic rows."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0000000123",
+                "investment_identifier": (
+                    "Investments Investments - non-controlled/non-affiliated "
+                    "First Lien Debt Banking, Finance, Insurance & Real Estate "
+                    "7Ridge Investments - Delayed Draw Term Loan Reference Rate "
+                    "and Spread S + 8.00% Interest Rate 11.67% Maturity Date 7/7/2028"
+                ),
+                "fair_value": 11123000,
+                "principal_amount": 11277000,
+                "interest_rate": 0.1167,
+            }
+        ])
+        result = _prepare_bdc(df)
+        assert result.empty
+
     def test_prefix_parent_with_one_suffix_child_is_retained(self):
         """A prefix parent is not dropped unless FV evidence proves a rollup."""
         df = self._make_bdc_df([
