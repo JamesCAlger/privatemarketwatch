@@ -34,6 +34,10 @@ def _redirect_position_matching_output(monkeypatch, tmp_path):
         tmp_path / "position_matches.csv",
     )
     monkeypatch.setattr(
+        "pipeline.position_matching.POSITION_ID_EDGES_FILE",
+        tmp_path / "position_id_edges.csv",
+    )
+    monkeypatch.setattr(
         "pipeline.index_returns.POSITION_RETURNS_FILE",
         tmp_path / "position_returns.csv",
     )
@@ -1232,6 +1236,24 @@ class TestPositionIds:
         pos, _ = compute_returns(matches_df=matches)
         assert "position_id" in pos.columns
         assert pos["position_id"].iloc[0] == "POS-00000001"
+
+    def test_writes_position_id_edge_artifact(self, tmp_path):
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-03-31", "issuer_name": "Loan Corp",
+             "fair_value": "1000000", "cusip": "AAA111222"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Loan Corp",
+             "fair_value": "1020000", "cusip": "AAA111222"},
+        ])
+        matches = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        assign_position_ids(unified, matches)
+
+        edges = pd.read_csv(tmp_path / "position_id_edges.csv", dtype=str)
+        assert len(edges) == 1
+        assert edges.iloc[0]["edge_type"] == "match_pair"
+        assert edges.iloc[0]["match_method"] == "B1_cusip"
 
 
 class TestPositionMatchReconciliation:

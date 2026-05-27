@@ -19,6 +19,7 @@ import pandas as pd
 
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
+    POSITION_ID_EDGES_FILE,
     POSITION_MATCHES_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
@@ -72,6 +73,14 @@ UNIFIED_SORT_COLUMNS = [
 
 MATCH_SORT_COLUMNS = [c for c in MATCH_COLUMNS if c != "position_id"]
 
+POSITION_ID_EDGE_COLUMNS = [
+    "edge_type", "position_id", "cik", "source",
+    "begin_report_date", "begin_quarter", "begin_issuer_name",
+    "begin_fair_value",
+    "end_report_date", "end_quarter", "end_issuer_name", "end_fair_value",
+    "match_method", "match_key", "match_score", "span_months",
+]
+
 
 def _sort_existing(
     df: pd.DataFrame,
@@ -88,6 +97,14 @@ def _sort_existing(
     ).reset_index(drop=True)
 
 
+def _write_position_id_edges(edges: list[dict]) -> None:
+    """Persist auditable edges used to form position_id chains."""
+    edges_df = pd.DataFrame(edges, columns=POSITION_ID_EDGE_COLUMNS)
+    edges_df = _sort_existing(edges_df, POSITION_ID_EDGE_COLUMNS)
+    POSITION_ID_EDGES_FILE.parent.mkdir(parents=True, exist_ok=True)
+    edges_df.to_csv(POSITION_ID_EDGES_FILE, index=False)
+
+
 # ---------------------------------------------------------------------------
 # SQL helpers
 # ---------------------------------------------------------------------------
@@ -98,6 +115,14 @@ def _quarter_label_sql(date_col: str) -> str:
         f"CAST(YEAR(TRY_CAST({date_col} AS DATE)) AS VARCHAR) || "
         f"'q' || CAST(QUARTER(TRY_CAST({date_col} AS DATE)) AS VARCHAR)"
     )
+
+
+def _quarter_from_date(value: object) -> str:
+    """Return YYYYqN from a date-like value for edge artifact rows."""
+    ts = pd.to_datetime(value, errors="coerce")
+    if pd.isna(ts):
+        return ""
+    return f"{ts.year}q{((ts.month - 1) // 3) + 1}"
 
 
 def _next_quarter_sql(qtr_col: str) -> str:
@@ -1302,6 +1327,7 @@ def assign_position_ids(
         unified_df["position_id"] = [
             f"POS-{i:08d}" for i in range(1, len(unified_df) + 1)
         ]
+        _write_position_id_edges([])
         logger.info("No match pairs -- assigned %d singleton position IDs", len(unified_df))
         return unified_df, matches_df
 
@@ -1417,6 +1443,7 @@ def assign_position_ids(
     # ------------------------------------------------------------------
     uf = UnionFind()
     n_edges = 0
+    short_match_edges: set[tuple[int, int]] = set()
     spans = pd.to_numeric(matches_df["span_months"], errors="coerce").fillna(99)
     for midx in range(n_match):
         if spans.iloc[midx] > 4:
@@ -1426,6 +1453,7 @@ def assign_position_ids(
         if b is not None and e is not None:
             uf.union(b, e)
             n_edges += 1
+            short_match_edges.add((b, e))
         elif b is not None:
             uf.find(b)  # register isolated node
         elif e is not None:
@@ -1543,7 +1571,6 @@ def assign_position_ids(
 
     # Write position_id directly by row index (no join = no fan-out)
     unified_df["position_id"] = [uid_to_pid[i] for i in range(len(unified_df))]
-    unified_df.drop(columns=["_uid"], inplace=True)
 
     # ------------------------------------------------------------------
     # Step 5: Tag matches (prefer end_uid which is always current-period)
@@ -1566,6 +1593,63 @@ def assign_position_ids(
     if n_unlinked:
         logger.warning("  %d match pairs could not be linked to any unified row",
                         n_unlinked)
+
+    # ------------------------------------------------------------------
+    # Step 5b: Persist auditable chain-forming edges
+    # ------------------------------------------------------------------
+    uid_lookup = unified_df.set_index("_uid", drop=False)
+    edge_rows: list[dict] = []
+    for midx in range(n_match):
+        b = begin_uid.get(midx)
+        e = end_uid.get(midx)
+        if b is None or e is None or spans.iloc[midx] > 4:
+            continue
+        row = matches_df.iloc[midx]
+        edge_rows.append({
+            "edge_type": "match_pair",
+            "position_id": uid_to_pid[e],
+            "cik": row.get("cik", ""),
+            "source": row.get("source", ""),
+            "begin_report_date": row.get("begin_report_date", ""),
+            "begin_quarter": row.get("begin_quarter", ""),
+            "begin_issuer_name": row.get("begin_issuer_name", ""),
+            "begin_fair_value": row.get("begin_fair_value", ""),
+            "end_report_date": row.get("end_report_date", ""),
+            "end_quarter": row.get("end_quarter", ""),
+            "end_issuer_name": row.get("end_issuer_name", ""),
+            "end_fair_value": row.get("end_fair_value", ""),
+            "match_method": row.get("match_method", ""),
+            "match_key": row.get("match_key", ""),
+            "match_score": row.get("match_score", ""),
+            "span_months": row.get("span_months", ""),
+        })
+    for item in supp_pairs.itertuples(index=False):
+        a = int(item.uid_a)
+        b = int(item.uid_b)
+        if (a, b) in short_match_edges:
+            continue
+        begin = uid_lookup.loc[a]
+        end = uid_lookup.loc[b]
+        edge_rows.append({
+            "edge_type": "supplementary_b2",
+            "position_id": uid_to_pid[b],
+            "cik": end.get("cik", ""),
+            "source": end.get("source", ""),
+            "begin_report_date": begin.get("report_date", ""),
+            "begin_quarter": _quarter_from_date(begin.get("report_date", "")),
+            "begin_issuer_name": begin.get("issuer_name", ""),
+            "begin_fair_value": begin.get("fair_value", ""),
+            "end_report_date": end.get("report_date", ""),
+            "end_quarter": _quarter_from_date(end.get("report_date", "")),
+            "end_issuer_name": end.get("issuer_name", ""),
+            "end_fair_value": end.get("fair_value", ""),
+            "match_method": "SUPP_B2_unique_exact_name",
+            "match_key": str(end.get("issuer_name", "")).strip().lower(),
+            "match_score": "1.0",
+            "span_months": "3",
+        })
+    _write_position_id_edges(edge_rows)
+    logger.info("  Position ID edge artifact: %d edges", len(edge_rows))
 
     # Ensure column order matches UNIFIED_COLUMNS
     from pipeline.unified_holdings import UNIFIED_COLUMNS
