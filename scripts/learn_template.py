@@ -59,6 +59,14 @@ from pipeline.config import (
     HTML_TEMPLATE_DIR,
     OUTPUT_DIR,
 )
+from pipeline.html_soi_evidence import (
+    detect_10k_periods as _shared_detect_10k_periods,
+    detect_periods_from_html_text as _shared_detect_periods_from_html_text,
+    find_soi_date_markers as _shared_find_soi_date_markers,
+    group_continuation_tables as _shared_group_continuation_tables,
+    parse_period_date as _shared_parse_period_date,
+    score_table_soi as _shared_score_table_soi,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -1343,51 +1351,7 @@ def _score_table_soi(grid: list, min_rows: int = 5) -> tuple[int, int]:
 
     Returns (score, best_header_row).
     """
-    if not grid or len(grid) < min_rows:
-        return (0, 0)
-
-    width = len(grid[0]) if grid else 0
-    best_score = 0
-    best_hr = 0
-
-    # Try rows 0-2 as potential header rows
-    for hr in range(min(3, len(grid))):
-        hdr_text = " ".join(c.lower() for c in grid[hr] if c.strip())
-        if not hdr_text:
-            continue
-
-        score = 0
-
-        # High-value keyword matching
-        for kw in _SOI_KEYWORDS_HIGH:
-            if kw in hdr_text:
-                score += 4
-
-        # Medium-value keyword matching
-        for kw in _SOI_KEYWORDS_MED:
-            if kw in hdr_text:
-                score += 2
-
-        # Negative keywords (disqualifiers)
-        for kw in _SOI_KEYWORDS_NEG:
-            if kw in hdr_text:
-                score -= 5
-
-        # Row count bonus
-        if len(grid) >= 15:
-            score += 5
-        if len(grid) >= 50:
-            score += 5
-
-        # Width bonus (SOI tables are wide)
-        if width >= 8:
-            score += 3
-
-        if score > best_score:
-            best_score = score
-            best_hr = hr
-
-    return (best_score, best_hr)
+    return _shared_score_table_soi(grid, min_rows=min_rows)
 
 
 def _group_continuation_tables(
@@ -1407,30 +1371,7 @@ def _group_continuation_tables(
     are grouped. The gap of 5 handles SOI schedules where 1-2 non-SOI
     tables (FV totals, footnotes) interrupt the sequence.
     """
-    if not scored_tables:
-        return []
-
-    # Sort by table index
-    sorted_tables = sorted(scored_tables, key=lambda x: x[0])
-
-    groups: list[list[int]] = []
-    current_group: list[int] = [sorted_tables[0][0]]
-    current_width = sorted_tables[0][2]
-
-    for i in range(1, len(sorted_tables)):
-        tidx, _, w, _ = sorted_tables[i]
-        prev_tidx = sorted_tables[i - 1][0]
-
-        # Group if: similar width (within 6) AND gap <= 5
-        if abs(w - current_width) <= 6 and tidx - prev_tidx <= 5:
-            current_group.append(tidx)
-        else:
-            groups.append(current_group)
-            current_group = [tidx]
-            current_width = w
-
-    groups.append(current_group)
-    return groups
+    return _shared_group_continuation_tables(scored_tables)
 
 
 _MONTH_NAMES = {
@@ -1447,20 +1388,7 @@ _PERIOD_DATE_RE = re.compile(
 
 def _parse_period_date(text: str) -> str | None:
     """Parse a date like 'March 31, 2023' from text. Returns 'YYYY-MM-DD' or None."""
-    m = _PERIOD_DATE_RE.search(text)
-    if not m:
-        return None
-    # Extract month name from the full match
-    full = m.group(0)
-    month_name = full.split()[0].lower().rstrip(",")
-    month = _MONTH_NAMES.get(month_name)
-    if not month:
-        return None
-    day = int(m.group(1))
-    year = int(m.group(2))
-    if year < 2000 or year > 2030 or day < 1 or day > 31:
-        return None
-    return f"{year:04d}-{month:02d}-{day:02d}"
+    return _shared_parse_period_date(text)
 
 
 _SOI_RE = re.compile(r"schedule\s+of\s+investments", re.IGNORECASE)
@@ -1482,30 +1410,7 @@ def _find_soi_date_markers(
 
     Returns list of (table_index, date_str) tuples.
     """
-    import bisect
-    import html as html_mod
-
-    # Index all <table> opening positions for binary search
-    table_positions = [m.start() for m in _TABLE_OPEN_RE.finditer(raw_html)]
-    if not table_positions:
-        return []
-
-    markers: list[tuple[int, str]] = []
-    for soi_m in _SOI_RE.finditer(raw_html):
-        # Extract 500 chars after the SOI heading, strip tags, decode entities
-        window_raw = raw_html[soi_m.end():soi_m.end() + 500]
-        window_text = _HTML_TAG_RE.sub(" ", window_raw)
-        window_text = html_mod.unescape(window_text)
-
-        date = _parse_period_date(window_text)
-        if not date:
-            continue
-
-        # Map to the table index that follows this SOI heading
-        tidx = bisect.bisect_right(table_positions, soi_m.start())
-        markers.append((tidx, date))
-
-    return markers
+    return _shared_find_soi_date_markers(raw_html)
 
 
 def _detect_periods_from_html(
@@ -1528,46 +1433,7 @@ def _detect_periods_from_html(
         raw_html = html_path.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return None
-
-    all_markers = _find_soi_date_markers(raw_html)
-    if not all_markers:
-        return None
-
-    # Deduplicate: keep first date per table index
-    seen_tidx: dict[int, str] = {}
-    for tidx, date in all_markers:
-        if tidx not in seen_tidx:
-            seen_tidx[tidx] = date
-
-    # Filter to markers at or before SOI tables
-    date_markers = sorted(seen_tidx.items())  # (tidx, date) sorted by tidx
-
-    # Need at least 2 distinct dates to split periods
-    distinct_dates = set(d for _, d in date_markers)
-    if len(distinct_dates) < 2:
-        return None
-
-    # Assign each SOI table to the most recent preceding date marker
-    periods: dict[str, list[int]] = {}
-    for tidx in sorted(soi_table_indices):
-        assigned_date = None
-        for marker_tidx, marker_date in date_markers:
-            if marker_tidx <= tidx:
-                assigned_date = marker_date
-            else:
-                break
-
-        # Tables before the first marker inherit from the first marker
-        if assigned_date is None and date_markers:
-            assigned_date = date_markers[0][1]
-
-        if assigned_date:
-            periods.setdefault(assigned_date, []).append(tidx)
-
-    if len(periods) < 2:
-        return None
-
-    return periods
+    return _shared_detect_periods_from_html_text(raw_html, soi_table_indices)
 
 
 def _detect_10k_periods(
@@ -1578,33 +1444,7 @@ def _detect_10k_periods(
 
     Returns table_periods dict or None if not applicable.
     """
-    if len(table_groups) != 2:
-        return None
-
-    if not report_date or len(report_date) < 10:
-        return None
-
-    # Current period = first group (lower indices), comparative = second
-    group1 = table_groups[0]
-    group2 = table_groups[1]
-
-    # Must have a meaningful index gap between groups (>= 10)
-    # to indicate they're separate schedule sections, not the same schedule.
-    gap = group2[0] - group1[-1]
-    if gap < 10:
-        return None  # Too close, likely continuation of same schedule
-
-    # Derive comparative date (prior fiscal year-end)
-    try:
-        year = int(report_date[:4])
-        comp_date = f"{year - 1}-{report_date[5:]}"
-    except (ValueError, IndexError):
-        return None
-
-    return {
-        report_date: group1,
-        comp_date: group2,
-    }
+    return _shared_detect_10k_periods(table_groups, report_date)
 
 
 def _auto_detect_dollar_unit(
