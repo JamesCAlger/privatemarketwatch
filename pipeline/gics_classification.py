@@ -8,7 +8,7 @@ sub-industry names. Three-phase cascade:
      + structural skip for non-corporate rows ($0)
   2. LLM batch classification of unique company names (~$1-3 via GPT-4o-mini)
      + optional web search re-classification for low-confidence results
-  3. Apply via DuckDB LEFT JOIN on normalized issuer_name
+  3. Apply via vectorized dict lookup on normalized issuer_name
 
 Cache: company_gics_cache.csv persists across runs so LLM is called at most
 once per unique normalized company name.
@@ -633,7 +633,7 @@ def _get_candidates(
 
 
 # ---------------------------------------------------------------------------
-# Phase 3: Apply enrichment via DuckDB
+# Phase 3: Apply enrichment via dict lookup
 # ---------------------------------------------------------------------------
 
 
@@ -669,118 +669,67 @@ def _apply_gics_to_holdings(
     unified_df: pd.DataFrame,
     cache: dict[str, tuple[str, str, str]],
 ) -> pd.DataFrame:
-    """Apply GICS classification to unified holdings via DuckDB JOIN.
+    """Apply GICS classification to unified holdings via dict lookup.
 
-    Uses three-pass matching:
+    Uses three-pass matching per unique issuer_name:
     1. Exact match on full normalized issuer_name
     2. Fallback: extract company name portion (strip loan descriptors) and match
     3. Fallback: normalized canonical_name from entity resolution
     """
-    # Build lookup DataFrame
-    lookup_records = [
-        {"company_name_norm": name, "gics_sub_industry": gics}
+    # Build cache lookup dict (normalized_name -> gics_sub_industry)
+    # excluding "Other" entries
+    gics_by_norm: dict[str, str] = {
+        name: gics
         for name, (gics, _, _) in cache.items()
-        if gics != "Other"
-    ]
+        if gics and gics != "Other"
+    }
 
-    if not lookup_records:
+    if not gics_by_norm:
         logger.info("No GICS classifications to apply")
         return unified_df
 
-    lookup_df = pd.DataFrame(lookup_records)
-
-    # Pre-compute name normalization mapping (avoids DuckDB UDF overhead)
-    # Includes both full-name normalization and short-name extraction
+    # Pass 1+2: Build issuer_name -> gics mapping via normalize + short-name
     unique_names = unified_df["issuer_name"].dropna().unique()
-    name_map_records = []
+    issuer_gics_map: dict[str, str] = {}
     for name in unique_names:
-        norm = _normalize_company_name(str(name))
-        short = _extract_short_name(str(name))
-        if norm:
-            name_map_records.append({
-                "issuer_name": str(name),
-                "_name_norm": norm,
-                "_name_short": short if short else norm,
-            })
+        name_str = str(name)
+        norm = _normalize_company_name(name_str)
+        if not norm:
+            continue
+        gics = gics_by_norm.get(norm)
+        if not gics:
+            short = _extract_short_name(name_str)
+            if short:
+                gics = gics_by_norm.get(short)
+        if gics:
+            issuer_gics_map[name_str] = gics
 
-    if not name_map_records:
-        return unified_df
-
-    name_map_df = pd.DataFrame(name_map_records)
-
-    # Pre-compute canonical_name normalization mapping
-    canonical_map_records = []
+    # Pass 3+4: Build canonical_name -> gics mapping (fallback)
+    canon_gics_map: dict[str, str] = {}
     if "canonical_name" in unified_df.columns:
         unique_canonicals = unified_df["canonical_name"].dropna().unique()
         for cn in unique_canonicals:
             cn_str = str(cn).strip()
-            if cn_str:
-                norm = _normalize_company_name(cn_str)
+            if not cn_str:
+                continue
+            norm = _normalize_company_name(cn_str)
+            if not norm:
+                continue
+            gics = gics_by_norm.get(norm)
+            if not gics:
                 short = _extract_short_name(cn_str)
-                if norm:
-                    canonical_map_records.append({
-                        "canonical_name": cn_str,
-                        "_canon_norm": norm,
-                        "_canon_short": short if short else norm,
-                    })
+                if short:
+                    gics = gics_by_norm.get(short)
+            if gics:
+                canon_gics_map[cn_str] = gics
 
-    canonical_map_df = pd.DataFrame(
-        canonical_map_records,
-        columns=["canonical_name", "_canon_norm", "_canon_short"],
-    ) if canonical_map_records else pd.DataFrame(
-        columns=["canonical_name", "_canon_norm", "_canon_short"],
-    )
-
-    # Add row index to preserve order through JOIN
-    unified_df = unified_df.copy()
-    unified_df["_row_idx"] = range(len(unified_df))
-    # Ensure canonical_name column exists for the JOIN
-    if "canonical_name" not in unified_df.columns:
-        unified_df["canonical_name"] = None
-
-    con = duckdb.connect()
-    con.register("holdings", unified_df)
-    con.register("gics_lookup", lookup_df)
-    con.register("name_map", name_map_df)
-    con.register("canonical_map", canonical_map_df)
-
-    result = con.execute("""
-        SELECT h.* EXCLUDE (gics_sub_industry, _row_idx),
-               COALESCE(
-                   g1.gics_sub_industry,
-                   g2.gics_sub_industry,
-                   g3.gics_sub_industry,
-                   g4.gics_sub_industry,
-                   ''
-               ) AS gics_sub_industry,
-               h._row_idx
-        FROM holdings h
-        LEFT JOIN name_map nm
-          ON CAST(h.issuer_name AS VARCHAR) = nm.issuer_name
-        LEFT JOIN gics_lookup g1
-          ON nm._name_norm = g1.company_name_norm
-        LEFT JOIN gics_lookup g2
-          ON nm._name_short = g2.company_name_norm
-          AND g1.gics_sub_industry IS NULL
-        LEFT JOIN canonical_map cm
-          ON CAST(h.canonical_name AS VARCHAR) = cm.canonical_name
-          AND g1.gics_sub_industry IS NULL
-          AND g2.gics_sub_industry IS NULL
-        LEFT JOIN gics_lookup g3
-          ON cm._canon_norm = g3.company_name_norm
-          AND g1.gics_sub_industry IS NULL
-          AND g2.gics_sub_industry IS NULL
-        LEFT JOIN gics_lookup g4
-          ON cm._canon_short = g4.company_name_norm
-          AND g1.gics_sub_industry IS NULL
-          AND g2.gics_sub_industry IS NULL
-          AND g3.gics_sub_industry IS NULL
-        ORDER BY h._row_idx
-    """).fetchdf()
-    con.close()
-
-    # Drop the temp index column
-    result = result.drop(columns=["_row_idx"])
+    # Apply: vectorized map on issuer_name, fallback to canonical_name
+    result = unified_df.copy()
+    gics_series = result["issuer_name"].map(issuer_gics_map)
+    if canon_gics_map and "canonical_name" in result.columns:
+        canon_series = result["canonical_name"].map(canon_gics_map)
+        gics_series = gics_series.fillna(canon_series)
+    result["gics_sub_industry"] = gics_series.fillna("")
 
     # Ensure column order matches UNIFIED_COLUMNS
     from pipeline.unified_holdings import UNIFIED_COLUMNS
@@ -924,7 +873,7 @@ def classify_gics(
                     ", ".join(f"{k}={v}" for k, v in sorted(sources.items())))
 
     # ── Phase 3: Apply to holdings ──
-    logger.info("Phase 3: Applying GICS to holdings via DuckDB JOIN...")
+    logger.info("Phase 3: Applying GICS to holdings via dict lookup...")
     result = _apply_gics_to_holdings(unified_df, cache)
 
     # Stats

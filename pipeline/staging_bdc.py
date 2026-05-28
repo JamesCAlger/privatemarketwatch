@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import logging
 import re
+import time
+from pathlib import Path
+from typing import Union
 
 import duckdb
 import pandas as pd
@@ -133,29 +136,81 @@ def _reclassify_named_fund_positions(df: pd.DataFrame) -> pd.DataFrame:
 # BDC preparation
 # ---------------------------------------------------------------------------
 
-def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
+def _prepare_bdc(
+    bdc_df: pd.DataFrame | None = None,
+    bdc_file: Union[Path, str, None] = None,
+) -> pd.DataFrame:
     """Filter, parse, classify, and map BDC holdings to unified schema.
 
-    Uses a DuckDB CTE pipeline for all data manipulation. The pandas
-    DataFrame is registered as a virtual table, transformed entirely in
-    SQL, and the result is fetched back as a pandas DataFrame.
+    Uses a DuckDB CTE pipeline for all data manipulation.
+
+    Parameters
+    ----------
+    bdc_df : pd.DataFrame, optional
+        Pre-loaded BDC holdings DataFrame.
+    bdc_file : Path or str, optional
+        Path to BDC holdings file (Parquet or CSV). When provided, DuckDB
+        reads the file directly -- much faster than loading via pandas then
+        registering.  Falls back to *bdc_df* when the file does not exist.
     """
-    logger.info("Preparing BDC holdings: %d input rows", len(bdc_df))
+    from pipeline.unified_holdings import UNIFIED_COLUMNS
 
-    if bdc_df.empty:
-        from pipeline.unified_holdings import UNIFIED_COLUMNS
-        return pd.DataFrame(columns=UNIFIED_COLUMNS)
-
-    bdc_df = bdc_df.copy()
-    for col in (
+    _optional_cols = (
         "fair_value_unit", "cost_unit", "principal_amount_unit",
         "industry", "investment_type", "affiliation",
-    ):
-        if col not in bdc_df.columns:
-            bdc_df[col] = ""
+    )
 
     con = duckdb.connect()
-    con.register("bdc_raw", bdc_df)
+
+    # --- data source selection ------------------------------------------------
+    if bdc_file is not None and Path(bdc_file).exists():
+        fpath = str(bdc_file).replace("\\", "/")
+        if str(bdc_file).endswith(".parquet"):
+            read_expr = f"read_parquet('{fpath}')"
+        else:
+            read_expr = f"read_csv_auto('{fpath}', header=true, all_varchar=true)"
+
+        # Materialise once into DuckDB columnar storage (faster than a VIEW
+        # when the table is referenced by many downstream CTEs).
+        con.execute(f"CREATE TABLE bdc_raw AS SELECT * FROM {read_expr}")
+        input_count = con.execute("SELECT COUNT(*) FROM bdc_raw").fetchone()[0]
+        logger.info("Preparing BDC holdings: %d input rows (from %s)",
+                     input_count, Path(bdc_file).name)
+
+        if input_count == 0:
+            con.close()
+            return pd.DataFrame(columns=UNIFIED_COLUMNS)
+
+        # Ensure optional columns exist
+        existing_cols = {
+            r[0] for r in con.execute(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_name = 'bdc_raw'"
+            ).fetchall()
+        }
+        for col in _optional_cols:
+            if col not in existing_cols:
+                con.execute(f"ALTER TABLE bdc_raw ADD COLUMN {col} VARCHAR DEFAULT ''")
+
+    elif bdc_df is not None:
+        input_count = len(bdc_df)
+        logger.info("Preparing BDC holdings: %d input rows", input_count)
+
+        if bdc_df.empty:
+            con.close()
+            return pd.DataFrame(columns=UNIFIED_COLUMNS)
+
+        bdc_df = bdc_df.copy()
+        for col in _optional_cols:
+            if col not in bdc_df.columns:
+                bdc_df[col] = ""
+        # Materialise into a TABLE (not a view) so pre-filter DELETEs work
+        con.register("_bdc_raw_view", bdc_df)
+        con.execute("CREATE TABLE bdc_raw AS SELECT * FROM _bdc_raw_view")
+
+    else:
+        raise ValueError("Either bdc_df or bdc_file must be provided")
+    # --- end data source selection --------------------------------------------
     if FX_RATES_FILE.exists():
         fx_path = str(FX_RATES_FILE).replace("\\", "/")
         con.execute(f"""
@@ -328,20 +383,43 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     # Filter comparative-period rows if the 'period' column exists.
     # Also exclude pre-2022 BDC data (unreliable partial XBRL coverage).
     # Rows with NULL/empty report_date pass the cutoff (test compatibility).
-    has_period = "period" in bdc_df.columns
-    date_cutoff = ("AND (TRY_CAST(report_date AS DATE) >= '2022-01-01'"
-                   " OR TRY_CAST(report_date AS DATE) IS NULL)")
+    _bdc_raw_cols = {
+        r[0] for r in con.execute(
+            "SELECT column_name FROM information_schema.columns "
+            "WHERE table_name = 'bdc_raw'"
+        ).fetchall()
+    }
+    has_period = "period" in _bdc_raw_cols
+
+    # -- Pre-filter: DELETE comparative-period and pre-2022 rows from the
+    # materialized table BEFORE any CTE processing.  This drops ~50% of rows
+    # so every downstream CTE, regex, and join operates on half the data.
+    pre_filter_count = con.execute("SELECT COUNT(*) FROM bdc_raw").fetchone()[0]
     if has_period:
-        period_sort_expr = "COALESCE(CAST(period AS VARCHAR), '')"
-        period_filter = (
-            f"""WHERE (TRY_CAST(period AS DATE) = TRY_CAST(report_date AS DATE)
-               OR period IS NULL
-               OR CAST(period AS VARCHAR) = '')
-            {date_cutoff}"""
-        )
+        con.execute("""
+            DELETE FROM bdc_raw
+            WHERE NOT (
+                TRY_CAST(period AS DATE) = TRY_CAST(report_date AS DATE)
+                OR period IS NULL
+                OR CAST(period AS VARCHAR) = ''
+            )
+            OR (TRY_CAST(report_date AS DATE) < '2022-01-01'
+                AND TRY_CAST(report_date AS DATE) IS NOT NULL)
+        """)
     else:
-        period_sort_expr = "''"
-        period_filter = f"WHERE TRUE {date_cutoff}"
+        con.execute("""
+            DELETE FROM bdc_raw
+            WHERE TRY_CAST(report_date AS DATE) < '2022-01-01'
+              AND TRY_CAST(report_date AS DATE) IS NOT NULL
+        """)
+    post_filter_count = con.execute("SELECT COUNT(*) FROM bdc_raw").fetchone()[0]
+    removed = pre_filter_count - post_filter_count
+    if removed > 0:
+        logger.info("  Pre-filtered: %d -> %d rows (%d comparative/pre-2022 removed)",
+                    pre_filter_count, post_filter_count, removed)
+
+    # Period/date filtering already applied via DELETE above
+    period_filter = "WHERE TRUE"
 
     # Conditional CTE for CC-reviewed aggregate header exclusion.
     # When the aggregate_header_flags.csv file has entries, inject a CTE
@@ -392,13 +470,18 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         _cc_agg_header_cte = "-- (no aggregate header flags loaded)"
         _affil_dedup_source = "no_bad_issuers"
 
-    sql = f"""
+    # =========================================================================
+    # Phase A: Row-level normalization, scale correction, amendment dedup,
+    # affiliation stripping, aggregate/artifact filtering, and prefix rollup.
+    # Materializes into _bdc_phase_a temp table so downstream phases read a
+    # clean columnar scan instead of re-deriving through the CTE chain.
+    # =========================================================================
+    _t_phase = time.time()
+    sql_phase_a = f"""
+    CREATE TEMP TABLE _bdc_phase_a AS
     WITH
     -- CTE 1: Normalise text columns, cast numerics, add row id
-    -- Filter to current-period rows only (period = report_date).
-    -- Comparative rows (period < report_date) are preserved in raw
-    -- bdc_holdings.csv for position matching but excluded from the
-    -- unified index to avoid double-counting.
+    -- Comparative-period and pre-2022 rows already removed by pre-filter DELETE.
     raw AS (
         SELECT
             *,
@@ -406,16 +489,10 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 ORDER BY
                     COALESCE(CAST(cik AS VARCHAR), ''),
                     COALESCE(CAST(report_date AS VARCHAR), ''),
-                    COALESCE(CAST(filing_date AS VARCHAR), ''),
                     COALESCE(CAST(accession_number AS VARCHAR), ''),
-                    COALESCE(CAST(form_type AS VARCHAR), ''),
-                    {period_sort_expr},
                     COALESCE(CAST(investment_identifier AS VARCHAR), ''),
                     COALESCE(CAST(dimensions_raw AS VARCHAR), ''),
-                    COALESCE(CAST(fair_value AS VARCHAR), ''),
-                    COALESCE(CAST(cost AS VARCHAR), ''),
-                    COALESCE(CAST(principal_amount AS VARCHAR), ''),
-                    COALESCE(CAST(shares_held AS VARCHAR), '')
+                    COALESCE(CAST(fair_value AS VARCHAR), '')
             ) AS _row_id,
             COALESCE(CAST(investment_identifier AS VARCHAR), '') AS _raw_id,
             COALESCE(lower(trim(CAST(investment_identifier AS VARCHAR))), '') AS _lower_id,
@@ -501,35 +578,29 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     --   -> "Acme Corp - Term Loan"
     -- Must run BEFORE aggregate filter so cleaned _raw_id/_lower_id
     -- are used for aggregate detection.
+    -- Compute stripped value once, derive _lower_id from it (3 regex
+    -- calls instead of 6).
     strip_affil AS (
-        SELECT * EXCLUDE (_raw_id, _lower_id),
-            regexp_replace(
+        SELECT * EXCLUDE (_raw_id, _lower_id, _stripped),
+            _stripped AS _raw_id,
+            lower(trim(_stripped)) AS _lower_id
+        FROM (
+            SELECT *,
                 regexp_replace(
                     regexp_replace(
-                        _raw_id,
-                        '{_AFFILIATION_PREFIX_RE}',
+                        regexp_replace(
+                            _raw_id,
+                            '{_AFFILIATION_PREFIX_RE}',
+                            ''
+                        ),
+                        '{_AFFILIATION_SUFFIX_RE}',
                         ''
                     ),
-                    '{_AFFILIATION_SUFFIX_RE}',
+                    '{_INVESTMENTS_HIERARCHY_RE}',
                     ''
-                ),
-                '{_INVESTMENTS_HIERARCHY_RE}',
-                ''
-            ) AS _raw_id,
-            lower(trim(regexp_replace(
-                regexp_replace(
-                    regexp_replace(
-                        _raw_id,
-                        '{_AFFILIATION_PREFIX_RE}',
-                        ''
-                    ),
-                    '{_AFFILIATION_SUFFIX_RE}',
-                    ''
-                ),
-                '{_INVESTMENTS_HIERARCHY_RE}',
-                ''
-            ))) AS _lower_id
-        FROM no_amendments
+                ) AS _stripped
+            FROM no_amendments
+        )
     ),
 
     aggregate_override_matches AS (
@@ -607,8 +678,57 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
         LEFT JOIN prefix_rollup_parents p
           ON a._row_id = p._row_id
         WHERE p._row_id IS NULL
-    ),
+    )
 
+    SELECT * FROM no_subtotals
+    """
+    con.execute(sql_phase_a)
+
+    # Log 1000x scale corrections (diagnostic, uses bdc_raw which is still alive)
+    try:
+        scale_log = con.execute("""
+            WITH _qfv AS (
+                SELECT cik, CAST(report_date AS VARCHAR) AS report_date,
+                       SUM(TRY_CAST(fair_value AS DOUBLE)) AS total_fv
+                FROM bdc_raw
+                WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+                GROUP BY cik, CAST(report_date AS VARCHAR)
+            ),
+            _cm AS (
+                SELECT cik, MEDIAN(total_fv) AS median_fv, COUNT(*) AS n_quarters
+                FROM _qfv GROUP BY cik
+            )
+            SELECT q.cik, q.report_date, q.total_fv, m.median_fv,
+                   ROUND(q.total_fv / m.median_fv, 0) AS ratio
+            FROM _qfv q
+            JOIN _cm m ON q.cik = m.cik
+            WHERE m.n_quarters >= 3 AND m.median_fv > 0
+              AND q.total_fv / m.median_fv > 100
+        """).fetchdf()
+        for _, row in scale_log.iterrows():
+            logger.info("  1000x scale correction: CIK %s %s "
+                        "(total_fv=%.0f, median=%.0f, ratio=%.0fx)",
+                        row["cik"], row["report_date"],
+                        row["total_fv"], row["median_fv"], row["ratio"])
+    except Exception:
+        pass  # Diagnostic only
+
+    _phase_a_count = con.execute(
+        "SELECT COUNT(*) FROM _bdc_phase_a"
+    ).fetchone()[0]
+    logger.info("  Phase A (filter+dedup): %d rows in %.1f s",
+                _phase_a_count, time.time() - _t_phase)
+
+    # =========================================================================
+    # Phase B: Identifier parsing, issuer/instrument extraction, bad-issuer
+    # cleanup, CC aggregate header exclusion, and affiliation-axis dedup.
+    # Reads from materialized _bdc_phase_a, writes to _bdc_phase_b.
+    # =========================================================================
+    _t_phase = time.time()
+    sql_phase_b = f"""
+    CREATE TEMP TABLE _bdc_phase_b AS
+    WITH
     -- CTE 5a: Initial split + helper columns for re-parsing
     -- Normalise em-dash (U+2014) to ' - ' and en-dash (U+2013) to '-' before
     -- splitting so that PennantPark (em-dash) and Goldman Sachs (en-dash) BDCs
@@ -685,7 +805,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
                 THEN 'two_pipe'
                 ELSE NULL
             END AS _pipe_format,
-        FROM no_subtotals
+        FROM _bdc_phase_a
     ),
 
     -- CTE 5b: Re-parse with industry-prefix detection and pipe-format override
@@ -984,8 +1104,25 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             FROM {_affil_dedup_source}
         ) sub
         WHERE _affil_rank = 1
-    ),
+    )
 
+    SELECT * FROM no_affil_dupes
+    """
+    con.execute(sql_phase_b)
+
+    _phase_b_count = con.execute(
+        "SELECT COUNT(*) FROM _bdc_phase_b"
+    ).fetchone()[0]
+    logger.info("  Phase B (parse+dedup): %d rows in %.1f s",
+                _phase_b_count, time.time() - _t_phase)
+
+    # =========================================================================
+    # Phase C: Classification, schema mapping, enrichment, casing normalization.
+    # Reads from materialized _bdc_phase_b, produces the final result.
+    # =========================================================================
+    _t_phase = time.time()
+    sql_phase_c = f"""
+    WITH
     -- CTE 6: Classify asset category
     classified AS (
         SELECT *,
@@ -997,7 +1134,7 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
             (_sh IS NOT NULL AND _sh != 0) AS _has_shares,
             (_bs IS NOT NULL AND _bs != 0) AS _has_basis_spread,
             (_pa IS NOT NULL AND _pa != 0) AS _has_principal_amount
-        FROM no_affil_dupes
+        FROM _bdc_phase_b
     ),
 
     with_asset AS (
@@ -1279,33 +1416,16 @@ def _prepare_bdc(bdc_df: pd.DataFrame) -> pd.DataFrame:
     SELECT * FROM with_casing ORDER BY _row_id
     """
 
-    result = con.execute(sql).fetchdf()
-
-    # Log 1000x scale corrections (if any)
-    try:
-        scale_log = con.execute("""
-            SELECT q.cik, q.report_date, q.total_fv, m.median_fv,
-                   ROUND(q.total_fv / m.median_fv, 0) AS ratio
-            FROM _quarterly_fv q
-            JOIN _cik_medians m ON q.cik = m.cik
-            WHERE m.n_quarters >= 3 AND m.median_fv > 0
-              AND q.total_fv / m.median_fv > 100
-        """).fetchdf()
-        for _, row in scale_log.iterrows():
-            logger.info("  1000x scale correction: CIK %s %s "
-                        "(total_fv=%.0f, median=%.0f, ratio=%.0fx)",
-                        row["cik"], row["report_date"],
-                        row["total_fv"], row["median_fv"], row["ratio"])
-    except Exception:
-        pass  # Diagnostic only
+    result = con.execute(sql_phase_c).fetchdf()
+    logger.info("  Phase C (classify+map): %d rows in %.1f s",
+                len(result), time.time() - _t_phase)
 
     con.close()
 
     # Drop internal row id column
     result.drop(columns=["_row_id"], inplace=True)
 
-    # Log filtering stats
-    input_count = len(bdc_df)
+    # Log filtering stats (input_count set during data source selection above)
     output_count = len(result)
     logger.info("  After all BDC filters: %d rows (%d removed)",
                 output_count, input_count - output_count)
