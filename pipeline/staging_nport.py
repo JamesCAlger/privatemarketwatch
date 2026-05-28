@@ -9,7 +9,6 @@ from typing import Union
 import duckdb
 import pandas as pd
 
-from pipeline.config import NPORT_EXCLUDE_CIKS
 from pipeline.classification import (
     _NPORT_ASSET_MAP,
     _NPORT_CREDIT_FUND_NAME_KEYWORDS,
@@ -44,17 +43,12 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
         _nport_loaded_from_file = True
         nport_path = str(nport_input).replace("\\", "/")
         # Use CREATE TABLE (not VIEW) so DuckDB loads the CSV once into its
-        # memory-efficient columnar format.  A VIEW would re-scan the 5 GB+
-        # file for every downstream query.
-        exclude_clause = ""
-        if NPORT_EXCLUDE_CIKS:
-            cik_list = ", ".join(f"'{c}'" for c in NPORT_EXCLUDE_CIKS)
-            exclude_clause = f"WHERE LTRIM(CAST(cik AS VARCHAR), '0') NOT IN ({cik_list})"
+        # memory-efficient columnar format.  A VIEW would re-scan the file
+        # for every downstream query.
         con.execute(f"""
             CREATE TABLE nport_raw AS
             SELECT * FROM read_csv_auto('{nport_path}',
                                         header=true, all_varchar=true)
-            {exclude_clause}
         """)
         row_count = con.execute("SELECT COUNT(*) FROM nport_raw").fetchone()[0]
         logger.info("Preparing N-PORT holdings: %d input rows", row_count)
@@ -75,15 +69,6 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
                 con.execute(f"ALTER TABLE nport_raw ADD COLUMN {col} VARCHAR DEFAULT ''")
     else:
         nport_df = nport_input
-        # Filter excluded CIKs from DataFrame path too
-        if NPORT_EXCLUDE_CIKS and "cik" in nport_df.columns:
-            before = len(nport_df)
-            nport_df = nport_df[
-                ~nport_df["cik"].astype(str).str.lstrip("0").isin(NPORT_EXCLUDE_CIKS)
-            ]
-            if len(nport_df) < before:
-                logger.info("  Excluded %d rows from %d CIKs",
-                            before - len(nport_df), len(NPORT_EXCLUDE_CIKS))
         logger.info("Preparing N-PORT holdings: %d input rows", len(nport_df))
         if nport_df.empty:
             con.close()

@@ -7415,45 +7415,28 @@ class TestUniverseGate:
         ]
 
 
-def test_nport_exclude_cik_filtered_before_unified_output(tmp_path):
-    bdc_df = pd.DataFrame()
-    nport_df = pd.DataFrame([{
-        "cik": "1547580",
-        "registrant_name": "Victory Portfolios II",
-        "accession_number": "0001547580-24-000001",
-        "filing_date": "2024-05-01",
-        "report_date": "2024-03-31",
-        "issuer_name": "Broad Fund",
-        "issuer_title": "Broad Fund",
-        "issuer_cusip": "",
-        "identifier_isin": "",
-        "issuer_lei": "",
-        "identifier_ticker": "",
-        "currency_value": "1000000",
-        "percentage": "1",
-        "asset_cat": "LON",
-        "issuer_type": "CORP",
-        "fair_value_level": "3",
-        "annualized_rate": "8",
-        "coupon_type": "Fixed",
-        "maturity_date": "2028-03-31",
-        "unit": "PA",
-        "balance": "1000000",
-        "holding_id": "H1",
-        "series_name": "",
-        "series_id": "",
-        "payoff_profile": "",
-        "investment_country": "",
-        "is_restricted_security": "",
-        "quarter": "2024q1",
-    }])
+def test_nport_exclude_cik_filtered_at_extraction_time():
+    """NPORT_EXCLUDE_CIKS are excluded at extraction time in nport_holdings.py,
+    not at staging/unified time.  Verify the extraction entry point removes them
+    from target_ciks before processing any quarters."""
+    from pipeline.config import NPORT_EXCLUDE_CIKS
 
-    with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE", tmp_path / "unified.csv"), \
-         patch("pipeline.unified_holdings.COMBINED_UNIVERSE_FILE", tmp_path / "missing_universe.csv"), \
-         patch("pipeline.unified_holdings.UNIVERSE_ORPHAN_HOLDINGS_FILE", tmp_path / "orphans.csv"):
-        result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
-
-    assert result.empty
+    # Simulate a fund universe that includes an excluded CIK
+    universe = pd.DataFrame({"cik": ["1547580", "9999999"]})
+    with patch("pipeline.nport_holdings.FUND_UNIVERSE_FILE"), \
+         patch("pipeline.nport_holdings._process_all_quarters") as mock_proc, \
+         patch("pipeline.nport_holdings._supplement_from_xml"):
+        mock_proc.return_value = (pd.DataFrame(), pd.DataFrame(), pd.DataFrame())
+        from pipeline.nport_holdings import extract_nport_holdings
+        from pipeline.edgar_client import EdgarClient
+        extract_nport_holdings(
+            client=EdgarClient.__new__(EdgarClient),
+            fund_universe=universe,
+        )
+        # The target_ciks passed to _process_all_quarters should exclude 1547580
+        called_ciks = mock_proc.call_args[0][1]
+        assert "1547580" not in called_ciks
+        assert "9999999" in called_ciks
 
 
 def test_total_investments_at_fair_value_is_aggregate_header():

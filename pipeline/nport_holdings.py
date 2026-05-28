@@ -27,6 +27,7 @@ import pandas as pd
 from pipeline.config import (
     FUND_UNIVERSE_FILE,
     NPORT_DATASET_URL_TEMPLATE,
+    NPORT_EXCLUDE_CIKS,
     NPORT_FILINGS_INDEX_FILE,
     NPORT_FUND_INFO_FILE,
     NPORT_HOLDINGS_FILE,
@@ -1064,6 +1065,16 @@ def extract_nport_holdings(
         .str.lstrip("0")
         .unique()
     )
+    # Exclude consumer/marketplace lending CIKs at extraction time so they
+    # never enter nport_holdings.csv (saves ~7M throwaway rows and ~2 GB).
+    if NPORT_EXCLUDE_CIKS:
+        excluded = target_ciks & NPORT_EXCLUDE_CIKS
+        if excluded:
+            target_ciks -= NPORT_EXCLUDE_CIKS
+            logger.info(
+                "Excluded %d consumer/marketplace CIKs from extraction: %s",
+                len(excluded), ", ".join(sorted(excluded)),
+            )
     logger.info(
         "Fund universe: %d rows, %d unique CIKs", len(fund_universe), len(target_ciks),
     )

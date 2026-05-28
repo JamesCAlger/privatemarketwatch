@@ -315,9 +315,9 @@ NPORT_DATASET_URL_TEMPLATE = (
     "form-n-port-data-sets/{quarter}_nport.zip"
 )
 
-# CIKs to exclude from unified holdings (consumer/marketplace lending funds
+# CIKs to exclude from N-PORT extraction (consumer/marketplace lending funds
 # that report millions of individual loan rows with opaque numeric IDs).
-# Data is kept in nport_holdings.csv but filtered out during --unified.
+# Excluded at extraction time so rows never enter nport_holdings.csv.
 NPORT_EXCLUDE_CIKS: set[str] = {
     "1658645",   # Stone Ridge Trust V (~20M consumer loan rows)
     "1644771",   # RiverNorth Marketplace Lending (opaque numeric IDs, <$1B FV)
