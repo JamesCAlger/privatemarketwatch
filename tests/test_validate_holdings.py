@@ -1492,6 +1492,55 @@ class TestBdcSourceReconciliation:
                 "status": "missing_from_pipeline",
                 "residual_class": "row_identity",
                 "blocking_issue": True,
+                "cik": "0001976336",
+                "entity_name": "Antares Private Credit Fund",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-antares-private",
+                "source_row_id": "antares-private-unfunded",
+                "raw_investment_identifier": (
+                    "Investments--non-controlled/non-affiliated Unfunded Commitments"
+                ),
+                "source_fair_value": "-1243000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001976336",
+                "entity_name": "Antares Private Credit Fund",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-antares-private",
+                "source_row_id": "antares-private-electronic-equipment",
+                "raw_investment_identifier": (
+                    "Investments - non-controlled/non-affiliated Secured Debt "
+                    "Electronic Equipment, Instruments and Component"
+                ),
+                "source_fair_value": "11226000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001976336",
+                "entity_name": "Antares Private Credit Fund",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-antares-private",
+                "source_row_id": "antares-private-it-services",
+                "raw_investment_identifier": (
+                    "Investments - non-controlled/non-affiliated Secured Debt IT Services"
+                ),
+                "source_fair_value": "39730000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
                 "cik": "0001899996",
                 "entity_name": "Fidelity Private Credit Co LLC",
                 "report_date": "2023-09-30",
@@ -1500,6 +1549,310 @@ class TestBdcSourceReconciliation:
                 "source_row_id": "fidelity-total-investments",
                 "raw_investment_identifier": "Investments, Total Investments -- non-controlled/ non-affiliated",
                 "source_fair_value": "1289595075",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "report_date": "2023-06-30",
+                "period": "2023-06-30",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-total-affiliated",
+                "raw_investment_identifier": "Investments, Total Investments -- non-controlled/ affiliated",
+                "source_fair_value": "1353796",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001849894",
+                "entity_name": "MSD Investment Corp.",
+                "report_date": "2023-06-30",
+                "period": "2023-06-30",
+                "accession_number": "acc-msd",
+                "source_row_id": "msd-total-non-affiliated",
+                "raw_investment_identifier": (
+                    "Investments Investments Total Investments - non-controlled/non-affiliated"
+                ),
+                "source_fair_value": "1572769000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001911321",
+                "entity_name": "Kennedy Lewis Capital Co",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-kennedy",
+                "source_row_id": "kennedy-investments-portfolio",
+                "raw_investment_identifier": "Investments Portfolio",
+                "source_fair_value": "857021339",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001715933",
+                "entity_name": "TCW Direct Lending VII LLC",
+                "report_date": "2023-03-31",
+                "period": "2023-03-31",
+                "accession_number": "acc-tcw",
+                "source_row_id": "tcw-debt-equity-securities",
+                "raw_investment_identifier": "Debt & Equity Securities",
+                "source_fair_value": "1044434959",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001715933",
+                "entity_name": "TCW Direct Lending VII LLC",
+                "report_date": "2023-03-31",
+                "period": "2023-03-31",
+                "accession_number": "acc-tcw",
+                "source_row_id": "tcw-debt-equity-securities-false-positive",
+                "raw_investment_identifier": "Acme Debt & Equity Securities LLC",
+                "source_fair_value": "1000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001653384",
+                "entity_name": "Runway Growth Finance Corp.",
+                "report_date": "2023-12-31",
+                "period": "2023-12-31",
+                "accession_number": "acc-runway-2023",
+                "source_row_id": "runway-total-ex-tbill",
+                "raw_investment_identifier": "Total Investments, Excluding U.S. Treasury Bills",
+                "source_fair_value": "1025010000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001653384",
+                "entity_name": "Runway Growth Finance Corp.",
+                "report_date": "2023-12-31",
+                "period": "2023-12-31",
+                "accession_number": "acc-runway-2023",
+                "source_row_id": "runway-total-ex-tbill-false-positive",
+                "raw_investment_identifier": "Total Investments Treasury Bills Holdings LLC",
+                "source_fair_value": "1000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001911321",
+                "entity_name": "Kennedy Lewis Capital Co",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-kennedy",
+                "source_row_id": "kennedy-non-controlled",
+                "raw_investment_identifier": "Investments-Non-Controlled/Non-Affiliated",
+                "source_fair_value": "857021339",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001911321",
+                "entity_name": "Kennedy Lewis Capital Co",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-kennedy",
+                "source_row_id": "kennedy-liabilities-excess",
+                "raw_investment_identifier": "Liabilities in excess of Other Assets",
+                "source_fair_value": "-358790678",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001950803",
+                "entity_name": "Stepstone Private Credit Fund LLC",
+                "report_date": "2025-06-30",
+                "period": "2025-06-30",
+                "accession_number": "acc-stepstone",
+                "source_row_id": "stepstone-liabilities-less",
+                "raw_investment_identifier": "Liabilities Less Other Assets",
+                "source_fair_value": "-93956910",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001911321",
+                "entity_name": "Kennedy Lewis Capital Co",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-kennedy",
+                "source_row_id": "kennedy-net-assets",
+                "raw_investment_identifier": "Net Assets",
+                "source_fair_value": "514827007",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-trinity",
+                "source_row_id": "trinity-affiliate-header",
+                "raw_investment_identifier": "Affiliate Investments1",
+                "source_fair_value": "39164000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001653384",
+                "entity_name": "Runway Growth Finance Corp.",
+                "report_date": "2023-03-31",
+                "period": "2023-03-31",
+                "accession_number": "acc-runway",
+                "source_row_id": "runway-non-control-non-affiliate-header",
+                "raw_investment_identifier": "Non-Control/Non-Affiliate Investments",
+                "source_fair_value": "1066654000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001513363",
+                "entity_name": "FIDUS INVESTMENT Corp",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-fidus",
+                "source_row_id": "fidus-non-control-non-affiliate-header",
+                "raw_investment_identifier": "Non-control/Non-affiliate Investments",
+                "source_fair_value": "1063342000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-trinity",
+                "source_row_id": "trinity-investment-securities-total",
+                "raw_investment_identifier": "Portfolio Company Investment in Securities",
+                "source_fair_value": "1792689000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-trinity",
+                "source_row_id": "trinity-affiliate-leaf",
+                "raw_investment_identifier": "Affiliate Investments EPT 16, LLC",
+                "source_fair_value": "4000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001920453",
+                "entity_name": "Fidelity Private Credit Fund",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-total-investment-portfolio",
+                "raw_investment_identifier": "Total Investment Portfolio",
+                "source_fair_value": "1750876439",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-air-freight-header",
+                "raw_investment_identifier": (
+                    "Investments Investments -- non-controlled/ non-affiliated "
+                    "Air Freight & Logistics"
+                ),
+                "source_fair_value": "58728630",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "report_date": "2024-09-30",
+                "period": "2024-09-30",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-non-affiliate-section",
+                "raw_investment_identifier": (
+                    "Investments Investments - non-controlled / non-affiliate"
+                ),
+                "source_fair_value": "1440989877",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-total-non-affiliate",
+                "raw_investment_identifier": "Total Investments -- non-controlled/ non-affiliate",
+                "source_fair_value": "1650565667",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-air-freight-entity",
+                "raw_investment_identifier": (
+                    "Investments Investments -- non-controlled/ non-affiliated "
+                    "Air Freight & Logistics SCP 3PL Topco, LLC Common Units"
+                ),
+                "source_fair_value": "346",
                 "evidence": "eligible current-period source row has no pipeline output row",
             },
         ])
@@ -1534,8 +1887,73 @@ class TestBdcSourceReconciliation:
             == "documented_source_total_header"
         )
         assert (
+            by_id["Investments--non-controlled/non-affiliated Unfunded Commitments"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id[
+                "Investments - non-controlled/non-affiliated Secured Debt "
+                "Electronic Equipment, Instruments and Component"
+            ]
+            == "documented_source_category_header"
+        )
+        assert (
+            by_id["Investments - non-controlled/non-affiliated Secured Debt IT Services"]
+            == "documented_source_category_header"
+        )
+        assert (
             by_id["Investments, Total Investments -- non-controlled/ non-affiliated"]
             == "documented_source_total_header"
+        )
+        assert (
+            by_id["Investments, Total Investments -- non-controlled/ affiliated"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id[
+                "Investments Investments Total Investments - non-controlled/non-affiliated"
+            ]
+            == "documented_source_total_header"
+        )
+        assert by_id["Investments Portfolio"] == "documented_source_total_header"
+        assert by_id["Investments-Non-Controlled/Non-Affiliated"] == "documented_source_total_header"
+        assert by_id["Liabilities in excess of Other Assets"] == "documented_source_total_header"
+        assert by_id["Liabilities Less Other Assets"] == "documented_source_total_header"
+        assert by_id["Net Assets"] == "documented_source_total_header"
+        assert by_id["Affiliate Investments1"] == "documented_source_affiliation_header"
+        assert by_id["Non-Control/Non-Affiliate Investments"] == "documented_source_affiliation_header"
+        assert by_id["Non-control/Non-affiliate Investments"] == "documented_source_affiliation_header"
+        assert (
+            by_id["Portfolio Company Investment in Securities"]
+            == "documented_source_total_header"
+        )
+        assert by_id["Debt & Equity Securities"] == "documented_source_total_header"
+        assert by_id["Acme Debt & Equity Securities LLC"] == "blocking_source_position_like_parser_mismatch"
+        assert by_id["Total Investments, Excluding U.S. Treasury Bills"] == "documented_source_total_header"
+        assert by_id["Total Investments Treasury Bills Holdings LLC"] == "blocking_source_position_like_parser_mismatch"
+        assert by_id["Affiliate Investments EPT 16, LLC"] == "blocking_source_position_like_parser_mismatch"
+        assert by_id["Total Investment Portfolio"] == "documented_source_total_header"
+        assert (
+            by_id[
+                "Investments Investments -- non-controlled/ non-affiliated "
+                "Air Freight & Logistics"
+            ]
+            == "documented_source_category_header"
+        )
+        assert (
+            by_id["Investments Investments - non-controlled / non-affiliate"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id["Total Investments -- non-controlled/ non-affiliate"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id[
+                "Investments Investments -- non-controlled/ non-affiliated "
+                "Air Freight & Logistics SCP 3PL Topco, LLC Common Units"
+            ]
+            == "blocking_source_position_like_parser_mismatch"
         )
         assert bool(
             classified.loc[
@@ -1785,6 +2203,72 @@ class TestBdcSourceReconciliation:
                 "status": "missing_from_pipeline",
                 "residual_class": "row_identity",
                 "blocking_issue": True,
+                "cik": "0001993402",
+                "entity_name": "Antares Strategic Credit Fund",
+                "report_date": "2024-09-30",
+                "accession_number": "acc-antares",
+                "source_row_id": "antares-specialty-retail-total",
+                "raw_investment_identifier": "Investments - non-controlled/non-affiliated Secured Debt Specialty Retail Total",
+                "source_fair_value": "9189000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001993402",
+                "entity_name": "Antares Strategic Credit Fund",
+                "report_date": "2024-09-30",
+                "accession_number": "acc-antares",
+                "source_row_id": "antares-trading-total",
+                "raw_investment_identifier": (
+                    "Investments - non-controlled/non-affiliated Secured Debt "
+                    "Trading Companies and Distributors Total"
+                ),
+                "source_fair_value": "15454000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001993402",
+                "entity_name": "Antares Strategic Credit Fund",
+                "report_date": "2024-09-30",
+                "accession_number": "acc-antares",
+                "source_row_id": "antares-wireless-total",
+                "raw_investment_identifier": (
+                    "Investments - non-controlled/non-affiliated Secured Debt "
+                    "Wireless Telecommunication Services Total"
+                ),
+                "source_fair_value": "5109000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001993402",
+                "entity_name": "Antares Strategic Credit Fund",
+                "report_date": "2024-09-30",
+                "accession_number": "acc-antares",
+                "source_row_id": "antares-unfunded-total",
+                "raw_investment_identifier": "Investments--non-controlled/non-affiliated Total Unfunded Commitments",
+                "source_fair_value": "-3038000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001993402",
+                "entity_name": "Antares Strategic Credit Fund",
+                "report_date": "2024-09-30",
+                "accession_number": "acc-antares",
+                "source_row_id": "antares-total-investments",
+                "raw_investment_identifier": "Total Investments - non-controlled/non-affiliated",
+                "source_fair_value": "1569598000",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
                 "cik": "0001965934",
                 "entity_name": "Overland Advantage",
                 "report_date": "2025-06-30",
@@ -1803,6 +2287,11 @@ class TestBdcSourceReconciliation:
         mechanisms = dict(zip(classified["source_row_id"], classified["mechanism"]))
         assert mechanisms["crescent-header"] == "documented_source_country_industry_header"
         assert mechanisms["msd-header"] == "documented_source_category_header"
+        assert mechanisms["antares-specialty-retail-total"] == "documented_source_category_header"
+        assert mechanisms["antares-trading-total"] == "documented_source_category_header"
+        assert mechanisms["antares-wireless-total"] == "documented_source_category_header"
+        assert mechanisms["antares-unfunded-total"] == "documented_source_total_header"
+        assert mechanisms["antares-total-investments"] == "documented_source_total_header"
         assert mechanisms["long-position"] == "blocking_source_pct_leaf_parser_mismatch"
 
         clusters = build_source_only_blocker_clusters(classified)
@@ -2268,6 +2757,8 @@ class TestCheckCoverage:
 # ---------------------------------------------------------------------------
 
 class TestValidateHoldings:
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_full_integration(self, tmp_path):
         df = _make_basic_holdings(n_bdc=15, n_nport=5)
         universe = pd.DataFrame([

@@ -407,13 +407,14 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
             raw_lower.str.match(
                 r"^(total|subtotal)\s+("
                 r"investments?|portfolio investments?|debt investments?|equity investments?|"
+                r"investment portfolio|"
                 r"cash equivalents?|cash and investments?|cash and cash equivalents|"
                 r"assets?|net assets?|liabilities|unfunded commitments?|commitments?|"
                 r"affiliates?|affiliate investments?|control investments?|non control non affiliate investments?"
                 r")(\s+at fair value)?"
-                r"(\s*[\u2014-]\s*(non[-\s]?controlled/non[-\s]?affiliated|"
-                r"non[-\s]?controlled\s+non[-\s]?affiliated|"
-                r"non[-\s]?control/non[-\s]?affiliate))?"
+                r"(\s*[\u2014-]\s*(non[-\s]?controlled\s*/\s*non[-\s]?affiliat(?:e|ed)|"
+                r"non[-\s]?controlled\s+non[-\s]?affiliat(?:e|ed)|"
+                r"non[-\s]?control\s*/\s*non[-\s]?affiliate))?"
                 r"(\s*[\u2014-]?\s*\(?-?\d+(?:\.\d+)?%\)?)?$",
                 na=False,
             )
@@ -422,7 +423,38 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
                 na=False,
             )
             | normalized.str.match(
+                r"^investments\s+non\s+controlled\s+non\s+affiliated\s+unfunded\s+commitments?$",
+                na=False,
+            )
+            | normalized.str.match(
                 r"^investments\s+total\s+investments\s+non\s+controlled\s+non\s+affiliat(?:e|ed)$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^investments\s+total\s+investments\s+non\s+controlled\s+affiliat(?:e|ed)$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^investments\s+investments\s+total\s+investments\s+non\s+controlled\s+non\s+affiliated$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^investments\s+investments\s+total\s+investments\s+non\s+controlled\s+affiliat(?:e|ed)$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^investments\s+investments\s+non\s+controlled\s+non\s+affiliate$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^total\s+investments\s+non\s+controlled\s+non\s+affiliate$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^(investments\s+portfolio|investments\s+non\s+controlled\s+non\s+affiliated|"
+                r"portfolio\s+company\s+investment\s+in\s+securities|debt\s+equity\s+securities|"
+                r"total\s+investments\s+excluding\s+u\s+s\s+treasury\s+bills|"
+                r"liabilities\s+(in\s+excess\s+of|less)\s+other\s+assets|net\s+assets)$",
                 na=False,
             )
         )
@@ -457,7 +489,8 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         & normalized.str.match(
             r"^(affiliate|affiliated|control|controlled|non controlled|"
             r"non control|non affiliated|non affiliate|non controlled non affiliated|"
-            r"control and affiliate)(\s+portfolio company)?\s+investments?$",
+            r"non control non affiliate|"
+            r"control and affiliate)(\s+portfolio company)?\s+investments?\d*$",
             na=False,
         )
     )
@@ -474,6 +507,10 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
             r"unsecured loans?|preferred equity|common equity|warrants?|software|"
             r"health care|healthcare|financials?|industrials?|energy|consumer|"
             r"business services|technology|media|telecommunications|"
+            r"it services|electronic equipment instruments and components?|"
+            r"air freight logistics|"
+            r"specialty retail|trading companies and distributors|"
+            r"wireless telecommunication services|"
             r"commercial services( and supplies)?|high tech industries|"
             r"services business|services consumer|chemicals( plastics? and rubber)?)\b",
             regex=True,
@@ -487,7 +524,7 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         & raw_lower.str.contains(
             r"\b(first\s+lien|1st\s+lien|second\s+lien|2nd\s+lien|"
             r"senior\s+secured|subordinated|unsecured|mezzanine|unitranche|"
-            r"common\s+equity|preferred\s+equity|warrants?|equity\s+interest|"
+            r"secured\s+debt|common\s+equity|preferred\s+equity|warrants?|equity\s+interest|"
             r"trust\s+interest|corporate\s+bond|secured\s+loans?|secured\s+bonds?)\b",
             regex=True,
             na=False,

@@ -331,13 +331,14 @@ def _sql_is_bdc_aggregate() -> str:
     has_entity = f"({has_entity_sql})"
     # Strict leaf evidence for hierarchy rows that begin with category text
     # but contain terminal position data. This guard is intentionally narrow:
-    # it requires Investment Type plus loan/equity instrument text and either
-    # rate or maturity evidence, so ordinary country/category rollups still
-    # flow through aggregate filtering.
+    # it requires an explicit leaf marker ("Investment Type" or "Instrument")
+    # plus loan/equity instrument text and either rate or maturity evidence,
+    # so ordinary country/category rollups still flow through aggregate
+    # filtering.
     leaf_text = "regexp_replace(replace(_lower_id, '\u00a0', ' '), '\\s+', ' ', 'g')"
     leaf_detail_signal = (
         "("
-        f"contains({leaf_text}, 'investment type') "
+        f"(contains({leaf_text}, 'investment type') OR contains({leaf_text}, 'instrument')) "
         f"AND regexp_matches({leaf_text}, "
         "'\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|"
         "delayed\\s+draw|revolver|revolving|senior\\s+secured|subordinated|"
@@ -658,7 +659,7 @@ def _leaf_detail_signal(identifier: str) -> bool:
         return False
     lower = re.sub(r"\s+", " ", identifier.replace("\xa0", " ")).lower().strip()
     return bool(
-        "investment type" in lower
+        ("investment type" in lower or "instrument" in lower)
         and re.search(
             r"\b(unitranche|first\s+lien|second\s+lien|term\s+loan|"
             r"delayed\s+draw|revolver|revolving|senior\s+secured|subordinated|"

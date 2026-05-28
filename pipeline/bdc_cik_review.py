@@ -348,6 +348,32 @@ def _evidence_item(evidence_id: str, description: str, data: Any) -> dict[str, A
     return {"evidence_id": evidence_id, "description": description, "data": data}
 
 
+def _html_source_search_rows(
+    source_only_rows: list[dict[str, str]],
+    residual_rows: list[dict[str, str]],
+    max_rows: int,
+) -> list[dict[str, str]]:
+    rows = list(source_only_rows)
+    if len(rows) >= max_rows:
+        return rows[:max_rows]
+    for residual in residual_rows:
+        samples = normalize_text(residual.get("sample_identifiers"))
+        if not samples:
+            continue
+        for idx, identifier in enumerate(part.strip() for part in samples.split(" | ") if part.strip()):
+            rows.append(
+                {
+                    "source_row_id": f"{normalize_text(residual.get('classification_id'))}:sample:{idx}",
+                    "raw_investment_identifier": identifier,
+                    "normalized_investment_identifier": identifier.lower(),
+                    "source_fair_value": normalize_text(residual.get("affected_source_fair_value")),
+                }
+            )
+            if len(rows) >= max_rows:
+                return rows
+    return rows
+
+
 def _rows_by_group(
     path: Path,
     targets: set[tuple[str, str, str]],
@@ -396,6 +422,7 @@ def build_bundles(
     review_ids: set[str] | None = None,
     overwrite: bool = False,
     max_rows: int = 25,
+    allow_html_download: bool = False,
 ) -> list[dict[str, str]]:
     worklist = _load_selected_worklist(output_dir, review_ids)
     bundle_dir = output_dir / "bundles"
@@ -460,6 +487,7 @@ def build_bundles(
         holdings_rows = holdings_by_pair.get(pair_key, [])
         pct_rows = pct_by_pair.get(pair_key, [])
         purity_rows = purity_by_pair.get(pair_key, [])
+        html_source_rows = _html_source_search_rows(source_only_rows, residual_rows, max_rows)
 
         packet = build_cik_validation_packet(
             cik,
@@ -502,10 +530,11 @@ def build_bundles(
                     *[r.get("source_fair_value", "") for r in detail_rows],
                 ],
                 source_identifiers=accession_candidates,
-                source_rows=source_only_rows,
+                source_rows=html_source_rows,
                 xbrl_rows_same_accession=[
                     r for r in holdings_rows if not accession or normalize_text(r.get("accession_number")) == accession
                 ],
+                allow_html_download=allow_html_download,
                 max_rows=max_rows,
             )
         )
@@ -817,9 +846,15 @@ def cli_build_bundles(argv: list[str] | None = None) -> int:
     parser.add_argument("--review-id", action="append", default=[])
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--allow-html-download", action="store_true")
     args = parser.parse_args(argv)
     review_ids = None if args.all or not args.review_id else set(args.review_id)
-    manifest = build_bundles(output_dir=args.output_dir, review_ids=review_ids, overwrite=args.overwrite)
+    manifest = build_bundles(
+        output_dir=args.output_dir,
+        review_ids=review_ids,
+        overwrite=args.overwrite,
+        allow_html_download=args.allow_html_download,
+    )
     print(json.dumps({"bundle_count": len(manifest)}, indent=2, sort_keys=True))
     return 0
 
@@ -846,6 +881,9 @@ def cli_validate_verdicts(argv: list[str] | None = None) -> int:
         for error in errors:
             print(f"{error['verdict_file']}: {error['error']}")
         return 1
+    error_file = args.output_dir / "verdict_validation_errors.csv"
+    if error_file.exists():
+        error_file.unlink()
     print("All verdicts passed validation.")
     return 0
 

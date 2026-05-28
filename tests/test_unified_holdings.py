@@ -7739,11 +7739,21 @@ class TestPctPrefixCategorySubtotals:
             "Maturity/ Dissolution Date 03/2028"
         )
 
+    def test_instrument_leaf_hierarchy_not_aggregate(self):
+        assert not _is_bdc_aggregate_row(
+            "Debt Investments Aerospace & Defense Kaman Corporation "
+            "Instrument First Lien Term Loan Ref SOFR(Q) Spread 2.75% "
+            "Total Coupon 7.07% Maturity 1/30/2032"
+        )
+
     def test_debt_investments_pct_rollup_still_aggregate(self):
         assert _is_bdc_aggregate_row("Debt Investments (184.96%)")
 
     def test_investment_country_pct_rollup_still_aggregate(self):
         assert _is_bdc_aggregate_row("Investment United States - 141.4%")
+
+    def test_instrument_word_without_leaf_terms_still_aggregate(self):
+        assert _is_bdc_aggregate_row("Debt Investments Aerospace & Defense Instrument")
 
     def test_total_safety_holdings_not_aggregate(self):
         assert not _is_bdc_aggregate_row("Total Safety Holdings LLC")
