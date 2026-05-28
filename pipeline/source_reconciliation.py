@@ -345,7 +345,7 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         na=False,
     )
     terminal_pct = raw_lower.str.contains(
-        r"(?:[\s(,\-]*-?\d+(?:\.\d+)?\s*%\)?\s*)$",
+        r"(?:[\s(,\-]*-?\d+(?:\.\d+)?\s*%\)?(?:\s+of\s+net\s+assets)?\s*)$",
         regex=True,
         na=False,
     )
@@ -354,7 +354,8 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         & ~entity_signal
         & raw_lower.str.match(
             r"^(total|subtotal|net assets?|total net assets?|total investments?|"
-            r"total portfolio|portfolio total|investments? total)\b",
+            r"total portfolio|portfolio total|investments? total|"
+            r"cash and investments|investments)\b",
             na=False,
         )
     )
@@ -402,14 +403,28 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
     total_header = (
         ~entity_signal
         & ~terminal_pct
-        & raw_lower.str.match(
-            r"^(total|subtotal)\s+("
-            r"investments?|portfolio investments?|debt investments?|equity investments?|"
-            r"cash equivalents?|cash and investments?|cash and cash equivalents|"
-            r"assets?|net assets?|liabilities|"
-            r"affiliates?|affiliate investments?|control investments?|non control non affiliate investments?"
-            r")(\s+at fair value)?(\s*[\u2014-]?\s*\(?-?\d+(?:\.\d+)?%\)?)?$",
-            na=False,
+        & (
+            raw_lower.str.match(
+                r"^(total|subtotal)\s+("
+                r"investments?|portfolio investments?|debt investments?|equity investments?|"
+                r"cash equivalents?|cash and investments?|cash and cash equivalents|"
+                r"assets?|net assets?|liabilities|unfunded commitments?|commitments?|"
+                r"affiliates?|affiliate investments?|control investments?|non control non affiliate investments?"
+                r")(\s+at fair value)?"
+                r"(\s*[\u2014-]\s*(non[-\s]?controlled/non[-\s]?affiliated|"
+                r"non[-\s]?controlled\s+non[-\s]?affiliated|"
+                r"non[-\s]?control/non[-\s]?affiliate))?"
+                r"(\s*[\u2014-]?\s*\(?-?\d+(?:\.\d+)?%\)?)?$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^investments\s+non\s+controlled\s+non\s+affiliated\s+total\s+unfunded\s+commitments?$",
+                na=False,
+            )
+            | normalized.str.match(
+                r"^investments\s+total\s+investments\s+non\s+controlled\s+non\s+affiliat(?:e|ed)$",
+                na=False,
+            )
         )
     )
     total_pipe_segment = (

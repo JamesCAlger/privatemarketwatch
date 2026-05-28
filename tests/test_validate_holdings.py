@@ -1460,6 +1460,48 @@ class TestBdcSourceReconciliation:
                 "source_fair_value": "5000",
                 "evidence": "eligible current-period source row has no pipeline output row",
             },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001993402",
+                "entity_name": "Antares Strategic Credit Fund",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-antares",
+                "source_row_id": "antares-total-investments",
+                "raw_investment_identifier": "Total Investments - non-controlled/non-affiliated",
+                "source_fair_value": "2586320000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001993402",
+                "entity_name": "Antares Strategic Credit Fund",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-antares",
+                "source_row_id": "antares-unfunded-commitments",
+                "raw_investment_identifier": "Investments-non-controlled/non-affiliated Total Unfunded Commitments",
+                "source_fair_value": "-3703000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "report_date": "2023-09-30",
+                "period": "2023-09-30",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-total-investments",
+                "raw_investment_identifier": "Investments, Total Investments -- non-controlled/ non-affiliated",
+                "source_fair_value": "1289595075",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
         ])
 
         classified = build_source_only_blocker_detail(detail)
@@ -1485,6 +1527,15 @@ class TestBdcSourceReconciliation:
                 "first lien senior secured notes"
             ]
             == "blocking_source_position_like_parser_mismatch"
+        )
+        assert by_id["Total Investments - non-controlled/non-affiliated"] == "documented_source_total_header"
+        assert (
+            by_id["Investments-non-controlled/non-affiliated Total Unfunded Commitments"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id["Investments, Total Investments -- non-controlled/ non-affiliated"]
+            == "documented_source_total_header"
         )
         assert bool(
             classified.loc[
@@ -1580,6 +1631,47 @@ class TestBdcSourceReconciliation:
                 "source_fair_value": "7000",
                 "evidence": "blocking numeric identity candidate; already_matched_output_count=1",
             },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001902649",
+                "entity_name": "BlackRock Private Credit Fund",
+                "report_date": "2024-12-31",
+                "accession_number": "acc-blackrock",
+                "source_row_id": "blackrock-debt-total",
+                "raw_investment_identifier": "Debt Investments - 159.7% of Net Assets",
+                "source_fair_value": "1039985833",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001902649",
+                "entity_name": "BlackRock Private Credit Fund",
+                "report_date": "2024-12-31",
+                "accession_number": "acc-blackrock",
+                "source_row_id": "blackrock-cash-investments-total",
+                "raw_investment_identifier": "Cash and Investments - 166.1% of Net Assets",
+                "source_fair_value": "1081472023",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001902649",
+                "entity_name": "BlackRock Private Credit Fund",
+                "report_date": "2024-12-31",
+                "accession_number": "acc-blackrock",
+                "source_row_id": "blackrock-leaf-with-net-assets",
+                "raw_investment_identifier": (
+                    "Debt Investments Chemicals Discovery Purchaser Corporation "
+                    "Instrument First Lien Term Loan Ref SOFR(Q) Floor 0.50% "
+                    "Spread 4.38% Total Coupon 8.95% Maturity 10/4/2029 - "
+                    "0.14% of Net Assets"
+                ),
+                "source_fair_value": "1505450",
+            },
         ])
 
         classified = build_source_only_blocker_detail(detail)
@@ -1591,6 +1683,9 @@ class TestBdcSourceReconciliation:
         assert mechanisms["leaf-pct"] == "blocking_source_pct_leaf_parser_mismatch"
         assert mechanisms["ambiguous-pct"] == "blocking_source_pct_ambiguous_after_review"
         assert mechanisms["numeric-alias-pct"] == "blocking_numeric_already_matched_output_alias"
+        assert mechanisms["blackrock-debt-total"] == "documented_source_pct_category_rollup"
+        assert mechanisms["blackrock-cash-investments-total"] == "documented_source_pct_total_header"
+        assert mechanisms["blackrock-leaf-with-net-assets"] == "blocking_source_pct_leaf_parser_mismatch"
 
     def test_source_only_blocker_detail_keeps_pct_leaf_false_positives_blocking(self):
         detail = pd.DataFrame([
