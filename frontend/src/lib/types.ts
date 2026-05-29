@@ -13,6 +13,21 @@ export interface IndexReturnRow {
 }
 export type IndexReturnsData = Record<string, IndexReturnRow[]>;
 
+/** Risk statistics for an index (volatility, Sharpe, drawdown, etc.) */
+export interface IndexRiskStats {
+  volatility: number | null;
+  sharpe: number | null;
+  maxDrawdown: number | null;
+  maxDrawdownQuarter: string | null;
+  bestQuarter: number | null;
+  bestQuarterLabel: string | null;
+  worstQuarter: number | null;
+  worstQuarterLabel: string | null;
+  pctPositiveQuarters: number | null;
+  positiveQuarters: number | null;
+  totalQuarters: number;
+}
+
 /** Shape of index_summary.json — array of per-index summaries */
 export interface IndexSummary {
   index: string;
@@ -27,6 +42,7 @@ export interface IndexSummary {
   totalFv: number | null;
   latestQuarter: string;
   sparkline: number[];
+  riskStats?: IndexRiskStats;
 }
 
 /** Shape of top_constituents.json — keyed by index classification */

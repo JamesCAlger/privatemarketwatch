@@ -40,6 +40,11 @@ from pipeline.index_returns import MIN_BEGIN_FV
 
 logger = logging.getLogger(__name__)
 
+# Annualized risk-free rate assumption for Sharpe ratio calculation.
+# Uses 4% as a rough average 3M T-Bill rate over the index history period
+# (2019-2025).  Could be replaced with a quarterly series for more precision.
+RISK_FREE_RATE_ANNUAL = 0.04
+
 FRONTEND_DATA_DIR = PROJECT_ROOT / "frontend" / "public" / "data"
 
 # Consumer/marketplace lending CIKs -- these report individual consumer loans

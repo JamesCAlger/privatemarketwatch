@@ -1,6 +1,112 @@
 """Frontend export helpers split from pipeline.export_frontend."""
 
+import math
+
 from pipeline.export.helpers import *
+
+
+def _compute_risk_stats(series: list[dict]) -> dict:
+    """Compute risk statistics from a sorted list of quarterly return dicts.
+
+    Each dict must have ``fv_weighted_return`` (float|None) and
+    ``index_level_fv`` (float|None).  Returns a dict with keys matching the
+    frontend ``IndexRiskStats`` interface, or ``None`` values if fewer than
+    2 usable quarters.
+    """
+    # Collect quarterly returns, skipping None
+    returns = [
+        s["fv_weighted_return"]
+        for s in series
+        if s.get("fv_weighted_return") is not None
+    ]
+    n = len(returns)
+    if n < 2:
+        return {
+            "volatility": None,
+            "sharpe": None,
+            "maxDrawdown": None,
+            "maxDrawdownQuarter": None,
+            "bestQuarter": None,
+            "bestQuarterLabel": None,
+            "worstQuarter": None,
+            "worstQuarterLabel": None,
+            "pctPositiveQuarters": None,
+            "positiveQuarters": None,
+            "totalQuarters": n,
+        }
+
+    # --- Annualized volatility ---
+    mean_r = sum(returns) / n
+    var = sum((r - mean_r) ** 2 for r in returns) / (n - 1)  # sample variance
+    quarterly_vol = math.sqrt(var)
+    annualized_vol = quarterly_vol * math.sqrt(4)
+
+    # --- Annualized return (geometric, from compounded quarterly returns) ---
+    compounded = 1.0
+    for r in returns:
+        compounded *= (1 + r)
+    total_return = compounded - 1
+    years = n / 4
+    annualized_return = (1 + total_return) ** (1 / years) - 1 if years > 0 else 0
+
+    # --- Sharpe ratio ---
+    sharpe = (
+        (annualized_return - RISK_FREE_RATE_ANNUAL) / annualized_vol
+        if annualized_vol > 0
+        else None
+    )
+
+    # --- Max drawdown from index_level_fv series ---
+    levels = [
+        (s["quarter"], s["index_level_fv"])
+        for s in series
+        if s.get("index_level_fv") is not None
+    ]
+    max_dd = 0.0
+    max_dd_quarter = None
+    if levels:
+        peak = levels[0][1]
+        for quarter, lvl in levels:
+            if lvl > peak:
+                peak = lvl
+            dd = (lvl - peak) / peak if peak > 0 else 0.0
+            if dd < max_dd:
+                max_dd = dd
+                max_dd_quarter = quarter
+
+    # --- Best / worst quarter ---
+    best_val = None
+    best_label = None
+    worst_val = None
+    worst_label = None
+    for s in series:
+        r = s.get("fv_weighted_return")
+        if r is None:
+            continue
+        if best_val is None or r > best_val:
+            best_val = r
+            best_label = s["quarter"]
+        if worst_val is None or r < worst_val:
+            worst_val = r
+            worst_label = s["quarter"]
+
+    # --- % positive quarters ---
+    positive = sum(1 for r in returns if r > 0)
+
+    return {
+        "volatility": _safe_round(annualized_vol, 4),
+        "sharpe": _safe_round(sharpe, 2),
+        "maxDrawdown": _safe_round(max_dd, 4),
+        "maxDrawdownQuarter": max_dd_quarter,
+        "bestQuarter": _safe_round(best_val, 6),
+        "bestQuarterLabel": best_label,
+        "worstQuarter": _safe_round(worst_val, 6),
+        "worstQuarterLabel": worst_label,
+        "pctPositiveQuarters": _safe_round(positive / n, 4) if n > 0 else None,
+        "positiveQuarters": positive,
+        "totalQuarters": n,
+    }
+
 
 def _export_index_returns(con: duckdb.DuckDBPyConnection) -> list[dict]:
     """Export full index time-series.  Returns the raw rows for reuse."""
@@ -168,6 +274,9 @@ def _export_index_summary(
             if s["index_level_fv"] is not None
         ]
 
+        # Risk statistics
+        risk_stats = _compute_risk_stats(series)
+
         summaries.append({
             "index": idx,
             "level": _safe_round(level, 2),
@@ -181,6 +290,7 @@ def _export_index_summary(
             "totalFv": _safe_round(latest["total_end_fv"], 0),
             "latestQuarter": latest["quarter"],
             "sparkline": spark,
+            "riskStats": risk_stats,
         })
 
     _write_json("index_summary.json", summaries)
