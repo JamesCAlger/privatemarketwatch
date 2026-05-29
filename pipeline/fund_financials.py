@@ -22,6 +22,7 @@ import pandas as pd
 from pipeline import extract_companyfacts, extract_ncen
 from pipeline.config import (
     BDC_FUND_INCOME_FILE,
+    BDC_PREMIUM_DISCOUNT_FILE,
     BDC_XBRL_CACHE_DIR,
     COMBINED_UNIVERSE_FILE,
     COMPANYFACTS_CACHE_DIR,
@@ -1553,6 +1554,72 @@ def _fill_computed_returns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
+# D-pre2. Backfill market price and premium/discount from listed prices
+# ---------------------------------------------------------------------------
+
+
+def _backfill_listed_price_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Fill market_price_per_share and premium_discount_pct from bdc_premium_discount.csv.
+
+    Non-invasive: if the file does not exist, returns df unchanged.
+    Only fills NULL values on BDC (companyfacts) rows.
+    """
+    if df.empty:
+        return df
+    if not BDC_PREMIUM_DISCOUNT_FILE.exists():
+        return df
+
+    try:
+        pd_df = pd.read_csv(BDC_PREMIUM_DISCOUNT_FILE, dtype=str)
+    except Exception:
+        return df
+
+    if pd_df.empty:
+        return df
+
+    con = duckdb.connect()
+    con.register("ff", df)
+    con.register("pd_data", pd_df)
+
+    result = con.execute("""
+        SELECT
+            ff.* EXCLUDE (market_price_per_share, premium_discount_pct),
+            COALESCE(
+                ff.market_price_per_share,
+                TRY_CAST(pd_data.close_price AS DOUBLE)
+            ) AS market_price_per_share,
+            COALESCE(
+                ff.premium_discount_pct,
+                TRY_CAST(pd_data.premium_discount_pct AS DOUBLE)
+            ) AS premium_discount_pct
+        FROM ff
+        LEFT JOIN pd_data
+            ON LPAD(CAST(ff.cik AS VARCHAR), 10, '0')
+                = LPAD(CAST(pd_data.cik AS VARCHAR), 10, '0')
+            AND ff.report_quarter = pd_data.report_quarter
+            AND ff.source = 'companyfacts'
+    """).fetchdf()
+
+    con.close()
+
+    filled_mkt = (
+        result["market_price_per_share"].notna().sum()
+        - df["market_price_per_share"].notna().sum()
+    )
+    filled_pd = (
+        result["premium_discount_pct"].notna().sum()
+        - df["premium_discount_pct"].notna().sum()
+    )
+    if filled_mkt > 0 or filled_pd > 0:
+        logger.info(
+            "Listed price backfill: +%d market_price, +%d premium_discount",
+            filled_mkt, filled_pd,
+        )
+
+    return result
+
+
+# ---------------------------------------------------------------------------
 # D. Orchestrator
 # ---------------------------------------------------------------------------
 
@@ -1899,6 +1966,9 @@ def build_fund_financials(
         kind="mergesort",
         na_position="last",
     ).reset_index(drop=True)
+
+    # ----- Backfill market_price + premium/discount from listed prices -----
+    result = _backfill_listed_price_data(result)
 
     # Schema enforcement (non-fatal warnings)
     violations = _enforce_schema(result)

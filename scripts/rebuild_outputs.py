@@ -250,6 +250,36 @@ def rebuild_html():
     return df
 
 
+def rebuild_prices():
+    """Rebuild listed prices + premium/discount from cached data."""
+    from pipeline.sec_ticker_map import build_bdc_ticker_map
+    from pipeline.listed_prices import rebuild_from_cache, build_premium_discount
+
+    logger.info("=== Rebuilding listed prices from cache ===")
+    t0 = time.time()
+    ticker_map_df = build_bdc_ticker_map()  # Cache-only, no network
+    prices_df = rebuild_from_cache(ticker_map_df=ticker_map_df)
+    logger.info("Listed prices: %d rows in %.1f s", len(prices_df), time.time() - t0)
+
+    logger.info("=== Rebuilding premium/discount ===")
+    t1 = time.time()
+    pd_df = build_premium_discount(prices_df=prices_df)
+    logger.info("Premium/discount: %d rows in %.1f s", len(pd_df), time.time() - t1)
+
+    return prices_df, pd_df
+
+
+def rebuild_tender_offers():
+    """Rebuild SC TO-I repurchase results from cached HTML files."""
+    from pipeline.sc_toi_filings import extract_sc_toi_results
+
+    logger.info("=== Rebuilding SC TO-I repurchase results ===")
+    t0 = time.time()
+    df = extract_sc_toi_results()
+    logger.info("SC TO-I results: %d rows in %.1f s", len(df), time.time() - t0)
+    return df
+
+
 def rebuild_gics():
     """Run GICS industry classification on unified holdings."""
     from pipeline.gics_classification import classify_gics
@@ -346,6 +376,10 @@ def main():
                         help="With --financials/all, reparse cached N-CSR HTML before rebuilding fund financials")
     parser.add_argument("--sector-breakdown", action="store_true",
                         help="Rebuild BDC sector breakdown and reconciliation")
+    parser.add_argument("--tender-offers", action="store_true",
+                        help="Rebuild SC TO-I repurchase results from cached HTML")
+    parser.add_argument("--prices", action="store_true",
+                        help="Rebuild listed prices + premium/discount from cache")
     parser.add_argument("--gics", action="store_true",
                         help="Run GICS industry classification only")
     parser.add_argument("--frontend", action="store_true",
@@ -363,6 +397,7 @@ def main():
         args.bdc_holdings or args.unified or args.income or args.returns
         or args.pik_status or args.pik_proxy or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
+        or args.tender_offers or args.prices
     )
 
     t_start = time.time()
@@ -396,6 +431,12 @@ def main():
 
     if args.html:
         rebuild_html()
+
+    if args.tender_offers:
+        rebuild_tender_offers()
+
+    if args.prices:
+        rebuild_prices()
 
     if args.gics:
         rebuild_gics()

@@ -17,6 +17,12 @@ OUTPUT_DIR = DATA_DIR / "output"
 OVERRIDES_DIR = DATA_DIR / "overrides"
 OUTPUT_CACHE_DIR = OUTPUT_DIR / "cache"
 
+# SEC reference data (company_tickers.json, etc.)
+SEC_REFERENCE_DIR = RAW_DIR / "sec_reference"
+
+# Listed price cache (per-ticker CSVs from yfinance)
+LISTED_PRICES_CACHE_DIR = RAW_DIR / "listed_prices"
+
 # Cache for downloaded N-2 cover pages (150KB each)
 N2_HEADERS_CACHE_DIR = RAW_DIR / "n2_headers_cache"
 
@@ -43,7 +49,9 @@ for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           BDC_HTML_CACHE_DIR, HTML_TEMPLATE_DIR,
           COMPANYFACTS_CACHE_DIR, REFERENCE_DIR,
           RAW_DIR / "filings" / "ncsr_html",
-          OVERRIDES_DIR, OUTPUT_CACHE_DIR]:
+          RAW_DIR / "filings" / "sc_toi_html",
+          OVERRIDES_DIR, OUTPUT_CACHE_DIR,
+          SEC_REFERENCE_DIR, LISTED_PRICES_CACHE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -112,6 +120,7 @@ COMBINED_UNIVERSE_JSON = OUTPUT_DIR / "combined_universe.json"
 VALIDATION_REPORT_FILE = OUTPUT_DIR / "validation_report.csv"
 BDC_FILINGS_INDEX_FILE = OUTPUT_DIR / "bdc_filings_index.csv"
 BDC_HOLDINGS_FILE = OUTPUT_DIR / "bdc_holdings.csv"
+BDC_HOLDINGS_PARQUET_FILE = OUTPUT_DIR / "bdc_holdings.parquet"
 BDC_PARSE_PROGRESS_FILE = OUTPUT_DIR / "bdc_parse_progress.csv"
 
 # N-CSR output files
@@ -119,12 +128,14 @@ NCSR_PARSE_PROGRESS_FILE = OUTPUT_DIR / "ncsr_parse_progress.csv"
 
 # N-PORT output files
 NPORT_HOLDINGS_FILE = OUTPUT_DIR / "nport_holdings.csv"
+NPORT_HOLDINGS_PARQUET_FILE = OUTPUT_DIR / "nport_holdings.parquet"
 NPORT_FILINGS_INDEX_FILE = OUTPUT_DIR / "nport_filings_index.csv"
 NPORT_FUND_INFO_FILE = OUTPUT_DIR / "nport_fund_info.csv"
 NPORT_PARSE_PROGRESS_FILE = OUTPUT_DIR / "nport_parse_progress.csv"
 
 # Unified private markets holdings
 UNIFIED_HOLDINGS_FILE = OUTPUT_DIR / "private_markets_holdings.csv"
+UNIFIED_HOLDINGS_PARQUET_FILE = OUTPUT_DIR / "private_markets_holdings.parquet"
 UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 
 # Manual row-level corrections overlay (checked into data/overrides/)
@@ -222,6 +233,11 @@ FUND_FINANCIALS_VALIDATION_CURRENT_FILE = OUTPUT_DIR / "fund_financials_validati
 FUND_FINANCIALS_QUALITY_METRICS_FILE = OUTPUT_DIR / "fund_financials_quality_metrics.csv"
 FUND_FINANCIALS_CROSS_LEVEL_FILE = OUTPUT_DIR / "fund_financials_cross_level.csv"
 
+# BDC listed prices and premium/discount
+SEC_COMPANY_TICKERS_FILE = SEC_REFERENCE_DIR / "company_tickers.json"
+BDC_LISTED_PRICES_FILE = OUTPUT_DIR / "bdc_listed_prices.csv"
+BDC_PREMIUM_DISCOUNT_FILE = OUTPUT_DIR / "bdc_premium_discount.csv"
+
 # Position-level PIK status
 BDC_POSITION_PIK_EVIDENCE_FILE = OUTPUT_DIR / "bdc_position_pik_evidence.csv"
 POSITION_PIK_STATUS_FILE = OUTPUT_DIR / "position_pik_status.csv"
@@ -267,6 +283,12 @@ IDENTIFIER_EXTRACTION_LOOKUP_FILE = OUTPUT_DIR / "identifier_extraction_lookup.c
 NCSR_HTML_CACHE_DIR = RAW_DIR / "filings" / "ncsr_html"
 NCSR_FILINGS_INDEX_FILE = OUTPUT_DIR / "ncsr_filings_index.csv"
 NCSR_FINANCIALS_FILE = OUTPUT_DIR / "ncsr_financials.csv"
+
+# SC TO-I/A tender offer repurchase filings
+SC_TOI_HTML_CACHE_DIR = RAW_DIR / "filings" / "sc_toi_html"
+SC_TOI_FILINGS_INDEX_FILE = OUTPUT_DIR / "sc_toi_filings_index.csv"
+SC_TOI_RESULTS_FILE = OUTPUT_DIR / "sc_toi_repurchase_results.csv"
+SC_TOI_PARSE_PROGRESS_FILE = OUTPUT_DIR / "sc_toi_parse_progress.csv"
 
 # HTML holdings extraction outputs
 HTML_EXTRACTION_FILE = OUTPUT_DIR / "html_extraction_holdings.csv"

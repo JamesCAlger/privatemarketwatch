@@ -502,6 +502,7 @@ def _export_portfolio_characteristics(
                 maturity_date,
                 asset_category,
                 coupon_type,
+                lien_position,
                 issuer_name,
                 report_date
             FROM raw

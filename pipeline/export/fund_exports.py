@@ -561,6 +561,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 TRY_CAST(cost AS DOUBLE) AS cost,
                 TRY_CAST(pik_rate AS DOUBLE) AS pik_rate,
                 fair_value_level,
+                lien_position,
                 source,
                 nport_is_default,
                 nport_are_interest_payments_in_arrears,
@@ -589,7 +590,8 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 asset_category VARCHAR, index_classification VARCHAR,
                 coupon_type VARCHAR, maturity_date VARCHAR, report_date VARCHAR,
                 exposure_type VARCHAR, asset_class VARCHAR, cost DOUBLE,
-                pik_rate DOUBLE, fair_value_level VARCHAR, source VARCHAR,
+                pik_rate DOUBLE, fair_value_level VARCHAR,
+                lien_position VARCHAR, source VARCHAR,
                 nport_is_default VARCHAR,
                 nport_are_interest_payments_in_arrears VARCHAR,
                 nport_is_paid_in_kind VARCHAR

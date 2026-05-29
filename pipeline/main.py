@@ -183,6 +183,18 @@ def _parse_args() -> argparse.Namespace:
              "PE/Credit/RE (high precision), writes HF/SC to review CSV. "
              "Requires OPENAI_API_KEY in .env.",
     )
+    parser.add_argument(
+        "--tender-offers",
+        action="store_true",
+        help="Discover and parse SC TO-I/A tender offer repurchase filings "
+             "for oversubscription metrics.",
+    )
+    parser.add_argument(
+        "--listed-prices",
+        action="store_true",
+        help="Download SEC ticker map + yfinance daily prices for listed BDCs, "
+             "then compute premium/discount vs NAV.",
+    )
     return parser.parse_args()
 
 
@@ -233,6 +245,8 @@ def _is_validate_only(args: argparse.Namespace) -> bool:
         and not args.export_frontend
         and not args.llm_fund_validation
         and not args.classify_funds
+        and not args.tender_offers
+        and not args.listed_prices
     )
 
 
@@ -260,6 +274,8 @@ def _is_validate_rules_only(args: argparse.Namespace) -> bool:
         and not args.export_frontend
         and not args.llm_fund_validation
         and not args.classify_funds
+        and not args.tender_offers
+        and not args.listed_prices
     )
 
 
@@ -287,6 +303,8 @@ def _is_validate_all_only(args: argparse.Namespace) -> bool:
         and not args.export_frontend
         and not args.llm_fund_validation
         and not args.classify_funds
+        and not args.tender_offers
+        and not args.listed_prices
     )
 
 
@@ -314,6 +332,8 @@ def _is_export_frontend_only(args: argparse.Namespace) -> bool:
         and not args.load_db
         and not args.llm_fund_validation
         and not args.classify_funds
+        and not args.tender_offers
+        and not args.listed_prices
     )
 
 
@@ -442,6 +462,10 @@ def main() -> None:
         mode_parts.append("LLM-FUND-VALIDATION")
     if args.classify_funds:
         mode_parts.append("CLASSIFY-FUNDS")
+    if args.tender_offers:
+        mode_parts.append("TENDER-OFFERS")
+    if args.listed_prices:
+        mode_parts.append("LISTED-PRICES")
     if args.ciks:
         mode_parts.append(f"CIKs: {', '.join(args.ciks)}")
     logger.info("  Mode: %s", " + ".join(mode_parts) if mode_parts else "FAST")
@@ -491,12 +515,20 @@ def main() -> None:
         logger.info("=== Pipeline complete in %.1f s ===", total)
         return
 
+    # Universe discovery (Steps 1-4) is only needed when --holdings or
+    # --nport are requested.  Other modes (--unified, --validate, --returns,
+    # --export-frontend, --financials, etc.) read from cached CSVs on disk.
+    _need_universe = args.holdings or args.nport
+
     client = EdgarClient()
 
     bdc_df = None
     combined = None
 
-    if not args.ciks:
+    if args.ciks:
+        logger.info("")
+        logger.info("Skipping Steps 1-4 (--ciks mode)")
+    elif _need_universe:
         # ── Step 1: Build BDC universe ──
         logger.info("")
         t1 = time.time()
@@ -536,7 +568,7 @@ def main() -> None:
         logger.info("Merge step completed in %.1f s", time.time() - t4)
     else:
         logger.info("")
-        logger.info("Skipping Steps 1-4 (--ciks mode)")
+        logger.info("Skipping universe discovery (using cached CSVs)")
 
     # ── Step 5: BDC holdings extraction (optional) ──
     holdings_df = None
@@ -676,6 +708,80 @@ def main() -> None:
                          exc_info=True)
         logger.info("Fund financials step completed in %.1f s",
                      time.time() - t7b_fin)
+
+    # ── Step 7b2: SC TO-I/A tender offer repurchase extraction (optional) ──
+    if args.tender_offers:
+        logger.info("")
+        t7b2 = time.time()
+        try:
+            from pipeline.sc_toi_filings import (
+                build_sc_toi_filings_index,
+                download_sc_toi_filings,
+                extract_sc_toi_results,
+            )
+            import pandas as pd
+
+            # Get tender offer fund + BDC CIKs from universe
+            toi_universe = None
+            if combined is not None and not combined.empty:
+                toi_universe = combined
+            else:
+                from pipeline.config import COMBINED_UNIVERSE_FILE
+                if COMBINED_UNIVERSE_FILE.exists():
+                    toi_universe = pd.read_csv(COMBINED_UNIVERSE_FILE, dtype=str)
+
+            if toi_universe is not None and not toi_universe.empty:
+                toi_ciks_df = toi_universe[
+                    toi_universe["vehicle_type"].isin(
+                        ["tender_offer_fund", "bdc"]
+                    )
+                ]
+                if args.ciks:
+                    toi_ciks = [str(c) for c in args.ciks]
+                else:
+                    toi_ciks = toi_ciks_df["cik"].dropna().unique().tolist()
+                if toi_ciks:
+                    toi_index = build_sc_toi_filings_index(client, toi_ciks)
+                    toi_index = download_sc_toi_filings(client, toi_index)
+                    extract_sc_toi_results(toi_index)
+                else:
+                    logger.info("No tender offer/BDC CIKs for SC TO-I extraction")
+            else:
+                logger.info("No universe available for SC TO-I extraction")
+        except Exception as exc:
+            logger.error("SC TO-I extraction failed: %s", exc, exc_info=True)
+        logger.info("SC TO-I extraction step completed in %.1f s",
+                     time.time() - t7b2)
+
+    # ── Step 7b3: Listed prices + premium/discount (optional) ──
+    if args.listed_prices:
+        logger.info("")
+        t7b3 = time.time()
+        try:
+            from pipeline.sec_ticker_map import build_bdc_ticker_map
+            from pipeline.listed_prices import (
+                download_listed_prices,
+                build_premium_discount,
+            )
+
+            ticker_map_df = build_bdc_ticker_map(client=client)
+            if not ticker_map_df.empty:
+                prices_df = download_listed_prices(ticker_map_df)
+                if not prices_df.empty:
+                    premium_discount_df = build_premium_discount(prices_df)
+                    logger.info(
+                        "Premium/discount: %d rows",
+                        len(premium_discount_df),
+                    )
+                else:
+                    logger.warning("No listed prices downloaded")
+            else:
+                logger.warning("No BDC tickers found in SEC mapping")
+        except Exception as exc:
+            logger.error("Listed prices failed: %s", exc, exc_info=True)
+        logger.info(
+            "Listed prices step completed in %.1f s", time.time() - t7b3,
+        )
 
     # ── Step 7c: LLM identifier extraction (optional) ──
     if args.extract:
@@ -1017,6 +1123,12 @@ def main() -> None:
         output_files.append(OUTPUT_DIR / "ncsr_parse_progress.csv")
         output_files.append(OUTPUT_DIR / "fund_financials.csv")
         output_files.append(OUTPUT_DIR / "bdc_sector_breakdown.csv")
+    if args.tender_offers:
+        output_files.append(OUTPUT_DIR / "sc_toi_filings_index.csv")
+        output_files.append(OUTPUT_DIR / "sc_toi_repurchase_results.csv")
+    if args.listed_prices:
+        output_files.append(OUTPUT_DIR / "bdc_listed_prices.csv")
+        output_files.append(OUTPUT_DIR / "bdc_premium_discount.csv")
     if args.extract:
         output_files.append(OUTPUT_DIR / "identifier_extraction_lookup.csv")
     if args.validate or args.validate_all:
