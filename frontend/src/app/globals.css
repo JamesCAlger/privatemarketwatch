@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-navy antialiased;
+    @apply bg-bg text-ink antialiased;
   }
 }
 
@@ -12,37 +12,12 @@
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
-}
 
-@layer components {
-  /* Hero gradient backgrounds */
-  .hero-gradient {
-    background-color: #0F1B2D;
-    background-image: linear-gradient(135deg, #0F1B2D 0%, #1B2A4A 50%, #162338 100%);
-  }
-
-  .hero-gradient-home {
-    background-color: #0C1520;
-    background-image: linear-gradient(135deg, #0C1520 0%, #0F1B2D 40%, #1B2A4A 100%);
-  }
-
-  /* Dot grid overlay -- applied via ::after so it layers on top of gradient */
-  .hero-pattern {
-    position: relative;
-  }
-  .hero-pattern::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-    background-size: 24px 24px;
-    pointer-events: none;
-  }
-
-  /* Stat highlight gradient */
-  .stat-highlight {
-    background-color: rgba(42, 157, 143, 0.05);
-    background-image: linear-gradient(135deg, rgba(42, 157, 143, 0.08) 0%, rgba(42, 157, 143, 0.03) 100%);
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 10px;
+    font-weight: 600;
   }
 }
 

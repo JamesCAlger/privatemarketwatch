@@ -21,9 +21,9 @@ interface Series {
   data: { quarter: string; level: number | null }[];
 }
 
-type Period = '1y' | '3y' | '5y' | 'all';
+export type Period = '1y' | '3y' | '5y' | 'all';
 
-const PERIODS: { key: Period; label: string; quarters: number | null }[] = [
+export const PERIODS: { key: Period; label: string; quarters: number | null }[] = [
   { key: '1y', label: '1 YR', quarters: 4 },
   { key: '3y', label: '3 YR', quarters: 12 },
   { key: '5y', label: '5 YR', quarters: 20 },
@@ -33,6 +33,9 @@ const PERIODS: { key: Period; label: string; quarters: number | null }[] = [
 interface TimeSeriesChartProps {
   series: Series[];
   defaultVisible?: string[];
+  /** When provided, period tabs are hidden and period is controlled externally */
+  period?: Period;
+  onPeriodChange?: (p: Period) => void;
 }
 
 // Recharts tooltip props are untyped
@@ -64,12 +67,17 @@ function CustomTooltip(props: {
 export default function TimeSeriesChart({
   series,
   defaultVisible,
+  period: externalPeriod,
+  onPeriodChange,
 }: TimeSeriesChartProps) {
   const allKeys = series.map((s) => s.key);
   const [visible, setVisible] = useState<Set<string>>(
     new Set(defaultVisible ?? allKeys),
   );
-  const [period, setPeriod] = useState<Period>('all');
+  const [internalPeriod, setInternalPeriod] = useState<Period>('all');
+  const period = externalPeriod ?? internalPeriod;
+  const setPeriod = onPeriodChange ?? setInternalPeriod;
+  const controlled = externalPeriod != null;
   const [ref, inView] = useInView(0.15);
 
   const toggleSeries = (key: string) => {
@@ -118,7 +126,7 @@ export default function TimeSeriesChart({
 
   if (allData.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 border border-surface-muted bg-surface text-muted text-sm">
+      <div className="flex items-center justify-center h-64 border border-rule bg-white text-ink3 text-sm">
         No data available yet. Run the pipeline with --returns to generate index data.
       </div>
     );
@@ -126,23 +134,25 @@ export default function TimeSeriesChart({
 
   return (
     <div ref={ref}>
-      {/* Period tabs + legend toggles */}
+      {/* Period tabs (when uncontrolled) + legend toggles */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div className="flex gap-1">
-          {PERIODS.map((p) => (
-            <button
-              key={p.key}
-              onClick={() => setPeriod(p.key)}
-              className={`text-xs px-3 py-1.5 transition-colors ${
-                period === p.key
-                  ? 'bg-navy text-white font-medium'
-                  : 'text-muted hover:text-navy hover:bg-surface'
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
+        {!controlled && (
+          <div className="flex gap-1">
+            {PERIODS.map((p) => (
+              <button
+                key={p.key}
+                onClick={() => setPeriod(p.key)}
+                className={`text-xs px-3 py-1.5 transition-colors ${
+                  period === p.key
+                    ? 'bg-navy text-white font-medium'
+                    : 'text-ink3 hover:text-navy hover:bg-white'
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="flex flex-wrap gap-2">
           {series.map((s) => (
             <button
@@ -151,7 +161,7 @@ export default function TimeSeriesChart({
               className={`flex items-center gap-1.5 text-xs px-2.5 py-1 border transition-all ${
                 visible.has(s.key)
                   ? 'border-current opacity-100'
-                  : 'border-surface-muted opacity-40'
+                  : 'border-rule opacity-40'
               }`}
               style={{ color: visible.has(s.key) ? s.color : undefined }}
             >
@@ -165,7 +175,7 @@ export default function TimeSeriesChart({
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={360}>
+      <ResponsiveContainer width="100%" height={280}>
         {inView ? (
           <AreaChart data={chartData}>
             <defs>
@@ -213,7 +223,7 @@ export default function TimeSeriesChart({
             )}
           </AreaChart>
         ) : (
-          <svg width="100%" height={360} />
+          <svg width="100%" height={280} />
         )}
       </ResponsiveContainer>
     </div>

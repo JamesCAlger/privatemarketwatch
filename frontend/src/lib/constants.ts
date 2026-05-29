@@ -1,6 +1,6 @@
-export const SITE_NAME = 'Private Market Watch';
+export const SITE_NAME = 'Metris Lens';
 export const SITE_DESCRIPTION =
-  'Data and indices for the evergreen fund universe -- BDCs, interval funds, and tender offer funds -- the registered vehicles bringing private markets to wealth management.';
+  'The data platform for private markets. Fund data, portfolio analytics, and position-level indices for private credit and equity -- built from mandatory SEC filings.';
 
 export interface IndexMeta {
   key: string;

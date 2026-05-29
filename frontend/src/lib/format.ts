@@ -56,7 +56,7 @@ export function formatQuarter(q: string | null | undefined): string {
 
 export function returnColor(value: number | null | undefined): string {
   if (value == null || isNaN(value)) return 'text-muted';
-  return value >= 0 ? 'text-teal' : 'text-red';
+  return value >= 0 ? 'text-green' : 'text-red';
 }
 
 export function returnSign(value: number | null | undefined, decimals = 1): string {

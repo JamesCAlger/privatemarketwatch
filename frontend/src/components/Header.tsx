@@ -4,20 +4,42 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { INDICES } from '@/lib/constants';
+import type { IndexSummary } from '@/lib/types';
+import HomepageSparkline from './HomepageSparkline';
 
-export default function Header() {
+interface HeaderProps {
+  indexSummaries?: IndexSummary[];
+}
+
+const NAV_ITEMS = [
+  { label: 'Funds', href: '/' },
+  { label: 'Indices', href: '/indices' },
+  { label: 'Methodology', href: '/methodology' },
+  { label: 'About', href: '/about' },
+  { label: 'Data', href: '/data-quality' },
+];
+
+function getNavActive(pathname: string): string {
+  if (pathname.startsWith('/indices')) return 'Indices';
+  if (pathname === '/' || pathname.startsWith('/funds')) return 'Funds';
+  if (pathname.startsWith('/methodology')) return 'Methodology';
+  if (pathname.startsWith('/data')) return 'Data';
+  if (pathname.startsWith('/about')) return 'About';
+  return '';
+}
+
+export default function Header({ indexSummaries = [] }: HeaderProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [indicesOpen, setIndicesOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
+  const active = getNavActive(pathname);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      if (y > 56 && y > lastScrollY.current) {
+      if (y > 120 && y > lastScrollY.current) {
         setHidden(true);
-        setIndicesOpen(false);
       } else {
         setHidden(false);
       }
@@ -28,174 +50,168 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`bg-navy sticky top-0 z-50 transition-transform duration-300 border-b border-teal/30 ${
+    <header className={`bg-navy text-white/[0.78] sticky top-0 z-50 transition-transform duration-300 ${
       hidden ? '-translate-y-full' : 'translate-y-0'
     }`}>
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex h-14 md:h-16 items-center gap-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="shrink-0">
-              <path d="M4 7L12 14L4 21" stroke="#2A9D8F" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 7L20 14L12 21" stroke="#3DB8A9" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
-            </svg>
-            <span className="font-bold text-white text-base md:text-lg tracking-tight">
-              Private Market Watch
-            </span>
-          </Link>
+      {/* Row 1: Utility bar */}
+      <div className="hidden md:flex items-center justify-between px-[72px] py-2.5 border-b border-white/[0.06] text-[11px] tracking-[0.06em]">
+        <span className="text-white/55">
+          As of Q4 2025 &middot; Data derived from mandatory SEC filings
+        </span>
+        <div className="flex gap-[18px]">
+          <span>EN &#x25BE;</span>
+          <span className="cursor-default">For Advisors</span>
+          <span className="cursor-default">For Institutions</span>
+          <span className="cursor-default">Login</span>
+        </div>
+      </div>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1 text-sm flex-1">
-            <NavLink href="/" current={pathname}>
-              Funds
-            </NavLink>
-            <div
-              className="relative"
-              onMouseEnter={() => setIndicesOpen(true)}
-              onMouseLeave={() => setIndicesOpen(false)}
-            >
-              <Link href="/indices" className={`relative px-3 py-5 hover:text-teal transition-colors inline-block ${
-                pathname.startsWith('/indices') ? 'text-white font-medium' : 'text-white/70'
-              }`}>
-                Indices
-                <svg className="inline-block ml-1 w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-                {pathname.startsWith('/indices') && (
-                  <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal" />
-                )}
+      {/* Row 2: Main nav */}
+      <div className="flex items-center justify-between px-4 md:px-[72px] py-4 md:py-5">
+        {/* Logo + tagline */}
+        <Link href="/" className="flex items-baseline gap-3.5 no-underline">
+          <span className="font-display text-[26px] text-white tracking-[-0.005em] font-medium">
+            Metris Lens
+          </span>
+          <span className="hidden sm:inline eyebrow text-accent tracking-[0.2em]">
+            Data &middot; Indices &middot; Research
+          </span>
+        </Link>
+
+        {/* Desktop nav items */}
+        <nav className="hidden md:flex items-center gap-7 text-[13px] font-medium">
+          {NAV_ITEMS.map(({ label, href }) => {
+            const isActive = label === active;
+            return (
+              <Link
+                key={label}
+                href={href}
+                className={`pb-1 border-b-2 transition-colors ${
+                  isActive
+                    ? 'border-accent text-white'
+                    : 'border-transparent text-white/[0.78] hover:text-white'
+                }`}
+              >
+                {label}
               </Link>
-              {indicesOpen && (
-                <div className="absolute top-full left-0 pt-0.5">
-                  <div className="bg-white border border-surface-muted shadow-panel py-1.5 min-w-[240px]">
-                    {INDICES.map((idx) => (
-                      <Link
-                        key={idx.slug}
-                        href={`/indices/${idx.slug}`}
-                        className="flex items-center px-4 py-2.5 text-sm text-navy hover:bg-surface transition-colors"
-                        onClick={() => setIndicesOpen(false)}
-                      >
-                        <span>{idx.shortName}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            <NavLink href="/methodology" current={pathname}>
-              Methodology
-            </NavLink>
-            <NavLink href="/about" current={pathname}>
-              About
-            </NavLink>
-            <NavLink href="/data-quality" current={pathname}>
-              Data Quality
-            </NavLink>
-          </nav>
+            );
+          })}
+          <Link
+            href="/data-quality"
+            className="px-4 py-2 border border-accent text-accent text-xs tracking-[0.08em] uppercase hover:bg-accent hover:text-navy transition-colors"
+          >
+            Subscribe &rarr;
+          </Link>
+        </nav>
 
-          {/* As-of date indicator (desktop) */}
-          <div className="hidden md:block text-xs text-white/40 shrink-0">
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden p-2 text-white/70"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {menuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+      </div>
+
+      {/* Row 3: Index ticker bar */}
+      <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr] items-stretch bg-navyDeep border-t border-white/[0.06] px-[72px]">
+        <div className="py-2.5 pr-[18px] flex items-center border-r border-white/[0.14]">
+          <span className="eyebrow text-accent tracking-[0.22em]">PMW Indices</span>
+        </div>
+        {INDICES.map((idx, i) => {
+          const s = indexSummaries.find((x) => x.index === idx.key);
+          if (!s) return null;
+          const isPositive = (s.trailing12m ?? 0) >= 0;
+          const retColor = isPositive ? '#7fd6a1' : '#e08c83';
+          return (
+            <Link
+              key={idx.key}
+              href={`/indices/${idx.slug}`}
+              className={`py-2.5 px-[18px] flex justify-between items-center gap-3.5 no-underline hover:bg-white/[0.03] transition-colors ${
+                i < INDICES.length - 1 ? 'border-r border-white/[0.14]' : ''
+              }`}
+            >
+              <div className="flex flex-col gap-px">
+                <span className="text-[10px] tracking-[0.16em] uppercase text-white/55">
+                  {idx.shortName}
+                </span>
+                <span className="font-mono text-lg text-white font-medium tabular-nums">
+                  {s.level?.toFixed(2)}
+                </span>
+              </div>
+              <div className="flex items-center gap-2" style={{ color: retColor }}>
+                {s.sparkline && s.sparkline.length >= 2 && (
+                  <HomepageSparkline
+                    data={s.sparkline}
+                    color={retColor}
+                    width={66}
+                    height={20}
+                  />
+                )}
+                <span className="font-mono text-[13px] font-semibold tabular-nums">
+                  {isPositive ? '+' : ''}
+                  {((s.trailing12m ?? 0) * 100).toFixed(1)}%
+                </span>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <nav className="md:hidden pb-4 border-t border-white/10 pt-3 space-y-1 px-4">
+          <Link
+            href="/"
+            className="block px-2 py-2 text-sm text-white/80 hover:text-accent hover:bg-white/5 transition-colors font-medium"
+            onClick={() => setMenuOpen(false)}
+          >
+            Fund Universe
+          </Link>
+          <div className="px-2 pt-2 pb-1 eyebrow text-accent">Indices</div>
+          {INDICES.map((idx) => (
+            <Link
+              key={idx.slug}
+              href={`/indices/${idx.slug}`}
+              className="block px-2 py-2 text-sm text-white/80 hover:text-accent hover:bg-white/5 transition-colors"
+              onClick={() => setMenuOpen(false)}
+            >
+              {idx.name}
+            </Link>
+          ))}
+          <Link
+            href="/methodology"
+            className="block px-2 py-2 text-sm text-white/80 hover:text-accent hover:bg-white/5 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            Methodology
+          </Link>
+          <Link
+            href="/about"
+            className="block px-2 py-2 text-sm text-white/80 hover:text-accent hover:bg-white/5 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            About
+          </Link>
+          <Link
+            href="/data-quality"
+            className="block px-2 py-2 text-sm text-white/80 hover:text-accent hover:bg-white/5 transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
+            Data Quality
+          </Link>
+          <div className="pt-2 px-2 text-xs text-white/30">
             As of Q4 2025
           </div>
-
-          {/* Spacer for mobile */}
-          <div className="flex-1 md:hidden" />
-
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden p-2 text-white/70"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {menuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        {menuOpen && (
-          <nav className="md:hidden pb-4 border-t border-white/10 pt-3 space-y-1">
-            <Link
-              href="/"
-              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors font-medium"
-              onClick={() => setMenuOpen(false)}
-            >
-              Fund Universe
-            </Link>
-            <div className="px-2 pt-2 pb-1 text-xs text-white/50 uppercase tracking-wider">Indices</div>
-            {INDICES.map((idx) => (
-              <Link
-                key={idx.slug}
-                href={`/indices/${idx.slug}`}
-                className="flex items-center gap-2.5 px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
-                onClick={() => setMenuOpen(false)}
-              >
-                <span
-                  className="w-2 h-2 rounded-full shrink-0"
-                  style={{ backgroundColor: idx.color }}
-                />
-                {idx.name}
-              </Link>
-            ))}
-            <Link
-              href="/methodology"
-              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Methodology
-            </Link>
-            <Link
-              href="/about"
-              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link
-              href="/data-quality"
-              className="block px-2 py-2 text-sm text-white/80 hover:text-teal hover:bg-white/5 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Data Quality
-            </Link>
-            <div className="pt-2 px-2 text-xs text-white/30">
-              As of Q4 2025
-            </div>
-          </nav>
-        )}
-      </div>
-    </header>
-  );
-}
-
-function NavLink({
-  href,
-  current,
-  children,
-}: {
-  href: string;
-  current: string;
-  children: React.ReactNode;
-}) {
-  const isActive = href === '/'
-    ? current === '/' || current.startsWith('/funds')
-    : current === href;
-  return (
-    <Link
-      href={href}
-      className={`relative px-3 py-5 hover:text-teal transition-colors ${
-        isActive ? 'text-white font-medium' : 'text-white/70'
-      }`}
-    >
-      {children}
-      {isActive && (
-        <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-teal" />
+        </nav>
       )}
-    </Link>
+    </header>
   );
 }
