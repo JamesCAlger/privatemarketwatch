@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bdc-xbrl-wrapper.v2",
+  "title": "BDC XBRL per-CIK wrapper with content signatures and invariants",
+  "type": "object",
+  "required": ["schema_version", "cik", "entity_name", "version", "source"],
+  "properties": {
+    "schema_version": {"const": "bdc-xbrl-wrapper.v2"},
+    "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
+    "entity_name": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "source": {"const": "bdc_xbrl"},
+    "identifier_format": {
+      "type": "object",
+      "properties": {
+        "delimiter": {
+          "type": "string",
+          "description": "Primary field delimiter in identifier strings"
+        },
+        "field_order": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Expected order of fields in identifier strings"
+        },
+        "alternate_delimiters": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Known alternate delimiters seen in some quarters"
+        }
+      },
+      "additionalProperties": false
+    },
+    "archetypes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["detection_rules", "field_signatures"],
+        "properties": {
+          "description": {"type": "string"},
+          "detection_rules": {
+            "type": "object",
+            "properties": {
+              "keywords": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Case-insensitive keyword matches against instrument_description or investment_identifier"
+              },
+              "keyword_mode": {
+                "type": "string",
+                "enum": ["any", "all"],
+                "default": "any",
+                "description": "Whether any or all keywords must match"
+              }
+            },
+            "additionalProperties": false
+          },
+          "field_signatures": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["numeric_range", "regex", "enum", "presence"]
+                },
+                "constraint": {
+                  "type": "string",
+                  "enum": ["required", "forbidden", "optional"],
+                  "default": "optional"
+                },
+                "min": {"type": "number"},
+                "max": {"type": "number"},
+                "pattern": {"type": "string"},
+                "values": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              },
+              "required": ["type", "constraint"],
+              "additionalProperties": false
+            },
+            "description": "Per-field content signature checks"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "properties": {
+        "fv_reconciliation": {
+          "type": "object",
+          "properties": {
+            "source_field": {
+              "type": "string",
+              "description": "Fund financials field to compare aggregate position FV against"
+            },
+            "tolerance_pct": {
+              "type": "number",
+              "description": "Max allowed percentage difference (e.g. 0.05 = 5%)"
+            },
+            "tolerance_abs": {
+              "type": "number",
+              "description": "Max allowed absolute difference in dollars"
+            }
+          },
+          "additionalProperties": false
+        },
+        "position_count_qoq": {
+          "type": "object",
+          "properties": {
+            "max_increase_pct": {
+              "type": "number",
+              "description": "Max QoQ increase ratio (e.g. 2.0 = 200%)"
+            },
+            "max_decrease_pct": {
+              "type": "number",
+              "description": "Max QoQ decrease ratio (e.g. 0.5 = 50%)"
+            }
+          },
+          "additionalProperties": false
+        },
+        "rate_sanity": {
+          "type": "object",
+          "properties": {
+            "min_pct": {
+              "type": "number",
+              "description": "Minimum interest rate as decimal (e.g. 0.01 = 1%)"
+            },
+            "max_pct": {
+              "type": "number",
+              "description": "Maximum interest rate as decimal (e.g. 0.25 = 25%)"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "known_edge_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "first_seen_quarter": {"type": "string"},
+          "detection_pattern": {"type": "string"},
+          "disposition": {
+            "type": "string",
+            "enum": ["expected", "warn", "fail"]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

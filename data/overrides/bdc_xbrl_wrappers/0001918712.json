@@ -1,0 +1,210 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v2",
+  "cik": "0001918712",
+  "entity_name": "Ares Strategic Income Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description",
+      "reference_rate",
+      "interest_rate",
+      "maturity_date"
+    ],
+    "alternate_delimiters": [" | "]
+  },
+  "archetypes": {
+    "senior_secured_debt": {
+      "description": "First lien, second lien, unitranche, and other senior secured term loans and revolvers",
+      "detection_rules": {
+        "keywords": [
+          "First lien senior secured loan",
+          "First lien senior secured delayed draw term loan",
+          "First lien senior secured revolving loan",
+          "Second lien senior secured loan",
+          "Senior secured loan",
+          "Senior subordinated loan",
+          "Subordinated loan",
+          "Unitranche first lien loan",
+          "Delayed draw term loan",
+          "Revolving credit facility",
+          "Term loan"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 30.0
+        },
+        "basis_spread": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 15.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        },
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        }
+      }
+    },
+    "equity": {
+      "description": "Common stock, preferred shares, partnership interests, LLC interests, and fund vehicles",
+      "detection_rules": {
+        "keywords": [
+          "Common stock",
+          "Preferred shares",
+          "Preferred stock",
+          "Preferred equity",
+          "Partnership interest",
+          "Limited partnership interest",
+          "LLC interest",
+          "LLC membership interest",
+          "Class A units",
+          "Class B units",
+          "Equity interest",
+          "Equity co-invest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 30.0
+        },
+        "basis_spread": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "clo": {
+      "description": "Collateralized loan obligation tranches and structured credit",
+      "detection_rules": {
+        "keywords": [
+          "Collateralized loan obligation",
+          "Collaterized loan obligation",
+          "CLO"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 30.0
+        },
+        "basis_spread": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 15.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "basis_spread": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "fv_reconciliation": {
+      "source_field": "investments_at_fair_value",
+      "tolerance_pct": 0.05,
+      "tolerance_abs": 5000000
+    },
+    "position_count_qoq": {
+      "max_increase_pct": 2.0,
+      "max_decrease_pct": 0.5
+    },
+    "rate_sanity": {
+      "min_pct": 1.0,
+      "max_pct": 30.0
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "pipe_delimited_rows",
+      "description": "Some rows in 2025-12-31 use pipe delimiters instead of comma delimiters",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\|",
+      "disposition": "warn"
+    },
+    {
+      "id": "bare_fund_vehicle",
+      "description": "ADLP LLC and similar bare fund vehicle names without instrument type detail",
+      "detection_pattern": "ADLP LLC",
+      "disposition": "expected"
+    },
+    {
+      "id": "euribor_reference_rate",
+      "description": "Some European positions reference Euribor instead of SOFR/LIBOR",
+      "detection_pattern": "(?i)euribor",
+      "disposition": "expected"
+    },
+    {
+      "id": "preferred_equity_with_dividend_rate",
+      "description": "Preferred shares and LP interests with dividend/distribution rates stored as interest_rate",
+      "detection_pattern": "(?i)preferred\\s+shares|Series\\s+[A-Z]\\s+preferred",
+      "disposition": "expected"
+    },
+    {
+      "id": "debt_with_unit_count",
+      "description": "Occasional debt positions reporting units in shares_held (e.g., Steward Partners)",
+      "detection_pattern": "(?i)Steward Partners",
+      "disposition": "expected"
+    }
+  ]
+}
