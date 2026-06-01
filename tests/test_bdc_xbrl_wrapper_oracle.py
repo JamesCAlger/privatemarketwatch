@@ -18,6 +18,7 @@ from pipeline.source_reconciliation import DETAIL_COLUMNS
 from pipeline.wrapper_content_signatures import (
     Archetype,
     FieldSignature,
+    RateSanity,
     UnclassifiedRate,
     WrapperDefinition,
     validate_content_signatures,
@@ -714,6 +715,13 @@ def _oracle_summary(rows):
         "unclassified_fv_rate_status": "pass",
         "fv_reconciliation_status": "pass",
         "fv_reconciliation_pct_diff": 0.003,
+        "exclusion_risk_count": 0,
+        "exclusion_risk_fv": 0,
+        "position_continuation_rate": "",
+        "rate_outlier_count": 0,
+        "cost_fv_ratio_outlier_count": 0,
+        "concept_drift_flag": "",
+        "unparsed_remainder_rate": "",
         "oracle_status": "pass",
         "oracle_fail_reasons": "",
     }
@@ -971,3 +979,342 @@ def test_validate_structure_flags_empty_keywords():
     wrapper = _make_wrapper(archetypes=archetypes)
     issues = validate_wrapper_definition_structure(wrapper)
     assert any("no keywords" in i for i in issues)
+
+
+# ---------------------------------------------------------------------------
+# Gap #7: Exclusion false-positive risk tests
+# ---------------------------------------------------------------------------
+
+
+def test_oracle_flags_exclusion_risk_when_position_evidence_found():
+    """Oracle should flag excluded rows containing position-evidence keywords."""
+    detail = _detail([
+        {
+            "status": "documented_source_rollup_exact",
+            "residual_class": "documented_exclusion",
+            "calibrated_status": "documented_source_rollup_exact",
+            "source_wrapper_disposition": "aggregate",
+            "raw_investment_identifier": "Total Term Loan Investments - Category A",
+            "source_fair_value": 5000000,
+        },
+    ])
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    assert summary.iloc[0]["exclusion_risk_count"] == 1
+    assert summary.iloc[0]["exclusion_risk_fv"] > 0
+    assert "exclusion_risk_detected" in summary.iloc[0]["oracle_fail_reasons"]
+
+
+def test_oracle_no_exclusion_risk_for_clean_exclusions():
+    """Oracle should not flag exclusions without position-evidence keywords."""
+    detail = _detail([
+        {
+            "status": "documented_source_rollup_exact",
+            "residual_class": "documented_exclusion",
+            "calibrated_status": "documented_source_rollup_exact",
+            "source_wrapper_disposition": "non_private_market",
+            "raw_investment_identifier": "U.S. Treasury Bills",
+        },
+    ])
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    assert summary.iloc[0]["exclusion_risk_count"] == 0
+    assert "exclusion_risk_detected" not in str(summary.iloc[0]["oracle_fail_reasons"])
+
+
+# ---------------------------------------------------------------------------
+# Gap #8: Position continuity tests
+# ---------------------------------------------------------------------------
+
+
+def test_oracle_flags_low_position_continuity():
+    """Oracle should flag quarters with < 50% position key continuation."""
+    # Q1 has positions A, B, C; Q2 has position D only -> 0% continuation
+    q1_rows = [
+        {
+            "report_date": "2024-09-30",
+            "source_wrapper_disposition": "debt_position_leaf",
+            "source_wrapper_position_key": f"position_{k}",
+            "status": "matched",
+        }
+        for k in ["a", "b", "c"]
+    ]
+    q2_rows = [
+        {
+            "report_date": "2024-12-31",
+            "source_wrapper_disposition": "debt_position_leaf",
+            "source_wrapper_position_key": "position_d",
+            "status": "matched",
+        },
+    ]
+    detail = _detail(q1_rows + q2_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert float(q2_row["position_continuation_rate"]) < 0.50
+    assert "low_position_continuity" in str(q2_row["oracle_fail_reasons"])
+
+
+def test_oracle_no_continuity_flag_when_rate_high():
+    """Oracle should not flag when position continuation is >= 50%."""
+    # Q1 has positions A, B; Q2 has A, B, C -> 100% continuation
+    q1_rows = [
+        {
+            "report_date": "2024-09-30",
+            "source_wrapper_disposition": "debt_position_leaf",
+            "source_wrapper_position_key": f"position_{k}",
+            "status": "matched",
+        }
+        for k in ["a", "b"]
+    ]
+    q2_rows = [
+        {
+            "report_date": "2024-12-31",
+            "source_wrapper_disposition": "debt_position_leaf",
+            "source_wrapper_position_key": f"position_{k}",
+            "status": "matched",
+        }
+        for k in ["a", "b", "c"]
+    ]
+    detail = _detail(q1_rows + q2_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert float(q2_row["position_continuation_rate"]) >= 0.50
+    assert "low_position_continuity" not in str(q2_row["oracle_fail_reasons"])
+
+
+# ---------------------------------------------------------------------------
+# Gap #4: Rate and scale outlier tests
+# ---------------------------------------------------------------------------
+
+
+def test_oracle_flags_rate_outliers():
+    """Oracle should flag rows with interest rates outside rate_sanity bounds."""
+    detail = _detail([{
+        "status": "documented_source_rollup_exact",
+        "residual_class": "documented_exclusion",
+        "calibrated_status": "documented_source_rollup_exact",
+    }])
+
+    holdings = pd.DataFrame({
+        "cik": ["0001786108"] * 3,
+        "report_date": ["2024-12-31"] * 3,
+        "interest_rate": ["0.08", "0.50", "0.10"],  # 50% is outside 1%-25%
+        "fair_value": ["1000000", "500000", "2000000"],
+    })
+
+    wrapper = WrapperDefinition(
+        cik="0001786108",
+        entity_name="Test BDC",
+        version=1,
+        archetypes=_make_wrapper().archetypes,
+        rate_sanity=RateSanity(min_pct=0.01, max_pct=0.25),
+        unclassified_rate=_make_wrapper().unclassified_rate,
+    )
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=wrapper,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(
+            detail, holdings_df=holdings,
+        )
+
+    assert summary.iloc[0]["rate_outlier_count"] == 1
+    assert "rate_outliers_detected" in summary.iloc[0]["oracle_fail_reasons"]
+
+
+def test_oracle_flags_cost_fv_ratio_outliers():
+    """Oracle should flag rows with extreme cost/FV ratios."""
+    detail = _detail([{
+        "status": "documented_source_rollup_exact",
+        "residual_class": "documented_exclusion",
+        "calibrated_status": "documented_source_rollup_exact",
+    }])
+
+    holdings = pd.DataFrame({
+        "cik": ["0001786108"] * 3,
+        "report_date": ["2024-12-31"] * 3,
+        "cost": ["1000000", "100", "2000000"],
+        "fair_value": ["1000000", "100000", "2000000"],  # row 2: ratio=0.001
+    })
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(
+            detail, holdings_df=holdings,
+        )
+
+    assert summary.iloc[0]["cost_fv_ratio_outlier_count"] == 1
+    assert "cost_fv_ratio_outliers" in summary.iloc[0]["oracle_fail_reasons"]
+
+
+def test_oracle_no_rate_outliers_when_within_bounds():
+    """Oracle should not flag rates within rate_sanity bounds."""
+    detail = _detail([{
+        "status": "documented_source_rollup_exact",
+        "residual_class": "documented_exclusion",
+        "calibrated_status": "documented_source_rollup_exact",
+    }])
+
+    holdings = pd.DataFrame({
+        "cik": ["0001786108"] * 2,
+        "report_date": ["2024-12-31"] * 2,
+        "interest_rate": ["0.08", "0.12"],  # both within 1%-25%
+        "fair_value": ["1000000", "2000000"],
+    })
+
+    wrapper = WrapperDefinition(
+        cik="0001786108",
+        entity_name="Test BDC",
+        version=1,
+        archetypes=_make_wrapper().archetypes,
+        rate_sanity=RateSanity(min_pct=0.01, max_pct=0.25),
+        unclassified_rate=_make_wrapper().unclassified_rate,
+    )
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=wrapper,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(
+            detail, holdings_df=holdings,
+        )
+
+    assert summary.iloc[0]["rate_outlier_count"] == 0
+    assert "rate_outliers_detected" not in str(summary.iloc[0]["oracle_fail_reasons"])
+
+
+# ---------------------------------------------------------------------------
+# Gap #3: Concept drift tests
+# ---------------------------------------------------------------------------
+
+
+def test_oracle_flags_concept_drift():
+    """Oracle should flag when XBRL concepts change between quarters."""
+    q1_detail = _detail([{
+        "report_date": "2024-09-30",
+        "concept_names": "InvestmentOwnedAtFairValue",
+        "status": "matched",
+    }])
+    q2_detail = _detail([{
+        "report_date": "2024-12-31",
+        "concept_names": "InvestmentOwnedAtCost",
+        "status": "matched",
+    }])
+    detail = pd.concat([q1_detail, q2_detail], ignore_index=True)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["concept_drift_flag"] == "yes"
+    assert "concept_drift_detected" in str(q2_row["oracle_fail_reasons"])
+
+
+def test_oracle_no_concept_drift_when_stable():
+    """Oracle should not flag when XBRL concepts are stable across quarters."""
+    q1_detail = _detail([{
+        "report_date": "2024-09-30",
+        "concept_names": "InvestmentOwnedAtFairValue",
+        "status": "matched",
+    }])
+    q2_detail = _detail([{
+        "report_date": "2024-12-31",
+        "concept_names": "InvestmentOwnedAtFairValue",
+        "status": "matched",
+    }])
+    detail = pd.concat([q1_detail, q2_detail], ignore_index=True)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["concept_drift_flag"] == "no"
+    assert "concept_drift_detected" not in str(q2_row["oracle_fail_reasons"])
+
+
+# ---------------------------------------------------------------------------
+# Gap #5: Unparsed remainder spike test
+# ---------------------------------------------------------------------------
+
+
+def test_oracle_flags_unparsed_remainder_spike():
+    """Oracle should flag when unparsed_remainder_rate spikes > 10pp QoQ."""
+    q1_detail = _detail([{
+        "report_date": "2024-09-30",
+        "source_wrapper_unparsed_remainder": "",
+    }])
+    q2_detail = _detail([{
+        "report_date": "2024-12-31",
+        "source_wrapper_unparsed_remainder": "leftover text",
+    }])
+    detail = pd.concat([q1_detail, q2_detail], ignore_index=True)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert "unparsed_remainder_spike" in str(q2_row["oracle_fail_reasons"])

@@ -52,55 +52,78 @@ Row count is not enough. A wrapper could classify 990 small rows and miss 10 lar
 
 ## Gap 3: No Concept/Dimension Drift Inventory
 
-**Status: NOT YET IMPLEMENTED**
+**Status: IMPLEMENTED (2026-06-01)**
 
 The wrappers reason over identifier strings. But XBRL failures often come from changes in concepts, axes, members, or dimension paths.
 
-**Required per-CIK inventory:**
+**Implemented (`_detect_concept_drift` in oracle harness):**
 
-- XBRL concepts used for FV, cost, principal, shares, rates
-- Axes and members used in holdings contexts
-- Dimension path shapes
-- New or missing concepts quarter over quarter
-- Duplicate facts from new dimension paths
+- Collects the set of unique `concept_names` values per CIK-quarter from reconciliation detail
+- Compares adjacent quarters chronologically
+- Flags `"yes"` when the concept set changes (new or dropped concepts), `"no"` when stable
+- Only populated for the second quarter onward (first quarter has no prior reference)
 
-A filer can keep similar identifier text while changing the tagging structure. Reconciliation may still partially work, but duplicate paths, comparative-period paths, or alternate concepts can create silent overcounting or missing rows.
+**New oracle summary column:** `concept_drift_flag` ("yes"/"no"/"").
 
-**Priority:** Tier 2 -- useful but expensive to implement. Start narrow: track the set of (concept, axis, member) tuples producing holdings rows per CIK-quarter, flag when the set changes.
+**Oracle integration:** When `concept_drift_flag == "yes"`, oracle adds reason `concept_drift_detected` and sets `oracle_status = "fail"`. This is a review reason in the promotion gate (not a hard reject).
+
+**Scope limitations (not yet implemented):**
+- Does not track axes or members separately from concept names
+- Does not track dimension path shapes
+- Does not detect duplicate facts from new dimension paths
+
+**Tests added:** `test_oracle_flags_concept_drift`, `test_oracle_no_concept_drift_when_stable`.
 
 ---
 
 ## Gap 4: Scale Handling Not Anchored
 
-**Status: NOT YET IMPLEMENTED**
+**Status: IMPLEMENTED (2026-06-01)**
 
-Current scale handling is partly inferred through staging/reconciliation behavior. The oracle should explicitly validate scale using independent anchors:
+Current scale handling is partly inferred through staging/reconciliation behavior. The oracle now explicitly validates rate scale and cost/FV relative sanity.
 
-- XBRL decimals or unit metadata where available
-- Fund-level `investments_at_fair_value` as FV anchor
-- Position FV sum vs fund FV
-- Cost/FV relative sanity
-- Rate fields separately from dollar fields
+**Implemented checks:**
 
-Dollar scale and rate scale need different treatment. A rate of 850 may mean 8.50%, 850 bps, or bad parsing. A fair value of 25,000 may mean 25 thousand or 25 million depending on filer scale. The oracle should prefer reconciliation against tagged fund totals over magnitude priors.
+### `_check_rate_outliers(holdings_df, wrapper, report_date)`
+
+Counts holdings rows with `interest_rate` outside the wrapper's `rate_sanity` bounds (`min_pct`, `max_pct`). Only fires when the wrapper definition includes a `rate_sanity` invariant. Oracle reason: `rate_outliers_detected`.
+
+### `_check_cost_fv_outliers(holdings_df, report_date)`
+
+Counts holdings rows where `abs(cost / fair_value)` exceeds 100x or falls below 0.01x. These extreme ratios indicate likely scale mismatches or parsing errors. Oracle reason: `cost_fv_ratio_outliers`.
+
+**New oracle summary columns:** `rate_outlier_count`, `cost_fv_ratio_outlier_count`.
+
+**Configuration:** `RateSanity.min_pct` and `RateSanity.max_pct` in wrapper definition JSON (`invariants.rate_sanity`). Default bounds: 1%-25%.
+
+**Scope limitations (not yet implemented):**
+- XBRL decimals or unit metadata validation
+- Fund-level `investments_at_fair_value` as independent dollar-scale anchor (partially covered by FV reconciliation in Gap 2)
+
+**Tests added:** `test_oracle_flags_rate_outliers`, `test_oracle_flags_cost_fv_ratio_outliers`, `test_oracle_no_rate_outliers_when_within_bounds`.
 
 ---
 
 ## Gap 5: unparsed_remainder Is Mostly Aspirational
 
-**Status: NOT YET IMPLEMENTED**
+**Status: IMPLEMENTED (2026-06-01)**
 
-The wrapper schema has `wrapper_unparsed_remainder`, and the oracle checks whether it is non-empty. But most current wrappers are identifier classifiers, not full parsers.
+The wrapper schema has `wrapper_unparsed_remainder`, and the oracle checks whether it is non-empty. The oracle now also computes a per-quarter rate and detects QoQ spikes.
 
-**Required parsing discipline:**
+**Implemented:**
 
-- Split identifier into expected fields
-- Map known fields into issuer, instrument, rate, maturity, etc.
-- Store any leftover text in `unparsed_remainder`
-- Fail or warn if remainder spikes
-- Localize drift to the first field where parsing diverged
+- `unparsed_remainder_rate` -- fraction of wrapper-processed rows that have non-empty `unparsed_remainder`, computed as `unparsed_rows / wrapper_total_rows`
+- QoQ spike detection: when `unparsed_remainder_rate` jumps > 10pp vs prior quarter, oracle adds reason `unparsed_remainder_spike`. Threshold: `_UNPARSED_REMAINDER_QOQ_SPIKE_THRESHOLD = 0.10`.
 
-**Priority:** Premature to gate on until at least 5-10 CIKs have full-parser wrappers. Content-signature field checks (numeric_range, regex, enum) serve as a partial substitute in the meantime.
+**New oracle summary column:** `unparsed_remainder_rate`.
+
+**Oracle integration:** The `unparsed_remainder_rows` reason (existing) fires when any rows have unparsed remainder. The `unparsed_remainder_spike` reason (new) fires on QoQ rate jumps exceeding the threshold. Both are review reasons in the promotion gate.
+
+**Scope limitations:**
+- Does not attempt to parse identifiers into fields or localize drift
+- Rate is a blunt measure -- premature to gate on until more CIKs have full-parser wrappers
+
+**Tests added:** `test_oracle_flags_unparsed_remainder_spike`.
 
 ---
 
@@ -132,7 +155,10 @@ Compares absolute oracle thresholds from the current oracle summary and relative
 **Review triggers** (`_PROMOTION_REVIEW_REASONS`):
 - `unclassified_rate_exceeded`, `unclassified_fv_rate_exceeded`
 - `unclassified_rate_qoq_jump`, `content_signatures_fail`
-- `unparsed_remainder_rows`
+- `unparsed_remainder_rows`, `unparsed_remainder_spike`
+- `exclusion_risk_detected`, `low_position_continuity`
+- `rate_outliers_detected`, `cost_fv_ratio_outliers`
+- `concept_drift_detected`
 
 **Relative checks (from baseline comparison):**
 - Total blocking rows delta > 0 -> reject
@@ -176,55 +202,81 @@ python -m pipeline.bdc_xbrl_wrapper_oracle --all-supported --promotion-gate --fa
 
 ## Gap 7: Weak False-Positive Protection For Exclusions
 
-**Status: NOT YET IMPLEMENTED**
+**Status: IMPLEMENTED (2026-06-01)**
 
 Excluding rows is dangerous because false positives directly delete data. Aggregate and non-private-market classifications are useful, but need stronger checks.
 
-**Risky false-positive examples:**
+**Implemented (`_check_exclusion_risk` in oracle harness):**
 
-- "Cash + PIK" in a loan coupon mistaken for cash
-- Category text that also contains a real issuer
-- A one-line position with no obvious maturity but real FV
-- Fund interests or CLOs misread as non-private-market funds
+Scans rows with `aggregate` or `non_private_market` wrapper disposition for position-evidence keywords that suggest the row might be a real position rather than a subtotal or non-private-market instrument.
 
-**Required evidence for exclusions:**
+**Position-evidence keywords checked** (`_EXCLUSION_POSITION_EVIDENCE_TOKENS`):
+`type of investment`, `investment type`, `maturity date`, `interest rate`, `reference rate`, `current coupon`, `first lien`, `1st lien`, `second lien`, `term loan`, `revolving credit facility`, `delayed draw`.
 
-- Aggregate rows should tie arithmetically to child rows where possible
-- Non-private-market rows should match narrow vocab and not contain position evidence
-- Excluded rows with large FV should be reviewed or separately gated
-- Rows classified as aggregate/non-private should be sampled in tests and residual reports
+When any excluded row's identifier matches these keywords:
+- `exclusion_risk_count` -- number of risky excluded rows
+- `exclusion_risk_fv` -- sum of |fair_value| across risky excluded rows
+- Oracle reason: `exclusion_risk_detected`
 
-The standard should be stricter for exclusions than for labels. A bad label is noisy; a bad exclusion causes data loss.
+**New oracle summary columns:** `exclusion_risk_count`, `exclusion_risk_fv`.
+
+**Oracle integration:** Review reason in promotion gate (not hard reject). The check is intentionally conservative: it flags exclusions that contain any position-evidence language, even if the row is probably a legitimate aggregate.
+
+**Scope limitations (not yet implemented):**
+- Arithmetic tie-out of aggregate rows to child rows
+- FV-weighted gating for excluded rows (flag when excluded FV > X% of total)
+- Sampling-based exclusion validation in tests
+
+**Tests added:** `test_oracle_flags_exclusion_risk_when_position_evidence_found`, `test_oracle_no_exclusion_risk_for_clean_exclusions`.
 
 ---
 
 ## Gap 8: Limited Cross-Quarter Position Continuity
 
-**Status: NOT YET IMPLEMENTED**
+**Status: IMPLEMENTED (2026-06-01)**
 
 Current QoQ checks include count bands and some stability checks, but do not track actual position continuity. BDC portfolios evolve but do not usually churn randomly quarter to quarter.
 
-**Required position key comparison across adjacent quarters:**
+**Implemented (`_compute_position_continuity` in oracle harness):**
 
-- Continuing positions (key present in both quarters)
-- New positions (key present only in current quarter)
-- Exited positions (key present only in prior quarter)
+- Filters to leaf position rows (`source_wrapper_disposition` ending in `_position_leaf`)
+- Collects the set of non-empty `source_wrapper_position_key` values per quarter
+- Compares adjacent quarters chronologically
+- Computes `continuation_rate = |continuing_keys| / |prior_keys|`
+- Only populated for the second quarter onward
+
+**New oracle summary column:** `position_continuation_rate` (0.0-1.0, or "" for first quarter).
+
+**Oracle integration:** When `position_continuation_rate < 0.50` (50%), oracle adds reason `low_position_continuity` and sets `oracle_status = "fail"`. Threshold: `_POSITION_CONTINUITY_MIN_RATE = 0.50`. This is a review reason in the promotion gate (not hard reject).
+
+**Scope limitations (not yet implemented):**
 - Changed fair values on continuing positions
-- Continuation rate (% of prior positions still present)
+- Fuzzy position matching (this is a separate pipeline concern)
+- New/exited position detail in oracle summary
 
-**Gate:** Flag CIK-quarters where continuation rate drops below threshold (e.g., < 50%) as potential wrapper regressions. Start with exact-key continuity as a diagnostic signal. Do not build fuzzy position matching into the oracle -- that is a separate pipeline concern.
+**Tests added:** `test_oracle_flags_low_position_continuity`, `test_oracle_no_continuity_flag_when_rate_high`.
 
 ---
 
-## Implementation Priority
+## Implementation Summary
 
-| Priority | Gap | Rationale |
-|---|---|---|
-| 1 | #2 FV-weighted coverage | Highest impact, straightforward |
-| 2 | #1 Coverage gates | Natural companion to #2, uses same data |
-| 3 | #6 Promotion gate | Architectural prerequisite for safe iteration |
-| 4 | #7 Exclusion false-positive protection | Directly prevents data loss |
-| 5 | #4 Scale validation | Important but partially covered by FV reconciliation |
-| 6 | #8 Position continuity | Useful diagnostic, start simple |
-| 7 | #3 Concept drift | Valuable but expensive, start narrow |
-| 8 | #5 unparsed_remainder | Premature until wrapper coverage is broader |
+All 8 gaps are implemented. Total: **42 tests** across the oracle test file.
+
+| Gap | Status | Oracle Columns Added | Oracle Reasons Added | Tests |
+|---|---|---|---|---|
+| #1 Coverage gates | IMPLEMENTED | 4 | 3 | 4 |
+| #2 FV-weighted coverage | IMPLEMENTED | 0 (in content sig engine) | 1 | 4 |
+| #3 Concept drift | IMPLEMENTED | 1 | 1 | 2 |
+| #4 Scale validation | IMPLEMENTED | 2 | 2 | 3 |
+| #5 unparsed_remainder | IMPLEMENTED | 1 | 1 | 1 |
+| #6 Promotion gate | IMPLEMENTED | 0 (separate columns) | 0 | 14 |
+| #7 Exclusion risk | IMPLEMENTED | 2 | 1 | 2 |
+| #8 Position continuity | IMPLEMENTED | 1 | 1 | 2 |
+
+**Remaining scope not yet implemented (documented per gap):**
+- Gap 3: Axis/member tracking, dimension path shapes, duplicate fact detection
+- Gap 4: XBRL decimals/unit metadata, fund-level FV as independent dollar-scale anchor
+- Gap 5: Full identifier field parsing, drift localization
+- Gap 6: Cross-CIK regression check, position-level semantics preservation
+- Gap 7: Arithmetic tie-out of aggregates, FV-weighted exclusion gating
+- Gap 8: FV changes on continuing positions, fuzzy position matching

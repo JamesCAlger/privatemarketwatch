@@ -70,12 +70,46 @@ ORACLE_SUMMARY_COLUMNS = [
     "unclassified_fv_rate_status",
     "fv_reconciliation_status",
     "fv_reconciliation_pct_diff",
+    "exclusion_risk_count",
+    "exclusion_risk_fv",
+    "position_continuation_rate",
+    "rate_outlier_count",
+    "cost_fv_ratio_outlier_count",
+    "concept_drift_flag",
+    "unparsed_remainder_rate",
     "oracle_status",
     "oracle_fail_reasons",
 ]
 
 # Default QoQ unclassified rate jump threshold (5 percentage points)
 _UNCLASSIFIED_RATE_QOQ_JUMP_THRESHOLD = 0.05
+
+# Position key continuation rate threshold (Gap #8)
+_POSITION_CONTINUITY_MIN_RATE = 0.50
+
+# QoQ unparsed_remainder_rate spike threshold in pp (Gap #5)
+_UNPARSED_REMAINDER_QOQ_SPIKE_THRESHOLD = 0.10
+
+# Keywords indicating a row has real position data, used
+# to detect false-positive exclusions (Gap #7)
+_EXCLUSION_POSITION_EVIDENCE_TOKENS = [
+    "type of investment",
+    "investment type",
+    "maturity date",
+    "interest rate",
+    "reference rate",
+    "current coupon",
+    "first lien",
+    "1st lien",
+    "second lien",
+    "term loan",
+    "revolving credit facility",
+    "delayed draw",
+]
+
+_EXCLUSION_EVIDENCE_PATTERN = "|".join(
+    re.escape(t) for t in _EXCLUSION_POSITION_EVIDENCE_TOKENS
+)
 
 REMAINING_MECHANISM_COLUMNS = [
     "cik",
@@ -194,6 +228,12 @@ _PROMOTION_REVIEW_REASONS = frozenset({
     "unclassified_rate_qoq_jump",
     "content_signatures_fail",
     "unparsed_remainder_rows",
+    "exclusion_risk_detected",
+    "low_position_continuity",
+    "rate_outliers_detected",
+    "cost_fv_ratio_outliers",
+    "concept_drift_detected",
+    "unparsed_remainder_spike",
 })
 
 
@@ -995,6 +1035,174 @@ def _check_fv_reconciliation(
     return result
 
 
+# ---------------------------------------------------------------------------
+# Gap #7: Exclusion false-positive risk detection
+# ---------------------------------------------------------------------------
+
+
+def _check_exclusion_risk(group: pd.DataFrame) -> tuple[int, float]:
+    """Check excluded rows for position-evidence keywords (Gap #7).
+
+    Returns (risky_row_count, risky_fair_value).
+    """
+    src_disp = group["source_wrapper_disposition"].fillna("").astype(str)
+    out_disp = group["output_wrapper_disposition"].fillna("").astype(str)
+    excluded_mask = (
+        src_disp.isin(["aggregate", "non_private_market"])
+        | out_disp.isin(["aggregate", "non_private_market"])
+    )
+    excluded = group[excluded_mask]
+    if excluded.empty:
+        return 0, 0.0
+    raw_lower = (
+        excluded["raw_investment_identifier"].fillna("").astype(str).str.lower()
+    )
+    risk_mask = raw_lower.str.contains(
+        _EXCLUSION_EVIDENCE_PATTERN, regex=True, na=False
+    )
+    risky = excluded[risk_mask]
+    if risky.empty:
+        return 0, 0.0
+    risky_fv = float(
+        pd.to_numeric(risky["source_fair_value"], errors="coerce")
+        .fillna(0)
+        .abs()
+        .sum()
+    )
+    return len(risky), risky_fv
+
+
+# ---------------------------------------------------------------------------
+# Gap #8: Position key continuity
+# ---------------------------------------------------------------------------
+
+
+def _compute_position_continuity(detail_df: pd.DataFrame) -> dict[str, float]:
+    """Compute position-key continuation rate between adjacent quarters (Gap #8).
+
+    Returns dict mapping report_date -> continuation_rate (0.0-1.0).
+    Only populated for the second quarter onward.
+    """
+    pos_col = "source_wrapper_position_key"
+    if detail_df.empty or pos_col not in detail_df.columns:
+        return {}
+    leaf_mask = (
+        detail_df["source_wrapper_disposition"]
+        .fillna("")
+        .astype(str)
+        .str.endswith("_position_leaf")
+    )
+    leaves = detail_df[leaf_mask]
+    if leaves.empty:
+        return {}
+    keys_by_quarter: dict[str, set[str]] = {}
+    for rd, grp in leaves.groupby("report_date", dropna=False):
+        keys = set(
+            grp[pos_col].fillna("").astype(str).str.strip()
+        ) - {""}
+        if keys:
+            keys_by_quarter[str(rd)] = keys
+    if len(keys_by_quarter) < 2:
+        return {}
+    sorted_quarters = sorted(keys_by_quarter.keys())
+    result: dict[str, float] = {}
+    for i in range(1, len(sorted_quarters)):
+        prev_keys = keys_by_quarter[sorted_quarters[i - 1]]
+        curr_keys = keys_by_quarter[sorted_quarters[i]]
+        continuing = prev_keys & curr_keys
+        rate = len(continuing) / len(prev_keys) if prev_keys else 1.0
+        result[sorted_quarters[i]] = round(rate, 4)
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Gap #4: Rate and scale outlier detection
+# ---------------------------------------------------------------------------
+
+
+def _check_rate_outliers(
+    holdings_df: pd.DataFrame | None,
+    wrapper: WrapperDefinition | None,
+    report_date: str,
+) -> int:
+    """Count holdings rows with interest_rate outside rate_sanity bounds (Gap #4)."""
+    if (
+        wrapper is None
+        or wrapper.rate_sanity is None
+        or holdings_df is None
+        or holdings_df.empty
+        or "interest_rate" not in holdings_df.columns
+        or "report_date" not in holdings_df.columns
+    ):
+        return 0
+    h = holdings_df[holdings_df["report_date"].astype(str).eq(report_date)]
+    if h.empty:
+        return 0
+    rates = pd.to_numeric(h["interest_rate"], errors="coerce").dropna()
+    if rates.empty:
+        return 0
+    outliers = rates[
+        (rates < wrapper.rate_sanity.min_pct) | (rates > wrapper.rate_sanity.max_pct)
+    ]
+    return int(len(outliers))
+
+
+def _check_cost_fv_outliers(
+    holdings_df: pd.DataFrame | None,
+    report_date: str,
+) -> int:
+    """Count holdings rows with extreme cost/FV ratio (Gap #4)."""
+    if (
+        holdings_df is None
+        or holdings_df.empty
+        or "cost" not in holdings_df.columns
+        or "fair_value" not in holdings_df.columns
+        or "report_date" not in holdings_df.columns
+    ):
+        return 0
+    h = holdings_df[holdings_df["report_date"].astype(str).eq(report_date)]
+    if h.empty:
+        return 0
+    cost = pd.to_numeric(h["cost"], errors="coerce")
+    fv = pd.to_numeric(h["fair_value"], errors="coerce")
+    valid = cost.notna() & fv.notna() & fv.ne(0) & cost.ne(0)
+    if not valid.any():
+        return 0
+    ratio = (cost[valid] / fv[valid]).abs()
+    return int(((ratio > 100) | (ratio < 0.01)).sum())
+
+
+# ---------------------------------------------------------------------------
+# Gap #3: Concept/dimension drift detection
+# ---------------------------------------------------------------------------
+
+
+def _detect_concept_drift(detail_df: pd.DataFrame) -> dict[str, str]:
+    """Detect new/dropped XBRL concepts between adjacent quarters (Gap #3).
+
+    Returns dict mapping report_date -> "yes"/"no".
+    Only populated for the second quarter onward.
+    """
+    if detail_df.empty or "concept_names" not in detail_df.columns:
+        return {}
+    concepts_by_quarter: dict[str, set[str]] = {}
+    for rd, grp in detail_df.groupby("report_date", dropna=False):
+        concepts = set(
+            grp["concept_names"].fillna("").astype(str).str.strip()
+        ) - {""}
+        if concepts:
+            concepts_by_quarter[str(rd)] = concepts
+    if len(concepts_by_quarter) < 2:
+        return {}
+    sorted_quarters = sorted(concepts_by_quarter.keys())
+    result: dict[str, str] = {}
+    for i in range(1, len(sorted_quarters)):
+        prev = concepts_by_quarter[sorted_quarters[i - 1]]
+        curr = concepts_by_quarter[sorted_quarters[i]]
+        result[sorted_quarters[i]] = "yes" if prev != curr else "no"
+    return result
+
+
 def build_wrapper_oracle_outputs(
     detail_df: pd.DataFrame,
     *,
@@ -1094,6 +1302,12 @@ def build_wrapper_oracle_outputs(
         wrapper_def is not None and len(wrapper_def.archetypes) == 0
     )
 
+    # Gap 3: Concept drift detection (cross-quarter)
+    concept_drift_by_quarter = _detect_concept_drift(df)
+
+    # Gap 8: Position continuity (cross-quarter)
+    continuity_by_quarter = _compute_position_continuity(df)
+
     rows: list[dict[str, Any]] = []
     for report_date, group in df.groupby("report_date", dropna=False):
         group_index = group.index
@@ -1136,6 +1350,37 @@ def build_wrapper_oracle_outputs(
         if cs_unclass_fv_status == "fail":
             reasons.append("unclassified_fv_rate_exceeded")
 
+        # Gap 7: Exclusion false-positive risk
+        exclusion_count, exclusion_fv = _check_exclusion_risk(group)
+        if exclusion_count > 0:
+            reasons.append("exclusion_risk_detected")
+
+        # Gap 4: Rate and scale outliers
+        rate_outlier_count = _check_rate_outliers(
+            holdings_df, wrapper_def, str(report_date)
+        )
+        if rate_outlier_count > 0:
+            reasons.append("rate_outliers_detected")
+        cost_fv_outlier_count = _check_cost_fv_outliers(
+            holdings_df, str(report_date)
+        )
+        if cost_fv_outlier_count > 0:
+            reasons.append("cost_fv_ratio_outliers")
+
+        # Gap 3: Concept drift
+        concept_drift = concept_drift_by_quarter.get(str(report_date), "")
+        if concept_drift == "yes":
+            reasons.append("concept_drift_detected")
+
+        # Gap 8: Position continuity
+        pos_cont_rate = continuity_by_quarter.get(str(report_date), "")
+        if isinstance(pos_cont_rate, float) and pos_cont_rate < _POSITION_CONTINUITY_MIN_RATE:
+            reasons.append("low_position_continuity")
+
+        # Gap 5: Unparsed remainder rate
+        wrapper_total_rows = int(source_wrapper.loc[group_index].sum())
+        unparsed_rate = unparsed_rows / wrapper_total_rows if wrapper_total_rows > 0 else 0.0
+
         cleared_group = cleared[cleared["report_date"].eq(report_date)]
         remaining_group = remaining[remaining["report_date"].eq(report_date)]
         rows.append({
@@ -1169,6 +1414,13 @@ def build_wrapper_oracle_outputs(
             "unclassified_fv_rate_status": cs_unclass_fv_status,
             "fv_reconciliation_status": fv_by_report.get(str(report_date), {}).get("status", ""),
             "fv_reconciliation_pct_diff": fv_by_report.get(str(report_date), {}).get("pct_diff", ""),
+            "exclusion_risk_count": exclusion_count,
+            "exclusion_risk_fv": round(exclusion_fv, 2) if exclusion_fv else 0,
+            "position_continuation_rate": pos_cont_rate,
+            "rate_outlier_count": rate_outlier_count,
+            "cost_fv_ratio_outlier_count": cost_fv_outlier_count,
+            "concept_drift_flag": concept_drift,
+            "unparsed_remainder_rate": round(unparsed_rate, 6) if wrapper_total_rows > 0 else "",
             "oracle_status": (
                 "not_applicable"
                 if not has_wrapper_rows
@@ -1177,9 +1429,12 @@ def build_wrapper_oracle_outputs(
             "oracle_fail_reasons": "|".join(reasons),
         })
 
+    # Sort chronologically for QoQ checks
+    if len(rows) > 1:
+        rows.sort(key=lambda r: r["report_date"])
+
     # QoQ unclassified rate jump detection (post-processing)
     if len(rows) > 1 and cs_by_report:
-        rows.sort(key=lambda r: r["report_date"])
         for i in range(1, len(rows)):
             prev_rate = rows[i - 1].get("unclassified_rate", 0.0)
             curr_rate = rows[i].get("unclassified_rate", 0.0)
@@ -1194,6 +1449,24 @@ def build_wrapper_oracle_outputs(
                 new_reason = "unclassified_rate_qoq_jump"
                 if existing_reasons:
                     rows[i]["oracle_fail_reasons"] = existing_reasons + "|" + new_reason
+                else:
+                    rows[i]["oracle_fail_reasons"] = new_reason
+                if rows[i]["oracle_status"] == "pass":
+                    rows[i]["oracle_status"] = "fail"
+
+    # QoQ unparsed remainder rate spike detection (Gap #5)
+    if len(rows) > 1:
+        for i in range(1, len(rows)):
+            prev_rate = _safe_float(rows[i - 1].get("unparsed_remainder_rate", 0))
+            curr_rate = _safe_float(rows[i].get("unparsed_remainder_rate", 0))
+            spike = curr_rate - prev_rate
+            if spike > _UNPARSED_REMAINDER_QOQ_SPIKE_THRESHOLD:
+                existing_reasons = rows[i]["oracle_fail_reasons"]
+                new_reason = "unparsed_remainder_spike"
+                if existing_reasons:
+                    rows[i]["oracle_fail_reasons"] = (
+                        existing_reasons + "|" + new_reason
+                    )
                 else:
                     rows[i]["oracle_fail_reasons"] = new_reason
                 if rows[i]["oracle_status"] == "pass":
