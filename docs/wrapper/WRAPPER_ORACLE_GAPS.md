@@ -59,8 +59,9 @@ The wrappers reason over identifier strings. But XBRL failures often come from c
 **Implemented (`_detect_concept_drift` in oracle harness):**
 
 - Collects the set of unique `concept_names` values per CIK-quarter from reconciliation detail
-- Compares adjacent quarters chronologically
-- Flags `"yes"` when the concept set changes (new or dropped concepts), `"no"` when stable
+- Compares adjacent quarters chronologically using churn rate: `|symmetric_difference| / |union|`
+- Flags `"yes"` only when churn rate >= 30% (`_CONCEPT_DRIFT_CHURN_THRESHOLD = 0.30`), `"no"` otherwise
+- Normal BDC portfolio turnover (adding/removing a few positions) changes a small fraction of concepts and does not trigger the flag; structural taxonomy changes (new axes, reorganized dimensions) affect many concepts and do trigger it
 - Only populated for the second quarter onward (first quarter has no prior reference)
 
 **New oracle summary column:** `concept_drift_flag` ("yes"/"no"/"").
@@ -72,7 +73,7 @@ The wrappers reason over identifier strings. But XBRL failures often come from c
 - Does not track dimension path shapes
 - Does not detect duplicate facts from new dimension paths
 
-**Tests added:** `test_oracle_flags_concept_drift`, `test_oracle_no_concept_drift_when_stable`.
+**Tests added:** `test_oracle_flags_concept_drift`, `test_oracle_no_concept_drift_when_stable`, `test_oracle_no_concept_drift_when_churn_below_threshold`.
 
 ---
 

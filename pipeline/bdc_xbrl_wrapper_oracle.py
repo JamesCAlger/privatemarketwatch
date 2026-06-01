@@ -89,6 +89,7 @@ _POSITION_CONTINUITY_MIN_RATE = 0.50
 
 # QoQ unparsed_remainder_rate spike threshold in pp (Gap #5)
 _UNPARSED_REMAINDER_QOQ_SPIKE_THRESHOLD = 0.10
+_CONCEPT_DRIFT_CHURN_THRESHOLD = 0.30
 
 # Keywords indicating a row has real position data, used
 # to detect false-positive exclusions (Gap #7)
@@ -1178,7 +1179,12 @@ def _check_cost_fv_outliers(
 
 
 def _detect_concept_drift(detail_df: pd.DataFrame) -> dict[str, str]:
-    """Detect new/dropped XBRL concepts between adjacent quarters (Gap #3).
+    """Detect significant XBRL concept churn between adjacent quarters (Gap #3).
+
+    Computes churn_rate = |symmetric_difference| / |union| for adjacent quarters.
+    Only flags "yes" when churn exceeds ``_CONCEPT_DRIFT_CHURN_THRESHOLD`` (30%).
+    Normal BDC portfolio turnover (adding/removing a few positions) changes a small
+    fraction of concepts; a structural taxonomy change affects many.
 
     Returns dict mapping report_date -> "yes"/"no".
     Only populated for the second quarter onward.
@@ -1199,7 +1205,14 @@ def _detect_concept_drift(detail_df: pd.DataFrame) -> dict[str, str]:
     for i in range(1, len(sorted_quarters)):
         prev = concepts_by_quarter[sorted_quarters[i - 1]]
         curr = concepts_by_quarter[sorted_quarters[i]]
-        result[sorted_quarters[i]] = "yes" if prev != curr else "no"
+        union = prev | curr
+        if not union:
+            result[sorted_quarters[i]] = "no"
+            continue
+        churn_rate = len(prev.symmetric_difference(curr)) / len(union)
+        result[sorted_quarters[i]] = (
+            "yes" if churn_rate >= _CONCEPT_DRIFT_CHURN_THRESHOLD else "no"
+        )
     return result
 
 

@@ -1290,6 +1290,34 @@ def test_oracle_no_concept_drift_when_stable():
     assert "concept_drift_detected" not in str(q2_row["oracle_fail_reasons"])
 
 
+def test_oracle_no_concept_drift_when_churn_below_threshold():
+    """Oracle should not flag when only a small fraction of concepts change.
+
+    Normal BDC portfolio turnover adds/removes a few concepts per quarter.
+    With 10 shared concepts and 1 new concept, churn = 1/11 ~ 9%, well below
+    the 30% threshold.
+    """
+    shared = [f"Concept{i}" for i in range(10)]
+    q1_rows = [{"report_date": "2024-09-30", "concept_names": c, "status": "matched"}
+               for c in shared]
+    q2_rows = [{"report_date": "2024-12-31", "concept_names": c, "status": "matched"}
+               for c in shared + ["NewConceptQ2"]]
+    detail = pd.concat([_detail(q1_rows), _detail(q2_rows)], ignore_index=True)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["concept_drift_flag"] == "no"
+    assert "concept_drift_detected" not in str(q2_row["oracle_fail_reasons"])
+
+
 # ---------------------------------------------------------------------------
 # Gap #5: Unparsed remainder spike test
 # ---------------------------------------------------------------------------
