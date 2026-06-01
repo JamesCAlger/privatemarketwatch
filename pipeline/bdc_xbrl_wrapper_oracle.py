@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import json as json_mod
 import logging
+from dataclasses import dataclass
 from pathlib import Path
 import re
 from typing import Any
@@ -22,6 +24,7 @@ from pipeline.bdc_xbrl_wrapper import (
 # Default CIK for oracle trials (Trinity Capital)
 TRINITY_CIK = "0001786108"
 from pipeline.wrapper_content_signatures import (
+    WrapperDefinition,
     load_wrapper_definition,
     validate_content_signatures,
     validate_fv_reconciliation,
@@ -154,6 +157,350 @@ QUEUE_SUMMARY_COLUMNS = [
     "oracle_remaining_blocking_rows",
     "status",
 ]
+
+# ---------------------------------------------------------------------------
+# Promotion gate
+# ---------------------------------------------------------------------------
+
+PROMOTION_GATE_COLUMNS = [
+    "cik",
+    "report_date",
+    "current_blocking_rows",
+    "baseline_blocking_rows",
+    "blocking_rows_delta",
+    "current_blocking_fv",
+    "baseline_blocking_fv",
+    "blocking_fv_delta",
+    "current_cleared_rollup_rows",
+    "baseline_cleared_rollup_rows",
+    "cleared_rollup_delta",
+    "current_unclassified_rate",
+    "current_unclassified_fv_rate",
+    "current_oracle_status",
+    "quarter_verdict",
+    "quarter_reasons",
+]
+
+# Oracle fail reasons that trigger hard promotion rejection
+_PROMOTION_REJECT_REASONS = frozenset({
+    "wrapper_blockers_remaining",
+    "wrapper_no_archetypes",
+})
+
+# Oracle fail reasons that require human review before promotion
+_PROMOTION_REVIEW_REASONS = frozenset({
+    "unclassified_rate_exceeded",
+    "unclassified_fv_rate_exceeded",
+    "unclassified_rate_qoq_jump",
+    "content_signatures_fail",
+    "unparsed_remainder_rows",
+})
+
+
+@dataclass
+class PromotionVerdict:
+    """Result of evaluating a wrapper promotion gate."""
+    status: str  # "promote", "reject", "review_required"
+    blocking_rows_delta: int
+    blocking_fv_delta: float
+    reasons: list[str]
+    improvements: list[str]
+    per_quarter: pd.DataFrame
+
+
+def _safe_float(value: Any) -> float:
+    if value is None or value == "":
+        return 0.0
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return 0.0
+
+
+def evaluate_promotion_gate(
+    current_summary: pd.DataFrame,
+    baseline_comparison: pd.DataFrame | None = None,
+) -> PromotionVerdict:
+    """Evaluate whether a wrapper change should be promoted.
+
+    Checks absolute oracle thresholds from ``current_summary`` and relative
+    improvements from ``baseline_comparison`` (before/after blocking metrics
+    produced by ``build_baseline_comparison``).
+
+    Returns a ``PromotionVerdict`` with status ``"promote"``, ``"reject"``,
+    or ``"review_required"``.
+    """
+    reject_reasons: list[str] = []
+    review_reasons: list[str] = []
+    improvements: list[str] = []
+    total_blocking_delta = 0
+    total_fv_delta = 0.0
+
+    if current_summary.empty:
+        return PromotionVerdict(
+            status="reject",
+            blocking_rows_delta=0,
+            blocking_fv_delta=0.0,
+            reasons=["no_oracle_data"],
+            improvements=[],
+            per_quarter=pd.DataFrame(columns=PROMOTION_GATE_COLUMNS),
+        )
+
+    # --- Absolute checks from current oracle summary ---
+    for _, row in current_summary.iterrows():
+        status = str(row.get("oracle_status", ""))
+        fail_reasons = str(row.get("oracle_fail_reasons", ""))
+        rd = str(row.get("report_date", ""))
+
+        if status == "fail":
+            reasons_set = set(fail_reasons.split("|")) if fail_reasons else set()
+            for reason in sorted(reasons_set & _PROMOTION_REJECT_REASONS):
+                reject_reasons.append(f"{rd}: {reason}")
+            for reason in sorted(reasons_set & _PROMOTION_REVIEW_REASONS):
+                review_reasons.append(f"{rd}: {reason}")
+            # Remaining mechanism reasons (not diagnostic)
+            for reason in sorted(reasons_set):
+                if reason.startswith("remaining_") and reason not in {
+                    "remaining_cash_or_money_market",
+                    "remaining_aggregate",
+                    "remaining_non_private_market",
+                }:
+                    review_reasons.append(f"{rd}: {reason}")
+
+    # --- Relative checks from baseline comparison ---
+    if baseline_comparison is not None and not baseline_comparison.empty:
+        bc = baseline_comparison.copy()
+        for col in [
+            "blocking_rows_delta",
+            "blocking_fair_value_delta",
+            "documented_rollup_delta",
+            "cleared_rollup_fair_value_delta",
+        ]:
+            if col in bc.columns:
+                bc[col] = pd.to_numeric(bc[col], errors="coerce").fillna(0)
+
+        if "blocking_rows_delta" in bc.columns:
+            total_blocking_delta = int(bc["blocking_rows_delta"].sum())
+        if "blocking_fair_value_delta" in bc.columns:
+            total_fv_delta = float(bc["blocking_fair_value_delta"].sum())
+
+        if total_blocking_delta > 0:
+            reject_reasons.append(
+                f"blocking_rows_increased: total_delta=+{total_blocking_delta}"
+            )
+        elif total_blocking_delta < 0:
+            improvements.append(
+                f"blocking_rows_reduced: total_delta={total_blocking_delta}"
+            )
+
+        if total_fv_delta > 0:
+            reject_reasons.append(
+                f"blocking_fv_increased: total_delta=+{total_fv_delta:.0f}"
+            )
+        elif total_fv_delta < 0:
+            improvements.append(
+                f"blocking_fv_reduced: total_delta={total_fv_delta:.0f}"
+            )
+
+        # Per-quarter regression check
+        if "blocking_rows_delta" in bc.columns:
+            regressed = bc[bc["blocking_rows_delta"] > 0]
+            for _, rq in regressed.iterrows():
+                review_reasons.append(
+                    f"{rq.get('report_date', '')}: blocking_rows_regressed "
+                    f"(delta=+{int(rq['blocking_rows_delta'])})"
+                )
+
+        # Cleared rollup improvements
+        if "documented_rollup_delta" in bc.columns:
+            total_rollup_delta = int(bc["documented_rollup_delta"].sum())
+            if total_rollup_delta > 0:
+                improvements.append(
+                    f"cleared_rollups_increased: total_delta=+{total_rollup_delta}"
+                )
+
+    # --- Build per-quarter comparison ---
+    per_quarter_rows = []
+    for _, row in current_summary.iterrows():
+        rd = str(row.get("report_date", ""))
+        cik_val = str(row.get("cik", ""))
+        bc_row: dict[str, Any] = {}
+        if baseline_comparison is not None and not baseline_comparison.empty:
+            bc_match = baseline_comparison[
+                baseline_comparison["report_date"].astype(str).eq(rd)
+            ]
+            if not bc_match.empty:
+                bc_row = bc_match.iloc[0].to_dict()
+
+        q_reasons: list[str] = []
+        q_blocking_delta = int(_safe_float(bc_row.get("blocking_rows_delta", 0)))
+        if q_blocking_delta > 0:
+            q_reasons.append("blocking_rows_regressed")
+        if str(row.get("oracle_status", "")) == "fail":
+            q_reasons.append("oracle_fail")
+
+        per_quarter_rows.append({
+            "cik": cik_val,
+            "report_date": rd,
+            "current_blocking_rows": int(
+                _safe_float(row.get("remaining_blocking_rows", 0))
+            ),
+            "baseline_blocking_rows": int(
+                _safe_float(bc_row.get("baseline_blocking_rows", 0))
+            ),
+            "blocking_rows_delta": q_blocking_delta,
+            "current_blocking_fv": float(
+                _safe_float(row.get("remaining_blocking_fair_value", 0))
+            ),
+            "baseline_blocking_fv": float(
+                _safe_float(bc_row.get("baseline_blocking_fair_value", 0))
+            ),
+            "blocking_fv_delta": float(
+                _safe_float(bc_row.get("blocking_fair_value_delta", 0))
+            ),
+            "current_cleared_rollup_rows": int(
+                _safe_float(row.get("cleared_rollup_rows", 0))
+            ),
+            "baseline_cleared_rollup_rows": int(
+                _safe_float(
+                    bc_row.get(
+                        "baseline_documented_source_rollup_exact_rows", 0
+                    )
+                )
+            ),
+            "cleared_rollup_delta": int(
+                _safe_float(bc_row.get("documented_rollup_delta", 0))
+            ),
+            "current_unclassified_rate": _safe_float(
+                row.get("unclassified_rate", "")
+            ),
+            "current_unclassified_fv_rate": _safe_float(
+                row.get("unclassified_fv_rate", "")
+            ),
+            "current_oracle_status": str(row.get("oracle_status", "")),
+            "quarter_verdict": "reject" if q_reasons else "pass",
+            "quarter_reasons": "|".join(q_reasons),
+        })
+
+    per_quarter = pd.DataFrame(per_quarter_rows, columns=PROMOTION_GATE_COLUMNS)
+
+    # --- Overall verdict ---
+    if reject_reasons:
+        status = "reject"
+    elif review_reasons:
+        status = "review_required"
+    else:
+        status = "promote"
+
+    return PromotionVerdict(
+        status=status,
+        blocking_rows_delta=total_blocking_delta,
+        blocking_fv_delta=total_fv_delta,
+        reasons=reject_reasons + review_reasons,
+        improvements=improvements,
+        per_quarter=per_quarter,
+    )
+
+
+def validate_wrapper_definition_structure(
+    wrapper: WrapperDefinition,
+) -> list[str]:
+    """Validate structural correctness of a wrapper definition.
+
+    Returns a list of issue descriptions.  Empty list means valid.
+    """
+    issues: list[str] = []
+    if not wrapper.archetypes:
+        issues.append("no_archetypes_defined")
+        return issues
+
+    # Keyword overlap detection
+    all_keywords: dict[str, str] = {}
+    for arch in wrapper.archetypes:
+        if not arch.keywords:
+            issues.append(f"archetype '{arch.name}' has no keywords")
+        for kw in arch.keywords:
+            kw_lower = kw.lower()
+            if kw_lower in all_keywords and all_keywords[kw_lower] != arch.name:
+                issues.append(
+                    f"keyword '{kw}' shared by '{all_keywords[kw_lower]}' "
+                    f"and '{arch.name}'"
+                )
+            all_keywords[kw_lower] = arch.name
+
+        # Field signature checks
+        for sig in arch.field_signatures:
+            if sig.sig_type == "numeric_range":
+                if (
+                    sig.min_val is not None
+                    and sig.max_val is not None
+                    and sig.min_val > sig.max_val
+                ):
+                    issues.append(
+                        f"archetype '{arch.name}' field '{sig.field_name}': "
+                        f"min ({sig.min_val}) > max ({sig.max_val})"
+                    )
+            if sig.constraint not in ("required", "forbidden", "optional"):
+                issues.append(
+                    f"archetype '{arch.name}' field '{sig.field_name}': "
+                    f"unknown constraint '{sig.constraint}'"
+                )
+
+    return issues
+
+
+def run_promotion_trial(
+    *,
+    cik: str = TRINITY_CIK,
+    output_dir: Path | None = None,
+    fresh_bdc_staging: bool = False,
+) -> PromotionVerdict:
+    """Run full promotion gate trial for one CIK.
+
+    Runs the oracle with ``compare_baseline=True``, validates the wrapper
+    definition structure, evaluates the promotion gate, and writes artifacts.
+    """
+    cik_norm = normalize_cik(cik)
+    out_dir = output_dir or (OUTPUT_DIR / "bdc_xbrl_wrapper_trial" / cik_norm)
+
+    _detail, summary, _cleared, _remaining, baseline = run_wrapper_oracle_trial(
+        cik=cik_norm,
+        output_dir=out_dir,
+        compare_baseline=True,
+        fresh_bdc_staging=fresh_bdc_staging,
+    )
+
+    # Structural validation
+    wrapper = load_wrapper_definition(cik_norm)
+    structural_issues = (
+        validate_wrapper_definition_structure(wrapper)
+        if wrapper is not None
+        else ["no_wrapper_definition"]
+    )
+
+    verdict = evaluate_promotion_gate(summary, baseline)
+
+    # Merge structural issues into verdict
+    for issue in structural_issues:
+        verdict.reasons.append(f"structural: {issue}")
+        if verdict.status == "promote":
+            verdict.status = "review_required"
+
+    # Write promotion artifacts
+    out_dir.mkdir(parents=True, exist_ok=True)
+    verdict.per_quarter.to_csv(out_dir / "promotion_comparison.csv", index=False)
+    verdict_dict = {
+        "status": verdict.status,
+        "blocking_rows_delta": verdict.blocking_rows_delta,
+        "blocking_fv_delta": verdict.blocking_fv_delta,
+        "reasons": verdict.reasons,
+        "improvements": verdict.improvements,
+        "structural_issues": structural_issues,
+    }
+    with open(out_dir / "promotion_verdict.json", "w", encoding="utf-8") as fh:
+        json_mod.dump(verdict_dict, fh, indent=2)
+
+    return verdict
 
 
 def _bool_col(series: pd.Series) -> pd.Series:
@@ -1101,6 +1448,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--fail-on-oracle-fail", action="store_true")
     parser.add_argument(
+        "--promotion-gate",
+        action="store_true",
+        help="Run full promotion gate: oracle trial + baseline comparison + structural validation + verdict.",
+    )
+    parser.add_argument(
         "--oracle-v2",
         action="store_true",
         help="Run comprehensive oracle v2 checks (arithmetic, structural, content, etc.).",
@@ -1132,6 +1484,36 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(report.summary_text())
         if args.fail_on_oracle_fail and report.fail_count > 0:
+            return 1
+        return 0
+
+    if args.promotion_gate:
+        ciks = (
+            supported_wrapper_ciks()
+            if args.all_supported
+            else (normalize_cik(args.cik),)
+        )
+        any_failing = False
+        for cik_val in ciks:
+            out = args.output_dir
+            if out is not None and args.all_supported:
+                out = out / cik_val
+            verdict = run_promotion_trial(
+                cik=cik_val,
+                output_dir=out,
+                fresh_bdc_staging=args.fresh_bdc_staging,
+            )
+            print(f"cik={cik_val}")
+            print(f"promotion_status={verdict.status}")
+            print(f"blocking_rows_delta={verdict.blocking_rows_delta}")
+            print(f"blocking_fv_delta={verdict.blocking_fv_delta:.0f}")
+            if verdict.reasons:
+                print(f"reasons={'; '.join(verdict.reasons)}")
+            if verdict.improvements:
+                print(f"improvements={'; '.join(verdict.improvements)}")
+            if verdict.status == "reject":
+                any_failing = True
+        if args.fail_on_oracle_fail and any_failing:
             return 1
         return 0
 

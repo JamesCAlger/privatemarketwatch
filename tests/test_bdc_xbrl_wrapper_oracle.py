@@ -3,11 +3,16 @@ from unittest import mock
 import pandas as pd
 
 from pipeline.bdc_xbrl_wrapper_oracle import (
+    BASELINE_COMPARISON_COLUMNS,
+    ORACLE_SUMMARY_COLUMNS,
+    PROMOTION_GATE_COLUMNS,
     _UNCLASSIFIED_RATE_QOQ_JUMP_THRESHOLD,
     build_residual_wrapper_queue,
     build_wrapper_oracle_outputs,
     build_wrapper_profile_for_cik,
+    evaluate_promotion_gate,
     run_wrapper_queue,
+    validate_wrapper_definition_structure,
 )
 from pipeline.source_reconciliation import DETAIL_COLUMNS
 from pipeline.wrapper_content_signatures import (
@@ -675,3 +680,294 @@ def test_oracle_fails_when_wrapper_has_no_archetypes():
 
     assert summary.iloc[0]["oracle_status"] == "fail"
     assert "wrapper_no_archetypes" in summary.iloc[0]["oracle_fail_reasons"]
+
+
+# ---------------------------------------------------------------------------
+# Promotion gate tests (Gap #6)
+# ---------------------------------------------------------------------------
+
+
+def _oracle_summary(rows):
+    """Build oracle summary DataFrame from row overrides."""
+    defaults = {
+        "cik": "0001786108",
+        "entity_name": "Trinity Capital Inc.",
+        "report_date": "2024-12-31",
+        "wrapper_source_rows": 10,
+        "wrapper_output_rows": 10,
+        "wrapper_rollup_candidates": 2,
+        "wrapper_leaf_outputs": 8,
+        "wrapper_leaf_source_rows": 8,
+        "cleared_rollup_rows": 2,
+        "cleared_rollup_fair_value": 1000000,
+        "remaining_blocking_rows": 0,
+        "remaining_blocking_fair_value": 0,
+        "remaining_wrapper_blocking_rows": 0,
+        "signature_fail_rows": 0,
+        "unclassified_prefix_rows": 0,
+        "unparsed_remainder_rows": 0,
+        "content_signature_pass_rate": 1.0,
+        "content_signature_violations": 0,
+        "unclassified_rate": 0.02,
+        "unclassified_rate_status": "pass",
+        "unclassified_fv_rate": 0.01,
+        "unclassified_fv_rate_status": "pass",
+        "fv_reconciliation_status": "pass",
+        "fv_reconciliation_pct_diff": 0.003,
+        "oracle_status": "pass",
+        "oracle_fail_reasons": "",
+    }
+    merged = []
+    for row in rows:
+        m = {**defaults, **row}
+        merged.append({col: m.get(col, "") for col in ORACLE_SUMMARY_COLUMNS})
+    return pd.DataFrame(merged)
+
+
+def _baseline_comp(rows):
+    """Build baseline comparison DataFrame from row overrides."""
+    defaults = {
+        "cik": "0001786108",
+        "report_date": "2024-12-31",
+        "current_blocking_rows": 0,
+        "baseline_blocking_rows": 5,
+        "blocking_rows_delta": -5,
+        "current_documented_source_rollup_exact_rows": 3,
+        "baseline_documented_source_rollup_exact_rows": 0,
+        "documented_rollup_delta": 3,
+        "current_blocking_fair_value": 0,
+        "baseline_blocking_fair_value": 500000,
+        "blocking_fair_value_delta": -500000,
+        "current_cleared_rollup_fair_value": 300000,
+        "baseline_cleared_rollup_fair_value": 0,
+        "cleared_rollup_fair_value_delta": 300000,
+    }
+    merged = []
+    for row in rows:
+        m = {**defaults, **row}
+        merged.append({col: m.get(col, 0) for col in BASELINE_COMPARISON_COLUMNS})
+    return pd.DataFrame(merged)
+
+
+def test_promotion_gate_promotes_when_blocking_rows_decrease():
+    """Promotion gate should promote when blocking rows decrease and oracle passes."""
+    summary = _oracle_summary([{}])
+    baseline = _baseline_comp([{
+        "blocking_rows_delta": -5,
+        "blocking_fair_value_delta": -500000,
+        "documented_rollup_delta": 3,
+    }])
+
+    verdict = evaluate_promotion_gate(summary, baseline)
+
+    assert verdict.status == "promote"
+    assert verdict.blocking_rows_delta == -5
+    assert verdict.blocking_fv_delta == -500000
+    assert any("blocking_rows_reduced" in imp for imp in verdict.improvements)
+    assert any("blocking_fv_reduced" in imp for imp in verdict.improvements)
+    assert any("cleared_rollups_increased" in imp for imp in verdict.improvements)
+    assert len(verdict.reasons) == 0
+
+
+def test_promotion_gate_rejects_when_blocking_rows_increase():
+    """Promotion gate should reject when total blocking rows increase."""
+    summary = _oracle_summary([{
+        "remaining_blocking_rows": 10,
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "wrapper_blockers_remaining",
+    }])
+    baseline = _baseline_comp([{
+        "blocking_rows_delta": 5,
+        "blocking_fair_value_delta": 0,
+    }])
+
+    verdict = evaluate_promotion_gate(summary, baseline)
+
+    assert verdict.status == "reject"
+    assert verdict.blocking_rows_delta == 5
+    assert any("blocking_rows_increased" in r for r in verdict.reasons)
+
+
+def test_promotion_gate_rejects_when_blocking_fv_increases():
+    """Promotion gate should reject when blocking FV increases."""
+    summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "wrapper_blockers_remaining",
+    }])
+    baseline = _baseline_comp([{
+        "blocking_rows_delta": 0,
+        "blocking_fair_value_delta": 100000,
+    }])
+
+    verdict = evaluate_promotion_gate(summary, baseline)
+
+    assert verdict.status == "reject"
+    assert any("blocking_fv_increased" in r for r in verdict.reasons)
+
+
+def test_promotion_gate_review_when_unclassified_rate_exceeded():
+    """Promotion gate should require review when oracle fails on coverage."""
+    summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "unclassified_rate_exceeded",
+    }])
+    baseline = _baseline_comp([{
+        "blocking_rows_delta": -3,
+        "blocking_fair_value_delta": -100000,
+    }])
+
+    verdict = evaluate_promotion_gate(summary, baseline)
+
+    assert verdict.status == "review_required"
+    assert any("unclassified_rate_exceeded" in r for r in verdict.reasons)
+    # Still has improvements from blocking reduction
+    assert any("blocking_rows_reduced" in imp for imp in verdict.improvements)
+
+
+def test_promotion_gate_review_on_per_quarter_regression():
+    """Promotion gate should flag per-quarter blocking regressions."""
+    summary = _oracle_summary([
+        {"report_date": "2024-09-30", "oracle_status": "pass"},
+        {"report_date": "2024-12-31", "oracle_status": "pass"},
+    ])
+    baseline = _baseline_comp([
+        {"report_date": "2024-09-30", "blocking_rows_delta": -10},
+        {"report_date": "2024-12-31", "blocking_rows_delta": 2},  # regression
+    ])
+
+    verdict = evaluate_promotion_gate(summary, baseline)
+
+    # Total delta is -8, so no total-level reject, but per-quarter regression
+    assert verdict.status == "review_required"
+    assert verdict.blocking_rows_delta == -8
+    assert any("blocking_rows_regressed" in r for r in verdict.reasons)
+    # Per-quarter comparison should show the regression
+    q2 = verdict.per_quarter[verdict.per_quarter["report_date"] == "2024-12-31"].iloc[0]
+    assert q2["quarter_verdict"] == "reject"
+    assert "blocking_rows_regressed" in q2["quarter_reasons"]
+
+
+def test_promotion_gate_promotes_without_baseline():
+    """Promotion gate should promote on clean oracle even without baseline."""
+    summary = _oracle_summary([{}])
+
+    verdict = evaluate_promotion_gate(summary, baseline_comparison=None)
+
+    assert verdict.status == "promote"
+    assert verdict.blocking_rows_delta == 0
+    assert verdict.blocking_fv_delta == 0.0
+    assert len(verdict.reasons) == 0
+
+
+def test_promotion_gate_rejects_on_empty_summary():
+    """Promotion gate should reject when oracle summary is empty."""
+    verdict = evaluate_promotion_gate(pd.DataFrame(), None)
+
+    assert verdict.status == "reject"
+    assert "no_oracle_data" in verdict.reasons
+
+
+def test_promotion_gate_rejects_on_wrapper_blockers():
+    """Promotion gate should hard-reject on wrapper_blockers_remaining."""
+    summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "wrapper_blockers_remaining",
+    }])
+
+    verdict = evaluate_promotion_gate(summary, baseline_comparison=None)
+
+    assert verdict.status == "reject"
+    assert any("wrapper_blockers_remaining" in r for r in verdict.reasons)
+
+
+def test_promotion_gate_per_quarter_columns():
+    """Promotion gate per_quarter should have all expected columns."""
+    summary = _oracle_summary([{}])
+    baseline = _baseline_comp([{}])
+
+    verdict = evaluate_promotion_gate(summary, baseline)
+
+    assert list(verdict.per_quarter.columns) == PROMOTION_GATE_COLUMNS
+    assert len(verdict.per_quarter) == 1
+
+
+# ---------------------------------------------------------------------------
+# Wrapper definition structural validation tests
+# ---------------------------------------------------------------------------
+
+
+def test_validate_structure_passes_clean_wrapper():
+    """Valid wrapper definition should produce no issues."""
+    wrapper = _make_wrapper()
+    issues = validate_wrapper_definition_structure(wrapper)
+    assert issues == []
+
+
+def test_validate_structure_flags_no_archetypes():
+    """Wrapper with no archetypes should be flagged."""
+    wrapper = _make_wrapper(archetypes=())
+    issues = validate_wrapper_definition_structure(wrapper)
+    assert "no_archetypes_defined" in issues
+
+
+def test_validate_structure_flags_keyword_overlap():
+    """Overlapping keywords across archetypes should be flagged."""
+    archetypes = (
+        Archetype(
+            name="debt_a",
+            description="First debt type",
+            keywords=("term loan",),
+            keyword_mode="any",
+            field_signatures=(),
+        ),
+        Archetype(
+            name="debt_b",
+            description="Second debt type",
+            keywords=("term loan", "revolver"),  # "term loan" overlaps
+            keyword_mode="any",
+            field_signatures=(),
+        ),
+    )
+    wrapper = _make_wrapper(archetypes=archetypes)
+    issues = validate_wrapper_definition_structure(wrapper)
+    assert any("term loan" in i and "debt_a" in i and "debt_b" in i for i in issues)
+
+
+def test_validate_structure_flags_invalid_numeric_range():
+    """Numeric range with min > max should be flagged."""
+    archetypes = (
+        Archetype(
+            name="bad_range",
+            description="Bad numeric range",
+            keywords=("test",),
+            keyword_mode="any",
+            field_signatures=(
+                FieldSignature(
+                    field_name="fair_value",
+                    sig_type="numeric_range",
+                    constraint="required",
+                    min_val=100.0,
+                    max_val=10.0,  # min > max
+                ),
+            ),
+        ),
+    )
+    wrapper = _make_wrapper(archetypes=archetypes)
+    issues = validate_wrapper_definition_structure(wrapper)
+    assert any("min" in i and "max" in i for i in issues)
+
+
+def test_validate_structure_flags_empty_keywords():
+    """Archetype with no keywords should be flagged."""
+    archetypes = (
+        Archetype(
+            name="no_keywords",
+            description="Missing keywords",
+            keywords=(),
+            keyword_mode="any",
+            field_signatures=(),
+        ),
+    )
+    wrapper = _make_wrapper(archetypes=archetypes)
+    issues = validate_wrapper_definition_structure(wrapper)
+    assert any("no keywords" in i for i in issues)

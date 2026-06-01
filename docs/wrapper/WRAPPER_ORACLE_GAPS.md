@@ -106,27 +106,71 @@ The wrapper schema has `wrapper_unparsed_remainder`, and the oracle checks wheth
 
 ## Gap 6: No Promotion Gate
 
-**Status: NOT YET IMPLEMENTED**
+**Status: IMPLEMENTED (2026-06-01)**
 
-The oracle produces diagnostics but has no hard lifecycle:
+The oracle now has a full promotion lifecycle:
 
 ```
-candidate wrapper -> trial run -> oracle checks -> promote or reject
+candidate wrapper -> trial run -> oracle checks + baseline comparison -> promote / reject / review_required
 ```
 
-**Required promotion contract (wrapper delta accepted only if):**
+**Implemented components:**
 
-- Reduces or explains target residuals
-- Does not increase blocking rows elsewhere
-- Does not increase unmatched FV
-- Does not worsen aggregate leakage
-- Does not worsen unclassified row/FV coverage
-- Passes content signatures and reconciliation
-- Preserves position-level semantics
+### `evaluate_promotion_gate(current_summary, baseline_comparison)`
 
-The gate should compare before/after artifacts, not just look at the final state. Otherwise a bad wrapper can appear to improve one metric by moving the problem into a less visible bucket.
+Compares absolute oracle thresholds from the current oracle summary and relative improvements from the baseline comparison (produced by `build_baseline_comparison`).
 
-Additionally, the promotion gate should validate that the wrapper definition itself is structurally valid (non-overlapping archetypes, consistent field signatures, valid FV reconciliation config).
+**Three verdicts:**
+- `"promote"` -- no regressions, oracle passes, blocking metrics improve or hold
+- `"reject"` -- blocking rows/FV increased, or hard-reject oracle fail reasons
+- `"review_required"` -- coverage regressions, per-quarter blocking regressions, or soft oracle fail reasons
+
+**Hard reject triggers** (`_PROMOTION_REJECT_REASONS`):
+- `wrapper_blockers_remaining` -- wrappers created new blockers
+- `wrapper_no_archetypes` -- structural issue
+
+**Review triggers** (`_PROMOTION_REVIEW_REASONS`):
+- `unclassified_rate_exceeded`, `unclassified_fv_rate_exceeded`
+- `unclassified_rate_qoq_jump`, `content_signatures_fail`
+- `unparsed_remainder_rows`
+
+**Relative checks (from baseline comparison):**
+- Total blocking rows delta > 0 -> reject
+- Total blocking FV delta > 0 -> reject
+- Per-quarter blocking rows regression -> review
+- Cleared rollups increase -> logged as improvement
+
+**Output:** `PromotionVerdict` dataclass with `status`, `blocking_rows_delta`, `blocking_fv_delta`, `reasons`, `improvements`, and `per_quarter` DataFrame.
+
+### `validate_wrapper_definition_structure(wrapper)`
+
+Validates structural correctness of a `WrapperDefinition`:
+- At least one archetype defined
+- Each archetype has keywords
+- No duplicate keywords across archetypes
+- Numeric range field signatures have min < max
+- Valid constraint values
+
+### `run_promotion_trial(cik, output_dir, fresh_bdc_staging)`
+
+Convenience function that orchestrates the full promotion flow:
+1. Runs `run_wrapper_oracle_trial` with `compare_baseline=True`
+2. Validates wrapper definition structure
+3. Evaluates promotion gate
+4. Writes `promotion_comparison.csv` and `promotion_verdict.json`
+
+### CLI: `--promotion-gate`
+
+```
+python -m pipeline.bdc_xbrl_wrapper_oracle --cik 0001918712 --promotion-gate
+python -m pipeline.bdc_xbrl_wrapper_oracle --all-supported --promotion-gate --fail-on-oracle-fail
+```
+
+**Tests added (14):** `test_promotion_gate_promotes_when_blocking_rows_decrease`, `test_promotion_gate_rejects_when_blocking_rows_increase`, `test_promotion_gate_rejects_when_blocking_fv_increases`, `test_promotion_gate_review_when_unclassified_rate_exceeded`, `test_promotion_gate_review_on_per_quarter_regression`, `test_promotion_gate_promotes_without_baseline`, `test_promotion_gate_rejects_on_empty_summary`, `test_promotion_gate_rejects_on_wrapper_blockers`, `test_promotion_gate_per_quarter_columns`, `test_validate_structure_passes_clean_wrapper`, `test_validate_structure_flags_no_archetypes`, `test_validate_structure_flags_keyword_overlap`, `test_validate_structure_flags_invalid_numeric_range`, `test_validate_structure_flags_empty_keywords`.
+
+**Not yet implemented:**
+- Cross-CIK regression check (does a wrapper change for CIK A increase blockers in CIK B)
+- Position-level semantics preservation (requires comparing position key sets from reconciliation detail)
 
 ---
 
