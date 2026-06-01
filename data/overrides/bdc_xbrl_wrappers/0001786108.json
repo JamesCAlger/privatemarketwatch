@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001786108",
   "entity_name": "Trinity Capital Inc.",
-  "version": 2,
+  "version": 3,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "TRINITY",
@@ -46,7 +46,21 @@
       "total investments",
       "total debt investments",
       "total equity investments"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "financial square",
+      "government institutional",
+      "u.s. treasury",
+      "us treasury",
+      "goldman sachs financial square"
     ]
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": ["issuer_name", "instrument_description", "rate_terms", "maturity_date"],
+    "alternate_delimiters": []
   },
   "archetypes": {
     "senior_secured_debt": {
@@ -61,6 +75,18 @@
         "keyword_mode": "any"
       },
       "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": 1.0,
+          "max": 30.0
+        },
+        "basis_spread": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 15.0
+        },
         "fair_value": {
           "type": "numeric_range",
           "constraint": "required",
@@ -78,6 +104,18 @@
         "keyword_mode": "any"
       },
       "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "basis_spread": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        },
         "fair_value": {
           "type": "numeric_range",
           "constraint": "optional",
@@ -96,6 +134,14 @@
         "keyword_mode": "any"
       },
       "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        },
         "fair_value": {
           "type": "numeric_range",
           "constraint": "optional",
@@ -220,8 +266,21 @@
     }
   ],
   "invariants": {
+    "fv_reconciliation": {
+      "source_field": "investments_at_fair_value",
+      "tolerance_pct": 0.10,
+      "tolerance_abs": 10000000
+    },
+    "position_count_qoq": {
+      "max_increase_pct": 2.0,
+      "max_decrease_pct": 0.5
+    },
+    "rate_sanity": {
+      "min_pct": 1.0,
+      "max_pct": 30.0
+    },
     "unclassified_rate": {
-      "max_pct": 0.1
+      "max_pct": 0.10
     }
   }
 }

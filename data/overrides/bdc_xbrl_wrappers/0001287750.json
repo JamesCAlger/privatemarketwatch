@@ -1,0 +1,244 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001287750",
+  "entity_name": "Ares Capital Corporation",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "ARES_CAPITAL",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {},
+    "aggregate_markers": [
+      "sub-total",
+      "subtotal",
+      "total investments",
+      "total debt investments",
+      "total equity investments"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "financial square",
+      "government institutional",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)first lien|second lien|senior secured|senior subordinated|subordinated|unitranche|term loan|revolving|delayed draw",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|senior preferred|partnership interest|LLC interest|equity interest|equity co-invest",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)warrant",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)collateralized loan obligation|CLO",
+        "family": "clo"
+      }
+    ]
+  },
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": ["issuer_name", "instrument_description"],
+    "alternate_delimiters": [" and ", " & "]
+  },
+  "archetypes": {
+    "senior_secured_debt": {
+      "description": "First lien, second lien, unitranche, and other senior secured term loans and revolvers",
+      "detection_rules": {
+        "keywords": [
+          "First lien senior secured loan",
+          "First lien senior secured delayed draw term loan",
+          "First lien senior secured revolving loan",
+          "Second lien senior secured loan",
+          "Senior secured loan",
+          "Senior subordinated loan",
+          "Subordinated loan",
+          "Unitranche first lien loan",
+          "Delayed draw term loan",
+          "Revolving credit facility",
+          "Term loan"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 30.0
+        },
+        "basis_spread": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 15.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Common stock, preferred shares, senior preferred, partnership interests, LLC interests, and fund vehicles",
+      "detection_rules": {
+        "keywords": [
+          "Common stock",
+          "Common equity",
+          "Common units",
+          "Preferred stock",
+          "Preferred equity",
+          "Preferred shares",
+          "Preferred units",
+          "Senior preferred",
+          "Partnership interest",
+          "LLC interest",
+          "Equity interest",
+          "Equity co-invest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 30.0
+        },
+        "basis_spread": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "clo": {
+      "description": "Collateralized loan obligation tranches and structured credit",
+      "detection_rules": {
+        "keywords": [
+          "Collateralized loan obligation",
+          "CLO"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 30.0
+        },
+        "basis_spread": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 15.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "basis_spread": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "ares_multi_entity_coborrower",
+      "description": "Multi-entity co-borrower identifiers using ', and ' conjunction (99% of rows)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": ", and ",
+      "disposition": "expected"
+    },
+    {
+      "id": "ares_instrument_suffix_missing",
+      "description": "34 blocking rows where entity name has no instrument type suffix and matches no archetype keyword",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^[A-Z][A-Za-z0-9 .,'&()-]+$",
+      "disposition": "warn"
+    },
+    {
+      "id": "ares_ivy_hill",
+      "description": "Ivy Hill Asset Management fund vehicle with sparse identifier - not a standard position",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)Ivy Hill Asset Management",
+      "disposition": "expected"
+    },
+    {
+      "id": "ares_numbered_tranches",
+      "description": "Numbered multi-tranche positions (distinct positions, not aggregates)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)loan [0-9]+$",
+      "disposition": "expected"
+    },
+    {
+      "id": "ares_senior_preferred",
+      "description": "Equity variant using non-standard 'Senior preferred stock' terminology (8,394 rows / 22.9% of holdings)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)senior preferred stock",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "fv_reconciliation": {
+      "source_field": "investments_at_fair_value",
+      "tolerance_pct": 0.05,
+      "tolerance_abs": 5000000
+    },
+    "position_count_qoq": {
+      "max_increase_pct": 2.0,
+      "max_decrease_pct": 0.5
+    },
+    "rate_sanity": {
+      "min_pct": 1.0,
+      "max_pct": 30.0
+    },
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}
