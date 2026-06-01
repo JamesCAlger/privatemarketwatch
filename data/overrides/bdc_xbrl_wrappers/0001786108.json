@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001786108",
   "entity_name": "Trinity Capital Inc.",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "TRINITY",
@@ -52,7 +52,12 @@
     "senior_secured_debt": {
       "description": "Term loans, revolvers, and other senior secured debt",
       "detection_rules": {
-        "keywords": ["Secured Loan", "Term Loan", "Revolving Credit", "Equipment Financing"],
+        "keywords": [
+          "Secured Loan",
+          "Term Loan",
+          "Revolving Credit",
+          "Equipment Financing"
+        ],
         "keyword_mode": "any"
       },
       "field_signatures": {
@@ -63,6 +68,160 @@
           "max": 100000000000
         }
       }
+    },
+    "warrant": {
+      "description": "Warrants on equity securities",
+      "detection_rules": {
+        "keywords": [
+          "Warrant"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity investments including common/preferred stock, LLC interests, and fund interests",
+      "detection_rules": {
+        "keywords": [
+          "Equity Investment",
+          "Equity Investments"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "TRINITY_CONTROL_SUBTOTAL",
+      "description": "Control Investments entity-level subtotal rows that duplicate the sum of underlying Portfolio Company positions",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Control Investments( .|$)",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_AFFILIATE_SUBTOTAL",
+      "description": "Affiliate Investments entity-level subtotal rows that duplicate the sum of underlying Portfolio Company positions",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Affiliate Investments",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_REFERENCE_RATE",
+      "description": "Standalone reference rate rows (SOFR, Prime, CORRA, Bank of England Base Rate) with no fair value - metadata only",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^(SOFR|Prime Rate|CORRA|Bank of England)",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_FORMATION_TX",
+      "description": "Formation Transactions row with zero fair value - not a real position",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Formation Transactions$",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_FX_FORWARDS",
+      "description": "Foreign Currency Forward Contracts counterparty metadata row",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "^Foreign Currency Forward Contracts",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_CONTROL_AFFILIATE_SUBTOTAL",
+      "description": "Combined Control and Affiliate Investments total row - top-level subtotal across both categories",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "^Control and Affiliate Investments$",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_SECTOR_SUBTOTAL",
+      "description": "Sector-level subtotal rows (e.g., \"Portfolio Company Debt Securities- United States Consumer Products & Services\" without position detail)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Portfolio Company (Debt Securities|Warrant Investments|Equity Investments)-\\s+(United States|Canada|Europe|United Sates)(?:\\s+[A-Z][A-Za-z &(),/\"]+)?$",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_ISSUER_TOTAL",
+      "description": "Issuer-level total rows (e.g., \"Total Bestow, Inc.\") appearing in early quarters",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^(Total |Sub-total|Portfolio Company (Debt Securities|Warrant Investments|Equity Investments).*Total )",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_GRAND_TOTAL",
+      "description": "Grand total rows: Investment in Securities, Portfolio Investments and Cash, Portfolio Company Debt Securities (bare)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Portfolio Company (Investment in Securities|Portfolio Investments|Cash|Debt Securities$)",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_CASH",
+      "description": "Cash and cash equivalents rows (Goldman Sachs fund, other cash accounts, restricted cash)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Cash",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_LIBOR",
+      "description": "LIBOR reference rate row in early quarters",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^LIBOR$",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_DEBT_ISSUER_ROLLUP",
+      "description": "Issuer-level or sector-level rollup rows for debt that lack position-level detail (no Type of Investment, Secured Loan, Equipment Financing, etc.). These aggregate underlying position rows.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Portfolio Company Debt Securities",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_TRUNCATED_DEBT",
+      "description": "Truncated debt identifier row missing Portfolio Company prefix",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^United States .+ Technology",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_TRUNCATED_PREFIX",
+      "description": "Rows with truncated or missing Portfolio Company prefix (e.g., ortfolio, Investments-)",
+      "first_seen_quarter": "2023-06-30",
+      "detection_pattern": "^(ortfolio Company|Investments-)",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_XBRL_METADATA",
+      "description": "XBRL metadata identifiers (InvestmentOwnedAtCost) that are not positions",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "^InvestmentOwned",
+      "disposition": "expected"
+    },
+    {
+      "id": "TRINITY_INTEREST_RATE_TEXT",
+      "description": "Standalone interest rate description rows (Variable interest rate...)",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^Variable interest rate",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.1
     }
   }
 }

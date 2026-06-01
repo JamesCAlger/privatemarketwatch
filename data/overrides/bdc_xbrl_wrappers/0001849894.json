@@ -7,5 +7,88 @@
   "staging": {
     "strategy": "prefix_strip",
     "hierarchy_prefix_re": "(?i)^Investments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|control(?:led)?(?:\\s*/\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity|debt|warrants?)\\s+(?:INDUSTRY_LABELS)\\s+"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "All debt instruments: first/second lien, subordinated, senior secured",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Debt",
+          "Second Lien Debt",
+          "Subordinated Debt",
+          "Senior Secured Debt",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Credit",
+          "Revolver",
+          "Unitranche",
+          "First Lien",
+          "Second Lien",
+          "Corporate Bond",
+          "Senior Note"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: common/preferred equity, stock, units, interests",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Preferred Equity",
+          "Common Stock",
+          "Preferred Stock",
+          "Common Units",
+          "Preferred Units",
+          "Partnership Interest",
+          "LLC Interest",
+          "Membership Interest",
+          "Equity Interest",
+          "Class A",
+          "Class B",
+          "Ordinary Shares"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
   }
 }

@@ -21,5 +21,90 @@
       "total debt investments",
       "total equity investments"
     ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "All debt instruments including senior secured, unitranche, and unsecured",
+      "detection_rules": {
+        "keywords": [
+          "1st Lien/Senior Secured Debt",
+          "2nd Lien/Senior Secured Debt",
+          "1st Lien/Last-Out Unitranche",
+          "Unsecured Debt",
+          "Senior Secured Debt",
+          "Debt Investments",
+          "First Lien",
+          "Second Lien",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Credit",
+          "Revolver",
+          "Unitranche",
+          "Corporate Bond",
+          "Senior Note",
+          "Subordinated"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: common/preferred stock, units, partnership interests",
+      "detection_rules": {
+        "keywords": [
+          "Equity Investments",
+          "Common Stock",
+          "Preferred Stock",
+          "Common Units",
+          "Preferred Units",
+          "Partnership Interest",
+          "LLC Interest",
+          "Membership Interest",
+          "Equity Interest",
+          "Class A",
+          "Class B",
+          "Ordinary Shares"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
   }
 }

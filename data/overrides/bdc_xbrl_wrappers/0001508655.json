@@ -25,5 +25,122 @@
       "marker_re": "(?:first[-\\s]lien|second[-\\s]lien|unitranche|term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|type\\s+(?:term\\s+loan|delayed\\s+draw\\s+term\\s+loan|revolving\\s+credit\\s+facility)|class\\s+[a-z0-9-]+|preferred\\s+units|partnership\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|structured\\s+product|warrants?)",
       "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b"
     }
+  },
+  "archetypes": {
+    "debt": {
+      "description": "All debt instruments: first/second lien loans, delayed draws, revolvers, unitranche",
+      "detection_rules": {
+        "keywords": [
+          "First-lien loan",
+          "First-lien delayed draw",
+          "First-lien revolving",
+          "First-lien holdco",
+          "First-lien note",
+          "Second-lien loan",
+          "Second-lien delayed draw",
+          "Second-lien note",
+          "First Lien",
+          "Second Lien",
+          "Unitranche",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Credit Facility",
+          "Revolver",
+          "Secured Loan",
+          "Senior Secured",
+          "Subordinated Note",
+          "Promissory Note",
+          "Convertible Promissory Note"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: common/preferred stock, units, partnership interests",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Preferred Stock",
+          "Common Shares",
+          "Preferred Shares",
+          "Common Units",
+          "Preferred Units",
+          "Common Equity",
+          "Preferred Equity",
+          "Partnership Interest",
+          "Partnership Units",
+          "LLC Interest",
+          "Membership Interest",
+          "Equity Interest",
+          "Earnout Interest",
+          "Trust Certificate",
+          "Class A",
+          "Class B",
+          "Ordinary Shares",
+          "Convertible Preference"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "structured_credit": {
+      "description": "Structured credit and asset-backed securities",
+      "detection_rules": {
+        "keywords": [
+          "Structured Product",
+          "Structured Credit",
+          "Collateralized Loan Obligation",
+          "CLO",
+          "Asset-backed"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
   }
 }

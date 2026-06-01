@@ -10,5 +10,92 @@
     "hierarchy_instrument_re": "Investment\\s+Type\\s+(.+?)(?:\\s+Interest\\s+Term\\b|\\s+Interest\\s+Rate\\b|\\s+Maturity\\s*/\\s*Dissolution\\s+Date\\b|\\s+Maturity\\b|$)",
     "hierarchy_trailing_re": "Maturity\\s*/\\s*Dissolution\\s+Date\\s+\\d{1,2}/\\d{4}\\s+(.+)$",
     "hierarchy_condition_extra": "starts_with(lower(_clean), 'investments ') AND contains(lower(_clean), ' investment type ') AND regexp_matches(lower(_clean), '\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|delayed\\s+draw|revolver|revolving|senior\\s+secured|subordinated|notes?|bonds?|common\\s+(stock|equity)|preferred|warrants?|equity)\\b') AND regexp_matches(lower(_clean), '\\b(interest\\s+(term|rate)|reference\\s+rate|sofr|libor|euribor|maturity\\s*/\\s*dissolution|maturity|due)\\b')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "All debt instruments: first/second lien term loans, unitranche, delayed draws, revolvers, notes",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Term Loan",
+          "First Lien Delayed Draw",
+          "Second Lien Term Loan",
+          "Senior Secured First Lien",
+          "Senior Secured Second Lien",
+          "Unitranche First Lien",
+          "Unitranche",
+          "Revolving Credit Facility",
+          "Revolver",
+          "Term Loan",
+          "Delayed Draw",
+          "Senior Secured Loan",
+          "Subordinated",
+          "Corporate Bond",
+          "Senior Note"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: common/preferred stock, units, partnership interests",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Equity",
+          "Preferred Stock",
+          "Preferred Equity",
+          "Common Units",
+          "Preferred Units",
+          "Partnership Interest",
+          "LLC Interest",
+          "Membership Interest",
+          "Equity Interest",
+          "Equity Co-invest",
+          "Class A",
+          "Class B",
+          "Ordinary Shares",
+          "Limited Partner"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
   }
 }

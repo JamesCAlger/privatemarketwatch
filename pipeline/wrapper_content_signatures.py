@@ -695,9 +695,28 @@ def run_qoq_drift(
 
 
 def _load_holdings_for_cik(cik: str) -> pd.DataFrame:
-    """Load BDC holdings for one CIK from the unified or BDC holdings file."""
+    """Load BDC holdings for one CIK from the BDC or unified holdings file.
+
+    Prefers raw BDC holdings because unified holdings may have staging
+    transformations (e.g. prefix_strip) that remove hierarchy labels
+    needed for archetype classification.
+    """
     cik_norm = normalize_cik(cik)
-    # Try unified first
+    numeric_cols = ["fair_value", "cost", "interest_rate", "basis_spread", "shares_held", "principal_amount"]
+
+    # Prefer raw BDC holdings -- preserves full identifiers for classification
+    if BDC_HOLDINGS_FILE.exists():
+        df = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
+        if "cik" in df.columns:
+            df["cik"] = df["cik"].map(normalize_cik)
+            result = df[df["cik"].eq(cik_norm)].copy()
+            if not result.empty:
+                for col in numeric_cols:
+                    if col in result.columns:
+                        result[col] = pd.to_numeric(result[col], errors="coerce")
+                return result
+
+    # Fall back to unified holdings
     unified_path = OUTPUT_DIR / "private_markets_holdings.csv"
     if unified_path.exists():
         df = pd.read_csv(unified_path, dtype=str)
@@ -708,22 +727,10 @@ def _load_holdings_for_cik(cik: str) -> pd.DataFrame:
                 & df["source"].astype(str).str.lower().eq("bdc")
             ].copy()
             if not result.empty:
-                # Convert numeric columns
-                for col in ["fair_value", "cost", "interest_rate", "basis_spread", "shares_held", "principal_amount"]:
+                for col in numeric_cols:
                     if col in result.columns:
                         result[col] = pd.to_numeric(result[col], errors="coerce")
                 return result
-
-    # Fall back to BDC holdings
-    if BDC_HOLDINGS_FILE.exists():
-        df = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
-        if "cik" in df.columns:
-            df["cik"] = df["cik"].map(normalize_cik)
-            result = df[df["cik"].eq(cik_norm)].copy()
-            for col in ["fair_value", "cost", "interest_rate", "basis_spread", "shares_held", "principal_amount"]:
-                if col in result.columns:
-                    result[col] = pd.to_numeric(result[col], errors="coerce")
-            return result
 
     return pd.DataFrame()
 

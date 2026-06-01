@@ -104,5 +104,96 @@
         "instrument_description": "Healthcare Services - First Lien Term Loan (3M USD TERM SOFR+6.25%), 10.42% Cash, 12/31/2028"
       }
     ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "All debt instruments: first/second lien term loans, delayed draws, revolvers, notes, and subordinated debt",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Term Loan",
+          "First Lien - Last Out Term Loan",
+          "Second Lien Term Loan",
+          "Delayed Draw Term Loan",
+          "Revolving Credit Facility",
+          "Senior Secured Loan",
+          "Senior Subordinated Loan",
+          "Subordinated Loan",
+          "Unitranche",
+          "Term Loan",
+          "Revolver",
+          "Senior Secured Note",
+          "Subordinated Note",
+          "Corporate Bond"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: common/preferred stock, units, partnership interests, LLC interests",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Preferred Stock",
+          "Common Units",
+          "Preferred Units",
+          "Common Equity",
+          "Preferred Equity",
+          "Partnership Interest",
+          "LLC Interest",
+          "LLC Membership Interest",
+          "Membership Interest",
+          "Equity Interest",
+          "Equity Co-invest",
+          "Class A Units",
+          "Class B Units",
+          "Class A Common",
+          "Class B Common",
+          "Series A Preferred",
+          "Series B Preferred",
+          "Series C Preferred",
+          "Ordinary Shares"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
   }
 }
