@@ -3,61 +3,24 @@
 Wrappers classify raw filing identifiers into deterministic signatures without
 mutating published holdings rows.  They are diagnostics and reconciliation
 helpers; global parser/staging defects should still be fixed globally.
+
+Wrapper specs are loaded from v3 JSON definitions in
+data/overrides/bdc_xbrl_wrappers/.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import json
+import logging
 import re
 import unicodedata
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
-TRINITY_CIK = "0001786108"
-SARATOGA_CIK = "0001377936"
-GOLDMAN_PRIVATE_CREDIT_CIK = "0001920145"
-GOLDMAN_BDC_CIK = "0001572694"
-FIDELITY_PRIVATE_CREDIT_CIK = "0001920453"
-SIXTH_STREET_SPECIALTY_CIK = "0001508655"
-SIXTH_STREET_LENDING_PARTNERS_CIK = "0001925309"
-ARES_STRATEGIC_INCOME_CIK = "0001918712"
-TRINITY_WRAPPER_VERSION = "1"
-TRINITY_DEBT_PREFIX = "Portfolio Company Debt Securities"
-TRINITY_PREFIX_RULES = {
-    "Portfolio Company Debt Securities": "debt",
-    "Portfolio Company Warrant Investments": "warrant",
-    "Portfolio Company Equity Investments": "equity",
-}
-TRINITY_LEAF_MARKERS_BY_FAMILY = {
-    "debt": (
-        "type of investment",
-        "investment date",
-        "maturity date",
-        "maturitydate",
-        "interest rate",
-        "interestrate",
-        "variable interest rate",
-        "fixed interest rate",
-        "pik interest rate",
-    ),
-    "warrant": (
-        "type of investment",
-        "investment date",
-        "expiration date",
-        "expirationdate",
-        "maturity date",
-        "maturitydate",
-    ),
-    "equity": (
-        "type of investment",
-        "investment date",
-        "expiration date",
-        "expirationdate",
-        "maturity date",
-        "maturitydate",
-    ),
-}
+logger = logging.getLogger(__name__)
 
 WRAPPER_COLUMNS = [
     "wrapper_version",
@@ -187,26 +150,6 @@ _RATE_VALUE_RE = re.compile(
     r"\bsofr\b|\blibor\b|\beuribor\b)\s+(.*)$",
     re.IGNORECASE | re.DOTALL,
 )
-_SARATOGA_AFFILIATION_PREFIX_RE = re.compile(
-    r"^(?:Affiliate investments|Affiliated investments|Control investments|"
-    r"Controlled investments|Non-Control/Non-Affiliate investments|"
-    r"Non-control/Non-affiliate investments|"
-    r"Non-Controlled/Non-Affiliated investments|"
-    r"Non-controlled/Non-affiliated investments)\s*-\s*",
-)
-_SARATOGA_PCT_ONLY_RE = re.compile(r"^\d[\d.]*%\s+-\s+[^-]+\s+-\s+[^-]+\s+-\s+.+")
-_SARATOGA_BARE_CATEGORY_RE = re.compile(
-    r"^[A-Za-z][A-Za-z0-9&/()., ]+(?:\s+-\s+"
-    r"(?:Affiliate|Affiliated|Control|Controlled|Non-control/Non-affiliate|"
-    r"Non-Control/Non-Affiliate)\s+investments)?$",
-    re.IGNORECASE,
-)
-_SARATOGA_TOTAL_PCT_RE = re.compile(r"^total\s+investments\s+-\s+\d[\d.]*%$", re.IGNORECASE)
-_SARATOGA_SUBTOTAL_RE = re.compile(
-    r"^sub\s+total\s+(?:affiliate|affiliated|control|controlled|"
-    r"non-control/non-affiliate|non-controlled/non-affiliated)\s+investments$",
-    re.IGNORECASE,
-)
 _DASH_TRANSLATION = str.maketrans({
     "\u2010": "-",
     "\u2011": "-",
@@ -216,29 +159,15 @@ _DASH_TRANSLATION = str.maketrans({
     "\u2212": "-",
 })
 
-_SIXTH_STREET_PREFIX_RULES = {
-    "Debt Investments": "debt",
-    "Equity and Other Investments": "equity",
-    "Equity Investments": "equity",
-}
-_GOLDMAN_PREFIX_RULES = {
-    "Investment Debt Investments": "debt",
-    "IInvestment Debt Investments": "debt",
-    "Investment Debt Inve": "debt",
-    "Investment Debt Investment": "debt",
-    "Investment 1st Lien/Senior Secured Debt": "debt",
-    "Investment 1st Lien/Last-Out Unitranche": "debt",
-    "Investment 2nd Lien/Senior Secured Debt": "debt",
-    "Investment Equity Investments": "equity",
-}
+
 def normalize_wrapper_identifier(value: Any) -> str:
     """Normalize filing identifier text for wrapper diagnostics only."""
     text = "" if value is None else str(value).strip()
     text = unicodedata.normalize("NFKC", text)
     text = text.replace("\u00a0", " ")
-    text = text.replace("Â", "")
-    text = text.replace("â€“", "-").replace("â€”", "-")
-    text = text.replace("ï»¿", "")
+    text = text.replace("\u00c2", "")
+    text = text.replace("\u00e2\u0080\u0093", "-").replace("\u00e2\u0080\u0094", "-")
+    text = text.replace("\u00ef\u00bb\u00bf", "")
     text = re.sub(r"[\u200b-\u200d\ufeff]", "", text)
     text = text.translate(_DASH_TRANSLATION)
     text = re.sub(r"\s+-\s+", " - ", text)
@@ -277,6 +206,9 @@ class WrapperSpec:
         "us treasury",
     )
     category_marker_re: re.Pattern[str] | None = field(default=None)
+    fallback_family_patterns: tuple[tuple[re.Pattern[str], str], ...] = ()
+    canonical_strip_re: re.Pattern[str] | None = None
+    no_prefix_is_aggregate: bool = False
 
     def normalized_cik(self) -> str:
         return normalize_cik(self.cik)
@@ -337,14 +269,10 @@ def _family_for_identifier(spec: WrapperSpec, identifier: str) -> tuple[str, str
     for prefix, family in spec.prefix_rules.items():
         if identifier.startswith(prefix):
             return prefix, family
-    if spec.normalized_cik() == SARATOGA_CIK and _SARATOGA_PCT_ONLY_RE.match(identifier):
-        return "", "mixed"
-    if spec.normalized_cik() == SARATOGA_CIK and (
-        _SARATOGA_BARE_CATEGORY_RE.match(identifier)
-        or _SARATOGA_TOTAL_PCT_RE.match(identifier)
-        or _SARATOGA_SUBTOTAL_RE.match(identifier)
-    ):
-        return "", "mixed"
+    # Try fallback patterns (replaces Saratoga-specific hardcoded checks)
+    for pattern, family in spec.fallback_family_patterns:
+        if pattern.match(identifier):
+            return "", family
     return "", ""
 
 
@@ -381,7 +309,7 @@ def _rollup_disposition(
         return f"{family}_total_rollup", _rule_id(spec, family, "TOTAL_ROLLUP")
     if any(marker in lowered for marker in spec.aggregate_markers):
         return "aggregate", _rule_id(spec, family, "AGGREGATE")
-    if spec.normalized_cik() == SARATOGA_CIK and not prefix_text:
+    if spec.no_prefix_is_aggregate and not prefix_text:
         return "aggregate", _rule_id(spec, family, "AGGREGATE")
     if spec.entity_signals_re.search(suffix_text):
         return f"{family}_issuer_rollup", _rule_id(spec, family, "ISSUER_ROLLUP")
@@ -408,142 +336,107 @@ def _extract_rate_key(identifier: str, family: str) -> str:
 
 
 def _canonical_identifier_for_keys(spec: WrapperSpec, identifier: str) -> str:
-    if spec.normalized_cik() == SARATOGA_CIK:
-        return _SARATOGA_AFFILIATION_PREFIX_RE.sub("", identifier).strip()
+    if spec.canonical_strip_re is not None:
+        return spec.canonical_strip_re.sub("", identifier).strip()
     return identifier
 
 
-def _make_specs() -> dict[str, WrapperSpec]:
-    specs = [
-        WrapperSpec(
-            cik=TRINITY_CIK,
-            rule_prefix="TRINITY",
-            version=TRINITY_WRAPPER_VERSION,
-            prefix_rules=TRINITY_PREFIX_RULES,
-            leaf_markers_by_family=TRINITY_LEAF_MARKERS_BY_FAMILY,
-            aggregate_markers=(
-                "sub-total",
-                "subtotal",
-                "total investments",
-                "total debt investments",
-                "total equity investments",
-            ),
-        ),
-        WrapperSpec(
-            cik=SARATOGA_CIK,
-            rule_prefix="SARATOGA",
-            version="1",
-            prefix_rules={
-                "Affiliate investments": "mixed",
-                "Affiliated investments": "mixed",
-                "Control investments": "mixed",
-                "Controlled investments": "mixed",
-                "Non-Control/Non-Affiliate investments": "mixed",
-                "Non-control/Non-affiliate investments": "mixed",
-                "Non-Controlled/Non-Affiliated investments": "mixed",
-                "Non-controlled/Non-affiliated investments": "mixed",
-            },
-            leaf_markers_by_family=DEFAULT_LEAF_MARKERS_BY_FAMILY,
-            aggregate_markers=(
-                "total investments",
-                "total affiliate",
-                "total control",
-                "total non-control",
-                "investment fund",
-                "structured finance securities",
-            ),
-            category_marker_re=re.compile(r"\d[\d.]*%\s*-\s*[^-]+$", re.IGNORECASE),
-        ),
-        WrapperSpec(
-            cik=GOLDMAN_PRIVATE_CREDIT_CIK,
-            rule_prefix="GS_PRIVATE_CREDIT",
-            version="1",
-            prefix_rules=_GOLDMAN_PREFIX_RULES,
-            leaf_markers_by_family=DEFAULT_LEAF_MARKERS_BY_FAMILY,
-            aggregate_markers=(
-                "total investments",
-                "total debt investments",
-                "total equity investments",
-            ),
-        ),
-        WrapperSpec(
-            cik=GOLDMAN_BDC_CIK,
-            rule_prefix="GS_BDC",
-            version="1",
-            prefix_rules=_GOLDMAN_PREFIX_RULES,
-            leaf_markers_by_family=DEFAULT_LEAF_MARKERS_BY_FAMILY,
-            aggregate_markers=(
-                "total investments",
-                "total debt investments",
-                "total equity investments",
-            ),
-        ),
-        WrapperSpec(
-            cik=FIDELITY_PRIVATE_CREDIT_CIK,
-            rule_prefix="FIDELITY_PRIVATE_CREDIT",
-            version="1",
-            prefix_rules={
-                "Investments Investments": "debt",
-            },
-            leaf_markers_by_family=DEFAULT_LEAF_MARKERS_BY_FAMILY,
-            aggregate_markers=(
-                "total investments",
-                "total debt investments",
-                "total equity investments",
-                "investment portfolio",
-                "total investment portfolio",
-                "non-controlled / non-affiliate first lien debt",
-            ),
-            non_private_markers=(
-                "cash",
-                "money market",
-                "financial square",
-                "government institutional",
-                "u.s. treasury",
-                "us treasury",
-                "mutual fund",
-                "floating rate central fund",
-                "high income central fund",
-            ),
-        ),
-        WrapperSpec(
-            cik=SIXTH_STREET_SPECIALTY_CIK,
-            rule_prefix="SIXTH_STREET_SPECIALTY",
-            version="1",
-            prefix_rules=_SIXTH_STREET_PREFIX_RULES,
-            leaf_markers_by_family=DEFAULT_LEAF_MARKERS_BY_FAMILY,
-            aggregate_markers=(
-                "total investments",
-                "total debt investments",
-                "total equity investments",
-                "structured credit",
-            ),
-        ),
-        WrapperSpec(
-            cik=SIXTH_STREET_LENDING_PARTNERS_CIK,
-            rule_prefix="SIXTH_STREET_LENDING_PARTNERS",
-            version="1",
-            prefix_rules=_SIXTH_STREET_PREFIX_RULES,
-            leaf_markers_by_family=DEFAULT_LEAF_MARKERS_BY_FAMILY,
-            aggregate_markers=(
-                "total investments",
-                "total debt investments",
-                "total equity investments",
-                "structured credit",
-            ),
-        ),
-        WrapperSpec(
-            cik=ARES_STRATEGIC_INCOME_CIK,
-            rule_prefix="ARES_STRATEGIC_INCOME",
-            version="1",
-            prefix_rules={},
-            leaf_markers_by_family=DEFAULT_LEAF_MARKERS_BY_FAMILY,
-        ),
-    ]
-    return {spec.normalized_cik(): spec for spec in specs}
+# ---------------------------------------------------------------------------
+# JSON-based spec loader (replaces hardcoded _make_specs)
+# ---------------------------------------------------------------------------
+
+_WRAPPER_DEFINITIONS_DIR = Path(__file__).resolve().parent.parent / "data" / "overrides" / "bdc_xbrl_wrappers"
 
 
-WRAPPER_SPECS = _make_specs()
+def _load_specs_from_json() -> dict[str, WrapperSpec]:
+    """Load WrapperSpec objects from v3 JSON definitions with dispatch sections."""
+    specs: dict[str, WrapperSpec] = {}
+    if not _WRAPPER_DEFINITIONS_DIR.exists():
+        return specs
+    for path in sorted(_WRAPPER_DEFINITIONS_DIR.glob("*.json")):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                raw = json.load(fh)
+        except (json.JSONDecodeError, OSError) as exc:
+            logger.warning("Failed to load wrapper JSON %s: %s", path.name, exc)
+            continue
+        schema_version = raw.get("schema_version", "")
+        if schema_version != "bdc-xbrl-wrapper.v3":
+            continue
+        dispatch = raw.get("dispatch")
+        if dispatch is None:
+            continue
+        cik = raw["cik"]
+        cik_norm = normalize_cik(cik)
+
+        # Build prefix_rules
+        prefix_rules = dict(dispatch.get("prefix_rules") or {})
+
+        # Build leaf_markers_by_family
+        raw_markers = dispatch.get("leaf_markers_by_family")
+        if raw_markers:
+            leaf_markers = {k: tuple(v) for k, v in raw_markers.items()}
+        else:
+            leaf_markers = dict(DEFAULT_LEAF_MARKERS_BY_FAMILY)
+
+        # Build aggregate_markers
+        agg = dispatch.get("aggregate_markers")
+        aggregate_markers = tuple(agg) if agg else (
+            "sub-total", "subtotal", "total investments",
+            "total debt investments", "total equity investments",
+            "portfolio investments",
+        )
+
+        # Build non_private_markers
+        npm = dispatch.get("non_private_markers")
+        non_private_markers = tuple(npm) if npm else (
+            "cash", "money market", "financial square",
+            "government institutional", "u.s. treasury", "us treasury",
+        )
+
+        # Build entity_signals_re
+        entity_re_str = dispatch.get("entity_signals_re")
+        entity_signals_re = re.compile(entity_re_str, re.IGNORECASE) if entity_re_str else DEFAULT_ENTITY_SIGNALS_RE
+
+        # Build category_marker_re
+        cat_re_str = dispatch.get("category_marker_re")
+        category_marker_re = re.compile(cat_re_str, re.IGNORECASE) if cat_re_str else None
+
+        # Build fallback_family_patterns
+        fallback_patterns: list[tuple[re.Pattern[str], str]] = []
+        for entry in dispatch.get("fallback_family_patterns") or []:
+            try:
+                pat = re.compile(entry["regex"], re.IGNORECASE)
+                fallback_patterns.append((pat, entry["family"]))
+            except re.error as exc:
+                logger.warning("Bad fallback regex in %s: %s", path.name, exc)
+
+        # Build canonical_strip_re
+        canon_str = dispatch.get("canonical_strip_re")
+        canonical_strip_re = re.compile(canon_str) if canon_str else None
+
+        # no_prefix_is_aggregate flag
+        no_prefix_is_aggregate = bool(dispatch.get("no_prefix_is_aggregate", False))
+
+        spec = WrapperSpec(
+            cik=cik,
+            rule_prefix=dispatch["rule_prefix"],
+            version=str(raw.get("version", 1)),
+            prefix_rules=prefix_rules,
+            leaf_markers_by_family=leaf_markers,
+            entity_signals_re=entity_signals_re,
+            aggregate_markers=aggregate_markers,
+            non_private_markers=non_private_markers,
+            category_marker_re=category_marker_re,
+            fallback_family_patterns=tuple(fallback_patterns),
+            canonical_strip_re=canonical_strip_re,
+            no_prefix_is_aggregate=no_prefix_is_aggregate,
+        )
+        specs[cik_norm] = spec
+    return specs
+
+
+WRAPPER_SPECS = _load_specs_from_json()
 
 
 def get_wrapper_spec(cik: Any) -> WrapperSpec | None:
@@ -634,11 +527,9 @@ def add_bdc_xbrl_wrapper_columns(
         prefix_mask = pd.Series(False, index=result.index)
         for prefix in spec.prefix_rules:
             prefix_mask = prefix_mask | identifiers.str.startswith(prefix, na=False)
-        if cik_value == SARATOGA_CIK:
-            prefix_mask = prefix_mask | identifiers.str.match(_SARATOGA_PCT_ONLY_RE, na=False)
-            prefix_mask = prefix_mask | identifiers.str.match(_SARATOGA_BARE_CATEGORY_RE, na=False)
-            prefix_mask = prefix_mask | identifiers.str.match(_SARATOGA_TOTAL_PCT_RE, na=False)
-            prefix_mask = prefix_mask | identifiers.str.match(_SARATOGA_SUBTOTAL_RE, na=False)
+        # Apply fallback patterns from config (replaces hardcoded Saratoga checks)
+        for pattern, _family in spec.fallback_family_patterns:
+            prefix_mask = prefix_mask | identifiers.str.match(pattern, na=False)
         mask = mask | (cik_norm.eq(cik_value) & prefix_mask)
     if not mask.any():
         return result

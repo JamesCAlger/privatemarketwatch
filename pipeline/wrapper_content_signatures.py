@@ -1,7 +1,7 @@
-"""Content signature engine for BDC XBRL wrapper v2 definitions.
+"""Content signature engine for BDC XBRL wrapper definitions.
 
-Loads per-CIK wrapper definitions (v2 schema), classifies holdings rows into
-archetypes, validates field-level content signatures, and runs fund-level
+Loads per-CIK wrapper definitions (v2 or v3 schema), classifies holdings rows
+into archetypes, validates field-level content signatures, and runs fund-level
 FV reconciliation and QoQ drift detection.
 
 This module is a diagnostic layer: it does not mutate holdings data.
@@ -87,8 +87,14 @@ class EdgeCase:
 
 
 @dataclass(frozen=True)
+class UnclassifiedRate:
+    """Maximum allowed fraction of unclassified rows per quarter."""
+    max_pct: float
+
+
+@dataclass(frozen=True)
 class WrapperDefinition:
-    """Parsed v2 wrapper definition for one CIK."""
+    """Parsed wrapper definition for one CIK (v2 or v3)."""
     cik: str
     entity_name: str
     version: int
@@ -96,6 +102,7 @@ class WrapperDefinition:
     fv_reconciliation: FVReconciliation | None = None
     position_count_qoq: PositionCountQoQ | None = None
     rate_sanity: RateSanity | None = None
+    unclassified_rate: UnclassifiedRate | None = None
     edge_cases: tuple[EdgeCase, ...] = ()
     identifier_delimiter: str = ", "
     alternate_delimiters: tuple[str, ...] = ()
@@ -107,9 +114,10 @@ class WrapperDefinition:
 
 
 def load_wrapper_definition(cik: str | int) -> WrapperDefinition | None:
-    """Load and parse a v2 wrapper JSON for the given CIK.
+    """Load and parse a v2 or v3 wrapper JSON for the given CIK.
 
-    Returns None if no definition file exists for this CIK.
+    Returns None if no definition file exists or lacks archetype/invariant
+    sections relevant to content signature validation.
     """
     cik_norm = normalize_cik(cik)
     path = WRAPPER_DEFINITIONS_DIR / f"{cik_norm}.json"
@@ -117,8 +125,13 @@ def load_wrapper_definition(cik: str | int) -> WrapperDefinition | None:
         return None
     with open(path, encoding="utf-8") as fh:
         raw = json.load(fh)
-    if raw.get("schema_version") != "bdc-xbrl-wrapper.v2":
+    schema_version = raw.get("schema_version", "")
+    if schema_version not in ("bdc-xbrl-wrapper.v2", "bdc-xbrl-wrapper.v3"):
         return None
+    # v3 files without archetypes or invariants are dispatch/staging only
+    if schema_version == "bdc-xbrl-wrapper.v3":
+        if not raw.get("archetypes") and not raw.get("invariants"):
+            return None
     return _parse_definition(raw)
 
 
@@ -171,6 +184,13 @@ def _parse_definition(raw: dict[str, Any]) -> WrapperDefinition:
             max_pct=rs.get("max_pct", 0.25),
         )
 
+    unclass_rate = None
+    if "unclassified_rate" in invariants:
+        ur = invariants["unclassified_rate"]
+        unclass_rate = UnclassifiedRate(
+            max_pct=ur.get("max_pct", 0.05),
+        )
+
     edge_cases = []
     for ec in raw.get("known_edge_cases") or []:
         edge_cases.append(EdgeCase(
@@ -190,6 +210,7 @@ def _parse_definition(raw: dict[str, Any]) -> WrapperDefinition:
         fv_reconciliation=fv_recon,
         position_count_qoq=pos_qoq,
         rate_sanity=rate_san,
+        unclassified_rate=unclass_rate,
         edge_cases=tuple(edge_cases),
         identifier_delimiter=idf.get("delimiter", ", "),
         alternate_delimiters=tuple(idf.get("alternate_delimiters") or []),
@@ -371,11 +392,13 @@ def validate_content_signatures(
     Returns (summary_df, violations_list).
     summary_df has one row per quarter with pass/fail counts.
     """
+    summary_columns = [
+        "report_date", "total_rows", "classified_rows", "unclassified_rows",
+        "pass_rows", "fail_rows", "pass_rate",
+        "unclassified_rate", "unclassified_rate_status",
+    ]
     if holdings_df.empty:
-        return pd.DataFrame(columns=[
-            "report_date", "total_rows", "classified_rows", "unclassified_rows",
-            "pass_rows", "fail_rows", "pass_rate",
-        ]), []
+        return pd.DataFrame(columns=summary_columns), []
 
     violations: list[SignatureViolation] = []
     # Determine the text column to classify on
@@ -418,6 +441,9 @@ def validate_content_signatures(
         "archetype": per_row_archetype,
         "row_pass": per_row_pass,
     })
+    # Determine unclassified_rate threshold from wrapper if available
+    unclass_threshold = wrapper.unclassified_rate.max_pct if wrapper.unclassified_rate else None
+
     summary_rows = []
     for report_date, group in result_df.groupby("report_date", dropna=False):
         classified = group[group["archetype"].ne("")]
@@ -425,6 +451,10 @@ def validate_content_signatures(
         pass_rows = int(group["row_pass"].sum())
         fail_rows = int((~group["row_pass"]).sum())
         total = len(group)
+        unclass_frac = len(unclassified) / total if total else 0.0
+        unclass_status = ""
+        if unclass_threshold is not None:
+            unclass_status = "pass" if unclass_frac <= unclass_threshold else "fail"
         summary_rows.append({
             "report_date": report_date,
             "total_rows": total,
@@ -433,6 +463,8 @@ def validate_content_signatures(
             "pass_rows": pass_rows,
             "fail_rows": fail_rows,
             "pass_rate": pass_rows / total if total else 0.0,
+            "unclassified_rate": round(unclass_frac, 6),
+            "unclassified_rate_status": unclass_status,
         })
     summary = pd.DataFrame(summary_rows)
     return summary, violations
@@ -623,6 +655,22 @@ def run_qoq_drift(
         sig_summary = sorted_summary.copy()
         sig_summary["qoq_drift_flag"] = drift_flags
 
+    # Unclassified rate drift (already computed per-quarter in validate_content_signatures)
+    if not sig_summary.empty and wrapper.unclassified_rate is not None:
+        threshold = wrapper.unclassified_rate.max_pct
+        if "unclassified_rate" in sig_summary.columns:
+            exceeding = sig_summary[
+                sig_summary["unclassified_rate_status"].fillna("").eq("fail")
+            ]
+            if not exceeding.empty:
+                logger.warning(
+                    "Unclassified rate exceeds %.1f%% threshold in %d/%d quarters for %s",
+                    threshold * 100,
+                    len(exceeding),
+                    len(sig_summary),
+                    wrapper.entity_name,
+                )
+
     # Violations DataFrame
     violations_df = pd.DataFrame([
         {
@@ -714,7 +762,7 @@ def main(argv: list[str] | None = None) -> int:
     cik_norm = normalize_cik(args.cik)
     wrapper = load_wrapper_definition(cik_norm)
     if wrapper is None:
-        logger.error("No v2 wrapper definition found for CIK %s", cik_norm)
+        logger.error("No wrapper definition found for CIK %s", cik_norm)
         return 1
 
     logger.info("Loaded wrapper for %s (%s) version %d", wrapper.entity_name, cik_norm, wrapper.version)

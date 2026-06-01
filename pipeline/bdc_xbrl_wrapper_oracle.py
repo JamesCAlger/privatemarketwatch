@@ -11,7 +11,6 @@ from typing import Any
 import pandas as pd
 
 from pipeline.bdc_xbrl_wrapper import (
-    TRINITY_CIK,
     add_bdc_xbrl_wrapper_columns,
     is_non_private_market_identifier,
     normalize_cik,
@@ -19,6 +18,9 @@ from pipeline.bdc_xbrl_wrapper import (
     supported_prefixes_for_cik,
     supported_wrapper_ciks,
 )
+
+# Default CIK for oracle trials (Trinity Capital)
+TRINITY_CIK = "0001786108"
 from pipeline.wrapper_content_signatures import (
     load_wrapper_definition,
     validate_content_signatures,

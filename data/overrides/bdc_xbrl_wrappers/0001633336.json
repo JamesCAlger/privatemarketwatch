@@ -1,0 +1,14 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001633336",
+  "entity_name": "Crescent Capital BDC, Inc.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "^Investments\\s+.+?\\s+(?:Debt|Equity)\\s+Investments\\s+(?:CRESCENT_INDUSTRY_LABELS)\\s+(.+?)\\s+Investment\\s+Type\\s+",
+    "hierarchy_instrument_re": "Investment\\s+Type\\s+(.+?)(?:\\s+Interest\\s+Term\\b|\\s+Interest\\s+Rate\\b|\\s+Maturity\\s*/\\s*Dissolution\\s+Date\\b|\\s+Maturity\\b|$)",
+    "hierarchy_trailing_re": "Maturity\\s*/\\s*Dissolution\\s+Date\\s+\\d{1,2}/\\d{4}\\s+(.+)$",
+    "hierarchy_condition_extra": "starts_with(lower(_clean), 'investments ') AND contains(lower(_clean), ' investment type ') AND regexp_matches(lower(_clean), '\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|delayed\\s+draw|revolver|revolving|senior\\s+secured|subordinated|notes?|bonds?|common\\s+(stock|equity)|preferred|warrants?|equity)\\b') AND regexp_matches(lower(_clean), '\\b(interest\\s+(term|rate)|reference\\s+rate|sofr|libor|euribor|maturity\\s*/\\s*dissolution|maturity|due)\\b')"
+  }
+}

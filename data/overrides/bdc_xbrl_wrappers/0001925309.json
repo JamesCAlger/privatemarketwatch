@@ -1,0 +1,29 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001925309",
+  "entity_name": "Sixth Street Lending Partners",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "SIXTH_STREET_LENDING_PARTNERS",
+    "prefix_rules": {
+      "Debt Investments": "debt",
+      "Equity and Other Investments": "equity",
+      "Equity Investments": "equity"
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "structured credit"
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_leaf_guard",
+    "leaf_guard": {
+      "type_industry_prefix_re": "(?i)^(?:Debt\\s+Investments|Equity\\s+and\\s+Other\\s+Investments)\\s+(?:INDUSTRY_LABELS)\\s+",
+      "marker_re": "(?:first[-\\s]lien|second[-\\s]lien|unitranche|term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|type\\s+(?:term\\s+loan|delayed\\s+draw\\s+term\\s+loan|revolving\\s+credit\\s+facility)|class\\s+[a-z0-9-]+|preferred\\s+units|partnership\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|structured\\s+product|warrants?)",
+      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b"
+    }
+  }
+}

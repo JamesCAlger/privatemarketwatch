@@ -1,0 +1,11 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001849894",
+  "entity_name": "MSD Investment Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "staging": {
+    "strategy": "prefix_strip",
+    "hierarchy_prefix_re": "(?i)^Investments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|control(?:led)?(?:\\s*/\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity|debt|warrants?)\\s+(?:INDUSTRY_LABELS)\\s+"
+  }
+}

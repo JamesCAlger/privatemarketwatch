@@ -1,0 +1,108 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001377936",
+  "entity_name": "Saratoga Investment Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "SARATOGA",
+    "prefix_rules": {
+      "Affiliate investments": "mixed",
+      "Affiliated investments": "mixed",
+      "Control investments": "mixed",
+      "Controlled investments": "mixed",
+      "Non-Control/Non-Affiliate investments": "mixed",
+      "Non-control/Non-affiliate investments": "mixed",
+      "Non-Controlled/Non-Affiliated investments": "mixed",
+      "Non-controlled/Non-affiliated investments": "mixed"
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total affiliate",
+      "total control",
+      "total non-control",
+      "investment fund",
+      "structured finance securities"
+    ],
+    "category_marker_re": "\\d[\\d.]*%\\s*-\\s*[^-]+$",
+    "fallback_family_patterns": [
+      {"regex": "^\\d[\\d.]*%\\s+-\\s+[^-]+\\s+-\\s+[^-]+\\s+-\\s+.+", "family": "mixed"},
+      {"regex": "^[A-Za-z][A-Za-z0-9&/()., ]+(?:\\s+-\\s+(?:Affiliate|Affiliated|Control|Controlled|Non-control/Non-affiliate|Non-Control/Non-Affiliate)\\s+investments)?$", "family": "mixed"},
+      {"regex": "^total\\s+investments\\s+-\\s+\\d[\\d.]*%$", "family": "mixed"},
+      {"regex": "^sub\\s+total\\s+(?:affiliate|affiliated|control|controlled|non-control/non-affiliate|non-controlled/non-affiliated)\\s+investments$", "family": "mixed"}
+    ],
+    "canonical_strip_re": "^(?:Affiliate investments|Affiliated investments|Control investments|Controlled investments|Non-Control/Non-Affiliate investments|Non-control/Non-affiliate investments|Non-Controlled/Non-Affiliated investments|Non-controlled/Non-affiliated investments)\\s*-\\s*",
+    "no_prefix_is_aggregate": true
+  },
+  "staging": {
+    "strategy": "issuer_bridge",
+    "issuer_bridges": [
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - alternative investment management software - first lien term loan (3m usd term sofr+8.50%), 12.82% cash, 7/18/2027",
+        "issuer_name": "Altvia MidCo, LLC.",
+        "instrument_description": "Alternative Investment Management Software - First Lien Term Loan (3M USD TERM SOFR+8.50%), 12.82% Cash, 7/18/2027"
+      },
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - dental practice management - delayed draw term loan (3m usd term sofr+8.00%), 12.47% cash, 11/25/2025",
+        "issuer_name": "New England Dental Partners",
+        "instrument_description": "Dental Practice Management - Delayed Draw Term Loan (3M USD TERM SOFR+8.00%), 12.47% Cash, 11/25/2025"
+      },
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - direct selling software - common units",
+        "issuer_name": "Exigo, LLC",
+        "instrument_description": "Direct Selling Software - Common Units"
+      },
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - direct selling software - first lien term loan (1m usd term sofr+6.25%), 10.67% cash, 3/16/2027",
+        "issuer_name": "Exigo, LLC",
+        "instrument_description": "Direct Selling Software - First Lien Term Loan (1M USD TERM SOFR+6.25%), 10.67% Cash, 3/16/2027"
+      },
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - direct selling software - revolving credit facility (1m usd term sofr+6.25%), 10.67% cash, 3/16/2027",
+        "issuer_name": "Exigo, LLC",
+        "instrument_description": "Direct Selling Software - Revolving Credit Facility (1M USD TERM SOFR+6.25%), 10.67% Cash, 3/16/2027"
+      },
+      {
+        "report_date": "2025-05-31",
+        "raw_id_lower": "10.3% - education services - first lien term loan 4.84% pik, 8/9/2027",
+        "issuer_name": "Zollege PBC",
+        "instrument_description": "Education Services - First Lien Term Loan 4.84% PIK, 8/9/2027"
+      },
+      {
+        "report_date": "2025-08-31",
+        "raw_id_lower": "10.6% - education services - common stock",
+        "issuer_name": "Zollege PBC",
+        "instrument_description": "Education Services - Common Stock"
+      },
+      {
+        "report_date": "2025-08-31",
+        "raw_id_lower": "10.6% - education services - first lien term loan 4.84% pik, 8/9/2027",
+        "issuer_name": "Zollege PBC",
+        "instrument_description": "Education Services - First Lien Term Loan 4.84% PIK, 8/9/2027"
+      },
+      {
+        "report_date": "2025-08-31",
+        "raw_id_lower": "219.0% - architecture & engineering software - first lien term loan (3m usd term sofr+5.50%), 9.67% cash, 4/13/2028",
+        "issuer_name": "BQE Software, Inc.",
+        "instrument_description": "Architecture & Engineering Software - First Lien Term Loan (3M USD TERM SOFR+5.50%), 9.67% Cash, 4/13/2028"
+      },
+      {
+        "report_date": "2025-11-30",
+        "raw_id_lower": "12.8% - corporate education software - series c preferred units",
+        "issuer_name": "ETU Holdings, Inc.",
+        "instrument_description": "Corporate Education Software - Series C Preferred Units"
+      },
+      {
+        "report_date": "2025-11-30",
+        "raw_id_lower": "222.8% - healthcare services - first lien term loan (3m usd term sofr+6.25%), 10.42% cash, 12/31/2028",
+        "issuer_name": "ComForCare Health Care",
+        "instrument_description": "Healthcare Services - First Lien Term Loan (3M USD TERM SOFR+6.25%), 10.42% Cash, 12/31/2028"
+      }
+    ]
+  }
+}

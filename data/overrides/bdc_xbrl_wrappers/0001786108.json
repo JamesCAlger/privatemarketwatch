@@ -1,0 +1,68 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001786108",
+  "entity_name": "Trinity Capital Inc.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TRINITY",
+    "prefix_rules": {
+      "Portfolio Company Debt Securities": "debt",
+      "Portfolio Company Warrant Investments": "warrant",
+      "Portfolio Company Equity Investments": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "type of investment",
+        "investment date",
+        "maturity date",
+        "maturitydate",
+        "interest rate",
+        "interestrate",
+        "variable interest rate",
+        "fixed interest rate",
+        "pik interest rate"
+      ],
+      "warrant": [
+        "type of investment",
+        "investment date",
+        "expiration date",
+        "expirationdate",
+        "maturity date",
+        "maturitydate"
+      ],
+      "equity": [
+        "type of investment",
+        "investment date",
+        "expiration date",
+        "expirationdate",
+        "maturity date",
+        "maturitydate"
+      ]
+    },
+    "aggregate_markers": [
+      "sub-total",
+      "subtotal",
+      "total investments",
+      "total debt investments",
+      "total equity investments"
+    ]
+  },
+  "archetypes": {
+    "senior_secured_debt": {
+      "description": "Term loans, revolvers, and other senior secured debt",
+      "detection_rules": {
+        "keywords": ["Secured Loan", "Term Loan", "Revolving Credit", "Equipment Financing"],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    }
+  }
+}

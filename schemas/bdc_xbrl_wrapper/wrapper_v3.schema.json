@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bdc-xbrl-wrapper.v3",
+  "title": "BDC XBRL per-CIK unified wrapper (dispatch + staging + content signatures)",
+  "type": "object",
+  "required": ["schema_version", "cik", "entity_name", "version", "source"],
+  "properties": {
+    "schema_version": {"const": "bdc-xbrl-wrapper.v3"},
+    "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
+    "entity_name": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "source": {"const": "bdc_xbrl"},
+    "dispatch": {
+      "type": "object",
+      "description": "Identifier classification rules for source reconciliation wrappers",
+      "properties": {
+        "rule_prefix": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Prefix for generated rule IDs (e.g. TRINITY, SARATOGA)"
+        },
+        "prefix_rules": {
+          "type": "object",
+          "additionalProperties": {"type": "string"},
+          "description": "Map of identifier prefix text to family name (debt/equity/warrant/mixed)"
+        },
+        "leaf_markers_by_family": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "description": "Per-family list of leaf-level marker strings. Omit to use defaults."
+        },
+        "aggregate_markers": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Strings in identifiers that indicate aggregate/subtotal rows"
+        },
+        "non_private_markers": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Strings indicating non-private-market instruments (cash, money market, etc.)"
+        },
+        "entity_signals_re": {
+          "type": "string",
+          "description": "Regex for entity signals (LLC, Inc, etc.). Omit to use default."
+        },
+        "category_marker_re": {
+          "type": "string",
+          "description": "Regex for category-level identifier patterns"
+        },
+        "fallback_family_patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["regex", "family"],
+            "properties": {
+              "regex": {"type": "string", "minLength": 1},
+              "family": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          },
+          "description": "Fallback patterns tried when no prefix_rules entry matches"
+        },
+        "canonical_strip_re": {
+          "type": "string",
+          "description": "Regex stripped from identifiers before computing keys"
+        },
+        "no_prefix_is_aggregate": {
+          "type": "boolean",
+          "description": "When true, identifiers matched via fallback (no prefix text) are classified as aggregate"
+        }
+      },
+      "additionalProperties": false
+    },
+    "staging": {
+      "type": "object",
+      "description": "BDC staging SQL configuration for per-CIK extraction patterns",
+      "required": ["strategy"],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["prefix_strip", "hierarchy_extract", "hierarchy_leaf_guard", "issuer_bridge", "default"]
+        },
+        "hierarchy_prefix_re": {
+          "type": "string",
+          "description": "Regex for hierarchy prefix to strip (prefix_strip strategy)"
+        },
+        "hierarchy_issuer_re": {
+          "type": "string",
+          "description": "Regex to extract issuer from hierarchy (hierarchy_extract strategy)"
+        },
+        "hierarchy_instrument_re": {
+          "type": "string",
+          "description": "Regex to extract instrument from hierarchy (hierarchy_extract strategy)"
+        },
+        "hierarchy_trailing_re": {
+          "type": "string",
+          "description": "Regex for trailing tranche labels after maturity (hierarchy_extract strategy)"
+        },
+        "hierarchy_condition_extra": {
+          "type": "string",
+          "description": "Additional SQL condition for hierarchy detection"
+        },
+        "leaf_guard": {
+          "type": "object",
+          "properties": {
+            "type_industry_prefix_re": {
+              "type": "string",
+              "description": "Regex for type/industry prefix to strip before leaf extraction"
+            },
+            "marker_re": {
+              "type": "string",
+              "description": "Regex for leaf-level instrument markers"
+            },
+            "evidence_re": {
+              "type": "string",
+              "description": "Regex for evidence fields (interest rate, maturity, etc.)"
+            },
+            "issuer_re": {
+              "type": "string",
+              "description": "Regex to extract issuer from cleaned identifier"
+            },
+            "instrument_re": {
+              "type": "string",
+              "description": "Regex to extract instrument from cleaned identifier"
+            }
+          },
+          "additionalProperties": false
+        },
+        "issuer_bridges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["report_date", "raw_id_lower", "issuer_name", "instrument_description"],
+            "properties": {
+              "report_date": {"type": "string"},
+              "raw_id_lower": {"type": "string"},
+              "issuer_name": {"type": "string"},
+              "instrument_description": {"type": "string"}
+            },
+            "additionalProperties": false
+          },
+          "description": "Manual issuer name bridges for specific identifiers (issuer_bridge strategy)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "identifier_format": {
+      "type": "object",
+      "properties": {
+        "delimiter": {
+          "type": "string",
+          "description": "Primary field delimiter in identifier strings"
+        },
+        "field_order": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Expected order of fields in identifier strings"
+        },
+        "alternate_delimiters": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Known alternate delimiters seen in some quarters"
+        }
+      },
+      "additionalProperties": false
+    },
+    "archetypes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["detection_rules", "field_signatures"],
+        "properties": {
+          "description": {"type": "string"},
+          "detection_rules": {
+            "type": "object",
+            "properties": {
+              "keywords": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "keyword_mode": {
+                "type": "string",
+                "enum": ["any", "all"],
+                "default": "any"
+              }
+            },
+            "additionalProperties": false
+          },
+          "field_signatures": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["numeric_range", "regex", "enum", "presence"]
+                },
+                "constraint": {
+                  "type": "string",
+                  "enum": ["required", "forbidden", "optional"],
+                  "default": "optional"
+                },
+                "min": {"type": "number"},
+                "max": {"type": "number"},
+                "pattern": {"type": "string"},
+                "values": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              },
+              "required": ["type", "constraint"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "properties": {
+        "fv_reconciliation": {
+          "type": "object",
+          "properties": {
+            "source_field": {"type": "string"},
+            "tolerance_pct": {"type": "number"},
+            "tolerance_abs": {"type": "number"}
+          },
+          "additionalProperties": false
+        },
+        "position_count_qoq": {
+          "type": "object",
+          "properties": {
+            "max_increase_pct": {"type": "number"},
+            "max_decrease_pct": {"type": "number"}
+          },
+          "additionalProperties": false
+        },
+        "rate_sanity": {
+          "type": "object",
+          "properties": {
+            "min_pct": {"type": "number"},
+            "max_pct": {"type": "number"}
+          },
+          "additionalProperties": false
+        },
+        "unclassified_rate": {
+          "type": "object",
+          "properties": {
+            "max_pct": {
+              "type": "number",
+              "description": "Maximum allowed unclassified row fraction (e.g. 0.05 = 5%)"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "known_edge_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "description"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "first_seen_quarter": {"type": "string"},
+          "detection_pattern": {"type": "string"},
+          "disposition": {
+            "type": "string",
+            "enum": ["expected", "warn", "fail"]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

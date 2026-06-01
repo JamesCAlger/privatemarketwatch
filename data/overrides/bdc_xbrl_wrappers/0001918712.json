@@ -1,9 +1,13 @@
 {
-  "schema_version": "bdc-xbrl-wrapper.v2",
+  "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001918712",
   "entity_name": "Ares Strategic Income Fund",
   "version": 1,
   "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "ARES_STRATEGIC_INCOME",
+    "prefix_rules": {}
+  },
   "identifier_format": {
     "delimiter": ", ",
     "field_order": [
@@ -172,6 +176,9 @@
     "rate_sanity": {
       "min_pct": 1.0,
       "max_pct": 30.0
+    },
+    "unclassified_rate": {
+      "max_pct": 0.05
     }
   },
   "known_edge_cases": [

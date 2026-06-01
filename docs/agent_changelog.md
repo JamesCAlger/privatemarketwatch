@@ -201,3 +201,34 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 - Modified `pipeline/bdc_xbrl_wrapper_oracle.py`: added `content_signature_pass_rate`, `content_signature_violations`, `fv_reconciliation_status`, `fv_reconciliation_pct_diff` to `ORACLE_SUMMARY_COLUMNS`; added `_check_content_signatures()` and `_check_fv_reconciliation()` helpers; wired them into `build_wrapper_oracle_outputs()` with optional `holdings_df` and `fund_financials_df` parameters; updated `run_wrapper_oracle_trial()` to pass holdings and fund financials through.
 - Created `tests/test_wrapper_content_signatures.py`: 32 tests covering schema loading (valid, missing, normalized CIK, invariants, edge cases), archetype classification (debt, equity, CLO, warrant, no-match, case-insensitive, pipe-separated), content signature pass/fail (rate in range, rate above max, rate below min, forbidden present, required missing), FV reconciliation (within tolerance, outside tolerance, no invariant, abs tolerance prevents false positive), QoQ drift (spike flagged, stable passes, drop flagged), edge case detection (pipe delimiter), false positive guards (normal growth, null rate on equity), and integration.
 - Test counts: 32 new tests pass, 34 existing wrapper/oracle tests pass with zero regressions (66 total).
+
+### 2026-06-01 -- Unify BDC XBRL wrapper system to v3 JSON schema
+
+Consolidated three parallel per-CIK systems (Python WrapperSpec, v2 JSON content signatures, hardcoded staging SQL constants) into a single v3 JSON schema per CIK.
+
+**Schema and definitions:**
+- Created `schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json`: unified schema with `dispatch`, `staging`, `archetypes`, `invariants`, `identifier_format`, `known_edge_cases` sections.
+- Wrote 11 v3 JSON files in `data/overrides/bdc_xbrl_wrappers/` (Trinity, Saratoga, Goldman Private Credit, Goldman BDC, Fidelity, Sixth Street Specialty, Sixth Street Lending, Ares, MSD, Crescent Capital, Crescent Private Credit).
+- Deleted `schemas/bdc_xbrl_wrapper/wrapper.schema.json` (v1, superseded).
+
+**bdc_xbrl_wrapper.py:**
+- Replaced `_make_specs()` with `_load_specs_from_json()` that reads v3 JSON dispatch sections.
+- Added `fallback_family_patterns`, `canonical_strip_re`, `no_prefix_is_aggregate` fields to `WrapperSpec` dataclass.
+- Generalized Saratoga-specific branches in `_family_for_identifier()`, `_canonical_identifier_for_keys()`, `_rollup_disposition()`, `add_bdc_xbrl_wrapper_columns()` to use config-driven fields instead of CIK constant checks.
+- Removed all `*_CIK` constants, `TRINITY_*` prefix/leaf constants, `_SARATOGA_*_RE` regexes, `_SIXTH_STREET_PREFIX_RULES`, `_GOLDMAN_PREFIX_RULES`, and `_make_specs()`.
+
+**wrapper_content_signatures.py:**
+- `load_wrapper_definition()` now accepts both v2 and v3 schema_version. v3 files without archetypes/invariants return None (dispatch/staging-only).
+- Added `UnclassifiedRate` dataclass and `unclassified_rate` field to `WrapperDefinition`.
+- `validate_content_signatures()` returns `unclassified_rate` and `unclassified_rate_status` columns per quarter.
+- `run_qoq_drift()` logs warnings when unclassified rate exceeds threshold.
+
+**staging_bdc.py:**
+- Added `_load_staging_configs()`, `_load_issuer_bridges_from_json()`, `_get_hierarchy_leaf_ciks()`, `_get_prefix_strip_ciks()`, `_get_hierarchy_extract_ciks()` loaders.
+- Replaced `_SARATOGA_ISSUER_BRIDGES` list, hardcoded MSD/Crescent/hierarchy-leaf CIK SQL with JSON-driven config.
+- SQL CTE structure and DuckDB logic unchanged.
+
+**bdc_xbrl_wrapper_oracle.py:**
+- Replaced `TRINITY_CIK` import with local constant.
+
+**Verification:** 66 wrapper/oracle/content-signature tests pass. 3 unified_holdings test failures traced to pre-existing dirty worktree changes in `bdc_identifier.py`, not caused by this work (confirmed by testing with committed `bdc_identifier.py`).

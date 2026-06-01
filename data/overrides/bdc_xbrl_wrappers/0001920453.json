@@ -1,0 +1,40 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001920453",
+  "entity_name": "Fidelity Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "FIDELITY_PRIVATE_CREDIT",
+    "prefix_rules": {
+      "Investments Investments": "debt"
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "investment portfolio",
+      "total investment portfolio",
+      "non-controlled / non-affiliate first lien debt"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "financial square",
+      "government institutional",
+      "u.s. treasury",
+      "us treasury",
+      "mutual fund",
+      "floating rate central fund",
+      "high income central fund"
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_leaf_guard",
+    "leaf_guard": {
+      "type_industry_prefix_re": "(?i)^(?:(?:First|Second)\\s+Lien\\s+Debt|Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)?\\s*(?:INDUSTRY_LABELS)\\s+",
+      "marker_re": "(?:first[-\\s]lien|second[-\\s]lien|unitranche|term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|type\\s+(?:term\\s+loan|delayed\\s+draw\\s+term\\s+loan|revolving\\s+credit\\s+facility)|class\\s+[a-z0-9-]+|preferred\\s+units|partnership\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|structured\\s+product|warrants?)",
+      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b"
+    }
+  }
+}

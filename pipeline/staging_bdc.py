@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import re
 import time
 from pathlib import Path
-from typing import Union
+from typing import Any, Union
 
 import duckdb
 import pandas as pd
@@ -39,9 +40,83 @@ from pipeline.classification import (
 from pipeline.config import (
     AGGREGATE_HEADER_FLAGS_FILE,
     FX_RATES_FILE,
+    OVERRIDES_DIR,
 )
 
 logger = logging.getLogger(__name__)
+
+_WRAPPER_DEFINITIONS_DIR = OVERRIDES_DIR / "bdc_xbrl_wrappers"
+
+
+def _load_staging_configs() -> dict[str, dict[str, Any]]:
+    """Load v3 JSON staging configs keyed by normalized CIK."""
+    configs: dict[str, dict[str, Any]] = {}
+    if not _WRAPPER_DEFINITIONS_DIR.exists():
+        return configs
+    for path in sorted(_WRAPPER_DEFINITIONS_DIR.glob("*.json")):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                raw = json.load(fh)
+        except (json.JSONDecodeError, OSError):
+            continue
+        if raw.get("schema_version") != "bdc-xbrl-wrapper.v3":
+            continue
+        staging = raw.get("staging")
+        if staging is None:
+            continue
+        cik = raw["cik"]
+        cik_norm = cik.lstrip("0").zfill(10)
+        configs[cik_norm] = {
+            "cik": cik,
+            "entity_name": raw.get("entity_name", ""),
+            "staging": staging,
+        }
+    if configs:
+        logger.info("Loaded staging configs for %d CIKs: %s",
+                     len(configs),
+                     ", ".join(sorted(configs)))
+    return configs
+
+
+def _load_issuer_bridges_from_json() -> list[dict[str, str]]:
+    """Load issuer bridge rows from all v3 JSON files with issuer_bridge strategy."""
+    configs = _load_staging_configs()
+    bridges: list[dict[str, str]] = []
+    for cik_norm, cfg in configs.items():
+        staging = cfg["staging"]
+        if staging.get("strategy") != "issuer_bridge":
+            continue
+        for bridge in staging.get("issuer_bridges") or []:
+            bridges.append({
+                "cik": cfg["cik"],
+                "report_date": bridge["report_date"],
+                "raw_id_lower": bridge["raw_id_lower"],
+                "issuer_name": bridge["issuer_name"],
+                "instrument_description": bridge["instrument_description"],
+            })
+    return bridges
+
+
+def _get_hierarchy_leaf_ciks() -> list[str]:
+    """Return list of CIKs using hierarchy_leaf_guard strategy."""
+    configs = _load_staging_configs()
+    return [cfg["cik"] for cfg in configs.values()
+            if cfg["staging"].get("strategy") == "hierarchy_leaf_guard"]
+
+
+def _get_prefix_strip_ciks() -> list[str]:
+    """Return list of CIKs using prefix_strip strategy."""
+    configs = _load_staging_configs()
+    return [cfg["cik"] for cfg in configs.values()
+            if cfg["staging"].get("strategy") == "prefix_strip"]
+
+
+def _get_hierarchy_extract_ciks() -> list[str]:
+    """Return list of CIKs using hierarchy_extract strategy."""
+    configs = _load_staging_configs()
+    return [cfg["cik"] for cfg in configs.values()
+            if cfg["staging"].get("strategy") == "hierarchy_extract"]
+
 
 def _load_aggregate_header_flags() -> pd.DataFrame:
     """Load CC-reviewed aggregate header flags, if present.
@@ -229,6 +304,20 @@ def _prepare_bdc(
     con.register("bdc_aggregate_overrides", aggregate_overrides)
     agg_header_flags = _load_aggregate_header_flags()
     con.register("cc_aggregate_header_flags", agg_header_flags)
+    _issuer_bridges = _load_issuer_bridges_from_json()
+    con.register(
+        "saratoga_issuer_bridges",
+        pd.DataFrame(
+            _issuer_bridges,
+            columns=[
+                "cik",
+                "report_date",
+                "raw_id_lower",
+                "issuer_name",
+                "instrument_description",
+            ],
+        ),
+    )
     _has_agg_flags = len(agg_header_flags) > 0
 
     # Pre-generate SQL fragments from Python constants
@@ -282,18 +371,33 @@ def _prepare_bdc(
     name_norm = _sql_normalize_name("issuer_name")
 
     # Normalised raw identifier: em-dash -> ' - ', en-dash -> '-'
-    _norm_raw = "regexp_replace(replace(_raw_id, '\u2014', ' - '), '\u2013', '-', 'g')"
+    _norm_raw = (
+        "regexp_replace("
+        "replace(replace(_raw_id, '\u2014', ' - '), '\u2013', '-'), "
+        "'\\s+-\\s*', ' - ', 'g')"
+    )
     _msd_extra_industry_labels = {
+        "Advertising",
+        "Application Software",
         "Beverage, Food & Tobacco",
         "Capital Equipment",
         "Chemicals, Plastics & Rubber",
         "Consumer",
+        "Diversified Support Services",
         "Environmental Industries",
+        "Environmental & Facilities Services",
+        "Specialized Consumer Services",
     }
     _industry_prefix_re = "|".join(
         re.escape(label).replace(r"\ ", r"\s+")
         for label in sorted(_INDUSTRY_LABELS | _msd_extra_industry_labels, key=len, reverse=True)
     )
+    # MSD hierarchy prefix: CIK list from JSON config
+    _prefix_strip_ciks = _get_prefix_strip_ciks()
+    _msd_cik_sql = (
+        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+        "IN (" + ", ".join(f"'{c}'" for c in _prefix_strip_ciks) + ")"
+    ) if _prefix_strip_ciks else "FALSE"
     _msd_hierarchy_prefix_re = (
         r"(?i)^Investments\s+Investments\s*-\s*"
         r"(?:non-?\s*control(?:led)?(?:\s*/\s*non-?\s*affiliat(?:e|ed))?"
@@ -307,7 +411,7 @@ def _prepare_bdc(
         rf"(?:{_industry_prefix_re})\s+"
     )
     _msd_hierarchy_condition = (
-        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = '0001849894' "
+        f"{_msd_cik_sql} "
         f"AND regexp_matches(_raw_id, '{_msd_hierarchy_prefix_re}')"
     )
     _msd_clean_raw = f"regexp_replace(_raw_id, '{_msd_hierarchy_prefix_re}', '')"
@@ -327,10 +431,11 @@ def _prepare_bdc(
     _seg3_is_industry = _sql_exact_match(
         "lower(trim(_segments[3]))", _INDUSTRY_LABELS
     )
+    _hierarchy_extract_ciks = _get_hierarchy_extract_ciks()
     _crescent_cik_sql = (
         "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
-        "IN ('0001633336', '0001954360')"
-    )
+        "IN (" + ", ".join(f"'{c}'" for c in _hierarchy_extract_ciks) + ")"
+    ) if _hierarchy_extract_ciks else "FALSE"
     _crescent_clean_raw = (
         "regexp_replace(replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '), '\\s+', ' ', 'g')"
     )
@@ -361,6 +466,41 @@ def _prepare_bdc(
         "'\\b(interest\\s+(term|rate)|reference\\s+rate|sofr|libor|euribor|"
         "maturity\\s*/\\s*dissolution|maturity|due)\\b')"
     )
+    _hierarchy_leaf_ciks = _get_hierarchy_leaf_ciks()
+    _hierarchy_leaf_cik_sql = (
+        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+        "IN (" + ", ".join(f"'{c}'" for c in _hierarchy_leaf_ciks) + ")"
+    ) if _hierarchy_leaf_ciks else "FALSE"
+    _sixth_street_prefix_re = (
+        rf"(?i)^(?:Debt\s+Investments|Equity\s+and\s+Other\s+Investments)\s+"
+        rf"(?:{_industry_prefix_re})\s+"
+    )
+    _fidelity_prefix_re = (
+        rf"(?i)^(?:(?:First|Second)\s+Lien\s+Debt|Debt|Equity|Preferred\s+Equity|Common\s+Equity)?\s*"
+        rf"(?:{_industry_prefix_re})\s+"
+    )
+    _hierarchy_leaf_clean_raw = (
+        f"regexp_replace(regexp_replace(_raw_id, '{_sixth_street_prefix_re}', ''), "
+        f"'{_fidelity_prefix_re}', '')"
+    )
+    _hierarchy_leaf_marker_re = (
+        r"(?:first[-\s]lien|second[-\s]lien|unitranche|term\s+loan|"
+        r"delayed\s+draw(?:\s+term\s+loan)?|revolving\s+credit\s+facility|"
+        r"revolver|secured\s+loan|type\s+(?:term\s+loan|delayed\s+draw\s+term\s+loan|"
+        r"revolving\s+credit\s+facility)|class\s+[a-z0-9-]+|preferred\s+units|"
+        r"partnership\s+interest|common\s+stock|preferred\s+stock|ordinary\s+shares|"
+        r"structured\s+product|warrants?)"
+    )
+    _hierarchy_leaf_condition = (
+        f"{_hierarchy_leaf_cik_sql} "
+        f"AND NOT contains({_norm_raw}, ' - ') "
+        f"AND regexp_matches({_hierarchy_leaf_clean_raw}, '(?i)\\s+{_hierarchy_leaf_marker_re}\\b') "
+        f"AND regexp_matches(lower({_hierarchy_leaf_clean_raw}), "
+        "'\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|"
+        "initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b')"
+    )
+    _hierarchy_leaf_issuer_re = rf"(?i)^(.+?)\s+{_hierarchy_leaf_marker_re}\b"
+    _hierarchy_leaf_instrument_re = rf"(?i)^.+?\s+({_hierarchy_leaf_marker_re}\b.*)$"
 
     # Fund vehicle/manager detection: equity-type positions with these name
     # signals get issuer_category = FUND (overrides the default CORPORATE).
@@ -814,6 +954,16 @@ def _prepare_bdc(
             CASE
                 -- Pipe format takes priority
                 WHEN _pipe_issuer IS NOT NULL THEN _pipe_issuer
+                -- CIK-scoped no-dash hierarchy leaves. These filers encode
+                -- category/industry/issuer/instrument terms in one
+                -- typed dimension value, so the generic first-segment parser
+                -- would otherwise treat the whole string as a bad issuer.
+                WHEN {_hierarchy_leaf_condition}
+                THEN trim(regexp_extract(
+                    {_hierarchy_leaf_clean_raw},
+                    '{_hierarchy_leaf_issuer_re}',
+                    1
+                ))
                 -- Crescent-family hierarchy rows:
                 -- Investments {{country}} {{Debt/Equity Investments}} {{industry}}
                 -- {{issuer}} Investment Type {{instrument}} Interest/Maturity ...
@@ -856,6 +1006,15 @@ def _prepare_bdc(
                      AND NOT ({_seg1_entity_sql})
                      AND lower(trim(_segments[2])) LIKE 'investments made in%'
                 THEN trim(_segments[3])
+                -- Saratoga-style after affiliation-prefix stripping:
+                -- seg[1] = "NNN.N%", seg[2] = issuer,
+                -- seg[3+] = industry + instrument.
+                -- Require 4+ segments so ambiguous category-only rows such
+                -- as "10.6% - Education Services - Common Stock" are still
+                -- filtered by the bad-issuer guard.
+                WHEN len(_segments) >= 4
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%$')
+                THEN trim(_segments[2])
                 -- Pct-prefix category skip (PennantPark / Blue Owl):
                 -- seg[1] = "NNN.N% Category", seg[2] = "NNN.N% Company ... Industry ..."
                 WHEN len(_segments) >= 2
@@ -951,6 +1110,12 @@ def _prepare_bdc(
                          THEN ', ' || trim(array_to_string({pipe_parts}[4:], ' | '))
                          ELSE ''
                      END
+                WHEN {_hierarchy_leaf_condition}
+                THEN trim(regexp_extract(
+                    {_hierarchy_leaf_clean_raw},
+                    '{_hierarchy_leaf_instrument_re}',
+                    1
+                ))
                 -- Crescent-family hierarchy rows. If a trailing tranche label
                 -- follows the month/year maturity (e.g. One/Four/Five), keep it
                 -- in the instrument key so equal-FV borrower tranches do not
@@ -1004,6 +1169,14 @@ def _prepare_bdc(
                      || CASE WHEN len(_segments) >= 5
                         THEN ' - ' || trim(array_to_string(_segments[4:], ' - '))
                         ELSE '' END
+                -- Saratoga-style pct-only first segment: instrument keeps
+                -- industry + leaf detail after the recovered issuer.
+                WHEN len(_segments) >= 4
+                     AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%$')
+                THEN regexp_replace(
+                    trim(array_to_string(_segments[3:], ' - ')),
+                    '^\\$?[\\d,.]+ ?', ''
+                )
                 -- Pct-prefix category skip: instrument = category from seg[1]
                 WHEN len(_segments) >= 2
                      AND regexp_matches(trim(_segments[1]), '^\d[\d.]*%\s+')
@@ -1046,6 +1219,24 @@ def _prepare_bdc(
         FROM initial_split
     ),
 
+    parsed_with_saratoga_bridge AS (
+        SELECT p.* EXCLUDE (issuer_name, instrument_description),
+            COALESCE(b.issuer_name, p.issuer_name) AS issuer_name,
+            COALESCE(
+                b.instrument_description,
+                p.instrument_description
+            ) AS instrument_description
+        FROM parsed p
+        LEFT JOIN saratoga_issuer_bridges b
+          ON LPAD(
+                 regexp_replace(CAST(p.cik AS VARCHAR), '[^0-9]', '', 'g'),
+                 10,
+                 '0'
+             ) = b.cik
+         AND CAST(p.report_date AS VARCHAR) = b.report_date
+         AND lower(trim(CAST(p._raw_id AS VARCHAR))) = b.raw_id_lower
+    ),
+
     -- CTE 5c: Fix bad issuer names (extraction artifacts from dimension paths)
     -- When issuer_name is a generic label (e.g., "Investments") but the raw
     -- identifier contains entity signals (LLC, Inc, etc.), replace issuer_name
@@ -1059,7 +1250,7 @@ def _prepare_bdc(
                 THEN _raw_id
                 ELSE issuer_name
             END AS issuer_name
-        FROM parsed
+        FROM parsed_with_saratoga_bridge
         WHERE NOT (({bad_issuer_filter}) AND NOT ({_sql_has_entity_in_raw}))
     ),
 

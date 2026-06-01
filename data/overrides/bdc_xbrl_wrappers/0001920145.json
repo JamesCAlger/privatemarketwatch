@@ -1,0 +1,25 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001920145",
+  "entity_name": "Goldman Sachs Private Credit Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "GS_PRIVATE_CREDIT",
+    "prefix_rules": {
+      "Investment Debt Investments": "debt",
+      "IInvestment Debt Investments": "debt",
+      "Investment Debt Inve": "debt",
+      "Investment Debt Investment": "debt",
+      "Investment 1st Lien/Senior Secured Debt": "debt",
+      "Investment 1st Lien/Last-Out Unitranche": "debt",
+      "Investment 2nd Lien/Senior Secured Debt": "debt",
+      "Investment Equity Investments": "equity"
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments"
+    ]
+  }
+}
