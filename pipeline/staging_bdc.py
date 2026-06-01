@@ -118,6 +118,60 @@ def _get_hierarchy_extract_ciks() -> list[str]:
             if cfg["staging"].get("strategy") == "hierarchy_extract"]
 
 
+def _get_comma_delimited_ciks() -> list[str]:
+    """Return CIKs whose wrapper uses ', ' delimiter with issuer_name first.
+
+    For these CIKs, bare entity names (without instrument description after
+    the comma delimiter) are always entity-level rollups, never standalone
+    equity positions. Used for single-child prefix rollup detection.
+    """
+    result: list[str] = []
+    wrapper_dir = _WRAPPER_DEFINITIONS_DIR
+    if not wrapper_dir.exists():
+        return result
+    for path in sorted(wrapper_dir.glob("*.json")):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                raw = json.load(fh)
+        except (json.JSONDecodeError, OSError):
+            continue
+        if raw.get("schema_version") != "bdc-xbrl-wrapper.v3":
+            continue
+        idf = raw.get("identifier_format", {})
+        if idf.get("delimiter") == ", " and "issuer_name" in (idf.get("field_order") or []):
+            result.append(raw["cik"])
+    return result
+
+
+def _get_prefix_rules_data() -> dict[str, list[str]]:
+    """Return CIK -> list of prefix_rules keys from wrapper JSON dispatch.
+
+    Used to build an aggregate-filter bypass: CIKs with declared prefix_rules
+    should not have real positions filtered by the aggregate check when the
+    identifier starts with a declared prefix AND contains entity/leaf detail
+    after the prefix.
+    """
+    result: dict[str, list[str]] = {}
+    wrapper_dir = _WRAPPER_DEFINITIONS_DIR
+    if not wrapper_dir.exists():
+        return result
+    for path in sorted(wrapper_dir.glob("*.json")):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                raw = json.load(fh)
+        except (json.JSONDecodeError, OSError):
+            continue
+        if raw.get("schema_version") != "bdc-xbrl-wrapper.v3":
+            continue
+        dispatch = raw.get("dispatch", {})
+        prefix_rules = dispatch.get("prefix_rules", {})
+        if not prefix_rules:
+            continue
+        cik = raw["cik"]
+        result[cik] = list(prefix_rules.keys())
+    return result
+
+
 def _load_aggregate_header_flags() -> pd.DataFrame:
     """Load CC-reviewed aggregate header flags, if present.
 
@@ -398,6 +452,12 @@ def _prepare_bdc(
         "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _prefix_strip_ciks) + ")"
     ) if _prefix_strip_ciks else "FALSE"
+    # CIKs eligible for single-child rollup detection (comma-delimited format)
+    _comma_delim_ciks = _get_comma_delimited_ciks()
+    _single_child_rollup_cik_sql = (
+        "LPAD(REGEXP_REPLACE(CAST(a.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+        "IN (" + ", ".join(f"'{c}'" for c in _comma_delim_ciks) + ")"
+    ) if _comma_delim_ciks else "FALSE"
     _msd_hierarchy_prefix_re = (
         r"(?i)^Investments\s+Investments\s*-\s*"
         r"(?:non-?\s*control(?:led)?(?:\s*/\s*non-?\s*affiliat(?:e|ed))?"
@@ -415,6 +475,117 @@ def _prepare_bdc(
         f"AND regexp_matches(_raw_id, '{_msd_hierarchy_prefix_re}')"
     )
     _msd_clean_raw = f"regexp_replace(_raw_id, '{_msd_hierarchy_prefix_re}', '')"
+
+    # Prefix-rules aggregate bypass: CIKs with declared prefix_rules in
+    # their wrapper JSON should not have real positions dropped by the
+    # aggregate filter when the identifier starts with a declared prefix
+    # AND the remainder contains entity signals or leaf detail.
+    _prefix_rules_data = _get_prefix_rules_data()
+    # Shared instrument-keyword regex for prefix_rules CIKs.  Used both
+    # in the aggregate-filter bypass (rescue real positions) and in the
+    # no_prefix_hierarchy CTE (remove subtotals).
+    _pr_instrument_re = (
+        r"(?:unitranche|first[-\s]+lien|second[-\s]+lien|term\s+loan|secured\s+loan"
+        r"|delayed\s+draw|revolver|revolving|senior\s+secured|subordinated"
+        r"|equipment\s+financing|notes?\b|bonds?\b|common\s+(?:stock|equity|units)"
+        r"|preferred\s+(?:stock|equity|units|shares)"
+        r"|warrants?\b|equity\s+(?:interest|co-invest|investment)"
+        r"|partnership\s+interest|llc\s+interest|member(?:ship)?\s+interest"
+        r"|type\s+of\s+investment|interest\s+rate|maturity\s+date"
+        r"|sofr|libor|euribor|prime\s+rate|corra)"
+    )
+    _prefix_rules_condition_parts: list[str] = []
+    _prefix_rules_hierarchy_parts: list[str] = []
+    for _pr_cik, _pr_prefixes in _prefix_rules_data.items():
+        _pr_cik_norm = _pr_cik.lstrip("0").zfill(10)
+        _pr_cik_sql = (
+            f"LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+            f"= '{_pr_cik_norm}'"
+        )
+        # Build regex to match any declared prefix (case-insensitive)
+        _pr_prefix_alts = "|".join(
+            re.escape(p) for p in sorted(_pr_prefixes, key=len, reverse=True)
+        )
+        # After the prefix, require an instrument-type keyword somewhere
+        # in the remainder (prefix stripped). This rescues real positions
+        # (which always name their instrument) while blocking issuer-level
+        # and sector-level subtotals that contain company names but no
+        # instrument detail.  We strip the prefix before checking because
+        # prefixes like "Portfolio Company Warrant Investments" contain
+        # instrument words ("warrant") that would incorrectly rescue all rows.
+        _pr_remainder = (
+            f"lower(regexp_replace(_raw_id, "
+            f"'(?i)^(?:{_pr_prefix_alts})\\s*-?\\s*', ''))"
+        )
+        _pr_condition = (
+            f"({_pr_cik_sql} "
+            f"AND regexp_matches(_raw_id, '(?i)^(?:{_pr_prefix_alts})\\s') "
+            f"AND regexp_matches({_pr_remainder}, '(?i){_pr_instrument_re}')"
+            f")"
+        )
+        _prefix_rules_condition_parts.append(_pr_condition)
+
+        # Build per-CIK subtotal filter for no_prefix_hierarchy CTE.
+        # For prefix_rules CIKs, real positions always start with a
+        # declared prefix AND have instrument keywords after the prefix.
+        # Subtotals that survive the aggregate filter are caught by four
+        # conditions:
+        _pr_entity_check = " OR ".join(
+            f"contains(lower(_raw_id), '{s}')" for s in _entity_sigs
+        )
+        # Prefix match that also handles dash separators ("Prefix- ...")
+        # and bare prefix with no suffix ("Prefix" at end of string).
+        _pr_prefix_match = (
+            f"regexp_matches(_raw_id, '(?i)^(?:{_pr_prefix_alts})(?:\\s|-|$)')"
+        )
+        _pr_hier_conds = [
+            # 2a: Prefix-starting rows without instrument detail after prefix
+            (
+                f"({_pr_prefix_match} "
+                f"AND NOT regexp_matches({_pr_remainder}, '(?i){_pr_instrument_re}'))"
+            ),
+            # 2b: "Total X" rows without instrument keywords — catches both
+            # starts_with("total ") and embedded "Total" after sector names
+            # (e.g. "...United States Total Applied Digital Corporation")
+            (
+                f"(regexp_matches(_lower_id, '(?:^|\\s)total\\s') "
+                f"AND NOT regexp_matches(lower(_raw_id), '(?i){_pr_instrument_re}'))"
+            ),
+            # 2c: Affiliation headers that lack a separator after "Investments"
+            (
+                "(regexp_matches(_lower_id, "
+                "'^(?:control(?:led)?|affiliate[d]?|non-?control(?:led)?(?:[/,]\\s*non-?affiliate[d]?)?)"
+                "\\s+(?:and\\s+(?:control(?:led)?|affiliate[d]?)\\s+)?investments\\s*$'))"
+            ),
+            # 2d: Bare entity names without prefix or instrument keywords
+            # (e.g. "Bestow, Inc." from affiliation stripping)
+            (
+                f"(NOT {_pr_prefix_match} "
+                f"AND NOT regexp_matches(_lower_id, '(?:^|\\s)total\\s') "
+                "AND NOT regexp_matches(_lower_id, "
+                "'^(?:control(?:led)?|affiliate[d]?|non-?control(?:led)?(?:[/,]\\s*non-?affiliate[d]?)?)"
+                "\\s+(?:and\\s+(?:control(?:led)?|affiliate[d]?)\\s+)?investments') "
+                f"AND ({_pr_entity_check}) "
+                f"AND NOT regexp_matches(lower(_raw_id), '(?i){_pr_instrument_re}'))"
+            ),
+        ]
+        _pr_hier_condition = (
+            f"({_pr_cik_sql} AND ({' OR '.join(_pr_hier_conds)}))"
+        )
+        _prefix_rules_hierarchy_parts.append(_pr_hier_condition)
+
+    _prefix_rules_hierarchy_condition = (
+        " OR ".join(_prefix_rules_condition_parts)
+        if _prefix_rules_condition_parts
+        else "FALSE"
+    )
+    # Combined subtotal filter for prefix_rules CIKs (used by
+    # no_prefix_hierarchy CTE below no_aggregates).
+    _prefix_hierarchy_filter = (
+        " OR ".join(_prefix_rules_hierarchy_parts)
+        if _prefix_rules_hierarchy_parts
+        else "FALSE"
+    )
 
     # Entity signal check on seg[1] (for pct-prefix category detection)
     _seg1_entity_sql = " OR ".join(
@@ -769,13 +940,22 @@ def _prepare_bdc(
           AND (
               COALESCE(o.force_include, 0) = 1
               OR ({_msd_hierarchy_condition})
+              OR ({_prefix_rules_hierarchy_condition})
               OR NOT ({agg_filter})
           )
     ),
 
+    -- CTE 2b: Filter prefix_rules subtotals that leaked through the
+    -- aggregate filter (they have entity signals like "Inc." that
+    -- protect them from the no-entity guard).
+    no_prefix_hierarchy AS (
+        SELECT * FROM no_aggregates
+        WHERE NOT ({_prefix_hierarchy_filter})
+    ),
+
     -- CTE 3: Filter XBRL artifacts (no financial data at all)
     no_artifacts AS (
-        SELECT * FROM no_aggregates
+        SELECT * FROM no_prefix_hierarchy
         WHERE _fv IS NOT NULL
            OR _ir IS NOT NULL
            OR _pa IS NOT NULL
@@ -813,11 +993,61 @@ def _prepare_bdc(
                <= greatest(1.0, 0.0001 * greatest(abs(a._fv), abs(SUM(b._fv))))
     ),
 
+    -- CTE 4b: Entity-level FV-match rollup parents (CIK-scoped).
+    -- Catches entity-level rollup rows whose FV matches ANY individual
+    -- instrument-level child row.  This handles parents with multiple
+    -- children at different FV levels (e.g. comparative-period variants)
+    -- where the parent FV equals one child but not the sum.
+    -- Only applies to CIKs with wrapper configs that use "issuer, instrument"
+    -- delimiter format, where bare entity names are always rollups.
+    -- Guards: parent lacks instrument keywords, child HAS instrument keywords,
+    -- child is at least 5 chars longer (covers ", CLO" minimum suffix).
+    single_child_rollup_parents AS (
+        SELECT DISTINCT
+            a._row_id
+        FROM has_fv a
+        JOIN has_fv b
+          ON a.cik = b.cik
+         AND a.accession_number = b.accession_number
+         AND b._raw_id LIKE a._raw_id || '%'
+         AND LENGTH(b._raw_id) >= LENGTH(a._raw_id) + 5
+         AND a._raw_id IS NOT NULL
+         AND LENGTH(a._raw_id) >= 3
+         AND a._row_id != b._row_id
+        WHERE {_single_child_rollup_cik_sql}
+          AND NOT regexp_matches(
+            lower(a._raw_id),
+            '(first lien|second lien|senior secured|subordinated|unitranche'
+            '|term loan|revolving|delayed draw|equipment financing'
+            '|secured loan|common stock|common equity|common units'
+            '|preferred stock|preferred equity|preferred shares|preferred units'
+            '|senior preferred|partnership interest|llc interest|equity interest'
+            '|equity co-invest|warrant|warrants|member interest'
+            '|class [a-z]|series [a-z]|collateralized loan obligation|clo)'
+        )
+          AND regexp_matches(
+            lower(b._raw_id),
+            '(first lien|second lien|senior secured|subordinated|unitranche'
+            '|term loan|revolving|delayed draw|equipment financing'
+            '|secured loan|common stock|common equity|common units'
+            '|preferred stock|preferred equity|preferred shares|preferred units'
+            '|senior preferred|partnership interest|llc interest|equity interest'
+            '|equity co-invest|warrant|warrants|member interest'
+            '|class [a-z]|series [a-z]|collateralized loan obligation|clo'
+            '|subordinated certificates|certificates)'
+        )
+          AND abs(a._fv - b._fv)
+              <= greatest(1.0, 0.0001 * greatest(abs(a._fv), abs(b._fv)))
+    ),
+
     no_subtotals AS (
         SELECT a.* FROM has_fv a
         LEFT JOIN prefix_rollup_parents p
           ON a._row_id = p._row_id
+        LEFT JOIN single_child_rollup_parents sp
+          ON a._row_id = sp._row_id
         WHERE p._row_id IS NULL
+          AND sp._row_id IS NULL
     )
 
     SELECT * FROM no_subtotals

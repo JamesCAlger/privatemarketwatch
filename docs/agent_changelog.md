@@ -6,6 +6,25 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-01 -- Fix Trinity Capital FV overshoot: prefix bypass + subtotal hierarchy filter
+
+- **staging_bdc.py (Change 1)**: Fixed prefix bypass instrument keyword check to strip the prefix before checking for instrument keywords. Previously, prefixes like "Portfolio Company Warrant Investments" contained "warrant" which rescued ALL rows under that prefix. Now `_pr_remainder` strips the prefix first, so only rows with instrument keywords in the text AFTER the prefix are rescued.
+- **staging_bdc.py (Change 2)**: Added `no_prefix_hierarchy` CTE between `no_aggregates` and `no_artifacts` to filter prefix_rules subtotals that leaked through the aggregate filter. Four conditions per CIK: (2a) prefix-starting rows without instrument detail after prefix, (2b) "Total X" rows without instrument keywords, (2c) affiliation headers without separators, (2d) bare entity names from affiliation stripping.
+- **staging_bdc.py**: Hoisted `_pr_instrument_re` before the per-CIK loop (shared between bypass and hierarchy filter). Added `_prefix_rules_hierarchy_parts` list and `_prefix_hierarchy_filter` combined SQL expression.
+- **Followup fix**: Prefix match in conditions 2a/2b/2d used `\s` after prefix which missed dash separators (`Prefix- Sector`) and bare prefix (`Prefix` at end-of-string). Changed to `(?:\s|-|$)`. Also widened 2b from `starts_with(_lower_id, 'total ')` to `regexp_matches(_lower_id, '(?:^|\s)total\s')` to catch embedded "Total" after sector names (e.g. "...United States Total Applied Digital Corporation").
+- **Oracle results**: Trinity (0001786108) A04/E01 now passes ALL 12 quarters with financials (0.0-0.7% divergence). Previous state was 24-29% overshoot on all quarters. Trinity overall: 161 pass / 18 fail (remaining fails are A07 pct_sum and unrelated checks). Ares (0001287750) unchanged at 198 pass / 16 fail.
+- **Row counts**: Unified holdings 794,982 (down 112 from 795,094 — subtotals removed across all Trinity quarters). BDC total: 575,217 rows.
+- **Tests**: 774 passed, 2 deselected (pre-existing MSD hierarchy test failures from prior worktree changes, not caused by this change).
+
+### 2026-06-01 -- Fix oracle failures for Ares Capital and Trinity Capital
+
+- **staging_bdc.py**: Added `single_child_rollup_parents` CTE (CIK-scoped to comma-delimited wrapper CIKs) to remove entity-level rollup rows with exactly 1 FV-matching child. Includes guards: parent lacks instrument keywords, child HAS instrument keywords, child is >= 20 chars longer. Targets Ares Ivy Hill/SDLP duplication causing ~9.5% GAV overshoot.
+- **staging_bdc.py**: Added `_get_prefix_rules_data()` and `_get_comma_delimited_ciks()` functions to load wrapper configs. Built dynamic aggregate-filter bypass for all 7 CIKs with `prefix_rules` in wrapper JSON. This prevents Trinity's 217 real positions from being dropped by `_BDC_AGGREGATE_PATTERNS` when identifiers start with "Portfolio Company Debt Securities" etc.
+- **source_reconciliation.py**: Added `documented_source_issuer_level_xbrl_subtotal` mechanism to reclassify issuer-level XBRL subtotals as non-blocking. Detection uses `source_wrapper_disposition` ending in `_issuer_rollup`. Also relaxed `HAVING COUNT >= 2` to allow single-child rollup matching for `_issuer_rollup` disposition in both `source_rollup_matches` and `source_child_rollup_matches`.
+- **0001287750.json**: Added `known_null_fields` documenting that Ares Capital does not report `pct_of_net_assets` in XBRL.
+- **test_unified_holdings.py**: Updated pre-existing test (`test_long_noncontrol_dimension_path_filtered_pre_strip` -> `test_long_noncontrol_dimension_path_with_entity_kept_pre_strip`) to match worktree `bdc_identifier.py` changes where expanded entity/leaf signals protect the identifier.
+- Test results: 2593 passed, 2 failed (pre-existing X06 column validation), 13 skipped, 32 deselected (5 pre-existing worktree failures: 2 MSD hierarchy, 1 Trinity wrapper v3, 2 column validation).
+
 ### 2026-05-28 — SC TO-I extraction regex expansion and universe validation
 
 - Updated `pipeline/sc_toi_filings.py` and `tests/test_sc_toi_filings.py` for SC TO-I/A tender-offer result extraction.
@@ -232,3 +251,32 @@ Consolidated three parallel per-CIK systems (Python WrapperSpec, v2 JSON content
 - Replaced `TRINITY_CIK` import with local constant.
 
 **Verification:** 66 wrapper/oracle/content-signature tests pass. 3 unified_holdings test failures traced to pre-existing dirty worktree changes in `bdc_identifier.py`, not caused by this work (confirmed by testing with committed `bdc_identifier.py`).
+
+### 2026-06-01 -- Fix oracle failures for Ares Capital and Trinity Capital
+
+**Problem:** Ares Capital (0001287750) A04/E01 showed 8.6-8.8% FV overshoot for 2024-12-31 and 2025-03-31 caused by entity-level XBRL rollup parents (Ivy Hill $1.9B, Potomac $350M, ACAS $500K) duplicating their instrument-level children. Trinity Capital (0001786108) prefix-rules aggregate bypass was too permissive, admitting subtotals via entity-signal matching.
+
+**Changes:**
+
+**staging_bdc.py:**
+- Added `_get_comma_delimited_ciks()` to identify CIKs with "issuer, instrument" delimiter format (Ares Capital, Ares Strategic Income)
+- Added `_get_prefix_rules_data()` to load prefix_rules from all wrapper JSON configs
+- Added CIK-scoped `single_child_rollup_parents` CTE that removes entity-only parent rows whose FV matches ANY individual instrument-level child (not just single-child or sum-match). Guards: parent lacks instrument keywords, child has instrument keywords, CIK uses comma-delimited wrapper format, FV matches within 0.01% tolerance, child at least 5 chars longer
+- Added `_prefix_rules_hierarchy_condition` aggregate bypass for 7 CIKs with declared prefix_rules. Replaced entity-signal OR leaf-detail condition with instrument-keyword-only check to prevent subtotal leakage through company-name matching
+- Modified `no_subtotals` CTE to exclude `single_child_rollup_parents`
+
+**source_reconciliation.py:**
+- Added `documented_source_issuer_level_xbrl_subtotal` mechanism with detection mask using `source_wrapper_disposition` ending in `_issuer_rollup`
+- Relaxed `source_rollup_matches` and `source_child_rollup_matches` HAVING clauses to allow single-child rollups with `_issuer_rollup` disposition
+
+**data/overrides/bdc_xbrl_wrappers/0001287750.json:**
+- Added `known_null_fields` documenting that pct_of_net_assets is not reported in XBRL
+
+**tests/test_unified_holdings.py:**
+- Updated `test_long_noncontrol_dimension_path` to match new entity-signal behavior from worktree changes
+- Added `test_short_noncontrol_without_entity_no_leaf_filtered_pre_strip`
+
+**Oracle results after fix:**
+- Ares: 198 pass, 16 fail (was 194 pass, 20 fail). A04/E01 ALL PASS -- 2024-12-31 dropped from 8.6% to 0.1%, 2025-03-31 from 8.8% to 0.1%. Remaining 16 failures are A07 (pct_of_net_assets=0%, expected null).
+- Trinity: 128 pass, 51 fail (unchanged). FV overshoot (24-29% pre-2025) is pre-existing from subtotals passing through the standard aggregate filter, not the prefix bypass. Requires separate investigation.
+- Source reconciliation reclassification (Change 3) not yet verified -- needs separate source recon rebuild.
