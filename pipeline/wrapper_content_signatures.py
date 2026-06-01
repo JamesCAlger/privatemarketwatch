@@ -90,6 +90,7 @@ class EdgeCase:
 class UnclassifiedRate:
     """Maximum allowed fraction of unclassified rows per quarter."""
     max_pct: float
+    max_fv_pct: float = 0.05  # FV-weighted threshold (default 5%)
 
 
 @dataclass(frozen=True)
@@ -189,6 +190,7 @@ def _parse_definition(raw: dict[str, Any]) -> WrapperDefinition:
         ur = invariants["unclassified_rate"]
         unclass_rate = UnclassifiedRate(
             max_pct=ur.get("max_pct", 0.05),
+            max_fv_pct=ur.get("max_fv_pct", 0.05),
         )
 
     edge_cases = []
@@ -396,6 +398,8 @@ def validate_content_signatures(
         "report_date", "total_rows", "classified_rows", "unclassified_rows",
         "pass_rows", "fail_rows", "pass_rate",
         "unclassified_rate", "unclassified_rate_status",
+        "total_fv", "classified_fv", "unclassified_fv",
+        "unclassified_fv_rate", "unclassified_fv_rate_status",
     ]
     if holdings_df.empty:
         return pd.DataFrame(columns=summary_columns), []
@@ -404,10 +408,12 @@ def validate_content_signatures(
     # Determine the text column to classify on
     text_col = _resolve_text_column(holdings_df)
     report_date_col = "report_date" if "report_date" in holdings_df.columns else None
+    has_fv = "fair_value" in holdings_df.columns
 
     per_row_pass = []
     per_row_archetype = []
     per_row_report_date = []
+    per_row_fv: list[float] = []
 
     for idx, row in holdings_df.iterrows():
         text = str(row.get(text_col, "") or "")
@@ -415,6 +421,17 @@ def validate_content_signatures(
         archetype_name = classify_archetype(wrapper, text)
         per_row_archetype.append(archetype_name or "")
         per_row_report_date.append(report_date)
+
+        # Collect absolute fair value for FV-weighted coverage
+        fv_val = 0.0
+        if has_fv:
+            raw_fv = row.get("fair_value")
+            if _field_is_present(raw_fv):
+                try:
+                    fv_val = abs(float(raw_fv))
+                except (ValueError, TypeError):
+                    fv_val = 0.0
+        per_row_fv.append(fv_val)
 
         if archetype_name is None:
             per_row_pass.append(True)  # Unclassified rows are not signature failures
@@ -440,9 +457,11 @@ def validate_content_signatures(
         "report_date": per_row_report_date,
         "archetype": per_row_archetype,
         "row_pass": per_row_pass,
+        "fair_value": per_row_fv,
     })
-    # Determine unclassified_rate threshold from wrapper if available
+    # Determine thresholds from wrapper if available
     unclass_threshold = wrapper.unclassified_rate.max_pct if wrapper.unclassified_rate else None
+    unclass_fv_threshold = wrapper.unclassified_rate.max_fv_pct if wrapper.unclassified_rate else None
 
     summary_rows = []
     for report_date, group in result_df.groupby("report_date", dropna=False):
@@ -455,6 +474,16 @@ def validate_content_signatures(
         unclass_status = ""
         if unclass_threshold is not None:
             unclass_status = "pass" if unclass_frac <= unclass_threshold else "fail"
+
+        # FV-weighted coverage
+        total_fv = float(group["fair_value"].sum())
+        classified_fv = float(classified["fair_value"].sum()) if not classified.empty else 0.0
+        unclassified_fv = float(unclassified["fair_value"].sum()) if not unclassified.empty else 0.0
+        unclass_fv_frac = unclassified_fv / total_fv if total_fv > 0 else 0.0
+        unclass_fv_status = ""
+        if unclass_fv_threshold is not None:
+            unclass_fv_status = "pass" if unclass_fv_frac <= unclass_fv_threshold else "fail"
+
         summary_rows.append({
             "report_date": report_date,
             "total_rows": total,
@@ -465,6 +494,11 @@ def validate_content_signatures(
             "pass_rate": pass_rows / total if total else 0.0,
             "unclassified_rate": round(unclass_frac, 6),
             "unclassified_rate_status": unclass_status,
+            "total_fv": round(total_fv, 2),
+            "classified_fv": round(classified_fv, 2),
+            "unclassified_fv": round(unclassified_fv, 2),
+            "unclassified_fv_rate": round(unclass_fv_frac, 6),
+            "unclassified_fv_rate_status": unclass_fv_status,
         })
     summary = pd.DataFrame(summary_rows)
     return summary, violations

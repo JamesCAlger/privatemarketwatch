@@ -61,11 +61,18 @@ ORACLE_SUMMARY_COLUMNS = [
     "unparsed_remainder_rows",
     "content_signature_pass_rate",
     "content_signature_violations",
+    "unclassified_rate",
+    "unclassified_rate_status",
+    "unclassified_fv_rate",
+    "unclassified_fv_rate_status",
     "fv_reconciliation_status",
     "fv_reconciliation_pct_diff",
     "oracle_status",
     "oracle_fail_reasons",
 ]
+
+# Default QoQ unclassified rate jump threshold (5 percentage points)
+_UNCLASSIFIED_RATE_QOQ_JUMP_THRESHOLD = 0.05
 
 REMAINING_MECHANISM_COLUMNS = [
     "cik",
@@ -593,7 +600,8 @@ def _check_content_signatures(
 ) -> dict[str, dict[str, Any]]:
     """Run v2 content signature checks for a CIK if a wrapper definition exists.
 
-    Returns a dict mapping report_date to {pass_rate, violation_count}.
+    Returns a dict mapping report_date to per-quarter metrics including
+    pass_rate, violation_count, unclassified rates, and FV coverage.
     """
     wrapper = load_wrapper_definition(cik)
     if wrapper is None or holdings_df.empty:
@@ -607,6 +615,10 @@ def _check_content_signatures(
         result[rd] = {
             "pass_rate": float(row.get("pass_rate", 0.0)),
             "violation_count": int(row.get("fail_rows", 0)),
+            "unclassified_rate": float(row.get("unclassified_rate", 0.0)),
+            "unclassified_rate_status": str(row.get("unclassified_rate_status", "")),
+            "unclassified_fv_rate": float(row.get("unclassified_fv_rate", 0.0)),
+            "unclassified_fv_rate_status": str(row.get("unclassified_fv_rate_status", "")),
         }
     return result
 
@@ -729,6 +741,12 @@ def build_wrapper_oracle_outputs(
         fund_financials_df,
     )
 
+    # Structural check: wrapper definition exists but has no archetypes
+    wrapper_def = load_wrapper_definition(cik_norm)
+    wrapper_no_archetypes = (
+        wrapper_def is not None and len(wrapper_def.archetypes) == 0
+    )
+
     rows: list[dict[str, Any]] = []
     for report_date, group in df.groupby("report_date", dropna=False):
         group_index = group.index
@@ -756,6 +774,21 @@ def build_wrapper_oracle_outputs(
         if not has_wrapper_rows:
             reasons.append("unsupported_wrapper_cik" if not prefixes else "no_wrapper_rows")
 
+        # Coverage gate: no-archetype structural check
+        if wrapper_no_archetypes:
+            reasons.append("wrapper_no_archetypes")
+
+        # Coverage gates from content signature results
+        cs_data = cs_by_report.get(str(report_date), {})
+        cs_unclass_rate = cs_data.get("unclassified_rate", 0.0)
+        cs_unclass_rate_status = cs_data.get("unclassified_rate_status", "")
+        cs_unclass_fv_rate = cs_data.get("unclassified_fv_rate", 0.0)
+        cs_unclass_fv_status = cs_data.get("unclassified_fv_rate_status", "")
+        if cs_unclass_rate_status == "fail":
+            reasons.append("unclassified_rate_exceeded")
+        if cs_unclass_fv_status == "fail":
+            reasons.append("unclassified_fv_rate_exceeded")
+
         cleared_group = cleared[cleared["report_date"].eq(report_date)]
         remaining_group = remaining[remaining["report_date"].eq(report_date)]
         rows.append({
@@ -781,8 +814,12 @@ def build_wrapper_oracle_outputs(
             "signature_fail_rows": signature_fail_rows,
             "unclassified_prefix_rows": unclassified_rows,
             "unparsed_remainder_rows": unparsed_rows,
-            "content_signature_pass_rate": cs_by_report.get(str(report_date), {}).get("pass_rate", ""),
-            "content_signature_violations": cs_by_report.get(str(report_date), {}).get("violation_count", ""),
+            "content_signature_pass_rate": cs_data.get("pass_rate", ""),
+            "content_signature_violations": cs_data.get("violation_count", ""),
+            "unclassified_rate": cs_unclass_rate if cs_data else "",
+            "unclassified_rate_status": cs_unclass_rate_status,
+            "unclassified_fv_rate": cs_unclass_fv_rate if cs_data else "",
+            "unclassified_fv_rate_status": cs_unclass_fv_status,
             "fv_reconciliation_status": fv_by_report.get(str(report_date), {}).get("status", ""),
             "fv_reconciliation_pct_diff": fv_by_report.get(str(report_date), {}).get("pct_diff", ""),
             "oracle_status": (
@@ -792,6 +829,28 @@ def build_wrapper_oracle_outputs(
             ),
             "oracle_fail_reasons": "|".join(reasons),
         })
+
+    # QoQ unclassified rate jump detection (post-processing)
+    if len(rows) > 1 and cs_by_report:
+        rows.sort(key=lambda r: r["report_date"])
+        for i in range(1, len(rows)):
+            prev_rate = rows[i - 1].get("unclassified_rate", 0.0)
+            curr_rate = rows[i].get("unclassified_rate", 0.0)
+            try:
+                prev_rate = float(prev_rate) if prev_rate != "" else 0.0
+                curr_rate = float(curr_rate) if curr_rate != "" else 0.0
+            except (ValueError, TypeError):
+                continue
+            jump = curr_rate - prev_rate
+            if jump > _UNCLASSIFIED_RATE_QOQ_JUMP_THRESHOLD:
+                existing_reasons = rows[i]["oracle_fail_reasons"]
+                new_reason = "unclassified_rate_qoq_jump"
+                if existing_reasons:
+                    rows[i]["oracle_fail_reasons"] = existing_reasons + "|" + new_reason
+                else:
+                    rows[i]["oracle_fail_reasons"] = new_reason
+                if rows[i]["oracle_status"] == "pass":
+                    rows[i]["oracle_status"] = "fail"
 
     summary = pd.DataFrame(rows, columns=ORACLE_SUMMARY_COLUMNS)
     return summary, cleared[DETAIL_COLUMNS], remaining[DETAIL_COLUMNS], mechanisms
@@ -1041,9 +1100,41 @@ def main(argv: list[str] | None = None) -> int:
         help="Rebuild only the requested CIK's BDC rows through current staging before reconciling.",
     )
     parser.add_argument("--fail-on-oracle-fail", action="store_true")
+    parser.add_argument(
+        "--oracle-v2",
+        action="store_true",
+        help="Run comprehensive oracle v2 checks (arithmetic, structural, content, etc.).",
+    )
+    parser.add_argument(
+        "--oracle-v2-checks",
+        default=None,
+        help="Comma-separated oracle v2 check IDs (e.g. A01,A04,F01).",
+    )
+    parser.add_argument(
+        "--oracle-v2-category",
+        default=None,
+        help="Run all oracle v2 checks in one category (e.g. A, B, F).",
+    )
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+
+    # Oracle v2: comprehensive arithmetic/structural/content checks
+    if args.oracle_v2:
+        from pipeline.oracle_runner import run_oracle
+        checks = args.oracle_v2_checks.split(",") if args.oracle_v2_checks else None
+        cik_arg = None if args.all_supported else normalize_cik(args.cik)
+        report = run_oracle(
+            cik=cik_arg,
+            checks=checks,
+            category=args.oracle_v2_category,
+            output_dir=args.output_dir,
+        )
+        print(report.summary_text())
+        if args.fail_on_oracle_fail and report.fail_count > 0:
+            return 1
+        return 0
+
     if args.queue_from_residuals:
         queue, summary = run_wrapper_queue(
             residual_clusters_file=args.residual_clusters_file,
