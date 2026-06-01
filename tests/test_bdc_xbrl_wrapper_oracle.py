@@ -1318,6 +1318,41 @@ def test_oracle_no_concept_drift_when_churn_below_threshold():
     assert "concept_drift_detected" not in str(q2_row["oracle_fail_reasons"])
 
 
+def test_oracle_no_concept_drift_when_pipe_delimited_combos_change():
+    """Concept drift should split pipe-delimited concept_names into individual
+    concepts before comparing.  Different rows may report different
+    *combinations* of the same underlying concepts (e.g. one row has
+    ``FV|Cost`` and another has ``FV|Cost|Maturity``).  This is normal
+    portfolio composition change, not a structural taxonomy change."""
+    q1_detail = _detail([
+        {"report_date": "2024-09-30",
+         "concept_names": "FairValue|Cost", "status": "matched"},
+        {"report_date": "2024-09-30",
+         "concept_names": "FairValue|Cost|Rate", "status": "matched"},
+    ])
+    # Q2: same individual concepts, different combo set
+    q2_detail = _detail([
+        {"report_date": "2024-12-31",
+         "concept_names": "FairValue|Cost|Rate|Maturity", "status": "matched"},
+    ])
+    detail = pd.concat([q1_detail, q2_detail], ignore_index=True)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    # Individual concepts: {FairValue, Cost, Rate} vs {FairValue, Cost, Rate, Maturity}
+    # churn = 1/4 = 25%, below the 30% threshold
+    assert q2_row["concept_drift_flag"] == "no"
+    assert "concept_drift_detected" not in str(q2_row["oracle_fail_reasons"])
+
+
 # ---------------------------------------------------------------------------
 # Gap #5: Unparsed remainder spike test
 # ---------------------------------------------------------------------------

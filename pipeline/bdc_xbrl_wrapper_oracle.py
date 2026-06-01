@@ -1193,9 +1193,12 @@ def _detect_concept_drift(detail_df: pd.DataFrame) -> dict[str, str]:
         return {}
     concepts_by_quarter: dict[str, set[str]] = {}
     for rd, grp in detail_df.groupby("report_date", dropna=False):
-        concepts = set(
-            grp["concept_names"].fillna("").astype(str).str.strip()
-        ) - {""}
+        concepts: set[str] = set()
+        for val in grp["concept_names"].fillna("").astype(str):
+            for c in val.split("|"):
+                c = c.strip()
+                if c:
+                    concepts.add(c)
         if concepts:
             concepts_by_quarter[str(rd)] = concepts
     if len(concepts_by_quarter) < 2:
