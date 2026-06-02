@@ -162,7 +162,7 @@ _FUND_WORD_RE = re.compile(r"\bfunds?\b", re.IGNORECASE)
 # Money market fund patterns (not private markets -- filtered out)
 _MONEY_MARKET_KEYWORDS = [
     "money market", "government obligations fund", "treasury obligations fund",
-    "liquidity fund",
+    "liquidity fund", "financial square",
 ]
 
 # Index classification fund-name signals
