@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001920145",
   "entity_name": "Goldman Sachs Private Credit Corp.",
-  "version": 1,
+  "version": 3,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "GS_PRIVATE_CREDIT",
@@ -14,13 +14,128 @@
       "Investment 1st Lien/Senior Secured Debt": "debt",
       "Investment 1st Lien/Last-Out Unitranche": "debt",
       "Investment 2nd Lien/Senior Secured Debt": "debt",
-      "Investment Equity Investments": "equity"
+      "Investment Equity Investments": "equity",
+      "Investment Equity Securities": "equity",
+      "Equity and Other": "equity",
+      "nvestment Debt Investments": "debt",
+      "vestment Debt Investments": "debt",
+      "Investment United States": "debt",
+      "Investment Canada": "debt",
+      "Investment United Kingdom": "debt",
+      "Investment Australia": "debt",
+      "Investment Cayman Islands": "equity",
+      "Investment Switzerland": "debt",
+      "Investment Luxembourg": "debt",
+      "Investment France": "debt",
+      "Investment Ireland": "debt"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "type of investment",
+        "investment type",
+        "investment date",
+        "initial acquisition date",
+        "maturity date",
+        "maturity",
+        "interest rate",
+        "reference rate",
+        "reference rate and spread",
+        "current coupon",
+        "effective yield",
+        "sofr",
+        "libor",
+        "euribor",
+        "floor rate",
+        "pik interest"
+      ],
+      "equity": [
+        "type of investment",
+        "investment type",
+        "investment date",
+        "initial acquisition date",
+        "maturity date",
+        "maturity",
+        "effective yield",
+        "common stock",
+        "common equity",
+        "preferred stock",
+        "preferred equity",
+        "preferred units",
+        "partnership interest"
+      ],
+      "warrant": [
+        "type of investment",
+        "investment type",
+        "investment date",
+        "expiration date",
+        "warrant"
+      ]
     },
     "aggregate_markers": [
       "total investments",
       "total debt investments",
-      "total equity investments"
-    ]
+      "total equity investments",
+      "investments in affiliated money market fund",
+      "investments and investments in affiliated money market fund",
+      "debt investments united states",
+      "debt investments canada",
+      "debt investments united kingdom",
+      "debt investments switzerland",
+      "debt investments france",
+      "debt investments luxembourg",
+      "debt investments australia",
+      "debt investments cayman islands",
+      "debt investments ireland",
+      "equity securities united states",
+      "equity securities cayman islands",
+      "equity securities united states common stock",
+      "1st lien/senior secured debt",
+      "2nd lien/senior secured debt",
+      "1st lien/last-out unitranche",
+      "first lien/senior secured debt",
+      "investment united states",
+      "investment canada",
+      "investment united kingdom",
+      "investment australia",
+      "investment cayman islands",
+      "investment switzerland",
+      "investment luxembourg",
+      "investment france",
+      "investment ireland"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "financial square",
+      "government institutional",
+      "u.s. treasury",
+      "us treasury",
+      "goldman sachs financial square government fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)(?:first|1st|2nd|second)\\s*lien|senior secured|unitranche|unsecured debt|debt investments|term loan|delayed draw|revolving credit|revolver|corporate bond|senior note|subordinated",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)equity investments|equity securities|equity and other|common stock|preferred stock|common units|preferred units|partnership interest|llc interest|membership interest|equity interest|ordinary shares|warrant",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^(?:investments|total investments|investments and investments)(?:\\s|$|-)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^(?:Canada|United Kingdom|United States|Switzerland|Luxembourg|France|Ireland|Australia|Cayman Islands|Netherlands|Germany|Belgium|Sweden|Norway|Denmark|Finland|Spain|Italy|Japan|Singapore|Hong Kong)(?:\\s|$|-)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^Investment\\s+Goldman\\s+Sachs",
+        "family": "debt"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "category_marker_re": "^(?:common stock|preferred stock|equity securities)(?:\\s+united\\s+states|\\s+cayman\\s+islands)?(?:\\s+(?:common|preferred)\\s+stock)?(?:\\s*-\\s*[\\d.]+%)?$"
   },
   "archetypes": {
     "debt": {
@@ -104,7 +219,7 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.05
     }
   }
 }

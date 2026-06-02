@@ -505,19 +505,28 @@ class TestIsBdcAggregateRow:
         )
 
     # --- Non-control dimension-path handling (2026-05-04, updated P0-A) ---
-    def test_long_noncontrol_dimension_path_filtered_pre_strip(self):
-        """Long dimension-path identifier starting with affiliation prefix IS filtered
-        by _is_bdc_aggregate_row (pre-stripping). In the pipeline, _INVESTMENTS_HIERARCHY_RE
-        strips the prefix first; this test validates the Python mirror's behavior on
-        unstripped identifiers."""
+    def test_long_noncontrol_dimension_path_with_entity_kept_pre_strip(self):
+        """Long dimension-path identifier with affiliation prefix BUT entity
+        signals ('Holding Company' -> 'holdings') and leaf detail ('Delayed
+        Draw' + 'SOFR') is NOT filtered because the entity/leaf guards
+        protect it. In the pipeline, _INVESTMENTS_HIERARCHY_RE strips the
+        prefix first anyway."""
         long_id = (
             "Non-Controlled/Non-Affiliated Investments Senior Secured First Lien Loans "
             "Industry Commercial Services & Supplies Company Advanced Web Technologies "
             "Holding Company Delayed Draw SOFR Spread 5.75"
         )
         assert len(long_id) >= 150  # sanity check
-        # Pre-stripping: the affiliation prefix causes it to be filtered
-        assert _is_bdc_aggregate_row(long_id)
+        # Entity signal 'holdings' and leaf detail protect this from aggregate filter
+        assert not _is_bdc_aggregate_row(long_id)
+
+    def test_short_noncontrol_without_entity_no_leaf_filtered_pre_strip(self):
+        """Affiliation prefix without entity signals or leaf detail IS filtered
+        pre-strip (validates the Python mirror catches category-only identifiers)."""
+        short_id = (
+            "Non-Controlled/Non-Affiliated Investments Senior Secured First Lien Loans"
+        )
+        assert _is_bdc_aggregate_row(short_id)
 
     def test_investments_hierarchy_stripped_identifier_kept(self):
         """After _INVESTMENTS_HIERARCHY_RE stripping, the remaining
@@ -1361,6 +1370,51 @@ class TestPrepareBdc:
         ])
         result = _prepare_bdc(df)
         assert result.empty
+
+    def test_fidelity_equity_coinvest_class_a_units_kept(self):
+        """Equity co-investments with Class A/B Units/Interest survive prefix hierarchy filter."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0001920453",
+                "entity_name": "Fidelity Private Credit Fund",
+                "accession_number": "0000950170-25-041963",
+                "report_date": "2024-12-31",
+                "investment_identifier": (
+                    "Investments Investments - non-controlled / non-affiliate "
+                    "Equity Specialized Consumer Services Quick Roofing Topco, "
+                    "LLC Class A Interest"
+                ),
+                "fair_value": 1359672,
+            },
+            {
+                "cik": "0001920453",
+                "entity_name": "Fidelity Private Credit Fund",
+                "accession_number": "0000950170-25-041963",
+                "report_date": "2024-12-31",
+                "investment_identifier": (
+                    "Investments Investments - non-controlled / non-affiliate "
+                    "Equity Industrial Machinery & Supplies & Components "
+                    "MoboTrex Ultimate Holdings, LLC Class A-2 Units"
+                ),
+                "fair_value": 1027063,
+            },
+            {
+                "cik": "0001920453",
+                "entity_name": "Fidelity Private Credit Fund",
+                "accession_number": "0000950170-25-041963",
+                "report_date": "2024-12-31",
+                "investment_identifier": (
+                    "Investments Investments - non-controlled / non-affiliate "
+                    "Equity Health Care Services NE Ortho Holdings, LLC "
+                    "Class B Membership Units"
+                ),
+                "fair_value": 135260,
+            },
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 3, (
+            f"Expected 3 equity co-investments, got {len(result)}"
+        )
 
     def test_prefix_parent_with_one_suffix_child_is_retained(self):
         """A prefix parent is not dropped unless FV evidence proves a rollup."""
@@ -2358,6 +2412,8 @@ class TestBuildUnifiedHoldings:
             },
         ])
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_full_integration(self, tmp_path):
         """End-to-end test with in-memory DataFrames."""
         bdc_df = self._make_bdc_df()
@@ -2392,6 +2448,8 @@ class TestBuildUnifiedHoldings:
         # Output file should exist
         assert (tmp_path / "test_output.csv").exists()
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_load_from_disk(self, tmp_path):
         """Test loading from CSV files."""
         bdc_df = self._make_bdc_df()
@@ -2405,7 +2463,11 @@ class TestBuildUnifiedHoldings:
         nport_df.to_csv(nport_path, index=False)
 
         with patch("pipeline.unified_holdings.BDC_HOLDINGS_FILE", bdc_path), \
+             patch("pipeline.unified_holdings.BDC_HOLDINGS_PARQUET_FILE",
+                   tmp_path / "missing_bdc.parquet"), \
              patch("pipeline.unified_holdings.NPORT_HOLDINGS_FILE", nport_path), \
+             patch("pipeline.unified_holdings.NPORT_HOLDINGS_PARQUET_FILE",
+                   tmp_path / "missing_nport.parquet"), \
              patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE", output_path):
             result = build_unified_holdings()
 
@@ -2450,6 +2512,8 @@ class TestEntityEnrichment:
             "is_default", "other_identifier", "currency_code",
         ])
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_entity_id_populated_when_lookup_exists(self, tmp_path):
         """When entity_lookup.csv exists, entity_id should be populated."""
         bdc_df = self._make_bdc_df()
@@ -2480,6 +2544,8 @@ class TestEntityEnrichment:
         assert acme["entity_id"] == "ENT-00000001"
         assert acme["canonical_name"] == "Acme Corporation"
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_entity_id_empty_when_no_lookup(self, tmp_path):
         """When entity_lookup.csv does not exist, entity_id stays empty."""
         bdc_df = self._make_bdc_df()
@@ -2494,6 +2560,8 @@ class TestEntityEnrichment:
         assert (result["entity_id"] == "").all()
         assert (result["canonical_name"] == "").all()
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_unmatched_rows_get_empty_entity_id(self, tmp_path):
         """Rows not in entity_lookup get empty entity_id (not NULL)."""
         bdc_df = self._make_bdc_df()
@@ -2523,6 +2591,8 @@ class TestEntityEnrichment:
         # No match -> empty string, not NaN
         assert (result["entity_id"] == "").all()
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_column_order_preserved(self, tmp_path):
         """Entity enrichment should not change column order."""
         bdc_df = self._make_bdc_df()
@@ -2587,6 +2657,8 @@ class TestIndustryEnrichment:
             "is_default", "other_identifier", "currency_code",
         ])
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_industry_populated_when_lookup_exists(self, tmp_path):
         """When identifier_extraction_lookup.csv exists, extracted_industry is filled."""
         bdc_df = self._make_bdc_df()
@@ -2611,6 +2683,8 @@ class TestIndustryEnrichment:
         acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
         assert acme["extracted_industry"] == "Technology"
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_industry_empty_when_no_lookup(self, tmp_path):
         """When no lookup file exists, extracted_industry stays empty."""
         bdc_df = self._make_bdc_df()
@@ -2626,6 +2700,8 @@ class TestIndustryEnrichment:
 
         assert (result["extracted_industry"] == "").all()
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_nport_rows_not_affected(self, tmp_path):
         """N-PORT rows should not get industry from BDC lookup."""
         bdc_df = self._make_bdc_df()
@@ -5965,6 +6041,39 @@ class TestExpandedAggregatePatterns:
             "Beta Holdings LLC - Mezzanine Debt - Due 12/15/2027"
         )
 
+    def test_trinity_type_of_investment_leaf_with_corporation_kept(self):
+        assert not _is_bdc_aggregate_row(
+            "Portfolio Company Debt Securities- United States Space Technology "
+            "Astranis Space Technology Corporation Type of Investment Secured Loan "
+            "Investment Date January 1, 2024 Maturity Date January 1, 2028 "
+            "Interest Rate Fixed interest rate 10.0%"
+        )
+
+    def test_trinity_type_of_investment_leaf_with_limited_kept(self):
+        assert not _is_bdc_aggregate_row(
+            "Portfolio Company Debt Securities- Europe Industrials Example Limited "
+            "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%"
+        )
+
+    def test_trinity_type_of_investment_leaf_with_holding_company_kept(self):
+        assert not _is_bdc_aggregate_row(
+            "Portfolio Company Debt Securities- United States Education Technology "
+            "Total Medical Sales Training Holding Company Type of Investment Secured Loan "
+            "Investment Date January 1, 2024 Maturity Date January 1, 2028 "
+            "Interest Rate Fixed interest rate 10.0%"
+        )
+
+    def test_trinity_bare_category_still_aggregate(self):
+        assert _is_bdc_aggregate_row(
+            "Portfolio Company Debt Securities- Europe Space Technology"
+        )
+
+    def test_trinity_subtotal_still_aggregate(self):
+        assert _is_bdc_aggregate_row(
+            "Portfolio Company Debt Securities- Sub-total: Education Technology"
+        )
+
 
 # ---------------------------------------------------------------------------
 # A2: Bad issuer name filter tests
@@ -7761,6 +7870,13 @@ class TestPctPrefixCategorySubtotals:
     def test_generic_crescent_style_header_without_leaf_evidence_aggregate(self):
         assert _is_bdc_aggregate_row("Investments Canada Debt Investments")
 
+    def test_no_dash_hierarchy_leaf_with_rate_evidence_not_aggregate(self):
+        assert not _is_bdc_aggregate_row(
+            "Debt Investments Business Services OutSystems Luxco SARL "
+            "First-lien loan (EUR 3,263 par, due 12/2028) Initial Acquisition Date "
+            "12/8/2022 Reference Rate and Spread E + 5.75% Interest Rate 8.74%"
+        )
+
 
 # ---------------------------------------------------------------------------
 # Pct-prefix identifier parsing (PennantPark / Blue Owl / Saratoga)
@@ -7835,15 +7951,31 @@ class TestPctPrefixParsing:
         )
         assert issuer == "Acme Corp"
 
-    def test_saratoga_not_affected(self):
-        """Saratoga: bare pct '10.2%' with no category text after it.
-        Does NOT match pct-prefix-with-text pattern, so default parse applies."""
+    def test_saratoga_pct_only_prefix_with_issuer(self):
+        """Saratoga: pct-only first segment, then issuer, industry, instrument."""
         issuer, instrument = _parse_bdc_identifier(
             "10.2% - Pepper Palace, Inc. - Specialty Food Retailer "
             "- First Lien Term Loan"
         )
-        # Default parse: first seg = "10.2%" as issuer (known limitation)
-        assert issuer == "10.2%"
+        assert issuer == "Pepper Palace, Inc."
+        assert instrument == "Specialty Food Retailer - First Lien Term Loan"
+
+    def test_saratoga_pct_only_prefix_with_tight_dash_spacing(self):
+        """Saratoga sometimes omits the space after an issuer/industry dash."""
+        issuer, instrument = _parse_bdc_identifier(
+            "220.9% - JDXpert -Talent Acquisition Software - "
+            "First Lien Term Loan (3M USD TERM SOFR+8.50%)"
+        )
+        assert issuer == "JDXpert"
+        assert instrument.startswith("Talent Acquisition Software - First Lien Term Loan")
+
+    def test_saratoga_pct_only_prefix_category_row_stays_ambiguous(self):
+        """Three-segment pct/category/instrument rows do not expose an issuer."""
+        issuer, instrument = _parse_bdc_identifier(
+            "10.6% - Education Services - Common Stock"
+        )
+        assert issuer == "10.6%"
+        assert instrument == "Education Services - Common Stock"
 
     def test_entity_signal_in_seg1_preserves_default(self):
         """Seg[1] with entity signal (LLC) should NOT trigger pct-prefix skip."""
@@ -7890,16 +8022,23 @@ class TestPctPrefixParsing:
 class TestPctPrefixSqlPath:
     """Integration tests verifying pct-prefix parsing through the SQL path."""
 
-    def _run_prepare_bdc(self, identifier, fair_value=1000000.0):
+    def _run_prepare_bdc(
+        self,
+        identifier,
+        fair_value=1000000.0,
+        cik="0001504619",
+        entity_name="PennantPark",
+        report_date="2024-01-31",
+    ):
         """Helper: run a single identifier through _prepare_bdc."""
         df = pd.DataFrame([{
-            "cik": "0001504619",
-            "entity_name": "PennantPark",
-            "accession_number": "0001504619-24-000001",
+            "cik": cik,
+            "entity_name": entity_name,
+            "accession_number": f"{cik}-24-000001",
             "form_type": "10-K",
             "filing_date": "2024-03-15",
-            "report_date": "2024-01-31",
-            "period": "2024-01-31",
+            "report_date": report_date,
+            "period": report_date,
             "investment_identifier": identifier,
             "fair_value": fair_value,
             "cost": fair_value,
@@ -7949,6 +8088,66 @@ class TestPctPrefixSqlPath:
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Flutter Entertainment plc"
 
+    def test_saratoga_pct_only_after_affiliation_strip_sql(self):
+        """SQL path strips affiliation and recovers issuer after pct-only segment."""
+        result = self._run_prepare_bdc(
+            "Non-control/Non-affiliate investments - 229.3% - Avantra - "
+            "IT Services - First Lien Term Loan (3M USD TERM SOFR+7.97%), "
+            "12.29% Cash, 9/20/2029"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Avantra"
+        assert result.iloc[0]["instrument_description"].startswith(
+            "IT Services - First Lien Term Loan"
+        )
+
+    def test_saratoga_tight_dash_spacing_sql(self):
+        """SQL path normalizes missing space after dash in Saratoga identifiers."""
+        result = self._run_prepare_bdc(
+            "Non-control/Non-affiliate investments - 220.9% - JDXpert "
+            "-Talent Acquisition Software - First Lien Term Loan "
+            "(3M USD TERM SOFR+8.50%), 13.09% Cash, 5/2/2027"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "JDXpert"
+        assert result.iloc[0]["instrument_description"].startswith(
+            "Talent Acquisition Software - First Lien Term Loan"
+        )
+
+    def test_saratoga_pct_only_category_row_filtered_sql(self):
+        """Ambiguous pct/category/instrument rows are not promoted to positions."""
+        result = self._run_prepare_bdc(
+            "Control investments - 10.6% - Education Services - Common Stock"
+        )
+        assert result.empty
+
+    def test_saratoga_exact_bridge_promotes_known_issuerless_leaf_sql(self):
+        """Reviewed Saratoga CIK-period signatures recover the missing issuer."""
+        result = self._run_prepare_bdc(
+            "Non-control/Non-affiliate investments - 229.3% - "
+            "Direct Selling Software - Common Units",
+            cik="0001377936",
+            entity_name="Saratoga Investment Corp.",
+            report_date="2025-02-28",
+            fair_value=729464,
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Exigo, LLC"
+        assert (
+            result.iloc[0]["instrument_description"]
+            == "Direct Selling Software - Common Units"
+        )
+
+    def test_saratoga_bridge_is_period_exact_sql(self):
+        """The Saratoga bridge does not globally promote category rows."""
+        result = self._run_prepare_bdc(
+            "Control investments - 10.6% - Education Services - Common Stock",
+            cik="0001377936",
+            entity_name="Saratoga Investment Corp.",
+            report_date="2025-09-30",
+        )
+        assert result.empty
+
     def test_entity_signal_preserves_default_sql(self):
         """Entity signal in seg[1] prevents pct-prefix skip in SQL path."""
         result = self._run_prepare_bdc(
@@ -7964,6 +8163,98 @@ class TestPctPrefixSqlPath:
         )
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+    def test_sixth_street_no_dash_hierarchy_sql(self):
+        """Sixth Street no-dash hierarchy rows expose issuer and tranche terms."""
+        result = self._run_prepare_bdc(
+            "Debt Investments Business Services OutSystems Luxco SARL "
+            "First-lien loan (EUR 3,263 par, due 12/2028) Initial Acquisition Date "
+            "12/8/2022 Reference Rate and Spread E + 5.75% Interest Rate 8.74%",
+            cik="0001508655",
+            entity_name="Sixth Street Specialty Lending, Inc.",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "OutSystems Luxco SARL"
+        assert result.iloc[0]["instrument_description"].startswith("First-lien loan")
+
+    def test_fidelity_no_dash_hierarchy_sql(self):
+        """Fidelity hierarchy rows should not be lost as aggregate headers."""
+        result = self._run_prepare_bdc(
+            "Investments Investments - non-controlled / non-affiliate First Lien Debt "
+            "Advertising MMGY Global LLC Revolving Credit Facility Maturity Date 4/25/2029",
+            cik="0001920453",
+            entity_name="Fidelity Private Credit Fund",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "MMGY Global LLC"
+        assert result.iloc[0]["instrument_description"].startswith(
+            "Revolving Credit Facility"
+        )
+
+
+class TestGSPrivateCreditSqlPath:
+    """GS Private Credit (0001920145) Reference Rate / bare Maturity rescue."""
+
+    def _run_prepare_bdc(
+        self,
+        identifier,
+        fair_value=1000000.0,
+    ):
+        df = pd.DataFrame([{
+            "cik": "0001920145",
+            "entity_name": "Goldman Sachs Private Credit Corp.",
+            "accession_number": "0001920145-24-000001",
+            "form_type": "10-K",
+            "filing_date": "2024-03-15",
+            "report_date": "2024-03-31",
+            "period": "2024-03-31",
+            "investment_identifier": identifier,
+            "fair_value": fair_value,
+            "cost": fair_value,
+            "principal_amount": None,
+            "interest_rate": None,
+            "basis_spread": None,
+            "reference_rate_type": None,
+            "maturity_date": None,
+            "shares_held": None,
+            "pct_of_net_assets": None,
+            "unrealized_gain_loss": None,
+            "pik_rate": None,
+            "industry": None,
+            "investment_type": None,
+            "affiliation": None,
+            "dimensions_raw": None,
+        }])
+        from pipeline.staging_bdc import _prepare_bdc
+        return _prepare_bdc(df)
+
+    def test_gs_reference_rate_leaf_survives_aggregate_filter(self):
+        """GS positions with Reference Rate (no Interest Rate) must not be
+        filtered as aggregates.  These are BSL positions where GS omits the
+        explicit Interest Rate field."""
+        result = self._run_prepare_bdc(
+            "Investment 1st Lien/Senior Secured Debt - 93.10% United States "
+            "- 3.1% Acrisure, LLC Insurance Reference Rate and Spread "
+            "S + 4.25% Maturity 02/15/2029"
+        )
+        assert len(result) == 1, "Reference Rate leaf dropped by aggregate filter"
+
+    def test_gs_interest_rate_leaf_survives(self):
+        """GS positions with explicit Interest Rate field survive (baseline)."""
+        result = self._run_prepare_bdc(
+            "Investment 1st Lien/Senior Secured Debt - 93.10% United States "
+            "- 85.3% Acme Corp Industry Software Interest Rate 11.58% "
+            "Reference Rate and Spread S + 5.75% Maturity 01/15/2028"
+        )
+        assert len(result) == 1
+
+    def test_gs_aggregate_row_still_filtered(self):
+        """Geographic subtotal row should still be filtered as aggregate."""
+        result = self._run_prepare_bdc(
+            "Investment United States - 104.84%",
+            fair_value=500000000.0,
+        )
+        assert result.empty, "Geographic subtotal should be filtered"
 
 
 class TestCrescentHierarchySqlPath:

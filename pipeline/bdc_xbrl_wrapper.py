@@ -477,6 +477,14 @@ def classify_identifier(cik: Any, identifier: Any) -> dict[str, str]:
 
     result["wrapper_parent_key"] = parent_key
     result["wrapper_signature_status"] = "pass"
+    # Category-marker override: identifiers that match the category regex after
+    # prefix stripping are demoted to rollup even when leaf markers fire.  This
+    # handles CIKs where bare subtotal names (e.g. "Common Stock - 0.1%") share
+    # keywords with position-level leaf markers.
+    if has_leaf_marker and spec.category_marker_re:
+        suffix_text = raw[len(prefix):] if prefix and raw.startswith(prefix) else raw
+        if spec.category_marker_re.search(suffix_text.strip()):
+            has_leaf_marker = False
     if has_leaf_marker:
         investment_date_key = _extract_value_key(key_identifier, "investment")
         maturity_date_key = _extract_value_key(key_identifier, "maturity")

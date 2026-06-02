@@ -119,7 +119,7 @@ def test_goldman_wrapper_classifies_hierarchical_debt_leaf():
 
     assert row["wrapper_family"] == "debt"
     assert row["wrapper_disposition"] == "debt_position_leaf"
-    assert row["wrapper_rule_id"] == "GS_PRIVATE_CREDIT_DEBT_LEAF_V1"
+    assert row["wrapper_rule_id"] == "GS_PRIVATE_CREDIT_DEBT_LEAF_V3"
     assert row["wrapper_position_key"]
 
 
@@ -315,3 +315,77 @@ def test_saratoga_wrapper_classifies_terminal_instrument_without_issuer_as_leaf(
     assert row["wrapper_family"] == "mixed"
     assert row["wrapper_disposition"] == "mixed_position_leaf"
     assert row["wrapper_position_key"]
+
+
+# ---------------------------------------------------------------------------
+# GS Private Credit (0001920145)
+# ---------------------------------------------------------------------------
+
+def test_gs_private_credit_debt_leaf_classified():
+    """Standard GS Private Credit debt leaf with Interest Rate field."""
+    row = classify_identifier(
+        "0001920145",
+        "Investment 1st Lien/Senior Secured Debt - 93.10% United States - 85.3% "
+        "Acme Corp Industry Software Interest Rate 11.58% Reference Rate and "
+        "Spread S + 5.75% Maturity 01/15/2028",
+    )
+    assert row["wrapper_family"] == "debt"
+    assert row["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_gs_private_credit_equity_leaf_classified():
+    """GS Private Credit equity position via Investment Equity Securities prefix."""
+    row = classify_identifier(
+        "0001920145",
+        "Investment Equity Securities - 0.1% United States - 0.1% Common Stock "
+        "- 0.1% RPC ABC Investment Holdings LLC Aerospace & Defense",
+    )
+    assert row["wrapper_family"] == "equity"
+    assert row["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_gs_private_credit_country_only_is_aggregate():
+    """Bare country name matched via fallback should classify as aggregate."""
+    for country in ("Canada", "Switzerland", "United Kingdom"):
+        row = classify_identifier("0001920145", country)
+        assert row["wrapper_disposition"] == "aggregate", f"{country} not aggregate"
+
+
+def test_gs_private_credit_investments_total_is_aggregate():
+    """Portfolio-level 'Investments - X%' totals should be aggregate."""
+    row = classify_identifier("0001920145", "Investments - 103.97%")
+    assert row["wrapper_disposition"] == "aggregate"
+
+
+def test_gs_private_credit_money_market_is_non_private():
+    """Goldman Sachs Financial Square Government Fund is non-private-market."""
+    row = classify_identifier(
+        "0001920145",
+        "Investment United States - 9.1% Goldman Sachs Financial Square "
+        "Government Fund - Institutional Shares",
+    )
+    assert row["wrapper_disposition"] == "non_private_market"
+
+
+def test_gs_private_credit_debt_investments_country_is_aggregate():
+    """'Debt Investments United States' is aggregate marker."""
+    row = classify_identifier("0001920145", "Debt Investments United States")
+    assert row["wrapper_disposition"] == "aggregate"
+
+
+def test_gs_private_credit_total_investments_is_rollup():
+    """'Total Investments - X%' should be debt_total_rollup."""
+    row = classify_identifier("0001920145", "Total Investments - 128.77%")
+    assert row["wrapper_disposition"] == "debt_total_rollup"
+
+
+def test_gs_private_credit_truncated_prefix_classified():
+    """Truncated 'nvestment Debt Investments' prefix still classifies."""
+    row = classify_identifier(
+        "0001920145",
+        "nvestment Debt Investments - 179.3% United States - 170.1% "
+        "Acme Corp Industry Software Interest Rate 11.0% "
+        "Reference Rate and Spread S + 5.50% Maturity 06/30/2028",
+    )
+    assert row["wrapper_family"] == "debt"
+    assert row["wrapper_disposition"] == "debt_position_leaf"

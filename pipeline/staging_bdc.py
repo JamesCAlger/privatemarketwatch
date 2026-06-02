@@ -491,17 +491,22 @@ def _prepare_bdc(
         r"|preferred\s+(?:stock|equity|units|shares)"
         r"|warrants?\b|equity\s+(?:interest|co-invest|investment)"
         r"|partnership\s+interest|llc\s+interest|member(?:ship)?\s+interest"
-        r"|type\s+of\s+investment|interest\s+rate|maturity\s+date"
-        r"|sofr|libor|euribor|prime\s+rate|corra)"
+        r"|class\s+[a-z][a-z0-9_-]*\s+(?:interest|units|shares|membership\s+units)"
+        r"|type\s+of\s+investment|interest\s+rate|maturity\s+date|maturity\s+\d"
+        r"|reference\s+rate|sofr|libor|euribor|prime\s+rate|corra)"
     )
     _prefix_rules_condition_parts: list[str] = []
     _prefix_rules_hierarchy_parts: list[str] = []
+    _double_investments_cik_norms: list[str] = []
     for _pr_cik, _pr_prefixes in _prefix_rules_data.items():
         _pr_cik_norm = _pr_cik.lstrip("0").zfill(10)
         _pr_cik_sql = (
             f"LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
             f"= '{_pr_cik_norm}'"
         )
+        # Track CIKs that use "Investments Investments" as a declared prefix
+        if any(p.lower() == "investments investments" for p in _pr_prefixes):
+            _double_investments_cik_norms.append(_pr_cik_norm)
         # Build regex to match any declared prefix (case-insensitive)
         _pr_prefix_alts = "|".join(
             re.escape(p) for p in sorted(_pr_prefixes, key=len, reverse=True)
@@ -585,6 +590,29 @@ def _prepare_bdc(
         " OR ".join(_prefix_rules_hierarchy_parts)
         if _prefix_rules_hierarchy_parts
         else "FALSE"
+    )
+
+    # CIK-scoped stripping of "Investments Investments" double-prefix in
+    # strip_affil.  These CIKs declare "Investments Investments" as a
+    # prefix_rules prefix; without stripping, the dash-split in Phase B
+    # produces issuer_name = "Investments Investments" which gets caught
+    # by the aggregate header flags.  The regex mirrors
+    # _INVESTMENTS_HIERARCHY_RE but anchored to the double form.
+    _double_inv_cik_sql = (
+        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+        "IN (" + ", ".join(
+            f"'{c}'" for c in _double_investments_cik_norms
+        ) + ")"
+    ) if _double_investments_cik_norms else "FALSE"
+    _DOUBLE_INVESTMENTS_HIERARCHY_RE = (
+        r"(?i)^Investments\s+Investments\s*(?:--|-|/)\s*"
+        r"(?:non-?\s*control(?:led)?(?:\s*[/,]\s*non-?\s*affiliat(?:e|ed))?"
+        r"|control(?:led)?(?:\s*[/,]\s*affiliat(?:e|ed))?"
+        r"|affiliat(?:e|ed))"
+        r"(?:\s+(?:equity|debt|first\s+lien|second\s+lien|senior\s+secured"
+        r"|subordinated|unsecured|mezzanine|unitranche|preferred|common"
+        r"|warrant|structured|other)(?:\s+(?:securities|investments|interests))?)?"
+        r"\s+"
     )
 
     # Entity signal check on seg[1] (for pct-prefix category detection)
@@ -897,10 +925,20 @@ def _prepare_bdc(
             lower(trim(_stripped)) AS _lower_id
         FROM (
             SELECT *,
+                -- Apply double-Investments stripping for CIKs that declare
+                -- "Investments Investments" in prefix_rules, then fall
+                -- through to the standard affiliation/hierarchy stripping.
                 regexp_replace(
                     regexp_replace(
                         regexp_replace(
-                            _raw_id,
+                            CASE WHEN {_double_inv_cik_sql}
+                                THEN regexp_replace(
+                                    _raw_id,
+                                    '{_DOUBLE_INVESTMENTS_HIERARCHY_RE}',
+                                    ''
+                                )
+                                ELSE _raw_id
+                            END,
                             '{_AFFILIATION_PREFIX_RE}',
                             ''
                         ),

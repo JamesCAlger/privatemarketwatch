@@ -280,3 +280,40 @@ Consolidated three parallel per-CIK systems (Python WrapperSpec, v2 JSON content
 - Ares: 198 pass, 16 fail (was 194 pass, 20 fail). A04/E01 ALL PASS -- 2024-12-31 dropped from 8.6% to 0.1%, 2025-03-31 from 8.8% to 0.1%. Remaining 16 failures are A07 (pct_of_net_assets=0%, expected null).
 - Trinity: 128 pass, 51 fail (unchanged). FV overshoot (24-29% pre-2025) is pre-existing from subtotals passing through the standard aggregate filter, not the prefix bypass. Requires separate investigation.
 - Source reconciliation reclassification (Change 3) not yet verified -- needs separate source recon rebuild.
+
+### 2026-06-02 -- Reduce blocking rows for Goldman Sachs Private Credit (0001920145): 208 -> 4
+
+Three changes to resolve 204 of 208 blocking rows (98% reduction). Remaining 4 are irreducible mojibake encoding issues in source XBRL.
+
+**data/overrides/bdc_xbrl_wrappers/0001920145.json (v1 -> v3):**
+- Added `fallback_family_patterns` with 5 regexes to catch bare instrument keywords, country names, portfolio totals, and GS money market fund
+- Set `no_prefix_is_aggregate: true` so non-prefix-matched identifiers are classified as aggregates
+- Expanded `aggregate_markers` from 3 to 29 entries: country/geography subtotals, instrument-type category headers (`1st lien/senior secured debt`, `2nd lien/senior secured debt`, `1st lien/last-out unitranche`), and country-prefixed patterns (`investment united states`, etc.)
+- Added `non_private_markers` for GS money market fund variants
+- Added 11 new `prefix_rules`: `Investment Equity Securities`, `Equity and Other`, truncated variants (`nvestment`, `vestment`), and country-prefixed entries
+- Added custom `leaf_markers_by_family` for debt: removed instrument-type keywords (first lien, senior secured, term loan, etc.) from debt leaf markers, keeping only structural markers (interest rate, reference rate, maturity, sofr, etc.). This prevents bare category subtotals like "1st Lien/Senior Secured Debt - 93.10%" from being misclassified as position leaves.
+- Added `category_marker_re` for equity: catches bare equity subtotals like "Common Stock - 0.1%" and "Equity Securities United States Common Stock" that share keywords with real equity position leaves.
+- Result: 157 unclassified identifiers -> 0, 37 category subtotals reclassified as aggregate, 4 equity subtotals demoted via category_marker_re
+
+**pipeline/bdc_xbrl_wrapper.py:**
+- Added `category_marker_re` override check in `classify_identifier()` before the leaf branch. When an identifier matches the category regex after prefix stripping, `has_leaf_marker` is set to False, demoting the identifier to rollup/aggregate classification.
+
+**pipeline/staging_bdc.py:**
+- Expanded `_pr_instrument_re` to match `reference\s+rate` and `maturity\s+\d` (bare maturity + date digit)
+- Root cause: GS Private Credit BSL/syndicated positions use "Reference Rate and Spread S + X.XX% Maturity MM/DD/YY" without explicit "Interest Rate" field. The 96 positions with this format were being dropped by the aggregate filter because the prefix_rules bypass didn't recognize them as leaf-level detail.
+
+**tests/test_bdc_xbrl_wrapper.py:**
+- Added 8 GS Private Credit classification tests covering debt/equity leaves, country aggregates, money market, totals, truncated prefixes
+- Updated existing test version assertion (V1 -> V3)
+
+**tests/test_unified_holdings.py:**
+- Added `TestGSPrivateCreditSqlPath` class with 3 tests: Reference Rate leaf rescue, Interest Rate leaf baseline, and geographic subtotal filtering
+
+**Oracle results (fresh BDC staging):**
+- Blocking rows: 208 -> 4 (98% reduction)
+- Unclassified_signature: 47 -> 0 (fully resolved)
+- Category subtotal leakage: 37 debt + 4 equity -> 0 (fully resolved)
+- Q2 2025+ quarters: 0 blocking rows (fully clean)
+- Remaining 4 blockers are mojibake encoding issues (corrupted em-dash characters in source XBRL) that cannot be resolved through wrapper config
+
+**Test counts:** 32 wrapper tests pass, 50 oracle tests pass, 770 unified holdings tests pass (9 pre-existing failures unrelated to this change)
