@@ -97,11 +97,27 @@ Counts holdings rows where `abs(cost / fair_value)` exceeds 100x or falls below 
 
 **Configuration:** `RateSanity.min_pct` and `RateSanity.max_pct` in wrapper definition JSON (`invariants.rate_sanity`). Default bounds: 1%-25%.
 
+### `_detect_magnitude_shifts(detail_df)` (Gap #4 extension)
+
+Cross-quarter detection of per-field magnitude shifts in reconciliation detail. For each field in `_MAGNITUDE_SHIFT_FIELDS` (`source_fair_value`, `source_interest_rate`, `source_cost`, `source_basis_spread`):
+
+- Groups by `report_date`, computes median of `abs(values)` excluding nulls and zeros
+- Skips quarters with fewer than `_MAGNITUDE_SHIFT_MIN_VALUES` (5) non-null non-zero values
+- Compares adjacent quarter medians: flags when ratio >= 10x or <= 0.1x
+
+Returns `{field_name: {report_date: shift_ratio}}`.
+
+**New oracle summary columns:** `fv_magnitude_shift`, `rate_magnitude_shift` (shift ratio or ""). Cost and basis_spread shifts surface only in `oracle_fail_reasons`.
+
+**Oracle reasons:** `fv_magnitude_shift_detected`, `rate_magnitude_shift_detected`, `cost_magnitude_shift_detected`, `spread_magnitude_shift_detected`. All are review reasons in the promotion gate (not hard reject).
+
+**Configuration:** `_MAGNITUDE_SHIFT_RATIO_THRESHOLD = 10.0`, `_MAGNITUDE_SHIFT_MIN_VALUES = 5`.
+
 **Scope limitations (not yet implemented):**
 - XBRL decimals or unit metadata validation
 - Fund-level `investments_at_fair_value` as independent dollar-scale anchor (partially covered by FV reconciliation in Gap 2)
 
-**Tests added:** `test_oracle_flags_rate_outliers`, `test_oracle_flags_cost_fv_ratio_outliers`, `test_oracle_no_rate_outliers_when_within_bounds`.
+**Tests added:** `test_oracle_flags_rate_outliers`, `test_oracle_flags_cost_fv_ratio_outliers`, `test_oracle_no_rate_outliers_when_within_bounds`, `test_magnitude_shift_detects_fv_scale_change`, `test_magnitude_shift_detects_rate_scale_change`, `test_magnitude_shift_no_flag_when_stable`, `test_magnitude_shift_no_flag_when_sparse`, `test_magnitude_shift_handles_negative_fv`, `test_magnitude_shift_no_flag_single_quarter`.
 
 ---
 
@@ -261,14 +277,14 @@ Current QoQ checks include count bands and some stability checks, but do not tra
 
 ## Implementation Summary
 
-All 8 gaps are implemented. Total: **42 tests** across the oracle test file.
+All 8 gaps are implemented. Total: **50 tests** across the oracle test file.
 
 | Gap | Status | Oracle Columns Added | Oracle Reasons Added | Tests |
 |---|---|---|---|---|
 | #1 Coverage gates | IMPLEMENTED | 4 | 3 | 4 |
 | #2 FV-weighted coverage | IMPLEMENTED | 0 (in content sig engine) | 1 | 4 |
 | #3 Concept drift | IMPLEMENTED | 1 | 1 | 2 |
-| #4 Scale validation | IMPLEMENTED | 2 | 2 | 3 |
+| #4 Scale validation | IMPLEMENTED | 4 | 6 | 9 |
 | #5 unparsed_remainder | IMPLEMENTED | 1 | 1 | 1 |
 | #6 Promotion gate | IMPLEMENTED | 0 (separate columns) | 0 | 14 |
 | #7 Exclusion risk | IMPLEMENTED | 2 | 1 | 2 |
@@ -276,7 +292,7 @@ All 8 gaps are implemented. Total: **42 tests** across the oracle test file.
 
 **Remaining scope not yet implemented (documented per gap):**
 - Gap 3: Axis/member tracking, dimension path shapes, duplicate fact detection
-- Gap 4: XBRL decimals/unit metadata, fund-level FV as independent dollar-scale anchor
+- Gap 4: XBRL decimals/unit metadata, fund-level FV as independent dollar-scale anchor, cost/spread magnitude shifts as dedicated summary columns
 - Gap 5: Full identifier field parsing, drift localization
 - Gap 6: Cross-CIK regression check, position-level semantics preservation
 - Gap 7: Arithmetic tie-out of aggregates, FV-weighted exclusion gating

@@ -720,6 +720,8 @@ def _oracle_summary(rows):
         "position_continuation_rate": "",
         "rate_outlier_count": 0,
         "cost_fv_ratio_outlier_count": 0,
+        "fv_magnitude_shift": "",
+        "rate_magnitude_shift": "",
         "concept_drift_flag": "",
         "unparsed_remainder_rate": "",
         "oracle_status": "pass",
@@ -1381,3 +1383,164 @@ def test_oracle_flags_unparsed_remainder_spike():
 
     q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
     assert "unparsed_remainder_spike" in str(q2_row["oracle_fail_reasons"])
+
+
+# ---------------------------------------------------------------------------
+# Gap #4 extension: Per-field magnitude shift tests
+# ---------------------------------------------------------------------------
+
+
+def test_magnitude_shift_detects_fv_scale_change():
+    """Oracle should flag when FV medians shift by >= 10x between quarters."""
+    # Q1: FV values around 1,000; Q2: FV values around 1,000,000 (1000x shift)
+    q1_rows = [
+        {"report_date": "2024-09-30", "source_fair_value": v, "status": "matched"}
+        for v in [1000, 1100, 900, 1050, 950]
+    ]
+    q2_rows = [
+        {"report_date": "2024-12-31", "source_fair_value": v, "status": "matched"}
+        for v in [1000000, 1100000, 900000, 1050000, 950000]
+    ]
+    detail = _detail(q1_rows + q2_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["fv_magnitude_shift"] != ""
+    assert float(q2_row["fv_magnitude_shift"]) >= 10.0
+    assert "fv_magnitude_shift_detected" in str(q2_row["oracle_fail_reasons"])
+
+
+def test_magnitude_shift_detects_rate_scale_change():
+    """Oracle should flag when rate medians shift by >= 10x (decimal -> percentage)."""
+    # Q1: rates as decimals ~0.08; Q2: rates as percentages ~8.0 (100x shift)
+    q1_rows = [
+        {"report_date": "2024-09-30", "source_interest_rate": v, "status": "matched"}
+        for v in [0.08, 0.09, 0.07, 0.085, 0.075]
+    ]
+    q2_rows = [
+        {"report_date": "2024-12-31", "source_interest_rate": v, "status": "matched"}
+        for v in [8.0, 9.0, 7.0, 8.5, 7.5]
+    ]
+    detail = _detail(q1_rows + q2_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["rate_magnitude_shift"] != ""
+    assert float(q2_row["rate_magnitude_shift"]) >= 10.0
+    assert "rate_magnitude_shift_detected" in str(q2_row["oracle_fail_reasons"])
+
+
+def test_magnitude_shift_no_flag_when_stable():
+    """No magnitude shift flag when values change by only 2x (normal variation)."""
+    q1_rows = [
+        {"report_date": "2024-09-30", "source_fair_value": v, "status": "matched"}
+        for v in [1000000, 1100000, 900000, 1050000, 950000]
+    ]
+    q2_rows = [
+        {"report_date": "2024-12-31", "source_fair_value": v, "status": "matched"}
+        for v in [2000000, 2200000, 1800000, 2100000, 1900000]  # ~2x, not 10x
+    ]
+    detail = _detail(q1_rows + q2_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["fv_magnitude_shift"] == ""
+    assert "fv_magnitude_shift_detected" not in str(q2_row["oracle_fail_reasons"])
+
+
+def test_magnitude_shift_no_flag_when_sparse():
+    """No magnitude shift flag when fewer than 5 values per quarter."""
+    # Only 3 values per quarter -- below _MAGNITUDE_SHIFT_MIN_VALUES threshold
+    q1_rows = [
+        {"report_date": "2024-09-30", "source_fair_value": v, "status": "matched"}
+        for v in [1000, 1100, 900]
+    ]
+    q2_rows = [
+        {"report_date": "2024-12-31", "source_fair_value": v, "status": "matched"}
+        for v in [1000000, 1100000, 900000]  # 1000x shift, but sparse
+    ]
+    detail = _detail(q1_rows + q2_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["fv_magnitude_shift"] == ""
+    assert "fv_magnitude_shift_detected" not in str(q2_row["oracle_fail_reasons"])
+
+
+def test_magnitude_shift_handles_negative_fv():
+    """Negative FV values should use abs() and not cause false positives."""
+    q1_rows = [
+        {"report_date": "2024-09-30", "source_fair_value": v, "status": "matched"}
+        for v in [1000000, -1100000, 900000, -1050000, 950000]
+    ]
+    q2_rows = [
+        {"report_date": "2024-12-31", "source_fair_value": v, "status": "matched"}
+        for v in [-1200000, 1300000, -1000000, 1150000, -1050000]
+    ]
+    detail = _detail(q1_rows + q2_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    q2_row = summary[summary["report_date"] == "2024-12-31"].iloc[0]
+    assert q2_row["fv_magnitude_shift"] == ""
+    assert "fv_magnitude_shift_detected" not in str(q2_row["oracle_fail_reasons"])
+
+
+def test_magnitude_shift_no_flag_single_quarter():
+    """No magnitude shift flag when only one quarter of data exists."""
+    q1_rows = [
+        {"report_date": "2024-12-31", "source_fair_value": v, "status": "matched"}
+        for v in [1000, 1100, 900, 1050, 950]
+    ]
+    detail = _detail(q1_rows)
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    assert summary.iloc[0]["fv_magnitude_shift"] == ""
+    assert "fv_magnitude_shift_detected" not in str(summary.iloc[0]["oracle_fail_reasons"])

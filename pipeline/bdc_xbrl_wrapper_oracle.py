@@ -75,6 +75,8 @@ ORACLE_SUMMARY_COLUMNS = [
     "position_continuation_rate",
     "rate_outlier_count",
     "cost_fv_ratio_outlier_count",
+    "fv_magnitude_shift",
+    "rate_magnitude_shift",
     "concept_drift_flag",
     "unparsed_remainder_rate",
     "oracle_status",
@@ -90,6 +92,16 @@ _POSITION_CONTINUITY_MIN_RATE = 0.50
 # QoQ unparsed_remainder_rate spike threshold in pp (Gap #5)
 _UNPARSED_REMAINDER_QOQ_SPIKE_THRESHOLD = 0.10
 _CONCEPT_DRIFT_CHURN_THRESHOLD = 0.30
+
+# Gap #4 extension: per-field QoQ magnitude-shift detection
+_MAGNITUDE_SHIFT_FIELDS = [
+    "source_fair_value",
+    "source_interest_rate",
+    "source_cost",
+    "source_basis_spread",
+]
+_MAGNITUDE_SHIFT_RATIO_THRESHOLD = 10.0  # 10x = one order of magnitude
+_MAGNITUDE_SHIFT_MIN_VALUES = 5          # min non-null non-zero values per quarter
 
 # Keywords indicating a row has real position data, used
 # to detect false-positive exclusions (Gap #7)
@@ -235,6 +247,10 @@ _PROMOTION_REVIEW_REASONS = frozenset({
     "cost_fv_ratio_outliers",
     "concept_drift_detected",
     "unparsed_remainder_spike",
+    "fv_magnitude_shift_detected",
+    "rate_magnitude_shift_detected",
+    "cost_magnitude_shift_detected",
+    "spread_magnitude_shift_detected",
 })
 
 
@@ -1219,6 +1235,54 @@ def _detect_concept_drift(detail_df: pd.DataFrame) -> dict[str, str]:
     return result
 
 
+def _detect_magnitude_shifts(
+    detail_df: pd.DataFrame,
+) -> dict[str, dict[str, float]]:
+    """Detect per-field QoQ magnitude shifts (Gap #4 extension).
+
+    For each field in ``_MAGNITUDE_SHIFT_FIELDS``, groups by ``report_date``,
+    computes the median of ``abs(values)`` excluding nulls and zeros, and
+    compares adjacent quarter medians.  Flags when the ratio is >=10x or
+    <=0.1x (one order of magnitude).
+
+    Returns ``{field_name: {report_date: shift_ratio}}`` where shift_ratio
+    is ``current_median / prev_median``.  Only quarters where the shift
+    exceeds the threshold are included.
+    """
+    if detail_df.empty:
+        return {}
+    result: dict[str, dict[str, float]] = {}
+    for field in _MAGNITUDE_SHIFT_FIELDS:
+        if field not in detail_df.columns:
+            continue
+        vals = detail_df[["report_date", field]].copy()
+        vals[field] = pd.to_numeric(vals[field], errors="coerce")
+        vals = vals[vals[field].notna() & vals[field].ne(0)].copy()
+        vals[field] = vals[field].abs()
+        if vals.empty:
+            continue
+        medians_by_quarter: dict[str, float] = {}
+        for rd, grp in vals.groupby("report_date", dropna=False):
+            if len(grp) < _MAGNITUDE_SHIFT_MIN_VALUES:
+                continue
+            medians_by_quarter[str(rd)] = float(grp[field].median())
+        if len(medians_by_quarter) < 2:
+            continue
+        sorted_quarters = sorted(medians_by_quarter.keys())
+        field_shifts: dict[str, float] = {}
+        for i in range(1, len(sorted_quarters)):
+            prev_median = medians_by_quarter[sorted_quarters[i - 1]]
+            curr_median = medians_by_quarter[sorted_quarters[i]]
+            if prev_median == 0:
+                continue
+            ratio = curr_median / prev_median
+            if ratio >= _MAGNITUDE_SHIFT_RATIO_THRESHOLD or ratio <= (1.0 / _MAGNITUDE_SHIFT_RATIO_THRESHOLD):
+                field_shifts[sorted_quarters[i]] = round(ratio, 4)
+        if field_shifts:
+            result[field] = field_shifts
+    return result
+
+
 def build_wrapper_oracle_outputs(
     detail_df: pd.DataFrame,
     *,
@@ -1324,6 +1388,9 @@ def build_wrapper_oracle_outputs(
     # Gap 8: Position continuity (cross-quarter)
     continuity_by_quarter = _compute_position_continuity(df)
 
+    # Gap 4 extension: per-field magnitude shift detection (cross-quarter)
+    magnitude_shifts = _detect_magnitude_shifts(df)
+
     rows: list[dict[str, Any]] = []
     for report_date, group in df.groupby("report_date", dropna=False):
         group_index = group.index
@@ -1383,6 +1450,21 @@ def build_wrapper_oracle_outputs(
         if cost_fv_outlier_count > 0:
             reasons.append("cost_fv_ratio_outliers")
 
+        # Gap 4 extension: per-field magnitude shifts
+        rd_str = str(report_date)
+        fv_mag_shift = magnitude_shifts.get("source_fair_value", {}).get(rd_str, "")
+        rate_mag_shift = magnitude_shifts.get("source_interest_rate", {}).get(rd_str, "")
+        cost_mag_shift = magnitude_shifts.get("source_cost", {}).get(rd_str, "")
+        spread_mag_shift = magnitude_shifts.get("source_basis_spread", {}).get(rd_str, "")
+        if fv_mag_shift:
+            reasons.append("fv_magnitude_shift_detected")
+        if rate_mag_shift:
+            reasons.append("rate_magnitude_shift_detected")
+        if cost_mag_shift:
+            reasons.append("cost_magnitude_shift_detected")
+        if spread_mag_shift:
+            reasons.append("spread_magnitude_shift_detected")
+
         # Gap 3: Concept drift
         concept_drift = concept_drift_by_quarter.get(str(report_date), "")
         if concept_drift == "yes":
@@ -1435,6 +1517,8 @@ def build_wrapper_oracle_outputs(
             "position_continuation_rate": pos_cont_rate,
             "rate_outlier_count": rate_outlier_count,
             "cost_fv_ratio_outlier_count": cost_fv_outlier_count,
+            "fv_magnitude_shift": fv_mag_shift,
+            "rate_magnitude_shift": rate_mag_shift,
             "concept_drift_flag": concept_drift,
             "unparsed_remainder_rate": round(unparsed_rate, 6) if wrapper_total_rows > 0 else "",
             "oracle_status": (
