@@ -16,6 +16,7 @@ import pandas as pd
 from pipeline import classification, lien_classification, staging_bdc, staging_nport
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
+    BDC_HOLDINGS_PARQUET_FILE,
     COMBINED_UNIVERSE_FILE,
     ENTITY_LOOKUP_FILE,
     FUND_FINANCIALS_FILE,
@@ -23,9 +24,11 @@ from pipeline.config import (
     FUND_STRATEGY_REFERENCE_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_HOLDINGS_FILE,
+    NPORT_HOLDINGS_PARQUET_FILE,
     ROW_CORRECTIONS_FILE,
     UNCLASSIFIED_REVIEW_CACHE_FILE,
     UNIFIED_HOLDINGS_FILE,
+    UNIFIED_HOLDINGS_PARQUET_FILE,
     UNIVERSE_ORPHAN_HOLDINGS_FILE,
 )
 
@@ -62,6 +65,7 @@ UNIFIED_COLUMNS = [
     # Source-specific (BDC)
     "bdc_investment_identifier", "bdc_form_type", "bdc_dimensions_raw",
     "bdc_unrealized_gain_loss",
+    "bdc_investment_country",
     # Source-specific (N-PORT)
     "nport_holding_id", "nport_series_name", "nport_series_id",
     "nport_asset_cat", "nport_issuer_type", "nport_payoff_profile",
@@ -716,29 +720,32 @@ def build_unified_holdings(
     """
     t0 = time.time()
 
-    # Load from disk if not provided
+    # Prepare BDC: prefer Parquet > CSV file path (DuckDB direct read)
+    # over pandas DataFrame.  This bypasses the slow pandas CSV parse +
+    # DuckDB registration path that was the main staging bottleneck.
     if bdc_df is None:
-        logger.info("Loading BDC holdings from %s", BDC_HOLDINGS_FILE.name)
-        bdc_df = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
-        # Restore numeric columns
-        for col in ["fair_value", "cost", "principal_amount", "interest_rate",
-                     "basis_spread", "pik_rate", "pct_of_net_assets",
-                     "shares_held", "unrealized_gain_loss"]:
-            if col in bdc_df.columns:
-                bdc_df[col] = pd.to_numeric(bdc_df[col], errors="coerce")
-        logger.info("  Loaded %d BDC rows", len(bdc_df))
+        bdc_file = (
+            BDC_HOLDINGS_PARQUET_FILE
+            if BDC_HOLDINGS_PARQUET_FILE.exists()
+            else BDC_HOLDINGS_FILE
+        )
+        logger.info("Loading BDC holdings from %s (via DuckDB)", bdc_file.name)
+        bdc_unified = staging_bdc._prepare_bdc(bdc_file=bdc_file)
+    else:
+        bdc_unified = staging_bdc._prepare_bdc(bdc_df=bdc_df)
 
-    # Determine N-PORT input: use file path (DuckDB) for disk loads to avoid
-    # pandas OOM on very large CSVs; use DataFrame if already provided.
+    # Prepare N-PORT: same pattern -- file path for DuckDB direct read.
     nport_input: Union[pd.DataFrame, Path]
     if nport_df is None:
-        logger.info("Loading N-PORT holdings from %s (via DuckDB)", NPORT_HOLDINGS_FILE.name)
-        nport_input = NPORT_HOLDINGS_FILE
+        nport_file = (
+            NPORT_HOLDINGS_PARQUET_FILE
+            if NPORT_HOLDINGS_PARQUET_FILE.exists()
+            else NPORT_HOLDINGS_FILE
+        )
+        logger.info("Loading N-PORT holdings from %s (via DuckDB)", nport_file.name)
+        nport_input = nport_file
     else:
         nport_input = nport_df
-
-    # Prepare each source
-    bdc_unified = staging_bdc._prepare_bdc(bdc_df)
     nport_unified = staging_nport._prepare_nport(nport_input)
     if bdc_unified.empty and nport_unified.empty:
         combined = pd.DataFrame(columns=UNIFIED_COLUMNS)
@@ -1303,11 +1310,13 @@ def build_unified_holdings(
     # _apply_gics_cache so that the LLM-assigned codes are already in place)
     combined = _apply_re_fund_gics_overrides(combined)
 
-    # Save
+    # Save CSV + Parquet companion
     combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
     logger.info("Saved to %s (%.1f MB)",
                 UNIFIED_HOLDINGS_FILE.name,
                 UNIFIED_HOLDINGS_FILE.stat().st_size / (1024 * 1024))
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(UNIFIED_HOLDINGS_FILE)
 
     # Log summary statistics
     _log_summary(combined)

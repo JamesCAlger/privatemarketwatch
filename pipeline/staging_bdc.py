@@ -78,6 +78,36 @@ def _load_staging_configs() -> dict[str, dict[str, Any]]:
     return configs
 
 
+def _load_identifier_parsers() -> dict[str, dict]:
+    """Load identifier_parser configs from v3 wrapper JSON files.
+
+    Returns dict mapping normalized CIK (10-digit zero-padded) to the
+    identifier_parser config dict.  Only returns parsers with a known type.
+    """
+    parsers: dict[str, dict] = {}
+    if not _WRAPPER_DEFINITIONS_DIR.exists():
+        return parsers
+    for path in sorted(_WRAPPER_DEFINITIONS_DIR.glob("*.json")):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                raw = json.load(fh)
+        except (json.JSONDecodeError, OSError):
+            continue
+        if raw.get("schema_version") != "bdc-xbrl-wrapper.v3":
+            continue
+        parser = raw.get("identifier_parser")
+        if parser is None or parser.get("type") not in ("hierarchical_pct",):
+            continue
+        cik = raw["cik"]
+        cik_norm = cik.lstrip("0").zfill(10)
+        parsers[cik_norm] = parser
+    if parsers:
+        logger.info("Loaded identifier_parser configs for %d CIKs: %s",
+                     len(parsers),
+                     ", ".join(sorted(parsers)))
+    return parsers
+
+
 def _load_issuer_bridges_from_json() -> list[dict[str, str]]:
     """Load issuer bridge rows from all v3 JSON files with issuer_bridge strategy."""
     configs = _load_staging_configs()
@@ -625,6 +655,49 @@ def _prepare_bdc(
         r"^(.+?)\s+(?:Industry|Interest Rate|Current Coupon|Maturity"
         r"|Reference Rate|Basis Point|Floor|PIK)(?:\s|$)"
     )
+
+    # --- Hierarchical pct identifier parser (config-driven) -----------------
+    _id_parsers = _load_identifier_parsers()
+    _hier_pct_ciks = [
+        cik for cik, cfg in _id_parsers.items()
+        if cfg.get("type") == "hierarchical_pct"
+    ]
+    _hier_pct_cik_sql = (
+        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+        "IN (" + ", ".join(f"'{c}'" for c in _hier_pct_ciks) + ")"
+    ) if _hier_pct_ciks else "FALSE"
+    # Condition: CIK matches AND >= 2 segments AND last segment has pct prefix
+    _hier_pct_condition = (
+        f"({_hier_pct_cik_sql} "
+        "AND len(_segments) >= 2 "
+        "AND regexp_matches(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+\\S'))"
+    )
+    # Build boundary keyword regex from all hierarchical_pct configs (union)
+    _hier_boundary_kws: set[str] = set()
+    _hier_country_names: set[str] = set()
+    for _hp_cfg in _id_parsers.values():
+        if _hp_cfg.get("type") == "hierarchical_pct":
+            _hier_boundary_kws.update(_hp_cfg.get("issuer_boundary_keywords", []))
+            _hier_country_names.update(_hp_cfg.get("country_list", []))
+    _hier_boundary_re = (
+        "(?:" + "|".join(
+            re.escape(kw).replace(r"\ ", r"\s+")
+            for kw in sorted(_hier_boundary_kws, key=len, reverse=True)
+        ) + ")"
+    ) if _hier_boundary_kws else "ZZZZZ_NO_MATCH"
+    _hier_country_re = (
+        "(?:" + "|".join(
+            re.escape(c) for c in sorted(_hier_country_names, key=len, reverse=True)
+        ) + ")"
+    ) if _hier_country_names else "ZZZZZ_NO_MATCH"
+    # Industry label regex for trailing equity match (no "Industry" keyword)
+    _hier_industry_label_re = (
+        "(?:" + "|".join(
+            re.escape(label).replace(r"\ ", r"\s+")
+            for label in sorted(_INDUSTRY_LABELS, key=len, reverse=True)
+        ) + ")"
+    )
+    # --- end hierarchical pct parser setup ------------------------------------
 
     # Industry label check on seg[3] (for geography-prefix detection in Blue Owl)
     _seg3_is_industry = _sql_exact_match(
@@ -1316,35 +1389,37 @@ def _prepare_bdc(
                     ), ''),
                     regexp_replace(_raw_id, '^.*?(?i)\\bIssuer Name\\s+', '')
                 )
-                -- Goldman Sachs hierarchical format (2-4 segments):
-                -- seg[1] starts with "Investment ", last segment has
-                -- "<pct>% <company> Industry ..." or "<pct>% <company> Interest Rate ..."
-                -- Works for 2-seg ("Investment <type> - <pct>% <co> ..."),
-                -- 3-seg ("Investment <cat> - <pct>% <geo+type> - <pct>% <co> ..."),
-                -- 4-seg ("Investment <cat> - <pct>% <geo> - <pct>% <type> - <pct>% <co> ...").
-                WHEN len(_segments) >= 2
-                     AND _issuer_lower LIKE 'investment %'
-                     AND regexp_matches(trim(_segments[-1]), '^-?\d[\d.]*%\s+\S')
+                -- Config-driven hierarchical pct format (GS Private Credit etc.):
+                -- 2-4 dash-separated segments with pct prefixes.
+                -- Issuer = last segment stripped of pct, text before boundary keyword.
+                -- For equity rows (no keyword boundary), text before trailing industry label.
+                WHEN {_hier_pct_condition}
                 THEN COALESCE(
                     NULLIF(regexp_extract(
-                        regexp_replace(trim(_segments[-1]), '^-?\d[\d.]*%\s+', ''),
-                        '^(.+?)\s+(?:Industry|Interest Rate|Reference Rate|Maturity|Floor|PIK)(?:\s|$)',
+                        regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                        '(?i)^(.+?)\\s+{_hier_boundary_re}(?:\\s|$)',
                         1
                     ), ''),
-                    regexp_replace(trim(_segments[-1]), '^-?\d[\d.]*%\s+', '')
+                    -- Equity fallback: strip trailing industry label
+                    NULLIF(regexp_extract(
+                        regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                        '(?i)^(.+?)\\s+{_hier_industry_label_re}$',
+                        1
+                    ), ''),
+                    regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', '')
                 )
                 -- Goldman Sachs 1-segment (no dash separator):
                 -- "Investment <type> <pct>% <company> Industry ..."
                 WHEN NOT contains(_raw_id, ' - ')
-                     AND _issuer_lower LIKE 'investment %'
-                     AND regexp_matches(_raw_id, '\d[\d.]*%\s+\S')
+                     AND {_hier_pct_cik_sql}
+                     AND regexp_matches(_raw_id, '\\d[\\d.]*%\\s+\\S')
                 THEN COALESCE(
                     NULLIF(regexp_extract(
-                        regexp_replace(_raw_id, '^.*?\d[\d.]*%\s+', ''),
-                        '^(.+?)\s+(?:Industry|Interest Rate|Reference Rate|Maturity|Floor|PIK)(?:\s|$)',
+                        regexp_replace(_raw_id, '^.*?\\d[\\d.]*%\\s+', ''),
+                        '(?i)^(.+?)\\s+{_hier_boundary_re}(?:\\s|$)',
                         1
                     ), ''),
-                    regexp_replace(_raw_id, '^.*?\d[\d.]*%\s+', '')
+                    regexp_replace(_raw_id, '^.*?\\d[\\d.]*%\\s+', '')
                 )
                 -- Default: first segment
                 ELSE _issuer_raw
@@ -1459,19 +1534,22 @@ def _prepare_bdc(
                     regexp_replace(_raw_id, '(?i)\\bIssuer Name\\s+.*$', ''),
                     '^\d[\d.]*%\s+', ''
                 )
-                -- Goldman Sachs multi-segment: instrument = seg[1] minus "Investment " prefix
-                WHEN len(_segments) >= 2
-                     AND _issuer_lower LIKE 'investment %'
-                     AND regexp_matches(trim(_segments[-1]), '^-?\d[\d.]*%\s+\S')
-                THEN regexp_replace(trim(_segments[1]), '^(?i)Investment\s+', '')
-                -- Goldman Sachs 1-segment: instrument from "Investment <type> ..."
+                -- Config-driven hierarchical pct: instrument description
+                -- 4+ segments: seg[-2] stripped of pct (lien type, e.g. "1st Lien/Senior Secured Debt")
+                -- 3 segments: seg[1] minus "Investment " prefix (already correct)
+                -- 2 segments: seg[1] minus "Investment " prefix
+                WHEN {_hier_pct_condition} AND len(_segments) >= 4
+                THEN regexp_replace(trim(_segments[-2]), '^-?\\d[\\d.]*%\\s+', '')
+                WHEN {_hier_pct_condition}
+                THEN regexp_replace(trim(_segments[1]), '^(?i)Investment\\s+', '')
+                -- Hierarchical pct 1-segment (no dash separator)
                 WHEN NOT contains(_raw_id, ' - ')
-                     AND _issuer_lower LIKE 'investment %'
-                     AND regexp_matches(_raw_id, '\d[\d.]*%\s+\S')
+                     AND {_hier_pct_cik_sql}
+                     AND regexp_matches(_raw_id, '\\d[\\d.]*%\\s+\\S')
                 THEN COALESCE(
                     NULLIF(regexp_extract(
-                        regexp_replace(_raw_id, '^(?i)Investment\s+', ''),
-                        '^(.+?)\s+\d[\d.]*%',
+                        regexp_replace(_raw_id, '^(?i)Investment\\s+', ''),
+                        '^(.+?)\\s+\\d[\\d.]*%',
                         1
                     ), ''),
                     ''
@@ -1483,7 +1561,33 @@ def _prepare_bdc(
                     trim(array_to_string(_segments[2:], ' - ')),
                     '^\\$?[\\d,.]+ ?', ''
                 )
-            END AS instrument_description
+            END AS instrument_description,
+            -- Hierarchical pct: country from seg[2] stripped of pct (>= 3 segments)
+            CASE WHEN {_hier_pct_condition} AND len(_segments) >= 3
+                 THEN regexp_extract(
+                     regexp_replace(trim(_segments[2]), '^-?\\d[\\d.]*%\\s+', ''),
+                     '(?i)^({_hier_country_re})$', 1
+                 )
+                 ELSE NULL
+            END AS _hier_country,
+            -- Hierarchical pct: industry from leaf segment
+            -- Debt: text after "Industry" keyword, before next boundary keyword
+            -- Equity: trailing industry label match (no "Industry" keyword)
+            CASE WHEN {_hier_pct_condition}
+                      AND regexp_matches(trim(_segments[-1]), '(?i)\\bIndustry\\s+')
+                 THEN trim(regexp_extract(
+                     regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                     '(?i)(?:^.*?)\\bIndustry\\s+(.+?)(?:\\s+(?:{_hier_boundary_re})(?:\\s|$)|$)',
+                     1
+                 ))
+                 WHEN {_hier_pct_condition}
+                 THEN regexp_extract(
+                     regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                     '(?i)\\s+({_hier_industry_label_re})$',
+                     1
+                 )
+                 ELSE NULL
+            END AS _hier_industry
         FROM initial_split
     ),
 
@@ -1666,10 +1770,14 @@ def _prepare_bdc(
     with_enrichment AS (
         SELECT *,
             -- Reference rate type: SOFR/LIBOR/PRIME from identifier text
+            -- Also detects "S + N" / "L + N" / "E + N" shorthand
             CASE
                 WHEN regexp_matches(lower(_raw_id), '\\bsofr\\b') THEN 'SOFR'
                 WHEN regexp_matches(lower(_raw_id), '\\blibor\\b') THEN 'LIBOR'
                 WHEN regexp_matches(lower(_raw_id), '\\bprime\\b') THEN 'PRIME'
+                WHEN regexp_matches(_raw_id, '\\bS\\s*\\+\\s*\\d') THEN 'SOFR'
+                WHEN regexp_matches(_raw_id, '\\bL\\s*\\+\\s*\\d') THEN 'LIBOR'
+                WHEN regexp_matches(_raw_id, '\\bE\\s*\\+\\s*\\d') THEN 'EURIBOR'
                 ELSE NULL
             END AS _text_ref_rate,
             -- Maturity date: extract from "M/D/YYYY Maturity", "Due M/D/YY",
@@ -1795,6 +1903,7 @@ def _prepare_bdc(
             form_type AS bdc_form_type,
             dimensions_raw AS bdc_dimensions_raw,
             _ugl AS bdc_unrealized_gain_loss,
+            COALESCE(_hier_country, '') AS bdc_investment_country,
             '' AS nport_holding_id,
             '' AS nport_series_name,
             '' AS nport_series_id,
@@ -1817,7 +1926,7 @@ def _prepare_bdc(
             '' AS jv_subsidiary,
             '' AS entity_id,
             '' AS canonical_name,
-            '' AS extracted_industry,
+            COALESCE(_hier_industry, '') AS extracted_industry,
             '' AS gics_sub_industry,
             '' AS lien_position,
             '' AS position_id,

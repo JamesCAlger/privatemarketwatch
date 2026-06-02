@@ -167,6 +167,38 @@
       },
       "additionalProperties": false
     },
+    "identifier_parser": {
+      "type": "object",
+      "description": "Per-CIK identifier parsing configuration for structured field extraction",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["hierarchical_pct"],
+          "description": "Parser type. hierarchical_pct: dash-separated segments with pct prefixes"
+        },
+        "issuer_boundary_keywords": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Keywords that mark end of issuer name in leaf segment"
+        },
+        "industry_keyword": {
+          "type": "string",
+          "description": "Keyword preceding industry name in leaf segment (e.g. Industry)"
+        },
+        "rate_shorthand": {
+          "type": "object",
+          "additionalProperties": {"type": "string"},
+          "description": "Map of rate shorthand prefix to reference rate type (e.g. S + -> SOFR)"
+        },
+        "country_list": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Known country names for extraction from segment text"
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": false
+    },
     "archetypes": {
       "type": "object",
       "additionalProperties": {

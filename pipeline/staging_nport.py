@@ -42,14 +42,14 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     if isinstance(nport_input, (str, Path)):
         _nport_loaded_from_file = True
         nport_path = str(nport_input).replace("\\", "/")
-        # Use CREATE TABLE (not VIEW) so DuckDB loads the CSV once into its
+        # Use CREATE TABLE (not VIEW) so DuckDB loads the file once into its
         # memory-efficient columnar format.  A VIEW would re-scan the file
         # for every downstream query.
-        con.execute(f"""
-            CREATE TABLE nport_raw AS
-            SELECT * FROM read_csv_auto('{nport_path}',
-                                        header=true, all_varchar=true)
-        """)
+        if str(nport_input).endswith(".parquet"):
+            read_expr = f"read_parquet('{nport_path}')"
+        else:
+            read_expr = f"read_csv_auto('{nport_path}', header=true, all_varchar=true)"
+        con.execute(f"CREATE TABLE nport_raw AS SELECT * FROM {read_expr}")
         row_count = con.execute("SELECT COUNT(*) FROM nport_raw").fetchone()[0]
         logger.info("Preparing N-PORT holdings: %d input rows", row_count)
         if row_count == 0:
@@ -280,6 +280,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS bdc_form_type,
             '' AS bdc_dimensions_raw,
             NULL AS bdc_unrealized_gain_loss,
+            '' AS bdc_investment_country,
             holding_id AS nport_holding_id,
             series_name AS nport_series_name,
             series_id AS nport_series_id,

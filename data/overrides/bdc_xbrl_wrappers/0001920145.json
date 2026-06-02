@@ -217,6 +217,22 @@
       }
     }
   },
+  "identifier_parser": {
+    "type": "hierarchical_pct",
+    "issuer_boundary_keywords": [
+      "Industry", "Interest Rate", "Reference Rate", "Maturity",
+      "Floor", "PIK", "Effective Yield", "Initial Acquisition Date"
+    ],
+    "industry_keyword": "Industry",
+    "rate_shorthand": {"S + ": "SOFR", "L + ": "LIBOR", "E + ": "EURIBOR"},
+    "country_list": [
+      "United States", "United Kingdom", "Canada", "Australia",
+      "Cayman Islands", "Switzerland", "Luxembourg", "France",
+      "Ireland", "Netherlands", "Germany", "Belgium", "Sweden",
+      "Norway", "Denmark", "Finland", "Spain", "Italy",
+      "Japan", "Singapore", "Hong Kong", "United Arab Emirates"
+    ]
+  },
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.05

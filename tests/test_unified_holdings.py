@@ -2126,14 +2126,14 @@ class TestTextEnrichment:
         result = _prepare_bdc(df)
         assert result.iloc[0]["reference_rate_type"] == "SOFR"
 
-    def test_libor_extracted(self):
+    def test_libor_shorthand_extracted(self):
         df = self._make_bdc_df([{
             "investment_identifier": "Acme Corp - Term Loan L+625, 1.00% Floor",
             "cik": "1", "fair_value": 1000000,
         }])
         result = _prepare_bdc(df)
-        # "L+" doesn't contain "libor" as a word, so no match
-        assert result.iloc[0]["reference_rate_type"] == ""
+        # "L+" shorthand detected as LIBOR
+        assert result.iloc[0]["reference_rate_type"] == "LIBOR"
 
     def test_libor_word_extracted(self):
         df = self._make_bdc_df([{
@@ -3334,7 +3334,7 @@ class TestIndustryPrefixSqlPath:
         result = _prepare_bdc(df)
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Physician Partners LLC"
-        assert "Debt Investments" in result.iloc[0]["instrument_description"]
+        assert result.iloc[0]["instrument_description"] == "1st Lien/Senior Secured Debt"
 
     def test_gs_4segment_en_dash_sql(self):
         """Goldman Sachs en-dash delimiters normalised and parsed."""
@@ -3366,7 +3366,7 @@ class TestIndustryPrefixSqlPath:
         result = _prepare_bdc(df)
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Acme Holdings Inc"
-        assert "Equity Securities" in result.iloc[0]["instrument_description"]
+        assert result.iloc[0]["instrument_description"] == "Common Stock"
 
     def test_gs_2segment_format_sql(self):
         """Goldman Sachs 2-segment format via SQL."""
@@ -8255,6 +8255,176 @@ class TestGSPrivateCreditSqlPath:
             fair_value=500000000.0,
         )
         assert result.empty, "Geographic subtotal should be filtered"
+
+    # --- Hierarchical pct identifier parser tests ---
+
+    def test_gs_4seg_debt_issuer_name(self):
+        """4-seg debt: issuer_name = company from leaf segment."""
+        result = self._run_prepare_bdc(
+            "Investment Debt Investments - 180.7% United Kingdom "
+            "- 4.7% 1st Lien/Senior Secured Debt "
+            "- 4.4% Polaris Newco, LLC Industry IT Services Interest Rate "
+            "9.58% Reference Rate and Spread S + 5.50% Maturity 06/02/2028"
+        )
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Polaris Newco, LLC"
+
+    def test_gs_4seg_debt_instrument_description(self):
+        """4-seg debt: instrument_description = lien type from seg[-2]."""
+        result = self._run_prepare_bdc(
+            "Investment Debt Investments - 180.7% United Kingdom "
+            "- 4.7% 1st Lien/Senior Secured Debt "
+            "- 4.4% Polaris Newco, LLC Industry IT Services Interest Rate "
+            "9.58% Reference Rate and Spread S + 5.50% Maturity 06/02/2028"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["instrument_description"] == "1st Lien/Senior Secured Debt"
+
+    def test_gs_4seg_debt_country(self):
+        """4-seg debt: country extracted from seg[2]."""
+        result = self._run_prepare_bdc(
+            "Investment Debt Investments - 180.7% United Kingdom "
+            "- 4.7% 1st Lien/Senior Secured Debt "
+            "- 4.4% Polaris Newco, LLC Industry IT Services Interest Rate "
+            "9.58% Reference Rate and Spread S + 5.50% Maturity 06/02/2028"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["bdc_investment_country"] == "United Kingdom"
+
+    def test_gs_4seg_debt_industry(self):
+        """4-seg debt: extracted_industry from leaf after 'Industry' keyword."""
+        result = self._run_prepare_bdc(
+            "Investment Debt Investments - 180.7% United Kingdom "
+            "- 4.7% 1st Lien/Senior Secured Debt "
+            "- 4.4% Polaris Newco, LLC Industry IT Services Interest Rate "
+            "9.58% Reference Rate and Spread S + 5.50% Maturity 06/02/2028"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["extracted_industry"] == "IT Services"
+
+    def test_gs_4seg_debt_reference_rate(self):
+        """4-seg debt: reference_rate_type from S + shorthand."""
+        result = self._run_prepare_bdc(
+            "Investment Debt Investments - 180.7% United Kingdom "
+            "- 4.7% 1st Lien/Senior Secured Debt "
+            "- 4.4% Polaris Newco, LLC Industry IT Services Interest Rate "
+            "9.58% Reference Rate and Spread S + 5.50% Maturity 06/02/2028"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["reference_rate_type"] == "SOFR"
+
+    def test_gs_3seg_debt_country_and_issuer(self):
+        """3-seg debt: country from seg[2], issuer from leaf."""
+        result = self._run_prepare_bdc(
+            "Investment 1st Lien/Senior Secured Debt - 93.10% United States "
+            "- 85.3% Acme Corp Industry Software Interest Rate 11.58% "
+            "Reference Rate and Spread S + 5.75% Maturity 01/15/2028"
+        )
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["bdc_investment_country"] == "United States"
+        assert row["issuer_name"] == "Acme Corp"
+
+    def test_gs_3seg_debt_instrument(self):
+        """3-seg debt: instrument = seg[1] minus 'Investment ' = lien type."""
+        result = self._run_prepare_bdc(
+            "Investment 1st Lien/Senior Secured Debt - 93.10% United States "
+            "- 85.3% Acme Corp Industry Software Interest Rate 11.58% "
+            "Reference Rate and Spread S + 5.75% Maturity 01/15/2028"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["instrument_description"] == "1st Lien/Senior Secured Debt"
+
+    def test_gs_4seg_equity_issuer(self):
+        """4-seg equity: issuer_name = company, not 'Equity and Other'."""
+        result = self._run_prepare_bdc(
+            "Equity and Other - 0.7% United States "
+            "- 0.1% Preferred Stock "
+            "- 0.0% SDB HOLDCO, LLC Aerospace & Defense"
+        )
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "SDB HOLDCO, LLC"
+
+    def test_gs_4seg_equity_instrument(self):
+        """4-seg equity: instrument = subcategory from seg[-2]."""
+        result = self._run_prepare_bdc(
+            "Equity and Other - 0.7% United States "
+            "- 0.1% Preferred Stock "
+            "- 0.0% SDB HOLDCO, LLC Aerospace & Defense"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["instrument_description"] == "Preferred Stock"
+
+    def test_gs_4seg_equity_country(self):
+        """4-seg equity: country from seg[2]."""
+        result = self._run_prepare_bdc(
+            "Equity and Other - 0.7% United States "
+            "- 0.1% Preferred Stock "
+            "- 0.0% SDB HOLDCO, LLC Aerospace & Defense"
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["bdc_investment_country"] == "United States"
+
+    def test_gs_4seg_equity_trailing_industry(self):
+        """4-seg equity: extracted_industry from trailing label match."""
+        result = self._run_prepare_bdc(
+            "Equity and Other - 0.7% United States "
+            "- 0.1% Preferred Stock "
+            "- 0.0% SDB HOLDCO, LLC Aerospace & Defense"
+        )
+        assert len(result) == 1
+        # "Aerospace & Defense" is a known industry label
+        assert result.iloc[0]["extracted_industry"] == "Aerospace & Defense"
+
+    def test_gs_equity_no_trailing_industry(self):
+        """4-seg equity without trailing industry label: issuer absorbs
+        terminal text, industry stays empty."""
+        result = self._run_prepare_bdc(
+            "Equity and Other - 0.7% United States "
+            "- 0.1% Common Stock "
+            "- 0.0% Unusual Holdings Corp"
+        )
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Unusual Holdings Corp"
+        assert row["extracted_industry"] == ""
+
+    def test_non_gs_cik_unaffected(self):
+        """Non-GS CIK: hierarchical pct parser must NOT fire."""
+        df = pd.DataFrame([{
+            "cik": "0001418076",
+            "entity_name": "Saratoga Investment Corp.",
+            "accession_number": "0001418076-24-000001",
+            "form_type": "10-K",
+            "filing_date": "2024-03-15",
+            "report_date": "2024-03-31",
+            "period": "2024-03-31",
+            "investment_identifier": "Acme Corp, LLC - Term Loan - First Lien",
+            "fair_value": 1000000.0,
+            "cost": 1000000.0,
+            "principal_amount": None,
+            "interest_rate": 10.0,
+            "basis_spread": 5.0,
+            "reference_rate_type": "SOFR",
+            "maturity_date": "2028-01-15",
+            "shares_held": None,
+            "pct_of_net_assets": None,
+            "unrealized_gain_loss": None,
+            "pik_rate": None,
+            "industry": None,
+            "investment_type": None,
+            "affiliation": None,
+            "dimensions_raw": None,
+        }])
+        from pipeline.staging_bdc import _prepare_bdc
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Acme Corp, LLC"
+        # Non-GS: bdc_investment_country stays empty
+        assert row["bdc_investment_country"] == ""
 
 
 class TestCrescentHierarchySqlPath:

@@ -389,3 +389,28 @@ def test_gs_private_credit_truncated_prefix_classified():
     )
     assert row["wrapper_family"] == "debt"
     assert row["wrapper_disposition"] == "debt_position_leaf"
+
+
+# --- identifier_parser config tests ---
+
+def test_identifier_parser_loads_from_gs_json():
+    """identifier_parser section loads correctly from GS wrapper JSON."""
+    from pipeline.staging_bdc import _load_identifier_parsers
+    parsers = _load_identifier_parsers()
+    gs_cik = "0001920145"
+    assert gs_cik in parsers, f"GS CIK {gs_cik} not in parsers"
+    cfg = parsers[gs_cik]
+    assert cfg["type"] == "hierarchical_pct"
+    assert "issuer_boundary_keywords" in cfg
+    assert "Industry" in cfg["issuer_boundary_keywords"]
+    assert "country_list" in cfg
+    assert "United States" in cfg["country_list"]
+
+
+def test_identifier_parser_missing_section_is_fine():
+    """Wrapper JSON without identifier_parser section should not error."""
+    from pipeline.staging_bdc import _load_identifier_parsers
+    parsers = _load_identifier_parsers()
+    # Most CIKs do not have identifier_parser; just verify the function
+    # returns a dict without errors.
+    assert isinstance(parsers, dict)
