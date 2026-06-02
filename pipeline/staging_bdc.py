@@ -412,8 +412,13 @@ def _prepare_bdc(
     _entity_sigs = [
         "inc.", "inc,", " inc ", " inc-",
         "llc", "l.l.c", "corp.", "corp,",
-        "ltd.", "ltd,", " ltd ", ", lp", " lp,", "l.p.",
-        "holdings", "group", "gmbh", " co.", " plc",
+        "corporation",
+        "ltd.", "ltd,", " ltd ",
+        "limited",
+        ", lp", " lp,", "l.p.",
+        "holdings", "holding company",
+        "group",
+        "gmbh", "sarl", " co.", " plc",
     ]
     _sql_has_entity_in_raw = " OR ".join(
         f"contains(lower(_raw_id), '{s}')" for s in _entity_sigs

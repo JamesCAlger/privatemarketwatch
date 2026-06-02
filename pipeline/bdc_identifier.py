@@ -320,33 +320,36 @@ def _sql_is_bdc_aggregate() -> str:
         "inc.", "inc,", " inc ", " inc-",
         "llc", "l.l.c",
         "corp.", "corp,",
+        "corporation",
         "ltd.", "ltd,", " ltd ",
+        "limited",
         ", lp", " lp,", "l.p.",
-        "holdings", "group",
-        "gmbh", " co.", " plc",
+        "holdings", "holding company",
+        "group",
+        "gmbh", "sarl", " co.", " plc",
     ]
     has_entity_sql = " OR ".join(
         f"contains(_lower_id, '{s}')" for s in _entity_signals
     )
     has_entity = f"({has_entity_sql})"
     # Strict leaf evidence for hierarchy rows that begin with category text
-    # but contain terminal position data. This guard is intentionally narrow:
-    # it requires an explicit leaf marker ("Investment Type" or "Instrument")
-    # plus loan/equity instrument text and either rate or maturity evidence,
-    # so ordinary country/category rollups still flow through aggregate
-    # filtering.
+    # but contain terminal position data. Condition 1 requires an explicit
+    # leaf marker, condition 2 requires instrument-type text, and condition 3
+    # requires rate/maturity evidence.
     leaf_text = "regexp_replace(replace(_lower_id, '\u00a0', ' '), '\\s+', ' ', 'g')"
     leaf_detail_signal = (
         "("
-        f"(contains({leaf_text}, 'investment type') OR contains({leaf_text}, 'instrument')) "
+        f"(contains({leaf_text}, 'investment type') OR contains({leaf_text}, 'type of investment') "
+        f"OR contains({leaf_text}, 'instrument')) "
         f"AND regexp_matches({leaf_text}, "
-        "'\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|"
+        "'\\b(unitranche|first[-\\s]+lien|second[-\\s]+lien|term\\s+loan|"
         "delayed\\s+draw|revolver|revolving|senior\\s+secured|subordinated|"
+        "secured\\s+loan|"
         "notes?|bonds?|common\\s+(stock|equity)|preferred|warrants?|"
         "equity)\\b') "
         f"AND regexp_matches({leaf_text}, "
         "'\\b(interest\\s+(term|rate)|reference\\s+rate|sofr|libor|euribor|"
-        "maturity\\s*/\\s*dissolution|maturity|due)\\b')"
+        "maturity\\s*/\\s*dissolution|maturity|due|acquisition\\s+date)\\b')"
         ")"
     )
     no_entity = f"NOT {has_entity}"
@@ -548,8 +551,13 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
     _pct_entity_sigs = [
         "inc.", "inc,", " inc ", " inc-",
         "llc", "l.l.c", "corp.", "corp,",
-        "ltd.", "ltd,", " ltd ", ", lp", " lp,", "l.p.",
-        "holdings", "group", "gmbh", " co.", " plc",
+        "corporation",
+        "ltd.", "ltd,", " ltd ",
+        "limited",
+        ", lp", " lp,", "l.p.",
+        "holdings", "holding company",
+        "group",
+        "gmbh", "sarl", " co.", " plc",
     ]
 
     if " - " not in identifier:
@@ -592,6 +600,27 @@ def _parse_bdc_identifier(identifier: str) -> tuple[str, str]:
         instrument = " - ".join(s.strip() for s in segments[2:])
         instrument = _QTY_PREFIX_RE.sub("", instrument).strip()
         return (issuer, instrument)
+
+    # Saratoga pct-only first segment: "NNN.N% - Company - Industry - Instrument"
+    # The first segment is a bare percentage with no trailing text, unlike
+    # PennantPark where the pct has category text ("NNN.N% First Lien ...").
+    if (len(segments) >= 2
+            and re.match(r"^\d[\d.]*%$", first_seg.strip())
+            and not any(s in first_seg.lower() for s in _pct_entity_sigs)):
+        seg1 = segments[1].strip()
+        # Case A: entity signal in segment -> it's the issuer
+        if any(s in seg1.lower() for s in _pct_entity_sigs):
+            issuer = seg1
+            instrument = " - ".join(s.strip() for s in segments[2:])
+            return (issuer, instrument)
+        # Case B: tight dash ("JDXpert -Talent...") -> split on tight dash
+        tight_dash = re.match(r'^(.+?)\s+-(\S)', seg1)
+        if tight_dash:
+            issuer = tight_dash.group(1).strip()
+            rest = seg1[tight_dash.start(2):]
+            instrument = " - ".join([rest] + [s.strip() for s in segments[2:]])
+            return (issuer, instrument)
+        # Case C: no entity, no tight dash -> ambiguous, fall through
 
     # Pct-prefix category skip (PennantPark / Blue Owl):
     # seg[1] = "NNN.N% Category Name", seg[2] = "NNN.N% Company ... Industry ..."
@@ -659,16 +688,19 @@ def _leaf_detail_signal(identifier: str) -> bool:
         return False
     lower = re.sub(r"\s+", " ", identifier.replace("\xa0", " ")).lower().strip()
     return bool(
-        ("investment type" in lower or "instrument" in lower)
+        ("investment type" in lower
+         or "type of investment" in lower
+         or "instrument" in lower)
         and re.search(
-            r"\b(unitranche|first\s+lien|second\s+lien|term\s+loan|"
+            r"\b(unitranche|first[-\s]+lien|second[-\s]+lien|term\s+loan|"
             r"delayed\s+draw|revolver|revolving|senior\s+secured|subordinated|"
+            r"secured\s+loan|"
             r"notes?|bonds?|common\s+(stock|equity)|preferred|warrants?|equity)\b",
             lower,
         )
         and re.search(
             r"\b(interest\s+(term|rate)|reference\s+rate|sofr|libor|euribor|"
-            r"maturity\s*/\s*dissolution|maturity|due)\b",
+            r"maturity\s*/\s*dissolution|maturity|due|acquisition\s+date)\b",
             lower,
         )
     )
@@ -709,10 +741,13 @@ def _is_bdc_aggregate_row(identifier: str) -> bool:
         "inc.", "inc,", " inc ", " inc-",
         "llc", "l.l.c",
         "corp.", "corp,",
+        "corporation",
         "ltd.", "ltd,", " ltd ",
+        "limited",
         ", lp", " lp,", "l.p.",
-        "holdings", "group",
-        "gmbh", " co.", " plc",
+        "holdings", "holding company",
+        "group",
+        "gmbh", "sarl", " co.", " plc",
     ]
     has_entity = any(s in lower for s in _entity_signals)
     leaf_detail_signal = _leaf_detail_signal(identifier)
