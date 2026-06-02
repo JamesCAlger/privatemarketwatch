@@ -9154,3 +9154,160 @@ class TestBdcAggregateOverrides:
         }])
         result = _prepare_bdc(df)
         assert result.empty
+
+
+class TestTextEnrichment:
+    """Integration tests for text-based field extraction from identifier text.
+
+    Covers maturity 'due M/YYYY', interest rate, basis spread, PIK rate,
+    and coupon type inference from identifier text when XBRL columns are NULL.
+    """
+
+    def _run_prepare_bdc(
+        self,
+        identifier,
+        fair_value=1000000.0,
+        cik="0001504619",
+        entity_name="TestEntity",
+        report_date="2024-01-31",
+        interest_rate=None,
+        basis_spread=None,
+        pik_rate=None,
+        reference_rate_type=None,
+        maturity_date=None,
+    ):
+        """Helper: run a single identifier through _prepare_bdc."""
+        df = pd.DataFrame([{
+            "cik": cik,
+            "entity_name": entity_name,
+            "accession_number": f"{cik}-24-000001",
+            "form_type": "10-K",
+            "filing_date": "2024-03-15",
+            "report_date": report_date,
+            "period": report_date,
+            "investment_identifier": identifier,
+            "fair_value": fair_value,
+            "cost": fair_value,
+            "principal_amount": None,
+            "interest_rate": interest_rate,
+            "basis_spread": basis_spread,
+            "reference_rate_type": reference_rate_type,
+            "maturity_date": maturity_date,
+            "shares_held": None,
+            "pct_of_net_assets": None,
+            "unrealized_gain_loss": None,
+            "pik_rate": pik_rate,
+            "industry": None,
+            "investment_type": None,
+            "affiliation": None,
+            "dimensions_raw": None,
+        }])
+        result = _prepare_bdc(df)
+        return result
+
+    def test_sixth_street_due_maturity(self):
+        """Sixth Street 'due M/YYYY' maturity is extracted."""
+        result = self._run_prepare_bdc(
+            "Debt Investments Business Services OutSystems Luxco SARL "
+            "First-lien loan ($36,651 par, due 7/2030) Initial Acquisition Date "
+            "12/8/2022 Reference Rate and Spread E + 5.75% Interest Rate 8.74%",
+            cik="0001508655",
+            entity_name="Sixth Street Specialty Lending, Inc.",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["maturity_date"] == "2030-07-31"
+
+    def test_trinity_fixed_rate(self):
+        """Trinity 'Fixed interest rate 12.9%' text extraction."""
+        result = self._run_prepare_bdc(
+            "Acme Holdings, LLC - First Lien Term Loan - "
+            "Fixed interest rate 12.9%; EOT 0.0%",
+            cik="0001786108",
+            entity_name="Trinity Capital Inc",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["interest_rate"] == pytest.approx(12.9)
+        assert result.iloc[0]["coupon_type"] == "Fixed"
+
+    def test_trinity_variable_with_floor(self):
+        """Trinity variable rate with floor and basis spread."""
+        result = self._run_prepare_bdc(
+            "Acme Holdings, LLC - First Lien Term Loan - Variable interest rate "
+            "Prime + 6.0% or Floor rate 11.0%; EOT 3.0%",
+            cik="0001786108",
+            entity_name="Trinity Capital Inc",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["interest_rate"] == pytest.approx(11.0)
+        assert result.iloc[0]["basis_spread"] == pytest.approx(6.0)
+        assert result.iloc[0]["reference_rate_type"] == "PRIME"
+        assert result.iloc[0]["coupon_type"] == "Floating"
+
+    def test_trinity_variable_with_pik(self):
+        """Trinity floor rate + PIK Interest Rate are separated correctly."""
+        result = self._run_prepare_bdc(
+            "Acme Holdings, LLC - First Lien Term Loan - Floor rate 11.0%"
+            "+PIK Interest Rate 1.0%; EOT 11.0%",
+            cik="0001786108",
+            entity_name="Trinity Capital Inc",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["interest_rate"] == pytest.approx(11.0)
+        assert result.iloc[0]["pik_rate"] == pytest.approx(1.0)
+
+    def test_fidelity_compact_spread(self):
+        """Fidelity compact 'SOFR+5.50% Interest Rate 10.70%' extraction."""
+        result = self._run_prepare_bdc(
+            "Investments First Lien Debt Acme LLC Term Loan "
+            "SOFR+5.50% Interest Rate 10.70% Maturity Date 8/2/2030",
+            cik="0001920453",
+            entity_name="Fidelity Private Credit Fund",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["basis_spread"] == pytest.approx(5.5)
+        assert result.iloc[0]["interest_rate"] == pytest.approx(10.7)
+
+    def test_saratoga_pik_rate(self):
+        """Saratoga '15.00% PIK' text extraction."""
+        result = self._run_prepare_bdc(
+            "Non-control/Non-affiliate investments - 229.3% - "
+            "Acme Holdings, LLC - First Lien Term Loan 15.00% PIK, 2/18/2028",
+            cik="0001377936",
+            entity_name="Saratoga Investment Corp.",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["pik_rate"] == pytest.approx(15.0)
+
+    def test_sixth_street_fully_pik(self):
+        """Sixth Street fully-PIK position: IR = PIK rate."""
+        result = self._run_prepare_bdc(
+            "Debt Investments Business Services Acme LLC "
+            "First-lien loan ($5,000 par, due 6/2029) "
+            "Interest Rate 13.70% PIK",
+            cik="0001508655",
+            entity_name="Sixth Street Specialty Lending, Inc.",
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["interest_rate"] == pytest.approx(13.7)
+        assert result.iloc[0]["pik_rate"] == pytest.approx(13.7)
+
+    def test_xbrl_precedence(self):
+        """XBRL structured values take precedence over text extraction."""
+        result = self._run_prepare_bdc(
+            "Acme Corp - First Lien Term Loan - Interest Rate 10.0%",
+            interest_rate=8.5,
+        )
+        assert len(result) == 1
+        assert result.iloc[0]["interest_rate"] == pytest.approx(8.5)
+
+    def test_no_false_positives(self):
+        """Plain identifier yields no text-derived fields."""
+        result = self._run_prepare_bdc(
+            "Acme Corp - First Lien Term Loan"
+        )
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["interest_rate"] is None or pd.isna(row["interest_rate"])
+        assert row["basis_spread"] is None or pd.isna(row["basis_spread"])
+        assert row["pik_rate"] is None or pd.isna(row["pik_rate"])
+        assert row["coupon_type"] == ""
