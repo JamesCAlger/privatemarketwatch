@@ -6,6 +6,18 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-02 -- Consolidate hardcoded staging SQL into wrapper JSON config
+
+- **Pure refactor** (Phase A): `pipeline/staging_bdc.py` now reads `hierarchy_prefix_re`, `hierarchy_issuer_re`, `hierarchy_instrument_re`, `hierarchy_trailing_re`, `hierarchy_condition_extra`, `leaf_guard.type_industry_prefix_re`, `leaf_guard.marker_re`, and `leaf_guard.evidence_re` from the per-CIK wrapper JSON files instead of hardcoding them in Python.
+- Added `_expand_placeholders()` and `_expand_staging_strings()` helpers to substitute `(?:INDUSTRY_LABELS)` and `(?:CRESCENT_INDUSTRY_LABELS)` tokens in JSON patterns with runtime-computed regex alternations.
+- Staging configs are now loaded once via `_load_staging_configs()` and grouped by strategy (`_prefix_strip_cfgs`, `_hierarchy_extract_cfgs`, `_leaf_guard_cfgs`) instead of calling three separate `_get_*_ciks()` helpers.
+- Removed `_get_hierarchy_leaf_ciks()`, `_get_prefix_strip_ciks()`, `_get_hierarchy_extract_ciks()` functions (were each redundantly calling `_load_staging_configs()`).
+- All variable names consumed by downstream SQL (`_msd_hierarchy_prefix_re`, `_msd_hierarchy_condition`, `_msd_clean_raw`, `_crescent_*`, `_hierarchy_leaf_*`) are preserved -- the generated SQL is character-for-character identical to the old hardcoded version (verified with explicit comparison script).
+- No behavioral change. Adding a new CIK with any of these three strategies now only requires adding a JSON wrapper file.
+- Verified: 21 CIK-specific tests pass, 784/784 non-slow unified holdings tests pass, 34/34 wrapper tests pass.
+
+---
+
 ### 2026-06-01 -- Fix Trinity Capital FV overshoot: prefix bypass + subtotal hierarchy filter
 
 - **staging_bdc.py (Change 1)**: Fixed prefix bypass instrument keyword check to strip the prefix before checking for instrument keywords. Previously, prefixes like "Portfolio Company Warrant Investments" contained "warrant" which rescued ALL rows under that prefix. Now `_pr_remainder` strips the prefix first, so only rows with instrument keywords in the text AFTER the prefix are rescued.

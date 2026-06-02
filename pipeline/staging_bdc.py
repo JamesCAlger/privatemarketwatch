@@ -48,6 +48,29 @@ logger = logging.getLogger(__name__)
 _WRAPPER_DEFINITIONS_DIR = OVERRIDES_DIR / "bdc_xbrl_wrappers"
 
 
+def _expand_placeholders(text: str, placeholders: dict[str, str]) -> str:
+    """Replace placeholder tokens in JSON regex patterns with runtime values."""
+    for token, expansion in placeholders.items():
+        text = text.replace(token, expansion)
+    return text
+
+
+def _expand_staging_strings(obj: Any, placeholders: dict[str, str]) -> None:
+    """Recursively expand placeholder tokens in all string values of a dict."""
+    if isinstance(obj, dict):
+        for key in obj:
+            if isinstance(obj[key], str):
+                obj[key] = _expand_placeholders(obj[key], placeholders)
+            elif isinstance(obj[key], (dict, list)):
+                _expand_staging_strings(obj[key], placeholders)
+    elif isinstance(obj, list):
+        for i, item in enumerate(obj):
+            if isinstance(item, str):
+                obj[i] = _expand_placeholders(item, placeholders)
+            elif isinstance(item, (dict, list)):
+                _expand_staging_strings(item, placeholders)
+
+
 def _load_staging_configs() -> dict[str, dict[str, Any]]:
     """Load v3 JSON staging configs keyed by normalized CIK."""
     configs: dict[str, dict[str, Any]] = {}
@@ -126,26 +149,6 @@ def _load_issuer_bridges_from_json() -> list[dict[str, str]]:
             })
     return bridges
 
-
-def _get_hierarchy_leaf_ciks() -> list[str]:
-    """Return list of CIKs using hierarchy_leaf_guard strategy."""
-    configs = _load_staging_configs()
-    return [cfg["cik"] for cfg in configs.values()
-            if cfg["staging"].get("strategy") == "hierarchy_leaf_guard"]
-
-
-def _get_prefix_strip_ciks() -> list[str]:
-    """Return list of CIKs using prefix_strip strategy."""
-    configs = _load_staging_configs()
-    return [cfg["cik"] for cfg in configs.values()
-            if cfg["staging"].get("strategy") == "prefix_strip"]
-
-
-def _get_hierarchy_extract_ciks() -> list[str]:
-    """Return list of CIKs using hierarchy_extract strategy."""
-    configs = _load_staging_configs()
-    return [cfg["cik"] for cfg in configs.values()
-            if cfg["staging"].get("strategy") == "hierarchy_extract"]
 
 
 def _get_comma_delimited_ciks() -> list[str]:
@@ -481,8 +484,29 @@ def _prepare_bdc(
         re.escape(label).replace(r"\ ", r"\s+")
         for label in sorted(_INDUSTRY_LABELS | _msd_extra_industry_labels, key=len, reverse=True)
     )
-    # MSD hierarchy prefix: CIK list from JSON config
-    _prefix_strip_ciks = _get_prefix_strip_ciks()
+    # Crescent industry label regex (moved earlier for placeholder registry)
+    _crescent_industry_re = "|".join(
+        re.escape(label).replace("\\ ", "\\s+")
+        for label in _CRESCENT_HIERARCHY_INDUSTRIES
+    )
+
+    # --- Load all staging configs once, expand placeholders, group by strategy ---
+    _staging_configs = _load_staging_configs()
+    _placeholders = {
+        "(?:INDUSTRY_LABELS)": f"(?:{_industry_prefix_re})",
+        "(?:CRESCENT_INDUSTRY_LABELS)": f"(?:{_crescent_industry_re})",
+    }
+    for _cfg in _staging_configs.values():
+        _expand_staging_strings(_cfg["staging"], _placeholders)
+    _prefix_strip_cfgs = {k: v for k, v in _staging_configs.items()
+                          if v["staging"].get("strategy") == "prefix_strip"}
+    _hierarchy_extract_cfgs = {k: v for k, v in _staging_configs.items()
+                               if v["staging"].get("strategy") == "hierarchy_extract"}
+    _leaf_guard_cfgs = {k: v for k, v in _staging_configs.items()
+                        if v["staging"].get("strategy") == "hierarchy_leaf_guard"}
+
+    # MSD hierarchy prefix: CIK list from staging configs
+    _prefix_strip_ciks = [v["cik"] for v in _prefix_strip_cfgs.values()]
     _msd_cik_sql = (
         "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _prefix_strip_ciks) + ")"
@@ -493,17 +517,10 @@ def _prepare_bdc(
         "LPAD(REGEXP_REPLACE(CAST(a.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _comma_delim_ciks) + ")"
     ) if _comma_delim_ciks else "FALSE"
+    # Read prefix_strip regex from JSON config (placeholders already expanded)
     _msd_hierarchy_prefix_re = (
-        r"(?i)^Investments\s+Investments\s*-\s*"
-        r"(?:non-?\s*control(?:led)?(?:\s*/\s*non-?\s*affiliat(?:e|ed))?"
-        r"|control(?:led)?(?:\s*/\s*affiliat(?:e|ed))?"
-        r"|affiliat(?:e|ed))"
-        r"\s+"
-        r"(?:first\s+lien\s+debt|second\s+lien\s+debt|subordinated\s+debt"
-        r"|senior\s+secured\s+debt|common\s+equity|preferred\s+equity"
-        r"|equity|debt|warrants?)"
-        r"\s+"
-        rf"(?:{_industry_prefix_re})\s+"
+        next(iter(_prefix_strip_cfgs.values()))["staging"]["hierarchy_prefix_re"]
+        if _prefix_strip_cfgs else ""
     )
     _msd_hierarchy_condition = (
         f"{_msd_cik_sql} "
@@ -708,7 +725,8 @@ def _prepare_bdc(
     _seg3_is_industry = _sql_exact_match(
         "lower(trim(_segments[3]))", _INDUSTRY_LABELS
     )
-    _hierarchy_extract_ciks = _get_hierarchy_extract_ciks()
+    # Crescent hierarchy_extract: CIK list and regexes from staging configs
+    _hierarchy_extract_ciks = [v["cik"] for v in _hierarchy_extract_cfgs.values()]
     _crescent_cik_sql = (
         "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _hierarchy_extract_ciks) + ")"
@@ -716,65 +734,50 @@ def _prepare_bdc(
     _crescent_clean_raw = (
         "regexp_replace(replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '), '\\s+', ' ', 'g')"
     )
-    _crescent_industry_re = "|".join(
-        re.escape(label).replace("\\ ", "\\s+")
-        for label in _CRESCENT_HIERARCHY_INDUSTRIES
-    )
-    _crescent_issuer_re = (
-        r"^Investments\s+.+?\s+(?:Debt|Equity)\s+Investments\s+"
-        rf"(?:{_crescent_industry_re})\s+(.+?)\s+Investment\s+Type\s+"
-    )
-    _crescent_instrument_re = (
-        r"Investment\s+Type\s+(.+?)(?:\s+Interest\s+Term\b|\s+Interest\s+Rate\b|"
-        r"\s+Maturity\s*/\s*Dissolution\s+Date\b|\s+Maturity\b|$)"
-    )
-    _crescent_trailing_re = (
-        r"Maturity\s*/\s*Dissolution\s+Date\s+\d{1,2}/\d{4}\s+(.+)$"
-    )
+    # Read regexes from JSON config (placeholders already expanded)
+    _he_staging = next(iter(_hierarchy_extract_cfgs.values()))["staging"] if _hierarchy_extract_cfgs else {}
+    _crescent_issuer_re = _he_staging.get("hierarchy_issuer_re", "")
+    _crescent_instrument_re = _he_staging.get("hierarchy_instrument_re", "")
+    _crescent_trailing_re = _he_staging.get("hierarchy_trailing_re", "")
+    # Build condition: substitute _clean placeholder with _crescent_clean_raw SQL expr
+    _he_condition_extra = _he_staging.get("hierarchy_condition_extra", "FALSE")
+    _he_condition_extra = _he_condition_extra.replace("_clean", _crescent_clean_raw)
     _crescent_condition = (
-        f"{_crescent_cik_sql} "
-        f"AND starts_with(lower({_crescent_clean_raw}), 'investments ') "
-        f"AND contains(lower({_crescent_clean_raw}), ' investment type ') "
-        f"AND regexp_matches(lower({_crescent_clean_raw}), "
-        "'\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|"
-        "delayed\\s+draw|revolver|revolving|senior\\s+secured|subordinated|"
-        "notes?|bonds?|common\\s+(stock|equity)|preferred|warrants?|equity)\\b') "
-        f"AND regexp_matches(lower({_crescent_clean_raw}), "
-        "'\\b(interest\\s+(term|rate)|reference\\s+rate|sofr|libor|euribor|"
-        "maturity\\s*/\\s*dissolution|maturity|due)\\b')"
+        f"{_crescent_cik_sql} AND {_he_condition_extra}"
+        if _hierarchy_extract_cfgs else "FALSE"
     )
-    _hierarchy_leaf_ciks = _get_hierarchy_leaf_ciks()
+    # Hierarchy leaf guard: CIK list, prefix patterns, marker/evidence from JSON
+    _hierarchy_leaf_ciks = [v["cik"] for v in _leaf_guard_cfgs.values()]
     _hierarchy_leaf_cik_sql = (
         "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _hierarchy_leaf_ciks) + ")"
     ) if _hierarchy_leaf_ciks else "FALSE"
-    _sixth_street_prefix_re = (
-        rf"(?i)^(?:Debt\s+Investments|Equity\s+and\s+Other\s+Investments)\s+"
-        rf"(?:{_industry_prefix_re})\s+"
-    )
-    _fidelity_prefix_re = (
-        rf"(?i)^(?:(?:First|Second)\s+Lien\s+Debt|Debt|Equity|Preferred\s+Equity|Common\s+Equity)?\s*"
-        rf"(?:{_industry_prefix_re})\s+"
-    )
-    _hierarchy_leaf_clean_raw = (
-        f"regexp_replace(regexp_replace(_raw_id, '{_sixth_street_prefix_re}', ''), "
-        f"'{_fidelity_prefix_re}', '')"
-    )
-    _hierarchy_leaf_marker_re = (
-        r"(?:first[-\s]lien|second[-\s]lien|unitranche|term\s+loan|"
-        r"delayed\s+draw(?:\s+term\s+loan)?|revolving\s+credit\s+facility|"
-        r"revolver|secured\s+loan|type\s+(?:term\s+loan|delayed\s+draw\s+term\s+loan|"
-        r"revolving\s+credit\s+facility)|class\s+[a-z0-9-]+|preferred\s+units|"
-        r"partnership\s+interest|common\s+stock|preferred\s+stock|ordinary\s+shares|"
-        r"structured\s+product|warrants?)"
-    )
+    # Chain per-CIK type_industry_prefix_re patterns via nested regexp_replace()
+    # Since prefixes are anchored (^) and CIK-specific, non-matching patterns
+    # are no-ops (same behavior as the former hardcoded chaining).
+    _leaf_clean = "_raw_id"
+    for _lg_cfg in _leaf_guard_cfgs.values():
+        _lg_prefix_re = _lg_cfg["staging"]["leaf_guard"]["type_industry_prefix_re"]
+        _leaf_clean = f"regexp_replace({_leaf_clean}, '{_lg_prefix_re}', '')"
+    _hierarchy_leaf_clean_raw = _leaf_clean
+    # Read marker_re and evidence_re from JSON (all leaf_guard CIKs share
+    # identical values today; if they diverge, per-CIK SQL branches needed)
+    _lg_marker_res = [cfg["staging"]["leaf_guard"]["marker_re"]
+                      for cfg in _leaf_guard_cfgs.values()]
+    _lg_evidence_res = [cfg["staging"]["leaf_guard"]["evidence_re"]
+                        for cfg in _leaf_guard_cfgs.values()]
+    _hierarchy_leaf_marker_re = _lg_marker_res[0] if _lg_marker_res else ""
+    _hierarchy_leaf_evidence_re = _lg_evidence_res[0] if _lg_evidence_res else ""
+    if len(set(_lg_marker_res)) > 1:
+        logger.warning("leaf_guard marker_re differs across CIKs; using first")
+    if len(set(_lg_evidence_res)) > 1:
+        logger.warning("leaf_guard evidence_re differs across CIKs; using first")
     _hierarchy_leaf_condition = (
         f"{_hierarchy_leaf_cik_sql} "
         f"AND NOT contains({_norm_raw}, ' - ') "
         f"AND regexp_matches({_hierarchy_leaf_clean_raw}, '(?i)\\s+{_hierarchy_leaf_marker_re}\\b') "
         f"AND regexp_matches(lower({_hierarchy_leaf_clean_raw}), "
-        "'\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|"
-        "initial\\s+acquisition\\s+date|acquisition\\s+date|par|shares?|units?)\\b')"
+        f"'{_hierarchy_leaf_evidence_re}')"
     )
     _hierarchy_leaf_issuer_re = rf"(?i)^(.+?)\s+{_hierarchy_leaf_marker_re}\b"
     _hierarchy_leaf_instrument_re = rf"(?i)^.+?\s+({_hierarchy_leaf_marker_re}\b.*)$"
