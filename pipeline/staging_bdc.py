@@ -468,21 +468,10 @@ def _prepare_bdc(
         "replace(replace(_raw_id, '\u2014', ' - '), '\u2013', '-'), "
         "'\\s+-\\s*', ' - ', 'g')"
     )
-    _msd_extra_industry_labels = {
-        "Advertising",
-        "Application Software",
-        "Beverage, Food & Tobacco",
-        "Capital Equipment",
-        "Chemicals, Plastics & Rubber",
-        "Consumer",
-        "Diversified Support Services",
-        "Environmental Industries",
-        "Environmental & Facilities Services",
-        "Specialized Consumer Services",
-    }
+    # Base industry prefix regex (standard labels only)
     _industry_prefix_re = "|".join(
         re.escape(label).replace(r"\ ", r"\s+")
-        for label in sorted(_INDUSTRY_LABELS | _msd_extra_industry_labels, key=len, reverse=True)
+        for label in sorted(_INDUSTRY_LABELS, key=len, reverse=True)
     )
     # Crescent industry label regex (moved earlier for placeholder registry)
     _crescent_industry_re = "|".join(
@@ -492,8 +481,23 @@ def _prepare_bdc(
 
     # --- Load all staging configs once, expand placeholders, group by strategy ---
     _staging_configs = _load_staging_configs()
+    # Collect per-CIK extra industry labels from staging configs (read before
+    # placeholder expansion since these are plain JSON string lists).
+    _all_extra_industry_labels: set[str] = set()
+    for _cfg in _staging_configs.values():
+        _all_extra_industry_labels.update(
+            _cfg["staging"].get("extra_industry_labels", [])
+        )
+    # Expanded industry prefix regex: base labels + all declared extras
+    _expanded_industry_prefix_re = "|".join(
+        re.escape(label).replace(r"\ ", r"\s+")
+        for label in sorted(
+            _INDUSTRY_LABELS | _all_extra_industry_labels, key=len, reverse=True
+        )
+    )
     _placeholders = {
         "(?:INDUSTRY_LABELS)": f"(?:{_industry_prefix_re})",
+        "(?:MSD_INDUSTRY_LABELS)": f"(?:{_expanded_industry_prefix_re})",
         "(?:CRESCENT_INDUSTRY_LABELS)": f"(?:{_crescent_industry_re})",
     }
     for _cfg in _staging_configs.values():
@@ -752,35 +756,115 @@ def _prepare_bdc(
         "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _hierarchy_leaf_ciks) + ")"
     ) if _hierarchy_leaf_ciks else "FALSE"
+    # Build per-CIK leaf guard components
+    _lg_per_cik: list[dict[str, str]] = []
+    for _lg_cik_norm, _lg_cfg in _leaf_guard_cfgs.items():
+        lg = _lg_cfg["staging"]["leaf_guard"]
+        _lg_prefix_re = lg["type_industry_prefix_re"]
+        _lg_per_cik.append({
+            "cik_norm": _lg_cik_norm,
+            "prefix_re": _lg_prefix_re,
+            "clean_raw": f"regexp_replace(_raw_id, '{_lg_prefix_re}', '')",
+            "marker_re": lg["marker_re"],
+            "evidence_re": lg["evidence_re"],
+        })
     # Chain per-CIK type_industry_prefix_re patterns via nested regexp_replace()
     # Since prefixes are anchored (^) and CIK-specific, non-matching patterns
     # are no-ops (same behavior as the former hardcoded chaining).
     _leaf_clean = "_raw_id"
-    for _lg_cfg in _leaf_guard_cfgs.values():
-        _lg_prefix_re = _lg_cfg["staging"]["leaf_guard"]["type_industry_prefix_re"]
-        _leaf_clean = f"regexp_replace({_leaf_clean}, '{_lg_prefix_re}', '')"
+    for _lg in _lg_per_cik:
+        _leaf_clean = f"regexp_replace({_leaf_clean}, '{_lg['prefix_re']}', '')"
     _hierarchy_leaf_clean_raw = _leaf_clean
-    # Read marker_re and evidence_re from JSON (all leaf_guard CIKs share
-    # identical values today; if they diverge, per-CIK SQL branches needed)
-    _lg_marker_res = [cfg["staging"]["leaf_guard"]["marker_re"]
-                      for cfg in _leaf_guard_cfgs.values()]
-    _lg_evidence_res = [cfg["staging"]["leaf_guard"]["evidence_re"]
-                        for cfg in _leaf_guard_cfgs.values()]
-    _hierarchy_leaf_marker_re = _lg_marker_res[0] if _lg_marker_res else ""
-    _hierarchy_leaf_evidence_re = _lg_evidence_res[0] if _lg_evidence_res else ""
-    if len(set(_lg_marker_res)) > 1:
-        logger.warning("leaf_guard marker_re differs across CIKs; using first")
-    if len(set(_lg_evidence_res)) > 1:
-        logger.warning("leaf_guard evidence_re differs across CIKs; using first")
-    _hierarchy_leaf_condition = (
-        f"{_hierarchy_leaf_cik_sql} "
-        f"AND NOT contains({_norm_raw}, ' - ') "
-        f"AND regexp_matches({_hierarchy_leaf_clean_raw}, '(?i)\\s+{_hierarchy_leaf_marker_re}\\b') "
-        f"AND regexp_matches(lower({_hierarchy_leaf_clean_raw}), "
-        f"'{_hierarchy_leaf_evidence_re}')"
-    )
-    _hierarchy_leaf_issuer_re = rf"(?i)^(.+?)\s+{_hierarchy_leaf_marker_re}\b"
-    _hierarchy_leaf_instrument_re = rf"(?i)^.+?\s+({_hierarchy_leaf_marker_re}\b.*)$"
+
+    # Per-CIK SQL branching for marker_re/evidence_re.
+    # Shared-path optimization: if all CIKs have identical values, produce
+    # compact SQL equivalent to the former single-marker approach.
+    _lg_marker_set = {lg["marker_re"] for lg in _lg_per_cik}
+    _lg_evidence_set = {lg["evidence_re"] for lg in _lg_per_cik}
+    _all_same_marker_evidence = (len(_lg_marker_set) <= 1
+                                 and len(_lg_evidence_set) <= 1)
+
+    def _cik_check_sql(cik_norm: str) -> str:
+        return (
+            "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), "
+            f"'[^0-9]', '', 'g'), 10, '0') = '{cik_norm}'"
+        )
+
+    if _all_same_marker_evidence and _lg_per_cik:
+        # Homogeneous path: single condition / issuer_re / instrument_re
+        _marker = _lg_per_cik[0]["marker_re"]
+        _evidence = _lg_per_cik[0]["evidence_re"]
+        _hierarchy_leaf_condition = (
+            f"{_hierarchy_leaf_cik_sql} "
+            f"AND NOT contains({_norm_raw}, ' - ') "
+            f"AND regexp_matches({_hierarchy_leaf_clean_raw}, "
+            f"'(?i)\\s+{_marker}\\b') "
+            f"AND regexp_matches(lower({_hierarchy_leaf_clean_raw}), "
+            f"'{_evidence}')"
+        )
+        _issuer_re = rf"(?i)^(.+?)\s+{_marker}\b"
+        _instrument_re = rf"(?i)^.+?\s+({_marker}\b.*)$"
+        _hierarchy_leaf_issuer_sql = (
+            f"WHEN {_hierarchy_leaf_condition}\n"
+            f"                THEN trim(regexp_extract(\n"
+            f"                    {_hierarchy_leaf_clean_raw},\n"
+            f"                    '{_issuer_re}',\n"
+            f"                    1\n"
+            f"                ))"
+        )
+        _hierarchy_leaf_instrument_sql = (
+            f"WHEN {_hierarchy_leaf_condition}\n"
+            f"                THEN trim(regexp_extract(\n"
+            f"                    {_hierarchy_leaf_clean_raw},\n"
+            f"                    '{_instrument_re}',\n"
+            f"                    1\n"
+            f"                ))"
+        )
+    elif _lg_per_cik:
+        # Per-CIK path: generate separate WHEN branches per CIK
+        _lg_cond_parts = []
+        _lg_issuer_parts = []
+        _lg_instrument_parts = []
+        for _lg in _lg_per_cik:
+            _cik_cond = (
+                f"({_cik_check_sql(_lg['cik_norm'])} "
+                f"AND NOT contains({_norm_raw}, ' - ') "
+                f"AND regexp_matches({_lg['clean_raw']}, "
+                f"'(?i)\\s+{_lg['marker_re']}\\b') "
+                f"AND regexp_matches(lower({_lg['clean_raw']}), "
+                f"'{_lg['evidence_re']}'))"
+            )
+            _lg_cond_parts.append(_cik_cond)
+            _i_re = rf"(?i)^(.+?)\s+{_lg['marker_re']}\b"
+            _d_re = rf"(?i)^.+?\s+({_lg['marker_re']}\b.*)$"
+            _lg_issuer_parts.append(
+                f"WHEN {_cik_cond}\n"
+                f"                THEN trim(regexp_extract(\n"
+                f"                    {_lg['clean_raw']},\n"
+                f"                    '{_i_re}',\n"
+                f"                    1\n"
+                f"                ))"
+            )
+            _lg_instrument_parts.append(
+                f"WHEN {_cik_cond}\n"
+                f"                THEN trim(regexp_extract(\n"
+                f"                    {_lg['clean_raw']},\n"
+                f"                    '{_d_re}',\n"
+                f"                    1\n"
+                f"                ))"
+            )
+        _hierarchy_leaf_condition = " OR ".join(_lg_cond_parts)
+        _hierarchy_leaf_issuer_sql = "\n                ".join(
+            _lg_issuer_parts
+        )
+        _hierarchy_leaf_instrument_sql = "\n                ".join(
+            _lg_instrument_parts
+        )
+    else:
+        # No leaf_guard CIKs configured
+        _hierarchy_leaf_condition = "FALSE"
+        _hierarchy_leaf_issuer_sql = "WHEN FALSE THEN NULL"
+        _hierarchy_leaf_instrument_sql = "WHEN FALSE THEN NULL"
 
     # Fund vehicle/manager detection: equity-type positions with these name
     # signals get issuer_category = FUND (overrides the default CORPORATE).
@@ -1307,12 +1391,7 @@ def _prepare_bdc(
                 -- category/industry/issuer/instrument terms in one
                 -- typed dimension value, so the generic first-segment parser
                 -- would otherwise treat the whole string as a bad issuer.
-                WHEN {_hierarchy_leaf_condition}
-                THEN trim(regexp_extract(
-                    {_hierarchy_leaf_clean_raw},
-                    '{_hierarchy_leaf_issuer_re}',
-                    1
-                ))
+                {_hierarchy_leaf_issuer_sql}
                 -- Crescent-family hierarchy rows:
                 -- Investments {{country}} {{Debt/Equity Investments}} {{industry}}
                 -- {{issuer}} Investment Type {{instrument}} Interest/Maturity ...
@@ -1461,12 +1540,7 @@ def _prepare_bdc(
                          THEN ', ' || trim(array_to_string({pipe_parts}[4:], ' | '))
                          ELSE ''
                      END
-                WHEN {_hierarchy_leaf_condition}
-                THEN trim(regexp_extract(
-                    {_hierarchy_leaf_clean_raw},
-                    '{_hierarchy_leaf_instrument_re}',
-                    1
-                ))
+                {_hierarchy_leaf_instrument_sql}
                 -- Crescent-family hierarchy rows. If a trailing tranche label
                 -- follows the month/year maturity (e.g. One/Four/Five), keep it
                 -- in the instrument key so equal-FV borrower tranches do not
@@ -1796,11 +1870,41 @@ def _prepare_bdc(
                 NULLIF(regexp_extract(_raw_id,
                     '(?:[Mm]aturity|[Dd]ue)\\s+(?:[Dd]ate\\s+)?(\\d{{1,2}}/\\d{{1,2}}/\\d{{2,4}})', 1), '')
             ) AS _text_maturity_raw,
-            NULLIF(regexp_extract(
-                replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '),
-                '(?:[Mm]aturity\\s*/\\s*[Dd]issolution\\s+[Dd]ate|[Mm]aturity/\\s*[Dd]issolution\\s+[Dd]ate)\\s+(\\d{{1,2}}/\\d{{4}})',
-                1
-            ), '') AS _text_maturity_month_raw
+            COALESCE(
+                NULLIF(regexp_extract(
+                    replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '),
+                    '(?:[Mm]aturity\\s*/\\s*[Dd]issolution\\s+[Dd]ate|[Mm]aturity/\\s*[Dd]issolution\\s+[Dd]ate)\\s+(\\d{{1,2}}/\\d{{4}})',
+                    1
+                ), ''),
+                NULLIF(regexp_extract(_raw_id,
+                    '(?i)\\bdue\\s+(\\d{{1,2}}/\\d{{4}})', 1), '')
+            ) AS _text_maturity_month_raw,
+            -- Basis spread: "SOFR + 5.25%", "Prime + 6.0%", "S + 5.25%", "E + 5.75%"
+            TRY_CAST(COALESCE(
+                NULLIF(regexp_extract(_raw_id,
+                    '(?i)(?:SOFR|LIBOR|PRIME|EURIBOR|SONIA|CORRA)\\s*\\+\\s*(\\d+\\.?\\d*)', 1), ''),
+                NULLIF(regexp_extract(_raw_id,
+                    '\\b[SLE]\\s*\\+\\s*(\\d+\\.?\\d*)', 1), '')
+            ) AS DOUBLE) AS _text_basis_spread,
+            -- Interest rate: "Fixed interest rate 12.9%", "Floor rate 11.0%",
+            -- "Interest Rate 9.04%" (only when not a PIK sub-rate)
+            TRY_CAST(COALESCE(
+                NULLIF(regexp_extract(_raw_id,
+                    '(?i)\\bFixed\\s+interest\\s+rate\\s+(\\d+\\.?\\d*)%', 1), ''),
+                NULLIF(regexp_extract(_raw_id,
+                    '(?i)\\bFloor\\s+rate\\s+(\\d+\\.?\\d*)%', 1), ''),
+                CASE WHEN NOT regexp_matches(_raw_id, '(?i)\\+PIK\\s+(?:Fixed\\s+)?Interest\\s+Rate')
+                     THEN NULLIF(regexp_extract(_raw_id,
+                         '(?i)\\bInterest\\s+Rate\\s+(\\d+\\.?\\d*)%', 1), '')
+                     ELSE NULL END
+            ) AS DOUBLE) AS _text_interest_rate,
+            -- PIK rate: "15.00% PIK", "(7.25% PIK)", "+PIK Interest Rate 1.0%"
+            TRY_CAST(COALESCE(
+                NULLIF(regexp_extract(_raw_id,
+                    '(\\d+\\.?\\d*)%\\s*PIK', 1), ''),
+                NULLIF(regexp_extract(_raw_id,
+                    '(?i)\\+PIK\\s+(?:Fixed\\s+)?Interest\\s+Rate\\s+(\\d+\\.?\\d*)%', 1), '')
+            ) AS DOUBLE) AS _text_pik_rate
         FROM with_coupon
     ),
 
@@ -1835,18 +1939,32 @@ def _prepare_bdc(
             CASE WHEN _ir IS NOT NULL AND _ir < 0 THEN NULL
                  WHEN _ir IS NOT NULL AND _ir <= 0.50 THEN _ir * 100
                  WHEN _ir IS NOT NULL AND _ir >= 50 THEN _ir / 100
-                 ELSE _ir END AS interest_rate,
+                 WHEN _ir IS NOT NULL THEN _ir
+                 WHEN _text_interest_rate IS NOT NULL THEN _text_interest_rate
+                 ELSE NULL END AS interest_rate,
             CASE WHEN _bs IS NOT NULL AND _bs < 0 THEN NULL
                  WHEN _bs IS NOT NULL AND _bs <= 0.50 THEN _bs * 100
                  WHEN _bs IS NOT NULL AND _bs >= 50 THEN _bs / 100
-                 ELSE _bs END AS basis_spread,
+                 WHEN _bs IS NOT NULL THEN _bs
+                 WHEN _text_basis_spread IS NOT NULL THEN _text_basis_spread
+                 ELSE NULL END AS basis_spread,
             COALESCE(NULLIF(CAST(reference_rate_type AS VARCHAR), ''), _text_ref_rate, '')
                 AS reference_rate_type,
-            coupon_type,
+            CASE
+                WHEN coupon_type != '' THEN coupon_type
+                WHEN _text_basis_spread IS NOT NULL THEN 'Floating'
+                WHEN _text_interest_rate IS NOT NULL
+                     AND regexp_matches(lower(_raw_id), '\\b(?:variable|floating|sofr|libor|prime)\\b')
+                     THEN 'Floating'
+                WHEN _text_interest_rate IS NOT NULL THEN 'Fixed'
+                ELSE ''
+            END AS coupon_type,
             CASE WHEN _pik IS NOT NULL AND _pik < 0 THEN NULL
                  WHEN _pik IS NOT NULL AND _pik <= 0.50 THEN _pik * 100
                  WHEN _pik IS NOT NULL AND _pik >= 50 THEN _pik / 100
-                 ELSE _pik END AS pik_rate,
+                 WHEN _pik IS NOT NULL THEN _pik
+                 WHEN _text_pik_rate IS NOT NULL THEN _text_pik_rate
+                 ELSE NULL END AS pik_rate,
             -- Maturity date with guard: reject dates before 1950
             -- and sentinel year 2099 (BDC convention for perpetual instruments)
             CASE

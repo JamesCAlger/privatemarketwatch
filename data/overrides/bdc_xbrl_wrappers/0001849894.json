@@ -6,7 +6,19 @@
   "source": "bdc_xbrl",
   "staging": {
     "strategy": "prefix_strip",
-    "hierarchy_prefix_re": "(?i)^Investments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|control(?:led)?(?:\\s*/\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity|debt|warrants?)\\s+(?:INDUSTRY_LABELS)\\s+"
+    "extra_industry_labels": [
+      "Advertising",
+      "Application Software",
+      "Beverage, Food & Tobacco",
+      "Capital Equipment",
+      "Chemicals, Plastics & Rubber",
+      "Consumer",
+      "Diversified Support Services",
+      "Environmental Industries",
+      "Environmental & Facilities Services",
+      "Specialized Consumer Services"
+    ],
+    "hierarchy_prefix_re": "(?i)^Investments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|control(?:led)?(?:\\s*/\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity|debt|warrants?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+"
   },
   "archetypes": {
     "debt": {
