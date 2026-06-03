@@ -32,9 +32,11 @@ Schema validation and unit examples are necessary, but not sufficient:
 - **Schema validation passes** means the JSON is syntactically valid.
 - **Wrapper classifier tests pass** means sampled identifiers classify as intended.
 - **Oracle passes against final unified holdings** means the wrapper is production-clean.
+- **J01 position key stability >= 70% B1b** means the wrapper's position keys are stable across quarters.
+- **J03 fuzzy fallback rate <= 10%** means position keys aren't falling through to expensive fuzzy matching.
 - **Oracle fails** means the wrapper is partial unless residuals are explicitly documented and accepted.
 
-Do not describe a wrapper as complete because visual samples look plausible. The source-to-final-unified reconciliation is the promotion gate.
+Do not describe a wrapper as complete because visual samples look plausible. The source-to-final-unified reconciliation and position matching quality checks are the promotion gates.
 
 ### Dispatch vs staging vs parser
 
@@ -174,6 +176,13 @@ The dispatch section controls source reconciliation classification. Every identi
 
 **`category_marker_re`**: Regex matching category-level identifiers (segment headers that are neither leaf nor aggregate).
 
+**`canonical_strip_re`**: Regex applied to position keys to remove volatile components before cross-quarter matching. This directly affects B1b match quality (J01/J03 scores). Common volatile patterns to strip:
+- Embedded percentages that change quarterly: `"\\b\\d+\\.?\\d*\\s*%"` or `" - \\d+\\.\\d+%"`
+- Variable allocation percentages in identifier segments
+- Trailing dates or quarter labels
+
+Example: GS BDC identifiers contain `" - 7.32%"` that changes every quarter. Adding `"canonical_strip_re": " - \\d+\\.\\d+%"` strips the volatile percentage, making the position key stable for B1b matching.
+
 ### archetypes section (optional but recommended)
 
 Define instrument archetypes with detection rules and field-level constraints:
@@ -311,6 +320,32 @@ This tests the unified-level output (classification, cost proxy, pct correction,
 
 `--holdings-file` is mutually exclusive with `--fresh-bdc-staging`.
 
+### 3c-match. Trial position matching (cross-quarter feedback)
+
+Add `--match` to the trial rebuild to run position matching on the trial output and get immediate cross-quarter matching feedback:
+
+```bash
+python scripts/rebuild_unified_cik_trial.py --cik {CIK} --match
+```
+
+This produces additional artifacts in the trial directory:
+- `position_matches.{CIK}.csv` — matched position pairs for this CIK
+- `matching_diagnostic.{CIK}.csv` — D_fuzzy fallback diagnostics showing which position key tokens differ between begin/end sides
+
+The script logs:
+- **Match tier distribution** — what percentage of matches use each tier (B1b, B2, C, D_fuzzy, etc.)
+- **J01 result** — B1b position key stability rate (target: >= 70%)
+- **J03 result** — fuzzy fallback rate (target: <= 10%)
+- **Fuzzy diagnostic preview** — first 10 D_fuzzy matches with position key diffs
+
+Use this to iterate on `canonical_strip_re` and `prefix_rules`. If J03 shows high fuzzy fallback, the diagnostic CSV shows exactly which tokens in the position key are volatile across quarters (e.g., embedded percentages changing from `"7 32"` to `"7 09"`). Fix those by adding patterns to `canonical_strip_re` to strip the volatile components.
+
+**Position key quality requirements for B1b matching:**
+- Keys must be >= 12 characters with >= 3 tokens
+- Keys must contain at least one 4+ letter distinctive token (not just generic words like "term loan senior secured")
+- Keys must be unique within each CIK/source/report quarter — repeated keys cannot form B1b edges
+- Placeholder keys (`"nc nc"`, `"lass units"`, etc.) are automatically rejected
+
 ### 3d. Production promotion (full rebuild)
 
 Before labeling a wrapper `production_clean`, run the full production rebuild and oracle:
@@ -363,6 +398,8 @@ If `identifier_parser` or `staging` config was added, confirm the target CIK app
 ```bash
 pytest tests/test_bdc_xbrl_wrapper.py -v
 pytest tests/test_unified_cik_trial.py -v
+pytest tests/test_position_matching.py -v
+pytest tests/test_oracle_checks.py -k "J01 or J03 or J04 or DiagnoseFuzzy" -v
 pytest tests/test_unified_holdings.py -k "not slow" --tb=short -q
 ```
 
@@ -440,3 +477,6 @@ Read existing wrappers at `data/overrides/bdc_xbrl_wrappers/*.json` for patterns
 - **Validate with the final unified oracle before declaring success.** Visual plausibility is not evidence.
 - **Do not hide failed oracle status.** Residual blockers are valid outcomes and must be documented.
 - **Do not promote dispatch-only wrappers as extraction fixes.** They classify identifiers but may not change final holdings extraction.
+- **Run `--match` before declaring a wrapper production-clean.** A wrapper that passes the unified oracle but has >10% D_fuzzy fallback (J03 fail) produces unstable position IDs across quarters, which corrupts index returns.
+- **Use `matching_diagnostic.{CIK}.csv` to debug high fuzzy rates.** The `key_diff_summary` column shows exactly which tokens differ between begin and end position keys. If the differing tokens are embedded percentages, dates, or allocation numbers, add a `canonical_strip_re` to remove them.
+- **Position keys must be issuer-specific.** Generic keys like `"senior secured first lien term loan"` (all common vocabulary, no issuer name) will be rejected by the B1b strong-key filter. Ensure `prefix_rules` strip enough prefix that the issuer name remains in the position key.
