@@ -1680,17 +1680,36 @@ def run_wrapper_oracle_trial(
     output_dir: Path | None = None,
     compare_baseline: bool = False,
     fresh_bdc_staging: bool = False,
+    holdings_file: Path | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame | None]:
-    """Run the wrapper oracle for one CIK and write trial artifacts."""
+    """Run the wrapper oracle for one CIK and write trial artifacts.
+
+    Parameters
+    ----------
+    holdings_file : Path, optional
+        Read holdings from this CSV instead of the canonical
+        ``UNIFIED_HOLDINGS_FILE``.  Mutually exclusive with
+        *fresh_bdc_staging*.  Intended for one-CIK trial rebuilds.
+    """
+    if fresh_bdc_staging and holdings_file is not None:
+        raise ValueError("--fresh-bdc-staging and --holdings-file are mutually exclusive")
     cik_norm = normalize_cik(cik)
     out_dir = output_dir or (OUTPUT_DIR / "bdc_xbrl_wrapper_trial" / cik_norm)
-    if not UNIFIED_HOLDINGS_FILE.exists():
-        raise FileNotFoundError(f"Unified holdings file not found: {UNIFIED_HOLDINGS_FILE}")
 
     source_df = _load_cached_source_facts_for_cik(cik_norm)
     if fresh_bdc_staging:
         holdings_df = _load_fresh_bdc_staged_holdings_for_cik(cik_norm)
+    elif holdings_file is not None:
+        if not holdings_file.exists():
+            raise FileNotFoundError(f"Holdings file not found: {holdings_file}")
+        unified_df = pd.read_csv(holdings_file, dtype=str)
+        holdings_df = unified_df[
+            unified_df.get("cik", pd.Series(dtype=str)).map(normalize_cik).eq(cik_norm)
+            & unified_df.get("source", pd.Series(dtype=str)).astype(str).str.lower().eq("bdc")
+        ].copy()
     else:
+        if not UNIFIED_HOLDINGS_FILE.exists():
+            raise FileNotFoundError(f"Unified holdings file not found: {UNIFIED_HOLDINGS_FILE}")
         unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
         holdings_df = unified_df[
             unified_df.get("cik", pd.Series(dtype=str)).map(normalize_cik).eq(cik_norm)
@@ -1819,6 +1838,13 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Rebuild only the requested CIK's BDC rows through current staging before reconciling.",
     )
+    parser.add_argument(
+        "--holdings-file",
+        type=Path,
+        default=None,
+        help="Read holdings from this CSV instead of canonical private_markets_holdings.csv. "
+             "Mutually exclusive with --fresh-bdc-staging. Use with trial rebuild output.",
+    )
     parser.add_argument("--fail-on-oracle-fail", action="store_true")
     parser.add_argument(
         "--promotion-gate",
@@ -1841,6 +1867,9 @@ def main(argv: list[str] | None = None) -> int:
         help="Run all oracle v2 checks in one category (e.g. A, B, F).",
     )
     args = parser.parse_args(argv)
+
+    if args.fresh_bdc_staging and args.holdings_file is not None:
+        parser.error("--fresh-bdc-staging and --holdings-file are mutually exclusive")
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
@@ -1915,6 +1944,7 @@ def main(argv: list[str] | None = None) -> int:
             output_dir=output_dir,
             compare_baseline=args.compare_baseline,
             fresh_bdc_staging=args.fresh_bdc_staging,
+            holdings_file=args.holdings_file,
         )
         print(f"cik={cik}")
         print(f"oracle_summary_rows={len(summary)}")

@@ -358,3 +358,30 @@ Changed test selection semantics for `tests/test_unified_holdings.py` without ch
 - Fast inner-loop command: `python -m pytest -q tests/test_unified_holdings.py -m "not slow and not integration"`.
 - Collection split: 786 total tests; 39 integration tests; 214 staging SQL tests; 253 slow/integration/staging tests; 533 fast inner-loop tests.
 - Verified fast subset: 533 passed, 253 deselected in 13.35s.
+
+### 2026-06-03 -- One-CIK unified trial rebuild for wrapper validation
+
+Added a fast one-CIK trial rebuild path so wrapper developers can validate unified holdings changes for a single CIK without running the full 33-minute unified build.
+
+**pipeline/unified_holdings.py:**
+- Added optional `output_file` and `orphan_file` keyword parameters to `build_unified_holdings()`. When provided, CSV/parquet output is written to the custom paths instead of the production defaults.
+- Added empty-DataFrame guards to entity and industry enrichment DuckDB steps to prevent `BinderException` when the universe gate removes all rows (e.g., test fixtures with non-real CIKs).
+- Internal variables `_out_file` / `_orphan_file` resolve defaults from `UNIFIED_HOLDINGS_FILE` / `UNIVERSE_ORPHAN_HOLDINGS_FILE` when the parameters are None.
+
+**scripts/rebuild_unified_cik_trial.py (new):**
+- CLI script: `python scripts/rebuild_unified_cik_trial.py --cik 0001849894`.
+- Loads production BDC and N-PORT holdings via DuckDB, filters to the target CIK, calls `build_unified_holdings()` with trial output paths under `data/output/bdc_xbrl_wrapper_trial/{CIK}/unified_trial/`.
+- Produces `trial_vs_production_summary.{CIK}.csv` comparing row counts and FV per source/report_date against production.
+
+**pipeline/bdc_xbrl_wrapper_oracle.py:**
+- Added `--holdings-file` CLI argument and `holdings_file` parameter to `run_wrapper_oracle_trial()`.
+- Mutual exclusion with `--fresh-bdc-staging` enforced at both the function and CLI parser level.
+- When `--holdings-file` is provided, oracle reads trial unified holdings instead of the production file.
+
+**tests/test_unified_cik_trial.py (new):**
+- 7 tests: 3 for `build_unified_holdings()` alternate output paths (custom path, default path, empty input), 3 for oracle `--holdings-file` mutual exclusion (ValueError, CLI rejection, FileNotFoundError), 1 for trial rebuild script CLI.
+
+**.claude/skills/wrapper/SKILL.md:**
+- Added step 3c (one-CIK trial unified rebuild) to the wrapper validation workflow; renumbered subsequent steps.
+
+**Verification:** 7 new tests pass; 870 existing wrapper/oracle/unified tests pass with zero regressions. Smoke test with Trinity Capital (CIK 0001786108): 5,053 rows in 64.6s, +0 row delta vs production.

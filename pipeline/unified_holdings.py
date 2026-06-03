@@ -85,6 +85,8 @@ UNIFIED_COLUMNS = [
     "gics_sub_industry",
     # Lien position (First Lien / Second Lien / Unsecured; DIRECT_LENDING only)
     "lien_position",
+    # Normalized position key for multi-tranche disambiguation
+    "position_key",
     # Position tracking (populated by --returns step)
     "position_id",
 ]
@@ -710,13 +712,26 @@ def _apply_unclassified_cache(combined: pd.DataFrame) -> pd.DataFrame:
 def build_unified_holdings(
     bdc_df: Optional[pd.DataFrame] = None,
     nport_df: Optional[pd.DataFrame] = None,
+    *,
+    output_file: Optional[Path] = None,
+    orphan_file: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Build unified private markets holdings from BDC + N-PORT data.
 
     If DataFrames are not provided, reads from disk (BDC_HOLDINGS_FILE,
     NPORT_HOLDINGS_FILE).
 
-    Returns the combined DataFrame and saves to UNIFIED_HOLDINGS_FILE.
+    Parameters
+    ----------
+    output_file : Path, optional
+        Write the unified CSV (and parquet companion) to this path instead
+        of the default ``UNIFIED_HOLDINGS_FILE``.
+    orphan_file : Path, optional
+        Write orphan holdings to this path instead of the default
+        ``UNIVERSE_ORPHAN_HOLDINGS_FILE``.
+
+    Returns the combined DataFrame and saves to *output_file* (or the
+    default production path).
     """
     t0 = time.time()
 
@@ -747,11 +762,13 @@ def build_unified_holdings(
     else:
         nport_input = nport_df
     nport_unified = staging_nport._prepare_nport(nport_input)
+    _out_file = output_file or UNIFIED_HOLDINGS_FILE
+    _orphan_file = orphan_file or (UNIFIED_HOLDINGS_FILE.parent / UNIVERSE_ORPHAN_HOLDINGS_FILE.name)
     if bdc_unified.empty and nport_unified.empty:
         combined = pd.DataFrame(columns=UNIFIED_COLUMNS)
-        _write_empty_orphan_report(UNIFIED_HOLDINGS_FILE.parent / UNIVERSE_ORPHAN_HOLDINGS_FILE.name)
-        UNIFIED_HOLDINGS_FILE.parent.mkdir(parents=True, exist_ok=True)
-        combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
+        _write_empty_orphan_report(_orphan_file)
+        _out_file.parent.mkdir(parents=True, exist_ok=True)
+        combined.to_csv(_out_file, index=False)
         logger.info("Unified holdings built with no eligible rows")
         return combined
 
@@ -1190,7 +1207,7 @@ def build_unified_holdings(
     logger.info("Combined: %d total rows (BDC %d + N-PORT %d, %d cross-source dupes removed)",
                 len(combined), len(bdc_unified), len(nport_unified), dedup_removed)
 
-    combined = _apply_universe_gate(combined)
+    combined = _apply_universe_gate(combined, orphan_path=_orphan_file)
 
     # Log subsidiary stats
     if "is_subsidiary" in combined.columns:
@@ -1199,7 +1216,7 @@ def build_unified_holdings(
             logger.info("  Subsidiary positions: %d rows flagged (is_subsidiary=1)", sub_count)
 
     # Entity enrichment: join against existing entity_lookup if available
-    if ENTITY_LOOKUP_FILE.exists():
+    if ENTITY_LOOKUP_FILE.exists() and not combined.empty:
         con2 = duckdb.connect()
         con2.register("holdings", combined)
         lookup_str = str(ENTITY_LOOKUP_FILE).replace("\\", "/")
@@ -1222,7 +1239,7 @@ def build_unified_holdings(
                      100 * eid_count / len(combined) if len(combined) else 0)
 
     # Industry enrichment: join against identifier_extraction_lookup if available
-    if IDENTIFIER_EXTRACTION_LOOKUP_FILE.exists():
+    if IDENTIFIER_EXTRACTION_LOOKUP_FILE.exists() and not combined.empty:
         con3 = duckdb.connect()
         con3.register("holdings", combined)
         ilookup_str = str(IDENTIFIER_EXTRACTION_LOOKUP_FILE).replace("\\", "/")
@@ -1306,17 +1323,21 @@ def build_unified_holdings(
     # Apply agent-reviewed unclassified reclassifications + JV flags
     combined = _apply_unclassified_cache(combined)
 
+    # Override position_key with wrapper-generated keys for wrapped BDC CIKs
+    combined = _apply_wrapper_position_keys(combined)
+
     # Remap GICS sub-industry for RE-strategy fund holdings (runs after
     # _apply_gics_cache so that the LLM-assigned codes are already in place)
     combined = _apply_re_fund_gics_overrides(combined)
 
     # Save CSV + Parquet companion
-    combined.to_csv(UNIFIED_HOLDINGS_FILE, index=False)
+    _out_file.parent.mkdir(parents=True, exist_ok=True)
+    combined.to_csv(_out_file, index=False)
     logger.info("Saved to %s (%.1f MB)",
-                UNIFIED_HOLDINGS_FILE.name,
-                UNIFIED_HOLDINGS_FILE.stat().st_size / (1024 * 1024))
+                _out_file.name,
+                _out_file.stat().st_size / (1024 * 1024))
     from pipeline.utils import write_parquet_companion
-    write_parquet_companion(UNIFIED_HOLDINGS_FILE)
+    write_parquet_companion(_out_file)
 
     # Log summary statistics
     _log_summary(combined)
@@ -1445,6 +1466,50 @@ _RE_FUND_GICS_REMAP = {
     "Health Care Services": "Health Care REITs",
     "Data Processing & Outsourced Services": "Data Center REITs",
 }
+
+
+def _apply_wrapper_position_keys(df: pd.DataFrame) -> pd.DataFrame:
+    """Override position_key with wrapper-generated keys for wrapped BDC CIKs.
+
+    For BDC rows where the wrapper classifies the identifier as a position
+    leaf and produces a non-empty ``wrapper_position_key``, replace the
+    generic staging ``position_key`` with the wrapper's per-CIK curated key.
+    The wrapper applies CIK-specific rules (``canonical_strip_re``,
+    ``identifier_format``, etc.) that the one-size-fits-all staging SQL
+    cannot.  Non-wrapped CIKs and N-PORT rows are unaffected.
+    """
+    from pipeline.bdc_xbrl_wrapper import add_bdc_xbrl_wrapper_columns
+
+    if df.empty or "source" not in df.columns:
+        return df
+
+    bdc_mask = df["source"].eq("bdc")
+    if not bdc_mask.any() or "bdc_investment_identifier" not in df.columns:
+        return df
+
+    bdc_rows = df.loc[bdc_mask].copy()
+    wrapped = add_bdc_xbrl_wrapper_columns(
+        bdc_rows,
+        identifier_col="bdc_investment_identifier",
+        cik_col="cik",
+    )
+
+    # Only override where wrapper produced a position leaf with a key
+    has_key = (
+        wrapped["wrapper_position_key"].ne("")
+        & wrapped["wrapper_disposition"].str.endswith("_position_leaf", na=False)
+    )
+    override_count = has_key.sum()
+    if override_count > 0:
+        df.loc[has_key[has_key].index, "position_key"] = (
+            wrapped.loc[has_key, "wrapper_position_key"]
+        )
+        logger.info(
+            "  Wrapper position_key override: %d rows across %d CIKs",
+            override_count,
+            df.loc[has_key[has_key].index, "cik"].nunique(),
+        )
+    return df
 
 
 def _apply_re_fund_gics_overrides(
