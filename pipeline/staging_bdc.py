@@ -20,6 +20,11 @@ from pipeline.bdc_identifier import (
     _INVESTMENTS_HIERARCHY_RE,
     _sql_is_bdc_aggregate,
 )
+from pipeline.bdc_xbrl_wrapper import (
+    get_wrapper_spec,
+    is_non_private_market_identifier,
+    supported_wrapper_ciks,
+)
 from pipeline.bdc_aggregate_overrides import load_bdc_aggregate_overrides
 from pipeline.classification import (
     _INDUSTRY_LABELS,
@@ -1762,6 +1767,47 @@ def _prepare_bdc(
                 _phase_b_count, time.time() - _t_phase)
 
     # =========================================================================
+    # Wrapper non-private-market exclusion lookup table.
+    # For wrapper-covered CIKs, call is_non_private_market_identifier() on each
+    # row to catch cash, treasury, money-market rows that the global keyword
+    # filter misses.  Register matching _row_id values as _wrapper_non_private
+    # so CTE 9 can join-exclude them alongside the global money-market check.
+    # =========================================================================
+    _wrapper_ciks = supported_wrapper_ciks()
+    if _wrapper_ciks:
+        _wrapper_cik_filter = ", ".join(f"'{c}'" for c in _wrapper_ciks)
+        _wnp_candidates = con.execute(f"""
+            SELECT _row_id, cik, _raw_id
+            FROM _bdc_phase_b
+            WHERE LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+                  IN ({_wrapper_cik_filter})
+        """).fetchdf()
+        _wnp_row_ids: list[int] = []
+        for _, _r in _wnp_candidates.iterrows():
+            _cik_norm = str(_r["cik"]).lstrip("0").zfill(10)
+            _spec = get_wrapper_spec(_cik_norm)
+            _markers = _spec.non_private_markers if _spec else None
+            if is_non_private_market_identifier(_r["_raw_id"], _markers):
+                _wnp_row_ids.append(int(_r["_row_id"]))
+        if _wnp_row_ids:
+            _wnp_df = pd.DataFrame({"_row_id": _wnp_row_ids})
+            con.register("_wnp_view", _wnp_df)
+            con.execute(
+                "CREATE TEMP TABLE _wrapper_non_private AS "
+                "SELECT _row_id FROM _wnp_view"
+            )
+            logger.info("  Wrapper non-private-market exclusion: %d rows from %d candidates",
+                        len(_wnp_row_ids), len(_wnp_candidates))
+        else:
+            con.execute(
+                "CREATE TEMP TABLE _wrapper_non_private (_row_id BIGINT)"
+            )
+    else:
+        con.execute(
+            "CREATE TEMP TABLE _wrapper_non_private (_row_id BIGINT)"
+        )
+
+    # =========================================================================
     # Phase C: Classification, schema mapping, enrichment, casing normalization.
     # Reads from materialized _bdc_phase_b, produces the final result.
     # =========================================================================
@@ -1831,10 +1877,12 @@ def _prepare_bdc(
         FROM reclassified
     ),
 
-    -- CTE 9: Filter money market funds
+    -- CTE 9: Filter money market funds + wrapper non-private-market rows
     no_mm AS (
-        SELECT * FROM with_reclass
+        SELECT wr.* FROM with_reclass wr
+        LEFT JOIN _wrapper_non_private wnp ON wr._row_id = wnp._row_id
         WHERE NOT ({mm_check})
+          AND wnp._row_id IS NULL
     ),
 
     -- CTE 10: Infer coupon type

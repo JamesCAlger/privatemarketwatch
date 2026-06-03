@@ -9311,3 +9311,79 @@ class TestTextEnrichment:
         assert row["basis_spread"] is None or pd.isna(row["basis_spread"])
         assert row["pik_rate"] is None or pd.isna(row["pik_rate"])
         assert row["coupon_type"] == ""
+
+
+# ---------------------------------------------------------------------------
+# Wrapper non-private-market filtering in staging
+# ---------------------------------------------------------------------------
+
+class TestWrapperNonPrivateMarketFiltering:
+    """Verify staging drops wrapper-tagged non-private-market rows."""
+
+    # Use a real wrapper CIK so supported_wrapper_ciks() returns it
+    _WRAPPER_CIK = "0001287750"
+    _NON_WRAPPER_CIK = "0000999999"
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_wrapper_non_private_treasury_excluded(self):
+        """U.S. Treasury row for a wrapper CIK is dropped by wrapper filter."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "U.S. Treasury Bill 2025-06-15",
+             "cik": self._WRAPPER_CIK, "fair_value": 500000},
+            {"investment_identifier": "Acme Corp - First Lien Term Loan",
+             "cik": self._WRAPPER_CIK, "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+    def test_wrapper_non_private_does_not_affect_non_wrapper_cik(self):
+        """Same treasury identifier for a non-wrapper CIK is NOT dropped."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "U.S. Treasury Bill 2025-06-15",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 500000},
+            {"investment_identifier": "Acme Corp - First Lien Term Loan",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        # Non-wrapper CIK: treasury row survives global keyword filter
+        # (global keywords cover "money market" etc., not "u.s. treasury")
+        assert len(result) == 2
+
+    def test_wrapper_non_private_false_positive_guard(self):
+        """Row with 'Cash + PIK Interest Rate 5%' survives the cash guard."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Senior Secured First Lien, Cash + PIK Interest Rate 5.00%",
+             "cik": self._WRAPPER_CIK, "fair_value": 1000000,
+             "interest_rate": 0.05},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+
+    def test_global_mm_keyword_still_works(self):
+        """Row with 'Money Market' for any CIK is still dropped by global filter."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Goldman Sachs Money Market Fund",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 500000},
+            {"investment_identifier": "Acme Corp - First Lien Term Loan",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert result.iloc[0]["issuer_name"] == "Acme Corp"

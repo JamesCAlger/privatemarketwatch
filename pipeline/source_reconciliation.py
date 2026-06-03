@@ -37,6 +37,7 @@ from pipeline.bdc_identifier import (
     _INVESTMENTS_HIERARCHY_RE,
     _sql_is_bdc_aggregate,
 )
+from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS, add_bdc_xbrl_wrapper_columns
 from pipeline.classification import (
     _BAD_ISSUER_ENTITY_SIGNALS,
     _BAD_ISSUER_NAMES_EXACT,
@@ -79,6 +80,14 @@ DETAIL_COLUMNS = [
     "source_row_id", "output_row_id",
     "raw_investment_identifier", "normalized_investment_identifier",
     "dimensions_raw", "concept_names",
+    "source_wrapper_disposition", "source_wrapper_rule_id", "source_wrapper_family",
+    "source_wrapper_parent_key", "source_wrapper_position_key", "source_wrapper_structured_leaf_key",
+    "source_wrapper_investment_date_key", "source_wrapper_maturity_date_key", "source_wrapper_rate_key",
+    "source_wrapper_signature_status", "source_wrapper_unparsed_remainder",
+    "output_wrapper_disposition", "output_wrapper_rule_id", "output_wrapper_family",
+    "output_wrapper_parent_key", "output_wrapper_position_key", "output_wrapper_structured_leaf_key",
+    "output_wrapper_investment_date_key", "output_wrapper_maturity_date_key", "output_wrapper_rate_key",
+    "output_wrapper_signature_status", "output_wrapper_unparsed_remainder",
     "source_fair_value", "output_fair_value",
     "source_cost", "output_cost",
     "source_principal_amount", "output_principal_amount",
@@ -88,6 +97,7 @@ DETAIL_COLUMNS = [
     "source_pik_rate", "output_pik_rate",
     "mismatched_fields", "issuer_name", "instrument_description",
     "index_classification", "asset_category", "issuer_category",
+    "non_private_market_disagreement",
     "evidence",
 ]
 
@@ -165,6 +175,7 @@ DOCUMENTED_MECHANISMS = {
     "excluded_money_market_fund": "documented_money_market_fund",
     "excluded_bad_issuer_name": "documented_bad_issuer_name",
     "excluded_affiliation_dedup": "documented_affiliation_dedup",
+    "documented_source_issuer_level_xbrl_subtotal": "documented_source_issuer_level_xbrl_subtotal",
 }
 
 MECHANISM_RECOMMENDED_ACTIONS = {
@@ -179,6 +190,7 @@ MECHANISM_RECOMMENDED_ACTIONS = {
     "documented_money_market_fund": "Keep documented as non-blocking money market fund position filtered during staging.",
     "documented_bad_issuer_name": "Keep documented as non-blocking generic/bad issuer name filtered during staging.",
     "documented_affiliation_dedup": "Keep documented as non-blocking affiliation-axis duplicate of a matched position.",
+    "documented_source_issuer_level_xbrl_subtotal": "Keep documented as non-blocking issuer-level XBRL subtotal; verify issuer identity and FV match to position leaves.",
     "diagnostic_secondary_field_mismatch": "Review secondary field extraction only if diagnostics cluster by filer.",
     "reconciled_identifier_normalization": "Keep as reconciled normalization; monitor for unexpected match-tier shifts.",
     "reconciled_issuer_name_extraction": "Keep as reconciled via issuer name extraction from raw identifier.",
@@ -221,6 +233,7 @@ MECHANISM_REASONS = {
     "documented_money_market_fund": "Source row is a money market fund position filtered during BDC staging.",
     "documented_bad_issuer_name": "Source row has a generic/bad issuer name (e.g. 'Investments', 'First Lien Debt') filtered during staging.",
     "documented_affiliation_dedup": "Source row is an affiliation-axis duplicate of another source row that matched to output.",
+    "documented_source_issuer_level_xbrl_subtotal": "Source row is an issuer-level XBRL subtotal whose fair value matches the sum of position-leaf rows for the same issuer.",
     "diagnostic_secondary_field_mismatch": "Matched row has a non-fair-value field mismatch tracked as diagnostic.",
     "reconciled_identifier_normalization": "Source and output reconciled through deterministic identifier normalization rather than exact dimensions.",
     "reconciled_issuer_name_extraction": "Source row reconciled to output via issuer name extraction from raw identifier.",
@@ -627,6 +640,15 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
             "documented_non_position_exclusion" if not blocking else "blocking_parser_or_review_residual"
         )
 
+    # Issuer-level XBRL subtotals identified by wrapper disposition
+    wrapper_disp = (
+        source_only.get("source_wrapper_disposition", pd.Series("", index=source_only.index))
+        .fillna("")
+        .astype(str)
+    )
+    issuer_rollup_subtotal = wrapper_disp.str.endswith("_issuer_rollup")
+    assign(issuer_rollup_subtotal, "documented_source_issuer_level_xbrl_subtotal", "SRCONLY_ISSUER_ROLLUP_XBRL", "high", False)
+
     assign(
         numeric_alias,
         "blocking_numeric_already_matched_output_alias",
@@ -657,12 +679,14 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         "numeric alias evidence, and deterministic entity/header/instrument signals"
     )
     source_only["hypotheses_tested"] = (
+        "issuer-level XBRL subtotal (wrapper disposition); "
         "numeric alias; total/subtotal header; cash or money-market bucket; "
         "affiliation/category/country-industry header; percentage total/header; "
         "percentage category rollup; percentage leaf parser mismatch; percentage ambiguous review; "
         "position-like parser mismatch; short plain unresolved identifier"
     )
     source_only["why_not_cleared"] = source_only["mechanism"].map({
+        "documented_source_issuer_level_xbrl_subtotal": "cleared as documented issuer-level XBRL subtotal with position-leaf children in pipeline output",
         "documented_source_total_header": "cleared as documented non-position total/header row",
         "documented_source_cash_or_money_market_bucket": "cleared as documented cash or money-market bucket outside private-market output",
         "documented_source_category_header": "cleared as documented category header without entity or instrument-path evidence",
@@ -906,7 +930,17 @@ def _material_mismatch_sql(source_expr: str, output_expr: str) -> str:
     """
 
 
-def _coerce_source_df(source_df: pd.DataFrame) -> pd.DataFrame:
+def _ensure_empty_wrapper_columns(df: pd.DataFrame) -> pd.DataFrame:
+    result = df.copy()
+    for col in WRAPPER_COLUMNS:
+        if col not in result.columns:
+            result[col] = ""
+        else:
+            result[col] = result[col].fillna("").astype(str)
+    return result
+
+
+def _coerce_source_df(source_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bool = True) -> pd.DataFrame:
     df = source_df.copy()
     required = [
         "cik", "entity_name", "report_date", "period", "accession_number",
@@ -921,10 +955,12 @@ def _coerce_source_df(source_df: pd.DataFrame) -> pd.DataFrame:
         if col not in df.columns:
             df[col] = ""
     df["source_row_id"] = range(len(df))
-    return df
+    if not enable_bdc_xbrl_wrappers:
+        return _ensure_empty_wrapper_columns(df)
+    return add_bdc_xbrl_wrapper_columns(df, identifier_col="investment_identifier", cik_col="cik")
 
 
-def _coerce_output_df(holdings_df: pd.DataFrame) -> pd.DataFrame:
+def _coerce_output_df(holdings_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bool = True) -> pd.DataFrame:
     df = holdings_df.copy()
     required = [
         "source", "cik", "entity_name", "report_date", "period",
@@ -940,7 +976,9 @@ def _coerce_output_df(holdings_df: pd.DataFrame) -> pd.DataFrame:
             df[col] = ""
     df = df[df["source"].astype(str).str.lower().eq("bdc")].copy()
     df["output_row_id"] = range(len(df))
-    return df
+    if not enable_bdc_xbrl_wrappers:
+        return _ensure_empty_wrapper_columns(df)
+    return add_bdc_xbrl_wrapper_columns(df, identifier_col="bdc_investment_identifier", cik_col="cik")
 
 
 def extract_bdc_source_facts_from_xbrl(
@@ -1048,13 +1086,15 @@ def _extract_single_xbrl_source_file(
 def reconcile_bdc_source_to_holdings(
     source_df: pd.DataFrame,
     holdings_df: pd.DataFrame,
+    *,
+    enable_bdc_xbrl_wrappers: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Reconcile BDC source facts to unified BDC holdings rows."""
     if source_df.empty and holdings_df.empty:
         return _empty_detail(), _empty_metrics()
 
-    source = _coerce_source_df(source_df)
-    output = _coerce_output_df(holdings_df)
+    source = _coerce_source_df(source_df, enable_bdc_xbrl_wrappers=enable_bdc_xbrl_wrappers)
+    output = _coerce_output_df(holdings_df, enable_bdc_xbrl_wrappers=enable_bdc_xbrl_wrappers)
     con = duckdb.connect()
     con.register("source_raw", source)
     con.register("output_raw", output)
@@ -1105,6 +1145,17 @@ def reconcile_bdc_source_to_holdings(
                 lower(trim({source_staging_identifier})) AS lower_id,
                 CAST(dimensions_raw AS VARCHAR) AS dimensions_raw,
                 CAST(concept_names AS VARCHAR) AS concept_names,
+                CAST(wrapper_disposition AS VARCHAR) AS source_wrapper_disposition,
+                CAST(wrapper_rule_id AS VARCHAR) AS source_wrapper_rule_id,
+                CAST(wrapper_family AS VARCHAR) AS source_wrapper_family,
+                CAST(wrapper_parent_key AS VARCHAR) AS source_wrapper_parent_key,
+                CAST(wrapper_position_key AS VARCHAR) AS source_wrapper_position_key,
+                CAST(wrapper_structured_leaf_key AS VARCHAR) AS source_wrapper_structured_leaf_key,
+                CAST(wrapper_investment_date_key AS VARCHAR) AS source_wrapper_investment_date_key,
+                CAST(wrapper_maturity_date_key AS VARCHAR) AS source_wrapper_maturity_date_key,
+                CAST(wrapper_rate_key AS VARCHAR) AS source_wrapper_rate_key,
+                CAST(wrapper_signature_status AS VARCHAR) AS source_wrapper_signature_status,
+                CAST(wrapper_unparsed_remainder AS VARCHAR) AS source_wrapper_unparsed_remainder,
                 TRY_CAST(fair_value AS DOUBLE) AS source_fair_value,
                 TRY_CAST(cost AS DOUBLE) AS source_cost,
                 TRY_CAST(principal_amount AS DOUBLE) AS source_principal_amount,
@@ -1209,7 +1260,19 @@ def reconcile_bdc_source_to_holdings(
                     WHEN amendment_rank > 1 THEN 'superseded_amendment'
                     WHEN source_fair_value IS NULL THEN 'excluded_no_fair_value'
                     ELSE ''
-                END AS source_exclusion_status
+                END AS source_exclusion_status,
+                CASE
+                    WHEN COALESCE(source_wrapper_disposition, '') = 'non_private_market'
+                         AND NOT {_money_market_check_sql('lower_id')}
+                        THEN 'wrapper_only'
+                    WHEN COALESCE(source_wrapper_disposition, '') NOT IN ('non_private_market', '')
+                         AND {_money_market_check_sql('lower_id')}
+                        THEN 'staging_only'
+                    WHEN COALESCE(source_wrapper_disposition, '') = ''
+                         AND {_money_market_check_sql('lower_id')}
+                        THEN 'staging_only'
+                    ELSE ''
+                END AS non_private_market_disagreement
             FROM source_ranked
             LEFT JOIN aggregate_override_matches aom
               ON source_ranked.source_row_id = aom.source_row_id
@@ -1285,6 +1348,17 @@ def reconcile_bdc_source_to_holdings(
                     '[^a-z0-9]+', ' ', 'g'
                 ) AS staging_normalized_investment_identifier,
                 CAST(bdc_dimensions_raw AS VARCHAR) AS dimensions_raw,
+                CAST(wrapper_disposition AS VARCHAR) AS output_wrapper_disposition,
+                CAST(wrapper_rule_id AS VARCHAR) AS output_wrapper_rule_id,
+                CAST(wrapper_family AS VARCHAR) AS output_wrapper_family,
+                CAST(wrapper_parent_key AS VARCHAR) AS output_wrapper_parent_key,
+                CAST(wrapper_position_key AS VARCHAR) AS output_wrapper_position_key,
+                CAST(wrapper_structured_leaf_key AS VARCHAR) AS output_wrapper_structured_leaf_key,
+                CAST(wrapper_investment_date_key AS VARCHAR) AS output_wrapper_investment_date_key,
+                CAST(wrapper_maturity_date_key AS VARCHAR) AS output_wrapper_maturity_date_key,
+                CAST(wrapper_rate_key AS VARCHAR) AS output_wrapper_rate_key,
+                CAST(wrapper_signature_status AS VARCHAR) AS output_wrapper_signature_status,
+                CAST(wrapper_unparsed_remainder AS VARCHAR) AS output_wrapper_unparsed_remainder,
                 TRY_CAST(fair_value AS DOUBLE) AS output_fair_value,
                 TRY_CAST(cost AS DOUBLE) AS output_cost,
                 TRY_CAST(principal_amount AS DOUBLE) AS output_principal_amount,
@@ -1375,6 +1449,96 @@ def reconcile_bdc_source_to_holdings(
             SELECT source_row_id, output_row_id, match_tier
             FROM exact_candidates
             WHERE source_match_rank = 1 AND output_match_rank = 1
+        ), wrapper_leaf_key_candidates AS (
+            SELECT
+                s.source_row_id,
+                o.output_row_id,
+                'wrapper_exact_leaf_key' AS match_tier,
+                ROW_NUMBER() OVER (
+                    PARTITION BY s.source_row_id
+                    ORDER BY
+                        abs(COALESCE(s.source_fair_value, 0) - COALESCE(o.output_fair_value, 0)),
+                        o.output_row_id
+                ) AS source_match_rank,
+                ROW_NUMBER() OVER (
+                    PARTITION BY o.output_row_id
+                    ORDER BY
+                        abs(COALESCE(s.source_fair_value, 0) - COALESCE(o.output_fair_value, 0)),
+                        s.source_row_id
+                ) AS output_match_rank
+            FROM eligible_source s
+            JOIN output_prepared o
+              ON s.cik = o.cik
+             AND s.report_date = o.report_date
+             AND s.accession_number = o.accession_number
+             AND regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_position_leaf$')
+             AND regexp_matches(COALESCE(o.output_wrapper_disposition, ''), '_position_leaf$')
+             AND COALESCE(s.source_wrapper_family, '') = COALESCE(o.output_wrapper_family, '')
+             AND NULLIF(trim(s.source_wrapper_position_key), '') IS NOT NULL
+             AND s.source_wrapper_position_key = o.output_wrapper_position_key
+             AND abs(COALESCE(s.source_fair_value, 0) - COALESCE(o.output_fair_value, 0))
+                 <= greatest(1.0, 0.0001 * greatest(abs(COALESCE(s.source_fair_value, 0)), abs(COALESCE(o.output_fair_value, 0))))
+            LEFT JOIN exact_dimension_matches eds ON s.source_row_id = eds.source_row_id
+            LEFT JOIN exact_dimension_matches edo ON o.output_row_id = edo.output_row_id
+            LEFT JOIN exact_matches ems ON s.source_row_id = ems.source_row_id
+            LEFT JOIN exact_matches emo ON o.output_row_id = emo.output_row_id
+            WHERE COALESCE(s.source_exclusion_status, '') = ''
+              AND COALESCE(s.duplicate_status, '') = ''
+              AND eds.source_row_id IS NULL
+              AND edo.output_row_id IS NULL
+              AND ems.source_row_id IS NULL
+              AND emo.output_row_id IS NULL
+        ), wrapper_leaf_key_matches AS (
+            SELECT source_row_id, output_row_id, match_tier
+            FROM wrapper_leaf_key_candidates
+            WHERE source_match_rank = 1 AND output_match_rank = 1
+        ), wrapper_structured_leaf_key_candidates AS (
+            SELECT
+                s.source_row_id,
+                o.output_row_id,
+                'wrapper_structured_leaf_key' AS match_tier,
+                ROW_NUMBER() OVER (
+                    PARTITION BY s.source_row_id
+                    ORDER BY
+                        abs(COALESCE(s.source_fair_value, 0) - COALESCE(o.output_fair_value, 0)),
+                        o.output_row_id
+                ) AS source_match_rank,
+                ROW_NUMBER() OVER (
+                    PARTITION BY o.output_row_id
+                    ORDER BY
+                        abs(COALESCE(s.source_fair_value, 0) - COALESCE(o.output_fair_value, 0)),
+                        s.source_row_id
+                ) AS output_match_rank
+            FROM eligible_source s
+            JOIN output_prepared o
+              ON s.cik = o.cik
+             AND s.report_date = o.report_date
+             AND s.accession_number = o.accession_number
+             AND regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_position_leaf$')
+             AND regexp_matches(COALESCE(o.output_wrapper_disposition, ''), '_position_leaf$')
+             AND COALESCE(s.source_wrapper_family, '') = COALESCE(o.output_wrapper_family, '')
+             AND NULLIF(trim(s.source_wrapper_structured_leaf_key), '') IS NOT NULL
+             AND s.source_wrapper_structured_leaf_key = o.output_wrapper_structured_leaf_key
+             AND abs(COALESCE(s.source_fair_value, 0) - COALESCE(o.output_fair_value, 0))
+                 <= greatest(1.0, 0.0001 * greatest(abs(COALESCE(s.source_fair_value, 0)), abs(COALESCE(o.output_fair_value, 0))))
+            LEFT JOIN exact_dimension_matches eds ON s.source_row_id = eds.source_row_id
+            LEFT JOIN exact_dimension_matches edo ON o.output_row_id = edo.output_row_id
+            LEFT JOIN exact_matches ems ON s.source_row_id = ems.source_row_id
+            LEFT JOIN exact_matches emo ON o.output_row_id = emo.output_row_id
+            LEFT JOIN wrapper_leaf_key_matches wlks ON s.source_row_id = wlks.source_row_id
+            LEFT JOIN wrapper_leaf_key_matches wlko ON o.output_row_id = wlko.output_row_id
+            WHERE COALESCE(s.source_exclusion_status, '') = ''
+              AND COALESCE(s.duplicate_status, '') = ''
+              AND eds.source_row_id IS NULL
+              AND edo.output_row_id IS NULL
+              AND ems.source_row_id IS NULL
+              AND emo.output_row_id IS NULL
+              AND wlks.source_row_id IS NULL
+              AND wlko.output_row_id IS NULL
+        ), wrapper_structured_leaf_key_matches AS (
+            SELECT source_row_id, output_row_id, match_tier
+            FROM wrapper_structured_leaf_key_candidates
+            WHERE source_match_rank = 1 AND output_match_rank = 1
         ), staging_normalized_candidates AS (
             SELECT
                 s.source_row_id,
@@ -1407,12 +1571,20 @@ def reconcile_bdc_source_to_holdings(
             LEFT JOIN exact_dimension_matches edo ON o.output_row_id = edo.output_row_id
             LEFT JOIN exact_matches ems ON s.source_row_id = ems.source_row_id
             LEFT JOIN exact_matches emo ON o.output_row_id = emo.output_row_id
+            LEFT JOIN wrapper_leaf_key_matches wlks ON s.source_row_id = wlks.source_row_id
+            LEFT JOIN wrapper_leaf_key_matches wlko ON o.output_row_id = wlko.output_row_id
+            LEFT JOIN wrapper_structured_leaf_key_matches wslks ON s.source_row_id = wslks.source_row_id
+            LEFT JOIN wrapper_structured_leaf_key_matches wslko ON o.output_row_id = wslko.output_row_id
             WHERE COALESCE(s.source_exclusion_status, '') = ''
               AND COALESCE(s.duplicate_status, '') = ''
               AND eds.source_row_id IS NULL
               AND edo.output_row_id IS NULL
               AND ems.source_row_id IS NULL
               AND emo.output_row_id IS NULL
+              AND wlks.source_row_id IS NULL
+              AND wlko.output_row_id IS NULL
+              AND wslks.source_row_id IS NULL
+              AND wslko.output_row_id IS NULL
         ), staging_normalized_matches AS (
             SELECT source_row_id, output_row_id, match_tier
             FROM staging_normalized_candidates
@@ -1452,6 +1624,10 @@ def reconcile_bdc_source_to_holdings(
             LEFT JOIN exact_dimension_matches edo ON o.output_row_id = edo.output_row_id
             LEFT JOIN staging_normalized_matches sns ON s.source_row_id = sns.source_row_id
             LEFT JOIN staging_normalized_matches sno ON o.output_row_id = sno.output_row_id
+            LEFT JOIN wrapper_leaf_key_matches wlks ON s.source_row_id = wlks.source_row_id
+            LEFT JOIN wrapper_leaf_key_matches wlko ON o.output_row_id = wlko.output_row_id
+            LEFT JOIN wrapper_structured_leaf_key_matches wslks ON s.source_row_id = wslks.source_row_id
+            LEFT JOIN wrapper_structured_leaf_key_matches wslko ON o.output_row_id = wslko.output_row_id
             WHERE COALESCE(s.source_exclusion_status, '') = ''
               AND COALESCE(s.duplicate_status, '') = ''
               AND ems.source_row_id IS NULL
@@ -1460,6 +1636,10 @@ def reconcile_bdc_source_to_holdings(
               AND edo.output_row_id IS NULL
               AND sns.source_row_id IS NULL
               AND sno.output_row_id IS NULL
+              AND wlks.source_row_id IS NULL
+              AND wlko.output_row_id IS NULL
+              AND wslks.source_row_id IS NULL
+              AND wslko.output_row_id IS NULL
         ), normalized_matches AS (
             SELECT source_row_id, output_row_id, match_tier
             FROM normalized_candidates
@@ -1468,6 +1648,10 @@ def reconcile_bdc_source_to_holdings(
             SELECT * FROM exact_dimension_matches
             UNION ALL
             SELECT * FROM exact_matches
+            UNION ALL
+            SELECT * FROM wrapper_leaf_key_matches
+            UNION ALL
+            SELECT * FROM wrapper_structured_leaf_key_matches
             UNION ALL
             SELECT * FROM staging_normalized_matches
             UNION ALL
@@ -1702,7 +1886,9 @@ def reconcile_bdc_source_to_holdings(
             SELECT
                 s.source_row_id,
                 COUNT(o.output_row_id) AS child_output_count,
-                SUM(o.output_fair_value) AS child_output_fair_value
+                SUM(o.output_fair_value) AS child_output_fair_value,
+                CAST(0 AS BIGINT) AS child_source_count,
+                CAST(NULL AS DOUBLE) AS child_source_fair_value
             FROM eligible_source s
             JOIN output_prepared o
               ON s.cik = o.cik
@@ -1711,6 +1897,23 @@ def reconcile_bdc_source_to_holdings(
              AND (
                 o.staging_normalized_investment_identifier
                     LIKE s.staging_normalized_investment_identifier || ' %'
+                OR (
+                    regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_rollup$')
+                    AND regexp_matches(COALESCE(o.output_wrapper_disposition, ''), '_position_leaf$')
+                    AND COALESCE(s.source_wrapper_family, '') = COALESCE(o.output_wrapper_family, '')
+                    AND NULLIF(trim(s.source_wrapper_parent_key), '') IS NOT NULL
+                    AND (
+                        s.source_wrapper_parent_key = o.output_wrapper_parent_key
+                        OR (
+                            s.source_wrapper_disposition IN (
+                                'debt_category_rollup', 'debt_total_rollup',
+                                'warrant_category_rollup', 'warrant_total_rollup',
+                                'equity_category_rollup', 'equity_total_rollup'
+                            )
+                            AND o.output_wrapper_parent_key LIKE s.source_wrapper_parent_key || ' %'
+                        )
+                    )
+                )
                 OR (
                     COALESCE(s.is_aggregate_candidate, false)
                     AND s.staging_normalized_investment_identifier LIKE 'total %'
@@ -1721,15 +1924,64 @@ def reconcile_bdc_source_to_holdings(
               AND NULLIF(trim(s.staging_normalized_investment_identifier), '') IS NOT NULL
               AND s.source_fair_value IS NOT NULL
               AND o.output_fair_value IS NOT NULL
-            GROUP BY s.source_row_id, s.source_fair_value
-            HAVING COUNT(o.output_row_id) >= 2
+            GROUP BY s.source_row_id, s.source_fair_value,
+                     COALESCE(s.source_wrapper_disposition, '')
+            HAVING (
+                       COUNT(o.output_row_id) >= 2
+                       OR (COUNT(o.output_row_id) = 1
+                           AND regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_issuer_rollup$'))
+                   )
                AND abs(s.source_fair_value - SUM(o.output_fair_value))
                    <= greatest(1.0, 0.0001 * greatest(abs(s.source_fair_value), abs(SUM(o.output_fair_value))))
+        ), source_child_rollup_matches AS (
+            SELECT
+                s.source_row_id,
+                CAST(0 AS BIGINT) AS child_output_count,
+                CAST(NULL AS DOUBLE) AS child_output_fair_value,
+                COUNT(c.source_row_id) AS child_source_count,
+                SUM(c.source_fair_value) AS child_source_fair_value
+            FROM eligible_source s
+            JOIN eligible_source c
+              ON s.cik = c.cik
+             AND s.report_date = c.report_date
+             AND s.accession_number = c.accession_number
+             AND s.source_row_id != c.source_row_id
+             AND regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_rollup$')
+             AND regexp_matches(COALESCE(c.source_wrapper_disposition, ''), '_position_leaf$')
+             AND COALESCE(s.source_wrapper_family, '') = COALESCE(c.source_wrapper_family, '')
+             AND NULLIF(trim(s.source_wrapper_parent_key), '') IS NOT NULL
+             AND NULLIF(trim(c.source_wrapper_parent_key), '') IS NOT NULL
+             AND contains(
+                    ' ' || COALESCE(c.source_wrapper_parent_key, '') || ' ',
+                    ' ' || COALESCE(s.source_wrapper_parent_key, '') || ' '
+                 )
+            WHERE COALESCE(s.source_exclusion_status, '') = ''
+              AND COALESCE(s.duplicate_status, '') = ''
+              AND COALESCE(c.source_exclusion_status, '') = ''
+              AND COALESCE(c.duplicate_status, '') = ''
+              AND s.source_fair_value IS NOT NULL
+              AND c.source_fair_value IS NOT NULL
+            GROUP BY s.source_row_id, s.source_fair_value,
+                     COALESCE(s.source_wrapper_disposition, '')
+            HAVING (
+                       COUNT(c.source_row_id) >= 2
+                       OR (COUNT(c.source_row_id) = 1
+                           AND regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_issuer_rollup$'))
+                   )
+               AND abs(s.source_fair_value - SUM(c.source_fair_value))
+                   <= greatest(1.0, 0.0001 * greatest(abs(s.source_fair_value), abs(SUM(c.source_fair_value))))
         ), documented_source_rollups AS (
             SELECT sr.*
             FROM source_rollup_matches sr
             LEFT JOIN all_matches m ON sr.source_row_id = m.source_row_id
             WHERE m.source_row_id IS NULL
+            UNION ALL
+            SELECT scr.*
+            FROM source_child_rollup_matches scr
+            LEFT JOIN all_matches m ON scr.source_row_id = m.source_row_id
+            LEFT JOIN source_rollup_matches sr ON scr.source_row_id = sr.source_row_id
+            WHERE m.source_row_id IS NULL
+              AND sr.source_row_id IS NULL
         ), rollup_child_outputs AS (
             SELECT DISTINCT o.output_row_id
             FROM documented_source_rollups sr
@@ -1741,6 +1993,23 @@ def reconcile_bdc_source_to_holdings(
              AND (
                 o.staging_normalized_investment_identifier
                     LIKE s.staging_normalized_investment_identifier || ' %'
+                OR (
+                    regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_rollup$')
+                    AND regexp_matches(COALESCE(o.output_wrapper_disposition, ''), '_position_leaf$')
+                    AND COALESCE(s.source_wrapper_family, '') = COALESCE(o.output_wrapper_family, '')
+                    AND NULLIF(trim(s.source_wrapper_parent_key), '') IS NOT NULL
+                    AND (
+                        s.source_wrapper_parent_key = o.output_wrapper_parent_key
+                        OR (
+                            s.source_wrapper_disposition IN (
+                                'debt_category_rollup', 'debt_total_rollup',
+                                'warrant_category_rollup', 'warrant_total_rollup',
+                                'equity_category_rollup', 'equity_total_rollup'
+                            )
+                            AND o.output_wrapper_parent_key LIKE s.source_wrapper_parent_key || ' %'
+                        )
+                    )
+                )
                 OR (
                     COALESCE(s.is_aggregate_candidate, false)
                     AND s.staging_normalized_investment_identifier LIKE 'total %'
@@ -1759,6 +2028,12 @@ def reconcile_bdc_source_to_holdings(
                          AND (COALESCE(s.is_exact_override_exclude, false)
                               OR COALESCE(oac.output_count, 0) = 0)
                         THEN 'excluded_aggregate_candidate'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
+                        THEN 'excluded_aggregate_candidate'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market'
+                        THEN 'excluded_money_market_fund'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false)
                         THEN 'excluded_money_market_fund'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false)
@@ -1783,6 +2058,10 @@ def reconcile_bdc_source_to_holdings(
                              AND (COALESCE(s.is_exact_override_exclude, false)
                                   OR COALESCE(oac.output_count, 0) = 0)
                          )
+                         OR (
+                             m.source_row_id IS NULL
+                             AND COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                         )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_hierarchy_header, false)
@@ -1803,6 +2082,10 @@ def reconcile_bdc_source_to_holdings(
                              AND (COALESCE(s.is_exact_override_exclude, false)
                                   OR COALESCE(oac.output_count, 0) = 0)
                          )
+                         OR (
+                             m.source_row_id IS NULL
+                             AND COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                         )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_hierarchy_header, false)
@@ -1822,6 +2105,10 @@ def reconcile_bdc_source_to_holdings(
                              COALESCE(s.is_aggregate_candidate, false)
                              AND (COALESCE(s.is_exact_override_exclude, false)
                                   OR COALESCE(oac.output_count, 0) = 0)
+                         )
+                         OR (
+                             m.source_row_id IS NULL
+                             AND COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
@@ -1844,6 +2131,12 @@ def reconcile_bdc_source_to_holdings(
                          AND (COALESCE(s.is_exact_override_exclude, false)
                               OR COALESCE(oac.output_count, 0) = 0)
                         THEN 'excluded_aggregate_candidate'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
+                        THEN 'excluded_aggregate_candidate'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market'
+                        THEN 'excluded_money_market_fund'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false)
                         THEN 'excluded_money_market_fund'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false)
@@ -1862,7 +2155,11 @@ def reconcile_bdc_source_to_holdings(
                     WHEN s.source_exclusion_status != '' THEN s.source_exclusion_status
                     WHEN s.duplicate_status != '' THEN 'same economic facts reported on multiple dimension paths'
                     WHEN m.source_row_id IS NULL AND sr.source_row_id IS NOT NULL
-                        THEN 'source rollup fair_value equals sum of multiple pipeline child positions'
+                        THEN CASE
+                            WHEN COALESCE(sr.child_output_count, 0) > 0
+                            THEN 'source rollup fair_value equals sum of multiple pipeline child positions'
+                            ELSE 'source rollup fair_value equals sum of multiple source child positions'
+                        END
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL
                         THEN 'self-referential subtotal whose identifier is prefix of multiple child source rows'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
@@ -1873,6 +2170,12 @@ def reconcile_bdc_source_to_holdings(
                             THEN 'aggregate source row excluded by audited exact override'
                             ELSE 'aggregate source row has no current pipeline output rows for this accession'
                         END
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
+                        THEN 'aggregate source row excluded by per-CIK wrapper classification'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market'
+                        THEN 'non-private-market source row excluded by per-CIK wrapper classification'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false)
                         THEN 'money market fund position filtered during BDC staging'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false)
@@ -1916,6 +2219,10 @@ def reconcile_bdc_source_to_holdings(
                         THEN 'source row reconciled to pipeline output by strict 1:1 fair-value identity'
                     WHEN m.match_tier = 'reconciled_partial_name_fv'
                         THEN 'source row reconciled to pipeline output by partial name token overlap plus FV'
+                    WHEN m.match_tier = 'wrapper_exact_leaf_key'
+                        THEN 'source row reconciled to pipeline output by per-CIK wrapper leaf key'
+                    WHEN m.match_tier = 'wrapper_structured_leaf_key'
+                        THEN 'source row reconciled to pipeline output by per-CIK wrapper structured leaf key'
                     ELSE 'source row reconciled to pipeline output'
                 END AS calibration_reason,
                 s.cik, s.entity_name, s.report_date, s.period, s.accession_number,
@@ -1924,6 +2231,28 @@ def reconcile_bdc_source_to_holdings(
                 CAST(o.output_row_id AS VARCHAR) AS output_row_id,
                 s.raw_investment_identifier, s.normalized_investment_identifier,
                 s.dimensions_raw, s.concept_names,
+                COALESCE(s.source_wrapper_disposition, '') AS source_wrapper_disposition,
+                COALESCE(s.source_wrapper_rule_id, '') AS source_wrapper_rule_id,
+                COALESCE(s.source_wrapper_family, '') AS source_wrapper_family,
+                COALESCE(s.source_wrapper_parent_key, '') AS source_wrapper_parent_key,
+                COALESCE(s.source_wrapper_position_key, '') AS source_wrapper_position_key,
+                COALESCE(s.source_wrapper_structured_leaf_key, '') AS source_wrapper_structured_leaf_key,
+                COALESCE(s.source_wrapper_investment_date_key, '') AS source_wrapper_investment_date_key,
+                COALESCE(s.source_wrapper_maturity_date_key, '') AS source_wrapper_maturity_date_key,
+                COALESCE(s.source_wrapper_rate_key, '') AS source_wrapper_rate_key,
+                COALESCE(s.source_wrapper_signature_status, '') AS source_wrapper_signature_status,
+                COALESCE(s.source_wrapper_unparsed_remainder, '') AS source_wrapper_unparsed_remainder,
+                COALESCE(o.output_wrapper_disposition, '') AS output_wrapper_disposition,
+                COALESCE(o.output_wrapper_rule_id, '') AS output_wrapper_rule_id,
+                COALESCE(o.output_wrapper_family, '') AS output_wrapper_family,
+                COALESCE(o.output_wrapper_parent_key, '') AS output_wrapper_parent_key,
+                COALESCE(o.output_wrapper_position_key, '') AS output_wrapper_position_key,
+                COALESCE(o.output_wrapper_structured_leaf_key, '') AS output_wrapper_structured_leaf_key,
+                COALESCE(o.output_wrapper_investment_date_key, '') AS output_wrapper_investment_date_key,
+                COALESCE(o.output_wrapper_maturity_date_key, '') AS output_wrapper_maturity_date_key,
+                COALESCE(o.output_wrapper_rate_key, '') AS output_wrapper_rate_key,
+                COALESCE(o.output_wrapper_signature_status, '') AS output_wrapper_signature_status,
+                COALESCE(o.output_wrapper_unparsed_remainder, '') AS output_wrapper_unparsed_remainder,
                 s.source_fair_value, o.output_fair_value,
                 s.source_cost, o.output_cost,
                 s.source_principal_amount, o.output_principal_amount,
@@ -1937,6 +2266,7 @@ def reconcile_bdc_source_to_holdings(
                 COALESCE(o.index_classification, '') AS index_classification,
                 COALESCE(o.asset_category, '') AS asset_category,
                 COALESCE(o.issuer_category, '') AS issuer_category,
+                COALESCE(s.non_private_market_disagreement, '') AS non_private_market_disagreement,
                 CASE
                     WHEN s.source_exclusion_status != '' THEN s.source_exclusion_status
                     WHEN s.duplicate_status != '' THEN
@@ -1944,9 +2274,13 @@ def reconcile_bdc_source_to_holdings(
                         || CAST(s.canonical_source_row_id AS VARCHAR)
                     WHEN m.source_row_id IS NULL AND sr.source_row_id IS NOT NULL THEN
                         'documented source rollup exact; child_output_count='
-                        || CAST(sr.child_output_count AS VARCHAR)
+                        || CAST(COALESCE(sr.child_output_count, 0) AS VARCHAR)
                         || '; child_output_fair_value='
-                        || CAST(sr.child_output_fair_value AS VARCHAR)
+                        || CAST(COALESCE(sr.child_output_fair_value, 0) AS VARCHAR)
+                        || '; child_source_count='
+                        || CAST(COALESCE(sr.child_source_count, 0) AS VARCHAR)
+                        || '; child_source_fair_value='
+                        || CAST(COALESCE(sr.child_source_fair_value, 0) AS VARCHAR)
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL THEN
                         'self-referential subtotal; identifier is prefix of multiple child source rows'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
@@ -1957,6 +2291,12 @@ def reconcile_bdc_source_to_holdings(
                             THEN 'aggregate source row documented by audited exact override'
                             ELSE 'aggregate source row documented because accession has no current pipeline output rows'
                         END
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'aggregate' THEN
+                        'aggregate source row documented by per-CIK wrapper classification'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market' THEN
+                        'non-private-market source row documented by per-CIK wrapper classification'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false) THEN
                         'money market fund filtered during staging'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false) THEN
@@ -1985,6 +2325,10 @@ def reconcile_bdc_source_to_holdings(
                         THEN 'source row reconciled to pipeline output by strict 1:1 fair-value identity'
                     WHEN m.match_tier = 'reconciled_partial_name_fv'
                         THEN 'source row reconciled to pipeline output by partial name token overlap plus FV'
+                    WHEN m.match_tier = 'wrapper_exact_leaf_key'
+                        THEN 'source row reconciled to pipeline output by per-CIK wrapper leaf key'
+                    WHEN m.match_tier = 'wrapper_structured_leaf_key'
+                        THEN 'source row reconciled to pipeline output by per-CIK wrapper structured leaf key'
                     ELSE 'source row reconciled to pipeline output'
                 END AS evidence
             FROM eligible_source s
@@ -2018,6 +2362,28 @@ def reconcile_bdc_source_to_holdings(
                 o.normalized_investment_identifier,
                 o.dimensions_raw,
                 '' AS concept_names,
+                '' AS source_wrapper_disposition,
+                '' AS source_wrapper_rule_id,
+                '' AS source_wrapper_family,
+                '' AS source_wrapper_parent_key,
+                '' AS source_wrapper_position_key,
+                '' AS source_wrapper_structured_leaf_key,
+                '' AS source_wrapper_investment_date_key,
+                '' AS source_wrapper_maturity_date_key,
+                '' AS source_wrapper_rate_key,
+                '' AS source_wrapper_signature_status,
+                '' AS source_wrapper_unparsed_remainder,
+                COALESCE(o.output_wrapper_disposition, '') AS output_wrapper_disposition,
+                COALESCE(o.output_wrapper_rule_id, '') AS output_wrapper_rule_id,
+                COALESCE(o.output_wrapper_family, '') AS output_wrapper_family,
+                COALESCE(o.output_wrapper_parent_key, '') AS output_wrapper_parent_key,
+                COALESCE(o.output_wrapper_position_key, '') AS output_wrapper_position_key,
+                COALESCE(o.output_wrapper_structured_leaf_key, '') AS output_wrapper_structured_leaf_key,
+                COALESCE(o.output_wrapper_investment_date_key, '') AS output_wrapper_investment_date_key,
+                COALESCE(o.output_wrapper_maturity_date_key, '') AS output_wrapper_maturity_date_key,
+                COALESCE(o.output_wrapper_rate_key, '') AS output_wrapper_rate_key,
+                COALESCE(o.output_wrapper_signature_status, '') AS output_wrapper_signature_status,
+                COALESCE(o.output_wrapper_unparsed_remainder, '') AS output_wrapper_unparsed_remainder,
                 CAST(NULL AS DOUBLE) AS source_fair_value, o.output_fair_value,
                 CAST(NULL AS DOUBLE) AS source_cost, o.output_cost,
                 CAST(NULL AS DOUBLE) AS source_principal_amount, o.output_principal_amount,
@@ -2028,6 +2394,7 @@ def reconcile_bdc_source_to_holdings(
                 '' AS mismatched_fields,
                 o.issuer_name, o.instrument_description,
                 o.index_classification, o.asset_category, o.issuer_category,
+                '' AS non_private_market_disagreement,
                 'pipeline BDC row has no matching current-period source fact' AS evidence
             FROM output_prepared o
             LEFT JOIN all_matches m ON o.output_row_id = m.output_row_id
@@ -2046,6 +2413,19 @@ def reconcile_bdc_source_to_holdings(
 
     metrics = build_source_reconciliation_metrics(detail)
     con.close()
+
+    # Log non-private-market filter disagreements between wrapper and staging
+    if "non_private_market_disagreement" in detail.columns:
+        _disagreements = detail[detail["non_private_market_disagreement"] != ""]
+        if len(_disagreements) > 0:
+            _wrapper_only = len(_disagreements[_disagreements["non_private_market_disagreement"] == "wrapper_only"])
+            _staging_only = len(_disagreements[_disagreements["non_private_market_disagreement"] == "staging_only"])
+            logger.warning(
+                "Non-private-market filter disagreement: %d rows "
+                "(wrapper_only=%d, staging_only=%d)",
+                len(_disagreements), _wrapper_only, _staging_only,
+            )
+
     return detail[DETAIL_COLUMNS], metrics[METRIC_COLUMNS]
 
 
@@ -3158,42 +3538,41 @@ def run_bdc_source_reconciliation_cached(
     )
     previous_by_cik = {str(row["cik"]): row for row in previous_manifest.to_dict("records")}
     manifest_rows: list[dict[str, Any]] = []
-    batch_recomputed_detail: Optional[pd.DataFrame] = None
-    batch_recomputed_metrics: Optional[pd.DataFrame] = None
-    batch_recompute = full_invalidation or len(dirty_ciks) > 20
-    if dirty_ciks and batch_recompute:
-        batch_recomputed_detail, batch_recomputed_metrics = reconcile_bdc_source_to_holdings(
-            source_df,
-            unified_df,
+    if dirty_ciks:
+        source_norm_cik = (
+            source_df.get("cik", pd.Series(dtype=str, index=source_df.index))
+            .astype(str)
+            .map(_normalize_cik)
         )
-        if not batch_recomputed_detail.empty:
-            batch_recomputed_detail["cik"] = batch_recomputed_detail["cik"].astype(str).map(_normalize_cik)
-        if not batch_recomputed_metrics.empty:
-            batch_recomputed_metrics["cik"] = batch_recomputed_metrics["cik"].astype(str).map(_normalize_cik)
+        bdc_mask = (
+            unified_df.get("source", pd.Series(dtype=str, index=unified_df.index))
+            .astype(str)
+            .str.lower()
+            .eq("bdc")
+        )
+        bdc_holdings_df = unified_df.loc[bdc_mask].copy()
+        holdings_norm_cik = (
+            bdc_holdings_df.get("cik", pd.Series(dtype=str, index=bdc_holdings_df.index))
+            .astype(str)
+            .map(_normalize_cik)
+        )
+        logger.info(
+            "Source reconciliation cache: recomputing %d dirty CIK partitions",
+            len(dirty_ciks),
+        )
+    else:
+        source_norm_cik = pd.Series(dtype=str, index=source_df.index)
+        bdc_holdings_df = unified_df.iloc[0:0].copy()
+        holdings_norm_cik = pd.Series(dtype=str, index=bdc_holdings_df.index)
 
     for row in plan.to_dict("records"):
         cik = str(row["cik"])
         detail_artifact = Path(row["detail_artifact_path"])
         metrics_artifact = Path(row["metrics_artifact_path"])
         if cik in dirty_ciks:
-            if batch_recompute:
-                detail_part = (
-                    batch_recomputed_detail[batch_recomputed_detail["cik"].eq(cik)].copy()
-                    if batch_recomputed_detail is not None and not batch_recomputed_detail.empty
-                    else _empty_detail()
-                )
-                metrics_part = (
-                    batch_recomputed_metrics[batch_recomputed_metrics["cik"].eq(cik)].copy()
-                    if batch_recomputed_metrics is not None and not batch_recomputed_metrics.empty
-                    else _empty_metrics()
-                )
-            else:
-                source_part = source_df[source_df.get("cik", pd.Series(dtype=str)).astype(str).map(_normalize_cik).eq(cik)].copy()
-                holdings_part = unified_df[
-                    unified_df.get("cik", pd.Series(dtype=str)).astype(str).map(_normalize_cik).eq(cik)
-                    & unified_df.get("source", pd.Series(dtype=str)).astype(str).str.lower().eq("bdc")
-                ].copy()
-                detail_part, metrics_part = reconcile_bdc_source_to_holdings(source_part, holdings_part)
+            source_part = source_df.loc[source_norm_cik.eq(cik)].copy()
+            holdings_part = bdc_holdings_df.loc[holdings_norm_cik.eq(cik)].copy()
+            detail_part, metrics_part = reconcile_bdc_source_to_holdings(source_part, holdings_part)
             _write_df_parquet_atomic(detail_part, detail_artifact, DETAIL_COLUMNS)
             _write_df_parquet_atomic(metrics_part, metrics_artifact, METRIC_COLUMNS)
             detail_count = len(detail_part)

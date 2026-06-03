@@ -860,6 +860,367 @@ class TestBdcSourceReconciliation:
         assert "extra_in_pipeline" in set(detail["status"])
         assert metrics.iloc[0]["blocking_issue_count"] == 3
 
+    def test_trinity_wrapper_rollup_is_non_blocking_when_fv_ties_leaf_positions(self):
+        parent = "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+        child_a = (
+            parent
+            + "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            + "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        child_b = (
+            parent
+            + "Type of Investment Equipment Financing Investment Date May 31, 2022 "
+            + "Maturity Date June 1, 2026 Interest Rate Variable interest rate S + 7.5%"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "investment_identifier": parent,
+            "dimensions_raw": f"investmentidentifier={parent}",
+            "context_id": "ctx_trinity_parent",
+            "fair_value": "3000000",
+        }])
+        output = _make_bdc_output([
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "bdc_investment_identifier": child_a,
+                "bdc_dimensions_raw": f"investmentidentifier={child_a}",
+                "issuer_name": "Aledia, Inc.",
+                "fair_value": "1000000",
+            },
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "bdc_investment_identifier": child_b,
+                "bdc_dimensions_raw": f"investmentidentifier={child_b}",
+                "issuer_name": "Aledia, Inc.",
+                "fair_value": "2000000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert set(detail["status"]) == {"documented_source_rollup_exact"}
+        row = detail.iloc[0]
+        assert row["blocking_issue"] == False
+        assert row["source_wrapper_disposition"] == "debt_issuer_rollup"
+        assert row["source_wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V1"
+        assert "child_output_count=2" in row["evidence"]
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
+
+    def test_trinity_wrapper_rollup_remains_blocking_when_fv_tie_fails(self):
+        parent = "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+        child_a = (
+            parent
+            + "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            + "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        child_b = (
+            parent
+            + "Type of Investment Equipment Financing Investment Date May 31, 2022 "
+            + "Maturity Date June 1, 2026 Interest Rate Variable interest rate S + 7.5%"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "investment_identifier": parent,
+            "dimensions_raw": f"investmentidentifier={parent}",
+            "context_id": "ctx_trinity_parent",
+            "fair_value": "4000000",
+        }])
+        output = _make_bdc_output([
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "bdc_investment_identifier": child_a,
+                "bdc_dimensions_raw": f"investmentidentifier={child_a}",
+                "issuer_name": "Aledia, Inc.",
+                "fair_value": "1000000",
+            },
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "bdc_investment_identifier": child_b,
+                "bdc_dimensions_raw": f"investmentidentifier={child_b}",
+                "issuer_name": "Aledia, Inc.",
+                "fair_value": "2000000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert "missing_from_pipeline" in set(detail["status"])
+        assert "extra_in_pipeline" in set(detail["status"])
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 3
+
+    def test_saratoga_wrapper_aggregate_is_documented_exclusion(self):
+        source = _make_bdc_source([{
+            "cik": "0001377936",
+            "entity_name": "Saratoga Investment Corp.",
+            "investment_identifier": "Alternative Investment Management Software",
+            "dimensions_raw": "investmentidentifier=Alternative Investment Management Software",
+            "context_id": "ctx_saratoga_category",
+            "fair_value": "11585573",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001377936",
+            "entity_name": "Saratoga Investment Corp.",
+            "bdc_investment_identifier": (
+                "Non-control/Non-affiliate investments - 229.3% - Altvia MidCo, LLC. - "
+                "Alternative Investment Management Software - First Lien Term Loan"
+            ),
+            "bdc_dimensions_raw": "investmentidentifier=Altvia MidCo, LLC.",
+            "issuer_name": "Altvia MidCo, LLC.",
+            "fair_value": "8845319",
+        }])
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"].astype(str).ne("")].iloc[0]
+
+        assert source_row["source_wrapper_disposition"] == "aggregate"
+        assert source_row["status"] == "excluded_aggregate_candidate"
+        assert source_row["blocking_issue"] == False
+        assert "per-CIK wrapper" in source_row["evidence"]
+
+    def test_saratoga_wrapper_position_leaf_still_blocks_when_missing(self):
+        identifier = (
+            "Non-control/Non-affiliate investments - 229.3% - Alternative Investment "
+            "Management Software - First Lien Term Loan (3M USD TERM SOFR+8.50%), "
+            "12.82% Cash, 7/18/2027"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001377936",
+            "entity_name": "Saratoga Investment Corp.",
+            "investment_identifier": identifier,
+            "dimensions_raw": f"investmentidentifier={identifier}",
+            "context_id": "ctx_saratoga_leaf",
+            "fair_value": "8845319",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001377936",
+            "entity_name": "Saratoga Investment Corp.",
+            "bdc_investment_identifier": "Unrelated Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Unrelated Corp - First Lien Term Loan",
+            "issuer_name": "Unrelated Corp",
+            "fair_value": "1",
+        }])
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"].astype(str).ne("")].iloc[0]
+
+        assert source_row["source_wrapper_disposition"] == "mixed_position_leaf"
+        assert source_row["status"] == "missing_from_pipeline"
+        assert source_row["blocking_issue"] == True
+
+    def test_saratoga_category_rollup_is_non_blocking_when_source_children_tie(self):
+        parent = "Affiliate investments - Employee Collaboration Software"
+        child_a = (
+            "Affiliate investments - Axero Holdings, LLC - Employee Collaboration Software - "
+            "First Lien Term Loan 4.50% Cash, (3M USD TERM SOFR+ 2.50%) PIK, 12/31/2027"
+        )
+        child_b = (
+            "Affiliate investments - Axero Holdings, LLC - Employee Collaboration Software - "
+            "Series A Preferred Units"
+        )
+        source = _make_bdc_source([
+            {
+                "cik": "0001377936",
+                "entity_name": "Saratoga Investment Corp.",
+                "investment_identifier": parent,
+                "dimensions_raw": f"investmentidentifier={parent}",
+                "context_id": "ctx_saratoga_parent",
+                "fair_value": "3000000",
+            },
+            {
+                "cik": "0001377936",
+                "entity_name": "Saratoga Investment Corp.",
+                "investment_identifier": child_a,
+                "dimensions_raw": f"investmentidentifier={child_a}",
+                "context_id": "ctx_saratoga_child_a",
+                "fair_value": "1000000",
+            },
+            {
+                "cik": "0001377936",
+                "entity_name": "Saratoga Investment Corp.",
+                "investment_identifier": child_b,
+                "dimensions_raw": f"investmentidentifier={child_b}",
+                "context_id": "ctx_saratoga_child_b",
+                "fair_value": "2000000",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "cik": "0001377936",
+                "entity_name": "Saratoga Investment Corp.",
+                "bdc_investment_identifier": child_a,
+                "bdc_dimensions_raw": f"investmentidentifier={child_a}",
+                "issuer_name": "Axero Holdings, LLC",
+                "fair_value": "1000000",
+            },
+            {
+                "cik": "0001377936",
+                "entity_name": "Saratoga Investment Corp.",
+                "bdc_investment_identifier": child_b,
+                "bdc_dimensions_raw": f"investmentidentifier={child_b}",
+                "issuer_name": "Axero Holdings, LLC",
+                "fair_value": "2000000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        parent_row = detail[detail["raw_investment_identifier"].eq(parent)].iloc[0]
+
+        assert parent_row["status"] == "documented_source_rollup_exact"
+        assert parent_row["blocking_issue"] == False
+        assert "child_source_count=2" in parent_row["evidence"]
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_trinity_wrapper_rollup_requires_multiple_leaf_positions(self):
+        parent = "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+        child = (
+            parent
+            + "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            + "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "investment_identifier": parent,
+            "dimensions_raw": f"investmentidentifier={parent}",
+            "context_id": "ctx_trinity_parent",
+            "fair_value": "3000000",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "bdc_investment_identifier": child,
+            "bdc_dimensions_raw": f"investmentidentifier={child}",
+            "issuer_name": "Aledia, Inc.",
+            "fair_value": "3000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert "documented_source_rollup_exact" not in set(detail["status"])
+        assert int(metrics.iloc[0]["documented_source_rollup_exact_rows"]) == 0
+
+    def test_trinity_wrapper_exact_leaf_key_reconciles_spacing_variation(self):
+        source_identifier = (
+            "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+            "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        output_identifier = (
+            "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc. "
+            "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "investment_identifier": source_identifier,
+            "dimensions_raw": f"investmentidentifier={source_identifier}",
+            "context_id": "ctx_trinity_leaf",
+            "fair_value": "1000000",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "bdc_investment_identifier": output_identifier,
+            "bdc_dimensions_raw": f"investmentidentifier={output_identifier}",
+            "issuer_name": "Aledia, Inc.",
+            "fair_value": "1000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert set(detail["status"]) == {"matched"}
+        assert detail.iloc[0]["match_tier"] == "wrapper_exact_leaf_key"
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_trinity_wrapper_structured_leaf_key_reconciles_marker_variation(self):
+        source_identifier = (
+            "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+            "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            "MaturityDate April 1, 2025 InterestRate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        output_identifier = (
+            "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc. "
+            "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "investment_identifier": source_identifier,
+            "dimensions_raw": f"investmentidentifier={source_identifier}",
+            "context_id": "ctx_trinity_structured_leaf",
+            "fair_value": "1000000",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "bdc_investment_identifier": output_identifier,
+            "bdc_dimensions_raw": f"investmentidentifier={output_identifier}",
+            "issuer_name": "Aledia, Inc.",
+            "fair_value": "1000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert set(detail["status"]) == {"matched"}
+        assert detail.iloc[0]["match_tier"] == "wrapper_structured_leaf_key"
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_bdc_xbrl_wrappers_can_be_disabled_for_baseline_comparison(self):
+        parent = "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+        child_a = (
+            parent
+            + "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            + "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%; EOT 7.0%"
+        )
+        child_b = (
+            parent
+            + "Type of Investment Equipment Financing Investment Date May 31, 2022 "
+            + "Maturity Date June 1, 2026 Interest Rate Variable interest rate S + 7.5%"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "investment_identifier": parent,
+            "dimensions_raw": f"investmentidentifier={parent}",
+            "context_id": "ctx_trinity_parent",
+            "fair_value": "3000000",
+        }])
+        output = _make_bdc_output([
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "bdc_investment_identifier": child_a,
+                "bdc_dimensions_raw": f"investmentidentifier={child_a}",
+                "issuer_name": "Aledia, Inc.",
+                "fair_value": "1000000",
+            },
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "bdc_investment_identifier": child_b,
+                "bdc_dimensions_raw": f"investmentidentifier={child_b}",
+                "issuer_name": "Aledia, Inc.",
+                "fair_value": "2000000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source,
+            output,
+            enable_bdc_xbrl_wrappers=False,
+        )
+
+        assert "documented_source_rollup_exact" not in set(detail["status"])
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 3
+
     def test_source_rollup_does_not_consume_matched_parent_with_distinct_children(self):
         source = _make_bdc_source([{
             "investment_identifier": "Cambium Learning Group, Inc.",
@@ -3580,3 +3941,64 @@ class TestCheckIncomeYieldConsistency:
         fee_csv.write_text("cik,total_income_yield,median_all_in_coupon\n")
         result = check_income_yield_consistency(fee_uplift_path=fee_csv)
         assert len(result) == 0
+
+
+# ---------------------------------------------------------------------------
+# Non-private-market disagreement diagnostic
+# ---------------------------------------------------------------------------
+
+class TestNonPrivateMarketDisagreement:
+    """Verify the non_private_market_disagreement diagnostic column."""
+
+    def test_disagreement_diagnostic_wrapper_only(self, monkeypatch):
+        """Detail flags 'wrapper_only' when wrapper tags non_private but keyword filter misses."""
+        source = _make_bdc_source([{
+            "investment_identifier": "U.S. Treasury Bill 2025-06-15",
+        }])
+        output = _make_bdc_output([{}])
+
+        # Monkeypatch add_bdc_xbrl_wrapper_columns to inject wrapper_disposition
+        real_add = None
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            # Force wrapper_disposition to 'non_private_market' for the test row
+            result["wrapper_disposition"] = "non_private_market"
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_rows = detail[detail["source_row_id"] != ""]
+        assert len(source_rows) > 0
+        # "U.S. Treasury" is not in global _MONEY_MARKET_KEYWORDS -> wrapper_only
+        wrapper_only_rows = source_rows[source_rows["non_private_market_disagreement"] == "wrapper_only"]
+        assert len(wrapper_only_rows) > 0
+
+    def test_disagreement_diagnostic_staging_only(self, monkeypatch):
+        """Detail flags 'staging_only' when keyword filter matches but wrapper does not tag."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Goldman Sachs Liquidity Fund",
+        }])
+        output = _make_bdc_output([{}])
+
+        # Ensure wrapper columns are added but disposition stays empty
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            # Force wrapper_disposition to empty (no wrapper tag)
+            result["wrapper_disposition"] = ""
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_rows = detail[detail["source_row_id"] != ""]
+        assert len(source_rows) > 0
+        # "liquidity fund" IS in global _MONEY_MARKET_KEYWORDS -> staging_only
+        staging_only_rows = source_rows[source_rows["non_private_market_disagreement"] == "staging_only"]
+        assert len(staging_only_rows) > 0
