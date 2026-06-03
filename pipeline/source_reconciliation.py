@@ -2370,12 +2370,16 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market' THEN
                         'non-private-market source row documented by per-CIK wrapper classification'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') LIKE '%_rollup' THEN
+                        'rollup source row documented by per-CIK wrapper classification'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false) THEN
                         'money market fund filtered during staging'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false) THEN
                         'generic/bad issuer name filtered during staging'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_hierarchy_header, false)
-                         AND NOT COALESCE(s.is_aggregate_candidate, false) THEN
+                         AND NOT COALESCE(s.is_aggregate_candidate, false)
+                         AND NOT (COALESCE(s.source_wrapper_disposition, '') LIKE '%_position_leaf') THEN
                         'hierarchy/category header without entity signals'
                     WHEN m.source_row_id IS NULL AND sad.source_row_id IS NOT NULL THEN
                         'affiliation-axis duplicate of matched source row'
