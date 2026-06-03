@@ -178,3 +178,58 @@ def test_dirty_reconciliation_planning_hashes_and_missing_artifacts(tmp_path, mo
     detail.unlink()
     assert "missing_detail_artifact" in sr.plan_dirty_reconciliation_ciks(source_manifest, holdings_hashes, "logic-a", "override-a").iloc[0]["dirty_reason"]
     assert "force" in sr.plan_dirty_reconciliation_ciks(source_manifest, holdings_hashes, "logic-a", "override-a", force=True).iloc[0]["dirty_reason"]
+
+
+def test_forced_reconciliation_recomputes_each_cik_partition(tmp_path, monkeypatch):
+    _patch_cache_paths(monkeypatch, tmp_path)
+    source_manifest = pd.DataFrame([
+        {
+            "accession_number": "0001",
+            "cik": "0000000123",
+            "file_hash": "source-a",
+            "filing_metadata_hash": "meta-a",
+            "parse_status": "ok",
+            "fact_row_count": "1",
+        },
+        {
+            "accession_number": "0002",
+            "cik": "0000000456",
+            "file_hash": "source-b",
+            "filing_metadata_hash": "meta-b",
+            "parse_status": "ok",
+            "fact_row_count": "1",
+        },
+    ])
+    source_df = pd.DataFrame([
+        {**{col: "" for col in sr.SOURCE_FACT_COLUMNS}, "cik": "123", "accession_number": "0001"},
+        {**{col: "" for col in sr.SOURCE_FACT_COLUMNS}, "cik": "456", "accession_number": "0002"},
+    ], columns=sr.SOURCE_FACT_COLUMNS)
+    unified_df = pd.DataFrame([
+        {"source": "BDC", "cik": "123", "report_date": "2025-03-31"},
+        {"source": "BDC", "cik": "456", "report_date": "2025-03-31"},
+        {"source": "NPORT", "cik": "456", "report_date": "2025-03-31"},
+    ])
+    holdings_hashes = pd.DataFrame([
+        {"cik": "0000000123", "holdings_hash": "holdings-a", "holdings_row_count": 1},
+        {"cik": "0000000456", "holdings_hash": "holdings-b", "holdings_row_count": 1},
+    ])
+    calls: list[tuple[tuple[str, ...], tuple[str, ...]]] = []
+
+    def fake_reconcile(source_part, holdings_part):
+        calls.append((
+            tuple(sorted(source_part["cik"].astype(str).unique())),
+            tuple(sorted(holdings_part["cik"].astype(str).unique())),
+        ))
+        return pd.DataFrame(columns=sr.DETAIL_COLUMNS), pd.DataFrame(columns=sr.METRIC_COLUMNS)
+
+    monkeypatch.setattr(sr, "extract_bdc_source_facts_cached", lambda **_: (source_df, source_manifest))
+    monkeypatch.setattr(sr, "compute_bdc_holdings_hashes", lambda _: holdings_hashes)
+    monkeypatch.setattr(sr, "compute_reconciliation_logic_hash", lambda: "logic-a")
+    monkeypatch.setattr(sr, "_compute_override_hash", lambda: "override-a")
+    monkeypatch.setattr(sr, "reconcile_bdc_source_to_holdings", fake_reconcile)
+
+    _, _, status = sr.run_bdc_source_reconciliation_cached(unified_df=unified_df, force=True)
+
+    assert status.iloc[0]["run_mode"] == "force"
+    assert int(status.iloc[0]["dirty_cik_count"]) == 2
+    assert calls == [(("123",), ("123",)), (("456",), ("456",))]

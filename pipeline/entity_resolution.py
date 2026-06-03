@@ -13,6 +13,7 @@ Pipeline:
   7. Write entity_lookup.csv and enrich private_markets_holdings.csv
 """
 
+import json
 import logging
 import re
 import time
@@ -26,6 +27,7 @@ from rapidfuzz import fuzz
 
 from pipeline.config import (
     ENTITY_LOOKUP_FILE,
+    ENTITY_OVERRIDES_FILE,
     ENTITY_STATS_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     UNIFIED_HOLDINGS_FILE,
@@ -110,6 +112,61 @@ _OPAQUE_NUMERIC_ID_RE = re.compile(r"^\d{5,}\.\w{1,4}\.\w{2,4}$")
 
 # Trailing number/parenthetical: " 1", " 2", " (1)", " (2)"
 _TRAILING_NUMBER_RE = re.compile(r"\s+(?:\d+|\(\d+\))\s*$")
+
+# Garbage entity names: subtotal/category headers that leak into variant table
+_GARBAGE_ENTITY_NAMES_RE = re.compile(
+    r"^(?:investments?|debt investments?|equity investments?"
+    r"|first lien (?:debt|senior secured)|second lien (?:debt|senior secured)"
+    r"|subordinated debt|unsecured debt|senior secured"
+    r"|structured (?:products?|finance)|fund investments?"
+    r"|total|subtotal|net assets?|other investments?"
+    r"|portfolio investments?)$",
+    re.IGNORECASE,
+)
+
+# Minimum entity name length (names shorter than this are garbage)
+_MIN_ENTITY_NAME_LENGTH = 3
+
+# Numeric-suffix guard: when two names are identical after stripping digits
+# but differ in their digits, they are likely different series/vintages
+# (e.g., "CIFC 2019-1" vs "CIFC 2020-3", "Carlyle Partners VII" vs
+# "Carlyle Partners VIII").  Require a much higher score to merge.
+_DIGIT_STRIP_RE = re.compile(r"\d+")
+# Roman numerals as standalone tokens (i, ii, ..., xxxix, xl, etc.)
+_ROMAN_TOKEN_RE = re.compile(
+    r"\b(?:xl|xxx?(?:ix|iv|v?i{0,3})|xx?(?:ix|iv|v?i{0,3})|x?(?:ix|iv|v?i{0,3})|vi{0,3}|iv|i{1,3})\b",
+    re.IGNORECASE,
+)
+# Set to 100 to block merges entirely: if two names differ only by
+# numbers/Roman numerals, they are distinct series/vintages and should
+# never be fuzzy-merged regardless of score.
+_NUMERIC_SUFFIX_THRESHOLD = 100
+
+
+def _strip_numeric_tokens(name: str) -> str:
+    """Strip digits and Roman numeral tokens from a normalized name."""
+    s = _DIGIT_STRIP_RE.sub("", name)
+    s = _ROMAN_TOKEN_RE.sub("", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def _numeric_suffix_guard(name_a: str, name_b: str, threshold: int) -> int:
+    """Return the effective threshold for merging two names.
+
+    If the names are identical after stripping all digits and Roman
+    numerals but differ in their numeric/ordinal components, return
+    _NUMERIC_SUFFIX_THRESHOLD (95) to prevent merging different
+    series/vintages.  Otherwise return the caller's threshold unchanged.
+    """
+    stripped_a = _strip_numeric_tokens(name_a)
+    stripped_b = _strip_numeric_tokens(name_b)
+    if not stripped_a or not stripped_b:
+        return threshold
+    # If the non-numeric skeletons match but the original names are
+    # different, the difference is purely numeric/ordinal.
+    if stripped_a == stripped_b and name_a != name_b:
+        return max(threshold, _NUMERIC_SUFFIX_THRESHOLD)
+    return threshold
 
 
 def extract_company_name(issuer_name: str, source: str = "bdc") -> str:
@@ -333,6 +390,20 @@ def _build_variant_table(holdings_path: Path) -> pd.DataFrame:
         con.close()
 
     df["occurrence_count"] = df["occurrence_count"].astype(int)
+
+    # Filter out garbage entity names (subtotal/category headers)
+    pre_count = len(df)
+    garbage_mask = df["issuer_name"].apply(
+        lambda n: bool(_GARBAGE_ENTITY_NAMES_RE.match(n.strip())) if isinstance(n, str) else False
+    )
+    short_mask = df["issuer_name"].apply(
+        lambda n: len(n.strip()) < _MIN_ENTITY_NAME_LENGTH if isinstance(n, str) else True
+    )
+    df = df[~garbage_mask & ~short_mask].reset_index(drop=True)
+    removed = pre_count - len(df)
+    if removed > 0:
+        logger.info("  Filtered %d garbage/short entity names", removed)
+
     return df
 
 
@@ -427,7 +498,10 @@ def _fuzzy_cluster(
 ) -> pd.DataFrame:
     """Merge entities with similar normalised names using fuzzy matching.
 
-    Blocking: first 4 chars of normalized_name.
+    Two passes:
+      Pass 1: 4-char blocking key, threshold (default 85).
+      Pass 2: 3-char blocking key, higher threshold (threshold + 5, min 90),
+              smaller max_block_size (200), only unmerged entities.
     Matching: rapidfuzz.fuzz.token_sort_ratio >= threshold.
     Clustering: Union-Find (connected components).
     """
@@ -449,21 +523,21 @@ def _fuzzy_cluster(
     if len(entity_df) <= 1:
         return variants
 
-    # Build blocks by first 4 chars
+    uf = UnionFind()
+    total_comparisons = 0
+    total_merges = 0
+    numeric_blocked = 0
+
+    # --- Pass 1: 4-char blocking ---
     entity_df["block_key"] = entity_df["normalized_name"].str[:4]
     blocks = entity_df.groupby("block_key")["entity_num"].apply(list).to_dict()
-
-    uf = UnionFind()
-    comparisons = 0
-    merges = 0
 
     for block_key, members in blocks.items():
         if len(members) <= 1:
             continue
         if len(members) > max_block_size:
-            continue  # Skip oversized blocks
+            continue
 
-        # Get normalized names for this block
         block_data = entity_df[entity_df["entity_num"].isin(members)]
         names = dict(zip(block_data["entity_num"], block_data["normalized_name"]))
 
@@ -471,16 +545,68 @@ def _fuzzy_cluster(
         for i in range(len(member_list)):
             for j in range(i + 1, len(member_list)):
                 a, b = member_list[i], member_list[j]
-                comparisons += 1
+                total_comparisons += 1
                 score = fuzz.token_sort_ratio(names[a], names[b])
-                if score >= threshold:
+                effective = _numeric_suffix_guard(names[a], names[b], threshold)
+                if score >= effective:
                     uf.union(a, b)
-                    merges += 1
+                    total_merges += 1
+                elif effective > threshold:
+                    numeric_blocked += 1
 
-    if merges == 0:
+    pass1_merges = total_merges
+
+    # --- Pass 2: 3-char blocking (catches near-miss first-4-char differences) ---
+    # Higher threshold compensates for wider blocking; smaller block cap prevents explosion
+    pass2_threshold = max(threshold + 5, 90)
+    # Cap at 200 for wider 3-char blocks, but honor caller's smaller limit
+    pass2_max_block = min(200, max_block_size)
+
+    # Identify entities already merged in pass 1
+    merged_in_pass1 = set()
+    for comp_members in uf.components().values():
+        if len(comp_members) > 1:
+            merged_in_pass1.update(comp_members)
+
+    # Only consider entities not yet merged
+    unmerged_mask = ~entity_df["entity_num"].isin(merged_in_pass1)
+    unmerged_df = entity_df[unmerged_mask]
+
+    if len(unmerged_df) > 1:
+        unmerged_df = unmerged_df.copy()
+        unmerged_df["block_key_3"] = unmerged_df["normalized_name"].str[:3]
+        blocks_3 = unmerged_df.groupby("block_key_3")["entity_num"].apply(list).to_dict()
+
+        for block_key, members in blocks_3.items():
+            if len(members) <= 1:
+                continue
+            if len(members) > pass2_max_block:
+                continue
+
+            block_data = unmerged_df[unmerged_df["entity_num"].isin(members)]
+            names = dict(zip(block_data["entity_num"], block_data["normalized_name"]))
+
+            member_list = list(names.keys())
+            for i in range(len(member_list)):
+                for j in range(i + 1, len(member_list)):
+                    a, b = member_list[i], member_list[j]
+                    total_comparisons += 1
+                    score = fuzz.token_sort_ratio(names[a], names[b])
+                    effective = _numeric_suffix_guard(names[a], names[b], pass2_threshold)
+                    if score >= effective:
+                        uf.union(a, b)
+                        total_merges += 1
+                    elif effective > pass2_threshold:
+                        numeric_blocked += 1
+
+    if total_merges == 0:
         return variants
 
-    logger.info("  Fuzzy clustering: %d comparisons, %d merges", comparisons, merges)
+    pass2_merges = total_merges - pass1_merges
+    logger.info(
+        "  Fuzzy clustering: %d comparisons, %d merges (pass1=%d, pass2=%d), %d numeric-suffix blocked",
+        total_comparisons, total_merges, pass1_merges, pass2_merges, numeric_blocked,
+    )
 
     # Remap entity_nums: all members of a component get the same entity_num
     components = uf.components()
@@ -632,6 +758,119 @@ def _cross_source_link(
         variants.loc[mask, "entity_num"] = new_num
         variants.loc[mask, "canonical_name"] = new_name
         variants.loc[mask, "cluster_method"] = "cross_source"
+
+    return variants
+
+
+# ---------------------------------------------------------------------------
+# Step 5b: Manual entity overrides
+# ---------------------------------------------------------------------------
+
+def _apply_entity_overrides(
+    variants: pd.DataFrame,
+    overrides_path: Optional[Path] = None,
+) -> pd.DataFrame:
+    """Apply JSON-based entity merge and canonical name overrides.
+
+    For merges: union-find all listed variants together, set canonical name.
+    For canonical overrides: update canonical_name for matching (issuer_name, source) pairs.
+    Skips gracefully if file doesn't exist or is malformed.
+    """
+    path = overrides_path or ENTITY_OVERRIDES_FILE
+    if not path.exists():
+        return variants
+
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (json.JSONDecodeError, OSError) as exc:
+        logger.warning("Could not load entity overrides from %s: %s", path, exc)
+        return variants
+
+    if data.get("schema_version") != "entity-overrides.v1":
+        logger.warning("Unknown entity overrides schema: %s", data.get("schema_version"))
+        return variants
+
+    variants = variants.copy()
+    uf = UnionFind()
+    merge_count = 0
+
+    # Apply merge overrides
+    for merge in data.get("merges", []):
+        canonical_name = merge.get("canonical_name", "")
+        variant_specs = merge.get("variants", [])
+        if not variant_specs or not canonical_name:
+            continue
+
+        # Find entity_nums for each variant
+        entity_nums = []
+        for spec in variant_specs:
+            issuer = spec.get("issuer_name", "")
+            source = spec.get("source", "")
+            mask = (variants["issuer_name"] == issuer) & (variants["source"] == source)
+            matched = variants.loc[mask, "entity_num"]
+            if not matched.empty:
+                entity_nums.append(int(matched.iloc[0]))
+
+        if len(entity_nums) < 2:
+            continue
+
+        # Union all matched entity_nums
+        for i in range(1, len(entity_nums)):
+            uf.union(entity_nums[0], entity_nums[i])
+            merge_count += 1
+
+    # Apply UF merges
+    if merge_count > 0:
+        components = uf.components()
+        for root, members in components.items():
+            if len(members) <= 1:
+                continue
+            # Find the canonical name from the merge spec (first matching)
+            # by looking at which merge spec covers these entity_nums
+            best_num = min(members)  # deterministic pick
+            # Try to find a merge spec that covers these members
+            override_canonical = None
+            for merge in data.get("merges", []):
+                merge_nums = set()
+                for spec in merge.get("variants", []):
+                    issuer = spec.get("issuer_name", "")
+                    source = spec.get("source", "")
+                    mask = (variants["issuer_name"] == issuer) & (variants["source"] == source)
+                    matched = variants.loc[mask, "entity_num"]
+                    if not matched.empty:
+                        merge_nums.add(int(matched.iloc[0]))
+                if merge_nums & set(members):
+                    override_canonical = merge.get("canonical_name")
+                    break
+
+            for m in members:
+                if override_canonical:
+                    variants.loc[variants["entity_num"] == m, "canonical_name"] = override_canonical
+                variants.loc[variants["entity_num"] == m, "entity_num"] = best_num
+                variants.loc[variants["entity_num"] == m, "cluster_method"] = "override"
+
+    # Apply canonical name overrides
+    canonical_count = 0
+    for override in data.get("canonical_overrides", []):
+        issuer = override.get("issuer_name", "")
+        source = override.get("source", "")
+        new_canonical = override.get("canonical_name", "")
+        if not issuer or not new_canonical:
+            continue
+        mask = (variants["issuer_name"] == issuer) & (variants["source"] == source)
+        if mask.any():
+            # Update canonical_name for all variants sharing the same entity_num
+            entity_nums = variants.loc[mask, "entity_num"].unique()
+            for en in entity_nums:
+                variants.loc[variants["entity_num"] == en, "canonical_name"] = new_canonical
+            canonical_count += 1
+
+    if merge_count > 0 or canonical_count > 0:
+        logger.info(
+            "  Entity overrides: %d merge operations, %d canonical overrides",
+            merge_count, canonical_count,
+        )
 
     return variants
 
@@ -810,12 +1049,25 @@ def build_entity_lookup(
     logger.info("Step 5: Cross-source linking (threshold=%d)...", cross_source_threshold)
     t4 = time.time()
     variants = _cross_source_link(variants, threshold=cross_source_threshold)
-    entity_count_final = variants["entity_num"].nunique()
+    entity_count_xsource = variants["entity_num"].nunique()
     logger.info(
         "  %d entities after cross-source linking (%d merged) in %.1f s",
-        entity_count_final,
-        entity_count_fuzzy - entity_count_final,
+        entity_count_xsource,
+        entity_count_fuzzy - entity_count_xsource,
         time.time() - t4,
+    )
+
+    # Step 5b: Manual entity overrides
+    logger.info("")
+    logger.info("Step 5b: Applying entity overrides...")
+    t4b = time.time()
+    variants = _apply_entity_overrides(variants)
+    entity_count_final = variants["entity_num"].nunique()
+    logger.info(
+        "  %d entities after overrides (%d merged) in %.1f s",
+        entity_count_final,
+        entity_count_xsource - entity_count_final,
+        time.time() - t4b,
     )
 
     # Renumber entity_nums to be consecutive

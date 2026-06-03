@@ -695,6 +695,8 @@ def _process_all_quarters(
     # Save
     if not holdings.empty:
         holdings.to_csv(NPORT_HOLDINGS_FILE, index=False)
+        from pipeline.utils import write_parquet_companion
+        write_parquet_companion(NPORT_HOLDINGS_FILE)
         logger.info("Holdings saved: %d rows -> %s", len(holdings), NPORT_HOLDINGS_FILE.name)
     if not fund_info.empty:
         fund_info.to_csv(NPORT_FUND_INFO_FILE, index=False)
@@ -1093,6 +1095,8 @@ def extract_nport_holdings(
         # Re-save with liquidity data
         if not holdings.empty:
             holdings.to_csv(NPORT_HOLDINGS_FILE, index=False)
+            from pipeline.utils import write_parquet_companion
+            write_parquet_companion(NPORT_HOLDINGS_FILE)
         logger.info("  XML supplement complete (%.1f s)", time.time() - t_xml)
 
     # Summary

@@ -180,6 +180,24 @@ def test_source_row_coordinate_candidates_search_all_tables(monkeypatch, tmp_pat
     assert "POSITION_ROW" in target["classification_candidates"]
 
 
-def test_non_bdc_skips_html_evidence(monkeypatch, tmp_path):
+def test_unsupported_source_skips_html_evidence(monkeypatch, tmp_path):
     _patch_paths(monkeypatch, tmp_path)
-    assert evidence.build_html_soi_evidence(source="nport", cik="1", report_date="2025-06-30", accession="x") == []
+    assert evidence.build_html_soi_evidence(source="other", cik="1", report_date="2025-06-30", accession="x") == []
+
+
+def test_ncsr_source_uses_ncsr_cache(monkeypatch, tmp_path):
+    cache = tmp_path / "filings" / "ncsr_html"
+    monkeypatch.setattr(evidence.config, "NCSR_HTML_CACHE_DIR", cache)
+    accession = "0001-25-000006"
+    _write_html(
+        cache,
+        "1",
+        accession,
+        _soi_table([["NCSR Issuer", "Loan", "1", "1", "1", "2029", "10%", ""] for _ in range(6)]),
+    )
+
+    items = evidence.build_html_soi_evidence(source="ncsr", cik="1", report_date="2025-06-30", accession=accession, residual_names=["NCSR Issuer"])
+    by_id = {item["evidence_id"]: item["data"] for item in items}
+
+    assert by_id["html_artifact"]["status"] == "available"
+    assert "filings/ncsr_html/1/000125000006.html" in by_id["html_artifact"]["path"]

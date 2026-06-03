@@ -1313,6 +1313,32 @@ class TestPrepareBdc:
         result = _prepare_bdc(df)
         assert len(result) == 2
 
+    def test_position_key_preserves_issuer_for_class_units(self):
+        """Class-unit equity rows must not collapse to generic keys."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "CATBIRD NYC, LLC, Class A Units",
+             "cik": "123", "fair_value": 1396000, "shares_held": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        key = result.iloc[0]["position_key"]
+        assert "catbird" in key
+        assert key != "lass units"
+
+    def test_position_key_preserves_numbered_loan_tranches(self):
+        """Ares-style trailing loan numbers identify separate positions."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "North Haven Stack Buyer, LLC, First lien senior secured loan 1",
+             "cik": "0001287750", "fair_value": 1800000, "principal_amount": 1800000},
+            {"investment_identifier": "North Haven Stack Buyer, LLC, First lien senior secured loan 2",
+             "cik": "0001287750", "fair_value": 3500000, "principal_amount": 3500000},
+        ])
+        result = _prepare_bdc(df)
+        keys = set(result["position_key"])
+        assert len(keys) == 2
+        assert any(key.endswith("loan 1") for key in keys)
+        assert any(key.endswith("loan 2") for key in keys)
+
     def test_msd_hierarchy_leaf_rows_without_legal_suffix_are_kept(self):
         """MSD hierarchy rows are position leaves even when issuer lacks LLC/Inc."""
         df = self._make_bdc_df([
@@ -1954,6 +1980,46 @@ class TestPrepareNport:
         assert result.iloc[0]["asset_category"] == "LOAN"
         assert result.iloc[0]["issuer_category"] == "CORPORATE"
         assert result.iloc[0]["fair_value_level"] == "3"
+
+    def test_placeholder_issuer_and_cusip_do_not_make_placeholder_position_key(self):
+        df = self._make_nport_df([
+            {
+                "fair_value_level": "3",
+                "cik": "200",
+                "registrant_name": "Test Fund",
+                "issuer_name": "NC",
+                "issuer_title": "CHARGEPOINT Inc. Preferred F Shares",
+                "issuer_cusip": "NC",
+                "asset_cat": "EP",
+                "issuer_type": "CORP",
+                "currency_value": 900000,
+            },
+        ])
+        result = _prepare_nport(df)
+        assert result.iloc[0]["issuer_name"] == "CHARGEPOINT Inc. Preferred F Shares"
+        key = result.iloc[0]["position_key"]
+        assert "chargepoint" in key
+        assert key != "nc nc"
+
+    def test_issuer_cusip_is_not_entire_position_key(self):
+        df = self._make_nport_df([
+            {
+                "fair_value_level": "3",
+                "cik": "200",
+                "registrant_name": "Test Fund",
+                "issuer_name": "Global Medical Response",
+                "issuer_title": "First Lien Term Loan",
+                "issuer_cusip": "123456789",
+                "asset_cat": "LON",
+                "issuer_type": "CORP",
+                "currency_value": 900000,
+            },
+        ])
+        result = _prepare_nport(df)
+        key = result.iloc[0]["position_key"]
+        assert key != "123456789"
+        assert "global medical response" in key
+        assert "first lien term loan" in key
 
     def test_empty_after_filter(self):
         df = self._make_nport_df([
@@ -9477,6 +9543,190 @@ class TestWrapperNonPrivateMarketFiltering:
         result = _prepare_bdc(df)
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+
+# ---------------------------------------------------------------------------
+# Wrapper-authoritative staging: rescue/drop via wrapper disposition
+# ---------------------------------------------------------------------------
+
+class TestWrapperAuthoritativeStaging:
+    """Verify that wrapper disposition overrides global aggregate/hierarchy
+    heuristics in staging: *_position_leaf rescues, aggregate/*_rollup drops."""
+
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
+    _FAKE_CIK = "0009999999"
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def test_wrapper_leaf_rescued_from_aggregate_filter(self, monkeypatch):
+        """Row matching aggregate patterns is kept when wrapper says *_position_leaf."""
+        import pipeline.staging_bdc as staging_mod
+
+        def _fake_classify(cik, identifier):
+            from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS
+            result = {col: "" for col in WRAPPER_COLUMNS}
+            if "Total Senior Secured Debt" in str(identifier):
+                result["wrapper_disposition"] = "debt_position_leaf"
+            return result
+
+        monkeypatch.setattr(staging_mod, "supported_wrapper_ciks",
+                            lambda: (self._FAKE_CIK,))
+        monkeypatch.setattr(staging_mod, "classify_identifier", _fake_classify)
+
+        df = self._make_bdc_df([
+            # This identifier matches aggregate patterns ("Total ... Debt")
+            # but wrapper says it's a leaf position
+            {"investment_identifier": "Total Senior Secured Debt - Acme Corp First Lien Term Loan Interest Rate 8.00% Maturity 01/2028",
+             "cik": self._FAKE_CIK, "fair_value": 1000000,
+             "interest_rate": 0.08},
+            # Normal position for baseline
+            {"investment_identifier": "Beta LLC - Second Lien Term Loan",
+             "cik": self._FAKE_CIK, "fair_value": 500000,
+             "interest_rate": 0.06},
+        ])
+        result = _prepare_bdc(df)
+        identifiers = result["bdc_investment_identifier"].tolist()
+        # Both rows should survive: the "Total" row rescued by wrapper leaf
+        assert len(result) == 2
+        assert any("Total Senior Secured Debt" in str(i) for i in identifiers)
+
+    def test_wrapper_rollup_not_dropped_by_staging(self, monkeypatch):
+        """Wrapper rollup disposition does NOT drop rows in staging.
+
+        Rollup/aggregate wrapper drop was intentionally omitted because some
+        wrappers misclassify equity co-investments as debt_issuer_rollup
+        (e.g., Fidelity).  The global agg_filter and per-CIK category_marker_re
+        handle aggregate filtering instead.  Wrapper rollup rows that pass
+        global rules are kept.
+        """
+        import pipeline.staging_bdc as staging_mod
+
+        def _fake_classify(cik, identifier):
+            from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS
+            result = {col: "" for col in WRAPPER_COLUMNS}
+            if "Acme LLC" in str(identifier):
+                result["wrapper_disposition"] = "debt_issuer_rollup"
+            return result
+
+        monkeypatch.setattr(staging_mod, "supported_wrapper_ciks",
+                            lambda: (self._FAKE_CIK,))
+        monkeypatch.setattr(staging_mod, "classify_identifier", _fake_classify)
+
+        df = self._make_bdc_df([
+            # Wrapper says rollup but row has entity signals and FV
+            # -> global rules keep it, wrapper rollup does not override
+            {"investment_identifier": "Acme LLC - Equity Co-Investment",
+             "cik": self._FAKE_CIK, "fair_value": 1000000},
+            {"investment_identifier": "Beta Corp - First Lien Term Loan",
+             "cik": self._FAKE_CIK, "fair_value": 500000,
+             "interest_rate": 0.07},
+        ])
+        result = _prepare_bdc(df)
+        # Both rows survive: wrapper rollup does not drop
+        assert len(result) == 2
+
+    def test_global_aggregate_filter_still_drops_rollup_text(self, monkeypatch):
+        """Global agg_filter still drops rows matching aggregate patterns,
+        regardless of wrapper disposition."""
+        import pipeline.staging_bdc as staging_mod
+
+        def _fake_classify(cik, identifier):
+            from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS
+            result = {col: "" for col in WRAPPER_COLUMNS}
+            if "Total Investments" in str(identifier):
+                result["wrapper_disposition"] = "debt_category_rollup"
+            return result
+
+        monkeypatch.setattr(staging_mod, "supported_wrapper_ciks",
+                            lambda: (self._FAKE_CIK,))
+        monkeypatch.setattr(staging_mod, "classify_identifier", _fake_classify)
+
+        df = self._make_bdc_df([
+            # Global agg_filter matches "Total ... Investments"
+            {"investment_identifier": "Total Senior Secured First Lien Debt Investments",
+             "cik": self._FAKE_CIK, "fair_value": 50000000},
+            {"investment_identifier": "Gamma Inc. - Senior Secured First Lien Term Loan",
+             "cik": self._FAKE_CIK, "fair_value": 1000000,
+             "interest_rate": 0.09},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert "Gamma" in result.iloc[0]["issuer_name"]
+
+    def test_wrapper_unclassified_uses_global_rules(self, monkeypatch):
+        """Row matching aggregate patterns with unclassified disposition is dropped by global rules."""
+        import pipeline.staging_bdc as staging_mod
+
+        def _fake_classify(cik, identifier):
+            from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS
+            result = {col: "" for col in WRAPPER_COLUMNS}
+            if "Total Investments" in str(identifier):
+                result["wrapper_disposition"] = "debt_unclassified"
+            return result
+
+        monkeypatch.setattr(staging_mod, "supported_wrapper_ciks",
+                            lambda: (self._FAKE_CIK,))
+        monkeypatch.setattr(staging_mod, "classify_identifier", _fake_classify)
+
+        df = self._make_bdc_df([
+            # Global aggregate filter catches "Total Investments"
+            # Wrapper returns unclassified -> global rules still apply -> dropped
+            {"investment_identifier": "Total Investments",
+             "cik": self._FAKE_CIK, "fair_value": 100000000},
+            {"investment_identifier": "Delta Corp - Term Loan B",
+             "cik": self._FAKE_CIK, "fair_value": 2000000,
+             "interest_rate": 0.065},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert "Delta" in result.iloc[0]["issuer_name"]
+
+    def test_wrapper_leaf_rescued_from_prefix_hierarchy(self, monkeypatch):
+        """Row matching prefix_hierarchy filter is kept when wrapper says *_position_leaf."""
+        import pipeline.staging_bdc as staging_mod
+
+        def _fake_classify(cik, identifier):
+            from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS
+            result = {col: "" for col in WRAPPER_COLUMNS}
+            if "Senior Secured First Lien" in str(identifier):
+                result["wrapper_disposition"] = "debt_position_leaf"
+            return result
+
+        monkeypatch.setattr(staging_mod, "supported_wrapper_ciks",
+                            lambda: (self._FAKE_CIK,))
+        monkeypatch.setattr(staging_mod, "classify_identifier", _fake_classify)
+
+        df = self._make_bdc_df([
+            # This identifier might match prefix hierarchy patterns
+            # but wrapper says it's a leaf position
+            {"investment_identifier": "Senior Secured First Lien Debt Investments Epsilon Holdings Inc. Term Loan Interest Rate 7.50% Maturity 06/2027",
+             "cik": self._FAKE_CIK, "fair_value": 3000000,
+             "interest_rate": 0.075},
+            {"investment_identifier": "Zeta Partners LLC - Revolving Credit Facility",
+             "cik": self._FAKE_CIK, "fair_value": 1500000,
+             "interest_rate": 0.055},
+        ])
+        result = _prepare_bdc(df)
+        identifiers = result["bdc_investment_identifier"].tolist()
+        # Both should survive: the prefix-hierarchy row rescued by wrapper leaf
+        assert len(result) == 2
+        assert any("Senior Secured First Lien" in str(i) for i in identifiers)
 
 
 class TestApplyWrapperPositionKeys:

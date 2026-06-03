@@ -7,6 +7,7 @@ rebuilds from existing cached files on disk.
 Usage:
     python scripts/rebuild_outputs.py              # Rebuild everything
     python scripts/rebuild_outputs.py --unified     # Only unified holdings
+    python scripts/rebuild_outputs.py --entities    # Only entity resolution
     python scripts/rebuild_outputs.py --bdc-holdings # Only cached BDC XBRL holdings
     python scripts/rebuild_outputs.py --returns     # Only matching + returns
     python scripts/rebuild_outputs.py --pik-status  # Only current PIK status artifacts
@@ -71,6 +72,18 @@ def rebuild_income():
     logger.info("Fee uplift: %d rows in %.1f s", len(fee_uplift_df), time.time() - t1)
 
     return fund_income_df, fee_uplift_df
+
+
+def rebuild_entities():
+    """Rebuild entity resolution lookup from unified holdings."""
+    from pipeline.entity_resolution import build_entity_lookup
+
+    logger.info("=== Rebuilding entity resolution ===")
+    t0 = time.time()
+    variants = build_entity_lookup()
+    entity_count = variants["entity_num"].nunique()
+    logger.info("Entity resolution: %d entities in %.1f s", entity_count, time.time() - t0)
+    return variants
 
 
 def rebuild_returns():
@@ -362,6 +375,8 @@ def main():
                         help="Rebuild unified holdings only")
     parser.add_argument("--income", action="store_true",
                         help="Rebuild fund income + fee uplift only")
+    parser.add_argument("--entities", action="store_true",
+                        help="Rebuild entity resolution lookup only")
     parser.add_argument("--returns", action="store_true",
                         help="Rebuild position matches + index returns only")
     parser.add_argument("--pik-status", action="store_true",
@@ -394,7 +409,7 @@ def main():
 
     # If no flags, rebuild everything
     rebuild_all = not (
-        args.bdc_holdings or args.unified or args.income or args.returns
+        args.bdc_holdings or args.unified or args.entities or args.income or args.returns
         or args.pik_status or args.pik_proxy or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
         or args.tender_offers or args.prices
@@ -407,6 +422,9 @@ def main():
 
     if rebuild_all or args.unified:
         rebuild_unified()
+
+    if rebuild_all or args.entities:
+        rebuild_entities()
 
     if rebuild_all or args.income:
         rebuild_income()

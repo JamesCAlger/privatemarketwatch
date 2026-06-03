@@ -274,11 +274,32 @@ def detect_10k_periods(table_groups: list[list[int]], report_date: str) -> dict[
     return {report_date: group1, comp_date: group2}
 
 
-def _html_path(cik: str, accession: str) -> Path:
-    return config.BDC_HTML_CACHE_DIR / normalize_cik(cik).lstrip("0") / f"{accession.replace('-', '')}.html"
+def _html_source_config(source: str) -> tuple[Path, Path, tuple[str, ...], str] | None:
+    source_norm = normalize_text(source).lower()
+    if source_norm == "bdc":
+        return (
+            config.BDC_HTML_CACHE_DIR,
+            config.BDC_FILINGS_INDEX_FILE,
+            ("10-K", "10-K/A", "10-Q", "10-Q/A"),
+            "BDC",
+        )
+    if source_norm in {"ncsr", "nport", "interval", "interval_source"}:
+        return (
+            config.NCSR_HTML_CACHE_DIR,
+            config.NCSR_FILINGS_INDEX_FILE,
+            ("N-CSR", "N-CSRS", "N-CSR/A", "N-CSRS/A"),
+            "N-CSR",
+        )
+    return None
 
 
-def _load_filing_meta(cik: str, accession: str, report_date: str) -> dict[str, str]:
+def _html_path(source: str, cik: str, accession: str) -> Path:
+    source_config = _html_source_config(source)
+    cache_dir = source_config[0] if source_config else config.BDC_HTML_CACHE_DIR
+    return cache_dir / normalize_cik(cik).lstrip("0") / f"{accession.replace('-', '')}.html"
+
+
+def _load_filing_meta(source: str, cik: str, accession: str, report_date: str) -> dict[str, str]:
     meta = {
         "cik": normalize_cik(cik),
         "accession_number": accession,
@@ -287,7 +308,8 @@ def _load_filing_meta(cik: str, accession: str, report_date: str) -> dict[str, s
         "filing_date": "",
         "entity_name": "",
     }
-    path = config.BDC_FILINGS_INDEX_FILE
+    source_config = _html_source_config(source)
+    path = source_config[1] if source_config else config.BDC_FILINGS_INDEX_FILE
     if not path.exists():
         return meta
     try:
@@ -432,6 +454,17 @@ def _source_row_search_terms(source_row: dict[str, Any]) -> list[str]:
                 terms.append(" ".join(entity_words[-n:]))
 
     for text in [raw, normalized]:
+        prefix_trimmed = re.split(r"(?i)\b(?:Reference Rate|Interest Rate|Maturity Date|Initial Acquisition Date)\b", text, maxsplit=1)[0]
+        if prefix_trimmed and prefix_trimmed != text:
+            terms.append(prefix_trimmed.strip(" ,-"))
+            prefix_words = prefix_trimmed.split()
+            for n in [6, 5, 4, 3, 2]:
+                if len(prefix_words) >= n:
+                    tail = " ".join(prefix_words[-n:])
+                    tail = _GENERIC_TERM_RE.sub(" ", tail)
+                    tail = re.sub(r"\s+", " ", tail).strip(" ,-")
+                    if len(tail) >= 5:
+                        terms.append(tail)
         cleaned = _GENERIC_TERM_RE.sub(" ", text)
         cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,-")
         if len(cleaned) >= 5:
@@ -450,7 +483,9 @@ def _source_row_search_terms(source_row: dict[str, Any]) -> list[str]:
 
     deduped: list[str] = []
     for term in terms:
-        if _norm_key(term) and _norm_key(term) not in {_norm_key(t) for t in deduped}:
+        key = _norm_key(term)
+        alpha_tokens = [tok for tok in _TOKEN_RE.findall(key) if re.search(r"[a-z]", tok)]
+        if key and len(alpha_tokens) >= 2 and key not in {_norm_key(t) for t in deduped}:
             deduped.append(term)
     return deduped[:8]
 
@@ -584,18 +619,21 @@ def build_html_soi_evidence(
     source_identifiers: Iterable[str] = (),
     source_rows: Iterable[dict[str, Any]] = (),
     xbrl_rows_same_accession: Iterable[dict[str, Any]] = (),
+    allow_html_download: bool = False,
     max_rows: int = 40,
 ) -> list[dict[str, Any]]:
-    """Build shared cached-HTML evidence items for a BDC accession."""
-    if normalize_text(source).lower() != "bdc":
+    """Build shared cached-HTML evidence items for a filing accession."""
+    source_config = _html_source_config(source)
+    if source_config is None:
         return []
+    _, _, doc_types, source_label = source_config
 
     acc = normalize_text(accession)
     if not acc:
         return [
             _evidence_item(
                 "html_artifact",
-                "Cached BDC HTML filing could not be selected because no accession number was available.",
+                f"Cached {source_label} HTML filing could not be selected because no accession number was available.",
                 {
                     "status": "missing_accession",
                     "cik": normalize_cik(cik),
@@ -605,23 +643,42 @@ def build_html_soi_evidence(
             )
         ]
 
-    meta = _load_filing_meta(cik, acc, report_date)
+    meta = _load_filing_meta(source, cik, acc, report_date)
     if form_type:
         meta["form_type"] = form_type
-    html_path = _html_path(cik, acc)
+    html_path = _html_path(source, cik, acc)
     if not html_path.exists():
-        return [
-            _evidence_item(
-                "html_artifact",
-                "Cached BDC HTML filing was not found; this is explicit missing evidence, not a download request.",
-                {
-                    "status": "missing_cached_html",
-                    "path": _display_path(html_path),
-                    "sha256": "",
-                    **meta,
-                },
-            )
-        ]
+        if allow_html_download:
+            try:
+                from pipeline.edgar_client import EdgarClient
+
+                client = EdgarClient()
+                url = client.resolve_filing_document_url(
+                    normalize_cik(cik),
+                    acc,
+                    doc_types=doc_types,
+                )
+                if url:
+                    client.download_file(url, html_path)
+            except Exception:
+                pass
+        if html_path.exists():
+            # Continue into normal cached parsing path after opt-in download.
+            pass
+        else:
+            status = "missing_cached_html_download_allowed" if allow_html_download else "missing_cached_html"
+            return [
+                _evidence_item(
+                    "html_artifact",
+                    f"Cached {source_label} HTML filing was not found; download was attempted only when explicitly allowed.",
+                    {
+                        "status": status,
+                        "path": _display_path(html_path),
+                        "sha256": "",
+                        **meta,
+                    },
+                )
+            ]
 
     raw_html = html_path.read_text(encoding="utf-8", errors="replace")
     tables = _extract_tables(raw_html)
@@ -647,7 +704,7 @@ def build_html_soi_evidence(
     evidence = [
         _evidence_item(
             "html_artifact",
-            "Cached BDC HTML filing artifact used for coordinate-level review evidence.",
+            f"Cached {source_label} HTML filing artifact used for coordinate-level review evidence.",
             {
                 "status": "available",
                 "path": _display_path(html_path),

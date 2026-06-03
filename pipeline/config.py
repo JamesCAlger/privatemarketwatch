@@ -141,7 +141,8 @@ UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 # Manual row-level corrections overlay (checked into data/overrides/)
 ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
 
-# Entity resolution outputs
+# Entity resolution overrides and outputs
+ENTITY_OVERRIDES_FILE = OVERRIDES_DIR / "entity_overrides.json"
 ENTITY_LOOKUP_FILE = OUTPUT_DIR / "entity_lookup.csv"
 ENTITY_STATS_FILE = OUTPUT_DIR / "entity_resolution_stats.csv"
 
@@ -214,6 +215,12 @@ POSITION_ID_EDGES_FILE = OUTPUT_DIR / "position_id_edges.csv"
 POSITION_MATCH_COVERAGE_FILE = OUTPUT_DIR / "position_match_coverage.csv"
 POSITION_MATCH_UNMATCHED_SUMMARY_FILE = OUTPUT_DIR / "position_match_unmatched_summary.csv"
 POSITION_MATCH_RESIDUALS_FILE = OUTPUT_DIR / "position_match_residuals.csv"
+
+# Oracle check outputs
+ORACLE_OUTPUT_DIR = OUTPUT_DIR / "oracle"
+ORACLE_CHECK_RESULTS_FILE = ORACLE_OUTPUT_DIR / "check_results.csv"
+ORACLE_CHECK_FAILURES_FILE = ORACLE_OUTPUT_DIR / "check_failures.csv"
+ORACLE_SUMMARY_MD_FILE = ORACLE_OUTPUT_DIR / "oracle_summary.md"
 
 # V1 report-only validation rules engine
 VALIDATION_RULES_AGGREGATE_FILE = OUTPUT_DIR / "validation_rules_aggregate.csv"

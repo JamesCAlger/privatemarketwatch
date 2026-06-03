@@ -968,6 +968,8 @@ def _parse_all_filings(filings_index: pd.DataFrame) -> pd.DataFrame:
     # Use completeness-aware selection so sparse context rows do not discard FV.
     combined = _deduplicate_bdc_holdings(combined)
     combined.to_csv(BDC_HOLDINGS_FILE, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(BDC_HOLDINGS_FILE)
     logger.info(
         "Holdings saved: %d total rows -> %s",
         len(combined), BDC_HOLDINGS_FILE.name,
@@ -1019,6 +1021,8 @@ def rebuild_cached_bdc_holdings(
 
     holdings = _deduplicate_bdc_holdings(pd.DataFrame(records))
     holdings.to_csv(BDC_HOLDINGS_FILE, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(BDC_HOLDINGS_FILE)
     logger.info(
         "Cached BDC holdings rebuilt: %d rows from %d filings -> %s",
         len(holdings), parsed, BDC_HOLDINGS_FILE.name,
