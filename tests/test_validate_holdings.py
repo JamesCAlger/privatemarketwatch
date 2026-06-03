@@ -4002,3 +4002,144 @@ class TestNonPrivateMarketDisagreement:
         # "liquidity fund" IS in global _MONEY_MARKET_KEYWORDS -> staging_only
         staging_only_rows = source_rows[source_rows["non_private_market_disagreement"] == "staging_only"]
         assert len(staging_only_rows) > 0
+
+
+class TestWrapperStagingDiagnostics:
+    """Verify the 5 additional wrapper-vs-staging diagnostic columns."""
+
+    def test_aggregate_detection_wrapper_only(self, monkeypatch):
+        """Wrapper says aggregate on entity-signal row; staging skips due to entity guard."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Alpha LLC Total Investments",
+        }])
+        output = _make_bdc_output([{}])
+
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            result["wrapper_disposition"] = "aggregate"
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_rows = detail[detail["source_row_id"] != ""]
+        assert len(source_rows) > 0
+        flagged = source_rows[source_rows["aggregate_detection_disagreement"] == "wrapper_only"]
+        assert len(flagged) > 0
+
+    def test_aggregate_detection_staging_only(self, monkeypatch):
+        """Staging detects aggregate on a row where wrapper says position leaf."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Total Software",
+        }])
+        output = _make_bdc_output([{}])
+
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            result["wrapper_disposition"] = "debt_position_leaf"
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_rows = detail[detail["source_row_id"] != ""]
+        assert len(source_rows) > 0
+        flagged = source_rows[source_rows["aggregate_detection_disagreement"] == "staging_only"]
+        assert len(flagged) > 0
+
+    def test_family_vs_asset_category_mismatch(self, monkeypatch):
+        """Wrapper says debt but staging classifies as EQUITY_COMMON."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Acme Corp - First Lien Term Loan",
+        }])
+        output = _make_bdc_output([{
+            "asset_category": "EQUITY_COMMON",
+        }])
+
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            result["wrapper_disposition"] = "debt_position_leaf"
+            result["wrapper_family"] = "debt"
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        matched = detail[(detail["source_row_id"] != "") & (detail["output_row_id"] != "")]
+        assert len(matched) > 0
+        flagged = matched[matched["family_vs_asset_category_disagreement"] == "wrapper_debt_vs_EQUITY_COMMON"]
+        assert len(flagged) > 0
+
+    def test_hierarchy_parse_wrapper_rollup(self, monkeypatch):
+        """Wrapper says rollup but staging does not flag as hierarchy header."""
+        source = _make_bdc_source([{
+            "investment_identifier": "Acme Corp - First Lien Term Loan",
+        }])
+        output = _make_bdc_output([{}])
+
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            result["wrapper_disposition"] = "debt_issuer_rollup"
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_rows = detail[detail["source_row_id"] != ""]
+        assert len(source_rows) > 0
+        flagged = source_rows[source_rows["hierarchy_parse_disagreement"] == "wrapper_rollup_staging_not_header"]
+        assert len(flagged) > 0
+
+    def test_wrapper_leaf_staging_excluded_affiliation_dedup(self, monkeypatch):
+        """Wrapper says leaf but staging excludes via affiliation dedup."""
+        # Two source rows with same FV: row 1 matches output, row 2 does not.
+        # Row 2 is caught by source_affiliation_dupes.
+        source = _make_bdc_source([
+            {
+                "investment_identifier": "Acme Corp - First Lien Term Loan",
+                "dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+                "fair_value": "1000000",
+            },
+            {
+                "investment_identifier": "Beta LLC - Senior Secured",
+                "dimensions_raw": "investmentidentifier=Beta LLC - Senior Secured",
+                "fair_value": "1000000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Acme Corp - First Lien Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Acme Corp - First Lien Term Loan",
+            "fair_value": "1000000",
+        }])
+
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            id_col = kwargs.get("identifier_col", "investment_identifier")
+            if id_col in result.columns:
+                mask = result[id_col].str.contains("Beta", na=False)
+                result.loc[mask, "wrapper_disposition"] = "debt_position_leaf"
+                result.loc[~mask, "wrapper_disposition"] = ""
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+        detail, _metrics = reconcile_bdc_source_to_holdings(source, output)
+        beta_rows = detail[detail["raw_investment_identifier"].str.contains("Beta", na=False)]
+        assert len(beta_rows) > 0
+        flagged = beta_rows[beta_rows["wrapper_leaf_staging_excluded"] == "affiliation_dedup"]
+        assert len(flagged) > 0

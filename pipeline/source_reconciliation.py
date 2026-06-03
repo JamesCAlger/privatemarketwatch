@@ -98,6 +98,11 @@ DETAIL_COLUMNS = [
     "mismatched_fields", "issuer_name", "instrument_description",
     "index_classification", "asset_category", "issuer_category",
     "non_private_market_disagreement",
+    "aggregate_detection_disagreement",
+    "hierarchy_parse_disagreement",
+    "identifier_normalization_impact",
+    "family_vs_asset_category_disagreement",
+    "wrapper_leaf_staging_excluded",
     "evidence",
 ]
 
@@ -1276,6 +1281,38 @@ def reconcile_bdc_source_to_holdings(
             FROM source_ranked
             LEFT JOIN aggregate_override_matches aom
               ON source_ranked.source_row_id = aom.source_row_id
+        ), source_with_diagnostics AS (
+            SELECT *,
+                -- Aggregate detection entity guard asymmetry
+                CASE
+                    WHEN COALESCE(source_wrapper_disposition, '') = 'aggregate'
+                         AND NOT is_aggregate_candidate
+                        THEN 'wrapper_only'
+                    WHEN is_aggregate_candidate
+                         AND COALESCE(source_wrapper_disposition, '') NOT IN ('', 'aggregate', 'non_private_market')
+                         AND NOT (COALESCE(source_wrapper_disposition, '') LIKE '%_rollup')
+                        THEN 'staging_only'
+                    ELSE ''
+                END AS aggregate_detection_disagreement,
+                -- Hierarchy parsing conflict
+                CASE
+                    WHEN COALESCE(source_wrapper_disposition, '') LIKE '%_rollup'
+                         AND NOT is_hierarchy_header
+                         AND NOT is_aggregate_candidate
+                        THEN 'wrapper_rollup_staging_not_header'
+                    WHEN is_hierarchy_header
+                         AND COALESCE(source_wrapper_disposition, '') LIKE '%_position_leaf'
+                        THEN 'staging_header_wrapper_leaf'
+                    ELSE ''
+                END AS hierarchy_parse_disagreement,
+                -- Identifier normalization divergence
+                CASE
+                    WHEN COALESCE(source_wrapper_disposition, '') != ''
+                         AND lower_id != lower(trim(CAST(raw_investment_identifier AS VARCHAR)))
+                        THEN 'prefix_stripped'
+                    ELSE ''
+                END AS identifier_normalization_impact
+            FROM source_classified
         ), source_duplicate_marked AS (
             SELECT *,
                 ROW_NUMBER() OVER (
@@ -1299,7 +1336,7 @@ def reconcile_bdc_source_to_holdings(
                         length(COALESCE(staging_normalized_investment_identifier, '')),
                         source_row_id
                 ) AS canonical_source_row_id
-            FROM source_classified
+            FROM source_with_diagnostics
             WHERE source_exclusion_status = ''
               AND NULLIF(trim(staging_normalized_investment_identifier), '') IS NOT NULL
         ), source_self_referential_subtotals AS (
@@ -1329,7 +1366,7 @@ def reconcile_bdc_source_to_holdings(
                     ELSE ''
                 END AS duplicate_status,
                 COALESCE(d.canonical_source_row_id, s.source_row_id) AS canonical_source_row_id
-            FROM source_classified s
+            FROM source_with_diagnostics s
             LEFT JOIN source_duplicate_marked d
               ON s.source_row_id = d.source_row_id
         ), output_prepared AS (
@@ -2267,6 +2304,42 @@ def reconcile_bdc_source_to_holdings(
                 COALESCE(o.asset_category, '') AS asset_category,
                 COALESCE(o.issuer_category, '') AS issuer_category,
                 COALESCE(s.non_private_market_disagreement, '') AS non_private_market_disagreement,
+                COALESCE(s.aggregate_detection_disagreement, '') AS aggregate_detection_disagreement,
+                COALESCE(s.hierarchy_parse_disagreement, '') AS hierarchy_parse_disagreement,
+                COALESCE(s.identifier_normalization_impact, '') AS identifier_normalization_impact,
+                -- Family vs asset_category mismatch
+                CASE
+                    WHEN m.source_row_id IS NULL THEN ''
+                    WHEN COALESCE(s.source_wrapper_family, '') IN ('', 'mixed') THEN ''
+                    WHEN COALESCE(o.asset_category, '') = '' THEN ''
+                    WHEN s.source_wrapper_family = 'debt'
+                         AND o.asset_category NOT IN ('LOAN', 'BOND', 'CLO_EQUITY', 'OTHER_DEBT', 'OTHER')
+                        THEN 'wrapper_debt_vs_' || o.asset_category
+                    WHEN s.source_wrapper_family = 'equity'
+                         AND o.asset_category NOT IN ('EQUITY_COMMON', 'EQUITY_PREFERRED', 'FUND', 'OTHER')
+                        THEN 'wrapper_equity_vs_' || o.asset_category
+                    WHEN s.source_wrapper_family = 'warrant'
+                         AND o.asset_category NOT IN ('WARRANT', 'OTHER')
+                        THEN 'wrapper_warrant_vs_' || o.asset_category
+                    ELSE ''
+                END AS family_vs_asset_category_disagreement,
+                -- Wrapper says leaf but staging excluded
+                CASE
+                    WHEN COALESCE(s.source_wrapper_disposition, '') LIKE '%_position_leaf'
+                         AND m.source_row_id IS NULL
+                         AND sad.source_row_id IS NOT NULL
+                        THEN 'affiliation_dedup'
+                    WHEN COALESCE(s.source_wrapper_disposition, '') LIKE '%_position_leaf'
+                         AND m.source_row_id IS NULL
+                         AND COALESCE(s.is_hierarchy_header, false)
+                         AND NOT COALESCE(s.is_aggregate_candidate, false)
+                        THEN 'hierarchy_header'
+                    WHEN COALESCE(s.source_wrapper_disposition, '') LIKE '%_position_leaf'
+                         AND m.source_row_id IS NULL
+                         AND COALESCE(s.is_bad_issuer_candidate, false)
+                        THEN 'bad_issuer_name'
+                    ELSE ''
+                END AS wrapper_leaf_staging_excluded,
                 CASE
                     WHEN s.source_exclusion_status != '' THEN s.source_exclusion_status
                     WHEN s.duplicate_status != '' THEN
@@ -2395,6 +2468,11 @@ def reconcile_bdc_source_to_holdings(
                 o.issuer_name, o.instrument_description,
                 o.index_classification, o.asset_category, o.issuer_category,
                 '' AS non_private_market_disagreement,
+                '' AS aggregate_detection_disagreement,
+                '' AS hierarchy_parse_disagreement,
+                '' AS identifier_normalization_impact,
+                '' AS family_vs_asset_category_disagreement,
+                '' AS wrapper_leaf_staging_excluded,
                 'pipeline BDC row has no matching current-period source fact' AS evidence
             FROM output_prepared o
             LEFT JOIN all_matches m ON o.output_row_id = m.output_row_id
@@ -2414,17 +2492,24 @@ def reconcile_bdc_source_to_holdings(
     metrics = build_source_reconciliation_metrics(detail)
     con.close()
 
-    # Log non-private-market filter disagreements between wrapper and staging
-    if "non_private_market_disagreement" in detail.columns:
-        _disagreements = detail[detail["non_private_market_disagreement"] != ""]
-        if len(_disagreements) > 0:
-            _wrapper_only = len(_disagreements[_disagreements["non_private_market_disagreement"] == "wrapper_only"])
-            _staging_only = len(_disagreements[_disagreements["non_private_market_disagreement"] == "staging_only"])
-            logger.warning(
-                "Non-private-market filter disagreement: %d rows "
-                "(wrapper_only=%d, staging_only=%d)",
-                len(_disagreements), _wrapper_only, _staging_only,
-            )
+    # Log wrapper-vs-staging diagnostic disagreements
+    _diag_cols = [
+        "non_private_market_disagreement",
+        "aggregate_detection_disagreement",
+        "hierarchy_parse_disagreement",
+        "identifier_normalization_impact",
+        "family_vs_asset_category_disagreement",
+        "wrapper_leaf_staging_excluded",
+    ]
+    for col in _diag_cols:
+        if col in detail.columns:
+            _flags = detail[detail[col] != ""]
+            if len(_flags) > 0:
+                _vals = _flags[col].value_counts().to_dict()
+                logger.warning(
+                    "%s: %d rows (%s)", col, len(_flags),
+                    ", ".join(f"{v}={c}" for v, c in _vals.items()),
+                )
 
     return detail[DETAIL_COLUMNS], metrics[METRIC_COLUMNS]
 
