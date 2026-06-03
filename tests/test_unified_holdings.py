@@ -48,6 +48,7 @@ from pipeline.staging_bdc import (
     _reclassify_named_fund_positions,
 )
 from pipeline.staging_nport import _prepare_nport
+from pipeline.unified_holdings import _apply_wrapper_position_keys
 from pipeline.unified_holdings import (
     _apply_universe_gate,
     _apply_row_corrections,
@@ -60,6 +61,9 @@ from pipeline.unified_holdings import (
     build_unified_holdings,
     UNIFIED_COLUMNS,
 )
+
+SLOW_INTEGRATION_MARKS = [pytest.mark.slow, pytest.mark.integration]
+SLOW_STAGING_SQL_MARKS = [pytest.mark.slow, pytest.mark.staging_sql]
 
 
 # ---------------------------------------------------------------------------
@@ -1267,6 +1271,8 @@ class TestReclassifyNamedFundPositions:
 # ---------------------------------------------------------------------------
 
 class TestPrepareBdc:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     def _make_bdc_df(self, rows):
         """Helper to create a minimal BDC DataFrame."""
         cols = [
@@ -1726,6 +1732,8 @@ class TestPrepareBdc:
 # ---------------------------------------------------------------------------
 
 class TestAmendmentDedup:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Test that _prepare_bdc keeps only the latest filing per CIK+report_date+form_family."""
 
     def _make_bdc_df(self, rows):
@@ -1889,6 +1897,8 @@ class TestAmendmentDedup:
 # ---------------------------------------------------------------------------
 
 class TestPrepareNport:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     def _make_nport_df(self, rows):
         """Helper to create a minimal N-PORT DataFrame."""
         cols = [
@@ -2097,6 +2107,8 @@ class TestPrepareNport:
 # ---------------------------------------------------------------------------
 
 class TestTextEnrichment:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for BDC text-based enrichment of reference_rate_type and maturity_date."""
 
     def _make_bdc_df(self, rows):
@@ -2320,6 +2332,8 @@ class TestTextEnrichment:
 # ---------------------------------------------------------------------------
 
 class TestBuildUnifiedHoldings:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     def _make_bdc_df(self):
         return pd.DataFrame([
             {
@@ -2480,6 +2494,8 @@ class TestBuildUnifiedHoldings:
 # ---------------------------------------------------------------------------
 
 class TestEntityEnrichment:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Tests for entity_id population via entity_lookup join."""
 
     def _make_bdc_df(self):
@@ -2625,6 +2641,8 @@ class TestEntityEnrichment:
 # ---------------------------------------------------------------------------
 
 class TestIndustryEnrichment:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Tests for extracted_industry population via identifier_extraction_lookup join."""
 
     def _make_bdc_df(self):
@@ -2747,6 +2765,8 @@ class TestIndustryEnrichment:
 # ---------------------------------------------------------------------------
 
 class TestNewNportUnifiedColumns:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for nport_is_default, nport_are_interest_payments_in_arrears, etc."""
 
     def _make_nport_df(self, rows):
@@ -2912,6 +2932,8 @@ class TestBareLeakedHeaders:
 
 
 class TestBareLeakedHeadersSqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Verify new aggregate entries work through _prepare_bdc SQL pipeline."""
 
     def _make_bdc_df(self, rows):
@@ -3198,6 +3220,8 @@ class TestParseBdcIdentifierPipeFormat:
 # ---------------------------------------------------------------------------
 
 class TestIndustryPrefixSqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Verify industry-prefix and pipe-format parsing through full SQL pipeline."""
 
     def _make_bdc_df(self, rows):
@@ -3515,6 +3539,8 @@ class TestNormalizeRate:
 
 
 class TestRateNormalizationSqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Verify rate normalization through _prepare_bdc SQL pipeline."""
 
     def _make_bdc_df(self, rows):
@@ -3643,6 +3669,8 @@ class TestParseBdcIdentifierAffiliationPipe:
 
 
 class TestPipeFormatSqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Verify pipe-format direction fix through _prepare_bdc SQL pipeline."""
 
     def _make_bdc_df(self, rows):
@@ -3744,6 +3772,8 @@ class TestExpandedSubtotalFiltering:
 
 
 class TestExpandedSubtotalSqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Verify expanded subtotals are filtered in _prepare_bdc SQL pipeline."""
 
     def _make_bdc_df(self, rows):
@@ -3780,6 +3810,8 @@ class TestExpandedSubtotalSqlPath:
 # ---------------------------------------------------------------------------
 
 class TestNportNullFvlAndHedgeFund:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for NULL fair_value_level inclusion and hedge fund exclusion."""
 
     def _make_nport_df(self, rows):
@@ -3908,6 +3940,8 @@ class TestNportNullFvlAndHedgeFund:
 
 
 class TestNportFundDetection:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for N-PORT fund-like issuer name reclassification."""
 
     def _make_nport_df(self, rows):
@@ -4123,6 +4157,8 @@ class TestNportFundDetection:
 # ---------------------------------------------------------------------------
 
 class TestRateCap:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for N-PORT interest rate cap at 50%."""
 
     def _make_nport_df(self, rows):
@@ -4190,6 +4226,8 @@ class TestRateCap:
 # ---------------------------------------------------------------------------
 
 class TestNameNormalization:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for issuer name normalization in BDC and N-PORT preparation."""
 
     def _make_bdc_df(self, rows):
@@ -4281,6 +4319,8 @@ class TestNameNormalization:
 # ---------------------------------------------------------------------------
 
 class TestCostProxy:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Tests for first-observed fair value as N-PORT cost proxy."""
 
     def _make_bdc_df(self, rows):
@@ -4415,6 +4455,8 @@ class TestCostProxy:
 
 
 class TestSharesNormalization:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Tests for shares_held power-of-10 correction in build_unified_holdings."""
 
     def _make_nport_df(self, rows):
@@ -4624,6 +4666,8 @@ class TestSharesNormalization:
 # ---------------------------------------------------------------------------
 
 class TestThreePipeFormatDetection:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for distinguishing 3-pipe sub-formats via legal suffix and
     instrument keyword heuristics in the SQL path."""
 
@@ -6148,6 +6192,8 @@ class TestIsBadIssuerName:
 
 
 class TestBadIssuerNameInPrepareBdc:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Integration test: bad issuer names filtered in _prepare_bdc."""
 
     def _make_bdc_df(self, rows):
@@ -6196,6 +6242,8 @@ class TestBadIssuerNameInPrepareBdc:
 # ---------------------------------------------------------------------------
 
 class TestNportNegativeFvFilter:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for negative fair_value and NULL fair_value filtering in _prepare_nport."""
 
     def _make_nport_df(self, rows):
@@ -6257,6 +6305,8 @@ class TestNportNegativeFvFilter:
 # ---------------------------------------------------------------------------
 
 class TestSubsidiaryFlag:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for is_subsidiary detection in _prepare_bdc."""
 
     def _make_bdc_row(self, **overrides):
@@ -6350,6 +6400,8 @@ class TestSubsidiaryFlag:
 # ---------------------------------------------------------------------------
 
 class TestSubsidiaryDedup:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Tests for within-filing subsidiary dedup in build_unified_holdings."""
 
     def _make_bdc_df(self, rows):
@@ -6498,6 +6550,8 @@ class TestSubsidiaryDedup:
 # ---------------------------------------------------------------------------
 
 class TestDimensionPathDedup:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Tests for BDC-only dimension-path duplicate handling."""
 
     def _make_bdc_df(self, rows):
@@ -6721,6 +6775,8 @@ class TestDimensionPathDedup:
 
 
 class TestAffiliationPrefixStrip:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for affiliation prefix/suffix stripping in _prepare_bdc()."""
 
     def _make_bdc_df(self, rows):
@@ -6801,6 +6857,8 @@ class TestAffiliationPrefixStrip:
 
 
 class TestAffiliationDedup:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Tests for affiliation-axis dedup in _prepare_bdc()."""
 
     def _make_bdc_df(self, rows):
@@ -7558,6 +7616,8 @@ def test_total_investments_at_fair_value_is_aggregate_header():
 # ---------------------------------------------------------------------------
 
 class TestEquityPrincipalAmountNulled:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Equity positions should have principal_amount = NULL in unified output.
 
     XBRL parser sometimes maps non-dollar facts (shares, percentages) to
@@ -7661,6 +7721,8 @@ class TestEquityPrincipalAmountNulled:
         assert float(row["principal_amount"]) == 1000000.0
 
 
+@pytest.mark.slow
+@pytest.mark.staging_sql
 def test_prepare_bdc_converts_non_usd_principal_with_reference_fx(tmp_path, monkeypatch):
     fx_file = tmp_path / "fx_rates.csv"
     fx_file.write_text(
@@ -7710,6 +7772,8 @@ def test_prepare_bdc_converts_non_usd_principal_with_reference_fx(tmp_path, monk
     assert row["cost_currency"] == "USD"
 
 
+@pytest.mark.slow
+@pytest.mark.staging_sql
 def test_prepare_bdc_flags_missing_reference_fx(tmp_path, monkeypatch):
     fx_file = tmp_path / "fx_rates.csv"
     fx_file.write_text(
@@ -7754,6 +7818,8 @@ def test_prepare_bdc_flags_missing_reference_fx(tmp_path, monkeypatch):
     assert row["principal_fx_status"] == "missing_reference_fx"
 
 
+@pytest.mark.slow
+@pytest.mark.staging_sql
 def test_prepare_nport_converts_non_usd_balance_with_exchange_rate():
     cols = [
         "accession_number", "holding_id", "issuer_name", "issuer_lei",
@@ -8020,6 +8086,8 @@ class TestPctPrefixParsing:
 
 
 class TestPctPrefixSqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Integration tests verifying pct-prefix parsing through the SQL path."""
 
     def _run_prepare_bdc(
@@ -8193,6 +8261,8 @@ class TestPctPrefixSqlPath:
 
 
 class TestGSPrivateCreditSqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """GS Private Credit (0001920145) Reference Rate / bare Maturity rescue."""
 
     def _run_prepare_bdc(
@@ -8428,6 +8498,8 @@ class TestGSPrivateCreditSqlPath:
 
 
 class TestCrescentHierarchySqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Crescent-family identifiers should parse as real leaf positions."""
 
     def _run_prepare_bdc(self, rows):
@@ -8528,6 +8600,8 @@ class TestCrescentHierarchySqlPath:
 # ---------------------------------------------------------------------------
 
 class TestRateBoundary50SqlPath:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Rate=50 is implausible as percentage; treated as bps /100 = 0.50."""
 
     def _make_bdc_df(self, rows):
@@ -8582,6 +8656,8 @@ class TestRateBoundary50SqlPath:
 # ---------------------------------------------------------------------------
 
 class TestMaturitySentinel2099:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Maturity year 2099 (perpetual sentinel) is nullified."""
 
     def _make_bdc_df(self, rows):
@@ -8637,6 +8713,8 @@ class TestMaturitySentinel2099:
 # ---------------------------------------------------------------------------
 
 class TestCusipPlaceholderNullification:
+    pytestmark = SLOW_INTEGRATION_MARKS
+
     """Placeholder CUSIPs (999999999, 000000000) nullified in output."""
 
     def _make_nport_raw(self, rows):
@@ -8722,6 +8800,8 @@ class TestCusipPlaceholderNullification:
 # ---------------------------------------------------------------------------
 
 class TestNportMaturitySentinel2099:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """N-PORT maturity year 2099 (perpetual sentinel) is nullified."""
 
     def _make_nport_df(self, rows):
@@ -8779,6 +8859,8 @@ class TestNportMaturitySentinel2099:
 # ---------------------------------------------------------------------------
 
 class TestPikRatePostNormalization:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """PIK rates at boundary (raw 0.20-0.50) are fixed when they exceed
     the total interest rate after normalization."""
 
@@ -8911,6 +8993,8 @@ class TestLoadAggregateHeaderFlags:
 
 
 class TestAggregateHeaderFlagExclusion:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Test that CC-flagged aggregate headers are excluded in _prepare_bdc."""
 
     def _make_bdc_df(self, rows):
@@ -8997,6 +9081,8 @@ class TestAggregateHeaderFlagExclusion:
 
 
 class TestBdcAggregateOverrides:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     def _make_bdc_df(self, rows):
         cols = [
             "cik", "entity_name", "accession_number", "form_type",
@@ -9157,6 +9243,8 @@ class TestBdcAggregateOverrides:
 
 
 class TestTextEnrichment:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Integration tests for text-based field extraction from identifier text.
 
     Covers maturity 'due M/YYYY', interest rate, basis spread, PIK rate,
@@ -9318,6 +9406,8 @@ class TestTextEnrichment:
 # ---------------------------------------------------------------------------
 
 class TestWrapperNonPrivateMarketFiltering:
+    pytestmark = SLOW_STAGING_SQL_MARKS
+
     """Verify staging drops wrapper-tagged non-private-market rows."""
 
     # Use a real wrapper CIK so supported_wrapper_ciks() returns it
@@ -9387,3 +9477,68 @@ class TestWrapperNonPrivateMarketFiltering:
         result = _prepare_bdc(df)
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Acme Corp"
+
+
+class TestApplyWrapperPositionKeys:
+    """Tests for _apply_wrapper_position_keys: override position_key with
+    wrapper-generated keys for wrapped BDC CIKs."""
+
+    def test_empty_df(self):
+        """Empty DataFrame passes through unchanged."""
+        df = pd.DataFrame()
+        result = _apply_wrapper_position_keys(df)
+        assert result.empty
+
+    def test_nport_rows_unaffected(self):
+        """N-PORT rows should never have position_key overridden."""
+        df = pd.DataFrame({
+            "source": ["nport"],
+            "cik": ["0001287750"],
+            "position_key": ["original_key"],
+            "bdc_investment_identifier": [""],
+        })
+        result = _apply_wrapper_position_keys(df)
+        assert result.iloc[0]["position_key"] == "original_key"
+
+    def test_non_wrapped_cik_unaffected(self):
+        """BDC CIK without a wrapper should keep staging position_key."""
+        df = pd.DataFrame({
+            "source": ["bdc"],
+            "cik": ["9999999999"],  # No wrapper exists for this CIK
+            "position_key": ["original_key"],
+            "bdc_investment_identifier": ["Acme Corp - Term Loan"],
+        })
+        result = _apply_wrapper_position_keys(df)
+        assert result.iloc[0]["position_key"] == "original_key"
+
+    def test_wrapped_cik_position_key_overridden(self):
+        """Wrapped CIK with a recognized identifier gets position_key
+        replaced by wrapper_position_key."""
+        # Use Sixth Street Specialty Lending (0001508655) which has prefix
+        # rules.  The identifier must start with a registered prefix and
+        # contain at least one leaf marker to get disposition=*_position_leaf.
+        df = pd.DataFrame({
+            "source": ["bdc"],
+            "cik": ["0001508655"],
+            "position_key": ["generic_staging_key"],
+            "bdc_investment_identifier": [
+                "Debt Investments Business Services Acme Corp "
+                "First Lien Term Loan Interest Rate 10.0%"
+            ],
+        })
+        result = _apply_wrapper_position_keys(df)
+        new_key = result.iloc[0]["position_key"]
+        # Wrapper key should differ from the generic staging key
+        assert new_key != "generic_staging_key"
+        # Wrapper normalizes to lowercase alphanumeric
+        assert new_key == new_key.lower()
+        assert "acme" in new_key
+
+    def test_no_source_column_returns_unchanged(self):
+        """DataFrame without 'source' column passes through safely."""
+        df = pd.DataFrame({
+            "cik": ["0001287750"],
+            "position_key": ["key"],
+        })
+        result = _apply_wrapper_position_keys(df)
+        assert result.iloc[0]["position_key"] == "key"
