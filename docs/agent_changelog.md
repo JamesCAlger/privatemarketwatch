@@ -6,6 +6,18 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-03 -- Add 5 wrapper-vs-staging diagnostic columns to source reconciliation
+
+- **pipeline/source_reconciliation.py**: Added 5 read-only diagnostic columns to `DETAIL_COLUMNS` and the reconciliation SQL: `aggregate_detection_disagreement`, `hierarchy_parse_disagreement`, `identifier_normalization_impact`, `family_vs_asset_category_disagreement`, `wrapper_leaf_staging_excluded`.
+- New `source_with_diagnostics` CTE inserted between `source_classified` and `source_duplicate_marked` computes the 3 source-only diagnostics. `source_duplicate_marked` and `eligible_source` updated to read from it.
+- `family_vs_asset_category_disagreement` and `wrapper_leaf_staging_excluded` computed in `source_detail` SELECT where matched-output and affiliation-dupe join data is available.
+- Replaced single-column `non_private_market_disagreement` log block with a loop over all 6 diagnostic columns.
+- **tests/test_validate_holdings.py**: New `TestWrapperStagingDiagnostics` class with 5 tests (one per column). All pass. No regressions (130/131 pass; 1 pre-existing `test_trinity_wrapper_rollup` V1/V3 rule ID mismatch).
+- **tests/test_source_reconciliation_cache.py**: 5/5 pass with updated `DETAIL_COLUMNS`.
+- No staging logic changed. Columns are purely additive diagnostics. Production rebuild not yet run.
+
+---
+
 ### 2026-06-02 -- Consolidate hardcoded staging SQL into wrapper JSON config
 
 - **Pure refactor** (Phase A): `pipeline/staging_bdc.py` now reads `hierarchy_prefix_re`, `hierarchy_issuer_re`, `hierarchy_instrument_re`, `hierarchy_trailing_re`, `hierarchy_condition_extra`, `leaf_guard.type_industry_prefix_re`, `leaf_guard.marker_re`, and `leaf_guard.evidence_re` from the per-CIK wrapper JSON files instead of hardcoding them in Python.
@@ -329,3 +341,20 @@ Three changes to resolve 204 of 208 blocking rows (98% reduction). Remaining 4 a
 - Remaining 4 blockers are mojibake encoding issues (corrupted em-dash characters in source XBRL) that cannot be resolved through wrapper config
 
 **Test counts:** 32 wrapper tests pass, 50 oracle tests pass, 770 unified holdings tests pass (9 pre-existing failures unrelated to this change)
+
+### 2026-06-03 -- Split unified holdings tests into fast, staging SQL, and integration buckets
+
+Changed test selection semantics for `tests/test_unified_holdings.py` without changing pipeline behavior.
+
+**pytest.ini:**
+- Added `staging_sql` marker for DuckDB-backed staging SQL tests.
+
+**tests/test_unified_holdings.py:**
+- Added reusable marker lists for slow integration and slow staging SQL groups.
+- Marked full `build_unified_holdings()` regression groups as `slow` + `integration`.
+- Marked `_prepare_bdc()` / `_prepare_nport()` DuckDB staging groups as `slow` + `staging_sql`.
+
+**Contracts and validation:**
+- Fast inner-loop command: `python -m pytest -q tests/test_unified_holdings.py -m "not slow and not integration"`.
+- Collection split: 786 total tests; 39 integration tests; 214 staging SQL tests; 253 slow/integration/staging tests; 533 fast inner-loop tests.
+- Verified fast subset: 533 passed, 253 deselected in 13.35s.
