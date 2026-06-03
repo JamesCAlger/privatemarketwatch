@@ -385,3 +385,41 @@ Added a fast one-CIK trial rebuild path so wrapper developers can validate unifi
 - Added step 3c (one-CIK trial unified rebuild) to the wrapper validation workflow; renumbered subsequent steps.
 
 **Verification:** 7 new tests pass; 870 existing wrapper/oracle/unified tests pass with zero regressions. Smoke test with Trinity Capital (CIK 0001786108): 5,053 rows in 64.6s, +0 row delta vs production.
+
+### 2026-06-03 -- Position-level matching uniqueness guard
+
+Implemented position-level safeguards for `position_id` assignment and repaired weak staging keys that were collapsing separate tranches.
+
+**pipeline/position_matching.py:**
+- Added strong `position_key` eligibility checks for B1b matching; generic or placeholder keys such as `lass units` and `nc nc` no longer form B1b edges.
+- B1b position-key matching now requires each key to be unique within a CIK/source/report quarter before it can link periods.
+- Added guarded union-find assignment: an edge is accepted only if the resulting component still has at most one row per `(cik, source, report_date)`.
+- Added a hard duplicate-position validation after assignment.
+- Dropped match rows that cannot map back to any unified row before returns are computed, preventing blank `position_id` values in matches and returns.
+
+**pipeline/staging_bdc.py and pipeline/staging_nport.py:**
+- Repaired weak BDC position keys by falling back to issuer plus instrument text, preserving numbered loan tranches.
+- N-PORT placeholder issuer/CUSIP values are no longer allowed to create placeholder position keys.
+- N-PORT `issuer_cusip` is no longer used as the entire position key because it can be issuer-level rather than instrument-level.
+
+**pipeline/oracle_checks.py:**
+- B02 now prefers canonical `position_key` over raw BDC identifiers.
+- Added J04 oracle check for duplicate `(cik, source, report_date, position_id)` groups.
+
+**data/overrides/bdc_xbrl_wrappers/0001287750.json:**
+- Removed invalid root-level schema field so the wrapper validates against `wrapper_v3.schema.json`.
+
+**Generated outputs:**
+- Rebuilt unified holdings and returns from cached inputs.
+- Final returns rebuild produced 794,703 unified rows, 473,651 assigned match rows, 475,786 position-id edge rows, 493,014 position-return rows, and 247 index-return rows.
+- Position ID assignment produced 318,917 unique position IDs. The assignment guard skipped 551 supplementary edges that would have merged duplicate report-date rows.
+
+**Validation:**
+- Targeted tests: `tests/test_position_matching.py` passed (74 tests); focused unified/oracle regression subset passed (96 tests).
+- `python scripts/rebuild_outputs.py --unified --returns` completed after the staging fixes; final `python scripts/rebuild_outputs.py --returns` completed after assigned-match filtering.
+- `python scripts/position_id_audit.py`: duplicate `(cik, report_date, position_id)` groups = 0; blank position IDs in holdings, matches, and returns = 0; cross-CIK position IDs = 0; orphan match/return IDs = 0.
+- Wrapper JSON validates with `python -m jsonschema -i data\overrides\bdc_xbrl_wrappers\0001287750.json schemas\bdc_xbrl_wrapper\wrapper_v3.schema.json`.
+- `python scripts/diff_outputs.py --semantic` still fails against the active baseline due broad pre-existing artifact drift: 443 divergent artifacts, including universe, parse progress, schema, frontend, holdings, matches, and returns outputs. The semantic report was written to `data/output/semantic_diff_report.json`.
+
+**Residual risks:**
+- `position_id_audit.py` still flags chain length >25 for 155 IDs and singleton IDs appearing in matches for 9,672 IDs. These are residual audit heuristics, not duplicate same-date failures; they should be reviewed separately before treating the audit as a full pass/fail gate.

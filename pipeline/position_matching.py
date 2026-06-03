@@ -12,6 +12,7 @@ All data manipulation uses DuckDB SQL CTEs.
 
 import logging
 import time
+from pathlib import Path
 from typing import Optional
 
 import duckdb
@@ -46,6 +47,44 @@ MAX_FV_RATIO = 5.0
 # FV ratio guards for higher-confidence tiers (catches unit-scale mismatches)
 MAX_FV_RATIO_WITHIN_FILING = 100.0  # Tier A: generous (same filing)
 MAX_FV_RATIO_IDENTIFIER = 50.0     # Tiers B1/B2/C: tighter
+
+# Tokens that do not make a position_key independently identifying.  These
+# are useful instrument descriptors, but a key made only of these words can
+# merge unrelated issuers into one position chain.
+_GENERIC_POSITION_KEY_TOKEN_RE = (
+    "a|b|c|d|e|f|i|ii|iii|iv|v|class|series|common|preferred|prefs?|"
+    "units?|shares?|stock|warrants?|term|loan|loans|revolver|revolving|"
+    "first|second|third|lien|senior|secured|subordinated|unsecured|debt|"
+    "equity|investment|investments|interest|rate|maturity|date|due|"
+    "llc|inc|corp|corporation|company|co|ltd|lp|l|p|and|the|of|"
+    "nc|na|n|a|none|null|unknown|lass|nits"
+)
+
+
+def _strong_position_key_sql(col: str) -> str:
+    """Return SQL expression for keys safe enough for B1b matching.
+
+    B1b is allowed to be stronger than exact-name matching only when the key
+    contains issuer-specific substance.  Short or generic keys such as
+    "lass units" and N-PORT placeholders such as "nc nc" must fall through.
+    """
+    norm = (
+        f"regexp_replace(lower(trim(CAST({col} AS VARCHAR))), "
+        "'[^a-z0-9]+', ' ', 'g')"
+    )
+    distinctive = (
+        "trim(regexp_replace(' ' || "
+        f"{norm}"
+        f" || ' ', '\\b(?:{_GENERIC_POSITION_KEY_TOKEN_RE})\\b', ' ', 'g'))"
+    )
+    return (
+        f"{norm} != '' "
+        f"AND length({norm}) >= 12 "
+        f"AND len(regexp_split_to_array({norm}, '\\s+')) >= 3 "
+        f"AND regexp_matches({distinctive}, '[a-z0-9]{{4,}}') "
+        f"AND NOT regexp_matches({norm}, "
+        "'^(?:nc|na|n a|none|null|unknown)(?:\\s+(?:nc|na|n a|none|null|unknown))*$')"
+    )
 
 # ---------------------------------------------------------------------------
 # Output schema
@@ -103,6 +142,55 @@ def _write_position_id_edges(edges: list[dict]) -> None:
     edges_df = _sort_existing(edges_df, POSITION_ID_EDGE_COLUMNS)
     POSITION_ID_EDGES_FILE.parent.mkdir(parents=True, exist_ok=True)
     edges_df.to_csv(POSITION_ID_EDGES_FILE, index=False)
+
+
+def _validate_unique_position_ids(unified_df: pd.DataFrame) -> None:
+    """Ensure one position_id appears at most once per CIK/source/report date."""
+    required = {"cik", "source", "report_date", "position_id"}
+    if unified_df.empty or not required.issubset(unified_df.columns):
+        return
+
+    ids = unified_df["position_id"].fillna("").astype(str).str.strip()
+    check_df = unified_df.loc[ids.ne(""), [
+        "cik", "source", "report_date", "position_id", "issuer_name",
+        "fair_value",
+    ]].copy()
+    if check_df.empty:
+        return
+
+    counts = (
+        check_df.groupby(
+            ["cik", "source", "report_date", "position_id"],
+            dropna=False,
+        )
+        .size()
+        .reset_index(name="_count")
+    )
+    dupes = counts[counts["_count"] > 1]
+    if dupes.empty:
+        return
+
+    sample_keys = dupes.sort_values(
+        ["_count", "cik", "source", "report_date", "position_id"],
+        ascending=[False, True, True, True, True],
+    ).head(5)
+    sample = check_df.merge(
+        sample_keys[["cik", "source", "report_date", "position_id", "_count"]],
+        on=["cik", "source", "report_date", "position_id"],
+        how="inner",
+    ).sort_values(["_count", "cik", "report_date", "position_id"], ascending=False)
+
+    examples = []
+    for _, row in sample.head(12).iterrows():
+        examples.append(
+            f"{row['cik']} {row['source']} {row['report_date']} "
+            f"{row['position_id']} {row['issuer_name']} fv={row['fair_value']}"
+        )
+    raise ValueError(
+        "position_id uniqueness violation: "
+        f"{len(dupes)} duplicate (cik, source, report_date, position_id) "
+        "groups. Examples: " + " | ".join(examples)
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -464,10 +552,105 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         UNION
         SELECT _end_row_id FROM cusip_final
     ),
-    -- B2: Exact issuer_name match (excluding CUSIP-matched rows)
+    -- B1b: Position key match (excluding CUSIP-matched rows)
+    poskey_remaining AS (
+        SELECT *,
+            ({_strong_position_key_sql('_position_key')}) AS _position_key_strong
+        FROM with_cusip
+        WHERE _row_id NOT IN (SELECT _row_id FROM cusip_used)
+    ),
+    -- Position keys are allowed to link periods only when they are unique
+    -- within each fund/source/report quarter. Repeated keys are issuer-level
+    -- or otherwise lossy, so using them would collapse distinct positions.
+    poskey_counts AS (
+        SELECT cik, source, quarter, _position_key, COUNT(*) AS n
+        FROM poskey_remaining
+        WHERE _position_key_strong
+        GROUP BY cik, source, quarter, _position_key
+    ),
+    high_mult_poskeys AS (
+        SELECT cik, source, quarter, _position_key
+        FROM poskey_counts
+        WHERE n > 1
+    ),
+    pairs_poskey AS (
+        SELECT
+            e.cik, e.entity_name, e.source,
+            b.quarter AS begin_quarter,
+            CAST(b.report_date AS VARCHAR) AS begin_report_date,
+            CAST(b.issuer_name AS VARCHAR) AS begin_issuer_name,
+            b.fv AS begin_fair_value, b.cost_val AS begin_cost,
+            b.pa AS begin_principal_amount, b.ir AS begin_interest_rate,
+            b.bs AS begin_basis_spread, b.sh AS begin_shares_held,
+            e.quarter AS end_quarter,
+            CAST(e.report_date AS VARCHAR) AS end_report_date,
+            CAST(e.issuer_name AS VARCHAR) AS end_issuer_name,
+            e.fv AS end_fair_value, e.cost_val AS end_cost,
+            e.pa AS end_principal_amount, e.ir AS end_interest_rate,
+            e.bs AS end_basis_spread, e.sh AS end_shares_held,
+            'B1b_position_key' AS match_method,
+            CAST(b._position_key AS VARCHAR) AS match_key,
+            1.0 AS match_score,
+            3 AS span_months,
+            b._row_id AS _begin_row_id,
+            e._row_id AS _end_row_id,
+            {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
+            ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
+            {_fv_proximity_sql('COALESCE(b.pa, 1.0)', 'COALESCE(e.pa, 1.0)')}
+                AS _pa_prox
+        FROM poskey_remaining b
+        JOIN poskey_remaining e
+          ON b.cik = e.cik
+         AND e.quarter = ({next_qtr})
+         AND b._position_key = e._position_key
+         AND b._position_key != ''
+         AND b.source = e.source
+        WHERE b._position_key_strong
+        AND e._position_key_strong
+        AND b._position_key NOT IN (
+            SELECT _position_key FROM high_mult_poskeys
+            WHERE cik = b.cik AND source = b.source AND quarter = b.quarter
+        )
+        AND e._position_key NOT IN (
+            SELECT _position_key FROM high_mult_poskeys
+            WHERE cik = e.cik AND source = e.source AND quarter = e.quarter
+        )
+        AND b.fv > 0 AND e.fv > 0
+        AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+    ),
+    -- B1b: 1:1 enforcement (composite tiebreaker: FV + rate + principal)
+    poskey_rn_begin AS (
+        SELECT *,
+            ROW_NUMBER() OVER (
+                PARTITION BY _begin_row_id
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
+                    _end_row_id ASC
+            ) AS rn_b
+        FROM pairs_poskey
+    ),
+    poskey_rn_end AS (
+        SELECT *,
+            ROW_NUMBER() OVER (
+                PARTITION BY _end_row_id
+                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
+                    _begin_row_id ASC
+            ) AS rn_e
+        FROM poskey_rn_begin WHERE rn_b = 1
+    ),
+    poskey_final AS (
+        SELECT * FROM poskey_rn_end WHERE rn_e = 1
+    ),
+    -- Row IDs consumed by position key matches
+    poskey_used AS (
+        SELECT _begin_row_id AS _row_id FROM poskey_final
+        UNION
+        SELECT _end_row_id FROM poskey_final
+    ),
+    -- B2: Exact issuer_name match (excluding CUSIP- and position-key-matched rows)
     name_remaining AS (
         SELECT * FROM with_cusip
         WHERE _row_id NOT IN (SELECT _row_id FROM cusip_used)
+          AND _row_id NOT IN (SELECT _row_id FROM poskey_used)
     ),
     -- Name multiplicity: exclude generic names appearing too often
     name_counts AS (
@@ -558,6 +741,17 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
             match_method, match_key, match_score, span_months,
             _begin_row_id, _end_row_id
         FROM cusip_final
+        UNION ALL
+        SELECT cik, entity_name, source,
+            begin_quarter, begin_report_date, begin_issuer_name,
+            begin_fair_value, begin_cost, begin_principal_amount,
+            begin_interest_rate, begin_basis_spread, begin_shares_held,
+            end_quarter, end_report_date, end_issuer_name,
+            end_fair_value, end_cost, end_principal_amount,
+            end_interest_rate, end_basis_spread, end_shares_held,
+            match_method, match_key, match_score, span_months,
+            _begin_row_id, _end_row_id
+        FROM poskey_final
         UNION ALL
         SELECT cik, entity_name, source,
             begin_quarter, begin_report_date, begin_issuer_name,
@@ -1035,6 +1229,8 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
 def match_positions(
     unified_df: Optional[pd.DataFrame] = None,
     bdc_raw_df: Optional[pd.DataFrame] = None,
+    *,
+    output_file: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Match positions across consecutive quarters.
 
@@ -1107,7 +1303,8 @@ def match_positions(
         TRY_CAST(basis_spread AS DOUBLE) AS bs,
         TRY_CAST(shares_held AS DOUBLE) AS sh,
         LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _name_lower,
-        CAST(cusip AS VARCHAR) AS _cusip
+        CAST(cusip AS VARCHAR) AS _cusip,
+        CAST(position_key AS VARCHAR) AS _position_key
     FROM unified
     WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
       AND TRY_CAST(fair_value AS DOUBLE) != 0
@@ -1275,13 +1472,15 @@ def match_positions(
     result = _sort_existing(result, MATCH_SORT_COLUMNS)
 
     # Save
-    result.to_csv(POSITION_MATCHES_FILE, index=False)
+    _out_file = output_file or POSITION_MATCHES_FILE
+    _out_file.parent.mkdir(parents=True, exist_ok=True)
+    result.to_csv(_out_file, index=False)
     elapsed = time.time() - t0
     logger.info("Position matching complete: %d pairs in %.1f s", len(result), elapsed)
-    if POSITION_MATCHES_FILE.exists():
+    if _out_file.exists():
         logger.info("Saved to %s (%.1f MB)",
-                     POSITION_MATCHES_FILE.name,
-                     POSITION_MATCHES_FILE.stat().st_size / (1024 * 1024))
+                     _out_file.name,
+                     _out_file.stat().st_size / (1024 * 1024))
 
     # Summary by method
     if len(result) > 0:
@@ -1376,6 +1575,22 @@ def assign_position_ids(
              AND CAST(m.{name_col} AS VARCHAR) = CAST(u.bdc_investment_identifier AS VARCHAR)
             WHERE CAST(m.match_method AS VARCHAR) LIKE 'A%'
         ),
+        poskey_cand AS (
+            SELECT
+                m._midx,
+                u._uid,
+                ABS(COALESCE(TRY_CAST(m.{fv_col} AS DOUBLE), 0)
+                    - COALESCE(TRY_CAST(u.fair_value AS DOUBLE), 0)) AS _fv_diff
+            FROM m
+            JOIN u
+              ON CAST(m.cik AS VARCHAR) = CAST(u.cik AS VARCHAR)
+             AND CAST(m.source AS VARCHAR) = CAST(u.source AS VARCHAR)
+             AND CAST(m.{date_col} AS VARCHAR) = CAST(u.report_date AS VARCHAR)
+             AND CAST(m.match_key AS VARCHAR) = CAST(u.position_key AS VARCHAR)
+            WHERE CAST(m.match_method AS VARCHAR) = 'B1b_position_key'
+              AND ({_strong_position_key_sql('m.match_key')})
+              AND ({_strong_position_key_sql('u.position_key')})
+        ),
         other_cand AS (
             SELECT
                 m._midx,
@@ -1389,9 +1604,12 @@ def assign_position_ids(
              AND CAST(m.{date_col} AS VARCHAR) = CAST(u.report_date AS VARCHAR)
              AND CAST(m.{name_col} AS VARCHAR) = CAST(u.issuer_name AS VARCHAR)
             WHERE CAST(m.match_method AS VARCHAR) NOT LIKE 'A%'
+              AND CAST(m.match_method AS VARCHAR) != 'B1b_position_key'
         ),
         all_cand AS (
             SELECT * FROM tier_a_cand
+            UNION ALL
+            SELECT * FROM poskey_cand
             UNION ALL
             SELECT * FROM other_cand
         ),
@@ -1442,8 +1660,45 @@ def assign_position_ids(
     # prior year-end, competing for one unified row.
     # ------------------------------------------------------------------
     uf = UnionFind()
+    row_date_keys = [
+        (
+            str(unified_df.at[i, "cik"]),
+            str(unified_df.at[i, "source"]),
+            str(unified_df.at[i, "report_date"]),
+        )
+        for i in range(len(unified_df))
+    ]
+    component_date_keys: dict[int, set[tuple[str, str, str]]] = {}
+
+    def _register_component(uid: int) -> int:
+        root = uf.find(uid)
+        component_date_keys.setdefault(root, {row_date_keys[uid]})
+        return root
+
+    def _guarded_union(a: int, b: int) -> bool:
+        """Union two rows only if the component remains date-unique."""
+        root_a = _register_component(a)
+        root_b = _register_component(b)
+        if root_a == root_b:
+            return True
+
+        keys_a = component_date_keys[root_a]
+        keys_b = component_date_keys[root_b]
+        if not keys_a.isdisjoint(keys_b):
+            return False
+
+        merged = keys_a | keys_b
+        uf.union(a, b)
+        new_root = uf.find(a)
+        component_date_keys.pop(root_a, None)
+        component_date_keys.pop(root_b, None)
+        component_date_keys[new_root] = merged
+        return True
+
     n_edges = 0
-    short_match_edges: set[tuple[int, int]] = set()
+    n_skipped_date_collision = 0
+    used_match_midx: set[int] = set()
+    used_supp_edges: set[tuple[int, int]] = set()
     spans = pd.to_numeric(matches_df["span_months"], errors="coerce").fillna(99)
     for midx in range(n_match):
         if spans.iloc[midx] > 4:
@@ -1451,16 +1706,23 @@ def assign_position_ids(
         b = begin_uid.get(midx)
         e = end_uid.get(midx)
         if b is not None and e is not None:
-            uf.union(b, e)
-            n_edges += 1
-            short_match_edges.add((b, e))
+            if _guarded_union(b, e):
+                n_edges += 1
+                used_match_midx.add(midx)
+            else:
+                n_skipped_date_collision += 1
         elif b is not None:
-            uf.find(b)  # register isolated node
+            _register_component(b)  # register isolated node
         elif e is not None:
-            uf.find(e)
+            _register_component(e)
 
     logger.info("  UF edges from match pairs (span<=4mo): %d (of %d total pairs)",
                 n_edges, n_match)
+    if n_skipped_date_collision:
+        logger.warning(
+            "  Skipped %d match edges that would merge duplicate report-date rows",
+            n_skipped_date_collision,
+        )
 
     # ------------------------------------------------------------------
     # Step 3b: Supplementary consecutive-quarter matching
@@ -1533,16 +1795,29 @@ def assign_position_ids(
     con2.close()
 
     n_supp = 0
+    n_supp_skipped_date_collision = 0
     if not supp_pairs.empty:
         uid_a_arr = supp_pairs["uid_a"].astype(int).values
         uid_b_arr = supp_pairs["uid_b"].astype(int).values
         for a, b in zip(uid_a_arr, uid_b_arr):
-            if uf.find(a) != uf.find(b):
+            root_a = _register_component(a)
+            root_b = _register_component(b)
+            if root_a == root_b:
+                continue
+            if not _guarded_union(a, b):
+                n_supp_skipped_date_collision += 1
+                continue
+            used_supp_edges.add((a, b))
+            if root_a != root_b:
                 n_supp += 1
-            uf.union(a, b)
 
     logger.info("  Supplementary B2 edges: %d new connections (of %d pairs)",
                 n_supp, len(supp_pairs))
+    if n_supp_skipped_date_collision:
+        logger.warning(
+            "  Skipped %d supplementary edges that would merge duplicate report-date rows",
+            n_supp_skipped_date_collision,
+        )
 
     # ------------------------------------------------------------------
     # Step 4: Assign component IDs (sorted for determinism)
@@ -1571,6 +1846,7 @@ def assign_position_ids(
 
     # Write position_id directly by row index (no join = no fan-out)
     unified_df["position_id"] = [uid_to_pid[i] for i in range(len(unified_df))]
+    _validate_unique_position_ids(unified_df)
 
     # ------------------------------------------------------------------
     # Step 5: Tag matches (prefer end_uid which is always current-period)
@@ -1591,8 +1867,11 @@ def assign_position_ids(
     matches_df.drop(columns=["_midx"], inplace=True)
 
     if n_unlinked:
-        logger.warning("  %d match pairs could not be linked to any unified row",
-                        n_unlinked)
+        logger.warning(
+            "  %d match pairs could not be linked to any unified row; "
+            "dropping them from assigned match output",
+            n_unlinked,
+        )
 
     # ------------------------------------------------------------------
     # Step 5b: Persist auditable chain-forming edges
@@ -1600,6 +1879,8 @@ def assign_position_ids(
     uid_lookup = unified_df.set_index("_uid", drop=False)
     edge_rows: list[dict] = []
     for midx in range(n_match):
+        if midx not in used_match_midx:
+            continue
         b = begin_uid.get(midx)
         e = end_uid.get(midx)
         if b is None or e is None or spans.iloc[midx] > 4:
@@ -1626,7 +1907,7 @@ def assign_position_ids(
     for item in supp_pairs.itertuples(index=False):
         a = int(item.uid_a)
         b = int(item.uid_b)
-        if (a, b) in short_match_edges:
+        if (a, b) not in used_supp_edges:
             continue
         begin = uid_lookup.loc[a]
         end = uid_lookup.loc[b]
@@ -1650,6 +1931,11 @@ def assign_position_ids(
         })
     _write_position_id_edges(edge_rows)
     logger.info("  Position ID edge artifact: %d edges", len(edge_rows))
+
+    if n_unlinked:
+        matches_df = matches_df[
+            matches_df["position_id"].astype(str).str.strip() != ""
+        ].copy()
 
     # Ensure column order matches UNIFIED_COLUMNS
     from pipeline.unified_holdings import UNIFIED_COLUMNS

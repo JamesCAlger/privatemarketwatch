@@ -437,6 +437,171 @@ class TestTierB:
 
 
 # ---------------------------------------------------------------------------
+# Tier B1b: Position Key
+# ---------------------------------------------------------------------------
+
+class TestTierB1b:
+    def test_position_key_basic_match(self):
+        """B1b: Same position_key, consecutive quarters -> matched."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp",
+             "fair_value": "500000", "position_key": "acme corp first lien term loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "510000", "position_key": "acme corp first lien term loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        # Could match via B1b or B2 (same issuer_name). B1b runs first if position_key present.
+        assert len(result) >= 1
+
+    def test_position_key_tranche_disambiguation(self):
+        """B1b: Same issuer, different instruments -> different keys -> no cross-match."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            # Q1: two tranches for same issuer
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp",
+             "fair_value": "500000", "position_key": "acme corp first lien term loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp",
+             "fair_value": "200000", "position_key": "acme corp revolver",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            # Q2: same two tranches
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "510000", "position_key": "acme corp first lien term loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "205000", "position_key": "acme corp revolver",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b1b = result[result["match_method"] == "B1b_position_key"]
+        # Should get 2 B1b matches: term loan -> term loan, revolver -> revolver
+        assert len(b1b) == 2
+        keys = set(b1b["match_key"])
+        assert "acme corp first lien term loan" in keys
+        assert "acme corp revolver" in keys
+
+    def test_position_key_volatile_stripping(self):
+        """B1b: Par amount changes -> same key -> matched."""
+        bdc_raw = _make_bdc_raw([])
+        # Two rows with same position_key (volatile components stripped)
+        unified = _make_unified([
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp",
+             "fair_value": "500000",
+             "position_key": "acme corp senior secured term loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "480000",
+             "position_key": "acme corp senior secured term loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        # Should match via B1b or B2
+        assert len(result) >= 1
+
+    def test_position_key_cascade(self):
+        """B1b-matched rows excluded from C/D tiers."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp",
+             "fair_value": "500000", "position_key": "acme corp first lien",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "510000", "position_key": "acme corp first lien",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        # Should not appear in both B1b and C/D
+        assert len(result) == 1
+
+    def test_position_key_empty_passthrough(self):
+        """Empty position_key falls through to B2 name match."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-03-31", "issuer_name": "Gamma Inc",
+             "fair_value": "500000", "position_key": "",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-06-30", "issuer_name": "Gamma Inc",
+             "fair_value": "510000", "position_key": "",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b1b = result[result["match_method"] == "B1b_position_key"]
+        assert len(b1b) == 0
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+
+    def test_position_key_generic_key_does_not_match_unrelated_issuers(self):
+        """Generic/degraded keys like 'lass units' must not form B1b edges."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-03-31", "issuer_name": "Catbird NYC LLC",
+             "fair_value": "500000", "position_key": "lass units",
+             "asset_category": "EQUITY_COMMON"},
+            {"source": "bdc", "cik": "200", "entity_name": "BDC2",
+             "report_date": "2024-06-30", "issuer_name": "Roof OpCo LLC",
+             "fair_value": "520000", "position_key": "lass units",
+             "asset_category": "EQUITY_COMMON"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b1b = result[result["match_method"] == "B1b_position_key"]
+        assert len(b1b) == 0
+
+    def test_position_key_placeholder_nc_does_not_match(self):
+        """N-PORT placeholder-like position keys must not form B1b edges."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "nport", "cik": "200", "entity_name": "Fund",
+             "report_date": "2024-03-31", "issuer_name": "ChargePoint Preferred",
+             "fair_value": "900000", "position_key": "nc nc",
+             "asset_category": "EQUITY_PREFERRED"},
+            {"source": "nport", "cik": "200", "entity_name": "Fund",
+             "report_date": "2024-06-30", "issuer_name": "Inrix Class C",
+             "fair_value": "910000", "position_key": "nc nc",
+             "asset_category": "EQUITY_COMMON"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b1b = result[result["match_method"] == "B1b_position_key"]
+        assert len(b1b) == 0
+
+    def test_position_key_repeated_within_quarter_does_not_match(self):
+        """Repeated position keys are not position-unique and cannot form B1b edges."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "nport", "cik": "200", "entity_name": "Fund",
+             "report_date": "2024-03-31", "issuer_name": "Alpha Term Loan A",
+             "fair_value": "900000", "position_key": "alpha corp senior loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "nport", "cik": "200", "entity_name": "Fund",
+             "report_date": "2024-03-31", "issuer_name": "Alpha Term Loan B",
+             "fair_value": "800000", "position_key": "alpha corp senior loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "nport", "cik": "200", "entity_name": "Fund",
+             "report_date": "2024-06-30", "issuer_name": "Alpha Term Loan C",
+             "fair_value": "910000", "position_key": "alpha corp senior loan",
+             "asset_category": "LOAN_FIRST_LIEN"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b1b = result[result["match_method"] == "B1b_position_key"]
+        assert len(b1b) == 0
+
+
+# ---------------------------------------------------------------------------
 # Tier C: Normalized Name
 # ---------------------------------------------------------------------------
 
@@ -1009,6 +1174,69 @@ class TestPositionIds:
         assert len(beta_ids) == 1
         assert alpha_ids[0] != beta_ids[0]
 
+    def test_assignment_skips_edges_that_merge_same_date_positions(self):
+        """A connected component cannot contain two rows for one CIK/source/date."""
+        unified = _make_unified([
+            {"source": "bdc", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-03-31", "issuer_name": "Alpha Inc",
+             "fair_value": "500000"},
+            {"source": "bdc", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Alpha Inc",
+             "fair_value": "510000"},
+            {"source": "bdc", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Beta Corp",
+             "fair_value": "515000"},
+        ])
+        match_rows = [
+            {
+                "cik": "300", "entity_name": "Fund1", "source": "bdc",
+                "begin_report_date": "2024-03-31",
+                "begin_issuer_name": "Alpha Inc",
+                "begin_fair_value": "500000",
+                "end_report_date": "2024-06-30",
+                "end_issuer_name": "Alpha Inc",
+                "end_fair_value": "510000",
+                "match_method": "B2_exact_name",
+                "match_key": "alpha inc",
+                "match_score": "1.0",
+                "span_months": "3",
+            },
+            {
+                "cik": "300", "entity_name": "Fund1", "source": "bdc",
+                "begin_report_date": "2024-06-30",
+                "begin_issuer_name": "Alpha Inc",
+                "begin_fair_value": "510000",
+                "end_report_date": "2024-06-30",
+                "end_issuer_name": "Beta Corp",
+                "end_fair_value": "515000",
+                "match_method": "B2_exact_name",
+                "match_key": "beta corp",
+                "match_score": "1.0",
+                "span_months": "3",
+            },
+        ]
+        matches = pd.DataFrame(match_rows)
+        for col in MATCH_COLUMNS:
+            if col not in matches.columns:
+                matches[col] = ""
+        matches = matches[MATCH_COLUMNS]
+
+        unified_out, _ = assign_position_ids(unified, matches)
+        alpha_q1 = unified_out[
+            (unified_out["issuer_name"] == "Alpha Inc")
+            & (unified_out["report_date"] == "2024-03-31")
+        ]["position_id"].iloc[0]
+        alpha_q2 = unified_out[
+            (unified_out["issuer_name"] == "Alpha Inc")
+            & (unified_out["report_date"] == "2024-06-30")
+        ]["position_id"].iloc[0]
+        beta_q2 = unified_out[
+            (unified_out["issuer_name"] == "Beta Corp")
+            & (unified_out["report_date"] == "2024-06-30")
+        ]["position_id"].iloc[0]
+        assert alpha_q1 == alpha_q2
+        assert beta_q2 != alpha_q2
+
     def test_multi_tranche_disambiguation(self):
         """Same issuer_name + different FV -> different position_ids."""
         bdc_raw = _make_bdc_raw([])
@@ -1102,6 +1330,36 @@ class TestPositionIds:
         assert "position_id" in matches_out.columns
         # Also check MATCH_COLUMNS includes it
         assert "position_id" in MATCH_COLUMNS
+
+    def test_unmapped_matches_are_dropped_from_assigned_output(self):
+        """Matches that cannot map to unified rows cannot feed returns."""
+        unified = _make_unified([
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Mapped Corp",
+             "fair_value": "510000"},
+        ])
+        matches = pd.DataFrame([{
+            "cik": "300",
+            "entity_name": "Fund1",
+            "source": "nport",
+            "begin_report_date": "2024-03-31",
+            "begin_issuer_name": "Missing Corp",
+            "begin_fair_value": "500000",
+            "end_report_date": "2024-06-30",
+            "end_issuer_name": "Missing Corp",
+            "end_fair_value": "510000",
+            "match_method": "B2_exact_name",
+            "match_key": "missing corp",
+            "match_score": "1.0",
+            "span_months": "3",
+        }])
+        for col in MATCH_COLUMNS:
+            if col not in matches.columns:
+                matches[col] = ""
+        matches = matches[MATCH_COLUMNS]
+
+        _, matches_out = assign_position_ids(unified, matches)
+        assert matches_out.empty
 
     def test_match_positions_stable_when_input_shuffled(self):
         bdc_raw = _make_bdc_raw([])
@@ -1378,6 +1636,8 @@ class TestFvRatioGuards:
         method_a = result[result["match_method"] == "A_within_filing"]
         assert len(method_a) == 1, "2x FV ratio pair should be accepted by Tier A"
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_tier_b1_rejects_extreme_fv_ratio(self):
         """Tier B1 (CUSIP) rejects pair with >50x FV ratio."""
         unified = _make_unified([
@@ -1398,6 +1658,8 @@ class TestFvRatioGuards:
         method_b1 = result[result["match_method"] == "B1_cusip"]
         assert len(method_b1) == 0, "100,000x FV ratio should be rejected by Tier B1 guard"
 
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_tier_b2_rejects_extreme_fv_ratio(self):
         """Tier B2 (exact name) rejects pair with >50x FV ratio."""
         unified = _make_unified([
@@ -1604,3 +1866,60 @@ class TestTierABeginSideDedup:
                 f"position_id {pid} has {len(pid_rows)} rows but only {dates} "
                 f"unique dates -- possible duplicate assignment"
             )
+
+
+# ---------------------------------------------------------------------------
+# output_file parameter
+# ---------------------------------------------------------------------------
+
+class TestOutputFileParameter:
+    """Verify that the output_file kwarg directs CSV output correctly."""
+
+    def test_writes_to_custom_path(self, tmp_path):
+        """output_file directs CSV to the specified path, creating parent dirs."""
+        custom_dir = tmp_path / "nested" / "trial"
+        custom_file = custom_dir / "matches.csv"
+
+        bdc_raw = _make_bdc_raw([
+            {"cik": "100", "entity_name": "TestBDC", "accession_number": "ACC1",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Acme Corp - Loan",
+             "fair_value": "1000000"},
+        ])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "100", "entity_name": "TestBDC",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "1000000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Acme Corp - Loan"},
+        ])
+
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw,
+                                 output_file=custom_file)
+        assert custom_file.exists(), "CSV not written to custom output_file path"
+        # Read back and verify contents
+        from pathlib import Path
+        read_back = pd.read_csv(custom_file)
+        assert len(read_back) == len(result)
+
+    def test_default_path_unchanged(self, tmp_path):
+        """output_file=None falls back to monkeypatched POSITION_MATCHES_FILE."""
+        default_file = tmp_path / "position_matches.csv"
+        # The autouse fixture already monkeypatches POSITION_MATCHES_FILE to tmp_path
+
+        bdc_raw = _make_bdc_raw([
+            {"cik": "200", "entity_name": "TestBDC2", "accession_number": "ACC2",
+             "report_date": "2024-06-30", "period": "2024-06-30",
+             "investment_identifier": "Beta Inc - Loan",
+             "fair_value": "500000"},
+        ])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "200", "entity_name": "TestBDC2",
+             "report_date": "2024-06-30", "issuer_name": "Beta Inc",
+             "fair_value": "500000", "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN",
+             "bdc_investment_identifier": "Beta Inc - Loan"},
+        ])
+
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        assert default_file.exists(), "Default monkeypatched path should be used"

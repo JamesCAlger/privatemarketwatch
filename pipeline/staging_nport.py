@@ -106,8 +106,15 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     lp_co_kw_checks = " OR ".join(
         f"contains(lower(issuer_name), '{kw}')" for kw in _NPORT_LP_FUND_CO_KEYWORDS
     )
-    # Fall back to issuer_title when issuer_name is NULL/empty (rescues ~9K rows)
-    _name_coalesce = "COALESCE(NULLIF(TRIM(CAST(issuer_name AS VARCHAR)), ''), issuer_title)"
+    # Fall back to issuer_title when issuer_name is NULL/empty or a placeholder
+    # such as "NC" (rescues issuer/title filings that otherwise produce
+    # non-identifying keys like "nc nc").
+    _name_coalesce = (
+        "COALESCE(NULLIF(TRIM(CASE "
+        "WHEN upper(trim(CAST(issuer_name AS VARCHAR))) IN "
+        "('', 'N/A', 'NA', 'NONE', 'NULL', 'UNKNOWN', 'NC') "
+        "THEN '' ELSE CAST(issuer_name AS VARCHAR) END), ''), issuer_title)"
+    )
     name_norm = _sql_normalize_name(_name_coalesce)
 
     sql = f"""
@@ -306,20 +313,29 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS extracted_industry,
             '' AS gics_sub_industry,
             '' AS lien_position,
-            -- Position key: CUSIP when available, else normalized name+instrument
-            CASE
-                WHEN TRIM(COALESCE(CAST(issuer_cusip AS VARCHAR), '')) != ''
-                     AND TRIM(CAST(issuer_cusip AS VARCHAR)) NOT IN ('000000000', '999999999', 'N/A', 'NONE')
-                THEN LOWER(TRIM(CAST(issuer_cusip AS VARCHAR)))
-                ELSE TRIM(REGEXP_REPLACE(
-                    REGEXP_REPLACE(
-                        LOWER(
-                            CAST({name_norm} AS VARCHAR)
-                            || ' '
-                            || COALESCE(CAST(issuer_title AS VARCHAR), '')),
-                        '[^a-z0-9 ]', ' ', 'g'),
-                    '\\s+', ' ', 'g'))
-            END AS position_key,
+            -- Position key: issuer/title based. issuer_cusip is issuer-level in
+            -- N-PORT and cannot be the whole key for position-level matching.
+            TRIM(REGEXP_REPLACE(
+                REGEXP_REPLACE(
+                    LOWER(
+                        CAST({name_norm} AS VARCHAR)
+                        || ' '
+                        || COALESCE(CAST(issuer_title AS VARCHAR), '')
+                        || CASE
+                            WHEN TRIM(COALESCE(CAST(issuer_cusip AS VARCHAR), '')) != ''
+                                 AND regexp_matches(
+                                     upper(trim(CAST(issuer_cusip AS VARCHAR))),
+                                     '^[A-Z0-9]{9}$'
+                                 )
+                                 AND upper(trim(CAST(issuer_cusip AS VARCHAR))) NOT IN (
+                                     '000000000', '999999999', 'N/A', 'NONE', 'NULL',
+                                     'UNKNOWN', 'NC'
+                                 )
+                            THEN ' ' || CAST(issuer_cusip AS VARCHAR)
+                            ELSE ''
+                        END),
+                    '[^a-z0-9 ]', ' ', 'g'),
+                '\\s+', ' ', 'g')) AS position_key,
             '' AS position_id,
             _row_id
         FROM with_fund_detect

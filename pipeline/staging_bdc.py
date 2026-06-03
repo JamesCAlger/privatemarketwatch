@@ -21,6 +21,7 @@ from pipeline.bdc_identifier import (
     _sql_is_bdc_aggregate,
 )
 from pipeline.bdc_xbrl_wrapper import (
+    classify_identifier,
     get_wrapper_spec,
     is_non_private_market_identifier,
     supported_wrapper_ciks,
@@ -51,6 +52,60 @@ from pipeline.config import (
 logger = logging.getLogger(__name__)
 
 _WRAPPER_DEFINITIONS_DIR = OVERRIDES_DIR / "bdc_xbrl_wrappers"
+
+
+def _repair_weak_position_keys(df: pd.DataFrame) -> pd.DataFrame:
+    """Repair non-identifying BDC position keys produced by generic parsing."""
+    if df.empty or "position_key" not in df.columns:
+        return df
+
+    key = df["position_key"].fillna("").astype(str).str.strip()
+    key_norm = (
+        key.str.lower()
+        .str.replace(r"[^a-z0-9]+", " ", regex=True)
+        .str.replace(r"\s+", " ", regex=True)
+        .str.strip()
+    )
+    weak = (
+        key_norm.str.len().lt(12)
+        | key_norm.str.fullmatch(r"(?:lass|nits|units|nc)(?:\s+(?:lass|nits|units|nc))*")
+    )
+    if not weak.any():
+        return df
+
+    issuer = df.get("issuer_name", pd.Series("", index=df.index)).fillna("").astype(str)
+    instrument = (
+        df.get("instrument_description", pd.Series("", index=df.index))
+        .fillna("")
+        .astype(str)
+    )
+    raw_id = (
+        df.get("bdc_investment_identifier", pd.Series("", index=df.index))
+        .fillna("")
+        .astype(str)
+    )
+
+    fallback = (
+        (issuer + " " + instrument)
+        .str.lower()
+        .str.replace(r"[^a-z0-9]+", " ", regex=True)
+        .str.replace(r"\s+", " ", regex=True)
+        .str.strip()
+    )
+    raw_fallback = (
+        raw_id.str.lower()
+        .str.replace(r"[^a-z0-9]+", " ", regex=True)
+        .str.replace(r"\s+", " ", regex=True)
+        .str.strip()
+    )
+    fallback = fallback.mask(fallback.str.len().lt(12), raw_fallback)
+    repair_mask = weak & fallback.str.len().ge(12)
+
+    if repair_mask.any():
+        df = df.copy()
+        df.loc[repair_mask, "position_key"] = fallback.loc[repair_mask]
+        logger.info("  Repaired %d weak BDC position_key values", repair_mask.sum())
+    return df
 
 
 def _expand_placeholders(text: str, placeholders: dict[str, str]) -> str:
@@ -930,6 +985,51 @@ def _prepare_bdc(
     # Period/date filtering already applied via DELETE above
     period_filter = "WHERE TRUE"
 
+    # =========================================================================
+    # Wrapper disposition lookup table.
+    # For wrapper-covered CIKs, call classify_identifier() on each raw
+    # investment_identifier in bdc_raw to get wrapper_disposition.  This is
+    # used in Phase A CTEs to rescue *_position_leaf rows from aggregate/
+    # prefix-hierarchy heuristics and to drop *_rollup / aggregate rows.
+    # =========================================================================
+    _wrapper_ciks = supported_wrapper_ciks()
+    if _wrapper_ciks:
+        _wd_cik_filter = ", ".join(f"'{c}'" for c in _wrapper_ciks)
+        _wd_candidates = con.execute(f"""
+            SELECT DISTINCT
+                LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') AS cik_norm,
+                COALESCE(CAST(investment_identifier AS VARCHAR), '') AS raw_id
+            FROM bdc_raw
+            WHERE LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+                  IN ({_wd_cik_filter})
+        """).fetchdf()
+        _disp_rows = []
+        for _, _r in _wd_candidates.iterrows():
+            result = classify_identifier(_r["cik_norm"], _r["raw_id"])
+            disp = result.get("wrapper_disposition", "")
+            if disp:
+                _disp_rows.append({
+                    "cik_norm": _r["cik_norm"],
+                    "raw_id": _r["raw_id"],
+                    "wrapper_disposition": disp,
+                })
+        if _disp_rows:
+            _disp_df = pd.DataFrame(_disp_rows)
+            con.register("_wd_view", _disp_df)
+            con.execute("CREATE TEMP TABLE _wrapper_disp AS SELECT * FROM _wd_view")
+            logger.info("  Wrapper disposition lookup: %d classified from %d candidates",
+                         len(_disp_rows), len(_wd_candidates))
+        else:
+            con.execute(
+                "CREATE TEMP TABLE _wrapper_disp "
+                "(cik_norm VARCHAR, raw_id VARCHAR, wrapper_disposition VARCHAR)"
+            )
+    else:
+        con.execute(
+            "CREATE TEMP TABLE _wrapper_disp "
+            "(cik_norm VARCHAR, raw_id VARCHAR, wrapper_disposition VARCHAR)"
+        )
+
     # Conditional CTE for CC-reviewed aggregate header exclusion.
     # When the aggregate_header_flags.csv file has entries, inject a CTE
     # that LEFT JOINs against the flags and filters out matches.
@@ -1140,13 +1240,23 @@ def _prepare_bdc(
     ),
 
     -- CTE 2: Filter aggregate/subtotal rows
+    -- Wrapper-authoritative rescue: *_position_leaf bypasses agg_filter.
+    -- Wrapper rollup/aggregate drop is NOT applied here because some
+    -- wrappers misclassify equity co-investments as debt_issuer_rollup
+    -- (e.g. Fidelity).  Rollup rows are already handled by the global
+    -- agg_filter, per-CIK category_marker_re in wrapper specs, and the
+    -- CC-reviewed aggregate header exclusions.
     no_aggregates AS (
         SELECT s.* FROM strip_affil s
         LEFT JOIN aggregate_override_matches o
           ON s._row_id = o._row_id
+        LEFT JOIN _wrapper_disp wd
+          ON LPAD(REGEXP_REPLACE(CAST(s.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = wd.cik_norm
+         AND COALESCE(CAST(s.investment_identifier AS VARCHAR), '') = wd.raw_id
         WHERE COALESCE(o.force_exclude, 0) = 0
           AND (
               COALESCE(o.force_include, 0) = 1
+              OR COALESCE(wd.wrapper_disposition, '') LIKE '%_position_leaf'
               OR ({_msd_hierarchy_condition})
               OR ({_prefix_rules_hierarchy_condition})
               OR NOT ({agg_filter})
@@ -1156,9 +1266,14 @@ def _prepare_bdc(
     -- CTE 2b: Filter prefix_rules subtotals that leaked through the
     -- aggregate filter (they have entity signals like "Inc." that
     -- protect them from the no-entity guard).
+    -- Wrapper-authoritative: *_position_leaf rescues from prefix filter.
     no_prefix_hierarchy AS (
-        SELECT * FROM no_aggregates
-        WHERE NOT ({_prefix_hierarchy_filter})
+        SELECT nag.* FROM no_aggregates nag
+        LEFT JOIN _wrapper_disp wd
+          ON LPAD(REGEXP_REPLACE(CAST(nag.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = wd.cik_norm
+         AND COALESCE(CAST(nag.investment_identifier AS VARCHAR), '') = wd.raw_id
+        WHERE COALESCE(wd.wrapper_disposition, '') LIKE '%_position_leaf'
+           OR NOT ({_prefix_hierarchy_filter})
     ),
 
     -- CTE 3: Filter XBRL artifacts (no financial data at all)
@@ -2109,8 +2224,7 @@ def _prepare_bdc(
                      IN ({', '.join(f"'{c}'" for c in _comma_delim_ciks) if _comma_delim_ciks else "'__NONE__'"})
                 THEN TRIM(REGEXP_REPLACE(
                     REGEXP_REPLACE(
-                        LOWER(REGEXP_REPLACE(CAST(_raw_id AS VARCHAR),
-                            '\\s+\\d+$', '', 'g')),
+                        LOWER(CAST(_raw_id AS VARCHAR)),
                         '[^a-z0-9 ]', ' ', 'g'),
                     '\\s+', ' ', 'g'))
                 ELSE TRIM(REGEXP_REPLACE(
@@ -2186,6 +2300,7 @@ def _prepare_bdc(
     """
 
     result = con.execute(sql_phase_c).fetchdf()
+    result = _repair_weak_position_keys(result)
     logger.info("  Phase C (classify+map): %d rows in %.1f s",
                 len(result), time.time() - _t_phase)
 

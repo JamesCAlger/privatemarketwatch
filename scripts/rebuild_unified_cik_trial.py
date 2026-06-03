@@ -10,6 +10,7 @@ wrapper JSON configs are reflected in the trial output.
 
 Usage:
     python scripts/rebuild_unified_cik_trial.py --cik 0001849894
+    python scripts/rebuild_unified_cik_trial.py --cik 0001572694 --match
 """
 
 import argparse
@@ -40,6 +41,8 @@ def main(argv: list[str] | None = None) -> int:
         description="Rebuild unified holdings for one CIK into a trial directory.",
     )
     parser.add_argument("--cik", required=True, help="Target CIK (e.g. 0001849894)")
+    parser.add_argument("--match", action="store_true",
+                        help="Run position matching on trial output and show diagnostics")
     args = parser.parse_args(argv)
 
     cik = _normalize_cik(args.cik)
@@ -195,6 +198,66 @@ def main(argv: list[str] | None = None) -> int:
         )
     else:
         logger.info("No production unified holdings found; skipping comparison")
+
+    # --- Position matching on trial output ---
+    if args.match:
+        from pipeline.position_matching import match_positions
+        from pipeline.oracle_checks import (
+            check_J01_position_key_stability,
+            check_J03_fuzzy_fallback_rate,
+            diagnose_fuzzy_fallbacks,
+        )
+
+        trial_matches_file = trial_dir / f"position_matches.{cik}.csv"
+        logger.info("Running position matching on trial output -> %s", trial_matches_file.name)
+        t3 = time.time()
+        matches_df = match_positions(
+            unified_df=trial_df,
+            bdc_raw_df=bdc_df,
+            output_file=trial_matches_file,
+        )
+        logger.info(
+            "Trial position matching: %d pairs in %.1f s",
+            len(matches_df), time.time() - t3,
+        )
+
+        # Tier distribution summary
+        if len(matches_df) > 0 and "match_method" in matches_df.columns:
+            tier_counts = matches_df["match_method"].value_counts()
+            logger.info("Match tier distribution:")
+            for method, count in tier_counts.items():
+                pct = 100 * count / len(matches_df)
+                logger.info("  %s: %d (%.1f%%)", method, count, pct)
+
+        # J01/J03 oracle checks
+        j01_results = check_J01_position_key_stability(matches_df)
+        for r in j01_results:
+            logger.info("J01 %s: %s (metric=%.3f, threshold=%.3f) -- %s",
+                        r.scope, r.status, r.metric_value, r.threshold, r.message)
+
+        j03_results = check_J03_fuzzy_fallback_rate(matches_df)
+        for r in j03_results:
+            logger.info("J03 %s: %s (metric=%.3f, threshold=%.3f) -- %s",
+                        r.scope, r.status, r.metric_value, r.threshold, r.message)
+
+        # Fuzzy fallback diagnostics
+        diag_df = diagnose_fuzzy_fallbacks(matches_df, trial_df)
+        if not diag_df.empty:
+            diag_path = trial_dir / f"matching_diagnostic.{cik}.csv"
+            diag_df.to_csv(diag_path, index=False)
+            logger.info("Fuzzy fallback diagnostics: %d rows -> %s", len(diag_df), diag_path.name)
+            # Show first 10 rows
+            preview = diag_df.head(10)
+            for _, row in preview.iterrows():
+                logger.info(
+                    "  %s | %s -> %s | %s",
+                    row.get("begin_issuer_name", ""),
+                    row.get("begin_position_key", ""),
+                    row.get("end_position_key", ""),
+                    row.get("key_diff_summary", ""),
+                )
+        else:
+            logger.info("No D_fuzzy matches to diagnose")
 
     logger.info("Trial rebuild complete for CIK %s", cik)
     return 0

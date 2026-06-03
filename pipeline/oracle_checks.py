@@ -375,9 +375,10 @@ def check_B02_unique_position_keys(
     if holdings_df.empty:
         return [_make_result("B02", "global", "skip", 0, 0, "No holdings data")]
 
-    # Check if wrapper columns exist
+    # Prefer the actual unified matching key.  Wrapper/source columns are
+    # fallbacks for source-detail checks that do not carry unified position_key.
     key_col = None
-    for candidate in ("wrapper_position_key", "bdc_investment_identifier"):
+    for candidate in ("position_key", "wrapper_position_key", "bdc_investment_identifier"):
         if candidate in holdings_df.columns:
             key_col = candidate
             break
@@ -1570,6 +1571,48 @@ def check_I06_non_private_market_exclusion(
 # ===================================================================
 
 
+def check_J04_unique_position_id_per_report_date(
+    holdings_df: pd.DataFrame,
+) -> list[CheckResult]:
+    """J04: A position_id must appear at most once per CIK/source/report date."""
+    if holdings_df is None or holdings_df.empty:
+        return [_make_result("J04", "global", "skip", 0, 0,
+                             "No holdings data available")]
+
+    required = {"cik", "report_date", "position_id"}
+    if not required.issubset(holdings_df.columns):
+        return [_make_result("J04", "global", "skip", 0, 0,
+                             "Missing cik/report_date/position_id columns")]
+
+    df = holdings_df.copy()
+    if "source" not in df.columns:
+        df["source"] = ""
+
+    pid = _col_str(df, "position_id")
+    df = df[pid.str.strip().ne("")]
+    if df.empty:
+        return [_make_result("J04", "global", "skip", 0, 0,
+                             "No populated position_id values")]
+
+    dupes = (
+        df.groupby(["cik", "source", "report_date", "position_id"], dropna=False)
+        .size()
+        .reset_index(name="row_count")
+    )
+    dupes = dupes[dupes["row_count"] > 1]
+    status = "pass" if dupes.empty else "fail"
+    detail = dupes.sort_values(
+        ["row_count", "cik", "source", "report_date", "position_id"],
+        ascending=[False, True, True, True, True],
+    ).head(100) if status == "fail" else pd.DataFrame()
+
+    return [_make_result(
+        "J04", "global", status, len(dupes), 0,
+        f"{len(dupes)} duplicate (cik, source, report_date, position_id) groups",
+        detail=detail,
+    )]
+
+
 def _get_wrapped_ciks() -> set[str]:
     """Return set of 10-digit CIK strings that have wrapper JSON definitions."""
     from pipeline.bdc_xbrl_wrapper import _WRAPPER_DEFINITIONS_DIR, normalize_cik
@@ -1723,6 +1766,119 @@ def check_J03_fuzzy_fallback_rate(
     return results
 
 
+# ---------------------------------------------------------------------------
+# Fuzzy fallback diagnostic
+# ---------------------------------------------------------------------------
+
+def diagnose_fuzzy_fallbacks(
+    matches_df: pd.DataFrame,
+    unified_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Diagnose D_fuzzy matches by showing which position key tokens differ.
+
+    Joins the begin/end sides of each D_fuzzy match back to unified holdings
+    to retrieve the position_key for each side, then tokenizes and diffs them.
+
+    Returns a DataFrame with columns:
+        cik, begin_report_date, end_report_date, begin_issuer_name,
+        end_issuer_name, begin_position_key, end_position_key,
+        match_score, key_diff_summary
+    """
+    if matches_df is None or matches_df.empty:
+        return pd.DataFrame()
+
+    if "match_method" not in matches_df.columns:
+        return pd.DataFrame()
+
+    fuzzy = matches_df[matches_df["match_method"] == "D_fuzzy"].copy()
+    if fuzzy.empty:
+        return pd.DataFrame()
+
+    if unified_df is None or unified_df.empty:
+        logger.warning("diagnose_fuzzy_fallbacks: empty unified_df, cannot join")
+        return pd.DataFrame()
+
+    if "position_key" not in unified_df.columns:
+        logger.warning("diagnose_fuzzy_fallbacks: unified_df missing position_key column")
+        return pd.DataFrame()
+
+    # Prepare unified lookup keyed on (cik, report_date, issuer_name, fair_value_rounded)
+    u = unified_df[["cik", "report_date", "issuer_name", "fair_value", "position_key"]].copy()
+    u["cik"] = u["cik"].astype(str).str.zfill(10)
+    u["report_date"] = u["report_date"].astype(str)
+    u["issuer_name"] = u["issuer_name"].astype(str)
+    u["fv_round"] = pd.to_numeric(u["fair_value"], errors="coerce").round(0)
+
+    fuzzy["cik"] = fuzzy["cik"].astype(str).str.zfill(10)
+
+    # Join begin side
+    fuzzy["begin_report_date"] = fuzzy["begin_report_date"].astype(str)
+    fuzzy["begin_issuer_name"] = fuzzy["begin_issuer_name"].astype(str)
+    fuzzy["begin_fv_round"] = pd.to_numeric(
+        fuzzy["begin_fair_value"], errors="coerce"
+    ).round(0)
+
+    begin_join = fuzzy.merge(
+        u.rename(columns={"position_key": "begin_position_key"}),
+        left_on=["cik", "begin_report_date", "begin_issuer_name", "begin_fv_round"],
+        right_on=["cik", "report_date", "issuer_name", "fv_round"],
+        how="left",
+    )
+
+    # Join end side
+    fuzzy["end_report_date"] = fuzzy["end_report_date"].astype(str)
+    fuzzy["end_issuer_name"] = fuzzy["end_issuer_name"].astype(str)
+    fuzzy["end_fv_round"] = pd.to_numeric(
+        fuzzy["end_fair_value"], errors="coerce"
+    ).round(0)
+
+    end_join = fuzzy.merge(
+        u.rename(columns={"position_key": "end_position_key"}),
+        left_on=["cik", "end_report_date", "end_issuer_name", "end_fv_round"],
+        right_on=["cik", "report_date", "issuer_name", "fv_round"],
+        how="left",
+    )
+
+    # Combine position keys from both joins
+    out = fuzzy[["cik", "begin_report_date", "end_report_date",
+                 "begin_issuer_name", "end_issuer_name"]].copy()
+    out["begin_position_key"] = begin_join["begin_position_key"].values
+    out["end_position_key"] = end_join["end_position_key"].values
+    if "match_score" in fuzzy.columns:
+        out["match_score"] = fuzzy["match_score"].values
+    else:
+        out["match_score"] = None
+
+    # Compute key diff summary
+    def _diff_tokens(row):
+        bk = str(row.get("begin_position_key", "") or "")
+        ek = str(row.get("end_position_key", "") or "")
+        if not bk and not ek:
+            return "both keys missing"
+        if not bk:
+            return "begin key missing"
+        if not ek:
+            return "end key missing"
+        if bk == ek:
+            return "identical keys"
+        b_tokens = bk.split()
+        e_tokens = ek.split()
+        diffs_b = []
+        diffs_e = []
+        max_len = max(len(b_tokens), len(e_tokens))
+        for i in range(max_len):
+            bt = b_tokens[i] if i < len(b_tokens) else "<missing>"
+            et = e_tokens[i] if i < len(e_tokens) else "<missing>"
+            if bt != et:
+                diffs_b.append(bt)
+                diffs_e.append(et)
+        return f"tokens differ: {diffs_b} vs {diffs_e}"
+
+    out["key_diff_summary"] = out.apply(_diff_tokens, axis=1)
+
+    return out.reset_index(drop=True)
+
+
 # ===================================================================
 # CHECK REGISTRY
 # ===================================================================
@@ -1768,6 +1924,7 @@ CHECK_REGISTRY: dict[str, tuple[Any, str]] = {
     "I06": (check_I06_non_private_market_exclusion, "source_detail_df"),
     "J01": (check_J01_position_key_stability, "matches_df"),
     "J03": (check_J03_fuzzy_fallback_rate, "matches_df"),
+    "J04": (check_J04_unique_position_id_per_report_date, "holdings_df"),
 }
 
 ALL_CHECK_IDS = sorted(CHECK_REGISTRY.keys())

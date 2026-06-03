@@ -42,6 +42,7 @@ from pipeline.oracle_checks import (
     check_H05_bdc_source_vs_unified_gap,
     check_I02_leaf_marker_accuracy,
     check_I06_non_private_market_exclusion,
+    check_J04_unique_position_id_per_report_date,
 )
 
 
@@ -287,6 +288,14 @@ class TestB02UniquePositionKeys:
         ])
         results = check_B02_unique_position_keys(holdings)
         assert any(r.status == "fail" for r in results)
+
+    def test_prefers_unified_position_key_when_present(self):
+        holdings = _holdings([
+            {"bdc_investment_identifier": "same raw id", "position_key": "acme corp term loan"},
+            {"bdc_investment_identifier": "same raw id", "position_key": "beta inc term loan"},
+        ])
+        results = check_B02_unique_position_keys(holdings)
+        assert any(r.status == "pass" for r in results)
 
 
 class TestB07SingleAccession:
@@ -767,6 +776,27 @@ def _matches(rows):
 # CATEGORY J TESTS: Position Matching Quality
 # ===================================================================
 
+class TestJ04UniquePositionIdPerReportDate:
+    """Tests for J04: no duplicate position_id within one CIK/source/date."""
+
+    def test_pass_unique_position_ids(self):
+        holdings = _holdings([
+            {"position_id": "POS-00000001", "issuer_name": "Acme Corp"},
+            {"position_id": "POS-00000002", "issuer_name": "Beta Inc"},
+        ])
+        results = check_J04_unique_position_id_per_report_date(holdings)
+        assert results[0].status == "pass"
+
+    def test_fail_duplicate_position_id_same_date(self):
+        holdings = _holdings([
+            {"position_id": "POS-00000001", "issuer_name": "Acme Corp"},
+            {"position_id": "POS-00000001", "issuer_name": "Beta Inc"},
+        ])
+        results = check_J04_unique_position_id_per_report_date(holdings)
+        assert results[0].status == "fail"
+        assert results[0].metric_value == 1
+
+
 class TestJ01PositionKeyStability:
     """Tests for J01: B1b rate for wrapped CIKs."""
 
@@ -936,3 +966,124 @@ class TestJ03FuzzyFallbackRate:
         failed = [r for r in results if r.cik == "0001572694"]
         assert len(failed) == 1
         assert "match_key" in failed[0].detail.columns
+
+
+# ===================================================================
+# DIAGNOSTIC: diagnose_fuzzy_fallbacks
+# ===================================================================
+
+class TestDiagnoseFuzzyFallbacks:
+    """Tests for diagnose_fuzzy_fallbacks()."""
+
+    def test_basic_diagnostic(self):
+        """D_fuzzy match joined to unified shows position keys + diff."""
+        from pipeline.oracle_checks import diagnose_fuzzy_fallbacks
+
+        matches = pd.DataFrame([{
+            "cik": "0001287750",
+            "match_method": "D_fuzzy",
+            "begin_report_date": "2024-03-31",
+            "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Acme Corp",
+            "end_issuer_name": "Acme Corp",
+            "begin_fair_value": "1000000",
+            "end_fair_value": "1050000",
+            "match_score": "0.92",
+        }])
+        unified = pd.DataFrame([
+            {"cik": "1287750", "report_date": "2024-03-31",
+             "issuer_name": "Acme Corp", "fair_value": "1000000",
+             "position_key": "acme corp first lien 7.5"},
+            {"cik": "1287750", "report_date": "2024-06-30",
+             "issuer_name": "Acme Corp", "fair_value": "1050000",
+             "position_key": "acme corp first lien 8.0"},
+        ])
+
+        result = diagnose_fuzzy_fallbacks(matches, unified)
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["begin_position_key"] == "acme corp first lien 7.5"
+        assert row["end_position_key"] == "acme corp first lien 8.0"
+        assert "tokens differ" in row["key_diff_summary"]
+        assert "7.5" in row["key_diff_summary"]
+        assert "8.0" in row["key_diff_summary"]
+
+    def test_empty_matches(self):
+        """Empty matches_df returns empty DataFrame."""
+        from pipeline.oracle_checks import diagnose_fuzzy_fallbacks
+
+        result = diagnose_fuzzy_fallbacks(pd.DataFrame(), pd.DataFrame())
+        assert result.empty
+
+    def test_no_fuzzy_matches(self):
+        """Non-D_fuzzy rows produce empty result."""
+        from pipeline.oracle_checks import diagnose_fuzzy_fallbacks
+
+        matches = pd.DataFrame([{
+            "cik": "0001287750",
+            "match_method": "B1b_position_key",
+            "begin_report_date": "2024-03-31",
+            "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Acme Corp",
+            "end_issuer_name": "Acme Corp",
+            "begin_fair_value": "1000000",
+            "end_fair_value": "1050000",
+        }])
+        unified = pd.DataFrame([
+            {"cik": "1287750", "report_date": "2024-03-31",
+             "issuer_name": "Acme Corp", "fair_value": "1000000",
+             "position_key": "acme corp first lien"},
+        ])
+
+        result = diagnose_fuzzy_fallbacks(matches, unified)
+        assert result.empty
+
+    def test_missing_position_key_column(self):
+        """Unified without position_key returns empty + warning."""
+        from pipeline.oracle_checks import diagnose_fuzzy_fallbacks
+
+        matches = pd.DataFrame([{
+            "cik": "0001287750",
+            "match_method": "D_fuzzy",
+            "begin_report_date": "2024-03-31",
+            "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Acme Corp",
+            "end_issuer_name": "Acme Corp",
+            "begin_fair_value": "1000000",
+            "end_fair_value": "1050000",
+        }])
+        unified = pd.DataFrame([
+            {"cik": "1287750", "report_date": "2024-03-31",
+             "issuer_name": "Acme Corp", "fair_value": "1000000"},
+        ])
+
+        result = diagnose_fuzzy_fallbacks(matches, unified)
+        assert result.empty
+
+    def test_identical_position_keys(self):
+        """Same key on both sides produces 'identical keys' summary."""
+        from pipeline.oracle_checks import diagnose_fuzzy_fallbacks
+
+        matches = pd.DataFrame([{
+            "cik": "0001287750",
+            "match_method": "D_fuzzy",
+            "begin_report_date": "2024-03-31",
+            "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Acme Corp",
+            "end_issuer_name": "Acme Corp",
+            "begin_fair_value": "1000000",
+            "end_fair_value": "1050000",
+            "match_score": "0.90",
+        }])
+        unified = pd.DataFrame([
+            {"cik": "1287750", "report_date": "2024-03-31",
+             "issuer_name": "Acme Corp", "fair_value": "1000000",
+             "position_key": "acme corp first lien"},
+            {"cik": "1287750", "report_date": "2024-06-30",
+             "issuer_name": "Acme Corp", "fair_value": "1050000",
+             "position_key": "acme corp first lien"},
+        ])
+
+        result = diagnose_fuzzy_fallbacks(matches, unified)
+        assert len(result) == 1
+        assert result.iloc[0]["key_diff_summary"] == "identical keys"
