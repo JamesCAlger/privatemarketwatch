@@ -20,7 +20,8 @@
       "total investments",
       "total debt investments",
       "total equity investments"
-    ]
+    ],
+    "category_marker_re": "^(?:\\(\\d+\\)\\s*)?(?:\\s*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)(?:.*[-\\x96\\x97\\u2013\\u2014]\\s*[\\d.]+%%?\\s*)*$"
   },
   "archetypes": {
     "debt": {

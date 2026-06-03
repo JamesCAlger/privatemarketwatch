@@ -43,6 +43,7 @@ These are harm-category restrictions. Violating them causes data loss, silent co
 - **No slow transforms on large datasets.** Avoid pandas `.apply()`, `.iterrows()`, or row-level Python loops on datasets with >10K rows — the pipeline's 800K+ row datasets will hang for minutes. Use DuckDB SQL or vectorized operations. Pandas is fine for small summaries and logging.
 - **Commit messages.** Include a short subject line plus a brief body (2-4 bullet points or sentences) explaining what changed and why. Keep it concise -- no walls of text.
 - **No ad-hoc inline Python scripts.** Do not launch `python -`, here-strings piped to Python, or long `python -c` snippets for repo-scale diagnostics. These have repeatedly left hidden high-memory processes running. Prefer existing scripts, targeted `pytest`, DuckDB CLI/SQL, `rg`, or short PowerShell inspection commands. If a temporary Python diagnostic is unavoidable, put it in a named temp file with explicit row limits, progress output, and a short timeout, and check/kill the process before continuing.
+- **No duplicate long-running test jobs.** Before starting a full pytest suite or rebuild, check for existing pytest/rebuild processes from other agents. Do not run overlapping full suites or rebuilds unless the user explicitly asks.
 - **Do not revert user changes.** This repository often has a dirty worktree with active experiments, generated data, and ad-hoc scripts.
 
 ## Anti-Sycophancy Requirement
@@ -112,6 +113,17 @@ Choose verification proportional to the change:
 - Unified holdings change: targeted tests plus `python -m pipeline.main --unified --validate` or `python scripts/rebuild_outputs.py --unified` when practical.
 - Export change: run `python -m pipeline.main --export-frontend` and inspect changed JSON shape.
 - Frontend TypeScript/UI change: run `npm run build` in `frontend/`.
+
+### Test Selection Workflow
+
+Use proportional verification. Do not run the full suite as the default inner loop.
+
+- For a narrow parser/classifier change, run the exact test node or affected test file first.
+- For unified holdings changes, run `tests/test_unified_holdings.py` and relevant validation tests, then rebuild unified outputs and run semantic diff when data semantics may change.
+- For frontend-only changes, run the frontend build rather than pytest.
+- Run the full pytest suite before merge/handoff, after broad refactors, or when shared contracts change.
+- Use `--durations=50 --durations-min=0.5` on full-suite runs.
+- Before starting a long pytest run, check for existing pytest processes and avoid overlapping full suites from multiple agents.
 
 Always report what was and was not run.
 

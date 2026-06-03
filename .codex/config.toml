@@ -2,3 +2,5 @@ approval_policy = "never"
 sandbox_mode = "workspace-write"
 
 model_auto_compact_token_limit = 200000
+
+model_reasoning_effort = "high"

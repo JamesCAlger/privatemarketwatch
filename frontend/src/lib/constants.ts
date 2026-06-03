@@ -10,6 +10,11 @@ export interface IndexMeta {
   color: string;       // hex
   tailwindColor: string;
   description: string;
+  category: string;
+  inceptionDate: string;
+  inceptionQuarter: string;
+  returnTypes: string;
+  baseLevel: number;
 }
 
 export const INDICES: IndexMeta[] = [
@@ -21,7 +26,12 @@ export const INDICES: IndexMeta[] = [
     color: '#2A9D8F',
     tailwindColor: 'text-teal',
     description:
-      'The largest publicly available benchmark of middle-market direct loans.',
+      'The largest publicly available benchmark of middle-market direct loans, built from holdings-level filings across registered closed-end vehicles.',
+    category: 'PMW INDEX \u00b7 PRIVATE CREDIT BENCHMARKS',
+    inceptionDate: 'January 1, 2019',
+    inceptionQuarter: '2019q1',
+    returnTypes: 'Gross & Net',
+    baseLevel: 100,
   },
   {
     key: 'PREFERRED_EQUITY',
@@ -31,7 +41,12 @@ export const INDICES: IndexMeta[] = [
     color: '#E76F51',
     tailwindColor: 'text-orange-500',
     description:
-      'Preferred equity positions in private companies with stated dividend rates, held by registered closed-end vehicles.',
+      'Preferred equity positions in private companies \u2014 stated dividend rates, redemption optionality, and a seniority structure that sits between debt and common stock.',
+    category: 'PMW INDEX \u00b7 PRIVATE CREDIT BENCHMARKS',
+    inceptionDate: 'January 1, 2019',
+    inceptionQuarter: '2019q1',
+    returnTypes: 'Gross & Net',
+    baseLevel: 100,
   },
   {
     key: 'COMMON_EQUITY',
@@ -41,7 +56,12 @@ export const INDICES: IndexMeta[] = [
     color: '#0F1B2D',
     tailwindColor: 'text-blue-500',
     description:
-      'Direct common equity co-investments and minority stakes in private companies, held by registered closed-end vehicles.',
+      'Direct common equity co-investments and minority stakes in private companies, held by registered closed-end vehicles \u2014 sponsor-backed and held to exit.',
+    category: 'PMW INDEX \u00b7 PRIVATE CREDIT BENCHMARKS',
+    inceptionDate: 'January 1, 2019',
+    inceptionQuarter: '2019q1',
+    returnTypes: 'Gross & Net',
+    baseLevel: 100,
   },
   // Private Credit Fund and Private Equity Fund indices hidden for now
   // (fund-of-fund allocations include leverage effects)

@@ -17,10 +17,12 @@ interface PerfSectionProps {
     color: string;
     data: { quarter: string; level: number | null }[];
   }[];
+  title?: string;
+  subtitle?: string;
   children?: React.ReactNode;
 }
 
-export default function PerfSection({ series, children }: PerfSectionProps) {
+export default function PerfSection({ series, title, subtitle, children }: PerfSectionProps) {
   const [period, setPeriod] = useState<Period>('all');
 
   return (
@@ -30,8 +32,12 @@ export default function PerfSection({ series, children }: PerfSectionProps) {
         <div>
           <div className="flex flex-wrap items-baseline justify-between gap-4 mb-5">
             <h2 className="font-display text-[28px] tracking-[-0.015em] text-ink">
-              Index performance{' '}
-              <span className="text-ink3 font-normal">&middot; Direct Lending</span>
+              {title ?? 'Index performance'}
+              {subtitle != null ? (
+                <span className="text-ink3 font-normal"> &middot; {subtitle}</span>
+              ) : !title ? (
+                <span className="text-ink3 font-normal"> &middot; Direct Lending</span>
+              ) : null}
             </h2>
             <div className="flex gap-1.5 text-[11px] tracking-[0.06em]">
               {PERIODS.map((p) => (

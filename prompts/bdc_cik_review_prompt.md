@@ -1,7 +1,9 @@
 # BDC Source-Blocker Review Prompt
 
 You are reviewing existing source-reconciliation blockers for BDC filings.
-Use cached local files only. Do not make network calls.
+Use cached local files only during verdict review. Bundle-building may download
+missing HTML only when launched with `--allow-html-download`; do not make
+network calls yourself.
 
 Review exactly one bundle path assigned to you. The bundle contains the
 worklist row, source-reconciliation residuals, source-only blockers, GAV
