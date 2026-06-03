@@ -2103,6 +2103,33 @@ def _prepare_bdc(
             COALESCE(_hier_industry, '') AS extracted_industry,
             '' AS gics_sub_industry,
             '' AS lien_position,
+            -- Position key: normalized issuer+instrument identity, volatile parts stripped
+            CASE
+                WHEN LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+                     IN ({', '.join(f"'{c}'" for c in _comma_delim_ciks) if _comma_delim_ciks else "'__NONE__'"})
+                THEN TRIM(REGEXP_REPLACE(
+                    REGEXP_REPLACE(
+                        LOWER(REGEXP_REPLACE(CAST(_raw_id AS VARCHAR),
+                            '\\s+\\d+$', '', 'g')),
+                        '[^a-z0-9 ]', ' ', 'g'),
+                    '\\s+', ' ', 'g'))
+                ELSE TRIM(REGEXP_REPLACE(
+                    REGEXP_REPLACE(
+                        LOWER(
+                        REGEXP_REPLACE(
+                        REGEXP_REPLACE(
+                        REGEXP_REPLACE(
+                        REGEXP_REPLACE(
+                            CAST({name_norm} AS VARCHAR)
+                            || ' '
+                            || COALESCE(CAST(instrument_description AS VARCHAR), ''),
+                            '\\(\\$[\\d,.]+\\s*par\\b[^)]*\\)', '', 'gi'),
+                            '(?:interest rate |rate )\\d+\\.?\\d*%', '', 'gi'),
+                            '(?:sofr|libor|prime)\\s*\\+\\s*\\d+\\.?\\d*%?', '', 'gi'),
+                            '^\\d+\\.\\d+%\\s+', '', 'g')),
+                        '[^a-z0-9 ]', ' ', 'g'),
+                    '\\s+', ' ', 'g'))
+            END AS position_key,
             '' AS position_id,
             _row_id
         FROM with_enrichment w

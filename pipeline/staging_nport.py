@@ -306,6 +306,20 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS extracted_industry,
             '' AS gics_sub_industry,
             '' AS lien_position,
+            -- Position key: CUSIP when available, else normalized name+instrument
+            CASE
+                WHEN TRIM(COALESCE(CAST(issuer_cusip AS VARCHAR), '')) != ''
+                     AND TRIM(CAST(issuer_cusip AS VARCHAR)) NOT IN ('000000000', '999999999', 'N/A', 'NONE')
+                THEN LOWER(TRIM(CAST(issuer_cusip AS VARCHAR)))
+                ELSE TRIM(REGEXP_REPLACE(
+                    REGEXP_REPLACE(
+                        LOWER(
+                            CAST({name_norm} AS VARCHAR)
+                            || ' '
+                            || COALESCE(CAST(issuer_title AS VARCHAR), '')),
+                        '[^a-z0-9 ]', ' ', 'g'),
+                    '\\s+', ' ', 'g'))
+            END AS position_key,
             '' AS position_id,
             _row_id
         FROM with_fund_detect
