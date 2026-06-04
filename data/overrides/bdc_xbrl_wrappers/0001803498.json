@@ -1,0 +1,237 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001803498",
+  "entity_name": "Blackstone Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "BCRED",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "interest rate",
+        "maturity",
+        "reference rate",
+        "sofr",
+        "libor",
+        "initial acquisition date"
+      ],
+      "equity": [
+        "common stock",
+        "preferred stock",
+        "common equity",
+        "preferred equity",
+        "partnership interest",
+        "llc interest",
+        "membership interest",
+        "class a",
+        "class b",
+        "units"
+      ],
+      "warrant": [
+        "warrant",
+        "expiration date"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total fair value",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "other cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government money market",
+      "state street institutional"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)first lien|second lien|senior secured|senior subordinated|subordinated|unitranche|term loan|revolving|delayed draw|mezzanine|bridge loan",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|partnership interest|LLC interest|equity interest|equity co-invest|membership interest|class [a-z] units|class [a-z] shares",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bwarrant",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)\\bCLO\\b|collateralized loan obligation",
+        "family": "clo"
+      }
+    ],
+    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Emerald JV LP|Verdelite JV LP|Controlled Affiliated Issuer|Non-Controlled Affiliated Issuer|Non-Controlled Affiliated User)$"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "All debt instruments: term loans, revolvers, delayed draws, CLO tranches, mezzanine",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Revolver",
+          "Revolving",
+          "Delayed Draw",
+          "First Lien",
+          "Second Lien",
+          "Senior Secured",
+          "Senior Subordinated",
+          "Subordinated",
+          "Unitranche",
+          "Mezzanine",
+          "Bridge Loan",
+          "CLO",
+          "Collateralized Loan Obligation"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.5,
+          "max": 30.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: common/preferred stock, units, partnership interests, LLC interests, fund vehicles",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Equity",
+          "Common Units",
+          "Common Shares",
+          "Preferred Stock",
+          "Preferred Equity",
+          "Preferred Shares",
+          "Preferred Units",
+          "Partnership Interest",
+          "LLC Interest",
+          "Membership Interest",
+          "Equity Interest",
+          "Equity Co-Invest",
+          "Class A",
+          "Class B",
+          "Ordinary Shares",
+          "LP Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "clo": {
+      "description": "CLO equity and debt tranches, structured credit vehicles",
+      "detection_rules": {
+        "keywords": [
+          "CLO",
+          "Collateralized Loan Obligation"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "bcred_pipe_suffix_schema_change",
+      "description": "Affiliation axis labels (Non-Affiliated Issuer, Emerald JV LP, etc.) appended with pipe delimiter starting 2025-12-31. Stripped by canonical_strip_re for position key stability.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": " \\| ",
+      "disposition": "expected"
+    },
+    {
+      "id": "bcred_numeric_tranche_suffix",
+      "description": "Numeric suffixes (1, 2, 3, ...) distinguish different loan tranches to the same borrower. These are separate positions, not duplicates.",
+      "first_seen_quarter": "2022-09-30",
+      "detection_pattern": "\\s+\\d+$",
+      "disposition": "expected"
+    },
+    {
+      "id": "bcred_jv_sub_portfolio",
+      "description": "Emerald JV LP and Verdelite JV LP sub-portfolios appear as separate rows from direct portfolio. Same underlying positions may appear under both direct and JV schedules.",
+      "first_seen_quarter": "2022-09-30",
+      "detection_pattern": "(?i)Emerald JV|Verdelite JV",
+      "disposition": "warn"
+    },
+    {
+      "id": "bcred_comparative_period_duplication",
+      "description": "Many positions appear twice per quarter with slightly different FV values, likely current-period and prior-period facts from the same XBRL filing. Up to 4x duplication in early quarters (2022-12-31) from period x dimension cross-product.",
+      "first_seen_quarter": "2022-09-30",
+      "detection_pattern": "",
+      "disposition": "warn"
+    },
+    {
+      "id": "bcred_investment_placeholder",
+      "description": "Placeholder identifiers 'Investment One' through 'Investment Seven' with FV=0, likely unfunded commitments or template rows.",
+      "first_seen_quarter": "2022-12-31",
+      "detection_pattern": "(?i)^Investment (One|Two|Three|Four|Five|Six|Seven)$",
+      "disposition": "expected"
+    },
+    {
+      "id": "bcred_jv_entity_aggregate",
+      "description": "JV entity rows (BCRED Emerald JV LP, BCRED Emerald JV) appear as aggregate-level entries with no rate/maturity/shares detail, representing entity-level fair values rather than individual positions.",
+      "first_seen_quarter": "2022-09-30",
+      "detection_pattern": "(?i)^BCRED (Emerald|Verdelite) JV",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.15
+    }
+  }
+}

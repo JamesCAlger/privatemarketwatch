@@ -1,0 +1,1330 @@
+{
+  "description": "Unlisted active BDCs with XBRL filing data. Auto-generated reference for the wrapper skill.",
+  "generated": "2026-06-03",
+  "total_count": 129,
+  "with_wrapper": 8,
+  "without_wrapper": 121,
+  "with_holdings_data": 123,
+  "without_holdings_data": 6,
+  "entries": [
+    {
+      "cik": "0001950976",
+      "entity_name": "26North BDC, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1099,
+      "holdings_quarters": 9,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-03-31"
+    },
+    {
+      "cik": "0001998387",
+      "entity_name": "5C Lending Partners Corp.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 218,
+      "holdings_quarters": 6,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-12-31"
+    },
+    {
+      "cik": "0001634452",
+      "entity_name": "AB Private Credit Investors Corp",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 11755,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0001982701",
+      "entity_name": "AB Private Lending Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3507,
+      "holdings_quarters": 8,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-06-30"
+    },
+    {
+      "cik": "0001913724",
+      "entity_name": "AG Twin Brook Capital Income Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 13399,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002011498",
+      "entity_name": "AGL Private Credit Income Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 821,
+      "holdings_quarters": 6,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-12-31"
+    },
+    {
+      "cik": "0001987221",
+      "entity_name": "AMG Comvest Senior Lending Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2179,
+      "holdings_quarters": 10,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-12-31"
+    },
+    {
+      "cik": "0001979306",
+      "entity_name": "Andalusian Credit Company, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 390,
+      "holdings_quarters": 9,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-03-31"
+    },
+    {
+      "cik": "0001976336",
+      "entity_name": "Antares Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 11923,
+      "holdings_quarters": 6,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-12-31"
+    },
+    {
+      "cik": "0001993402",
+      "entity_name": "Antares Strategic Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 15299,
+      "holdings_quarters": 9,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-03-31"
+    },
+    {
+      "cik": "0002065397",
+      "entity_name": "Antares Strategic Credit Fund II LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1022,
+      "holdings_quarters": 3,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-09-30"
+    },
+    {
+      "cik": "0001837532",
+      "entity_name": "Apollo Debt Solutions BDC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 14567,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002052152",
+      "entity_name": "Apollo Origination II (L) Capital Trust",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 785,
+      "holdings_quarters": 5,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-03-31"
+    },
+    {
+      "cik": "0002052153",
+      "entity_name": "Apollo Origination II (UL) Capital Trust",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 792,
+      "holdings_quarters": 5,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-03-31"
+    },
+    {
+      "cik": "0002083477",
+      "entity_name": "APS BDC, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 131,
+      "holdings_quarters": 1,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2026-03-31"
+    },
+    {
+      "cik": "0002031750",
+      "entity_name": "Ares Core Infrastructure Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 364,
+      "holdings_quarters": 7,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-09-30"
+    },
+    {
+      "cik": "0001918712",
+      "entity_name": "ARES STRATEGIC INCOME FUND",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
+      "has_holdings_data": true,
+      "holdings_rows": 15177,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001633858",
+      "entity_name": "Audax Credit BDC Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 10499,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002033362",
+      "entity_name": "Audax Private Credit Fund, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2144,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001899017",
+      "entity_name": "Bain Capital Private Credit",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3597,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001811972",
+      "entity_name": "Barings Capital Investment Corp",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 13490,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001859919",
+      "entity_name": "Barings Private Credit LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 15807,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001726548",
+      "entity_name": "BC Partners Lending Corp",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2570,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001950572",
+      "entity_name": "BIP Ventures Evergreen BDC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 128,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001834543",
+      "entity_name": "BlackRock Direct Lending Corp.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 6988,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001902649",
+      "entity_name": "BlackRock Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 7952,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001803498",
+      "entity_name": "Blackstone Private Credit Fund",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": ["dispatch", "archetypes"],
+      "has_holdings_data": true,
+      "holdings_rows": 43705,
+      "holdings_quarters": 15,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2022-09-30"
+    },
+    {
+      "cik": "0002049733",
+      "entity_name": "Blackstone Private Real Estate Credit & Income Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 495,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001895316",
+      "entity_name": "Brightwood Capital Corp I",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2130,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002017636",
+      "entity_name": "CCS IX Portfolio Holdings, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 132,
+      "holdings_quarters": 5,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-03-31"
+    },
+    {
+      "cik": "0001841514",
+      "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3592,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001954360",
+      "entity_name": "Crescent Private Credit Income Corp",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
+      "has_holdings_data": true,
+      "holdings_rows": 4453,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0002035713",
+      "entity_name": "Crestline Lending Solutions, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 394,
+      "holdings_quarters": 3,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-09-30"
+    },
+    {
+      "cik": "0001916099",
+      "entity_name": "Diameter Credit Co",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1611,
+      "holdings_quarters": 9,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-03-31"
+    },
+    {
+      "cik": "0001133901",
+      "entity_name": "ELECTRONIC MEDIA CENTRAL CORP",
+      "wrapper_status": "none",
+      "has_holdings_data": false
+    },
+    {
+      "cik": "0002027033",
+      "entity_name": "EPT 16 LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1002,
+      "holdings_quarters": 3,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-09-30"
+    },
+    {
+      "cik": "0001899996",
+      "entity_name": "Fidelity Private Credit Central Fund LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 5984,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001920453",
+      "entity_name": "Fidelity Private Credit Fund",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_leaf_guard",
+      "has_holdings_data": true,
+      "holdings_rows": 4964,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001890107",
+      "entity_name": "First Eagle Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3396,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0002012139",
+      "entity_name": "Fortress Private Lending Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 576,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001920145",
+      "entity_name": "Goldman Sachs Private Credit Fund LLC",
+      "wrapper_status": "exists",
+      "wrapper_version": 3,
+      "wrapper_sections": [
+        "dispatch",
+        "identifier_parser",
+        "archetypes",
+        "invariants"
+      ],
+      "has_holdings_data": true,
+      "holdings_rows": 9070,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001772704",
+      "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 7197,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001674760",
+      "entity_name": "Goldman Sachs Private Middle Market Credit LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1967,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001901612",
+      "entity_name": "Golub Capital BDC 4 LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 11357,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001868878",
+      "entity_name": "Golub Capital Direct Lending LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 18538,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001901606",
+      "entity_name": "Golub Capital Direct Lending Unlevered LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 9543,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001930087",
+      "entity_name": "Golub Capital Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 11178,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0002082559",
+      "entity_name": "Golub Capital Private Income Fund I",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 401,
+      "holdings_quarters": 2,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-12-31"
+    },
+    {
+      "cik": "0002082557",
+      "entity_name": "Golub Capital Private Income Fund S",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 402,
+      "holdings_quarters": 2,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-12-31"
+    },
+    {
+      "cik": "0001661306",
+      "entity_name": "Hancock Park Corporate Income, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1494,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001989817",
+      "entity_name": "HPS Corporate Capital Solutions Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2853,
+      "holdings_quarters": 8,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-06-30"
+    },
+    {
+      "cik": "0001838126",
+      "entity_name": "HPS Corporate Lending Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 14409,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001984739",
+      "entity_name": "Investcorp US Private Credit BDC II",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 66,
+      "holdings_quarters": 1,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2026-03-31"
+    },
+    {
+      "cik": "0001959604",
+      "entity_name": "Jefferies Credit Partners BDC Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 4167,
+      "holdings_quarters": 10,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-12-31"
+    },
+    {
+      "cik": "0001850787",
+      "entity_name": "Kayne DL 2021, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1728,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001911321",
+      "entity_name": "Kennedy Lewis Capital Co",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2850,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002012839",
+      "entity_name": "KKR Enhanced US Direct Lending Fund-L",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2928,
+      "holdings_quarters": 8,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-06-30"
+    },
+    {
+      "cik": "0001930679",
+      "entity_name": "KKR FS Income Trust",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 5871,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001975736",
+      "entity_name": "KKR FS Income Trust Select",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3968,
+      "holdings_quarters": 9,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-03-31"
+    },
+    {
+      "cik": "0001849089",
+      "entity_name": "Lafayette Square Empire BDC, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1587,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002043759",
+      "entity_name": "LAGO Evergreen Credit",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 290,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001983514",
+      "entity_name": "LGAM Private Credit LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3744,
+      "holdings_quarters": 10,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-12-31"
+    },
+    {
+      "cik": "0002008748",
+      "entity_name": "Lord Abbett Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 190,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0002041841",
+      "entity_name": "Lord Abbett Private Credit Fund S",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 291,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001988280",
+      "entity_name": "Manulife Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3181,
+      "holdings_quarters": 9,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-03-31"
+    },
+    {
+      "cik": "0002006758",
+      "entity_name": "Middle Market Apollo Institutional Private Lending",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3166,
+      "holdings_quarters": 7,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-06-30"
+    },
+    {
+      "cik": "0002061670",
+      "entity_name": "Monroe Capital Enhanced Corporate Lending Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 443,
+      "holdings_quarters": 2,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-12-31"
+    },
+    {
+      "cik": "0001742313",
+      "entity_name": "Monroe Capital Income Plus Corp",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 17479,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001817825",
+      "entity_name": "MSC Capital LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2145,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001849894",
+      "entity_name": "MSD Investment, LLC",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "prefix_strip",
+      "has_holdings_data": true,
+      "holdings_rows": 3778,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001779523",
+      "entity_name": "Muzinich BDC, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 425,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001985375",
+      "entity_name": "Muzinich Corporate Lending Income Fund, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 749,
+      "holdings_quarters": 4,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-06-30"
+    },
+    {
+      "cik": "0001925531",
+      "entity_name": "New Mountain Guardian IV BDC L.L.C.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 6219,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001976719",
+      "entity_name": "New Mountain Guardian IV Unlevered BDC, L.L.C.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 4456,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0002037804",
+      "entity_name": "New Mountain Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3402,
+      "holdings_quarters": 6,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-12-31"
+    },
+    {
+      "cik": "0001588272",
+      "entity_name": "NexPoint Capital, Inc.  (NXPT)",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 872,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0001766037",
+      "entity_name": "NMF SLF I, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 8853,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001973476",
+      "entity_name": "North Haven Private Income Fund A LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 5870,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0001851322",
+      "entity_name": "North Haven Private Income Fund LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 14984,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001911066",
+      "entity_name": "Nuveen Churchill Private Capital Income Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 9098,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001974793",
+      "entity_name": "Oaktree Gardens OLP, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 939,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001872371",
+      "entity_name": "Oaktree Strategic Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 7350,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001955010",
+      "entity_name": "OHA Senior Private Lending Fund (U) LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3695,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001860424",
+      "entity_name": "Onex Falcon Direct Lending BDC Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2081,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001965934",
+      "entity_name": "Overland Advantage",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 855,
+      "holdings_quarters": 8,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-06-30"
+    },
+    {
+      "cik": "0001655887",
+      "entity_name": "Owl Rock Capital Corp II",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 10234,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001812554",
+      "entity_name": "Owl Rock Core Income Corp.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 19366,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001869453",
+      "entity_name": "Owl Rock Technology Income Corp.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 7324,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001938649",
+      "entity_name": "Partners Group Lending Fund, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": false
+    },
+    {
+      "cik": "0002089126",
+      "entity_name": "PennantPark Private Income Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 104,
+      "holdings_quarters": 2,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-12-31"
+    },
+    {
+      "cik": "0001923622",
+      "entity_name": "PGIM Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2099,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001948368",
+      "entity_name": "Phillip Street Middle Market Lending Fund LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 3526,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001905824",
+      "entity_name": "PIMCO Capital Solutions BDC Corp.",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "prefix_strip",
+      "has_holdings_data": true,
+      "holdings_rows": 1565,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0002045370",
+      "entity_name": "Remora Capital Corp",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 693,
+      "holdings_quarters": 3,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-09-30"
+    },
+    {
+      "cik": "0001743415",
+      "entity_name": "SCP Private Credit Income BDC LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1014,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0001959568",
+      "entity_name": "Senior Credit Investments, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 4012,
+      "holdings_quarters": 10,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-12-31"
+    },
+    {
+      "cik": "0002033382",
+      "entity_name": "Silver Point Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 153,
+      "holdings_quarters": 1,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2026-03-31"
+    },
+    {
+      "cik": "0001646614",
+      "entity_name": "Silver Point Specialty Credit Fund, L.P.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 4570,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001925309",
+      "entity_name": "Sixth Street Lending Partners",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_leaf_guard",
+      "has_holdings_data": true,
+      "holdings_rows": 2211,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002028686",
+      "entity_name": "SL Investment Fund II LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1634,
+      "holdings_quarters": 6,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-12-31"
+    },
+    {
+      "cik": "0001832148",
+      "entity_name": "SLR HC BDC LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 773,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0001932591",
+      "entity_name": "SLR Private Credit BDC II LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 603,
+      "holdings_quarters": 10,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-12-31"
+    },
+    {
+      "cik": "0002061174",
+      "entity_name": "Sound Point Direct Lending BDC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 239,
+      "holdings_quarters": 2,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-12-31"
+    },
+    {
+      "cik": "0001786835",
+      "entity_name": "Star Mountain Credit Opportunities Fund, LP",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 4292,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001901037",
+      "entity_name": "Stellus Private Credit BDC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 4757,
+      "holdings_quarters": 15,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2022-09-30"
+    },
+    {
+      "cik": "0001950803",
+      "entity_name": "Stepstone Private Credit Fund LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 13358,
+      "holdings_quarters": 11,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-09-30"
+    },
+    {
+      "cik": "0001825384",
+      "entity_name": "Stone Point Capital Credit LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 5610,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002031283",
+      "entity_name": "Stone Point Credit Income Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1127,
+      "holdings_quarters": 5,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-03-31"
+    },
+    {
+      "cik": "0002077250",
+      "entity_name": "Stone Point Credit Income Fund - Select",
+      "wrapper_status": "none",
+      "has_holdings_data": false
+    },
+    {
+      "cik": "0001885968",
+      "entity_name": "T Series Middle Market Loan Fund LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 9707,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001901164",
+      "entity_name": "T. Rowe Price OHA Select Private Credit Fund",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 5984,
+      "holdings_quarters": 12,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-06-30"
+    },
+    {
+      "cik": "0001702510",
+      "entity_name": "TCG BDC II, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 4843,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001603480",
+      "entity_name": "TCW Direct Lending LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1475,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001715933",
+      "entity_name": "TCW Direct Lending VII LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 2863,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001825265",
+      "entity_name": "TCW Direct Lending VIII LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1550,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002066811",
+      "entity_name": "TCW SPECIALTY LENDING LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": false
+    },
+    {
+      "cik": "0001916608",
+      "entity_name": "TCW Star Direct Lending LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1030,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0002043133",
+      "entity_name": "TCW Steel City Perpetual Levered Fund LP",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 46,
+      "holdings_quarters": 2,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2025-12-31"
+    },
+    {
+      "cik": "0002025369",
+      "entity_name": "Third Point Private Capital Partners",
+      "wrapper_status": "none",
+      "has_holdings_data": false
+    },
+    {
+      "cik": "0001792509",
+      "entity_name": "TriplePoint Global Venture Credit, LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 9355,
+      "holdings_quarters": 10,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-12-31"
+    },
+    {
+      "cik": "0001521945",
+      "entity_name": "Triton Pacific Investment Corporation, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1512,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001784700",
+      "entity_name": "Varagon Capital Corp.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 8471,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001717310",
+      "entity_name": "Venture Lending & Leasing IX, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 5130,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001919369",
+      "entity_name": "VISTA CREDIT STRATEGIC LENDING CORP.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 723,
+      "holdings_quarters": 10,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-12-31"
+    },
+    {
+      "cik": "0002020354",
+      "entity_name": "West Bay BDC LLC",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 654,
+      "holdings_quarters": 7,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-09-30"
+    },
+    {
+      "cik": "0001944831",
+      "entity_name": "Willow Tree Capital Corp",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 1514,
+      "holdings_quarters": 6,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-12-31"
+    },
+    {
+      "cik": "0001850938",
+      "entity_name": "WTI Fund X, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 5014,
+      "holdings_quarters": 13,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2023-03-31"
+    },
+    {
+      "cik": "0001987731",
+      "entity_name": "WTI Fund XI, Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": true,
+      "holdings_rows": 498,
+      "holdings_quarters": 8,
+      "holdings_latest": "2026-03-31",
+      "holdings_earliest": "2024-06-30"
+    },
+    {
+      "cik": "0001999538",
+      "entity_name": "X1 Capital Inc.",
+      "wrapper_status": "none",
+      "has_holdings_data": false
+    }
+  ]
+}

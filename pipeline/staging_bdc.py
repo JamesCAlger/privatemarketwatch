@@ -13,6 +13,7 @@ import duckdb
 import pandas as pd
 
 from pipeline.bdc_identifier import (
+    _AFFILIATION_PIPE_SUFFIX_RE,
     _AFFILIATION_PREFIX_RE,
     _AFFILIATION_SUFFIX_RE,
     _AFFILIATION_TAGS,
@@ -569,29 +570,39 @@ def _prepare_bdc(
     _leaf_guard_cfgs = {k: v for k, v in _staging_configs.items()
                         if v["staging"].get("strategy") == "hierarchy_leaf_guard"}
 
-    # MSD hierarchy prefix: CIK list from staging configs
-    _prefix_strip_ciks = [v["cik"] for v in _prefix_strip_cfgs.values()]
-    _msd_cik_sql = (
-        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
-        "IN (" + ", ".join(f"'{c}'" for c in _prefix_strip_ciks) + ")"
-    ) if _prefix_strip_ciks else "FALSE"
+    # Prefix-strip hierarchy: build per-CIK conditions and clean expressions
+    # so each CIK's own hierarchy_prefix_re is applied correctly.
+    _prefix_strip_per_cik: list[dict[str, str]] = []
+    for _ps_cfg in _prefix_strip_cfgs.values():
+        _ps_cik = _ps_cfg["cik"]
+        _ps_re = _ps_cfg["staging"]["hierarchy_prefix_re"]
+        _ps_cik_sql = (
+            f"LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), "
+            f"10, '0') = '{_ps_cik}'"
+        )
+        _prefix_strip_per_cik.append({"cik_sql": _ps_cik_sql, "re": _ps_re})
     # CIKs eligible for single-child rollup detection (comma-delimited format)
     _comma_delim_ciks = _get_comma_delimited_ciks()
     _single_child_rollup_cik_sql = (
         "LPAD(REGEXP_REPLACE(CAST(a.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _comma_delim_ciks) + ")"
     ) if _comma_delim_ciks else "FALSE"
-    # Read prefix_strip regex from JSON config (placeholders already expanded)
-    _msd_hierarchy_prefix_re = (
-        next(iter(_prefix_strip_cfgs.values()))["staging"]["hierarchy_prefix_re"]
-        if _prefix_strip_cfgs else ""
-    )
+    # Combined condition: any prefix_strip CIK matches its own regex
     _msd_hierarchy_condition = (
-        f"{_msd_cik_sql} "
-        f"AND regexp_matches(_raw_id, '{_msd_hierarchy_prefix_re}')"
+        " OR ".join(
+            f"({d['cik_sql']} AND regexp_matches(_raw_id, '{d['re']}'))"
+            for d in _prefix_strip_per_cik
+        )
+        if _prefix_strip_per_cik else "FALSE"
     )
-    _msd_clean_raw = f"regexp_replace(_raw_id, '{_msd_hierarchy_prefix_re}', '')"
-
+    # Per-CIK clean expression: apply the matching CIK's regex
+    _msd_clean_raw = (
+        ("CASE " + " ".join(
+            f"WHEN {d['cik_sql']} THEN regexp_replace(_raw_id, '{d['re']}', '')"
+            for d in _prefix_strip_per_cik
+        ) + " ELSE _raw_id END")
+        if _prefix_strip_per_cik else "_raw_id"
+    )
     # Prefix-rules aggregate bypass: CIKs with declared prefix_rules in
     # their wrapper JSON should not have real positions dropped by the
     # aggregate filter when the identifier starts with a declared prefix
@@ -614,14 +625,18 @@ def _prepare_bdc(
     _prefix_rules_condition_parts: list[str] = []
     _prefix_rules_hierarchy_parts: list[str] = []
     _double_investments_cik_norms: list[str] = []
+    _prefix_strip_cik_set = {v["cik"] for v in _prefix_strip_cfgs.values()}
     for _pr_cik, _pr_prefixes in _prefix_rules_data.items():
         _pr_cik_norm = _pr_cik.lstrip("0").zfill(10)
         _pr_cik_sql = (
             f"LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
             f"= '{_pr_cik_norm}'"
         )
-        # Track CIKs that use "Investments Investments" as a declared prefix
-        if any(p.lower() == "investments investments" for p in _pr_prefixes):
+        # Track CIKs that use "Investments Investments" as a declared prefix,
+        # but skip CIKs with prefix_strip staging since they have their own
+        # hierarchy_prefix_re that handles the full stripping correctly.
+        if (any(p.lower() == "investments investments" for p in _pr_prefixes)
+                and _pr_cik_norm not in _prefix_strip_cik_set):
             _double_investments_cik_norms.append(_pr_cik_norm)
         # Build regex to match any declared prefix (case-insensitive)
         _pr_prefix_alts = "|".join(
@@ -1201,18 +1216,22 @@ def _prepare_bdc(
                 regexp_replace(
                     regexp_replace(
                         regexp_replace(
-                            CASE WHEN {_double_inv_cik_sql}
-                                THEN regexp_replace(
-                                    _raw_id,
-                                    '{_DOUBLE_INVESTMENTS_HIERARCHY_RE}',
-                                    ''
-                                )
-                                ELSE _raw_id
-                            END,
-                            '{_AFFILIATION_PREFIX_RE}',
+                            regexp_replace(
+                                CASE WHEN {_double_inv_cik_sql}
+                                    THEN regexp_replace(
+                                        _raw_id,
+                                        '{_DOUBLE_INVESTMENTS_HIERARCHY_RE}',
+                                        ''
+                                    )
+                                    ELSE _raw_id
+                                END,
+                                '{_AFFILIATION_PREFIX_RE}',
+                                ''
+                            ),
+                            '{_AFFILIATION_SUFFIX_RE}',
                             ''
                         ),
-                        '{_AFFILIATION_SUFFIX_RE}',
+                        '{_AFFILIATION_PIPE_SUFFIX_RE}',
                         ''
                     ),
                     '{_INVESTMENTS_HIERARCHY_RE}',

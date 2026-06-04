@@ -271,6 +271,15 @@ _AFFILIATION_SUFFIX_RE = (
     r"(?i) - (?:Non-Control(?:led)?(?:[/,] ?Non-Affiliat(?:e|ed))?"
     r"|Control(?:led)?|Affiliat(?:e|ed))$"
 )
+# Pipe-delimited affiliation suffix: " | Controlled Affiliated Issuer" etc.
+# Applied separately from _AFFILIATION_SUFFIX_RE because the delimiter is
+# a pipe, not a dash, and the tag vocabulary is broader.
+_AFFILIATION_PIPE_SUFFIX_RE = (
+    r"(?i)\s*\|\s*(?:"
+    r"(?:Non[- ]?)?(?:Control(?:led)?(?:\s+|[/,]\s*))?"
+    r"(?:Non[- ]?)?Affiliat(?:e|ed|er)(?:\s+(?:Issuer[er]*|User|Investments?))?"
+    r")$"
+)
 
 # Entity signals that indicate a real company name (guards for prefix filter)
 
@@ -278,6 +287,15 @@ _AFFILIATION_TAGS = {
     "non-affiliated issuer", "affiliated issuer",
     "non-affiliated", "affiliated", "controlled",
     "non-control/non-affiliate", "control", "affiliate",
+    # Compound tags seen in BCRED (0001803498) and others
+    "controlled affiliated issuer",
+    "non-controlled affiliated issuer",
+    "non-controlled affiliated user",  # typo variant in BCRED filings
+    "non-controlled affiliated",
+    "non affiliated",  # no-hyphen variant (CIK 0001655887)
+    "no-affiliated issuer",  # typo variant (CIK 0001812554)
+    "nonaffiliated",  # no-hyphen no-space variant (CIK 0001859919)
+    "non-affiliated issuerer",  # typo variant (CIK 0002037804)
 }
 
 # Instrument-type keywords for 3-pipe format detection.  When segment 3

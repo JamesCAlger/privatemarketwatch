@@ -423,3 +423,44 @@ Implemented position-level safeguards for `position_id` assignment and repaired 
 
 **Residual risks:**
 - `position_id_audit.py` still flags chain length >25 for 155 IDs and singleton IDs appearing in matches for 9,672 IDs. These are residual audit heuristics, not duplicate same-date failures; they should be reviewed separately before treating the audit as a full pass/fail gate.
+
+### 2026-06-03 -- Add audited soft-gate exceptions for BDC wrapper oracle
+
+Implemented a narrow agent-exception path for BDC XBRL wrapper promotion gates.
+
+**pipeline/bdc_xbrl_oracle_exceptions.py and pipeline/config.py:**
+- Added `bdc_xbrl_oracle_exceptions.json` as the active audited override file path.
+- Added a loader/validator for `bdc-xbrl-oracle-exceptions.v1` records with exact `cik`, `report_date`, `oracle_reason`, and `wrapper_version` matching.
+- Accepted active exceptions require `confidence >= 0.80`; malformed active records fail loudly.
+
+**pipeline/bdc_xbrl_wrapper_oracle.py:**
+- Promotion evaluation now preserves raw `oracle_status` and `oracle_fail_reasons` while adding effective promotion fields: `waived_oracle_reasons`, `unwaived_oracle_reasons`, and `effective_oracle_status`.
+- Exceptions can waive only selected review-style soft diagnostics. Hard rejects, blocker regressions, remaining blocker mechanisms, source reconciliation blockers, and `exclusion_risk_detected` remain non-waiveable.
+- `run_promotion_trial()` writes inactive `exception_proposals.json` templates for eligible unwaived soft reasons; proposals do not apply until accepted in the active override file.
+
+**Tests and validation:**
+- Added focused coverage in `tests/test_bdc_xbrl_wrapper_oracle.py` for accepted exact-match waivers, inactive/low-confidence/stale exceptions, non-waiveable reasons, proposal generation, and loader validation.
+- `python -m pytest tests\test_bdc_xbrl_wrapper_oracle.py -q`: 55 passed.
+- `python scripts\diff_outputs.py --semantic` was run as the post-test backstop and failed due broad pre-existing baseline drift: 443 divergent artifacts, 3,682 checked, 77 skipped. No production rebuild was run.
+
+### 2026-06-03 -- Create wrapper for CIK 0001803498 (Blackstone Private Credit Fund / BCRED)
+
+- Created `data/overrides/bdc_xbrl_wrappers/0001803498.json` (v3 schema, version 1)
+- Wrapper sections: `dispatch` + `archetypes` (no staging or identifier_parser needed -- BCRED uses flat identifiers, not hierarchical)
+- Identifier format: `"CompanyName [N] [| AffiliationAxis]"` -- flat company names with optional numeric tranche suffixes and pipe-delimited affiliation axis labels (appearing only in 2025-12-31+ filings)
+- `canonical_strip_re` strips pipe-delimited affiliation suffixes (Non-Affiliated Issuer, Emerald JV LP, Verdelite JV LP, etc.) for position key stability
+- `non_private_markers` filter cash/money-market/treasury positions (55 rows excluded)
+- `fallback_family_patterns` classify debt/equity/warrant/CLO via keyword matching
+- 6 known edge cases documented: pipe suffix schema change, numeric tranche suffixes, JV sub-portfolio overlap, comparative-period duplication, investment placeholders, JV entity aggregates
+
+**Validation results:**
+- Schema validation: pass
+- Oracle (staging): 50 remaining blocking rows across 15 quarters (34 cash/money-market, 16 unclassified signatures). Zero delta vs baseline.
+- Oracle (unified trial): 46 remaining blocking rows. All 15 quarters status=fail (unclassified_rate/unclassified_fv_rate -- expected for flat identifiers without instrument keywords)
+- Trial unified rebuild: 22,762 rows (production 22,773, delta -11). Index breakdown: 89% DIRECT_LENDING, 5.8% STRUCTURED_CREDIT, 3.6% COMMON_EQUITY, 1% PREFERRED_EQUITY
+- Position matching: J01 PASS (85.4% B1b, threshold 70%), J03 PASS (0.7% fuzzy, threshold 10%)
+- Tests: test_bdc_xbrl_wrapper 50/50, test_unified_cik_trial 7/7, test_bdc_xbrl_wrapper_oracle 55/55, test_position_matching 75/75
+
+**Status: partial_wrapper** -- oracle fails on unclassified_rate for all quarters because BCRED identifiers are flat company names without instrument-type keywords. The wrapper correctly classifies positions via XBRL field evidence (rate/maturity/shares) rather than identifier text. Cash/money-market blockers are correctly excluded by non_private_markers. No production rebuild performed.
+
+- Updated `unlisted_bdc_xbrl_reference.json`: with_wrapper 7->8, without_wrapper 122->121
