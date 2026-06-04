@@ -2,8 +2,8 @@
   "description": "Unlisted active BDCs with XBRL filing data. Auto-generated reference for the wrapper skill.",
   "generated": "2026-06-03",
   "total_count": 129,
-  "with_wrapper": 8,
-  "without_wrapper": 121,
+  "with_wrapper": 10,
+  "without_wrapper": 119,
   "with_holdings_data": 123,
   "without_holdings_data": 6,
   "entries": [
@@ -278,7 +278,10 @@
       "entity_name": "Blackstone Private Credit Fund",
       "wrapper_status": "exists",
       "wrapper_version": 1,
-      "wrapper_sections": ["dispatch", "archetypes"],
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 43705,
       "holdings_quarters": 15,
@@ -903,12 +906,18 @@
     {
       "cik": "0001812554",
       "entity_name": "Owl Rock Core Income Corp.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
       "has_holdings_data": true,
       "holdings_rows": 19366,
       "holdings_quarters": 13,
       "holdings_latest": "2026-03-31",
-      "holdings_earliest": "2023-03-31"
+      "holdings_earliest": "2023-03-31",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ]
     },
     {
       "cik": "0001869453",
@@ -1095,7 +1104,13 @@
     {
       "cik": "0001901037",
       "entity_name": "Stellus Private Credit BDC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 4757,
       "holdings_quarters": 15,

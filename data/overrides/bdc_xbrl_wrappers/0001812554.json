@@ -1,0 +1,301 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001812554",
+  "entity_name": "Owl Rock Core Income Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "OWL_ROCK_CORE_INCOME",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "interest rate",
+        "maturity",
+        "maturity date",
+        "reference rate",
+        "sofr",
+        "libor",
+        "initial acquisition date",
+        "first lien",
+        "second lien",
+        "senior secured",
+        "term loan",
+        "revolving",
+        "revolver",
+        "delayed draw",
+        "unitranche",
+        "unsecured",
+        "bridge loan",
+        "subordinated",
+        "unsecured note",
+        "senior convertible note"
+      ],
+      "equity": [
+        "common stock",
+        "common equity",
+        "common units",
+        "preferred stock",
+        "preferred equity",
+        "preferred units",
+        "preferred shares",
+        "partnership interest",
+        "partnership interests",
+        "partnership units",
+        "llc interest",
+        "membership interest",
+        "equity interest",
+        "equity co-invest",
+        "class a units",
+        "class a-2 units",
+        "class b units",
+        "class a interests",
+        "series a-2 units",
+        "lp interest",
+        "limited partner interest"
+      ],
+      "specialty_finance": [
+        "specialty finance debt investment",
+        "specialty finance equity investment"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "expiration date"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total portfolio company commitments",
+      "total non-controlled/non-affiliated",
+      "total controlled/affiliated",
+      "total debt investments",
+      "total equity investments",
+      "sub-total",
+      "subtotal"
+    ],
+    "non_private_markers": [],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)first lien|second lien|senior secured|subordinated|unitranche|term loan|revolving|delayed draw|unsecured facility|unsecured note|senior convertible note|bridge loan",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|partnership interest|partnership units|LLC interest|membership interest|equity interest|equity co-invest|class [a-z][-]?\\d* units|class [a-z]\\d* interests|class [a-z] interests|series [a-z][-]?\\d* units|LP interest|limited partner interest",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)specialty finance",
+        "family": "specialty_finance"
+      },
+      {
+        "regex": "(?i)\\bwarrant",
+        "family": "warrant"
+      }
+    ],
+    "category_marker_re": "(?i)^(?:ABF|BF)\\s*-\\s*",
+    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|No-Affiliated Issuer)$"
+  },
+  "archetypes": {
+    "senior_secured_debt": {
+      "description": "First lien and second lien senior secured loans, revolvers, delayed draw facilities, EUR term loans",
+      "detection_rules": {
+        "keywords": [
+          "First lien senior secured",
+          "Second lien senior secured",
+          "First Lien",
+          "Second Lien",
+          "Senior Secured",
+          "Term Loan",
+          "Revolving",
+          "Revolver",
+          "Delayed Draw"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.5,
+          "max": 30.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "unsecured_debt": {
+      "description": "Unsecured facilities and subordinated debt",
+      "detection_rules": {
+        "keywords": [
+          "Unsecured facility",
+          "Unsecured notes",
+          "Senior Convertible Note",
+          "Subordinated",
+          "Bridge Loan"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.5,
+          "max": 30.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Common stock, preferred shares, partnership interests, class units, LP interests, equity co-investments",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Equity",
+          "Common Units",
+          "Preferred Stock",
+          "Preferred Equity",
+          "Preferred Shares",
+          "Preferred Units",
+          "Class A Units",
+          "Class A-2 Units",
+          "Class B Units",
+          "Class A Interests",
+          "Series A-2 Units",
+          "Partnership Interest",
+          "Partnership Units",
+          "LLC Interest",
+          "Membership Interest",
+          "Equity Interest",
+          "Equity Co-Invest",
+          "LP Interest",
+          "Limited Partner Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "specialty_finance": {
+      "description": "Specialty finance debt and equity investments in affiliated vehicles (leasing, real estate, SLF)",
+      "detection_rules": {
+        "keywords": [
+          "Specialty finance debt investment",
+          "Specialty finance equity investment"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "owlrock_pipe_format_change",
+      "description": "Identifiers switched from comma-delimited (Issuer, Instrument) to pipe-delimited (Issuer | Instrument | Affiliation) starting Q4 2025. The canonical_strip_re removes the pipe-appended affiliation label.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": " \\| ",
+      "disposition": "expected"
+    },
+    {
+      "id": "owlrock_no_affiliated_typo",
+      "description": "Typo variant 'No-Affiliated Issuer' instead of 'Non-Affiliated Issuer' appears in some pipe-delimited identifiers.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "No-Affiliated Issuer",
+      "disposition": "expected"
+    },
+    {
+      "id": "owlrock_footnote_suffix",
+      "description": "Affiliated/controlled entity positions have (c) or (d) footnote suffixes directly on the entity name, marking affiliation status.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "\\([cd]\\)\\s*$",
+      "disposition": "expected"
+    },
+    {
+      "id": "owlrock_abf_bf_category_headers",
+      "description": "Category header rows like 'ABF - Leasing', 'ABF - Specialty finance', 'BF - Commercial Real Estate' with no FV/rate/maturity. Section headers for specialty finance sub-categories.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "^(?:ABF|BF) - ",
+      "disposition": "expected"
+    },
+    {
+      "id": "owlrock_bare_affiliated_entities",
+      "description": "Affiliated fund vehicles (LSI Financing, Fifth Season Investments, Blue Owl Credit SLF, OCIC SLF, BOCSO) appear as bare entity names without instrument type suffix. These are legitimate specialty finance positions.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)^(?:LSI Financing|Fifth Season|Blue Owl Credit SLF|Blue Owl Cross-Strategy|OCIC SLF|OWL-HP FINANCE|Wingspire Capital)",
+      "disposition": "expected"
+    },
+    {
+      "id": "owlrock_numeric_tranche_suffix",
+      "description": "Numeric suffixes (1, 2) distinguish different loan tranches to the same borrower (e.g., 'First lien senior secured loan 1').",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "loan \\d+$",
+      "disposition": "expected"
+    },
+    {
+      "id": "owlrock_commitment_subtotals",
+      "description": "Commitment subtotal rows (Total Portfolio Company Commitments, Total non-controlled/non-affiliated - debt commitments) with negative FV representing unfunded commitment obligations.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "^Total .* commitments?$",
+      "disposition": "expected"
+    },
+    {
+      "id": "owlrock_bsl_bare_names",
+      "description": "Broadly syndicated loan positions in Q3 2023 through Q1 2024 appear as bare company names without instrument type suffix (e.g., 'Berlin Packaging L.L.C.', 'Hub International'). These are legitimate BSL positions but cannot be classified by dispatch without an instrument keyword. Causes 27% unclassified rate in affected quarters.",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "^[A-Z0-9]",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}
