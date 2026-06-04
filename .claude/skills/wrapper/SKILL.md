@@ -1,6 +1,6 @@
 ---
 description: Create or update a BDC XBRL wrapper JSON for a CIK
-argument-hint: <CIK> [profile|create|validate|update]
+argument-hint: [CIK|next] [profile|create|validate|update]
 allowed-tools: Bash Read Write Edit Grep Glob
 ---
 
@@ -8,9 +8,11 @@ allowed-tools: Bash Read Write Edit Grep Glob
 
 Build, validate, or update per-CIK wrapper JSON files that control how the pipeline classifies and extracts structured fields from XBRL investment identifiers.
 
-**Usage:** `/wrapper <CIK> [mode]`
+**Usage:** `/wrapper [CIK|next] [mode]`
 
 Modes: `profile` (default), `create`, `validate`, `update`
+
+If the user does not specify a CIK, choose the next unprocessed CIK from the default FV priority queue below.
 
 ---
 
@@ -31,10 +33,11 @@ Schema validation and unit examples are necessary, but not sufficient:
 
 - **Schema validation passes** means the JSON is syntactically valid.
 - **Wrapper classifier tests pass** means sampled identifiers classify as intended.
-- **Oracle passes against final unified holdings** means the wrapper is production-clean.
+- **Promotion gate passes against final unified holdings** means the wrapper is production-clean.
 - **J01 position key stability >= 70% B1b** means the wrapper's position keys are stable across quarters.
 - **J03 fuzzy fallback rate <= 10%** means position keys aren't falling through to expensive fuzzy matching.
-- **Oracle fails** means the wrapper is partial unless residuals are explicitly documented and accepted.
+- **Raw oracle failures remain visible** even when an accepted soft-gate exception changes the effective promotion verdict.
+- **Oracle fails** means the wrapper is partial unless residuals are explicitly documented, accepted, and only affect waiveable soft gates.
 
 Do not describe a wrapper as complete because visual samples look plausible. The source-to-final-unified reconciliation and position matching quality checks are the promotion gates.
 
@@ -47,6 +50,71 @@ The wrapper sections affect different parts of the pipeline:
 - **`staging`** handles custom extraction when generic parser logic is not enough.
 
 If identifiers encode structured fields and final extraction depends on them, add `identifier_parser` or `staging` config unless generic staging has already been proven sufficient. Confirm from logs or loader output that the target CIK's parser/staging config is actually loaded; do not assume a similar CIK's parser applies.
+
+---
+
+## Step 0: Look Up the CIK in the Reference
+
+If the user did not provide a specific CIK, select the first CIK in this queue whose reference entry still has `wrapper_status = "none"`. This queue is ordered by latest-quarter fair value needed to push unlisted BDC wrapper coverage toward about 90% FV coverage. Basis: `data/output/private_markets_holdings.csv` latest-quarter BDC FV and `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json`, measured 2026-06-04.
+
+| Priority | CIK | Entity |
+|---:|---|---|
+| 1 | 0001838126 | HPS Corporate Lending Fund |
+| 2 | 0001837532 | Apollo Debt Solutions BDC |
+| 3 | 0001930087 | Golub Capital Private Credit Fund |
+| 4 | 0001872371 | Oaktree Strategic Credit Fund |
+| 5 | 0001851322 | North Haven Private Income Fund LLC |
+| 6 | 0001742313 | Monroe Capital Income Plus Corp |
+| 7 | 0001859919 | Barings Private Credit Corp |
+| 8 | 0001869453 | Blue Owl Technology Income Corp. |
+| 9 | 0002031750 | Ares Core Infrastructure Fund |
+| 10 | 0001913724 | TPG Twin Brook Capital Income Fund |
+| 11 | 0001993402 | Antares Strategic Credit Fund |
+| 12 | 0001950803 | Stepstone Private Credit Fund LLC |
+| 13 | 0001930679 | KKR FS Income Trust |
+| 14 | 0001901164 | T. Rowe Price OHA Select Private Credit Fund |
+| 15 | 0001825384 | Stone Point Credit Corp |
+| 16 | 0001916099 | Diameter Credit Co |
+| 17 | 0001702510 | Carlyle Credit Solutions, Inc. |
+| 18 | 0001901612 | Golub Capital BDC 4, Inc. |
+| 19 | 0001911066 | Nuveen Churchill Private Capital Income Fund |
+| 20 | 0001902649 | BlackRock Private Credit Fund |
+| 21 | 0002037804 | New Mountain Private Credit Fund |
+| 22 | 0001989817 | HPS Corporate Capital Solutions Fund |
+| 23 | 0001885968 | T Series BDC LLC |
+| 24 | 0001899017 | Bain Capital Private Credit |
+| 25 | 0001925531 | New Mountain Guardian IV BDC, L.L.C. |
+| 26 | 0002049733 | Blackstone Private Real Estate Credit & Income Fund |
+| 27 | 0001634452 | AB Private Credit Investors Corp |
+| 28 | 0001975736 | KKR FS Income Trust Select |
+| 29 | 0002083477 | APS BDC, LLC |
+| 30 | 0001959604 | Jefferies Credit Partners BDC Inc. |
+| 31 | 0002012139 | Fortress Private Lending Fund |
+| 32 | 0001976336 | Antares Private Credit Fund |
+| 33 | 0001899996 | Fidelity Private Credit Co LLC |
+| 34 | 0002052152 | Apollo Origination II (Levered) Capital Trust |
+| 35 | 0001772704 | Goldman Sachs Private Middle Market Credit II LLC |
+| 36 | 0001965934 | Overland Advantage |
+| 37 | 0002011498 | AGL Private Credit Income Fund |
+| 38 | 0001766037 | NMF SLF I, Inc. |
+| 39 | 0001919369 | VISTA CREDIT STRATEGIC LENDING CORP. |
+
+Before doing any work, check the unlisted BDC reference to confirm the selected CIK exists and see its current wrapper status:
+
+```python
+import json
+with open('data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json') as f:
+    ref = json.load(f)
+match = [e for e in ref['entries'] if e['cik'] == '{CIK_PADDED}']
+if match:
+    print(json.dumps(match[0], indent=2))
+else:
+    print('CIK not in unlisted reference -- check if listed or not a BDC')
+```
+
+If the CIK is not in the reference, check whether it is a listed BDC (has a ticker in `data/output/bdc_listed_prices.csv`) or not in the BDC universe at all. Listed BDCs can still have wrappers; the reference only tracks unlisted ones.
+
+If `wrapper_status` is `"exists"`, the CIK already has a wrapper. Use `validate` or `update` mode instead of `create`. If `has_holdings_data` is `false`, the CIK has XBRL filing directories but no extracted holdings -- profiling will fail until holdings are extracted.
 
 ---
 
@@ -125,6 +193,33 @@ SELECT investment_identifier,
 FROM ...
 ```
 
+### 1e. Cross-reference HTML grids (when available)
+
+Check `data/raw/filings/bdc_html/{CIK_UNPADDED}/` for `.grids.json` files. If grids exist for a period adjacent to the XBRL start date (within 1-2 quarters), extract the instrument type column from SOI tables and compare against the wrapper's `fallback_family_patterns`. This catches instrument vocabulary that the XBRL identifiers encode differently or omit entirely.
+
+HTML SOI tables preserve the original column structure (Company / Investment Type / Rate / Maturity / Par / Cost / FV) while XBRL flattens everything into a single `investment_identifier` string. Some instrument types that exist as a distinct column in the HTML table (e.g. "Unsecured notes", "Class A-2 Units", "Partnership Units") may never appear as a keyword in the XBRL identifier.
+
+```python
+import json, glob, os
+
+grid_files = sorted(glob.glob(f'data/raw/filings/bdc_html/{CIK_UNPADDED}/*.grids.json'))
+if grid_files:
+    # Use the most recent grid file
+    with open(grid_files[-1]) as f:
+        grids = json.load(f)
+    # Find SOI tables by consistent column width (48 is common)
+    soi_widths = {g['width'] for g in grids if g['width'] >= 20}
+    print(f'{len(grid_files)} grid files, SOI widths: {soi_widths}')
+    # Extract instrument types from the instrument column
+    # Column index varies by filer -- check the filing template or inspect headers
+else:
+    print('No HTML grids available for this CIK')
+```
+
+**When to skip:** If grids are only available for periods 3+ quarters before the XBRL start, instrument vocabulary may have drifted. Also skip if the oracle's `unclassified_rate` is already under 2% -- the oracle surfaces the same gaps more directly.
+
+**When it helps most:** Format transitions (comma to pipe, prefix changes) where the HTML period shows the "before" vocabulary and the XBRL period shows the "after." Also useful when the XBRL identifiers lack instrument type keywords entirely (bare company names) but the HTML SOI tables had them in a separate column.
+
 ---
 
 ## Step 2: Build the Wrapper JSON
@@ -146,7 +241,7 @@ Use the v3 schema. Read the full schema at `schemas/bdc_xbrl_wrapper/wrapper_v3.
 
 ### dispatch section
 
-The dispatch section controls source reconciliation classification. Every identifier gets classified into a disposition.
+The dispatch section controls source reconciliation classification. Identifiers should classify into a disposition when the CIK wrapper explains them. Unclassified rows are a wrapper coverage issue, not a reason to suppress source reconciliation output.
 
 **`rule_prefix`**: Short uppercase label (e.g. `"TRINITY"`, `"GS_PRIVATE_CREDIT"`).
 
@@ -253,7 +348,7 @@ For CIKs whose identifiers need special parsing beyond what the generic pipeline
 
 ## Step 3: Validate the Wrapper
 
-Validation has four levels: schema, staging oracle, trial unified rebuild, and production promotion.
+Validation has four levels: schema, staging oracle, trial unified rebuild, and production promotion gate.
 
 ### 3a. Schema validation
 
@@ -285,6 +380,14 @@ Inspect these artifacts:
 - `remaining_blocker_mechanisms.csv`
 - `baseline_comparison.csv`
 
+If the run used `--promotion-gate`, also inspect:
+
+- `promotion_comparison.csv`
+- `promotion_verdict.json`
+- `exception_proposals.json`
+
+`oracle_status` and `oracle_fail_reasons` are the raw deterministic oracle result. `effective_oracle_status`, `waived_oracle_reasons`, and `unwaived_oracle_reasons` are promotion-gate interpretation fields after accepted soft-gate exceptions are applied.
+
 Treat these mechanisms as unresolved unless there is clear evidence and a documented acceptance rationale:
 
 - `wrapper_blockers_remaining`
@@ -293,6 +396,58 @@ Treat these mechanisms as unresolved unless there is clear evidence and a docume
 - `unclassified_signature`
 - `category_rollup_source_child_fv_mismatch`
 - material cost/FV or rate outliers
+
+Do not let an agent "override" the oracle by silently changing row classifications. The agent may propose an audited exception only for eligible soft diagnostics, and only as a promotion-gate interpretation. Source reconciliation rows, wrapper classifications, and raw oracle results remain unchanged.
+
+#### Soft-gate exception workflow
+
+When a promotion gate writes `exception_proposals.json`, proposals are inactive templates. They do not apply until an accepted record is added to `data/overrides/bdc_xbrl_oracle_exceptions.json`.
+
+Accepted exception records must match exactly on:
+
+- `cik`
+- `report_date`
+- `oracle_reason`
+- `wrapper_version`
+
+They must also include:
+
+- `status`: `accepted`
+- `confidence`: `>= 0.80`
+- `reason`
+- `evidence`
+- `residual_risk`
+- `created_by`
+- `accepted_by`
+- `updated_at`
+
+Only these review-style reasons are waiveable:
+
+- `unclassified_rate_exceeded`
+- `unclassified_fv_rate_exceeded`
+- `unclassified_rate_qoq_jump`
+- `content_signatures_fail`
+- `unparsed_remainder_rows`
+- `unparsed_remainder_spike`
+- `low_position_continuity`
+- `rate_outliers_detected`
+- `cost_fv_ratio_outliers`
+- `concept_drift_detected`
+- `fv_magnitude_shift_detected`
+- `rate_magnitude_shift_detected`
+- `cost_magnitude_shift_detected`
+- `spread_magnitude_shift_detected`
+
+These remain non-waiveable:
+
+- source reconciliation blockers
+- `wrapper_blockers_remaining`
+- `wrapper_no_archetypes`
+- blocker row or FV regressions versus baseline
+- `remaining_*` blocker mechanisms
+- `exclusion_risk_detected`
+
+Use exceptions for "the wrapper is acceptable despite this soft diagnostic" cases, not for fixing extraction. If a parser rule, dispatch pattern, or staging mechanism is wrong, update the wrapper instead of accepting an exception.
 
 ### 3c. One-CIK trial unified rebuild (fast inner loop)
 
@@ -346,25 +501,28 @@ Use this to iterate on `canonical_strip_re` and `prefix_rules`. If J03 shows hig
 - Keys must be unique within each CIK/source/report quarter — repeated keys cannot form B1b edges
 - Placeholder keys (`"nc nc"`, `"lass units"`, etc.) are automatically rejected
 
-### 3d. Production promotion (full rebuild)
+### 3d. Production promotion gate (full rebuild)
 
 Before labeling a wrapper `production_clean`, run the full production rebuild and oracle:
 
 ```bash
 python scripts/rebuild_outputs.py --unified
-python -m pipeline.bdc_xbrl_wrapper_oracle --cik {CIK} --compare-baseline
+python -m pipeline.bdc_xbrl_wrapper_oracle --cik {CIK} --promotion-gate
 python scripts/diff_outputs.py --semantic
 ```
 
 Target result:
 
-- `oracle_status`: `pass` for all relevant quarters
+- raw `oracle_status`: `pass` for all relevant quarters, or raw failures limited to accepted waiveable soft reasons
+- `effective_oracle_status`: `pass` for all relevant quarters
+- `waived_oracle_reasons`: populated only for accepted soft-gate exceptions with documented evidence
+- `unwaived_oracle_reasons`: empty for all relevant quarters
 - `remaining_blocking_rows`: `0`, or explicitly accepted residuals
 - no increase in blocking rows or blocking FV versus baseline
-- documented improvements in `baseline_comparison.csv` if the wrapper was intended to clear blockers
+- documented improvements in `promotion_comparison.csv` and `baseline_comparison.csv` if the wrapper was intended to clear blockers
 - `diff_outputs.py --semantic` shows expected deltas only
 
-If this fails, the wrapper is partial. Summarize affected quarters, mechanisms, row counts, FV exposure, and whether blockers decreased versus baseline. Do not promote it as production-clean.
+If this fails, the wrapper is partial. Summarize affected quarters, mechanisms, row counts, FV exposure, waived/unwaived reasons, and whether blockers decreased versus baseline. Do not promote it as production-clean.
 
 `diff_outputs.py --semantic` is only meaningful after canonical production artifacts are rebuilt — do not run it against trial artifacts.
 
@@ -443,28 +601,231 @@ If the oracle does not pass, write a concise verdict before stopping or promotin
 - source row count, output row count, remaining blocking rows, and remaining blocking FV
 - top residual mechanisms and sample identifiers
 - baseline comparison: blockers reduced, unchanged, or increased
-- explicit status: `production_clean`, `partial_wrapper`, or `blocked_no_safe_mechanism`
+- explicit status: `production_clean`, `partial_wrapper`, `review_required_with_accepted_soft_exceptions`, or `blocked_no_safe_mechanism`
+- any accepted soft-gate exceptions: reason, confidence, evidence, and residual risk
 
 A partial wrapper can still be useful as a diagnostic, but it must not be described as complete.
 
 ---
 
-## Reference: Existing Wrappers
+## Reference: Unlisted BDC Universe Lookup
 
-| CIK | Entity | Key Features |
-|-----|--------|-------------|
-| 0001786108 | Trinity Capital | Family-specific leaf markers, 3 archetypes |
-| 0001377936 | Saratoga Investment | Pct-prefix parsing, issuer bridges |
-| 0001920145 | GS Private Credit | Hierarchical pct identifier_parser, 12+ prefix variants |
-| 0001572694 | Goldman Sachs BDC | Same GS prefix rules |
-| 0001920453 | Fidelity Private Credit | hierarchy_leaf_guard staging |
-| 0001508655 | Sixth Street Specialty | hierarchy_leaf_guard staging |
-| 0001633336 | Crescent Capital | hierarchy_extract staging |
-| 0001918712 | Ares Strategic Income | Minimal dispatch, 3 archetypes with field signatures |
-| 0001849894 | MSD Investment | prefix_strip staging |
-| 0001287750 | Gladstone Capital | Basic prefix rules |
+Before profiling or creating a wrapper, consult the pre-built reference list to find the CIK. This avoids re-scanning the universe each time.
 
-Read existing wrappers at `data/overrides/bdc_xbrl_wrappers/*.json` for patterns.
+**Reference file:** `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json`
+
+This JSON file contains all 129 unlisted active BDCs with XBRL filing data, including:
+- `cik`, `entity_name`
+- `wrapper_status`: `"exists"` or `"none"`
+- `wrapper_version`, `wrapper_sections`, `wrapper_staging_strategy` (when wrapper exists)
+- `has_holdings_data`, `holdings_rows`, `holdings_quarters`, `holdings_latest`, `holdings_earliest`
+
+### Quick lookup
+
+To find a CIK by entity name or check wrapper status:
+
+```python
+import json
+with open('data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json') as f:
+    ref = json.load(f)
+# Search by partial name (case-insensitive)
+matches = [e for e in ref['entries'] if 'blackstone' in e['entity_name'].lower()]
+# Filter to those without wrappers
+no_wrapper = [e for e in ref['entries'] if e['wrapper_status'] == 'none']
+# Filter to those with the most holdings data
+big = sorted([e for e in ref['entries'] if e.get('has_holdings_data')],
+             key=lambda x: x['holdings_rows'], reverse=True)
+```
+
+### Maintaining the reference
+
+**When to regenerate:** After adding or removing a wrapper, after a universe rebuild, or when the reference `generated` date is more than 30 days old.
+
+**How to regenerate:**
+
+```bash
+python -c "
+import pandas as pd, os, duckdb, glob, json, re
+from collections import OrderedDict
+
+universe = pd.read_csv('data/output/bdc_universe.csv', dtype=str)
+universe['cik_padded'] = universe['cik'].str.zfill(10)
+listed = pd.read_csv('data/output/bdc_listed_prices.csv', dtype=str)
+listed_ciks = set(listed['cik'].str.zfill(10).unique())
+xbrl_ciks = set()
+for d in os.listdir('data/raw/filings/bdc_xbrl'):
+    if os.path.isdir(os.path.join('data/raw/filings/bdc_xbrl', d)):
+        xbrl_ciks.add(d.zfill(10))
+wrappers = {}
+for f in glob.glob('data/overrides/bdc_xbrl_wrappers/*.json'):
+    cik = os.path.basename(f).replace('.json', '')
+    with open(f) as fh:
+        data = json.load(fh)
+    if data.get('schema_version') != 'bdc-xbrl-wrapper.v3': continue
+    sections = [s for s in ['dispatch','staging','identifier_parser','archetypes','invariants'] if s in data]
+    wrappers[cik] = {'version': data.get('version'), 'sections': sections,
+                     'staging_strategy': data.get('staging',{}).get('strategy') if 'staging' in data else None}
+con = duckdb.connect()
+hdf = con.execute(\"\"\"SELECT LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR),'[^0-9]','','g'),10,'0') AS cp,
+    COUNT(*) AS tr, COUNT(DISTINCT report_date) AS nq, MAX(report_date) AS lq, MIN(report_date) AS eq
+    FROM read_parquet('data/output/bdc_holdings.parquet') GROUP BY 1\"\"\").fetchdf()
+con.close()
+hmap = {r['cp']:{'total_rows':int(r['tr']),'n_quarters':int(r['nq']),'latest_quarter':r['lq'],'earliest_quarter':r['eq']} for _,r in hdf.iterrows()}
+active = universe[universe['status']=='active']
+ul = active[active['cik_padded'].isin(xbrl_ciks) & ~active['cik_padded'].isin(listed_ciks)].sort_values('entity_name')
+entries = []
+for _,row in ul.iterrows():
+    cik = row['cik_padded']
+    name = re.sub(r'\s*\(CIK\s+\d+\)','',str(row['entity_name'])).strip()
+    e = OrderedDict([('cik',cik),('entity_name',name)])
+    if cik in wrappers:
+        w = wrappers[cik]; e['wrapper_status']='exists'; e['wrapper_version']=w['version']; e['wrapper_sections']=w['sections']
+        if w['staging_strategy']: e['wrapper_staging_strategy']=w['staging_strategy']
+    else: e['wrapper_status']='none'
+    if cik in hmap:
+        h=hmap[cik]; e['has_holdings_data']=True; e['holdings_rows']=h['total_rows']; e['holdings_quarters']=h['n_quarters']
+        e['holdings_latest']=h['latest_quarter']; e['holdings_earliest']=h['earliest_quarter']
+    else: e['has_holdings_data']=False
+    entries.append(e)
+from datetime import date
+ref = OrderedDict([('description','Unlisted active BDCs with XBRL filing data. Auto-generated reference for the wrapper skill.'),
+    ('generated',str(date.today())),('total_count',len(entries)),('with_wrapper',sum(1 for e in entries if e['wrapper_status']=='exists')),
+    ('without_wrapper',sum(1 for e in entries if e['wrapper_status']=='none')),
+    ('with_holdings_data',sum(1 for e in entries if e.get('has_holdings_data'))),
+    ('without_holdings_data',sum(1 for e in entries if not e.get('has_holdings_data'))),('entries',entries)])
+with open('data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json','w') as f:
+    json.dump(ref,f,indent=2)
+print(f'Regenerated: {len(entries)} entries, {ref[\"with_wrapper\"]} with wrappers')
+"
+```
+
+### Current wrapper inventory
+
+**Unlisted BDCs with wrappers (7):**
+
+| CIK | Entity | Sections | Key Features |
+|-----|--------|----------|-------------|
+| 0001918712 | Ares Strategic Income | dispatch, archetypes | Minimal dispatch, 3 archetypes |
+| 0001954360 | Crescent Private Credit | staging, archetypes | hierarchy_extract staging |
+| 0001920453 | Fidelity Private Credit | dispatch, staging, archetypes | hierarchy_leaf_guard staging |
+| 0001920145 | GS Private Credit | dispatch, identifier_parser, archetypes | Hierarchical pct parser, 21 prefix variants |
+| 0001849894 | MSD Investment | staging, archetypes | prefix_strip staging |
+| 0001905824 | PIMCO Capital Solutions | dispatch, staging, archetypes | prefix_strip, 37 aggregate markers |
+| 0001925309 | Sixth Street Lending Partners | dispatch, staging, archetypes | hierarchy_leaf_guard staging |
+
+**Listed BDCs with wrappers (6):**
+
+| CIK | Entity | Sections | Key Features |
+|-----|--------|----------|-------------|
+| 0001287750 | Ares Capital (ARCC) | dispatch, archetypes | Basic aggregate/non-private markers |
+| 0001633336 | Crescent Capital (CCAP) | staging, archetypes | hierarchy_extract staging |
+| 0001572694 | Goldman Sachs BDC (GSBD) | dispatch, archetypes | 8 prefix rules |
+| 0001377936 | Saratoga Investment (SAR) | dispatch, staging, archetypes | issuer_bridge staging, canonical_strip_re |
+| 0001508655 | Sixth Street Specialty (TSLX) | dispatch, staging, archetypes | hierarchy_leaf_guard staging |
+| 0001786108 | Trinity Capital (TRIN) | dispatch, archetypes | Family-specific leaf markers, v3 |
+
+Read existing wrapper JSONs at `data/overrides/bdc_xbrl_wrappers/*.json` for patterns.
+
+### After creating or updating a wrapper
+
+After successfully creating or modifying a wrapper, update the reference file:
+
+1. Re-run the regeneration script above, OR
+2. Manually update the affected entry's `wrapper_status`, `wrapper_version`, and `wrapper_sections` fields in the reference JSON.
+
+---
+
+## Known Pitfalls (Lessons Learned)
+
+These traps have caused agents to waste significant time debugging pipeline interactions instead of improving data quality. Read them before starting.
+
+### Pitfall 1: `_DOUBLE_INVESTMENTS_HIERARCHY_RE` corrupts `_raw_id` for prefix_strip CIKs
+
+**Trigger:** Adding `"Investments Investments"` to `prefix_rules` in a wrapper that also uses `staging.strategy = "prefix_strip"`.
+
+**Mechanism:** Any CIK with `"Investments Investments"` in `prefix_rules` gets added to `_double_investments_cik_norms` in `staging_bdc.py`. This activates a generic regex (`_DOUBLE_INVESTMENTS_HIERARCHY_RE`) in the `strip_affil` CTE that partially strips the identifier — it removes `"Investments Investments - affiliation instrument_keyword "` but only captures single-word instrument keywords like `"first lien"`, NOT compound types like `"First Lien Debt"`. This leaves `"Debt"` at the front of `_raw_id`, which cascades to `bdc_investment_identifier` and corrupts issuer_name extraction.
+
+**Fix (applied 2026-06):** `staging_bdc.py` now excludes prefix_strip CIKs from `_double_investments_cik_norms`. But agents should still verify: after adding a dispatch section to a wrapper, compare trial `bdc_investment_identifier` values against production. If most rows have different identifiers (not just new/lost rows), this trap or something similar is active.
+
+**Verification:** Run `_prepare_bdc(bdc_df=filtered_df)` directly and check that `bdc_investment_identifier` preserves the full raw identifier. Then run `build_unified_holdings()` and check the output — if identifiers are stripped in the unified output but correct in `_prepare_bdc`, the stripping happens post-staging.
+
+### Pitfall 2: `leaf_markers_by_family` must use the family name from `prefix_rules`
+
+**Symptom:** Wrapper classifies everything as `mixed_category_rollup` instead of `mixed_position_leaf`, even though leaf markers exist.
+
+**Cause:** `prefix_rules` maps prefixes to a family name (e.g. `"mixed"`), and `_has_leaf_marker()` looks up `leaf_markers_by_family[family]`. If markers are defined under `"debt"` and `"equity"` but the family is `"mixed"`, the lookup returns nothing.
+
+**Fix:** Always define markers under the exact family name used in `prefix_rules`. If all prefixes map to `"mixed"`, put all markers (debt + equity + warrant) under the `"mixed"` key.
+
+### Pitfall 3: `extra_industry_labels` must cover every industry label the filer uses
+
+**Symptom:** `issuer_name = "Investments Investments"` (the raw prefix leaks through as the issuer name) for a subset of rows.
+
+**Cause:** The `hierarchy_prefix_re` uses `(?:MSD_INDUSTRY_LABELS)` as a placeholder that expands to the union of base `_INDUSTRY_LABELS` (63 labels) + `extra_industry_labels`. If a filer uses an industry label not in either set (e.g. `"Containers, Packaging & Glass"`, `"Automobile"`, `"Services:"` without sub-category), the regex fails to match and the prefix isn't stripped.
+
+**Prevention:** Before writing the wrapper, profile ALL distinct industry labels in the raw data:
+
+```sql
+SELECT DISTINCT regexp_extract(
+    investment_identifier,
+    '(?:First Lien Debt|Second Lien Debt|Subordinated Debt|Common Equity|Preferred Equity|Equity)\s+(.+?)\s+(?:[A-Z][a-z].*(?:LLC|Inc|Corp|Ltd|Co\.|LP|Partners))',
+    1
+) AS industry_label
+FROM ...
+WHERE industry_label IS NOT NULL AND industry_label != ''
+ORDER BY 1
+```
+
+Cross-reference against `pipeline/classification.py:_INDUSTRY_LABELS`. Any label not in the base set must go into `extra_industry_labels`. Watch for:
+- Labels with colons and sub-categories (e.g. `"Services: Business"` vs bare `"Services:"`)
+- Labels with ampersands vs "and" (e.g. `"Containers, Packaging & Glass"`)
+- ALL-CAPS or missing-space variants (e.g. `"SERVICESBusiness"`)
+
+### Pitfall 4: The oracle doesn't catch issuer extraction failures
+
+**Gap:** A row can be present in the unified output (not a blocker) but have `issuer_name = "Investments Investments"` or another garbage value. The oracle checks whether wrapper-classified leaves exist in the output and whether rollup FVs tie, but it does NOT check whether `issuer_name` was correctly extracted.
+
+**Workaround:** After every trial rebuild, check for bad issuer names:
+
+```python
+bad = trial_df[trial_df['issuer_name'].str.contains('Investments|Total|Debt Investments', na=False, regex=True)]
+print(f'Suspicious issuer_name rows: {len(bad)}')
+```
+
+If any are found, the `hierarchy_prefix_re` or industry labels need fixing.
+
+### Pitfall 5: Optimize for data quality, not oracle metrics
+
+**Anti-pattern:** Adding broad archetype keywords (e.g. `"Debt "` with trailing space) to suppress `unclassified_fv_rate` without investigating what the oracle is actually signaling. This masks real bugs.
+
+**Correct approach:** When a metric fails, investigate the ROWS driving the failure before changing the wrapper. Check:
+1. Are the failing rows actually in the output? (blocker check)
+2. Do they have correct `issuer_name` and `instrument_description`? (extraction check)
+3. Are they real positions or misclassified aggregates? (classification check)
+4. Did the trial introduce identity changes (different `bdc_investment_identifier`) vs just new/lost rows? (regression check)
+
+### Pitfall 6: Always compare trial vs production at the row level before trusting summary metrics
+
+**Anti-pattern:** Running the trial, seeing "+88 new rows" in the summary, and assuming all 88 are genuine rescues.
+
+**Correct approach:** Compare `bdc_investment_identifier` values between trial and production:
+
+```python
+trial_keys = set(zip(trial['report_date'], trial['bdc_investment_identifier']))
+prod_keys = set(zip(prod['report_date'], prod['bdc_investment_identifier']))
+new_keys = trial_keys - prod_keys
+lost_keys = prod_keys - trial_keys
+```
+
+If `lost_keys` is large (especially close to the size of `new_keys`), most rows changed identity rather than being genuinely new. This signals an identifier corruption bug, not a wrapper improvement.
+
+### Pitfall 7: Stale trial output
+
+**Symptom:** Oracle or comparison results don't match expectations. Metrics look wrong despite code being correct.
+
+**Cause:** Trial output files persist across runs. If a rebuild fails or runs against old module code, the output file isn't updated but still exists. Subsequent reads of the file return stale data.
+
+**Prevention:** After every trial rebuild, check the file modification timestamp before reading results. If running diagnostics interactively, verify that `_prepare_bdc()` output matches expectations before trusting `build_unified_holdings()` output.
 
 ---
 
