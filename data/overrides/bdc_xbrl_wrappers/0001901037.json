@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001901037",
   "entity_name": "Stellus Private Credit BDC",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "STELLUS_PRIVATE_CREDIT",
@@ -48,19 +48,26 @@
         "common stock",
         "common equity",
         "common units",
+        "common shares",
+        "common interests",
         "preferred stock",
         "preferred equity",
         "preferred units",
         "preferred shares",
         "partnership interest",
         "partnership interests",
+        "partner interests",
         "class a units",
         "class a-1 units",
+        "class a-2 units",
         "class a unit",
         "class b units",
         "class b-i shares",
         "class 1 interests",
         "series a units",
+        "ordinary shares",
+        "shares",
+        "units",
         "llc interest",
         "equity interest",
         "equity co-invest",
@@ -91,11 +98,11 @@
     ],
     "fallback_family_patterns": [
       {
-        "regex": "(?i)first lien|second lien|senior secured|senior subordinated|subordinated|unitranche|term loan|term a loan|revolving|revolver|delayed draw|mezzanine|convertible bond",
+        "regex": "(?i)first lien|second lien|senior secured|senior subordinated|subordinated|unitranche|t\\s*erm\\s+loan|term a loan|revolving|revolver|delayed draw|mezzanine|convertible bond",
         "family": "debt"
       },
       {
-        "regex": "(?i)common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|class a units|class a-1 units|class a unit|class b units|class b-i shares|class 1 interests|series a units|partnership interest|LLC interest|equity interest|equity co-invest|limited partner|-\\s*Equity$",
+        "regex": "(?i)common stock|common equity|common units|common shares|common interests|preferred stock|preferred equity|preferred shares|preferred units|class a units|class a-1 units|class a-2 units|class a unit|class b units|class b-i shares|class 1 interests|series a units|partnership interest|partner\\s+interests|LLC interest|equity interest|equity co-invest|limited partner|\\bshares\\b|\\bunits\\b|-\\s*Equity$",
         "family": "equity"
       },
       {
@@ -175,23 +182,30 @@
           "Common Stock",
           "Common Equity",
           "Common Units",
+          "Common Shares",
+          "Common Interests",
           "Preferred Stock",
           "Preferred Equity",
           "Preferred Shares",
           "Preferred Units",
           "Class A Units",
           "Class A-1 Units",
+          "Class A-2 Units",
           "Class A Unit",
           "Class B Units",
           "Class B-I Shares",
           "Class 1 Interests",
           "Series A Units",
+          "Ordinary Shares",
           "Partnership Interest",
           "Partnership Interests",
+          "Partner Interests",
           "LLC Interest",
           "Limited Partner",
           "Equity Interest",
-          "Equity Co-Invest"
+          "Equity Co-Invest",
+          "Shares",
+          "Units"
         ],
         "keyword_mode": "any"
       },
@@ -269,6 +283,20 @@
       "description": "Some positions use 'Term A Loan' instead of standard 'Term Loan' (e.g. AdCellerant, Equine Network)",
       "first_seen_quarter": "2023-03-31",
       "detection_pattern": "(?i)term a loan",
+      "disposition": "expected"
+    },
+    {
+      "id": "stellus_xbrl_term_loan_typo",
+      "description": "XBRL typo 'T erm Loan' (space injected) in Axis Portable Air LLC identifier in Q3-Q4 2022.",
+      "first_seen_quarter": "2022-09-30",
+      "detection_pattern": "T erm Loan",
+      "disposition": "expected"
+    },
+    {
+      "id": "stellus_broad_equity_keywords",
+      "description": "Equity positions use diverse class/series/unit variants (Class B Shares, Class C Units, Partner Interests, Common Shares, Ordinary Shares) not covered by narrow keyword lists. Broadened to word-boundary matches on 'shares' and 'units'.",
+      "first_seen_quarter": "2022-09-30",
+      "detection_pattern": "(?i)\\b(?:shares|units|partner interests|common shares|common interests|ordinary shares)\\b",
       "disposition": "expected"
     }
   ]
