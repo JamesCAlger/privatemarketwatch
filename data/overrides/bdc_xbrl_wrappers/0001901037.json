@@ -1,0 +1,275 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001901037",
+  "entity_name": "Stellus Private Credit BDC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "STELLUS_PRIVATE_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "type of investment",
+        "investment type",
+        "investment date",
+        "initial acquisition date",
+        "maturity date",
+        "maturity",
+        "interest rate",
+        "reference rate",
+        "reference rate and spread",
+        "current coupon",
+        "sofr",
+        "libor",
+        "euribor",
+        "first lien",
+        "1st lien",
+        "second lien",
+        "term loan",
+        "term a loan",
+        "revolving credit facility",
+        "revolving line of credit",
+        "revolver",
+        "delayed draw",
+        "senior secured",
+        "floor rate",
+        "pik interest",
+        "unitranche",
+        "mezzanine",
+        "subordinated",
+        "convertible bond",
+        "incremental term loan"
+      ],
+      "equity": [
+        "type of investment",
+        "investment type",
+        "investment date",
+        "initial acquisition date",
+        "common stock",
+        "common equity",
+        "common units",
+        "preferred stock",
+        "preferred equity",
+        "preferred units",
+        "preferred shares",
+        "partnership interest",
+        "partnership interests",
+        "class a units",
+        "class a-1 units",
+        "class a unit",
+        "class b units",
+        "class b-i shares",
+        "class 1 interests",
+        "series a units",
+        "llc interest",
+        "equity interest",
+        "equity co-invest",
+        "limited partner",
+        "equity"
+      ],
+      "warrant": [
+        "type of investment",
+        "investment type",
+        "investment date",
+        "expiration date",
+        "expirationdate",
+        "warrant"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "sub-total",
+      "subtotal"
+    ],
+    "non_private_markers": [
+      "money market",
+      "cash",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)first lien|second lien|senior secured|senior subordinated|subordinated|unitranche|term loan|term a loan|revolving|revolver|delayed draw|mezzanine|convertible bond",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)common stock|common equity|common units|preferred stock|preferred equity|preferred shares|preferred units|class a units|class a-1 units|class a unit|class b units|class b-i shares|class 1 interests|series a units|partnership interest|LLC interest|equity interest|equity co-invest|limited partner|-\\s*Equity$",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)warrant",
+        "family": "warrant"
+      }
+    ]
+  },
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": ["issuer_name", "instrument_description"],
+    "alternate_delimiters": [" - "]
+  },
+  "archetypes": {
+    "senior_secured_debt": {
+      "description": "First lien, second lien, unitranche, and other senior secured term loans, revolvers, and delayed draw facilities",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Term A Loan",
+          "Delayed Draw Term Loan",
+          "Revolving Credit Facility",
+          "Revolver",
+          "Revolving Line of Credit",
+          "First Lien",
+          "Second Lien",
+          "Senior Secured",
+          "Unitranche",
+          "Incremental Term Loan"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.01,
+          "max": 0.30
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -50000000,
+          "max": 50000000000
+        }
+      }
+    },
+    "subordinated_debt": {
+      "description": "Subordinated and mezzanine debt instruments",
+      "detection_rules": {
+        "keywords": [
+          "Subordinated",
+          "Mezzanine",
+          "Convertible Bond"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.01,
+          "max": 0.30
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -50000000,
+          "max": 50000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Common stock, preferred shares, partnership interests, class units, and equity co-investments",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Equity",
+          "Common Units",
+          "Preferred Stock",
+          "Preferred Equity",
+          "Preferred Shares",
+          "Preferred Units",
+          "Class A Units",
+          "Class A-1 Units",
+          "Class A Unit",
+          "Class B Units",
+          "Class B-I Shares",
+          "Class 1 Interests",
+          "Series A Units",
+          "Partnership Interest",
+          "Partnership Interests",
+          "LLC Interest",
+          "Limited Partner",
+          "Equity Interest",
+          "Equity Co-Invest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "shares_held": {
+          "type": "presence",
+          "constraint": "optional"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -50000000,
+          "max": 50000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -50000000,
+          "max": 50000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "fv_reconciliation": {
+      "source_field": "investments_at_fair_value",
+      "tolerance_pct": 0.05,
+      "tolerance_abs": 5000000
+    },
+    "position_count_qoq": {
+      "max_increase_pct": 2.5,
+      "max_decrease_pct": 0.5
+    },
+    "rate_sanity": {
+      "min_pct": 0.01,
+      "max_pct": 0.30
+    },
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "stellus_pbdc_spv_suffix",
+      "description": "Positions held through PBDC SPV vehicle appear with '(PBDC SPV)' suffix alongside direct-hold variant, creating near-duplicate pairs with slightly different rates. First seen Q3 2024.",
+      "first_seen_quarter": "2024-09-30",
+      "detection_pattern": "\\(PBDC SPV\\)",
+      "disposition": "expected"
+    },
+    {
+      "id": "stellus_ehi_dash_hierarchy",
+      "description": "EHI Buyer / EHI Group Holdings uses dash-separated hierarchy instead of comma delimiter",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "EHI Buyer.*-.*EHI Group Holdings",
+      "disposition": "expected"
+    },
+    {
+      "id": "stellus_term_a_loan",
+      "description": "Some positions use 'Term A Loan' instead of standard 'Term Loan' (e.g. AdCellerant, Equine Network)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)term a loan",
+      "disposition": "expected"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 
 from pipeline.bdc_xbrl_wrapper import (
     add_bdc_xbrl_wrapper_columns,
@@ -414,3 +415,444 @@ def test_identifier_parser_missing_section_is_fine():
     # Most CIKs do not have identifier_parser; just verify the function
     # returns a dict without errors.
     assert isinstance(parsers, dict)
+
+
+# ---------------------------------------------------------------------------
+# PIMCO Capital Solutions BDC Corp. (0001905824)
+# ---------------------------------------------------------------------------
+
+PIMCO_CIK = "0001905824"
+
+
+def test_pimco_debt_first_lien_leaf():
+    """First lien senior secured term loan with SOFR spread is classified as debt leaf."""
+    ident = (
+        "Debt Investments | First Lien Senior Secured | Technology | "
+        "MRI Software, LLC Term Loan | SOFR + 4.750 % | 8.450 % | 02/10/2028"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]  # non-empty
+
+
+def test_pimco_debt_second_lien_leaf():
+    """Second lien debt position is classified as debt leaf."""
+    ident = (
+        "Debt Investments | Second Lien Senior Secured | Technology | "
+        "Mavenir Systems, Inc. 2L Term Loan | N/A | 12.000% PIK | 07/26/2030"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_pimco_senior_unsecured_leaf():
+    """Senior unsecured PIK note is classified as debt leaf."""
+    ident = (
+        "Debt Investments | Senior Unsecured | Technology | GCOM | "
+        "N/A | 17.000 % PIK | 02/16/2029"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_pimco_corporate_bond_leaf():
+    """Corporate bond with 144A is classified as debt leaf."""
+    ident = (
+        "Corporate Bonds | Automotive | "
+        "Rivian Holdings/Auto LLC 144A | SOFR + 5.625% | 11.490% | 10/15/2026"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_pimco_equity_common_stock():
+    """Common stock equity position is classified as equity leaf."""
+    ident = "Common Stock | Chemicals | K2 Propco Class S Units"
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_pimco_equity_common_stocks_variant():
+    """Older 'Common Stocks' prefix variant is also classified as equity."""
+    ident = "Common Stocks | Retailers | West Marine/Rising Tide Holdings, Inc."
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "equity"
+
+
+def test_pimco_warrant_leaf():
+    """Warrant position under Warrants prefix is classified correctly."""
+    ident = "Warrants | Technology | GCOM | 8/11/2033"
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "warrant"
+    assert result["wrapper_disposition"] == "warrant_position_leaf"
+
+
+def test_pimco_warrant_under_debt_prefix():
+    """Warrants nested under 'Debt Investments | Warrants' are classified as debt family.
+
+    These lack typical debt leaf markers (SOFR, interest rate, maturity keywords)
+    so they classify as category rollup, which is acceptable -- the staging pipeline
+    handles them separately via the Warrants prefix variant.
+    """
+    ident = (
+        "Debt Investments | Warrants | Technology | GCOM | 08/11/2033"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_category_rollup"
+
+
+def test_pimco_aggregate_total_investments():
+    """'Total Investments' is classified as aggregate."""
+    result = classify_identifier(PIMCO_CIK, "Total Investments")
+    assert result["wrapper_disposition"] == "aggregate_total_rollup"
+
+
+def test_pimco_aggregate_total_first_lien():
+    """Industry subtotal under first lien is classified as aggregate."""
+    ident = (
+        "Debt Investments | First Lien Senior Secured | Total First Lien Senior Secured"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert "aggregate" in result["wrapper_disposition"] or "rollup" in result["wrapper_disposition"]
+
+
+def test_pimco_aggregate_total_debt():
+    """'Total Debt Investments' is classified as aggregate."""
+    ident = "Debt Investments | Total Debt Investments"
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert "aggregate" in result["wrapper_disposition"] or "rollup" in result["wrapper_disposition"]
+
+
+def test_pimco_short_term_treasury_leaf():
+    """Short-term T-bill under 'Short-Term Investments' prefix is classified as debt."""
+    ident = (
+        "Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | "
+        "N/A | 3.756% | 10/14/2025"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+
+
+def test_pimco_truncated_lien_prefix():
+    """Truncated 'First Lie' (missing 'n') is still classified as debt."""
+    ident = (
+        "Debt Investments | First LieSenior Secured | Technology | "
+        "MH Sub I, LLC Term Loan | SOFR + 4.250 % | 7.918 % | 05/03/2028"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_pimco_preferred_stock():
+    """Preferred stock is classified as equity."""
+    ident = "Preferred Stock | Energy | Mustang Express, Series A"
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_pimco_no_space_pipe_prefix():
+    """'Debt Investments |First Lien' (no space after pipe) is classified as debt."""
+    ident = (
+        "Debt Investments |First Lien Senior Secured | Technology | "
+        "Arctic Wolf Networks, Inc. Term Loan| SOFR + 5.750%| 10.058%| 02/04/2030"
+    )
+    result = classify_identifier(PIMCO_CIK, ident)
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_pimco_reference_rate_metadata():
+    """Standalone reference rate rows are classified via fallback as metadata."""
+    result = classify_identifier(PIMCO_CIK, "One Month SOFR")
+    assert result["wrapper_family"] == "metadata"
+
+
+# ---------------------------------------------------------------------------
+# MSD Investment Corp. (CIK 0001849894) - dispatch + staging wrapper
+# ---------------------------------------------------------------------------
+MSD_CIK = "0001849894"
+
+
+def test_msd_debt_leaf_first_lien():
+    """First lien debt with issuer and rate detail is a leaf position."""
+    ident = (
+        "Investments Investments - non-controlled/non-affiliated "
+        "First Lien Debt Aerospace & Defense "
+        "Frontgrade Technologies Inc. Reference Rate and Spread S + 4.50% "
+        "Interest Rate 8.90% Maturity Date 1/9/2030"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_family"] == "mixed"
+    assert result["wrapper_disposition"] == "mixed_position_leaf"
+
+
+def test_msd_debt_leaf_delayed_draw():
+    """Delayed draw term loan is classified as leaf."""
+    ident = (
+        "Investments Investments - non-controlled/non-affiliated "
+        "First Lien Debt Aerospace & Defense "
+        "Sky Merger Sub, LLC - Delayed Draw Term Loan "
+        "Reference Rate and Spread S + 6.35% Interest Rate 10.04% "
+        "Maturity Date 5/28/2029"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_position_leaf"
+
+
+def test_msd_equity_leaf_preferred_stock():
+    """Preferred equity with class designation is a leaf."""
+    ident = (
+        "Investments Investments - non-controlled/non-affiliated "
+        "Preferred Equity Services: Consumer "
+        "Metropolis Technologies Inc. - Class D Preferred Stock"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_position_leaf"
+
+
+def test_msd_industry_subtotal_is_category_rollup():
+    """Industry-level subtotal (type + industry, no issuer) is category rollup."""
+    ident = (
+        "Investments Investments - non-controlled/non-affiliated "
+        "First Lien Debt Aerospace & Defense"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_category_rollup"
+
+
+@pytest.mark.parametrize(
+    "asset_type",
+    [
+        "First Lien Debt Services: Consumer",
+        "Second Lien Debt Services: Consumer",
+        "Preferred Equity Services: Consumer",
+    ],
+)
+def test_msd_services_consumer_subtotals_are_category_rollups(asset_type):
+    """MSD service-consumer category rows are subtotals, not positions."""
+    ident = (
+        "Investments Investments - non-controlled/non-affiliated "
+        f"{asset_type}"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_category_rollup"
+
+
+def test_msd_bare_type_subtotal_is_category_rollup():
+    """Bare instrument type subtotal (no industry or issuer) is category rollup."""
+    ident = (
+        "Investments Investments - non-controlled/non-affiliated First Lien Debt"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_category_rollup"
+
+
+def test_msd_affiliation_subtotal_is_category_rollup():
+    """Affiliation-only subtotal is category rollup."""
+    ident = "Investments Investments - non-controlled/non-affiliated"
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_category_rollup"
+
+
+def test_msd_total_row_is_total_rollup():
+    """Total Investments row is classified as total rollup."""
+    ident = (
+        "Investments Investments Total Investments "
+        "- non-controlled/non-affiliated"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_total_rollup"
+
+
+def test_msd_total_preferred_equity_is_total_rollup():
+    """Total Preferred Equity row is classified as total rollup."""
+    ident = (
+        "Investments Investments - non-controlled/non-affiliated "
+        "Total Preferred Equity"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_disposition"] == "mixed_total_rollup"
+
+
+def test_msd_cash_is_non_private():
+    """Cash and Cash Equivalents is classified as non-private market."""
+    result = classify_identifier(MSD_CIK, "Cash and Cash Equivalents")
+    assert result["wrapper_disposition"] == "non_private_market"
+
+
+def test_msd_portfolio_total_is_non_private():
+    """Portfolio total row is classified as non-private market."""
+    result = classify_identifier(
+        MSD_CIK, "Portfolio Investments, Cash and Cash Equivalents"
+    )
+    assert result["wrapper_disposition"] == "non_private_market"
+
+
+def test_msd_truncated_prefix_classified():
+    """Truncated prefix variant (nvestments) is still classified."""
+    ident = (
+        "nvestments Investments - non-controlled/non-affiliated "
+        "First Lien Debt Construction & Building"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_family"] == "mixed"
+    assert "rollup" in result["wrapper_disposition"]
+
+
+def test_msd_uppercase_variant_classified():
+    """ALL-CAPS prefix variant is classified."""
+    ident = (
+        "INVESTMENTS INVESTMENTS - NON-CONTROLLED/NON-AFFILIATED "
+        "SECOND LIEN DEBT SERVICESConsumer "
+        "Southern Veterinary Partners L L C Reference Rate and Spread "
+        "S + 7.85% Interest Rate Floor 1.00% Interest Rate 12.25% "
+        "Maturity Date 10/5/2028"
+    )
+    result = classify_identifier(MSD_CIK, ident)
+    assert result["wrapper_family"] == "mixed"
+    assert result["wrapper_disposition"] == "mixed_position_leaf"
+
+
+def test_msd_fx_forward_is_derivative():
+    """Foreign Currency Forward Contracts are classified as derivative."""
+    result = classify_identifier(
+        MSD_CIK,
+        "Foreign Currency Forward Contracts - Derivative Counterparty "
+        "Macquarie Settlement Date July 31, 2025",
+    )
+    assert result["wrapper_family"] == "derivative"
+
+
+# ---------------------------------------------------------------------------
+# Stellus Private Credit BDC (CIK 0001901037) - flat format, fallback-only
+# ---------------------------------------------------------------------------
+STELLUS_CIK = "0001901037"
+
+
+def test_stellus_debt_term_loan_leaf():
+    """Standard term loan identifier is classified as debt leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "2X LLC, Term Loan"
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_stellus_debt_revolver_leaf():
+    """Revolver is classified as debt leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "American Refrigeration, LLC, Revolving Credit Facility"
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_stellus_debt_delayed_draw_leaf():
+    """Delayed draw term loan is classified as debt leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "Amika OpCo LLC, Delayed Draw Term Loan"
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_stellus_debt_term_a_loan_leaf():
+    """Non-standard 'Term A Loan' is classified as debt leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "AdCellerant LLC, Term A Loan"
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_stellus_debt_unitranche_leaf():
+    """Unitranche loan is classified as debt leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "Craftable Intermediate II Inc., Unitranche Term Loan"
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_stellus_equity_class_a_units_leaf():
+    """Class A Units equity position is classified as equity leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "TriplePoint Holdco LLC, Class A Units"
+    )
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_stellus_equity_common_stock_leaf():
+    """Common stock is classified as equity leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "Monitorus Holding Limited, Common Stock"
+    )
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_stellus_equity_partnership_interest_leaf():
+    """Partnership interest is classified as equity leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "Rallyday Elder Care Co-Investors LP, Partnership Interests"
+    )
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_stellus_equity_preferred_leaf():
+    """Preferred units are classified as equity leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "Sapphire Aggregator LLC, Preferred Units"
+    )
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_stellus_pbdc_spv_suffix_classified_as_debt_leaf():
+    """Positions with (PBDC SPV) suffix are still classified as debt leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "2X LLC, Term Loan (PBDC SPV)"
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_stellus_pbdc_spv_equity_classified():
+    """Equity with (PBDC SPV) suffix is still classified as equity leaf."""
+    result = classify_identifier(
+        STELLUS_CIK, "CF Arch Holdings LLC, Class A Units (PBDC SPV)"
+    )
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_stellus_ehi_dash_hierarchy_classified():
+    """EHI Buyer edge case with dash-separated hierarchy classifies correctly."""
+    result = classify_identifier(
+        STELLUS_CIK, "EHI Buyer, Inc - EHI Group Holdings, L.P.- Equity"
+    )
+    assert result["wrapper_family"] == "equity"
+
+
+def test_stellus_convertible_bond_classified_as_debt():
+    """Convertible bonds classify as debt."""
+    result = classify_identifier(
+        STELLUS_CIK, "Sapphire Aggregator LLC, Convertible Bonds"
+    )
+    assert result["wrapper_family"] == "debt"
+
+
+def test_stellus_registered_in_supported_ciks():
+    """Stellus CIK is in the supported wrapper registry."""
+    assert STELLUS_CIK in supported_wrapper_ciks()
