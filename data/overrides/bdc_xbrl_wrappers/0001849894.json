@@ -2,23 +2,94 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001849894",
   "entity_name": "MSD Investment Corp.",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "MSD_INVESTMENT",
+    "prefix_rules": {
+      "Investments Investments": "mixed",
+      "INVESTMENTS INVESTMENTS": "mixed",
+      "nvestments Investments": "mixed",
+      "Member Investments Investments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "mixed": [
+        "interest rate",
+        "maturity date",
+        "reference rate",
+        "sofr",
+        "libor",
+        "euribor",
+        "initial acquisition date",
+        "term loan",
+        "delayed draw",
+        "revolving credit",
+        "revolver",
+        "corporate bond",
+        "senior note",
+        "common stock",
+        "preferred stock",
+        "common units",
+        "preferred units",
+        "partnership interest",
+        "llc interest",
+        "membership interest",
+        "equity interest",
+        "class a",
+        "class b",
+        "class d",
+        "ordinary shares",
+        "warrant"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total preferred equity",
+      "total cash and cash equivalents",
+      "total portfolio investments",
+      "total first lien debt",
+      "total second lien debt",
+      "total subordinated debt",
+      "total common equity",
+      "total equity"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "money market",
+      "portfolio investments, cash and cash equivalents"
+    ],
+    "fallback_family_patterns": [
+      {"regex": "(?i)^Cash and Cash Equivalents", "family": "cash"},
+      {"regex": "(?i)^Total Cash", "family": "cash"},
+      {"regex": "(?i)^Total Portfolio Investments", "family": "cash"},
+      {"regex": "(?i)^Portfolio Investments,? Cash", "family": "cash"},
+      {"regex": "(?i)^Foreign Currency Forward Contracts", "family": "derivative"},
+      {"regex": "(?i)^Media:\\s", "family": "mixed"}
+    ],
+    "category_marker_re": "(?i)^(?:Investments Investments|INVESTMENTS INVESTMENTS|nvestments Investments|Member Investments Investments)\\s*-\\s*(?:non[- ]?control(?:led)?(?:/non[- ]?affiliat(?:e|ed))?|NON-CONTROLLED/NON-AFFILIATED)\\s+(?:First Lien Debt|Second Lien Debt|Subordinated Debt|Senior Secured Debt|Common Equity|Preferred Equity|Equity(?:\\s+and\\s+Other\\s+Investments)?|SECOND LIEN DEBT|FIRST LIEN DEBT)(?:\\s+(?:Aerospace & Defense|Automobile|Automotive|Banking, Finance, Insurance & Real Estate|Beverage, Food & Tobacco|Capital Equipment|Chemicals, Plastics & Rubber|Construction & Building|Consumer Goods:? (?:Durable|Non-durable)|Consumer goods:? Non-durable|Containers, Packaging & Glass|Energy: Oil & Gas|Environmental Industries|Environmental & Facilities Services|Healthcare & Pharmaceuticals|High Tech Industries|Hotel, Gaming & Leisure|Media: (?:Advertising, Printing & Publishing|Broadcasting & Subscription|Diversified & Production)|Metals & Mining|Retail|Services: (?:Business|Consumer)|Sovereign & Public Finance|Telecommunications|Transportation: (?:Cargo|Consumer)|Wholesale|Diversified Support Services|Specialized Consumer Services|Application Software|Advertising|Consumer|and Other Investments))?$",
+    "canonical_strip_re": " Interest Rate Floor \\d+[\\d.]*%| Interest Rate \\d+[\\d.]*%"
+  },
   "staging": {
     "strategy": "prefix_strip",
     "extra_industry_labels": [
       "Advertising",
       "Application Software",
+      "Automobile",
       "Beverage, Food & Tobacco",
       "Capital Equipment",
       "Chemicals, Plastics & Rubber",
+      "Construction & Building",
       "Consumer",
+      "Containers, Packaging & Glass",
       "Diversified Support Services",
       "Environmental Industries",
       "Environmental & Facilities Services",
+      "Healthcare & Pharmaceuticals",
+      "Services:",
+      "Sovereign & Public Finance",
       "Specialized Consumer Services"
     ],
-    "hierarchy_prefix_re": "(?i)^Investments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|control(?:led)?(?:\\s*/\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity|debt|warrants?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+"
+    "hierarchy_prefix_re": "(?i)^(?:Member\\s+)?I?nvestments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|NON-CONTROLLED/NON-AFFILIATED|control(?:led)?(?:\\s*/\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity(?:\\s+and\\s+other\\s+investments)?|debt|warrants?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+"
   },
   "archetypes": {
     "debt": {
@@ -29,6 +100,7 @@
           "Second Lien Debt",
           "Subordinated Debt",
           "Senior Secured Debt",
+          "Debt ",
           "Term Loan",
           "Delayed Draw",
           "Revolving Credit",
@@ -37,7 +109,8 @@
           "First Lien",
           "Second Lien",
           "Corporate Bond",
-          "Senior Note"
+          "Senior Note",
+          "Reference Rate and Spread"
         ],
         "keyword_mode": "any"
       },
@@ -56,6 +129,7 @@
         "keywords": [
           "Common Equity",
           "Preferred Equity",
+          "Equity ",
           "Common Stock",
           "Preferred Stock",
           "Common Units",
@@ -98,6 +172,50 @@
       }
     }
   },
+  "known_edge_cases": [
+    {
+      "id": "MSD_FX_FORWARDS",
+      "description": "Foreign Currency Forward Contracts rows (Macquarie counterparty) with NaN fair values in 2025-03-31",
+      "first_seen_quarter": "2025-03-31",
+      "detection_pattern": "^Foreign Currency Forward Contracts",
+      "disposition": "expected"
+    },
+    {
+      "id": "MSD_UPPERCASE_VARIANT",
+      "description": "ALL-CAPS identifier variants with missing spaces in industry labels (SERVICESBusiness, SERVICESConsumer, CONSUMER GOODSNon-durable)",
+      "first_seen_quarter": "2024-09-30",
+      "detection_pattern": "^INVESTMENTS INVESTMENTS",
+      "disposition": "expected"
+    },
+    {
+      "id": "MSD_TRUNCATED_PREFIX",
+      "description": "Truncated prefix variant missing leading character (nvestments Investments)",
+      "first_seen_quarter": "2024-09-30",
+      "detection_pattern": "^nvestments Investments",
+      "disposition": "expected"
+    },
+    {
+      "id": "MSD_MEMBER_PREFIX",
+      "description": "Member prefix variant seen in early quarters (Member Investments Investments)",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^Member Investments Investments",
+      "disposition": "expected"
+    },
+    {
+      "id": "MSD_INDUSTRY_ONLY_SUBTOTAL",
+      "description": "Industry-level subtotal rows with instrument type + industry but no issuer (e.g. First Lien Debt Aerospace & Defense)",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?:First Lien Debt|Second Lien Debt|Subordinated Debt|Common Equity|Preferred Equity|Equity)\\s+(?:Aerospace|Banking|Beverage|Capital|Chemicals|Construction|Consumer|Containers|Energy|Environmental|Healthcare|High Tech|Hotel|Media|Metals|Retail|Services|Sovereign|Telecommunications|Transportation|Wholesale)(?:[^A-Z]|$)",
+      "disposition": "expected"
+    },
+    {
+      "id": "MSD_BARE_INDUSTRY_SUBTOTAL",
+      "description": "Bare industry label rows without prefix (Media: Advertising, Printing & Publishing) seen in early quarters",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Media: Advertising, Printing & Publishing$",
+      "disposition": "expected"
+    }
+  ],
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.10

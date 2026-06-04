@@ -1945,9 +1945,24 @@ def reconcile_bdc_source_to_holdings(
                             s.source_wrapper_disposition IN (
                                 'debt_category_rollup', 'debt_total_rollup',
                                 'warrant_category_rollup', 'warrant_total_rollup',
-                                'equity_category_rollup', 'equity_total_rollup'
+                                'equity_category_rollup', 'equity_total_rollup',
+                                'mixed_category_rollup', 'mixed_total_rollup'
                             )
                             AND o.output_wrapper_parent_key LIKE s.source_wrapper_parent_key || ' %'
+                        )
+                        OR (
+                            regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_total_rollup$')
+                            AND starts_with(
+                                COALESCE(o.output_wrapper_parent_key, ''),
+                                trim(regexp_replace(regexp_replace(
+                                    COALESCE(s.source_wrapper_parent_key, ''),
+                                    '\\btotal(?:\\s+investments)?\\b', '', 'gi'
+                                ), '\\s{{2,}}', ' ', 'g'))
+                            )
+                            AND length(trim(regexp_replace(regexp_replace(
+                                COALESCE(s.source_wrapper_parent_key, ''),
+                                '\\btotal(?:\\s+investments)?\\b', '', 'gi'
+                            ), '\\s{{2,}}', ' ', 'g'))) >= 10
                         )
                     )
                 )
@@ -2041,9 +2056,24 @@ def reconcile_bdc_source_to_holdings(
                             s.source_wrapper_disposition IN (
                                 'debt_category_rollup', 'debt_total_rollup',
                                 'warrant_category_rollup', 'warrant_total_rollup',
-                                'equity_category_rollup', 'equity_total_rollup'
+                                'equity_category_rollup', 'equity_total_rollup',
+                                'mixed_category_rollup', 'mixed_total_rollup'
                             )
                             AND o.output_wrapper_parent_key LIKE s.source_wrapper_parent_key || ' %'
+                        )
+                        OR (
+                            regexp_matches(COALESCE(s.source_wrapper_disposition, ''), '_total_rollup$')
+                            AND starts_with(
+                                COALESCE(o.output_wrapper_parent_key, ''),
+                                trim(regexp_replace(regexp_replace(
+                                    COALESCE(s.source_wrapper_parent_key, ''),
+                                    '\\btotal(?:\\s+investments)?\\b', '', 'gi'
+                                ), '\\s{{2,}}', ' ', 'g'))
+                            )
+                            AND length(trim(regexp_replace(regexp_replace(
+                                COALESCE(s.source_wrapper_parent_key, ''),
+                                '\\btotal(?:\\s+investments)?\\b', '', 'gi'
+                            ), '\\s{{2,}}', ' ', 'g'))) >= 10
                         )
                     )
                 )
