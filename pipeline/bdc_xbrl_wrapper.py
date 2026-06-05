@@ -250,7 +250,8 @@ def is_non_private_market_identifier(identifier: Any, markers: tuple[str, ...] |
             continue
         if marker in lowered:
             return True
-    if "cash +" in lowered or "cash plus" in lowered or "total coupon" in lowered or "coupon" in lowered:
+    if ("cash +" in lowered or "cash plus" in lowered or "cash (" in lowered
+            or "cash," in lowered or "total coupon" in lowered or "coupon" in lowered):
         return False
     return bool(re.search(
         r"(?:^|[^a-z])(?:total\s+)?cash(?:\s+and\s+cash\s+equivalents|\s+equivalents|\s+accounts)?(?:[^a-z]|$)",
