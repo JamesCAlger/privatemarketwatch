@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001901037",
   "entity_name": "Stellus Private Credit BDC",
-  "version": 2,
+  "version": 3,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "STELLUS_PRIVATE_CREDIT",
@@ -256,8 +256,8 @@
       "max_decrease_pct": 0.5
     },
     "rate_sanity": {
-      "min_pct": 0.01,
-      "max_pct": 0.30
+      "min_pct": 1.0,
+      "max_pct": 30.0
     },
     "unclassified_rate": {
       "max_pct": 0.05
