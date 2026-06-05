@@ -1182,7 +1182,9 @@ def _check_cost_fv_outliers(
         return 0
     cost = pd.to_numeric(h["cost"], errors="coerce")
     fv = pd.to_numeric(h["fair_value"], errors="coerce")
-    valid = cost.notna() & fv.notna() & fv.ne(0) & cost.ne(0)
+    # Skip nominal-value positions (unfunded commitments, warrants at
+    # minimal mark) where |FV| <= $1,000 -- the ratio is meaningless.
+    valid = cost.notna() & fv.notna() & fv.ne(0) & cost.ne(0) & (fv.abs() > 1000)
     if not valid.any():
         return 0
     ratio = (cost[valid] / fv[valid]).abs()

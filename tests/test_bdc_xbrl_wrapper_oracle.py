@@ -1192,6 +1192,40 @@ def test_oracle_flags_cost_fv_ratio_outliers():
     assert "cost_fv_ratio_outliers" in summary.iloc[0]["oracle_fail_reasons"]
 
 
+def test_oracle_cost_fv_skips_nominal_fv_positions():
+    """Positions with |FV| <= $1,000 are nominal-value (unfunded commitments,
+    warrants at minimal mark) and should not trigger cost/FV outlier flags."""
+    detail = _detail([{
+        "status": "documented_source_rollup_exact",
+        "residual_class": "documented_exclusion",
+        "calibrated_status": "documented_source_rollup_exact",
+    }])
+
+    holdings = pd.DataFrame({
+        "cik": ["0001786108"] * 3,
+        "report_date": ["2024-12-31"] * 3,
+        # Nominal FV positions: |FV| <= 1000 with real cost
+        "cost": ["-125000", "600000", "1000000"],
+        "fair_value": ["-1000", "1000", "1000000"],
+    })
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(
+            detail, holdings_df=holdings,
+        )
+
+    assert summary.iloc[0]["cost_fv_ratio_outlier_count"] == 0
+    assert "cost_fv_ratio_outliers" not in str(
+        summary.iloc[0].get("oracle_fail_reasons", "")
+    )
+
+
 def test_oracle_no_rate_outliers_when_within_bounds():
     """Oracle should not flag rates within rate_sanity bounds."""
     detail = _detail([{
