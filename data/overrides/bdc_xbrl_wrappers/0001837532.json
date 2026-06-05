@@ -1,0 +1,193 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001837532",
+  "entity_name": "Apollo Debt Solutions BDC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "APOLLO_DEBT_SOLUTIONS",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment type",
+        "interest rate",
+        "maturity date",
+        "maturity",
+        "reference rate",
+        "sofr",
+        "sonia",
+        "libor",
+        "euribor",
+        "bbsw",
+        "first lien secured debt",
+        "second lien secured debt",
+        "unsecured debt",
+        "subordinated debt",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "corporate bond",
+        "senior note"
+      ],
+      "equity": [
+        "investment type",
+        "common equity",
+        "preferred equity",
+        "common stock",
+        "preferred stock",
+        "membership interest",
+        "limited partnership",
+        "equity unit",
+        "stock"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ]
+    },
+    "aggregate_markers": [
+      "investments after cash equivalents",
+      "investments before cash equivalents",
+      "investments",
+      "total investments",
+      "total pharmaceuticals",
+      "total debt investments",
+      "total equity investments"
+    ],
+    "non_private_markers": [
+      "state street institutional",
+      "money market",
+      "goldman sachs financial square",
+      "government fund",
+      "u.s. government",
+      "us government"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Term\\s+Loan|Delayed\\s+Draw|Revolv(?:er|ing)|Corporate\\s+Bond|Senior\\s+Note|Interest\\s+Rate\\s+(?:S|SOFR|SONIA|BBSW|EURIBOR|L)\\+",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)Common\\s+Equity|Preferred\\s+Equity|Common\\s+Stock|Preferred\\s+Stock|Membership\\s+Interest|Limited\\s+Partnership|Equity\\s+Unit|(?:Common|Preferred)\\s+Stocks",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)^Investments\\b|^Total\\s+",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)State\\s+Street\\s+Institutional|Goldman\\s+Sachs\\s+Financial\\s+Square|Money\\s+Market|Government\\s+Fund",
+        "family": "debt"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "canonical_strip_re": "\\s+Interest\\s+Rate\\s+.*$",
+    "category_marker_re": "^(?:Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Investments|Total\\s+.+)$"
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:Investment|Security)\\s+Type\\s+",
+    "hierarchy_instrument_re": "(?:Investment|Security)\\s+Type\\s+(.+)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Investment|Security)\\s+Type\\s+')",
+    "extra_industry_labels": [
+      "Automobile Components",
+      "Beverages",
+      "Consumer Staples Distribution & Retail",
+      "Diversified REITs",
+      "Financial Services",
+      "Ground Transportation",
+      "Marine Transportation",
+      "Personal Care Products",
+      "Special Purpose Entity",
+      "Asset Backed Securities",
+      "Financing",
+      "Electric Utilities",
+      "Energy Equipment & Services",
+      "Independent Power & Renewable Electricity Producers",
+      "Semiconductors & Semiconductor Equipment",
+      "Equity Real Estate Investment Trusts (REITs)"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "All debt instruments: first/second lien, unsecured, subordinated, term loans, revolvers, delayed draws, corporate bonds",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Secured Debt",
+          "Second Lien Secured Debt",
+          "Unsecured Debt",
+          "Subordinated Debt",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Revolving",
+          "Corporate Bond",
+          "Senior Note",
+          "Senior Secured"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: common/preferred stock, membership interests, equity units, limited partnerships",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Preferred Equity",
+          "Common Stock",
+          "Preferred Stock",
+          "Preferred Stocks",
+          "Membership Interest",
+          "Equity Unit",
+          "Limited Partnership",
+          "Stock"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

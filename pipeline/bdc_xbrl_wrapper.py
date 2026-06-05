@@ -250,7 +250,7 @@ def is_non_private_market_identifier(identifier: Any, markers: tuple[str, ...] |
             continue
         if marker in lowered:
             return True
-    if "cash +" in lowered or "total coupon" in lowered or "coupon" in lowered:
+    if "cash +" in lowered or "cash plus" in lowered or "total coupon" in lowered or "coupon" in lowered:
         return False
     return bool(re.search(
         r"(?:^|[^a-z])(?:total\s+)?cash(?:\s+and\s+cash\s+equivalents|\s+equivalents|\s+accounts)?(?:[^a-z]|$)",
@@ -271,7 +271,7 @@ def _family_for_identifier(spec: WrapperSpec, identifier: str) -> tuple[str, str
             return prefix, family
     # Try fallback patterns (replaces Saratoga-specific hardcoded checks)
     for pattern, family in spec.fallback_family_patterns:
-        if pattern.match(identifier):
+        if pattern.search(identifier):
             return "", family
     return "", ""
 
@@ -537,7 +537,7 @@ def add_bdc_xbrl_wrapper_columns(
             prefix_mask = prefix_mask | identifiers.str.startswith(prefix, na=False)
         # Apply fallback patterns from config (replaces hardcoded Saratoga checks)
         for pattern, _family in spec.fallback_family_patterns:
-            prefix_mask = prefix_mask | identifiers.str.match(pattern, na=False)
+            prefix_mask = prefix_mask | identifiers.str.contains(pattern, na=False)
         mask = mask | (cik_norm.eq(cik_value) & prefix_mask)
     if not mask.any():
         return result

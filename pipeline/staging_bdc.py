@@ -598,7 +598,8 @@ def _prepare_bdc(
     # Per-CIK clean expression: apply the matching CIK's regex
     _msd_clean_raw = (
         ("CASE " + " ".join(
-            f"WHEN {d['cik_sql']} THEN regexp_replace(_raw_id, '{d['re']}', '')"
+            f"WHEN {d['cik_sql']} THEN regexp_replace("
+            f"regexp_replace(_raw_id, '{d['re']}', ''), '{d['re']}', '')"
             for d in _prefix_strip_per_cik
         ) + " ELSE _raw_id END")
         if _prefix_strip_per_cik else "_raw_id"
@@ -804,26 +805,80 @@ def _prepare_bdc(
     _seg3_is_industry = _sql_exact_match(
         "lower(trim(_segments[3]))", _INDUSTRY_LABELS
     )
-    # Crescent hierarchy_extract: CIK list and regexes from staging configs
-    _hierarchy_extract_ciks = [v["cik"] for v in _hierarchy_extract_cfgs.values()]
-    _crescent_cik_sql = (
-        "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
-        "IN (" + ", ".join(f"'{c}'" for c in _hierarchy_extract_ciks) + ")"
-    ) if _hierarchy_extract_ciks else "FALSE"
-    _crescent_clean_raw = (
-        "regexp_replace(replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '), '\\s+', ' ', 'g')"
+    # hierarchy_extract: per-CIK regexes from staging configs
+    # Clean raw: collapse whitespace, replace NBSP, insert space before
+    # Investment/Security Type when missing (Apollo filing data quality issue:
+    # e.g. "Inc.Investment Type" -> "Inc. Investment Type").
+    _he_clean_raw = (
+        "replace(replace("
+        "regexp_replace(replace(CAST(_raw_id AS VARCHAR), '\u00a0', ' '), "
+        "'\\s+', ' ', 'g'), "
+        "'Investment Type', ' Investment Type'), "
+        "'Security Type', ' Security Type')"
     )
-    # Read regexes from JSON config (placeholders already expanded)
-    _he_staging = next(iter(_hierarchy_extract_cfgs.values()))["staging"] if _hierarchy_extract_cfgs else {}
-    _crescent_issuer_re = _he_staging.get("hierarchy_issuer_re", "")
-    _crescent_instrument_re = _he_staging.get("hierarchy_instrument_re", "")
-    _crescent_trailing_re = _he_staging.get("hierarchy_trailing_re", "")
-    # Build condition: substitute _clean placeholder with _crescent_clean_raw SQL expr
-    _he_condition_extra = _he_staging.get("hierarchy_condition_extra", "FALSE")
-    _he_condition_extra = _he_condition_extra.replace("_clean", _crescent_clean_raw)
-    _crescent_condition = (
-        f"{_crescent_cik_sql} AND {_he_condition_extra}"
-        if _hierarchy_extract_cfgs else "FALSE"
+    # Build per-CIK hierarchy_extract components (parallel to _lg_per_cik)
+    _he_per_cik: list[dict[str, str]] = []
+    for _he_cfg in _hierarchy_extract_cfgs.values():
+        _he_cik = _he_cfg["cik"]
+        _he_stg = _he_cfg["staging"]
+        _he_cik_sql = (
+            "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), "
+            f"10, '0') = '{_he_cik}'"
+        )
+        _cond = _he_stg.get("hierarchy_condition_extra", "FALSE")
+        _cond = _cond.replace("_clean", _he_clean_raw)
+        _he_per_cik.append({
+            "cik": _he_cik,
+            "cik_sql": _he_cik_sql,
+            "condition": f"{_he_cik_sql} AND {_cond}",
+            "issuer_re": _he_stg.get("hierarchy_issuer_re", ""),
+            "instrument_re": _he_stg.get("hierarchy_instrument_re", ""),
+            "trailing_re": _he_stg.get("hierarchy_trailing_re", ""),
+        })
+    # Per-CIK SQL WHEN branches for issuer extraction
+    _he_issuer_parts: list[str] = []
+    for _he in _he_per_cik:
+        _he_issuer_parts.append(
+            f"WHEN {_he['condition']}\n"
+            f"                THEN trim(regexp_extract(\n"
+            f"                    {_he_clean_raw},\n"
+            f"                    '{_he['issuer_re']}',\n"
+            f"                    1\n"
+            f"                ))"
+        )
+    _he_issuer_sql = "\n                ".join(_he_issuer_parts) if _he_issuer_parts else (
+        "WHEN FALSE THEN NULL"
+    )
+    # Per-CIK SQL WHEN branches for instrument extraction
+    _he_instrument_parts: list[str] = []
+    for _he in _he_per_cik:
+        _instr = (
+            f"WHEN {_he['condition']}\n"
+            f"                THEN trim(regexp_extract(\n"
+            f"                    {_he_clean_raw},\n"
+            f"                    '{_he['instrument_re']}',\n"
+            f"                    1\n"
+            f"                ))"
+        )
+        if _he["trailing_re"]:
+            _instr = (
+                f"WHEN {_he['condition']}\n"
+                f"                THEN trim(regexp_extract(\n"
+                f"                    {_he_clean_raw},\n"
+                f"                    '{_he['instrument_re']}',\n"
+                f"                    1\n"
+                f"                )) || COALESCE(\n"
+                f"                    NULLIF(' - ' || trim(regexp_extract(\n"
+                f"                        {_he_clean_raw},\n"
+                f"                        '{_he['trailing_re']}',\n"
+                f"                        1\n"
+                f"                    )), ' - '),\n"
+                f"                    ''\n"
+                f"                )"
+            )
+        _he_instrument_parts.append(_instr)
+    _he_instrument_sql = "\n                ".join(_he_instrument_parts) if _he_instrument_parts else (
+        "WHEN FALSE THEN NULL"
     )
     # Hierarchy leaf guard: CIK list, prefix patterns, marker/evidence from JSON
     _hierarchy_leaf_ciks = [v["cik"] for v in _leaf_guard_cfgs.values()]
@@ -1263,8 +1318,8 @@ def _prepare_bdc(
     -- Wrapper rollup/aggregate drop is NOT applied here because some
     -- wrappers misclassify equity co-investments as debt_issuer_rollup
     -- (e.g. Fidelity).  Rollup rows are already handled by the global
-    -- agg_filter, per-CIK category_marker_re in wrapper specs, and the
-    -- CC-reviewed aggregate header exclusions.
+    -- agg_filter, prefix hierarchy filters, and the CC-reviewed aggregate
+    -- header exclusions.
     no_aggregates AS (
         SELECT s.* FROM strip_affil s
         LEFT JOIN aggregate_override_matches o
@@ -1276,7 +1331,6 @@ def _prepare_bdc(
           AND (
               COALESCE(o.force_include, 0) = 1
               OR COALESCE(wd.wrapper_disposition, '') LIKE '%_position_leaf'
-              OR ({_msd_hierarchy_condition})
               OR ({_prefix_rules_hierarchy_condition})
               OR NOT ({agg_filter})
           )
@@ -1286,13 +1340,19 @@ def _prepare_bdc(
     -- aggregate filter (they have entity signals like "Inc." that
     -- protect them from the no-entity guard).
     -- Wrapper-authoritative: *_position_leaf rescues from prefix filter.
+    -- Category rollups are safe to drop here because wrapper category rules
+    -- are issuerless hierarchy/subtotal patterns; issuer_rollup is still not
+    -- authoritative due known false-positive risk in older wrappers.
     no_prefix_hierarchy AS (
         SELECT nag.* FROM no_aggregates nag
         LEFT JOIN _wrapper_disp wd
           ON LPAD(REGEXP_REPLACE(CAST(nag.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = wd.cik_norm
          AND COALESCE(CAST(nag.investment_identifier AS VARCHAR), '') = wd.raw_id
         WHERE COALESCE(wd.wrapper_disposition, '') LIKE '%_position_leaf'
-           OR NOT ({_prefix_hierarchy_filter})
+           OR (
+               COALESCE(wd.wrapper_disposition, '') NOT LIKE '%_category_rollup'
+               AND NOT ({_prefix_hierarchy_filter})
+           )
     ),
 
     -- CTE 3: Filter XBRL artifacts (no financial data at all)
@@ -1531,15 +1591,8 @@ def _prepare_bdc(
                 -- typed dimension value, so the generic first-segment parser
                 -- would otherwise treat the whole string as a bad issuer.
                 {_hierarchy_leaf_issuer_sql}
-                -- Crescent-family hierarchy rows:
-                -- Investments {{country}} {{Debt/Equity Investments}} {{industry}}
-                -- {{issuer}} Investment Type {{instrument}} Interest/Maturity ...
-                WHEN {_crescent_condition}
-                THEN trim(regexp_extract(
-                    {_crescent_clean_raw},
-                    '{_crescent_issuer_re}',
-                    1
-                ))
+                -- hierarchy_extract rows: per-CIK issuer regex extraction
+                {_he_issuer_sql}
                 -- MSD Investment Corp. embeds the full SOI hierarchy in one
                 -- typed-dimension value. Valid borrowers often lack LLC/Inc
                 -- suffixes, so parse only this CIK's hierarchy instead of
@@ -1680,23 +1733,10 @@ def _prepare_bdc(
                          ELSE ''
                      END
                 {_hierarchy_leaf_instrument_sql}
-                -- Crescent-family hierarchy rows. If a trailing tranche label
-                -- follows the month/year maturity (e.g. One/Four/Five), keep it
-                -- in the instrument key so equal-FV borrower tranches do not
-                -- collapse during staging deduplication.
-                WHEN {_crescent_condition}
-                THEN trim(regexp_extract(
-                    {_crescent_clean_raw},
-                    '{_crescent_instrument_re}',
-                    1
-                )) || COALESCE(
-                    NULLIF(' - ' || trim(regexp_extract(
-                        {_crescent_clean_raw},
-                        '{_crescent_trailing_re}',
-                        1
-                    )), ' - '),
-                    ''
-                )
+                -- hierarchy_extract rows: per-CIK instrument regex extraction.
+                -- trailing_re (if present) appends tranche labels after maturity
+                -- to prevent equal-FV borrower tranches from collapsing.
+                {_he_instrument_sql}
                 WHEN {_msd_hierarchy_condition}
                 THEN trim(COALESCE(
                     NULLIF(regexp_extract({_msd_clean_raw}, '^.+?\\s+-\\s+(.+)$', 1), ''),
