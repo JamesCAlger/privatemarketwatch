@@ -20,6 +20,7 @@ import pandas as pd
 from lxml import etree
 
 from pipeline.config import (
+    BDC_DEDUPE_AXIS_SPLITS_FILE,
     BDC_FILING_FORM_TYPES,
     BDC_FILINGS_INDEX_FILE,
     BDC_HOLDINGS_FILE,
@@ -803,6 +804,48 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
     ].transform("size")
     result["dedupe_context_count"] = group_sizes
 
+    # ------------------------------------------------------------------
+    # FV-conflict split: when a dedup group has distinct fair values,
+    # the rows represent genuinely different positions reported under the
+    # same XBRL axis.  Sub-group by rounded FV so each position survives.
+    # ------------------------------------------------------------------
+    fv_numeric = pd.to_numeric(result.get("fair_value"), errors="coerce")
+    fv_rounded = fv_numeric.round(0)
+    fv_nunique = fv_rounded.groupby(
+        [result[k] for k in _DEDUP_KEY_COLUMNS], dropna=False,
+    ).transform("nunique")
+    has_fv_conflict = fv_nunique > 1
+
+    result["_fv_split_key"] = ""
+    # Rows with a non-null FV in a conflict group get their rounded FV as key
+    fv_mask = has_fv_conflict & fv_rounded.notna()
+    result.loc[fv_mask, "_fv_split_key"] = (
+        fv_rounded[fv_mask].astype(int).astype(str)
+    )
+    # Null-FV rows in conflict groups: assign to the sub-group of the
+    # highest-scoring non-null-FV row in their original group
+    null_fv_conflict = has_fv_conflict & fv_rounded.isna()
+    if null_fv_conflict.any():
+        best_key = (
+            result[has_fv_conflict & fv_rounded.notna()]
+            .sort_values(
+                by=["_dedupe_score", "_dedupe_row_order"],
+                ascending=[False, True],
+                kind="mergesort",
+            )
+            .groupby(_DEDUP_KEY_COLUMNS, dropna=False)["_fv_split_key"]
+            .first()
+        )
+        for idx in result.index[null_fv_conflict]:
+            key_vals = tuple(result.loc[idx, _DEDUP_KEY_COLUMNS])
+            if key_vals in best_key.index:
+                result.at[idx, "_fv_split_key"] = best_key[key_vals]
+
+    _EFFECTIVE_KEY = _DEDUP_KEY_COLUMNS + ["_fv_split_key"]
+
+    # ------------------------------------------------------------------
+    # Detect conflicts within effective (post-split) sub-groups
+    # ------------------------------------------------------------------
     conflict_fields_by_col: dict[str, pd.Series] = {}
     for col in [c for c in _DEDUP_CONFLICT_COLUMNS if c in result.columns]:
         numeric = pd.to_numeric(result[col], errors="coerce").round(6)
@@ -812,7 +855,7 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
         )
         normalized = normalized.mask(normalized.isna() | (normalized == ""), pd.NA)
         nunique = normalized.groupby(
-            [result[k] for k in _DEDUP_KEY_COLUMNS],
+            [result[k] for k in _EFFECTIVE_KEY],
             dropna=False,
         ).transform("nunique")
         conflict_fields_by_col[col] = nunique > 1
@@ -826,6 +869,9 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             .map(lambda val, field=col: field if val == "" else f"{val},{field}")
         )
 
+    # ------------------------------------------------------------------
+    # Fill missing values and pick best row per effective sub-group
+    # ------------------------------------------------------------------
     fill_source = result.copy()
     fill_source[value_cols] = fill_source[value_cols].replace("", pd.NA)
     fill_values = (
@@ -835,7 +881,7 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             ascending=[False, True],
             kind="mergesort",
         )
-        .groupby(_DEDUP_KEY_COLUMNS, dropna=False)[value_cols]
+        .groupby(_EFFECTIVE_KEY, dropna=False)[value_cols]
         .first()
         .reset_index()
     )
@@ -846,10 +892,10 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             ascending=[False, True],
             kind="mergesort",
         )
-        .drop_duplicates(subset=_DEDUP_KEY_COLUMNS, keep="first")
+        .drop_duplicates(subset=_EFFECTIVE_KEY, keep="first")
         .merge(
             fill_values,
-            on=_DEDUP_KEY_COLUMNS,
+            on=_EFFECTIVE_KEY,
             how="left",
             suffixes=("", "_dedupe_fill"),
         )
@@ -873,6 +919,34 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
         ]
         picked.drop(columns=[fill_col], inplace=True)
 
+    # Tag rows that resulted from an FV-based axis split
+    picked["dedupe_axis_split"] = picked["_fv_split_key"].ne("")
+
+    # Emit audit artifact for split rows
+    split_rows = picked[picked["dedupe_axis_split"]]
+    if not split_rows.empty:
+        audit_cols = [
+            c for c in [
+                "cik", "entity_name", "accession_number", "report_date",
+                "investment_identifier", "period", "dimensions_raw",
+                "fair_value", "cost", "dedupe_context_count",
+                "dedupe_conflict_fields",
+            ] if c in split_rows.columns
+        ]
+        try:
+            split_rows[audit_cols].to_csv(
+                BDC_DEDUPE_AXIS_SPLITS_FILE, index=False
+            )
+            logger.info(
+                "BDC dedupe axis splits: %d rows written to %s",
+                len(split_rows), BDC_DEDUPE_AXIS_SPLITS_FILE,
+            )
+        except Exception:
+            logger.warning(
+                "Failed to write BDC dedupe axis splits audit file",
+                exc_info=True,
+            )
+
     conflicts = picked["dedupe_conflict_fields"].astype("string").str.len().fillna(0) > 0
     if conflicts.any():
         logger.warning(
@@ -880,7 +954,7 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             int(conflicts.sum()),
         )
 
-    return picked.drop(columns=["_dedupe_row_order", "_dedupe_score"])
+    return picked.drop(columns=["_dedupe_row_order", "_dedupe_score", "_fv_split_key"])
 
 
 # ===========================================================================

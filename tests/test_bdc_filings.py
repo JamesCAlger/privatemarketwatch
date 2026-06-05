@@ -1458,9 +1458,114 @@ class TestParseAllFilings:
 
         result = _deduplicate_bdc_holdings(raw)
 
+        # FV conflict triggers axis split -- both positions preserved
+        assert len(result) == 2
+        assert set(result["fair_value"]) == {"1000000", "2000000"}
+        assert result["dedupe_axis_split"].all()
+        # Within each sub-group there is no conflict
+        assert (result["dedupe_conflict_fields"] == "").all()
+        # Original group size is still recorded
+        assert (result["dedupe_context_count"].astype(int) == 2).all()
+
+    def test_dedupe_fv_split_collapses_same_fv_subgroup(self):
+        """3 rows with 2 distinct FVs: two at $1M collapse, one at $2M kept."""
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "cost": "995000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "2000000",
+                "cost": "1900000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 2
+        assert set(result["fair_value"]) == {"1000000", "2000000"}
+        assert result["dedupe_axis_split"].all()
+
+    def test_dedupe_cost_only_conflict_no_split(self):
+        """Same FV but different cost: no FV split triggered."""
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "cost": "950000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
         assert len(result) == 1
-        assert result.iloc[0]["fair_value"] == "1000000"
-        assert result.iloc[0]["dedupe_conflict_fields"] == "fair_value"
+        assert not result.iloc[0]["dedupe_axis_split"]
+
+    def test_dedupe_null_fv_in_conflict_group_joins_best_subgroup(self):
+        """Null-FV row in a conflict group joins the highest-scoring sub-group."""
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "interest_rate": "",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "2000000",
+                "cost": "1900000",
+                "interest_rate": "",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "",
+                "cost": "",
+                "interest_rate": "SOFR+500",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        # Two sub-groups survive; the null-FV row fills the rate into one
+        assert len(result) == 2
+        assert set(result["fair_value"]) == {"1000000", "2000000"}
+        # The rate should appear on whichever sub-group the null-FV row joined
+        rates = result["interest_rate"].tolist()
+        assert "SOFR+500" in rates
 
     def test_dedupe_preserves_distinct_legal_entity_dimensions(self):
         from pipeline.bdc_filings import _deduplicate_bdc_holdings

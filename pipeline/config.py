@@ -122,6 +122,7 @@ BDC_FILINGS_INDEX_FILE = OUTPUT_DIR / "bdc_filings_index.csv"
 BDC_HOLDINGS_FILE = OUTPUT_DIR / "bdc_holdings.csv"
 BDC_HOLDINGS_PARQUET_FILE = OUTPUT_DIR / "bdc_holdings.parquet"
 BDC_PARSE_PROGRESS_FILE = OUTPUT_DIR / "bdc_parse_progress.csv"
+BDC_DEDUPE_AXIS_SPLITS_FILE = OUTPUT_DIR / "bdc_dedupe_axis_splits.csv"
 
 # N-CSR output files
 NCSR_PARSE_PROGRESS_FILE = OUTPUT_DIR / "ncsr_parse_progress.csv"
