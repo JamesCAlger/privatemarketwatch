@@ -33,8 +33,14 @@ from pipeline.config import (
     BDC_HOLDINGS_FILE,
     BDC_SOURCE_FACTS_CACHE_MANIFEST_FILE,
     OUTPUT_DIR,
+    OVERRIDES_DIR,
     SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
     UNIFIED_HOLDINGS_FILE,
+)
+from pipeline.bdc_xbrl_oracle_exceptions import (
+    ORACLE_EXCEPTION_SCHEMA_VERSION,
+    load_bdc_xbrl_oracle_exceptions,
+    reason_is_waived,
 )
 from pipeline.source_reconciliation import (
     DETAIL_COLUMNS,
@@ -224,6 +230,9 @@ PROMOTION_GATE_COLUMNS = [
     "current_unclassified_rate",
     "current_unclassified_fv_rate",
     "current_oracle_status",
+    "waived_oracle_reasons",
+    "unwaived_oracle_reasons",
+    "effective_oracle_status",
     "quarter_verdict",
     "quarter_reasons",
 ]
@@ -253,6 +262,23 @@ _PROMOTION_REVIEW_REASONS = frozenset({
     "spread_magnitude_shift_detected",
 })
 
+_PROMOTION_EXCEPTION_ELIGIBLE_REASONS = frozenset({
+    "unclassified_rate_exceeded",
+    "unclassified_fv_rate_exceeded",
+    "unclassified_rate_qoq_jump",
+    "content_signatures_fail",
+    "unparsed_remainder_rows",
+    "unparsed_remainder_spike",
+    "low_position_continuity",
+    "rate_outliers_detected",
+    "cost_fv_ratio_outliers",
+    "concept_drift_detected",
+    "fv_magnitude_shift_detected",
+    "rate_magnitude_shift_detected",
+    "cost_magnitude_shift_detected",
+    "spread_magnitude_shift_detected",
+})
+
 
 @dataclass
 class PromotionVerdict:
@@ -274,9 +300,53 @@ def _safe_float(value: Any) -> float:
         return 0.0
 
 
+def _split_reason_string(value: Any) -> set[str]:
+    return {part for part in str(value or "").split("|") if part}
+
+
+def _normalized_wrapper_versions(wrapper_version_by_cik: dict[str, Any] | None) -> dict[str, str]:
+    if not wrapper_version_by_cik:
+        return {}
+    return {
+        normalize_cik(cik): str(version)
+        for cik, version in wrapper_version_by_cik.items()
+        if str(version or "").strip()
+    }
+
+
+def _waiveable_reason_sets(
+    reasons_set: set[str],
+    *,
+    cik: str,
+    report_date: str,
+    wrapper_version: str,
+    oracle_exceptions: pd.DataFrame | None,
+) -> tuple[set[str], set[str]]:
+    waived: set[str] = set()
+    unwaived: set[str] = set()
+    for reason in reasons_set:
+        if (
+            reason in _PROMOTION_EXCEPTION_ELIGIBLE_REASONS
+            and reason_is_waived(
+                oracle_exceptions,
+                cik=cik,
+                report_date=report_date,
+                oracle_reason=reason,
+                wrapper_version=wrapper_version,
+            )
+        ):
+            waived.add(reason)
+        else:
+            unwaived.add(reason)
+    return waived, unwaived
+
+
 def evaluate_promotion_gate(
     current_summary: pd.DataFrame,
     baseline_comparison: pd.DataFrame | None = None,
+    *,
+    oracle_exceptions: pd.DataFrame | None = None,
+    wrapper_version_by_cik: dict[str, Any] | None = None,
 ) -> PromotionVerdict:
     """Evaluate whether a wrapper change should be promoted.
 
@@ -287,6 +357,7 @@ def evaluate_promotion_gate(
     Returns a ``PromotionVerdict`` with status ``"promote"``, ``"reject"``,
     or ``"review_required"``.
     """
+    wrapper_versions = _normalized_wrapper_versions(wrapper_version_by_cik)
     reject_reasons: list[str] = []
     review_reasons: list[str] = []
     improvements: list[str] = []
@@ -306,17 +377,25 @@ def evaluate_promotion_gate(
     # --- Absolute checks from current oracle summary ---
     for _, row in current_summary.iterrows():
         status = str(row.get("oracle_status", ""))
-        fail_reasons = str(row.get("oracle_fail_reasons", ""))
+        reasons_set = _split_reason_string(row.get("oracle_fail_reasons", ""))
         rd = str(row.get("report_date", ""))
+        cik_val = normalize_cik(row.get("cik", ""))
+        wrapper_version = wrapper_versions.get(cik_val, "")
 
         if status == "fail":
-            reasons_set = set(fail_reasons.split("|")) if fail_reasons else set()
-            for reason in sorted(reasons_set & _PROMOTION_REJECT_REASONS):
+            _waived, unwaived = _waiveable_reason_sets(
+                reasons_set,
+                cik=cik_val,
+                report_date=rd,
+                wrapper_version=wrapper_version,
+                oracle_exceptions=oracle_exceptions,
+            )
+            for reason in sorted(unwaived & _PROMOTION_REJECT_REASONS):
                 reject_reasons.append(f"{rd}: {reason}")
-            for reason in sorted(reasons_set & _PROMOTION_REVIEW_REASONS):
+            for reason in sorted(unwaived & _PROMOTION_REVIEW_REASONS):
                 review_reasons.append(f"{rd}: {reason}")
             # Remaining mechanism reasons (not diagnostic)
-            for reason in sorted(reasons_set):
+            for reason in sorted(unwaived):
                 if reason.startswith("remaining_") and reason not in {
                     "remaining_cash_or_money_market",
                     "remaining_aggregate",
@@ -380,7 +459,22 @@ def evaluate_promotion_gate(
     per_quarter_rows = []
     for _, row in current_summary.iterrows():
         rd = str(row.get("report_date", ""))
-        cik_val = str(row.get("cik", ""))
+        cik_val = normalize_cik(row.get("cik", ""))
+        wrapper_version = wrapper_versions.get(cik_val, "")
+        raw_reasons = _split_reason_string(row.get("oracle_fail_reasons", ""))
+        waived, unwaived = _waiveable_reason_sets(
+            raw_reasons,
+            cik=cik_val,
+            report_date=rd,
+            wrapper_version=wrapper_version,
+            oracle_exceptions=oracle_exceptions,
+        )
+        raw_status = str(row.get("oracle_status", ""))
+        effective_status = (
+            "pass"
+            if raw_status == "fail" and raw_reasons and not unwaived
+            else raw_status
+        )
         bc_row: dict[str, Any] = {}
         if baseline_comparison is not None and not baseline_comparison.empty:
             bc_match = baseline_comparison[
@@ -393,7 +487,7 @@ def evaluate_promotion_gate(
         q_blocking_delta = int(_safe_float(bc_row.get("blocking_rows_delta", 0)))
         if q_blocking_delta > 0:
             q_reasons.append("blocking_rows_regressed")
-        if str(row.get("oracle_status", "")) == "fail":
+        if effective_status == "fail":
             q_reasons.append("oracle_fail")
 
         per_quarter_rows.append({
@@ -435,6 +529,9 @@ def evaluate_promotion_gate(
                 row.get("unclassified_fv_rate", "")
             ),
             "current_oracle_status": str(row.get("oracle_status", "")),
+            "waived_oracle_reasons": "|".join(sorted(waived)),
+            "unwaived_oracle_reasons": "|".join(sorted(unwaived)),
+            "effective_oracle_status": effective_status,
             "quarter_verdict": "reject" if q_reasons else "pass",
             "quarter_reasons": "|".join(q_reasons),
         })
@@ -506,11 +603,219 @@ def validate_wrapper_definition_structure(
     return issues
 
 
+def validate_wrapper_json_coherence(raw: dict[str, Any]) -> list[str]:
+    """Check cross-section invariants in a raw wrapper JSON dict.
+
+    Complements ``validate_wrapper_definition_structure`` (which checks
+    parsed archetype structure) by validating the raw JSON before parsing.
+    Returns a list of issue descriptions; empty means valid.
+    """
+    issues: list[str] = []
+    dispatch = raw.get("dispatch") or {}
+    staging = raw.get("staging") or {}
+
+    # --- 1. Family-marker alignment ---
+    prefix_rules = dispatch.get("prefix_rules") or {}
+    leaf_markers = dispatch.get("leaf_markers_by_family") or {}
+    if prefix_rules and leaf_markers:
+        families_used = set(prefix_rules.values())
+        for family in sorted(families_used):
+            if family not in leaf_markers:
+                issues.append(
+                    f"warning: family '{family}' in prefix_rules has no "
+                    f"entry in leaf_markers_by_family"
+                )
+
+    # --- 2. Staging strategy prerequisites ---
+    strategy = staging.get("strategy", "")
+    if strategy == "prefix_strip":
+        if not staging.get("hierarchy_prefix_re"):
+            issues.append(
+                "staging strategy 'prefix_strip' requires "
+                "'hierarchy_prefix_re'"
+            )
+    elif strategy == "hierarchy_extract":
+        if not staging.get("hierarchy_issuer_re"):
+            issues.append(
+                "staging strategy 'hierarchy_extract' requires "
+                "'hierarchy_issuer_re'"
+            )
+        if not staging.get("hierarchy_instrument_re"):
+            issues.append(
+                "staging strategy 'hierarchy_extract' requires "
+                "'hierarchy_instrument_re'"
+            )
+    elif strategy == "hierarchy_leaf_guard":
+        leaf_guard = staging.get("leaf_guard") or {}
+        if not leaf_guard.get("marker_re"):
+            issues.append(
+                "staging strategy 'hierarchy_leaf_guard' requires "
+                "'leaf_guard.marker_re'"
+            )
+        if not leaf_guard.get("evidence_re"):
+            issues.append(
+                "staging strategy 'hierarchy_leaf_guard' requires "
+                "'leaf_guard.evidence_re'"
+            )
+    elif strategy == "issuer_bridge":
+        bridges = staging.get("issuer_bridges") or []
+        if not bridges:
+            issues.append(
+                "staging strategy 'issuer_bridge' requires non-empty "
+                "'issuer_bridges' array"
+            )
+
+    # --- 3. Regex compilation ---
+    _REGEX_FIELDS_DISPATCH = [
+        ("dispatch", "canonical_strip_re"),
+        ("dispatch", "category_marker_re"),
+    ]
+    _REGEX_FIELDS_STAGING = [
+        ("staging", "hierarchy_prefix_re"),
+        ("staging", "hierarchy_issuer_re"),
+        ("staging", "hierarchy_instrument_re"),
+        ("staging", "hierarchy_trailing_re"),
+    ]
+    _REGEX_FIELDS_LEAF_GUARD = [
+        "marker_re",
+        "evidence_re",
+        "issuer_re",
+        "instrument_re",
+        "type_industry_prefix_re",
+    ]
+
+    for section_key, field_key in _REGEX_FIELDS_DISPATCH + _REGEX_FIELDS_STAGING:
+        section = raw.get(section_key) or {}
+        value = section.get(field_key)
+        if isinstance(value, str) and value:
+            try:
+                re.compile(value)
+            except re.error as exc:
+                issues.append(
+                    f"{section_key}.{field_key} is not a valid regex: {exc}"
+                )
+
+    leaf_guard = (raw.get("staging") or {}).get("leaf_guard") or {}
+    for field_key in _REGEX_FIELDS_LEAF_GUARD:
+        value = leaf_guard.get(field_key)
+        if isinstance(value, str) and value:
+            try:
+                re.compile(value)
+            except re.error as exc:
+                issues.append(
+                    f"staging.leaf_guard.{field_key} is not a valid regex: "
+                    f"{exc}"
+                )
+
+    # Fallback family patterns regexes
+    for i, pat in enumerate(dispatch.get("fallback_family_patterns") or []):
+        regex_val = pat.get("regex", "")
+        if isinstance(regex_val, str) and regex_val:
+            try:
+                re.compile(regex_val)
+            except re.error as exc:
+                issues.append(
+                    f"dispatch.fallback_family_patterns[{i}].regex is not "
+                    f"a valid regex: {exc}"
+                )
+
+    # --- 4. Fallback family consistency ---
+    # Fallback families often catch one-off patterns where leaf/rollup
+    # classification may not apply, so missing leaf markers is a warning.
+    if leaf_markers:
+        for i, pat in enumerate(
+            dispatch.get("fallback_family_patterns") or []
+        ):
+            family = pat.get("family", "")
+            if family and family not in leaf_markers:
+                issues.append(
+                    f"warning: fallback_family_patterns[{i}] family "
+                    f"'{family}' has no entry in leaf_markers_by_family"
+                )
+
+    # --- 5. Archetype-dispatch alignment warning ---
+    archetypes = raw.get("archetypes") or {}
+    if archetypes and dispatch:
+        archetype_names = set(archetypes.keys())
+        dispatch_families = set(prefix_rules.values())
+        for pat in dispatch.get("fallback_family_patterns") or []:
+            dispatch_families.add(pat.get("family", ""))
+        dispatch_families.discard("")
+        if dispatch_families and not (archetype_names & dispatch_families):
+            issues.append(
+                f"warning: archetype names {sorted(archetype_names)} "
+                f"have no overlap with dispatch families "
+                f"{sorted(dispatch_families)} -- classification systems "
+                f"may be disconnected"
+            )
+
+    return issues
+
+
+def _wrapper_version_by_cik(cik: str) -> dict[str, str]:
+    wrapper = load_wrapper_definition(cik)
+    if wrapper is None:
+        return {}
+    return {normalize_cik(cik): str(wrapper.version)}
+
+
+def build_exception_proposals(
+    current_summary: pd.DataFrame,
+    *,
+    wrapper_version_by_cik: dict[str, Any] | None = None,
+    oracle_exceptions: pd.DataFrame | None = None,
+) -> list[dict[str, Any]]:
+    """Build inactive proposal templates for waiveable soft oracle reasons."""
+    wrapper_versions = _normalized_wrapper_versions(wrapper_version_by_cik)
+    proposals: list[dict[str, Any]] = []
+    if current_summary.empty:
+        return proposals
+    seen: set[tuple[str, str, str, str]] = set()
+    for _, row in current_summary.iterrows():
+        if str(row.get("oracle_status", "")) != "fail":
+            continue
+        cik_val = normalize_cik(row.get("cik", ""))
+        report_date = str(row.get("report_date", ""))
+        wrapper_version = wrapper_versions.get(cik_val, "")
+        for reason in sorted(_split_reason_string(row.get("oracle_fail_reasons", ""))):
+            if reason not in _PROMOTION_EXCEPTION_ELIGIBLE_REASONS:
+                continue
+            if reason_is_waived(
+                oracle_exceptions,
+                cik=cik_val,
+                report_date=report_date,
+                oracle_reason=reason,
+                wrapper_version=wrapper_version,
+            ):
+                continue
+            key = (cik_val, report_date, reason, wrapper_version)
+            if key in seen:
+                continue
+            seen.add(key)
+            proposals.append({
+                "schema_version": ORACLE_EXCEPTION_SCHEMA_VERSION,
+                "cik": cik_val,
+                "report_date": report_date,
+                "oracle_reason": reason,
+                "wrapper_version": wrapper_version,
+                "status": "proposed",
+                "confidence": "",
+                "reason": "",
+                "evidence": "",
+                "residual_risk": "",
+                "created_by": "agent",
+                "accepted_by": "",
+                "updated_at": "",
+            })
+    return proposals
+
+
 def run_promotion_trial(
     *,
     cik: str = TRINITY_CIK,
     output_dir: Path | None = None,
     fresh_bdc_staging: bool = False,
+    holdings_file: Path | None = None,
 ) -> PromotionVerdict:
     """Run full promotion gate trial for one CIK.
 
@@ -525,6 +830,7 @@ def run_promotion_trial(
         output_dir=out_dir,
         compare_baseline=True,
         fresh_bdc_staging=fresh_bdc_staging,
+        holdings_file=holdings_file,
     )
 
     # Structural validation
@@ -535,7 +841,19 @@ def run_promotion_trial(
         else ["no_wrapper_definition"]
     )
 
-    verdict = evaluate_promotion_gate(summary, baseline)
+    wrapper_versions = _wrapper_version_by_cik(cik_norm)
+    oracle_exceptions = load_bdc_xbrl_oracle_exceptions()
+    verdict = evaluate_promotion_gate(
+        summary,
+        baseline,
+        oracle_exceptions=oracle_exceptions,
+        wrapper_version_by_cik=wrapper_versions,
+    )
+    exception_proposals = build_exception_proposals(
+        summary,
+        wrapper_version_by_cik=wrapper_versions,
+        oracle_exceptions=oracle_exceptions,
+    )
 
     # Merge structural issues into verdict
     for issue in structural_issues:
@@ -556,6 +874,15 @@ def run_promotion_trial(
     }
     with open(out_dir / "promotion_verdict.json", "w", encoding="utf-8") as fh:
         json_mod.dump(verdict_dict, fh, indent=2)
+    with open(out_dir / "exception_proposals.json", "w", encoding="utf-8") as fh:
+        json_mod.dump(
+            {
+                "schema_version": ORACLE_EXCEPTION_SCHEMA_VERSION,
+                "exceptions": exception_proposals,
+            },
+            fh,
+            indent=2,
+        )
 
     return verdict
 
@@ -1352,9 +1679,18 @@ def build_wrapper_oracle_outputs(
         df["source_wrapper_unparsed_remainder"].fillna("").astype(str).str.strip().ne("")
         | df["output_wrapper_unparsed_remainder"].fillna("").astype(str).str.strip().ne("")
     )
+    source_blocking_disposition = remaining["source_wrapper_disposition"].fillna("").astype(str)
+    output_blocking_disposition = remaining["output_wrapper_disposition"].fillna("").astype(str)
+    diagnostic_dispositions = {"aggregate", "non_private_market"}
     wrapper_blocking = remaining[
-        remaining["source_wrapper_disposition"].fillna("").astype(str).ne("")
-        | remaining["output_wrapper_disposition"].fillna("").astype(str).ne("")
+        (
+            source_blocking_disposition.ne("")
+            & ~source_blocking_disposition.isin(diagnostic_dispositions)
+        )
+        | (
+            output_blocking_disposition.ne("")
+            & ~output_blocking_disposition.isin(diagnostic_dispositions)
+        )
     ]
     mechanisms = build_remaining_mechanism_summary(
         df,
@@ -1698,6 +2034,16 @@ def run_wrapper_oracle_trial(
     cik_norm = normalize_cik(cik)
     out_dir = output_dir or (OUTPUT_DIR / "bdc_xbrl_wrapper_trial" / cik_norm)
 
+    # Fail fast on wrapper JSON coherence issues
+    wrapper_path = OVERRIDES_DIR / "bdc_xbrl_wrappers" / f"{cik_norm}.json"
+    if wrapper_path.exists():
+        with open(wrapper_path, encoding="utf-8") as _wf:
+            _raw_wrapper = json_mod.load(_wf)
+        coherence_issues = validate_wrapper_json_coherence(_raw_wrapper)
+        if coherence_issues:
+            for issue in coherence_issues:
+                logger.warning("Wrapper coherence: %s", issue)
+
     source_df = _load_cached_source_facts_for_cik(cik_norm)
     if fresh_bdc_staging:
         holdings_df = _load_fresh_bdc_staged_holdings_for_cik(cik_norm)
@@ -1872,6 +2218,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.fresh_bdc_staging and args.holdings_file is not None:
         parser.error("--fresh-bdc-staging and --holdings-file are mutually exclusive")
+    if args.all_supported and args.holdings_file is not None:
+        parser.error("--all-supported and --holdings-file are mutually exclusive")
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
@@ -1906,6 +2254,7 @@ def main(argv: list[str] | None = None) -> int:
                 cik=cik_val,
                 output_dir=out,
                 fresh_bdc_staging=args.fresh_bdc_staging,
+                holdings_file=args.holdings_file,
             )
             print(f"cik={cik_val}")
             print(f"promotion_status={verdict.status}")

@@ -19,7 +19,7 @@ from typing import Any
 
 import pandas as pd
 
-from pipeline.bdc_xbrl_wrapper import normalize_cik
+from pipeline.bdc_xbrl_wrapper import classify_identifier, normalize_cik
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     FUND_FINANCIALS_FILE,
@@ -110,6 +110,55 @@ class WrapperDefinition:
 
 
 # ---------------------------------------------------------------------------
+# Default archetype field signatures
+# ---------------------------------------------------------------------------
+
+# Applied to archetypes whose name matches a known family when the wrapper
+# does not explicitly define a signature for the field.  Explicit always wins.
+_DEFAULT_ARCHETYPE_SIGNATURES: dict[str, dict[str, FieldSignature]] = {
+    "debt": {
+        "fair_value": FieldSignature(
+            "fair_value", "numeric_range", "required", -1e9, 1e12,
+        ),
+    },
+    "senior_secured_debt": {
+        "fair_value": FieldSignature(
+            "fair_value", "numeric_range", "required", -1e9, 1e12,
+        ),
+    },
+    "equity": {
+        "fair_value": FieldSignature(
+            "fair_value", "numeric_range", "required", -1e9, 1e12,
+        ),
+        "basis_spread": FieldSignature(
+            "basis_spread", "presence", "forbidden",
+        ),
+    },
+    "warrant": {
+        "fair_value": FieldSignature(
+            "fair_value", "numeric_range", "required", -1e9, 1e12,
+        ),
+        "interest_rate": FieldSignature(
+            "interest_rate", "presence", "forbidden",
+        ),
+        "basis_spread": FieldSignature(
+            "basis_spread", "presence", "forbidden",
+        ),
+    },
+    "clo": {
+        "fair_value": FieldSignature(
+            "fair_value", "numeric_range", "required", -1e9, 1e12,
+        ),
+    },
+    "mixed": {
+        "fair_value": FieldSignature(
+            "fair_value", "numeric_range", "required", -1e9, 1e12,
+        ),
+    },
+}
+
+
+# ---------------------------------------------------------------------------
 # Loader
 # ---------------------------------------------------------------------------
 
@@ -143,6 +192,7 @@ def _parse_definition(raw: dict[str, Any]) -> WrapperDefinition:
         keywords = tuple(detection.get("keywords") or [])
         keyword_mode = detection.get("keyword_mode", "any")
         sigs = []
+        explicit_fields: set[str] = set()
         for field_name, sig_spec in (spec.get("field_signatures") or {}).items():
             sigs.append(FieldSignature(
                 field_name=field_name,
@@ -153,6 +203,12 @@ def _parse_definition(raw: dict[str, Any]) -> WrapperDefinition:
                 pattern=sig_spec.get("pattern"),
                 values=tuple(sig_spec["values"]) if "values" in sig_spec else None,
             ))
+            explicit_fields.add(field_name)
+        # Apply default signatures for known family names
+        defaults = _DEFAULT_ARCHETYPE_SIGNATURES.get(name) or {}
+        for default_field, default_sig in defaults.items():
+            if default_field not in explicit_fields:
+                sigs.append(default_sig)
         archetypes.append(Archetype(
             name=name,
             description=spec.get("description", ""),
@@ -745,9 +801,25 @@ def _load_holdings_for_cik(cik: str) -> pd.DataFrame:
             df["cik"] = df["cik"].map(normalize_cik)
             result = df[df["cik"].eq(cik_norm)].copy()
             if not result.empty:
+                if "period" in result.columns and "report_date" in result.columns:
+                    current_period = (
+                        result["period"].isna()
+                        | result["period"].astype(str).eq("")
+                        | result["period"].astype(str).eq(result["report_date"].astype(str))
+                    )
+                    result = result[current_period].copy()
                 for col in numeric_cols:
                     if col in result.columns:
                         result[col] = pd.to_numeric(result[col], errors="coerce")
+                if "fair_value" in result.columns:
+                    result = result[result["fair_value"].notna()].copy()
+                text_col = _resolve_text_column(result) if not result.empty else ""
+                if text_col:
+                    dispositions = result[text_col].map(
+                        lambda value: classify_identifier(cik_norm, value).get("wrapper_disposition", "")
+                    )
+                    if dispositions.str.endswith("_position_leaf").any():
+                        result = result[dispositions.str.endswith("_position_leaf")].copy()
                 return result
 
     # Fall back to unified holdings

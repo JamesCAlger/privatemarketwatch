@@ -13,6 +13,8 @@ from pipeline.wrapper_content_signatures import (
     PositionCountQoQ,
     RateSanity,
     WrapperDefinition,
+    _DEFAULT_ARCHETYPE_SIGNATURES,
+    _parse_definition,
     classify_archetype,
     load_wrapper_definition,
     validate_content_signatures,
@@ -20,6 +22,7 @@ from pipeline.wrapper_content_signatures import (
     run_qoq_drift,
     _detect_edge_cases,
     _field_is_present,
+    _load_holdings_for_cik,
 )
 
 
@@ -146,6 +149,27 @@ def test_load_wrapper_definition_has_edge_cases():
     ids = {ec.id for ec in wrapper.edge_cases}
     assert "pipe_delimited_rows" in ids
     assert "bare_fund_vehicle" in ids
+
+
+def test_blue_owl_tech_content_signatures_cover_explicit_instruments():
+    """Blue Owl Technology archetypes cover explicit instrument text without bare-name promotion."""
+    wrapper = load_wrapper_definition("0001869453")
+    assert wrapper is not None
+
+    assert classify_archetype(
+        wrapper,
+        "Armstrong Bidco Limited | First lien senior secured GBP delayed draw term loan",
+    ) == "debt"
+    assert classify_archetype(
+        wrapper,
+        "Anaplan, Inc., Firs lien senior secured revolving loan",
+    ) == "debt"
+    assert classify_archetype(
+        wrapper,
+        "KWOL Acquisition Inc. (dba Worldwide Clinical Trials), Common stock",
+    ) == "equity"
+    assert classify_archetype(wrapper, "LSI Financing 1 DAC") is None
+    assert classify_archetype(wrapper, "BOCSO") is None
 
 
 # ---------------------------------------------------------------------------
@@ -316,6 +340,60 @@ def test_unclassified_rows_are_not_signature_failures():
     assert len(violations) == 0
     assert summary.iloc[0]["unclassified_rows"] == 1
     assert summary.iloc[0]["pass_rate"] == 1.0
+
+
+def test_load_holdings_for_cik_filters_raw_to_current_fv_position_leaves(monkeypatch, tmp_path):
+    raw_path = tmp_path / "bdc_holdings.csv"
+    pd.DataFrame([
+        {
+            "cik": "0001377936",
+            "report_date": "2024-11-30",
+            "period": "2024-11-30",
+            "investment_identifier": (
+                "GoReact - Education Software - First Lien Term Loan "
+                "(3M USD TERM SOFR+7.50%), 12.17% Cash/1.00% PIK, 1/17/2025"
+            ),
+            "fair_value": "8142981",
+            "cost": "8139422",
+        },
+        {
+            "cik": "0001377936",
+            "report_date": "2024-11-30",
+            "period": "2024-02-29",
+            "investment_identifier": (
+                "GoReact - Education Software - First Lien Term Loan "
+                "(3M USD TERM SOFR+7.50%), 13.03% Cash/1.00% PIK, 1/17/2025"
+            ),
+            "fair_value": "8087775",
+            "cost": "8060498",
+        },
+        {
+            "cik": "0001377936",
+            "report_date": "2024-11-30",
+            "period": "2024-11-30",
+            "investment_identifier": "TOTAL INVESTMENTS - 256.5%",
+            "fair_value": "960093232",
+            "cost": "940000000",
+        },
+        {
+            "cik": "0001377936",
+            "report_date": "2024-11-30",
+            "period": "2024-11-30",
+            "investment_identifier": (
+                "GoReact - Education Software - Delayed Draw Term Loan "
+                "(3M USD TERM SOFR+7.50%), 12.17% Cash/1.00% PIK, 1/17/2025"
+            ),
+            "fair_value": "",
+            "cost": "",
+        },
+    ]).to_csv(raw_path, index=False)
+    monkeypatch.setattr("pipeline.wrapper_content_signatures.BDC_HOLDINGS_FILE", raw_path)
+
+    result = _load_holdings_for_cik("1377936")
+
+    assert len(result) == 1
+    assert "GoReact" in result.iloc[0]["investment_identifier"]
+    assert result.iloc[0]["fair_value"] == 8142981
 
 
 # ---------------------------------------------------------------------------
@@ -612,3 +690,151 @@ def test_multiple_quarters_signature_summary():
     assert q3["fail_rows"] == 0
     assert q4["total_rows"] == 1
     assert q4["fail_rows"] == 1
+
+
+# ---------------------------------------------------------------------------
+# Default archetype field signature tests
+# ---------------------------------------------------------------------------
+
+
+def test_default_signatures_applied_to_equity_archetype():
+    """Equity archetype with only FV signature gets basis_spread:forbidden from defaults."""
+    raw = {
+        "cik": "0000000099",
+        "entity_name": "Test Fund",
+        "version": 1,
+        "archetypes": {
+            "equity": {
+                "description": "Equity instruments",
+                "detection_rules": {"keywords": ["Common stock"], "keyword_mode": "any"},
+                "field_signatures": {
+                    "fair_value": {
+                        "type": "numeric_range",
+                        "constraint": "required",
+                        "min": -1e9,
+                        "max": 1e12,
+                    },
+                },
+            },
+        },
+    }
+    defn = _parse_definition(raw)
+    equity_arch = [a for a in defn.archetypes if a.name == "equity"][0]
+    sig_map = {s.field_name: s for s in equity_arch.field_signatures}
+    assert "basis_spread" in sig_map
+    assert sig_map["basis_spread"].constraint == "forbidden"
+    # Explicit FV should still be there
+    assert "fair_value" in sig_map
+    assert sig_map["fair_value"].constraint == "required"
+
+
+def test_explicit_signature_overrides_default():
+    """Wrapper with explicit basis_spread:optional on equity keeps explicit, not default."""
+    raw = {
+        "cik": "0000000099",
+        "entity_name": "Test Fund",
+        "version": 1,
+        "archetypes": {
+            "equity": {
+                "description": "Equity instruments",
+                "detection_rules": {"keywords": ["Common stock"], "keyword_mode": "any"},
+                "field_signatures": {
+                    "basis_spread": {
+                        "type": "presence",
+                        "constraint": "optional",
+                    },
+                },
+            },
+        },
+    }
+    defn = _parse_definition(raw)
+    equity_arch = [a for a in defn.archetypes if a.name == "equity"][0]
+    sig_map = {s.field_name: s for s in equity_arch.field_signatures}
+    assert sig_map["basis_spread"].constraint == "optional"  # explicit wins
+    # FV default should still be applied since not explicit
+    assert "fair_value" in sig_map
+    assert sig_map["fair_value"].constraint == "required"
+
+
+def test_unknown_archetype_gets_no_defaults():
+    """Archetype with unrecognized name gets no default signatures."""
+    raw = {
+        "cik": "0000000099",
+        "entity_name": "Test Fund",
+        "version": 1,
+        "archetypes": {
+            "structured_credit": {
+                "description": "Structured credit instruments",
+                "detection_rules": {"keywords": ["CLO tranche"], "keyword_mode": "any"},
+                "field_signatures": {},
+            },
+        },
+    }
+    defn = _parse_definition(raw)
+    arch = defn.archetypes[0]
+    assert arch.name == "structured_credit"
+    assert len(arch.field_signatures) == 0
+
+
+def test_warrant_defaults_include_rate_and_spread_forbidden():
+    """Warrant archetype gets interest_rate:forbidden and basis_spread:forbidden."""
+    raw = {
+        "cik": "0000000099",
+        "entity_name": "Test Fund",
+        "version": 1,
+        "archetypes": {
+            "warrant": {
+                "description": "Warrants",
+                "detection_rules": {"keywords": ["Warrant"], "keyword_mode": "any"},
+                "field_signatures": {},
+            },
+        },
+    }
+    defn = _parse_definition(raw)
+    warrant_arch = defn.archetypes[0]
+    sig_map = {s.field_name: s for s in warrant_arch.field_signatures}
+    assert sig_map["interest_rate"].constraint == "forbidden"
+    assert sig_map["basis_spread"].constraint == "forbidden"
+    assert sig_map["fair_value"].constraint == "required"
+
+
+def test_default_equity_signature_catches_spread_on_equity():
+    """Equity row with basis_spread present triggers a violation via default signature."""
+    raw = {
+        "cik": "0000000099",
+        "entity_name": "Test Fund",
+        "version": 1,
+        "archetypes": {
+            "equity": {
+                "description": "Equity instruments",
+                "detection_rules": {"keywords": ["Common stock"], "keyword_mode": "any"},
+                "field_signatures": {
+                    "fair_value": {
+                        "type": "numeric_range",
+                        "constraint": "required",
+                        "min": -1e9,
+                        "max": 1e12,
+                    },
+                },
+            },
+        },
+    }
+    defn = _parse_definition(raw)
+    wrapper = WrapperDefinition(
+        cik=defn.cik,
+        entity_name=defn.entity_name,
+        version=defn.version,
+        archetypes=defn.archetypes,
+    )
+    df = pd.DataFrame([{
+        "report_date": "2024-12-31",
+        "instrument_description": "Acme Corp, Common stock",
+        "interest_rate": None,
+        "basis_spread": 0.05,  # Should be forbidden for equity
+        "fair_value": 1000000,
+        "shares_held": None,
+    }])
+    summary, violations = validate_content_signatures(wrapper, df)
+    spread_violations = [v for v in violations if v.field_name == "basis_spread"]
+    assert len(spread_violations) == 1
+    assert "forbidden" in spread_violations[0].reason

@@ -1,18 +1,27 @@
+import json
 from unittest import mock
 
 import pandas as pd
+import pytest
 
 from pipeline.bdc_xbrl_wrapper_oracle import (
     BASELINE_COMPARISON_COLUMNS,
     ORACLE_SUMMARY_COLUMNS,
     PROMOTION_GATE_COLUMNS,
     _UNCLASSIFIED_RATE_QOQ_JUMP_THRESHOLD,
+    build_exception_proposals,
     build_residual_wrapper_queue,
     build_wrapper_oracle_outputs,
     build_wrapper_profile_for_cik,
     evaluate_promotion_gate,
+    run_promotion_trial,
     run_wrapper_queue,
     validate_wrapper_definition_structure,
+    validate_wrapper_json_coherence,
+)
+from pipeline.bdc_xbrl_oracle_exceptions import (
+    ORACLE_EXCEPTION_SCHEMA_VERSION,
+    load_bdc_xbrl_oracle_exceptions,
 )
 from pipeline.source_reconciliation import DETAIL_COLUMNS
 from pipeline.wrapper_content_signatures import (
@@ -196,9 +205,11 @@ def test_oracle_classifies_aggregate_and_non_private_rows_as_diagnostic():
         },
     ])
 
-    _summary, _cleared, _remaining, mechanisms = build_wrapper_oracle_outputs(detail)
+    summary, _cleared, _remaining, mechanisms = build_wrapper_oracle_outputs(detail)
 
     assert set(mechanisms["mechanism"]) == {"aggregate", "cash_or_money_market"}
+    assert summary.iloc[0]["remaining_wrapper_blocking_rows"] == 0
+    assert summary.iloc[0]["oracle_status"] == "pass"
 
 
 def test_oracle_splits_rollup_child_sum_mismatch_from_no_child_tie():
@@ -759,6 +770,25 @@ def _baseline_comp(rows):
     return pd.DataFrame(merged)
 
 
+def _oracle_exception_rows(rows):
+    defaults = {
+        "schema_version": ORACLE_EXCEPTION_SCHEMA_VERSION,
+        "cik": "0001786108",
+        "report_date": "2024-12-31",
+        "oracle_reason": "unclassified_rate_exceeded",
+        "wrapper_version": "1",
+        "status": "accepted",
+        "confidence": 0.9,
+        "reason": "Reviewed CIK-specific filing behavior.",
+        "evidence": "Trial reconciliation and source detail reviewed.",
+        "residual_risk": "Low residual diagnostic risk.",
+        "created_by": "agent",
+        "accepted_by": "operator",
+        "updated_at": "2026-06-03",
+    }
+    return pd.DataFrame([{**defaults, **row} for row in rows])
+
+
 def test_promotion_gate_promotes_when_blocking_rows_decrease():
     """Promotion gate should promote when blocking rows decrease and oracle passes."""
     summary = _oracle_summary([{}])
@@ -869,6 +899,30 @@ def test_promotion_gate_promotes_without_baseline():
     assert len(verdict.reasons) == 0
 
 
+def test_promotion_trial_forwards_holdings_file(tmp_path):
+    """Promotion trial should evaluate the same trial holdings as the oracle."""
+    summary = _oracle_summary([{}])
+    holdings_file = tmp_path / "trial_holdings.csv"
+
+    with (
+        mock.patch(
+            "pipeline.bdc_xbrl_wrapper_oracle.run_wrapper_oracle_trial",
+            return_value=(pd.DataFrame(), summary, pd.DataFrame(), pd.DataFrame(), pd.DataFrame()),
+        ) as run_trial,
+        mock.patch("pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition", return_value=mock.Mock(version=1)),
+        mock.patch("pipeline.bdc_xbrl_wrapper_oracle.validate_wrapper_definition_structure", return_value=[]),
+        mock.patch("pipeline.bdc_xbrl_wrapper_oracle.load_bdc_xbrl_oracle_exceptions", return_value=pd.DataFrame()),
+    ):
+        verdict = run_promotion_trial(
+            cik="0001859919",
+            output_dir=tmp_path / "promotion",
+            holdings_file=holdings_file,
+        )
+
+    assert verdict.status == "promote"
+    assert run_trial.call_args.kwargs["holdings_file"] == holdings_file
+
+
 def test_promotion_gate_rejects_on_empty_summary():
     """Promotion gate should reject when oracle summary is empty."""
     verdict = evaluate_promotion_gate(pd.DataFrame(), None)
@@ -899,6 +953,148 @@ def test_promotion_gate_per_quarter_columns():
 
     assert list(verdict.per_quarter.columns) == PROMOTION_GATE_COLUMNS
     assert len(verdict.per_quarter) == 1
+
+
+def test_promotion_gate_accepted_exception_waives_soft_reason():
+    """Accepted exact-match exceptions waive eligible soft promotion reasons."""
+    summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "unclassified_rate_exceeded",
+    }])
+    baseline = _baseline_comp([{
+        "blocking_rows_delta": -3,
+        "blocking_fair_value_delta": -100000,
+    }])
+    exceptions = _oracle_exception_rows([{}])
+
+    verdict = evaluate_promotion_gate(
+        summary,
+        baseline,
+        oracle_exceptions=exceptions,
+        wrapper_version_by_cik={"0001786108": 1},
+    )
+
+    assert verdict.status == "promote"
+    assert verdict.reasons == []
+    quarter = verdict.per_quarter.iloc[0]
+    assert quarter["current_oracle_status"] == "fail"
+    assert quarter["effective_oracle_status"] == "pass"
+    assert quarter["waived_oracle_reasons"] == "unclassified_rate_exceeded"
+    assert quarter["unwaived_oracle_reasons"] == ""
+
+
+def test_promotion_gate_exception_does_not_waive_hard_or_false_exclusion_reason():
+    """Exceptions cannot waive hard rejects or non-waiveable exclusion risk."""
+    hard_summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "wrapper_blockers_remaining",
+    }])
+    false_exclusion_summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "exclusion_risk_detected",
+    }])
+    exceptions = _oracle_exception_rows([
+        {"oracle_reason": "wrapper_blockers_remaining"},
+        {"oracle_reason": "exclusion_risk_detected"},
+    ])
+
+    hard_verdict = evaluate_promotion_gate(
+        hard_summary,
+        None,
+        oracle_exceptions=exceptions,
+        wrapper_version_by_cik={"0001786108": 1},
+    )
+    false_exclusion_verdict = evaluate_promotion_gate(
+        false_exclusion_summary,
+        None,
+        oracle_exceptions=exceptions,
+        wrapper_version_by_cik={"0001786108": 1},
+    )
+
+    assert hard_verdict.status == "reject"
+    assert any("wrapper_blockers_remaining" in r for r in hard_verdict.reasons)
+    assert hard_verdict.per_quarter.iloc[0]["unwaived_oracle_reasons"] == "wrapper_blockers_remaining"
+    assert false_exclusion_verdict.status == "review_required"
+    assert any("exclusion_risk_detected" in r for r in false_exclusion_verdict.reasons)
+    assert false_exclusion_verdict.per_quarter.iloc[0]["unwaived_oracle_reasons"] == "exclusion_risk_detected"
+
+
+def test_promotion_gate_exception_requires_exact_match_and_active_confidence():
+    """Inactive, low-confidence, or stale-version exceptions do not waive."""
+    summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": "unclassified_rate_exceeded",
+    }])
+    baseline = _baseline_comp([{}])
+    exceptions = _oracle_exception_rows([
+        {"status": "proposed", "confidence": 1.0},
+        {"status": "accepted", "confidence": 0.79},
+        {"status": "accepted", "confidence": 0.95, "wrapper_version": "2"},
+    ])
+
+    verdict = evaluate_promotion_gate(
+        summary,
+        baseline,
+        oracle_exceptions=exceptions,
+        wrapper_version_by_cik={"0001786108": 1},
+    )
+
+    assert verdict.status == "review_required"
+    assert verdict.per_quarter.iloc[0]["waived_oracle_reasons"] == ""
+    assert verdict.per_quarter.iloc[0]["unwaived_oracle_reasons"] == "unclassified_rate_exceeded"
+
+
+def test_build_exception_proposals_only_outputs_unwaived_eligible_reasons():
+    """Proposal templates include only eligible unwaived soft reasons."""
+    summary = _oracle_summary([{
+        "oracle_status": "fail",
+        "oracle_fail_reasons": (
+            "unclassified_rate_exceeded|wrapper_blockers_remaining|"
+            "exclusion_risk_detected|concept_drift_detected"
+        ),
+    }])
+    exceptions = _oracle_exception_rows([{
+        "oracle_reason": "unclassified_rate_exceeded",
+    }])
+
+    proposals = build_exception_proposals(
+        summary,
+        wrapper_version_by_cik={"0001786108": 1},
+        oracle_exceptions=exceptions,
+    )
+
+    assert [p["oracle_reason"] for p in proposals] == ["concept_drift_detected"]
+    assert proposals[0]["status"] == "proposed"
+    assert proposals[0]["confidence"] == ""
+
+
+def test_load_bdc_xbrl_oracle_exceptions_validates_active_file(tmp_path):
+    """Active exception files normalize CIKs and reject malformed records."""
+    valid_path = tmp_path / "exceptions.json"
+    valid_record = _oracle_exception_rows([{}]).iloc[0].to_dict()
+    valid_path.write_text(
+        json.dumps({
+            "schema_version": ORACLE_EXCEPTION_SCHEMA_VERSION,
+            "exceptions": [valid_record],
+        }),
+        encoding="utf-8",
+    )
+
+    loaded = load_bdc_xbrl_oracle_exceptions(valid_path)
+
+    assert loaded.iloc[0]["cik"] == "0001786108"
+    assert loaded.iloc[0]["confidence"] == 0.9
+
+    invalid_path = tmp_path / "invalid.json"
+    invalid_record = dict(valid_record)
+    invalid_record["confidence"] = 0.5
+    invalid_path.write_text(
+        json.dumps({"exceptions": [invalid_record]}),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="confidence >= 0.80"):
+        load_bdc_xbrl_oracle_exceptions(invalid_path)
 
 
 # ---------------------------------------------------------------------------
@@ -1578,3 +1774,185 @@ def test_magnitude_shift_no_flag_single_quarter():
 
     assert summary.iloc[0]["fv_magnitude_shift"] == ""
     assert "fv_magnitude_shift_detected" not in str(summary.iloc[0]["oracle_fail_reasons"])
+
+
+# ---------------------------------------------------------------------------
+# Wrapper JSON coherence checks
+# ---------------------------------------------------------------------------
+
+
+def test_coherence_passes_for_valid_wrapper():
+    """A well-formed wrapper JSON has no coherence issues."""
+    raw = {
+        "schema_version": "bdc-xbrl-wrapper.v3",
+        "cik": "0001786108",
+        "entity_name": "Trinity Capital Inc.",
+        "version": 1,
+        "dispatch": {
+            "rule_prefix": "TRINITY",
+            "prefix_rules": {"Debt Investments": "debt", "Equity": "equity"},
+            "leaf_markers_by_family": {
+                "debt": ["interest rate", "maturity"],
+                "equity": ["common stock"],
+            },
+            "aggregate_markers": ["total investments"],
+        },
+        "archetypes": {
+            "debt": {
+                "description": "Debt",
+                "detection_rules": {"keywords": ["Term Loan"], "keyword_mode": "any"},
+            },
+            "equity": {
+                "description": "Equity",
+                "detection_rules": {"keywords": ["Common stock"], "keyword_mode": "any"},
+            },
+        },
+    }
+    assert validate_wrapper_json_coherence(raw) == []
+
+
+def test_coherence_catches_missing_leaf_markers_family():
+    """Family in prefix_rules without leaf_markers_by_family entry is flagged as warning."""
+    raw = {
+        "dispatch": {
+            "prefix_rules": {"Debt": "debt", "Mixed": "mixed"},
+            "leaf_markers_by_family": {"debt": ["maturity"]},
+        },
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("mixed" in i and "leaf_markers_by_family" in i for i in issues)
+    # Should be a warning, not a hard error
+    mixed_issues = [i for i in issues if "mixed" in i]
+    assert all(i.startswith("warning:") for i in mixed_issues)
+
+
+def test_coherence_catches_prefix_strip_missing_regex():
+    """prefix_strip strategy without hierarchy_prefix_re is flagged."""
+    raw = {
+        "staging": {"strategy": "prefix_strip"},
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("hierarchy_prefix_re" in i for i in issues)
+
+
+def test_coherence_catches_hierarchy_extract_missing_fields():
+    """hierarchy_extract without both regexes is flagged."""
+    raw = {
+        "staging": {
+            "strategy": "hierarchy_extract",
+            "hierarchy_issuer_re": ".*",
+        },
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("hierarchy_instrument_re" in i for i in issues)
+    assert not any("hierarchy_issuer_re" in i for i in issues)
+
+
+def test_coherence_catches_leaf_guard_missing_fields():
+    """hierarchy_leaf_guard without marker_re/evidence_re is flagged."""
+    raw = {
+        "staging": {
+            "strategy": "hierarchy_leaf_guard",
+            "leaf_guard": {"marker_re": "term loan"},
+        },
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("evidence_re" in i for i in issues)
+    assert not any("marker_re" in i for i in issues)
+
+
+def test_coherence_catches_issuer_bridge_empty():
+    """issuer_bridge strategy with empty bridges is flagged."""
+    raw = {
+        "staging": {"strategy": "issuer_bridge", "issuer_bridges": []},
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("issuer_bridges" in i for i in issues)
+
+
+def test_coherence_catches_bad_regex():
+    """Invalid regex patterns are flagged."""
+    raw = {
+        "dispatch": {"canonical_strip_re": "[invalid("},
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("canonical_strip_re" in i and "valid regex" in i for i in issues)
+
+
+def test_coherence_catches_bad_fallback_regex():
+    """Invalid regex in fallback_family_patterns is flagged."""
+    raw = {
+        "dispatch": {
+            "fallback_family_patterns": [{"regex": "[bad(", "family": "debt"}],
+        },
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("fallback_family_patterns[0]" in i for i in issues)
+
+
+def test_coherence_catches_fallback_family_missing_leaf_markers():
+    """Fallback family with no leaf markers is flagged as warning."""
+    raw = {
+        "dispatch": {
+            "leaf_markers_by_family": {"debt": ["maturity"]},
+            "fallback_family_patterns": [{"regex": "equity", "family": "equity"}],
+        },
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("fallback_family_patterns[0]" in i and "equity" in i for i in issues)
+    fallback_issues = [i for i in issues if "fallback_family_patterns" in i]
+    assert all(i.startswith("warning:") for i in fallback_issues)
+
+
+def test_coherence_warns_disconnected_archetypes():
+    """Archetype names with no dispatch family overlap triggers warning."""
+    raw = {
+        "dispatch": {
+            "prefix_rules": {"Debt": "debt"},
+        },
+        "archetypes": {
+            "first_lien": {"description": "1L", "detection_rules": {"keywords": ["1L"]}},
+            "second_lien": {"description": "2L", "detection_rules": {"keywords": ["2L"]}},
+        },
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert any("disconnected" in i and i.startswith("warning:") for i in issues)
+
+
+def test_coherence_no_warning_when_archetypes_overlap_dispatch():
+    """No warning when archetype names overlap with dispatch families."""
+    raw = {
+        "dispatch": {
+            "prefix_rules": {"Debt": "debt", "Equity": "equity"},
+        },
+        "archetypes": {
+            "debt": {"description": "Debt", "detection_rules": {"keywords": ["Loan"]}},
+            "warrant": {"description": "Warrant", "detection_rules": {"keywords": ["Warrant"]}},
+        },
+    }
+    issues = validate_wrapper_json_coherence(raw)
+    assert not any("disconnected" in i for i in issues)
+
+
+def test_coherence_passes_all_existing_wrappers():
+    """All committed wrapper JSONs should pass coherence with zero hard errors.
+
+    Warnings (prefixed with 'warning:') are allowed.
+    """
+    import glob
+    wrapper_files = glob.glob(
+        "data/overrides/bdc_xbrl_wrappers/*.json"
+    )
+    for path in wrapper_files:
+        if "reference" in path:
+            continue
+        with open(path, encoding="utf-8") as f:
+            raw = json.load(f)
+        if raw.get("schema_version") not in (
+            "bdc-xbrl-wrapper.v2",
+            "bdc-xbrl-wrapper.v3",
+        ):
+            continue
+        issues = validate_wrapper_json_coherence(raw)
+        errors = [i for i in issues if not i.startswith("warning:")]
+        assert errors == [], f"{path}: {errors}"
