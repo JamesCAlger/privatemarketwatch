@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Private Market Watch · Homepage explorations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300..900&family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300..800&family=Plus+Jakarta+Sans:wght@300..800&family=Manrope:wght@300..800&family=DM+Serif+Display&family=Libre+Caslon+Text:wght@400;700&family=Crimson+Pro:wght@300..800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #efebe4; }
+  body { font-family: "Inter", system-ui, -apple-system, sans-serif; color: #1a1a1a; }
+  *, *::before, *::after { box-sizing: border-box; }
+  /* Headers above each artboard */
+  .dc-section-title { font-family: "Source Serif 4", Georgia, serif !important; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="v1-broadsheet.jsx"></script>
+<script type="text/babel" src="v2-institutional.jsx"></script>
+<script type="text/babel" src="v3-almanac.jsx"></script>
+<script type="text/babel" src="v4-minimalist.jsx"></script>
+<script type="text/babel" src="v5-encyclopedia.jsx"></script>
+<script type="text/babel" src="v2-themed.jsx"></script>
+
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+const { Broadsheet, Institutional, AlmanacDark, Minimalist, Encyclopedia, V2Home, V2_THEMES, V2ReturnSummaryCard } = window;
+
+const ARTBOARD_W = 1280;
+const ARTBOARD_H = 3580;
+
+function App() {
+  return (
+    <DesignCanvas storageKey="pmw-canvas-v2" title="Private Market Watch — Homepage explorations" subtitle="Round 2: refinements of V2 (your favorite). Original five below for reference.">
+      <DCSection id="return-table" title="Total Return Summary — color & hierarchy options" subtitle="Headers on top in all three. The green-on-Gross has been dropped (gross isn't ‘good’ — it's just structural). Tell me which to roll into the main pages.">
+        <DCArtboard id="rt-A" label="A · Monochrome (all ink, weight hierarchy)"   width={520} height={420}><V2ReturnSummaryCard theme={V2_THEMES.navyGold} variant="A" /></DCArtboard>
+        <DCArtboard id="rt-B" label="B · Accent-led Net (headline in brand color)" width={520} height={420}><V2ReturnSummaryCard theme={V2_THEMES.navyGold} variant="B" /></DCArtboard>
+        <DCArtboard id="rt-C" label="C · Headline + dim (Net big, Gross secondary)" width={520} height={420}><V2ReturnSummaryCard theme={V2_THEMES.navyGold} variant="C" /></DCArtboard>
+      </DCSection>
+      <DCSection id="v2refine" title="V2 — Refinements" subtitle="Same chassis (dark ticker bar, card grid, dark portfolio band, dense data) across five palettes & type pairings. Return table uses variant C — Net as the headline, Gross dimmed.">
+        <DCArtboard id="v2-1" label={V2_THEMES.navyGold.label}     width={ARTBOARD_W} height={ARTBOARD_H}><V2Home theme={V2_THEMES.navyGold}     returnVariant="C" /></DCArtboard>
+        <DCArtboard id="v2-2" label={V2_THEMES.charcoalGold.label} width={ARTBOARD_W} height={ARTBOARD_H}><V2Home theme={V2_THEMES.charcoalGold} returnVariant="C" /></DCArtboard>
+        <DCArtboard id="v2-3" label={V2_THEMES.navySage.label}     width={ARTBOARD_W} height={ARTBOARD_H}><V2Home theme={V2_THEMES.navySage}     returnVariant="C" /></DCArtboard>
+        <DCArtboard id="v2-4" label={V2_THEMES.inkElectric.label}  width={ARTBOARD_W} height={ARTBOARD_H}><V2Home theme={V2_THEMES.inkElectric}  returnVariant="C" /></DCArtboard>
+        <DCArtboard id="v2-5" label={V2_THEMES.creamOxblood.label} width={ARTBOARD_W} height={ARTBOARD_H}><V2Home theme={V2_THEMES.creamOxblood} returnVariant="C" /></DCArtboard>
+      </DCSection>
+      <DCSection id="homes" title="Round 1 — Reference" subtitle="The five original directions, for comparison.">
+        <DCArtboard id="v1" label="V1 · Broadsheet" width={ARTBOARD_W} height={ARTBOARD_H}><Broadsheet /></DCArtboard>
+        <DCArtboard id="v2" label="V2 · Institutional Index" width={ARTBOARD_W} height={ARTBOARD_H}><Institutional /></DCArtboard>
+        <DCArtboard id="v3" label="V3 · Almanac, dark" width={ARTBOARD_W} height={ARTBOARD_H}><AlmanacDark /></DCArtboard>
+        <DCArtboard id="v4" label="V4 · Modern Minimalist" width={ARTBOARD_W} height={ARTBOARD_H}><Minimalist /></DCArtboard>
+        <DCArtboard id="v5" label="V5 · Encyclopedia (weird)" width={ARTBOARD_W} height={ARTBOARD_H}><Encyclopedia /></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
