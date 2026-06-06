@@ -34,6 +34,7 @@ from pipeline.config import (
     POSITION_PURITY_METRICS_FILE,
     PROJECT_ROOT,
     ROW_VALIDATION_ISSUES_FILE,
+    UNLISTED_BDC_REFERENCE_FILE,
     VALIDATION_REPORT_FILE,
 )
 from pipeline.index_returns import MIN_BEGIN_FV
@@ -56,6 +57,35 @@ def _exclude_consumer_lending_sql(cik_col: str = "cik") -> str:
     """SQL fragment to exclude consumer/marketplace lending CIKs."""
     ciks = ", ".join(f"'{c}'" for c in CONSUMER_LENDING_EXCLUDE_CIKS)
     return f" AND {cik_col} NOT IN ({ciks})"
+
+
+# ---------------------------------------------------------------------------
+# V1 scope: unlisted BDCs only
+# ---------------------------------------------------------------------------
+
+def _load_unlisted_bdc_ciks() -> set[str]:
+    """Load the set of unlisted BDC CIKs from the reference file."""
+    if not UNLISTED_BDC_REFERENCE_FILE.exists():
+        logger.warning("Unlisted BDC reference not found at %s -- no CIK filter applied",
+                       UNLISTED_BDC_REFERENCE_FILE)
+        return set()
+    data = json.loads(UNLISTED_BDC_REFERENCE_FILE.read_text(encoding="utf-8"))
+    return {e["cik"] for e in data.get("entries", [])}
+
+
+# Loaded once at module level for all export functions
+UNLISTED_BDC_CIKS: set[str] = _load_unlisted_bdc_ciks()
+
+
+def _unlisted_bdc_filter_sql(cik_col: str = "cik") -> str:
+    """SQL fragment to restrict to unlisted BDC CIKs.
+
+    Returns an empty string if the reference file is missing (no filter).
+    """
+    if not UNLISTED_BDC_CIKS:
+        return ""
+    ciks = ", ".join(f"'{c}'" for c in sorted(UNLISTED_BDC_CIKS))
+    return f" AND {cik_col} IN ({ciks})"
 
 
 # Source CSVs
@@ -214,6 +244,7 @@ def _valid_positions_sql() -> str:
             FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}')
             WHERE index_classification IS NOT NULL
               {_quarter_cutoff_sql('end_quarter')}
+              {_unlisted_bdc_filter_sql('cik')}
             GROUP BY index_classification
         ),
         valid AS (
@@ -237,6 +268,7 @@ def _valid_positions_sql() -> str:
                 WHERE pr.quarterly_total_return IS NOT NULL
                   AND pr.begin_fair_value >= {MIN_BEGIN_FV}
                   {_exclude_consumer_lending_sql('pr.cik')}
+                  {_unlisted_bdc_filter_sql('pr.cik')}
             )
             WHERE _dedup_rn = 1
         )"""

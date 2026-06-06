@@ -1294,6 +1294,8 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
             SELECT * FROM read_csv_auto(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         latest_q AS (
             SELECT MAX(report_date) AS q FROM raw
@@ -1535,6 +1537,7 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
             WHERE TRY_CAST(fair_value AS DOUBLE) > 0
               AND report_date >= '2022-10-01'
               {_exclude_consumer_lending_sql('cik')}
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         all_gav AS (
             SELECT cik, report_quarter, SUM(fair_value) AS all_fv
@@ -1557,6 +1560,8 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
             SELECT * FROM read_csv_auto(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         dl AS (
             SELECT
@@ -1682,6 +1687,7 @@ def _export_distribution_histogram(con: duckdb.DuckDBPyConnection) -> None:
             WHERE TRY_CAST(distribution_rate AS DOUBLE) > 0
               AND TRY_CAST(total_assets AS DOUBLE) > 1000000
               {_quarter_cutoff_sql('report_quarter')}
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         latest AS (
             SELECT * FROM typed WHERE rn = 1
@@ -1766,6 +1772,7 @@ def _export_leverage_histogram(con: duckdb.DuckDBPyConnection) -> None:
               AND TRY_CAST(leverage_ratio AS DOUBLE) >= 0
               AND TRY_CAST(total_assets AS DOUBLE) > 1000000
               {_quarter_cutoff_sql('report_quarter')}
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         latest AS (
             SELECT * FROM typed WHERE rn = 1

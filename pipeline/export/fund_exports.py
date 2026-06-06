@@ -79,6 +79,8 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
         latest AS (
             SELECT cik, MAX(TRY_CAST(report_date AS DATE)) AS d
             FROM ff
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
             GROUP BY cik
             HAVING MAX(TRY_CAST(total_assets AS DOUBLE)) > 1000000
                AND MAX(TRY_CAST(report_date AS DATE)) >= DATE '2022-10-01'
@@ -569,6 +571,8 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
             FROM read_csv_auto(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
         """)
         con.execute("""
             CREATE OR REPLACE TEMP TABLE _holdings_latest AS
@@ -608,6 +612,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
             )
             WHERE cik IS NOT NULL
+              {_unlisted_bdc_filter_sql('cik')}
             GROUP BY cik
         )
         WHERE max_assets > 1000000 AND last_report_date >= DATE '2022-10-01'
@@ -820,6 +825,8 @@ def _export_fund_summary(con: duckdb.DuckDBPyConnection) -> None:
         latest AS (
             SELECT cik, MAX(TRY_CAST(report_date AS DATE)) AS d
             FROM ff
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
             GROUP BY cik
             HAVING MAX(TRY_CAST(total_assets AS DOUBLE)) > 1000000
                AND MAX(TRY_CAST(report_date AS DATE)) >= DATE '2022-10-01'

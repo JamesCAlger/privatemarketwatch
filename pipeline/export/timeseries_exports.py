@@ -59,6 +59,8 @@ def _export_industry_breakdown(con: duckdb.DuckDBPyConnection) -> None:
             SELECT * FROM read_csv_auto(
                 '{source_file.as_posix()}', all_varchar=true
             )
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         latest AS (
             SELECT MAX(report_date) AS max_date FROM raw
@@ -215,6 +217,7 @@ def _export_fund_index_returns(con: duckdb.DuckDBPyConnection) -> None:
             WHERE report_quarter >= '2022q4'
               {_quarter_cutoff_sql('report_quarter')}
               AND TRY_CAST(total_assets AS DOUBLE) > 1000000
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         with_return AS (
             SELECT
@@ -333,6 +336,7 @@ def _export_aum_time_series(con: duckdb.DuckDBPyConnection) -> None:
             WHERE report_quarter >= '2022q4'
               {_quarter_cutoff_sql('report_quarter')}
               AND TRY_CAST(total_assets AS DOUBLE) > 1000000
+              {_unlisted_bdc_filter_sql('cik')}
         )
         SELECT
             report_quarter,

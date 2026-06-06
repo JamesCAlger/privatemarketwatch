@@ -196,6 +196,7 @@ def _export_index_summary(
                 FROM read_csv_auto('{POSITION_RETURNS_CSV.as_posix()}')
                 WHERE index_classification IS NOT NULL
                   {_quarter_cutoff_sql('end_quarter')}
+                  {_unlisted_bdc_filter_sql('cik')}
                 GROUP BY index_classification
             ),
             deduped AS (
@@ -206,6 +207,7 @@ def _export_index_summary(
                  AND pr.end_quarter = l.q
                 WHERE pr.quarterly_total_return IS NOT NULL
                   AND pr.begin_fair_value >= {MIN_BEGIN_FV}
+                  {_unlisted_bdc_filter_sql('pr.cik')}
             )
             SELECT index_classification,
                    COUNT(DISTINCT issuer_name) AS n_companies,
@@ -493,6 +495,8 @@ def _export_portfolio_characteristics(
             SELECT * FROM read_csv_auto(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
         ),
         dl AS (
             SELECT
@@ -634,6 +638,7 @@ def _export_metadata(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
             WHERE report_date <= '{cutoff_date}'
+              {_unlisted_bdc_filter_sql('cik')}
         """).fetchone()
         if result and result[0]:
             # Convert date to quarter format
@@ -653,6 +658,8 @@ def _export_metadata(
         vc_rows = con.execute(f"""
             SELECT vehicle_type, COUNT(*) AS n
             FROM read_csv_auto('{COMBINED_UNIVERSE_CSV.as_posix()}')
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
             GROUP BY vehicle_type
         """).fetchall()
         for vt, n in vc_rows:
@@ -671,6 +678,8 @@ def _export_metadata(
                 SELECT * FROM read_csv_auto(
                     '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
                 )
+                WHERE 1=1
+                  {_unlisted_bdc_filter_sql('cik')}
             ),
             latest AS (
                 SELECT MAX(report_date) AS q FROM raw
@@ -699,6 +708,7 @@ def _export_metadata(
                   AND index_classification != 'UNCLASSIFIED'
                   AND TRY_CAST(begin_fair_value AS DOUBLE) >= 100000
                   {_quarter_cutoff_sql('end_quarter')}
+                  {_unlisted_bdc_filter_sql('cik')}
             ),
             latest AS (SELECT MAX(end_quarter) AS q FROM pr)
             SELECT COUNT(DISTINCT issuer_name)
@@ -716,6 +726,7 @@ def _export_metadata(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
             WHERE filing_date IS NOT NULL AND TRIM(filing_date) != ''
+              {_unlisted_bdc_filter_sql('cik')}
         """).fetchone()
         if vintage_row and vintage_row[0]:
             data_vintage = str(vintage_row[0])
