@@ -1,0 +1,160 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002031750",
+  "entity_name": "Ares Core Infrastructure Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "ARES_CORE_INFRASTRUCTURE",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien senior secured loan",
+        "first lien senior secured loans",
+        "first lien snior secured loans",
+        "senior subordinated loan",
+        "senior subordinated loans",
+        "delayed draw term loan",
+        "term loan",
+        "interest rate",
+        "reference rate",
+        "sofr"
+      ],
+      "equity": [
+        "common equity",
+        "other equity",
+        "ordinary units",
+        "class a units",
+        "equity"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "first lien senior secured loans",
+      "senior subordinated loans"
+    ],
+    "non_private_markers": [
+      "money market",
+      "money market fund",
+      "treasury bill",
+      "u.s. treasury",
+      "us treasury",
+      "first american u.s. treasury sweep"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)(?:Money\\s+Market|Treasury\\s+Bill|U\\.S\\.\\s+Treasury|First\\s+American\\s+U\\.S\\.\\s+Treasury\\s+Sweep)",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i),\\s*(?:Common\\s+Equity|Other\\s+Equity|Ordinary\\s+Units|Class\\s+A\\s+Units|Equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)(?:\\bFirst\\s+Lien\\s+(?:Senior|Snior)\\s+Secured\\s+Loans?\\b|\\bSenior\\s+Subordinated\\s+Loans?\\b|\\bDelayed\\s+Draw\\s+Term\\s+Loan\\b)",
+        "family": "debt"
+      }
+    ],
+    "canonical_strip_re": "\\.|(?<=\\bloan)s\\b",
+    "category_marker_re": "^(?:First\\s+Lien\\s+Senior\\s+Secured\\s+Loans|Senior\\s+Subordinated\\s+Loans)$"
+  },
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Infrastructure credit positions including first lien senior secured loans, senior subordinated loans, and delayed draw term loans.",
+      "detection_rules": {
+        "keywords": [
+          "First lien senior secured loan",
+          "First lien senior secured loans",
+          "First lien snior secured loans",
+          "Senior subordinated loan",
+          "Senior subordinated loans",
+          "Delayed Draw Term Loan"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Infrastructure equity positions including common equity, other equity, ordinary units, and class A units.",
+      "detection_rules": {
+        "keywords": [
+          "Common equity",
+          "Other equity",
+          "Ordinary units",
+          "Class A units"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "cash": {
+      "description": "Cash and treasury sweep rows excluded from private-market index constituents.",
+      "detection_rules": {
+        "keywords": [
+          "Money Market",
+          "Treasury Bill",
+          "U.S. Treasury",
+          "First American U.S. Treasury Sweep"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "ARES_CORE_BARE_CATEGORY_TOTALS",
+      "description": "Bare category identifiers such as 'Senior subordinated loans' and 'First lien senior secured loans' are XBRL category totals, while issuer-prefixed rows with the same instrument words are position-level holdings.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "^(First lien senior secured loans|Senior subordinated loans)$",
+      "disposition": "expected"
+    },
+    {
+      "id": "ARES_CORE_COMPARATIVE_PERIOD_DUPLICATES",
+      "description": "The 2026-Q1 filing includes comparative-period rows for 2025-12-31; reconciliation documents these separately as non-blocking comparative facts.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "comparative period",
+      "disposition": "expected"
+    },
+    {
+      "id": "ARES_CORE_TREASURY_SWEEP_AND_BILLS",
+      "description": "First American treasury sweep rows and Treasury Bill rows are cash or money-market equivalents, not private-market index constituents.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "(Money Market|Treasury Bill|First American U.S. Treasury Sweep)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

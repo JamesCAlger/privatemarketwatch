@@ -1,0 +1,225 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001925531",
+  "entity_name": "New Mountain Guardian IV BDC L.L.C.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "NEW_MOUNTAIN_GUARDIAN_IV",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "first lien - drawn",
+        "first lien - undrawn",
+        "first lien- drawn",
+        "first lien- undrawn",
+        "first lien-drawn",
+        "first lien - undawn",
+        "first lien undrawn",
+        "first lien(5)(6)",
+        "first lien 1",
+        "first lien 2",
+        "first lien 3",
+        "first lien 4",
+        "first lien 5",
+        "first lien 6",
+        "first drawn",
+        "first lien 2 - undrawn",
+        "first lien drawn",
+        "first drawn",
+        "first lien - draw",
+        "first lien - undraw",
+        "first lien - undrawn 1",
+        "first lien - undrawn 2",
+        "first lien - undrawn 3",
+        "first lien - undrawn 4",
+        "first lien - undrawn 5",
+        "first lien - drawn 1",
+        "first lien - drawn 2",
+        "first lien - drawn 3",
+        "first lien - drawn 4",
+        "first lien - drawn 5",
+        "first lien 1 - undrawn",
+        "first lien 2 - undrawn",
+        "first lien 3 - undrawn",
+        "first lien 4 - undrawn",
+        "first lien 5 - undrawn",
+        "first line",
+        "first ien",
+        "frst lien",
+        "fist lien",
+        "second lien",
+        "second lien - drawn",
+        "second lien - undrawn",
+        "second lien 1",
+        "second lien 2",
+        "subordinated",
+        "subordinated 1",
+        "subordinated 2",
+        "structured finance obligations"
+      ],
+      "equity": [
+        "preferred shares",
+        "series a preferred shares",
+        "class b preferred units",
+        "preferred units",
+        "ordinary shares",
+        "ordinary shares",
+        "common stock",
+        "common units",
+        "class a-1 common stock",
+        "class a-1 common units",
+        "class a-2 common units",
+        "class b common units",
+        "class n-3 common units"
+      ],
+      "fund": [
+        "credit fund",
+        "structured finance obligations"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total",
+      "cash and investments"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|u\\.s\\.\\s+treasury|us\\s+treasury|treasury\\s+bills?)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Cash\\s+and\\s+Investments|Subtotal|Sub-Total)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\bCredit\\s+Fund\\b.*\\b(?:Structured\\s+Finance\\s+Obligations|Preferred\\s+shares?)\\b|\\bIvy\\s+Hill\\s+Middle\\s+Market\\s+Credit\\s+Fund\\b",
+        "family": "fund"
+      },
+      {
+        "regex": "(?i)\\b(?:Preferred\\s+shares?|Series\\s+A\\s+preferred\\s+shares?|Class\\s+B\\s+preferred\\s+units?|Preferred\\s+units?|Ordinary\\s+shares?|Common\\s+stock|Common\\s+units?|Class\\s+[A-Z](?:-\\d+)?\\s+common\\s+(?:stock|units?))\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:First\\s+Lien|First\\s+lien|First\\s+Drawn|First\\s+line|First\\s+ien|Frst\\s+lien|Fist\\s+lien|Second\\s+Lien|Second\\s+lien|Subordinated|Structured\\s+Finance\\s+Obligations)\\b",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Cash\\s+and\\s+Investments|Subtotal|Sub-Total)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Loan and debt positions including first lien, second lien, drawn/undrawn facilities, subordinated debt, and structured finance obligations.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Subordinated",
+          "Structured Finance Obligations",
+          "Drawn",
+          "Undrawn"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Preferred shares, ordinary shares, common stock, and common/preferred unit positions.",
+      "detection_rules": {
+        "keywords": [
+          "Preferred shares",
+          "Preferred units",
+          "Ordinary shares",
+          "Common stock",
+          "Common units"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "fund": {
+      "description": "Fund issuer rows, including Ivy Hill Middle Market Credit Fund structured finance obligations and preferred-share rows.",
+      "detection_rules": {
+        "keywords": [
+          "Credit Fund",
+          "Structured Finance Obligations"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "pipe_format_transition",
+      "description": "Later rows use pipe-delimited issuer/instrument text, for example 'AAH Topco, LLC | First Lien'. Earlier rows use comma-delimited text.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\|\\s*(?:First|Second|Subordinated|Preferred|Common|Structured)",
+      "disposition": "expected"
+    },
+    {
+      "id": "drawn_undrawn_and_numbered_tranches",
+      "description": "Drawn, undrawn, and numbered First Lien rows are retained as separate position-level constituents.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "First\\s+Lien(?:\\s+-\\s+(?:Drawn|Undrawn)|\\s+\\d+)",
+      "disposition": "expected"
+    },
+    {
+      "id": "misspelled_lien_labels",
+      "description": "Filer typos such as 'Frst lien', 'Fist lien', 'First line', and 'First ien' are explicit loan-position labels and are classified as debt leaves.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "(?:Frst|Fist|First\\s+line|First\\s+ien)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

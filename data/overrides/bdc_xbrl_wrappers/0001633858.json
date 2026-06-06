@@ -1,0 +1,236 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001633858",
+  "entity_name": "Audax Credit BDC Inc.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "AUDAX_CREDIT_BDC",
+    "prefix_rules": {
+      "Portfolio Investments BANK LOANS: NON-CONTROL/NON-AFFILIATE INVESTMENTS": "debt",
+      "Portfolio Investments Audax Credit BDC, Inc. BANK LOANS: NON-CONTROL/NON-AFFILIATE INVESTMENTS": "debt",
+      "ortfolio Investments BANK LOANS: NON-CONTROL/NON-AFFILIATE INVESTMENTS": "debt",
+      "Portfolio Investments EQUITY AND PREFERRED SHARES: NON-CONTROL/NON-AFFILIATE INVESTMENTS": "equity",
+      "Portfolio Investments Audax Credit BDC, Inc. EQUITY AND PREFERRED SHARES: NON-CONTROL/NON-AFFILIATE INVESTMENTS": "equity",
+      "ortfolio Investments EQUITY AND PREFERRED SHARES: NON-CONTROL/NON-AFFILIATE INVESTMENTS": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment type",
+        "senior secured",
+        "unitranche",
+        "term loan",
+        "revolving credit",
+        "revolving loan",
+        "first lien",
+        "second lien",
+        "index s+",
+        "spread",
+        "interest rate",
+        "maturity date",
+        "due "
+      ],
+      "equity": [
+        "investment type",
+        "equity securities",
+        "common stock",
+        "common units",
+        "preferred units",
+        "class a units",
+        "class a common",
+        "class b common",
+        "lp interest",
+        "co-invest units",
+        "acquisition date"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "expiration date"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total portfolio investments",
+      "total equity and preferred shares",
+      "total bank loans",
+      "portfolio investments bank loans:",
+      "portfolio investments equity and preferred shares:"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "short-term investment"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+Equivalents?|Money\\s+Market|U\\.S\\.\\s+Treasury|Treasury\\s+Bill|Short-Term\\s+Investment)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)(?:\\b(?:Senior\\s+Secured|Unitranche|Term\\s+Loan|Revolving\\s+(?:Credit\\s+)?Loan|Revolving\\s+Credit\\s+Facility|First\\s+Lien|Second\\s+Lien)\\b|\\bBANK\\s+LOANS:)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\b(?:Equity\\s+Securities|Common\\s+Stock|Common\\s+Units|Preferred\\s+Units|Preferred\\s+Shares|Class\\s+[A-Z0-9-]+\\s+(?:Common\\s+)?Units|Class\\s+[A-Z0-9-]+\\s+Common\\s+Stock|LP\\s+Interest|Co-Invest\\s+Units|EQUITY\\s+AND\\s+PREFERRED\\s+SHARES:)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)^Total\\s+Portfolio\\s+Investments$",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^(?!.*\\bInvestment\\s+Type\\b)(?:Total\\s+Portfolio\\s+Investments|.*\\bTotal\\s+(?:Portfolio\\s+Investments|Equity\\s+and\\s+Preferred\\s+Shares|Bank\\s+Loans)\\b.*|.*\\bP?ortfolio\\s+Investments\\s+(?:Audax\\s+Credit\\s+BDC,\\s+Inc\\.\\s+)?(?:BANK\\s+LOANS:|EQUITY\\s+AND\\s+PREFERRED\\s+SHARES:).*)$",
+    "canonical_strip_re": "\\s+Index\\s+.*$|\\s+Interest\\s+Rate\\s+.*$|\\s+Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\s*$"
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^Portfolio\\s+Investments(?:\\s+Audax\\s+Credit\\s+BDC,\\s+Inc\\.)?\\s+(?:BANK\\s+LOANS:|EQUITY\\s+AND\\s+PREFERRED\\s+SHARES:)\\s+NON-CONTROL/NON-AFFILIATE\\s+INVESTMENTS\\s*-?\\s*(?:\\(\\d+(?:\\.\\d+)?%\\)\\s*)?(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+Investment\\s+Type\\s+",
+    "hierarchy_instrument_re": "(?i)\\bInvestment\\s+Type\\s+(?:Investment\\s+Type\\s+)?(.+)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^Portfolio\\s+Investments') AND regexp_matches(_clean, '(?i)\\bInvestment\\s+Type\\s+')",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Automotive",
+      "Banking, Finance, Insurance & Real Estate",
+      "Beverage, Food & Tobacco",
+      "Capital Equipment",
+      "Chemicals, Plastics & Rubber",
+      "Construction & Building",
+      "Consumer Goods: Durable",
+      "Consumer Goods: Non-Durable",
+      "Containers, Packaging & Glass",
+      "Environmental Industries",
+      "Healthcare & Pharmaceuticals",
+      "High Tech Industries",
+      "Hotels, Gaming & Leisure",
+      "Media: Advertising, Printing & Publishing",
+      "Services: Aerospace & Defense",
+      "Services: Automotive",
+      "Services: Banking, Finance, Insurance & Real Estate",
+      "Services: Beverage, Food & Tobacco",
+      "Services: Business",
+      "Services: Chemicals, Plastics & Rubber",
+      "Services: Construction & Building",
+      "Services: Consumer",
+      "Services: Environmental Industries",
+      "Services: Transportation: Cargo",
+      "Transportation: Cargo",
+      "Transportation: Consumer"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Bank loan positions including senior secured, unitranche, term-loan, and revolving-credit instruments.",
+      "detection_rules": {
+        "keywords": [
+          "Senior Secured",
+          "Unitranche",
+          "Term Loan",
+          "Revolving Credit",
+          "Revolving Loan",
+          "First Lien",
+          "Second Lien"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity and preferred-share positions including common units, preferred units, LP interests, and co-invest units.",
+      "detection_rules": {
+        "keywords": [
+          "Equity Securities",
+          "Common Units",
+          "Preferred Units",
+          "Common Stock",
+          "Preferred Shares",
+          "LP Interest",
+          "Co-Invest Units"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and similar equity-linked instruments.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "cash": {
+      "description": "Cash equivalents, money-market funds, Treasury bills, and short-term investments excluded from private-market index constituents.",
+      "detection_rules": {
+        "keywords": [
+          "Cash Equivalents",
+          "Money Market",
+          "U.S. Treasury",
+          "Treasury Bill",
+          "Short-Term Investment"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "AUDAX_TOTAL_PORTFOLIO_INVESTMENTS",
+      "description": "Total Portfolio Investments and Total Equity and Preferred Shares rows are source subtotals, not position-level holdings.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "(?i)Total\\s+(Portfolio\\s+Investments|Equity\\s+and\\s+Preferred\\s+Shares)",
+      "disposition": "expected"
+    },
+    {
+      "id": "AUDAX_PORTFOLIO_INDUSTRY_HEADERS",
+      "description": "Portfolio Investments BANK LOANS/EQUITY AND PREFERRED SHARES rows without Investment Type are industry headers or category subtotals; rows with Investment Type are position leaves.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "(?i)^Portfolio\\s+Investments.*(?:BANK\\s+LOANS:|EQUITY\\s+AND\\s+PREFERRED\\s+SHARES:)(?!.*Investment\\s+Type)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

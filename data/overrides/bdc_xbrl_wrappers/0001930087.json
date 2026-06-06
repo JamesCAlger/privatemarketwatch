@@ -1,0 +1,173 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001930087",
+  "entity_name": "Golub Capital Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "GOLUB_PRIVATE_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "one stop",
+        "senior secured",
+        "second lien",
+        "subordinated debt",
+        "structured finance note",
+        "interest rate",
+        "maturity",
+        "reference rate",
+        "sofr",
+        "libor"
+      ],
+      "equity": [
+        "common stock",
+        "preferred stock",
+        "lp interest",
+        "lp units",
+        "llc interest",
+        "llc units",
+        "partnership interest",
+        "membership interest",
+        "equity interest"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "expiration date"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury portfolio",
+      "jpmorgan 100% u.s. treasury securities money market fund",
+      "morgan stanley institutional liquidity funds"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(one\\s*stop\\d*|senior\\s+secured|second\\s+lien|subordinated\\s+debt|structured\\s+finance\\s+note)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:total\\s+)?(?:debt\\s+investments|equity\\s+investments|investments)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\b(common\\s+stock|preferred\\s+stock|lp\\s+(?:interest|units)|llc\\s+(?:interest|units)|partnership\\s+interest|membership\\s+interest|equity\\s+interest)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bwarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)(?:money\\s+market|u\\.s\\.\\s+treasury|us\\s+treasury|treasury\\s+portfolio|morgan\\s+stanley\\s+institutional\\s+liquidity\\s+funds|jpmorgan\\s+100%\\s+u\\.s\\.\\s+treasury)",
+        "family": "cash"
+      }
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt positions including one-stop loans, senior secured loans, second lien loans, subordinated debt, and structured finance notes",
+      "detection_rules": {
+        "keywords": [
+          "One stop",
+          "Senior secured",
+          "Second lien",
+          "Subordinated debt",
+          "Structured Finance Note"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity and fund-interest positions including common/preferred stock, LP interests, LP units, LLC interests, and LLC units",
+      "detection_rules": {
+        "keywords": [
+          "Common stock",
+          "Preferred stock",
+          "LP interest",
+          "LP units",
+          "LLC interest",
+          "LLC units",
+          "Partnership interest",
+          "Membership interest",
+          "Equity interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "golub_pipe_format_2026q1",
+      "description": "Latest-quarter identifiers use pipe-delimited issuer and instrument text, while 2025-12-31 and earlier samples use comma-delimited issuer and instrument text.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": " \\| ",
+      "disposition": "expected"
+    },
+    {
+      "id": "golub_numbered_one_stop_tranches",
+      "description": "Numbered One stop, Senior secured, Structured Finance Note, LP interest, and LLC interest suffixes distinguish separate position-level tranches or interests.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "(?i)\\b(?:One stop|Senior secured|Structured Finance Note|LP interest|LLC interest)\\s+\\d+$",
+      "disposition": "expected"
+    },
+    {
+      "id": "golub_money_market_cash_rows",
+      "description": "JPMorgan and Morgan Stanley treasury money-market identifiers are non-private-market cash equivalents and should not become index-facing private credit positions.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "(?i)(?:money market|institutional liquidity funds|treasury portfolio)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

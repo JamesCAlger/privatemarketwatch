@@ -1,0 +1,147 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001899996",
+  "entity_name": "Fidelity Private Credit Co LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "FIDELITY_PRIVATE_CREDIT_CENTRAL",
+    "prefix_rules": {
+      "Investments Investments": "mixed",
+      "Investments, Investments": "mixed",
+      "Investments": "mixed",
+      "Investment": "mixed",
+      "Total Investments": "mixed",
+      "Total Investment Portfolio": "mixed",
+      "Total Money Market Mutual Funds": "cash"
+    },
+    "leaf_markers_by_family": {
+      "mixed": [
+        "type class",
+        "type common",
+        "type equity",
+        "type preferred",
+        "delayed draw term loan",
+        "delayed draw",
+        "term loan",
+        "revolving credit facility",
+        "revolver",
+        "equity units",
+        "common units",
+        "preferred units",
+        "class a units",
+        "class b units",
+        "class c units",
+        "class a-1 units",
+        "class a-2 units",
+        "class a interest",
+        "membership units",
+        "equity interest",
+        "preferred stock",
+        "common stock",
+        "warrant",
+        "warrants",
+        "maturity date",
+        "interest rate",
+        "reference rate and spread"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total investment portfolio",
+      "total equity",
+      "total equity investments",
+      "total first lien debt",
+      "total second lien debt",
+      "total money market mutual funds",
+      "non-controlled / non-affiliate",
+      "non-controlled/ non-affiliate",
+      "non-controlled/ non-affiliated"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "mutual fund",
+      "floating rate central fund",
+      "high income central fund",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*Total\\s+Money\\s+Market\\s+Mutual\\s+Funds\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+Investments?|Total\\s+Investment\\s+Portfolio|Investments,?\\s+Total\\s+Investments?|Investments,?\\s+Investments\\s*[-,]+.*\\bTotal\\b)",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*Commodity\\s+Chemicals\\s*$",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)^(?!.*\\b(?:llc|l\\.l\\.c|inc|corp|company|ltd|limited|lp|l\\.p|class|units?|interest|term\\s+loan|credit\\s+facility|maturity|stock|warrants?)\\b).*(?:total|commodity\\s+chemicals|equity\\s+[A-Za-z &/,]+|first\\s+lien\\s+debt\\s+[A-Za-z &/,]+|second\\s+lien\\s+debt\\s+[A-Za-z &/,]+)\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)^\\s*(?:Investments,?\\s+Investments|Investments|Investment)\\s*(?:--|-|,)\\s*(?:non-?control(?:led)?\\s*/\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/\\s*non-?affiliated|non-?control(?:led)?\\s*/\\s*non-?affiliate|non-?control(?:led)?\\s*,\\s*non-?affiliat(?:ed|e|d)|non-?control(?:led)?\\s*/?\\s*non-?affiliated|non-?control(?:led)?\\s*/?\\s*non-?affiliate|non-?control(?:led)?|affiliated|affiliate|affiliatd)\\s*,?\\s*|\\bReference\\s+Rate\\s+and\\s+Spread\\s+(?:SOFR|LIBOR|EURIBOR|Prime|Base\\s+Rate|S|L|E)(?:\\s*\\+\\s*\\d+(?:\\.\\d+)?%)?|\\bInterest\\s+Rate\\s+[-\\u2014]?\\s*\\d+(?:\\.\\d+)?%|\\s*\\([^)]*PIK[^)]*\\)"
+  },
+  "staging": {
+    "strategy": "hierarchy_leaf_guard",
+    "extra_industry_labels": [
+      "Application Software",
+      "Automotive Parts & Equipment",
+      "Diversified Support Services",
+      "Electrical Components",
+      "Electronic Components",
+      "Electronic Manufacturing Services",
+      "Food Distributors",
+      "Health Care Services",
+      "Health Care Supplies",
+      "Human Resource & Employment Services",
+      "Industrial Machinery & Supplies & Components",
+      "Packaged Foods & Meats",
+      "Specialized Consumer Services"
+    ],
+    "leaf_guard": {
+      "type_industry_prefix_re": "(?i)^(?:(?:First|Second)\\s+Lien\\s+Debt|Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)?\\s*(?:MSD_INDUSTRY_LABELS)\\s+",
+      "marker_re": "(?:term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|type\\s+(?:class\\s+[a-z0-9-]+\\s+units?|common\\s+units?|equity\\s+units?|preferred\\s+units?)|class\\s+[a-z0-9-]+\\s+(?:interest|units|shares|membership\\s+units)|common\\s+units?|preferred\\s+units?|equity\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|warrants?)",
+      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|par|shares?|units?|class|interest)\\b"
+    }
+  },
+  "archetypes": {
+    "mixed": {
+      "description": "Fidelity Private Credit Central debt, equity, warrant, fund, cash, and category rows encoded in Investments hierarchy identifiers.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Debt",
+          "Second Lien Debt",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Credit Facility",
+          "Equity",
+          "Common Units",
+          "Preferred Units",
+          "Equity Interest",
+          "Common Stock",
+          "Preferred Stock",
+          "Warrant"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

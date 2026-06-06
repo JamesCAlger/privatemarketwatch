@@ -1,0 +1,255 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001859919",
+  "entity_name": "Barings Private Credit Corp",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "BARINGS_PRIVATE_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "second lien",
+        "senior secured",
+        "subordinated term loan",
+        "subordinated structured notes",
+        "structured secured note",
+        "municipal revenue bond",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "convertible bonds",
+        "interest rate",
+        "maturity",
+        "reference rate",
+        "sofr",
+        "libor"
+      ],
+      "equity": [
+        "common stock",
+        "ordinary shares",
+        "preferred stock",
+        "preferred lp units",
+        "llc units",
+        "member interest",
+        "membership interest",
+        "class a units",
+        "class b common stock",
+        "class c",
+        "equity interest"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "expiration date"
+      ],
+      "fund": [
+        "investment funds & vehicles",
+        "investment funds and vehicles"
+      ],
+      "other": [
+        "royalty rights",
+        "rocade holdings llc"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total first lien senior secured term loan",
+      "total second lien senior secured term loan",
+      "total subordinated term loan",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "money market",
+      "government fund",
+      "u.s. treasury",
+      "us treasury",
+      "treasury fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+and\\s+Cash\\s+Equivalents|Money\\s+Market|Government\\s+Fund|U\\.S\\.\\s+Treasury|US\\s+Treasury|Treasury\\s+Fund)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)\\b(?:First\\s+Lien|Second\\s+Lien|Senior\\s+Secured|Subordinated\\s+Term\\s+Loan|Subordinated\\s+Structured\\s+Notes?|Structured\\s+Secured\\s+Note|Municipal\\s+Revenue\\s+Bond|Term\\s+Loan|Delayed\\s+Draw|Revolver|Revolving|Convertible\\s+Bonds?)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\b(?:Common\\s+Stock|Ordinary\\s+Shares|Preferred\\s+Stock|Preferred\\s+LP\\s+Units|LLC\\s+Units?|Member\\s+Interest|Membership\\s+Interest|Class\\s+[A-Z](?:[-\\s][A-Z0-9]+)?\\s+(?:Units?|Common\\s+Stock|Stock)|Equity\\s+Interest)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bInvestment\\s+Funds\\s*(?:&|and)\\s*Vehicles\\b",
+        "family": "fund"
+      },
+      {
+        "regex": "(?i)\\bRoyalty\\s+Rights\\b|^\\s*Rocade\\s+Holdings\\s+LLC\\s*$",
+        "family": "other"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments)\\b",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|First\\s+Lien\\s+Senior\\s+Secured\\s+Term\\s+Loan|Second\\s+Lien\\s+Senior\\s+Secured\\s+Term\\s+Loan|Subordinated\\s+Term\\s+Loan|Subtotal|Sub-Total)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt positions including first and second lien senior secured loans, subordinated loans, revolvers, delayed draws, structured secured notes, and convertible bonds",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Senior Secured",
+          "Subordinated Term Loan",
+          "Subordinated Structured Notes",
+          "Structured Secured Note",
+          "Municipal Revenue Bond",
+          "Term Loan",
+          "Revolver",
+          "Delayed Draw",
+          "Convertible Bonds"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity positions including common stock, ordinary shares, preferred stock, LLC units, LP units, member interests, and class units",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Ordinary Shares",
+          "Preferred Stock",
+          "Preferred LP Units",
+          "LLC Units",
+          "Member Interest",
+          "Membership Interest",
+          "Class A Units",
+          "Class B Common Stock",
+          "Equity Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "fund": {
+      "description": "Investment-fund and vehicle interests disclosed as portfolio positions",
+      "detection_rules": {
+        "keywords": [
+          "Investment Funds & Vehicles",
+          "Investment Funds and Vehicles"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "other": {
+      "description": "Other private-market positions such as royalty rights and the exact reconciled Rocade Holdings LLC row",
+      "detection_rules": {
+        "keywords": [
+          "Royalty Rights",
+          "Rocade Holdings LLC"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "barings_pipe_format_transition",
+      "description": "Identifiers use comma-delimited issuer, optional industry, and instrument text through 2025-09-30, then mostly switch to pipe-delimited issuer and instrument text starting 2025-12-31.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": " \\| ",
+      "disposition": "expected"
+    },
+    {
+      "id": "barings_duplicate_tranches",
+      "description": "Same issuer and instrument text can appear multiple times in a quarter with different rate, value, or economic fields. These remain separate position-level rows upstream and must not be borrower-aggregated.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)(First Lien|Second Lien|Revolver|LLC Units|Common Stock)",
+      "disposition": "expected"
+    },
+    {
+      "id": "barings_uninstrumented_issuer_rows",
+      "description": "Some rows expose only issuer text. This wrapper only classifies the exact recurring Rocade Holdings LLC row observed as reconciled OTHER and does not broad-match arbitrary issuer-only text because it would hide residuals that need source reconciliation review.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^[A-Za-z0-9 .,&()'-]+$",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

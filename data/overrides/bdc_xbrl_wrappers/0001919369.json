@@ -1,0 +1,202 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001919369",
+  "entity_name": "VISTA CREDIT STRATEGIC LENDING CORP.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "VISTA_CREDIT_STRATEGIC_LENDING",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first-lien debt",
+        "first lien debt",
+        "reference rate and spread",
+        "interest rate",
+        "maturity date",
+        "sofr",
+        "llc",
+        "inc",
+        "corporation",
+        "corp",
+        "acronis international",
+        "mckissock investment holdings",
+        "sumup holdings midco"
+      ],
+      "equity": [
+        "preferred equity",
+        "other equity",
+        "interest rate",
+        "maturity date",
+        "lp",
+        "l.p",
+        "inc"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total first-lien debt",
+      "total first lien debt",
+      "total preferred equity",
+      "total other equity",
+      "total investments",
+      "total investments - non-controlled/non-affiliated",
+      "cash and cash equivalents",
+      "restricted cash and cash equivalents",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "restricted cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+and\\s+Cash\\s+Equivalents|Restricted\\s+Cash\\s+and\\s+Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury|Treasury\\s+Bills?)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*Total\\s+(?:Preferred\\s+Equity|Other\\s+Equity)\\s*$",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+(?:First[-\\s]Lien\\s+Debt|Investments(?:\\s*-\\s*non-controlled/non-affiliated)?)|Subtotal|Sub-Total)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Automobiles\\s+&\\s+Automobile\\s+Parts|Architecture,\\s+Construction\\s+&\\s+Engineering|Data\\s+&\\s+Analytics|Diversified\\s+Business\\s+Services|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Institutions\\s+&\\s+Services|Diversified\\s+Software|Education|Financials|Government\\s+&\\s+Public\\s+Service|Government,\\s+Risk\\s+&\\s+Compliance|Healthcare\\s+IT\\s+&\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|IT\\s+Security|IT\\s+Services\\s+&\\s+IT\\s+Systems\\s+Management\\s*\\(Ex-Security\\)?|Infrastructure\\s+Software\\s+&\\s+DevOps|Insurance|Media,\\s+Entertainment\\s+&\\s+Publishing|Real\\s+Estate|Telecom\\s+Services\\s+&\\s+IT\\s+Hardware|Transportation,\\s+Logistics\\s+&\\s+Supply\\s+Chain|Utilities\\s+&\\s+Utility\\s+Equipment)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Investments\\s+(?:[-\\u2013]\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?First[-\\s]Lien\\s+Debt\\b.*\\b(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Investments\\s+(?:[-\\u2013]\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:Preferred\\s+Equity|Other\\s+Equity)\\b.*\\b(?:Interest\\s+Rate|Maturity\\s+Date)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Acronis\\s+International|McKissock\\s+Investment\\s+Holdings|SumUp\\s+Holdings\\s+Midco\\s+S\\..+\\s+r\\.l)\\s*,?\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^(?!.*\\s+and\\s+)(?!.*,[^,]*,)(?=.*\\b(?:LLC|Inc\\.?|Corporation|Corp\\.?|L\\.P\\.?|LP|Ltd\\.?|B\\.V\\.?)\\b)[A-Za-z0-9&.,'() /-]+$",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity|Investments(?:\\s*-\\s*non-controlled/non-affiliated)?)|Subtotal|Sub-Total|(?:Automobiles\\s+&\\s+Automobile\\s+Parts|Architecture,\\s+Construction\\s+&\\s+Engineering|Data\\s+&\\s+Analytics|Diversified\\s+Business\\s+Services|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Institutions\\s+&\\s+Services|Diversified\\s+Software|Education|Financials|Government\\s+&\\s+Public\\s+Service|Government,\\s+Risk\\s+&\\s+Compliance|Healthcare\\s+IT\\s+&\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|IT\\s+Security|IT\\s+Services\\s+&\\s+IT\\s+Systems\\s+Management\\s*\\(Ex-Security\\)?|Infrastructure\\s+Software\\s+&\\s+DevOps|Insurance|Media,\\s+Entertainment\\s+&\\s+Publishing|Real\\s+Estate|Telecom\\s+Services\\s+&\\s+IT\\s+Hardware|Transportation,\\s+Logistics\\s+&\\s+Supply\\s+Chain|Utilities\\s+&\\s+Utility\\s+Equipment))\\s*$",
+    "canonical_strip_re": "(?i)^\\s*Investments\\s+(?:[-\\u2013]\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+.*?(?=\\s+Interest\\s+Rate|\\s+Maturity\\s+Date|$)|\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%\\s*(?=Maturity\\s+Date|\\s+Maturity\\s+Date|$)",
+    "category_marker_before_total": true
+  },
+  "identifier_format": {
+    "delimiter": "none",
+    "field_order": [
+      "affiliation",
+      "asset_family",
+      "industry",
+      "issuer_name",
+      "rate",
+      "maturity_date"
+    ],
+    "alternate_delimiters": []
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "extra_industry_labels": [
+      "Architecture, Construction & Engineering",
+      "Automobiles & Automobile Parts",
+      "Data & Analytics",
+      "Diversified Business Services",
+      "Diversified Consumer Services",
+      "Diversified Financial Institutions & Services",
+      "Diversified Software",
+      "Education",
+      "Financials",
+      "Government & Public Service",
+      "Government, Risk & Compliance",
+      "Healthcare IT & Technology",
+      "Hotels, Restaurants & Leisure",
+      "Infrastructure Software & DevOps",
+      "Insurance",
+      "IT Security",
+      "IT Services & IT Systems Management (Ex-Security)",
+      "Media, Entertainment & Publishing",
+      "Real Estate",
+      "Telecom Services & IT Hardware",
+      "Transportation, Logistics & Supply Chain",
+      "Utilities & Utility Equipment"
+    ],
+    "hierarchy_issuer_re": "(?i)^\\s*Investments\\s+(?:–\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b",
+    "hierarchy_instrument_re": "(?i)^\\s*Investments\\s+(?:–\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?((?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity))\\s+",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*Investments\\s+(?:–\\s*)?(?:non-controlled/(?:non-)?affiliated\\s+)?(?:First[-\\s]Lien\\s+Debt|Preferred\\s+Equity|Other\\s+Equity)\\s+') AND regexp_matches(_clean, '(?i)\\b(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Maturity\\s+Date)\\b')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Vista first-lien debt hierarchy rows with asset family, industry, issuer, reference-rate spread, current rate, and maturity embedded in XBRL text.",
+      "detection_rules": {
+        "keywords": [
+          "First-Lien Debt",
+          "First Lien Debt",
+          "Reference Rate and Spread",
+          "Interest Rate",
+          "Maturity Date",
+          "SOFR"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Vista preferred and other equity hierarchy rows with issuer and maturity-date evidence.",
+      "detection_rules": {
+        "keywords": [
+          "Preferred Equity",
+          "Other Equity",
+          "Maturity Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "legacy_bare_issuer_rows",
+      "description": "Earlier quarters use bare issuer-name rows without rate or maturity text. Legal-form single-issuer rows and recurring single issuer names with fair value are classified as position leaves; comma-and issuer lists without fair value are not matched by that fallback.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^[Issuer legal name]$",
+      "disposition": "expected"
+    },
+    {
+      "id": "rate_and_spread_are_key_volatility",
+      "description": "Displayed reference spread and current interest rate can drift quarter to quarter. Wrapper keys strip those values while preserving asset family, issuer, and maturity date.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "Reference Rate and Spread ... Interest Rate ... Maturity Date",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

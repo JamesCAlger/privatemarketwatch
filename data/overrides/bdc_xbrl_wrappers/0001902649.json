@@ -1,0 +1,237 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001902649",
+  "entity_name": "BlackRock Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "BLACKROCK_PRIVATE_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "instrument first lien",
+        "instrument second lien",
+        "instrument subordinated",
+        "instrument unsecured",
+        "investment first lien",
+        "investment second lien",
+        "investment subordinated",
+        "investment unsecured",
+        "first lien",
+        "second lien",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "senior secured",
+        "subordinated",
+        "unsecured note",
+        "maturity",
+        "maturity date",
+        "reference rate",
+        "interest rate",
+        "total coupon",
+        "sofr",
+        "libor",
+        "euribor"
+      ],
+      "equity": [
+        "instrument common stock",
+        "instrument preferred stock",
+        "instrument common shares",
+        "instrument preferred shares",
+        "instrument common units",
+        "instrument preferred units",
+        "investment common stock",
+        "investment preferred stock",
+        "investment common shares",
+        "investment preferred shares",
+        "investment common units",
+        "investment preferred units",
+        "common stock",
+        "preferred stock",
+        "common shares",
+        "preferred shares",
+        "common units",
+        "preferred units",
+        "equity securities"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "expiration date"
+      ],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total cash and investments",
+      "cash and investments",
+      "total investments",
+      "total debt investments",
+      "total equity securities",
+      "total equity investments",
+      "debt investments -",
+      "investments -",
+      "sub-total",
+      "subtotal"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government money market",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:cash\\s+and\\s+cash\\s+equivalents|total\\s+cash\\s+and\\s+investments|cash\\s+and\\s+investments|total\\s+investments|investments\\s+-\\s+|total\\s+debt\\s+investments|total\\s+equity\\s+securities|total\\s+equity\\s+investments)\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*Debt\\s+Investments\\b|\\b(?:first\\s+lien|second\\s+lien|senior\\s+secured|subordinated|unsecured\\s+note|term\\s+loan|delayed\\s+draw|revolver|revolving|SOFR|LIBOR|EURIBOR|maturity(?:\\s+date)?|total\\s+coupon)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Equity\\s+Securities\\s*|Equity\\s+Investments\\b)|\\b(?:common\\s+stock|preferred\\s+stock|common\\s+shares|preferred\\s+shares|common\\s+units|preferred\\s+units|equity\\s+securities)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bwarrants?\\b",
+        "family": "warrant"
+      }
+    ],
+    "canonical_strip_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s+|\\s+Ref\\s+.*$|\\s+Reference\\s+Rate\\s+.*$|\\s+Interest\\s+Rate\\s+\\d+\\.?\\d*%|\\s+Maturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b"
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments|Equity\\s+Securities|Equity\\s+Investments)\\s*(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:(?:Instrument|Investment|Instument)\\s+)?(?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref)\\b",
+    "hierarchy_instrument_re": "(?i)\\s+(?:(?:Instrument|Investment|Instument)\\s+)?((?:[A-Z]\\s+Ref|First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|Ref)\\b.+?)(?:\\s+(?:Ref|Reference\\s+Rate|Interest\\s+Rate|SOFR|LIBOR|EURIBOR|Prime|Floor|Spread|Total\\s+Coupon|Maturity(?:\\s+Date)?)\\b|$)",
+    "hierarchy_trailing_re": "(?i)\\s+(Maturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b(?:\\s+(?:One|Two|Three|Four))?)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt\\s+Investments\\b|Equity\\s+Securities\\s*|Equity\\s+Investments\\b)') AND (regexp_matches(_clean, '(?i)\\b(?:Instrument|Investment|Instument)\\b') OR (regexp_matches(_clean, '(?i)\\b(?:Inc\\.?|LLC\\d?|Corp\\.?|Corporation|L\\.L\\.C\\.|L\\.P\\.|Ltd\\.?|Limited|Holdings?|Group|Bidco|Buyer|Parent|Borrower|SAS|B\\.V\\.|SE\\b|LP\\b)') AND regexp_matches(_clean, '(?i)\\b(?:First|Second|Subordinated|Unsecured|Senior|Delayed|Revolver|Revolving|Term\\s+Loan|Common|Preferred|Warrants?|Class|[A-Z]\\s+Ref)\\b')))",
+    "extra_industry_labels": [
+      "Commercial Services and Supplies",
+      "Construction and Engineering",
+      "Health Care Equipment and Supplies",
+      "Health Care Providers and Services",
+      "Healthcare Providers and Services",
+      "Hotels, Restaurants and Leisure",
+      "Internet and Catalog Retail",
+      "Internet Software and Services",
+      "Life Sciences Tools and Services",
+      "Oil, Gas and Consumable Fuels",
+      "Paper and Forest Products",
+      "Real Estate Management and Development"
+    ]
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "instrument_marker",
+      "instrument_description",
+      "rate_terms",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      " | ",
+      ", "
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt instruments including first and second lien loans, delayed draws, revolvers, unsecured notes, and rate-bearing loan rows",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Senior Secured",
+          "Subordinated",
+          "Unsecured Note",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Revolving",
+          "SOFR",
+          "LIBOR",
+          "EURIBOR",
+          "Total Coupon"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity securities including common/preferred stock, shares, and units",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Preferred Stock",
+          "Common Shares",
+          "Preferred Shares",
+          "Common Units",
+          "Preferred Units",
+          "Equity Securities"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and related equity options",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "category_rows_without_instrument",
+      "description": "Industry/category rows such as Debt Investments Real Estate Management and Development have no issuer/instrument evidence and are classified as rollups, not position leaves.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Debt Investments [A-Za-z &]+(?: One)?$",
+      "disposition": "expected"
+    },
+    {
+      "id": "treasury_borrower_names",
+      "description": "Borrower names may contain Treasury, such as Apex Group Treasury LLC; only explicit U.S. Treasury/government cash-equivalent markers are non-private-market.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "Treasury LLC",
+      "disposition": "expected"
+    }
+  ]
+}

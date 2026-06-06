@@ -1,0 +1,177 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001872371",
+  "entity_name": "Oaktree Strategic Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "OAKTREE_STRATEGIC_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "second lien",
+        "delayed draw",
+        "term loan",
+        "revolver",
+        "fixed rate bond",
+        "floating rate bond",
+        "clo notes",
+        "credit linked note",
+        "subordinated debt",
+        "subordinated draw",
+        "interest rate",
+        "maturity",
+        "reference rate",
+        "sofr",
+        "libor"
+      ],
+      "equity": [
+        "common stock",
+        "common equity",
+        "preferred equity",
+        "preferred stock",
+        "preferred shares",
+        "investor shares"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "expiration date"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "other cash accounts",
+      "money market",
+      "u.s. treasury fund",
+      "us treasury fund",
+      "bny mellon u.s. treasury fund",
+      "bny mellon us treasury fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "\\b(?:first\\s+lien\\s+(?:(?:delayed\\s+draw\\s+)?term\\s+loan\\.?\\s*\\d*|revolver\\s*\\d*|floating\\s+rate\\s+bond)|second\\s+lien\\s+term\\s+loan\\s*\\d*|subordinated\\s+(?:debt\\s+)?(?:term\\s+loan\\s*\\d*|revolver|draw\\s+term\\s+loan)|fixed\\s+rate\\s+bond\\s*\\d*|credit\\s+linked\\s+note|clo\\s+notes?\\s*\\d*)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "\\b(?:common\\s+stock\\s*\\d*|common\\s+equity|preferred\\s+equity|preferred\\s+stock|preferred\\s+shares)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "\\bwarrants?\\s*\\d*\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?:other\\s+cash\\s+accounts|money\\s+market|bny\\s+mellon\\s+u\\.s\\.\\s+treasury\\s+fund|bny\\s+mellon\\s+us\\s+treasury\\s+fund)",
+        "family": "cash"
+      },
+      {
+        "regex": "^\\s*(?:total\\s+)?(?:debt\\s+investments|equity\\s+investments|investments)\\b",
+        "family": "debt"
+      }
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt positions including first/second lien loans, revolvers, fixed/floating-rate bonds, CLO notes, credit-linked notes, and subordinated debt",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Term Loan",
+          "First Lien Delayed Draw Term Loan",
+          "First Lien Revolver",
+          "Second Lien Term Loan",
+          "Subordinated Debt Term Loan",
+          "Subordinated Debt Revolver",
+          "Fixed Rate Bond",
+          "First Lien Floating Rate Bond",
+          "CLO Notes",
+          "Credit Linked Note"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity positions including common stock/equity and preferred equity",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Equity",
+          "Preferred Equity",
+          "Preferred Stock",
+          "Preferred Shares"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "oaktree_pipe_industry_format_2026q1",
+      "description": "Some 2026-03-31 identifiers use pipe-delimited issuer, industry, and instrument fields, e.g. Issuer | Industry | First Lien Term Loan.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": " \\| ",
+      "disposition": "expected"
+    },
+    {
+      "id": "oaktree_numbered_tranches",
+      "description": "Numeric suffixes on loan, bond, CLO note, and warrant labels distinguish separate position-level tranches or securities.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)\\b(?:Term Loan|Bond|CLO Notes|Warrants)\\s+\\d+$",
+      "disposition": "expected"
+    },
+    {
+      "id": "oaktree_treasury_fund_cash_rows",
+      "description": "BNY Mellon U.S. Treasury Fund and Other cash accounts are non-private-market cash equivalents.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "(?i)(?:BNY Mellon.*Treasury Fund|Other cash accounts)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

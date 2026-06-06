@@ -1,0 +1,192 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001634452",
+  "entity_name": "AB Private Credit Investors Corp",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "AB_PRIVATE_CREDIT_INVESTORS",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "| term loan",
+        "|term loan",
+        "| delayed draw",
+        "|delayed draw",
+        "| revolver",
+        "|revolver",
+        "| revolving",
+        "|revolving",
+        "| senior secured",
+        "|senior secured"
+      ],
+      "equity": [
+        "| units",
+        "|units",
+        "| class",
+        "|class",
+        "| series",
+        "|series",
+        "| ordinary shares",
+        "|ordinary shares",
+        "| common shares",
+        "|common shares",
+        "| preferred shares",
+        "|preferred shares",
+        "| earn out",
+        "|earn out"
+      ],
+      "fund": [
+        "| units",
+        "|units",
+        "| lp interests",
+        "|lp interests",
+        "| limited partnership interests",
+        "|limited partnership interests",
+        "| common units",
+        "|common units",
+        "| preferred units",
+        "|preferred units"
+      ],
+      "warrant": [
+        "| warrant",
+        "|warrant",
+        " warrant |",
+        "| warrants",
+        "|warrants",
+        " warrants |",
+        "| common warrant",
+        "|common warrant",
+        "| common warrants",
+        "|common warrants",
+        "| series",
+        "|series"
+      ],
+      "cash": [],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total cash",
+      "total cash equivalents",
+      "total cash and cash equivalents",
+      "net assets",
+      "liabilities in excess of other assets",
+      "investments"
+    ],
+    "non_private_markers": [
+      "cash",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Cash|Cash\\s+Equivalents|Cash\\s+and\\s+Cash\\s+Equivalents)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:INVESTMENTS|Investment|NET\\s+ASSETS.*|LIABILITIES\\s+IN\\s+EXCESS\\s+OF\\s+OTHER\\s+ASSETS.*)(?:\\s*$|\\s*\\|)",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|S|\\.S\\.|U\\.U\\.S\\.|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)?\\s*)?(?:(?:Corporate\\s+Debt)|(?:(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt))(?:\\b|\\s*\\|)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:(?:U\\.?\\s*S\\.?|US|Canadian|France|French|Luxembourg|United\\s+Kingdom)?\\s*)?(?:Common\\s+Stock|Preferred\\s+Stock)(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\b|\\s*\\|)",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*(?:(?:U\\.?\\s*S\\.?|US|Canadian|France|French|Luxembourg|United\\s+Kingdom)?\\s*)?Warrants?(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\b|\\s*\\|)",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)^\\s*(?:(?:U\\.?\\s*S\\.?|US|Canadian|France|French|Luxembourg|United\\s+Kingdom)?\\s*)?Investment\\s+Companies(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\b|\\s*\\|)",
+        "family": "fund"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:INVESTMENTS|Investment|NET\\s+ASSETS.*|LIABILITIES\\s+IN\\s+EXCESS\\s+OF\\s+OTHER\\s+ASSETS.*|(?:Total\\s+)?(?:Cash|Cash\\s+Equivalents|Cash\\s+and\\s+Cash\\s+Equivalents)(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\s*\\|\\s*(?:Total\\s+Cash(?:\\s+and\\s+Cash\\s+Equivalents|\\s+Equivalents)?|US\\s+Dollar|US\\s+DOLLAR|LIABILITIES\\s+IN\\s+EXCESS\\s+OF\\s+OTHER\\s+ASSETS.*|NET\\s+ASSETS.*))?|(?:Total\\s+)?(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|S|\\.S\\.|U\\.U\\.S\\.|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)?\\s*)?(?:Corporate\\s+Debt|(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt|Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investment\\s+Companies)(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\s*\\|\\s*(?:(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt\\s*\\|\\s*)?Total\\b.*)?|(?:Investment|INVESTMENTS)\\s*\\|\\s*Total\\s+Investments?)\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)^\\s*(?:U\\.?\\s*S\\.?|US)\\.?\\s*|\\s*-\\s*\\d+(?:\\.\\d+)?%|\\s*\\|\\s*(?:\\u2014|-|\\d+(?:\\.\\d+)?%)?\\s*\\([^|)]*(?:\\+|floor|pik)[^|)]*\\)\\s*|\\s*\\|\\s*(?:[A-Z]\\s*\\+\\s*)?\\d+(?:\\.\\d+)?%\\s*(?:PIK|Floor)?\\s*|\\s*\\|\\s*(?:\\u2014|-)\\s*%\\s*"
+  },
+  "identifier_format": {
+    "delimiter": "|",
+    "field_order": [
+      "country_or_category",
+      "security_type",
+      "issuer_name",
+      "industry",
+      "instrument_description",
+      "rate_or_economics",
+      "maturity_or_investment_date"
+    ],
+    "alternate_delimiters": [
+      ","
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|S|\\.S\\.|U\\.U\\.S\\.|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)?\\s*)?(?:Corporate\\s+Debt)\\s*\\|\\s*(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt\\s*\\|\\s*|(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)\\s+)?(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt\\s*\\|\\s*|(?:(?:U\\.?\\s*S\\.?|US|Canadian|France|French|Luxembourg|United\\s+Kingdom)?\\s*)?(?:Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investment\\s+Companies)\\s*(?:-\\s*\\d+(?:\\.\\d+)?%\\s*)?\\|\\s*)(.+?)\\s*\\|",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|S|\\.S\\.|U\\.U\\.S\\.|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)?\\s*)?(?:Corporate\\s+Debt)\\s*\\|\\s*(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt\\s*\\|\\s*|(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)\\s+)?(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt\\s*\\|\\s*|(?:(?:U\\.?\\s*S\\.?|US|Canadian|France|French|Luxembourg|United\\s+Kingdom)?\\s*)?(?:Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investment\\s+Companies)\\s*(?:-\\s*\\d+(?:\\.\\d+)?%\\s*)?\\|\\s*)[^|]+\\s*\\|\\s*(.+)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|S|\\.S\\.|U\\.U\\.S\\.|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)?\\s*)?(?:Corporate\\s+Debt|(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt|Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investment\\s+Companies)') AND regexp_matches(_clean, '\\|')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "AB Private Credit Investors corporate debt pipe rows with lien, issuer, industry, instrument, rate, and maturity fields.",
+      "detection_rules": {
+        "keywords": [
+          "Corporate Debt",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Senior Secured Debt"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "AB Private Credit Investors common stock, preferred stock, warrants, and investment-company rows encoded as pipe-delimited issuer/instrument fields.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Preferred Stock",
+          "Warrants",
+          "Investment Companies",
+          "Units",
+          "Shares"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

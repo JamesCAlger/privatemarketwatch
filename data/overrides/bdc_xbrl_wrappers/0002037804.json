@@ -1,0 +1,260 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002037804",
+  "entity_name": "New Mountain Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "NEW_MOUNTAIN_PRIVATE_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "second lien",
+        "subordinated",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "undrawn",
+        "drawn"
+      ],
+      "equity": [
+        "preferred shares",
+        "preferred stock",
+        "preferred equity",
+        "common units",
+        "common shares",
+        "common stock",
+        "ordinary shares",
+        "class a",
+        "class b",
+        "equity"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "mixed": [
+        " inc",
+        "inc.",
+        " llc",
+        "l.l.c.",
+        " corp",
+        "corp.",
+        "corporation",
+        " l.p.",
+        " lp",
+        " ltd",
+        "limited",
+        "holdings",
+        "group",
+        "parent",
+        "borrower",
+        "buyer",
+        "bidco",
+        "topco",
+        "midco",
+        "management",
+        "partners",
+        "denali"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government obligations fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury|Government\\s+Obligations\\s+Fund)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)\\b(?:Preferred\\s+Shares|Preferred\\s+Stock|Preferred\\s+Equity|Common\\s+Units|Common\\s+Shares|Common\\s+Stock|Ordinary\\s+Shares|Class\\s+[A-Z0-9-]+\\s+Common\\s+Units|Equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:First\\s+Lien|Second\\s+Lien|Subordinated|Term\\s+Loan|Delayed\\s+Draw|Revolver|Revolving|Undrawn|Drawn)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total)\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": ".+",
+        "family": "mixed"
+      }
+    ],
+    "canonical_strip_re": "(?i)(?:\\s*\\|\\s*(?:non-affiliated|affiliated|controlled)\\s+issuer\\s*$|^\\s*Investment,\\s*(?:Unaffiliated|Non-Affiliated|Affiliated|Controlled)\\s+Issuer,\\s*)",
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description",
+      "affiliation"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(.+?\\b(?:Inc\\.?|LLC\\.?|L\\.L\\.C\\.?|L\\.P\\.?|LP|Corp\\.?|Corporation|Ltd\\.?|Limited|S\\.a\\s+r\\.l\\.?|Pty\\s+Ltd\\.?)\\s*(?:\\([^)]*\\))?)\\s*,?\\s+((?:First\\s+Lien|Second\\s+Lien|Subordinated|Preferred\\s+shares|Common\\s+units|Ordinary\\s+shares|Class\\s+[A-Z0-9-]+\\s+common\\s+units|Warrants?|Business\\s+Services|Distribution\\s+&\\s+Logistics|Energy|Packaging|Investment)\\b.*)$",
+    "hierarchy_instrument_re": "(?i)^\\s*.+?\\b(?:Inc\\.?|LLC\\.?|L\\.L\\.C\\.?|L\\.P\\.?|LP|Corp\\.?|Corporation|Ltd\\.?|Limited|S\\.a\\s+r\\.l\\.?|Pty\\s+Ltd\\.?)\\s*(?:\\([^)]*\\))?\\s*,?\\s+((?:First\\s+Lien|Second\\s+Lien|Subordinated|Preferred\\s+shares|Common\\s+units|Ordinary\\s+shares|Class\\s+[A-Z0-9-]+\\s+common\\s+units|Warrants?|Business\\s+Services|Distribution\\s+&\\s+Logistics|Energy|Packaging|Investment)\\b.*)$",
+    "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, '(?i)\\b(?:Inc\\.?|LLC\\.?|L\\.L\\.C\\.?|L\\.P\\.?|LP|Corp\\.?|Corporation|Ltd\\.?|Limited|S\\.a\\s+r\\.l\\.?|Pty\\s+Ltd\\.?)\\s*(?:\\([^)]*\\))?\\s*,?\\s+(?:First\\s+Lien|Second\\s+Lien|Subordinated|Preferred\\s+shares|Common\\s+units|Ordinary\\s+shares|Class\\s+[A-Z0-9-]+\\s+common\\s+units|Warrants?|Business\\s+Services|Distribution\\s+&\\s+Logistics|Energy|Packaging|Investment)\\b')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "First- and second-lien loans, subordinated loans, drawn and undrawn revolver components, and rate-bearing debt rows",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Subordinated",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Undrawn",
+          "Drawn"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Preferred shares, common units, common shares, and other explicit equity rows",
+      "detection_rules": {
+        "keywords": [
+          "Preferred shares",
+          "Preferred stock",
+          "Preferred equity",
+          "Common units",
+          "Common shares",
+          "Common stock",
+          "Ordinary shares",
+          "Class A",
+          "Equity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "basis_spread": {
+          "type": "presence",
+          "constraint": "forbidden"
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and similar equity-linked instruments",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "mixed": {
+      "description": "Issuer-first rows where the identifier names the company but uses business-line labels or omits explicit debt/equity text",
+      "detection_rules": {
+        "keywords": [
+          "Inc",
+          "LLC",
+          "Corp",
+          "L.P.",
+          "Holdings",
+          "Group",
+          "Parent",
+          "Borrower",
+          "Buyer",
+          "Bidco",
+          "Topco",
+          "Denali"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "comma_to_pipe_identifier_drift",
+      "description": "2024-12 through 2025-09 mostly use comma-delimited issuer/instrument identifiers; 2025-12 and later mostly use pipe-delimited issuer/instrument/affiliation identifiers.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "Issuer, First Lien -> Issuer | First Lien | Non-Affiliated Issuer",
+      "disposition": "expected"
+    },
+    {
+      "id": "business_line_labels_are_positions",
+      "description": "Some debt positions disclose business-line labels such as Business Services, Energy, Packaging, or Distribution & Logistics instead of lien text in the identifier. These are position rows when paired with issuer names and economic fields.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "Issuer | Business Services",
+      "disposition": "warn"
+    },
+    {
+      "id": "non_accrual_status_suffix",
+      "description": "A small number of rows append Non-accrual status to the identifier; this is status metadata on a position, not an aggregate row.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "| Non-accrual status",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.02
+    }
+  }
+}

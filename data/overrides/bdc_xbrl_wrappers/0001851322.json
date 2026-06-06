@@ -1,0 +1,251 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001851322",
+  "entity_name": "North Haven Private Income Fund LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "NORTH_HAVEN_PRIVATE_INCOME",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment first lien debt",
+        "investment second lien debt",
+        "investment unsecured debt",
+        "first lien debt",
+        "second lien debt",
+        "unsecured debt",
+        "reference rate",
+        "rate and spread",
+        "interest rate",
+        "maturity date",
+        "sofr",
+        "libor",
+        "pik"
+      ],
+      "equity": [
+        "investment common equity",
+        "investment preferred equity",
+        "investment llc interest",
+        "common equity",
+        "preferred equity",
+        "llc interest",
+        "acquisition date",
+        "shares"
+      ],
+      "mixed": [
+        " llc",
+        " inc",
+        " corp",
+        " ltd",
+        " lp",
+        " holdings",
+        " group",
+        " acquisition",
+        " buyer",
+        " borrower",
+        " intermediate",
+        " parent",
+        " topco",
+        " midco"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "investment one",
+      "investment two",
+      "investment three",
+      "debt investments",
+      "equity investments",
+      "preferred equity positions",
+      "unsecured debt position",
+      "investments - non-controlled/affiliated",
+      "investments after cash equivalents",
+      "investments before cash equivalents",
+      "total investments",
+      "total portfolio investments"
+    ],
+    "non_private_markers": [
+      "money market",
+      "government fund",
+      "treasury fund",
+      "cash and cash equivalents"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\bInvestment\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\bInvestment\\s+(?:Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:Money\\s+Market|Government\\s+Fund|Treasury\\s+Fund|Cash\\s+and\\s+Cash\\s+Equivalents)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^(?!Investments?\\b)(?!Total\\b)(?=.*\\b(?:LLC|Inc\\.?|Corp\\.?|Corporation|Ltd\\.?|LP|L\\.P\\.|Holdings|Group|Acquisition|Buyer|Borrower|Intermediate|Parent|Topco|Midco)\\b).+",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^(?:Investment\\s+(?:One|Two|Three)|(?:One|Two|Three)\\s+(?:Debt\\s+Investments|Preferred\\s+Equity\\s+Positions|Unsecured\\s+Debt\\s+Position)|Investments\\s+-\\s+non-controlled/affiliated\\b)",
+        "family": "debt"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "category_marker_re": "(?i)^(?:Investment\\s+(?:One|Two|Three)|(?:One|Two|Three)\\s+(?:Debt\\s+Investments|Preferred\\s+Equity\\s+Positions|Unsecured\\s+Debt\\s+Position)|Investments\\s+-\\s+non-controlled/affiliated\\b|Investments(?:[-\\s](?:controlled/affiliated|non-controlled/\\s*non-affiliated|non-controlled/non-affiliated|non-controlled/affiliated))?(?:\\s+(?:Debt\\s+Investments|Equity\\s+Investments))?\\s*$)",
+    "canonical_strip_re": "\\s+Interest\\s+Rate\\s+.*$|\\s+Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\s*$"
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^Investments(?:[-\\s](?:controlled/affiliated|non-controlled/\\s*non-affiliated|non-controlled/non-affiliated|non-controlled/affiliated))?\\s*(?:(?:Debt|Equity)\\s+Investments\\s+)?(?:Investment\\s+Fund\\s+|Investments\\s+Investments\\s+In\\s+Joint\\s+Ventures\\s+)?(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+Investment\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest)\\b",
+    "hierarchy_instrument_re": "(?i)\\bInvestment\\s+((?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest).*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^Investments') AND regexp_matches(_clean, '(?i)\\bInvestment\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest)\\b')",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Air Freight & Logistics",
+      "Automobile Components",
+      "Automobiles",
+      "Banks",
+      "Beverages",
+      "Biotechnology",
+      "Building Products",
+      "Capital Markets",
+      "Chemicals",
+      "Commercial Services & Supplies",
+      "Components",
+      "Construction & Engineering",
+      "Construction & Building",
+      "Consumer Staples Distribution & Retail",
+      "Containers & Packaging",
+      "Diversified Consumer Services",
+      "Distributors",
+      "Electric Utilities",
+      "Electrical Equipment",
+      "Electronic Equipment, Instruments & Components",
+      "Entertainment",
+      "Financial Services",
+      "Food Products",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Health Care Providers & Services",
+      "Household Durables",
+      "IT Services",
+      "Independent Power and Renewable Electricity Producers",
+      "Industrial Conglomerates",
+      "Insurance Services",
+      "Interactive Media & Services",
+      "Investment Fund",
+      "Leisure Products",
+      "Life Sciences Tools & Services",
+      "Machinery",
+      "Media",
+      "Multi-Utilities",
+      "Pharmaceuticals",
+      "Professional Services",
+      "Real Estate Management & Development",
+      "Software",
+      "Specialty Retail",
+      "Textiles, Apparel & Luxury Goods",
+      "Trading Companies & Distributors",
+      "Transportation Infrastructure",
+      "Wireless Telecommunication Services",
+      "biotechnology"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt positions including first lien, second lien, and unsecured debt with reference rate, interest rate, and maturity fields",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Debt",
+          "Second Lien Debt",
+          "Unsecured Debt",
+          "Reference Rate",
+          "Interest Rate",
+          "Maturity Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity positions including common equity, preferred equity, and LLC interests",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Preferred Equity",
+          "LLC Interest",
+          "Acquisition Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "mixed": {
+      "description": "Old issuer-only rows whose visible HTML schedule supplies the instrument section while XBRL typed identifiers retain only issuer text",
+      "detection_rules": {
+        "keywords": [
+          "LLC",
+          "Inc",
+          "Corp",
+          "Holdings",
+          "Group",
+          "Acquisition"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "north_haven_affiliated_bare_issuer_totals",
+      "description": "Rows such as Investments - non-controlled/affiliated KWOR Acquisition, Inc. are affiliation-level totals, not position leaves.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)^Investments\\s+-\\s+non-controlled/affiliated",
+      "disposition": "expected"
+    },
+    {
+      "id": "north_haven_numbered_investment_headers",
+      "description": "Investment One/Two/Three rows are source headers or note labels without economic position detail.",
+      "first_seen_quarter": "2025-09-30",
+      "detection_pattern": "(?i)^Investment\\s+(?:One|Two|Three)$",
+      "disposition": "expected"
+    },
+    {
+      "id": "north_haven_old_html_section_headers",
+      "description": "Cached 2022 HTML grids show issuer-only rows grouped under visible instrument sections such as First Lien Debt, Second Lien Debt, Preferred Equity, and Common Equity. Older XBRL typed identifiers often retain only the issuer name, so these are classified as mixed position leaves rather than debt or equity by text.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)^(?!Investments?\\b).+\\b(?:LLC|Inc\\.?|Corp\\.?|Holdings|Group|Acquisition)\\b",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

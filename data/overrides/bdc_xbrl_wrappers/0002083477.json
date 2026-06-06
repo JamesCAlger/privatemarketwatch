@@ -1,0 +1,107 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002083477",
+  "entity_name": "APS BDC, LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "APS_BDC",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "chs bdc 2 llc",
+        "chs bdc 2 llc 1",
+        "chs bdc 2 llc 2",
+        "chs bdc 2 llc 3",
+        "aps cw spv llc",
+        "aps cw spv llc 1",
+        "aps cw spv llc 2",
+        "aps cw spv llc 3",
+        "aps cw spv llc 4",
+        "aps cw spv llc 5",
+        "aps cw spv llc 6"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "government money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|government\\s+money\\s+market|u\\.s\\.\\s+treasury|us\\s+treasury|treasury\\s+bills?)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Subtotal|Sub-Total)(?:\\s+-\\s*\\d+(?:\\.\\d+)?%)?\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\|\\s*(?:CHS\\s+BDC\\s+2\\s+LLC|APS\\s+CW\\s+SPV\\s+LLC)(?:\\s+\\d+)?\\s*$",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Subtotal|Sub-Total)(?:\\s+-\\s*\\d+(?:\\.\\d+)?%)?\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_name",
+      "spv_or_tranche_label"
+    ],
+    "alternate_delimiters": []
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Pipe-delimited APS BDC loan participations where the right-hand segment identifies the CHS BDC 2 LLC or APS CW SPV LLC tranche.",
+      "detection_rules": {
+        "keywords": [
+          "CHS BDC 2 LLC",
+          "APS CW SPV LLC"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "spv_suffix_is_position_label",
+      "description": "The suffix after the pipe is retained in wrapper_position_key because numbered CHS BDC 2 LLC and APS CW SPV LLC labels distinguish separate position-level constituents.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "\\|\\s*(?:CHS BDC 2 LLC|APS CW SPV LLC)(?:\\s+\\d+)?$",
+      "disposition": "expected"
+    },
+    {
+      "id": "single_quarter_no_position_matching_history",
+      "description": "Only one quarter is currently cached for this CIK, so cross-quarter J01/J03 matching is expected to skip until another quarter is available.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "2026-03-31",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

@@ -49,49 +49,11 @@ Do not describe a wrapper as complete because visual samples look plausible.
 
 ## Priority Queue
 
-FV-ordered queue for next unprocessed CIK. Basis: latest-quarter BDC FV, measured 2026-06-04.
+FV-ordered queue for next unprocessed CIK. 38 of 39 original queue entries have wrappers. Updated 2026-06-05.
 
 | Priority | CIK | Entity |
 |---:|---|---|
-| 1 | 0001838126 | HPS Corporate Lending Fund |
-| 2 | 0001837532 | Apollo Debt Solutions BDC |
-| 3 | 0001930087 | Golub Capital Private Credit Fund |
-| 4 | 0001872371 | Oaktree Strategic Credit Fund |
-| 5 | 0001851322 | North Haven Private Income Fund LLC |
-| 6 | 0001742313 | Monroe Capital Income Plus Corp |
-| 7 | 0001859919 | Barings Private Credit Corp |
-| 8 | 0001869453 | Blue Owl Technology Income Corp. |
-| 9 | 0002031750 | Ares Core Infrastructure Fund |
-| 10 | 0001913724 | TPG Twin Brook Capital Income Fund |
-| 11 | 0001993402 | Antares Strategic Credit Fund |
-| 12 | 0001950803 | Stepstone Private Credit Fund LLC |
-| 13 | 0001930679 | KKR FS Income Trust |
-| 14 | 0001901164 | T. Rowe Price OHA Select Private Credit Fund |
-| 15 | 0001825384 | Stone Point Credit Corp |
-| 16 | 0001916099 | Diameter Credit Co |
-| 17 | 0001702510 | Carlyle Credit Solutions, Inc. |
-| 18 | 0001901612 | Golub Capital BDC 4, Inc. |
-| 19 | 0001911066 | Nuveen Churchill Private Capital Income Fund |
-| 20 | 0001902649 | BlackRock Private Credit Fund |
-| 21 | 0002037804 | New Mountain Private Credit Fund |
-| 22 | 0001989817 | HPS Corporate Capital Solutions Fund |
-| 23 | 0001885968 | T Series BDC LLC |
-| 24 | 0001899017 | Bain Capital Private Credit |
-| 25 | 0001925531 | New Mountain Guardian IV BDC, L.L.C. |
-| 26 | 0002049733 | Blackstone Private Real Estate Credit & Income Fund |
-| 27 | 0001634452 | AB Private Credit Investors Corp |
-| 28 | 0001975736 | KKR FS Income Trust Select |
-| 29 | 0002083477 | APS BDC, LLC |
-| 30 | 0001959604 | Jefferies Credit Partners BDC Inc. |
-| 31 | 0002012139 | Fortress Private Lending Fund |
-| 32 | 0001976336 | Antares Private Credit Fund |
-| 33 | 0001899996 | Fidelity Private Credit Co LLC |
-| 34 | 0002052152 | Apollo Origination II (Levered) Capital Trust |
-| 35 | 0001772704 | Goldman Sachs Private Middle Market Credit II LLC |
-| 36 | 0001965934 | Overland Advantage |
-| 37 | 0002011498 | AGL Private Credit Income Fund |
-| 38 | 0001766037 | NMF SLF I, Inc. |
-| 39 | 0001919369 | VISTA CREDIT STRATEGIC LENDING CORP. |
+| 1 | 0001975736 | KKR FS Income Trust Select |
 
 ---
 

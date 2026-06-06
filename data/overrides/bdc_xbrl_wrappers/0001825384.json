@@ -1,0 +1,164 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001825384",
+  "entity_name": "Stone Point Capital Credit LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "STONE_POINT_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "second lien",
+        "term loan",
+        "delayed draw",
+        "revolving loan",
+        "revolver",
+        "unsecured note",
+        "senior note",
+        "due ",
+        "maturity",
+        "interest rate",
+        "reference rate",
+        "sofr",
+        "libor"
+      ],
+      "equity": [
+        "equity",
+        "preferred equity",
+        "common equity",
+        "equity investment",
+        "acquisition date"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "expiration date",
+        "acquisition date"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "sub-total",
+      "subtotal"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government institutional"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)(?:^|[,\\s])(first\\s+lien|second\\s+lien|term\\s+loan|delayed\\s+draw|revolving\\s+loan|revolver|unsecured\\s+note|senior\\s+note)(?:[,\\s]|$)|none_cnst_string_.*(?:firstlien|secondlien|termloan|delayeddraw|revolvingloan|unsecurednote|seniornote)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)(?:^|[,\\s])(preferred\\s+equity|common\\s+equity|equity\\s+investment|equity)(?:[,\\s]|$)",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)(?:^|[,\\s])warrants?(?:[,\\s]|$)",
+        "family": "warrant"
+      }
+    ]
+  },
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description",
+      "date_or_terms"
+    ],
+    "alternate_delimiters": [
+      ",",
+      " "
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt instruments including first and second lien loans, delayed draws, revolvers, and unsecured notes",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Term Loan",
+          "First Lien Delayed Draw Term Loan",
+          "First Lien Revolving Loan",
+          "Second Lien Term Loan",
+          "Second Lien Delayed Draw Term Loan",
+          "Second Lien Revolving Loan",
+          "Unsecured Note",
+          "Senior Note",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Loan",
+          "Revolver"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments including common equity, preferred equity, and equity investments",
+      "detection_rules": {
+        "keywords": [
+          "Equity",
+          "Common Equity",
+          "Preferred Equity",
+          "Equity Investment"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and related equity options",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.02
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "bare_issuer_rows",
+      "description": "Bare issuer-only identifiers such as RSC Topco, Inc. do not contain enough instrument evidence to classify deterministically from XBRL identifier text alone.",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "^[A-Za-z0-9 .,&'-]+,?\\s+(?:Inc\\.|LLC|L\\.P\\.)$",
+      "disposition": "warn"
+    }
+  ]
+}

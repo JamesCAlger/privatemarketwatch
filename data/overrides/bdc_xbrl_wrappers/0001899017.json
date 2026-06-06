@@ -1,0 +1,217 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001899017",
+  "entity_name": "Bain Capital Private Credit",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "BAIN_PRIVATE_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "second lien",
+        "senior secured loan",
+        "subordinated debt",
+        "subordinated note",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "sofr",
+        "bkbm",
+        "spread",
+        "interest rate",
+        "maturity date",
+        "maturity"
+      ],
+      "equity": [
+        "equity interest",
+        "preferred equity interest",
+        "class a equity interest",
+        "preferred equity",
+        "common equity",
+        "equity"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total",
+      "investments after cash equivalents",
+      "investments before cash equivalents"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "goldman sachs financial square",
+      "government fund",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^(?!.*\\binterest\\s+rate\\b).*(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|goldman\\s+sachs\\s+financial\\s+square|government\\s+fund|u\\.s\\.\\s+treasury|us\\s+treasury)",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^(?:total\\s+investments|total\\s+debt\\s+investments|total\\s+equity\\s+investments|investments\\s+(?:after|before)\\s+cash\\s+equivalents|subtotal|sub-total)$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\bwarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)\\b(?:equity\\s+interest|preferred\\s+equity\\s+interest|class\\s+a\\s+equity\\s+interest|preferred\\s+equity|common\\s+equity|equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:first\\s+lien|second\\s+lien|senior\\s+secured\\s+loan|subordinated\\s+(?:debt|note)|term\\s+loan|delayed\\s+draw|revolv(?:er|ing)|sofr|bkbm|spread|interest\\s+rate|maturity\\s+date)\\b",
+        "family": "debt"
+      }
+    ],
+    "canonical_strip_re": "(?i)(?:^\\s*(?:(?:non[-\\s]*controlled/)+(?:non[-\\s]*affiliat(?:e|ed))|controlled\\s+affiliate)\\s+investments\\s+|\\s*interest\\s+rate\\s+\\d+(?:\\.\\d+)?%?|\\s+one\\s*$)",
+    "category_marker_re": "(?i)^\\s*(?:total\\s+)?(?:investments?|debt\\s+investments|equity\\s+investments|subtotal|sub-total|investments\\s+(?:after|before)\\s+cash\\s+equivalents)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "industry",
+      "issuer_name",
+      "instrument_description",
+      "rate",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      " - ",
+      ", "
+    ]
+  },
+  "staging": {
+    "strategy": "prefix_strip",
+    "hierarchy_prefix_re": "(?i)^\\s*(?:(?:non[-\\s]*controlled/)+(?:non[-\\s]*affiliat(?:e|ed))|controlled\\s+affiliate)\\s+investments\\s+(?:(?:MSD_INDUSTRY_LABELS)\\s+)?",
+    "extra_industry_labels": [
+      "Beverage, Food & Tobacco",
+      "Capital Equipment",
+      "Chemicals, Plastics & Rubber",
+      "Chemicals, Plastics, & Rubber",
+      "Construction & Building",
+      "Environmental Industries",
+      "FIRE: Finance",
+      "FIRE: Insurance",
+      "Forest Products & Paper",
+      "Hotel, Gaming, & Leisure",
+      "Investment Vehicles",
+      "Media: Publishing"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "First- and second-lien senior secured loans, delayed draws, revolvers, subordinated debt, and subordinated notes.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Senior Secured Loan",
+          "Subordinated Debt",
+          "Subordinated Note",
+          "Delayed Draw",
+          "Revolver",
+          "SOFR",
+          "BKBM"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity-interest and preferred-equity positions, including fund vehicle equity interests.",
+      "detection_rules": {
+        "keywords": [
+          "Equity Interest",
+          "Preferred Equity Interest",
+          "Class A Equity Interest",
+          "Preferred Equity",
+          "Common Equity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and similar equity-linked instruments.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "bain_industry_prefixed_flat_identifiers",
+      "description": "Most rows encode industry, issuer, instrument, spread, current interest rate, and maturity in one flat string.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "<industry> <issuer> <instrument> <rate/maturity fields>",
+      "disposition": "expected"
+    },
+    {
+      "id": "bain_affiliation_prefixed_identifiers",
+      "description": "Some rows prepend Controlled Affiliate Investments or Non-Controlled/Non-Affiliate Investments before the industry and position text.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^(Controlled Affiliate Investments|Non-Controlled/Non-Affiliate Investments)",
+      "disposition": "expected"
+    },
+    {
+      "id": "bain_current_coupon_volatility",
+      "description": "Current interest-rate text varies quarter to quarter; canonical keys strip only current coupon text while retaining spread, maturity, issuer, and instrument terms.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Interest Rate <percent>",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

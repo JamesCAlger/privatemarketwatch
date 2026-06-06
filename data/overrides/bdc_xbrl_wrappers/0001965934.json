@@ -1,0 +1,151 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001965934",
+  "entity_name": "Overland Advantage",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "OVERLAND_ADVANTAGE",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "second lien",
+        "senior secured",
+        "unsecured",
+        "term loan",
+        "delayed draw",
+        "delay draw",
+        "revolving loan",
+        "interest rate",
+        "maturity date",
+        "sofr",
+        "prime"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "investments and cash equivalents",
+      "total investments",
+      "total debt investments",
+      "debt investments",
+      "investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "blackrock liquidity fedfund",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+Equivalents|BlackRock\\s+Liquidity\\s+FedFund|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury|Treasury\\s+Bills?)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Subtotal|Sub-Total|Investments\\s+and\\s+Cash\\s+Equivalents)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Investments|nvestments)\\s+Non-controlled/non-affiliated\\s+(?:(?:senior\\s+secured\\s+)?debt\\s+)?Debt\\s+investments\\b.*",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Investments|Debt\\s+Investments|Investments\\s+and\\s+Cash\\s+Equivalents|(?:Investments|nvestments)\\s+Non-controlled/non-affiliated\\s+(?:(?:senior\\s+secured\\s+)?debt\\s+)?Debt\\s+investments(?:\\s+[A-Za-z&, ]+)?)\\s*$",
+    "canonical_strip_re": "(?i)^\\s*(?:Investments|nvestments)\\s+Non-controlled/non-affiliated\\s+(?:(?:senior\\s+secured\\s+)?debt\\s+)?Debt\\s+investments\\s+|\\s+Interest\\s+Rate\\s+(?:SOFR|Prime)\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\s+Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}"
+  },
+  "identifier_format": {
+    "delimiter": "none",
+    "field_order": [
+      "hierarchy_industry_issuer_instrument_rate_maturity"
+    ],
+    "alternate_delimiters": []
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "extra_industry_labels": [
+      "Building Products",
+      "Commercial Services & Supplies",
+      "Construction & Engineering",
+      "Consumer Staples Distribution & Retail",
+      "Electronic Equipment",
+      "Electrical Utilities",
+      "Energy Equipment & Services",
+      "Financial Services",
+      "Gas & Consumable Fuels",
+      "Health Care Equipment & Supplies",
+      "Health Care Providers & Services",
+      "Health Care Technology",
+      "Hotels, Restaurants & Leisure",
+      "IT Services",
+      "Textiles, Apparel & Luxury Goods",
+      "Trading Companies & Distributors",
+      "Water Utilities"
+    ],
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Investments|nvestments)\\s+Non-controlled/non-affiliated\\s+(?:(?:senior\\s+secured\\s+)?debt\\s+)?Debt\\s+investments\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:First\\s+lien|Second\\s+lien|Unsecured)\\b",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:Investments|nvestments)\\s+Non-controlled/non-affiliated\\s+(?:(?:senior\\s+secured\\s+)?debt\\s+)?Debt\\s+investments\\s+(?:MSD_INDUSTRY_LABELS)\\s+.+?\\s+((?:First\\s+lien|Second\\s+lien|Unsecured)\\b.+?)(?:\\s+Interest\\s+Rate|\\s+Maturity\\s+Date|$)",
+    "hierarchy_trailing_re": "(?i)\\s+(One|Two|Three)\\s*$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Investments|nvestments)\\s+Non-controlled/non-affiliated\\s+(?:(?:senior\\s+secured\\s+)?debt\\s+)?Debt\\s+investments\\s+(?:MSD_INDUSTRY_LABELS)\\s+.+?\\s+(?:First\\s+lien|Second\\s+lien|Unsecured)\\b')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Hierarchical Overland Advantage debt identifiers with industry, issuer, instrument type, reference-rate spread, and maturity embedded in the XBRL axis text.",
+      "detection_rules": {
+        "keywords": [
+          "first lien",
+          "second lien",
+          "senior secured",
+          "unsecured",
+          "term loan",
+          "delayed draw",
+          "revolving loan",
+          "interest rate",
+          "SOFR",
+          "Prime"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "hierarchy_prefix_variants",
+      "description": "Observed identifiers alternate between senior-secured-debt and debt hierarchy prefixes, and some source rows are truncated to nvestments; all variants are treated as the same hierarchy source.",
+      "first_seen_quarter": "2024-06-30",
+      "detection_pattern": "^(?:Investments|nvestments) Non-controlled/non-affiliated",
+      "disposition": "expected"
+    },
+    {
+      "id": "rate_and_maturity_are_key_volatility",
+      "description": "Interest-rate spread and one- versus two-digit maturity-date text can change while the issuer and facility remain the same, so wrapper_position_key strips those volatile components but keeps facility type and trailing lot labels.",
+      "first_seen_quarter": "2024-06-30",
+      "detection_pattern": "Interest Rate .* Maturity Date",
+      "disposition": "expected"
+    },
+    {
+      "id": "cash_and_treasury_rows_are_non_private",
+      "description": "BlackRock Liquidity FedFund, Cash Equivalents, Investments and Cash Equivalents, and U.S. Treasury Bill rows are cash or treasury holdings rather than private-market position constituents.",
+      "first_seen_quarter": "2024-06-30",
+      "detection_pattern": "Cash Equivalents|BlackRock Liquidity FedFund|U.S. Treasury Bill|Investments and Cash Equivalents",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

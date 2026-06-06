@@ -1,0 +1,226 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001989817",
+  "entity_name": "HPS Corporate Capital Solutions Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "HPS_CORPORATE_CAPITAL_SOLUTIONS",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        ", inc",
+        " inc.",
+        " inc ",
+        " llc",
+        "l.l.c.",
+        " corp",
+        " corporation",
+        " ltd",
+        " limited",
+        " l.p.",
+        ", lp",
+        " lp,",
+        " lp ",
+        " plc",
+        " srl",
+        " s.a.r.l.",
+        " sarl",
+        " s.a.",
+        " r.l.",
+        " s.p.a.",
+        " s.l.u.",
+        " b.v.",
+        " n.v.",
+        " gmbh",
+        "company",
+        "holdings",
+        "group",
+        "partners",
+        "bidco",
+        "topco",
+        "midco",
+        "opco",
+        "buyco",
+        "holdco",
+        "borrower",
+        "management",
+        "services",
+        "solutions",
+        "trust",
+        "llp"
+      ],
+      "equity": [
+        "preferred stock",
+        "preferred shares",
+        "preferred units",
+        "common stock",
+        "common units",
+        "ordinary shares",
+        "class a",
+        "class b",
+        "class c",
+        "class d",
+        "llc interest",
+        "lp interest",
+        "l.p. interest",
+        "membership interest",
+        "equity interest",
+        "co-invest",
+        "units"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "non-controlled/affiliated investments",
+      "non-affiliated issuer",
+      "affiliated issuer",
+      "subtotal",
+      "sub-total",
+      "total investments"
+    ],
+    "non_private_markers": [
+      "bny mellon us treasury fund",
+      "dreyfus government cash management",
+      "dreyfus treasury obligations cash management",
+      "goldman sachs financial square government fund",
+      "cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury obligations"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:BNY\\s+Mellon\\s+US\\s+Treasury\\s+Fund|Dreyfus\\s+(?:Government\\s+Cash\\s+Management|Treasury\\s+Obligations\\s+Cash\\s+Management)|Goldman\\s+Sachs\\s+Financial\\s+Square\\s+Government\\s+Fund|Cash\\s+and\\s+Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)(?:Preferred\\s+Stock|Preferred\\s+Shares|Preferred\\s+Units|Common\\s+Stock|Common\\s+Units|Class\\s+[A-D](?:[- ]\\d+)?\\s+(?:Common\\s+)?Units|Ordinary\\s+Shares|LLC\\s+Interest|LP\\s+Interest|L\\.P\\.\\s+Interest|Membership\\s+Interest|Equity\\s+Interest)",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^(?!\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|Non-Controlled/Affiliated\\s+Investments\\b)).*(?:\\b(?:Inc\\.?|LLC|L\\.L\\.C\\.?|Corp\\.?|Corporation|Ltd\\.?|Limited|L\\.P\\.?|LP|PLC|Srl|S\\.?\\s*.?\\s*R\\.?\\s*L\\.?|SARL|S\\.A\\.?|S\\.P\\.A\\.?|S\\.L\\.U\\.?|B\\.V\\.?|N\\.V\\.?|GmbH|Company|Holdings?|Group|Partners?|Bidco|Topco|Midco|Opco|Buyco|Holdco|Borrower|Management|Services|Solutions|Co-Invest|Fund|Trust|LLP)\\b|\\s\\d+\\s*(?:\\|\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer)?\\s*$)",
+        "family": "debt"
+      }
+    ],
+    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|\\|\\s*Non-Affiliated\\s+Issuer|\\|\\s*Affiliated\\s+Issuer)\\s*$",
+    "category_marker_re": "(?i)^\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|Non-Controlled/Affiliated\\s+Investments|Total\\s+Investments|Subtotal|Sub-Total)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "issuer_name",
+      "optional_position_number",
+      "optional_affiliation"
+    ],
+    "alternate_delimiters": [
+      " | ",
+      ", "
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Issuer-only HPS direct lending positions. HPS Corporate Capital Solutions often omits instrument text, so legal-entity signals and trailing position numbers identify leaves.",
+      "detection_rules": {
+        "keywords": [
+          "Inc",
+          "LLC",
+          "Corp",
+          "Limited",
+          "Holdings",
+          "Group",
+          "Borrower",
+          "Services",
+          "Solutions",
+          "Trust",
+          "LLP"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments when explicitly labeled as stock, units, interests, or shares.",
+      "detection_rules": {
+        "keywords": [
+          "Preferred Stock",
+          "Common Units",
+          "Class A Units",
+          "Equity Interest",
+          "Membership Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrant positions when explicitly labeled.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "HPS_CCS_BARE_ISSUER_ROWS",
+      "description": "Most rows are bare issuer names without instrument labels. Multiple positions may be distinguished only by trailing numbers.",
+      "first_seen_quarter": "2024-06-30",
+      "detection_pattern": "Equinox Holdings, Inc.",
+      "disposition": "expected"
+    },
+    {
+      "id": "HPS_CCS_PIPE_AFFILIATION_SUFFIX",
+      "description": "Later filings append pipe-delimited affiliation suffixes such as '| Non-Affiliated Issuer'. These suffixes are stripped from wrapper position keys.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\|\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer",
+      "disposition": "expected"
+    },
+    {
+      "id": "HPS_CCS_CASH_FUNDS",
+      "description": "Dreyfus, BNY Mellon Treasury, and Goldman Sachs Financial Square government funds are cash or money-market rows outside private-market holdings.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "Dreyfus Government Cash Management",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001702510",
+  "entity_name": "TCG BDC II, Inc.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TCG_BDC_II",
+    "leaf_markers_by_family": {
+      "mixed": [
+        "first lien debt",
+        "second lien debt",
+        "equity investments",
+        "common and preferred equity investments",
+        "structured credit investment",
+        "structured credit investments",
+        "investment funds"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total structured credit investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*Investment\\s*(?:\\||,)\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Equity\\s+Investments|Common\\s+and\\s+Preferred\\s+Equity\\s+Investments|Structured\\s+Credit\\s+Investments?|Investment\\s+Funds)(?:\\s*(?:\\||,).*)?\\s*$",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*Total\\s+(?:Investments|Debt\\s+Investments|Equity\\s+Investments|Structured\\s+Credit\\s+Investments)\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Cash\\s+and\\s+Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury)\\b",
+        "family": "cash"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*Investment\\s*(?:\\||,)\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Equity\\s+Investments|Common\\s+and\\s+Preferred\\s+Equity\\s+Investments|Structured\\s+Credit\\s+Investments?|Investment\\s+Funds)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "section",
+      "affiliation",
+      "instrument_family",
+      "issuer_name",
+      "industry_or_tranche_label"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Auto Aftermarket & Services",
+      "Beverage & Food",
+      "Business Services",
+      "Capital Equipment",
+      "Chemicals, Plastics & Rubber",
+      "Construction & Building",
+      "Consumer Goods: Durable",
+      "Consumer Goods: Non-Durable",
+      "Consumer Services",
+      "Containers, Packaging & Glass",
+      "Diversified Financial Services",
+      "Energy: Electricity",
+      "Energy: Oil & Gas",
+      "Environmental Industries",
+      "Healthcare & Pharmaceuticals",
+      "High Tech Industries",
+      "Investment Funds",
+      "Investment MSLOF",
+      "Leisure Products & Services",
+      "Media: Advertising, Printing & Publishing",
+      "Media: Broadcasting & Subscription",
+      "Media: Diversified & Production",
+      "Retail",
+      "Software",
+      "Sovereign & Public Finance",
+      "Structured Credit",
+      "Telecommunications",
+      "Transportation: Cargo",
+      "Transportation: Consumer",
+      "Utilities: Oil & Gas",
+      "Utilities: Water",
+      "Wholesale"
+    ],
+    "hierarchy_issuer_re": "(?i)^Investment\\s*(?:\\||,)\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Equity\\s+Investments|Common\\s+and\\s+Preferred\\s+Equity\\s+Investments|Structured\\s+Credit\\s+Investments?|Investment\\s+Funds)\\s*(?:\\||,)\\s*(.+?)\\s*(?:\\||,)\\s*(?:MSD_INDUSTRY_LABELS)(?:\\s+\\d+)?\\s*$",
+    "hierarchy_instrument_re": "(?i)^Investment\\s*(?:\\||,)\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer\\s*(?:\\||,)\\s*((?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Equity\\s+Investments|Common\\s+and\\s+Preferred\\s+Equity\\s+Investments|Structured\\s+Credit\\s+Investments?|Investment\\s+Funds))\\s*(?:\\||,)",
+    "hierarchy_trailing_re": "(?i)^Investment\\s*(?:\\||,)\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Equity\\s+Investments|Common\\s+and\\s+Preferred\\s+Equity\\s+Investments|Structured\\s+Credit\\s+Investments?|Investment\\s+Funds)\\s*(?:\\||,)\\s*.+?\\s*(?:\\||,)\\s*((?:MSD_INDUSTRY_LABELS)(?:\\s+\\d+)?)\\s*$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^Investment\\s*(?:\\||,)\\s*(?:Non-Affiliated|Affiliated)\\s+Issuer\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Equity\\s+Investments|Common\\s+and\\s+Preferred\\s+Equity\\s+Investments|Structured\\s+Credit\\s+Investments?|Investment\\s+Funds)\\s*(?:\\||,)')"
+  },
+  "archetypes": {
+    "mixed": {
+      "description": "TCG BDC II XBRL hierarchy leaves with affiliation, instrument family, issuer, and industry/tranche labels.",
+      "detection_rules": {
+        "keywords": [
+          "Investment",
+          "Issuer",
+          "First Lien Debt",
+          "Second Lien Debt",
+          "Equity Investments",
+          "Structured Credit"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "TCG_PIPED_INVESTMENT_HIERARCHY",
+      "description": "Current filings encode section, affiliation, instrument family, issuer, and industry or tranche label as pipe-delimited hierarchy segments.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "Investment | Non-Affiliated Issuer | First Lien Debt",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCG_COMMA_INVESTMENT_HIERARCHY",
+      "description": "Earlier filings use the same hierarchy with comma delimiters, including commas inside issuer names and industry labels.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Investment, Non-Affiliated Issuer, First Lien Debt",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCG_TOTAL_POWER_ISSUER",
+      "description": "Total Power Limited is a real issuer and must not be filtered only because the borrower name starts with Total.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Total Power Limited",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

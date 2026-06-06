@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001849894",
   "entity_name": "MSD Investment Corp.",
-  "version": 2,
+  "version": 3,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "MSD_INVESTMENT",
@@ -89,7 +89,7 @@
       "Sovereign & Public Finance",
       "Specialized Consumer Services"
     ],
-    "hierarchy_prefix_re": "(?i)^(?:Member\\s+)?I?nvestments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|NON-CONTROLLED/NON-AFFILIATED|control(?:led)?(?:\\s*/\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity(?:\\s+and\\s+other\\s+investments)?|debt|warrants?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+"
+    "hierarchy_prefix_re": "(?i)^(?:Member\\s+)?I?nvestments\\s+Investments\\s*-\\s*(?:non-?\\s*control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|NON-CONTROLLED/NON-AFFILIATED|control(?:led)?(?:\\s*/\\s*non-?\\s*affiliat(?:e|ed))?|affiliat(?:e|ed))\\s+(?:first\\s+lien\\s+debt|second\\s+lien\\s+debt|subordinated\\s+debt|senior\\s+secured\\s+debt|common\\s+equity|preferred\\s+equity|equity(?:\\s+and\\s+other\\s+investments)?|debt|warrants?)\\s+(?:consumer\\s+goods\\s*:?\\s*non-durable|consumer\\s+goods\\s*:?\\s*durable|services\\s*:?\\s*consumer|services\\s*:?\\s*business|(?:MSD_INDUSTRY_LABELS))\\s*"
   },
   "archetypes": {
     "debt": {

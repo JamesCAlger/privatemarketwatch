@@ -1,0 +1,191 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001976336",
+  "entity_name": "Antares Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "ANTARES_PRIVATE_CREDIT",
+    "prefix_rules": {
+      "Investments": "mixed",
+      "Identifier [Axis] Investments": "mixed",
+      "IInvestments": "mixed",
+      "nvestments": "mixed",
+      "vInvestments": "mixed",
+      "InvestmentBasisSpreadVariableRate": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "mixed": [
+        "asset type",
+        "commitment type",
+        "reference rate and spread",
+        "interest rate",
+        "maturity date",
+        "commitment expiration date",
+        "assets type",
+        "first lien",
+        "second lien",
+        "term loan",
+        "delayeddraw",
+        "delayed draw",
+        "revolver",
+        "common",
+        "preferred",
+        "lp units",
+        "warrant"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total portfolio investments",
+      "total secured debt investments",
+      "total unsecured debt investments",
+      "total equity investments",
+      "total unfunded commitments",
+      "unfunded commitments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "black rock liquidity",
+      "blackrock liquidity",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents)\\b|Black\\s*Rock\\s+Liquidity",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Portfolio\\s+)?Investments?\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*Total\\s+(?:Secured\\s+Debt|Unsecured\\s+Debt|Equity|Unfunded\\s+Commitments)\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Debt\\s+Investments|Secured\\s+Debt|Unsecured\\s+Debt|Equity\\s+Investments)\\b",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)(?:^\\s*Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+Total\\s+Equity\\s+Investments\\s*$|^\\s*[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+Total\\s+Equity\\s+Investments\\s*$|^\\s*Total\\s+Investments\\s+-\\s+non-controlled/non-affiliated\\s*$|^\\s*Total\\s+Secured\\s+Debt\\s+Investments\\s*$|^\\s*(?:(?:Identifier \\[Axis\\]\\s+)?Investments[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:(?:MSD_INDUSTRY_LABELS))?\\s*$)",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+[A-Z]\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\s+Commitment\\s+Expiration\\s+Date\\s+(?:N/A|\\d{1,2}/\\d{1,2}/\\d{2,4})"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "category",
+      "industry",
+      "issuer_name",
+      "instrument_description"
+    ],
+    "alternate_delimiters": [
+      " - "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "extra_industry_labels": [
+      "Aerospace and Defense",
+      "Air Freight and Logistics",
+      "Automobile Components",
+      "Building Products",
+      "Capital Markets",
+      "Commercial Services and Supplies",
+      "Construction and Engineering",
+      "Containers and Packaging",
+      "Diversified Consumer Services",
+      "Electronic Equipment, Instruments and Component",
+      "Electronic Equipment, Instruments and Components",
+      "Energy Equipment and Services",
+      "Financial Services",
+      "Health Care Equipment and Supplies",
+      "Health Care Providers and Services",
+      "Household Products",
+      "Healthcare Equipment and Supplies",
+      "Healthcare Providers and Services",
+      "Health Care Technology",
+      "Hotels, Restaurants and Leisure",
+      "Independent Power and Renewable Electricity Producers",
+      "Industrial Conglomerates",
+      "Insurance",
+      "Internet Software and Services",
+      "IT Services",
+      "Life Sciences Tools and Services",
+      "Media",
+      "Oil, Gas and Consumable Fuels",
+      "Personal Care Products",
+      "Professional Services",
+      "Real Estate Management and Development",
+      "Road and Rail",
+      "Software",
+      "Specialty Retail",
+      "Specially Retail",
+      "Technology Hardware, Storage and Peripherals",
+      "Textiles, Apparel and Luxury Goods",
+      "Trading Companies and Distributors",
+      "Transportation Infrastructure"
+    ],
+    "hierarchy_issuer_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?(?:(?:Investments\\s+)?(?:Debt\\s+Investments|Secured\\s+Debt|Unsecured\\s+Debt\\s+Investments|Equity\\s+Investments|Equity|Preferred\\s+Equity|Common\\s+Equity)\\s+)?(?:Media\\s*|(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:(?:Assets?\\s+Type|Commitment\\s+Type)\\s*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date)",
+    "hierarchy_instrument_re": "(?i)^(?:(?:Identifier \\[Axis\\]\\s+)?(?:[A-Za-z]*Investments|nvestments)[^A-Za-z0-9]+non[^A-Za-z0-9]+controlled[^A-Za-z0-9]+non[^A-Za-z0-9]+affiliated\\s+)?.*?\\s+((?:Assets?\\s+Type|Commitment\\s+Type)\\s*.*|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date\\s*.*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Assets?\\s+Type|Commitment\\s+Type|(?:Revolver|Delayed\\s+Draw\\s+Term\\s+Loan|DelayedDraw\\s+Term\\s+Loan)\\s+Commitment\\s+Expiration\\s+Date)')"
+  },
+  "archetypes": {
+    "mixed": {
+      "description": "Antares Private Credit Fund XBRL hierarchy leaves for debt, equity, warrants, and unfunded commitments.",
+      "detection_rules": {
+        "keywords": [
+          "Asset Type",
+          "Commitment Type",
+          "First Lien",
+          "Second Lien",
+          "Term Loan",
+          "DelayedDraw",
+          "Delayed Draw",
+          "Revolver",
+          "Common",
+          "Preferred",
+          "LP Units",
+          "Warrant"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "ANTARES_PRIVATE_ASSET_TYPE_HIERARCHY",
+      "description": "Current XBRL identifiers encode affiliation, instrument bucket, industry, issuer, and leaf instrument in one typed dimension using Asset Type.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "Asset Type",
+      "disposition": "expected"
+    },
+    {
+      "id": "ANTARES_PRIVATE_UNFUNDED_COMMITMENTS",
+      "description": "Unfunded commitments use issuer plus Commitment Type and Commitment Expiration Date. They are position-level rows when not total/header unfunded commitment rows.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "Commitment Type",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

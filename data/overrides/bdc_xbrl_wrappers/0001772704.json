@@ -1,0 +1,279 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001772704",
+  "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "GS_PRIVATE_MIDDLE_MARKET_II",
+    "prefix_rules": {
+      "Investment Debt Investments": "debt",
+      "IInvestment Debt Investments": "debt",
+      "nvestment Debt Investments": "debt",
+      "vestment Debt Investments": "debt",
+      "Investment 1st Lien/Senior Secured Debt": "debt",
+      "Investment 1st Lien/Last-Out Unitranche": "debt",
+      "Investment 2nd Lien/Senior Secured Debt": "debt",
+      "Investment Unsecured Debt": "debt",
+      "Investment Equity Securities": "equity",
+      "Equity Securities": "equity",
+      "Common Stock": "equity",
+      "Preferred Stock": "equity",
+      "Warrants": "warrant",
+      "Investment United States": "debt",
+      "Investment Canada": "debt",
+      "Investment United Kingdom": "debt",
+      "Investment Cayman Islands": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "interest rate",
+        "reference rate",
+        "reference rate and spread",
+        "maturity",
+        "initial acquisition date",
+        "sofr",
+        "libor",
+        "euribor",
+        "pik"
+      ],
+      "equity": [
+        "common stock",
+        "preferred stock",
+        "equity securities",
+        "partnership interest",
+        "membership interest",
+        "llc interest",
+        "initial acquisition date"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total investments and investments in affiliated money market fund",
+      "investments and investments in affiliated money market fund",
+      "investments in affiliated money market fund",
+      "debt investments",
+      "equity securities",
+      "common stock",
+      "preferred stock",
+      "warrants",
+      "1st lien/senior secured debt",
+      "1st lien/last-out unitranche",
+      "2nd lien/senior secured debt",
+      "unsecured debt",
+      "total canada",
+      "total united states",
+      "total united kingdom",
+      "non-controlled affiliates"
+    ],
+    "non_private_markers": [
+      "cash",
+      "money market",
+      "financial square",
+      "government fund",
+      "government institutional",
+      "u.s. treasury",
+      "us treasury",
+      "goldman sachs financial square government fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)goldman\\s+sachs\\s+financial\\s+square\\s+government\\s+fund|money\\s+market|cash\\s+equivalents",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^(?:total\\s+investments|total\\s+investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund|investments|debt\\s+investments|equity\\s+securities|common\\s+stock|preferred\\s+stock|warrants?|non-controlled\\s+affiliates)(?:\\s|$|[-–])",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\bwarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)\\b(?:common\\s+stock|preferred\\s+stock|equity\\s+securities|partnership\\s+interest|membership\\s+interest|llc\\s+interest)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:1st\\s+lien|first\\s+lien|2nd\\s+lien|second\\s+lien|senior\\s+secured|unitranche|unsecured\\s+debt|term\\s+loan|delayed\\s+draw|revolving|reference\\s+rate|interest\\s+rate|maturity)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^(?:total\\s+)?(?:Canada|United\\s+Kingdom|United\\s+States|Cayman\\s+Islands)(?:\\s|$|[-–])",
+        "family": "debt"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "category_marker_before_total": true,
+    "category_marker_re": "(?i)^\\s*(?:(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%\\s*(?:,\\s*)?)?(?:investment\\s+)?(?:total\\s+investments(?:\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund)?|common\\s+stock|preferred\\s+stock|warrants?|equity\\s+securities|1st\\s+lien/senior\\s+secured\\s+debt|1st\\s+lien/last-out\\s+unitranche(?:\\s+\\(\\d+\\))?|2nd\\s+lien/senior\\s+secured\\s+debt|unsecured\\s+debt|debt\\s+investments|investments|non-controlled\\s+affiliates|(?:total\\s+)?(?:canada|united\\s+states|united\\s+kingdom|cayman\\s+islands))(?:\\s*(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%)?(?:\\s*,?\\s*(?:total\\s+investments(?:\\s+and\\s+investments\\s+in\\s+affiliated\\s+money\\s+market\\s+fund)?|common\\s+stock|preferred\\s+stock|warrants?|equity\\s+securities|1st\\s+lien/senior\\s+secured\\s+debt|1st\\s+lien/last-out\\s+unitranche(?:\\s+\\(\\d+\\))?|2nd\\s+lien/senior\\s+secured\\s+debt|unsecured\\s+debt|debt\\s+investments|investments|(?:total\\s+)?(?:canada|united\\s+states|united\\s+kingdom|cayman\\s+islands))(?:\\s*(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%)?)*\\s*$|^\\s*(?:-|\\u2013)?\\s*\\d+(?:\\.\\d+)?\\.?%\\s*$",
+    "canonical_strip_re": "(?i)(?:^\\s*(?:I?Investment|nvestment|vestment)?\\s*(?:(?:Debt\\s+Investments|Equity\\s+Securities|1st\\s+Lien/Senior\\s+Secured\\s+Debt|1st\\s+Lien/Last-Out\\s+Unitranche(?:\\s+\\(\\d+\\))?|2nd\\s+Lien/Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investments\\s+in\\s+Affiliated\\s+Money\\s+Market\\s+Fund|Investments|United\\s+States|Canada|United\\s+Kingdom|Cayman\\s+Islands)(?:\\s*(?:-|\\u2013)\\s*\\d+(?:\\.\\d+)?\\.?%,?)?(?:\\s+(?:United\\s+States|Canada|United\\s+Kingdom|Cayman\\s+Islands))?(?:\\s*(?:-|\\u2013)\\s*\\d+(?:\\.\\d+)?\\.?%,?)?\\s*)+|\\bIndustry\\s+|\\s*Interest\\s*Rate\\s*\\d+(?:\\.\\d+)?%?|\\s*Interest\\s*Rate\\b|\\s+Initial\\s+Acquisition\\s+Date\\s+\\d{2}/\\d{2}/\\d{2,4})"
+  },
+  "identifier_format": {
+    "delimiter": " - ",
+    "field_order": [
+      "portfolio_category",
+      "country",
+      "instrument_category",
+      "issuer_name",
+      "industry",
+      "rate_terms",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      " – ",
+      ", "
+    ]
+  },
+  "identifier_parser": {
+    "type": "hierarchical_pct",
+    "issuer_boundary_keywords": [
+      "Industry",
+      "Interest Rate",
+      "Reference Rate",
+      "Maturity",
+      "Floor",
+      "PIK",
+      "Effective Yield",
+      "Initial Acquisition Date"
+    ],
+    "industry_keyword": "Industry",
+    "rate_shorthand": {
+      "S + ": "SOFR",
+      "SN + ": "SOFR",
+      "L + ": "LIBOR",
+      "E + ": "EURIBOR",
+      "P + ": "PRIME"
+    },
+    "country_list": [
+      "United States",
+      "United Kingdom",
+      "Canada",
+      "Cayman Islands",
+      "Australia",
+      "Switzerland",
+      "Luxembourg",
+      "France",
+      "Ireland",
+      "Netherlands",
+      "Germany",
+      "Belgium",
+      "Sweden",
+      "Norway",
+      "Denmark",
+      "Finland",
+      "Spain",
+      "Italy",
+      "Japan",
+      "Singapore",
+      "Hong Kong",
+      "United Arab Emirates"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt instruments including first-lien senior secured loans, last-out unitranche loans, second-lien loans, and unsecured debt.",
+      "detection_rules": {
+        "keywords": [
+          "1st Lien/Senior Secured Debt",
+          "1st Lien/Last-Out Unitranche",
+          "2nd Lien/Senior Secured Debt",
+          "Unsecured Debt",
+          "Senior Secured",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving",
+          "SOFR",
+          "LIBOR",
+          "EURIBOR"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity securities including common stock, preferred stock, and partnership or LLC interests.",
+      "detection_rules": {
+        "keywords": [
+          "Equity Securities",
+          "Common Stock",
+          "Preferred Stock",
+          "Partnership Interest",
+          "Membership Interest",
+          "LLC Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and similar equity-linked instruments.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "goldman_pmmc_ii_percentage_hierarchy",
+      "description": "Identifiers often prepend portfolio-category, country, and instrument buckets with quarter-specific percentage text before issuer-level details.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Investment Debt Investments - <pct> <country> - <pct> <instrument> - <pct> <issuer>",
+      "disposition": "expected"
+    },
+    {
+      "id": "goldman_pmmc_ii_truncated_investment_prefix",
+      "description": "Some XBRL identifiers have truncated investment prefixes such as IInvestment, nvestment, or vestment.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^(IInvestment|nvestment|vestment) Debt Investments",
+      "disposition": "expected"
+    },
+    {
+      "id": "goldman_pmmc_ii_bare_non_controlled_affiliates",
+      "description": "Some Non-Controlled Affiliates rows have issuer names and fair value but no instrument evidence; they remain rollup/review rows rather than wrapper position leaves.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Non-Controlled Affiliates <issuer>",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

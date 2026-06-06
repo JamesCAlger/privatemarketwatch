@@ -1,0 +1,261 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001838126",
+  "entity_name": "HPS Corporate Lending Fund",
+  "version": 3,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "HPS_CORPORATE_LENDING",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        ", inc",
+        " inc.",
+        " inc ",
+        " llc",
+        " corp",
+        " ltd",
+        "l.p.",
+        ", lp",
+        " lp,",
+        " lp ",
+        "holdings",
+        "group",
+        "partners",
+        "gmbh",
+        " plc",
+        "sarl",
+        " sas",
+        "limited",
+        " pty",
+        " ab ",
+        " ab,",
+        " co.",
+        " co,",
+        "b.v.",
+        "s.p.a.",
+        "s.l.u.",
+        " n.v.",
+        "company",
+        "bidco",
+        "topco",
+        "midco",
+        "opco",
+        "buyco",
+        "holdco",
+        "management",
+        "services",
+        "solutions"
+      ],
+      "equity": [
+        "preferred stock",
+        "preferred shares",
+        "preferred units",
+        "common stock",
+        "common units",
+        "ordinary shares",
+        "class a",
+        "class b",
+        "class c",
+        "class d",
+        "llc interest",
+        "lp interest",
+        "l.p. interest",
+        "membership interest",
+        "equity interest",
+        "units"
+      ],
+      "warrant": [
+        "warrant"
+      ],
+      "clo": [
+        "clo",
+        "class e",
+        "class d",
+        "subordinated note"
+      ]
+    },
+    "aggregate_markers": [],
+    "non_private_markers": [
+      "j.p. morgan u.s. government fund"
+    ],
+    "fallback_family_patterns": [
+      {"regex": "(?i)\\bWarrant", "family": "warrant"},
+      {"regex": "(?i)(?:Preferred Stock|Preferred Shares|Preferred Units|Common Stock|Common Units|Class A[- ]\\d*\\s*Units|Class [A-D]\\s+(?:Common )?Units|Ordinary Shares|LLC Interest|LP Interest|L\\.P\\. Interest|Membership Interest|Equity Interest|Class A Common Units)", "family": "equity"},
+      {"regex": "(?i)(?:CLO|Class [A-E]\\d?R?\\d?|Subordinated Note)", "family": "clo"},
+      {"regex": "(?i).", "family": "debt"}
+    ],
+    "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|\\|\\s*Non-Affiliated Issuer|\\|\\s*Affiliated Issuer)\\s*$"
+  },
+  "archetypes": {
+    "warrant": {
+      "description": "Warrants on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants",
+          "B-2 Warrants",
+          "A-2 Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "clo": {
+      "description": "CLO tranche investments: Class E, Class D, subordinated notes in CLO vehicles",
+      "detection_rules": {
+        "keywords": [
+          "CLO",
+          "Subordinated Note",
+          "Class E"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity instruments: preferred/common stock, units, partnership interests, LLC interests",
+      "detection_rules": {
+        "keywords": [
+          "Preferred Stock",
+          "Preferred Shares",
+          "Preferred Units",
+          "Common Stock",
+          "Common Units",
+          "Class A Common Units",
+          "Class A Units",
+          "Class A-1 Units",
+          "Class A-2 Units",
+          "Class A-3 Units",
+          "Class D Units",
+          "Ordinary Shares",
+          "A2 Ordinary Shares",
+          "LLC Interest",
+          "LP Interest",
+          "L.P. Interest",
+          "Membership Interest",
+          "Equity Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "debt": {
+      "description": "Direct lending positions: senior secured, unitranche, mezzanine. HPS uses bare company names without instrument keywords, so entity suffixes serve as catch-all debt markers. Checked last after warrant/CLO/equity.",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Credit",
+          "Revolver",
+          "Senior Note",
+          "Corporate Bond",
+          "Unitranche",
+          ", Inc",
+          " Inc.",
+          " Inc ",
+          " LLC",
+          " Corp",
+          " Ltd",
+          "L.P.",
+          ", LP",
+          " LP,",
+          " LP ",
+          "Holdings",
+          "Group",
+          "Partners",
+          "GmbH",
+          " PLC",
+          "SARL",
+          " SAS",
+          "Limited",
+          " Pty",
+          " AB ",
+          " AB,",
+          " Co.",
+          " Co,",
+          "B.V.",
+          "S.P.A.",
+          "S.L.U.",
+          " N.V.",
+          "Company",
+          "BidCo",
+          "TopCo",
+          "MidCo",
+          "OpCo",
+          "BuyCo",
+          "HoldCo",
+          "Management",
+          "Services",
+          "Solutions"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "HPS_PIPE_FORMAT_TRANSITION",
+      "description": "Pipe-delimited affiliation suffix (| Non-Affiliated Issuer, | Affiliated Issuer) appeared in 2025-12-31. Earlier quarters have no pipe.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\|",
+      "disposition": "expected"
+    },
+    {
+      "id": "HPS_DOUBLE_PIPE",
+      "description": "Some rows have double pipe before affiliation (e.g. 'Club Car Wash Preferred, LLC - Preferred Stock 1 | | Non-Affiliated Issuer')",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\|\\s*\\|",
+      "disposition": "expected"
+    },
+    {
+      "id": "HPS_DOUBLE_SPACE_DASH",
+      "description": "Some CLO/equity identifiers have double space before dash (e.g. 'Octagon 52 Ltd  - Class ER')",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\s{2,}-\\s",
+      "disposition": "expected"
+    },
+    {
+      "id": "HPS_TRAILING_POSITION_NUMBER",
+      "description": "Multiple positions in same issuer distinguished by trailing number (e.g. '123Dentist Inc 1', '123Dentist Inc 2'). Each is a separate loan/tranche.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "\\s+\\d+$",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10,
+      "max_fv_pct": 0.10
+    }
+  }
+}

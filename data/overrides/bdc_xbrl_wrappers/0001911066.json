@@ -1,0 +1,194 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001911066",
+  "entity_name": "Nuveen Churchill Private Capital Income Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "NUVEEN_CHURCHILL_PCIF",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien debt",
+        "first lien term loan",
+        "second lien debt",
+        "subordinated debt",
+        "revolving loan",
+        "delayed draw",
+        "term loan",
+        "debt"
+      ],
+      "equity": [
+        "class a units",
+        "class a common units",
+        "common units",
+        "common equity",
+        "preferred equity",
+        "limited partnership interests",
+        "partnership interests"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total",
+      "investments before cash equivalents",
+      "investments after cash equivalents"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "money market deposit",
+      "government obligations fund",
+      "first american government obligations fund",
+      "blackrock liquidity funds treasury",
+      "blackrock liquidity funds t-fund",
+      "u.s. treasury",
+      "us treasury",
+      "treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|government\\s+obligations\\s+fund|first\\s+american\\s+government\\s+obligations\\s+fund|blackrock\\s+liquidity\\s+funds\\s+(?:treasury|t-fund)|u\\.s\\.\\s+treasury|us\\s+treasury)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)\\b(?:Class\\s+A(?:\\s+Common)?\\s+Units?|Common\\s+Units?|Common\\s+Equity|Preferred\\s+Equity|Limited\\s+Partnership\\s+Interests?|Partnership\\s+Interests?)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:First\\s+Lien\\s+(?:Debt|Term\\s+Loan)|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Revolving\\s+Loan|Delayed\\s+Draw|Term\\s+Loan|Debt)\\b",
+        "family": "debt"
+      }
+    ],
+    "canonical_strip_re": "(?i)\\s*(?:\\||,)\\s*(?:First\\s+Lien\\s+(?:Debt|Term\\s+Loan)|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Revolving\\s+Loan|Preferred\\s+Equity|Common\\s+Equity|Class\\s+A(?:\\s+Common)?\\s+Units?|Common\\s+Units?|Limited\\s+Partnership\\s+Interests?|Partnership\\s+Interests?)",
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "^(.+?),\\s+.+$",
+    "hierarchy_instrument_re": "^.+?,\\s+(.+)$",
+    "hierarchy_condition_extra": "NOT contains(_clean, '|') AND regexp_matches(_clean, ',')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt positions including first lien debt, first lien term loans, delayed draws, revolvers, and subordinated debt.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Debt",
+          "First Lien Term Loan",
+          "Second Lien Debt",
+          "Subordinated Debt",
+          "Revolving Loan",
+          "Delayed Draw",
+          "Term Loan",
+          "Debt"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity and partnership-interest positions.",
+      "detection_rules": {
+        "keywords": [
+          "Class A Units",
+          "Class A Common Units",
+          "Common Units",
+          "Common Equity",
+          "Preferred Equity",
+          "Limited Partnership Interests",
+          "Partnership Interests"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrant positions when explicitly labeled.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "nuveen_churchill_pipe_format_transition",
+      "description": "2025-12-31 and later rows use pipe-delimited issuer and instrument text, for example 'Apex Service Partners, LLC | First Lien Debt'.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\|\\s*(?:First Lien|Subordinated|Revolving|Class A|Partnership)",
+      "disposition": "expected"
+    },
+    {
+      "id": "nuveen_churchill_comma_format",
+      "description": "Older rows generally use comma-delimited issuer and instrument text. The CIK-scoped staging rule extracts issuer from text before the last comma and instrument from text after it.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": ",\\s*(?:First Lien|Subordinated|Revolving|Class A|Partnership)",
+      "disposition": "expected"
+    },
+    {
+      "id": "nuveen_churchill_legacy_class_valuation",
+      "description": "Older filings contain bare 'Class Valuation' rows with economic fields but without issuer/instrument specificity. The wrapper does not force those bare labels into position leaves.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "^Class Valuation(?:\\s+\\d+)?$",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

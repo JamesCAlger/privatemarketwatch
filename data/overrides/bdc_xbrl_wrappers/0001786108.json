@@ -9,7 +9,10 @@
     "prefix_rules": {
       "Portfolio Company Debt Securities": "debt",
       "Portfolio Company Warrant Investments": "warrant",
-      "Portfolio Company Equity Investments": "equity"
+      "Portfolio Company Equity Investments": "equity",
+      "ortfolio Company Debt Securities": "debt",
+      "ortfolio Company Warrant Investments": "warrant",
+      "ortfolio Company Equity Investments": "equity"
     },
     "leaf_markers_by_family": {
       "debt": [
@@ -38,14 +41,20 @@
         "expirationdate",
         "maturity date",
         "maturitydate"
-      ]
+      ],
+      "cash": []
     },
     "aggregate_markers": [
       "sub-total",
       "subtotal",
       "total investments",
       "total debt investments",
-      "total equity investments"
+      "total equity investments",
+      "portfolio company investment in securities",
+      "portfolio investments and cash and cash equivalents",
+      "control and affiliate investments",
+      "affiliate investments",
+      "control investments"
     ],
     "non_private_markers": [
       "cash",
@@ -55,6 +64,24 @@
       "u.s. treasury",
       "us treasury",
       "goldman sachs financial square"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*Portfolio\\s+Company\\s+Cash\\s+and\\s+Cash\\s+Equivalents\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*Portfolio\\s+Company\\s+(?:Investment\\s+in\\s+Securities|Portfolio\\s+Investments\\s+and\\s+Cash\\s+and\\s+Cash\\s+Equivalents)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Sub[-\\s]*total|Total)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Affiliate|Control)(?:\\s+and\\s+Affiliate)?\\s+Investments\\d*(?:\\s+.+)?\\s*$",
+        "family": "equity"
+      }
     ]
   },
   "identifier_format": {
@@ -156,7 +183,7 @@
       "id": "TRINITY_CONTROL_SUBTOTAL",
       "description": "Control Investments entity-level subtotal rows that duplicate the sum of underlying Portfolio Company positions",
       "first_seen_quarter": "2023-03-31",
-      "detection_pattern": "^Control Investments( .|$)",
+      "detection_pattern": "^Control Investments(?: .|$)",
       "disposition": "expected"
     },
     {
@@ -170,7 +197,7 @@
       "id": "TRINITY_REFERENCE_RATE",
       "description": "Standalone reference rate rows (SOFR, Prime, CORRA, Bank of England Base Rate) with no fair value - metadata only",
       "first_seen_quarter": "2023-03-31",
-      "detection_pattern": "^(SOFR|Prime Rate|CORRA|Bank of England)",
+      "detection_pattern": "^(?:SOFR|Prime Rate|CORRA|Bank of England)",
       "disposition": "expected"
     },
     {
@@ -198,21 +225,21 @@
       "id": "TRINITY_SECTOR_SUBTOTAL",
       "description": "Sector-level subtotal rows (e.g., \"Portfolio Company Debt Securities- United States Consumer Products & Services\" without position detail)",
       "first_seen_quarter": "2023-03-31",
-      "detection_pattern": "^Portfolio Company (Debt Securities|Warrant Investments|Equity Investments)-\\s+(United States|Canada|Europe|United Sates)(?:\\s+[A-Z][A-Za-z &(),/\"]+)?$",
+      "detection_pattern": "^Portfolio Company (?:Debt Securities|Warrant Investments|Equity Investments)-\\s+(?:United States|Canada|Europe|United Sates)(?:\\s+[A-Z][A-Za-z &(),/\"]+)?$",
       "disposition": "expected"
     },
     {
       "id": "TRINITY_ISSUER_TOTAL",
       "description": "Issuer-level total rows (e.g., \"Total Bestow, Inc.\") appearing in early quarters",
       "first_seen_quarter": "2023-03-31",
-      "detection_pattern": "^(Total |Sub-total|Portfolio Company (Debt Securities|Warrant Investments|Equity Investments).*Total )",
+      "detection_pattern": "^(?:Total |Sub-total|Portfolio Company (?:Debt Securities|Warrant Investments|Equity Investments).*Total )",
       "disposition": "expected"
     },
     {
       "id": "TRINITY_GRAND_TOTAL",
       "description": "Grand total rows: Investment in Securities, Portfolio Investments and Cash, Portfolio Company Debt Securities (bare)",
       "first_seen_quarter": "2023-03-31",
-      "detection_pattern": "^Portfolio Company (Investment in Securities|Portfolio Investments|Cash|Debt Securities$)",
+      "detection_pattern": "^Portfolio Company (?:Investment in Securities|Portfolio Investments|Cash|Debt Securities$)",
       "disposition": "expected"
     },
     {
@@ -247,7 +274,7 @@
       "id": "TRINITY_TRUNCATED_PREFIX",
       "description": "Rows with truncated or missing Portfolio Company prefix (e.g., ortfolio, Investments-)",
       "first_seen_quarter": "2023-06-30",
-      "detection_pattern": "^(ortfolio Company|Investments-)",
+      "detection_pattern": "^(?:ortfolio Company|Investments-)",
       "disposition": "expected"
     },
     {

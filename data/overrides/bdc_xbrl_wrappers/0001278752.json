@@ -1,0 +1,221 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001278752",
+  "entity_name": "MidCap Financial Investment Corp",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "MIDCAP_FINANCIAL",
+    "prefix_rules": {
+      "Non-Controlled/Non-Affiliated Investments": "mixed",
+      "Controlled Investments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "mixed": [
+        "investment type",
+        "interest rate",
+        "maturity date",
+        "sofr",
+        "libor",
+        "euribor"
+      ],
+      "debt": [
+        "investment type",
+        "interest rate",
+        "maturity date",
+        "maturity",
+        "sofr",
+        "libor",
+        "euribor",
+        "first lien secured debt",
+        "second lien secured debt",
+        "secured debt",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "corporate bond",
+        "promissory note"
+      ],
+      "equity": [
+        "common equity",
+        "common equity / interest",
+        "common stock",
+        "preferred equity",
+        "preferred stock",
+        "membership interest",
+        "membership interests",
+        "common equity - membership",
+        "common equity - common stock"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "other": []
+    },
+    "aggregate_markers": [
+      "investments after cash equivalents",
+      "investments before cash equivalents",
+      "total investments after cash equivalents",
+      "total investments before cash equivalents",
+      "total investments",
+      "total ",
+      "non-controlled/non-affiliated investments,",
+      "controlled investments,",
+      "first lien - secured debt",
+      "second lien - secured debt",
+      "common equity/interests",
+      "preferred equity",
+      "structured products and other"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "money market",
+      "u.s. government",
+      "us government",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^(?:Investments|Total)\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^(?:First|Second)\\s+Lien\\s+-\\s+Secured\\s+Debt$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^Structured\\s+Products\\s+and\\s+Other$",
+        "family": "other"
+      },
+      {
+        "regex": "(?i)(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Secured\\s+Debt\\s+-\\s+Promissory\\s+Note|Term\\s+Loan|Delayed\\s+Draw|Revolv(?:er|ing)|Corporate\\s+Bond|Promissory\\s+Note|\\bSOFR\\+|\\bLIBOR\\+|\\bEURIBOR\\+",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)Common\\s+Equity|Common\\s+Stock|Preferred\\s+Equity|Preferred\\s+Stock|Membership\\s+Interests?|Common\\s+Equity\\s*/\\s*Interest",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "canonical_strip_re": "\\s+(?:Interest\\s+Rate\\s+)?(?:SOFR|LIBOR|EURIBOR)\\+.*$",
+    "category_marker_re": "^(?:Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Total\\s+.+|(?:Non-Controlled/Non-Affiliated|Controlled)\\s+Investments(?:,.*)?|(?:First|Second)\\s+Lien\\s+-\\s+Secured\\s+Debt|Common\\s+Equity/Interests|Preferred\\s+Equity|Structured\\s+Products\\s+and\\s+Other)$"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description",
+      "rate_terms",
+      "maturity_date"
+    ],
+    "alternate_delimiters": [
+      " | ",
+      ","
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "MidCap debt positions with explicit secured debt, loan, revolver, delayed draw, bond, note, rate, or maturity evidence",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Secured Debt",
+          "Second Lien Secured Debt",
+          "Secured Debt",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Revolving",
+          "Corporate Bond",
+          "Promissory Note",
+          "SOFR",
+          "Maturity Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Common/preferred equity, stock, and membership-interest positions",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Common Stock",
+          "Preferred Equity",
+          "Preferred Stock",
+          "Membership Interest",
+          "Membership Interests",
+          "Common Equity / Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and other warrant-like equity instruments",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "other": {
+      "description": "Explicit structured-products/other category rows retained as non-leaf diagnostics unless separately evidenced",
+      "detection_rules": {
+        "keywords": [
+          "Structured Products and Other"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    },
+    "rate_sanity": {
+      "min_pct": 1.0,
+      "max_pct": 30.0
+    }
+  }
+}

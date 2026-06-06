@@ -1,0 +1,199 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001885968",
+  "entity_name": "T Series Middle Market Loan Fund LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "T_SERIES_BDC",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien debt",
+        "second lien debt",
+        "subordinated debt",
+        "unsecured debt",
+        "other debt",
+        "reference rate",
+        "interest rate",
+        "maturity date",
+        "sofr",
+        "pik"
+      ],
+      "equity": [
+        "common equity",
+        "preferred equity",
+        "equity acquisition date",
+        "acquisition date",
+        "warrant"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash",
+      "cash equivalents",
+      "money market",
+      "j.p. morgan us government money market fund",
+      "j.p. morgan us govt money market fund",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Cash|J\\.P\\.\\s*Morgan\\s+US\\s+(?:Government|Govt)\\s+Money\\s+Market\\s+Fund(?:\\s+-\\s+Institutional\\s+Shares)?)\\s*$",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:Deb)?Debt\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated\\s+.*\\b(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Investments-non-controlled/non-affiliated\\s+Debt\\s+Investments\\s+.*\\b(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Equity\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated\\s+.*\\b(?:Common\\s+Equity|Preferred\\s+Equity|Warrant|Equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*Investments-non-controlled/non-affiliated\\s+Equity\\s+Investments\\s+.*\\b(?:Common\\s+Equity|Preferred\\s+Equity|Warrant|Equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*Total\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Investments)\\b",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Investments)|(?:Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated\\s+(?:MSD_INDUSTRY_LABELS))\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\b(?:Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%|Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4})"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "category",
+      "affiliation",
+      "industry",
+      "issuer_name",
+      "instrument_description"
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Investment\\s+)?(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrant|Equity)\\b",
+    "hierarchy_instrument_re": "(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+(?:MSD_INDUSTRY_LABELS)\\s+.+?\\s+(?:Investment\\s+)?((?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Subordinated\\s+Debt|Unsecured\\s+Debt|Other\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrant|Equity)\\b.*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:(?:Investment,\\s*Identifier\\s*\\[Axis\\]:\\s*)?(?:(?:Deb)?Debt|Equity)\\s+Investments\\s*-\\s*non-controlled\\s*/+\\s*(?:non\\s*-?\\s*)?affiliated|Investments-non-controlled/non-affiliated\\s+(?:Debt|Equity)\\s+Investments)\\s+')",
+    "extra_industry_labels": [
+      "Air Freight & Logistics",
+      "Automobile Components",
+      "Automobiles",
+      "Building Products",
+      "Commercial Services & Supplies",
+      "Construction & Engineering",
+      "Consumer Staples Distribution & Retail",
+      "Diversified Consumer Services",
+      "Electronic Equipment, Instruments & Components",
+      "Electrical Equipment",
+      "Financial",
+      "Financial Services",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Health Care Providers & Services",
+      "Health Care Technology",
+      "Insurance Services",
+      "Interactive Media & Services",
+      "IT Services",
+      "Life Sciences Tools & Services",
+      "Multi-Utilities",
+      "Professional Services",
+      "Real Estate Management & Development",
+      "Transportation",
+      "Wireless Telecommunication Services"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "T Series first-lien, second-lien, subordinated, unsecured, and other debt positions in the debt investments hierarchy.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Debt",
+          "Second Lien Debt",
+          "Subordinated Debt",
+          "Unsecured Debt",
+          "Other Debt",
+          "Reference Rate and Spread"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "T Series common equity, preferred equity, and warrant positions in the equity investments hierarchy.",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Preferred Equity",
+          "Warrant",
+          "Acquisition Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "T_SERIES_AFFILIATION_SPELLING_DRIFT",
+      "description": "The hierarchy uses non-controlled/non-affiliated, non-controlled/non - affiliated, non-controlled//non-affiliated, and non-controlled/affiliated spelling variants.",
+      "first_seen_quarter": "2025-09-30",
+      "detection_pattern": "Debt Investments - non-controlled/<variant> <industry> <issuer> <instrument>",
+      "disposition": "expected"
+    },
+    {
+      "id": "T_SERIES_PREFIX_CORRUPTION",
+      "description": "Some rows have a duplicated leading prefix such as DebDebt Investments; the wrapper handles the prefix without changing the position identity.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "DebDebt Investments -",
+      "disposition": "expected"
+    },
+    {
+      "id": "T_SERIES_EARLY_FLAT_INVESTMENTS_PREFIX",
+      "description": "Earlier rows may use a flattened Investments-non-controlled/non-affiliated Debt Investments hierarchy prefix.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Investments-non-controlled/non-affiliated Debt Investments",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

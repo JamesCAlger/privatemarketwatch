@@ -2,8 +2,8 @@
   "description": "Unlisted active BDCs with XBRL filing data. Auto-generated reference for the wrapper skill.",
   "generated": "2026-06-03",
   "total_count": 129,
-  "with_wrapper": 10,
-  "without_wrapper": 119,
+  "with_wrapper": 27,
+  "without_wrapper": 102,
   "with_holdings_data": 123,
   "without_holdings_data": 6,
   "entries": [
@@ -11,6 +11,14 @@
       "cik": "0001950976",
       "entity_name": "26North BDC, Inc.",
       "wrapper_status": "none",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 1099,
       "holdings_quarters": 9,
@@ -20,7 +28,15 @@
     {
       "cik": "0001998387",
       "entity_name": "5C Lending Partners Corp.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 218,
       "holdings_quarters": 6,
@@ -30,9 +46,18 @@
     {
       "cik": "0001634452",
       "entity_name": "AB Private Credit Investors Corp",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "identifier_format",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
-      "holdings_rows": 11755,
+      "holdings_rows": 11756,
       "holdings_quarters": 11,
       "holdings_latest": "2026-03-31",
       "holdings_earliest": "2023-09-30"
@@ -40,7 +65,7 @@
     {
       "cik": "0001982701",
       "entity_name": "AB Private Lending Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
       "has_holdings_data": true,
       "holdings_rows": 3507,
       "holdings_quarters": 8,
@@ -49,8 +74,16 @@
     },
     {
       "cik": "0001913724",
-      "entity_name": "AG Twin Brook Capital Income Fund",
-      "wrapper_status": "none",
+      "entity_name": "TPG Twin Brook Capital Income Fund",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 13399,
       "holdings_quarters": 13,
@@ -60,7 +93,7 @@
     {
       "cik": "0002011498",
       "entity_name": "AGL Private Credit Income Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
       "has_holdings_data": true,
       "holdings_rows": 821,
       "holdings_quarters": 6,
@@ -100,7 +133,15 @@
     {
       "cik": "0001993402",
       "entity_name": "Antares Strategic Credit Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 15299,
       "holdings_quarters": 9,
@@ -120,22 +161,38 @@
     {
       "cik": "0001837532",
       "entity_name": "Apollo Debt Solutions BDC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
       "has_holdings_data": true,
       "holdings_rows": 14567,
       "holdings_quarters": 13,
       "holdings_latest": "2026-03-31",
-      "holdings_earliest": "2023-03-31"
+      "holdings_earliest": "2023-03-31",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "default"
     },
     {
       "cik": "0002052152",
       "entity_name": "Apollo Origination II (L) Capital Trust",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
       "has_holdings_data": true,
       "holdings_rows": 785,
       "holdings_quarters": 5,
       "holdings_latest": "2026-03-31",
-      "holdings_earliest": "2025-03-31"
+      "holdings_earliest": "2025-03-31",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract"
     },
     {
       "cik": "0002052153",
@@ -150,7 +207,14 @@
     {
       "cik": "0002083477",
       "entity_name": "APS BDC, LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": null,
       "has_holdings_data": true,
       "holdings_rows": 131,
       "holdings_quarters": 1,
@@ -160,7 +224,13 @@
     {
       "cik": "0002031750",
       "entity_name": "Ares Core Infrastructure Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 364,
       "holdings_quarters": 7,
@@ -186,7 +256,14 @@
     {
       "cik": "0001633858",
       "entity_name": "Audax Credit BDC Inc.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 10499,
       "holdings_quarters": 13,
@@ -206,7 +283,15 @@
     {
       "cik": "0001899017",
       "entity_name": "Bain Capital Private Credit",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "prefix_strip",
       "has_holdings_data": true,
       "holdings_rows": 3597,
       "holdings_quarters": 12,
@@ -226,7 +311,13 @@
     {
       "cik": "0001859919",
       "entity_name": "Barings Private Credit LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 15807,
       "holdings_quarters": 13,
@@ -266,7 +357,15 @@
     {
       "cik": "0001902649",
       "entity_name": "BlackRock Private Credit Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 7952,
       "holdings_quarters": 13,
@@ -291,7 +390,14 @@
     {
       "cik": "0002049733",
       "entity_name": "Blackstone Private Real Estate Credit & Income Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": null,
       "has_holdings_data": true,
       "holdings_rows": 495,
       "holdings_quarters": 4,
@@ -384,7 +490,15 @@
     {
       "cik": "0001899996",
       "entity_name": "Fidelity Private Credit Central Fund LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_leaf_guard",
       "has_holdings_data": true,
       "holdings_rows": 5984,
       "holdings_quarters": 12,
@@ -422,7 +536,15 @@
     {
       "cik": "0002012139",
       "entity_name": "Fortress Private Lending Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 576,
       "holdings_quarters": 4,
@@ -449,7 +571,14 @@
     {
       "cik": "0001772704",
       "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "identifier_parser",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 7197,
       "holdings_quarters": 13,
@@ -469,7 +598,13 @@
     {
       "cik": "0001901612",
       "entity_name": "Golub Capital BDC 4 LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 11357,
       "holdings_quarters": 13,
@@ -499,7 +634,13 @@
     {
       "cik": "0001930087",
       "entity_name": "Golub Capital Private Credit Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 11178,
       "holdings_quarters": 12,
@@ -539,9 +680,15 @@
     {
       "cik": "0001989817",
       "entity_name": "HPS Corporate Capital Solutions Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
-      "holdings_rows": 2853,
+      "holdings_rows": 2862,
       "holdings_quarters": 8,
       "holdings_latest": "2026-03-31",
       "holdings_earliest": "2024-06-30"
@@ -549,7 +696,13 @@
     {
       "cik": "0001838126",
       "entity_name": "HPS Corporate Lending Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 3,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 14409,
       "holdings_quarters": 13,
@@ -619,7 +772,15 @@
     {
       "cik": "0001975736",
       "entity_name": "KKR FS Income Trust Select",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 3968,
       "holdings_quarters": 9,
@@ -709,7 +870,13 @@
     {
       "cik": "0001742313",
       "entity_name": "Monroe Capital Income Plus Corp",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 17479,
       "holdings_quarters": 13,
@@ -766,7 +933,13 @@
     {
       "cik": "0001925531",
       "entity_name": "New Mountain Guardian IV BDC L.L.C.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 6219,
       "holdings_quarters": 13,
@@ -806,9 +979,15 @@
     {
       "cik": "0001766037",
       "entity_name": "NMF SLF I, Inc.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
-      "holdings_rows": 8853,
+      "holdings_rows": 8860,
       "holdings_quarters": 13,
       "holdings_latest": "2026-03-31",
       "holdings_earliest": "2023-03-31"
@@ -826,7 +1005,15 @@
     {
       "cik": "0001851322",
       "entity_name": "North Haven Private Income Fund LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 14984,
       "holdings_quarters": 13,
@@ -856,7 +1043,13 @@
     {
       "cik": "0001872371",
       "entity_name": "Oaktree Strategic Credit Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 7350,
       "holdings_quarters": 13,
@@ -886,7 +1079,7 @@
     {
       "cik": "0001965934",
       "entity_name": "Overland Advantage",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
       "has_holdings_data": true,
       "holdings_rows": 855,
       "holdings_quarters": 8,
@@ -922,7 +1115,13 @@
     {
       "cik": "0001869453",
       "entity_name": "Owl Rock Technology Income Corp.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 7324,
       "holdings_quarters": 13,
@@ -1120,7 +1319,15 @@
     {
       "cik": "0001950803",
       "entity_name": "Stepstone Private Credit Fund LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "prefix_strip",
       "has_holdings_data": true,
       "holdings_rows": 13358,
       "holdings_quarters": 11,
@@ -1130,7 +1337,13 @@
     {
       "cik": "0001825384",
       "entity_name": "Stone Point Capital Credit LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 5610,
       "holdings_quarters": 13,
@@ -1156,7 +1369,15 @@
     {
       "cik": "0001885968",
       "entity_name": "T Series Middle Market Loan Fund LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 9707,
       "holdings_quarters": 13,
@@ -1176,7 +1397,15 @@
     {
       "cik": "0001702510",
       "entity_name": "TCG BDC II, Inc.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 4843,
       "holdings_quarters": 13,
@@ -1288,7 +1517,15 @@
     {
       "cik": "0001919369",
       "entity_name": "VISTA CREDIT STRATEGIC LENDING CORP.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 723,
       "holdings_quarters": 10,

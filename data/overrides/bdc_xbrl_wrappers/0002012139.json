@@ -1,0 +1,241 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002012139",
+  "entity_name": "Fortress Private Lending Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "FORTRESS_PRIVATE_LENDING",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment first lien",
+        "investment type first lien",
+        "first lien",
+        "term loan",
+        "delayed draw",
+        "revolving credit facility",
+        "reference rate and spread",
+        "interest rate",
+        "maturity date",
+        "sofr",
+        "euribor"
+      ],
+      "equity": [
+        "class a units",
+        "common equity",
+        "preferred equity",
+        "common stock",
+        "preferred stock",
+        "equity investments",
+        "equity interest"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total",
+      "investments after cash equivalents",
+      "investments before cash equivalents"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "government fund",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^(?!.*\\binterest\\s+rate\\b).*(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|government\\s+fund|u\\.s\\.\\s+treasury|us\\s+treasury)",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:total\\s+investments|total\\s+debt\\s+investments|total\\s+equity\\s+investments|investments\\s+(?:after|before)\\s+cash\\s+equivalents|subtotal|sub-total)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\bwarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)\\b(?:class\\s+a\\s+units|common\\s+equity|preferred\\s+equity|common\\s+stock|preferred\\s+stock|equity\\s+interest)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:first\\s+lien|term\\s+loan|delayed\\s+draw|revolving\\s+credit\\s+facility|reference\\s+rate\\s+and\\s+spread|SOFR|EURIBOR|interest\\s+rate|maturity\\s+date)\\b",
+        "family": "debt"
+      }
+    ],
+    "canonical_strip_re": "(?i)(?:^\\s*Investments\\s+Non-controlled,\\s+(?:Non-affiliated\\s+Investments|non-affiliated\\s+investments|Affiliated\\s+investments)\\s+(?:Debt|Equity)\\s+investments\\s+(?:Aerospace\\s+&\\s+Defense|Automobile\\s+Components|Automobilers\\s+&\\s+Components|Building\\s+Products|Capital\\s+Goods|Capital\\s+Markets|Chemicals|Commercial\\s+&\\s+Professional\\s+Services|Commercial\\s+Services\\s+&\\s+Supplies|Construction\\s+&\\s+Engineering|Consumer\\s+Discretionary\\s+Distribution\\s+&\\s+Retail|Consumer\\s+Durables\\s+&\\s+Apparel|Consumer\\s+Services|Containers\\s+&\\s+Packaging|Diversified\\s+Telecommunication\\s+Services|Energy|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Food,\\s+Beverage\\s+&\\s+Tobacco|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Services|Healthcare|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+&\\s+Personal\\s+Products|Household\\s+Products|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|Insurance|IT\\s+Services|Leisure\\s+Products|Machinery|Materials|Oil,\\s+Gas\\s+&\\s+Consumable\\s+Fuels|Pharmaceuticals,\\s+Biotechnology\\s+&\\s+Life\\s+Sciences|Software\\s+&\\s+Services|Software|Specialty\\s+Retail|Transportation|Utilities)\\s+|\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?)",
+    "category_marker_re": "(?i)^\\s*(?:total\\s+)?(?:investments|debt\\s+investments|equity\\s+investments|subtotal|sub-total|investments\\s+(?:after|before)\\s+cash\\s+equivalents)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " Investment ",
+    "field_order": [
+      "hierarchy",
+      "issuer_name",
+      "instrument_description",
+      "rate",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      " Investment Type ",
+      " - ",
+      ", "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Investments\\s+Non-controlled,\\s+(?:Non-affiliated\\s+Investments|non-affiliated\\s+investments|Affiliated\\s+investments)\\s+(?:Debt|Equity)\\s+investments\\s+(?:(?:MSD_INDUSTRY_LABELS)\\s+)?)?)(.+?)\\s+Investment(?:\\s+Type)?\\s+",
+    "hierarchy_instrument_re": "(?i)\\s+Investment(?:\\s+Type)?\\s+(.+?)(?:\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+|\\s+Interest\\s+Rate\\s+|\\s+Maturity\\s+Date\\s+|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:^\\s*Investments\\s+Non-controlled,\\s+(?:Non-affiliated|non-affiliated|Affiliated)|\\s+Investment\\s+Type\\s+|\\s+Investment\\s+(?:First\\s+Lien|Class\\s+A|Warrants?))')",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Automobile Components",
+      "Automobilers & Components",
+      "Building Products",
+      "Capital Goods",
+      "Capital Markets",
+      "Chemicals",
+      "Commercial & Professional Services",
+      "Commercial Services & Supplies",
+      "Construction & Engineering",
+      "Consumer Discretionary Distribution & Retail",
+      "Consumer Durables & Apparel",
+      "Consumer Services",
+      "Containers & Packaging",
+      "Diversified Telecommunication Services",
+      "Energy",
+      "Equity Real Estate Investment Trusts (REITs)",
+      "Financial Services",
+      "Food Products",
+      "Food, Beverage & Tobacco",
+      "Ground Transportation",
+      "Health Care Equipment & Services",
+      "Healthcare",
+      "Hotels, Restaurants & Leisure",
+      "Household & Personal Products",
+      "Household Products",
+      "Independent Power & Renewable Electricity Producers",
+      "Insurance",
+      "IT Services",
+      "Leisure Products",
+      "Machinery",
+      "Materials",
+      "Oil, Gas & Consumable Fuels",
+      "Pharmaceuticals, Biotechnology & Life Sciences",
+      "Software",
+      "Software & Services",
+      "Specialty Retail",
+      "Transportation",
+      "Utilities"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt instruments including first-lien term loans, delayed draws, and revolving credit facilities with reference spread, current coupon, and maturity terms.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Credit Facility",
+          "SOFR",
+          "EURIBOR"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity investments including class units, common equity, preferred equity, and equity interests.",
+      "detection_rules": {
+        "keywords": [
+          "Class A Units",
+          "Common Equity",
+          "Preferred Equity",
+          "Common Stock",
+          "Preferred Stock",
+          "Equity Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and similar equity-linked instruments.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "fortress_affiliation_hierarchy_rows",
+      "description": "Most identifiers prepend affiliation, asset class, and industry before issuer and instrument details.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "Investments Non-controlled, <affiliation> <asset class> investments <industry> <issuer> Investment <instrument>",
+      "disposition": "expected"
+    },
+    {
+      "id": "fortress_investment_type_rows",
+      "description": "Some 2026 rows omit the affiliation hierarchy and use issuer Investment Type instrument labels.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "<issuer> Investment Type <instrument>",
+      "disposition": "expected"
+    },
+    {
+      "id": "fortress_bare_issuer_rows",
+      "description": "A few bare issuer identifiers have no instrument evidence and remain unclassified for review rather than being promoted to position leaves.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "<issuer name>",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

@@ -1,0 +1,314 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001905824",
+  "entity_name": "PIMCO Capital Solutions BDC Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "PIMCO_CAPITAL_SOLUTIONS",
+    "prefix_rules": {
+      "Debt Investments": "debt",
+      "Debt Investment": "debt",
+      "Corporate Bonds": "debt",
+      "Common Stock": "equity",
+      "Common Stocks": "equity",
+      "Preferred Stock": "equity",
+      "Warrants": "warrant",
+      "Short-Term Investments": "debt",
+      "Short-Term Investmentsv": "debt",
+      "Investments Non-Controlled Non Affiliated Investments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "sofr",
+        "libor",
+        "euribor",
+        "interest rate",
+        "maturity",
+        "term loan",
+        "revolving",
+        "delayed draw",
+        "initial term",
+        "incremental term",
+        "closing date term",
+        "facility b loan",
+        "filo term",
+        "discount note",
+        "144a",
+        "n/a"
+      ],
+      "equity": [
+        "common stock",
+        "common stocks",
+        "preferred stock",
+        "class s units",
+        "class a units",
+        "series a",
+        "partnership interest",
+        "llc interest"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total non-controlled non-affiliated investments",
+      "total debt investments",
+      "total first lien senior secured",
+      "total first lien secured",
+      "total second lien senior secured",
+      "total second lien secured",
+      "total senior unsecured",
+      "total corporate bonds",
+      "total short-term investments",
+      "total warrants",
+      "total common stock",
+      "total common stocks",
+      "total u.s. treasury bills",
+      "total technology",
+      "total healthcare",
+      "total entertainment",
+      "total retailers",
+      "total automotive",
+      "total consumer services",
+      "total financial other",
+      "total industrial other",
+      "total insurance life",
+      "total packaging",
+      "total pharmaceuticals",
+      "total food and beverage",
+      "total gaming",
+      "total chemicals",
+      "total consumer products",
+      "total broadcasting",
+      "total brokerage",
+      "total building materials",
+      "total it services",
+      "total wireless",
+      "total aviation services",
+      "total diversified manufacturing",
+      "total energy"
+    ],
+    "non_private_markers": [
+      "u.s. treasury bill",
+      "u.s. treasury bills",
+      "federal home loan bank",
+      "discount note"
+    ],
+    "fallback_family_patterns": [
+      {"regex": "(?i)one month sofr|three month sofr|six month sofr|one month euribor|three month euribor|six month euribor", "family": "metadata"},
+      {"regex": "(?i)^total ", "family": "aggregate"}
+    ],
+    "canonical_strip_re": "\\| [\\d.]+ ?%",
+    "category_marker_re": "(?i)^(Debt Investments \\| (First Lien Senior Secured|Second Lien Senior Secured|Senior Unsecured|Corporate Bonds|Short-Term Investments|Common Stocks|Warrants) \\| (?:Total |[A-Z][A-Za-z &,/]+$))"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "category",
+      "lien_type",
+      "industry",
+      "issuer_instrument",
+      "reference_rate",
+      "interest_rate",
+      "maturity_date"
+    ],
+    "alternate_delimiters": ["|"]
+  },
+  "staging": {
+    "strategy": "prefix_strip",
+    "hierarchy_prefix_re": "^(?:Debt Investments?|Corporate Bonds|Common Stocks?|Preferred Stock|Warrants|Short-Term Investments(?:v)?|Investments Non-Controlled Non Affiliated Investments)\\s*\\|\\s*(?:First Lie(?:n )?Senior Secured|Second Lien Senior Secured|Senior Unsecured|Corporate Bonds|Short-Term Investments|Common Stocks?|Warrants|U\\.S\\. Government Agencies)\\s*\\|\\s*"
+  },
+  "archetypes": {
+    "senior_secured_debt": {
+      "description": "First and second lien senior secured term loans, revolvers, delayed draw facilities",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Senior Secured",
+          "Second Lien Senior Secured",
+          "Term Loan",
+          "Revolving Credit",
+          "Delayed Draw",
+          "FILO Term"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 25.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "unsecured_debt": {
+      "description": "Senior unsecured debt and PIK notes",
+      "detection_rules": {
+        "keywords": [
+          "Senior Unsecured"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "corporate_bond": {
+      "description": "Corporate bonds (e.g. Rivian 144A)",
+      "detection_rules": {
+        "keywords": [
+          "Corporate Bond",
+          "144A"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 1.0,
+          "max": 25.0
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Common stock, preferred stock, and LLC/partnership interests",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Stocks",
+          "Preferred Stock",
+          "Class S Units",
+          "Series A"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants on equity securities",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        },
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -100000000,
+          "max": 100000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "fv_reconciliation": {
+      "source_field": "investments_at_fair_value",
+      "tolerance_pct": 0.05,
+      "tolerance_abs": 5000000
+    },
+    "position_count_qoq": {
+      "max_increase_pct": 2.0,
+      "max_decrease_pct": 0.5
+    },
+    "rate_sanity": {
+      "min_pct": 1.0,
+      "max_pct": 25.0
+    },
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "PIMCO_TRUNCATED_LIEN",
+      "description": "First Lien prefix sometimes truncated to 'First Lie' (missing 'n') in 2026-Q1 XBRL",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "First Lie(?!n)",
+      "disposition": "expected"
+    },
+    {
+      "id": "PIMCO_NO_SPACE_PIPE",
+      "description": "Some quarters use pipe without leading space in sub-category (e.g., 'Debt Investments |First Lien')",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "\\|[A-Z]",
+      "disposition": "expected"
+    },
+    {
+      "id": "PIMCO_TYPO_SHORT_TERM",
+      "description": "Short-Term Investmentsv with trailing 'v' typo in 2025-09-30",
+      "first_seen_quarter": "2025-09-30",
+      "detection_pattern": "Short-Term Investmentsv",
+      "disposition": "expected"
+    },
+    {
+      "id": "PIMCO_WARRANT_MISCLASSIFIED_SHORT_TERM",
+      "description": "Some 2025-09-30 rows appear under 'Short-Term Investments | Warrants' but contain U.S. Treasury Bills",
+      "first_seen_quarter": "2025-09-30",
+      "detection_pattern": "Short-Term Investments \\| Warrants \\| U\\.S\\. Treasury Bill",
+      "disposition": "warn"
+    },
+    {
+      "id": "PIMCO_PIK_RATE_IN_IDENTIFIER",
+      "description": "PIK rate embedded in identifier text (e.g., '17.000% (7.000% PIK)') for K2 and GCOM positions",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "PIK",
+      "disposition": "expected"
+    },
+    {
+      "id": "PIMCO_REFERENCE_RATE_ROWS",
+      "description": "Standalone reference rate rows (One Month SOFR, Three Month EURIBOR, etc.) with no FV - metadata only",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "(?i)^(One|Three|Six) Month (SOFR|EURIBOR)$",
+      "disposition": "expected"
+    },
+    {
+      "id": "PIMCO_DUAL_PERIOD_ROWS",
+      "description": "Many identifiers appear twice per quarter with slightly different rates/FV - likely comparative period XBRL facts",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "",
+      "disposition": "expected"
+    },
+    {
+      "id": "PIMCO_DEBT_WRAPPER_EQUITY",
+      "description": "Some equity/warrant rows wrapped under 'Debt Investments |Common Stocks' or 'Debt Investments |Warrants' prefix",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "Debt Investments \\|\\s*(Common Stocks?|Warrants)",
+      "disposition": "expected"
+    }
+  ]
+}

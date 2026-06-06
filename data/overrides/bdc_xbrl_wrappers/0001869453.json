@@ -1,0 +1,207 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001869453",
+  "entity_name": "Blue Owl Technology Income Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "BLUE_OWL_TECH_INCOME",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien senior secured",
+        "second lien senior secured",
+        "senior secured loan",
+        "delayed draw term loan",
+        "revolving loan",
+        "multi-currency revolving loan",
+        "revolver",
+        "term loan",
+        "multi-draw term loan",
+        "unsecured notes",
+        "subordinated floating rate notes",
+        "floating rate notes"
+      ],
+      "equity": [
+        "common units",
+        "class a units",
+        "class b units",
+        "class a interest",
+        "preferred stock",
+        "preferred shares",
+        "preferred equity",
+        "preferred units",
+        "common stock",
+        "common equity",
+        "lp interest",
+        "l.p. interest",
+        "llc interest",
+        "limited partner interest",
+        "specialty finance equity investment"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total portfolio company commitments",
+      "total non-controlled/non-affiliated - debt commitments",
+      "total non-controlled/non-affiliated - equity commitments",
+      "total non-controlled/affiliated - equity commitments",
+      "abf - commercial real estate",
+      "abf - leasing",
+      "abf - specialty finance"
+    ],
+    "non_private_markers": [
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government fund",
+      "cash equivalents"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:first\\s+lien\\s+senior\\s+secured\\s+(?:eur\\s+|gbp\\s+|nok\\s+)?(?:(?:delayed\\s+draw|multi[-\\s]draw)\\s+term\\s+)?(?:loan\\s*[a-z0-9]*|(?:multi[-\\s]currency\\s+)?revo(?:lv|v)ing\\s+loan|revolver)|second\\s+lien\\s+senior\\s+secured\\s+(?:term\\s+)?loan\\s*[a-z0-9]*|senior\\s+secured\\s+(?:loan\\s*[a-z0-9]*|revolving\\s+loan)|unsecured\\s+notes?|subordinated\\s+floating\\s+rate\\s+notes?)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\b(?:common\\s+units?|class\\s+[a-z]\\s+(?:units?|interest)|preferred\\s+(?:stock|shares|equity|units?)|common\\s+(?:stock|equity)|l\\.?p\\.?\\s+interest|l\\.?l\\.?c\\.?\\s+interest|limited\\s+partner\\s+interest|specialty\\s+finance\\s+equity\\s+investment)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bwarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)^(?:abf\\s+-\\s+|total\\s+(?:portfolio\\s+company\\s+commitments|non-controlled/(?:non-affiliated|affiliated)\\s+-\\s+(?:debt|equity)\\s+commitments|investments))",
+        "family": "mixed"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "category_marker_re": "(?i)^(?:abf\\s+-\\s+.+|total\\s+.+)$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer",
+      "instrument"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt positions including first/second lien senior secured loans, delayed draw term loans, revolving loans, unsecured notes, and subordinated floating-rate notes",
+      "detection_rules": {
+        "keywords": [
+          "First lien senior secured",
+          "First lien senior secured loan",
+          "First lien senior secured delayed draw term loan",
+          "First lien senior secured revolving loan",
+          "Firs lien senior secured",
+          "First lien senior secured revovling loan",
+          "First lien senior secured multi-currency revolving loan",
+          "First lien senior secured multi-draw term loan",
+          "Second lien senior secured",
+          "Second lien senior secured loan",
+          "Second lien senior secured term loan",
+          "Senior secured loan",
+          "Term loan",
+          "Unsecured notes",
+          "Subordinated Floating Rate Notes"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity and fund-interest positions including common units, preferred stock/shares/equity/units, LP interests, LLC interests, class interests, and specialty finance equity investments",
+      "detection_rules": {
+        "keywords": [
+          "Common Units",
+          "Class A Units",
+          "Class B Units",
+          "Class A Interest",
+          "Preferred Stock",
+          "Preferred Shares",
+          "Preferred Equity",
+          "Preferred Units",
+          "Common Stock",
+          "Common stock",
+          "Common Equity",
+          "LP Interest",
+          "L.P. Interest",
+          "LLC Interest",
+          "Limited Partner Interest",
+          "Specialty finance equity investment"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "blue_owl_tech_pipe_and_comma_formats",
+      "description": "Latest-quarter identifiers use pipe-delimited issuer and instrument text, while older identifiers commonly use comma-delimited issuer and instrument text.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": " \\| |, ",
+      "disposition": "expected"
+    },
+    {
+      "id": "blue_owl_tech_abf_headers",
+      "description": "ABF - Commercial Real Estate, ABF - Leasing, and ABF - Specialty finance are section headers without position-level economics.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "(?i)^ABF\\s+-\\s+",
+      "disposition": "expected"
+    },
+    {
+      "id": "blue_owl_tech_bare_specialty_finance_names",
+      "description": "Bare names such as LSI Financing 1 DAC and Blue Owl Credit SLF do not expose instrument type in the XBRL identifier and are intentionally left unclassified unless the identifier includes explicit instrument evidence.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)^(?:LSI Financing|Blue Owl Credit SLF|BOCSO)",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

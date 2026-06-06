@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001901037",
   "entity_name": "Stellus Private Credit BDC",
-  "version": 3,
+  "version": 4,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "STELLUS_PRIVATE_CREDIT",
@@ -110,6 +110,12 @@
         "family": "warrant"
       }
     ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^(.*\\b(?:L\\s+L\\s+C|LLC|Inc\\.?|Corp\\.?|Corporation|L\\.?P\\.?|Ltd\\.?|Co\\.|Incorporated|Limited))",
+    "hierarchy_instrument_re": "(?i).*\\b(?:L\\s+L\\s+C|LLC|Inc\\.?|Corp\\.?|Corporation|L\\.?P\\.?|Ltd\\.?|Co\\.|Incorporated|Limited)[,\\s-]+(.+)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)\\b(?:L\\s+L\\s+C|LLC|Inc\\.?|Corp\\.?|Corporation|L\\.?P\\.?|Ltd\\.?|Co\\.|Incorporated|Limited)[,\\s-]')"
   },
   "identifier_format": {
     "delimiter": ", ",

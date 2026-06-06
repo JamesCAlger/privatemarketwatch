@@ -1,0 +1,194 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002011498",
+  "entity_name": "AGL Private Credit Income Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "AGL_PRIVATE_CREDIT_INCOME",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "second lien",
+        "term loan",
+        "delayed draw",
+        "revolving loan",
+        "reference rate and spread",
+        "maturity date",
+        "acquisition date",
+        "sofr",
+        "prime"
+      ],
+      "equity": [
+        "equity investments",
+        "lp interest",
+        "l.p. interest",
+        "investment funds",
+        "acquisition date"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "debt securities",
+      "total investments",
+      "total debt investments",
+      "total equity investment",
+      "total equity investments",
+      "non-controlled/non-affiliated debt investments",
+      "non-controlled/non-affiliated investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "goldman sachs financial square government institutional fund",
+      "financial square government institutional fund",
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "government institutional fund",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Goldman\\s+Sachs\\s+Financial\\s+Square\\s+Government\\s+Institutional\\s+Fund|Financial\\s+Square\\s+Government\\s+Institutional\\s+Fund|Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents|Money\\s+Market|Government\\s+Institutional\\s+Fund|U\\.S\\.\\s+Treasury|US\\s+Treasury|Treasury\\s+Bills?)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Debt\\s+Securities|Total\\s+Investments|Total\\s+Debt\\s+Investments|Total\\s+Equity\\s+Investments?|Investments\\s+Non-controlled/Non-affiliated\\s+(?:debt\\s+)?investments|Subtotal|Sub-Total)\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Investments\\s+)?(?:Non-controlled/(?:Non-)?affiliated\\s+)?Equity\\s+investments\\b.*\\b(?:LP\\s+Interest|Investment\\s+Funds|Acquisition\\s+Date)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Investments|Industry)\\b.*\\b(?:First\\s+Lien|Second\\s+Lien|Term\\s+Loan|Delayed\\s+Draw|Revolving\\s+Loan|Reference\\s+Rate\\s+and\\s+Spread)\\b",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Debt\\s+Securities|Total\\s+Investments|Total\\s+Debt\\s+Investments|Total\\s+Equity\\s+Investments?|Investments\\s+Non-controlled/Non-affiliated\\s+(?:debt\\s+)?investments|Subtotal|Sub-Total)\\s*$",
+    "canonical_strip_re": "(?i)^\\s*Investments\\s+(?:Non-controlled/(?:Non-)?affiliated\\s+)?(?:(?:Debt|Equity)\\s+investments|investments)\\s+|^\\s*Investments\\s+Industry\\s+(?:Aerospace\\s+&\\s+Defense|Automobile\\s+Components|Commercial\\s+Services\\s+&\\s+Supplies|Containers\\s+&\\s+Packaging|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Electrical\\s+Equipment|Health\\s+Care\\s+Equipment\\s+&\\s+Services|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|IT\\s+Services|Insurance|Investment\\s+Funds|Machinery|Personal\\s+Care\\s+Products|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor(?:\\s+Equipment)?|Software|Specialty\\s+Retail|Trading\\s+Companies\\s+&\\s+Distributors)\\s+|^\\s*Industry\\s+(?:Aerospace\\s+&\\s+Defense|Automobile\\s+Components|Commercial\\s+Services\\s+&\\s+Supplies|Containers\\s+&\\s+Packaging|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Electrical\\s+Equipment|Health\\s+Care\\s+Equipment\\s+&\\s+Services|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|IT\\s+Services|Insurance|Investment\\s+Funds|Machinery|Personal\\s+Care\\s+Products|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor(?:\\s+Equipment)?|Software|Specialty\\s+Retail|Trading\\s+Companies\\s+&\\s+Distributors)\\s+|\\bIndustry\\s+(?:Aerospace\\s+&\\s+Defense|Automobile\\s+Components|Commercial\\s+Services\\s+&\\s+Supplies|Containers\\s+&\\s+Packaging|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Electrical\\s+Equipment|Health\\s+Care\\s+Equipment\\s+&\\s+Services|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|IT\\s+Services|Insurance|Investment\\s+Funds|Machinery|Personal\\s+Care\\s+Products|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor(?:\\s+Equipment)?|Software|Specialty\\s+Retail|Trading\\s+Companies\\s+&\\s+Distributors)|\\bFirst\\s+Lien\\b|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+(?:SOFR\\s*\\+\\s*|PRIME\\s*\\+?)?\\d+(?:\\.\\d+)?%?|\\s+All\\s+In\\s+Rate\\s+\\d+(?:\\.\\d+)?%?(?:\\s*cash\\s*/\\s*\\d+(?:\\.\\d+)?%?\\s*PIK)?|\\s+Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}|\\s+Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}"
+  },
+  "identifier_format": {
+    "delimiter": "none",
+    "field_order": [
+      "affiliation",
+      "asset_family",
+      "industry",
+      "issuer_name",
+      "instrument_description",
+      "reference_rate",
+      "all_in_rate",
+      "acquisition_date",
+      "maturity_date"
+    ],
+    "alternate_delimiters": []
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Automobile Components",
+      "Commercial Services & Supplies",
+      "Containers & Packaging",
+      "Diversified Consumer Services",
+      "Diversified Financial Services",
+      "Electrical Equipment",
+      "Health Care Equipment & Services",
+      "Health Care Providers & Services",
+      "Health Care Technology",
+      "Hotels, Restaurants & Leisure",
+      "IT Services",
+      "Insurance",
+      "Investment Funds",
+      "Machinery",
+      "Personal Care Products",
+      "Professional Services",
+      "Semiconductors & Semiconductor",
+      "Semiconductors & Semiconductor Equipment",
+      "Software",
+      "Specialty Retail",
+      "Trading Companies & Distributors"
+    ],
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Investments\\s+)?(?:Non-controlled/(?:Non-)?affiliated\\s+)?(?:(?:Debt|debt|Equity|equity)\\s+investments|investments)\\s+(?:Industry\\s+(?:MSD_INDUSTRY_LABELS)\\s+)?|Investments\\s+Industry\\s+(?:MSD_INDUSTRY_LABELS)\\s+|Industry\\s+(?:MSD_INDUSTRY_LABELS)\\s+)(.+?)\\s+(?:(?:First\\s+Lien|Second\\s+Lien)\\b|LP\\s+Interest\\b|Acquisition\\s+Date\\b)",
+    "hierarchy_instrument_re": "(?i)^\\s*.*?((?:(?:First\\s+Lien|Second\\s+Lien)\\s+)+(?:Delayed\\s+Draw\\s+)?(?:Revolving\\s+Loan|Term\\s+Loan(?:\\s+#\\d+)?|Delayed\\s+Draw\\s+Term\\s+Loan(?:\\s+#\\d+)?).*|LP\\s+Interest(?:\\s+Industry\\s+(?:MSD_INDUSTRY_LABELS))?.*|Equity\\s+investments.*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Investments|Industry)') AND regexp_matches(_clean, '(?i)\\b(?:First\\s+Lien|Second\\s+Lien|LP\\s+Interest|Equity\\s+investments)\\b') AND regexp_matches(_clean, '(?i)\\b(?:Reference\\s+Rate|Acquisition\\s+Date|Maturity\\s+Date)\\b')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "AGL first-lien loans with issuer, facility type, reference-rate spread, all-in-rate, acquisition date, and maturity embedded in hierarchy text.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Loan",
+          "Reference Rate and Spread",
+          "Maturity Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "AGL equity, LP-interest, and investment-fund positions with acquisition-date evidence in hierarchy text.",
+      "detection_rules": {
+        "keywords": [
+          "Equity investments",
+          "LP Interest",
+          "Investment Funds",
+          "Acquisition Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "asset_family_prefix_drift",
+      "description": "The same debt facilities appear with several hierarchy prefixes, including plain investments, debt investments, and Industry-first variants; canonical keys strip those prefixes.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "Non-controlled/Non-affiliated (debt )?investments|Investments Industry|^Industry",
+      "disposition": "expected"
+    },
+    {
+      "id": "duplicated_first_lien_token",
+      "description": "Some parsed rows include First Lien twice after the debt-investments hierarchy prefix; canonical keys remove only the duplicated leading token so facility type remains in the key.",
+      "first_seen_quarter": "2025-03-31",
+      "detection_pattern": "First Lien First Lien",
+      "disposition": "expected"
+    },
+    {
+      "id": "affiliated_investment_fund_equity",
+      "description": "AGL EPCI I is disclosed as a non-controlled/affiliated equity investment-fund position with cost, fair value, pct-of-net-assets, and acquisition-date facts.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "AGL EPCI I",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

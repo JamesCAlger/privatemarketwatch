@@ -1,0 +1,188 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001916099",
+  "entity_name": "Diameter Credit Co",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "DIAMETER_CREDIT",
+    "prefix_rules": {
+      "Investments Non-Controlled/Non-Affiliated First Lien Debt": "debt",
+      "Investments Non-Controlled/Non-Affiliated Second Lien Debt": "debt",
+      "Investments Non-Controlled/Non-Affiliated Preferred Equity": "equity",
+      "Investments Non-Controlled/Non-Affiliated Common Equity": "equity",
+      "Investments Non-Controlled/Non-Affiliated Equity": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "term loan",
+        "corporate bond",
+        "revolving line of credit",
+        "revolver",
+        "interest rate",
+        "reference rate",
+        "maturity date",
+        "acquisition date",
+        "sofr",
+        "euribor",
+        "stibor"
+      ],
+      "equity": [
+        "common shares",
+        "shares",
+        "acquisition date",
+        "maturity date",
+        "co-invest",
+        " lp",
+        " fund"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total preferred equity",
+      "total common equity",
+      "total cash and cash equivalents",
+      "total portfolio investments",
+      "before cash and cash equivalents",
+      "preferred equityinvestments non-controlled/non-affiliated total preferred equity",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "total cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+and\\s+Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Portfolio\\s+)?Investments?.*Cash\\s+and\\s+Cash\\s+Equivalents\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*Investments\\s+Non-Controlled/Non-Affiliated\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Investments\\s+Non-Controlled/Non-Affiliated\\s+(?:Preferred\\s+Equity|Common\\s+Equity|Equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Preferred\\s+Equity|Common\\s+Equity|Portfolio\\s+Investments)\\b",
+        "family": "equity"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Investments\\s+Non-Controlled/Non-Affiliated\\s+)?(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Equity(?:\\s+Other\\s+Equity)?)\\s+(?:MSD_INDUSTRY_LABELS)\\s*$|\\bTotal\\s+(?:Investments|Preferred\\s+Equity|Common\\s+Equity|Cash\\s+and\\s+Cash\\s+Equivalents|Portfolio\\s+Investments)\\b|Preferred\\s+EquityInvestments\\s+Non-Controlled/Non-Affiliated\\s+Total\\s+Preferred\\s+Equity",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\b(?:Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%\\s*(?:\\(\\d+(?:\\.\\d+)?%\\s+PIK\\)|\\d+(?:\\.\\d+)?%\\s+PIK)?|Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{4})"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "security_type",
+      "industry",
+      "issuer_name",
+      "instrument_description"
+    ],
+    "alternate_delimiters": []
+  },
+  "staging": {
+    "strategy": "prefix_strip",
+    "hierarchy_prefix_re": "(?i)^Investments\\s+Non-Controlled/Non-Affiliated\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Equity(?:\\s+Other\\s+Equity)?)\\s+(?:(?:MSD_INDUSTRY_LABELS)\\s+)?",
+    "extra_industry_labels": [
+      "Automobile Components",
+      "Financial Services",
+      "Other Equity",
+      "Personal Care Products"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "First- and second-lien loans, revolvers, and corporate bonds disclosed in the non-controlled/non-affiliated hierarchy",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Debt",
+          "Second Lien Debt",
+          "Term Loan",
+          "Corporate Bond",
+          "Revolving Line of Credit"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Common shares, co-investment interests, preferred equity, and fund interests disclosed in the non-controlled/non-affiliated hierarchy",
+      "detection_rules": {
+        "keywords": [
+          "Common Shares",
+          "Co-Invest",
+          "Preferred Equity",
+          "Common Equity",
+          "Fund",
+          "LP"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "non_controlled_hierarchy_category_rows",
+      "description": "Sector-only rows such as First Lien Debt Financial Services are hierarchy categories, not position-level holdings, even though the security type prefix contains debt/equity words.",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "Investments Non-Controlled/Non-Affiliated <security type> <industry>",
+      "disposition": "expected"
+    },
+    {
+      "id": "malformed_preferred_equity_total",
+      "description": "One preferred-equity total concatenates the next hierarchy prefix; it is an aggregate row and should not be retained as a position.",
+      "first_seen_quarter": "2024-09-30",
+      "detection_pattern": "Preferred EquityInvestments Non-Controlled/Non-Affiliated Total Preferred Equity",
+      "disposition": "expected"
+    },
+    {
+      "id": "cash_equivalent_totals",
+      "description": "Cash and cash-equivalent hierarchy rows are explicitly non-private-market rows and excluded from index-facing holdings.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "Total Cash and Cash Equivalents",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.01
+    }
+  }
+}

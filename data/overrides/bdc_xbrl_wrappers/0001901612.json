@@ -1,0 +1,153 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001901612",
+  "entity_name": "Golub Capital BDC 4 LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "GOLUB_BDC4",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "one stop",
+        "senior secured",
+        "subordinated debt",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving loan"
+      ],
+      "equity": [
+        "common stock",
+        "common units",
+        "common equity",
+        "preferred stock",
+        "preferred units",
+        "preferred equity",
+        "lp units",
+        "lp interest",
+        "llc units",
+        "llc interest",
+        "warrant"
+      ],
+      "fund": [
+        "lp units",
+        "lp interest",
+        "llc interest"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total portfolio",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*Total\\s+Investments\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?Cash\\s+and\\s+Cash\\s+Equivalents\\s*$",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*.+,\\s*(?:One\\s*stop|Senior\\s+secured|Subordinated\\s+debt|Term\\s+loan|Delayed\\s+draw|Revolver|Revolving\\s+loan)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*.+,\\s*(?:Common\\s+stock|Common\\s+units|Common\\s+equity|Preferred\\s+stock|Preferred\\s+units|Preferred\\s+equity|LP\\s+units|LP\\s+interest|LLC\\s+units|LLC\\s+interest|Warrant)\\b",
+        "family": "equity"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+Investments|Subtotal|Sub-Total)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": [
+      "issuer",
+      "instrument"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Golub BDC 4 loan positions identified by comma-delimited issuer and debt instrument labels such as One stop or Senior secured.",
+      "detection_rules": {
+        "keywords": [
+          "One stop",
+          "Senior secured",
+          "Subordinated debt",
+          "Term loan",
+          "Delayed draw",
+          "Revolver"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Golub BDC 4 equity, partnership-interest, and warrant positions.",
+      "detection_rules": {
+        "keywords": [
+          "Common stock",
+          "Preferred stock",
+          "LP units",
+          "LP interest",
+          "LLC units",
+          "LLC interest",
+          "Warrant"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "GOLUB_BDC4_COMMA_DELIMITED_POSITIONS",
+      "description": "Most identifiers are simple comma-delimited issuer/instrument strings, for example 'Issuer, One stop 1'.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": ",\\s*(?:One stop|Senior secured|Common stock|Preferred stock|LP units|LLC units)",
+      "disposition": "expected"
+    },
+    {
+      "id": "GOLUB_BDC4_NUMBERED_ONE_STOP_TRANCHES",
+      "description": "Numbered One stop and Senior secured suffixes are retained as distinct position-level tranches.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": ",\\s*(?:One stop|Senior secured)\\s+\\d+",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

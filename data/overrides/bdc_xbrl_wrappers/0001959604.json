@@ -1,0 +1,198 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001959604",
+  "entity_name": "Jefferies Credit Partners BDC Inc.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "JEFFERIES_CREDIT_PARTNERS",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment type",
+        "first lien",
+        "second lien",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "reference rate",
+        "maturity date",
+        "sofr"
+      ],
+      "equity": [
+        "investment type",
+        "common stock",
+        "preferred stock",
+        "l.p interest",
+        "l.p. interest",
+        "lp interest",
+        "partnership interest"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total non-controlled-non-affiliated portfolio company debt investments",
+      "total non-controlled-non-affiliated portfolio company equity investments",
+      "total non-controlled-non-affiliated portfolio company investments",
+      "total unfunded portfolio company commitments",
+      "unfunded portfolio company commitments"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government obligations fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury|Government\\s+Obligations\\s+Fund)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?Unfunded\\s+Portfolio\\s+Company\\s+Commitments\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+Portfolio\\s+Company\\s+Investments\\s+(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments\\b.*\\bInvestment\\s+Type\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Portfolio\\s+Company\\s+)?[^|]*\\bInvestment\\s+Type\\s+(?:First\\s+Lien|Second\\s+Lien|Subordinated|Term\\s+Loan|Delayed\\s+Draw|Revolver)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+Portfolio\\s+Company\\s+Investments\\s+Equity\\s+Investments\\b.*\\bInvestment\\s+Type\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Portfolio\\s+Company\\s+)?[^|]*\\bInvestment\\s+Type\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interest|LP\\s+Interest|Partnership\\s+Interest)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*Non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+company\\s+(?:debt\\s+investments\\s+)?Equity\\s+Investments\\b.*\\bInvestment\\s+Type\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*Non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+company\\s+debt\\s+investments\\s+Equity\\s+Investments\\s+Preferred\\s+Stock\\s+Total\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments\\s+|Equity\\s+Investments\\s+)?Total\\s+non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+[Cc]ompany\\s+(?:debt\\s+investments|equity\\s+investments|investments)\\b",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)(?:^\\s*(?:Total\\s+)?Unfunded\\s+Portfolio\\s+Company\\s+Commitments\\s*$|\\bTotal\\s+non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+[Cc]ompany\\s+(?:debt\\s+investments|equity\\s+investments|investments)\\s*$)",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)^\\s*(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+|^\\s*Non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio\\s+company\\s+(?:debt\\s+investments\\s+)?|^\\s*Portfolio\\s+Company\\s+|\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+.+?(?=\\s+Maturity\\s+Date|$)|\\s+Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "affiliation",
+      "category",
+      "industry",
+      "issuer_name",
+      "instrument_description",
+      "reference_rate",
+      "maturity_date"
+    ],
+    "alternate_delimiters": []
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "extra_industry_labels": [
+      "Banking, Finance, Insurance, and Real Estate",
+      "Chemicals, Plastic, & Rubber",
+      "Healthcare & Pharmaceuticals",
+      "Services:"
+    ],
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+|Portfolio\\s+Company\\s+)?(.+?)\\s+Investment\\s+Type\\s+.+?(?:\\s+(?:Reference\\s+Rate|Maturity\\s+Date|Interest\\s+Rate)|$)",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+|Portfolio\\s+Company\\s+)?(?:.+?)\\s+Investment\\s+Type\\s+(.+?)(?:\\s+(?:Reference\\s+Rate|Maturity\\s+Date|Interest\\s+Rate)|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)\\bInvestment\\s+Type\\b') AND (regexp_matches(_clean, '(?i)^\\s*(?:Non[- ]Controlled\\s*/\\s*Non[- ]Affiliated\\s+)?Portfolio\\s+Company\\s+Investments\\s+(?:(?:First\\s+Lien|Second\\s+Lien|Subordinated)\\s+Debt\\s+Investments|Equity\\s+Investments(?:\\s+(?:Common\\s+Stock|Preferred\\s+Stock|L\\.?P\\.?\\s+Interests?))?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+') OR regexp_matches(_clean, '(?i)^\\s*Portfolio\\s+Company\\s+') OR regexp_matches(_clean, '(?i)\\b(?:Inc\\.?|LLC\\.?|L\\.L\\.C\\.?|L\\.P\\.?|LP|Corp\\.?|Corporation|Ltd\\.?|Limited|Company|Co\\.?)\\s*(?:\\([^)]*\\))?\\s+Investment\\s+Type\\b'))"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Jefferies first-lien, second-lien, subordinated, delayed-draw, revolver, and term-loan positions encoded with Investment Type, reference-rate, and maturity text.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Subordinated",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Reference Rate and Spread",
+          "Maturity Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Common stock, preferred stock, and L.P. interest positions encoded with Investment Type.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Preferred Stock",
+          "L.P Interest",
+          "L.P. Interest",
+          "LP Interest",
+          "Partnership Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "JEFFERIES_FULL_HIERARCHY_IDENTIFIERS",
+      "description": "Most rows use a flattened hierarchy: affiliation, portfolio-company investments, instrument family, industry, issuer, Investment Type, reference-rate spread, and maturity.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^Non-Controlled/Non-Affiliated Portfolio Company Investments",
+      "disposition": "expected"
+    },
+    {
+      "id": "JEFFERIES_STRIPPED_PORTFOLIO_COMPANY_ROWS",
+      "description": "Some rows enter staging as Portfolio Company issuer-first identifiers after generic affiliation stripping; they still contain Investment Type and are parsed by the same wrapper.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^Portfolio Company .+ Investment Type",
+      "disposition": "expected"
+    },
+    {
+      "id": "JEFFERIES_UNFUNDED_COMMITMENTS",
+      "description": "Unfunded Portfolio Company Commitments and Total Unfunded Portfolio Company Commitments are commitment/rollup rows, not index-level positions.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "^(Total )?Unfunded Portfolio Company Commitments$",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.02
+    }
+  }
+}

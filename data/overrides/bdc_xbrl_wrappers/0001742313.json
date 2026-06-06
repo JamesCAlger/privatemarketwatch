@@ -1,0 +1,251 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001742313",
+  "entity_name": "Monroe Capital Income Plus Corp",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "MONROE_INCOME_PLUS",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "senior secured loans",
+        "junior secured loans",
+        "unitranche secured loans",
+        "senior secured loan",
+        "junior secured loan",
+        "unitranche secured loan",
+        "revolver",
+        "revolving",
+        "delayed draw",
+        "term loan",
+        "interest rate",
+        "reference rate",
+        "maturity",
+        "sofr",
+        "libor"
+      ],
+      "equity": [
+        "equity securities",
+        "equity investments",
+        "common units",
+        "common stock",
+        "class a units",
+        "class a common units",
+        "class a preferred units",
+        "class b units",
+        "class b preferred interests",
+        "preferred interests",
+        "preferred stock",
+        "preferred units",
+        "series a units",
+        "series a preferred stock",
+        "series b units",
+        "series b preferred stock",
+        "series b preferred units",
+        "equity commitment",
+        "equity commitments",
+        "commitment to purchase the equity",
+        "shares"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "mixed": [
+        " llc",
+        " inc",
+        " corp",
+        " corporation",
+        " company",
+        " limited",
+        " ltd",
+        " holdings",
+        " holdco",
+        " parent",
+        " buyer",
+        " borrower",
+        " acquisition",
+        " group"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total senior secured loans",
+      "total junior secured loans",
+      "total unitranche secured loans",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "money market",
+      "government fund",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+and\\s+Cash\\s+Equivalents|Money\\s+Market|Government\\s+Fund|U\\.S\\.\\s+Treasury|US\\s+Treasury)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)(?:\\|\\s*)?(?:Senior\\s+Secured\\s+Loans?|Junior\\s+Secured\\s+Loans?|Unitranche\\s+Secured\\s+Loans?)\\b|\\b(?:Revolver|Revolving|Delayed\\s+Draw|Term\\s+Loan)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)(?:\\|\\s*)?(?:Equity\\s+Securities|Equity\\s+Investments)\\b|\\b(?:Common\\s+Units?|Common\\s+Stock|Class\\s+[A-Z](?:-\\d+)?\\s+(?:Common\\s+)?Units?|Class\\s+[A-Z](?:-\\d+)?\\s+Shares?|Preferred\\s+(?:Interests?|Stock|Units?|Shares?)|Series\\s+[A-Z]\\s+(?:Preferred\\s+)?(?:Stock|Units?)|Equity\\s+Commitments?|Commitment\\s+to\\s+Purchase\\s+the\\s+Equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^(?!\\s*(?:Investments?|Total|Subtotal|Sub-Total)\\b)(?=.*\\b(?:LLC|Inc\\.?|Corp\\.?|Corporation|Company|Limited|Ltd\\.?|Holdings|HoldCo|Parent|Buyer|Borrower|Acquisition|Group)\\b).+",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Senior\\s+Secured\\s+Loans|Junior\\s+Secured\\s+Loans|Unitranche\\s+Secured\\s+Loans)\\b",
+        "family": "debt"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Senior\\s+Secured\\s+Loans|Junior\\s+Secured\\s+Loans|Unitranche\\s+Secured\\s+Loans|Subtotal|Sub-Total)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Senior secured, junior secured, and unitranche loan positions, including revolvers and delayed draws",
+      "detection_rules": {
+        "keywords": [
+          "Senior Secured Loans",
+          "Junior Secured Loans",
+          "Unitranche Secured Loans",
+          "Revolver",
+          "Revolving",
+          "Delayed Draw",
+          "Term Loan"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity securities, common/preferred units, preferred stock/interests, and equity commitments",
+      "detection_rules": {
+        "keywords": [
+          "Equity Securities",
+          "Equity Investments",
+          "Common Units",
+          "Common Stock",
+          "Class A Units",
+          "Class A Common Units",
+          "Preferred Interests",
+          "Preferred Stock",
+          "Preferred Units",
+          "Equity Commitment",
+          "Commitment to purchase the equity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and options on equity",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "mixed": {
+      "description": "Issuer-only Monroe rows where the XBRL identifier lacks enough text to assign debt or equity family deterministically",
+      "detection_rules": {
+        "keywords": [
+          "LLC",
+          "Inc",
+          "Corp",
+          "Company",
+          "Holdings",
+          "HoldCo",
+          "Parent",
+          "Acquisition"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "monroe_pipe_format_transition",
+      "description": "Identifiers switched to pipe-delimited issuer and instrument family fields starting in 2025-12-31.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": " \\| ",
+      "disposition": "expected"
+    },
+    {
+      "id": "monroe_sparse_issuer_only_rows",
+      "description": "Some rows retain only issuer text or issuer plus a parenthetical instrument hint, so they classify as mixed leaves unless a debt, equity, or warrant term is visible.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "(?i)^(?!\\s*(?:Investments?|Total)\\b).+\\b(?:LLC|Inc\\.?|Corp\\.?|Holdings|Parent|Acquisition)\\b",
+      "disposition": "expected"
+    },
+    {
+      "id": "monroe_numbered_tranches",
+      "description": "Numeric suffixes such as issuer 1, issuer 2, and issuer 3 distinguish separate position-level tranches and are preserved in position keys.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "\\s+\\d+\\s*(?:\\||$)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001901164",
+  "entity_name": "T. Rowe Price OHA Select Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TRP_OHA_SELECT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "mixed": [
+        "investment, unaffiliated issuer",
+        "non-affiliated issuer",
+        "affiliated issuer",
+        "controlled issuer",
+        " inc",
+        "inc.",
+        " llc",
+        "corp",
+        " l.p.",
+        " lp",
+        " ltd",
+        "limited",
+        "holdings",
+        "international",
+        "group",
+        "rights",
+        "consultants",
+        "partners",
+        "management",
+        "software",
+        "scientific",
+        "packaging",
+        "technologies",
+        "intermediate",
+        "buyer",
+        "parent",
+        "midco",
+        "bidco",
+        "acquisition"
+      ],
+      "debt": [
+        "first lien",
+        "second lien",
+        "debt securities",
+        "term loan",
+        "revolver",
+        "senior secured",
+        "interest rate",
+        "sofr",
+        "maturity"
+      ],
+      "equity": [
+        "common stock",
+        "preferred stock",
+        "common equity",
+        "preferred equity",
+        "equity"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?:cash\\s+and\\s+cash\\s+equivalents|cash\\s+equivalents|money\\s+market|u\\.s\\.\\s+treasury|us\\s+treasury)",
+        "family": "cash"
+      },
+      {
+        "regex": "\\b(?:first\\s+lien|second\\s+lien|debt\\s+securities|term\\s+loan|revolver|senior\\s+secured)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "\\b(?:common\\s+stock|preferred\\s+stock|common\\s+equity|preferred\\s+equity|equity)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "\\bwarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": ".+",
+        "family": "mixed"
+      }
+    ],
+    "canonical_strip_re": "(?i)(?:^\\s*investment,\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer,\\s*|\\s*\\|\\s*(?:unaffiliated|non-affiliated|affiliated|controlled)\\s+issuer\\s*$)"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_or_position_label",
+      "affiliation"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "archetypes": {
+    "mixed": {
+      "description": "Issuer/tranche labels where the filer omits instrument type from most XBRL identifiers; economic fields provide the position evidence.",
+      "detection_rules": {
+        "keywords": [
+          "Investment, Unaffiliated Issuer",
+          "Non-Affiliated Issuer",
+          "Affiliated Issuer",
+          "Controlled Issuer",
+          "Inc",
+          "LLC",
+          "Corp",
+          "L.P.",
+          "Holdings",
+          "Group"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "debt": {
+      "description": "Explicitly labeled debt rows where lien or loan text appears in the identifier.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "Debt Securities",
+          "Term Loan",
+          "Revolver",
+          "Senior Secured"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Explicitly labeled equity rows.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Preferred Stock",
+          "Common Equity",
+          "Preferred Equity",
+          "Equity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrant rows when explicitly labeled.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "trp_oha_bare_issuer_identifiers",
+      "description": "Most XBRL identifiers disclose only issuer or issuer plus numeric tranche label; instrument type is not present in the identifier text.",
+      "first_seen_quarter": "2023-06-30",
+      "detection_pattern": "^[^|,]+(?:\\s+\\d+)?$",
+      "disposition": "warn"
+    },
+    {
+      "id": "trp_oha_comma_affiliation_format",
+      "description": "2025-06-30 and 2025-09-30 identifiers prepend Investment, Unaffiliated Issuer before the issuer/tranche label.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "^Investment, Unaffiliated Issuer,",
+      "disposition": "expected"
+    },
+    {
+      "id": "trp_oha_pipe_affiliation_format",
+      "description": "2025-12-31 and later identifiers append pipe-delimited Non-Affiliated Issuer affiliation text.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\| Non-Affiliated Issuer$",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.20
+    }
+  }
+}

@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001377936",
   "entity_name": "Saratoga Investment Corp.",
-  "version": 1,
+  "version": 3,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "SARATOGA",
@@ -16,17 +16,55 @@
       "Non-Controlled/Non-Affiliated investments": "mixed",
       "Non-controlled/Non-affiliated investments": "mixed"
     },
+    "leaf_markers_by_family": {
+      "mixed": [
+        "type of investment",
+        "investment type",
+        "investment date",
+        "initial acquisition date",
+        "maturity date",
+        "maturity",
+        "interest rate",
+        "reference rate",
+        "current coupon",
+        "first lien",
+        "second lien",
+        "term loan",
+        "revolving credit facility",
+        "delayed draw",
+        "senior secured",
+        "floor rate",
+        "pik interest",
+        "common stock",
+        "common units",
+        "common equity",
+        "preferred stock",
+        "preferred units",
+        "limited partner interests",
+        "partnership interest",
+        "other/structured finance securities",
+        "warrant",
+        " - loan"
+      ]
+    },
     "aggregate_markers": [
       "total investments",
       "total affiliate",
       "total control",
       "total non-control",
       "investment fund",
-      "structured finance securities"
+      "structured finance securities",
+      "non-profit services"
     ],
     "category_marker_re": "\\d[\\d.]*%\\s*-\\s*[^-]+$",
     "fallback_family_patterns": [
       {"regex": "^\\d[\\d.]*%\\s+-\\s+[^-]+\\s+-\\s+[^-]+\\s+-\\s+.+", "family": "mixed"},
+      {"regex": "^.+\\s+-\\s+.+\\s+-\\s+.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$", "family": "mixed"},
+      {"regex": "^.+\\s+-\\s+.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$", "family": "mixed"},
+      {"regex": "^.+\\s+-\\s+.+\\s+-\\s+(?:First\\s+Lien\\s+Term\\s+Loan|Limited\\s+Partner\\s+Interests|Other/Structured\\s+Finance\\s+Securities).*$", "family": "mixed"},
+      {"regex": "^.+-.+-.+\\s+-\\s+Loan(?:\\s+-\\s+\\w+|\\s+\\w+)?$", "family": "mixed"},
+      {"regex": "^.+-.+Term-Loan.+-Loan$", "family": "mixed"},
+      {"regex": "^Non-profit\\s+Services$", "family": "mixed"},
       {"regex": "^[A-Za-z][A-Za-z0-9&/()., ]+(?:\\s+-\\s+(?:Affiliate|Affiliated|Control|Controlled|Non-control/Non-affiliate|Non-Control/Non-Affiliate)\\s+investments)?$", "family": "mixed"},
       {"regex": "^total\\s+investments\\s+-\\s+\\d[\\d.]*%$", "family": "mixed"},
       {"regex": "^sub\\s+total\\s+(?:affiliate|affiliated|control|controlled|non-control/non-affiliate|non-controlled/non-affiliated)\\s+investments$", "family": "mixed"}
@@ -38,10 +76,40 @@
     "strategy": "issuer_bridge",
     "issuer_bridges": [
       {
+        "report_date": "2024-11-30",
+        "raw_id_lower": "goreact - education software - first lien term loan (3m usd term sofr+7.50%), 12.17% cash/1.00% pik, 1/17/2025",
+        "issuer_name": "GoReact",
+        "instrument_description": "Education Software - First Lien Term Loan (3M USD TERM SOFR+7.50%), 12.17% Cash/1.00% PIK, 1/17/2025"
+      },
+      {
+        "report_date": "2024-11-30",
+        "raw_id_lower": "omatic software, llc - non-profit services - first lien term loan (3m usd term sofr+8.00%), 12.73% cash/1.00% pik, 6/30/2025",
+        "issuer_name": "Omatic Software, LLC",
+        "instrument_description": "Non-profit Services - First Lien Term Loan (3M USD TERM SOFR+8.00%), 12.73% Cash/1.00% PIK, 6/30/2025"
+      },
+      {
         "report_date": "2025-02-28",
         "raw_id_lower": "229.3% - alternative investment management software - first lien term loan (3m usd term sofr+8.50%), 12.82% cash, 7/18/2027",
         "issuer_name": "Altvia MidCo, LLC.",
         "instrument_description": "Alternative Investment Management Software - First Lien Term Loan (3M USD TERM SOFR+8.50%), 12.82% Cash, 7/18/2027"
+      },
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - goreact - education software - first lien term loan (3m usd term sofr+7.50%), 12.02% cash/1.00% pik, 4/17/2025",
+        "issuer_name": "GoReact",
+        "instrument_description": "Education Software - First Lien Term Loan (3M USD TERM SOFR+7.50%), 12.02% Cash/1.00% PIK, 4/17/2025"
+      },
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - emily street enterprises, l.l.c. - office supplies - first lien term loan (3m usd term sofr+8.00%), 12.58% cash/1.00% pik, 6/30/2025",
+        "issuer_name": "Emily Street Enterprises, L.L.C.",
+        "instrument_description": "Office Supplies - First Lien Term Loan (3M USD TERM SOFR+8.00%), 12.58% Cash/1.00% PIK, 6/30/2025"
+      },
+      {
+        "report_date": "2025-02-28",
+        "raw_id_lower": "229.3% - omatic software, llc - non-profit services - first lien term loan (3m usd term sofr+8.00%), 12.58% cash/1.00% pik, 6/30/2025",
+        "issuer_name": "Omatic Software, LLC",
+        "instrument_description": "Non-profit Services - First Lien Term Loan (3M USD TERM SOFR+8.00%), 12.58% Cash/1.00% PIK, 6/30/2025"
       },
       {
         "report_date": "2025-02-28",
@@ -69,9 +137,27 @@
       },
       {
         "report_date": "2025-05-31",
+        "raw_id_lower": "220.9% - omatic software, llc - non-profit services - first lien term loan (3m usd term sofr+8.00%), 13.59% cash/1.00% pik, 6/30/2025",
+        "issuer_name": "Omatic Software, LLC",
+        "instrument_description": "Non-profit Services - First Lien Term Loan (3M USD TERM SOFR+8.00%), 13.59% Cash/1.00% PIK, 6/30/2025"
+      },
+      {
+        "report_date": "2025-05-31",
+        "raw_id_lower": "fiesta purchaser, inc-beverage, food & tobacco term-loan b (12/24)-loan",
+        "issuer_name": "Fiesta Purchaser, Inc.",
+        "instrument_description": "Beverage, Food & Tobacco Term-Loan B (12/24) - Loan"
+      },
+      {
+        "report_date": "2025-05-31",
         "raw_id_lower": "10.3% - education services - first lien term loan 4.84% pik, 8/9/2027",
         "issuer_name": "Zollege PBC",
         "instrument_description": "Education Services - First Lien Term Loan 4.84% PIK, 8/9/2027"
+      },
+      {
+        "report_date": "2025-08-31",
+        "raw_id_lower": "fiesta purchaser, inc-beverage, food & tobacco term-loan b (12/24)-loan",
+        "issuer_name": "Fiesta Purchaser, Inc.",
+        "instrument_description": "Beverage, Food & Tobacco Term-Loan B (12/24) - Loan"
       },
       {
         "report_date": "2025-08-31",
@@ -90,6 +176,18 @@
         "raw_id_lower": "219.0% - architecture & engineering software - first lien term loan (3m usd term sofr+5.50%), 9.67% cash, 4/13/2028",
         "issuer_name": "BQE Software, Inc.",
         "instrument_description": "Architecture & Engineering Software - First Lien Term Loan (3M USD TERM SOFR+5.50%), 9.67% Cash, 4/13/2028"
+      },
+      {
+        "report_date": "2025-11-30",
+        "raw_id_lower": "healthcare & pharmaceuticals - ingenovis health inc. - loan",
+        "issuer_name": "Ingenovis Health Inc.",
+        "instrument_description": "Healthcare & Pharmaceuticals - Loan"
+      },
+      {
+        "report_date": "2025-11-30",
+        "raw_id_lower": "healthcare & pharmaceuticals - pediatric associates holding company llc - loan",
+        "issuer_name": "Pediatric Associates Holding Company LLC",
+        "instrument_description": "Healthcare & Pharmaceuticals - Loan"
       },
       {
         "report_date": "2025-11-30",
@@ -123,7 +221,9 @@
           "Revolver",
           "Senior Secured Note",
           "Subordinated Note",
-          "Corporate Bond"
+          "Corporate Bond",
+          " - Loan",
+          "Term-Loan"
         ],
         "keyword_mode": "any"
       },

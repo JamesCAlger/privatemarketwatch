@@ -1,0 +1,244 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001950803",
+  "entity_name": "Stepstone Private Credit Fund LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "STEPSTONE_PRIVATE_CREDIT",
+    "prefix_rules": {
+      "Non-Controlled, Non-Affiliated Debt Investments": "debt",
+      "Non-Controlled Non-Affiliated Debt Investments": "debt",
+      "Non Controlled Non Affiliated Debt Investments": "debt",
+      "\"Non-Controlled, Non-Affiliated Debt Investments": "debt",
+      "Non-Controlled, Non-Affiliated Equity Investments": "equity",
+      "Non-Controlled, Non-Affiliated Private Credit Funds": "fund",
+      "Non-Controlled, Non-Affiliated Private Equity Funds": "fund",
+      "Cash and Cash Equivalents and Restricted Cash and Restricted Cash Equivalents": "cash",
+      "Total Cash and Cash Equivalents and Restricted Cash and Restricted Cash Equivalents": "cash"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "reference rate spread",
+        "reference rate and spread",
+        "cash interest rate",
+        "pik rate",
+        "maturity date",
+        "maturity",
+        "sofr",
+        "libor",
+        "euribor",
+        "prime",
+        "term loan",
+        "delayed draw",
+        "revolving loan",
+        "revolving credit",
+        "revolver",
+        "incremental term loan",
+        "initial term loan",
+        "closing date term loan"
+      ],
+      "equity": [
+        "common stock",
+        "common equity",
+        "preferred stock",
+        "preferred equity",
+        "preferred units",
+        "limited partnership interest",
+        "limited partnership interests",
+        "partnership interest",
+        "membership interest",
+        "equity interest"
+      ],
+      "fund": [
+        "limited partnership interest",
+        "limited partnership interests",
+        "partnership interest",
+        "fund",
+        "private credit fund",
+        "private equity fund"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total first lien senior secured",
+      "total second lien senior secured",
+      "total non-controlled, non-affiliated debt investments",
+      "total non-controlled, non-affiliated private equity fund",
+      "total non-controlled, non-affiliated private equity funds",
+      "total investments and cash and cash equivalents",
+      "liabilities less other assets",
+      "net assets",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "restricted cash",
+      "other cash accounts",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*\"?Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+Debt\\s+Investments",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*\"?Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+Equity\\s+Investments",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*\"?Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+Private\\s+(?:Credit|Equity)\\s+Funds",
+        "family": "fund"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?Cash\\s+and\\s+Cash\\s+Equivalents",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*Total\\s+Investments(?:\\s+and\\s+Cash\\s+and\\s+Cash\\s+Equivalents.*)?(?:\\s*\\|\\s*\\w+)?\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Net\\s+Assets|Liabilities\\s+Less\\s+Other\\s+Assets)\\b",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)(?:^|\\|\\s*|\\bl\\s+)(?:Total\\s+|Net\\s+Assets|Liabilities\\s+Less\\s+Other\\s+Assets|First\\s+Lien\\s+Senior\\s+Secured\\s*$|Second\\s+Lien\\s+Senior\\s+Secured\\s*$|Collateralized\\s+Loan\\s+Obligations\\s*$)",
+    "canonical_strip_re": "\"|\\s+\\b(?:One|Two|Three|Four)\\b$|\\s*\\|\\s*Total\\s+(?:Investments?|First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds?|Private\\s+Equity\\s+Fund))\\b.*$|\\bTotal\\s+|\\s*\\|\\s*Reference\\s+Rate\\s+Spread\\s*(?:/\\s*Floor)?\\s*\\|\\s*[^|]+|\\s*\\|\\s*Cash\\s+Interest\\s+Rate\\s*/\\s*PIK\\s+Rate\\s*\\|\\s*[\\d.]+%|\\s*\\|\\s*Maturity\\s+Date\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}|\\s*\\|\\s*(?:[36]M\\s+)?SOFR\\s*\\+\\s*[\\d.]+%\\s*/\\s*[\\d.]+%\\s*\\|\\s*[\\d.]+%\\s*\\|\\s*\\d{1,2}[/-]\\d{1,2}[/-]\\d{2,4}",
+    "category_marker_before_total": true
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "category",
+      "lien_type",
+      "industry",
+      "issuer_instrument",
+      "reference_rate",
+      "interest_rate",
+      "maturity_date"
+    ],
+    "alternate_delimiters": [
+      "|",
+      " l "
+    ]
+  },
+  "staging": {
+    "strategy": "prefix_strip",
+    "hierarchy_prefix_re": "(?i)^\\s*\"?Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds)\\s*(?:(?:\\||\\sl\\s)\\s*)?(?:(?:First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Collateralized\\s+Loan\\s+Obligations|Equity|Limited\\s+Partnership\\s+Interests?)\\s*(?:(?:\\||\\sl\\s)\\s*)?)?(?:[^|]+?\\s*(?:(?:\\||\\sl\\s)\\s*))?"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Direct lending positions including first/second lien loans, revolvers, delayed draws, and other rate-bearing debt rows",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Loan",
+          "Revolving Credit",
+          "Revolver",
+          "Initial Term Loan",
+          "Incremental Term Loan",
+          "Reference Rate Spread",
+          "Cash Interest Rate",
+          "SOFR",
+          "LIBOR",
+          "EURIBOR",
+          "PRIME"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity positions and partnership interests",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Equity",
+          "Preferred Stock",
+          "Preferred Equity",
+          "Preferred Units",
+          "Limited Partnership Interest",
+          "Partnership Interest",
+          "Membership Interest",
+          "Equity Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "fund": {
+      "description": "Private credit and private equity fund interests disclosed as positions",
+      "detection_rules": {
+        "keywords": [
+          "Private Credit Funds",
+          "Private Equity Funds",
+          "Limited Partnership Interest",
+          "Limited Partnership Interests"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "STEPSTONE_PIPE_DELIMITER_VARIANTS",
+      "description": "Rows use pipe delimiters with inconsistent spacing, no spacing, or a lowercase l delimiter in 2025 periods.",
+      "first_seen_quarter": "2025-03-31",
+      "detection_pattern": "\\||\\sl\\s",
+      "disposition": "expected"
+    },
+    {
+      "id": "STEPSTONE_QUOTED_IDENTIFIERS",
+      "description": "Some 2026-03-31 XBRL identifiers include literal leading and trailing quote characters.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "^\"Non-Controlled",
+      "disposition": "expected"
+    },
+    {
+      "id": "STEPSTONE_DUPLICATE_SUFFIXES",
+      "description": "Same position text can recur with trailing One/Two suffixes and different economic fields; these are retained as position-level rows and not borrower-aggregated.",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "\\s(?:One|Two|Three|Four)$",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

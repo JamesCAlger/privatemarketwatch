@@ -1,0 +1,138 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002049733",
+  "entity_name": "Blackstone Private Real Estate Credit & Income Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "BLACKSTONE_REAL_ESTATE_CREDIT_INCOME",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "loan",
+        "portfolio",
+        "ardan",
+        "cypress ridge",
+        "eagle & west",
+        "faropoint atlantic",
+        "iron mountain manassas",
+        "kkr aip v",
+        "lincoln square north",
+        "natura gardens",
+        "puck building",
+        "ridge hill",
+        "sherrin multifamily",
+        "stella on the park",
+        "sterling plaza",
+        "the journal phase i"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total loan investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "dreyfus government cash management",
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "government cash management",
+      "government money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Dreyfus\\s+Government\\s+Cash\\s+Management|Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents|Money\\s+Market|Government\\s+(?:Cash\\s+Management|Money\\s+Market)|U\\.S\\.\\s+Treasury|US\\s+Treasury|Treasury\\s+Bills?)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Loan\\s+Investments|Subtotal|Sub-Total)(?:\\s+-\\s*\\d+(?:\\.\\d+)?%)?\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^(?!\\s*(?:Total|Subtotal|Sub-Total)\\b)(?!.*\\b(?:Dreyfus\\s+Government\\s+Cash\\s+Management|Cash\\s+Equivalents|Money\\s+Market|Treasury)\\b).+",
+        "family": "debt"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Loan\\s+Investments|Subtotal|Sub-Total)(?:\\s+-\\s*\\d+(?:\\.\\d+)?%)?\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": "none",
+    "field_order": [
+      "issuer_or_property_name"
+    ],
+    "alternate_delimiters": []
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Flat real-estate credit loan, mortgage-backed security, and property-level debt identifiers where source XBRL facts carry the interest-rate evidence.",
+      "detection_rules": {
+        "keywords": [
+          "loan",
+          "portfolio",
+          "BMARK",
+          "BRAVO",
+          "COLT",
+          "COMM",
+          "BX",
+          "Ardan",
+          "Cypress Ridge"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "flat_identifier_interest_rate_facts",
+      "description": "InvestmentIdentifierAxis values are flat property, loan, or securitization names; position-level debt evidence is carried in source interest-rate/principal/cost/fair-value facts rather than instrument words in the identifier.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "^(?!Total|Dreyfus).+",
+      "disposition": "expected"
+    },
+    {
+      "id": "text_only_property_names",
+      "description": "A small set of property names have no digits or loan/portfolio words, so they are listed explicitly as observed debt leaf markers rather than covered by a global bare-text rule.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "Ardan|Cypress Ridge|Eagle & West|Faropoint Atlantic|Puck Building|Ridge Hill",
+      "disposition": "expected"
+    },
+    {
+      "id": "dreyfus_cash_management",
+      "description": "Dreyfus Government Cash Management rows are cash-management/non-private-market rows, not private credit positions.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "Dreyfus Government Cash Management",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}
