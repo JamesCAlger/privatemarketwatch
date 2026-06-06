@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evergreen.local/schemas/interval_source_review/verdict.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_id",
+    "cik",
+    "report_date",
+    "verdict",
+    "confidence",
+    "primary_justification",
+    "evidence_refs",
+    "changed_files",
+    "patch_summary",
+    "source_reconciliation_effect",
+    "gav_effect",
+    "tests_validation_plan",
+    "requires_human_merge",
+    "missing_evidence",
+    "residual_risk",
+    "reviewer_notes"
+  ],
+  "properties": {
+    "review_id": { "type": "string", "minLength": 1 },
+    "cik": { "type": "string", "minLength": 1 },
+    "report_date": { "type": "string", "minLength": 1 },
+    "verdict": {
+      "type": "string",
+      "enum": ["PATCH_PROPOSED", "NO_PATCH_NEEDED", "INSUFFICIENT_EVIDENCE", "ESCALATE"]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH"]
+    },
+    "primary_justification": { "type": "string", "minLength": 1 },
+    "reconciliation_diagnosis": {
+      "type": "string",
+      "enum": [
+        "",
+        "REAL_SOURCE_POSITION_MISSING_FROM_UNIFIED",
+        "HTML_PRESENT_TABLE_NOT_PARSED",
+        "NPORT_ONLY_NO_HTML_COORDINATE",
+        "PIPELINE_ONLY_POSITION",
+        "PUBLIC_MARKET_OR_NON_PRIVATE_FILTERED",
+        "MONEY_MARKET_OR_CASH_EQUIVALENT",
+        "AGGREGATE_OR_HEADER",
+        "COMPARATIVE_PERIOD",
+        "DUPLICATE_OR_ALIAS",
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "changed_files": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "rule_type": {
+      "type": "string",
+      "enum": [
+        "",
+        "table_selection",
+        "period_assignment",
+        "row_classification",
+        "continuation_row_merge",
+        "aggregate_subtotal_exclusion",
+        "nport_private_markets_filter",
+        "nport_identity_match"
+      ]
+    },
+    "html_citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_ref", "table_index", "row_index", "cell_indices", "reason"],
+        "properties": {
+          "evidence_ref": { "type": "string", "minLength": 1 },
+          "table_index": { "type": "integer", "minimum": 0 },
+          "row_index": { "type": "integer", "minimum": 0 },
+          "cell_indices": {
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 },
+            "minItems": 1
+          },
+          "row_classification": {
+            "type": "string",
+            "enum": [
+              "POSITION_ROW",
+              "AGGREGATE_HEADER",
+              "SUBTOTAL_ROW",
+              "CONTINUATION_ROW",
+              "COMPARATIVE_PERIOD_ROW",
+              "UNCLASSIFIABLE",
+              "INSUFFICIENT_EVIDENCE"
+            ]
+          },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "patch_summary": { "type": "string" },
+    "source_reconciliation_effect": { "type": "string" },
+    "gav_effect": { "type": "string" },
+    "tests_validation_plan": { "type": "string" },
+    "requires_human_merge": { "type": "boolean" },
+    "missing_evidence": { "type": "string" },
+    "residual_risk": { "type": "string", "minLength": 1 },
+    "reviewer_notes": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "verdict": { "const": "PATCH_PROPOSED" } },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "changed_files": { "minItems": 1 },
+          "patch_summary": { "minLength": 1 },
+          "source_reconciliation_effect": { "minLength": 1 },
+          "gav_effect": { "minLength": 1 },
+          "tests_validation_plan": { "minLength": 1 },
+          "requires_human_merge": { "const": true }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "verdict": { "enum": ["INSUFFICIENT_EVIDENCE", "ESCALATE"] } },
+        "required": ["verdict"]
+      },
+      "then": {
+        "properties": {
+          "missing_evidence": { "minLength": 10 }
+        }
+      }
+    }
+  ]
+}
