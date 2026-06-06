@@ -1087,3 +1087,35 @@ class TestDiagnoseFuzzyFallbacks:
         result = diagnose_fuzzy_fallbacks(matches, unified)
         assert len(result) == 1
         assert result.iloc[0]["key_diff_summary"] == "identical keys"
+
+    def test_duplicate_unified_lookup_keeps_one_diagnostic_row(self):
+        """Duplicate same issuer/date/FV lookup rows should not expand diagnostics."""
+        from pipeline.oracle_checks import diagnose_fuzzy_fallbacks
+
+        matches = pd.DataFrame([{
+            "cik": "0001766037",
+            "match_method": "D_fuzzy",
+            "begin_report_date": "2025-12-31",
+            "end_report_date": "2026-03-31",
+            "begin_issuer_name": "AAH Topco, LLC",
+            "end_issuer_name": "AAH Topco, LLC",
+            "begin_fair_value": "1000000",
+            "end_fair_value": "1050000",
+            "match_score": "0.88",
+        }])
+        unified = pd.DataFrame([
+            {"cik": "1766037", "report_date": "2025-12-31",
+             "issuer_name": "AAH Topco, LLC", "fair_value": "1000000",
+             "position_key": "aah topco llc first lien 1"},
+            {"cik": "1766037", "report_date": "2026-03-31",
+             "issuer_name": "AAH Topco, LLC", "fair_value": "1050000",
+             "position_key": "aah topco llc first lien 1"},
+            {"cik": "1766037", "report_date": "2026-03-31",
+             "issuer_name": "AAH Topco, LLC", "fair_value": "1050000",
+             "position_key": "aah topco llc first lien 1 duplicate"},
+        ])
+
+        result = diagnose_fuzzy_fallbacks(matches, unified)
+
+        assert len(result) == 1
+        assert result.iloc[0]["end_position_key"] == "aah topco llc first lien 1"

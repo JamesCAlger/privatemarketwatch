@@ -38,6 +38,7 @@ from pipeline.bdc_identifier import (
     _sql_is_bdc_aggregate,
 )
 from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS, add_bdc_xbrl_wrapper_columns
+from pipeline.bdc_xbrl_html_bridge import apply_html_section_bridge_wrapper_columns
 from pipeline.classification import (
     _BAD_ISSUER_ENTITY_SIGNALS,
     _BAD_ISSUER_NAMES_EXACT,
@@ -962,7 +963,12 @@ def _coerce_source_df(source_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bool
     df["source_row_id"] = range(len(df))
     if not enable_bdc_xbrl_wrappers:
         return _ensure_empty_wrapper_columns(df)
-    return add_bdc_xbrl_wrapper_columns(df, identifier_col="investment_identifier", cik_col="cik")
+    df = add_bdc_xbrl_wrapper_columns(df, identifier_col="investment_identifier", cik_col="cik")
+    return apply_html_section_bridge_wrapper_columns(
+        df,
+        identifier_col="investment_identifier",
+        cik_col="cik",
+    )
 
 
 def _coerce_output_df(holdings_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bool = True) -> pd.DataFrame:
@@ -983,7 +989,12 @@ def _coerce_output_df(holdings_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bo
     df["output_row_id"] = range(len(df))
     if not enable_bdc_xbrl_wrappers:
         return _ensure_empty_wrapper_columns(df)
-    return add_bdc_xbrl_wrapper_columns(df, identifier_col="bdc_investment_identifier", cik_col="cik")
+    df = add_bdc_xbrl_wrapper_columns(df, identifier_col="bdc_investment_identifier", cik_col="cik")
+    return apply_html_section_bridge_wrapper_columns(
+        df,
+        identifier_col="bdc_investment_identifier",
+        cik_col="cik",
+    )
 
 
 def extract_bdc_source_facts_from_xbrl(
@@ -2096,7 +2107,10 @@ def reconcile_bdc_source_to_holdings(
                               OR COALESCE(oac.output_count, 0) = 0)
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL
-                         AND COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
+                         AND (
+                             COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
+                             OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                         )
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market'
@@ -2127,7 +2141,10 @@ def reconcile_bdc_source_to_holdings(
                          )
                          OR (
                              m.source_row_id IS NULL
-                             AND COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                             AND (
+                                 COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                                 OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                             )
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
@@ -2151,7 +2168,10 @@ def reconcile_bdc_source_to_holdings(
                          )
                          OR (
                              m.source_row_id IS NULL
-                             AND COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                             AND (
+                                 COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                                 OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                             )
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
@@ -2175,7 +2195,10 @@ def reconcile_bdc_source_to_holdings(
                          )
                          OR (
                              m.source_row_id IS NULL
-                             AND COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                             AND (
+                                 COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
+                                 OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                             )
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false))
@@ -2199,7 +2222,10 @@ def reconcile_bdc_source_to_holdings(
                               OR COALESCE(oac.output_count, 0) = 0)
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL
-                         AND COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
+                         AND (
+                             COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
+                             OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                         )
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market'
@@ -2240,6 +2266,9 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
                         THEN 'aggregate source row excluded by per-CIK wrapper classification'
+                    WHEN m.source_row_id IS NULL
+                         AND COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                        THEN 'category rollup source row excluded by per-CIK wrapper classification'
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market'
                         THEN 'non-private-market source row excluded by per-CIK wrapper classification'
@@ -2451,6 +2480,45 @@ def reconcile_bdc_source_to_holdings(
              AND s.report_date = oac.report_date
              AND s.accession_number = oac.accession_number
             WHERE COALESCE(s.period_status, '') != 'pre_2022_out_of_scope'
+        ), output_collapsed_source_duplicates AS (
+            SELECT DISTINCT o.output_row_id
+            FROM output_prepared o
+            JOIN eligible_source s
+              ON s.cik = o.cik
+             AND s.report_date = o.report_date
+             AND s.accession_number = o.accession_number
+            JOIN all_matches canonical_match
+              ON s.canonical_source_row_id = canonical_match.source_row_id
+            WHERE COALESCE(s.source_exclusion_status, '') = ''
+              AND COALESCE(s.duplicate_status, '') = 'collapsed_duplicate_dimension_path'
+              AND s.source_fair_value IS NOT NULL
+              AND o.output_fair_value IS NOT NULL
+              AND abs(s.source_fair_value - o.output_fair_value)
+                  <= greatest(1.0, 0.0001 * greatest(abs(s.source_fair_value), abs(o.output_fair_value)))
+              AND (
+                    (
+                        NULLIF(trim(COALESCE(s.dimensions_raw, '')), '') IS NOT NULL
+                        AND s.dimensions_raw = o.dimensions_raw
+                    )
+                    OR (
+                        NULLIF(trim(COALESCE(s.raw_investment_identifier, '')), '') IS NOT NULL
+                        AND s.raw_investment_identifier = o.raw_investment_identifier
+                    )
+                    OR (
+                        NULLIF(trim(COALESCE(s.staging_normalized_investment_identifier, '')), '') IS NOT NULL
+                        AND s.staging_normalized_investment_identifier = o.staging_normalized_investment_identifier
+                    )
+                    OR (
+                        NULLIF(trim(COALESCE(s.source_wrapper_position_key, '')), '') IS NOT NULL
+                        AND s.source_wrapper_position_key = o.output_wrapper_position_key
+                        AND COALESCE(s.source_wrapper_parent_key, '') = COALESCE(o.output_wrapper_parent_key, '')
+                        AND COALESCE(s.source_wrapper_family, '') = COALESCE(o.output_wrapper_family, '')
+                    )
+                    OR (
+                        NULLIF(trim(COALESCE(s.source_wrapper_structured_leaf_key, '')), '') IS NOT NULL
+                        AND s.source_wrapper_structured_leaf_key = o.output_wrapper_structured_leaf_key
+                    )
+              )
         ), output_extras AS (
             SELECT
                 'extra_in_pipeline' AS status,
@@ -2511,8 +2579,10 @@ def reconcile_bdc_source_to_holdings(
             FROM output_prepared o
             LEFT JOIN all_matches m ON o.output_row_id = m.output_row_id
             LEFT JOIN rollup_child_outputs rco ON o.output_row_id = rco.output_row_id
+            LEFT JOIN output_collapsed_source_duplicates ocsd ON o.output_row_id = ocsd.output_row_id
             WHERE m.output_row_id IS NULL
               AND rco.output_row_id IS NULL
+              AND ocsd.output_row_id IS NULL
               AND TRY_CAST(o.report_date AS DATE) >= '2022-01-01'
         )
         SELECT {", ".join(DETAIL_COLUMNS)}

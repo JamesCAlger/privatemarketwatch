@@ -905,7 +905,7 @@ class TestBdcSourceReconciliation:
         row = detail.iloc[0]
         assert row["blocking_issue"] == False
         assert row["source_wrapper_disposition"] == "debt_issuer_rollup"
-        assert row["source_wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V1"
+        assert row["source_wrapper_rule_id"] == "TRINITY_DEBT_ISSUER_ROLLUP_V3"
         assert "child_output_count=2" in row["evidence"]
         assert metrics.iloc[0]["blocking_issue_count"] == 0
 
@@ -982,6 +982,32 @@ class TestBdcSourceReconciliation:
         assert source_row["status"] == "excluded_aggregate_candidate"
         assert source_row["blocking_issue"] == False
         assert "per-CIK wrapper" in source_row["evidence"]
+
+    def test_msd_wrapper_category_rollup_is_documented_exclusion(self):
+        identifier = (
+            "Investments Investments - non-controlled/non-affiliated "
+            "First Lien Debt Services: Consumer"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001849894",
+            "entity_name": "MSD Investment Corp.",
+            "investment_identifier": identifier,
+            "dimensions_raw": f"investmentidentifier={identifier}",
+            "context_id": "ctx_msd_services_consumer",
+            "fair_value": "328916000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source,
+            _make_bdc_output([]),
+        )
+        source_row = detail[detail["source_row_id"].astype(str).ne("")].iloc[0]
+
+        assert source_row["source_wrapper_disposition"] == "mixed_category_rollup"
+        assert source_row["status"] == "excluded_aggregate_candidate"
+        assert source_row["residual_class"] == "documented_exclusion"
+        assert source_row["blocking_issue"] == False
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
 
     def test_saratoga_wrapper_position_leaf_still_blocks_when_missing(self):
         identifier = (
@@ -1272,6 +1298,38 @@ class TestBdcSourceReconciliation:
         assert metrics.iloc[0]["matched_rows"] == 1
         assert metrics.iloc[0]["collapsed_duplicate_dimension_path_rows"] == 1
         assert metrics.iloc[0]["strong_issue_count"] == 0
+
+    def test_output_duplicate_for_collapsed_source_dimension_path_is_non_blocking(self):
+        source = _make_bdc_source([
+            {
+                "context_id": "ctx_canonical",
+                "investment_identifier": "Acme Corp | First Lien Term Loan",
+                "dimensions_raw": "investmentidentifier=Acme Corp | First Lien Term Loan|axis=canonical",
+            },
+            {
+                "context_id": "ctx_duplicate",
+                "investment_identifier": "Acme Corp  | First Lien Term Loan",
+                "dimensions_raw": "investmentidentifier=Acme Corp  | First Lien Term Loan|axis=industry",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": "Acme Corp | First Lien Term Loan",
+                "bdc_dimensions_raw": "investmentidentifier=Acme Corp | First Lien Term Loan|axis=canonical",
+            },
+            {
+                "bdc_investment_identifier": "Acme Corp  | First Lien Term Loan",
+                "bdc_dimensions_raw": "investmentidentifier=Acme Corp  | First Lien Term Loan|axis=industry",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+
+        assert set(detail["status"]) == {"matched", "collapsed_duplicate_dimension_path"}
+        assert metrics.iloc[0]["matched_rows"] == 1
+        assert metrics.iloc[0]["collapsed_duplicate_dimension_path_rows"] == 1
+        assert metrics.iloc[0]["extra_in_pipeline_rows"] == 0
+        assert metrics.iloc[0]["blocking_issue_count"] == 0
 
     def test_self_referential_subtotal_is_non_blocking(self):
         """Source row whose identifier is a prefix of 2+ child source rows is excluded."""

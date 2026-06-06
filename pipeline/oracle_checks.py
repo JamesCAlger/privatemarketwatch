@@ -1808,6 +1808,10 @@ def diagnose_fuzzy_fallbacks(
     u["report_date"] = u["report_date"].astype(str)
     u["issuer_name"] = u["issuer_name"].astype(str)
     u["fv_round"] = pd.to_numeric(u["fair_value"], errors="coerce").round(0)
+    u = u.drop_duplicates(
+        subset=["cik", "report_date", "issuer_name", "fv_round"],
+        keep="first",
+    )
 
     fuzzy["cik"] = fuzzy["cik"].astype(str).str.zfill(10)
 

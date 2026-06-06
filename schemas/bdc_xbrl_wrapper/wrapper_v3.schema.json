@@ -70,6 +70,10 @@
         "no_prefix_is_aggregate": {
           "type": "boolean",
           "description": "When true, identifiers matched via fallback (no prefix text) are classified as aggregate"
+        },
+        "category_marker_before_total": {
+          "type": "boolean",
+          "description": "When true, category_marker_re demotes matching total-style rows to aggregate before total-rollup classification"
         }
       },
       "additionalProperties": false
@@ -143,6 +147,11 @@
             "additionalProperties": false
           },
           "description": "Manual issuer name bridges for specific identifiers (issuer_bridge strategy)"
+        },
+        "extra_industry_labels": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Additional industry labels beyond the built-in set, used to expand the MSD_INDUSTRY_LABELS placeholder"
         }
       },
       "additionalProperties": false

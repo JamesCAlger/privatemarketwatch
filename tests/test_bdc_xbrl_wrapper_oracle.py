@@ -133,15 +133,42 @@ def test_oracle_fails_when_wrapper_blocker_remains():
         "blocking_issue": True,
         "residual_class": "row_identity",
         "calibrated_status": "blocking_missing_from_pipeline",
+        "source_wrapper_disposition": "debt_position_leaf",
+        "source_wrapper_rule_id": "TRINITY_DEBT_LEAF_V1",
+        "source_wrapper_position_key": "portfolio company debt securities europe industrials aledia inc",
     }])
 
     summary, cleared, remaining, mechanisms = build_wrapper_oracle_outputs(detail)
 
     assert cleared.empty
     assert len(remaining) == 1
-    assert mechanisms.iloc[0]["mechanism"] == "issuer_rollup_no_child_tie"
+    assert mechanisms.iloc[0]["mechanism"] == "leaf_no_output_candidate"
     assert summary.iloc[0]["oracle_status"] == "fail"
     assert "wrapper_blockers_remaining" in summary.iloc[0]["oracle_fail_reasons"]
+
+
+def test_oracle_treats_total_rollup_disposition_as_diagnostic():
+    detail = _detail([{
+        "status": "missing_from_pipeline",
+        "blocking_issue": True,
+        "residual_class": "row_identity",
+        "calibrated_status": "blocking_missing_from_pipeline",
+        "source_wrapper_disposition": "mixed_total_rollup",
+        "source_wrapper_rule_id": "MIDCAP_FINANCIAL_MIXED_TOTAL_ROLLUP_V1",
+        "source_wrapper_family": "mixed",
+        "source_wrapper_parent_key": "total healthcare pharmaceuticals",
+        "source_wrapper_position_key": "total healthcare pharmaceuticals",
+        "raw_investment_identifier": "Total Healthcare & Pharmaceuticals",
+        "normalized_investment_identifier": "total healthcare pharmaceuticals",
+    }])
+
+    summary, _cleared, remaining, mechanisms = build_wrapper_oracle_outputs(detail)
+
+    assert len(remaining) == 1
+    assert mechanisms.iloc[0]["mechanism"] == "total_rollup_no_child_tie"
+    assert summary.iloc[0]["oracle_status"] == "fail"
+    assert "remaining_total_rollup_no_child_tie" in summary.iloc[0]["oracle_fail_reasons"]
+    assert "wrapper_blockers_remaining" not in summary.iloc[0]["oracle_fail_reasons"]
 
 
 def test_oracle_fails_unclassified_trinity_prefix_row():
@@ -463,6 +490,64 @@ def test_validate_content_signatures_includes_fv_columns():
     assert row["unclassified_fv_rate_status"] == "fail"  # exceeds 5% threshold
     # Row rate: 1/3 ~= 0.333
     assert row["unclassified_rate_status"] == "fail"  # exceeds 5%
+
+
+def test_validate_content_signatures_falls_back_when_preferred_text_is_blank():
+    wrapper = _make_wrapper(keywords=("advanced dermatology",))
+    holdings = pd.DataFrame({
+        "instrument_description": ["", "Unmatched text"],
+        "bdc_investment_identifier": [
+            "Advanced Dermatology & Cosmetic Surgery",
+            "Other issuer",
+        ],
+        "fair_value": [1000000, 100],
+        "report_date": ["2025-03-31", "2025-03-31"],
+    })
+
+    summary, _ = validate_content_signatures(wrapper, holdings)
+
+    row = summary.iloc[0]
+    assert row["classified_rows"] == 1
+    assert row["unclassified_rows"] == 1
+    assert row["classified_fv"] == 1000000.0
+
+
+def test_validate_content_signatures_uses_wrapper_leaf_family_when_keywords_miss():
+    wrapper = _make_wrapper(keywords=("term loan",))
+    holdings = pd.DataFrame({
+        "instrument_description": [""],
+        "bdc_investment_identifier": ["Apex Service Partners LLC 3"],
+        "wrapper_family": ["debt"],
+        "wrapper_disposition": ["debt_position_leaf"],
+        "fair_value": [56000000],
+        "report_date": ["2025-03-31"],
+    })
+
+    summary, _ = validate_content_signatures(wrapper, holdings)
+
+    row = summary.iloc[0]
+    assert row["classified_rows"] == 1
+    assert row["unclassified_rows"] == 0
+    assert row["unclassified_fv_rate_status"] == "pass"
+
+
+def test_validate_content_signatures_uses_wrapper_classifier_when_columns_absent():
+    wrapper = _make_wrapper(keywords=("term loan",))
+    holdings = pd.DataFrame({
+        "bdc_investment_identifier": [
+            "Portfolio Company Debt Securities- Europe Industrials Aledia, Inc."
+            "Type of Investment Equipment Financing Investment Date March 31, 2022 "
+            "Maturity Date April 1, 2025 Interest Rate Fixed interest rate 9.0%"
+        ],
+        "fair_value": [1000000],
+        "report_date": ["2024-12-31"],
+    })
+
+    summary, _ = validate_content_signatures(wrapper, holdings)
+
+    row = summary.iloc[0]
+    assert row["classified_rows"] == 1
+    assert row["unclassified_rows"] == 0
 
 
 def test_validate_content_signatures_fv_pass_when_below_threshold():

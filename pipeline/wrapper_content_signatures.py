@@ -461,8 +461,20 @@ def validate_content_signatures(
         return pd.DataFrame(columns=summary_columns), []
 
     violations: list[SignatureViolation] = []
-    # Determine the text column to classify on
+    # Determine the preferred text column, then fall back per row when that
+    # column is blank. Some filers have mixed formats where most rows have
+    # instrument_description but bare issuer/tranche rows only preserve the
+    # classifiable text in the original identifier.
     text_col = _resolve_text_column(holdings_df)
+    fallback_text_cols = []
+    for candidate in [
+        text_col,
+        "bdc_investment_identifier",
+        "investment_identifier",
+        "issuer_name",
+    ]:
+        if candidate and candidate in holdings_df.columns and candidate not in fallback_text_cols:
+            fallback_text_cols.append(candidate)
     report_date_col = "report_date" if "report_date" in holdings_df.columns else None
     has_fv = "fair_value" in holdings_df.columns
 
@@ -472,9 +484,33 @@ def validate_content_signatures(
     per_row_fv: list[float] = []
 
     for idx, row in holdings_df.iterrows():
-        text = str(row.get(text_col, "") or "")
+        text = ""
+        for candidate in fallback_text_cols:
+            candidate_text = str(row.get(candidate, "") or "").strip()
+            if candidate_text:
+                text = candidate_text
+                break
         report_date = str(row.get(report_date_col, "") or "") if report_date_col else ""
         archetype_name = classify_archetype(wrapper, text)
+        if archetype_name is None:
+            wrapper_family = str(row.get("wrapper_family", "") or "").strip()
+            wrapper_disposition = str(row.get("wrapper_disposition", "") or "").strip()
+            if (
+                wrapper_family
+                and wrapper_disposition.endswith("_position_leaf")
+                and any(arch.name == wrapper_family for arch in wrapper.archetypes)
+            ):
+                archetype_name = wrapper_family
+        if archetype_name is None:
+            wrapper_result = classify_identifier(wrapper.cik, text)
+            wrapper_family = str(wrapper_result.get("wrapper_family", "") or "").strip()
+            wrapper_disposition = str(wrapper_result.get("wrapper_disposition", "") or "").strip()
+            if (
+                wrapper_family
+                and wrapper_disposition.endswith("_position_leaf")
+                and any(arch.name == wrapper_family for arch in wrapper.archetypes)
+            ):
+                archetype_name = wrapper_family
         per_row_archetype.append(archetype_name or "")
         per_row_report_date.append(report_date)
 

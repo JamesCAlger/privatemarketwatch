@@ -27,6 +27,10 @@ from pipeline.bdc_xbrl_wrapper import (
     is_non_private_market_identifier,
     supported_wrapper_ciks,
 )
+from pipeline.bdc_xbrl_html_bridge import (
+    BRIDGE_TABLE_COLUMNS,
+    load_html_section_bridge_rows,
+)
 from pipeline.bdc_aggregate_overrides import load_bdc_aggregate_overrides
 from pipeline.classification import (
     _INDUSTRY_LABELS,
@@ -113,6 +117,10 @@ def _expand_placeholders(text: str, placeholders: dict[str, str]) -> str:
     """Replace placeholder tokens in JSON regex patterns with runtime values."""
     for token, expansion in placeholders.items():
         text = text.replace(token, expansion)
+    # DuckDB regex does not accept JSON-style unicode escapes such as \u2013.
+    # Decode common dash escapes after JSON loading while keeping config files
+    # ASCII-friendly.
+    text = text.replace("\\u2013", chr(0x2013)).replace("\\u2014", chr(0x2014))
     return text
 
 
@@ -210,6 +218,10 @@ def _load_issuer_bridges_from_json() -> list[dict[str, str]]:
             })
     return bridges
 
+
+def _load_html_section_bridges_from_json() -> pd.DataFrame:
+    """Load audited static HTML-section bridge rows for BDC XBRL staging."""
+    return load_html_section_bridge_rows()
 
 
 def _get_comma_delimited_ciks() -> list[str]:
@@ -453,6 +465,7 @@ def _prepare_bdc(
     agg_header_flags = _load_aggregate_header_flags()
     con.register("cc_aggregate_header_flags", agg_header_flags)
     _issuer_bridges = _load_issuer_bridges_from_json()
+    _html_section_bridges = _load_html_section_bridges_from_json()
     con.register(
         "saratoga_issuer_bridges",
         pd.DataFrame(
@@ -466,11 +479,25 @@ def _prepare_bdc(
             ],
         ),
     )
+    _html_bridge_table = pd.DataFrame(
+        _html_section_bridges,
+        columns=BRIDGE_TABLE_COLUMNS,
+    ).rename(columns={
+        "cik": "bridge_cik",
+        "accession_number": "bridge_accession_number",
+        "report_date": "bridge_report_date",
+        "raw_id_lower": "bridge_raw_id_lower",
+    })
+    con.register("html_section_bridges", _html_bridge_table)
     _has_agg_flags = len(agg_header_flags) > 0
 
     # Pre-generate SQL fragments from Python constants
     agg_filter = _sql_is_bdc_aggregate()
     bad_issuer_filter = _sql_is_bad_issuer_name()
+    bad_numeric_issuer_filter = (
+        "(LENGTH(trim(CAST(issuer_name AS VARCHAR))) >= 1 "
+        "AND NOT regexp_matches(trim(CAST(issuer_name AS VARCHAR)), '[a-zA-Z]'))"
+    )
     # Entity signal check on raw identifier -- when issuer_name is bad but raw
     # has company signals (LLC, Inc, etc.), keep the row with raw as issuer_name
     _entity_sigs = [
@@ -738,9 +765,9 @@ def _prepare_bdc(
     ) if _double_investments_cik_norms else "FALSE"
     _DOUBLE_INVESTMENTS_HIERARCHY_RE = (
         r"(?i)^Investments\s+Investments\s*(?:--|-|/)\s*"
-        r"(?:non-?\s*control(?:led)?(?:\s*[/,]\s*non-?\s*affiliat(?:e|ed))?"
-        r"|control(?:led)?(?:\s*[/,]\s*affiliat(?:e|ed))?"
-        r"|affiliat(?:e|ed))"
+        r"(?:non-?\s*control(?:led)?(?:\s*[/,]\s*non-?\s*affiliat(?:e|ed|d))?"
+        r"|control(?:led)?(?:\s*[/,]\s*affiliat(?:e|ed|d))?"
+        r"|affiliat(?:e|ed|d))"
         r"(?:\s+(?:equity|debt|first\s+lien|second\s+lien|senior\s+secured"
         r"|subordinated|unsecured|mezzanine|unitranche|preferred|common"
         r"|warrant|structured|other)(?:\s+(?:securities|investments|interests))?)?"
@@ -768,11 +795,31 @@ def _prepare_bdc(
         "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
         "IN (" + ", ".join(f"'{c}'" for c in _hier_pct_ciks) + ")"
     ) if _hier_pct_ciks else "FALSE"
-    # Condition: CIK matches AND >= 2 segments AND last segment has pct prefix
+    _hier_pct_leaf_prefix_re = "^-?\\d[\\d.]*%,?\\s+\\S"
+    # Condition: CIK matches AND >= 2 segments AND last segment has pct prefix.
+    # Some hierarchical-pct filers use comma-delimited category chains, leaving
+    # the final dash segment as "1.06%, Issuer"; accept the comma as delimiter.
+    # Issuer names can also contain dashes, e.g. "Foundation Software - Class B",
+    # so also accept a percent-prefixed penultimate segment.
     _hier_pct_condition = (
         f"({_hier_pct_cik_sql} "
         "AND len(_segments) >= 2 "
-        "AND regexp_matches(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+\\S'))"
+        f"AND (regexp_matches(trim(_segments[-1]), '{_hier_pct_leaf_prefix_re}') "
+        f"OR (len(_segments) >= 5 AND regexp_matches(trim(_segments[-2]), '{_hier_pct_leaf_prefix_re}'))))"
+    )
+    _hier_leaf_sql = (
+        "CASE "
+        f"WHEN regexp_matches(trim(_segments[-1]), '{_hier_pct_leaf_prefix_re}') "
+        "THEN trim(_segments[-1]) "
+        f"WHEN len(_segments) >= 5 AND regexp_matches(trim(_segments[-2]), '{_hier_pct_leaf_prefix_re}') "
+        "THEN trim(_segments[-2] || ' - ' || _segments[-1]) "
+        "ELSE trim(_segments[-1]) END"
+    )
+    _hier_instrument_segment_sql = (
+        "CASE "
+        f"WHEN len(_segments) >= 5 AND regexp_matches(trim(_segments[-2]), '{_hier_pct_leaf_prefix_re}') "
+        "THEN trim(_segments[-3]) "
+        "ELSE trim(_segments[-2]) END"
     )
     # Build boundary keyword regex from all hierarchical_pct configs (union)
     _hier_boundary_kws: set[str] = set()
@@ -880,6 +927,9 @@ def _prepare_bdc(
     _he_instrument_sql = "\n                ".join(_he_instrument_parts) if _he_instrument_parts else (
         "WHEN FALSE THEN NULL"
     )
+    _he_any_condition = (
+        "(" + " OR ".join(f"({_he['condition']})" for _he in _he_per_cik) + ")"
+    ) if _he_per_cik else "FALSE"
     # Hierarchy leaf guard: CIK list, prefix patterns, marker/evidence from JSON
     _hierarchy_leaf_ciks = [v["cik"] for v in _leaf_guard_cfgs.values()]
     _hierarchy_leaf_cik_sql = (
@@ -1327,10 +1377,16 @@ def _prepare_bdc(
         LEFT JOIN _wrapper_disp wd
           ON LPAD(REGEXP_REPLACE(CAST(s.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = wd.cik_norm
          AND COALESCE(CAST(s.investment_identifier AS VARCHAR), '') = wd.raw_id
+        LEFT JOIN html_section_bridges hsb
+          ON LPAD(REGEXP_REPLACE(CAST(s.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = hsb.bridge_cik
+         AND CAST(s.accession_number AS VARCHAR) = hsb.bridge_accession_number
+         AND CAST(s.report_date AS VARCHAR) = hsb.bridge_report_date
+         AND lower(trim(CAST(s.investment_identifier AS VARCHAR))) = hsb.bridge_raw_id_lower
         WHERE COALESCE(o.force_exclude, 0) = 0
           AND (
               COALESCE(o.force_include, 0) = 1
               OR COALESCE(wd.wrapper_disposition, '') LIKE '%_position_leaf'
+              OR COALESCE(hsb.disposition, '') LIKE '%_position_leaf'
               OR ({_prefix_rules_hierarchy_condition})
               OR NOT ({agg_filter})
           )
@@ -1340,17 +1396,27 @@ def _prepare_bdc(
     -- aggregate filter (they have entity signals like "Inc." that
     -- protect them from the no-entity guard).
     -- Wrapper-authoritative: *_position_leaf rescues from prefix filter.
-    -- Category rollups are safe to drop here because wrapper category rules
-    -- are issuerless hierarchy/subtotal patterns; issuer_rollup is still not
-    -- authoritative due known false-positive risk in older wrappers.
+    -- Category rollups, total rollups, and explicit aggregate dispositions
+    -- are safe to drop here because they are issuerless hierarchy/subtotal patterns;
+    -- issuer_rollup is still not authoritative due known false-positive risk
+    -- in older wrappers.
     no_prefix_hierarchy AS (
         SELECT nag.* FROM no_aggregates nag
         LEFT JOIN _wrapper_disp wd
           ON LPAD(REGEXP_REPLACE(CAST(nag.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = wd.cik_norm
          AND COALESCE(CAST(nag.investment_identifier AS VARCHAR), '') = wd.raw_id
+        LEFT JOIN html_section_bridges hsb
+          ON LPAD(REGEXP_REPLACE(CAST(nag.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = hsb.bridge_cik
+         AND CAST(nag.accession_number AS VARCHAR) = hsb.bridge_accession_number
+         AND CAST(nag.report_date AS VARCHAR) = hsb.bridge_report_date
+         AND lower(trim(CAST(nag.investment_identifier AS VARCHAR))) = hsb.bridge_raw_id_lower
         WHERE COALESCE(wd.wrapper_disposition, '') LIKE '%_position_leaf'
+           OR COALESCE(hsb.disposition, '') LIKE '%_position_leaf'
            OR (
+               COALESCE(wd.wrapper_disposition, '') != 'aggregate'
+               AND
                COALESCE(wd.wrapper_disposition, '') NOT LIKE '%_category_rollup'
+               AND COALESCE(wd.wrapper_disposition, '') NOT LIKE '%_total_rollup'
                AND NOT ({_prefix_hierarchy_filter})
            )
     ),
@@ -1584,6 +1650,12 @@ def _prepare_bdc(
     parsed AS (
         SELECT * EXCLUDE (_issuer_raw, _issuer_lower, _pipe_issuer, _pipe_format, _segments),
             CASE
+                -- CIK-scoped hierarchy_extract wrappers override generic pipe
+                -- parsing when their explicit condition matches. Some filers
+                -- use pipes as hierarchy delimiters rather than issuer/instrument
+                -- separators, so the generic pipe fallback would otherwise read
+                -- category text as the issuer.
+                {_he_issuer_sql}
                 -- Pipe format takes priority
                 WHEN _pipe_issuer IS NOT NULL THEN _pipe_issuer
                 -- CIK-scoped no-dash hierarchy leaves. These filers encode
@@ -1591,8 +1663,6 @@ def _prepare_bdc(
                 -- typed dimension value, so the generic first-segment parser
                 -- would otherwise treat the whole string as a bad issuer.
                 {_hierarchy_leaf_issuer_sql}
-                -- hierarchy_extract rows: per-CIK issuer regex extraction
-                {_he_issuer_sql}
                 -- MSD Investment Corp. embeds the full SOI hierarchy in one
                 -- typed-dimension value. Valid borrowers often lack LLC/Inc
                 -- suffixes, so parse only this CIK's hierarchy instead of
@@ -1675,17 +1745,17 @@ def _prepare_bdc(
                 WHEN {_hier_pct_condition}
                 THEN COALESCE(
                     NULLIF(regexp_extract(
-                        regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                        regexp_replace({_hier_leaf_sql}, '^-?\\d[\\d.]*%,?\\s+', ''),
                         '(?i)^(.+?)\\s+{_hier_boundary_re}(?:\\s|$)',
                         1
                     ), ''),
                     -- Equity fallback: strip trailing industry label
                     NULLIF(regexp_extract(
-                        regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                        regexp_replace({_hier_leaf_sql}, '^-?\\d[\\d.]*%,?\\s+', ''),
                         '(?i)^(.+?)\\s+{_hier_industry_label_re}$',
                         1
                     ), ''),
-                    regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', '')
+                    regexp_replace({_hier_leaf_sql}, '^-?\\d[\\d.]*%,?\\s+', '')
                 )
                 -- Goldman Sachs 1-segment (no dash separator):
                 -- "Investment <type> <pct>% <company> Industry ..."
@@ -1704,6 +1774,9 @@ def _prepare_bdc(
                 ELSE _issuer_raw
             END AS issuer_name,
             CASE
+                -- CIK-scoped hierarchy_extract wrappers override generic pipe
+                -- parsing when their explicit condition matches.
+                {_he_instrument_sql}
                 -- 2-pipe: instrument = segment 2
                 WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'two_pipe'
                 THEN trim({pipe_parts}[2])
@@ -1733,10 +1806,6 @@ def _prepare_bdc(
                          ELSE ''
                      END
                 {_hierarchy_leaf_instrument_sql}
-                -- hierarchy_extract rows: per-CIK instrument regex extraction.
-                -- trailing_re (if present) appends tranche labels after maturity
-                -- to prevent equal-FV borrower tranches from collapsing.
-                {_he_instrument_sql}
                 WHEN {_msd_hierarchy_condition}
                 THEN trim(COALESCE(
                     NULLIF(regexp_extract({_msd_clean_raw}, '^.+?\\s+-\\s+(.+)$', 1), ''),
@@ -1800,7 +1869,7 @@ def _prepare_bdc(
                 -- 3 segments: seg[1] minus "Investment " prefix (already correct)
                 -- 2 segments: seg[1] minus "Investment " prefix
                 WHEN {_hier_pct_condition} AND len(_segments) >= 4
-                THEN regexp_replace(trim(_segments[-2]), '^-?\\d[\\d.]*%\\s+', '')
+                THEN regexp_replace({_hier_instrument_segment_sql}, '^-?\\d[\\d.]*%,?\\s+', '')
                 WHEN {_hier_pct_condition}
                 THEN regexp_replace(trim(_segments[1]), '^(?i)Investment\\s+', '')
                 -- Hierarchical pct 1-segment (no dash separator)
@@ -1826,7 +1895,7 @@ def _prepare_bdc(
             -- Hierarchical pct: country from seg[2] stripped of pct (>= 3 segments)
             CASE WHEN {_hier_pct_condition} AND len(_segments) >= 3
                  THEN regexp_extract(
-                     regexp_replace(trim(_segments[2]), '^-?\\d[\\d.]*%\\s+', ''),
+                     regexp_replace(trim(_segments[2]), '^-?\\d[\\d.]*%,?\\s+', ''),
                      '(?i)^({_hier_country_re})$', 1
                  )
                  ELSE NULL
@@ -1835,15 +1904,15 @@ def _prepare_bdc(
             -- Debt: text after "Industry" keyword, before next boundary keyword
             -- Equity: trailing industry label match (no "Industry" keyword)
             CASE WHEN {_hier_pct_condition}
-                      AND regexp_matches(trim(_segments[-1]), '(?i)\\bIndustry\\s+')
+                 AND regexp_matches({_hier_leaf_sql}, '(?i)\\bIndustry\\s+')
                  THEN trim(regexp_extract(
-                     regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                     regexp_replace({_hier_leaf_sql}, '^-?\\d[\\d.]*%,?\\s+', ''),
                      '(?i)(?:^.*?)\\bIndustry\\s+(.+?)(?:\\s+(?:{_hier_boundary_re})(?:\\s|$)|$)',
                      1
                  ))
                  WHEN {_hier_pct_condition}
                  THEN regexp_extract(
-                     regexp_replace(trim(_segments[-1]), '^-?\\d[\\d.]*%\\s+', ''),
+                     regexp_replace({_hier_leaf_sql}, '^-?\\d[\\d.]*%,?\\s+', ''),
                      '(?i)\\s+({_hier_industry_label_re})$',
                      1
                  )
@@ -1852,7 +1921,7 @@ def _prepare_bdc(
         FROM initial_split
     ),
 
-    parsed_with_saratoga_bridge AS (
+    parsed_with_manual_bridge AS (
         SELECT p.* EXCLUDE (issuer_name, instrument_description),
             COALESCE(b.issuer_name, p.issuer_name) AS issuer_name,
             COALESCE(
@@ -1870,6 +1939,38 @@ def _prepare_bdc(
          AND lower(trim(CAST(p._raw_id AS VARCHAR))) = b.raw_id_lower
     ),
 
+    parsed_with_saratoga_bridge AS (
+        SELECT p.* EXCLUDE (issuer_name, instrument_description),
+            CASE
+                WHEN hsb.bridge_raw_id_lower IS NOT NULL
+                     AND (
+                         COALESCE(hsb.permit_overwrite, false)
+                         OR COALESCE(trim(CAST(p.instrument_description AS VARCHAR)), '') = ''
+                     )
+                THEN COALESCE(NULLIF(hsb.issuer_name, ''), p.issuer_name)
+                ELSE p.issuer_name
+            END AS issuer_name,
+            CASE
+                WHEN hsb.bridge_raw_id_lower IS NOT NULL
+                     AND (
+                         COALESCE(hsb.permit_overwrite, false)
+                         OR COALESCE(trim(CAST(p.instrument_description AS VARCHAR)), '') = ''
+                     )
+                THEN COALESCE(NULLIF(hsb.instrument_description, ''), p.instrument_description)
+                ELSE p.instrument_description
+            END AS instrument_description
+        FROM parsed_with_manual_bridge p
+        LEFT JOIN html_section_bridges hsb
+          ON LPAD(
+                 regexp_replace(CAST(p.cik AS VARCHAR), '[^0-9]', '', 'g'),
+                 10,
+                 '0'
+             ) = hsb.bridge_cik
+         AND CAST(p.accession_number AS VARCHAR) = hsb.bridge_accession_number
+         AND CAST(p.report_date AS VARCHAR) = hsb.bridge_report_date
+         AND lower(trim(CAST(p._raw_id AS VARCHAR))) = hsb.bridge_raw_id_lower
+    ),
+
     -- CTE 5c: Fix bad issuer names (extraction artifacts from dimension paths)
     -- When issuer_name is a generic label (e.g., "Investments") but the raw
     -- identifier contains entity signals (LLC, Inc, etc.), replace issuer_name
@@ -1878,13 +1979,20 @@ def _prepare_bdc(
     no_bad_issuers AS (
         SELECT * EXCLUDE (issuer_name),
             CASE
+                WHEN ({bad_numeric_issuer_filter})
+                     AND ({_he_any_condition})
+                THEN issuer_name
                 WHEN ({bad_issuer_filter})
                      AND ({_sql_has_entity_in_raw})
                 THEN _raw_id
                 ELSE issuer_name
             END AS issuer_name
         FROM parsed_with_saratoga_bridge
-        WHERE NOT (({bad_issuer_filter}) AND NOT ({_sql_has_entity_in_raw}))
+        WHERE NOT (
+            ({bad_issuer_filter})
+            AND NOT (({bad_numeric_issuer_filter}) AND ({_he_any_condition}))
+            AND NOT ({_sql_has_entity_in_raw})
+        )
     ),
 
     {_cc_agg_header_cte}

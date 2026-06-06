@@ -15,6 +15,7 @@ import json
 import logging
 import re
 import unicodedata
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -209,6 +210,7 @@ class WrapperSpec:
     fallback_family_patterns: tuple[tuple[re.Pattern[str], str], ...] = ()
     canonical_strip_re: re.Pattern[str] | None = None
     no_prefix_is_aggregate: bool = False
+    category_marker_before_total: bool = False
 
     def normalized_cik(self) -> str:
         return normalize_cik(self.cik)
@@ -250,8 +252,14 @@ def is_non_private_market_identifier(identifier: Any, markers: tuple[str, ...] |
             continue
         if marker in lowered:
             return True
-    if ("cash +" in lowered or "cash plus" in lowered or "cash (" in lowered
-            or "cash," in lowered or "total coupon" in lowered or "coupon" in lowered):
+    if ("cash interest rate" in lowered or "cash/ pik" in lowered
+            or "cash / pik" in lowered or "cash/pik" in lowered
+            or "cash +" in lowered or "cash plus" in lowered
+            or "cash pay" in lowered
+            or "cash (" in lowered or "cash," in lowered
+            or "total coupon" in lowered or "coupon" in lowered):
+        return False
+    if re.search(r"\b\d+(?:\.\d+)?%\s+cash\s*/\s*\d", lowered):
         return False
     return bool(re.search(
         r"(?:^|[^a-z])(?:total\s+)?cash(?:\s+and\s+cash\s+equivalents|\s+equivalents|\s+accounts)?(?:[^a-z]|$)",
@@ -304,6 +312,14 @@ def _rollup_disposition(
     lowered = identifier.lower()
     if is_non_private_market_identifier(identifier, spec.non_private_markers):
         return "non_private_market", _rule_id(spec, family, "NON_PRIVATE_MARKET")
+    if any(marker in lowered and "commitment" in marker for marker in spec.aggregate_markers):
+        return "aggregate", _rule_id(spec, family, "AGGREGATE")
+    if (
+        spec.category_marker_before_total
+        and spec.category_marker_re
+        and spec.category_marker_re.search(suffix_text)
+    ):
+        return "aggregate", _rule_id(spec, family, "AGGREGATE")
     if re.search(r"(?:^| )sub total(?: |$)", normalized) or re.search(r"(?:^| )subtotal(?: |$)", normalized):
         return f"{family}_total_rollup", _rule_id(spec, family, "TOTAL_ROLLUP")
     if re.search(r"(?:^| )total(?: |$)", suffix):
@@ -326,7 +342,11 @@ def _extract_value_key(identifier: str, value_name: str) -> str:
     if pattern is None:
         return ""
     match = pattern.search(identifier)
-    return normalize_key(match.group(1)) if match else ""
+    if not match:
+        return ""
+    value = match.group(1)
+    value = re.sub(r"\b(\d{1,2}/\d{1,2})/20(\d{2})\b", r"\1/\2", value)
+    return normalize_key(value)
 
 
 def _extract_rate_key(identifier: str, family: str) -> str:
@@ -338,8 +358,8 @@ def _extract_rate_key(identifier: str, family: str) -> str:
 
 def _canonical_identifier_for_keys(spec: WrapperSpec, identifier: str) -> str:
     if spec.canonical_strip_re is not None:
-        return spec.canonical_strip_re.sub("", identifier).strip()
-    return identifier
+        identifier = spec.canonical_strip_re.sub("", identifier).strip()
+    return re.sub(r"\b(\d{1,2}/\d{1,2})/20(\d{2})\b", r"\1/\2", identifier)
 
 
 # ---------------------------------------------------------------------------
@@ -418,6 +438,7 @@ def _load_specs_from_json() -> dict[str, WrapperSpec]:
 
         # no_prefix_is_aggregate flag
         no_prefix_is_aggregate = bool(dispatch.get("no_prefix_is_aggregate", False))
+        category_marker_before_total = bool(dispatch.get("category_marker_before_total", False))
 
         spec = WrapperSpec(
             cik=cik,
@@ -432,6 +453,7 @@ def _load_specs_from_json() -> dict[str, WrapperSpec]:
             fallback_family_patterns=tuple(fallback_patterns),
             canonical_strip_re=canonical_strip_re,
             no_prefix_is_aggregate=no_prefix_is_aggregate,
+            category_marker_before_total=category_marker_before_total,
         )
         specs[cik_norm] = spec
     return specs
@@ -469,6 +491,14 @@ def classify_identifier(cik: Any, identifier: Any) -> dict[str, str]:
     result["wrapper_version"] = spec.version
     result["wrapper_family"] = family
     if not parent_key:
+        disposition, rule_id = _rollup_disposition(spec, raw, parent_key, family, prefix)
+        if not disposition.endswith("_unclassified"):
+            result.update({
+                "wrapper_rule_id": rule_id,
+                "wrapper_disposition": disposition,
+                "wrapper_signature_status": "pass",
+            })
+            return result
         result.update({
             "wrapper_rule_id": _rule_id(spec, family, "UNCLASSIFIED"),
             "wrapper_disposition": f"{family}_unclassified",
@@ -512,6 +542,20 @@ def classify_identifier(cik: Any, identifier: Any) -> dict[str, str]:
     return result
 
 
+def _contains_wrapper_pattern(
+    identifiers: pd.Series,
+    pattern: re.Pattern[str],
+) -> pd.Series:
+    """Run a configured regex mask without pandas capture-group noise."""
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message="This pattern is interpreted as a regular expression, and has match groups.*",
+            category=UserWarning,
+        )
+        return identifiers.str.contains(pattern, na=False)
+
+
 def add_bdc_xbrl_wrapper_columns(
     df: pd.DataFrame,
     *,
@@ -538,7 +582,7 @@ def add_bdc_xbrl_wrapper_columns(
             prefix_mask = prefix_mask | identifiers.str.startswith(prefix, na=False)
         # Apply fallback patterns from config (replaces hardcoded Saratoga checks)
         for pattern, _family in spec.fallback_family_patterns:
-            prefix_mask = prefix_mask | identifiers.str.contains(pattern, na=False)
+            prefix_mask = prefix_mask | _contains_wrapper_pattern(identifiers, pattern)
         mask = mask | (cik_norm.eq(cik_value) & prefix_mask)
     if not mask.any():
         return result

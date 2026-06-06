@@ -240,9 +240,9 @@ _AFFILIATION_PREFIX_RE = (
 # "{Industry} {Company} {Instrument}".
 _INVESTMENTS_HIERARCHY_RE = (
     r"(?i)^Investments\s*(?:--|-|/)\s*"
-    r"(?:non-?\s*control(?:led)?(?:\s*[/,]\s*non-?\s*affiliat(?:e|ed))?"
-    r"|control(?:led)?(?:\s*[/,]\s*affiliat(?:e|ed))?"
-    r"|affiliat(?:e|ed))"
+    r"(?:non-?\s*control(?:led)?(?:\s*[/,]\s*non-?\s*affiliat(?:e|ed|d))?"
+    r"|control(?:led)?(?:\s*[/,]\s*affiliat(?:e|ed|d))?"
+    r"|affiliat(?:e|ed|d))"
     r"(?:\s+(?:equity|debt|first\s+lien|second\s+lien|senior\s+secured"
     r"|subordinated|unsecured|mezzanine|unitranche|preferred|common"
     r"|warrant|structured|other)(?:\s+(?:securities|investments|interests))?)?"

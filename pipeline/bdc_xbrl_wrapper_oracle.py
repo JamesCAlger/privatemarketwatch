@@ -1682,14 +1682,22 @@ def build_wrapper_oracle_outputs(
     source_blocking_disposition = remaining["source_wrapper_disposition"].fillna("").astype(str)
     output_blocking_disposition = remaining["output_wrapper_disposition"].fillna("").astype(str)
     diagnostic_dispositions = {"aggregate", "non_private_market"}
+    source_diagnostic = (
+        source_blocking_disposition.isin(diagnostic_dispositions)
+        | source_blocking_disposition.str.endswith("_rollup")
+    )
+    output_diagnostic = (
+        output_blocking_disposition.isin(diagnostic_dispositions)
+        | output_blocking_disposition.str.endswith("_rollup")
+    )
     wrapper_blocking = remaining[
         (
             source_blocking_disposition.ne("")
-            & ~source_blocking_disposition.isin(diagnostic_dispositions)
+            & ~source_diagnostic
         )
         | (
             output_blocking_disposition.ne("")
-            & ~output_blocking_disposition.isin(diagnostic_dispositions)
+            & ~output_diagnostic
         )
     ]
     mechanisms = build_remaining_mechanism_summary(

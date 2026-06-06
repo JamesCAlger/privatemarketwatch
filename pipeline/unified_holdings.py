@@ -38,6 +38,10 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
+WRAPPER_DUPLICATE_LOT_KEY_CIKS = frozenset({
+    "0001772704",
+})
+
 # Unified output column order
 UNIFIED_COLUMNS = [
     # Identity
@@ -1504,11 +1508,67 @@ def _apply_wrapper_position_keys(df: pd.DataFrame) -> pd.DataFrame:
         df.loc[has_key[has_key].index, "position_key"] = (
             wrapped.loc[has_key, "wrapper_position_key"]
         )
+        df = _append_duplicate_wrapper_lot_keys(df, has_key[has_key].index)
         logger.info(
             "  Wrapper position_key override: %d rows across %d CIKs",
             override_count,
             df.loc[has_key[has_key].index, "cik"].nunique(),
         )
+    return df
+
+
+def _append_duplicate_wrapper_lot_keys(
+    df: pd.DataFrame,
+    candidate_index: pd.Index,
+) -> pd.DataFrame:
+    """Append deterministic lot suffixes for repeated wrapper keys.
+
+    Some BDC XBRL schedules disclose multiple separate rows with the same
+    issuer, spread, and maturity. For configured CIKs, keep those rows as
+    separate position-level constituents by ranking repeated wrapper keys
+    within a CIK/source/report-date group. The suffix is applied only to keys
+    that would otherwise repeat in that quarter.
+    """
+    required = {
+        "cik", "source", "report_date", "position_key",
+        "principal_amount", "fair_value", "cost",
+    }
+    if df.empty or not required.issubset(df.columns):
+        return df
+
+    cik_norm = (
+        df["cik"].astype(str)
+        .str.replace(r"[^0-9]", "", regex=True)
+        .str.zfill(10)
+    )
+    candidate_mask = df.index.isin(candidate_index)
+    scoped = (
+        candidate_mask
+        & cik_norm.isin(WRAPPER_DUPLICATE_LOT_KEY_CIKS)
+        & df["position_key"].astype(str).ne("")
+    )
+    if not scoped.any():
+        return df
+
+    key_cols = ["cik", "source", "report_date", "position_key"]
+    group_sizes = df.loc[scoped].groupby(key_cols, dropna=False)["position_key"].transform("size")
+    duplicate_index = group_sizes[group_sizes.gt(1)].index
+    if len(duplicate_index) == 0:
+        return df
+
+    work = df.loc[duplicate_index, key_cols + ["principal_amount", "fair_value", "cost"]].copy()
+    work["_principal_abs"] = pd.to_numeric(work["principal_amount"], errors="coerce").abs().fillna(-1)
+    work["_fair_value_abs"] = pd.to_numeric(work["fair_value"], errors="coerce").abs().fillna(-1)
+    work["_cost_abs"] = pd.to_numeric(work["cost"], errors="coerce").abs().fillna(-1)
+    work["_source_index"] = range(len(work))
+    work = work.sort_values(
+        key_cols + ["_principal_abs", "_fair_value_abs", "_cost_abs", "_source_index"],
+        ascending=[True, True, True, True, False, False, False, True],
+        kind="mergesort",
+    )
+    work["_lot_rank"] = work.groupby(key_cols, dropna=False).cumcount() + 1
+    suffix = " lot " + work["_lot_rank"].astype(str)
+    df.loc[work.index, "position_key"] = df.loc[work.index, "position_key"].astype(str) + suffix
     return df
 
 

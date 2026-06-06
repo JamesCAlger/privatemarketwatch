@@ -141,6 +141,12 @@ UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 
 # Manual row-level corrections overlay (checked into data/overrides/)
 ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
+BDC_XBRL_ORACLE_EXCEPTIONS_FILE = OVERRIDES_DIR / "bdc_xbrl_oracle_exceptions.json"
+
+# Unlisted (non-traded) BDC reference for v1 frontend filtering
+UNLISTED_BDC_REFERENCE_FILE = (
+    OVERRIDES_DIR / "bdc_xbrl_wrappers" / "unlisted_bdc_xbrl_reference.json"
+)
 
 # Entity resolution overrides and outputs
 ENTITY_OVERRIDES_FILE = OVERRIDES_DIR / "entity_overrides.json"
