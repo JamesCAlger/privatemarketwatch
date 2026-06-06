@@ -103,12 +103,11 @@ export default function HomePage() {
             {/* Left: headline + CTA */}
             <div>
               <h1 className="font-display text-[42px] md:text-[60px] leading-[1.05] tracking-[-0.028em] text-white mb-5 font-medium">
-                The data platform<br />for private markets.
+                The index platform<br />for private credit.
               </h1>
               <p className="text-[17px] leading-relaxed text-white/60 max-w-[620px] mb-6">
-                The largest publicly available dataset of{' '}
-                <strong className="text-white/90">BDCs, interval funds, and tender offer funds</strong>.
-                Covering the investor-accessible side of private credit and equity,
+                Position-level benchmarks and portfolio analytics for{' '}
+                <strong className="text-white/90">unlisted BDCs</strong>,
                 built from mandatory SEC filings.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -144,7 +143,7 @@ export default function HomePage() {
                 </div>
                 <div className="border-t border-white/[0.1] pt-2.5">
                   <div className="text-[11px] uppercase tracking-[0.12em] text-white/45">
-                    Registered Funds
+                    Unlisted BDCs
                   </div>
                   <div className="font-display text-[30px] text-white tracking-[-0.02em] mt-1">
                     {formatNumber(summary.totalFunds)}
@@ -242,7 +241,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
               <div className="md:pr-6">
-                <div className="eyebrow text-accent mb-2">Direct Lending</div>
+                <div className="eyebrow text-accent mb-2">Private Credit</div>
                 <h2 className="font-display text-[26px] text-white tracking-[-0.01em] leading-tight">
                   Portfolio<br />Characteristics
                 </h2>
@@ -284,8 +283,8 @@ export default function HomePage() {
       {/* ================================================================ */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 space-y-14">
 
-        {/* 6. Movers — premiums, discounts, yield leaderboard */}
-        <MoversSection funds={funds} />
+        {/* 6. Credit risk + yield leaderboard */}
+        <CreditRiskCards creditRisk={creditRisk} funds={funds} />
 
         {/* 7. Distributions & Leverage (single card, two-column) */}
         {(distHistogram || levHistogram) && (
@@ -460,146 +459,154 @@ function ReturnSummaryTable({
   );
 }
 
-function MoversSection({ funds }: { funds: import('@/lib/types').FundListItem[] }) {
-  // Top premiums (funds with positive premium/discount)
-  const withPremDisc = funds.filter(
-    (f) => f.premiumDiscountPct != null && f.navPerShare != null,
-  );
-  const topPremiums = [...withPremDisc]
-    .filter((f) => (f.premiumDiscountPct ?? 0) > 0)
-    .sort((a, b) => (b.premiumDiscountPct ?? 0) - (a.premiumDiscountPct ?? 0))
-    .slice(0, 6);
-  const topDiscounts = [...withPremDisc]
-    .filter((f) => (f.premiumDiscountPct ?? 0) < 0)
-    .sort((a, b) => (a.premiumDiscountPct ?? 0) - (b.premiumDiscountPct ?? 0))
-    .slice(0, 6);
+function CreditRiskCards({
+  creditRisk,
+  funds,
+}: {
+  creditRisk: import('@/lib/types').CreditRiskRow[];
+  funds: import('@/lib/types').FundListItem[];
+}) {
+  const latest = creditRisk.length > 0 ? creditRisk[creditRisk.length - 1] : null;
+  const prior = creditRisk.length > 1 ? creditRisk[creditRisk.length - 2] : null;
 
-  // Yield leaderboard (top by distribution rate — values already in pct form)
+  // Yield leaderboard (top by distribution rate)
   const withDist = funds.filter((f) => f.distributionRate != null && f.distributionRate > 0);
   const topYield = [...withDist]
     .sort((a, b) => (b.distributionRate ?? 0) - (a.distributionRate ?? 0))
     .slice(0, 8);
   const maxYield = topYield[0]?.distributionRate ?? 1;
 
-  if (topPremiums.length === 0 && topDiscounts.length === 0 && topYield.length === 0) {
-    return null;
-  }
-
-  // premiumDiscountPct and distributionRate are already in pct form (e.g. 5.2 = 5.2%)
-  const fmtPctRaw = (v: number | null) => {
-    if (v == null) return '--';
-    const pct = Math.abs(v).toFixed(1);
-    return v >= 0 ? `+${pct}%` : `\u2212${pct}%`;
-  };
-
-  const fmtDollar = (v: number | null) => {
-    if (v == null) return '--';
-    return `$${v.toFixed(2)}`;
-  };
+  if (!latest && topYield.length === 0) return null;
 
   const shortName = (f: import('@/lib/types').FundListItem) => {
-    // Strip CIK suffix and ticker parenthetical for compact display
     let n = f.name.replace(/\s*\(CIK\s+\d+\)\s*$/, '').replace(/\s*\([A-Z]{1,5}(?:,\s*[A-Z]{1,5})*\)\s*/, ' ').trim();
     if (n.length > 28) n = n.slice(0, 27) + '\u2026';
     return n;
   };
 
+  const dirArrow = (current: number, previous: number | null) => {
+    if (previous == null) return '';
+    if (current > previous + 0.001) return ' \u2191';
+    if (current < previous - 0.001) return ' \u2193';
+    return ' \u2192';
+  };
+
+  const dirColor = (current: number, previous: number | null) => {
+    if (previous == null) return 'text-ink3';
+    if (current > previous + 0.001) return 'text-red';
+    if (current < previous - 0.001) return 'text-green';
+    return 'text-ink3';
+  };
+
+  // Compute FV-to-cost ratio proxy from markedBelowCost
+  const fvCostHealthy = latest ? 1 - (latest.byFv.markedBelowCost ?? 0) : null;
+  const deepDistressCount = latest ? Math.round(latest.totalPositions * latest.byCount.deepDistress) : null;
+
   return (
     <section>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Top Premiums */}
-        <div className="bg-white border border-rule p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-2 h-2 rounded-full bg-green" />
-            <span className="eyebrow text-ink2">Top Premiums to NAV</span>
-          </div>
-          <div className="space-y-0">
-            <div className="grid grid-cols-[1fr_auto_auto] gap-x-3 pb-2 border-b border-rule text-[10px] uppercase tracking-[0.1em] text-ink3">
-              <span>Fund</span>
-              <span className="text-right">NAV/Sh</span>
-              <span className="text-right">Prem.</span>
+        {/* Credit Risk Summary */}
+        {latest && (
+          <div className="bg-white border border-rule p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 rounded-full bg-red" />
+              <span className="eyebrow text-ink2">Credit Risk Summary</span>
             </div>
-            {topPremiums.map((f) => (
-              <div
-                key={f.cik}
-                className="grid grid-cols-[1fr_auto_auto] gap-x-3 py-2.5 border-b border-rule2 text-xs"
-              >
-                <div className="truncate">
-                  {f.ticker && <span className="font-mono text-[10px] text-ink3">{f.ticker} </span>}
-                  <span className="text-ink2">{shortName(f)}</span>
+            <div className="space-y-4">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Non-Accrual Rate (by FV)</div>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-[28px] text-ink tabular-nums leading-none">
+                    {(latest.byFv.nonAccrual * 100).toFixed(2)}%
+                  </span>
+                  <span className={`font-mono text-xs tabular-nums ${dirColor(latest.byFv.nonAccrual, prior?.byFv.nonAccrual ?? null)}`}>
+                    {dirArrow(latest.byFv.nonAccrual, prior?.byFv.nonAccrual ?? null)} QoQ
+                  </span>
                 </div>
-                <span className="font-mono tabular-nums text-ink3 text-right">
-                  {fmtDollar(f.navPerShare)}
-                </span>
-                <span className="font-mono tabular-nums text-green font-semibold text-right">
-                  {fmtPctRaw(f.premiumDiscountPct)}
-                </span>
               </div>
-            ))}
+              <div className="border-t border-rule pt-3">
+                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Marked Below Cost (by FV)</div>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-[28px] text-ink tabular-nums leading-none">
+                    {(latest.byFv.markedBelowCost * 100).toFixed(1)}%
+                  </span>
+                  <span className={`font-mono text-xs tabular-nums ${dirColor(latest.byFv.markedBelowCost, prior?.byFv.markedBelowCost ?? null)}`}>
+                    {dirArrow(latest.byFv.markedBelowCost, prior?.byFv.markedBelowCost ?? null)} QoQ
+                  </span>
+                </div>
+              </div>
+              <div className="text-[10px] text-ink3 border-t border-rule pt-2">
+                {formatQuarter(latest.quarter)} | {formatNumber(latest.totalPositions)} positions
+              </div>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Top Discounts */}
-        <div className="bg-white border border-rule p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-2 h-2 rounded-full bg-red" />
-            <span className="eyebrow text-ink2">Top Discounts to NAV</span>
-          </div>
-          <div className="space-y-0">
-            <div className="grid grid-cols-[1fr_auto_auto] gap-x-3 pb-2 border-b border-rule text-[10px] uppercase tracking-[0.1em] text-ink3">
-              <span>Fund</span>
-              <span className="text-right">NAV/Sh</span>
-              <span className="text-right">Disc.</span>
+        {/* FV-to-Cost Ratio */}
+        {latest && (
+          <div className="bg-white border border-rule p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 rounded-full bg-navy" />
+              <span className="eyebrow text-ink2">Portfolio Health</span>
             </div>
-            {topDiscounts.map((f) => (
-              <div
-                key={f.cik}
-                className="grid grid-cols-[1fr_auto_auto] gap-x-3 py-2.5 border-b border-rule2 text-xs"
-              >
-                <div className="truncate">
-                  {f.ticker && <span className="font-mono text-[10px] text-ink3">{f.ticker} </span>}
-                  <span className="text-ink2">{shortName(f)}</span>
+            <div className="space-y-4">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Positions at or Above Cost</div>
+                <div className="font-mono text-[28px] text-ink tabular-nums leading-none">
+                  {fvCostHealthy != null ? `${(fvCostHealthy * 100).toFixed(1)}%` : '--'}
                 </div>
-                <span className="font-mono tabular-nums text-ink3 text-right">
-                  {fmtDollar(f.navPerShare)}
-                </span>
-                <span className="font-mono tabular-nums text-red font-semibold text-right">
-                  {fmtPctRaw(f.premiumDiscountPct)}
-                </span>
+                <div className="text-[10px] text-ink3 mt-1">by fair value weight</div>
               </div>
-            ))}
+              <div className="border-t border-rule pt-3">
+                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Deep Distress Positions</div>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-[28px] text-ink tabular-nums leading-none">
+                    {deepDistressCount != null ? formatNumber(deepDistressCount) : '--'}
+                  </span>
+                  <span className="text-[10px] text-ink3">
+                    ({(latest.byCount.deepDistress * 100).toFixed(1)}% of count)
+                  </span>
+                </div>
+                <div className="text-[10px] text-ink3 mt-1">marked below 80% of cost</div>
+              </div>
+              <div className="text-[10px] text-ink3 border-t border-rule pt-2">
+                {formatDollar(latest.totalFv)} total indexed FV
+              </div>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Yield Leaderboard */}
-        <div className="bg-white border border-rule p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-2 h-2 rounded-full bg-accent" />
-            <span className="eyebrow text-ink2">Yield Leaderboard</span>
-          </div>
-          <div className="space-y-2.5">
-            {topYield.map((f) => {
-              const rate = f.distributionRate ?? 0;
-              const barW = (rate / maxYield) * 100;
-              return (
-                <div key={f.cik}>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-ink2 truncate pr-2">{shortName(f)}</span>
-                    <span className="font-mono tabular-nums text-ink font-semibold shrink-0">
-                      {rate.toFixed(1)}%
-                    </span>
+        {topYield.length > 0 && (
+          <div className="bg-white border border-rule p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 rounded-full bg-accent" />
+              <span className="eyebrow text-ink2">Yield Leaderboard</span>
+            </div>
+            <div className="space-y-2.5">
+              {topYield.map((f) => {
+                const rate = f.distributionRate ?? 0;
+                const barW = (rate / maxYield) * 100;
+                return (
+                  <div key={f.cik}>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-ink2 truncate pr-2">{shortName(f)}</span>
+                      <span className="font-mono tabular-nums text-ink font-semibold shrink-0">
+                        {rate.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="h-2 bg-rule2 relative">
+                      <div
+                        className="absolute left-0 top-0 bottom-0 bg-accent"
+                        style={{ width: `${barW}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="h-2 bg-rule2 relative">
-                    <div
-                      className="absolute left-0 top-0 bottom-0 bg-accent"
-                      style={{ width: `${barW}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

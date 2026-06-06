@@ -3,54 +3,34 @@
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { FundListItem } from '@/lib/types';
-import { formatDollar, formatPercent, formatNumber } from '@/lib/format';
-import { formatDisplayName, getFundNameParts } from '@/lib/nameFormat';
-import VehicleTypeBadge from './VehicleTypeBadge';
+import { formatDollar } from '@/lib/format';
+import { getFundNameParts } from '@/lib/nameFormat';
 
-type SortKey = 'name' | 'totalAssets' | 'navPerShare' | 'distributionRate' | 'liquidity' | 'quarterlyReturn';
-type VehicleFilter = 'all' | 'bdc' | 'interval_fund' | 'tender_offer_fund';
+type SortKey = 'name' | 'totalAssets' | 'navPerShare' | 'distributionRate' | 'quarterlyReturn';
 
 interface FundTableProps {
   funds: FundListItem[];
 }
 
-const LIQUIDITY_LABEL: Record<string, string> = {
-  bdc: 'Publicly Traded',
-  interval_fund: 'Semi-Liquid',
-  tender_offer_fund: 'Semi-Liquid',
-};
-const LIQUIDITY_ORDER: Record<string, number> = {
-  'Publicly Traded': 0,
-  'Semi-Liquid': 1,
-};
-
 export default function FundTable({ funds }: FundTableProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
-  const [vehicleFilter, setVehicleFilter] = useState<VehicleFilter>('all');
   const [sortKey, setSortKey] = useState<SortKey>('totalAssets');
   const [sortAsc, setSortAsc] = useState(false);
 
   const filtered = useMemo(() => {
     let result = funds;
 
-    if (vehicleFilter !== 'all') {
-      result = result.filter((f) => f.vehicleType === vehicleFilter);
-    }
-
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(
         (f) => {
           const fundParts = getFundNameParts(f.name, f.ticker);
-          const adviserDisplay = formatDisplayName(f.adviser, { kind: 'manager' });
           return (
             f.name.toLowerCase().includes(q) ||
             fundParts.displayName.toLowerCase().includes(q) ||
-            (fundParts.ticker ?? '').toLowerCase().includes(q) ||
             (f.ticker ?? '').toLowerCase().includes(q) ||
-            (f.adviser ?? '').toLowerCase().includes(q) ||
-            adviserDisplay.toLowerCase().includes(q)
+            (f.adviser ?? '').toLowerCase().includes(q)
           );
         },
       );
@@ -62,9 +42,6 @@ export default function FundTable({ funds }: FundTableProps) {
       if (sortKey === 'name') {
         av = getFundNameParts(a.name, a.ticker).displayName.toLowerCase();
         bv = getFundNameParts(b.name, b.ticker).displayName.toLowerCase();
-      } else if (sortKey === 'liquidity') {
-        av = LIQUIDITY_ORDER[LIQUIDITY_LABEL[a.vehicleType] ?? ''] ?? 99;
-        bv = LIQUIDITY_ORDER[LIQUIDITY_LABEL[b.vehicleType] ?? ''] ?? 99;
       } else {
         av = a[sortKey];
         bv = b[sortKey];
@@ -78,7 +55,7 @@ export default function FundTable({ funds }: FundTableProps) {
     });
 
     return result;
-  }, [funds, search, vehicleFilter, sortKey, sortAsc]);
+  }, [funds, search, sortKey, sortAsc]);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -108,39 +85,17 @@ export default function FundTable({ funds }: FundTableProps) {
     </th>
   );
 
-  const FILTERS: { key: VehicleFilter; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: 'bdc', label: 'BDCs' },
-    { key: 'interval_fund', label: 'Interval' },
-    { key: 'tender_offer_fund', label: 'Tender Offer' },
-  ];
-
   return (
     <div>
       {/* Controls */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search by name, adviser, or ticker..."
+          placeholder="Search by name or adviser..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 px-4 py-2 text-sm border border-surface-muted bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal"
         />
-        <div className="flex gap-1">
-          {FILTERS.map((f) => (
-            <button
-              key={f.key}
-              onClick={() => setVehicleFilter(f.key)}
-              className={`text-xs px-3 py-2 transition-colors ${
-                vehicleFilter === f.key
-                  ? 'bg-navy text-white font-medium'
-                  : 'text-muted hover:text-navy hover:bg-surface bg-white border border-surface-muted'
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Table */}
@@ -149,8 +104,6 @@ export default function FundTable({ funds }: FundTableProps) {
           <thead>
             <tr className="bg-navy">
               <SortHeader label="Fund" col="name" className="text-left" />
-              <th className="py-3 px-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">Type</th>
-              <SortHeader label="Liquidity" col="liquidity" className="text-left" />
               <SortHeader label="AUM" col="totalAssets" className="text-right" />
               <SortHeader label="NAV/Sh" col="navPerShare" className="text-right" />
               <SortHeader label="Dist Rate" col="distributionRate" className="text-right" />
@@ -160,7 +113,7 @@ export default function FundTable({ funds }: FundTableProps) {
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-muted">
+                <td colSpan={5} className="py-8 text-center text-muted">
                   No funds match your search.
                 </td>
               </tr>
@@ -177,15 +130,6 @@ export default function FundTable({ funds }: FundTableProps) {
               >
                 <td className="py-3 px-4">
                   <div className="font-medium text-navy truncate max-w-[280px]">{fundParts.displayName}</div>
-                  {fundParts.ticker && (
-                    <span className="text-xs text-muted">{fundParts.ticker}</span>
-                  )}
-                </td>
-                <td className="py-3 px-4">
-                  <VehicleTypeBadge vehicleType={fund.vehicleType} />
-                </td>
-                <td className="py-3 px-4 text-sm text-muted">
-                  {LIQUIDITY_LABEL[fund.vehicleType] ?? '--'}
                 </td>
                 <td className="py-3 px-4 text-right tabular-nums">
                   {formatDollar(fund.totalAssets)}

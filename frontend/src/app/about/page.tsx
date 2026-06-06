@@ -6,14 +6,13 @@ import { formatNumber, formatDollar, formatQuarter } from '@/lib/format';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'About Private Market Watch -- a data platform for SEC-registered private markets vehicles with position-level indices.',
+    'About Metris Lens -- the index platform for private credit, with position-level benchmarks for unlisted BDCs.',
 };
 
 const STEPS = [
-  { label: 'Universe identification', detail: '6 independent SEC data sources' },
+  { label: 'Universe identification', detail: 'SEC data sources for unlisted BDCs' },
   { label: 'BDC portfolio extraction', detail: '10-K/10-Q schedules of investments' },
-  { label: 'Fund portfolio extraction', detail: 'N-PORT quarterly holdings' },
-  { label: 'Holdings unification', detail: 'Classification and deduplication' },
+  { label: 'Holdings classification', detail: 'Asset category and index assignment' },
   { label: 'Position matching', detail: 'Across reporting periods' },
   { label: 'Return decomposition', detail: 'Price + income + principal' },
   { label: 'Index aggregation', detail: 'FV-weighted, chain-linked from 100' },
@@ -32,15 +31,9 @@ export default function AboutPage() {
       if (!allVehicles.has(v.cik)) allVehicles.set(v.cik, { vehicleType: v.vehicleType });
     }
   }
-  const entityCount = allVehicles.size;
-  let bdcCount = 0;
-  let intervalCount = 0;
-  let tenderCount = 0;
-  Array.from(allVehicles.values()).forEach((v) => {
-    if (v.vehicleType === 'bdc') bdcCount++;
-    else if (v.vehicleType === 'interval_fund') intervalCount++;
-    else if (v.vehicleType === 'tender_offer_fund') tenderCount++;
-  });
+  const bdcCount = Array.from(allVehicles.values()).filter((v) => v.vehicleType === 'bdc').length;
+  const totalConstituents = summaries.reduce((sum, s) => sum + (s.constituents ?? 0), 0);
+  const totalIssuers = summaries.reduce((sum, s) => sum + (s.uniqueCompanies ?? 0), 0);
 
   return (
     <div>
@@ -49,7 +42,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
           <h1 className="text-display-sm md:text-display-lg text-white mb-3">About</h1>
           <p className="text-white/60 max-w-2xl text-lg">
-            About Private Market Watch and how the data platform and indices are constructed.
+            About Metris Lens and how the index platform and benchmarks are constructed.
           </p>
         </div>
       </div>
@@ -58,31 +51,28 @@ export default function AboutPage() {
         {/* Stat callout row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 -mt-2">
           <MiniStat label="Private Markets FV" value={formatDollar(totalFv)} />
-          <MiniStat label="BDCs" value={formatNumber(bdcCount)} />
-          <MiniStat label="Interval Funds" value={formatNumber(intervalCount)} />
-          <MiniStat label="Tender Offer Funds" value={formatNumber(tenderCount)} />
+          <MiniStat label="Unlisted BDCs" value={formatNumber(bdcCount)} />
+          <MiniStat label="Unique Issuers" value={formatNumber(totalIssuers)} />
+          <MiniStat label="Indexed Positions" value={formatNumber(totalConstituents)} />
         </div>
 
         <div className="space-y-8 text-sm text-navy/80 leading-relaxed prose-content">
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
               <span className="w-1 h-5 bg-teal" />
-              About Private Market Watch
+              About Metris Lens
             </h2>
             <p>
-              Private Market Watch is a data platform covering all
-              SEC-registered evergreen vehicles: business development
-              companies (BDCs), interval funds, and tender offer funds. It provides
+              Metris Lens is an index platform covering unlisted (non-traded)
+              business development companies (BDCs). It provides
               fund-level analytics, portfolio data, and transparent position-level
-              indices. These are the registered, wealth-accessible vehicles that
-              have opened private credit and equity markets to a broader investor base.
+              indices for private credit and equity. Unlisted BDCs are the
+              fastest-growing vehicle for wealth-channel investors to access
+              private credit markets.
             </p>
             <p>
-              The index currently tracks{' '}
-              <strong>{formatNumber(entityCount)}</strong> reporting
-              entities ({formatNumber(bdcCount)} BDCs,{' '}
-              {formatNumber(intervalCount)} interval funds,{' '}
-              {formatNumber(tenderCount)} tender offer funds)
+              The platform currently tracks{' '}
+              <strong>{formatNumber(bdcCount)}</strong> unlisted BDCs
               representing <strong>{formatDollar(totalFv)}</strong> in
               private markets fair value.
             </p>
@@ -91,22 +81,21 @@ export default function AboutPage() {
           <section>
             <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
               <span className="w-1 h-5 bg-teal" />
-              Why Evergreen Vehicles?
+              Why Unlisted BDCs?
             </h2>
             <Callout>
-              Evergreen private market funds have grown from a niche to a core
-              allocation for wealth channel investors. Yet performance measurement
-              has lagged.
+              Unlisted BDCs have grown from a niche to a core allocation for
+              wealth channel investors. Yet performance measurement has lagged.
             </Callout>
             <p>
               Existing benchmarks rely on voluntary manager
               surveys or track only a subset of the market.
               By sourcing all data from mandatory portfolio disclosures of
-              every registered vehicle, Private Market Watch
-              provides complete, unbiased coverage of this rapidly growing market
-              segment -- from fund-level analytics down to individual position-level
-              indices that mirror the granularity of public credit benchmarks
-              like the Morningstar LSTA Leveraged Loan Index.
+              every unlisted BDC, Metris Lens provides complete, unbiased
+              coverage of this rapidly growing market segment -- from fund-level
+              analytics down to individual position-level indices that mirror
+              the granularity of public credit benchmarks like the Morningstar
+              LSTA Leveraged Loan Index.
             </p>
           </section>
 
@@ -154,10 +143,9 @@ export default function AboutPage() {
             <p>
               Indices are updated quarterly following SEC filing deadlines, with
               a one-quarter observation lag. The current dataset covers{' '}
-              <strong>2019 Q4 through {formatQuarter(meta.asOfQuarter)}</strong>.
+              <strong>2022 Q4 through {formatQuarter(meta.asOfQuarter)}</strong>.
               BDC portfolio coverage begins around 2022 when the SEC phased in
-              structured tagging requirements. Fund portfolio data (N-PORT)
-              extends back to late 2019.
+              structured XBRL tagging requirements for investment schedules.
             </p>
             {meta.dataVintage && (
               <p className="mt-2 text-xs text-muted">

@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Methodology',
   description:
-    'How Private Market Watch constructs its data platform and indices from mandatory SEC regulatory filings.',
+    'How Metris Lens constructs its index platform and benchmarks from mandatory SEC regulatory filings.',
 };
 
 const sections = [
@@ -17,7 +17,7 @@ const sections = [
   { id: 'returns', title: 'Return Calculation' },
   { id: 'rebalancing', title: 'Rebalancing & Timing' },
   { id: 'limitations', title: 'Limitations' },
-];
+] as const;
 
 export default function MethodologyPage() {
   return (
@@ -63,14 +63,14 @@ export default function MethodologyPage() {
           <article className="flex-1 min-w-0 prose-content">
             <Section num={1} id="overview" title="Overview">
               <p>
-                Private Market Watch is a data platform covering SEC-registered
-                evergreen vehicles investing in private markets. It provides
-                fund-level analytics, portfolio data, and position-level indices
-                for private credit and equity. Unlike traditional private markets
-                indices that rely on voluntary manager submissions, the data and
-                indices are constructed entirely from mandatory SEC filings,
-                ensuring complete and unbiased coverage of the registered vehicle
-                universe.
+                Metris Lens is an index platform covering unlisted (non-traded)
+                business development companies (BDCs) investing in private
+                markets. It provides fund-level analytics, portfolio data, and
+                position-level indices for private credit and equity. Unlike
+                traditional private markets indices that rely on voluntary
+                manager submissions, the indices are constructed entirely from
+                mandatory SEC filings, ensuring complete and unbiased coverage
+                of the unlisted BDC universe.
               </p>
               <Callout>
                 Each index constituent is an individual position (e.g., a specific
@@ -79,28 +79,19 @@ export default function MethodologyPage() {
                 Morningstar LSTA Leveraged Loan Index.
               </Callout>
               <p>
-                Four indices are published, each tracking a distinct segment of
+                Two indices are published, each tracking a distinct segment of
                 the private markets:
               </p>
               <ul>
                 <li>
-                  <strong>Direct Lending Index</strong> -- The largest position-level
-                  benchmark for middle-market direct lending
+                  <strong>Private Credit Total Return Index</strong> -- The largest
+                  position-level benchmark for middle-market direct lending,
+                  sourced from unlisted BDC schedules of investments
                 </li>
                 <li>
-                  <strong>Direct Equity Index</strong> -- Direct equity
+                  <strong>Private Equity NAV Return Index</strong> -- Direct equity
                   co-investments and minority stakes in private companies, held by
-                  registered closed-end vehicles
-                </li>
-                <li>
-                  <strong>Private Credit Fund Index</strong> -- Allocations to
-                  private credit strategies including CLOs, direct lending funds,
-                  and specialty finance platforms
-                </li>
-                <li>
-                  <strong>Private Equity Fund Index</strong> -- Allocations to
-                  private equity strategies including buyout, growth equity, and
-                  venture capital funds
+                  unlisted BDCs
                 </li>
               </ul>
             </Section>
@@ -108,7 +99,7 @@ export default function MethodologyPage() {
             <Section num={2} id="data-sources" title="Data Sources">
               <p>
                 All data is sourced from SEC EDGAR, the public repository of
-                regulatory filings. Three filing types provide the raw data:
+                regulatory filings. Two filing types provide the raw data:
               </p>
               <h4>BDC XBRL (10-K/10-Q)</h4>
               <p>
@@ -119,29 +110,21 @@ export default function MethodologyPage() {
                 tagged with fair value, cost, interest rate, maturity, and other
                 attributes using a typed dimension (investmentIdentifierAxis).
               </p>
-              <h4>N-PORT (Quarterly TSV)</h4>
-              <p>
-                Registered investment companies (including interval funds and
-                tender offer funds) file monthly portfolio holdings on Form N-PORT.
-                The SEC publishes quarterly bulk data sets containing all
-                N-PORT filings in tab-separated format. Each holding includes
-                CUSIP, issuer type, asset category, fair value, and additional
-                fields for debt securities.
-              </p>
               <h4>N-CEN and N-2</h4>
               <p>
                 Form N-CEN provides census data for registered investment
                 companies, including fund type classification. Form N-2 cover
-                pages contain checkboxes identifying whether a fund is a BDC,
-                interval fund, or closed-end fund. These are used for universe
-                construction, not holdings extraction.
+                pages contain checkboxes identifying whether a fund is a BDC
+                or closed-end fund. These are used for universe construction,
+                not holdings extraction.
               </p>
             </Section>
 
             <Section num={3} id="universe" title="Universe Construction">
               <p>
-                The investment universe is built using six independent discovery
-                methods, then cross-validated against third-party lists:
+                The unlisted BDC universe is built using multiple independent
+                discovery methods, then filtered to non-traded vehicles and
+                cross-validated against third-party lists:
               </p>
               <ol>
                 <li>
@@ -156,33 +139,24 @@ export default function MethodologyPage() {
                   <strong>SEC BDC data set</strong> -- CIKs appearing in the
                   SEC&apos;s structured BDC data sets
                 </li>
-                <li>
-                  <strong>N-CEN classification</strong> -- Funds tagged as
-                  interval funds or N-2 registrants in N-CEN filings
-                </li>
-                <li>
-                  <strong>N-2 checkbox parsing</strong> -- Automated parsing of
-                  N-2 cover page checkboxes to identify interval funds, BDCs, and
-                  closed-end funds
-                </li>
-                <li>
-                  <strong>EFTS text search</strong> -- Full-text search of SEC
-                  filings for &ldquo;tender offer fund&rdquo; and related terms
-                </li>
               </ol>
+              <p>
+                Listed (publicly traded) BDCs are excluded from the index
+                universe. The unlisted BDC reference list is maintained from
+                SEC filings, prospectus review, and cross-referencing with
+                exchange ticker databases.
+              </p>
               <Callout>
-                Third-party validation lists include the Interval Fund Tracker,
-                Tender Offer Funds database, and Sure Dividend BDC list. Match
-                rates consistently exceed 95%.
+                Third-party validation lists include the Sure Dividend BDC list.
+                Match rates consistently exceed 95%.
               </Callout>
             </Section>
 
             <Section num={4} id="holdings" title="Holdings Extraction">
               <p>
-                Holdings are extracted from two sources and unified into a single
-                dataset:
+                Holdings are extracted from BDC XBRL filings and normalized into
+                a standardized dataset:
               </p>
-              <h4>BDC Holdings</h4>
               <p>
                 XBRL instance documents are downloaded for each BDC&apos;s 10-K
                 and 10-Q filings. The parser extracts facts tagged under the
@@ -191,27 +165,17 @@ export default function MethodologyPage() {
                 principal_amount, etc.). A concept mapping table handles
                 variations in XBRL taxonomies across filers.
               </p>
-              <h4>N-PORT Holdings</h4>
               <p>
-                Quarterly TSV data sets are downloaded from the SEC DERA website.
-                Holdings are filtered to universe CIKs and mapped to the unified
-                schema. Balance and unit fields are converted: PA (par amount)
-                maps to principal_amount, NS (number of shares) maps to
-                shares_held.
-              </p>
-              <h4>Unification</h4>
-              <p>
-                BDC and N-PORT holdings are combined with consistent field names,
-                rate harmonization (BDC rates converted from decimal to
-                percentage), and cross-source deduplication. When a BDC also
-                files N-PORT, the BDC XBRL data is preferred for richer field
-                coverage.
+                Rate harmonization converts BDC rates from decimal to percentage
+                form. Per-CIK wrappers handle filer-specific XBRL variations
+                including custom hierarchy levels and alternative dimension
+                structures.
               </p>
             </Section>
 
             <Section num={5} id="classification" title="Index Classification">
               <p>
-                Each holding is classified into one of four index categories based
+                Each holding is classified into one of two index categories based
                 on asset category and issuer category:
               </p>
               <div className="overflow-x-auto my-4">
@@ -229,26 +193,16 @@ export default function MethodologyPage() {
                   </thead>
                   <tbody>
                     <tr className="border-b border-surface">
-                      <td className="py-2.5 px-4 font-medium text-navy">Direct Lending</td>
+                      <td className="py-2.5 px-4 font-medium text-navy">Private Credit</td>
                       <td className="py-2.5 px-4 text-navy/70">LOAN, DEBT</td>
                       <td className="py-2.5 px-4 text-navy/70">CORPORATE</td>
                     </tr>
-                    <tr className="border-b border-surface bg-surface/30">
-                      <td className="py-2.5 px-4 font-medium text-navy">Direct Equity</td>
+                    <tr className="bg-surface/30">
+                      <td className="py-2.5 px-4 font-medium text-navy">Private Equity</td>
                       <td className="py-2.5 px-4 text-navy/70">
                         EQUITY_COMMON, EQUITY_PREFERRED
                       </td>
                       <td className="py-2.5 px-4 text-navy/70">CORPORATE</td>
-                    </tr>
-                    <tr className="border-b border-surface">
-                      <td className="py-2.5 px-4 font-medium text-navy">Private Credit Fund</td>
-                      <td className="py-2.5 px-4 text-navy/70">FUND (credit keywords)</td>
-                      <td className="py-2.5 px-4 text-navy/70">FUND</td>
-                    </tr>
-                    <tr className="bg-surface/30">
-                      <td className="py-2.5 px-4 font-medium text-navy">Private Equity Fund</td>
-                      <td className="py-2.5 px-4 text-navy/70">FUND (equity keywords)</td>
-                      <td className="py-2.5 px-4 text-navy/70">FUND</td>
                     </tr>
                   </tbody>
                 </table>
@@ -265,7 +219,7 @@ export default function MethodologyPage() {
             <Section num={6} id="matching" title="Position Matching">
               <p>
                 To compute returns, the same position must be linked across
-                consecutive quarters. A four-tier matching cascade is used:
+                consecutive quarters. A three-tier matching cascade is used:
               </p>
               <ol>
                 <li>
@@ -275,12 +229,7 @@ export default function MethodologyPage() {
                   pairs requiring no external matching.
                 </li>
                 <li>
-                  <strong>Tier B1: CUSIP matching</strong> -- N-PORT holdings
-                  with CUSIP identifiers are matched across quarters on the same
-                  CUSIP within the same CIK.
-                </li>
-                <li>
-                  <strong>Tier B2: Exact name matching</strong> -- Positions are
+                  <strong>Tier B: Exact name matching</strong> -- Positions are
                   matched by exact issuer_name within the same CIK across
                   adjacent quarters.
                 </li>
@@ -331,8 +280,7 @@ export default function MethodologyPage() {
               <p>
                 The indices rebalance quarterly, aligned with SEC filing
                 deadlines. BDC 10-K/10-Q filings have a 60-day deadline after
-                fiscal period end; N-PORT filings have a 60-day deadline. Data is
-                available with a one-quarter lag.
+                fiscal period end. Data is available with a one-quarter lag.
               </p>
               <p>
                 New positions entering the index (no prior-period match)

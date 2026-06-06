@@ -28,7 +28,7 @@ import ConcentrationPieChart, { COLORS_TEAL_RAMP } from '@/components/ManagerPie
 import ConcentrationCurve from '@/components/ConcentrationCurve';
 
 export const metadata = {
-  title: 'Indices | Private Market Watch',
+  title: 'Indices | Metris Lens',
   description: 'Position-level private market index performance, concentration, and universe coverage.',
 };
 
@@ -38,8 +38,8 @@ export default function IndicesPage() {
   const metadata = getMetadata();
   const vehicles = getVehicleContribution();
 
-  // Combined concentration across DL + PE + CE
-  const combinedIndices = ['DIRECT_LENDING', 'PREFERRED_EQUITY', 'COMMON_EQUITY'];
+  // Combined concentration across visible indices
+  const combinedIndices = INDICES.map((i) => i.key);
   const managerData = combineConcentration(getManagerConcentration(), combinedIndices);
   const concentrationCurve = getConcentrationCurve();
   const combinedInvesteeCurve = concentrationCurve['COMBINED']?.investee ?? [];
@@ -53,7 +53,6 @@ export default function IndicesPage() {
   const totalCompanies = visibleSummaries.reduce((sum, s) => sum + (s.uniqueCompanies ?? 0), 0);
   // Per-index stats
   const dlSummary = summaries.find((s) => s.index === 'DIRECT_LENDING');
-  const peSummary = summaries.find((s) => s.index === 'PREFERRED_EQUITY');
   const ceSummary = summaries.find((s) => s.index === 'COMMON_EQUITY');
 
   // Build chart series from index_returns
@@ -77,16 +76,14 @@ export default function IndicesPage() {
               Private Market Indices
             </h1>
             <p className="text-white/60 text-base md:text-lg mb-10">
-              The largest publicly available benchmark of private credit loans
-              and equity investment performance. Covers all illiquid holdings
-              held across US registered funds investing in private markets.
+              Position-level benchmarks for private credit and equity,
+              built from the portfolio holdings of unlisted BDCs.
             </p>
 
             {/* Hero stat callouts */}
             <HeroStats
               totalFv={totalFv}
               loanCount={dlSummary?.constituents ?? 0}
-              prefEquityCount={peSummary?.constituents ?? 0}
               commonEquityCount={ceSummary?.constituents ?? 0}
             />
           </div>
@@ -97,7 +94,7 @@ export default function IndicesPage() {
         {/* Performance */}
         <section className="mb-14">
           {/* Index Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
             {INDICES.map((idx) => {
               const summary = summaries.find((s) => s.index === idx.key);
               return (
@@ -121,7 +118,7 @@ export default function IndicesPage() {
           <div className="bg-white p-4 sm:p-6 shadow-card">
             <TimeSeriesChart
               series={chartSeries}
-              defaultVisible={['DIRECT_LENDING', 'PREFERRED_EQUITY', 'COMMON_EQUITY']}
+              defaultVisible={['DIRECT_LENDING', 'COMMON_EQUITY']}
             />
           </div>
         </section>
@@ -242,14 +239,13 @@ export default function IndicesPage() {
             issuerCount={totalCompanies}
           />
           <p className="text-xs text-muted mt-3">
-            Counts reflect the latest quarter across all SEC-registered BDCs,
-            interval funds, and tender offer funds.
+            Counts reflect the latest quarter across all unlisted BDCs.
           </p>
         </section>
 
         {/* Index CTAs */}
         <section className="mt-14 mb-10">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {INDICES.map((idx) => (
               <Link
                 key={idx.key}

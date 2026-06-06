@@ -18,7 +18,7 @@ export function generateMetadata({ params }: { params: { cik: string } }) {
   if (!fund) return { title: 'Fund Not Found' };
   const fundName = getFundNameParts(fund.name, fund.ticker).displayName;
   return {
-    title: `${fundName} | Private Market Watch`,
+    title: `${fundName} | Metris Lens`,
     description: `Fund one-pager for ${fundName} (${fund.vehicleType}).`,
   };
 }
@@ -330,7 +330,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
 
   // Derive liquidity label from vehicle type
   function deriveLiquidity(vt: string): string {
-    if (vt === 'bdc') return 'Publicly Traded';
+    if (vt === 'bdc') return 'Unlisted';
     if (vt === 'interval_fund') return 'Semi-Liquid';
     if (vt === 'tender_offer_fund') return 'Semi-Liquid';
     return 'Closed-End';

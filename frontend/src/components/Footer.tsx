@@ -46,16 +46,12 @@ export default function Footer() {
             <Link href="/about" className="block text-xs py-1 text-white/[0.78] hover:text-white transition-colors">
               About
             </Link>
-            <Link href="/data-quality" className="block text-xs py-1 text-white/[0.78] hover:text-white transition-colors">
-              Data access
-            </Link>
           </div>
 
           {/* Data Sources */}
           <div>
             <div className="eyebrow text-accent mb-2.5">Data Sources</div>
             <div className="text-xs py-1">SEC EDGAR -- BDC XBRL</div>
-            <div className="text-xs py-1">SEC EDGAR -- N-PORT</div>
             <div className="text-xs py-1">SEC EDGAR -- N-CEN / N-2</div>
           </div>
         </div>

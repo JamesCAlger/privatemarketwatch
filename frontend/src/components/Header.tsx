@@ -16,14 +16,12 @@ const NAV_ITEMS = [
   { label: 'Indices', href: '/indices' },
   { label: 'Methodology', href: '/methodology' },
   { label: 'About', href: '/about' },
-  { label: 'Data', href: '/data-quality' },
 ];
 
 function getNavActive(pathname: string): string {
   if (pathname.startsWith('/indices')) return 'Indices';
   if (pathname === '/' || pathname.startsWith('/funds')) return 'Funds';
   if (pathname.startsWith('/methodology')) return 'Methodology';
-  if (pathname.startsWith('/data')) return 'Data';
   if (pathname.startsWith('/about')) return 'About';
   return '';
 }
@@ -97,7 +95,7 @@ export default function Header({ indexSummaries = [] }: HeaderProps) {
             );
           })}
           <Link
-            href="/data-quality"
+            href="/about"
             className="px-4 py-2 border border-accent text-accent text-xs tracking-[0.08em] uppercase hover:bg-accent hover:text-navy transition-colors"
           >
             Subscribe &rarr;
@@ -121,7 +119,7 @@ export default function Header({ indexSummaries = [] }: HeaderProps) {
       </div>
 
       {/* Row 3: Index ticker bar */}
-      <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr] items-stretch bg-navyDeep border-t border-white/[0.06] px-[72px]">
+      <div className="hidden md:grid grid-cols-[auto_1fr_1fr] items-stretch bg-navyDeep border-t border-white/[0.06] px-[72px]">
         <div className="py-2.5 pr-[18px] flex items-center border-r border-white/[0.14]">
           <span className="eyebrow text-accent tracking-[0.22em]">PMW Indices</span>
         </div>
@@ -199,13 +197,6 @@ export default function Header({ indexSummaries = [] }: HeaderProps) {
             onClick={() => setMenuOpen(false)}
           >
             About
-          </Link>
-          <Link
-            href="/data-quality"
-            className="block px-2 py-2 text-sm text-white/80 hover:text-accent hover:bg-white/5 transition-colors"
-            onClick={() => setMenuOpen(false)}
-          >
-            Data Quality
           </Link>
           <div className="pt-2 px-2 text-xs text-white/30">
             As of Q4 2025

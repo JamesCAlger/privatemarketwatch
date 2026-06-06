@@ -116,7 +116,6 @@ export default function IndexDetailPage({
 
   // Universe coverage heuristic per index
   const coveragePct = idx.key === 'DIRECT_LENDING' ? '96.4%' :
-    idx.key === 'PREFERRED_EQUITY' ? '84.1%' :
     idx.key === 'COMMON_EQUITY' ? '92.3%' : '--';
 
   // Risk stats
@@ -233,7 +232,7 @@ export default function IndexDetailPage({
           <StatCell
             label="Last Rebalance"
             value={formatDataVintage(metadata.dataVintage)}
-            sub="post-Q4 N-PORT"
+            sub="post-Q4 BDC XBRL"
           />
         </div>
       </div>
@@ -295,7 +294,7 @@ export default function IndexDetailPage({
           <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
               <div className="md:pr-6">
-                <div className="eyebrow text-accent mb-2">Direct Lending</div>
+                <div className="eyebrow text-accent mb-2">Private Credit</div>
                 <h2 className="font-display text-[26px] text-white tracking-[-0.01em] leading-tight">
                   Portfolio<br />Characteristics
                 </h2>

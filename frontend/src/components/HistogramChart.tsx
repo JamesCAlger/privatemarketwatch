@@ -30,23 +30,12 @@ function CustomTooltip({
   label?: string;
 }) {
   if (!active || !payload || payload.length === 0) return null;
-  const bdc = payload.find((p) => p.dataKey === 'bdc')?.value ?? 0;
-  const nonBdc = payload.find((p) => p.dataKey === 'nonBdc')?.value ?? 0;
+  const total = payload.find((p) => p.dataKey === 'total')?.value ?? 0;
   return (
     <div className="bg-navy px-3 py-2 shadow-panel text-xs">
       <p className="text-white/60 mb-1">{label}</p>
       <div className="flex items-center gap-2 text-white">
-        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#2A9D8F' }} />
-        <span className="text-white/70">BDC:</span>
-        <span className="font-medium tabular-nums">{bdc}</span>
-      </div>
-      <div className="flex items-center gap-2 text-white">
-        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#E9C46A' }} />
-        <span className="text-white/70">Non-BDC:</span>
-        <span className="font-medium tabular-nums">{nonBdc}</span>
-      </div>
-      <div className="border-t border-white/20 mt-1 pt-1 text-white font-medium">
-        Total: {bdc + nonBdc}
+        <span className="font-medium tabular-nums">{total} funds</span>
       </div>
     </div>
   );
@@ -76,18 +65,6 @@ export default function HistogramChart({ data, title, medianLabel }: HistogramCh
         <h3 className="text-sm font-semibold text-navy">{title}</h3>
         <span className="text-xs text-muted tabular-nums">
           {medianLabel ?? `Median: ${formatPercent(data.median)}`} | {data.total} funds
-        </span>
-      </div>
-
-      {/* Legend */}
-      <div className="flex gap-3 mb-2">
-        <span className="flex items-center gap-1.5 text-[11px]">
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#2A9D8F' }} />
-          <span className="text-navy">BDC</span>
-        </span>
-        <span className="flex items-center gap-1.5 text-[11px]">
-          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#E9C46A' }} />
-          <span className="text-navy">Non-BDC</span>
         </span>
       </div>
 
@@ -121,16 +98,8 @@ export default function HistogramChart({ data, title, medianLabel }: HistogramCh
               cursor={{ fill: 'rgba(15, 27, 45, 0.04)' }}
             />
             <Bar
-              dataKey="bdc"
-              stackId="hist"
+              dataKey="total"
               fill="#2A9D8F"
-              radius={0}
-              animationDuration={800}
-            />
-            <Bar
-              dataKey="nonBdc"
-              stackId="hist"
-              fill="#E9C46A"
               radius={0}
               animationDuration={800}
             />
