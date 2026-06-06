@@ -49,11 +49,9 @@ Do not describe a wrapper as complete because visual samples look plausible.
 
 ## Priority Queue
 
-FV-ordered queue for next unprocessed CIK. 38 of 39 original queue entries have wrappers. Updated 2026-06-05.
+All 39 original queue entries have wrappers (56 total on disk). Queue complete as of 2026-06-05.
 
-| Priority | CIK | Entity |
-|---:|---|---|
-| 1 | 0001975736 | KKR FS Income Trust Select |
+To process CIKs outside the original queue, profile from the unlisted BDC reference or use `/wrapper [CIK] profile`.
 
 ---
 
