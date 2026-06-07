@@ -251,6 +251,29 @@ def rebuild_sector_breakdown():
     return reconciliation_df, reconciled_df
 
 
+def rebuild_provenance():
+    """Build opt-in provenance diagnostic artifacts."""
+    from pipeline.provenance import (
+        build_holdings_wrapper_provenance,
+        build_position_provenance_index,
+        build_xbrl_concept_map,
+    )
+
+    logger.info("=== Building provenance artifacts ===")
+    t0 = time.time()
+    wrapper_df = build_holdings_wrapper_provenance()
+    concept_map = build_xbrl_concept_map()
+    prov_df = build_position_provenance_index(wrapper_provenance_df=wrapper_df)
+    logger.info(
+        "Provenance: %d wrapper rows, %d concept columns, %d index rows in %.1f s",
+        len(wrapper_df),
+        len(concept_map),
+        len(prov_df),
+        time.time() - t0,
+    )
+    return wrapper_df, concept_map, prov_df
+
+
 def rebuild_html():
     """Re-run HTML template extraction (Phase 2 only, $0)."""
     from pipeline.html_extract import extract_all_html
@@ -401,6 +424,8 @@ def main():
                         help="Rebuild frontend JSON data only")
     parser.add_argument("--validate-rules", action="store_true",
                         help="Run report-only V1 validation rules against cached outputs")
+    parser.add_argument("--provenance", action="store_true",
+                        help="Build opt-in provenance diagnostic artifacts")
     parser.add_argument("--validate-all", action="store_true",
                         help="Run cached fund financial, holdings, and validation-rule checks")
     parser.add_argument("--rules-category", nargs="+", choices=["PC", "IDX", "T", "S", "R", "XS", "F", "M", "RI"],
@@ -412,7 +437,7 @@ def main():
         args.bdc_holdings or args.unified or args.entities or args.income or args.returns
         or args.pik_status or args.pik_proxy or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
-        or args.tender_offers or args.prices
+        or args.tender_offers or args.prices or args.provenance
     )
 
     t_start = time.time()
@@ -461,6 +486,9 @@ def main():
 
     if rebuild_all or args.frontend:
         rebuild_frontend()
+
+    if args.provenance:
+        rebuild_provenance()
 
     if args.validate_rules:
         run_validation_rules(categories=args.rules_category)

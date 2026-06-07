@@ -311,6 +311,12 @@ HTML_EXTRACTION_EXPERIMENT_FILE = OUTPUT_DIR / "html_extraction_experiment.csv"
 # HTML template validation (aggregate FV + carry rate checks)
 HTML_TEMPLATE_VALIDATION_FILE = OUTPUT_DIR / "html_template_validation.csv"
 
+# Provenance diagnostic artifacts (opt-in, not part of standard rebuild)
+PROVENANCE_DIR = OUTPUT_DIR / "provenance"
+HOLDINGS_WRAPPER_PROVENANCE_FILE = PROVENANCE_DIR / "holdings_wrapper_provenance.csv"
+XBRL_CONCEPT_MAP_FILE = PROVENANCE_DIR / "xbrl_concept_map.json"
+POSITION_PROVENANCE_INDEX_FILE = PROVENANCE_DIR / "position_provenance_index.csv"
+
 # ---------------------------------------------------------------------------
 # Database (for --load-db)
 # ---------------------------------------------------------------------------
