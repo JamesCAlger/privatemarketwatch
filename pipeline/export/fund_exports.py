@@ -80,6 +80,8 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
             SELECT cik, MAX(TRY_CAST(report_date AS DATE)) AS d
             FROM ff
             WHERE 1=1
+              AND TRY_CAST(total_assets AS DOUBLE) IS NOT NULL
+              AND TRY_CAST(total_assets AS DOUBLE) > 0
               {_unlisted_bdc_filter_sql('cik')}
             GROUP BY cik
             HAVING MAX(TRY_CAST(total_assets AS DOUBLE)) > 1000000
@@ -826,6 +828,8 @@ def _export_fund_summary(con: duckdb.DuckDBPyConnection) -> None:
             SELECT cik, MAX(TRY_CAST(report_date AS DATE)) AS d
             FROM ff
             WHERE 1=1
+              AND TRY_CAST(total_assets AS DOUBLE) IS NOT NULL
+              AND TRY_CAST(total_assets AS DOUBLE) > 0
               {_unlisted_bdc_filter_sql('cik')}
             GROUP BY cik
             HAVING MAX(TRY_CAST(total_assets AS DOUBLE)) > 1000000
