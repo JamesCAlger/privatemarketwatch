@@ -321,6 +321,24 @@ class TestSourceOnlyBlockerClassification:
             "blocking_source_position_like_parser_mismatch",
         }
 
+    @pytest.mark.parametrize("identifier", [
+        "Investment Portfolio",
+        "Total Mutual Funds",
+        "Total Investments -- non-controlled / affiliated",
+        "Total Investments -- non-controlled/ affiliate",
+    ])
+    def test_fidelity_apollo_totals_documented_nonblocking(self, identifier):
+        """Regression: subtotal/total rows from Fidelity PCF and Apollo DS."""
+        row = self._classified(identifier)
+        assert row["mechanism"] == "documented_source_total_header"
+        assert row["is_blocking"] == False
+
+    def test_total_investments_controlled_affiliated_nonblocking(self):
+        """Variant with single non- prefix and 'affiliated' suffix."""
+        row = self._classified("Total Investments - non-controlled/affiliated")
+        assert row["mechanism"] == "documented_source_total_header"
+        assert row["is_blocking"] == False
+
 
 # ---------------------------------------------------------------------------
 # BDC source reconciliation
@@ -380,6 +398,57 @@ class TestBdcSourceReconciliation:
 
         by_identifier = {row["investment_identifier"]: row for row in rows}
         assert by_identifier["Company 5 - Term Loan"]["fair_value"] == 1400000.0
+
+    def test_source_extraction_applies_stepstone_2025q4_scale_correction(self, tmp_path):
+        identifier = (
+            "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | "
+            "Insurance | Denali Topco LLC Initial Term Loan | SOFR + 5.50% | 7/12/29"
+        )
+        xml = f"""
+            <xbrl xmlns="http://www.xbrl.org/2003/instance"
+                  xmlns:xbrli="http://www.xbrl.org/2003/instance"
+                  xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+                  xmlns:test="http://example.com/test">
+                <xbrli:context id="ctx_stepstone">
+                    <xbrli:entity>
+                        <xbrli:identifier scheme="http://www.sec.gov/CIK">0001950803</xbrli:identifier>
+                        <xbrli:segment>
+                            <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                                <test:InvestmentIdentifierDomain>{identifier}</test:InvestmentIdentifierDomain>
+                            </xbrldi:typedMember>
+                        </xbrli:segment>
+                    </xbrli:entity>
+                    <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+                </xbrli:context>
+                <test:InvestmentOwnedAtFairValue contextRef="ctx_stepstone" unitRef="usd" decimals="0">12541</test:InvestmentOwnedAtFairValue>
+                <test:InvestmentOwnedAtCost contextRef="ctx_stepstone" unitRef="usd" decimals="0">12541</test:InvestmentOwnedAtCost>
+                <test:InvestmentOwnedBalancePrincipalAmount contextRef="ctx_stepstone" unitRef="usd" decimals="0">12541</test:InvestmentOwnedBalancePrincipalAmount>
+                <test:InvestmentInterestRate contextRef="ctx_stepstone" unitRef="pure" decimals="4">0.0942</test:InvestmentInterestRate>
+                <test:InvestmentOwnedPercentOfNetAssets contextRef="ctx_stepstone" unitRef="pure" decimals="4">0.0067</test:InvestmentOwnedPercentOfNetAssets>
+            </xbrl>
+        """
+        path = tmp_path / "stepstone.xml"
+        path.write_text(xml, encoding="utf-8")
+
+        rows = _extract_single_xbrl_source_file(
+            path,
+            {
+                "cik": "0001950803",
+                "entity_name": "Stepstone Private Credit Fund LLC",
+                "accession_number": "0001193125-26-128890",
+                "form_type": "10-K",
+                "filing_date": "2026-05-21",
+                "report_date": "2025-12-31",
+            },
+        )
+
+        assert len(rows) == 1
+        row = rows[0]
+        assert row["fair_value"] == 12541000.0
+        assert row["cost"] == 12541000.0
+        assert row["principal_amount"] == 12541000.0
+        assert row["interest_rate"] == 0.0942
+        assert row["pct_of_net_assets"] == 0.0067
 
     def test_exact_source_to_output_match(self):
         detail, metrics = reconcile_bdc_source_to_holdings(
@@ -2214,6 +2283,35 @@ class TestBdcSourceReconciliation:
                 "status": "missing_from_pipeline",
                 "residual_class": "row_identity",
                 "blocking_issue": True,
+                "cik": "0001920453",
+                "entity_name": "Fidelity Private Credit Fund",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-fidelity",
+                "source_row_id": "fidelity-affiliate-total",
+                "raw_investment_identifier": "Total Investments -- non-controlled/ affiliate",
+                "source_fair_value": "84485040",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001837532",
+                "entity_name": "Apollo Debt Solutions BDC",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-apollo",
+                "source_row_id": "apollo-wrapper-total-pharma",
+                "raw_investment_identifier": "Total Pharmaceuticals",
+                "source_wrapper_disposition": "debt_total_rollup",
+                "source_fair_value": "376477000",
+                "evidence": "rollup source row documented by per-CIK wrapper classification",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
                 "cik": "0001899996",
                 "entity_name": "Fidelity Private Credit Co LLC",
                 "report_date": "2025-03-31",
@@ -2274,6 +2372,179 @@ class TestBdcSourceReconciliation:
                 "source_fair_value": "346",
                 "evidence": "eligible current-period source row has no pipeline output row",
             },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001905824",
+                "entity_name": "PIMCO Capital Solutions BDC Corp.",
+                "report_date": "2026-03-31",
+                "period": "2026-03-31",
+                "accession_number": "acc-pimco",
+                "source_row_id": "pimco-fhlb-discount-note",
+                "raw_investment_identifier": (
+                    "Debt Investments | Short-Term Investments | U.S. Government Agencies | "
+                    "U.S. Treasury Bills | Federal Home Loan Bank Discount Note | "
+                    "3.580 % | 04/01/2026"
+                ),
+                "source_fair_value": "1000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001905824",
+                "entity_name": "PIMCO Capital Solutions BDC Corp.",
+                "report_date": "2025-09-30",
+                "period": "2025-09-30",
+                "accession_number": "acc-pimco",
+                "source_row_id": "pimco-ustb-warrants-noise",
+                "raw_investment_identifier": (
+                    "Short-Term Investmentsv | Warrants | U.S. Treasury Bill | "
+                    "U.S. Treasury Bill | N/A | 3.816% | 12/11/2025"
+                ),
+                "source_fair_value": "695000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001905824",
+                "entity_name": "PIMCO Capital Solutions BDC Corp.",
+                "report_date": "2025-09-30",
+                "period": "2025-09-30",
+                "accession_number": "acc-pimco",
+                "source_row_id": "pimco-fhlb-warrants-noise",
+                "raw_investment_identifier": (
+                    "Warrants | U.S. Government Agencies | "
+                    "Federal Home Loan Bank Discount Note | N/A | 4.024% | 10/08/2025"
+                ),
+                "source_fair_value": "799000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001905824",
+                "entity_name": "PIMCO Capital Solutions BDC Corp.",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-pimco",
+                "source_row_id": "pimco-total-short-term",
+                "raw_investment_identifier": "Total Short-Term Investments",
+                "source_fair_value": "123000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001905824",
+                "entity_name": "PIMCO Capital Solutions BDC Corp.",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-pimco",
+                "source_row_id": "pimco-total-non-affiliate",
+                "raw_investment_identifier": "Total Non-Controlled Non-Affiliated Investments",
+                "source_fair_value": "456000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001803498",
+                "entity_name": "Blackstone Private Credit Fund",
+                "report_date": "2026-03-31",
+                "period": "2026-03-31",
+                "accession_number": "acc-blackstone",
+                "source_row_id": "blackstone-dreyfus-cash",
+                "raw_investment_identifier": (
+                    "Dreyfus Government Cash Management - Institutional Shares | "
+                    "Emerald JV LP"
+                ),
+                "source_fair_value": "2000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001812554",
+                "entity_name": "Blue Owl Credit Income Corp.",
+                "report_date": "2026-03-31",
+                "period": "2026-03-31",
+                "accession_number": "acc-blueowl",
+                "source_row_id": "blueowl-total-commitments",
+                "raw_investment_identifier": "Total Portfolio Company Commitments",
+                "source_fair_value": "-3000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001812554",
+                "entity_name": "Blue Owl Credit Income Corp.",
+                "report_date": "2026-03-31",
+                "period": "2026-03-31",
+                "accession_number": "acc-blueowl",
+                "source_row_id": "blueowl-total-debt-commitments",
+                "raw_investment_identifier": "Total non-controlled/non-affiliated - debt commitments",
+                "source_fair_value": "-4000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001812554",
+                "entity_name": "Blue Owl Credit Income Corp.",
+                "report_date": "2025-12-31",
+                "period": "2025-12-31",
+                "accession_number": "acc-blueowl",
+                "source_row_id": "blueowl-affiliated-debt-commitments",
+                "raw_investment_identifier": "Total non-controlled/affiliated - debt commitments",
+                "source_fair_value": "-14000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001633858",
+                "entity_name": "Audax Credit BDC Inc.",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-audax",
+                "source_row_id": "audax-total-equity-pref",
+                "raw_investment_identifier": (
+                    "Portfolio Investments EQUITY AND PREFERRED SHARES: "
+                    "NON-CONTROL/NON-AFFILIATE INVESTMENTS - (1.7%) "
+                    "Total Equity and Preferred Shares"
+                ),
+                "source_fair_value": "3000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
+            {
+                "status": "missing_from_pipeline",
+                "residual_class": "row_identity",
+                "blocking_issue": True,
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Central Fund LLC",
+                "report_date": "2025-03-31",
+                "period": "2025-03-31",
+                "accession_number": "acc-fidelity-central",
+                "source_row_id": "fidelity-central-total-equity",
+                "raw_investment_identifier": (
+                    "Investments Investments -- non-controlled/ non-affiliated Total Equity"
+                ),
+                "source_fair_value": "5000000",
+                "evidence": "eligible current-period source row has no pipeline output row",
+            },
         ])
 
         classified = build_source_only_blocker_detail(detail)
@@ -2292,6 +2563,35 @@ class TestBdcSourceReconciliation:
             by_id["Goldman Sachs Financial Square Government Institutional Fund"]
             == "documented_source_cash_or_money_market_bucket"
         )
+        assert (
+            by_id[
+                "Debt Investments | Short-Term Investments | U.S. Government Agencies | "
+                "U.S. Treasury Bills | Federal Home Loan Bank Discount Note | "
+                "3.580 % | 04/01/2026"
+            ]
+            == "documented_source_cash_or_money_market_bucket"
+        )
+        assert (
+            by_id[
+                "Short-Term Investmentsv | Warrants | U.S. Treasury Bill | "
+                "U.S. Treasury Bill | N/A | 3.816% | 12/11/2025"
+            ]
+            == "documented_source_cash_or_money_market_bucket"
+        )
+        assert (
+            by_id[
+                "Warrants | U.S. Government Agencies | "
+                "Federal Home Loan Bank Discount Note | N/A | 4.024% | 10/08/2025"
+            ]
+            == "documented_source_cash_or_money_market_bucket"
+        )
+        assert (
+            by_id[
+                "Dreyfus Government Cash Management - Institutional Shares | "
+                "Emerald JV LP"
+            ]
+            == "documented_source_cash_or_money_market_bucket"
+        )
         assert by_id["Total Safety Holdings LLC"] == "blocking_source_position_like_parser_mismatch"
         assert (
             by_id[
@@ -2307,6 +2607,37 @@ class TestBdcSourceReconciliation:
         )
         assert (
             by_id["Investments--non-controlled/non-affiliated Unfunded Commitments"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id["Total Investments -- non-controlled/ affiliate"]
+            == "documented_source_total_header"
+        )
+        assert by_id["Total Pharmaceuticals"] == "documented_source_total_header"
+        assert by_id["Total Short-Term Investments"] == "documented_source_total_header"
+        assert (
+            by_id["Total Non-Controlled Non-Affiliated Investments"]
+            == "documented_source_total_header"
+        )
+        assert by_id["Total Portfolio Company Commitments"] == "documented_source_total_header"
+        assert (
+            by_id["Total non-controlled/non-affiliated - debt commitments"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id["Total non-controlled/affiliated - debt commitments"]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id[
+                "Portfolio Investments EQUITY AND PREFERRED SHARES: "
+                "NON-CONTROL/NON-AFFILIATE INVESTMENTS - (1.7%) "
+                "Total Equity and Preferred Shares"
+            ]
+            == "documented_source_total_header"
+        )
+        assert (
+            by_id["Investments Investments -- non-controlled/ non-affiliated Total Equity"]
             == "documented_source_total_header"
         )
         assert (

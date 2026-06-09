@@ -25,6 +25,7 @@ from pipeline.bdc_filings import (
     _match_concept,
     _parse_fact_value,
     _parse_xbrl_contexts,
+    _apply_stepstone_2025q4_monetary_scale_correction,
     _normalize_mixed_decimals_monetary_facts,
 )
 from pipeline.bdc_aggregate_overrides import (
@@ -419,62 +420,81 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         )
     )
 
+    explicit_total_header = normalized.str.match(
+        r"^(total\s+portfolio\s+company\s+commitments?|"
+        r"total\s+non\s+controlled\s+non\s+affiliated\s+debt\s+commitments?|"
+        r"total\s+non\s+controlled\s+affiliated\s+debt\s+commitments?|"
+        r"total\s+non\s+controlled\s+non\s+affiliated\s+investments?|"
+        r"total\s+investments\s+non\s+controlled\s+affiliat(?:e|ed)|"
+        r"total\s+short\s+term\s+investments?|"
+        r"total\s+equity(?:\s+other)?|"
+        r"total\s+equity\s+investments?|"
+        r"total\s+equity\s+and\s+preferred\s+shares?|"
+        r"total\s+portfolio\s+investments?|"
+        r"investments\s+investments\s+non\s+controlled\s+non\s+affiliat(?:e|ed)\s+total\s+equity|"
+        r"portfolio\s+investments\s+.*\s+total\s+(?:equity\s+and\s+preferred\s+shares?|portfolio\s+investments?))$",
+        na=False,
+    )
     total_header = (
-        ~entity_signal
-        & ~terminal_pct
-        & (
-            raw_lower.str.match(
-                r"^(total|subtotal)\s+("
-                r"investments?|portfolio investments?|debt investments?|equity investments?|"
-                r"investment portfolio|"
-                r"cash equivalents?|cash and investments?|cash and cash equivalents|"
-                r"assets?|net assets?|liabilities|unfunded commitments?|commitments?|"
-                r"affiliates?|affiliate investments?|control investments?|non control non affiliate investments?"
-                r")(\s+at fair value)?"
-                r"(\s*[\u2014-]\s*(non[-\s]?controlled\s*/\s*non[-\s]?affiliat(?:e|ed)|"
-                r"non[-\s]?controlled\s+non[-\s]?affiliat(?:e|ed)|"
-                r"non[-\s]?control\s*/\s*non[-\s]?affiliate))?"
-                r"(\s*[\u2014-]?\s*\(?-?\d+(?:\.\d+)?%\)?)?$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^investments\s+non\s+controlled\s+non\s+affiliated\s+total\s+unfunded\s+commitments?$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^investments\s+non\s+controlled\s+non\s+affiliated\s+unfunded\s+commitments?$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^investments\s+total\s+investments\s+non\s+controlled\s+non\s+affiliat(?:e|ed)$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^investments\s+total\s+investments\s+non\s+controlled\s+affiliat(?:e|ed)$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^investments\s+investments\s+total\s+investments\s+non\s+controlled\s+non\s+affiliated$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^investments\s+investments\s+total\s+investments\s+non\s+controlled\s+affiliat(?:e|ed)$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^investments\s+investments\s+non\s+controlled\s+non\s+affiliate$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^total\s+investments\s+non\s+controlled\s+non\s+affiliate$",
-                na=False,
-            )
-            | normalized.str.match(
-                r"^(investments\s+portfolio|investments\s+non\s+controlled\s+non\s+affiliated|"
-                r"portfolio\s+company\s+investment\s+in\s+securities|debt\s+equity\s+securities|"
-                r"total\s+investments\s+excluding\s+u\s+s\s+treasury\s+bills|"
-                r"liabilities\s+(in\s+excess\s+of|less)\s+other\s+assets|net\s+assets)$",
-                na=False,
+        explicit_total_header
+        | (
+            ~entity_signal
+            & ~terminal_pct
+            & (
+                raw_lower.str.match(
+                    r"^(total|subtotal)\s+("
+                    r"investments?|portfolio investments?|debt investments?|equity investments?|"
+                    r"investment portfolio|mutual\s+funds?|"
+                    r"cash equivalents?|cash and investments?|cash and cash equivalents|"
+                    r"assets?|net assets?|liabilities|unfunded commitments?|commitments?|"
+                    r"affiliates?|affiliate investments?|control investments?|non control non affiliate investments?"
+                    r")(\s+at fair value)?"
+                    r"(\s*[\u2014-]+\s*(non[-\s]?controlled\s*/\s*non[-\s]?affiliat(?:e|ed)|"
+                    r"non[-\s]?controlled\s+non[-\s]?affiliat(?:e|ed)|"
+                    r"non[-\s]?controlled\s*/?\s*affiliat(?:e|ed)|"
+                    r"non[-\s]?control\s*/\s*non[-\s]?affiliate))?"
+                    r"(\s*[\u2014-]?\s*\(?-?\d+(?:\.\d+)?%\)?)?$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^investments\s+non\s+controlled\s+non\s+affiliated\s+total\s+unfunded\s+commitments?$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^investments\s+non\s+controlled\s+non\s+affiliated\s+unfunded\s+commitments?$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^investments\s+total\s+investments\s+non\s+controlled\s+non\s+affiliat(?:e|ed)$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^investments\s+total\s+investments\s+non\s+controlled\s+affiliat(?:e|ed)$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^investments\s+investments\s+total\s+investments\s+non\s+controlled\s+non\s+affiliated$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^investments\s+investments\s+total\s+investments\s+non\s+controlled\s+affiliat(?:e|ed)$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^investments\s+investments\s+non\s+controlled\s+non\s+affiliate$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^total\s+investments\s+non\s+controlled\s+non\s+affiliate$",
+                    na=False,
+                )
+                | normalized.str.match(
+                    r"^(investment\s+portfolio|investments\s+portfolio|investments\s+non\s+controlled\s+non\s+affiliated|"
+                    r"portfolio\s+company\s+investment\s+in\s+securities|debt\s+equity\s+securities|"
+                    r"total\s+investments\s+excluding\s+u\s+s\s+treasury\s+bills|"
+                    r"liabilities\s+(in\s+excess\s+of|less)\s+other\s+assets|net\s+assets)$",
+                    na=False,
+                )
             )
         )
     )
@@ -490,12 +510,49 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
     )
     cash_bucket = (
         ~numeric_alias
-        & raw_lower.str.contains(
-            r"\b(cash equivalents?|cash and cash equivalents|restricted cash|"
-            r"money market|institutional liquidity|treasury portfolio|"
-            r"government institutional fund|financial square government|mmda)\b",
-            regex=True,
-            na=False,
+        & (
+            raw_lower.str.contains(
+                r"\b(cash equivalents?|cash and cash equivalents|restricted cash|"
+                r"money market|institutional liquidity|treasury portfolio|"
+                r"government institutional fund|financial square government|mmda)\b",
+                regex=True,
+                na=False,
+            )
+            | raw_lower.str.contains(
+                r"\b(dreyfus\b.*\bcash management|"
+                r"government cash management|treasury obligations cash management)\b",
+                regex=True,
+                na=False,
+            )
+            | (
+                raw_lower.str.contains(r"\bshort[-\s]?term investments?v?\b", regex=True, na=False)
+                & raw_lower.str.contains(
+                    r"\b(u\.?s\.?\s+treasury bills?|united states treasury bills?|"
+                    r"federal home loan bank|discount note)\b",
+                    regex=True,
+                    na=False,
+                )
+            )
+            | (
+                raw_lower.str.contains(
+                    r"\bfederal home loan bank\b.*\bdiscount note\b",
+                    regex=True,
+                    na=False,
+                )
+            )
+            | (
+                ~entity_signal
+                & raw_lower.str.contains(
+                    r"\b(u\.?s\.?\s+treasury bills?|united states treasury bills?)\b",
+                    regex=True,
+                    na=False,
+                )
+                & raw_lower.str.contains(
+                    r"\b(short[-\s]?term|u\.?s\.?\s+government|government securities|n/a)\b",
+                    regex=True,
+                    na=False,
+                )
+            )
         )
         & ~raw_lower.str.contains(
             r"\b(private equity fund|limited partnership|lp interest|fund interest)\b",
@@ -654,6 +711,12 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
     )
     issuer_rollup_subtotal = wrapper_disp.str.endswith("_issuer_rollup")
     assign(issuer_rollup_subtotal, "documented_source_issuer_level_xbrl_subtotal", "SRCONLY_ISSUER_ROLLUP_XBRL", "high", False)
+    wrapper_rollup = (
+        wrapper_disp.eq("aggregate")
+        | wrapper_disp.str.endswith("_total_rollup")
+        | wrapper_disp.str.endswith("_category_rollup")
+    )
+    assign(wrapper_rollup, "documented_source_total_header", "SRCONLY_WRAPPER_ROLLUP_XBRL", "high", False)
 
     assign(
         numeric_alias,
@@ -1096,6 +1159,7 @@ def _extract_single_xbrl_source_file(
         for col in _VALUE_COLUMNS:
             row[col] = fact_vals.get(col)
         rows.append(row)
+    _apply_stepstone_2025q4_monetary_scale_correction(rows)
     return rows
 
 
