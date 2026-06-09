@@ -217,7 +217,35 @@ export default function HomePage() {
       {/* ================================================================ */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 space-y-14">
 
-        {/* 3. Index Performance -- chart + return summary side by side */}
+        {/* Industry Exposure + Manager Concentration (two-column donuts) */}
+        {(sectorItems.length > 0 || managerItems.length > 0) && (
+          <section>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {sectorItems.length > 0 && (
+                <div className="bg-white border border-rule p-7">
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Industry exposure</h3>
+                  <p className="text-xs text-ink3 mt-2 mb-3">{sectorItems.length} GICS sectors &middot; share of holdings AUM</p>
+                  <ProportionDonut items={sectorItems} centerStat={sectorCenterStat} />
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                    Reconciled BDC filings + holdings-level N-PORT.
+                  </div>
+                </div>
+              )}
+              {managerItems.length > 0 && (
+                <div className="bg-white border border-rule p-7">
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
+                  <p className="text-xs text-ink3 mt-2 mb-3">Top {managerItems.length} managers &middot; share of universe AUM</p>
+                  <ProportionDonut items={managerItems} centerStat={managerCenterStat} />
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                    Combined indices &middot; top {managerItems.length} managers.
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Index Performance -- chart + return summary side by side */}
         {perfSeries.some((s) => s.data.length > 0) && (
           <section>
             <PerfSection series={perfSeries}>
@@ -253,34 +281,6 @@ export default function HomePage() {
                 Total AUM across {aumTimeSeries[aumTimeSeries.length - 1].bdcCount} unlisted BDCs &middot; quarterly from {formatQuarter(aumTimeSeries[0].quarter)}
               </p>
               <UniverseGrowthChart data={aumTimeSeries} />
-            </div>
-          </section>
-        )}
-
-        {/* 4. Industry Exposure + Manager Concentration (two-column donuts) */}
-        {(sectorItems.length > 0 || managerItems.length > 0) && (
-          <section>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {sectorItems.length > 0 && (
-                <div className="bg-white border border-rule p-7">
-                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Industry exposure</h3>
-                  <p className="text-xs text-ink3 mt-2 mb-3">{sectorItems.length} GICS sectors &middot; share of holdings AUM</p>
-                  <ProportionDonut items={sectorItems} centerStat={sectorCenterStat} />
-                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
-                    Reconciled BDC filings + holdings-level N-PORT.
-                  </div>
-                </div>
-              )}
-              {managerItems.length > 0 && (
-                <div className="bg-white border border-rule p-7">
-                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
-                  <p className="text-xs text-ink3 mt-2 mb-3">Top {managerItems.length} managers &middot; share of universe AUM</p>
-                  <ProportionDonut items={managerItems} centerStat={managerCenterStat} />
-                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
-                    Combined indices &middot; top {managerItems.length} managers.
-                  </div>
-                </div>
-              )}
             </div>
           </section>
         )}
