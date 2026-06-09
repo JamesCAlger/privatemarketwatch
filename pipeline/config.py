@@ -16,6 +16,7 @@ THIRD_PARTY_DIR = RAW_DIR / "third_party"
 OUTPUT_DIR = DATA_DIR / "output"
 OVERRIDES_DIR = DATA_DIR / "overrides"
 OUTPUT_CACHE_DIR = OUTPUT_DIR / "cache"
+SEC_DOWNLOAD_LOCK_DIR = OUTPUT_CACHE_DIR / "sec_download_locks"
 
 # SEC reference data (company_tickers.json, etc.)
 SEC_REFERENCE_DIR = RAW_DIR / "sec_reference"
@@ -50,7 +51,7 @@ for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           COMPANYFACTS_CACHE_DIR, REFERENCE_DIR,
           RAW_DIR / "filings" / "ncsr_html",
           RAW_DIR / "filings" / "sc_toi_html",
-          OVERRIDES_DIR, OUTPUT_CACHE_DIR,
+          OVERRIDES_DIR, OUTPUT_CACHE_DIR, SEC_DOWNLOAD_LOCK_DIR,
           SEC_REFERENCE_DIR, LISTED_PRICES_CACHE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
@@ -124,6 +125,9 @@ BDC_HOLDINGS_PARQUET_FILE = OUTPUT_DIR / "bdc_holdings.parquet"
 BDC_PARSE_PROGRESS_FILE = OUTPUT_DIR / "bdc_parse_progress.csv"
 BDC_DEDUPE_AXIS_SPLITS_FILE = OUTPUT_DIR / "bdc_dedupe_axis_splits.csv"
 
+# Audited opt-in SEC HTML downloads for agent workflows
+SEC_DOWNLOAD_MANIFEST_FILE = OUTPUT_DIR / "sec_download_manifest.jsonl"
+
 # N-CSR output files
 NCSR_PARSE_PROGRESS_FILE = OUTPUT_DIR / "ncsr_parse_progress.csv"
 
@@ -146,6 +150,12 @@ BDC_XBRL_ORACLE_EXCEPTIONS_FILE = OVERRIDES_DIR / "bdc_xbrl_oracle_exceptions.js
 # Unlisted (non-traded) BDC reference for v1 frontend filtering
 UNLISTED_BDC_REFERENCE_FILE = (
     OVERRIDES_DIR / "bdc_xbrl_wrappers" / "unlisted_bdc_xbrl_reference.json"
+)
+
+# V1 wrapper cohort manifest -- the 39 wrapper-covered unlisted BDCs
+# used as the frontend sample scope.
+WRAPPER_COHORT_MANIFEST_FILE = (
+    OVERRIDES_DIR / "wrapper_cohorts" / "v1_39_wrapper_manifest.json"
 )
 
 # Entity resolution overrides and outputs
@@ -237,6 +247,7 @@ VALIDATION_RULES_TREND_FILE = OUTPUT_DIR / "validation_rules_trend.csv"
 
 # Fund-level income and fee uplift
 BDC_FUND_INCOME_FILE = OUTPUT_DIR / "bdc_fund_income.csv"
+BDC_FUND_HIGHLIGHTS_FILE = OUTPUT_DIR / "bdc_fund_highlights.csv"
 FEE_UPLIFT_FILE = OUTPUT_DIR / "fee_uplift.csv"
 FUND_FINANCIALS_FILE = OUTPUT_DIR / "fund_financials.csv"
 FUND_IDENTITY_FILE = OUTPUT_DIR / "fund_identity.csv"

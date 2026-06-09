@@ -13,6 +13,7 @@ Usage:
     python scripts/rebuild_outputs.py --pik-status  # Only current PIK status artifacts
     python scripts/rebuild_outputs.py --pik-proxy   # Only PIK schedule-rate proxy artifacts
     python scripts/rebuild_outputs.py --income      # Only fund income + fee uplift
+    python scripts/rebuild_outputs.py --highlights   # Only fund-level highlights
     python scripts/rebuild_outputs.py --html        # Only HTML template extraction ($0)
 """
 
@@ -165,6 +166,17 @@ def rebuild_pik_proxy():
         time.time() - t0,
     )
     return summary_df, transitions_df
+
+
+def rebuild_highlights():
+    """Rebuild comprehensive fund-level highlights from cached XBRL."""
+    from pipeline.bdc_fund_highlights import extract_bdc_fund_highlights
+
+    logger.info("=== Rebuilding fund-level highlights ===")
+    t0 = time.time()
+    df = extract_bdc_fund_highlights()
+    logger.info("Fund highlights: %d rows in %.1f s", len(df), time.time() - t0)
+    return df
 
 
 def rebuild_ncsr():
@@ -406,6 +418,8 @@ def main():
                         help="Rebuild current PIK status artifacts only")
     parser.add_argument("--pik-proxy", action="store_true",
                         help="Rebuild PIK schedule-rate proxy artifacts only")
+    parser.add_argument("--highlights", action="store_true",
+                        help="Rebuild fund-level highlights from cached XBRL")
     parser.add_argument("--html", action="store_true",
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
@@ -435,7 +449,8 @@ def main():
     # If no flags, rebuild everything
     rebuild_all = not (
         args.bdc_holdings or args.unified or args.entities or args.income or args.returns
-        or args.pik_status or args.pik_proxy or args.html or args.frontend or args.financials or args.gics
+        or args.pik_status or args.pik_proxy or args.highlights or args.html
+        or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
         or args.tender_offers or args.prices or args.provenance
     )
@@ -453,6 +468,9 @@ def main():
 
     if rebuild_all or args.income:
         rebuild_income()
+
+    if args.highlights:
+        rebuild_highlights()
 
     if rebuild_all or args.financials:
         rebuild_financials(
