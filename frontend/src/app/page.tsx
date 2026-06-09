@@ -10,6 +10,8 @@ import {
   getGicsSectorBreakdown,
   getDistributionHistogram,
   getLeverageHistogram,
+  getAumTimeSeries,
+  getCreditRisk,
 } from '@/lib/data';
 import { INDICES } from '@/lib/constants';
 import { formatDollar, formatNumber, formatQuarter, formatPercent, formatYears } from '@/lib/format';
@@ -18,9 +20,11 @@ import Link from 'next/link';
 import FundTable from '@/components/FundTable';
 import PerfSection from '@/components/PerfSection';
 import ReturnSummaryTable from '@/components/ReturnSummaryTable';
-import GicsSectorChart from '@/components/GicsSectorChart';
+import ProportionDonut from '@/components/ProportionDonut';
 import HistogramChart from '@/components/HistogramChart';
-import ConcentrationPieChart from '@/components/ManagerPieChart';
+import UniverseGrowthChart from '@/components/UniverseGrowthChart';
+import CreditStressChart from '@/components/CreditStressChart';
+import { formatDisplayName } from '@/lib/nameFormat';
 
 export default function HomePage() {
   const funds = getFundList();
@@ -34,6 +38,8 @@ export default function HomePage() {
   const distHistogram = getDistributionHistogram();
   const levHistogram = getLeverageHistogram();
   const managerConcentration = getManagerConcentration();
+  const aumTimeSeries = getAumTimeSeries();
+  const creditRisk = getCreditRisk();
 
   const dlSummary = indexSummaries.find((s) => s.index === 'DIRECT_LENDING');
   const visibleKeys = new Set(INDICES.map((i) => i.key));
@@ -84,6 +90,23 @@ export default function HomePage() {
     managerConcentration,
     INDICES.map((i) => i.key),
   );
+
+  // Donut items for Industry Exposure + Manager Concentration
+  const sectorItems = gicsSectorBreakdown.map((s) => ({
+    label: s.sector,
+    pct: s.pctOfTotal * 100,
+  }));
+  const managerItems = combinedManagers.map((m) => ({
+    label: formatDisplayName(m.name, { kind: 'manager' }),
+    pct: m.pctOfIndex * 100,
+  }));
+  function top5Share(items: { pct: number }[]): number {
+    const total = items.reduce((s, x) => s + x.pct, 0);
+    const top5Sum = [...items].sort((a, b) => b.pct - a.pct).slice(0, 5).reduce((s, x) => s + x.pct, 0);
+    return total > 0 ? (top5Sum / total) * 100 : 0;
+  }
+  const sectorCenterStat = { label: 'Top 5', value: top5Share(sectorItems).toFixed(0) + '%', note: 'of holdings' };
+  const managerCenterStat = { label: 'Top 5', value: top5Share(managerItems).toFixed(0) + '%', note: 'of universe AUM' };
 
   // Portfolio characteristics stats
   const pc = portfolioCharacteristics;
@@ -203,25 +226,110 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* 4. Industry Exposure + Manager Concentration (two-column) */}
-        {(gicsSectorBreakdown.length > 0 || combinedManagers.length > 0) && (
+        {/* Universe Growth */}
+        {aumTimeSeries.length > 1 && (
+          <section>
+            <div className="bg-white border border-rule p-7">
+              <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
+                <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Universe growth</h3>
+                <div className="text-right">
+                  <span className="font-mono text-[22px] text-ink font-semibold tabular-nums">
+                    {formatDollar(aumTimeSeries[aumTimeSeries.length - 1].total)}
+                  </span>
+                  {aumTimeSeries.length >= 5 && (() => {
+                    const latest = aumTimeSeries[aumTimeSeries.length - 1].total;
+                    const yearAgo = aumTimeSeries[aumTimeSeries.length - 5]?.total;
+                    if (!yearAgo || yearAgo === 0) return null;
+                    const yoy = ((latest / yearAgo) - 1) * 100;
+                    return (
+                      <span className="text-[11px] text-ink3 ml-2 font-mono tabular-nums">
+                        +{yoy.toFixed(0)}% YoY
+                      </span>
+                    );
+                  })()}
+                </div>
+              </div>
+              <p className="text-xs text-ink3 mb-4">
+                Total AUM across {aumTimeSeries[aumTimeSeries.length - 1].bdcCount} unlisted BDCs &middot; quarterly from {formatQuarter(aumTimeSeries[0].quarter)}
+              </p>
+              <UniverseGrowthChart data={aumTimeSeries} />
+            </div>
+          </section>
+        )}
+
+        {/* 4. Industry Exposure + Manager Concentration (two-column donuts) */}
+        {(sectorItems.length > 0 || managerItems.length > 0) && (
           <section>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {gicsSectorBreakdown.length > 0 && (
-                <div className="bg-white border border-rule p-6">
-                  <div className="eyebrow text-ink2 mb-4">Industry Exposure</div>
-                  <GicsSectorChart data={gicsSectorBreakdown} />
+              {sectorItems.length > 0 && (
+                <div className="bg-white border border-rule p-7">
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Industry exposure</h3>
+                  <p className="text-xs text-ink3 mt-2 mb-3">{sectorItems.length} GICS sectors &middot; share of holdings AUM</p>
+                  <ProportionDonut items={sectorItems} centerStat={sectorCenterStat} />
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                    Reconciled BDC filings + holdings-level N-PORT.
+                  </div>
                 </div>
               )}
-              {combinedManagers.length > 0 && (
-                <div className="bg-white border border-rule p-6">
-                  <div className="eyebrow text-ink2 mb-4">Manager Concentration</div>
-                  <ConcentrationPieChart data={combinedManagers} title="Combined Indices" />
+              {managerItems.length > 0 && (
+                <div className="bg-white border border-rule p-7">
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
+                  <p className="text-xs text-ink3 mt-2 mb-3">Top {managerItems.length} managers &middot; share of universe AUM</p>
+                  <ProportionDonut items={managerItems} centerStat={managerCenterStat} />
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                    Combined indices &middot; top {managerItems.length} managers.
+                  </div>
                 </div>
               )}
             </div>
           </section>
         )}
+
+        {/* Credit Stress */}
+        {creditRisk.length > 1 && (() => {
+          const latest = creditRisk[creditRisk.length - 1];
+          const latestTotal = latest.byFv.deepDistress + latest.byFv.nonAccrual + latest.byFv.markedBelowCost;
+          const yearAgoIdx = creditRisk.length - 5;
+          const yearAgo = yearAgoIdx >= 0 ? creditRisk[yearAgoIdx] : null;
+          const yearAgoTotal = yearAgo
+            ? yearAgo.byFv.deepDistress + yearAgo.byFv.nonAccrual + yearAgo.byFv.markedBelowCost
+            : null;
+          const delta = yearAgoTotal != null ? latestTotal - yearAgoTotal : null;
+          return (
+            <section>
+              <div className="bg-white border border-rule p-7">
+                <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
+                  <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Credit stress, by quarter</h3>
+                  <div className="text-right">
+                    <span className="font-mono text-[26px] text-ink font-semibold tabular-nums leading-none">
+                      {(latestTotal * 100).toFixed(1)}%
+                    </span>
+                    <div className="text-[10px] text-ink3 uppercase tracking-[0.1em] mt-1">
+                      of fair value flagged &middot; {formatQuarter(latest.quarter)}
+                    </div>
+                    {delta != null && (
+                      <div className="text-[11px] text-ink2 font-mono tabular-nums mt-1">
+                        {delta > 0 ? '+' : ''}{(delta * 100).toFixed(1)} pp YoY
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <p className="text-xs text-ink3 mb-2">
+                  Cumulative % of fair value showing each signal &middot; {creditRisk.length}-quarter history
+                </p>
+                <CreditStressChart data={creditRisk} />
+                <div className="flex flex-wrap justify-between items-baseline mt-2 pt-3 border-t border-rule2 text-xs text-ink3">
+                  <span>
+                    Universe AUM{' '}
+                    <span className="font-mono text-ink2 tabular-nums">{formatDollar(latest.totalFv)}</span>
+                    {' '}across {formatNumber(latest.totalPositions)} positions.
+                  </span>
+                  <span>Source: SEC 10-K / 10-Q filings</span>
+                </div>
+              </div>
+            </section>
+          );
+        })()}
       </div>
 
       {/* ================================================================ */}
@@ -318,8 +426,9 @@ export default function HomePage() {
         {/* 7. Distributions & Leverage (single card, two-column) */}
         {(distHistogram || levHistogram) && (
           <section>
-            <div className="bg-white border border-rule p-6">
-              <div className="eyebrow text-ink2 mb-5">Distributions &amp; Leverage</div>
+            <div className="bg-white border border-rule p-7">
+              <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Distributions &amp; leverage</h3>
+              <p className="text-xs text-ink3 mt-2 mb-4">Cross-sectional distribution &middot; medians shown</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
                 {distHistogram && (
                   <div>
@@ -361,16 +470,15 @@ export default function HomePage() {
         {/* 8. Fund Universe */}
         <section id="universe">
           <div className="bg-white border border-rule">
-            <div className="flex flex-wrap items-baseline justify-between gap-4 p-6 pb-0">
+            <div className="p-7 pb-0">
               <h2 className="font-display text-[26px] tracking-[-0.01em] text-ink">
-                Fund Universe
+                Fund universe{' '}
+                <span className="text-ink3 font-normal">
+                  &middot; {formatNumber(summary.totalFunds)} funds &middot; {formatDollar(summary.totalAum)}
+                </span>
               </h2>
-              <span className="text-xs text-ink3">
-                {formatNumber(summary.totalFunds)} funds &middot;{' '}
-                {formatDollar(summary.totalAum)} total AUM
-              </span>
             </div>
-            <div className="p-6 pt-4">
+            <div className="p-7 pt-4">
               <FundTable funds={funds} />
             </div>
           </div>
