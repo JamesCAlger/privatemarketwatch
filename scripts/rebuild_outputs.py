@@ -14,6 +14,7 @@ Usage:
     python scripts/rebuild_outputs.py --pik-proxy   # Only PIK schedule-rate proxy artifacts
     python scripts/rebuild_outputs.py --income      # Only fund income + fee uplift
     python scripts/rebuild_outputs.py --highlights   # Only fund-level highlights
+    python scripts/rebuild_outputs.py --highlights-oracle  # Highlights oracle + quality gate
     python scripts/rebuild_outputs.py --html        # Only HTML template extraction ($0)
 """
 
@@ -177,6 +178,24 @@ def rebuild_highlights():
     df = extract_bdc_fund_highlights()
     logger.info("Fund highlights: %d rows in %.1f s", len(df), time.time() - t0)
     return df
+
+
+def rebuild_highlights_oracle():
+    """Run oracle validation on fund-level highlights + quality gate."""
+    from pipeline.bdc_fund_highlights_oracle import run_highlights_oracle
+
+    logger.info("=== Running fund highlights oracle ===")
+    t0 = time.time()
+    oracle_df = run_highlights_oracle()
+    logger.info("Highlights oracle: %d rows in %.1f s", len(oracle_df), time.time() - t0)
+
+    from scripts.fund_highlights_quality_gate import run_quality_gate
+
+    logger.info("=== Running fund highlights quality gate ===")
+    t1 = time.time()
+    gate_df = run_quality_gate(oracle_df=oracle_df)
+    logger.info("Quality gate: %d CIKs in %.1f s", len(gate_df), time.time() - t1)
+    return oracle_df, gate_df
 
 
 def rebuild_ncsr():
@@ -420,6 +439,8 @@ def main():
                         help="Rebuild PIK schedule-rate proxy artifacts only")
     parser.add_argument("--highlights", action="store_true",
                         help="Rebuild fund-level highlights from cached XBRL")
+    parser.add_argument("--highlights-oracle", action="store_true",
+                        help="Run fund highlights oracle + quality gate")
     parser.add_argument("--html", action="store_true",
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
@@ -449,8 +470,8 @@ def main():
     # If no flags, rebuild everything
     rebuild_all = not (
         args.bdc_holdings or args.unified or args.entities or args.income or args.returns
-        or args.pik_status or args.pik_proxy or args.highlights or args.html
-        or args.frontend or args.financials or args.gics
+        or args.pik_status or args.pik_proxy or args.highlights or args.highlights_oracle
+        or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
         or args.tender_offers or args.prices or args.provenance
     )
@@ -471,6 +492,9 @@ def main():
 
     if args.highlights:
         rebuild_highlights()
+
+    if args.highlights_oracle:
+        rebuild_highlights_oracle()
 
     if rebuild_all or args.financials:
         rebuild_financials(
