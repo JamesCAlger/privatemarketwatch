@@ -198,6 +198,17 @@ def rebuild_highlights_oracle():
     return oracle_df, gate_df
 
 
+def rebuild_highlights_residual():
+    """Run residual profiler on fund highlights quality gate results."""
+    from scripts.fund_highlights_residual_profiler import run_residual_profiler
+
+    logger.info("=== Running fund highlights residual profiler ===")
+    t0 = time.time()
+    profile_df = run_residual_profiler()
+    logger.info("Residual profile: %d CIKs in %.1f s", len(profile_df), time.time() - t0)
+    return profile_df
+
+
 def rebuild_ncsr():
     """Rebuild N-CSR financials from cached HTML files."""
     from pipeline.ncsr_financials import extract_ncsr_financials
@@ -441,6 +452,8 @@ def main():
                         help="Rebuild fund-level highlights from cached XBRL")
     parser.add_argument("--highlights-oracle", action="store_true",
                         help="Run fund highlights oracle + quality gate")
+    parser.add_argument("--highlights-residual", action="store_true",
+                        help="Run fund highlights residual profiler")
     parser.add_argument("--html", action="store_true",
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
@@ -471,6 +484,7 @@ def main():
     rebuild_all = not (
         args.bdc_holdings or args.unified or args.entities or args.income or args.returns
         or args.pik_status or args.pik_proxy or args.highlights or args.highlights_oracle
+        or args.highlights_residual
         or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
         or args.tender_offers or args.prices or args.provenance
@@ -495,6 +509,9 @@ def main():
 
     if args.highlights_oracle:
         rebuild_highlights_oracle()
+
+    if args.highlights_residual:
+        rebuild_highlights_residual()
 
     if rebuild_all or args.financials:
         rebuild_financials(
