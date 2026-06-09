@@ -57,3 +57,19 @@ export function getIndexBySlug(slug: string): IndexMeta | undefined {
 export function getIndexByKey(key: string): IndexMeta | undefined {
   return INDICES.find((i) => i.key === key);
 }
+
+/** Per-index methodology summary content for index detail pages. */
+export const INDEX_METHODOLOGY: Record<string, { eligibility: string; construction: string }> = {
+  DIRECT_LENDING: {
+    eligibility:
+      'Eligible positions are direct corporate loans (first lien, second lien, unitranche, mezzanine) held by unlisted BDCs with XBRL-tagged schedules of investments. Excludes CLO tranches, fund interests, structured products, and consumer/marketplace lending.',
+    construction:
+      'The index is fair-value-weighted and chain-linked from a base of 100 (Q4 2022). Total return = capital return (price change on a per-unit basis) + income return (coupon accrual from filed rate data). Rebalanced quarterly, aligned with SEC filing deadlines.',
+  },
+  COMMON_EQUITY: {
+    eligibility:
+      'Eligible positions are direct common equity investments in private companies held by unlisted BDCs. Includes co-investments, minority stakes, and equity kickers. Excludes preferred equity, warrants, and fund interests.',
+    construction:
+      'The index is fair-value-weighted and chain-linked from a base of 100 (Q4 2022). Returns reflect NAV-based price appreciation only -- dividend income is not included for common equity positions. Rebalanced quarterly.',
+  },
+};

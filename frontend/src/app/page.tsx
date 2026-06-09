@@ -8,7 +8,6 @@ import {
   getManagerConcentration,
   getFundIndexReturns,
   getGicsSectorBreakdown,
-  getCreditRisk,
   getDistributionHistogram,
   getLeverageHistogram,
 } from '@/lib/data';
@@ -18,8 +17,8 @@ import { combineConcentration } from '@/lib/data';
 import Link from 'next/link';
 import FundTable from '@/components/FundTable';
 import PerfSection from '@/components/PerfSection';
+import ReturnSummaryTable from '@/components/ReturnSummaryTable';
 import GicsSectorChart from '@/components/GicsSectorChart';
-import DistressBarChart from '@/components/DistressBarChart';
 import HistogramChart from '@/components/HistogramChart';
 import ConcentrationPieChart from '@/components/ManagerPieChart';
 
@@ -32,7 +31,6 @@ export default function HomePage() {
   const fundIndexReturns = getFundIndexReturns();
   const gicsSectorBreakdown = getGicsSectorBreakdown();
   const portfolioCharacteristics = getPortfolioCharacteristics();
-  const creditRisk = getCreditRisk();
   const distHistogram = getDistributionHistogram();
   const levHistogram = getLeverageHistogram();
   const managerConcentration = getManagerConcentration();
@@ -43,7 +41,6 @@ export default function HomePage() {
   const totalIndexFv = visibleSummaries.reduce((sum, s) => sum + (s.totalFv ?? 0), 0);
 
   // Build index performance series: position-level gross + fund-level net
-  // Both rebased to 100 at PERF_START_QUARTER for visual comparability
   const PERF_START_QUARTER = '2022q4';
   const dlPositionSeries = indexReturns['DIRECT_LENDING'] ?? [];
   const fundCombinedSeries = fundIndexReturns['combined'] ?? [];
@@ -91,6 +88,14 @@ export default function HomePage() {
   // Portfolio characteristics stats
   const pc = portfolioCharacteristics;
   const hasPC = pc && pc.positionCount > 0;
+
+  // Return summary rows
+  const returnRows = buildReturnRows(indexReturns, fundIndexReturns);
+
+  // Movers data
+  const topLeverage = buildTopLeverage(funds);
+  const largestNavMoves = buildLargestNavMoves(funds);
+  const topYield = buildTopYield(funds);
 
   return (
     <div>
@@ -189,15 +194,11 @@ export default function HomePage() {
       {/* ================================================================ */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 space-y-14">
 
-        {/* 3. Index Performance — chart + return summary side by side */}
+        {/* 3. Index Performance -- chart + return summary side by side */}
         {perfSeries.some((s) => s.data.length > 0) && (
           <section>
             <PerfSection series={perfSeries}>
-              <ReturnSummaryTable
-                dlSummary={dlSummary ?? null}
-                indexReturns={indexReturns}
-                fundIndexReturns={fundIndexReturns}
-              />
+              <ReturnSummaryTable rows={returnRows} showGross={true} />
             </PerfSection>
           </section>
         )}
@@ -221,20 +222,10 @@ export default function HomePage() {
             </div>
           </section>
         )}
-
-        {/* 5. Credit Distress (full-width) */}
-        {creditRisk.length > 0 && (
-          <section>
-            <div className="bg-white border border-rule p-6">
-              <div className="eyebrow text-ink2 mb-4">Credit Distress</div>
-              <DistressBarChart data={creditRisk} />
-            </div>
-          </section>
-        )}
       </div>
 
       {/* ================================================================ */}
-      {/* PORTFOLIO CHARACTERISTICS — dark band                            */}
+      {/* PORTFOLIO CHARACTERISTICS -- dark band                            */}
       {/* ================================================================ */}
       {hasPC && (
         <div className="bg-navy mt-14">
@@ -279,12 +270,50 @@ export default function HomePage() {
       )}
 
       {/* ================================================================ */}
-      {/* LOWER SECTIONS (light bg)                                        */}
+      {/* MOVERS                                                           */}
       {/* ================================================================ */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 space-y-14">
+        {(topLeverage.length > 0 || largestNavMoves.length > 0 || topYield.length > 0) && (
+          <section>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Top Leverage */}
+              {topLeverage.length > 0 && (
+                <MoversCard
+                  title="Top Leverage"
+                  dotColor="bg-red"
+                  items={topLeverage}
+                  maxVal={topLeverage[0]?.value ?? 1}
+                  barColor="bg-red/60"
+                  valueFmt={(v) => `${v.toFixed(2)}x`}
+                />
+              )}
 
-        {/* 6. Credit risk + yield leaderboard */}
-        <CreditRiskCards creditRisk={creditRisk} funds={funds} />
+              {/* Largest NAV Moves */}
+              {largestNavMoves.length > 0 && (
+                <MoversCard
+                  title="Largest NAV Moves"
+                  dotColor="bg-navy"
+                  items={largestNavMoves}
+                  maxVal={Math.max(...largestNavMoves.map((m) => Math.abs(m.value)))}
+                  barColor="bg-navy/40"
+                  valueFmt={(v) => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`}
+                />
+              )}
+
+              {/* Yield Leaderboard */}
+              {topYield.length > 0 && (
+                <MoversCard
+                  title="Yield Leaderboard"
+                  dotColor="bg-accent"
+                  items={topYield}
+                  maxVal={topYield[0]?.value ?? 1}
+                  barColor="bg-accent"
+                  valueFmt={(v) => `${v.toFixed(1)}%`}
+                />
+              )}
+            </div>
+          </section>
+        )}
 
         {/* 7. Distributions & Leverage (single card, two-column) */}
         {(distHistogram || levHistogram) && (
@@ -351,16 +380,70 @@ export default function HomePage() {
   );
 }
 
-function ReturnSummaryTable({
-  dlSummary,
-  indexReturns,
-  fundIndexReturns,
+/* ------------------------------------------------------------------ */
+/* Movers card                                                         */
+/* ------------------------------------------------------------------ */
+
+interface MoverItem {
+  name: string;
+  cik: string;
+  value: number;
+}
+
+function MoversCard({
+  title,
+  dotColor,
+  items,
+  maxVal,
+  barColor,
+  valueFmt,
 }: {
-  dlSummary: import('@/lib/types').IndexSummary | null;
-  indexReturns: import('@/lib/types').IndexReturnsData;
-  fundIndexReturns: import('@/lib/types').FundIndexReturnsData;
+  title: string;
+  dotColor: string;
+  items: MoverItem[];
+  maxVal: number;
+  barColor: string;
+  valueFmt: (v: number) => string;
 }) {
-  // Compute multi-period returns from quarterly series
+  return (
+    <div className="bg-white border border-rule p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <span className={`w-2 h-2 rounded-full ${dotColor}`} />
+        <span className="eyebrow text-ink2">{title}</span>
+      </div>
+      <div className="space-y-2.5">
+        {items.map((item) => {
+          const barW = maxVal > 0 ? (Math.abs(item.value) / maxVal) * 100 : 0;
+          return (
+            <div key={item.cik}>
+              <div className="flex justify-between text-xs mb-1">
+                <span className="text-ink2 truncate pr-2">{item.name}</span>
+                <span className="font-mono tabular-nums text-ink font-semibold shrink-0">
+                  {valueFmt(item.value)}
+                </span>
+              </div>
+              <div className="h-2 bg-rule2 relative">
+                <div
+                  className={`absolute left-0 top-0 bottom-0 ${barColor}`}
+                  style={{ width: `${barW}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Data builders                                                       */
+/* ------------------------------------------------------------------ */
+
+function buildReturnRows(
+  indexReturns: import('@/lib/types').IndexReturnsData,
+  fundIndexReturns: import('@/lib/types').FundIndexReturnsData,
+) {
   const dlSeries = indexReturns['DIRECT_LENDING'] ?? [];
   const fundSeries = fundIndexReturns['combined'] ?? [];
 
@@ -380,27 +463,13 @@ function ReturnSummaryTable({
     return Math.pow(1 + totalReturn, 1 / years) - 1;
   }
 
-  // Gross (position-level) returns
-  const gross1y = periodReturn(
-    dlSeries.map((r) => ({ level: r.levelFv })),
-    4,
-  );
-  const gross3yTotal = periodReturn(
-    dlSeries.map((r) => ({ level: r.levelFv })),
-    12,
-  );
+  const gross1y = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), 4);
+  const gross3yTotal = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), 12);
   const gross3y = gross3yTotal != null ? annualize(gross3yTotal, 3) : null;
-  const gross5yTotal = periodReturn(
-    dlSeries.map((r) => ({ level: r.levelFv })),
-    20,
-  );
+  const gross5yTotal = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), 20);
   const gross5y = gross5yTotal != null ? annualize(gross5yTotal, 5) : null;
-  const grossInception = periodReturn(
-    dlSeries.map((r) => ({ level: r.levelFv })),
-    dlSeries.length - 1,
-  );
+  const grossInception = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), dlSeries.length - 1);
 
-  // Net (fund-level) returns
   const net1y = periodReturn(fundSeries, 4);
   const net3yTotal = periodReturn(fundSeries, 12);
   const net3y = net3yTotal != null ? annualize(net3yTotal, 3) : null;
@@ -408,208 +477,45 @@ function ReturnSummaryTable({
   const net5y = net5yTotal != null ? annualize(net5yTotal, 5) : null;
   const netInception = periodReturn(fundSeries, fundSeries.length - 1);
 
-  const rows = [
+  return [
     { label: '1 Year', gross: gross1y, net: net1y },
     { label: '3 Year (annualized)', gross: gross3y, net: net3y },
     { label: '5 Year (annualized)', gross: gross5y, net: net5y },
     { label: 'Since inception', gross: grossInception, net: netInception },
   ];
-
-  const fmtRet = (v: number | null) => {
-    if (v == null) return '--';
-    const pct = (v * 100).toFixed(1);
-    return v >= 0 ? `+${pct}%` : `${pct}%`;
-  };
-
-  const fmtDrag = (gross: number | null, net: number | null) => {
-    if (gross == null || net == null) return '--';
-    const diff = (gross - net) * 100;
-    const pp = Math.abs(diff).toFixed(1);
-    return `\u2212${pp} pp`;
-  };
-
-  return (
-    <div>
-      <div className="eyebrow text-ink2 mb-3.5">Total return summary</div>
-      {/* Header row */}
-      <div className="grid grid-cols-[1.4fr_1fr_1fr_0.9fr] gap-x-2 pb-2 border-b border-rule text-[10px] uppercase tracking-[0.12em] text-ink3">
-        <span />
-        <span className="text-right">Net</span>
-        <span className="text-right">Gross</span>
-        <span className="text-right">Fee drag</span>
-      </div>
-      {rows.map((r) => (
-        <div
-          key={r.label}
-          className="grid grid-cols-[1.4fr_1fr_1fr_0.9fr] gap-x-2 items-baseline py-3 border-b border-rule2"
-        >
-          <span className="text-xs text-ink2">{r.label}</span>
-          <span className="font-mono text-[19px] font-semibold text-ink text-right tabular-nums">
-            {fmtRet(r.net)}
-          </span>
-          <span className="font-mono text-[13px] text-ink3 text-right tabular-nums">
-            {fmtRet(r.gross)}
-          </span>
-          <span className="font-mono text-xs text-ink3 text-right tabular-nums">
-            {fmtDrag(r.gross, r.net)}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
 }
 
-function CreditRiskCards({
-  creditRisk,
-  funds,
-}: {
-  creditRisk: import('@/lib/types').CreditRiskRow[];
-  funds: import('@/lib/types').FundListItem[];
-}) {
-  const latest = creditRisk.length > 0 ? creditRisk[creditRisk.length - 1] : null;
-  const prior = creditRisk.length > 1 ? creditRisk[creditRisk.length - 2] : null;
+function shortName(f: import('@/lib/types').FundListItem): string {
+  let n = f.name
+    .replace(/\s*\(CIK\s+\d+\)\s*$/, '')
+    .replace(/\s*\([A-Z]{1,5}(?:,\s*[A-Z]{1,5})*\)\s*/, ' ')
+    .trim();
+  if (n.length > 28) n = n.slice(0, 27) + '\u2026';
+  return n;
+}
 
-  // Yield leaderboard (top by distribution rate)
-  const withDist = funds.filter((f) => f.distributionRate != null && f.distributionRate > 0);
-  const topYield = [...withDist]
+function buildTopLeverage(funds: import('@/lib/types').FundListItem[]): MoverItem[] {
+  return [...funds]
+    .filter((f) => f.leverageRatio != null && f.leverageRatio > 0)
+    .sort((a, b) => (b.leverageRatio ?? 0) - (a.leverageRatio ?? 0))
+    .slice(0, 8)
+    .map((f) => ({ name: shortName(f), cik: f.cik, value: f.leverageRatio! }));
+}
+
+function buildLargestNavMoves(funds: import('@/lib/types').FundListItem[]): MoverItem[] {
+  return [...funds]
+    .filter((f) => f.quarterlyReturn != null)
+    .sort((a, b) => Math.abs(b.quarterlyReturn ?? 0) - Math.abs(a.quarterlyReturn ?? 0))
+    .slice(0, 8)
+    .map((f) => ({ name: shortName(f), cik: f.cik, value: f.quarterlyReturn! }));
+}
+
+function buildTopYield(funds: import('@/lib/types').FundListItem[]): MoverItem[] {
+  return [...funds]
+    .filter((f) => f.distributionRate != null && f.distributionRate > 0)
     .sort((a, b) => (b.distributionRate ?? 0) - (a.distributionRate ?? 0))
-    .slice(0, 8);
-  const maxYield = topYield[0]?.distributionRate ?? 1;
-
-  if (!latest && topYield.length === 0) return null;
-
-  const shortName = (f: import('@/lib/types').FundListItem) => {
-    let n = f.name.replace(/\s*\(CIK\s+\d+\)\s*$/, '').replace(/\s*\([A-Z]{1,5}(?:,\s*[A-Z]{1,5})*\)\s*/, ' ').trim();
-    if (n.length > 28) n = n.slice(0, 27) + '\u2026';
-    return n;
-  };
-
-  const dirArrow = (current: number, previous: number | null) => {
-    if (previous == null) return '';
-    if (current > previous + 0.001) return ' \u2191';
-    if (current < previous - 0.001) return ' \u2193';
-    return ' \u2192';
-  };
-
-  const dirColor = (current: number, previous: number | null) => {
-    if (previous == null) return 'text-ink3';
-    if (current > previous + 0.001) return 'text-red';
-    if (current < previous - 0.001) return 'text-green';
-    return 'text-ink3';
-  };
-
-  // Compute FV-to-cost ratio proxy from markedBelowCost
-  const fvCostHealthy = latest ? 1 - (latest.byFv.markedBelowCost ?? 0) : null;
-  const deepDistressCount = latest ? Math.round(latest.totalPositions * latest.byCount.deepDistress) : null;
-
-  return (
-    <section>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Credit Risk Summary */}
-        {latest && (
-          <div className="bg-white border border-rule p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-red" />
-              <span className="eyebrow text-ink2">Credit Risk Summary</span>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Non-Accrual Rate (by FV)</div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[28px] text-ink tabular-nums leading-none">
-                    {(latest.byFv.nonAccrual * 100).toFixed(2)}%
-                  </span>
-                  <span className={`font-mono text-xs tabular-nums ${dirColor(latest.byFv.nonAccrual, prior?.byFv.nonAccrual ?? null)}`}>
-                    {dirArrow(latest.byFv.nonAccrual, prior?.byFv.nonAccrual ?? null)} QoQ
-                  </span>
-                </div>
-              </div>
-              <div className="border-t border-rule pt-3">
-                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Marked Below Cost (by FV)</div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[28px] text-ink tabular-nums leading-none">
-                    {(latest.byFv.markedBelowCost * 100).toFixed(1)}%
-                  </span>
-                  <span className={`font-mono text-xs tabular-nums ${dirColor(latest.byFv.markedBelowCost, prior?.byFv.markedBelowCost ?? null)}`}>
-                    {dirArrow(latest.byFv.markedBelowCost, prior?.byFv.markedBelowCost ?? null)} QoQ
-                  </span>
-                </div>
-              </div>
-              <div className="text-[10px] text-ink3 border-t border-rule pt-2">
-                {formatQuarter(latest.quarter)} | {formatNumber(latest.totalPositions)} positions
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* FV-to-Cost Ratio */}
-        {latest && (
-          <div className="bg-white border border-rule p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-navy" />
-              <span className="eyebrow text-ink2">Portfolio Health</span>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Positions at or Above Cost</div>
-                <div className="font-mono text-[28px] text-ink tabular-nums leading-none">
-                  {fvCostHealthy != null ? `${(fvCostHealthy * 100).toFixed(1)}%` : '--'}
-                </div>
-                <div className="text-[10px] text-ink3 mt-1">by fair value weight</div>
-              </div>
-              <div className="border-t border-rule pt-3">
-                <div className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">Deep Distress Positions</div>
-                <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[28px] text-ink tabular-nums leading-none">
-                    {deepDistressCount != null ? formatNumber(deepDistressCount) : '--'}
-                  </span>
-                  <span className="text-[10px] text-ink3">
-                    ({(latest.byCount.deepDistress * 100).toFixed(1)}% of count)
-                  </span>
-                </div>
-                <div className="text-[10px] text-ink3 mt-1">marked below 80% of cost</div>
-              </div>
-              <div className="text-[10px] text-ink3 border-t border-rule pt-2">
-                {formatDollar(latest.totalFv)} total indexed FV
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Yield Leaderboard */}
-        {topYield.length > 0 && (
-          <div className="bg-white border border-rule p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-accent" />
-              <span className="eyebrow text-ink2">Yield Leaderboard</span>
-            </div>
-            <div className="space-y-2.5">
-              {topYield.map((f) => {
-                const rate = f.distributionRate ?? 0;
-                const barW = (rate / maxYield) * 100;
-                return (
-                  <div key={f.cik}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-ink2 truncate pr-2">{shortName(f)}</span>
-                      <span className="font-mono tabular-nums text-ink font-semibold shrink-0">
-                        {rate.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="h-2 bg-rule2 relative">
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-accent"
-                        style={{ width: `${barW}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
+    .slice(0, 8)
+    .map((f) => ({ name: shortName(f), cik: f.cik, value: f.distributionRate! }));
 }
 
 /** Convert "2025-12-31" to "2025q4" */

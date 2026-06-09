@@ -37,9 +37,12 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Resources */}
+          {/* Platform */}
           <div>
-            <div className="eyebrow text-accent mb-2.5">Resources</div>
+            <div className="eyebrow text-accent mb-2.5">Platform</div>
+            <Link href="/" className="block text-xs py-1 text-white/[0.78] hover:text-white transition-colors">
+              Funds
+            </Link>
             <Link href="/methodology" className="block text-xs py-1 text-white/[0.78] hover:text-white transition-colors">
               Methodology
             </Link>

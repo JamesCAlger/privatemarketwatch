@@ -3,14 +3,27 @@ import Link from 'next/link';
 export default function NotFound() {
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-24 text-center">
-      <h1 className="font-display text-4xl font-bold text-ink mb-4">404</h1>
-      <p className="text-ink3 mb-8">Page not found.</p>
-      <Link
-        href="/"
-        className="inline-block px-4 py-2 border border-accent text-accent hover:bg-accent hover:text-navy transition-colors text-sm tracking-[0.04em]"
-      >
-        Back to Home
-      </Link>
+      <p className="eyebrow text-ink3 mb-4">404</p>
+      <h1 className="font-display text-[42px] tracking-[-0.02em] text-ink mb-4">
+        Page not found
+      </h1>
+      <p className="text-ink3 text-sm mb-8 max-w-md mx-auto">
+        The page you&apos;re looking for doesn&apos;t exist or has been moved.
+      </p>
+      <div className="flex justify-center gap-3">
+        <Link
+          href="/"
+          className="inline-block px-5 py-2.5 bg-navy text-white text-sm font-medium hover:bg-navy/90 transition-colors"
+        >
+          Fund universe
+        </Link>
+        <Link
+          href="/indices/private-credit"
+          className="inline-block px-5 py-2.5 border border-rule text-ink2 text-sm font-medium hover:bg-surface/50 transition-colors"
+        >
+          View indices
+        </Link>
+      </div>
     </div>
   );
 }

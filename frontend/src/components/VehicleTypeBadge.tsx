@@ -1,5 +1,6 @@
 const VEHICLE_CONFIG: Record<string, { label: string; bg: string; text: string }> = {
   bdc: { label: 'Unlisted BDC', bg: 'bg-teal/10', text: 'text-teal' },
+  non_traded: { label: 'Non-Traded', bg: 'bg-navy', text: 'text-white' },
   interval_fund: { label: 'Interval', bg: 'bg-amber-50', text: 'text-amber-700' },
   tender_offer_fund: { label: 'Tender Offer', bg: 'bg-violet-50', text: 'text-violet-700' },
 };

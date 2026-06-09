@@ -1,8 +1,11 @@
 import { MetadataRoute } from 'next';
 import { INDICES } from '@/lib/constants';
+import { getFundDetailCiks } from '@/lib/data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://privatemarketwatch.com';
+  const base = 'https://metrislens.com';
+
+  const fundCiks = getFundDetailCiks();
 
   return [
     { url: base, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },
@@ -11,6 +14,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.9,
+    })),
+    ...fundCiks.map((cik) => ({
+      url: `${base}/funds/${cik}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     })),
     { url: `${base}/methodology`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/about`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.5 },

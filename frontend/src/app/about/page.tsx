@@ -9,13 +9,23 @@ export const metadata: Metadata = {
     'About Metris Lens -- the index platform for private credit, with position-level benchmarks for unlisted BDCs.',
 };
 
-const STEPS = [
-  { label: 'Universe identification', detail: 'SEC data sources for unlisted BDCs' },
-  { label: 'BDC portfolio extraction', detail: '10-K/10-Q schedules of investments' },
-  { label: 'Holdings classification', detail: 'Asset category and index assignment' },
-  { label: 'Position matching', detail: 'Across reporting periods' },
-  { label: 'Return decomposition', detail: 'Price + income + principal' },
-  { label: 'Index aggregation', detail: 'FV-weighted, chain-linked from 100' },
+const PRINCIPLES = [
+  {
+    title: 'Independent',
+    description: 'No voluntary manager surveys. No proprietary feeds. All data comes from mandatory SEC filings, eliminating selection bias.',
+  },
+  {
+    title: 'Rules-based',
+    description: 'Fully systematic construction with no discretionary overrides. Every classification, matching, and aggregation step follows published rules.',
+  },
+  {
+    title: 'Transparent',
+    description: 'Coverage gaps are disclosed inline. Data quality metrics are published. The methodology is open and documented.',
+  },
+  {
+    title: 'Reproducible',
+    description: 'Given the same SEC filings, anyone can reproduce the index. The pipeline is deterministic with published validation.',
+  },
 ];
 
 export default function AboutPage() {
@@ -23,7 +33,6 @@ export default function AboutPage() {
   const summaries = getIndexSummary();
   const vehicles = getVehicleContribution();
 
-  // Derive private markets stats from actual index data
   const totalFv = summaries.reduce((sum, s) => sum + (s.totalFv ?? 0), 0);
   const allVehicles = new Map<string | number, { vehicleType: string }>();
   for (const key of Object.keys(vehicles)) {
@@ -33,132 +42,128 @@ export default function AboutPage() {
   }
   const bdcCount = Array.from(allVehicles.values()).filter((v) => v.vehicleType === 'bdc').length;
   const totalConstituents = summaries.reduce((sum, s) => sum + (s.constituents ?? 0), 0);
-  const totalIssuers = summaries.reduce((sum, s) => sum + (s.uniqueCompanies ?? 0), 0);
 
   return (
     <div>
-      {/* Hero banner */}
-      <div className="hero-gradient hero-pattern">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
-          <h1 className="text-display-sm md:text-display-lg text-white mb-3">About</h1>
-          <p className="text-white/60 max-w-2xl text-lg">
-            About Metris Lens and how the index platform and benchmarks are constructed.
-          </p>
-        </div>
+      {/* Hero */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 pb-10">
+        <h1 className="font-display text-[52px] md:text-[68px] leading-[1.05] tracking-[-0.03em] text-ink mb-5">
+          Making private markets<br />observable.
+        </h1>
+        <p className="text-[17px] leading-relaxed text-ink2 max-w-[620px]">
+          Metris Lens provides the first position-level benchmarks for unlisted
+          BDCs, built entirely from mandatory SEC filings. Independent, rules-based,
+          transparent, and reproducible.
+        </p>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-10">
-        {/* Stat callout row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 -mt-2">
-          <MiniStat label="Private Markets FV" value={formatDollar(totalFv)} />
-          <MiniStat label="Unlisted BDCs" value={formatNumber(bdcCount)} />
-          <MiniStat label="Unique Issuers" value={formatNumber(totalIssuers)} />
-          <MiniStat label="Indexed Positions" value={formatNumber(totalConstituents)} />
-        </div>
+      <div className="border-t border-rule" />
 
-        <div className="space-y-8 text-sm text-navy/80 leading-relaxed prose-content">
-          <section>
-            <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal" />
-              About Metris Lens
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12 space-y-16">
+
+        {/* Manifesto */}
+        <section>
+          <h2 className="font-display text-[28px] tracking-[-0.015em] text-ink mb-5">
+            Why this exists
+          </h2>
+          <div className="space-y-4 text-[15px] leading-relaxed text-ink2">
+            <p>
+              Private credit is the fastest-growing asset class in wealth management.
+              Unlisted BDCs have grown from a niche product to a core allocation for
+              advisors and institutions. Yet performance measurement has lagged far
+              behind the assets under management.
+            </p>
+            <p>
+              Existing benchmarks rely on voluntary manager surveys that cover a
+              fraction of the market, or track only listed BDCs whose market prices
+              reflect trading dynamics rather than portfolio performance. There has
+              been no comprehensive, rules-based benchmark for the unlisted BDC
+              universe -- until now.
+            </p>
+            <p>
+              By sourcing all data from mandatory portfolio disclosures filed with
+              the SEC, Metris Lens provides complete, unbiased coverage of the
+              unlisted BDC market. Every position in every fund&apos;s schedule of
+              investments becomes a data point. No voluntary submissions, no
+              selection bias, no gaps.
+            </p>
+          </div>
+        </section>
+
+        {/* Principles */}
+        <section>
+          <h2 className="font-display text-[28px] tracking-[-0.015em] text-ink mb-6">
+            Principles
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {PRINCIPLES.map((p) => (
+              <div key={p.title} className="border border-rule p-5">
+                <h3 className="text-sm font-semibold text-navy mb-2">{p.title}</h3>
+                <p className="text-xs text-ink2 leading-relaxed">{p.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Coverage stats */}
+        <section>
+          <h2 className="font-display text-[28px] tracking-[-0.015em] text-ink mb-6">
+            Coverage
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatBox label="Private Markets FV" value={formatDollar(totalFv)} />
+            <StatBox label="Unlisted BDCs" value={formatNumber(bdcCount)} />
+            <StatBox label="Indexed Positions" value={formatNumber(totalConstituents)} />
+            <StatBox
+              label="Data As Of"
+              value={meta.asOfQuarter ? formatQuarter(meta.asOfQuarter) : '--'}
+            />
+          </div>
+        </section>
+
+        {/* People placeholder */}
+        <section>
+          <h2 className="font-display text-[28px] tracking-[-0.015em] text-ink mb-6">
+            Team
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="border border-rule p-5 text-center">
+                <div className="w-14 h-14 rounded-full bg-surface mx-auto mb-3" />
+                <div className="h-3 bg-surface rounded w-20 mx-auto mb-2" />
+                <div className="h-2 bg-surface/70 rounded w-16 mx-auto" />
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-ink3 mt-3">
+            Team profiles coming soon.
+          </p>
+        </section>
+
+        {/* Contact */}
+        <section>
+          <div className="bg-navy p-8">
+            <h2 className="font-display text-[24px] text-white mb-4">
+              Get in touch
             </h2>
-            <p>
-              Metris Lens is an index platform covering unlisted (non-traded)
-              business development companies (BDCs). It provides
-              fund-level analytics, portfolio data, and transparent position-level
-              indices for private credit and equity. Unlisted BDCs are the
-              fastest-growing vehicle for wealth-channel investors to access
-              private credit markets.
+            <p className="text-sm text-white/60 mb-6">
+              Interested in the data, methodology, or partnership opportunities?
             </p>
-            <p>
-              The platform currently tracks{' '}
-              <strong>{formatNumber(bdcCount)}</strong> unlisted BDCs
-              representing <strong>{formatDollar(totalFv)}</strong> in
-              private markets fair value.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal" />
-              Why Unlisted BDCs?
-            </h2>
-            <Callout>
-              Unlisted BDCs have grown from a niche to a core allocation for
-              wealth channel investors. Yet performance measurement has lagged.
-            </Callout>
-            <p>
-              Existing benchmarks rely on voluntary manager
-              surveys or track only a subset of the market.
-              By sourcing all data from mandatory portfolio disclosures of
-              every unlisted BDC, Metris Lens provides complete, unbiased
-              coverage of this rapidly growing market segment -- from fund-level
-              analytics down to individual position-level indices that mirror
-              the granularity of public credit benchmarks like the Morningstar
-              LSTA Leveraged Loan Index.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal" />
-              Index Construction
-            </h2>
-            <p>
-              The indices are constructed through a rigorous, rules-based process
-              that transforms mandatory SEC filings into position-level
-              benchmarks. The methodology is fully systematic with no discretionary
-              overrides.
-            </p>
-
-            {/* Visual stepper */}
-            <div className="mt-5 space-y-0">
-              {STEPS.map((step, i) => (
-                <div key={i} className="flex gap-4">
-                  {/* Vertical connector + dot */}
-                  <div className="flex flex-col items-center">
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
-                      i === 0 ? 'bg-teal text-white' : 'bg-teal/10 text-teal'
-                    }`}>
-                      {i + 1}
-                    </div>
-                    {i < STEPS.length - 1 && (
-                      <div className="w-px h-6 bg-surface-muted" />
-                    )}
-                  </div>
-                  <div className="pb-4">
-                    <p className="font-medium text-navy text-sm">{step.label}</p>
-                    <p className="text-xs text-muted">{step.detail}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <ContactItem label="General Inquiries" value="info@metrislens.com" />
+              <ContactItem label="Data & Research" value="research@metrislens.com" />
+              <ContactItem label="Partnerships" value="partners@metrislens.com" />
+              <ContactItem label="Press" value="press@metrislens.com" />
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section>
-            <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal" />
-              Update Frequency
-            </h2>
-            <p>
-              Indices are updated quarterly following SEC filing deadlines, with
-              a one-quarter observation lag. The current dataset covers{' '}
-              <strong>2022 Q4 through {formatQuarter(meta.asOfQuarter)}</strong>.
-              BDC portfolio coverage begins around 2022 when the SEC phased in
-              structured XBRL tagging requirements for investment schedules.
-            </p>
-            {meta.dataVintage && (
-              <p className="mt-2 text-xs text-muted">
-                Last updated: {new Date(meta.dataVintage).toLocaleDateString()}
-              </p>
-            )}
-          </section>
-
-          <section>
-            <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal" />
-              Disclaimer
-            </h2>
+        {/* Disclaimer */}
+        <section>
+          <h2 className="font-display text-[28px] tracking-[-0.015em] text-ink mb-4">
+            Disclaimer
+          </h2>
+          <div className="text-sm text-ink2 leading-relaxed space-y-3">
             <p>
               This data is derived from publicly available SEC filings and is
               provided for informational and research purposes only. It does not
@@ -169,47 +174,47 @@ export default function AboutPage() {
             <p>
               No warranty is made as to the accuracy, completeness, or timeliness
               of the data. The reported fair values reflect fund-level
-              mark-to-model estimates, not market transaction prices. Users
-              should independently verify any data before making investment
-              decisions.
+              mark-to-model estimates, not market transaction prices.
             </p>
-          </section>
+          </div>
+        </section>
 
-          <section>
-            <h2 className="text-lg font-semibold text-navy mb-3 flex items-center gap-3">
-              <span className="w-1 h-5 bg-teal" />
-              Learn More
-            </h2>
-            <p>
-              For detailed information on index construction, see the{' '}
-              <Link
-                href="/methodology"
-                className="text-teal hover:underline font-medium"
-              >
-                Methodology
-              </Link>{' '}
-              page.
-            </p>
-          </section>
-        </div>
+        {/* Learn more */}
+        <section>
+          <div className="flex gap-4">
+            <Link
+              href="/methodology"
+              className="inline-block px-5 py-3 bg-navy text-white text-sm font-medium hover:bg-navy/90 transition-colors"
+            >
+              Read the methodology &rarr;
+            </Link>
+            <Link
+              href="/"
+              className="inline-block px-5 py-3 border border-rule text-ink2 text-sm font-medium hover:bg-surface/50 transition-colors"
+            >
+              Browse the fund universe
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );
 }
 
-function MiniStat({ label, value }: { label: string; value: string }) {
+function StatBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-white p-4 shadow-card">
-      <p className="text-xs text-muted mb-1">{label}</p>
-      <p className="text-lg font-bold text-navy tabular-nums">{value}</p>
+    <div className="border border-rule p-4">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1.5">{label}</p>
+      <p className="font-mono text-lg text-navy font-semibold tabular-nums">{value}</p>
     </div>
   );
 }
 
-function Callout({ children }: { children: React.ReactNode }) {
+function ContactItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border-l-3 border-teal bg-teal/5 px-4 py-3 my-4 text-sm text-navy/80" style={{ borderLeftWidth: '3px' }}>
-      {children}
+    <div className="bg-white/[0.06] border border-white/[0.1] p-3">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-white/40 mb-1">{label}</p>
+      <p className="text-sm text-white/80">{value}</p>
     </div>
   );
 }

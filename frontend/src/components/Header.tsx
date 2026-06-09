@@ -9,11 +9,12 @@ import HomepageSparkline from './HomepageSparkline';
 
 interface HeaderProps {
   indexSummaries?: IndexSummary[];
+  fundCount?: number;
 }
 
 const NAV_ITEMS = [
+  { label: 'Indices', href: '/indices/private-credit' },
   { label: 'Funds', href: '/' },
-  { label: 'Indices', href: '/indices' },
   { label: 'Methodology', href: '/methodology' },
   { label: 'About', href: '/about' },
 ];
@@ -26,7 +27,7 @@ function getNavActive(pathname: string): string {
   return '';
 }
 
-export default function Header({ indexSummaries = [] }: HeaderProps) {
+export default function Header({ indexSummaries = [], fundCount }: HeaderProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -118,10 +119,12 @@ export default function Header({ indexSummaries = [] }: HeaderProps) {
         </button>
       </div>
 
-      {/* Row 3: Index ticker bar */}
+      {/* Row 3: Fund lookup bar + index tickers */}
       <div className="hidden md:grid grid-cols-[auto_1fr_1fr] items-stretch bg-navyDeep border-t border-white/[0.06] px-[72px]">
         <div className="py-2.5 pr-[18px] flex items-center border-r border-white/[0.14]">
-          <span className="eyebrow text-accent tracking-[0.22em]">PMW Indices</span>
+          <Link href="/" className="eyebrow text-accent tracking-[0.22em] no-underline hover:text-white transition-colors">
+            Fund Lookup
+          </Link>
         </div>
         {INDICES.map((idx, i) => {
           const s = indexSummaries.find((x) => x.index === idx.key);

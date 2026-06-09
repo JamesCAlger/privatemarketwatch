@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Serif, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getIndexSummary } from '@/lib/data';
+import { getIndexSummary, getFundList } from '@/lib/data';
 import './globals.css';
 
 const plexSerif = IBM_Plex_Serif({
@@ -50,10 +50,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const indexSummaries = getIndexSummary();
+  const fundCount = getFundList().length;
   return (
     <html lang="en" className={`${plexSerif.variable} ${plexSans.variable} ${plexMono.variable} bg-bg`}>
       <body className="font-body min-h-screen flex flex-col bg-bg text-ink">
-        <Header indexSummaries={indexSummaries} />
+        <Header indexSummaries={indexSummaries} fundCount={fundCount} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

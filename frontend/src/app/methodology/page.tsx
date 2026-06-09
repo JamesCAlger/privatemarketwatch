@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import CalloutBox from '@/components/CalloutBox';
+import MethodologyTOC from '@/components/MethodologyTOC';
 
 export const metadata: Metadata = {
   title: 'Methodology',
@@ -8,123 +10,62 @@ export const metadata: Metadata = {
 };
 
 const sections = [
-  { id: 'overview', title: 'Overview' },
-  { id: 'data-sources', title: 'Data Sources' },
-  { id: 'universe', title: 'Universe Construction' },
-  { id: 'holdings', title: 'Holdings Extraction' },
-  { id: 'classification', title: 'Index Classification' },
-  { id: 'matching', title: 'Position Matching' },
-  { id: 'returns', title: 'Return Calculation' },
-  { id: 'rebalancing', title: 'Rebalancing & Timing' },
+  { id: 'universe', title: 'Universe' },
+  { id: 'data-pipeline', title: 'Data Pipeline' },
+  { id: 'index-construction', title: 'Index Construction' },
+  { id: 'return-calculation', title: 'Return Calculation' },
+  { id: 'universe-analytics', title: 'Universe Analytics' },
   { id: 'limitations', title: 'Limitations' },
 ] as const;
 
 export default function MethodologyPage() {
   return (
     <div>
-      {/* Hero banner */}
-      <div className="hero-gradient hero-pattern">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 md:py-16">
-          <h1 className="text-display-sm md:text-display-lg text-white mb-3">Methodology</h1>
-          <p className="text-white/60 max-w-2xl text-lg">
-            How the data platform and index family are constructed,
-            from data sourcing through return calculation.
-          </p>
+      {/* Editorial hero */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 pb-10">
+        <h1 className="font-display text-[52px] md:text-[68px] leading-[1.05] tracking-[-0.03em] text-ink mb-4">
+          Methodology
+        </h1>
+        <p className="text-[17px] leading-relaxed text-ink2 max-w-[620px] mb-6">
+          How the data platform and index family are constructed,
+          from universe identification through return calculation and published analytics.
+        </p>
+        <div className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-ink3">
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.12em] text-ink3 block">Version</span>
+            <span className="text-ink font-medium">1.0</span>
+          </div>
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.12em] text-ink3 block">Last Updated</span>
+            <span className="text-ink font-medium">June 2026</span>
+          </div>
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.12em] text-ink3 block">Format</span>
+            <span className="text-ink font-medium">Position-level indices</span>
+          </div>
         </div>
       </div>
 
+      <div className="border-t border-rule" />
+
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
         <div className="flex gap-10">
-          {/* Sticky TOC */}
-          <nav className="hidden lg:block w-52 shrink-0">
-            <div className="sticky top-20">
-              <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">
-                Contents
-              </p>
-              <ul className="space-y-0.5 text-sm">
-                {sections.map((s, i) => (
-                  <li key={s.id}>
-                    <a
-                      href={`#${s.id}`}
-                      className="flex items-center gap-2.5 py-1.5 text-muted hover:text-teal transition-colors"
-                    >
-                      <span className="w-5 h-5 rounded-full bg-surface-muted text-navy/40 text-xs flex items-center justify-center shrink-0 font-medium">
-                        {i + 1}
-                      </span>
-                      {s.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
+          {/* Sticky TOC with scroll-spy */}
+          <MethodologyTOC sections={sections} />
 
           {/* Content */}
           <article className="flex-1 min-w-0 prose-content">
-            <Section num={1} id="overview" title="Overview">
+            <Section num={1} id="universe" title="Universe">
               <p>
-                Metris Lens is an index platform covering unlisted (non-traded)
-                business development companies (BDCs) investing in private
-                markets. It provides fund-level analytics, portfolio data, and
-                position-level indices for private credit and equity. Unlike
-                traditional private markets indices that rely on voluntary
-                manager submissions, the indices are constructed entirely from
-                mandatory SEC filings, ensuring complete and unbiased coverage
-                of the unlisted BDC universe.
+                The index universe covers <strong>unlisted (non-traded) business development
+                companies (BDCs)</strong> registered with the SEC. These are closed-end funds
+                that have elected BDC status under the Investment Company Act and invest
+                primarily in private credit and equity.
               </p>
-              <Callout>
-                Each index constituent is an individual position (e.g., a specific
-                term loan to a borrower), not an aggregated issuer exposure. This
-                mirrors the construction of public credit indices like the
-                Morningstar LSTA Leveraged Loan Index.
-              </Callout>
-              <p>
-                Two indices are published, each tracking a distinct segment of
-                the private markets:
-              </p>
-              <ul>
-                <li>
-                  <strong>Private Credit Total Return Index</strong> -- The largest
-                  position-level benchmark for middle-market direct lending,
-                  sourced from unlisted BDC schedules of investments
-                </li>
-                <li>
-                  <strong>Private Equity NAV Return Index</strong> -- Direct equity
-                  co-investments and minority stakes in private companies, held by
-                  unlisted BDCs
-                </li>
-              </ul>
-            </Section>
 
-            <Section num={2} id="data-sources" title="Data Sources">
+              <h4>Discovery</h4>
               <p>
-                All data is sourced from SEC EDGAR, the public repository of
-                regulatory filings. Two filing types provide the raw data:
-              </p>
-              <h4>BDC XBRL (10-K/10-Q)</h4>
-              <p>
-                Business Development Companies file annual (10-K) and quarterly
-                (10-Q) reports that include a Schedule of Investments in structured
-                XBRL format. The SEC began requiring inline XBRL tagging for BDC
-                investment schedules starting in 2022-2023. Each position is
-                tagged with fair value, cost, interest rate, maturity, and other
-                attributes using a typed dimension (investmentIdentifierAxis).
-              </p>
-              <h4>N-CEN and N-2</h4>
-              <p>
-                Form N-CEN provides census data for registered investment
-                companies, including fund type classification. Form N-2 cover
-                pages contain checkboxes identifying whether a fund is a BDC
-                or closed-end fund. These are used for universe construction,
-                not holdings extraction.
-              </p>
-            </Section>
-
-            <Section num={3} id="universe" title="Universe Construction">
-              <p>
-                The unlisted BDC universe is built using multiple independent
-                discovery methods, then filtered to non-traded vehicles and
-                cross-validated against third-party lists:
+                Unlisted BDCs are identified through three independent SEC data sources:
               </p>
               <ol>
                 <li>
@@ -140,49 +81,66 @@ export default function MethodologyPage() {
                   SEC&apos;s structured BDC data sets
                 </li>
               </ol>
+
+              <h4>Exclusions</h4>
               <p>
-                Listed (publicly traded) BDCs are excluded from the index
-                universe. The unlisted BDC reference list is maintained from
-                SEC filings, prospectus review, and cross-referencing with
-                exchange ticker databases.
+                Listed (publicly traded) BDCs are excluded. The unlisted BDC reference
+                list is cross-validated against third-party sources. Consumer and
+                marketplace lending vehicles with opaque individual loan IDs are
+                excluded from index-level outputs.
               </p>
-              <Callout>
-                Third-party validation lists include the Sure Dividend BDC list.
-                Match rates consistently exceed 95%.
-              </Callout>
+
+              <CalloutBox variant="design" title="Design choice">
+                Each index constituent is an individual position (e.g., a specific term
+                loan), not an aggregated issuer exposure. This mirrors the construction
+                of public credit indices like the Morningstar LSTA Leveraged Loan Index.
+              </CalloutBox>
             </Section>
 
-            <Section num={4} id="holdings" title="Holdings Extraction">
+            <Section num={2} id="data-pipeline" title="Data Pipeline">
               <p>
-                Holdings are extracted from BDC XBRL filings and normalized into
-                a standardized dataset:
+                All data is sourced from SEC EDGAR. No voluntary manager surveys, no
+                proprietary feeds. This eliminates selection bias and ensures complete
+                coverage of the filing universe.
               </p>
+
+              <h4>BDC XBRL (10-K/10-Q)</h4>
               <p>
-                XBRL instance documents are downloaded for each BDC&apos;s 10-K
-                and 10-Q filings. The parser extracts facts tagged under the
-                investmentIdentifierAxis dimension, mapping XBRL concepts to
-                standardized fields (fair_value, cost, interest_rate,
-                principal_amount, etc.). A concept mapping table handles
-                variations in XBRL taxonomies across filers.
+                Business Development Companies file annual (10-K) and quarterly
+                (10-Q) reports that include a Schedule of Investments in structured
+                XBRL format. The SEC required inline XBRL tagging for BDC
+                investment schedules starting in 2022-2023. Each position is
+                tagged with fair value, cost, interest rate, maturity, and other
+                attributes using a typed dimension (investmentIdentifierAxis).
               </p>
+
+              <h4>Extraction</h4>
               <p>
+                XBRL instance documents are downloaded and parsed. A concept
+                mapping layer handles variations in XBRL taxonomies across filers.
                 Rate harmonization converts BDC rates from decimal to percentage
-                form. Per-CIK wrappers handle filer-specific XBRL variations
-                including custom hierarchy levels and alternative dimension
-                structures.
+                form. Per-CIK wrappers handle filer-specific XBRL variations.
               </p>
+
+              <CalloutBox variant="edge-case" title="Edge case">
+                Some filers use non-standard XBRL structures or custom hierarchy
+                levels. These are handled by per-CIK configuration rather than
+                global rules, preserving extraction accuracy without over-generalizing.
+              </CalloutBox>
             </Section>
 
-            <Section num={5} id="classification" title="Index Classification">
+            <Section num={3} id="index-construction" title="Index Construction">
               <p>
-                Each holding is classified into one of two index categories based
-                on asset category and issuer category:
+                Two indices are published, each tracking a distinct segment of the
+                private markets:
               </p>
               <div className="overflow-x-auto my-4">
                 <table className="w-full text-sm border-collapse">
                   <thead>
                     <tr className="bg-navy">
-                      <th className="text-left py-2.5 px-4 font-medium text-white/80 text-xs uppercase tracking-wider">Index</th>
+                      <th className="text-left py-2.5 px-4 font-medium text-white/80 text-xs uppercase tracking-wider">
+                        Index
+                      </th>
                       <th className="text-left py-2.5 px-4 font-medium text-white/80 text-xs uppercase tracking-wider">
                         Asset Category
                       </th>
@@ -199,24 +157,14 @@ export default function MethodologyPage() {
                     </tr>
                     <tr className="bg-surface/30">
                       <td className="py-2.5 px-4 font-medium text-navy">Private Equity</td>
-                      <td className="py-2.5 px-4 text-navy/70">
-                        EQUITY_COMMON, EQUITY_PREFERRED
-                      </td>
+                      <td className="py-2.5 px-4 text-navy/70">EQUITY_COMMON</td>
                       <td className="py-2.5 px-4 text-navy/70">CORPORATE</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <p>
-                Additional heuristics reduce the unclassified rate: BDC financial
-                field fallback (positions with interest rates default to LOAN),
-                named co-investment reclassification (fund positions with
-                identifiable operating company names reclassified to equity), and
-                expanded keyword lists for credit/PE fund detection.
-              </p>
-            </Section>
 
-            <Section num={6} id="matching" title="Position Matching">
+              <h4>Position Matching</h4>
               <p>
                 To compute returns, the same position must be linked across
                 consecutive quarters. A three-tier matching cascade is used:
@@ -225,13 +173,11 @@ export default function MethodologyPage() {
                 <li>
                   <strong>Tier A: Within-filing comparatives</strong> -- BDC XBRL
                   filings contain both current and prior-period facts under the
-                  same investmentIdentifierAxis value. These are filer-matched
-                  pairs requiring no external matching.
+                  same investmentIdentifierAxis value.
                 </li>
                 <li>
-                  <strong>Tier B: Exact name matching</strong> -- Positions are
-                  matched by exact issuer_name within the same CIK across
-                  adjacent quarters.
+                  <strong>Tier B: Exact name matching</strong> -- Positions matched
+                  by exact issuer_name within the same CIK across adjacent quarters.
                 </li>
                 <li>
                   <strong>Tier C/D: Normalized and fuzzy matching</strong> --
@@ -239,19 +185,20 @@ export default function MethodologyPage() {
                   similarity with fair value proximity guards.
                 </li>
               </ol>
-              <Callout>
+
+              <CalloutBox variant="design" title="Design choice">
                 All tiers enforce strict 1:1 matching using row-level
                 deduplication with fair value proximity tiebreaking. Cascade
-                exclusion prevents the same position from being matched at
-                multiple tiers.
-              </Callout>
+                exclusion prevents double-matching.
+              </CalloutBox>
             </Section>
 
-            <Section num={7} id="returns" title="Return Calculation">
+            <Section num={4} id="return-calculation" title="Return Calculation">
               <p>
-                Total return for each position is decomposed into three
-                components, following the convention of public credit indices:
+                Total return for each position is decomposed into components,
+                following the convention of public credit indices:
               </p>
+
               <h4>Capital Return (Price)</h4>
               <p>
                 Per-unit price return isolates price changes from quantity
@@ -260,38 +207,62 @@ export default function MethodologyPage() {
                 fair_value / cost. This prevents amortizing loans from being
                 penalized and new purchases from inflating returns.
               </p>
+
               <h4>Income Return</h4>
               <p>
                 Estimated coupon accrual based on a three-tier rate imputation:
                 (1) direct interest_rate from the filing, (2) basis_spread plus
-                implied SOFR from peer filers, (3) same-filer median rate. Income
-                is accrued proportionally to the holding period.
+                implied SOFR from peer filers, (3) same-filer median rate.
               </p>
-              <h4>Index Aggregation</h4>
+
+              <h4>Aggregation</h4>
               <p>
-                Index-level returns are computed as fair-value-weighted averages
-                across all constituents. Equal-weighted returns are also published.
-                Index levels are chain-linked from a base of 100. A minimum of 10
-                constituents per quarter is required for a valid index observation.
+                Index-level returns are fair-value-weighted averages across all
+                constituents. Equal-weighted returns are also published. Index levels
+                are chain-linked from a base of 100. A minimum of 10 constituents per
+                quarter is required for a valid observation.
+              </p>
+
+              <CalloutBox variant="limitation" title="Limitation">
+                Income return is estimated from filed rate data, not actual cash
+                received. PIK and amendment effects may not be fully captured.
+              </CalloutBox>
+            </Section>
+
+            <Section num={5} id="universe-analytics" title="Universe Analytics">
+              <p>
+                Beyond index returns, the platform publishes fund-level analytics
+                and portfolio characteristics:
+              </p>
+              <ul>
+                <li>
+                  <strong>Portfolio characteristics</strong> -- Weighted average
+                  coupon, spread, and maturity with coverage disclosure
+                </li>
+                <li>
+                  <strong>Structural composition</strong> -- Lien position, rate
+                  type, and asset class breakdowns
+                </li>
+                <li>
+                  <strong>Manager concentration</strong> -- AUM share by adviser
+                </li>
+                <li>
+                  <strong>Fund-level performance</strong> -- NAV returns,
+                  distribution rates, leverage ratios
+                </li>
+                <li>
+                  <strong>Credit risk indicators</strong> -- PIK exposure,
+                  non-accrual rates, default flags where disclosed
+                </li>
+              </ul>
+              <p>
+                All analytics are derived from the same mandatory filing data.
+                Coverage gaps are disclosed inline (e.g., &quot;86% coverage&quot;
+                next to weighted average coupon).
               </p>
             </Section>
 
-            <Section num={8} id="rebalancing" title="Rebalancing & Timing">
-              <p>
-                The indices rebalance quarterly, aligned with SEC filing
-                deadlines. BDC 10-K/10-Q filings have a 60-day deadline after
-                fiscal period end. Data is available with a one-quarter lag.
-              </p>
-              <p>
-                New positions entering the index (no prior-period match)
-                contribute to AUM statistics but not to return calculations for
-                their first quarter. Exiting positions (matched in the prior
-                period but absent in the current) are included in returns for
-                their final period.
-              </p>
-            </Section>
-
-            <Section num={9} id="limitations" title="Limitations">
+            <Section num={6} id="limitations" title="Limitations">
               <ul>
                 <li>
                   <strong>Coverage starts ~2022</strong> -- BDC XBRL tagging was
@@ -314,16 +285,10 @@ export default function MethodologyPage() {
                   active filers.
                 </li>
                 <li>
-                  <strong>Income estimation</strong> -- Coupon income is estimated
-                  from filed rate data, not actual cash received. PIK and
-                  amendment effects may not be fully captured.
-                </li>
-                <li>
                   <strong>Incomplete field coverage</strong> -- Portfolio
-                  characteristics such as weighted average coupon, spread, and
-                  maturity are based on positions where the filer disclosed the
-                  relevant data. Not all filers tag all fields, so reported
-                  metrics may reflect a subset of the index universe.
+                  characteristics are based on positions where the filer disclosed
+                  the relevant data. Coverage rates are disclosed alongside
+                  each metric.
                 </li>
                 <li>
                   <strong>No leverage adjustment</strong> -- Returns reflect
@@ -331,6 +296,13 @@ export default function MethodologyPage() {
                   include leverage effects.
                 </li>
               </ul>
+
+              <CalloutBox variant="limitation" title="Important">
+                This data is derived from publicly available SEC filings and is
+                provided for informational and research purposes only. It does not
+                constitute investment advice. Past performance is not indicative of
+                future results.
+              </CalloutBox>
             </Section>
           </article>
         </div>
@@ -351,9 +323,9 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="mb-10 scroll-mt-20">
-      <h2 className="text-xl font-semibold text-navy mb-4 flex items-center gap-3">
-        <span className="w-7 h-7 rounded-full bg-teal/10 text-teal text-sm flex items-center justify-center shrink-0 font-bold">
+    <section id={id} className="mb-12 scroll-mt-20">
+      <h2 className="font-display text-[28px] tracking-[-0.015em] text-ink mb-4 flex items-center gap-3">
+        <span className="w-8 h-8 rounded-full bg-teal/10 text-teal text-sm flex items-center justify-center shrink-0 font-bold">
           {num}
         </span>
         {title}
@@ -362,13 +334,5 @@ function Section({
         {children}
       </div>
     </section>
-  );
-}
-
-function Callout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="border-l-3 border-teal bg-teal/5 px-4 py-3 my-4 text-sm text-navy/80" style={{ borderLeftWidth: '3px' }}>
-      {children}
-    </div>
   );
 }

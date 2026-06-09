@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { INDICES, getIndexBySlug } from '@/lib/constants';
+import Link from 'next/link';
+import { INDICES, getIndexBySlug, INDEX_METHODOLOGY } from '@/lib/constants';
 import {
   getIndexReturns,
   getIndexSummary,
@@ -10,6 +11,7 @@ import {
   getManagerConcentration,
   getVehicleContribution,
   getMetadata,
+  getFundIndexReturns,
 } from '@/lib/data';
 import {
   formatLevel,
@@ -24,9 +26,11 @@ import {
 
 import Breadcrumb from '@/components/Breadcrumb';
 import PerfSection from '@/components/PerfSection';
+import ReturnSummaryTable from '@/components/ReturnSummaryTable';
 import SectorChart from '@/components/SectorChart';
 import ConcentrationPieChart from '@/components/ManagerPieChart';
 import ConstituentTable from '@/components/ConstituentTable';
+import HorizontalStackedBar from '@/components/HorizontalStackedBar';
 
 // Generate static pages for all indices
 export function generateStaticParams() {
@@ -62,6 +66,7 @@ export default function IndexDetailPage({
   const managerConcentration = getManagerConcentration();
   const vehicleContribution = getVehicleContribution();
   const metadata = getMetadata();
+  const fundIndexReturns = getFundIndexReturns();
 
   const summary = summaries.find((s) => s.index === idx.key);
   const series = returns[idx.key] ?? [];
@@ -82,7 +87,7 @@ export default function IndexDetailPage({
     },
   ];
 
-  // Return summary rows for the table beside the chart
+  // Compute multi-period returns
   function periodReturn(quartersBack: number): number | null {
     if (series.length < quartersBack + 1) return null;
     const current = series[series.length - 1]?.levelFv;
@@ -95,23 +100,42 @@ export default function IndexDetailPage({
     return Math.pow(1 + totalReturn, 1 / years) - 1;
   }
 
-  const ret1y = periodReturn(4);
-  const ret3yTotal = periodReturn(12);
-  const ret3y = ret3yTotal != null ? annualize(ret3yTotal, 3) : null;
-  const ret5yTotal = periodReturn(20);
-  const ret5y = ret5yTotal != null ? annualize(ret5yTotal, 5) : null;
-  const retInception = periodReturn(series.length - 1);
-  const retInceptionAnn = retInception != null && series.length > 1
-    ? annualize(retInception, (series.length - 1) / 4)
+  // Gross (position-level) returns
+  const gross1y = periodReturn(4);
+  const gross3yTotal = periodReturn(12);
+  const gross3y = gross3yTotal != null ? annualize(gross3yTotal, 3) : null;
+  const gross5yTotal = periodReturn(20);
+  const gross5y = gross5yTotal != null ? annualize(gross5yTotal, 5) : null;
+  const grossInception = periodReturn(series.length - 1);
+  const grossInceptionAnn = grossInception != null && series.length > 1
+    ? annualize(grossInception, (series.length - 1) / 4)
+    : null;
+
+  // Net (fund-level) returns
+  const fundSeries = fundIndexReturns['combined'] ?? [];
+  function fundPeriodReturn(quartersBack: number): number | null {
+    if (fundSeries.length < quartersBack + 1) return null;
+    const current = fundSeries[fundSeries.length - 1]?.level;
+    const base = fundSeries[fundSeries.length - 1 - quartersBack]?.level;
+    if (current == null || base == null || base === 0) return null;
+    return current / base - 1;
+  }
+  const net1y = fundPeriodReturn(4);
+  const net3yTotal = fundPeriodReturn(12);
+  const net3y = net3yTotal != null ? annualize(net3yTotal, 3) : null;
+  const net5yTotal = fundPeriodReturn(20);
+  const net5y = net5yTotal != null ? annualize(net5yTotal, 5) : null;
+  const netInception = fundPeriodReturn(fundSeries.length - 1);
+  const netInceptionAnn = netInception != null && fundSeries.length > 1
+    ? annualize(netInception, (fundSeries.length - 1) / 4)
     : null;
 
   const returnRows = [
-    { label: 'QoQ', value: summary?.qoqReturn },
-    { label: 'YTD', value: summary?.ytd },
-    { label: '1 Year', value: ret1y },
-    { label: '3 Year (ann.)', value: ret3y },
-    { label: '5 Year (ann.)', value: ret5y },
-    { label: 'Since Inception (ann.)', value: retInceptionAnn },
+    { label: 'QoQ', net: summary?.qoqReturn ?? null, gross: summary?.qoqReturn ?? null },
+    { label: '1 Year', net: net1y, gross: gross1y },
+    { label: '3 Year (ann.)', net: net3y, gross: gross3y },
+    { label: '5 Year (ann.)', net: net5y, gross: gross5y },
+    { label: 'Since Inception (ann.)', net: netInceptionAnn, gross: grossInceptionAnn },
   ];
 
   // Universe coverage heuristic per index
@@ -121,13 +145,26 @@ export default function IndexDetailPage({
   // Risk stats
   const risk = summary?.riskStats;
 
+  // Lien split for structural composition
+  const lienItems = showPortfolioChars && portfolioChars ? [
+    { label: 'First Lien', pct: portfolioChars.lienSplit.firstLien },
+    { label: 'Second Lien', pct: portfolioChars.lienSplit.secondLien },
+    { label: 'Unsecured', pct: portfolioChars.lienSplit.unsecured },
+  ] : [];
+
+  // Top 25 constituents
+  const top25 = constituents.slice(0, 25);
+
+  // Methodology content
+  const methodology = INDEX_METHODOLOGY[idx.key];
+
   return (
     <div>
       {/* Breadcrumb */}
       <Breadcrumb
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Indices', href: '/' },
+          { label: 'Indices' },
           { label: idx.shortName },
         ]}
       />
@@ -238,7 +275,7 @@ export default function IndexDetailPage({
       </div>
 
       {/* ================================================================ */}
-      {/* PERFORMANCE                                                      */}
+      {/* PERFORMANCE + RETURN SUMMARY                                     */}
       {/* ================================================================ */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
         <PerfSection
@@ -246,24 +283,7 @@ export default function IndexDetailPage({
           title="Index performance"
           subtitle={idx.shortName}
         >
-          <div>
-            <div className="eyebrow text-ink2 mb-3.5">Total return summary</div>
-            <div className="grid grid-cols-[1.4fr_1fr] gap-x-2 pb-2 border-b border-rule text-[10px] uppercase tracking-[0.12em] text-ink3">
-              <span />
-              <span className="text-right">Return</span>
-            </div>
-            {returnRows.map((r) => (
-              <div
-                key={r.label}
-                className="grid grid-cols-[1.4fr_1fr] gap-x-2 items-baseline py-3 border-b border-rule2"
-              >
-                <span className="text-xs text-ink2">{r.label}</span>
-                <span className={`font-mono text-[17px] font-semibold text-right tabular-nums ${returnColor(r.value ?? null)}`}>
-                  {returnSign(r.value)}
-                </span>
-              </div>
-            ))}
-          </div>
+          <ReturnSummaryTable rows={returnRows} showGross={true} />
         </PerfSection>
       </div>
 
@@ -331,10 +351,85 @@ export default function IndexDetailPage({
         </div>
       )}
 
+      {/* CE portfolio characteristics — different metrics */}
+      {idx.key === 'COMMON_EQUITY' && summary && (
+        <div className="bg-navy">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
+              <div className="md:pr-6">
+                <div className="eyebrow text-accent mb-2">Private Equity</div>
+                <h2 className="font-display text-[26px] text-white tracking-[-0.01em] leading-tight">
+                  Portfolio<br />Characteristics
+                </h2>
+                <p className="text-white/40 text-xs mt-2">
+                  As of {summary.latestQuarter ? formatQuarter(summary.latestQuarter) : '--'}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-0">
+                <div className="py-4 px-5">
+                  <div className="text-[10px] uppercase tracking-[0.14em] text-white/40 mb-2">
+                    Constituent Positions
+                  </div>
+                  <div className="font-mono text-[36px] text-accent tabular-nums leading-none">
+                    {formatNumber(summary.constituents)}
+                  </div>
+                </div>
+                <div className="py-4 px-5 md:border-l md:border-white/[0.08]">
+                  <div className="text-[10px] uppercase tracking-[0.14em] text-white/40 mb-2">
+                    Unique Companies
+                  </div>
+                  <div className="font-mono text-[36px] text-accent tabular-nums leading-none">
+                    {formatNumber(summary.uniqueCompanies)}
+                  </div>
+                </div>
+                <div className="py-4 px-5 md:border-l md:border-white/[0.08]">
+                  <div className="text-[10px] uppercase tracking-[0.14em] text-white/40 mb-2">
+                    Aggregate Fair Value
+                  </div>
+                  <div className="font-mono text-[36px] text-accent tabular-nums leading-none">
+                    {formatDollar(summary.totalFv)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ================================================================ */}
-      {/* COMPOSITION                                                      */}
+      {/* STRUCTURAL COMPOSITION (DL only)                                 */}
       {/* ================================================================ */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 space-y-10">
+      {showPortfolioChars && lienItems.length > 0 && (
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+          <div className="bg-white border border-rule p-7">
+            <div className="eyebrow text-ink2 mb-5">Structural Composition</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <p className="text-xs text-ink2 mb-3">Lien Position</p>
+                <HorizontalStackedBar
+                  items={lienItems}
+                  footnote="Percentage of total indexed fair value"
+                />
+              </div>
+              <div>
+                <p className="text-xs text-ink2 mb-3">Rate Type</p>
+                <HorizontalStackedBar
+                  items={[
+                    { label: 'Floating', pct: portfolioChars.rateTypeSplit.floating },
+                    { label: 'Fixed', pct: portfolioChars.rateTypeSplit.fixed },
+                  ]}
+                  footnote="Percentage of total indexed fair value"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================================================================ */}
+      {/* COMPOSITION DONUTS                                               */}
+      {/* ================================================================ */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-10 space-y-10">
         {(sectors.length > 0 || managerData.length > 0) && (
           <section>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -359,18 +454,121 @@ export default function IndexDetailPage({
         )}
 
         {/* ================================================================ */}
-        {/* TOP 20 HOLDINGS                                                  */}
+        {/* TOP 25 HOLDINGS                                                 */}
         {/* ================================================================ */}
-        {constituents.length > 0 && (
+        {top25.length > 0 && (
           <section>
             <div className="bg-white border border-rule">
               <div className="p-6 pb-0">
                 <h2 className="font-display text-[26px] tracking-[-0.01em] text-ink">
-                  Largest 20 Holdings
+                  Largest 25 Holdings
                 </h2>
               </div>
               <div className="p-6 pt-4">
-                <ConstituentTable data={constituents} indexKey={idx.key} />
+                <ConstituentTable data={top25} indexKey={idx.key} />
+                <p className="text-xs text-ink3 mt-3">
+                  Top 25 of {formatNumber(summary?.constituents)} positions
+                  across {formatNumber(summary?.uniqueCompanies)} issuers
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ================================================================ */}
+        {/* TOP FUNDS CONTRIBUTING                                          */}
+        {/* ================================================================ */}
+        {vehicles.length > 0 && (
+          <section>
+            <div className="bg-white border border-rule">
+              <div className="p-6 pb-0">
+                <h2 className="font-display text-[26px] tracking-[-0.01em] text-ink">
+                  Top Funds Contributing
+                </h2>
+              </div>
+              <div className="p-6 pt-4 overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-navy">
+                      <th className="py-3 px-4 text-left text-xs font-medium text-white/70 uppercase tracking-wider">
+                        Fund
+                      </th>
+                      <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
+                        Positions
+                      </th>
+                      <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
+                        Fair Value
+                      </th>
+                      <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
+                        % of Index
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vehicles.slice(0, 10).map((v, i) => (
+                      <tr
+                        key={String(v.cik)}
+                        className={`border-b border-surface last:border-0 hover:bg-surface/50 transition-colors ${
+                          i % 2 === 1 ? 'bg-surface/30' : ''
+                        }`}
+                      >
+                        <td className="py-3 px-4 font-medium text-navy">
+                          <Link
+                            href={`/funds/${v.cik}`}
+                            className="hover:text-teal transition-colors"
+                          >
+                            {v.entityName}
+                          </Link>
+                        </td>
+                        <td className="py-3 px-4 text-right tabular-nums">
+                          {formatNumber(v.positionCount)}
+                        </td>
+                        <td className="py-3 px-4 text-right tabular-nums">
+                          {formatDollar(v.totalFv)}
+                        </td>
+                        <td className="py-3 px-4 text-right tabular-nums">
+                          {formatPercent(v.pctOfIndex)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ================================================================ */}
+        {/* METHODOLOGY SUMMARY                                             */}
+        {/* ================================================================ */}
+        {methodology && (
+          <section>
+            <div className="bg-white border border-rule p-7">
+              <div className="eyebrow text-ink2 mb-4">Methodology</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-ink2 leading-relaxed">
+                <div>
+                  <p className="text-xs font-semibold text-ink mb-2 uppercase tracking-[0.08em]">
+                    Eligibility
+                  </p>
+                  <p>{methodology.eligibility}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-ink mb-2 uppercase tracking-[0.08em]">
+                    Construction
+                  </p>
+                  <p>{methodology.construction}</p>
+                </div>
+              </div>
+              <div className="mt-5 pt-4 border-t border-rule">
+                <Link
+                  href="/methodology"
+                  className="text-teal text-sm font-medium hover:underline inline-flex items-center gap-1"
+                >
+                  Full methodology
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
             </div>
           </section>

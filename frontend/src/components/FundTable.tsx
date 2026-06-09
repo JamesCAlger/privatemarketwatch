@@ -87,11 +87,21 @@ export default function FundTable({ funds }: FundTableProps) {
 
   return (
     <div>
+      {/* Filter pills */}
+      <div className="flex gap-2 mb-3">
+        <span className="px-3 py-1 text-[11px] font-medium tracking-[0.04em] bg-navy text-white">
+          All
+        </span>
+        <span className="px-3 py-1 text-[11px] font-medium tracking-[0.04em] border border-rule text-ink3">
+          Non-Traded BDC
+        </span>
+      </div>
+
       {/* Controls */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search by name or adviser..."
+          placeholder={`Search ${funds.length} funds by name, ticker, or adviser...`}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 px-4 py-2 text-sm border border-surface-muted bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal"
