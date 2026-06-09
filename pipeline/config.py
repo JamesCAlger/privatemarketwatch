@@ -43,6 +43,9 @@ HTML_TEMPLATE_DIR = RAW_DIR / "filing_templates"
 # companyfacts API cache (one JSON per CIK, ~100KB each)
 COMPANYFACTS_CACHE_DIR = RAW_DIR / "companyfacts_cache"
 
+# Fund highlights wrapper overrides
+FUND_HIGHLIGHTS_WRAPPER_DIR = OVERRIDES_DIR / "fund_highlights_wrappers"
+
 # Ensure directories exist on import
 for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           N2_HEADERS_CACHE_DIR, BDC_XBRL_CACHE_DIR,
@@ -52,7 +55,8 @@ for d in [SEC_DATASETS_DIR, FILINGS_DIR, THIRD_PARTY_DIR, OUTPUT_DIR,
           RAW_DIR / "filings" / "ncsr_html",
           RAW_DIR / "filings" / "sc_toi_html",
           OVERRIDES_DIR, OUTPUT_CACHE_DIR, SEC_DOWNLOAD_LOCK_DIR,
-          SEC_REFERENCE_DIR, LISTED_PRICES_CACHE_DIR]:
+          SEC_REFERENCE_DIR, LISTED_PRICES_CACHE_DIR,
+          FUND_HIGHLIGHTS_WRAPPER_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------

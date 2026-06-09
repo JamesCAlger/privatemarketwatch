@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fund-highlights-wrapper.v1",
+  "title": "Fund highlights per-CIK wrapper for concept mapping and share class aliases",
+  "type": "object",
+  "required": ["schema_version", "cik", "entity_name", "version"],
+  "properties": {
+    "schema_version": {"const": "fund-highlights-wrapper.v1"},
+    "cik": {"type": "string", "pattern": "^[0-9]{10}$"},
+    "entity_name": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "concept_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["xbrl_concept_substring", "target_field", "action"],
+        "properties": {
+          "xbrl_concept_substring": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Lowercase substring matched against local XBRL concept name"
+          },
+          "target_field": {
+            "type": "string",
+            "description": "Target highlights column name (e.g. assets_net, total_assets)"
+          },
+          "action": {
+            "type": "string",
+            "enum": ["map", "suppress", "prefer"],
+            "description": "map=alias, suppress=ignore concept, prefer=override global priority"
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Why this override is needed"
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Ordered concept-to-field overrides applied before the global HIGHLIGHTS_CONCEPT_MAP"
+    },
+    "share_class_aliases": {
+      "type": "object",
+      "additionalProperties": {"type": "string"},
+      "description": "Raw XBRL member substring -> canonical class label. Applied before global regex chain."
+    },
+    "oracle_tolerances": {
+      "type": "object",
+      "properties": {
+        "nav_identity_tol": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.20,
+          "description": "Per-CIK NAV identity tolerance (fraction, max 20%)"
+        },
+        "income_identity_tol": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.20,
+          "description": "Per-CIK income identity tolerance (fraction, max 20%)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "source_preferences": {
+      "type": "object",
+      "additionalProperties": {"type": "string"},
+      "description": "Per-field source preference when cross-source values diverge"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes on why this wrapper exists"
+    }
+  },
+  "additionalProperties": false
+}

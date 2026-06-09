@@ -6,6 +6,34 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-09 -- Position match quality: J05/J06 oracle checks + B2 attribute disambiguation
+
+- **New oracle checks** (pipeline/oracle_checks.py):
+  - J05: Lower-tier match pair consistency -- flags B2/C/D/E matches with 2+ attribute discontinuities (FV ratio >10x, rate gap >5pp, principal ratio >5x). Warn if suspect rate >5%.
+  - J06: Fuzzy match semantic validation -- joins D/E matches back to holdings via DuckDB to compare raw identifiers (JW similarity) and index classifications. Warn if suspect rate >15%.
+  - Added `_jaro_winkler_py()` pure-Python helper (self-contained, no extra deps).
+  - Both registered in CHECK_REGISTRY, discoverable by oracle_runner dispatch.
+- **B2/C/D attribute disambiguation** (pipeline/position_matching.py):
+  - B2 (exact name): Added `_attr_penalty` (lien_position + index_classification + coupon_type mismatch count) and `_maturity_prox` (maturity date day difference) to ROW_NUMBER ORDER BY, ahead of FV/rate/principal proximity.
+  - C (normalized name): Same `_attr_penalty` and `_maturity_prox` tiebreaker added.
+  - D (fuzzy): Same penalty added to blocked CTE, carried through scored/with_output, inserted after match_score DESC in ROW_NUMBER.
+  - Soft penalty design: only reorders preference when multiple candidates exist at the same entity; does not filter out any matches.
+- **Tests**: 22 new tests (18 oracle + 4 position matching), all passing. 98 oracle check tests total, 79 position matching tests total. Zero regressions.
+- **Files modified**: pipeline/oracle_checks.py, pipeline/position_matching.py, tests/test_oracle_checks.py, tests/test_position_matching.py
+
+### 2026-06-09 -- Fund highlights wrapper skill
+
+- **New module**: `pipeline/fund_highlights_wrapper.py` -- frozen dataclass loader for per-CIK highlights wrappers (concept overrides, share class aliases, oracle tolerances)
+- **Schema**: `schemas/fund_highlights_wrapper/wrapper_v1.schema.json` -- JSON Schema 2020-12 for `fund-highlights-wrapper.v1`
+- **Pipeline integration**: `pipeline/bdc_fund_highlights.py` -- wrapper-aware `_match_concept_with_wrapper()` applied before global concept map; `_canonical_share_class()` now accepts per-CIK aliases; both changes are no-ops when no wrapper exists for a CIK
+- **Oracle integration**: `pipeline/bdc_fund_highlights_oracle.py` -- per-CIK tolerance overrides from wrapper; new `highlights_wrapper_version` column in oracle output; `_compute_verdict()` accepts `nav_identity_tol`/`income_identity_tol` parameters
+- **Config**: `pipeline/config.py` -- added `FUND_HIGHLIGHTS_WRAPPER_DIR` path constant
+- **Scripts**: `scripts/rebuild_highlights_cik_trial.py` (one-CIK trial rebuild with before/after comparison); `scripts/fund_highlights_wrapper_worklist.py` (priority queue from residual profiler)
+- **Skill**: `.claude/skills/highlights-wrapper/SKILL.md` -- profile/create/validate dispatch
+- **Docs**: `docs/highlights_wrapper/` -- profile, create, and validate mode instructions
+- **Tests**: `tests/test_fund_highlights_wrapper.py` -- 19 tests covering loader, concept overrides (map/suppress/prefer/order), share class aliases, oracle tolerances, schema validation, frozen dataclass
+- **Regression**: 19/19 new tests pass; existing `test_validate_fund_financials.py` (11/11), `test_oracle_checks.py` (80/80), `test_validation_rules.py` (41/41) pass; pre-existing 1 failure in `test_bdc_xbrl_wrapper.py` (apollo DS test) is unrelated
+
 ### 2026-06-06 -- KKR FS Income Trust Select wrapper
 
 - Added `data/overrides/bdc_xbrl_wrappers/0001975736.json` for KKR FS Income Trust Select and updated its entry in `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` from `wrapper_status: none` to `exists`.
@@ -1575,6 +1603,20 @@ Follow-up in same implementation pass:
 
 **Status: done_with_review_items** -- CIK `0001784700` has zero remaining deterministic blocking rows in fresh staging/trial oracle checks and passes trial position matching. Human review is needed for the soft oracle diagnostics and for rerunning canonical cached production rebuild/promotion in a clean environment.
 
+## 2026-06-09 - TCW Direct Lending VII wrapper package
+
+- Claimed CIK `0001715933` (`TCW Direct Lending VII LLC`) as agent `codex-gpt5-20260609-002` and added `data/overrides/bdc_xbrl_wrappers/0001715933.json`. Updated `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` from `wrapper_status: none` to `exists` with `hierarchy_extract` staging (`with_wrapper` 33 -> 34, `without_wrapper` 96 -> 95).
+- The wrapper covers TCW VII `Debt Securities`, `Equity Securities`, `Controlled Affiliated Investments`, `Non-Controlled Affiliated Investments`, cash-equivalent, short-term investment, and total/header identifiers. It rescues position leaves with acquisition-date or instrument evidence while treating industry/category rows such as `Debt Securities Food Products` as non-position aggregates.
+- Added focused classifier tests in `tests/test_bdc_xbrl_wrapper.py` for debt leaves, affiliation-prefixed leaves, equity leaves, total/subtotal/cash false positives, coupon/net-asset percentage key stability, and registry support. Added `tests/test_unified_holdings.py` staging tests for debt, affiliation-prefixed debt, and equity issuer/instrument extraction.
+- Validation: schema validation passed; wrapper coherence passed; focused wrapper tests passed (`11 passed`, including adjacent TCW VIII regression tests selected by the filter); focused staging tests passed (`6 passed`, including adjacent TCW VIII regression tests). Fresh staging oracle and trial-holdings oracle each reported 13 quarters and zero remaining deterministic blocking rows.
+- One-CIK trial rebuild with matching produced 933 trial rows versus 979 current production rows, delta `-46` rows. Matching produced 592 pairs: 392 `B1b_position_key`, 182 `A_within_filing`, and 18 `B2_exact_name`. J01 passed (`B1b rate = 95.6%`, threshold 70%) and J03 passed (`D_fuzzy rate = 0.0%`, threshold 10%).
+- Trial promotion-style gate against `data/output/bdc_xbrl_wrapper_trial/0001715933/unified_trial/private_markets_holdings.0001715933.csv` returned `promotion_status=review_required`, `blocking_rows_delta=-50`, and `blocking_fv_delta=-19599266289`. Remaining reasons are review-style diagnostics: 2024-09-30 and 2024-12-31 through 2026-03-31 cost/FV ratio outliers, plus exclusion-risk diagnostics for 2024-12-31 and 2025-03-31.
+- Current-production promotion gate was also run and rejected because canonical production holdings are stale for this wrapper, with early `wrapper_blockers_remaining` / `remaining_leaf_present_in_raw_missing_from_unified` reasons still present. A full cached production rebuild was not started because other agents began CIK-scoped oracle/pytest jobs in the shared workspace; production promotion still requires a clean canonical rebuild.
+- `python scripts/diff_outputs.py --semantic` was run and failed due broad existing workspace drift (`443 divergent artifact(s)`, 3,682 checked, 77 skipped), not as an isolated TCW VII signal. No SEC downloads were performed.
+- The claim was marked done because the wrapper exists, required CIK-scoped source/oracle/trial/matching/promotion-style validation ran, and deterministic trial blockers were cleared.
+
+**Status: done_with_review_items** -- CIK `0001715933` has zero remaining deterministic blocking rows in fresh staging/trial oracle checks and passes trial position matching. Human review is needed for cost/FV and exclusion-risk soft diagnostics; production promotion still requires a successful canonical cached unified rebuild.
+
 ## 2026-06-09 - TCW Direct Lending VIII wrapper package
 
 - Claimed CIK `0001825265` (`TCW Direct Lending VIII LLC`) as agent `codex-gpt5-20260609-a7f3` and added `data/overrides/bdc_xbrl_wrappers/0001825265.json`. Updated `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` from `wrapper_status: none` to `exists` with `hierarchy_extract` staging.
@@ -1589,6 +1631,20 @@ Follow-up in same implementation pass:
 
 **Status: done_with_review_items** -- CIK `0001825265` has zero remaining deterministic blocking rows in fresh staging/trial oracle checks and passes trial position matching. Human review is needed for the three soft oracle diagnostics above; production promotion still requires a successful canonical cached unified rebuild in a clean environment.
 
+## 2026-06-09 - Commonwealth Credit Partners BDC I wrapper package
+
+- Claimed CIK `0001841514` (`Commonwealth Credit Partners BDC I, Inc.`) as agent `codex-gpt5-20260609-b9c2` and added `data/overrides/bdc_xbrl_wrappers/0001841514.json`. Updated `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` from `wrapper_status: none` to `exists` with `hierarchy_extract` staging.
+- The wrapper covers Commonwealth first-lien senior secured debt leaves, en-dash/dash issuer-instrument separators, equity shorthand rows such as issuer plus `Equity`/`Preferred Equity` plus industry, membership-interest rows, cash-equivalent rows, investment-and-cash totals, debt/equity subtotals, net assets, liabilities, and affiliated/non-controlled affiliated totals. Position keys strip volatile spread/floor/current interest-rate text while preserving issuer, instrument, and maturity details.
+- Added focused wrapper tests in `tests/test_bdc_xbrl_wrapper.py` for debt leaves with dash variants, bare equity/unit leaves, equity shorthand leaves, subtotal/cash/liability false positives, position-key coupon stability, and registry support. Added `tests/test_unified_holdings.py` staging tests for debt issuer/instrument extraction, revolving-credit extraction, equity shorthand extraction, and CIK scoping.
+- Validation: wrapper schema validation passed; wrapper coherence passed; focused wrapper tests passed (`6 passed`); focused staging tests passed (`4 passed`). Fresh staging oracle and trial-holdings oracle each reported zero remaining blocking rows and an empty `remaining_blocker_mechanisms.csv`.
+- One-CIK trial rebuild with matching produced 1,588 trial rows versus 1,574 production rows, delta +14 rows. Matching passed J01 (`B1b rate = 95.9%`, threshold 70%) and J03 (`D_fuzzy rate = 0.1%`, threshold 10%).
+- Trial promotion-style gate using `--promotion-gate --holdings-file data/output/bdc_xbrl_wrapper_trial/0001841514/unified_trial/private_markets_holdings.0001841514.csv` returned `promotion_status=review_required`, `blocking_rows_delta=-55`, `blocking_fv_delta=-13852568000.0`, and no structural issues.
+- Remaining human-review items are soft oracle diagnostics: `2023-12-31` `exclusion_risk_detected`; `2024-03-31` `exclusion_risk_detected`; `2024-06-30` `cost_fv_ratio_outliers` and `exclusion_risk_detected`; `2024-09-30` `exclusion_risk_detected`; `2024-12-31` `exclusion_risk_detected`; and `2025-03-31` `exclusion_risk_detected`.
+- A canonical cached unified rebuild was already running as PID `13432` (`python scripts/rebuild_outputs.py --unified`, started 2026-06-09 15:00:50) before a duplicate could be launched. It was still running after two bounded waits, so no duplicate rebuild or semantic diff was started. Production promotion against canonical artifacts remains pending that rebuild's completion.
+- No SEC downloads were performed. The claim was marked done because the wrapper exists, required CIK-scoped source/oracle/trial/matching validation ran, deterministic trial blockers were cleared, and remaining issues are human-review soft diagnostics plus the in-progress canonical rebuild.
+
+**Status: done_with_review_items** -- CIK `0001841514` has zero remaining deterministic blocking rows in fresh staging/trial oracle checks and passes trial position matching. Human review is needed for the soft exclusion/cost-FV diagnostics above; production promotion still requires completion of the already-running canonical cached unified rebuild and a semantic diff.
+
 ### 2026-06-09 -- Fund highlights oracle and quality gate
 
 - Created `pipeline/bdc_fund_highlights_oracle.py`: per-row oracle harness for fund-level highlights data with 5 validation groups:
@@ -1602,3 +1658,55 @@ Follow-up in same implementation pass:
 - Modified `pipeline/config.py`: added BDC_FUND_HIGHLIGHTS_ORACLE_FILE, FUND_HIGHLIGHTS_QUALITY_GATE_FILE, FUND_HIGHLIGHTS_QUALITY_GATE_MD_FILE
 - Modified `scripts/rebuild_outputs.py`: added `--highlights-oracle` flag and `rebuild_highlights_oracle()` function
 - Results: 237 CIKs evaluated -- 37 PASS (16%), 170 REVIEW (72%), 30 FAIL (13%). 1 Verified (Ares Capital), 36 Preliminary, 30 Excluded (non-BDC entities with 0 core fields). Median cross-source match rate 77.4%. Top review drivers: cross_source_total_assets_mismatch (different extraction pipelines), cross_source_nav_mismatch, interest_expense mismatch.
+
+## 2026-06-09 - Senior Credit Investments wrapper package released for review
+
+- Claimed CIK `0001959568` (`Senior Credit Investments, LLC`) as agent `codex-gpt5-20260609-001` and added `data/overrides/bdc_xbrl_wrappers/0001959568.json`. Updated its `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` entry from `wrapper_status: none` to `exists` with `hierarchy_extract` staging (`with_wrapper` 34 -> 35, `without_wrapper` 95 -> 94 in the current dirty reference file).
+- The wrapper covers Senior Credit's flat hierarchy identifiers for non-controlled/non-affiliated first-lien debt and equity rows, including issuer extraction before `Investment Type`, debt instrument extraction before reference-rate and maturity text, `Portfolio Company ... Investment Type ...` equity rows, cash-equivalent exclusions, and exact total/unfunded rows as non-position aggregates.
+- Added focused classifier tests in `tests/test_bdc_xbrl_wrapper.py` for debt leaves, portfolio-company equity leaves, total/category/unfunded false positives, bare portfolio-company false positives, and registry support. Added focused staging tests in `tests/test_unified_holdings.py` for Senior Credit debt issuer/instrument extraction and LP-interest extraction.
+- Validation: wrapper schema validation passed; wrapper coherence passed before temp diagnostics were removed; focused wrapper tests passed (`5 passed`); focused staging tests passed (`2 passed`). Fresh staging oracle reported 10 quarters, zero remaining blocking rows, zero wrapper-blocking rows, and `oracle_status_counts={'pass': 7, 'fail': 3}` from exact total-row exclusion-risk diagnostics.
+- One-CIK trial rebuild with matching produced 2,048 trial rows versus 2,308 current production rows, delta `-260` rows. Trial matching produced 684 pairs and passed J01 (`B1b rate = 82.6%`, threshold 70%) and J03 (`D_fuzzy rate = 0.9%`, threshold 10%).
+- Trial-holdings oracle cleared all deterministic source blockers: `remaining_blocking_rows=0` across all 10 quarters. It cleared 72 documented rollup/source residual rows versus baseline. Baseline comparison improved by 19 blocking rows and about $1.871B blocking FV.
+- Trial promotion-style gate against `data/output/bdc_xbrl_wrapper_trial/0001959568/unified_trial/private_markets_holdings.0001959568.csv` returned `promotion_status=review_required`, `blocking_rows_delta=-19`, `blocking_fv_delta=-1870744000`, and no structural issues. Remaining unwaived review diagnostics are `exclusion_risk_detected` on 2024-09-30, 2024-12-31, and 2025-03-31 exact total debt-investment rows, plus `cost_fv_ratio_outliers` on 2025-06-30 (`Redwood Services Group, LLC`, cost 1,392,000, FV -2,000) and 2025-12-31 (`Vessco Midco Holdings, LLC`, cost 246,000, FV -2,000).
+- No SEC downloads were performed. A full production rebuild/promotion was not started because an existing `scripts/rebuild_outputs.py --unified` process was already running in the shared workspace. The claim was released, not marked done, because raw promotion-style oracle failures remain and `exclusion_risk_detected` is non-waiveable in the wrapper workflow.
+
+**Status: released_for_human_review** -- CIK `0001959568` has zero remaining deterministic source-reconciliation blockers in fresh staging and trial-holdings oracle checks and passes trial position matching. Human review is needed for the exact total-row exclusion-risk diagnostics and the two small negative-FV cost/FV outlier diagnostics before this wrapper can be treated as production-clean.
+
+## 2026-06-09 - TCW Direct Lending wrapper package
+
+- Claimed CIK `0001603480` (`TCW Direct Lending LLC`) as agent `codex-gpt5-20260609-003` and added `data/overrides/bdc_xbrl_wrappers/0001603480.json`. Updated `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` from `wrapper_status: none` to `exists` with `hierarchy_extract` staging (`with_wrapper` 35 -> 36, `without_wrapper` 94 -> 93 in the current dirty reference file).
+- The wrapper covers TCW Direct Lending prefixed 2023-2025 identifiers and later bare 2025-2026 identifiers, including debt term-loan variants (`First Out`, `Delayed Draw Priming/Printing`, `HoldCo`, `Incremental`, `2025`, `10th Amendment`), revolvers, subordinated loans, common/preferred equity, membership interests, units, warrants, Strategic Ventures rows, cash equivalents, short-term Treasury rows, and total/category rows. Position keys strip volatile current coupon and NAV percentage text while preserving issuer/instrument/maturity identity.
+- Added focused wrapper tests in `tests/test_bdc_xbrl_wrapper.py` for debt/equity leaves, subtotal/cash false positives, prefixed and bare position-key stability, and registry support. Added focused staging tests in `tests/test_unified_holdings.py` for prefixed debt, prefixed equity, `Retail & Animal` issuer preservation, and bare debt/equity hierarchy extraction.
+- Validation: wrapper schema validation passed; wrapper coherence passed; focused wrapper tests passed (`6 passed`); focused staging tests passed (`5 passed`). Fresh staging oracle and trial-holdings oracle each reported `remaining_blocking_rows=0`; baseline comparison reduced blocking rows by 131 and blocking FV by approximately `$25.599B`.
+- One-CIK trial rebuild with matching produced 430 trial rows versus 460 current production rows, delta `-30` rows. Wrapper position-key override applied to 426 rows. Matching produced 261 pairs and passed J01 (`B1b rate = 98.3%`, threshold 70%) and J03 (`D_fuzzy rate = 0.4%`, threshold 10%).
+- Trial promotion-style gate against `data/output/bdc_xbrl_wrapper_trial/0001603480/unified_trial/private_markets_holdings.0001603480.csv` returned `promotion_status=review_required`, `blocking_rows_delta=-131`, and `blocking_fv_delta=-25599414329`, with no remaining source-reconciliation blockers.
+- Remaining human-review item is the soft cost/FV ratio diagnostic for SSI Parent / School Specialty common stock on 2023-03-31 through 2025-12-31: cost is consistently `53889` while FV ranges from about `$11.481M` to `$31.928M`, producing ratios below the oracle's 0.01 threshold. This is a matched source/output position and not a wrapper parsing blocker.
+- No SEC downloads were performed. A full production promotion gate against canonical artifacts was not run because an existing `scripts/rebuild_outputs.py --unified` process (`PID 13432`) was already active in the shared workspace. `python scripts/diff_outputs.py --semantic` was run and failed due broad existing workspace drift (`443 divergent artifact(s)`, 3,682 checked, 77 skipped), not as an isolated TCW Direct Lending wrapper signal.
+
+**Status: done_with_review_items** -- CIK `0001603480` has zero remaining deterministic source-reconciliation blockers in fresh staging and trial-holdings oracle checks and passes trial position matching. Human review is needed for the SSI Parent cost/FV ratio soft diagnostic; production promotion still requires completion of the already-running canonical cached unified rebuild and a clean production promotion check.
+
+## 2026-06-09 - TCW Star Direct Lending wrapper package
+
+- Claimed CIK `0001916608` (`TCW Star Direct Lending LLC`) as agent `codex-20260609-002` and added `data/overrides/bdc_xbrl_wrappers/0001916608.json`. Updated `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` from `wrapper_status: none` to `exists` with `hierarchy_extract` staging.
+- The wrapper covers TCW Star singular/plural `Debt Investment(s)` and `Equity Investment(s)` identifiers, cash equivalents, short-term Treasury rows, total/net-asset/liability rows, and industry subtotal rows. It extracts issuer/instrument from acquisition-date hierarchy rows and intentionally does not promote malformed `Date Processing And Outsourced Services Acquisition Date` rows that lack an issuer.
+- Added focused wrapper tests in `tests/test_bdc_xbrl_wrapper.py` for debt leaves, equity/common-unit leaves, subtotal/cash/treasury false positives, malformed no-issuer false positive handling, position-key coupon/NAV stability, and registry support. Added focused staging tests in `tests/test_unified_holdings.py` for TCW Star debt extraction, equity extraction, and malformed no-issuer exclusion.
+- Validation: wrapper schema validation passed; wrapper coherence passed; focused wrapper tests passed (`6 passed`); focused staging tests passed (`3 passed`). Fresh staging oracle and trial-holdings oracle each reported 13 quarters and zero remaining blocking rows.
+- One-CIK trial rebuild with matching produced 436 trial rows versus 436 production rows, delta `0` rows and `0` FV delta in every quarter. Matching produced 304 pairs and passed J01 (`B1b rate = 97.7%`, threshold 70%) and J03 (`D_fuzzy rate = 0.0%`, threshold 10%).
+- Trial and current-production promotion-style gates both returned `promotion_status=review_required`, `blocking_rows_delta=-108`, and `blocking_fv_delta=-3671776234`, with no structural issues. Remaining review reasons were `exclusion_risk_detected` on 2023-03-31, 2023-06-30, and 2023-09-30; `fv_magnitude_shift_detected` and `low_position_continuity` on 2023-06-30 and 2023-09-30; and `cost_fv_ratio_outliers` on 2025-09-30 and 2026-03-31.
+- A full cached production `python scripts/rebuild_outputs.py --unified` was attempted after checking for existing rebuild jobs, but timed out after 45 minutes and the orphaned rebuild process was stopped. `python scripts/diff_outputs.py --semantic` was run afterward and failed due broad existing workspace drift (`443 divergent artifact(s)`, 3,682 checked, 77 skipped), not as an isolated TCW Star signal.
+- No SEC downloads were performed. The claim was marked done because the wrapper exists, required source/oracle/trial/matching/promotion-style validation ran, and deterministic blockers were cleared.
+
+**Status: done_with_review_items** -- CIK `0001916608` has zero remaining deterministic blocking rows in fresh staging/trial oracle checks and passes trial position matching. Human review is needed for exclusion-risk, FV-shift/continuity, and cost/FV diagnostics above; production promotion still requires a successful canonical cached unified rebuild in a clean environment.
+
+## 2026-06-09 - Onex corrupted source-row exclusion and Manulife wrapper package
+
+- For CIK `0001860424` (`Onex Falcon Direct Lending BDC Fund`), added exact audited aggregate-row overrides for the malformed Apryse source identifier in the 2025-06-30 and 2025-09-30 accessions. The corrupted concatenated rows are now excluded from the trial unified output rather than promoted as position-level loans.
+- Updated `data/overrides/bdc_xbrl_wrappers/0001860424.json` with a narrow staging guard and known edge case for the corrupted `Non-cNon-controlled...Apryse` source pattern. Added a focused classifier regression in `tests/test_bdc_xbrl_wrapper.py`.
+- Claimed CIK `0001988280` (`Manulife Private Credit Fund`) as agent `codex-20260609-xbrl-02` and added `data/overrides/bdc_xbrl_wrappers/0001988280.json`. Updated `data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json` from `wrapper_status: none` to `exists` (`with_wrapper` 36 -> 37, `without_wrapper` 93 -> 92 in the current dirty reference file).
+- The Manulife wrapper covers pipe-separated `Senior loans` hierarchy rows, two-segment leaves with a missing industry/issuer delimiter, short-term/cash-management rows, percentage-only industry and equity category rows, issuer-only rollups, and canonical position keys that strip changing senior-loan/industry percentages and rate parentheticals.
+- Added focused Manulife wrapper tests for senior-loan leaves, missing-delimiter leaves, subtotal/category false positives, issuer-only rollups, short-term non-private rows, position-key stability, and registry support.
+- Validation: Manulife wrapper schema validation passed; focused wrapper tests passed (`7 passed`); fresh source oracle passed all 9 quarters with `remaining_blocking_rows=0`; trial-holdings oracle passed all 9 quarters with `remaining_blocking_rows=0`; one-CIK trial rebuild with matching produced 1,698 trial rows versus 1,720 production rows, delta `-22` rows. Matching passed J01 (`B1b rate = 96.8%`, threshold 70%) and J03 (`D_fuzzy rate = 0.2%`, threshold 10%).
+- Trial promotion gate for Manulife returned `promotion_status=promote`, `blocking_rows_delta=-96`, and `blocking_fv_delta=-2838415694`. Diagnostics remain visible as warnings: wrapper-only non-private rows, wrapper-only aggregate rows, hierarchy parse disagreements, and debt-wrapper/equity-asset-category disagreement for 25 equity rows.
+- No SEC downloads were performed. The Manulife claim was marked done because the wrapper exists, source/oracle/trial/matching/promotion validation passed, and deterministic blockers are cleared.
+
+**Status: done** -- CIK `0001988280` has zero remaining deterministic blocking rows and passes trial promotion. Human review items remaining: none required by the deterministic wrapper gates; optional review may inspect the non-blocking oracle warnings listed above.

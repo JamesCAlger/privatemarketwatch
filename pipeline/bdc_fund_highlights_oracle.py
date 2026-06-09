@@ -39,6 +39,7 @@ from pipeline.config import (
     BDC_FUND_INCOME_FILE,
     FUND_FINANCIALS_FILE,
 )
+from pipeline.fund_highlights_wrapper import load_highlights_wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +110,8 @@ _ORACLE_COLUMNS = [
     # Group 5: coverage
     "core_field_count",
     "class_field_asymmetry",
+    # Wrapper
+    "highlights_wrapper_version",
     # Verdict
     "oracle_status",
     "oracle_fail_reasons",
@@ -591,8 +594,23 @@ def _compute_class_asymmetry(highlights_df: pd.DataFrame) -> dict:
 # Verdict logic
 # ---------------------------------------------------------------------------
 
-def _compute_verdict(row: dict) -> tuple:
+def _compute_verdict(
+    row: dict,
+    nav_identity_tol: float = _IDENTITY_TOL,
+    income_identity_tol: float = _INCOME_IDENTITY_TOL,
+) -> tuple:
     """Compute oracle_status, fail_reasons, review_reasons from check results.
+
+    Parameters
+    ----------
+    row : dict
+        Oracle check results for a single row.
+    nav_identity_tol : float
+        NAV identity tolerance (default: global _IDENTITY_TOL).
+        Per-CIK wrappers may relax this up to 20%.
+    income_identity_tol : float
+        Income identity tolerance (default: global _INCOME_IDENTITY_TOL).
+        Per-CIK wrappers may relax this up to 20%.
 
     Returns (status, fail_reasons_str, review_reasons_str).
     """
@@ -601,11 +619,11 @@ def _compute_verdict(row: dict) -> tuple:
 
     # --- Group 1: identity failures -> FAIL (NAV and income only) ---
     nav_id = row.get("nav_identity_pct_diff")
-    if pd.notna(nav_id) and nav_id > _IDENTITY_TOL:
+    if pd.notna(nav_id) and nav_id > nav_identity_tol:
         fail_reasons.append("nav_identity_fail")
 
     inc_id = row.get("income_identity_pct_diff")
-    if pd.notna(inc_id) and inc_id > _INCOME_IDENTITY_TOL:
+    if pd.notna(inc_id) and inc_id > income_identity_tol:
         fail_reasons.append("income_identity_fail")
 
     # Balance sheet identity and net_assets/equity are DIAGNOSTIC only (not
@@ -787,16 +805,38 @@ def run_highlights_oracle(
     # instant rows for NAV/shares, duration rows for ratios/returns.
     oracle_df = _check_stability(hl, oracle_df)
 
-    # Compute verdicts
+    # Build per-CIK wrapper tolerance lookup
+    wrapper_tols: dict[str, dict[str, float]] = {}
+    wrapper_versions: dict[str, int] = {}
+    for cik_val in oracle_df["cik"].unique():
+        wrapper = load_highlights_wrapper(cik_val)
+        if wrapper:
+            wrapper_tols[str(cik_val)] = wrapper.oracle_tolerances
+            wrapper_versions[str(cik_val)] = wrapper.version
+        else:
+            wrapper_versions[str(cik_val)] = 0
+
+    # Compute verdicts with per-CIK tolerances
     statuses = []
     fail_reasons = []
     review_reasons = []
+    wv_col = []
     for _, row in oracle_df.iterrows():
-        status, fr, rr = _compute_verdict(row.to_dict())
+        cik_str = str(row.get("cik", ""))
+        tols = wrapper_tols.get(cik_str, {})
+        nav_tol = tols.get("nav_identity_tol", _IDENTITY_TOL)
+        inc_tol = tols.get("income_identity_tol", _INCOME_IDENTITY_TOL)
+        status, fr, rr = _compute_verdict(
+            row.to_dict(),
+            nav_identity_tol=nav_tol,
+            income_identity_tol=inc_tol,
+        )
         statuses.append(status)
         fail_reasons.append(fr)
         review_reasons.append(rr)
+        wv_col.append(wrapper_versions.get(cik_str, 0))
 
+    oracle_df["highlights_wrapper_version"] = wv_col
     oracle_df["oracle_status"] = statuses
     oracle_df["oracle_fail_reasons"] = fail_reasons
     oracle_df["oracle_review_reasons"] = review_reasons

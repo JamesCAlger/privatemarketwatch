@@ -37,6 +37,10 @@ from pipeline.config import (
     BDC_FILINGS_INDEX_FILE,
     BDC_FUND_HIGHLIGHTS_FILE,
 )
+from pipeline.fund_highlights_wrapper import (
+    HighlightsWrapperSpec,
+    load_highlights_wrapper,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -199,10 +203,27 @@ _SERIES_PREFERRED_RE = re.compile(r"(?i)Series\s*([A-Z])\d*\s*(?:Convertible\s*)
 _PREFERRED_CLASS_RE = re.compile(r"(?i)Preferred\s*(?:Class|Stock)?\s*([A-Z])\s*Member")
 
 
-def _canonical_share_class(raw: str) -> str:
-    """Map raw XBRL member name to canonical share class label."""
+def _canonical_share_class(raw: str, aliases: Optional[dict[str, str]] = None) -> str:
+    """Map raw XBRL member name to canonical share class label.
+
+    Parameters
+    ----------
+    raw : str
+        Raw XBRL member name (e.g. 'ClassICommonSharesMember').
+    aliases : dict, optional
+        Per-CIK aliases from a highlights wrapper.  Keys are substrings
+        matched against the raw member name; values are canonical labels.
+        Checked before the global regex chain.
+    """
     if not raw:
         return ""
+
+    # Per-CIK aliases take priority
+    if aliases:
+        for substring, canonical in aliases.items():
+            if substring in raw:
+                return canonical
+
     upper = raw.upper().replace(" ", "")
 
     # Institutional class variants -> ClassI
@@ -382,6 +403,26 @@ def _match_highlights_concept(local_lower: str) -> Optional[str]:
     return None
 
 
+def _match_concept_with_wrapper(
+    local_lower: str,
+    wrapper: Optional[HighlightsWrapperSpec],
+) -> Optional[str]:
+    """Wrapper-aware concept matching.
+
+    Checks per-CIK concept_overrides first (ordered), then falls back to the
+    global HIGHLIGHTS_CONCEPT_MAP.  If no wrapper exists, behavior is identical
+    to _match_highlights_concept.
+    """
+    if wrapper:
+        for substring, target_field, action in wrapper.concept_overrides:
+            if substring in local_lower:
+                if action == "suppress":
+                    return None
+                # "map" and "prefer" both route to target_field
+                return target_field
+    return _match_highlights_concept(local_lower)
+
+
 def _strip_ns_prefix(raw_member: str) -> str:
     """Strip CIK namespace prefix from member value.
 
@@ -505,13 +546,25 @@ def _parse_highlights_contexts(tree: etree._ElementTree) -> dict:
 def _extract_highlights_facts(
     tree: etree._ElementTree,
     contexts: dict,
+    cik: Optional[str] = None,
 ) -> list[dict[str, Any]]:
     """Extract fund-level highlights facts from accepted contexts.
+
+    Parameters
+    ----------
+    tree : lxml ElementTree
+    contexts : dict from _parse_highlights_contexts
+    cik : str, optional
+        CIK for wrapper lookup.  If a highlights wrapper exists for this CIK,
+        its concept_overrides are applied before the global concept map.
 
     Returns one dict per unique (period_end, period_type, share_class) group.
     """
     if not contexts:
         return []
+
+    # Look up per-CIK wrapper (None if not found)
+    wrapper = load_highlights_wrapper(cik) if cik else None
 
     # Group by (period_end, period_type, share_class)
     facts_by_group: dict[tuple, dict[str, Any]] = {}
@@ -532,7 +585,7 @@ def _extract_highlights_facts(
         if not raw_text:
             continue
 
-        col = _match_highlights_concept(local)
+        col = _match_concept_with_wrapper(local, wrapper)
         if col is None:
             continue
 
@@ -594,12 +647,23 @@ def _normalize_highlights(df: pd.DataFrame) -> pd.DataFrame:
         df = df[~is_junk].copy()
         logger.info("Rule 1 (member filter): dropped %d non-share-class rows", n_junk)
 
-    # --- Rule 2: canonical share class mapping ---
+    # --- Rule 2: canonical share class mapping (with per-CIK aliases) ---
     has_class = df["share_class"].notna() & (df["share_class"] != "")
     if has_class.any():
         raw_classes = df.loc[has_class, "share_class"].unique()
-        df.loc[has_class, "share_class"] = df.loc[has_class, "share_class"].map(
-            _canonical_share_class
+
+        # Build per-CIK alias lookup once
+        cik_aliases: dict[str, dict[str, str] | None] = {}
+        for cik_val in df.loc[has_class, "cik"].unique():
+            wrapper = load_highlights_wrapper(cik_val)
+            cik_aliases[cik_val] = wrapper.share_class_aliases if wrapper else None
+
+        def _map_share_class(row):
+            aliases = cik_aliases.get(row["cik"])
+            return _canonical_share_class(row["share_class"], aliases=aliases)
+
+        df.loc[has_class, "share_class"] = df.loc[has_class].apply(
+            _map_share_class, axis=1
         )
         mapped_classes = df.loc[has_class, "share_class"].unique()
         logger.info(
@@ -750,7 +814,7 @@ def extract_bdc_fund_highlights(
         try:
             tree = etree.parse(xml_path)
             contexts = _parse_highlights_contexts(tree)
-            facts = _extract_highlights_facts(tree, contexts)
+            facts = _extract_highlights_facts(tree, contexts, cik=filing_meta["cik"])
 
             for fact in facts:
                 record = {**filing_meta, **fact}
