@@ -49,9 +49,33 @@ Do not describe a wrapper as complete because visual samples look plausible.
 
 ## Priority Queue
 
-All 39 original queue entries have wrappers (56 total on disk). Queue complete as of 2026-06-05.
+All 39 original queue entries have wrappers. New agents must claim work through
+the shared claim helper so parallel sessions do not choose the same CIK.
 
-To process CIKs outside the original queue, profile from the unlisted BDC reference or use `/wrapper [CIK] profile`.
+Claim the next unwrapped BDC before profiling:
+
+```bash
+python scripts/bdc_wrapper_worklist.py --next --agent "<agent-name>"
+```
+
+The helper derives the queue from
+`data/overrides/bdc_xbrl_wrappers/unlisted_bdc_xbrl_reference.json`, excludes
+CIKs that already have wrapper JSON files, excludes entries without holdings
+data, and prioritizes current source-reconciliation blockers before holdings
+row count. It writes `data/output/bdc_wrapper_claims.json` under an atomic
+`.lock` file so multiple agents can claim different CIKs safely.
+
+Useful commands:
+
+```bash
+python scripts/bdc_wrapper_worklist.py --stats
+python scripts/bdc_wrapper_worklist.py --list --limit 20
+python scripts/bdc_wrapper_worklist.py --done <CIK> --agent "<agent-name>"
+python scripts/bdc_wrapper_worklist.py --release <CIK> --agent "<agent-name>"
+```
+
+Only mark a CIK `done` after the wrapper exists and deterministic validation
+has been run. Use `--release` if the claim cannot be completed.
 
 ---
 
@@ -71,7 +95,7 @@ Read the mode-specific doc for detailed instructions:
 - **Do not add identifiers to aggregate_markers unless verified across all quarters.** A subtotal in one quarter may become a leaf in another.
 - **Include truncation variants in prefix_rules.** Filers sometimes have off-by-one prefix truncation in XBRL (e.g. `IInvestment`, `nvestment`).
 - **Test both leaf survival and aggregate filtering.** Every wrapper change needs at least one "this real position survives" and one "this subtotal is filtered" test.
-- **Do not run SEC downloads.** All raw data is cached. Use `_prepare_bdc()` or `--fresh-bdc-staging` to rebuild from cache.
+- **Do not run SEC downloads directly.** All raw data is cached by default. If missing BDC HTML evidence is explicitly needed, use only the audited guard script, e.g. `python scripts/download_missing_bdc_html.py --cik <CIK> --missing --max-downloads 10 --agent "<agent-name>" --reason wrapper_evidence`. This script validates the CIK/accession against `data/output/bdc_filings_index.csv`, enforces cross-process SEC throttling, writes atomically to `data/raw/filings/bdc_html/`, and appends receipts to `data/output/sec_download_manifest.jsonl`.
 - **Validate with the final unified oracle before declaring success.** Visual plausibility is not evidence.
 - **Do not hide failed oracle status.** Residual blockers are valid outcomes and must be documented.
 - **Do not promote dispatch-only wrappers as extraction fixes.** They classify identifiers but may not change final holdings extraction.
