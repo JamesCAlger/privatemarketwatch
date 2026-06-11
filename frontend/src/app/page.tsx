@@ -11,13 +11,11 @@ import {
   getSectorBreakdown,
   getDistributionHistogram,
   getLeverageHistogram,
-  getAumTimeSeries,
   getCreditRisk,
   getTopConstituents,
   getConcentrationCurve,
   getSpreadTimeSeries,
   getSpreadByFundSize,
-  getSpreadByLien,
 } from '@/lib/data';
 import { INDICES } from '@/lib/constants';
 import { formatDollar, formatNumber, formatQuarter, formatPercent, formatYears } from '@/lib/format';
@@ -28,11 +26,9 @@ import PerfSection from '@/components/PerfSection';
 import ReturnSummaryTable from '@/components/ReturnSummaryTable';
 import ProportionDonut from '@/components/ProportionDonut';
 import HistogramChart from '@/components/HistogramChart';
-import UniverseGrowthChart from '@/components/UniverseGrowthChart';
 import CreditStressChart from '@/components/CreditStressChart';
 import SpreadTimeChart from '@/components/SpreadTimeChart';
 import SpreadByFundSizeChart from '@/components/SpreadByFundSizeChart';
-import SpreadByLienChart from '@/components/SpreadByLienChart';
 import { formatDisplayName } from '@/lib/nameFormat';
 import StatStrip from '@/components/StatStrip';
 
@@ -48,11 +44,9 @@ export default function HomePage() {
   const distHistogram = getDistributionHistogram();
   const levHistogram = getLeverageHistogram();
   const managerConcentration = getManagerConcentration();
-  const aumTimeSeries = getAumTimeSeries();
   const creditRisk = getCreditRisk();
   const spreadTimeSeries = getSpreadTimeSeries();
   const spreadByFundSize = getSpreadByFundSize();
-  const spreadByLien = getSpreadByLien();
   const sectorBreakdown = getSectorBreakdown();
   const topConstituents = getTopConstituents();
   const concentrationCurve = getConcentrationCurve();
@@ -260,37 +254,6 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* Universe Growth */}
-        {aumTimeSeries.length > 1 && (
-          <section>
-            <div className="bg-white border border-rule p-7">
-              <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
-                <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Universe growth</h3>
-                <div className="text-right">
-                  <span className="font-mono text-[22px] text-ink font-semibold tabular-nums">
-                    {formatDollar(aumTimeSeries[aumTimeSeries.length - 1].total)}
-                  </span>
-                  {aumTimeSeries.length >= 5 && (() => {
-                    const latest = aumTimeSeries[aumTimeSeries.length - 1].total;
-                    const yearAgo = aumTimeSeries[aumTimeSeries.length - 5]?.total;
-                    if (!yearAgo || yearAgo === 0) return null;
-                    const yoy = ((latest / yearAgo) - 1) * 100;
-                    return (
-                      <span className="text-[11px] text-ink3 ml-2 font-mono tabular-nums">
-                        +{yoy.toFixed(0)}% YoY
-                      </span>
-                    );
-                  })()}
-                </div>
-              </div>
-              <p className="text-xs text-ink3 mb-4">
-                Total AUM across {aumTimeSeries[aumTimeSeries.length - 1].bdcCount} unlisted BDCs &middot; quarterly from {formatQuarter(aumTimeSeries[0].quarter)}
-              </p>
-              <UniverseGrowthChart data={aumTimeSeries} />
-            </div>
-          </section>
-        )}
-
         {/* Spread Analysis */}
         {spreadTimeSeries.length > 1 && (() => {
           const latest = spreadTimeSeries[spreadTimeSeries.length - 1];
@@ -299,27 +262,30 @@ export default function HomePage() {
           const peakBps = Math.round(peak * 100);
           return (
             <section>
-              {/* Time series — full width */}
-              <div className="bg-white border border-rule p-7 mb-6">
-                <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
-                  <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Spread analysis</h3>
-                  <div className="text-right">
-                    <span className="font-mono text-[22px] text-ink font-semibold tabular-nums">
-                      {latestBps} bps
-                    </span>
-                    <span className="text-[11px] text-ink3 ml-2 font-mono tabular-nums">
-                      from {peakBps} peak
-                    </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Spread over time */}
+                <div className="bg-white border border-rule p-7">
+                  <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
+                    <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Spread analysis</h3>
+                    <div className="text-right">
+                      <span className="font-mono text-[18px] text-ink font-semibold tabular-nums">
+                        {latestBps} bps
+                      </span>
+                      <span className="text-[11px] text-ink3 ml-1.5 font-mono tabular-nums">
+                        from {peakBps} peak
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-ink3 mb-4">
+                    FV-weighted average credit spread over base rate &middot; {spreadTimeSeries.length}-quarter history
+                  </p>
+                  <SpreadTimeChart data={spreadTimeSeries} />
+                  <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
+                    Direct lending positions &middot; {latest.positionCount.toLocaleString()} positions &middot; {formatDollar(latest.totalFv)} FV
                   </div>
                 </div>
-                <p className="text-xs text-ink3 mb-4">
-                  FV-weighted average credit spread over base rate &middot; direct lending positions &middot; {spreadTimeSeries.length}-quarter history
-                </p>
-                <SpreadTimeChart data={spreadTimeSeries} />
-              </div>
 
-              {/* Fund size + Lien — two columns */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Spread by fund size */}
                 {spreadByFundSize.length > 0 && (
                   <div className="bg-white border border-rule p-7">
                     <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Spread by fund size</h3>
@@ -330,26 +296,6 @@ export default function HomePage() {
                     <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
                       {spreadByFundSize.reduce((s, d) => s + d.fundCount, 0)} funds with spread data.
                       Small-fund premium: {Math.round((spreadByFundSize[0]?.was ?? 0) * 100) - Math.round((spreadByFundSize[spreadByFundSize.length - 1]?.was ?? 0) * 100)} bps over large.
-                    </div>
-                  </div>
-                )}
-                {spreadByLien.length > 0 && (
-                  <div className="bg-white border border-rule p-7">
-                    <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Spread by lien position</h3>
-                    <p className="text-xs text-ink3 mt-2 mb-3">
-                      Direct lending &middot; latest quarter
-                    </p>
-                    <SpreadByLienChart data={spreadByLien} />
-                    <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
-                      {spreadByLien.filter((d) => d.lien !== 'Unknown').length} classified lien types.
-                      {(() => {
-                        const fl = spreadByLien.find((d) => d.lien === 'First Lien');
-                        const sl = spreadByLien.find((d) => d.lien === 'Second Lien');
-                        if (fl && sl) {
-                          return ` Second lien premium: ${Math.round(sl.was * 100) - Math.round(fl.was * 100)} bps.`;
-                        }
-                        return '';
-                      })()}
                     </div>
                   </div>
                 )}

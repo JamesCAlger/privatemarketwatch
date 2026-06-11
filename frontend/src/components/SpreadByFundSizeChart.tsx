@@ -19,11 +19,7 @@ interface SpreadByFundSizeChartProps {
   data: SpreadByFundSizeRow[];
 }
 
-const BUCKET_COLORS: Record<string, string> = {
-  Small: '#0b1a2c',
-  Medium: '#2a4a6b',
-  Large: '#5a7d9a',
-};
+const BUCKET_COLORS = ['#0b1a2c', '#1e3a5f', '#2a4a6b', '#5a7d9a'];
 
 function ChartTooltip({
   active,
@@ -36,7 +32,7 @@ function ChartTooltip({
   const row = payload[0].payload;
   return (
     <div className="bg-navy px-3 py-2 shadow-panel text-xs">
-      <p className="text-white/60 mb-1">{row.bucket} funds</p>
+      <p className="text-white/60 mb-1">{row.bucket}</p>
       <div className="text-accent font-medium tabular-nums">
         {Math.round(row.was * 100)} bps
       </div>
@@ -57,6 +53,10 @@ export default function SpreadByFundSizeChart({ data }: SpreadByFundSizeChartPro
     bps: Math.round(d.was * 100),
   }));
 
+  const bpsValues = chartData.map((d) => d.bps);
+  const minBps = Math.floor((Math.min(...bpsValues) - 20) / 25) * 25;
+  const maxBps = Math.ceil((Math.max(...bpsValues) + 20) / 25) * 25;
+
   return (
     <div ref={ref}>
       <ResponsiveContainer width="100%" height={220}>
@@ -70,6 +70,7 @@ export default function SpreadByFundSizeChart({ data }: SpreadByFundSizeChartPro
               tickLine={false}
             />
             <YAxis
+              domain={[minBps, maxBps]}
               tick={{ fontSize: 10, fill: '#6b7280' }}
               axisLine={false}
               tickLine={false}
@@ -91,10 +92,10 @@ export default function SpreadByFundSizeChart({ data }: SpreadByFundSizeChartPro
               animationDuration={800}
               animationEasing="ease-out"
             >
-              {chartData.map((entry) => (
+              {chartData.map((entry, i) => (
                 <Cell
                   key={entry.bucket}
-                  fill={BUCKET_COLORS[entry.bucket] ?? '#0b1a2c'}
+                  fill={BUCKET_COLORS[i] ?? '#5a7d9a'}
                 />
               ))}
               <LabelList

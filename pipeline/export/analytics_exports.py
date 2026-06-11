@@ -1942,30 +1942,34 @@ def _export_spread_by_fund_size(con: duckdb.DuckDBPyConnection) -> None:
             SELECT
                 l.*,
                 lf.total_assets,
-                NTILE(3) OVER (
-                    ORDER BY lf.total_assets ASC NULLS LAST
-                ) AS size_tercile
+                CASE
+                    WHEN lf.total_assets < 1e9  THEN 1
+                    WHEN lf.total_assets < 5e9  THEN 2
+                    WHEN lf.total_assets < 15e9 THEN 3
+                    ELSE 4
+                END AS size_bucket
             FROM latest l
             JOIN latest_ff lf ON l.cik = lf.cik
         ),
-        by_tercile AS (
+        by_bucket AS (
             SELECT
-                CASE size_tercile
-                    WHEN 1 THEN 'Small'
-                    WHEN 2 THEN 'Medium'
-                    WHEN 3 THEN 'Large'
+                CASE size_bucket
+                    WHEN 1 THEN '< $1B'
+                    WHEN 2 THEN '$1-5B'
+                    WHEN 3 THEN '$5-15B'
+                    WHEN 4 THEN '> $15B'
                 END AS bucket,
-                size_tercile,
+                size_bucket,
                 SUM(basis_spread * fair_value) / SUM(fair_value) AS was,
                 SUM(fair_value) AS total_fv,
                 COUNT(*) AS position_count,
                 COUNT(DISTINCT cik) AS fund_count
             FROM with_size
-            GROUP BY size_tercile
+            GROUP BY size_bucket
         )
         SELECT bucket, was, total_fv, position_count, fund_count
-        FROM by_tercile
-        ORDER BY size_tercile
+        FROM by_bucket
+        ORDER BY size_bucket
     """).fetchall()
 
     out = [
