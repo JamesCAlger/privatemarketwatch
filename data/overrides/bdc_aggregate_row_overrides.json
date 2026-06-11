@@ -995,6 +995,30 @@
                           "evidence":  "BDC source reconciliation review PATCH_PROPOSED bundle for Ares 2025-12-31/0001287750-26-000006.",
                           "review_id":  "bdc-src-recon-2026-05-24-ares-issuer-excludes",
                           "updated_at":  "2026-05-24"
+                      },
+                      {
+                          "cik":  "0001860424",
+                          "report_date":  "2025-06-30",
+                          "accession_number":  "0000950170-25-105519",
+                          "match_text":  "Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+                          "match_mode":  "exact",
+                          "action":  "exclude",
+                          "reason":  "Onex Falcon source-corrupted Apryse row concatenates two hierarchy identifiers across the maturity token and is not a reliable position-level holding row.",
+                          "evidence":  "Cached BDC XBRL source row for Onex Falcon 2025-06-30/0000950170-25-105519 starts with malformed Non-cNon-controlled prefix and contains 6/26/2032ontrolled/Non-affiliated hierarchy concatenation; wrapper trial confirmed removal of the malformed output row.",
+                          "review_id":  "bdc-wrapper-2026-06-09-onex-apryse-source-corruption",
+                          "updated_at":  "2026-06-09"
+                      },
+                      {
+                          "cik":  "0001860424",
+                          "report_date":  "2025-09-30",
+                          "accession_number":  "0001193125-25-271605",
+                          "match_text":  "Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+                          "match_mode":  "exact",
+                          "action":  "exclude",
+                          "reason":  "Onex Falcon source-corrupted Apryse row concatenates two hierarchy identifiers across the maturity token and is not a reliable position-level holding row.",
+                          "evidence":  "Cached BDC XBRL source row for Onex Falcon 2025-09-30/0001193125-25-271605 starts with malformed Non-cNon-controlled prefix and contains 6/26/2032ontrolled/Non-affiliated hierarchy concatenation; wrapper trial confirmed removal of the malformed output row.",
+                          "review_id":  "bdc-wrapper-2026-06-09-onex-apryse-source-corruption",
+                          "updated_at":  "2026-06-09"
                       }
                   ]
 }
