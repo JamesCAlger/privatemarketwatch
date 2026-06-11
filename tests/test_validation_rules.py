@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import os
 import sys
 from pathlib import Path
 
@@ -279,6 +280,7 @@ def test_ri07_fails_when_returns_exist_but_holdings_position_ids_blank(tmp_path)
             position_id="",
         ),
     ])
+    os.utime(paths["position_returns"], (2_000_000_000, 2_000_000_000))
 
     aggregate, detail = run_all(
         categories=["RI"],
@@ -291,6 +293,42 @@ def test_ri07_fails_when_returns_exist_but_holdings_position_ids_blank(tmp_path)
     ri07 = detail[detail["rule_id"] == "RI07"]
     assert len(ri07) == 1
     assert ri07.iloc[0]["cik"] == "100"
+
+
+def test_ri07_reports_stale_returns_before_blank_position_id_flood(tmp_path):
+    paths = _fixtures(tmp_path)
+    _write_csv(paths["holdings"], [
+        _base_holding(
+            cik="100",
+            quarter="2024q1",
+            report_date="2024-03-31",
+            issuer_name="Acme",
+            position_id="",
+        ),
+        _base_holding(
+            cik="100",
+            quarter="2024q2",
+            report_date="2024-06-30",
+            issuer_name="Acme",
+            position_id="",
+        ),
+    ])
+    os.utime(paths["position_returns"], (1_000_000_000, 1_000_000_000))
+    os.utime(paths["holdings"], (2_000_000_000, 2_000_000_000))
+
+    aggregate, detail = run_all(
+        categories=["RI"],
+        table_paths=paths,
+        write=False,
+    )
+
+    by_rule = aggregate.set_index("rule_id")
+    assert by_rule.loc["RI07", "status"] == "FAIL"
+    ri07 = detail[detail["rule_id"] == "RI07"]
+    assert len(ri07) == 1
+    row = ri07.iloc[0]
+    assert row["granularity"] == "artifact_pair"
+    assert "older than private_markets_holdings" in row["detail"]
 
 
 def test_promoted_fail_rules_trigger_and_zero_hit(tmp_path):
@@ -314,6 +352,20 @@ def test_pc02_pc03_reconcile_index_guard_not_raw_row_presence(tmp_path):
 
     assert by_rule.loc["PC02", "hit_count"] == 0
     assert by_rule.loc["PC03", "hit_count"] == 0
+
+
+def test_pc03_allows_subcent_fv_roundtrip_noise(tmp_path):
+    paths = _fixtures(tmp_path)
+    index_rows = pd.read_csv(paths["index_returns"], dtype=str).to_dict("records")
+    index_rows[0]["total_begin_fv"] = "11000000.005"
+    index_rows[0]["total_end_fv"] = "11110000.005"
+    _write_csv(paths["index_returns"], index_rows)
+
+    aggregate, detail = run_all(table_paths=paths, write=False)
+    by_rule = aggregate.set_index("rule_id")
+
+    assert by_rule.loc["PC03", "status"] == "PASS"
+    assert detail[detail["rule_id"] == "PC03"].empty
 
 
 def test_missing_optional_tables_produce_skipped_rows(tmp_path):

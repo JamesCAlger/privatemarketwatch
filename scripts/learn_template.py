@@ -316,6 +316,8 @@ def prepare_cik(cik: str):
             result = download_html_filing(
                 client, cik_stripped,
                 filing["accession_number"], primary_doc,
+                agent="learn_template",
+                reason="learn_template_prepare",
             )
             if result:
                 ok += 1

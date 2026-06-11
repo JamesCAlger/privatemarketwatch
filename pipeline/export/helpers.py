@@ -36,6 +36,7 @@ from pipeline.config import (
     ROW_VALIDATION_ISSUES_FILE,
     UNLISTED_BDC_REFERENCE_FILE,
     VALIDATION_REPORT_FILE,
+    WRAPPER_COHORT_MANIFEST_FILE,
 )
 from pipeline.index_returns import MIN_BEGIN_FV
 
@@ -64,7 +65,16 @@ def _exclude_consumer_lending_sql(cik_col: str = "cik") -> str:
 # ---------------------------------------------------------------------------
 
 def _load_unlisted_bdc_ciks() -> set[str]:
-    """Load the set of unlisted BDC CIKs from the reference file."""
+    """Load the set of unlisted BDC CIKs for the frontend scope.
+
+    Uses the v1 wrapper cohort manifest (39 wrapper-covered BDCs) when
+    available, falling back to the full unlisted BDC reference.
+    """
+    if WRAPPER_COHORT_MANIFEST_FILE.exists():
+        data = json.loads(WRAPPER_COHORT_MANIFEST_FILE.read_text(encoding="utf-8"))
+        ciks = {e["cik"] for e in data.get("entries", [])}
+        logger.info("Frontend scope: %d CIKs from wrapper cohort manifest", len(ciks))
+        return ciks
     if not UNLISTED_BDC_REFERENCE_FILE.exists():
         logger.warning("Unlisted BDC reference not found at %s -- no CIK filter applied",
                        UNLISTED_BDC_REFERENCE_FILE)

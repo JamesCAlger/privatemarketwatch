@@ -656,7 +656,7 @@ def _export_metadata(
     total_vehicles = 0
     if COMBINED_UNIVERSE_CSV.exists():
         vc_rows = con.execute(f"""
-            SELECT vehicle_type, COUNT(*) AS n
+            SELECT vehicle_type, COUNT(DISTINCT cik) AS n
             FROM read_csv_auto('{COMBINED_UNIVERSE_CSV.as_posix()}')
             WHERE 1=1
               {_unlisted_bdc_filter_sql('cik')}

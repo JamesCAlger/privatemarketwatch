@@ -81,6 +81,7 @@ class TestColumnContracts:
         df = _make_unified_df([{
             "fair_value": "1000000",
             "principal_amount": "100000000",
+            "principal_amount_usd": "100000000",
         }])
         issues, _ = validate_column_contracts(df)
         result = _issues_by_rule(issues, "X06")
@@ -380,11 +381,13 @@ class TestResidualSummary:
                 "issuer_name": "Scale Problem LLC",
                 "fair_value": "1000000",
                 "principal_amount": "250000000",
+                "principal_amount_usd": "250000000",
             },
             {
                 "issuer_name": "Normal Loan LLC",
                 "fair_value": "1000000",
                 "principal_amount": "1000000",
+                "principal_amount_usd": "1000000",
             },
         ])
         reports = run_column_quality_validation(df)

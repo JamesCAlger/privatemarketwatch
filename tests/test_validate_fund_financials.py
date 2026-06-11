@@ -172,6 +172,46 @@ def test_validate_cross_level_flags_coverage_mismatch():
     assert len(mismatches) == 2
 
 
+def test_validate_fund_financials_persists_only_fund_period_cross_level(tmp_path, monkeypatch):
+    fund = _fund_df([{}])
+    holdings = _holdings_df([
+        {},
+        {
+            "cik": "0000002000",
+            "report_date": "2024-03-31",
+        },
+    ])
+    validation_path = tmp_path / "fund_financials_validation_current.csv"
+    quality_path = tmp_path / "fund_financials_quality_metrics.csv"
+    cross_path = tmp_path / "fund_financials_cross_level.csv"
+    monkeypatch.setattr(
+        "pipeline.validate_fund_financials.FUND_FINANCIALS_VALIDATION_CURRENT_FILE",
+        validation_path,
+    )
+    monkeypatch.setattr(
+        "pipeline.validate_fund_financials.FUND_FINANCIALS_QUALITY_METRICS_FILE",
+        quality_path,
+    )
+    monkeypatch.setattr(
+        "pipeline.validate_fund_financials.FUND_FINANCIALS_CROSS_LEVEL_FILE",
+        cross_path,
+    )
+
+    reports = validate_fund_financials(
+        fund_df=fund,
+        holdings_df=holdings,
+        write=True,
+    )
+
+    returned_mismatches = reports["fund_cross_level"][
+        reports["fund_cross_level"]["check_code"] == "F28"
+    ]
+    persisted = pd.read_csv(cross_path, dtype=str)
+    assert len(returned_mismatches) == 2
+    assert set(persisted["cik"]) == {"0000001000"}
+    assert "0000002000" not in set(persisted["cik"])
+
+
 def test_build_quality_metrics_derives_under_review():
     result = validate_fund_source(_fund_df([{"total_assets": "not-a-number"}]))
     quality = build_quality_metrics(result)

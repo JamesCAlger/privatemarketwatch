@@ -639,6 +639,25 @@ def build_quality_metrics(results: pd.DataFrame) -> pd.DataFrame:
     return summary[QUALITY_COLUMNS]
 
 
+def _fund_period_cross_level_rows(
+    cross_results: pd.DataFrame,
+    fund_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Keep persisted cross-level diagnostics referential to fund_financials."""
+    if cross_results.empty or fund_df.empty:
+        return cross_results.iloc[0:0].copy()
+
+    fund = _prepare_fund_df(fund_df)
+    valid_pairs = set(zip(fund["cik"], fund["report_quarter"]))
+    out = cross_results.copy()
+    pairs = zip(
+        out["cik"].fillna("").astype(str).str.zfill(10),
+        out["report_quarter"].fillna("").astype(str),
+    )
+    mask = [pair in valid_pairs for pair in pairs]
+    return out.loc[mask].copy()
+
+
 def validate_fund_financials(
     fund_df: Optional[pd.DataFrame] = None,
     holdings_df: Optional[pd.DataFrame] = None,
@@ -666,9 +685,10 @@ def validate_fund_financials(
     quality = build_quality_metrics(all_results)
 
     if write:
+        persisted_cross = _fund_period_cross_level_rows(cross_results, fund_df)
         all_results.to_csv(FUND_FINANCIALS_VALIDATION_CURRENT_FILE, index=False)
         quality.to_csv(FUND_FINANCIALS_QUALITY_METRICS_FILE, index=False)
-        cross_results.to_csv(FUND_FINANCIALS_CROSS_LEVEL_FILE, index=False)
+        persisted_cross.to_csv(FUND_FINANCIALS_CROSS_LEVEL_FILE, index=False)
         logger.info("  Saved %s", FUND_FINANCIALS_VALIDATION_CURRENT_FILE.name)
         logger.info("  Saved %s", FUND_FINANCIALS_QUALITY_METRICS_FILE.name)
         logger.info("  Saved %s", FUND_FINANCIALS_CROSS_LEVEL_FILE.name)

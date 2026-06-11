@@ -146,7 +146,7 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
             "cik": d["cik"],
             "name": d["name"],
             "vehicleType": d["vehicle_type"],
-            "adviser": d["adviser"],
+            "adviser": d["adviser"] or CIK_TO_MANAGER_BRAND.get(str(d["cik"]).zfill(10), ""),
             "ticker": d["ticker"],
             "validationTier": d["validation_tier"] or None,
             "gavStatus": d["gav_status"] or None,
@@ -471,6 +471,54 @@ def _compute_fund_exposure(
         "fvHierarchy": fv_hierarchy,
         "creditFlags": credit_flags,
     }
+
+    # GICS sector breakdown (top sectors by FV)
+    gics_rows = con.execute(f"""
+        WITH cur AS (
+            SELECT * FROM _holdings_latest
+            WHERE cik = '{cik}' AND fair_value > 0
+        ),
+        -- Map GICS sub-industry to GICS sector
+        sector_map AS (
+            SELECT
+                CASE
+                    WHEN gics_sub_industry IN ('Application Software','Systems Software','IT Consulting & Other Services','Technology Hardware, Storage & Peripherals','Electronic Components','Electronic Equipment & Instruments','Semiconductor Materials & Equipment','Semiconductors','Technology Distributors','Electronic Manufacturing Services') THEN 'Information Technology'
+                    WHEN gics_sub_industry IN ('Health Care Services','Health Care Technology','Health Care Equipment','Health Care Supplies','Health Care Facilities','Managed Health Care','Life Sciences Tools & Services','Biotechnology','Pharmaceuticals','Health Care Distributors') THEN 'Health Care'
+                    WHEN gics_sub_industry IN ('Diversified Financial Services','Insurance Brokers','Property & Casualty Insurance','Multi-line Insurance','Reinsurance','Life & Health Insurance','Asset Management & Custody Banks','Financial Exchanges & Data','Investment Banking & Brokerage','Consumer Finance','Thrifts & Mortgage Finance','Regional Banks','Diversified Banks','Mortgage REITs','Specialized Finance','Multi-Sector Holdings','Transaction & Payment Processing Services') THEN 'Financials'
+                    WHEN gics_sub_industry IN ('Aerospace & Defense','Industrial Machinery & Supplies & Components','Building Products','Construction & Engineering','Electrical Components & Equipment','Environmental & Facilities Services','Research & Consulting Services','Diversified Support Services','Data Processing & Outsourced Services','Human Resource & Employment Services','Security & Alarm Services','Industrial Conglomerates','Trading Companies & Distributors','Air Freight & Logistics','Trucking','Railroads','Airlines','Airport Services','Marine Transportation') THEN 'Industrials'
+                    WHEN gics_sub_industry IN ('Broadline Retail','Specialty Stores','Apparel Retail','Automotive Retail','Computer & Electronics Retail','Home Improvement Retail','Homefurnishing Retail','Internet & Direct Marketing Retail','Department Stores','Distributors','Hotels, Resorts & Cruise Lines','Restaurants','Leisure Facilities','Education Services','Casinos & Gaming','Leisure Products','Apparel, Accessories & Luxury Goods','Footwear','Homebuilding','Household Appliances','Housewares & Specialties','Textiles','Automobile Manufacturers','Auto Parts & Equipment','Motorcycle Manufacturers','Consumer Staples Distribution & Retail') THEN 'Consumer Discretionary'
+                    WHEN gics_sub_industry IN ('Packaged Foods & Meats','Soft Drinks & Non-alcoholic Beverages','Brewers','Distillers & Vintners','Household Products','Personal Care Products','Agricultural Products & Services','Food Distributors','Tobacco','Drug Retail','Hypermarkets & Super Centers','Food Retail') THEN 'Consumer Staples'
+                    WHEN gics_sub_industry IN ('Interactive Media & Services','Movies & Entertainment','Cable & Satellite','Publishing','Advertising','Broadcasting','Interactive Home Entertainment','Integrated Telecommunication Services','Wireless Telecommunication Services','Alternative Carriers') THEN 'Communication Services'
+                    WHEN gics_sub_industry IN ('Oil & Gas Exploration & Production','Oil & Gas Equipment & Services','Oil & Gas Refining & Marketing','Oil & Gas Storage & Transportation','Integrated Oil & Gas','Coal & Consumable Fuels') THEN 'Energy'
+                    WHEN gics_sub_industry IN ('Electric Utilities','Gas Utilities','Multi-Utilities','Water Utilities','Independent Power Producers & Energy Traders','Renewable Electricity') THEN 'Utilities'
+                    WHEN gics_sub_industry IN ('Diversified REITs','Industrial REITs','Office REITs','Residential REITs','Retail REITs','Specialized REITs','Health Care REITs','Hotel & Resort REITs','Real Estate Operating Companies','Real Estate Services','Real Estate Development') THEN 'Real Estate'
+                    WHEN gics_sub_industry IN ('Specialty Chemicals','Diversified Chemicals','Commodity Chemicals','Fertilizers & Agricultural Chemicals','Industrial Gases','Construction Materials','Gold','Copper','Diversified Metals & Mining','Silver','Steel','Aluminum','Paper & Plastic Packaging Products & Materials','Metal, Glass & Plastic Containers','Paper Products','Forest Products') THEN 'Materials'
+                    WHEN gics_sub_industry IN ('Internet Services & Infrastructure') THEN 'Information Technology'
+                    ELSE NULL
+                END AS gics_sector,
+                fair_value
+            FROM cur
+            WHERE gics_sub_industry IS NOT NULL AND gics_sub_industry <> ''
+        ),
+        totals AS (
+            SELECT SUM(fair_value) AS total_fv FROM cur
+        )
+        SELECT
+            COALESCE(gics_sector, 'Other') AS sector,
+            SUM(fair_value) AS sector_fv,
+            SUM(fair_value) / NULLIF((SELECT total_fv FROM totals), 0) AS pct
+        FROM sector_map
+        GROUP BY COALESCE(gics_sector, 'Other')
+        HAVING SUM(fair_value) > 0
+        ORDER BY sector_fv DESC
+    """).fetchall()
+
+    if gics_rows and any(r[2] for r in gics_rows):
+        result["gicsSectors"] = [
+            {"sector": str(r[0]), "pct": _safe_round(r[2], 4)}
+            for r in gics_rows
+        ]
+
     return result
 
 
@@ -569,7 +617,8 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 source,
                 nport_is_default,
                 nport_are_interest_payments_in_arrears,
-                nport_is_paid_in_kind
+                nport_is_paid_in_kind,
+                gics_sub_industry
             FROM read_csv_auto(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
@@ -600,7 +649,8 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 lien_position VARCHAR, source VARCHAR,
                 nport_is_default VARCHAR,
                 nport_are_interest_payments_in_arrears VARCHAR,
-                nport_is_paid_in_kind VARCHAR
+                nport_is_paid_in_kind VARCHAR,
+                gics_sub_industry VARCHAR
             )
         """)
 
@@ -782,6 +832,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
 
         # Identity info
         id_info = identity_lookup.get(str(cik_val), {})
+        adviser = id_info.get("adviser", "") or CIK_TO_MANAGER_BRAND.get(str(cik_val).zfill(10), "")
 
         # Compute exposure and top holdings
         exposure = _compute_fund_exposure(con, cik_val) if has_holdings else None
@@ -791,7 +842,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
             "cik": cik_val,
             "name": str(rows.iloc[-1].get("entity_name", "")),
             "vehicleType": str(rows.iloc[-1].get("vehicle_type", "")),
-            "adviser": id_info.get("adviser", ""),
+            "adviser": adviser,
             "ticker": id_info.get("ticker", ""),
             "series": series,
             "exposure": exposure,

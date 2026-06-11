@@ -167,6 +167,7 @@ def test_credit_risk_export_is_bdc_only_independent_signals(monkeypatch, tmp_pat
     monkeypatch.setattr(analytics_exports, "FUND_FINANCIALS_CSV", missing_financials)
     monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
     monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(export_helpers, "UNLISTED_BDC_CIKS", set())
 
     con = duckdb.connect(":memory:")
     analytics_exports._export_credit_risk(con)
@@ -247,6 +248,7 @@ def test_credit_risk_nonaccrual_affiliation_prefix_stripped(monkeypatch, tmp_pat
     monkeypatch.setattr(analytics_exports, "FUND_FINANCIALS_CSV", missing_financials)
     monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
     monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(export_helpers, "UNLISTED_BDC_CIKS", set())
 
     con = duckdb.connect(":memory:")
     analytics_exports._export_credit_risk(con)
@@ -345,6 +347,7 @@ def test_gics_sector_export_uses_reconciled_bdc_before_holdings(monkeypatch, tmp
     monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
     monkeypatch.setattr(analytics_exports, "INDEX_DISPLAY_END_QUARTER", "2025q1")
     monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(export_helpers, "UNLISTED_BDC_CIKS", set())
 
     con = duckdb.connect(":memory:")
     analytics_exports._export_gics_sector_breakdown(con)
@@ -416,6 +419,7 @@ def test_gics_sector_export_falls_back_when_bdc_reconciliation_fails(monkeypatch
     monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
     monkeypatch.setattr(analytics_exports, "INDEX_DISPLAY_END_QUARTER", "2025q1")
     monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(export_helpers, "UNLISTED_BDC_CIKS", set())
 
     con = duckdb.connect(":memory:")
     analytics_exports._export_gics_sector_breakdown(con)
@@ -482,6 +486,7 @@ def test_gics_sector_export_labels_unknown_and_uses_total_denominator(monkeypatc
     monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
     monkeypatch.setattr(analytics_exports, "INDEX_DISPLAY_END_QUARTER", "2025q1")
     monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
+    monkeypatch.setattr(export_helpers, "UNLISTED_BDC_CIKS", set())
 
     con = duckdb.connect(":memory:")
     analytics_exports._export_gics_sector_breakdown(con)

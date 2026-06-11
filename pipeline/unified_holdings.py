@@ -40,6 +40,7 @@ logger = logging.getLogger(__name__)
 
 WRAPPER_DUPLICATE_LOT_KEY_CIKS = frozenset({
     "0001772704",
+    "0001784700",
 })
 
 # Unified output column order

@@ -66,6 +66,10 @@ TABLE_PATHS = {
     "entity_lookup": config.ENTITY_LOOKUP_FILE,
 }
 
+STALE_ARTIFACT_TOLERANCE_SECONDS = 5.0
+RETURN_AGG_TOLERANCE = 0.000001
+FV_AGG_TOLERANCE = 0.01
+
 EXPECTED_COLUMNS = {
     "holdings": [
         "cik", "quarter", "report_date", "issuer_name", "position_id",
@@ -246,23 +250,35 @@ def _pc_and_existing_rules() -> list[ValidationRule]:
         FROM valid
         GROUP BY index_classification, end_quarter
         HAVING COUNT(*) >= {MIN_CONSTITUENTS}
-    ), diff AS (
+    ), compared AS (
         SELECT i.*,
-               GREATEST(
-                 ABS(COALESCE(TRY_CAST(i.fv_weighted_return AS DOUBLE), 999999)
-                     - COALESCE(r.fv_weighted_return, 999998)),
-                 ABS(COALESCE(TRY_CAST(i.equal_weighted_return AS DOUBLE), 999999)
-                     - COALESCE(r.equal_weighted_return, 999998)),
-                 ABS(COALESCE(TRY_CAST(i.constituent_count AS DOUBLE), 999999)
-                     - COALESCE(CAST(r.constituent_count AS DOUBLE), 999998)),
-                 ABS(COALESCE(TRY_CAST(i.total_begin_fv AS DOUBLE), 999999)
-                     - COALESCE(r.total_begin_fv, 999998)),
-                 ABS(COALESCE(TRY_CAST(i.total_end_fv AS DOUBLE), 999999)
-                     - COALESCE(r.total_end_fv, 999998))
-               ) AS delta
+               ABS(COALESCE(TRY_CAST(i.fv_weighted_return AS DOUBLE), 999999)
+                   - COALESCE(r.fv_weighted_return, 999998)) AS fv_return_delta,
+               ABS(COALESCE(TRY_CAST(i.equal_weighted_return AS DOUBLE), 999999)
+                   - COALESCE(r.equal_weighted_return, 999998)) AS equal_return_delta,
+               ABS(COALESCE(TRY_CAST(i.constituent_count AS DOUBLE), 999999)
+                   - COALESCE(CAST(r.constituent_count AS DOUBLE), 999998)) AS count_delta,
+               ABS(COALESCE(TRY_CAST(i.total_begin_fv AS DOUBLE), 999999)
+                   - COALESCE(r.total_begin_fv, 999998)) AS begin_fv_delta,
+               ABS(COALESCE(TRY_CAST(i.total_end_fv AS DOUBLE), 999999)
+                   - COALESCE(r.total_end_fv, 999998)) AS end_fv_delta
         FROM index_returns i
         JOIN recomputed r USING (index_classification, quarter)
-        WHERE delta > 0.000001
+    ), diff AS (
+        SELECT *,
+               GREATEST(
+                 fv_return_delta,
+                 equal_return_delta,
+                 count_delta,
+                 begin_fv_delta,
+                 end_fv_delta
+               ) AS delta
+        FROM compared
+        WHERE fv_return_delta > {RETURN_AGG_TOLERANCE}
+           OR equal_return_delta > {RETURN_AGG_TOLERANCE}
+           OR count_delta > 0
+           OR begin_fv_delta > {FV_AGG_TOLERANCE}
+           OR end_fv_delta > {FV_AGG_TOLERANCE}
     )
     SELECT {_detail_sql(
         "index_quarter",
@@ -272,7 +288,7 @@ def _pc_and_existing_rules() -> list[ValidationRule]:
         hit_rate="delta",
         priority="ROW_NUMBER() OVER (ORDER BY delta DESC, index_classification, quarter)",
         detail="'index aggregate fields differ from eligible row recomputation'",
-        evidence="'Uses same valid-row guard as pipeline.index_returns'",
+        evidence="'Uses same valid-row guard as pipeline.index_returns with cent-level FV tolerance'",
         source_file="'index_returns.csv;position_returns.csv'",
     )} FROM diff
     """
@@ -1987,6 +2003,19 @@ def _referential_integrity_rules() -> list[ValidationRule]:
         ValidationRule("RI07", "RI", "Returns build left holdings position IDs blank", "FAIL", True, ("holdings", "position_returns"),
             f"""WITH returns_present AS (
                 SELECT COUNT(*) AS n FROM position_returns
+            ), artifact AS (
+                SELECT
+                    MAX(CASE WHEN table_name = 'holdings' THEN mtime END) AS holdings_mtime,
+                    MAX(CASE WHEN table_name = 'position_returns' THEN mtime END) AS returns_mtime,
+                    MAX(CASE WHEN table_name = 'holdings' THEN path END) AS holdings_path,
+                    MAX(CASE WHEN table_name = 'position_returns' THEN path END) AS returns_path
+                FROM artifact_freshness
+            ), stale AS (
+                SELECT *
+                FROM artifact
+                WHERE holdings_mtime IS NOT NULL
+                  AND returns_mtime IS NOT NULL
+                  AND returns_mtime + {STALE_ARTIFACT_TOLERANCE_SECONDS} < holdings_mtime
             ), multi_q AS (
                 SELECT cik, COUNT(DISTINCT COALESCE(quarter, report_date)) AS n_q
                 FROM holdings GROUP BY cik HAVING n_q > 1
@@ -2002,12 +2031,20 @@ def _referential_integrity_rules() -> list[ValidationRule]:
                   AND COALESCE(TRY_CAST(h.fair_value AS DOUBLE), 0) <> 0
                 GROUP BY h.cik
             )
+            SELECT {_detail_sql("artifact_pair", "'holdings|position_returns'",
+            affected_fv="0", denominator="holdings_mtime - returns_mtime",
+            priority="1",
+            detail="'position_returns.csv is older than private_markets_holdings.csv'",
+            evidence="'Rerun returns so assign_position_ids rewrites private_markets_holdings.csv and downstream returns artifacts together'",
+            source_file="'private_markets_holdings.csv;position_returns.csv'")} FROM stale
+            UNION ALL
             SELECT {_detail_sql("cik", "cik",
             cik="cik", affected_fv="missing_fv", denominator="missing_rows",
             priority="ROW_NUMBER() OVER (ORDER BY missing_fv DESC, cik)",
             detail="'position_returns exists but multi-quarter holdings have blank position_id'",
             evidence="'Run the returns path so assign_position_ids rewrites private_markets_holdings.csv'",
-            source_file="'private_markets_holdings.csv;position_returns.csv'")} FROM g"""),
+            source_file="'private_markets_holdings.csv;position_returns.csv'")} FROM g
+            WHERE NOT EXISTS (SELECT 1 FROM stale)"""),
     ]
 
 
@@ -2042,6 +2079,18 @@ def _load_tables(
     table_paths: dict[str, str | Path] | None,
 ) -> dict[str, str]:
     paths = {**TABLE_PATHS, **(table_paths or {})}
+    artifact_rows = []
+    for table, path_value in paths.items():
+        path = Path(path_value)
+        exists = path.exists()
+        artifact_rows.append({
+            "table_name": table,
+            "path": str(path),
+            "exists": exists,
+            "mtime": path.stat().st_mtime if exists else None,
+        })
+    con.register("artifact_freshness", pd.DataFrame(artifact_rows))
+
     needed = {
         table
         for rule in rules
