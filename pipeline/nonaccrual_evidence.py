@@ -59,6 +59,43 @@ _POSITIVE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Layer 1: Schedule-level aggregate count statements.  The footnote
+# describes the fund's total non-accrual exposure rather than flagging a
+# specific position.  These are attached to every fact in the schedule by
+# XBRL footnote arcs, causing massive fan-out.
+_SCHEDULE_LEVEL_COUNT_RE = re.compile(
+    r"\b(?:the\s+(?:Company|Fund|Trust|Registrant)\s+had\s+"
+    r"(?:one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+"
+    r"(?:portfolio\s+)?(?:company\s+)?investment)"
+    r"|"
+    r"(?:loans\s+with\s+a\s+cost\s+basis\s+of\s+\$[\d.,]+\s+"
+    r"(?:million|billion|thousand)?\s*"
+    r"(?:and\s+a\s+fair\s+value\s+of\s+\$[\d.,]+\s*"
+    r"(?:million|billion|thousand)?\s*)?"
+    r"were\s+classified\s+as\s+non[\s-]?accrual)",
+    re.IGNORECASE,
+)
+
+# Layer 2: Footnotes whose primary subject is NOT non-accrual.  Non-accrual
+# is mentioned incidentally in a long footnote about SPV structure, unfunded
+# commitments, affiliated holdings, or other topics.
+_NON_PRIMARY_SUBJECT_RE = re.compile(
+    r"^(?:"
+    # SPV / structural footnotes
+    r"denotes\s+that\s+all\s+or\s+a\s+portion"
+    r"|"
+    # Unfunded commitment footnotes mentioning NA incidentally
+    r"position\s+or\s+portion\s+thereof\s+is\s+an\s+unfunded"
+    r"|"
+    # Multi-entity holding descriptions
+    r"the\s+company\s+holds\s+investments?\s+in\s+[A-Z]"
+    r"|"
+    # Unfunded commitment with no-interest language
+    r"security\s+has\s+an\s+unfunded\s+commitment"
+    r")",
+    re.IGNORECASE,
+)
+
 
 @dataclass(frozen=True)
 class FootnoteDecision:
@@ -98,6 +135,14 @@ def classify_footnote(text: str, report_date: str | None = None) -> FootnoteDeci
         return FootnoteDecision(False, "exclusion_language")
     if _NEGATED_RE.search(note):
         return FootnoteDecision(False, "negated_language")
+
+    # Layer 2: reject footnotes whose primary subject is not non-accrual.
+    if _NON_PRIMARY_SUBJECT_RE.search(note):
+        return FootnoteDecision(False, "non_primary_subject")
+
+    # Layer 1: reject schedule-level aggregate count statements.
+    if _SCHEDULE_LEVEL_COUNT_RE.search(note):
+        return FootnoteDecision(False, "schedule_level_count")
 
     stated_dates = _as_of_dates(note)
     parsed_report_date = _parse_report_date(report_date)
