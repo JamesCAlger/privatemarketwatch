@@ -1,15 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { INDICES } from '@/lib/constants';
 import type { IndexSummary } from '@/lib/types';
 import HomepageSparkline from './HomepageSparkline';
 
+interface FundSearchItem {
+  cik: string;
+  name: string;
+  ticker: string | null;
+  adviser: string | null;
+}
+
 interface HeaderProps {
   indexSummaries?: IndexSummary[];
   fundCount?: number;
+  fundSearchItems?: FundSearchItem[];
 }
 
 const NAV_ITEMS = [
@@ -27,12 +35,61 @@ function getNavActive(pathname: string): string {
   return '';
 }
 
-export default function Header({ indexSummaries = [], fundCount }: HeaderProps) {
+export default function Header({ indexSummaries = [], fundCount, fundSearchItems = [] }: HeaderProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
   const active = getNavActive(pathname);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [selectedIdx, setSelectedIdx] = useState(-1);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  const searchResults = useMemo(() => searchQuery.trim().length >= 2
+    ? fundSearchItems.filter((f) => {
+        const q = searchQuery.toLowerCase();
+        return (
+          f.name.toLowerCase().includes(q) ||
+          (f.ticker && f.ticker.toLowerCase().includes(q)) ||
+          (f.adviser && f.adviser.toLowerCase().includes(q)) ||
+          f.cik.includes(q)
+        );
+      }).slice(0, 8)
+    : [], [searchQuery, fundSearchItems]);
+
+  const showDropdown = searchFocused && searchResults.length > 0;
+
+  const handleSearchKey = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIdx((i) => Math.min(i + 1, searchResults.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIdx((i) => Math.max(i - 1, 0));
+    } else if (e.key === 'Enter' && selectedIdx >= 0 && searchResults[selectedIdx]) {
+      router.push(`/funds/${searchResults[selectedIdx].cik}`);
+      setSearchQuery('');
+      setSearchFocused(false);
+    } else if (e.key === 'Escape') {
+      setSearchFocused(false);
+    }
+  }, [searchResults, selectedIdx, router]);
+
+  useEffect(() => { setSelectedIdx(-1); }, [searchQuery]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -53,9 +110,9 @@ export default function Header({ indexSummaries = [], fundCount }: HeaderProps) 
       hidden ? '-translate-y-full' : 'translate-y-0'
     }`}>
       {/* Row 1: Utility bar */}
-      <div className="hidden md:flex items-center justify-between px-[72px] py-2.5 border-b border-white/[0.06] text-[11px] tracking-[0.06em]">
+      <div className="hidden md:flex items-center justify-between px-[120px] py-2.5 border-b border-white/[0.06] text-[11px] tracking-[0.06em]">
         <span className="text-white/55">
-          As of Q4 2025 &middot; Data derived from mandatory SEC filings
+          As of Q4 2025
         </span>
         <div className="flex gap-[18px]">
           <span>EN &#x25BE;</span>
@@ -66,7 +123,7 @@ export default function Header({ indexSummaries = [], fundCount }: HeaderProps) 
       </div>
 
       {/* Row 2: Main nav */}
-      <div className="flex items-center justify-between px-4 md:px-[72px] py-4 md:py-5">
+      <div className="flex items-center justify-between px-4 md:px-[120px] py-4 md:py-5">
         {/* Logo + tagline */}
         <Link href="/" className="flex items-baseline gap-3.5 no-underline">
           <span className="font-display text-[26px] text-white tracking-[-0.005em] font-medium">
@@ -120,11 +177,45 @@ export default function Header({ indexSummaries = [], fundCount }: HeaderProps) 
       </div>
 
       {/* Row 3: Fund lookup bar + index tickers */}
-      <div className="hidden md:grid grid-cols-[auto_1fr_1fr] items-stretch bg-navyDeep border-t border-white/[0.06] px-[72px]">
-        <div className="py-2.5 pr-[18px] flex items-center border-r border-white/[0.14]">
-          <Link href="/" className="eyebrow text-accent tracking-[0.22em] no-underline hover:text-white transition-colors">
+      <div className="hidden md:grid grid-cols-[1fr_auto_auto] items-stretch bg-navyDeep border-t border-white/[0.06] px-[120px]">
+        <div ref={searchRef} className="py-2 pr-[18px] flex items-center gap-3 border-r border-white/[0.14] relative">
+          <label htmlFor="fund-search" className="eyebrow text-accent tracking-[0.22em] shrink-0 cursor-default">
             Fund Lookup
-          </Link>
+          </label>
+          <input
+            id="fund-search"
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onKeyDown={handleSearchKey}
+            placeholder={`Search ${fundCount ?? ''} funds by name, ticker, or CIK...`}
+            className="flex-1 bg-white/[0.07] border border-white/[0.12] text-white text-[12px] px-3 py-1.5 placeholder:text-white/30 focus:outline-none focus:border-accent/50 min-w-0"
+          />
+          {showDropdown && (
+            <div className="absolute top-full left-0 right-[18px] mt-1 bg-navy border border-white/[0.15] shadow-lg z-50 max-h-[320px] overflow-y-auto">
+              {searchResults.map((f, i) => (
+                <Link
+                  key={f.cik}
+                  href={`/funds/${f.cik}`}
+                  className={`block px-3 py-2.5 no-underline transition-colors ${
+                    i === selectedIdx ? 'bg-white/[0.08]' : 'hover:bg-white/[0.05]'
+                  }`}
+                  onClick={() => { setSearchQuery(''); setSearchFocused(false); }}
+                >
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[12px] text-white font-medium truncate">{f.name}</span>
+                    {f.ticker && (
+                      <span className="font-mono text-[11px] text-accent tabular-nums shrink-0">{f.ticker}</span>
+                    )}
+                  </div>
+                  {f.adviser && (
+                    <div className="text-[10px] text-white/40 mt-0.5 truncate">{f.adviser}</div>
+                  )}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
         {INDICES.map((idx, i) => {
           const s = indexSummaries.find((x) => x.index === idx.key);
@@ -135,28 +226,26 @@ export default function Header({ indexSummaries = [], fundCount }: HeaderProps) 
             <Link
               key={idx.key}
               href={`/indices/${idx.slug}`}
-              className={`py-2.5 px-[18px] flex justify-between items-center gap-3.5 no-underline hover:bg-white/[0.03] transition-colors ${
+              className={`py-2 px-[18px] flex items-center gap-3.5 no-underline hover:bg-white/[0.03] transition-colors ${
                 i < INDICES.length - 1 ? 'border-r border-white/[0.14]' : ''
               }`}
             >
-              <div className="flex flex-col gap-px">
-                <span className="text-[10px] tracking-[0.16em] uppercase text-white/55">
-                  {idx.shortName}
-                </span>
-                <span className="font-mono text-lg text-white font-medium tabular-nums">
-                  {s.level?.toFixed(2)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2" style={{ color: retColor }}>
+              <span className="text-[10px] tracking-[0.16em] uppercase text-white/55">
+                {idx.shortName}
+              </span>
+              <span className="font-mono text-[15px] text-white font-medium tabular-nums">
+                {s.level?.toFixed(2)}
+              </span>
+              <div className="flex items-center gap-1.5" style={{ color: retColor }}>
                 {s.sparkline && s.sparkline.length >= 2 && (
                   <HomepageSparkline
                     data={s.sparkline}
                     color={retColor}
-                    width={66}
-                    height={20}
+                    width={50}
+                    height={16}
                   />
                 )}
-                <span className="font-mono text-[13px] font-semibold tabular-nums">
+                <span className="font-mono text-[12px] font-semibold tabular-nums">
                   {isPositive ? '+' : ''}
                   {((s.trailing12m ?? 0) * 100).toFixed(1)}%
                 </span>
