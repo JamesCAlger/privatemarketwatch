@@ -239,6 +239,7 @@ export interface FundExposure {
     pctInArrears: number | null;
     coverage: number | null;
   } | null;
+  gicsSectors?: { sector: string; pct: number }[] | null;
 }
 
 /** Fund top holding */

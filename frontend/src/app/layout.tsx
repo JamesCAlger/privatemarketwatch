@@ -50,11 +50,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const indexSummaries = getIndexSummary();
-  const fundCount = getFundList().length;
+  const fundList = getFundList();
+  const fundCount = fundList.length;
+  const fundSearchItems = fundList.map((f) => ({
+    cik: f.cik,
+    name: f.name,
+    ticker: f.ticker,
+    adviser: f.adviser,
+  }));
   return (
     <html lang="en" className={`${plexSerif.variable} ${plexSans.variable} ${plexMono.variable} bg-bg`}>
       <body className="font-body min-h-screen flex flex-col bg-bg text-ink">
-        <Header indexSummaries={indexSummaries} fundCount={fundCount} />
+        <Header indexSummaries={indexSummaries} fundCount={fundCount} fundSearchItems={fundSearchItems} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

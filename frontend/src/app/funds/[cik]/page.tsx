@@ -139,7 +139,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
 
       {/* Hero banner */}
       <div className="hero-gradient hero-pattern">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 md:py-14">
+        <div className="px-4 md:px-[120px] py-10 md:py-14">
           {/* Badges */}
           <div className="flex gap-2 mb-4">
             {badges.map((b) => (
@@ -193,7 +193,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
       </div>
 
       {/* Snapshot stats card (overlapping hero) */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 -mt-6">
+      <div className="px-4 md:px-[120px] -mt-6">
         {snapshotStats.length > 0 && (
           <div className="bg-white border border-rule p-5 mb-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

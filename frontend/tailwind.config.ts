@@ -33,6 +33,11 @@ const config: Config = {
         card:  '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03)',
         panel: '0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)',
       },
+      fontSize: {
+        'display-sm': ['1.875rem', { lineHeight: '1.2', fontWeight: '600' }],
+        'display-md': ['2.5rem',   { lineHeight: '1.15', fontWeight: '600' }],
+        'display-lg': ['3rem',     { lineHeight: '1.1', fontWeight: '600' }],
+      },
       fontFamily: {
         display: ['var(--font-display)', 'Georgia', 'serif'],
         body:    ['var(--font-body)', 'system-ui', 'sans-serif'],

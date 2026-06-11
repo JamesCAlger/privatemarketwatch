@@ -4,7 +4,7 @@ import { INDICES } from '@/lib/constants';
 export default function Footer() {
   return (
     <footer className="bg-navy text-white/[0.78] mt-16">
-      <div className="px-4 md:px-[72px] pt-14 pb-9">
+      <div className="px-4 md:px-[120px] pt-14 pb-9">
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-7">
           {/* Brand blurb */}
           <div>

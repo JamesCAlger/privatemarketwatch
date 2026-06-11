@@ -51,9 +51,9 @@ export default function ProportionDonut({ items, centerStat }: ProportionDonutPr
   });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-[196px_minmax(0,1fr)] gap-6 items-center">
+    <div>
       {/* Donut */}
-      <div className="relative mx-auto sm:mx-0" style={{ width: SIZE, height: SIZE }}>
+      <div className="relative mx-auto" style={{ width: SIZE, height: SIZE }}>
         <svg viewBox={`0 0 ${SIZE} ${SIZE}`} width={SIZE} height={SIZE} className="block">
           <circle cx={cx} cy={cy} r={r} fill="none" stroke="#eef0f4" strokeWidth={THICKNESS} />
           {arcs.map((a, i) => (
@@ -81,8 +81,8 @@ export default function ProportionDonut({ items, centerStat }: ProportionDonutPr
         )}
       </div>
 
-      {/* Legend */}
-      <div className="grid grid-cols-2 gap-x-[18px] gap-y-1.5">
+      {/* Legend — below donut, 3-column grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1.5 mt-5">
         {arcs.map((a, i) => (
           <div
             key={i}

@@ -150,7 +150,7 @@ export default function DataQualityDashboard({ data }: { data: DataQuality }) {
   }));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+    <div className="px-4 md:px-[120px] py-10">
       {/* ---- Summary stat cards ---- */}
       {ps && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10 -mt-2">

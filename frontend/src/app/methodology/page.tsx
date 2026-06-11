@@ -22,7 +22,7 @@ export default function MethodologyPage() {
   return (
     <div>
       {/* Editorial hero */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-14 pb-10">
+      <div className="px-4 md:px-[120px] pt-14 pb-10">
         <h1 className="font-display text-[52px] md:text-[68px] leading-[1.05] tracking-[-0.03em] text-ink mb-4">
           Methodology
         </h1>
@@ -48,7 +48,7 @@ export default function MethodologyPage() {
 
       <div className="border-t border-rule" />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+      <div className="px-4 md:px-[120px] py-10">
         <div className="flex gap-10">
           {/* Sticky TOC with scroll-spy */}
           <MethodologyTOC sections={sections} />

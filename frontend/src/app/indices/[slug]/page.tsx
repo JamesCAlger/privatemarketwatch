@@ -172,7 +172,7 @@ export default function IndexDetailPage({
       {/* ================================================================ */}
       {/* HERO                                                             */}
       {/* ================================================================ */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 pb-10">
+      <div className="px-4 md:px-[120px] pt-6 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 md:gap-12 items-start">
           {/* Left: headline + description + metadata */}
           <div>
@@ -256,7 +256,7 @@ export default function IndexDetailPage({
       {/* ================================================================ */}
       {/* STAT STRIP                                                       */}
       {/* ================================================================ */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
+      <div className="px-4 md:px-[120px] pb-10">
         <div className="bg-white border border-rule grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 divide-x divide-rule">
           <StatCell label="Aggregate Fair Value" value={formatDollar(summary?.totalFv)} />
           <StatCell label="Unique Companies" value={formatNumber(summary?.uniqueCompanies)} />
@@ -277,7 +277,7 @@ export default function IndexDetailPage({
       {/* ================================================================ */}
       {/* PERFORMANCE + RETURN SUMMARY                                     */}
       {/* ================================================================ */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
+      <div className="px-4 md:px-[120px] pb-10">
         <PerfSection
           series={chartSeries}
           title="Index performance"
@@ -291,7 +291,7 @@ export default function IndexDetailPage({
       {/* RISK STATISTICS                                                  */}
       {/* ================================================================ */}
       {risk && (
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-10">
+        <div className="px-4 md:px-[120px] pb-10">
           <div className="bg-white border border-rule p-7">
             <div className="eyebrow text-ink2 mb-5">Risk Statistics</div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
@@ -311,7 +311,7 @@ export default function IndexDetailPage({
       {/* ================================================================ */}
       {showPortfolioChars && portfolioChars.asOf && (
         <div className="bg-navy">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+          <div className="px-4 md:px-[120px] py-10">
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
               <div className="md:pr-6">
                 <div className="eyebrow text-accent mb-2">Private Credit</div>
@@ -354,7 +354,7 @@ export default function IndexDetailPage({
       {/* CE portfolio characteristics — different metrics */}
       {idx.key === 'COMMON_EQUITY' && summary && (
         <div className="bg-navy">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+          <div className="px-4 md:px-[120px] py-10">
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
               <div className="md:pr-6">
                 <div className="eyebrow text-accent mb-2">Private Equity</div>
@@ -400,7 +400,7 @@ export default function IndexDetailPage({
       {/* STRUCTURAL COMPOSITION (DL only)                                 */}
       {/* ================================================================ */}
       {showPortfolioChars && lienItems.length > 0 && (
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+        <div className="px-4 md:px-[120px] py-10">
           <div className="bg-white border border-rule p-7">
             <div className="eyebrow text-ink2 mb-5">Structural Composition</div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -429,7 +429,7 @@ export default function IndexDetailPage({
       {/* ================================================================ */}
       {/* COMPOSITION DONUTS                                               */}
       {/* ================================================================ */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-10 space-y-10">
+      <div className="px-4 md:px-[120px] pb-10 space-y-10">
         {(sectors.length > 0 || managerData.length > 0) && (
           <section>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

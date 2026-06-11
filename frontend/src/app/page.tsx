@@ -8,10 +8,13 @@ import {
   getManagerConcentration,
   getFundIndexReturns,
   getGicsSectorBreakdown,
+  getSectorBreakdown,
   getDistributionHistogram,
   getLeverageHistogram,
   getAumTimeSeries,
   getCreditRisk,
+  getTopConstituents,
+  getConcentrationCurve,
 } from '@/lib/data';
 import { INDICES } from '@/lib/constants';
 import { formatDollar, formatNumber, formatQuarter, formatPercent, formatYears } from '@/lib/format';
@@ -40,6 +43,9 @@ export default function HomePage() {
   const managerConcentration = getManagerConcentration();
   const aumTimeSeries = getAumTimeSeries();
   const creditRisk = getCreditRisk();
+  const sectorBreakdown = getSectorBreakdown();
+  const topConstituents = getTopConstituents();
+  const concentrationCurve = getConcentrationCurve();
 
   const dlSummary = indexSummaries.find((s) => s.index === 'DIRECT_LENDING');
   const visibleKeys = new Set(INDICES.map((i) => i.key));
@@ -108,6 +114,30 @@ export default function HomePage() {
   const sectorCenterStat = { label: 'Top 5', value: top5Share(sectorItems).toFixed(0) + '%', note: 'of holdings' };
   const managerCenterStat = { label: 'Top 5', value: top5Share(managerItems).toFixed(0) + '%', note: 'of universe AUM' };
 
+  // Instrument type donut — split direct lending by lien, then other classifications
+  const dlFv = (sectorBreakdown['DIRECT_LENDING'] ?? []).reduce((s, r) => s + r.totalFv, 0);
+  const lien = portfolioCharacteristics?.lienSplit;
+  const instrumentRaw: { label: string; fv: number }[] = [
+    { label: 'First Lien Senior Loans', fv: lien ? dlFv * lien.firstLien : dlFv },
+    { label: 'Second Lien Loans', fv: lien ? dlFv * lien.secondLien : 0 },
+    { label: 'Unsecured Loans', fv: lien ? dlFv * lien.unsecured : 0 },
+    { label: 'Common Equity', fv: (sectorBreakdown['COMMON_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
+    { label: 'Structured Credit', fv: (sectorBreakdown['STRUCTURED_CREDIT'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
+    { label: 'Preferred Equity', fv: (sectorBreakdown['PREFERRED_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
+    {
+      label: 'Other',
+      fv: ['DIRECT_REAL_ESTATE', 'PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'UNCLASSIFIED']
+        .reduce((sum, k) => sum + (sectorBreakdown[k] ?? []).reduce((s, r) => s + r.totalFv, 0), 0),
+    },
+  ].filter((x) => x.fv > 0);
+  const instrumentTotal = instrumentRaw.reduce((s, x) => s + x.fv, 0);
+  const instrumentDonutItems = instrumentRaw.map((x) => ({
+    label: x.label,
+    pct: instrumentTotal > 0 ? (x.fv / instrumentTotal) * 100 : 0,
+  }));
+  const firstLienPct = instrumentDonutItems.find((x) => x.label === 'First Lien Senior Loans')?.pct ?? 0;
+  const instrumentCenterStat = { label: 'First Lien', value: firstLienPct.toFixed(0) + '%', note: 'of fair value' };
+
   // Portfolio characteristics stats
   const pc = portfolioCharacteristics;
   const hasPC = pc && pc.positionCount > 0;
@@ -125,87 +155,81 @@ export default function HomePage() {
       {/* ================================================================ */}
       {/* HERO                                                             */}
       {/* ================================================================ */}
-      <div className="bg-navy pt-11 pb-8">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-8 md:gap-14 items-start">
-            {/* Left: headline + CTA */}
-            <div>
-              <h1 className="font-display text-[42px] md:text-[60px] leading-[1.05] tracking-[-0.028em] text-white mb-5 font-medium">
-                The index platform<br />for private credit.
-              </h1>
-              <p className="text-[17px] leading-relaxed text-white/60 max-w-[620px] mb-6">
-                Position-level benchmarks and portfolio analytics for{' '}
-                <strong className="text-white/90">unlisted BDCs</strong>,
-                built from mandatory SEC filings.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="#universe"
-                  className="inline-block px-[22px] py-3 bg-accent text-navy text-[13px] font-medium tracking-[0.06em] no-underline hover:bg-accent/90 transition-colors"
-                >
-                  Browse the fund universe &rarr;
-                </Link>
-                <Link
-                  href="/methodology"
-                  className="inline-block px-[22px] py-3 border border-white/20 text-white/80 text-[13px] font-medium tracking-[0.06em] no-underline hover:bg-white/[0.06] transition-colors"
-                >
-                  View methodology &#x2197;
-                </Link>
+      <div className="border-b border-rule pt-11 pb-8">
+        <div className="px-4 md:px-[120px]">
+          <h1 className="font-display text-[42px] md:text-[60px] leading-[1.08] tracking-[-0.028em] text-ink mb-2 font-medium max-w-[820px]">
+            Private credit fund holdings.
+          </h1>
+          <h1 className="font-display text-[42px] md:text-[60px] leading-[1.08] tracking-[-0.028em] text-ink3 mb-5 font-medium">
+            Loan by loan.
+          </h1>
+          <p className="text-[17px] leading-relaxed text-ink3 max-w-[620px] mb-6">
+            Browse individual loans, equity stakes, and credit facilities held by
+            semi-liquid funds. Updated quarterly.
+          </p>
+          <div className="flex flex-wrap gap-3 mb-8">
+            <Link
+              href="#universe"
+              className="inline-block px-[22px] py-3 bg-navy text-white text-[13px] font-medium tracking-[0.06em] no-underline hover:bg-navy/90 transition-colors"
+            >
+              Browse the fund universe &rarr;
+            </Link>
+            <Link
+              href="/methodology"
+              className="inline-block px-[22px] py-3 border border-rule text-ink2 text-[13px] font-medium tracking-[0.06em] no-underline hover:bg-surface/50 transition-colors"
+            >
+              View methodology &#x2197;
+            </Link>
+          </div>
+
+          {/* Stat strip */}
+          <div className="border border-rule grid grid-cols-2 md:grid-cols-5">
+            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
+              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+                Indexed Fair Value
+              </div>
+              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
+                {formatDollar(totalIndexFv)}
               </div>
             </div>
-
-            {/* Right: Universe Coverage card */}
-            <div className="bg-white/[0.05] border border-white/[0.1] p-6">
-              <div className="eyebrow text-accent mb-3">
-                Universe coverage &middot;{' '}
-                {metadata.asOfQuarter ? formatQuarter(metadata.asOfQuarter) : '--'}
+            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
+              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+                Registered Funds
               </div>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-4">
-                <div className="border-t border-white/[0.1] pt-2.5">
-                  <div className="text-[11px] uppercase tracking-[0.12em] text-white/45">
-                    Indexed Fair Value
-                  </div>
-                  <div className="font-display text-[30px] text-white tracking-[-0.02em] mt-1">
-                    {formatDollar(totalIndexFv)}
-                  </div>
-                </div>
-                <div className="border-t border-white/[0.1] pt-2.5">
-                  <div className="text-[11px] uppercase tracking-[0.12em] text-white/45">
-                    Unlisted BDCs
-                  </div>
-                  <div className="font-display text-[30px] text-white tracking-[-0.02em] mt-1">
-                    {formatNumber(summary.totalFunds)}
-                  </div>
-                </div>
-                <div className="border-t border-white/[0.1] pt-2.5">
-                  <div className="text-[11px] uppercase tracking-[0.12em] text-white/45">
-                    CIKs with Holdings
-                  </div>
-                  <div className="font-display text-[30px] text-white tracking-[-0.02em] mt-1">
-                    {formatNumber(metadata.cikCount)}
-                  </div>
-                </div>
-                <div className="border-t border-white/[0.1] pt-2.5">
-                  <div className="text-[11px] uppercase tracking-[0.12em] text-white/45">
-                    Unique Companies
-                  </div>
-                  <div className="font-display text-[30px] text-white tracking-[-0.02em] mt-1">
-                    {formatNumber(metadata.uniqueIssuers)}
-                  </div>
-                </div>
+              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
+                {formatNumber(summary.totalFunds)}
               </div>
-              {/* Coverage progress bar */}
-              <div className="border-t border-white/[0.1] pt-3 mt-4">
-                <div className="flex justify-between items-baseline">
-                  <span className="text-[11px] text-white/45">Universe coverage by AUM</span>
-                  <span className="font-mono text-[13px] text-green tabular-nums">96.4%</span>
-                </div>
-                <div className="h-1.5 bg-white/[0.1] mt-2 relative">
-                  <div
-                    className="absolute left-0 top-0 bottom-0 bg-accent"
-                    style={{ width: '96%' }}
-                  />
-                </div>
+            </div>
+            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
+              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+                CIKs with Holdings
+              </div>
+              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
+                {formatNumber(metadata.cikCount)}
+              </div>
+            </div>
+            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
+              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+                Unique Companies
+              </div>
+              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
+                {formatNumber(metadata.uniqueIssuers)}
+              </div>
+            </div>
+            <div className="px-5 py-4">
+              <div className="flex justify-between items-baseline mb-1.5">
+                <span className="text-[10px] uppercase tracking-[0.14em] text-ink3">Coverage by AUM</span>
+                <span className="font-mono text-[15px] text-accent font-semibold tabular-nums">96.4%</span>
+              </div>
+              <div className="text-[11px] text-ink3 leading-snug mb-2">
+                Share of eligible universe AUM reconciled &amp; indexed &middot;{' '}
+                {metadata.asOfQuarter ? formatQuarter(metadata.asOfQuarter) : 'Q4 2025'}
+              </div>
+              <div className="h-1.5 bg-rule2 relative">
+                <div
+                  className="absolute left-0 top-0 bottom-0 bg-accent"
+                  style={{ width: '96%' }}
+                />
               </div>
             </div>
           </div>
@@ -215,32 +239,47 @@ export default function HomePage() {
       {/* ================================================================ */}
       {/* MAIN CONTENT                                                     */}
       {/* ================================================================ */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-7 space-y-14">
+      <div className="px-4 md:px-[120px] py-7 space-y-14">
 
         {/* Industry Exposure + Manager Concentration (two-column donuts) */}
-        {(sectorItems.length > 0 || managerItems.length > 0) && (
+        {/* Instrument Type + Industry Exposure (top row) */}
+        {(instrumentDonutItems.length > 0 || sectorItems.length > 0) && (
           <section>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {instrumentDonutItems.length > 0 && (
+                <div className="bg-white border border-rule p-7">
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Instrument type</h3>
+                  <p className="text-xs text-ink3 mt-2 mb-3">{instrumentDonutItems.length} categories &middot; share of indexed fair value</p>
+                  <ProportionDonut items={instrumentDonutItems} centerStat={instrumentCenterStat} />
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                    Other includes real estate holdings, indirect exposure via credit and equity fund vehicles, and opaque SPVs such as co-investment JVs and feeder funds.
+                  </div>
+                </div>
+              )}
               {sectorItems.length > 0 && (
                 <div className="bg-white border border-rule p-7">
                   <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Industry exposure</h3>
                   <p className="text-xs text-ink3 mt-2 mb-3">{sectorItems.length} GICS sectors &middot; share of holdings AUM</p>
                   <ProportionDonut items={sectorItems} centerStat={sectorCenterStat} />
                   <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
-                    Reconciled BDC filings + holdings-level N-PORT.
+                    Unknown sector positions lack GICS classification in the source filing or could not be reconciled.
                   </div>
                 </div>
               )}
-              {managerItems.length > 0 && (
-                <div className="bg-white border border-rule p-7">
-                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
-                  <p className="text-xs text-ink3 mt-2 mb-3">Top {managerItems.length} managers &middot; share of universe AUM</p>
-                  <ProportionDonut items={managerItems} centerStat={managerCenterStat} />
-                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
-                    Combined indices &middot; top {managerItems.length} managers.
-                  </div>
-                </div>
-              )}
+            </div>
+          </section>
+        )}
+
+        {/* Manager Concentration (full width below) */}
+        {managerItems.length > 0 && (
+          <section>
+            <div className="bg-white border border-rule p-7">
+              <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
+              <p className="text-xs text-ink3 mt-2 mb-3">Top {managerItems.length} managers &middot; share of universe AUM</p>
+              <ProportionDonut items={managerItems} centerStat={managerCenterStat} />
+              <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                Combined indices &middot; top {managerItems.length} managers.
+              </div>
             </div>
           </section>
         )}
@@ -330,6 +369,120 @@ export default function HomePage() {
             </section>
           );
         })()}
+
+        {/* Top Positions + Concentration Curve (two-column) */}
+        {(() => {
+          // Flatten top constituents across DIRECT_LENDING only (largest category)
+          const dlPositions = topConstituents['DIRECT_LENDING'] ?? [];
+          const topPositions = dlPositions.slice(0, 15);
+          const combinedCurve = concentrationCurve['COMBINED']?.position ?? [];
+
+          if (topPositions.length === 0 && combinedCurve.length === 0) return null;
+          return (
+            <section>
+              <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6">
+                {/* Top Positions Table */}
+                {topPositions.length > 0 && (
+                  <div className="bg-white border border-rule p-7">
+                    <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Largest positions</h3>
+                    <p className="text-xs text-ink3 mt-2 mb-4">Top {topPositions.length} direct lending positions by fair value</p>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs">
+                        <thead>
+                          <tr className="border-b border-rule text-[10px] uppercase tracking-[0.12em] text-ink3">
+                            <th className="text-left py-2 pr-3 font-medium">Issuer</th>
+                            <th className="text-left py-2 pr-3 font-medium">Fund</th>
+                            <th className="text-right py-2 pr-3 font-medium">Fair Value</th>
+                            <th className="text-right py-2 pr-3 font-medium">Unreal. G/L</th>
+                            <th className="text-right py-2 font-medium">Rate</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {topPositions.map((p, i) => {
+                            // Clean up issuer name — strip trailing ",1" or description suffixes
+                            const cleanName = p.issuerName.replace(/,\s*\d+$/, '').replace(/,\s*(CP|LLC|Inc\.|Ltd\.)?\s*$/, '$1').trim();
+                            const shortName = cleanName.length > 32 ? cleanName.slice(0, 30) + '...' : cleanName;
+                            const shortFund = p.vehicleName.length > 22 ? p.vehicleName.slice(0, 20) + '...' : p.vehicleName;
+                            return (
+                              <tr key={i} className="border-b border-rule2 hover:bg-surface/30">
+                                <td className="py-2 pr-3 text-ink font-medium truncate max-w-[200px]" title={cleanName}>
+                                  {shortName}
+                                </td>
+                                <td className="py-2 pr-3 text-ink3 truncate max-w-[160px]" title={p.vehicleName}>
+                                  {shortFund}
+                                </td>
+                                <td className="py-2 pr-3 text-right font-mono tabular-nums text-ink">
+                                  {formatDollar(p.fairValue ?? 0)}
+                                </td>
+                                <td className={`py-2 pr-3 text-right font-mono tabular-nums ${
+                                  p.unrealizedGlPct != null
+                                    ? p.unrealizedGlPct >= 0 ? 'text-green' : 'text-red'
+                                    : 'text-ink3'
+                                }`}>
+                                  {p.unrealizedGlPct != null
+                                    ? `${p.unrealizedGlPct >= 0 ? '+' : ''}${p.unrealizedGlPct.toFixed(1)}%`
+                                    : '--'}
+                                </td>
+                                <td className="py-2 text-right text-ink3">
+                                  {p.rateType ?? '--'}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
+                      {dlPositions.length} direct lending positions across the indexed universe.
+                    </div>
+                  </div>
+                )}
+
+                {/* Concentration Curve */}
+                {combinedCurve.length > 0 && (
+                  <div className="bg-white border border-rule p-7">
+                    <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Position concentration</h3>
+                    <p className="text-xs text-ink3 mt-2 mb-4">
+                      Share of fair value by position quantile &middot; {combinedCurve[0]?.totalCount?.toLocaleString()} total positions
+                    </p>
+                    <div className="space-y-2">
+                      {combinedCurve.map((b, i) => {
+                        const pct = b.fvPct * 100;
+                        return (
+                          <div key={i}>
+                            <div className="flex justify-between items-baseline text-xs mb-1">
+                              <span className="text-ink2">{b.label}</span>
+                              <span className="font-mono tabular-nums text-ink font-medium">
+                                {pct.toFixed(1)}%
+                                <span className="text-ink3 font-normal ml-1.5">({b.count.toLocaleString()})</span>
+                              </span>
+                            </div>
+                            <div className="h-5 bg-rule2 relative">
+                              <div
+                                className="absolute left-0 top-0 bottom-0"
+                                style={{
+                                  width: `${pct}%`,
+                                  backgroundColor: i === 0 ? '#0b1a2c' : i === 1 ? '#2a3f55' : i === 2 ? '#4a6178' : '#8a9bab',
+                                }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                      Top 5% of positions hold{' '}
+                      <span className="font-mono text-ink tabular-nums font-medium">
+                        {((combinedCurve[0]?.fvPct ?? 0) * 100 + (combinedCurve[1]?.fvPct ?? 0) * 100).toFixed(1)}%
+                      </span>{' '}
+                      of total indexed fair value.
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          );
+        })()}
       </div>
 
       {/* ================================================================ */}
@@ -337,7 +490,7 @@ export default function HomePage() {
       {/* ================================================================ */}
       {hasPC && (
         <div className="bg-navy mt-14">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+          <div className="px-4 md:px-[120px] py-10">
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
               <div className="md:pr-6">
                 <div className="eyebrow text-accent mb-2">Private Credit</div>
@@ -380,7 +533,7 @@ export default function HomePage() {
       {/* ================================================================ */}
       {/* MOVERS                                                           */}
       {/* ================================================================ */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 space-y-14">
+      <div className="px-4 md:px-[120px] py-10 space-y-14">
         {(topLeverage.length > 0 || largestNavMoves.length > 0 || topYield.length > 0) && (
           <section>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

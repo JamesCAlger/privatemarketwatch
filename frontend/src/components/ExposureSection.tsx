@@ -8,7 +8,10 @@ import { formatPercent } from '@/lib/format';
 const ASSET_CLASS_COLORS = ['#1A5F56', '#1F7268', '#2A9D8F', '#3DB0A3', '#7ACEC5', '#99DDD6', '#D6F5F2'];
 const EXPOSURE_TYPE_COLORS = ['#1A5F56', '#2A9D8F', '#99DDD6'];
 const LIEN_COLORS = ['#1A5F56', '#2A9D8F', '#99DDD6'];
-const RATE_COLORS = ['#1A5F56', '#5BBFB4'];
+const GICS_COLORS = [
+  '#0b1a2c', '#1A5F56', '#1F7268', '#2A9D8F', '#3DB0A3',
+  '#5BBFB4', '#7ACEC5', '#99DDD6', '#B8ECE7', '#D6F5F2', '#c7a14a',
+];
 
 interface ExposureSectionProps {
   exposure: FundExposure;
@@ -87,7 +90,7 @@ function MiniDonut({
 }
 
 export default function ExposureSection({ exposure }: ExposureSectionProps) {
-  const { assetClassSplit, exposureTypeSplit, lienSplit, rateTypeSplit, assetSplit } = exposure;
+  const { assetClassSplit, exposureTypeSplit, lienSplit, assetSplit, gicsSectors } = exposure;
 
   // Asset Class donut (from 2-axis classification)
   const acSplit = assetClassSplit;
@@ -130,34 +133,53 @@ export default function ExposureSection({ exposure }: ExposureSectionProps) {
     { name: 'Unsecured', value: lienSplit.unsecured ?? 0 },
   ];
 
-  const rateData = [
-    { name: 'Floating', value: rateTypeSplit.floating ?? 0 },
-    { name: 'Fixed', value: rateTypeSplit.fixed ?? 0 },
-  ];
+  // GICS sector donut
+  const showGics = gicsSectors && gicsSectors.length > 0;
+  const gicsData = (gicsSectors ?? []).map((g) => ({ name: g.sector, value: g.pct }));
 
-  // Determine grid columns: 2 on small, up to 4 on large when exposure type shown
-  const donutCount = 1 + (showExposureType ? 1 : 0) + (showLien ? 1 : 0) + (debtPct > 0.1 ? 1 : 0);
-  const gridCols = donutCount >= 4
-    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
-    : donutCount === 3
-      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-      : 'grid-cols-1 sm:grid-cols-2';
+  // First lien stat (shown inline when lien data available but not enough for donut)
+  const firstLienPct = lienSplit.firstLien;
+  const showFirstLienStat = debtPct > 0.1 && firstLienPct != null && (lienCoverage ?? 0) >= 0.5;
+
+  // Determine grid columns
+  const donutCount = 1 + (showExposureType ? 1 : 0) + (showLien ? 1 : 0);
+  const gridCols = donutCount >= 3
+    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+    : 'grid-cols-1 sm:grid-cols-2';
 
   return (
-    <div className={`grid ${gridCols} gap-5`}>
-      <MiniDonut
-        data={assetClassData}
-        colors={acSplit ? ASSET_CLASS_COLORS : ['#1A5F56', '#2A9D8F', '#5BBFB4', '#99DDD6']}
-        title={acSplit ? 'Asset Class' : 'Asset Type'}
-      />
-      {showExposureType && (
-        <MiniDonut data={exposureData} colors={EXPOSURE_TYPE_COLORS} title="Exposure Type" />
+    <div className="space-y-5">
+      {/* Asset Class + GICS Sector side by side */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <MiniDonut
+          data={assetClassData}
+          colors={acSplit ? ASSET_CLASS_COLORS : ['#1A5F56', '#2A9D8F', '#5BBFB4', '#99DDD6']}
+          title={acSplit ? 'Asset Class' : 'Asset Type'}
+        />
+        {showGics ? (
+          <MiniDonut data={gicsData} colors={GICS_COLORS} title="GICS Sector" />
+        ) : showExposureType ? (
+          <MiniDonut data={exposureData} colors={EXPOSURE_TYPE_COLORS} title="Exposure Type" />
+        ) : showLien ? (
+          <MiniDonut data={lienData} colors={LIEN_COLORS} title="Lien Position" />
+        ) : null}
+      </div>
+      {/* Secondary row: exposure type + lien (only if GICS occupied the first row) */}
+      {showGics && (showExposureType || showLien) && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {showExposureType && (
+            <MiniDonut data={exposureData} colors={EXPOSURE_TYPE_COLORS} title="Exposure Type" />
+          )}
+          {showLien && (
+            <MiniDonut data={lienData} colors={LIEN_COLORS} title="Lien Position" />
+          )}
+        </div>
       )}
-      {showLien && (
-        <MiniDonut data={lienData} colors={LIEN_COLORS} title="Lien Position" />
-      )}
-      {debtPct > 0.1 && (
-        <MiniDonut data={rateData} colors={RATE_COLORS} title="Rate Type" />
+      {showFirstLienStat && !showLien && (
+        <div className="bg-white shadow-card p-5">
+          <p className="text-[11px] text-muted uppercase tracking-wider mb-1">% First Lien</p>
+          <p className="text-sm font-semibold text-navy tabular-nums">{formatPercent(firstLienPct!)}</p>
+        </div>
       )}
     </div>
   );

@@ -21,6 +21,21 @@
   }
 }
 
+/* Hero banners -- dark gradient backgrounds for page headers */
+.hero-gradient.hero-pattern {
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(42, 157, 143, 0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(199, 161, 74, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, #0b1a2c 0%, #16273c 100%);
+}
+
+.hero-gradient-home.hero-pattern {
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(42, 157, 143, 0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(199, 161, 74, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, #06121f 0%, #16273c 50%, #1E7A6E 100%);
+}
+
 /* Prose content formatting for methodology/about text */
 .prose-content p {
   margin-bottom: 0.75rem;
