@@ -1,0 +1,147 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001950976",
+  "entity_name": "26North BDC, Inc.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TWENTY_SIX_NORTH_BDC",
+    "prefix_rules": {
+      "Debt Investments": "debt",
+      "Common Equity": "equity",
+      "Equity": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "first lien",
+        "senior secured",
+        "term loan",
+        "delayed draw",
+        "revolving loan",
+        "revolver",
+        "corporate bond",
+        "sofr",
+        "libor",
+        "prime"
+      ],
+      "equity": [
+        "common stock",
+        "common equity",
+        "preferred stock",
+        "preferred equity"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total common equity",
+      "total equity",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury|Treasury\\s+Bills?)\\b",
+        "family": "cash"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:|Debt\\s+Investments|Common\\s+Equity|Equity|Total\\s+(?:Debt\\s+Investments|Common\\s+Equity|Equity|Investments))\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s*\\|\\s*[^|]*(?:SOFR|LIBOR|Prime|Base\\s+Rate|\\d{1,2}/\\d{1,2}/\\d{2,4}|\\d+(?:\\.\\d+)?%).*$"
+  },
+  "identifier_format": {
+    "delimiter": "|",
+    "field_order": [
+      "category",
+      "issuer_name",
+      "instrument_description",
+      "industry_or_rate",
+      "rate_or_date",
+      "maturity_or_date"
+    ],
+    "alternate_delimiters": []
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments|Common\\s+Equity|Equity)\\s*\\|\\s*([^|]+?)\\s*\\|",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:Debt\\s+Investments|Common\\s+Equity|Equity)\\s*\\|\\s*[^|]+?\\s*\\|\\s*([^|]+?)\\s*(?:\\||$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt\\s+Investments|Common\\s+Equity|Equity)\\s*\\|') AND regexp_matches(_clean, '\\|')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "26North debt positions encoded as pipe-delimited category, issuer, instrument, industry, rate, and date fields.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Senior Secured",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Loan",
+          "Revolver",
+          "Corporate Bond",
+          "SOFR"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "26North common and preferred equity positions encoded as pipe-delimited issuer and instrument fields.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Equity",
+          "Preferred Stock",
+          "Preferred Equity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "TWENTY_SIX_NORTH_PIPE_ROWS",
+      "description": "Position rows use pipe-delimited category, issuer, instrument, industry/rate, rate/date, and maturity/date fields. Some filings omit spaces around pipes or concatenate industry and SOFR text.",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "^(Debt Investments|Common Equity|Equity)\\s*\\|",
+      "disposition": "expected"
+    },
+    {
+      "id": "TWENTY_SIX_NORTH_RATE_DATE_KEY_DRIFT",
+      "description": "Current coupon, SOFR spread, and trailing date fields vary across periods; wrapper keys preserve issuer and instrument while stripping volatile rate/date tails.",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "SOFR|\\d{1,2}/\\d{1,2}/\\d{4}",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

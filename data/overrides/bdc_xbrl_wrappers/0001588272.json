@@ -1,0 +1,169 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001588272",
+  "entity_name": "NexPoint Capital, Inc.  (NXPT)",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "NEXPOINT_CAPITAL",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        " | ",
+        "term loan",
+        "sofr",
+        "fixed",
+        "pik",
+        "%"
+      ],
+      "equity": [
+        " | ",
+        "%"
+      ],
+      "warrant": [
+        " | "
+      ],
+      "cash": [],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "net assets",
+      "cash equivalents",
+      "other assets & liabilities",
+      "other assets and liabilities",
+      "total common stocks",
+      "total preferred stocks",
+      "total senior secured loans",
+      "total corporate bonds",
+      "total llc interests",
+      "total warrants"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "cash and cash equivalents",
+      "other assets & liabilities",
+      "other assets and liabilities",
+      "net assets",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Cash\\s+Equivalents|Cash\\s+and\\s+Cash\\s+Equivalents)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+Investments|Net\\s+Assets)\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Senior\\s+Secured\\s+Loans|Corporate\\s+Bonds|Asset-Backed\\s+Securitie(?:s)?)(?:\\s*$|\\s*\\|)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Preferred\\s+Stocks|Common\\s+Stocks|LLC\\s+Interests)(?:\\s*$|\\s*\\|)",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*Warrants(?:\\s*$|\\s*\\|)",
+        "family": "warrant"
+      }
+    ],
+    "category_marker_before_total": true,
+    "category_marker_re": "(?i)^\\s*(?:\\|\\s*)?(?:(?:Senior\\s+Secured\\s+Loans|Corporate\\s+Bonds|Preferred\\s+Stocks|Common\\s+Stocks|LLC\\s+Interests|Warrants|Asset-Backed\\s+Securitie(?:s)?)(?:\\s*\\|\\s*Total\\s+Investments)?|Net\\s+Assets|Total\\s+Investments|Cash\\s+Equivalents|Other\\s+Assets\\s*&\\s*Liabilities\\s+net|Other\\s+Assets\\s+and\\s+Liabilities\\s+net)\\s*$",
+    "canonical_strip_re": "(?i)^\\s*(?:Senior\\s+Secured\\s+Loans|Corporate\\s+Bonds|Preferred\\s+Stocks|Common\\s+Stocks|LLC\\s+Interests|Warrants|Asset-Backed\\s+Securitie(?:s)?)\\s*\\|\\s*|\\s*\\|\\s*(?:(?:SOFR|SORF|Prime|Fixed)(?:\\s*\\+\\s*\\d+)?|\\d+(?:\\.\\d+)?%\\s*Fixed|\\d+(?:\\.\\d+)?\\s*%)(?=\\s*\\|)|\\s*\\|\\s*\\d+(?:\\.\\d+)?\\s*%\\s*$|\\s*\\|\\s*\\d{1,2}/\\d{1,2}/\\d{2,4}\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": "|",
+    "field_order": [
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "rate_or_coupon",
+      "maturity"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Pipe-delimited senior secured loan, corporate bond, and asset-backed securities rows.",
+      "detection_rules": {
+        "keywords": [
+          "Senior Secured Loans",
+          "Corporate Bonds",
+          "Asset-Backed Securities",
+          "Term Loan",
+          "SOFR",
+          "PIK"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Pipe-delimited common stock, preferred stock, and LLC interest rows.",
+      "detection_rules": {
+        "keywords": [
+          "Preferred Stocks",
+          "Common Stocks",
+          "LLC Interests"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Pipe-delimited warrant rows and warrant totals.",
+      "detection_rules": {
+        "keywords": [
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "nexpoint_terminal_coupon_preferred_stock",
+      "description": "Preferred-stock positions may end with a coupon percentage and no explicit share field, which trips the generic terminal-percentage aggregate filter unless the wrapper classifies the row as a position leaf.",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "Preferred Stocks | <industry> | <issuer> | <coupon>%",
+      "disposition": "expected"
+    },
+    {
+      "id": "nexpoint_pipe_rollups",
+      "description": "Bare asset-class rows and Total Investments cash/other-assets rows are totals or balance-sheet lines, not position-level holdings.",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "Senior Secured Loans; Total Investments | Cash Equivalents; Net Assets",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

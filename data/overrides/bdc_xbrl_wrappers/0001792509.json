@@ -1,0 +1,167 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001792509",
+  "entity_name": "TriplePoint Global Venture Credit, LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TRIPLEPOINT_GLOBAL_VENTURE_CREDIT",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "growth capital loan",
+        "debt investments",
+        "convertible note",
+        "revolver",
+        "term loan",
+        "interest rate"
+      ],
+      "equity": [
+        "equity investments",
+        "preferred stock",
+        "common stock",
+        "ordinary shares",
+        "limited partnership interest",
+        "partnership interest",
+        "hybrid",
+        "warrant investments"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total warrant investments",
+      "total cash and cash equivalents",
+      "cash and investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "federated government obligations fund",
+      "government obligations fund",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "treasury bills"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)\\b(?:Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents|Federated\\s+Government\\s+Obligations\\s+Fund|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury|Treasury\\s+Bills?)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Warrant\\s+Investments|Cash\\s+and\\s+Investments|Subtotal|Sub-Total)\\s*$",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\b(?:Growth\\s+Capital\\s+Loan|Debt\\s+Investments|Convertible\\s+Note|Revolver|Term\\s+Loan)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\b(?:Equity\\s+Investments?|Warrant\\s+Investments?|Preferred\\s+Stock|Common\\s+Stock|Ordinary\\s+Shares|Limited\\s+Partnership\\s+Interest|Partnership\\s+Interest|Hybrid|Warrants?)\\b",
+        "family": "equity"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Warrant\\s+Investments|Cash\\s+and\\s+Investments|Subtotal|Sub-Total)\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "issuer_name",
+      "instrument_description",
+      "issuer_status"
+    ],
+    "alternate_delimiters": [
+      ", "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^([^|]+?)(?:\\s*\\|\\s*|,\\s+)(?:Growth\\s+Capital\\s+Loan|Debt\\s+Investments|Convertible\\s+Note|Revolver|Term\\s+Loan|Equity\\s+Investments|Preferred\\s+Stock|Common\\s+Stock|Ordinary\\s+Shares|Limited\\s+Partnership\\s+Interest|Partnership\\s+Interest|Hybrid|Warrant\\s+Investments)(?:\\s|$)",
+    "hierarchy_instrument_re": "(?i)^[^|]+?(?:\\s*\\|\\s*|,\\s+)((?:Growth\\s+Capital\\s+Loan|Debt\\s+Investments|Convertible\\s+Note|Revolver|Term\\s+Loan|Equity\\s+Investments|Preferred\\s+Stock|Common\\s+Stock|Ordinary\\s+Shares|Limited\\s+Partnership\\s+Interest|Partnership\\s+Interest|Hybrid|Warrant\\s+Investments)(?:\\s|$).*?)(?:\\s*\\|.*)?\\s*$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:\\|\\s*|,\\s+)(?:Growth\\s+Capital\\s+Loan|Debt\\s+Investments|Convertible\\s+Note|Revolver|Term\\s+Loan|Equity\\s+Investments|Preferred\\s+Stock|Common\\s+Stock|Ordinary\\s+Shares|Limited\\s+Partnership\\s+Interest|Partnership\\s+Interest|Hybrid|Warrant\\s+Investments)(?:\\s|$)')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "TriplePoint venture debt rows including growth capital loans, revolvers, term loans, debt investments, and convertible notes.",
+      "detection_rules": {
+        "keywords": [
+          "Growth Capital Loan",
+          "Debt Investments",
+          "Convertible Note",
+          "Revolver",
+          "Term Loan"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity positions marked as equity investments, common stock, preferred stock, ordinary shares, partnership interests, or hybrid securities.",
+      "detection_rules": {
+        "keywords": [
+          "Equity Investments",
+          "Preferred Stock",
+          "Common Stock",
+          "Ordinary Shares",
+          "Limited Partnership Interest",
+          "Partnership Interest",
+          "Hybrid"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "presence",
+          "constraint": "forbidden"
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "comma_to_pipe_format_transition",
+      "description": "Older rows use comma-delimited issuer and instrument text; 2025-12 and later rows use pipe-delimited issuer, instrument, investment bucket, and affiliation status.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "\\|\\s*(?:Growth Capital Loan|Preferred Stock|Common Stock|Hybrid)",
+      "disposition": "expected"
+    },
+    {
+      "id": "equity_investments_without_stock_label",
+      "description": "Some equity leaves disclose only issuer plus Equity Investments and share/cost/fair-value facts, so Equity Investments is a position-level marker when attached to an issuer.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": ",\\s*Equity Investments$",
+      "disposition": "expected"
+    },
+    {
+      "id": "federated_government_obligations_cash_equivalent",
+      "description": "Federated Government Obligations Fund rows are cash-equivalent/non-private-market holdings and are excluded from private-market outputs.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Federated Government Obligations Fund",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

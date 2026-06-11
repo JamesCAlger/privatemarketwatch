@@ -1,0 +1,168 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001988280",
+  "entity_name": "Manulife Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "MANULIFE_PRIVATE_CREDIT",
+    "prefix_rules": {
+      "Senior loans": "debt",
+      "Senior Loans": "debt",
+      "enior loans": "debt",
+      "Senior loans (A)(B)": "debt",
+      "Equity (A)": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "incremental",
+        "amendment",
+        "cme term sofr",
+        "prime rate",
+        "class a-2 units"
+      ],
+      "equity": [
+        "class a",
+        "units",
+        "common",
+        "preferred"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "net investments",
+      "total net assets",
+      "other assets and liabilities",
+      "less unfunded loan commitments",
+      "short-term funds"
+    ],
+    "non_private_markers": [
+      "short-term investments",
+      "short-term funds",
+      "dreyfus treasury obligations cash management fund",
+      "cash management fund",
+      "treasury obligations",
+      "money market",
+      "cash and cash equivalents"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Consumer\\s+discretionary|Consumer\\s+staples|Financials|Health\\s+care|Industrials|Information\\s+technology|Materials)(?:\\s+\\d+(?:\\.\\d+)?%)?\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Short-term\\s+(?:investments|funds)\\b",
+        "family": "cash"
+      }
+    ],
+    "category_marker_re": "^\\s*(?:(?:\\(A\\)\\(B\\)\\s*)?\\d+(?:\\.\\d+)?%\\s*\\|?\\s*[A-Za-z &,()]+(?:\\s+\\d+(?:\\.\\d+)?%)?\\s*\\|?\\s*|\\|\\s*[A-Za-z &,()]+\\s+\\d+(?:\\.\\d+)?%\\s*|\\d+(?:\\.\\d+)?%\\s*\\|\\s*[A-Za-z &,()]+(?:\\s+\\d+(?:\\.\\d+)?%)?\\s*\\|\\s*[^,()]+\\b(?:LLC|L\\.L\\.C\\.|Inc\\.?|Corp\\.?|Corporation|Company|Co\\.?)\\s*)$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)^\\s*(?:Senior\\s+[Ll]oans?|enior\\s+loans)(?:\\s+\\(A\\)\\(B\\))?(?:\\s+\\d+(?:\\.\\d+)?%|\\s*\\(Cost\\s+\\$[\\d,]+\\))?\\s*\\|\\s*.*?\\s+\\d+(?:\\.\\d+)?%\\s*\\|?\\s*|^\\s*(?:Senior\\s+[Ll]oans?|enior\\s+loans)(?:\\s+\\(A\\)\\(B\\))?(?:\\s+\\d+(?:\\.\\d+)?%|\\s*\\(Cost\\s+\\$[\\d,]+\\))?\\s*\\|\\s*|\\s*\\([^)]*(?:CME\\s+Term\\s+SOFR|Prime\\s+rate|SOFR)[^)]*\\)|\\s*\\([A-Z]\\)?$"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "asset_class",
+      "industry",
+      "issuer_and_instrument"
+    ],
+    "alternate_delimiters": [
+      "|"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Senior loan positions in Manulife's pipe-separated hierarchy, including term loans, delayed draws, revolvers, and amendment tranches.",
+      "detection_rules": {
+        "keywords": [
+          "Senior loans",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "CME Term SOFR",
+          "Prime rate"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "principal_amount": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity/unit positions disclosed inside the senior-loan hierarchy.",
+      "detection_rules": {
+        "keywords": [
+          "Class A-2 Units",
+          "Equity",
+          "Units"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "cash": {
+      "description": "Short-term investments, Dreyfus Treasury cash-management funds, and non-position net-asset rows excluded from private-market position outputs.",
+      "detection_rules": {
+        "keywords": [
+          "Short-term investments",
+          "Short-term funds",
+          "Dreyfus Treasury Obligations Cash Management Fund",
+          "Less unfunded loan commitments"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "manulife_two_segment_leaf_without_industry_pipe",
+      "description": "Some 2024 CPC Lakeshirts rows omit the delimiter between industry percentage and issuer, but retain loan instrument terms and economic fields.",
+      "first_seen_quarter": "2024-06-30",
+      "detection_pattern": "Senior loans 112.4% | Textiles, apparel and luxury goods 1.9%CPC Lakeshirts Acquisition LLC, Term Loan ...",
+      "disposition": "expected"
+    },
+    {
+      "id": "manulife_short_term_net_asset_rows",
+      "description": "Short-term investment totals, net investments, total net assets, and less unfunded loan commitments are non-position rows and should not enter position-level outputs.",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "Short-term investments <pct> | Less unfunded loan commitments ...",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

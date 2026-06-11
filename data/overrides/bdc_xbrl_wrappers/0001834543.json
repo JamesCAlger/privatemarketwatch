@@ -1,0 +1,180 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001834543",
+  "entity_name": "BlackRock Direct Lending Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "BLACKROCK_DIRECT_LENDING",
+    "prefix_rules": {
+      "Debt Investments": "debt",
+      "Debt InvestmeDebt Investments": "debt",
+      "Cash and Cash Equivalents": "debt"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "instrument",
+        "maturity",
+        "maturity date",
+        "reference rate",
+        "ref sofr",
+        "ref libor",
+        "ref fixed",
+        "floor",
+        "spread",
+        "total coupon",
+        "first lien",
+        "second lien",
+        "2nd lien",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "sr secured",
+        "senior secured",
+        "pik"
+      ],
+      "equity": [
+        "acquisition date",
+        "common stock",
+        "common units",
+        "common shares",
+        "preferred stock",
+        "preferred units",
+        "preferred shares",
+        "series",
+        "class a",
+        "class b",
+        "units",
+        "shares"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "acquisition date"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity securities",
+      "total equity investments",
+      "investments -",
+      "cash and investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash",
+      "cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^(?:Investment|Equity Securities)\\b.*\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)^(?:Investment|Equity Securities)\\b.*\\b(?:Common\\s+Stock|Common\\s+Units|Common\\s+Shares|Preferred\\s+Stock|Preferred\\s+Units|Preferred\\s+Shares|Series\\s+[A-Z0-9-]+\\s+Shares|Class\\s+[A-Z0-9-]+\\s+(?:Common\\s+|Preferred\\s+)?Units)\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^Equity\\s+Securities\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^Cash\\s+and\\s+(?:Cash\\s+Equivalents|Investments)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^Total\\s+Debt\\s+Investments\\b|^Investments\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^Total\\s+Equity\\s+Securities\\b|^Equity\\s+Securities\\b.*\\bTotal\\b",
+        "family": "equity"
+      }
+    ],
+    "canonical_strip_re": "^(?:Debt\\s+InvestmeDebt\\s+Investments|Debt\\s+Investments|Equity\\s+Securities)\\s+(?:Automobiles|Beverages|Building\\s+Products|Capital\\s+Markets|Commercial\\s+Services\\s+&\\s+Supplies|Construction\\s+(?:&|and)\\s+Engineering|Consumer\\s+Finance|Consumer\\s+Materials|Containers\\s+&\\s+Packaging|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Electrical\\s+Equipment|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|IT\\s+Services|Insurance|Internet\\s+Software\\s+&\\s+Services|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Media|Paper\\s+&\\s+Forest\\s+Products|Professional\\s+Services|Real\\s+Estate\\s+Management\\s+&\\s+Development|Road\\s+(?:&|and)\\s+Rail|Semiconductors\\s+&\\s+Semiconductor\\s+Equipment|Software|Specialty\\s+Retail|Wireless\\s+Telecommunication\\s+Services)\\s+|\\bRef\\s+.*?(?=\\s+Maturity\\b)|\\bInstrument\\s+|\\bMaturity\\s*/?\\s*Expiration\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}|\\bExpiration\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}|\\s*\\([^)]*\\)",
+    "no_prefix_is_aggregate": true,
+    "category_marker_re": "^(?:Cash\\s+and\\s+(?:Investments|Cash\\s+Equivalents)|Debt\\s+Investments|Equity\\s+Securities)(?:\\s+-\\s*[-\\d.]+%\\s+of\\s+Net\\s+Assets|\\s+(?:[A-Za-z&,/]+\\s*){1,5})?$"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt instruments including first lien, second lien, delayed draw term loans, revolvers, and senior secured loans",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Second Lien",
+          "2nd Lien",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Sr Secured",
+          "Senior Secured",
+          "Instrument"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Common and preferred equity instruments, shares, and units",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Units",
+          "Common Shares",
+          "Preferred Stock",
+          "Preferred Units",
+          "Preferred Shares",
+          "Series",
+          "Class A",
+          "Class B",
+          "Shares",
+          "Units"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants to purchase common, preferred, class, or series equity instruments",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

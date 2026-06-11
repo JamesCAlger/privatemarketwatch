@@ -1,0 +1,219 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001959568",
+  "entity_name": "Senior Credit Investments, LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "SENIOR_CREDIT_INVESTMENTS",
+    "prefix_rules": {
+      "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments": "debt",
+      "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments": "equity",
+      "Non-Controlled/Non-Affiliated Portfolio Company Investments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment type",
+        "reference rate and spread",
+        "maturity date"
+      ],
+      "equity": [
+        "investment type",
+        "l.p. interest",
+        "lp interest",
+        "common units",
+        "preferred units",
+        "equity"
+      ],
+      "mixed": [
+        "investment type"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total non-controlled-non-affiliated portfolio company investments",
+      "total non-controlled-non-affiliated portfolio company debt investments",
+      "total non-controlled-non-affiliated portfolio company equity investments",
+      "unfunded portfolio company commitments",
+      "portfolio company investments investments total",
+      "portfolio company investments total",
+      "non-controlled/non-affiliated portfolio company investments investments total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government obligations fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:total\\s+)?cash(?:\\s+and\\s+cash\\s+equivalents|\\s+equivalents)?\\b|money\\s+market|government\\s+obligations\\s+fund|u\\.s\\.\\s+treasury|us\\s+treasury",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:total\\s+)?unfunded\\s+portfolio\\s+company\\s+commitments\\b|^\\s*total\\s+(?:debt\\s+investments|equity\\s+investments|investments)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Portfolio\\s+Company\\s+.+\\s+Investment\\s+Type\\s+(?:First\\s+Lien|Term\\s+Loan|Delayed\\s+Draw|Revolver|Revolving)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Portfolio\\s+Company\\s+.+\\s+Investment\\s+Type\\s+(?:L\\.?P\\.?\\s+Interest|LP\\s+Interest|Common\\s+Units|Preferred\\s+Units|Equity)",
+        "family": "equity"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:(?:First\\s+Lien\\s+Debt\\s+Investments\\s+)?(?:Investments\\s+)?Total\\s+non-controlled-non-affiliated\\s+Portfolio\\s+Company\\s+(?:debt\\s+|equity\\s+)?investments|(?:Total\\s+)?Unfunded\\s+Portfolio\\s+Company\\s+Commitments)\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)^\\s*(?:Non-Controlled/Non-Affiliated\\s+Portfolio\\s+Company\\s+Investments\\s+)?(?:First\\s+Lien\\s+Debt\\s+Investments|Equity\\s+Investments)\\s+(?:Aerospace|Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Banking|Banking,\\s+Finance,\\s+Insurance,\\s+and\\s+Real\\s+Estate|Capital\\s+Equipment|Chemicals|Chemicals,\\s+Plastic,\\s+&\\s+Rubber|Commercial\\s+Services\\s+&\\s+Supplies|Diversified\\s+Consumer\\s+Services|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Food\\s+Products|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Healthcare|Healthcare\\s+&\\s+Pharmaceuticals|High\\s+Tech\\s+Industries|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Insurance|IT\\s+Services|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Media|Packaging|Professional\\s+Services|Real\\s+Estate\\s+Management\\s+&\\s+Development|Services:\\s+Business|Services:\\s+Consumer|Software|Trading\\s+Companies\\s+&\\s+Distributors|Transportation:\\s+Cargo|Utilities:\\s+Electric|Wholesale),?\\s+|^\\s*Portfolio\\s+Company\\s+"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "affiliation",
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "instrument_description",
+      "rate_terms",
+      "dates"
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Non-Controlled/Non-Affiliated\\s+Portfolio\\s+Company\\s+Investments\\s+)?(?:First\\s+Lien\\s+Debt\\s+Investments|Equity\\s+Investments)\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)?|Portfolio\\s+Company\\s+)(.+?)\\s+Investment\\s+Type\\s+(?:First\\s+Lien\\s+Delayed\\s+Draw\\s+Term\\s+Loan|First\\s+Lien\\s+Revolver|First\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Revolving\\s+Credit\\s+Facility|First\\s+Lien|L\\.?P\\.?\\s+Interest|LP\\s+Interest|Common\\s+Units|Preferred\\s+Units|Equity)\\b",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:(?:Non-Controlled/Non-Affiliated\\s+Portfolio\\s+Company\\s+Investments\\s+)?(?:First\\s+Lien\\s+Debt\\s+Investments|Equity\\s+Investments)\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)?|Portfolio\\s+Company\\s+).+?\\s+Investment\\s+Type\\s+((?:First\\s+Lien\\s+Delayed\\s+Draw\\s+Term\\s+Loan|First\\s+Lien\\s+Revolver|First\\s+Lien\\s+Term\\s+Loan|First\\s+Lien\\s+Revolving\\s+Credit\\s+Facility|First\\s+Lien|L\\.?P\\.?\\s+Interest|LP\\s+Interest|Common\\s+Units|Preferred\\s+Units|Equity)\\b.*?)(?:\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+|\\s+Maturity\\s+Date\\s+|\\s+Interest\\s+Rate\\s+|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Non-Controlled/Non-Affiliated\\s+Portfolio\\s+Company\\s+Investments|Portfolio\\s+Company)\\b') AND regexp_matches(_clean, '(?i)\\bInvestment\\s+Type\\s+(?:First\\s+Lien|L\\.?P\\.?\\s+Interest|LP\\s+Interest|Common\\s+Units|Preferred\\s+Units|Equity)\\b')",
+    "extra_industry_labels": [
+      "Aerospace",
+      "Aerospace & Defense",
+      "Air Freight & Logistics",
+      "Banking",
+      "Banking, Finance, Insurance, and Real Estate",
+      "Capital Equipment",
+      "Chemicals",
+      "Chemicals, Plastic, & Rubber",
+      "Commercial Services & Supplies",
+      "Diversified Consumer Services",
+      "Electrical Equipment",
+      "Electronic Equipment, Instruments & Components",
+      "Food Products",
+      "Health Care Equipment & Supplies",
+      "Health Care Providers & Services",
+      "Health Care Technology",
+      "Healthcare",
+      "Healthcare & Pharmaceuticals",
+      "High Tech Industries",
+      "Hotels, Restaurants & Leisure",
+      "Insurance",
+      "IT Services",
+      "Life Sciences Tools & Services",
+      "Machinery",
+      "Media",
+      "Packaging",
+      "Professional Services",
+      "Real Estate Management & Development",
+      "Services: Business",
+      "Services: Consumer",
+      "Software",
+      "Trading Companies & Distributors",
+      "Transportation: Cargo",
+      "Utilities: Electric",
+      "Wholesale"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "First lien debt investments in Senior Credit's flat BDC XBRL hierarchy.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien",
+          "Term Loan",
+          "Delayed Draw Term Loan",
+          "Revolver",
+          "Reference Rate and Spread"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        },
+        "maturity_date": {
+          "type": "presence",
+          "constraint": "optional"
+        }
+      }
+    },
+    "equity": {
+      "description": "LP interests and other equity positions surfaced as Portfolio Company investment-type rows.",
+      "detection_rules": {
+        "keywords": [
+          "L.P. Interest",
+          "LP Interest",
+          "Common Units",
+          "Preferred Units",
+          "Equity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    },
+    "cash": {
+      "description": "Cash, Treasury, and money-market rows excluded from private-market position outputs.",
+      "detection_rules": {
+        "keywords": [
+          "Cash",
+          "Cash Equivalents",
+          "Money Market",
+          "Government Obligations Fund"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "senior_credit_flat_affiliation_industry_hierarchy",
+      "description": "Identifiers flatten affiliation, asset class, industry, issuer, investment type, reference spread, and maturity into one typed dimension value.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments <industry> <issuer> Investment Type First Lien ...",
+      "disposition": "expected"
+    },
+    {
+      "id": "senior_credit_unfunded_commitments",
+      "description": "Unfunded Portfolio Company Commitments rows are sparse commitment totals, not position-level funded holdings.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Total Unfunded Portfolio Company Commitments",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

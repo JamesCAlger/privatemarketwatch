@@ -1,0 +1,241 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001784700",
+  "entity_name": "Varagon Capital Corp.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "VARAGON_CAPITAL",
+    "prefix_rules": {
+      "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans": "debt",
+      "Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans": "debt",
+      "Controlled Non-Affiliated Investments, Senior Secured First Lien Loans": "debt",
+      "Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Equity": "equity",
+      "Controlled Investments": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "type of investment",
+        "term loan",
+        "delayed draw term loan",
+        "revolver",
+        "reference rate and spread",
+        "interest rate",
+        "acquisition date",
+        "maturity",
+        "sofr",
+        "prime"
+      ],
+      "equity": [
+        "type of investment",
+        "class a units",
+        "class a-1 units",
+        "class b units",
+        "class c units",
+        "class d units",
+        "common units",
+        "equity co-invest",
+        "limited partnership units",
+        "preferred stock",
+        "preferred stock unit",
+        "series a interest"
+      ],
+      "mixed": [
+        "type of investment",
+        "limited partnership units",
+        "reference rate and spread",
+        "interest rate",
+        "maturity"
+      ],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "subtotal non-controlled/non-affiliated investments",
+      "subtotal controlled investments",
+      "total investments",
+      "total senior secured first lien loans",
+      "total senior direct lending program",
+      "total equity",
+      "total debt investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+(?:Investments(?:,\\s+[A-Za-z]+\\s+\\d{1,2},\\s+\\d{4})?|Senior\\s+Secured\\s+First\\s+Lien\\s+Loans|Senior\\s+Direct\\s+Lending\\s+Program|Equity)|Subtotal\\s+(?:Non-Controlled/Non-Affiliated|Controlled)\\s+Investments)\\s*$",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Cash\\s+and\\s+Cash\\s+Equivalents|Cash\\s+Equivalents|Money\\s+Market|U\\.S\\.\\s+Treasury|US\\s+Treasury)\\b",
+        "family": "cash"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:Total\\s+(?:Investments(?:,\\s+[A-Za-z]+\\s+\\d{1,2},\\s+\\d{4})?|Senior\\s+Secured\\s+First\\s+Lien\\s+Loans|Senior\\s+Direct\\s+Lending\\s+Program|Equity)|Subtotal\\s+(?:Non-Controlled/Non-Affiliated|Controlled)\\s+Investments|(?:Non-Controlled/Non-Affiliated|Controlled(?:/Non-Affiliated)?|Controlled\\s+Non-Affiliated)\\s+Investments,\\s+(?:Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+)?(?:Industry\\s+)?(?:MSD_INDUSTRY_LABELS)?)\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)^\\s*(?:(?:Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated|Non-Controlled/Non-Affiliated|Controlled\\s+Non-Affiliated|Controlled/Non-Affiliated)\\s+Investments,\\s+Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+|Non-Controlled/Non-Affiliated\\s+Investments,\\s+Equity,\\s+|Controlled\\s+Investments,\\s+)(?:Industry(?:\\s+[^,]*)?,\\s+)?(?:Company\\s+)?|,?\\s*Industry\\s+[^,]+(?=,?\\s+Type\\s+of\\s+Investment\\b)|,?\\s*Reference\\s+Rate\\s+and\\s+Spread\\s+.*?(?=,?\\s+(?:Interest\\s+Rate|Acquisition\\s+Date|Maturity)\\b|$)|,?\\s*Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?|,?\\s*Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}"
+  },
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": [
+      "affiliation",
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "instrument_description",
+      "rate",
+      "maturity"
+    ],
+    "alternate_delimiters": []
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated|Non-Controlled/Non-Affiliated|Controlled\\s+Non-Affiliated|Controlled/Non-Affiliated)\\s+Investments,\\s+Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+|Non-Controlled/Non-Affiliated\\s+Investments,\\s+Equity,\\s+|Controlled\\s+Investments,\\s+)(?:Industry(?:\\s+[^,]*)?,\\s+)?(?:Company\\s+)?(.+?)(?:,\\s+Industry\\s+[^,]+)?(?:,\\s+|\\s+)Type\\s+of\\s+Investment\\b",
+    "hierarchy_instrument_re": "(?i)\\bType\\s+of\\s+Investment\\s+(.+?)(?:,?\\s+Reference\\s+Rate\\s+and\\s+Spread\\b|,?\\s+Interest\\s+Rate\\b|,?\\s+Acquisition\\s+Date\\b|,?\\s+Maturity\\b|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:(?:Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated|Non-Controlled/Non-Affiliated|Controlled\\s+Non-Affiliated|Controlled/Non-Affiliated)\\s+Investments,\\s+Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+|Non-Controlled/Non-Affiliated\\s+Investments,\\s+Equity,\\s+|Controlled\\s+Investments,\\s+)') AND regexp_matches(_clean, '(?i)\\bType\\s+of\\s+Investment\\b')",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Air Freight & Logistics",
+      "Automobile Components",
+      "Auto Components",
+      "Beverages",
+      "Chemicals",
+      "Commercial Services & Supplies",
+      "Construction & Engineering",
+      "Consumer Staples Distribution & Retail",
+      "Containers & Packaging",
+      "Diversified Consumer Services",
+      "Distributors",
+      "Electronic Equipment, Instruments & Components",
+      "Energy Equipment & Services",
+      "Financial Services",
+      "Food Products",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Health Care Providers & Services",
+      "Health Care Technology",
+      "Hotels, Restaurants & Leisure",
+      "Household Products",
+      "Investment Funds and Vehicles",
+      "Insurance",
+      "IT Services",
+      "Marine Transportation",
+      "Personal Care Products",
+      "Personal Products",
+      "Pharmaceuticals",
+      "Professional Services",
+      "Software",
+      "Trading Companies & Distributors"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Senior secured first lien debt positions with issuer, type of investment, spread, coupon, acquisition date, and maturity encoded in comma hierarchy strings.",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Delayed Draw Term Loan",
+          "Revolver",
+          "Reference Rate and Spread",
+          "SOFR",
+          "PRIME"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity positions including class units, preferred stock units, limited partnership units, and equity co-investments.",
+      "detection_rules": {
+        "keywords": [
+          "Class A Units",
+          "Class A-1 Units",
+          "Class B Units",
+          "Class C Units",
+          "Class D Units",
+          "Common Units",
+          "Equity Co-Invest",
+          "Limited Partnership Units",
+          "Preferred Stock",
+          "Series A Interest"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "mixed": {
+      "description": "Controlled investment and subtotal/total hierarchy rows used for source reconciliation diagnostics.",
+      "detection_rules": {
+        "keywords": [
+          "Controlled Investments",
+          "Subtotal",
+          "Total Investments"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "VARAGON_COMMA_HIERARCHY",
+      "description": "Position rows use comma-delimited affiliation, asset class, industry, company, type of investment, rate, acquisition date, and maturity segments.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Company <issuer>, Type of Investment <instrument>",
+      "disposition": "expected"
+    },
+    {
+      "id": "VARAGON_COMPARATIVE_TOTALS",
+      "description": "Quarterly source rows can include current and comparative Total Investments labels; these are non-position totals and should remain excluded from position-level holdings.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Total Investments, <Month> <Day>, <Year>",
+      "disposition": "expected"
+    },
+    {
+      "id": "VARAGON_LOT_SUFFIXES",
+      "description": "Some tranche rows append One or Two after maturity to distinguish lots; the wrapper preserves those suffixes in position keys.",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "Maturity <date> (One|Two)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.05
+    }
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001603480",
+  "entity_name": "TCW Direct Lending LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TCW_DIRECT_LENDING",
+    "prefix_rules": {
+      "Debt Investments and Equity Investments": "mixed",
+      "Debt Investments": "debt",
+      "Equity Investments": "equity",
+      "Cash Equivalents": "cash",
+      "Short-term Investments": "cash",
+      "Total Investments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "date",
+        "first out term loan",
+        "delayed draw priming term loan",
+        "delayed draw printing term loan",
+        "10th amendment term loan",
+        "2025 term loan",
+        "term loan",
+        "subordinated loan",
+        "incremental term loan",
+        "holdco term loan",
+        "revolver",
+        "sofr",
+        "libor",
+        "fixed coupon",
+        "maturity",
+        "pik"
+      ],
+      "equity": [
+        "common stock",
+        "common shares",
+        "common units",
+        "common membership interests",
+        "preferred stock",
+        "preferred equity",
+        "preferred units",
+        "preferred membership interests",
+        "class a common",
+        "class a units",
+        "class p-1 units",
+        "class p-2 units",
+        "class a preferred stock",
+        "class b preferred stock",
+        "class d preferred units",
+        "class e common units",
+        "membership interests",
+        "warrant",
+        "warrants",
+        "expires"
+      ],
+      "cash": [],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "debt investments and equity investments",
+      "debt investments",
+      "equity investments",
+      "short-term investments",
+      "cash equivalents",
+      "net assets",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "first american government obligation fund",
+      "short-term investments",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "money market"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?!Debt\\s+Investments|Equity\\s+Investments|Cash\\s+Equivalents|Short-term\\s+Investments|Total\\s+Investments)(?=.*\\b(?:Term\\s+Loan|Subordinated\\s+Loan|Revolver)\\b)(?=.*\\b(?:LLC|Inc\\.?|Corp\\.?|Company|Parent|Holdings|Intermediate)\\b)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?!Debt\\s+Investments|Equity\\s+Investments|Cash\\s+Equivalents|Short-term\\s+Investments|Total\\s+Investments)(?=.*\\b(?:Common\\s+Stock|Common\\s+Shares|Common\\s+Membership\\s+Interests|Preferred\\s+Membership\\s+Interests|Preferred\\s+Stock|Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Preferred\\s+)?Units?|P-[12]\\s+Units|Warrant)\\b)(?=.*\\b(?:LLC|Inc\\.?|Corp\\.?|Parent|Holdings|Ventures)\\b)",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Cash\\s+Equivalents|Short-term\\s+Investments)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+Investments|Debt\\s+Investments\\s+and\\s+Equity\\s+Investments)\\b",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)^(?!.*\\b(?:Date|Term\\s+Loan|Subordinated\\s+Loan|Incremental\\s+Term\\s+Loan|HoldCo\\s+Term\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|Warrants?)\\b)\\s*(?:[-,]\\s*)?[A-Za-z&/,.'()\\-\\s]+(?:\\s+Net\\s+Assets\\s+[-\\d.]+%?|\\s*)$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Net\\s+Assets\\b|\\s+Maturity\\b)|\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*$|\\s+Net\\s+Assets\\s+[-\\d.]+%?"
+  },
+  "identifier_format": {
+    "delimiter": "- ",
+    "field_order": [
+      "asset_class",
+      "country",
+      "industry",
+      "issuer_name",
+      "date",
+      "instrument_description",
+      "rate",
+      "net_assets",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      " ",
+      ", "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+(?:(?:Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Industrial\\s+Conglomerates|Investment\\s+Funds\\s+&\\s+Vehicles|Metals\\s+&\\s+Mining|Pharmaceuticals|Technolog(?:y|ies)\\s+Hardware,\\s+Storage\\s+and\\s+Peripherals),?\\s+)+)?(.+?)\\s+(?:Date\\s+|(?:\\d+(?:st|nd|rd|th)\\s+Amendment\\s+|\\d{4}\\s+|First\\s+Out\\s+|Delayed\\s+Draw\\s+(?:Priming|Printing)\\s+|HoldCo\\s+|Incremental\\s+)?Term\\s+Loan|Subordinated\\s+Loan|Revolver(?:\\s+Opco)?|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Common\\s+(?:Stock|Shares|Units|membership\\s+Interests)|Preferred\\s+(?:Stock|Equity|Units|membership\\s+Interests)|Membership\\s+Interests|Warrants?)\\b",
+    "hierarchy_instrument_re": "(?i)(?:\\bDate\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+|^\\s*(?:(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+(?:(?:Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Industrial\\s+Conglomerates|Investment\\s+Funds\\s+&\\s+Vehicles|Metals\\s+&\\s+Mining|Pharmaceuticals|Technolog(?:y|ies)\\s+Hardware,\\s+Storage\\s+and\\s+Peripherals),?\\s+)+)?.+?\\s+)((?:(?:\\d+(?:st|nd|rd|th)\\s+Amendment\\s+|\\d{4}\\s+|First\\s+Out\\s+|Delayed\\s+Draw\\s+(?:Priming|Printing)\\s+|HoldCo\\s+|Incremental\\s+)?Term\\s+Loan|Subordinated\\s+Loan|Revolver(?:\\s+Opco)?)(?:\\s+[A-Z])?|(?:Class\\s+[A-Z][A-Z0-9-]*\\s+Common|Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Common\\s+)?(?:Preferred\\s+)?Units?|P-[12]\\s+Units|Common\\s+(?:Stock|Shares|Units|membership\\s+Interests)|Preferred\\s+(?:Stock|Equity|Units|membership\\s+Interests)|Membership\\s+Interests|Warrants?(?:,\\s*expires\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)(?:.*?))\\s*(?:[-,]?\\s*\\d|\\s+Net\\s+Assets|\\s+Maturity\\b|$)",
+    "hierarchy_condition_extra": "(regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+.*\\b(?:Date|Term\\s+Loan|Subordinated\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Membership\\s+Interests|Warrants?)\\b') OR (regexp_matches(_clean, '(?i)^\\s*.*\\b(?:Term\\s+Loan|Subordinated\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Membership\\s+Interests|Warrants?)\\b') AND NOT regexp_matches(_clean, '(?i)^\\s*(?:Short-term\\s+Investments|Cash\\s+Equivalents|Total\\s+Investments)\\b')))",
+    "extra_industry_labels": [
+      "Distributors",
+      "Diversified Consumer Services",
+      "Diversified Financial Services",
+      "Hotels, Restaurants & Leisure",
+      "Household Durables",
+      "Industrial Conglomerates",
+      "Investment Funds & Vehicles",
+      "Metals & Mining",
+      "Pharmaceuticals",
+      "Technologies Hardware, Storage and Peripherals",
+      "Technology Hardware, Storage and Peripherals"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "TCW Direct Lending debt positions including term loans, subordinated loans, revolvers, HoldCo term loans, and incremental term loans.",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "First Out Term Loan",
+          "Delayed Draw Priming Term Loan",
+          "Delayed Draw Printing Term Loan",
+          "10th Amendment Term Loan",
+          "2025 Term Loan",
+          "Subordinated Loan",
+          "Revolver",
+          "HoldCo Term Loan",
+          "Incremental Term Loan",
+          "SOFR",
+          "LIBOR",
+          "Maturity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "TCW Direct Lending common stock, common shares, preferred equity, membership interests, units, and warrants.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Shares",
+          "Common Units",
+          "Preferred Stock",
+          "Preferred Equity",
+          "Preferred Units",
+          "Preferred membership Interests",
+          "Common membership Interests",
+          "Class A Common",
+          "Class A Preferred Stock",
+          "Class P-1 Units",
+          "Class P-2 Units",
+          "Class B Preferred Stock",
+          "Class D Preferred Units",
+          "Class E Common Units",
+          "Membership Interests",
+          "Warrant"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "TCW_DIRECT_COMPARATIVE_PERIOD_ROWS",
+      "description": "Several later filings include prior-period rows for the same accession; the wrapper classifies identifiers while the staging pre-filter remains responsible for excluding comparative periods.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "same accession with prior report_date",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_DIRECT_SHORT_TERM_INVESTMENTS",
+      "description": "Short-term Investments Net Assets rows and U.S. Treasury Bill rows are cash or non-private-market buckets, not position-level private holdings.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Short-term Investments ... Net Assets",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_DIRECT_EARLY_STRATEGIC_VENTURES",
+      "description": "The Strategic Ventures preferred membership interest appears as a position leaf under Equity Investments- United States Investment Funds & Vehicles; the sibling row without instrument terms is a category/issuer rollup.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "TCW Direct Lending Strategic Ventures Preferred membership Interests",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

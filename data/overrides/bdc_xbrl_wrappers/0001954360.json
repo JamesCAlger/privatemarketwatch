@@ -4,6 +4,28 @@
   "entity_name": "Crescent Private Credit Income Corp.",
   "version": 1,
   "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "CRESCENT_PRIVATE_CREDIT",
+    "prefix_rules": {
+      "Investments": "mixed"
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total cash equivalents",
+      "cash equivalents"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "dreyfus government cash management",
+      "money market",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "canonical_strip_re": "\\s+Maturity\\s*/\\s*Dissolution\\s+Date\\s+\\d{1,2}/\\d{4}\\s+.*$",
+    "category_marker_re": "(?i)^Investments\\s+[A-Za-z][A-Za-z\\s,&/-]+\\s+(?:Debt|Equity)\\s+Investments\\s+[A-Za-z][A-Za-z\\s,&/-]+$"
+  },
   "staging": {
     "strategy": "hierarchy_extract",
     "hierarchy_issuer_re": "^Investments\\s+.+?\\s+(?:Debt|Equity)\\s+Investments\\s+(?:CRESCENT_INDUSTRY_LABELS)\\s+(.+?)\\s+Investment\\s+Type\\s+",

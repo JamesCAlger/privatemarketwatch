@@ -1,0 +1,221 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001825265",
+  "entity_name": "TCW Direct Lending VIII LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TCW_DIRECT_LENDING_VIII",
+    "prefix_rules": {
+      "Debt Investments": "debt",
+      "Equity Investments": "equity",
+      "Debt & Equity Investments": "mixed",
+      "Cash Equivalents": "cash",
+      "Short-term Investments": "cash",
+      "Total Investments": "mixed",
+      "Net Assets": "mixed",
+      "Liabilities in Excess of Other Assets": "mixed",
+      "Net unrealized depreciation on unfunded commitments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "acquisition date",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "last out",
+        "take back",
+        "sofr",
+        "maturity",
+        "maturity date",
+        "fixed coupon",
+        "pik"
+      ],
+      "equity": [
+        "acquisition date",
+        "common stock",
+        "common units",
+        "preferred stock",
+        "preferred units",
+        "warrant",
+        "warrants",
+        "expires"
+      ],
+      "cash": [],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "debt & equity investments",
+      "net assets",
+      "liabilities in excess of other assets",
+      "net unrealized depreciation on unfunded commitments",
+      "total debt investments",
+      "total equity investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "first american government obligation fund",
+      "short-term investments",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "money market"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Cash\\s+Equivalents|Short-term\\s+Investments)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+Investments|Debt\\s*&\\s*Equity\\s+Investments|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other\\s+Assets|Net\\s+unrealized\\s+depreciation\\s+on\\s+unfunded\\s+commitments)\\b",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)^(?!.*\\bAcquisition\\s+Date\\b)\\s*(?:Debt|Equity)\\s+Investments,\\s+.+,?\\s+Net\\s+Assets\\s+[-\\d.]+%\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Maturity(?:\\s+Date)?\\b)|\\s+(?:%\\s+of\\s+)?Net\\s+Assets\\s+[-\\d.]+%"
+  },
+  "identifier_format": {
+    "delimiter": ", ",
+    "field_order": [
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "acquisition_date",
+      "instrument_description",
+      "rate",
+      "net_assets",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      " ",
+      " - "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt|Equity)\\s+Investments,\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+(.+?),?\\s+Acquisition\\s+Date\\s+",
+    "hierarchy_instrument_re": "(?i)\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+(.+?)(?:\\s*[^A-Za-z0-9\\s/,]\\s*\\d|\\s+Net\\s+Assets\\b|\\s+%\\s+of\\s+Net\\s+Assets\\b|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments,\\s+.*\\bAcquisition\\s+Date\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Last\\s+Out|Take\\s+Back|Warrants?|Common\\s+(?:Units|Stock)|Preferred\\s+(?:Units|Stock|Equity)|Equity)\\b')",
+    "extra_industry_labels": [
+      "Automobile Components",
+      "Building Products",
+      "Commercial & Professional Services",
+      "Commercial Services & Supplies",
+      "Construction & Engineering",
+      "Construction Materials",
+      "Consumer Discretionary",
+      "Consumer Services",
+      "Containers & Packaging",
+      "Electrical Equipment",
+      "Energy Equipment & Services",
+      "Food Products",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Hotels, Restaurants & Leisure",
+      "Household Durables",
+      "Industrial Machinery",
+      "Information Technology Services",
+      "Leisure Products",
+      "Machinery",
+      "Materials",
+      "Oil & Gas Equipment & Services",
+      "Oil & Gas & Consumable Fuels",
+      "Oil, Gas & Consumable Fuels",
+      "Pharmaceuticals",
+      "Professional Services",
+      "Software",
+      "Specialty Retail",
+      "Technology Hardware, Storage and Peripherals",
+      "Textiles, Apparel & Luxury Goods",
+      "Trading Companies & Distributors",
+      "Transportation Infrastructure"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "TCW VIII debt positions including term loans, delayed draw term loans, revolvers, last-out loans, and take-back loans.",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Last Out",
+          "Take Back",
+          "SOFR",
+          "Fixed Coupon",
+          "Maturity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "TCW VIII common stock, common units, preferred equity, and equity-linked warrant positions.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Units",
+          "Preferred Stock",
+          "Preferred Units",
+          "Preferred Equity",
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "TCW_VIII_COMPARATIVE_PERIOD_ROWS",
+      "description": "Several 2024-2025 filings include prior-period rows for the same accession; the wrapper classifies identifiers while the staging pre-filter remains responsible for excluding comparative periods.",
+      "first_seen_quarter": "2024-03-31",
+      "detection_pattern": "same accession with prior report_date",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VIII_2023_SCALE_ERROR",
+      "description": "The 2023-03-31 filing has a known 1000x FV scale anomaly handled by the existing staging scale-correction guard.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "quarterly FV more than 100x CIK median",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VIII_INDUSTRY_SUBTOTALS",
+      "description": "Industry rows ending in Net Assets are subtotal rows, not position-level holdings; rows with Acquisition Date are treated as leaves.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Debt Investments, <industry>, Net Assets <pct>%",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

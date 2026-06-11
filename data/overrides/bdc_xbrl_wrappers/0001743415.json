@@ -1,0 +1,222 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001743415",
+  "entity_name": "SCP Private Credit Income BDC LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "SCP_PRIVATE_CREDIT_INCOME",
+    "prefix_rules": {
+      "Total Investments & Cash Equivalents": "mixed",
+      "Total Investments(10)": "mixed",
+      "Total Investments": "mixed",
+      "Total Bank Debt/Senior Secured Loans": "mixed",
+      "Total Common Equity/Equity": "mixed",
+      "Liabilities in Excess of Other Assets": "mixed",
+      "Liabilities in Excess of Other": "mixed",
+      "Net Assets": "mixed",
+      "Cash Equivalents": "cash",
+      "Oldco AI, LLC (f/k/a Amerimark) One": "debt",
+      "Oldco AI, LLC (f/k/a Amerimark)": "debt",
+      "Common Equity/Equity Interests/Warrants": "equity",
+      "Common Equity/Equity Interest": "equity",
+      "Preferred Equity": "equity",
+      "Bank Debt/Senior Secured Loans": "debt",
+      "ank Debt/Senior Secured Loans": "debt"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "|",
+        "industry",
+        "spread above index",
+        "interest rate",
+        "acquisition date",
+        "maturity date",
+        "maturity",
+        "floor",
+        "s+",
+        "l+",
+        "p+"
+      ],
+      "equity": [
+        "|",
+        "industry",
+        "common stock",
+        "warrant",
+        "warrants",
+        "preferred equity",
+        "interest rate",
+        "pik",
+        "acquisition date"
+      ],
+      "cash": [],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total bank debt/senior secured loans",
+      "total common equity/equity",
+      "liabilities in excess of other assets",
+      "liabilities in excess of other",
+      "net assets",
+      "investments",
+      "cash equivalents"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government obligation",
+      "first american"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*Cash\\s+Equivalents\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+Investments|Investments|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other|Total\\s+Bank\\s+Debt|Total\\s+Common\\s+Equity)\\b",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:[-,]?\\s*)?(?:Bank\\s+Debt/Senior\\s+Secured\\s+Loans|Common\\s+Equity/Equity(?:\\s+Interests/Warrants)?|Preferred\\s+Equity|Investments|Total\\s+.*|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other(?:\\s+Assets)?)(?:\\s*(?:[-\\u2013\\u2014]|\\u00e2\\u20ac[\\u201c\\u201d])\\s*\\(?[-\\d.]+%\\)?)?\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s*(?:[-\\u2013\\u2014]|\\u00e2\\u20ac[\\u201c\\u201d])\\s*\\(?[-\\d.]+%\\)?|\\s+Spread\\s+above\\s+Index\\s+[A-Z]\\+\\d+|\\s+Floor\\s+\\d+(?:\\.\\d+)?%?|\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?|\\s*\\|\\s*[SLP]\\+\\d+\\s*(?=\\|)|\\s*\\|\\s*\\d+(?:\\.\\d+)?%?\\s*(?=\\|)|\\b(?:Industry|Acquisition\\s+Date|Maturity\\s+Date)\\b\\s*|/\\d{1,2}(?=/\\d{2,4}\\b)|\\b0(?=\\d/\\d{4}\\b)"
+  },
+  "identifier_format": {
+    "delimiter": " | ",
+    "field_order": [
+      "asset_class",
+      "issuer_name",
+      "industry",
+      "spread_or_rate",
+      "floor",
+      "interest_rate",
+      "acquisition_date",
+      "maturity_date"
+    ],
+    "alternate_delimiters": [
+      " - ",
+      " \u2014 ",
+      " \u2013 "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Bank\\s+Debt/Senior\\s+Secured\\s+Loans|ank\\s+Debt/Senior\\s+Secured\\s+Loans|Common\\s+Equity/Equity\\s+Interests/Warrants|Preferred\\s+Equity)\\s*(?:\\||[-\\u2013\\u2014]|\\u00e2\\u20ac[\\u201c\\u201d])\\s*(?:[-\\d.]+%\\s+)?(.+?)(?:\\s+(?:Common\\s+Stock|Warrants?)\\b|\\s+Industry\\b|\\s+Interest\\s+Rate\\b|\\s+Acquisition\\s+Date\\b|\\s*\\|)",
+    "hierarchy_instrument_re": "(?i)^\\s*((?:Bank\\s+Debt/Senior\\s+Secured\\s+Loans|ank\\s+Debt/Senior\\s+Secured\\s+Loans|Common\\s+Equity/Equity\\s+Interests/Warrants|Preferred\\s+Equity))\\b",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Bank\\s+Debt/Senior\\s+Secured\\s+Loans|ank\\s+Debt/Senior\\s+Secured\\s+Loans|Common\\s+Equity/Equity\\s+Interests/Warrants|Preferred\\s+Equity)\\s*(?:\\||[-\\u2013\\u2014]|\\u00e2\\u20ac[\\u201c\\u201d])') AND NOT regexp_matches(_clean, '(?i)^\\s*(?:Total\\s+|Net\\s+Assets|Liabilities\\s+in\\s+Excess|Cash\\s+Equivalents)')",
+    "extra_industry_labels": [
+      "Biotechnology",
+      "Broadline Retail",
+      "Building Products",
+      "Capital Markets",
+      "Diversified Consumer Services",
+      "Diversified Financial Services",
+      "Financial Services",
+      "Government",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Health Care Providers & Services",
+      "Health Care Technology",
+      "Insurance",
+      "Internet & Catalog Retail",
+      "Internet Software & Services",
+      "IT Services",
+      "Leisure Equipment & Products",
+      "Life Sciences Tools & Services",
+      "Packaged Foods & Meats",
+      "Personal Products",
+      "Pharmaceuticals",
+      "Professional Services",
+      "Road & Rail",
+      "Software",
+      "Specialty Retail",
+      "Trading Companies & Distributors",
+      "Water Utilities",
+      "Wireless Telecommunication Services"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "SCP Private Credit bank debt and senior secured loan positions.",
+      "detection_rules": {
+        "keywords": [
+          "Bank Debt/Senior Secured Loans",
+          "Spread above Index",
+          "Interest Rate",
+          "Maturity Date",
+          "S+",
+          "L+",
+          "P+"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "SCP Private Credit common equity, equity interests, warrants, and preferred equity positions.",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity/Equity Interests/Warrants",
+          "Common Stock",
+          "Warrants",
+          "Preferred Equity",
+          "PIK",
+          "Acquisition Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "SCP_LIABILITIES_ROWS",
+      "description": "Liabilities in Excess of Other Assets rows are negative net asset/liability buckets, not private-market investment positions.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Liabilities in Excess of Other",
+      "disposition": "expected"
+    },
+    {
+      "id": "SCP_FORMAT_DRIFT_PIPE_TO_DASH",
+      "description": "The filer transitions from pipe-separated identifiers in 2023 to dash/section-prefixed identifiers with Industry, Interest Rate, Acquisition Date, and Maturity Date fields.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Bank Debt/Senior Secured Loans | ... and Bank Debt/Senior Secured Loans - ... Industry ...",
+      "disposition": "expected"
+    },
+    {
+      "id": "SCP_BARE_OLDCO_AI_MEMBERS",
+      "description": "Bare Oldco AI investment-identifier-axis members without section prefix or instrument terms are rollup/header members; detailed Oldco debt positions appear separately with Bank Debt/Senior Secured Loans terms.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Oldco AI, LLC (f/k/a Amerimark)",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

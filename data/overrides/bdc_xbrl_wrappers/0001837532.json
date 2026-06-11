@@ -83,6 +83,14 @@
       {
         "regex": "(?i)State\\s+Street\\s+Institutional|Goldman\\s+Sachs\\s+Financial\\s+Square|Money\\s+Market|Government\\s+Fund",
         "family": "debt"
+      },
+      {
+        "regex": "(?i)\\b(?:Inc\\.?|LLC|L\\.L\\.C\\.?|Corp\\.?|Corporation|Co\\.?|Company|Ltd\\.?|Limited|LP|L\\.P\\.?|S\\.A\\.?\\s+R\\.L\\.?|B\\.V\\.?|GmbH|Topco|Bidco|Holdings?)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\bS\\.?a\\.?r\\.?l\\.?\\b|Patriot\\s+Growth\\s+Insurance\\s+Services.*\\bLL\\b",
+        "family": "debt"
       }
     ],
     "no_prefix_is_aggregate": true,

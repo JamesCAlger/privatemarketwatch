@@ -1,0 +1,244 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002052153",
+  "entity_name": "Apollo Origination II (UL) Capital Trust",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "APOLLO_ORIGINATION_II_UL",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment type",
+        "interest rate",
+        "maturity date",
+        "maturity",
+        "reference rate",
+        "sofr",
+        "sonia",
+        "libor",
+        "euribor",
+        "bbsw",
+        "prime",
+        "first lien secured debt",
+        "second lien secured debt",
+        "unsecured debt",
+        "subordinated debt",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving",
+        "convertible bond",
+        "corporate bond",
+        "senior note"
+      ],
+      "equity": [
+        "investment type",
+        "common equity",
+        "preferred equity",
+        "common stock",
+        "preferred stock",
+        "preferred stocks",
+        "membership interest",
+        "partnership interest",
+        "limited partnership",
+        "equity unit",
+        "stock"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ],
+      "fund": [
+        "co-investment"
+      ]
+    },
+    "aggregate_markers": [
+      "investments after cash equivalents",
+      "investments before cash equivalents",
+      "investments",
+      "total investments",
+      "total debt investments",
+      "total equity investments"
+    ],
+    "non_private_markers": [
+      "state street institutional",
+      "money market",
+      "goldman sachs financial square",
+      "government fund",
+      "u.s. government",
+      "us government"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Term\\s+Loan|Delayed\\s+Draw|Revolv(?:er|ing)|Convertible\\s+Bond|Corporate\\s+Bond|Senior\\s+Note|Interest\\s+Rate\\s+(?:S|SOFR|SONIA|BBSW|EURIBOR|L|P)\\+|\\b(?:S|E|L|P)\\+\\d",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)Common\\s+Equity|Preferred\\s+Equity|Common\\s+Stock|Preferred\\s+Stock|Preferred\\s+Stocks|Membership\\s+Interest|Partnership\\s+Interest|Limited\\s+Partnership|Equity\\s+Unit|\\bStock\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)^Co-investment$",
+        "family": "fund"
+      },
+      {
+        "regex": "(?i)^(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Beverages|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Finance|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+REITs|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Marine\\s+Transportation|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor\\s+Equipment|Software|Specialty\\s+Retail|Technology\\s+Hardware,\\s+Storage\\s+&\\s+Peripherals|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)(?:\\b|$)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^Investments\\b|^Total\\s+",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)State\\s+Street\\s+Institutional|Goldman\\s+Sachs\\s+Financial\\s+Square|Money\\s+Market|Government\\s+Fund",
+        "family": "debt"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "category_marker_before_total": true,
+    "category_marker_re": "^(?:(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Beverages|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Finance|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+REITs|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Marine\\s+Transportation|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor\\s+Equipment|Software|Specialty\\s+Retail|Technology\\s+Hardware,\\s+Storage\\s+&\\s+Peripherals|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)|Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Investments|Total\\s+.+)$",
+    "canonical_strip_re": "(?i)^(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Beverages|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Finance|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+REITs|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Marine\\s+Transportation|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor\\s+Equipment|Software|Specialty\\s+Retail|Technology\\s+Hardware,\\s+Storage\\s+&\\s+Peripherals|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)\\s+|(?:Investment|Security)\\s+Type\\s+|\\s+Interest\\s+Rate\\s+.*?(?=\\s+Maturity\\s+Date|$)"
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:Investment|Security)\\s+Type\\s+",
+    "hierarchy_instrument_re": "(?:Investment|Security)\\s+Type\\s+(.+)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Investment|Security)\\s+Type\\s+')",
+    "extra_industry_labels": [
+      "Air Freight & Logistics",
+      "Automobile Components",
+      "Beverages",
+      "Capital Markets",
+      "Chemicals",
+      "Commercial Services & Supplies",
+      "Communications Equipment",
+      "Consumer Finance",
+      "Consumer Staples Distribution & Retail",
+      "Containers & Packaging",
+      "Diversified Consumer Services",
+      "Diversified REITs",
+      "Electric Utilities",
+      "Electronic Equipment, Instruments & Components",
+      "Energy Equipment & Services",
+      "Equity Real Estate Investment Trusts (REITs)",
+      "Financial Services",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Health Care Providers & Services",
+      "Independent Power & Renewable Electricity Producers",
+      "Life Sciences Tools & Services",
+      "Machinery",
+      "Marine Transportation",
+      "Personal Care Products",
+      "Semiconductors & Semiconductor Equipment",
+      "Specialty Retail",
+      "Technology Hardware, Storage & Peripherals",
+      "Transportation Infrastructure",
+      "Wireless Telecommunication Services",
+      "Special Purpose Entity",
+      "Asset Backed Securities",
+      "Financing"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Apollo Origination II UL debt instruments encoded as sector/company/Investment Type rows with rate and maturity fields.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Secured Debt",
+          "Second Lien Secured Debt",
+          "Unsecured Debt",
+          "Subordinated Debt",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Revolving",
+          "Convertible Bond",
+          "Corporate Bond",
+          "Senior Note",
+          "Senior Secured"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Apollo Origination II UL common, preferred, membership, and partnership interest rows encoded with Investment Type.",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Preferred Equity",
+          "Common Stock",
+          "Preferred Stock",
+          "Preferred Stocks",
+          "Membership Interest",
+          "Partnership Interest",
+          "Equity Unit",
+          "Limited Partnership",
+          "Stock"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Apollo Origination II UL warrants and options on equity.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "fund": {
+      "description": "Apollo Origination II UL disclosed co-investment row carried as a fund-style position.",
+      "detection_rules": {
+        "keywords": [
+          "Co-investment"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

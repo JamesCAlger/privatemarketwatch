@@ -1,0 +1,268 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001715933",
+  "entity_name": "TCW Direct Lending VII LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TCW_DIRECT_LENDING_VII",
+    "prefix_rules": {
+      "Debt Securities": "debt",
+      "Equity Securities": "equity",
+      "Controlled Affiliated Investments": "mixed",
+      "Controlled Affiliated Investment": "mixed",
+      "Controlled Affiliated investments": "mixed",
+      "Non-Controlled Affiliated Investments": "mixed",
+      "Non-Controlled Affiliated Investment": "mixed",
+      "Debt & Equity Securities": "mixed",
+      "Cash Equivalents": "cash",
+      "Short-term Investments": "cash",
+      "Cash": "cash",
+      "Total Investments": "mixed",
+      "Net Assets": "mixed",
+      "Liabilities in Excess of Other Assets": "mixed",
+      "Net unrealized depreciation on unfunded commitments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "acquisition date",
+        "term loan",
+        "delayed draw",
+        "incremental term loan",
+        "protective advance",
+        "revolver",
+        "last out",
+        "super senior",
+        "sofr",
+        "libor",
+        "prime",
+        "maturity",
+        "maturity date",
+        "fixed coupon",
+        "pik"
+      ],
+      "equity": [
+        "acquisition date",
+        "common stock",
+        "common units",
+        "preferred stock",
+        "preferred units",
+        "class a units",
+        "class b common units",
+        "class c common units",
+        "class a lp interests",
+        "membership interests",
+        "warrant",
+        "warrants",
+        "expires"
+      ],
+      "cash": [],
+      "mixed": [
+        "term loan",
+        "delayed draw",
+        "incremental term loan",
+        "protective advance",
+        "revolver",
+        "last out",
+        "super senior",
+        "common stock",
+        "common units",
+        "preferred stock",
+        "preferred units",
+        "class a units",
+        "class b common units",
+        "class c common units",
+        "class a lp interests",
+        "membership interests",
+        "warrant",
+        "warrants",
+        "pik"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "debt & equity securities",
+      "net assets",
+      "liabilities in excess of other assets",
+      "net unrealized depreciation on unfunded commitments",
+      "total debt securities",
+      "total equity securities",
+      "debt securities",
+      "equity securities",
+      "controlled affiliated investments",
+      "non-controlled affiliated investments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "first american government obligation fund",
+      "short-term investments",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "money market"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Cash\\s+Equivalents|Short-term\\s+Investments)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+Investments|Debt\\s*&\\s*Equity\\s+Securities|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other\\s+Assets|Net\\s+unrealized\\s+depreciation\\s+on\\s+unfunded\\s+commitments)\\b",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)^(?!.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Incremental\\s+Term\\s+Loan|Protective\\s+Advance|Revolver|Last\\s+Out|Super\\s+Senior|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)\\s*(?:[-,]\\s*)?[A-Za-z&/,.'()\\-\\s]+(?:\\s+Net\\s+Assets\\s+[-\\d.]+%|\\s*)$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Maturity(?:\\s+Date)?\\b)|\\s+(?:%\\s+of\\s+)?Net\\s+Assets\\s+[-\\d.]+%"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "acquisition_date",
+      "instrument_description",
+      "rate",
+      "net_assets",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      ", ",
+      " - "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+)(.+?)\\s+(?:Acquisition\\s+Date\\s+|(?:Last\\s+Out\\s+|Delayed\\s+Draw\\s+|Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b",
+    "hierarchy_instrument_re": "(?i)(?:\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+|(?:Debt|Equity)\\s+Securities\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+.+?\\s+|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.+?\\s+)((?:Last\\s+Out\\s+)?(?:Delayed\\s+Draw\\s+)?(?:Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)(?:\\s+[A-Z])?|(?:Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Common\\s+)?Units|Class\\s+[A-Z]\\s+LP\\s+Interests|Membership\\s+Interests|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Warrants?)(?:.*?))\\s*(?:[-,]?\\s*\\d|\\s+%\\s+of\\s+Net\\s+Assets|\\s+Net\\s+Assets|\\s+Maturity\\b|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s+.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)')",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Auto Components",
+      "Automobile Components",
+      "Building Products",
+      "Capital Goods",
+      "Commercial & Professional Services",
+      "Commercial & Professional Service",
+      "Commercial Services & Supplies",
+      "Construction & Engineering",
+      "Construction Materials",
+      "Consumer Durables & Apparel",
+      "Consumer Discretionary",
+      "Consumer Services",
+      "Containers & Packaging",
+      "Electrical Equipment",
+      "Energy Equipment & Services",
+      "Food Products",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Health Care Technology",
+      "Hotels, Restaurants & Leisure",
+      "Household Durables",
+      "Household Products",
+      "Industrial Machinery",
+      "Information Technology Services",
+      "Internet & Direct Marketing Retail",
+      "Leisure Products",
+      "Machinery",
+      "Materials",
+      "Media",
+      "Oil & Gas Equipment & Services",
+      "Oil & Gas & Consumable Fuels",
+      "Oil, Gas & Consumable Fuels",
+      "Pharmaceuticals",
+      "Professional Services",
+      "Publishing",
+      "Software",
+      "Specialty Retail",
+      "Technology Hardware, Storage and Peripherals",
+      "Textiles, Apparel & Luxury Goods",
+      "Trading Companies & Distributors",
+      "Transportation Infrastructure"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "TCW VII debt positions including term loans, delayed draw term loans, revolvers, last-out loans, super-senior revolvers, and protective advances.",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Last Out",
+          "Super Senior",
+          "Protective Advance",
+          "SOFR",
+          "LIBOR",
+          "Maturity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "TCW VII common stock, common units, preferred units, membership interests, LP interests, and equity-linked warrant positions.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Units",
+          "Preferred Stock",
+          "Preferred Units",
+          "Class A Units",
+          "Class B Common Units",
+          "Class C Common Units",
+          "Class A LP Interests",
+          "Membership Interests",
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "TCW_VII_COMPARATIVE_PERIOD_ROWS",
+      "description": "Several filings include prior-period rows for the same accession; the wrapper classifies identifiers while the staging pre-filter remains responsible for excluding comparative periods.",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "same accession with prior report_date",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VII_INDUSTRY_SUBTOTALS",
+      "description": "Rows such as Debt Securities Food Products and Debt Securities Chemicals are industry or issuer subtotal candidates unless they contain acquisition-date or instrument evidence.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Debt Securities <industry> without acquisition date or instrument terms",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

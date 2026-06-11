@@ -1,0 +1,167 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002008748",
+  "entity_name": "Lord Abbett Private Credit Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "LORD_ABBETT_PRIVATE_CREDIT",
+    "prefix_rules": {
+      "First Lien Secured Debt": "debt",
+      "First Lien Secured Debt [Member]": "debt",
+      "Second Lien Secured Debt": "debt",
+      "Second Lien Secured Debt [Member]": "debt",
+      "Equity [Member]": "equity",
+      "Total Equity": "equity",
+      "Total First Lien Secured Debt-non-controlled/non-affiliated": "debt",
+      "Total First Lien Secured Debt-non-controlled/non-affliliated": "debt",
+      "Total Second Lien Secured Debt": "debt",
+      "Total Investments": "mixed",
+      "Total Investments at Fair Value": "mixed",
+      "Total Investments in Joint Venture": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "revolver",
+        "delayed draw",
+        "delayed draw term"
+      ],
+      "equity": [
+        "equity interest",
+        "common stock",
+        "preferred stock",
+        "common equity",
+        "preferred equity"
+      ],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "first lien secured debt",
+      "first lien secured debt [member]",
+      "second lien secured debt",
+      "second lien secured debt [member]",
+      "equity [member]",
+      "total first lien secured debt",
+      "total second lien secured debt",
+      "total equity",
+      "total investments",
+      "total investments at fair value",
+      "total investments in joint venture",
+      "joint venture"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*.+\\((?:Revolver|Delayed\\s+Draw(?:\\s+Term)?)\\)(?:\\s+\\d+)?\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?:First|Second)\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*Equity\\s+\\[Member\\]\\s*$",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*Total\\s+(?:First\\s+Lien\\s+Secured\\s+Debt(?:-non-controlled/non-aff?iliated)?|Second\\s+Lien\\s+Secured\\s+Debt|Equity|Investments(?:\\s+at\\s+Fair\\s+Value|\\s+in\\s+Joint\\s+Venture)?)\\s*$",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*(?:First\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Second\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Equity\\s+\\[Member\\]|Total\\s+(?:First\\s+Lien\\s+Secured\\s+Debt(?:-non-controlled/non-aff?iliated)?|Second\\s+Lien\\s+Secured\\s+Debt|Equity|Investments(?:\\s+at\\s+Fair\\s+Value|\\s+in\\s+Joint\\s+Venture)?))\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s+\\d+\\s*$"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "issuer_name",
+      "instrument_hint"
+    ],
+    "alternate_delimiters": [
+      " - ",
+      ", ",
+      " [Member]"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Lord Abbett borrower debt rows when the identifier contains explicit revolver or delayed-draw instrument text.",
+      "detection_rules": {
+        "keywords": [
+          "Revolver",
+          "Delayed Draw",
+          "Delayed Draw Term"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "maturity_date": {
+          "type": "presence",
+          "constraint": "optional"
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity rows only when an identifier includes explicit position-level equity security text; member and total rows are rollups.",
+      "detection_rules": {
+        "keywords": [
+          "Equity Interest",
+          "Common Equity",
+          "Preferred Equity",
+          "Common Stock",
+          "Preferred Stock"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "LORD_ABBETT_CATEGORY_MEMBER_FACTS",
+      "description": "The 2025-12-31 and 2026-03-31 filings include InvestmentIdentifierAxis facts such as First Lien Secured Debt [Member] and Equity [Member]. These are category/member rollups, not position-level constituents.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "First Lien Secured Debt [Member] / Equity [Member]",
+      "disposition": "expected"
+    },
+    {
+      "id": "LORD_ABBETT_TOTAL_ROLLUPS",
+      "description": "Total investments, total first/second lien debt, total equity, and total joint venture rows are portfolio rollups that should be documented for reconciliation but not promoted to position-level holdings.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "Total Investments at Fair Value / Total First Lien Secured Debt-non-controlled/non-affiliated",
+      "disposition": "expected"
+    },
+    {
+      "id": "LORD_ABBETT_BORROWER_ROWS_WITHOUT_FV",
+      "description": "Many borrower identifiers contain maturity evidence and instrument hints such as Revolver or Delayed Draw, but cached XBRL rows currently have blank fair value. The wrapper recognizes the identifier shape but does not synthesize missing FV.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "<issuer> (Revolver) or <issuer> (Delayed Draw) with blank FV",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

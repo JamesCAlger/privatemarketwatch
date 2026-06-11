@@ -7,6 +7,8 @@
   "dispatch": {
     "rule_prefix": "FIDELITY_PRIVATE_CREDIT",
     "prefix_rules": {
+      "Investments -- non-controlled/ non-affiliate Equity": "equity",
+      "Investments -- non-controlled/ non-affiliated Equity": "equity",
       "Investments Investments": "debt"
     },
     "aggregate_markers": [
@@ -17,6 +19,7 @@
       "total investment portfolio",
       "non-controlled / non-affiliate first lien debt"
     ],
+    "category_marker_re": "(?i)^\\s*(?:(?:First|Second)\\s+Lien\\s+)?(?:Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)(?:\\s+[A-Z][A-Za-z,&:]+(?:\\s+[&A-Z]?[A-Za-z,&]+)*)?\\s*$",
     "non_private_markers": [
       "cash",
       "money market",

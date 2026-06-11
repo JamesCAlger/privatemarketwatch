@@ -1,0 +1,223 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001841514",
+  "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "COMMONWEALTH_CREDIT_PARTNERS_BDC_I",
+    "prefix_rules": {
+      "Debt Investments": "debt",
+      "Equity Investments": "equity",
+      "Affiliated investments": "mixed",
+      "Affiliate company investment": "mixed",
+      "Non-controlled, Affiliated investments": "mixed",
+      "Membership Interest Investments": "equity",
+      "Cash and Cash Equivalents": "cash",
+      "Investment and Cash and Cash Equivalents": "cash",
+      "Total Cash and Cash Equivalents": "cash",
+      "Total Investment and Cash and Cash Equivalents": "cash",
+      "Total Investments and Cash and Cash Equivalents": "cash",
+      "Total Investments": "mixed",
+      "Total Equity Investments": "equity",
+      "Total Debt Investments Preferred Equity and Common Equity": "mixed",
+      "Net Assets": "mixed",
+      "Liabilities In Excess of Other Assets": "mixed",
+      "Liabilities in Excess of Other Assets": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "term loan",
+        "delayed draw",
+        "delayed draw loan",
+        "revolving credit line",
+        "revolver",
+        "spread above index",
+        "interest rate",
+        "maturity date",
+        "sofr",
+        "pik"
+      ],
+      "equity": [
+        "common equity",
+        "preferred equity",
+        "preferred units",
+        "membership interest",
+        "preferred membership interest",
+        "common membership interest",
+        "equity",
+        "class",
+        "units",
+        "series"
+      ],
+      "cash": [],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total common equity",
+      "total preferred equity",
+      "total first lien senior secured",
+      "total affiliate investments",
+      "total affiliated investments",
+      "net assets",
+      "liabilities in excess of other assets",
+      "liabilities in excess of other assets",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "total cash and cash equivalents",
+      "total investment and cash and cash equivalents",
+      "total investments and cash and cash equivalents",
+      "other cash and cash equivalents",
+      "cash equivalents",
+      "investment and cash and cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "treasury bill",
+      "government obligations"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Liabilities\\s+In?\\s+Excess\\s+of\\s+Other\\s+Assets|Net\\s+Assets|Total\\s+Investments|Total\\s+Debt\\s+Investments\\s+Preferred\\s+Equity\\s+and\\s+Common\\s+Equity|Total\\s+Equity\\s+Investments)\\s*$",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+)?(?:Cash\\s+and\\s+Cash\\s+Equivalents|Investments?\\s+and\\s+Cash\\s+and\\s+Cash\\s+Equivalents)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*.+?\\s+-\\s+(?:Series\\s+[A-Z0-9-]+\\s+units|Class\\s+[A-Z0-9-]+\\s+(?:Units|Preferred\\s+Units)|Preferred\\s+Units)\\s*$",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*.+?\\s+(?:Preferred\\s+)?Equity\\s*,\\s*(?:Media\\s+&\\s+Entertainment|Consumer\\s+Services|Commercial\\s+&\\s+Professional\\s+Services|Health\\s+Care\\s+Equipment\\s+&\\s+Services|Consumer\\s+Durables\\s+&\\s+Apparel)\\s*$",
+        "family": "equity"
+      }
+    ],
+    "category_marker_re": "(?i)^\\s*,?\\s*(?:Debt\\s+Investments,\\s+)?(?:Equity\\s+Investments,\\s+)?(?:(?:Affiliated\\s+investments|Affiliate\\s+company\\s+investment|Non-controlled,\\s+Affiliated\\s+investments),\\s+)?(?:Total\\s+First\\s+Lien\\s+Senior\\s+Secured|Total\\s+(?:Common|Preferred)\\s+Equity|Total\\s+(?:Non-controlled,\\s+)?Affiliat(?:e|ed)\\s+Investments)\\s*$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s*,?\\s*Spread\\s+Above\\s+Index\\s+.*?(?=\\s+Interest\\s+Rate\\b)|\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?|\\s*,?\\s*\\(?\\d+(?:\\.\\d+)?%\\s+floor\\)?"
+  },
+  "identifier_format": {
+    "delimiter": " - ",
+    "field_order": [
+      "asset_class",
+      "security_type",
+      "issuer_name",
+      "instrument_description",
+      "industry",
+      "rate_terms",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      ", ",
+      " - ",
+      " -"
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments,\\s+First\\s+Lien\\s+Senior\\s+Secured,\\s+|Equity\\s+Investments,\\s+(?:Common\\s+Equity,\\s+)?|Membership\\s+Interest\\s+Investments,\\s+(?:Common|Preferred)\\s+Membership\\s+Interest,\\s+)?(.+?)\\s*(?:-\\s*)?(?:Term\\s+Loan|Delayed\\s+Draw(?:\\s+Term)?\\s+Loan|Revolving\\s+Credit\\s+Line|Class\\s+[A-Z0-9-]+\\s+Units|Series\\s+[A-Z0-9-]+\\s+units|Preferred\\s+Equity|Equity)\\b",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:Debt\\s+Investments,\\s+First\\s+Lien\\s+Senior\\s+Secured,\\s+|Equity\\s+Investments,\\s+(?:Common\\s+Equity,\\s+)?|Membership\\s+Interest\\s+Investments,\\s+(?:Common|Preferred)\\s+Membership\\s+Interest,\\s+)?.+?\\s*(?:-\\s*)?((?:Term\\s+Loan|Delayed\\s+Draw(?:\\s+Term)?\\s+Loan|Revolving\\s+Credit\\s+Line|Class\\s+[A-Z0-9-]+\\s+Units|Series\\s+[A-Z0-9-]+\\s+units|Preferred\\s+Equity|Equity)\\b.*?)(?:\\s*,\\s*(?:MSD_INDUSTRY_LABELS)\\s*,?\\s*Spread\\s+Above\\s+Index|\\s*,\\s*(?:MSD_INDUSTRY_LABELS)\\s*$|\\s+Spread\\s+Above\\s+Index|\\s+Interest\\s+Rate|\\s+Maturity\\s+Date|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt\\s+Investments,\\s+First\\s+Lien\\s+Senior\\s+Secured,\\s+.+?\\s*-\\s*(?:Term\\s+Loan|Delayed\\s+Draw(?:\\s+Term)?\\s+Loan|Revolving\\s+Credit\\s+Line)\\b|(?:Equity\\s+Investments,\\s+(?:Common\\s+Equity,\\s+)?|Membership\\s+Interest\\s+Investments,\\s+(?:Common|Preferred)\\s+Membership\\s+Interest,\\s+)?.+?\\s*(?:-\\s*)?(?:Class\\s+[A-Z0-9-]+\\s+Units|Series\\s+[A-Z0-9-]+\\s+units|Preferred\\s+Equity|Equity)\\s*,\\s*(?:MSD_INDUSTRY_LABELS)\\s*$)')",
+    "extra_industry_labels": [
+      "Capital Goods",
+      "Consumer Services",
+      "Diversified Financials",
+      "Financial Services",
+      "Health Care Equipment & Services",
+      "Media & Entertainment",
+      "Software & Services",
+      "Technology Hardware & Equipment",
+      "Commercial & Professional Services",
+      "Consumer Durables & Apparel"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Commonwealth first-lien senior secured loans including term loans, delayed draw loans, and revolving credit lines.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Senior Secured",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolving Credit Line",
+          "Spread Above Index",
+          "SOFR",
+          "Maturity Date"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Commonwealth common equity, preferred equity, and class or series unit positions.",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Preferred Equity",
+          "Preferred Units",
+          "Class",
+          "Series",
+          "Units"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "COMMONWEALTH_EN_DASH_DEBT_LEAVES",
+      "description": "Some 2023-2024 debt leaves use en dash separators between issuer and instrument; wrapper/staging normalization treats those as position-level debt leaves.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "Debt Investments, First Lien Senior Secured, <issuer> - <instrument>, <industry>, Spread Above Index ...",
+      "disposition": "expected"
+    },
+    {
+      "id": "COMMONWEALTH_ROLLUPS_AND_BALANCE_ROWS",
+      "description": "Portfolio totals, debt/equity subtotals, net assets, liabilities, and investment-and-cash totals appear under InvestmentIdentifierAxis and should not be promoted to position-level holdings.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Total Investments, Total Debt Investments, Net Assets, Liabilities in Excess of Other Assets",
+      "disposition": "expected"
+    },
+    {
+      "id": "COMMONWEALTH_BARE_EQUITY_UNITS",
+      "description": "Later-quarter equity rows can appear as issuer-first unit identifiers without Debt/Equity Investments prefixes; the wrapper classifies only unit-bearing leaf patterns and leaves issuer-only rows unpromoted.",
+      "first_seen_quarter": "2024-09-30",
+      "detection_pattern": "<issuer> - Class/Series units",
+      "disposition": "expected"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

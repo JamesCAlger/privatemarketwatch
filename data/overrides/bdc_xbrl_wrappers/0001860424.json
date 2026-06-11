@@ -1,0 +1,226 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001860424",
+  "entity_name": "Onex Falcon Direct Lending BDC Fund",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "ONEX_FALCON_DIRECT_LENDING",
+    "prefix_rules": {
+      "Non-controlled/Non-affiliated investments Debt Investments": "debt",
+      "NON-CONTROLLED/NON-AFFILIATED INVESTMENTS DEBT INVESTMENTS": "debt",
+      "Non-controlled/Non-affiliated investments Equity": "equity",
+      "NON-CONTROLLED/NON-AFFILIATED INVESTMENTS EQUITY": "equity",
+      "Non-controlled/Non-affiliated investments": "mixed",
+      "NON-CONTROLLED/NON-AFFILIATED INVESTMENTS": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "initial acquisition date",
+        "acquisition date",
+        "maturity date",
+        "interest rate",
+        "reference rate and spread",
+        "reference rate",
+        "term loan",
+        "term facility",
+        "delayed draw",
+        "ddtl",
+        "revolver",
+        "revolving loan",
+        "revolving credit",
+        "revolving credit facility",
+        "sofr",
+        "prime",
+        "floor"
+      ],
+      "equity": [
+        "common equity",
+        "common stock",
+        "common units",
+        "preferred equity",
+        "preferred units",
+        "class a",
+        "class b",
+        "series",
+        "warrant"
+      ],
+      "mixed": [],
+      "cash": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "non-controlled/non-affiliated investments",
+      "non-controlled/non-affiliated investments debt investments",
+      "non-controlled/non-affiliated investments equity"
+    ],
+    "non_private_markers": [
+      "cash and cash equivalents",
+      "cash equivalents",
+      "money market",
+      "u.s. treasury",
+      "us treasury",
+      "government obligations fund"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:total\\s+)?cash(?:\\s+and\\s+cash\\s+equivalents|\\s+equivalents)?\\b|money\\s+market|government\\s+obligations\\s+fund|u\\.s\\.\\s+treasury|us\\s+treasury",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*total\\s+(?:debt\\s+investments|equity\\s+investments|investments)\\b",
+        "family": "debt"
+      }
+    ],
+    "canonical_strip_re": "(?i)\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+.*?(?=\\s+(?:Interest\\s+Rate|Initial\\s+Acquisition\\s+Date|Acquisition\\s+Date|Maturity\\s+Date)\\b)|\\s+Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?(?:\\s*\\([^)]*\\))?|\\s+(?:Initial\\s+Acquisition\\s+Date|Acquisition\\s+Date)\\s+\\d{1,2}/\\d{1,2}/\\d{4}"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "affiliation",
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "instrument_description",
+      "rate_terms",
+      "dates"
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Non-controlled/Non-affiliated\\s+investments\\s+)?(?:Debt\\s+Investments|Equity)\\s+(?:Non-controlled/Non-affiliated\\s+investments\\s+Debt\\s+Investments\\s+)?(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Initial\\s+Term\\s+Loan|Closing\\s+Date\\s+Dollar\\s+Term\\s+Loan|Closing\\s+Date\\s+Initial\\s+Term\\s+Loan|Second\\s+Amendment\\s+Incremental\\s+Term\\s+Loan|Ninth\\s+Amendment\\s+Dollar\\s+Refinancing\\s+Term\\s+Loan|Eight\\s+Amendment\\s+Term\\s+Loan|2024\\s+Refinancing\\s+Term\\s+Loan|2024-2\\s+Term\\s+Loan|[A-Za-z0-9 -]+\\s+Term\\s+Loan|Term\\s+A\\s+Loan|Term\\s+Loan\\s*B|Term\\s+Loan\\s+B|Term\\s+B-2|Term\\s+B\\s+Loan(?:\\s+\\(2024\\))?|Tranche\\s+B\\s+Loan|Incremental\\s+TL|Term\\s+Facility|Incremental\\s+Term\\s+Facility|Term\\s+Loan|Delayed\\s+Draw\\s+Term\\s+Loan|Additional\\s+DDTL|Designated\\s+DDTL|Future\\s+Expansion\\s+DDTL|Advance\\s+Revolver|Revolver|Initial\\s+Revolving\\s+Credit|Initial\\s+Revolving\\s+Credit\\s+Facility|Revolving\\s+Credit\\s+Loan|Revolving\\s+Credit\\s+Facility|Revolving\\s+Loan|Additional\\s+Revolving\\s+Commitment|Extended\\s+Facility\\s+B(?:\\s+\\(USD\\))?|Initial\\s+USD\\s+Term\\s+Loan|HoldCoTerm\\s+Loan|Class\\s+[A-Za-z0-9 -]+\\s+Equity|Common\\s+Equity|Common\\s+Stock|Common\\s+Units|Preferred\\s+Equity|Preferred\\s+Units|Class\\s+[A-Za-z0-9 -]+\\s+(?:common\\s+)?units|Series\\s+[A-Za-z0-9 -]+\\s+Preferred\\s+Units|Equity\\s+Interest|Warrants?)\\b",
+    "hierarchy_instrument_re": "(?i)^\\s*(?:Non-controlled/Non-affiliated\\s+investments\\s+)?(?:Debt\\s+Investments|Equity)\\s+(?:Non-controlled/Non-affiliated\\s+investments\\s+Debt\\s+Investments\\s+)?(?:MSD_INDUSTRY_LABELS)\\s+.+?\\s+((?:Initial\\s+Term\\s+Loan|Closing\\s+Date\\s+Dollar\\s+Term\\s+Loan|Closing\\s+Date\\s+Initial\\s+Term\\s+Loan|Second\\s+Amendment\\s+Incremental\\s+Term\\s+Loan|Ninth\\s+Amendment\\s+Dollar\\s+Refinancing\\s+Term\\s+Loan|Eight\\s+Amendment\\s+Term\\s+Loan|2024\\s+Refinancing\\s+Term\\s+Loan|2024-2\\s+Term\\s+Loan|[A-Za-z0-9 -]+\\s+Term\\s+Loan|Term\\s+A\\s+Loan|Term\\s+Loan\\s*B|Term\\s+Loan\\s+B|Term\\s+B-2|Term\\s+B\\s+Loan(?:\\s+\\(2024\\))?|Tranche\\s+B\\s+Loan|Incremental\\s+TL|Term\\s+Facility|Incremental\\s+Term\\s+Facility|Term\\s+Loan|Delayed\\s+Draw\\s+Term\\s+Loan|Additional\\s+DDTL|Designated\\s+DDTL|Future\\s+Expansion\\s+DDTL|Advance\\s+Revolver|Revolver|Initial\\s+Revolving\\s+Credit|Initial\\s+Revolving\\s+Credit\\s+Facility|Revolving\\s+Credit\\s+Loan|Revolving\\s+Credit\\s+Facility|Revolving\\s+Loan|Additional\\s+Revolving\\s+Commitment|Extended\\s+Facility\\s+B(?:\\s+\\(USD\\))?|Initial\\s+USD\\s+Term\\s+Loan|HoldCoTerm\\s+Loan|Class\\s+[A-Za-z0-9 -]+\\s+Equity|Common\\s+Equity|Common\\s+Stock|Common\\s+Units|Preferred\\s+Equity|Preferred\\s+Units|Class\\s+[A-Za-z0-9 -]+\\s+(?:common\\s+)?units|Series\\s+[A-Za-z0-9 -]+\\s+Preferred\\s+Units|Equity\\s+Interest|Warrants?)\\b.*?)(?:\\s+Reference\\s+Rate\\s+and\\s+Spread\\s+|\\s+Interest\\s+Rate\\s+|\\s+Initial\\s+Acquisition\\s+Date\\s*|\\s+Acquisition\\s+Date\\s+|\\s+Maturity\\s+Date\\s*|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Non-controlled/Non-affiliated\\s+investments\\s+)?(?:Debt\\s+Investments|Equity)\\s+') AND NOT regexp_matches(_clean, '(?i)^\\s*Non-cNon-controlled/Non-affiliated\\s+investments\\s+Debt\\s+Investments\\b') AND regexp_matches(_clean, '(?i)\\b(?:Initial\\s+Term\\s+Loan|Closing\\s+Date\\s+Dollar\\s+Term\\s+Loan|Closing\\s+Date\\s+Initial\\s+Term\\s+Loan|Second\\s+Amendment\\s+Incremental\\s+Term\\s+Loan|Ninth\\s+Amendment\\s+Dollar\\s+Refinancing\\s+Term\\s+Loan|Eight\\s+Amendment\\s+Term\\s+Loan|2024\\s+Refinancing\\s+Term\\s+Loan|2024-2\\s+Term\\s+Loan|[A-Za-z0-9 -]+\\s+Term\\s+Loan|Term\\s+A\\s+Loan|Term\\s+Loan\\s*B|Term\\s+Loan\\s+B|Term\\s+B-2|Term\\s+B\\s+Loan(?:\\s+\\(2024\\))?|Tranche\\s+B\\s+Loan|Incremental\\s+TL|Term\\s+Facility|Incremental\\s+Term\\s+Facility|Term\\s+Loan|Delayed\\s+Draw\\s+Term\\s+Loan|Additional\\s+DDTL|Designated\\s+DDTL|Future\\s+Expansion\\s+DDTL|Advance\\s+Revolver|Revolver|Initial\\s+Revolving\\s+Credit|Initial\\s+Revolving\\s+Credit\\s+Facility|Revolving\\s+Credit\\s+Loan|Revolving\\s+Credit\\s+Facility|Revolving\\s+Loan|Additional\\s+Revolving\\s+Commitment|Extended\\s+Facility\\s+B(?:\\s+\\(USD\\))?|Initial\\s+USD\\s+Term\\s+Loan|HoldCoTerm\\s+Loan|Class\\s+[A-Za-z0-9 -]+\\s+Equity|Common\\s+Equity|Common\\s+Stock|Common\\s+Units|Preferred\\s+Equity|Preferred\\s+Units|Class\\s+[A-Za-z0-9 -]+\\s+(?:common\\s+)?units|Series\\s+[A-Za-z0-9 -]+\\s+Preferred\\s+Units|Equity\\s+Interest|Warrants?)\\b') AND regexp_matches(_clean, '(?i)(?:Reference\\s+Rate\\s+and\\s+Spread|Interest\\s+Rate|Initial\\s+Acquisition\\s+Date|Acquisition\\s+Date|Maturity\\s+Date|Common\\s+Equity|Preferred\\s+Equity|Common\\s+Units|Preferred\\s+Units|Warrants?)')",
+    "extra_industry_labels": [
+      "Aerospace & Defense",
+      "Automotive",
+      "Automotive, Wholesale & Repair",
+      "Beverage, Food & Tobacco",
+      "Business Services",
+      "Chemicals",
+      "Chemicals, Plastics & Rubber",
+      "Construction & Building",
+      "Consumer Goods",
+      "Consumer Goods: Durable",
+      "Consumer Goods: Non-durable",
+      "Consumer Services",
+      "Containers, Packaging & Glass",
+      "Environmental Industries",
+      "Financial Services",
+      "Forest Products & Paper",
+      "Healthcare & Pharmaceuticals",
+      "High Tech Industries",
+      "Insurance",
+      "Media: Advertising, Printing & Publishing",
+      "Retail",
+      "Sovereign & Public Finance",
+      "Telecommunications",
+      "Transportation: Cargo",
+      "Wholesale"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Debt investments in Onex Falcon's non-controlled/non-affiliated flat hierarchy, including term loans, delayed draws, and revolving facilities.",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Delayed Draw Term Loan",
+          "Revolving Loan",
+          "Revolving Credit Facility",
+          "Reference Rate and Spread",
+          "SOFR",
+          "PRIME"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity investments in Onex Falcon's non-controlled/non-affiliated flat hierarchy.",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Common Stock",
+          "Common Units",
+          "Preferred Equity",
+          "Preferred Units",
+          "Series",
+          "Class"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "cash": {
+      "description": "Cash, cash equivalents, and money-market rows excluded from private-market position outputs.",
+      "detection_rules": {
+        "keywords": [
+          "Cash",
+          "Cash Equivalents",
+          "Money Market",
+          "Government Obligations Fund"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "onex_flat_affiliation_industry_hierarchy",
+      "description": "Identifiers flatten affiliation, asset class, industry, issuer, instrument, rate terms, and dates into one XBRL typed dimension value.",
+      "first_seen_quarter": "2023-06-30",
+      "detection_pattern": "Non-controlled/Non-affiliated investments Debt Investments <industry> <issuer> <instrument> Reference Rate and Spread ...",
+      "disposition": "expected"
+    },
+    {
+      "id": "onex_uppercase_spacing_variants",
+      "description": "Some 2024 rows use all-caps hierarchy labels and spaced legal suffixes or rate tokens such as L L C and S O F R.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "NON-CONTROLLED/NON-AFFILIATED INVESTMENTS DEBT INVESTMENTS ...",
+      "disposition": "expected"
+    },
+    {
+      "id": "onex_apryse_corrupted_concatenated_prefix",
+      "description": "Two Apryse rows in 2025 use a malformed Non-cNon-controlled prefix that concatenates another affiliation hierarchy into the maturity token; these are excluded as source-corrupted aggregate artifacts rather than parsed as position leaves.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "Non-cNon-controlled/Non-affiliated investments Debt Investments ... 6/26/2032ontrolled/Non-affiliated investments Debt Investments ...",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

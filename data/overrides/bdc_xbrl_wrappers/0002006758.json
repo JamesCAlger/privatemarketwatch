@@ -1,0 +1,183 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0002006758",
+  "entity_name": "Middle Market Apollo Institutional Private Lending",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "MM_APOLLO_INSTITUTIONAL",
+    "prefix_rules": {},
+    "leaf_markers_by_family": {
+      "debt": [
+        "investment type",
+        "interest rate",
+        "maturity date",
+        "maturity",
+        "reference rate",
+        "sofr",
+        "sonia",
+        "euribor",
+        "libor",
+        "prime",
+        "first lien secured debt",
+        "second lien secured debt",
+        "unsecured debt",
+        "subordinated debt",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "revolving"
+      ],
+      "equity": [
+        "investment type",
+        "common equity",
+        "preferred equity",
+        "common stock",
+        "preferred stock",
+        "preferred stocks",
+        "limited partnership",
+        "partnership interest",
+        "membership interest",
+        "stock"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants"
+      ]
+    },
+    "aggregate_markers": [
+      "investments",
+      "total investments",
+      "total debt investments",
+      "total equity investments"
+    ],
+    "non_private_markers": [
+      "state street institutional",
+      "money market",
+      "goldman sachs financial square",
+      "government fund",
+      "u.s. government",
+      "us government"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Term\\s+Loan|Delayed\\s+Draw|Revolv(?:er|ing)|Interest\\s+Rate\\s+(?:S|SOFR|SONIA|EURIBOR|L|P)\\+|\\b(?:S|E|L|P)\\+\\d",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)Common\\s+Equity|Preferred\\s+Equity|Common\\s+Stock|Preferred\\s+Stock|Preferred\\s+Stocks|Membership\\s+Interest|Partnership\\s+Interest|Limited\\s+Partnership|\\bStock\\b",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)\\bWarrants?\\b",
+        "family": "warrant"
+      },
+      {
+        "regex": "(?i)^(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Financial\\s+Services|Food\\s+Products|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Software|Specialty\\s+Retail|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)(?:\\b|$)",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^Investments\\b|^Total\\s+",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)\\b(?:Inc\\.?|LLC|L\\.L\\.C\\.?|Corp\\.?|Corporation|Co\\.?|Company|Ltd\\.?|Limited|LP|L\\.P\\.?|S\\.A\\.?\\s+R\\.L\\.?|SARL|B\\.V\\.?|GmbH|Topco|Bidco|Holdings?)\\b",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)State\\s+Street\\s+Institutional|Goldman\\s+Sachs\\s+Financial\\s+Square|Money\\s+Market|Government\\s+Fund",
+        "family": "debt"
+      }
+    ],
+    "no_prefix_is_aggregate": true,
+    "category_marker_before_total": true,
+    "category_marker_re": "^(?:(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Financial\\s+Services|Food\\s+Products|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Software|Specialty\\s+Retail|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)|Investments|Total\\s+.+)$",
+    "canonical_strip_re": "(?i)^(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Financial\\s+Services|Food\\s+Products|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Software|Specialty\\s+Retail|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)\\s+|(?:Investment|Security)\\s+Type\\s+|Total\\s+Investments\\s+(?=(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Common\\s+Equity|Preferred\\s+Equity)|\\s+(?:Interest\\s+Rate\\s+)?(?:[A-Z]+\\s*\\+\\s*\\d+(?:\\.\\d+)?|\\d+(?:\\.\\d+)?%)\\s*(?:Cash\\s+plus\\s+\\d+(?:\\.\\d+)?%\\s+PIK)?(?:,\\s*(?:Cash\\s+plus\\s+\\d+(?:\\.\\d+)?%\\s+PIK,\\s*)?\\d+(?:\\.\\d+)?%\\s+Floor)?(?=\\s+Maturity\\s+Date|$)"
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:(?:Investment|Security)\\s+Type\\s+)?(?:(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrants?)\\b",
+    "hierarchy_instrument_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)?.+?\\s+(?:(?:Investment|Security)\\s+Type\\s+)?((?:(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrants?)\\b.*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:(?:Investment|Security)\\s+Type\\s+)?(?:(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|Warrants?)\\b')",
+    "extra_industry_labels": [
+      "Automobile Components",
+      "Consumer Staples Distribution & Retail",
+      "Financial Services",
+      "Personal Care Products"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Apollo institutional flat hierarchy debt rows with industry, issuer text, instrument, rate, and maturity in one identifier.",
+      "detection_rules": {
+        "keywords": [
+          "First Lien Secured Debt",
+          "Second Lien Secured Debt",
+          "Unsecured Debt",
+          "Subordinated Debt",
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "Revolving"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Common and preferred equity rows with stock, limited partnership, membership, or partnership-interest descriptors.",
+      "detection_rules": {
+        "keywords": [
+          "Common Equity",
+          "Preferred Equity",
+          "Common Stock",
+          "Preferred Stock",
+          "Preferred Stocks",
+          "Limited Partnership",
+          "Partnership Interest",
+          "Membership Interest",
+          "Stock"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrants and similar equity-linked instruments.",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

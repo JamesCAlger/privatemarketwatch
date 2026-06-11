@@ -2,15 +2,15 @@
   "description": "Unlisted active BDCs with XBRL filing data. Auto-generated reference for the wrapper skill.",
   "generated": "2026-06-03",
   "total_count": 129,
-  "with_wrapper": 27,
-  "without_wrapper": 102,
+  "with_wrapper": 39,
+  "without_wrapper": 90,
   "with_holdings_data": 123,
   "without_holdings_data": 6,
   "entries": [
     {
       "cik": "0001950976",
       "entity_name": "26North BDC, Inc.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
       "wrapper_version": 1,
       "wrapper_sections": [
         "dispatch",
@@ -103,7 +103,15 @@
     {
       "cik": "0001987221",
       "entity_name": "AMG Comvest Senior Lending Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 2179,
       "holdings_quarters": 10,
@@ -197,7 +205,15 @@
     {
       "cik": "0002052153",
       "entity_name": "Apollo Origination II (UL) Capital Trust",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 792,
       "holdings_quarters": 5,
@@ -347,7 +363,13 @@
     {
       "cik": "0001834543",
       "entity_name": "BlackRock Direct Lending Corp.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 6988,
       "holdings_quarters": 13,
@@ -427,7 +449,15 @@
     {
       "cik": "0001841514",
       "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 3592,
       "holdings_quarters": 13,
@@ -588,7 +618,16 @@
     {
       "cik": "0001674760",
       "entity_name": "Goldman Sachs Private Middle Market Credit LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "identifier_parser",
+        "archetypes",
+        "invariants"
+      ],
+      "staging_strategy": "hierarchy_extract + identifier_parser:hierarchical_pct",
       "has_holdings_data": true,
       "holdings_rows": 1967,
       "holdings_quarters": 13,
@@ -820,7 +859,13 @@
     {
       "cik": "0002008748",
       "entity_name": "Lord Abbett Private Credit Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 190,
       "holdings_quarters": 4,
@@ -840,7 +885,14 @@
     {
       "cik": "0001988280",
       "entity_name": "Manulife Private Credit Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "identifier_format",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 3181,
       "holdings_quarters": 9,
@@ -850,7 +902,15 @@
     {
       "cik": "0002006758",
       "entity_name": "Middle Market Apollo Institutional Private Lending",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 3166,
       "holdings_quarters": 7,
@@ -969,7 +1029,13 @@
     {
       "cik": "0001588272",
       "entity_name": "NexPoint Capital, Inc.  (NXPT)",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 872,
       "holdings_quarters": 11,
@@ -1069,7 +1135,15 @@
     {
       "cik": "0001860424",
       "entity_name": "Onex Falcon Direct Lending BDC Fund",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 2081,
       "holdings_quarters": 12,
@@ -1157,7 +1231,15 @@
     {
       "cik": "0001948368",
       "entity_name": "Phillip Street Middle Market Lending Fund LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "identifier_format",
+        "identifier_parser",
+        "archetypes",
+        "invariants"
+      ],
       "has_holdings_data": true,
       "holdings_rows": 3526,
       "holdings_quarters": 13,
@@ -1195,7 +1277,15 @@
     {
       "cik": "0001743415",
       "entity_name": "SCP Private Credit Income BDC LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 1014,
       "holdings_quarters": 11,
@@ -1205,7 +1295,15 @@
     {
       "cik": "0001959568",
       "entity_name": "Senior Credit Investments, LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 4012,
       "holdings_quarters": 10,
@@ -1225,7 +1323,15 @@
     {
       "cik": "0001646614",
       "entity_name": "Silver Point Specialty Credit Fund, L.P.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 4570,
       "holdings_quarters": 12,
@@ -1415,7 +1521,15 @@
     {
       "cik": "0001603480",
       "entity_name": "TCW Direct Lending LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 1475,
       "holdings_quarters": 13,
@@ -1425,7 +1539,15 @@
     {
       "cik": "0001715933",
       "entity_name": "TCW Direct Lending VII LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 2863,
       "holdings_quarters": 13,
@@ -1435,7 +1557,15 @@
     {
       "cik": "0001825265",
       "entity_name": "TCW Direct Lending VIII LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 1550,
       "holdings_quarters": 13,
@@ -1451,7 +1581,15 @@
     {
       "cik": "0001916608",
       "entity_name": "TCW Star Direct Lending LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 1030,
       "holdings_quarters": 13,
@@ -1477,7 +1615,15 @@
     {
       "cik": "0001792509",
       "entity_name": "TriplePoint Global Venture Credit, LLC",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 9355,
       "holdings_quarters": 10,
@@ -1497,7 +1643,15 @@
     {
       "cik": "0001784700",
       "entity_name": "Varagon Capital Corp.",
-      "wrapper_status": "none",
+      "wrapper_status": "exists",
+      "wrapper_version": 1,
+      "wrapper_sections": [
+        "dispatch",
+        "staging",
+        "archetypes",
+        "invariants"
+      ],
+      "wrapper_staging_strategy": "hierarchy_extract",
       "has_holdings_data": true,
       "holdings_rows": 8471,
       "holdings_quarters": 13,

@@ -1,0 +1,270 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001646614",
+  "entity_name": "Silver Point Specialty Credit Fund, L.P.",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "SILVER_POINT_SPECIALTY_CREDIT",
+    "prefix_rules": {
+      "Non-Controlled/Non-Affiliated Investments, Secured Loans, 1st Lien Term Loan,": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Loans, 1st Lien Term Loan": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Loans, 1st Lien Revolver": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Loans, 2nd Lien Term Loan,": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Loans, 2nd Lien Term Loan": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Bonds ,Senior Secured Bonds,": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Bonds ,Senior Secured Bonds": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Bonds, Senior Secured Bonds,": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Bonds, Senior Secured Bonds": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Secured Loans Bonds": "debt",
+      "Non-Controlled/Non-Affiliated Investments, Equities, Common Equities": "equity",
+      "Non-Controlled/Affiliated Investments, Secured Loans, 1st Lien Term Loan,": "debt",
+      "Non-Controlled/Affiliated Investments, Secured Loans, 1st Lien Term Loan": "debt",
+      "Non-Controlled/Affiliated Investments, Subordinated Notes,": "debt",
+      "Non-Controlled/Affiliated Investments, Subordinated Notes": "debt",
+      "Controlled Investments, Secured Loans, 1st Lien Term Loan,": "debt",
+      "Controlled Investments, Secured Loans, 1st Lien Term Loan": "debt",
+      "Controlled Investments, Secured Loans, 1st Lien Revolver": "debt",
+      "Controlled Investments, 1st Lien Secured Loans": "debt",
+      "Controlled Investments, Equities, Common Equities": "equity",
+      "Controlled Investments, Equities, Secured Loans, 1st Lien Term Loan": "debt",
+      "Controlled Investments, Equities, Secured Loans, 1st Lien Revolver": "debt",
+      "Controlled Investments, Real Estate Properties": "equity",
+      "Controlled Investments, Trust Interest": "equity",
+      "Non-Controlled/Non-Affiliated Investments 1st Lien/Secured Loans": "debt",
+      "Non-Controlled/Non-Affiliated Investments 1st Lien/ Secured Loans": "debt",
+      "Non-Controlled/Non-Affiliated Investments 2nd Lien/Secured Loans": "debt",
+      "Non-Controlled/Non-Affiliated Investments Senior Secured Bonds": "debt",
+      "Non-Controlled/Non-Affiliated Investments Unsecured Bonds": "debt",
+      "Non-Controlled/Non-Affiliated Investments Equities": "equity",
+      "Non-Controlled/Non-Affiliated Investments Warrants": "warrant",
+      "Non-Controlled/Affiliated Investments 1st Lien/Secured Loans": "debt",
+      "Non-Controlled/Affiliated Investments Senior Secured Debt": "debt",
+      "Non-Controlled/Affiliated Investments Senior Secured Bonds": "debt",
+      "Non-Controlled/Affiliated Investments Subordinated Debt": "debt",
+      "Non-Controlled/Affiliated Investments Unsecured Debt": "debt",
+      "Non-Controlled/Affiliated Investments Equities": "equity",
+      "Controlled Investments 1st Lien/Secured Loans": "debt",
+      "Controlled Investments Equities": "equity",
+      "Controlled Investments Real Estate Properties": "equity",
+      "Controlled Investments Trust Interest": "equity",
+      "SP-CREH 19 Highline LLC, Secured Loans": "debt",
+      "SP-CREH 19 Highline LLC Secured Loans": "debt",
+      "SP-CREH 19 Highline LLC, Equities": "equity",
+      "SP-CREH 19 Highline LLC Equities": "equity",
+      "TH Liquidating Trust, Trust Interest": "equity",
+      "TH Liquidating Trust Trust Interest": "equity",
+      "1st Lien/Secured Loans": "debt",
+      "1st Lien/ Secured Loans": "debt",
+      "2nd Lien/Secured Loans": "debt",
+      "Senior Secured Bonds": "debt",
+      "Unsecured Bonds": "debt",
+      "Subordinated Debt": "debt",
+      "Unsecured Debt": "debt",
+      "Equities": "equity",
+      "Real Estate Properties": "equity",
+      "Trust Interest": "equity"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "1st lien",
+        "2nd lien",
+        "secured loans",
+        "senior secured",
+        "subordinated",
+        "unsecured debt",
+        "term loan",
+        "revolver",
+        "revolving",
+        "senior secured bonds",
+        "rate ",
+        "interest rate",
+        "reference rate",
+        "original acquisition date",
+        "maturity date",
+        "maturity"
+      ],
+      "equity": [
+        "equities",
+        "common equities",
+        "common equity",
+        "common stock",
+        "trust interest",
+        "real estate properties",
+        "original acquisition date",
+        "acquisition date",
+        "maturity date"
+      ],
+      "warrant": [
+        "warrant",
+        "warrants",
+        "original acquisition date",
+        "expiration date"
+      ],
+      "cash": [],
+      "mixed": [
+        "type of investment",
+        "1st lien",
+        "2nd lien",
+        "term loan",
+        "revolver",
+        "secured loans",
+        "common equities",
+        "real estate properties",
+        "original acquisition date",
+        "maturity date",
+        "interest rate"
+      ]
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total controlled investments",
+      "total non-controlled/affiliated investments",
+      "total non-controlled/non-affiliated investments",
+      "total cash equivalents",
+      "total cash equivalents and restricted cash equivalents",
+      "total secured loans",
+      "total senior secured bonds",
+      "total subordinated debt",
+      "total unsecured debt",
+      "total trust interest",
+      "total real estate properties",
+      "total equities",
+      "total common equities",
+      "controlled investments, united states of america",
+      "non-controlled/non-affiliated investments united states of america equities",
+      "non-controlled/non-affiliated investments, total united states of america common equities",
+      "non-controlled/non-affiliated investments total united states of america equities",
+      "non-controlled investments, united states of america",
+      "non-controlled investments united states of america"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "restricted cash equivalents",
+      "money market",
+      "jpmorgan 100% us treasury securities money market fund",
+      "u.s. treasury",
+      "us treasury"
+    ],
+    "category_marker_re": "(?i)^(?:.*\\btotal\\b.*|controlled\\s+investments,?\\s+united\\s+states\\s+of\\s+america|non-controlled/non-affiliated\\s+investments,?\\s+(?:total\\s+)?(?:united\\s+states\\s+of\\s+america\\s+)?(?:common\\s+)?equities|non-controlled\\s+investments,?\\s+united\\s+states\\s+of\\s+america|(?:united\\s+states\\s+of\\s+america|canada|luxembourg|netherlands|germany|japan|united\\s+kingdom|singapore|cayman\\s+islands|australia)|(?:1st\\s+lien/?\\s*secured\\s+loans|2nd\\s+lien/?\\s*secured\\s+loans|senior\\s+secured\\s+bonds|unsecured\\s+bonds|subordinated\\s+debt|unsecured\\s+debt|equities|real\\s+estate\\s+properties|trust\\s+interest)(?:\\s+(?:united\\s+states\\s+of\\s+america|canada|luxembourg|netherlands|germany|japan|united\\s+kingdom|singapore|cayman\\s+islands|australia))?)$",
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*Total\\s+",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*Cash\\s+Equivalents\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*Controlled\\s+Investments,?\\s+Total\\b",
+        "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*Non-Controlled/(?:Non-)?Affiliated\\s+Investments,?\\s+Total\\b",
+        "family": "mixed"
+      }
+    ],
+    "canonical_strip_re": "(?i),?\\s*Industry\\s+.*?(?=\\s+(?:Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date)\\b)|,?\\s*Interest\\s+Rate\\s+\\d+\\.?\\d*\\s*%|,?\\s*Original\\s+Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}"
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+(?:Secured\\s+Loans,?\\s+(?:1st|2nd)\\s+Lien\\s+(?:Term\\s+Loan|Revolver)|Secured\\s+Bonds\\s*,?\\s*Senior\\s+Secured\\s+Bonds|Subordinated\\s+Notes|Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Equities,?\\s+Common\\s+Equities|Equities|Real\\s+Estate\\s+Properties|Trust\\s+Interest),?\\s+(?:United\\s+States\\s+of\\s+America|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia),?\\s+(.+?)(?:,\\s+[^,]+,\\s+(?:Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date)|\\s+Instrument\\s+)",
+    "hierarchy_instrument_re": "(?i)^(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+(.+?)(?:,?\\s+(?:United\\s+States\\s+of\\s+America|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia)\\b)",
+    "hierarchy_trailing_re": "(?i)\\s+(Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments') AND regexp_matches(_clean, '(?i)\\b(?:1st\\s+Lien|2nd\\s+Lien|Secured\\s+Loans|Senior\\s+Secured|Subordinated|Unsecured\\s+Debt|Equities|Real\\s+Estate\\s+Properties|Trust\\s+Interest)\\b') AND regexp_matches(_clean, '(?i)\\b(?:Rate|Interest\\s+Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date|Instrument)\\b')"
+  },
+  "archetypes": {
+    "debt": {
+      "description": "Secured loans, revolvers, senior secured bonds, subordinated and unsecured debt",
+      "detection_rules": {
+        "keywords": [
+          "1st Lien",
+          "2nd Lien",
+          "Term Loan",
+          "Revolver",
+          "Secured Loans",
+          "Senior Secured",
+          "Subordinated",
+          "Unsecured Debt",
+          "Bonds"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "equity": {
+      "description": "Equity, trust interest, and real estate property positions",
+      "detection_rules": {
+        "keywords": [
+          "Equities",
+          "Common Equities",
+          "Common Equity",
+          "Trust Interest",
+          "Real Estate Properties"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "warrant": {
+      "description": "Warrant positions",
+      "detection_rules": {
+        "keywords": [
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    },
+    "mixed": {
+      "description": "Mixed historical portfolio-company format used for controlled and affiliated positions",
+      "detection_rules": {
+        "keywords": [
+          "Type of Investment",
+          "Portfolio Company",
+          "Real Estate Properties",
+          "Trust Interest",
+          "Secured Loans",
+          "Equities"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000000
+        }
+      }
+    }
+  },
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}

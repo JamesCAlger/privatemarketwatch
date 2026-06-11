@@ -1,0 +1,224 @@
+{
+  "schema_version": "bdc-xbrl-wrapper.v3",
+  "cik": "0001916608",
+  "entity_name": "TCW Star Direct Lending LLC",
+  "version": 1,
+  "source": "bdc_xbrl",
+  "dispatch": {
+    "rule_prefix": "TCW_STAR_DIRECT_LENDING",
+    "prefix_rules": {
+      "Debt Investments": "debt",
+      "Debt Investment": "debt",
+      "DEBT Investment": "debt",
+      "Equity Investments": "equity",
+      "Equity Investment": "equity",
+      "Cash Equivalents": "cash",
+      "Short-term Investments": "cash",
+      "US. Treasury Bill": "cash",
+      "U.S. Treasury Bill": "cash",
+      "Total Investments": "mixed",
+      "Total Debt Investments": "mixed",
+      "Total Equity Investments": "mixed",
+      "Total Cash Equivalents": "cash",
+      "Total Short-term Investments": "cash",
+      "Total Short Term Investments": "cash",
+      "Net Assets": "mixed",
+      "Liabilities in Excess of Other Assets": "mixed",
+      "Net unrealized depreciation on unfunded commitments": "mixed"
+    },
+    "leaf_markers_by_family": {
+      "debt": [
+        "acquisition date",
+        "term loan",
+        "delayed draw",
+        "revolver",
+        "sofr",
+        "maturity",
+        "maturity date",
+        "pik"
+      ],
+      "equity": [
+        "acquisition date",
+        "common stock",
+        "common units",
+        "warrant",
+        "warrants",
+        "expires"
+      ],
+      "cash": [],
+      "mixed": []
+    },
+    "aggregate_markers": [
+      "total investments",
+      "total debt investments",
+      "total equity investments",
+      "total cash equivalents",
+      "total short-term investments",
+      "total short term investments",
+      "net assets",
+      "liabilities in excess of other assets",
+      "net unrealized depreciation on unfunded commitments",
+      "subtotal",
+      "sub-total"
+    ],
+    "non_private_markers": [
+      "cash equivalents",
+      "first american government obligation fund",
+      "short-term investments",
+      "short term investments",
+      "u.s. treasury",
+      "us treasury",
+      "us. treasury",
+      "treasury bill",
+      "money market"
+    ],
+    "fallback_family_patterns": [
+      {
+        "regex": "(?i)^\\s*(?:Cash\\s+Equivalents|Short[- ]term\\s+Investments?|U\\.?S\\.?\\s+Treasury\\s+Bill)\\b",
+        "family": "cash"
+      },
+      {
+        "regex": "(?i)^\\s*(?:Total\\s+(?:Investments|Debt\\s+Investments|Equity\\s+Investments|Cash\\s+Equivalents|Short[- ]term\\s+Investments)|Net\\s+Assets|Liabilities\\s+in\\s+Excess\\s+of\\s+Other\\s+Assets|Net\\s+unrealized\\s+depreciation\\s+on\\s+unfunded\\s+commitments)\\b",
+        "family": "mixed"
+      }
+    ],
+    "category_marker_re": "(?i)^(?:\\s*,?\\s*)?(?:\\d+(?:\\.\\d+)?%?|[A-Za-z][A-Za-z &,./-]*\\s*(?:,?\\s*%\\s+of\\s+Net\\s+Assets\\s*[-–]?\\s*\\d+(?:\\.\\d+)?\\s*%?|,?\\s*Net\\s+Assets\\s*[-–]?\\s*\\d+(?:\\.\\d+)?\\s*%?)?|Date\\s+Processing\\s+And\\s+Outsourced\\s+Services\\s+Acquisition\\s+Date\\b.*|Processing\\s+And\\s+Outsourced\\s+Services\\s+Acquisition\\s+Date\\b.*)\\s*,?$",
+    "category_marker_before_total": true,
+    "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Maturity(?:\\s+Date)?\\b)|\\s+(?:%\\s+of\\s+)?Net\\s+Assets\\s*[-–]?\\s*\\d+(?:\\.\\d+)?%"
+  },
+  "identifier_format": {
+    "delimiter": " ",
+    "field_order": [
+      "asset_class",
+      "industry",
+      "issuer_name",
+      "acquisition_date",
+      "instrument_description",
+      "rate",
+      "net_assets",
+      "maturity"
+    ],
+    "alternate_delimiters": [
+      ", ",
+      " - "
+    ]
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt|Equity)\\s+Investments?\\s*,?\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+(.+?),?\\s+Acquisition\\s+Date\\s*-?\\s+",
+    "hierarchy_instrument_re": "(?i)\\bAcquisition\\s+Date\\s*-?\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+(?:Investment\\s+)?(.+?)(?:\\s*[^A-Za-z0-9\\s/,]\\s*\\d|\\s+%\\s+of\\s+Net\\s+Assets\\b|\\s+Net\\s+Assets\\b|\\s+Maturity\\s+Date?\\b|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments?\\s*,?\\s+.*\\bAcquisition\\s+Date\\s*-?\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Warrants?|Common\\s+(?:Units|Stock))\\b') AND NOT regexp_matches(_clean, '(?i)^\\s*Debt\\s+Investment\\s+(?:Date\\s+Processing\\s+And\\s+Outsourced\\s+Services|Processing\\s+And\\s+Outsourced\\s+Services)\\s+Acquisition\\s+Date\\b')",
+    "extra_industry_labels": [
+      "Automobile Components",
+      "Automobiles",
+      "Building Products",
+      "Capital Goods",
+      "Commercial & Professional Services",
+      "Commercial Services & Supplies",
+      "Construction & Engineering",
+      "Construction Materials",
+      "Consumer Discretionary",
+      "Consumer Services",
+      "Containers & Packaging",
+      "Data Processing & Outsourced Services",
+      "Data Processing And Outsourced Services",
+      "Date Processing And Outsourced Services",
+      "Diversified Support Services",
+      "Electrical Equipment",
+      "Energy Equipment & Services",
+      "Food Products",
+      "Ground Transportation",
+      "Health Care Equipment & Supplies",
+      "Hotels, Restaurants & Leisure",
+      "Household Products",
+      "Machinery",
+      "Marine Transportation",
+      "Materials",
+      "Packaged Foods and Meats",
+      "Paper & Forest Products",
+      "Personal Care Products",
+      "Professional Services",
+      "Software",
+      "Specialty Retail",
+      "Trading Companies & Distributors",
+      "Transportation Infrastructure"
+    ]
+  },
+  "archetypes": {
+    "debt": {
+      "description": "TCW Star debt positions including term loans, delayed draw term loans, and revolvers.",
+      "detection_rules": {
+        "keywords": [
+          "Term Loan",
+          "Delayed Draw",
+          "Revolver",
+          "SOFR",
+          "Maturity"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        },
+        "interest_rate": {
+          "type": "numeric_range",
+          "constraint": "optional",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    "equity": {
+      "description": "TCW Star common stock, common unit, and equity-linked warrant positions.",
+      "detection_rules": {
+        "keywords": [
+          "Common Stock",
+          "Common Units",
+          "Warrant",
+          "Warrants"
+        ],
+        "keyword_mode": "any"
+      },
+      "field_signatures": {
+        "fair_value": {
+          "type": "numeric_range",
+          "constraint": "required",
+          "min": -1000000000,
+          "max": 1000000000
+        }
+      }
+    }
+  },
+  "known_edge_cases": [
+    {
+      "id": "TCW_STAR_SINGULAR_DEBT_INVESTMENT_LABEL",
+      "description": "Early and current XBRL labels use singular Debt Investment and Equity Investment prefixes, while related TCW wrappers use plural labels.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Debt Investment <industry> <issuer> Acquisition Date",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_STAR_INDUSTRY_SUBTOTALS",
+      "description": "Debt Investment and Equity Investment rows ending with percent-of-net-assets text are industry subtotals, not position-level holdings.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Debt Investment <industry> % of Net Assets",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_STAR_MALFORMED_DATA_PROCESSING_ROW",
+      "description": "Several 2023 rows disclose Data/Date Processing and Outsourced Services plus acquisition and loan terms without an issuer name; these are not promoted to position leaves without source evidence.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "Debt Investment Date Processing And Outsourced Services Acquisition Date",
+      "disposition": "warn"
+    }
+  ],
+  "invariants": {
+    "unclassified_rate": {
+      "max_pct": 0.10
+    }
+  }
+}
