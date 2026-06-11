@@ -164,6 +164,7 @@ def test_wrapper_columns_are_empty_for_other_ciks():
 
 def test_registry_exposes_supported_ciks_and_prefixes():
     assert "0001786108" in supported_wrapper_ciks()
+    assert "0001834543" in supported_wrapper_ciks()
     assert "0001920145" in supported_wrapper_ciks()
     assert "0001572694" in supported_wrapper_ciks()
     assert "0001508655" in supported_wrapper_ciks()
@@ -177,7 +178,51 @@ def test_registry_exposes_supported_ciks_and_prefixes():
     assert "0002012139" in supported_wrapper_ciks()
     assert "0001772704" in supported_wrapper_ciks()
     assert "Portfolio Company Debt Securities" in supported_prefixes_for_cik("1786108")
+    assert "Debt Investments" in supported_prefixes_for_cik("0001834543")
     assert "Investment Debt Investments" in supported_prefixes_for_cik("0001920145")
+
+
+def test_blackrock_direct_lending_flat_debt_leaf():
+    row = classify_identifier(
+        "0001834543",
+        "Debt Investments Diversified Financial Services GC Champion Acquisition LLC "
+        "(Numerix) Instrument First Lien Delayed Draw Term Loan Ref SOFR(Q) "
+        "Floor 1.00% Spread 5.00% Total Coupon 8.67% Maturity 8/21/2028",
+    )
+
+    assert row["wrapper_family"] == "debt"
+    assert row["wrapper_disposition"] == "debt_position_leaf"
+    assert row["wrapper_rule_id"] == "BLACKROCK_DIRECT_LENDING_DEBT_LEAF_V1"
+    assert row["wrapper_position_key"]
+    assert "ref sofr" not in row["wrapper_position_key"]
+
+
+def test_blackrock_direct_lending_equity_and_warrant_families():
+    equity = classify_identifier(
+        "0001834543",
+        "Investment Infinite Commerce Holdings LLC (Razor), Series A-3, "
+        "Preferred Units Acquisition Date 8/27/2025",
+    )
+    warrant = classify_identifier(
+        "0001834543",
+        "Investment Worldremit Group Limited (United Kingdom), Warrants to "
+        "Purchase Series E Stock Acquisition Date 6/24/2024",
+    )
+
+    assert equity["wrapper_disposition"] == "equity_position_leaf"
+    assert warrant["wrapper_disposition"] == "warrant_position_leaf"
+
+
+def test_blackrock_direct_lending_cash_and_category_rows_not_leaf():
+    cash = classify_identifier("0001834543", "Cash and Cash Equivalents - 1.83% of Net Assets")
+    category = classify_identifier("0001834543", "Debt Investments Automobiles")
+    total_equity = classify_identifier("0001834543", "Total Equity Securities - 0.21% of Net Assets")
+    investments = classify_identifier("0001834543", "Investments - 109.47% of Net Assets")
+
+    assert cash["wrapper_disposition"] == "non_private_market"
+    assert category["wrapper_disposition"] in {"aggregate", "debt_category_rollup"}
+    assert total_equity["wrapper_disposition"] in {"aggregate", "equity_total_rollup"}
+    assert investments["wrapper_disposition"] == "aggregate"
 
 
 def test_kkr_fs_income_trust_pipe_debt_leaf():
@@ -341,7 +386,7 @@ def test_bain_private_credit_debt_leaf_strips_current_coupon_only():
     assert first["wrapper_position_key"] != different_spread["wrapper_position_key"]
     assert "5 75" in first["wrapper_position_key"]
     assert "9 42" not in first["wrapper_position_key"]
-    assert "7 12 2029" in first["wrapper_position_key"]
+    assert "7 12 29" in first["wrapper_position_key"]
 
 
 def test_bain_private_credit_prefixed_debt_leaf_matches_unprefixed_key():
@@ -427,7 +472,7 @@ def test_fortress_private_lending_debt_leaf_strips_current_coupon_only():
     assert first["wrapper_position_key"] != different_spread["wrapper_position_key"]
     assert "euribor 575" in first["wrapper_position_key"]
     assert "7 8" not in first["wrapper_position_key"]
-    assert "7 31 2031" in first["wrapper_position_key"]
+    assert "7 31 31" in first["wrapper_position_key"]
 
 
 def test_fortress_private_lending_tranche_terms_remain_distinct():
@@ -712,6 +757,37 @@ def test_ab_private_credit_cash_and_balance_sheet_rows_are_not_private_leaves():
 
 def test_ab_private_credit_registered_in_supported_ciks():
     assert AB_PRIVATE_CREDIT_INVESTORS_CIK in supported_wrapper_ciks()
+
+
+def test_silver_point_specialty_credit_comma_leaf_and_total_rows():
+    leaf = classify_identifier(
+        "0001646614",
+        "Non-Controlled/Non-Affiliated Investments, Secured Loans, 1st Lien "
+        "Term Loan, Luxembourg, Mallinckrodt International Finance S.A., "
+        "Pharmaceuticals & Life Sciences, Rate L+5.25%, 0.75% Floor, "
+        "Interest Rate 10.40%, Original Acquisition Date 10/13/2020, "
+        "Maturity Date 9/30/2027",
+    )
+    total_trust = classify_identifier(
+        "0001646614",
+        "Controlled Investments, Total Trust Interest",
+    )
+    bare_category = classify_identifier(
+        "0001646614",
+        "1st Lien/Secured Loans United States of America",
+    )
+    total_equity = classify_identifier(
+        "0001646614",
+        "Non-Controlled/Non-Affiliated Investments, Total Equities",
+    )
+
+    assert leaf["wrapper_family"] == "debt"
+    assert leaf["wrapper_disposition"] == "debt_position_leaf"
+    assert leaf["wrapper_rule_id"] == "SILVER_POINT_SPECIALTY_CREDIT_DEBT_LEAF_V1"
+    assert "10 40" not in leaf["wrapper_position_key"]
+    assert total_trust["wrapper_disposition"] == "mixed_total_rollup"
+    assert bare_category["wrapper_disposition"] == "debt_category_rollup"
+    assert total_equity["wrapper_disposition"] == "mixed_total_rollup"
 
 
 def test_new_mountain_guardian_iv_pipe_debt_leaf():
@@ -1268,6 +1344,41 @@ def test_sixth_street_shared_wrapper_classifies_equity_leaf():
     assert row["wrapper_disposition"] == "equity_position_leaf"
 
 
+def test_crescent_wrapper_classifies_unsecured_debt_leaf():
+    row = classify_identifier(
+        "0001954360",
+        "Investments Canada Debt Investments Diversified Financials Dawson Logan "
+        "2025-L5 LP Investment Type Unsecured Debt Interest Term S + 1232 "
+        "Interest Rate 12.32% Maturity/ Dissolution Date 10/2040",
+    )
+
+    assert row["wrapper_family"] == "mixed"
+    assert row["wrapper_disposition"] == "mixed_position_leaf"
+    assert row["wrapper_position_key"]
+
+
+def test_crescent_wrapper_classifies_equity_leaf():
+    row = classify_identifier(
+        "0001954360",
+        "Investments Switzerland Equity Investments Pharmaceuticals, Biotechnology "
+        "and Life Sciences Sequence Parent Investment Type Common Stock",
+    )
+
+    assert row["wrapper_family"] == "mixed"
+    assert row["wrapper_disposition"] == "mixed_position_leaf"
+    assert row["wrapper_position_key"]
+
+
+def test_crescent_wrapper_keeps_country_industry_header_as_rollup():
+    row = classify_identifier(
+        "0001954360",
+        "Investments Netherlands Debt Investments Financial Services",
+    )
+
+    assert row["wrapper_disposition"] != "mixed_position_leaf"
+    assert row["wrapper_disposition"] in {"aggregate", "mixed_category_rollup"}
+
+
 def test_fidelity_wrapper_classifies_hierarchical_debt_leaf():
     row = classify_identifier(
         "0001920453",
@@ -1279,6 +1390,30 @@ def test_fidelity_wrapper_classifies_hierarchical_debt_leaf():
     assert row["wrapper_family"] == "debt"
     assert row["wrapper_disposition"] == "debt_position_leaf"
     assert row["wrapper_rule_id"] == "FIDELITY_PRIVATE_CREDIT_DEBT_LEAF_V1"
+
+
+def test_fidelity_wrapper_classifies_current_equity_leaf():
+    row = classify_identifier(
+        "0001920453",
+        "Investments -- non-controlled/ non-affiliate Equity Packaged Foods & Meats "
+        "Vp Deliver Holdings, LP Type Class A LP Units",
+    )
+
+    assert row["wrapper_family"] == "equity"
+    assert row["wrapper_disposition"] == "equity_position_leaf"
+    assert row["wrapper_position_key"]
+
+
+def test_fidelity_wrapper_classifies_current_preferred_unit_leaf():
+    row = classify_identifier(
+        "0001920453",
+        "Investments -- non-controlled/ non-affiliate Equity Specialized Consumer Services "
+        "Roofing Services Solutions Holdings, LLC Type Series A Preferred Unit",
+    )
+
+    assert row["wrapper_family"] == "equity"
+    assert row["wrapper_disposition"] == "equity_position_leaf"
+    assert row["wrapper_position_key"]
 
 
 def test_fidelity_wrapper_classifies_mutual_funds_as_non_private_market():
@@ -1822,6 +1957,171 @@ def test_gs_middle_market_ii_bare_affiliate_is_not_leaf():
 
     assert row["wrapper_disposition"] != "debt_position_leaf"
     assert not row["wrapper_position_key"]
+
+
+# ---------------------------------------------------------------------------
+# Goldman Sachs Private Middle Market Credit (0001674760)
+# ---------------------------------------------------------------------------
+
+
+def test_gs_middle_market_debt_leaf_classified_without_investment_prefix():
+    row = classify_identifier(
+        "0001674760",
+        "Debt Investments United States 1st Lien/Senior Secured Debt "
+        "Xactly Corporation IT Services Interest Rate 12.70% Reference Rate "
+        "and Spread S + 7.25% Maturity 07/31/25",
+    )
+
+    assert row["wrapper_family"] == "debt"
+    assert row["wrapper_disposition"] == "debt_position_leaf"
+    assert row["wrapper_rule_id"] == "GS_PRIVATE_MIDDLE_MARKET_DEBT_LEAF_V1"
+    assert "xactly corporation" in row["wrapper_position_key"]
+    assert "12 70" not in row["wrapper_position_key"]
+    assert "s 7 25" in row["wrapper_position_key"]
+    assert "07 31 25" in row["wrapper_position_key"]
+
+
+def test_gs_middle_market_rollups_and_bare_affiliate_are_not_leaves():
+    last_out = classify_identifier("0001674760", "1st Lien/Last-out Unitranche - 3.27%")
+    country = classify_identifier("0001674760", "United States - 110.06%")
+    total = classify_identifier("0001674760", "Total Investments - 143.6%")
+    affiliate = classify_identifier(
+        "0001674760",
+        "Non-Controlled Affiliated Investments Collaborative Imaging, LLC "
+        "(dba Texas Radiology Associates)",
+    )
+
+    assert last_out["wrapper_disposition"] == "aggregate"
+    assert country["wrapper_disposition"] in {"aggregate", "debt_total_rollup"}
+    assert total["wrapper_disposition"] in {"aggregate", "debt_total_rollup"}
+    assert affiliate["wrapper_disposition"] == "aggregate"
+    assert not affiliate["wrapper_position_key"]
+
+
+def test_gs_middle_market_equity_leaf_keeps_instrument_evidence():
+    row = classify_identifier(
+        "0001674760",
+        "Common Stock Collaborative Imaging Holdco, LLC "
+        "(dba Texas Radiology Associates) - Class B Health Care Providers & "
+        "Services Initial Acquisition Date 03/30/18",
+    )
+
+    assert row["wrapper_family"] == "equity"
+    assert row["wrapper_disposition"] == "equity_position_leaf"
+    assert "collaborative imaging holdco" in row["wrapper_position_key"]
+
+
+def test_gs_middle_market_country_only_row_is_aggregate():
+    row = classify_identifier("0001674760", "Canada")
+
+    assert row["wrapper_disposition"] == "aggregate"
+    assert row["wrapper_signature_status"] == "pass"
+
+
+# ---------------------------------------------------------------------------
+# Phillip Street Middle Market Lending Fund LLC (0001948368)
+# ---------------------------------------------------------------------------
+
+
+PHILLIP_STREET_CIK = "0001948368"
+
+
+def test_phillip_street_debt_leaf_classified_from_hierarchy_identifier():
+    row = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Investment Debt Investments - 168.5% United States - 168.5% "
+        "1st Lien/Senior Secured Debt - 159.5% BCTO Bluebill Buyer, Inc. "
+        "(dba Ren) Industry Financial Services Interest Rate 8.17% "
+        "Reference Rate and Spread S + 4.50% Maturity 07/30/32",
+    )
+
+    assert row["wrapper_family"] == "debt"
+    assert row["wrapper_disposition"] == "debt_position_leaf"
+    assert row["wrapper_rule_id"] == "PHILLIP_STREET_MIDDLE_MARKET_DEBT_LEAF_V1"
+    assert "bcto bluebill buyer" in row["wrapper_position_key"]
+    assert "168 5" not in row["wrapper_position_key"]
+    assert "8 17" not in row["wrapper_position_key"]
+
+
+def test_phillip_street_truncated_prefix_classified():
+    row = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "IInvestment Debt Investments - 168.5% United States - 168.5% "
+        "1st Lien/Senior Secured Debt - 159.5% BCTO Bluebill Buyer, Inc. "
+        "(dba Ren) Industry Financial Services Reference Rate and Spread "
+        "S + 4.50% Maturity 07/30/32",
+    )
+
+    assert row["wrapper_family"] == "debt"
+    assert row["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_phillip_street_position_key_ignores_hierarchy_pct_and_current_coupon():
+    first = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Investment Debt Investments - 126.26% United States - 126.26% "
+        "1st Lien/Senior Secured Debt - 111.71% Superior Environmental "
+        "Solutions Industry Commercial Services & Supplies Interest Rate "
+        "11.94% Reference Rate and Spread S + 6.50% Maturity 08/01/29 One",
+    )
+    second = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Investment Debt Investments - 127.58% United States - 127.58% "
+        "1st Lien/Senior Secured Debt - 117.24% Superior Environmental "
+        "Solutions Industry Commercial Services & Supplies Interest Rate "
+        "11.45% Reference Rate and Spread S + 6.50% Maturity 08/01/29 One",
+    )
+    changed_spread = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Investment Debt Investments - 127.58% United States - 127.58% "
+        "1st Lien/Senior Secured Debt - 117.24% Superior Environmental "
+        "Solutions Industry Commercial Services & Supplies Interest Rate "
+        "11.45% Reference Rate and Spread S + 7.00% Maturity 08/01/29 One",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != changed_spread["wrapper_position_key"]
+
+
+def test_phillip_street_category_rows_and_totals_are_not_leaves():
+    debt_bucket = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Investment Debt Investments - 168.5% United States - 168.5% "
+        "1st Lien/Senior Secured Debt - 159.5%",
+    )
+    total_common = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Investment Equity Securities - 0.91% United States - 0.91% "
+        "Common Stock - 0.91% Total Common Stock",
+    )
+    bare_unitranche = classify_identifier(PHILLIP_STREET_CIK, "1st Lien/Last-Out Unitranche")
+
+    assert debt_bucket["wrapper_disposition"] == "aggregate"
+    assert total_common["wrapper_disposition"] == "aggregate"
+    assert bare_unitranche["wrapper_disposition"] == "aggregate"
+    assert not debt_bucket["wrapper_position_key"]
+    assert not total_common["wrapper_position_key"]
+    assert not bare_unitranche["wrapper_position_key"]
+
+
+def test_phillip_street_money_market_is_non_private_and_bare_affiliate_is_not_leaf():
+    cash = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Non-Controlled Affiliates Goldman Sachs Financial Square Government Fund",
+    )
+    affiliate = classify_identifier(
+        PHILLIP_STREET_CIK,
+        "Non-Controlled Affiliates ABC Investment Holdco Inc. (dba ABC Plumbing)",
+    )
+
+    assert cash["wrapper_disposition"] == "non_private_market"
+    assert affiliate["wrapper_disposition"] != "debt_position_leaf"
+    assert not affiliate["wrapper_position_key"]
+
+
+def test_phillip_street_registered_in_supported_ciks():
+    assert PHILLIP_STREET_CIK in supported_wrapper_ciks()
 
 
 # --- identifier_parser config tests ---
@@ -3084,6 +3384,35 @@ def test_apollo_ds_sector_subtotal_is_not_leaf():
     assert result.get("wrapper_disposition", "") != "equity_position_leaf"
 
 
+def test_apollo_ds_company_only_source_row_is_aggregate():
+    """Issuer-only source facts are XBRL totals, not position-level leaves."""
+    result = classify_identifier(
+        APOLLO_DS_CIK,
+        "Commercial Services & Supplies Associa Associations Inc.",
+    )
+
+    assert result["wrapper_disposition"] == "equity_total_rollup"
+    assert result["wrapper_rule_id"] == "APOLLO_DEBT_SOLUTIONS_DEBT_AGGREGATE_V1"
+
+
+def test_apollo_ds_company_only_sarl_source_row_is_aggregate():
+    result = classify_identifier(
+        APOLLO_DS_CIK,
+        "Software M-Files MetaTiedot Midco S.a.r.l.",
+    )
+
+    assert result["wrapper_disposition"] == "aggregate"
+
+
+def test_apollo_ds_truncated_ll_source_row_is_aggregate():
+    result = classify_identifier(
+        APOLLO_DS_CIK,
+        "Insurance Patriot Growth Insurance Services Patriot Growth Insurance Services, LL",
+    )
+
+    assert result["wrapper_disposition"] == "aggregate"
+
+
 def test_apollo_ds_money_market_is_non_private():
     """Money market fund row classifies as non-private-market."""
     result = classify_identifier(
@@ -3273,6 +3602,240 @@ def test_apollo_origination_ii_l_registered_in_supported_ciks():
 
 
 # ---------------------------------------------------------------------------
+# Apollo Origination II (UL) Capital Trust (CIK 0002052153)
+# ---------------------------------------------------------------------------
+APOLLO_ORIGINATION_II_UL_CIK = "0002052153"
+
+
+def test_apollo_origination_ii_ul_debt_delayed_draw_leaf():
+    """Apollo Origination II UL delayed-draw debt rows classify as debt leaves."""
+    result = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Automobile Components Clarience Technologies Truck-Lite Co., LLC "
+        "Investment Type First Lien Secured Debt - Delayed Draw Interest Rate "
+        "S+575, 0.75% Floor Maturity Date 2/13/2031",
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_apollo_origination_ii_ul_pik_debt_leaf():
+    """PIK-bearing rate text remains a debt position, not cash/non-private."""
+    result = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Commercial Services & Supplies Triumph Group Triumph Group, Inc. "
+        "Investment Type First Lien Secured Debt - Term Loan Interest Rate "
+        "S+400 Cash plus 2.88% PIK Maturity Date 3/28/2031",
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_apollo_origination_ii_ul_corporate_bond_leaf():
+    """Corporate bond rows classify as debt leaves."""
+    result = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Electronic Equipment, Instruments & Components Wolfspeed Wolfspeed Inc "
+        "Investment Type First Lien Secured Debt - Corporate Bond Interest Rate "
+        "9.88% Maturity Date 6/23/2030",
+    )
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_apollo_origination_ii_ul_preferred_equity_leaf():
+    """Preferred equity rows classify as equity leaves."""
+    result = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Insurance Higginbotham HIG Intermediate, Inc. Investment Type "
+        "Preferred Equity - Cumulative Preferred Interest Rate Equity",
+    )
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_apollo_origination_ii_ul_sector_header_is_not_leaf():
+    """Bare sector headers are rollups/aggregates, not position leaves."""
+    result = classify_identifier(APOLLO_ORIGINATION_II_UL_CIK, "Aerospace & Defense")
+    assert result.get("wrapper_disposition", "") != "debt_position_leaf"
+    assert result.get("wrapper_disposition", "") != "equity_position_leaf"
+
+
+def test_apollo_origination_ii_ul_issuer_rollup_is_not_leaf():
+    """Issuer subtotal rows without Investment Type remain non-leaf rows."""
+    result = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Commercial Services & Supplies Encore AVSC Holding Corp.",
+    )
+    assert result.get("wrapper_family") == "debt"
+    assert result.get("wrapper_disposition", "") == "aggregate"
+
+
+def test_apollo_origination_ii_ul_cash_equivalent_totals_are_not_leaves():
+    """Cash-equivalent total rows are source rollups, not investee positions."""
+    result = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Investments before Cash Equivalents",
+    )
+    assert result.get("wrapper_disposition", "") in {"aggregate", "non_private_market"}
+    assert result.get("wrapper_disposition", "") != "debt_position_leaf"
+
+
+def test_apollo_origination_ii_ul_money_market_is_non_private():
+    """Money market fund rows classify as non-private-market."""
+    result = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Money Market Fund Goldman Sachs Financial Square Government Fund "
+        "Institutional Shares",
+    )
+    assert result.get("wrapper_disposition", "") == "non_private_market"
+
+
+def test_apollo_origination_ii_ul_coinvestment_is_fund_leaf():
+    """Repeated disclosed Co-investment rows are fund-style position leaves."""
+    result = classify_identifier(APOLLO_ORIGINATION_II_UL_CIK, "Co-investment")
+    assert result["wrapper_family"] == "fund"
+    assert result["wrapper_disposition"] == "fund_position_leaf"
+    assert result["wrapper_position_key"] == "co investment"
+
+
+def test_apollo_origination_ii_ul_position_key_ignores_rate_drift():
+    """Rate-only drift does not create a new wrapper position key."""
+    first = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Commercial Services & Supplies Heritage Environmental Services "
+        "Heritage Environmental Services, Inc. Investment Type First Lien "
+        "Secured Debt - Term Loan Interest Rate S+500, 0.75% Floor "
+        "Maturity Date 1/31/2031",
+    )
+    second = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Commercial Services & Supplies Heritage Environmental Services "
+        "Heritage Environmental Services, Inc. Investment Type First Lien "
+        "Secured Debt - Term Loan Interest Rate S+525, 0.75% Floor "
+        "Maturity Date 1/31/2031",
+    )
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+
+
+def test_apollo_origination_ii_ul_position_key_keeps_maturity_date():
+    """Maturity date remains part of the position key after rate stripping."""
+    first = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Commercial Services & Supplies Heritage Environmental Services "
+        "Heritage Environmental Services, Inc. Investment Type First Lien "
+        "Secured Debt - Term Loan Interest Rate S+500, 0.75% Floor "
+        "Maturity Date 1/31/2031",
+    )
+    second = classify_identifier(
+        APOLLO_ORIGINATION_II_UL_CIK,
+        "Commercial Services & Supplies Heritage Environmental Services "
+        "Heritage Environmental Services, Inc. Investment Type First Lien "
+        "Secured Debt - Term Loan Interest Rate S+500, 0.75% Floor "
+        "Maturity Date 1/31/2032",
+    )
+    assert first["wrapper_position_key"] != second["wrapper_position_key"]
+
+
+def test_apollo_origination_ii_ul_registered_in_supported_ciks():
+    assert APOLLO_ORIGINATION_II_UL_CIK in supported_wrapper_ciks()
+
+
+# ---------------------------------------------------------------------------
+# Middle Market Apollo Institutional Private Lending (CIK 0002006758)
+# ---------------------------------------------------------------------------
+MM_APOLLO_INSTITUTIONAL_CIK = "0002006758"
+
+
+def test_mm_apollo_institutional_debt_without_investment_type_is_leaf():
+    result = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Commercial Services & Supplies Best Trash Bingo Group Buyer, Inc. "
+        "First Lien Secured Debt - Term Loan S+475, 1.00% Floor Maturity Date 07/10/31",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_mm_apollo_institutional_investment_type_debt_leaf():
+    result = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Professional Services North Highland The North Highland Company LLC "
+        "Investment Type First Lien Secured Debt - Revolver S+475, 0.75% Floor "
+        "Maturity Date 12/20/2030",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_mm_apollo_institutional_equity_leaf():
+    result = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Pharmaceuticals PAI Pharma PAI Co-Investor FT Aggregator LLC Common Equity - Stock",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_mm_apollo_institutional_total_investments_leaf_with_instrument_evidence():
+    result = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Pharmaceuticals PAI Pharma Total Investments First Lien Secured Debt - "
+        "Revolver S+450, 0.75% Floor Maturity Date 02/13/32",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_mm_apollo_institutional_issuer_only_row_is_aggregate():
+    result = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Commercial Services & Supplies Best Trash Bingo Group Buyer, Inc.",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "aggregate"
+
+
+def test_mm_apollo_institutional_bare_industry_and_total_rows_are_aggregate():
+    industry = classify_identifier(MM_APOLLO_INSTITUTIONAL_CIK, "Aerospace & Defense")
+    total = classify_identifier(MM_APOLLO_INSTITUTIONAL_CIK, "Total Food Products")
+    short_plain = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Entertainment Chernin Entertainment",
+    )
+
+    assert industry["wrapper_disposition"] == "aggregate"
+    assert total["wrapper_disposition"] == "aggregate"
+    assert short_plain["wrapper_disposition"] == "aggregate"
+
+
+def test_mm_apollo_institutional_position_key_ignores_rate_drift():
+    first = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Commercial Services & Supplies Best Trash Bingo Group Buyer, Inc. "
+        "First Lien Secured Debt - Term Loan S+500, 1.00% Floor Maturity Date 07/10/31",
+    )
+    second = classify_identifier(
+        MM_APOLLO_INSTITUTIONAL_CIK,
+        "Commercial Services & Supplies Best Trash Bingo Group Buyer, Inc. "
+        "First Lien Secured Debt - Term Loan S+475, 1.00% Floor Maturity Date 07/10/31",
+    )
+
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+
+
+def test_mm_apollo_institutional_registered_in_supported_ciks():
+    assert MM_APOLLO_INSTITUTIONAL_CIK in supported_wrapper_ciks()
+
+
+# ---------------------------------------------------------------------------
 # Blue Owl Technology Income Corp. (CIK 0001869453)
 # ---------------------------------------------------------------------------
 BLUE_OWL_TECH_INCOME_CIK = "0001869453"
@@ -3441,6 +4004,73 @@ def test_tpg_twin_brook_known_duplicate_issuer_debt_leaf_classified():
 def test_tpg_twin_brook_registered_in_supported_ciks():
     """TPG Twin Brook CIK is in the supported wrapper registry."""
     assert TPG_TWIN_BROOK_CIK in supported_wrapper_ciks()
+
+
+# ---------------------------------------------------------------------------
+# TriplePoint Global Venture Credit, LLC (CIK 0001792509)
+# ---------------------------------------------------------------------------
+TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_CIK = "0001792509"
+
+
+def test_triplepoint_global_comma_equity_leaf_classified():
+    """Comma-delimited Equity Investments rows are position leaves."""
+    result = classify_identifier(
+        TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_CIK,
+        "JOKR S.a.r.l. 1, Equity Investments",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_rule_id"] == (
+        "TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_EQUITY_LEAF_V1"
+    )
+    assert result["wrapper_position_key"]
+
+
+def test_triplepoint_global_pipe_equity_leaf_classified():
+    """Pipe-delimited preferred-stock equity rows are position leaves."""
+    result = classify_identifier(
+        TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_CIK,
+        "Kobold Metals Company | Preferred Stock | Equity Investments |Non-Affiliated Issuer",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_triplepoint_global_cash_equivalent_is_non_private():
+    """Federated Government Obligations Fund rows are excluded as cash equivalents."""
+    result = classify_identifier(
+        TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_CIK,
+        "Federated Government Obligations Fund | Non-Affiliated Issuer",
+    )
+
+    assert result["wrapper_disposition"] == "non_private_market"
+
+
+def test_triplepoint_global_total_equity_not_leaf():
+    """Portfolio total rows are aggregates even though they contain Equity Investments."""
+    result = classify_identifier(
+        TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_CIK,
+        "Total Equity Investments",
+    )
+
+    assert result["wrapper_disposition"] == "equity_total_rollup"
+
+
+def test_triplepoint_global_bare_issuer_not_broadened():
+    """Bare issuer-only rows are not classified as leaves by the wrapper."""
+    result = classify_identifier(
+        TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_CIK,
+        "FlashParking, Inc.",
+    )
+
+    assert result["wrapper_disposition"] == ""
+
+
+def test_triplepoint_global_registered_in_supported_ciks():
+    """TriplePoint Global Venture Credit CIK is in the supported wrapper registry."""
+    assert TRIPLEPOINT_GLOBAL_VENTURE_CREDIT_CIK in supported_wrapper_ciks()
 
 
 # ---------------------------------------------------------------------------
@@ -4533,6 +5163,212 @@ def test_ab_private_credit_investors_registered_in_supported_ciks():
 
 
 # ---------------------------------------------------------------------------
+# 26North BDC, Inc. wrapper (CIK 0001950976)
+# ---------------------------------------------------------------------------
+
+
+TWENTY_SIX_NORTH_BDC_CIK = "0001950976"
+
+
+def test_twenty_six_north_pipe_debt_leaf_classified():
+    result = classify_identifier(
+        TWENTY_SIX_NORTH_BDC_CIK,
+        "Debt Investments | Alert SRC Newco LLC |First Lien Senior Secured "
+        "Delayed Draw Term Loan|Commercial Services & Supplies|SOFR + 5.000%|"
+        "8.673%|12/11/2024|12/11/2030",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_twenty_six_north_pipe_equity_leaf_classified():
+    result = classify_identifier(
+        TWENTY_SIX_NORTH_BDC_CIK,
+        "Equity|Great Dane Intermediate Holding I LLC |Preferred Equity| "
+        "Software|14.00%|12/20/2025",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_twenty_six_north_category_and_cash_rows_not_leaves():
+    debt_category = classify_identifier(TWENTY_SIX_NORTH_BDC_CIK, "Debt Investments")
+    equity_category = classify_identifier(TWENTY_SIX_NORTH_BDC_CIK, "Common Equity")
+    cash = classify_identifier(TWENTY_SIX_NORTH_BDC_CIK, "Cash and Cash Equivalents")
+
+    assert debt_category["wrapper_disposition"] == "aggregate"
+    assert debt_category["wrapper_position_key"] == ""
+    assert equity_category["wrapper_disposition"] in {"aggregate", "equity_category_rollup"}
+    assert equity_category["wrapper_position_key"] == ""
+    assert cash["wrapper_disposition"] == "non_private_market"
+
+
+def test_twenty_six_north_position_key_ignores_rate_tail():
+    first = classify_identifier(
+        TWENTY_SIX_NORTH_BDC_CIK,
+        "Debt Investments | Alegeus Technologies Holdings Corp. |First Lien "
+        "Senior Secured Term Loan|Health Care TechnologySOFR + 6.500|10.167%|"
+        "11/22/2024|11/5/2029",
+    )
+    second = classify_identifier(
+        TWENTY_SIX_NORTH_BDC_CIK,
+        "Debt Investments | Alegeus Technologies Holdings Corp. |First Lien "
+        "Senior Secured Term Loan|Health Care TechnologySOFR + 6.750|10.340%|"
+        "11/22/2024|11/5/2029",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+
+
+def test_twenty_six_north_registered_in_supported_ciks():
+    assert TWENTY_SIX_NORTH_BDC_CIK in supported_wrapper_ciks()
+
+
+# ---------------------------------------------------------------------------
+# Varagon Capital Corp. wrapper (CIK 0001784700)
+# ---------------------------------------------------------------------------
+
+
+VARAGON_CAPITAL_CIK = "0001784700"
+
+
+def test_varagon_debt_leaf_classified_from_comma_hierarchy():
+    result = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Industry Aerospace & Defense, Company AIM Acquisition, LLC, Type of Investment "
+        "Term Loan, Reference Rate and Spread SOFR + 4.75%, Interest Rate 8.58%, "
+        "Acquisition Date 6/2/2022, Maturity 12/2/2027",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "VARAGON_CAPITAL_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_varagon_equity_coinvest_blocker_is_position_leaf():
+    result = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Equity, Industry Commercial "
+        "Services & Supplies, Company Chimney Rock 3G Co-Invest, Type of Investment "
+        "Equity Co-Invest",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_varagon_totals_and_subtotals_are_aggregate_rows():
+    current_total = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Total Investments, March 31, 2025",
+    )
+    senior_total = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Total Senior Secured First Lien Loans",
+    )
+    subtotal = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Subtotal Non-Controlled/Non-Affiliated Investments",
+    )
+    equity_category = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Equity, Industry Chemicals",
+    )
+
+    assert current_total["wrapper_disposition"] == "aggregate"
+    assert senior_total["wrapper_disposition"] == "aggregate"
+    assert subtotal["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert equity_category["wrapper_disposition"] in {"aggregate", "equity_category_rollup"}
+
+
+def test_varagon_position_key_ignores_current_coupon_not_maturity():
+    first = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Industry IT Services, Company Distinct Holdings, Inc., Type of Investment "
+        "Term Loan, Reference Rate and Spread SOFR + 5.75%, Interest Rate 9.42%, "
+        "Acquisition Date 7/18/2024, Maturity 7/18/2029",
+    )
+    changed_coupon = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Industry IT Services, Company Distinct Holdings, Inc., Type of Investment "
+        "Term Loan, Reference Rate and Spread SOFR + 5.75%, Interest Rate 9.45%, "
+        "Acquisition Date 7/18/2024, Maturity 7/18/2029",
+    )
+    changed_maturity = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Industry IT Services, Company Distinct Holdings, Inc., Type of Investment "
+        "Term Loan, Reference Rate and Spread SOFR + 5.75%, Interest Rate 9.45%, "
+        "Acquisition Date 7/18/2024, Maturity 7/18/2030",
+    )
+
+    assert first["wrapper_position_key"] == changed_coupon["wrapper_position_key"]
+    assert first["wrapper_position_key"] != changed_maturity["wrapper_position_key"]
+
+
+def test_varagon_position_key_ignores_reference_spread_repricing():
+    old_spread = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Company A&R Logistics Holdings, Inc., Industry Road & Rail, Type of Investment "
+        "Term Loan, Reference Rate and Spread SOFR+5.50%, Interest Rate 10.24%, "
+        "Maturity 05/03/25",
+    )
+    new_spread = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Company A&R Logistics Holdings, Inc., Industry Road & Rail, Type of Investment "
+        "Term Loan, Reference Rate and Spread SOFR+5.75%, Interest Rate 10.79%, "
+        "Maturity 05/03/25",
+    )
+    different_instrument = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Company A&R Logistics Holdings, Inc., Industry Road & Rail, Type of Investment "
+        "Revolver, Reference Rate and Spread SOFR+5.75%, Interest Rate 10.79%, "
+        "Maturity 05/03/25",
+    )
+
+    assert old_spread["wrapper_position_key"] == new_spread["wrapper_position_key"]
+    assert old_spread["wrapper_position_key"] != different_instrument["wrapper_position_key"]
+
+
+def test_varagon_position_key_ignores_company_industry_order_drift():
+    company_first = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Company Adviser Investments, LLC, Industry Capital Markets, Type of Investment "
+        "Delayed Draw Term Loan, Reference Rate and Spread SOFR + 4.75%, Interest Rate "
+        "8.67%, Maturity 08/31/28",
+    )
+    industry_first = classify_identifier(
+        VARAGON_CAPITAL_CIK,
+        "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+        "Industry Capital Markets, Company Adviser Investments, LLC, Type of Investment "
+        "Delayed Draw Term Loan, Reference Rate and Spread SOFR + 4.75%, Interest Rate "
+        "8.70%, Maturity 08/31/28",
+    )
+
+    assert company_first["wrapper_position_key"] == industry_first["wrapper_position_key"]
+    assert "capital markets" not in company_first["wrapper_position_key"]
+
+
+def test_varagon_registered_in_supported_ciks():
+    assert VARAGON_CAPITAL_CIK in supported_wrapper_ciks()
+
+
+# ---------------------------------------------------------------------------
 # New Mountain Private Credit Fund wrapper (CIK 0002037804)
 # ---------------------------------------------------------------------------
 
@@ -4702,3 +5538,1204 @@ def test_nmf_slf_i_totals_and_affiliation_headers_are_not_leaves():
 
 def test_nmf_slf_i_registered_in_supported_ciks():
     assert NMF_SLF_I_CIK in supported_wrapper_ciks()
+
+
+# ---------------------------------------------------------------------------
+# Lord Abbett Private Credit Fund wrapper (CIK 0002008748)
+# ---------------------------------------------------------------------------
+
+
+LORD_ABBETT_PRIVATE_CREDIT_CIK = "0002008748"
+
+
+def test_lord_abbett_private_credit_revolver_leaf_classified():
+    result = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "Accel International Holdings Inc (Revolver)",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "LORD_ABBETT_PRIVATE_CREDIT_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_lord_abbett_private_credit_delayed_draw_leaf_classified():
+    result = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "RJW Logistics Group, Inc (Delayed Draw) 2",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_lord_abbett_private_credit_member_rows_are_aggregates():
+    first_lien = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "First Lien Secured Debt [Member]",
+    )
+    second_lien = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "Second Lien Secured Debt [Member]",
+    )
+    equity = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "Equity [Member]",
+    )
+
+    assert first_lien["wrapper_disposition"] == "aggregate"
+    assert second_lien["wrapper_disposition"] == "aggregate"
+    assert equity["wrapper_disposition"] == "aggregate"
+    assert first_lien["wrapper_position_key"] == ""
+    assert equity["wrapper_position_key"] == ""
+
+
+def test_lord_abbett_private_credit_totals_are_aggregates():
+    total_first = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "Total First Lien Secured Debt-non-controlled/non-affiliated",
+    )
+    typo_total = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "Total First Lien Secured Debt-non-controlled/non-affliliated",
+    )
+    total_fv = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "Total Investments at Fair Value",
+    )
+    total_jv = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "Total Investments in Joint Venture",
+    )
+
+    assert total_first["wrapper_disposition"] == "aggregate"
+    assert typo_total["wrapper_disposition"] == "aggregate"
+    assert total_fv["wrapper_disposition"] == "aggregate"
+    assert total_jv["wrapper_disposition"] == "aggregate"
+
+
+def test_lord_abbett_private_credit_bare_issuer_not_forced_to_leaf():
+    result = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "LeadVenture",
+    )
+
+    assert result["wrapper_disposition"] == ""
+    assert result["wrapper_position_key"] == ""
+
+
+def test_lord_abbett_private_credit_position_key_ignores_trailing_lot_number():
+    first = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "RJW Logistics Group, Inc (Delayed Draw)",
+    )
+    second = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "RJW Logistics Group, Inc (Delayed Draw) 2",
+    )
+    different = classify_identifier(
+        LORD_ABBETT_PRIVATE_CREDIT_CIK,
+        "RJW Logistics Group, Inc (Revolver)",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different["wrapper_position_key"]
+
+
+def test_lord_abbett_private_credit_registered_in_supported_ciks():
+    assert LORD_ABBETT_PRIVATE_CREDIT_CIK in supported_wrapper_ciks()
+    assert "First Lien Secured Debt" in supported_prefixes_for_cik(LORD_ABBETT_PRIVATE_CREDIT_CIK)
+
+
+# ---------------------------------------------------------------------------
+# TCW Direct Lending VII LLC wrapper (CIK 0001715933)
+# ---------------------------------------------------------------------------
+
+
+TCW_DIRECT_LENDING_VII_CIK = "0001715933"
+
+
+def test_tcw_direct_lending_vii_debt_securities_leaf_classified():
+    result = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Debt Securities Food Products Hometown Food Company Acquisition Date "
+        "08/31/18 Term Loan - 10.21% (SOFR + 5.00%, 1.25% Floor) "
+        "% of Net Assets 2.6% Maturity Date 08/31/23",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "TCW_DIRECT_LENDING_VII_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_vii_affiliated_debt_leaf_classified():
+    result = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Controlled Affiliated Investments Navistar Defense, LLC "
+        "Super Senior Revolver - 14.27% inc PIK",
+    )
+
+    assert result["wrapper_family"] == "mixed"
+    assert result["wrapper_disposition"] == "mixed_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_vii_equity_securities_leaf_classified():
+    result = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Equity Securities Textiles, Apparel & Luxury Goods Centric Brands "
+        "L.P. Class A LP Interests",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_vii_subtotals_and_cash_are_not_leaves():
+    industry = classify_identifier(TCW_DIRECT_LENDING_VII_CIK, "Debt Securities Food Products")
+    issuer_rollup = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Debt Securities Chemicals AGY Holdings Corp.",
+    )
+    total = classify_identifier(TCW_DIRECT_LENDING_VII_CIK, "Total Investments (155.3%)")
+    cash = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Cash Equivalents First American Government Obligation Fund, Yield 4.39%",
+    )
+    treasury = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Short-term Investments U.S. Treasury Bill, Yield 5.26%",
+    )
+
+    assert industry["wrapper_disposition"] == "aggregate"
+    assert industry["wrapper_position_key"] == ""
+    assert issuer_rollup["wrapper_disposition"] in {"debt_issuer_rollup", "aggregate"}
+    assert issuer_rollup["wrapper_position_key"] == ""
+    assert total["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert cash["wrapper_disposition"] == "non_private_market"
+    assert treasury["wrapper_disposition"] == "non_private_market"
+
+
+def test_tcw_direct_lending_vii_position_key_ignores_current_coupon_and_nav_pct():
+    first = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Debt Securities Food Products Hometown Food Company Acquisition Date "
+        "08/31/18 Term Loan - 9.85% (LIBOR + 5.00%, 1.25% Floor) "
+        "% of Net Assets 2.4% Maturity Date 08/31/23",
+    )
+    second = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Debt Securities Food Products Hometown Food Company Acquisition Date "
+        "08/31/18 Term Loan - 10.21% (SOFR + 5.00%, 1.25% Floor) "
+        "% of Net Assets 2.6% Maturity Date 08/31/23",
+    )
+    different_instrument = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Debt Securities Food Products Hometown Food Company Acquisition Date "
+        "08/31/18 Revolver - 10.21% (SOFR + 5.00%, 1.25% Floor) "
+        "% of Net Assets 0.2% Maturity Date 08/31/23",
+    )
+    different_maturity = classify_identifier(
+        TCW_DIRECT_LENDING_VII_CIK,
+        "Debt Securities Food Products Hometown Food Company Acquisition Date "
+        "08/31/18 Term Loan - 10.21% (SOFR + 5.00%, 1.25% Floor) "
+        "% of Net Assets 2.6% Maturity Date 09/30/24",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_instrument["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_maturity["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_vii_registered_in_supported_ciks():
+    assert TCW_DIRECT_LENDING_VII_CIK in supported_wrapper_ciks()
+    assert "Debt Securities" in supported_prefixes_for_cik(TCW_DIRECT_LENDING_VII_CIK)
+
+
+# ---------------------------------------------------------------------------
+# Commonwealth Credit Partners BDC I, Inc. wrapper (CIK 0001841514)
+# ---------------------------------------------------------------------------
+
+
+COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK = "0001841514"
+
+
+def test_commonwealth_credit_partners_debt_leaf_classified_with_dash_variant():
+    result = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Debt Investments, First Lien Senior Secured, National Debt Relief "
+        "\u2013 Term Loan, Diversified Financials, Spread Above Index SOFR + "
+        "6.00% (1.50% Floor) Interest rate 11.47% Maturity Date 2/24/2027",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "COMMONWEALTH_CREDIT_PARTNERS_BDC_I_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_commonwealth_credit_partners_bare_equity_units_classified():
+    result = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "190 Octane Holdings, LLC - Series A-1 units",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_commonwealth_credit_partners_equity_shorthand_classified():
+    result = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "CTM Acquisition LLC Equity, Media & Entertainment",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_commonwealth_credit_partners_totals_cash_and_liabilities_are_not_leaves():
+    total_debt = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Debt Investments, Total First Lien Senior Secured",
+    )
+    total_all = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Total Debt Investments Preferred Equity and Common Equity",
+    )
+    liabilities = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Liabilities In Excess of Other Assets",
+    )
+    cash = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Cash and Cash Equivalents, Other cash and cash equivalents, Cash Equivalents",
+    )
+    total_cash = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Total Investment and Cash and Cash Equivalents",
+    )
+    affiliated_total = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Non-controlled, Affiliated investments, Total Non-controlled, Affiliated Investments",
+    )
+
+    assert total_debt["wrapper_disposition"] == "aggregate"
+    assert total_all["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert liabilities["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert cash["wrapper_disposition"] == "non_private_market"
+    assert total_cash["wrapper_disposition"] == "non_private_market"
+    assert affiliated_total["wrapper_disposition"] == "aggregate"
+
+
+def test_commonwealth_credit_partners_position_key_ignores_coupon_change():
+    first = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Debt Investments, First Lien Senior Secured, Abea Acquisition, Inc. - "
+        "Term Loan, Consumer Services, Spread Above Index SOFR + 6.50% "
+        "(1.00% floor) Interest Rate 10.76% Maturity Date 11/30/2026",
+    )
+    second = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Debt Investments, First Lien Senior Secured, Abea Acquisition, Inc. - "
+        "Term Loan, Consumer Services, Spread Above Index SOFR + 6.50% "
+        "(1.00% floor) Interest Rate 10.96% Maturity Date 11/30/2026",
+    )
+    different_instrument = classify_identifier(
+        COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK,
+        "Debt Investments, First Lien Senior Secured, Abea Acquisition, Inc. - "
+        "Delayed Draw Term Loan, Consumer Services, Spread Above Index SOFR + 6.50% "
+        "(1.00% floor) Interest Rate 10.96% Maturity Date 11/30/2026",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_instrument["wrapper_position_key"]
+
+
+def test_commonwealth_credit_partners_registered_in_supported_ciks():
+    assert COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK in supported_wrapper_ciks()
+    assert "Debt Investments" in supported_prefixes_for_cik(COMMONWEALTH_CREDIT_PARTNERS_BDC_I_CIK)
+
+
+# ---------------------------------------------------------------------------
+# TCW Direct Lending VIII LLC wrapper (CIK 0001825265)
+# ---------------------------------------------------------------------------
+
+
+TCW_DIRECT_LENDING_VIII_CIK = "0001825265"
+
+
+def test_tcw_direct_lending_viii_debt_leaf_classified():
+    result = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Debt Investments, Commercial Services & Supplies Power Acquisition LLC, "
+        "Acquisition Date 01/22/25 Term Loan B - 10.67% "
+        "(SOFR + 7.00%, 1.50% Floor) Net Assets 4.2% Maturity 01/22/30",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "TCW_DIRECT_LENDING_VIII_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_viii_equity_warrant_leaf_classified():
+    result = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Equity Investments, Energy Equipment & Services HydroSource Logistics, LLC, "
+        "Acquisition Date 04/05/24 Warrant, expires 4/4/34 Net Assets 3.5%",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_viii_subtotals_and_cash_are_not_leaves():
+    subtotal = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Debt Investments, Commercial Services & Supplies, Net Assets 16.2%",
+    )
+    total = classify_identifier(TCW_DIRECT_LENDING_VIII_CIK, "Total Investments (188.3%)")
+    cash = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Cash Equivalents, First American Government Obligation Fund, "
+        "Yield 4.39%, Class X (FGXXX) Net Assets 14.4%",
+    )
+    treasury = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Short-term Investments, U.S. Treasury Bill, Yield 5.05% Net Assets 18.1%",
+    )
+
+    assert subtotal["wrapper_disposition"] == "aggregate"
+    assert subtotal["wrapper_position_key"] == ""
+    assert total["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert cash["wrapper_disposition"] == "non_private_market"
+    assert treasury["wrapper_disposition"] == "non_private_market"
+
+
+def test_tcw_direct_lending_viii_position_key_ignores_current_coupon_and_nav_pct():
+    first = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Debt Investments, Containers & Packaging Hoffmaster Group, Inc., "
+        "Acquisition Date 02/24/23 Term Loan - 10.10% "
+        "(SOFR + 6.25%, 2.00% Floor) Net Assets 2.5% Maturity 02/24/28",
+    )
+    second = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Debt Investments, Containers & Packaging Hoffmaster Group, Inc., "
+        "Acquisition Date 02/24/23 Term Loan - 8.67% "
+        "(SOFR + 5.00%, 2.00% Floor) Net Assets 2.4% Maturity 02/24/28",
+    )
+    different_lot = classify_identifier(
+        TCW_DIRECT_LENDING_VIII_CIK,
+        "Debt Investments, Containers & Packaging Hoffmaster Group, Inc., "
+        "Acquisition Date 03/15/24 Incremental Term Loan - 8.67% "
+        "(SOFR + 5.00%, 2.00% Floor) Net Assets 2.2% Maturity 02/24/28",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_lot["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_viii_registered_in_supported_ciks():
+    assert TCW_DIRECT_LENDING_VIII_CIK in supported_wrapper_ciks()
+    assert "Debt Investments" in supported_prefixes_for_cik(TCW_DIRECT_LENDING_VIII_CIK)
+
+
+# ---------------------------------------------------------------------------
+# TCW Direct Lending LLC wrapper (CIK 0001603480)
+# ---------------------------------------------------------------------------
+
+
+TCW_DIRECT_LENDING_CIK = "0001603480"
+
+
+def test_tcw_direct_lending_llc_debt_leaf_classified():
+    result = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Debt Investments- United States Distributors Animal Supply Company, LLC "
+        "Date 08/14/20 Term Loan - 13.16% inc PIK "
+        "(SOFR + 8.50%, 1.00% Floor, all PIK) Net Assets 5.8% "
+        "Maturity 08/14/25",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "TCW_DIRECT_LENDING_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_llc_equity_leaf_classified():
+    result = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Equity Investments- United States Investment Funds & Vehicles "
+        "TCW Direct Lending Strategic Ventures Preferred membership Interests "
+        "Net Assets 20.9%",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_rule_id"] == "TCW_DIRECT_LENDING_EQUITY_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_llc_subtotals_and_cash_are_not_leaves():
+    issuer_rollup = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Equity Investments- United States Investment Funds & Vehicles "
+        "TCW Direct Lending Strategic Ventures Net Assets 20.9%",
+    )
+    short_total = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Short-term Investments Net Assets 130.5",
+    )
+    treasury = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Short-term Investments U.S. Treasury Bill, Yield 4.59% Net Assets 130.5",
+    )
+    mixed_total = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Debt Investments and Equity Investments- United States Net Assets 263.3%",
+    )
+    total = classify_identifier(TCW_DIRECT_LENDING_CIK, "Total Investments (263.3%)")
+
+    assert issuer_rollup["wrapper_disposition"] == "aggregate"
+    assert issuer_rollup["wrapper_position_key"] == ""
+    assert short_total["wrapper_disposition"] == "non_private_market"
+    assert treasury["wrapper_disposition"] == "non_private_market"
+    assert mixed_total["wrapper_family"] == "mixed"
+    assert mixed_total["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert total["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+
+
+def test_tcw_direct_lending_llc_position_key_ignores_current_coupon_and_nav_pct():
+    first = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Debt Investments- United States Distributors Animal Supply Company, LLC "
+        "Date 08/14/20 Term Loan - 13.16% inc PIK "
+        "(SOFR + 8.50%, 1.00% Floor, all PIK) Net Assets 5.8% "
+        "Maturity 08/14/25",
+    )
+    second = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Debt Investments- United States Distributors Animal Supply Company, LLC "
+        "Date 08/14/20 Term Loan - 14.03% inc PIK "
+        "(SOFR + 8.50%, 1.00% Floor, all PIK) Net Assets 5.4% "
+        "Maturity 08/14/25",
+    )
+    different_position = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Debt Investments- United States Distributors Animal Supply Company, LLC "
+        "Date 08/14/20 Subordinated Loan - 14.03% inc PIK "
+        "(SOFR + 8.50%, 1.00% Floor, all PIK) Net Assets 5.4% "
+        "Maturity 08/14/25",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_position["wrapper_position_key"]
+
+
+def test_tcw_direct_lending_llc_bare_position_keys_ignore_current_coupon():
+    first = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Animal Supply Company, LLC First Out Term Loan - 13.09%",
+    )
+    second = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "Animal Supply Company, LLC First Out Term Loan - 12.64%",
+    )
+    equity = classify_identifier(
+        TCW_DIRECT_LENDING_CIK,
+        "TCW Direct Lending Strategic Ventures LLC Preferred Membership Interests",
+    )
+
+    assert first["wrapper_family"] == "debt"
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert equity["wrapper_family"] == "equity"
+    assert equity["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_tcw_direct_lending_llc_registered_in_supported_ciks():
+    assert TCW_DIRECT_LENDING_CIK in supported_wrapper_ciks()
+    assert "Debt Investments" in supported_prefixes_for_cik(TCW_DIRECT_LENDING_CIK)
+
+
+# ---------------------------------------------------------------------------
+# TCW Star Direct Lending LLC wrapper (CIK 0001916608)
+# ---------------------------------------------------------------------------
+
+
+TCW_STAR_DIRECT_LENDING_CIK = "0001916608"
+
+
+def test_tcw_star_direct_lending_debt_leaf_classified():
+    result = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Debt Investment Commercial Services & Supplies Jones Industrial Holdings, Inc. "
+        "Acquisition Date - 07/31/2023 Investment Term Loan - 13.92% "
+        "(SOFR + 8.50%, 2.00% Floor) % of Net Assets - 6.6% "
+        "Maturity Date - 07/31/2028",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "TCW_STAR_DIRECT_LENDING_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_star_direct_lending_equity_warrant_leaf_classified():
+    result = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Equity Investment, Automobile Components SUP Parent Holdings, LLC "
+        "Acquisition Date - 08/13/25 Investment Common Units % of Net Assets - 0.8%",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_tcw_star_direct_lending_subtotals_and_cash_are_not_leaves():
+    subtotal = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Debt Investment Food Products % of Net Assets - 18.5%",
+    )
+    comma_subtotal = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Debt Investment, Commercial Services & Supplies, % of Net Assets - 16.4%",
+    )
+    total = classify_identifier(TCW_STAR_DIRECT_LENDING_CIK, "Total Investments (115.8%)")
+    cash = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Cash Equivalents, First American Government Obligation Fund, Yield 4.27%, "
+        "Class X (FGXXX), % of Net Assets - 5.3%",
+    )
+    treasury = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Short-term Investments U.S. Treasury Bill, Yield 5.26% Net Assets 28.2%",
+    )
+
+    assert subtotal["wrapper_disposition"] == "aggregate"
+    assert comma_subtotal["wrapper_disposition"] == "aggregate"
+    assert total["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert cash["wrapper_disposition"] == "non_private_market"
+    assert treasury["wrapper_disposition"] == "non_private_market"
+
+
+def test_tcw_star_direct_lending_malformed_no_issuer_row_not_leaf():
+    result = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Debt Investment Date Processing And Outsourced Services Acquisition Date - "
+        "12/21/22 Term Loan 11.57% (SOFR+6.88% 1.50% Floor) Maturity Date 12/21/27",
+    )
+
+    assert result["wrapper_disposition"] == "aggregate"
+    assert result["wrapper_position_key"] == ""
+
+
+def test_tcw_star_direct_lending_position_key_ignores_coupon_and_nav_pct():
+    first = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Debt Investment Containers & Packaging Hoffmaster Group, Inc. "
+        "Acquisition Date - 02/24/2023 Investment Term Loan - 12.84% "
+        "(SOFR + 7.50%, 2.00% Floor) % of Net Assets - 5.5% "
+        "Maturity Date - 02/24/2028",
+    )
+    second = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Debt Investment Containers & Packaging Hoffmaster Group, Inc. "
+        "Acquisition Date - 02/24/2023 Investment Term Loan - 11.58% "
+        "(SOFR + 6.25%, 2.00% Floor) % of Net Assets - 5.1% "
+        "Maturity Date - 02/24/2028",
+    )
+    incremental = classify_identifier(
+        TCW_STAR_DIRECT_LENDING_CIK,
+        "Debt Investment Containers & Packaging Hoffmaster Group, Inc. "
+        "Acquisition Date - 03/15/24 Investment Incremental Term Loan - 11.58% "
+        "(SOFR + 6.25%, 2.00% Floor) % of Net Assets - 0.6% "
+        "Maturity Date - 02/24/2028",
+    )
+
+    assert first["wrapper_disposition"] == "debt_position_leaf"
+    assert second["wrapper_disposition"] == "debt_position_leaf"
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != incremental["wrapper_position_key"]
+
+
+def test_tcw_star_direct_lending_registered_in_supported_ciks():
+    assert TCW_STAR_DIRECT_LENDING_CIK in supported_wrapper_ciks()
+    assert "Debt Investment" in supported_prefixes_for_cik(TCW_STAR_DIRECT_LENDING_CIK)
+
+
+# ---------------------------------------------------------------------------
+# Onex Falcon Direct Lending BDC Fund wrapper (CIK 0001860424)
+# ---------------------------------------------------------------------------
+
+
+ONEX_FALCON_DIRECT_LENDING_CIK = "0001860424"
+
+
+def test_onex_falcon_debt_leaf_classified_from_flat_hierarchy():
+    result = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Debt Investments Forest Products "
+        "& Paper Jackson Paper Manufacturing Company Initial Term Loan Reference "
+        "Rate and Spread 1M SOFR + 6.25% Floor 1.00% Interest Rate 10.02% "
+        "Initial Acquisition Date 10/1/2021 Maturity Date 8/26/2026",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "ONEX_FALCON_DIRECT_LENDING_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_onex_falcon_revolver_without_current_coupon_is_still_debt_leaf():
+    result = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Debt Investments High Tech "
+        "Industries Apryse Software Corp Revolving Credit Facility Reference Rate "
+        "and Spread 3M SOFR + 4.75% Acquisition Date 6/25/2025 Maturity Date "
+        "6/26/2032",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_onex_falcon_corrupted_apryse_concatenation_is_excluded():
+    result = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech "
+        "Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M "
+        "SOFR + 4.75% Acquisition Date 6/25/2025 Maturity Date "
+        "6/26/2032ontrolled/Non-affiliated investments Debt Investments High "
+        "Tech Industries Apryse Software Corp 2024 Refinancing Term Loan "
+        "Reference Rate and Spread 3M SOFR + 4.75% Acquisition Date 7/15/2024 "
+        "Maturity Date 7/15/2027",
+    )
+
+    assert result["wrapper_family"] == ""
+    assert not result["wrapper_disposition"].endswith("_position_leaf")
+    assert result["wrapper_position_key"] == ""
+
+
+def test_onex_falcon_uppercase_debt_leaf_variant_classified():
+    result = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "NON-CONTROLLED/NON-AFFILIATED INVESTMENTS DEBT INVESTMENTS CONSUMER "
+        "GOODSDurable B C D I Meteor Acquisition, L L C Initial Term Loan "
+        "Reference Rate and Spread 3 M SO FR + 7.00% Floor 1.00% Interest Rate "
+        "11.43% Initial Acquisition Date 12/29/2022 Maturity Date 6/29/2028",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+
+
+def test_onex_falcon_equity_leaf_classified():
+    result = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Equity Wholesale IMB Holdco "
+        "LLC Series A Preferred Units",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+
+
+def test_onex_falcon_category_and_cash_rows_not_leaves():
+    category = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Debt Investments Business Services",
+    )
+    affiliation = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments",
+    )
+    cash = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Cash and Cash Equivalents First American Government Obligations Fund",
+    )
+
+    assert category["wrapper_disposition"] in {"aggregate", "debt_category_rollup"}
+    assert category["wrapper_position_key"] == ""
+    assert affiliation["wrapper_disposition"] == "aggregate"
+    assert cash["wrapper_disposition"] == "non_private_market"
+
+
+def test_onex_falcon_position_key_ignores_coupon_and_acquisition_date_drift():
+    first = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Debt Investments Forest Products "
+        "& Paper Jackson Paper Manufacturing Company Initial Term Loan Reference "
+        "Rate and Spread 3M SOFR + 7.25% Floor 1.00% Interest Rate 12.68% "
+        "Initial Acquisition Date 10/1/2021 Maturity Date 8/26/2026",
+    )
+    second = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Debt Investments Forest Products "
+        "& Paper Jackson Paper Manufacturing Company Initial Term Loan Reference "
+        "Rate and Spread 1M SOFR + 6.25% Floor 1.00% Interest Rate 10.02% "
+        "Initial Acquisition Date 10/1/2021 Maturity Date 8/26/2026",
+    )
+    different_maturity = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Debt Investments Forest Products "
+        "& Paper Jackson Paper Manufacturing Company Initial Term Loan Reference "
+        "Rate and Spread 1M SOFR + 6.25% Floor 1.00% Interest Rate 10.02% "
+        "Initial Acquisition Date 10/1/2021 Maturity Date 8/26/2028",
+    )
+
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_maturity["wrapper_position_key"]
+
+
+def test_onex_falcon_registered_in_supported_ciks():
+    assert ONEX_FALCON_DIRECT_LENDING_CIK in supported_wrapper_ciks()
+
+
+# ---------------------------------------------------------------------------
+# Manulife Private Credit Fund wrapper (CIK 0001988280)
+# ---------------------------------------------------------------------------
+
+
+MANULIFE_PRIVATE_CREDIT_CIK = "0001988280"
+
+
+def test_manulife_private_credit_senior_loan_leaf_classified():
+    result = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 112.4% | Industrials 38.7% | AWP Safety Holdings, LLC, "
+        "Term Loan (1 month CME Term SOFR + 4.750%)",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "MANULIFE_PRIVATE_CREDIT_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_manulife_private_credit_two_segment_leaf_without_industry_pipe_survives():
+    result = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 112.4% | Textiles, apparel and luxury goods 1.9%"
+        "CPC Lakeshirts Acquisition LLC, Term Loan "
+        "(1 month CME Term SOFR + 5.500%)",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert "cpc lakeshirts acquisition llc term loan" in result["wrapper_position_key"]
+
+
+def test_manulife_private_credit_rollups_are_not_position_leaves():
+    senior_total = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans (A)(B) 79.2%",
+    )
+    industry_total = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 112.4% | Consumer discretionary 19.6%",
+    )
+    bare_industry = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Consumer discretionary 24.9%",
+    )
+    equity_category = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 195.1% | Equity (A) 0.3%",
+    )
+    comparative_category = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans | Information technology 17.8%",
+    )
+
+    assert not senior_total["wrapper_disposition"].endswith("_position_leaf")
+    assert not industry_total["wrapper_disposition"].endswith("_position_leaf")
+    assert not bare_industry["wrapper_disposition"].endswith("_position_leaf")
+    assert not equity_category["wrapper_disposition"].endswith("_position_leaf")
+    assert not comparative_category["wrapper_disposition"].endswith("_position_leaf")
+    assert senior_total["wrapper_position_key"] == ""
+    assert industry_total["wrapper_position_key"] == ""
+    assert bare_industry["wrapper_position_key"] == ""
+    assert equity_category["wrapper_position_key"] == ""
+    assert comparative_category["wrapper_position_key"] == ""
+
+
+def test_manulife_private_credit_issuer_only_rows_are_aggregate_not_leaves():
+    rapid = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 195.1% | Machinery 0.1% | Rapid Aggregator LLC",
+    )
+    pj_fitzpatrick = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 235.6% | Diversified consumer services 0.2% | "
+        "P.J. Fitzpatrick LLC",
+    )
+    pj_term_loan = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 235.6% | Diversified consumer services 28.8% | "
+        "P.J. Fitzpatrick LLC, Term Loan (3 month CME Term SOFR + 4.750%)",
+    )
+
+    assert rapid["wrapper_disposition"] == "aggregate"
+    assert pj_fitzpatrick["wrapper_disposition"] == "aggregate"
+    assert rapid["wrapper_position_key"] == ""
+    assert pj_fitzpatrick["wrapper_position_key"] == ""
+    assert pj_term_loan["wrapper_disposition"] == "debt_position_leaf"
+    assert pj_term_loan["wrapper_position_key"]
+
+
+def test_manulife_private_credit_short_term_rows_are_non_private_or_aggregate():
+    unfunded = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Short-term investments 37.1% | Less unfunded loan commitments (15.5%)",
+    )
+    dreyfus = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Short-term funds 1.1% | Dreyfus Treasury Obligations Cash Management Fund",
+    )
+    net_investments = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Short-term investments 37.1% | Net investments - "
+        "Non-controlled/Non-affiliated (Cost $112,602,529) 100.8%",
+    )
+
+    assert unfunded["wrapper_disposition"] in {"aggregate", "non_private_market"}
+    assert dreyfus["wrapper_disposition"] == "non_private_market"
+    assert net_investments["wrapper_disposition"] in {"aggregate", "non_private_market"}
+    assert unfunded["wrapper_position_key"] == ""
+    assert dreyfus["wrapper_position_key"] == ""
+    assert net_investments["wrapper_position_key"] == ""
+
+
+def test_manulife_private_credit_position_key_ignores_prefix_pct_and_rate_terms():
+    first = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 112.4% | Industrials 38.7% | AWP Safety Holdings, LLC, "
+        "Term Loan (1 month CME Term SOFR + 4.750%)",
+    )
+    second = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 79.2% | Industrials 29.4% | AWP Safety Holdings, LLC, "
+        "Term Loan (1 month CME Term SOFR + 5.250%)",
+    )
+    different_position = classify_identifier(
+        MANULIFE_PRIVATE_CREDIT_CIK,
+        "Senior loans 112.4% | Industrials 38.7% | AWP Safety Holdings, LLC, "
+        "Delayed Draw Term Loan (1 month CME Term SOFR + 4.750%)",
+    )
+
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_position["wrapper_position_key"]
+
+
+def test_manulife_private_credit_registered_in_supported_ciks():
+    assert MANULIFE_PRIVATE_CREDIT_CIK in supported_wrapper_ciks()
+    assert "Senior loans" in supported_prefixes_for_cik(MANULIFE_PRIVATE_CREDIT_CIK)
+
+
+# ---------------------------------------------------------------------------
+# SCP Private Credit Income BDC LLC wrapper (CIK 0001743415)
+# ---------------------------------------------------------------------------
+
+
+SCP_PRIVATE_CREDIT_INCOME_CIK = "0001743415"
+
+
+def test_scp_private_credit_income_pipe_debt_leaf_classified():
+    result = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Bank Debt/Senior Secured Loans | ACRES Commercial Mortgage LLC | "
+        "Diversified Financial Services | S+705 | 1.00% | 11.38% | "
+        "12/24/2021 | 8/21/2028",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "SCP_PRIVATE_CREDIT_INCOME_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_scp_private_credit_income_dash_debt_leaf_classified():
+    result = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Bank Debt/Senior Secured Loans - 157.3% AMF Levered II, LLC "
+        "Industry Diversified Financial Services Spread above Index S+705 "
+        "Floor 1.00% Interest Rate 11.67% Acquisition Date 12/2021 "
+        "Maturity Date 8/2028",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_position_key"]
+
+
+def test_scp_private_credit_income_equity_and_preferred_leaves_classified():
+    common = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Common Equity/Equity Interests/Warrants - Assertio Holdings, Inc. "
+        "Common Stock Industry Pharmaceuticals Acquisition Date 07/2023",
+    )
+    preferred = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Preferred Equity - Veronica Holdings, LLC (Vapotherm) Industry "
+        "Health Care Equipment & Supplies Interest Rate 9.00% PIK "
+        "Acquisition Date 9/2024",
+    )
+
+    assert common["wrapper_family"] == "equity"
+    assert common["wrapper_disposition"] == "equity_position_leaf"
+    assert common["wrapper_position_key"]
+    assert preferred["wrapper_family"] == "equity"
+    assert preferred["wrapper_disposition"] == "equity_position_leaf"
+    assert preferred["wrapper_position_key"]
+
+
+def test_scp_private_credit_income_liability_total_and_cash_rows_not_leaves():
+    liabilities = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Liabilities in Excess of Other Assets - (64.3%)",
+    )
+    net_assets = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Net Assets - 100.0%",
+    )
+    total_debt = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Total Bank Debt/Senior Secured Loans",
+    )
+    total_investments = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Total Investments(10) - 156.8%",
+    )
+    cash = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Cash Equivalents | First American Government Obligations Fund",
+    )
+
+    for row in [liabilities, net_assets, total_debt, total_investments, cash]:
+        assert not row["wrapper_disposition"].endswith("_position_leaf")
+        assert row["wrapper_position_key"] == ""
+    assert cash["wrapper_disposition"] == "non_private_market"
+
+
+def test_scp_private_credit_income_bare_oldco_rows_are_rollups_not_leaves():
+    bare_oldco = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Oldco AI, LLC (f/k/a Amerimark)",
+    )
+    bare_oldco_one = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Oldco AI, LLC (f/k/a Amerimark) One",
+    )
+    detailed_oldco = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Bank Debt/Senior Secured Loans | Oldco AI, LLC (f/k/a AmeriMark) | "
+        "Internet & Catalog Retail | P+475 | 1.00 | 13.25 | "
+        "6/16/2023 | 10/31/2023",
+    )
+
+    assert bare_oldco["wrapper_disposition"] != "debt_position_leaf"
+    assert bare_oldco_one["wrapper_disposition"] != "debt_position_leaf"
+    assert bare_oldco["wrapper_position_key"] == ""
+    assert bare_oldco_one["wrapper_position_key"] == ""
+    assert detailed_oldco["wrapper_disposition"] == "debt_position_leaf"
+    assert detailed_oldco["wrapper_position_key"]
+
+
+def test_scp_private_credit_income_position_key_strips_pct_and_rate_terms():
+    first = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Bank Debt/Senior Secured Loans - 157.3% AMF Levered II, LLC "
+        "Industry Diversified Financial Services Spread above Index S+705 "
+        "Floor 1.00% Interest Rate 10.84% Acquisition Date 12/2021 "
+        "Maturity Date 8/2028",
+    )
+    second = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Bank Debt/Senior Secured Loans - 112.5% AMF Levered II, LLC "
+        "Industry Diversified Financial Services Spread above Index S+705 "
+        "Floor 1.00% Interest Rate 11.67% Acquisition Date 12/2021 "
+        "Maturity Date 8/2028",
+    )
+    different_position = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Bank Debt/Senior Secured Loans - 157.3% AMF Levered II, LLC "
+        "Industry Diversified Financial Services Spread above Index S+705 "
+        "Floor 1.00% Interest Rate 10.84% Acquisition Date 12/2021 "
+        "Maturity Date 9/2029",
+    )
+    pipe_format = classify_identifier(
+        SCP_PRIVATE_CREDIT_INCOME_CIK,
+        "Bank Debt/Senior Secured Loans | AMF Levered II, LLC | "
+        "Diversified Financial Services | S+705 | 1.00% | 10.84% | "
+        "12/24/2021 | 8/21/2028",
+    )
+
+    assert first["wrapper_position_key"] == second["wrapper_position_key"]
+    assert first["wrapper_position_key"] == pipe_format["wrapper_position_key"]
+    assert first["wrapper_position_key"] != different_position["wrapper_position_key"]
+
+
+def test_scp_private_credit_income_registered_in_supported_ciks():
+    assert SCP_PRIVATE_CREDIT_INCOME_CIK in supported_wrapper_ciks()
+    assert "Bank Debt/Senior Secured Loans" in supported_prefixes_for_cik(
+        SCP_PRIVATE_CREDIT_INCOME_CIK
+    )
+
+
+# ---------------------------------------------------------------------------
+# Senior Credit Investments, LLC wrapper (CIK 0001959568)
+# ---------------------------------------------------------------------------
+
+
+SENIOR_CREDIT_INVESTMENTS_CIK = "0001959568"
+
+
+def test_senior_credit_investments_debt_leaf_classified_from_flat_hierarchy():
+    result = classify_identifier(
+        SENIOR_CREDIT_INVESTMENTS_CIK,
+        "Non-Controlled/Non-Affiliated Portfolio Company Investments First "
+        "Lien Debt Investments Health Care Technology Kona Buyer, LLC "
+        "Investment Type First Lien Delayed Draw Term Loan Reference Rate "
+        "and Spread S + 4.50% Maturity Date 7/23/2031",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert result["wrapper_rule_id"] == "SENIOR_CREDIT_INVESTMENTS_DEBT_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_senior_credit_investments_portfolio_company_leaf_classified():
+    result = classify_identifier(
+        SENIOR_CREDIT_INVESTMENTS_CIK,
+        "Portfolio Company Firebird Co-Invest L.P. Investment Type L.P. Interest",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_position_key"] == "firebird co invest l p investment type l p interest"
+
+
+def test_senior_credit_investments_category_total_and_unfunded_not_leaves():
+    category = classify_identifier(
+        SENIOR_CREDIT_INVESTMENTS_CIK,
+        "Non-Controlled/Non-Affiliated Portfolio Company Investments "
+        "First Lien Debt Investments Air Freight & Logistics",
+    )
+    total = classify_identifier(
+        SENIOR_CREDIT_INVESTMENTS_CIK,
+        "Non-Controlled/Non-Affiliated Portfolio Company Investments "
+        "Investments Total non-controlled-non-affiliated Portfolio Company investments",
+    )
+    unfunded = classify_identifier(
+        SENIOR_CREDIT_INVESTMENTS_CIK,
+        "Total Unfunded Portfolio Company Commitments",
+    )
+
+    assert category["wrapper_disposition"] in {"aggregate", "debt_category_rollup"}
+    assert category["wrapper_position_key"] == ""
+    assert total["wrapper_disposition"] in {"aggregate", "mixed_total_rollup"}
+    assert total["wrapper_position_key"] == ""
+    assert unfunded["wrapper_disposition"] in {"aggregate", "debt_total_rollup"}
+    assert unfunded["wrapper_position_key"] == ""
+
+
+def test_senior_credit_investments_bare_portfolio_company_stays_unclassified():
+    result = classify_identifier(
+        SENIOR_CREDIT_INVESTMENTS_CIK,
+        "Portfolio Company Kona Buyer",
+    )
+
+    assert result["wrapper_family"] == ""
+    assert result["wrapper_disposition"] == ""
+
+
+def test_senior_credit_investments_registered_in_supported_ciks():
+    assert SENIOR_CREDIT_INVESTMENTS_CIK in supported_wrapper_ciks()
+    assert (
+        "Non-Controlled/Non-Affiliated Portfolio Company Investments "
+        "First Lien Debt Investments"
+        in supported_prefixes_for_cik(SENIOR_CREDIT_INVESTMENTS_CIK)
+    )
+
+
+# ---------------------------------------------------------------------------
+# NexPoint Capital, Inc. (0001588272)
+# ---------------------------------------------------------------------------
+
+
+NEXPOINT_CAPITAL_CIK = "0001588272"
+
+
+def test_nexpoint_capital_terminal_coupon_preferred_stock_is_leaf():
+    result = classify_identifier(
+        NEXPOINT_CAPITAL_CIK,
+        "Preferred Stocks | Financials | United Fidelity Bank FSB | 7.00%",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_rule_id"] == "NEXPOINT_CAPITAL_EQUITY_LEAF_V1"
+    assert result["wrapper_position_key"] == "financials united fidelity bank fsb"
+
+
+def test_nexpoint_capital_pipe_debt_leaf_classified():
+    result = classify_identifier(
+        NEXPOINT_CAPITAL_CIK,
+        "Senior Secured Loans | Healthcare | CCS Medical, Inc "
+        "(First Lien Term Loan) | Fixed + 1600 | 0.00% | 4/7/2026",
+    )
+
+    assert result["wrapper_family"] == "debt"
+    assert result["wrapper_disposition"] == "debt_position_leaf"
+    assert "ccs medical" in result["wrapper_position_key"]
+
+
+def test_nexpoint_capital_category_total_and_cash_rows_not_leaves():
+    preferred = classify_identifier(NEXPOINT_CAPITAL_CIK, "Preferred Stocks")
+    loan = classify_identifier(NEXPOINT_CAPITAL_CIK, "Senior Secured Loans")
+    warrant_total = classify_identifier(NEXPOINT_CAPITAL_CIK, "Warrants | Total Investments")
+    cash = classify_identifier(NEXPOINT_CAPITAL_CIK, "Total Investments | Cash Equivalents")
+    other_assets = classify_identifier(
+        NEXPOINT_CAPITAL_CIK,
+        "Total Investments | Other Assets & Liabilities net",
+    )
+
+    assert preferred["wrapper_disposition"] == "aggregate"
+    assert loan["wrapper_disposition"] == "aggregate"
+    assert warrant_total["wrapper_disposition"] == "aggregate"
+    assert cash["wrapper_disposition"] == "non_private_market"
+    assert other_assets["wrapper_disposition"] == "non_private_market"
+    assert not preferred["wrapper_position_key"]
+    assert not loan["wrapper_position_key"]
+    assert not warrant_total["wrapper_position_key"]
+    assert not cash["wrapper_position_key"]
+    assert not other_assets["wrapper_position_key"]
+
+
+def test_nexpoint_capital_registered_in_supported_ciks():
+    assert NEXPOINT_CAPITAL_CIK in supported_wrapper_ciks()
+    assert supported_prefixes_for_cik(NEXPOINT_CAPITAL_CIK) == ()

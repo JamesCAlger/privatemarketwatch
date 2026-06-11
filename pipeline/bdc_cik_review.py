@@ -423,10 +423,12 @@ def build_bundles(
     overwrite: bool = False,
     max_rows: int = 25,
     allow_html_download: bool = False,
+    max_html_downloads: int = 10,
 ) -> list[dict[str, str]]:
     worklist = _load_selected_worklist(output_dir, review_ids)
     bundle_dir = output_dir / "bundles"
     ensure_dir(bundle_dir)
+    html_download_slots_used = 0
 
     artifact_paths = [
         config.SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
@@ -512,6 +514,35 @@ def build_bundles(
         ]
         accession_candidates = resolve_accessions_from_rows(residual_rows + source_only_rows + detail_rows + holdings_rows)
         accession = accession_candidates[0] if accession_candidates else ""
+        html_path = (
+            config.BDC_HTML_CACHE_DIR
+            / (normalize_cik(cik).lstrip("0") or "0")
+            / f"{accession.replace('-', '')}.html"
+            if accession
+            else None
+        )
+        needs_html_download = bool(
+            html_path
+            and (not html_path.exists() or html_path.stat().st_size < 1024)
+        )
+        allow_html_for_bundle = False
+        if allow_html_download and needs_html_download:
+            if html_download_slots_used < max_html_downloads:
+                allow_html_for_bundle = True
+                html_download_slots_used += 1
+            else:
+                evidence_items.append(
+                    _evidence_item(
+                        "html_download_cap",
+                        "Opt-in BDC HTML download was skipped because the run-level cap was reached.",
+                        {
+                            "max_html_downloads": max_html_downloads,
+                            "cik": cik,
+                            "accession_number": accession,
+                            "path": display_path(html_path),
+                        },
+                    )
+                )
         evidence_items.extend(
             build_html_soi_evidence(
                 source="bdc",
@@ -534,7 +565,7 @@ def build_bundles(
                 xbrl_rows_same_accession=[
                     r for r in holdings_rows if not accession or normalize_text(r.get("accession_number")) == accession
                 ],
-                allow_html_download=allow_html_download,
+                allow_html_download=allow_html_for_bundle,
                 max_rows=max_rows,
             )
         )
@@ -847,13 +878,17 @@ def cli_build_bundles(argv: list[str] | None = None) -> int:
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--allow-html-download", action="store_true")
+    parser.add_argument("--max-html-downloads", type=int, default=10)
     args = parser.parse_args(argv)
+    if args.max_html_downloads < 1:
+        raise BdcCikReviewError("--max-html-downloads must be at least 1")
     review_ids = None if args.all or not args.review_id else set(args.review_id)
     manifest = build_bundles(
         output_dir=args.output_dir,
         review_ids=review_ids,
         overwrite=args.overwrite,
         allow_html_download=args.allow_html_download,
+        max_html_downloads=args.max_html_downloads,
     )
     print(json.dumps({"bundle_count": len(manifest)}, indent=2, sort_keys=True))
     return 0

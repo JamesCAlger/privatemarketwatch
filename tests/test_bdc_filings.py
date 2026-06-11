@@ -1063,6 +1063,99 @@ class TestDecimalsNormalization:
         assert diff_pos[0]["fair_value"] == 18000000.0
 
 
+STEPSTONE_FIRST_LIEN_IDENTIFIER = (
+    "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | "
+    "Insurance | Denali Topco LLC Initial Term Loan | SOFR + 5.50% | 7/12/29"
+)
+
+
+def _stepstone_2025q4_record(**overrides):
+    record = {
+        "cik": "0001950803",
+        "entity_name": "Stepstone Private Credit Fund LLC",
+        "accession_number": "0001193125-26-128890",
+        "report_date": "2025-12-31",
+        "period": "2025-12-31",
+        "investment_identifier": STEPSTONE_FIRST_LIEN_IDENTIFIER,
+        "fair_value": 12541.0,
+        "cost": 12541.0,
+        "principal_amount": 12541.0,
+        "interest_rate": 0.0942,
+        "pct_of_net_assets": 0.0067,
+    }
+    record.update(overrides)
+    return record
+
+
+class TestStepstone2025Q4ScaleCorrection:
+    def test_first_lien_leaf_monetary_fields_scaled(self):
+        from pipeline.bdc_filings import _apply_stepstone_2025q4_monetary_scale_correction
+
+        records = [_stepstone_2025q4_record()]
+
+        _apply_stepstone_2025q4_monetary_scale_correction(records)
+
+        row = records[0]
+        assert row["fair_value"] == 12541000.0
+        assert row["cost"] == 12541000.0
+        assert row["principal_amount"] == 12541000.0
+        assert row["interest_rate"] == 0.0942
+        assert row["pct_of_net_assets"] == 0.0067
+
+    def test_non_stepstone_cik_not_scaled(self):
+        from pipeline.bdc_filings import _apply_stepstone_2025q4_monetary_scale_correction
+
+        records = [_stepstone_2025q4_record(cik="0000000100")]
+
+        _apply_stepstone_2025q4_monetary_scale_correction(records)
+
+        assert records[0]["fair_value"] == 12541.0
+
+    def test_non_first_lien_stepstone_row_not_scaled(self):
+        from pipeline.bdc_filings import _apply_stepstone_2025q4_monetary_scale_correction
+
+        records = [
+            _stepstone_2025q4_record(
+                investment_identifier=(
+                    "Non-Controlled, Non-Affiliated Debt Investments | "
+                    "Second Lien Senior Secured | Software | Borrower LLC Term Loan | "
+                    "SOFR + 8.00% | 7/12/29"
+                )
+            )
+        ]
+
+        _apply_stepstone_2025q4_monetary_scale_correction(records)
+
+        assert records[0]["fair_value"] == 12541.0
+
+    def test_large_value_in_affected_filing_not_scaled(self):
+        from pipeline.bdc_filings import _apply_stepstone_2025q4_monetary_scale_correction
+
+        records = [_stepstone_2025q4_record(fair_value=12541000.0)]
+
+        _apply_stepstone_2025q4_monetary_scale_correction(records)
+
+        assert records[0]["fair_value"] == 12541000.0
+
+    def test_pct_consistent_small_value_not_scaled(self):
+        from pipeline.bdc_filings import _apply_stepstone_2025q4_monetary_scale_correction
+
+        records = [
+            _stepstone_2025q4_record(
+                fair_value=250000.0,
+                cost=250000.0,
+                principal_amount=250000.0,
+                pct_of_net_assets=0.000134,
+            )
+        ]
+
+        _apply_stepstone_2025q4_monetary_scale_correction(records)
+
+        assert records[0]["fair_value"] == 250000.0
+        assert records[0]["cost"] == 250000.0
+        assert records[0]["principal_amount"] == 250000.0
+
+
 # ---------------------------------------------------------------------------
 # 7. _parse_single_filing (end-to-end single file)
 # ---------------------------------------------------------------------------

@@ -1,8 +1,9 @@
 """Cached HTML Schedule of Investments evidence for BDC review bundles.
 
-This module is intentionally read-only. It parses cached filing HTML in memory
-and reuses the low-level HTML table parser, but does not call the production
-HTML extraction workflow or write learned grid/template files.
+This module is cache-only by default. When explicitly allowed, BDC filings may
+be fetched through the audited SEC download guard. It reuses the low-level HTML
+table parser, but does not call the production HTML extraction workflow or write
+learned grid/template files.
 """
 
 from __future__ import annotations
@@ -307,6 +308,7 @@ def _load_filing_meta(source: str, cik: str, accession: str, report_date: str) -
         "form_type": "",
         "filing_date": "",
         "entity_name": "",
+        "primary_document": "",
     }
     source_config = _html_source_config(source)
     path = source_config[1] if source_config else config.BDC_FILINGS_INDEX_FILE
@@ -647,21 +649,36 @@ def build_html_soi_evidence(
     if form_type:
         meta["form_type"] = form_type
     html_path = _html_path(source, cik, acc)
+    download_receipt: dict[str, Any] | None = None
     if not html_path.exists():
         if allow_html_download:
-            try:
-                from pipeline.edgar_client import EdgarClient
+            if normalize_text(source).lower() == "bdc":
+                try:
+                    from pipeline.edgar_client import EdgarClient
+                    from pipeline.sec_download_guard import download_bdc_html
 
-                client = EdgarClient()
-                url = client.resolve_filing_document_url(
-                    normalize_cik(cik),
-                    acc,
-                    doc_types=doc_types,
-                )
-                if url:
-                    client.download_file(url, html_path)
-            except Exception:
-                pass
+                    client = EdgarClient()
+                    download_receipt = download_bdc_html(
+                        client=client,
+                        cik=normalize_cik(cik),
+                        accession=acc,
+                        primary_doc=meta.get("primary_document", ""),
+                        agent="html_soi_evidence",
+                        reason="bdc_review_evidence",
+                        doc_types=doc_types,
+                    )
+                except Exception as exc:
+                    download_receipt = {
+                        "status": "failed",
+                        "stage": "guard_exception",
+                        "error": str(exc),
+                    }
+            else:
+                download_receipt = {
+                    "status": "failed",
+                    "stage": "unsupported_source",
+                    "error": "Guarded opt-in HTML download is currently limited to BDC filings.",
+                }
         if html_path.exists():
             # Continue into normal cached parsing path after opt-in download.
             pass
@@ -675,6 +692,7 @@ def build_html_soi_evidence(
                         "status": status,
                         "path": _display_path(html_path),
                         "sha256": "",
+                        "download_receipt": download_receipt,
                         **meta,
                     },
                 )

@@ -24,7 +24,6 @@ from pipeline.config import (
     BDC_FILING_FORM_TYPES,
     BDC_FILINGS_INDEX_FILE,
     BDC_HOLDINGS_FILE,
-    BDC_HTML_CACHE_DIR,
     BDC_PARSE_PROGRESS_FILE,
     BDC_UNIVERSE_FILE,
     BDC_XBRL_CACHE_DIR,
@@ -120,6 +119,16 @@ _CATEGORY_IDENTIFIER_RE = re.compile(
     r"preferred equity|common equity|warrants?)$",
     re.IGNORECASE,
 )
+
+_STEPSTONE_2025Q4_CIK = "0001950803"
+_STEPSTONE_2025Q4_ACCESSION = "0001193125-26-128890"
+_STEPSTONE_2025Q4_REPORT_DATE = "2025-12-31"
+_STEPSTONE_2025Q4_NET_ASSETS = 1864467000.0
+_STEPSTONE_2025Q4_SCALE_FACTOR = 1000.0
+_STEPSTONE_2025Q4_SCALE_MAX_ABS = 500000.0
+_STEPSTONE_2025Q4_MIN_SCALE_RATIO = 250.0
+_STEPSTONE_2025Q4_MAX_SCALE_RATIO = 2000.0
+_STEPSTONE_2025Q4_SCALE_COLUMNS = ("fair_value", "cost", "principal_amount")
 
 
 # ===========================================================================
@@ -608,6 +617,109 @@ def _normalize_mixed_decimals_monetary_facts(
             )
 
 
+def _normalize_cik_digits(value: Any) -> str:
+    digits = re.sub(r"\D+", "", "" if value is None else str(value))
+    return digits.zfill(10) if digits else ""
+
+
+def _stepstone_2025q4_scale_fix_applies(row: dict[str, Any]) -> bool:
+    if _normalize_cik_digits(row.get("cik")) != _STEPSTONE_2025Q4_CIK:
+        return False
+    if str(row.get("accession_number", "") or "").strip() != _STEPSTONE_2025Q4_ACCESSION:
+        return False
+    report_date = str(row.get("report_date", "") or "").strip()
+    period = str(row.get("period", "") or "").strip()
+    if report_date != _STEPSTONE_2025Q4_REPORT_DATE or period != _STEPSTONE_2025Q4_REPORT_DATE:
+        return False
+
+    identifier = str(row.get("investment_identifier", "") or "")
+    lower_identifier = identifier.lower()
+    if "first lien senior secured" not in lower_identifier:
+        return False
+
+    try:
+        from pipeline.bdc_xbrl_wrapper import classify_identifier
+    except Exception:
+        logger.debug("Stepstone scale fix skipped because wrapper classifier was unavailable")
+        return False
+
+    wrapper = classify_identifier(_STEPSTONE_2025Q4_CIK, identifier)
+    if wrapper.get("wrapper_disposition") != "debt_position_leaf":
+        return False
+
+    try:
+        fair_value = abs(float(row.get("fair_value")))
+        pct_of_net_assets = abs(float(row.get("pct_of_net_assets")))
+    except (TypeError, ValueError):
+        return False
+    if pd.isna(fair_value) or pd.isna(pct_of_net_assets):
+        return False
+    if fair_value == 0 or pct_of_net_assets == 0:
+        return False
+    if fair_value >= _STEPSTONE_2025Q4_SCALE_MAX_ABS:
+        return False
+    implied_scale = (pct_of_net_assets * _STEPSTONE_2025Q4_NET_ASSETS) / fair_value
+    return (
+        _STEPSTONE_2025Q4_MIN_SCALE_RATIO
+        <= implied_scale
+        <= _STEPSTONE_2025Q4_MAX_SCALE_RATIO
+    )
+
+
+def _scale_stepstone_2025q4_value(value: Any) -> Any:
+    if value is None:
+        return value
+    if isinstance(value, str) and value.strip() == "":
+        return value
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return value
+    if pd.isna(numeric) or numeric == 0:
+        return value
+    if abs(numeric) >= _STEPSTONE_2025Q4_SCALE_MAX_ABS:
+        return value
+    return numeric * _STEPSTONE_2025Q4_SCALE_FACTOR
+
+
+def _apply_stepstone_2025q4_monetary_scale_correction(
+    records: list[dict[str, Any]],
+) -> None:
+    """Correct Stepstone 2025-12-31 first-lien position values reported 1000x low.
+
+    The affected filing has wrapper-recognized first-lien position rows whose
+    monetary facts are in thousands while category totals and percentages imply
+    dollar-scale values.  Keep this repair CIK/accession/date scoped so it does
+    not become a generic small-position heuristic.
+    """
+    corrected = 0
+    for row in records:
+        if not _stepstone_2025q4_scale_fix_applies(row):
+            continue
+        row_corrected = False
+        for col in _STEPSTONE_2025Q4_SCALE_COLUMNS:
+            before = row.get(col)
+            after = _scale_stepstone_2025q4_value(before)
+            if (
+                after != before
+                and not (
+                    isinstance(after, (int, float))
+                    and isinstance(before, (int, float))
+                    and pd.isna(after)
+                    and pd.isna(before)
+                )
+            ):
+                row[col] = after
+                row_corrected = True
+        if row_corrected:
+            corrected += 1
+    if corrected:
+        logger.info(
+            "Stepstone 2025-12-31 monetary scale correction applied to %d first-lien rows",
+            corrected,
+        )
+
+
 def _extract_investment_facts(
     tree: etree._ElementTree,
     contexts: dict[str, dict],
@@ -752,6 +864,8 @@ def _parse_single_filing(
         rec["form_type"] = filing_meta.get("form_type", "")
         rec["filing_date"] = filing_meta.get("filing_date", "")
         rec["report_date"] = filing_meta.get("report_date", "")
+
+    _apply_stepstone_2025q4_monetary_scale_correction(facts)
 
     return facts
 
@@ -1219,31 +1333,34 @@ def download_html_filing(
     cik: str,
     accession: str,
     primary_doc: str,
+    *,
+    agent: str = "",
+    reason: str = "bdc_html_filing",
 ) -> Path | None:
-    """Download the HTML primary document for a filing.
+    """Download a BDC HTML primary document through the audited guard.
 
     Caches to BDC_HTML_CACHE_DIR / cik / {accession_nodashes}.html.
     Returns cached file path or None on failure.
     """
-    cik_stripped = cik.lstrip("0") or "0"
-    acc_nodashes = accession.replace("-", "")
-    cache_dir = BDC_HTML_CACHE_DIR / cik_stripped
-    cache_file = cache_dir / f"{acc_nodashes}.html"
+    from pipeline.sec_download_guard import download_bdc_html
 
-    if cache_file.exists() and cache_file.stat().st_size > 1024:
-        return cache_file
-
-    url = (
-        f"https://www.sec.gov/Archives/edgar/data/"
-        f"{cik_stripped}/{acc_nodashes}/{primary_doc}"
+    record = download_bdc_html(
+        client=client,
+        cik=cik,
+        accession=accession,
+        primary_doc=primary_doc,
+        agent=agent,
+        reason=reason,
     )
-
-    try:
-        resp = client.get(url)
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        cache_file.write_bytes(resp.content)
-        logger.debug("Downloaded HTML: %s -> %s", url, cache_file)
-        return cache_file
-    except Exception as exc:
-        logger.debug("HTML download failed for %s: %s", url, exc)
-        return None
+    if record.get("status") in {"cached", "downloaded"}:
+        path = Path(str(record.get("cache_path", "")))
+        if not path.is_absolute():
+            path = Path(__file__).resolve().parent.parent / path
+        return path
+    logger.debug(
+        "HTML download failed for CIK %s accession %s: %s",
+        cik,
+        accession,
+        record.get("error") or record.get("stage"),
+    )
+    return None

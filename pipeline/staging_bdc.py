@@ -118,9 +118,13 @@ def _expand_placeholders(text: str, placeholders: dict[str, str]) -> str:
     for token, expansion in placeholders.items():
         text = text.replace(token, expansion)
     # DuckDB regex does not accept JSON-style unicode escapes such as \u2013.
-    # Decode common dash escapes after JSON loading while keeping config files
+    # Decode escaped Unicode after JSON loading while keeping config files
     # ASCII-friendly.
-    text = text.replace("\\u2013", chr(0x2013)).replace("\\u2014", chr(0x2014))
+    text = re.sub(
+        r"\\u([0-9a-fA-F]{4})",
+        lambda match: chr(int(match.group(1), 16)),
+        text,
+    )
     return text
 
 
@@ -1557,6 +1561,11 @@ def _prepare_bdc(
     ).fetchone()[0]
     logger.info("  Phase A (filter+dedup): %d rows in %.1f s",
                 _phase_a_count, time.time() - _t_phase)
+    if _phase_a_count == 0:
+        logger.info("  Phase B/C skipped: no rows after Phase A filters")
+        con.close()
+        logger.info("  After all BDC filters: 0 rows (%d removed)", input_count)
+        return pd.DataFrame(columns=UNIFIED_COLUMNS)
 
     # =========================================================================
     # Phase B: Identifier parsing, issuer/instrument extraction, bad-issuer

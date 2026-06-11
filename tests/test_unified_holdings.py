@@ -1303,6 +1303,32 @@ class TestPrepareBdc:
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Caitec, Inc."
 
+    def test_returns_empty_when_wrapper_filters_all_phase_a_rows(self):
+        """All-rollup wrapper CIKs return an empty staged frame, not Phase B SQL errors."""
+        df = self._make_bdc_df([
+            {
+                "investment_identifier": "Second Lien Secured Debt",
+                "cik": "0002008748",
+                "entity_name": "Lord Abbett Private Credit Fund",
+                "report_date": "2026-03-31",
+                "fair_value": 26389000,
+                "dimensions_raw": "investmentidentifieraxis=Second Lien Secured Debt",
+            },
+            {
+                "investment_identifier": "Total Investments at Fair Value",
+                "cik": "0002008748",
+                "entity_name": "Lord Abbett Private Credit Fund",
+                "report_date": "2026-03-31",
+                "fair_value": 1413006000,
+                "dimensions_raw": "investmentidentifieraxis=Total Investments at Fair Value",
+            },
+        ])
+
+        result = _prepare_bdc(df)
+
+        assert result.empty
+        assert list(result.columns) == UNIFIED_COLUMNS
+
     def test_keeps_non_prefix_names(self):
         """Non-prefix bare issuer names are kept as individual holdings."""
         df = self._make_bdc_df([
@@ -1339,6 +1365,43 @@ class TestPrepareBdc:
         assert len(keys) == 2
         assert any(key.endswith("loan 1") for key in keys)
         assert any(key.endswith("loan 2") for key in keys)
+
+    def test_silver_point_wrapper_extracts_comma_hierarchy_leaf(self):
+        """Silver Point early comma hierarchy rows are positions, not subtotals."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0001646614",
+                "entity_name": "Silver Point Specialty Credit Fund, L.P.",
+                "accession_number": "0000950170-23-042115",
+                "report_date": "2023-06-30",
+                "investment_identifier": (
+                    "Non-Controlled/Non-Affiliated Investments, Secured Loans, "
+                    "1st Lien Term Loan, Luxembourg, Mallinckrodt International "
+                    "Finance S.A., Pharmaceuticals & Life Sciences, Rate L+5.25%, "
+                    "0.75% Floor, Interest Rate 10.40%, Original Acquisition Date "
+                    "10/13/2020, Maturity Date 9/30/2027"
+                ),
+                "fair_value": 7909754,
+                "interest_rate": 0.104,
+                "maturity_date": "2027-09-30",
+            },
+            {
+                "cik": "0001646614",
+                "entity_name": "Silver Point Specialty Credit Fund, L.P.",
+                "accession_number": "0000950170-23-042115",
+                "report_date": "2023-06-30",
+                "investment_identifier": "Controlled Investments, Total Trust Interest",
+                "fair_value": 2304179,
+            },
+        ])
+
+        result = _prepare_bdc(df)
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Mallinckrodt International Finance S.A."
+        assert "1st Lien Term Loan" in row["instrument_description"]
+        assert row["maturity_date"] == "2027-09-30"
 
     def test_tpg_twin_brook_comma_debt_leaf_extracts_instrument(self):
         """TPG comma-delimited leaf rows should split issuer from loan terms."""
@@ -1474,6 +1537,51 @@ class TestPrepareBdc:
         assert row["issuer_name"] == "Twin Brook Equity Holdings, LLC"
         assert row["instrument_description"] == ""
         assert row["asset_category"] == "EQUITY_COMMON"
+
+    def test_triplepoint_global_comma_equity_leaf_extracts_issuer(self):
+        """TriplePoint comma-delimited equity leaves split issuer and instrument."""
+        df = self._make_bdc_df([
+            {
+                "investment_identifier": "JOKR S.a.r.l. 1, Equity Investments",
+                "cik": "0001792509",
+                "entity_name": "TriplePoint Global Venture Credit, LLC",
+                "fair_value": 328000,
+                "cost": 375000,
+                "shares_held": 5688,
+            },
+        ])
+
+        result = _prepare_bdc(df)
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "JOKR S.a.r.l. 1"
+        assert row["instrument_description"] == "Equity Investments"
+        assert row["asset_category"] == "EQUITY_COMMON"
+
+    def test_triplepoint_global_pipe_equity_leaf_extracts_issuer(self):
+        """TriplePoint four-segment pipe equity leaves keep issuer and stock type."""
+        df = self._make_bdc_df([
+            {
+                "investment_identifier": (
+                    "JOKR S.a.r.l. | Preferred Stock 3 | Equity Investments "
+                    "|Non-Affiliated Issuer"
+                ),
+                "cik": "0001792509",
+                "entity_name": "TriplePoint Global Venture Credit, LLC",
+                "fair_value": 1443000,
+                "cost": 662000,
+                "shares_held": 99189,
+            },
+        ])
+
+        result = _prepare_bdc(df)
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "JOKR S.a.r.l."
+        assert row["instrument_description"] == "Preferred Stock 3"
+        assert row["asset_category"] == "EQUITY_PREFERRED"
 
     def test_html_section_bridge_fills_missing_instrument(self, monkeypatch):
         """Exact HTML-section bridge records repair XBRL rows missing instrument text."""
@@ -8806,6 +8914,50 @@ class TestGSPrivateCreditSqlPath:
         assert row["instrument_description"] == "Preferred Stock"
         assert row["bdc_investment_country"] == "United States"
 
+    def test_gs_middle_market_no_dash_hierarchy_debt(self):
+        """CIK 0001674760 no-dash hierarchy extracts issuer and instrument."""
+        result = self._run_prepare_bdc(
+            "Debt Investments United States 1st Lien/Senior Secured Debt "
+            "Xactly Corporation IT Services Interest Rate 12.70% Reference Rate "
+            "and Spread S + 7.25% Maturity 07/31/25",
+            cik="0001674760",
+            entity_name="Goldman Sachs Private Middle Market Credit LLC",
+        )
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Xactly Corporation"
+        assert row["instrument_description"] == "1st Lien/Senior Secured Debt"
+        assert row["reference_rate_type"] == "SOFR"
+
+    def test_gs_middle_market_no_country_hierarchy_debt(self):
+        """CIK 0001674760 debt rows can omit the country bucket."""
+        result = self._run_prepare_bdc(
+            "1st Lien/Last-Out Unitranche Doxim, Inc. Diversified Financial "
+            "Services Interest Rate 11.24% Reference Rate and Spread S + 6.40% "
+            "Maturity 08/31/24",
+            cik="0001674760",
+            entity_name="Goldman Sachs Private Middle Market Credit LLC",
+        )
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Doxim, Inc."
+        assert row["instrument_description"] == "1st Lien/Last-Out Unitranche"
+        assert row["reference_rate_type"] == "SOFR"
+
+    def test_gs_middle_market_bare_affiliate_filtered_from_sql_path(self):
+        """Bare affiliate subtotal is not kept as a position-level holding."""
+        result = self._run_prepare_bdc(
+            "Non-Controlled Affiliated Investments Collaborative Imaging, LLC "
+            "(dba Texas Radiology Associates)",
+            fair_value=2600000.0,
+            cik="0001674760",
+            entity_name="Goldman Sachs Private Middle Market Credit LLC",
+        )
+
+        assert result.empty
+
     def test_non_gs_cik_unaffected(self):
         """Non-GS CIK: hierarchical pct parser must NOT fire."""
         df = pd.DataFrame([{
@@ -10628,6 +10780,33 @@ class TestApplyWrapperPositionKeys:
         assert not keys[2].endswith(" lot 1")
         assert keys[0].replace(" lot 1", "") == keys[1].replace(" lot 2", "")
 
+    def test_varagon_duplicate_wrapper_keys_get_lot_suffixes(self):
+        """Repeated Varagon loans remain separate lots after spread stripping."""
+        base_identifier = (
+            "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, "
+            "Company Arrowhead Holdco Company, Industry Auto Components, Type of "
+            "Investment Term Loan, Reference Rate and Spread SOFR+4.50%, Interest "
+            "Rate 9.28%, Maturity 08/31/28"
+        )
+        df = pd.DataFrame({
+            "source": ["bdc", "bdc", "bdc"],
+            "cik": ["0001784700", "0001784700", "0001784700"],
+            "report_date": ["2023-03-31", "2023-03-31", "2023-06-30"],
+            "position_key": ["generic_1", "generic_2", "generic_3"],
+            "bdc_investment_identifier": [base_identifier, base_identifier, base_identifier],
+            "principal_amount": [100.0, 50.0, 100.0],
+            "fair_value": [99000.0, 49000.0, 101000.0],
+            "cost": [100000.0, 50000.0, 100000.0],
+        })
+
+        result = _apply_wrapper_position_keys(df)
+
+        keys = list(result["position_key"])
+        assert keys[0].endswith(" lot 1")
+        assert keys[1].endswith(" lot 2")
+        assert not keys[2].endswith(" lot 1")
+        assert keys[0].replace(" lot 1", "") == keys[1].replace(" lot 2", "")
+
     def test_no_source_column_returns_unchanged(self):
         """DataFrame without 'source' column passes through safely."""
         df = pd.DataFrame({
@@ -10680,6 +10859,50 @@ def test_apollo_origination_ii_l_hierarchy_extracts_issuer_and_instrument():
         "First Lien Secured Debt - Delayed Draw"
     )
     assert "Investment Type" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_apollo_origination_ii_ul_hierarchy_extracts_extended_industry_label():
+    raw = (
+        "Technology Hardware, Storage & Peripherals Service Express "
+        "Victors Purchaser, LLC Investment Type First Lien Secured Debt - "
+        "Term Loan Interest Rate S+550, 0.50% Floor Maturity Date 2/3/2031"
+    )
+    df = pd.DataFrame([{
+        "cik": "0002052153",
+        "entity_name": "Apollo Origination II (UL) Capital Trust",
+        "accession_number": "0002052153-26-000001",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 1115000,
+        "cost": 1115000,
+        "principal_amount": 1115000,
+        "interest_rate": 0.1,
+        "basis_spread": 0.055,
+        "reference_rate_type": "",
+        "maturity_date": "2031-02-03",
+        "pct_of_net_assets": 0.001,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Service Express Victors Purchaser, LLC"
+    assert row["instrument_description"].startswith(
+        "First Lien Secured Debt - Term Loan"
+    )
+    assert "Technology Hardware" not in row["issuer_name"]
 
 
 @pytest.mark.slow
@@ -10886,6 +11109,846 @@ def test_t_series_bdc_hierarchy_extracts_equity_issuer_and_instrument():
 
 @pytest.mark.slow
 @pytest.mark.staging_sql
+def test_tcw_direct_lending_vii_hierarchy_extracts_debt_issuer_and_instrument():
+    raw = (
+        "Debt Securities Food Products Hometown Food Company Acquisition Date "
+        "08/31/18 Term Loan - 10.21% (SOFR + 5.00%, 1.25% Floor) "
+        "% of Net Assets 2.6% Maturity Date 08/31/23"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001715933",
+        "entity_name": "TCW Direct Lending VII LLC",
+        "accession_number": "0001715933-26-000001",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 16752204,
+        "cost": 16800000,
+        "principal_amount": 17000000,
+        "interest_rate": 0.1021,
+        "basis_spread": 0.05,
+        "reference_rate_type": "",
+        "maturity_date": "2023-08-31",
+        "pct_of_net_assets": 0.026,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Hometown Food Company"
+    assert row["instrument_description"] == "Term Loan"
+    assert "Debt Securities" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_vii_hierarchy_extracts_affiliated_debt():
+    raw = (
+        "Controlled Affiliated Investments Navistar Defense, LLC "
+        "Super Senior Revolver - 14.27% inc PIK"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001715933",
+        "entity_name": "TCW Direct Lending VII LLC",
+        "accession_number": "0001715933-26-000002",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 12500000,
+        "cost": 13000000,
+        "principal_amount": 15000000,
+        "interest_rate": 0.1427,
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": "",
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Navistar Defense, LLC"
+    assert row["instrument_description"] == "Super Senior Revolver"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_vii_hierarchy_extracts_equity_security():
+    raw = (
+        "Equity Securities Textiles, Apparel & Luxury Goods Centric Brands "
+        "L.P. Class A LP Interests"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001715933",
+        "entity_name": "TCW Direct Lending VII LLC",
+        "accession_number": "0001715933-26-000003",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 4025000,
+        "cost": 1000000,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": "",
+        "pik_rate": "",
+        "shares_held": 100,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Centric Brands L.P."
+    assert row["instrument_description"] == "Class A LP Interests"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_viii_hierarchy_extracts_debt_issuer_and_instrument():
+    raw = (
+        "Debt Investments, Commercial Services & Supplies Power Acquisition LLC, "
+        "Acquisition Date 01/22/25 Term Loan B - 10.67% "
+        "(SOFR + 7.00%, 1.50% Floor) Net Assets 4.2% Maturity 01/22/30"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001825265",
+        "entity_name": "TCW Direct Lending VIII LLC",
+        "accession_number": "0001825265-26-000001",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 33856766,
+        "cost": 33702547,
+        "principal_amount": 34000000,
+        "interest_rate": 0.1067,
+        "basis_spread": 0.07,
+        "reference_rate_type": "",
+        "maturity_date": "2030-01-22",
+        "pct_of_net_assets": 0.042,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Power Acquisition LLC"
+    assert row["instrument_description"] == "Term Loan B"
+    assert "Debt Investments" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_viii_hierarchy_extracts_equity_warrant():
+    raw = (
+        "Equity Investments, Energy Equipment & Services HydroSource Logistics, LLC, "
+        "Acquisition Date 04/05/24 Warrant, expires 4/4/34 Net Assets 3.5%"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001825265",
+        "entity_name": "TCW Direct Lending VIII LLC",
+        "accession_number": "0001825265-26-000002",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 28719739,
+        "cost": 357421,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.035,
+        "pik_rate": "",
+        "shares_held": 247,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "HydroSource Logistics, LLC"
+    assert row["instrument_description"] == "Warrant, expires 4/4/34"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_viii_hierarchy_extract_is_cik_scoped():
+    raw = (
+        "Debt Investments, Commercial Services & Supplies Power Acquisition LLC, "
+        "Acquisition Date 01/22/25 Term Loan B - 10.67% "
+        "(SOFR + 7.00%, 1.50% Floor) Net Assets 4.2% Maturity 01/22/30"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001603480",
+        "entity_name": "TCW Direct Lending LLC",
+        "accession_number": "0001603480-26-000001",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 33856766,
+        "cost": 33702547,
+        "principal_amount": 34000000,
+        "interest_rate": 0.1067,
+        "basis_spread": 0.07,
+        "reference_rate_type": "",
+        "maturity_date": "2030-01-22",
+        "pct_of_net_assets": 0.042,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    assert result.iloc[0]["issuer_name"] != "Power Acquisition LLC"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_llc_hierarchy_extracts_debt_issuer_and_instrument():
+    raw = (
+        "Debt Investments- United States Distributors Animal Supply Company, LLC "
+        "Date 08/14/20 Term Loan - 13.16% inc PIK "
+        "(SOFR + 8.50%, 1.00% Floor, all PIK) Net Assets 5.8% "
+        "Maturity 08/14/25"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001603480",
+        "entity_name": "TCW Direct Lending LLC",
+        "accession_number": "0001603480-26-000001",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 42400000,
+        "cost": 42000000,
+        "principal_amount": 43000000,
+        "interest_rate": 0.1316,
+        "basis_spread": 0.085,
+        "reference_rate_type": "",
+        "maturity_date": "2025-08-14",
+        "pct_of_net_assets": 0.058,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Animal Supply Company, LLC"
+    assert row["instrument_description"] == "Term Loan"
+    assert "Debt Investments" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_llc_hierarchy_extracts_equity_membership_interest():
+    raw = (
+        "Equity Investments- United States Investment Funds & Vehicles "
+        "TCW Direct Lending Strategic Ventures Preferred membership Interests "
+        "Net Assets 20.9%"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001603480",
+        "entity_name": "TCW Direct Lending LLC",
+        "accession_number": "0001603480-26-000002",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 82000000,
+        "cost": 82000000,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.209,
+        "pik_rate": "",
+        "shares_held": 100,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "TCW Direct Lending Strategic Ventures"
+    assert row["instrument_description"] == "Preferred membership Interests"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_llc_hierarchy_extracts_class_common():
+    raw = (
+        "Equity Investments- United States Distributors "
+        "Retail & Animal Supply Holdings, LLC Class A Common Net Assets 1.2%"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001603480",
+        "entity_name": "TCW Direct Lending LLC",
+        "accession_number": "0001603480-26-000003",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 1200000,
+        "cost": 1000000,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.012,
+        "pik_rate": "",
+        "shares_held": 100,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Retail & Animal Supply Holdings, LLC"
+    assert row["instrument_description"] == "Class A Common"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_llc_hierarchy_extracts_bare_debt_row():
+    raw = "Animal Supply Company, LLC First Out Term Loan - 13.09%"
+    df = pd.DataFrame([{
+        "cik": "0001603480",
+        "entity_name": "TCW Direct Lending LLC",
+        "accession_number": "0001603480-26-000004",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 2703724,
+        "cost": 2703724,
+        "principal_amount": "",
+        "interest_rate": 0.1309,
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "2025-08-14",
+        "pct_of_net_assets": "",
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Animal Supply Company, LLC"
+    assert row["instrument_description"] == "First Out Term Loan"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_direct_lending_llc_hierarchy_extracts_bare_equity_row():
+    raw = "TCW Direct Lending Strategic Ventures LLC Preferred Membership Interests"
+    df = pd.DataFrame([{
+        "cik": "0001603480",
+        "entity_name": "TCW Direct Lending LLC",
+        "accession_number": "0001603480-26-000005",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 37189488,
+        "cost": 37189488,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": "",
+        "pik_rate": "",
+        "shares_held": 100,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "TCW Direct Lending Strategic Ventures LLC"
+    assert row["instrument_description"] == "Preferred Membership Interests"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_star_direct_lending_hierarchy_extracts_debt_issuer_and_instrument():
+    raw = (
+        "Debt Investment Commercial Services & Supplies Jones Industrial Holdings, Inc. "
+        "Acquisition Date - 07/31/2023 Investment Term Loan - 13.92% "
+        "(SOFR + 8.50%, 2.00% Floor) % of Net Assets - 6.6% "
+        "Maturity Date - 07/31/2028"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001916608",
+        "entity_name": "TCW Star Direct Lending LLC",
+        "accession_number": "0001916608-24-000001",
+        "form_type": "10-Q",
+        "filing_date": "2024-05-01",
+        "report_date": "2024-03-31",
+        "investment_identifier": raw,
+        "fair_value": 12345678,
+        "cost": 12300000,
+        "principal_amount": 12500000,
+        "interest_rate": 0.1392,
+        "basis_spread": 0.085,
+        "reference_rate_type": "",
+        "maturity_date": "2028-07-31",
+        "pct_of_net_assets": 0.066,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Jones Industrial Holdings, Inc."
+    assert row["instrument_description"] == "Term Loan"
+    assert "Debt Investment" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_star_direct_lending_hierarchy_extracts_equity_warrant():
+    raw = (
+        "Equity Investment, Automobile Components SUP Parent Holdings, LLC "
+        "Acquisition Date - 08/13/25 Investment Common Units % of Net Assets - 0.8%"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001916608",
+        "entity_name": "TCW Star Direct Lending LLC",
+        "accession_number": "0001916608-26-000001",
+        "form_type": "10-K",
+        "filing_date": "2026-03-01",
+        "report_date": "2025-12-31",
+        "investment_identifier": raw,
+        "fair_value": 1658228,
+        "cost": 0,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.008,
+        "pik_rate": "",
+        "shares_held": 100,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "SUP Parent Holdings, LLC"
+    assert row["instrument_description"] == "Common Units"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_tcw_star_direct_lending_malformed_no_issuer_row_not_extracted_as_position():
+    raw = (
+        "Debt Investment Date Processing And Outsourced Services Acquisition Date - "
+        "12/21/22 Term Loan 11.57% (SOFR+6.88% 1.50% Floor) Maturity Date 12/21/27"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001916608",
+        "entity_name": "TCW Star Direct Lending LLC",
+        "accession_number": "0001916608-23-000001",
+        "form_type": "10-Q",
+        "filing_date": "2023-05-01",
+        "report_date": "2023-03-31",
+        "investment_identifier": raw,
+        "fair_value": 10150263,
+        "cost": 10100000,
+        "principal_amount": 10200000,
+        "interest_rate": 0.1157,
+        "basis_spread": 0.0688,
+        "reference_rate_type": "",
+        "maturity_date": "2027-12-21",
+        "pct_of_net_assets": "",
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 0
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_commonwealth_credit_partners_hierarchy_extracts_debt_issuer_and_instrument():
+    raw = (
+        "Debt Investments, First Lien Senior Secured, National Debt Relief - "
+        "Term Loan, Diversified Financials, Spread Above Index SOFR + 6.00% "
+        "(1.50% Floor) Interest rate 11.47% Maturity Date 2/24/2027"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001841514",
+        "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
+        "accession_number": "0000950170-24-029358",
+        "form_type": "10-K",
+        "filing_date": "2024-03-11",
+        "report_date": "2023-12-31",
+        "investment_identifier": raw,
+        "fair_value": 12961000,
+        "cost": 12970000,
+        "principal_amount": 13131000,
+        "interest_rate": 0.1147,
+        "basis_spread": 0.06,
+        "reference_rate_type": "",
+        "maturity_date": "2027-02-24",
+        "pct_of_net_assets": 0.02,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "National Debt Relief"
+    assert row["instrument_description"] == "Term Loan"
+    assert "Debt Investments" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_commonwealth_credit_partners_hierarchy_extracts_revolving_credit_line():
+    raw = (
+        "Debt Investments, First Lien Senior Secured, OAO Acquisitions - "
+        "Revolving Credit Line, Capital Goods, Spread Above Index SOFR + "
+        "6.25% (1.25% floor), Interest rate 11.60%, Maturity Date 12/27/2029"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001841514",
+        "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
+        "accession_number": "0000950170-24-029358",
+        "form_type": "10-K",
+        "filing_date": "2024-03-11",
+        "report_date": "2023-12-31",
+        "investment_identifier": raw,
+        "fair_value": -10000,
+        "cost": 10000,
+        "principal_amount": 0,
+        "interest_rate": 0.116,
+        "basis_spread": 0.0625,
+        "reference_rate_type": "",
+        "maturity_date": "2029-12-27",
+        "pct_of_net_assets": 0,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "OAO Acquisitions"
+    assert row["instrument_description"] == "Revolving Credit Line"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_commonwealth_credit_partners_hierarchy_extracts_equity_shorthand():
+    raw = "CTM Acquisition LLC Equity, Media & Entertainment"
+    df = pd.DataFrame([{
+        "cik": "0001841514",
+        "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
+        "accession_number": "0000950170-24-096491",
+        "form_type": "10-Q",
+        "filing_date": "2024-08-14",
+        "report_date": "2024-06-30",
+        "investment_identifier": raw,
+        "fair_value": 269000,
+        "cost": 665000,
+        "principal_amount": 664865000,
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.0004,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "CTM Acquisition LLC"
+    assert row["instrument_description"] == "Equity"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_commonwealth_credit_partners_hierarchy_extract_is_cik_scoped():
+    raw = (
+        "Debt Investments, First Lien Senior Secured, National Debt Relief - "
+        "Term Loan, Diversified Financials, Spread Above Index SOFR + 6.00% "
+        "(1.50% Floor) Interest rate 11.47% Maturity Date 2/24/2027"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001603480",
+        "entity_name": "TCW Direct Lending LLC",
+        "accession_number": "0001603480-24-000001",
+        "form_type": "10-K",
+        "filing_date": "2024-03-11",
+        "report_date": "2023-12-31",
+        "investment_identifier": raw,
+        "fair_value": 12961000,
+        "cost": 12970000,
+        "principal_amount": 13131000,
+        "interest_rate": 0.1147,
+        "basis_spread": 0.06,
+        "reference_rate_type": "",
+        "maturity_date": "2027-02-24",
+        "pct_of_net_assets": 0.02,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    assert result.iloc[0]["issuer_name"] != "National Debt Relief"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_mm_apollo_institutional_hierarchy_extracts_debt_without_investment_type():
+    raw = (
+        "Commercial Services & Supplies Best Trash Bingo Group Buyer, Inc. "
+        "First Lien Secured Debt - Term Loan S+475, 1.00% Floor Maturity Date 07/10/31"
+    )
+    df = pd.DataFrame([{
+        "cik": "0002006758",
+        "entity_name": "Middle Market Apollo Institutional Private Lending",
+        "accession_number": "0001193125-26-214580",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-08",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 9005000,
+        "cost": 8958000,
+        "principal_amount": 9050000,
+        "interest_rate": 0.0475,
+        "basis_spread": 0.0475,
+        "reference_rate_type": "",
+        "maturity_date": "2031-07-10",
+        "pct_of_net_assets": 0.01,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Best Trash Bingo Group Buyer, Inc."
+    assert row["instrument_description"].startswith("First Lien Secured Debt - Term Loan")
+    assert "Commercial Services" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_mm_apollo_institutional_hierarchy_extracts_investment_type_debt():
+    raw = (
+        "Professional Services North Highland The North Highland Company LLC "
+        "Investment Type First Lien Secured Debt - Revolver S+475, 0.75% Floor "
+        "Maturity Date 12/20/30"
+    )
+    df = pd.DataFrame([{
+        "cik": "0002006758",
+        "entity_name": "Middle Market Apollo Institutional Private Lending",
+        "accession_number": "0001193125-26-214580",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-08",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 16000,
+        "cost": 16000,
+        "principal_amount": 17000,
+        "interest_rate": 0.0475,
+        "basis_spread": 0.0475,
+        "reference_rate_type": "",
+        "maturity_date": "2030-12-20",
+        "pct_of_net_assets": 0.0001,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "North Highland The North Highland Company LLC"
+    assert row["instrument_description"].startswith("First Lien Secured Debt - Revolver")
+    assert "Investment Type" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_mm_apollo_institutional_hierarchy_extracts_equity_issuer_and_instrument():
+    raw = "Pharmaceuticals PAI Pharma PAI Co-Investor FT Aggregator LLC Common Equity - Stock"
+    df = pd.DataFrame([{
+        "cik": "0002006758",
+        "entity_name": "Middle Market Apollo Institutional Private Lending",
+        "accession_number": "0001193125-26-214580",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-08",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 42000,
+        "cost": 50000,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.0001,
+        "pik_rate": "",
+        "shares_held": 50,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "PAI Pharma PAI Co-Investor FT Aggregator LLC"
+    assert row["instrument_description"] == "Common Equity - Stock"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
 def test_ab_private_credit_investors_pipe_debt_extracts_issuer_and_instrument():
     raw = (
         "U.S. Corporate Debt | 1st Lien/Senior Secured Debt | "
@@ -10966,3 +12029,405 @@ def test_ab_private_credit_investors_alternate_pipe_prefix_extracts_issuer():
     assert row["issuer_name"] == "Gryphon Redwood Acquisition LLC"
     assert "Delayed Draw Term Loan" in row["instrument_description"]
     assert "Equity Investments" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_twenty_six_north_pipe_debt_extracts_issuer_and_instrument():
+    raw = (
+        "Debt Investments | Alert SRC Newco LLC |First Lien Senior Secured "
+        "Delayed Draw Term Loan|Commercial Services & Supplies|SOFR + 5.000%|"
+        "8.673%|12/11/2024|12/11/2030"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001950976",
+        "entity_name": "26North BDC, Inc.",
+        "accession_number": "0001950976-26-000001",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 7142000,
+        "cost": 7122000,
+        "principal_amount": 7142000,
+        "interest_rate": 0.08673,
+        "basis_spread": 0.05,
+        "reference_rate_type": "",
+        "maturity_date": "2030-12-11",
+        "pct_of_net_assets": 0.01,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Alert SRC Newco LLC"
+    assert row["instrument_description"] == (
+        "First Lien Senior Secured Delayed Draw Term Loan"
+    )
+    assert "Debt Investments" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_twenty_six_north_pipe_equity_extracts_issuer_and_instrument():
+    raw = (
+        "Equity|Great Dane Intermediate Holding I LLC |Preferred Equity| "
+        "Software|14.00%|12/20/2025"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001950976",
+        "entity_name": "26North BDC, Inc.",
+        "accession_number": "0001950976-26-000001",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-01",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 1000000,
+        "cost": 900000,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.01,
+        "pik_rate": "",
+        "shares_held": 1000,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Great Dane Intermediate Holding I LLC"
+    assert row["instrument_description"] == "Preferred Equity"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_scp_private_credit_income_pipe_debt_extracts_issuer_and_instrument():
+    raw = (
+        "Bank Debt/Senior Secured Loans | ACRES Commercial Mortgage LLC | "
+        "Diversified Financial Services | S+705 | 1.00% | 11.38% | "
+        "12/24/2021 | 8/21/2028"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001743415",
+        "entity_name": "SCP Private Credit Income BDC LLC",
+        "accession_number": "0000950170-24-042652",
+        "form_type": "10-K",
+        "filing_date": "2024-04-01",
+        "report_date": "2023-12-31",
+        "investment_identifier": raw,
+        "fair_value": 3250000,
+        "cost": 3300000,
+        "principal_amount": 3350000,
+        "interest_rate": 0.1138,
+        "basis_spread": 0.0705,
+        "reference_rate_type": "S",
+        "maturity_date": "2028-08-21",
+        "pct_of_net_assets": 0.01,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "ACRES Commercial Mortgage LLC"
+    assert row["instrument_description"] == "Bank Debt/Senior Secured Loans"
+    assert "Diversified Financial Services" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_scp_private_credit_income_dash_debt_extracts_issuer_and_instrument():
+    raw = (
+        "Bank Debt/Senior Secured Loans - 157.3% AMF Levered II, LLC "
+        "Industry Diversified Financial Services Spread above Index S+705 "
+        "Floor 1.00% Interest Rate 11.67% Acquisition Date 12/2021 "
+        "Maturity Date 8/2028"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001743415",
+        "entity_name": "SCP Private Credit Income BDC LLC",
+        "accession_number": "0000950170-25-046748",
+        "form_type": "10-K",
+        "filing_date": "2025-03-28",
+        "report_date": "2024-12-31",
+        "investment_identifier": raw,
+        "fair_value": 4400000,
+        "cost": 4500000,
+        "principal_amount": 4550000,
+        "interest_rate": 0.1167,
+        "basis_spread": 0.0705,
+        "reference_rate_type": "S",
+        "maturity_date": "2028-08-31",
+        "pct_of_net_assets": 0.01,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "AMF Levered II, LLC"
+    assert row["instrument_description"] == "Bank Debt/Senior Secured Loans"
+    assert "Industry" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_scp_private_credit_income_equity_extracts_issuer_and_instrument():
+    raw = (
+        "Common Equity/Equity Interests/Warrants - Assertio Holdings, Inc. "
+        "Common Stock Industry Pharmaceuticals Acquisition Date 07/2023"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001743415",
+        "entity_name": "SCP Private Credit Income BDC LLC",
+        "accession_number": "0000950170-25-046748",
+        "form_type": "10-K",
+        "filing_date": "2025-03-28",
+        "report_date": "2024-12-31",
+        "investment_identifier": raw,
+        "fair_value": 390000,
+        "cost": 400000,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.001,
+        "pik_rate": "",
+        "shares_held": 100,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Assertio Holdings, Inc."
+    assert row["instrument_description"] == "Common Equity/Equity Interests/Warrants"
+    assert "Industry" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_scp_private_credit_income_hierarchy_extract_is_cik_scoped():
+    raw = (
+        "Bank Debt/Senior Secured Loans - 157.3% AMF Levered II, LLC "
+        "Industry Diversified Financial Services Spread above Index S+705 "
+        "Floor 1.00% Interest Rate 11.67% Acquisition Date 12/2021 "
+        "Maturity Date 8/2028"
+    )
+    df = pd.DataFrame([{
+        "cik": "9999999999",
+        "entity_name": "Not SCP Private Credit",
+        "accession_number": "0000000000-25-000001",
+        "form_type": "10-K",
+        "filing_date": "2025-03-28",
+        "report_date": "2024-12-31",
+        "investment_identifier": raw,
+        "fair_value": 4400000,
+        "cost": 4500000,
+        "principal_amount": 4550000,
+        "interest_rate": 0.1167,
+        "basis_spread": 0.0705,
+        "reference_rate_type": "S",
+        "maturity_date": "2028-08-31",
+        "pct_of_net_assets": 0.01,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    assert result.iloc[0]["issuer_name"] != "AMF Levered II, LLC"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_senior_credit_investments_hierarchy_extracts_debt_issuer_and_instrument():
+    raw = (
+        "Non-Controlled/Non-Affiliated Portfolio Company Investments First "
+        "Lien Debt Investments Health Care Technology Kona Buyer, LLC "
+        "Investment Type First Lien Delayed Draw Term Loan Reference Rate "
+        "and Spread S + 4.50% Maturity Date 7/23/2031"
+    )
+    df = pd.DataFrame([{
+        "cik": "0001959568",
+        "entity_name": "Senior Credit Investments, LLC",
+        "accession_number": "0001193125-26-116346",
+        "form_type": "10-K",
+        "filing_date": "2026-03-20",
+        "report_date": "2025-12-31",
+        "investment_identifier": raw,
+        "fair_value": 85000,
+        "cost": 85000,
+        "principal_amount": 86000,
+        "interest_rate": "",
+        "basis_spread": 0.045,
+        "reference_rate_type": "",
+        "maturity_date": "2031-07-23",
+        "pct_of_net_assets": 0.001,
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Kona Buyer, LLC"
+    assert row["instrument_description"] == "First Lien Delayed Draw Term Loan"
+    assert "Portfolio Company Investments" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_senior_credit_investments_portfolio_company_extracts_lp_interest():
+    raw = "Portfolio Company Firebird Co-Invest L.P. Investment Type L.P. Interest"
+    df = pd.DataFrame([{
+        "cik": "0001959568",
+        "entity_name": "Senior Credit Investments, LLC",
+        "accession_number": "0001193125-26-116346",
+        "form_type": "10-K",
+        "filing_date": "2026-03-20",
+        "report_date": "2025-12-31",
+        "investment_identifier": raw,
+        "fair_value": 11000,
+        "cost": 12000,
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": 0.0001,
+        "pik_rate": "",
+        "shares_held": 100,
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "Firebird Co-Invest L.P."
+    assert row["instrument_description"] == "L.P. Interest"
+    assert "Portfolio Company" not in row["issuer_name"]
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_nexpoint_capital_terminal_coupon_preferred_stock_survives_filter():
+    raw = "Preferred Stocks | Financials | United Fidelity Bank FSB | 7.00%"
+    df = pd.DataFrame([{
+        "cik": "0001588272",
+        "entity_name": "NexPoint Capital, Inc.  (NXPT)",
+        "accession_number": "0001193125-26-223911",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-15",
+        "report_date": "2026-03-31",
+        "investment_identifier": raw,
+        "fair_value": 500000,
+        "cost": 1000000,
+        "principal_amount": 1000,
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": "",
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 1
+    row = result.iloc[0]
+    assert row["issuer_name"] == "United Fidelity Bank FSB"
+    assert row["instrument_description"].startswith("Preferred Stocks")
+    assert row["asset_category"] == "EQUITY_PREFERRED"
+
+
+@pytest.mark.slow
+@pytest.mark.staging_sql
+def test_nexpoint_capital_bare_preferred_category_is_not_output():
+    df = pd.DataFrame([{
+        "cik": "0001588272",
+        "entity_name": "NexPoint Capital, Inc.  (NXPT)",
+        "accession_number": "0001193125-26-223911",
+        "form_type": "10-Q",
+        "filing_date": "2026-05-15",
+        "report_date": "2026-03-31",
+        "investment_identifier": "Preferred Stocks",
+        "fair_value": 12500000,
+        "cost": "",
+        "principal_amount": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "reference_rate_type": "",
+        "maturity_date": "",
+        "pct_of_net_assets": "",
+        "pik_rate": "",
+        "shares_held": "",
+        "unrealized_gain_loss": "",
+        "dimensions_raw": "",
+        "investment_type": "",
+        "industry": "",
+        "affiliation": "",
+    }])
+
+    result = _prepare_bdc(df)
+
+    assert len(result) == 0
