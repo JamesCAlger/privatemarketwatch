@@ -15,6 +15,9 @@ import {
   getCreditRisk,
   getTopConstituents,
   getConcentrationCurve,
+  getSpreadTimeSeries,
+  getSpreadByFundSize,
+  getSpreadByLien,
 } from '@/lib/data';
 import { INDICES } from '@/lib/constants';
 import { formatDollar, formatNumber, formatQuarter, formatPercent, formatYears } from '@/lib/format';
@@ -27,7 +30,11 @@ import ProportionDonut from '@/components/ProportionDonut';
 import HistogramChart from '@/components/HistogramChart';
 import UniverseGrowthChart from '@/components/UniverseGrowthChart';
 import CreditStressChart from '@/components/CreditStressChart';
+import SpreadTimeChart from '@/components/SpreadTimeChart';
+import SpreadByFundSizeChart from '@/components/SpreadByFundSizeChart';
+import SpreadByLienChart from '@/components/SpreadByLienChart';
 import { formatDisplayName } from '@/lib/nameFormat';
+import StatStrip from '@/components/StatStrip';
 
 export default function HomePage() {
   const funds = getFundList();
@@ -43,6 +50,9 @@ export default function HomePage() {
   const managerConcentration = getManagerConcentration();
   const aumTimeSeries = getAumTimeSeries();
   const creditRisk = getCreditRisk();
+  const spreadTimeSeries = getSpreadTimeSeries();
+  const spreadByFundSize = getSpreadByFundSize();
+  const spreadByLien = getSpreadByLien();
   const sectorBreakdown = getSectorBreakdown();
   const topConstituents = getTopConstituents();
   const concentrationCurve = getConcentrationCurve();
@@ -121,9 +131,9 @@ export default function HomePage() {
     { label: 'First Lien Senior Loans', fv: lien ? dlFv * lien.firstLien : dlFv },
     { label: 'Second Lien Loans', fv: lien ? dlFv * lien.secondLien : 0 },
     { label: 'Unsecured Loans', fv: lien ? dlFv * lien.unsecured : 0 },
-    { label: 'Common Equity', fv: (sectorBreakdown['COMMON_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
     { label: 'Structured Credit', fv: (sectorBreakdown['STRUCTURED_CREDIT'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
     { label: 'Preferred Equity', fv: (sectorBreakdown['PREFERRED_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
+    { label: 'Common Equity', fv: (sectorBreakdown['COMMON_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
     {
       label: 'Other',
       fv: ['DIRECT_REAL_ESTATE', 'PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'UNCLASSIFIED']
@@ -155,15 +165,15 @@ export default function HomePage() {
       {/* ================================================================ */}
       {/* HERO                                                             */}
       {/* ================================================================ */}
-      <div className="border-b border-rule pt-11 pb-8">
+      <div className="border-b border-rule pt-6 pb-8">
         <div className="px-4 md:px-[120px]">
-          <h1 className="font-display text-[42px] md:text-[60px] leading-[1.08] tracking-[-0.028em] text-ink mb-2 font-medium max-w-[820px]">
-            Private credit fund holdings.
+          <h1 className="font-display text-[56px] md:text-[80px] leading-[1.08] tracking-[-0.028em] text-ink mb-2 font-medium max-w-[920px]">
+            Private fund holdings.
           </h1>
-          <h1 className="font-display text-[42px] md:text-[60px] leading-[1.08] tracking-[-0.028em] text-ink3 mb-5 font-medium">
+          <h1 className="font-display text-[56px] md:text-[80px] leading-[1.08] tracking-[-0.028em] text-ink3 mb-5 font-medium">
             Loan by loan.
           </h1>
-          <p className="text-[17px] leading-relaxed text-ink3 max-w-[620px] mb-6">
+          <p className="text-[22px] leading-relaxed text-ink3 max-w-[720px] mb-6">
             Browse individual loans, equity stakes, and credit facilities held by
             semi-liquid funds. Updated quarterly.
           </p>
@@ -183,56 +193,13 @@ export default function HomePage() {
           </div>
 
           {/* Stat strip */}
-          <div className="border border-rule grid grid-cols-2 md:grid-cols-5">
-            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
-              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
-                Indexed Fair Value
-              </div>
-              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
-                {formatDollar(totalIndexFv)}
-              </div>
-            </div>
-            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
-              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
-                Registered Funds
-              </div>
-              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
-                {formatNumber(summary.totalFunds)}
-              </div>
-            </div>
-            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
-              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
-                CIKs with Holdings
-              </div>
-              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
-                {formatNumber(metadata.cikCount)}
-              </div>
-            </div>
-            <div className="border-b md:border-b-0 md:border-r border-rule px-5 py-4">
-              <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
-                Unique Companies
-              </div>
-              <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
-                {formatNumber(metadata.uniqueIssuers)}
-              </div>
-            </div>
-            <div className="px-5 py-4">
-              <div className="flex justify-between items-baseline mb-1.5">
-                <span className="text-[10px] uppercase tracking-[0.14em] text-ink3">Coverage by AUM</span>
-                <span className="font-mono text-[15px] text-accent font-semibold tabular-nums">96.4%</span>
-              </div>
-              <div className="text-[11px] text-ink3 leading-snug mb-2">
-                Share of eligible universe AUM reconciled &amp; indexed &middot;{' '}
-                {metadata.asOfQuarter ? formatQuarter(metadata.asOfQuarter) : 'Q4 2025'}
-              </div>
-              <div className="h-1.5 bg-rule2 relative">
-                <div
-                  className="absolute left-0 top-0 bottom-0 bg-accent"
-                  style={{ width: '96%' }}
-                />
-              </div>
-            </div>
-          </div>
+          <StatStrip
+            totalFv={totalIndexFv}
+            holdingsCount={metadata.holdingsCount}
+            totalFunds={summary.totalFunds}
+            avgSpread={portfolioCharacteristics?.was ?? null}
+            quarters={dlPositionSeries.length}
+          />
         </div>
       </div>
 
@@ -323,6 +290,73 @@ export default function HomePage() {
             </div>
           </section>
         )}
+
+        {/* Spread Analysis */}
+        {spreadTimeSeries.length > 1 && (() => {
+          const latest = spreadTimeSeries[spreadTimeSeries.length - 1];
+          const latestBps = Math.round(latest.was * 100);
+          const peak = Math.max(...spreadTimeSeries.map((d) => d.was));
+          const peakBps = Math.round(peak * 100);
+          return (
+            <section>
+              {/* Time series — full width */}
+              <div className="bg-white border border-rule p-7 mb-6">
+                <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
+                  <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Spread analysis</h3>
+                  <div className="text-right">
+                    <span className="font-mono text-[22px] text-ink font-semibold tabular-nums">
+                      {latestBps} bps
+                    </span>
+                    <span className="text-[11px] text-ink3 ml-2 font-mono tabular-nums">
+                      from {peakBps} peak
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-ink3 mb-4">
+                  FV-weighted average credit spread over base rate &middot; direct lending positions &middot; {spreadTimeSeries.length}-quarter history
+                </p>
+                <SpreadTimeChart data={spreadTimeSeries} />
+              </div>
+
+              {/* Fund size + Lien — two columns */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {spreadByFundSize.length > 0 && (
+                  <div className="bg-white border border-rule p-7">
+                    <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Spread by fund size</h3>
+                    <p className="text-xs text-ink3 mt-2 mb-3">
+                      Fund total assets tercile &middot; latest quarter
+                    </p>
+                    <SpreadByFundSizeChart data={spreadByFundSize} />
+                    <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
+                      {spreadByFundSize.reduce((s, d) => s + d.fundCount, 0)} funds with spread data.
+                      Small-fund premium: {Math.round((spreadByFundSize[0]?.was ?? 0) * 100) - Math.round((spreadByFundSize[spreadByFundSize.length - 1]?.was ?? 0) * 100)} bps over large.
+                    </div>
+                  </div>
+                )}
+                {spreadByLien.length > 0 && (
+                  <div className="bg-white border border-rule p-7">
+                    <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Spread by lien position</h3>
+                    <p className="text-xs text-ink3 mt-2 mb-3">
+                      Direct lending &middot; latest quarter
+                    </p>
+                    <SpreadByLienChart data={spreadByLien} />
+                    <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
+                      {spreadByLien.filter((d) => d.lien !== 'Unknown').length} classified lien types.
+                      {(() => {
+                        const fl = spreadByLien.find((d) => d.lien === 'First Lien');
+                        const sl = spreadByLien.find((d) => d.lien === 'Second Lien');
+                        if (fl && sl) {
+                          return ` Second lien premium: ${Math.round(sl.was * 100) - Math.round(fl.was * 100)} bps.`;
+                        }
+                        return '';
+                      })()}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          );
+        })()}
 
         {/* Credit Stress */}
         {creditRisk.length > 1 && (() => {

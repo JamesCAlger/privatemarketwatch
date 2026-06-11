@@ -1822,6 +1822,239 @@ def _export_leverage_histogram(con: duckdb.DuckDBPyConnection) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Spread analysis exports
+# ---------------------------------------------------------------------------
+
+
+def _export_spread_time_series(con: duckdb.DuckDBPyConnection) -> None:
+    """FV-weighted average credit spread over time, DIRECT_LENDING only."""
+    if not UNIFIED_HOLDINGS_CSV.exists():
+        logger.warning("unified holdings not found -- skipping spread_time_series")
+        _write_json("spread_time_series.json", [])
+        return
+
+    cutoff_date = (
+        _quarter_to_date(INDEX_DISPLAY_END_QUARTER)
+        if INDEX_DISPLAY_END_QUARTER else "9999-12-31"
+    )
+
+    rows = con.execute(f"""
+        WITH raw AS (
+            SELECT
+                report_date,
+                TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value
+            FROM read_csv_auto(
+                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+            )
+            WHERE index_classification = 'DIRECT_LENDING'
+              AND TRY_CAST(basis_spread AS DOUBLE) > 0
+              AND TRY_CAST(basis_spread AS DOUBLE) <= 15
+              AND TRY_CAST(fair_value AS DOUBLE) > 0
+              AND report_date <= '{cutoff_date}'
+              {_unlisted_bdc_filter_sql('cik')}
+              {_exclude_consumer_lending_sql('cik')}
+        ),
+        by_quarter AS (
+            SELECT
+                CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                    || 'q'
+                    || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                AS quarter,
+                SUM(basis_spread * fair_value) / SUM(fair_value) AS was,
+                SUM(fair_value) AS total_fv,
+                COUNT(*) AS position_count
+            FROM raw
+            GROUP BY quarter
+            HAVING COUNT(*) >= 10
+        )
+        SELECT quarter, was, total_fv, position_count
+        FROM by_quarter
+        ORDER BY quarter
+    """).fetchall()
+
+    out = [
+        {
+            "quarter": r[0],
+            "was": _safe_round(r[1], 6),
+            "totalFv": _safe_round(r[2], 0),
+            "positionCount": int(r[3]),
+        }
+        for r in rows
+    ]
+
+    _write_json("spread_time_series.json", out)
+    logger.info("  spread_time_series: %d quarters", len(out))
+
+
+def _export_spread_by_fund_size(con: duckdb.DuckDBPyConnection) -> None:
+    """FV-weighted average spread by fund size tercile, latest quarter."""
+    if not UNIFIED_HOLDINGS_CSV.exists() or not FUND_FINANCIALS_CSV.exists():
+        logger.warning("unified holdings or fund_financials not found -- skipping spread_by_fund_size")
+        _write_json("spread_by_fund_size.json", [])
+        return
+
+    cutoff_date = (
+        _quarter_to_date(INDEX_DISPLAY_END_QUARTER)
+        if INDEX_DISPLAY_END_QUARTER else "9999-12-31"
+    )
+
+    rows = con.execute(f"""
+        WITH uh AS (
+            SELECT
+                cik,
+                report_date,
+                TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value
+            FROM read_csv_auto(
+                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+            )
+            WHERE index_classification = 'DIRECT_LENDING'
+              AND TRY_CAST(basis_spread AS DOUBLE) > 0
+              AND TRY_CAST(basis_spread AS DOUBLE) <= 15
+              AND TRY_CAST(fair_value AS DOUBLE) > 0
+              AND report_date <= '{cutoff_date}'
+              {_unlisted_bdc_filter_sql('cik')}
+              {_exclude_consumer_lending_sql('cik')}
+        ),
+        latest_q AS (
+            SELECT MAX(report_date) AS q FROM uh
+        ),
+        latest AS (
+            SELECT * FROM uh WHERE report_date = (SELECT q FROM latest_q)
+        ),
+        ff AS (
+            SELECT cik,
+                   TRY_CAST(total_assets AS DOUBLE) AS total_assets,
+                   ROW_NUMBER() OVER (
+                       PARTITION BY cik
+                       ORDER BY TRY_CAST(report_date AS DATE) DESC NULLS LAST
+                   ) AS rn
+            FROM read_csv_auto(
+                '{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true
+            )
+            WHERE TRY_CAST(total_assets AS DOUBLE) > 0
+        ),
+        latest_ff AS (
+            SELECT cik, total_assets FROM ff WHERE rn = 1
+        ),
+        with_size AS (
+            SELECT
+                l.*,
+                lf.total_assets,
+                NTILE(3) OVER (
+                    ORDER BY lf.total_assets ASC NULLS LAST
+                ) AS size_tercile
+            FROM latest l
+            JOIN latest_ff lf ON l.cik = lf.cik
+        ),
+        by_tercile AS (
+            SELECT
+                CASE size_tercile
+                    WHEN 1 THEN 'Small'
+                    WHEN 2 THEN 'Medium'
+                    WHEN 3 THEN 'Large'
+                END AS bucket,
+                size_tercile,
+                SUM(basis_spread * fair_value) / SUM(fair_value) AS was,
+                SUM(fair_value) AS total_fv,
+                COUNT(*) AS position_count,
+                COUNT(DISTINCT cik) AS fund_count
+            FROM with_size
+            GROUP BY size_tercile
+        )
+        SELECT bucket, was, total_fv, position_count, fund_count
+        FROM by_tercile
+        ORDER BY size_tercile
+    """).fetchall()
+
+    out = [
+        {
+            "bucket": r[0],
+            "was": _safe_round(r[1], 6),
+            "totalFv": _safe_round(r[2], 0),
+            "positionCount": int(r[3]),
+            "fundCount": int(r[4]),
+        }
+        for r in rows
+    ]
+
+    _write_json("spread_by_fund_size.json", out)
+    logger.info("  spread_by_fund_size: %d buckets", len(out))
+
+
+def _export_spread_by_lien(con: duckdb.DuckDBPyConnection) -> None:
+    """FV-weighted average spread by lien position, latest quarter."""
+    if not UNIFIED_HOLDINGS_CSV.exists():
+        logger.warning("unified holdings not found -- skipping spread_by_lien")
+        _write_json("spread_by_lien.json", [])
+        return
+
+    cutoff_date = (
+        _quarter_to_date(INDEX_DISPLAY_END_QUARTER)
+        if INDEX_DISPLAY_END_QUARTER else "9999-12-31"
+    )
+
+    rows = con.execute(f"""
+        WITH uh AS (
+            SELECT
+                lien_position,
+                TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value,
+                report_date
+            FROM read_csv_auto(
+                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+            )
+            WHERE index_classification = 'DIRECT_LENDING'
+              AND TRY_CAST(basis_spread AS DOUBLE) > 0
+              AND TRY_CAST(basis_spread AS DOUBLE) <= 15
+              AND TRY_CAST(fair_value AS DOUBLE) > 0
+              AND report_date <= '{cutoff_date}'
+              {_unlisted_bdc_filter_sql('cik')}
+              {_exclude_consumer_lending_sql('cik')}
+        ),
+        latest_q AS (
+            SELECT MAX(report_date) AS q FROM uh
+        ),
+        latest AS (
+            SELECT * FROM uh WHERE report_date = (SELECT q FROM latest_q)
+        ),
+        by_lien AS (
+            SELECT
+                COALESCE(NULLIF(lien_position, ''), 'Unknown') AS lien,
+                SUM(basis_spread * fair_value) / SUM(fair_value) AS was,
+                SUM(fair_value) AS total_fv,
+                COUNT(*) AS position_count
+            FROM latest
+            GROUP BY lien
+            HAVING COUNT(*) >= 5
+        ),
+        with_pct AS (
+            SELECT *,
+                total_fv / NULLIF(SUM(total_fv) OVER (), 0) AS pct_of_total
+            FROM by_lien
+        )
+        SELECT lien, was, total_fv, position_count, pct_of_total
+        FROM with_pct
+        ORDER BY total_fv DESC
+    """).fetchall()
+
+    out = [
+        {
+            "lien": r[0],
+            "was": _safe_round(r[1], 6),
+            "totalFv": _safe_round(r[2], 0),
+            "positionCount": int(r[3]),
+            "pctOfTotal": _safe_round(r[4], 4),
+        }
+        for r in rows
+    ]
+
+    _write_json("spread_by_lien.json", out)
+    logger.info("  spread_by_lien: %d lien types", len(out))
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 

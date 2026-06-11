@@ -19,6 +19,9 @@ import type {
   GicsSectorRow,
   CreditRiskRow,
   HistogramData,
+  SpreadTimeSeriesRow,
+  SpreadByFundSizeRow,
+  SpreadByLienRow,
 } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'public', 'data');
@@ -146,6 +149,24 @@ export function getLeverageHistogram(): HistogramData | null {
   const data = readJson<HistogramData>('leverage_histogram.json');
   if (!data.buckets) return null;
   return data;
+}
+
+export function getSpreadTimeSeries(): SpreadTimeSeriesRow[] {
+  const filePath = path.join(DATA_DIR, 'spread_time_series.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<SpreadTimeSeriesRow[]>('spread_time_series.json');
+}
+
+export function getSpreadByFundSize(): SpreadByFundSizeRow[] {
+  const filePath = path.join(DATA_DIR, 'spread_by_fund_size.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<SpreadByFundSizeRow[]>('spread_by_fund_size.json');
+}
+
+export function getSpreadByLien(): SpreadByLienRow[] {
+  const filePath = path.join(DATA_DIR, 'spread_by_lien.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<SpreadByLienRow[]>('spread_by_lien.json');
 }
 
 export function getFundDetailCiks(): string[] {

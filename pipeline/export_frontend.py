@@ -22,6 +22,9 @@ from pipeline.export.analytics_exports import (
     _export_leverage_histogram,
     _export_manager_concentration,
     _export_position_concentration,
+    _export_spread_by_fund_size,
+    _export_spread_by_lien,
+    _export_spread_time_series,
     _export_vehicle_concentration,
 )
 from pipeline.export.fund_exports import (
@@ -83,6 +86,9 @@ def export_all() -> None:
     _export_credit_risk(con)
     _export_distribution_histogram(con)
     _export_leverage_histogram(con)
+    _export_spread_time_series(con)
+    _export_spread_by_fund_size(con)
+    _export_spread_by_lien(con)
 
     con.close()
     logger.info("Frontend export complete -- %d JSON files in %s",

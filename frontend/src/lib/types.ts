@@ -470,6 +470,32 @@ export interface HistogramData {
   buckets: HistogramBucket[];
 }
 
+/** Spread time series row from spread_time_series.json */
+export interface SpreadTimeSeriesRow {
+  quarter: string;
+  was: number;
+  totalFv: number;
+  positionCount: number;
+}
+
+/** Spread by fund size row from spread_by_fund_size.json */
+export interface SpreadByFundSizeRow {
+  bucket: string;
+  was: number;
+  totalFv: number;
+  positionCount: number;
+  fundCount: number;
+}
+
+/** Spread by lien row from spread_by_lien.json */
+export interface SpreadByLienRow {
+  lien: string;
+  was: number;
+  totalFv: number;
+  positionCount: number;
+  pctOfTotal: number;
+}
+
 /** Full fund detail from fund_details/{cik}.json */
 export interface FundDetail {
   cik: string;
