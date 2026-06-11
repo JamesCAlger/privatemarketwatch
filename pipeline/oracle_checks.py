@@ -1,7 +1,7 @@
 """Comprehensive BDC XBRL Oracle -- independent check functions.
 
 Each check function takes standardized inputs and returns a list of CheckResult
-objects.  Checks are grouped into 9 categories:
+objects.  Checks are grouped into 10 categories:
 
   A: Arithmetic Invariants   (derived truth -- highest confidence)
   B: Structural Invariants   (hierarchy integrity)
@@ -12,6 +12,7 @@ objects.  Checks are grouped into 9 categories:
   G: Aggregate Leak Detection
   H: Source Completeness
   I: Wrapper-Specific Checks
+  J: Position Matching Quality
 
 This module is a diagnostic layer: it does not mutate holdings data.
 """
@@ -1766,6 +1767,361 @@ def check_J03_fuzzy_fallback_rate(
     return results
 
 
+def check_J05_lower_tier_match_consistency(
+    matches_df: pd.DataFrame,
+    *,
+    suspect_threshold: float = 0.05,
+) -> list[CheckResult]:
+    """J05: Lower-tier match pair consistency -- flag B2/C/D/E matches with
+    attribute discontinuities that suggest wrong-tranche or wrong-entity errors.
+
+    A match is "suspect" if 2+ of these flags fire:
+      - fv_ratio_extreme: max(begin_fv, end_fv) / min(...) > 10
+      - rate_discontinuity: |begin_rate - end_rate| > 5.0 pct pts
+      - principal_ratio_extreme: max(begin_pa, end_pa) / min(...) > 5
+
+    Threshold: warn if suspect_rate > 5%.
+    """
+    results: list[CheckResult] = []
+    if matches_df is None or matches_df.empty:
+        return [_make_result("J05", "global", "skip", 0, suspect_threshold,
+                             "No position match data available")]
+
+    wrapped_ciks = _get_wrapped_ciks()
+    if not wrapped_ciks:
+        return [_make_result("J05", "global", "skip", 0, suspect_threshold,
+                             "No wrapped CIKs found")]
+
+    required = {"cik", "match_method", "begin_fair_value", "end_fair_value"}
+    if not required.issubset(matches_df.columns):
+        return [_make_result("J05", "global", "skip", 0, suspect_threshold,
+                             "Missing required columns in matches_df")]
+
+    df = matches_df.copy()
+    df["cik"] = df["cik"].astype(str).str.zfill(10)
+
+    # Filter to wrapped CIKs, lower tiers only
+    lower_tiers = {"B2_exact_name", "C_normalized_name", "D_fuzzy", "E_entity_fingerprint"}
+    mask = df["cik"].isin(wrapped_ciks) & df["match_method"].isin(lower_tiers)
+    lt = df[mask].copy()
+
+    if lt.empty:
+        return [_make_result("J05", "global", "skip", 0, suspect_threshold,
+                             "No lower-tier matches for wrapped CIKs")]
+
+    # Coerce numeric columns
+    b_fv = pd.to_numeric(lt["begin_fair_value"], errors="coerce").fillna(0)
+    e_fv = pd.to_numeric(lt["end_fair_value"], errors="coerce").fillna(0)
+    b_ir = pd.to_numeric(lt.get("begin_interest_rate", pd.Series(0, index=lt.index)),
+                         errors="coerce").fillna(0)
+    e_ir = pd.to_numeric(lt.get("end_interest_rate", pd.Series(0, index=lt.index)),
+                         errors="coerce").fillna(0)
+    b_pa = pd.to_numeric(lt.get("begin_principal_amount", pd.Series(0, index=lt.index)),
+                         errors="coerce").fillna(0)
+    e_pa = pd.to_numeric(lt.get("end_principal_amount", pd.Series(0, index=lt.index)),
+                         errors="coerce").fillna(0)
+
+    # Flag 1: FV ratio extreme (both > 0)
+    fv_min = pd.concat([b_fv, e_fv], axis=1).min(axis=1)
+    fv_max = pd.concat([b_fv, e_fv], axis=1).max(axis=1)
+    fv_flag = (fv_min > 0) & (fv_max / fv_min > 10)
+
+    # Flag 2: Rate discontinuity
+    rate_flag = (b_ir.ne(0) | e_ir.ne(0)) & ((b_ir - e_ir).abs() > 5.0)
+
+    # Flag 3: Principal ratio extreme (both > 0)
+    pa_min = pd.concat([b_pa, e_pa], axis=1).min(axis=1)
+    pa_max = pd.concat([b_pa, e_pa], axis=1).max(axis=1)
+    pa_flag = (pa_min > 0) & (pa_max / pa_min > 5)
+
+    # Suspect = 2+ flags
+    flag_count = fv_flag.astype(int) + rate_flag.astype(int) + pa_flag.astype(int)
+    suspect_mask = flag_count >= 2
+
+    # Per-CIK results
+    for cik, cik_group_idx in lt.groupby("cik", dropna=False).groups.items():
+        cik_s = str(cik)
+        total = len(cik_group_idx)
+        cik_suspect = suspect_mask.loc[cik_group_idx]
+        suspect_count = cik_suspect.sum()
+        suspect_rate = suspect_count / total if total > 0 else 0.0
+        status = "warn" if suspect_rate > suspect_threshold else "pass"
+
+        detail = pd.DataFrame()
+        if status == "warn":
+            suspect_rows = lt.loc[cik_group_idx[cik_suspect.values]].copy()
+            suspect_rows["flag_fv_ratio"] = fv_flag.loc[suspect_rows.index].astype(int)
+            suspect_rows["flag_rate_disc"] = rate_flag.loc[suspect_rows.index].astype(int)
+            suspect_rows["flag_pa_ratio"] = pa_flag.loc[suspect_rows.index].astype(int)
+            detail_cols = ["cik", "match_method", "begin_issuer_name", "end_issuer_name",
+                           "begin_fair_value", "end_fair_value",
+                           "begin_interest_rate", "end_interest_rate",
+                           "flag_fv_ratio", "flag_rate_disc", "flag_pa_ratio"]
+            detail_cols = [c for c in detail_cols if c in suspect_rows.columns]
+            detail = suspect_rows[detail_cols].head(200)
+
+        results.append(_make_result(
+            "J05", "cik", status, suspect_rate, suspect_threshold,
+            f"{cik_s}: {suspect_count}/{total} lower-tier matches suspect "
+            f"({suspect_rate:.1%})",
+            detail=detail, cik=cik_s,
+        ))
+
+    if not results:
+        results.append(_make_result("J05", "global", "skip", 0, suspect_threshold,
+                                    "No evaluable lower-tier matches"))
+    return results
+
+
+# ---------------------------------------------------------------------------
+# Jaro-Winkler helper (self-contained, no external dependencies)
+# ---------------------------------------------------------------------------
+
+def _jaro_winkler_py(s1: str, s2: str) -> float:
+    """Pure-Python Jaro-Winkler similarity (0-1 scale)."""
+    if s1 == s2:
+        return 1.0
+    len1, len2 = len(s1), len(s2)
+    if len1 == 0 or len2 == 0:
+        return 0.0
+
+    match_distance = max(len1, len2) // 2 - 1
+    if match_distance < 0:
+        match_distance = 0
+
+    s1_matches = [False] * len1
+    s2_matches = [False] * len2
+
+    matches = 0
+    transpositions = 0
+
+    for i in range(len1):
+        start = max(0, i - match_distance)
+        end = min(i + match_distance + 1, len2)
+        for j in range(start, end):
+            if s2_matches[j] or s1[i] != s2[j]:
+                continue
+            s1_matches[i] = True
+            s2_matches[j] = True
+            matches += 1
+            break
+
+    if matches == 0:
+        return 0.0
+
+    k = 0
+    for i in range(len1):
+        if not s1_matches[i]:
+            continue
+        while not s2_matches[k]:
+            k += 1
+        if s1[i] != s2[k]:
+            transpositions += 1
+        k += 1
+
+    jaro = (matches / len1 + matches / len2
+            + (matches - transpositions / 2) / matches) / 3
+
+    # Winkler adjustment
+    prefix = 0
+    for i in range(min(4, len1, len2)):
+        if s1[i] == s2[i]:
+            prefix += 1
+        else:
+            break
+
+    return jaro + prefix * 0.1 * (1 - jaro)
+
+
+def check_J06_fuzzy_match_semantic_validation(
+    matches_df: pd.DataFrame,
+    holdings_df: pd.DataFrame,
+    *,
+    suspect_threshold: float = 0.15,
+) -> list[CheckResult]:
+    """J06: Fuzzy match semantic validation -- flag D/E tier matches where
+    raw identifiers diverge (JW < 0.5) or index classification flips.
+
+    Joins each match side back to holdings_df via DuckDB to retrieve
+    bdc_investment_identifier and index_classification for comparison.
+
+    Threshold: warn if suspect_rate > 15%.
+    """
+    import duckdb
+
+    results: list[CheckResult] = []
+    if matches_df is None or matches_df.empty:
+        return [_make_result("J06", "global", "skip", 0, suspect_threshold,
+                             "No position match data available")]
+    if holdings_df is None or holdings_df.empty:
+        return [_make_result("J06", "global", "skip", 0, suspect_threshold,
+                             "No holdings data available")]
+
+    wrapped_ciks = _get_wrapped_ciks()
+    if not wrapped_ciks:
+        return [_make_result("J06", "global", "skip", 0, suspect_threshold,
+                             "No wrapped CIKs found")]
+
+    required_m = {"cik", "match_method", "begin_report_date", "end_report_date",
+                  "begin_issuer_name", "end_issuer_name",
+                  "begin_fair_value", "end_fair_value"}
+    if not required_m.issubset(matches_df.columns):
+        return [_make_result("J06", "global", "skip", 0, suspect_threshold,
+                             "Missing required columns in matches_df")]
+
+    required_h = {"cik", "report_date", "issuer_name", "source"}
+    if not required_h.issubset(holdings_df.columns):
+        return [_make_result("J06", "global", "skip", 0, suspect_threshold,
+                             "Missing required columns in holdings_df")]
+
+    df = matches_df.copy()
+    df["cik"] = df["cik"].astype(str).str.zfill(10)
+
+    # Filter to wrapped CIKs, D/E tiers only
+    de_tiers = {"D_fuzzy", "E_entity_fingerprint"}
+    mask = df["cik"].isin(wrapped_ciks) & df["match_method"].isin(de_tiers)
+    de = df[mask].copy()
+
+    if de.empty:
+        return [_make_result("J06", "global", "skip", 0, suspect_threshold,
+                             "No D/E tier matches for wrapped CIKs")]
+
+    # Prepare holdings for DuckDB join
+    h = holdings_df.copy()
+    h["cik"] = h["cik"].astype(str).str.zfill(10)
+    h_cols = ["cik", "report_date", "issuer_name", "source", "fair_value"]
+    if "bdc_investment_identifier" in h.columns:
+        h_cols.append("bdc_investment_identifier")
+    if "index_classification" in h.columns:
+        h_cols.append("index_classification")
+    h = h[h_cols].copy()
+    h["report_date"] = h["report_date"].astype(str)
+    h["issuer_name"] = h["issuer_name"].astype(str)
+
+    # Add row index for DuckDB
+    de = de.reset_index(drop=True)
+    de["_match_idx"] = range(len(de))
+
+    con = duckdb.connect()
+    con.register("de_matches", de)
+    con.register("holdings", h)
+
+    # Join begin side
+    begin_sql = """
+    SELECT m._match_idx,
+           h.bdc_investment_identifier AS begin_raw_id,
+           h.index_classification AS begin_classification
+    FROM de_matches m
+    LEFT JOIN holdings h
+      ON m.cik = h.cik AND h.source = 'bdc'
+      AND CAST(m.begin_report_date AS VARCHAR) = CAST(h.report_date AS VARCHAR)
+      AND CAST(m.begin_issuer_name AS VARCHAR) = CAST(h.issuer_name AS VARCHAR)
+    QUALIFY ROW_NUMBER() OVER (
+      PARTITION BY m._match_idx
+      ORDER BY ABS(COALESCE(TRY_CAST(m.begin_fair_value AS DOUBLE), 0)
+                   - COALESCE(TRY_CAST(h.fair_value AS DOUBLE), 0)) ASC
+    ) = 1
+    """
+
+    # Join end side
+    end_sql = """
+    SELECT m._match_idx,
+           h.bdc_investment_identifier AS end_raw_id,
+           h.index_classification AS end_classification
+    FROM de_matches m
+    LEFT JOIN holdings h
+      ON m.cik = h.cik AND h.source = 'bdc'
+      AND CAST(m.end_report_date AS VARCHAR) = CAST(h.report_date AS VARCHAR)
+      AND CAST(m.end_issuer_name AS VARCHAR) = CAST(h.issuer_name AS VARCHAR)
+    QUALIFY ROW_NUMBER() OVER (
+      PARTITION BY m._match_idx
+      ORDER BY ABS(COALESCE(TRY_CAST(m.end_fair_value AS DOUBLE), 0)
+                   - COALESCE(TRY_CAST(h.fair_value AS DOUBLE), 0)) ASC
+    ) = 1
+    """
+
+    try:
+        begin_df = con.execute(begin_sql).fetchdf()
+        end_df = con.execute(end_sql).fetchdf()
+    except Exception as e:
+        con.close()
+        return [_make_result("J06", "global", "skip", 0, suspect_threshold,
+                             f"DuckDB join error: {e}")]
+    finally:
+        con.close()
+
+    # Merge results back to de matches
+    de = de.merge(begin_df, on="_match_idx", how="left")
+    de = de.merge(end_df, on="_match_idx", how="left")
+
+    # Fill NaN
+    for col in ("begin_raw_id", "end_raw_id", "begin_classification", "end_classification"):
+        if col in de.columns:
+            de[col] = de[col].fillna("").astype(str)
+        else:
+            de[col] = ""
+
+    # Flag 1: name_divergence -- JW similarity of raw identifiers < 0.5
+    name_divergence = pd.Series(False, index=de.index)
+    both_present = (de["begin_raw_id"].str.strip().ne("")) & (de["end_raw_id"].str.strip().ne(""))
+    if both_present.any():
+        jw_scores = de.loc[both_present].apply(
+            lambda row: _jaro_winkler_py(
+                row["begin_raw_id"].lower().strip(),
+                row["end_raw_id"].lower().strip(),
+            ),
+            axis=1,
+        )
+        name_divergence.loc[both_present] = jw_scores < 0.5
+        # Store JW scores for detail output
+        de["jw_score"] = 0.0
+        de.loc[both_present, "jw_score"] = jw_scores.values
+
+    # Flag 2: classification_flip
+    classification_flip = pd.Series(False, index=de.index)
+    both_class = (de["begin_classification"].str.strip().ne("")) & (de["end_classification"].str.strip().ne(""))
+    if both_class.any():
+        classification_flip.loc[both_class] = (
+            de.loc[both_class, "begin_classification"] != de.loc[both_class, "end_classification"]
+        )
+
+    # Suspect = either flag
+    suspect_mask = name_divergence | classification_flip
+
+    # Per-CIK results
+    for cik, cik_group_idx in de.groupby("cik", dropna=False).groups.items():
+        cik_s = str(cik)
+        total = len(cik_group_idx)
+        cik_suspect = suspect_mask.loc[cik_group_idx]
+        suspect_count = cik_suspect.sum()
+        suspect_rate = suspect_count / total if total > 0 else 0.0
+        status = "warn" if suspect_rate > suspect_threshold else "pass"
+
+        detail = pd.DataFrame()
+        if status == "warn":
+            suspect_rows = de.loc[cik_group_idx[cik_suspect.values]].copy()
+            detail_cols = ["cik", "match_method",
+                           "begin_issuer_name", "end_issuer_name",
+                           "begin_raw_id", "end_raw_id",
+                           "begin_classification", "end_classification"]
+            if "jw_score" in suspect_rows.columns:
+                detail_cols.append("jw_score")
+            detail_cols = [c for c in detail_cols if c in suspect_rows.columns]
+            detail = suspect_rows[detail_cols].head(200)
+
+        results.append(_make_result(
+            "J06", "cik", status, suspect_rate, suspect_threshold,
+            f"{cik_s}: {suspect_count}/{total} D/E matches suspect "
+            f"({suspect_rate:.1%})",
+            detail=detail, cik=cik_s,
+        ))
+
+    if not results:
+        results.append(_make_result("J06", "global", "skip", 0, suspect_threshold,
+                                    "No evaluable D/E tier matches"))
+    return results
+
+
 # ---------------------------------------------------------------------------
 # Fuzzy fallback diagnostic
 # ---------------------------------------------------------------------------
@@ -1929,6 +2285,8 @@ CHECK_REGISTRY: dict[str, tuple[Any, str]] = {
     "J01": (check_J01_position_key_stability, "matches_df"),
     "J03": (check_J03_fuzzy_fallback_rate, "matches_df"),
     "J04": (check_J04_unique_position_id_per_report_date, "holdings_df"),
+    "J05": (check_J05_lower_tier_match_consistency, "matches_df"),
+    "J06": (check_J06_fuzzy_match_semantic_validation, "matches_df, holdings_df"),
 }
 
 ALL_CHECK_IDS = sorted(CHECK_REGISTRY.keys())

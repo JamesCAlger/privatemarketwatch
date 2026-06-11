@@ -7,9 +7,12 @@ from pipeline.oracle_checks import (
     ALL_CHECK_IDS,
     CHECK_REGISTRY,
     CheckResult,
+    _jaro_winkler_py,
     check_A01_subtotal_arithmetic,
     check_J01_position_key_stability,
     check_J03_fuzzy_fallback_rate,
+    check_J05_lower_tier_match_consistency,
+    check_J06_fuzzy_match_semantic_validation,
     check_A04_gav_reconciliation,
     check_A07_pct_of_net_assets_sum,
     check_B01_leaf_completeness,
@@ -712,7 +715,7 @@ class TestI06NonPrivateMarketExclusion:
 
 class TestCheckRegistry:
     def test_all_checks_registered(self):
-        assert len(CHECK_REGISTRY) >= 35
+        assert len(CHECK_REGISTRY) >= 37
 
     def test_all_check_ids_sorted(self):
         assert ALL_CHECK_IDS == sorted(ALL_CHECK_IDS)
@@ -966,6 +969,282 @@ class TestJ03FuzzyFallbackRate:
         failed = [r for r in results if r.cik == "0001572694"]
         assert len(failed) == 1
         assert "match_key" in failed[0].detail.columns
+
+
+# ===================================================================
+# J05: Lower-Tier Match Pair Consistency
+# ===================================================================
+
+class TestJ05LowerTierMatchConsistency:
+    """Tests for J05: attribute discontinuity flags on B2/C/D/E matches."""
+
+    def test_skip_when_no_matches(self):
+        results = check_J05_lower_tier_match_consistency(None)
+        assert len(results) == 1
+        assert results[0].status == "skip"
+
+    def test_skip_when_empty(self):
+        results = check_J05_lower_tier_match_consistency(pd.DataFrame())
+        assert len(results) == 1
+        assert results[0].status == "skip"
+
+    def test_pass_correct_matches(self, monkeypatch):
+        """Matches with consistent attributes -> pass (no suspect)."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        df = _matches([
+            {"match_method": "B2_exact_name",
+             "begin_fair_value": "1000000", "end_fair_value": "1050000",
+             "begin_interest_rate": "8.5", "end_interest_rate": "8.5",
+             "begin_principal_amount": "1000000", "end_principal_amount": "1000000"},
+            {"match_method": "C_normalized_name",
+             "begin_fair_value": "500000", "end_fair_value": "480000",
+             "begin_interest_rate": "9.0", "end_interest_rate": "9.5",
+             "begin_principal_amount": "500000", "end_principal_amount": "500000"},
+        ])
+        results = check_J05_lower_tier_match_consistency(df)
+        cik_results = [r for r in results if r.cik == "0001287750"]
+        assert len(cik_results) == 1
+        assert cik_results[0].status == "pass"
+
+    def test_warn_wrong_tranche(self, monkeypatch):
+        """Match with extreme FV ratio + rate discontinuity -> suspect."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        # All 3 matches have 2+ flags -> 100% suspect rate -> warn
+        df = _matches([
+            {"match_method": "B2_exact_name",
+             "begin_fair_value": "10000000", "end_fair_value": "500000",
+             "begin_interest_rate": "8.5", "end_interest_rate": "15.0",
+             "begin_principal_amount": "10000000", "end_principal_amount": "500000"},
+            {"match_method": "D_fuzzy",
+             "begin_fair_value": "20000000", "end_fair_value": "100000",
+             "begin_interest_rate": "5.0", "end_interest_rate": "12.0",
+             "begin_principal_amount": "20000000", "end_principal_amount": "100000"},
+            {"match_method": "C_normalized_name",
+             "begin_fair_value": "5000000", "end_fair_value": "200000",
+             "begin_interest_rate": "7.0", "end_interest_rate": "14.0",
+             "begin_principal_amount": "5000000", "end_principal_amount": "200000"},
+        ])
+        results = check_J05_lower_tier_match_consistency(df)
+        cik_results = [r for r in results if r.cik == "0001287750"]
+        assert len(cik_results) == 1
+        assert cik_results[0].status == "warn"
+        assert cik_results[0].metric_value > 0.05
+
+    def test_single_flag_not_suspect(self, monkeypatch):
+        """A match with only 1 flag should NOT be suspect."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        df = _matches([
+            # Only rate discontinuity (1 flag) -- not suspect
+            {"match_method": "B2_exact_name",
+             "begin_fair_value": "1000000", "end_fair_value": "1050000",
+             "begin_interest_rate": "5.0", "end_interest_rate": "12.0",
+             "begin_principal_amount": "1000000", "end_principal_amount": "1000000"},
+        ])
+        results = check_J05_lower_tier_match_consistency(df)
+        cik_results = [r for r in results if r.cik == "0001287750"]
+        assert len(cik_results) == 1
+        assert cik_results[0].status == "pass"
+
+    def test_a_and_b1b_tiers_excluded(self, monkeypatch):
+        """A and B1b matches should not be evaluated by J05."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        df = _matches([
+            # These have extreme discontinuities but should be excluded
+            {"match_method": "A_within_filing",
+             "begin_fair_value": "10000000", "end_fair_value": "100",
+             "begin_interest_rate": "5.0", "end_interest_rate": "20.0",
+             "begin_principal_amount": "10000000", "end_principal_amount": "100"},
+            {"match_method": "B1b_position_key",
+             "begin_fair_value": "10000000", "end_fair_value": "100",
+             "begin_interest_rate": "5.0", "end_interest_rate": "20.0",
+             "begin_principal_amount": "10000000", "end_principal_amount": "100"},
+        ])
+        results = check_J05_lower_tier_match_consistency(df)
+        # Should skip -- no lower-tier matches
+        assert all(r.status == "skip" for r in results)
+
+    def test_zero_fv_not_flagged(self, monkeypatch):
+        """Zero FV should not trigger fv_ratio flag."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        df = _matches([
+            {"match_method": "B2_exact_name",
+             "begin_fair_value": "0", "end_fair_value": "1000000",
+             "begin_interest_rate": "8.5", "end_interest_rate": "8.5",
+             "begin_principal_amount": "0", "end_principal_amount": "1000000"},
+        ])
+        results = check_J05_lower_tier_match_consistency(df)
+        cik_results = [r for r in results if r.cik == "0001287750"]
+        assert len(cik_results) == 1
+        assert cik_results[0].status == "pass"
+
+
+# ===================================================================
+# J06: Fuzzy Match Semantic Validation
+# ===================================================================
+
+class TestJ06FuzzyMatchSemanticValidation:
+    """Tests for J06: name divergence and classification flip on D/E matches."""
+
+    def test_skip_when_no_matches(self):
+        results = check_J06_fuzzy_match_semantic_validation(None, pd.DataFrame())
+        assert len(results) == 1
+        assert results[0].status == "skip"
+
+    def test_skip_when_no_holdings(self):
+        df = _matches([{"match_method": "D_fuzzy"}])
+        results = check_J06_fuzzy_match_semantic_validation(df, None)
+        assert len(results) == 1
+        assert results[0].status == "skip"
+
+    def test_pass_correct_de_matches(self, monkeypatch):
+        """D/E matches with consistent identifiers/classifications -> pass."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        matches = _matches([
+            {"match_method": "D_fuzzy",
+             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+             "begin_issuer_name": "Acme Corp", "end_issuer_name": "Acme Corp",
+             "begin_fair_value": "1000000", "end_fair_value": "1050000"},
+        ])
+        holdings = _holdings([
+            {"cik": "0001287750", "report_date": "2024-03-31",
+             "issuer_name": "Acme Corp", "fair_value": "1000000",
+             "bdc_investment_identifier": "Acme Corp First Lien Term Loan",
+             "index_classification": "DIRECT_LENDING"},
+            {"cik": "0001287750", "report_date": "2024-06-30",
+             "issuer_name": "Acme Corp", "fair_value": "1050000",
+             "bdc_investment_identifier": "Acme Corp First Lien Term Loan",
+             "index_classification": "DIRECT_LENDING"},
+        ])
+        results = check_J06_fuzzy_match_semantic_validation(matches, holdings)
+        cik_results = [r for r in results if r.cik == "0001287750"]
+        assert len(cik_results) == 1
+        assert cik_results[0].status == "pass"
+
+    def test_warn_name_divergence(self, monkeypatch):
+        """D match with very different raw identifiers -> suspect."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        matches = _matches([
+            {"match_method": "D_fuzzy",
+             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+             "begin_issuer_name": "Acme Corp", "end_issuer_name": "Acme Corp",
+             "begin_fair_value": "1000000", "end_fair_value": "1050000"},
+        ])
+        # Use maximally divergent raw identifiers to ensure JW < 0.5
+        holdings = _holdings([
+            {"cik": "0001287750", "report_date": "2024-03-31",
+             "issuer_name": "Acme Corp", "fair_value": "1000000",
+             "bdc_investment_identifier": "ZYXWVU QPONML",
+             "index_classification": "DIRECT_LENDING"},
+            {"cik": "0001287750", "report_date": "2024-06-30",
+             "issuer_name": "Acme Corp", "fair_value": "1050000",
+             "bdc_investment_identifier": "ABCDEF GHIJKL",
+             "index_classification": "DIRECT_LENDING"},
+        ])
+        results = check_J06_fuzzy_match_semantic_validation(matches, holdings)
+        cik_results = [r for r in results if r.cik == "0001287750"]
+        assert len(cik_results) == 1
+        # With only 1 match total and it's suspect, rate = 100% > 15%
+        assert cik_results[0].status == "warn"
+
+    def test_warn_classification_flip(self, monkeypatch):
+        """D match with different index_classification -> suspect."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        matches = _matches([
+            {"match_method": "D_fuzzy",
+             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+             "begin_issuer_name": "Beta Inc", "end_issuer_name": "Beta Inc",
+             "begin_fair_value": "500000", "end_fair_value": "520000"},
+        ])
+        holdings = _holdings([
+            {"cik": "0001287750", "report_date": "2024-03-31",
+             "issuer_name": "Beta Inc", "fair_value": "500000",
+             "bdc_investment_identifier": "Beta Inc Term Loan",
+             "index_classification": "DIRECT_LENDING"},
+            {"cik": "0001287750", "report_date": "2024-06-30",
+             "issuer_name": "Beta Inc", "fair_value": "520000",
+             "bdc_investment_identifier": "Beta Inc Term Loan",
+             "index_classification": "EQUITY"},
+        ])
+        results = check_J06_fuzzy_match_semantic_validation(matches, holdings)
+        cik_results = [r for r in results if r.cik == "0001287750"]
+        assert len(cik_results) == 1
+        assert cik_results[0].status == "warn"
+
+    def test_b2_tiers_excluded(self, monkeypatch):
+        """B2 matches should not be evaluated by J06."""
+        monkeypatch.setattr(
+            "pipeline.oracle_checks._get_wrapped_ciks",
+            lambda: {"0001287750"},
+        )
+        matches = _matches([
+            {"match_method": "B2_exact_name",
+             "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+             "begin_issuer_name": "Acme Corp", "end_issuer_name": "Acme Corp",
+             "begin_fair_value": "1000000", "end_fair_value": "1050000"},
+        ])
+        holdings = _holdings([
+            {"cik": "0001287750", "report_date": "2024-03-31",
+             "issuer_name": "Acme Corp", "fair_value": "1000000",
+             "bdc_investment_identifier": "X", "index_classification": "A"},
+            {"cik": "0001287750", "report_date": "2024-06-30",
+             "issuer_name": "Acme Corp", "fair_value": "1050000",
+             "bdc_investment_identifier": "Y", "index_classification": "B"},
+        ])
+        results = check_J06_fuzzy_match_semantic_validation(matches, holdings)
+        # Should skip -- no D/E tier matches
+        assert all(r.status == "skip" for r in results)
+
+
+# ===================================================================
+# Jaro-Winkler Helper
+# ===================================================================
+
+class TestJaroWinklerPy:
+    """Tests for the pure-Python Jaro-Winkler implementation."""
+
+    def test_identical_strings(self):
+        assert _jaro_winkler_py("hello", "hello") == 1.0
+
+    def test_empty_strings(self):
+        assert _jaro_winkler_py("", "") == 1.0
+        assert _jaro_winkler_py("hello", "") == 0.0
+        assert _jaro_winkler_py("", "hello") == 0.0
+
+    def test_completely_different(self):
+        score = _jaro_winkler_py("abc", "xyz")
+        assert score == 0.0
+
+    def test_similar_strings(self):
+        score = _jaro_winkler_py("acme corp term loan", "acme corp term loan a")
+        assert score > 0.9
+
+    def test_divergent_strings(self):
+        score = _jaro_winkler_py("abcdef", "zyxwvu")
+        assert score < 0.5
 
 
 # ===================================================================

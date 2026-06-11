@@ -688,7 +688,25 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
             {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
             ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
             {_fv_proximity_sql('COALESCE(b.pa, 1.0)', 'COALESCE(e.pa, 1.0)')}
-                AS _pa_prox
+                AS _pa_prox,
+            -- Attribute penalty: count of categorical mismatches (0=perfect)
+            (CASE WHEN COALESCE(CAST(b.lien_position AS VARCHAR), '') != ''
+                      AND COALESCE(CAST(e.lien_position AS VARCHAR), '') != ''
+                      AND CAST(b.lien_position AS VARCHAR) != CAST(e.lien_position AS VARCHAR)
+                  THEN 1 ELSE 0 END)
+            + (CASE WHEN COALESCE(CAST(b.index_classification AS VARCHAR), '') != ''
+                        AND COALESCE(CAST(e.index_classification AS VARCHAR), '') != ''
+                        AND CAST(b.index_classification AS VARCHAR) != CAST(e.index_classification AS VARCHAR)
+                    THEN 1 ELSE 0 END)
+            + (CASE WHEN COALESCE(CAST(b.coupon_type AS VARCHAR), '') != ''
+                        AND COALESCE(CAST(e.coupon_type AS VARCHAR), '') != ''
+                        AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
+                    THEN 1 ELSE 0 END)
+            AS _attr_penalty,
+            COALESCE(ABS(DATEDIFF('day',
+                TRY_CAST(b.maturity_date AS DATE),
+                TRY_CAST(e.maturity_date AS DATE)
+            )), 999999) AS _maturity_prox
         FROM name_remaining b
         JOIN name_remaining e
           ON b.cik = e.cik
@@ -707,13 +725,13 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         AND b.fv > 0 AND e.fv > 0
         AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
     ),
-    -- B2: 1:1 enforcement (composite tiebreaker: FV + rate + principal)
+    -- B2: 1:1 enforcement (attribute penalty + FV + rate + maturity + principal)
     name_rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
-                    _end_row_id ASC
+                ORDER BY _attr_penalty ASC, _fv_prox ASC, _rate_prox ASC,
+                    _maturity_prox ASC, _pa_prox ASC, _end_row_id ASC
             ) AS rn_b
         FROM pairs_name
     ),
@@ -721,8 +739,8 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
-                    _begin_row_id ASC
+                ORDER BY _attr_penalty ASC, _fv_prox ASC, _rate_prox ASC,
+                    _maturity_prox ASC, _pa_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM name_rn_begin WHERE rn_b = 1
     ),
@@ -838,7 +856,25 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
             3 AS span_months,
             b._row_id AS _begin_row_id,
             e._row_id AS _end_row_id,
-            {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox
+            {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
+            -- Attribute penalty: count of categorical mismatches (0=perfect)
+            (CASE WHEN COALESCE(CAST(b.lien_position AS VARCHAR), '') != ''
+                      AND COALESCE(CAST(e.lien_position AS VARCHAR), '') != ''
+                      AND CAST(b.lien_position AS VARCHAR) != CAST(e.lien_position AS VARCHAR)
+                  THEN 1 ELSE 0 END)
+            + (CASE WHEN COALESCE(CAST(b.index_classification AS VARCHAR), '') != ''
+                        AND COALESCE(CAST(e.index_classification AS VARCHAR), '') != ''
+                        AND CAST(b.index_classification AS VARCHAR) != CAST(e.index_classification AS VARCHAR)
+                    THEN 1 ELSE 0 END)
+            + (CASE WHEN COALESCE(CAST(b.coupon_type AS VARCHAR), '') != ''
+                        AND COALESCE(CAST(e.coupon_type AS VARCHAR), '') != ''
+                        AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
+                    THEN 1 ELSE 0 END)
+            AS _attr_penalty,
+            COALESCE(ABS(DATEDIFF('day',
+                TRY_CAST(b.maturity_date AS DATE),
+                TRY_CAST(e.maturity_date AS DATE)
+            )), 999999) AS _maturity_prox
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik
@@ -861,7 +897,8 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _fv_prox ASC, _end_row_id ASC
+                ORDER BY _attr_penalty ASC, _fv_prox ASC,
+                    _maturity_prox ASC, _end_row_id ASC
             ) AS rn_b
         FROM pairs
     ),
@@ -869,7 +906,8 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _fv_prox ASC, _begin_row_id ASC
+                ORDER BY _attr_penalty ASC, _fv_prox ASC,
+                    _maturity_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM rn_begin WHERE rn_b = 1
     )
@@ -953,7 +991,25 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
             b._row_id AS _begin_row_id,
             e._row_id AS _end_row_id,
             b._norm_name AS b_norm,
-            e._norm_name AS e_norm
+            e._norm_name AS e_norm,
+            -- Attribute penalty columns
+            (CASE WHEN COALESCE(CAST(b.lien_position AS VARCHAR), '') != ''
+                      AND COALESCE(CAST(e.lien_position AS VARCHAR), '') != ''
+                      AND CAST(b.lien_position AS VARCHAR) != CAST(e.lien_position AS VARCHAR)
+                  THEN 1 ELSE 0 END)
+            + (CASE WHEN COALESCE(CAST(b.index_classification AS VARCHAR), '') != ''
+                        AND COALESCE(CAST(e.index_classification AS VARCHAR), '') != ''
+                        AND CAST(b.index_classification AS VARCHAR) != CAST(e.index_classification AS VARCHAR)
+                    THEN 1 ELSE 0 END)
+            + (CASE WHEN COALESCE(CAST(b.coupon_type AS VARCHAR), '') != ''
+                        AND COALESCE(CAST(e.coupon_type AS VARCHAR), '') != ''
+                        AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
+                    THEN 1 ELSE 0 END)
+            AS _attr_penalty,
+            COALESCE(ABS(DATEDIFF('day',
+                TRY_CAST(b.maturity_date AS DATE),
+                TRY_CAST(e.maturity_date AS DATE)
+            )), 999999) AS _maturity_prox
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik
@@ -1001,14 +1057,17 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
             3 AS span_months,
             _begin_row_id,
             _end_row_id,
-            _fv_prox
+            _fv_prox,
+            _attr_penalty,
+            _maturity_prox
         FROM scored
     ),
     rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY match_score DESC, _fv_prox ASC, _end_row_id ASC
+                ORDER BY match_score DESC, _attr_penalty ASC,
+                    _fv_prox ASC, _maturity_prox ASC, _end_row_id ASC
             ) AS rn_b
         FROM with_output
     ),
@@ -1016,7 +1075,8 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY match_score DESC, _fv_prox ASC, _begin_row_id ASC
+                ORDER BY match_score DESC, _attr_penalty ASC,
+                    _fv_prox ASC, _maturity_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM rn_begin WHERE rn_b = 1
     )

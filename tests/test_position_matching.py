@@ -1923,3 +1923,104 @@ class TestOutputFileParameter:
 
         result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
         assert default_file.exists(), "Default monkeypatched path should be used"
+
+
+# ---------------------------------------------------------------------------
+# B2/C Attribute Disambiguation Tests
+# ---------------------------------------------------------------------------
+
+class TestB2AttributeDisambiguation:
+    """Tests for the attribute penalty tiebreaker in B2 matching."""
+
+    def test_same_fv_different_lien_prefers_same_lien(self):
+        """When two candidates have similar FV but different lien_position,
+        prefer the one with matching lien_position."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            # Q1: one first-lien position
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp",
+             "fair_value": "1000000", "lien_position": "first_lien",
+             "index_classification": "DIRECT_LENDING"},
+            # Q2: two positions with same name -- first lien and second lien
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "1010000", "lien_position": "first_lien",
+             "index_classification": "DIRECT_LENDING"},
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp",
+             "fair_value": "990000", "lien_position": "second_lien",
+             "index_classification": "DIRECT_LENDING"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        # The match should pair Q1 first-lien with Q2 first-lien
+        row = b2.iloc[0]
+        assert float(row["end_fair_value"]) == 1010000
+
+    def test_same_lien_different_fv_prefers_closer_fv(self):
+        """When candidates have the same lien_position, FV proximity still
+        drives the tiebreaker (unchanged behavior)."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-03-31", "issuer_name": "Beta Corp",
+             "fair_value": "1000000", "lien_position": "first_lien"},
+            # Q2: two first-lien positions -- prefer closer FV
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Beta Corp",
+             "fair_value": "1005000", "lien_position": "first_lien"},
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Beta Corp",
+             "fair_value": "1500000", "lien_position": "first_lien"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        row = b2.iloc[0]
+        assert float(row["end_fair_value"]) == 1005000
+
+    def test_both_attributes_missing_falls_back_to_fv(self):
+        """When lien_position is missing on both sides, the tiebreaker
+        falls back to FV proximity (unchanged behavior)."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-03-31", "issuer_name": "Gamma Corp",
+             "fair_value": "1000000"},
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Gamma Corp",
+             "fair_value": "1010000"},
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Gamma Corp",
+             "fair_value": "2000000"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        row = b2.iloc[0]
+        assert float(row["end_fair_value"]) == 1010000
+
+    def test_classification_mismatch_penalizes(self):
+        """When index_classification differs, prefer the matching one
+        even if FV is slightly worse."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-03-31", "issuer_name": "Delta Corp",
+             "fair_value": "1000000", "index_classification": "DIRECT_LENDING"},
+            # Q2: EQUITY candidate has closer FV but wrong classification
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Delta Corp",
+             "fair_value": "1001000", "index_classification": "EQUITY"},
+            {"source": "bdc", "cik": "700", "entity_name": "BDC7",
+             "report_date": "2024-06-30", "issuer_name": "Delta Corp",
+             "fair_value": "1020000", "index_classification": "DIRECT_LENDING"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        row = b2.iloc[0]
+        # Should prefer the DIRECT_LENDING match despite slightly worse FV
+        assert float(row["end_fair_value"]) == 1020000
