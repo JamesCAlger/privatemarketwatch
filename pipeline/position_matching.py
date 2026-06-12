@@ -1863,6 +1863,20 @@ def match_positions(
                     side, dup_count,
                 )
 
+    # Apply position match overrides (reject / force_pair)
+    from pipeline.position_match_overrides import (
+        apply_match_overrides,
+        load_position_match_overrides,
+    )
+    overrides_df = load_position_match_overrides()
+    if not overrides_df.empty:
+        result, n_rejected, n_forced = apply_match_overrides(result, overrides_df)
+        if n_rejected or n_forced:
+            logger.info(
+                "  Match overrides applied: %d rejected, %d forced",
+                n_rejected, n_forced,
+            )
+
     # Ensure column order
     for col in MATCH_COLUMNS:
         if col not in result.columns:

@@ -20,11 +20,13 @@ from pipeline.bdc_xbrl_wrapper_oracle import (
     _append_parsed_field_quality_summary,
     _build_agent_cluster_packets,
     _build_agent_issue_packets,
+    _build_cost_fv_outlier_packets,
     _build_column_drift_packets,
     _build_parsed_field_quality_packets,
     _build_high_fv_unclassified_clusters,
     _build_row_delta_attribution,
     _build_source_corrupted_identifier_packets,
+    _build_source_verbose_identifier_packets,
     _materiality_metrics,
     build_agent_verdict_summary,
     build_exception_proposals,
@@ -1463,8 +1465,8 @@ def test_oracle_flags_rate_outliers():
     assert "rate_outliers_detected" in summary.iloc[0]["oracle_fail_reasons"]
 
 
-def test_oracle_flags_cost_fv_ratio_outliers():
-    """Oracle should flag rows with extreme cost/FV ratios."""
+def test_oracle_counts_cost_fv_ratio_outliers_without_failing():
+    """Oracle should count extreme cost/FV ratios without making them hard fails."""
     detail = _detail([{
         "status": "documented_source_rollup_exact",
         "residual_class": "documented_exclusion",
@@ -1490,7 +1492,13 @@ def test_oracle_flags_cost_fv_ratio_outliers():
         )
 
     assert summary.iloc[0]["cost_fv_ratio_outlier_count"] == 1
-    assert "cost_fv_ratio_outliers" in summary.iloc[0]["oracle_fail_reasons"]
+    assert "cost_fv_ratio_outliers" not in summary.iloc[0]["oracle_fail_reasons"]
+
+    packets = _build_cost_fv_outlier_packets(holdings, cik="0001786108")
+    assert list(packets.columns) == AGENT_ISSUE_PACKET_COLUMNS
+    assert len(packets) == 1
+    assert packets.iloc[0]["rule_id"] == "WRAP.COST_FV_RATIO_OUTLIER"
+    assert packets.iloc[0]["likely_owner"] == "validation_rule"
 
 
 def test_oracle_cost_fv_skips_nominal_fv_positions():
@@ -1525,6 +1533,29 @@ def test_oracle_cost_fv_skips_nominal_fv_positions():
     assert "cost_fv_ratio_outliers" not in str(
         summary.iloc[0].get("oracle_fail_reasons", "")
     )
+
+
+def test_oracle_uses_no_wrapper_rows_for_existing_definition_without_prefix_rows():
+    detail = _detail([{
+        "status": "matched",
+        "raw_investment_identifier": "Jackson Paper Manufacturing Company Initial Term Loan",
+        "source_wrapper_disposition": "",
+        "output_wrapper_disposition": "",
+        "source_wrapper_signature_status": "",
+    }])
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=_make_wrapper(),
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    reasons = summary.iloc[0]["oracle_fail_reasons"]
+    assert "no_wrapper_rows" in reasons
+    assert "unsupported_wrapper_cik" not in reasons
 
 
 def test_oracle_no_rate_outliers_when_within_bounds():
@@ -2401,7 +2432,7 @@ def test_high_fv_unclassified_clusters_trial_writes_artifact(tmp_path):
 # ---------------------------------------------------------------------------
 
 
-def test_source_corrupted_identifier_packets_flag_field_token_source_rows():
+def test_source_verbose_identifier_packets_flag_when_output_is_contaminated():
     detail = _detail([{
         "source_row_id": "src-1",
         "raw_investment_identifier": (
@@ -2410,6 +2441,7 @@ def test_source_corrupted_identifier_packets_flag_field_token_source_rows():
             "Interest Rate SOFR + 6.00%"
         ),
         "source_fair_value": 6_000_000,
+        "issuer_name": "Debt Investments Type of Investment First Lien Term Loan",
     }])
     holdings = pd.DataFrame([
         _holding(fair_value="994000000"),
@@ -2420,15 +2452,38 @@ def test_source_corrupted_identifier_packets_flag_field_token_source_rows():
         ),
     ])
 
-    packets = _build_source_corrupted_identifier_packets(detail, holdings, cik="1786108")
+    packets = _build_source_verbose_identifier_packets(detail, holdings, cik="1786108")
 
     assert list(packets.columns) == AGENT_ISSUE_PACKET_COLUMNS
     assert len(packets) == 1
     row = packets.iloc[0]
-    assert row["rule_id"] == "WRAP.SOURCE_CORRUPTED_IDENTIFIER"
-    assert row["likely_owner"] == "source_data"
+    assert row["rule_id"] == "WRAP.SOURCE_VERBOSE_IDENTIFIER"
+    assert row["source_rule_id"] == "WRAP.SOURCE_CORRUPTED_IDENTIFIER"
+    assert row["likely_owner"] == "wrapper"
     assert row["materiality_tier"] == "P1"
     assert row["review_status"] == "review"
+
+
+def test_source_verbose_identifier_packets_ignore_clean_output_false_positive():
+    detail = _detail([{
+        "source_row_id": "src-1",
+        "raw_investment_identifier": (
+            "Debt Investments Type of Investment First Lien Term Loan "
+            "Investment Date 01/01/2024 Maturity Date 12/31/2028 "
+            "Interest Rate SOFR + 6.00%"
+        ),
+        "source_fair_value": 6_000_000,
+        "issuer_name": "Jackson Paper Manufacturing Company",
+        "instrument_description": "First Lien Term Loan",
+        "status": "matched",
+        "calibrated_status": "matched",
+    }])
+    holdings = pd.DataFrame([_holding(fair_value="6000000")])
+
+    packets = _build_source_verbose_identifier_packets(detail, holdings, cik="1786108")
+
+    assert packets.empty
+    assert list(packets.columns) == AGENT_ISSUE_PACKET_COLUMNS
 
 
 def test_column_drift_packets_use_short_history_and_emit_examples():
@@ -2457,10 +2512,33 @@ def test_column_drift_packets_use_short_history_and_emit_examples():
     assert interest_rate_q3["baseline_dominant_bucket"] == "numeric_pct"
     assert "rate_text" in interest_rate_q3["bucket_distribution"]
     assert not examples.empty
-    assert set(examples["column"]) == {"interest_rate"}
+    assert "interest_rate" in set(examples["column"])
 
 
-def test_agent_issue_packets_merge_parsed_and_source_corrupted_artifacts():
+def test_column_drift_packets_flag_identity_text_shape_shift():
+    holdings = pd.DataFrame([
+        _holding(report_date="2024-03-31", issuer_name="Jackson Paper Manufacturing Company"),
+        _holding(report_date="2024-06-30", issuer_name="Acme Software Inc."),
+        _holding(
+            report_date="2024-09-30",
+            issuer_name="Debt Investments Type of Investment First Lien Term Loan Interest Rate SOFR + 6.00%",
+            bdc_investment_identifier="verbose-label-residue",
+            fair_value="100",
+        ),
+    ])
+
+    summary, examples = _build_column_drift_packets(holdings, cik="1786108")
+
+    issuer_q3 = summary[
+        summary["column"].eq("issuer_name")
+        & summary["report_date"].eq("2024-09-30")
+    ].iloc[0]
+    assert issuer_q3["status"] == "review"
+    assert issuer_q3["current_dominant_bucket"] == "field_label_text"
+    assert "issuer_name" in set(examples["column"])
+
+
+def test_agent_issue_packets_merge_parsed_source_verbose_cost_and_column_validation_artifacts():
     detail = _detail([{
         "source_row_id": "src-1",
         "output_row_id": "out-1",
@@ -2481,11 +2559,41 @@ def test_agent_issue_packets_merge_parsed_and_source_corrupted_artifacts():
         ),
     ])
     parsed = _build_parsed_field_quality_packets(detail, holdings, cik="1786108")
-    corrupted = _build_source_corrupted_identifier_packets(detail, holdings, cik="1786108")
+    source_verbose = _build_source_verbose_identifier_packets(
+        detail,
+        holdings,
+        parsed_field_quality=parsed,
+        cik="1786108",
+    )
+    cost_outliers = _build_cost_fv_outlier_packets(pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="Tiny Mark Loan",
+            cost="100",
+            fair_value="100000",
+        )
+    ]), cik="1786108")
+    column_issues = pd.DataFrame([{
+        "dataset": "private_markets_holdings",
+        "source": "bdc",
+        "cik": "0001786108",
+        "report_date": "2024-12-31",
+        "row_key": "0",
+        "column": "interest_rate",
+        "rule_id": "C201",
+        "severity": "FAIL",
+        "evidence_strength": "STRONG",
+        "status": "OPEN",
+        "action": "REVIEW",
+        "value": "SOFR plus too much text",
+        "message": "interest_rate must be parseable",
+        "evidence": "parse failed",
+    }])
 
     packets = _build_agent_issue_packets(
         parsed_field_quality=parsed,
-        source_corrupted_identifiers=corrupted,
+        source_verbose_identifiers=source_verbose,
+        cost_fv_outliers=cost_outliers,
+        column_validation_issues=column_issues,
         holdings_df=holdings,
         cik="1786108",
     )
@@ -2493,8 +2601,13 @@ def test_agent_issue_packets_merge_parsed_and_source_corrupted_artifacts():
     assert list(packets.columns) == AGENT_ISSUE_PACKET_COLUMNS
     assert {
         "WRAP.PARSED_FIELD_CONTAMINATION",
-        "WRAP.SOURCE_CORRUPTED_IDENTIFIER",
+        "WRAP.SOURCE_VERBOSE_IDENTIFIER",
+        "WRAP.COST_FV_RATIO_OUTLIER",
+        "WRAP.PRODUCTION_COLUMN_VALIDATION",
     }.issubset(set(packets["rule_id"]))
+    validation = packets[packets["rule_id"].eq("WRAP.PRODUCTION_COLUMN_VALIDATION")].iloc[0]
+    assert validation["source_rule_id"] == "C201"
+    assert validation["likely_owner"] == "wrapper"
     assert set(packets["packet_type"]) == {"row"}
     assert packets["issue_id"].is_unique
 
@@ -2575,6 +2688,30 @@ def test_agent_cluster_packets_merge_delta_high_fv_and_drift_artifacts():
     }.issubset(set(packets["rule_id"]))
     assert set(packets["packet_type"]) == {"cluster"}
     assert packets["issue_id"].is_unique
+
+
+def test_agent_cluster_packets_include_no_wrapper_rows_summary():
+    oracle_summary = pd.DataFrame([{
+        "cik": "0001786108",
+        "entity_name": "Trinity Capital Inc.",
+        "report_date": "2024-12-31",
+        "oracle_fail_reasons": "no_wrapper_rows",
+    }], columns=ORACLE_SUMMARY_COLUMNS)
+    holdings = pd.DataFrame([_holding(fair_value="5000000")])
+
+    packets = _build_agent_cluster_packets(
+        row_delta_attribution=pd.DataFrame(columns=ROW_DELTA_ATTRIBUTION_COLUMNS),
+        high_fv_unclassified_clusters=pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS),
+        column_drift_summary=pd.DataFrame(columns=COLUMN_DRIFT_SUMMARY_COLUMNS),
+        oracle_summary=oracle_summary,
+        holdings_df=holdings,
+        cik="1786108",
+    )
+
+    assert list(packets.columns) == AGENT_CLUSTER_PACKET_COLUMNS
+    assert len(packets) == 1
+    assert packets.iloc[0]["rule_id"] == "WRAP.NO_WRAPPER_ROWS"
+    assert packets.iloc[0]["representative_rows_path"] == "oracle_summary.csv"
 
 
 def test_agent_verdict_validation_and_summary_promotion_effects():
@@ -2711,6 +2848,25 @@ def test_parsed_field_quality_ignores_clean_rows_and_scopes_to_cik():
     ])
 
     packets = _build_parsed_field_quality_packets(detail, holdings, cik="0001786108")
+
+    assert packets.empty
+    assert list(packets.columns) == PARSED_FIELD_QUALITY_COLUMNS
+
+
+def test_parsed_field_quality_allows_coupon_bearing_instrument_descriptions():
+    detail = _detail([{
+        "cik": "0001786108",
+        "issuer_name": "Mental Healthcare Services",
+        "instrument_description": (
+            "Delayed Draw Term Loan (3M USD TERM SOFR+8.40%), "
+            "12.86% Cash, 8/5/2027"
+        ),
+        "output_wrapper_position_key": "mental healthcare services delayed draw term loan",
+        "output_wrapper_disposition": "debt_position_leaf",
+        "output_fair_value": 1000,
+    }])
+
+    packets = _build_parsed_field_quality_packets(detail, pd.DataFrame(), cik="0001786108")
 
     assert packets.empty
     assert list(packets.columns) == PARSED_FIELD_QUALITY_COLUMNS

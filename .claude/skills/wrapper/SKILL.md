@@ -102,3 +102,6 @@ Read the mode-specific doc for detailed instructions:
 - **Run `--match` before declaring a wrapper production-clean.** A wrapper that passes the unified oracle but has >10% D_fuzzy fallback (J03 fail) produces unstable position IDs across quarters, which corrupts index returns.
 - **Use `matching_diagnostic.{CIK}.csv` to debug high fuzzy rates.** The `key_diff_summary` column shows exactly which tokens differ between begin and end position keys.
 - **Position keys must be issuer-specific.** Generic keys like `"senior secured first lien term loan"` will be rejected by the B1b strong-key filter.
+- **Review C/D/E match quality after J01/J03 stabilization.** Use `match_triage.{CIK}.csv` to identify flagged pairs. Work highest FV first. Prefer wrapper config fixes over per-pair overrides. Each override must have mechanism, evidence, confidence >= 0.70, and residual_risk.
+- **Do not write overrides for issues fixable by wrapper config.** If a volatile position key token causes D_fuzzy fallback, fix `canonical_strip_re` instead of overriding individual pairs.
+- **Override confidence thresholds:** reject requires >= 0.80, force_pair requires >= 0.85.

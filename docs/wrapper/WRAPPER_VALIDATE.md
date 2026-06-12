@@ -175,6 +175,35 @@ Use this to iterate on `canonical_strip_re` and `prefix_rules`. If J03 shows hig
 - Keys must be unique within each CIK/source/report quarter -- repeated keys cannot form B1b edges
 - Placeholder keys (`"nc nc"`, `"lass units"`, etc.) are automatically rejected
 
+### 3c-2. Position match quality review (C/D/E pair triage)
+
+After trial matching stabilizes J01/J03, review C/D/E match quality:
+
+```bash
+python scripts/rebuild_unified_cik_trial.py --cik {CIK} --match
+```
+
+Inspect `match_triage.{CIK}.csv` in the trial directory. Each C/D/E pair
+has boolean flag columns indicating potential issues:
+
+- `flag_classification_flip`: begin/end index_classification differ
+- `flag_subtype_mismatch`: instrument sub-type differs (term_loan vs revolver)
+- `flag_maturity_gap`: maturity dates >365 days apart
+- `flag_fv_ratio_extreme`: FV ratio >10x
+- `flag_rate_discontinuity`: interest rate differs >5 pct pts
+
+For each flagged pair (work highest FV first):
+
+1. **Determine root cause**: Is this a wrapper issue, a matcher issue, or correct?
+2. **Wrapper-fixable**: Update `canonical_strip_re`, `pipe_field_map`, or
+   `prefix_rules` in the wrapper JSON, re-run trial, verify the pair now
+   matches at a higher tier or the flag resolves.
+3. **Override needed**: Write to `data/overrides/position_match_overrides/{CIK}.json`:
+   - `reject`: Remove the pair (position becomes unmatched)
+   - `force_pair`: Replace the end-side assignment
+4. **Correct-despite-flag**: No action needed; the heuristic is a false positive.
+5. Re-run `--match` to verify fixes took effect.
+
 ### 3d. Production promotion gate (full rebuild)
 
 Before labeling a wrapper `production_clean`, run the full production rebuild and oracle:

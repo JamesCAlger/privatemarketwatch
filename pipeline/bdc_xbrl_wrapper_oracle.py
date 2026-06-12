@@ -39,6 +39,7 @@ from pipeline.config import (
     SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
+from pipeline.column_validation import validate_column_contracts
 from pipeline.bdc_xbrl_oracle_exceptions import (
     ORACLE_EXCEPTION_SCHEMA_VERSION,
     load_bdc_xbrl_oracle_exceptions,
@@ -311,9 +312,13 @@ _AGENT_VERDICT_ALLOWED_OWNERS = frozenset({
 _WRAPPER_SOFT_PACKET_RULE_IDS = {
     "WRAP.PARSED_FIELD_CONTAMINATION",
     "WRAP.SOURCE_CORRUPTED_IDENTIFIER",
+    "WRAP.SOURCE_VERBOSE_IDENTIFIER",
+    "WRAP.COST_FV_RATIO_OUTLIER",
+    "WRAP.PRODUCTION_COLUMN_VALIDATION",
     "WRAP.ROW_DELTA_ATTRIBUTION",
     "WRAP.HIGH_FV_UNCLASSIFIED_CLUSTER",
     "WRAP.COLUMN_DISTRIBUTION_DRIFT",
+    "WRAP.NO_WRAPPER_ROWS",
 }
 _MATERIALITY_P1_FV_ABS = 5_000_000.0
 _MATERIALITY_P1_FV_PCT = 0.0025
@@ -324,18 +329,33 @@ _MATERIALITY_P1_ROW_PCT = 0.02
 _MATERIALITY_P0_ROW_ABS = 15
 _MATERIALITY_P0_ROW_PCT = 0.05
 _DRIFT_COLUMNS = [
+    "issuer_name",
+    "instrument_description",
+    "bdc_investment_identifier",
+    "position_key",
     "interest_rate",
     "basis_spread",
     "pik_rate",
     "maturity_date",
+    "coupon_type",
+    "reference_rate_type",
     "index_classification",
     "asset_category",
     "exposure_type",
+    "asset_class",
 ]
+_DRIFT_TEXT_COLUMNS = {
+    "issuer_name",
+    "instrument_description",
+    "bdc_investment_identifier",
+    "position_key",
+}
 _DRIFT_BASELINE_QUARTERS = 4
 _DRIFT_MIN_BASELINE_QUARTERS = 2
 _DRIFT_JS_THRESHOLD = 0.25
 _DRIFT_NEW_BUCKET_SHARE_THRESHOLD = 0.20
+_DRIFT_TEXT_JS_THRESHOLD = 0.12
+_DRIFT_TEXT_NEW_BUCKET_SHARE_THRESHOLD = 0.10
 
 _PARSED_FIELD_HIERARCHY_PATTERN = re.compile(
     r"non[-\s]?controlled|non[-\s]?affiliated|controlled investments?|"
@@ -351,6 +371,20 @@ _PARSED_FIELD_RATE_DATE_PATTERN = re.compile(
 _PARSED_FIELD_EXPLICIT_RATE_DATE_PATTERN = re.compile(
     r"interest rate|reference rate|current coupon|maturity date|"
     r"acquisition date|initial acquisition date",
+    re.IGNORECASE,
+)
+_PARSED_FIELD_LABEL_PATTERN = re.compile(
+    r"type of investment|investment type|investment date|initial acquisition date|"
+    r"maturity date|maturity/dissolution date|interest rate|reference rate|"
+    r"current coupon|acquisition date|expiration date|cost|fair value",
+    re.IGNORECASE,
+)
+_PARSED_SOURCE_SECTION_PATTERN = re.compile(
+    r"non[-\s]?controlled|non[-\s]?affiliated|controlled investments?|"
+    r"affiliated investments?|debt investments?|equity investments?|"
+    r"short[-\s]?term investments?|cash equivalents?|senior loans?\s+\d|"
+    r"portfolio company debt securities|portfolio company equity investments|"
+    r"portfolio company warrant investments",
     re.IGNORECASE,
 )
 _PARSED_FIELD_PCT_PATTERN = re.compile(r"\b\d+(?:\.\d+)?%")
@@ -1262,13 +1296,61 @@ def _build_high_fv_unclassified_clusters(
     ).reset_index(drop=True)
 
 
-def _build_source_corrupted_identifier_packets(
+def _detail_row_is_remaining_blocker(row: pd.Series) -> bool:
+    status = str(row.get("status", "") or "").lower()
+    calibrated = str(row.get("calibrated_status", "") or "").lower()
+    residual = str(row.get("residual_class", "") or "").lower()
+    blocking_issue = row.get("blocking_issue", False)
+    if isinstance(blocking_issue, str):
+        blocking = blocking_issue.strip().lower() in {"true", "1", "yes"}
+    else:
+        blocking = bool(blocking_issue)
+    return (
+        blocking
+        or "blocking" in calibrated
+        or status in {"missing_from_pipeline", "source_only"}
+        or residual.startswith("blocking")
+    )
+
+
+def _source_identifier_is_verbose(raw_identifier: str) -> bool:
+    token_count = len(_SOURCE_CORRUPTED_FIELD_TOKEN_PATTERN.findall(raw_identifier))
+    hierarchy_pct = bool(_SOURCE_CORRUPTED_HIERARCHY_PCT_PATTERN.search(raw_identifier))
+    very_long_with_fields = len(raw_identifier) >= 180 and token_count >= 1
+    return token_count >= 2 or hierarchy_pct or very_long_with_fields
+
+
+def _output_has_field_label_residue(row: pd.Series) -> bool:
+    output_blob = " ".join(
+        str(row.get(col, "") or "")
+        for col in [
+            "issuer_name",
+            "instrument_description",
+            "output_wrapper_position_key",
+            "bdc_investment_identifier",
+        ]
+    )
+    if not output_blob.strip():
+        return False
+    return bool(
+        _PARSED_FIELD_LABEL_PATTERN.search(output_blob)
+        or _PARSED_SOURCE_SECTION_PATTERN.search(output_blob)
+    )
+
+
+def _build_source_verbose_identifier_packets(
     detail_df: pd.DataFrame,
     holdings_df: pd.DataFrame | None,
     *,
+    parsed_field_quality: pd.DataFrame | None = None,
     cik: str = TRINITY_CIK,
 ) -> pd.DataFrame:
-    """Flag source identifiers that look like concatenated field/hierarchy text."""
+    """Flag verbose source identifiers only when they coincide with output risk.
+
+    Verbose raw source identifiers are common in some filings and are not enough
+    to prove wrapper failure. This packet fires when verbose source text appears
+    with output contamination or an unresolved blocker.
+    """
     detail = _ensure_detail_columns(detail_df)
     if detail.empty:
         return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
@@ -1277,15 +1359,24 @@ def _build_source_corrupted_identifier_packets(
     if detail.empty:
         return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
     quarter_totals = _quarter_totals(holdings_df, cik=cik_norm)
+    parsed_source_ids: set[str] = set()
+    parsed_output_ids: set[str] = set()
+    if parsed_field_quality is not None and not parsed_field_quality.empty:
+        parsed_source_ids = set(parsed_field_quality.get("source_row_id", pd.Series(dtype=str)).fillna("").astype(str))
+        parsed_output_ids = set(parsed_field_quality.get("output_row_id", pd.Series(dtype=str)).fillna("").astype(str))
     records: list[dict[str, Any]] = []
     for idx, row in detail.iterrows():
         raw_identifier = str(row.get("raw_investment_identifier", "") or "")
         if not raw_identifier.strip():
             continue
-        token_count = len(_SOURCE_CORRUPTED_FIELD_TOKEN_PATTERN.findall(raw_identifier))
-        hierarchy_pct = bool(_SOURCE_CORRUPTED_HIERARCHY_PCT_PATTERN.search(raw_identifier))
-        very_long_with_fields = len(raw_identifier) >= 180 and token_count >= 1
-        if token_count < 2 and not hierarchy_pct and not very_long_with_fields:
+        if not _source_identifier_is_verbose(raw_identifier):
+            continue
+        source_row_id = str(row.get("source_row_id", "") or "")
+        output_row_id = str(row.get("output_row_id", "") or "")
+        parsed_hit = source_row_id in parsed_source_ids or output_row_id in parsed_output_ids
+        output_residue = _output_has_field_label_residue(row) or parsed_hit
+        remaining_blocker = _detail_row_is_remaining_blocker(row)
+        if not output_residue and not remaining_blocker:
             continue
         report_date = str(row.get("report_date", "") or "")
         total_fv, total_rows = _totals_for_report(
@@ -1299,39 +1390,60 @@ def _build_source_corrupted_identifier_packets(
             affected_rows=1,
             total_rows=total_rows,
         )
+        owner = "wrapper" if output_residue else "source_data"
+        evidence = (
+            "verbose source identifier coincides with output field-label residue"
+            if output_residue
+            else "verbose source identifier coincides with unresolved source blocker"
+        )
         records.append({
             "issue_id": _packet_issue_id(
                 cik=cik_norm,
                 report_date=report_date,
-                rule_id="WRAP.SOURCE_CORRUPTED_IDENTIFIER",
+                rule_id="WRAP.SOURCE_VERBOSE_IDENTIFIER",
                 unique=row.get("source_row_id", idx),
             ),
-            "rule_id": "WRAP.SOURCE_CORRUPTED_IDENTIFIER",
-            "source_rule_id": "",
+            "rule_id": "WRAP.SOURCE_VERBOSE_IDENTIFIER",
+            "source_rule_id": "WRAP.SOURCE_CORRUPTED_IDENTIFIER",
             "packet_type": "row",
             "severity": "review" if materiality["materiality_tier"] in {"P0", "P1"} else "warn",
             "materiality_tier": materiality["materiality_tier"],
-            "likely_owner": "source_data",
+            "likely_owner": owner,
             "review_status": "review",
             "cik": cik_norm,
             "entity_name": str(row.get("entity_name", "") or ""),
             "report_date": report_date,
             "accession_number": str(row.get("accession_number", "") or ""),
-            "source_row_id": str(row.get("source_row_id", "") or ""),
-            "output_row_id": str(row.get("output_row_id", "") or ""),
+            "source_row_id": source_row_id,
+            "output_row_id": output_row_id,
             "production_column": "bdc_investment_identifier",
             "source_value": raw_identifier,
             "output_value": str(row.get("issuer_name", "") or ""),
             **materiality,
-            "evidence": "source identifier contains hierarchy/rate/date field tokens",
+            "evidence": evidence,
             "recommended_action": (
-                "Review whether the source row is corrupted source text, a wrapper parser "
-                "boundary error, or a valid verbose identifier before changing output."
+                "Review row against source filing; if output is contaminated, add a scoped "
+                "wrapper parse rule, otherwise record the verbose source identifier as a false positive."
             ),
         })
     if not records:
         return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
     return pd.DataFrame(records, columns=AGENT_ISSUE_PACKET_COLUMNS)
+
+
+def _build_source_corrupted_identifier_packets(
+    detail_df: pd.DataFrame,
+    holdings_df: pd.DataFrame | None,
+    *,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    """Compatibility alias for the renamed source-verbose identifier packet."""
+    return _build_source_verbose_identifier_packets(
+        detail_df,
+        holdings_df,
+        parsed_field_quality=None,
+        cik=cik,
+    )
 
 
 def _bucket_distribution(series: pd.Series) -> dict[str, float]:
@@ -1405,12 +1517,43 @@ def _classification_bucket(value: Any) -> str:
     return text.upper() if text else "blank"
 
 
+def _text_shape_bucket(value: Any) -> str:
+    text = str(value or "").strip()
+    if not text or text.lower() in {"nan", "none"}:
+        return "blank"
+    lower = text.lower()
+    if _PARSED_FIELD_LABEL_PATTERN.search(text):
+        return "field_label_text"
+    if _PARSED_SOURCE_SECTION_PATTERN.search(text) and _PARSED_FIELD_PCT_PATTERN.search(text):
+        return "hierarchy_pct_text"
+    if re.fullmatch(r"[A-Z0-9\-./ ]+", text) and any(ch.isdigit() for ch in text):
+        return "identifier_like"
+    if len(text) >= 180:
+        return "long_text"
+    if any(token in lower for token in ["sofr", "libor", "prime", "pik"]):
+        return "rate_embedded_text"
+    token_count = len(_PARSED_POSITION_TOKEN_PATTERN.findall(lower))
+    if token_count <= 2:
+        return "short_text"
+    if token_count <= 8:
+        return "normal_text"
+    return "verbose_text"
+
+
 def _column_drift_bucket(column: str, value: Any) -> str:
     if column in {"interest_rate", "basis_spread", "pik_rate"}:
         return _rate_bucket(value)
     if column == "maturity_date":
         return _date_bucket(value)
+    if column in _DRIFT_TEXT_COLUMNS:
+        return _text_shape_bucket(value)
     return _classification_bucket(value)
+
+
+def _drift_thresholds_for_column(column: str) -> tuple[float, float]:
+    if column in _DRIFT_TEXT_COLUMNS:
+        return _DRIFT_TEXT_JS_THRESHOLD, _DRIFT_TEXT_NEW_BUCKET_SHARE_THRESHOLD
+    return _DRIFT_JS_THRESHOLD, _DRIFT_NEW_BUCKET_SHARE_THRESHOLD
 
 
 def _build_column_drift_packets(
@@ -1475,7 +1618,8 @@ def _build_column_drift_packets(
                     sum(share for bucket, share in current_dist.items() if bucket not in baseline_dist),
                     6,
                 )
-                if js >= _DRIFT_JS_THRESHOLD or new_bucket_share >= _DRIFT_NEW_BUCKET_SHARE_THRESHOLD:
+                js_threshold, new_bucket_threshold = _drift_thresholds_for_column(column)
+                if js >= js_threshold or new_bucket_share >= new_bucket_threshold:
                     status = "review"
                     severity = "review"
                 else:
@@ -1535,8 +1679,11 @@ def _build_column_drift_packets(
 def _build_agent_issue_packets(
     *,
     parsed_field_quality: pd.DataFrame,
-    source_corrupted_identifiers: pd.DataFrame,
-    holdings_df: pd.DataFrame | None,
+    source_corrupted_identifiers: pd.DataFrame | None = None,
+    source_verbose_identifiers: pd.DataFrame | None = None,
+    cost_fv_outliers: pd.DataFrame | None = None,
+    column_validation_issues: pd.DataFrame | None = None,
+    holdings_df: pd.DataFrame | None = None,
     cik: str = TRINITY_CIK,
 ) -> pd.DataFrame:
     records: list[dict[str, Any]] = []
@@ -1588,8 +1735,89 @@ def _build_agent_issue_packets(
                 "recommended_action": str(row.get("recommended_action", "") or ""),
             })
 
-    if source_corrupted_identifiers is not None and not source_corrupted_identifiers.empty:
-        records.extend(source_corrupted_identifiers.to_dict(orient="records"))
+    source_packets = source_verbose_identifiers
+    if source_packets is None:
+        source_packets = source_corrupted_identifiers
+    if source_packets is not None and not source_packets.empty:
+        records.extend(source_packets.to_dict(orient="records"))
+
+    if cost_fv_outliers is not None and not cost_fv_outliers.empty:
+        records.extend(cost_fv_outliers.to_dict(orient="records"))
+
+    if column_validation_issues is not None and not column_validation_issues.empty:
+        holdings_lookup = (
+            holdings_df.reset_index(drop=True)
+            if holdings_df is not None and not holdings_df.empty
+            else pd.DataFrame()
+        )
+        for idx, row in column_validation_issues.iterrows():
+            report_date = str(row.get("report_date", "") or "")
+            total_fv, total_rows = _totals_for_report(
+                quarter_totals,
+                cik=cik_norm,
+                report_date=report_date,
+            )
+            lookup_row = pd.Series(dtype=object)
+            row_key = pd.to_numeric(pd.Series([row.get("row_key")]), errors="coerce").iloc[0]
+            if pd.notna(row_key) and not holdings_lookup.empty:
+                row_pos = int(row_key)
+                if 0 <= row_pos < len(holdings_lookup):
+                    lookup_row = holdings_lookup.iloc[row_pos]
+            affected_fv = lookup_row.get("fair_value", 0) if not lookup_row.empty else 0
+            materiality = _materiality_metrics(
+                affected_fair_value=affected_fv,
+                total_fair_value=total_fv,
+                affected_rows=1,
+                total_rows=total_rows,
+            )
+            rule_id = str(row.get("rule_id", "") or "")
+            column = str(row.get("column", "") or "")
+            owner = "validation_rule"
+            if column in {
+                "issuer_name",
+                "instrument_description",
+                "bdc_investment_identifier",
+                "interest_rate",
+                "basis_spread",
+                "pik_rate",
+                "maturity_date",
+                "cost",
+                "fair_value",
+            }:
+                owner = "wrapper"
+            elif column in {"index_classification", "asset_category", "asset_class", "exposure_type"}:
+                owner = "classification"
+            severity = str(row.get("severity", "WARN") or "WARN").lower()
+            records.append({
+                "issue_id": _packet_issue_id(
+                    cik=cik_norm,
+                    report_date=report_date,
+                    rule_id="WRAP.PRODUCTION_COLUMN_VALIDATION",
+                    unique=f"{rule_id}-{row.get('row_key', '')}-{idx}",
+                ),
+                "rule_id": "WRAP.PRODUCTION_COLUMN_VALIDATION",
+                "source_rule_id": rule_id,
+                "packet_type": "row",
+                "severity": "review" if severity == "fail" else "warn",
+                "materiality_tier": materiality["materiality_tier"],
+                "likely_owner": owner,
+                "review_status": "review",
+                "cik": cik_norm,
+                "entity_name": str(lookup_row.get("entity_name", "") or ""),
+                "report_date": report_date,
+                "accession_number": str(lookup_row.get("accession_number", "") or ""),
+                "source_row_id": "",
+                "output_row_id": str(row.get("row_key", "") or ""),
+                "production_column": column,
+                "source_value": str(lookup_row.get("bdc_investment_identifier", "") or ""),
+                "output_value": str(row.get("value", "") or ""),
+                **materiality,
+                "evidence": str(row.get("message", "") or row.get("evidence", "") or ""),
+                "recommended_action": (
+                    "Review the production validation issue against source evidence; if true, "
+                    "repair the wrapper or upstream deterministic rule that produced the value."
+                ),
+            })
 
     if not records:
         return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
@@ -1603,12 +1831,62 @@ def _build_agent_cluster_packets(
     row_delta_attribution: pd.DataFrame,
     high_fv_unclassified_clusters: pd.DataFrame,
     column_drift_summary: pd.DataFrame,
-    holdings_df: pd.DataFrame | None,
+    oracle_summary: pd.DataFrame | None = None,
+    holdings_df: pd.DataFrame | None = None,
     cik: str = TRINITY_CIK,
 ) -> pd.DataFrame:
     records: list[dict[str, Any]] = []
     cik_norm = normalize_cik(cik)
     quarter_totals = _quarter_totals(holdings_df, cik=cik_norm)
+
+    if oracle_summary is not None and not oracle_summary.empty:
+        no_rows = oracle_summary[
+            oracle_summary.get("oracle_fail_reasons", pd.Series(dtype=str))
+            .fillna("")
+            .astype(str)
+            .str.contains("no_wrapper_rows", regex=False)
+        ]
+        for idx, row in no_rows.iterrows():
+            report_date = str(row.get("report_date", "") or "")
+            total_fv, total_rows = _totals_for_report(
+                quarter_totals,
+                cik=cik_norm,
+                report_date=report_date,
+            )
+            materiality = _materiality_metrics(
+                affected_fair_value=total_fv,
+                total_fair_value=total_fv,
+                affected_rows=total_rows,
+                total_rows=total_rows,
+            )
+            records.append({
+                "issue_id": _packet_issue_id(
+                    cik=cik_norm,
+                    report_date=report_date,
+                    rule_id="WRAP.NO_WRAPPER_ROWS",
+                    unique=idx,
+                ),
+                "rule_id": "WRAP.NO_WRAPPER_ROWS",
+                "source_rule_id": "no_wrapper_rows",
+                "packet_type": "cluster",
+                "severity": "review",
+                "materiality_tier": materiality["materiality_tier"],
+                "likely_owner": "wrapper",
+                "review_status": "review",
+                "cik": cik_norm,
+                "entity_name": str(row.get("entity_name", "") or ""),
+                "report_date": report_date,
+                "affected_report_dates": report_date,
+                "cluster_key": "no_wrapper_rows",
+                "cluster_label": "wrapper definition produced no wrapper rows",
+                "production_column": "wrapper_disposition",
+                **materiality,
+                "evidence": "wrapper definition exists but no source or output rows received wrapper dispositions",
+                "representative_rows_path": "oracle_summary.csv",
+                "recommended_action": (
+                    "Review wrapper support detection and staging output before treating this CIK as unsupported."
+                ),
+            })
 
     if row_delta_attribution is not None and not row_delta_attribution.empty:
         for idx, row in row_delta_attribution.iterrows():
@@ -1941,23 +2219,44 @@ def _parsed_field_checks_for_value(*, column: str, value: str) -> list[tuple[str
     if not text:
         return []
     checks: list[tuple[str, str]] = []
-    if column in {"issuer_name", "instrument_description", "position_key"}:
+    if column == "instrument_description":
+        token = _pattern_token(_PARSED_FIELD_LABEL_PATTERN, text)
+        if token:
+            issue_type = (
+                "rate_or_date_contamination"
+                if _PARSED_FIELD_EXPLICIT_RATE_DATE_PATTERN.search(token)
+                else "hierarchy_or_metric_contamination"
+            )
+            checks.append((issue_type, token))
+        token = _pattern_token(_PARSED_SOURCE_SECTION_PATTERN, text)
+        if token:
+            checks.append(("hierarchy_or_metric_contamination", token))
+        return checks
+    if column == "issuer_name":
         token = _pattern_token(_PARSED_FIELD_PCT_PATTERN, text)
         if token:
             checks.append(("hierarchy_or_metric_contamination", token))
-    if column in {"issuer_name", "instrument_description", "position_key"}:
         token = _pattern_token(_PARSED_FIELD_HIERARCHY_PATTERN, text)
         if token:
             checks.append(("hierarchy_or_metric_contamination", token))
-    if column == "issuer_name":
         token = _pattern_token(_PARSED_FIELD_RATE_DATE_PATTERN, text)
         if token:
             checks.append(("rate_or_date_contamination", token))
-    elif column in {"instrument_description", "position_key"}:
+    elif column == "position_key":
+        token = _pattern_token(_PARSED_FIELD_LABEL_PATTERN, text)
+        if token:
+            issue_type = (
+                "rate_or_date_contamination"
+                if _PARSED_FIELD_EXPLICIT_RATE_DATE_PATTERN.search(token)
+                else "hierarchy_or_metric_contamination"
+            )
+            checks.append((issue_type, token))
+        token = _pattern_token(_PARSED_FIELD_HIERARCHY_PATTERN, text)
+        if token:
+            checks.append(("hierarchy_or_metric_contamination", token))
         token = _pattern_token(_PARSED_FIELD_EXPLICIT_RATE_DATE_PATTERN, text)
         if token:
             checks.append(("rate_or_date_contamination", token))
-    if column == "position_key":
         tokens = _PARSED_POSITION_TOKEN_PATTERN.findall(text.lower())
         if 0 < len(tokens) < 3:
             checks.append(("low_information_position_key", text))
@@ -3365,6 +3664,103 @@ def _check_cost_fv_outliers(
     return int(((ratio > 100) | (ratio < 0.01)).sum())
 
 
+def _cost_fv_outlier_rows(
+    holdings_df: pd.DataFrame | None,
+    *,
+    cik: str = TRINITY_CIK,
+    report_date: str | None = None,
+) -> pd.DataFrame:
+    if (
+        holdings_df is None
+        or holdings_df.empty
+        or "cost" not in holdings_df.columns
+        or "fair_value" not in holdings_df.columns
+    ):
+        return pd.DataFrame()
+    cik_norm = normalize_cik(cik)
+    h = holdings_df.copy()
+    if "cik" in h.columns:
+        h["cik"] = h["cik"].map(normalize_cik)
+        h = h[h["cik"].eq(cik_norm)].copy()
+    else:
+        h["cik"] = cik_norm
+    if report_date is not None and "report_date" in h.columns:
+        h = h[h["report_date"].astype(str).eq(str(report_date))].copy()
+    if h.empty:
+        return pd.DataFrame()
+    h["_cost_num"] = pd.to_numeric(h["cost"], errors="coerce")
+    h["_fv_num"] = pd.to_numeric(h["fair_value"], errors="coerce")
+    valid = (
+        h["_cost_num"].notna()
+        & h["_fv_num"].notna()
+        & h["_fv_num"].ne(0)
+        & h["_cost_num"].ne(0)
+        & (h["_fv_num"].abs() > 1000)
+    )
+    if not valid.any():
+        return pd.DataFrame()
+    h["_cost_fv_ratio_abs"] = (h["_cost_num"] / h["_fv_num"]).abs()
+    return h[valid & ((h["_cost_fv_ratio_abs"] > 100) | (h["_cost_fv_ratio_abs"] < 0.01))].copy()
+
+
+def _build_cost_fv_outlier_packets(
+    holdings_df: pd.DataFrame | None,
+    *,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    rows = _cost_fv_outlier_rows(holdings_df, cik=cik)
+    if rows.empty:
+        return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
+    cik_norm = normalize_cik(cik)
+    quarter_totals = _quarter_totals(holdings_df, cik=cik_norm)
+    records: list[dict[str, Any]] = []
+    for idx, row in rows.iterrows():
+        report_date = str(row.get("report_date", "") or "")
+        total_fv, total_rows = _totals_for_report(
+            quarter_totals,
+            cik=cik_norm,
+            report_date=report_date,
+        )
+        materiality = _materiality_metrics(
+            affected_fair_value=row.get("fair_value", 0),
+            total_fair_value=total_fv,
+            affected_rows=1,
+            total_rows=total_rows,
+        )
+        ratio = _safe_float(row.get("_cost_fv_ratio_abs", 0))
+        records.append({
+            "issue_id": _packet_issue_id(
+                cik=cik_norm,
+                report_date=report_date,
+                rule_id="WRAP.COST_FV_RATIO_OUTLIER",
+                unique=f"{row.get('bdc_investment_identifier', '')}-{idx}",
+            ),
+            "rule_id": "WRAP.COST_FV_RATIO_OUTLIER",
+            "source_rule_id": "cost_fv_ratio_outliers",
+            "packet_type": "row",
+            "severity": "review" if materiality["materiality_tier"] in {"P0", "P1"} else "warn",
+            "materiality_tier": materiality["materiality_tier"],
+            "likely_owner": "validation_rule",
+            "review_status": "review",
+            "cik": cik_norm,
+            "entity_name": str(row.get("entity_name", "") or ""),
+            "report_date": report_date,
+            "accession_number": str(row.get("accession_number", "") or ""),
+            "source_row_id": "",
+            "output_row_id": "",
+            "production_column": "cost|fair_value",
+            "source_value": str(row.get("bdc_investment_identifier", "") or ""),
+            "output_value": f"cost={row.get('cost', '')}; fair_value={row.get('fair_value', '')}; ratio={ratio:.6g}",
+            **materiality,
+            "evidence": "cost/fair-value ratio is outside 0.01x to 100x after excluding nominal FV positions",
+            "recommended_action": (
+                "Review whether this is a real position economics issue, filing scale issue, "
+                "or wrapper parse error before changing output."
+            ),
+        })
+    return pd.DataFrame(records, columns=AGENT_ISSUE_PACKET_COLUMNS)
+
+
 # ---------------------------------------------------------------------------
 # Gap #3: Concept/dimension drift detection
 # ---------------------------------------------------------------------------
@@ -3571,6 +3967,8 @@ def build_wrapper_oracle_outputs(
 
     # Structural check: wrapper definition exists but has no archetypes
     wrapper_def = load_wrapper_definition(cik_norm)
+    wrapper_json_exists = (OVERRIDES_DIR / "bdc_xbrl_wrappers" / f"{cik_norm}.json").exists()
+    has_wrapper_definition = wrapper_def is not None or wrapper_json_exists
     wrapper_no_archetypes = (
         wrapper_def is not None and len(wrapper_def.archetypes) == 0
     )
@@ -3609,7 +4007,7 @@ def build_wrapper_oracle_outputs(
             or unclassified_prefix.loc[group_index].any()
         )
         if not has_wrapper_rows:
-            reasons.append("unsupported_wrapper_cik" if not prefixes else "no_wrapper_rows")
+            reasons.append("no_wrapper_rows" if has_wrapper_definition else "unsupported_wrapper_cik")
 
         # Coverage gate: no-archetype structural check
         if wrapper_no_archetypes:
@@ -3640,8 +4038,6 @@ def build_wrapper_oracle_outputs(
         cost_fv_outlier_count = _check_cost_fv_outliers(
             holdings_df, str(report_date)
         )
-        if cost_fv_outlier_count > 0:
-            reasons.append("cost_fv_ratio_outliers")
 
         # Gap 4 extension: per-field magnitude shifts
         rd_str = str(report_date)
@@ -3966,10 +4362,18 @@ def run_wrapper_oracle_trial(
         holdings_df,
         cik=cik_norm,
     )
-    source_corrupted_identifiers = _build_source_corrupted_identifier_packets(
+    source_verbose_identifiers = _build_source_verbose_identifier_packets(
         detail,
         holdings_df,
+        parsed_field_quality=parsed_field_quality,
         cik=cik_norm,
+    )
+    cost_fv_outliers = _build_cost_fv_outlier_packets(
+        holdings_df,
+        cik=cik_norm,
+    )
+    column_validation_issues, _column_validation_metrics = validate_column_contracts(
+        holdings_df if holdings_df is not None else pd.DataFrame()
     )
     row_delta_attribution = _build_row_delta_attribution(
         holdings_df,
@@ -3987,7 +4391,9 @@ def run_wrapper_oracle_trial(
     )
     agent_issue_packets = _build_agent_issue_packets(
         parsed_field_quality=parsed_field_quality,
-        source_corrupted_identifiers=source_corrupted_identifiers,
+        source_verbose_identifiers=source_verbose_identifiers,
+        cost_fv_outliers=cost_fv_outliers,
+        column_validation_issues=column_validation_issues,
         holdings_df=holdings_df,
         cik=cik_norm,
     )
@@ -3995,6 +4401,7 @@ def run_wrapper_oracle_trial(
         row_delta_attribution=row_delta_attribution,
         high_fv_unclassified_clusters=high_fv_unclassified_clusters,
         column_drift_summary=column_drift_summary,
+        oracle_summary=summary,
         holdings_df=holdings_df,
         cik=cik_norm,
     )
@@ -4011,7 +4418,10 @@ def run_wrapper_oracle_trial(
     out_dir.mkdir(parents=True, exist_ok=True)
     detail.to_csv(out_dir / "reconciliation_detail.csv", index=False)
     parsed_field_quality.to_csv(out_dir / "parsed_field_quality.csv", index=False)
-    source_corrupted_identifiers.to_csv(out_dir / "source_corrupted_identifiers.csv", index=False)
+    source_verbose_identifiers.to_csv(out_dir / "source_verbose_identifiers.csv", index=False)
+    source_verbose_identifiers.to_csv(out_dir / "source_corrupted_identifiers.csv", index=False)
+    cost_fv_outliers.to_csv(out_dir / "cost_fv_ratio_outliers.csv", index=False)
+    column_validation_issues.to_csv(out_dir / "column_validation_issues.csv", index=False)
     row_delta_attribution.to_csv(out_dir / "row_delta_attribution.csv", index=False)
     high_fv_unclassified_clusters.to_csv(
         out_dir / "high_fv_unclassified_clusters.csv",

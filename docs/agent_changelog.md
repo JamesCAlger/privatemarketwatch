@@ -6,6 +6,17 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-12 -- Position match override system and triage heuristics
+
+- **New modules:** `pipeline/position_match_overrides.py` (loader + applier), `pipeline/match_triage.py` (5-check heuristic triage)
+- **Override system:** Per-CIK JSON files in `data/overrides/position_match_overrides/` with `reject` and `force_pair` actions. Natural key matching (issuer_name + report_date + FV with 1% tolerance). Same audit contract as other overrides: mechanism, evidence, confidence, residual_risk, created_by, review_id.
+- **JSON schema:** `schemas/position_match_override/override_v1.schema.json`
+- **Triage function:** `triage_match_quality()` applies 5 heuristic checks to C/D/E match pairs: classification_flip, subtype_mismatch, maturity_gap, fv_ratio_extreme, rate_discontinuity. Joins match sides to holdings via DuckDB (same J07 pattern).
+- **Wired into pipeline:** Override application added after tier assembly in `match_positions()`. Triage output added to `rebuild_unified_cik_trial.py --match` (writes `match_triage.{CIK}.csv`).
+- **Config:** Added `POSITION_MATCH_OVERRIDES_DIR` to `pipeline/config.py`
+- **Docs:** Added step 3c-2 to `WRAPPER_VALIDATE.md`, added match review guardrails to `SKILL.md`
+- **Tests:** 14 override tests (loading, validation, reject, force_pair, FV tolerance, CIK scoping, method suffix), 14 triage tests (5 flag checks, no-flag clean, CIK/tier filtering, subtype parser). All 97 existing position matching tests pass.
+
 ### 2026-06-11 -- Plan C: Re-calibration complete (weighted error rate 4.2% -> 2.0%)
 
 - **Rebuilt outputs** with Plans A+B fixes: 794,797 unified holdings rows, 511,482 position match pairs.

@@ -259,6 +259,28 @@ def main(argv: list[str] | None = None) -> int:
         else:
             logger.info("No D_fuzzy matches to diagnose")
 
+        # Match quality triage (C/D/E pair heuristic flags)
+        from pipeline.match_triage import triage_match_quality
+
+        triage_df = triage_match_quality(matches_df, trial_df, cik=cik)
+        if not triage_df.empty:
+            triage_path = trial_dir / f"match_triage.{cik}.csv"
+            triage_df.to_csv(triage_path, index=False)
+            n_flagged = int((triage_df["triage_flags"] > 0).sum())
+            total_triaged = len(triage_df)
+            logger.info(
+                "Match triage: %d of %d C/D/E pairs flagged (%.1f%%)",
+                n_flagged,
+                total_triaged,
+                100 * n_flagged / max(total_triaged, 1),
+            )
+            for flag_col in [c for c in triage_df.columns if c.startswith("flag_")]:
+                n = int(triage_df[flag_col].sum())
+                if n > 0:
+                    logger.info("  %s: %d", flag_col, n)
+        else:
+            logger.info("No C/D/E matches to triage")
+
     logger.info("Trial rebuild complete for CIK %s", cik)
     return 0
 
