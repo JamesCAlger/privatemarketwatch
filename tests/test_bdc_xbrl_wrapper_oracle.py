@@ -5,17 +5,37 @@ import pandas as pd
 import pytest
 
 from pipeline.bdc_xbrl_wrapper_oracle import (
+    AGENT_CLUSTER_PACKET_COLUMNS,
+    AGENT_ISSUE_PACKET_COLUMNS,
+    AGENT_VERDICT_SUMMARY_COLUMNS,
     BASELINE_COMPARISON_COLUMNS,
+    COLUMN_DRIFT_EXAMPLE_COLUMNS,
+    COLUMN_DRIFT_SUMMARY_COLUMNS,
+    HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS,
     ORACLE_SUMMARY_COLUMNS,
+    PARSED_FIELD_QUALITY_COLUMNS,
     PROMOTION_GATE_COLUMNS,
+    ROW_DELTA_ATTRIBUTION_COLUMNS,
     _UNCLASSIFIED_RATE_QOQ_JUMP_THRESHOLD,
+    _append_parsed_field_quality_summary,
+    _build_agent_cluster_packets,
+    _build_agent_issue_packets,
+    _build_column_drift_packets,
+    _build_parsed_field_quality_packets,
+    _build_high_fv_unclassified_clusters,
+    _build_row_delta_attribution,
+    _build_source_corrupted_identifier_packets,
+    _materiality_metrics,
+    build_agent_verdict_summary,
     build_exception_proposals,
     build_residual_wrapper_queue,
     build_wrapper_oracle_outputs,
     build_wrapper_profile_for_cik,
+    run_wrapper_oracle_trial,
     evaluate_promotion_gate,
     run_promotion_trial,
     run_wrapper_queue,
+    validate_agent_verdict_records,
     validate_wrapper_definition_structure,
     validate_wrapper_json_coherence,
 )
@@ -1859,6 +1879,871 @@ def test_magnitude_shift_no_flag_single_quarter():
 
     assert summary.iloc[0]["fv_magnitude_shift"] == ""
     assert "fv_magnitude_shift_detected" not in str(summary.iloc[0]["oracle_fail_reasons"])
+
+
+# ---------------------------------------------------------------------------
+# Row-delta attribution packets
+# ---------------------------------------------------------------------------
+
+
+def _holding(**overrides):
+    row = {
+        "cik": "0001786108",
+        "entity_name": "Trinity Capital Inc.",
+        "source": "bdc",
+        "report_date": "2024-12-31",
+        "accession_number": "0001786108-25-000001",
+        "bdc_investment_identifier": "Jackson Paper Initial Term Loan",
+        "issuer_name": "Jackson Paper Manufacturing Company",
+        "instrument_description": "Initial Term Loan",
+        "position_key": "jackson paper initial term loan",
+        "fair_value": "1000",
+        "cost": "950",
+        "principal_amount": "1000",
+        "interest_rate": "10.0",
+        "basis_spread": "5.0",
+        "pik_rate": "",
+        "index_classification": "DIRECT_LENDING",
+        "asset_class": "PRIVATE_CREDIT",
+        "exposure_type": "DIRECT",
+        "asset_category": "LOAN",
+        "issuer_category": "CORPORATE",
+    }
+    row.update(overrides)
+    return row
+
+
+def test_materiality_metrics_uses_fv_row_and_repeated_quarter_tiers():
+    p0_fv = _materiality_metrics(
+        affected_fair_value=30_000_000,
+        total_fair_value=1_000_000_000,
+        affected_rows=1,
+        total_rows=100,
+    )
+    p1_fv = _materiality_metrics(
+        affected_fair_value=6_000_000,
+        total_fair_value=1_000_000_000,
+        affected_rows=1,
+        total_rows=100,
+    )
+    p1_rows = _materiality_metrics(
+        affected_fair_value=0,
+        total_fair_value=1_000_000_000,
+        affected_rows=5,
+        total_rows=100,
+    )
+    p0_rows = _materiality_metrics(
+        affected_fair_value=0,
+        total_fair_value=1_000_000_000,
+        affected_rows=15,
+        total_rows=100,
+    )
+    repeated = _materiality_metrics(
+        affected_fair_value=1,
+        total_fair_value=1_000_000_000,
+        affected_rows=1,
+        total_rows=100,
+        quarter_count=2,
+    )
+
+    assert p0_fv["materiality_tier"] == "P0"
+    assert p1_fv["materiality_tier"] == "P1"
+    assert p1_rows["materiality_tier"] == "P1"
+    assert p0_rows["materiality_tier"] == "P0"
+    assert repeated["materiality_tier"] == "P1"
+
+
+def test_row_delta_attribution_empty_when_trial_matches_production():
+    holdings = pd.DataFrame([_holding()])
+
+    deltas = _build_row_delta_attribution(holdings, holdings, cik="1786108")
+
+    assert deltas.empty
+    assert list(deltas.columns) == ROW_DELTA_ATTRIBUTION_COLUMNS
+
+
+def test_row_delta_attribution_scopes_to_target_cik():
+    trial = pd.DataFrame([_holding()])
+    production = pd.DataFrame([
+        _holding(),
+        _holding(
+            cik="0000000001",
+            bdc_investment_identifier="Other Loan",
+            issuer_name="Other Issuer",
+            position_key="other loan",
+        ),
+    ])
+
+    deltas = _build_row_delta_attribution(trial, production, cik="0001786108")
+
+    assert deltas.empty
+
+
+def test_row_delta_attribution_flags_added_and_removed_position_rows():
+    production = pd.DataFrame([_holding()])
+    trial = pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="New Borrower Term Loan",
+            issuer_name="New Borrower LLC",
+            position_key="new borrower term loan",
+            fair_value="2000",
+        )
+    ])
+
+    deltas = _build_row_delta_attribution(trial, production, cik="0001786108")
+
+    by_type = set(deltas["delta_type"])
+    assert "added_position_leaf" in by_type
+    assert "removed_position_leaf" in by_type
+    assert set(deltas["review_status"]) == {"review"}
+
+
+def test_row_delta_attribution_classifies_removed_non_private_and_aggregate_rows():
+    production = pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="Goldman Sachs Liquidity Fund",
+            issuer_name="Goldman Sachs Liquidity Fund",
+            position_key="goldman sachs liquidity fund",
+            exposure_type="LIQUID",
+            index_classification="CASH",
+        ),
+        _holding(
+            bdc_investment_identifier="Total Debt Investments",
+            issuer_name="Total Debt Investments",
+            instrument_description="",
+            position_key="total debt investments",
+        ),
+    ])
+    trial = pd.DataFrame(columns=production.columns)
+
+    deltas = _build_row_delta_attribution(trial, production, cik="0001786108")
+
+    assert set(deltas["delta_type"]) == {"removed_non_private", "removed_aggregate"}
+    assert set(deltas["review_status"]) == {"info"}
+
+
+def test_row_delta_attribution_reports_parsed_and_classification_changes():
+    production = pd.DataFrame([_holding()])
+    trial = pd.DataFrame([
+        _holding(
+            issuer_name="Jackson Paper Manufacturing Co.",
+            instrument_description="First Lien Initial Term Loan",
+            position_key="jackson paper first lien initial term loan",
+            index_classification="UNCLASSIFIED",
+        )
+    ])
+
+    deltas = _build_row_delta_attribution(trial, production, cik="0001786108")
+
+    assert {
+        "changed_issuer_name",
+        "changed_instrument_description",
+        "changed_position_key",
+        "changed_index_classification",
+    }.issubset(set(deltas["delta_type"]))
+    classification = deltas[deltas["delta_type"] == "changed_index_classification"].iloc[0]
+    assert "index_classification" in classification["changed_columns"]
+
+
+def test_row_delta_attribution_numeric_tolerance():
+    production = pd.DataFrame([_holding(fair_value="1000.00", interest_rate="10.0")])
+    tiny_change = pd.DataFrame([_holding(fair_value="1000.05", interest_rate="10.0")])
+    material_change = pd.DataFrame([_holding(fair_value="1000.05", interest_rate="10.5")])
+
+    tiny_deltas = _build_row_delta_attribution(tiny_change, production, cik="0001786108")
+    material_deltas = _build_row_delta_attribution(material_change, production, cik="0001786108")
+
+    assert tiny_deltas.empty
+    numeric = material_deltas[material_deltas["delta_type"] == "changed_numeric_value"].iloc[0]
+    assert numeric["changed_columns"] == "interest_rate"
+
+
+def test_row_delta_attribution_trial_writes_artifact(tmp_path):
+    trial_file = tmp_path / "trial_holdings.csv"
+    pd.DataFrame([
+        _holding(
+            cik="0000000002",
+            bdc_investment_identifier="New Trial Loan",
+            issuer_name="New Trial Borrower LLC",
+            position_key="new trial borrower term loan",
+        )
+    ]).to_csv(trial_file, index=False)
+    production = pd.DataFrame([
+        _holding(
+            cik="0000000002",
+            bdc_investment_identifier="Old Production Loan",
+            issuer_name="Old Production Borrower LLC",
+            position_key="old production borrower term loan",
+        )
+    ])
+
+    empty_detail = pd.DataFrame(columns=DETAIL_COLUMNS)
+    empty_summary = pd.DataFrame(columns=ORACLE_SUMMARY_COLUMNS)
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._load_cached_source_facts_for_cik",
+        return_value=pd.DataFrame(),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._load_current_production_bdc_holdings_for_cik",
+        return_value=production,
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.BDC_HOLDINGS_FILE",
+        tmp_path / "missing_bdc_holdings.csv",
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._wrapper_position_keys",
+        return_value=set(),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.reconcile_bdc_source_to_holdings",
+        return_value=(empty_detail, {}),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.build_wrapper_oracle_outputs",
+        return_value=(
+            empty_summary,
+            pd.DataFrame(columns=DETAIL_COLUMNS),
+            pd.DataFrame(columns=DETAIL_COLUMNS),
+            pd.DataFrame(),
+        ),
+    ):
+        run_wrapper_oracle_trial(
+            cik="0000000002",
+            holdings_file=trial_file,
+            output_dir=tmp_path,
+        )
+
+    written = pd.read_csv(tmp_path / "row_delta_attribution.csv")
+    assert list(written.columns) == ROW_DELTA_ATTRIBUTION_COLUMNS
+    assert set(written["delta_type"]) == {"added_position_leaf", "removed_position_leaf"}
+
+
+# ---------------------------------------------------------------------------
+# High-FV unclassified cluster packets
+# ---------------------------------------------------------------------------
+
+
+def test_high_fv_unclassified_clusters_empty_without_threshold():
+    wrapper = WrapperDefinition(
+        cik="0001786108",
+        entity_name="Test BDC",
+        version=1,
+        archetypes=(
+            Archetype(
+                name="debt",
+                description="Debt instruments",
+                keywords=("term loan",),
+                keyword_mode="any",
+                field_signatures=(),
+            ),
+        ),
+    )
+    holdings = pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="Apollo Co-Investment Program",
+            issuer_name="Apollo Co-Investment Program",
+            instrument_description="",
+            fair_value="1000",
+        )
+    ])
+
+    clusters = _build_high_fv_unclassified_clusters(holdings, wrapper, cik="0001786108")
+
+    assert clusters.empty
+    assert list(clusters.columns) == HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS
+
+
+def test_high_fv_unclassified_clusters_empty_below_threshold():
+    wrapper = _make_wrapper(max_fv_pct=0.50)
+    holdings = pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="Acme Corp Term Loan",
+            issuer_name="Acme Corp",
+            instrument_description="Term Loan",
+            fair_value="900",
+        ),
+        _holding(
+            bdc_investment_identifier="Apollo Co-Investment Program",
+            issuer_name="Apollo Co-Investment Program",
+            instrument_description="",
+            fair_value="100",
+        ),
+    ])
+
+    clusters = _build_high_fv_unclassified_clusters(holdings, wrapper, cik="0001786108")
+
+    assert clusters.empty
+    assert list(clusters.columns) == HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS
+
+
+def test_high_fv_unclassified_clusters_groups_repeated_high_fv_labels():
+    wrapper = _make_wrapper(max_fv_pct=0.10)
+    holdings = pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="Acme Corp Term Loan",
+            issuer_name="Acme Corp",
+            instrument_description="Term Loan",
+            fair_value="100",
+        ),
+        _holding(
+            bdc_investment_identifier="Apollo Co-Investment Program LP Interest A",
+            issuer_name="Apollo Co-Investment Program",
+            instrument_description="LP Interest",
+            position_key="apollo co investment program lp interest a",
+            fair_value="600",
+            index_classification="PRIVATE_CREDIT_FUND",
+            asset_category="FUND",
+            exposure_type="FUND",
+        ),
+        _holding(
+            bdc_investment_identifier="Apollo Co-Investment Program LP Interest B",
+            issuer_name="Apollo Co-Investment Program",
+            instrument_description="LP Interest",
+            position_key="apollo co investment program lp interest b",
+            fair_value="300",
+            index_classification="PRIVATE_CREDIT_FUND",
+            asset_category="FUND",
+            exposure_type="FUND",
+        ),
+    ])
+
+    clusters = _build_high_fv_unclassified_clusters(holdings, wrapper, cik="0001786108")
+
+    assert list(clusters.columns) == HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS
+    assert len(clusters) == 1
+    row = clusters.iloc[0]
+    assert row["cluster_label"] == "Apollo Co-Investment Program"
+    assert row["affected_report_dates"] == "2024-12-31"
+    assert row["quarter_count"] == 1
+    assert row["row_count"] == 2
+    assert row["fair_value_abs_sum"] == 900.0
+    assert row["fair_value_share"] == 0.9
+    assert row["max_quarter_fair_value_share"] == 0.9
+    assert row["source_family_guess"] == "fund"
+    assert row["suggested_wrapper_family"] == "fund"
+    assert row["output_asset_category"] == "FUND"
+    assert row["owner"] == "wrapper"
+    assert row["review_status"] == "review"
+
+
+def test_high_fv_unclassified_clusters_excludes_classified_and_wrapper_family_rows():
+    wrapper = _make_wrapper(max_fv_pct=0.10)
+    holdings = pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="Acme Corp Term Loan",
+            issuer_name="Acme Corp",
+            instrument_description="Term Loan",
+            fair_value="100",
+        ),
+        _holding(
+            bdc_investment_identifier="Apex Service Partners LLC 3",
+            issuer_name="Apex Service Partners LLC",
+            instrument_description="",
+            position_key="apex service partners llc 3",
+            wrapper_family="debt",
+            wrapper_disposition="debt_position_leaf",
+            fair_value="900",
+        ),
+    ])
+
+    clusters = _build_high_fv_unclassified_clusters(holdings, wrapper, cik="0001786108")
+
+    assert clusters.empty
+    assert list(clusters.columns) == HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS
+
+
+def test_high_fv_unclassified_clusters_scope_and_multi_quarter_summary():
+    wrapper = _make_wrapper(max_fv_pct=0.10)
+    holdings = pd.DataFrame([
+        _holding(
+            report_date="2024-09-30",
+            bdc_investment_identifier="Acme Corp Term Loan",
+            issuer_name="Acme Corp",
+            instrument_description="Term Loan",
+            fair_value="100",
+        ),
+        _holding(
+            report_date="2024-09-30",
+            bdc_investment_identifier="Apollo Co-Investment Program LP Interest",
+            issuer_name="Apollo Co-Investment Program",
+            instrument_description="LP Interest",
+            position_key="apollo co investment program lp interest q3",
+            fair_value="400",
+        ),
+        _holding(
+            report_date="2024-12-31",
+            bdc_investment_identifier="Acme Corp Term Loan",
+            issuer_name="Acme Corp",
+            instrument_description="Term Loan",
+            fair_value="100",
+        ),
+        _holding(
+            report_date="2024-12-31",
+            bdc_investment_identifier="Apollo Co-Investment Program LP Interest",
+            issuer_name="Apollo Co-Investment Program",
+            instrument_description="LP Interest",
+            position_key="apollo co investment program lp interest q4",
+            fair_value="600",
+        ),
+        _holding(
+            cik="0000000001",
+            report_date="2024-12-31",
+            bdc_investment_identifier="Other Co-Investment Program",
+            issuer_name="Other Co-Investment Program",
+            instrument_description="LP Interest",
+            position_key="other co investment program",
+            fair_value="100000",
+        ),
+    ])
+
+    clusters = _build_high_fv_unclassified_clusters(holdings, wrapper, cik="0001786108")
+
+    assert len(clusters) == 1
+    row = clusters.iloc[0]
+    assert row["cluster_label"] == "Apollo Co-Investment Program"
+    assert row["quarter_count"] == 2
+    assert row["affected_report_dates"] == "2024-09-30|2024-12-31"
+    assert row["fair_value_abs_sum"] == 1000.0
+    assert row["max_quarter_fair_value_share"] == pytest.approx(0.857143)
+
+
+def test_high_fv_unclassified_clusters_trial_writes_artifact(tmp_path):
+    wrapper = WrapperDefinition(
+        cik="0000000002",
+        entity_name="Test BDC",
+        version=1,
+        archetypes=(
+            Archetype(
+                name="debt",
+                description="Debt instruments",
+                keywords=("term loan",),
+                keyword_mode="any",
+                field_signatures=(),
+            ),
+        ),
+        unclassified_rate=UnclassifiedRate(max_pct=0.10, max_fv_pct=0.10),
+    )
+    trial_file = tmp_path / "trial_holdings.csv"
+    pd.DataFrame([
+        _holding(
+            cik="0000000002",
+            bdc_investment_identifier="Acme Corp Term Loan",
+            issuer_name="Acme Corp",
+            instrument_description="Term Loan",
+            position_key="acme corp term loan",
+            fair_value="100",
+        ),
+        _holding(
+            cik="0000000002",
+            bdc_investment_identifier="Apollo Co-Investment Program LP Interest",
+            issuer_name="Apollo Co-Investment Program",
+            instrument_description="LP Interest",
+            position_key="apollo co investment program lp interest",
+            fair_value="900",
+            index_classification="PRIVATE_CREDIT_FUND",
+            asset_category="FUND",
+            exposure_type="FUND",
+        ),
+    ]).to_csv(trial_file, index=False)
+
+    empty_detail = pd.DataFrame(columns=DETAIL_COLUMNS)
+    empty_summary = pd.DataFrame(columns=ORACLE_SUMMARY_COLUMNS)
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._load_cached_source_facts_for_cik",
+        return_value=pd.DataFrame(),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._load_current_production_bdc_holdings_for_cik",
+        return_value=pd.DataFrame(),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.BDC_HOLDINGS_FILE",
+        tmp_path / "missing_bdc_holdings.csv",
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._wrapper_position_keys",
+        return_value=set(),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.reconcile_bdc_source_to_holdings",
+        return_value=(empty_detail, {}),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.build_wrapper_oracle_outputs",
+        return_value=(
+            empty_summary,
+            pd.DataFrame(columns=DETAIL_COLUMNS),
+            pd.DataFrame(columns=DETAIL_COLUMNS),
+            pd.DataFrame(),
+        ),
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=wrapper,
+    ):
+        run_wrapper_oracle_trial(
+            cik="0000000002",
+            holdings_file=trial_file,
+            output_dir=tmp_path,
+        )
+
+    written = pd.read_csv(tmp_path / "high_fv_unclassified_clusters.csv")
+    assert list(written.columns) == HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS
+    assert len(written) == 1
+    assert written.iloc[0]["cluster_label"] == "Apollo Co-Investment Program"
+    assert written.iloc[0]["source_family_guess"] == "fund"
+
+    agent_clusters = pd.read_csv(tmp_path / "agent_cluster_packets.csv")
+    agent_issues = pd.read_csv(tmp_path / "agent_issue_packets.csv")
+    drift_summary = pd.read_csv(tmp_path / "column_drift_summary.csv")
+    verdict_summary = pd.read_csv(tmp_path / "agent_verdict_summary.csv")
+    assert list(agent_clusters.columns) == AGENT_CLUSTER_PACKET_COLUMNS
+    assert "WRAP.HIGH_FV_UNCLASSIFIED_CLUSTER" in set(agent_clusters["rule_id"])
+    assert list(agent_issues.columns) == AGENT_ISSUE_PACKET_COLUMNS
+    assert list(drift_summary.columns) == COLUMN_DRIFT_SUMMARY_COLUMNS
+    assert list(verdict_summary.columns) == AGENT_VERDICT_SUMMARY_COLUMNS
+    assert (tmp_path / "agent_cluster_packets.jsonl").exists()
+    assert (tmp_path / "agent_issue_packets.jsonl").exists()
+
+
+# ---------------------------------------------------------------------------
+# Agent review packets and drift diagnostics
+# ---------------------------------------------------------------------------
+
+
+def test_source_corrupted_identifier_packets_flag_field_token_source_rows():
+    detail = _detail([{
+        "source_row_id": "src-1",
+        "raw_investment_identifier": (
+            "Debt Investments Type of Investment First Lien Term Loan "
+            "Investment Date 01/01/2024 Maturity Date 12/31/2028 "
+            "Interest Rate SOFR + 6.00%"
+        ),
+        "source_fair_value": 6_000_000,
+    }])
+    holdings = pd.DataFrame([
+        _holding(fair_value="994000000"),
+        _holding(
+            bdc_investment_identifier="Corrupted Source Row",
+            position_key="corrupted source row",
+            fair_value="6000000",
+        ),
+    ])
+
+    packets = _build_source_corrupted_identifier_packets(detail, holdings, cik="1786108")
+
+    assert list(packets.columns) == AGENT_ISSUE_PACKET_COLUMNS
+    assert len(packets) == 1
+    row = packets.iloc[0]
+    assert row["rule_id"] == "WRAP.SOURCE_CORRUPTED_IDENTIFIER"
+    assert row["likely_owner"] == "source_data"
+    assert row["materiality_tier"] == "P1"
+    assert row["review_status"] == "review"
+
+
+def test_column_drift_packets_use_short_history_and_emit_examples():
+    holdings = pd.DataFrame([
+        _holding(report_date="2024-03-31", interest_rate="10.00", fair_value="100"),
+        _holding(report_date="2024-06-30", interest_rate="11.00", fair_value="100"),
+        _holding(
+            report_date="2024-09-30",
+            interest_rate="SOFR + 6.00%",
+            fair_value="100",
+            bdc_investment_identifier="Jackson Paper SOFR Loan",
+        ),
+    ])
+
+    summary, examples = _build_column_drift_packets(holdings, cik="1786108")
+
+    assert list(summary.columns) == COLUMN_DRIFT_SUMMARY_COLUMNS
+    assert list(examples.columns) == COLUMN_DRIFT_EXAMPLE_COLUMNS
+    interest_rate_q3 = summary[
+        summary["column"].eq("interest_rate")
+        & summary["report_date"].eq("2024-09-30")
+    ].iloc[0]
+    assert interest_rate_q3["baseline_quarter_count"] == 2
+    assert interest_rate_q3["status"] == "review"
+    assert interest_rate_q3["current_dominant_bucket"] == "rate_text"
+    assert interest_rate_q3["baseline_dominant_bucket"] == "numeric_pct"
+    assert "rate_text" in interest_rate_q3["bucket_distribution"]
+    assert not examples.empty
+    assert set(examples["column"]) == {"interest_rate"}
+
+
+def test_agent_issue_packets_merge_parsed_and_source_corrupted_artifacts():
+    detail = _detail([{
+        "source_row_id": "src-1",
+        "output_row_id": "out-1",
+        "issuer_name": "Apryse Software Corp Interest Rate 9.05% Maturity Date 6/26/2032",
+        "output_fair_value": 6_000_000,
+        "raw_investment_identifier": (
+            "Debt Investments Type of Investment First Lien Term Loan "
+            "Maturity Date 6/26/2032 Interest Rate 9.05%"
+        ),
+    }])
+    holdings = pd.DataFrame([
+        _holding(fair_value="994000000"),
+        _holding(
+            bdc_investment_identifier="Apryse Software Corp Term Loan",
+            issuer_name="Apryse Software Corp",
+            position_key="apryse software corp term loan",
+            fair_value="6000000",
+        ),
+    ])
+    parsed = _build_parsed_field_quality_packets(detail, holdings, cik="1786108")
+    corrupted = _build_source_corrupted_identifier_packets(detail, holdings, cik="1786108")
+
+    packets = _build_agent_issue_packets(
+        parsed_field_quality=parsed,
+        source_corrupted_identifiers=corrupted,
+        holdings_df=holdings,
+        cik="1786108",
+    )
+
+    assert list(packets.columns) == AGENT_ISSUE_PACKET_COLUMNS
+    assert {
+        "WRAP.PARSED_FIELD_CONTAMINATION",
+        "WRAP.SOURCE_CORRUPTED_IDENTIFIER",
+    }.issubset(set(packets["rule_id"]))
+    assert set(packets["packet_type"]) == {"row"}
+    assert packets["issue_id"].is_unique
+
+
+def test_agent_cluster_packets_merge_delta_high_fv_and_drift_artifacts():
+    production = pd.DataFrame([_holding()])
+    trial = pd.DataFrame([
+        _holding(
+            bdc_investment_identifier="New Borrower Term Loan",
+            issuer_name="New Borrower LLC",
+            position_key="new borrower term loan",
+            fair_value="5000000",
+        )
+    ])
+    row_delta = _build_row_delta_attribution(trial, production, cik="1786108")
+    high_fv = pd.DataFrame([{
+        "cik": "0001786108",
+        "entity_name": "Trinity Capital Inc.",
+        "cluster_label": "Apollo Co-Investment Program",
+        "affected_report_dates": "2024-12-31",
+        "quarter_count": 1,
+        "row_count": 2,
+        "fair_value_abs_sum": 10_000_000,
+        "fair_value_share": 0.25,
+        "max_quarter_fair_value_share": 0.25,
+        "source_family_guess": "fund",
+        "suggested_wrapper_family": "fund",
+        "output_index_classification": "PRIVATE_CREDIT_FUND",
+        "output_asset_category": "FUND",
+        "output_exposure_type": "FUND",
+        "sample_identifiers": "Apollo Co-Investment Program LP Interest",
+        "sample_issuer_names": "Apollo Co-Investment Program",
+        "sample_instrument_descriptions": "LP Interest",
+        "suggested_review_question": "Should this cluster be wrapper-covered?",
+        "owner": "wrapper",
+        "review_status": "review",
+    }], columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+    drift = pd.DataFrame([{
+        "cik": "0001786108",
+        "entity_name": "Trinity Capital Inc.",
+        "report_date": "2024-12-31",
+        "column": "interest_rate",
+        "baseline_quarter_count": 2,
+        "row_count": 1,
+        "fair_value_abs_sum": 5_000_000,
+        "js_divergence": 0.5,
+        "new_bucket_share": 1.0,
+        "current_dominant_bucket": "rate_text",
+        "baseline_dominant_bucket": "numeric_pct",
+        "status": "review",
+        "severity": "review",
+        "materiality_tier": "P1",
+        "bucket_distribution": "rate_text:1.000000",
+        "baseline_bucket_distribution": "numeric_pct:1.000000",
+    }], columns=COLUMN_DRIFT_SUMMARY_COLUMNS)
+    holdings = pd.DataFrame([
+        _holding(fair_value="5000000"),
+        _holding(
+            bdc_investment_identifier="Apollo Co-Investment Program LP Interest",
+            position_key="apollo co investment program lp interest",
+            fair_value="10000000",
+        ),
+    ])
+
+    packets = _build_agent_cluster_packets(
+        row_delta_attribution=row_delta,
+        high_fv_unclassified_clusters=high_fv,
+        column_drift_summary=drift,
+        holdings_df=holdings,
+        cik="1786108",
+    )
+
+    assert list(packets.columns) == AGENT_CLUSTER_PACKET_COLUMNS
+    assert {
+        "WRAP.ROW_DELTA_ATTRIBUTION",
+        "WRAP.HIGH_FV_UNCLASSIFIED_CLUSTER",
+        "WRAP.COLUMN_DISTRIBUTION_DRIFT",
+    }.issubset(set(packets["rule_id"]))
+    assert set(packets["packet_type"]) == {"cluster"}
+    assert packets["issue_id"].is_unique
+
+
+def test_agent_verdict_validation_and_summary_promotion_effects():
+    valid = [{
+        "issue_id": "WRAP|0001786108|2024-12-31|WRAP.ROW_DELTA_ATTRIBUTION|1",
+        "rule_id": "WRAP.ROW_DELTA_ATTRIBUTION",
+        "severity": "review",
+        "materiality_tier": "P1",
+        "likely_owner": "wrapper",
+        "cik": "0001786108",
+        "report_date": "2024-12-31",
+        "verdict": "true_wrapper_error",
+        "mechanism": "wrapper failed to split source leaf",
+        "recommended_action": "Add CIK-local wrapper leaf pattern with source evidence.",
+        "confidence": 0.92,
+        "affected_fair_value": 10_000_000,
+        "evidence": "Source row and trial row reviewed.",
+        "residual_risk": "Low after targeted regression test.",
+    }]
+    invalid = [{
+        **valid[0],
+        "issue_id": "bad-confidence",
+        "confidence": 1.5,
+    }]
+    unsafe_action = [{
+        **valid[0],
+        "issue_id": "unsafe-action",
+        "recommended_action": "Hand-edit production output CSV.",
+    }]
+
+    assert validate_agent_verdict_records(valid) == []
+    assert any("confidence" in error for error in validate_agent_verdict_records(invalid))
+    assert any("hand-edited" in error for error in validate_agent_verdict_records(unsafe_action))
+
+    summary = build_agent_verdict_summary(valid)
+    assert list(summary.columns) == AGENT_VERDICT_SUMMARY_COLUMNS
+    assert summary.iloc[0]["promotion_effect"] == "reject"
+    assert summary.iloc[0]["issue_count"] == 1
+
+
+def test_promotion_gate_consumes_agent_verdict_summary():
+    summary = _oracle_summary([{}])
+    reject_verdicts = pd.DataFrame([{
+        "verdict": "true_wrapper_error",
+        "likely_owner": "wrapper",
+        "materiality_tier": "P1",
+        "issue_count": 1,
+        "affected_fair_value": 10_000_000,
+        "max_confidence": 0.92,
+        "promotion_effect": "reject",
+    }], columns=AGENT_VERDICT_SUMMARY_COLUMNS)
+    review_verdicts = pd.DataFrame([{
+        "verdict": "inconclusive",
+        "likely_owner": "unknown",
+        "materiality_tier": "P1",
+        "issue_count": 1,
+        "affected_fair_value": 10_000_000,
+        "max_confidence": 0.70,
+        "promotion_effect": "review",
+    }], columns=AGENT_VERDICT_SUMMARY_COLUMNS)
+
+    reject = evaluate_promotion_gate(summary, verdict_summary=reject_verdicts)
+    review = evaluate_promotion_gate(summary, verdict_summary=review_verdicts)
+
+    assert reject.status == "reject"
+    assert any("agent_verdict_reject" in reason for reason in reject.reasons)
+    assert review.status == "review_required"
+    assert any("agent_verdict_review" in reason for reason in review.reasons)
+
+
+# ---------------------------------------------------------------------------
+# Parsed-field quality review packets
+# ---------------------------------------------------------------------------
+
+
+def test_parsed_field_quality_flags_contaminated_output_columns():
+    detail = _detail([{
+        "status": "matched",
+        "source_row_id": "src-1",
+        "output_row_id": "out-1",
+        "issuer_name": (
+            "Non-controlled/Non-affiliated Investments Debt Investments "
+            "Apryse Software Corp Interest Rate 9.05% Maturity Date 6/26/2032"
+        ),
+        "instrument_description": "Senior loans 195.1% | Chemicals 12.0%",
+        "output_wrapper_disposition": "debt_position_leaf",
+        "output_wrapper_position_key": (
+            "Apryse Software Corp Term Loan Interest Rate 9.05% Maturity Date 6/26/2032"
+        ),
+        "output_fair_value": 1234567,
+    }])
+
+    packets = _build_parsed_field_quality_packets(detail, pd.DataFrame(), cik="1786108")
+
+    assert list(packets.columns) == PARSED_FIELD_QUALITY_COLUMNS
+    assert set(packets["column"]) == {
+        "issuer_name",
+        "instrument_description",
+        "position_key",
+    }
+    assert "hierarchy_or_metric_contamination" in set(packets["issue_type"])
+    assert "rate_or_date_contamination" in set(packets["issue_type"])
+    assert set(packets["severity"]) == {"warn"}
+    assert packets["fair_value"].astype(float).max() == 1234567
+
+
+def test_parsed_field_quality_ignores_clean_rows_and_scopes_to_cik():
+    detail = _detail([{
+        "cik": "0001786108",
+        "issuer_name": "Jackson Paper Manufacturing Company",
+        "instrument_description": "Initial Term Loan",
+        "output_wrapper_position_key": "jackson paper initial term loan",
+        "output_wrapper_disposition": "debt_position_leaf",
+    }])
+    holdings = pd.DataFrame([
+        {
+            "cik": "0001786108",
+            "entity_name": "Trinity Capital Inc.",
+            "report_date": "2024-12-31",
+            "accession_number": "0001786108-25-000001",
+            "bdc_investment_identifier": "Jackson Paper Initial Term Loan",
+            "position_key": "jackson paper initial term loan",
+            "fair_value": "100",
+        },
+        {
+            "cik": "0000000001",
+            "entity_name": "Other BDC",
+            "report_date": "2024-12-31",
+            "accession_number": "0000000001-25-000001",
+            "bdc_investment_identifier": "Other Loan",
+            "position_key": "Other Loan Interest Rate 12.00% Maturity Date 1/1/2030",
+            "fair_value": "200",
+        },
+    ])
+
+    packets = _build_parsed_field_quality_packets(detail, holdings, cik="0001786108")
+
+    assert packets.empty
+    assert list(packets.columns) == PARSED_FIELD_QUALITY_COLUMNS
+
+
+def test_parsed_field_quality_summarizes_without_changing_oracle_status():
+    detail = _detail([{
+        "status": "documented_source_rollup_exact",
+        "residual_class": "documented_exclusion",
+        "calibrated_status": "documented_source_rollup_exact",
+        "issuer_name": "Non-controlled Investments Apryse Software Corp 9.05%",
+        "output_fair_value": 500,
+    }])
+
+    with mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle._check_content_signatures",
+        return_value={},
+    ), mock.patch(
+        "pipeline.bdc_xbrl_wrapper_oracle.load_wrapper_definition",
+        return_value=None,
+    ):
+        summary, _, _, _ = build_wrapper_oracle_outputs(detail)
+
+    status_before = summary.iloc[0]["oracle_status"]
+    reasons_before = summary.iloc[0]["oracle_fail_reasons"]
+    packets = _build_parsed_field_quality_packets(detail, pd.DataFrame(), cik="0001786108")
+    updated = _append_parsed_field_quality_summary(summary, packets)
+
+    assert status_before == "pass"
+    assert updated.iloc[0]["oracle_status"] == status_before
+    assert updated.iloc[0]["oracle_fail_reasons"] == reasons_before
+    assert updated.iloc[0]["parsed_field_quality_issue_count"] > 0
+    assert updated.iloc[0]["parsed_field_quality_fair_value"] == 500
 
 
 # ---------------------------------------------------------------------------

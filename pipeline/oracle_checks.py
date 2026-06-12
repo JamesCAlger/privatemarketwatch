@@ -1567,6 +1567,426 @@ def check_I06_non_private_market_exclusion(
     )]
 
 
+# ---------------------------------------------------------------------------
+# GICS sub-industry label reference (for I09 / I08 pattern checks)
+# ---------------------------------------------------------------------------
+# Subset of commonly occurring GICS sub-industry labels; sourced from
+# pipeline.classification._INDUSTRY_LABELS at the time of writing.  This is a
+# diagnostic reference only and does not need to be exhaustive.
+_GICS_SUBINDUSTRY_LABELS: set[str] = {
+    "aerospace & defense", "air freight & logistics", "application software",
+    "auto components", "automobile components", "banks", "beverages",
+    "biotechnology", "building products", "capital markets", "chemicals",
+    "commercial services & supplies", "communications equipment",
+    "components", "construction & engineering", "construction materials",
+    "consumer finance", "consumer goods", "consumer services",
+    "consumer staples distribution & retail",
+    "containers & packaging", "data processing & outsourced services",
+    "distributors", "diversified consumer services",
+    "diversified financial services", "diversified support services",
+    "education services", "electric utilities", "electrical equipment",
+    "electronic equipment, instruments & components",
+    "entertainment", "environmental & facilities services",
+    "financial services", "food & staples retailing", "food distributors",
+    "food products", "ground transportation",
+    "health care equipment", "health care equipment & supplies",
+    "health care facilities", "health care providers & services",
+    "health care services", "health care supplies", "health care technology",
+    "hotels, restaurants & leisure", "household durables", "household products",
+    "human resource & employment services",
+    "independent power and renewable electricity producers",
+    "industrial conglomerates", "industrial machinery & supplies & components",
+    "insurance", "insurance brokers", "insurance services",
+    "integrated telecommunication services",
+    "interactive media & services", "internet services & infrastructure",
+    "it consulting & other services", "it services",
+    "leisure facilities", "leisure products",
+    "life sciences tools & services", "machinery", "managed health care",
+    "media", "movies & entertainment", "multi-utilities",
+    "oil, gas & consumable fuels", "packaged foods & meats",
+    "paper & forest products", "personal products", "pharmaceuticals",
+    "professional services", "property & casualty insurance",
+    "real estate", "real estate management & development",
+    "research & consulting services", "restaurants", "road & rail",
+    "security & alarm services",
+    "semiconductors & semiconductor equipment",
+    "software", "specialized consumer services", "specialty chemicals",
+    "specialty retail", "systems software",
+    "technology distributors", "technology hardware, storage & peripherals",
+    "textiles, apparel & luxury goods",
+    "trading companies & distributors",
+    "transportation infrastructure", "trucking",
+    "water utilities", "wireless telecommunication services",
+}
+
+
+def _is_gics_sector_like(text: str) -> bool:
+    """Return True if *text* looks like a GICS sub-industry label."""
+    return text.strip().lower() in _GICS_SUBINDUSTRY_LABELS
+
+
+def _is_entity_name_like(text: str) -> bool:
+    """Return True if *text* looks like an entity/company name."""
+    t = text.strip()
+    if not t or len(t) < 3:
+        return False
+    _LEGAL_SUFFIXES = re.compile(
+        r"(?i)\b(?:LLC|L\.L\.C|Inc\.?|Corp\.?|Corporation|Ltd\.?|Limited"
+        r"|L\.?P\.?|Holdings|Group|Co\.|Company|GmbH|SARL|PLC)\b"
+    )
+    if _LEGAL_SUFFIXES.search(t):
+        return True
+    # Multi-word capitalized phrase (heuristic for entity names)
+    words = t.split()
+    if len(words) >= 2 and all(w[0].isupper() for w in words if w and w[0].isalpha()):
+        return True
+    return False
+
+
+def _is_rate_like(text: str) -> bool:
+    """Return True if *text* looks like an interest rate / spread."""
+    t = text.strip()
+    return bool(re.search(
+        r"(?i)(?:SOFR|LIBOR|EURIBOR|PRIME|[SLP]\s*\+)|"
+        r"\d+\.\d+\s*%|"
+        r"\d+\s*%\s*/\s*\d",
+        t,
+    ))
+
+
+def _is_date_like(text: str) -> bool:
+    """Return True if *text* looks like a date (MM/DD/YYYY or similar)."""
+    t = text.strip()
+    return bool(re.search(
+        r"\d{1,2}[/-]\d{1,2}[/-]\d{2,4}",
+        t,
+    ))
+
+
+def _is_instrument_like(text: str) -> bool:
+    """Return True if *text* contains instrument-type keywords."""
+    t = text.strip().lower()
+    return bool(re.search(
+        r"(?:term\s+loan|revolv|delayed\s+draw|unitranche|first\s+lien"
+        r"|second\s+lien|senior\s+secured|common\s+(?:stock|equity)"
+        r"|preferred\s+(?:stock|equity)|warrants?|partnership\s+interest"
+        r"|llc\s+interest|membership\s+interest)",
+        t,
+    ))
+
+
+_PATTERN_DETECTORS = {
+    "entity_name_like": _is_entity_name_like,
+    "rate_like": _is_rate_like,
+    "date_like": _is_date_like,
+    "gics_sector_like": _is_gics_sector_like,
+    "instrument_like": _is_instrument_like,
+}
+
+
+def check_I08_segment_assertion_drift(
+    source_detail_df: pd.DataFrame,
+    *,
+    wrapper_specs: dict | None = None,
+) -> list[CheckResult]:
+    """I08: Pipe-segment content assertions from wrapper JSON.
+
+    For each wrapped CIK with ``segment_assertions``, check that the
+    declared pattern type appears in at least ``min_prevalence`` fraction
+    of rows with the expected segment count.
+    """
+    results: list[CheckResult] = []
+    if source_detail_df.empty:
+        return [_make_result("I08", "global", "skip", 0, 0,
+                             "No source detail data")]
+
+    if wrapper_specs is None:
+        try:
+            from pipeline.bdc_xbrl_wrapper import get_wrapper_spec
+            import json
+            from pipeline.config import OVERRIDES_DIR
+            wrapper_dir = OVERRIDES_DIR / "bdc_xbrl_wrappers"
+            wrapper_specs = {}
+            for path in sorted(wrapper_dir.glob("*.json")):
+                try:
+                    with open(path, encoding="utf-8") as fh:
+                        raw = json.load(fh)
+                except (json.JSONDecodeError, OSError):
+                    continue
+                if raw.get("schema_version") != "bdc-xbrl-wrapper.v3":
+                    continue
+                assertions = raw.get("segment_assertions")
+                if assertions:
+                    wrapper_specs[raw["cik"]] = assertions
+        except Exception:
+            return [_make_result("I08", "global", "skip", 0, 0,
+                                 "Could not load wrapper specs")]
+
+    if not wrapper_specs:
+        return [_make_result("I08", "global", "skip", 0, 0,
+                             "No CIKs with segment_assertions")]
+
+    leaves = source_detail_df[
+        _col_str(source_detail_df, "source_wrapper_disposition").str.endswith("_position_leaf")
+    ]
+    if leaves.empty:
+        return [_make_result("I08", "global", "skip", 0, 0, "No leaf rows")]
+
+    for cik, assertions in wrapper_specs.items():
+        cik_int = str(int(cik))
+        cik_mask = _col_str(leaves, "cik").apply(
+            lambda x: str(int(x)) if x.isdigit() else x
+        ) == cik_int
+        cik_leaves = leaves[cik_mask]
+        if cik_leaves.empty:
+            continue
+
+        raw_ids = _col_str(cik_leaves, "raw_investment_identifier")
+
+        for assertion in assertions:
+            seg_idx = assertion.get("segment_index")
+            expected_pattern = assertion.get("expected_pattern")
+            seg_count = assertion.get("segment_count")
+            min_prev = assertion.get("min_prevalence", 0.5)
+            field_name = assertion.get("field_name", f"segment_{seg_idx}")
+            desc = assertion.get("description", "")
+
+            if seg_idx is None or expected_pattern is None:
+                continue
+
+            detector = _PATTERN_DETECTORS.get(expected_pattern)
+            if detector is None:
+                continue
+
+            # Split on pipe, filter to rows with expected segment count
+            segments_list = raw_ids.str.split(r"\s*\|\s*")
+            if seg_count:
+                count_mask = segments_list.apply(len) == seg_count
+            else:
+                count_mask = segments_list.apply(len) >= seg_idx
+
+            eligible = segments_list[count_mask]
+            if eligible.empty:
+                results.append(_make_result(
+                    "I08", "cik", "skip", 0, min_prev,
+                    f"CIK {cik} {field_name}: no rows with {seg_count} segments",
+                    cik=cik,
+                ))
+                continue
+
+            # Extract segment and check pattern
+            seg_values = eligible.apply(
+                lambda segs: segs[seg_idx - 1].strip() if len(segs) >= seg_idx else ""
+            )
+            matched = seg_values.apply(detector)
+            prevalence = matched.sum() / max(len(eligible), 1)
+            status = "pass" if prevalence >= min_prev else "warn"
+            results.append(_make_result(
+                "I08", "cik", status, prevalence, min_prev,
+                f"CIK {cik} {field_name} ({expected_pattern}): "
+                f"{prevalence:.1%} prevalence ({matched.sum()}/{len(eligible)}) "
+                f"-- {desc}",
+                cik=cik,
+            ))
+
+    if not results:
+        results.append(_make_result("I08", "global", "skip", 0, 0,
+                                     "No assertions evaluated"))
+    return results
+
+
+def check_I09_gics_issuer_name_detection(
+    source_detail_df: pd.DataFrame,
+    *,
+    threshold_pct: float = 0.05,
+) -> list[CheckResult]:
+    """I09: Detect issuer_name fields that are actually GICS sub-industry labels.
+
+    Flags CIK-quarters where >threshold_pct of position_leaf rows have an
+    issuer_name that matches a known GICS sub-industry label, indicating
+    likely pipe/hierarchy mis-assignment.
+    """
+    results: list[CheckResult] = []
+    if source_detail_df.empty:
+        return [_make_result("I09", "global", "skip", 0, threshold_pct,
+                             "No source detail data")]
+
+    leaves = source_detail_df[
+        _col_str(source_detail_df, "source_wrapper_disposition").str.endswith("_position_leaf")
+    ]
+    if leaves.empty:
+        return [_make_result("I09", "global", "skip", 0, threshold_pct,
+                             "No leaf rows")]
+
+    # Check issuer_name from unified output, falling back to staged issuer
+    issuer_col = "issuer_name"
+    if issuer_col not in leaves.columns:
+        issuer_col = "source_issuer_name"
+    if issuer_col not in leaves.columns:
+        return [_make_result("I09", "global", "skip", 0, threshold_pct,
+                             "No issuer_name column")]
+
+    issuers = _col_str(leaves, issuer_col).str.strip().str.lower()
+    gics_match = issuers.isin(_GICS_SUBINDUSTRY_LABELS)
+
+    global_rate = gics_match.sum() / max(len(leaves), 1)
+    if global_rate <= threshold_pct:
+        return [_make_result(
+            "I09", "global", "pass", global_rate, threshold_pct,
+            f"Global GICS-as-issuer rate: {global_rate:.1%} ({gics_match.sum()}/{len(leaves)})",
+        )]
+
+    # Per CIK-quarter breakdown
+    for (cik, rd), grp in leaves.groupby(
+        [_col_str(leaves, "cik"), _col_str(leaves, "report_date")]
+    ):
+        grp_issuers = _col_str(grp, issuer_col).str.strip().str.lower()
+        grp_match = grp_issuers.isin(_GICS_SUBINDUSTRY_LABELS)
+        rate = grp_match.sum() / max(len(grp), 1)
+        if rate > threshold_pct:
+            status = "warn" if rate < 0.20 else "fail"
+            results.append(_make_result(
+                "I09", "cik_quarter", status, rate, threshold_pct,
+                f"CIK {cik} {rd}: {rate:.1%} of issuers are GICS labels "
+                f"({grp_match.sum()}/{len(grp)})",
+                detail=grp[grp_match].head(20),
+                cik=str(cik),
+                report_date=str(rd),
+            ))
+
+    if not results:
+        results.append(_make_result(
+            "I09", "global", "pass", global_rate, threshold_pct,
+            f"Global GICS-as-issuer rate: {global_rate:.1%}",
+        ))
+    return results
+
+
+def check_I10_instrument_subtype_coverage(
+    source_detail_df: pd.DataFrame,
+    *,
+    warn_threshold_pct: float = 0.50,
+) -> list[CheckResult]:
+    """I10: Multi-position entities should have distinct instrument descriptions.
+
+    Groups position_leaf rows by (CIK, quarter, issuer_name). For groups with
+    2+ positions, checks whether instrument_description distinguishes them.
+    Warns if >warn_threshold_pct of multi-position groups have identical
+    instrument descriptions.
+    """
+    results: list[CheckResult] = []
+    if source_detail_df.empty:
+        return [_make_result("I10", "global", "skip", 0, warn_threshold_pct,
+                             "No source detail data")]
+
+    leaves = source_detail_df[
+        _col_str(source_detail_df, "source_wrapper_disposition").str.endswith("_position_leaf")
+    ]
+    if leaves.empty:
+        return [_make_result("I10", "global", "skip", 0, warn_threshold_pct,
+                             "No leaf rows")]
+
+    issuer_col = "issuer_name" if "issuer_name" in leaves.columns else "source_issuer_name"
+    instr_col = "instrument_description" if "instrument_description" in leaves.columns else "source_instrument_description"
+    if issuer_col not in leaves.columns or instr_col not in leaves.columns:
+        return [_make_result("I10", "global", "skip", 0, warn_threshold_pct,
+                             "Missing issuer/instrument columns")]
+
+    group_cols = [_col_str(leaves, "cik"), _col_str(leaves, "report_date"),
+                  _col_str(leaves, issuer_col)]
+    total_multi = 0
+    identical_multi = 0
+
+    for (cik, rd, issuer), grp in leaves.groupby(group_cols):
+        if len(grp) < 2:
+            continue
+        total_multi += 1
+        descs = _col_str(grp, instr_col).str.strip().str.lower()
+        if descs.nunique() == 1:
+            identical_multi += 1
+
+    if total_multi == 0:
+        return [_make_result("I10", "global", "skip", 0, warn_threshold_pct,
+                             "No multi-position groups found")]
+
+    identical_rate = identical_multi / total_multi
+    status = "pass" if identical_rate <= warn_threshold_pct else "warn"
+    return [_make_result(
+        "I10", "global", status, identical_rate, warn_threshold_pct,
+        f"{identical_rate:.1%} of multi-position groups have identical "
+        f"instrument descriptions ({identical_multi}/{total_multi})",
+    )]
+
+
+def check_I11_position_key_uniqueness_within_entity(
+    source_detail_df: pd.DataFrame,
+    *,
+    warn_threshold_pct: float = 0.10,
+) -> list[CheckResult]:
+    """I11: Position keys within the same entity should be unique.
+
+    Groups position_leaf rows by (CIK, quarter, issuer_name). Warns when
+    multiple positions share the same position key (or keys differing only
+    by a trailing digit), as this predicts tranche-renumbering matching errors.
+    """
+    results: list[CheckResult] = []
+    if source_detail_df.empty:
+        return [_make_result("I11", "global", "skip", 0, warn_threshold_pct,
+                             "No source detail data")]
+
+    leaves = source_detail_df[
+        _col_str(source_detail_df, "source_wrapper_disposition").str.endswith("_position_leaf")
+    ]
+    if leaves.empty:
+        return [_make_result("I11", "global", "skip", 0, warn_threshold_pct,
+                             "No leaf rows")]
+
+    issuer_col = "issuer_name" if "issuer_name" in leaves.columns else "source_issuer_name"
+    key_col = "position_key" if "position_key" in leaves.columns else "source_position_key"
+    if issuer_col not in leaves.columns or key_col not in leaves.columns:
+        return [_make_result("I11", "global", "skip", 0, warn_threshold_pct,
+                             "Missing issuer/position_key columns")]
+
+    group_cols = [_col_str(leaves, "cik"), _col_str(leaves, "report_date"),
+                  _col_str(leaves, issuer_col)]
+    total_multi = 0
+    dupe_groups = 0
+    dupe_detail_rows = []
+
+    for (cik, rd, issuer), grp in leaves.groupby(group_cols):
+        if len(grp) < 2:
+            continue
+        total_multi += 1
+
+        # Normalize keys: strip trailing digits to detect near-duplicates
+        keys = _col_str(grp, key_col).str.strip()
+        keys_base = keys.str.replace(r"\s*\d+\s*$", "", regex=True).str.lower()
+        if keys_base.duplicated().any():
+            dupe_groups += 1
+            if len(dupe_detail_rows) < 100:
+                dupe_detail_rows.append({
+                    "cik": cik, "report_date": rd,
+                    "issuer_name": issuer,
+                    "position_count": len(grp),
+                    "unique_keys": keys.nunique(),
+                    "unique_base_keys": keys_base.nunique(),
+                })
+
+    if total_multi == 0:
+        return [_make_result("I11", "global", "skip", 0, warn_threshold_pct,
+                             "No multi-position groups found")]
+
+    dupe_rate = dupe_groups / total_multi
+    status = "pass" if dupe_rate <= warn_threshold_pct else "warn"
+    detail = pd.DataFrame(dupe_detail_rows) if dupe_detail_rows else pd.DataFrame()
+    return [_make_result(
+        "I11", "global", status, dupe_rate, warn_threshold_pct,
+        f"{dupe_rate:.1%} of multi-position groups have near-duplicate "
+        f"position keys ({dupe_groups}/{total_multi})",
+        detail=detail,
+    )]
+
+
 # ===================================================================
 # CATEGORY J: Position Matching Quality
 # ===================================================================
@@ -2239,6 +2659,268 @@ def diagnose_fuzzy_fallbacks(
     return out.reset_index(drop=True)
 
 
+def check_J07_hard_gate_rejection_audit(
+    matches_df: pd.DataFrame,
+    holdings_df: pd.DataFrame,
+) -> list[CheckResult]:
+    """J07: Audit how many C/D/E matches would be rejected by each hard gate.
+
+    Joins match sides back to holdings to retrieve index_classification,
+    maturity_date, and instrument_description. Reports counts and percentages
+    for classification flip, maturity >12mo, and instrument sub-type mismatch.
+
+    Always passes -- this is an informational audit check.
+    """
+    import duckdb
+
+    results: list[CheckResult] = []
+    if matches_df is None or matches_df.empty:
+        return [_make_result("J07", "global", "skip", 0, 0,
+                             "No position match data available")]
+    if holdings_df is None or holdings_df.empty:
+        return [_make_result("J07", "global", "skip", 0, 0,
+                             "No holdings data available")]
+
+    required_m = {"cik", "match_method", "begin_report_date", "end_report_date",
+                  "begin_issuer_name", "end_issuer_name",
+                  "begin_fair_value", "end_fair_value"}
+    if not required_m.issubset(matches_df.columns):
+        return [_make_result("J07", "global", "skip", 0, 0,
+                             "Missing required columns in matches_df")]
+
+    required_h = {"cik", "report_date", "issuer_name", "source"}
+    if not required_h.issubset(holdings_df.columns):
+        return [_make_result("J07", "global", "skip", 0, 0,
+                             "Missing required columns in holdings_df")]
+
+    # Filter to C/D/E tiers
+    cde_tiers = {"C_normalized_name", "D_fuzzy", "E_entity_fingerprint"}
+    df = matches_df.copy()
+    df["cik"] = df["cik"].astype(str).str.zfill(10)
+    cde = df[df["match_method"].isin(cde_tiers)].copy()
+    if cde.empty:
+        return [_make_result("J07", "global", "pass", 0, 0,
+                             "No C/D/E tier matches to audit")]
+
+    cde = cde.reset_index(drop=True)
+    cde["_idx"] = range(len(cde))
+
+    h = holdings_df.copy()
+    h["cik"] = h["cik"].astype(str).str.zfill(10)
+    h_cols = ["cik", "report_date", "issuer_name", "source", "fair_value"]
+    for col in ("index_classification", "maturity_date", "instrument_description"):
+        if col in h.columns:
+            h_cols.append(col)
+    h = h[h_cols].copy()
+    h["report_date"] = h["report_date"].astype(str)
+    h["issuer_name"] = h["issuer_name"].astype(str)
+
+    con = duckdb.connect()
+    con.register("cde_m", cde)
+    con.register("h", h)
+
+    # Join both sides
+    for side in ("begin", "end"):
+        sql = f"""
+        SELECT m._idx,
+               h.index_classification AS {side}_ic,
+               CAST(h.maturity_date AS VARCHAR) AS {side}_maturity,
+               CAST(h.instrument_description AS VARCHAR) AS {side}_inst_desc
+        FROM cde_m m
+        LEFT JOIN h
+          ON m.cik = h.cik AND h.source = 'bdc'
+          AND CAST(m.{side}_report_date AS VARCHAR) = CAST(h.report_date AS VARCHAR)
+          AND CAST(m.{side}_issuer_name AS VARCHAR) = CAST(h.issuer_name AS VARCHAR)
+        QUALIFY ROW_NUMBER() OVER (
+          PARTITION BY m._idx
+          ORDER BY ABS(COALESCE(TRY_CAST(m.{side}_fair_value AS DOUBLE), 0)
+                       - COALESCE(TRY_CAST(h.fair_value AS DOUBLE), 0)) ASC
+        ) = 1
+        """
+        side_df = con.execute(sql).fetchdf()
+        cde = cde.merge(side_df, on="_idx", how="left")
+    con.close()
+
+    # Fill NaN
+    for col in ("begin_ic", "end_ic", "begin_maturity", "end_maturity",
+                "begin_inst_desc", "end_inst_desc"):
+        if col in cde.columns:
+            cde[col] = cde[col].fillna("").astype(str)
+        else:
+            cde[col] = ""
+
+    total = len(cde)
+
+    # Classification flip count
+    both_ic = (cde["begin_ic"].str.strip().ne("")) & (cde["end_ic"].str.strip().ne(""))
+    class_flip = both_ic & (cde["begin_ic"] != cde["end_ic"])
+    n_class_flip = int(class_flip.sum())
+
+    # Maturity gap > 365 days
+    cde["_b_mat"] = pd.to_datetime(cde["begin_maturity"], errors="coerce")
+    cde["_e_mat"] = pd.to_datetime(cde["end_maturity"], errors="coerce")
+    both_mat = cde["_b_mat"].notna() & cde["_e_mat"].notna()
+    mat_gap = (cde["_b_mat"] - cde["_e_mat"]).abs().dt.days
+    mat_exceed = both_mat & (mat_gap > 365)
+    n_mat_exceed = int(mat_exceed.sum())
+
+    # Instrument sub-type mismatch (reparse from description)
+    import re as _re
+
+    def _parse_subtype(desc: str) -> str:
+        if not desc:
+            return ""
+        d = desc
+        if _re.search(r'(?i)\b(?:revolv(?:er|ing)|rcf|revolving\s+credit)\b', d):
+            return "REVOLVER"
+        if _re.search(r'(?i)\b(?:ddtl|delayed\s+draw)\b', d):
+            return "DDTL"
+        if _re.search(r'(?i)\b(?:term\s+loan|tl[a-d]?\b)', d):
+            return "TERM_LOAN"
+        if _re.search(r'(?i)\b(?:warrants?)\b', d):
+            return "WARRANT"
+        if _re.search(r'(?i)\b(?:common\s+(?:stock|equity|units?)|preferred\s+(?:stock|equity|units?)|membership\s+interest|llc\s+interest|equity\s+interest|class\s+[a-c]\b|ordinary\s+shares)\b', d):
+            return "EQUITY"
+        return ""
+
+    cde["_b_subtype"] = cde["begin_inst_desc"].apply(_parse_subtype)
+    cde["_e_subtype"] = cde["end_inst_desc"].apply(_parse_subtype)
+    both_sub = (cde["_b_subtype"].ne("")) & (cde["_e_subtype"].ne(""))
+    sub_mismatch = both_sub & (cde["_b_subtype"] != cde["_e_subtype"])
+    n_sub_mismatch = int(sub_mismatch.sum())
+
+    msg = (
+        f"C/D/E gate audit ({total} pairs): "
+        f"classification_flip={n_class_flip} ({100*n_class_flip/max(total,1):.1f}%), "
+        f"maturity_>12mo={n_mat_exceed} ({100*n_mat_exceed/max(total,1):.1f}%), "
+        f"subtype_mismatch={n_sub_mismatch} ({100*n_sub_mismatch/max(total,1):.1f}%)"
+    )
+    results.append(_make_result("J07", "global", "pass", total, 0, msg))
+    return results
+
+
+def check_J08_suspected_refinancing_detection(
+    matches_df: pd.DataFrame,
+    holdings_df: pd.DataFrame,
+    *,
+    max_refi_rate: float = 0.05,
+) -> list[CheckResult]:
+    """J08: Flag matches where maturity shifted >12 months AND spread changed >50bps.
+
+    These are suspected refinancings -- legitimate position continuity where the
+    underlying instrument was refinanced. Surfaced for review, not auto-rejected.
+
+    Warn if suspected refinancings exceed max_refi_rate of B2+ matches.
+    """
+    import duckdb
+
+    results: list[CheckResult] = []
+    if matches_df is None or matches_df.empty:
+        return [_make_result("J08", "global", "skip", 0, max_refi_rate,
+                             "No position match data available")]
+    if holdings_df is None or holdings_df.empty:
+        return [_make_result("J08", "global", "skip", 0, max_refi_rate,
+                             "No holdings data available")]
+
+    required_m = {"cik", "match_method", "begin_report_date", "end_report_date",
+                  "begin_issuer_name", "end_issuer_name",
+                  "begin_fair_value", "end_fair_value"}
+    if not required_m.issubset(matches_df.columns):
+        return [_make_result("J08", "global", "skip", 0, max_refi_rate,
+                             "Missing required columns in matches_df")]
+
+    # Filter to B2+ tiers (everything except A and B1)
+    b2_plus = {"B1b_position_key", "B2_exact_name", "C_normalized_name",
+               "D_fuzzy", "E_entity_fingerprint"}
+    df = matches_df.copy()
+    df["cik"] = df["cik"].astype(str).str.zfill(10)
+    b2 = df[df["match_method"].isin(b2_plus)].copy()
+    if b2.empty:
+        return [_make_result("J08", "global", "skip", 0, max_refi_rate,
+                             "No B2+ tier matches")]
+
+    b2 = b2.reset_index(drop=True)
+    b2["_idx"] = range(len(b2))
+
+    h = holdings_df.copy()
+    h["cik"] = h["cik"].astype(str).str.zfill(10)
+    h_cols = ["cik", "report_date", "issuer_name", "source", "fair_value"]
+    for col in ("maturity_date", "basis_spread", "interest_rate"):
+        if col in h.columns:
+            h_cols.append(col)
+    h = h[h_cols].copy()
+    h["report_date"] = h["report_date"].astype(str)
+    h["issuer_name"] = h["issuer_name"].astype(str)
+
+    con = duckdb.connect()
+    con.register("b2_m", b2)
+    con.register("h", h)
+
+    for side in ("begin", "end"):
+        sql = f"""
+        SELECT m._idx,
+               CAST(h.maturity_date AS VARCHAR) AS {side}_maturity,
+               TRY_CAST(h.basis_spread AS DOUBLE) AS {side}_spread,
+               TRY_CAST(h.interest_rate AS DOUBLE) AS {side}_rate
+        FROM b2_m m
+        LEFT JOIN h
+          ON m.cik = h.cik AND h.source = 'bdc'
+          AND CAST(m.{side}_report_date AS VARCHAR) = CAST(h.report_date AS VARCHAR)
+          AND CAST(m.{side}_issuer_name AS VARCHAR) = CAST(h.issuer_name AS VARCHAR)
+        QUALIFY ROW_NUMBER() OVER (
+          PARTITION BY m._idx
+          ORDER BY ABS(COALESCE(TRY_CAST(m.{side}_fair_value AS DOUBLE), 0)
+                       - COALESCE(TRY_CAST(h.fair_value AS DOUBLE), 0)) ASC
+        ) = 1
+        """
+        side_df = con.execute(sql).fetchdf()
+        b2 = b2.merge(side_df, on="_idx", how="left")
+    con.close()
+
+    # Parse maturity and spread
+    b2["_b_mat"] = pd.to_datetime(b2.get("begin_maturity", ""), errors="coerce")
+    b2["_e_mat"] = pd.to_datetime(b2.get("end_maturity", ""), errors="coerce")
+
+    # Use spread if available, fall back to rate
+    b2["_b_sprd"] = pd.to_numeric(b2.get("begin_spread", None), errors="coerce")
+    b2["_e_sprd"] = pd.to_numeric(b2.get("end_spread", None), errors="coerce")
+    if b2["_b_sprd"].isna().all():
+        b2["_b_sprd"] = pd.to_numeric(b2.get("begin_rate", None), errors="coerce")
+        b2["_e_sprd"] = pd.to_numeric(b2.get("end_rate", None), errors="coerce")
+
+    # Flag: maturity shift > 365 days AND spread change > 0.5 (50bps)
+    both_mat = b2["_b_mat"].notna() & b2["_e_mat"].notna()
+    mat_gap = (b2["_b_mat"] - b2["_e_mat"]).abs().dt.days
+    both_sprd = b2["_b_sprd"].notna() & b2["_e_sprd"].notna()
+    sprd_gap = (b2["_b_sprd"] - b2["_e_sprd"]).abs()
+
+    refi_mask = both_mat & (mat_gap > 365) & both_sprd & (sprd_gap > 0.5)
+    n_refi = int(refi_mask.sum())
+    total = len(b2)
+    refi_rate = n_refi / max(total, 1)
+    status = "warn" if refi_rate > max_refi_rate else "pass"
+
+    detail = pd.DataFrame()
+    if n_refi > 0:
+        refi_rows = b2[refi_mask].copy()
+        detail_cols = ["cik", "match_method",
+                       "begin_issuer_name", "end_issuer_name"]
+        for c in ("begin_maturity", "end_maturity", "begin_spread", "end_spread",
+                   "begin_rate", "end_rate"):
+            if c in refi_rows.columns:
+                detail_cols.append(c)
+        detail_cols = [c for c in detail_cols if c in refi_rows.columns]
+        detail = refi_rows[detail_cols].head(200)
+
+    msg = (
+        f"Suspected refinancings: {n_refi}/{total} B2+ matches "
+        f"({100*refi_rate:.1f}%) have maturity shift >12mo and spread change >50bps"
+    )
+    results.append(_make_result("J08", "global", status, refi_rate, max_refi_rate,
+                                msg, detail=detail))
+    return results
+
+
 # ===================================================================
 # CHECK REGISTRY
 # ===================================================================
@@ -2282,11 +2964,17 @@ CHECK_REGISTRY: dict[str, tuple[Any, str]] = {
     "I02": (check_I02_leaf_marker_accuracy, "source_detail_df"),
     "I05": (check_I05_wrapper_content_signature_agreement, "source_detail_df"),
     "I06": (check_I06_non_private_market_exclusion, "source_detail_df"),
+    "I08": (check_I08_segment_assertion_drift, "source_detail_df"),
+    "I09": (check_I09_gics_issuer_name_detection, "source_detail_df"),
+    "I10": (check_I10_instrument_subtype_coverage, "source_detail_df"),
+    "I11": (check_I11_position_key_uniqueness_within_entity, "source_detail_df"),
     "J01": (check_J01_position_key_stability, "matches_df"),
     "J03": (check_J03_fuzzy_fallback_rate, "matches_df"),
     "J04": (check_J04_unique_position_id_per_report_date, "holdings_df"),
     "J05": (check_J05_lower_tier_match_consistency, "matches_df"),
     "J06": (check_J06_fuzzy_match_semantic_validation, "matches_df, holdings_df"),
+    "J07": (check_J07_hard_gate_rejection_audit, "matches_df, holdings_df"),
+    "J08": (check_J08_suspected_refinancing_detection, "matches_df, holdings_df"),
 }
 
 ALL_CHECK_IDS = sorted(CHECK_REGISTRY.keys())

@@ -1314,7 +1314,11 @@ class TestBdcSourceReconciliation:
         )
 
         assert "documented_source_rollup_exact" not in set(detail["status"])
-        assert int(metrics.iloc[0]["blocking_issue_count"]) == 3
+        # The parent source row is cleared by issuer subtotal arithmetic
+        # (its FV=3M matches the sum of 2 output children with issuer_name "Aledia, Inc.").
+        # The 2 output children remain extra_in_pipeline.
+        assert "documented_source_issuer_subtotal_arithmetic" in set(detail["status"])
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 2
 
     def test_source_rollup_does_not_consume_matched_parent_with_distinct_children(self):
         source = _make_bdc_source([{

@@ -71,6 +71,8 @@ UNIFIED_COLUMNS = [
     "bdc_investment_identifier", "bdc_form_type", "bdc_dimensions_raw",
     "bdc_unrealized_gain_loss",
     "bdc_investment_country",
+    # Non-accrual signals (BDC only -- extracted from XBRL footnotes/dimensions)
+    "nonaccrual_footnote", "nonaccrual_dimension",
     # Source-specific (N-PORT)
     "nport_holding_id", "nport_series_name", "nport_series_id",
     "nport_asset_cat", "nport_issuer_type", "nport_payoff_profile",

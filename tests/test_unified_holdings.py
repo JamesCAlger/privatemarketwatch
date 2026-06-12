@@ -2107,6 +2107,35 @@ class TestPrepareBdc:
         assert len(result) == 1
         assert result.iloc[0]["bdc_investment_identifier"] == stripped_id
 
+    def test_nonaccrual_columns_threaded_through(self):
+        """nonaccrual_footnote/dimension columns survive staging to unified."""
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan",
+             "cik": "123", "fair_value": 1000000,
+             "nonaccrual_footnote": True, "nonaccrual_dimension": False},
+            {"investment_identifier": "Beta Inc - Note",
+             "cik": "123", "fair_value": 2000000,
+             "nonaccrual_footnote": False, "nonaccrual_dimension": True},
+            {"investment_identifier": "Gamma LLC - Revolver",
+             "cik": "123", "fair_value": 500000,
+             "nonaccrual_footnote": False, "nonaccrual_dimension": False},
+        ])
+        result = _prepare_bdc(df)
+        assert "nonaccrual_footnote" in result.columns
+        assert "nonaccrual_dimension" in result.columns
+
+        by_issuer = result.set_index("issuer_name")
+        # Footnote-flagged position
+        acme = by_issuer.loc["Acme Corp"]
+        assert acme["nonaccrual_footnote"] in (True, "true", "True", 1)
+        # Dimension-flagged position
+        beta = by_issuer.loc["Beta Inc"]
+        assert beta["nonaccrual_dimension"] in (True, "true", "True", 1)
+        # Clean position
+        gamma = by_issuer.loc["Gamma LLC"]
+        assert gamma["nonaccrual_footnote"] in (False, "false", "False", 0)
+        assert gamma["nonaccrual_dimension"] in (False, "false", "False", 0)
+
 
 # ---------------------------------------------------------------------------
 # Amendment dedup in _prepare_bdc (CTE 1b)

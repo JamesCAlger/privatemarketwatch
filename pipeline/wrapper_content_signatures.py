@@ -290,6 +290,87 @@ _FIELD_COLUMN_MAP = {
 }
 
 
+def classify_content_signature_rows(
+    wrapper: WrapperDefinition,
+    holdings_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Return per-row archetype classification used by content signatures."""
+    result_columns = [
+        "row_index",
+        "report_date",
+        "classification_text",
+        "archetype",
+        "fair_value",
+    ]
+    if holdings_df.empty:
+        return pd.DataFrame(columns=result_columns)
+
+    # Determine the preferred text column, then fall back per row when that
+    # column is blank. Some filers have mixed formats where most rows have
+    # instrument_description but bare issuer/tranche rows only preserve the
+    # classifiable text in the original identifier.
+    text_col = _resolve_text_column(holdings_df)
+    fallback_text_cols = []
+    for candidate in [
+        text_col,
+        "bdc_investment_identifier",
+        "investment_identifier",
+        "issuer_name",
+    ]:
+        if candidate and candidate in holdings_df.columns and candidate not in fallback_text_cols:
+            fallback_text_cols.append(candidate)
+    report_date_col = "report_date" if "report_date" in holdings_df.columns else None
+    has_fv = "fair_value" in holdings_df.columns
+
+    rows: list[dict[str, Any]] = []
+    for idx, row in holdings_df.iterrows():
+        text = ""
+        for candidate in fallback_text_cols:
+            candidate_text = str(row.get(candidate, "") or "").strip()
+            if candidate_text:
+                text = candidate_text
+                break
+        report_date = str(row.get(report_date_col, "") or "") if report_date_col else ""
+        archetype_name = classify_archetype(wrapper, text)
+        if archetype_name is None:
+            wrapper_family = str(row.get("wrapper_family", "") or "").strip()
+            wrapper_disposition = str(row.get("wrapper_disposition", "") or "").strip()
+            if (
+                wrapper_family
+                and wrapper_disposition.endswith("_position_leaf")
+                and any(arch.name == wrapper_family for arch in wrapper.archetypes)
+            ):
+                archetype_name = wrapper_family
+        if archetype_name is None:
+            wrapper_result = classify_identifier(wrapper.cik, text)
+            wrapper_family = str(wrapper_result.get("wrapper_family", "") or "").strip()
+            wrapper_disposition = str(wrapper_result.get("wrapper_disposition", "") or "").strip()
+            if (
+                wrapper_family
+                and wrapper_disposition.endswith("_position_leaf")
+                and any(arch.name == wrapper_family for arch in wrapper.archetypes)
+            ):
+                archetype_name = wrapper_family
+
+        fv_val = 0.0
+        if has_fv:
+            raw_fv = row.get("fair_value")
+            if _field_is_present(raw_fv):
+                try:
+                    fv_val = abs(float(raw_fv))
+                except (ValueError, TypeError):
+                    fv_val = 0.0
+
+        rows.append({
+            "row_index": idx,
+            "report_date": report_date,
+            "classification_text": text,
+            "archetype": archetype_name or "",
+            "fair_value": fv_val,
+        })
+    return pd.DataFrame(rows, columns=result_columns)
+
+
 def classify_archetype(wrapper: WrapperDefinition, text: str) -> str | None:
     """Return the archetype name matching the given text, or None.
 
@@ -461,71 +542,17 @@ def validate_content_signatures(
         return pd.DataFrame(columns=summary_columns), []
 
     violations: list[SignatureViolation] = []
-    # Determine the preferred text column, then fall back per row when that
-    # column is blank. Some filers have mixed formats where most rows have
-    # instrument_description but bare issuer/tranche rows only preserve the
-    # classifiable text in the original identifier.
-    text_col = _resolve_text_column(holdings_df)
-    fallback_text_cols = []
-    for candidate in [
-        text_col,
-        "bdc_investment_identifier",
-        "investment_identifier",
-        "issuer_name",
-    ]:
-        if candidate and candidate in holdings_df.columns and candidate not in fallback_text_cols:
-            fallback_text_cols.append(candidate)
-    report_date_col = "report_date" if "report_date" in holdings_df.columns else None
-    has_fv = "fair_value" in holdings_df.columns
-
+    row_classification = classify_content_signature_rows(wrapper, holdings_df)
     per_row_pass = []
-    per_row_archetype = []
-    per_row_report_date = []
-    per_row_fv: list[float] = []
-
+    row_lookup = row_classification.set_index("row_index")
     for idx, row in holdings_df.iterrows():
-        text = ""
-        for candidate in fallback_text_cols:
-            candidate_text = str(row.get(candidate, "") or "").strip()
-            if candidate_text:
-                text = candidate_text
-                break
-        report_date = str(row.get(report_date_col, "") or "") if report_date_col else ""
-        archetype_name = classify_archetype(wrapper, text)
+        class_row = row_lookup.loc[idx]
+        report_date = str(class_row.get("report_date", "") or "")
+        archetype_name = str(class_row.get("archetype", "") or "")
         if archetype_name is None:
-            wrapper_family = str(row.get("wrapper_family", "") or "").strip()
-            wrapper_disposition = str(row.get("wrapper_disposition", "") or "").strip()
-            if (
-                wrapper_family
-                and wrapper_disposition.endswith("_position_leaf")
-                and any(arch.name == wrapper_family for arch in wrapper.archetypes)
-            ):
-                archetype_name = wrapper_family
-        if archetype_name is None:
-            wrapper_result = classify_identifier(wrapper.cik, text)
-            wrapper_family = str(wrapper_result.get("wrapper_family", "") or "").strip()
-            wrapper_disposition = str(wrapper_result.get("wrapper_disposition", "") or "").strip()
-            if (
-                wrapper_family
-                and wrapper_disposition.endswith("_position_leaf")
-                and any(arch.name == wrapper_family for arch in wrapper.archetypes)
-            ):
-                archetype_name = wrapper_family
-        per_row_archetype.append(archetype_name or "")
-        per_row_report_date.append(report_date)
-
-        # Collect absolute fair value for FV-weighted coverage
-        fv_val = 0.0
-        if has_fv:
-            raw_fv = row.get("fair_value")
-            if _field_is_present(raw_fv):
-                try:
-                    fv_val = abs(float(raw_fv))
-                except (ValueError, TypeError):
-                    fv_val = 0.0
-        per_row_fv.append(fv_val)
-
-        if archetype_name is None:
+            per_row_pass.append(True)  # Unclassified rows are not signature failures
+            continue
+        if not archetype_name:
             per_row_pass.append(True)  # Unclassified rows are not signature failures
             continue
 
@@ -545,12 +572,8 @@ def validate_content_signatures(
         per_row_pass.append(row_pass)
 
     # Build summary by quarter
-    result_df = pd.DataFrame({
-        "report_date": per_row_report_date,
-        "archetype": per_row_archetype,
-        "row_pass": per_row_pass,
-        "fair_value": per_row_fv,
-    })
+    result_df = row_classification[["report_date", "archetype", "fair_value"]].copy()
+    result_df["row_pass"] = per_row_pass
     # Determine thresholds from wrapper if available
     unclass_threshold = wrapper.unclassified_rate.max_pct if wrapper.unclassified_rate else None
     unclass_fv_threshold = wrapper.unclassified_rate.max_fv_pct if wrapper.unclassified_rate else None

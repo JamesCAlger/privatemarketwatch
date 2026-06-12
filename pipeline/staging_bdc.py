@@ -397,6 +397,7 @@ def _prepare_bdc(
     _optional_cols = (
         "fair_value_unit", "cost_unit", "principal_amount_unit",
         "industry", "investment_type", "affiliation",
+        "nonaccrual_footnote", "nonaccrual_dimension",
     )
 
     con = duckdb.connect()
@@ -2489,6 +2490,8 @@ def _prepare_bdc(
             '' AS nport_is_paid_in_kind,
             '' AS nport_currency_code,
             '' AS nport_liquidity_classification,
+            COALESCE(TRY_CAST(nonaccrual_footnote AS BOOLEAN), FALSE) AS nonaccrual_footnote,
+            COALESCE(TRY_CAST(nonaccrual_dimension AS BOOLEAN), FALSE) AS nonaccrual_dimension,
             CASE WHEN lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
                           LIKE '%nonconsolidatedsubsidiar%'
                       OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))

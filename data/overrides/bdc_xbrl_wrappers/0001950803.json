@@ -129,7 +129,13 @@
   },
   "staging": {
     "strategy": "prefix_strip",
-    "hierarchy_prefix_re": "(?i)^\\s*\"?Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds)\\s*(?:(?:\\||\\sl\\s)\\s*)?(?:(?:First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Collateralized\\s+Loan\\s+Obligations|Equity|Limited\\s+Partnership\\s+Interests?)\\s*(?:(?:\\||\\sl\\s)\\s*)?)?(?:[^|]+?\\s*(?:(?:\\||\\sl\\s)\\s*))?"
+    "hierarchy_prefix_re": "(?i)^\\s*\"?Non[- ]Controlled,?\\s+Non[- ]Affiliated\\s+(?:Debt\\s+Investments|Equity\\s+Investments|Private\\s+Credit\\s+Funds|Private\\s+Equity\\s+Funds)\\s*(?:(?:\\||\\sl\\s)\\s*)?(?:(?:First\\s+Lien\\s+Senior\\s+Secured|Second\\s+Lien\\s+Senior\\s+Secured|Collateralized\\s+Loan\\s+Obligations|Equity|Limited\\s+Partnership\\s+Interests?)\\s*(?:(?:\\||\\sl\\s)\\s*)?)?(?:[^|]+?\\s*(?:(?:\\||\\sl\\s)\\s*))?",
+    "pipe_field_map": {
+      "issuer_segment": 4,
+      "industry_segment": 3,
+      "lien_segment": 2,
+      "instrument_segments": [2, 4]
+    }
   },
   "archetypes": {
     "debt": {
@@ -240,5 +246,39 @@
     "unclassified_rate": {
       "max_pct": 0.10
     }
-  }
+  },
+  "segment_assertions": [
+    {
+      "segment_index": 3,
+      "field_name": "industry",
+      "expected_pattern": "gics_sector_like",
+      "segment_count": 7,
+      "min_prevalence": 0.80,
+      "description": "Segment 3 should be a GICS industry label for 7-segment pipe identifiers"
+    },
+    {
+      "segment_index": 4,
+      "field_name": "issuer_instrument",
+      "expected_pattern": "entity_name_like",
+      "segment_count": 7,
+      "min_prevalence": 0.80,
+      "description": "Segment 4 should contain an entity name (issuer + instrument) for 7-segment identifiers"
+    },
+    {
+      "segment_index": 5,
+      "field_name": "reference_rate",
+      "expected_pattern": "rate_like",
+      "segment_count": 7,
+      "min_prevalence": 0.70,
+      "description": "Segment 5 should be a reference rate for 7-segment identifiers"
+    },
+    {
+      "segment_index": 7,
+      "field_name": "maturity_date",
+      "expected_pattern": "date_like",
+      "segment_count": 7,
+      "min_prevalence": 0.70,
+      "description": "Segment 7 should be a maturity date for 7-segment identifiers"
+    }
+  ]
 }

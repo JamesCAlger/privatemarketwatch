@@ -13,6 +13,8 @@ from pipeline.oracle_checks import (
     check_J03_fuzzy_fallback_rate,
     check_J05_lower_tier_match_consistency,
     check_J06_fuzzy_match_semantic_validation,
+    check_J07_hard_gate_rejection_audit,
+    check_J08_suspected_refinancing_detection,
     check_A04_gav_reconciliation,
     check_A07_pct_of_net_assets_sum,
     check_B01_leaf_completeness,
@@ -45,6 +47,10 @@ from pipeline.oracle_checks import (
     check_H05_bdc_source_vs_unified_gap,
     check_I02_leaf_marker_accuracy,
     check_I06_non_private_market_exclusion,
+    check_I08_segment_assertion_drift,
+    check_I09_gics_issuer_name_detection,
+    check_I10_instrument_subtype_coverage,
+    check_I11_position_key_uniqueness_within_entity,
     check_J04_unique_position_id_per_report_date,
 )
 
@@ -709,13 +715,165 @@ class TestI06NonPrivateMarketExclusion:
         assert results[0].status == "pass"
 
 
+class TestI08SegmentAssertionDrift:
+    def test_pass_correct_segments(self):
+        """Segment assertion passes when pattern matches."""
+        detail = _source_detail([{
+            "source_wrapper_disposition": "debt_position_leaf",
+            "cik": "0001950803",
+            "raw_investment_identifier": (
+                "Non-Controlled Debt | First Lien | Software | "
+                "Acme Corp, LLC Term Loan | 3M SOFR + 5.50% | 12.0% | 3/31/2029"
+            ),
+        }])
+        assertions = {
+            "0001950803": [
+                {
+                    "segment_index": 3,
+                    "field_name": "industry",
+                    "expected_pattern": "gics_sector_like",
+                    "segment_count": 7,
+                    "min_prevalence": 0.80,
+                    "description": "Segment 3 = GICS industry",
+                },
+            ]
+        }
+        results = check_I08_segment_assertion_drift(detail, wrapper_specs=assertions)
+        assert any(r.status == "pass" for r in results)
+
+    def test_warn_wrong_segment_content(self):
+        """Segment assertion warns when content doesn't match expected pattern."""
+        detail = _source_detail([{
+            "source_wrapper_disposition": "debt_position_leaf",
+            "cik": "0001950803",
+            "raw_investment_identifier": (
+                "Non-Controlled Debt | First Lien | Acme Corp | "
+                "Software | 3M SOFR + 5.50% | 12.0% | 3/31/2029"
+            ),
+        }])
+        # Asserting segment 3 should be industry, but it's actually a company name
+        assertions = {
+            "0001950803": [
+                {
+                    "segment_index": 3,
+                    "field_name": "industry",
+                    "expected_pattern": "gics_sector_like",
+                    "segment_count": 7,
+                    "min_prevalence": 0.80,
+                    "description": "Segment 3 = GICS industry",
+                },
+            ]
+        }
+        results = check_I08_segment_assertion_drift(detail, wrapper_specs=assertions)
+        assert any(r.status == "warn" for r in results)
+
+    def test_skip_when_no_specs(self):
+        detail = _source_detail([{
+            "source_wrapper_disposition": "debt_position_leaf",
+        }])
+        results = check_I08_segment_assertion_drift(detail, wrapper_specs={})
+        assert results[0].status == "skip"
+
+
+class TestI09GicsIssuerNameDetection:
+    def test_pass_no_gics_in_issuer(self):
+        """Normal issuer names should not trigger GICS detection."""
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp, LLC"},
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Beta Holdings Inc."},
+        ])
+        results = check_I09_gics_issuer_name_detection(detail)
+        assert results[0].status == "pass"
+
+    def test_warn_gics_in_issuer(self):
+        """GICS labels as issuer_name should be flagged."""
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "cik": "0001111111", "report_date": "2024-12-31",
+             "issuer_name": "Software"},
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "cik": "0001111111", "report_date": "2024-12-31",
+             "issuer_name": "Insurance"},
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "cik": "0001111111", "report_date": "2024-12-31",
+             "issuer_name": "Acme Corp"},
+        ])
+        results = check_I09_gics_issuer_name_detection(detail)
+        # 2 out of 3 have GICS names = 66.7% > 5% threshold
+        assert any(r.status in ("warn", "fail") for r in results)
+
+    def test_skip_empty(self):
+        results = check_I09_gics_issuer_name_detection(pd.DataFrame())
+        assert results[0].status == "skip"
+
+
+class TestI10InstrumentSubtypeCoverage:
+    def test_pass_distinct_instruments(self):
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "instrument_description": "Term Loan A"},
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "instrument_description": "Revolver"},
+        ])
+        results = check_I10_instrument_subtype_coverage(detail)
+        assert results[0].status == "pass"
+
+    def test_warn_identical_instruments(self):
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "instrument_description": "Term Loan"},
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "instrument_description": "Term Loan"},
+        ])
+        results = check_I10_instrument_subtype_coverage(detail)
+        # 1 out of 1 multi-position group has identical instruments = 100% > 50%
+        assert results[0].status == "warn"
+
+    def test_skip_no_multi_groups(self):
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "instrument_description": "Term Loan"},
+        ])
+        results = check_I10_instrument_subtype_coverage(detail)
+        assert results[0].status == "skip"
+
+
+class TestI11PositionKeyUniquenessWithinEntity:
+    def test_pass_unique_keys(self):
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "position_key": "acme term loan a"},
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "position_key": "acme revolver"},
+        ])
+        results = check_I11_position_key_uniqueness_within_entity(detail)
+        assert results[0].status == "pass"
+
+    def test_warn_near_duplicate_keys(self):
+        detail = _source_detail([
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "position_key": "acme term loan 1"},
+            {"source_wrapper_disposition": "debt_position_leaf",
+             "issuer_name": "Acme Corp", "position_key": "acme term loan 2"},
+        ])
+        results = check_I11_position_key_uniqueness_within_entity(detail)
+        # Keys differ only by trailing digit -> near-duplicate
+        assert results[0].status == "warn"
+
+    def test_skip_empty(self):
+        results = check_I11_position_key_uniqueness_within_entity(pd.DataFrame())
+        assert results[0].status == "skip"
+
+
 # ===================================================================
 # REGISTRY TESTS
 # ===================================================================
 
 class TestCheckRegistry:
     def test_all_checks_registered(self):
-        assert len(CHECK_REGISTRY) >= 37
+        assert len(CHECK_REGISTRY) >= 41
 
     def test_all_check_ids_sorted(self):
         assert ALL_CHECK_IDS == sorted(ALL_CHECK_IDS)
@@ -1398,3 +1556,129 @@ class TestDiagnoseFuzzyFallbacks:
 
         assert len(result) == 1
         assert result.iloc[0]["end_position_key"] == "aah topco llc first lien 1"
+
+
+# ---------------------------------------------------------------------------
+# J07: Hard Gate Rejection Audit
+# ---------------------------------------------------------------------------
+
+class TestJ07HardGateRejectionAudit:
+
+    def test_skip_on_empty_matches(self):
+        results = check_J07_hard_gate_rejection_audit(pd.DataFrame(), pd.DataFrame())
+        assert len(results) == 1
+        assert results[0].status == "skip"
+
+    def test_pass_with_cde_matches(self):
+        """J07 always passes -- it is an informational audit."""
+        matches = pd.DataFrame([{
+            "cik": "0001000001", "match_method": "C_normalized_name",
+            "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Acme Corp", "end_issuer_name": "Acme Corp",
+            "begin_fair_value": "1000000", "end_fair_value": "1010000",
+            "source": "bdc",
+        }])
+        holdings = pd.DataFrame([{
+            "cik": "0001000001", "report_date": "2024-03-31",
+            "issuer_name": "Acme Corp", "source": "bdc",
+            "fair_value": "1000000", "index_classification": "DIRECT_LENDING",
+            "maturity_date": "2026-06-30",
+            "instrument_description": "Senior Term Loan",
+        }, {
+            "cik": "0001000001", "report_date": "2024-06-30",
+            "issuer_name": "Acme Corp", "source": "bdc",
+            "fair_value": "1010000", "index_classification": "DIRECT_LENDING",
+            "maturity_date": "2026-06-30",
+            "instrument_description": "Senior Term Loan",
+        }])
+        results = check_J07_hard_gate_rejection_audit(matches, holdings)
+        assert len(results) == 1
+        assert results[0].status == "pass"
+        assert "classification_flip=0" in results[0].message
+
+    def test_skip_when_no_cde_tiers(self):
+        """J07 skips when all matches are B1/B2 (no C/D/E)."""
+        matches = pd.DataFrame([{
+            "cik": "0001000001", "match_method": "B1_cusip",
+            "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Acme Corp", "end_issuer_name": "Acme Corp",
+            "begin_fair_value": "1000000", "end_fair_value": "1010000",
+            "source": "bdc",
+        }])
+        holdings = pd.DataFrame([{
+            "cik": "0001000001", "report_date": "2024-03-31",
+            "issuer_name": "Acme Corp", "source": "bdc",
+            "fair_value": "1000000",
+        }])
+        results = check_J07_hard_gate_rejection_audit(matches, holdings)
+        assert len(results) == 1
+        assert results[0].status == "pass"  # No C/D/E -> passes with 0 pairs
+
+
+# ---------------------------------------------------------------------------
+# J08: Suspected Refinancing Detection
+# ---------------------------------------------------------------------------
+
+class TestJ08SuspectedRefinancing:
+
+    def test_skip_on_empty_matches(self):
+        results = check_J08_suspected_refinancing_detection(
+            pd.DataFrame(), pd.DataFrame()
+        )
+        assert len(results) == 1
+        assert results[0].status == "skip"
+
+    def test_pass_no_refinancing(self):
+        """J08 passes when no maturity+spread shifts detected."""
+        matches = pd.DataFrame([{
+            "cik": "0001000001", "match_method": "B2_exact_name",
+            "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Stable Corp", "end_issuer_name": "Stable Corp",
+            "begin_fair_value": "1000000", "end_fair_value": "1010000",
+            "source": "bdc",
+        }])
+        holdings = pd.DataFrame([{
+            "cik": "0001000001", "report_date": "2024-03-31",
+            "issuer_name": "Stable Corp", "source": "bdc",
+            "fair_value": "1000000",
+            "maturity_date": "2026-06-30", "basis_spread": "3.5",
+            "interest_rate": "8.5",
+        }, {
+            "cik": "0001000001", "report_date": "2024-06-30",
+            "issuer_name": "Stable Corp", "source": "bdc",
+            "fair_value": "1010000",
+            "maturity_date": "2026-06-30", "basis_spread": "3.5",
+            "interest_rate": "8.5",
+        }])
+        results = check_J08_suspected_refinancing_detection(matches, holdings)
+        assert len(results) == 1
+        assert results[0].status == "pass"
+
+    def test_warn_on_refinancing(self):
+        """J08 warns when maturity shift + spread change exceeds threshold."""
+        matches = pd.DataFrame([{
+            "cik": "0001000001", "match_method": "B2_exact_name",
+            "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Refi Corp", "end_issuer_name": "Refi Corp",
+            "begin_fair_value": "1000000", "end_fair_value": "1010000",
+            "source": "bdc",
+        }])
+        holdings = pd.DataFrame([{
+            "cik": "0001000001", "report_date": "2024-03-31",
+            "issuer_name": "Refi Corp", "source": "bdc",
+            "fair_value": "1000000",
+            "maturity_date": "2025-06-30", "basis_spread": "3.5",
+            "interest_rate": "8.5",
+        }, {
+            "cik": "0001000001", "report_date": "2024-06-30",
+            "issuer_name": "Refi Corp", "source": "bdc",
+            "fair_value": "1010000",
+            "maturity_date": "2028-06-30", "basis_spread": "2.5",
+            "interest_rate": "7.5",
+        }])
+        results = check_J08_suspected_refinancing_detection(
+            matches, holdings, max_refi_rate=0.0
+        )
+        assert len(results) == 1
+        # With only 1 match that is a refi, rate=100% > 0% threshold -> warn
+        assert results[0].status == "warn"

@@ -1943,3 +1943,34 @@ Replaced greedy ROW_NUMBER PARTITION BY dedup with the Hungarian algorithm (mini
 **Test counts:** 107 position matching + Hungarian tests pass. Full suite: 3,546 passed, 13 skipped, 0 new failures (1 pre-existing failure in `test_bdc_xbrl_wrapper.py::test_apollo_ds_company_only_source_row_is_aggregate` excluded).
 
 **Follow-up: Tier E bipartite disabled (same session).** Deep analysis of results showed Tier E bipartite produced 6,856 reassigned pairs (79% of all churn), dominated by lateral swaps within ambiguous name clusters at a single CIK (Cliffwater, 5,853 swaps). FV proximity was sometimes sacrificed. Gold-set changes were lateral moves, not accuracy improvements. Bipartite now only applies to Tier C and D where the mechanism addresses the wrong_tranche failure mode (entity groups with multiple distinct tranches where FV crossover causes greedy mis-assignment). Tier E's entity fingerprint matching operates on fuzzier identity signals where globally-optimal reassignment is not meaningful.
+
+### 2026-06-12 -- Final wrapper-oracle agent packet and drift architecture
+
+Finalized the wrapper-oracle extension architecture and implemented the remaining trial telemetry, agent verdict, and promotion-gate integration.
+
+**Files modified:**
+- `docs/wrapper_oracle_extensions/oracle_agent_review_and_drift_design.md` -- converted open questions into final architecture decisions for materiality, drift baselines, verdict confidence, waiver scope, artifact ownership, and per-CIK wrapper scoping
+- `pipeline/bdc_xbrl_wrapper_oracle.py` -- added agent row packets, agent cluster packets, source-corrupted identifier detection, per-CIK column distribution drift summaries/examples, agent verdict JSONL validation, verdict summary reduction, and promotion-gate consumption of verdict effects
+- `tests/test_bdc_xbrl_wrapper_oracle.py` -- added focused coverage for materiality tiers, source-corrupted packets, drift packeting, packet aggregation, verdict validation/summary effects, promotion-gate verdict effects, and trial artifact writes
+- `pipeline/bdc_filings.py` -- moved the non-accrual helper import inside `_parse_single_filing()` to resolve an existing circular import that blocked wrapper-oracle test collection
+
+**New trial artifacts:**
+- `source_corrupted_identifiers.csv`
+- `column_drift_summary.csv`
+- `column_drift_examples.csv`
+- `agent_issue_packets.csv`
+- `agent_issue_packets.jsonl`
+- `agent_cluster_packets.csv`
+- `agent_cluster_packets.jsonl`
+- `agent_verdict_summary.csv`
+
+**Contracts and guardrails:**
+- Agent packet outputs are scoped to the requested CIK and are trial telemetry, not production truth.
+- Column drift compares each CIK's current quarter against a rolling four-quarter baseline, using all available prior quarters for short histories and requiring at least two prior quarters before review status.
+- Verdict summaries can reject or require review for promotion, but only through deterministic `promotion_effect` values derived from validated JSONL verdict records.
+- Verdict validation requires mechanism, evidence, confidence, residual risk, materiality tier, affected FV, and a deterministic repair path; it rejects hand-edited production-output recommendations.
+
+**Validation results:**
+- `python -m py_compile pipeline/bdc_xbrl_wrapper_oracle.py pipeline/bdc_filings.py` -- passed
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -k "materiality or source_corrupted or column_drift or agent_issue or agent_cluster or agent_verdict or promotion_gate_consumes_agent or high_fv_unclassified_clusters_trial_writes_artifact" -q` -- 8 passed, 88 deselected
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -q` -- 96 passed

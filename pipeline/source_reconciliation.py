@@ -115,6 +115,7 @@ METRIC_COLUMNS = [
     "value_mismatch_rows", "collapsed_duplicate_dimension_path_rows",
     "excluded_comparative_period_rows", "excluded_aggregate_candidate_rows",
     "documented_source_rollup_exact_rows",
+    "documented_source_issuer_subtotal_arithmetic_rows",
     "excluded_no_fair_value_rows", "superseded_amendment_rows",
     "excluded_self_referential_subtotal_rows",
     "excluded_hierarchy_header_rows",
@@ -168,6 +169,7 @@ INTENTIONAL_SOURCE_STATUSES = {
     "excluded_money_market_fund",
     "excluded_bad_issuer_name",
     "excluded_affiliation_dedup",
+    "documented_source_issuer_subtotal_arithmetic",
 }
 
 DOCUMENTED_MECHANISMS = {
@@ -183,6 +185,7 @@ DOCUMENTED_MECHANISMS = {
     "excluded_bad_issuer_name": "documented_bad_issuer_name",
     "excluded_affiliation_dedup": "documented_affiliation_dedup",
     "documented_source_issuer_level_xbrl_subtotal": "documented_source_issuer_level_xbrl_subtotal",
+    "documented_source_issuer_subtotal_arithmetic": "documented_source_issuer_subtotal_arithmetic",
 }
 
 MECHANISM_RECOMMENDED_ACTIONS = {
@@ -198,6 +201,7 @@ MECHANISM_RECOMMENDED_ACTIONS = {
     "documented_bad_issuer_name": "Keep documented as non-blocking generic/bad issuer name filtered during staging.",
     "documented_affiliation_dedup": "Keep documented as non-blocking affiliation-axis duplicate of a matched position.",
     "documented_source_issuer_level_xbrl_subtotal": "Keep documented as non-blocking issuer-level XBRL subtotal; verify issuer identity and FV match to position leaves.",
+    "documented_source_issuer_subtotal_arithmetic": "Keep documented as non-blocking issuer-level subtotal whose FV matches sum of output leaf positions for the same issuer name.",
     "diagnostic_secondary_field_mismatch": "Review secondary field extraction only if diagnostics cluster by filer.",
     "reconciled_identifier_normalization": "Keep as reconciled normalization; monitor for unexpected match-tier shifts.",
     "reconciled_issuer_name_extraction": "Keep as reconciled via issuer name extraction from raw identifier.",
@@ -241,6 +245,7 @@ MECHANISM_REASONS = {
     "documented_bad_issuer_name": "Source row has a generic/bad issuer name (e.g. 'Investments', 'First Lien Debt') filtered during staging.",
     "documented_affiliation_dedup": "Source row is an affiliation-axis duplicate of another source row that matched to output.",
     "documented_source_issuer_level_xbrl_subtotal": "Source row is an issuer-level XBRL subtotal whose fair value matches the sum of position-leaf rows for the same issuer.",
+    "documented_source_issuer_subtotal_arithmetic": "Source row is an issuer-level subtotal whose FV matches sum of multiple output leaf positions for the same extracted issuer name.",
     "diagnostic_secondary_field_mismatch": "Matched row has a non-fair-value field mismatch tracked as diagnostic.",
     "reconciled_identifier_normalization": "Source and output reconciled through deterministic identifier normalization rather than exact dimensions.",
     "reconciled_issuer_name_extraction": "Source row reconciled to output via issuer name extraction from raw identifier.",
@@ -2157,6 +2162,60 @@ def reconcile_bdc_source_to_holdings(
                     AND s.staging_normalized_investment_identifier LIKE 'total %'
                 )
              )
+        ), source_issuer_subtotal_candidates AS (
+            -- Identify unmatched source rows that look like issuer-level subtotals:
+            -- entity signal present, no position-level instrument signal.
+            -- DuckDB uses RE2 which does not support \b; use (?:\s|$) instead.
+            SELECT
+                s.source_row_id,
+                s.cik,
+                s.report_date,
+                s.accession_number,
+                s.source_fair_value,
+                s.staging_normalized_investment_identifier
+            FROM eligible_source s
+            LEFT JOIN all_matches m ON s.source_row_id = m.source_row_id
+            LEFT JOIN documented_source_rollups sr ON s.source_row_id = sr.source_row_id
+            WHERE m.source_row_id IS NULL
+              AND sr.source_row_id IS NULL
+              AND COALESCE(s.source_exclusion_status, '') = ''
+              AND COALESCE(s.duplicate_status, '') = ''
+              AND s.source_fair_value IS NOT NULL
+              -- Must have entity signal
+              AND regexp_matches(
+                  lower(s.staging_normalized_investment_identifier),
+                  '(?:inc[.]?|llc|corp[.]?|ltd[.]?|l[.]?p[.]?|holdings|partners|group|co[.]?)(?:\\s|$)'
+              )
+              -- Must NOT have position-level instrument signal
+              AND NOT regexp_matches(
+                  lower(s.staging_normalized_investment_identifier),
+                  '(?:term\\s+loan|first\\s+lien|second\\s+lien|revolver|revolving|delayed\\s+draw|unitranche|senior\\s+secured|subordinated|notes?(?:\\s|$)|bonds?(?:\\s|$)|warrants?(?:\\s|$)|preferred\\s+stock|common\\s+stock|sofr|libor|euribor|maturity|\\d{{1,2}}/\\d{{2,4}})'
+              )
+        ), source_issuer_subtotal_arithmetic AS (
+            -- Match issuer subtotal candidates to multiple output leaves where
+            -- the output issuer_name is contained within the source identifier
+            -- and the FV sum matches the source FV within tolerance.
+            SELECT
+                si.source_row_id,
+                COUNT(DISTINCT o.output_row_id) AS child_output_count,
+                SUM(o.output_fair_value) AS child_output_fair_value
+            FROM source_issuer_subtotal_candidates si
+            JOIN output_prepared o
+              ON si.cik = o.cik
+             AND si.report_date = o.report_date
+             AND si.accession_number = o.accession_number
+             AND o.output_fair_value IS NOT NULL
+             AND COALESCE(o.issuer_name, '') != ''
+             -- Source staging identifier must contain the normalized output issuer_name
+             AND contains(
+                 si.staging_normalized_investment_identifier,
+                 trim(regexp_replace(lower(o.issuer_name), '[^a-z0-9]+', ' ', 'g'))
+             )
+             AND length(trim(regexp_replace(lower(o.issuer_name), '[^a-z0-9]+', ' ', 'g'))) >= 3
+            GROUP BY si.source_row_id, si.source_fair_value
+            HAVING COUNT(DISTINCT o.output_row_id) >= 2
+               AND abs(si.source_fair_value - SUM(o.output_fair_value))
+                   <= greatest(1.0, 0.0001 * greatest(abs(si.source_fair_value), abs(SUM(o.output_fair_value))))
         ), source_detail AS (
             SELECT
                 CASE
@@ -2164,6 +2223,8 @@ def reconcile_bdc_source_to_holdings(
                     WHEN s.duplicate_status != '' THEN s.duplicate_status
                     WHEN m.source_row_id IS NULL AND sr.source_row_id IS NOT NULL
                         THEN 'documented_source_rollup_exact'
+                    WHEN m.source_row_id IS NULL AND sisa.source_row_id IS NOT NULL
+                        THEN 'documented_source_issuer_subtotal_arithmetic'
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL
                         THEN 'excluded_self_referential_subtotal'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
@@ -2197,6 +2258,7 @@ def reconcile_bdc_source_to_holdings(
                 CASE
                     WHEN s.source_exclusion_status != '' OR s.duplicate_status != ''
                          OR (m.source_row_id IS NULL AND sr.source_row_id IS NOT NULL)
+                         OR (m.source_row_id IS NULL AND sisa.source_row_id IS NOT NULL)
                          OR (m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL)
                          OR (
                              COALESCE(s.is_aggregate_candidate, false)
@@ -2224,6 +2286,7 @@ def reconcile_bdc_source_to_holdings(
                 CASE
                     WHEN s.source_exclusion_status != '' OR s.duplicate_status != ''
                          OR (m.source_row_id IS NULL AND sr.source_row_id IS NOT NULL)
+                         OR (m.source_row_id IS NULL AND sisa.source_row_id IS NOT NULL)
                          OR (m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL)
                          OR (
                              COALESCE(s.is_aggregate_candidate, false)
@@ -2251,6 +2314,7 @@ def reconcile_bdc_source_to_holdings(
                 CASE
                     WHEN s.source_exclusion_status != '' OR s.duplicate_status != ''
                          OR (m.source_row_id IS NULL AND sr.source_row_id IS NOT NULL)
+                         OR (m.source_row_id IS NULL AND sisa.source_row_id IS NOT NULL)
                          OR (m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL)
                          OR (
                              COALESCE(s.is_aggregate_candidate, false)
@@ -2279,6 +2343,8 @@ def reconcile_bdc_source_to_holdings(
                     WHEN s.duplicate_status != '' THEN s.duplicate_status
                     WHEN m.source_row_id IS NULL AND sr.source_row_id IS NOT NULL
                         THEN 'documented_source_rollup_exact'
+                    WHEN m.source_row_id IS NULL AND sisa.source_row_id IS NOT NULL
+                        THEN 'documented_source_issuer_subtotal_arithmetic'
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL
                         THEN 'excluded_self_referential_subtotal'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
@@ -2317,6 +2383,11 @@ def reconcile_bdc_source_to_holdings(
                             THEN 'source rollup fair_value equals sum of multiple pipeline child positions'
                             ELSE 'source rollup fair_value equals sum of multiple source child positions'
                         END
+                    WHEN m.source_row_id IS NULL AND sisa.source_row_id IS NOT NULL
+                        THEN 'issuer-level subtotal FV matches sum of '
+                            || CAST(sisa.child_output_count AS VARCHAR)
+                            || ' output leaf positions (child_fv='
+                            || CAST(COALESCE(sisa.child_output_fair_value, 0) AS VARCHAR) || ')'
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL
                         THEN 'self-referential subtotal whose identifier is prefix of multiple child source rows'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
@@ -2477,6 +2548,11 @@ def reconcile_bdc_source_to_holdings(
                         || CAST(COALESCE(sr.child_source_count, 0) AS VARCHAR)
                         || '; child_source_fair_value='
                         || CAST(COALESCE(sr.child_source_fair_value, 0) AS VARCHAR)
+                    WHEN m.source_row_id IS NULL AND sisa.source_row_id IS NOT NULL THEN
+                        'issuer subtotal arithmetic; child_output_count='
+                        || CAST(sisa.child_output_count AS VARCHAR)
+                        || '; child_output_fair_value='
+                        || CAST(COALESCE(sisa.child_output_fair_value, 0) AS VARCHAR)
                     WHEN m.source_row_id IS NULL AND srs.source_row_id IS NOT NULL THEN
                         'self-referential subtotal; identifier is prefix of multiple child source rows'
                     WHEN COALESCE(s.is_aggregate_candidate, false)
@@ -2535,6 +2611,7 @@ def reconcile_bdc_source_to_holdings(
             LEFT JOIN all_matches m ON s.source_row_id = m.source_row_id
             LEFT JOIN output_prepared o ON m.output_row_id = o.output_row_id
             LEFT JOIN documented_source_rollups sr ON s.source_row_id = sr.source_row_id
+            LEFT JOIN source_issuer_subtotal_arithmetic sisa ON s.source_row_id = sisa.source_row_id
             LEFT JOIN source_self_referential_subtotals srs ON s.source_row_id = srs.source_row_id
             LEFT JOIN source_affiliation_dupes sad ON s.source_row_id = sad.source_row_id
             LEFT JOIN numeric_identity_candidate_summary nics
@@ -2709,6 +2786,7 @@ def build_source_reconciliation_metrics(detail_df: pd.DataFrame) -> pd.DataFrame
                 SUM(CASE WHEN status = 'excluded_comparative_period' THEN 1 ELSE 0 END) AS excluded_comparative_period_rows,
                 SUM(CASE WHEN status = 'excluded_aggregate_candidate' THEN 1 ELSE 0 END) AS excluded_aggregate_candidate_rows,
                 SUM(CASE WHEN status = 'documented_source_rollup_exact' THEN 1 ELSE 0 END) AS documented_source_rollup_exact_rows,
+                SUM(CASE WHEN status = 'documented_source_issuer_subtotal_arithmetic' THEN 1 ELSE 0 END) AS documented_source_issuer_subtotal_arithmetic_rows,
                 SUM(CASE WHEN status = 'excluded_no_fair_value' THEN 1 ELSE 0 END) AS excluded_no_fair_value_rows,
                 SUM(CASE WHEN status = 'superseded_amendment' THEN 1 ELSE 0 END) AS superseded_amendment_rows,
                 SUM(CASE WHEN status = 'excluded_self_referential_subtotal' THEN 1 ELSE 0 END) AS excluded_self_referential_subtotal_rows,
@@ -2731,6 +2809,7 @@ def build_source_reconciliation_metrics(detail_df: pd.DataFrame) -> pd.DataFrame
                 WHEN source_rows - excluded_comparative_period_rows
                      - excluded_aggregate_candidate_rows
                      - documented_source_rollup_exact_rows
+                     - documented_source_issuer_subtotal_arithmetic_rows
                      - excluded_no_fair_value_rows
                      - superseded_amendment_rows
                      - collapsed_duplicate_dimension_path_rows
@@ -2744,6 +2823,7 @@ def build_source_reconciliation_metrics(detail_df: pd.DataFrame) -> pd.DataFrame
                     (source_rows - excluded_comparative_period_rows
                      - excluded_aggregate_candidate_rows
                      - documented_source_rollup_exact_rows
+                     - documented_source_issuer_subtotal_arithmetic_rows
                      - excluded_no_fair_value_rows
                      - superseded_amendment_rows
                      - collapsed_duplicate_dimension_path_rows
@@ -2757,6 +2837,7 @@ def build_source_reconciliation_metrics(detail_df: pd.DataFrame) -> pd.DataFrame
                 WHEN source_rows - excluded_comparative_period_rows
                      - excluded_aggregate_candidate_rows
                      - documented_source_rollup_exact_rows
+                     - documented_source_issuer_subtotal_arithmetic_rows
                      - excluded_no_fair_value_rows
                      - superseded_amendment_rows
                      - collapsed_duplicate_dimension_path_rows
@@ -2771,6 +2852,7 @@ def build_source_reconciliation_metrics(detail_df: pd.DataFrame) -> pd.DataFrame
                     (source_rows - excluded_comparative_period_rows
                      - excluded_aggregate_candidate_rows
                      - documented_source_rollup_exact_rows
+                     - documented_source_issuer_subtotal_arithmetic_rows
                      - excluded_no_fair_value_rows
                      - superseded_amendment_rows
                      - collapsed_duplicate_dimension_path_rows

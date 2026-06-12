@@ -99,9 +99,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^Investments(?:[-\\s](?:controlled/affiliated|non-controlled/\\s*non-affiliated|non-controlled/non-affiliated|non-controlled/affiliated))?\\s*(?:(?:Debt|Equity)\\s+Investments\\s+)?(?:Investment\\s+Fund\\s+|Investments\\s+Investments\\s+In\\s+Joint\\s+Ventures\\s+)?(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+Investment\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest)\\b",
+    "hierarchy_issuer_re": "(?i)^(?:Investments(?:[-\\s](?:controlled/affiliated|non-controlled/\\s*non-affiliated|non-controlled/non-affiliated|non-controlled/affiliated))?\\s*(?:(?:Debt|Equity)\\s+Investments\\s+)?(?:Investment\\s+Fund\\s+|Investments\\s+Investments\\s+In\\s+Joint\\s+Ventures\\s+)?)?(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:Rights\\s+)?Investment\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest)\\b",
     "hierarchy_instrument_re": "(?i)\\bInvestment\\s+((?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest).*)$",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^Investments') AND regexp_matches(_clean, '(?i)\\bInvestment\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest)\\b')",
+    "hierarchy_condition_extra": "(regexp_matches(_clean, '(?i)^Investments') OR regexp_matches(_clean, '(?i)^(?:MSD_INDUSTRY_LABELS)\\s+')) AND regexp_matches(_clean, '(?i)\\bInvestment\\s+(?:First\\s+Lien\\s+Debt|Second\\s+Lien\\s+Debt|Unsecured\\s+Debt|Common\\s+Equity|Preferred\\s+Equity|LLC\\s+Interest)\\b')",
     "extra_industry_labels": [
       "Aerospace & Defense",
       "Air Freight & Logistics",

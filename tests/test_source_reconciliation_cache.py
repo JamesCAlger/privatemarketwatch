@@ -180,6 +180,154 @@ def test_dirty_reconciliation_planning_hashes_and_missing_artifacts(tmp_path, mo
     assert "force" in sr.plan_dirty_reconciliation_ciks(source_manifest, holdings_hashes, "logic-a", "override-a", force=True).iloc[0]["dirty_reason"]
 
 
+def _make_source_row(identifier, fair_value, cik="123", accession="0001"):
+    """Helper to build a single source fact row."""
+    row = {col: "" for col in sr.SOURCE_FACT_COLUMNS}
+    row.update({
+        "cik": cik,
+        "entity_name": "BDC",
+        "accession_number": accession,
+        "form_type": "10-Q",
+        "filing_date": "2025-05-01",
+        "report_date": "2025-03-31",
+        "context_id": "c1",
+        "period": "2025-03-31",
+        "investment_identifier": identifier,
+        "fair_value": fair_value,
+    })
+    return row
+
+
+def _make_output_row(identifier, fair_value, issuer_name="", cik="123", accession="0001"):
+    """Helper to build a single holdings output row."""
+    return {
+        "source": "BDC",
+        "cik": cik,
+        "entity_name": "BDC",
+        "report_date": "2025-03-31",
+        "period": "2025-03-31",
+        "accession_number": accession,
+        "filing_date": "2025-05-01",
+        "bdc_form_type": "10-Q",
+        "bdc_investment_identifier": identifier,
+        "bdc_dimensions_raw": "",
+        "issuer_name": issuer_name,
+        "instrument_description": "",
+        "index_classification": "",
+        "asset_category": "LOAN",
+        "issuer_category": "",
+        "maturity_date": "",
+        "fair_value": fair_value,
+        "cost": "",
+        "principal_amount": "",
+        "shares_held": "",
+        "interest_rate": "",
+        "basis_spread": "",
+        "pik_rate": "",
+    }
+
+
+# ---- Issuer subtotal arithmetic clearing tests ----
+
+
+def test_issuer_subtotal_arithmetic_basic_clearing():
+    """Source uses different identifier format than output children -> cleared by arithmetic.
+
+    The source identifier "Debt Investments - Acme Corp LLC" will NOT be a prefix
+    of output identifiers like "Acme Corp LLC - First Lien Term Loan SOFR+500 07/2028",
+    so the existing rollup_exact CTE won't match. The new issuer subtotal arithmetic
+    CTE extracts "acme corp llc" from both and matches by FV arithmetic.
+    """
+    source_df = pd.DataFrame([
+        _make_source_row("Debt Investments - Acme Corp LLC", 300.0),
+    ], columns=sr.SOURCE_FACT_COLUMNS)
+    holdings_df = pd.DataFrame([
+        _make_output_row("Acme Corp LLC - First Lien Term Loan SOFR+500 07/2028", 100.0, issuer_name="Acme Corp LLC"),
+        _make_output_row("Acme Corp LLC - Second Lien Term Loan SOFR+800 07/2028", 100.0, issuer_name="Acme Corp LLC"),
+        _make_output_row("Acme Corp LLC - Revolver SOFR+500 07/2028", 100.0, issuer_name="Acme Corp LLC"),
+    ])
+    detail, _ = sr.reconcile_bdc_source_to_holdings(source_df, holdings_df, enable_bdc_xbrl_wrappers=False)
+    source_rows = detail[detail["source_row_id"].astype(str) != ""]
+    acme_row = source_rows[source_rows["raw_investment_identifier"].str.contains("Acme Corp LLC", na=False)]
+    assert len(acme_row) == 1
+    assert acme_row.iloc[0]["status"] == "documented_source_issuer_subtotal_arithmetic"
+    assert acme_row.iloc[0]["blocking_issue"] == False  # noqa: E712
+
+
+def test_issuer_subtotal_arithmetic_fv_mismatch_stays_blocking():
+    """Source FV=400 but children sum=300 -> NOT cleared (stays blocking)."""
+    source_df = pd.DataFrame([
+        _make_source_row("Debt Investments - Beta Holdings Inc", 400.0),
+    ], columns=sr.SOURCE_FACT_COLUMNS)
+    holdings_df = pd.DataFrame([
+        _make_output_row("Beta Holdings Inc - First Lien SOFR+500 07/2028", 100.0, issuer_name="Beta Holdings Inc"),
+        _make_output_row("Beta Holdings Inc - Second Lien SOFR+800 07/2028", 100.0, issuer_name="Beta Holdings Inc"),
+        _make_output_row("Beta Holdings Inc - Revolver SOFR+500 07/2028", 100.0, issuer_name="Beta Holdings Inc"),
+    ])
+    detail, _ = sr.reconcile_bdc_source_to_holdings(source_df, holdings_df, enable_bdc_xbrl_wrappers=False)
+    source_rows = detail[detail["source_row_id"].astype(str) != ""]
+    beta_row = source_rows[source_rows["raw_investment_identifier"].str.contains("Beta Holdings", na=False)]
+    assert len(beta_row) == 1
+    assert beta_row.iloc[0]["status"] != "documented_source_issuer_subtotal_arithmetic"
+    assert beta_row.iloc[0]["blocking_issue"] == True  # noqa: E712
+
+
+def test_issuer_subtotal_arithmetic_single_child_not_cleared():
+    """Source FV=100 with only ONE output child FV=100 -> NOT cleared (require >= 2)."""
+    source_df = pd.DataFrame([
+        _make_source_row("Debt Investments - Gamma Corp", 100.0),
+    ], columns=sr.SOURCE_FACT_COLUMNS)
+    holdings_df = pd.DataFrame([
+        _make_output_row("Gamma Corp - First Lien SOFR+500 07/2028", 100.0, issuer_name="Gamma Corp"),
+    ])
+    detail, _ = sr.reconcile_bdc_source_to_holdings(source_df, holdings_df, enable_bdc_xbrl_wrappers=False)
+    source_rows = detail[detail["source_row_id"].astype(str) != ""]
+    gamma_row = source_rows[source_rows["raw_investment_identifier"].str.contains("Gamma Corp", na=False)]
+    # Either matched directly or blocking, but NOT cleared by issuer subtotal arithmetic
+    for _, row in gamma_row.iterrows():
+        assert row["status"] != "documented_source_issuer_subtotal_arithmetic"
+
+
+def test_issuer_subtotal_arithmetic_position_signal_not_cleared():
+    """Source with position keywords should NOT be cleared even if FV matches.
+
+    "Delta LLC First Lien Term Loan" has position signals (first lien, term loan)
+    so even though its FV matches the sum of children, it should not be treated
+    as an issuer-level subtotal.
+    """
+    source_df = pd.DataFrame([
+        _make_source_row("Delta LLC First Lien Term Loan", 200.0),
+    ], columns=sr.SOURCE_FACT_COLUMNS)
+    holdings_df = pd.DataFrame([
+        _make_output_row("Delta LLC - First Lien Term Loan A SOFR+500 07/2028", 100.0, issuer_name="Delta LLC"),
+        _make_output_row("Delta LLC - First Lien Term Loan B SOFR+500 07/2028", 100.0, issuer_name="Delta LLC"),
+    ])
+    detail, _ = sr.reconcile_bdc_source_to_holdings(source_df, holdings_df, enable_bdc_xbrl_wrappers=False)
+    source_rows = detail[detail["source_row_id"].astype(str) != ""]
+    delta_row = source_rows[source_rows["raw_investment_identifier"].str.contains("Delta LLC First Lien", na=False)]
+    assert len(delta_row) >= 1
+    # Should not be cleared by issuer subtotal arithmetic because "First Lien Term Loan" is a position signal
+    for _, row in delta_row.iterrows():
+        assert row["status"] != "documented_source_issuer_subtotal_arithmetic"
+
+
+def test_issuer_subtotal_arithmetic_pipe_delimited():
+    """Pipe-delimited source 'Investments | Debt | Epsilon Holdings Inc' -> cleared."""
+    source_df = pd.DataFrame([
+        _make_source_row("Investments | Debt | Epsilon Holdings Inc", 500.0),
+    ], columns=sr.SOURCE_FACT_COLUMNS)
+    holdings_df = pd.DataFrame([
+        _make_output_row("Epsilon Holdings Inc First Lien", 250.0, issuer_name="Epsilon Holdings Inc"),
+        _make_output_row("Epsilon Holdings Inc Revolver", 250.0, issuer_name="Epsilon Holdings Inc"),
+    ])
+    detail, _ = sr.reconcile_bdc_source_to_holdings(source_df, holdings_df, enable_bdc_xbrl_wrappers=False)
+    source_rows = detail[detail["source_row_id"].astype(str) != ""]
+    epsilon_row = source_rows[source_rows["raw_investment_identifier"].str.contains("Epsilon Holdings", na=False)]
+    assert len(epsilon_row) == 1
+    assert epsilon_row.iloc[0]["status"] == "documented_source_issuer_subtotal_arithmetic"
+    assert epsilon_row.iloc[0]["blocking_issue"] == False  # noqa: E712
+
+
 def test_forced_reconciliation_recomputes_each_cik_partition(tmp_path, monkeypatch):
     _patch_cache_paths(monkeypatch, tmp_path)
     source_manifest = pd.DataFrame([

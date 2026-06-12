@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json as json_mod
 import logging
+import math
 from dataclasses import dataclass
 from pathlib import Path
 import re
@@ -25,6 +26,7 @@ from pipeline.bdc_xbrl_wrapper import (
 TRINITY_CIK = "0001786108"
 from pipeline.wrapper_content_signatures import (
     WrapperDefinition,
+    classify_content_signature_rows,
     load_wrapper_definition,
     validate_content_signatures,
     validate_fv_reconciliation,
@@ -81,6 +83,8 @@ ORACLE_SUMMARY_COLUMNS = [
     "position_continuation_rate",
     "rate_outlier_count",
     "cost_fv_ratio_outlier_count",
+    "parsed_field_quality_issue_count",
+    "parsed_field_quality_fair_value",
     "fv_magnitude_shift",
     "rate_magnitude_shift",
     "concept_drift_flag",
@@ -128,6 +132,287 @@ _EXCLUSION_POSITION_EVIDENCE_TOKENS = [
 
 _EXCLUSION_EVIDENCE_PATTERN = "|".join(
     re.escape(t) for t in _EXCLUSION_POSITION_EVIDENCE_TOKENS
+)
+
+PARSED_FIELD_QUALITY_COLUMNS = [
+    "cik",
+    "entity_name",
+    "report_date",
+    "accession_number",
+    "source_row_id",
+    "output_row_id",
+    "bdc_investment_identifier",
+    "column",
+    "issue_type",
+    "severity",
+    "fair_value",
+    "output_value",
+    "evidence_token",
+    "wrapper_disposition",
+    "suggested_owner",
+    "recommended_action",
+]
+
+ROW_DELTA_ATTRIBUTION_COLUMNS = [
+    "cik",
+    "entity_name",
+    "report_date",
+    "accession_number",
+    "delta_type",
+    "row_count",
+    "fair_value_abs_sum",
+    "production_row_count",
+    "trial_row_count",
+    "production_fair_value_abs_sum",
+    "trial_fair_value_abs_sum",
+    "sample_identifier",
+    "sample_position_key",
+    "changed_columns",
+    "production_value",
+    "trial_value",
+    "likely_mechanism",
+    "owner",
+    "review_status",
+]
+
+HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS = [
+    "cik",
+    "entity_name",
+    "cluster_label",
+    "affected_report_dates",
+    "quarter_count",
+    "row_count",
+    "fair_value_abs_sum",
+    "fair_value_share",
+    "max_quarter_fair_value_share",
+    "source_family_guess",
+    "suggested_wrapper_family",
+    "output_index_classification",
+    "output_asset_category",
+    "output_exposure_type",
+    "sample_identifiers",
+    "sample_issuer_names",
+    "sample_instrument_descriptions",
+    "suggested_review_question",
+    "owner",
+    "review_status",
+]
+
+AGENT_ISSUE_PACKET_COLUMNS = [
+    "issue_id",
+    "rule_id",
+    "source_rule_id",
+    "packet_type",
+    "severity",
+    "materiality_tier",
+    "likely_owner",
+    "review_status",
+    "cik",
+    "entity_name",
+    "report_date",
+    "accession_number",
+    "source_row_id",
+    "output_row_id",
+    "production_column",
+    "source_value",
+    "output_value",
+    "affected_fair_value",
+    "affected_fair_value_pct",
+    "affected_row_count",
+    "affected_row_pct",
+    "evidence",
+    "recommended_action",
+]
+
+AGENT_CLUSTER_PACKET_COLUMNS = [
+    "issue_id",
+    "rule_id",
+    "source_rule_id",
+    "packet_type",
+    "severity",
+    "materiality_tier",
+    "likely_owner",
+    "review_status",
+    "cik",
+    "entity_name",
+    "report_date",
+    "affected_report_dates",
+    "cluster_key",
+    "cluster_label",
+    "production_column",
+    "affected_fair_value",
+    "affected_fair_value_pct",
+    "affected_row_count",
+    "affected_row_pct",
+    "evidence",
+    "representative_rows_path",
+    "recommended_action",
+]
+
+COLUMN_DRIFT_SUMMARY_COLUMNS = [
+    "cik",
+    "entity_name",
+    "report_date",
+    "column",
+    "baseline_quarter_count",
+    "row_count",
+    "fair_value_abs_sum",
+    "js_divergence",
+    "new_bucket_share",
+    "current_dominant_bucket",
+    "baseline_dominant_bucket",
+    "status",
+    "severity",
+    "materiality_tier",
+    "bucket_distribution",
+    "baseline_bucket_distribution",
+]
+
+COLUMN_DRIFT_EXAMPLE_COLUMNS = [
+    "cik",
+    "entity_name",
+    "report_date",
+    "column",
+    "bucket",
+    "bdc_investment_identifier",
+    "issuer_name",
+    "instrument_description",
+    "output_value",
+    "fair_value",
+]
+
+AGENT_VERDICT_SUMMARY_COLUMNS = [
+    "verdict",
+    "likely_owner",
+    "materiality_tier",
+    "issue_count",
+    "affected_fair_value",
+    "max_confidence",
+    "promotion_effect",
+]
+
+_AGENT_VERDICT_ALLOWED_VALUES = frozenset({
+    "true_wrapper_error",
+    "false_positive",
+    "inconclusive",
+    "not_wrapper_owned",
+    "real_filing_change",
+    "source_format_change_normalized_ok",
+})
+_AGENT_VERDICT_ALLOWED_OWNERS = frozenset({
+    "wrapper",
+    "global_staging",
+    "classification",
+    "source_data",
+    "enrichment",
+    "validation_rule",
+    "unknown",
+})
+_WRAPPER_SOFT_PACKET_RULE_IDS = {
+    "WRAP.PARSED_FIELD_CONTAMINATION",
+    "WRAP.SOURCE_CORRUPTED_IDENTIFIER",
+    "WRAP.ROW_DELTA_ATTRIBUTION",
+    "WRAP.HIGH_FV_UNCLASSIFIED_CLUSTER",
+    "WRAP.COLUMN_DISTRIBUTION_DRIFT",
+}
+_MATERIALITY_P1_FV_ABS = 5_000_000.0
+_MATERIALITY_P1_FV_PCT = 0.0025
+_MATERIALITY_P0_FV_ABS = 25_000_000.0
+_MATERIALITY_P0_FV_PCT = 0.01
+_MATERIALITY_P1_ROW_ABS = 5
+_MATERIALITY_P1_ROW_PCT = 0.02
+_MATERIALITY_P0_ROW_ABS = 15
+_MATERIALITY_P0_ROW_PCT = 0.05
+_DRIFT_COLUMNS = [
+    "interest_rate",
+    "basis_spread",
+    "pik_rate",
+    "maturity_date",
+    "index_classification",
+    "asset_category",
+    "exposure_type",
+]
+_DRIFT_BASELINE_QUARTERS = 4
+_DRIFT_MIN_BASELINE_QUARTERS = 2
+_DRIFT_JS_THRESHOLD = 0.25
+_DRIFT_NEW_BUCKET_SHARE_THRESHOLD = 0.20
+
+_PARSED_FIELD_HIERARCHY_PATTERN = re.compile(
+    r"non[-\s]?controlled|non[-\s]?affiliated|controlled investments?|"
+    r"affiliated investments?|debt investments?|equity investments?|"
+    r"short[-\s]?term investments?|cash equivalents?|senior loans?\s+\d",
+    re.IGNORECASE,
+)
+_PARSED_FIELD_RATE_DATE_PATTERN = re.compile(
+    r"interest rate|reference rate|current coupon|maturity date|"
+    r"acquisition date|initial acquisition date|\bsofr\b|\blibor\b",
+    re.IGNORECASE,
+)
+_PARSED_FIELD_EXPLICIT_RATE_DATE_PATTERN = re.compile(
+    r"interest rate|reference rate|current coupon|maturity date|"
+    r"acquisition date|initial acquisition date",
+    re.IGNORECASE,
+)
+_PARSED_FIELD_PCT_PATTERN = re.compile(r"\b\d+(?:\.\d+)?%")
+_PARSED_POSITION_TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+_ROW_DELTA_AGGREGATE_PATTERN = re.compile(
+    r"\b(sub[-\s]?total|total investments?|total debt investments?|"
+    r"total equity investments?|portfolio investments?)\b",
+    re.IGNORECASE,
+)
+_ROW_DELTA_CATEGORY_PREFIX_PATTERN = re.compile(
+    r"^\s*(debt investments?|equity investments?|senior loans?|"
+    r"short[-\s]?term investments?|cash equivalents?)\b",
+    re.IGNORECASE,
+)
+_ROW_DELTA_NUMERIC_COLUMNS = [
+    "fair_value",
+    "cost",
+    "principal_amount",
+    "interest_rate",
+    "basis_spread",
+    "pik_rate",
+]
+_ROW_DELTA_CLASSIFICATION_COLUMNS = [
+    "index_classification",
+    "asset_class",
+    "exposure_type",
+    "asset_category",
+    "issuer_category",
+]
+_ROW_DELTA_TEXT_COLUMNS = [
+    "issuer_name",
+    "instrument_description",
+    "position_key",
+]
+_HIGH_FV_FUND_PATTERN = re.compile(
+    r"\b(funds?|co[-\s]?invest(?:ment)?|lp interest|l\.p\.|limited partnership|"
+    r"private credit|senior loan program)\b",
+    re.IGNORECASE,
+)
+_HIGH_FV_DEBT_PATTERN = re.compile(
+    r"\b(loan|debt|revolver|revolving|sofr|libor|term loan|first lien|"
+    r"second lien|delayed draw|unitranche|notes?)\b",
+    re.IGNORECASE,
+)
+_HIGH_FV_EQUITY_PATTERN = re.compile(
+    r"\b(common stock|preferred|equity|shares?|units?)\b",
+    re.IGNORECASE,
+)
+_HIGH_FV_WARRANT_PATTERN = re.compile(r"\bwarrants?\b", re.IGNORECASE)
+_HIGH_FV_CLO_PATTERN = re.compile(
+    r"\b(clo|collateralized loan obligation)\b",
+    re.IGNORECASE,
+)
+_SOURCE_CORRUPTED_FIELD_TOKEN_PATTERN = re.compile(
+    r"interest rate|reference rate|current coupon|maturity date|"
+    r"investment date|type of investment|initial acquisition date",
+    re.IGNORECASE,
+)
+_SOURCE_CORRUPTED_HIERARCHY_PCT_PATTERN = re.compile(
+    r"\b(?:senior loans?|debt investments?|equity investments?|"
+    r"non[-\s]?controlled|non[-\s]?affiliated)\b[^|,;]{0,80}\d+(?:\.\d+)?%",
+    re.IGNORECASE,
 )
 
 REMAINING_MECHANISM_COLUMNS = [
@@ -300,6 +585,1540 @@ def _safe_float(value: Any) -> float:
         return 0.0
 
 
+def _safe_int(value: Any) -> int:
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return 0
+
+
+def _slug(value: Any, *, max_len: int = 80) -> str:
+    text = re.sub(r"[^A-Za-z0-9]+", "-", str(value or "").strip()).strip("-")
+    return text[:max_len] or "blank"
+
+
+def _packet_issue_id(
+    *,
+    cik: str,
+    report_date: str,
+    rule_id: str,
+    unique: Any,
+) -> str:
+    return "|".join([
+        "WRAP",
+        normalize_cik(cik),
+        str(report_date or ""),
+        rule_id,
+        _slug(unique, max_len=100),
+    ])
+
+
+def _quarter_totals(holdings_df: pd.DataFrame | None, *, cik: str) -> pd.DataFrame:
+    columns = ["cik", "report_date", "total_fair_value_abs", "total_rows"]
+    if holdings_df is None or holdings_df.empty:
+        return pd.DataFrame(columns=columns)
+    df = holdings_df.copy()
+    if "cik" in df.columns:
+        df["cik"] = df["cik"].map(normalize_cik)
+        df = df[df["cik"].eq(normalize_cik(cik))].copy()
+    else:
+        df["cik"] = normalize_cik(cik)
+    if "source" in df.columns:
+        source = df["source"].fillna("").astype(str).str.lower()
+        df = df[source.eq("bdc") | source.eq("")].copy()
+    if "report_date" not in df.columns or df.empty:
+        return pd.DataFrame(columns=columns)
+    if "fair_value" not in df.columns:
+        df["fair_value"] = 0
+    df["_fv_abs"] = pd.to_numeric(df["fair_value"], errors="coerce").abs().fillna(0)
+    return (
+        df.groupby(["cik", "report_date"], dropna=False)
+        .agg(
+            total_fair_value_abs=("_fv_abs", "sum"),
+            total_rows=("cik", "size"),
+        )
+        .reset_index()[columns]
+    )
+
+
+def _totals_for_report(
+    quarter_totals: pd.DataFrame | None,
+    *,
+    cik: str,
+    report_date: str,
+) -> tuple[float, int]:
+    if quarter_totals is None or quarter_totals.empty:
+        return 0.0, 0
+    qt = quarter_totals.copy()
+    match = qt[
+        qt["cik"].map(normalize_cik).eq(normalize_cik(cik))
+        & qt["report_date"].astype(str).eq(str(report_date))
+    ]
+    if match.empty:
+        return 0.0, 0
+    row = match.iloc[0]
+    return _safe_float(row.get("total_fair_value_abs", 0)), _safe_int(row.get("total_rows", 0))
+
+
+def _materiality_metrics(
+    *,
+    affected_fair_value: Any,
+    total_fair_value: Any,
+    affected_rows: Any,
+    total_rows: Any,
+    quarter_count: int = 1,
+) -> dict[str, Any]:
+    affected_fv = abs(_safe_float(affected_fair_value))
+    total_fv = abs(_safe_float(total_fair_value))
+    affected_count = _safe_int(affected_rows)
+    total_count = _safe_int(total_rows)
+    fv_pct = affected_fv / total_fv if total_fv > 0 else 0.0
+    row_pct = affected_count / total_count if total_count > 0 else 0.0
+
+    p0_fv = affected_fv >= max(_MATERIALITY_P0_FV_ABS, _MATERIALITY_P0_FV_PCT * total_fv)
+    p1_fv = affected_fv >= max(_MATERIALITY_P1_FV_ABS, _MATERIALITY_P1_FV_PCT * total_fv)
+    p0_rows = affected_count >= max(
+        _MATERIALITY_P0_ROW_ABS,
+        math.ceil(_MATERIALITY_P0_ROW_PCT * total_count),
+    )
+    p1_rows = affected_count >= max(
+        _MATERIALITY_P1_ROW_ABS,
+        math.ceil(_MATERIALITY_P1_ROW_PCT * total_count),
+    )
+
+    if p0_fv or p0_rows:
+        tier = "P0"
+    elif p1_fv or p1_rows or (quarter_count >= 2 and affected_count > 0):
+        tier = "P1"
+    else:
+        tier = "P2"
+    return {
+        "materiality_tier": tier,
+        "affected_fair_value": round(affected_fv, 2),
+        "affected_fair_value_pct": round(fv_pct, 6),
+        "affected_row_count": affected_count,
+        "affected_row_pct": round(row_pct, 6),
+    }
+
+
+def _write_jsonl_from_df(df: pd.DataFrame, path: Path) -> None:
+    with path.open("w", encoding="utf-8", newline="\n") as fh:
+        for row in df.fillna("").to_dict(orient="records"):
+            fh.write(json_mod.dumps(row, ensure_ascii=True, sort_keys=True) + "\n")
+
+
+def _first_non_empty(row: pd.Series, *columns: str) -> str:
+    for col in columns:
+        value = row.get(col, "")
+        if pd.notna(value) and str(value).strip():
+            return str(value)
+    return ""
+
+
+def _normalize_delta_text(value: Any) -> str:
+    if value is None or pd.isna(value):
+        return ""
+    return re.sub(r"\s+", " ", str(value).strip().lower())
+
+
+def _join_unique_values(series: pd.Series, *, limit: int = 3) -> str:
+    values: list[str] = []
+    seen: set[str] = set()
+    for value in series:
+        if value is None or pd.isna(value):
+            continue
+        text = str(value).strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        values.append(text)
+        if len(values) >= limit:
+            break
+    return " | ".join(values)
+
+
+def _format_delta_number(value: Any) -> str:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if pd.isna(number):
+        return ""
+    return f"{number:.10g}"
+
+
+def _sum_delta_numeric(series: pd.Series) -> float:
+    return pd.to_numeric(series, errors="coerce").sum(min_count=1)
+
+
+def _numeric_delta_changed(column: str, production_value: Any, trial_value: Any) -> bool:
+    prod_blank = production_value is None or pd.isna(production_value) or str(production_value).strip() == ""
+    trial_blank = trial_value is None or pd.isna(trial_value) or str(trial_value).strip() == ""
+    if prod_blank and trial_blank:
+        return False
+    prod_num = pd.to_numeric(pd.Series([production_value]), errors="coerce").iloc[0]
+    trial_num = pd.to_numeric(pd.Series([trial_value]), errors="coerce").iloc[0]
+    if pd.isna(prod_num) or pd.isna(trial_num):
+        return prod_blank != trial_blank or str(production_value).strip() != str(trial_value).strip()
+    diff = abs(float(prod_num) - float(trial_num))
+    scale = max(abs(float(prod_num)), abs(float(trial_num)))
+    if column in {"fair_value", "cost", "principal_amount"}:
+        tolerance = max(1.0, 0.0001 * scale)
+    else:
+        tolerance = max(0.0001, 0.0001 * scale)
+    return diff > tolerance
+
+
+def _filter_delta_holdings(df: pd.DataFrame | None, *, cik: str) -> pd.DataFrame:
+    columns = [
+        "cik",
+        "entity_name",
+        "source",
+        "report_date",
+        "accession_number",
+        "bdc_investment_identifier",
+        "investment_identifier",
+        "position_key",
+        *_ROW_DELTA_TEXT_COLUMNS,
+        *_ROW_DELTA_CLASSIFICATION_COLUMNS,
+        *_ROW_DELTA_NUMERIC_COLUMNS,
+    ]
+    columns = list(dict.fromkeys(columns))
+    if df is None or df.empty:
+        return pd.DataFrame(columns=columns)
+    out = df.copy()
+    for col in columns:
+        if col not in out.columns:
+            out[col] = ""
+    out["cik"] = out["cik"].map(normalize_cik)
+    out = out[out["cik"].eq(normalize_cik(cik))].copy()
+    if "source" in out.columns:
+        source = out["source"].fillna("").astype(str).str.lower()
+        out = out[source.eq("bdc") | source.eq("")].copy()
+    for col in _ROW_DELTA_NUMERIC_COLUMNS:
+        out[col] = pd.to_numeric(out[col], errors="coerce")
+    return out[columns]
+
+
+def _delta_row_key(row: pd.Series) -> str:
+    cik = normalize_cik(row.get("cik", ""))
+    report_date = str(row.get("report_date", "") or "")
+    accession = str(row.get("accession_number", "") or "")
+    identifier = _first_non_empty(
+        row,
+        "bdc_investment_identifier",
+        "investment_identifier",
+    )
+    identifier_key = normalize_wrapper_identifier(identifier)
+    if identifier_key:
+        return "|".join(["id", cik, report_date, accession, identifier_key])
+    position_key = normalize_wrapper_identifier(row.get("position_key", ""))
+    fair_value = _format_delta_number(_safe_float(row.get("fair_value", 0)))
+    return "|".join(["fallback", cik, report_date, accession, position_key, fair_value])
+
+
+def _aggregate_delta_holdings(df: pd.DataFrame | None, *, cik: str) -> pd.DataFrame:
+    filtered = _filter_delta_holdings(df, cik=cik)
+    if filtered.empty:
+        return pd.DataFrame()
+    filtered["_delta_key"] = filtered.apply(_delta_row_key, axis=1)
+    filtered["_fair_value_abs"] = filtered["fair_value"].abs().fillna(0)
+    agg_spec: dict[str, Any] = {
+        "cik": ("cik", "first"),
+        "entity_name": ("entity_name", _join_unique_values),
+        "report_date": ("report_date", "first"),
+        "accession_number": ("accession_number", "first"),
+        "row_count": ("cik", "size"),
+        "fair_value_abs_sum": ("_fair_value_abs", "sum"),
+        "sample_identifier": ("bdc_investment_identifier", _join_unique_values),
+        "sample_position_key": ("position_key", _join_unique_values),
+    }
+    for col in _ROW_DELTA_TEXT_COLUMNS + _ROW_DELTA_CLASSIFICATION_COLUMNS:
+        agg_spec[col] = (col, _join_unique_values)
+    for col in _ROW_DELTA_NUMERIC_COLUMNS:
+        agg_spec[f"{col}_sum"] = (col, _sum_delta_numeric)
+    grouped = filtered.groupby("_delta_key", dropna=False).agg(**agg_spec).reset_index()
+    missing_identifier = grouped["sample_identifier"].fillna("").astype(str).str.strip().eq("")
+    if missing_identifier.any():
+        grouped.loc[missing_identifier, "sample_identifier"] = grouped.loc[
+            missing_identifier,
+            "sample_position_key",
+        ]
+    return grouped
+
+
+def _holding_looks_non_private(row: pd.Series) -> bool:
+    exposure = str(row.get("exposure_type", "") or "").upper()
+    index_class = str(row.get("index_classification", "") or "").upper()
+    issuer_category = str(row.get("issuer_category", "") or "").upper()
+    if exposure == "LIQUID" or index_class == "CASH" or issuer_category == "GOVERNMENT":
+        return True
+    text = " ".join(
+        str(row.get(col, "") or "")
+        for col in [
+            "sample_identifier",
+            "sample_position_key",
+            "issuer_name",
+            "instrument_description",
+        ]
+    )
+    return is_non_private_market_identifier(text)
+
+
+def _holding_looks_aggregate(row: pd.Series) -> bool:
+    text = " ".join(
+        str(row.get(col, "") or "")
+        for col in [
+            "sample_identifier",
+            "sample_position_key",
+            "issuer_name",
+            "instrument_description",
+        ]
+    )
+    if _ROW_DELTA_AGGREGATE_PATTERN.search(text):
+        return True
+    has_position_evidence = re.search(_EXCLUSION_EVIDENCE_PATTERN, text, re.IGNORECASE)
+    return bool(_ROW_DELTA_CATEGORY_PREFIX_PATTERN.search(text) and not has_position_evidence)
+
+
+def _row_delta_record(
+    *,
+    cik: str,
+    delta_type: str,
+    row_count: int,
+    fair_value_abs_sum: float,
+    production_row: pd.Series | None = None,
+    trial_row: pd.Series | None = None,
+    changed_columns: str = "",
+    production_value: str = "",
+    trial_value: str = "",
+) -> dict[str, Any]:
+    row = trial_row if trial_row is not None else production_row
+    assert row is not None
+    production_count = int(production_row.get("row_count", 0)) if production_row is not None else 0
+    trial_count = int(trial_row.get("row_count", 0)) if trial_row is not None else 0
+    production_fv = float(production_row.get("fair_value_abs_sum", 0)) if production_row is not None else 0.0
+    trial_fv = float(trial_row.get("fair_value_abs_sum", 0)) if trial_row is not None else 0.0
+    likely_mechanism_by_type = {
+        "added_position_leaf": "trial adds a BDC row absent from current production",
+        "removed_non_private": "trial removes a row that looks non-private or liquid",
+        "removed_aggregate": "trial removes a row with subtotal or category hierarchy signals",
+        "removed_position_leaf": "trial removes a row that does not have safe aggregate or non-private signals",
+        "changed_index_classification": "trial changes one or more classification fields",
+        "changed_issuer_name": "trial changes parsed issuer_name",
+        "changed_instrument_description": "trial changes parsed instrument_description",
+        "changed_position_key": "trial changes normalized position_key",
+        "changed_numeric_value": "trial changes one or more numeric production fields",
+        "unknown": "duplicate or ambiguous row group needs manual attribution",
+    }
+    review_status = "info" if delta_type in {"removed_non_private", "removed_aggregate"} else "review"
+    return {
+        "cik": cik,
+        "entity_name": _first_non_empty(row, "entity_name"),
+        "report_date": _first_non_empty(row, "report_date"),
+        "accession_number": _first_non_empty(row, "accession_number"),
+        "delta_type": delta_type,
+        "row_count": row_count,
+        "fair_value_abs_sum": round(float(fair_value_abs_sum), 2),
+        "production_row_count": production_count,
+        "trial_row_count": trial_count,
+        "production_fair_value_abs_sum": round(production_fv, 2),
+        "trial_fair_value_abs_sum": round(trial_fv, 2),
+        "sample_identifier": _first_non_empty(row, "sample_identifier"),
+        "sample_position_key": _first_non_empty(row, "sample_position_key"),
+        "changed_columns": changed_columns,
+        "production_value": production_value,
+        "trial_value": trial_value,
+        "likely_mechanism": likely_mechanism_by_type.get(delta_type, ""),
+        "owner": "unknown" if delta_type == "unknown" else "wrapper",
+        "review_status": review_status,
+    }
+
+
+def _value_summary(row: pd.Series, columns: list[str]) -> str:
+    parts: list[str] = []
+    for col in columns:
+        value_col = f"{col}_sum" if col in _ROW_DELTA_NUMERIC_COLUMNS else col
+        value = row.get(value_col, "")
+        formatted = _format_delta_number(value) if col in _ROW_DELTA_NUMERIC_COLUMNS else str(value or "")
+        parts.append(f"{col}={formatted}")
+    return "; ".join(parts)
+
+
+def _build_row_delta_attribution(
+    trial_holdings_df: pd.DataFrame,
+    production_holdings_df: pd.DataFrame | None,
+    *,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    """Compare one-CIK trial holdings to current production holdings."""
+    cik_norm = normalize_cik(cik)
+    trial = _aggregate_delta_holdings(trial_holdings_df, cik=cik_norm)
+    production = _aggregate_delta_holdings(production_holdings_df, cik=cik_norm)
+    if trial.empty and production.empty:
+        return pd.DataFrame(columns=ROW_DELTA_ATTRIBUTION_COLUMNS)
+
+    records: list[dict[str, Any]] = []
+    trial_by_key = {str(row["_delta_key"]): row for _, row in trial.iterrows()} if not trial.empty else {}
+    production_by_key = {
+        str(row["_delta_key"]): row for _, row in production.iterrows()
+    } if not production.empty else {}
+
+    for key in sorted(set(trial_by_key) | set(production_by_key)):
+        trial_row = trial_by_key.get(key)
+        production_row = production_by_key.get(key)
+        if production_row is None and trial_row is not None:
+            records.append(
+                _row_delta_record(
+                    cik=cik_norm,
+                    delta_type="added_position_leaf",
+                    row_count=int(trial_row.get("row_count", 0)),
+                    fair_value_abs_sum=float(trial_row.get("fair_value_abs_sum", 0)),
+                    trial_row=trial_row,
+                )
+            )
+            continue
+        if trial_row is None and production_row is not None:
+            if _holding_looks_non_private(production_row):
+                delta_type = "removed_non_private"
+            elif _holding_looks_aggregate(production_row):
+                delta_type = "removed_aggregate"
+            else:
+                delta_type = "removed_position_leaf"
+            records.append(
+                _row_delta_record(
+                    cik=cik_norm,
+                    delta_type=delta_type,
+                    row_count=int(production_row.get("row_count", 0)),
+                    fair_value_abs_sum=float(production_row.get("fair_value_abs_sum", 0)),
+                    production_row=production_row,
+                )
+            )
+            continue
+        if trial_row is None or production_row is None:
+            continue
+        if int(trial_row.get("row_count", 0)) > 1 or int(production_row.get("row_count", 0)) > 1:
+            records.append(
+                _row_delta_record(
+                    cik=cik_norm,
+                    delta_type="unknown",
+                    row_count=max(
+                        int(production_row.get("row_count", 0)),
+                        int(trial_row.get("row_count", 0)),
+                    ),
+                    fair_value_abs_sum=max(
+                        float(production_row.get("fair_value_abs_sum", 0)),
+                        float(trial_row.get("fair_value_abs_sum", 0)),
+                    ),
+                    production_row=production_row,
+                    trial_row=trial_row,
+                )
+            )
+            continue
+
+        classification_changes = [
+            col for col in _ROW_DELTA_CLASSIFICATION_COLUMNS
+            if _normalize_delta_text(production_row.get(col, "")) != _normalize_delta_text(trial_row.get(col, ""))
+        ]
+        if classification_changes:
+            records.append(
+                _row_delta_record(
+                    cik=cik_norm,
+                    delta_type="changed_index_classification",
+                    row_count=1,
+                    fair_value_abs_sum=max(
+                        float(production_row.get("fair_value_abs_sum", 0)),
+                        float(trial_row.get("fair_value_abs_sum", 0)),
+                    ),
+                    production_row=production_row,
+                    trial_row=trial_row,
+                    changed_columns="|".join(classification_changes),
+                    production_value=_value_summary(production_row, classification_changes),
+                    trial_value=_value_summary(trial_row, classification_changes),
+                )
+            )
+        for text_col, delta_type in [
+            ("issuer_name", "changed_issuer_name"),
+            ("instrument_description", "changed_instrument_description"),
+            ("position_key", "changed_position_key"),
+        ]:
+            if _normalize_delta_text(production_row.get(text_col, "")) != _normalize_delta_text(trial_row.get(text_col, "")):
+                records.append(
+                    _row_delta_record(
+                        cik=cik_norm,
+                        delta_type=delta_type,
+                        row_count=1,
+                        fair_value_abs_sum=max(
+                            float(production_row.get("fair_value_abs_sum", 0)),
+                            float(trial_row.get("fair_value_abs_sum", 0)),
+                        ),
+                        production_row=production_row,
+                        trial_row=trial_row,
+                        changed_columns=text_col,
+                        production_value=str(production_row.get(text_col, "") or ""),
+                        trial_value=str(trial_row.get(text_col, "") or ""),
+                    )
+                )
+        numeric_changes = [
+            col for col in _ROW_DELTA_NUMERIC_COLUMNS
+            if _numeric_delta_changed(
+                col,
+                production_row.get(f"{col}_sum", ""),
+                trial_row.get(f"{col}_sum", ""),
+            )
+        ]
+        if numeric_changes:
+            records.append(
+                _row_delta_record(
+                    cik=cik_norm,
+                    delta_type="changed_numeric_value",
+                    row_count=1,
+                    fair_value_abs_sum=max(
+                        float(production_row.get("fair_value_abs_sum", 0)),
+                        float(trial_row.get("fair_value_abs_sum", 0)),
+                    ),
+                    production_row=production_row,
+                    trial_row=trial_row,
+                    changed_columns="|".join(numeric_changes),
+                    production_value=_value_summary(production_row, numeric_changes),
+                    trial_value=_value_summary(trial_row, numeric_changes),
+                )
+            )
+
+    if not records:
+        return pd.DataFrame(columns=ROW_DELTA_ATTRIBUTION_COLUMNS)
+    result = pd.DataFrame(records, columns=ROW_DELTA_ATTRIBUTION_COLUMNS)
+    return result.sort_values(
+        ["report_date", "delta_type", "sample_identifier"],
+        kind="stable",
+    ).reset_index(drop=True)
+
+
+def _cluster_label_for_row(row: pd.Series) -> tuple[str, str]:
+    for col in ["issuer_name", "instrument_description", "bdc_investment_identifier", "investment_identifier"]:
+        value = str(row.get(col, "") or "").strip()
+        if value:
+            return value, normalize_wrapper_identifier(value)
+    return "", ""
+
+
+def _family_guess_from_text(text: str) -> str:
+    if _HIGH_FV_CLO_PATTERN.search(text):
+        return "clo"
+    if _HIGH_FV_WARRANT_PATTERN.search(text):
+        return "warrant"
+    if _HIGH_FV_FUND_PATTERN.search(text):
+        return "fund"
+    if _HIGH_FV_DEBT_PATTERN.search(text):
+        return "debt"
+    if _HIGH_FV_EQUITY_PATTERN.search(text):
+        return "equity"
+    return "unknown"
+
+
+def _high_fv_output_field(group: pd.DataFrame, column: str) -> str:
+    if column not in group.columns:
+        return ""
+    values = group[column].fillna("").astype(str).str.strip()
+    values = values[values.ne("")]
+    if values.empty:
+        return ""
+    counts = values.value_counts()
+    return str(counts.index[0])
+
+
+def _build_high_fv_unclassified_clusters(
+    holdings_df: pd.DataFrame,
+    wrapper: WrapperDefinition | None,
+    *,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    """Build cluster packets for high-FV unclassified wrapper output rows."""
+    if wrapper is None or wrapper.unclassified_rate is None:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+    if holdings_df is None or holdings_df.empty:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+
+    cik_norm = normalize_cik(cik)
+    h = holdings_df.copy()
+    if "cik" in h.columns:
+        h["cik"] = h["cik"].map(normalize_cik)
+        h = h[h["cik"].eq(cik_norm)].copy()
+    else:
+        h["cik"] = cik_norm
+    if "source" in h.columns:
+        source = h["source"].fillna("").astype(str).str.lower()
+        h = h[source.eq("bdc") | source.eq("")].copy()
+    if h.empty:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+
+    for col in [
+        "entity_name",
+        "report_date",
+        "bdc_investment_identifier",
+        "investment_identifier",
+        "issuer_name",
+        "instrument_description",
+        "index_classification",
+        "asset_category",
+        "exposure_type",
+    ]:
+        if col not in h.columns:
+            h[col] = ""
+    h["_row_index"] = h.index
+    classified = classify_content_signature_rows(wrapper, h)
+    if classified.empty:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+    classified = classified.rename(columns={"fair_value": "_signature_fair_value_abs"})
+    h = h.merge(
+        classified[["row_index", "archetype", "_signature_fair_value_abs"]],
+        left_on="_row_index",
+        right_on="row_index",
+        how="left",
+    )
+    h["_signature_fair_value_abs"] = pd.to_numeric(
+        h["_signature_fair_value_abs"],
+        errors="coerce",
+    ).fillna(0)
+    h["archetype"] = h["archetype"].fillna("").astype(str)
+
+    quarter_fv = h.groupby("report_date", dropna=False)["_signature_fair_value_abs"].sum()
+    unclassified = h[h["archetype"].eq("")].copy()
+    if unclassified.empty:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+    unclassified_fv = unclassified.groupby("report_date", dropna=False)["_signature_fair_value_abs"].sum()
+    affected_reports = {
+        str(report_date)
+        for report_date, fv in unclassified_fv.items()
+        if float(quarter_fv.get(report_date, 0) or 0) > 0
+        and (float(fv) / float(quarter_fv.get(report_date, 0))) > wrapper.unclassified_rate.max_fv_pct
+    }
+    if not affected_reports:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+    unclassified = unclassified[unclassified["report_date"].astype(str).isin(affected_reports)].copy()
+    if unclassified.empty:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+
+    labels = unclassified.apply(_cluster_label_for_row, axis=1, result_type="expand")
+    unclassified["_cluster_label"] = labels[0]
+    unclassified["_cluster_key"] = labels[1]
+    unclassified = unclassified[unclassified["_cluster_key"].astype(str).ne("")].copy()
+    if unclassified.empty:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+
+    total_affected_fv = float(
+        quarter_fv[[idx for idx in quarter_fv.index if str(idx) in affected_reports]].sum()
+    )
+    rows: list[dict[str, Any]] = []
+    for _, group in unclassified.groupby("_cluster_key", dropna=False):
+        report_dates = sorted(str(value) for value in group["report_date"].dropna().astype(str).unique())
+        cluster_fv = float(group["_signature_fair_value_abs"].sum())
+        quarter_shares: list[float] = []
+        for report_date, q_group in group.groupby("report_date", dropna=False):
+            denominator = float(quarter_fv.get(report_date, 0) or 0)
+            if denominator > 0:
+                quarter_shares.append(float(q_group["_signature_fair_value_abs"].sum()) / denominator)
+        text_blob = " ".join(
+            _join_unique_values(group[col]) for col in [
+                "_cluster_label",
+                "bdc_investment_identifier",
+                "instrument_description",
+                "issuer_name",
+            ]
+        )
+        source_family_guess = _family_guess_from_text(text_blob)
+        rows.append({
+            "cik": cik_norm,
+            "entity_name": _join_unique_values(group["entity_name"]),
+            "cluster_label": _join_unique_values(group["_cluster_label"]),
+            "affected_report_dates": "|".join(report_dates),
+            "quarter_count": len(report_dates),
+            "row_count": int(len(group)),
+            "fair_value_abs_sum": round(cluster_fv, 2),
+            "fair_value_share": round(cluster_fv / total_affected_fv, 6) if total_affected_fv > 0 else 0,
+            "max_quarter_fair_value_share": round(max(quarter_shares), 6) if quarter_shares else 0,
+            "source_family_guess": source_family_guess,
+            "suggested_wrapper_family": source_family_guess,
+            "output_index_classification": _high_fv_output_field(group, "index_classification"),
+            "output_asset_category": _high_fv_output_field(group, "asset_category"),
+            "output_exposure_type": _high_fv_output_field(group, "exposure_type"),
+            "sample_identifiers": _join_unique_values(group["bdc_investment_identifier"]),
+            "sample_issuer_names": _join_unique_values(group["issuer_name"]),
+            "sample_instrument_descriptions": _join_unique_values(group["instrument_description"]),
+            "suggested_review_question": (
+                "Should this repeated high-FV unclassified label be covered by a "
+                "CIK-local wrapper family or archetype?"
+            ),
+            "owner": "wrapper",
+            "review_status": "review",
+        })
+
+    if not rows:
+        return pd.DataFrame(columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS)
+    return pd.DataFrame(rows, columns=HIGH_FV_UNCLASSIFIED_CLUSTER_COLUMNS).sort_values(
+        ["fair_value_abs_sum", "row_count", "cluster_label"],
+        ascending=[False, False, True],
+        kind="stable",
+    ).reset_index(drop=True)
+
+
+def _build_source_corrupted_identifier_packets(
+    detail_df: pd.DataFrame,
+    holdings_df: pd.DataFrame | None,
+    *,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    """Flag source identifiers that look like concatenated field/hierarchy text."""
+    detail = _ensure_detail_columns(detail_df)
+    if detail.empty:
+        return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
+    cik_norm = normalize_cik(cik)
+    detail = detail[detail["cik"].map(normalize_cik).eq(cik_norm)].copy()
+    if detail.empty:
+        return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
+    quarter_totals = _quarter_totals(holdings_df, cik=cik_norm)
+    records: list[dict[str, Any]] = []
+    for idx, row in detail.iterrows():
+        raw_identifier = str(row.get("raw_investment_identifier", "") or "")
+        if not raw_identifier.strip():
+            continue
+        token_count = len(_SOURCE_CORRUPTED_FIELD_TOKEN_PATTERN.findall(raw_identifier))
+        hierarchy_pct = bool(_SOURCE_CORRUPTED_HIERARCHY_PCT_PATTERN.search(raw_identifier))
+        very_long_with_fields = len(raw_identifier) >= 180 and token_count >= 1
+        if token_count < 2 and not hierarchy_pct and not very_long_with_fields:
+            continue
+        report_date = str(row.get("report_date", "") or "")
+        total_fv, total_rows = _totals_for_report(
+            quarter_totals,
+            cik=cik_norm,
+            report_date=report_date,
+        )
+        materiality = _materiality_metrics(
+            affected_fair_value=row.get("source_fair_value", 0),
+            total_fair_value=total_fv,
+            affected_rows=1,
+            total_rows=total_rows,
+        )
+        records.append({
+            "issue_id": _packet_issue_id(
+                cik=cik_norm,
+                report_date=report_date,
+                rule_id="WRAP.SOURCE_CORRUPTED_IDENTIFIER",
+                unique=row.get("source_row_id", idx),
+            ),
+            "rule_id": "WRAP.SOURCE_CORRUPTED_IDENTIFIER",
+            "source_rule_id": "",
+            "packet_type": "row",
+            "severity": "review" if materiality["materiality_tier"] in {"P0", "P1"} else "warn",
+            "materiality_tier": materiality["materiality_tier"],
+            "likely_owner": "source_data",
+            "review_status": "review",
+            "cik": cik_norm,
+            "entity_name": str(row.get("entity_name", "") or ""),
+            "report_date": report_date,
+            "accession_number": str(row.get("accession_number", "") or ""),
+            "source_row_id": str(row.get("source_row_id", "") or ""),
+            "output_row_id": str(row.get("output_row_id", "") or ""),
+            "production_column": "bdc_investment_identifier",
+            "source_value": raw_identifier,
+            "output_value": str(row.get("issuer_name", "") or ""),
+            **materiality,
+            "evidence": "source identifier contains hierarchy/rate/date field tokens",
+            "recommended_action": (
+                "Review whether the source row is corrupted source text, a wrapper parser "
+                "boundary error, or a valid verbose identifier before changing output."
+            ),
+        })
+    if not records:
+        return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
+    return pd.DataFrame(records, columns=AGENT_ISSUE_PACKET_COLUMNS)
+
+
+def _bucket_distribution(series: pd.Series) -> dict[str, float]:
+    values = series.fillna("").astype(str)
+    total = len(values)
+    if total == 0:
+        return {}
+    counts = values.value_counts(dropna=False)
+    return {str(bucket): float(count) / total for bucket, count in counts.items()}
+
+
+def _format_distribution(dist: dict[str, float]) -> str:
+    return "|".join(f"{bucket}:{share:.6f}" for bucket, share in sorted(dist.items()))
+
+
+def _js_divergence(current: dict[str, float], baseline: dict[str, float]) -> float:
+    if not current or not baseline:
+        return 0.0
+    keys = sorted(set(current) | set(baseline))
+    midpoint = {key: (current.get(key, 0.0) + baseline.get(key, 0.0)) / 2.0 for key in keys}
+
+    def kl(left: dict[str, float], right: dict[str, float]) -> float:
+        out = 0.0
+        for key in keys:
+            p = left.get(key, 0.0)
+            q = right.get(key, 0.0)
+            if p > 0 and q > 0:
+                out += p * math.log2(p / q)
+        return out
+
+    return round(0.5 * kl(current, midpoint) + 0.5 * kl(baseline, midpoint), 6)
+
+
+def _dominant_bucket(dist: dict[str, float]) -> str:
+    if not dist:
+        return ""
+    return sorted(dist.items(), key=lambda item: (-item[1], item[0]))[0][0]
+
+
+def _rate_bucket(value: Any) -> str:
+    text = str(value or "").strip()
+    if not text or text.lower() in {"nan", "none"}:
+        return "blank"
+    lower = text.lower()
+    number = pd.to_numeric(pd.Series([text.replace("%", "")]), errors="coerce").iloc[0]
+    if pd.notna(number):
+        numeric = float(number)
+        if numeric == 0:
+            return "zero"
+        return "percent_string" if "%" in text else "numeric_pct"
+    if any(token in lower for token in ["sofr", "libor", "prime", "cash", "pik"]):
+        return "rate_text"
+    return "other_text"
+
+
+def _date_bucket(value: Any) -> str:
+    text = str(value or "").strip()
+    if not text or text.lower() in {"nan", "none"}:
+        return "blank"
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+        return "yyyy-mm-dd"
+    if re.fullmatch(r"\d{1,2}/\d{1,2}/\d{2,4}", text):
+        return "slash_date"
+    if re.search(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)", text, re.IGNORECASE):
+        return "text_date"
+    return "other_text"
+
+
+def _classification_bucket(value: Any) -> str:
+    text = str(value or "").strip()
+    return text.upper() if text else "blank"
+
+
+def _column_drift_bucket(column: str, value: Any) -> str:
+    if column in {"interest_rate", "basis_spread", "pik_rate"}:
+        return _rate_bucket(value)
+    if column == "maturity_date":
+        return _date_bucket(value)
+    return _classification_bucket(value)
+
+
+def _build_column_drift_packets(
+    holdings_df: pd.DataFrame,
+    *,
+    cik: str = TRINITY_CIK,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Build CIK-column distribution drift summary and representative examples."""
+    if holdings_df is None or holdings_df.empty:
+        return (
+            pd.DataFrame(columns=COLUMN_DRIFT_SUMMARY_COLUMNS),
+            pd.DataFrame(columns=COLUMN_DRIFT_EXAMPLE_COLUMNS),
+        )
+    cik_norm = normalize_cik(cik)
+    df = holdings_df.copy()
+    if "cik" in df.columns:
+        df["cik"] = df["cik"].map(normalize_cik)
+        df = df[df["cik"].eq(cik_norm)].copy()
+    else:
+        df["cik"] = cik_norm
+    if "source" in df.columns:
+        source = df["source"].fillna("").astype(str).str.lower()
+        df = df[source.eq("bdc") | source.eq("")].copy()
+    if df.empty or "report_date" not in df.columns:
+        return (
+            pd.DataFrame(columns=COLUMN_DRIFT_SUMMARY_COLUMNS),
+            pd.DataFrame(columns=COLUMN_DRIFT_EXAMPLE_COLUMNS),
+        )
+    for col in [
+        "entity_name",
+        "bdc_investment_identifier",
+        "issuer_name",
+        "instrument_description",
+        "fair_value",
+        *_DRIFT_COLUMNS,
+    ]:
+        if col not in df.columns:
+            df[col] = ""
+    df["_fv_abs"] = pd.to_numeric(df["fair_value"], errors="coerce").abs().fillna(0)
+    quarters = sorted(str(q) for q in df["report_date"].dropna().astype(str).unique())
+    summary_rows: list[dict[str, Any]] = []
+    example_rows: list[dict[str, Any]] = []
+
+    for column in _DRIFT_COLUMNS:
+        df[f"_{column}_bucket"] = df[column].map(lambda value: _column_drift_bucket(column, value))
+        for idx, report_date in enumerate(quarters):
+            current = df[df["report_date"].astype(str).eq(report_date)].copy()
+            previous_quarters = quarters[max(0, idx - _DRIFT_BASELINE_QUARTERS):idx]
+            baseline_quarter_count = len(previous_quarters)
+            bucket_col = f"_{column}_bucket"
+            current_dist = _bucket_distribution(current[bucket_col])
+            baseline_dist: dict[str, float] = {}
+            js = 0.0
+            new_bucket_share = 0.0
+            status = "info"
+            severity = "info"
+            if baseline_quarter_count >= _DRIFT_MIN_BASELINE_QUARTERS:
+                baseline = df[df["report_date"].astype(str).isin(previous_quarters)].copy()
+                baseline_dist = _bucket_distribution(baseline[bucket_col])
+                js = _js_divergence(current_dist, baseline_dist)
+                new_bucket_share = round(
+                    sum(share for bucket, share in current_dist.items() if bucket not in baseline_dist),
+                    6,
+                )
+                if js >= _DRIFT_JS_THRESHOLD or new_bucket_share >= _DRIFT_NEW_BUCKET_SHARE_THRESHOLD:
+                    status = "review"
+                    severity = "review"
+                else:
+                    status = "pass"
+                    severity = "info"
+            else:
+                status = "insufficient_baseline"
+                severity = "info"
+
+            materiality = _materiality_metrics(
+                affected_fair_value=current["_fv_abs"].sum(),
+                total_fair_value=current["_fv_abs"].sum(),
+                affected_rows=len(current),
+                total_rows=len(current),
+            )
+            summary_rows.append({
+                "cik": cik_norm,
+                "entity_name": _join_unique_values(current["entity_name"]),
+                "report_date": report_date,
+                "column": column,
+                "baseline_quarter_count": baseline_quarter_count,
+                "row_count": int(len(current)),
+                "fair_value_abs_sum": round(float(current["_fv_abs"].sum()), 2),
+                "js_divergence": js,
+                "new_bucket_share": new_bucket_share,
+                "current_dominant_bucket": _dominant_bucket(current_dist),
+                "baseline_dominant_bucket": _dominant_bucket(baseline_dist),
+                "status": status,
+                "severity": severity,
+                "materiality_tier": materiality["materiality_tier"] if status == "review" else "P2",
+                "bucket_distribution": _format_distribution(current_dist),
+                "baseline_bucket_distribution": _format_distribution(baseline_dist),
+            })
+
+            if status == "review":
+                example = current.sort_values("_fv_abs", ascending=False, kind="stable").head(5)
+                for _, ex in example.iterrows():
+                    example_rows.append({
+                        "cik": cik_norm,
+                        "entity_name": str(ex.get("entity_name", "") or ""),
+                        "report_date": report_date,
+                        "column": column,
+                        "bucket": str(ex.get(bucket_col, "") or ""),
+                        "bdc_investment_identifier": str(ex.get("bdc_investment_identifier", "") or ""),
+                        "issuer_name": str(ex.get("issuer_name", "") or ""),
+                        "instrument_description": str(ex.get("instrument_description", "") or ""),
+                        "output_value": str(ex.get(column, "") or ""),
+                        "fair_value": _safe_float(ex.get("fair_value", 0)),
+                    })
+
+    return (
+        pd.DataFrame(summary_rows, columns=COLUMN_DRIFT_SUMMARY_COLUMNS),
+        pd.DataFrame(example_rows, columns=COLUMN_DRIFT_EXAMPLE_COLUMNS),
+    )
+
+
+def _build_agent_issue_packets(
+    *,
+    parsed_field_quality: pd.DataFrame,
+    source_corrupted_identifiers: pd.DataFrame,
+    holdings_df: pd.DataFrame | None,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    records: list[dict[str, Any]] = []
+    cik_norm = normalize_cik(cik)
+    quarter_totals = _quarter_totals(holdings_df, cik=cik_norm)
+
+    if parsed_field_quality is not None and not parsed_field_quality.empty:
+        for idx, row in parsed_field_quality.iterrows():
+            report_date = str(row.get("report_date", "") or "")
+            total_fv, total_rows = _totals_for_report(
+                quarter_totals,
+                cik=cik_norm,
+                report_date=report_date,
+            )
+            materiality = _materiality_metrics(
+                affected_fair_value=row.get("fair_value", 0),
+                total_fair_value=total_fv,
+                affected_rows=1,
+                total_rows=total_rows,
+            )
+            owner = str(row.get("suggested_owner", "wrapper") or "wrapper")
+            if owner not in _AGENT_VERDICT_ALLOWED_OWNERS:
+                owner = "wrapper"
+            records.append({
+                "issue_id": _packet_issue_id(
+                    cik=cik_norm,
+                    report_date=report_date,
+                    rule_id="WRAP.PARSED_FIELD_CONTAMINATION",
+                    unique=f"{row.get('source_row_id', '')}-{row.get('column', '')}-{idx}",
+                ),
+                "rule_id": "WRAP.PARSED_FIELD_CONTAMINATION",
+                "source_rule_id": "",
+                "packet_type": "row",
+                "severity": str(row.get("severity", "warn") or "warn"),
+                "materiality_tier": materiality["materiality_tier"],
+                "likely_owner": owner,
+                "review_status": "review",
+                "cik": cik_norm,
+                "entity_name": str(row.get("entity_name", "") or ""),
+                "report_date": report_date,
+                "accession_number": str(row.get("accession_number", "") or ""),
+                "source_row_id": str(row.get("source_row_id", "") or ""),
+                "output_row_id": str(row.get("output_row_id", "") or ""),
+                "production_column": str(row.get("column", "") or ""),
+                "source_value": str(row.get("bdc_investment_identifier", "") or ""),
+                "output_value": str(row.get("output_value", "") or ""),
+                **materiality,
+                "evidence": str(row.get("evidence_token", "") or ""),
+                "recommended_action": str(row.get("recommended_action", "") or ""),
+            })
+
+    if source_corrupted_identifiers is not None and not source_corrupted_identifiers.empty:
+        records.extend(source_corrupted_identifiers.to_dict(orient="records"))
+
+    if not records:
+        return pd.DataFrame(columns=AGENT_ISSUE_PACKET_COLUMNS)
+    return pd.DataFrame(records, columns=AGENT_ISSUE_PACKET_COLUMNS).drop_duplicates(
+        "issue_id"
+    ).reset_index(drop=True)
+
+
+def _build_agent_cluster_packets(
+    *,
+    row_delta_attribution: pd.DataFrame,
+    high_fv_unclassified_clusters: pd.DataFrame,
+    column_drift_summary: pd.DataFrame,
+    holdings_df: pd.DataFrame | None,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    records: list[dict[str, Any]] = []
+    cik_norm = normalize_cik(cik)
+    quarter_totals = _quarter_totals(holdings_df, cik=cik_norm)
+
+    if row_delta_attribution is not None and not row_delta_attribution.empty:
+        for idx, row in row_delta_attribution.iterrows():
+            if str(row.get("review_status", "") or "") == "info":
+                continue
+            report_date = str(row.get("report_date", "") or "")
+            total_fv, total_rows = _totals_for_report(
+                quarter_totals,
+                cik=cik_norm,
+                report_date=report_date,
+            )
+            materiality = _materiality_metrics(
+                affected_fair_value=row.get("fair_value_abs_sum", 0),
+                total_fair_value=total_fv,
+                affected_rows=row.get("row_count", 0),
+                total_rows=total_rows,
+            )
+            delta_type = str(row.get("delta_type", "") or "")
+            records.append({
+                "issue_id": _packet_issue_id(
+                    cik=cik_norm,
+                    report_date=report_date,
+                    rule_id="WRAP.ROW_DELTA_ATTRIBUTION",
+                    unique=f"{delta_type}-{row.get('sample_identifier', '')}-{idx}",
+                ),
+                "rule_id": "WRAP.ROW_DELTA_ATTRIBUTION",
+                "source_rule_id": "",
+                "packet_type": "cluster",
+                "severity": "review" if materiality["materiality_tier"] in {"P0", "P1"} else "warn",
+                "materiality_tier": materiality["materiality_tier"],
+                "likely_owner": str(row.get("owner", "wrapper") or "wrapper"),
+                "review_status": "review",
+                "cik": cik_norm,
+                "entity_name": str(row.get("entity_name", "") or ""),
+                "report_date": report_date,
+                "affected_report_dates": report_date,
+                "cluster_key": f"{delta_type}:{normalize_wrapper_identifier(row.get('sample_identifier', ''))}",
+                "cluster_label": str(row.get("sample_identifier", "") or row.get("sample_position_key", "") or delta_type),
+                "production_column": str(row.get("changed_columns", "") or ""),
+                **materiality,
+                "evidence": str(row.get("likely_mechanism", "") or ""),
+                "representative_rows_path": "row_delta_attribution.csv",
+                "recommended_action": "Review trial-vs-production delta before promotion.",
+            })
+
+    if high_fv_unclassified_clusters is not None and not high_fv_unclassified_clusters.empty:
+        for idx, row in high_fv_unclassified_clusters.iterrows():
+            report_dates = str(row.get("affected_report_dates", "") or "")
+            report_date = report_dates.split("|")[0] if report_dates else ""
+            total_fv = 0.0
+            total_rows = 0
+            for rd in report_dates.split("|"):
+                q_fv, q_rows = _totals_for_report(quarter_totals, cik=cik_norm, report_date=rd)
+                total_fv += q_fv
+                total_rows += q_rows
+            materiality = _materiality_metrics(
+                affected_fair_value=row.get("fair_value_abs_sum", 0),
+                total_fair_value=total_fv,
+                affected_rows=row.get("row_count", 0),
+                total_rows=total_rows,
+                quarter_count=_safe_int(row.get("quarter_count", 1)),
+            )
+            records.append({
+                "issue_id": _packet_issue_id(
+                    cik=cik_norm,
+                    report_date=report_date,
+                    rule_id="WRAP.HIGH_FV_UNCLASSIFIED_CLUSTER",
+                    unique=row.get("cluster_label", idx),
+                ),
+                "rule_id": "WRAP.HIGH_FV_UNCLASSIFIED_CLUSTER",
+                "source_rule_id": "",
+                "packet_type": "cluster",
+                "severity": "review",
+                "materiality_tier": materiality["materiality_tier"],
+                "likely_owner": "wrapper",
+                "review_status": "review",
+                "cik": cik_norm,
+                "entity_name": str(row.get("entity_name", "") or ""),
+                "report_date": report_date,
+                "affected_report_dates": report_dates,
+                "cluster_key": normalize_wrapper_identifier(row.get("cluster_label", "")),
+                "cluster_label": str(row.get("cluster_label", "") or ""),
+                "production_column": "index_classification",
+                **materiality,
+                "evidence": (
+                    f"source_family_guess={row.get('source_family_guess', '')}; "
+                    f"output_asset_category={row.get('output_asset_category', '')}"
+                ),
+                "representative_rows_path": "high_fv_unclassified_clusters.csv",
+                "recommended_action": str(row.get("suggested_review_question", "") or ""),
+            })
+
+    if column_drift_summary is not None and not column_drift_summary.empty:
+        drift = column_drift_summary[column_drift_summary["status"].astype(str).eq("review")]
+        for idx, row in drift.iterrows():
+            report_date = str(row.get("report_date", "") or "")
+            total_fv, total_rows = _totals_for_report(
+                quarter_totals,
+                cik=cik_norm,
+                report_date=report_date,
+            )
+            materiality = _materiality_metrics(
+                affected_fair_value=row.get("fair_value_abs_sum", 0),
+                total_fair_value=total_fv,
+                affected_rows=row.get("row_count", 0),
+                total_rows=total_rows,
+            )
+            column = str(row.get("column", "") or "")
+            records.append({
+                "issue_id": _packet_issue_id(
+                    cik=cik_norm,
+                    report_date=report_date,
+                    rule_id="WRAP.COLUMN_DISTRIBUTION_DRIFT",
+                    unique=f"{column}-{idx}",
+                ),
+                "rule_id": "WRAP.COLUMN_DISTRIBUTION_DRIFT",
+                "source_rule_id": "",
+                "packet_type": "cluster",
+                "severity": str(row.get("severity", "review") or "review"),
+                "materiality_tier": materiality["materiality_tier"],
+                "likely_owner": "wrapper",
+                "review_status": "review",
+                "cik": cik_norm,
+                "entity_name": str(row.get("entity_name", "") or ""),
+                "report_date": report_date,
+                "affected_report_dates": report_date,
+                "cluster_key": f"{column}:{row.get('current_dominant_bucket', '')}",
+                "cluster_label": f"{column} distribution drift",
+                "production_column": column,
+                **materiality,
+                "evidence": (
+                    f"js_divergence={row.get('js_divergence', '')}; "
+                    f"new_bucket_share={row.get('new_bucket_share', '')}; "
+                    f"current={row.get('bucket_distribution', '')}; "
+                    f"baseline={row.get('baseline_bucket_distribution', '')}"
+                ),
+                "representative_rows_path": "column_drift_examples.csv",
+                "recommended_action": (
+                    "Review whether this is a real filing format change, normalized-safe "
+                    "source drift, or wrapper-owned output drift."
+                ),
+            })
+
+    if not records:
+        return pd.DataFrame(columns=AGENT_CLUSTER_PACKET_COLUMNS)
+    return pd.DataFrame(records, columns=AGENT_CLUSTER_PACKET_COLUMNS).drop_duplicates(
+        "issue_id"
+    ).reset_index(drop=True)
+
+
+def _load_agent_verdict_records(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    records: list[dict[str, Any]] = []
+    with path.open(encoding="utf-8-sig") as fh:
+        for line_no, line in enumerate(fh, start=1):
+            text = line.strip()
+            if not text:
+                continue
+            try:
+                record = json_mod.loads(text)
+            except json_mod.JSONDecodeError as exc:
+                raise ValueError(f"Invalid JSON on verdict line {line_no}: {exc}") from exc
+            if not isinstance(record, dict):
+                raise ValueError(f"Verdict line {line_no} is not a JSON object")
+            records.append(record)
+    return records
+
+
+def validate_agent_verdict_records(records: list[dict[str, Any]]) -> list[str]:
+    """Validate wrapper oracle agent verdict JSONL records."""
+    errors: list[str] = []
+    seen_issue_ids: set[str] = set()
+    required = [
+        "issue_id",
+        "rule_id",
+        "severity",
+        "materiality_tier",
+        "likely_owner",
+        "cik",
+        "report_date",
+        "verdict",
+        "mechanism",
+        "recommended_action",
+        "confidence",
+        "affected_fair_value",
+        "evidence",
+        "residual_risk",
+    ]
+    for idx, record in enumerate(records, start=1):
+        prefix = f"line {idx}"
+        for field in required:
+            if str(record.get(field, "") or "").strip() == "":
+                if field == "evidence" and record.get("verdict") == "inconclusive":
+                    continue
+                errors.append(f"{prefix}: missing {field}")
+        issue_id = str(record.get("issue_id", "") or "").strip()
+        if issue_id:
+            if issue_id in seen_issue_ids:
+                errors.append(f"{prefix}: duplicate issue_id {issue_id}")
+            seen_issue_ids.add(issue_id)
+        verdict = str(record.get("verdict", "") or "").strip()
+        if verdict not in _AGENT_VERDICT_ALLOWED_VALUES:
+            errors.append(f"{prefix}: invalid verdict {verdict}")
+        owner = str(record.get("likely_owner", "") or "").strip()
+        if owner not in _AGENT_VERDICT_ALLOWED_OWNERS:
+            errors.append(f"{prefix}: invalid likely_owner {owner}")
+        confidence = pd.to_numeric(pd.Series([record.get("confidence")]), errors="coerce").iloc[0]
+        if pd.isna(confidence) or float(confidence) < 0.0 or float(confidence) > 1.0:
+            errors.append(f"{prefix}: confidence must be between 0 and 1")
+        mechanism = str(record.get("mechanism", "") or "").strip()
+        if verdict == "true_wrapper_error" and not mechanism:
+            errors.append(f"{prefix}: true_wrapper_error requires mechanism")
+        action = str(record.get("recommended_action", "") or "").strip().lower()
+        if verdict == "true_wrapper_error" and not action:
+            errors.append(f"{prefix}: true_wrapper_error requires deterministic repair path")
+        if "hand-edit" in action or "edit production output" in action or "edit csv" in action:
+            errors.append(f"{prefix}: recommended_action cannot ask for hand-edited production output")
+        if verdict == "false_positive" and not mechanism:
+            errors.append(f"{prefix}: false_positive requires scoped reason in mechanism")
+    return errors
+
+
+def build_agent_verdict_summary(records: list[dict[str, Any]]) -> pd.DataFrame:
+    """Reduce validated agent verdicts to deterministic promotion effects."""
+    if not records:
+        return pd.DataFrame(columns=AGENT_VERDICT_SUMMARY_COLUMNS)
+    errors = validate_agent_verdict_records(records)
+    if errors:
+        raise ValueError("Invalid agent verdict records: " + "; ".join(errors))
+    rows: list[dict[str, Any]] = []
+    for record in records:
+        verdict = str(record.get("verdict", "") or "")
+        owner = str(record.get("likely_owner", "") or "")
+        tier = str(record.get("materiality_tier", "") or "P2")
+        confidence = _safe_float(record.get("confidence", 0))
+        affected_fv = _safe_float(record.get("affected_fair_value", 0))
+        effect = "info"
+        if verdict == "true_wrapper_error" and owner == "wrapper" and tier in {"P0", "P1"}:
+            effect = "reject"
+        elif verdict == "inconclusive" and tier in {"P0", "P1"}:
+            effect = "review"
+        elif verdict == "false_positive" and confidence < 0.80 and tier in {"P0", "P1"}:
+            effect = "review"
+        elif verdict == "not_wrapper_owned" and tier == "P0":
+            effect = "review"
+        rows.append({
+            "verdict": verdict,
+            "likely_owner": owner,
+            "materiality_tier": tier,
+            "affected_fair_value": affected_fv,
+            "confidence": confidence,
+            "promotion_effect": effect,
+        })
+    df = pd.DataFrame(rows)
+    grouped = (
+        df.groupby(["verdict", "likely_owner", "materiality_tier", "promotion_effect"], dropna=False)
+        .agg(
+            issue_count=("verdict", "size"),
+            affected_fair_value=("affected_fair_value", "sum"),
+            max_confidence=("confidence", "max"),
+        )
+        .reset_index()
+    )
+    return grouped[AGENT_VERDICT_SUMMARY_COLUMNS].sort_values(
+        ["promotion_effect", "materiality_tier", "verdict", "likely_owner"],
+        kind="stable",
+    ).reset_index(drop=True)
+
+
+def _load_agent_verdict_summary(out_dir: Path) -> pd.DataFrame:
+    verdict_path = out_dir / "agent_verdicts.jsonl"
+    records = _load_agent_verdict_records(verdict_path)
+    return build_agent_verdict_summary(records)
+
+
+def _parsed_field_issue_record(
+    row: pd.Series,
+    *,
+    cik: str,
+    column: str,
+    issue_type: str,
+    output_value: str,
+    evidence_token: str,
+    fair_value: Any,
+    wrapper_disposition: str,
+    source_row_id: str = "",
+    output_row_id: str = "",
+    bdc_investment_identifier: str = "",
+) -> dict[str, Any]:
+    return {
+        "cik": cik,
+        "entity_name": _first_non_empty(row, "entity_name"),
+        "report_date": _first_non_empty(row, "report_date"),
+        "accession_number": _first_non_empty(row, "accession_number"),
+        "source_row_id": source_row_id or _first_non_empty(row, "source_row_id"),
+        "output_row_id": output_row_id or _first_non_empty(row, "output_row_id"),
+        "bdc_investment_identifier": (
+            bdc_investment_identifier
+            or _first_non_empty(
+                row,
+                "bdc_investment_identifier",
+                "raw_investment_identifier",
+                "investment_identifier",
+                "normalized_investment_identifier",
+            )
+        ),
+        "column": column,
+        "issue_type": issue_type,
+        "severity": "warn",
+        "fair_value": _safe_float(fair_value),
+        "output_value": output_value,
+        "evidence_token": evidence_token,
+        "wrapper_disposition": wrapper_disposition,
+        "suggested_owner": "llm_review",
+        "recommended_action": (
+            "Review row against source filing; if true error, add or adjust the CIK wrapper "
+            "so this field excludes hierarchy, rate/date, or low-information fragments."
+        ),
+    }
+
+
+def _pattern_token(pattern: re.Pattern[str], value: str) -> str:
+    match = pattern.search(value)
+    return match.group(0) if match else ""
+
+
+def _parsed_field_checks_for_value(*, column: str, value: str) -> list[tuple[str, str]]:
+    text = str(value or "").strip()
+    if not text:
+        return []
+    checks: list[tuple[str, str]] = []
+    if column in {"issuer_name", "instrument_description", "position_key"}:
+        token = _pattern_token(_PARSED_FIELD_PCT_PATTERN, text)
+        if token:
+            checks.append(("hierarchy_or_metric_contamination", token))
+    if column in {"issuer_name", "instrument_description", "position_key"}:
+        token = _pattern_token(_PARSED_FIELD_HIERARCHY_PATTERN, text)
+        if token:
+            checks.append(("hierarchy_or_metric_contamination", token))
+    if column == "issuer_name":
+        token = _pattern_token(_PARSED_FIELD_RATE_DATE_PATTERN, text)
+        if token:
+            checks.append(("rate_or_date_contamination", token))
+    elif column in {"instrument_description", "position_key"}:
+        token = _pattern_token(_PARSED_FIELD_EXPLICIT_RATE_DATE_PATTERN, text)
+        if token:
+            checks.append(("rate_or_date_contamination", token))
+    if column == "position_key":
+        tokens = _PARSED_POSITION_TOKEN_PATTERN.findall(text.lower())
+        if 0 < len(tokens) < 3:
+            checks.append(("low_information_position_key", text))
+    return checks
+
+
+def _build_parsed_field_quality_packets(
+    detail_df: pd.DataFrame,
+    holdings_df: pd.DataFrame | None,
+    *,
+    cik: str = TRINITY_CIK,
+) -> pd.DataFrame:
+    """Build review-only packets for suspicious parsed wrapper output fields.
+
+    These packets are intentionally scoped to one CIK and do not affect oracle
+    pass/fail status. They give the agent row-level evidence when a wrapper may
+    be putting hierarchy, rate/date, or low-information text into production
+    output columns.
+    """
+    cik_norm = normalize_cik(cik)
+    records: list[dict[str, Any]] = []
+
+    if not detail_df.empty:
+        detail = _ensure_detail_columns(detail_df)
+        detail = detail[detail["cik"].eq(cik_norm)].copy()
+        for _, row in detail.iterrows():
+            fair_value = row.get("output_fair_value")
+            if pd.isna(fair_value) or _safe_float(fair_value) == 0:
+                fair_value = row.get("source_fair_value")
+            wrapper_disposition = _first_non_empty(
+                row,
+                "output_wrapper_disposition",
+                "source_wrapper_disposition",
+            )
+            for column in ("issuer_name", "instrument_description"):
+                value = _first_non_empty(row, column)
+                for issue_type, token in _parsed_field_checks_for_value(
+                    column=column,
+                    value=value,
+                ):
+                    records.append(
+                        _parsed_field_issue_record(
+                            row,
+                            cik=cik_norm,
+                            column=column,
+                            issue_type=issue_type,
+                            output_value=value,
+                            evidence_token=token,
+                            fair_value=fair_value,
+                            wrapper_disposition=wrapper_disposition,
+                        )
+                    )
+            value = _first_non_empty(row, "output_wrapper_position_key")
+            for issue_type, token in _parsed_field_checks_for_value(
+                column="position_key",
+                value=value,
+            ):
+                records.append(
+                    _parsed_field_issue_record(
+                        row,
+                        cik=cik_norm,
+                        column="position_key",
+                        issue_type=issue_type,
+                        output_value=value,
+                        evidence_token=token,
+                        fair_value=fair_value,
+                        wrapper_disposition=wrapper_disposition,
+                    )
+                )
+
+    if holdings_df is not None and not holdings_df.empty and "cik" in holdings_df.columns:
+        holdings = holdings_df.copy()
+        holdings["cik"] = holdings["cik"].map(normalize_cik)
+        holdings = holdings[holdings["cik"].eq(cik_norm)].copy()
+        if "position_key" in holdings.columns and not holdings.empty:
+            for _, row in holdings.iterrows():
+                value = _first_non_empty(row, "position_key")
+                wrapper_disposition = _first_non_empty(row, "wrapper_disposition")
+                fair_value = _first_non_empty(row, "fair_value", "reported_value", "value")
+                identifier = _first_non_empty(
+                    row,
+                    "bdc_investment_identifier",
+                    "investment_identifier",
+                    "raw_investment_identifier",
+                )
+                for issue_type, token in _parsed_field_checks_for_value(
+                    column="position_key",
+                    value=value,
+                ):
+                    records.append(
+                        _parsed_field_issue_record(
+                            row,
+                            cik=cik_norm,
+                            column="position_key",
+                            issue_type=issue_type,
+                            output_value=value,
+                            evidence_token=token,
+                            fair_value=fair_value,
+                            wrapper_disposition=wrapper_disposition,
+                            source_row_id="",
+                            output_row_id="",
+                            bdc_investment_identifier=identifier,
+                        )
+                    )
+
+    if not records:
+        return pd.DataFrame(columns=PARSED_FIELD_QUALITY_COLUMNS)
+    packets = pd.DataFrame(records, columns=PARSED_FIELD_QUALITY_COLUMNS)
+    return packets.drop_duplicates(PARSED_FIELD_QUALITY_COLUMNS).reset_index(drop=True)
+
+
+def _append_parsed_field_quality_summary(
+    summary_df: pd.DataFrame,
+    packets_df: pd.DataFrame,
+) -> pd.DataFrame:
+    summary = summary_df.copy()
+    for col in ORACLE_SUMMARY_COLUMNS:
+        if col not in summary.columns:
+            summary[col] = ""
+    if summary.empty:
+        return summary[ORACLE_SUMMARY_COLUMNS]
+    summary["parsed_field_quality_issue_count"] = 0
+    summary["parsed_field_quality_fair_value"] = 0.0
+    if not packets_df.empty:
+        packets = packets_df.copy()
+        packets["report_date"] = packets["report_date"].astype(str)
+        packets["fair_value"] = pd.to_numeric(packets["fair_value"], errors="coerce").fillna(0).abs()
+        issue_counts = packets.groupby("report_date", dropna=False).agg(
+            parsed_field_quality_issue_count=("issue_type", "size"),
+        )
+        material_rows = packets.drop_duplicates(
+            [
+                "report_date",
+                "source_row_id",
+                "output_row_id",
+                "bdc_investment_identifier",
+                "fair_value",
+            ]
+        )
+        materiality = material_rows.groupby("report_date", dropna=False).agg(
+            parsed_field_quality_fair_value=("fair_value", "sum"),
+        )
+        packet_summary = issue_counts.merge(
+            materiality,
+            left_index=True,
+            right_index=True,
+            how="left",
+        )
+        for idx, row in summary.iterrows():
+            report_date = str(row.get("report_date", ""))
+            if report_date in packet_summary.index:
+                summary.at[idx, "parsed_field_quality_issue_count"] = int(
+                    packet_summary.at[report_date, "parsed_field_quality_issue_count"]
+                )
+                summary.at[idx, "parsed_field_quality_fair_value"] = round(
+                    float(packet_summary.at[report_date, "parsed_field_quality_fair_value"]),
+                    2,
+                )
+    return summary[ORACLE_SUMMARY_COLUMNS]
+
+
 def _split_reason_string(value: Any) -> set[str]:
     return {part for part in str(value or "").split("|") if part}
 
@@ -347,6 +2166,7 @@ def evaluate_promotion_gate(
     *,
     oracle_exceptions: pd.DataFrame | None = None,
     wrapper_version_by_cik: dict[str, Any] | None = None,
+    verdict_summary: pd.DataFrame | None = None,
 ) -> PromotionVerdict:
     """Evaluate whether a wrapper change should be promoted.
 
@@ -454,6 +2274,28 @@ def evaluate_promotion_gate(
                 improvements.append(
                     f"cleared_rollups_increased: total_delta=+{total_rollup_delta}"
                 )
+
+    # --- Review-adjusted verdict effects ---
+    if verdict_summary is not None and not verdict_summary.empty:
+        summary_df = verdict_summary.copy()
+        if "promotion_effect" not in summary_df.columns:
+            reject_reasons.append("malformed_agent_verdict_summary")
+        else:
+            for _, vrow in summary_df.iterrows():
+                effect = str(vrow.get("promotion_effect", "") or "")
+                verdict = str(vrow.get("verdict", "") or "")
+                owner = str(vrow.get("likely_owner", "") or "")
+                tier = str(vrow.get("materiality_tier", "") or "")
+                issue_count = _safe_int(vrow.get("issue_count", 0))
+                affected_fv = _safe_float(vrow.get("affected_fair_value", 0))
+                reason = (
+                    f"agent_verdict_{effect}: {verdict}/{owner}/{tier} "
+                    f"issues={issue_count} affected_fv={affected_fv:.0f}"
+                )
+                if effect == "reject":
+                    reject_reasons.append(reason)
+                elif effect == "review":
+                    review_reasons.append(reason)
 
     # --- Build per-quarter comparison ---
     per_quarter_rows = []
@@ -843,11 +2685,16 @@ def run_promotion_trial(
 
     wrapper_versions = _wrapper_version_by_cik(cik_norm)
     oracle_exceptions = load_bdc_xbrl_oracle_exceptions()
+    verdict_summary = pd.DataFrame(columns=AGENT_VERDICT_SUMMARY_COLUMNS)
+    verdict_summary_path = out_dir / "agent_verdict_summary.csv"
+    if verdict_summary_path.exists():
+        verdict_summary = pd.read_csv(verdict_summary_path, dtype=str)
     verdict = evaluate_promotion_gate(
         summary,
         baseline,
         oracle_exceptions=oracle_exceptions,
         wrapper_version_by_cik=wrapper_versions,
+        verdict_summary=verdict_summary,
     )
     exception_proposals = build_exception_proposals(
         summary,
@@ -1863,6 +3710,8 @@ def build_wrapper_oracle_outputs(
             "position_continuation_rate": pos_cont_rate,
             "rate_outlier_count": rate_outlier_count,
             "cost_fv_ratio_outlier_count": cost_fv_outlier_count,
+            "parsed_field_quality_issue_count": 0,
+            "parsed_field_quality_fair_value": 0,
             "fv_magnitude_shift": fv_mag_shift,
             "rate_magnitude_shift": rate_mag_shift,
             "concept_drift_flag": concept_drift,
@@ -2020,6 +3869,18 @@ def _load_fresh_bdc_staged_holdings_for_cik(cik: str) -> pd.DataFrame:
     return staged
 
 
+def _load_current_production_bdc_holdings_for_cik(cik: str) -> pd.DataFrame:
+    """Load current production BDC holdings for one CIK, if available."""
+    cik_norm = normalize_cik(cik)
+    if not UNIFIED_HOLDINGS_FILE.exists():
+        return pd.DataFrame()
+    unified_df = pd.read_csv(UNIFIED_HOLDINGS_FILE, dtype=str)
+    return unified_df[
+        unified_df.get("cik", pd.Series(dtype=str)).map(normalize_cik).eq(cik_norm)
+        & unified_df.get("source", pd.Series(dtype=str)).astype(str).str.lower().eq("bdc")
+    ].copy()
+
+
 def run_wrapper_oracle_trial(
     *,
     cik: str = TRINITY_CIK,
@@ -2071,6 +3932,7 @@ def run_wrapper_oracle_trial(
             unified_df.get("cik", pd.Series(dtype=str)).map(normalize_cik).eq(cik_norm)
             & unified_df.get("source", pd.Series(dtype=str)).astype(str).str.lower().eq("bdc")
         ].copy()
+    production_holdings_df = _load_current_production_bdc_holdings_for_cik(cik_norm)
     raw_bdc_position_keys: set[tuple[str, str, str, str]] = set()
     if BDC_HOLDINGS_FILE.exists():
         bdc_raw = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
@@ -2099,6 +3961,44 @@ def run_wrapper_oracle_trial(
         holdings_df=holdings_df,
         fund_financials_df=trial_fund_financials,
     )
+    parsed_field_quality = _build_parsed_field_quality_packets(
+        detail,
+        holdings_df,
+        cik=cik_norm,
+    )
+    source_corrupted_identifiers = _build_source_corrupted_identifier_packets(
+        detail,
+        holdings_df,
+        cik=cik_norm,
+    )
+    row_delta_attribution = _build_row_delta_attribution(
+        holdings_df,
+        production_holdings_df,
+        cik=cik_norm,
+    )
+    high_fv_unclassified_clusters = _build_high_fv_unclassified_clusters(
+        holdings_df,
+        load_wrapper_definition(cik_norm),
+        cik=cik_norm,
+    )
+    column_drift_summary, column_drift_examples = _build_column_drift_packets(
+        holdings_df,
+        cik=cik_norm,
+    )
+    agent_issue_packets = _build_agent_issue_packets(
+        parsed_field_quality=parsed_field_quality,
+        source_corrupted_identifiers=source_corrupted_identifiers,
+        holdings_df=holdings_df,
+        cik=cik_norm,
+    )
+    agent_cluster_packets = _build_agent_cluster_packets(
+        row_delta_attribution=row_delta_attribution,
+        high_fv_unclassified_clusters=high_fv_unclassified_clusters,
+        column_drift_summary=column_drift_summary,
+        holdings_df=holdings_df,
+        cik=cik_norm,
+    )
+    summary = _append_parsed_field_quality_summary(summary, parsed_field_quality)
     baseline_comparison = None
     if compare_baseline:
         baseline_detail, _baseline_metrics = reconcile_bdc_source_to_holdings(
@@ -2110,6 +4010,33 @@ def run_wrapper_oracle_trial(
 
     out_dir.mkdir(parents=True, exist_ok=True)
     detail.to_csv(out_dir / "reconciliation_detail.csv", index=False)
+    parsed_field_quality.to_csv(out_dir / "parsed_field_quality.csv", index=False)
+    source_corrupted_identifiers.to_csv(out_dir / "source_corrupted_identifiers.csv", index=False)
+    row_delta_attribution.to_csv(out_dir / "row_delta_attribution.csv", index=False)
+    high_fv_unclassified_clusters.to_csv(
+        out_dir / "high_fv_unclassified_clusters.csv",
+        index=False,
+    )
+    column_drift_summary.to_csv(out_dir / "column_drift_summary.csv", index=False)
+    column_drift_examples.to_csv(out_dir / "column_drift_examples.csv", index=False)
+    agent_issue_packets.to_csv(out_dir / "agent_issue_packets.csv", index=False)
+    _write_jsonl_from_df(agent_issue_packets, out_dir / "agent_issue_packets.jsonl")
+    agent_cluster_packets.to_csv(out_dir / "agent_cluster_packets.csv", index=False)
+    _write_jsonl_from_df(agent_cluster_packets, out_dir / "agent_cluster_packets.jsonl")
+    try:
+        agent_verdict_summary = _load_agent_verdict_summary(out_dir)
+    except ValueError as exc:
+        agent_verdict_summary = pd.DataFrame([{
+            "verdict": "malformed_agent_verdicts",
+            "likely_owner": "unknown",
+            "materiality_tier": "P0",
+            "issue_count": 1,
+            "affected_fair_value": 0.0,
+            "max_confidence": 0.0,
+            "promotion_effect": "reject",
+        }], columns=AGENT_VERDICT_SUMMARY_COLUMNS)
+        logger.error("Agent verdict validation failed: %s", exc)
+    agent_verdict_summary.to_csv(out_dir / "agent_verdict_summary.csv", index=False)
     summary.to_csv(out_dir / "oracle_summary.csv", index=False)
     cleared.to_csv(out_dir / "cleared_rollups.csv", index=False)
     remaining.to_csv(out_dir / "remaining_blockers.csv", index=False)

@@ -2180,3 +2180,129 @@ class TestEdgeCases:
     def test_value_columns_sorted(self):
         from pipeline.bdc_filings import _VALUE_COLUMNS
         assert _VALUE_COLUMNS == sorted(_VALUE_COLUMNS)
+
+
+# ---------------------------------------------------------------------------
+# Non-accrual extraction in _parse_single_filing
+# ---------------------------------------------------------------------------
+
+class TestNonaccrualExtraction:
+    """Verify footnote and dimension non-accrual signals are extracted."""
+
+    XBRL_WITH_NONACCRUAL = textwrap.dedent("""\
+        <?xml version="1.0" encoding="UTF-8"?>
+        <xbrl
+            xmlns="http://www.xbrl.org/2003/instance"
+            xmlns:xbrli="http://www.xbrl.org/2003/instance"
+            xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+            xmlns:link="http://www.xbrl.org/2003/linkbase"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:test="http://example.com/test">
+
+            <!-- Investment context 1: has linked non-accrual footnote -->
+            <xbrli:context id="ctx_fn">
+                <xbrli:entity>
+                    <xbrli:identifier scheme="http://www.sec.gov/CIK">100</xbrli:identifier>
+                    <xbrli:segment>
+                        <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                            <test:InvestmentIdentifierDomain>Acme Corp - Term Loan</test:InvestmentIdentifierDomain>
+                        </xbrldi:typedMember>
+                    </xbrli:segment>
+                </xbrli:entity>
+                <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+            </xbrli:context>
+
+            <!-- Investment context 2: has non-accrual dimension member -->
+            <xbrli:context id="ctx_dim">
+                <xbrli:entity>
+                    <xbrli:identifier scheme="http://www.sec.gov/CIK">100</xbrli:identifier>
+                    <xbrli:segment>
+                        <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                            <test:InvestmentIdentifierDomain>Beta Inc - Senior Note</test:InvestmentIdentifierDomain>
+                        </xbrldi:typedMember>
+                        <xbrldi:explicitMember dimension="test:InvestmentTypeAxis">test:NonAccrualMember</xbrldi:explicitMember>
+                    </xbrli:segment>
+                </xbrli:entity>
+                <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+            </xbrli:context>
+
+            <!-- Investment context 3: no NA signal -->
+            <xbrli:context id="ctx_clean">
+                <xbrli:entity>
+                    <xbrli:identifier scheme="http://www.sec.gov/CIK">100</xbrli:identifier>
+                    <xbrli:segment>
+                        <xbrldi:typedMember dimension="test:InvestmentIdentifierAxis">
+                            <test:InvestmentIdentifierDomain>Gamma LLC - Revolver</test:InvestmentIdentifierDomain>
+                        </xbrldi:typedMember>
+                    </xbrli:segment>
+                </xbrli:entity>
+                <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+            </xbrli:context>
+
+            <!-- Facts -->
+            <test:InvestmentOwnedAtFairValue id="fv_fn" contextRef="ctx_fn" unitRef="usd" decimals="0">1000000</test:InvestmentOwnedAtFairValue>
+            <test:InvestmentOwnedAtFairValue id="fv_dim" contextRef="ctx_dim" unitRef="usd" decimals="0">2000000</test:InvestmentOwnedAtFairValue>
+            <test:InvestmentOwnedAtFairValue id="fv_clean" contextRef="ctx_clean" unitRef="usd" decimals="0">3000000</test:InvestmentOwnedAtFairValue>
+
+            <!-- Footnote link: fv_fn -> non-accrual footnote -->
+            <link:footnoteLink>
+                <link:loc xlink:type="locator" xlink:href="#fv_fn" xlink:label="fact_fn"/>
+                <link:footnote xlink:type="resource" xlink:label="fn_na" xml:lang="en">
+                    Loan was placed on non-accrual status as of December 31, 2025.
+                </link:footnote>
+                <link:footnoteArc xlink:type="arc" xlink:from="fact_fn" xlink:to="fn_na" xlink:arcrole="http://www.xbrl.org/2003/arcrole/fact-footnote"/>
+            </link:footnoteLink>
+        </xbrl>
+    """)
+
+    def test_parse_single_filing_extracts_nonaccrual_signals(self, tmp_path):
+        from pipeline.bdc_filings import _parse_single_filing
+
+        xml_file = tmp_path / "test.xml"
+        xml_file.write_text(self.XBRL_WITH_NONACCRUAL, encoding="utf-8")
+
+        meta = {
+            "cik": "100", "entity_name": "Test", "accession_number": "0001",
+            "form_type": "10-K", "filing_date": "2026-01-15",
+            "report_date": "2025-12-31",
+        }
+        records = _parse_single_filing(str(xml_file), meta)
+
+        by_id = {r["investment_identifier"]: r for r in records}
+
+        # Footnote-flagged position
+        acme = by_id["Acme Corp - Term Loan"]
+        assert acme["nonaccrual_footnote"] is True
+        assert acme["nonaccrual_dimension"] is False
+
+        # Dimension-flagged position
+        beta = by_id["Beta Inc - Senior Note"]
+        assert beta["nonaccrual_footnote"] is False
+        assert beta["nonaccrual_dimension"] is True
+
+        # Clean position
+        gamma = by_id["Gamma LLC - Revolver"]
+        assert gamma["nonaccrual_footnote"] is False
+        assert gamma["nonaccrual_dimension"] is False
+
+    def test_dedup_preserves_nonaccrual_or_semantics(self):
+        """If any row in a dedup group has True, the surviving row must too."""
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        df = pd.DataFrame([
+            {
+                "accession_number": "A", "investment_identifier": "X",
+                "period": "2025-12-31", "dimensions_raw": "",
+                "fair_value": 100, "nonaccrual_footnote": True,
+                "nonaccrual_dimension": False,
+            },
+            {
+                "accession_number": "A", "investment_identifier": "X",
+                "period": "2025-12-31", "dimensions_raw": "",
+                "fair_value": 100, "nonaccrual_footnote": False,
+                "nonaccrual_dimension": False,
+            },
+        ])
+        result = _deduplicate_bdc_holdings(df)
+        assert len(result) == 1
+        assert bool(result.iloc[0]["nonaccrual_footnote"]) is True

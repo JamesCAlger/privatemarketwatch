@@ -94,11 +94,10 @@ def test_data_quality_export_includes_gav_status_counts(monkeypatch, tmp_path):
 def test_credit_risk_export_is_bdc_only_independent_signals(monkeypatch, tmp_path):
     holdings = tmp_path / "private_markets_holdings.csv"
     frontend_dir = tmp_path / "frontend"
-    nonaccrual = tmp_path / "nonaccrual_flags.csv"
     missing_financials = tmp_path / "missing_fund_financials.csv"
     frontend_dir.mkdir(parents=True)
 
-    _write_csv(holdings, [
+    _write_rows(holdings, [
         {
             "source": "bdc",
             "cik": "0000000001",
@@ -112,6 +111,8 @@ def test_credit_risk_export_is_bdc_only_independent_signals(monkeypatch, tmp_pat
             "pik_rate": "",
             "nport_is_paid_in_kind": "",
             "bdc_investment_identifier": "overlap-id",
+            "nonaccrual_footnote": "true",
+            "nonaccrual_dimension": "false",
         },
         {
             "source": "bdc",
@@ -126,6 +127,8 @@ def test_credit_risk_export_is_bdc_only_independent_signals(monkeypatch, tmp_pat
             "pik_rate": "12.0",
             "nport_is_paid_in_kind": "",
             "bdc_investment_identifier": "pik-only-id",
+            "nonaccrual_footnote": "false",
+            "nonaccrual_dimension": "false",
         },
         {
             "source": "bdc",
@@ -140,6 +143,8 @@ def test_credit_risk_export_is_bdc_only_independent_signals(monkeypatch, tmp_pat
             "pik_rate": "",
             "nport_is_paid_in_kind": "",
             "bdc_investment_identifier": "bad-scale-id",
+            "nonaccrual_footnote": "false",
+            "nonaccrual_dimension": "false",
         },
         {
             "source": "nport",
@@ -154,16 +159,12 @@ def test_credit_risk_export_is_bdc_only_independent_signals(monkeypatch, tmp_pat
             "pik_rate": "",
             "nport_is_paid_in_kind": "Y",
             "bdc_investment_identifier": "nport-id",
+            "nonaccrual_footnote": "false",
+            "nonaccrual_dimension": "false",
         },
     ])
-    nonaccrual.write_text(
-        "cik,report_date,investment_identifier,nonaccrual_source\n"
-        "0000000001,2025-03-31,overlap-id,fixture\n",
-        encoding="utf-8",
-    )
 
     monkeypatch.setattr(analytics_exports, "UNIFIED_HOLDINGS_CSV", holdings)
-    monkeypatch.setattr(analytics_exports, "NONACCRUAL_FLAGS_CSV", nonaccrual)
     monkeypatch.setattr(analytics_exports, "FUND_FINANCIALS_CSV", missing_financials)
     monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
     monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
@@ -192,16 +193,14 @@ def test_credit_risk_export_is_bdc_only_independent_signals(monkeypatch, tmp_pat
     assert "healthy" not in exported[0]["byCount"]
 
 
-def test_credit_risk_nonaccrual_affiliation_prefix_stripped(monkeypatch, tmp_path):
-    """Non-accrual flags with affiliation-prefixed identifiers should still
-    join to unified holdings where bdc_investment_identifier is stripped."""
+def test_credit_risk_nonaccrual_from_unified_columns(monkeypatch, tmp_path):
+    """Non-accrual flags read from unified holdings columns (not external CSV)."""
     holdings = tmp_path / "private_markets_holdings.csv"
     frontend_dir = tmp_path / "frontend"
-    nonaccrual = tmp_path / "nonaccrual_flags.csv"
     missing_financials = tmp_path / "missing_fund_financials.csv"
     frontend_dir.mkdir(parents=True)
 
-    _write_csv(holdings, [
+    _write_rows(holdings, [
         {
             "source": "bdc",
             "cik": "0000000001",
@@ -215,6 +214,8 @@ def test_credit_risk_nonaccrual_affiliation_prefix_stripped(monkeypatch, tmp_pat
             "pik_rate": "",
             "nport_is_paid_in_kind": "",
             "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "nonaccrual_footnote": "true",
+            "nonaccrual_dimension": "false",
         },
         {
             "source": "bdc",
@@ -229,22 +230,12 @@ def test_credit_risk_nonaccrual_affiliation_prefix_stripped(monkeypatch, tmp_pat
             "pik_rate": "",
             "nport_is_paid_in_kind": "",
             "bdc_investment_identifier": "Beta Inc - Revolver",
+            "nonaccrual_footnote": "false",
+            "nonaccrual_dimension": "true",
         },
     ])
-    # Raw nonaccrual flags use affiliation-prefixed identifiers.
-    # Values with commas must be quoted for CSV parsing.
-    nonaccrual.write_text(
-        "cik,report_date,investment_identifier,nonaccrual_source\n"
-        "0000000001,2025-03-31,"
-        "Non-Controlled Investments - Acme Corp - Term Loan,fixture\n"
-        '0000000001,2025-03-31,'
-        '"Investments in Non-Controlled, Non-Affiliated Portfolio Companies - '
-        'Beta Inc - Revolver",fixture\n',
-        encoding="utf-8",
-    )
 
     monkeypatch.setattr(analytics_exports, "UNIFIED_HOLDINGS_CSV", holdings)
-    monkeypatch.setattr(analytics_exports, "NONACCRUAL_FLAGS_CSV", nonaccrual)
     monkeypatch.setattr(analytics_exports, "FUND_FINANCIALS_CSV", missing_financials)
     monkeypatch.setattr(analytics_exports, "FRONTEND_DATA_DIR", frontend_dir)
     monkeypatch.setattr(export_helpers, "FRONTEND_DATA_DIR", frontend_dir)
@@ -256,7 +247,7 @@ def test_credit_risk_nonaccrual_affiliation_prefix_stripped(monkeypatch, tmp_pat
     exported = json.loads((frontend_dir / "credit_risk.json").read_text(encoding="utf-8"))
     assert len(exported) == 1
     q = exported[0]
-    # Both positions should be flagged as non-accrual after prefix stripping
+    # Both positions should be flagged as non-accrual via their respective columns
     assert q["byCount"]["nonAccrual"] == 1.0
     assert q["byFv"]["nonAccrual"] == 1.0
 

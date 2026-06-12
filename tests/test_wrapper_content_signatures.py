@@ -16,6 +16,7 @@ from pipeline.wrapper_content_signatures import (
     _DEFAULT_ARCHETYPE_SIGNATURES,
     _parse_definition,
     classify_archetype,
+    classify_content_signature_rows,
     load_wrapper_definition,
     validate_content_signatures,
     validate_fv_reconciliation,
@@ -340,6 +341,59 @@ def test_unclassified_rows_are_not_signature_failures():
     assert len(violations) == 0
     assert summary.iloc[0]["unclassified_rows"] == 1
     assert summary.iloc[0]["pass_rate"] == 1.0
+
+
+def test_classify_content_signature_rows_uses_wrapper_leaf_family_fallback():
+    """Row classification should expose the same wrapper-family fallback as validation."""
+    wrapper = WrapperDefinition(
+        cik="0000000099",
+        entity_name="Test BDC",
+        version=1,
+        archetypes=(
+            Archetype(
+                name="debt",
+                description="Debt",
+                keywords=("term loan",),
+                keyword_mode="any",
+                field_signatures=(),
+            ),
+        ),
+    )
+    df = pd.DataFrame([{
+        "report_date": "2025-03-31",
+        "instrument_description": "",
+        "bdc_investment_identifier": "Apex Service Partners LLC 3",
+        "wrapper_family": "debt",
+        "wrapper_disposition": "debt_position_leaf",
+        "fair_value": "56000000",
+    }])
+
+    rows = classify_content_signature_rows(wrapper, df)
+
+    assert list(rows.columns) == [
+        "row_index",
+        "report_date",
+        "classification_text",
+        "archetype",
+        "fair_value",
+    ]
+    assert rows.iloc[0]["classification_text"] == "Apex Service Partners LLC 3"
+    assert rows.iloc[0]["archetype"] == "debt"
+    assert rows.iloc[0]["fair_value"] == 56000000.0
+
+
+def test_classify_content_signature_rows_leaves_unknown_rows_unclassified():
+    wrapper = _make_wrapper()
+    df = pd.DataFrame([{
+        "report_date": "2024-12-31",
+        "instrument_description": "Unmapped co-investment program",
+        "fair_value": "-250000",
+    }])
+
+    rows = classify_content_signature_rows(wrapper, df)
+
+    assert rows.iloc[0]["archetype"] == ""
+    assert rows.iloc[0]["fair_value"] == 250000.0
 
 
 def test_load_holdings_for_cik_filters_raw_to_current_fv_position_leaves(monkeypatch, tmp_path):

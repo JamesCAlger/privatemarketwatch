@@ -1,10 +1,5 @@
 """Frontend export helpers split from pipeline.export_frontend."""
 
-from pipeline.bdc_identifier import (
-    _AFFILIATION_PREFIX_RE,
-    _AFFILIATION_SUFFIX_RE,
-    _INVESTMENTS_HIERARCHY_RE,
-)
 from pipeline.export.helpers import *
 
 def _top_n_with_other(
@@ -1466,10 +1461,9 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
     2. Non-accrual: flagged in BDC XBRL footnotes/dimensions
     3. Marked below cost: FV/cost < 90%
 
-    Non-accrual flags are extracted from ``nonaccrual_flags.csv`` which is
-    produced by parsing XBRL footnote links and dimension members across
-    all BDC filings.  118 CIKs (~61% of BDC universe) have non-accrual
-    data.  N-PORT is excluded from this export.
+    Non-accrual flags are read directly from the ``nonaccrual_footnote``
+    and ``nonaccrual_dimension`` columns on unified holdings (extracted
+    during BDC XBRL parsing).  N-PORT is excluded from this export.
 
     GAV filter: CIK-quarters where either DL-only or all-position FV /
     total_assets is between 0.7 and 1.3 are included.
@@ -1480,36 +1474,6 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
         return
 
     has_fund_financials = FUND_FINANCIALS_CSV.exists()
-    has_nonaccrual = NONACCRUAL_FLAGS_CSV.exists()
-
-    # Non-accrual CTE: LEFT JOIN on cik + report_date + identifier
-    na_cte = ""
-    na_select = "0 AS is_nonaccrual"
-    if has_nonaccrual:
-        na_cte = f""",
-        na_flags AS (
-            SELECT DISTINCT cik, report_date,
-                regexp_replace(
-                    regexp_replace(
-                        regexp_replace(
-                            investment_identifier,
-                            '{_AFFILIATION_PREFIX_RE}', ''
-                        ),
-                        '{_AFFILIATION_SUFFIX_RE}', ''
-                    ),
-                    '{_INVESTMENTS_HIERARCHY_RE}', ''
-                ) AS investment_identifier
-            FROM read_csv_auto('{NONACCRUAL_FLAGS_CSV.as_posix()}', all_varchar=true)
-        )"""
-        na_select = ("CASE WHEN na.cik IS NOT NULL THEN 1 ELSE 0 END "
-                     "AS is_nonaccrual")
-
-    na_join = ""
-    if has_nonaccrual:
-        na_join = """LEFT JOIN na_flags na
-              ON dl.cik = na.cik
-             AND dl.report_date = na.report_date
-             AND dl.bdc_investment_identifier = na.investment_identifier"""
 
     # GAV filter
     gav_cte = ""
@@ -1573,7 +1537,9 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
                 || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
                 TRY_CAST(fair_value AS DOUBLE) AS fair_value,
                 TRY_CAST(principal_amount_usd AS DOUBLE) AS principal,
-                TRY_CAST(cost AS DOUBLE) AS cost
+                TRY_CAST(cost AS DOUBLE) AS cost,
+                COALESCE(TRY_CAST(nonaccrual_footnote AS BOOLEAN), FALSE) AS _na_fn,
+                COALESCE(TRY_CAST(nonaccrual_dimension AS BOOLEAN), FALSE) AS _na_dim
             FROM raw
             WHERE source = 'bdc'
               AND index_classification = 'DIRECT_LENDING'
@@ -1581,13 +1547,12 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
               AND report_date >= '2022-10-01'
               {_exclude_consumer_lending_sql('cik')}
         )
-        {na_cte}
         {gav_cte},
         with_tiers AS (
             SELECT
                 dl.report_quarter,
                 dl.fair_value,
-                {na_select},
+                CASE WHEN dl._na_fn OR dl._na_dim THEN 1 ELSE 0 END AS is_nonaccrual,
                 CASE
                     WHEN dl.principal > 10000
                          AND dl.principal BETWEEN dl.fair_value * 0.1
@@ -1603,7 +1568,6 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
                     THEN 1 ELSE 0
                 END AS is_marked_below_cost
             FROM dl
-            {na_join}
             {gav_join}
             WHERE dl.report_quarter IS NOT NULL
               {_quarter_cutoff_sql('dl.report_quarter')}

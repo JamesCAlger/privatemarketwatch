@@ -800,6 +800,7 @@ def _extract_investment_facts(
     for ctx_id, fact_vals in facts_by_ctx.items():
         ctx_info = contexts[ctx_id]
         record: dict[str, Any] = {
+            "_context_id": ctx_id,
             "period": ctx_info["period"],
             "investment_identifier": ctx_info["investment_identifier"],
             "industry": ctx_info["industry"],
@@ -855,6 +856,50 @@ def _parse_single_filing(
 
     contexts = _parse_xbrl_contexts(tree)
     facts = _extract_investment_facts(tree, contexts)
+
+    # --- Non-accrual evidence: footnotes + dimensions ---
+    from pipeline.nonaccrual_evidence import (
+        classify_footnote,
+        has_nonaccrual_dimension,
+        linked_fact_footnotes,
+    )
+
+    root = tree.getroot()
+    report_date = filing_meta.get("report_date", "")
+
+    # 1. Dimension-based: check each context for explicit non-accrual members
+    na_dim_ctxs: set[str] = set()
+    for ctx_id, ctx_info in contexts.items():
+        if has_nonaccrual_dimension(ctx_info):
+            na_dim_ctxs.add(ctx_id)
+
+    # 2. Footnote-based: build fact_id -> linked footnotes, resolve to contexts
+    fn_map = linked_fact_footnotes(root)
+    # Build fact_id -> context_id mapping for investment facts
+    fact_id_to_ctx: dict[str, str] = {}
+    inv_ctx_ids = {cid for cid, info in contexts.items() if info["is_investment"]}
+    for elem in root.iter():
+        fid = elem.get("id")
+        cref = elem.get("contextRef")
+        if fid and cref and cref in inv_ctx_ids:
+            fact_id_to_ctx[fid] = cref
+
+    na_fn_ctxs: set[str] = set()
+    for fact_id, notes in fn_map.items():
+        ctx_id = fact_id_to_ctx.get(fact_id)
+        if not ctx_id:
+            continue
+        for note in notes:
+            decision = classify_footnote(note, report_date)
+            if decision.accepted:
+                na_fn_ctxs.add(ctx_id)
+                break  # one accepted footnote is enough for this context
+
+    # 3. Stamp each record
+    for rec in facts:
+        ctx_id = rec.get("_context_id", "")
+        rec["nonaccrual_footnote"] = ctx_id in na_fn_ctxs
+        rec["nonaccrual_dimension"] = ctx_id in na_dim_ctxs
 
     # Annotate each record with filing metadata
     for rec in facts:
@@ -1033,6 +1078,27 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
         ]
         picked.drop(columns=[fill_col], inplace=True)
 
+    # Non-accrual OR-merge: if any row in a dedup group has True, the
+    # surviving row must have True (signals should not be lost by dedup).
+    for na_col in ("nonaccrual_footnote", "nonaccrual_dimension"):
+        if na_col in result.columns:
+            bool_col = pd.to_numeric(result[na_col], errors="coerce").fillna(0)
+            na_group_max = (
+                bool_col.groupby(
+                    [result[k] for k in _EFFECTIVE_KEY], dropna=False,
+                ).transform("max")
+            )
+            result["_na_max"] = na_group_max
+            # Get one value per effective group to merge into picked
+            na_agg = (
+                result.drop_duplicates(subset=_EFFECTIVE_KEY)
+                [_EFFECTIVE_KEY + ["_na_max"]]
+            )
+            picked = picked.merge(na_agg, on=_EFFECTIVE_KEY, how="left")
+            picked[na_col] = picked["_na_max"].fillna(0).astype(bool)
+            picked.drop(columns=["_na_max"], inplace=True)
+            result.drop(columns=["_na_max"], inplace=True)
+
     # Tag rows that resulted from an FV-based axis split
     picked["dedupe_axis_split"] = picked["_fv_split_key"].ne("")
 
@@ -1068,7 +1134,10 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             int(conflicts.sum()),
         )
 
-    return picked.drop(columns=["_dedupe_row_order", "_dedupe_score", "_fv_split_key"])
+    drop_cols = ["_dedupe_row_order", "_dedupe_score", "_fv_split_key"]
+    if "_context_id" in picked.columns:
+        drop_cols.append("_context_id")
+    return picked.drop(columns=drop_cols)
 
 
 # ===========================================================================

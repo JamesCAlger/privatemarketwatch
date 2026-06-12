@@ -306,6 +306,8 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             COALESCE(CAST(is_any_portion_interest_paid AS VARCHAR), '') AS nport_is_paid_in_kind,
             COALESCE(CAST(currency_code AS VARCHAR), '') AS nport_currency_code,
             COALESCE(CAST(liquidity_classification AS VARCHAR), '') AS nport_liquidity_classification,
+            FALSE AS nonaccrual_footnote,
+            FALSE AS nonaccrual_dimension,
             0 AS is_subsidiary,
             '' AS jv_subsidiary,
             '' AS entity_id,

@@ -152,6 +152,34 @@
           "type": "array",
           "items": {"type": "string"},
           "description": "Additional industry labels beyond the built-in set, used to expand the MSD_INDUSTRY_LABELS placeholder"
+        },
+        "pipe_field_map": {
+          "type": "object",
+          "description": "Declares which pipe-delimited segment indices hold the issuer name and instrument description for CIKs whose pipe format differs from the generic SLR pattern. Segment indices are 1-based (matching DuckDB array indexing).",
+          "properties": {
+            "issuer_segment": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "1-based index of the pipe segment containing issuer name (possibly combined with instrument)"
+            },
+            "instrument_segments": {
+              "type": "array",
+              "items": {"type": "integer", "minimum": 1},
+              "description": "1-based indices of pipe segments to concatenate for instrument description"
+            },
+            "industry_segment": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "1-based index of the pipe segment containing industry label"
+            },
+            "lien_segment": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "1-based index of the pipe segment containing lien type / seniority"
+            }
+          },
+          "required": ["issuer_segment"],
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -314,6 +342,46 @@
           "disposition": {
             "type": "string",
             "enum": ["expected", "warn", "fail"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "segment_assertions": {
+      "type": "array",
+      "description": "Canary assertions for pipe-delimited segment content. Used by I08 oracle check to detect format drift.",
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "segment_index": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based pipe segment index to check"
+          },
+          "field_name": {
+            "type": "string",
+            "description": "Human-readable field name for this segment (e.g. 'issuer', 'industry')"
+          },
+          "expected_pattern": {
+            "type": "string",
+            "enum": ["entity_name_like", "rate_like", "date_like", "gics_sector_like", "instrument_like"],
+            "description": "Content-type pattern to validate against"
+          },
+          "segment_count": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Expected total number of pipe segments"
+          },
+          "min_prevalence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Minimum fraction of rows that should match this assertion"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of this assertion"
           }
         },
         "additionalProperties": false

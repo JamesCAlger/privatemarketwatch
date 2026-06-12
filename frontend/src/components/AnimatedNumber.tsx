@@ -10,7 +10,7 @@ interface AnimatedNumberProps {
   inView?: boolean;
 }
 
-export default function AnimatedNumber({ value, duration = 2000, formatter, inView }: AnimatedNumberProps) {
+export default function AnimatedNumber({ value, duration = 1500, formatter, inView }: AnimatedNumberProps) {
   const [display, setDisplay] = useState(formatter(0));
   const hasAnimated = useRef(false);
 
