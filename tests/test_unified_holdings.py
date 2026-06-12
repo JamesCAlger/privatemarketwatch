@@ -7392,6 +7392,120 @@ class TestAffiliationDedup:
         assert len(result) == 1
         assert result.iloc[0]["bdc_investment_identifier"] == "Acme Corp - Term Loan"
 
+    # -- Prefix-identifier dedup (sector subtotal / dimension-path dupes) ------
+
+    def test_prefix_dedup_removes_sector_subtotal(self):
+        """Sector subtotal with same FV as detail row is removed."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Senior Secured Loans - IT Consulting",
+             "fair_value": 12000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier":
+                 "Senior Secured Loans - IT Consulting - Macrosoft Inc - Term Loan",
+             "fair_value": 12000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert "Macrosoft" in result.iloc[0]["bdc_investment_identifier"]
+
+    def test_prefix_dedup_removes_bare_issuer_subtotal(self):
+        """Bare issuer name with same FV as detail row is removed."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "NSG Captive, Inc.",
+             "fair_value": 48000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "NSG Captive, Inc. - Insurance - Equity",
+             "fair_value": 48000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert "Insurance" in result.iloc[0]["bdc_investment_identifier"]
+
+    def test_prefix_dedup_keeps_different_fv(self):
+        """Parent and child with different FV are both kept."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Acme Corp",
+             "fair_value": 50000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Acme Corp - Term Loan",
+             "fair_value": 30000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+
+    def test_prefix_dedup_keeps_non_prefix_same_fv(self):
+        """Two rows with same FV but no prefix relationship are both kept."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Acme Corp - Term Loan A",
+             "fair_value": 10000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Acme Corp - Term Loan B",
+             "fair_value": 10000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+
+    def test_prefix_dedup_chain_removes_all_intermediates(self):
+        """Three-level chain A -> B -> C: both A and B are removed."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Common Stock",
+             "fair_value": 4000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Common Stock - AI Sector",
+             "fair_value": 4000000},
+            {"cik": "200", "entity_name": "Test BDC",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier":
+                 "Common Stock - AI Sector - Infinity Corp - SAFE",
+             "fair_value": 4000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert "Infinity" in result.iloc[0]["bdc_investment_identifier"]
+
+    def test_prefix_dedup_cross_cik_no_removal(self):
+        """Same prefix+FV across different CIKs does not trigger removal."""
+        df = self._make_bdc_df([
+            {"cik": "200", "entity_name": "Fund A",
+             "accession_number": "acc1", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Acme Corp",
+             "fair_value": 10000000},
+            {"cik": "300", "entity_name": "Fund B",
+             "accession_number": "acc2", "form_type": "10-K",
+             "filing_date": "2025-06-01", "report_date": "2025-12-31",
+             "investment_identifier": "Acme Corp - Term Loan",
+             "fair_value": 10000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+
 
 # ---------------------------------------------------------------------------
 # Expanded bad issuer names tests

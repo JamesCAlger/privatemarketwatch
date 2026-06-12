@@ -601,6 +601,69 @@ def _prepare_bdc(
     _leaf_guard_cfgs = {k: v for k, v in _staging_configs.items()
                         if v["staging"].get("strategy") == "hierarchy_leaf_guard"}
 
+    # --- pipe_field_map: CIK-scoped overrides for pipe-delimited segment layout ---
+    _pipe_field_map_cfgs: list[dict[str, Any]] = []
+    for _pfm_norm, _pfm_cfg in _staging_configs.items():
+        pfm = _pfm_cfg["staging"].get("pipe_field_map")
+        if pfm is None:
+            continue
+        _pfm_cik = _pfm_cfg["cik"]
+        _pfm_cik_sql = (
+            "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), "
+            f"10, '0') = '{_pfm_cik}'"
+        )
+        _pipe_field_map_cfgs.append({
+            "cik": _pfm_cik,
+            "cik_sql": _pfm_cik_sql,
+            "issuer_segment": pfm["issuer_segment"],
+            "instrument_segments": pfm.get("instrument_segments", []),
+            "industry_segment": pfm.get("industry_segment"),
+            "lien_segment": pfm.get("lien_segment"),
+        })
+
+    # Build CIK-scoped pipe_field_map WHEN branches for _pipe_issuer
+    _pfm_issuer_parts: list[str] = []
+    _pfm_format_parts: list[str] = []
+    for _pfm in _pipe_field_map_cfgs:
+        seg = _pfm["issuer_segment"]
+        _pfm_issuer_parts.append(
+            f"WHEN {has_pipe} AND len({pipe_parts}) >= {seg} "
+            f"AND {_pfm['cik_sql']}\n"
+            f"                THEN trim({pipe_parts}[{seg}])"
+        )
+        _pfm_format_parts.append(
+            f"WHEN {has_pipe} AND len({pipe_parts}) >= {seg} "
+            f"AND {_pfm['cik_sql']}\n"
+            f"                THEN 'field_map'"
+        )
+    _pfm_issuer_sql = "\n                ".join(_pfm_issuer_parts) if _pfm_issuer_parts else ""
+    _pfm_format_sql = "\n                ".join(_pfm_format_parts) if _pfm_format_parts else ""
+
+    # Build CIK-scoped pipe_field_map WHEN branches for instrument_description
+    _pfm_instrument_parts: list[str] = []
+    for _pfm in _pipe_field_map_cfgs:
+        inst_segs = _pfm.get("instrument_segments", [])
+        if inst_segs:
+            # Concatenate declared instrument segments with ', '
+            concat_expr = " || ', ' || ".join(
+                f"trim({pipe_parts}[{s}])" for s in inst_segs
+            )
+            min_seg = max(inst_segs)
+            _pfm_instrument_parts.append(
+                f"WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'field_map' "
+                f"AND {_pfm['cik_sql']}\n"
+                f"                THEN {concat_expr}"
+            )
+        else:
+            # No instrument segments: use the issuer segment as-is
+            seg = _pfm["issuer_segment"]
+            _pfm_instrument_parts.append(
+                f"WHEN _pipe_issuer IS NOT NULL AND _pipe_format = 'field_map' "
+                f"AND {_pfm['cik_sql']}\n"
+                f"                THEN trim({pipe_parts}[{seg}])"
+            )
+    _pfm_instrument_sql = "\n                ".join(_pfm_instrument_parts) if _pfm_instrument_parts else ""
+
     # Prefix-strip hierarchy: build per-CIK conditions and clean expressions
     # so each CIK's own hierarchy_prefix_re is applied correctly.
     _prefix_strip_per_cik: list[dict[str, str]] = []
@@ -1620,6 +1683,8 @@ def _prepare_bdc(
                 -- SLR equipment-financing leaf: "Equipment Financing - 24.1% | Company | Industry | ..."
                 WHEN {has_pipe} AND {slr_seg2_is_leaf_issuer}
                 THEN trim({pipe_parts}[2])
+                -- CIK-scoped pipe_field_map: issuer from declared segment index
+                {_pfm_issuer_sql}
                 -- 3+ pipes: default SLR -> issuer = seg3
                 WHEN {has_pipe} AND len({pipe_parts}) >= 3
                 THEN trim({pipe_parts}[3])
@@ -1646,6 +1711,8 @@ def _prepare_bdc(
                 THEN 'company_first'
                 WHEN {has_pipe} AND {slr_seg2_is_leaf_issuer}
                 THEN 'slr_seg2_leaf'
+                -- CIK-scoped pipe_field_map format tag
+                {_pfm_format_sql}
                 WHEN {has_pipe} AND len({pipe_parts}) >= 3
                 THEN 'slr'
                 WHEN {has_pipe} AND len({pipe_parts}) = 2
@@ -1814,6 +1881,8 @@ def _prepare_bdc(
                          THEN ', ' || trim(array_to_string({pipe_parts}[4:], ' | '))
                          ELSE ''
                      END
+                -- CIK-scoped pipe_field_map: instrument from declared segments
+                {_pfm_instrument_sql}
                 {_hierarchy_leaf_instrument_sql}
                 WHEN {_msd_hierarchy_condition}
                 THEN trim(COALESCE(
@@ -2056,6 +2125,43 @@ def _prepare_bdc(
     ).fetchone()[0]
     logger.info("  Phase B (parse+dedup): %d rows in %.1f s",
                 _phase_b_count, time.time() - _t_phase)
+
+    # =========================================================================
+    # Prefix-identifier dedup: remove subtotal/rollup rows where one
+    # identifier is a strict prefix of another (with " - " separator)
+    # and both carry the same fair value within $1 tolerance.  This catches
+    # XBRL filings that report each position under multiple dimension paths:
+    # a short sector-level subtotal and a longer position-level detail row.
+    # Both carry identical FV, inflating position counts and FV totals.
+    # Affects ~7 CIKs as of 2026-06 (Muzinich, PhenixFIN, Capital
+    # Southwest, Rand Capital, Oxford Square, Steele Creek).
+    # =========================================================================
+    _prefix_dedup_sql = """
+        DELETE FROM _bdc_phase_b
+        WHERE _row_id IN (
+            SELECT p1._row_id
+            FROM _bdc_phase_b p1
+            WHERE p1._fv IS NOT NULL AND p1._fv > 0
+              AND EXISTS (
+                SELECT 1 FROM _bdc_phase_b p2
+                WHERE p2.cik = p1.cik
+                  AND CAST(p2.report_date AS VARCHAR) = CAST(p1.report_date AS VARCHAR)
+                  AND CAST(p2._raw_id AS VARCHAR) <> CAST(p1._raw_id AS VARCHAR)
+                  AND starts_with(
+                      CAST(p2._raw_id AS VARCHAR),
+                      CAST(p1._raw_id AS VARCHAR) || ' - '
+                  )
+                  AND p2._fv IS NOT NULL AND p2._fv > 0
+                  AND ABS(p2._fv - p1._fv) < 1.0
+              )
+        )
+    """
+    con.execute(_prefix_dedup_sql)
+    _post_prefix = con.execute("SELECT COUNT(*) FROM _bdc_phase_b").fetchone()[0]
+    _prefix_removed = _phase_b_count - _post_prefix
+    if _prefix_removed > 0:
+        logger.info("  Prefix-identifier dedup: removed %d subtotal/rollup rows",
+                    _prefix_removed)
 
     # =========================================================================
     # Wrapper non-private-market exclusion lookup table.
