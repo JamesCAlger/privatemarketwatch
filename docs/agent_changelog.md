@@ -1985,3 +1985,25 @@ Finalized the wrapper-oracle extension architecture and implemented the remainin
 - `python -m py_compile pipeline/bdc_xbrl_wrapper_oracle.py pipeline/bdc_filings.py` -- passed
 - `pytest tests/test_bdc_xbrl_wrapper_oracle.py -k "materiality or source_corrupted or column_drift or agent_issue or agent_cluster or agent_verdict or promotion_gate_consumes_agent or high_fv_unclassified_clusters_trial_writes_artifact" -q` -- 8 passed, 88 deselected
 - `pytest tests/test_bdc_xbrl_wrapper_oracle.py -q` -- 96 passed
+
+### 2026-06-12 -- Wrapper oracle production-validation packets and review-only outlier gates
+
+Implemented the finalized wrapper-oracle additions that move noisy wrapper-adjacent signals into agent-review artifacts instead of direct oracle hard failures.
+
+**Files modified:**
+- `pipeline/bdc_xbrl_wrapper_oracle.py` -- added production column validation issue export and packet mapping, source-verbose identifier packets, cost/FV outlier row packets, expanded text/identity column drift coverage, and no-wrapper-row cluster packets.
+- `tests/test_bdc_xbrl_wrapper_oracle.py` -- added and updated focused tests for review-only cost/FV semantics, source-verbose false-positive control, production validation packet mapping, text drift, parsed-field coupon allowances, and staging-only no-wrapper-row handling.
+
+**Contracts and guardrails:**
+- `cost_fv_ratio_outlier_count` remains visible in `oracle_summary.csv`, but `cost_fv_ratio_outliers` is no longer an oracle fail reason; row-level issues are emitted as `WRAP.COST_FV_RATIO_OUTLIER`.
+- Verbose raw source identifiers are emitted as `WRAP.SOURCE_VERBOSE_IDENTIFIER` only when paired with output contamination, parsed-field residue, or an unresolved blocker. `source_corrupted_identifiers.csv` remains as a compatibility alias.
+- Wrapper trials now write `source_verbose_identifiers.csv`, `cost_fv_ratio_outliers.csv`, and `column_validation_issues.csv`.
+- Production column validation issues are mapped into agent row packets as `WRAP.PRODUCTION_COLUMN_VALIDATION` with the original validation `rule_id` preserved as `source_rule_id`.
+- Column drift now covers identity/text fields and uses tighter review thresholds for text-shape changes (`JS >= 0.12` or new bucket share `>= 0.10`).
+- Existing wrapper definitions with no produced wrapper rows now use `no_wrapper_rows` and emit `WRAP.NO_WRAPPER_ROWS`; `unsupported_wrapper_cik` is reserved for no wrapper definition.
+
+**Validation results:**
+- `python -m py_compile pipeline/bdc_xbrl_wrapper_oracle.py pipeline/column_validation.py` -- passed
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -q` -- 101 passed
+- `pytest tests/test_column_validation.py -q` -- 20 passed
+- Cache-only smoke trial: `python -m pipeline.bdc_xbrl_wrapper_oracle --cik 0001508655 --output-dir .codex_tmp\wrapper_oracle_recheck_0001508655` -- passed; 13 summary rows, status counts `{'fail': 9, 'pass': 4}`, 10 cost/FV packets, 5,451 production column validation packets, 2 column drift cluster packets. Cost/FV counts no longer appeared in oracle fail reasons.
