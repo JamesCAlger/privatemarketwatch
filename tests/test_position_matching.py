@@ -19,6 +19,7 @@ from pipeline.position_matching import (
     MAX_FV_RATIO,
     MAX_FV_RATIO_IDENTIFIER,
     MAX_FV_RATIO_WITHIN_FILING,
+    MAX_MATURITY_GAP_DAYS,
     MAX_NAME_MULTIPLICITY,
     MIN_JW_SIMILARITY,
     assign_position_ids,
@@ -2024,3 +2025,453 @@ class TestB2AttributeDisambiguation:
         row = b2.iloc[0]
         # Should prefer the DIRECT_LENDING match despite slightly worse FV
         assert float(row["end_fair_value"]) == 1020000
+
+
+# ---------------------------------------------------------------------------
+# Classification Flip Veto Tests
+# ---------------------------------------------------------------------------
+
+class TestClassificationFlipVeto:
+    """Tests for the classification flip hard rejection gate in B2/C/D."""
+
+    def test_b2_rejects_classification_flip(self):
+        """B2: Same name but different classification -> no match."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-03-31", "issuer_name": "Flip Corp",
+             "fair_value": "1000000", "index_classification": "DIRECT_LENDING"},
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-06-30", "issuer_name": "Flip Corp",
+             "fair_value": "1010000", "index_classification": "EQUITY"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 0
+
+    def test_b2_allows_when_one_side_empty(self):
+        """B2: Classification on one side only -> match allowed."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-03-31", "issuer_name": "Half Corp",
+             "fair_value": "1000000", "index_classification": "DIRECT_LENDING"},
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-06-30", "issuer_name": "Half Corp",
+             "fair_value": "1010000"},  # No classification
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+
+    def test_c_rejects_classification_flip(self):
+        """C: Normalized name match with different classification -> rejected."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            # Name differs only by pipe suffix -> C will normalize-match
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-03-31", "issuer_name": "FlipNorm Corp | Senior",
+             "fair_value": "1000000", "index_classification": "DIRECT_LENDING"},
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-06-30", "issuer_name": "FlipNorm Corp | Junior",
+             "fair_value": "1010000", "index_classification": "EQUITY"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        c = result[result["match_method"] == "C_normalized_name"]
+        assert len(c) == 0
+
+    def test_d_rejects_classification_flip(self):
+        """D: Fuzzy match with different classification -> rejected."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-03-31",
+             "issuer_name": "Flippington Industries LLC",
+             "fair_value": "1000000", "index_classification": "DIRECT_LENDING"},
+            {"source": "bdc", "cik": "800", "entity_name": "BDC8",
+             "report_date": "2024-06-30",
+             "issuer_name": "Flippington Industries Inc",
+             "fair_value": "1010000", "index_classification": "EQUITY"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        d = result[result["match_method"] == "D_fuzzy"]
+        assert len(d) == 0
+
+
+# ---------------------------------------------------------------------------
+# Instrument Sub-Type Continuity Tests
+# ---------------------------------------------------------------------------
+
+class TestInstrumentSubTypeContinuity:
+    """Tests for instrument sub-type mismatch rejection."""
+
+    def test_b2_rejects_revolver_vs_term_loan(self):
+        """B2: Same name, revolver vs term loan descriptions -> rejected."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-03-31", "issuer_name": "SubType Corp",
+             "fair_value": "1000000",
+             "instrument_description": "Senior Secured Term Loan"},
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-06-30", "issuer_name": "SubType Corp",
+             "fair_value": "1010000",
+             "instrument_description": "Senior Secured Revolving Credit Facility"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 0
+
+    def test_b2_allows_same_subtype(self):
+        """B2: Same name, both term loans -> match allowed."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-03-31", "issuer_name": "MatchSub Corp",
+             "fair_value": "1000000",
+             "instrument_description": "First Lien Term Loan"},
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-06-30", "issuer_name": "MatchSub Corp",
+             "fair_value": "1010000",
+             "instrument_description": "Senior Term Loan B"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+
+    def test_b2_allows_when_no_subtype_parsed(self):
+        """B2: One side has no parseable sub-type -> match allowed."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-03-31", "issuer_name": "NoSub Corp",
+             "fair_value": "1000000",
+             "instrument_description": "Senior Secured Term Loan"},
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-06-30", "issuer_name": "NoSub Corp",
+             "fair_value": "1010000",
+             "instrument_description": "Senior Secured Debt"},  # No parseable subtype
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+
+    def test_rejects_ddtl_vs_term_loan(self):
+        """B2: DDTL vs term loan -> rejected."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-03-31", "issuer_name": "DDTL Corp",
+             "fair_value": "1000000",
+             "instrument_description": "Delayed Draw Term Loan"},
+            {"source": "bdc", "cik": "900", "entity_name": "BDC9",
+             "report_date": "2024-06-30", "issuer_name": "DDTL Corp",
+             "fair_value": "1010000",
+             "instrument_description": "First Lien Term Loan"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 0
+
+
+# ---------------------------------------------------------------------------
+# Maturity Mismatch Veto Tests
+# ---------------------------------------------------------------------------
+
+class TestMaturityMismatchVeto:
+    """Tests for maturity gap rejection in C/D/E."""
+
+    def test_c_rejects_maturity_gap_over_365(self):
+        """C: Normalized name match with >365-day maturity gap -> rejected."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-03-31",
+             "issuer_name": "MatGap Corp | Senior",
+             "fair_value": "1000000",
+             "maturity_date": "2025-06-30"},
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-06-30",
+             "issuer_name": "MatGap Corp | Junior",
+             "fair_value": "1010000",
+             "maturity_date": "2027-12-31"},  # ~2.5 years later
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        c = result[result["match_method"] == "C_normalized_name"]
+        assert len(c) == 0
+
+    def test_c_allows_maturity_within_365(self):
+        """C: Normalized name match with maturity gap <=365 -> allowed."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-03-31",
+             "issuer_name": "MatOK Corp | Senior",
+             "fair_value": "1000000",
+             "maturity_date": "2026-06-30"},
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-06-30",
+             "issuer_name": "MatOK Corp | Junior",
+             "fair_value": "1010000",
+             "maturity_date": "2026-12-31"},  # 183 days later
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        c = result[result["match_method"] == "C_normalized_name"]
+        assert len(c) == 1
+
+    def test_c_allows_when_maturity_missing(self):
+        """C: One side has no maturity date -> match allowed."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-03-31",
+             "issuer_name": "MatNull Corp | Senior",
+             "fair_value": "1000000",
+             "maturity_date": "2025-06-30"},
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-06-30",
+             "issuer_name": "MatNull Corp | Junior",
+             "fair_value": "1010000"},  # No maturity
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        c = result[result["match_method"] == "C_normalized_name"]
+        assert len(c) == 1
+
+    def test_b2_allows_maturity_gap_over_365(self):
+        """B2: Maturity gap >365 days is NOT rejected (veto only for C/D/E)."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-03-31", "issuer_name": "B2MatGap Corp",
+             "fair_value": "1000000",
+             "maturity_date": "2025-06-30"},
+            {"source": "bdc", "cik": "810", "entity_name": "BDC81",
+             "report_date": "2024-06-30", "issuer_name": "B2MatGap Corp",
+             "fair_value": "1010000",
+             "maturity_date": "2027-12-31"},  # >365 days but B2 allows
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+
+
+# ---------------------------------------------------------------------------
+# Suffix Coexistence Tiebreaker Tests
+# ---------------------------------------------------------------------------
+
+class TestSuffixCoexistence:
+    """Tests for the trailing number suffix tiebreaker in B2/C/D."""
+
+    def test_b2_prefers_same_trailing_number(self):
+        """B2: When multiple candidates, prefer the one with matching suffix."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            # Q1: "Acme Corp 3"
+            {"source": "bdc", "cik": "850", "entity_name": "BDC85",
+             "report_date": "2024-03-31", "issuer_name": "Acme Corp 3",
+             "fair_value": "1000000"},
+            # Q2: "Acme Corp 3" and "Acme Corp 6"
+            {"source": "bdc", "cik": "850", "entity_name": "BDC85",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp 3",
+             "fair_value": "1010000"},
+            {"source": "bdc", "cik": "850", "entity_name": "BDC85",
+             "report_date": "2024-06-30", "issuer_name": "Acme Corp 6",
+             "fair_value": "1005000"},
+        ])
+        result = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        b2 = result[result["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        row = b2.iloc[0]
+        # Should match to "Acme Corp 3" (suffix 3) not "Acme Corp 6"
+        assert "3" in str(row["end_issuer_name"])
+        assert float(row["end_fair_value"]) == 1010000
+
+
+# ---------------------------------------------------------------------------
+# Bipartite (Hungarian) Matching
+# ---------------------------------------------------------------------------
+
+class TestBipartiteMatching:
+    """Tests for the Hungarian bipartite dedup in C/D/E tiers."""
+
+    def test_bipartite_resolves_fv_crossover(self):
+        """3-position entity where FV crossover causes greedy to swap.
+
+        Entity has Term Loan A ($10M) and Term Loan B ($7M) in Q1.
+        In Q2, FVs cross over: Term Loan A ($7.5M), Term Loan B ($9.5M).
+        Greedy picks closest-FV pairs locally, swapping assignments.
+        Bipartite should use global optimization to avoid the swap,
+        because suffix match and attribute alignment favor correct pairing.
+        """
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            # Q1
+            {"source": "bdc", "cik": "900", "entity_name": "BDC90",
+             "report_date": "2024-03-31",
+             "issuer_name": "Crossover Industries - Term Loan A",
+             "fair_value": "10000000", "principal_amount": "10000000",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "900", "entity_name": "BDC90",
+             "report_date": "2024-03-31",
+             "issuer_name": "Crossover Industries - Term Loan B",
+             "fair_value": "7000000", "principal_amount": "7000000",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_SECOND_LIEN"},
+            # Q2: FVs have crossed
+            {"source": "bdc", "cik": "900", "entity_name": "BDC90",
+             "report_date": "2024-06-30",
+             "issuer_name": "Crossover Industries - Term Loan A",
+             "fair_value": "7500000", "principal_amount": "10000000",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_FIRST_LIEN"},
+            {"source": "bdc", "cik": "900", "entity_name": "BDC90",
+             "report_date": "2024-06-30",
+             "issuer_name": "Crossover Industries - Term Loan B",
+             "fair_value": "9500000", "principal_amount": "7000000",
+             "index_classification": "DIRECT_LENDING",
+             "asset_category": "LOAN_SECOND_LIEN"},
+        ])
+        result = match_positions(
+            unified_df=unified, bdc_raw_df=bdc_raw, use_bipartite=True
+        )
+        # Both should match (either B2 or C)
+        assert len(result) == 2
+        # Each begin_issuer_name should match its own end_issuer_name
+        for _, row in result.iterrows():
+            # "Term Loan A" begin should match "Term Loan A" end
+            if "Term Loan A" in str(row["begin_issuer_name"]):
+                assert "Term Loan A" in str(row["end_issuer_name"]), (
+                    f"Term Loan A begin matched to {row['end_issuer_name']}"
+                )
+            elif "Term Loan B" in str(row["begin_issuer_name"]):
+                assert "Term Loan B" in str(row["end_issuer_name"]), (
+                    f"Term Loan B begin matched to {row['end_issuer_name']}"
+                )
+
+    def test_bipartite_preserves_correct_greedy(self):
+        """2-position entity where greedy is already correct -- no change."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            # Q1
+            {"source": "bdc", "cik": "901", "entity_name": "BDC91",
+             "report_date": "2024-03-31",
+             "issuer_name": "StableCo - Senior Loan",
+             "fair_value": "5000000"},
+            {"source": "bdc", "cik": "901", "entity_name": "BDC91",
+             "report_date": "2024-03-31",
+             "issuer_name": "StableCo - Junior Loan",
+             "fair_value": "3000000"},
+            # Q2: similar FVs, no crossover
+            {"source": "bdc", "cik": "901", "entity_name": "BDC91",
+             "report_date": "2024-06-30",
+             "issuer_name": "StableCo - Senior Loan",
+             "fair_value": "5100000"},
+            {"source": "bdc", "cik": "901", "entity_name": "BDC91",
+             "report_date": "2024-06-30",
+             "issuer_name": "StableCo - Junior Loan",
+             "fair_value": "3050000"},
+        ])
+        result = match_positions(
+            unified_df=unified, bdc_raw_df=bdc_raw, use_bipartite=True
+        )
+        assert len(result) == 2
+        for _, row in result.iterrows():
+            if "Senior" in str(row["begin_issuer_name"]):
+                assert "Senior" in str(row["end_issuer_name"])
+            else:
+                assert "Junior" in str(row["end_issuer_name"])
+
+    def test_bipartite_rectangular_group(self):
+        """3 begin-side, 2 end-side -- optimal matching of 2 pairs."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            # Q1: 3 positions
+            {"source": "bdc", "cik": "902", "entity_name": "BDC92",
+             "report_date": "2024-03-31",
+             "issuer_name": "RectCo - Tranche 1",
+             "fair_value": "4000000"},
+            {"source": "bdc", "cik": "902", "entity_name": "BDC92",
+             "report_date": "2024-03-31",
+             "issuer_name": "RectCo - Tranche 2",
+             "fair_value": "6000000"},
+            {"source": "bdc", "cik": "902", "entity_name": "BDC92",
+             "report_date": "2024-03-31",
+             "issuer_name": "RectCo - Tranche 3",
+             "fair_value": "8000000"},
+            # Q2: 2 positions (Tranche 3 exited)
+            {"source": "bdc", "cik": "902", "entity_name": "BDC92",
+             "report_date": "2024-06-30",
+             "issuer_name": "RectCo - Tranche 1",
+             "fair_value": "4100000"},
+            {"source": "bdc", "cik": "902", "entity_name": "BDC92",
+             "report_date": "2024-06-30",
+             "issuer_name": "RectCo - Tranche 2",
+             "fair_value": "6200000"},
+        ])
+        result = match_positions(
+            unified_df=unified, bdc_raw_df=bdc_raw, use_bipartite=True
+        )
+        # Should match 2 pairs (Tranche 1->1, Tranche 2->2)
+        assert len(result) == 2
+        for _, row in result.iterrows():
+            if "Tranche 1" in str(row["begin_issuer_name"]):
+                assert "Tranche 1" in str(row["end_issuer_name"])
+            else:
+                assert "Tranche 2" in str(row["end_issuer_name"])
+
+    def test_bipartite_single_pair_passthrough(self):
+        """Single-pair entities pass through unchanged."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "903", "entity_name": "BDC93",
+             "report_date": "2024-03-31",
+             "issuer_name": "SingleCo LLC",
+             "fair_value": "2000000"},
+            {"source": "bdc", "cik": "903", "entity_name": "BDC93",
+             "report_date": "2024-06-30",
+             "issuer_name": "SingleCo LLC",
+             "fair_value": "2050000"},
+        ])
+        result_bipartite = match_positions(
+            unified_df=unified, bdc_raw_df=bdc_raw, use_bipartite=True
+        )
+        assert len(result_bipartite) == 1
+        assert "SingleCo" in str(result_bipartite.iloc[0]["begin_issuer_name"])
+
+    def test_bipartite_flag_disabled(self):
+        """use_bipartite=False produces identical results to greedy."""
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "bdc", "cik": "904", "entity_name": "BDC94",
+             "report_date": "2024-03-31",
+             "issuer_name": "FlagTest Inc - Loan A",
+             "fair_value": "5000000"},
+            {"source": "bdc", "cik": "904", "entity_name": "BDC94",
+             "report_date": "2024-03-31",
+             "issuer_name": "FlagTest Inc - Loan B",
+             "fair_value": "3000000"},
+            {"source": "bdc", "cik": "904", "entity_name": "BDC94",
+             "report_date": "2024-06-30",
+             "issuer_name": "FlagTest Inc - Loan A",
+             "fair_value": "5100000"},
+            {"source": "bdc", "cik": "904", "entity_name": "BDC94",
+             "report_date": "2024-06-30",
+             "issuer_name": "FlagTest Inc - Loan B",
+             "fair_value": "3050000"},
+        ])
+        result_off = match_positions(
+            unified_df=unified, bdc_raw_df=bdc_raw, use_bipartite=False
+        )
+        result_on = match_positions(
+            unified_df=unified, bdc_raw_df=bdc_raw, use_bipartite=True
+        )
+        assert len(result_off) == len(result_on)
+        # Same pairs matched (greedy is already optimal here)
+        off_pairs = set(zip(
+            result_off["begin_issuer_name"], result_off["end_issuer_name"]
+        ))
+        on_pairs = set(zip(
+            result_on["begin_issuer_name"], result_on["end_issuer_name"]
+        ))
+        assert off_pairs == on_pairs

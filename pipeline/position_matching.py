@@ -24,7 +24,7 @@ from pipeline.config import (
     POSITION_MATCHES_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
-from pipeline.utils import UnionFind
+from pipeline.utils import UnionFind, hungarian_assignment
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +47,9 @@ MAX_FV_RATIO = 5.0
 # FV ratio guards for higher-confidence tiers (catches unit-scale mismatches)
 MAX_FV_RATIO_WITHIN_FILING = 100.0  # Tier A: generous (same filing)
 MAX_FV_RATIO_IDENTIFIER = 50.0     # Tiers B1/B2/C: tighter
+
+# Maximum maturity date gap (days) for C/D/E tier matches
+MAX_MATURITY_GAP_DAYS = 365
 
 # Tokens that do not make a position_key independently identifying.  These
 # are useful instrument descriptors, but a key made only of these words can
@@ -617,6 +620,9 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         )
         AND b.fv > 0 AND e.fv > 0
         AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+        -- Instrument sub-type continuity
+        AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
+             OR b._inst_subtype = e._inst_subtype)
     ),
     -- B1b: 1:1 enforcement (composite tiebreaker: FV + rate + principal)
     poskey_rn_begin AS (
@@ -706,7 +712,12 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
             COALESCE(ABS(DATEDIFF('day',
                 TRY_CAST(b.maturity_date AS DATE),
                 TRY_CAST(e.maturity_date AS DATE)
-            )), 999999) AS _maturity_prox
+            )), 999999) AS _maturity_prox,
+            -- Suffix coexistence: prefer matching trailing numbers
+            CASE WHEN b._trailing_num IS NOT NULL
+                      AND e._trailing_num IS NOT NULL
+                      AND b._trailing_num = e._trailing_num
+                 THEN 1 ELSE 0 END AS _suffix_match
         FROM name_remaining b
         JOIN name_remaining e
           ON b.cik = e.cik
@@ -724,14 +735,21 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         )
         AND b.fv > 0 AND e.fv > 0
         AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+        -- Classification flip veto: reject if both sides have a classification and they differ
+        AND (COALESCE(CAST(b.index_classification AS VARCHAR), '') = ''
+             OR COALESCE(CAST(e.index_classification AS VARCHAR), '') = ''
+             OR CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR))
+        -- Instrument sub-type continuity
+        AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
+             OR b._inst_subtype = e._inst_subtype)
     ),
     -- B2: 1:1 enforcement (attribute penalty + FV + rate + maturity + principal)
     name_rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _attr_penalty ASC, _fv_prox ASC, _rate_prox ASC,
-                    _maturity_prox ASC, _pa_prox ASC, _end_row_id ASC
+                ORDER BY _suffix_match DESC, _attr_penalty ASC, _fv_prox ASC,
+                    _rate_prox ASC, _maturity_prox ASC, _pa_prox ASC, _end_row_id ASC
             ) AS rn_b
         FROM pairs_name
     ),
@@ -739,8 +757,8 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _attr_penalty ASC, _fv_prox ASC, _rate_prox ASC,
-                    _maturity_prox ASC, _pa_prox ASC, _begin_row_id ASC
+                ORDER BY _suffix_match DESC, _attr_penalty ASC, _fv_prox ASC,
+                    _rate_prox ASC, _maturity_prox ASC, _pa_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM name_rn_begin WHERE rn_b = 1
     ),
@@ -803,8 +821,9 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
     next_qtr = _next_quarter_sql("b.quarter")
     norm_sql = _normalize_name_sql("CAST(issuer_name AS VARCHAR)")
 
-    sql = f"""
-    CREATE OR REPLACE TEMP TABLE tier_c AS
+    # Statement 1: save all candidate pairs (before greedy dedup)
+    sql_candidates = f"""
+    CREATE OR REPLACE TEMP TABLE tier_c_candidates AS
     WITH
     all_used AS (
         SELECT _row_id FROM tier_a_unified_ids
@@ -834,79 +853,101 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT cik, quarter, _norm_name
         FROM norm_name_counts
         WHERE n > {MAX_NAME_MULTIPLICITY}
-    ),
-    pairs AS (
-        SELECT
-            e.cik, e.entity_name, e.source,
-            b.quarter AS begin_quarter,
-            CAST(b.report_date AS VARCHAR) AS begin_report_date,
-            CAST(b.issuer_name AS VARCHAR) AS begin_issuer_name,
-            b.fv AS begin_fair_value, b.cost_val AS begin_cost,
-            b.pa AS begin_principal_amount, b.ir AS begin_interest_rate,
-            b.bs AS begin_basis_spread, b.sh AS begin_shares_held,
-            e.quarter AS end_quarter,
-            CAST(e.report_date AS VARCHAR) AS end_report_date,
-            CAST(e.issuer_name AS VARCHAR) AS end_issuer_name,
-            e.fv AS end_fair_value, e.cost_val AS end_cost,
-            e.pa AS end_principal_amount, e.ir AS end_interest_rate,
-            e.bs AS end_basis_spread, e.sh AS end_shares_held,
-            'C_normalized_name' AS match_method,
-            CAST(b._norm_name AS VARCHAR) AS match_key,
-            1.0 AS match_score,
-            3 AS span_months,
-            b._row_id AS _begin_row_id,
-            e._row_id AS _end_row_id,
-            {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
-            -- Attribute penalty: count of categorical mismatches (0=perfect)
-            (CASE WHEN COALESCE(CAST(b.lien_position AS VARCHAR), '') != ''
-                      AND COALESCE(CAST(e.lien_position AS VARCHAR), '') != ''
-                      AND CAST(b.lien_position AS VARCHAR) != CAST(e.lien_position AS VARCHAR)
-                  THEN 1 ELSE 0 END)
-            + (CASE WHEN COALESCE(CAST(b.index_classification AS VARCHAR), '') != ''
-                        AND COALESCE(CAST(e.index_classification AS VARCHAR), '') != ''
-                        AND CAST(b.index_classification AS VARCHAR) != CAST(e.index_classification AS VARCHAR)
-                    THEN 1 ELSE 0 END)
-            + (CASE WHEN COALESCE(CAST(b.coupon_type AS VARCHAR), '') != ''
-                        AND COALESCE(CAST(e.coupon_type AS VARCHAR), '') != ''
-                        AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
-                    THEN 1 ELSE 0 END)
-            AS _attr_penalty,
-            COALESCE(ABS(DATEDIFF('day',
-                TRY_CAST(b.maturity_date AS DATE),
-                TRY_CAST(e.maturity_date AS DATE)
-            )), 999999) AS _maturity_prox
-        FROM remaining b
-        JOIN remaining e
-          ON b.cik = e.cik
-         AND e.quarter = ({next_qtr})
-         AND b._norm_name = e._norm_name
-         AND b._norm_name != ''
-         AND b.source = e.source
-        WHERE b._norm_name NOT IN (
-            SELECT _norm_name FROM high_mult_norm
-            WHERE cik = b.cik AND quarter = b.quarter
-        )
-        AND e._norm_name NOT IN (
-            SELECT _norm_name FROM high_mult_norm
-            WHERE cik = e.cik AND quarter = e.quarter
-        )
-        AND b.fv > 0 AND e.fv > 0
-        AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
-    ),
-    rn_begin AS (
+    )
+    SELECT
+        e.cik, e.entity_name, e.source,
+        b.quarter AS begin_quarter,
+        CAST(b.report_date AS VARCHAR) AS begin_report_date,
+        CAST(b.issuer_name AS VARCHAR) AS begin_issuer_name,
+        b.fv AS begin_fair_value, b.cost_val AS begin_cost,
+        b.pa AS begin_principal_amount, b.ir AS begin_interest_rate,
+        b.bs AS begin_basis_spread, b.sh AS begin_shares_held,
+        e.quarter AS end_quarter,
+        CAST(e.report_date AS VARCHAR) AS end_report_date,
+        CAST(e.issuer_name AS VARCHAR) AS end_issuer_name,
+        e.fv AS end_fair_value, e.cost_val AS end_cost,
+        e.pa AS end_principal_amount, e.ir AS end_interest_rate,
+        e.bs AS end_basis_spread, e.sh AS end_shares_held,
+        'C_normalized_name' AS match_method,
+        CAST(b._norm_name AS VARCHAR) AS match_key,
+        1.0 AS match_score,
+        3 AS span_months,
+        b._row_id AS _begin_row_id,
+        e._row_id AS _end_row_id,
+        {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
+        -- Attribute penalty: count of categorical mismatches (0=perfect)
+        (CASE WHEN COALESCE(CAST(b.lien_position AS VARCHAR), '') != ''
+                  AND COALESCE(CAST(e.lien_position AS VARCHAR), '') != ''
+                  AND CAST(b.lien_position AS VARCHAR) != CAST(e.lien_position AS VARCHAR)
+              THEN 1 ELSE 0 END)
+        + (CASE WHEN COALESCE(CAST(b.index_classification AS VARCHAR), '') != ''
+                    AND COALESCE(CAST(e.index_classification AS VARCHAR), '') != ''
+                    AND CAST(b.index_classification AS VARCHAR) != CAST(e.index_classification AS VARCHAR)
+                THEN 1 ELSE 0 END)
+        + (CASE WHEN COALESCE(CAST(b.coupon_type AS VARCHAR), '') != ''
+                    AND COALESCE(CAST(e.coupon_type AS VARCHAR), '') != ''
+                    AND CAST(b.coupon_type AS VARCHAR) != CAST(e.coupon_type AS VARCHAR)
+                THEN 1 ELSE 0 END)
+        AS _attr_penalty,
+        COALESCE(ABS(DATEDIFF('day',
+            TRY_CAST(b.maturity_date AS DATE),
+            TRY_CAST(e.maturity_date AS DATE)
+        )), 999999) AS _maturity_prox,
+        -- Suffix coexistence: prefer matching trailing numbers
+        CASE WHEN b._trailing_num IS NOT NULL
+                  AND e._trailing_num IS NOT NULL
+                  AND b._trailing_num = e._trailing_num
+             THEN 1 ELSE 0 END AS _suffix_match
+    FROM remaining b
+    JOIN remaining e
+      ON b.cik = e.cik
+     AND e.quarter = ({next_qtr})
+     AND b._norm_name = e._norm_name
+     AND b._norm_name != ''
+     AND b.source = e.source
+    WHERE b._norm_name NOT IN (
+        SELECT _norm_name FROM high_mult_norm
+        WHERE cik = b.cik AND quarter = b.quarter
+    )
+    AND e._norm_name NOT IN (
+        SELECT _norm_name FROM high_mult_norm
+        WHERE cik = e.cik AND quarter = e.quarter
+    )
+    AND b.fv > 0 AND e.fv > 0
+    AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+    -- Classification flip veto
+    AND (COALESCE(CAST(b.index_classification AS VARCHAR), '') = ''
+         OR COALESCE(CAST(e.index_classification AS VARCHAR), '') = ''
+         OR CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR))
+    -- Instrument sub-type continuity
+    AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
+         OR b._inst_subtype = e._inst_subtype)
+    -- Maturity mismatch veto (C/D/E only)
+    AND (TRY_CAST(b.maturity_date AS DATE) IS NULL
+         OR TRY_CAST(e.maturity_date AS DATE) IS NULL
+         OR ABS(DATEDIFF('day',
+             TRY_CAST(b.maturity_date AS DATE),
+             TRY_CAST(e.maturity_date AS DATE))) <= {MAX_MATURITY_GAP_DAYS})
+    """
+    con.execute(sql_candidates)
+
+    # Statement 2: greedy dedup from candidates
+    sql_dedup = """
+    CREATE OR REPLACE TEMP TABLE tier_c AS
+    WITH rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _attr_penalty ASC, _fv_prox ASC,
+                ORDER BY _suffix_match DESC, _attr_penalty ASC, _fv_prox ASC,
                     _maturity_prox ASC, _end_row_id ASC
             ) AS rn_b
-        FROM pairs
+        FROM tier_c_candidates
     ),
     rn_end AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _attr_penalty ASC, _fv_prox ASC,
+                ORDER BY _suffix_match DESC, _attr_penalty ASC, _fv_prox ASC,
                     _maturity_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM rn_begin WHERE rn_b = 1
@@ -922,7 +963,7 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         _begin_row_id, _end_row_id
     FROM rn_end WHERE rn_e = 1
     """
-    con.execute(sql)
+    con.execute(sql_dedup)
     return "tier_c"
 
 
@@ -938,8 +979,9 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
     next_qtr = _next_quarter_sql("b.quarter")
     norm_sql = _normalize_name_sql("CAST(issuer_name AS VARCHAR)")
 
-    sql = f"""
-    CREATE OR REPLACE TEMP TABLE tier_d AS
+    # Statement 1: save all candidate pairs (before greedy dedup)
+    sql_candidates = f"""
+    CREATE OR REPLACE TEMP TABLE tier_d_candidates AS
     WITH
     all_used AS (
         SELECT _row_id FROM tier_a_unified_ids
@@ -1009,7 +1051,15 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
             COALESCE(ABS(DATEDIFF('day',
                 TRY_CAST(b.maturity_date AS DATE),
                 TRY_CAST(e.maturity_date AS DATE)
-            )), 999999) AS _maturity_prox
+            )), 999999) AS _maturity_prox,
+            COALESCE(CAST(b.index_classification AS VARCHAR), '') AS b_index_classification,
+            COALESCE(CAST(e.index_classification AS VARCHAR), '') AS e_index_classification,
+            TRY_CAST(b.maturity_date AS DATE) AS b_maturity_dt,
+            TRY_CAST(e.maturity_date AS DATE) AS e_maturity_dt,
+            b._inst_subtype AS b_inst_subtype,
+            e._inst_subtype AS e_inst_subtype,
+            b._trailing_num AS b_trailing_num,
+            e._trailing_num AS e_trailing_num
         FROM remaining b
         JOIN remaining e
           ON b.cik = e.cik
@@ -1035,47 +1085,66 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
         WHERE jaro_winkler_similarity(b_norm, e_norm) >= {MIN_JW_SIMILARITY}
           AND b_fv > 0 AND e_fv > 0
           AND b_fv / e_fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
-    ),
-    with_output AS (
-        SELECT
-            cik, entity_name, source,
-            {_quarter_label_sql('b_report_date')} AS begin_quarter,
-            CAST(b_report_date AS VARCHAR) AS begin_report_date,
-            CAST(b_issuer_name AS VARCHAR) AS begin_issuer_name,
-            b_fv AS begin_fair_value, b_cost AS begin_cost,
-            b_pa AS begin_principal_amount, b_ir AS begin_interest_rate,
-            b_bs AS begin_basis_spread, b_sh AS begin_shares_held,
-            {_quarter_label_sql('e_report_date')} AS end_quarter,
-            CAST(e_report_date AS VARCHAR) AS end_report_date,
-            CAST(e_issuer_name AS VARCHAR) AS end_issuer_name,
-            e_fv AS end_fair_value, e_cost AS end_cost,
-            e_pa AS end_principal_amount, e_ir AS end_interest_rate,
-            e_bs AS end_basis_spread, e_sh AS end_shares_held,
-            'D_fuzzy' AS match_method,
-            CAST(b_norm || ' ~ ' || e_norm AS VARCHAR) AS match_key,
-            jw AS match_score,
-            3 AS span_months,
-            _begin_row_id,
-            _end_row_id,
-            _fv_prox,
-            _attr_penalty,
-            _maturity_prox
-        FROM scored
-    ),
-    rn_begin AS (
+          -- Classification flip veto
+          AND (b_index_classification = ''
+               OR e_index_classification = ''
+               OR b_index_classification = e_index_classification)
+          -- Instrument sub-type continuity
+          AND (b_inst_subtype IS NULL OR e_inst_subtype IS NULL
+               OR b_inst_subtype = e_inst_subtype)
+          -- Maturity mismatch veto
+          AND (b_maturity_dt IS NULL OR e_maturity_dt IS NULL
+               OR ABS(DATEDIFF('day', b_maturity_dt, e_maturity_dt)) <= {MAX_MATURITY_GAP_DAYS})
+    )
+    SELECT
+        cik, entity_name, source,
+        {_quarter_label_sql('b_report_date')} AS begin_quarter,
+        CAST(b_report_date AS VARCHAR) AS begin_report_date,
+        CAST(b_issuer_name AS VARCHAR) AS begin_issuer_name,
+        b_fv AS begin_fair_value, b_cost AS begin_cost,
+        b_pa AS begin_principal_amount, b_ir AS begin_interest_rate,
+        b_bs AS begin_basis_spread, b_sh AS begin_shares_held,
+        {_quarter_label_sql('e_report_date')} AS end_quarter,
+        CAST(e_report_date AS VARCHAR) AS end_report_date,
+        CAST(e_issuer_name AS VARCHAR) AS end_issuer_name,
+        e_fv AS end_fair_value, e_cost AS end_cost,
+        e_pa AS end_principal_amount, e_ir AS end_interest_rate,
+        e_bs AS end_basis_spread, e_sh AS end_shares_held,
+        'D_fuzzy' AS match_method,
+        CAST(b_norm || ' ~ ' || e_norm AS VARCHAR) AS match_key,
+        jw AS match_score,
+        3 AS span_months,
+        _begin_row_id,
+        _end_row_id,
+        _fv_prox,
+        _attr_penalty,
+        _maturity_prox,
+        -- Suffix coexistence: prefer matching trailing numbers
+        CASE WHEN b_trailing_num IS NOT NULL
+                  AND e_trailing_num IS NOT NULL
+                  AND b_trailing_num = e_trailing_num
+             THEN 1 ELSE 0 END AS _suffix_match
+    FROM scored
+    """
+    con.execute(sql_candidates)
+
+    # Statement 2: greedy dedup from candidates
+    sql_dedup = """
+    CREATE OR REPLACE TEMP TABLE tier_d AS
+    WITH rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY match_score DESC, _attr_penalty ASC,
+                ORDER BY match_score DESC, _suffix_match DESC, _attr_penalty ASC,
                     _fv_prox ASC, _maturity_prox ASC, _end_row_id ASC
             ) AS rn_b
-        FROM with_output
+        FROM tier_d_candidates
     ),
     rn_end AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY match_score DESC, _attr_penalty ASC,
+                ORDER BY match_score DESC, _suffix_match DESC, _attr_penalty ASC,
                     _fv_prox ASC, _maturity_prox ASC, _begin_row_id ASC
             ) AS rn_e
         FROM rn_begin WHERE rn_b = 1
@@ -1091,7 +1160,7 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
         _begin_row_id, _end_row_id
     FROM rn_end WHERE rn_e = 1
     """
-    con.execute(sql)
+    con.execute(sql_dedup)
     return "tier_d"
 
 
@@ -1110,8 +1179,9 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
     """
     next_qtr = _next_quarter_sql("b.quarter")
 
-    sql = f"""
-    CREATE OR REPLACE TEMP TABLE tier_e AS
+    # Statement 1: save all candidate pairs (before greedy dedup)
+    sql_candidates = f"""
+    CREATE OR REPLACE TEMP TABLE tier_e_candidates AS
     WITH
     all_used AS (
         SELECT _row_id FROM tier_a_unified_ids
@@ -1138,7 +1208,6 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
           AND CAST(entity_id AS VARCHAR) != ''
     ),
     -- Count positions per entity_id + CIK + quarter + classification
-    -- Single-position entities don't need fingerprint disambiguation
     entity_counts AS (
         SELECT cik, source, quarter, _entity_id,
             CAST(index_classification AS VARCHAR) AS _ic,
@@ -1183,6 +1252,15 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR)
          AND b.fv > 0 AND e.fv > 0
          AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+         -- Instrument sub-type continuity
+         AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
+              OR b._inst_subtype = e._inst_subtype)
+         -- Maturity mismatch veto
+         AND (TRY_CAST(b.maturity_date AS DATE) IS NULL
+              OR TRY_CAST(e.maturity_date AS DATE) IS NULL
+              OR ABS(DATEDIFF('day',
+                  TRY_CAST(b.maturity_date AS DATE),
+                  TRY_CAST(e.maturity_date AS DATE))) <= {MAX_MATURITY_GAP_DAYS})
         -- Both sides must be single-position for this entity+classification
         JOIN entity_counts bc
           ON b.cik = bc.cik AND b.source = bc.source
@@ -1232,6 +1310,15 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND ABS(b._prin_bucket - e._prin_bucket) <= 1
          AND b.fv > 0 AND e.fv > 0
          AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+         -- Instrument sub-type continuity
+         AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
+              OR b._inst_subtype = e._inst_subtype)
+         -- Maturity mismatch veto
+         AND (TRY_CAST(b.maturity_date AS DATE) IS NULL
+              OR TRY_CAST(e.maturity_date AS DATE) IS NULL
+              OR ABS(DATEDIFF('day',
+                  TRY_CAST(b.maturity_date AS DATE),
+                  TRY_CAST(e.maturity_date AS DATE))) <= {MAX_MATURITY_GAP_DAYS})
         -- At least one side is multi-position (not caught by E1)
         JOIN entity_counts bc
           ON b.cik = bc.cik AND b.source = bc.source
@@ -1242,21 +1329,24 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND e.quarter = ec.quarter AND e._entity_id = ec._entity_id
          AND CAST(e.index_classification AS VARCHAR) = ec._ic
         WHERE bc.n > 1 OR ec.n > 1
-    ),
-    -- Combine E1 + E2
-    all_pairs AS (
-        SELECT * FROM pairs_single
-        UNION ALL
-        SELECT * FROM pairs_multi
-    ),
-    rn_begin AS (
+    )
+    SELECT * FROM pairs_single
+    UNION ALL
+    SELECT * FROM pairs_multi
+    """
+    con.execute(sql_candidates)
+
+    # Statement 2: greedy dedup from candidates
+    sql_dedup = """
+    CREATE OR REPLACE TEMP TABLE tier_e AS
+    WITH rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
                 ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
                     _end_row_id ASC
             ) AS rn_b
-        FROM all_pairs
+        FROM tier_e_candidates
     ),
     rn_end AS (
         SELECT *,
@@ -1278,8 +1368,224 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
         _begin_row_id, _end_row_id
     FROM rn_end WHERE rn_e = 1
     """
-    con.execute(sql)
+    con.execute(sql_dedup)
     return "tier_e"
+
+
+# ---------------------------------------------------------------------------
+# Bipartite (Hungarian) dedup for C/D/E tiers
+# ---------------------------------------------------------------------------
+
+# Cost function weights per tier.
+# Converts the ORDER BY tiebreaker columns into a scalar cost for the
+# Hungarian algorithm.  Lower cost = better match.
+COST_CONFIG_C = {
+    "suffix_match_weight": 100.0,
+    "attr_penalty_weight": 10.0,
+    "fv_prox_weight": 1.0,
+    "maturity_prox_weight": 0.001,
+    "cost_cols": ["_suffix_match", "_attr_penalty", "_fv_prox", "_maturity_prox"],
+}
+COST_CONFIG_D = {
+    "match_score_weight": 1000.0,
+    "suffix_match_weight": 100.0,
+    "attr_penalty_weight": 10.0,
+    "fv_prox_weight": 1.0,
+    "maturity_prox_weight": 0.001,
+    "cost_cols": ["match_score", "_suffix_match", "_attr_penalty", "_fv_prox",
+                  "_maturity_prox"],
+}
+COST_CONFIG_E = {
+    "fv_prox_weight": 1.0,
+    "rate_prox_weight": 0.3,
+    "pa_prox_weight": 0.1,
+    "cost_cols": ["_fv_prox", "_rate_prox", "_pa_prox"],
+}
+
+
+def _compute_pair_cost(row: dict, tier_name: str) -> float:
+    """Compute scalar cost for a candidate pair row."""
+    if tier_name == "tier_c":
+        cfg = COST_CONFIG_C
+        return (
+            cfg["suffix_match_weight"] * (1 - float(row.get("_suffix_match", 0)))
+            + cfg["attr_penalty_weight"] * float(row.get("_attr_penalty", 0))
+            + cfg["fv_prox_weight"] * float(row.get("_fv_prox", 0))
+            + cfg["maturity_prox_weight"]
+            * min(float(row.get("_maturity_prox", 999999)) / 365.0, 1.0)
+        )
+    elif tier_name == "tier_d":
+        cfg = COST_CONFIG_D
+        return (
+            cfg["match_score_weight"] * (1 - float(row.get("match_score", 0)))
+            + cfg["suffix_match_weight"] * (1 - float(row.get("_suffix_match", 0)))
+            + cfg["attr_penalty_weight"] * float(row.get("_attr_penalty", 0))
+            + cfg["fv_prox_weight"] * float(row.get("_fv_prox", 0))
+            + cfg["maturity_prox_weight"]
+            * min(float(row.get("_maturity_prox", 999999)) / 365.0, 1.0)
+        )
+    else:  # tier_e
+        cfg = COST_CONFIG_E
+        return (
+            cfg["fv_prox_weight"] * float(row.get("_fv_prox", 0))
+            + cfg["rate_prox_weight"] * float(row.get("_rate_prox", 0))
+            + cfg["pa_prox_weight"] * float(row.get("_pa_prox", 0))
+        )
+
+
+def _bipartite_dedup(
+    con: duckdb.DuckDBPyConnection,
+    tier_name: str,
+) -> int:
+    """Replace greedy ROW_NUMBER dedup with Hungarian bipartite matching.
+
+    Reads candidates from ``{tier_name}_candidates``, groups into connected
+    components via UnionFind, runs the Hungarian algorithm on each
+    multi-position component, and replaces the ``{tier_name}`` temp table.
+
+    Returns the number of pairs that changed assignment vs greedy.
+    """
+    t0 = time.time()
+    cand_table = f"{tier_name}_candidates"
+
+    # Fetch candidates
+    cand_df = con.execute(f"SELECT * FROM {cand_table}").fetchdf()
+    if cand_df.empty:
+        return 0
+
+    # Fetch greedy result for comparison
+    greedy_pairs = set()
+    greedy_df = con.execute(f"SELECT _begin_row_id, _end_row_id FROM {tier_name}").fetchdf()
+    for _, r in greedy_df.iterrows():
+        greedy_pairs.add((int(r["_begin_row_id"]), int(r["_end_row_id"])))
+
+    # Build connected components via UnionFind.
+    # Nodes are tagged as ('b', row_id) or ('e', row_id) to keep begin/end
+    # sides separate.
+    uf = UnionFind()
+    for _, row in cand_df.iterrows():
+        b_key = ("b", int(row["_begin_row_id"]))
+        e_key = ("e", int(row["_end_row_id"]))
+        uf.find(b_key)
+        uf.find(e_key)
+        uf.union(b_key, e_key)
+
+    components = uf.components()
+
+    # Build index: for each component, collect its candidate rows
+    # Map each node to its component root
+    node_to_root = {}
+    for root, members in components.items():
+        for m in members:
+            node_to_root[m] = root
+
+    # Group candidate rows by component
+    comp_rows = {}
+    for idx, row in cand_df.iterrows():
+        b_key = ("b", int(row["_begin_row_id"]))
+        root = node_to_root[b_key]
+        if root not in comp_rows:
+            comp_rows[root] = []
+        comp_rows[root].append(idx)
+
+    optimal_indices = []
+    reassigned = 0
+
+    for root, row_indices in comp_rows.items():
+        members = components[root]
+        begin_ids = sorted({m[1] for m in members if m[0] == "b"})
+        end_ids = sorted({m[1] for m in members if m[0] == "e"})
+
+        n_begin = len(begin_ids)
+        n_end = len(end_ids)
+
+        if n_begin <= 1 or n_end <= 1:
+            # Trivial component: pick best candidate per side by cost
+            sub_df = cand_df.loc[row_indices]
+            best_per_begin = {}
+            for idx in row_indices:
+                row = cand_df.loc[idx]
+                bid = int(row["_begin_row_id"])
+                cost = _compute_pair_cost(row, tier_name)
+                if bid not in best_per_begin or cost < best_per_begin[bid][0]:
+                    best_per_begin[bid] = (cost, idx)
+            # For single-end, also enforce 1:1 on end side
+            used_ends = set()
+            for bid in sorted(best_per_begin.keys()):
+                _, idx = best_per_begin[bid]
+                eid = int(cand_df.loc[idx, "_end_row_id"])
+                if eid not in used_ends:
+                    optimal_indices.append(idx)
+                    used_ends.add(eid)
+            continue
+
+        # Multi-position component: build cost matrix and run Hungarian
+        begin_id_to_idx = {bid: i for i, bid in enumerate(begin_ids)}
+        end_id_to_idx = {eid: j for j, eid in enumerate(end_ids)}
+
+        SENTINEL = 1e15
+        cost_matrix = [[SENTINEL] * n_end for _ in range(n_begin)]
+        # Also store which candidate row corresponds to each cell
+        cell_to_cand_idx = {}
+
+        for idx in row_indices:
+            row = cand_df.loc[idx]
+            bid = int(row["_begin_row_id"])
+            eid = int(row["_end_row_id"])
+            i = begin_id_to_idx[bid]
+            j = end_id_to_idx[eid]
+            cost = _compute_pair_cost(row, tier_name)
+            # Keep the best (lowest cost) candidate for each (i, j) cell
+            if cost < cost_matrix[i][j]:
+                cost_matrix[i][j] = cost
+                cell_to_cand_idx[(i, j)] = idx
+
+        row_ind, col_ind = hungarian_assignment(cost_matrix)
+
+        for i, j in zip(row_ind, col_ind):
+            if cost_matrix[i][j] < SENTINEL and (i, j) in cell_to_cand_idx:
+                cand_idx = cell_to_cand_idx[(i, j)]
+                optimal_indices.append(cand_idx)
+                pair = (begin_ids[i], end_ids[j])
+                if pair not in greedy_pairs:
+                    reassigned += 1
+
+    # Build result DataFrame from optimal indices
+    if optimal_indices:
+        result_df = cand_df.loc[optimal_indices].copy()
+    else:
+        result_df = cand_df.iloc[:0].copy()
+
+    # Get the output columns from the current tier table
+    tier_cols = [desc[0] for desc in con.execute(
+        f"SELECT * FROM {tier_name} LIMIT 0"
+    ).description]
+
+    # Select only columns that exist in the tier table
+    out_cols = [c for c in tier_cols if c in result_df.columns]
+    result_df = result_df[out_cols].reset_index(drop=True)
+
+    # Replace the tier table
+    con.register(f"_bipartite_{tier_name}", result_df)
+    con.execute(f"""
+        CREATE OR REPLACE TEMP TABLE {tier_name} AS
+        SELECT * FROM _bipartite_{tier_name}
+    """)
+    con.unregister(f"_bipartite_{tier_name}")
+
+    elapsed = time.time() - t0
+    n_components = len(comp_rows)
+    n_multi = sum(
+        1 for root in comp_rows
+        if len({m[1] for m in components[root] if m[0] == "b"}) >= 2
+        and len({m[1] for m in components[root] if m[0] == "e"}) >= 2
+    )
+    logger.info(
+        "  %s bipartite: %d components (%d multi-position), "
+        "%d pairs reassigned, %.2fs",
+        tier_name, n_components, n_multi, reassigned, elapsed,
+    )
+    return reassigned
 
 
 # ---------------------------------------------------------------------------
@@ -1291,6 +1597,7 @@ def match_positions(
     bdc_raw_df: Optional[pd.DataFrame] = None,
     *,
     output_file: Optional[Path] = None,
+    use_bipartite: bool = True,
 ) -> pd.DataFrame:
     """Match positions across consecutive quarters.
 
@@ -1364,7 +1671,26 @@ def match_positions(
         TRY_CAST(shares_held AS DOUBLE) AS sh,
         LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _name_lower,
         CAST(cusip AS VARCHAR) AS _cusip,
-        CAST(position_key AS VARCHAR) AS _position_key
+        CAST(position_key AS VARCHAR) AS _position_key,
+        -- Instrument sub-type parsed from description (RE2: no \\b, use (^|\\W)..(\\W|$))
+        CASE
+          WHEN regexp_matches(CAST(instrument_description AS VARCHAR),
+               '(?i)(^|\\W)(?:revolv(?:er|ing)|rcf|revolving credit)(\\W|$)') THEN 'REVOLVER'
+          WHEN regexp_matches(CAST(instrument_description AS VARCHAR),
+               '(?i)(^|\\W)(?:ddtl|delayed draw)(\\W|$)') THEN 'DDTL'
+          WHEN regexp_matches(CAST(instrument_description AS VARCHAR),
+               '(?i)(^|\\W)(?:term loan|tl[a-d]?)(\\W|$)') THEN 'TERM_LOAN'
+          WHEN regexp_matches(CAST(instrument_description AS VARCHAR),
+               '(?i)(^|\\W)warrants?(\\W|$)') THEN 'WARRANT'
+          WHEN regexp_matches(CAST(instrument_description AS VARCHAR),
+               '(?i)(^|\\W)(?:common (?:stock|equity|units?)|preferred (?:stock|equity|units?)|membership interest|llc interest|equity interest|class [a-c](\\W|$)|ordinary shares)(\\W|$)') THEN 'EQUITY'
+          ELSE NULL
+        END AS _inst_subtype,
+        -- Trailing number from issuer_name for suffix coexistence tiebreaker
+        TRY_CAST(
+          regexp_extract(CAST(issuer_name AS VARCHAR), '(\\d+)\\s*$', 1)
+          AS INTEGER
+        ) AS _trailing_num
     FROM unified
     WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
       AND TRY_CAST(fair_value AS DOUBLE) != 0
@@ -1394,19 +1720,32 @@ def match_positions(
     logger.info("Running Tier C: Normalized name matching...")
     _match_normalized_name(con)
     tier_c_count = con.execute("SELECT COUNT(*) FROM tier_c").fetchone()[0]
-    logger.info("  Tier C: %d pairs", tier_c_count)
+    logger.info("  Tier C: %d pairs (greedy)", tier_c_count)
+    if use_bipartite:
+        _bipartite_dedup(con, "tier_c")
+        tier_c_count = con.execute("SELECT COUNT(*) FROM tier_c").fetchone()[0]
+        logger.info("  Tier C: %d pairs (after bipartite)", tier_c_count)
 
     # --- Tier D: Fuzzy ---
     logger.info("Running Tier D: Jaro-Winkler fuzzy matching...")
     _match_fuzzy(con)
     tier_d_count = con.execute("SELECT COUNT(*) FROM tier_d").fetchone()[0]
-    logger.info("  Tier D: %d pairs", tier_d_count)
+    logger.info("  Tier D: %d pairs (greedy)", tier_d_count)
+    if use_bipartite:
+        _bipartite_dedup(con, "tier_d")
+        tier_d_count = con.execute("SELECT COUNT(*) FROM tier_d").fetchone()[0]
+        logger.info("  Tier D: %d pairs (after bipartite)", tier_d_count)
 
     # --- Tier E: Entity fingerprint ---
     logger.info("Running Tier E: Entity-constrained fingerprint matching...")
     _match_entity_fingerprint(con)
     tier_e_count = con.execute("SELECT COUNT(*) FROM tier_e").fetchone()[0]
-    logger.info("  Tier E: %d pairs", tier_e_count)
+    logger.info("  Tier E: %d pairs (greedy)", tier_e_count)
+    # Bipartite disabled for Tier E: entity fingerprint matching operates on
+    # fuzzy identity signals where globally-optimal reassignment produces
+    # lateral churn (6,800+ swaps in assessment) without measurable accuracy
+    # improvement.  Tier E's high base error rate is better addressed by
+    # tightening candidate filters than by reassigning within noisy clusters.
 
     # --- Combine all tiers and annotate with classification ---
     # Two separate queries to avoid conditional JOIN anti-pattern:

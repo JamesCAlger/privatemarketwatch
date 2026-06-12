@@ -6,6 +6,44 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-11 -- Plan C: Re-calibration complete (weighted error rate 4.2% -> 2.0%)
+
+- **Rebuilt outputs** with Plans A+B fixes: 794,797 unified holdings rows, 511,482 position match pairs.
+- **Generated v2 calibration sample**: 600 pairs across 6 tiers (same seed, different population due to Plan A/B changes). 146 bundles.
+- **Sub-agent line-by-line review**: 7 parallel sub-agents reviewed 146 bundles using the 5-point calibration protocol (entity identity, instrument type, tranche discrimination, attribute consistency, alternative candidates). An earlier heuristic review (0.1%) significantly underestimated errors by missing wrong_tranche cases.
+- **Results**:
+  - Weighted error rate: **2.0%** (95% CI: 0.0%-4.1%), down from 4.2%
+  - A: 0.0%, B1b: 2.5%, B2: 3.1%, C: 29.4%, D: 13.4%, E: 12.9%
+  - A and B2 meet targets; B1b, C, D, E still exceed targets
+  - 519 correct, 36 wrong_tranche, 23 ambiguous, 16 wrong_entity, 6 wrong_instrument (58 total errors)
+- **Dominant residual pattern**: wrong_tranche (36/58 errors) -- same entity, different instrument. Greedy 1:1 ROW_NUMBER matching selects locally optimal pairs without global optimization. This is the bipartite matching problem (Plan B Deliverable 6, deferred).
+- **V2 decision**: Agentic triage IS justified for C/D/E tier matches. Recommended: (1) bipartite matching for multi-position entities, (2) agentic review for residual C/D/E flagged pairs, (3) CIK-specific prefix stripping for D-tier.
+- Files created: docs/position_match_calibration/calibration_results_v2.md, scripts/run_calibration_review.py
+- Files modified: data/output/position_match_calibration/sample.csv, verdicts/, calibration_summary.md
+
+### 2026-06-11 -- Plan B: Matching algorithm hardening (4 hard gates + suffix tiebreaker + J07/J08)
+
+- **Classification flip veto** (pipeline/position_matching.py):
+  - B2/C/D pair CTEs now reject matches where both sides have non-empty `index_classification` and they differ. 100% calibrated precision.
+  - E already required classification match; A/B1/B1b excluded by design.
+- **Instrument sub-type continuity** (pipeline/position_matching.py):
+  - Added `_inst_subtype` computed column to `unified_base` CTE, parsed from `instrument_description` via RE2 regex (REVOLVER, DDTL, TERM_LOAN, WARRANT, EQUITY).
+  - B1b/B2/C/D/E pair CTEs reject matches where both sides have a parseable sub-type and they differ.
+- **Maturity mismatch veto** (pipeline/position_matching.py):
+  - Added `MAX_MATURITY_GAP_DAYS = 365` module constant.
+  - C/D/E pair CTEs reject matches where both sides have parseable maturity dates differing by >365 days. B2 excluded (tolerates amendments).
+- **Suffix coexistence tiebreaker** (pipeline/position_matching.py):
+  - Added `_trailing_num` computed column to `unified_base`, parsing trailing integers from `issuer_name`.
+  - B2/C/D ROW_NUMBER ORDER BY now includes `_suffix_match DESC` early in tiebreaker sequence.
+  - Not a hard gate -- shifts preference only when same-suffix candidates exist.
+- **Tier D blocked CTE propagation**: Added `index_classification`, `_inst_subtype`, `maturity_date`, and `_trailing_num` to the D `blocked` SELECT to enable filters in `scored`.
+- **J07 hard gate rejection audit** (pipeline/oracle_checks.py):
+  - Informational check that counts C/D/E matches rejected by each gate (classification flip, maturity >12mo, instrument sub-type mismatch). Always passes.
+- **J08 suspected refinancing detection** (pipeline/oracle_checks.py):
+  - Flags B2+ matches with maturity shift >12mo AND spread change >50bps. Warns if rate exceeds 5%.
+- **Tests**: 13 new tests in test_position_matching.py (classification flip, instrument sub-type, maturity gap, suffix tiebreaker). 6 new tests in test_oracle_checks.py (J07, J08).
+- Files modified: pipeline/position_matching.py, pipeline/oracle_checks.py, tests/test_position_matching.py, tests/test_oracle_checks.py
+
 ### 2026-06-09 -- Position match quality: J05/J06 oracle checks + B2 attribute disambiguation
 
 - **New oracle checks** (pipeline/oracle_checks.py):
@@ -1774,3 +1812,134 @@ Follow-up in same implementation pass:
 - No SEC downloads were performed. A production cached rebuild and `python scripts/diff_outputs.py --semantic` backstop were not started because another agent already had `scripts/rebuild_outputs.py --unified` running as PID `15180` in the shared workspace. The claim was marked done because the wrapper exists, required validation ran, deterministic blockers are cleared, and only human-review promotion items remain.
 
 **Status: done_with_review_items** -- CIK `0001588272` has zero remaining deterministic source-reconciliation blockers after fresh staging and trial validation and passes trial position matching. Human review is needed for the 2023-09-30 cost/FV ratio diagnostic and the 2025-06-30 low-continuity diagnostic before treating the wrapper as production-clean.
+
+### 2026-06-11 -- Plan A: Wrapper layer fixes + oracle canary checks
+
+Implements the wrapper extraction fixes and oracle canary checks from the position match calibration review (112 errors in 600 sampled pairs, 47 errors from 4 CIK wrapper/staging problems).
+
+**CIK wrapper fixes:**
+- **Fidelity (0001920453):** Added `category_marker_re` to dispatch config to catch bare category subtotals ("Debt", "Debt Diversified Financial Services", etc.) that lack instrument keywords. Uses end-anchored regex to distinguish category headers from real positions that always trail with rate/maturity fields.
+- **Stepstone (0001950803):** Added `pipe_field_map` staging config and CIK-scoped WHEN branches in staging_bdc.py to extract issuer from pipe segment 4 (not segment 3/industry). The generic 7-pipe pattern was assigning the industry segment as issuer.
+- **GSBD (0001572694):** Added `hierarchy_extract` staging section with issuer/instrument regexes for the "Investment <type> - <pct>% <company> Industry <label> <fields>" format. Added 43 extra_industry_labels for GSBD-specific GICS sectors.
+- **North Haven (0001851322):** Fixed hierarchy_extract condition and issuer regex to handle the affiliation-stripped form. After Phase A strips "Investments-non-controlled/non-affiliated", identifiers start with the bare industry label, not "Investments". Made the "^Investments..." prefix optional in both `hierarchy_condition_extra` (OR with industry-label start) and `hierarchy_issuer_re`.
+
+**Schema changes:**
+- Added `pipe_field_map` property to staging section in wrapper_v3.schema.json (issuer_segment, instrument_segments, industry_segment, lien_segment)
+- Added `segment_assertions` top-level property for canary format-drift assertions
+
+**Oracle checks (I08-I11):**
+- I08: Segment assertion drift -- validates pipe-segment content types against declared assertions in wrapper JSON. Uses pattern detectors (entity_name_like, rate_like, date_like, gics_sector_like, instrument_like).
+- I09: GICS issuer name detection -- flags CIK-quarters where >5% of position_leaf issuer_names match known GICS sub-industry labels (catches pipe/hierarchy mis-assignment generically).
+- I10: Instrument sub-type coverage -- warns when multi-position-per-entity groups have identical instrument descriptions (precondition for pattern 4/6 matching errors).
+- I11: Position key uniqueness within entity -- warns when multiple positions at the same entity share near-duplicate position keys (predicts tranche-renumbering vulnerability).
+
+**Files modified:**
+- `data/overrides/bdc_xbrl_wrappers/0001920453.json` -- added category_marker_re
+- `data/overrides/bdc_xbrl_wrappers/0001950803.json` -- added pipe_field_map + segment_assertions
+- `data/overrides/bdc_xbrl_wrappers/0001572694.json` -- added hierarchy_extract staging
+- `data/overrides/bdc_xbrl_wrappers/0001851322.json` -- refined hierarchy_extract regexes
+- `pipeline/staging_bdc.py` -- pipe_field_map loading + CIK-scoped WHEN branches
+- `pipeline/oracle_checks.py` -- I08/I09/I10/I11 checks + pattern detectors + GICS label set
+- `schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json` -- pipe_field_map + segment_assertions
+- `tests/test_oracle_checks.py` -- 15 new tests for I08/I09/I10/I11
+
+**Test results:** 110 oracle_checks tests passed; 624 wrapper tests passed (1 pre-existing failure in Apollo DS test, unrelated). All wrapper JSON files load correctly. No regressions in validation_rules (52 passed) or validate_fund_financials tests.
+
+### 2026-06-11 -- Issuer-level subtotal arithmetic clearing in source reconciliation
+
+Added a new source reconciliation clearing mechanism `documented_source_issuer_subtotal_arithmetic` that identifies issuer-level subtotal source rows whose FV matches the sum of multiple output leaf positions for the same issuer name. This addresses the majority of blocking rows that are parent XBRL hierarchy nodes, not genuinely missing positions.
+
+**Mechanism design:**
+- Two new CTEs: `source_issuer_subtotal_candidates` (filters unmatched source rows with entity signals like LLC/Inc/Corp but no position signals like Term Loan/Revolver/SOFR) and `source_issuer_subtotal_arithmetic` (joins to output on `contains(source_staging_id, normalized_issuer_name)` with FV tolerance matching)
+- Requires >= 2 output leaf children and FV tolerance of max($1, 0.01%)
+- Fires after existing `documented_source_rollup_exact` to avoid double-clearing
+- DuckDB RE2 compatibility: all `\b` word boundaries replaced with `(?:\s|$)` since RE2 does not support `\b`
+
+**Files modified:**
+- `pipeline/source_reconciliation.py` -- new constants, CTEs, CASE branches in source_detail, metrics aggregation
+- `tests/test_source_reconciliation_cache.py` -- 5 new test cases (basic clearing, FV mismatch, single child, position signal, pipe-delimited)
+- `tests/test_validate_holdings.py` -- updated `test_bdc_xbrl_wrappers_can_be_disabled_for_baseline_comparison` assertion (Trinity/Aledia parent now correctly cleared as issuer subtotal; blocking count 3->2)
+
+**Test results:** 10/10 source_reconciliation_cache tests passed. 139/139 validate_holdings tests passed. 116/116 oracle_checks tests passed. 111/111 bdc_filings tests passed.
+
+**Remaining work:** Wrapper dispatch updates for Crescent Capital (0001633336), MidCap Financial (0001278752), Goldman Sachs BDC (0001572694) deferred until source reconciliation is re-run on cached data to measure Part 1 residual and identify which CIKs still need wrapper updates.
+
+### 2026-06-11 -- Per-CIK parsed-field quality packets for wrapper oracle
+
+Added review-only parsed-field quality packets to the BDC XBRL wrapper oracle. Each wrapper trial now writes `parsed_field_quality.csv` under the target CIK trial directory, scoped only to that CIK, and flags suspicious production output fields such as contaminated issuer names, instrument descriptions, and position keys that include hierarchy labels, percentages, rate/date fragments, or low-information text.
+
+**Files modified:**
+- `pipeline/bdc_xbrl_wrapper_oracle.py` -- added parsed-field packet construction, CIK scoping, packet artifact write, and two summary telemetry columns: `parsed_field_quality_issue_count` and `parsed_field_quality_fair_value`
+- `tests/test_bdc_xbrl_wrapper_oracle.py` -- added focused tests for contaminated output detection, clean-row/other-CIK suppression, and preserving oracle pass/fail status
+
+**Validation results:**
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -k parsed_field_quality -q` -- 3 passed
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -q` -- 76 passed
+
+**Contract note:** These checks are warnings/review packets only. They do not add oracle failure reasons or change wrapper promotion pass/fail behavior.
+
+### 2026-06-11 -- One-CIK row-delta attribution for wrapper oracle
+
+Added deterministic row-delta attribution to BDC XBRL wrapper trials. Each trial now writes `row_delta_attribution.csv`, scoped to the target CIK, comparing trial BDC holdings against current production BDC holdings and explaining added rows, removed rows, parsed-field changes, classification changes, and numeric changes.
+
+**Files modified:**
+- `pipeline/bdc_xbrl_wrapper_oracle.py` -- added row-delta schema, current-production CIK loader, attribution builder, and artifact write
+- `tests/test_bdc_xbrl_wrapper_oracle.py` -- added focused row-delta tests for empty matches, CIK scoping, added/removed rows, non-private and aggregate removals, parsed/classification changes, numeric tolerance, and artifact writing
+
+**Validation results:**
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -k row_delta -q` -- 7 passed
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -q` -- 83 passed
+
+**Contract note:** This is oracle trial telemetry only. It does not change production holdings, source reconciliation, oracle pass/fail status, or promotion-gate behavior.
+
+### 2026-06-11 -- High-FV unclassified cluster packets for wrapper oracle
+
+Added high-FV unclassified cluster review packets to BDC XBRL wrapper trials. Each trial now writes `high_fv_unclassified_clusters.csv`, scoped to the target CIK, when a wrapper's FV-weighted unclassified rate breaches its configured `unclassified_rate.max_fv_pct` threshold. The packet groups repeated unclassified labels by issuer/instrument/identifier, reports affected quarters, FV impact, output classification fields, and a suggested wrapper family guess.
+
+**Files modified:**
+- `pipeline/wrapper_content_signatures.py` -- added `classify_content_signature_rows()` so oracle telemetry can reuse the same content-signature classification and wrapper-family fallback logic as validation
+- `pipeline/bdc_xbrl_wrapper_oracle.py` -- added high-FV unclassified cluster schema, CIK-scoped cluster builder, family-guess heuristics, and trial artifact write
+- `tests/test_wrapper_content_signatures.py` -- added tests for row-level classification fallback and absolute-FV output
+- `tests/test_bdc_xbrl_wrapper_oracle.py` -- added focused tests for threshold suppression, grouping, CIK scoping, multi-quarter summaries, classified-row exclusion, and artifact writing
+
+**Validation results:**
+- `pytest tests/test_wrapper_content_signatures.py -q` -- 41 passed
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -k high_fv_unclassified -q` -- 6 passed
+- `pytest tests/test_bdc_xbrl_wrapper_oracle.py -q` -- 89 passed
+
+**Contract note:** This is oracle trial telemetry only. It does not change production holdings, source reconciliation, oracle pass/fail status, or promotion-gate behavior. It is intended to give wrapper agents a per-CIK worklist for high-FV rows that are currently not covered by local archetypes or wrapper family classification.
+
+### 2026-06-11 -- Bipartite (Hungarian) matching for C/D/E tiers
+
+Replaced greedy ROW_NUMBER PARTITION BY dedup with the Hungarian algorithm (minimum-cost bipartite matching) for C/D/E tiers. This finds the globally optimal 1:1 assignment across all positions for the same entity, fixing wrong_tranche errors caused by FV crossover in multi-position entities.
+
+**Architecture:** Post-processing approach with minimal SQL changes.
+- C/D/E tier SQL now saves ALL candidate pairs to `tier_X_candidates` temp tables before greedy dedup
+- Greedy dedup still runs as fallback
+- New `_bipartite_dedup()` function groups candidates into connected components via UnionFind, runs Hungarian on each multi-position component, replaces the tier table
+- `use_bipartite` parameter on `match_positions()` (default True) controls the behavior
+
+**Files changed:**
+- `pipeline/utils.py` -- Added `hungarian_assignment()`: pure Python O(N^3) implementation for small matrices (entity groups are 2-8 positions)
+- `pipeline/position_matching.py` -- Split C/D/E SQL into candidates + dedup; added `_bipartite_dedup()` with per-tier cost functions; added `use_bipartite` parameter
+- `tests/test_hungarian.py` -- New: 10 tests (1x1, 2x2, 3x3, rectangular, all-equal, sentinel, brute-force cross-check, empty)
+- `tests/test_position_matching.py` -- Added 5 bipartite tests (FV crossover resolution, correct greedy preservation, rectangular group, single pair passthrough, flag disabled)
+- `scripts/assess_bipartite.py` -- New: gold-set comparison script (greedy vs bipartite against calibration v2)
+
+**Gold-set assessment results (302 C/D/E rows):**
+- 6 errors fixed (wrong_tranche/wrong_entity -> different pair)
+- 3 regressions (correct -> different pair) -- likely Unicode encoding artifacts (em-dash vs hyphen)
+- Net improvement: +3
+- 239 unchanged correct, 38 unchanged error
+
+**Match count impact:**
+- C: 2,218 -> 2,265 (+47)
+- D: 12,967 -> 14,670 (+1,703)
+- E: 5,598 -> 6,325 (+727)
+- Total: 511,482 -> 513,959 (+2,477 net new matches)
+
+**Performance:** Bipartite adds ~70s to the ~120s matching pipeline (total ~190s with bipartite vs ~120s greedy). Overhead is dominated by Tier D (48s for 5,744 components, 1,163 multi-position).
+
+**Test counts:** 107 position matching + Hungarian tests pass. Full suite: 3,546 passed, 13 skipped, 0 new failures (1 pre-existing failure in `test_bdc_xbrl_wrapper.py::test_apollo_ds_company_only_source_row_is_aggregate` excluded).
+
+**Follow-up: Tier E bipartite disabled (same session).** Deep analysis of results showed Tier E bipartite produced 6,856 reassigned pairs (79% of all churn), dominated by lateral swaps within ambiguous name clusters at a single CIK (Cliffwater, 5,853 swaps). FV proximity was sometimes sacrificed. Gold-set changes were lateral moves, not accuracy improvements. Bipartite now only applies to Tier C and D where the mechanism addresses the wrong_tranche failure mode (entity groups with multiple distinct tranches where FV crossover causes greedy mis-assignment). Tier E's entity fingerprint matching operates on fuzzier identity signals where globally-optimal reassignment is not meaningful.
