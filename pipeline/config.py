@@ -151,6 +151,9 @@ UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
 BDC_XBRL_ORACLE_EXCEPTIONS_FILE = OVERRIDES_DIR / "bdc_xbrl_oracle_exceptions.json"
 
+# Position match overrides (per-CIK JSON files with reject/force_pair directives)
+POSITION_MATCH_OVERRIDES_DIR = OVERRIDES_DIR / "position_match_overrides"
+
 # Unlisted (non-traded) BDC reference for v1 frontend filtering
 UNLISTED_BDC_REFERENCE_FILE = (
     OVERRIDES_DIR / "bdc_xbrl_wrappers" / "unlisted_bdc_xbrl_reference.json"
