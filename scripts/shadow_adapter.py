@@ -22,7 +22,8 @@ import logging
 
 from pipeline.config import (
     ORACLE_CHECK_RESULTS_FILE,
-    SOURCE_RECONCILIATION_METRICS_FILE,
+    SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
+    SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
     VALIDATION_RULES_AGGREGATE_FILE,
 )
 
@@ -53,7 +54,8 @@ def _oracle_select() -> str | None:
            COALESCE(CAST(report_date AS VARCHAR), '') AS period,
            lower(status) AS status,
            TRY_CAST(metric_value AS DOUBLE) AS metric, 'oracle_metric' AS metric_name,
-           COALESCE(TRY_CAST(detail_rows AS BIGINT), TRY_CAST(residual_rows AS BIGINT), 0) AS n_units
+           COALESCE(TRY_CAST(detail_rows AS BIGINT), TRY_CAST(residual_rows AS BIGINT), 0) AS n_units,
+           CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
     """
 
@@ -72,26 +74,71 @@ def _vrules_select() -> str | None:
            COALESCE(CAST(run_timestamp AS VARCHAR), '') AS period,
            CASE WHEN lower(status) IN ('skipped','skip') THEN 'skip' ELSE lower(status) END AS status,
            TRY_CAST(hit_rate AS DOUBLE) AS metric, 'hit_rate' AS metric_name,
-           COALESCE(TRY_CAST(hit_count AS BIGINT), 0) AS n_units
+           COALESCE(TRY_CAST(hit_count AS BIGINT), 0) AS n_units,
+           CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
     FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
     """
 
 
 def _source_recon_select() -> str | None:
-    f = SOURCE_RECONCILIATION_METRICS_FILE
-    if not f.exists():
-        logger.info("adapter: source_reconciliation_metrics absent -- skip")
+    """Tight source-fact reconciliation residuals, classified by mechanism.
+
+    Replaces the coarse per-CIK-quarter metrics ingestion with the RICH residual
+    artifacts so the panel inherits source_reconciliation's own classification:
+      - residual_classification.csv: output-side residuals (blocking_issue, mechanism,
+        confidence, affected_source_fair_value).
+      - source_only_detail.csv: source-only residuals (is_blocking, mechanism,
+        confidence, source_fair_value).
+
+    Emits ONE ledger row per (cik, report_date, mechanism) for BLOCKING residuals
+    only -- the `documented_*` mechanisms are intentional scope exclusions
+    (comparative periods, no-FV, source rollups, money-market, affiliation dedup)
+    and are not flags. `mechanism` and `src_confidence` are carried so the runner's
+    confidence/surface layer can defer to source_reconciliation's own judgement
+    rather than the generic bootstrap heuristic.
+    """
+    res = SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE
+    so = SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE
+    parts: list[str] = []
+    if res.exists():
+        parts.append(f"""
+            SELECT 'rc' AS src, CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+                   CAST(mechanism AS VARCHAR) AS mechanism,
+                   CAST(blocking_issue AS BOOLEAN) AS blocking,
+                   CAST(confidence AS VARCHAR) AS confidence,
+                   TRY_CAST(affected_source_fair_value AS DOUBLE) AS fv
+            FROM read_csv_auto('{res.as_posix()}', sample_size=-1)""")
+    if so.exists():
+        parts.append(f"""
+            SELECT 'so' AS src, CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+                   CAST(mechanism AS VARCHAR) AS mechanism,
+                   CAST(is_blocking AS BOOLEAN) AS blocking,
+                   CAST(confidence AS VARCHAR) AS confidence,
+                   TRY_CAST(source_fair_value AS DOUBLE) AS fv
+            FROM read_csv_auto('{so.as_posix()}', sample_size=-1)""")
+    if not parts:
+        logger.info("adapter: source_reconciliation residual artifacts absent -- skip")
         return None
-    # The tight source-fact reconciliation, per CIK-quarter (cached XBRL vs output).
+    union = " UNION ALL ".join(parts)
+    # The two artifacts are two VIEWS of the same residual (output-side vs source-side),
+    # keyed by (cik, report_date, mechanism). Sum FV within each view, then take the max
+    # ACROSS views so a residual present in both is not double-counted.
     return f"""
-    SELECT 'source_recon' AS engine, 'source_reconciliation' AS rule_name,
+    SELECT 'source_recon' AS engine, mechanism AS rule_name,
            'tight' AS tier, 'advisory' AS enforcement,
-           CAST(cik AS VARCHAR) AS cik, 'report_date' AS period_kind,
-           CAST(report_date AS VARCHAR) AS period,
-           CASE WHEN reconciliation_status = 'RECONCILED' THEN 'pass' ELSE 'fail' END AS status,
-           TRY_CAST(reconciled_source_row_rate AS DOUBLE) AS metric, 'reconciled_rate' AS metric_name,
-           COALESCE(TRY_CAST(blocking_issue_count AS BIGINT), 0) AS n_units
-    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+           cik, 'report_date' AS period_kind, report_date AS period,
+           'fail' AS status,
+           round(max(view_fv) / 1e6, 2) AS metric, 'affected_fv_m' AS metric_name,
+           sum(n_view) AS n_units,
+           mechanism AS mechanism, any_value(confidence) AS src_confidence
+    FROM (
+        SELECT cik, report_date, mechanism, src, any_value(confidence) AS confidence,
+               sum(COALESCE(fv, 0)) AS view_fv, count(*) AS n_view
+        FROM ({union})
+        WHERE blocking
+        GROUP BY cik, report_date, mechanism, src
+    )
+    GROUP BY cik, report_date, mechanism
     """
 
 

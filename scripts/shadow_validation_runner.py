@@ -46,10 +46,15 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 # from INDEPENDENCE signals computable today:
 #   confirmed_impossible : violation is logically impossible (precision 1.0)
 #   tight_anchor         : tight check failed vs an independent anchor (high)
+#   source_blocking_<c>  : source_reconciliation's OWN residual classification
+#                          (blocking_issue + mechanism + confidence high/medium/low);
+#                          defers to the mature upstream artifact, not the heuristic
 #   corroborated         : weak warn co-located with a tight fail at same cik+period
 #   scope_caveat         : rule is known definitional/scope-heavy -> suppress
 #   lone_weak            : weak warn, no corroboration -> low confidence (noise)
-# surface = confidence in {confirmed_impossible, tight_anchor, corroborated}.
+# surface = {confirmed_impossible, tight_anchor, corroborated,
+#            source_blocking_high, source_blocking_medium} (low-confidence source
+#            residuals are not surfaced, per source_reconciliation's own grade).
 # These are PROXIES; real precision still needs the source-adjudicated gold set
 # that the Part B review loop accrues.
 # ---------------------------------------------------------------------------
@@ -67,14 +72,16 @@ SELECT 'conservation' AS engine, rule_name, tier, enforcement, cik,
        'report_date' AS period_kind, report_date AS period,
        CASE status WHEN 'reconciles' THEN 'pass'
                    WHEN 'no_anchor'  THEN 'skip' ELSE 'fail' END AS status,
-       residual_pct AS metric, 'residual_pct' AS metric_name, 1 AS n_units
+       residual_pct AS metric, 'residual_pct' AS metric_name, 1 AS n_units,
+       CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
 FROM result_{name}
 """
 _XS = """
 SELECT 'cross_source' AS engine, rule_name, tier, enforcement, cik,
        'report_quarter' AS period_kind, report_quarter AS period,
        CASE status WHEN 'agree' THEN 'pass' ELSE 'fail' END AS status,
-       pct_diff AS metric, 'pct_diff' AS metric_name, 1 AS n_units
+       pct_diff AS metric, 'pct_diff' AS metric_name, 1 AS n_units,
+       CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
 FROM result_{name}
 """
 _IDN = """
@@ -83,14 +90,16 @@ SELECT 'identity' AS engine, rule_name, any_value(tier) AS tier,
        'report_date' AS period_kind, report_date AS period,
        CASE WHEN sum(CASE WHEN NOT holds THEN 1 ELSE 0 END) = 0 THEN 'pass' ELSE 'fail' END AS status,
        round(100.0*sum(CASE WHEN NOT holds THEN 1 ELSE 0 END)/count(*), 2) AS metric,
-       'violation_pct' AS metric_name, count(*) AS n_units
+       'violation_pct' AS metric_name, count(*) AS n_units,
+       CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
 FROM result_{name} GROUP BY rule_name, cik, report_date
 """
 # weak rules emit pass|warn (never fail) -- they are flags, not gates.
 _WEAK = """
 SELECT 'weak' AS engine, rule_name, tier, enforcement, cik,
        'report_date' AS period_kind, report_date AS period,
-       status, metric, 'weak_metric' AS metric_name, n_units
+       status, metric, 'weak_metric' AS metric_name, n_units,
+       CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
 FROM result_{name}
 """
 
@@ -147,12 +156,16 @@ def main(argv: list[str] | None = None) -> int:
     con.execute(
         f"""
         CREATE TABLE ledger_scored AS
-        SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated')) AS surface
+        SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated',
+                                  'source_blocking_high','source_blocking_medium')) AS surface
         FROM (
             WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
             SELECT l.*,
                 CASE
                     WHEN l.status NOT IN ('fail','warn') THEN NULL
+                    -- source_reconciliation classifies its own residuals (blocking_issue +
+                    -- mechanism + confidence); defer to it rather than the bootstrap heuristic.
+                    WHEN l.engine='source_recon' THEN 'source_blocking_' || COALESCE(l.src_confidence, 'na')
                     WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
                     WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
                     WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'

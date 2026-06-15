@@ -6,6 +6,15 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-15 -- Shadow adapter ingests rich source-reconciliation residual classification
+
+- **What changed:** `scripts/shadow_adapter.py` `_source_recon_select()` no longer ingests the coarse per-CIK-quarter `source_reconciliation_metrics.csv` (pass/fail + reconciled-rate). It now ingests the RICH residual artifacts -- `source_reconciliation_residual_classification.csv` (output-side: `blocking_issue`, `mechanism`, `confidence`, `affected_source_fair_value`) and `source_reconciliation_source_only_detail.csv` (source-side: `is_blocking`, `mechanism`, `confidence`, `source_fair_value`).
+- **Grain:** one ledger row per `(cik, report_date, mechanism)` for BLOCKING residuals only. The two artifacts are two views of the same residual keyed by `(cik, report_date, mechanism)`; the union de-duplicates (423 canonical blocking residual groups, not 423+1749 double-counted). FV is summed within each view then max-ed across views to avoid double-counting. `documented_*` mechanisms (comparative period, no-FV, source rollup, money-market, affiliation dedup) are intentional scope exclusions and are NOT emitted as flags.
+- **Schema change:** the validation-results ledger gains two nullable columns -- `mechanism` and `src_confidence`. The four engine normalizers (conservation/identity/cross-source/weak) and the oracle/vrules adapters emit `CAST(NULL AS VARCHAR)` for both; only `source_recon` populates them.
+- **Confidence/surface:** `scripts/shadow_validation_runner.py` scoring now DEFERS to source_reconciliation's own classification for source_recon rows: `confidence = 'source_blocking_' || src_confidence` (high/medium/low). `surface` adds `source_blocking_high` + `source_blocking_medium`; `source_blocking_low` is NOT surfaced (per the upstream grade). This replaces the generic `tight_anchor` bootstrap for the FV axis with the mature upstream judgement.
+- **Result counts:** source_recon contributes 423 blocking residuals across 5 `blocking_source_*` mechanisms (354 `medium` -> surfaced, 69 `low` -> suppressed; 0 `high` because high-confidence residuals are all `documented_*` non-blocking). Ledger total 31,702 results across 142 distinct checks; 2,138 of 3,393 flagged rows surfaced (37% suppressed as scope/noise/low-confidence).
+- **Read-only:** outputs under `data/output/shadow/` only (gitignored); no production artifacts touched.
+
 ### 2026-06-12 -- Position match override system and triage heuristics
 
 - **New modules:** `pipeline/position_match_overrides.py` (loader + applier), `pipeline/match_triage.py` (5-check heuristic triage)
@@ -2457,3 +2466,44 @@ Diagnosed Main Street (0001379785) maturity = 0 value / 508 validation_needed de
 - These are PROXIES: real precision still needs the source-adjudicated gold set
   that the Part B review loop accrues. Production is never the arbiter; the source
   filing is.
+
+## 2026-06-15 - iXBRL field-status: lien reconciliation gate (a) + value overlay into staging (b)
+
+Completed "do both" on the per-position iXBRL descriptor field-status system.
+
+What changed (pipeline/bdc_xbrl_html_bridge.py):
+- reconcile_to_subtotals(per_position, subtotals, tol_pct=0.05, tol_abs=5e6) (a):
+  rolls value-status per-position lien FV up to the filer's own lien subtotals;
+  returns {reconciled, tiers}. Tested pass+fail.
+- build_field_status_rows(bridges, flat_rows, lien_subtotals) (producer core):
+  joins flat positions -> inline status (assigns not_found to flat rows absent
+  from the inline doc), applies the lien reconciliation gate (value->validation_
+  needed for the whole filing when rollup fails), emits overlay-schema rows
+  (maturity_status / lien_status / reference_rate_status). Tested: join+not_found
+  + reconcile pass/fail downgrade.
+- apply_ixbrl_field_status_overlay(df, status_rows) (b): rewritten vectorized
+  (merge-based, no per-row loop) for the ~1.18M-row _prepare_bdc frame. Applies
+  status=='value' maturity/lien/reference_rate onto blank-only staged cells,
+  exact-keyed by (cik, accession, report_date, raw_id_lower); sets
+  reference_rate_source='ixbrl_field_status'. Tested value-only + blank-only.
+- extract_bdc_ixbrl_field_status(...) (universe producer; APPLY STEP, not run):
+  iterates cached inline filings, runs the builder + build_field_status_rows,
+  writes BDC_IXBRL_FIELD_STATUS_FILE. report_date read as VARCHAR (DATE inference
+  yields '...-00:00:00' keys that break the context-instant anchor -> 0 bridges).
+
+Wiring:
+- config.py: BDC_IXBRL_FIELD_STATUS_FILE = data/output/bdc_ixbrl_field_status.csv.
+- staging_bdc._prepare_bdc: consumes the artifact via apply_ixbrl_field_status_
+  overlay after the HTML-section bridge overlay; NO-OP if the artifact is absent.
+
+Validation:
+- Scoped single-CIK smoke (Blackstone 0001803498, cached HTML only, no downloads):
+  43,734 position-quarters -> maturity value 75.8%, not_found 19.5%, blank 4.8%;
+  reference_rate value 60.4%, validation_needed 14.0% (shadow-list flagging
+  unconfirmed columns); lien reconciliation passed (lien value 33,011).
+- Tests: tests/test_bdc_xbrl_html_bridge_fields.py 23 passing (incl. reconcile
+  gate + producer-core + vectorized overlay). 151 passing across the touched
+  lien/bridge test files.
+
+Apply step still pending (requires explicit go; heavy + overwrites central data):
+  run extract_bdc_ixbrl_field_status() universe-wide, then rebuild unified.
