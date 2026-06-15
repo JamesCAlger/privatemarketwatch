@@ -2411,3 +2411,29 @@ Diagnosed Main Street (0001379785) maturity = 0 value / 508 validation_needed de
   fmt_issuer_name 4%. fmt_cusip/isin inert (BDC carries no CUSIP).
 - Unified runner now 39 rules / 30,887 check-results; weak tier 14,865 pass /
   1,369 warn; tight tiers unchanged. Format dimension of the panel complete.
+
+### 2026-06-15 -- Shadow-list rule: bare-footnote header markers
+
+- `_detect_header_map`: extended footnote stripping to also remove BARE trailing footnote refs ("Maturity 6", "Portfolio Company 1 2 3 4"), not just parenthesized "(6)". Stone Point's SOI header used bare numbers -> previously numeric>0 -> header rejected.
+- Impact: Stone Point maturity 0 -> 329 value. (Stone Point Income / APS / Fortress unaffected -> different residual causes.) 20 fields-suite tests pass.
+- Sweep state after the two systematic fixes (\b concatenated + bare-footnote): position-weighted maturity ~76% value / ~16% validation_needed / ~8% blank; filers >=80% confirmed 80 -> 112. Residual ~25 filers / ~5K positions (~8%) are a DIVERSE tail (venture BDCs Hercules/Horizon with own-notes "due" rows not SOI; Stepstone/Capital Southwest with no detected maturity label; misc) -> correctly routed to validation_needed (recovered-but-unconfirmed = review), the safe state.
+
+### 2026-06-15 -- Adapter: ingest existing check outputs into the ledger (warn/soft step 3)
+
+- Added scripts/shadow_adapter.py: reads EXISTING pipeline check artifacts and
+  normalizes them into the unified ledger schema (no re-coding). Sources: oracle
+  check_results.csv (48 A-J checks), validation_rules_aggregate.csv (PC/IDX/T/S/R/
+  XS/F/M/RI), source_reconciliation_metrics.csv (per-CIK-quarter reconciliation).
+  Tier assigned from a tight-check map derived from validation_inventory.md
+  (TIGHT_ORACLE, TIGHT_VRULES); everything else weak. Status taken as-reported.
+- Wired into shadow_validation_runner.py. Panel now spans 7 sources / 137+
+  distinct checks / ~31k results. Rollup adds: source_recon tight 1,434 pass /
+  480 fail; oracle weak 260 pass/16 warn/21 fail; validation_rules tight 16 pass/
+  2 warn + weak 17 pass/60 warn.
+- Caveat: ingests latest-on-disk. The oracle check_results.csv present is a
+  PARTIAL run (J-series etc.; the tight A/E-series checks are absent), so oracle
+  currently shows 0 tight rows -- a full oracle run would populate them. The tier
+  MAP is correct regardless.
+- Remaining: same-pattern adapters for nonaccrual / column_validation row-issues /
+  highlights oracle; then step 4 (per-rule precision via truth set) and step 5
+  (quality-tier derivation). Weak warns stay non-blocking.

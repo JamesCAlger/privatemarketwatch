@@ -32,6 +32,7 @@ import shadow_conservation_engine as cons   # noqa: E402
 import shadow_identity_engine as idn         # noqa: E402
 import shadow_cross_source_engine as xsrc    # noqa: E402
 import shadow_weak_engine as wk              # noqa: E402
+import shadow_adapter as adp                 # noqa: E402
 
 from pipeline.config import OUTPUT_DIR       # noqa: E402
 
@@ -113,6 +114,12 @@ def main(argv: list[str] | None = None) -> int:
         parts.append(_WEAK.format(name=r.name))
     logger.info("weak: %d rules", len(wk.RULES))
 
+    # 5. adapters: ingest existing pipeline check outputs (oracle, validation_rules),
+    #    tier-tagged, normalized into the same ledger schema (no re-coding).
+    adapter_parts = adp.adapter_selects()
+    parts.extend(adapter_parts)
+    logger.info("adapters: %d existing-output sources ingested", len(adapter_parts))
+
     con.execute("CREATE TABLE ledger AS " + " UNION ALL ".join(parts))
 
     SHADOW_DIR.mkdir(parents=True, exist_ok=True)
@@ -142,9 +149,10 @@ def main(argv: list[str] | None = None) -> int:
     logger.info("wrote %s", ledger_path)
     logger.info("wrote %s", summary_path)
 
-    total = con.execute("SELECT count(*) FROM ledger").fetchone()[0]
-    logger.info("ledger: %d check-results across %d rules", total,
-                len(cons.RULES) + n_idn + n_xs + len(wk.RULES))
+    total, n_checks = con.execute(
+        "SELECT count(*), count(DISTINCT engine || '|' || rule_name) FROM ledger"
+    ).fetchone()
+    logger.info("ledger: %d check-results across %d distinct checks", total, n_checks)
     logger.info("rollup by engine x tier x status:")
     for eng, tier, st, n in con.execute(
         "SELECT engine, tier, status, count(*) FROM ledger GROUP BY 1,2,3 ORDER BY 1,2,3"
