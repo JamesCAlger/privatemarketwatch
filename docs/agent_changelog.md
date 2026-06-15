@@ -2384,3 +2384,30 @@ Diagnosed Main Street (0001379785) maturity = 0 value / 508 validation_needed de
 - Remaining (warn/soft steps 3-5): adapter for bespoke weak families (anomaly/
   stability/cross-ref T/S/M), per-rule precision via a truth set, quality-tier
   derivation. Weak warns must stay non-blocking.
+
+### 2026-06-15 -- Maturity content signature + shadow-list sweep (header-rule fixes)
+
+- **Maturity content signature** (`apply_maturity_signature`): a header-confirmed maturity must be future-dated vs report_date; a past-dated "maturity" (likely a coincidentally-aligned misread) downgrades value -> validation_needed. Header-agnostic; closes the coincidental-parse gap the column logic can't. +1 test.
+- **Universe sweep** (195 CIKs, latest filing each) tallying per-field status surfaced validation_needed CLUSTERS dominated by filer families (Golub x6, SLR x3, Sixth Street x2, Audax, TriplePoint, ...).
+- **Root cause = one global rule bug, not per-CIK quirks**: those families concatenate header labels ("MaturityDate", "AcquisitionDate"), and the maturity rule `(?i)\bmaturity\b` failed to match (no word boundary before "Date"). Fixed the shadow-list rule to `(?i)maturity` (+ `acquisition`/`above index` for the same reason).
+- **Impact**: Golub PCF maturity 0 -> 990 value; SLR 0 -> 108; Audax 0 -> 410. Pre-fix position-weighted maturity was 56% value / 36% validation_needed / 8% blank across the universe; the concatenated-header fix lifts the bulk of the 65 sub-20%-value filers.
+- Residual clusters (Sixth Street debt schedule, TriplePoint venture BDC) remain and need their own look. 20 fields-suite tests pass.
+
+### 2026-06-15 -- Declarative per-column format contract (weak engine)
+
+- shadow_weak_engine.py now carries COLUMN_FORMAT_CONTRACT: one declarative table
+  of each column's expected format (21 columns) -- decimal ranges, enum domains
+  (mirroring column_validation.ENUM_VALUES), string lengths, cik pattern, date
+  parse + sentinel. _contract_rules() auto-generates one fmt_<col> WeakRule per
+  column (type {decimal,enum,string_len,string_exact,pattern,date}); plus 3
+  semantic rules (pct concentration, maturity-not-past, dl_rate_fill). 24 weak
+  rules total, replacing the prior 9 hand-picked. Answers "does each column have
+  an expected format" -- yes, now in one auditable place instead of ~50 scattered
+  C-series checks.
+- Validated: most columns conform (0% warn for source/cik/report_date/entity_name/
+  fair_value/shares/all 4 enums/maturity_date). Residuals: fmt_cost 68% of
+  CIK-quarters (~14% of rows out of [0,3e9] -- likely negative cost from cost-proxy
+  fill; NEW signal), fmt_pct_of_net_assets 45%, fmt_basis_spread 13%,
+  fmt_issuer_name 4%. fmt_cusip/isin inert (BDC carries no CUSIP).
+- Unified runner now 39 rules / 30,887 check-results; weak tier 14,865 pass /
+  1,369 warn; tight tiers unchanged. Format dimension of the panel complete.

@@ -54,23 +54,82 @@ class WeakRule:
     enforcement: str = "flag"
 
 
-RULES: list[WeakRule] = [
-    WeakRule("interest_rate_range", "row", "interest_rate IS NOT NULL",
-             holds_sql="interest_rate BETWEEN 0 AND 25", note="rate in [0,25]%"),
-    WeakRule("basis_spread_range", "row", "basis_spread IS NOT NULL",
-             holds_sql="basis_spread BETWEEN 0 AND 15", note="spread in [0,15]%"),
-    WeakRule("pik_rate_range", "row", "pik_rate IS NOT NULL",
-             holds_sql="pik_rate BETWEEN 0 AND 20", note="pik in [0,20]%"),
+# ---------------------------------------------------------------------------
+# Per-column FORMAT/TYPE contract -- the single declarative source of each
+# column's expected format (consolidates the scattered C-series checks +
+# ENUM_VALUES). type in {decimal, enum, string_len, string_exact, pattern, date}.
+# Enum values mirror pipeline/column_validation.ENUM_VALUES.
+# ---------------------------------------------------------------------------
+COLUMN_FORMAT_CONTRACT: dict[str, dict] = {
+    "source":              {"type": "enum", "values": ["bdc", "nport", "html"]},
+    "cik":                 {"type": "pattern", "regex": "^[0-9]{10}$"},
+    "report_date":         {"type": "date"},
+    "entity_name":         {"type": "string_len", "min": 1, "max": 200},
+    "issuer_name":         {"type": "string_len", "min": 3, "max": 300},
+    "cusip":               {"type": "string_exact", "len": 9},
+    "isin":                {"type": "string_exact", "len": 12},
+    "fair_value":          {"type": "decimal", "min": -1e9, "max": 3e9},   # FV may be negative (shorts); cap $3B/row
+    "cost":                {"type": "decimal", "min": 0,    "max": 3e9},
+    "principal_amount":    {"type": "decimal", "min": 0,    "max": 1e11},
+    "principal_amount_usd":{"type": "decimal", "min": 0,    "max": 1e11},
+    "shares_held":         {"type": "decimal", "min": 0,    "max": 1e12},
+    "interest_rate":       {"type": "decimal", "min": 0,    "max": 25},
+    "basis_spread":        {"type": "decimal", "min": 0,    "max": 15},
+    "pik_rate":            {"type": "decimal", "min": 0,    "max": 20},
+    "pct_of_net_assets":   {"type": "decimal", "min": 0,    "max": 100},   # per-row contract; concentration is a separate semantic rule
+    "exposure_type":       {"type": "enum", "values": ["DIRECT", "FUND", "LIQUID"]},
+    "asset_class":         {"type": "enum", "values": ["CASH", "HEDGE_FUND", "OTHER",
+                            "PRIVATE_CREDIT", "PRIVATE_EQUITY", "REAL_ESTATE", "STRUCTURED_CREDIT"]},
+    "index_classification":{"type": "enum", "values": ["CASH", "COMMON_EQUITY", "DIRECT_LENDING",
+                            "DIRECT_REAL_ESTATE", "HEDGE_FUND", "PREFERRED_EQUITY", "PRIVATE_CREDIT_FUND",
+                            "PRIVATE_EQUITY_FUND", "REAL_ESTATE_FUND", "STRUCTURED_CREDIT", "UNCLASSIFIED"]},
+    "coupon_type":         {"type": "enum", "values": ["Fixed", "Floating", "Variable"]},
+    "maturity_date":       {"type": "date", "sentinel": "9999-12-31"},
+}
+
+
+def _present(col: str) -> str:
+    return f"{col} IS NOT NULL AND trim(CAST({col} AS VARCHAR)) <> ''"
+
+
+def _contract_rules() -> list[WeakRule]:
+    """Generate one format/type WeakRule per column from the contract."""
+    out: list[WeakRule] = []
+    for col, spec in COLUMN_FORMAT_CONTRACT.items():
+        t = spec["type"]
+        if t == "decimal":
+            holds = (f"TRY_CAST({col} AS DOUBLE) IS NOT NULL "
+                     f"AND TRY_CAST({col} AS DOUBLE) BETWEEN {spec['min']:g} AND {spec['max']:g}")
+            note = f"numeric in [{spec['min']:g},{spec['max']:g}]"
+        elif t == "enum":
+            vals = ", ".join(f"'{v}'" for v in spec["values"])
+            holds = f"CAST({col} AS VARCHAR) IN ({vals})"
+            note = f"enum ({len(spec['values'])} values)"
+        elif t == "string_len":
+            holds = f"length(CAST({col} AS VARCHAR)) BETWEEN {spec['min']} AND {spec['max']}"
+            note = f"length [{spec['min']},{spec['max']}]"
+        elif t == "string_exact":
+            holds = f"length(CAST({col} AS VARCHAR)) = {spec['len']}"
+            note = f"length = {spec['len']}"
+        elif t == "pattern":
+            holds = f"regexp_matches(CAST({col} AS VARCHAR), '{spec['regex']}')"
+            note = f"matches {spec['regex']}"
+        elif t == "date":
+            holds = f"TRY_CAST({col} AS DATE) IS NOT NULL"
+            if spec.get("sentinel"):
+                holds += f" OR CAST({col} AS VARCHAR) = '{spec['sentinel']}'"
+            note = "parses as date" + (" (or sentinel)" if spec.get("sentinel") else "")
+        else:
+            continue
+        out.append(WeakRule(f"fmt_{col}", "row", _present(col), holds_sql=holds, note=note))
+    return out
+
+
+# Semantic weak rules (beyond pure column format).
+SEMANTIC_RULES: list[WeakRule] = [
     WeakRule("pct_position_concentration", "row", "pct_of_net_assets IS NOT NULL",
-             holds_sql="pct_of_net_assets BETWEEN 0 AND 25",
-             note="per-position pct in [0,25]% (concentration flag)"),
-    WeakRule("shares_held_sign", "row", "shares_held IS NOT NULL",
-             holds_sql="shares_held >= 0", note="shares >= 0"),
-    WeakRule("coupon_type_enum", "row", "coupon_type IS NOT NULL AND trim(coupon_type) <> ''",
-             holds_sql="coupon_type IN ('Fixed','Floating','Variable')",
-             note="coupon_type in {Fixed,Floating,Variable}"),
-    WeakRule("issuer_name_length", "row", "issuer_name IS NOT NULL AND trim(issuer_name) <> ''",
-             holds_sql="length(issuer_name) BETWEEN 3 AND 300", note="issuer length [3,300]"),
+             holds_sql="TRY_CAST(pct_of_net_assets AS DOUBLE) BETWEEN 0 AND 25",
+             note="per-position pct <= 25% (concentration flag)"),
     WeakRule("maturity_not_past", "row",
              "index_classification = 'DIRECT_LENDING' AND maturity_date IS NOT NULL "
              "AND TRY_CAST(maturity_date AS DATE) IS NOT NULL "
@@ -81,6 +140,8 @@ RULES: list[WeakRule] = [
              present_sql="interest_rate IS NOT NULL OR basis_spread IS NOT NULL",
              threshold=0.80, min_n=10, note="DL rows with rate/spread >= 80%"),
 ]
+
+RULES: list[WeakRule] = _contract_rules() + SEMANTIC_RULES
 
 
 def _unified() -> str:
@@ -97,16 +158,15 @@ def ensure_base(con: duckdb.DuckDBPyConnection) -> None:
     if con.execute("SELECT count(*) FROM information_schema.tables "
                    "WHERE table_name='weak_base'").fetchone()[0]:
         return
+    # cik + report_date are the keys (cast to VARCHAR); every other contract
+    # column is selected RAW (the generated holds do their own TRY_CAST).
+    extra = [c for c in COLUMN_FORMAT_CONTRACT if c not in ("cik", "report_date")]
+    select = ("CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date, "
+              + ", ".join(extra))
     con.execute(
         f"""
         CREATE TABLE weak_base AS
-        SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
-               TRY_CAST(interest_rate AS DOUBLE) AS interest_rate,
-               TRY_CAST(basis_spread AS DOUBLE) AS basis_spread,
-               TRY_CAST(pik_rate AS DOUBLE) AS pik_rate,
-               TRY_CAST(pct_of_net_assets AS DOUBLE) AS pct_of_net_assets,
-               TRY_CAST(shares_held AS DOUBLE) AS shares_held,
-               coupon_type, issuer_name, maturity_date, index_classification
+        SELECT {select}
         FROM {_unified()}
         WHERE bdc_dimensions_raw IS NOT NULL
           AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)
