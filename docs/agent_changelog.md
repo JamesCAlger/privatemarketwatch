@@ -2437,3 +2437,23 @@ Diagnosed Main Street (0001379785) maturity = 0 value / 508 validation_needed de
 - Remaining: same-pattern adapters for nonaccrual / column_validation row-issues /
   highlights oracle; then step 4 (per-rule precision via truth set) and step 5
   (quality-tier derivation). Weak warns stay non-blocking.
+
+### 2026-06-15 -- Bootstrap precision/confidence layer (warn/soft step 4, no truth set)
+
+- shadow_validation_runner.py: added a confidence tag per flagged ledger row,
+  derived from INDEPENDENCE signals (production is NOT used as truth -- circular;
+  no gold set exists yet). Values: confirmed_impossible (logically impossible,
+  e.g. FV>total assets), tight_anchor (tight check failed vs independent anchor),
+  corroborated (weak warn co-located with a tight fail at same cik+period),
+  scope_caveat (known definitional rules: income_identity, pct concentration,
+  fmt_pct_of_net_assets, dl_rate_fill), lone_weak (uncorroborated weak warn).
+  surface = {confirmed_impossible, tight_anchor, corroborated}.
+- Outputs: ledger now has confidence+surface columns; new
+  validation_precision_proxy.csv (per rule: flagged/surfaced/by-confidence).
+- Result: 3,450 flagged -> 2,274 surfaced, 1,176 (34%) suppressed (857
+  scope_caveat, 297 lone_weak). fmt_cost 575 -> 399 corroborated / 176 lone;
+  income_identity 298 all scope_caveat (correctly silenced). Makes the panel
+  actionable today.
+- These are PROXIES: real precision still needs the source-adjudicated gold set
+  that the Part B review loop accrues. Production is never the arbiter; the source
+  filing is.

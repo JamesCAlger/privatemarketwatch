@@ -40,6 +40,27 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger("shadow_validation_runner")
 SHADOW_DIR = OUTPUT_DIR / "shadow"
 
+# ---------------------------------------------------------------------------
+# Bootstrap precision/confidence (no truth set). Production is NOT truth (that
+# would be circular), and we have no gold set yet -- so confidence is derived
+# from INDEPENDENCE signals computable today:
+#   confirmed_impossible : violation is logically impossible (precision 1.0)
+#   tight_anchor         : tight check failed vs an independent anchor (high)
+#   corroborated         : weak warn co-located with a tight fail at same cik+period
+#   scope_caveat         : rule is known definitional/scope-heavy -> suppress
+#   lone_weak            : weak warn, no corroboration -> low confidence (noise)
+# surface = confidence in {confirmed_impossible, tight_anchor, corroborated}.
+# These are PROXIES; real precision still needs the source-adjudicated gold set
+# that the Part B review loop accrues.
+# ---------------------------------------------------------------------------
+CONFIRMED_IMPOSSIBLE = {"R07", "E02"}   # positions FV > fund total assets -> impossible
+SCOPE_CAVEAT = {"income_identity", "pct_position_concentration",
+                "fmt_pct_of_net_assets", "dl_rate_fill"}  # definitional / scope-heavy
+
+
+def _sql_set(s: set[str]) -> str:
+    return ", ".join(f"'{x}'" for x in sorted(s))
+
 # Per-engine normalization to the common ledger schema (11 columns, same order).
 _CONS = """
 SELECT 'conservation' AS engine, rule_name, tier, enforcement, cik,
@@ -122,11 +143,52 @@ def main(argv: list[str] | None = None) -> int:
 
     con.execute("CREATE TABLE ledger AS " + " UNION ALL ".join(parts))
 
+    # Bootstrap confidence scoring (no truth set; see header).
+    con.execute(
+        f"""
+        CREATE TABLE ledger_scored AS
+        SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated')) AS surface
+        FROM (
+            WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
+            SELECT l.*,
+                CASE
+                    WHEN l.status NOT IN ('fail','warn') THEN NULL
+                    WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
+                    WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
+                    WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'
+                    WHEN l.tier='weak' AND l.status='warn' AND tf.cik IS NOT NULL THEN 'corroborated'
+                    WHEN l.tier='weak' AND l.status='warn' THEN 'lone_weak'
+                    ELSE 'other'
+                END AS confidence
+            FROM ledger l LEFT JOIN tf ON l.cik=tf.cik AND l.period=tf.period
+        )
+        """
+    )
+
     SHADOW_DIR.mkdir(parents=True, exist_ok=True)
     ledger_path = SHADOW_DIR / "validation_results_ledger.csv"
     con.execute(
-        f"""COPY (SELECT * FROM ledger ORDER BY engine, rule_name, status, cik, period)
+        f"""COPY (SELECT * FROM ledger_scored ORDER BY surface DESC, engine, rule_name, status, cik, period)
             TO '{ledger_path.as_posix()}' (HEADER, DELIMITER ',')"""
+    )
+    # Precision-proxy summary: per rule, how its flags break down by confidence.
+    proxy_path = SHADOW_DIR / "validation_precision_proxy.csv"
+    con.execute(
+        f"""
+        COPY (
+            SELECT engine, rule_name, tier,
+                   sum(CASE WHEN status IN ('fail','warn') THEN 1 ELSE 0 END) AS n_flagged,
+                   sum(CASE WHEN surface THEN 1 ELSE 0 END) AS n_surfaced,
+                   sum(CASE WHEN confidence='confirmed_impossible' THEN 1 ELSE 0 END) AS n_confirmed,
+                   sum(CASE WHEN confidence='tight_anchor' THEN 1 ELSE 0 END) AS n_tight_anchor,
+                   sum(CASE WHEN confidence='corroborated' THEN 1 ELSE 0 END) AS n_corroborated,
+                   sum(CASE WHEN confidence='lone_weak' THEN 1 ELSE 0 END) AS n_lone_weak,
+                   sum(CASE WHEN confidence='scope_caveat' THEN 1 ELSE 0 END) AS n_scope_caveat
+            FROM ledger_scored GROUP BY 1,2,3
+            HAVING sum(CASE WHEN status IN ('fail','warn') THEN 1 ELSE 0 END) > 0
+            ORDER BY n_surfaced DESC, n_flagged DESC
+        ) TO '{proxy_path.as_posix()}' (HEADER, DELIMITER ',')
+        """
     )
     summary_path = SHADOW_DIR / "validation_results_summary.csv"
     con.execute(
@@ -153,11 +215,24 @@ def main(argv: list[str] | None = None) -> int:
         "SELECT count(*), count(DISTINCT engine || '|' || rule_name) FROM ledger"
     ).fetchone()
     logger.info("ledger: %d check-results across %d distinct checks", total, n_checks)
+    logger.info("wrote %s", proxy_path)
     logger.info("rollup by engine x tier x status:")
     for eng, tier, st, n in con.execute(
         "SELECT engine, tier, status, count(*) FROM ledger GROUP BY 1,2,3 ORDER BY 1,2,3"
     ).fetchall():
-        logger.info("  %-13s %-5s %-5s : %6d", eng, tier, st, n)
+        logger.info("  %-16s %-5s %-5s : %6d", eng, tier, st, n)
+    logger.info("bootstrap confidence (flagged rows only):")
+    for conf, n in con.execute(
+        "SELECT confidence, count(*) FROM ledger_scored WHERE confidence IS NOT NULL "
+        "GROUP BY 1 ORDER BY 2 DESC"
+    ).fetchall():
+        logger.info("  %-22s : %6d", conf, n)
+    surf, flagged = con.execute(
+        "SELECT sum(CASE WHEN surface THEN 1 ELSE 0 END), "
+        "sum(CASE WHEN confidence IS NOT NULL THEN 1 ELSE 0 END) FROM ledger_scored"
+    ).fetchone()
+    logger.info("surfaced (high-confidence) %d of %d flagged (%.0f%% suppressed as noise/scope)",
+                surf or 0, flagged or 0, 100.0*(1-(surf or 0)/(flagged or 1)))
     return 0
 
 
