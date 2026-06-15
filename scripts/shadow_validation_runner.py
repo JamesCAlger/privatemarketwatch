@@ -31,6 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import shadow_conservation_engine as cons   # noqa: E402
 import shadow_identity_engine as idn         # noqa: E402
 import shadow_cross_source_engine as xsrc    # noqa: E402
+import shadow_weak_engine as wk              # noqa: E402
 
 from pipeline.config import OUTPUT_DIR       # noqa: E402
 
@@ -62,6 +63,13 @@ SELECT 'identity' AS engine, rule_name, any_value(tier) AS tier,
        round(100.0*sum(CASE WHEN NOT holds THEN 1 ELSE 0 END)/count(*), 2) AS metric,
        'violation_pct' AS metric_name, count(*) AS n_units
 FROM result_{name} GROUP BY rule_name, cik, report_date
+"""
+# weak rules emit pass|warn (never fail) -- they are flags, not gates.
+_WEAK = """
+SELECT 'weak' AS engine, rule_name, tier, enforcement, cik,
+       'report_date' AS period_kind, report_date AS period,
+       status, metric, 'weak_metric' AS metric_name, n_units
+FROM result_{name}
 """
 
 
@@ -98,6 +106,13 @@ def main(argv: list[str] | None = None) -> int:
             parts.append(_XS.format(name=r.name)); n_xs += 1
     logger.info("cross_source: %d/%d rules ran", n_xs, len(xsrc.RULES))
 
+    # 4. weak field-validity (tier=weak, status pass|warn -- flags, never gates)
+    wk.ensure_base(con)
+    for r in wk.RULES:
+        wk.run_rule(con, r)
+        parts.append(_WEAK.format(name=r.name))
+    logger.info("weak: %d rules", len(wk.RULES))
+
     con.execute("CREATE TABLE ledger AS " + " UNION ALL ".join(parts))
 
     SHADOW_DIR.mkdir(parents=True, exist_ok=True)
@@ -114,9 +129,12 @@ def main(argv: list[str] | None = None) -> int:
                    count(*) AS n_groups,
                    sum(CASE WHEN status='pass' THEN 1 ELSE 0 END) AS n_pass,
                    sum(CASE WHEN status='fail' THEN 1 ELSE 0 END) AS n_fail,
+                   sum(CASE WHEN status='warn' THEN 1 ELSE 0 END) AS n_warn,
                    sum(CASE WHEN status='skip' THEN 1 ELSE 0 END) AS n_skip,
                    round(100.0*sum(CASE WHEN status='fail' THEN 1 ELSE 0 END)
-                         /NULLIF(sum(CASE WHEN status IN ('pass','fail') THEN 1 ELSE 0 END),0), 2) AS fail_pct
+                         /NULLIF(sum(CASE WHEN status IN ('pass','fail') THEN 1 ELSE 0 END),0), 2) AS fail_pct,
+                   round(100.0*sum(CASE WHEN status='warn' THEN 1 ELSE 0 END)
+                         /NULLIF(sum(CASE WHEN status IN ('pass','warn') THEN 1 ELSE 0 END),0), 2) AS warn_pct
             FROM ledger GROUP BY 1,2,3,4 ORDER BY engine, fail_pct DESC NULLS LAST
         ) TO '{summary_path.as_posix()}' (HEADER, DELIMITER ',')
         """
@@ -126,7 +144,7 @@ def main(argv: list[str] | None = None) -> int:
 
     total = con.execute("SELECT count(*) FROM ledger").fetchone()[0]
     logger.info("ledger: %d check-results across %d rules", total,
-                len(cons.RULES) + n_idn + n_xs)
+                len(cons.RULES) + n_idn + n_xs + len(wk.RULES))
     logger.info("rollup by engine x tier x status:")
     for eng, tier, st, n in con.execute(
         "SELECT engine, tier, status, count(*) FROM ledger GROUP BY 1,2,3 ORDER BY 1,2,3"

@@ -661,3 +661,43 @@ logic, add provenance) rather than reconstructing the outcome.
 - Frozen per-CIK config is only as safe as the drift detector's recall --
   invest in format-gate coverage accordingly.
 ```
+
+## 9. Wrapper split (Part A / Part B) and identifier-flattening prevalence
+
+The wrapper skill splits into two MODES over ONE per-CIK config (not two skills,
+not two configs):
+
+- **Part A -- deterministic parse + enrich.** Runs IN-PIPELINE, downstream of the
+  xbrl / ixbrl / html extraction. For FLATTENED filers it splits the composite
+  `investment_identifier` (per-CIK pipe/grammar rules, as the current wrapper
+  already authors) into issuer / instrument / rate / maturity / etc. and enriches.
+  For STRUCTURED filers it reads the dimension members directly -- string-splitting
+  is the flattened-filer FALLBACK, and the format gate guards that grammar (trips
+  on column drift). Config is frozen until a drift trigger fires.
+
+- **Part B -- agentic review of the shadow validation-results ledger.** Consumes
+  the unified tier-tagged ledger (all engines/columns), triages each residual:
+  (i) parse/enrichment defect -> author a new Part A rule; (ii) genuine source-data
+  error -> escalate (no rule); (iii) scope / known-exclusion -> document
+  non-blocking. Proposes audited config (mechanism/evidence/confidence); the gate
+  (ledger re-run) is the acceptance test. Agents discover; the gate decides.
+
+Execution loop (Part A must RUN before Part B can validate):
+    A runs -> engines compute the ledger -> B validates -> B authors a Part A rule
+    (defects only) -> A re-runs -> ledger re-validates.
+Part B's FIXES land in Part A's config because the durable fix to a parsing defect
+IS a Part A rule, and there must be one source of truth for "how this CIK's
+identifiers are parsed." Validation (reading the ledger) writes nothing.
+
+### Flattening prevalence (measured 2026-06-15, current-period BDC, CIK counts)
+- FLATTENED (rate embedded in investment_identifier): 74 CIKs (~38%) -- need the
+  string parsed for rate/maturity/instrument.
+- STRUCTURED (typed rate field, clean identifier): 75 CIKs (~39%) -- datapoints
+  from separate XBRL facts.
+- MIXED / equity-heavy (no rate): 45 CIKs (~23%).
+Per-datapoint source (all current-period rows): identifier carries a rate% in
+26.6%; typed interest_rate filled 59%; typed maturity_date filled only 29% (so
+maturity is predominantly string-sourced even for structured filers); identifier
+has due/par 30%; median identifier length 62 chars. FV-weighting omitted -- raw
+bdc_holdings FV is pre-dedup and inflated. Conclusion: identifier parsing (Part A)
+is load-bearing for ~half the universe, and maturity_date broadly.

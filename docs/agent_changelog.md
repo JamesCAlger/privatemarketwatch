@@ -2331,3 +2331,56 @@ Made the iXBRL row-anchor self-describing about confidence (four-state design; n
   graduate into the same ledger as flags with per-rule precision tracking; the
   4 pipeline gate engines (conservation/identity/cross_source + source_reconciliation
   match engine) consolidate the ~12 GAV/identity/cross-source duplicate impls.
+
+### 2026-06-15 -- Flat->inline join assigns not_found status (Step 3)
+
+- `bdc_xbrl_html_bridge.join_flat_positions_to_inline_status(flat_rows, bridges)`: every flat-XBRL position (bdc_holdings) gets per-field inline status; a position with no inline anchor (row not found in the inline doc though present in flat XBRL) -> all fields `not_found` -> review. Anchored fields carry the builder status (value/validation_needed/blank); lien/sector derive value-if-populated-else-blank. Output uses uniform `{field}_status` + `{field}_source_column` naming.
+- Tests: +2 in test_bdc_xbrl_html_bridge_fields.py (not_found for unanchored; derived blank/value for anchored) -> 18 pass.
+- The four-state taxonomy is now complete: not_found (no inline row, exists in flat) + value/validation_needed/blank (per-field, anchored).
+
+### 2026-06-15 -- Wrapper Part A/B split + flattening prevalence (doc)
+
+- frontier_architecture.md section 9: documented the wrapper split into two MODES
+  over one per-CIK config -- Part A (deterministic parse/enrich, in-pipeline,
+  splits flattened investment_identifier / reads dimensions where structured,
+  format-gate-guarded, frozen-until-drift) and Part B (agentic review of the
+  unified validation-results ledger; triages residuals into parse-rule / escalate
+  / document; gate is acceptance test). Execution loop A-runs -> ledger -> B-validates
+  -> B-authors-Part-A-rule -> re-run; Part B fixes land in Part A's config because
+  the durable fix to a parse defect IS a Part A rule and there must be one source
+  of truth for parsing.
+- Measured identifier-flattening prevalence (current-period BDC, CIK counts): 74
+  FLATTENED (~38%, rate embedded in identifier -> must parse), 75 STRUCTURED (~39%,
+  typed rate field), 45 MIXED/equity (~23%). Per-datapoint: rate% in identifier
+  26.6%, typed interest_rate 59%, typed maturity_date only 29% (maturity is
+  predominantly string-sourced). FV-weighting omitted (raw pre-dedup, inflated).
+
+### 2026-06-15 -- Shadow-list rule: MM/YY date parsing in header-confirmed column
+
+Diagnosed Main Street (0001379785) maturity = 0 value / 508 validation_needed despite a detected "Maturity Date" column: the column aligned correctly (header grid-idx -> data cell "04/28") but the cell is abbreviated MM/YY, which `_extract_row_dates` doesn't parse -> fell to validation_needed.
+
+- `bdc_xbrl_html_bridge._parse_field_value`: added MM/YY parsing (`"04/28"` -> 2028-04-30, last day of month) applied ONLY in the header-confirmed date path -- NOT in the heuristic row scan (where MM/DD is ambiguous). This is the safe placement: we only interpret MM/YY when we know the cell is the maturity/acquisition column.
+- Result: Main Street maturity 0->500 value (validation_needed 508->8, blank 159 = revolvers/equity). Blackstone unchanged (1898 value). +1 test -> 19 pass in the fields suite.
+- Confirms the design: filer-format quirks surface as `validation_needed` (not silent corruption), and are fixed by adding a targeted parse/column rule to the shadow list rather than a per-CIK code branch.
+
+### 2026-06-15 -- Weak field-validity engine + warn status (warn/soft steps 1-2)
+
+- Added scripts/shadow_weak_engine.py: parametric field-validity WEAK engine
+  (kinds: row range/sign/enum/format/date, and fill coverage). A check is data:
+  WeakRule(name, kind, gate_sql, holds_sql|present_sql, threshold). Emits status
+  pass|WARN (never fail), tier=weak, enforcement=flag -- a flag, never a gate.
+  Read-only; output data/output/shadow/weak_gate_results.csv. 9 rules shipped:
+  interest_rate_range[0,25] (1.0% warn), basis_spread_range[0,15] (13.1%),
+  pik_rate_range[0,20] (1.2%), pct_position_concentration[0,25] (47.0%),
+  shares_held_sign (0%), coupon_type_enum (0%), issuer_name_length[3,300] (3.9%),
+  maturity_not_past DL (10.9%), dl_rate_fill>=80% (12.7%).
+- Wired into scripts/shadow_validation_runner.py: ledger now carries `warn` as a
+  first-class status (Step 1). Rollup: 24 rules / 21,142 check-results; weak tier
+  5,933 pass / 556 warn; tight tiers unchanged. Summary CSV gains n_warn/warn_pct.
+  Tight-fail (gate candidates) and weak-warn (flags) are cleanly separated.
+- Validated: clean fields self-confirm (shares/coupon 0%, rate 1%); noisy flags
+  (pct-concentration 47%, spread/dl-rate-fill 13%) are exactly the precision-track
+  candidates -- which is why weak=flag, not gate.
+- Remaining (warn/soft steps 3-5): adapter for bespoke weak families (anomaly/
+  stability/cross-ref T/S/M), per-rule precision via a truth set, quality-tier
+  derivation. Weak warns must stay non-blocking.
