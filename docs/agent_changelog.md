@@ -2007,3 +2007,177 @@ Implemented the finalized wrapper-oracle additions that move noisy wrapper-adjac
 - `pytest tests/test_bdc_xbrl_wrapper_oracle.py -q` -- 101 passed
 - `pytest tests/test_column_validation.py -q` -- 20 passed
 - Cache-only smoke trial: `python -m pipeline.bdc_xbrl_wrapper_oracle --cik 0001508655 --output-dir .codex_tmp\wrapper_oracle_recheck_0001508655` -- passed; 13 summary rows, status counts `{'fail': 9, 'pass': 4}`, 10 cost/FV packets, 5,451 production column validation packets, 2 column drift cluster packets. Cost/FV counts no longer appeared in oracle fail reasons.
+
+### 2026-06-15 -- Leaf->lien recovery from BDC XBRL instance document order (new module, not yet integrated)
+
+Investigated why ~45% of cohort DIRECT_LENDING FV has blank `lien_position` (frontend `firstLien:0.9792` overstated by folding Unknown into First Lien). Root cause: hierarchical-tagging filers (Blackstone, HPS) tag lien tier on *subtotal* facts only; leaf position facts carry just `InvestmentIdentifierAxis`, so there is no dimensional key linking leaf to lien. The link exists only as document order in the instance (confirmed: leaf runs reconcile to lien x sector subtotals to the cent).
+
+- **New module** `pipeline/bdc_lien_hierarchy.py` -- read-only, cache-only. Walks `InvestmentOwnedAtFairValue` facts in instance document order, groups leaf runs, assigns the lien/sector of the closing subtotal **only when the run reconciles to the subtotal** (derived-truth gate). Non-reconciling runs returned flagged (lien=None), never assigned.
+- **Tests** `tests/test_bdc_lien_hierarchy.py` -- 5 passed, incl. false-positive guard (non-reconciling subtotal is not accepted), structure-absent case, lien-only subtotal, independent two-sector grouping.
+- **Measured** (latest cached instance per filer): Blackstone $76.5B recovered (112/176 groups reconcile), HPS Corp Lending $24.2B, HPS Corp Cap Solutions $1.7B. Cohort recovered lien-FV ~$102.5B, recovery rate 78.5% by FV; ~$28B flagged stays Unknown.
+- **Golub (PCF 0001930087, BDC4 0001901612): method does NOT apply** -- 0 sector subtotals, lien-only subtotals do not reconcile to leaf runs; lien stays Unknown. Recovery is filer-specific and must be gated by structure detection + per-filer coverage.
+- **Not integrated** into staging/unified/frontend and no outputs rebuilt -- pending owner sign-off and the cross-reconciliation/drift/semantic gates described in the gate assessment.
+
+## 2026-06-15 -- Frontier data-quality architecture design reference
+
+- Added `docs/refactoring/frontier_architecture.md` (design discussion, no
+  pipeline behavior change). Consolidates a multi-turn architecture session.
+- Captures: the organizing principle (deterministic for truth / learned for
+  triage / statistical for the bound; flatten last not first); a nine-stage
+  target architecture; the TWO gate families (value/conservation vs
+  structure/format) and that the format gate doubles as the per-CIK
+  drift-trigger; schemas for the source fact store (long-format, keyed on
+  `context_id`), the append-only decision ledger, and the gate registry.
+- Worked examples grounded in real data: IRGSE (CIK 0001508655) showing the
+  reconciliation key bug (dimension-string vs resolved-issuer) that both misses
+  subtotals and creates false-positive blockers; ABC Corp format-drift trace;
+  PIK/lien/sector relocation to signal producers over the fact store.
+- Documents the autonomy ceiling, coverage holes (what passes a perfect FV gate
+  while still wrong), best-practice comparison, suggested 80/20 build order, and
+  open risks (context->position cardinality, gold-set cost, frozen-config recall
+  dependency).
+
+### 2026-06-15 -- Lien breakdown (aggregate, from filer subtotals) + frontend wiring
+
+Implemented Track A: the lien analogue of the existing sector breakdown. Reads the filer's own lien subtotals directly (aggregate) rather than mapping each leaf, mirroring `bdc_sector_breakdown.py` which already reads sector subtotals and skips position-level contexts.
+
+- `pipeline/bdc_sector_breakdown.py` -- added `extract_bdc_lien_breakdown()` (+ `_parse_lien_contexts`, `_extract_lien_facts`, `_aggregate_lien_tiers`). Detects lien tier from the member name (axis-name agnostic, reuses `bdc_lien_hierarchy._lien_tier`). Per (cik, report_date, lien_tier): prefers summing lien x sector subtotals, falls back to the pure lien-tier total; skips ambiguous lien x non-sector partitions to avoid double counting. Output: `data/output/bdc_lien_breakdown.csv`.
+- `pipeline/config.py` -- `BDC_LIEN_BREAKDOWN_FILE`.
+- `tests/test_bdc_lien_breakdown.py` -- 5 passed (sector-sum, pure-tier fallback, no-double-count when both present, position-context skipped, ambiguous-partition skipped). `tests/test_bdc_lien_hierarchy.py` (Track B leaf mapping) -- 5 passed.
+- `pipeline/export/index_exports.py` -- `_export_portfolio_characteristics` now sources `lienSplit` from `bdc_lien_breakdown.csv` (cohort, as-of quarter) with an explicit `unknown` bucket and `source` tag, falling back to the old per-position subtraction method if the artifact is absent. Fixes the prior defect where blank lien was folded into First Lien.
+- `frontend/src/lib/types.ts` -- `lienSplit` gains optional `subordinated`, `unknown`, `source`. `app/indices/[slug]/page.tsx` and `app/page.tsx` render Subordinated + Unknown/unreported slices. `npm run build` passes.
+- **Measured (cohort, 2025-12-31):** First Lien $212.3B (70.3%), Second $5.3B (1.8%), Subordinated $2.7B (0.9%), Unsecured $1.0B (0.3%), Unknown $80.8B (26.7%) of $302.0B DL FV -- vs published `firstLien:0.9792`. Filers without lien subtotals (Golub, Fidelity, Stellus, AB) correctly remain Unknown.
+- **Not yet run:** `--export-frontend` (would regenerate published JSON); `bdc_lien_breakdown.csv` currently covers cohort filers' 2025-12-31 filings only (not full history). Known gate gap: the lien_only fallback can pick up non-subtotal contexts (AB Private Credit emits a small negative First Lien) -- a sum(tiers) vs total-DL-FV reconciliation gate should flag/drop these before publication.
+
+### 2026-06-15 -- Step 1 (v1) shadow disposition ledger (read-only diagnostic)
+
+- Added `scripts/build_shadow_disposition_ledger.py`. Read-only; writes only to
+  `data/output/shadow/` (does NOT touch unified_holdings or any production
+  artifact). Scope: 77 wrapped BDC CIKs, current-period rows.
+- Design: v1 does NOT build a competing disposition engine. It REUSES the
+  existing pipeline's disposition outcome (validated rule stack -> unified
+  membership) and adds only the independent conservation gate on top. Cheap
+  text/marker/leaf signals are kept as high-recall/low-precision triage flags,
+  not decisions. (An earlier draft built fresh competing signals; it lost to the
+  validated logic in both directions and was abandoned -- the months of
+  trial/error in the existing rules are the asset, not a thing to reimplement.)
+- Outputs: bdc_row_disposition_ledger.csv (existing disposition + triage flags),
+  bdc_triage_summary.csv, bdc_conservation_residual.csv (the tiered gate result).
+- CONSERVATION ANCHOR repointed to fund_financials (companyfacts): STRONG =
+  investments_at_fair_value (same quantity as Sum(positions), independent
+  source), secondary tight = schedule grand-total, loose = total_assets. Anchor
+  coverage of the 850 wrapped CIK-quarters jumped ~18% -> ~90% (companyfacts_fv
+  734, schedule_total 34, loose_assets 9, none 73). Validation: median
+  sum_included/tight_anchor = 1.0; companyfacts_fv vs schedule_total agree to
+  0.0% median |diff| (n=121). Gate over existing output: 452 reconcile, 204
+  overshoot/leak, 112 undershoot/missing -> ~316-CIK-quarter residual queue.
+- DATA-QUALITY FINDING: `bdc_fund_highlights.total_assets` is mis-scaled/
+  mis-extracted for 710/790 (~90%) CIK-quarters (TSLX 2023-12-31 shows $7.6M for
+  a $3.28B fund; assets_net -$1.5B); BS identity holds 4.3% vs 98.8% for
+  companyfacts/fund_financials. Broken highlights balance-sheet fields feed
+  nothing in production; being removed from the extraction (see below). Fixing it
+  would unlock a wide-coverage
+  loose bound.
+- The balance-sheet InvestmentOwnedAtFairValue no-dimension total is NOT
+  extracted into bdc_holdings (0/850); lifting tight coverage beyond ~18%
+  requires that extraction.
+- Documented as section 8b in docs/refactoring/frontier_architecture.md.
+
+### 2026-06-15 -- Reduce lien Unknown: layered export + reconciliation gate + keyword vocab
+
+Implemented the three levers to reduce the 26.7% Unknown lien in the cohort DL split.
+
+- **Lever 1 + gate** (`pipeline/export/index_exports.py`): new `_layer_lien_split(pp_rows, sub_rows, pct)` helper. Per filer, uses `bdc_lien_breakdown` subtotals only when they reconcile to that filer's DL FV (all tiers >= 0, total within +5%, coverage >= 50%); routes the uncovered remainder to Unknown; otherwise uses the already-populated per-position `lien_position`. `_export_portfolio_characteristics` now calls this (replacing the aggregate-only block). The reconciliation gate correctly rejects AB Private Credit's negative subtotal. `lienSplit` JSON gains `subordinated`, `unknown`, `source`, `subtotalFilers`.
+- **Lever 2** (`pipeline/lien_classification.py`): added `one stop`/`one-stop` (Golub unitranche product) and `first-lien`/`1st-lien`/`second-lien`/`2nd-lien` hyphen variants.
+- **Tests**: `tests/test_layer_lien_split.py` (6, incl. negative/over-count/low-coverage gate fallbacks); `tests/test_lien_classification.py` (+6, incl. false-positive guard). 128 lien-related tests pass.
+- **Verified (cohort 2025-12-31, current data):** layered split = First 85.3%, Second 1.9%, Subordinated 0.6%, Unsecured 0.4%, **Unknown 11.8%** (was 26.7% aggregate-only; published was firstLien 97.9%). 19 filers pass the gate.
+- **Not yet run:** `--unified` rebuild (needed for Lever-2 keywords to populate `lien_position`; projected Unknown then ~5-6%) and `--export-frontend`.
+
+### 2026-06-15 -- Shadow ledger: residual localization pass
+
+- Added a localization pass to `scripts/build_shadow_disposition_ledger.py`
+  (read-only). For each non-reconciling tight CIK-quarter it finds the specific
+  candidate rows that explain the signed gap, using STRUCTURE not subset-sum:
+  overshoot -> aggregate-like included row ~ excess, or aggregate-like row ~ sum
+  of >=2 detailed same-issuer children (issuer subtotal); undershoot -> excluded
+  row WITH leaf detail ~ shortfall. Confirms each quarter by gap-closure
+  (removing/adding candidates reconciles to the anchor). Reuses the pipeline's
+  resolved issuer_name (joined from unified). Outputs
+  bdc_residual_localization.csv (candidate rows) and
+  bdc_residual_localization_summary.csv (per-quarter label).
+- Labels over the 316 non-reconciling tight quarters: overshoot_unexplained 150,
+  undershoot_unexplained 86, partial_leak 34, leak_localized 20, drop_localized
+  19, partial_drop 7.
+- FINDINGS: (1) undershoots are largely SCOPE, not drops -- excluded short-term
+  Treasury-bill rows match the shortfall (intentionally excluded from
+  private-markets holdings but included in investments_at_fair_value). (2) the
+  largest overshoots are STRUCTURAL, not small subtotals -- e.g. CIK 0001851322
+  2025-12-31 +$7.1B, 0001920453 2025-03-31 +$2.0B (sum ~2x fund -> likely
+  comparative-period bleed or duplicate dimension paths); candidates do not close
+  these (labeled partial/unexplained). (3) issuer_subtotal precision is limited
+  by the unreliable typed has_leaf_detail field (detail-in-string filers), so
+  partial_leak candidates include noise -- handled by the gap-closure label
+  (leak_localized high-confidence, partial_leak low-confidence).
+- NEXT: scope-aware labels (short-term/Treasury/money-market -> scope, not drop);
+  investigate top unexplained overshoots (the highest-$ residuals); join
+  source_wrapper_rule_id provenance for per-rule attribution.
+
+### 2026-06-15 -- reference_rate_type inference + maturity_date text generalization
+
+Descriptor-tagging gap work (hierarchical filers tag numeric per-position facts but not categorical descriptors).
+
+**reference_rate_type evidence-flagged inference (all BDCs, self-gating):**
+- `staging_bdc.py`: `reference_rate_type` now resolves XBRL field -> identifier text -> inference (basis_spread present + not EUR/GBP/SONIA + `report_date >= 2023-07-01` -> SOFR, else LIBOR). New `reference_rate_source` column tags `xbrl_field` / `identifier_text` / `inferred_post_libor` / `inferred_pre_libor` / ''.
+- Threaded `reference_rate_source` through `UNIFIED_COLUMNS` (unified_holdings.py), `staging_nport.py` (''), `db.py` (pmi_holdings schema + `_HOLDINGS_COLS`).
+- Verified: inference produces SOFR/inferred_post_libor end-to-end via `_prepare_bdc`; both BDC and N-PORT carry the column (same set as UNIFIED_COLUMNS; union uses named columns so order-independent). Projected floating reference_rate_type coverage 30% -> ~99% across v3 cohort after rebuild.
+
+**maturity_date text generalization:**
+- `staging_bdc.py`: maturity text extraction now also scans `instrument_description` (was identifier-only), incl. "due M/YYYY" / "Maturity Date M/D/YYYY". Verified extracts "due 2/2032" and "Maturity Date 6/30/2030" from description.
+- DATA FINDING: this recovers ~$0 in the current BDC universe -- the $363B blank-maturity DL FV (Blackstone, Blue Owl family, Ares, HPS, FS KKR, Golub) has maturity in NEITHER identifier nor description; XBRL has no per-position maturity concept for these filers (confirmed via concept scan). Maturity is HTML-only and, unlike reference rate, has no inference analogue (per-loan date). Real recovery requires the audited per-CIK HTML bridge (`bdc_xbrl_html_bridge`); the text generalization is a correct robustness improvement that protects future desc-embedding filers.
+
+**Tests:** `tests/test_lien_classification.py` (+6 incl. false-positive guard), `tests/test_layer_lien_split.py` (6), `tests/test_bdc_lien_breakdown.py` (5), `tests/test_bdc_lien_hierarchy.py` (5) pass. Full `test_unified_holdings.py` exceeds bounded run window (>590s); targeted structural + synthetic verification used. Not yet run: `--unified` rebuild / `--export-frontend` (would apply the reference-rate inference and publish).
+
+### 2026-06-15 -- HTML-section bridge: maturity_date + reference_rate recovery (builder + apply)
+
+Extended the audited HTML-section bridge (`bdc_xbrl_html_bridge.py`) to recover descriptor VALUES (previously classification-only) for filers that tag numeric facts per position but not maturity/reference-rate (Blackstone et al.).
+
+- **Builder**: `(continued)` section headers now match (`_section_for_row` strips "(continued)" -- was missing 53 continuation headers on Blackstone, only 14 base matched). Added `_extract_row_dates` (maturity = latest row date, acquisition = earliest), `_extract_reference_rate` (SOFR/LIBOR/PRIME incl. SF+/S+/P+). Fixed `_search_terms` to strip the pipe affiliation suffix + tranche number ("123Dentist, Inc. 1 | Non-Affiliated Issuer" -> "123Dentist, Inc.") -- this was leaving "| Issuer" in terms so Blackstone never matched (HPS-style clean identifiers unaffected). New bridge fields: `maturity_date`, `acquisition_date`, `reference_rate_type` (in `BRIDGE_TABLE_COLUMNS`, candidate record, `_record_to_row`).
+- **Apply**: new `apply_html_section_bridge_field_overlays` overlays maturity_date / reference_rate_type onto exact (cik, accession, report_date, raw_id) bridge matches, **blank-only, no clobber**, tagging `reference_rate_source='html_section_bridge'`. Wired into `staging_bdc._prepare_bdc`.
+- **Tests**: `tests/test_bdc_xbrl_html_bridge_fields.py` (9, incl. no-clobber + no-match-noop guards). Existing `test_bdc_xbrl_html_bridge.py` (12) still passes -> 21 total.
+- **Blackstone 2025-12-31 proposal generated** (`.tmp/blackstone_bridge_proposal_2025-12-31.json`, NOT placed in the auto-loaded bridge dir pending review): 750/2036 positions matched (36.8%), of which **98.9% carry maturity_date and 97.3% reference_rate_type**, FV-reconciled. ~$31B of Blackstone's $83.8B DL FV.
+- **Rejection diagnosis**: 1,252/1,286 rejections are `candidate_count=0` (term/positioning misses, NOT FV ambiguity -- only ~31 are >1-candidate). So 37% is the current positioning ceiling; higher coverage needs better section/row positioning + fuzzier issuer matching (follow-on tuning), not disambiguation.
+- **Governance note**: `load_html_section_bridge_rows` loads any `*.json` in the bridge dir with the right schema_version -- so the existing HPS `0001838126.proposed.json` IS active, and accepting Blackstone = placing the reviewed file there. Consider a loader gate distinguishing accepted vs proposed.
+
+### 2026-06-15 -- iXBRL contextRef-anchored field bridge (supersedes fuzzy matching)
+
+Root-cause: the cached BDC HTML is INLINE XBRL (ix:nonFraction/contextRef present), but maturity is untagged display text (0 maturity ix-facts). The fuzzy issuer-name+FV matcher only reached 36.8% on Blackstone. The principled fix anchors on the tagged FV fact's `contextRef` -- whose context's `InvestmentIdentifierAxis` member == `bdc_investment_identifier` -- then reads maturity from the same DOM `<tr>`. Exact per-position key, no name guessing.
+
+- `pipeline/bdc_xbrl_html_bridge.py`: added `propose_field_bridges_from_ixbrl(cik, accession, report_date, html_path)` -- parses iXBRL, maps FV-fact contextRef -> position identity, walks to enclosing `<tr>`, extracts maturity (latest row date) + reference_rate + acquisition_date. Emits the same bridge-record shape the loader/apply already consume.
+- **Blackstone 2025-12-31 result: 2,002/2,036 positions anchored (98.3%), 100% with maturity_date, 89.8% with reference_rate_type, in ~2s** (vs 36.8% fuzzy). Per-tranche exact (Atlas CC tranche 4 = PRIME vs SOFR for 1-3). Proposal at `.tmp/blackstone_ixbrl_bridge_2025-12-31.json` (NOT auto-activated, pending review).
+- Tests: `tests/test_bdc_xbrl_html_bridge_fields.py` +2 (per-tranche anchor, subtotal-context skip) -> 11 pass; existing `test_bdc_xbrl_html_bridge.py` (12) still passes.
+- The existing `apply_html_section_bridge_field_overlays` + loader consume these records unchanged. Generalizes to any inline-XBRL filer (Blue Owl, Ares, HPS, FS KKR) by running the builder per accession.
+- Recommendation: prefer the iXBRL anchor over the fuzzy proposer for inline-XBRL filers; review + accept Blackstone, rebuild, measure WAM lift; this also supplies the ACTUAL reference rate (superseding the SOFR inference for matched rows).
+
+### 2026-06-15 -- Frontend cohort: gate-verified expansion 39 -> 70 v3-wrapper BDCs
+
+- GATE-VERIFIED all 77 v3 wrapper files against the FV conservation gate
+  (unified sum vs fund_financials.investments_at_fair_value / total_assets at each
+  fund's latest anchored quarter). Result: 68 clean + 2 no-anchor = 70 admitted;
+  7 HELD BACK for over-inclusion (unified/total_assets > 1.05): 0002052153 Apollo
+  Origination II (1.73x), 0001988280 Manulife (1.26x), 0001975736 KKR FS Income
+  Trust Select (1.18x), 0001377936 Saratoga (1.16x), 0001930679 KKR FS Income
+  Trust (1.15x), 0002037804 New Mountain (1.10x), 0001278752 MidCap (1.05x). These
+  exhibit issuer-subtotal duplication and need wrapper/dedup fixes before
+  admission. None were in the prior v1_39 cohort, so no live fund is affected.
+- NEW MANIFEST data/overrides/wrapper_cohorts/v2_70_gate_verified_wrapper_manifest.json
+  (70 entries). config.WRAPPER_COHORT_MANIFEST_FILE repointed from v1_39 (retained
+  for audit). Frontend scope 39 -> 70 (+31 added, 0 dropped). Verified the export
+  filter now loads 70 CIKs.
+- CLEANUP: deleted 321 stale non-cohort fund_details/*.json (pre-V1-narrowing
+  leftovers, mostly listed BDCs; git-recoverable). 69 in-cohort detail files kept.
+- NOT YET DONE (scope DEFINED, not REGENERATED): a frontend re-export
+  (`python -m pipeline.main --export-frontend`) is required to (a) regenerate the
+  filtered aggregates (index/analytics/fund_list still reflect the old 39 scope)
+  and (b) create the 1 missing cohort detail file (0002083477 APS BDC). Deferred
+  because the worktree is broadly divergent from baseline; a blind full export is
+  unsafe.

@@ -159,10 +159,12 @@ UNLISTED_BDC_REFERENCE_FILE = (
     OVERRIDES_DIR / "bdc_xbrl_wrappers" / "unlisted_bdc_xbrl_reference.json"
 )
 
-# V1 wrapper cohort manifest -- the 39 wrapper-covered unlisted BDCs
-# used as the frontend sample scope.
+# Wrapper cohort manifest -- the frontend sample scope. v2 (2026-06-15) is the
+# 70 gate-verified v3-wrapper BDCs (68 clean + 2 no-anchor of the 77 v3 wrappers;
+# 7 held back for FV-conservation over-inclusion -- see manifest basis_note).
+# The prior v1_39_wrapper_manifest.json is retained for audit.
 WRAPPER_COHORT_MANIFEST_FILE = (
-    OVERRIDES_DIR / "wrapper_cohorts" / "v1_39_wrapper_manifest.json"
+    OVERRIDES_DIR / "wrapper_cohorts" / "v2_70_gate_verified_wrapper_manifest.json"
 )
 
 # Entity resolution overrides and outputs
@@ -266,6 +268,7 @@ FUND_IDENTITY_FILE = OUTPUT_DIR / "fund_identity.csv"
 BDC_SECTOR_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_sector_breakdown.csv"
 BDC_SECTOR_RECONCILIATION_FILE = OUTPUT_DIR / "bdc_sector_reconciliation.csv"
 BDC_SECTOR_BREAKDOWN_RECONCILED_FILE = OUTPUT_DIR / "bdc_sector_breakdown_reconciled.csv"
+BDC_LIEN_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_lien_breakdown.csv"
 FUND_FINANCIALS_VALIDATION_CURRENT_FILE = OUTPUT_DIR / "fund_financials_validation_current.csv"
 FUND_FINANCIALS_QUALITY_METRICS_FILE = OUTPUT_DIR / "fund_financials_quality_metrics.csv"
 FUND_FINANCIALS_CROSS_LEVEL_FILE = OUTPUT_DIR / "fund_financials_cross_level.csv"

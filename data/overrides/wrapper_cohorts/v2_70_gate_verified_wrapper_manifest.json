@@ -1,0 +1,440 @@
+{
+  "schema_version": "wrapper-cohort-manifest.v1",
+  "cohort_id": "v2_70_gate_verified_wrapper_bdc",
+  "description": "v3 wrapper-covered BDCs that pass the FV conservation gate (unified <= 1.05x total assets, or within 10% of investments_at_fair_value when total assets absent).",
+  "cohort_basis": "all_v3_wrapper_files_minus_fv_conservation_gate_failures",
+  "basis_note": "2026-06-15: 77 v3 wrapper files; gate-verified against fund_financials.investments_at_fair_value/total_assets at each fund's latest anchored quarter. 68 clean + 2 no-anchor admitted (70). 7 HELD BACK for over-inclusion (unified/total_assets>1.05): 0002052153 Apollo Origination II (1.73x), 0001988280 Manulife (1.26x), 0001975736 KKR FS Income Trust Select (1.18x), 0001377936 Saratoga (1.16x), 0001930679 KKR FS Income Trust (1.15x), 0002037804 New Mountain (1.10x), 0001278752 MidCap Financial (1.05x). These need wrapper/dedup fixes (issuer-subtotal duplication) before admission. None of the 7 were in the prior v1_39 cohort, so no currently-published fund is affected.",
+  "created_date": "2026-06-15",
+  "supersedes": "v1_39_wrapper_bdc",
+  "held_back_ciks": [
+    "0002052153",
+    "0001988280",
+    "0001975736",
+    "0001377936",
+    "0001930679",
+    "0002037804",
+    "0001278752"
+  ],
+  "entries": [
+    {
+      "rank": 1,
+      "cik": "0001918712",
+      "entity_name": "ARES STRATEGIC INCOME FUND",
+      "wrapper_file": "0001918712.json"
+    },
+    {
+      "rank": 2,
+      "cik": "0001954360",
+      "entity_name": "Crescent Private Credit Income Corp",
+      "wrapper_file": "0001954360.json"
+    },
+    {
+      "rank": 3,
+      "cik": "0001920145",
+      "entity_name": "Goldman Sachs Private Credit Corp.",
+      "wrapper_file": "0001920145.json"
+    },
+    {
+      "rank": 4,
+      "cik": "0001920453",
+      "entity_name": "Fidelity Private Credit Fund",
+      "wrapper_file": "0001920453.json"
+    },
+    {
+      "rank": 5,
+      "cik": "0001925309",
+      "entity_name": "Sixth Street Lending Partners",
+      "wrapper_file": "0001925309.json"
+    },
+    {
+      "rank": 6,
+      "cik": "0001905824",
+      "entity_name": "PIMCO Capital Solutions BDC Corp.",
+      "wrapper_file": "0001905824.json"
+    },
+    {
+      "rank": 7,
+      "cik": "0001803498",
+      "entity_name": "Blackstone Private Credit Fund",
+      "wrapper_file": "0001803498.json"
+    },
+    {
+      "rank": 8,
+      "cik": "0001849894",
+      "entity_name": "MSD Investment Corp.",
+      "wrapper_file": "0001849894.json"
+    },
+    {
+      "rank": 9,
+      "cik": "0001812554",
+      "entity_name": "Blue Owl Credit Income Corp.",
+      "wrapper_file": "0001812554.json"
+    },
+    {
+      "rank": 10,
+      "cik": "0001930087",
+      "entity_name": "Golub Capital Private Credit Fund",
+      "wrapper_file": "0001930087.json"
+    },
+    {
+      "rank": 11,
+      "cik": "0001838126",
+      "entity_name": "HPS Corporate Lending Fund",
+      "wrapper_file": "0001838126.json"
+    },
+    {
+      "rank": 12,
+      "cik": "0001872371",
+      "entity_name": "Oaktree Strategic Credit Fund",
+      "wrapper_file": "0001872371.json"
+    },
+    {
+      "rank": 13,
+      "cik": "0001837532",
+      "entity_name": "Apollo Debt Solutions BDC",
+      "wrapper_file": "0001837532.json"
+    },
+    {
+      "rank": 14,
+      "cik": "0001851322",
+      "entity_name": "North Haven Private Income Fund LLC",
+      "wrapper_file": "0001851322.json"
+    },
+    {
+      "rank": 15,
+      "cik": "0001901037",
+      "entity_name": "Stellus Private Credit BDC",
+      "wrapper_file": "0001901037.json"
+    },
+    {
+      "rank": 16,
+      "cik": "0001742313",
+      "entity_name": "Monroe Capital Income Plus Corp",
+      "wrapper_file": "0001742313.json"
+    },
+    {
+      "rank": 17,
+      "cik": "0002031750",
+      "entity_name": "Ares Core Infrastructure Fund",
+      "wrapper_file": "0002031750.json"
+    },
+    {
+      "rank": 18,
+      "cik": "0001859919",
+      "entity_name": "Barings Private Credit Corp",
+      "wrapper_file": "0001859919.json"
+    },
+    {
+      "rank": 19,
+      "cik": "0001869453",
+      "entity_name": "Blue Owl Technology Income Corp.",
+      "wrapper_file": "0001869453.json"
+    },
+    {
+      "rank": 20,
+      "cik": "0001913724",
+      "entity_name": "TPG Twin Brook Capital Income Fund",
+      "wrapper_file": "0001913724.json"
+    },
+    {
+      "rank": 21,
+      "cik": "0001633858",
+      "entity_name": "Audax Credit BDC Inc.",
+      "wrapper_file": "0001633858.json"
+    },
+    {
+      "rank": 22,
+      "cik": "0001825384",
+      "entity_name": "Stone Point Credit Corp",
+      "wrapper_file": "0001825384.json"
+    },
+    {
+      "rank": 23,
+      "cik": "0001993402",
+      "entity_name": "Antares Strategic Credit Fund",
+      "wrapper_file": "0001993402.json"
+    },
+    {
+      "rank": 24,
+      "cik": "0001950803",
+      "entity_name": "Stepstone Private Credit Fund LLC",
+      "wrapper_file": "0001950803.json"
+    },
+    {
+      "rank": 25,
+      "cik": "0001702510",
+      "entity_name": "Carlyle Credit Solutions, Inc.",
+      "wrapper_file": "0001702510.json"
+    },
+    {
+      "rank": 26,
+      "cik": "0001901612",
+      "entity_name": "Golub Capital BDC 4, Inc.",
+      "wrapper_file": "0001901612.json"
+    },
+    {
+      "rank": 27,
+      "cik": "0001902649",
+      "entity_name": "BlackRock Private Credit Fund",
+      "wrapper_file": "0001902649.json"
+    },
+    {
+      "rank": 28,
+      "cik": "0001989817",
+      "entity_name": "HPS Corporate Capital Solutions Fund",
+      "wrapper_file": "0001989817.json"
+    },
+    {
+      "rank": 29,
+      "cik": "0001925531",
+      "entity_name": "New Mountain Guardian IV BDC, L.L.C.",
+      "wrapper_file": "0001925531.json"
+    },
+    {
+      "rank": 30,
+      "cik": "0001885968",
+      "entity_name": "T Series BDC LLC",
+      "wrapper_file": "0001885968.json"
+    },
+    {
+      "rank": 31,
+      "cik": "0002049733",
+      "entity_name": "Blackstone Private Real Estate Credit & Income Fund",
+      "wrapper_file": "0002049733.json"
+    },
+    {
+      "rank": 32,
+      "cik": "0001899017",
+      "entity_name": "Bain Capital Private Credit",
+      "wrapper_file": "0001899017.json"
+    },
+    {
+      "rank": 33,
+      "cik": "0002083477",
+      "entity_name": "APS BDC, LLC",
+      "wrapper_file": "0002083477.json"
+    },
+    {
+      "rank": 34,
+      "cik": "0001634452",
+      "entity_name": "AB Private Credit Investors Corp",
+      "wrapper_file": "0001634452.json"
+    },
+    {
+      "rank": 35,
+      "cik": "0002012139",
+      "entity_name": "Fortress Private Lending Fund",
+      "wrapper_file": "0002012139.json"
+    },
+    {
+      "rank": 36,
+      "cik": "0001965934",
+      "entity_name": "Overland Advantage",
+      "wrapper_file": "0001965934.json"
+    },
+    {
+      "rank": 37,
+      "cik": "0001899996",
+      "entity_name": "Fidelity Private Credit Co LLC",
+      "wrapper_file": "0001899996.json"
+    },
+    {
+      "rank": 38,
+      "cik": "0002052152",
+      "entity_name": "Apollo Origination II (Levered) Capital Trust",
+      "wrapper_file": "0002052152.json"
+    },
+    {
+      "rank": 39,
+      "cik": "0002011498",
+      "entity_name": "AGL Private Credit Income Fund",
+      "wrapper_file": "0002011498.json"
+    },
+    {
+      "rank": 40,
+      "cik": "0001287750",
+      "entity_name": "ARES CAPITAL CORP",
+      "wrapper_file": "0001287750.json"
+    },
+    {
+      "rank": 41,
+      "cik": "0001508655",
+      "entity_name": "Sixth Street Specialty Lending, Inc.",
+      "wrapper_file": "0001508655.json"
+    },
+    {
+      "rank": 42,
+      "cik": "0001572694",
+      "entity_name": "Goldman Sachs BDC, Inc.",
+      "wrapper_file": "0001572694.json"
+    },
+    {
+      "rank": 43,
+      "cik": "0001588272",
+      "entity_name": "NexPoint Capital, Inc.",
+      "wrapper_file": "0001588272.json"
+    },
+    {
+      "rank": 44,
+      "cik": "0001603480",
+      "entity_name": "TCW Direct Lending LLC",
+      "wrapper_file": "0001603480.json"
+    },
+    {
+      "rank": 45,
+      "cik": "0001633336",
+      "entity_name": "Crescent Capital BDC, Inc.",
+      "wrapper_file": "0001633336.json"
+    },
+    {
+      "rank": 46,
+      "cik": "0001646614",
+      "entity_name": "Silver Point Specialty Lending Fund",
+      "wrapper_file": "0001646614.json"
+    },
+    {
+      "rank": 47,
+      "cik": "0001674760",
+      "entity_name": "Silver Capital Holdings LLC",
+      "wrapper_file": "0001674760.json"
+    },
+    {
+      "rank": 48,
+      "cik": "0001715933",
+      "entity_name": "TCW Direct Lending VII LLC",
+      "wrapper_file": "0001715933.json"
+    },
+    {
+      "rank": 49,
+      "cik": "0001743415",
+      "entity_name": "SCP Private Credit Income BDC LLC",
+      "wrapper_file": "0001743415.json"
+    },
+    {
+      "rank": 50,
+      "cik": "0001766037",
+      "entity_name": "NMF SLF I, Inc.",
+      "wrapper_file": "0001766037.json"
+    },
+    {
+      "rank": 51,
+      "cik": "0001772704",
+      "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
+      "wrapper_file": "0001772704.json"
+    },
+    {
+      "rank": 52,
+      "cik": "0001784700",
+      "entity_name": "Varagon Capital Corp",
+      "wrapper_file": "0001784700.json"
+    },
+    {
+      "rank": 53,
+      "cik": "0001786108",
+      "entity_name": "Trinity Capital Inc.",
+      "wrapper_file": "0001786108.json"
+    },
+    {
+      "rank": 54,
+      "cik": "0001792509",
+      "entity_name": "TriplePoint Private Venture Credit Inc.",
+      "wrapper_file": "0001792509.json"
+    },
+    {
+      "rank": 55,
+      "cik": "0001825265",
+      "entity_name": "TCW Direct Lending VIII LLC",
+      "wrapper_file": "0001825265.json"
+    },
+    {
+      "rank": 56,
+      "cik": "0001834543",
+      "entity_name": "BlackRock Direct Lending Corp.",
+      "wrapper_file": "0001834543.json"
+    },
+    {
+      "rank": 57,
+      "cik": "0001841514",
+      "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
+      "wrapper_file": "0001841514.json"
+    },
+    {
+      "rank": 58,
+      "cik": "0001860424",
+      "entity_name": "Onex Direct Lending BDC Fund",
+      "wrapper_file": "0001860424.json"
+    },
+    {
+      "rank": 59,
+      "cik": "0001901164",
+      "entity_name": "T. Rowe Price OHA Select Private Credit Fund",
+      "wrapper_file": "0001901164.json"
+    },
+    {
+      "rank": 60,
+      "cik": "0001911066",
+      "entity_name": "Nuveen Churchill Private Capital Income Fund",
+      "wrapper_file": "0001911066.json"
+    },
+    {
+      "rank": 61,
+      "cik": "0001916099",
+      "entity_name": "Diameter Credit Co",
+      "wrapper_file": "0001916099.json"
+    },
+    {
+      "rank": 62,
+      "cik": "0001916608",
+      "entity_name": "TCW Star Direct Lending LLC",
+      "wrapper_file": "0001916608.json"
+    },
+    {
+      "rank": 63,
+      "cik": "0001919369",
+      "entity_name": "VISTA CREDIT STRATEGIC LENDING CORP.",
+      "wrapper_file": "0001919369.json"
+    },
+    {
+      "rank": 64,
+      "cik": "0001948368",
+      "entity_name": "Phillip Street BDC LLC",
+      "wrapper_file": "0001948368.json"
+    },
+    {
+      "rank": 65,
+      "cik": "0001950976",
+      "entity_name": "26North BDC, Inc.",
+      "wrapper_file": "0001950976.json"
+    },
+    {
+      "rank": 66,
+      "cik": "0001959568",
+      "entity_name": "Senior Credit Investments, LLC",
+      "wrapper_file": "0001959568.json"
+    },
+    {
+      "rank": 67,
+      "cik": "0001959604",
+      "entity_name": "Jefferies Credit Partners BDC Inc.",
+      "wrapper_file": "0001959604.json"
+    },
+    {
+      "rank": 68,
+      "cik": "0001976336",
+      "entity_name": "Antares Private Credit Fund",
+      "wrapper_file": "0001976336.json"
+    },
+    {
+      "rank": 69,
+      "cik": "0002006758",
+      "entity_name": "MidCap Apollo Institutional Private Lending",
+      "wrapper_file": "0002006758.json"
+    },
+    {
+      "rank": 70,
+      "cik": "0002008748",
+      "entity_name": "",
+      "wrapper_file": "0002008748.json"
+    }
+  ]
+}
