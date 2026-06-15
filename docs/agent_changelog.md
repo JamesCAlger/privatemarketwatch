@@ -2279,3 +2279,36 @@ User-approved audited download to make the iXBRL contextRef anchor usable for al
 - Caveat: these are tight in FORM but violation rates are partly definitional
   (total_expenses scope, pik-vs-all-in rate convention), so each needs a
   truth-set/precision pass before promotion to a blocking gate.
+
+### 2026-06-15 -- Parametric cross-source agreement gate engine (3rd shape)
+
+- Added scripts/shadow_cross_source_engine.py: two independent sources must agree
+  on the same quantity, joined on a shared key. A check is data:
+  CrossSourceRule(name, left=(source,col), right=(source,col), comparator, tol);
+  skips rules with absent columns. Read-only; output
+  data/output/shadow/cross_source_gate_results.csv.
+- Scope = fund-level financials across three independent BDC extractions
+  (bdc_fund_highlights = highlights-statement XBRL; bdc_fund_income = income-
+  statement XBRL; fund_financials = companyfacts API), joined cik+report_quarter.
+  8 rules: highlights<->income (NII 4.7% disagree, TII 1.9%, expenses 0.8%,
+  mgmt_fee 0.2%); companyfacts<->income (TII 0.0%, NII 0.0% -- perfect);
+  highlights<->companyfacts (nav 9.7%, shares 4.3%). Median |diff| 0% everywhere.
+- TRIANGULATION: confirms the identity engine's income_identity 26% violation is
+  DEFINITIONAL (sources agree on NII/TII/expenses, so NII != TII-total_expenses is
+  an expense-scope gap, not a source error). Two engines cross-validate.
+- Documented that the BDC<->N-PORT same-CUSIP agreement (XS01-06) is structurally
+  empty here: BDC rows carry no CUSIP (0 of 574K), 0 shared-CUSIP CIK-quarters --
+  a tight check that can never fire in this dataset.
+- Three parametric shadow engines now exist (conservation / identity / cross-source)
+  + the pipeline's source-reconciliation match engine; together they cover the
+  tight-check families. Next: wire into one tier/enforcement-tagged runner.
+
+### 2026-06-15 -- Column-aware iXBRL extraction + per-field status enum (shadow list)
+
+Made the iXBRL row-anchor self-describing about confidence (four-state design; not_found assigned upstream at the flat-XBRL join, not in the builder).
+
+- `bdc_xbrl_html_bridge.py`: added `_row_grid` (colspan-aware, includes `<th>`), `_detect_header_map` (footnote-marker-stripped so "Maturity Date (2)(15)" isn't counted numeric), `_FIELD_COLUMN_RULES` (shadow-list header regex per field), and `field_status(field, grid, header_map) -> {value, status, source_column}`. The builder tracks the current column-header map and resolves maturity / acquisition / reference_rate by header, emitting per-field `*_status` + `*_source_column` provenance.
+- Status: `value` = header-confirmed cell parsed to expected type; `validation_needed` = value found but column unconfirmed (heuristic / no header) or present-but-unparsable -> review; `blank` = column found, cell empty.
+- Measured (2025-12-31): Blackstone maturity 1898 value / 1 vneeded / 114 blank; BX Secured Lending 606/0/68; FS KKR 496/114/114; Main Street 0/508/159 (header undetected -> all flagged, NOT trusted -- the safe failure).
+- Tests: test_bdc_xbrl_html_bridge_fields.py +5 -> 16; full bridge suite 28 pass.
+- NEXT: flat<->inline join for `not_found`; standing-exception `ensure_inline_doc`; per-CIK shadow-list overrides (e.g. Main Street header); lien/sector subtotal reconciliation; consume only status=value into staging.
