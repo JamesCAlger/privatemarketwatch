@@ -2181,3 +2181,58 @@ Root-cause: the cached BDC HTML is INLINE XBRL (ix:nonFraction/contextRef presen
   and (b) create the 1 missing cohort detail file (0002083477 APS BDC). Deferred
   because the worktree is broadly divergent from baseline; a blind full export is
   unsafe.
+
+### 2026-06-15 -- Gate fix (sum unified) + new rate/scale shadow gate
+
+- FIX: scripts/build_shadow_disposition_ledger.py now computes the gate quantity
+  (sum_included) from UNIFIED fair value per CIK-quarter, not from summing matched
+  bdc_holdings source rows (which double-counted where unified deduped, e.g.
+  duplicate 10-K/10-K/A). Added source_included_fv + source_minus_unified
+  diagnostics. Wrapped-cohort overshoot 204 -> 203 (only the duplicate-filing CIK
+  was a source artifact in this set); tool is now correct regardless of dedup.
+- NEW: scripts/build_shadow_rate_scale_gate.py (read-only, the interest_rate
+  axis). Core period-independent check: portfolio weighted-avg coupon =
+  sum(rate*principal)/sum(principal), plausible band [2,25]%; per-position flags
+  for rate in (0,1) (decimal-scaled) and rate>50 (double-scaled). Loose secondary:
+  reconstructed annual coupon vs fund total_investment_income (wide band only;
+  period-caveated). Outputs bdc_rate_scale_gate.csv + bdc_rate_scale_suspect_rows.csv.
+- Findings (77 v3-wrapped CIKs): 720 scale_ok, 109 no_rate_data, 15
+  decimal_scale_rows, 1 wavg_out_of_band; median wavg coupon 10.14%. Confirmed
+  real decimal-vs-percent errors with identifier-text corroboration: Merx Aviation
+  (MidCap 0001278752) rate 0.1 vs "Revolver 10.00%"; Paymentsense (Apollo
+  0001837532) 0.125 vs "Interest Rate 12.50%"; Valor VCI (0002052152) 0.1 vs "10%".
+- Not committed yet; data/output/shadow/* is gitignored (artifacts regenerable).
+
+### 2026-06-15 -- Closed the inline-XBRL cache gap (audited download) + lien row-text fallback
+
+User-approved audited download to make the iXBRL contextRef anchor usable for all wrapper-CIK position-quarters.
+
+- **Download**: ran the existing audited path (`sec_download_guard.download_bdc_html` driven over the 463-row worklist) -- 462 downloaded + 1 retried (transient "response ended prematurely"), 4.17 GB in ~4.3 min, rate-limited and recorded in `sec_download_manifest.jsonl` (464 entries). Caches the primary inline `.htm` to `bdc_html/` (where the anchor reads).
+- **Coverage lift**: inline-XBRL availability across the 77 wrapper CIKs went **54.9% -> 100%** of position-quarters (852/852 CIK-quarters, 316,379/316,379 positions). The gap was a cache-route gap (modern 2022-2026 filers), not pre-iXBRL.
+- **Builder lien fallback** (`propose_field_bridges_from_ixbrl`): lien resolves via the lien SECTION header (Blackstone-style) OR, for filers grouped only by industry, the row instrument text -- both normalized through `lien_classification.classify_lien`. Emits `lien_position` (tier) + `lien_section` (raw).
+- **Validated across newly-cached filers**: maturity ~95-100%, sector ~100%, reference rate ~90%; lien Blackstone 100% / TPG Twin Brook 99% / Oaktree 89% / Stellus 77% (residual = lien-less equity/JV). 135 bridge/lien tests pass.
+- The reusable iXBRL row-anchor now recovers lien + sector + maturity + reference rate per position, exactly contextRef-keyed, for the full wrapper universe. NEXT: wire lien/sector overlays into apply/staging (maturity + ref already wired); reconcile per-position lien/sector vs each filer's own subtotals.
+
+### 2026-06-15 -- Tier-tagged validation inventory (review artifact)
+
+- Added docs/refactoring/validation_inventory.md: catalogs ~450 distinct
+  validations/guards across oracle_checks.py (48), the wrapper oracle +
+  content_signatures (~40), validate_holdings + validation_rules (~115),
+  highlights/financials/nonaccrual/cik validators (~60),
+  column_validation/fund_strategy/llm/html_template/source_reconciliation (~145),
+  and inline build guards in unified_holdings/bdc_filings/index_returns/
+  position_matching (~50). Each tagged tier (tight/weak), method, column,
+  enforcement (blocking/advisory/opt_in/inline_mutate), tolerance.
+- Headline findings: (1) almost NOTHING blocks the production build -- oracle_runner
+  is advisory unless --fail-on-failure; validate_holdings never raises;
+  validation_rules.run_all doesn't raise; highlights oracle only nav/income
+  identities FAIL; the only things that change/stop production data are inline
+  transforms (dedups, universe_gate, pct recalc, scale fixes, position_id assert,
+  index filters), most of them silent heuristic mutations. (2) Massive duplication
+  -- ~12 implementations of positions-vs-fund-total (GAV/FV) conservation, plus
+  repeated subtotal-arithmetic, pct-sum, NAV-identity, rate-scale copies. (3) A
+  defined promotion queue of tight-but-advisory checks (A01,A04/E01,E02,E04,E07,
+  G02,H01,H05,fv_reconciliation,source_recon engine,V7,V10,PC02/03/08,R07,R10,
+  IDX14,XS*,RI01-07,F10/11/12/17/20,nonaccrual recon). (4) checks built on the
+  known-unreliable highlights balance-sheet fields flagged. (5) silent-mutation
+  guards flagged as highest corruption risk.

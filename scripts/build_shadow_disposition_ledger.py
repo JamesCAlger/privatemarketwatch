@@ -175,6 +175,24 @@ def build_ledger(con: duckdb.DuckDBPyConnection) -> None:
     else:
         con.execute("CREATE TABLE ffin (cik VARCHAR, report_date VARCHAR, inv_fv DOUBLE, total_assets DOUBLE)")
 
+    # Production quantity for the gate: sum of UNIFIED fair value per CIK-quarter.
+    # This is what production actually published. The gate must reconcile THIS
+    # against the anchor -- NOT a sum of matched bdc_holdings source rows, which
+    # double-counts wherever unified deduped (e.g. duplicate 10-K/10-K/A filings).
+    con.execute(
+        f"""
+        CREATE TABLE unified_fv AS
+        SELECT CAST(cik AS VARCHAR) AS cik,
+               CAST(report_date AS VARCHAR) AS report_date,
+               sum(TRY_CAST(fair_value AS DOUBLE)) AS unified_fv,
+               count(*) AS unified_rows
+        FROM {unified}
+        WHERE bdc_dimensions_raw IS NOT NULL
+          AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)
+        GROUP BY 1, 2
+        """
+    )
+
     # Signals + dispositions. Resolution policy is intentionally simple in v1.
     con.execute(
         """
@@ -292,14 +310,27 @@ def write_outputs(con: duckdb.DuckDBPyConnection) -> None:
     con.execute(
         """
         CREATE TABLE residual AS
-        WITH sums AS (
+        WITH src AS (
             SELECT cik, report_date, count(*) AS n_rows,
-                   sum(CASE WHEN disposition='include_position' THEN COALESCE(fair_value,0) ELSE 0 END) AS sum_included,
+                   sum(CASE WHEN disposition='include_position' THEN COALESCE(fair_value,0) ELSE 0 END) AS source_included_fv,
                    sum(CASE WHEN disposition='include_position' THEN 1 ELSE 0 END) AS n_included
             FROM ledger GROUP BY cik, report_date
+        ),
+        sums AS (
+            -- sum_included is the PRODUCTION quantity (sum of unified FV), not the
+            -- sum of matched source rows. source_included_fv is kept as a
+            -- diagnostic; (source_included_fv - sum_included) is the dedup that
+            -- unified applied (e.g. duplicate-filing collapse).
+            SELECT src.cik, src.report_date, src.n_rows, src.n_included,
+                   src.source_included_fv,
+                   COALESCE(uf.unified_fv, 0) AS sum_included,
+                   uf.unified_rows
+            FROM src LEFT JOIN unified_fv uf USING (cik, report_date)
         )
         SELECT
-            s.cik, s.report_date, s.sum_included, s.n_rows, s.n_included,
+            s.cik, s.report_date, s.sum_included, s.source_included_fv,
+            (s.source_included_fv - s.sum_included) AS source_minus_unified,
+            s.unified_rows, s.n_rows, s.n_included,
             f.inv_fv          AS companyfacts_inv_fv,   -- STRONG tight anchor
             t.total_fv        AS schedule_total,        -- secondary tight anchor
             f.total_assets    AS total_assets,          -- LOOSE bound anchor
@@ -339,9 +370,10 @@ def write_outputs(con: duckdb.DuckDBPyConnection) -> None:
         f"""
         COPY (
             SELECT cik, report_date, anchor_tier, gate_status, sum_included,
+                   source_included_fv, source_minus_unified,
                    companyfacts_inv_fv, schedule_total, tight_anchor,
                    anchor_crosscheck_pct, tight_residual_pct,
-                   total_assets, invested_ratio, n_rows, n_included
+                   total_assets, invested_ratio, unified_rows, n_rows, n_included
             FROM residual
             ORDER BY anchor_tier,
                      abs(COALESCE(sum_included - tight_anchor, 0)) DESC
