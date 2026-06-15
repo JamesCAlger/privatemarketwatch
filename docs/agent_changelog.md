@@ -2236,3 +2236,23 @@ User-approved audited download to make the iXBRL contextRef anchor usable for al
   IDX14,XS*,RI01-07,F10/11/12/17/20,nonaccrual recon). (4) checks built on the
   known-unreliable highlights balance-sheet fields flagged. (5) silent-mutation
   guards flagged as highest corruption risk.
+
+### 2026-06-15 -- Parametric conservation gate engine (de-dup FV + cost)
+
+- Added scripts/shadow_conservation_engine.py: one read-only engine for the
+  "Sum(value column over unified BDC rows) reconciles to an independent fund-level
+  total" pattern. Each check is a data-only ConservationRule(name, value_column,
+  anchors[, tolerance, tier]); anchors are priority-ordered {fund_financials column |
+  schedule_total value}. The engine is generic -- adding a column to validate is
+  adding a rule, no new code. Consolidates the ~12 scattered FV/GAV implementations
+  (A04, E01, E02, V7, F20, GAV adapters, R07, html aggregate_fv, nonaccrual chart
+  gate, shadow FV gate) plus the cost variant.
+- Rules shipped: fv_conservation (fair_value vs companyfacts investments_at_fv,
+  fallback schedule total) -- 453 reconcile / 203 overshoot / 108 undershoot / 81
+  no_anchor, median ratio 1.0 (reproduces the standalone FV gate); cost_conservation
+  (cost vs schedule total cost) -- 60 reconcile / 54 undershoot / 29 overshoot / 702
+  no_anchor, median 0.9999. Output: data/output/shadow/conservation_gate_results.csv
+  (one row per rule x CIK-quarter, tagged rule_name/value_column/tier/enforcement).
+- Note: pct_of_net_assets is a SIBLING (per-row identity FV=pct*NA), a different
+  shape than pure sum-conservation; it would extend the engine, not drop in as a
+  plain rule. Engine is read-only; data/output/shadow is gitignored.
