@@ -2256,3 +2256,26 @@ User-approved audited download to make the iXBRL contextRef anchor usable for al
 - Note: pct_of_net_assets is a SIBLING (per-row identity FV=pct*NA), a different
   shape than pure sum-conservation; it would extend the engine, not drop in as a
   plain rule. Engine is read-only; data/output/shadow is gitignored.
+
+### 2026-06-15 -- Parametric per-row identity gate engine
+
+- Added scripts/shadow_identity_engine.py: sibling to the conservation engine.
+  Checks an algebraic relationship AMONG fields of a single row (optionally + one
+  per-quarter scalar join), per row, self-localizing -- catches field errors a
+  sum check is blind to. A check is data: IdentityRule(name, table, needed_cols,
+  holds_sql, residual_sql, [scalar], row_filter). Skips rules whose columns are
+  absent (safe across schema variation). Read-only; output
+  data/output/shadow/identity_gate_violations.csv.
+- Shipped rules + results (77 v3-wrapped cohort): pct_of_net_assets_identity
+  (FV=pct/100*net_assets) 13,136/99,371 violations 13.2%; pik_le_interest_rate
+  823/13,584 6.1%; nav_identity (nav*shares=net_assets) 83/2,135 3.9%;
+  income_identity (NII=TII-total_expenses) 298/1,162 25.7%; balance_sheet_identity
+  (TA-TL=net_assets, companyfacts) 86/2,029 4.2%.
+- Findings: balance_sheet holds 95.8% on companyfacts (vs 4.3% on the broken
+  highlights fields) -- confirms reliable source; pct identity also flags leaked
+  subtotals (bare 'Debt' category rows, e.g. 0001920453 ~$1.6B residual) so it
+  doubles as a population-error detector, self-localized; income_identity 26%
+  violation is a new signal (likely expense-scope definitional gap).
+- Caveat: these are tight in FORM but violation rates are partly definitional
+  (total_expenses scope, pik-vs-all-in rate convention), so each needs a
+  truth-set/precision pass before promotion to a blocking gate.
