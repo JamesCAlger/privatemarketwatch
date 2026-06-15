@@ -2312,3 +2312,22 @@ Made the iXBRL row-anchor self-describing about confidence (four-state design; n
 - Measured (2025-12-31): Blackstone maturity 1898 value / 1 vneeded / 114 blank; BX Secured Lending 606/0/68; FS KKR 496/114/114; Main Street 0/508/159 (header undetected -> all flagged, NOT trusted -- the safe failure).
 - Tests: test_bdc_xbrl_html_bridge_fields.py +5 -> 16; full bridge suite 28 pass.
 - NEXT: flat<->inline join for `not_found`; standing-exception `ensure_inline_doc`; per-CIK shadow-list overrides (e.g. Main Street header); lien/sector subtotal reconciliation; consume only status=value into staging.
+
+### 2026-06-15 -- Unified tier-tagged validation-results runner
+
+- Added scripts/shadow_validation_runner.py: wires the three parametric engines
+  (conservation, identity, cross_source) into ONE run over a shared DuckDB
+  connection and normalizes their outputs into a single validation-results ledger:
+  engine | rule_name | tier | enforcement | cik | period_kind | period | status
+  (pass|fail|skip) | metric | metric_name | n_units. Read-only; nothing blocks the
+  build -- it measures. Outputs data/output/shadow/validation_results_ledger.csv
+  and validation_results_summary.csv (per engine x rule: pass/fail/skip + fail%).
+- Run (77 v3-wrapped cohort): 14,653 check-results across 15 rules (2 conservation
+  + 5 identity + 8 cross_source, all ran). Tier=tight rollup: conservation
+  513 pass / 394 fail / 783 skip(no_anchor); identity 5,492 pass / 921 fail;
+  cross_source 6,363 pass / 187 fail.
+- This is the read-only panel the consolidation built toward: tight fails are the
+  promotion-to-blocking queue; weak checks (from the validation_inventory) would
+  graduate into the same ledger as flags with per-rule precision tracking; the
+  4 pipeline gate engines (conservation/identity/cross_source + source_reconciliation
+  match engine) consolidate the ~12 GAV/identity/cross-source duplicate impls.
