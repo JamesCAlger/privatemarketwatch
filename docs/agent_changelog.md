@@ -6,6 +6,14 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- "15 leaked category headers" resolved: MidCap flattened-identifier issuer mis-parse
+
+- Investigated the 15 agg_header_high names present in cohort unified holdings. They are NOT subtotal leaks: all 122 rows are BDC, all carry full instrument detail (real positions), FV is not inflated.
+- Root cause: issuer_name MIS-PARSE -- the borrower was set to the sector instead of the company. Concentrated in CIK 0001278752 = MidCap Financial Investment Corp (111/122 rows, $989M/$1.05B). Format `{Sector} - {Subsector} {Company} {Type}`; parser kept the leading sector (e.g. issuer_name="Consumer Goods" on 62 distinct companies = $470M).
+- MidCap is in held_back_ciks (NOT published), so the index is not corrupted; but unified_holdings borrower identity is wrong for ~$1B. Company is recoverable from bdc_investment_identifier / instrument_description.
+- Remedy (wrapper-skill work): per-CIK wrapper parse rule for MidCap to assign company (not sector) to issuer_name, validated against source filing; re-run gate; consider re-admitting MidCap. Detail in data_investigation_results.md. No code change this entry.
+
+
 ### 2026-06-16 -- Path B: investments_at_cost promoted into fund_financials (production)
 
 - **`pipeline/extract_companyfacts.py`:** added `investments_at_cost` (exact concept `InvestmentOwnedAtCost`, no fallback -- the affiliate-only alternative would understate) to `_PORTFOLIO_CONCEPTS`, so it flows through `_EXTENDED_FIELDS` everywhere automatically (extraction, empty-DF columns, fund_financials passthrough/seed-null SQL).
