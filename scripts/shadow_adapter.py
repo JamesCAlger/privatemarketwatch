@@ -21,6 +21,7 @@ from __future__ import annotations
 import logging
 
 from pipeline.config import (
+    FUND_FINANCIALS_VALIDATION_CURRENT_FILE,
     ORACLE_CHECK_RESULTS_FILE,
     ROW_VALIDATION_ISSUES_FILE,
     SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
@@ -179,7 +180,43 @@ def _row_issues_select() -> str | None:
     """
 
 
+def _fund_financials_select() -> str | None:
+    """Fund-financials validation checks (NAV, returns, balance-sheet identities).
+
+    Unlike row_validation, `status` here is a real outcome (PASS/FAIL/SKIP); the
+    rule's configured importance lives in `severity` (FAIL=hard / WARN=advisory /
+    INFO / null) and certainty in `evidence_strength`. One row per
+    (cik, report_date, check_code) already, so aggregation is mostly a safety net.
+    tier=tight only for FAIL-severity (hard identity) checks; the runner surfaces
+    failures by the check's own severity + evidence rather than the heuristic. This
+    cross-checks the identity engine's nav/income/balance-sheet rules with the
+    existing audited fund-financials implementation.
+    """
+    f = FUND_FINANCIALS_VALIDATION_CURRENT_FILE
+    if not f.exists():
+        logger.info("adapter: fund_financials_validation_current absent -- skip")
+        return None
+    period = "COALESCE(CAST(report_date AS VARCHAR), CAST(report_quarter AS VARCHAR), '')"
+    return f"""
+    SELECT 'fund_financials' AS engine, CAST(check_code AS VARCHAR) AS rule_name,
+           CASE WHEN bool_or(upper(severity) = 'FAIL') THEN 'tight' ELSE 'weak' END AS tier,
+           'advisory' AS enforcement,
+           COALESCE(CAST(cik AS VARCHAR), '(global)') AS cik,
+           'report_date' AS period_kind,
+           {period} AS period,
+           CASE WHEN bool_or(upper(status) = 'FAIL') THEN 'fail'
+                WHEN bool_or(upper(status) = 'PASS') THEN 'pass'
+                ELSE 'skip' END AS status,
+           CAST(count(*) AS DOUBLE) AS metric, 'check_rows' AS metric_name,
+           count(*) AS n_units,
+           lower(any_value(mechanism)) AS mechanism,
+           lower(COALESCE(any_value(evidence_strength), '')) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY check_code, cik, {period}
+    """
+
+
 def adapter_selects() -> list[str]:
     """Return normalized ledger-schema SELECT fragments for every available source."""
     return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select(),
-                        _row_issues_select()) if s]
+                        _row_issues_select(), _fund_financials_select()) if s]

@@ -53,13 +53,16 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 #   row_fail_<e>         : validate_holdings FAIL-severity row issue, graded by its
 #                          own evidence_strength (strong/moderate/weak)
 #   row_warn_<e>         : validate_holdings WARN-severity row issue (advisory bulk)
+#   ffv_fail_<e>         : fund_financials check failed; ffv_fail_strong = FAIL-severity
+#                          (hard) check, else graded by the check's evidence_strength
 #   corroborated         : weak warn co-located with a tight fail at same cik+period
 #   scope_caveat         : rule is known definitional/scope-heavy -> suppress
 #   lone_weak            : weak warn, no corroboration -> low confidence (noise)
 # surface = {confirmed_impossible, tight_anchor, corroborated,
 #            source_blocking_high, source_blocking_medium,
-#            row_block_verified, row_fail_strong, row_fail_moderate} (low-confidence
-#            source residuals + row WARN bulk + weak fails are not surfaced).
+#            row_block_verified, row_fail_strong, row_fail_moderate,
+#            ffv_fail_strong, ffv_fail_moderate} (low-confidence source residuals,
+#            row WARN bulk, and weak/null-evidence fails are not surfaced).
 # These are PROXIES; real precision still needs the source-adjudicated gold set
 # that the Part B review loop accrues.
 # ---------------------------------------------------------------------------
@@ -163,7 +166,8 @@ def main(argv: list[str] | None = None) -> int:
         CREATE TABLE ledger_scored AS
         SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated',
                                   'source_blocking_high','source_blocking_medium',
-                                  'row_block_verified','row_fail_strong','row_fail_moderate')) AS surface
+                                  'row_block_verified','row_fail_strong','row_fail_moderate',
+                                  'ffv_fail_strong','ffv_fail_moderate')) AS surface
         FROM (
             WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
             SELECT l.*,
@@ -177,6 +181,10 @@ def main(argv: list[str] | None = None) -> int:
                     WHEN l.engine='row_validation' AND l.mechanism='block_verified' THEN 'row_block_verified'
                     WHEN l.engine='row_validation' AND l.status='fail' THEN 'row_fail_' || COALESCE(l.src_confidence, 'na')
                     WHEN l.engine='row_validation' THEN 'row_warn_' || COALESCE(l.src_confidence, 'na')
+                    -- fund_financials: status=fail is the outcome; tier=tight marks a FAIL-severity
+                    -- (hard) check, otherwise grade by the check's own evidence_strength.
+                    WHEN l.engine='fund_financials' AND l.status='fail' AND l.tier='tight' THEN 'ffv_fail_strong'
+                    WHEN l.engine='fund_financials' AND l.status='fail' THEN 'ffv_fail_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
                     WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
                     WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
                     WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'

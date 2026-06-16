@@ -6,6 +6,14 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Shadow adapter ingests fund_financials validation checks
+
+- **What changed:** new `_fund_financials_select()` in `scripts/shadow_adapter.py` ingests `fund_financials_validation_current.csv` (151K rows, NAV / returns / balance-sheet identity checks). Wired into `adapter_selects()` as the 5th adapter.
+- **Mapping (differs from row_validation):** here `status` is a real outcome (PASS/FAIL/SKIP), `severity` is the rule's configured importance (FAIL=hard / WARN=advisory / INFO / null), and `evidence_strength` the certainty. Already at `(cik, report_date, check_code)` grain (24 checks, ~150K groups). `tier=tight` only for FAIL-severity (hard) checks; `status` maps fail/pass/skip directly; `src_confidence` carries evidence_strength.
+- **Confidence/surface:** runner scoring defers to the check's own grading -- `ffv_fail_strong` (FAIL-severity hard check) and `ffv_fail_<evidence>` otherwise. Surface adds `ffv_fail_strong` + `ffv_fail_moderate`; `ffv_fail_weak`/null-evidence fails are NOT surfaced. Cross-checks the identity engine's nav/income/balance-sheet rules against the existing audited fund-financials implementation.
+- **Result counts:** fund_financials contributes 95 tight fails + 10,431 weak fails + 76,676 pass + 63,659 skip. Surfaced: 95 `ffv_fail_strong` + 6,863 `ffv_fail_moderate` = 6,958; 3,568 weak fails suppressed. Several MODERATE checks (F28, F20-25) fail at cik-quarter scale -- candidates for the per-adapter false-positive assessment phase. Ledger total 202,936 results across 211 distinct checks; 11,412 of 33,872 flagged surfaced (66% suppressed).
+- **Adapters wired now:** oracle, validation_rules, source_recon (rich residuals), row_validation, fund_financials. Read-only; outputs under `data/output/shadow/` only.
+
 ### 2026-06-16 -- Shadow adapter ingests validate_holdings row-level issues
 
 - **What changed:** new `_row_issues_select()` in `scripts/shadow_adapter.py` ingests `row_validation_issues.csv` (959K rows, the validate_holdings row-grain the four engines lack). Wired into `adapter_selects()` as a 4th adapter.
