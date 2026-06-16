@@ -61,10 +61,16 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 #   cons_gav_cleared     : conservation FV fail that gav_recon (the mature impl) clears
 #                          -> false positive, not surfaced (~80% of conservation fails)
 #   gav_fail_<e> / gav_over_coverage : holdings GAV reconciliation fail / positions
-#                          exceeding the denominator (FV inflation); under_coverage
-#                          (incomplete extraction) -> gav_other (not surfaced)
-#   agg_header_<c>       : reviewed AGGREGATE_HEADER verdict, graded by review confidence
-#   corroborated         : weak warn co-located with a tight fail at same cik+period
+#                          exceeding the denominator (FV inflation), MATERIAL (>=5%)
+#                          only; sub-5% residuals + under_coverage -> gav_minor (not surfaced)
+#   agg_header_<c>       : reviewed AGGREGATE_HEADER verdict that actually appears in
+#                          cohort unified holdings (a real leak); already-excluded names
+#                          -> agg_header_excluded (not surfaced)
+#   corroborated         : weak warn co-located with a tight fail, EXCLUDING nonaccrual
+#                          (a credit fact) and pure column-format warns (co-location noise)
+#   cons_superseded      : conservation engine fail -> retired from surfacing; gav_recon
+#                          is the FV-reconciliation authority (engine was ~80% FP)
+#   xs_highlights_unreliable : cross_source check vs the broken bdc_fund_highlights -> not surfaced
 #   scope_caveat         : rule is known definitional/scope-heavy -> suppress
 #   lone_weak            : weak warn, no corroboration -> low confidence (noise)
 # surface = {confirmed_impossible, tight_anchor, corroborated,
@@ -77,7 +83,10 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 # ---------------------------------------------------------------------------
 CONFIRMED_IMPOSSIBLE = {"R07", "E02"}   # positions FV > fund total assets -> impossible
 SCOPE_CAVEAT = {"income_identity", "pct_position_concentration",
-                "fmt_pct_of_net_assets", "dl_rate_fill"}  # definitional / scope-heavy
+                "fmt_pct_of_net_assets", "dl_rate_fill",
+                # denominator-basis identity (median 14.6% row-violation, up to 100%);
+                # definitional for high-violation CIKs -- assessment 2026-06-16.
+                "pct_of_net_assets_identity"}  # definitional / scope-heavy
 
 
 def _sql_set(s: set[str]) -> str:
@@ -203,7 +212,26 @@ def main(argv: list[str] | None = None) -> int:
 
     con.execute("CREATE TABLE ledger AS " + " UNION ALL ".join(parts))
 
-    # Bootstrap confidence scoring (no truth set; see header).
+    # For aggregate_header localization: the verdict catalog is name-keyed and ~98%
+    # of confirmed-aggregate names are already excluded from production. Surface only
+    # those that ACTUALLY appear as a cohort unified-holdings issuer (a real leak).
+    uni = OUTPUT_DIR / "private_markets_holdings.csv"
+    if uni.exists():
+        con.execute(
+            f"""CREATE TABLE uni_agg_names AS
+                SELECT DISTINCT lower(trim(issuer_name)) AS name_key
+                FROM read_csv_auto('{uni.as_posix()}', sample_size=-1)
+                WHERE lpad(CAST(cik AS VARCHAR), 10, '0') IN (SELECT cik FROM wrapped)"""
+        )
+    else:
+        con.execute("CREATE TABLE uni_agg_names(name_key VARCHAR)")
+    logger.info("uni_agg_names: %d cohort issuer keys for agg_header localization",
+                con.execute("SELECT count(*) FROM uni_agg_names").fetchone()[0])
+
+    # Bootstrap confidence scoring (no truth set; see header). Remedies 2026-06-16
+    # applied: same-axis corroboration, drop highlights-based cross_source, retire
+    # conservation (superseded by gav_recon), scope pct_of_net_assets_identity,
+    # localize agg_header, threshold gav residuals at 5%.
     con.execute(
         f"""
         CREATE TABLE ledger_scored AS
@@ -214,15 +242,15 @@ def main(argv: list[str] | None = None) -> int:
                                   'gav_fail_strong','gav_fail_moderate','gav_over_coverage',
                                   'agg_header_high','agg_header_medium')) AS surface
         FROM (
-            WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail'),
-                 -- gav_recon is the mature FV reconciliation; where it PASSES, a
-                 -- conservation-engine FV fail at the same cik+period is a false positive
-                 -- (assessment 2026-06-16: ~80% of conservation FV fails are gav-cleared).
-                 gav_ok AS (SELECT DISTINCT cik, period FROM ledger
-                            WHERE engine='gav_recon' AND status='pass')
+            WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
             SELECT l.*,
                 CASE
                     WHEN l.status NOT IN ('fail','warn') THEN NULL
+                    -- conservation is superseded by gav_recon (the mature FV reconciliation
+                    -- with subsidiary/multi-denominator scope); assessment 2026-06-16 found
+                    -- it ~80% false-positive, and cost_conservation has no cross-check.
+                    -- Retired from surfacing (kept in ledger as advisory).
+                    WHEN l.engine='conservation' AND l.status='fail' THEN 'cons_superseded'
                     -- source_reconciliation classifies its own residuals (blocking_issue +
                     -- mechanism + confidence); defer to it rather than the bootstrap heuristic.
                     WHEN l.engine='source_recon' THEN 'source_blocking_' || COALESCE(l.src_confidence, 'na')
@@ -235,29 +263,40 @@ def main(argv: list[str] | None = None) -> int:
                     -- (hard) check, otherwise grade by the check's own evidence_strength.
                     WHEN l.engine='fund_financials' AND l.status='fail' AND l.tier='tight' THEN 'ffv_fail_strong'
                     WHEN l.engine='fund_financials' AND l.status='fail' THEN 'ffv_fail_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
-                    -- gav reconciliation: hard fails + over_coverage (positions exceed the
-                    -- denominator = FV inflation) surface; under_coverage (incomplete
-                    -- extraction) does not.
-                    WHEN l.engine='gav_recon' AND l.status='fail' THEN 'gav_fail_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
-                    WHEN l.engine='gav_recon' AND l.mechanism='over_coverage' THEN 'gav_over_coverage'
-                    WHEN l.engine='gav_recon' THEN 'gav_other'
-                    -- aggregate_header: confirmed subtotal/header (fail) surfaces by review
-                    -- confidence; JV_SUBSIDIARY (warn) is a classification, not a defect.
-                    WHEN l.engine='aggregate_header' AND l.mechanism='aggregate_header' THEN 'agg_header_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
+                    -- cross_source checks against bdc_fund_highlights are unreliable: the
+                    -- highlights artifact is broken (xs_nav median pct_diff 99.9%), so a
+                    -- disagreement flags the reference, not the holdings. Not surfaced.
+                    WHEN l.engine='cross_source' AND l.rule_name LIKE '%highlights%' THEN 'xs_highlights_unreliable'
+                    -- gav reconciliation: only MATERIAL residuals (>=5%) surface. Within the
+                    -- wrapped cohort over_coverage is 0.2-2% (FV-vs-NAV-basis noise, not
+                    -- gross leakage); thresholding keeps the panel honest.
+                    WHEN l.engine='gav_recon' AND l.status='fail' AND abs(l.metric) >= 5
+                         THEN 'gav_fail_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
+                    WHEN l.engine='gav_recon' AND l.mechanism='over_coverage' AND abs(l.metric) >= 5
+                         THEN 'gav_over_coverage'
+                    WHEN l.engine='gav_recon' THEN 'gav_minor'
+                    -- aggregate_header: surface a confirmed AGGREGATE_HEADER only if the name
+                    -- actually appears in cohort unified holdings (a real leak); names already
+                    -- excluded -> agg_header_excluded. JV_SUBSIDIARY is a classification, not
+                    -- a defect.
+                    WHEN l.engine='aggregate_header' AND l.mechanism='aggregate_header' AND uan.name_key IS NOT NULL
+                         THEN 'agg_header_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
+                    WHEN l.engine='aggregate_header' AND l.mechanism='aggregate_header' THEN 'agg_header_excluded'
                     WHEN l.engine='aggregate_header' THEN 'agg_jv'
-                    -- conservation FV fail that the mature gav_recon clears -> false positive.
-                    WHEN l.engine='conservation' AND l.rule_name='fv_conservation' AND l.status='fail'
-                         AND go.cik IS NOT NULL THEN 'cons_gav_cleared'
                     WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
                     WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
                     WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'
-                    WHEN l.tier='weak' AND l.status='warn' AND tf.cik IS NOT NULL THEN 'corroborated'
+                    -- corroboration requires the weak warn to be domain-adjacent, not just
+                    -- co-located: nonaccrual (a credit fact) and pure column-format warns at a
+                    -- troubled fund-quarter are not validated by an unrelated tight fail.
+                    WHEN l.tier='weak' AND l.status='warn' AND tf.cik IS NOT NULL
+                         AND l.engine NOT IN ('nonaccrual','weak') THEN 'corroborated'
                     WHEN l.tier='weak' AND l.status='warn' THEN 'lone_weak'
                     ELSE 'other'
                 END AS confidence
             FROM ledger l
             LEFT JOIN tf ON l.cik=tf.cik AND l.period=tf.period
-            LEFT JOIN gav_ok go ON l.cik=go.cik AND l.period=go.period
+            LEFT JOIN uni_agg_names uan ON lower(trim(l.cik))=uan.name_key
         )
         """
     )

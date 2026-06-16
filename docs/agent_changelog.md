@@ -6,6 +6,18 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Shadow panel: remedy pass (surfaced 6,441 -> 3,376, 91% suppressed)
+
+Applied the six remedies from the assessment to `scripts/shadow_validation_runner.py` (surfacing/confidence logic only; read-only panel):
+- **Same-axis corroboration:** corroboration now excludes `nonaccrual` (a credit fact) and the `weak` format engine (co-location noise). corroborated 1,567 -> 163 (now only fund_strategy 97 + html_carry 66, domain-adjacent).
+- **Drop highlights-based cross_source:** `cross_source` rules matching `%highlights%` -> `xs_highlights_unreliable` (not surfaced). They compare against the broken bdc_fund_highlights (xs_nav median pct_diff 99.9%). 187 suppressed.
+- **Retire conservation engine:** all conservation fails -> `cons_superseded` (not surfaced); gav_recon is the FV-reconciliation authority (engine was ~80% FP, cost_conservation had no cross-check). 417 suppressed. Removed the gav_ok CTE/cons_gav_cleared (subsumed).
+- **Scope pct_of_net_assets_identity:** added to SCOPE_CAVEAT (denominator-basis, median 14.6% violation -> definitional). 315 -> scope_caveat.
+- **Localize agg_header:** new `uni_agg_names` table (cohort unified issuer names); surface AGGREGATE_HEADER only if the name appears in cohort holdings (15 real leaks: "u.s. corporate debt", "healthcare & pharmaceuticals", "consumer goods"...), else `agg_header_excluded` (788 suppressed). Adds one 548MB unified scan per run.
+- **Threshold gav residuals at 5%:** gav fails/over_coverage surface only if |residual_pct| >= 5%; sub-5% (cohort over_coverage is 0.2-2%) + under_coverage -> `gav_minor` (1,338 suppressed). gav_fail_strong 5 -> 1 (the +8.87% case); gav_over_coverage 218 -> 0.
+- **Result:** surfaced 6,441 -> 3,376. Composition: row_block_verified 1120, row_fail_moderate 861 (X06), tight_anchor 581 (html_agg + pik/balance-sheet/nav identities), source_blocking_medium 354, row_fail_strong 185 (X04), corroborated 163, ffv_fail_strong 95, agg_header_high 15, gav_fail_strong 1, confirmed_impossible 1. Ledger contract still validates 50 fragments; 'other' bucket unchanged (21 oracle + 1 vrules, pre-existing).
+- **Real finding surfaced:** the 15 agg_header_high are leaked category/sector headers in published cohort holdings (~$15B catalog FV) -- a genuine data-quality target for production.
+
 ### 2026-06-16 -- Shadow panel: complete surfaced-category assessment (no code change)
 
 - Assessed every one of the 6,441 surfaced flags (full detail in `data/output/data_investigation_results.md`). No remedies applied yet (deferred to a remedy pass per the user).
