@@ -6,6 +6,12 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Explored re-anchoring the conservation engine (validates retirement; no code change)
+
+- Tested whether re-anchoring the conservation engine on gav_recon's numerator/denominator would recover it. Detail in `data/output/data_investigation_results.md`.
+- The numerator is NOT the problem (cons.value_sum / gav numerators all median ~1.0). Swapping to gav indexable/ex_sub clears only ~13% of overshoots. The FPs are driven by (1) an over-tight 0.5% tolerance -- widening to 5% clears 48%, 10% clears 63% -- and (2) gav's per-quarter comparison-denominator selection (gav PASSES 201/248 overshoots at ~6% residual vs companyfacts).
+- Matching gav fully = reproducing gav_recon, which already covers 845/845 cohort cons rows. Re-anchoring not worth it; retirement (cons_superseded) confirmed correct. Only unique offering is cost_conservation (gav has no cost equivalent) -- if kept, cost-only with ~5% tolerance.
+
 ### 2026-06-16 -- Shadow panel: remedy pass (surfaced 6,441 -> 3,376, 91% suppressed)
 
 Applied the six remedies from the assessment to `scripts/shadow_validation_runner.py` (surfacing/confidence logic only; read-only panel):
