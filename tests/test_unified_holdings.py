@@ -5780,6 +5780,30 @@ class TestAssetClass:
         ])
         assert result[0][1] == "CASH"
 
+    def test_asset_category_cash_routes_to_cash(self):
+        """Rows staged with asset_category='CASH' classify as CASH / LIQUID
+        regardless of issuer text -- this is the retained-cash bucket path."""
+        result = _sql_classify([
+            {"asset_category": "CASH", "issuer_category": "CORPORATE",
+             "issuer_name": "First American Government Obligations Fund",
+             "instrument_description": ""}
+        ], include_index=True)
+        index_classification, exposure_type, asset_class = result[0]
+        assert index_classification == "CASH"
+        assert asset_class == "CASH"
+        assert exposure_type == "LIQUID"
+
+    def test_asset_category_cash_does_not_affect_loans(self):
+        """False-positive guard: a normal corporate loan is unaffected by the
+        new asset_category='CASH' branch."""
+        result = _sql_classify([
+            {"asset_category": "LOAN", "issuer_category": "CORPORATE",
+             "issuer_name": "Acme Corp", "instrument_description": "First Lien Term Loan"}
+        ], include_index=True)
+        index_classification, _exposure_type, asset_class = result[0]
+        assert index_classification == "DIRECT_LENDING"
+        assert asset_class == "PRIVATE_CREDIT"
+
     def test_fund_no_signals_other(self):
         """Fund with no credit/PE signals -> OTHER (asset_class)."""
         result = _sql_classify([
@@ -10071,8 +10095,13 @@ class TestWrapperNonPrivateMarketFiltering:
             data.append(full_row)
         return pd.DataFrame(data)
 
-    def test_wrapper_non_private_treasury_excluded(self):
-        """U.S. Treasury row for a wrapper CIK is dropped by wrapper filter."""
+    def test_wrapper_non_private_treasury_retained_as_cash(self):
+        """U.S. Treasury row for a wrapper CIK is retained, marked asset_category=CASH.
+
+        Cash equivalents are no longer dropped: they persist into the unified
+        holdings as a Cash bucket (analytics-only) and are excluded from the
+        position-level indices downstream by position matching.
+        """
         df = self._make_bdc_df([
             {"investment_identifier": "U.S. Treasury Bill 2025-06-15",
              "cik": self._WRAPPER_CIK, "fair_value": 500000},
@@ -10080,8 +10109,12 @@ class TestWrapperNonPrivateMarketFiltering:
              "cik": self._WRAPPER_CIK, "fair_value": 1000000},
         ])
         result = _prepare_bdc(df)
-        assert len(result) == 1
-        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+        assert len(result) == 2
+        by_id = {r["bdc_investment_identifier"]: r for _, r in result.iterrows()}
+        treasury = next(v for k, v in by_id.items() if "Treasury" in str(k))
+        assert treasury["asset_category"] == "CASH"
+        acme = next(v for k, v in by_id.items() if "Acme" in str(k))
+        assert acme["asset_category"] in ("LOAN", "DEBT")
 
     def test_wrapper_non_private_does_not_affect_non_wrapper_cik(self):
         """Same treasury identifier for a non-wrapper CIK is NOT dropped."""
@@ -10097,7 +10130,11 @@ class TestWrapperNonPrivateMarketFiltering:
         assert len(result) == 2
 
     def test_wrapper_non_private_false_positive_guard(self):
-        """Row with 'Cash + PIK Interest Rate 5%' survives the cash guard."""
+        """Row with 'Cash + PIK Interest Rate 5%' is a loan, NOT a cash bucket.
+
+        False-positive guard: a loan whose coupon mix mentions 'Cash + PIK'
+        must survive as a debt position and must NOT be marked asset_category=CASH.
+        """
         df = self._make_bdc_df([
             {"investment_identifier": "Acme Corp - Senior Secured First Lien, Cash + PIK Interest Rate 5.00%",
              "cik": self._WRAPPER_CIK, "fair_value": 1000000,
@@ -10105,9 +10142,10 @@ class TestWrapperNonPrivateMarketFiltering:
         ])
         result = _prepare_bdc(df)
         assert len(result) == 1
+        assert result.iloc[0]["asset_category"] != "CASH"
 
-    def test_global_mm_keyword_still_works(self):
-        """Row with 'Money Market' for any CIK is still dropped by global filter."""
+    def test_global_mm_keyword_retained_as_cash(self):
+        """Row with 'Money Market' for any CIK is retained, marked asset_category=CASH."""
         df = self._make_bdc_df([
             {"investment_identifier": "Goldman Sachs Money Market Fund",
              "cik": self._NON_WRAPPER_CIK, "fair_value": 500000},
@@ -10115,8 +10153,12 @@ class TestWrapperNonPrivateMarketFiltering:
              "cik": self._NON_WRAPPER_CIK, "fair_value": 1000000},
         ])
         result = _prepare_bdc(df)
-        assert len(result) == 1
-        assert result.iloc[0]["issuer_name"] == "Acme Corp"
+        assert len(result) == 2
+        by_id = {r["bdc_investment_identifier"]: r for _, r in result.iterrows()}
+        mm = next(v for k, v in by_id.items() if "Money Market" in str(k))
+        assert mm["asset_category"] == "CASH"
+        acme = next(v for k, v in by_id.items() if "Acme" in str(k))
+        assert acme["asset_category"] in ("LOAN", "DEBT")
 
 
 # ---------------------------------------------------------------------------

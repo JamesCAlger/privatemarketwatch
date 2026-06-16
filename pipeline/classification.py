@@ -510,6 +510,7 @@ def _sql_classify_index() -> str:
     nac_eq = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) IN ('EC', 'EP')"
 
     return f"""CASE
+  WHEN asset_category = 'CASH' THEN 'CASH'
   WHEN {sc_kw} THEN 'STRUCTURED_CREDIT'
   WHEN issuer_category = 'GOVERNMENT' OR {cash_kw} THEN 'CASH'
   WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'CASH'
@@ -571,6 +572,7 @@ def _sql_classify_exposure_type() -> str:
     cash_kw = _sql_keyword_check("_combined_fund_text", _CASH_KEYWORDS)
     cash_guard_kw = _sql_keyword_check("_combined_fund_text", _CASH_CORPORATE_GUARD_KEYWORDS)
     return f"""CASE
+  WHEN asset_category = 'CASH' THEN 'LIQUID'
   WHEN issuer_category = 'GOVERNMENT' THEN 'LIQUID'
   WHEN {cash_kw} THEN 'LIQUID'
   WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'LIQUID'
@@ -614,6 +616,7 @@ def _sql_classify_asset_class() -> str:
     nac_eq = "UPPER(TRIM(CAST(nport_asset_cat AS VARCHAR))) IN ('EC', 'EP')"
 
     return f"""CASE
+  WHEN asset_category = 'CASH' THEN 'CASH'
   WHEN issuer_category = 'GOVERNMENT' OR {cash_kw} THEN 'CASH'
   WHEN issuer_category != 'CORPORATE' AND {cash_guard_kw} THEN 'CASH'
   WHEN {re_kw} THEN 'REAL_ESTATE'
@@ -816,6 +819,11 @@ def _classify_index(asset_category: str, issuer_category: str,
         combined += " " + instrument_description.lower()
 
     nac = (nport_asset_cat or "").strip().upper()
+
+    # Cash equivalents staged with asset_category='CASH' (money-market / treasury
+    # / cash-deposit rows retained for analytics) always classify as CASH.
+    if asset_category == "CASH":
+        return "CASH"
 
     # Structured credit (check first -- CLO tranches should not fall into DIRECT_LENDING)
     has_sc = any(kw in combined for kw in _STRUCTURED_CREDIT_KEYWORDS)

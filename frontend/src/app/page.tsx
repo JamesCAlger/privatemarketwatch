@@ -124,10 +124,17 @@ export default function HomePage() {
   const instrumentRaw: { label: string; fv: number }[] = [
     { label: 'First Lien Senior Loans', fv: lien ? dlFv * lien.firstLien : dlFv },
     { label: 'Second Lien Loans', fv: lien ? dlFv * lien.secondLien : 0 },
+    { label: 'Subordinated Loans', fv: lien ? dlFv * (lien.subordinated ?? 0) : 0 },
     { label: 'Unsecured Loans', fv: lien ? dlFv * lien.unsecured : 0 },
+    { label: 'Direct Lending (lien unreported)', fv: lien ? dlFv * (lien.unknown ?? 0) : 0 },
     { label: 'Structured Credit', fv: (sectorBreakdown['STRUCTURED_CREDIT'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
     { label: 'Preferred Equity', fv: (sectorBreakdown['PREFERRED_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
     { label: 'Common Equity', fv: (sectorBreakdown['COMMON_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
+    // Cash & equivalents — analytics-only bucket, never an index constituent.
+    { label: 'Cash & Equivalents', fv: portfolioCharacteristics?.cashFv ?? 0 },
+    // Portfolio derivatives (TRS, FX forwards, options) — analytics-only, net FV.
+    // The BDC's own financing/rate hedges are excluded from the portfolio view.
+    { label: 'Portfolio Derivatives', fv: portfolioCharacteristics?.portfolioDerivativeFv ?? 0 },
     {
       label: 'Other',
       fv: ['DIRECT_REAL_ESTATE', 'PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'UNCLASSIFIED']
@@ -210,7 +217,7 @@ export default function HomePage() {
               {instrumentDonutItems.length > 0 && (
                 <div className="bg-white border border-rule p-7">
                   <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Instrument type</h3>
-                  <p className="text-xs text-ink3 mt-2 mb-3">{instrumentDonutItems.length} categories &middot; share of indexed fair value</p>
+                  <p className="text-xs text-ink3 mt-2 mb-3">{instrumentDonutItems.length} categories &middot; share of portfolio fair value (incl. cash)</p>
                   <ProportionDonut items={instrumentDonutItems} centerStat={instrumentCenterStat} />
                   <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
                     Other includes real estate holdings, indirect exposure via credit and equity fund vehicles, and opaque SPVs such as co-investment JVs and feeder funds.

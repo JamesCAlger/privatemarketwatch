@@ -706,6 +706,16 @@ def main() -> None:
         except Exception as exc:
             logger.error("BDC sector breakdown failed: %s", exc,
                          exc_info=True)
+
+        # Fund-level derivatives + role classification (analytics-only; never
+        # index constituents). Runs after fund financials so the notional-to-debt
+        # gate has borrowings available. Cache-only.
+        try:
+            from pipeline.bdc_derivatives import extract_bdc_derivatives
+            extract_bdc_derivatives()
+        except Exception as exc:
+            logger.error("BDC derivatives extraction failed: %s", exc,
+                         exc_info=True)
         logger.info("Fund financials step completed in %.1f s",
                      time.time() - t7b_fin)
 

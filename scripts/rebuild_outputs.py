@@ -76,6 +76,21 @@ def rebuild_income():
     return fund_income_df, fee_uplift_df
 
 
+def rebuild_derivatives():
+    """Rebuild fund-level BDC derivatives + role classification from cached XBRL.
+
+    Analytics-only artifact (bdc_derivatives.csv). Does NOT touch unified
+    holdings, position matching, or the indices.
+    """
+    from pipeline.bdc_derivatives import extract_bdc_derivatives
+
+    logger.info("=== Rebuilding BDC derivatives ===")
+    t0 = time.time()
+    df = extract_bdc_derivatives()
+    logger.info("Derivatives: %d type-rows in %.1f s", len(df), time.time() - t0)
+    return df
+
+
 def rebuild_entities():
     """Rebuild entity resolution lookup from unified holdings."""
     from pipeline.entity_resolution import build_entity_lookup
@@ -458,6 +473,8 @@ def main():
                         help="Rebuild HTML template extractions only ($0)")
     parser.add_argument("--financials", action="store_true",
                         help="Rebuild fund financials only (cache-only)")
+    parser.add_argument("--derivatives", action="store_true",
+                        help="Rebuild fund-level BDC derivatives + role classification (cache-only)")
     parser.add_argument("--refresh-ncsr", action="store_true",
                         help="With --financials/all, reparse cached N-CSR HTML before rebuilding fund financials")
     parser.add_argument("--sector-breakdown", action="store_true",
@@ -487,7 +504,7 @@ def main():
         or args.highlights_residual
         or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
-        or args.tender_offers or args.prices or args.provenance
+        or args.tender_offers or args.prices or args.provenance or args.derivatives
     )
 
     t_start = time.time()
@@ -521,6 +538,9 @@ def main():
 
     if args.sector_breakdown:
         rebuild_sector_breakdown()
+
+    if rebuild_all or args.derivatives:
+        rebuild_derivatives()
 
     if rebuild_all or args.returns:
         rebuild_returns()

@@ -1694,6 +1694,14 @@ def match_positions(
     FROM unified
     WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
       AND TRY_CAST(fair_value AS DOUBLE) != 0
+      -- Cash and derivatives are analytics-only, never index constituents.
+      -- Excluding them here (before the ROW_NUMBER _row_id assignment) keeps
+      -- the matched-position universe -- and therefore index_returns and the
+      -- return/value columns of position_returns for every real index class --
+      -- identical to before these buckets were retained. (Verified by isolation
+      -- test: only the synthetic position_id label re-sequences.)
+      AND COALESCE(CAST(asset_class AS VARCHAR), '') NOT IN ('CASH', 'DERIVATIVE')
+      AND COALESCE(CAST(index_classification AS VARCHAR), '') != 'CASH'
     """
     con.execute(sql)
 

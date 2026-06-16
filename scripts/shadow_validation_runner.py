@@ -245,7 +245,8 @@ def main(argv: list[str] | None = None) -> int:
                                   'row_block_verified','row_fail_strong','row_fail_moderate',
                                   'ffv_fail_strong','cost_conservation_fail',
                                   'gav_fail_strong','gav_fail_moderate','gav_over_coverage',
-                                  'agg_header_high','agg_header_medium')) AS surface
+                                  'agg_header_high','agg_header_medium',
+                                  'derivative_role_high','derivative_role_medium')) AS surface
         FROM (
             WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
             SELECT l.*,
@@ -296,6 +297,10 @@ def main(argv: list[str] | None = None) -> int:
                          THEN 'agg_header_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
                     WHEN l.engine='aggregate_header' AND l.mechanism='aggregate_header' THEN 'agg_header_excluded'
                     WHEN l.engine='aggregate_header' THEN 'agg_jv'
+                    -- derivative_role classifier defers to its own grade (the
+                    -- notional-to-debt gate / no-signal residual). high/medium
+                    -- surface for review; low is noise.
+                    WHEN l.engine='derivative_role' THEN 'derivative_role_' || COALESCE(l.src_confidence, 'na')
                     WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
                     WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
                     WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'

@@ -23,6 +23,7 @@ import logging
 from pipeline.config import (
     AGGREGATE_HEADER_FLAGS_FILE,
     CLASSIFICATION_VALIDATION_FILE,
+    DERIVATIVE_ROLE_REVIEW_FILE,
     FUND_FINANCIALS_VALIDATION_CURRENT_FILE,
     FUND_STRATEGY_VALIDATION_FILE,
     HOLDINGS_GAV_RECONCILIATION_FILE,
@@ -392,10 +393,40 @@ def _classification_select() -> str | None:
     """
 
 
+def _derivative_role_select() -> str | None:
+    """Uncertain derivative-role positions for agentic review (analytics-only).
+
+    The derivative_role classifier (pipeline/bdc_derivatives.py) cannot resolve
+    every position to portfolio vs. financing-hedge with high confidence -- the
+    residual (notional-to-debt contradictions, no-signal types) is written to
+    derivative_role_review.csv. This adapter routes it through the universal panel
+    like every other review step. One ledger row per (cik, report_date, mechanism);
+    `src_confidence` carries the classifier's own grade so the runner defers to it.
+    """
+    f = DERIVATIVE_ROLE_REVIEW_FILE
+    if not f.exists():
+        logger.info("adapter: derivative_role_review absent -- skip")
+        return None
+    return f"""
+    SELECT 'derivative_role' AS engine, mechanism AS rule_name,
+           'tight' AS tier, 'advisory' AS enforcement,
+           CAST(cik AS VARCHAR) AS cik, 'report_date' AS period_kind,
+           CAST(report_date AS VARCHAR) AS period,
+           'fail' AS status,
+           round(sum(TRY_CAST(net_fv AS DOUBLE)) / 1e6, 2) AS metric,
+           'uncertain_deriv_fv_m' AS metric_name,
+           count(*) AS n_units,
+           mechanism AS mechanism, lower(any_value(role_confidence)) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY cik, report_date, mechanism
+    """
+
+
 def adapter_selects() -> list[str]:
     """Return normalized ledger-schema SELECT fragments for every available source."""
     return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select(),
                         _row_issues_select(), _fund_financials_select(),
                         _html_template_select(), _gav_recon_select(),
                         _fund_strategy_select(), _nonaccrual_select(),
-                        _aggregate_header_select(), _classification_select()) if s]
+                        _aggregate_header_select(), _classification_select(),
+                        _derivative_role_select()) if s]

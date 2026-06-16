@@ -36,7 +36,9 @@ from pipeline.classification import (
     _INDUSTRY_LABELS,
     _BDC_FUND_VEHICLE_KEYWORDS,
     _BDC_FUND_VEHICLE_POS_GUARD,
+    _CASH_KEYWORDS,
     _LEGAL_SUFFIX_RE_SQL,
+    _MONEY_MARKET_KEYWORDS,
     _PIPE_INSTRUMENT_KEYWORDS,
     _is_named_coinvest,
     _sql_classify_bdc_asset,
@@ -522,6 +524,22 @@ def _prepare_bdc(
     asset_case = _sql_classify_bdc_asset()
     coinvest_expr = _sql_is_named_coinvest()
     mm_check = _sql_money_market_check()
+    # Cash-identity check: a row is a genuine cash position only when its own
+    # issuer/instrument text names a cash equivalent (money-market fund, treasury,
+    # cash deposit).  Rows that match the raw cash filter only via a trailing
+    # aggregate phrase like "Total Cash and Cash Equivalents" (filer balance-sheet
+    # reconciliation footers such as "Net Assets" / "Liabilities Less Other
+    # Assets") are NOT cash positions and must keep being dropped, not retained.
+    _cash_identity_keywords = sorted(set(_CASH_KEYWORDS) | set(_MONEY_MARKET_KEYWORDS) | {
+        "cash equivalent", "cash equivalents",
+        "government obligations", "treasury obligations",
+        "liquidity fund", "government fund", "govt fund",
+    })
+    cash_identity_check = _sql_keyword_check(
+        "(lower(trim(CAST(issuer_name AS VARCHAR))) || ' ' "
+        "|| lower(trim(CAST(instrument_description AS VARCHAR))))",
+        _cash_identity_keywords,
+    )
     industry_in = _sql_industry_label_in()
     pipe_parts = "regexp_split_to_array(_raw_id, '\\s*\\|\\s*')"
     has_pipe = "regexp_matches(_raw_id, '\\|')"
@@ -2275,12 +2293,32 @@ def _prepare_bdc(
         FROM reclassified
     ),
 
-    -- CTE 9: Filter money market funds + wrapper non-private-market rows
+    -- CTE 9: Retain genuine cash equivalents as a Cash bucket (analytics-only),
+    -- drop non-cash leaks.  Money-market-keyword rows and wrapper
+    -- non-private-market rows are candidate cash equivalents.  A candidate is
+    -- retained and stamped asset_category='CASH' ONLY when its own issuer /
+    -- instrument text names a cash equivalent (money market, treasury, cash
+    -- deposit).  Candidates that match only via a trailing aggregate phrase
+    -- (e.g. "... | Total Cash and Cash Equivalents | Net Assets") are filer
+    -- balance-sheet reconciliation footers, not positions -- they keep being
+    -- dropped, exactly as before.  Retained cash rows classify as
+    -- index_classification='CASH' / asset_class='CASH' and are NOT index
+    -- constituents (position matching excludes asset_class='CASH'), so the
+    -- position-level indices are unchanged.
     no_mm AS (
-        SELECT wr.* FROM with_reclass wr
-        LEFT JOIN _wrapper_non_private wnp ON wr._row_id = wnp._row_id
-        WHERE NOT ({mm_check})
-          AND wnp._row_id IS NULL
+        SELECT * EXCLUDE (asset_category_final, _cash_filter_match, _cash_identity),
+            CASE
+                WHEN _cash_filter_match AND _cash_identity THEN 'CASH'
+                ELSE asset_category_final
+            END AS asset_category_final
+        FROM (
+            SELECT wr.*,
+                (({mm_check}) OR wnp._row_id IS NOT NULL) AS _cash_filter_match,
+                ({cash_identity_check}) AS _cash_identity
+            FROM with_reclass wr
+            LEFT JOIN _wrapper_non_private wnp ON wr._row_id = wnp._row_id
+        )
+        WHERE NOT (_cash_filter_match AND NOT _cash_identity)
     ),
 
     -- CTE 10: Infer coupon type

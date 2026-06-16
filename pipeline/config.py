@@ -254,6 +254,10 @@ VALIDATION_RULES_DETAIL_FILE = OUTPUT_DIR / "validation_rules_detail.csv"
 VALIDATION_RULES_HISTORY_FILE = OUTPUT_DIR / "validation_rules_history.csv"
 VALIDATION_RULES_TREND_FILE = OUTPUT_DIR / "validation_rules_trend.csv"
 
+# Derivatives (analytics-only; never index constituents)
+BDC_DERIVATIVES_FILE = OUTPUT_DIR / "bdc_derivatives.csv"
+DERIVATIVE_ROLE_REVIEW_FILE = OUTPUT_DIR / "derivative_role_review.csv"
+
 # Fund-level income and fee uplift
 BDC_FUND_INCOME_FILE = OUTPUT_DIR / "bdc_fund_income.csv"
 BDC_FUND_HIGHLIGHTS_FILE = OUTPUT_DIR / "bdc_fund_highlights.csv"

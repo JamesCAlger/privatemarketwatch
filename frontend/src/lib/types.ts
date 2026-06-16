@@ -93,11 +93,29 @@ export interface PortfolioCharacteristics {
     firstLien: number;
     secondLien: number;
     unsecured: number;
+    subordinated?: number;
+    unknown?: number;
+    source?: string;
   };
   rateTypeSplit: {
     floating: number;
     fixed: number;
   };
+  /**
+   * Analytics-only buckets (NOT index constituents). Fair value of cash
+   * equivalents (money market, treasury, cash deposits) at the as-of quarter,
+   * used by the holistic portfolio-composition donut.
+   */
+  cashFv?: number | null;
+  /**
+   * Net derivative fair value by role (analytics-only; never index
+   * constituents). `portfolioDerivativeFv` (TRS, FX forwards, options) feeds the
+   * instrument donut; `financingHedge*` (the BDC's own rate/ALM hedges) are
+   * retained as data and not shown in the donut. Notional is kept separate from FV.
+   */
+  portfolioDerivativeFv?: number | null;
+  financingHedgeFv?: number | null;
+  financingHedgeNotional?: number | null;
 }
 
 /** Shared shape for concentration charts (manager, vehicle, investee) */
