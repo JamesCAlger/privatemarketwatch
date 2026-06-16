@@ -6,6 +6,15 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Shadow panel: complete surfaced-category assessment (no code change)
+
+- Assessed every one of the 6,441 surfaced flags (full detail in `data/output/data_investigation_results.md`). No remedies applied yet (deferred to a remedy pass per the user).
+- **Keep (real):** html_agg (274, extraction FV mismatch); row_validation block_verified (SRC_BDC01 missing-source-row 638, etc.) and FAIL-severity X04 (185)/X06 (861); source_blocking_medium (354); ffv_fail_strong (95).
+- **False positives:** `corroborated` (1,567) is mostly co-location noise -- 697 are nonaccrual (a credit fact, not a defect) and 707 are unrelated weak-format warns at the same fund-quarter; the rule fires on same (cik,period), not same axis. cross_source highlights-based checks (187) compare against the known-broken bdc_fund_highlights (xs_nav median pct_diff 99.9%) -- they flag a bad reference artifact, not holdings. conservation tight_anchor residual (149) remains FP-prone.
+- **Mixed/investigate:** pct_of_net_assets_identity (315, median 14.6% violation -> denominator-basis, partly definitional); agg_header_high (790) is 98% already-excluded catalog, only 15 names (~$1B: "consumer goods", "transportation"...) actually leak into cohort holdings.
+- **Marginal:** gav_over_coverage (218) residual only 0.2-2%; gav_fail (5) and confirmed_impossible R07 (0.3% over) near rounding.
+- **Proposed remedies (next):** same-axis corroboration (exclude nonaccrual/weak-format); drop highlights-based cross_source surfacing; re-anchor/retire conservation; investigate pct_of_net_assets denominator; localize agg_header to unified-present names; threshold gav_over_coverage.
+
 ### 2026-06-16 -- Shadow panel: ledger contract hardening + adapter false-positive assessment
 
 - **Hardening:** `scripts/shadow_validation_runner.py` now asserts a typed 13-column contract per fragment before the union (`_assert_ledger_contract` DESCRIBEs each SELECT; requires the exact column names in order, metric/n_units numeric, the rest VARCHAR). Validated 50 fragments; verified it catches a reordered/mistyped column instead of relying on DuckDB to coincidentally throw.
@@ -2557,3 +2566,41 @@ Validation:
 
 Apply step still pending (requires explicit go; heavy + overwrites central data):
   run extract_bdc_ixbrl_field_status() universe-wide, then rebuild unified.
+
+## 2026-06-16 - iXBRL field-status: period scoping + reconcile double-count fix + universe run
+
+Refined the producer and ran it universe-wide (cached HTML only, no downloads).
+Artifact: data/output/bdc_ixbrl_field_status.csv (1,180,533 rows, 195 CIKs, 1,922
+filings).
+
+Refinement (pipeline/bdc_xbrl_html_bridge.py):
+- join_flat_positions_to_inline_status now reads `period`, sets `period_role`
+  (current / comparative), and labels comparative-period unanchored rows
+  `comparative` instead of `not_found`. Inline docs tag only the current
+  period's positions, so a comparative-period flat row is anchored in its own
+  current-period filing, not this one -- it is benign, not a review item.
+- build_field_status_rows: lien reconciliation now sums CURRENT-period FV only.
+  Previously a still-held position's comparative row (same identifier) double-
+  counted its FV against the filer's lien subtotal and could spuriously fail
+  the gate. Reconciliation failures dropped 37 -> 30 filings.
+- Each row carries `period` + `period_role`.
+- Tests: 25 passing (added comparative-vs-current labeling + current-only
+  reconciliation FV).
+
+Inspection (period-scoped):
+- period_role: current 627,181 (53.1%), comparative 553,352 (46.9%).
+- CURRENT-period status distribution (what the overlay/review act on):
+  - maturity:       value 70.2%  validation_needed 13.1%  blank 12.1%  not_found 4.6%
+  - lien:           value 55.8%  blank 37.9%  not_found 4.6%  validation_needed 1.7%
+  - reference_rate: validation_needed 42.0%  value 27.2%  blank 26.1%  not_found 4.6%
+  - sector:         value 93.4%  not_found 4.6%  blank 2.0%
+- Genuine current-period not_found (the real review queue): 29,025 rows (4.6% of
+  current), down from the blended 282,078 (23.9%) before period scoping.
+
+Overlay impact (apply_ixbrl_field_status_overlay; value-only, blank-only): will
+fill current-period blank staged cells with maturity 70.2% / lien 55.8% /
+sector 93.4% / reference_rate 27.2% value coverage. reference_rate stays
+conservative by design (shadow-list routes 42% to validation_needed).
+
+Still pending (explicit go): wire into a unified rebuild, then export. Coordinate
+with the concurrent cash/derivatives export/frontend work before --export-frontend.
