@@ -6,6 +6,13 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Blind-spot profile + cohort split for the quality-tier view
+
+- Profiled the strong-anchor blind spots and found the quality-tier universe is ~204 BDC CIKs (the identity engine is not cohort-scoped), not the 77 wrapped cohort. `scripts/shadow_quality_tiers.py` now tags each fund-quarter `cohort` (wrapped=published vs other) in both outputs, correcting the earlier mislabel.
+- Blind spots are BROAD (188/204 CIKs, many fully blind), not concentrated. By cohort: wrapped (published) 266/1037 blind (25.7%); other 732/1557 (47.0%). Wrapped tiers: under_review 650 / verified 206 / preliminary 181.
+- Cause (266 wrapped blind): 192 have no gav AND no cost row (no anchorable BDC-FV holdings -- pre-XBRL/N-PORT quarters); ~70-74 are companyfacts FV/cost skips; none are HTML filers. Recent XBRL-era quarters are well-anchored; blind spots skew older. Detail in data_investigation_results.md.
+
+
 ### 2026-06-16 -- Shadow panel capstone: quality-tier rollup + coverage/blind-spot view
 
 - New `scripts/shadow_quality_tiers.py` (read-only, standalone -- reads validation_results_ledger.csv, does NOT touch the runner which is under concurrent edit). Rolls per-check flags up to a per-(cik, report_date) data-quality status and a coverage view.
@@ -2803,3 +2810,29 @@ Other fields unchanged by the ref_rate fix: maturity value 70.2%, lien 55.8%,
 sector 93.4%.
 
 Artifact ready for inspection; unified rebuild still pending explicit go.
+
+## 2026-06-16 - Triage of the 5,112 genuine 'missing' rows (assessment, no code change)
+
+Investigated whether the remaining misses hold another clean programmatic fix
+(like unfunded-commitment / reference_rate). Conclusion: no clean global win.
+Evidence:
+- ~80% of missing do NOT reach the index. 936 are affiliation x industry SUBTOTAL
+  aggregates (median |FV| $11.7M vs $2.1M for real positions, 5.6x) -- but 0/936
+  survive into private_markets_holdings; the existing _BDC_AGGREGATE_PATTERNS
+  filter already removes them. Acquisition-date-suffix rows (1,268) are also
+  mostly filtered; verified the flat vs inline identifier construction differs
+  fundamentally for that filer (suffix-strip matched only 23/107, all category
+  rows), so it is not a normalization fix.
+- Only 1,070 of 5,072 distinct missing survive into unified holdings = $24.1B
+  cumulative = 0.319% of unified FV (immaterial per quarter).
+- Of survivors: 581 are a member-QName flat-extraction quirk (identifier is the
+  raw XBRL dimension member, e.g. "FabFitFunIncMember", original casing kept);
+  ~489 are a diverse equity/warrant + idiosyncratic-mismatch tail. No single rule.
+
+Recommended (not yet done):
+- Safe artifact refinement: scope the field-status producer to rows that survive
+  into unified holdings, so the 'missing' review queue reflects index-relevant
+  positions only (5,112 -> ~1,070, removing subtotal-aggregate noise).
+- The member-QName fix belongs in the flat extractor (emit readable label, not
+  the member QName); it would change identifiers/position_id continuity, so it is
+  a deliberate change to flag, not a quick join tweak.
