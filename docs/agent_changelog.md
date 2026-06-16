@@ -6,6 +6,13 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- CORRECTION: fund-level reported cost exists; cost_conservation is salvageable
+
+- Reverses the two prior cost_conservation entries. companyfacts `InvestmentOwnedAtCost` (undimensioned fund-level total) IS cached for 75/76 cohort CIKs -- same coverage as `InvestmentOwnedAtFairValue` -- just not extracted into fund_financials.
+- cost_conservation's `no_anchor` problem was the ANCHOR CHOICE (schedule-total row, present 17%), not a missing figure. Re-anchored to companyfacts cost: coverage 17% -> 81% (686/845); anchor validity median 1.0 vs schedule-total; Sum(unified cost) reconciles 77% at 5% tol (median ratio 1.001). The ~23% residual is partly the cost-proxy contamination (13.4% of rows have cost==fair_value).
+- Implication: cost_conservation can become the only independent tight check non-redundant with gav_recon (gav has no cost). Recommended: revive cost-only conservation anchored on companyfacts InvestmentOwnedAtCost, ~5% tolerance, clean (proxy-excluded) numerator. fv_conservation stays retired. Production follow-up: extract investments_at_cost into fund_financials.
+
+
 ### 2026-06-16 -- Explored re-anchoring the conservation engine (validates retirement; no code change)
 
 - Tested whether re-anchoring the conservation engine on gav_recon's numerator/denominator would recover it. Detail in `data/output/data_investigation_results.md`.
