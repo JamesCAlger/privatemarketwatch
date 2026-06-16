@@ -155,3 +155,47 @@ Answer to the original "is it a context issue": partly, but not a context you ca
 manufacture from derived signals -- the helpful context (clean issuer + deduped tranche
 reconciliation) cannot be derived without first solving the parse. So enrichment is not
 the unlock; parsing fixes or raw-source adjudication are.
+
+### v3 result (2026-06-16) -- RAW-source injection WORKS; it IS a (raw-)context issue
+
+v3 injects the RAW current-period source rows for the filing (identifier + FV + match
+status, unparsed, 175-449 rows) -- NOT a derived conclusion. The agent locates the issuer
+by reading and reconciles itself. Ran 4 diverse packets (CIKs 1508655, 1280784, 1370755,
+0000081955) x 2 arms, paired.
+
+Result:
+  CONTROL  : 1 ESCALATE, 1 INSUFFICIENT_EVIDENCE, 2 NO_PATCH_NEEDED -- all MEDIUM, 0 HIGH.
+  TREATMENT: 4 NO_PATCH_NEEDED -- 3 HIGH, 1 MEDIUM. 0 indecisive, 0 regressions.
+Two packets flipped indecisive->decisive (ESCALATE->NO_PATCH/HIGH, INSUFFICIENT->NO_PATCH/
+HIGH); the other two stayed NO_PATCH but confidence MED->HIGH. Clean directional effect.
+
+Mechanism (why it worked):
+- The raw rows let the agent do the FV reconciliation it couldn't before. Tilson treatment
+  agent summed the 7 Tilson tranches to EXACTLY 10,550,000 = the bare-issuer FV, and found
+  the row's own label `documented_source_issuer_subtotal_arithmetic` -> confident issuer
+  rollup, NO_PATCH/HIGH.
+- BIG secondary finding: several "blockers" are STALE. The raw current-period rows show the
+  blocker identifier with match_status='matched', output_fv == source_fv -- i.e. it is
+  already in output. The bundle's `source_only_blocker_rows` snapshot is an older,
+  contradicted view (Warrior TopCo and ResearchGate warrant are both already matched).
+
+So: it IS a context issue -- specifically a RAW-context issue. Derived signals (v1/v2)
+can't help (circular), but the raw source rows decisively can. This also resolves the
+v1-pilot conservatism strand: the raw rows gave the airtight reconciliation the agents
+needed to COMMIT (NO_PATCH/HIGH) instead of hedging (ESCALATE).
+
+Honest caveats:
+- n=4, unpowered; but the effect is clean (2 flips, 2 confidence lifts, 0 regressions).
+- All 4 packets were rollup/stale cases -> the win is confident correct REJECTION
+  (NO_PATCH), NOT rule-creation (PATCH_PROPOSED). v3 did NOT test a genuine-missing-
+  position -> PATCH path (none in this sample).
+- Part of the signal is the raw rows EXPOSING stale match_status, not pure agent
+  reconciliation -- which points at a data-hygiene fix (the blocker snapshot is stale).
+
+Implications for the loop:
+1. Inject raw current-period source rows into bundles (cheap, deterministic, no parsing).
+2. Refresh the stale `source_only_blocker_rows` snapshot -- a chunk of the 1,175
+   INSUFFICIENT pile may be ALREADY-MATCHED or issuer-ROLLUP rows that need no patch.
+3. Expectation: converts a meaningful fraction of INSUFFICIENT/ESCALATE -> decisive
+   NO_PATCH (correct rejection), shrinking the queue WITHOUT parsing fixes. Genuine
+   missing-position cases needing a rule are a smaller residual than the raw queue implies.

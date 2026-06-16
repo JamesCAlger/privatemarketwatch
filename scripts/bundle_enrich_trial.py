@@ -85,6 +85,22 @@ def resolve(bundle: dict, con) -> list[dict]:
     return out
 
 
+def raw_source_rows(bundle: dict, con) -> list[dict]:
+    """v3: the RAW current-period source rows for this filing -- unparsed, undeduped of
+    issuer, just identifier + FV + output-match status. NO derived conclusion. The agent
+    locates the blocker issuer's name within these identifiers and reconciles by reading
+    source (which deterministic parsing cannot do for flattened identifiers)."""
+    cik, rd = bundle["cik"], bundle["report_date"]
+    rows = con.execute(f"""
+        SELECT DISTINCT raw_investment_identifier,
+               TRY_CAST(source_fair_value AS DOUBLE), TRY_CAST(output_fair_value AS DOUBLE), status
+        FROM D WHERE cik='{cik}' AND report_date='{rd}' AND period='{rd}'
+          AND raw_investment_identifier IS NOT NULL
+        ORDER BY TRY_CAST(source_fair_value AS DOUBLE) DESC NULLS LAST""").fetchall()
+    return [{"raw_investment_identifier": r[0], "source_fv": _f(r[1]),
+             "output_fv": _f(r[2]), "match_status": str(r[3] or "")} for r in rows]
+
+
 def main(argv=None):
     args = argv if argv is not None else sys.argv[1:]
     con = duckdb.connect()
@@ -100,19 +116,23 @@ def main(argv=None):
     SAND.mkdir(parents=True, exist_ok=True)
     for bp in cands:
         bundle = json.loads(bp.read_text())
-        resolved = resolve(bundle, con)
+        raw = raw_source_rows(bundle, con)
         (SAND / f"CONTROL_{bp.name}").write_text(json.dumps(bundle, indent=2))
         treat = json.loads(bp.read_text())
         treat["evidence_items"].append({
-            "evidence_id": "resolved_issuer_arithmetic",
-            "data": resolved,
-            "note": "Deterministic resolved-issuer FV reconciliation: does the bare-issuer fact decompose "
-                    "into same-issuer tranche leaves (ROLLUP) or not (possible single position)?",
+            "evidence_id": "raw_source_rows_current_period",
+            "data": raw,
+            "note": "RAW current-period source rows for this filing (identifier + FV + output-match "
+                    "status), unparsed. To reconcile a bare-issuer blocker: find the issuer name within "
+                    "these identifiers, sum source_fv across its tranches, compare to the blocker FV, and "
+                    "note which tranches reached output. No derived conclusion is provided.",
         })
         (SAND / f"TREATMENT_{bp.name}").write_text(json.dumps(treat, indent=2))
-        print(f"\n=== {bp.name} ===")
-        for r in resolved:
-            print(json.dumps(r, indent=2)[:700])
+        blk = (_ev(bundle).get("source_only_blocker_rows") or _ev(bundle).get("source_residual_rows") or [{}])[0]
+        print(f"\n=== {bp.name}: {len(raw)} raw current-period rows injected; "
+              f"blocker='{(blk.get('raw_investment_identifier') or '')[:50]}' ===")
+        for r in raw[:4]:
+            print(f"   sFV={r['source_fv']:>14,.0f} oFV={r['output_fv']:>12,.0f} {r['match_status'][:14]:14s} {r['raw_investment_identifier'][:55]}")
     print(f"\nwrote {len(cands)} control/treatment pairs to {SAND}")
     return 0
 
