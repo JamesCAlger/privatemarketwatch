@@ -6,6 +6,92 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-06-16 - Gold-set labeler agent (independent iXBRL source reader)
+
+Built `scripts/gold/labeler_agent.py`: the constrained, source-reading step that
+pre-fills harness candidates, BLIND to pipeline output. It has its OWN minimal
+inline-XBRL fact reader (does not call pipeline.bdc_xbrl_html_bridge), so a pipeline
+extraction bug cannot leak into a gold candidate. Reads only (cik, report_date,
+accession, source_identifier) from the frame -- never the frame's pipeline values.
+- true_fair_value / true_cost: from the tagged InvestmentOwnedAtFairValue /
+  InvestmentOwnedAtCost facts, resolved per-position by contextRef (typed
+  InvestmentIdentifierAxis member), @scale/@sign applied. true_classification /
+  true_lien: heuristic from the position text, tagged low-confidence.
+- CIK-quarter: reads the NO-DIMENSION InvestmentOwnedAtFairValue balance-sheet
+  total -- which the position-level pipeline does NOT extract (0/850), so it is a
+  genuine independent anchor for sum-of-positions reconciliation.
+- Run over batch1 (546 units): 320 positions, 255 matched (79%), 253 FV read; 25/25
+  CIK-quarter totals read; 201 flags correctly skipped (verdict needs human). The
+  21% unmatched are the member-QName / flattened-identifier quirk -> null candidate
+  (safe failure; human reads source). Output candidates_batch1.jsonl.
+- VALIDATION: on matched tail positions the labeler's iXBRL FV equals the pipeline
+  FV to 0.0% (Ivy Hill $1.899B, BCRED Emerald $1.540B, ...) -- two independent
+  extraction paths agree, confirming the reader's dollar scaling. (Agreement
+  confirms plumbing on both sides; whether the FILER's tagged FV matches the
+  rendered schedule is still the HUMAN's call in the harness -- by design.)
+- FINDING: fund_financials.investments_at_fair_value is NULL for the 2026-03-31
+  snapshot (companyfacts not refreshed for Q1 2026), so the frame's companyfacts
+  CIK-quarter anchor is nan there; the labeler's iXBRL no-dim total fills that gap.
+- Harness updated to prefer the labeler candidate (true_fair_value per position,
+  true_total_investments_fv per CIK-quarter) over pipeline/companyfacts; verified
+  it loads 345 candidates and prefills correctly. Tail census is now agent-drafted
+  + human-confirmed (the human eyeballs the rendered row), not hand-transcribed.
+
+## 2026-06-16 - Gold-set tail tuning: as-of-snapshot framing (supersedes batch1 draw)
+
+Tuned the tail/body strata after a coverage probe (scripts/gold/tail_coverage_
+probe.py, read-only). Finding: the original all-history denominator ($3,486B over
+285k position-quarters) understated coverage and wasted labels -- top-300 all-
+history = only 68 DISTINCT instruments (same giant JVs repeated across ~13 quarters).
+The as-of snapshot (each fund's latest filed quarter; cohort = 34,116 positions /
+$406.2B, all 2026-03-31) is the right base: top-200 covers 19.8% (vs 6.5% all-
+history), all distinct.
+- draw_gold_sample.py now draws tail_census + pps_body from the snapshot; defaults
+  k_tail 120->200, n_pps 80->100. silent_bulk stays all-history (blind spots skew
+  OLD), flags stay all-history. Manifest gains framing + snapshot_* fields.
+- Redrawn batch1 (no labels existed; safe): 546 units -- tail 200 positions + 25
+  CIK-quarters, pps_body 80, silent_bulk 40, surfaced 40, suppressed 161.
+- labeler_protocol.md updated with the framing + 200-position tail.
+
+## 2026-06-16 - Gold-set apparatus stood up (schema + harness + first draw + protocol)
+
+Built the minimum-viable source-adjudicated gold set for the v1 BDC cohort (77
+wrapped CIKs, Q4 2022+). Read-only on data/output and frontend; writes only under
+the new `data/gold/`. No SEC network calls. Stops before mass labeling by design.
+
+- **Schema** `data/gold/schema/gold_label_schema_v1.json` (versioned, append-only):
+  per-position (true_fair_value/cost/classification/lien[/rate/maturity deferred],
+  source_ref=accession+context_id, adjudicator, ambiguous + ambiguous_fields) and
+  per-CIK-quarter (true_total_investments_fv, true_position_count, subtotal/
+  comparative row lists). Every record stamps the `pipeline_version` (git SHA) it
+  was judged against. Firewall rules in `data/gold/README.md`.
+- **Draw** `scripts/gold/draw_gold_sample.py` (DuckDB, vectorized; Poisson PPS via
+  deterministic hash, no big fetch). Seed 20260616, pipeline_version f8c9df3.
+  Frame = 431 units: tail_census 120 positions (top-K by |FV|, dollar coverage
+  4.5%, min |FV| $938M) + 25 CIK-quarters; pps_body 45 (Horvitz-Thompson, pi
+  stored); silent_bulk 40 (no-strong-anchor positions, N=31,390); surfaced_flag 40
+  (precision); suppressed_flag 161 (FN bound, stratified ~13/confidence-class over
+  the surface='false' population = the ~36k suppressed flags). Frozen to
+  `data/gold/samples/sample_frame_batch1.jsonl` + `sample_manifest_batch1.json`.
+- **Harness** `scripts/gold/review_harness.py` (local Flask web app). Per unit:
+  resolves the cached inline-XBRL source (`data/raw/filings/bdc_html/{cik}/{acc}.html`),
+  extracts the matching schedule row(s) (most-specific-token first) or the
+  "total investments" rows for CIK-quarter/flag units, shows them beside the
+  pipeline value with the candidate pre-filled; confirm/correct/ambiguous in one
+  keystroke; appends to `data/gold/labels/*.jsonl`. Verified end-to-end (source
+  extraction, position + flag forms, label append) then test labels cleared.
+- **Protocol + estimators** `data/gold/labeler_protocol.md` and
+  `scripts/gold/estimate_gold.py`: three-role independence firewall (labeler reads
+  source / human adjudicates / fixer held out); per-field reading + citation rules;
+  ambiguous-first-class; labeler self-calibration (Rogan-Gladen + CI widening on a
+  20% audited slice); Wilson CIs for precision/FN/silent-bulk, Horvitz-Thompson for
+  FV-weighted body error. Estimator runs clean on zero labels ("awaiting labels").
+- Data finding surfaced by the draw: the panel ledger `surface` column is the
+  boolean string 'true'/'false' (3,580 surfaced / 36,041 suppressed), not the
+  confidence category; the suppressed FN population aligns with the ~36k figure.
+- Not run: no pytest suite (new standalone scripts, verified directly); no rebuild/
+  export. Labels + samples are committed artifacts; estimates_*.json is regenerable.
+
 ### 2026-06-16 -- Cleanup: repoint cost_conservation onto the fund_financials production column
 
 - `scripts/shadow_conservation_engine.py`: cost_conservation's PRIMARY anchor is now `fund_financials.investments_at_cost` (the path-B production column), with the direct companyfacts-cache read kept as a fallback and schedule-total last. Closes the path-A/path-B loop using the production column instead of the bespoke cache read as the main path. Engine-only change (the runner is under concurrent edit, so its harmless `ensure_companyfacts_cost` call is left in place).
@@ -2843,3 +2929,228 @@ Recommended (not yet done):
 - The member-QName fix belongs in the flat extractor (emit readable label, not
   the member QName); it would change identifiers/position_id continuity, so it is
   a deliberate change to flag, not a quick join tweak.
+
+## 2026-06-16 - in_unified flag scopes review queue to production rows
+
+Added an `in_unified` boolean to each field-status row (pipeline/bdc_xbrl_html_
+bridge.py producer): does this (cik, report_date, identifier) survive into the
+index-facing private_markets_holdings?  Computed by a vectorized left-merge of the
+artifact against unified holdings on (cik, report_date, _raw_id_lower(identifier)).
+Non-destructive -- the flag, not a hard filter, so the full audit trail is kept.
+
+Re-run complete (1,180,533 rows; 786,073 in_unified = 66.6%):
+- Review queue (anchor_class=missing): full 5,112 -> scoped (missing AND
+  in_unified) = 1,084 (a 79% reduction; the other ~4,000 are subtotal aggregates /
+  identifier-mismatched flat rows the unified subtotal filter already drops).
+- anchor_class x in_unified (current): anchored 598,156/508,780;
+  unfunded_commitment 23,858/4,218; missing 5,112/1,084; zero_fv 55/41.
+
+A downstream review consumer should filter status='not_found' AND in_unified ->
+1,084 production-relevant rows (dominated by the member-QName flat-extraction
+quirk). Tests: 32 in fields suite (unchanged; producer-level merge validated by
+the re-run). Unified rebuild still pending explicit go.
+
+## 2026-06-16 — Stable position_id registry (opt-in, dark-landed)
+
+What changed:
+- New module `pipeline/position_id_registry.py`: drift-resistant per-row
+  natural key `(cik, source, report_date, rawid, principal, shares)` with a
+  deterministic lot suffix for the ~0.012% within-quarter collisions, plus
+  `resolve_position_ids()` that names union-find components via a persisted
+  registry (inherit / mint / merge-with-retirement / split-guard) instead of
+  the unstable global sort-rank ordinal.
+- `pipeline/position_matching.py`: `assign_position_ids()` gains keyword-only
+  `use_registry`/`registry_path`/`retirements_path` (default off → behavior
+  identical). When on, both the empty-matches and main branches resolve ids
+  through the registry. Component formation is UNCHANGED.
+- `pipeline/config.py`: `POSITION_ID_REGISTRY_FILE`, `POSITION_ID_RETIREMENTS_FILE`.
+- `pipeline/main.py`: `--stable-position-ids` CLI flag (default off).
+
+Why / evidence (see `docs/position_id_stable_identifier_design.md`):
+- Measured: new-quarter ingestion re-sequences 99.99% of closed-quarter labels
+  today; issuer_name drifts 12%, rawid 1.6% (2.7% wrapped), fair_value 0% but a
+  restatement hazard; the composite key residual-collides at 0.012%.
+- Registry inherits ids by chain membership → closed-quarter ids stable across
+  rebuilds; merges retire the younger id with an audit row; rawid drift is
+  carried forward via the chain (no separate remap CSV in v1).
+
+Guardrails / scope:
+- Opt-in only; production path unchanged until seeded + flag flipped (needs
+  sign-off). rawid drift on a closed quarter with no adjacent chained quarter
+  would still re-mint — known residual.
+- Tests: +10 in `tests/test_position_id_registry.py` (replay determinism,
+  closed-quarter stability under reorder + new quarter, merge→retirement,
+  split uniqueness, rawid carry-forward, roundtrip). Existing
+  `tests/test_position_matching.py` 97/97 still pass (no default-path regression).
+
+## 2026-06-16 — position_id registry: Q1/Q2 hardening
+
+What changed:
+- `position_id_registry.compute_natural_keys`: base-key collisions now resolved
+  by `bdc_dimensions_raw` (XBRL dimension context = per-filing-unique,
+  cache-deterministic), then a deterministic ordinal over stable structural
+  fields only (issuer_name/fair_value excluded). Residual within-quarter
+  collisions 175 -> 0 on the full Q4-2022 dataset (733,240 distinct keys).
+- New `scripts/measure_position_key_drift.py`: read-only harness measuring the
+  position_key churn a `canonical_strip_re` edit causes. Result: 88,384 rows
+  (15.7% of BDC) -- material. Used as the pre-seed gate + ongoing drift detector.
+
+Decisions (see docs/position_id_stable_identifier_design.md sec 9):
+- Q1 resolved: dimension-context key, no extraction-schema change needed.
+- Q2: registry natural key excludes position_key, so closed-quarter ids are
+  drift-immune; wrapped CIKs carry continuity via the chain (canonical_strip_re
+  holds position_key). Residual is unwrapped-with-suffix CIKs -> fixed by adding
+  wrappers (agentic loop), NOT a registry rebind (would over-link tranches).
+
+Tests: test_position_id_registry.py +2 (dimension disambiguation, identical-
+context ordinal) = 12 total, all pass. No production data or default path changed.
+
+## 2026-06-16 - Unified rebuild: iXBRL overlay activated (maturity enriched)
+
+Rebuilt private_markets_holdings from cached data (scripts/rebuild_outputs.py
+--unified); the iXBRL field-status overlay in _prepare_bdc is now live.
+795,064 rows; BDC rows 574,687 (unchanged). FV/row-count unaffected -- the
+overlay only writes descriptor columns (maturity_date / reference_rate_type /
+lien_position / reference_rate_source), never FV/cost/principal/classification.
+
+BDC fill rates (before -> after):
+- maturity_date:       31.5% -> 77.5%  (major win; +46pp, 445,537 rows; values
+  verified clean: min 2002, max 2074, 0 absurd, concentrated 2026-2032).
+- reference_rate_type: 73.6% -> 73.9%  (+2,063 high-confidence rows tagged
+  reference_rate_source='ixbrl_field_status'; already well-covered by inference).
+- lien_position:       60.5% -> 60.5%  (NO effect).
+
+Lien no-effect is architectural: unified lien_position is recomputed from
+lien_classification._sql_classify_lien() (_lien_raw, gated to DIRECT_LENDING) at
+unified_holdings.py:982/1113, independent of the staging lien_position the overlay
+writes -> the overlay's lien is overwritten. To enrich lien via iXBRL, wire the
+per-position iXBRL lien into _lien_raw (COALESCE before the SQL reclassify), a
+separate task.
+
+Pre-existing 8 schema-enforcement warnings (asset_category_enum 429, coupon_type_
+enum 51949, etc.) unchanged -- the overlay touches none of those columns.
+
+Notes / follow-ups:
+- Rebuild took ~42 min: Phase B identifier parsing (~25 min, pre-existing) +
+  inefficient overlay (CSV->DataFrame->to_dict->DataFrame round-trip on the 1.18M-
+  row artifact, ~4.8GB peak). Optimize the overlay to consume the DataFrame
+  directly before the next rebuild.
+- index_returns / export-frontend NOT rebuilt: index uses rate/FV (unaffected by
+  maturity); export-frontend held pending coordination with the concurrent cash/
+  derivatives frontend work.
+
+## 2026-06-16 - Wire iXBRL lien into _lien_raw (lien fallback)
+
+unified_holdings.py: _lien_raw now COALESCEs the keyword classifier with the
+staging lien_position (populated ONLY by the reconciled iXBRL field-status
+overlay; staging_bdc.py:2577 initializes it to '').  Keyword-first, additive:
+  COALESCE(NULLIF(TRIM(_sql_classify_lien),''), NULLIF(TRIM(lien_position),''))
+So the iXBRL section-header lien fills DIRECT_LENDING positions where the keyword
+rule is blank, without overriding existing keyword classifications. Lien stays
+DIRECT_LENDING-gated (line ~1117).
+
+Test: tests/test_unified_holdings.py::TestBuildUnifiedHoldings::
+test_ixbrl_lien_fills_blank_keyword_lien (end-to-end build; patches the artifact
+to a temp CSV) -- verifies the blank-keyword row takes the iXBRL "Second Lien"
+and the keyword "First Lien" row is unchanged. Passes.
+
+Estimated gain once rebuilt: DIRECT_LENDING lien coverage 71.0% -> ~91.3%
+(99,358 of 141,851 blank-lien DL rows recoverable via reconciled iXBRL lien).
+Requires a unified rebuild to take effect (not yet run).
+
+## 2026-06-16 — Overhaul-proof gates for J06 identifier-drift mis-matches
+
+What changed:
+- Spot-checked the J06 fuzzy-match oracle flags. Confirmed one real production
+  mis-match (CIK 1930087 LeadsOnline: One stop 2 -> 3) plus drift-driven false
+  positives, all rooted in cross-quarter identifier drift in under-wrapped CIKs.
+- Captured as engine-agnostic artifacts (NOT a disposable wrapper edit, given the
+  planned wrapper overhaul/split):
+  - `tests/test_identifier_tranche_identity_gate.py`: 2 strict-xfail contract
+    gates (tranche ordinals must not collapse; doubled `LLC, LLC` must collapse)
+    + 1 anchor. Currently xfail; flip to strict-fail when fixed, forcing cleanup.
+  - `docs/position_match_identifier_drift_findings.md`: facts, root cause
+    (confirmed via `_normalize_name_sql`), J06 triage labels, and the contract
+    the new wrapper system must satisfy.
+
+Why: facts + measured contract survive a rewrite; wrapper-schema syntax does not.
+Root cause: matching normalizer strips trailing tranche ordinals (One stop 2 == 3)
+and does not collapse doubled entity suffixes. Fix belongs in the
+normalization/extraction layer (tranche-aware), not the registry. CIK candidates
+for the agentic wrapper loop: 1930087, 1901612.
+
+Tests: +3 (1 pass, 2 strict-xfail). No production data or matching logic changed.
+
+## 2026-06-16 — Registry activated: position_id repopulated from seed (--returns --stable-position-ids)
+
+What ran: `python -m pipeline.main --returns --stable-position-ids` (cache-only).
+Pre-run safety snapshot: pre_run_2026-06-16_173612.
+
+Result:
+- Registry resolution: 304,842 components inherited, 16,564 minted, 1,550 merged,
+  1,250 split-reassigned. Retirement audit: 3,049 rows (2,762 retired ids ->
+  1,634 survivors) in position_id_retirements.csv.
+- Live private_markets_holdings.csv: position_id 100% repopulated (795,064 rows,
+  321,406 distinct ids) -- it had been blank since a prior --unified-only rebuild.
+- Label stability vs the Jun-11 seed across a real rebuild: 99.15% of Q4-2022+
+  closed rows preserved their exact position_id (666,332/672,051); the 0.85%
+  changed are chain-structure changes (merges, audited; splits, re-minted), not
+  labelling churn. Contrast: the old sort-rank scheme churned ~99.99% on a
+  smaller perturbation.
+- Downstream recomputed: position_matches (472,175), position_returns (485,002),
+  index_returns (230 quarters), fee_uplift, bdc_fund_income.
+
+Seed source: data/snapshots/pre_run_2026-06-11_214500 (last fully-labelled build;
+the live file's labels had been wiped). Registry at data/output/position_id_registry.csv.
+Open item: registry is stateful but lives in the rebuild-target dir -- move to a
+non-regenerated path (e.g. data/overrides/) before routine --clean rebuilds.
+
+## 2026-06-16 — Split audit + registry moved out of data/output/
+
+What changed:
+- `position_id_registry.resolve_position_ids`: chain SPLITS are now audited.
+  When a split-guard evicts a component from a contended id and re-mints, it
+  writes a `reason='chain_split'` row to retirements.csv (retired = the id it
+  left, surviving = its new minted id). Unlike a merge, the source id stays
+  live (the keeper holds it); the reason field distinguishes them for
+  gold-set re-finders. +assertions in test_split_preserves_uniqueness.
+- Registry is now a governed stateful artifact under
+  `data/overrides/position_id_registry/{registry,retirements}.csv` (config
+  POSITION_ID_REGISTRY_DIR), moved out of the rebuild-target data/output/ so
+  `rebuild_outputs.py --clean` and output snapshots cannot wipe it. Existing
+  live files (795,226 keys; 3,049 merge retirements) were moved, not regenerated.
+
+Note: the prior --returns run's 1,250 splits predate the audit code, so they
+have no chain_split records (one-time gap; those components are already
+separate and will not re-split). Splits are audited from the next run onward.
+
+Tests: test_position_id_registry.py 12 pass (split-audit assertions added).
+
+## 2026-06-16 - Bundle-enrichment experiment: raw-source injection lifts review verdicts
+
+Investigated why bdc_cik_review yields ~94% INSUFFICIENT_EVIDENCE / LOW confidence
+(48/1251 PATCH_PROPOSED = 3.8%; conversion concentrated in short_plain_unresolved 10.8%
++ unclassifiable_after_review 10.3%; the two parser_mismatch giants 728 packets convert
+~1%). Root cause: the review bundle carries reconciliation residuals + AMBIGUOUS derived
+structure (16 redundant coordinate candidates, empty header_context, noisy row
+classification), not what the decision needs.
+
+Experiment (docs/refactoring/bundle_enrichment_experiment.md; scripts/bundle_enrich_trial.py;
+sandbox data/output/bdc_cik_review_exp/, read-only):
+- v1 inject resolved coordinate/classification: REFUTED (agents FV-reconciled and overrode it).
+- v2 inject deterministic resolved-issuer FV arithmetic: CIRCULAR/uncomputable -- needs the
+  issuer extraction + comparative/dimension dedup that are the broken parses CAUSING the
+  blockers (ratios 936x/283x; Tilson control double-counts to 1.976).
+- v3 inject RAW current-period source rows (identifier+FV+match_status, unparsed): WORKS.
+  Paired 4 packets x 2 arms -- CONTROL 1 ESCALATE/1 INSUFFICIENT/2 NO_PATCH (0 HIGH);
+  TREATMENT 4 NO_PATCH_NEEDED (3 HIGH), 0 regressions. Agent reconciles by reading (Tilson
+  agent summed 7 tranches = exactly 10,550,000 = bare-issuer FV -> confident rollup).
+
+GUARDRAIL FOR FUTURE WORK (agentic validation / Part B): the bundle builder MUST inject the
+RAW current-period source rows, not derived signals. Also refresh the stale
+source_only_blocker_rows snapshot -- v3 found several blockers are already matched
+(match_status='matched', output_fv==source_fv) or issuer rollups, needing no patch.
+Caveat: v3's 4 cases were all rollup/stale -> wins were confident NO_PATCH (correct
+rejection), not new rules. A powered run with genuine-missing-position packets is needed to
+test whether raw-source injection also lifts the PATCH_PROPOSED path (in progress).
+No production data or schemas changed; experiment is read-only.

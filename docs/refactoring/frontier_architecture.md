@@ -682,6 +682,18 @@ not two configs):
   non-blocking. Proposes audited config (mechanism/evidence/confidence); the gate
   (ledger re-run) is the acceptance test. Agents discover; the gate decides.
 
+  > **Bundle construction requirement (measured 2026-06-16, see
+  > `bundle_enrichment_experiment.md`).** Part B review bundles MUST inject the RAW
+  > current-period source rows for the filing (identifier + FV + match-status, unparsed),
+  > not derived signals. Derived enrichment (resolved coordinate candidates, deterministic
+  > issuer arithmetic) is CIRCULAR -- it presupposes the broken parse that creates the
+  > blocker -- and does not help. Raw rows let the agent locate the issuer by reading and
+  > reconcile FV itself; in a paired trial this flipped indecisive verdicts
+  > (ESCALATE/INSUFFICIENT) to decisive NO_PATCH/HIGH with zero regressions. Also keep the
+  > `source_only_blocker_rows` snapshot FRESH: several blockers were already matched
+  > (match_status='matched') or issuer rollups, needing no patch -- a stale snapshot
+  > inflates the INSUFFICIENT queue.
+
 Execution loop (Part A must RUN before Part B can validate):
     A runs -> engines compute the ledger -> B validates -> B authors a Part A rule
     (defects only) -> A re-runs -> ledger re-validates.
