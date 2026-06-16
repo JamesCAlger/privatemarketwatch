@@ -44,7 +44,18 @@ def main(argv: list[str] | None = None) -> int:
 
     con = duckdb.connect()
     con.execute(f"CREATE TABLE L AS SELECT * FROM read_csv_auto('{LEDGER.as_posix()}', sample_size=-1)")
-    con.execute(f"CREATE TABLE R AS SELECT * FROM read_csv_auto('{reg.as_posix()}', sample_size=-1, all_varchar=true)")
+    # LIVE registry = the active blocking floor; DORMANT = candidate what-ifs (none can
+    # promote until a gold set exists). Union the shared columns so the preview shows both,
+    # tagged by source -- the dormant rows are informational, not active gates.
+    dorm = REG_DIR / "enforcement_registry_dormant.csv"
+    sel = ("rule_id, ledger_engine, ledger_rule, quantity_group, authority_source, "
+           "enforcement_state, deminimis_floor_usd")
+    parts = [f"SELECT {sel}, 'live' AS registry_source "
+             f"FROM read_csv_auto('{reg.as_posix()}', sample_size=-1, all_varchar=true)"]
+    if dorm.exists():
+        parts.append(f"SELECT {sel}, 'dormant' AS registry_source "
+                     f"FROM read_csv_auto('{dorm.as_posix()}', sample_size=-1, all_varchar=true)")
+    con.execute("CREATE TABLE R AS " + " UNION ALL ".join(parts))
     w = wrapped_ciks()
     con.execute("CREATE TABLE w(cik VARCHAR)")
     con.executemany("INSERT INTO w VALUES (?)", [(c,) for c in w])
