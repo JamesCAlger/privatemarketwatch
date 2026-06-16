@@ -116,3 +116,42 @@ Lessons:
 
 Revised next enrichment to test: per-tranche XBRL FV decomposition + resolved-issuer
 arithmetic (sum of tranche FVs vs the bare-issuer fact), NOT coordinate de-ambiguation.
+
+### v2 result (2026-06-16) -- resolved-issuer arithmetic is CIRCULAR; not run
+
+Rebuilt `scripts/bundle_enrich_trial.py` to inject resolved-issuer FV arithmetic (does
+the bare-issuer fact reconcile to the sum of same-issuer tranche leaves -> ROLLUP vs
+single position?). Applied to 4 diverse packets (CIKs 1508655, 1280784, 1370755, +
+0000081955 Tilson control). The arithmetic came out as garbage and the trial was NOT
+run, because computing it requires solving the two problems that CAUSE these blockers:
+
+1. ISSUER EXTRACTION. The flattened identifier is `<Category> <Industry> <Issuer>`
+   (e.g. "Debt Investments Consumer & Business Services, Tectura Corporation"). Token
+   extraction matched the CATEGORY prefix -> every "Debt Investments ..." row counted as
+   a tranche (ratios 936x, 283x, 318x). The pipeline's OWN `issuer_name` column is also
+   category-prefixed garbage for these filers ("Debt Investments Software an...",
+   "Equity Investments Drug Disc...") -- because broken issuer parsing is exactly why
+   these are parser-mismatch blockers. There is no clean issuer key to reconcile on.
+2. COMPARATIVE / DIMENSION-PATH DEDUP. Even Tilson (clean issuer name) gave ratio 1.976
+   -- ~2x -- because the detail holds comparative-period and multi-dimension-path
+   duplicate rows (Series B Preferred repeated at 0.0 and 4,559,500). The sum double-counts
+   without the comparative/dimension dedup the pipeline itself struggles with.
+
+CONCLUSION (the real finding of the whole arc): bundle enrichment with DERIVED signals
+cannot resolve the parser-mismatch bulk, because every useful derived signal
+(coordinate classification in v1, issuer arithmetic in v2) PRESUPPOSES the parse that is
+broken. The enrichment is circular. Therefore the high INSUFFICIENT_EVIDENCE / LOW rate
+is largely CORRECT behaviour on a genuinely parse-blocked class -- not a fixable
+bundling oversight. The agents are right to escalate.
+
+What could actually help (untested / out of scope here):
+- Inject the RAW source-table excerpt for the issuer (the filing's actual SOI rows), NOT
+  a derived signal, and let the agent reconcile by reading source. Different from v1/v2
+  (which injected pipeline-derived conclusions that inherit the broken parse).
+- OR treat these as per-CIK Part A wrapper-parsing fixes (the durable fix for the format).
+- OR human/source adjudication (what the agents request).
+
+Answer to the original "is it a context issue": partly, but not a context you can
+manufacture from derived signals -- the helpful context (clean issuer + deduped tranche
+reconciliation) cannot be derived without first solving the parse. So enrichment is not
+the unlock; parsing fixes or raw-source adjudication are.

@@ -1,71 +1,85 @@
-"""Bundle-enrichment trial: resolve the AMBIGUOUS source-table structure already in
-a review bundle into ONE clean per-blocker statement, and write an enriched copy to a
-sandbox. Read-only on production (writes only data/output/bdc_cik_review_exp/).
+"""Bundle-enrichment trial v2: resolved-issuer FV arithmetic.
 
-Finding that motivates this: the bundle already carries html grid + 16 redundant
-coordinate candidates + noisy row classifications + EMPTY header_context. The agent
-must resolve them itself and can't, so it returns INSUFFICIENT_EVIDENCE. This resolves
-them deterministically: per blocker row -> majority classification + governing section
-header + is-aggregate flag + a one-line conclusion.
+The pilot (v1) refuted "resolve coordinate ambiguity". The real blocker is FV
+reconciliation: bare-issuer XBRL axis facts are often ISSUER-LEVEL ROLLUPS (sum of
+tranche leaves), not single positions. v2 injects, per blocker row, the signed
+resolved-issuer arithmetic: does the bare-issuer fact FV reconcile to the sum of
+same-issuer tranche leaves? -> ROLLUP (do not add) vs genuine single position vs
+ambiguous (escalate). FV-grounded and able to conclude NO_PATCH, fixing v1's threat #3.
+
+Read-only on production (writes only data/output/bdc_cik_review_exp/).
 """
 from __future__ import annotations
-import json, re, sys, collections
+import json, re, sys
 from pathlib import Path
+import duckdb
 from pipeline.config import OUTPUT_DIR
 
 SAND = OUTPUT_DIR / "bdc_cik_review_exp"
 BUNDLES = OUTPUT_DIR / "bdc_cik_review" / "bundles"
+DETAIL = OUTPUT_DIR / "source_reconciliation_detail.csv"
 
-_HDR_RE = re.compile(r"investments?\b.*(net assets|%)|^(total|subtotal)\b", re.I)
-_AGG_RE = re.compile(r"^\s*(total|subtotal)\b", re.I)
+TRANCHE_RE = re.compile(r"(series|preferred|common|term|note|warrant|loan|lien|membership|"
+                        r"unit|revolver|subordinat|senior|\$|\d+\.\d+\s*%)", re.I)
+AGG_RE = re.compile(r"^\s*(total|subtotal)\b", re.I)
 
 
 def _ev(bundle: dict) -> dict:
     return {it["evidence_id"]: it.get("data", it) for it in bundle["evidence_items"]}
 
 
-def resolve(bundle: dict) -> list[dict]:
+def _f(x):
+    try: return float(x)
+    except (TypeError, ValueError): return 0.0
+
+
+def resolve(bundle: dict, con) -> list[dict]:
     ev = _ev(bundle)
-    coord = ev.get("html_source_row_coordinate_candidates", []) or []
-    rowclass = ev.get("html_row_classification_candidates", []) or []
-    blockers = ev.get("source_only_blocker_rows", []) or ev.get("source_residual_rows", []) or []
-
-    # section headers present in the schedule (deterministic, from row classifications)
-    headers = [r.get("row_text", "") for r in rowclass if _HDR_RE.search(str(r.get("row_text", "")))]
-    agg_headers = [h for h in headers if _AGG_RE.search(h)]
-
+    blockers = ev.get("source_only_blocker_rows") or ev.get("source_residual_rows") or []
+    cik, rd = bundle["cik"], bundle["report_date"]
     out = []
     for b in blockers:
-        ident = b.get("raw_investment_identifier") or b.get("normalized_investment_identifier") or ""
-        cand = [c for c in coord if c.get("raw_investment_identifier") == ident]
-        tally = collections.Counter()
-        for c in cand:
-            for cl in c.get("classification_candidates", []):
-                tally[cl] += 1
-        resolved_class = tally.most_common(1)[0][0] if tally else "UNRESOLVED"
-        agree = f"{tally.get(resolved_class,0)}/{sum(tally.values())}" if tally else "0/0"
-        self_aggregate = bool(_AGG_RE.search(ident))
-        issuer_token = ident.split(",")[0].strip().lower()[:18]
-        issuer_subtotal = any(("total" in h.lower() and issuer_token and issuer_token in h.lower())
-                              for h in headers)
-        pos_evidence = b.get("why_not_cleared") or b.get("reason") or ""
-        if self_aggregate:
-            concl = "Row IS an aggregate/subtotal header -> correctly excluded; NO_PATCH_NEEDED candidate."
-        elif resolved_class == "POSITION_ROW":
-            concl = ("Resolves to POSITION_ROW (coordinate candidates unanimous) under a non-aggregate "
-                     "section; position-like evidence present -> genuine position missing from output "
-                     "(under-inclusion); supports a bounded parser/normalization patch.")
+        ident = (b.get("raw_investment_identifier") or "").strip()
+        bare_fv = _f(b.get("source_fair_value"))
+        tok = re.split(r"[,(]", ident)[0].strip().lower()[:18].replace("'", "''")
+        rows = con.execute(f"""
+            SELECT raw_investment_identifier,
+                   TRY_CAST(source_fair_value AS DOUBLE), TRY_CAST(output_fair_value AS DOUBLE), status
+            FROM D WHERE cik='{cik}' AND report_date='{rd}'
+              AND lower(raw_investment_identifier) LIKE '%{tok}%'""").fetchall() if tok else []
+        tranches = [r for r in rows if r[0] and r[0].strip().lower() != ident.lower()
+                    and TRANCHE_RE.search(r[0]) and not AGG_RE.search(r[0])]
+        sum_tr = sum(_f(r[1]) for r in tranches)
+        n_tr = len(tranches)
+        n_tr_out = sum(1 for r in tranches if _f(r[2]) > 0 or str(r[3] or "").lower() in ("matched", "reconciled"))
+        ratio = (sum_tr / bare_fv) if bare_fv else None
+
+        if n_tr >= 2 and ratio and 0.9 <= ratio <= 1.1:
+            hint = "ROLLUP"
+            concl = (f"Bare-issuer fact FV {bare_fv:,.0f} reconciles to the sum of {n_tr} same-issuer "
+                     f"tranche leaves ({sum_tr:,.0f}, ratio {ratio:.2f}); {n_tr_out}/{n_tr} reached output. "
+                     f"ISSUER-LEVEL ROLLUP, not a single position -> do NOT add as a position. "
+                     + ("Tranches already in output -> NO_PATCH_NEEDED (or aggregate-filter the rollup fact)."
+                        if n_tr_out >= max(1, n_tr - 1) else
+                        "Tranches under-attributed in output -> a separate tranche-attribution defect, "
+                        "still do not add the rollup."))
+        elif n_tr == 0 and bare_fv > 0:
+            hint = "SINGLE_POSITION_CANDIDATE"
+            concl = (f"No same-issuer tranche leaves found; bare-issuer FV {bare_fv:,.0f} does not decompose "
+                     f"-> may be a genuine single position missing from output (verify it equals one SOI line).")
         else:
-            concl = f"Resolved classification {resolved_class}; insufficient to call position vs aggregate."
+            hint = "AMBIGUOUS"
+            concl = (f"{n_tr} tranche leaves sum {sum_tr:,.0f} vs bare-issuer {bare_fv:,.0f} "
+                     f"(ratio {('%.2f' % ratio) if ratio else 'NA'}); only partial reconciliation -> ESCALATE.")
         out.append({
             "raw_investment_identifier": ident,
-            "resolved_classification": resolved_class,
-            "coordinate_candidate_agreement": agree,
-            "self_row_is_aggregate_header": self_aggregate,
-            "issuer_has_total_subtotal_line": issuer_subtotal,
-            "governing_section_headers": headers[:6],
-            "aggregate_section_headers": agg_headers[:6],
-            "position_like_evidence": str(pos_evidence)[:300],
+            "bare_issuer_source_fv": round(bare_fv, 0),
+            "n_same_issuer_tranche_leaves": n_tr,
+            "sum_tranche_source_fv": round(sum_tr, 0),
+            "tranche_sum_over_bare_ratio": round(ratio, 3) if ratio else None,
+            "tranche_leaves_reaching_output": n_tr_out,
+            "tranche_samples": [{"id": str(r[0])[:60], "sfv": _f(r[1])} for r in tranches[:6]],
+            "resolution": hint,
             "deterministic_conclusion": concl,
         })
     return out
@@ -73,29 +87,33 @@ def resolve(bundle: dict) -> list[dict]:
 
 def main(argv=None):
     args = argv if argv is not None else sys.argv[1:]
-    if not args:
-        # default: 2 position_like bundles
-        cands = sorted(BUNDLES.glob("*POSITION_LIKE*.json"))[:2]
-    else:
+    con = duckdb.connect()
+    con.execute(f"CREATE TABLE D AS SELECT * FROM read_csv_auto('{DETAIL.as_posix()}', sample_size=-1, all_varchar=true)")
+    if args:
         cands = [Path(a) for a in args]
+    else:  # diverse: 3 new CIKs + Tilson (0000081955) positive control
+        ciks = ["0001508655", "0001280784", "0001370755", "0000081955"]
+        cands = []
+        for c in ciks:
+            g = sorted(BUNDLES.glob(f"*_{c}_*POSITION_LIKE*.json")) or sorted(BUNDLES.glob(f"*_{c}_*PCT_LEAF*.json"))
+            if g: cands.append(g[0])
     SAND.mkdir(parents=True, exist_ok=True)
     for bp in cands:
         bundle = json.loads(bp.read_text())
-        resolved = resolve(bundle)
-        # CONTROL copy (verbatim) + TREATMENT copy (+ resolved item)
+        resolved = resolve(bundle, con)
         (SAND / f"CONTROL_{bp.name}").write_text(json.dumps(bundle, indent=2))
         treat = json.loads(bp.read_text())
         treat["evidence_items"].append({
-            "evidence_id": "resolved_source_table_position",
+            "evidence_id": "resolved_issuer_arithmetic",
             "data": resolved,
-            "note": "Deterministic resolution of the ambiguous coordinate/classification candidates "
-                    "already in this bundle: one statement per blocker row.",
+            "note": "Deterministic resolved-issuer FV reconciliation: does the bare-issuer fact decompose "
+                    "into same-issuer tranche leaves (ROLLUP) or not (possible single position)?",
         })
         (SAND / f"TREATMENT_{bp.name}").write_text(json.dumps(treat, indent=2))
-        print(f"\n=== {bp.name} ({len(resolved)} blocker rows) ===")
+        print(f"\n=== {bp.name} ===")
         for r in resolved:
-            print(json.dumps(r, indent=2)[:900])
-    print(f"\nwrote control/treatment pairs to {SAND}")
+            print(json.dumps(r, indent=2)[:700])
+    print(f"\nwrote {len(cands)} control/treatment pairs to {SAND}")
     return 0
 
 
