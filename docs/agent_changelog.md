@@ -10,7 +10,8 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 - Tested whether re-anchoring the conservation engine on gav_recon's numerator/denominator would recover it. Detail in `data/output/data_investigation_results.md`.
 - The numerator is NOT the problem (cons.value_sum / gav numerators all median ~1.0). Swapping to gav indexable/ex_sub clears only ~13% of overshoots. The FPs are driven by (1) an over-tight 0.5% tolerance -- widening to 5% clears 48%, 10% clears 63% -- and (2) gav's per-quarter comparison-denominator selection (gav PASSES 201/248 overshoots at ~6% residual vs companyfacts).
-- Matching gav fully = reproducing gav_recon, which already covers 845/845 cohort cons rows. Re-anchoring not worth it; retirement (cons_superseded) confirmed correct. Only unique offering is cost_conservation (gav has no cost equivalent) -- if kept, cost-only with ~5% tolerance.
+- Matching gav fully = reproducing gav_recon, which already covers 845/845 cohort cons rows. Re-anchoring not worth it; retirement (cons_superseded) confirmed correct.
+- Follow-up checked whether cost_conservation is worth keeping (gav has no cost equivalent). It is NOT -- it is the panel's weakest check: 83% no_anchor (barely runs), abs residual median 7.7%/p75 35%, and a numerator contaminated by the cost-proxy fill (13.4% of rows have cost==fair_value). No independent arbiter. CONCLUSION: retire the whole conservation engine; do NOT build a cost-only variant.
 
 ### 2026-06-16 -- Shadow panel: remedy pass (surfaced 6,441 -> 3,376, 91% suppressed)
 
