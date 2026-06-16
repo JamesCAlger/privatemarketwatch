@@ -6,6 +6,19 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Shadow adapter: remaining Tier-1/Tier-2 sources (6 new adapters)
+
+- **What changed:** added 6 adapter selects in `scripts/shadow_adapter.py`, wired into `adapter_selects()`. The panel now ingests 11 existing-output sources (was 5). `nonaccrual_flags.csv` has no config constant -> built from `OUTPUT_DIR` locally.
+- **html_template_validation** (`html_extract`): two checks per (cik, report_date) -- `html_agg` (extracted FV vs companyfacts; tight, an extraction-boundary anchor independent of source_recon's XBRL side; 274 FAILs surface via tight_anchor) and `html_carry` (cross-quarter continuity; weak, FAIL->warn; 66 corroborated, 620 lone_weak).
+- **holdings_gav_reconciliation** (`gav_recon`): cross-check of the conservation engine (richer denominators/scope). Surfaces hard FAILs (5) + `over_coverage` (218, the FV-inflation direction); `under_coverage` (1,116) -> gav_other (not surfaced). NOTE: gav_recon flags only 5 hard fails vs the conservation engine's 394 -- a scope discrepancy for the assessment phase.
+- **fund_strategy_validation** (`fund_strategy`): Layer-3 identity-vs-mix; UNDER_REVIEW (475) -> weak warn (generic path).
+- **nonaccrual_flags** (`nonaccrual`): a PRESENCE signal, not pass/fail -- weak warn (868), never surfaced (credit fact, not a defect).
+- **aggregate_header_flags** (`aggregate_header`): name-keyed verdict catalog (no cik; `cik` holds name_norm, period_kind='name'). AGGREGATE_HEADER (803) -> fail, surfaces by review confidence (790 high + 13 medium); JV_SUBSIDIARY (1,175) -> warn agg_jv (not surfaced).
+- **classification_validation** (`classification`): 10 global cross-ref rules; warn when disagreement_pct >= 1% (1 warn = E2 at 3.62%).
+- **Runner scoring:** new branches for `gav_recon` (gav_fail_<e> / gav_over_coverage / gav_other) and `aggregate_header` (agg_header_<c> / agg_jv); html/fund_strategy/nonaccrual/classification use the generic tight_anchor / weak-warn paths. Surface adds gav_fail_strong, gav_fail_moderate, gav_over_coverage, agg_header_high, agg_header_medium. Verified no new adapter leaks into the 'other' bucket.
+- **Result counts:** ledger total 217,688 results across 228 distinct checks (15 engines); 13,572 of 39,493 flagged surfaced (66% suppressed). All Tier-1 and Tier-2 adapters from the integration plan are now wired.
+- **Read-only:** outputs under `data/output/shadow/` only.
+
 ### 2026-06-16 -- Shadow adapter ingests fund_financials validation checks
 
 - **What changed:** new `_fund_financials_select()` in `scripts/shadow_adapter.py` ingests `fund_financials_validation_current.csv` (151K rows, NAV / returns / balance-sheet identity checks). Wired into `adapter_selects()` as the 5th adapter.

@@ -21,13 +21,22 @@ from __future__ import annotations
 import logging
 
 from pipeline.config import (
+    AGGREGATE_HEADER_FLAGS_FILE,
+    CLASSIFICATION_VALIDATION_FILE,
     FUND_FINANCIALS_VALIDATION_CURRENT_FILE,
+    FUND_STRATEGY_VALIDATION_FILE,
+    HOLDINGS_GAV_RECONCILIATION_FILE,
+    HTML_TEMPLATE_VALIDATION_FILE,
     ORACLE_CHECK_RESULTS_FILE,
+    OUTPUT_DIR,
     ROW_VALIDATION_ISSUES_FILE,
     SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
     SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
     VALIDATION_RULES_AGGREGATE_FILE,
 )
+
+# nonaccrual_flags.csv has no config constant; build from OUTPUT_DIR locally.
+NONACCRUAL_FLAGS_FILE = OUTPUT_DIR / "nonaccrual_flags.csv"
 
 logger = logging.getLogger("shadow_adapter")
 
@@ -216,7 +225,177 @@ def _fund_financials_select() -> str | None:
     """
 
 
+def _html_template_select() -> str | None:
+    """HTML-extraction validation: FV reconciliation at the extraction boundary.
+
+    An anchor independent of source_recon (which reconciles the XBRL side) -- this
+    reconciles HTML-extracted FV against companyfacts for the pre-XBRL/HTML cohort.
+    Two checks per (cik, report_date): `html_agg` (extracted FV sum vs companyfacts;
+    tight, FAIL surfaces via the generic tight_anchor path) and `html_carry`
+    (cross-quarter carry continuity; weak -- a FAIL is mapped to a warn flag).
+    """
+    f = HTML_TEMPLATE_VALIDATION_FILE
+    if not f.exists():
+        logger.info("adapter: html_template_validation absent -- skip")
+        return None
+    t = f"read_csv_auto('{f.as_posix()}', sample_size=-1)"
+    return f"""
+    SELECT 'html_extract' AS engine, 'html_agg' AS rule_name, 'tight' AS tier,
+           'advisory' AS enforcement, CAST(cik AS VARCHAR) AS cik,
+           'report_date' AS period_kind, CAST(report_date AS VARCHAR) AS period,
+           CASE WHEN bool_or(upper(agg_status) = 'FAIL') THEN 'fail'
+                WHEN bool_or(upper(agg_status) = 'PASS') THEN 'pass' ELSE 'skip' END AS status,
+           round(any_value(TRY_CAST(adj_ratio AS DOUBLE)), 3) AS metric, 'adj_ratio' AS metric_name,
+           count(*) AS n_units,
+           CASE WHEN bool_or(CAST(drift_detected AS BOOLEAN)) THEN 'drift'
+                ELSE CAST(NULL AS VARCHAR) END AS mechanism,
+           CAST(NULL AS VARCHAR) AS src_confidence
+    FROM {t} GROUP BY cik, report_date
+    UNION ALL
+    SELECT 'html_extract', 'html_carry', 'weak', 'advisory', CAST(cik AS VARCHAR),
+           'report_date', CAST(report_date AS VARCHAR),
+           CASE WHEN bool_or(upper(carry_status) = 'FAIL') THEN 'warn'
+                WHEN bool_or(upper(carry_status) = 'PASS') THEN 'pass' ELSE 'skip' END,
+           round(any_value(TRY_CAST(carry_rate AS DOUBLE)), 3), 'carry_rate', count(*),
+           CAST(NULL AS VARCHAR), CAST(NULL AS VARCHAR)
+    FROM {t} GROUP BY cik, report_date
+    """
+
+
+def _gav_recon_select() -> str | None:
+    """Holdings GAV reconciliation -- the existing, richer cross-check of the
+    conservation engine (handles subsidiary positions, multiple denominators,
+    aggregate-filtered scope). The runner surfaces hard FAILs and OVER_COVERAGE
+    (positions exceeding the denominator -- the FV-inflation direction), but NOT
+    under_coverage (incomplete extraction, an expected gap). `blocks_verified`
+    marks production's own verified-blocker disposition.
+    """
+    f = HOLDINGS_GAV_RECONCILIATION_FILE
+    if not f.exists():
+        logger.info("adapter: holdings_gav_reconciliation absent -- skip")
+        return None
+    return f"""
+    SELECT 'gav_recon' AS engine, 'gav_reconciliation' AS rule_name, 'tight' AS tier,
+           CASE WHEN bool_or(CAST(blocks_verified AS BOOLEAN)) THEN 'blocking_eligible'
+                ELSE 'advisory' END AS enforcement,
+           CAST(cik AS VARCHAR) AS cik, 'report_date' AS period_kind,
+           CAST(report_date AS VARCHAR) AS period,
+           CASE WHEN bool_or(upper(reconciliation_status) = 'FAIL') THEN 'fail'
+                WHEN bool_or(upper(reconciliation_status) = 'WARN') THEN 'warn'
+                WHEN bool_or(upper(reconciliation_status) = 'PASS') THEN 'pass' ELSE 'skip' END AS status,
+           round(any_value(TRY_CAST(residual_pct AS DOUBLE)), 2) AS metric, 'residual_pct' AS metric_name,
+           count(*) AS n_units,
+           CASE WHEN bool_or(flag = 'over_coverage') THEN 'over_coverage'
+                WHEN bool_or(flag = 'under_coverage') THEN 'under_coverage'
+                ELSE lower(any_value(flag)) END AS mechanism,
+           lower(any_value(comparison_confidence)) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY cik, report_date
+    """
+
+
+def _fund_strategy_select() -> str | None:
+    """Layer-3 fund identity vs holdings-mix validation (weak/advisory axis).
+
+    `validation_status` UNDER_REVIEW -> warn flag (flows the generic weak-warn path:
+    surfaces only when corroborated by a co-located tight fail). NO_REFERENCE -> skip.
+    """
+    f = FUND_STRATEGY_VALIDATION_FILE
+    if not f.exists():
+        logger.info("adapter: fund_strategy_validation absent -- skip")
+        return None
+    return f"""
+    SELECT 'fund_strategy' AS engine, 'fund_strategy_validation' AS rule_name, 'weak' AS tier,
+           'advisory' AS enforcement, CAST(cik AS VARCHAR) AS cik,
+           'report_date' AS period_kind, CAST(report_date AS VARCHAR) AS period,
+           CASE WHEN bool_or(upper(validation_status) = 'UNDER_REVIEW') THEN 'warn'
+                WHEN bool_or(upper(validation_status) = 'PASS') THEN 'pass' ELSE 'skip' END AS status,
+           round(100.0 * sum(COALESCE(TRY_CAST(affected_fair_value AS DOUBLE), 0))
+                 / NULLIF(sum(COALESCE(TRY_CAST(total_fair_value AS DOUBLE), 0)), 0), 2) AS metric,
+           'affected_pct' AS metric_name, count(*) AS n_units,
+           lower(any_value(strategy_source)) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY cik, report_date
+    """
+
+
+def _nonaccrual_select() -> str | None:
+    """Non-accrual evidence -- a PRESENCE signal, not a pass/fail check.
+
+    Non-accrual is a credit-risk fact, not a data defect, so it is ingested as a
+    weak warn (visible in the ledger, never surfaced) capturing the count of
+    flagged positions per (cik, report_date) and the dominant evidence source.
+    """
+    f = NONACCRUAL_FLAGS_FILE
+    if not f.exists():
+        logger.info("adapter: nonaccrual_flags absent -- skip")
+        return None
+    return f"""
+    SELECT 'nonaccrual' AS engine, 'nonaccrual_flag' AS rule_name, 'weak' AS tier,
+           'advisory' AS enforcement, CAST(cik AS VARCHAR) AS cik,
+           'report_date' AS period_kind, CAST(report_date AS VARCHAR) AS period,
+           'warn' AS status,
+           CAST(count(*) AS DOUBLE) AS metric, 'nonaccrual_positions' AS metric_name,
+           count(*) AS n_units,
+           lower(any_value(nonaccrual_source)) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY cik, report_date
+    """
+
+
+def _aggregate_header_select() -> str | None:
+    """Reviewed aggregate/JV-header verdict catalog (name-keyed, no cik/period).
+
+    Directly on the FV over-inclusion axis. The source has no cik, so `cik` holds
+    the normalized issuer name (period_kind='name'). AGGREGATE_HEADER = a confirmed
+    subtotal/header that should not be a position (status=fail -> surfaces by the
+    review confidence); JV_SUBSIDIARY = a subsidiary holding (status=warn, not a
+    defect -> not surfaced).
+    """
+    f = AGGREGATE_HEADER_FLAGS_FILE
+    if not f.exists():
+        logger.info("adapter: aggregate_header_flags absent -- skip")
+        return None
+    return f"""
+    SELECT 'aggregate_header' AS engine, CAST(verdict AS VARCHAR) AS rule_name, 'tight' AS tier,
+           'advisory' AS enforcement,
+           COALESCE(CAST(name_norm AS VARCHAR), '(unknown)') AS cik,
+           'name' AS period_kind, '' AS period,
+           CASE WHEN upper(verdict) = 'AGGREGATE_HEADER' THEN 'fail' ELSE 'warn' END AS status,
+           round(sum(COALESCE(TRY_CAST(total_fv AS DOUBLE), 0)) / 1e6, 2) AS metric, 'total_fv_m' AS metric_name,
+           sum(COALESCE(TRY_CAST(n_positions AS BIGINT), 0)) AS n_units,
+           lower(CAST(verdict AS VARCHAR)) AS mechanism,
+           lower(any_value(confidence)) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY verdict, name_norm
+    """
+
+
+def _classification_select() -> str | None:
+    """Classification cross-reference rules (10 global rules, disagreement rate).
+
+    A rule warns when actual classifications disagree with the expected mapping at
+    >=1% (weak; flows the generic weak-warn path). Global grain (no cik/period).
+    """
+    f = CLASSIFICATION_VALIDATION_FILE
+    if not f.exists():
+        logger.info("adapter: classification_validation absent -- skip")
+        return None
+    return f"""
+    SELECT 'classification' AS engine, CAST(rule AS VARCHAR) AS rule_name, 'weak' AS tier,
+           'advisory' AS enforcement, '(global)' AS cik, 'global' AS period_kind, '' AS period,
+           CASE WHEN TRY_CAST(disagreement_pct AS DOUBLE) >= 1.0 THEN 'warn' ELSE 'pass' END AS status,
+           TRY_CAST(disagreement_pct AS DOUBLE) AS metric, 'disagreement_pct' AS metric_name,
+           COALESCE(TRY_CAST(disagreement_count AS BIGINT), 0) AS n_units,
+           CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    """
+
+
 def adapter_selects() -> list[str]:
     """Return normalized ledger-schema SELECT fragments for every available source."""
     return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select(),
-                        _row_issues_select(), _fund_financials_select()) if s]
+                        _row_issues_select(), _fund_financials_select(),
+                        _html_template_select(), _gav_recon_select(),
+                        _fund_strategy_select(), _nonaccrual_select(),
+                        _aggregate_header_select(), _classification_select()) if s]

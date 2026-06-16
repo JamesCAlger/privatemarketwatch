@@ -55,6 +55,10 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 #   row_warn_<e>         : validate_holdings WARN-severity row issue (advisory bulk)
 #   ffv_fail_<e>         : fund_financials check failed; ffv_fail_strong = FAIL-severity
 #                          (hard) check, else graded by the check's evidence_strength
+#   gav_fail_<e> / gav_over_coverage : holdings GAV reconciliation fail / positions
+#                          exceeding the denominator (FV inflation); under_coverage
+#                          (incomplete extraction) -> gav_other (not surfaced)
+#   agg_header_<c>       : reviewed AGGREGATE_HEADER verdict, graded by review confidence
 #   corroborated         : weak warn co-located with a tight fail at same cik+period
 #   scope_caveat         : rule is known definitional/scope-heavy -> suppress
 #   lone_weak            : weak warn, no corroboration -> low confidence (noise)
@@ -167,7 +171,9 @@ def main(argv: list[str] | None = None) -> int:
         SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated',
                                   'source_blocking_high','source_blocking_medium',
                                   'row_block_verified','row_fail_strong','row_fail_moderate',
-                                  'ffv_fail_strong','ffv_fail_moderate')) AS surface
+                                  'ffv_fail_strong','ffv_fail_moderate',
+                                  'gav_fail_strong','gav_fail_moderate','gav_over_coverage',
+                                  'agg_header_high','agg_header_medium')) AS surface
         FROM (
             WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
             SELECT l.*,
@@ -185,6 +191,16 @@ def main(argv: list[str] | None = None) -> int:
                     -- (hard) check, otherwise grade by the check's own evidence_strength.
                     WHEN l.engine='fund_financials' AND l.status='fail' AND l.tier='tight' THEN 'ffv_fail_strong'
                     WHEN l.engine='fund_financials' AND l.status='fail' THEN 'ffv_fail_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
+                    -- gav reconciliation: hard fails + over_coverage (positions exceed the
+                    -- denominator = FV inflation) surface; under_coverage (incomplete
+                    -- extraction) does not.
+                    WHEN l.engine='gav_recon' AND l.status='fail' THEN 'gav_fail_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
+                    WHEN l.engine='gav_recon' AND l.mechanism='over_coverage' THEN 'gav_over_coverage'
+                    WHEN l.engine='gav_recon' THEN 'gav_other'
+                    -- aggregate_header: confirmed subtotal/header (fail) surfaces by review
+                    -- confidence; JV_SUBSIDIARY (warn) is a classification, not a defect.
+                    WHEN l.engine='aggregate_header' AND l.mechanism='aggregate_header' THEN 'agg_header_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
+                    WHEN l.engine='aggregate_header' THEN 'agg_jv'
                     WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
                     WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
                     WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'
