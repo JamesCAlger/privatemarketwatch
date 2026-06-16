@@ -68,8 +68,11 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 #                          -> agg_header_excluded (not surfaced)
 #   corroborated         : weak warn co-located with a tight fail, EXCLUDING nonaccrual
 #                          (a credit fact) and pure column-format warns (co-location noise)
-#   cons_superseded      : conservation engine fail -> retired from surfacing; gav_recon
-#                          is the FV-reconciliation authority (engine was ~80% FP)
+#   cost_conservation_fail : sum(position cost) vs companyfacts InvestmentOwnedAtCost
+#                          (independent fund-level total, 88% coverage) -> a real tight
+#                          check, non-redundant with gav_recon (gav has no cost side)
+#   cons_superseded      : fv_conservation fail -> retired from surfacing; gav_recon is
+#                          the FV-reconciliation authority (engine was ~80% FP)
 #   xs_highlights_unreliable : cross_source check vs the broken bdc_fund_highlights -> not surfaced
 #   scope_caveat         : rule is known definitional/scope-heavy -> suppress
 #   lone_weak            : weak warn, no corroboration -> low confidence (noise)
@@ -170,7 +173,9 @@ def main(argv: list[str] | None = None) -> int:
 
     parts: list[str] = []
 
-    # 1. conservation (always creates result_<name>)
+    # 1. conservation (always creates result_<name>). cost_conservation uses the
+    #    companyfacts InvestmentOwnedAtCost anchor -> build it first.
+    cons.ensure_companyfacts_cost(con)
     for r in cons.RULES:
         cons.run_rule(con, r)
         parts.append(_CONS.format(name=r.name))
@@ -238,7 +243,7 @@ def main(argv: list[str] | None = None) -> int:
         SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated',
                                   'source_blocking_high','source_blocking_medium',
                                   'row_block_verified','row_fail_strong','row_fail_moderate',
-                                  'ffv_fail_strong',
+                                  'ffv_fail_strong','cost_conservation_fail',
                                   'gav_fail_strong','gav_fail_moderate','gav_over_coverage',
                                   'agg_header_high','agg_header_medium')) AS surface
         FROM (
@@ -246,10 +251,18 @@ def main(argv: list[str] | None = None) -> int:
             SELECT l.*,
                 CASE
                     WHEN l.status NOT IN ('fail','warn') THEN NULL
-                    -- conservation is superseded by gav_recon (the mature FV reconciliation
-                    -- with subsidiary/multi-denominator scope); assessment 2026-06-16 found
-                    -- it ~80% false-positive, and cost_conservation has no cross-check.
-                    -- Retired from surfacing (kept in ledger as advisory).
+                    -- cost_conservation is re-anchored on companyfacts InvestmentOwnedAtCost
+                    -- (independent fund-level total, 88% coverage) -- a real tight check that
+                    -- is NON-redundant with gav_recon (gav has no cost side). Surfaces.
+                    WHEN l.engine='conservation' AND l.rule_name='cost_conservation' AND l.status='fail'
+                         AND abs(l.metric) <= 100 THEN 'cost_conservation_fail'
+                    -- a >100% residual implies a near-zero/partial companyfacts anchor, not a
+                    -- real cost mismatch (positions can't sum to >2x the reported total).
+                    WHEN l.engine='conservation' AND l.rule_name='cost_conservation' AND l.status='fail'
+                         THEN 'cost_conservation_anchor_bad'
+                    -- fv_conservation is superseded by gav_recon (the mature FV reconciliation
+                    -- with subsidiary/multi-denominator scope); assessment 2026-06-16 found it
+                    -- ~80% false-positive. Retired from surfacing (kept in ledger as advisory).
                     WHEN l.engine='conservation' AND l.status='fail' THEN 'cons_superseded'
                     -- source_reconciliation classifies its own residuals (blocking_issue +
                     -- mechanism + confidence); defer to it rather than the bootstrap heuristic.

@@ -6,6 +6,15 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Revived cost_conservation re-anchored on companyfacts InvestmentOwnedAtCost
+
+- **Engine (`scripts/shadow_conservation_engine.py`):** new `companyfacts_concept` anchor kind + `ensure_companyfacts_cost()` that extracts the undimensioned `InvestmentOwnedAtCost` total from the companyfacts cache (cache-only, no network) into a `_cf_cost` temp table. cost_conservation now anchors on companyfacts cost (fallback: schedule total) with a 5% tolerance (was schedule-only at 0.5%).
+- **Coverage/quality:** no_anchor 702 -> 101 (17% -> 88% coverage); reconciles 63 -> 554; median value_sum/anchor 1.0006. The 190 fails are NOT proxy-driven (median cost-proxy fraction 8.3% on fails vs 8.5% on reconciles) -- genuine cost residuals.
+- **Runner (`scripts/shadow_validation_runner.py`):** calls `ensure_companyfacts_cost` before the conservation rules. cost_conservation fails surface as `cost_conservation_fail` (a real tight check, non-redundant with gav_recon which has no cost side); fv_conservation stays `cons_superseded`. Upper guard: residual >100% -> `cost_conservation_anchor_bad` (near-zero/partial anchor, not surfaced).
+- **Result:** 185 surfaced cost_conservation_fail (residuals 5.1-99.9%) + 5 anchor_bad suppressed. Surfaced total 3,376 -> 3,561. Read-only; ledger contract still validates 50 fragments.
+- **Follow-up (path B, not done):** extract `investments_at_cost` into fund_financials via extract_companyfacts (exact concept InvestmentOwnedAtCost) so oracle/GAV checks can reuse the fund-level cost.
+
+
 ### 2026-06-16 -- CORRECTION: fund-level reported cost exists; cost_conservation is salvageable
 
 - Reverses the two prior cost_conservation entries. companyfacts `InvestmentOwnedAtCost` (undimensioned fund-level total) IS cached for 75/76 cohort CIKs -- same coverage as `InvestmentOwnedAtFairValue` -- just not extracted into fund_financials.

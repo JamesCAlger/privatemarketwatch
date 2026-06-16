@@ -13,6 +13,7 @@ Read-only; writes only to data/output/shadow/.
 
 from __future__ import annotations
 
+import json
 import logging
 import re
 import sys
@@ -24,6 +25,7 @@ import duckdb
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     BDC_HOLDINGS_PARQUET_FILE,
+    COMPANYFACTS_CACHE_DIR,
     FUND_FINANCIALS_FILE,
     OUTPUT_DIR,
     OVERRIDES_DIR,
@@ -86,9 +88,15 @@ RULES: list[ConservationRule] = [
         name="cost_conservation",
         value_column="cost",
         anchors=(
-            # no companyfacts cost concept; reconcile to the schedule total cost
+            # companyfacts InvestmentOwnedAtCost (undimensioned fund-level total) is the
+            # independent anchor -- 75/76 cohort coverage, same as FV. Schedule total is the
+            # fallback. Re-anchored 2026-06-16 (was schedule-only, 17% coverage).
+            Anchor("companyfacts_concept", "companyfacts_cost", "InvestmentOwnedAtCost"),
             Anchor("schedule_total", "schedule_total_cost", "cost"),
         ),
+        # 5% band: FV/cost-vs-companyfacts has inherent scope/timing noise, and the unified
+        # cost numerator includes ~13% cost-proxy fills (cost==fair_value). 0.5% is unrealistic.
+        tolerance_pct=0.05,
     ),
 ]
 
@@ -107,6 +115,41 @@ def _bdc() -> str:
 
 def wrapped_ciks() -> list[str]:
     return sorted(p.stem for p in WRAPPER_DIR.glob("*.json") if _CIK_RE.match(p.stem))
+
+
+_CF_FORMS = ("10-K", "10-Q", "10-K/A", "10-Q/A")
+
+
+def ensure_companyfacts_cost(con: duckdb.DuckDBPyConnection) -> int:
+    """Build TEMP TABLE _cf_cost(cik, report_date, anchor_value) from the cached
+    companyfacts InvestmentOwnedAtCost (undimensioned fund-level total). Cache-only,
+    no network. Must be called (with a `wrapped` table present) before running any
+    rule that uses a companyfacts_concept anchor.
+    """
+    ciks = [r[0] for r in con.execute("SELECT cik FROM wrapped").fetchall()]
+    rows: list[tuple[str, str, float]] = []
+    for cik in ciks:
+        p = COMPANYFACTS_CACHE_DIR / f"{cik}.json"
+        if not p.exists():
+            continue
+        try:
+            node = json.loads(p.read_text()).get("facts", {}).get("us-gaap", {}).get("InvestmentOwnedAtCost")
+        except Exception:
+            continue
+        if not node:
+            continue
+        best: dict[str, float] = {}
+        for v in node.get("units", {}).get("USD", []):
+            if v.get("form") not in _CF_FORMS:
+                continue
+            end, val = v.get("end"), v.get("val")
+            if end and val is not None:
+                best[end] = max(best.get(end, 0.0), float(val))
+        rows.extend((cik, end, val) for end, val in best.items())
+    con.execute("CREATE OR REPLACE TEMP TABLE _cf_cost(cik VARCHAR, report_date VARCHAR, anchor_value DOUBLE)")
+    if rows:
+        con.executemany("INSERT INTO _cf_cost VALUES (?, ?, ?)", rows)
+    return len(rows)
 
 
 def _anchor_table_sql(anchor: Anchor) -> str:
@@ -133,6 +176,9 @@ def _anchor_table_sql(anchor: Anchor) -> str:
             WHERE {_SCHEDULE_TOTAL_SQL}
             GROUP BY 1, 2
         """
+    if anchor.kind == "companyfacts_concept":
+        # Reads the table built by ensure_companyfacts_cost() (cache-only extraction).
+        return "SELECT cik, report_date, anchor_value FROM _cf_cost"
     raise ValueError(f"unknown anchor kind: {anchor.kind}")
 
 
@@ -199,7 +245,9 @@ def main(argv: list[str] | None = None) -> int:
     con = duckdb.connect()
     con.execute("CREATE TABLE wrapped(cik VARCHAR)")
     con.executemany("INSERT INTO wrapped VALUES (?)", [(c,) for c in ciks])
-    logger.info("conservation engine: cohort %d CIKs, %d rules", len(ciks), len(RULES))
+    n_cf = ensure_companyfacts_cost(con)
+    logger.info("conservation engine: cohort %d CIKs, %d rules, %d companyfacts cost facts",
+                len(ciks), len(RULES), n_cf)
 
     for rule in RULES:
         run_rule(con, rule)
