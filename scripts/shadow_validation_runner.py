@@ -54,7 +54,12 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 #                          own evidence_strength (strong/moderate/weak)
 #   row_warn_<e>         : validate_holdings WARN-severity row issue (advisory bulk)
 #   ffv_fail_<e>         : fund_financials check failed; ffv_fail_strong = FAIL-severity
-#                          (hard) check, else graded by the check's evidence_strength
+#                          (hard) check surfaces, else graded by evidence_strength.
+#                          ffv_fail_moderate is NOT surfaced (assessment 2026-06-16:
+#                          the MODERATE cluster is coverage/ratio/heuristic, 32%
+#                          cross-engine corroboration -- definitional, not errors).
+#   cons_gav_cleared     : conservation FV fail that gav_recon (the mature impl) clears
+#                          -> false positive, not surfaced (~80% of conservation fails)
 #   gav_fail_<e> / gav_over_coverage : holdings GAV reconciliation fail / positions
 #                          exceeding the denominator (FV inflation); under_coverage
 #                          (incomplete extraction) -> gav_other (not surfaced)
@@ -205,11 +210,16 @@ def main(argv: list[str] | None = None) -> int:
         SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated',
                                   'source_blocking_high','source_blocking_medium',
                                   'row_block_verified','row_fail_strong','row_fail_moderate',
-                                  'ffv_fail_strong','ffv_fail_moderate',
+                                  'ffv_fail_strong',
                                   'gav_fail_strong','gav_fail_moderate','gav_over_coverage',
                                   'agg_header_high','agg_header_medium')) AS surface
         FROM (
-            WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
+            WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail'),
+                 -- gav_recon is the mature FV reconciliation; where it PASSES, a
+                 -- conservation-engine FV fail at the same cik+period is a false positive
+                 -- (assessment 2026-06-16: ~80% of conservation FV fails are gav-cleared).
+                 gav_ok AS (SELECT DISTINCT cik, period FROM ledger
+                            WHERE engine='gav_recon' AND status='pass')
             SELECT l.*,
                 CASE
                     WHEN l.status NOT IN ('fail','warn') THEN NULL
@@ -235,6 +245,9 @@ def main(argv: list[str] | None = None) -> int:
                     -- confidence; JV_SUBSIDIARY (warn) is a classification, not a defect.
                     WHEN l.engine='aggregate_header' AND l.mechanism='aggregate_header' THEN 'agg_header_' || COALESCE(NULLIF(l.src_confidence, ''), 'na')
                     WHEN l.engine='aggregate_header' THEN 'agg_jv'
+                    -- conservation FV fail that the mature gav_recon clears -> false positive.
+                    WHEN l.engine='conservation' AND l.rule_name='fv_conservation' AND l.status='fail'
+                         AND go.cik IS NOT NULL THEN 'cons_gav_cleared'
                     WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
                     WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
                     WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'
@@ -242,7 +255,9 @@ def main(argv: list[str] | None = None) -> int:
                     WHEN l.tier='weak' AND l.status='warn' THEN 'lone_weak'
                     ELSE 'other'
                 END AS confidence
-            FROM ledger l LEFT JOIN tf ON l.cik=tf.cik AND l.period=tf.period
+            FROM ledger l
+            LEFT JOIN tf ON l.cik=tf.cik AND l.period=tf.period
+            LEFT JOIN gav_ok go ON l.cik=go.cik AND l.period=go.period
         )
         """
     )

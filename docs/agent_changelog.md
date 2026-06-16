@@ -6,6 +6,15 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Shadow panel: ledger contract hardening + adapter false-positive assessment
+
+- **Hardening:** `scripts/shadow_validation_runner.py` now asserts a typed 13-column contract per fragment before the union (`_assert_ledger_contract` DESCRIBEs each SELECT; requires the exact column names in order, metric/n_units numeric, the rest VARCHAR). Validated 50 fragments; verified it catches a reordered/mistyped column instead of relying on DuckDB to coincidentally throw.
+- **Assessment (read-only, no truth set):** direct check-to-check reconciliation + cross-engine corroboration + check-note inspection. Findings (full detail in `data/output/data_investigation_results.md`, 2026-06-16):
+  - The conservation engine is ~80% false-positive vs the mature `holdings_gav_reconciliation`: 268 of its cohort FV fails are cleared by gav_recon (pass/ok), only 47 corroborated. gav_recon handles subsidiaries/multiple denominators; the engine's anchor is too tight.
+  - fund_financials is the corroboration outlier (31.7% vs 94-100% for every other engine); its `ffv_fail_moderate` cluster is coverage/ratio/heuristic (F28 coverage, F22 incomplete-extraction, F16 distribution heuristic, F20 duplicates the gav warn), not value errors.
+- **Precision fixes applied (surfacing only):** (1) `ffv_fail_moderate` demoted from surface -- only fund_financials FAIL-severity (`ffv_fail_strong`, 95) surfaces; (2) new `cons_gav_cleared` -- a conservation FV fail where gav_recon passes the same cik+period is not surfaced. Surfaced dropped 13,572 -> 6,441 (84% suppressed); removed exactly 6,863 ffv_moderate + 268 cons_gav_cleared.
+- **For later:** re-anchor the conservation engine on gav_recon's denominator logic (or retire fv_conservation); dedup F20 vs gav; localize aggregate_header_high (name-keyed/global) to the cohort.
+
 ### 2026-06-16 -- Shadow adapter: remaining Tier-1/Tier-2 sources (6 new adapters)
 
 - **What changed:** added 6 adapter selects in `scripts/shadow_adapter.py`, wired into `adapter_selects()`. The panel now ingests 11 existing-output sources (was 5). `nonaccrual_flags.csv` has no config constant -> built from `OUTPUT_DIR` locally.
