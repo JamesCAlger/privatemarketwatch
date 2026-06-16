@@ -78,7 +78,35 @@ SCOPE_CAVEAT = {"income_identity", "pct_position_concentration",
 def _sql_set(s: set[str]) -> str:
     return ", ".join(f"'{x}'" for x in sorted(s))
 
-# Per-engine normalization to the common ledger schema (11 columns, same order).
+
+# Explicit ledger contract: every engine/adapter SELECT must yield exactly these
+# 13 columns, in this order, with these types. Asserted per-fragment before the
+# union so a reordered or mistyped column fails loudly with a clear message rather
+# than relying on DuckDB to coincidentally throw (or silently coerce).
+LEDGER_COLUMNS = ["engine", "rule_name", "tier", "enforcement", "cik", "period_kind",
+                  "period", "status", "metric", "metric_name", "n_units",
+                  "mechanism", "src_confidence"]
+_NUMERIC_COLS = {"metric", "n_units"}
+_NUMERIC_TYPES = {"DOUBLE", "FLOAT", "REAL", "DECIMAL", "INTEGER", "BIGINT", "HUGEINT",
+                  "SMALLINT", "TINYINT", "UBIGINT", "UINTEGER", "USMALLINT", "UTINYINT"}
+
+
+def _assert_ledger_contract(con: duckdb.DuckDBPyConnection, fragment: str, idx: int) -> None:
+    """Raise if a SELECT fragment does not match the 13-column typed ledger contract."""
+    desc = con.execute("DESCRIBE " + fragment).fetchall()  # (name, type, null, key, default, extra)
+    names = [r[0] for r in desc]
+    if names != LEDGER_COLUMNS:
+        raise ValueError(f"ledger contract violation in part {idx}: columns {names} != {LEDGER_COLUMNS}")
+    for name, typ, *_ in desc:
+        base = typ.split("(")[0].upper()
+        if name in _NUMERIC_COLS:
+            if base not in _NUMERIC_TYPES:
+                raise ValueError(f"ledger contract violation in part {idx}: column '{name}' type {typ} is not numeric")
+        elif base != "VARCHAR":
+            raise ValueError(f"ledger contract violation in part {idx}: column '{name}' type {typ} is not VARCHAR")
+
+
+# Per-engine normalization to the common ledger schema (13 columns, same order).
 _CONS = """
 SELECT 'conservation' AS engine, rule_name, tier, enforcement, cik,
        'report_date' AS period_kind, report_date AS period,
@@ -161,6 +189,12 @@ def main(argv: list[str] | None = None) -> int:
     adapter_parts = adp.adapter_selects()
     parts.extend(adapter_parts)
     logger.info("adapters: %d existing-output sources ingested", len(adapter_parts))
+
+    # Hardening: assert every fragment matches the typed 13-column contract before
+    # the union, so a future engine/adapter cannot silently misalign a column.
+    for i, frag in enumerate(parts):
+        _assert_ledger_contract(con, frag, i)
+    logger.info("ledger contract: %d fragments validated (13 typed columns each)", len(parts))
 
     con.execute("CREATE TABLE ledger AS " + " UNION ALL ".join(parts))
 
