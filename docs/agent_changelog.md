@@ -6,6 +6,13 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Cleanup: repoint cost_conservation onto the fund_financials production column
+
+- `scripts/shadow_conservation_engine.py`: cost_conservation's PRIMARY anchor is now `fund_financials.investments_at_cost` (the path-B production column), with the direct companyfacts-cache read kept as a fallback and schedule-total last. Closes the path-A/path-B loop using the production column instead of the bespoke cache read as the main path. Engine-only change (the runner is under concurrent edit, so its harmless `ensure_companyfacts_cost` call is left in place).
+- **Validated:** results identical to the cache-read version (reconciles 554 / overshoot 140 / undershoot 50 / no_anchor 101). anchor_used split: ff_investments_at_cost 686, schedule_total 58, cf_cache_cost (the old read) 0 -- the production column fully substitutes the cache read with zero regression, so the fallback is provably redundant.
+- Full runner builds clean; cost_conservation_fail still surfaces 185. The cf_cache_cost fallback + ensure_companyfacts_cost can be removed once the runner edits land (would need the runner change).
+
+
 ### 2026-06-16 -- Blind-spot profile + cohort split for the quality-tier view
 
 - Profiled the strong-anchor blind spots and found the quality-tier universe is ~204 BDC CIKs (the identity engine is not cohort-scoped), not the 77 wrapped cohort. `scripts/shadow_quality_tiers.py` now tags each fund-quarter `cohort` (wrapped=published vs other) in both outputs, correcting the earlier mislabel.

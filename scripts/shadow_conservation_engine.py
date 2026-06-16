@@ -88,14 +88,18 @@ RULES: list[ConservationRule] = [
         name="cost_conservation",
         value_column="cost",
         anchors=(
-            # companyfacts InvestmentOwnedAtCost (undimensioned fund-level total) is the
-            # independent anchor -- 75/76 cohort coverage, same as FV. Schedule total is the
-            # fallback. Re-anchored 2026-06-16 (was schedule-only, 17% coverage).
-            Anchor("companyfacts_concept", "companyfacts_cost", "InvestmentOwnedAtCost"),
+            # PRIMARY: fund_financials.investments_at_cost -- the production column promoted
+            # 2026-06-16 (path B), sourced from companyfacts InvestmentOwnedAtCost. Using it
+            # closes the loop with production and removes the bespoke cache read as the main
+            # path. FALLBACK: the direct companyfacts-cache read (ensure_companyfacts_cost),
+            # in case fund_financials' quarterly-dedup dropped a report_date. LAST: schedule
+            # total. (Was schedule-only at 0.5% before 2026-06-16; coverage 17% -> ~88%.)
+            Anchor("fund_financials", "ff_investments_at_cost", "investments_at_cost"),
+            Anchor("companyfacts_concept", "cf_cache_cost", "InvestmentOwnedAtCost"),
             Anchor("schedule_total", "schedule_total_cost", "cost"),
         ),
-        # 5% band: FV/cost-vs-companyfacts has inherent scope/timing noise, and the unified
-        # cost numerator includes ~13% cost-proxy fills (cost==fair_value). 0.5% is unrealistic.
+        # 5% band: cost-vs-companyfacts has inherent scope/timing noise, and the unified cost
+        # numerator includes ~13% cost-proxy fills (cost==fair_value). 0.5% is unrealistic.
         tolerance_pct=0.05,
     ),
 ]
