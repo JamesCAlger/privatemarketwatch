@@ -1,0 +1,14 @@
+quantity_group,anchor_id,rank,independence_kind,established_basis,note
+FV_SUM,gold_human,0,gold,human,ultimate source adjudicator
+FV_SUM,companyfacts_fv,1,same_target,structural,InvestmentOwnedAtFairValue fund total
+FV_SUM,schedule_total,2,same_target,structural,schedule grand-total Total Investments
+FV_SUM,html_agg,3,same_target,structural,HTML-extracted FV vs companyfacts
+FV_SUM,total_assets_bound,4,cross_target,structural,positions FV <= total_assets (different companyfacts concept)
+COST_SUM,gold_human,0,gold,human,ultimate source adjudicator
+COST_SUM,companyfacts_cost,1,same_target,structural,InvestmentOwnedAtCost fund total
+COUNT,gold_human,0,gold,human,ultimate source adjudicator
+COUNT,source_recon_leaf,1,same_target,structural,disposition-aware row accounting (COUNT folds here)
+RATE,gold_human,0,gold,human,ultimate source adjudicator
+RATE,income_recon,1,same_target,structural,implied coupon vs total_investment_income
+NAV,gold_human,0,gold,human,ultimate source adjudicator
+NAV,companyfacts_nav,1,same_target,structural,nav*shares vs net_assets

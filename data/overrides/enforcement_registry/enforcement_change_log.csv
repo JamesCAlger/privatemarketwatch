@@ -1,0 +1,6 @@
+timestamp,rule_id,from_state,to_state,authorizer,evidence,effective_accession
+2026-06-16,R07,advisory,blocking,human:day-one-seed,confirmed_impossible: positions FV > fund total assets is logically impossible,v1-seed-2022Q4
+2026-06-16,E02,advisory,blocking,human:day-one-seed,confirmed_impossible: holdings FV > total_assets*1.05,v1-seed-2022Q4
+2026-06-16,SRC_BDC01,advisory,blocking,human:day-one-seed,block_verified: production-verified under-inclusion (source row missing from output),v1-seed-2022Q4
+2026-06-16,GAV_BDC01,advisory,blocking,human:day-one-seed,block_verified: production-verified GAV reconciliation blocker,v1-seed-2022Q4
+2026-06-16,C201,advisory,blocking,human:day-one-seed,block_verified: issuer_name missing on a position row,v1-seed-2022Q4
