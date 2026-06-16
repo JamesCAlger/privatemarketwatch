@@ -199,3 +199,43 @@ Implications for the loop:
 3. Expectation: converts a meaningful fraction of INSUFFICIENT/ESCALATE -> decisive
    NO_PATCH (correct rejection), shrinking the queue WITHOUT parsing fixes. Genuine
    missing-position cases needing a rule are a smaller residual than the raw queue implies.
+
+### v3 POWERED run (2026-06-16) -- raw-source injection does NOT lift PATCH_PROPOSED
+
+Selected 10 packets ENRICHED for genuine single missing positions (identifier carries
+company + lien/instrument + rate, FV $3-57M, not already-matched, diverse CIKs), x 2 arms
+(20 review subagents).
+
+Result (verdict counts):
+  CONTROL  : 1 PATCH_PROPOSED, 1 NO_PATCH, 6 INSUFFICIENT, 2 ESCALATE  (2 decisive)
+  TREATMENT: 0 PATCH_PROPOSED, 3 NO_PATCH, 1 INSUFFICIENT, 6 ESCALATE  (3 decisive)
+
+PATCH path: NOT lifted. Treatment produced ZERO patches; the only PATCH came from CONTROL
+(1865174, "strip category-pct prefix") and TREATMENT REFUTED it -- the raw rows showed
+108/112 pct-prefixed rows already MATCHED, so the proposed rule would false-positive ->
+ESCALATE. So raw injection PREVENTED a likely-wrong patch (improved decision quality),
+it did not add patches.
+
+The decisive finding (consistent across all 10): the "genuine missing position" blockers
+are NOT parser defects. Every one decomposed into:
+  - STALE blockers -- already matched in the raw rows (source_only_blocker_rows snapshot
+    is stale vs the authoritative reconciliation); recurring.
+  - MATCHING/DEDUP artifacts -- FV-distinct duplicate-identifier tranche siblings (same
+    normalized issuer+rate+maturity) collapsed by 1:1 matching; "One"/"Two" split rows;
+    negative-FV revolver/DDTL fragments.
+  - per-CIK HTML TEMPLATE/table-selection gaps (needs scripts/learn_template.py, not a
+    global parser rule) -- e.g. 1372807 default_template picked a Statement of Changes,
+    1544206 foreign/equity sub-schedules unstaged.
+  - XBRL-axis-vs-HTML identifier-scheme mismatch; axis-member-to-row-text misalignment.
+And in nearly every case GAV PASSES / over_coverage -- there is NO real missing FV; the
+pipeline already covers it.
+
+Conclusion of the whole arc: derived enrichment (v1/v2) is circular/useless; raw-source
+injection (v3) improves decisiveness and ACCURACY (confident NO_PATCH on stale/rollup;
+honest ESCALATE on real-but-unpatchable) and CATCHES false-positive patches -- but does
+NOT lift PATCH_PROPOSED, because the parser-mismatch queue is overwhelmingly NOT parse
+defects. The low ~3.8% conversion is a CEILING set by the queue's nature, not a context
+gap. Leverage is: (1) refresh the stale blocker snapshot; (2) fix 1:1 matching for
+FV-distinct same-identifier siblings; (3) per-CIK template work for template-gap CIKs;
+(4) accept most of these need NO patch (GAV already passes). Caveats: n=10 paired,
+verdicts MEDIUM confidence; selection still caught some already-matched despite filtering.
