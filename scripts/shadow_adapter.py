@@ -22,6 +22,7 @@ import logging
 
 from pipeline.config import (
     ORACLE_CHECK_RESULTS_FILE,
+    ROW_VALIDATION_ISSUES_FILE,
     SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
     SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
     VALIDATION_RULES_AGGREGATE_FILE,
@@ -142,6 +143,43 @@ def _source_recon_select() -> str | None:
     """
 
 
+def _row_issues_select() -> str | None:
+    """Per-row validation issues from validate_holdings (the row-grain the engines lack).
+
+    `row_validation_issues.csv` logs only OPEN issues, so `status` is always OPEN --
+    the verdict lives in `severity` (FAIL/WARN/INFO), the certainty in
+    `evidence_strength` (STRONG/MODERATE/WEAK), and `action=BLOCK_VERIFIED` is
+    production's own verified-blocker disposition. Aggregated to one ledger row per
+    (cik, report_date, rule_id); `mechanism` carries the block-verified flag and
+    `src_confidence` carries the evidence strength so the runner can defer to this
+    artifact's own grading rather than the generic bootstrap heuristic.
+    """
+    f = ROW_VALIDATION_ISSUES_FILE
+    if not f.exists():
+        logger.info("adapter: row_validation_issues absent -- skip")
+        return None
+    return f"""
+    SELECT 'row_validation' AS engine, CAST(rule_id AS VARCHAR) AS rule_name,
+           CASE WHEN bool_or(upper(severity) = 'FAIL') THEN 'tight' ELSE 'weak' END AS tier,
+           CASE WHEN bool_or(upper(action) = 'BLOCK_VERIFIED') THEN 'blocking_eligible'
+                ELSE 'advisory' END AS enforcement,
+           COALESCE(CAST(cik AS VARCHAR), '(global)') AS cik,
+           'report_date' AS period_kind,
+           COALESCE(CAST(report_date AS VARCHAR), '') AS period,
+           CASE WHEN bool_or(upper(severity) = 'FAIL') THEN 'fail'
+                WHEN bool_or(upper(severity) = 'WARN') THEN 'warn'
+                ELSE 'skip' END AS status,
+           CAST(count(*) AS DOUBLE) AS metric, 'issue_rows' AS metric_name,
+           count(*) AS n_units,
+           CASE WHEN bool_or(upper(action) = 'BLOCK_VERIFIED') THEN 'block_verified'
+                ELSE lower(any_value(action)) END AS mechanism,
+           lower(any_value(evidence_strength)) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY rule_id, cik, report_date
+    """
+
+
 def adapter_selects() -> list[str]:
     """Return normalized ledger-schema SELECT fragments for every available source."""
-    return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select()) if s]
+    return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select(),
+                        _row_issues_select()) if s]

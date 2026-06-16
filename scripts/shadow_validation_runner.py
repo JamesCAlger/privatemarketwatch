@@ -49,12 +49,17 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 #   source_blocking_<c>  : source_reconciliation's OWN residual classification
 #                          (blocking_issue + mechanism + confidence high/medium/low);
 #                          defers to the mature upstream artifact, not the heuristic
+#   row_block_verified   : validate_holdings row issue with action=BLOCK_VERIFIED
+#   row_fail_<e>         : validate_holdings FAIL-severity row issue, graded by its
+#                          own evidence_strength (strong/moderate/weak)
+#   row_warn_<e>         : validate_holdings WARN-severity row issue (advisory bulk)
 #   corroborated         : weak warn co-located with a tight fail at same cik+period
 #   scope_caveat         : rule is known definitional/scope-heavy -> suppress
 #   lone_weak            : weak warn, no corroboration -> low confidence (noise)
 # surface = {confirmed_impossible, tight_anchor, corroborated,
-#            source_blocking_high, source_blocking_medium} (low-confidence source
-#            residuals are not surfaced, per source_reconciliation's own grade).
+#            source_blocking_high, source_blocking_medium,
+#            row_block_verified, row_fail_strong, row_fail_moderate} (low-confidence
+#            source residuals + row WARN bulk + weak fails are not surfaced).
 # These are PROXIES; real precision still needs the source-adjudicated gold set
 # that the Part B review loop accrues.
 # ---------------------------------------------------------------------------
@@ -157,7 +162,8 @@ def main(argv: list[str] | None = None) -> int:
         f"""
         CREATE TABLE ledger_scored AS
         SELECT *, (confidence IN ('confirmed_impossible','tight_anchor','corroborated',
-                                  'source_blocking_high','source_blocking_medium')) AS surface
+                                  'source_blocking_high','source_blocking_medium',
+                                  'row_block_verified','row_fail_strong','row_fail_moderate')) AS surface
         FROM (
             WITH tf AS (SELECT DISTINCT cik, period FROM ledger WHERE tier='tight' AND status='fail')
             SELECT l.*,
@@ -166,6 +172,11 @@ def main(argv: list[str] | None = None) -> int:
                     -- source_reconciliation classifies its own residuals (blocking_issue +
                     -- mechanism + confidence); defer to it rather than the bootstrap heuristic.
                     WHEN l.engine='source_recon' THEN 'source_blocking_' || COALESCE(l.src_confidence, 'na')
+                    -- row_validation carries its own severity (FAIL/WARN), evidence_strength,
+                    -- and action (BLOCK_VERIFIED = production-verified blocker); defer to it.
+                    WHEN l.engine='row_validation' AND l.mechanism='block_verified' THEN 'row_block_verified'
+                    WHEN l.engine='row_validation' AND l.status='fail' THEN 'row_fail_' || COALESCE(l.src_confidence, 'na')
+                    WHEN l.engine='row_validation' THEN 'row_warn_' || COALESCE(l.src_confidence, 'na')
                     WHEN l.rule_name IN ({_sql_set(CONFIRMED_IMPOSSIBLE)}) THEN 'confirmed_impossible'
                     WHEN l.rule_name IN ({_sql_set(SCOPE_CAVEAT)}) THEN 'scope_caveat'
                     WHEN l.tier='tight' AND l.status='fail' THEN 'tight_anchor'
