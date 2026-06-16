@@ -6,6 +6,15 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Shadow panel capstone: quality-tier rollup + coverage/blind-spot view
+
+- New `scripts/shadow_quality_tiers.py` (read-only, standalone -- reads validation_results_ledger.csv, does NOT touch the runner which is under concurrent edit). Rolls per-check flags up to a per-(cik, report_date) data-quality status and a coverage view.
+- **Quality-tier ladder** (2,594 cohort fund-quarters): under_review 1,299 (50.1%, has a surfaced flag); preliminary 757 (29.2%, evaluated but no strong-anchor pass); verified 538 (20.7%, a strong FV/cost anchor passed clean); unverified 0.
+- **Strong anchor** = independent FV/cost reconciliation: gav_recon, cost_conservation (vs companyfacts cost), html_agg (vs companyfacts), or source_recon. Deliberately distinguished from the weaker per-row identity and cross_source-vs-broken-highlights checks (counting those as coverage overstates confidence -- the naive 8-engine version reported 0 blind spots).
+- **Coverage finding:** 998 fund-quarters (38.5%) have NO strong FV/cost anchor at all -- genuine blind spots where only algebraic/row checks ran. Written to `validation_coverage_gaps.csv`; full tiers to `validation_quality_tiers.csv`.
+- This is the read-only panel's capstone: it turns the flag list into a per-fund-quarter status with honest blind spots, and is what would feed frontend quality tiers. Real precision still needs the Part B gold set (separate track).
+
+
 ### 2026-06-16 -- "15 leaked category headers" resolved: MidCap flattened-identifier issuer mis-parse
 
 - Investigated the 15 agg_header_high names present in cohort unified holdings. They are NOT subtotal leaks: all 122 rows are BDC, all carry full instrument detail (real positions), FV is not inflated.
@@ -2768,3 +2777,29 @@ Net effect: the genuine review backlog shrinks from the blended not_found (was
 ~29k current) to material untagged misses only; unfunded commitments and zero-FV
 positions are recorded with their own class and excluded from review. Producer
 re-running with this + the reference_rate rule fix.
+
+## 2026-06-16 - Refreshed artifact: anchor_class + reference_rate fix (final numbers)
+
+Producer re-run complete (1,180,533 rows; cached HTML only). Both changes applied.
+
+anchor_class distribution:
+  anchored             898,455 (76.1%)
+  comparative          253,053 (21.4%)
+  unfunded_commitment   23,858 (2.0%)
+  missing                5,112 (0.4%)
+  zero_fv                   55 (0.0%)
+
+Genuine current-period review queue (status=not_found, anchor_class=missing):
+5,112 -- down 82% from the prior 29,025. The old not_found split into 23,858
+unfunded_commitment (tagged, no FV fact) + 55 zero_fv + 5,112 genuine material
+misses. Unfunded/zero-FV are recorded with their own class and excluded from
+review; only the 5,112 material untagged positions remain to review.
+
+reference_rate value coverage (current-period) after the column-rule fix:
+  before: value 27.2%  validation_needed 42.0%  blank 26.1%
+  after:  value 44.3%  validation_needed 28.7%  blank 22.4%
+(+107k rows recovered from validation_needed/blank into value.)
+Other fields unchanged by the ref_rate fix: maturity value 70.2%, lien 55.8%,
+sector 93.4%.
+
+Artifact ready for inspection; unified rebuild still pending explicit go.
