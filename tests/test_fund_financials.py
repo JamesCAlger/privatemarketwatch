@@ -1841,6 +1841,7 @@ class TestExtendedConcepts:
             "portfolio_turnover", "asset_coverage_ratio",
             "unfunded_commitments", "unrealized_appreciation",
             "unrealized_depreciation", "debt_weighted_avg_rate",
+            "investments_at_cost",
         }
         assert expected == set(_EXTENDED_FIELDS)
 

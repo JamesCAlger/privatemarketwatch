@@ -6,6 +6,61 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+### 2026-06-16 -- Path B: investments_at_cost promoted into fund_financials (production)
+
+- **`pipeline/extract_companyfacts.py`:** added `investments_at_cost` (exact concept `InvestmentOwnedAtCost`, no fallback -- the affiliate-only alternative would understate) to `_PORTFOLIO_CONCEPTS`, so it flows through `_EXTENDED_FIELDS` everywhere automatically (extraction, empty-DF columns, fund_financials passthrough/seed-null SQL).
+- **`pipeline/fund_financials.py`:** added `investments_at_cost` to `OUTPUT_COLUMNS`.
+- **`tests/test_fund_financials.py`:** updated the pinned `_EXTENDED_FIELDS` set. 138/138 fund_financials + validate_fund_financials tests pass.
+- **Rebuilt `fund_financials.csv` cache-only** (`rebuild_outputs.py --financials`, reused cached N-CSR): 6,282 rows. New column coverage parallels FV -- companyfacts rows 1,951 cost-nonnull vs 2,052 FV-nonnull (95%); N-PORT/N-CEN have none (companyfacts-only concept). No other schema change.
+- **Effect:** the oracle / GAV / validate_holdings checks can now reconcile against an independent fund-level cost anchor (previously only the shadow conservation engine had it, via a direct companyfacts-cache read). 
+- **Deferred (concurrent-edit safety):** repointing the shadow conservation engine from the cache read to the new fund_financials column -- the runner is being edited by another agent (derivative_role adapter); will consolidate once that lands. The cache-read path is correct in the meantime.
+
+
+### 2026-06-16 -- Derivatives extracted + role-classified (analytics-only; indices untouched)
+
+- **New module `pipeline/bdc_derivatives.py`** (cache-only, mirrors `bdc_fund_income.py`):
+  fund-level extraction of BDC derivative net fair value + notional from cached XBRL, with a
+  `derivative_role` classifier (portfolio vs. the BDC's own financing/ALM hedge). Design:
+  `docs/derivative_role_classifier_design.md`; evidence: `data/output/data_investigation_results.md` (2026-06-16).
+- **Net FV is READ, not derived:** `DerivativeFairValueOfDerivativeAsset - ...Liability`
+  (fallback `DerivativeAssets - ...Liabilities`), per type where dimensioned on
+  `us-gaap:DerivativeInstrumentRiskAxis`, else entity-level allocated by notional. Gross
+  unrealized gain/loss is NOT used (tagged by only 3 filers; $0 at period-end for most IR
+  filers). **Notional is kept strictly separate from FV** (separate column; verified ~800x
+  apart from net FV -- no leak into any FV aggregate).
+- **`derivative_role` classifier (layered):** own-debt member naming -> financing_hedge (0.95);
+  ASC-815 designation -> financing_hedge (0.97); TRS -> portfolio; IR-family + notional-ties-debt
+  (0.1-1.5x) -> financing_hedge (0.90), >1.5x -> uncertain; FX forward -> portfolio; option/
+  warrant/future -> portfolio. Floor-axis loan attribute (`InvestmentInterestRateFloorAxis`) is
+  explicitly NOT treated as a derivative (false-positive guard).
+- **Artifacts:** `data/output/bdc_derivatives.csv` (one row per cik/report_date/type:
+  net_fv, net_fv_source, notional, derivative_role, role_confidence, role_mechanism, designated,
+  names_own_debt) and `data/output/derivative_role_review.csv` (uncertain rows for review).
+  Config: `BDC_DERIVATIVES_FILE`, `DERIVATIVE_ROLE_REVIEW_FILE`.
+- **Counts (current cache):** 76 CIKs, 823 type-rows. By role: financing_hedge 49 CIKs net FV
+  -$1,219M / notional $1,017B; portfolio 49 CIKs net FV -$153M / notional $198B; uncertain 6
+  CIKs / 19 review rows. IR swaps dominate financing_hedge (46 CIKs); FX forwards dominate
+  portfolio (36 CIKs).
+- **Indices untouched:** derivatives are a SEPARATE fund-level artifact -- they never enter
+  unified_holdings, position matching, or index_returns. (The `asset_class='DERIVATIVE'`
+  exclusion in position_matching.py remains as belt-and-suspenders.) Unified/position/index
+  CSVs are not rebuilt or modified by this work.
+- **Analytics + frontend:** `_export_portfolio_characteristics` emits `portfolioDerivativeFv`,
+  `financingHedgeFv`, `financingHedgeNotional` (from `bdc_derivatives.csv` at the as-of quarter,
+  unlisted-filtered). `frontend/src/lib/types.ts` + `frontend/src/app/page.tsx` add a
+  "Portfolio Derivatives" donut slice (net FV; the financing-hedge bucket is retained as data,
+  not shown). NOTE: portfolio derivative net FV is small/negative (FX forwards are hedges with
+  tiny MTM despite large notional), so the donut slice is typically negligible -- expected, as
+  net FV (not notional) is the correct composition measure.
+- **Universal review:** uncertain derivatives routed through the shadow validator -- new
+  `_derivative_role_select()` adapter in `scripts/shadow_adapter.py` (registered in
+  `adapter_selects()`), runner CASE `derivative_role_<conf>` with high/medium surfaced.
+- **Wiring:** `--derivatives` flag in `scripts/rebuild_outputs.py` (cache-only; runs in
+  rebuild-all after financials).
+- **Tests:** `tests/test_bdc_derivatives.py` (16): type canonicalization, role classifier
+  branches, and an XBRL fixture proving net-FV extraction, notional-separate-from-FV, and the
+  floor-axis false-positive guard. All pass.
+
 ### 2026-06-16 -- Revived cost_conservation re-anchored on companyfacts InvestmentOwnedAtCost
 
 - **Engine (`scripts/shadow_conservation_engine.py`):** new `companyfacts_concept` anchor kind + `ensure_companyfacts_cost()` that extracts the undimensioned `InvestmentOwnedAtCost` total from the companyfacts cache (cache-only, no network) into a `_cf_cost` temp table. cost_conservation now anchors on companyfacts cost (fallback: schedule total) with a 5% tolerance (was schedule-only at 0.5%).
@@ -2639,3 +2694,69 @@ conservative by design (shadow-list routes 42% to validation_needed).
 
 Still pending (explicit go): wire into a unified rebuild, then export. Coordinate
 with the concurrent cash/derivatives export/frontend work before --export-frontend.
+
+## 2026-06-16 - reference_rate column rule fix + not_found verified as zero-FV commitments
+
+reference_rate_type rule fix (pipeline/bdc_xbrl_html_bridge.py):
+- Root cause of the high reference_rate validation_needed (42%): the column rule
+  matched the numeric "Spread" / "SpreadAboveIndex" column, found a bare number,
+  failed to parse a benchmark, and flagged validation_needed -- while the actual
+  benchmark sat in a separate "Index" / "Reference Rate" column the rule never
+  read.
+- field_status() now gathers ALL matching columns and tries them in priority
+  order (dedicated benchmark column first, then combined, then spread/interest-
+  rate), returning the first that parses to a benchmark. A pure numeric spread
+  column no longer yields a false value; a combined "Reference Rate and Spread"
+  / "SpreadAboveIndex" cell ("SF + 5.50%") is still read.
+- Added bare-code parsing (_benchmark_from_code) for dedicated Index columns that
+  hold codes like "SF" (SOFR) with the spread in a separate column -- applied
+  only on the header-confirmed path.
+- Rule header now: reference rate | index | spread | basis | base rate |
+  interest rate (interest rate is last-priority; numeric all-in rates fail to
+  parse and stay flagged).
+- Verified on the three driver filers (per-filing anchored bridges):
+  - 0001742313: ~0 -> 739 value (SOFR via bare "SF" Index column)
+  - 0001476765 (Golub): preserved 1,241 value (combined SpreadAboveIndex) -- an
+    earlier spread-exclusion attempt regressed this to 0; rejected.
+  - 0001587987: 3,429 validation_needed -> 3,418 value (PRIME via "Interest
+    Rate" column "Prime plus")
+- Tests: 31 in fields suite (added benchmark-vs-spread priority, bare codes,
+  interest-rate column, numeric-spread-not-false-value); 159 across touched
+  lien/bridge files.
+
+not_found verification (answering "did filers skip tagging?"): No. Checked Audax
+(0001633858) iXBRL directly -- all 211 current not_found positions carry current-
+instant InvestmentInterestRate / BasisSpread / ContractualObligation facts but no
+InvestmentOwnedAtFairValue fact, and 100% have $0 flat fair value: they are
+unfunded commitments (delayed draws, revolvers). Universe-wide, 80.6% of current
+not_found rows are zero/near-zero FV and the entire not_found bucket is only
+1.27% of current fair value. The contextRef anchor correctly skips $0 commitments.
+
+Artifact re-run with the fixed rule in progress (cached HTML only). Unified
+rebuild still pending explicit go.
+
+## 2026-06-16 - Separate unfunded commitments from genuine misses (anchor_class)
+
+So the review queue is not polluted by rows we already know are OK, current-period
+unanchored rows are now classified instead of all being not_found
+(pipeline/bdc_xbrl_html_bridge.py):
+- Builder: propose_field_bridges_from_ixbrl now also returns `commitment_ids` --
+  current-instant identifiers the filer DID tag (any fact) but which have NO
+  InvestmentOwnedAtFairValue fact (delayed draws, revolvers, unfunded).
+- build_field_status_rows classifies current unanchored rows + emits `anchor_class`:
+  - unfunded_commitment: identifier in commitment_ids (tagged, no FV fact).
+  - zero_fv: flat fair value confirmed ~0 (|FV| < $1; null FV preserved, NOT
+    treated as zero, so a null does not get silently marked benign).
+  - missing: material (non-zero FV) and untagged -> genuine review item -> stays
+    not_found.
+  Benign classes set every field status to the class label, so a downstream
+  review filter on status==not_found skips them automatically. The overlay is
+  unaffected (it applies status==value only).
+- Producer passes commitment_ids through per filing.
+- Tests: 32 in fields suite (added 4-way classification: anchored / unfunded_
+  commitment / zero_fv / missing); 48 across touched bridge/lien files.
+
+Net effect: the genuine review backlog shrinks from the blended not_found (was
+~29k current) to material untagged misses only; unfunded commitments and zero-FV
+positions are recorded with their own class and excluded from review. Producer
+re-running with this + the reference_rate rule fix.

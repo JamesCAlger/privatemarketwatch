@@ -368,6 +368,13 @@ _PORTFOLIO_CONCEPTS = {
         "fallback": [],
         "unit": "USD", "instant": True,
     },
+    # Fund-level total cost of investments (sibling of investments_at_fair_value).
+    # Independent anchor for cost reconciliation; 75/76 BDC-cohort coverage.
+    "investments_at_cost": {
+        "exact": ["InvestmentOwnedAtCost"],
+        "fallback": [],
+        "unit": "USD", "instant": True,
+    },
     "debt_weighted_avg_rate": {
         "exact": ["DebtWeightedAverageInterestRate"],
         "fallback": [],

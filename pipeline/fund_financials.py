@@ -44,6 +44,7 @@ OUTPUT_COLUMNS = [
     "cik", "entity_name", "vehicle_type", "source",
     "report_quarter", "report_date",
     "total_assets", "net_assets", "total_liabilities", "investments_at_fair_value",
+    "investments_at_cost",
     "nav_per_share", "shares_outstanding", "borrowings",
     "total_investment_income", "net_investment_income",
     "management_fee", "incentive_fee", "interest_expense", "total_expenses",
