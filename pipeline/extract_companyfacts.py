@@ -279,7 +279,15 @@ _BALANCE_SHEET_CONCEPTS = {
 _DISTRIBUTION_CONCEPTS = {
     "distribution_per_share": {
         "exact": ["InvestmentCompanyDistributionToShareholdersPerShare"],
-        "fallback": [],
+        # Fallbacks (only used when the standard element is absent) for funds that
+        # tag their per-share distribution under other standard taxonomy elements:
+        # declared common dividend, or per-unit distribution for LP-structured BDCs.
+        # NOT DividendsPayableAmountPerShare (a balance, not a period flow) and NOT
+        # company-specific component extensions (not present in companyfacts).
+        "fallback": [
+            "CommonStockDividendsPerShareDeclared",
+            "DistributionMadeToLimitedPartnerDistributionsDeclaredPerUnit",
+        ],
         "unit": "USD/shares", "instant": False,
     },
     "dividends_declared_per_share": {

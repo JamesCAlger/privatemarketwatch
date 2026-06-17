@@ -113,6 +113,20 @@ _TOTAL_RETURN_CLASS_PRIORITY = {
 }
 
 
+# NAV-based total-return elements we accept, in priority order (lower = preferred).
+# The plain element is the standard net NAV total return; some filers instead tag
+# only an after-incentive-fee or a custom NAV element (same NAV basis), with the
+# before-fee (gross) variant as a last resort. Market-value total-return elements
+# (InvestmentCompanyTotalReturnMarketValue, *BasedOnMarketValue) are deliberately
+# NOT listed -- those are a different (price) basis and must not be mixed in.
+_TR_ELEMENT_PRIORITY = {
+    "InvestmentCompanyTotalReturn": 0,
+    "InvestmentCompanyTotalReturnAfterIncentiveFees": 1,
+    "TotalReturnBasedOnNetAssetValue": 2,
+    "InvestmentCompanyTotalReturnBeforeIncentiveFees": 3,
+}
+
+
 def _xml_local_name(tag: str) -> str:
     """Return the local XML tag name without namespace."""
     return tag.rsplit("}", 1)[-1] if "}" in tag else tag
@@ -194,7 +208,9 @@ def _extract_bdc_total_return_facts_from_xml(path: Path) -> list[dict]:
     rows: list[dict] = []
     accession = path.stem
     for fact in root.iter():
-        if _xml_local_name(fact.tag) != "InvestmentCompanyTotalReturn":
+        element = _xml_local_name(fact.tag)
+        element_rank = _TR_ELEMENT_PRIORITY.get(element)
+        if element_rank is None:
             continue
         context = contexts.get(fact.attrib.get("contextRef", ""))
         if not context:
@@ -207,6 +223,8 @@ def _extract_bdc_total_return_facts_from_xml(path: Path) -> list[dict]:
             **context,
             "raw_value": raw_value,
             "value": _normalize_total_return_fact_value(raw_value),
+            "element": element,
+            "element_rank": element_rank,
             "accession": accession,
             "path": str(path),
         })
@@ -266,11 +284,11 @@ def extract_bdc_total_return_quarterly(
     # facts, then the latest cached accession.
     raw = raw.sort_values(
         [
-            "cik", "end_date", "class_rank", "class_sort",
+            "cik", "end_date", "class_rank", "class_sort", "element_rank",
             "is_ytd", "duration_months", "is_current_filing_period",
             "accession",
         ],
-        ascending=[True, True, True, True, False, False, False, False],
+        ascending=[True, True, True, True, True, False, False, False, False],
         kind="mergesort",
     )
     selected = raw.drop_duplicates(["cik", "end_date"], keep="first").copy()
