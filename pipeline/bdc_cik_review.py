@@ -416,6 +416,48 @@ def _rows_by_pair(
     return rows
 
 
+def _raw_source_rows_by_pair(
+    path: Path,
+    pairs: set[tuple[str, str]],
+    limit_per_pair: int = 600,
+) -> dict[tuple[str, str], list[dict[str, str]]]:
+    """Current-period source rows (identifier + source FV + output FV + match status),
+    projected to four fields and deduped on (identifier, source FV).
+
+    This is the RAW reconciliation view the review agent reconciles by READING -- it
+    lets the agent locate a blocker's issuer, sum its tranches, and see which reached
+    output. Validated to flip indecisive verdicts to decisive ones (see
+    docs/refactoring/bundle_enrichment_experiment.md, v3). No derived conclusion.
+    """
+    rows: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
+    seen: dict[tuple[str, str], set[tuple[str, str]]] = defaultdict(set)
+    if not path.exists() or not pairs:
+        return rows
+    with path.open(newline="", encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            key = (normalize_cik(row.get("cik")), normalize_text(row.get("report_date")))
+            if key not in pairs:
+                continue
+            # current period only (drop comparative-period rows)
+            if normalize_text(row.get("period")) != normalize_text(row.get("report_date")):
+                continue
+            if len(rows[key]) >= limit_per_pair:
+                continue
+            rid = row.get("raw_investment_identifier", "")
+            sfv = row.get("source_fair_value", "")
+            dedup_key = (rid, sfv)
+            if dedup_key in seen[key]:
+                continue
+            seen[key].add(dedup_key)
+            rows[key].append({
+                "raw_investment_identifier": rid,
+                "source_fair_value": sfv,
+                "output_fair_value": row.get("output_fair_value", ""),
+                "match_status": row.get("status", ""),
+            })
+    return rows
+
+
 def build_bundles(
     *,
     output_dir: Path = REVIEW_DIR,
@@ -469,6 +511,7 @@ def build_bundles(
     holdings_by_pair = _rows_by_pair(config.OUTPUT_DIR / "private_markets_holdings.csv", pairs, lambda r: True, max_rows)
     pct_by_pair = _rows_by_pair(config.OUTPUT_DIR / "holdings_pct_sum.csv", pairs, lambda r: True, None)
     purity_by_pair = _rows_by_pair(config.OUTPUT_DIR / "position_purity_metrics.csv", pairs, lambda r: True, None)
+    raw_source_by_pair = _raw_source_rows_by_pair(config.SOURCE_RECONCILIATION_DETAIL_FILE, pairs)
 
     for row in worklist:
         review_id = row["review_id"]
@@ -489,6 +532,7 @@ def build_bundles(
         holdings_rows = holdings_by_pair.get(pair_key, [])
         pct_rows = pct_by_pair.get(pair_key, [])
         purity_rows = purity_by_pair.get(pair_key, [])
+        raw_source_rows = raw_source_by_pair.get(pair_key, [])
         html_source_rows = _html_source_search_rows(source_only_rows, residual_rows, max_rows)
 
         packet = build_cik_validation_packet(
@@ -511,6 +555,14 @@ def build_bundles(
             _evidence_item("holdings_examples", "Sample unified holdings rows for the same CIK/date.", holdings_rows),
             _evidence_item("pct_of_net_assets", "pct_of_net_assets aggregate validation row.", pct_rows),
             _evidence_item("position_purity", "Position purity metrics row.", purity_rows),
+            _evidence_item(
+                "raw_source_rows_current_period",
+                "RAW current-period source rows (identifier + source FV + output FV + match "
+                "status), unparsed. To reconcile a blocker: find its issuer within these "
+                "identifiers, sum its tranches, compare to the blocker FV, and note which "
+                "reached output. No derived conclusion is provided.",
+                raw_source_rows,
+            ),
         ]
         accession_candidates = resolve_accessions_from_rows(residual_rows + source_only_rows + detail_rows + holdings_rows)
         accession = accession_candidates[0] if accession_candidates else ""

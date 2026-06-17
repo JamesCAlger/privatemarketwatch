@@ -397,3 +397,43 @@ def test_summary_includes_reconciliation_diagnosis_counts(tmp_path):
     rows = _read_csv(output / "summary.csv")
     assert rows[0]["reconciliation_diagnosis"] == "INSUFFICIENT_EVIDENCE"
     assert "INSUFFICIENT_EVIDENCE: 1 reviews" in (output / "summary.md").read_text(encoding="utf-8")
+
+
+def test_raw_source_rows_by_pair_projects_dedups_current_period(tmp_path):
+    detail = tmp_path / "detail.csv"
+    _write_csv(detail, [
+        # current-period row -> included
+        {"cik": "1287750", "report_date": "2025-03-31", "period": "2025-03-31",
+         "raw_investment_identifier": "Acme Corp Term Loan", "source_fair_value": "1000",
+         "output_fair_value": "1000", "status": "matched"},
+        # exact duplicate (same identifier + source FV) -> deduped away
+        {"cik": "1287750", "report_date": "2025-03-31", "period": "2025-03-31",
+         "raw_investment_identifier": "Acme Corp Term Loan", "source_fair_value": "1000",
+         "output_fair_value": "1000", "status": "matched"},
+        # FV-distinct sibling (same identifier, different FV) -> kept as distinct
+        {"cik": "1287750", "report_date": "2025-03-31", "period": "2025-03-31",
+         "raw_investment_identifier": "Acme Corp Term Loan", "source_fair_value": "2000",
+         "output_fair_value": "", "status": "missing_from_pipeline"},
+        # comparative period (period != report_date) -> excluded
+        {"cik": "1287750", "report_date": "2025-03-31", "period": "2024-12-31",
+         "raw_investment_identifier": "Acme Corp Term Loan", "source_fair_value": "999",
+         "output_fair_value": "999", "status": "matched"},
+        # different pair (not requested) -> excluded
+        {"cik": "9999999", "report_date": "2025-03-31", "period": "2025-03-31",
+         "raw_investment_identifier": "Other", "source_fair_value": "5",
+         "output_fair_value": "5", "status": "matched"},
+    ])
+    pairs = {(review.normalize_cik("1287750"), review.normalize_text("2025-03-31"))}
+    out = review._raw_source_rows_by_pair(detail, pairs)
+    key = (review.normalize_cik("1287750"), review.normalize_text("2025-03-31"))
+    rows = out[key]
+    # dedup exact dup + drop comparative + drop other pair; keep FV-distinct sibling
+    assert len(rows) == 2
+    assert sorted(r["source_fair_value"] for r in rows) == ["1000", "2000"]
+    # projection to exactly the four fields, incl output FV + match status
+    assert set(rows[0].keys()) == {
+        "raw_investment_identifier", "source_fair_value", "output_fair_value", "match_status"}
+    miss = [r for r in rows if r["match_status"] == "missing_from_pipeline"][0]
+    assert miss["output_fair_value"] == ""
+    # only the requested pair is present
+    assert set(out) == {key}
