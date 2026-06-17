@@ -43,14 +43,6 @@ export default function StatStrip({ totalFv, holdingsCount, totalFunds, avgSprea
       </div>
       <div className="border-r border-rule px-5 py-4">
         <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
-          Funds
-        </div>
-        <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
-          <AnimatedNumber value={totalFunds} formatter={fmtNumber} inView={inView} />
-        </div>
-      </div>
-      <div className="border-r border-rule px-5 py-4">
-        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
           Avg Spread
         </div>
         <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
@@ -59,6 +51,14 @@ export default function StatStrip({ totalFv, holdingsCount, totalFunds, avgSprea
           ) : (
             '--'
           )}
+        </div>
+      </div>
+      <div className="border-r border-rule px-5 py-4">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+          Funds
+        </div>
+        <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
+          <AnimatedNumber value={totalFunds} formatter={fmtNumber} inView={inView} />
         </div>
       </div>
       <div className="px-5 py-4">

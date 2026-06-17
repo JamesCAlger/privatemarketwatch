@@ -18,6 +18,9 @@ import type {
   AumTimeSeriesRow,
   GicsSectorRow,
   CreditRiskRow,
+  PikEligibilityRow,
+  FundPeerDistributions,
+  FundAumPeerBandRow,
   HistogramData,
   SpreadTimeSeriesRow,
   SpreadByFundSizeRow,
@@ -105,6 +108,18 @@ export function getFundDetail(cik: string): FundDetail | null {
   return JSON.parse(raw) as FundDetail;
 }
 
+export function getFundPeerDistributions(): FundPeerDistributions | null {
+  const filePath = path.join(DATA_DIR, 'fund_peer_distributions.json');
+  if (!fs.existsSync(filePath)) return null;
+  return readJson<FundPeerDistributions>('fund_peer_distributions.json');
+}
+
+export function getFundAumPeerBand(): FundAumPeerBandRow[] {
+  const filePath = path.join(DATA_DIR, 'fund_aum_peer_band.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<FundAumPeerBandRow[]>('fund_aum_peer_band.json');
+}
+
 export function getDataQuality(): DataQuality {
   const filePath = path.join(DATA_DIR, 'data_quality.json');
   if (!fs.existsSync(filePath)) return {};
@@ -133,6 +148,12 @@ export function getCreditRisk(): CreditRiskRow[] {
   const filePath = path.join(DATA_DIR, 'credit_risk.json');
   if (!fs.existsSync(filePath)) return [];
   return readJson<CreditRiskRow[]>('credit_risk.json');
+}
+
+export function getPikEligibility(): PikEligibilityRow[] {
+  const filePath = path.join(DATA_DIR, 'pik_eligibility.json');
+  if (!fs.existsSync(filePath)) return [];
+  return readJson<PikEligibilityRow[]>('pik_eligibility.json');
 }
 
 export function getDistributionHistogram(): HistogramData | null {

@@ -1,12 +1,14 @@
-import type { FundSeriesEntry } from '@/lib/types';
+import type { FundSeriesEntry, FundAumPeerBandRow } from '@/lib/types';
 import { getQuarterlyReturns } from './FundPerformanceTable';
 import { returnColor } from '@/lib/format';
 import TotalReturnChart from './TotalReturnChart';
 import ReturnSummaryTable from './ReturnSummaryTable';
+import AumGrowthChart from './AumGrowthChart';
 
 interface FundPerformanceTabProps {
   series: FundSeriesEntry[];
   vehicleType: string;
+  aumPeerBand?: FundAumPeerBandRow[];
 }
 
 /** Build a total return index by chaining quarterly or monthly returns. */
@@ -56,7 +58,7 @@ function pickLineChart(series: FundSeriesEntry[], vehicleType: string) {
   return null;
 }
 
-export default function FundPerformanceTab({ series, vehicleType }: FundPerformanceTabProps) {
+export default function FundPerformanceTab({ series, vehicleType, aumPeerBand = [] }: FundPerformanceTabProps) {
   if (series.length === 0) {
     return (
       <div className="py-12 text-center text-ink3 text-sm">
@@ -128,6 +130,17 @@ export default function FundPerformanceTab({ series, vehicleType }: FundPerforma
             lineLabel={lineChart?.label ?? 'Total Return'}
             showBars={false}
           />
+        </div>
+      )}
+
+      {/* AUM growth vs peers (indexed to 100 at start) */}
+      {series.filter((s) => s.total_assets != null).length >= 2 && (
+        <div className="bg-white border border-rule p-4 sm:p-6">
+          <p className="text-sm font-medium text-navy mb-1">AUM growth</p>
+          <p className="text-xs text-ink3 mb-3">
+            Indexed to 100 at the start of the fund&apos;s history, against the peer-median fund rebased to the same point.
+          </p>
+          <AumGrowthChart series={series} band={aumPeerBand} />
         </div>
       )}
 

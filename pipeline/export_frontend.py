@@ -21,6 +21,7 @@ from pipeline.export.analytics_exports import (
     _export_investee_concentration,
     _export_leverage_histogram,
     _export_manager_concentration,
+    _export_pik_eligibility,
     _export_position_concentration,
     _export_spread_by_fund_size,
     _export_spread_by_lien,
@@ -84,6 +85,7 @@ def export_all() -> None:
     _export_aum_time_series(con)
     _export_gics_sector_breakdown(con)
     _export_credit_risk(con)
+    _export_pik_eligibility(con)
     _export_distribution_histogram(con)
     _export_leverage_histogram(con)
     _export_spread_time_series(con)

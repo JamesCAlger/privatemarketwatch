@@ -1,12 +1,29 @@
-import type { FundExposure } from '@/lib/types';
+import type { FundExposure, FundPeerDistributions } from '@/lib/types';
 import { formatPercent, formatYears } from '@/lib/format';
 import ExposureSection from './ExposureSection';
+import PeerDistribution from './PeerDistribution';
 
 interface FundOverviewTabProps {
   exposure: FundExposure | null;
+  peerDistributions?: FundPeerDistributions | null;
+  cik?: string;
 }
 
-export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
+// Order the peer-comparison metrics, position-level signals first.
+const PEER_METRIC_ORDER = [
+  'spreadBps',
+  'firstLienPct',
+  'floatingPct',
+  'top10Pct',
+  'creditStressPct',
+  'pikPct',
+  'wam',
+  'distributionRate',
+  'leverageRatio',
+  'totalAssets',
+];
+
+export default function FundOverviewTab({ exposure, peerDistributions, cik }: FundOverviewTabProps) {
   if (!exposure) {
     return (
       <div className="py-12 text-center text-ink3 text-sm">
@@ -14,6 +31,14 @@ export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
       </div>
     );
   }
+
+  // Peer-comparison metrics this fund actually has a value for.
+  const peerMetrics = peerDistributions && cik
+    ? PEER_METRIC_ORDER
+        .map((k) => peerDistributions.metrics[k])
+        .filter((m): m is NonNullable<typeof m> =>
+          !!m && m.values.some((x) => x.cik === cik))
+    : [];
 
   const { wac, wacCoverage, was, wam, wamCoverage, concentration, pikExposure, creditFlags } = exposure;
 
@@ -33,6 +58,23 @@ export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
 
   return (
     <div className="space-y-8 py-6">
+      {/* How it compares — position-level metrics vs the peer universe */}
+      {peerMetrics.length > 0 && cik && (
+        <div className="bg-white border border-rule p-6">
+          <div className="flex items-baseline justify-between mb-1">
+            <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">How it compares</h3>
+          </div>
+          <p className="text-xs text-ink3 mb-5">
+            Each metric against the BDC coverage universe. Gold marks this fund; the dashed line is the peer median.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+            {peerMetrics.map((m) => (
+              <PeerDistribution key={m.label} metric={m} cik={cik} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Portfolio Characteristics (dark band) */}
       {hasCoreMetrics && (
         <div className="bg-navy -mx-6 px-6 py-6">

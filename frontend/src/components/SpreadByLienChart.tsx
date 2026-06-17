@@ -94,7 +94,7 @@ export default function SpreadByLienChart({ data }: SpreadByLienChartProps) {
             />
             <Bar
               dataKey="bps"
-              radius={[2, 2, 0, 0]}
+              radius={0}
               animationDuration={800}
               animationEasing="ease-out"
             >

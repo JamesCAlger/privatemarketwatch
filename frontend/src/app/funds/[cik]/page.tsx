@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
-import { getFundDetail, getFundDetailCiks, getFundList } from '@/lib/data';
+import { getFundDetail, getFundDetailCiks, getFundPeerDistributions, getFundAumPeerBand } from '@/lib/data';
 import { formatDollar, formatPercent, formatNumber } from '@/lib/format';
 import { formatDisplayName, getFundNameParts } from '@/lib/nameFormat';
-import type { FundExposure, FundListItem } from '@/lib/types';
+import type { FundExposure } from '@/lib/types';
 import VehicleTypeBadge from '@/components/VehicleTypeBadge';
-import FundDetailClient, { type PeerRanks } from '@/components/FundDetailClient';
+import FundDetailClient from '@/components/FundDetailClient';
 import { getQuarterlyReturns } from '@/components/FundPerformanceTable';
 import Breadcrumb from '@/components/Breadcrumb';
 
@@ -23,56 +23,6 @@ export function generateMetadata({ params }: { params: { cik: string } }) {
 }
 
 // ---------------------------------------------------------------------------
-// Peer ranking computation
-// ---------------------------------------------------------------------------
-
-function computePeerRanks(cik: string, funds: FundListItem[]): PeerRanks {
-  const metrics: PeerRanks['metrics'] = [];
-
-  // Helper to rank current fund in a metric
-  function rankIn(
-    label: string,
-    getValue: (f: FundListItem) => number | null | undefined,
-    higherIsBetter: boolean,
-  ) {
-    const withValues = funds
-      .filter((f) => {
-        const v = getValue(f);
-        return v != null && isFinite(v);
-      })
-      .map((f) => ({ cik: f.cik, value: getValue(f) as number }));
-
-    if (withValues.length < 5) return; // not enough peers
-
-    // Sort: higher first if higherIsBetter, lower first otherwise
-    const sorted = [...withValues].sort((a, b) =>
-      higherIsBetter ? b.value - a.value : a.value - b.value,
-    );
-    const idx = sorted.findIndex((f) => f.cik === cik);
-    if (idx < 0) return;
-
-    const rank = idx + 1;
-    const total = sorted.length;
-    const quartile = Math.min(4, Math.ceil((rank / total) * 4)) as 1 | 2 | 3 | 4;
-
-    metrics.push({
-      label,
-      value: sorted[idx].value,
-      rank,
-      total,
-      quartile,
-    });
-  }
-
-  rankIn('Distribution Rate', (f) => f.distributionRate, true);
-  rankIn('Leverage Ratio', (f) => f.leverageRatio, false);
-  rankIn('1Y Return', (f) => f.quarterlyReturn, true);
-  rankIn('NAV/Share', (f) => f.navPerShare, true);
-
-  return { metrics };
-}
-
-// ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
 
@@ -80,14 +30,13 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   const fund = getFundDetail(params.cik);
   if (!fund) notFound();
 
-  const funds = getFundList();
   const latest = fund.series[fund.series.length - 1];
   const isBdc = fund.vehicleType === 'bdc';
   const fundNameParts = getFundNameParts(fund.name, fund.ticker);
   const adviserName = formatDisplayName(fund.adviser, { kind: 'manager' });
 
-  // Peer ranking
-  const peerRanks = computePeerRanks(fund.cik, funds);
+  const peerDistributions = getFundPeerDistributions();
+  const aumPeerBand = getFundAumPeerBand();
 
   // Quarterly returns for 1Y trailing
   const qReturns = getQuarterlyReturns(fund.series);
@@ -101,13 +50,13 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   const strategy = deriveStrategy(fund.exposure);
   const liquidity = deriveLiquidity(fund.vehicleType);
 
-  // Snapshot stats for the hero card
+  // Snapshot stats for the hero card -- NAV/Share is the headline figure.
   const snapshotStats: { label: string; value: string }[] = [];
-  if (latest?.total_assets != null) {
-    snapshotStats.push({ label: 'AUM', value: formatDollar(latest.total_assets) });
-  }
   if (latest?.nav_per_share != null) {
     snapshotStats.push({ label: 'NAV/Share', value: `$${latest.nav_per_share.toFixed(2)}` });
+  }
+  if (latest?.total_assets != null) {
+    snapshotStats.push({ label: 'AUM', value: formatDollar(latest.total_assets) });
   }
   if (latest?.distribution_rate != null) {
     snapshotStats.push({ label: 'Dist. Rate', value: `${latest.distribution_rate.toFixed(1)}%` });
@@ -121,10 +70,12 @@ export default function FundPage({ params }: { params: { cik: string } }) {
     { label: 'BDC', bg: 'bg-teal/10', text: 'text-teal' },
   ];
   if (isBdc) {
-    badges.push({ label: 'NON-TRADED', bg: 'bg-navy', text: 'text-white' });
+    badges.push(
+      fundNameParts.ticker
+        ? { label: 'PUBLICLY TRADED', bg: 'bg-white/10', text: 'text-white/85' }
+        : { label: 'NON-TRADED', bg: 'bg-navy', text: 'text-white' },
+    );
   }
-  // Check if this fund is in an index
-  badges.push({ label: 'INDEX MEMBER', bg: 'bg-accent/10', text: 'text-accent' });
 
   return (
     <div>
@@ -163,6 +114,13 @@ export default function FundPage({ params }: { params: { cik: string } }) {
             <span>CIK {fund.cik}</span>
             {adviserName && <span>{adviserName}</span>}
           </div>
+
+          {/* Blurb */}
+          {fund.blurb && (
+            <p className="text-[15px] leading-relaxed text-white/70 max-w-[760px] mb-6">
+              {fund.blurb}
+            </p>
+          )}
 
           {/* Identity row */}
           <div className="flex flex-wrap items-start divide-x divide-white/20">
@@ -208,7 +166,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
         )}
 
         {/* Tabbed content */}
-        <FundDetailClient fund={fund} peerRanks={peerRanks} />
+        <FundDetailClient fund={fund} peerDistributions={peerDistributions} aumPeerBand={aumPeerBand} />
       </div>
 
       {/* Spacer */}

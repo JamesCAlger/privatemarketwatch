@@ -6,12 +6,10 @@ import {
   getMetadata,
   getPortfolioCharacteristics,
   getManagerConcentration,
-  getFundIndexReturns,
   getGicsSectorBreakdown,
   getSectorBreakdown,
-  getDistributionHistogram,
-  getLeverageHistogram,
   getCreditRisk,
+  getPikEligibility,
   getTopConstituents,
   getConcentrationCurve,
   getSpreadTimeSeries,
@@ -22,11 +20,9 @@ import { formatDollar, formatNumber, formatQuarter, formatPercent, formatYears }
 import { combineConcentration } from '@/lib/data';
 import Link from 'next/link';
 import FundTable from '@/components/FundTable';
-import PerfSection from '@/components/PerfSection';
-import ReturnSummaryTable from '@/components/ReturnSummaryTable';
 import ProportionDonut from '@/components/ProportionDonut';
-import HistogramChart from '@/components/HistogramChart';
 import CreditStressChart from '@/components/CreditStressChart';
+import PikEligibilityChart from '@/components/PikEligibilityChart';
 import SpreadTimeChart from '@/components/SpreadTimeChart';
 import SpreadByFundSizeChart from '@/components/SpreadByFundSizeChart';
 import { formatDisplayName } from '@/lib/nameFormat';
@@ -38,13 +34,11 @@ export default function HomePage() {
   const indexSummaries = getIndexSummary();
   const metadata = getMetadata();
   const indexReturns = getIndexReturns();
-  const fundIndexReturns = getFundIndexReturns();
   const gicsSectorBreakdown = getGicsSectorBreakdown();
   const portfolioCharacteristics = getPortfolioCharacteristics();
-  const distHistogram = getDistributionHistogram();
-  const levHistogram = getLeverageHistogram();
   const managerConcentration = getManagerConcentration();
   const creditRisk = getCreditRisk();
+  const pikEligibility = getPikEligibility();
   const spreadTimeSeries = getSpreadTimeSeries();
   const spreadByFundSize = getSpreadByFundSize();
   const sectorBreakdown = getSectorBreakdown();
@@ -56,44 +50,8 @@ export default function HomePage() {
   const visibleSummaries = indexSummaries.filter((s) => visibleKeys.has(s.index));
   const totalIndexFv = visibleSummaries.reduce((sum, s) => sum + (s.totalFv ?? 0), 0);
 
-  // Build index performance series: position-level gross + fund-level net
-  const PERF_START_QUARTER = '2022q4';
+  // Quarter count for the stat strip
   const dlPositionSeries = indexReturns['DIRECT_LENDING'] ?? [];
-  const fundCombinedSeries = fundIndexReturns['combined'] ?? [];
-
-  function rebaseSeries(
-    raw: { quarter: string; level: number | null }[],
-    startQ: string,
-  ): { quarter: string; level: number | null }[] {
-    const filtered = raw.filter((r) => r.quarter >= startQ);
-    const baseLevel = filtered[0]?.level;
-    if (!baseLevel) return filtered;
-    return filtered.map((r) => ({
-      quarter: r.quarter,
-      level: r.level != null ? (r.level / baseLevel) * 100 : null,
-    }));
-  }
-
-  const perfSeries = [
-    {
-      key: 'positionGross',
-      name: 'Position-Level (Gross)',
-      color: '#0b1a2c',
-      data: rebaseSeries(
-        dlPositionSeries.map((r) => ({ quarter: r.quarter, level: r.levelFv })),
-        PERF_START_QUARTER,
-      ),
-    },
-    {
-      key: 'fundNet',
-      name: 'Fund-Level (Net)',
-      color: '#c7a14a',
-      data: rebaseSeries(
-        fundCombinedSeries.map((r) => ({ quarter: r.quarter, level: r.level })),
-        PERF_START_QUARTER,
-      ),
-    },
-  ];
 
   // Combine manager concentration across all visible indices
   const combinedManagers = combineConcentration(
@@ -106,17 +64,37 @@ export default function HomePage() {
     label: s.sector,
     pct: s.pctOfTotal * 100,
   }));
-  const managerItems = combinedManagers.map((m) => ({
-    label: formatDisplayName(m.name, { kind: 'manager' }),
-    pct: m.pctOfIndex * 100,
-  }));
   function top5Share(items: { pct: number }[]): number {
     const total = items.reduce((s, x) => s + x.pct, 0);
     const top5Sum = [...items].sort((a, b) => b.pct - a.pct).slice(0, 5).reduce((s, x) => s + x.pct, 0);
     return total > 0 ? (top5Sum / total) * 100 : 0;
   }
   const sectorCenterStat = { label: 'Top 5', value: top5Share(sectorItems).toFixed(0) + '%', note: 'of holdings' };
-  const managerCenterStat = { label: 'Top 5', value: top5Share(managerItems).toFixed(0) + '%', note: 'of universe AUM' };
+
+  // Position concentration — ordered quantile brackets of fair value, rendered as bars
+  const combinedCurve = concentrationCurve['COMBINED']?.position ?? [];
+  const top5ConcPct = ((combinedCurve[0]?.fvPct ?? 0) + (combinedCurve[1]?.fvPct ?? 0)) * 100;
+  const posConcMax = combinedCurve.reduce((m, b) => Math.max(m, b.fvPct * 100), 0);
+
+  // Manager concentration — top managers by share, capped to the same number of
+  // bars as position concentration so the two charts line up side by side.
+  // The remaining managers (plus any source "Other") roll up into a final "Other" bar.
+  const namedManagers = combinedManagers.filter((m) => m.name !== 'Other');
+  const sourceOther = combinedManagers.find((m) => m.name === 'Other');
+  const managerBarCount = combinedCurve.length || 6;
+  const topNamed = namedManagers.slice(0, managerBarCount - 1);
+  const otherPct =
+    namedManagers.slice(managerBarCount - 1).reduce((s, m) => s + m.pctOfIndex, 0) +
+    (sourceOther?.pctOfIndex ?? 0);
+  const managerItems = [
+    ...topNamed.map((m) => ({
+      label: formatDisplayName(m.name, { kind: 'manager' }),
+      pct: m.pctOfIndex * 100,
+    })),
+    ...(otherPct > 0 ? [{ label: 'Other', pct: otherPct * 100 }] : []),
+  ];
+  const managerTop5Pct = namedManagers.slice(0, 5).reduce((s, m) => s + m.pctOfIndex, 0) * 100;
+  const managerMax = managerItems.reduce((m, x) => Math.max(m, x.pct), 0);
 
   // Instrument type donut — split direct lending by lien, then other classifications
   const dlFv = (sectorBreakdown['DIRECT_LENDING'] ?? []).reduce((s, r) => s + r.totalFv, 0);
@@ -126,7 +104,7 @@ export default function HomePage() {
     { label: 'Second Lien Loans', fv: lien ? dlFv * lien.secondLien : 0 },
     { label: 'Subordinated Loans', fv: lien ? dlFv * (lien.subordinated ?? 0) : 0 },
     { label: 'Unsecured Loans', fv: lien ? dlFv * lien.unsecured : 0 },
-    { label: 'Direct Lending (lien unreported)', fv: lien ? dlFv * (lien.unknown ?? 0) : 0 },
+    { label: 'Other Direct Lending', fv: lien ? dlFv * (lien.unknown ?? 0) : 0 },
     { label: 'Structured Credit', fv: (sectorBreakdown['STRUCTURED_CREDIT'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
     { label: 'Preferred Equity', fv: (sectorBreakdown['PREFERRED_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
     { label: 'Common Equity', fv: (sectorBreakdown['COMMON_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
@@ -152,9 +130,6 @@ export default function HomePage() {
   // Portfolio characteristics stats
   const pc = portfolioCharacteristics;
   const hasPC = pc && pc.positionCount > 0;
-
-  // Return summary rows
-  const returnRows = buildReturnRows(indexReturns, fundIndexReturns);
 
   // Movers data
   const topLeverage = buildTopLeverage(funds);
@@ -205,6 +180,39 @@ export default function HomePage() {
       </div>
 
       {/* ================================================================ */}
+      {/* ORIENTATION -- what this is + position-level gloss               */}
+      {/* ================================================================ */}
+      <div className="border-b border-rule">
+        <div className="px-4 md:px-[120px] py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-x-12 gap-y-8 items-start">
+            <div className="max-w-[660px]">
+              <div className="eyebrow text-accent mb-3">What this is</div>
+              <p className="text-[17px] leading-relaxed text-ink2">
+                Metris Lens rebuilds what{' '}
+                <span className="text-ink font-medium">
+                  business development companies (BDCs)
+                </span>{' '}
+                own, directly from their mandatory SEC filings: every loan, equity stake, and
+                credit facility a fund discloses, normalized and refreshed each quarter. No
+                manager surveys and no proprietary feeds. Coverage starts with BDCs and is
+                expanding to every BDC plus interval and tender-offer funds, and ultimately
+                the full universe of semi-liquid structures.
+              </p>
+            </div>
+            <div className="border-l-2 border-accent pl-5 lg:mt-1">
+              <div className="eyebrow text-accent mb-3">Position-level, not fund-level</div>
+              <p className="text-[17px] leading-relaxed text-ink2">
+                Most benchmarks collapse a fund into a single return. We keep every holding
+                separate: a first-lien loan, a second-lien loan, and an equity co-invest in the
+                same borrower are three distinct records. Concentration, spreads, and credit
+                stress stay visible at the level where the risk actually sits.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ================================================================ */}
       {/* MAIN CONTENT                                                     */}
       {/* ================================================================ */}
       <div className="px-4 md:px-[120px] py-7 space-y-14">
@@ -217,17 +225,17 @@ export default function HomePage() {
               {instrumentDonutItems.length > 0 && (
                 <div className="bg-white border border-rule p-7">
                   <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Instrument type</h3>
-                  <p className="text-xs text-ink3 mt-2 mb-3">{instrumentDonutItems.length} categories &middot; share of portfolio fair value (incl. cash)</p>
+                  <p className="text-xs text-ink3 mt-2 mb-3">Share of portfolio fair value (incl. cash)</p>
                   <ProportionDonut items={instrumentDonutItems} centerStat={instrumentCenterStat} />
                   <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
-                    Other includes real estate holdings, indirect exposure via credit and equity fund vehicles, and opaque SPVs such as co-investment JVs and feeder funds.
+                    Other Direct Lending is direct lending whose lien seniority was not disclosed in the source filing, so it cannot be placed in a first lien, second lien, subordinated, or unsecured bucket. Other includes real estate holdings, indirect exposure via credit and equity fund vehicles, and opaque SPVs such as co-investment JVs and feeder funds.
                   </div>
                 </div>
               )}
               {sectorItems.length > 0 && (
                 <div className="bg-white border border-rule p-7">
                   <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Industry exposure</h3>
-                  <p className="text-xs text-ink3 mt-2 mb-3">{sectorItems.length} GICS sectors &middot; share of holdings AUM</p>
+                  <p className="text-xs text-ink3 mt-2 mb-3">Share of holdings fair value</p>
                   <ProportionDonut items={sectorItems} centerStat={sectorCenterStat} />
                   <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
                     Unknown sector positions lack GICS classification in the source filing or could not be reconciled.
@@ -238,26 +246,77 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* Manager Concentration (full width below) */}
-        {managerItems.length > 0 && (
+        {/* Position concentration (ordered bars) + Manager concentration (donut) */}
+        {(combinedCurve.length > 0 || managerItems.length > 0) && (
           <section>
-            <div className="bg-white border border-rule p-7">
-              <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
-              <p className="text-xs text-ink3 mt-2 mb-3">Top {managerItems.length} managers &middot; share of universe AUM</p>
-              <ProportionDonut items={managerItems} centerStat={managerCenterStat} />
-              <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
-                Combined indices &middot; top {managerItems.length} managers.
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {combinedCurve.length > 0 && (
+                <div className="bg-white border border-rule p-7">
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Position concentration</h3>
+                  <p className="text-xs text-ink3 mt-2 mb-3">Share of fair value, by position quantile</p>
+                  <div className="space-y-2">
+                    {combinedCurve.map((b, i) => {
+                      const pct = b.fvPct * 100;
+                      const barW = posConcMax > 0 ? (pct / posConcMax) * 100 : 0;
+                      return (
+                        <div key={i}>
+                          <div className="flex justify-between items-baseline text-xs mb-1">
+                            <span className="text-ink2 truncate pr-2">{b.label}</span>
+                            <span className="font-mono tabular-nums text-ink font-medium shrink-0">
+                              {pct.toFixed(1)}%
+                              <span className="text-ink3 font-normal ml-1.5">({b.count.toLocaleString()})</span>
+                            </span>
+                          </div>
+                          <div className="h-5 bg-rule2 relative">
+                            <div
+                              className="absolute left-0 top-0 bottom-0 bg-navy"
+                              style={{ width: `${barW}%` }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                    Top 5% of positions hold{' '}
+                    <span className="font-mono text-ink tabular-nums font-medium">{top5ConcPct.toFixed(1)}%</span>{' '}
+                    of total indexed fair value.
+                  </div>
+                </div>
+              )}
+              {managerItems.length > 0 && (
+                <div className="bg-white border border-rule p-7">
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
+                  <p className="text-xs text-ink3 mt-2 mb-3">Share of universe fair value</p>
+                  <div className="space-y-2">
+                    {managerItems.map((m, i) => {
+                      const barW = managerMax > 0 ? (m.pct / managerMax) * 100 : 0;
+                      return (
+                        <div key={i}>
+                          <div className="flex justify-between items-baseline text-xs mb-1">
+                            <span className="text-ink2 truncate pr-2">{m.label}</span>
+                            <span className="font-mono tabular-nums text-ink font-medium shrink-0">
+                              {m.pct.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="h-5 bg-rule2 relative">
+                            <div
+                              className="absolute left-0 top-0 bottom-0 bg-navy"
+                              style={{ width: `${barW}%` }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+                    Top 5 managers hold{' '}
+                    <span className="font-mono text-ink tabular-nums font-medium">{managerTop5Pct.toFixed(1)}%</span>{' '}
+                    of universe fair value. Combined across all indices.
+                  </div>
+                </div>
+              )}
             </div>
-          </section>
-        )}
-
-        {/* Index Performance -- chart + return summary side by side */}
-        {perfSeries.some((s) => s.data.length > 0) && (
-          <section>
-            <PerfSection series={perfSeries}>
-              <ReturnSummaryTable rows={returnRows} showGross={true} />
-            </PerfSection>
           </section>
         )}
 
@@ -283,11 +342,11 @@ export default function HomePage() {
                       </span>
                     </div>
                   </div>
-                  <p className="text-xs text-ink3 mb-4">
+                  <p className="text-xs text-ink3 mb-3">
                     FV-weighted average credit spread over base rate &middot; {spreadTimeSeries.length}-quarter history
                   </p>
                   <SpreadTimeChart data={spreadTimeSeries} />
-                  <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
+                  <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
                     Direct lending positions &middot; {latest.positionCount.toLocaleString()} positions &middot; {formatDollar(latest.totalFv)} FV
                   </div>
                 </div>
@@ -300,7 +359,7 @@ export default function HomePage() {
                       Fund total assets tercile &middot; latest quarter
                     </p>
                     <SpreadByFundSizeChart data={spreadByFundSize} />
-                    <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
+                    <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
                       {spreadByFundSize.reduce((s, d) => s + d.fundCount, 0)} funds with spread data.
                       Small-fund premium: {Math.round((spreadByFundSize[0]?.was ?? 0) * 100) - Math.round((spreadByFundSize[spreadByFundSize.length - 1]?.was ?? 0) * 100)} bps over large.
                     </div>
@@ -323,9 +382,10 @@ export default function HomePage() {
           const delta = yearAgoTotal != null ? latestTotal - yearAgoTotal : null;
           return (
             <section>
-              <div className="bg-white border border-rule p-7">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-white border border-rule p-7">
                 <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
-                  <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Credit stress, by quarter</h3>
+                  <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Credit stress, by quarter</h3>
                   <div className="text-right">
                     <span className="font-mono text-[26px] text-ink font-semibold tabular-nums leading-none">
                       {(latestTotal * 100).toFixed(1)}%
@@ -340,11 +400,11 @@ export default function HomePage() {
                     )}
                   </div>
                 </div>
-                <p className="text-xs text-ink3 mb-2">
-                  Cumulative % of fair value showing each signal &middot; {creditRisk.length}-quarter history
+                <p className="text-xs text-ink3 mb-3">
+                  Cumulative % of fair value showing each signal
                 </p>
                 <CreditStressChart data={creditRisk} />
-                <div className="flex flex-wrap justify-between items-baseline mt-2 pt-3 border-t border-rule2 text-xs text-ink3">
+                <div className="flex flex-wrap justify-between items-baseline mt-4 pt-3 border-t border-rule2 text-[11px] text-ink3">
                   <span>
                     Universe AUM{' '}
                     <span className="font-mono text-ink2 tabular-nums">{formatDollar(latest.totalFv)}</span>
@@ -352,22 +412,60 @@ export default function HomePage() {
                   </span>
                   <span>Source: SEC 10-K / 10-Q filings</span>
                 </div>
+                </div>
+
+                {/* PIK-eligible loans, by quarter */}
+                {pikEligibility.length > 1 && (() => {
+                  const pikLatest = pikEligibility[pikEligibility.length - 1];
+                  const pikYearAgoIdx = pikEligibility.length - 5;
+                  const pikYearAgo = pikYearAgoIdx >= 0 ? pikEligibility[pikYearAgoIdx] : null;
+                  const pikDelta = pikYearAgo ? pikLatest.byCount - pikYearAgo.byCount : null;
+                  return (
+                    <div className="bg-white border border-rule p-7">
+                      <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
+                        <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Loans with PIK terms, by quarter</h3>
+                        <div className="text-right">
+                          <span className="font-mono text-[26px] text-ink font-semibold tabular-nums leading-none">
+                            {(pikLatest.byCount * 100).toFixed(1)}%
+                          </span>
+                          <div className="text-[10px] text-ink3 uppercase tracking-[0.1em] mt-1">
+                            of loans &middot; {formatQuarter(pikLatest.quarter)}
+                          </div>
+                          {pikDelta != null && (
+                            <div className="text-[11px] text-ink2 font-mono tabular-nums mt-1">
+                              {pikDelta > 0 ? '+' : ''}{(pikDelta * 100).toFixed(1)} pp YoY
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <p className="text-xs text-ink3 mb-3">
+                        Share of direct-lending loans with PIK features
+                      </p>
+                      <PikEligibilityChart data={pikEligibility} />
+                      <div className="flex flex-wrap justify-between items-baseline mt-4 pt-3 border-t border-rule2 text-[11px] text-ink3">
+                        <span>PIK flag set or PIK rate disclosed &middot; proxy for PIK terms, not current PIK income.</span>
+                        <span className="font-mono text-ink2 tabular-nums">
+                          {pikLatest.pikCount.toLocaleString()} / {pikLatest.totalPositions.toLocaleString()} loans
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </section>
           );
         })()}
 
-        {/* Top Positions + Concentration Curve (two-column) */}
+        {/* Top Positions */}
         {(() => {
           // Flatten top constituents across DIRECT_LENDING only (largest category)
           const dlPositions = topConstituents['DIRECT_LENDING'] ?? [];
-          const topPositions = dlPositions.slice(0, 15);
-          const combinedCurve = concentrationCurve['COMBINED']?.position ?? [];
+          const topPositions = dlPositions.slice(0, 10);
 
-          if (topPositions.length === 0 && combinedCurve.length === 0) return null;
+          if (topPositions.length === 0) return null;
           return (
             <section>
-              <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6">
+              <div>
                 {/* Top Positions Table */}
                 {topPositions.length > 0 && (
                   <div className="bg-white border border-rule p-7">
@@ -386,17 +484,15 @@ export default function HomePage() {
                         </thead>
                         <tbody>
                           {topPositions.map((p, i) => {
-                            // Clean up issuer name — strip trailing ",1" or description suffixes
-                            const cleanName = p.issuerName.replace(/,\s*\d+$/, '').replace(/,\s*(CP|LLC|Inc\.|Ltd\.)?\s*$/, '$1').trim();
-                            const shortName = cleanName.length > 32 ? cleanName.slice(0, 30) + '...' : cleanName;
-                            const shortFund = p.vehicleName.length > 22 ? p.vehicleName.slice(0, 20) + '...' : p.vehicleName;
+                            // Strip a trailing ",N" position index and any trailing comma.
+                            const cleanName = p.issuerName.replace(/,\s*\d+$/, '').replace(/,\s*$/, '').trim();
                             return (
                               <tr key={i} className="border-b border-rule2 hover:bg-surface/30">
-                                <td className="py-2 pr-3 text-ink font-medium truncate max-w-[200px]" title={cleanName}>
-                                  {shortName}
+                                <td className="py-2 pr-3 text-ink font-medium" title={cleanName}>
+                                  {cleanName}
                                 </td>
-                                <td className="py-2 pr-3 text-ink3 truncate max-w-[160px]" title={p.vehicleName}>
-                                  {shortFund}
+                                <td className="py-2 pr-3 text-ink3" title={p.vehicleName}>
+                                  {p.vehicleName}
                                 </td>
                                 <td className="py-2 pr-3 text-right font-mono tabular-nums text-ink">
                                   {formatDollar(p.fairValue ?? 0)}
@@ -418,51 +514,6 @@ export default function HomePage() {
                           })}
                         </tbody>
                       </table>
-                    </div>
-                    <div className="border-t border-rule2 pt-3 mt-2 text-[11px] text-ink3">
-                      {dlPositions.length} direct lending positions across the indexed universe.
-                    </div>
-                  </div>
-                )}
-
-                {/* Concentration Curve */}
-                {combinedCurve.length > 0 && (
-                  <div className="bg-white border border-rule p-7">
-                    <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Position concentration</h3>
-                    <p className="text-xs text-ink3 mt-2 mb-4">
-                      Share of fair value by position quantile &middot; {combinedCurve[0]?.totalCount?.toLocaleString()} total positions
-                    </p>
-                    <div className="space-y-2">
-                      {combinedCurve.map((b, i) => {
-                        const pct = b.fvPct * 100;
-                        return (
-                          <div key={i}>
-                            <div className="flex justify-between items-baseline text-xs mb-1">
-                              <span className="text-ink2">{b.label}</span>
-                              <span className="font-mono tabular-nums text-ink font-medium">
-                                {pct.toFixed(1)}%
-                                <span className="text-ink3 font-normal ml-1.5">({b.count.toLocaleString()})</span>
-                              </span>
-                            </div>
-                            <div className="h-5 bg-rule2 relative">
-                              <div
-                                className="absolute left-0 top-0 bottom-0"
-                                style={{
-                                  width: `${pct}%`,
-                                  backgroundColor: i === 0 ? '#0b1a2c' : i === 1 ? '#2a3f55' : i === 2 ? '#4a6178' : '#8a9bab',
-                                }}
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
-                      Top 5% of positions hold{' '}
-                      <span className="font-mono text-ink tabular-nums font-medium">
-                        {((combinedCurve[0]?.fvPct ?? 0) * 100 + (combinedCurve[1]?.fvPct ?? 0) * 100).toFixed(1)}%
-                      </span>{' '}
-                      of total indexed fair value.
                     </div>
                   </div>
                 )}
@@ -563,50 +614,6 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* 7. Distributions & Leverage (single card, two-column) */}
-        {(distHistogram || levHistogram) && (
-          <section>
-            <div className="bg-white border border-rule p-7">
-              <h3 className="font-display text-[24px] tracking-[-0.01em] text-ink">Distributions &amp; leverage</h3>
-              <p className="text-xs text-ink3 mt-2 mb-4">Cross-sectional distribution &middot; medians shown</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-                {distHistogram && (
-                  <div>
-                    <div className="flex items-baseline gap-3 mb-3">
-                      <span className="text-xs text-ink2">Distribution Rate</span>
-                      <span className="font-mono text-[22px] text-ink tabular-nums">
-                        {formatPercent(distHistogram.median)}
-                      </span>
-                      <span className="text-[10px] text-ink3">median &middot; {distHistogram.total} funds</span>
-                    </div>
-                    <HistogramChart
-                      data={distHistogram}
-                      title=""
-                      medianLabel=""
-                    />
-                  </div>
-                )}
-                {levHistogram && (
-                  <div>
-                    <div className="flex items-baseline gap-3 mb-3">
-                      <span className="text-xs text-ink2">Leverage Ratio</span>
-                      <span className="font-mono text-[22px] text-ink tabular-nums">
-                        {levHistogram.median.toFixed(2)}x
-                      </span>
-                      <span className="text-[10px] text-ink3">median &middot; {levHistogram.total} funds</span>
-                    </div>
-                    <HistogramChart
-                      data={levHistogram}
-                      title=""
-                      medianLabel=""
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* 8. Fund Universe */}
         <section id="universe">
           <div className="bg-white border border-rule">
@@ -665,7 +672,7 @@ function MoversCard({
           return (
             <div key={item.cik}>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-ink2 truncate pr-2">{item.name}</span>
+                <span className="text-ink2 truncate pr-2 flex-1 min-w-0" title={item.name}>{item.name}</span>
                 <span className="font-mono tabular-nums text-ink font-semibold shrink-0">
                   {valueFmt(item.value)}
                 </span>
@@ -688,58 +695,13 @@ function MoversCard({
 /* Data builders                                                       */
 /* ------------------------------------------------------------------ */
 
-function buildReturnRows(
-  indexReturns: import('@/lib/types').IndexReturnsData,
-  fundIndexReturns: import('@/lib/types').FundIndexReturnsData,
-) {
-  const dlSeries = indexReturns['DIRECT_LENDING'] ?? [];
-  const fundSeries = fundIndexReturns['combined'] ?? [];
-
-  function periodReturn(
-    series: { level: number | null }[],
-    quartersBack: number,
-  ): number | null {
-    if (series.length < quartersBack + 1) return null;
-    const current = series[series.length - 1]?.level;
-    const base = series[series.length - 1 - quartersBack]?.level;
-    if (current == null || base == null || base === 0) return null;
-    return current / base - 1;
-  }
-
-  function annualize(totalReturn: number, years: number): number {
-    if (years <= 0) return totalReturn;
-    return Math.pow(1 + totalReturn, 1 / years) - 1;
-  }
-
-  const gross1y = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), 4);
-  const gross3yTotal = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), 12);
-  const gross3y = gross3yTotal != null ? annualize(gross3yTotal, 3) : null;
-  const gross5yTotal = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), 20);
-  const gross5y = gross5yTotal != null ? annualize(gross5yTotal, 5) : null;
-  const grossInception = periodReturn(dlSeries.map((r) => ({ level: r.levelFv })), dlSeries.length - 1);
-
-  const net1y = periodReturn(fundSeries, 4);
-  const net3yTotal = periodReturn(fundSeries, 12);
-  const net3y = net3yTotal != null ? annualize(net3yTotal, 3) : null;
-  const net5yTotal = periodReturn(fundSeries, 20);
-  const net5y = net5yTotal != null ? annualize(net5yTotal, 5) : null;
-  const netInception = periodReturn(fundSeries, fundSeries.length - 1);
-
-  return [
-    { label: '1 Year', gross: gross1y, net: net1y },
-    { label: '3 Year (annualized)', gross: gross3y, net: net3y },
-    { label: '5 Year (annualized)', gross: gross5y, net: net5y },
-    { label: 'Since inception', gross: grossInception, net: netInception },
-  ];
-}
-
 function shortName(f: import('@/lib/types').FundListItem): string {
-  let n = f.name
+  // Strip the trailing "(CIK NNN)" and inline ticker "(ABC)"; let CSS truncate
+  // to the actual cell width rather than a fixed character count.
+  return f.name
     .replace(/\s*\(CIK\s+\d+\)\s*$/, '')
     .replace(/\s*\([A-Z]{1,5}(?:,\s*[A-Z]{1,5})*\)\s*/, ' ')
     .trim();
-  if (n.length > 28) n = n.slice(0, 27) + '\u2026';
-  return n;
 }
 
 function buildTopLeverage(funds: import('@/lib/types').FundListItem[]): MoverItem[] {

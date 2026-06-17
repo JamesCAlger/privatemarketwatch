@@ -1621,6 +1621,136 @@ def _export_credit_risk(con: duckdb.DuckDBPyConnection) -> None:
     logger.info("  credit_risk: %d quarters", len(out))
 
 
+def _export_pik_eligibility(con: duckdb.DuckDBPyConnection) -> None:
+    """Proportion of BDC direct-lending loans with PIK features, per quarter.
+
+    A position is counted as PIK-eligible when the N-PORT paid-in-kind flag is
+    set (``nport_is_paid_in_kind``) OR a PIK interest rate is populated
+    (``pik_rate`` > 0).  This is a disclosure-based proxy for PIK *terms*, not
+    proof of current PIK income -- see the PIK-terminology note in AGENTS.md.
+
+    The universe mirrors ``_export_credit_risk`` exactly (unlisted BDC
+    direct-lending positions, FV > 0, 2022q4 onward, behind the same GAV
+    reconciliation filter) so the two charts share a denominator and can sit
+    side by side.
+    """
+    if not UNIFIED_HOLDINGS_CSV.exists():
+        logger.warning("unified holdings not found -- skipping pik_eligibility")
+        _write_json("pik_eligibility.json", [])
+        return
+
+    has_fund_financials = FUND_FINANCIALS_CSV.exists()
+
+    # GAV filter -- identical to _export_credit_risk.
+    gav_cte = ""
+    gav_join = ""
+    if has_fund_financials:
+        gav_cte = f""",
+        ff AS (
+            SELECT cik, report_quarter,
+                   TRY_CAST(total_assets AS DOUBLE) AS total_assets
+            FROM read_csv_auto('{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true)
+            WHERE TRY_CAST(total_assets AS DOUBLE) > 0
+        ),
+        dl_gav AS (
+            SELECT cik, report_quarter, SUM(fair_value) AS dl_fv
+            FROM dl
+            GROUP BY cik, report_quarter
+        ),
+        all_positions AS (
+            SELECT cik,
+                CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                || 'q'
+                || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value
+            FROM read_csv_auto('{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true)
+            WHERE TRY_CAST(fair_value AS DOUBLE) > 0
+              AND report_date >= '2022-10-01'
+              {_exclude_consumer_lending_sql('cik')}
+              {_unlisted_bdc_filter_sql('cik')}
+        ),
+        all_gav AS (
+            SELECT cik, report_quarter, SUM(fair_value) AS all_fv
+            FROM all_positions
+            GROUP BY cik, report_quarter
+        ),
+        good_ciks AS (
+            SELECT d.cik, d.report_quarter
+            FROM dl_gav d
+            JOIN all_gav a ON d.cik = a.cik AND d.report_quarter = a.report_quarter
+            JOIN ff ON d.cik = ff.cik AND d.report_quarter = ff.report_quarter
+            WHERE d.dl_fv / ff.total_assets BETWEEN 0.7 AND 1.3
+               OR a.all_fv / ff.total_assets BETWEEN 0.7 AND 1.3
+        )"""
+        gav_join = """INNER JOIN good_ciks gc
+              ON dl.cik = gc.cik AND dl.report_quarter = gc.report_quarter"""
+
+    rows = con.execute(f"""
+        WITH raw AS (
+            SELECT * FROM read_csv_auto(
+                '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
+            )
+            WHERE 1=1
+              {_unlisted_bdc_filter_sql('cik')}
+        ),
+        dl AS (
+            SELECT
+                cik,
+                report_date,
+                CAST(YEAR(TRY_CAST(report_date AS DATE)) AS VARCHAR)
+                || 'q'
+                || CAST(QUARTER(TRY_CAST(report_date AS DATE)) AS VARCHAR) AS report_quarter,
+                TRY_CAST(fair_value AS DOUBLE) AS fair_value,
+                CASE
+                    WHEN COALESCE(TRY_CAST(nport_is_paid_in_kind AS BOOLEAN), FALSE)
+                         OR (TRY_CAST(pik_rate AS DOUBLE) IS NOT NULL
+                             AND TRY_CAST(pik_rate AS DOUBLE) > 0)
+                    THEN 1 ELSE 0
+                END AS is_pik
+            FROM raw
+            WHERE source = 'bdc'
+              AND index_classification = 'DIRECT_LENDING'
+              AND TRY_CAST(fair_value AS DOUBLE) > 0
+              AND report_date >= '2022-10-01'
+              {_exclude_consumer_lending_sql('cik')}
+        )
+        {gav_cte},
+        filtered AS (
+            SELECT dl.report_quarter, dl.fair_value, dl.is_pik
+            FROM dl
+            {gav_join}
+            WHERE dl.report_quarter IS NOT NULL
+              {_quarter_cutoff_sql('dl.report_quarter')}
+        )
+        SELECT
+            report_quarter,
+            COUNT(*) AS total_positions,
+            SUM(fair_value) AS total_fv,
+            SUM(is_pik) AS pik_count,
+            SUM(CASE WHEN is_pik = 1 THEN fair_value ELSE 0 END) AS pik_fv
+        FROM filtered
+        GROUP BY report_quarter
+        ORDER BY report_quarter
+    """).fetchall()
+
+    out = []
+    for quarter, total_positions, total_fv_q, pik_count, pik_fv in rows:
+        total_pos = float(total_positions) if total_positions else 1
+        total_fv_f = float(total_fv_q) if total_fv_q else 1
+        out.append({
+            "quarter": quarter,
+            "totalPositions": int(total_positions or 0),
+            "totalFv": _safe_round(total_fv_q, 0),
+            "pikCount": int(pik_count or 0),
+            "pikFv": _safe_round(pik_fv, 0),
+            "byCount": _safe_round(float(pik_count or 0) / total_pos, 4),
+            "byFv": _safe_round(float(pik_fv or 0) / total_fv_f, 4),
+        })
+
+    _write_json("pik_eligibility.json", out)
+    logger.info("  pik_eligibility: %d quarters", len(out))
+
+
 def _export_distribution_histogram(con: duckdb.DuckDBPyConnection) -> None:
     """Distribution rate histogram, latest quarter per CIK."""
     if not FUND_FINANCIALS_CSV.exists():

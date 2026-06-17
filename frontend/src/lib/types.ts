@@ -473,6 +473,17 @@ export interface CreditRiskRow {
   totalFv: number;
 }
 
+/** PIK-eligibility row from pik_eligibility.json. byCount/byFv are fractions. */
+export interface PikEligibilityRow {
+  quarter: string;
+  totalPositions: number;
+  totalFv: number;
+  pikCount: number;
+  pikFv: number;
+  byCount: number;
+  byFv: number;
+}
+
 /** Histogram bucket for distribution/leverage histograms */
 export interface HistogramBucket {
   bucket: string;
@@ -521,7 +532,32 @@ export interface FundDetail {
   vehicleType: string;
   adviser: string;
   ticker: string;
+  blurb?: string;
   series: FundSeriesEntry[];
   exposure: FundExposure | null;
   topHoldings: FundHolding[] | null;
+}
+
+/** A single peer metric distribution from fund_peer_distributions.json */
+export interface PeerMetric {
+  label: string;
+  unit: string;
+  decimals: number;
+  values: { cik: string; v: number }[];
+  median: number;
+  p25: number;
+  p75: number;
+}
+
+export interface FundPeerDistributions {
+  metrics: Record<string, PeerMetric>;
+}
+
+/** AUM peer band row from fund_aum_peer_band.json */
+export interface FundAumPeerBandRow {
+  date: string;
+  median: number;
+  p25: number;
+  p75: number;
+  n: number;
 }

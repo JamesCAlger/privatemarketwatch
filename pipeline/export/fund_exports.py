@@ -582,6 +582,105 @@ def _compute_fund_top_holdings(
     ]
 
 
+def _fmt_aum(v: float) -> str:
+    """Format total assets for prose, e.g. '$92.5 billion' / '$840 million'."""
+    if v >= 1e9:
+        return f"${v / 1e9:.1f} billion"
+    if v >= 1e6:
+        return f"${v / 1e6:.0f} million"
+    return f"${v:,.0f}"
+
+
+def _compose_blurb(
+    name: str,
+    adviser: str,
+    ticker: str,
+    exposure: dict | None,
+    aum_info: tuple | None,
+) -> str:
+    """Draft a data-grounded blurb for a fund.
+
+    Every claim is traceable to our own data (structure, adviser, AUM rank,
+    asset/lien/rate mix, weighted-average spread, top GICS sector). Claims that
+    would require outside knowledge (market segment, manager strategy) are
+    deliberately omitted to avoid unsourced assertions.
+    """
+    import re
+    clean = re.sub(r"\s*\(CIK\s+\d+\)\s*", " ", name or "")
+    tk = ticker
+    m = re.search(r"\(([A-Z]{1,5})\)", clean)
+    if m:
+        if not tk:
+            tk = m.group(1)
+        clean = re.sub(r"\s*\([A-Z]{1,5}\)\s*", " ", clean)
+    clean = " ".join(clean.split()).strip()
+
+    structure = (
+        "publicly traded business development company" if tk
+        else "non-traded business development company"
+    )
+    s1 = f"{clean} is a {structure}"
+    if adviser:
+        s1 += f" advised by {adviser}"
+    s1 += "."
+    parts = [s1]
+
+    if aum_info:
+        rank, n_funds, ta = aum_info
+        if rank == 1:
+            pos = f"the largest BDC in the {n_funds}-fund coverage universe by total assets"
+        elif rank <= max(3, n_funds // 10):
+            pos = f"among the largest BDCs in the {n_funds}-fund coverage universe"
+        elif rank <= n_funds / 2:
+            pos = "a mid-sized fund in the coverage universe"
+        else:
+            pos = "one of the smaller funds in the coverage universe"
+        parts.append(f"With {_fmt_aum(ta)} in total assets, it is {pos}.")
+
+    if exposure:
+        asset = exposure.get("assetSplit") or {}
+        lien = exposure.get("lienSplit") or {}
+        rate = exposure.get("rateTypeSplit") or {}
+        was = exposure.get("was")
+        debt_pct = asset.get("debt")
+        eq_pct = asset.get("equity") or 0
+        first = lien.get("firstLien")
+        floating = rate.get("floating")
+
+        if debt_pct is not None and debt_pct >= 0.6:
+            sent = "The portfolio is concentrated in direct lending"
+            details = []
+            if first is not None:
+                details.append(f"{round(first * 100)}% in first-lien senior secured loans")
+            if floating is not None:
+                details.append(f"{round(floating * 100)}% floating-rate")
+            if details:
+                sent += ", with " + " and ".join(details)
+            if was is not None:
+                sent += f", at a weighted-average spread of {round(was * 100)} bps over the base rate"
+            sent += "."
+            parts.append(sent)
+        elif eq_pct >= 0.4:
+            parts.append(f"The portfolio is equity-oriented, with {round(eq_pct * 100)}% in equity positions.")
+        elif debt_pct is not None:
+            parts.append(
+                f"The portfolio blends debt ({round(debt_pct * 100)}%) and equity "
+                f"({round(eq_pct * 100)}%) positions."
+            )
+
+        secs = exposure.get("gicsSectors") or []
+        # Only surface a "largest sector" claim when it's actually material;
+        # a 4%-of-holdings top sector means coverage is too thin to be meaningful.
+        if (secs and secs[0].get("sector") not in (None, "Other")
+                and (secs[0].get("pct") or 0) >= 0.08):
+            parts.append(
+                f"Its largest sector exposure is {secs[0]['sector']} "
+                f"({round(secs[0]['pct'] * 100)}% of holdings)."
+            )
+
+    return " ".join(parts)
+
+
 def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
     """Export per-CIK quarterly time series to fund_details/{cik}.json."""
     if not FUND_FINANCIALS_CSV.exists():
@@ -618,7 +717,10 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 nport_is_default,
                 nport_are_interest_payments_in_arrears,
                 nport_is_paid_in_kind,
-                gics_sub_industry
+                gics_sub_industry,
+                nonaccrual_footnote,
+                nonaccrual_dimension,
+                TRY_CAST(principal_amount_usd AS DOUBLE) AS principal_amount_usd
             FROM read_csv_auto(
                 '{UNIFIED_HOLDINGS_CSV.as_posix()}', all_varchar=true
             )
@@ -650,7 +752,10 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 nport_is_default VARCHAR,
                 nport_are_interest_payments_in_arrears VARCHAR,
                 nport_is_paid_in_kind VARCHAR,
-                gics_sub_industry VARCHAR
+                gics_sub_industry VARCHAR,
+                nonaccrual_footnote VARCHAR,
+                nonaccrual_dimension VARCHAR,
+                principal_amount_usd DOUBLE
             )
         """)
 
@@ -764,7 +869,60 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                     "gavRatio": _safe_round(adj_g if adj_g is not None else raw_g, 4),
                 }
 
+    # Per-fund credit-stress % (FV flagged), mirroring the homepage credit_risk
+    # definition over direct-lending positions, latest quarter: deep distress
+    # (FV/principal < 80%), non-accrual, or marked below cost (FV/cost < 90%).
+    credit_stress_by_cik: dict = {}
+    if has_holdings:
+        for c_cik, stress in con.execute("""
+            WITH dl AS (
+                SELECT cik, fair_value AS fv,
+                    principal_amount_usd AS prin, cost,
+                    (COALESCE(TRY_CAST(nonaccrual_footnote AS BOOLEAN), FALSE)
+                     OR COALESCE(TRY_CAST(nonaccrual_dimension AS BOOLEAN), FALSE)) AS na
+                FROM _holdings_latest
+                WHERE index_classification = 'DIRECT_LENDING' AND fair_value > 0
+            ),
+            flagged AS (
+                SELECT cik, fv,
+                    CASE WHEN na
+                          OR (prin > 10000 AND prin BETWEEN fv * 0.1 AND fv * 10 AND fv / prin < 0.80)
+                          OR (cost > 10000 AND cost BETWEEN fv * 0.1 AND fv * 10 AND fv / cost < 0.90)
+                         THEN fv ELSE 0 END AS flagged_fv
+                FROM dl
+            )
+            SELECT cik, SUM(flagged_fv) / NULLIF(SUM(fv), 0) AS stress
+            FROM flagged GROUP BY cik
+        """).fetchall():
+            if stress is not None:
+                credit_stress_by_cik[c_cik] = round(float(stress) * 100, 2)
+
+    # AUM rank across funds (latest quarter) for blurb positioning.
+    aum_rank_by_cik: dict = {}
+    aum_rank_rows = con.execute(f"""
+        WITH per_cik AS (
+            SELECT cik,
+                   TRY_CAST(total_assets AS DOUBLE) AS ta,
+                   ROW_NUMBER() OVER (PARTITION BY cik ORDER BY report_date DESC) AS rn
+            FROM read_csv_auto('{FUND_FINANCIALS_CSV.as_posix()}', all_varchar=true)
+            WHERE TRY_CAST(total_assets AS DOUBLE) > 0
+              {_unlisted_bdc_filter_sql('cik')}
+        )
+        SELECT cik, ta FROM per_cik WHERE rn = 1 ORDER BY ta DESC
+    """).fetchall()
+    _n_aum = len(aum_rank_rows)
+    for _i, (_c, _ta) in enumerate(aum_rank_rows):
+        aum_rank_by_cik[str(_c)] = (_i + 1, _n_aum, float(_ta))
+
     count = 0
+    # Per-fund scalar metrics collected for the shared peer-distribution export.
+    peer_rows: list[dict] = []
+    # total_assets by report date across all funds, for the AUM peer band.
+    aum_by_quarter: dict[str, list[float]] = {}
+
+    def _peer_num(x):
+        return x if isinstance(x, (int, float)) else None
+
     for (cik_val,) in ciks:
         rows = con.execute(f"""
             SELECT * FROM read_csv_auto(
@@ -838,12 +996,49 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
         exposure = _compute_fund_exposure(con, cik_val) if has_holdings else None
         top_holdings = _compute_fund_top_holdings(con, cik_val) if has_holdings else None
 
+        # Accumulate total_assets across funds for the AUM peer band.
+        for _e in series:
+            _ta = _peer_num(_e.get("total_assets"))
+            if _ta is not None and _ta > 0:
+                aum_by_quarter.setdefault(str(_e.get("reportDate")), []).append(_ta)
+
+        # Collect this fund's scalar metrics for the peer-distribution export.
+        if exposure:
+            _latest = series[-1] if series else {}
+            _conc = exposure.get("concentration") or {}
+            _pik = exposure.get("pikExposure") or {}
+            _lien = exposure.get("lienSplit") or {}
+            _rate = exposure.get("rateTypeSplit") or {}
+            peer_rows.append({
+                "cik": cik_val,
+                "spreadBps": (round(exposure["was"] * 100, 1)
+                              if _peer_num(exposure.get("was")) is not None else None),
+                "wam": _peer_num(exposure.get("wam")),
+                "firstLienPct": (round(_lien["firstLien"] * 100, 1)
+                                 if _peer_num(_lien.get("firstLien")) is not None else None),
+                "floatingPct": (round(_rate["floating"] * 100, 1)
+                                if _peer_num(_rate.get("floating")) is not None else None),
+                "top10Pct": (round(_conc["top10Pct"] * 100, 1)
+                             if _peer_num(_conc.get("top10Pct")) is not None else None),
+                "pikPct": (round(_pik["pctOfDebtFv"] * 100, 1)
+                           if _peer_num(_pik.get("pctOfDebtFv")) is not None else None),
+                "creditStressPct": credit_stress_by_cik.get(cik_val),
+                "distributionRate": _peer_num(_latest.get("distribution_rate")),
+                "leverageRatio": _peer_num(_latest.get("leverage_ratio")),
+                "totalAssets": _peer_num(_latest.get("total_assets")),
+            })
+
+        _fund_name = str(rows.iloc[-1].get("entity_name", ""))
+        _ticker = id_info.get("ticker", "")
         fund_data = {
             "cik": cik_val,
-            "name": str(rows.iloc[-1].get("entity_name", "")),
+            "name": _fund_name,
             "vehicleType": str(rows.iloc[-1].get("vehicle_type", "")),
             "adviser": adviser,
-            "ticker": id_info.get("ticker", ""),
+            "ticker": _ticker,
+            "blurb": _compose_blurb(
+                _fund_name, adviser, _ticker, exposure, aum_rank_by_cik.get(cik_val)
+            ),
             "series": series,
             "exposure": exposure,
             "topHoldings": top_holdings,
@@ -855,6 +1050,69 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
             json.dumps(fund_data, default=str, separators=(",", ":")).encode("utf-8"),
         )
         count += 1
+
+    # ── Peer-distribution export ──────────────────────────────────────────
+    # One shared file: per scalar metric, every fund's value, so each fund page
+    # can render a "distribution + this-fund marker + percentile" comparison.
+    _metric_specs = [
+        ("totalAssets", "AUM (total assets)", "$", 0),
+        ("spreadBps", "Wtd-avg spread", "bps", 0),
+        ("wam", "Wtd-avg maturity", "yr", 1),
+        ("firstLienPct", "First-lien share", "%", 0),
+        ("floatingPct", "Floating-rate share", "%", 0),
+        ("distributionRate", "Distribution rate", "%", 1),
+        ("leverageRatio", "Leverage", "x", 2),
+        ("creditStressPct", "Credit stress", "%", 1),
+        ("pikPct", "Loans with PIK terms", "%", 1),
+        ("top10Pct", "Top-10 concentration", "%", 0),
+    ]
+
+    def _quantile(sorted_vals: list[float], q: float):
+        if not sorted_vals:
+            return None
+        idx = q * (len(sorted_vals) - 1)
+        lo = int(idx)
+        hi = min(lo + 1, len(sorted_vals) - 1)
+        frac = idx - lo
+        return sorted_vals[lo] * (1 - frac) + sorted_vals[hi] * frac
+
+    peer_metrics: dict = {}
+    for key, label, unit, decimals in _metric_specs:
+        vals = [(pr["cik"], pr[key]) for pr in peer_rows if pr.get(key) is not None]
+        if not vals:
+            continue
+        nums = sorted(v for _, v in vals)
+        peer_metrics[key] = {
+            "label": label,
+            "unit": unit,
+            "decimals": decimals,
+            "values": [{"cik": c, "v": round(v, 4)} for c, v in vals],
+            "median": round(_quantile(nums, 0.5), 4),
+            "p25": round(_quantile(nums, 0.25), 4),
+            "p75": round(_quantile(nums, 0.75), 4),
+        }
+    _write_json("fund_peer_distributions.json", {"metrics": peer_metrics})
+    logger.info(
+        "  fund_peer_distributions: %d metrics across %d funds",
+        len(peer_metrics), len(peer_rows),
+    )
+
+    # AUM peer band over time: per report date, the median / p25 / p75 of total
+    # assets across funds, so a fund's AUM trajectory can be read against peers.
+    aum_band = []
+    for q in sorted(aum_by_quarter):
+        vals = sorted(aum_by_quarter[q])
+        if len(vals) < 3:
+            continue
+        aum_band.append({
+            "date": q,
+            "median": round(_quantile(vals, 0.5), 0),
+            "p25": round(_quantile(vals, 0.25), 0),
+            "p75": round(_quantile(vals, 0.75), 0),
+            "n": len(vals),
+        })
+    _write_json("fund_aum_peer_band.json", aum_band)
+    logger.info("  fund_aum_peer_band: %d quarters", len(aum_band))
 
     # Cleanup temp tables
     con.execute("DROP TABLE IF EXISTS _holdings_latest")

@@ -70,16 +70,6 @@ export default function CreditStressChart({ data }: CreditStressChartProps) {
 
   return (
     <div ref={ref}>
-      {/* Legend */}
-      <div className="flex flex-wrap gap-4 mb-3 text-[11px] text-ink2">
-        {[...TIERS].reverse().map((t) => (
-          <span key={t.key} className="inline-flex items-center gap-1.5">
-            <span className="w-[9px] h-[9px] border border-rule" style={{ backgroundColor: t.color }} />
-            {t.label}
-          </span>
-        ))}
-      </div>
-
       <ResponsiveContainer width="100%" height={220}>
         {inView ? (
           <BarChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
@@ -118,6 +108,16 @@ export default function CreditStressChart({ data }: CreditStressChartProps) {
           <svg width="100%" height={220} />
         )}
       </ResponsiveContainer>
+
+      {/* Legend */}
+      <div className="flex flex-wrap gap-4 mt-3 text-[11px] text-ink2">
+        {[...TIERS].reverse().map((t) => (
+          <span key={t.key} className="inline-flex items-center gap-1.5">
+            <span className="w-[9px] h-[9px] border border-rule" style={{ backgroundColor: t.color }} />
+            {t.label}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

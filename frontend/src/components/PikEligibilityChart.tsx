@@ -9,13 +9,15 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { formatDollar, formatQuarter } from '@/lib/format';
+import { formatQuarter, formatPercent } from '@/lib/format';
 import { useInView } from '@/lib/useInView';
-import type { SpreadTimeSeriesRow } from '@/lib/types';
+import type { PikEligibilityRow } from '@/lib/types';
 
-interface SpreadTimeChartProps {
-  data: SpreadTimeSeriesRow[];
+interface PikEligibilityChartProps {
+  data: PikEligibilityRow[];
 }
+
+const BAR_COLOR = '#0b1a2c';
 
 function ChartTooltip({
   active,
@@ -23,7 +25,7 @@ function ChartTooltip({
   label,
 }: {
   active?: boolean;
-  payload?: { value: number; payload: SpreadTimeSeriesRow & { bps: number } }[];
+  payload?: { payload: PikEligibilityRow }[];
   label?: string;
 }) {
   if (!active || !payload?.length) return null;
@@ -31,33 +33,37 @@ function ChartTooltip({
   return (
     <div className="bg-navy px-3 py-2 shadow-panel text-xs">
       <p className="text-white/60 mb-1">{formatQuarter(label)}</p>
-      <div className="text-accent font-medium tabular-nums">
-        {row.bps} bps
+      <div className="flex items-center gap-2 text-white">
+        <span className="text-white/70">By count:</span>
+        <span className="font-medium tabular-nums">{formatPercent(row.byCount)}</span>
+        <span className="text-white/40 tabular-nums">
+          ({row.pikCount.toLocaleString()} / {row.totalPositions.toLocaleString()})
+        </span>
       </div>
-      <div className="text-white/50 tabular-nums mt-1">
-        {formatDollar(row.totalFv)} FV &middot; {row.positionCount.toLocaleString()} positions
+      <div className="flex items-center gap-2 text-white mt-0.5">
+        <span className="text-white/70">By fair value:</span>
+        <span className="font-medium tabular-nums">{formatPercent(row.byFv)}</span>
       </div>
     </div>
   );
 }
 
-export default function SpreadTimeChart({ data }: SpreadTimeChartProps) {
+export default function PikEligibilityChart({ data }: PikEligibilityChartProps) {
   const [ref, inView] = useInView(0.15);
 
   if (data.length === 0) return null;
 
-  const chartData = data.map((d) => ({
-    ...d,
-    bps: Math.round(d.was * 100),
+  const chartData = data.map((row) => ({
+    quarter: row.quarter,
+    byCount: row.byCount ?? 0,
+    byFv: row.byFv ?? 0,
+    pikCount: row.pikCount,
+    totalPositions: row.totalPositions,
   }));
-
-  const bpsValues = chartData.map((d) => d.bps);
-  const minBps = Math.floor(Math.min(...bpsValues) / 50) * 50;
-  const maxBps = Math.ceil(Math.max(...bpsValues) / 50) * 50;
 
   return (
     <div ref={ref}>
-      <ResponsiveContainer width="100%" height={240}>
+      <ResponsiveContainer width="100%" height={220}>
         {inView ? (
           <BarChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#eef0f4" vertical={false} />
@@ -69,33 +75,26 @@ export default function SpreadTimeChart({ data }: SpreadTimeChartProps) {
               tickLine={false}
             />
             <YAxis
-              domain={[minBps, maxBps]}
-              tickFormatter={(v: number) => `${v}`}
+              tickFormatter={(v: number) => `${(v * 100).toFixed(0)}%`}
               tick={{ fontSize: 10, fill: '#6b7280' }}
               axisLine={false}
               tickLine={false}
-              width={40}
-              label={{
-                value: 'bps',
-                position: 'insideTopLeft',
-                offset: -4,
-                style: { fontSize: 9, fill: '#6b7280' },
-              }}
+              width={36}
             />
             <Tooltip
               content={<ChartTooltip />}
               cursor={{ fill: 'rgba(15, 27, 45, 0.04)' }}
             />
             <Bar
-              dataKey="bps"
-              fill="#0b1a2c"
+              dataKey="byCount"
+              fill={BAR_COLOR}
               radius={0}
               animationDuration={1000}
               animationEasing="ease-out"
             />
           </BarChart>
         ) : (
-          <svg width="100%" height={240} />
+          <svg width="100%" height={220} />
         )}
       </ResponsiveContainer>
     </div>
