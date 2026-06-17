@@ -1,12 +1,14 @@
-import type { FundExposure, FundPeerDistributions } from '@/lib/types';
+import type { FundExposure, FundPeerDistributions, GicsSectorRow } from '@/lib/types';
 import { formatPercent, formatYears } from '@/lib/format';
 import ExposureSection from './ExposureSection';
 import PeerDistribution from './PeerDistribution';
+import IndustryVsUniverse from './IndustryVsUniverse';
 
 interface FundOverviewTabProps {
   exposure: FundExposure | null;
   peerDistributions?: FundPeerDistributions | null;
   cik?: string;
+  universeSectors?: GicsSectorRow[];
 }
 
 // Order the peer-comparison metrics, position-level signals first.
@@ -23,7 +25,7 @@ const PEER_METRIC_ORDER = [
   'totalAssets',
 ];
 
-export default function FundOverviewTab({ exposure, peerDistributions, cik }: FundOverviewTabProps) {
+export default function FundOverviewTab({ exposure, peerDistributions, cik, universeSectors }: FundOverviewTabProps) {
   if (!exposure) {
     return (
       <div className="py-12 text-center text-ink3 text-sm">
@@ -117,6 +119,17 @@ export default function FundOverviewTab({ exposure, peerDistributions, cik }: Fu
       <div>
         <ExposureSection exposure={exposure} />
       </div>
+
+      {/* Sector exposure vs universe */}
+      {exposure.gicsSectors && exposure.gicsSectors.length > 0 && (universeSectors?.length ?? 0) > 0 && (
+        <div className="bg-white border border-rule p-6">
+          <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Sector exposure vs universe</h3>
+          <p className="text-xs text-ink3 mt-2 mb-5">
+            GICS sector mix against the BDC coverage universe. Gold = overweight vs the universe.
+          </p>
+          <IndustryVsUniverse fundSectors={exposure.gicsSectors} universe={universeSectors!} />
+        </div>
+      )}
 
       {/* Credit risk indicators */}
       {hasCreditFlags && (

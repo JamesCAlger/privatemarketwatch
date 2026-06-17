@@ -196,6 +196,7 @@ export interface FundSummary {
 export interface FundExposure {
   totalFv: number;
   positionCount: number;
+  gicsSectors?: { sector: string; pct: number }[];
   assetSplit: {
     debt: number | null;
     equity: number | null;

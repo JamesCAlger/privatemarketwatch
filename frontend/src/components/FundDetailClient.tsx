@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { FundDetail, FundPeerDistributions, FundAumPeerBandRow } from '@/lib/types';
+import type { FundDetail, FundPeerDistributions, FundAumPeerBandRow, GicsSectorRow } from '@/lib/types';
 import FundTabBar from './FundTabBar';
 import FundOverviewTab from './FundOverviewTab';
 import FundHoldingsTab from './FundHoldingsTab';
@@ -12,9 +12,10 @@ interface FundDetailClientProps {
   fund: FundDetail;
   peerDistributions: FundPeerDistributions | null;
   aumPeerBand: FundAumPeerBandRow[];
+  universeSectors: GicsSectorRow[];
 }
 
-export default function FundDetailClient({ fund, peerDistributions, aumPeerBand }: FundDetailClientProps) {
+export default function FundDetailClient({ fund, peerDistributions, aumPeerBand, universeSectors }: FundDetailClientProps) {
   const [activeTab, setActiveTab] = useState('overview');
 
   const holdingsCount = fund.topHoldings?.length ?? 0;
@@ -38,6 +39,7 @@ export default function FundDetailClient({ fund, peerDistributions, aumPeerBand 
             exposure={fund.exposure}
             peerDistributions={peerDistributions}
             cik={fund.cik}
+            universeSectors={universeSectors}
           />
         )}
         {activeTab === 'holdings' && (

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getFundDetail, getFundDetailCiks, getFundPeerDistributions, getFundAumPeerBand } from '@/lib/data';
+import { getFundDetail, getFundDetailCiks, getFundPeerDistributions, getFundAumPeerBand, getGicsSectorBreakdown } from '@/lib/data';
 import { formatDollar, formatPercent, formatNumber } from '@/lib/format';
 import { formatDisplayName, getFundNameParts } from '@/lib/nameFormat';
 import type { FundExposure } from '@/lib/types';
@@ -37,6 +37,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
 
   const peerDistributions = getFundPeerDistributions();
   const aumPeerBand = getFundAumPeerBand();
+  const universeSectors = getGicsSectorBreakdown();
 
   // Quarterly returns for 1Y trailing
   const qReturns = getQuarterlyReturns(fund.series);
@@ -166,7 +167,7 @@ export default function FundPage({ params }: { params: { cik: string } }) {
         )}
 
         {/* Tabbed content */}
-        <FundDetailClient fund={fund} peerDistributions={peerDistributions} aumPeerBand={aumPeerBand} />
+        <FundDetailClient fund={fund} peerDistributions={peerDistributions} aumPeerBand={aumPeerBand} universeSectors={universeSectors} />
       </div>
 
       {/* Spacer */}
