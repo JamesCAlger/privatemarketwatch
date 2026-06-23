@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next';
-import { INDICES } from '@/lib/constants';
 import { getFundDetailCiks } from '@/lib/data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,12 +8,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: base, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },
-    ...INDICES.map((idx) => ({
-      url: `${base}/indices/${idx.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.9,
-    })),
     ...fundCiks.map((cik) => ({
       url: `${base}/funds/${cik}`,
       lastModified: new Date(),

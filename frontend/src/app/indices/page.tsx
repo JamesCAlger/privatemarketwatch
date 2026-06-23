@@ -1,5 +1,10 @@
-import { redirect } from 'next/navigation';
+'use client';
 
-export default function IndicesPage() {
-  redirect('/indices/private-credit');
+import { useEffect } from 'react';
+
+export default function Page() {
+  useEffect(() => {
+    window.location.replace('/');
+  }, []);
+  return null;
 }

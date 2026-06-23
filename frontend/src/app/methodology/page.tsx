@@ -6,14 +6,12 @@ import MethodologyTOC from '@/components/MethodologyTOC';
 export const metadata: Metadata = {
   title: 'Methodology',
   description:
-    'How Metris Lens constructs its index platform and benchmarks from mandatory SEC regulatory filings.',
+    'How Metris Lens extracts and validates unlisted BDC portfolio holdings from mandatory SEC regulatory filings.',
 };
 
 const sections = [
   { id: 'universe', title: 'Universe' },
   { id: 'data-pipeline', title: 'Data Pipeline' },
-  { id: 'index-construction', title: 'Index Construction' },
-  { id: 'return-calculation', title: 'Return Calculation' },
   { id: 'universe-analytics', title: 'Universe Analytics' },
   { id: 'limitations', title: 'Limitations' },
 ] as const;
@@ -27,8 +25,8 @@ export default function MethodologyPage() {
           Methodology
         </h1>
         <p className="text-[17px] leading-relaxed text-ink2 max-w-[620px] mb-6">
-          How the data platform and index family are constructed,
-          from universe identification through return calculation and published analytics.
+          How the data platform is constructed, from universe identification
+          through holdings extraction, validation, and published analytics.
         </p>
         <div className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-ink3">
           <div>
@@ -41,7 +39,7 @@ export default function MethodologyPage() {
           </div>
           <div>
             <span className="text-[10px] uppercase tracking-[0.12em] text-ink3 block">Format</span>
-            <span className="text-ink font-medium">Position-level indices</span>
+            <span className="text-ink font-medium">Position-level holdings</span>
           </div>
         </div>
       </div>
@@ -57,7 +55,7 @@ export default function MethodologyPage() {
           <article className="flex-1 min-w-0 prose-content">
             <Section num={1} id="universe" title="Universe">
               <p>
-                The index universe covers <strong>unlisted (non-traded) business development
+                The coverage universe is <strong>unlisted (non-traded) business development
                 companies (BDCs)</strong> registered with the SEC. These are closed-end funds
                 that have elected BDC status under the Investment Company Act and invest
                 primarily in private credit and equity.
@@ -87,13 +85,13 @@ export default function MethodologyPage() {
                 Listed (publicly traded) BDCs are excluded. The unlisted BDC reference
                 list is cross-validated against third-party sources. Consumer and
                 marketplace lending vehicles with opaque individual loan IDs are
-                excluded from index-level outputs.
+                excluded from the unified holdings outputs.
               </p>
 
               <CalloutBox variant="design" title="Design choice">
-                Each index constituent is an individual position (e.g., a specific term
-                loan), not an aggregated issuer exposure. This mirrors the construction
-                of public credit indices like the Morningstar LSTA Leveraged Loan Index.
+                Each holding is tracked as an individual position (e.g., a specific term
+                loan), not an aggregated issuer exposure. This preserves loan-tranche-level
+                detail rather than rolling positions up to the borrower.
               </CalloutBox>
             </Section>
 
@@ -129,110 +127,10 @@ export default function MethodologyPage() {
               </CalloutBox>
             </Section>
 
-            <Section num={3} id="index-construction" title="Index Construction">
+            <Section num={3} id="universe-analytics" title="Universe Analytics">
               <p>
-                Two indices are published, each tracking a distinct segment of the
-                private markets:
-              </p>
-              <div className="overflow-x-auto my-4">
-                <table className="w-full text-sm border-collapse">
-                  <thead>
-                    <tr className="bg-navy">
-                      <th className="text-left py-2.5 px-4 font-medium text-white/80 text-xs uppercase tracking-wider">
-                        Index
-                      </th>
-                      <th className="text-left py-2.5 px-4 font-medium text-white/80 text-xs uppercase tracking-wider">
-                        Asset Category
-                      </th>
-                      <th className="text-left py-2.5 px-4 font-medium text-white/80 text-xs uppercase tracking-wider">
-                        Issuer Category
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b border-surface">
-                      <td className="py-2.5 px-4 font-medium text-navy">Private Credit</td>
-                      <td className="py-2.5 px-4 text-navy/70">LOAN, DEBT</td>
-                      <td className="py-2.5 px-4 text-navy/70">CORPORATE</td>
-                    </tr>
-                    <tr className="bg-surface/30">
-                      <td className="py-2.5 px-4 font-medium text-navy">Private Equity</td>
-                      <td className="py-2.5 px-4 text-navy/70">EQUITY_COMMON</td>
-                      <td className="py-2.5 px-4 text-navy/70">CORPORATE</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <h4>Position Matching</h4>
-              <p>
-                To compute returns, the same position must be linked across
-                consecutive quarters. A three-tier matching cascade is used:
-              </p>
-              <ol>
-                <li>
-                  <strong>Tier A: Within-filing comparatives</strong> -- BDC XBRL
-                  filings contain both current and prior-period facts under the
-                  same investmentIdentifierAxis value.
-                </li>
-                <li>
-                  <strong>Tier B: Exact name matching</strong> -- Positions matched
-                  by exact issuer_name within the same CIK across adjacent quarters.
-                </li>
-                <li>
-                  <strong>Tier C/D: Normalized and fuzzy matching</strong> --
-                  Fallback matching using name normalization and Jaro-Winkler
-                  similarity with fair value proximity guards.
-                </li>
-              </ol>
-
-              <CalloutBox variant="design" title="Design choice">
-                All tiers enforce strict 1:1 matching using row-level
-                deduplication with fair value proximity tiebreaking. Cascade
-                exclusion prevents double-matching.
-              </CalloutBox>
-            </Section>
-
-            <Section num={4} id="return-calculation" title="Return Calculation">
-              <p>
-                Total return for each position is decomposed into components,
-                following the convention of public credit indices:
-              </p>
-
-              <h4>Capital Return (Price)</h4>
-              <p>
-                Per-unit price return isolates price changes from quantity
-                changes. For loans: price = fair_value / principal_amount. For
-                equity: price = fair_value / shares_held, with fallback to
-                fair_value / cost. This prevents amortizing loans from being
-                penalized and new purchases from inflating returns.
-              </p>
-
-              <h4>Income Return</h4>
-              <p>
-                Estimated coupon accrual based on a three-tier rate imputation:
-                (1) direct interest_rate from the filing, (2) basis_spread plus
-                implied SOFR from peer filers, (3) same-filer median rate.
-              </p>
-
-              <h4>Aggregation</h4>
-              <p>
-                Index-level returns are fair-value-weighted averages across all
-                constituents. Equal-weighted returns are also published. Index levels
-                are chain-linked from a base of 100. A minimum of 10 constituents per
-                quarter is required for a valid observation.
-              </p>
-
-              <CalloutBox variant="limitation" title="Limitation">
-                Income return is estimated from filed rate data, not actual cash
-                received. PIK and amendment effects may not be fully captured.
-              </CalloutBox>
-            </Section>
-
-            <Section num={5} id="universe-analytics" title="Universe Analytics">
-              <p>
-                Beyond index returns, the platform publishes fund-level analytics
-                and portfolio characteristics:
+                The platform publishes fund-level analytics and portfolio
+                characteristics derived from the extracted holdings:
               </p>
               <ul>
                 <li>
@@ -262,7 +160,7 @@ export default function MethodologyPage() {
               </p>
             </Section>
 
-            <Section num={6} id="limitations" title="Limitations">
+            <Section num={4} id="limitations" title="Limitations">
               <ul>
                 <li>
                   <strong>Coverage starts ~2022</strong> -- BDC XBRL tagging was
@@ -270,9 +168,9 @@ export default function MethodologyPage() {
                   unstructured HTML.
                 </li>
                 <li>
-                  <strong>Quarterly frequency</strong> -- Unlike daily public
-                  market indices, these indices update quarterly due to the
-                  filing cadence.
+                  <strong>Quarterly frequency</strong> -- Holdings update
+                  quarterly, driven by the SEC filing cadence rather than daily
+                  market data.
                 </li>
                 <li>
                   <strong>Fair value estimation</strong> -- Reported fair values
@@ -280,20 +178,15 @@ export default function MethodologyPage() {
                   transaction prices.
                 </li>
                 <li>
-                  <strong>Survivorship bias</strong> -- Funds that de-register or
-                  stop filing exit the index. Historical returns include only
-                  active filers.
+                  <strong>Survivorship</strong> -- Funds that de-register or
+                  stop filing drop out of coverage. The current universe includes
+                  only active filers.
                 </li>
                 <li>
                   <strong>Incomplete field coverage</strong> -- Portfolio
                   characteristics are based on positions where the filer disclosed
                   the relevant data. Coverage rates are disclosed alongside
                   each metric.
-                </li>
-                <li>
-                  <strong>No leverage adjustment</strong> -- Returns reflect
-                  gross portfolio performance, not fund-level returns which may
-                  include leverage effects.
                 </li>
               </ul>
 

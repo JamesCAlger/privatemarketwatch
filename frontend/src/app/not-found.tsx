@@ -17,12 +17,6 @@ export default function NotFound() {
         >
           Fund universe
         </Link>
-        <Link
-          href="/indices/private-credit"
-          className="inline-block px-5 py-2.5 border border-rule text-ink2 text-sm font-medium hover:bg-surface/50 transition-colors"
-        >
-          View indices
-        </Link>
       </div>
     </div>
   );
