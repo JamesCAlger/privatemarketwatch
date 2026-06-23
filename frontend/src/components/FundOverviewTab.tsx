@@ -1,31 +1,13 @@
-import type { FundExposure, FundPeerDistributions, GicsSectorRow } from '@/lib/types';
+import type { FundExposure } from '@/lib/types';
 import { formatPercent, formatYears } from '@/lib/format';
 import ExposureSection from './ExposureSection';
-import PeerDistribution from './PeerDistribution';
-import IndustryVsUniverse from './IndustryVsUniverse';
+import MaturityProfileChart from './MaturityProfileChart';
 
 interface FundOverviewTabProps {
   exposure: FundExposure | null;
-  peerDistributions?: FundPeerDistributions | null;
-  cik?: string;
-  universeSectors?: GicsSectorRow[];
 }
 
-// Order the peer-comparison metrics, position-level signals first.
-const PEER_METRIC_ORDER = [
-  'spreadBps',
-  'firstLienPct',
-  'floatingPct',
-  'top10Pct',
-  'creditStressPct',
-  'pikPct',
-  'wam',
-  'distributionRate',
-  'leverageRatio',
-  'totalAssets',
-];
-
-export default function FundOverviewTab({ exposure, peerDistributions, cik, universeSectors }: FundOverviewTabProps) {
+export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
   if (!exposure) {
     return (
       <div className="py-12 text-center text-ink3 text-sm">
@@ -34,15 +16,7 @@ export default function FundOverviewTab({ exposure, peerDistributions, cik, univ
     );
   }
 
-  // Peer-comparison metrics this fund actually has a value for.
-  const peerMetrics = peerDistributions && cik
-    ? PEER_METRIC_ORDER
-        .map((k) => peerDistributions.metrics[k])
-        .filter((m): m is NonNullable<typeof m> =>
-          !!m && m.values.some((x) => x.cik === cik))
-    : [];
-
-  const { wac, wacCoverage, was, wam, wamCoverage, concentration, pikExposure, creditFlags } = exposure;
+  const { wac, wacCoverage, was, wam, wamCoverage, concentration, pikExposure, creditFlags, maturityBuckets } = exposure;
 
   // Hide WAC/WAS if coverage is too low to be meaningful
   const MIN_COVERAGE = 0.6;
@@ -57,26 +31,10 @@ export default function FundOverviewTab({ exposure, peerDistributions, cik, univ
   const hasArrears = creditFlags && creditFlags.coverage != null && creditFlags.coverage > 0.1
     && creditFlags.pctInArrears != null && creditFlags.pctInArrears > 0;
   const hasCreditFlags = hasDefault || hasArrears || hasPik;
+  const hasMaturity = !!maturityBuckets && maturityBuckets.some((b) => b.pct != null && b.pct > 0);
 
   return (
     <div className="space-y-8 py-6">
-      {/* How it compares — position-level metrics vs the peer universe */}
-      {peerMetrics.length > 0 && cik && (
-        <div className="bg-white border border-rule p-6">
-          <div className="flex items-baseline justify-between mb-1">
-            <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">How it compares</h3>
-          </div>
-          <p className="text-xs text-ink3 mb-5">
-            Each metric against the BDC coverage universe. Gold marks this fund; the dashed line is the peer median.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
-            {peerMetrics.map((m) => (
-              <PeerDistribution key={m.label} metric={m} cik={cik} />
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Portfolio Characteristics (dark band) */}
       {hasCoreMetrics && (
         <div className="bg-navy -mx-6 px-6 py-6">
@@ -90,11 +48,7 @@ export default function FundOverviewTab({ exposure, peerDistributions, cik, univ
               />
             )}
             {showWas && (
-              <MetricCard
-                label="Wtd. Avg. Spread"
-                value={`${was!.toFixed(0)} bps`}
-                dark
-              />
+              <MetricCard label="Wtd. Avg. Spread" value={`${was!.toFixed(0)} bps`} dark />
             )}
             {wam != null && (
               <MetricCard
@@ -105,11 +59,7 @@ export default function FundOverviewTab({ exposure, peerDistributions, cik, univ
               />
             )}
             {concentration?.top10Pct != null && (
-              <MetricCard
-                label="Top 10 Concentration"
-                value={formatPercent(concentration.top10Pct)}
-                dark
-              />
+              <MetricCard label="Top 10 Concentration" value={formatPercent(concentration.top10Pct)} dark />
             )}
           </div>
         </div>
@@ -120,21 +70,21 @@ export default function FundOverviewTab({ exposure, peerDistributions, cik, univ
         <ExposureSection exposure={exposure} />
       </div>
 
-      {/* Sector exposure vs universe */}
-      {exposure.gicsSectors && exposure.gicsSectors.length > 0 && (universeSectors?.length ?? 0) > 0 && (
+      {/* Maturity profile */}
+      {hasMaturity && (
         <div className="bg-white border border-rule p-6">
-          <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Sector exposure vs universe</h3>
-          <p className="text-xs text-ink3 mt-2 mb-5">
-            GICS sector mix against the BDC coverage universe. Gold = overweight vs the universe.
+          <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Maturity profile</h3>
+          <p className="text-xs text-ink3 mt-1 mb-4">
+            Share of debt fair value by years to maturity.
           </p>
-          <IndustryVsUniverse fundSectors={exposure.gicsSectors} universe={universeSectors!} />
+          <MaturityProfileChart buckets={maturityBuckets!} />
         </div>
       )}
 
       {/* Credit risk indicators */}
       {hasCreditFlags && (
         <div className="bg-white border border-rule p-5">
-          <div className="eyebrow text-ink2 mb-4">Risk & Credit Indicators</div>
+          <div className="eyebrow text-ink2 mb-4">Risk &amp; Credit Indicators</div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
             {hasPik && pikExposure && (
               <div>
@@ -180,9 +130,7 @@ function MetricCard({
       <p className={`font-mono text-[28px] tabular-nums leading-none ${dark ? 'text-accent' : 'text-navy'}`}>
         {value}
       </p>
-      {sub && (
-        <p className={`text-[10px] mt-1 ${dark ? 'text-white/30' : 'text-ink3'}`}>{sub}</p>
-      )}
+      {sub && <p className={`text-[10px] mt-1 ${dark ? 'text-white/30' : 'text-ink3'}`}>{sub}</p>}
     </div>
   );
 }

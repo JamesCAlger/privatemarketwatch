@@ -58,7 +58,7 @@ export default function PeerDistribution({ metric, cik }: PeerDistributionProps)
   const maxCount = Math.max(...counts, 1);
 
   const W = 300;
-  const H = 44;
+  const H = 34;
   const xFor = (v: number) => ((v - lo) / range) * W;
   const markerX = xFor(fundVal);
   const medianX = xFor(metric.median);
@@ -68,11 +68,12 @@ export default function PeerDistribution({ metric, cik }: PeerDistributionProps)
 
   return (
     <div>
-      <div className="flex items-baseline justify-between mb-1.5">
-        <span className="text-[11px] uppercase tracking-[0.12em] text-ink3">{metric.label}</span>
-        <span className="font-mono text-[15px] text-ink font-semibold tabular-nums">
-          {fmt(fundVal, metric.unit, metric.decimals)}
-        </span>
+      <div className="text-[11px] uppercase tracking-[0.12em] text-ink3 mb-1">{metric.label}</div>
+      <div className="font-mono text-[26px] text-ink font-semibold tabular-nums leading-none">
+        {fmt(fundVal, metric.unit, metric.decimals)}
+      </div>
+      <div className="text-[11px] text-accent font-medium mt-1.5 mb-2.5">
+        {ordinal(pct)} percentile
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} className="block" preserveAspectRatio="none">
         {/* histogram */}
@@ -95,12 +96,10 @@ export default function PeerDistribution({ metric, cik }: PeerDistributionProps)
         {/* median */}
         <line x1={medianX} y1={2} x2={medianX} y2={H} stroke={NAVY} strokeWidth={1} strokeDasharray="3 3" opacity={0.5} />
         {/* fund marker */}
-        <line x1={markerX} y1={0} x2={markerX} y2={H} stroke={ACCENT} strokeWidth={2} />
-        <circle cx={markerX} cy={4} r={3.5} fill={ACCENT} />
+        <line x1={markerX} y1={1} x2={markerX} y2={H} stroke={ACCENT} strokeWidth={2} />
       </svg>
-      <div className="flex items-baseline justify-between mt-1 text-[10px] text-ink3">
-        <span className="text-accent font-medium">{ordinal(pct)} percentile</span>
-        <span className="tabular-nums">peer median {fmt(metric.median, metric.unit, metric.decimals)}</span>
+      <div className="text-[10px] text-ink3 mt-1.5 tabular-nums">
+        Peer median {fmt(metric.median, metric.unit, metric.decimals)}
       </div>
     </div>
   );

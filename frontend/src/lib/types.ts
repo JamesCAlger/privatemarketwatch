@@ -228,6 +228,13 @@ export interface FundExposure {
     floating: number | null;
     fixed: number | null;
   };
+  instrumentMix?: {
+    termLoan: number | null;
+    revolver: number | null;
+    delayedDrawTermLoan: number | null;
+    unitranche: number | null;
+    coverage: number | null;
+  };
   wac: number | null;
   wacCoverage?: number | null;
   was: number | null;

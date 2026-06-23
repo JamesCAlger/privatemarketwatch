@@ -149,8 +149,10 @@ export default function IndexDetailPage({
   const lienItems = showPortfolioChars && portfolioChars ? [
     { label: 'First Lien', pct: portfolioChars.lienSplit.firstLien },
     { label: 'Second Lien', pct: portfolioChars.lienSplit.secondLien },
+    { label: 'Subordinated', pct: portfolioChars.lienSplit.subordinated ?? 0 },
     { label: 'Unsecured', pct: portfolioChars.lienSplit.unsecured },
-  ] : [];
+    { label: 'Lien Unreported', pct: portfolioChars.lienSplit.unknown ?? 0 },
+  ].filter((x) => x.pct > 0) : [];
 
   // Top 25 constituents
   const top25 = constituents.slice(0, 25);

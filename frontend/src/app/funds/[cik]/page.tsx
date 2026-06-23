@@ -1,11 +1,10 @@
 import { notFound } from 'next/navigation';
 import { getFundDetail, getFundDetailCiks, getFundPeerDistributions, getFundAumPeerBand, getGicsSectorBreakdown } from '@/lib/data';
-import { formatDollar, formatPercent, formatNumber } from '@/lib/format';
+import { formatDollar, formatNumber } from '@/lib/format';
 import { formatDisplayName, getFundNameParts } from '@/lib/nameFormat';
 import type { FundExposure } from '@/lib/types';
 import VehicleTypeBadge from '@/components/VehicleTypeBadge';
 import FundDetailClient from '@/components/FundDetailClient';
-import { getQuarterlyReturns } from '@/components/FundPerformanceTable';
 import Breadcrumb from '@/components/Breadcrumb';
 
 export function generateStaticParams() {
@@ -30,7 +29,15 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   const fund = getFundDetail(params.cik);
   if (!fund) notFound();
 
-  const latest = fund.series[fund.series.length - 1];
+  // Use the most recent *complete* reporting period for the snapshot. A freshly
+  // filed period can appear as a partial stub (cover-page share count + income
+  // but no balance-sheet instants yet); taking the last series row blindly would
+  // blank out NAV/Share and AUM even though the prior quarter is fully reported.
+  const completePeriods = fund.series.filter(
+    (s) => s.total_assets != null || s.net_assets != null,
+  );
+  const latest = completePeriods[completePeriods.length - 1]
+    ?? fund.series[fund.series.length - 1];
   const isBdc = fund.vehicleType === 'bdc';
   const fundNameParts = getFundNameParts(fund.name, fund.ticker);
   const adviserName = formatDisplayName(fund.adviser, { kind: 'manager' });
@@ -39,32 +46,21 @@ export default function FundPage({ params }: { params: { cik: string } }) {
   const aumPeerBand = getFundAumPeerBand();
   const universeSectors = getGicsSectorBreakdown();
 
-  // Quarterly returns for 1Y trailing
-  const qReturns = getQuarterlyReturns(fund.series);
-  const returns = qReturns.map((q) => q.ret);
-  const last4 = returns.slice(-4);
-  const trail1y = last4.length >= 4
-    ? last4.reduce((acc, r) => acc * (1 + r), 1) - 1
-    : null;
-
   // Derive strategy
   const strategy = deriveStrategy(fund.exposure);
-  const liquidity = deriveLiquidity(fund.vehicleType);
 
-  // Snapshot stats for the hero card -- NAV/Share is the headline figure.
-  const snapshotStats: { label: string; value: string }[] = [];
+  // Hero stat row -- NAV/Share, AUM, Positions, Strategy.
+  const heroStats: { label: string; value: string; mono?: boolean }[] = [];
   if (latest?.nav_per_share != null) {
-    snapshotStats.push({ label: 'NAV/Share', value: `$${latest.nav_per_share.toFixed(2)}` });
+    heroStats.push({ label: 'NAV/Share', value: `$${latest.nav_per_share.toFixed(2)}`, mono: true });
   }
   if (latest?.total_assets != null) {
-    snapshotStats.push({ label: 'AUM', value: formatDollar(latest.total_assets) });
+    heroStats.push({ label: 'AUM', value: formatDollar(latest.total_assets), mono: true });
   }
-  if (latest?.distribution_rate != null) {
-    snapshotStats.push({ label: 'Dist. Rate', value: `${latest.distribution_rate.toFixed(1)}%` });
+  if (fund.exposure) {
+    heroStats.push({ label: 'Positions', value: formatNumber(fund.exposure.positionCount), mono: true });
   }
-  if (latest?.leverage_ratio != null) {
-    snapshotStats.push({ label: 'Leverage', value: formatPercent(latest.leverage_ratio) });
-  }
+  heroStats.push({ label: 'Strategy', value: strategy });
 
   // Badges
   const badges: { label: string; bg: string; text: string }[] = [
@@ -123,50 +119,22 @@ export default function FundPage({ params }: { params: { cik: string } }) {
             </p>
           )}
 
-          {/* Identity row */}
-          <div className="flex flex-wrap items-start divide-x divide-white/20">
-            <div className="pr-6 pb-2">
-              <p className="text-[11px] text-white/50 uppercase tracking-wider mb-1">Strategy</p>
-              <p className="text-lg font-semibold text-white">{strategy}</p>
-            </div>
-            <div className="px-6 pb-2">
-              <p className="text-[11px] text-white/50 uppercase tracking-wider mb-1">Liquidity</p>
-              <p className="text-lg font-semibold text-white">{liquidity}</p>
-            </div>
-            {trail1y != null && (
-              <div className="px-6 pb-2">
-                <p className="text-[11px] text-white/50 uppercase tracking-wider mb-1">1Y Return</p>
-                <p className="text-lg font-semibold text-white">
-                  {trail1y >= 0 ? '+' : ''}{(trail1y * 100).toFixed(1)}%
+          {/* Key stats (NAV/Share leads) */}
+          <div className="flex flex-wrap items-start gap-y-3 divide-x divide-white/20">
+            {heroStats.map((s, i) => (
+              <div key={s.label} className={i === 0 ? 'pr-6' : 'px-6'}>
+                <p className="text-[11px] text-white/50 uppercase tracking-wider mb-1">{s.label}</p>
+                <p className={`text-lg font-semibold text-white ${s.mono ? 'font-mono tabular-nums' : ''}`}>
+                  {s.value}
                 </p>
               </div>
-            )}
-            {fund.exposure && (
-              <div className="px-6 pb-2">
-                <p className="text-[11px] text-white/50 uppercase tracking-wider mb-1">Positions</p>
-                <p className="text-lg font-semibold text-white">{formatNumber(fund.exposure.positionCount)}</p>
-              </div>
-            )}
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Snapshot stats card (overlapping hero) */}
-      <div className="px-4 md:px-[120px] -mt-6">
-        {snapshotStats.length > 0 && (
-          <div className="bg-white border border-rule p-5 mb-6">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {snapshotStats.map((s) => (
-                <div key={s.label} className="text-center">
-                  <p className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1.5">{s.label}</p>
-                  <p className="font-mono text-lg text-navy font-semibold tabular-nums">{s.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Tabbed content */}
+      {/* Tabbed content */}
+      <div className="px-4 md:px-[120px] pt-8">
         <FundDetailClient fund={fund} peerDistributions={peerDistributions} aumPeerBand={aumPeerBand} universeSectors={universeSectors} />
       </div>
 
@@ -200,11 +168,4 @@ function deriveStrategy(exp: FundExposure | null): string {
     return `${sorted[0][0]} / ${sorted[1][0]}`;
   }
   return topLabel;
-}
-
-function deriveLiquidity(vt: string): string {
-  if (vt === 'bdc') return 'Unlisted';
-  if (vt === 'interval_fund') return 'Semi-Liquid';
-  if (vt === 'tender_offer_fund') return 'Semi-Liquid';
-  return 'Closed-End';
 }

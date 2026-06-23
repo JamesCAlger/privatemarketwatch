@@ -1,8 +1,6 @@
 import type { FundSeriesEntry, FundAumPeerBandRow } from '@/lib/types';
 import { getQuarterlyReturns } from './FundPerformanceTable';
-import { returnColor } from '@/lib/format';
 import TotalReturnChart from './TotalReturnChart';
-import ReturnSummaryTable from './ReturnSummaryTable';
 import AumGrowthChart from './AumGrowthChart';
 
 interface FundPerformanceTabProps {
@@ -118,6 +116,25 @@ export default function FundPerformanceTab({ series, vehicleType, aumPeerBand = 
 
   return (
     <div className="py-6 space-y-8">
+      {/* Total return summary -- headline line */}
+      {returnRows.some((r) => r.net != null) && (
+        <div className="bg-white border border-rule p-5">
+          <div className="eyebrow text-ink2 mb-3">Total return summary</div>
+          <div className="flex flex-wrap items-start gap-y-3 divide-x divide-rule">
+            {returnRows.map((r, i) => (
+              <div key={r.label} className={i === 0 ? 'pr-6' : 'px-6'}>
+                <p className="text-[10px] uppercase tracking-[0.12em] text-ink3 mb-1">{r.label}</p>
+                <p className={`font-mono text-lg font-semibold tabular-nums ${
+                  r.net == null ? 'text-ink3' : r.net >= 0 ? 'text-green' : 'text-red'
+                }`}>
+                  {r.net == null ? '--' : `${r.net >= 0 ? '+' : ''}${(r.net * 100).toFixed(1)}%`}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Total return chart */}
       {lineData.length >= 2 && (
         <div className="bg-white border border-rule p-4 sm:p-6">
@@ -141,13 +158,6 @@ export default function FundPerformanceTab({ series, vehicleType, aumPeerBand = 
             Indexed to 100 at the start of the fund&apos;s history, against the peer-median fund rebased to the same point.
           </p>
           <AumGrowthChart series={series} band={aumPeerBand} />
-        </div>
-      )}
-
-      {/* Return summary table */}
-      {qReturns.length > 0 && (
-        <div className="bg-white border border-rule p-6">
-          <ReturnSummaryTable rows={returnRows} showGross={false} />
         </div>
       )}
 

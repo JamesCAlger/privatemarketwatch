@@ -1,184 +1,74 @@
-'use client';
-
 import type { FundExposure } from '@/lib/types';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { formatPercent } from '@/lib/format';
-
-// Monochromatic teal ramp — matches indices concentration charts
-const ASSET_CLASS_COLORS = ['#1A5F56', '#1F7268', '#2A9D8F', '#3DB0A3', '#7ACEC5', '#99DDD6', '#D6F5F2'];
-const EXPOSURE_TYPE_COLORS = ['#1A5F56', '#2A9D8F', '#99DDD6'];
-const LIEN_COLORS = ['#1A5F56', '#2A9D8F', '#99DDD6'];
-const GICS_COLORS = [
-  '#0b1a2c', '#1A5F56', '#1F7268', '#2A9D8F', '#3DB0A3',
-  '#5BBFB4', '#7ACEC5', '#99DDD6', '#B8ECE7', '#D6F5F2', '#c7a14a',
-];
+import ProportionDonut from './ProportionDonut';
 
 interface ExposureSectionProps {
   exposure: FundExposure;
 }
 
-function MiniDonut({
-  data,
-  colors,
-  title,
-}: {
-  data: { name: string; value: number }[];
-  colors: string[];
-  title: string;
-}) {
-  // Assign colors before filtering/sorting so each category keeps a stable color.
-  // Filter out negligible slices (<0.1%), sort largest-to-smallest, pin "Other" last.
-  const MIN_SLICE = 0.001;
-  const withColor = data
-    .map((d, i) => ({ ...d, color: colors[i % colors.length] }))
-    .filter((d) => d.value >= MIN_SLICE);
-  const other = withColor.filter((d) => d.name === 'Other');
-  const rest = withColor.filter((d) => d.name !== 'Other').sort((a, b) => b.value - a.value);
-  const filtered = [...rest, ...other];
-  if (filtered.length === 0) return null;
-
-  return (
-    <div className="bg-white p-4 shadow-card">
-      <p className="text-sm font-medium text-navy mb-2 text-center">{title}</p>
-      <ResponsiveContainer width="100%" height={180}>
-        <PieChart>
-          <Pie
-            data={filtered}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            innerRadius="48%"
-            outerRadius="82%"
-            startAngle={90}
-            endAngle={-270}
-            paddingAngle={1}
-            strokeWidth={0}
-          >
-            {filtered.map((entry) => (
-              <Cell key={entry.name} fill={entry.color} />
-            ))}
-          </Pie>
-          <Tooltip
-            content={({ active, payload }) => {
-              if (!active || !payload?.length) return null;
-              const d = payload[0].payload;
-              return (
-                <div className="bg-white shadow-panel px-4 py-3 text-sm border border-surface-muted">
-                  <p className="font-semibold text-navy">{d.name}</p>
-                  <p className="text-muted">{formatPercent(d.value)}</p>
-                </div>
-              );
-            }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 mt-1 text-[11px]">
-        {filtered.map((d) => (
-          <span key={d.name} className="flex items-center gap-1">
-            <span
-              className="inline-block w-2 h-2"
-              style={{ backgroundColor: d.color }}
-            />
-            <span className="text-navy">{d.name}</span>
-            <span className="text-muted tabular-nums">{formatPercent(d.value)}</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
+/**
+ * Fund-level composition, rendered in the same format as the homepage:
+ * an Instrument-type donut (lien-resolved debt + equity/structured/cash/other)
+ * and a GICS Industry-exposure donut, both via ProportionDonut.
+ */
 export default function ExposureSection({ exposure }: ExposureSectionProps) {
-  const { assetClassSplit, exposureTypeSplit, lienSplit, assetSplit, gicsSectors } = exposure;
+  const a = exposure.assetSplit;
+  const lien = exposure.lienSplit;
+  const debt = a.debt ?? 0;
+  const fl = lien.firstLien ?? 0;
+  const sl = lien.secondLien ?? 0;
+  const un = lien.unsecured ?? 0;
+  const otherDl = Math.max(0, 1 - fl - sl - un);
 
-  // Asset Class donut (from 2-axis classification)
-  const acSplit = assetClassSplit;
-  const assetClassData = acSplit
-    ? [
-        { name: 'Private Credit', value: acSplit.privateCredit ?? 0 },
-        { name: 'Private Equity', value: acSplit.privateEquity ?? 0 },
-        { name: 'Real Estate', value: acSplit.realEstate ?? 0 },
-        { name: 'Structured Credit', value: acSplit.structuredCredit ?? 0 },
-        { name: 'Hedge Fund', value: acSplit.hedgeFund ?? 0 },
-        { name: 'Cash', value: acSplit.cash ?? 0 },
-        { name: 'Other', value: acSplit.other ?? 0 },
-      ]
-    : [
-        { name: 'Debt', value: assetSplit.debt ?? 0 },
-        { name: 'Equity', value: assetSplit.equity ?? 0 },
-        { name: 'Funds', value: assetSplit.fund ?? 0 },
-        { name: 'Other', value: assetSplit.other ?? 0 },
-      ];
-
-  // Exposure Type donut — only show if fund has >5% non-DIRECT exposure
-  const etSplit = exposureTypeSplit;
-  const directPct = etSplit?.direct ?? 1;
-  const showExposureType = etSplit && directPct < 0.95;
-  const exposureData = etSplit
-    ? [
-        { name: 'Direct Investment', value: etSplit.direct ?? 0 },
-        { name: 'Fund-of-Funds', value: etSplit.fund ?? 0 },
-        { name: 'Liquid / Traded', value: etSplit.liquid ?? 0 },
-      ]
-    : [];
-
-  const debtPct = assetSplit.debt ?? 0;
-  const lienCoverage = lienSplit.coverage ?? 0;
-  const showLien = debtPct > 0.1 && lienCoverage >= 0.5;
-
-  const lienData = [
-    { name: 'First Lien', value: lienSplit.firstLien ?? 0 },
-    { name: 'Second Lien', value: lienSplit.secondLien ?? 0 },
-    { name: 'Unsecured', value: lienSplit.unsecured ?? 0 },
+  // Instrument type — same categories as the homepage instrument donut, scaled
+  // to share of total portfolio fair value.
+  const instrumentRaw = [
+    { label: 'First Lien Senior Loans', pct: debt * fl },
+    { label: 'Second Lien Loans', pct: debt * sl },
+    { label: 'Unsecured Loans', pct: debt * un },
+    { label: 'Other Direct Lending', pct: debt * otherDl },
+    { label: 'Structured Credit', pct: a.structured ?? 0 },
+    { label: 'Equity', pct: a.equity ?? 0 },
+    { label: 'Fund Vehicles', pct: a.fund ?? 0 },
+    { label: 'Cash & Equivalents', pct: a.cash ?? 0 },
+    { label: 'Other', pct: a.other ?? 0 },
   ];
+  const instrumentItems = instrumentRaw
+    .map((x) => ({ label: x.label, pct: x.pct * 100 }))
+    .filter((x) => x.pct > 0.05);
+  const firstLienPct = instrumentItems.find((x) => x.label === 'First Lien Senior Loans')?.pct ?? 0;
+  const instrumentCenter = { label: 'First Lien', value: `${firstLienPct.toFixed(0)}%`, note: 'of fair value' };
 
-  // GICS sector donut
-  const showGics = gicsSectors && gicsSectors.length > 0;
-  const gicsData = (gicsSectors ?? []).map((g) => ({ name: g.sector, value: g.pct }));
+  // Industry exposure — GICS sectors, share of holdings.
+  const sectorItems = (exposure.gicsSectors ?? []).map((g) => ({ label: g.sector, pct: g.pct * 100 }));
+  const top5 = [...sectorItems].sort((x, y) => y.pct - x.pct).slice(0, 5).reduce((s, x) => s + x.pct, 0);
+  const sectorTotal = sectorItems.reduce((s, x) => s + x.pct, 0);
+  const sectorCenter = {
+    label: 'Top 5',
+    value: `${sectorTotal > 0 ? Math.round((top5 / sectorTotal) * 100) : 0}%`,
+    note: 'of holdings',
+  };
 
-  // First lien stat (shown inline when lien data available but not enough for donut)
-  const firstLienPct = lienSplit.firstLien;
-  const showFirstLienStat = debtPct > 0.1 && firstLienPct != null && (lienCoverage ?? 0) >= 0.5;
-
-  // Determine grid columns
-  const donutCount = 1 + (showExposureType ? 1 : 0) + (showLien ? 1 : 0);
-  const gridCols = donutCount >= 3
-    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-    : 'grid-cols-1 sm:grid-cols-2';
+  const hasInstrument = instrumentItems.length > 0;
+  const hasSectors = sectorItems.length > 0;
+  if (!hasInstrument && !hasSectors) return null;
 
   return (
-    <div className="space-y-5">
-      {/* Asset Class + GICS Sector side by side */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <MiniDonut
-          data={assetClassData}
-          colors={acSplit ? ASSET_CLASS_COLORS : ['#1A5F56', '#2A9D8F', '#5BBFB4', '#99DDD6']}
-          title={acSplit ? 'Asset Class' : 'Asset Type'}
-        />
-        {showGics ? (
-          <MiniDonut data={gicsData} colors={GICS_COLORS} title="GICS Sector" />
-        ) : showExposureType ? (
-          <MiniDonut data={exposureData} colors={EXPOSURE_TYPE_COLORS} title="Exposure Type" />
-        ) : showLien ? (
-          <MiniDonut data={lienData} colors={LIEN_COLORS} title="Lien Position" />
-        ) : null}
-      </div>
-      {/* Secondary row: exposure type + lien (only if GICS occupied the first row) */}
-      {showGics && (showExposureType || showLien) && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {showExposureType && (
-            <MiniDonut data={exposureData} colors={EXPOSURE_TYPE_COLORS} title="Exposure Type" />
-          )}
-          {showLien && (
-            <MiniDonut data={lienData} colors={LIEN_COLORS} title="Lien Position" />
-          )}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {hasInstrument && (
+        <div className="bg-white border border-rule p-7">
+          <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Instrument type</h3>
+          <p className="text-xs text-ink3 mt-2 mb-3">Share of portfolio fair value</p>
+          <ProportionDonut items={instrumentItems} centerStat={instrumentCenter} />
         </div>
       )}
-      {showFirstLienStat && !showLien && (
-        <div className="bg-white shadow-card p-5">
-          <p className="text-[11px] text-muted uppercase tracking-wider mb-1">% First Lien</p>
-          <p className="text-sm font-semibold text-navy tabular-nums">{formatPercent(firstLienPct!)}</p>
+      {hasSectors && (
+        <div className="bg-white border border-rule p-7">
+          <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Industry exposure</h3>
+          <p className="text-xs text-ink3 mt-2 mb-3">Share of holdings fair value</p>
+          <ProportionDonut items={sectorItems} centerStat={sectorCenter} />
+          <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
+            Unknown sector positions lack GICS classification in the source filing or could not be reconciled.
+          </div>
         </div>
       )}
     </div>

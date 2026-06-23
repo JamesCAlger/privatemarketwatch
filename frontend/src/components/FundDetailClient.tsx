@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { FundDetail, FundPeerDistributions, FundAumPeerBandRow, GicsSectorRow } from '@/lib/types';
 import FundTabBar from './FundTabBar';
 import FundOverviewTab from './FundOverviewTab';
+import FundPeersTab from './FundPeersTab';
 import FundHoldingsTab from './FundHoldingsTab';
 import FundPerformanceTab from './FundPerformanceTab';
 import FundFilingsTab from './FundFilingsTab';
@@ -22,8 +23,9 @@ export default function FundDetailClient({ fund, peerDistributions, aumPeerBand,
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
-    { id: 'holdings', label: 'Holdings', count: holdingsCount > 0 ? holdingsCount : undefined },
+    { id: 'peers', label: 'Peer comparison' },
     { id: 'performance', label: 'Performance' },
+    { id: 'holdings', label: 'Holdings', count: holdingsCount > 0 ? holdingsCount : undefined },
     { id: 'filings', label: 'Filings' },
   ];
 
@@ -35,7 +37,10 @@ export default function FundDetailClient({ fund, peerDistributions, aumPeerBand,
       {/* Tab content */}
       <div>
         {activeTab === 'overview' && (
-          <FundOverviewTab
+          <FundOverviewTab exposure={fund.exposure} />
+        )}
+        {activeTab === 'peers' && (
+          <FundPeersTab
             exposure={fund.exposure}
             peerDistributions={peerDistributions}
             cik={fund.cik}
