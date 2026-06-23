@@ -82,7 +82,12 @@ export type VehicleContributionData = Record<string, VehicleRow[]>;
 export interface PortfolioCharacteristics {
   asOf: string;
   positionCount: number;
+  /** Direct-lending fair value (denominator for the DL-relative lien/rate/WAC metrics). */
   totalFv: number;
+  /** Full current-quarter portfolio fair value, all index classifications. */
+  portfolioFv?: number | null;
+  /** Fair value by index classification at the as-of quarter (sums to portfolioFv). */
+  classificationFv?: Record<string, number> | null;
   wac: number | null;
   was: number | null;
   wam: number | null;

@@ -25,7 +25,7 @@ export default function FundDetailClient({ fund, peerDistributions, aumPeerBand,
     { id: 'overview', label: 'Overview' },
     { id: 'peers', label: 'Peer comparison' },
     { id: 'performance', label: 'Performance' },
-    { id: 'holdings', label: 'Holdings', count: holdingsCount > 0 ? holdingsCount : undefined },
+    { id: 'holdings', label: 'Top Holdings', count: holdingsCount > 0 ? holdingsCount : undefined },
     { id: 'filings', label: 'Filings' },
   ];
 
@@ -37,7 +37,7 @@ export default function FundDetailClient({ fund, peerDistributions, aumPeerBand,
       {/* Tab content */}
       <div>
         {activeTab === 'overview' && (
-          <FundOverviewTab exposure={fund.exposure} />
+          <FundOverviewTab exposure={fund.exposure} onNavigate={setActiveTab} />
         )}
         {activeTab === 'peers' && (
           <FundPeersTab
@@ -45,6 +45,7 @@ export default function FundDetailClient({ fund, peerDistributions, aumPeerBand,
             peerDistributions={peerDistributions}
             cik={fund.cik}
             universeSectors={universeSectors}
+            onNavigate={setActiveTab}
           />
         )}
         {activeTab === 'holdings' && (

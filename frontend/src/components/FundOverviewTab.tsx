@@ -5,9 +5,10 @@ import MaturityProfileChart from './MaturityProfileChart';
 
 interface FundOverviewTabProps {
   exposure: FundExposure | null;
+  onNavigate?: (tab: string) => void;
 }
 
-export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
+export default function FundOverviewTab({ exposure, onNavigate }: FundOverviewTabProps) {
   if (!exposure) {
     return (
       <div className="py-12 text-center text-ink3 text-sm">
@@ -24,21 +25,21 @@ export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
   const showWas = was != null && (wacCoverage ?? 0) >= MIN_COVERAGE;
   const showWacCoverage = wacCoverage != null && wacCoverage < 0.9;
 
-  const hasCoreMetrics = showWac || showWas || wam != null || concentration?.top10Pct != null;
   const hasPik = pikExposure && pikExposure.pctOfDebtFv != null && pikExposure.pctOfDebtFv > 0;
+  const hasCoreMetrics = showWac || showWas || wam != null || concentration?.top10Pct != null || hasPik;
   const hasDefault = creditFlags && creditFlags.coverage != null && creditFlags.coverage > 0.1
     && creditFlags.pctInDefault != null && creditFlags.pctInDefault > 0;
   const hasArrears = creditFlags && creditFlags.coverage != null && creditFlags.coverage > 0.1
     && creditFlags.pctInArrears != null && creditFlags.pctInArrears > 0;
-  const hasCreditFlags = hasDefault || hasArrears || hasPik;
+  const hasCreditFlags = hasDefault || hasArrears;
   const hasMaturity = !!maturityBuckets && maturityBuckets.some((b) => b.pct != null && b.pct > 0);
 
   return (
     <div className="space-y-8 py-6">
-      {/* Portfolio Characteristics (dark band) */}
+      {/* Portfolio Characteristics (dark band, full-bleed to the screen edge) */}
       {hasCoreMetrics && (
-        <div className="bg-navy -mx-6 px-6 py-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div className="bg-navy -mx-4 md:-mx-[120px] px-4 md:px-[120px] py-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {showWac && (
               <MetricCard
                 label="Wtd. Avg. Coupon"
@@ -60,6 +61,9 @@ export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
             )}
             {concentration?.top10Pct != null && (
               <MetricCard label="Top 10 Concentration" value={formatPercent(concentration.top10Pct)} dark />
+            )}
+            {hasPik && pikExposure && (
+              <MetricCard label={pikExposure.label} value={formatPercent(pikExposure.pctOfDebtFv)} dark />
             )}
           </div>
         </div>
@@ -86,12 +90,6 @@ export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
         <div className="bg-white border border-rule p-5">
           <div className="eyebrow text-ink2 mb-4">Risk &amp; Credit Indicators</div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-            {hasPik && pikExposure && (
-              <div>
-                <p className="text-[11px] text-ink3 uppercase tracking-wider mb-1">{pikExposure.label}</p>
-                <p className="text-sm font-semibold text-navy tabular-nums">{formatPercent(pikExposure.pctOfDebtFv)}</p>
-              </div>
-            )}
             {hasDefault && creditFlags && (
               <div>
                 <p className="text-[11px] text-ink3 uppercase tracking-wider mb-1">In Default</p>
@@ -107,7 +105,44 @@ export default function FundOverviewTab({ exposure }: FundOverviewTabProps) {
           </div>
         </div>
       )}
+
+      {/* CTA -> Peer comparison */}
+      {onNavigate && (
+        <NextStepCta
+          onClick={() => onNavigate('peers')}
+          heading="See how this fund stacks up"
+          sub="Percentile rank against peer BDCs on spread, concentration, credit stress and more."
+          action="Peer comparison"
+        />
+      )}
     </div>
+  );
+}
+
+function NextStepCta({
+  onClick,
+  heading,
+  sub,
+  action,
+}: {
+  onClick: () => void;
+  heading: string;
+  sub: string;
+  action: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="group w-full flex items-center justify-between gap-4 bg-white border border-rule hover:border-navy p-5 text-left transition-colors"
+    >
+      <div>
+        <p className="font-display text-[18px] tracking-[-0.01em] text-ink">{heading}</p>
+        <p className="text-xs text-ink3 mt-1">{sub}</p>
+      </div>
+      <span className="text-accent text-sm font-medium shrink-0 group-hover:translate-x-0.5 transition-transform">
+        {action} &rarr;
+      </span>
+    </button>
   );
 }
 

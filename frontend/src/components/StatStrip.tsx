@@ -24,25 +24,25 @@ export default function StatStrip({ totalFv, holdingsCount, totalFunds, avgSprea
   const spreadBps = avgSpread != null ? Math.round(avgSpread * 100) : null;
 
   return (
-    <div ref={ref} className="bg-white border border-rule grid grid-cols-5">
-      <div className="border-r border-rule px-5 py-4">
-        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+    <div ref={ref} className="bg-white border-t border-l border-rule grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="border-b border-r border-rule px-4 sm:px-5 py-4">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5 leading-[1.3] min-h-[2.6em]">
           Fair Value
         </div>
         <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
           <AnimatedNumber value={totalFv} formatter={fmtDollar} inView={inView} />
         </div>
       </div>
-      <div className="border-r border-rule px-5 py-4">
-        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+      <div className="border-b border-r border-rule px-4 sm:px-5 py-4">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5 leading-[1.3] min-h-[2.6em]">
           Covered Holdings
         </div>
         <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
           <AnimatedNumber value={holdingsCount} formatter={fmtNumber} inView={inView} />
         </div>
       </div>
-      <div className="border-r border-rule px-5 py-4">
-        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+      <div className="border-b border-r border-rule px-4 sm:px-5 py-4">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5 leading-[1.3] min-h-[2.6em]">
           Avg Spread
         </div>
         <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
@@ -53,16 +53,16 @@ export default function StatStrip({ totalFv, holdingsCount, totalFunds, avgSprea
           )}
         </div>
       </div>
-      <div className="border-r border-rule px-5 py-4">
-        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+      <div className="border-b border-r border-rule px-4 sm:px-5 py-4">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5 leading-[1.3] min-h-[2.6em]">
           Funds
         </div>
         <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">
           <AnimatedNumber value={totalFunds} formatter={fmtNumber} inView={inView} />
         </div>
       </div>
-      <div className="px-5 py-4">
-        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5">
+      <div className="border-b border-r border-rule px-4 sm:px-5 py-4">
+        <div className="text-[10px] uppercase tracking-[0.14em] text-ink3 mb-1.5 leading-[1.3] min-h-[2.6em]">
           Quarters
         </div>
         <div className="font-mono text-[26px] text-ink tracking-[-0.02em] font-semibold tabular-nums">

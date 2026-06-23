@@ -74,7 +74,7 @@ export default function FundHoldingsTab({ holdings }: FundHoldingsTabProps) {
                 Fair Value
               </th>
               <th className="py-3 px-4 text-right text-xs font-medium text-white/70 uppercase tracking-wider">
-                % of NAV
+                % Portfolio
               </th>
             </tr>
           </thead>

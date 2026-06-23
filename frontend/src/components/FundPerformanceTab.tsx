@@ -47,10 +47,10 @@ function pickLineChart(series: FundSeriesEntry[], vehicleType: string) {
 
   if (vehicleType === 'bdc') {
     if (trIndex.length >= 2) return { data: trIndex, label: 'Total Return', key: 'tr' };
-    if (navIndex.length >= 2) return { data: navIndex, label: 'NAV/Share Index', key: 'nav' };
+    if (navIndex.length >= 2) return { data: navIndex, label: 'NAV per Share', key: 'nav' };
   } else {
     if (trIndex.length >= 2) return { data: trIndex, label: 'Total Return', key: 'tr' };
-    if (navIndex.length >= 2 && navIsGenuineQuarterly) return { data: navIndex, label: 'NAV/Share Index', key: 'nav' };
+    if (navIndex.length >= 2 && navIsGenuineQuarterly) return { data: navIndex, label: 'NAV per Share', key: 'nav' };
   }
 
   return null;

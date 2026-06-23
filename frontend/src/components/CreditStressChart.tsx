@@ -22,7 +22,7 @@ interface CreditStressChartProps {
 const TIERS = [
   { key: 'deepDistress', label: 'Deep Distress (<80% par)', color: '#0b1a2c' },
   { key: 'nonAccrual', label: 'Non-Accrual', color: '#6b7a8b' },
-  { key: 'markedBelowCost', label: 'Marked 10%+ Below Cost', color: '#c0c6ce' },
+  { key: 'markedBelowCost', label: 'Marked Below Cost (<90% cost)', color: '#c0c6ce' },
 ] as const;
 
 function ChartTooltip({

@@ -22,20 +22,20 @@ export default function ExposureSection({ exposure }: ExposureSectionProps) {
   // Instrument type — same categories as the homepage instrument donut, scaled
   // to share of total portfolio fair value.
   const instrumentRaw = [
-    { label: 'First Lien Senior Loans', pct: debt * fl },
-    { label: 'Second Lien Loans', pct: debt * sl },
-    { label: 'Unsecured Loans', pct: debt * un },
-    { label: 'Other Direct Lending', pct: debt * otherDl },
-    { label: 'Structured Credit', pct: a.structured ?? 0 },
+    { label: 'First Lien', pct: debt * fl },
+    { label: 'Second Lien', pct: debt * sl },
+    { label: 'Unsecured', pct: debt * un },
+    { label: 'Other Lending', pct: debt * otherDl },
+    { label: 'Structured', pct: a.structured ?? 0 },
     { label: 'Equity', pct: a.equity ?? 0 },
     { label: 'Fund Vehicles', pct: a.fund ?? 0 },
-    { label: 'Cash & Equivalents', pct: a.cash ?? 0 },
+    { label: 'Cash', pct: a.cash ?? 0 },
     { label: 'Other', pct: a.other ?? 0 },
   ];
   const instrumentItems = instrumentRaw
     .map((x) => ({ label: x.label, pct: x.pct * 100 }))
     .filter((x) => x.pct > 0.05);
-  const firstLienPct = instrumentItems.find((x) => x.label === 'First Lien Senior Loans')?.pct ?? 0;
+  const firstLienPct = instrumentItems.find((x) => x.label === 'First Lien')?.pct ?? 0;
   const instrumentCenter = { label: 'First Lien', value: `${firstLienPct.toFixed(0)}%`, note: 'of fair value' };
 
   // Industry exposure — GICS sectors, share of holdings.

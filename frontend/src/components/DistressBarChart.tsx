@@ -21,7 +21,7 @@ interface DistressBarChartProps {
 const TIERS = [
   { key: 'deepDistress', label: 'Deep Distress (<80% par)', color: '#9B2226' },
   { key: 'nonAccrual', label: 'Non-Accrual', color: '#CA6702' },
-  { key: 'markedBelowCost', label: 'Marked 10%+ Below Cost', color: '#EEC643' },
+  { key: 'markedBelowCost', label: 'Marked Below Cost (<90% cost)', color: '#EEC643' },
 ] as const;
 
 type ViewMode = 'count' | 'fv';

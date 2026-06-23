@@ -7,6 +7,7 @@ interface FundPeersTabProps {
   peerDistributions?: FundPeerDistributions | null;
   cik?: string;
   universeSectors?: GicsSectorRow[];
+  onNavigate?: (tab: string) => void;
 }
 
 // Position-level signals first. first-lien % and floating-rate % are excluded:
@@ -22,7 +23,7 @@ const PEER_METRIC_ORDER = [
   'totalAssets',
 ];
 
-export default function FundPeersTab({ exposure, peerDistributions, cik, universeSectors }: FundPeersTabProps) {
+export default function FundPeersTab({ exposure, peerDistributions, cik, universeSectors, onNavigate }: FundPeersTabProps) {
   const peerMetrics = peerDistributions && cik
     ? PEER_METRIC_ORDER
         .map((k) => peerDistributions.metrics[k])
@@ -64,6 +65,22 @@ export default function FundPeersTab({ exposure, peerDistributions, cik, univers
           </p>
           <IndustryVsUniverse fundSectors={exposure!.gicsSectors!} universe={universeSectors!} />
         </div>
+      )}
+
+      {/* CTA -> Performance */}
+      {onNavigate && (
+        <button
+          onClick={() => onNavigate('performance')}
+          className="group w-full flex items-center justify-between gap-4 bg-white border border-rule hover:border-navy p-5 text-left transition-colors"
+        >
+          <div>
+            <p className="font-display text-[18px] tracking-[-0.01em] text-ink">Track this fund&apos;s performance</p>
+            <p className="text-xs text-ink3 mt-1">Total return and NAV history, rebased against the peer-median fund.</p>
+          </div>
+          <span className="text-accent text-sm font-medium shrink-0 group-hover:translate-x-0.5 transition-transform">
+            Performance &rarr;
+          </span>
+        </button>
       )}
     </div>
   );
