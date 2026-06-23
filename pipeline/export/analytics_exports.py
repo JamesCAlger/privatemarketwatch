@@ -1237,6 +1237,14 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
     bdc_reconciled_cte = ""
     accepted_join = ""
     accepted_where = ""
+    # Industry-exposure overlay (owner decision 2026-06-23): use the fund-level
+    # reconciled BDC sector breakdown as the FIRST source, falling back to
+    # position-level unified holdings only for CIK-quarters without a reconciled
+    # (PASS/SCALE) sector axis.  The headline FV is still preserved exactly: each
+    # accepted fund's sector rows are rescaled (`sector_scale`) so they sum back
+    # to that fund's unified-holdings FV.  This collapses the "Other"/Unknown
+    # bucket because ~70% of cohort FV has a fully GICS-mapped fund-level axis
+    # that the position-level parse misses.
     if has_reconciled and has_reconciliation:
         bdc_reconciled_cte = f""",
         reconciliation AS (
@@ -1266,6 +1274,33 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
               ON r.cik = ab.cik AND r.report_date = ab.report_date
             JOIN latest_q l ON r.report_date = l.q
             WHERE TRY_CAST(r.reconciled_fair_value AS DOUBLE) > 0
+        ),
+        -- Reconciled sector FV is on a different (larger) basis than unified
+        -- holdings, which inflated the portfolio total.  Scale each accepted BDC's
+        -- reconciled sector rows so they sum to that fund's actual unified-holdings
+        -- FV: preserves the better sub-industry proportions, fixes the magnitude.
+        accepted_unified AS (
+            SELECT l.cik, SUM(l.fair_value) AS uni_fv
+            FROM latest l
+            JOIN accepted_bdc ab
+              ON l.cik = ab.cik AND l.report_date = ab.report_date
+            GROUP BY l.cik
+        ),
+        sector_scale AS (
+            SELECT bs.cik,
+                   CASE WHEN SUM(bs.fair_value) > 0
+                        THEN COALESCE(MAX(au.uni_fv), 0) / SUM(bs.fair_value)
+                        ELSE 1 END AS factor
+            FROM bdc_sector bs
+            LEFT JOIN accepted_unified au ON bs.cik = au.cik
+            GROUP BY bs.cik
+        ),
+        bdc_sector_scaled AS (
+            SELECT bs.cik, bs.report_date,
+                   bs.fair_value * COALESCE(ss.factor, 1) AS fair_value,
+                   bs.raw_industry, bs.source_bucket
+            FROM bdc_sector bs
+            LEFT JOIN sector_scale ss ON bs.cik = ss.cik
         )"""
         accepted_join = """
             LEFT JOIN accepted_bdc ab
@@ -1274,7 +1309,7 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
         accepted_where = "AND ab.cik IS NULL"
     else:
         bdc_reconciled_cte = """,
-        bdc_sector AS (
+        bdc_sector_scaled AS (
             SELECT
                 CAST(NULL AS VARCHAR) AS cik,
                 CAST(NULL AS VARCHAR) AS report_date,
@@ -1345,7 +1380,7 @@ def _export_gics_sector_breakdown(con: duckdb.DuckDBPyConnection) -> None:
                 raw_industry,
                 source_bucket,
                 CAST(NULL AS VARCHAR) AS index_classification
-            FROM bdc_sector
+            FROM bdc_sector_scaled
             UNION ALL
             SELECT * FROM bdc_holdings_fallback
             UNION ALL
