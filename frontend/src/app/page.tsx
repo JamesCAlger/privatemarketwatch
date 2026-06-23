@@ -144,7 +144,7 @@ export default function HomePage() {
       <div className="border-b border-rule pt-6 pb-8">
         <div className="px-4 md:px-[120px]">
           <h1 className="font-display text-[56px] md:text-[80px] leading-[1.08] tracking-[-0.028em] text-ink mb-2 font-medium max-w-[920px]">
-            Private fund holdings.
+            BDC holdings.
           </h1>
           <h1 className="font-display text-[56px] md:text-[80px] leading-[1.08] tracking-[-0.028em] text-ink3 mb-5 font-medium">
             Loan by loan.
