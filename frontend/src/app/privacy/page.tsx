@@ -31,10 +31,12 @@ export default function PrivacyPage() {
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12 space-y-12">
         <Section title="Overview">
           <p>
-            Metris Lens is operated by Blue Obsidian Enterprises
+            Metris Lens is operated by Blue Obsidian Enterprises Limited
             (&quot;Blue Obsidian Enterprises,&quot; &quot;we,&quot; &quot;us&quot;), a
-            company incorporated in the United Kingdom, which is the data controller
-            for this site. The site is an informational research platform that
+            private limited company registered in England and Wales under company
+            number 16340409, with its registered office at 5 Frys Court, London,
+            England, SE10 9GG. Blue Obsidian Enterprises is the data controller for
+            this site. The site is an informational research platform that
             publishes analytics derived from mandatory filings that companies make
             with the U.S. Securities and Exchange Commission (SEC). It is a
             statically published site: it has no user accounts, no login, and no

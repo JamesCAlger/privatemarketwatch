@@ -4,6 +4,19 @@
 # Scraper/rate-abuse defense is handled at the edge (Vercel Firewall),
 # not here.
 
+# Search + AI crawlers explicitly welcome.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Googlebot
+User-agent: Bingbot
+Allow: /
+
+# Everyone else.
 User-agent: *
 Allow: /
 

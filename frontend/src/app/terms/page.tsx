@@ -31,7 +31,11 @@ export default function TermsPage() {
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12 space-y-12">
         <Section title="Acceptance of terms">
           <p>
-            By accessing or using this website (the &quot;Site&quot;), you agree to
+            This website (the &quot;Site&quot;) is operated by Blue Obsidian
+            Enterprises Limited (&quot;Blue Obsidian Enterprises,&quot; &quot;we,&quot;
+            &quot;us&quot;), a private limited company registered in England and Wales
+            under company number 16340409, with its registered office at 5 Frys Court,
+            London, England, SE10 9GG. By accessing or using the Site, you agree to
             these Terms of Use. If you do not agree, do not use the Site. We may
             update these terms from time to time; continued use after an update
             constitutes acceptance of the revised terms.

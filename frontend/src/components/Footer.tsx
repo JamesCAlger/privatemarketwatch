@@ -61,7 +61,7 @@ export default function Footer() {
 
         {/* Bottom strip */}
         <div className="border-t border-white/10 mt-7 pt-3.5 text-[11px] opacity-60 flex flex-col sm:flex-row justify-between gap-2">
-          <span>&copy; 2026 Blue Obsidian Enterprises &middot; metrislens.com</span>
+          <span>&copy; 2026 Blue Obsidian Enterprises Limited &middot; metrislens.com</span>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-white transition-colors">
               Privacy
@@ -71,6 +71,11 @@ export default function Footer() {
             </Link>
           </div>
         </div>
+        <p className="text-[11px] opacity-45 mt-2.5 max-w-3xl">
+          Blue Obsidian Enterprises Limited is a private limited company registered in
+          England and Wales (company no. 16340409). Registered office: 5 Frys Court,
+          London, England, SE10 9GG.
+        </p>
       </div>
     </footer>
   );
