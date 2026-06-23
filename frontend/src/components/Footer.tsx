@@ -61,7 +61,7 @@ export default function Footer() {
 
         {/* Bottom strip */}
         <div className="border-t border-white/10 mt-7 pt-3.5 text-[11px] opacity-60 flex flex-col sm:flex-row justify-between gap-2">
-          <span>&copy; 2026 Metris, Inc. &middot; metrislens.com</span>
+          <span>&copy; 2026 Blue Obsidian Enterprises &middot; metrislens.com</span>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-white transition-colors">
               Privacy

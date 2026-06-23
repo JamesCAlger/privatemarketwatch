@@ -31,8 +31,10 @@ export default function PrivacyPage() {
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12 space-y-12">
         <Section title="Overview">
           <p>
-            Metris Lens (&quot;Metris Lens,&quot; &quot;we,&quot; &quot;us&quot;)
-            operates this website as an informational research platform. The site
+            Metris Lens is operated by Blue Obsidian Enterprises
+            (&quot;Blue Obsidian Enterprises,&quot; &quot;we,&quot; &quot;us&quot;), a
+            company incorporated in the United Kingdom, which is the data controller
+            for this site. The site is an informational research platform that
             publishes analytics derived from mandatory filings that companies make
             with the U.S. Securities and Exchange Commission (SEC). It is a
             statically published site: it has no user accounts, no login, and no
@@ -111,11 +113,14 @@ export default function PrivacyPage() {
 
         <Section title="Your choices and rights">
           <p>
-            Depending on where you live, you may have rights to access, correct, or
-            delete personal data we hold about you, or to object to certain
-            processing. Because the site collects very little personal data, these
-            requests are usually limited to email correspondence and technical logs.
-            To make a request, contact us at the address below.
+            Under the UK General Data Protection Regulation (UK GDPR) and other
+            applicable law, you may have rights to access, correct, or delete personal
+            data we hold about you, to restrict or object to certain processing, and to
+            data portability. Because the site collects very little personal data, these
+            requests are usually limited to email correspondence and technical logs. To
+            make a request, contact us at the address below. If you are unhappy with how
+            we handle your data, you also have the right to complain to the UK
+            Information Commissioner&apos;s Office (ICO) at ico.org.uk.
           </p>
         </Section>
 

@@ -105,7 +105,7 @@ export default function TermsPage() {
         <Section title="Intellectual property">
           <p>
             The Site design, text, methodology documentation, and the compiled and
-            derived data sets are the property of Metris, Inc. or its licensors and
+            derived data sets are the property of Blue Obsidian Enterprises or its licensors and
             are protected by applicable intellectual property laws. The names
             &quot;Metris&quot; and &quot;Metris Lens&quot; and associated marks may
             not be used without permission.
@@ -124,7 +124,7 @@ export default function TermsPage() {
 
         <Section title="Limitation of liability">
           <p>
-            To the fullest extent permitted by law, Metris, Inc. and its affiliates,
+            To the fullest extent permitted by law, Blue Obsidian Enterprises and its affiliates,
             officers, and contributors will not be liable for any indirect,
             incidental, consequential, special, or punitive damages, or for any loss
             of profits, investment losses, or data, arising from your use of or
@@ -143,10 +143,11 @@ export default function TermsPage() {
 
         <Section title="Governing law">
           <p>
-            These terms are governed by the laws of the State of Delaware, without
-            regard to its conflict-of-laws rules, except where applicable law requires
-            otherwise. (Confirm the correct governing jurisdiction for Metris, Inc.
-            before relying on this clause.)
+            These terms are governed by and construed in accordance with the laws of
+            England and Wales. The courts of England and Wales have exclusive
+            jurisdiction over any dispute or claim arising out of or in connection with
+            them, except where applicable mandatory consumer law gives you the right to
+            bring proceedings in your country of residence.
           </p>
         </Section>
 
