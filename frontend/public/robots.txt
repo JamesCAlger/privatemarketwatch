@@ -1,0 +1,10 @@
+# Metris Lens -- open to all well-behaved crawlers and AI agents.
+# Note: robots.txt is advisory. It is obeyed by cooperative bots
+# (search engines, LLM crawlers) but ignored by abusive scrapers.
+# Scraper/rate-abuse defense is handled at the edge (Vercel Firewall),
+# not here.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.metrislens.com/sitemap.xml
