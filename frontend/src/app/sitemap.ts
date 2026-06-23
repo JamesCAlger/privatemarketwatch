@@ -3,7 +3,7 @@ import { INDICES } from '@/lib/constants';
 import { getFundDetailCiks } from '@/lib/data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://metrislens.com';
+  const base = 'https://www.metrislens.com';
 
   const fundCiks = getFundDetailCiks();
 

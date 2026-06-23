@@ -33,12 +33,12 @@ export const metadata: Metadata = {
   },
   description:
     'The data platform for private markets. Fund data, portfolio analytics, and position-level indices for private credit and equity -- built from mandatory SEC filings.',
-  metadataBase: new URL('https://metrislens.com'),
+  metadataBase: new URL('https://www.metrislens.com'),
   openGraph: {
     title: 'Metris Lens',
     description:
       'Fund data, portfolio analytics, and indices for private credit and equity markets from SEC filings.',
-    url: 'https://metrislens.com',
+    url: 'https://www.metrislens.com',
     siteName: 'Metris Lens',
     type: 'website',
   },
