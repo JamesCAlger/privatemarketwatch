@@ -1,11 +1,10 @@
 import Link from 'next/link';
-import { INDICES } from '@/lib/constants';
 
 export default function Footer() {
   return (
     <footer className="bg-navy text-white/[0.78] mt-16">
       <div className="px-4 md:px-[120px] pt-14 pb-9">
-        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-7">
           {/* Brand blurb */}
           <div>
             <div className="flex items-baseline gap-2.5">
@@ -13,28 +12,14 @@ export default function Footer() {
                 Metris Lens
               </span>
               <span className="eyebrow text-accent tracking-[0.2em]">
-                Data &middot; Indices &middot; Research
+                Data &middot; Research
               </span>
             </div>
             <p className="text-xs leading-relaxed mt-3 max-w-xs">
-              Independent, rules-based benchmarks for private credit and equity
-              markets -- built entirely from mandatory SEC filings. Does not
-              constitute investment advice.
+              Portfolio analytics and holdings for unlisted business development
+              companies (BDCs) -- built entirely from mandatory SEC filings. Does
+              not constitute investment advice.
             </p>
-          </div>
-
-          {/* Indices */}
-          <div>
-            <div className="eyebrow text-accent mb-2.5">Indices</div>
-            {INDICES.map((idx) => (
-              <Link
-                key={idx.slug}
-                href={`/indices/${idx.slug}`}
-                className="block text-xs py-1 text-white/[0.78] hover:text-white transition-colors"
-              >
-                {idx.shortName}
-              </Link>
-            ))}
           </div>
 
           {/* Platform */}

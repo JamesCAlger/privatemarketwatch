@@ -1,13 +1,10 @@
 import {
   getFundList,
   getFundSummary,
-  getIndexReturns,
-  getIndexSummary,
   getMetadata,
   getPortfolioCharacteristics,
   getManagerConcentration,
   getGicsSectorBreakdown,
-  getSectorBreakdown,
   getCreditRisk,
   getPikEligibility,
   getTopConstituents,
@@ -15,7 +12,6 @@ import {
   getSpreadTimeSeries,
   getSpreadByFundSize,
 } from '@/lib/data';
-import { INDICES } from '@/lib/constants';
 import { formatDollar, formatNumber, formatQuarter, formatPercent, formatYears } from '@/lib/format';
 import { combineConcentration } from '@/lib/data';
 import Link from 'next/link';
@@ -31,9 +27,7 @@ import StatStrip from '@/components/StatStrip';
 export default function HomePage() {
   const funds = getFundList();
   const summary = getFundSummary();
-  const indexSummaries = getIndexSummary();
   const metadata = getMetadata();
-  const indexReturns = getIndexReturns();
   const gicsSectorBreakdown = getGicsSectorBreakdown();
   const portfolioCharacteristics = getPortfolioCharacteristics();
   const managerConcentration = getManagerConcentration();
@@ -41,22 +35,16 @@ export default function HomePage() {
   const pikEligibility = getPikEligibility();
   const spreadTimeSeries = getSpreadTimeSeries();
   const spreadByFundSize = getSpreadByFundSize();
-  const sectorBreakdown = getSectorBreakdown();
   const topConstituents = getTopConstituents();
   const concentrationCurve = getConcentrationCurve();
 
-  const dlSummary = indexSummaries.find((s) => s.index === 'DIRECT_LENDING');
-  const visibleKeys = new Set(INDICES.map((i) => i.key));
-  const visibleSummaries = indexSummaries.filter((s) => visibleKeys.has(s.index));
-  const totalIndexFv = visibleSummaries.reduce((sum, s) => sum + (s.totalFv ?? 0), 0);
+  // Aggregate BDC portfolio fair value (current quarter, all classifications)
+  const portfolioFv = portfolioCharacteristics?.portfolioFv ?? portfolioCharacteristics?.totalFv ?? 0;
 
-  // Quarter count for the stat strip
-  const dlPositionSeries = indexReturns['DIRECT_LENDING'] ?? [];
-
-  // Combine manager concentration across all visible indices
+  // Combine manager concentration across the direct-lending and equity books
   const combinedManagers = combineConcentration(
     managerConcentration,
-    INDICES.map((i) => i.key),
+    ['DIRECT_LENDING', 'COMMON_EQUITY'],
   );
 
   // Donut items for Industry Exposure + Manager Concentration
@@ -96,35 +84,44 @@ export default function HomePage() {
   const managerTop5Pct = namedManagers.slice(0, 5).reduce((s, m) => s + m.pctOfIndex, 0) * 100;
   const managerMax = managerItems.reduce((m, x) => Math.max(m, x.pct), 0);
 
-  // Instrument type donut — split direct lending by lien, then other classifications
-  const dlFv = (sectorBreakdown['DIRECT_LENDING'] ?? []).reduce((s, r) => s + r.totalFv, 0);
+  // Instrument type donut — split direct lending by lien, then other classifications.
+  // Sourced from the holdings-based classificationFv so the slices reconcile to the
+  // headline portfolio fair value (same current-quarter, all-classification basis).
+  const cfv = portfolioCharacteristics?.classificationFv ?? {};
+  const dlFv = cfv['DIRECT_LENDING'] ?? 0;
   const lien = portfolioCharacteristics?.lienSplit;
+  // DL lien tiers — First Lien is the remainder so the five DL slices sum to exactly dlFv.
+  const secondFv = lien ? dlFv * lien.secondLien : 0;
+  const subFv = lien ? dlFv * (lien.subordinated ?? 0) : 0;
+  const unsecFv = lien ? dlFv * lien.unsecured : 0;
+  const otherDlFv = lien ? dlFv * (lien.unknown ?? 0) : 0;
+  const firstLienFv = lien ? Math.max(0, dlFv - secondFv - subFv - unsecFv - otherDlFv) : dlFv;
+  const structuredFv = cfv['STRUCTURED_CREDIT'] ?? 0;
+  const preferredFv = cfv['PREFERRED_EQUITY'] ?? 0;
+  const commonFv = cfv['COMMON_EQUITY'] ?? 0;
+  const cashFv = cfv['CASH'] ?? 0;
+  // Everything else (funds, real estate, unclassified) as the remainder, so the
+  // whole donut sums to EXACTLY portfolioFv — the same figure as the headline.
+  const otherFv = Math.max(0, portfolioFv - dlFv - structuredFv - preferredFv - commonFv - cashFv);
   const instrumentRaw: { label: string; fv: number }[] = [
-    { label: 'First Lien Senior Loans', fv: lien ? dlFv * lien.firstLien : dlFv },
-    { label: 'Second Lien Loans', fv: lien ? dlFv * lien.secondLien : 0 },
-    { label: 'Subordinated Loans', fv: lien ? dlFv * (lien.subordinated ?? 0) : 0 },
-    { label: 'Unsecured Loans', fv: lien ? dlFv * lien.unsecured : 0 },
-    { label: 'Other Direct Lending', fv: lien ? dlFv * (lien.unknown ?? 0) : 0 },
-    { label: 'Structured Credit', fv: (sectorBreakdown['STRUCTURED_CREDIT'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
-    { label: 'Preferred Equity', fv: (sectorBreakdown['PREFERRED_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
-    { label: 'Common Equity', fv: (sectorBreakdown['COMMON_EQUITY'] ?? []).reduce((s, r) => s + r.totalFv, 0) },
-    // Cash & equivalents — analytics-only bucket, never an index constituent.
-    { label: 'Cash & Equivalents', fv: portfolioCharacteristics?.cashFv ?? 0 },
-    // Portfolio derivatives (TRS, FX forwards, options) — analytics-only, net FV.
-    // The BDC's own financing/rate hedges are excluded from the portfolio view.
-    { label: 'Portfolio Derivatives', fv: portfolioCharacteristics?.portfolioDerivativeFv ?? 0 },
-    {
-      label: 'Other',
-      fv: ['DIRECT_REAL_ESTATE', 'PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'UNCLASSIFIED']
-        .reduce((sum, k) => sum + (sectorBreakdown[k] ?? []).reduce((s, r) => s + r.totalFv, 0), 0),
-    },
+    { label: 'First Lien', fv: firstLienFv },
+    { label: 'Second Lien', fv: secondFv },
+    { label: 'Subordinated', fv: subFv },
+    { label: 'Unsecured', fv: unsecFv },
+    { label: 'Other Lending', fv: otherDlFv },
+    { label: 'Structured', fv: structuredFv },
+    { label: 'Preferred', fv: preferredFv },
+    { label: 'Common Equity', fv: commonFv },
+    // Cash & equivalents — analytics-only classification, included for a holistic view.
+    { label: 'Cash', fv: cashFv },
+    { label: 'Other', fv: otherFv },
   ].filter((x) => x.fv > 0);
   const instrumentTotal = instrumentRaw.reduce((s, x) => s + x.fv, 0);
   const instrumentDonutItems = instrumentRaw.map((x) => ({
     label: x.label,
     pct: instrumentTotal > 0 ? (x.fv / instrumentTotal) * 100 : 0,
   }));
-  const firstLienPct = instrumentDonutItems.find((x) => x.label === 'First Lien Senior Loans')?.pct ?? 0;
+  const firstLienPct = instrumentDonutItems.find((x) => x.label === 'First Lien')?.pct ?? 0;
   const instrumentCenterStat = { label: 'First Lien', value: firstLienPct.toFixed(0) + '%', note: 'of fair value' };
 
   // Portfolio characteristics stats
@@ -142,16 +139,17 @@ export default function HomePage() {
       {/* HERO                                                             */}
       {/* ================================================================ */}
       <div className="border-b border-rule pt-6 pb-8">
-        <div className="px-4 md:px-[120px]">
+        <div className="max-w-[1180px] mx-auto px-4 md:px-6">
           <h1 className="font-display text-[56px] md:text-[80px] leading-[1.08] tracking-[-0.028em] text-ink mb-2 font-medium max-w-[920px]">
             BDC holdings.
           </h1>
-          <h1 className="font-display text-[56px] md:text-[80px] leading-[1.08] tracking-[-0.028em] text-ink3 mb-5 font-medium">
+          <h1 className="font-display text-[56px] md:text-[80px] leading-[1.08] tracking-[-0.028em] text-ink3 mb-6 font-medium">
             Loan by loan.
           </h1>
-          <p className="text-[22px] leading-relaxed text-ink3 max-w-[720px] mb-6">
-            Browse individual loans, equity stakes, and credit facilities held by
-            semi-liquid funds. Updated quarterly.
+          <p className="text-[19px] md:text-[21px] leading-snug text-ink3 max-w-[1000px] mb-6">
+            Private markets are no longer walled off from ordinary investors, yet
+            these funds are still far easier to buy than to inspect. Metris Lens
+            brings position-level transparency out from behind the paywall.
           </p>
           <div className="flex flex-wrap gap-3 mb-8">
             <Link
@@ -167,61 +165,47 @@ export default function HomePage() {
               View methodology &#x2197;
             </Link>
           </div>
-
-          {/* Stat strip */}
-          <StatStrip
-            totalFv={totalIndexFv}
-            holdingsCount={metadata.holdingsCount}
-            totalFunds={summary.totalFunds}
-            avgSpread={portfolioCharacteristics?.was ?? null}
-            quarters={dlPositionSeries.length}
-          />
         </div>
       </div>
 
       {/* ================================================================ */}
-      {/* ORIENTATION -- what this is + position-level gloss               */}
+      {/* ORIENTATION -- mission statement + stat strip                    */}
       {/* ================================================================ */}
       <div className="border-b border-rule">
-        <div className="px-4 md:px-[120px] py-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-x-12 gap-y-8 items-start">
-            <div className="max-w-[660px]">
-              <div className="eyebrow text-accent mb-3">What this is</div>
-              <p className="text-[17px] leading-relaxed text-ink2">
-                Metris Lens rebuilds what{' '}
-                <span className="text-ink font-medium">
-                  business development companies (BDCs)
-                </span>{' '}
-                own, directly from their mandatory SEC filings: every loan, equity stake, and
-                credit facility a fund discloses, normalized and refreshed each quarter. No
-                manager surveys and no proprietary feeds. Coverage starts with BDCs and is
-                expanding to every BDC plus interval and tender-offer funds, and ultimately
-                the full universe of semi-liquid structures.
-              </p>
-            </div>
-            <div className="border-l-2 border-accent pl-5 lg:mt-1">
-              <div className="eyebrow text-accent mb-3">Position-level, not fund-level</div>
-              <p className="text-[17px] leading-relaxed text-ink2">
-                Most benchmarks collapse a fund into a single return. We keep every holding
-                separate: a first-lien loan, a second-lien loan, and an equity co-invest in the
-                same borrower are three distinct records. Concentration, spreads, and credit
-                stress stay visible at the level where the risk actually sits.
-              </p>
-            </div>
-          </div>
+        <div className="max-w-[1180px] mx-auto px-4 md:px-6 py-10">
+          {/* Stat strip */}
+          <StatStrip
+            totalFv={portfolioFv}
+            holdingsCount={metadata.holdingsCount}
+            totalFunds={summary.totalFunds}
+            avgSpread={portfolioCharacteristics?.was ?? null}
+            quarters={spreadTimeSeries.length}
+          />
         </div>
       </div>
 
       {/* ================================================================ */}
       {/* MAIN CONTENT                                                     */}
       {/* ================================================================ */}
-      <div className="px-4 md:px-[120px] py-7 space-y-14">
+      <div className="max-w-[1180px] mx-auto px-4 md:px-6 py-7 space-y-14">
+
+        {/* Section subtitle introducing the portfolio charts */}
+        <div className="max-w-[760px]">
+          <div className="eyebrow text-accent mb-3">Inside the portfolio</div>
+          <h2 className="font-display text-[26px] md:text-[30px] tracking-[-0.01em] text-ink leading-tight">
+            What these funds actually hold
+          </h2>
+          <p className="text-[15px] leading-relaxed text-ink2 mt-3">
+            Aggregated across the covered universe: instrument and industry mix,
+            concentration, spreads, and credit stress at the position level.
+          </p>
+        </div>
 
         {/* Industry Exposure + Manager Concentration (two-column donuts) */}
         {/* Instrument Type + Industry Exposure (top row) */}
         {(instrumentDonutItems.length > 0 || sectorItems.length > 0) && (
           <section>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:[@media(min-height:760px)]:grid-cols-2 gap-6">
               {instrumentDonutItems.length > 0 && (
                 <div className="bg-white border border-rule p-7">
                   <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Instrument type</h3>
@@ -249,7 +233,7 @@ export default function HomePage() {
         {/* Position concentration (ordered bars) + Manager concentration (donut) */}
         {(combinedCurve.length > 0 || managerItems.length > 0) && (
           <section>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:[@media(min-height:760px)]:grid-cols-2 gap-6">
               {combinedCurve.length > 0 && (
                 <div className="bg-white border border-rule p-7">
                   <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Position concentration</h3>
@@ -280,14 +264,14 @@ export default function HomePage() {
                   <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
                     Top 5% of positions hold{' '}
                     <span className="font-mono text-ink tabular-nums font-medium">{top5ConcPct.toFixed(1)}%</span>{' '}
-                    of total indexed fair value.
+                    of portfolio fair value.
                   </div>
                 </div>
               )}
               {managerItems.length > 0 && (
                 <div className="bg-white border border-rule p-7">
                   <h3 className="font-display text-[22px] tracking-[-0.01em] text-ink">Manager concentration</h3>
-                  <p className="text-xs text-ink3 mt-2 mb-3">Share of universe fair value</p>
+                  <p className="text-xs text-ink3 mt-2 mb-3">Share of portfolio fair value</p>
                   <div className="space-y-2">
                     {managerItems.map((m, i) => {
                       const barW = managerMax > 0 ? (m.pct / managerMax) * 100 : 0;
@@ -312,7 +296,7 @@ export default function HomePage() {
                   <div className="border-t border-rule2 pt-3 mt-4 text-[11px] text-ink3">
                     Top 5 managers hold{' '}
                     <span className="font-mono text-ink tabular-nums font-medium">{managerTop5Pct.toFixed(1)}%</span>{' '}
-                    of universe fair value. Combined across all indices.
+                    of portfolio fair value.
                   </div>
                 </div>
               )}
@@ -328,7 +312,7 @@ export default function HomePage() {
           const peakBps = Math.round(peak * 100);
           return (
             <section>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:[@media(min-height:760px)]:grid-cols-2 gap-6">
                 {/* Spread over time */}
                 <div className="bg-white border border-rule p-7">
                   <div className="flex flex-wrap items-baseline justify-between gap-4 mb-1">
@@ -406,7 +390,7 @@ export default function HomePage() {
                 <CreditStressChart data={creditRisk} />
                 <div className="flex flex-wrap justify-between items-baseline mt-4 pt-3 border-t border-rule2 text-[11px] text-ink3">
                   <span>
-                    Universe AUM{' '}
+                    Portfolio FV{' '}
                     <span className="font-mono text-ink2 tabular-nums">{formatDollar(latest.totalFv)}</span>
                     {' '}across {formatNumber(latest.totalPositions)} positions.
                   </span>
@@ -528,7 +512,7 @@ export default function HomePage() {
       {/* ================================================================ */}
       {hasPC && (
         <div className="bg-navy mt-14">
-          <div className="px-4 md:px-[120px] py-10">
+          <div className="max-w-[1180px] mx-auto px-4 md:px-6 py-10">
             <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
               <div className="md:pr-6">
                 <div className="eyebrow text-accent mb-2">Private Credit</div>
@@ -544,8 +528,8 @@ export default function HomePage() {
                   { label: 'Wtd. Avg. Coupon', value: pc.wac != null ? `${pc.wac.toFixed(1)}%` : '--', sub: pc.wacCoverage != null ? `${(pc.wacCoverage * 100).toFixed(0)}% coverage` : undefined },
                   { label: 'Wtd. Avg. Spread', value: pc.was != null ? `${(pc.was * 100).toFixed(0)} bps` : '--', sub: pc.wasCoverage != null ? `${(pc.wasCoverage * 100).toFixed(0)}% coverage` : undefined },
                   { label: 'Wtd. Avg. Maturity', value: pc.wam != null ? formatYears(pc.wam) : '--', sub: pc.wamCoverage != null ? `${(pc.wamCoverage * 100).toFixed(0)}% coverage` : undefined },
-                  { label: 'First Lien', value: formatPercent(pc.lienSplit.firstLien), sub: 'of FV' },
-                  { label: 'Floating Rate', value: formatPercent(pc.rateTypeSplit.floating), sub: 'of FV' },
+                  { label: 'First Lien', value: formatPercent(pc.lienSplit.firstLien), sub: 'of direct lending' },
+                  { label: 'Floating Rate', value: formatPercent(pc.rateTypeSplit.floating), sub: 'of debt' },
                 ].map((stat, i) => (
                   <div
                     key={stat.label}
@@ -571,7 +555,7 @@ export default function HomePage() {
       {/* ================================================================ */}
       {/* MOVERS                                                           */}
       {/* ================================================================ */}
-      <div className="px-4 md:px-[120px] py-10 space-y-14">
+      <div className="max-w-[1180px] mx-auto px-4 md:px-6 py-10 space-y-14">
         {(topLeverage.length > 0 || largestNavMoves.length > 0 || topYield.length > 0) && (
           <section>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

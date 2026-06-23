@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Serif, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getIndexSummary, getFundList } from '@/lib/data';
+import { getFundList } from '@/lib/data';
 import './globals.css';
 
 const plexSerif = IBM_Plex_Serif({
@@ -32,12 +32,12 @@ export const metadata: Metadata = {
     template: '%s | Metris Lens',
   },
   description:
-    'The data platform for private markets. Fund data, portfolio analytics, and position-level indices for private credit and equity -- built from mandatory SEC filings.',
+    'Portfolio analytics and holdings for unlisted business development companies (BDCs), built from mandatory SEC filings.',
   metadataBase: new URL('https://www.metrislens.com'),
   openGraph: {
     title: 'Metris Lens',
     description:
-      'Fund data, portfolio analytics, and indices for private credit and equity markets from SEC filings.',
+      'Portfolio analytics and holdings for unlisted business development companies (BDCs), built from mandatory SEC filings.',
     url: 'https://www.metrislens.com',
     siteName: 'Metris Lens',
     type: 'website',
@@ -49,7 +49,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const indexSummaries = getIndexSummary();
   const fundList = getFundList();
   const fundCount = fundList.length;
   const fundSearchItems = fundList.map((f) => ({
@@ -61,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${plexSerif.variable} ${plexSans.variable} ${plexMono.variable} bg-bg`}>
       <body className="font-body min-h-screen flex flex-col bg-bg text-ink">
-        <Header indexSummaries={indexSummaries} fundCount={fundCount} fundSearchItems={fundSearchItems} />
+        <Header fundCount={fundCount} fundSearchItems={fundSearchItems} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

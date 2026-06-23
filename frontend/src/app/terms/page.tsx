@@ -44,8 +44,8 @@ export default function TermsPage() {
 
         <Section title="What Metris Lens provides">
           <p>
-            Metris Lens publishes analytics, benchmarks, and position-level indices
-            derived from mandatory filings that companies make with the U.S.
+            Metris Lens publishes position-level portfolio holdings and analytics
+            derived from public filings that companies make with the U.S.
             Securities and Exchange Commission (SEC). The data is presented for
             informational and research purposes for a professional audience.
           </p>
@@ -55,7 +55,7 @@ export default function TermsPage() {
           <p>
             Nothing on the Site is investment, legal, tax, or accounting advice, and
             nothing on the Site is a recommendation, solicitation, or offer to buy or
-            sell any security or to adopt any investment strategy. The indices and
+            sell any security or to adopt any investment strategy. The data and
             analytics are not offered as, and should not be relied upon as, a basis
             for any investment decision. Past performance is not indicative of future
             results. You are solely responsible for your own decisions and should

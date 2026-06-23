@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { getMetadata, getIndexSummary, getVehicleContribution } from '@/lib/data';
+import { getMetadata, getFundSummary, getPortfolioCharacteristics } from '@/lib/data';
 import { formatNumber, formatDollar, formatQuarter } from '@/lib/format';
 
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'About Metris Lens -- the index platform for private credit, with position-level benchmarks for unlisted BDCs.',
+    'About Metris Lens -- position-level portfolio holdings for unlisted BDCs, built from mandatory SEC filings.',
 };
 
 const PRINCIPLES = [
@@ -24,24 +24,18 @@ const PRINCIPLES = [
   },
   {
     title: 'Reproducible',
-    description: 'Given the same SEC filings, anyone can reproduce the index. The pipeline is deterministic with published validation.',
+    description: 'Given the same SEC filings, anyone can reproduce the holdings dataset. The pipeline is deterministic with published validation.',
   },
 ];
 
 export default function AboutPage() {
   const meta = getMetadata();
-  const summaries = getIndexSummary();
-  const vehicles = getVehicleContribution();
+  const fundSummary = getFundSummary();
+  const portfolio = getPortfolioCharacteristics();
 
-  const totalFv = summaries.reduce((sum, s) => sum + (s.totalFv ?? 0), 0);
-  const allVehicles = new Map<string | number, { vehicleType: string }>();
-  for (const key of Object.keys(vehicles)) {
-    for (const v of vehicles[key] ?? []) {
-      if (!allVehicles.has(v.cik)) allVehicles.set(v.cik, { vehicleType: v.vehicleType });
-    }
-  }
-  const bdcCount = Array.from(allVehicles.values()).filter((v) => v.vehicleType === 'bdc').length;
-  const totalConstituents = summaries.reduce((sum, s) => sum + (s.constituents ?? 0), 0);
+  const totalFv = portfolio.totalFv;
+  const bdcCount = fundSummary.totalFunds;
+  const positionCount = portfolio.positionCount;
 
   return (
     <div>
@@ -51,7 +45,7 @@ export default function AboutPage() {
           Making private markets<br />observable.
         </h1>
         <p className="text-[17px] leading-relaxed text-ink2 max-w-[620px]">
-          Metris Lens provides the first position-level benchmarks for unlisted
+          Metris Lens provides position-level portfolio holdings for unlisted
           BDCs, built entirely from mandatory SEC filings. Independent, rules-based,
           transparent, and reproducible.
         </p>
@@ -111,9 +105,9 @@ export default function AboutPage() {
             Coverage
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatBox label="Private Markets FV" value={formatDollar(totalFv)} />
+            <StatBox label="Portfolio Fair Value" value={formatDollar(totalFv)} />
             <StatBox label="Unlisted BDCs" value={formatNumber(bdcCount)} />
-            <StatBox label="Indexed Positions" value={formatNumber(totalConstituents)} />
+            <StatBox label="Holdings" value={formatNumber(positionCount)} />
             <StatBox
               label="Data As Of"
               value={meta.asOfQuarter ? formatQuarter(meta.asOfQuarter) : '--'}
