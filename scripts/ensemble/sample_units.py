@@ -55,6 +55,10 @@ STRATA = [
 # total adjudications under the Standard ~1,000 budget). Override on the CLI.
 DEFAULT_ALLOC = {"d1": 55, "d2_3": 55, "d4_7": 45, "d8plus": 35}
 
+# Default UNIT allocation for a pilot subset (~150 adjudications), drawn as a STRICT
+# subset of an existing batch's selected units so no adjudication is ever wasted.
+DEFAULT_PILOT_ALLOC = {"d1": 30, "d2_3": 20, "d4_7": 8, "d8plus": 3}
+
 
 def _stratum(degree: int) -> str:
     for name, lo, hi in STRATA:
@@ -209,8 +213,76 @@ def build(
     }
 
 
+def _read_batch(src_dir: Path) -> tuple[dict, dict]:
+    """Return (rows_by_unit, manifest) for an existing ensemble batch dir."""
+    manifest = json.loads((src_dir / "cofire_manifest.json").read_text(encoding="utf-8"))
+    rows_by_unit: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    with open(src_dir / "review_ids.csv", newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            rows_by_unit[(r["cik"], r["report_date"])].append(r)
+    return rows_by_unit, manifest
+
+
+def _emit_subset(out_dir: Path, keys: set[tuple[str, str]], rows_by_unit: dict, src_manifest: dict) -> dict:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    n_adj = 0
+    with open(out_dir / "review_ids.csv", "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["review_id", "cik", "report_date", "engine", "rule_name", "stratum"])
+        for key in sorted(keys):
+            for r in rows_by_unit[key]:
+                w.writerow([r["review_id"], r["cik"], r["report_date"], r["engine"], r["rule_name"], r["stratum"]])
+                n_adj += 1
+    units = [u for u in src_manifest["units"] if (u["cik"], u["report_date"]) in keys]
+    manifest = dict(src_manifest)
+    manifest["units"] = units
+    manifest["n_units_selected"] = len(units)
+    manifest["n_adjudications"] = n_adj
+    manifest["derived_from"] = src_manifest.get("seed")
+    (out_dir / "cofire_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return {"n_units": len(units), "n_adjudications": n_adj}
+
+
+def build_pilot_split(*, src_batch: str, pilot_batch: str, rest_batch: str, alloc: dict, seed: int) -> dict:
+    """Split an existing batch's selected units into a pilot subset + the remainder.
+
+    Pilot units are a STRICT subset of src; rest = src - pilot. The two are disjoint,
+    so they can be discovered/preflighted/dispatched as independent B1 batches with no
+    lock or verdict collisions, and together reconstitute the full src sample.
+    """
+    src_dir = DEFAULT_OUT_BASE / src_batch
+    rows_by_unit, manifest = _read_batch(src_dir)
+    rng = random.Random(seed)
+
+    by_stratum: dict[str, list] = defaultdict(list)
+    for u in manifest["units"]:
+        by_stratum[u["stratum"]].append((u["cik"], u["report_date"]))
+
+    pilot_keys: set[tuple[str, str]] = set()
+    split_report = {}
+    for name, _, _ in STRATA:
+        pool = sorted(by_stratum.get(name, []))
+        take = min(alloc.get(name, 0), len(pool))
+        chosen = rng.sample(pool, take) if take else []
+        pilot_keys.update(chosen)
+        split_report[name] = {"src_units": len(pool), "pilot_units": take}
+    all_keys = {(u["cik"], u["report_date"]) for u in manifest["units"]}
+    rest_keys = all_keys - pilot_keys
+
+    pilot = _emit_subset(DEFAULT_OUT_BASE / pilot_batch, pilot_keys, rows_by_unit, manifest)
+    rest = _emit_subset(DEFAULT_OUT_BASE / rest_batch, rest_keys, rows_by_unit, manifest)
+    return {"split": split_report, "pilot": pilot, "rest": rest,
+            "pilot_dir": str(DEFAULT_OUT_BASE / pilot_batch), "rest_dir": str(DEFAULT_OUT_BASE / rest_batch)}
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description="Unit-stratified sampler for the weak-rule FP + ensemble B1 experiment.")
+    p.add_argument("--pilot-of", default=None, metavar="SRC_BATCH",
+                   help="Split SRC_BATCH's selected units into a disjoint pilot subset + remainder, then exit.")
+    p.add_argument("--pilot-batch-id", default=None, help="Pilot output batch id (default: <src>_pilot).")
+    p.add_argument("--rest-batch-id", default=None, help="Remainder output batch id (default: <src>_rest).")
+    for name, _, _ in STRATA:
+        p.add_argument(f"--pilot-n-{name}", type=int, default=DEFAULT_PILOT_ALLOC[name], help=f"Pilot units from stratum {name}.")
     p.add_argument("--queue", type=Path, default=DEFAULT_QUEUE)
     p.add_argument("--batch-id", default="ens1", help="Output dir = data/output/ensemble/<batch_id>/")
     p.add_argument("--min-firings", type=int, default=30, help="In-scope = weak rules with >= this many firings.")
@@ -222,6 +294,19 @@ def main(argv=None) -> int:
     args = p.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+    if args.pilot_of:
+        pilot_batch = args.pilot_batch_id or f"{args.pilot_of}_pilot"
+        rest_batch = args.rest_batch_id or f"{args.pilot_of}_rest"
+        alloc = {name: getattr(args, f"pilot_n_{name}") for name, _, _ in STRATA}
+        res = build_pilot_split(src_batch=args.pilot_of, pilot_batch=pilot_batch,
+                                rest_batch=rest_batch, alloc=alloc, seed=args.seed)
+        logger.info("pilot split of '%s' (strict subset): %s", args.pilot_of, res["split"])
+        logger.info("PILOT '%s': %d units, %d adjudications -> %s",
+                    pilot_batch, res["pilot"]["n_units"], res["pilot"]["n_adjudications"], res["pilot_dir"])
+        logger.info("REST  '%s': %d units, %d adjudications -> %s",
+                    rest_batch, res["rest"]["n_units"], res["rest"]["n_adjudications"], res["rest_dir"])
+        return 0
 
     units, in_scope = _load_units(args.queue, args.min_firings)
     prof = _profile(units)
