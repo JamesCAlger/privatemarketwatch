@@ -43,8 +43,11 @@ DECIDED = {"real_error", "false_alarm"}
 
 
 def _load_verdict(path: Path) -> dict | None:
+    # utf-8-sig: tolerate a UTF-8 BOM, which Codex workers sometimes write and which
+    # plain utf-8 json.load rejects. (B1 finalize uses strict utf-8; run
+    # scripts/ensemble/strip_verdict_bom.py before finalize if BOMs appear.)
     try:
-        with open(path, encoding="utf-8") as fh:
+        with open(path, encoding="utf-8-sig") as fh:
             return json.load(fh)
     except (OSError, json.JSONDecodeError):
         return None
