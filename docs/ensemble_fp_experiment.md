@@ -1,7 +1,8 @@
 # Weak-rule False-Positive + Ensemble B1 Experiment
 
 **Branch:** `ensemble-fp-experiment` (all code here is additive; Agent B1 is NOT modified).
-**Status as of 2026-06-28 ~20:15 local.** Resume steps are in section 5.
+**Status as of 2026-06-29 ~08:45 local.** Current batch is **`ens2`** (cohort-scoped;
+`ens1*` is superseded — see section 2a). Resume steps are in section 5.
 
 ---
 
@@ -24,10 +25,44 @@ against co-firing structure afterward.
   co-firing degree (d1=1 rule, d2_3, d4_7, d8plus), and adjudicate every in-scope weak
   flag on each sampled unit. Gives pooled per-rule FP rates AND the co-firing->precision
   relationship from one batch.
-- **In-scope rules:** weak/review-lane rules with **>= 30 firings** in the queue (59 rules).
+- **In-scope rules:** weak/review-lane rules with **>= 30 firings** in the queue.
 - **Budget:** "Standard" ~1,000 adjudications.
-- **Drawn sample (`ens1`):** 260 units -> **1,008 adjudications**, 59 in-scope rules
-  (53 got >=1 sampled flag; ~12 reach n>=30 for tight CIs).
+
+## 2a. Scope correction (2026-06-29) -- why ens1 is superseded by ens2
+
+`ens1` was drawn before two bugs were understood; its pilot (`ens1_pilot`, 157 flags)
+returned **70% `no_source`** and only 43 decided. Root causes (both now fixed in
+`sample_units.py`):
+
+1. **Wrong sampling frame.** The sampler read the WHOLE `review_queue.csv`, not the v1
+   **wrapper cohort** (AGENTS.md scope: ~70 unlisted BDCs). Only 5/56 sampled CIKs were
+   in-cohort; 17/56 were N-PORT/N-CSR interval/tender funds. The B1 evidence CLI
+   (`scripts/review_agent/evidence_cli.py`) is **BDC-SOI-HTML-only** (`_ENGINE_SOURCE`
+   -> "BDC", `_html_path` -> `BDC_HTML_CACHE_DIR`): it roams the WHOLE filing once it
+   resolves one, but cannot open N-PORT XML / N-CSR HTML -> those funds are 100%
+   `no_source` (failure `missing_cached_html`).
+2. **No-accession engines.** `fund_financials` (F*), `html_extract` (html_carry) and
+   `fund_strategy` bundles carry no resolvable accession, so the CLI fails at
+   `no_accession_resolved` BEFORE any file open -- independent of cohort. (`row_validation`
+   / `oracle` only failed on non-BDC funds, so cohort scoping rescues them.)
+
+This was NOT a "B1 only sees a slice" problem -- B1 roams the entire filing; the gap is
+*which source* it can open. See the memory note `full-filing-search-adjudication`.
+
+**Fixes (in `sample_units.py`):**
+- **Cohort filter** -- default `config.WRAPPER_COHORT_MANIFEST_FILE` (70 CIKs);
+  `--all-vehicles` disables (audit only). Non-cohort and N-PORT CIKs are dropped.
+- **`--exclude-engines`** -- default `fund_financials,html_extract,fund_strategy`; these
+  are excluded from the adjudicated in-scope set but **still recorded in
+  `all_weak_rules`** as co-firing features (the ensemble feature vector stays complete).
+- Manifest records `cohort_scoped`, `cohort_cik_count`, `excluded_engines` for provenance.
+
+**Drawn sample (`ens2`, 2026-06-29):** cohort-scoped frame = 789 units / 32 in-scope
+rules (>=30 firings). Allocation `--n-d1 8 --n-d2_3 13 --n-d4_7 90 --n-d8plus 30` ->
+**141 units / 934 adjudications**, all 42 CIKs in-cohort; engines row_validation 635 /
+oracle 175 / weak 84 / nonaccrual 40. **Caveat:** the cohort frame is degree-skewed
+(81% of units are d8plus; only 8 d1 + 13 d2_3 units exist), so per-rule FP is
+well-powered but the ensemble-DEGREE contrast is structurally weak.
 
 ## 3. Scripts (all on this branch, under `scripts/ensemble/`)
 
@@ -48,18 +83,21 @@ Ensemble artifacts live in `data/output/ensemble/<batch>/`; B1 batch dirs in
 
 | Batch | rids | State |
 |---|---|---|
-| `ens1` | 1,008 | full sample (universe). discover+preflight done. Analysis target. |
-| `ens1_pilot` | 157 | pilot (disjoint subset of ens1). **Partially adjudicated:** 34 decided + 4 ambiguous kept; 119 still need adjudication. |
-| `ens1_pilot_r2` | 119 | **retry batch** for the pilot's undecided rids. discover+preflight done; ready to dispatch. |
-| `ens1_rest` | 851 | remainder of ens1 (not yet dispatched). Run after the pilot is complete. |
+| `ens2` | 934 | **CURRENT** full sample (cohort-scoped). discover done. |
+| `ens2_pilot` | 122 | strict subset of ens2 (32 units). **Dispatching now** -- gate on `no_source` before running the remainder. |
+| `ens2_rest` | 812 | remainder of ens2 (109 units). Run after the pilot gate passes. |
+| `ens1*` | -- | **SUPERSEDED** (wrong frame; see section 2a). `ens1`, `ens1_pilot` (157, 70% no_source), `ens1_pilot_r2` (119), `ens1_rest` (851). Kept only for audit. |
 
-The pilot's first runs failed/degraded due to dispatch infra issues (section 6), not the
-experiment design. `prep_retry` already salvaged the 34 decided verdicts.
+ens1's pilot also hit dispatch infra issues (section 6) on its first runs; those are
+orthogonal to the scope bug and are fixed/documented separately.
 
 ## 5. RESUME after restart
 
 A restart clears the 2 stuck codex workers and resets sandbox state, so **no `taskkill`
 needed**. From a fresh **elevated** PowerShell:
+
+`ens2` is already drawn and discovered; `ens2_pilot` is dispatching. From a fresh
+**elevated** PowerShell:
 
 ```powershell
 Set-Location "C:\Users\alger\Documents\000. Projects\005. evergreen funds platform xbrl"
@@ -67,28 +105,36 @@ Set-Location "C:\Users\alger\Documents\000. Projects\005. evergreen funds platfo
 # 0. sanity: no codex should be running
 Get-Process -Name codex* -ErrorAction SilentlyContinue
 
-# 1. finish the pilot: retry the 119 undecided rids (fresh batch id => no stale markers)
-python -m scripts.ensemble.prep_retry --src ens1_pilot --retry ens1_pilot_r2
-python -m scripts.agent_b.run_review discover ens1_pilot_r2 --review-ids-from data/output/ensemble/ens1_pilot_r2/review_ids.csv
-.\scripts\dispatch_agent_b_workers.ps1 -BatchId ens1_pilot_r2 -MaxParallel 1
+# 1. (if re-drawing ens2 from scratch) cohort-scoped sample + disjoint pilot split
+python -m scripts.ensemble.sample_units --batch-id ens2 --n-d1 8 --n-d2_3 13 --n-d4_7 90 --n-d8plus 30
+python -m scripts.ensemble.sample_units --pilot-of ens2     # -> ens2_pilot + ens2_rest
 
-# 2. analyze the FULL pilot (verdicts are shared by review_id)
-python -m scripts.ensemble.strip_verdict_bom --batch-id ens1_pilot
-python -m scripts.ensemble.analyze_ensemble --batch-id ens1_pilot
-# -> read data/output/ensemble/ens1_pilot/ensemble_summary.md
+# 2. PILOT GATE: discover the PILOT batch (each batch needs its OWN discover/worklist),
+#    then dispatch. NOTE: discover the exact batch id you are about to dispatch.
+python -m scripts.agent_b.run_review discover ens2_pilot --review-ids-from data/output/ensemble/ens2_pilot/review_ids.csv
+.\scripts\dispatch_agent_b_workers.ps1 -BatchId ens2_pilot -MaxParallel 2
+python -m scripts.ensemble.strip_verdict_bom --batch-id ens2_pilot
+python -m scripts.agent_b.run_review finalize ens2_pilot
+# -> check no_source in finalize_summary.json; expect LOW teens, not the old 70%.
 
-# 3. (after the pilot looks right) run the remaining 851
-python -m scripts.agent_b.run_review discover ens1_rest --review-ids-from data/output/ensemble/ens1_rest/review_ids.csv
-.\scripts\dispatch_agent_b_workers.ps1 -BatchId ens1_rest -MaxParallel 2
-python -m scripts.ensemble.strip_verdict_bom --batch-id ens1
-python -m scripts.ensemble.analyze_ensemble --batch-id ens1
+# 3. (after the pilot gate passes) run the remaining 812
+python -m scripts.agent_b.run_review discover ens2_rest --review-ids-from data/output/ensemble/ens2_rest/review_ids.csv
+.\scripts\dispatch_agent_b_workers.ps1 -BatchId ens2_rest -MaxParallel 2
+
+# 4. analyze the FULL ens2 (verdicts are shared by review_id across pilot+rest)
+python -m scripts.ensemble.strip_verdict_bom --batch-id ens2
+python -m scripts.ensemble.analyze_ensemble --batch-id ens2
+# -> read data/output/ensemble/ens2/ensemble_summary.md
 ```
 
 Notes:
-- `-MaxParallel 1` for the retry = guaranteed (no race). Fresh post-restart state may make
-  `-MaxParallel 2` clean (it matches the working `restall` batch); if trying 2, watch the
-  first ~20 verdicts and drop to 1 if `no_source` climbs.
-- 119 workers at 1-wide ~= 1-3 hrs; 851 at 2-wide is long (consider a second machine).
+- **Discover is per-batch-id.** The dispatcher reads `data/output/agent_b/batch/<id>/worklist.csv`,
+  which `discover <id>` creates. Running `discover ens2` then dispatching `ens2_pilot`
+  fails `PRECHECK_FAIL: missing worklist` -- discover the SAME id you dispatch. Bundles are
+  keyed by review_id and shared, so a subset discover reuses existing bundles (no rework).
+- `-MaxParallel 2` is the proven-clean value (section 6). Watch the first ~20 verdicts; if
+  `no_source` climbs, stop and check (a fresh batch id avoids stale-marker cascades).
+- ens2_pilot = 122 adjudications (~30-60 min at 2-wide); ens2_rest = 812 (long).
 - Run only ONE Codex fleet at a time on this machine.
 
 ## 6. Dispatch infra gotchas (hard-won)
