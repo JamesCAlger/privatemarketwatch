@@ -282,6 +282,18 @@ def _compute_fund_exposure(
                      THEN fair_value ELSE 0 END) AS arrears_fv,
             COUNT(CASE WHEN nport_is_default IS NOT NULL AND TRIM(nport_is_default) != ''
                        THEN 1 END) AS credit_flag_count,
+            -- Instrument type mix (debt only)
+            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
+                      AND instrument_type = 'Term Loan' THEN fair_value ELSE 0 END) AS it_term_loan,
+            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
+                      AND instrument_type = 'Revolver' THEN fair_value ELSE 0 END) AS it_revolver,
+            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
+                      AND instrument_type = 'Delayed Draw Term Loan' THEN fair_value ELSE 0 END) AS it_ddtl,
+            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
+                      AND instrument_type = 'Unitranche' THEN fair_value ELSE 0 END) AS it_unitranche,
+            SUM(CASE WHEN index_classification = 'DIRECT_LENDING'
+                      AND instrument_type IS NOT NULL AND instrument_type <> ''
+                     THEN fair_value ELSE 0 END) AS it_identified,
             -- Position count
             COUNT(*) AS position_count
         FROM cur
@@ -305,6 +317,7 @@ def _compute_fund_exposure(
      pik_bdc_fv, pik_nport_fv,
      fvl_1, fvl_2, fvl_3, fvl_total,
      default_fv, arrears_fv, credit_flag_count,
+     it_term_loan, it_revolver, it_ddtl, it_unitranche, it_identified,
      position_count) = row
 
     total_fv_f = float(total_fv or 0)
@@ -441,6 +454,13 @@ def _compute_fund_exposure(
             "floating": round(float(floating_fv or 0) / debt_fv_f, 4) if debt_fv_f > 0 else None,
             "fixed": round(float(fixed_fv or 0) / debt_fv_f, 4) if debt_fv_f > 0 else None,
         },
+        "instrumentMix": {
+            "termLoan": round(float(it_term_loan or 0) / debt_fv_f, 4) if debt_fv_f > 0 else None,
+            "revolver": round(float(it_revolver or 0) / debt_fv_f, 4) if debt_fv_f > 0 else None,
+            "delayedDrawTermLoan": round(float(it_ddtl or 0) / debt_fv_f, 4) if debt_fv_f > 0 else None,
+            "unitranche": round(float(it_unitranche or 0) / debt_fv_f, 4) if debt_fv_f > 0 else None,
+            "coverage": round(float(it_identified or 0) / debt_fv_f, 4) if debt_fv_f > 0 else None,
+        },
         "wac": _safe_round(wac, 2),
         "wacCoverage": wac_coverage,
         "was": _safe_round(was, 2),
@@ -478,10 +498,12 @@ def _compute_fund_exposure(
             SELECT * FROM _holdings_latest
             WHERE cik = '{cik}' AND fair_value > 0
         ),
-        -- Map GICS sub-industry to GICS sector
+        -- Map GICS sub-industry to GICS sector; unclassified FV becomes 'Unknown'
+        -- so the sectors sum to 100% of portfolio fair value (matches homepage).
         sector_map AS (
             SELECT
                 CASE
+                    WHEN gics_sub_industry IS NULL OR gics_sub_industry = '' THEN 'Unknown'
                     WHEN gics_sub_industry IN ('Application Software','Systems Software','IT Consulting & Other Services','Technology Hardware, Storage & Peripherals','Electronic Components','Electronic Equipment & Instruments','Semiconductor Materials & Equipment','Semiconductors','Technology Distributors','Electronic Manufacturing Services') THEN 'Information Technology'
                     WHEN gics_sub_industry IN ('Health Care Services','Health Care Technology','Health Care Equipment','Health Care Supplies','Health Care Facilities','Managed Health Care','Life Sciences Tools & Services','Biotechnology','Pharmaceuticals','Health Care Distributors') THEN 'Health Care'
                     WHEN gics_sub_industry IN ('Diversified Financial Services','Insurance Brokers','Property & Casualty Insurance','Multi-line Insurance','Reinsurance','Life & Health Insurance','Asset Management & Custody Banks','Financial Exchanges & Data','Investment Banking & Brokerage','Consumer Finance','Thrifts & Mortgage Finance','Regional Banks','Diversified Banks','Mortgage REITs','Specialized Finance','Multi-Sector Holdings','Transaction & Payment Processing Services') THEN 'Financials'
@@ -494,26 +516,29 @@ def _compute_fund_exposure(
                     WHEN gics_sub_industry IN ('Diversified REITs','Industrial REITs','Office REITs','Residential REITs','Retail REITs','Specialized REITs','Health Care REITs','Hotel & Resort REITs','Real Estate Operating Companies','Real Estate Services','Real Estate Development') THEN 'Real Estate'
                     WHEN gics_sub_industry IN ('Specialty Chemicals','Diversified Chemicals','Commodity Chemicals','Fertilizers & Agricultural Chemicals','Industrial Gases','Construction Materials','Gold','Copper','Diversified Metals & Mining','Silver','Steel','Aluminum','Paper & Plastic Packaging Products & Materials','Metal, Glass & Plastic Containers','Paper Products','Forest Products') THEN 'Materials'
                     WHEN gics_sub_industry IN ('Internet Services & Infrastructure') THEN 'Information Technology'
-                    ELSE NULL
+                    ELSE 'Other'
                 END AS gics_sector,
                 fair_value
             FROM cur
-            WHERE gics_sub_industry IS NOT NULL AND gics_sub_industry <> ''
         ),
         totals AS (
             SELECT SUM(fair_value) AS total_fv FROM cur
         )
         SELECT
-            COALESCE(gics_sector, 'Other') AS sector,
+            gics_sector AS sector,
             SUM(fair_value) AS sector_fv,
             SUM(fair_value) / NULLIF((SELECT total_fv FROM totals), 0) AS pct
         FROM sector_map
-        GROUP BY COALESCE(gics_sector, 'Other')
+        GROUP BY gics_sector
         HAVING SUM(fair_value) > 0
-        ORDER BY sector_fv DESC
+        ORDER BY (gics_sector = 'Unknown'), sector_fv DESC
     """).fetchall()
 
-    if gics_rows and any(r[2] for r in gics_rows):
+    # Emit only when at least one position is GICS-classified; otherwise a
+    # 100%-Unknown donut is noise. When emitted, include the Unknown remainder
+    # (ordered last) so the slices sum to 100% of portfolio fair value.
+    has_classified = any(r[0] != "Unknown" and r[2] for r in gics_rows)
+    if has_classified:
         result["gicsSectors"] = [
             {"sector": str(r[0]), "pct": _safe_round(r[2], 4)}
             for r in gics_rows
@@ -648,14 +673,17 @@ def _compose_blurb(
         floating = rate.get("floating")
 
         if debt_pct is not None and debt_pct >= 0.6:
+            # Express lien/rate composition as a share of TOTAL fair value
+            # (debt_pct * split), matching the instrument donut's denominator so
+            # the blurb and the on-page donut report the same first-lien number.
             sent = "The portfolio is concentrated in direct lending"
             details = []
             if first is not None:
-                details.append(f"{round(first * 100)}% in first-lien senior secured loans")
+                details.append(f"{round(debt_pct * first * 100)}% in first-lien senior secured loans")
             if floating is not None:
-                details.append(f"{round(floating * 100)}% floating-rate")
+                details.append(f"{round(debt_pct * floating * 100)}% in floating-rate debt")
             if details:
-                sent += ", with " + " and ".join(details)
+                sent += ", with " + " and ".join(details) + " by fair value"
             if was is not None:
                 sent += f", at a weighted-average spread of {round(was * 100)} bps over the base rate"
             sent += "."
@@ -713,6 +741,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 TRY_CAST(pik_rate AS DOUBLE) AS pik_rate,
                 fair_value_level,
                 lien_position,
+                instrument_type,
                 source,
                 nport_is_default,
                 nport_are_interest_payments_in_arrears,
@@ -748,7 +777,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 coupon_type VARCHAR, maturity_date VARCHAR, report_date VARCHAR,
                 exposure_type VARCHAR, asset_class VARCHAR, cost DOUBLE,
                 pik_rate DOUBLE, fair_value_level VARCHAR,
-                lien_position VARCHAR, source VARCHAR,
+                lien_position VARCHAR, instrument_type VARCHAR, source VARCHAR,
                 nport_is_default VARCHAR,
                 nport_are_interest_payments_in_arrears VARCHAR,
                 nport_is_paid_in_kind VARCHAR,
