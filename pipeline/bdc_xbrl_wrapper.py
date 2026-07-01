@@ -374,12 +374,16 @@ def _canonical_identifier_for_keys(spec: WrapperSpec, identifier: str) -> str:
 _WRAPPER_DEFINITIONS_DIR = Path(__file__).resolve().parent.parent / "data" / "overrides" / "bdc_xbrl_wrappers"
 
 
-def _load_specs_from_json() -> dict[str, WrapperSpec]:
-    """Load WrapperSpec objects from v3 JSON definitions with dispatch sections."""
+def _load_specs_from_json(directory: "Path | None" = None) -> dict[str, WrapperSpec]:
+    """Load WrapperSpec objects from v3 JSON definitions with dispatch sections.
+
+    ``directory`` defaults to the production override dir; callers (e.g. the B2 trial
+    rebuild) may pass a trial wrapper dir."""
+    directory = directory or _WRAPPER_DEFINITIONS_DIR
     specs: dict[str, WrapperSpec] = {}
-    if not _WRAPPER_DEFINITIONS_DIR.exists():
+    if not directory.exists():
         return specs
-    for path in sorted(_WRAPPER_DEFINITIONS_DIR.glob("*.json")):
+    for path in sorted(directory.glob("*.json")):
         try:
             with open(path, encoding="utf-8") as fh:
                 raw = json.load(fh)
@@ -465,6 +469,20 @@ def _load_specs_from_json() -> dict[str, WrapperSpec]:
 
 
 WRAPPER_SPECS = _load_specs_from_json()
+
+
+def reload_wrapper_specs(override_dir: "Path | None" = None) -> dict[str, WrapperSpec]:
+    """Rebuild the module-global ``WRAPPER_SPECS`` from production, optionally OVERLAYING a
+    trial wrapper dir (specs there override production per CIK). Used by the B2 trial rebuild
+    so a staged wrapper patch (e.g. an added aggregate_marker) takes effect for one CIK
+    without touching the production overrides. Call ``reload_wrapper_specs()`` (no arg) to
+    restore production. Returns the active spec map."""
+    global WRAPPER_SPECS
+    specs = _load_specs_from_json()
+    if override_dir is not None:
+        specs.update(_load_specs_from_json(Path(override_dir)))
+    WRAPPER_SPECS = specs
+    return WRAPPER_SPECS
 
 
 def get_wrapper_spec(cik: Any) -> WrapperSpec | None:
