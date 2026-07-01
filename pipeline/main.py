@@ -135,6 +135,14 @@ def _parse_args() -> argparse.Namespace:
              "Requires --unified or existing unified holdings file.",
     )
     parser.add_argument(
+        "--stable-position-ids",
+        action="store_true",
+        help="Assign position_id via the persisted registry (stable across "
+             "rebuilds) instead of the sort-rank ordinal. Opt-in; seeds the "
+             "registry on first run. See "
+             "docs/position_id_stable_identifier_design.md.",
+    )
+    parser.add_argument(
         "--classify-gics",
         action="store_true",
         help="Run position-level GICS industry classification on unified holdings. "
@@ -926,6 +934,7 @@ def main() -> None:
                 )
             unified_df, matches_df = assign_position_ids(
                 unified_df, matches_df,
+                use_registry=getattr(args, "stable_position_ids", False),
             )
             # Re-save unified holdings with position_id populated
             unified_df.to_csv(

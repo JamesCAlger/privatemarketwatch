@@ -21,6 +21,8 @@ import pandas as pd
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     POSITION_ID_EDGES_FILE,
+    POSITION_ID_REGISTRY_FILE,
+    POSITION_ID_RETIREMENTS_FILE,
     POSITION_MATCHES_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
@@ -1917,9 +1919,41 @@ def match_positions(
 # Position ID assignment -- stable tracking across quarters
 # ---------------------------------------------------------------------------
 
+def _assign_via_registry(unified_df, components_dict, registry_path,
+                         retirements_path):
+    """Resolve uid->position_id through the persisted registry layer.
+
+    Returns (uid_to_pid, ResolveResult).  Writes the refreshed registry and
+    retirement artifacts only when paths are provided.  Component formation is
+    unchanged -- this only names the components.
+    """
+    from pipeline.position_id_registry import (
+        compute_natural_keys, resolve_position_ids, load_registry,
+    )
+    natural_keys = compute_natural_keys(unified_df)
+    comp_lists = [list(members) for members in components_dict.values()]
+    prior = load_registry(registry_path) if registry_path else None
+    res = resolve_position_ids(comp_lists, unified_df, natural_keys, prior)
+    if registry_path is not None:
+        from pathlib import Path as _P
+        _P(registry_path).parent.mkdir(parents=True, exist_ok=True)
+        res.registry_df.to_csv(registry_path, index=False)
+    if retirements_path is not None:
+        res.retirements_df.to_csv(retirements_path, index=False)
+    logger.info(
+        "  Registry: %d inherited, %d minted, %d merged, %d split-reassigned",
+        res.n_inherited, res.n_minted, res.n_merged, res.n_split_reassigned,
+    )
+    return res.uid_to_pid, res
+
+
 def assign_position_ids(
     unified_df: pd.DataFrame,
     matches_df: pd.DataFrame,
+    *,
+    use_registry: bool = False,
+    registry_path=None,
+    retirements_path=None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Assign stable position_id values to unified holdings and match pairs.
 
@@ -1941,12 +1975,25 @@ def assign_position_ids(
     """
     t0 = time.time()
 
+    if use_registry and registry_path is None:
+        registry_path = POSITION_ID_REGISTRY_FILE
+        if retirements_path is None:
+            retirements_path = POSITION_ID_RETIREMENTS_FILE
+
     if matches_df.empty:
         # All singletons
         unified_df = _sort_existing(unified_df.copy(), UNIFIED_SORT_COLUMNS)
-        unified_df["position_id"] = [
-            f"POS-{i:08d}" for i in range(1, len(unified_df) + 1)
-        ]
+        if use_registry:
+            uid_to_pid, _ = _assign_via_registry(
+                unified_df, {}, registry_path, retirements_path,
+            )
+            unified_df["position_id"] = [
+                uid_to_pid[i] for i in range(len(unified_df))
+            ]
+        else:
+            unified_df["position_id"] = [
+                f"POS-{i:08d}" for i in range(1, len(unified_df) + 1)
+            ]
         _write_position_id_edges([])
         logger.info("No match pairs -- assigned %d singleton position IDs", len(unified_df))
         return unified_df, matches_df
@@ -2244,26 +2291,33 @@ def assign_position_ids(
     # Step 4: Assign component IDs (sorted for determinism)
     # ------------------------------------------------------------------
     components = uf.components()
-    uid_to_pid: dict[int, str] = {}
-    ordered_components = sorted(
-        (sorted(members) for members in components.values()),
-        key=lambda members: members[0],
-    )
-    for i, members in enumerate(ordered_components, 1):
-        pid = f"POS-{i:08d}"
-        for uid in members:
-            uid_to_pid[uid] = pid
+    n_components = len(components)
+    n_chained_rows = sum(len(m) for m in components.values())
+    n_singletons = len(unified_df) - n_chained_rows
 
-    n_components = len(ordered_components)
+    if use_registry:
+        # Stable identifier layer: names components via the persisted registry
+        # instead of a sort-rank ordinal.  Component membership is unchanged.
+        uid_to_pid, _ = _assign_via_registry(
+            unified_df, components, registry_path, retirements_path,
+        )
+    else:
+        uid_to_pid = {}
+        ordered_components = sorted(
+            (sorted(members) for members in components.values()),
+            key=lambda members: members[0],
+        )
+        for i, members in enumerate(ordered_components, 1):
+            pid = f"POS-{i:08d}"
+            for uid in members:
+                uid_to_pid[uid] = pid
 
-    # Singletons: unified rows not in any component
-    next_id = n_components + 1
-    n_singletons = 0
-    for uid in range(len(unified_df)):
-        if uid not in uid_to_pid:
-            uid_to_pid[uid] = f"POS-{next_id:08d}"
-            next_id += 1
-            n_singletons += 1
+        # Singletons: unified rows not in any component
+        next_id = n_components + 1
+        for uid in range(len(unified_df)):
+            if uid not in uid_to_pid:
+                uid_to_pid[uid] = f"POS-{next_id:08d}"
+                next_id += 1
 
     # Write position_id directly by row index (no join = no fan-out)
     unified_df["position_id"] = [uid_to_pid[i] for i in range(len(unified_df))]

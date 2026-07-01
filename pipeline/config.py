@@ -238,6 +238,12 @@ POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
 POSITION_RETURNS_FILE = OUTPUT_DIR / "position_returns.csv"
 INDEX_RETURNS_FILE = OUTPUT_DIR / "index_returns.csv"
 POSITION_ID_EDGES_FILE = OUTPUT_DIR / "position_id_edges.csv"
+# Stable identifier registry (opt-in; see docs/position_id_stable_identifier_design.md).
+# Stateful artifact: lives under OVERRIDES_DIR (governed, NOT a rebuild target),
+# so `rebuild_outputs.py --clean` and output snapshots never wipe it.
+POSITION_ID_REGISTRY_DIR = OVERRIDES_DIR / "position_id_registry"
+POSITION_ID_REGISTRY_FILE = POSITION_ID_REGISTRY_DIR / "registry.csv"
+POSITION_ID_RETIREMENTS_FILE = POSITION_ID_REGISTRY_DIR / "retirements.csv"
 POSITION_MATCH_COVERAGE_FILE = OUTPUT_DIR / "position_match_coverage.csv"
 POSITION_MATCH_UNMATCHED_SUMMARY_FILE = OUTPUT_DIR / "position_match_unmatched_summary.csv"
 POSITION_MATCH_RESIDUALS_FILE = OUTPUT_DIR / "position_match_residuals.csv"
