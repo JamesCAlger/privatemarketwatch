@@ -199,6 +199,9 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
         FROM {_unified()}
         WHERE bdc_dimensions_raw IS NOT NULL
           AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)
+          -- cash-equivalents (T-bills, money-market sweeps) stay in holdings but are NOT 'investments
+          -- at fair value'; the companyfacts anchor excludes them, so the conservation sum must too.
+          AND upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'
         GROUP BY 1, 2
         """
     )

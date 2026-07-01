@@ -422,6 +422,29 @@ def _derivative_role_select() -> str | None:
     """
 
 
+def _agent_a_select() -> str | None:
+    """Agent A enrichment-corroboration flags (basis_spread vs XBRL + SOFR reconciliation).
+    Aggregated per CIK-quarter; dominant reconciliation verdict carried as mechanism so B
+    can prioritise (reconcile_agentA / reconcile_neither are the high-value packets)."""
+    f = OUTPUT_DIR / "shadow" / "agent_a_flags.csv"
+    if not f.exists():
+        logger.info("adapter: agent_a_flags absent -- skip")
+        return None
+    return f"""
+    SELECT 'agentA' AS engine, rule_name, 'tight' AS tier, 'advisory' AS enforcement,
+           CAST(cik AS VARCHAR) AS cik, 'report_date' AS period_kind,
+           CAST(report_date AS VARCHAR) AS period,
+           CASE WHEN bool_or(lower(status) = 'fail') THEN 'fail'
+                WHEN bool_or(lower(status) = 'warn') THEN 'warn' ELSE 'pass' END AS status,
+           TRY_CAST(max(TRY_CAST(xbrl_residual AS DOUBLE)) AS DOUBLE) AS metric,
+           'xbrl_reconcile_residual_pp' AS metric_name,
+           CAST(count(*) AS BIGINT) AS n_units,
+           mode(mechanism) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
+    FROM read_csv_auto('{f.as_posix()}', sample_size=-1)
+    GROUP BY cik, report_date, rule_name
+    """
+
+
 def adapter_selects() -> list[str]:
     """Return normalized ledger-schema SELECT fragments for every available source."""
     return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select(),
@@ -429,4 +452,4 @@ def adapter_selects() -> list[str]:
                         _html_template_select(), _gav_recon_select(),
                         _fund_strategy_select(), _nonaccrual_select(),
                         _aggregate_header_select(), _classification_select(),
-                        _derivative_role_select()) if s]
+                        _derivative_role_select(), _agent_a_select()) if s]
