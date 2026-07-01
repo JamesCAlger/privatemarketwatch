@@ -1,0 +1,43 @@
+{
+  "draw_id": "batch1",
+  "seed": 20260616,
+  "pipeline_version": "6f1487b",
+  "period_start": "2022-10-01",
+  "as_of": "2025-12-31",
+  "cohort_ciks": 77,
+  "published_ciks": 70,
+  "framing": "FV-error strata (tail_census, pps_body) drawn from the AS-OF SNAPSHOT = each fund's latest filing on/before 2025-12-31; silent_bulk and flag strata are all-history.",
+  "base_positions": 285391,
+  "base_sum_abs_fv": 3485830393361.083,
+  "snapshot_positions": 33211,
+  "snapshot_sum_abs_fv": 400034769803.0,
+  "params": {
+    "as_of": "2025-12-31",
+    "k_tail": 200,
+    "n_tail_cikq": 25,
+    "n_pps": 100,
+    "n_surfaced": 40,
+    "n_suppressed": 40,
+    "n_silent": 40
+  },
+  "tail_min_abs_fv": 208224000.0,
+  "tail_snapshot_coverage_pct": 19.714771578190092,
+  "pps_body_total_size": 318278577103.0,
+  "silent_population_N": 31390,
+  "counts_by_stratum_unit": {
+    "tail_census/position": 200,
+    "pps_body/position": 96,
+    "silent_bulk/position": 40,
+    "tail_census/cik_quarter": 25,
+    "surfaced_flag/flag": 40,
+    "suppressed_flag/flag": 161
+  },
+  "total_units": 562,
+  "estimators": {
+    "tail_census": "certainty (pi=1); exact contribution",
+    "pps_body": "Horvitz-Thompson, weight=1/pi, pi=min(1,n*size/total)",
+    "silent_bulk": "SRS within no-anchor positions, pi=n/N",
+    "surfaced_flag": "precision = confirmed_error / labeled; Wilson CI",
+    "suppressed_flag": "FN rate = confirmed_error / labeled; Wilson CI; oversampled by confidence"
+  }
+}
