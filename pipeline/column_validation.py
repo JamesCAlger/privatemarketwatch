@@ -381,12 +381,29 @@ def validate_column_contracts(
             "interest_rate is present but unparseable",
             "numeric interest_rate is required when present",
         ),
+        # C113 refined 2026-06-19 (B-trial evidence): the flat >25% bound was 79%
+        # false-alarm (Wilson95 [52,92]); the unambiguous false alarms are
+        # structured-credit / CLO subordinated tranches carried at an "effective
+        # interest" (accretion) yield, which legitimately runs 25-40%+ and is the
+        # filer's own disclosed figure -- not a coupon, not a mis-scale. Exempt that
+        # class from the upper bound (keep the <0 check and a >75% gross-scale safety
+        # net for ALL). PRIVATE_CREDIT rows >25% stay flagged: that bucket is
+        # genuinely mixed (real mis-parses like a 50% EOT balloon vs legit
+        # venture/PIK floors) and warrants review.
         _issue_query(
             "interest_rate", "C113", SEVERITY_WARN, EVIDENCE_MODERATE,
             ACTION_REVIEW,
-            "TRY_CAST(interest_rate AS DOUBLE) > 25 OR TRY_CAST(interest_rate AS DOUBLE) < 0",
-            "interest_rate is outside the expected percentage range",
-            "rates are stored as whole-number percentages",
+            "TRY_CAST(interest_rate AS DOUBLE) < 0 "
+            "OR TRY_CAST(interest_rate AS DOUBLE) > 75 "
+            "OR (TRY_CAST(interest_rate AS DOUBLE) > 25 "
+            "    AND COALESCE(asset_class, '') <> 'STRUCTURED_CREDIT' "
+            "    AND COALESCE(index_classification, '') <> 'STRUCTURED_CREDIT' "
+            "    AND lower(COALESCE(instrument_description, '') || ' ' "
+            "        || COALESCE(bdc_investment_identifier, '')) NOT LIKE '%effective interest%')",
+            "interest_rate is outside the expected percentage range "
+            "(excludes structured-credit effective yields)",
+            "rates are whole-number percentages; structured-credit effective "
+            "yields legitimately exceed 25%",
         ),
         _issue_query(
             "basis_spread", "C114", SEVERITY_FAIL, EVIDENCE_STRONG,
@@ -453,6 +470,25 @@ def validate_column_contracts(
             "length(TRIM(CAST(issuer_name AS VARCHAR))) > 300",
             "issuer_name is unusually long",
             "long issuer names may be full dimension strings",
+        ),
+        # C206 added 2026-06-19 (B-trial / TorcSill finding): a clean issuer_name
+        # never contains XBRL dimension-path or instrument/rate/maturity text. When
+        # the wrapper fails to parse one dimension axis, the raw path leaks into
+        # issuer_name (e.g. "Debt Securities, Energy ... Acquisition Date 08/13/24,
+        # Protective Advance"). This both corrupts the field AND defeats Stage-D
+        # dimension-path dedup (the divergent issuer_name no longer matches the clean
+        # copy's key), so the position double-counts. Catches ~4.9% of BDC rows / 58
+        # CIKs; ~4.2k are in same cik/accession/fair-value multi-row groups (the
+        # dedup-miss subset). C203 (>300 chars) misses these (~120 chars).
+        _issue_query(
+            "issuer_name", "C206", SEVERITY_WARN, EVIDENCE_MODERATE,
+            ACTION_REVIEW,
+            "issuer_name ILIKE '%Acquisition Date%' OR issuer_name ILIKE '%Maturity Date%' "
+            "OR issuer_name ILIKE '%of Net Assets%' OR issuer_name ILIKE '%Debt Securities,%'",
+            "issuer_name contains raw XBRL dimension/term text (parse leak)",
+            "issuer_name should be the clean entity; leaked dimension-path / maturity / "
+            "net-assets text indicates a wrapper parse failure and can defeat "
+            "dimension-path dedup (position double-counts)",
         ),
         _issue_query(
             "cusip", "C204", SEVERITY_FAIL, EVIDENCE_STRONG,

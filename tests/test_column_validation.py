@@ -114,6 +114,54 @@ class TestColumnContracts:
         assert len(result) == 1
         assert result.iloc[0]["severity"] == SEVERITY_WARN
 
+    def test_c113_exempts_structured_credit_effective_yield(self):
+        """B-trial refinement: CLO/structured effective yields >25% are legitimate."""
+        # STRUCTURED_CREDIT effective yield 36% -> exempt (no C113)
+        sc = _make_unified_df([{"interest_rate": "36", "asset_class": "STRUCTURED_CREDIT"}])
+        assert len(_issues_by_rule(validate_column_contracts(sc)[0], "C113")) == 0
+
+        # "effective interest" descriptor 30% (PRIVATE_CREDIT) -> exempt (no C113)
+        eff = _make_unified_df([{
+            "interest_rate": "30",
+            "bdc_investment_identifier": "Catamaran CLO 2014-1 Subordinated, effective interest 30%",
+        }])
+        assert len(_issues_by_rule(validate_column_contracts(eff)[0], "C113")) == 0
+
+    def test_c206_flags_issuer_name_dimension_leak(self):
+        """B-trial/TorcSill: raw XBRL dimension/term text leaked into issuer_name."""
+        # the TorcSill-style contaminated copy fires
+        bad = _make_unified_df([{
+            "issuer_name": "Debt Securities, Energy Equipment & Services WDE TorcSill "
+                           "Holdings LLC, Acquisition Date 08/13/24 , Protective Advance Term Loan",
+        }])
+        assert len(_issues_by_rule(validate_column_contracts(bad)[0], "C206")) == 1
+
+        for leak in ["X Corp, Acquisition Date 1/1/24", "Y LLC Maturity Date 5/1/28",
+                     "Z Inc, % of Net Assets 0.6%"]:
+            df = _make_unified_df([{"issuer_name": leak}])
+            assert len(_issues_by_rule(validate_column_contracts(df)[0], "C206")) == 1, leak
+
+    def test_c206_clean_issuer_names_pass(self):
+        """False-positive guard: clean entity names must NOT fire C206."""
+        for ok in ["WDE TorcSill Holdings LLC", "Acme Corp",
+                   "JHCC Holdings LLC, One stop 7", "Integro Parent, Inc."]:
+            df = _make_unified_df([{"issuer_name": ok}])
+            assert len(_issues_by_rule(validate_column_contracts(df)[0], "C206")) == 0, ok
+
+    def test_c113_keeps_private_credit_and_gross_scale(self):
+        """False-positive guard: real mis-parses must still fire."""
+        # PRIVATE_CREDIT 50% (EOT-balloon-style mis-parse) -> still fires
+        pc = _make_unified_df([{"interest_rate": "50"}])
+        assert len(_issues_by_rule(validate_column_contracts(pc)[0], "C113")) == 1
+
+        # >75% gross scale error fires even for exempt structured class
+        gross = _make_unified_df([{"interest_rate": "80", "asset_class": "STRUCTURED_CREDIT"}])
+        assert len(_issues_by_rule(validate_column_contracts(gross)[0], "C113")) == 1
+
+        # negative rate fires for all classes
+        neg = _make_unified_df([{"interest_rate": "-3", "asset_class": "STRUCTURED_CREDIT"}])
+        assert len(_issues_by_rule(validate_column_contracts(neg)[0], "C113")) == 1
+
     def test_maturity_sentinel_info_and_bad_year_fail(self):
         sentinel = _make_unified_df([{"maturity_date": "9999-12-31"}])
         sentinel_issues, _ = validate_column_contracts(sentinel)
