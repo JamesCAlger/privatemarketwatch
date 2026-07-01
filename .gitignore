@@ -65,3 +65,7 @@ err.txt
 roam2.txt
 parquet_analysis.md
 20[0-9][0-9]-*_wrapper.txt
+
+# Stable position-id registry: governed, stateful local artifact. Too large
+# (~108MB) to track in git / push to GitHub. Kept on disk; back it up out-of-band.
+data/overrides/position_id_registry/registry.csv
