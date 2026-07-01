@@ -105,7 +105,9 @@ def main(argv=None):
     args = argv if argv is not None else sys.argv[1:]
     con = duckdb.connect()
     con.execute(f"CREATE TABLE D AS SELECT * FROM read_csv_auto('{DETAIL.as_posix()}', sample_size=-1, all_varchar=true)")
-    if args:
+    if len(args) == 1 and args[0].endswith(".txt"):
+        cands = [Path(line) for line in Path(args[0]).read_text().splitlines() if line.strip()]
+    elif args:
         cands = [Path(a) for a in args]
     else:  # diverse: 3 new CIKs + Tilson (0000081955) positive control
         ciks = ["0001508655", "0001280784", "0001370755", "0000081955"]
