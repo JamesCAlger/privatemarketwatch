@@ -47,3 +47,21 @@ frontend/.npm-localappdata/
 pytest-*/
 tmp_pytest*/
 tmp[a-z0-9][a-z0-9][a-z0-9]*/
+
+# Node (root-level tooling)
+node_modules/
+
+# Agent run/scratch dirs and dot-prefixed temp files
+.codex_runs/
+.codex_tmp/
+agent_tmp/
+.tmp/
+.tmp*
+_tmp_*
+tmp_*
+
+# Loose scratch analysis / logs / one-off wrapper dumps
+err.txt
+roam2.txt
+parquet_analysis.md
+20[0-9][0-9]-*_wrapper.txt
