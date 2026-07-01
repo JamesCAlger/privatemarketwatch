@@ -1,0 +1,32 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001280784",
+  "entity_name": "Hercules Capital, Inc.",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "\\bDebt Investments\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investmen(?:ts|st)\\b"
+    },
+    {
+      "label": "WARRANT",
+      "regex": "\\bWarrant Investments\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b(?:Maturity Date|Acquisition Date)\\b|\\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{4}\\b|\\b\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:Prime|Daily SONIA|\\d+-month\\s+(?:SOFR|SONIA|BSBY|Eurodollar))\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:FIXED\\s+\\d+(?:\\.\\d+)?%|(?:Prime|Daily SONIA|\\d+-month\\s+(?:SOFR|SONIA|BSBY|Eurodollar))\\s*\\+\\s*\\d+(?:\\.\\d+)?%|PIK Interest\\s+\\d+(?:\\.\\d+)?%)\\b"
+    }
+  ]
+}

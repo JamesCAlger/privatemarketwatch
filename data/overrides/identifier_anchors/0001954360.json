@@ -1,0 +1,40 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001954360",
+  "entity_name": "Crescent Private Credit Income Corp",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "\\bDebt Investments\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments?\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bInvestment\\s+Type\\b|\\bInvestment\\u00a0Type\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bInterest Term\\s+[A-Z]\\s*\\+"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\s+[0-9]"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\s*/?\\s*Dissolution Date\\b"
+    },
+    {
+      "label": "COMMIT",
+      "regex": "\\b(?:Delayed Draw|Revolver|Commitment)\\b"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "\\b(?:Unsecured Debt|Subordinated)\\b"
+    }
+  ]
+}

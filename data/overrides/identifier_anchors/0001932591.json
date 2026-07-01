@@ -1,0 +1,23 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001932591",
+  "entity_name": "SLR Private Credit BDC II LLC",
+  "anchors": [
+    {
+      "label": "RATE",
+      "regex": "\\|\\s*[SP]\\+\\d+\\s*\\|\\s*\\d+(?:\\.\\d+)?%\\s*\\|\\s*\\d+(?:\\.\\d+)?%\\s*\\|"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "^Total Investments(?: & Cash Equivalents)?$"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "^[^|]+\\|\\s*Total\\s+[^|]+$"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "^[^|]+\\s+—\\s+\\d+(?:\\.\\d+)?%\\s*\\|\\s*Total\\s+[^|]+$"
+    }
+  ]
+}

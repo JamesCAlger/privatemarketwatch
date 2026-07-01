@@ -1,0 +1,38 @@
+{
+  "cik": "1950803",
+  "target_quarter": "2025-12-31",
+  "grand_total": 3008628000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 3008628000.0,
+      "source": "filing accession 0001193125-26-128890, evidence_cli grid table 4 row 9: Total investments fair value $3,008,628 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 3008628000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "evidence_cli grid table 4 rows 1-3 identify December 31, 2025, Cost, Fair Value; row 9: Total investments | $ | 3,008,238 | 100.00 | % | $ | 3,008,628 | 100.00 | %."
+    },
+    {
+      "source": "filing",
+      "quote": "evidence_cli totals table 65 row 34: Total Investments | $ | 3,008,238 | $ | 3,008,628 | 161.57 | %."
+    },
+    {
+      "source": "filing",
+      "quote": "evidence_cli grid table 23 row 3 balance sheet: Investments in securities of unaffiliated issuers at fair value (cost $3,008,238 and $1,567,756, respectively) | $ | 3,008,628."
+    },
+    {
+      "source": "filing",
+      "quote": "evidence_cli grid table 23 row 11 balance sheet: Total assets | $ | 3,198,869."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2025-12-31 reports total_assets=3198869000.0 and investments_at_fair_value=3008628000.0."
+    }
+  ],
+  "rationale": "The annual filing contains a single December 31, 2025 Total investments row whose fair value is $3,008,628 thousand, equal to 3008628000.0. The same amount appears on the balance sheet as investments in securities of unaffiliated issuers at fair value and is below total assets of 3198869000.0, leaving a plausible non-investment asset remainder of 190241000.0. The companyfacts fair-value tag captured this same grand total rather than a partial subtotal; the schedule total includes first lien senior secured, second lien senior secured, subordinated notes, preferred equity, and limited partnership interests.",
+  "confidence": 0.94
+}

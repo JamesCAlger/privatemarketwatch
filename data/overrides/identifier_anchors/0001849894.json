@@ -1,0 +1,30 @@
+{
+  "schema_version": "agentA-anchor-vocabulary.v1",
+  "cik": "0001849894",
+  "entity_name": "MSD Investment Corp.",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "reason": "Bundle anchor_present_pct is 100.0 and none_examples is empty; staged anchors reproduce the dominant identifier markers needed by the self-screen.",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Investments - non-controlled/non-affiliated"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "Subordinated Debt"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference Rate and Spread"
+    },
+    {
+      "label": "RATE",
+      "regex": "Interest Rate"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity Date"
+    }
+  ]
+}

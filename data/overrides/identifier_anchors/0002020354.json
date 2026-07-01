@@ -1,0 +1,36 @@
+{
+  "cik": "0002020354",
+  "entity_name": "West Bay BDC LLC",
+  "schema": "agentA-anchor-vocab.v1",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:Debt Investments|1st Lien/Senior Secured Debt)\\b"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "\\b(?:Non-Controlled Affiliates|Investments in Affiliated Money Market Fund|Affiliated Money Market Fund)\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bUnited States\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Interest Rate\\s+[0-9]+(?:\\.[0-9]+)?%|Reference Rate\\s*(?:and|\\u00a0and)\\s*Spread)\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate\\s*(?:and|\\u00a0and)\\s*Spread\\s+S\\s*\\+\\s*[0-9]+(?:\\.[0-9]+)?%"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\s+[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"
+    }
+  ],
+  "notes": [
+    "Bundle none_examples include standalone category and section labels: Debt Investments, United States, and Investments in Affiliated Money Market Fund.",
+    "Evidence CLI roam was attempted but unavailable in this worker because pandas is not installed."
+  ]
+}

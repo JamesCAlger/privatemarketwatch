@@ -1,0 +1,39 @@
+{
+  "schema_version": "agentA-anchor-vocab.v1",
+  "cik": "0001504619",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "(?i)(Investments in (?:Non-Controlled, Non-Affiliated|Controlled, Affiliated) Portfolio Companies|Related Party PSSL)"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "(?i)(First Lien (?:Senior )?Secured Debt|Second Lien (?:Senior )?Secured Debt|Subordinated Debt)"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "(?i)(Preferred Equity|Equity Interests|Equity Securities|Common Equity)"
+    },
+    {
+      "label": "RATE",
+      "regex": "(?i)Current Coupon"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "(?i)Basis Point Spread Above Index"
+    },
+    {
+      "label": "MAT",
+      "regex": "(?i)\\bMaturity\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "(?i)(Cash and Cash Equivalents|Liabilities in Excess of Other Assets)"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "(?i)\\bTotal\\b"
+    }
+  ]
+}

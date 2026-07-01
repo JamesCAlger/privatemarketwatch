@@ -1,0 +1,39 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001372807",
+  "entity_name": "BCP Investment Corp",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:First Lien/Senior Secured Debt|Senior Secured Loans|Junior Secured Loans|Debt Securities Portfolio)\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\b(?:Preferred Stock and Units|Common Stock and Membership Units|Equity Securities Portfolio|Preferred Equity|Common|Class A Membership Units|Warrant Class A|Equity)\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\b(?:Collateralized Loan Obligations|CLO Fund Securities)\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\s+\\d+(?:\\.\\d+)?%"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b"
+    },
+    {
+      "label": "COMMIT",
+      "regex": "\\bInitial Acquisition Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "\\bInvestments in (?:Affiliate|Non-Control, Non-Affiliate) Portfolio Companies\\b"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001832148",
+  "entity_name": "SLR HC BDC LLC",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "RATE",
+      "regex": "\\|\\s*[SL]\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*\\|\\s*\\d+(?:\\.\\d+)?%\\s*\\|\\s*\\d+(?:\\.\\d+)?%?"
+    },
+    {
+      "label": "EQUITY MAT",
+      "regex": "^(?:Common Equity\\s*/\\s*Warrants|Warrants)\\s*\\|.*\\|\\s*(?:\\d{1,2}/\\d{1,2}/\\d{4}|\\d{1,2}/\\d{4})\\s*$"
+    }
+  ]
+}

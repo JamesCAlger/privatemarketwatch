@@ -1,0 +1,30 @@
+{
+  "cik": "1803498",
+  "target_quarter": "2025-12-31",
+  "grand_total": 82199346000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 82199346000.0,
+      "source": "Filing 0001803498-26-000014, Consolidated Statements of Assets and Liabilities row 'Total investments at fair value (cost of $82,916,241 and $68,985,671, respectively)', us-gaap:InvestmentOwnedAtFairValue context c-6, scale 3"
+    }
+  ],
+  "companyfacts_fv": 82199346000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Total investments at fair value (cost of $82,916,241 and $68,985,671, respectively) | 82,199,346 | 68,419,777"
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule subtotals for 2025: Total Investments - non-controlled/non-affiliated fair value 77,980,254; Total Investments - non-controlled/affiliated fair value 1,122,254; Total Investments - controlled/affiliated (excluding Investments in Joint Ventures) fair value 1,305,025; Total Investments - Investments in Joint Ventures fair value 1,791,813. Amounts are in thousands and sum to 82,199,346."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials companyfacts row for 2025-12-31 reports total_assets 85,992,162,000 and investments_at_fair_value 82,199,346,000."
+    }
+  ],
+  "rationale": "The filing contains an undimensioned balance-sheet XBRL fact for total investments at fair value of 82,199,346 thousand. The separately presented investment schedule subtotals reconcile exactly to the same amount, so the companyfacts value captured the grand total rather than only a non-affiliated subtotal. The grand total is below total assets of 85,992,162,000 and represents about 95.6% of total assets, which is plausible for this BDC.",
+  "confidence": 0.98
+}

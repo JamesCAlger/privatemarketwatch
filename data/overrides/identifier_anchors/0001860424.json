@@ -1,0 +1,36 @@
+{
+  "schema": "agentA-anchor-vocabulary.v1",
+  "cik": "0001860424",
+  "entity_name": "Onex Direct Lending BDC Fund",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "reason": "Production CIK anchor override is absent; propose the minimal markers needed to recover the bundle's observed signatures from flattened identifier text.",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Non-controlled/Non-affiliated investments"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference Rate and Spread"
+    },
+    {
+      "label": "RATE",
+      "regex": "Interest Rate"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity Date|Initial Acquisition Date|Acquisition Date"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle",
+      "observation": "current_anchor_labels include AFFIL, REFRATE, RATE, and MAT; none_examples is empty."
+    },
+    {
+      "source": "evidence_cli tables",
+      "observation": "SOI tables 48-51 and 53-56 carry Portfolio Company, Investment Type, Reference Rate and Spread, Floor, Interest Rate, Initial Acquisition Date, and Maturity Date headers."
+    }
+  ]
+}

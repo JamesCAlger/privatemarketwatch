@@ -1,0 +1,71 @@
+{
+  "schema": "agentA-anchor-vocab.v1",
+  "cik": "0001890107",
+  "entity_name": "First Eagle Private Credit Fund",
+  "report_date": "2025-12-31",
+  "status": "NO_NEW_ANCHORS_REQUIRED",
+  "anchor_present_pct": 100.0,
+  "none_pct": 0.0,
+  "none_examples": [],
+  "current_anchor_labels": [
+    "TOTAL",
+    "AFFIL",
+    "SECDEBT",
+    "EQUITY",
+    "SUBORD",
+    "ASSETTYPE",
+    "COMMIT",
+    "COMMITEXP",
+    "REFRATE",
+    "RATE",
+    "MAT"
+  ],
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Investments - non-controlled/non-affiliated"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference Rate and Spread"
+    },
+    {
+      "label": "RATE",
+      "regex": "Interest Rate\\s+\\d+(?:\\.\\d+)?%"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity Date"
+    }
+  ],
+  "proposed_anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Investments - non-controlled/non-affiliated"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference Rate and Spread"
+    },
+    {
+      "label": "RATE",
+      "regex": "Interest Rate\\s+\\d+(?:\\.\\d+)?%"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity Date"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle",
+      "observation": "All 200 rows already have an anchor signature and there are no none_examples."
+    },
+    {
+      "source": "evidence_cli roam",
+      "table_index": 42,
+      "row_index": 1,
+      "observation": "SOI header includes Investments, Region, Reference Rate and Spread, Interest Rate Floor, Interest Rate, Maturity Date, Principal, Amortized Cost, Fair Value, and Percentage of Net Assets."
+    }
+  ]
+}

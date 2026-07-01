@@ -1,0 +1,28 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0002033362",
+  "entity_name": "Audax Private Credit Fund, LLC",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b",
+      "evidence": "Bundle RATE MAT identifiers embed Interest Rate; evidence table 25 row 1 and repeated SOI headers confirm Interest Rate as a source column."
+    },
+    {
+      "label": "PORTCO",
+      "regex": "\\bPortfolio Company\\b",
+      "evidence": "Bundle none examples include Portfolio Company Heritage Partners/Visor Buyer rows; evidence table 44 row 1 confirms Portfolio Company (1) and Investment Type as SOI columns."
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\b",
+      "evidence": "Bundle none example SavATree Senior Secured Delayed Draw Term Loan Maturity 6/6/02031 One; evidence tables 76-78 row 1 use a Maturity column, and debt SOI tables use Maturity Date."
+    }
+  ],
+  "notes": [
+    "No production override file existed for this CIK at read time.",
+    "Anchors are proposed only for markers present in bundle identifiers and confirmed in source headers."
+  ]
+}

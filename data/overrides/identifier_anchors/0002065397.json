@@ -1,0 +1,73 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0002065397",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "TOTAL",
+      "regex": "\\bTotal\\b",
+      "signature": "TOTAL"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "Investments\\s*[-\\u2014]\\s*non-controlled/non-affiliated",
+      "signature": "AFFIL"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bSecured Debt\\b",
+      "signature": "SECDEBT"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments\\b",
+      "signature": "EQUITY"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "\\bSubordinated Debt\\b",
+      "signature": "SUBORD"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bAsset Type\\b",
+      "signature": "ASSETTYPE"
+    },
+    {
+      "label": "COMMIT",
+      "regex": "\\bCommitment Type\\b",
+      "signature": "COMMIT"
+    },
+    {
+      "label": "COMMITEXP",
+      "regex": "\\bCommitment Expiration Date\\b",
+      "signature": "COMMITEXP"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b",
+      "signature": "REFRATE"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b",
+      "signature": "RATE"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b(?:Maturity Date|Acquisition Date)\\b",
+      "signature": "MAT"
+    },
+    {
+      "label": "CASH",
+      "regex": "^BlackRock Liquidity T-Fund - Institutional Shares$",
+      "signature": "CASH"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle.none_examples",
+      "text": "BlackRock Liquidity T-Fund - Institutional Shares"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001634452",
+  "entity_name": "AB Private Credit Investors Corp",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "description": "Corporate debt section marker embedded at the start of this filer's debt identifiers.",
+      "regex": "^US Corporate Debt\\b",
+      "examples": [
+        "US Corporate Debt | 1st Lien/Senior Secured Debt | CHV Holdings LLC | Digital Infrastructure & Services | Term Loan | 12.56% (S + 4.00%; 1.00% Floor; 4.75% PIK) | 3/27/2029"
+      ],
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-124450",
+          "table_index": 51,
+          "row_index": 27,
+          "observation": "Debt table rows carry issuer, industry, instrument type, rate terms, and maturity."
+        }
+      ]
+    },
+    {
+      "label": "RATE",
+      "description": "Embedded stated rate or rate placeholder followed by parenthesized floating-rate terms.",
+      "regex": "\\|\\s*(?:[0-9]+(?:\\.[0-9]+)?\\s*%|\\u2014(?:\\s*%)?)\\s*\\(",
+      "examples": [
+        "12.56% (S + 4.00%; 1.00% Floor; 4.75% PIK)"
+      ],
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-124450",
+          "table_index": 52,
+          "row_index": 21,
+          "observation": "Source row shows stated percentage followed by S + spread and floor terms."
+        }
+      ]
+    },
+    {
+      "label": "MAT",
+      "description": "Embedded slash-form maturity or investment date at the end of identifiers.",
+      "regex": "\\|\\s*[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}(?:\\s*\\||\\s*$)",
+      "examples": [
+        "3/27/2029",
+        "12/31/2025"
+      ],
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-124450",
+          "table_index": 52,
+          "row_index": 21,
+          "observation": "Debt source row includes a slash-form maturity date."
+        },
+        {
+          "accession_number": "0001193125-26-124450",
+          "table_index": 68,
+          "row_index": 22,
+          "observation": "Investment-company rows do not show the section marker in each position row but do use the same table section."
+        }
+      ]
+    },
+    {
+      "label": "INVCO",
+      "description": "Investment company / fund interest section marker used for LP interests and units.",
+      "regex": "^U\\.S\\. Investment Companies\\b",
+      "examples": [
+        "U.S. Investment Companies | AB Equity Investors, L.P. | LP Interests",
+        "U.S. Investment Companies | Falcon Co-Investment Partners, L.P. | Units"
+      ],
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-124450",
+          "table_index": 68,
+          "row_index": 21,
+          "observation": "Section row shows U.S. Investment Companies, followed by LP Interests and Units position rows."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Proposal adds the minimum anchors needed for the active dominant debt signature and for investment-company rows currently landing in (none)."
+  ]
+}

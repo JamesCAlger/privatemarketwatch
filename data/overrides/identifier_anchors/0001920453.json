@@ -1,0 +1,54 @@
+{
+  "schema_version": "agentA-anchor-vocabulary.v1",
+  "cik": "0001920453",
+  "entity_name": "Fidelity Private Credit Fund",
+  "report_date": "2025-12-31",
+  "status": "NO_CHANGE",
+  "reason": "Bundle anchor_present_pct is 100.0 and none_examples is empty; no unsupported anchor markers proposed.",
+  "available_identifier_datapoints": [
+    "affiliation/section marker",
+    "asset class",
+    "industry",
+    "issuer",
+    "instrument type",
+    "reference rate",
+    "basis spread",
+    "optional PIK rate",
+    "interest rate",
+    "maturity date"
+  ],
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Investments\\s*-+\\s*non-controlled/\\s*non-affiliate"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference Rate and Spread\\s+SOFR"
+    },
+    {
+      "label": "RATE",
+      "regex": "Interest Rate\\s+\\d"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity Date"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bFirst Lien Debt\\b"
+    }
+  ],
+  "anchor_markers": [
+    "Investments -- non-controlled/ non-affiliate",
+    "Reference Rate and Spread SOFR",
+    "Interest Rate <numeric percent>",
+    "Maturity Date",
+    "Equity",
+    "First Lien Debt"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "agentA-anchor-vocab.v1",
+  "cik": "0002043759",
+  "status": "NO_CHANGES_NEEDED",
+  "regime": "flattened",
+  "signature": "AFFIL SECDEBT ASSETTYPE RATE REFRATE MAT",
+  "anchors": [
+    {
+      "label": "TOTAL",
+      "regex": "\\bTotal\\b"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "non-controlled/non-affiliated"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bDebt Investments\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments\\b"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "\\bSecond lien\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bType of Investment\\b"
+    },
+    {
+      "label": "COMMIT",
+      "regex": "\\bDelayed draw\\b"
+    },
+    {
+      "label": "COMMITEXP",
+      "regex": "\\bExpiration Date\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:SOFR|PSOFR|PRIME)\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Interest|Investment) Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b(?:Maturity Date|Expiration Date)\\b"
+    }
+  ],
+  "anchor_labels": [
+    "TOTAL",
+    "AFFIL",
+    "SECDEBT",
+    "EQUITY",
+    "SUBORD",
+    "ASSETTYPE",
+    "COMMIT",
+    "COMMITEXP",
+    "REFRATE",
+    "RATE",
+    "MAT"
+  ],
+  "none_examples": [],
+  "reason": "Bundle reports anchor_present_pct 100.0 and no none_examples; no new anchor vocabulary is needed."
+}

@@ -1,0 +1,34 @@
+{
+  "cik": "1899017",
+  "target_quarter": "2023-12-31",
+  "grand_total": 211749000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments and cash equivalents at fair value",
+      "value": 211749000.0,
+      "source": "2023 10-K accession 0000950170-24-037134, Schedule of Investments total row; us-gaap:InvestmentOwnedAtFairValue context C_09e4bf6b-5b27-4e3a-b720-b612b359a44a (InvestmentHoldingsAndCashEquivalentsMember) = 211,749,000"
+    }
+  ],
+  "companyfacts_fv": 192754000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "XBRL context C_09e4bf6b-5b27-4e3a-b720-b612b359a44a has EquitySecuritiesByIndustryAxis member InvestmentHoldingsAndCashEquivalentsMember and instant 2023-12-31; us-gaap:InvestmentOwnedAtFairValue = 211749000."
+    },
+    {
+      "source": "filing",
+      "quote": "The same schedule reports us-gaap:InvestmentOwnedAtFairValue = 192754000 before the controlled affiliate cash-equivalent row, and later reports controlled affiliate Goldman Sachs Financial Square Government Fund cash equivalents at fair value = 18995000."
+    },
+    {
+      "source": "query",
+      "quote": "staging report_date 2023-12-31 sums by schedule: Non Controlled/Non Affiliate Investments = 188789000; Legacy Corporate Lending HoldCo affiliated/controlled rows = 3965000; Controlled Affiliate Investments = 18995000; total = 211749000."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials report_date 2023-12-31 total_assets = 223740000 and companyfacts investments_at_fair_value = 192754000; using 211749000 leaves 11991000 of other assets."
+    }
+  ],
+  "rationale": "The filing contains an explicit total row tagged us-gaap:InvestmentOwnedAtFairValue for InvestmentHoldingsAndCashEquivalentsMember at 211749000, so the grand total is taken directly from that row. The companyfacts value of 192754000 captures the non-controlled/non-affiliate investments plus Legacy Corporate Lending HoldCo rows, but excludes the separately presented controlled affiliate cash-equivalent investment of 18995000. The resulting grand total is below total assets and represents about 94.6% of total assets, a plausible BDC balance-sheet close.",
+  "confidence": 0.96
+}

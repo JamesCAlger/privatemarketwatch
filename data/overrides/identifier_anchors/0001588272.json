@@ -1,0 +1,27 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001588272",
+  "entity_name": "NexPoint Capital, Inc.",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "ASSETTYPE",
+      "regex": "(?:^|\\|\\s*)(?:Asset-Backed Securities|Common Stocks|LLC Interests|Preferred Stocks|Senior Secured Loans)(?:\\s*\\||$)"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:SOFR|SORF|PRIME)\\s*\\+\\s*\\d+\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Fixed\\s*\\+\\s*\\d+|PIK\\s*\\+\\s*\\d+(?:\\.\\d+)?%|\\d+(?:\\.\\d+)?%\\s*(?:Fixed|PIK)?)\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+    }
+  ],
+  "notes": [
+    "Identifier strings use pipe-delimited asset type, industry, issuer/instrument/tranche, rate descriptor or reference-rate spread, stated percentage, and maturity date when present."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "agentA-anchor-vocab.v1",
+  "cik": "0000081955",
+  "entity_name": "RAND CAPITAL CORP",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "RATE",
+      "regex": "\\b(?:at|Modified\\s+to|to)\\s+\\d+(?:\\.\\d+)?%"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bSecured\\s+Note\\b|\\bSecured\\s+Promissory\\s+Note\\b"
+    },
+    {
+      "label": "TERMLOAN",
+      "regex": "\\bTerm\\s+Loan\\b"
+    },
+    {
+      "label": "PROMNOTE",
+      "regex": "\\bPromissory\\s+Note\\b"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle.none_examples",
+      "observations": [
+        "GoNoodle, Inc. - 1,500,000 Secured Note",
+        "HDI Acquisition LLC - 1,245,119 Term Loan",
+        "Mattison Avenue Holdings LLC. - $1,794,944 Third Amended, Restated and Consolidated Promissory Note"
+      ]
+    }
+  ]
+}

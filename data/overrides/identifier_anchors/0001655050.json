@@ -1,0 +1,46 @@
+{
+  "cik": "0001655050",
+  "_doc": "Bain Capital Specialty Finance, Inc. staged A2 anchor proposal for bundle data/output/agent_a/quarter/2025-12-31/bundles/0001655050_2025-12-31.json. The bundle none_examples include senior secured loan, structured product, controlled affiliate member, industry member, LP interest, and blocker LP interest identifiers. This proposal preserves the existing CIK dialect and keeps narrow anchors for those observed identifier markers.",
+  "anchors": [
+    {
+      "label": "TOTAL",
+      "regex": "^\\s*total\\b"
+    },
+    {
+      "label": "CASH",
+      "regex": "money market|government fund|financial square|u\\.?s\\.? government|liquidity (?:fund|funds)|cash and cash equivalent"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "non-?controlled|controlled\\s*/|/\\s*non-?affiliated|/\\s*affiliated|\\bcontrolled investments?\\b|controlled affiliate|\\bmember\\b"
+    },
+    {
+      "label": "SECLOAN",
+      "regex": "senior secured loan|first lien|second lien"
+    },
+    {
+      "label": "SUBDEBT",
+      "regex": "subordinated (?:note|debt)"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "common equity|preferred equity|equity interest|membership interest|preferred stock|common stock|warrant|\\blp interest\\b|blocker lp interest"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "reference rate|\\bsofr\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|\\bsonia\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "[0-9]+\\.?[0-9]*\\s*%"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"
+    },
+    {
+      "label": "STRUCTURED",
+      "regex": "structured products?|clo"
+    }
+  ]
+}

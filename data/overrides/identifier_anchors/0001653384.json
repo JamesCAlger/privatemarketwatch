@@ -1,0 +1,63 @@
+{
+  "cik": "0001653384",
+  "schema_version": "agentA-identifier-anchors.v1",
+  "regime": "flattened",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "^Affiliate Investments\\b"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "^Control Investments\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bSenior Secured Term Loans\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bSenior Secured\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bDebt Investments\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bInterest Rate\\s+(?:SOFR|PRIME)\\+"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b"
+    }
+  ],
+  "available_identifier_datapoints": [
+    "issuer",
+    "affiliation/control bucket",
+    "investment asset class",
+    "industry/sector",
+    "instrument type",
+    "tranche/security class",
+    "reference rate type",
+    "basis spread",
+    "interest rate floor",
+    "PIK rate or PIK description",
+    "ETP percentage",
+    "initial acquisition date",
+    "maturity date"
+  ],
+  "notes": [
+    "Bundle none_examples include issuer/type-only debt identifiers such as Affiliate Investments Senior Secured Term Loans Gynesonics, Inc. and Control Investments Senior Secured Term Loans Pivot3, Inc.; Senior Secured Term Loans and Senior Secured are proposed as SECDEBT anchors for those rows.",
+    "Current bundle labels already include AFFIL, SECDEBT, EQUITY, ASSETTYPE, REFRATE, RATE, and MAT; this proposal makes the debt markers explicit for rows without embedded rate/date text."
+  ]
+}

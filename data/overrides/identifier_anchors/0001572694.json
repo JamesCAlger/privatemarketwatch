@@ -1,0 +1,50 @@
+{
+  "schema_version": "agentA-anchor-vocabulary.v1",
+  "cik": "0001572694",
+  "entity_name": "Goldman Sachs BDC, Inc.",
+  "status": "PROPOSED",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\b(?:Investments in Affiliated Money Market Fund|Goldman Sachs Financial Square Government Fund)\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:Debt Investments|1st Lien/Last-Out Unitranche|1st Lien/Senior Secured Debt|2nd Lien/Senior Secured Debt|Unsecured Debt)\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\b(?:Equity Securities|Common Stock|Preferred Stock|Warrants)\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\b(?:United States|United Kingdom|Canada|Germany)\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\b|\\bInitial Acquisition Date\\b"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle.none_examples",
+      "observed_markers": [
+        "Investments in Affiliated Money Market Fund",
+        "Goldman Sachs Financial Square Government Fund - Institutional Shares",
+        "1st Lien/Last-Out Unitranche",
+        "Warrants",
+        "United States",
+        "Debt Investments"
+      ]
+    }
+  ]
+}

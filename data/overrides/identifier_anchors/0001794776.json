@@ -1,0 +1,38 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001794776",
+  "anchors": [
+    {
+      "label": "TOTAL",
+      "regex": "\\bTotal\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:First|Second) Lien Senior Secured\\b|\\bCorporate Bonds\\b|\\bCLO Mezzanine\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\b(?:CLO Equity|Equity(?: and Other)? Investments|Common Shares)\\b"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "\\bStructured Subordinated Note\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bShort-Term Investments\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\((?:S|SOFR)\\s*\\+"
+    }
+  ]
+}

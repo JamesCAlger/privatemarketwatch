@@ -1,0 +1,18 @@
+{
+  "cik": "0001782524",
+  "_doc": "Staged A2 proposal for Morgan Stanley Direct Lending Fund. Preserves the existing broad section/rate/maturity anchors and adds a bounded position-name anchor so issuer-only investment identifiers in the bundle no longer resolve to (none).",
+  "anchors": [
+    {"label": "TOTAL", "regex": "^\\s*total\\b"},
+    {"label": "AFFIL", "regex": "non-?controlled|controlled\\s*/|/\\s*non-?affiliated|/\\s*affiliated"},
+    {"label": "SECDEBT", "regex": "first lien debt|second lien debt|secured debt|other debt|\\bdebt investments?\\b"},
+    {"label": "SUBORD", "regex": "subordinated"},
+    {"label": "EQUITY", "regex": "common equity|preferred equity|equity interest|membership interest|preferred stock|common stock|warrant|\\brights?\\b"},
+    {"label": "ASSETTYPE", "regex": "asset type|investment type"},
+    {"label": "COMMIT", "regex": "commitment type"},
+    {"label": "COMMITEXP", "regex": "commitment expiration"},
+    {"label": "REFRATE", "regex": "reference rate|\\bsofr\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|(?:sofr|sf|libor|l|prime|p|euribor|e|s)\\s*\\+\\s*\\d"},
+    {"label": "RATE", "regex": "[0-9]+\\.?[0-9]*\\s*%"},
+    {"label": "MAT", "regex": "\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"},
+    {"label": "POSITION", "regex": "\\b(?:Inc\\.|LLC|Corp\\.?|Holdco|Holdings|Foods|Associations)\\b"}
+  ]
+}

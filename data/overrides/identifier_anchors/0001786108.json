@@ -1,0 +1,113 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001786108",
+  "entity_name": "Trinity Capital Inc.",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "issuer",
+    "investment_category",
+    "geography",
+    "industry",
+    "instrument_type",
+    "investment_date",
+    "maturity_date",
+    "expiration_date",
+    "series",
+    "coupon_type",
+    "reference_rate_type",
+    "basis_spread",
+    "floor_rate",
+    "interest_rate",
+    "pik_rate",
+    "eot_rate"
+  ],
+  "anchors": [
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:Prime|PRIME|Base Rate|SOFR 30 Day Forward|SOFR \\d+ Month Term|LIBOR|0)\\s*\\+"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Variable interest rate|Fixed interest rate|Interest Rate)\\b"
+    },
+    {
+      "label": "WARRANT",
+      "regex": "Warrant Investments-"
+    },
+    {
+      "label": "DEBT_SECTION",
+      "regex": "^Portfolio Company Debt Securities- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?$"
+    }
+  ],
+  "anchor_rules": [
+    {
+      "label": "REFRATE",
+      "pattern": "\\b(?:Prime|PRIME|Base Rate|SOFR 30 Day Forward|SOFR \\d+ Month Term|LIBOR|0)\\s*\\+",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-068600",
+          "table_index": 32,
+          "row_index": 27,
+          "observation": "Recent variable-rate debt rows include Prime/PRIME plus a spread embedded in the identifier."
+        },
+        {
+          "accession_number": "0000950170-23-017817",
+          "table_index": null,
+          "row_index": null,
+          "observation": "Older bundle samples include SOFR 30 Day Forward and LIBOR plus a spread embedded in the identifier."
+        }
+      ]
+    },
+    {
+      "label": "RATE",
+      "pattern": "\\b(?:Variable interest rate|Fixed interest rate|Interest Rate)\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-068600",
+          "table_index": 32,
+          "row_index": 27,
+          "observation": "Variable-rate debt rows include Interest Rate / Variable interest rate text embedded in the identifier."
+        },
+        {
+          "accession_number": "0000950170-23-017817",
+          "table_index": null,
+          "row_index": null,
+          "observation": "Older bundle samples include Interest Rate / Fixed interest rate and Interest Rate / Variable interest rate text embedded in the identifier."
+        }
+      ]
+    },
+    {
+      "label": "WARRANT",
+      "pattern": "Warrant Investments-",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-068600",
+          "table_index": 44,
+          "row_index": 2,
+          "observation": "Warrant rows begin with Portfolio Company Warrant Investments- and carry Expiration Date and Series text in the identifier."
+        }
+      ]
+    },
+    {
+      "label": "DEBT_SECTION",
+      "pattern": "^Portfolio Company Debt Securities- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?$",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-068600",
+          "table_index": null,
+          "row_index": null,
+          "observation": "Bundle none_examples are category-only debt section markers such as Portfolio Company Debt Securities- United States Construction Technology, including United Sates typo variants."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "DEBT_SECTION is intentionally constrained to category-only debt section identifiers and does not match position rows containing Type of Investment.",
+    "Only datapoints embedded in investment_identifier strings were inventoried; source-table-only numeric columns are not treated as identifier datapoints."
+  ]
+}

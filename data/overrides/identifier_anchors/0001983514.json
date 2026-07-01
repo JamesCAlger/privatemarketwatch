@@ -1,0 +1,107 @@
+{
+  "schema": "agentA-anchor-vocabulary.v1",
+  "cik": "0001983514",
+  "entity_name": "LGAM Private Credit LLC",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\bnon-controlled/(?:non-)?affiliated\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.top_variants[0].samples",
+          "observation": "Dominant debt identifiers include affiliation text such as non-controlled/non-affiliated."
+        }
+      ]
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\b(?:Equity Investments|Preferred Equity|Common Equity)\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.top_variants[2].samples",
+          "observation": "Equity identifiers include Preferred Equity and Common Equity instrument text."
+        }
+      ]
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.top_variants[0].samples",
+          "observation": "Dominant debt identifiers embed the literal Reference Rate and Spread label before the reference code and spread."
+        }
+      ]
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.top_variants[0].samples",
+          "observation": "Dominant debt identifiers embed the literal Interest Rate label before the coupon percentage."
+        }
+      ]
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.top_variants[0].samples",
+          "observation": "Dominant debt identifiers embed the literal Maturity Date label before the date."
+        }
+      ]
+    },
+    {
+      "label": "INVESTMENT_DUPLICATE_SUFFIX",
+      "regex": "\\bInvestment\\s+(?:One|Two|Three)\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.top_variants[1].samples",
+          "observation": "Bundle includes repeated Investment One, Investment Two, and Investment Three identifiers with no embedded rate/date datapoints."
+        }
+      ]
+    },
+    {
+      "label": "ISSUER_DUPLICATE_NUMERIC_SUFFIX",
+      "regex": "\\b(?:iCIMS, Inc\\.(?:, First Lien Debt)?|Associations, Inc\\.)\\s+[123]\\b",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.none_examples",
+          "examples": [
+            "iCIMS, Inc. 1",
+            "iCIMS, Inc. 2",
+            "iCIMS, Inc. 3",
+            "iCIMS, Inc., First Lien Debt 1",
+            "iCIMS, Inc., First Lien Debt 2"
+          ],
+          "observation": "None examples include issuer labels with numeric duplicate suffixes and, in older rows, embedded First Lien Debt instrument text."
+        }
+      ]
+    },
+    {
+      "label": "ISSUER_ASSOCIATIONS",
+      "regex": "\\bAssociations, Inc\\.(?:\\s|$)",
+      "applies_to": "investment_identifier",
+      "evidence": [
+        {
+          "source": "bundle.none_examples",
+          "examples": [
+            "Associations, Inc."
+          ],
+          "observation": "The bundle none examples include Associations, Inc. as an issuer-only identifier with no embedded rate/date datapoints."
+        }
+      ]
+    }
+  ]
+}

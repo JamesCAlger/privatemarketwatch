@@ -1,0 +1,63 @@
+{
+  "schema": "agentA-anchor-vocabulary.v1",
+  "cik": "0001920145",
+  "entity_name": "Goldman Sachs Private Credit Corp.",
+  "report_date": "2025-12-31",
+  "status": "NO_ANCHOR_CHANGE",
+  "available_identifier_datapoints": [
+    "section",
+    "country",
+    "asset_type",
+    "issuer",
+    "industry",
+    "interest_rate",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "initial_acquisition_date",
+    "maturity_date",
+    "tranche_or_class_suffix"
+  ],
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "(?:1st\\s+Lien/Senior\\s+Secured\\s+Debt|1st\\s+Lien/Last-Out\\s+Unitranche|Structured\\s+Finance\\s+Obligation\\s+[-\\u2013]\\s+Debt\\s+Instruments)"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "Subordinated\\s+Notes"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "(?:Equity\\s+and\\s+Other|Common\\s+Stock|Preferred\\s+Stock|Warrants|Structured\\s+Finance\\s+Obligation\\s+[-\\u2013]\\s+Equity\\s+Instruments)"
+    },
+    {
+      "label": "RATE",
+      "regex": "(?:Interest\\s+Rate|Effective\\s+Yield)"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference\\s+Rate\\s+and\\s+Spread"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle",
+      "observation": "Current anchor labels already cover the dominant signatures; none_examples is empty and none_pct is 0.0."
+    },
+    {
+      "source": "evidence_cli roam",
+      "table_rows": [
+        "table 49 row 1",
+        "table 52 row 1",
+        "table 68 row 1"
+      ],
+      "observation": "Source schedule headers include Investment, Interest Rate, Reference Rate and Spread, Initial Acquisition Date, Maturity, and Effective Yield."
+    }
+  ],
+  "notes": "No new anchor is required for this bundle because no sample lands in (none). The listed labels document the section/rate markers observed in the identifier strings."
+}

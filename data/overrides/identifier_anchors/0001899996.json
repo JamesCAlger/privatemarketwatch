@@ -1,0 +1,35 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001899996",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Investments\\s*(?:,\\s*Investments|Investments)?\\s*--\\s*non-controlled/\\s*non-affiliat(?:e|ed|d)"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bInvestment\\b.*\\b(Class [A-Z0-9-]+ (?:Common |Preferred )?Units|Equity Units)\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "^Commodity Chemicals$"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "^Investments$"
+    }
+  ],
+  "notes": "Bundle none_examples include singular Investment equity identifiers, a category label, and the Investments section marker."
+}

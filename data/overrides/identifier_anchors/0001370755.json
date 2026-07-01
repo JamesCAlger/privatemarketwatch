@@ -1,0 +1,103 @@
+{
+  "schema_version": "agentA-anchors.v1",
+  "cik": "0001370755",
+  "entity_name": "BlackRock TCP Capital Corp.",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "issuer",
+    "industry",
+    "security_type",
+    "instrument_type",
+    "tranche",
+    "reference_rate",
+    "reference_rate_tenor",
+    "floor_rate",
+    "spread_rate",
+    "cash_pik_split",
+    "pik_rate",
+    "total_coupon",
+    "maturity_date",
+    "expiration_date"
+  ],
+  "anchors": [
+    {
+      "label": "REFRATE",
+      "regex": "\\bRef\\s+(?:SOFR|LIBOR|Prime|Fixed)\\s*(?:\\([A-Z]\\))?",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-079299",
+          "table_index": 25,
+          "row_index": 1,
+          "row_text": "Issuer | Instrument | Ref | Floor | Spread | Total Coupon | Maturity | Principal | Cost | Fair Value | % of Total Cash and Investments | Notes"
+        }
+      ],
+      "reason": "Debt identifiers embed reference-rate text such as Ref SOFR(M), Ref SOFR (Q), Ref Prime, Ref LIBOR(A), and Ref Fixed."
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Floor|Spread|Total Coupon)\\s+[0-9]+(?:\\.[0-9]+)?%|\\bCash\\s*\\+\\s*[0-9]+(?:\\.[0-9]+)?%\\s*PIK%?|\\b[0-9]+(?:\\.[0-9]+)?%\\s*PIK%?",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-079299",
+          "table_index": 25,
+          "row_index": 1,
+          "row_text": "Issuer | Instrument | Ref | Floor | Spread | Total Coupon | Maturity | Principal | Cost | Fair Value | % of Total Cash and Investments | Notes"
+        }
+      ],
+      "reason": "Dominant debt identifiers embed Floor, Spread, optional Cash plus PIK, and Total Coupon percentages."
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\s+[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-079299",
+          "table_index": 25,
+          "row_index": 1,
+          "row_text": "Issuer | Instrument | Ref | Floor | Spread | Total Coupon | Maturity | Principal | Cost | Fair Value | % of Total Cash and Investments | Notes"
+        }
+      ],
+      "reason": "Debt identifiers embed maturity dates in M/D/YYYY form."
+    },
+    {
+      "label": "EQUITY",
+      "regex": "^Equity Securities\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-079299",
+          "table_index": 33,
+          "row_index": 2,
+          "row_text": "Equity Securities"
+        }
+      ],
+      "reason": "Equity identifiers and section rows begin with Equity Securities."
+    },
+    {
+      "label": "DEBT",
+      "regex": "^Debt Investments\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-079299",
+          "table_index": 25,
+          "row_index": 0,
+          "row_text": "Debt Investments"
+        }
+      ],
+      "reason": "The bundle none_examples include section-only Debt Investments rows that need a stable signature."
+    },
+    {
+      "label": "INVESTMENTS",
+      "regex": "^Investments$",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-079299",
+          "table_index": 25,
+          "row_index": 0,
+          "row_text": "Investments"
+        }
+      ],
+      "reason": "The bundle none_examples include section-only Investments rows that need a stable signature."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001988280",
+  "entity_name": "Manulife Private Credit Fund",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:Senior loans?|Term Loan|Delayed Draw Term Loan|Revolver|Incremental Term Loan|Add-On Term Loan|Amendment Term Loan)\\b",
+      "evidence": "SOI rows in tables 148-157 list individual senior-loan positions with issuer and instrument text; table 160 row 6 confirms senior loans are variable-rate obligations."
+    },
+    {
+      "label": "COMMIT",
+      "regex": "\\(C\\)",
+      "evidence": "Table 160 row 7 defines (C) as unfunded or partially unfunded loan commitments; none examples Vybond Buyer LLC Delayed Draw Term Loan (C) and Revolver (C) appear as position rows in table 153 rows 9-10."
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:\\d+(?:,\\s*\\d+)*(?:\\s+and\\s+\\d+)?\\s+month\\s+CME\\s+Term\\s+SOFR|Prime rate)\\b",
+      "evidence": "Identifier strings and SOI rows include terms such as 3 month CME Term SOFR + spread and Prime rate + spread; table 160 row 2 defines CME and row 4 defines SOFR."
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b\\d{1,2}\\.\\d{3}\\s*%|\\b\\d{1,2}\\.\\d{3}\\s*%\\s*PIK\\b",
+      "evidence": "SOI rows include embedded spread percentages in loan descriptions and PIK rates, including Bandon Fitness rows in table 149 rows 13-15 and Beacon Behavioral row in table 151 row 16."
+    }
+  ],
+  "none_examples_expected_to_match": [
+    "Industrials | Building products | Vybond Buyer LLC, Delayed Draw Term Loan (C)",
+    "Industrials | Building products | Vybond Buyer LLC, Revolver (C)"
+  ],
+  "notes": [
+    "The proposal uses the (C) footnote marker as COMMIT so unfunded commitment rows without embedded rate text no longer remain unanchored.",
+    "Maturity dates are not anchor evidence because they are in separate SOI columns rather than the investment_identifier string."
+  ]
+}

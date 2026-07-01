@@ -1,0 +1,26 @@
+{
+  "cik": "1930087",
+  "target_quarter": "2025-12-31",
+  "grand_total": 9913408000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Investments at fair value",
+      "value": 9913408000.0,
+      "source": "fund_financials companyfacts row for report_date=2025-12-31, investments_at_fair_value"
+    }
+  ],
+  "companyfacts_fv": 9913408000.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "fund_financials report_date=2025-12-31: total_assets=10209714000.0; investments_at_fair_value=9913408000.0; investments_at_cost=9839254000.0; source=companyfacts"
+    },
+    {
+      "source": "query",
+      "quote": "source-facts parquet for accession 0001930087-26-000024 has 1004 current-period holding rows summing to fair_value=9828933000.0 and cost=9755791000.0, below the companyfacts balance-sheet fair-value tag"
+    }
+  ],
+  "rationale": "The undimensioned companyfacts investments_at_fair_value tag is the grand total. It is greater than the extracted holding-row subtotal and closes plausibly to companyfacts total assets: 9913408000.0 / 10209714000.0 = 97.1%, leaving about 296.3 million of non-investment assets. The lower row-level extraction is incomplete for anchoring and does not indicate an additional affiliated or controlled schedule to add; adding any material separate schedule to the companyfacts tag would fail the total-assets ceiling.",
+  "confidence": 0.9
+}
