@@ -8,6 +8,15 @@ Build a data platform for SEC-registered private markets vehicles (BDCs, interva
 
 See `private_markets_index_spec.md` for the full specification including the four target indices.
 
+## V1 Scope (Current Public Product)
+
+The indices above describe the long-term vision. **The shipping v1 product is deliberately narrower: only the underlying position-level holdings data for the ~70 unlisted BDCs in the wrapper-cohort sample.** Keep this front of mind — do not reintroduce index surfaces or non-BDC vehicles into the public site without an explicit decision to expand scope.
+
+- **What v1 ships:** for the ~70-BDC cohort, the underlying position data (every loan, equity stake, and credit facility each fund discloses) plus per-fund and aggregate portfolio analytics (instrument/industry mix, concentration, spreads, credit stress, PIK).
+- **No indices in v1.** Position-level indices, index returns, "constituents", "indexed fair value", base-100 levels, and the `/indices` pages are NOT part of v1 and have been removed from the public frontend. Generic financial-charting math (e.g. a single fund's own total-return series rebased to 100) is not the index product and is fine to keep.
+- **BDCs only.** Interval funds and tender-offer funds are still discovered/processed in the pipeline but are out of scope for the v1 public site.
+- **Canonical cohort & FV.** The authoritative scope is the wrapper-cohort manifest (~70 CIKs). The public "fair value" figure is the current-quarter sum of `private_markets_holdings.csv` for that cohort across all index classifications. The homepage headline FV, the instrument-type donut, and the industry-exposure donut must all reconcile EXACTLY to that single number (straight `GROUP BY` of the same holdings — no dedup, scaling, reconciled overlays, or matched-subset sources).
+
 ## Agent Update Protocol
 
 Multiple agents may run concurrently. To keep project context fresh without race conditions:
@@ -258,6 +267,8 @@ npm run build             # Static export to frontend/out/
 ## Files Worth Reading First
 
 - `AGENTS.md` (this file): current state, contracts, schemas, and operational warnings.
+- `docs/reference/codex_worker_dispatch.md`: how to dispatch sandboxed Codex worker fleets (the
+  reusable pattern + the four sandbox traps). Read before standing up any new terminal agent set.
 - `docs/agentic_data_quality.md`: proposed agentic validation architecture.
 - `pipeline/unified_holdings.py`: central holdings construction and classification.
 - `pipeline/bdc_position_pik.py`: cache-only BDC XBRL extractor for position-level PIK income/accrual/capitalization evidence.
