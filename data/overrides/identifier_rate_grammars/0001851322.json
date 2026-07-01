@@ -1,0 +1,60 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001851322",
+  "entity_name": "North Haven Private Income Fund LLC",
+  "version": 1,
+  "author": "agentA induced (sandboxed) from bundle 0001851322.json; Morgan Stanley North Haven first-lien-debt dialect, flattened-concatenation regime.",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "AFFIL REFRATE RATE MAT",
+    "note": "Dominant rate-bearing variant under the per-CIK anchors (2880 rows, 35.8% of the CIK): floating first/second-lien debt phrased '<affil header> Debt Investments <industry> <issuer> Investment First Lien Debt Reference Rate and Spread S + <spread>% (incl. <pik>% PIK) Interest Rate <allin>% Maturity Date m/d/yyyy'. SPREAD IS PERCENT (7.00% -> twin 0.07), NOT bps -- confirmed against every sample twin (S + 7.00% -> basis_spread 0.07; S + 5.00% -> 0.05; S + 6.60% -> 0.066). The stated 'Interest Rate' is the ALL-IN coupon; the reference index VALUE (SOFR) is not printed in the string, so interest_rate_all_in is taken verbatim and gated against the interest_rate twin. The PIK clause uses the explicit '(incl. X% PIK)' wording -> PIK is INCLUDED in the all-in (inclusive convention); cash leg = all_in - pik. Equity rows ('AFFIL EQUITY MAT' / 'MAT') carry only an Acquisition Date and no rate; they are a separate, non-rate-bearing variant and are NOT covered here."
+  },
+  "pik_convention": "inclusive",
+  "_pik_convention_doc": "North Haven prints 'Reference Rate and Spread S + <spread>% (incl. <pik>% PIK) Interest Rate <allin>%'. The literal token 'incl.' (included) is decisive: the PIK leg is part of the all-in Interest Rate, not added on top. Twin cross-check confirms this: BPG Holdings 'S + 7.00% (incl. 5.00% PIK) Interest Rate 11%' -- with SOFR ~4% the floating coupon is ~4 + 7 = ~11% all-in, and the 5.00% PIK is a portion of that 11% paid in kind rather than 11% + 5% = 16% additive. Likewise Firebird 'S + 5.00% (incl. 2.75% PIK) Interest Rate 9.31%' (~4.3 SOFR + 5.00 spread ~= 9.31 all-in; 2.75% of that is PIK). So convention = inclusive (like Bain/Antares), NOT additive (unlike MidCap's 'cash plus X PIK'). cash leg = all_in - pik. No self-contained 'X% cash plus Y% PIK = Z%' total is printed and the reference index value is absent, so NO sum_identity is possible; gating is against the reliable structured twins via pct_agree/date_agree.",
+  "_reference_code_doc": "Reference appears as the single letter 'S' in 'Reference Rate and Spread S + <spread>%'. 'S' = SOFR: this is Morgan Stanley / North Haven shorthand, the index is U.S.-dollar term SOFR for first/second-lien USD direct loans (2021+ vintage, post-LIBOR-transition). The code map also retains the full words SOFR/LIBOR/EURIBOR/PRIME and the letters E (EURIBOR) and P/SF for robustness across quarters, but every sample in this bundle uses bare 'S'.",
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "Reference Rate and Spread\\s+(SOFR|SF|S|LIBOR|EURIBOR|E|Prime Rate|Prime|P)\\b",
+      "group": 1,
+      "type": "ref_code",
+      "map": {"SOFR": "SOFR", "SF": "SOFR", "S": "SOFR", "LIBOR": "LIBOR", "EURIBOR": "EURIBOR", "E": "EURIBOR", "PRIME RATE": "PRIME", "PRIME": "PRIME", "P": "PRIME"}
+    },
+    {
+      "field": "basis_spread",
+      "regex": "Reference Rate and Spread\\s+(?:SOFR|SF|S|LIBOR|EURIBOR|E|Prime Rate|Prime|P)\\s*\\+\\s*([0-9]+\\.?[0-9]*)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "\\(\\s*(?:incl\\.?\\s*)?([0-9]+\\.?[0-9]*)\\s*%\\s*PIK\\s*\\)",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate_all_in",
+      "regex": "Interest Rate\\s+([0-9]+\\.?[0-9]*)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "Maturity Date\\s+([0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4})",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": "floating_if_reference_rate_else_fixed",
+    "interest_rate_cash_leg": "interest_rate_all_in_minus_pik"
+  },
+  "invariants": [
+    {"name": "all_in_vs_twin", "kind": "pct_agree", "parsed": "interest_rate_all_in", "twin": "interest_rate", "tol": 0.05},
+    {"name": "spread_vs_twin", "kind": "pct_agree", "parsed": "basis_spread", "twin": "basis_spread", "tol": 0.05},
+    {"name": "pik_vs_twin", "kind": "pct_agree", "parsed": "pik_rate", "twin": "pik_rate", "tol": 0.05},
+    {"name": "maturity_vs_twin", "kind": "date_agree", "parsed": "maturity_date", "twin": "maturity_date"},
+    {"name": "floating_has_reference", "kind": "implication", "if_present": "basis_spread", "then_present": "reference_rate_type"}
+  ],
+  "required_fields": ["reference_rate_type", "basis_spread", "maturity_date"]
+}

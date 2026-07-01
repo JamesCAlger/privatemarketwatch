@@ -1,0 +1,106 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001982701",
+  "entity_name": "AB Private Lending Fund",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "SECDEBT RATE MAT"
+  },
+  "dominant_signature": "SECDEBT RATE MAT",
+  "available_identifier_datapoints": [
+    "asset_category",
+    "lien_or_security_type",
+    "issuer",
+    "industry",
+    "instrument_type",
+    "interest_rate",
+    "reference_rate_type",
+    "basis_spread",
+    "floor_rate",
+    "pik_rate",
+    "maturity_date",
+    "tranche_suffix"
+  ],
+  "unsupported_identifier_datapoints": [],
+  "pik_convention": "inclusive",
+  "extractors": [
+    {
+      "field": "interest_rate",
+      "regex": "\\|\\s*(?P<interest_rate>[0-9]+(?:\\.[0-9]+)?)%\\s*\\(",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "reference_rate_type",
+      "regex": "\\(\\s*(?P<reference_rate_type>S)\\s*\\+",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "S": "SOFR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\(\\s*S\\s*\\+\\s*(?P<basis_spread>[0-9]+(?:\\.[0-9]+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "floor_rate",
+      "regex": ";\\s*(?P<floor_rate>[0-9]+(?:\\.[0-9]+)?)%\\s*Floor",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": ";\\s*(?P<pik_rate>[0-9]+(?:\\.[0-9]+)?)%\\s*PIK\\)",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "\\|\\s*(?P<maturity_date>[0-9]{1,2}/[0-9]{1,2}/[0-9]{4})(?:\\s*\\|\\s*[^|]+)?\\s*$",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": {
+      "rule": "floating_iff_reference_rate_type_present"
+    }
+  },
+  "required_fields": [
+    "interest_rate",
+    "reference_rate_type",
+    "basis_spread",
+    "maturity_date"
+  ],
+  "invariants": [
+    {
+      "name": "interest_rate_matches_twin",
+      "kind": "pct_agree",
+      "parsed": "interest_rate",
+      "twin": "interest_rate"
+    },
+    {
+      "name": "basis_spread_matches_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "maturity_date_matches_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    }
+  ],
+  "evidence": [
+    "Bundle top variant SECDEBT RATE MAT covers 324 of 325 rows.",
+    "Roam query 'Datacor,10.21,PIK' found table 44 rows 15-17 with 10.21 % ( S + 4.50 %; 1.00 % Floor; 2.00 % PIK) and maturity 3/13/2029.",
+    "Bundle samples show optional PIK: AAH Topco and Admiral Buyer examples omit PIK while retaining interest_rate, S reference, spread, floor, and maturity."
+  ],
+  "notes": "PIK is optional and therefore excluded from required_fields. The all-in stated interest_rate is treated as inclusive of any disclosed PIK component because identifiers state a single leading coupon followed by parenthetical reference/spread/floor/PIK terms."
+}

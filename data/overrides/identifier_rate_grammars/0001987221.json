@@ -1,0 +1,116 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001987221",
+  "entity_name": "John Hancock Comvest Private Income Fund",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "REFRATE RATE MAT"
+  },
+  "available_identifier_datapoints": [
+    "issuer",
+    "asset_class_or_lien",
+    "instrument_type",
+    "industry",
+    "reference_rate_type",
+    "basis_spread_percent",
+    "floor_percent",
+    "fixed_rate_percent",
+    "interest_rate_percent",
+    "pik_terms_flag",
+    "maturity_date",
+    "acquisition_date_for_equity"
+  ],
+  "unsupported_identifier_datapoints": [
+    "numeric_pik_rate"
+  ],
+  "not_applicable_reason": null,
+  "pik_convention": "inclusive",
+  "required_fields": [
+    "interest_rate",
+    "maturity_date"
+  ],
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "Spread Above Index\\s+(SOFR|FIXED)\\b",
+      "type": "ref_code",
+      "map": {
+        "SOFR": "SOFR",
+        "FIXED": "FIXED"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "Spread Above Index\\s+SOFR\\s*\\+\\s*([0-9]+(?:\\.[0-9]+)?)%",
+      "type": "pct"
+    },
+    {
+      "field": "floor",
+      "regex": "\\(([0-9]+(?:\\.[0-9]+)?)%\\s+floor\\)",
+      "type": "pct"
+    },
+    {
+      "field": "fixed_rate",
+      "regex": "Spread Above Index\\s+FIXED\\s+([0-9]+(?:\\.[0-9]+)?)%",
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "Interest Rate\\s+([0-9]+(?:\\.[0-9]+)?)%",
+      "type": "pct"
+    },
+    {
+      "field": "pik_terms_flag",
+      "regex": "Interest Rate\\s+[0-9]+(?:\\.[0-9]+)?%\\s+PIK\\b",
+      "type": "text"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "Maturity Date\\s+([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})",
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": {
+      "floating_when_reference_rate_type": [
+        "SOFR"
+      ],
+      "fixed_when_reference_rate_type": [
+        "FIXED"
+      ]
+    }
+  },
+  "invariants": [
+    {
+      "name": "interest_rate_matches_structured_twin",
+      "kind": "pct_agree",
+      "parsed": "interest_rate",
+      "twin": "interest_rate",
+      "tolerance": 0.0001
+    },
+    {
+      "name": "basis_spread_matches_structured_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread",
+      "tolerance": 0.0001
+    },
+    {
+      "name": "maturity_date_matches_structured_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    }
+  ],
+  "evidence": [
+    "Bundle dominant variant REFRATE RATE MAT includes SOFR + spread, floor, Interest Rate, and Maturity Date embedded in investment_identifier.",
+    "Bundle RATE MAT variant includes FIXED rate text, Interest Rate, optional literal PIK, and Maturity Date embedded in investment_identifier.",
+    "Evidence CLI table 35 row 1 shows the corresponding SOI headers: Spread Above Index, Interest Rate, and Maturity Date.",
+    "basis_spread is only extracted when the identifier states SOFR plus a percent spread.",
+    "fixed_rate is only extracted when the identifier states FIXED plus a percent rate.",
+    "PIK is treated as a terms flag only because the sample identifiers do not embed a separate numeric PIK rate.",
+    "Equity acquisition dates are present in identifiers but excluded from rate grammar extraction because they are not maturity dates."
+  ]
+}

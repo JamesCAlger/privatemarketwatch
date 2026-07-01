@@ -1,0 +1,44 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0000081955",
+  "entity_name": "RAND CAPITAL CORP",
+  "status": "PROPOSED",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "RATE"
+  },
+  "available_identifier_datapoints": [
+    "issuer",
+    "principal_amount",
+    "instrument_type",
+    "interest_rate"
+  ],
+  "unsupported_identifier_datapoints": [
+    "pik_rate",
+    "maturity_date",
+    "basis_spread",
+    "reference_rate_type",
+    "interest_rate_floor"
+  ],
+  "required_fields": [
+    "interest_rate"
+  ],
+  "extractors": [
+    {
+      "field": "interest_rate",
+      "regex": "\\b(?:at|Modified\\s+to|to)\\s+(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    }
+  ],
+  "pik_convention": "not_present_in_identifier",
+  "invariants": [
+    {
+      "name": "identifier_interest_rate_matches_twin_interest_rate",
+      "kind": "pct_agree",
+      "parsed": "interest_rate",
+      "twin": "interest_rate"
+    }
+  ]
+}

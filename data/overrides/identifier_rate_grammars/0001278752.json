@@ -1,0 +1,87 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001278752",
+  "entity_name": "MidCap Financial Investment Corp",
+  "version": 1,
+  "author": "Agent A2 staged proposal from 2025-12-31 bundle 0001278752_2025-12-31.json",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "SECDEBT REFRATE RATE MAT",
+    "note": "Dominant identifier strings contain secured-debt instrument text plus reference-rate spread, PIK terms, floor, and maturity date. Spread values are stated as bps after the reference rate, e.g. SOFR+200 means 2.00%. Identifier datapoints present include industry/sector, issuer/borrower, instrument type, tranche/facility type, reference rate, spread, PIK wording, floor, and maturity. Par/fair-value/source-table columns are not treated as identifier datapoints."
+  },
+  "available_identifier_datapoints": [
+    "industry_or_sector",
+    "issuer_or_borrower",
+    "instrument_type",
+    "tranche_or_facility_type",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "interest_rate_floor",
+    "maturity_date"
+  ],
+  "unsupported_identifier_datapoints": [
+    "principal_or_shares",
+    "cost",
+    "fair_value",
+    "pct_of_net_assets",
+    "source_table_column_headers"
+  ],
+  "pik_convention": "additive",
+  "_pik_convention_doc": "The dominant secured-debt samples state 'Cash plus X% PIK', indicating additive PIK wording in the identifier.",
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "(SOFR|SON|CORRA|SF|LIBOR|L|PRIME|P|EURIBOR|E)\\s*\\+\\s*[0-9]",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "SF": "SOFR",
+        "SOFR": "SOFR",
+        "SON": "SON",
+        "CORRA": "CORRA",
+        "L": "LIBOR",
+        "LIBOR": "LIBOR",
+        "P": "PRIME",
+        "PRIME": "PRIME",
+        "E": "EURIBOR",
+        "EURIBOR": "EURIBOR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "(?:SOFR|SON|CORRA|SF|LIBOR|L|PRIME|P|EURIBOR|E)\\s*\\+\\s*([0-9]{2,4})\\b(?!\\s*%)",
+      "group": 1,
+      "type": "bps"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "(?:Cash\\s+plus\\s+)?([0-9]+\\.?[0-9]*)\\s*%\\s*PIK",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate_floor",
+      "regex": "([0-9]+\\.?[0-9]*)\\s*%\\s*Floor",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "(?:Maturity(?:\\s+Date)?\\s+)?([0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4})\\s*$",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": "floating_if_reference_rate_else_fixed"
+  },
+  "invariants": [
+    {"name": "spread_vs_twin", "kind": "pct_agree", "parsed": "basis_spread", "twin": "basis_spread"},
+    {"name": "maturity_vs_twin", "kind": "date_agree", "parsed": "maturity_date", "twin": "maturity_date"},
+    {"name": "floating_has_reference", "kind": "implication", "if_present": "basis_spread", "then_present": "reference_rate_type"}
+  ],
+  "required_fields": ["reference_rate_type", "basis_spread", "maturity_date"],
+  "confidence": "medium",
+  "residual_risk": "One sampled 2024-12-31 revolver identifier states Maturity Date 11/18/28 while its structured twin shows 2026-11-18; this looks like a twin/source mismatch rather than identifier grammar failure. Held-out gate should adjudicate full-population consistency."
+}

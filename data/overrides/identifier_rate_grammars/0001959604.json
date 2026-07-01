@@ -1,0 +1,100 @@
+{
+    "cik":  "0001959604",
+    "schema":  "agentA-rate-grammar.v1",
+    "status":  "PROPOSED",
+    "applies_to":  {
+                       "regime":  "flattened",
+                       "signature":  "AFFIL ASSETTYPE SECDEBT REFRATE RATE MAT"
+                   },
+    "available_identifier_datapoints":  [
+                                            "affiliation/portfolio section",
+                                            "asset class or industry section",
+                                            "issuer",
+                                            "investment type",
+                                            "reference rate code",
+                                            "basis spread percentage",
+                                            "optional PIK percentage",
+                                            "maturity date"
+                                        ],
+    "unsupported_identifier_datapoints":  [
+                                              "cash interest leg when PIK is included",
+                                              "interest rate floor",
+                                              "all-in coupon total"
+                                          ],
+    "pik_convention":  "inclusive",
+    "required_fields":  [
+                            "reference_rate_type",
+                            "basis_spread",
+                            "maturity_date"
+                        ],
+    "extractors":  [
+                       {
+                           "field":  "reference_rate_type",
+                           "regex":  "\\bReference Rate and Spread\\s+([A-Z])\\s*\\+\\s*\\d+(?:\\.\\d+)?%",
+                           "group":  1,
+                           "type":  "ref_code",
+                           "map":  {
+                                       "S":  "SOFR"
+                                   }
+                       },
+                       {
+                           "field":  "basis_spread",
+                           "regex":  "\\bReference Rate and Spread\\s+[A-Z]\\s*\\+\\s*(\\d+(?:\\.\\d+)?)%",
+                           "group":  1,
+                           "type":  "pct",
+                           "map":  {
+
+                                   }
+                       },
+                       {
+                           "field":  "pik_rate",
+                           "regex":  "\\(includes\\s+(\\d+(?:\\.\\d+)?)%\\s+PIK\\)",
+                           "group":  1,
+                           "type":  "pct",
+                           "map":  {
+
+                                   }
+                       },
+                       {
+                           "field":  "maturity_date",
+                           "regex":  "\\bMaturity Date\\s+(\\d{1,2}/\\d{1,2}/\\d{4})\\b",
+                           "group":  1,
+                           "type":  "date_mdy",
+                           "map":  {
+
+                                   }
+                       }
+                   ],
+    "derivations":  [
+                        {
+                            "field":  "coupon_type",
+                            "value":  "floating",
+                            "when_present":  "reference_rate_type"
+                        }
+                    ],
+    "invariants":  [
+                       {
+                           "name":  "basis_spread_matches_structured_twin",
+                           "kind":  "pct_agree",
+                           "parsed":  "basis_spread",
+                           "twin":  "basis_spread"
+                       },
+                       {
+                           "name":  "maturity_date_matches_structured_twin",
+                           "kind":  "date_agree",
+                           "parsed":  "maturity_date",
+                           "twin":  "maturity_date"
+                       },
+                       {
+                           "name":  "spread_requires_reference_rate",
+                           "kind":  "implication",
+                           "if_present":  "basis_spread",
+                           "then_present":  "reference_rate_type"
+                       }
+                   ],
+    "notes":  [
+                  "Dominant embedded-rate identifier format is \u0027Reference Rate and Spread S + X% ... Maturity Date M/D/YYYY\u0027.",
+                  "PIK is optional and appears in newer and some older identifiers as \u0027(includes X% PIK)\u0027; it is not a required field.",
+                  "One 2024-12-31 sample has identifier maturity 12/30/2026 but structured twin maturity 2030-05-27, so maturity-date agreement may flag a source/twin inconsistency rather than a regex failure."
+              ]
+}

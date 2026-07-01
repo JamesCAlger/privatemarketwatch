@@ -1,0 +1,104 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001280784",
+  "entity_name": "Hercules Capital, Inc.",
+  "status": "PROPOSED",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "SECDEBT MAT REFRATE"
+  },
+  "available_identifier_datapoints": [
+    "issuer",
+    "instrument_type",
+    "maturity_month_year",
+    "reference_rate_type",
+    "basis_spread",
+    "fixed_interest_rate",
+    "floor_rate",
+    "cap_rate",
+    "pik_rate",
+    "exit_fee",
+    "acquisition_date"
+  ],
+  "unsupported_identifier_datapoints": [
+    "full_maturity_date_day",
+    "cash_interest_leg"
+  ],
+  "pik_convention": "additive",
+  "required_fields": [
+    "reference_rate_type",
+    "basis_spread"
+  ],
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "\\b(Prime|Daily SONIA|\\d+-month\\s+(?:SOFR|SONIA|BSBY|Eurodollar))\\s*\\+\\s*\\d+(?:\\.\\d+)?%",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "Prime": "PRIME",
+        "Daily SONIA": "SONIA",
+        "1-month SOFR": "SOFR",
+        "3-month SOFR": "SOFR",
+        "1-month SONIA": "SONIA",
+        "3-month SONIA": "SONIA",
+        "1-month BSBY": "BSBY",
+        "3-month BSBY": "BSBY",
+        "3-month Eurodollar": "EURODOLLAR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\b(?:Prime|Daily SONIA|\\d+-month\\s+(?:SOFR|SONIA|BSBY|Eurodollar))\\s*\\+\\s*(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
+      "field": "interest_rate",
+      "regex": "\\bFIXED\\s+(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
+      "field": "interest_rate_all_in",
+      "regex": "\\bCap rate\\s+(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
+      "field": "pik_rate",
+      "regex": "\\bPIK Interest\\s+(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
+      "field": "maturity_date",
+      "regex": "\\b(?:Maturity Date\\s+)?((?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{4})\\b",
+      "group": 1,
+      "type": "text",
+      "map": {}
+    }
+  ],
+  "derivations": [
+    {
+      "field": "coupon_type",
+      "kind": "presence",
+      "source": "reference_rate_type",
+      "if_present": "floating",
+      "if_absent": "fixed"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "floating_spread_has_reference",
+      "kind": "implication",
+      "if_present": "basis_spread",
+      "then_present": "reference_rate_type"
+    }
+  ],
+  "notes": "Identifiers contain issuer/type plus embedded maturity month-year, reference-rate spread, fixed coupon, floor/cap, PIK, and exit-fee text across comma-separated and flattened-and eras. Required fields are limited to the dominant floating-rate signatures; PIK, floor, cap, and fixed coupon are optional."
+}

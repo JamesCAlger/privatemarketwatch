@@ -1,0 +1,123 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001633858",
+  "entity_name": "Audax Credit BDC Inc.",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED_RATE_GRAMMAR",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "SECDEBT RATE MAT",
+    "_resolved_by": "harness resolve_applies_to (committed anchors)"
+  },
+  "available_identifier_datapoints": [
+    "issuer",
+    "industry_or_section",
+    "investment_type",
+    "tranche_or_lien_descriptor",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "interest_rate",
+    "acquisition_date",
+    "maturity_date"
+  ],
+  "unsupported_identifier_datapoints": [
+    "floor",
+    "cash_leg_rate",
+    "fair_value",
+    "par_or_shares",
+    "amortized_cost"
+  ],
+  "dominant_signatures": [
+    "RATE MAT",
+    "RATE",
+    "REFRATE RATE MAT"
+  ],
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "\\bIndex\\s+(?P<reference_rate_type>S\\+)",
+      "group": "reference_rate_type",
+      "type": "ref_code",
+      "map": {
+        "S+": "SOFR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\bSpread\\s+(?P<basis_spread>\\d+(?:\\.\\d+)?)%",
+      "group": "basis_spread",
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "\\bSpread\\s+(?:\\d+(?:\\.\\d+)?%\\s*,\\s*)?(?P<pik_rate>\\d+(?:\\.\\d+)?)%\\s+PIK\\b",
+      "group": "pik_rate",
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "\\bInterest\\s+Rate\\s+(?P<interest_rate>\\d+(?:\\.\\d+)?)%",
+      "group": "interest_rate",
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "\\bMaturity(?:\\s+Date)?\\s+(?P<maturity_date>\\d{1,2}/\\d{1,2}/+\\d{4})\\b",
+      "group": "maturity_date",
+      "type": "date_mdy"
+    }
+  ],
+  "unit_conventions": {
+    "basis_spread": "identifier percent string; convert from pct to decimal downstream",
+    "pik_rate": "identifier percent string; optional",
+    "interest_rate": "identifier percent string; convert from pct to decimal downstream",
+    "maturity_date": "m/d/yyyy; some source identifiers contain a doubled slash before the year"
+  },
+  "derivations": {
+    "coupon_type": {
+      "rule": "floating_if_reference_rate_type_present_else_fixed"
+    }
+  },
+  "pik_convention": "additive",
+  "required_fields": [
+    "reference_rate_type"
+  ],
+  "optional_fields": [
+    "pik_rate"
+  ],
+  "invariants": [
+    {
+      "name": "basis_spread_matches_twin",
+      "kind": "pct_agree",
+      "field": "basis_spread",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "interest_rate_matches_twin",
+      "kind": "pct_agree",
+      "field": "interest_rate",
+      "parsed": "interest_rate",
+      "twin": "interest_rate"
+    },
+    {
+      "name": "maturity_date_matches_twin",
+      "kind": "date_agree",
+      "field": "maturity_date",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle",
+      "observation": "Dominant RATE MAT samples embed Index S+, Spread, optional PIK, Interest Rate, Acquisition Date, and Maturity Date tokens in investment_identifier."
+    },
+    {
+      "source": "roam",
+      "accession_number": "0001193125-26-117535",
+      "observation": "Table 29 row 1 shows columns Investment Type, Index, Spread, Interest Rate, Acquisition Date, and Maturity Date; table 29 row 14 shows Discovery Education with S+, 2.88%, 5.70% PIK, 12.23%, and 4/9/2029."
+    }
+  ]
+}
