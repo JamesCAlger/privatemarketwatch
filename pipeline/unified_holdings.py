@@ -13,7 +13,13 @@ from typing import Optional, Union
 import duckdb
 import pandas as pd
 
-from pipeline import classification, lien_classification, staging_bdc, staging_nport
+from pipeline import (
+    classification,
+    instrument_classification,
+    lien_classification,
+    staging_bdc,
+    staging_nport,
+)
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     BDC_HOLDINGS_PARQUET_FILE,
@@ -63,10 +69,13 @@ UNIFIED_COLUMNS = [
     "exposure_type", "asset_class",
     "fair_value_level",
     # Rate/spread
-    "interest_rate", "basis_spread", "reference_rate_type",
+    "interest_rate", "interest_rate_source",
+    "basis_spread", "basis_spread_source",
+    "reference_rate_type",
+    "reference_rate_source",
     "coupon_type", "pik_rate",
     # Debt details
-    "maturity_date",
+    "maturity_date", "maturity_date_source",
     # Source-specific (BDC)
     "bdc_investment_identifier", "bdc_form_type", "bdc_dimensions_raw",
     "bdc_unrealized_gain_loss",
@@ -92,6 +101,8 @@ UNIFIED_COLUMNS = [
     "gics_sub_industry",
     # Lien position (First Lien / Second Lien / Unsecured; DIRECT_LENDING only)
     "lien_position",
+    # Instrument type (Revolver / Delayed Draw Term Loan / Term Loan / Unitranche)
+    "instrument_type",
     # Normalized position key for multi-tranche disambiguation
     "position_key",
     # Position tracking (populated by --returns step)
@@ -788,8 +799,10 @@ def build_unified_holdings(
     exposure_case = classification._sql_classify_exposure_type()
     asset_class_case = classification._sql_classify_asset_class()
     lien_case = lien_classification._sql_classify_lien()
+    instr_case = instrument_classification._sql_classify_instrument_type()
     _special_cols = {
         "index_classification", "exposure_type", "asset_class", "lien_position",
+        "instrument_type",
         "principal_amount", "principal_amount_usd", "principal_fx_status", "cusip",
     }
     col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _special_cols)
@@ -978,7 +991,14 @@ def build_unified_holdings(
             {idx_case} AS _index_class,
             {exposure_case} AS _exposure_type,
             {asset_class_case} AS _asset_class,
-            {lien_case} AS _lien_raw
+            -- Keyword classifier first; fall back to the iXBRL section-header lien
+            -- (staging lien_position is populated ONLY by the reconciled iXBRL
+            -- field-status overlay, so this is additive: it fills lien where the
+            -- keyword rule is blank without overriding existing classifications).
+            COALESCE(NULLIF(TRIM({lien_case}), ''), NULLIF(TRIM(lien_position), '')) AS _lien_raw,
+            -- Instrument type from row text (keyword), falling back to any staged
+            -- value. Applies to all rows; the keywords only fire on debt products.
+            COALESCE(NULLIF(TRIM({instr_case}), ''), NULLIF(TRIM(instrument_type), '')) AS _instr_raw
         FROM with_fund_text
     ),
     -- Cost proxy: fill NULL/zero cost with first observed fair_value
@@ -1110,7 +1130,8 @@ def build_unified_holdings(
         _exposure_type AS exposure_type,
         _asset_class AS asset_class,
         CASE WHEN _index_class = 'DIRECT_LENDING' THEN _lien_raw
-             ELSE NULL END AS lien_position
+             ELSE NULL END AS lien_position,
+        _instr_raw AS instrument_type
     FROM with_shares_fix
     """
 

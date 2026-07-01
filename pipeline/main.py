@@ -705,12 +705,19 @@ def main() -> None:
                          exc_info=True)
 
         try:
-            from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+            from pipeline.bdc_sector_breakdown import (
+                extract_bdc_instrument_type_breakdown,
+                extract_bdc_lien_breakdown,
+                extract_bdc_sector_breakdown,
+            )
             from pipeline.bdc_sector_reconciliation import (
                 reconcile_bdc_sector_breakdown,
             )
             extract_bdc_sector_breakdown()
             reconcile_bdc_sector_breakdown()
+            # Aggregate lien + instrument-type breakdowns (XBRL-member subtotals).
+            extract_bdc_lien_breakdown()
+            extract_bdc_instrument_type_breakdown()
         except Exception as exc:
             logger.error("BDC sector breakdown failed: %s", exc,
                          exc_info=True)

@@ -45,7 +45,9 @@ logger = logging.getLogger(__name__)
 
 _SECOND_LIEN_KEYWORDS: list[str] = [
     "second lien",
+    "second-lien",
     "2nd lien",
+    "2nd-lien",
     "junior lien",
     "junior secured",
 ]
@@ -58,9 +60,13 @@ _UNSECURED_KEYWORDS: list[str] = [
 
 _FIRST_LIEN_KEYWORDS: list[str] = [
     "first lien",
+    "first-lien",
     "1st lien",
+    "1st-lien",
     "senior secured",
     "unitranche",
+    "one stop",        # Golub "One Stop" = unitranche/first-lien product
+    "one-stop",
     "super senior",
     "last out",
     "first out",

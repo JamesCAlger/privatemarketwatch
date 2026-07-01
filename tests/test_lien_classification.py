@@ -86,6 +86,35 @@ class TestClassifyLien:
     def test_senior_lien(self):
         assert classify_lien("Acme Corp Senior Lien Loan", None) == "First Lien"
 
+    # --- Lever 2: hyphenated + product-name variants ---
+    def test_first_lien_hyphenated(self):
+        # Sixth Street writes "First-lien loan (...)"
+        assert classify_lien("First-lien loan", None) == "First Lien"
+
+    def test_second_lien_hyphenated(self):
+        assert classify_lien("Second-lien term loan", None) == "Second Lien"
+
+    def test_one_stop_via_identifier(self):
+        # Golub tags first-lien/unitranche as "One stop" in the identifier
+        assert classify_lien(
+            "ABC Legal Holdings, LLC", None,
+            bdc_investment_identifier="ABC Legal Holdings, LLC, One stop 1",
+        ) == "First Lien"
+
+    def test_one_stop_hyphen(self):
+        assert classify_lien("Acme Corp One-Stop Loan", None) == "First Lien"
+
+    def test_one_stop_does_not_override_second_lien(self):
+        # priority guard: an explicit second-lien marker still wins
+        assert classify_lien("Acme One Stop Second Lien", None) == "Second Lien"
+
+    def test_one_stop_only_for_direct_lending(self):
+        # false-positive guard: non-DL positions are never lien-classified
+        assert classify_lien(
+            "One Stop Shop Holdings", None,
+            index_classification="DIRECT_EQUITY",
+        ) is None
+
     # --- Priority order ---
     def test_second_lien_beats_first_lien(self):
         """Second lien checked before first lien."""
