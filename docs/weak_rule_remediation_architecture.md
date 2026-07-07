@@ -172,6 +172,27 @@ deterministic checker needs.
   last calibration — triggered, not calendar; sampled, never census. B1's independence
   is what makes the calibration trustworthy: the rule-family gates must not grade their
   own calibration.
+- **Experiment (pre-adoption): per-fingerprint stratification of B1 calibration.**
+  Per-rule FP rates are cohort averages; if real-rates vary materially by mechanism,
+  the finer routing prior is per fingerprint group `(rule_id, cik)` — a sampled-90%
+  group goes direct to B2 while a sampled-~0% group waits behind its gate. Whether the
+  variation is material is an empirical question the completed ens2 run can already
+  answer: every ens2 adjudication carries (rule_id, cik), so step 1 is a RETROSPECTIVE
+  re-cut of the existing 875 decided verdicts by fingerprint group — no new
+  adjudications. Measure: (a) within-rule between-group real-rate dispersion
+  (beta-binomial overdispersion vs the per-rule pooled rate); (b) the
+  routing-disagreement rate — how many groups a per-group prior would route
+  differently than the per-rule prior, weighted by flagged FV; (c) how many groups
+  carry enough samples (n>=10) for a per-group estimate to mean anything. Decision
+  rule: if dispersion is immaterial or the disagreement affects trivial FV, per-rule
+  priors suffice — stratification is not worth the sample cost (30-50 adjudications
+  per stratum across hundreds of strata does not scale on a 2-wide fleet). If
+  material, adopt the cheap form: keep sampling per rule but RECORD each sampled
+  flag's fingerprint, and spend dedicated per-group samples only on high-FV groups the
+  retrospective cut flags as divergent — validated by a small prospective sample of
+  the top such groups before any routing changes. Either way a group-level verdict
+  remains a RATE, never row-level truth: it routes; it never authorizes a mass fix
+  (that authority stays with acceptance sampling, section 6.3).
 
 ## 6. Mechanism clustering
 

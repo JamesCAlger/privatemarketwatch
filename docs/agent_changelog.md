@@ -6374,3 +6374,16 @@ these need source-anchored checks, not row-local predicates.
   held-out gate -> n=25 acceptance sample -> cross-CIK library propagation via the
   bounded-template lane -> promotion wave -> rebuild/diff/baseline -> four curves ->
   quality tiers -> rule retirement.
+
+## 2026-07-07 -- Spec amendment: per-fingerprint B1 stratification as a pre-adoption experiment
+
+- docs/weak_rule_remediation_architecture.md section 5: added an experiment (not an
+  adopted design) testing whether B1 calibration should stratify by fingerprint group
+  (rule_id, cik) instead of per rule. Step 1 is retrospective and free: re-cut the
+  875 decided ens2 adjudications by fingerprint group; measure within-rule
+  between-group real-rate overdispersion, FV-weighted routing-disagreement vs per-rule
+  priors, and per-group sample sufficiency (n>=10). Adopt the cheap form (record
+  fingerprints on per-rule samples; dedicated per-group samples only for high-FV
+  divergent groups, prospectively validated) only if the retrospective cut shows
+  material dispersion. Group verdicts remain rates for routing, never authorization
+  for mass fixes. Doc-only change.
