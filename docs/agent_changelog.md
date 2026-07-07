@@ -6387,3 +6387,35 @@ these need source-anchored checks, not row-local predicates.
   divergent groups, prospectively validated) only if the retrospective cut shows
   material dispersion. Group verdicts remain rates for routing, never authorization
   for mass fixes. Doc-only change.
+
+## 2026-07-07 -- Fingerprint stratification retrospective re-cut (spec section 5 experiment, step 1)
+
+- New scripts/ensemble/eda_fingerprint_stratification.py: re-cuts the 875 decided ens2
+  B1 adjudications into 420 (rule_id, cik) fingerprint groups; Monte Carlo dispersion
+  vs pooled per-rule real-rates, routing disagreement vs the 0.8 direct-dispatch
+  boundary, per-group sufficiency. Outputs fingerprint_stratification_by_rule.csv +
+  fingerprint_groups.csv under data/output/ensemble/ens2/. n_units used as the weight
+  (review-lane queue rows carry no fv_at_risk).
+- Findings: median group n=1 (240/420 singletons) -- census per-group calibration is
+  unreachable. Overdispersion concentrated: FX01 p~5e-5 (2 CIKs ~100% real vs pooled
+  0.51 carry 27% of sampled FX01 flagged units), PP03 p=0.017; GAV_BDC02/PCT01
+  marginal. Per-filer heterogeneity confirmed (0001803498 ~100% real across FX01+PP03;
+  0002031750 across A07+X08).
+- Decision: adopt the cheap form only (record fingerprints on future B1 samples; no
+  per-group sampling infrastructure). FX01's pending deterministic gate supersedes its
+  routing prior; re-run the cut after that gate ships. Full write-up appended to
+  data/output/data_investigation_results.md (2026-07-07 entry).
+
+## 2026-07-07 -- Spec: stratification step-1 results + execution order (gap 1 before new B1 batches)
+
+- docs/weak_rule_remediation_architecture.md section 5: recorded the step-1
+  retrospective result (420 groups, median n=1; FX01 the only correction-surviving
+  overdispersion; cheap form adopted) and specced step 2 -- per-group minimum quotas
+  ride the FIRST post-gap-1 recalibration batch (~150-250 verdicts); printed-cell gate
+  as the at-scale verdict source; era-windowing of verdicts mandatory.
+- Section 8.1: execution-order decision -- no new B1 batches before the first
+  post-gap-1 rebuild; the backlog of validated fixes (41-CIK overnight gate-PASS
+  rules, anchor overrides) changes the firing pool, so batches drawn now would
+  adjudicate flags a rebuild erases. Next step for the project = gap 1 (Layer D
+  anchor kind -> Layer A wrapper promotion -> Layers B/C build hook + audit),
+  then wave 1 + rebuild + battery re-run, then the stratified B1 batch.
