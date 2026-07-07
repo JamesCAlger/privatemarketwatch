@@ -6290,3 +6290,87 @@ Plan: Phase 0 structure audit as first-class validation; Phase 1 guarded determi
 (cash recall + demote legal-form tokens from PE signals) with FP tests; Phase 2 capture iXBRL
 type axis/SOI label + fund-strategy prior; Phase 3 agentic look-through as per-CIK audited
 config. No code or data changed in this session.
+
+## 2026-07-05 -- Weak-rule FP calibration from ens2 B1 adjudications (one-shot, deterministic)
+Calibrated the high-FP weak review-lane rules using the 875 decided ens2 B1 adjudications
+(360 real / 515 false_alarm). Ensemble (co-firing) signal was REJECTED (flag real-rate flat
+~0.40 across degree strata); the per-rule FP table + FA-mechanism clusters were used instead.
+Every change retro-tested against adjudicated labels (new script
+scripts/ensemble/calibration_retrotest.py; results data/output/ensemble/ens2/calibration_retrotest.csv).
+Changes:
+- pipeline/column_validation.py C103 (neg FV, was 97.5% FP): now excludes sign-consistent
+  unfunded-commitment marks (cost also negative, or revolver/delayed-draw/unfunded/undrawn/
+  commitment/LOC/credit-facility text via new _unfunded_position_sql()). Retro-test: 36/39 FA
+  groups suppressed, rows 50,064 -> 794. Known loss: 1 adjudicated real (footnote-marker
+  mis-parse inside a legitimate-negatives group).
+- C104 (zero FV, 94.3% FP) demoted WARN/REVIEW -> INFO/TRACK_ONLY (source dash legitimately = 0;
+  substance guard failed retro-test 4/50). C404 (neg pct, 76.9% FP) demoted likewise
+  (sign-exclusion REJECTED: lost 3/3 reals).
+- C107 (neg cost, 80% FP) deliberately UNCHANGED: all candidate cuts lose adjudicated reals
+  faster than FAs (comment in code pins this; do not re-attempt row-local cuts without new evidence).
+- pipeline/validate_holdings.py PCT01 high_pct_sum bound 200 -> 225 (filers legitimately print
+  200-225% totals; retro-test 8/9 FA suppressed, 3/4 reals kept, flagged cik-qtrs 386 -> 130).
+- scripts/shadow_weak_engine.py: fmt_cost min 0 -> -3e9 and fmt_pct_of_net_assets min 0 -> -100
+  (both were 100% duplicates of C107/C404 firings); pct_position_concentration gate now
+  non-negative pct only (was 99% duplicate of the negative-pct family; 6,821 -> 84 rows).
+- FX02/FX03 USD-alias guard, X01 preferred-equity exclusion, X07 equity exclusion (committed in
+  this same branch state) are part of the same calibration batch.
+Tests: tests/test_column_validation.py 38 pass (+6 new C103/C104/C404/C107 tests);
+tests/test_validate_holdings.py 140 pass (+1 new 210%-ok boundary test). Validation artifacts
+rebuilt via python -m pipeline.main --validate. Unchanged high-FP rules without a separable
+deterministic mechanism: C107 80%, fmt_basis_spread family, FX01 49%, X08 55%, PP01 53% --
+these need source-anchored checks, not row-local predicates.
+
+## 2026-07-07 -- Weak-rule remediation architecture design doc
+
+- New doc: docs/weak_rule_remediation_architecture.md (DRAFT for review, no code changes).
+  Generalizes the B1->B2->anchor->B2 conservation chain into a multi-lane weak-rule
+  remediation system: worklist-as-contract with realness_basis (B1 becomes one producer
+  among several), per-rule-family gates (printed-cell reconciliation for C107/X08,
+  structured-attribute check for FX01, PP01 routed into the conservation lane),
+  mechanism-signature clustering with acceptance sampling, cross-CIK mechanism library,
+  rank-don't-cut per-CIK FV materiality, lane ordering rows->values->fields->derived,
+  four-curves-per-pass convergence contract, and a versioned promotion/rollback protocol
+  for data/overrides (one commit per wave, provenance fields in rule files,
+  rollback = revert config + deterministic rebuild).
+- Required B2 change identified before any calibrated_prior routing: a first-class
+  no_defect exit with evidence citation + held-out spot-checks (B2 currently treats a
+  no-op as failure, which is only safe when realness was established upstream).
+- Open questions for review are listed in the doc (section 11): sampling rates,
+  acceptance thresholds, gate build order, recalibration triggers, library location.
+
+## 2026-07-07 -- Weak-rule remediation spec rev 2 (implementation cross-check amendments)
+
+- docs/weak_rule_remediation_architecture.md amended after cross-checking the draft
+  against scripts/agent_investigate/, scripts/agent_b2/, pipeline/agent_rule.py, and
+  scripts/shadow_conservation_engine.py. Doc-only change; no code or data touched.
+- 3.1 now names modules and disambiguates the "B2" name collision: the spec's B2
+  investigator = scripts/agent_investigate/run_investigation.py; scripts/agent_b2/ is
+  the original bounded-template lane (works well in scope, no FPs), retained as the
+  executor for mechanism-library instantiations where the mechanism is pre-decided.
+- 3.2 adds the explicit worklist schema (rule_name, realness_basis, priority_score)
+  plus a gate_screen producer row; 3.3 unifies no_defect verification with the
+  printed-cell gate (deterministic at 100% once the primitive exists; sampling is a
+  bridge) and requires the reviewed_workflow B1-only dispatch guard relaxation to be
+  an explicit decision.
+- 4 adds the citation schema (extends B1 culprit_citations with column + text
+  normalization rules). 7 adds no_defect as a terminal state and flags the 0.5% vs
+  1.0% tolerance mismatch (worker prompt vs loop_decision/flag threshold) as a
+  reviewer decision.
+- 8.1 (new): gap 1 expanded to a full design -- three promotion stores with no
+  production consumer (verified: nothing in pipeline/ reads agent_b2_corrections,
+  agent_investigate_rules, or agent_anchor); four-layer fix (A wrapper patches into
+  bdc_xbrl_wrappers; B raw-staging corrections + C post-unified rules inside
+  build_unified_holdings; D verified_override anchor kind in the shadow conservation
+  engine); application requirements (deterministic order/scoping, rebuild-time audit
+  vs measured_impact with drift WARN, injectable loader for test isolation);
+  governance loop; retire -Fresh as default; sequencing D->A->B/C with per-CIK parity.
+- 10.3 provenance authorship split (promotion machinery stamps gate/sample stats,
+  never the authoring agent) + new cross-wave composition/re-validation item.
+- 11 updated (Wilson grounding for acceptance samples: all-pass n>=25 one-sided /
+  n>=35 two-sided for a 90% lower bound; new tolerance + drift-threshold questions).
+- 13 (new): worked example tracing one C107 footnote-marker cluster through battery ->
+  fingerprint -> printed-cell gate (33 real / 8 no_defect) -> B2 rule authoring ->
+  held-out gate -> n=25 acceptance sample -> cross-CIK library propagation via the
+  bounded-template lane -> promotion wave -> rebuild/diff/baseline -> four curves ->
+  quality tiers -> rule retirement.
