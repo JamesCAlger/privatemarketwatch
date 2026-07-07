@@ -216,6 +216,131 @@ class TestColumnContracts:
         assert len(result) == 1
         assert result.iloc[0]["severity"] == SEVERITY_WARN
 
+    # --- X01 preferred-equity tightening -------------------------------------
+    def test_x01_preferred_equity_rate_is_not_flagged(self):
+        # False alarm: preferred equity legitimately carries a stated dividend
+        # rate. It must NOT fire X01 after the tightening.
+        df = _make_unified_df([{
+            "asset_class": "PRIVATE_EQUITY",
+            "index_classification": "PREFERRED_EQUITY",
+            "interest_rate": "16.0",
+        }])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X01")) == 0
+
+    def test_x01_common_equity_rate_still_flagged(self):
+        # True positive retained: common equity with a rate is still suspicious.
+        df = _make_unified_df([{
+            "asset_class": "PRIVATE_EQUITY",
+            "index_classification": "COMMON_EQUITY",
+            "interest_rate": "16.0",
+        }])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X01")) == 1
+
+    # --- X07 equity-appreciation tightening ----------------------------------
+    def test_x07_equity_10x_appreciation_is_not_flagged(self):
+        # False alarm: equity/warrants legitimately appreciate >10x cost.
+        df = _make_unified_df([{
+            "asset_class": "PRIVATE_EQUITY",
+            "index_classification": "COMMON_EQUITY",
+            "cost": "100000",
+            "fair_value": "5000000",  # 50x
+        }])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X07")) == 0
+
+    def test_x07_debt_10x_still_flagged(self):
+        # True positive retained: a loan at 50x cost is a real outlier.
+        df = _make_unified_df([{
+            "asset_class": "PRIVATE_CREDIT",
+            "cost": "100000",
+            "fair_value": "5000000",  # 50x
+        }])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "X07")) == 1
+
+    # --- FX02 / FX03 USD-unit canonicalization -------------------------------
+    def test_fx02_noncanonical_usd_token_is_not_flagged(self):
+        # False alarm: non-canonical USD unit tokens are still dollars.
+        for tok in ("U_USD", "UNIT_USD", "UNIT_STANDARD_USD_K5CWMI1_BU-1-I27"):
+            df = _make_unified_df([{"source": "bdc", "fair_value_currency": tok}])
+            issues, _ = validate_column_contracts(df)
+            assert len(_issues_by_rule(issues, "FX02")) == 0, tok
+
+    def test_fx02_genuine_non_usd_still_flagged(self):
+        # True positive retained: a real non-USD unit must still fire.
+        df = _make_unified_df([{"source": "bdc", "fair_value_currency": "EUR"}])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "FX02")) == 1
+
+    def test_fx03_noncanonical_usd_token_is_not_flagged(self):
+        for tok in ("U_USD", "UNIT_USD", "UNIT_STANDARD_USD_TJGR_KXHI0CIJ"):
+            df = _make_unified_df([{"source": "bdc", "cost_currency": tok}])
+            issues, _ = validate_column_contracts(df)
+            assert len(_issues_by_rule(issues, "FX03")) == 0, tok
+
+    def test_fx03_genuine_non_usd_still_flagged(self):
+        df = _make_unified_df([{"source": "bdc", "cost_currency": "GBP"}])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "FX03")) == 1
+
+    # --- C103 negative-FV calibration -----------------------------------------
+    def test_c103_unexplained_negative_fv_still_flagged(self):
+        # True positive retained: negative FV with positive cost and no
+        # unfunded-commitment text is exactly the mis-parse class C103 exists for.
+        df = _make_unified_df([{"fair_value": "-125000", "cost": "1000000"}])
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "C103")
+        assert len(result) == 1
+        assert result.iloc[0]["severity"] == SEVERITY_WARN
+
+    def test_c103_sign_consistent_negative_mark_not_flagged(self):
+        # False alarm: cost and FV both negative is a filer's own
+        # parenthetical unfunded-commitment mark.
+        df = _make_unified_df([{"fair_value": "-125000", "cost": "-68000"}])
+        issues, _ = validate_column_contracts(df)
+        assert len(_issues_by_rule(issues, "C103")) == 0
+
+    def test_c103_unfunded_keyword_not_flagged(self):
+        # False alarm: revolver / delayed-draw text marks a commitment position.
+        for kw in ("Revolving Loan", "Delayed Draw Term Loan", "Unfunded",
+                   "Letter of Credit"):
+            df = _make_unified_df([{
+                "fair_value": "-56000",
+                "cost": "1000000",
+                "bdc_investment_identifier": f"Acme Corp - First Lien {kw}",
+            }])
+            issues, _ = validate_column_contracts(df)
+            assert len(_issues_by_rule(issues, "C103")) == 0, kw
+
+    # --- C104 / C404 demotion --------------------------------------------------
+    def test_c104_zero_fv_is_info_track_only(self):
+        df = _make_unified_df([{"fair_value": "0"}])
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "C104")
+        assert len(result) == 1
+        assert result.iloc[0]["severity"] == SEVERITY_INFO
+        assert result.iloc[0]["action"] == "TRACK_ONLY"
+
+    def test_c404_negative_pct_is_info_track_only(self):
+        df = _make_unified_df([{"pct_of_net_assets": "-0.2"}])
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "C404")
+        assert len(result) == 1
+        assert result.iloc[0]["severity"] == SEVERITY_INFO
+        assert result.iloc[0]["action"] == "TRACK_ONLY"
+
+    def test_c107_negative_cost_still_warns(self):
+        # Regression pin: C107 was deliberately NOT scope-cut (retro-test
+        # showed sign/keyword exclusions lose reals faster than false alarms).
+        df = _make_unified_df([{"cost": "-534000"}])
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "C107")
+        assert len(result) == 1
+        assert result.iloc[0]["severity"] == SEVERITY_WARN
+        assert result.iloc[0]["action"] == "REVIEW"
+
 
 class TestReportAdapters:
     def test_gav_adapter_severity(self):

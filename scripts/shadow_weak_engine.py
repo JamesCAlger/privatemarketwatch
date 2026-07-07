@@ -69,14 +69,21 @@ COLUMN_FORMAT_CONTRACT: dict[str, dict] = {
     "cusip":               {"type": "string_exact", "len": 9},
     "isin":                {"type": "string_exact", "len": 12},
     "fair_value":          {"type": "decimal", "min": -1e9, "max": 3e9},   # FV may be negative (shorts); cap $3B/row
-    "cost":                {"type": "decimal", "min": 0,    "max": 3e9},
+    # cost min widened 2026-07-05: negative amortized cost on unfunded-
+    # commitment marks is filer presentation (ens2: fmt_cost 72% FP, and 100%
+    # of its firings duplicated C107's negative-cost rows). Negative-cost
+    # review signal lives in column_validation C107.
+    "cost":                {"type": "decimal", "min": -3e9, "max": 3e9},
     "principal_amount":    {"type": "decimal", "min": 0,    "max": 1e11},
     "principal_amount_usd":{"type": "decimal", "min": 0,    "max": 1e11},
     "shares_held":         {"type": "decimal", "min": 0,    "max": 1e12},
     "interest_rate":       {"type": "decimal", "min": 0,    "max": 25},
     "basis_spread":        {"type": "decimal", "min": 0,    "max": 15},
     "pik_rate":            {"type": "decimal", "min": 0,    "max": 20},
-    "pct_of_net_assets":   {"type": "decimal", "min": 0,    "max": 100},   # per-row contract; concentration is a separate semantic rule
+    # pct min widened 2026-07-05: negative pct is filer presentation on
+    # negative-FV rows / negative-NAV quarters (ens2: 86% FP; all firings
+    # duplicated C404). >100 stays flagged here and as X09 in the strong lane.
+    "pct_of_net_assets":   {"type": "decimal", "min": -100, "max": 100},   # per-row contract; concentration is a separate semantic rule
     "exposure_type":       {"type": "enum", "values": ["DIRECT", "FUND", "LIQUID"]},
     "asset_class":         {"type": "enum", "values": ["CASH", "HEDGE_FUND", "OTHER",
                             "PRIVATE_CREDIT", "PRIVATE_EQUITY", "REAL_ESTATE", "STRUCTURED_CREDIT"]},
@@ -127,8 +134,13 @@ def _contract_rules() -> list[WeakRule]:
 
 # Semantic weak rules (beyond pure column format).
 SEMANTIC_RULES: list[WeakRule] = [
-    WeakRule("pct_position_concentration", "row", "pct_of_net_assets IS NOT NULL",
-             holds_sql="TRY_CAST(pct_of_net_assets AS DOUBLE) BETWEEN 0 AND 25",
+    # Gate restricted to non-negative pct 2026-07-05: the 0-25 band made this
+    # rule fire on every negative-pct row too (6,737 of its 6,821 firings were
+    # duplicates of the negative-pct family; ens2 FP 73%). Only genuine >25%
+    # concentration remains (84 rows).
+    WeakRule("pct_position_concentration", "row",
+             "pct_of_net_assets IS NOT NULL AND TRY_CAST(pct_of_net_assets AS DOUBLE) >= 0",
+             holds_sql="TRY_CAST(pct_of_net_assets AS DOUBLE) <= 25",
              note="per-position pct <= 25% (concentration flag)"),
     WeakRule("maturity_not_past", "row",
              "index_classification = 'DIRECT_LENDING' AND maturity_date IS NOT NULL "

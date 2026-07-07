@@ -4161,8 +4161,26 @@ class TestCheckPctOfNetAssetsSum:
         df = _make_unified_df(rows)
         result = check_pct_of_net_assets_sum(df)
         assert len(result) == 1
-        assert float(result.iloc[0]["pct_sum"]) > 200
+        assert float(result.iloc[0]["pct_sum"]) > 225
         assert result.iloc[0]["flag"] == "high_pct_sum"
+
+    def test_levered_bdc_sum_within_225_is_ok(self):
+        """Calibrated bound: filers legitimately print totals of 200-225% of
+        net assets (ens2 adjudications), so 210% must NOT flag."""
+        rows = []
+        for i in range(10):
+            rows.append({
+                "source": "bdc", "cik": "100", "entity_name": "BDC A",
+                "issuer_name": f"Company {i}",
+                "fair_value": "1000000",
+                "pct_of_net_assets": "21.0",
+                "report_date": "2024-03-31",
+            })
+        df = _make_unified_df(rows)
+        result = check_pct_of_net_assets_sum(df)
+        assert len(result) == 1
+        assert abs(float(result.iloc[0]["pct_sum"]) - 210.0) < 0.1
+        assert result.iloc[0]["flag"] == "ok"
 
     def test_low_sum(self):
         """5 positions with pct=8% each -> sum=40%, flag=low_pct_sum."""
