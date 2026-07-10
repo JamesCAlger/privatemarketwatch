@@ -1,0 +1,34 @@
+{
+  "cik": "1919369",
+  "rule_id": "qf_holdings_20251231_principal_rescale",
+  "rule_type": "value_rescale",
+  "action": "rescale",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "issuer_name = 'QF Holdings, Inc.' AND instrument_description = 'First-Lien Debt' AND principal_amount = '33449.0' AND bdc_dimensions_raw LIKE '%QF Holdings, Inc.%'",
+  "field": "principal_amount",
+  "factor": 1000.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings row for QF Holdings, Inc. at 2025-12-31 has principal_amount=33449.0, cost=33242.0, fair_value=33224.0; the same QF Holdings position at 2026-03-31 has principal_amount=33449000.0, cost=33248000.0, fair_value=33224000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The QF fair_value rescale predicate matches one row and adds 33190776.0, exactly the 2025-12-31 fair-value residual."
+    }
+  ],
+  "rationale": "Principal amount on the malformed QF Holdings row shares the same thousands-versus-dollars scale defect as cost and fair_value. Rescaling principal_amount by 1000 makes the position internally consistent with the already-correct 2026-03-31 QF row.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 0.0,
+      "residual_before": -33190776.0,
+      "residual_after": -33190776.0
+    }
+  }
+}

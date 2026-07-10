@@ -1,0 +1,53 @@
+{
+  "cik": "1715933",
+  "rule_id": "1715933_2025q2_add_cash_short_term_investments",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-06-30"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-06-30",
+      "issuer_name": "Cash Equivalents",
+      "bdc_investment_identifier": "Cash Equivalents",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Cash Equivalents",
+      "source_row_id": "filing accession 0000950170-25-107431 table 7 row 29",
+      "fair_value": 7095586.0,
+      "cost": 7095586.0,
+      "asset_category": "cash_equivalent"
+    },
+    {
+      "report_date": "2025-06-30",
+      "issuer_name": "Short-term Investments",
+      "bdc_investment_identifier": "Short-term Investments",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments",
+      "source_row_id": "filing accession 0000950170-25-107431 table 7 row 32",
+      "fair_value": 394466500.0,
+      "cost": 394466500.0,
+      "asset_category": "short_term_investment"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 7 rows 26, 29, 32 show Total Debt & Equity Investments fair value 691,956,192; Total Cash Equivalents fair value 7,095,586; Total Short-term Investments fair value 394,466,500."
+    },
+    {
+      "source": "query",
+      "quote": "Staging/holdings searches for Cash, Treasury, Short-term, and First American returned no 2025-06-30 cash or short-term investment rows, while the anchor override identifies them as printed components of Total Investments."
+    }
+  ],
+  "rationale": "The extractor dropped the printed cash-equivalent and short-term investment components that are part of the filer's Total Investments anchor. Adding those two source-backed filing rows restores the omitted investment components after duplicate affiliated-axis rows are excluded.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 2,
+      "fv": 401562086.0,
+      "residual_before": -401562086.0,
+      "residual_after": 0.0
+    }
+  }
+}

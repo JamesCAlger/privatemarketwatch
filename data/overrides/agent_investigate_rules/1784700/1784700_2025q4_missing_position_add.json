@@ -1,0 +1,132 @@
+{
+  "cik": "1784700",
+  "rule_id": "1784700-2025q4-missing-current-period-positions",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For report_date='2025-12-31', holdings fair_value sums to 844882000 while current-period staging fair_value sums to 849354000 and fund_financials investments_at_fair_value is 849354000."
+    },
+    {
+      "source": "query",
+      "quote": "The 11 nonzero current-period staging rows absent from holdings by dimensions_raw/fair_value/cost sum to fair_value 4472000, exactly the residual against the validated anchor."
+    }
+  ],
+  "rationale": "The target quarter is an under-count. The validated anchor and the current-period staging schedule both equal 849354000, but holdings excludes 11 real nonzero source rows totaling 4472000 of fair value. Recovering those source rows reconciles the gate without deleting or rescaling existing positions.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 11,
+      "fv": 4472000.0,
+      "residual_before": -4472000.0,
+      "residual_after": 0.0
+    }
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 172000.0,
+      "cost": 210000.0,
+      "principal_amount": 217000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Personal Care Products, Company Accupac, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 3.00% (6.00% PIK), Interest Rate 10.87%, Acquisition Date 12/31/2024, Maturity 12/31/2029",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Personal Care Products, Company Accupac, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 3.00% (6.00% PIK), Interest Rate 10.87%, Acquisition Date 12/31/2024, Maturity 12/31/2029",
+      "source_row_id": "staging:period=2025-12-31:sid=45"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 172000.0,
+      "cost": 210000.0,
+      "principal_amount": 217000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Personal Care Products, Company Accupac, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 3.00% (6.00% PIK), Interest Rate 10.89%, Acquisition Date 12/31/2024, Maturity 12/31/2029",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Personal Care Products, Company Accupac, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 3.00% (6.00% PIK), Interest Rate 10.89%, Acquisition Date 12/31/2024, Maturity 12/31/2029",
+      "source_row_id": "staging:period=2025-12-31:sid=46"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 46000.0,
+      "cost": 46000.0,
+      "principal_amount": 48000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Commercial Services & Supplies, Company 3G Intermediate, Inc., Type of Investment Revolver, Reference Rate and Spread SOFR + 5.50%, Interest Rate 9.19%, Acquisition Date 9/30/2024, Maturity 9/30/2030 One",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Commercial Services & Supplies, Company 3G Intermediate, Inc., Type of Investment Revolver, Reference Rate and Spread SOFR + 5.50%, Interest Rate 9.19%, Acquisition Date 9/30/2024, Maturity 9/30/2030 One",
+      "source_row_id": "staging:period=2025-12-31:sid=75"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 98000.0,
+      "cost": 101000.0,
+      "principal_amount": 104000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Commercial Services & Supplies, Company Source Holding Delaware, LLC, Type of Investment Revolver, Reference Rate and Spread PRIME+ 3.75%, Interest Rate 10.50%, Acquisition Date 2/7/2025, Maturity 2/7/2031",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Commercial Services & Supplies, Company Source Holding Delaware, LLC, Type of Investment Revolver, Reference Rate and Spread PRIME+ 3.75%, Interest Rate 10.50%, Acquisition Date 2/7/2025, Maturity 2/7/2031",
+      "source_row_id": "staging:period=2025-12-31:sid=95"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 1000.0,
+      "cost": 1000.0,
+      "principal_amount": 1000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Diversified Consumer Services, Company ADPD Holdings LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 6.00%, Interest Rate 10.01%, Acquisition Date 8/16/2022, Maturity 8/16/2028 One",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Diversified Consumer Services, Company ADPD Holdings LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 6.00%, Interest Rate 10.01%, Acquisition Date 8/16/2022, Maturity 8/16/2028 One",
+      "source_row_id": "staging:period=2025-12-31:sid=127"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 52000.0,
+      "cost": 52000.0,
+      "principal_amount": 53000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Health Care Equipment & Supplies, Company Zavation Medical Products, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 5.75%, Interest Rate 9.73%, Acquisition Date 7/22/2024, Maturity 6/30/2028",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Health Care Equipment & Supplies, Company Zavation Medical Products, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 5.75%, Interest Rate 9.73%, Acquisition Date 7/22/2024, Maturity 6/30/2028",
+      "source_row_id": "staging:period=2025-12-31:sid=179"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 102000.0,
+      "cost": 100000.0,
+      "principal_amount": 102000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Health Care Providers & Services, Company SGA Dental Partners Opco, LLC, Type of Investment Delayed Draw Term Loan, Reference Rate and Spread SOFR + 5.50%, Interest Rate 9.36%, Acquisition Date 7/17/2024, Maturity 7/17/2029 Two",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Health Care Providers & Services, Company SGA Dental Partners Opco, LLC, Type of Investment Delayed Draw Term Loan, Reference Rate and Spread SOFR + 5.50%, Interest Rate 9.36%, Acquisition Date 7/17/2024, Maturity 7/17/2029 Two",
+      "source_row_id": "staging:period=2025-12-31:sid=232"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 3455000.0,
+      "cost": 3457000.0,
+      "principal_amount": 3507000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Pharmaceuticals, Company NS and Associates LLC, Type of Investment Term Loan, Reference Rate and Spread SOFR + 5.25%, Interest Rate 9.07%, Acquisition Date 9/9/2025, Maturity 8/6/2030",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Pharmaceuticals, Company NS and Associates LLC, Type of Investment Term Loan, Reference Rate and Spread SOFR + 5.25%, Interest Rate 9.07%, Acquisition Date 9/9/2025, Maturity 8/6/2030",
+      "source_row_id": "staging:period=2025-12-31:sid=294"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 30000.0,
+      "cost": 29000.0,
+      "principal_amount": 30000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Trading Companies & Distributors, Company Easy Ice, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 5.25%, Interest Rate 9.24%, Acquisition Date 10/30/2024, Maturity 10/30/2030 One",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Trading Companies & Distributors, Company Easy Ice, LLC, Type of Investment Revolver, Reference Rate and Spread SOFR + 5.25%, Interest Rate 9.24%, Acquisition Date 10/30/2024, Maturity 10/30/2030 One",
+      "source_row_id": "staging:period=2025-12-31:sid=317"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 383000.0,
+      "cost": 377000.0,
+      "principal_amount": 384000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Trading Companies & Distributors, Company Krayden Holdings, Inc., Type of Investment Delayed Draw Term Loan, Reference Rate and Spread SOFR + 4.75%, Interest Rate 8.42%, Acquisition Date 3/1/2023, Maturity 3/1/2029 One",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Trading Companies & Distributors, Company Krayden Holdings, Inc., Type of Investment Delayed Draw Term Loan, Reference Rate and Spread SOFR + 4.75%, Interest Rate 8.42%, Acquisition Date 3/1/2023, Maturity 3/1/2029 One",
+      "source_row_id": "staging:period=2025-12-31:sid=332"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": -39000.0,
+      "cost": -9000.0,
+      "principal_amount": 0.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Air Freight & Logistics, Company Horizon Freight Holdings, Inc., Type of Investment Delayed Draw Term Loan, Acquisition Date 8/22/2024, Maturity 8/22/2030 One",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Loans, Industry Air Freight & Logistics, Company Horizon Freight Holdings, Inc., Type of Investment Delayed Draw Term Loan, Acquisition Date 8/22/2024, Maturity 8/22/2030 One",
+      "source_row_id": "staging:period=2025-12-31:sid=341"
+    }
+  ]
+}

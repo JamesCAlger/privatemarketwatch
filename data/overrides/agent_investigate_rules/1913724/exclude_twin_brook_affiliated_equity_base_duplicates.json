@@ -1,0 +1,103 @@
+{
+  "cik": "1913724",
+  "rule_id": "exclude_twin_brook_affiliated_equity_base_duplicates",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2023-06-30",
+      "2023-09-30",
+      "2023-12-31",
+      "2024-03-31",
+      "2024-06-30",
+      "2024-09-30",
+      "2025-03-31",
+      "2025-06-30",
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw IN ('investmentidentifieraxis=Twin Brook Equity Holdings, LLC', 'investmentidentifieraxis=Twin Brook Segregated Equity Holdings, LLC')",
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "2025-09-30 schedule row shows Twin Brook Equity Holdings, LLC (32) (33) (34) | Equity - 16.72 % membership interest | amortized cost 85,570 | fair value 96,653; Twin Brook Segregated Equity Holdings, LLC (32) (33) (34) | Equity - 3.78 % membership interest | cost 19 | fair value 15; Total non-controlled/affiliated investments | cost 85,589 | fair value 96,668."
+    },
+    {
+      "source": "filing",
+      "quote": "2025-09-30 filing total line: Total investments | cost 3,906,977 | fair value 3,900,686."
+    },
+    {
+      "source": "query",
+      "quote": "Holdings for 2025-09-30 contain both base rows investmentidentifieraxis=Twin Brook Equity Holdings, LLC fair_value 96,653,000 and investmentidentifieraxis=Twin Brook Segregated Equity Holdings, LLC fair_value 15,000, plus detailed Equity interest, Affiliated rows with the same fair values; extracted value_sum 3,997,354,000 exceeds anchor 3,900,686,000 by exactly 96,668,000."
+    },
+    {
+      "source": "query",
+      "quote": "Simulated exclusion of the two base Twin Brook dimensions leaves 2024-12-31 unchanged by scoping it out; that quarter already reconciles and contains only the non-detailed normalized rows for these positions."
+    }
+  ],
+  "rationale": "The base Twin Brook affiliated-equity dimensions are leaked duplicate representations of the detailed equity schedule rows in the scoped quarters. The filing presents the affiliated equity positions once, totaling 96,668 thousand at 2025-09-30, and the extracted overage equals the duplicated base rows. Excluding only the leaked base dimensions in quarters where paired detailed rows are present removes the over-count without deleting real positions or regressing 2024-12-31.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2023-06-30": {
+      "rows": 1,
+      "fv": -38564000.0,
+      "residual_before": 38564000.0,
+      "residual_after": 0.0
+    },
+    "2023-09-30": {
+      "rows": 2,
+      "fv": -48615000.0,
+      "residual_before": 48615000.0,
+      "residual_after": 0.0
+    },
+    "2023-12-31": {
+      "rows": 2,
+      "fv": -54714000.0,
+      "residual_before": 54714000.0,
+      "residual_after": 0.0
+    },
+    "2024-03-31": {
+      "rows": 2,
+      "fv": -62126000.0,
+      "residual_before": 62126000.0,
+      "residual_after": 0.0
+    },
+    "2024-06-30": {
+      "rows": 2,
+      "fv": -69913000.0,
+      "residual_before": 69913000.0,
+      "residual_after": 0.0
+    },
+    "2024-09-30": {
+      "rows": 2,
+      "fv": -78081000.0,
+      "residual_before": 78081000.0,
+      "residual_after": 0.0
+    },
+    "2025-03-31": {
+      "rows": 2,
+      "fv": -85558000.0,
+      "residual_before": 85558000.0,
+      "residual_after": 0.0
+    },
+    "2025-06-30": {
+      "rows": 2,
+      "fv": -91868000.0,
+      "residual_before": 91868000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 2,
+      "fv": -96668000.0,
+      "residual_before": 96668000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 2,
+      "fv": -103670000.0,
+      "residual_before": 103670000.0,
+      "residual_after": 0.0
+    }
+  }
+}

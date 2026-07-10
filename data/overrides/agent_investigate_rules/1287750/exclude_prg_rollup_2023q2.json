@@ -1,0 +1,40 @@
+{
+  "cik": "1287750",
+  "rule_id": "exclude_prg_rollup_2023q2",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2023-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2023-06-30' AND bdc_dimensions_raw = 'investmentidentifieraxis=Production Resource Group, L.L.C. and PRG III, LLC'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "conservation for fv_conservation 2023-06-30: value_sum=21607400000.0, anchor_value=21496500000.0, residual_abs=110900000.0, status=overshoot."
+    },
+    {
+      "source": "query",
+      "quote": "holdings row selected by predicate: Production Resource Group, L.L.C. and PRG III, LLC; bdc_dimensions_raw=investmentidentifieraxis=Production Resource Group, L.L.C. and PRG III, LLC; fair_value=111000000.0; asset_category=OTHER."
+    },
+    {
+      "source": "query",
+      "quote": "detailed PRG rows for 2023-06-30 with dimensions beginning 'investmentidentifieraxis=Production Resource Group, L.L.C. and PRG III, LLC,' have detail_rows=5 and prg_detail_fv=111100000.0; the generic PRG row is therefore a parent rollup counted alongside its child positions."
+    },
+    {
+      "source": "query",
+      "quote": "the exact generic PRG dimensions occur in holdings only once across all extracted quarters: report_date=2023-06-30, matching_rows=1, fv=111000000.0."
+    }
+  ],
+  "rationale": "The 2023-06-30 extraction over-counts fair value by 110.9 million. The selected PRG row is not a separate security: it is a parent rollup for the PRG investment group and is counted together with five detailed PRG instruments for the same report date. Excluding the rollup removes the duplicate parent amount without deleting any child position. The remaining 0.1 million difference is consistent with the schedule's rounded displayed position values.",
+  "confidence": 0.95,
+  "measured_impact": {
+    "2023-06-30": {
+      "rows": 1,
+      "fv": -111000000.0,
+      "residual_before": 110900000.0,
+      "residual_after": -100000.0
+    }
+  }
+}

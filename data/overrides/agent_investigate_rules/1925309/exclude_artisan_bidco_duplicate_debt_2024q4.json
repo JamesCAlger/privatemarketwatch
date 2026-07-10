@@ -1,0 +1,36 @@
+{
+  "cik": "1925309",
+  "rule_id": "exclude_artisan_bidco_duplicate_debt_2024q4",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2024-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-12-31' AND bdc_dimensions_raw LIKE '%Artisan Bidco, Inc.%141,889 par%' AND fair_value = '139850000.0'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2024-12-31, holdings debt detail rows total fair_value 7229621000.0 while the staging Debt Investments subtotal is 7089771000.0, an overage of 139850000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The selected holdings row is Artisan Bidco, Inc. First-lien loan ($141,889 par, due 11/2029), fair_value=139850000.0, cost=138686000.0. Excluding this single row brings debt detail fair value to the Debt Investments subtotal."
+    },
+    {
+      "source": "query",
+      "quote": "Staging shows the same Artisan Bidco $141,889 row as period 2023-12-31 with null fair_value/cost and as period 2024-12-31 with fair_value=139850000.0, while other current Artisan Bidco debt rows remain at $114,848 par and EUR 51,863 par."
+    }
+  ],
+  "rationale": "The 2024-12-31 extraction includes an extra Artisan Bidco debt detail row that exactly explains the debt-detail overage versus the filing's own Debt Investments subtotal. The other Artisan Bidco current positions remain counted; only the leaked duplicate detail row is excluded.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": -139850000.0,
+      "residual_before": 79199000.0,
+      "residual_after": -60651000.0
+    }
+  }
+}

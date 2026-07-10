@@ -1,0 +1,38 @@
+{
+  "cik": "1954360",
+  "rule_id": "1954360_fix_20240331_wct_term_loan_fair_value",
+  "rule_type": "value_expression",
+  "action": "set",
+  "scope": {
+    "quarters": [
+      "2024-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-03-31' AND bdc_dimensions_raw = 'investmentidentifieraxis=Investments United States Debt Investments Pharmaceuticals, Biotechnology and Life Sciences WCT Group Holdings, LLC Investment Type Unitranche First Lien Term Loan Interest Term S + 625 (75 Floor) Interest Rate 11.43% Maturity/Dissolution Date 12/2029'",
+  "field": "fair_value",
+  "expression": "3434000",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2024-03-31, staging reports the Pharmaceuticals, Biotechnology and Life Sciences U.S. debt subtotal fair_value=4927000. The detailed rows under that subtotal are Parexel 1484000, WCT revolver 9000, and WCT term loan 343000, leaving 3091000 unexplained."
+    },
+    {
+      "source": "query",
+      "quote": "The WCT term loan has principal_amount=3366000 and cost=3286000, making fair_value=343000 a dropped digit. Setting it to 3434000 makes the detail sum equal the 4927000 subtotal."
+    },
+    {
+      "source": "query",
+      "quote": "Adjacent quarters show the same WCT term loan at normal scale: 2024-06-30 fair_value=3425000 principal_amount=3358000; 2024-09-30 fair_value=3417000 principal_amount=3350000; 2024-12-31 fair_value=3333000 principal_amount=3341000."
+    }
+  ],
+  "rationale": "The 2024-03-31 WCT term-loan fair value was extracted one digit short. The industry subtotal and adjacent quarters identify the intended value as 3434000, not 343000.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2024-03-31": {
+      "rows": 1,
+      "fv": 3091000.0,
+      "residual_before": -3089000.0,
+      "residual_after": 2000.0
+    }
+  }
+}

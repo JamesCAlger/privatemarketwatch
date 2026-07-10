@@ -1,0 +1,84 @@
+{
+  "cik": "1792509",
+  "rule_id": "exclude_cash_equivalents_from_investments_fv",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "asset_category = 'CASH'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2024-03-31, holdings contains one CASH row: issuer_name='Federated Government Obligations Fund, Cash Equivalents', bdc_dimensions_raw='investmentidentifieraxis=Federated Government Obligations Fund, Cash Equivalents', fair_value=46708000.0."
+    },
+    {
+      "source": "query",
+      "quote": "For 2024-03-31, fv_conservation value_sum=449527000.0 and anchor_value=402819000.0; the residual is 46708000.0, exactly the CASH row fair value."
+    },
+    {
+      "source": "query",
+      "quote": "Across anchored quarters 2023-12-31 through 2025-12-31, subtracting rows where asset_category='CASH' makes corrected_sum equal investments_at_fair_value anchor for every quarter."
+    }
+  ],
+  "rationale": "The conservation anchor is investments at fair value, while the leaked row is a cash-equivalent money market holding classified as CASH. It is not a portfolio investment row for this anchor. The same normalized CASH row explains the full fair-value residual in every anchored quarter, so this is an over-inclusion defect rather than a duplicate, scale, or missing-row defect.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2023-12-31": {
+      "rows": 1,
+      "fv": -45013000.0,
+      "residual_before": 45013000.0,
+      "residual_after": 0.0
+    },
+    "2024-03-31": {
+      "rows": 1,
+      "fv": -46708000.0,
+      "residual_before": 46708000.0,
+      "residual_after": 0.0
+    },
+    "2024-06-30": {
+      "rows": 1,
+      "fv": -38539000.0,
+      "residual_before": 38539000.0,
+      "residual_after": 0.0
+    },
+    "2024-09-30": {
+      "rows": 1,
+      "fv": -57059000.0,
+      "residual_before": 57059000.0,
+      "residual_after": 0.0
+    },
+    "2024-12-31": {
+      "rows": 1,
+      "fv": -40829000.0,
+      "residual_before": 40829000.0,
+      "residual_after": 0.0
+    },
+    "2025-03-31": {
+      "rows": 1,
+      "fv": -69882000.0,
+      "residual_before": 69882000.0,
+      "residual_after": 0.0
+    },
+    "2025-06-30": {
+      "rows": 1,
+      "fv": -11870000.0,
+      "residual_before": 11870000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": -10185000.0,
+      "residual_before": 10185000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": -16874000.0,
+      "residual_before": 16874000.0,
+      "residual_after": 0.0
+    }
+  }
+}

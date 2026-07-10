@@ -1,0 +1,46 @@
+{
+  "cik": "1920145",
+  "rule_id": "1920145_2023q4_add_coretrust_one_adjustment",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2023-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2023-12-31",
+      "issuer_name": "Coretrust Purchasing Group LLC",
+      "instrument_description": "1st Lien/Senior Secured Debt",
+      "fair_value": -69000.0,
+      "principal_amount": 5526000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 112.40% United States - 104.84% 1st Lien/Senior Secured Debt - 93.10% Coretrust Purchasing Group LLC Industry Financial Services Reference Rate and Spread S + 6.75% Maturity 10/01/29 One",
+      "source_row_id": "staging:investmentidentifieraxis=Investment Debt Investments - 112.40% United States - 104.84% 1st Lien/Senior Secured Debt - 93.10% Coretrust Purchasing Group LLC Industry Financial Services Reference Rate and Spread S + 6.75% Maturity 10/01/29 One"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "staging for 2023-12-31 contains Coretrust Purchasing Group LLC ... Reference Rate and Spread S + 6.75% Maturity 10/01/29 One with fair_value -69000.0 and principal_amount 5526000.0."
+    },
+    {
+      "source": "query",
+      "quote": "holdings for 2023-12-31 contains the unsuffixed Coretrust negative adjustment with fair_value -69000.0 but has no Coretrust row whose bdc_dimensions_raw ends in One; the suffixed staging row is dropped from holdings."
+    },
+    {
+      "source": "query",
+      "quote": "After excluding the affiliated money market row, the holdings fair-value sum is 1788188000.0 versus anchor 1788119000.0; adding the missing -69000.0 Coretrust One row drives the residual to zero."
+    }
+  ],
+  "rationale": "The source filing/staging has two separate Coretrust reference-rate adjustment rows, one unsuffixed and one suffixed One. Holdings retained only the unsuffixed adjustment. The missing suffixed row is a real source row and must be recovered rather than deleting another investment position.",
+  "confidence": 0.92,
+  "measured_impact": {
+    "2023-12-31": {
+      "rows": 1,
+      "fv": -69000.0,
+      "residual_before": 69000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "cik": "1766037",
+  "rule_id": "exclude_2025q3_notorious_topco_aggregate_duplicate",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-09-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-09-30' AND bdc_dimensions_raw = 'investmentidentifieraxis=Notorious Topco, LLC, First Lien' AND issuer_name = 'Notorious Topco, LLC, First lien' AND TRY_CAST(fair_value AS DOUBLE) = 15604000.0 AND TRY_CAST(cost AS DOUBLE) = 24847000.0 AND principal_amount IS NULL",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Holdings for 2025-09-30 include an aggregate row: bdc_dimensions_raw='investmentidentifieraxis=Notorious Topco, LLC, First Lien', fair_value=15604000.0, cost=24847000.0, principal_amount NULL."
+    },
+    {
+      "source": "query",
+      "quote": "The numbered detail rows for the same report date are Notorious Topco, LLC, First Lien 1 fair_value=13291000.0 cost=21163000.0 principal_amount=21228000.0; First Lien 2 fair_value=1158000.0 cost=1845000.0 principal_amount=1850000.0; First Lien 3 fair_value=1155000.0 cost=1839000.0 principal_amount=1844000.0. Their fair_value and cost sums equal the aggregate row exactly: fair_value 15604000.0, cost 24847000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Across holdings, the exact parent/detail duplicate pattern where a parent row with no principal_amount equals the sum of numbered child rows appears only once: report_date=2025-09-30, parent_dim='investmentidentifieraxis=Notorious Topco, LLC, First Lien', child_n=3, parent_fv=15604000.0, child_fv=15604000.0, parent_cost=24847000.0, child_cost=24847000.0."
+    }
+  ],
+  "rationale": "The unnumbered Notorious Topco First Lien row is an aggregate duplicate of three real numbered tranche rows, not a separate investment. Keeping both the aggregate and its components over-counts fair value by exactly the 2025-09-30 residual.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 1,
+      "fv": -15604000.0,
+      "residual_before": 15604000.0,
+      "residual_after": 0.0
+    }
+  }
+}

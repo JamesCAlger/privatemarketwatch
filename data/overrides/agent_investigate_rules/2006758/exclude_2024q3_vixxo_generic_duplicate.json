@@ -1,0 +1,32 @@
+{
+  "cik": "2006758",
+  "rule_id": "exclude_2024q3_vixxo_generic_duplicate",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2024-09-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-09-30' AND issuer_name = 'Vixxo Corporation' AND instrument_description = 'First Lien Secured Debt' AND fair_value = '4876000.0' AND cost = '4877000.0'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "2024-09-30 holdings contains Vixxo Corporation | First Lien Secured Debt | fair_value=4876000 | cost=4877000 and Vixxo Corporation Vixxo Corporation | First Lien Secured Debt - Term Loan S+500, 1.00% Floor Maturity Date 8/1/2030 | principal_amount=4950000 | fair_value=4876000 | cost=4877000."
+    },
+    {
+      "source": "query",
+      "quote": "Excluding the generic Vixxo Corporation First Lien Secured Debt row changes 2024-09-30 fv from 902555000 to 897679000 versus anchor 897678000, leaving only a 1000 rounding residue."
+    }
+  ],
+  "rationale": "The generic Vixxo debt row is a leaked duplicate of the detailed Vixxo term-loan row in the same quarter. The detailed row carries the principal amount and maturity terms, so the generic row should not be counted separately.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2024-09-30": {
+      "rows": 1,
+      "fv": 4876000.0,
+      "residual_before": 4877000.0,
+      "residual_after": 1000.0
+    }
+  }
+}

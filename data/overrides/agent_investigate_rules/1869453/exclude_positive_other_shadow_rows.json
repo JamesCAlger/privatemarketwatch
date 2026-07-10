@@ -1,0 +1,106 @@
+{
+  "cik": "1869453",
+  "rule_id": "exclude_positive_other_shadow_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "asset_category = 'OTHER' AND TRY_CAST(fair_value AS DOUBLE) > 0",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings asset_category='OTHER' positive rows are 7 rows totaling fair_value 79,759,000: Blue Owl Cross-Strategy Opportunities LLC 25,203,000; BOCSO 25,200,000; Blue Owl Credit SLF 14,104,000; Stripe Blue Owl Holdings LLC 7,797,000; LSI Financing 1 DAC 2,623,000; LSI Financing DAC 2,600,000; Blue Owl Leasing LLC 2,232,000."
+    },
+    {
+      "source": "query",
+      "quote": "The same 2025-12-31 filing also has typed leaf rows for the shadowed investments, including Blue Owl Cross-Strategy Opportunities LLC, Specialty finance equity investment fair_value 25,203,000; Blue Owl Credit SLF LLC | LLC Interest fair_value 14,104,000; Stripe Blue Owl Holdings LLC | LLC Interest fair_value 7,797,000; Blue Owl Leasing LLC | LLC Interest fair_value 2,232,000; and LSI Financing 1 DAC, Specialty finance equity investment fair_value 2,623,000."
+    },
+    {
+      "source": "filing",
+      "quote": "Wrapper cache documents this issuer-specific edge case: Bare names such as LSI Financing 1 DAC and Blue Owl Credit SLF do not expose instrument type in the XBRL identifier and are intentionally left unclassified unless the identifier includes explicit instrument evidence."
+    },
+    {
+      "source": "query",
+      "quote": "Applying the predicate to anchored quarters reduces residuals to zero for 2023-03-31 through 2025-09-30; for 2025-12-31 it moves value_sum from 6,286,924,000 to 6,207,165,000 against anchor 6,207,136,000."
+    }
+  ],
+  "rationale": "Positive OTHER rows are bare-name shadow facts or aliases for instrument-specific leaf holdings. They are not independent positions; including them double-counts fair value. The pattern is stable across this CIK and the same exclusion reconciles all earlier anchored quarters exactly without deleting typed leaf positions.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2023-03-31": {
+      "rows": 1,
+      "fv": -13789000.0,
+      "residual_before": 13789000.0,
+      "residual_after": 0.0
+    },
+    "2023-06-30": {
+      "rows": 1,
+      "fv": -12757000.0,
+      "residual_before": 12757000.0,
+      "residual_after": 0.0
+    },
+    "2023-09-30": {
+      "rows": 1,
+      "fv": -12874000.0,
+      "residual_before": 12874000.0,
+      "residual_after": 0.0
+    },
+    "2023-12-31": {
+      "rows": 1,
+      "fv": -13001000.0,
+      "residual_before": 13001000.0,
+      "residual_after": 0.0
+    },
+    "2024-03-31": {
+      "rows": 1,
+      "fv": -12898000.0,
+      "residual_before": 12898000.0,
+      "residual_after": 0.0
+    },
+    "2024-06-30": {
+      "rows": 1,
+      "fv": -11970000.0,
+      "residual_before": 11970000.0,
+      "residual_after": 0.0
+    },
+    "2024-09-30": {
+      "rows": 2,
+      "fv": -15616000.0,
+      "residual_before": 15616000.0,
+      "residual_after": 0.0
+    },
+    "2024-12-31": {
+      "rows": 3,
+      "fv": -7156000.0,
+      "residual_before": 7156000.0,
+      "residual_after": 0.0
+    },
+    "2025-03-31": {
+      "rows": 3,
+      "fv": -7232000.0,
+      "residual_before": 7232000.0,
+      "residual_after": 0.0
+    },
+    "2025-06-30": {
+      "rows": 3,
+      "fv": -9766000.0,
+      "residual_before": 9766000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 4,
+      "fv": -9380000.0,
+      "residual_before": 9380000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 7,
+      "fv": -79759000.0,
+      "residual_before": 79788000.0,
+      "residual_after": 29000.0
+    }
+  }
+}

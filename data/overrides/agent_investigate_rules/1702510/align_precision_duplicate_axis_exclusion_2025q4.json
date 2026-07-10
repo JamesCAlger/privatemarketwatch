@@ -1,0 +1,36 @@
+{
+  "cik": "1702510",
+  "rule_id": "align_precision_duplicate_axis_exclusion_2025q4",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND (bdc_dimensions_raw LIKE 'investmentidentifieraxis=Investments | Affiliated Issuer | First Lien Debt | Align Precision Group, LLC, Aerospace & Defense %' OR bdc_dimensions_raw = 'investmentidentifieraxis=Investment | Affiliated Issuer | Equity Investments | Align Precision Group, LLC, Aerospace & Defense')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings rows selected by the predicate are the three duplicate Align Precision representations: FV 20296000, 5449000, and 2885000; total FV 28630000."
+    },
+    {
+      "source": "query",
+      "quote": "staging has canonical Align Precision rows with pipe-delimited dimensions and the same fair values, plus duplicate comma-style rows with no principal_amount and no source cost: 'Investments | Affiliated Issuer | First Lien Debt | Align Precision Group, LLC, Aerospace & Defense 1' FV 20296000, 'Investment | Affiliated Issuer | Equity Investments | Align Precision Group, LLC, Aerospace & Defense' FV 5449000, and 'Investments | Affiliated Issuer | First Lien Debt | Align Precision Group, LLC, Aerospace & Defense 2' FV 2885000."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials companyfacts investments_at_fair_value for 2025-12-31 is 2651286000, while extracted holdings sum to 2679916000 before correction."
+    }
+  ],
+  "rationale": "The residual is caused by duplicate Align Precision Group facts extracted under alternate comma-style investmentidentifieraxis representations. The canonical pipe-delimited rows remain in holdings and carry the same fair values; excluding only the duplicate representations removes 28630000 of over-count without deleting the real positions.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 3,
+      "fv": -28630000.0,
+      "residual_before": 28630000.0,
+      "residual_after": 0.0
+    }
+  }
+}

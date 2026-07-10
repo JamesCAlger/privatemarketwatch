@@ -1,0 +1,43 @@
+{
+  "cik": "1603480",
+  "rule_id": "1603480_exclude_heldout_short_form_duplicate_axes_2025",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date IN ('2025-09-30','2025-12-31') AND NOT (bdc_dimensions_raw LIKE 'investmentidentifieraxis=Debt Investments-%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Equity Investments-%')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings grouped by axis type show duplicate short-form axes in held-out quarters: 2025-09-30 short_form rows=24 fv=230543981.0 and verbose_schedule rows=26 fv=291471526.0; 2025-12-31 short_form rows=22 fv=202182854.0 and verbose_schedule rows=24 fv=263724095.0."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials investments_at_fair_value equals the verbose schedule subtotal in held-out quarters: 2025-09-30 investments_at_fair_value=291471526.0 and 2025-12-31 investments_at_fair_value=263724095.0."
+    },
+    {
+      "source": "query",
+      "quote": "Current-period staging has the same split: 2025-09-30 short_form fv=264467706.0 and verbose_schedule fv=291471526.0; 2025-12-31 short_form fv=236578820.0 and verbose_schedule fv=263724095.0. The short_form amounts exactly match the held-out add-to-balance overshoots reported by the gate."
+    }
+  ],
+  "rationale": "The September and December held-out quarters contain two XBRL representations of the same schedule positions. The verbose Debt Investments-/Equity Investments- axes reconcile exactly to the independent XBRL fair-value anchors, while the terse investmentidentifieraxis rows duplicate those positions and create the gate overshoot. The 2025-06-30 target quarter is intentionally excluded from this rule because its validated anchor is the printed all-axis schedule total rather than the companyfacts subtotal.",
+  "confidence": 0.91,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 24,
+      "fv": -230543981.0,
+      "residual_before": 230543981.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 22,
+      "fv": -202182854.0,
+      "residual_before": 202182854.0,
+      "residual_after": 0.0
+    }
+  }
+}

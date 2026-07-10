@@ -1,0 +1,54 @@
+{
+  "cik": "1646614",
+  "rule_id": "exclude_portfolio_company_axis_duplicates",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "(bdc_dimensions_raw LIKE 'investmentidentifieraxis=Fund''s controlled investments Portfolio Company%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Fund''s affiliated/non-controlled investments Portfolio Company%')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, fv_conservation value_sum=1233842301 and anchor_value=1183746738. Rows with bdc_dimensions_raw like investmentidentifieraxis=Fund's controlled investments Portfolio Company% or investmentidentifieraxis=Fund's affiliated/non-controlled investments Portfolio Company% sum to 50095563 across 14 rows, exactly the residual."
+    },
+    {
+      "source": "query",
+      "quote": "The same exclusion reconciles adjacent quarters: 2025-06-30 corrected_fv=927688537 equals anchor_value=927688537, 2025-09-30 corrected_fv=1091269993 equals anchor_value=1091269993, and 2025-12-31 corrected_fv=1183746738 equals anchor_value=1183746738."
+    },
+    {
+      "source": "query",
+      "quote": "Example duplicate representation at 2025-12-31: Fund's controlled investments Portfolio Company 1035 Mecklenburg Highway, Mooresville, North Carolina Type of Investment Real Estate Properties has fair_value=11386450, and the detailed controlled-investment row Real Estate Properties United States of America 1035 Mecklenburg Highway, Mooresville, North Carolina has fair_value=11386450."
+    }
+  ],
+  "rationale": "The extracted holdings include portfolio-company-axis summary members for controlled and affiliated investments in addition to the detailed investment-axis rows. These are alternate dimensional representations of the same positions, not additional investments. Excluding the portfolio-company-axis duplicates removes only the over-counted representation and preserves the detailed position rows used by the conservation anchor.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 11,
+      "fv": 52320852.0,
+      "residual_before": 150575458.0,
+      "residual_after": 98254606.0
+    },
+    "2025-06-30": {
+      "rows": 12,
+      "fv": 50954858.0,
+      "residual_before": 50954858.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 12,
+      "fv": 48673173.0,
+      "residual_before": 48673173.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 14,
+      "fv": 50095563.0,
+      "residual_before": 50095563.0,
+      "residual_after": 0.0
+    }
+  }
+}

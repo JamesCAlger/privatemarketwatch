@@ -1,0 +1,40 @@
+{
+  "cik": "1742313",
+  "rule_id": "exclude_2023q2_generic_duplicate_positions",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2023-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2023-06-30' AND bdc_dimensions_raw IN ('investmentidentifieraxis=SheerTrans Solutions, LLC, Equity Securities', 'investmentidentifieraxis=SheerTrans Solutions, LLC', 'investmentidentifieraxis=SFR Holdco, LLC, Junior Secured Loan, One', 'investmentidentifieraxis=SFR Holdco, LLC (Delayed draw junior secured loan)', 'investmentidentifieraxis=Nastel Technologies, LLC, Equity Securities', 'investmentidentifieraxis=Nastel Technologies, LLC', 'investmentidentifieraxis=Second Avenue SFR Holdings II LLC (Revolver)')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "2023-06-30 fv_conservation value_sum=1801300000.0, anchor_value=1764774000.0, residual_pct=2.07; residual amount is 36526000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Duplicate-pair query found generic rows with no principal/shares matching detailed rows for the same position: SheerTrans Equity Securities 8643000 duplicates preferred interests 8643000; SheerTrans Solutions, LLC 5057000 duplicates Senior Secured Loans One 5057000; SFR Junior Secured Loan One 5850000 duplicates Junior Secured Loans Due 7/28/2028 5850000; SFR Delayed draw junior secured loan 4387000 duplicates Junior Secured Loans Two 4387000; Nastel Equity Securities 4328000 duplicates Class A units 4328000; Nastel Technologies, LLC 3500000 duplicates Senior Secured Loans One 3500000."
+    },
+    {
+      "source": "query",
+      "quote": "Second Avenue SFR Holdings II LLC appears twice in 2023-06-30 holdings at 4761000: a detailed loan row 'Second Avenue S F R Holdings I I L L C ( Revolver), Senior Secured Loans, Due 8/9/2024' with principal_amount=4875000 and a generic row 'Second Avenue SFR Holdings II LLC (Revolver)' with principal_amount null."
+    },
+    {
+      "source": "query",
+      "quote": "The rule predicate selects 7 holdings rows and SUM(fair_value)=36526000.0 for 2023-06-30."
+    }
+  ],
+  "rationale": "The overshoot is caused by generic duplicate extraction of real positions already represented by detailed loan or equity rows with principal/shares or more specific security descriptions. Excluding only these seven generic duplicate rows removes the 36526000.0 overcount while retaining real equity commitment rows and all detailed positions.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2023-06-30": {
+      "rows": 7,
+      "fv": -36526000.0,
+      "residual_before": 36526000.0,
+      "residual_after": 0.0
+    }
+  }
+}

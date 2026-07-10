@@ -1,0 +1,50 @@
+{
+  "cik": "1925309",
+  "rule_id": "add_elysium_convertible_preference_2024q4",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2024-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2024-12-31",
+      "issuer_name": "Elysium BidCo Limited",
+      "bdc_investment_identifier": "Equity and Other Investments Pharmaceuticals Elysium BidCo Limited Convertible Preference Shares (38,503,125 units) Initial Acquisition Date 12/11/2024",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Equity and Other Investments Pharmaceuticals Elysium BidCo Limited Convertible Preference Shares (38,503,125 units) Initial Acquisition Date 12/11/2024",
+      "source_row_id": "staging:report_date=2024-12-31;period=2024-12-31;dimensions_raw=investmentidentifieraxis=Equity and Other Investments Pharmaceuticals Elysium BidCo Limited Convertible Preference Shares (38,503,125 units) Initial Acquisition Date 12/11/2024",
+      "fair_value": 49063000.0,
+      "cost": 49063000.0,
+      "shares_held": 38503125.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "asset_category": "EQUITY_PREFERRED"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Current-period staging row exists with investment_identifier='Equity and Other Investments Pharmaceuticals Elysium BidCo Limited Convertible Preference Shares (38,503,125 units) Initial Acquisition Date 12/11/2024', cost=49063000.0, shares_held=38503125.0, dimensions_raw matching the added position, but fair_value is null and no holdings row exists."
+    },
+    {
+      "source": "query",
+      "quote": "After adding the staged healthcare ordinary shares row, the remaining equity-detail undercount versus the Equity and Other Investments subtotal is 49063000.0, exactly the Elysium convertible preference row's monetary amount."
+    },
+    {
+      "source": "query",
+      "quote": "Staging subtotals reconcile internally: Debt Investments fair_value 7089771000.0 plus Equity and Other Investments fair_value 154511000.0 equals Total Investments fair_value 7244282000.0."
+    }
+  ],
+  "rationale": "The Elysium convertible preference shares are a real current-period equity position present in staging but omitted from holdings because fair_value was null. The filing's equity subtotal and total require this row at 49063000.0 fair value, matching its staged monetary amount.",
+  "confidence": 0.88,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": 49063000.0,
+      "residual_before": -49063000.0,
+      "residual_after": 0.0
+    }
+  }
+}

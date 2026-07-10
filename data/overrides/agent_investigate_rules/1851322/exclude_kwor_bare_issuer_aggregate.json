@@ -1,0 +1,42 @@
+{
+  "cik": "1851322",
+  "rule_id": "exclude_kwor_bare_issuer_aggregate",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "issuer_name = 'KWOR Acquisition, Inc. 5' AND asset_category = 'OTHER' AND principal_amount IS NULL AND shares_held IS NULL AND pct_of_net_assets IS NULL",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "2025-03-31 KWOR Acquisition, Inc. 5 has fv=22107000, cost=22107000, asset_category OTHER, principal_amount NULL, shares_held NULL, pct_of_net_assets NULL."
+    },
+    {
+      "source": "query",
+      "quote": "2025-03-31 detailed KWOR rows excluding KWOR Acquisition, Inc. 5 sum to 22107000: KWOR Acquisition, Inc. 1/2/3/4 plus KWOR Intermediate I, Inc. 1/2. The aggregate row duplicates the detailed leaves."
+    },
+    {
+      "source": "query",
+      "quote": "Local wrapper override for cik 0001851322 documents this edge case: 'Rows such as Investments - non-controlled/affiliated KWOR Acquisition, Inc. are affiliation-level totals, not position leaves.'"
+    }
+  ],
+  "rationale": "The KWOR row is a bare issuer/affiliation aggregate. It has no instrument economics and its fair value equals the sum of the detailed KWOR debt and equity leaves, so including it double-counts the issuer.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": -22107000.0,
+      "residual_before": 21014000.0,
+      "residual_after": -1093000.0
+    },
+    "2025-06-30": {
+      "rows": 1,
+      "fv": -22417000.0,
+      "residual_before": 22417000.0,
+      "residual_after": 0.0
+    }
+  }
+}

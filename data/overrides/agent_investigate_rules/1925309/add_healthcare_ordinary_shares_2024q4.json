@@ -1,0 +1,46 @@
+{
+  "cik": "1925309",
+  "rule_id": "add_healthcare_ordinary_shares_2024q4",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2024-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2024-12-31",
+      "issuer_name": "Healthcare Ordinary Shares",
+      "bdc_investment_identifier": "Equity and Other Investments Healthcare 83,408 Ordinary Shares Initial Acquisition Date 3/24/2023",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Equity and Other Investments Healthcare 83,408 Ordinary Shares Initial Acquisition Date 3/24/2023",
+      "source_row_id": "staging:report_date=2024-12-31;period=2024-12-31;dimensions_raw=investmentidentifieraxis=Equity and Other Investments Healthcare 83,408 Ordinary Shares Initial Acquisition Date 3/24/2023",
+      "fair_value": 11588000.0,
+      "cost": 12876000.0,
+      "shares_held": 83408.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "asset_category": "EQUITY_COMMON"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Current-period staging row exists with investment_identifier='Equity and Other Investments Healthcare 83,408 Ordinary Shares Initial Acquisition Date 3/24/2023', fair_value=11588000.0, cost=12876000.0, shares_held=83408.0."
+    },
+    {
+      "source": "query",
+      "quote": "For 2024-12-31, holdings equity detail rows total fair_value 93860000.0 while the staging Equity and Other Investments subtotal is 154511000.0; the healthcare ordinary shares row is present in staging but absent from holdings."
+    }
+  ],
+  "rationale": "The extractor dropped a real current-period equity position. Adding the staging row restores part of the equity-detail undercount without altering any debt rows.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": 11588000.0,
+      "residual_before": -60651000.0,
+      "residual_after": -49063000.0
+    }
+  }
+}

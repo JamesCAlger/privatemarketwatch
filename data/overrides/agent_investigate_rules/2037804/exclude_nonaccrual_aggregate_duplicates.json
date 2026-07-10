@@ -1,0 +1,43 @@
+{
+  "cik": "2037804",
+  "rule_id": "exclude_nonaccrual_aggregate_duplicates",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "principal_amount IS NULL AND (bdc_investment_identifier = 'Notorious Topco, LLC, First lien term loans, Non-accrual status' OR bdc_investment_identifier = 'ACI Parent, Inc. | Investment | Non-accrual status' OR bdc_investment_identifier = 'DCA Investment Holding, LLC | First lien term loans | Non-accrual status')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "2025-09-30 Notorious Topco detailed rows First Lien 1, First Lien 2, and First Lien 3 have fair values 26051000, 2269000, and 2263000, summing to 30583000; the separate row Notorious Topco, LLC, First lien term loans, Non-accrual status also has fair_value 30583000 and no principal_amount."
+    },
+    {
+      "source": "query",
+      "quote": "2025-12-31 DCA Investment Holding detailed rows First Lien 1 through First Lien 4 have fair values 8112000, 1795000, 1359000, and 427000, while the separate DCA Investment Holding, LLC | First lien term loans | Non-accrual status row has fair_value 11695000 and no principal_amount."
+    },
+    {
+      "source": "query",
+      "quote": "2025-12-31 ACI Parent has ACI Parent Inc. | Preferred shares at fair_value 2085000 and ACI Parent, Inc. | Investment | Non-accrual status at fair_value 2086000 with the same cost 20124000 and no principal_amount."
+    }
+  ],
+  "rationale": "These non-accrual status rows are issuer-level aggregate or alternate-disclosure rows for positions already represented by detailed holding rows. They have no principal_amount and duplicate the fair value of the component or matching investment rows, causing direct-axis over-counting.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 1,
+      "fv": -30583000.0,
+      "residual_before": 30583000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 2,
+      "fv": -13781000.0,
+      "residual_before": 13788000.0,
+      "residual_after": 7000.0
+    }
+  }
+}

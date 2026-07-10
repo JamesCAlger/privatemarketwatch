@@ -1,0 +1,42 @@
+{
+  "cik": "1786108",
+  "rule_id": "empower_financial_2024q2_fv_add_10m",
+  "rule_type": "value_expression",
+  "action": "set",
+  "scope": {
+    "quarters": [
+      "2024-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-06-30' AND bdc_dimensions_raw LIKE '%Empower Financial, Inc. Type of Investment Secured Loan Investment Date May 15, 2024%' AND fair_value = '4511000.0'",
+  "field": "fair_value",
+  "expression": "fair_value + 10000000",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "fv_conservation for 2024-06-30: value_sum 1414815000.0, anchor_value 1424815000.0, status undershoot; residual is 10000000.0 below the validated anchor."
+    },
+    {
+      "source": "query",
+      "quote": "For staging period 2024-06-30, investmentidentifieraxis=Portfolio Company Debt Securities- United States Finance and Insurance Empower Financial, Inc. has fair_value 37449000.0, while the five detailed staging rows under the same Empower debt issuer sum to 27449000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The holdings predicate selects exactly one row: report_date 2024-06-30, Empower Financial secured loan, Investment Date May 15, 2024, fair_value 4511000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Later Empower debt rows show the same May 15, 2024 tranche carrying the extra 10000000 in value: 2024-09-30 fair_value 14879000.0 and 2024-12-31 fair_value 14895000.0, while 2024-06-30 is 4511000.0."
+    }
+  ],
+  "rationale": "The validated anchor is the filing's investments-at-fair-value total. The quarter is short by exactly 10000000.0. Within the staging hierarchy, the Empower Financial debt issuer subtotal exceeds its extracted detailed debt rows by exactly 10000000.0 across fair value, matching the conservation residual. The affected May 15, 2024 secured-loan row is the only 2024-06-30 holdings row with that identifier and value, and subsequent quarters carry the same tranche with the additional 10000000 included. This is an undervalued real holding, not an over-inclusion to delete.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2024-06-30": {
+      "rows": 1,
+      "fv": 10000000.0,
+      "residual_before": 10000000.0,
+      "residual_after": 0.0
+    }
+  }
+}

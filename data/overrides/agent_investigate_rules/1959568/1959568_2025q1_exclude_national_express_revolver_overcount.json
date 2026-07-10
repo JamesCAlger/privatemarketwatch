@@ -1,0 +1,32 @@
+{
+  "cik": "1959568",
+  "rule_id": "1959568_2025q1_exclude_national_express_revolver_overcount",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-03-31' AND bdc_dimensions_raw = 'investmentidentifieraxis=Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services National Express Wash Parent Intermediate Holdco, LLCC Investment Type First Lien Revolver Reference Rate and Spread S + 5.00% Maturity Date 7/16/2029'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "After removing the duplicated Red Griffin category row, adjusted 2025-03-31 fair value is 355266000 versus the validated investments_at_fair_value anchor of 355200000, leaving a 66000 over-count."
+    },
+    {
+      "source": "query",
+      "quote": "The exact remaining over-count is the 2025-03-31 National Express Wash Parent Intermediate Holdco, LLCC First Lien Revolver row: fair_value 66000, cost 66000, principal_amount 67000. Excluding the Red Griffin duplicate and this row changes rows_hit=2 and fv_hit=3316000, reducing value_sum from 358516000 to 355200000."
+    }
+  ],
+  "rationale": "The 2025-03-31 National Express revolver row is the isolated residual over-inclusion after the confirmed Red Griffin duplicate is removed. The predicate is quarter-specific because later quarters contain National Express revolver rows that reconcile and should not be removed.",
+  "confidence": 0.86,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": -66000.0,
+      "residual_before": 66000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "cik": "1603480",
+  "rule_id": "1603480_recover_short_form_equity_facts_2025",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-06-30"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-06-30",
+      "fair_value": 20405886.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=RT Holdings Parent, LLC Class A Unit",
+      "issuer_name": "RT Holdings Parent, LLC",
+      "bdc_investment_identifier": "RT Holdings Parent, LLC Class A Unit",
+      "source_row_id": "staging|period=2025-06-30|report_date=2025-06-30|dimensions_raw=investmentidentifieraxis=RT Holdings Parent, LLC Class A Unit"
+    },
+    {
+      "report_date": "2025-06-30",
+      "fair_value": 12383993.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Cedar Ultimate Parent, LLC Class A Preferred Unit",
+      "issuer_name": "Cedar Ultimate Parent, LLC",
+      "bdc_investment_identifier": "Cedar Ultimate Parent, LLC Class A Preferred Unit",
+      "source_row_id": "staging|period=2025-06-30|report_date=2025-06-30|dimensions_raw=investmentidentifieraxis=Cedar Ultimate Parent, LLC Class A Preferred Unit"
+    },
+    {
+      "report_date": "2025-06-30",
+      "fair_value": 0.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Cedar Ultimate Parent, LLC Class D Preferred Unit",
+      "issuer_name": "Cedar Ultimate Parent, LLC",
+      "bdc_investment_identifier": "Cedar Ultimate Parent, LLC Class D Preferred Unit",
+      "source_row_id": "staging|period=2025-06-30|report_date=2025-06-30|dimensions_raw=investmentidentifieraxis=Cedar Ultimate Parent, LLC Class D Preferred Unit"
+    },
+    {
+      "report_date": "2025-06-30",
+      "fair_value": 0.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Cedar Ultimate Parent, LLC Class E Preferred Unit",
+      "issuer_name": "Cedar Ultimate Parent, LLC",
+      "bdc_investment_identifier": "Cedar Ultimate Parent, LLC Class E Preferred Unit",
+      "source_row_id": "staging|period=2025-06-30|report_date=2025-06-30|dimensions_raw=investmentidentifieraxis=Cedar Ultimate Parent, LLC Class E Preferred Unit"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Task manifest identifies the validated 2025-06-30 conservation anchor as printed_schedule_total=628526565.0."
+    },
+    {
+      "source": "query",
+      "quote": "For report_date=2025-06-30 and period=2025-06-30, staging has 54 rows summing to fair_value 628526568.0, while holdings has 50 rows summing to 595736689.0."
+    },
+    {
+      "source": "query",
+      "quote": "Anti-join from current-period staging to holdings for 2025-06-30 returns four source rows: RT Holdings Parent, LLC Class A Unit fair_value 20405886.0; Cedar Ultimate Parent, LLC Class A Preferred Unit fair_value 12383993.0; Cedar Ultimate Parent, LLC Class D Preferred Unit fair_value 0.0; Cedar Ultimate Parent, LLC Class E Preferred Unit fair_value 0.0."
+    },
+    {
+      "source": "query",
+      "quote": "For current-period staging, verbose schedule rows reconcile to the XBRL fair-value anchors in held-out quarters: 2025-09-30 verbose_schedule fv 291471526.0 equals fund_financials investments_at_fair_value 291471526.0; 2025-12-31 verbose_schedule fv 263724095.0 equals fund_financials investments_at_fair_value 263724095.0. Adding short-form rows in those quarters would overstate fair value by 264467706.0 and 236578820.0, respectively."
+    }
+  ],
+  "rationale": "The target-quarter discrepancy is an under-count caused by four source rows present in 2025-06-30 current-period staging but dropped before holdings. The validated 2025-06-30 anchor is the printed all-axis schedule total, and current-period staging reconciles to that total within rounding only after recovering these four rows. The same short-form axis rows must not be recovered in 2025-09-30 or 2025-12-31 because those held-out quarters have independent XBRL fair-value anchors that already equal the verbose schedule subtotal; adding short-form rows there duplicates fair value.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 4,
+      "fv": 32789879.0,
+      "residual_before": -32789876.0,
+      "residual_after": 3.0
+    }
+  }
+}

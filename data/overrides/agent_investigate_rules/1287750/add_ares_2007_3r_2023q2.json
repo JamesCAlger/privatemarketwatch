@@ -1,0 +1,50 @@
+{
+  "cik": "1287750",
+  "rule_id": "add_ares_2007_3r_2023q2",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2023-06-30"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2023-06-30",
+      "issuer_name": "ARES 2007-3R",
+      "bdc_investment_identifier": "ARES 2007-3R, Subordinated notes",
+      "bdc_dimensions_raw": "investmentidentifieraxis=ARES 2007-3R, Subordinated notes",
+      "source_row_id": "staging:report_date=2023-06-30;period=2023-06-30;dimensions_raw=investmentidentifieraxis=ARES 2007-3R, Subordinated notes",
+      "fair_value": 100000.0,
+      "cost": 0.0,
+      "shares_held": 20000000.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "asset_category": "OTHER"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "staging current-period row: period=2023-06-30, report_date=2023-06-30, investment_identifier=ARES 2007-3R, Subordinated notes, dimensions_raw=investmentidentifieraxis=ARES 2007-3R, Subordinated notes, fair_value=100000.0, cost=0.0, shares_held=20000000.0."
+    },
+    {
+      "source": "query",
+      "quote": "holdings contains zero rows where bdc_dimensions_raw=investmentidentifieraxis=ARES 2007-3R, Subordinated notes."
+    },
+    {
+      "source": "query",
+      "quote": "for the 2023-06-30 current-period staging row, no holdings child rows exist under dimensions_raw LIKE 'investmentidentifieraxis=ARES 2007-3R, Subordinated notes,%', so this is not an issuer-level rollup duplicate."
+    }
+  ],
+  "rationale": "The extraction dropped a real 2023-06-30 source position for ARES 2007-3R subordinated notes. Unlike the issuer-level rows filtered as rollups, this row has security-level wording, shares held, a fair value, no child holdings, and no corresponding holdings row. Adding it after excluding the PRG parent rollup eliminates the remaining 100 thousand under-count.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2023-06-30": {
+      "rows": 1,
+      "fv": 100000.0,
+      "residual_before": -100000.0,
+      "residual_after": 0.0
+    }
+  }
+}

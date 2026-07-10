@@ -1,0 +1,50 @@
+{
+  "cik": "1930679",
+  "rule_id": "exclude_exact_par_commitment_rows_2025h2",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "predicate_sql": "TRY_CAST(fair_value AS DOUBLE) = TRY_CAST(cost AS DOUBLE) AND TRY_CAST(fair_value AS DOUBLE) = TRY_CAST(principal_amount AS DOUBLE)",
+  "scope": {
+    "quarters": [
+      "2025-06-30",
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-06-30, validated investments_at_fair_value anchor is 1608953000 and extracted holdings FV is 1975499000, residual 366546000. Rows where fair_value = cost = principal_amount contribute 96 rows and 353991000 FV, moving residual to 12555000 (0.704% of anchor)."
+    },
+    {
+      "source": "query",
+      "quote": "The same exact-par predicate reduces later current-period overshoots without pushing below anchor: 2025-09-30 removes 117 rows / 394535000 FV, residual 462453000 -> 67918000; 2025-12-31 removes 133 rows / 499528000 FV, residual 549024000 -> 49496000."
+    },
+    {
+      "source": "query",
+      "quote": "The overage tracks disclosed unfunded commitments: 2025-06-30 residual 366546000 vs unfunded_commitments 339770000; 2025-09-30 residual 462453000 vs 455134000; 2025-12-31 residual 549024000 vs 548706000."
+    }
+  ],
+  "rationale": "The extracted holdings include a systematic population of loan rows carried at exact par where fair_value, cost, and principal_amount are identical. In the affected 2025-H2 periods these rows explain the fair-value excess against the validated investments-at-fair-value anchor and align with the off-balance-sheet unfunded commitment signal, so they are commitment-style leakage rather than measured investment fair value. The scope excludes 2025-03-31 and earlier because applying the same predicate historically would create a new undershoot, indicating the defect is not stable there.",
+  "confidence": 0.78,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 96,
+      "fv": 353991000.0,
+      "residual_before": 366546000.0,
+      "residual_after": 12555000.0
+    },
+    "2025-09-30": {
+      "rows": 117,
+      "fv": 394535000.0,
+      "residual_before": 462453000.0,
+      "residual_after": 67918000.0
+    },
+    "2025-12-31": {
+      "rows": 133,
+      "fv": 499528000.0,
+      "residual_before": 549024000.0,
+      "residual_after": 49496000.0
+    }
+  }
+}

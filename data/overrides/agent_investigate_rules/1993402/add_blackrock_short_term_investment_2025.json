@@ -1,0 +1,87 @@
+{
+  "cik": "1993402",
+  "rule_id": "add_blackrock_short_term_investment_2025",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-06-30",
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-06-30",
+      "issuer_name": "BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_investment_identifier": "BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_dimensions_raw": "investmentidentifieraxis=BlackRock Liquidity T-Fund - Institutional Shares",
+      "source_row_id": "staging:2025-06-30:investmentidentifieraxis=BlackRock Liquidity T-Fund - Institutional Shares",
+      "fair_value": 61955000.0,
+      "cost": 58644000.0,
+      "pct_of_net_assets": 0.0346,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD"
+    },
+    {
+      "report_date": "2025-09-30",
+      "issuer_name": "BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_investment_identifier": "Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "source_row_id": "staging:2025-09-30:investmentidentifieraxis=Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "fair_value": 46814000.0,
+      "cost": 42836000.0,
+      "pct_of_net_assets": 0.0226,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_investment_identifier": "Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "fair_value": 75879000.0,
+      "cost": 71644000.0,
+      "pct_of_net_assets": 0.0355,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "fv_conservation residuals before correction: 2025-06-30 value_sum 3098615000.0 anchor_value 3160570000.0; 2025-09-30 value_sum 3535934000.0 anchor_value 3582748000.0; 2025-12-31 value_sum 4170156000.0 anchor_value 4246035000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Staging contains current-period BlackRock rows absent from holdings: 2025-06-30 investmentidentifieraxis=BlackRock Liquidity T-Fund - Institutional Shares; 2025-09-30 and 2025-12-31 investmentidentifieraxis=Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares. Holdings query for BlackRock in 2025-12-31 returned zero rows."
+    },
+    {
+      "source": "query",
+      "quote": "Adding the BlackRock fair-value gaps produces exact reconciliation: 3098615000.0 + 61955000.0 = 3160570000.0; 3535934000.0 + 46814000.0 = 3582748000.0; 4170156000.0 + 75879000.0 = 4246035000.0."
+    }
+  ],
+  "rationale": "The extractor dropped the BlackRock liquidity fund / short-term investment row from unified holdings even though it is present as a current-period staging investment. The affected quarters have validated balance-sheet investment fair-value anchors, and the missing BlackRock position accounts for the full holdings undershoot in each quarter. The rule adds only those source-backed rows and does not remove any real positions.",
+  "confidence": 0.86,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 1,
+      "fv": 61955000.0,
+      "residual_before": 61955000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 46814000.0,
+      "residual_before": 46814000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 75879000.0,
+      "residual_before": 75879000.0,
+      "residual_after": 0.0
+    }
+  }
+}

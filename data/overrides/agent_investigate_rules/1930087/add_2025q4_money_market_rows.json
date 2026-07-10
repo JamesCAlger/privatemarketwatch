@@ -1,0 +1,75 @@
+{
+  "cik": "1930087",
+  "rule_id": "add_2025q4_money_market_rows",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 65109000.0,
+      "cost": 65109000.0,
+      "shares_held": 65109000.0,
+      "issuer_name": "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class",
+      "instrument_description": "Money market fund, CUSIP 61747C582",
+      "asset_category": "CASH",
+      "issuer_category": "FUND",
+      "asset_class": "CASH_EQUIVALENT",
+      "index_classification": "CASH",
+      "bdc_investment_identifier": "Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class (CUSIP 61747C582)",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class (CUSIP 61747C582)",
+      "source_row_id": "000193008726000024.html:f-6186 us-gaap:MoneyMarketFundsAtCarryingValue contextRef=c-1124"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 16663000.0,
+      "cost": 16663000.0,
+      "shares_held": 16663000.0,
+      "issuer_name": "JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class",
+      "instrument_description": "Money market fund, CUSIP 4812A0375",
+      "asset_category": "CASH",
+      "issuer_category": "FUND",
+      "asset_class": "CASH_EQUIVALENT",
+      "index_classification": "CASH",
+      "bdc_investment_identifier": "JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class (CUSIP 4812A0375)",
+      "bdc_dimensions_raw": "investmentidentifieraxis=JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class (CUSIP 4812A0375)",
+      "source_row_id": "000193008726000024.html:f-6190 us-gaap:MoneyMarketFundsAtCarryingValue contextRef=c-1125"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2025-12-31 have COUNT=1002 and SUM(fair_value)=9828933000.0 versus anchor 9913408000.0, a shortfall of 84475000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Anti-join of current-period staging to corrected holdings finds two omitted source rows: Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class (CUSIP 61747C582) and JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class (CUSIP 4812A0375); both have investmentidentifieraxis dimensions but null numeric values in staging."
+    },
+    {
+      "source": "filing",
+      "quote": "000193008726000024.html has context c-1124 for Morgan Stanley Institutional Liquidity Funds - Treasury Portfolio Institutional Share Class (CUSIP 61747C582) and fact f-6186 us-gaap:MoneyMarketFundsAtCarryingValue scale=3 value 65,109."
+    },
+    {
+      "source": "filing",
+      "quote": "000193008726000024.html has context c-1125 for JPMorgan 100% U.S. Treasury Securities Money Market Fund - Capital Share Class (CUSIP 4812A0375) and fact f-6190 us-gaap:MoneyMarketFundsAtCarryingValue scale=3 value 16,663."
+    },
+    {
+      "source": "filing",
+      "quote": "The same filing tags aggregate money-market carrying value f-6193 as 81,772 and investment-owned fair value f-6184 as 9,913,408."
+    }
+  ],
+  "rationale": "The target-quarter under-count is caused primarily by two real money-market fund positions that exist in the filing with typed investment-identifier contexts but were not carried into holdings because their staging rows have null fair_value and cost. Adding only those two source-backed cash-equivalent investment rows improves the fair-value conservation residual without deleting or changing any real portfolio holdings; the remaining 2703000.0 gap is below the deterministic tolerance and is not safely attributable to another missing source position from the available holdings/staging data.",
+  "confidence": 0.86,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 2,
+      "fv": 81772000.0,
+      "residual_before": -84475000.0,
+      "residual_after": -2703000.0
+    }
+  }
+}

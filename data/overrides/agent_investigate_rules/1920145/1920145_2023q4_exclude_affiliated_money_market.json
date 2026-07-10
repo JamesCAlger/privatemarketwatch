@@ -1,0 +1,36 @@
+{
+  "cik": "1920145",
+  "rule_id": "1920145_2023q4_exclude_affiliated_money_market",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2023-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2023-12-31' AND bdc_dimensions_raw LIKE '%Goldman Sachs Financial Square Government Fund%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings row for 2023-12-31: Investment Goldman Sachs Financial Square Government Fund / Institutional Shares has fair_value 65977000.0 and bdc_dimensions_raw = investmentidentifieraxis=Investment Goldman Sachs Financial Square Government Fund - Institutional Shares."
+    },
+    {
+      "source": "query",
+      "quote": "staging has separate subtotal rows: Investments - 112.40% fair_value 1788119000.0, Investments in Affiliated Money Market Fund fair_value 65977000.0, and Investments and Investments in Affiliated Money Market Fund - 116.55% fair_value 1854096000.0."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2023-12-31 reports investments_at_fair_value 1788119000.0, matching the Investments subtotal and excluding the affiliated money market fund."
+    }
+  ],
+  "rationale": "The conservation anchor is the filer's Investments subtotal. The Goldman Sachs Financial Square Government Fund row is presented as an affiliated money market fund outside that subtotal and is included only in a broader investments-plus-affiliated-money-market subtotal, so counting it in holdings overstates the investment fair-value anchor.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2023-12-31": {
+      "rows": 1,
+      "fv": -65977000.0,
+      "residual_before": 66046000.0,
+      "residual_after": 69000.0
+    }
+  }
+}

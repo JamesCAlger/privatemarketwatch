@@ -1,0 +1,48 @@
+{
+  "cik": "1278752",
+  "rule_id": "1278752_exclude_relationship_axis_duplicates",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "(bdc_dimensions_raw LIKE 'investmentidentifieraxis=Controlled Investments%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Affiliated Investments%')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-06-30, holdings value_sum is 3739882000.0 versus anchor 3327482000.0, residual_before 412400000.0. Rows with bdc_dimensions_raw starting Controlled Investments or Affiliated Investments total 16 rows and 412400000.0 fair value; excluding them gives value_after 3327482000.0 and residual_after 0.0."
+    },
+    {
+      "source": "query",
+      "quote": "Matched duplicate examples in 2025-06-30: Controlled Investments Merx Aviation Finance, LLC, Membership Interests fair_value 133746000.0 matches the detailed Passenger Airlines Merx Aviation Finance, LLC Common Equity - Membership Interests row; Controlled Investments ChyronHego US Holding Corporation, Term Loan fair_value 106406000.0 matches the detailed Software ChyronHego Corporation ChyronHego US Holding Corporation First Lien Secured Debt - Term Loan row; Affiliated Investments Carbonfree Chemicals Holdings LLC,Common Equity / Interest fair_value 18519000.0 matches the detailed Chemicals Carbonfree Chemicals SPE I LLC Carbonfree Chemicals Holdings LLC Common Equity row."
+    },
+    {
+      "source": "query",
+      "quote": "Across anchored quarters, the same predicate reduces overshoot and does not create an undershoot: residual_after is 35759000.0 for 2023-06-30, 9872000.0 for 2023-09-30, 62462000.0 for 2023-12-31, 52640000.0 for 2024-03-31, 9673000.0 for 2024-06-30, 60506000.0 for 2024-09-30, 60354000.0 for 2024-12-31, 20498000.0 for 2025-03-31, and 0.0 for 2025-06-30, 2025-09-30, and 2025-12-31."
+    }
+  ],
+  "rationale": "The extracted holdings include relationship-axis presentations for controlled and affiliated investments in addition to the detailed schedule rows. These relationship-axis rows are real filing facts but are duplicate alternate presentations of positions already counted in the industry/investment-detail schedule. In 2025-06-30 their combined fair value exactly equals the conservation overshoot, and matched rows with identical fair values remain in holdings after exclusion.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 16,
+      "fv": 412400000.0,
+      "residual_before": 412400000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 16,
+      "fv": 335356000.0,
+      "residual_before": 335356000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 14,
+      "fv": 332486000.0,
+      "residual_before": 332486000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "cik": "1872371",
+  "rule_id": "exclude_bny_mellon_treasury_cash_fund",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "(issuer_name = 'BNY Mellon U.S. Treasury Fund, Investor Shares' OR bdc_investment_identifier = 'BNY Mellon U.S. Treasury Fund, Investor Shares') AND asset_category = 'CASH'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings row for 2025-03-31: issuer_name='BNY Mellon U.S. Treasury Fund, Investor Shares', bdc_dimensions_raw='investmentidentifieraxis=BNY Mellon U.S. Treasury Fund, Investor Shares', fair_value=61575000.0, cost=61575000.0, asset_category='CASH'. The fv_conservation residual before correction is 61575000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The same cash fund pattern occurs at 2024-12-31: fair_value=99632000.0 and fv_conservation residual_before=99632000.0; excluding the row gives value_after=5023732000.0 and residual_after=0.0."
+    },
+    {
+      "source": "query",
+      "quote": "Across all holdings, asset_category='CASH' appears only for BNY Mellon U.S. Treasury Fund, Investor Shares in 2024-12-31 and 2025-03-31. Applying this predicate leaves all other anchored quarters unchanged and moves 2025-03-31 value_sum from 5883158000.0 to the anchor 5821583000.0."
+    }
+  ],
+  "rationale": "The extracted holdings include a cash sweep / treasury money-market fund row that is not included in the filing's investments-at-fair-value anchor. In both affected quarters, the fair-value conservation overshoot equals this single CASH row exactly. This is an over-inclusion defect, not a duplicate security or scaling issue, because the staging row has no investment type or industry and the holdings classifier marks it as CASH.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": 99632000.0,
+      "residual_before": 99632000.0,
+      "residual_after": 0.0
+    },
+    "2025-03-31": {
+      "rows": 1,
+      "fv": 61575000.0,
+      "residual_before": 61575000.0,
+      "residual_after": 0.0
+    }
+  }
+}
