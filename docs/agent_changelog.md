@@ -6469,3 +6469,50 @@ these need source-anchored checks, not row-local predicates.
   Targeted suites green: agent rule/applier/wrapper-patch/anchor (87), verdict_leaf
   (30), shadow/conservation/promote selection (46). Wave 1 itself (promotion +
   rebuild + semantic diff + battery re-run) NOT executed -- operator-gated.
+
+## 2026-07-10 — Disk reclamation: worker-fleet scratch + pre-run snapshot retention
+
+**What changed:**
+- Diagnosed `data/` at ~600 GB: 853 stale `codex.exe` copies (257 GB) in `worker_home\.sandbox-bin` dirs under `data/output` (Codex copies its ~300 MB binary into every fresh CODEX_HOME), plus ~40 MB/~5,000-file plugin caches per worker, plus 29 unpruned `pre_run_*` snapshots (154 GB) in `data/snapshots`.
+- Deleted all `codex.exe` copies and `worker_home\*\.tmp\plugins` caches under `data/output` (agent_b, agent_investigate, agent_a, agent_b2, agent_anchor). Work artifacts (logs, wrappers, verdicts, prompts, sqlite state) untouched.
+- Pruned 24 oldest `pre_run_*` snapshots (~130 GB); kept `baseline`, `pre_2026_05_27_refresh`, and the 3 newest `pre_run_*`.
+- `scripts/run_codex_worker.ps1`: now deletes `.sandbox-bin\codex.exe` and `.tmp\plugins` from the worker home after each run (new `-NoCleanup` switch preserves them for debugging).
+- New `scripts/cleanup_worker_scratch.ps1`: sweeps orphaned scratch from killed dispatchers/pre-change batches (`-Root`, `-WhatIfOnly`); refuses to run while codex processes are alive.
+- `pipeline/main.py` `_snapshot_outputs()`: now prunes to the newest 3 `pre_run_*` snapshots after each auto-snapshot (`_PRE_RUN_SNAPSHOTS_KEEP = 3`); named snapshots never touched.
+- `docs/reference/codex_worker_dispatch.md`: added "Disk hygiene" section.
+
+**Tests:** new `tests/test_snapshot_prune.py` (5 tests, passing). No production data outputs touched — deletions were sandbox scratch and snapshot copies only.
+
+## 2026-07-10 -- Wave 1 executed: first production application of promoted agent fixes
+
+- Promotion (commit 19d083d): 49 CIKs attempted via run_investigation.promote (live B3
+  gate = promotion bar). 44 promoted; 5 refused by the live gate against current
+  production (1803498, 1859919 delete-to-balance; 1899996, 1911066, 1965934 residual
+  unchanged) -- stale June PASS records did not carry.
+- Parity check (scripts/wave1_parity_check.py) pulled 4 more: 1508655, 1812554,
+  1885968 (rules matched 0 rows on the current frame -- caught by the new noop drift
+  flag) and 1743415 (~1 row/quarter beyond its rules). Archived under
+  data/output/agent_investigate/wave1_pulled/ for re-investigation. Final wave:
+  40 CIKs / 64 rules; parity 440 CIK-quarters, 0 mismatches, audit 64/64 applied,
+  0 drift flags.
+- Production rebuild: 792,256 unified rows. agent_fix_application_audit.csv is now a
+  standing rebuild artifact.
+- Conservation engine re-run (first post-gap-1 measurement): fv_conservation flagged
+  CIK-quarters 337 -> 245 (-27%); reconciles 427 -> 519; 7 verified_override anchors
+  in use. 38/40 wave targets reconcile; 1930087 (-0.85% vs its verified anchor) and
+  1930679 (+0.78%) are inside the B3 gate 1% band but outside the engine 0.5% band --
+  instrument-threshold mismatch to resolve, not a regression.
+- diff_outputs.py --semantic vs the old baseline was dominated by PRE-EXISTING drift
+  (schema columns added since the baseline was cut: FX currency fields, nonaccrual
+  provenance, sec_dataset_quarter; changes in non-wave CIKs in position_matches).
+  It could not serve as the wave acceptance check; parity + audit + per-CIK scoping
+  did. Baseline refreshed via snapshot_outputs.py --clean; prior baseline archived at
+  data/snapshots/baseline_pre_wave1_2026-07-10/.
+- Frontend export re-run (28 JSON files) from corrected holdings.
+- Known issue (pre-existing, NOT from gap 1): test_unified_holdings.py
+  test_ixbrl_lien_fills_blank_keyword_lien fails on the pre-change tree too
+  (iXBRL lien overlay fill returns None) -- needs separate investigation. Suite
+  otherwise 894 passed (2h51m runtime; consider marking the full-build tests slow).
+- Next: re-investigate the 9 held CIKs against the current frame; live-gate + promote
+  the 7 B2 correction leaves; then the first post-rebuild B1 recalibration batch with
+  per-fingerprint-group quotas (now unblocked -- gap 1 and wave 1 are done).
