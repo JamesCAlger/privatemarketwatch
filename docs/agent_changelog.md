@@ -6516,3 +6516,18 @@ these need source-anchored checks, not row-local predicates.
 - Next: re-investigate the 9 held CIKs against the current frame; live-gate + promote
   the 7 B2 correction leaves; then the first post-rebuild B1 recalibration batch with
   per-fingerprint-group quotas (now unblocked -- gap 1 and wave 1 are done).
+
+## 2026-07-10 -- Baseline refreshed post-wave-1; snapshot walker hardened
+
+- scripts/snapshot_outputs.py: exclude sandbox worker scratch subtrees (worker_home,
+  .sandbox*, .tmp -- nondeterministic, huge, MAX_PATH violations, deleted by cleanup
+  sweeps mid-walk) and record-not-crash on files that vanish between walk and stat.
+  First refresh attempt crashed on agent_b worker scratch; a partial copy left
+  read-only git pack files that needed an external force-remove before rerun.
+- New baseline: 24,539 included / 8,968 excluded / 33,507 artifacts at git_head
+  dcfe39c (includes the wave-1 override store). Prior baseline archived at
+  data/snapshots/baseline_pre_wave1_2026-07-10/. diff_outputs.py --semantic vs the
+  new baseline: clean (24,543 checked, 0 semantic deltas).
+- Scope note: artifact count grew from 3,759 (2026-05-16 baseline) because
+  data/output now carries agent batch records, review bundles, and ensemble outputs;
+  worker scratch stays excluded by name.
