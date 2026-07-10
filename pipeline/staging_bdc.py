@@ -381,6 +381,8 @@ def _reclassify_named_fund_positions(df: pd.DataFrame) -> pd.DataFrame:
 def _prepare_bdc(
     bdc_df: pd.DataFrame | None = None,
     bdc_file: Union[Path, str, None] = None,
+    raw_exclusions: list[dict] | None = None,
+    raw_exclusion_audits: list[dict] | None = None,
 ) -> pd.DataFrame:
     """Filter, parse, classify, and map BDC holdings to unified schema.
 
@@ -394,6 +396,14 @@ def _prepare_bdc(
         Path to BDC holdings file (Parquet or CSV). When provided, DuckDB
         reads the file directly -- much faster than loading via pandas then
         registering.  Falls back to *bdc_df* when the file does not exist.
+    raw_exclusions : list of dict, optional
+        Promoted comparative-period targets [{cik, report_date}] (see
+        ``pipeline.agent_promoted.raw_staging_exclusions``). Applied as
+        DELETEs on the raw frame while it still carries XBRL ``period`` --
+        the layer where the comparative fix semantically applies.
+    raw_exclusion_audits : list, optional
+        When provided, application audit rows are appended to it (the caller
+        persists the rebuild audit artifact).
     """
     from pipeline.unified_holdings import UNIFIED_COLUMNS
 
@@ -454,6 +464,11 @@ def _prepare_bdc(
     else:
         raise ValueError("Either bdc_df or bdc_file must be provided")
     # --- end data source selection --------------------------------------------
+    if raw_exclusions:
+        from pipeline.agent_promoted import apply_raw_staging_exclusions
+        audits = apply_raw_staging_exclusions(con, raw_exclusions)
+        if raw_exclusion_audits is not None:
+            raw_exclusion_audits.extend(audits)
     if FX_RATES_FILE.exists():
         fx_path = str(FX_RATES_FILE).replace("\\", "/")
         con.execute(f"""

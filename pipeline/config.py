@@ -151,6 +151,14 @@ UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
 BDC_XBRL_ORACLE_EXCEPTIONS_FILE = OVERRIDES_DIR / "bdc_xbrl_oracle_exceptions.json"
 
+# Promoted agent-fix stores (gap 1): gate-PASS fixes with production consumers.
+# agent_anchor -> shadow conservation engine (verified_override anchor kind);
+# agent_b2_corrections -> raw BDC staging (comparative_period_filter);
+# agent_investigate_rules -> tail of build_unified_holdings (pipeline.agent_promoted).
+AGENT_ANCHOR_OVERRIDES_DIR = OVERRIDES_DIR / "agent_anchor"
+AGENT_B2_CORRECTIONS_DIR = OVERRIDES_DIR / "agent_b2_corrections"
+AGENT_INVESTIGATE_RULES_DIR = OVERRIDES_DIR / "agent_investigate_rules"
+
 # Position match overrides (per-CIK JSON files with reject/force_pair directives)
 POSITION_MATCH_OVERRIDES_DIR = OVERRIDES_DIR / "position_match_overrides"
 

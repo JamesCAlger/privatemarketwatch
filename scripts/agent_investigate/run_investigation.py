@@ -35,7 +35,7 @@ from pipeline.anchor_validation import classify_anchors, flag_anchor_outliers
 BASE = config.OUTPUT_DIR / "agent_investigate"
 CONSERVATION = config.OUTPUT_DIR / "shadow" / "conservation_gate_results.csv"
 DEFAULT_VERDICTS = config.OUTPUT_DIR / "review_queue" / "verdicts"
-DEFAULT_OVERRIDES = config.PROJECT_ROOT / "data" / "overrides" / "agent_investigate_rules"
+DEFAULT_OVERRIDES = config.AGENT_INVESTIGATE_RULES_DIR
 # Per-cik verified GRAND-total anchors written by the anchor-adjudicator (agent_anchor). When
 # present for a cik-quarter, this REPLACES the (possibly incomplete) companyfacts subtotal as the
 # strong anchor the fixer + gate reconcile to. See pipeline/anchor_leaf.py.

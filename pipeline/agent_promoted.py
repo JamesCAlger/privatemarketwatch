@@ -1,0 +1,312 @@
+"""Production consumers for PROMOTED agent fixes (gap 1).
+
+Three families of gate-PASS agent fixes each have a git-tracked override store; this
+module is their single production consumer, so trial and production share one code path:
+
+- ``data/overrides/agent_anchor/<cik>/<quarter>.json`` -- Anchor Adjudicator grand
+  totals (closure-verified). Consumed by the shadow conservation engine as the
+  top-priority ``verified_override`` anchor kind (Layer D).
+- ``data/overrides/agent_b2_corrections/<cik>/<fix_class>.json`` -- gate-PASS B2
+  correction leaves. The raw-staging family (``comparative_period_filter``) is applied
+  inside BDC staging while the frame still carries raw XBRL ``period`` (Layer B).
+- ``data/overrides/agent_investigate_rules/<cik>/<rule_id>.json`` -- gate-PASS
+  investigator rules (``pipeline.agent_rule`` vocabulary), applied at the tail of
+  ``build_unified_holdings()`` scoped per CIK to BDC-source rows (Layer C).
+
+Every application emits audit rows; ``write_application_audit`` persists them next to
+the unified output each rebuild, diffed against the rule's authoring-time
+``measured_impact``. A promoted rule that matches 0 rows or 10x the authored rows means
+upstream extraction shifted under it: WARN and route to re-validation, never apply
+silently.
+
+Loaders take an explicit ``*_dir`` parameter defaulting to the config path so
+fixture-based tests can pass an empty store. ASCII-only logs.
+"""
+
+from __future__ import annotations
+
+import json
+import logging
+import re
+from pathlib import Path
+from typing import Optional
+
+import pandas as pd
+
+from pipeline import config
+
+logger = logging.getLogger(__name__)
+
+# Applied rows vs authoring-time rows beyond this ratio (either direction) flags drift.
+DRIFT_ROW_RATIO = 10.0
+
+_DIGITS_RE = re.compile(r"\D")
+
+AUDIT_COLUMNS = ["layer", "cik", "rule_id", "rule_type", "status", "rows_changed",
+                 "fv_affected", "authoring_rows", "authoring_fv", "drift", "message"]
+
+
+def normalize_cik10(raw) -> str:
+    """10-digit zero-padded CIK from any int/str form (empty stays empty)."""
+    digits = _DIGITS_RE.sub("", str(raw or ""))
+    return digits.zfill(10) if digits else ""
+
+
+# --------------------------------------------------------------------------- anchors (Layer D)
+
+def load_anchor_overrides(overrides_dir: Optional[Path] = None) -> list[dict]:
+    """Adjudicated grand totals: [{cik, report_date, anchor_value}] (cik 10-digit).
+
+    Files live at ``<dir>/<cik>/<quarter>.json`` with fields ``cik``,
+    ``target_quarter``, ``grand_total`` (see scripts/agent_anchor/run_anchor.py
+    promote). Malformed files are skipped with a WARN, never guessed at.
+    """
+    base = Path(overrides_dir) if overrides_dir is not None else config.AGENT_ANCHOR_OVERRIDES_DIR
+    out: list[dict] = []
+    for p in sorted(base.glob("*/*.json")) if base.exists() else []:
+        try:
+            # utf-8-sig: sandbox workers sometimes write JSON with a UTF-8 BOM.
+            leaf = json.loads(p.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError) as exc:
+            logger.warning("anchor override unreadable, skipped: %s (%s)", p, exc)
+            continue
+        cik = normalize_cik10(leaf.get("cik") or p.parent.name)
+        quarter = str(leaf.get("target_quarter") or p.stem).strip()
+        total = leaf.get("grand_total")
+        if not cik or not quarter or not isinstance(total, (int, float)):
+            logger.warning("anchor override missing cik/target_quarter/grand_total, skipped: %s", p)
+            continue
+        out.append({"cik": cik, "report_date": quarter, "anchor_value": float(total)})
+    return out
+
+
+# --------------------------------------------------------------------------- corrections (Layer B)
+
+def load_promoted_corrections(corrections_dir: Optional[Path] = None) -> list[dict]:
+    """Gate-PASS B2 correction leaves from ``<dir>/<cik>/<fix_class>.json``."""
+    base = (Path(corrections_dir) if corrections_dir is not None
+            else config.AGENT_B2_CORRECTIONS_DIR)
+    out: list[dict] = []
+    for p in sorted(base.glob("*/*.json")) if base.exists() else []:
+        try:
+            leaf = json.loads(p.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError) as exc:
+            logger.warning("promoted correction unreadable, skipped: %s (%s)", p, exc)
+            continue
+        if isinstance(leaf, dict):
+            out.append(leaf)
+    return out
+
+
+def raw_staging_exclusions(corrections: list[dict]) -> list[dict]:
+    """Deterministic (cik, report_date) targets for the raw-staging comparative filter."""
+    targets: set[tuple[str, str]] = set()
+    for c in corrections:
+        if str(c.get("fix_class") or "") != "comparative_period_filter":
+            continue
+        cik = normalize_cik10(c.get("cik"))
+        rd = str((c.get("template") or {}).get("report_date") or "").strip()
+        if cik and rd:
+            targets.add((cik, rd))
+    return [{"cik": cik, "report_date": rd} for cik, rd in sorted(targets)]
+
+
+def apply_raw_staging_exclusions(con, exclusions: list[dict]) -> list[dict]:
+    """DELETE comparative-period rows from the staging ``bdc_raw`` DuckDB table.
+
+    For each promoted (cik, report_date): drop rows of that filer-quarter whose raw
+    XBRL ``period`` differs from ``report_date`` -- the same predicate as
+    ``pipeline.agent_b2_appliers.apply_comparative_period_filter``, expressed in SQL
+    against the pre-staging frame (unified holdings no longer carry ``period``).
+
+    NULL/empty ``period`` rows ARE dropped for the target quarter: the pandas applier
+    compares ``astype(str)`` so NULL never equals report_date, and staging's generic
+    pre-filter deliberately KEEPS NULL-period rows -- those are exactly the
+    comparative leaks this promoted, gate-validated fix targets.
+    """
+    audits: list[dict] = []
+    if not exclusions:
+        return audits
+    cols = {r[0] for r in con.execute(
+        "SELECT column_name FROM information_schema.columns WHERE table_name = 'bdc_raw'"
+    ).fetchall()}
+    if "period" not in cols or "report_date" not in cols:
+        return [{"layer": "raw_bdc_staging", "cik": e["cik"], "rule_id": "comparative_period_filter",
+                 "rule_type": "comparative_period_filter", "status": "error",
+                 "rows_changed": 0, "fv_affected": None, "authoring_rows": None,
+                 "authoring_fv": None, "drift": "",
+                 "message": "bdc_raw lacks period/report_date columns"} for e in exclusions]
+    for e in exclusions:
+        cik, rd = str(e["cik"]), str(e["report_date"]).replace("'", "''")
+        where = (
+            "LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = "
+            f"'{cik}' AND CAST(report_date AS VARCHAR) = '{rd}' "
+            "AND (period IS NULL OR CAST(period AS VARCHAR) = '' "
+            "     OR CAST(period AS VARCHAR) <> CAST(report_date AS VARCHAR))"
+        )
+        n, fv = con.execute(
+            f"SELECT COUNT(*), SUM(TRY_CAST(fair_value AS DOUBLE)) FROM bdc_raw WHERE {where}"
+        ).fetchone()
+        con.execute(f"DELETE FROM bdc_raw WHERE {where}")
+        audits.append({"layer": "raw_bdc_staging", "cik": cik,
+                       "rule_id": f"comparative_period_filter/{e['report_date']}",
+                       "rule_type": "comparative_period_filter", "status": "ok",
+                       "rows_changed": int(n or 0),
+                       "fv_affected": float(fv) if fv is not None else None,
+                       "authoring_rows": None, "authoring_fv": None,
+                       "drift": "noop" if not n else "",
+                       "message": ""})
+        if not n:
+            logger.warning("promoted comparative_period_filter matched 0 rows: cik=%s %s "
+                           "(upstream extraction may have shifted)", cik, e["report_date"])
+        else:
+            logger.info("raw-staging comparative filter: cik=%s %s dropped %d rows",
+                        cik, e["report_date"], n)
+    return audits
+
+
+# --------------------------------------------------------------------------- rules (Layer C)
+
+def load_promoted_rules(rules_dir: Optional[Path] = None) -> dict[str, list[dict]]:
+    """{cik10: [rules]} from ``<dir>/<cik>/<rule_id>.json``.
+
+    Within a CIK, rules apply in sorted-filename order -- the same order
+    ``agent_rule.load_rules`` used when B3 gated them, so production application
+    preserves gate-time semantics.
+    """
+    base = Path(rules_dir) if rules_dir is not None else config.AGENT_INVESTIGATE_RULES_DIR
+    out: dict[str, list[dict]] = {}
+    for p in sorted(base.glob("*/*.json")) if base.exists() else []:
+        try:
+            rule = json.loads(p.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError) as exc:
+            logger.warning("promoted rule unreadable, skipped: %s (%s)", p, exc)
+            continue
+        cik = normalize_cik10(p.parent.name)
+        if cik:
+            out.setdefault(cik, []).append(rule)
+    return out
+
+
+def _authoring_impact(rule: dict) -> tuple[Optional[int], Optional[float]]:
+    """(rows, fv) totals from the rule's authoring-time measured_impact, if present."""
+    mi = rule.get("measured_impact")
+    if not isinstance(mi, dict) or not mi:
+        return None, None
+    rows = fv = 0.0
+    for q in mi.values():
+        if not isinstance(q, dict):
+            return None, None
+        rows += float(q.get("rows") or 0)
+        fv += abs(float(q.get("fv") or 0))
+    return int(rows), fv
+
+
+def _applied_impact(audit: dict) -> tuple[int, float]:
+    """(rows changed, abs FV affected) from one agent_rule applier audit."""
+    rows = 0
+    for k in ("rows_excluded", "rows_rescaled", "rows_set", "rows_added"):
+        if k in audit:
+            rows = int(audit[k] or 0)
+            break
+    fv = sum(abs(float(b.get("fv") or 0)) for b in (audit.get("per_quarter") or {}).values())
+    return rows, fv
+
+
+def _drift(rule: dict, applied_rows: int) -> str:
+    """'' (ok) | 'noop' | 'row_drift' -- the re-validation routing signal."""
+    if applied_rows == 0:
+        return "noop"
+    authored, _ = _authoring_impact(rule)
+    if authored and (applied_rows > DRIFT_ROW_RATIO * authored
+                     or applied_rows * DRIFT_ROW_RATIO < authored):
+        return "row_drift"
+    return ""
+
+
+def apply_promoted_rules(
+    combined: pd.DataFrame, rules_by_cik: dict[str, list[dict]],
+) -> tuple[pd.DataFrame, list[dict]]:
+    """Apply promoted investigator rules to the unified frame, per CIK, BDC rows only.
+
+    Scoping is structural, not trust-based: a rule authored against one filer's
+    dimension strings is only ever evaluated against that CIK's BDC-source rows, so it
+    cannot touch N-PORT rows or another filer no matter what its predicate says. The
+    full frame is never scanned row-by-row -- each CIK's slice is small.
+    """
+    audits: list[dict] = []
+    if not rules_by_cik or combined.empty or "cik" not in combined.columns:
+        return combined, audits
+    from pipeline.agent_rule import apply_rules
+
+    cik_norm = combined["cik"].astype(str).str.replace(r"\D", "", regex=True).str.zfill(10)
+    is_bdc = (combined["source"].astype(str).str.lower() == "bdc") if "source" in combined.columns \
+        else pd.Series(True, index=combined.index)
+
+    replaced_parts: list[pd.DataFrame] = []
+    drop_mask = pd.Series(False, index=combined.index)
+    for cik in sorted(rules_by_cik):
+        rules = rules_by_cik[cik]
+        mask = (cik_norm == cik) & is_bdc
+        sub = combined.loc[mask]
+        if sub.empty:
+            for r in rules:
+                audits.append({"layer": "unified_agent_rules", "cik": cik,
+                               "rule_id": str(r.get("rule_id")), "rule_type": str(r.get("rule_type")),
+                               "status": "no_rows", "rows_changed": 0, "fv_affected": 0.0,
+                               "authoring_rows": _authoring_impact(r)[0],
+                               "authoring_fv": _authoring_impact(r)[1],
+                               "drift": "noop", "message": "no BDC rows for CIK in frame"})
+                logger.warning("promoted rule %s: no BDC rows for cik=%s in frame",
+                               r.get("rule_id"), cik)
+            continue
+        corrected, rule_audits = apply_rules(sub, rules)
+        # row_add positions carry only holdings fields (see agent_rule.ADD_POSITION_KEYS);
+        # identity columns are filled STRUCTURALLY from the rule's own CIK scope so an
+        # added row can never orphan out of its filer.
+        added = corrected["cik"].isna()
+        if added.any():
+            corrected.loc[added, "cik"] = cik
+            if "source" in corrected.columns:
+                corrected.loc[added & corrected["source"].isna(), "source"] = "bdc"
+            if "entity_name" in corrected.columns:
+                names = sub["entity_name"].dropna() if "entity_name" in sub.columns else []
+                if len(names):
+                    corrected.loc[added & corrected["entity_name"].isna(),
+                                  "entity_name"] = sorted(names.mode())[0]
+        for r, a in zip(rules, rule_audits):
+            rows, fv = _applied_impact(a)
+            authored_rows, authored_fv = _authoring_impact(r)
+            drift = _drift(r, rows) if a.get("status") == "ok" else ""
+            audits.append({"layer": "unified_agent_rules", "cik": cik,
+                           "rule_id": str(a.get("rule_id")), "rule_type": str(r.get("rule_type")),
+                           "status": str(a.get("status")), "rows_changed": rows,
+                           "fv_affected": fv, "authoring_rows": authored_rows,
+                           "authoring_fv": authored_fv, "drift": drift,
+                           "message": "; ".join(a.get("errors") or []) or str(a.get("message") or "")})
+            if a.get("status") != "ok":
+                logger.warning("promoted rule %s (cik=%s) did not apply: %s",
+                               a.get("rule_id"), cik, a.get("errors") or a.get("message"))
+            elif drift:
+                logger.warning("promoted rule %s (cik=%s) DRIFT=%s: applied rows=%d vs "
+                               "authored rows=%s -- route to re-validation",
+                               a.get("rule_id"), cik, drift, rows, authored_rows)
+        drop_mask = drop_mask | mask
+        replaced_parts.append(corrected)
+
+    if not replaced_parts:
+        return combined, audits
+    out = pd.concat([combined.loc[~drop_mask], *replaced_parts], ignore_index=True)
+    return out[combined.columns], audits
+
+
+# --------------------------------------------------------------------------- audit artifact
+
+def write_application_audit(audit_rows: list[dict], path: Path) -> None:
+    """Persist the per-rebuild application audit (small frame; pandas is fine)."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(audit_rows, columns=AUDIT_COLUMNS).to_csv(path, index=False)
+    n_drift = sum(1 for r in audit_rows if r.get("drift"))
+    logger.info("agent-fix application audit: %d entries (%d flagged) -> %s",
+                len(audit_rows), n_drift, path.name)

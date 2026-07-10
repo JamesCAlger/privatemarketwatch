@@ -31,12 +31,18 @@ PROD_WRAPPER_DIR = Path(__file__).resolve().parent.parent / "data" / "overrides"
 def apply_subtotal_filter(
     cik: str, template: dict, *, out_wrapper_dir: Path,
     source_wrapper_dir: Path = PROD_WRAPPER_DIR, provenance: dict | None = None,
+    write_if_noop: bool = True,
 ) -> dict:
     """Merge ``template['patterns']`` into the CIK's wrapper ``dispatch.aggregate_markers``,
     writing a TRIAL wrapper to ``out_wrapper_dir/<cik>.json``. Returns an audit dict.
 
     Fails safe (status=error, no write) when the source wrapper is missing or is not a
-    dispatch-style wrapper -- those CIKs need a different mechanism, not a silent no-op."""
+    dispatch-style wrapper -- those CIKs need a different mechanism, not a silent no-op.
+
+    ``write_if_noop=False`` (in-place production promotion): when every pattern is
+    already present, skip the write entirely (status=noop) so re-promotion never appends
+    duplicate provenance blocks. Trial materialization keeps the default (the trial
+    wrapper must exist on disk even when the patch is a no-op)."""
     cik_norm = normalize_cik(cik)
     audit: dict = {"fix_class": "subtotal_filter", "cik": cik_norm}
     patterns = [str(p).strip() for p in (template.get("patterns") or []) if str(p).strip()]
@@ -74,6 +80,11 @@ def apply_subtotal_filter(
             added.append(pl)
     dispatch["aggregate_markers"] = existing
     wrapper["dispatch"] = dispatch
+
+    if not added and not write_if_noop:
+        audit.update(status="noop", patterns_added=[], n_markers_total=len(existing),
+                     message="all patterns already present; wrapper not rewritten")
+        return audit
 
     # provenance block -- the audit trail the bare wrapper config lacks.
     prov = wrapper.setdefault("b2_provenance", [])

@@ -221,7 +221,49 @@ def test_promote_copies_only_pass(tmp_path):
     promoted = rr.promote_passes(
         [{"cik": "0001743415", "mechanism": "subtotal_leak", "verdict": "PASS"},
          {"cik": "0001743415", "mechanism": "rate_scale", "verdict": "FAIL"}],
-        corrections_dir=tmp_path / "corrections", overrides_dir=overrides)
+        corrections_dir=tmp_path / "corrections", overrides_dir=overrides,
+        wrapper_dir=tmp_path / "wrappers")
     assert len(promoted) == 1
     assert (overrides / "0001743415" / "subtotal_leak.json").exists()
     assert not (overrides / "0001743415" / "rate_scale.json").exists()
+
+
+def test_promote_wrapper_patch_applies_to_production_wrapper(tmp_path):
+    """Gap-1 Layer A: a PASS subtotal_filter promotes the PATCHED WRAPPER (with
+    provenance) into the wrapper store, not a leaf into the corrections store."""
+    cik = "0001743415"
+    wrappers = tmp_path / "wrappers"
+    wrappers.mkdir()
+    (wrappers / f"{cik}.json").write_text(json.dumps(
+        {"dispatch": {"aggregate_markers": ["total investments"]}}), encoding="utf-8")
+    corr = tmp_path / "corrections" / cik
+    corr.mkdir(parents=True)
+    (corr / "subtotal_filter.json").write_text(json.dumps(
+        {"cik": cik, "fix_class": "subtotal_filter",
+         "template": {"patterns": ["total debt investments"]},
+         "source_review_ids": ["RVQ_1"], "confidence": 0.9}), encoding="utf-8")
+    overrides = tmp_path / "overrides"
+
+    promoted = rr.promote_passes(
+        [{"cik": cik, "mechanism": "subtotal_filter", "verdict": "PASS"}],
+        corrections_dir=tmp_path / "corrections", overrides_dir=overrides,
+        wrapper_dir=wrappers)
+
+    assert len(promoted) == 1
+    assert promoted[0]["layer"] == "wrapper_patch"
+    assert promoted[0]["status"] == "ok"
+    wrapper = json.loads((wrappers / f"{cik}.json").read_text(encoding="utf-8"))
+    assert "total debt investments" in wrapper["dispatch"]["aggregate_markers"]
+    assert wrapper["b2_provenance"][0]["patterns_added"] == ["total debt investments"]
+    assert wrapper["b2_provenance"][0]["source_review_ids"] == ["RVQ_1"]
+    # The leaf must NOT land in the corrections override store (wrong layer).
+    assert not (overrides / cik / "subtotal_filter.json").exists()
+
+    # Re-promotion is a recorded no-op: no duplicate provenance, wrapper unchanged.
+    promoted2 = rr.promote_passes(
+        [{"cik": cik, "mechanism": "subtotal_filter", "verdict": "PASS"}],
+        corrections_dir=tmp_path / "corrections", overrides_dir=overrides,
+        wrapper_dir=wrappers)
+    assert promoted2[0]["status"] == "noop"
+    wrapper2 = json.loads((wrappers / f"{cik}.json").read_text(encoding="utf-8"))
+    assert len(wrapper2["b2_provenance"]) == 1

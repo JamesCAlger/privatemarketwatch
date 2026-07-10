@@ -733,6 +733,8 @@ def build_unified_holdings(
     *,
     output_file: Optional[Path] = None,
     orphan_file: Optional[Path] = None,
+    agent_rules_dir: Optional[Path] = None,
+    b2_corrections_dir: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Build unified private markets holdings from BDC + N-PORT data.
 
@@ -747,11 +749,26 @@ def build_unified_holdings(
     orphan_file : Path, optional
         Write orphan holdings to this path instead of the default
         ``UNIVERSE_ORPHAN_HOLDINGS_FILE``.
+    agent_rules_dir, b2_corrections_dir : Path, optional
+        Promoted agent-fix stores (gap 1). Default to the config stores
+        (``AGENT_INVESTIGATE_RULES_DIR`` / ``AGENT_B2_CORRECTIONS_DIR``);
+        fixture-based tests pass an empty directory so promoted production
+        fixes never leak into fixtures that use real CIKs. Every application
+        is audited to ``agent_fix_application_audit.csv`` next to the output.
 
     Returns the combined DataFrame and saves to *output_file* (or the
     default production path).
     """
     t0 = time.time()
+
+    # Promoted agent fixes (gap 1): Layer B (raw-staging comparative filters) applies
+    # inside BDC staging while the frame still carries XBRL `period`; Layer C
+    # (investigator rules) applies at the tail. One code path for production, trial,
+    # and rebuild_outputs -- parity by construction.
+    from pipeline import agent_promoted
+    _agent_fix_audits: list[dict] = []
+    _raw_exclusions = agent_promoted.raw_staging_exclusions(
+        agent_promoted.load_promoted_corrections(b2_corrections_dir))
 
     # Prepare BDC: prefer Parquet > CSV file path (DuckDB direct read)
     # over pandas DataFrame.  This bypasses the slow pandas CSV parse +
@@ -763,9 +780,13 @@ def build_unified_holdings(
             else BDC_HOLDINGS_FILE
         )
         logger.info("Loading BDC holdings from %s (via DuckDB)", bdc_file.name)
-        bdc_unified = staging_bdc._prepare_bdc(bdc_file=bdc_file)
+        bdc_unified = staging_bdc._prepare_bdc(
+            bdc_file=bdc_file, raw_exclusions=_raw_exclusions,
+            raw_exclusion_audits=_agent_fix_audits)
     else:
-        bdc_unified = staging_bdc._prepare_bdc(bdc_df=bdc_df)
+        bdc_unified = staging_bdc._prepare_bdc(
+            bdc_df=bdc_df, raw_exclusions=_raw_exclusions,
+            raw_exclusion_audits=_agent_fix_audits)
 
     # Prepare N-PORT: same pattern -- file path for DuckDB direct read.
     nport_input: Union[pd.DataFrame, Path]
@@ -1313,6 +1334,16 @@ def build_unified_holdings(
     # catches everything the row-level correction system missed)
     combined = _apply_fund_strategy_asset_class_override(combined)
 
+    # Promoted investigator rules (gap 1 Layer C): gate-PASS rules from the audited
+    # override store, applied per CIK to BDC-source rows only. Runs after
+    # classification (rule predicates reference unified-frame columns) and before the
+    # write, so validation, position matching, and frontend export all see corrected
+    # data -- no forked views.
+    _promoted_rules = agent_promoted.load_promoted_rules(agent_rules_dir)
+    if _promoted_rules:
+        combined, _rule_audits = agent_promoted.apply_promoted_rules(combined, _promoted_rules)
+        _agent_fix_audits.extend(_rule_audits)
+
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
     logger.info("  Cost coverage: %d rows (%.1f%%)",
@@ -1357,6 +1388,13 @@ def build_unified_holdings(
     # Remap GICS sub-industry for RE-strategy fund holdings (runs after
     # _apply_gics_cache so that the LLM-assigned codes are already in place)
     combined = _apply_re_fund_gics_overrides(combined)
+
+    # Rebuild-time agent-fix audit: per-rule matched rows + FV deltas vs the rule's
+    # authoring-time measured_impact. Written whenever any promoted store is non-empty
+    # (drift there is the re-validation trigger; nothing promoted -> no artifact).
+    if _raw_exclusions or _promoted_rules:
+        agent_promoted.write_application_audit(
+            _agent_fix_audits, _out_file.parent / "agent_fix_application_audit.csv")
 
     # Save CSV + Parquet companion
     _out_file.parent.mkdir(parents=True, exist_ok=True)

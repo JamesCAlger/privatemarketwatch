@@ -6419,3 +6419,53 @@ these need source-anchored checks, not row-local predicates.
   adjudicate flags a rebuild erases. Next step for the project = gap 1 (Layer D
   anchor kind -> Layer A wrapper promotion -> Layers B/C build hook + audit),
   then wave 1 + rebuild + battery re-run, then the stratified B1 batch.
+
+## 2026-07-10 -- Gap 1 implemented: promoted agent fixes wired into production (Layers A-D)
+
+- New `pipeline/agent_promoted.py`: single production consumer for the three promoted
+  agent-fix stores. Loaders take an explicit dir param defaulting to new config paths
+  (`AGENT_ANCHOR_OVERRIDES_DIR`, `AGENT_B2_CORRECTIONS_DIR`,
+  `AGENT_INVESTIGATE_RULES_DIR`); all reads are utf-8-sig (sandbox workers write BOMs
+  -- this silently broke every b3_gate read until fixed).
+- Layer D: `scripts/shadow_conservation_engine.py` gained a `verified_override` anchor
+  kind at TOP priority for fv_conservation, fed from `data/overrides/agent_anchor/`
+  via `ensure_anchor_overrides()`. Residuals now measure against adjudicated grand
+  totals; resolved quarters stop re-flagging. `verified_override` added to
+  `verdict_leaf.KNOWN_ANCHORS`.
+- Layer A: `run_remediation.promote_passes` now routes wrapper-patch fix classes
+  (subtotal_filter) by applying the PATCHED WRAPPER in place into
+  `data/overrides/bdc_xbrl_wrappers/` with provenance; re-promotion is a recorded
+  noop (`apply_subtotal_filter(write_if_noop=False)`), never a duplicate provenance
+  append. Non-wrapper leaves still copy to `data/overrides/agent_b2_corrections/`.
+- Layer B: `staging_bdc._prepare_bdc` accepts `raw_exclusions`; promoted
+  comparative_period_filter leaves are applied as DuckDB DELETEs on `bdc_raw` while it
+  still carries XBRL `period`. NOTE: for the target quarter this also drops NULL/empty
+  `period` rows (parity with the pandas applier the gate validated; staging's generic
+  pre-filter keeps NULL-period rows, which is exactly the leak class).
+- Layer C: `build_unified_holdings()` applies promoted investigator rules at the tail
+  (after classification, before write), per CIK, BDC-source rows only, sorted-filename
+  order (gate-time parity). row_add rows get cik/source/entity_name filled
+  structurally from the rule's CIK scope. New params `agent_rules_dir` /
+  `b2_corrections_dir`.
+- Audit artifact: `agent_fix_application_audit.csv` written next to the unified output
+  whenever any promoted store is non-empty; per rule: rows/FV applied vs
+  authoring-time measured_impact, drift flag (`noop` / `row_drift` at 10x) with WARN
+  logs -- the re-validation routing signal. Never applied silently.
+- Test isolation: autouse conftest fixture points the three store paths at empty
+  per-test dirs (marker `use_real_promoted_stores` opts out) so promoted production
+  fixes never leak into fixtures using real CIKs.
+- Wave-1 inventory: new `scripts/wave1_inventory.py` writes
+  `data/output/agent_investigate/wave1_inventory.csv`. At 2026-07-10: 48 CIKs / 72
+  rules gate-PASS ready to promote (authored FV impact ~25.8B); held back: 1377936,
+  1899017, 1975736 (gate FAIL) and 1743415 (rules but no persisted gate record --
+  re-run the gate first). The 7 staged B2 correction leaves have no persisted gate
+  records (pre-date b3_gate layout); gate them live before promoting.
+- Operational note: after promoting a CIK's rules and rebuilding, its staged rules
+  under data/output/agent_investigate/<cik>/rules are STALE relative to the corrected
+  baseline -- archive/clear before re-investigating that CIK (retire `-Fresh` as the
+  default runbook).
+- Tests: new tests/test_agent_promoted.py (22) incl. Layers B+C end-to-end through
+  build_unified_holdings; 2 new promote tests in test_agent_b2_run_remediation.py.
+  Targeted suites green: agent rule/applier/wrapper-patch/anchor (87), verdict_leaf
+  (30), shadow/conservation/promote selection (46). Wave 1 itself (promotion +
+  rebuild + semantic diff + battery re-run) NOT executed -- operator-gated.

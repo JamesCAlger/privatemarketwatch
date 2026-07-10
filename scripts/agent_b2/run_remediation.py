@@ -6,7 +6,10 @@ The deterministic orchestration for B2/B3. The PURE, unit-tested core lives here
  - ``build_conservation_snapshots`` -- re-triage Tier-0 conservation deterministically from a
    holdings frame + the independent anchor (recompute value_sum vs stored anchor_value).
  - ``gate_conservation_packet`` -- build baseline+trial snapshots and run the B3 held-out gate.
- - ``promote_passes`` -- copy only PASS staged corrections to the production overrides.
+ - ``promote_passes`` -- promote only PASS staged corrections into their production
+   consumer store: wrapper-patch fixes apply the patched wrapper in place
+   (data/overrides/bdc_xbrl_wrappers), everything else copies the leaf to
+   data/overrides/agent_b2_corrections (consumed by build_unified_holdings).
 
 The heavy step (``apply``) shells out to ``rebuild_unified_cik_trial.py --corrections`` to
 produce trial holdings; that is operator-run (cached pipeline rebuild), not unit-tested here.
@@ -30,14 +33,14 @@ import pandas as pd
 
 from pipeline import config
 from pipeline.agent_b2_diagnose import diagnose, select_mechanism, _load_raw_cik
-from pipeline.agent_b2_wrapper_patch import apply_subtotal_filter
+from pipeline.agent_b2_wrapper_patch import PROD_WRAPPER_DIR, apply_subtotal_filter
 from pipeline.agent_b_held_out import gate_correction
 from pipeline.correction_leaf import stage_for
 
 DEFAULT_BASE = config.OUTPUT_DIR / "agent_b2"
 DEFAULT_VERDICTS = config.OUTPUT_DIR / "review_queue" / "verdicts"
 DEFAULT_CORRECTIONS = DEFAULT_BASE / "corrections"
-DEFAULT_OVERRIDES = config.PROJECT_ROOT / "data" / "overrides" / "agent_b2_corrections"
+DEFAULT_OVERRIDES = config.AGENT_B2_CORRECTIONS_DIR
 DEFAULT_CONSERVATION = config.OUTPUT_DIR / "shadow" / "conservation_gate_results.csv"
 TRIAL_REBUILD = config.PROJECT_ROOT / "scripts" / "rebuild_unified_cik_trial.py"
 
@@ -242,9 +245,16 @@ def gate_conservation_packet(
                            **gate_kwargs)
 
 
-def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides_dir: Path) -> list[dict]:
-    """Copy only PASS staged corrections to the production overrides (mirrors Agent A's
-    promote: staged -> data/overrides/...). Returns the promoted records."""
+def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides_dir: Path,
+                   wrapper_dir: Path = PROD_WRAPPER_DIR) -> list[dict]:
+    """Promote only PASS staged corrections into their PRODUCTION consumer store.
+
+    Layer routing (gap 1): a wrapper-patch correction (e.g. subtotal_filter) applies the
+    PATCHED WRAPPER in place into ``wrapper_dir`` (data/overrides/bdc_xbrl_wrappers --
+    the store production staging already reads), with provenance; re-promotion is a
+    recorded no-op, never a duplicate provenance append. Every other correction copies
+    the leaf to ``overrides_dir`` (data/overrides/agent_b2_corrections), which
+    ``build_unified_holdings`` consumes at raw staging. Returns the promoted records."""
     corrections_dir, overrides_dir = Path(corrections_dir), Path(overrides_dir)
     promoted: list[dict] = []
     for g in gate_results:
@@ -254,10 +264,29 @@ def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides
         src = corrections_dir / cik / f"{mech}.json"
         if not src.exists():
             continue
-        dst = overrides_dir / cik / f"{mech}.json"
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dst)
-        promoted.append({"cik": cik, "mechanism": mech, "src": str(src), "dst": str(dst)})
+        try:
+            leaf = json.loads(src.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            leaf = {}
+        fc = str(leaf.get("fix_class") or "")
+        applier = WRAPPER_PATCH_APPLIERS.get(fc)
+        if applier is not None:
+            prov = {k: leaf.get(k) for k in ("source_review_ids", "confidence")
+                    if leaf.get(k) is not None}
+            prov["promoted_gate"] = {"mechanism": mech, "verdict": "PASS"}
+            audit = applier(cik, leaf.get("template") or {},
+                            out_wrapper_dir=Path(wrapper_dir),
+                            source_wrapper_dir=Path(wrapper_dir),
+                            provenance=prov, write_if_noop=False)
+            promoted.append({"cik": cik, "mechanism": mech, "layer": "wrapper_patch",
+                             "src": str(src), "dst": audit.get("out_path"),
+                             "status": audit.get("status"), "audit": audit})
+        else:
+            dst = overrides_dir / cik / f"{mech}.json"
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
+            promoted.append({"cik": cik, "mechanism": mech, "layer": "post_staging",
+                             "src": str(src), "dst": str(dst), "status": "ok"})
     return promoted
 
 

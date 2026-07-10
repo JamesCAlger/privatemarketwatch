@@ -58,7 +58,10 @@ KNOWN_MECHANISMS = frozenset({
     "false_alarm_cash_leg", "false_alarm_rule_range",
 })
 
-KNOWN_ANCHORS = frozenset({"companyfacts_fv", "schedule_total", "extract_total_fv"})
+# verified_override = a promoted Anchor-Adjudicator grand total (gap 1 Layer D), the
+# top-priority anchor in the shadow conservation engine.
+KNOWN_ANCHORS = frozenset({"companyfacts_fv", "schedule_total", "extract_total_fv",
+                           "verified_override"})
 
 # Advisory remediation classes a worker may attach to a finding so B2 starts from the
 # diagnosis instead of re-deriving it. Soft vocabulary (warn, not fail). These name the
