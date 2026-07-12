@@ -1,0 +1,65 @@
+{
+  "cik": "1988280",
+  "rule_id": "1988280_2025q4_restore_missing_fv_only_staging_rows",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "fair_value": -105643990.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-term investments 9.6% | Less unfunded loan commitments (61.8%)",
+      "bdc_investment_identifier": "Short-term investments 9.6% | Less unfunded loan commitments (61.8%)",
+      "issuer_name": "Less unfunded loan commitments",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Short-term investments 9.6% | Less unfunded loan commitments (61.8%)"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 105029.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Senior loans 235.6% | Machinery 0.1% | Rapid Aggregator LLC",
+      "bdc_investment_identifier": "Senior loans 235.6% | Machinery 0.1% | Rapid Aggregator LLC",
+      "issuer_name": "Rapid Aggregator LLC",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Senior loans 235.6% | Machinery 0.1% | Rapid Aggregator LLC"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 314500.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Senior loans 235.6% | Diversified consumer services 0.2% | P.J. Fitzpatrick LLC",
+      "bdc_investment_identifier": "Senior loans 235.6% | Diversified consumer services 0.2% | P.J. Fitzpatrick LLC",
+      "issuer_name": "P.J. Fitzpatrick LLC",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Senior loans 235.6% | Diversified consumer services 0.2% | P.J. Fitzpatrick LLC"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 16403149.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Senior loans 235.6% | Short-term funds 9.6% | Dreyfus Government Cash Management Fund, Institutional Class",
+      "bdc_investment_identifier": "Senior loans 235.6% | Short-term funds 9.6% | Dreyfus Government Cash Management Fund, Institutional Class",
+      "issuer_name": "Dreyfus Government Cash Management Fund, Institutional Class",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Senior loans 235.6% | Short-term funds 9.6% | Dreyfus Government Cash Management Fund, Institutional Class"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "staging WHERE report_date='2025-12-31' AND period='2025-12-31' sums to fv_sum=314170238.0, matching the conservation anchor; holdings for the same report_date sum to 402991550.0."
+    },
+    {
+      "source": "query",
+      "quote": "Four target-period staging rows absent from holdings have fair values -105643990.0, 105029.0, 314500.0, and 16403149.0; their net fair value is -88821312.0, exactly the 402991550.0 - 314170238.0 residual."
+    }
+  ],
+  "rationale": "The residual is caused by under-counted fair-value-only staging rows, not by over-included real holdings. The unified holdings table omitted the source rows needed to reconcile the extracted schedule to the validated investments-at-fair-value anchor; adding those four existing staging rows preserves real positions and brings the target quarter to the filer total.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 4,
+      "fv": -88821312.0,
+      "residual_before": 88821312.0,
+      "residual_after": 0.0
+    }
+  }
+}

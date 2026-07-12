@@ -1,0 +1,39 @@
+{
+  "cik": "1743415",
+  "target_quarter": "2023-12-31",
+  "grand_total": 420568000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Bank Debt/Senior Secured Loans",
+      "value": 406543000.0,
+      "source": "staging row: investmentidentifieraxis=Total Bank Debt/Senior Secured Loans, fair_value 406543000.0"
+    },
+    {
+      "label": "Total Common Equity/Equity",
+      "value": 14025000.0,
+      "source": "staging row: investmentidentifieraxis=Total Common Equity/Equity, fair_value 14025000.0"
+    }
+  ],
+  "companyfacts_fv": 13958000.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "staging report_date 2023-12-31 row: Total Investments(10) - 156.8%, cost 425763000.0, fair_value 420568000.0"
+    },
+    {
+      "source": "query",
+      "quote": "staging subtotals for 2023-12-31: Total Bank Debt/Senior Secured Loans fair_value 406543000.0; Total Common Equity/Equity fair_value 14025000.0"
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials companyfacts 2023-12-31: total_assets 466182000.0, investments_at_fair_value 13958000.0"
+    },
+    {
+      "source": "query",
+      "quote": "holdings 2023-12-31 group by instrument_description: Bank Debt/Senior Secured Loans fair_value 406543000.0; Common Equity/Equity Interests/Warrants fair_value 14025000.0"
+    }
+  ],
+  "rationale": "The filing-derived staging data contains a 2023-12-31 schedule grand-total row, Total Investments(10) - 156.8%, with fair value 420568000.0. The two schedule subtotals, bank debt/senior secured loans of 406543000.0 and common equity/equity of 14025000.0, sum exactly to that total row. The result is below total assets of 466182000.0 and represents about 90.2% of assets, which is a plausible BDC investment share. The companyfacts value of 13958000.0 is incomplete; it corresponds to the large SLR-AMI Topco Blocker equity position rather than the schedule grand total.",
+  "confidence": 0.94
+}

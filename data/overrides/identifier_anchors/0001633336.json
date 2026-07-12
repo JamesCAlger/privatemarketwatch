@@ -1,0 +1,16 @@
+{
+  "cik": "0001633336",
+  "_doc": "Crescent Capital BDC A2 staged anchor proposal from the 2025-12-31 bundle. Bundle identifiers use Debt Investments, Equity Investments, Investment Type, Interest Term/rate phrases, Interest Rate, and Maturity/Dissolution Date. Exact-only GEO coverage handles country-only section rows in none_examples without changing full position signatures.",
+  "anchors": [
+    {"label": "TOTAL", "regex": "^\\s*total\\b|investments and cash equivalents total|cash equivalents total"},
+    {"label": "CASH", "regex": "money market|government fund|u\\.?s\\.? government|treasury bill|liquidity (?:fund|funds)|cash and cash equivalent|cash equivalents"},
+    {"label": "AFFIL", "regex": "non-?controlled|controlled\\s*/|/\\s*non-?affiliated|/\\s*affiliated|\\bcontrolled investments?\\b|\\baffiliated investments?\\b"},
+    {"label": "GEO", "regex": "^\\s*investments\\s+(?:finland|france|united states|canada|united kingdom|netherlands|belgium|australia|sweden)\\s*$"},
+    {"label": "DEBT", "regex": "debt investments"},
+    {"label": "EQUITY", "regex": "equity investments"},
+    {"label": "INVTYPE", "regex": "investment[^a-z0-9]+type|^\\s*(?:senior secured|unitranche|subordinated|first lien|second lien|delayed draw|revolver|term loan)\\b"},
+    {"label": "REFRATE", "regex": "reference rate|\\bsofr\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|interest\\s+(?:term\\s+)?[a-z]+\\s*\\+\\s*\\d|\\bterm\\s+[a-z]+\\s*\\+\\s*\\d"},
+    {"label": "RATE", "regex": "interest rate\\s+[0-9]|interest\\s+term\\s+[0-9]{2,4}(?:\\.[0-9]+)?\\s*pik"},
+    {"label": "MAT", "regex": "maturity\\s*/?\\s*dissolution|\\b[0-9]{1,2}/[0-9]{4}\\b|\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"}
+  ]
+}

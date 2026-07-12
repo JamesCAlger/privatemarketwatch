@@ -1,0 +1,45 @@
+{
+  "cik": "1825265",
+  "rule_id": "superior-affiliation-axis-dedup-2025q3",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "predicate_sql": "report_date = '2025-09-30' AND bdc_dimensions_raw ILIKE '%Superior Industries International, Inc%'",
+  "match_fields": [
+    "report_date",
+    "fair_value"
+  ],
+  "keep": "first",
+  "scope": {
+    "quarters": [
+      "2025-09-30"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "conservation shows fv_conservation 2025-09-30 value_sum=1325637936.0 and anchor_value=1310591331.0, an overshoot of 15046605.0."
+    },
+    {
+      "source": "query",
+      "quote": "holdings has six 2025-09-30 Superior Industries rows forming three duplicate fair_value pairs: Debt Term Loan 12115467.0 and Non-Controlled Affiliated Term Loan 12115467.0; Debt Delayed Draw Term Loan 2931138.0 and Non-Controlled Affiliated Delayed Draw Term Loan 2931138.0; Equity Common Stock 0.0 and Non-Controlled Affiliated Common Stock 0.0."
+    },
+    {
+      "source": "query",
+      "quote": "staging contains the same affiliated-axis Superior rows for report_date 2025-09-30 with fair_value 12115467.0, 2931138.0, and 0.0, while the detailed Debt/Equity Investments counterparts carry principal/cost detail."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials reports investments_at_fair_value=1310591331.0 for 2025-09-30."
+    }
+  ],
+  "rationale": "The residual is caused by duplicate representations of the same Superior Industries positions under both the detailed Debt/Equity Investments schedule and the Non-Controlled Affiliated Investments axis. Within this scoped candidate set, report_date plus fair_value pairs each affiliated-axis row with its detailed counterpart. Keeping the first row preserves the detailed schedule row and removes the duplicate affiliated-axis representation.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 3,
+      "fv": 15046605.0,
+      "residual_before": 15046605.0,
+      "residual_after": 0.0
+    }
+  }
+}

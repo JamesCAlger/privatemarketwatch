@@ -1,0 +1,32 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001834543",
+  "entity_name": "BlackRock Direct Lending Corp.",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "^Debt Investments\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "^Equity Securities\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "^Investment\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bRef\\s+(?:SOFR\\([MQ]\\)|LIBOR\\([MQ]\\)|Prime)\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Floor|Spread|Total Coupon|PIK)\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b(?:Maturity(?:\\s+Date|/ Expiration)?|Acquisition Date)\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+    }
+  ],
+  "notes": "Anchors are limited to section/rate/date markers observed in this bundle's investment_identifier strings, including none_examples beginning with Debt Investments, Equity Securities, and Investment."
+}

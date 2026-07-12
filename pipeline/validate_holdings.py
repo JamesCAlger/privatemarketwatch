@@ -1498,9 +1498,17 @@ def check_pct_of_net_assets_sum(df: pd.DataFrame) -> pd.DataFrame:
     Catches subtotal leakage (inflates sum) and missing positions (deflates sum).
 
     Flag logic:
-      - pct_sum > 200 -> high_pct_sum
+      - pct_sum > 225 -> high_pct_sum
       - pct_sum < 50  -> low_pct_sum
       - else           -> ok
+
+    The high bound was calibrated 2026-07-05 on ens2 B1 adjudications (PCT01
+    was 71% FP at the old >200 bound): filers legitimately print totals of
+    200-225% of net assets (levered BDCs near the practical ~2.25x ceiling,
+    tied out to their own balance sheets), while adjudicated subtotal-leak
+    reals clustered above 225. Retro-test: 8/9 FA suppressed, 3/4 reals kept,
+    flagged CIK-quarters 386 -> 130. Known loss: leaks that keep the sum
+    within 200-225 (1 adjudicated real at 209.7).
 
     Returns DataFrame with columns: cik, report_date, pct_sum, position_count,
     total_fv, flag
@@ -1533,7 +1541,7 @@ def check_pct_of_net_assets_sum(df: pd.DataFrame) -> pd.DataFrame:
     )
     SELECT *,
         CASE
-            WHEN pct_sum > 200 THEN 'high_pct_sum'
+            WHEN pct_sum > 225 THEN 'high_pct_sum'
             WHEN pct_sum < 50 THEN 'low_pct_sum'
             ELSE 'ok'
         END AS flag
@@ -1554,7 +1562,7 @@ def check_pct_of_net_assets_sum(df: pd.DataFrame) -> pd.DataFrame:
         logger.info("  Pct-of-net-assets sum: %d CIK-quarters (%d ok, %d high, %d low)",
                     len(result), ok, high, low)
         if high > 0:
-            logger.warning("  %d CIK-quarters with pct_sum > 200%% (possible subtotal leak)",
+            logger.warning("  %d CIK-quarters with pct_sum > 225%% (possible subtotal leak)",
                           high)
 
     return result

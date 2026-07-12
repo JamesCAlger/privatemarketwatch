@@ -1,0 +1,51 @@
+{
+  "schema_version": "agentA-anchor-vocabulary.v1",
+  "cik": "0001982701",
+  "entity_name": "AB Private Lending Fund",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "match": "US Corporate Debt",
+      "regex": "\\bUS Corporate Debt\\b",
+      "signature_token": "SECDEBT",
+      "evidence": "Bundle dominant SECDEBT RATE MAT samples begin with 'US Corporate Debt'."
+    },
+    {
+      "label": "RATE",
+      "match": "rate expression",
+      "regex": "\\|\\s*[0-9]+(?:\\.[0-9]+)?%\\s*\\(\\s*S\\s*\\+\\s*[0-9]+(?:\\.[0-9]+)?%",
+      "signature_token": "RATE",
+      "evidence": "Bundle dominant samples and roam table 44 rows 15-17 show the embedded all-in rate and SOFR spread expression."
+    },
+    {
+      "label": "MAT",
+      "match": "maturity date",
+      "regex": "\\|\\s*[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}(?:\\s*\\|\\s*[^|]+)?\\s*$",
+      "signature_token": "MAT",
+      "evidence": "Bundle dominant samples and roam table 44 rows 15-17 show maturity dates at the end of the position row."
+    },
+    {
+      "label": "INVESTMENT_COMPANY",
+      "match": "US Investment Companies",
+      "regex": "\\bUS Investment Companies\\b",
+      "signature_token": "ASSETTYPE",
+      "evidence": "Bundle none_examples include 'US Investment Companies| AB EQUITY INVESTORS, L.P.| LP Interests'; roam found AB EQUITY INVESTORS, L.P. | LP Interests at table 55 row 3."
+    },
+    {
+      "label": "LP_INTEREST",
+      "match": "LP Interests",
+      "regex": "\\bLP Interests\\b",
+      "signature_token": "EQUITY",
+      "evidence": "Roam query 'AB EQUITY INVESTORS,LP Interests' found the issuer and LP Interests line at table 55 row 3."
+    }
+  ],
+  "available_identifier_datapoints": [
+    "asset_category",
+    "issuer",
+    "instrument_type",
+    "fund_interest_type"
+  ],
+  "notes": "This proposal targets the only bundle none_example, an investment company LP interest without embedded rate or maturity datapoints."
+}

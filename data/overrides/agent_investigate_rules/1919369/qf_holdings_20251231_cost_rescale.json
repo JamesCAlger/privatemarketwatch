@@ -1,0 +1,34 @@
+{
+  "cik": "1919369",
+  "rule_id": "qf_holdings_20251231_cost_rescale",
+  "rule_type": "value_rescale",
+  "action": "rescale",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "issuer_name = 'QF Holdings, Inc.' AND instrument_description = 'First-Lien Debt' AND cost = '33242.0' AND bdc_dimensions_raw LIKE '%QF Holdings, Inc.%'",
+  "field": "cost",
+  "factor": 1000.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "conservation shows cost_conservation 2025-12-31 value_sum=1426947242.0 anchor_value=1460156000.0, residual=-33208758.0."
+    },
+    {
+      "source": "query",
+      "quote": "holdings row for QF Holdings, Inc. at 2025-12-31 has principal_amount=33449.0, cost=33242.0, fair_value=33224.0; the same QF Holdings position at 2026-03-31 has principal_amount=33449000.0, cost=33248000.0, fair_value=33224000.0."
+    }
+  ],
+  "rationale": "The same scale defect affects cost on the QF Holdings row. Multiplying cost by 1000 changes 33242.0 to 33242000.0, adding 33208758.0 and bringing the cost total to the filing anchor while leaving the already-correct 2026-03-31 row untouched.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 33208758.0,
+      "residual_before": -33208758.0,
+      "residual_after": 0.0
+    }
+  }
+}

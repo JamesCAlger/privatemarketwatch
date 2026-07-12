@@ -1,0 +1,42 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001633858",
+  "entity_name": "Audax Credit BDC Inc.",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "EQUITY",
+      "regex": "\\bEQUITY AND PREFERRED SHARES:\\s+NON-CONTROL/NON-AFFILIATE INVESTMENTS\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bBANK LOANS:\\s+NON-CONTROL/NON-AFFILIATE INVESTMENTS\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Interest Rate|Spread)\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bIndex\\s+S\\+\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity(?:\\s+Date)?\\b"
+    }
+  ],
+  "none_examples_addressed": [
+    {
+      "identifier": "Portfolio Investments EQUITY AND PREFERRED SHARES: NON-CONTROL/NON-AFFILIATE INVESTMENTS Environmental Industries O6 Environmental Investment Type Common Units",
+      "proposed_signature": "EQUITY"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "roam",
+      "accession_number": "0001193125-26-117535",
+      "observation": "Table 38 row 25 and table 39 row 3 contain the equity section marker; table 39 row 37 contains O6 Environmental Common Units under Environmental Industries."
+    }
+  ]
+}

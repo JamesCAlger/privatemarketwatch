@@ -43,7 +43,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--cik", required=True, help="Target CIK (e.g. 0001849894)")
     parser.add_argument("--match", action="store_true",
                         help="Run position matching on trial output and show diagnostics")
+    parser.add_argument("--corrections", default=None,
+                        help="Dir of staged B2 correction-leaf JSONs; post-staging appliers "
+                             "are applied to the trial holdings (writes *.corrected.csv).")
+    parser.add_argument("--stage", type=int, default=None,
+                        help="Restrict applied corrections to one precedence stage (1/2/3).")
+    parser.add_argument("--wrapper-dir", default=None,
+                        help="Trial wrapper dir overlaid on production (B2 wrapper-patch "
+                             "corrections, e.g. subtotal_filter) before the build.")
     args = parser.parse_args(argv)
+
+    # Overlay a trial wrapper (e.g. a staged subtotal_filter patch) before any staging runs.
+    if args.wrapper_dir:
+        from pipeline.bdc_xbrl_wrapper import reload_wrapper_specs
+        reload_wrapper_specs(override_dir=Path(args.wrapper_dir))
+        logger.info("Overlaid trial wrapper dir: %s", args.wrapper_dir)
 
     cik = _normalize_cik(args.cik)
 
@@ -124,6 +138,41 @@ def main(argv: list[str] | None = None) -> int:
     else:
         logger.info("N-PORT holdings file not found; building BDC-only trial")
 
+    # --- Load staged B2 corrections and apply raw-staging corrections before unified build ---
+    staged_corrections = []
+    raw_correction_audits = []
+    if args.corrections:
+        import json
+
+        from pipeline.correction_leaf import stage_for
+
+        corr_dir = Path(args.corrections)
+        for p in sorted(corr_dir.glob("**/*.json")):
+            try:
+                staged_corrections.append(json.loads(p.read_text(encoding="utf-8")))
+            except (OSError, json.JSONDecodeError):
+                logger.warning("skip unreadable correction: %s", p)
+        staged_corrections = [
+            c for c in staged_corrections
+            if _normalize_cik(str(c.get("cik", ""))) == cik
+            and (args.stage is None or stage_for(str(c.get("fix_class") or "")) == args.stage)
+        ]
+
+        raw_corrections = [
+            c for c in staged_corrections
+            if str(c.get("fix_class") or "") == "comparative_period_filter"
+        ]
+        if raw_corrections:
+            from pipeline.agent_b2_appliers import apply_comparative_period_filter
+
+            for c in raw_corrections:
+                bdc_df, audit = apply_comparative_period_filter(bdc_df, c.get("template") or {})
+                audit["cik"] = c.get("cik")
+                audit["layer"] = "raw_bdc_staging"
+                raw_correction_audits.append(audit)
+            logger.info("Applied %d raw-staging correction(s); audits=%s",
+                        len(raw_corrections), raw_correction_audits)
+
     # --- Build unified holdings into trial directory ---
     import pandas as pd
 
@@ -139,6 +188,28 @@ def main(argv: list[str] | None = None) -> int:
     )
     elapsed = time.time() - t2
     logger.info("Trial unified holdings: %d rows in %.1f s", len(trial_df), elapsed)
+
+    # --- Apply staged B2 post-staging corrections, if requested (trial only) ---
+    if args.corrections:
+        from pipeline.agent_b2_appliers import run_corrections
+
+        post_corrections = [
+            c for c in staged_corrections
+            if str(c.get("fix_class") or "") != "comparative_period_filter"
+        ]
+        post_audits = []
+        if post_corrections:
+            trial_df, post_audits = run_corrections(trial_df, post_corrections, stage=args.stage)
+        audits = raw_correction_audits + post_audits
+        if staged_corrections:
+            corrected_csv = trial_dir / f"private_markets_holdings.{cik}.corrected.csv"
+            trial_df.to_csv(corrected_csv, index=False)
+            (trial_dir / f"corrections_audit.{cik}.json").write_text(
+                json.dumps(audits, indent=2), encoding="utf-8")
+            logger.info("Applied %d correction(s) (stage=%s) -> %s; audits=%s",
+                        len(staged_corrections), args.stage, corrected_csv.name, audits)
+        else:
+            logger.info("No corrections for CIK %s in %s", cik, Path(args.corrections))
 
     # --- Summary: compare with production if available ---
     if UNIFIED_HOLDINGS_FILE.exists():

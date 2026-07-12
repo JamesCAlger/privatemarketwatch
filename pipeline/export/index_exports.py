@@ -3,6 +3,7 @@
 import math
 
 from pipeline.export.helpers import *
+from pipeline.config import BDC_LIEN_BREAKDOWN_FILE, BDC_DERIVATIVES_FILE
 
 
 def _compute_risk_stats(series: list[dict]) -> dict:
@@ -479,6 +480,71 @@ def _export_vehicle_contribution(con: duckdb.DuckDBPyConnection) -> None:
     _write_json("vehicle_contribution.json", out)
 
 
+# Lien tier -> output key
+_LIEN_KEY = {
+    "First Lien": "firstLien", "Second Lien": "secondLien",
+    "Subordinated": "subordinated", "Unsecured": "unsecured", "Unknown": "unknown",
+}
+
+
+def _layer_lien_split(pp_rows, sub_rows, pct):
+    """Combine filer lien subtotals with per-position lien_position.
+
+    Parameters
+    ----------
+    pp_rows : list of (cik, lien_position, fv) -- per-position DL lien sums.
+    sub_rows : list of (cik, lien_tier, fv) -- filer lien subtotals.
+    pct : callable mapping an FV to a fraction of total DL FV.
+
+    Per filer: if the lien subtotals reconcile to that filer's DL FV (all tiers
+    non-negative, total within +5% and covering >= 50% of the filer's DL FV),
+    use the subtotal tiers and route the uncovered remainder to Unknown.
+    Otherwise use the per-position lien_position aggregation.  Returns the
+    lienSplit dict, or None if there is nothing to compute.
+    """
+    from collections import defaultdict
+
+    dl_fv: dict[str, float] = defaultdict(float)
+    pp: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
+    for cik, lien, fv in pp_rows:
+        fv = float(fv or 0.0)
+        dl_fv[cik] += fv
+        pp[cik][_LIEN_KEY.get(str(lien), "unknown")] += fv
+    if not dl_fv:
+        return None
+
+    sub: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
+    for cik, tier, fv in sub_rows:
+        sub[cik][_LIEN_KEY.get(str(tier), "unknown")] += float(fv or 0.0)
+
+    out: dict[str, float] = defaultdict(float)
+    n_sub = 0
+    for cik, dl in dl_fv.items():
+        s = sub.get(cik)
+        s_tot = sum(s.values()) if s else 0.0
+        s_min = min(s.values()) if s else 0.0
+        # reconciliation gate: non-negative tiers, no over-count, >=50% coverage
+        reconciles = bool(s) and s_min >= -1.0 and s_tot <= dl * 1.05 and s_tot >= dl * 0.5
+        if reconciles:
+            for k, v in s.items():
+                out[k] += max(0.0, v)
+            out["unknown"] += max(0.0, dl - s_tot)  # uncovered remainder is honest Unknown
+            n_sub += 1
+        else:
+            for k, v in pp[cik].items():
+                out[k] += v
+
+    return {
+        "firstLien": pct(out["firstLien"]),
+        "secondLien": pct(out["secondLien"]),
+        "subordinated": pct(out["subordinated"]),
+        "unsecured": pct(out["unsecured"]),
+        "unknown": pct(out["unknown"]),
+        "source": "layered_subtotal_plus_position",
+        "subtotalFilers": n_sub,
+    }
+
+
 def _export_portfolio_characteristics(
     con: duckdb.DuckDBPyConnection,
 ) -> None:
@@ -599,25 +665,156 @@ def _export_portfolio_characteristics(
             return 0
         return _safe_round(v / total_fv_f, 4)
 
+    # Lien split: LAYERED.  Per filer, use the filer-reported lien subtotals
+    # (bdc_lien_breakdown) when they reconcile to that filer's DL FV; otherwise
+    # fall back to the already-populated per-position lien_position.  This
+    # captures both hierarchical-tagging filers (Blackstone/HPS, subtotals) and
+    # identifier-embedded-lien filers (Goldman/Oaktree, per-position) without
+    # double counting, and routes only the genuinely unestablished FV to
+    # Unknown.  Falls back to the cohort subtraction method on any failure.
+    lien_split = {
+        "firstLien": _pct(first_lien_fv),
+        "secondLien": _pct(second_lien_fv),
+        "unsecured": _pct(unsecured_fv),
+        "source": "position_lien_position",
+    }
+    if total_fv_f > 0 and as_of:
+        try:
+            uni = UNIFIED_HOLDINGS_CSV.as_posix()
+            pp_rows = con.execute(f"""
+                SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                    COALESCE(NULLIF(TRIM(CAST(lien_position AS VARCHAR)), ''), 'Unknown') AS lien,
+                    SUM(CAST(fair_value AS DOUBLE)) AS fv
+                FROM read_csv_auto('{uni}', all_varchar=true)
+                WHERE report_date = '{as_of}'
+                  AND index_classification = 'DIRECT_LENDING'
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+                  {_unlisted_bdc_filter_sql('cik')}
+                GROUP BY 1, 2
+            """).fetchall()
+            sub_rows = []
+            if BDC_LIEN_BREAKDOWN_FILE.exists():
+                sub_rows = con.execute(f"""
+                    SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik, lien_tier,
+                        SUM(TRY_CAST(fair_value AS DOUBLE)) AS fv
+                    FROM read_csv_auto('{BDC_LIEN_BREAKDOWN_FILE.as_posix()}', all_varchar=true)
+                    WHERE report_date = '{as_of}'
+                      {_unlisted_bdc_filter_sql("lpad(CAST(cik AS VARCHAR), 10, '0')")}
+                    GROUP BY 1, 2
+                """).fetchall()
+            layered = _layer_lien_split(pp_rows, sub_rows, _pct)
+            if layered is not None:
+                lien_split = layered
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("layered lien split failed, using position method: %s", exc)
+
+    # Cash bucket (analytics-only): total fair value of cash equivalents
+    # (money market, treasury, cash deposits) at the same as-of quarter.
+    # Sourced from the unified holdings -- cash is intentionally excluded from
+    # position_returns / the indices, so it cannot come from the matched-position
+    # pipeline.  This feeds the holistic portfolio-composition donut.
+    cash_fv = 0.0
+    if as_of:
+        try:
+            uni = UNIFIED_HOLDINGS_CSV.as_posix()
+            cash_row = con.execute(f"""
+                SELECT SUM(CAST(fair_value AS DOUBLE)) AS fv
+                FROM read_csv_auto('{uni}', all_varchar=true)
+                WHERE report_date = '{as_of}'
+                  AND index_classification = 'CASH'
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+                  {_unlisted_bdc_filter_sql('cik')}
+            """).fetchone()
+            cash_fv = float(cash_row[0] or 0) if cash_row else 0.0
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("cash bucket FV computation failed: %s", exc)
+
+    # Derivative buckets (analytics-only): net FV by role at the as-of quarter,
+    # from the separate fund-level bdc_derivatives.csv artifact (derivatives are
+    # never index constituents and never enter unified holdings / position
+    # returns).  portfolio = TRS, FX forwards, options; financing_hedge = the
+    # BDC's own interest-rate/ALM hedges (kept as data, not shown in the donut);
+    # `uncertain` rows are excluded here -- they are routed to the shadow
+    # validator for review.  Net FV never includes notional.
+    portfolio_deriv_fv = 0.0
+    financing_hedge_fv = 0.0
+    financing_hedge_notional = 0.0
+    if as_of and BDC_DERIVATIVES_FILE.exists():
+        try:
+            dv = BDC_DERIVATIVES_FILE.as_posix()
+            drow = con.execute(f"""
+                SELECT
+                    SUM(CASE WHEN derivative_role = 'portfolio'
+                             THEN TRY_CAST(net_fv AS DOUBLE) ELSE 0 END) AS port_fv,
+                    SUM(CASE WHEN derivative_role = 'financing_hedge'
+                             THEN TRY_CAST(net_fv AS DOUBLE) ELSE 0 END) AS hedge_fv,
+                    SUM(CASE WHEN derivative_role = 'financing_hedge'
+                             THEN TRY_CAST(notional AS DOUBLE) ELSE 0 END) AS hedge_notional
+                FROM read_csv_auto('{dv}', all_varchar=true)
+                WHERE report_date = '{as_of}'
+                  {_unlisted_bdc_filter_sql('cik')}
+            """).fetchone()
+            if drow:
+                portfolio_deriv_fv = float(drow[0] or 0)
+                financing_hedge_fv = float(drow[1] or 0)
+                financing_hedge_notional = float(drow[2] or 0)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("derivative bucket computation failed: %s", exc)
+
+    # Full-portfolio fair value by index classification at the same as-of quarter
+    # (ALL classifications, not just direct lending), from unified holdings. This is
+    # the single canonical current-quarter portfolio total ($390B basis) that the
+    # headline FV and the instrument-composition donut reconcile to.  `totalFv`
+    # above stays direct-lending-only because it is the denominator for the
+    # DL-relative lien/rate/WAC metrics.
+    classification_fv: dict[str, float] = {}
+    portfolio_fv = 0.0
+    if as_of:
+        try:
+            uni = UNIFIED_HOLDINGS_CSV.as_posix()
+            cls_rows = con.execute(f"""
+                SELECT COALESCE(NULLIF(TRIM(index_classification), ''), 'UNCLASSIFIED') AS ic,
+                       SUM(CAST(fair_value AS DOUBLE)) AS fv
+                FROM read_csv_auto('{uni}', all_varchar=true)
+                WHERE report_date = '{as_of}'
+                  AND TRY_CAST(fair_value AS DOUBLE) > 0
+                  {_unlisted_bdc_filter_sql('cik')}
+                  {_exclude_consumer_lending_sql('cik')}
+                GROUP BY 1
+            """).fetchall()
+            for ic, fv in cls_rows:
+                classification_fv[ic] = _safe_round(float(fv or 0), 0)
+            # portfolioFv is exactly the sum of the rounded classification buckets
+            # so the headline FV and the instrument donut reconcile to the dollar.
+            portfolio_fv = sum(classification_fv.values())
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("classification FV computation failed: %s", exc)
+
     _write_json("portfolio_characteristics.json", {
         "asOf": as_of,
         "positionCount": pos_count,
         "totalFv": _safe_round(total_fv_f, 0),
+        # Full current-quarter portfolio (all classifications) and its breakdown.
+        "portfolioFv": _safe_round(portfolio_fv, 0),
+        "classificationFv": classification_fv,
         "wac": _safe_round(wac, 2),
         "was": _safe_round(was, 2),
         "wam": _safe_round(wam, 1),
         "wacCoverage": _safe_round(wac_count / pos_count, 4) if pos_count else 0,
         "wasCoverage": _safe_round(was_count / pos_count, 4) if pos_count else 0,
         "wamCoverage": _safe_round(wam_count / pos_count, 4) if pos_count else 0,
-        "lienSplit": {
-            "firstLien": _pct(first_lien_fv),
-            "secondLien": _pct(second_lien_fv),
-            "unsecured": _pct(unsecured_fv),
-        },
+        "lienSplit": lien_split,
         "rateTypeSplit": {
             "floating": _pct(floating_fv),
             "fixed": _pct(fixed_fv),
         },
+        # Analytics-only buckets (NOT index constituents).
+        "cashFv": _safe_round(cash_fv, 0),
+        # Net derivative fair value by role (portfolio shown in the donut;
+        # financingHedge kept as data). Notional kept separate from FV.
+        "portfolioDerivativeFv": _safe_round(portfolio_deriv_fv, 0),
+        "financingHedgeFv": _safe_round(financing_hedge_fv, 0),
+        "financingHedgeNotional": _safe_round(financing_hedge_notional, 0),
     })
 
 

@@ -1,0 +1,368 @@
+{
+  "schema_version": "identifier-spread-corrections.v1",
+  "doc": "Per-position basis_spread overrides where the freeform identifier spread reconciles with all-in+SOFR and the XBRL tag does not. Reversible: old_value_xbrl recorded. SOFR90 is a ~3M Term-SOFR proxy.",
+  "match_key": [
+    "cik",
+    "report_date",
+    "identifier"
+  ],
+  "corrections": [
+    {
+      "cik": "0001993402",
+      "report_date": "2024-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Professional Services HSI Halo Acquisition, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate Floor 0.00% Interest Rate 10.07% Maturity Date 6/28/2031",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0475,
+      "old_value_xbrl": 0.05,
+      "agentA_value_pct": 4.75,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.3094,
+        "cash_all_in_pct": 9.59,
+        "a_residual": 0.4694,
+        "xbrl_residual": 0.7194
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Life Sciences Tools & Services Emmes Blocker, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 10.13% (Incl. 3.25% PIK) Maturity Date 7/7/2028",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0275,
+      "old_value_xbrl": 0.02,
+      "agentA_value_pct": 2.75,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.34918,
+        "cash_all_in_pct": 6.88,
+        "a_residual": 0.2192,
+        "xbrl_residual": 0.5308
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2024-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Diversified Consumer Services CVP Holdco, Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 5.00% Interest Rate Floor 0.75% Interest Rate 10.44% Maturity Date 6/28/2031",
+      "field": "basis_spread",
+      "new_value_decimal": 0.05,
+      "old_value_xbrl": 0.0525,
+      "agentA_value_pct": 5.0,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.3094,
+        "cash_all_in_pct": 9.99,
+        "a_residual": 0.3194,
+        "xbrl_residual": 0.5694
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-03-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Capital Markets Edgeco Buyer, Inc. Asset Type First Lien Term Loan Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.79% Maturity Date 6/1/2028",
+      "field": "basis_spread",
+      "new_value_decimal": 0.045,
+      "old_value_xbrl": 0.04,
+      "agentA_value_pct": 4.5,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.35445,
+        "cash_all_in_pct": 8.79,
+        "a_residual": 0.0645,
+        "xbrl_residual": 0.4355
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-03-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Commercial Services and Supplies FL Hawk Intermediate Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.79% Maturity Date 2/22/2030",
+      "field": "basis_spread",
+      "new_value_decimal": 0.045,
+      "old_value_xbrl": 0.04,
+      "agentA_value_pct": 4.5,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.35445,
+        "cash_all_in_pct": 8.79,
+        "a_residual": 0.0645,
+        "xbrl_residual": 0.4355
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-03-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Machinery Merlin Buyer, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 4.75% Interest Rate 9.04% Maturity Date 12/14/2028",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0475,
+      "old_value_xbrl": 0.04,
+      "agentA_value_pct": 4.75,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.35445,
+        "cash_all_in_pct": 9.04,
+        "a_residual": 0.0645,
+        "xbrl_residual": 0.6855
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-06-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Commercial Services and Supplies YLG Holdings, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate 9.04% Maturity Date 12/23/2030",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0475,
+      "old_value_xbrl": 0.04,
+      "agentA_value_pct": 4.75,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.3421,
+        "cash_all_in_pct": 9.04,
+        "a_residual": 0.0521,
+        "xbrl_residual": 0.6979
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-06-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Insurance AMBA Buyer, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate 9.64% Maturity Date 7/30/2027",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0525,
+      "old_value_xbrl": 0.05,
+      "agentA_value_pct": 5.25,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.3421,
+        "cash_all_in_pct": 9.64,
+        "a_residual": 0.0479,
+        "xbrl_residual": 0.2979
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2025-09-30",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Distributors Aurora BC Group Holdings, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.00% Interest Rate 8.98% Maturity Date 12/21/2027",
+      "field": "basis_spread",
+      "new_value_decimal": 0.05,
+      "old_value_xbrl": 0.055,
+      "agentA_value_pct": 5.0,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.34918,
+        "cash_all_in_pct": 9.48,
+        "a_residual": 0.1308,
+        "xbrl_residual": 0.3692
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2024-12-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Financial Services Cerity Partners Equity Holding LLC Asset Type First Lien Revolver Reference Rate and Spread S + 5.25% Interest Rate Floor 0.75% Interest Rate 10.06% Maturity Date 7/28/2028",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0525,
+      "old_value_xbrl": 0.0575,
+      "agentA_value_pct": 5.25,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.69157,
+        "cash_all_in_pct": 10.06,
+        "a_residual": 0.1184,
+        "xbrl_residual": 0.3816
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001993402",
+      "report_date": "2024-12-31",
+      "identifier": "Investments - non-controlled/non-affiliated Secured Debt Professional Services USRP Holdings, Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 5.00% Interest Rate Floor 0.00% Interest Rate 9.93% Maturity Date 12/31/2029",
+      "field": "basis_spread",
+      "new_value_decimal": 0.05,
+      "old_value_xbrl": 0.055,
+      "agentA_value_pct": 5.0,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.69157,
+        "cash_all_in_pct": 9.83,
+        "a_residual": 0.1384,
+        "xbrl_residual": 0.3616
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2026-03-31",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services Great Lakes Dental Partners, LLC Investment Type Unitranche First Lien Revolver Interest Term S + 425 (100 Floor) (plus 300 PIK) Interest Rate 11.10% Maturity/ Dissolution Date 06/2027",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0425,
+      "old_value_xbrl": 0.0725,
+      "agentA_value_pct": 4.25,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 3.67877,
+        "cash_all_in_pct": 8.1,
+        "a_residual": 0.1712,
+        "xbrl_residual": 2.8288
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2026-03-31",
+      "identifier": "Investments United States Debt Investments Software & Services Ontario Systems, LLC Investment Type Unitranche First Lien Term Loan Interest Term S + 550 (100 Floor) (plus 100 PIK) Interest Rate 10.35% Maturity/ Dissolution Date 09/2028",
+      "field": "basis_spread",
+      "new_value_decimal": 0.055,
+      "old_value_xbrl": 0.065,
+      "agentA_value_pct": 5.5,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 3.67877,
+        "cash_all_in_pct": 9.35,
+        "a_residual": 0.1712,
+        "xbrl_residual": 0.8288
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2025-12-31",
+      "identifier": "Investments United States Debt Investments Insurance Vantage Insurance Partners, Inc. Investment Type Unitranche First Lien Revolver Interest Term S + 600 (100 Floor) Interest Rate 10.17% Maturity/Dissolution Date 12/2028",
+      "field": "basis_spread",
+      "new_value_decimal": 0.06,
+      "old_value_xbrl": 0.065,
+      "agentA_value_pct": 6.0,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.01064,
+        "cash_all_in_pct": 10.17,
+        "a_residual": 0.1594,
+        "xbrl_residual": 0.3406
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2023-12-31",
+      "identifier": "Investments United States Debt Investments Consumer Services USA Hometown Experts, Inc Investment Type Senior Secured First Lien Term Loan Interest Term S + 660 (100 Floor) Interest Rate 12.00% Maturity/Dissolution Date 11/2029",
+      "field": "basis_spread",
+      "new_value_decimal": 0.066,
+      "old_value_xbrl": 0.055,
+      "agentA_value_pct": 6.6,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.35531,
+        "cash_all_in_pct": 12.0,
+        "a_residual": 0.0447,
+        "xbrl_residual": 1.1447
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-06-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services CC Amulet Management, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 675 (100 Floor) Interest Rate 12.11% Maturity/Dissolution Date 08/2027",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0675,
+      "old_value_xbrl": 0.065,
+      "agentA_value_pct": 6.75,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.35331,
+        "cash_all_in_pct": 12.11,
+        "a_residual": 0.0067,
+        "xbrl_residual": 0.2567
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services GrapeTree Medical Staffing, LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.46% Maturity / Dissolution Date 04/2026",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0525,
+      "old_value_xbrl": 0.055,
+      "agentA_value_pct": 5.25,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.3094,
+        "cash_all_in_pct": 10.46,
+        "a_residual": 0.0994,
+        "xbrl_residual": 0.3494
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services GrapeTree Medical Staffing, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.46% Maturity/Dissolution Date 04/2026",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0525,
+      "old_value_xbrl": 0.055,
+      "agentA_value_pct": 5.25,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.3094,
+        "cash_all_in_pct": 10.46,
+        "a_residual": 0.0994,
+        "xbrl_residual": 0.3494
+      },
+      "confidence": "medium"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services Homecare Partners Management, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.50% Maturity / Dissolution Date 05/2027",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0525,
+      "old_value_xbrl": 5.75,
+      "agentA_value_pct": 5.25,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.3094,
+        "cash_all_in_pct": 10.5,
+        "a_residual": 0.0594,
+        "xbrl_residual": 0.5594
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2024-09-30",
+      "identifier": "Investments United States Debt Investments Health Care Equipment & Services Homecare Partners Management, LLC Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 525 (100 Floor) Interest Rate 10.50% Maturity / Dissolution Date 06/2030",
+      "field": "basis_spread",
+      "new_value_decimal": 0.0525,
+      "old_value_xbrl": 5.75,
+      "agentA_value_pct": 5.25,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 5.3094,
+        "cash_all_in_pct": 10.5,
+        "a_residual": 0.0594,
+        "xbrl_residual": 0.5594
+      },
+      "confidence": "high"
+    },
+    {
+      "cik": "0001633336",
+      "report_date": "2023-06-30",
+      "identifier": "Investments United States Debt Investments Materials A&A Global Imports, LLC Investment Type Senior Secured First Lien Term Loan Interest Term L + 850 Interest Rate 13.70% Maturity/ Dissolution Date 06/2026",
+      "field": "basis_spread",
+      "new_value_decimal": 0.085,
+      "old_value_xbrl": 0.065,
+      "agentA_value_pct": 8.5,
+      "mechanism": "agentA_spread_reconciled",
+      "evidence": {
+        "sofr_90day_pct": 4.99569,
+        "cash_all_in_pct": 13.7,
+        "a_residual": 0.2043,
+        "xbrl_residual": 2.2043
+      },
+      "confidence": "high"
+    }
+  ]
+}

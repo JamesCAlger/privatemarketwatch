@@ -1,0 +1,52 @@
+{
+  "version": "agentA-identifier-anchors.v1",
+  "cik": "0001743415",
+  "entity_name": "SCP Private Credit Income BDC LLC",
+  "report_date": "2025-12-31",
+  "regime": "flattened",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "Bank Debt/Senior Secured Loans"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "(?:Common Equity/Equity Interests/Warrants|Common Equity|Equity Interests|Warrants)"
+    },
+    {
+      "label": "PREFEQUITY",
+      "regex": "Preferred Equity"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "(?:Investments|Net Assets|Liabilities in Excess of Other Assets)"
+    }
+  ],
+  "aggregate_candidate_patterns": [
+    "Investments",
+    "Net Assets",
+    "Liabilities in Excess of Other Assets"
+  ],
+  "available_identifier_datapoints": [
+    "instrument_type",
+    "issuer",
+    "industry",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate_floor",
+    "interest_rate",
+    "acquisition_date",
+    "maturity_date",
+    "section_percent_of_net_assets"
+  ],
+  "unsupported_identifier_datapoints": [
+    "pik_rate",
+    "cash_interest_rate",
+    "all_in_interest_rate_breakout"
+  ],
+  "evidence_notes": [
+    "Bundle none_examples show Common Equity/Equity Interests/Warrants, Preferred Equity, Investments, Net Assets, and Liabilities in Excess of Other Assets as identifier-level section or aggregate markers.",
+    "Evidence CLI roam could not be used in this sandbox because the active Python environment is missing pandas."
+  ]
+}

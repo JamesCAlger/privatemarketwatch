@@ -1,0 +1,35 @@
+{
+  "cik": "1603480",
+  "target_quarter": "2025-06-30",
+  "grand_total": 628526565.0,
+  "method": "sum_of_schedules",
+  "components": [
+    {
+      "label": "Companyfacts-matching schedule rows with cost",
+      "value": 327832328.0,
+      "source": "query staging period 2025-06-30 accession 0000950170-25-107759: 26 rows with cost present, SUM(fair_value)=327,832,328"
+    },
+    {
+      "label": "Additional schedule rows without cost",
+      "value": 300694237.0,
+      "source": "query staging period 2025-06-30 accession 0000950170-25-107759: 28 rows with cost NULL, SUM(fair_value)=300,694,237"
+    }
+  ],
+  "companyfacts_fv": 327832330.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "fund_financials 2025-06-30: total_assets 725,032,000; investments_at_fair_value 327,832,330; investments_at_cost 432,887,516."
+    },
+    {
+      "source": "query",
+      "quote": "staging 2025-06-30 accession 0000950170-25-107759: rows 54; SUM(fair_value) 628,526,565; additional_no_cost_schedule_fv 300,694,237; companyfacts_matching_schedule_fv 327,832,328; companyfacts_matching_schedule_cost 432,887,514."
+    },
+    {
+      "source": "query",
+      "quote": "staging bucket split: additional schedule rows without cost = 28 rows, fair value 300,694,237; companyfacts-matching schedule rows with cost = 26 rows, fair value 327,832,328, cost 432,887,514."
+    }
+  ],
+  "rationale": "The companyfacts investments_at_fair_value tag matches only the schedule rows that carry cost, at 327,832,328 fair value versus the supplied companyfacts value of 327,832,330 after rounding. The same 2025-06-30 filing accession also contains 28 additional fair-value rows without cost totaling 300,694,237. Summing these two schedule buckets gives 628,526,565, which is greater than the companyfacts subtotal, below total assets of 725,032,000, and represents about 86.7% of assets. The companyfacts tag therefore captured a subtotal rather than the grand total.",
+  "confidence": 0.88
+}

@@ -6,6 +6,1178 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-06-28 - Rebuild stale review queue; verify ledger->queue rule coverage
+
+The review queue (`data/output/review_queue/review_queue.csv`, last built 2026-06-18 22:31)
+was stale against the shadow ledger (`data/output/shadow/validation_results_ledger.csv`,
+rebuilt 2026-06-21 19:55). The `agentA` engine (1,107 rows: 57 fail + 1,050 warn) had been
+added to the ledger after the queue was last generated, so all 4 agentA rules were absent
+from the queue. `pipeline/review_queue.py` has no engine filter -- it queues every fail/warn
+row -- so the gap was pure staleness, not a routing rule.
+- **Action**: ran `python -m pipeline.review_queue --lane both` (read-only on production;
+  writes only under `data/output/review_queue/`).
+- **New queue**: 52,472 items (blocker 14,442, review 38,030; source-anchored 3,773).
+- **Coverage verified**: ledger has 275 distinct (engine, rule) pairs; 196 fire (fail/warn);
+  all 196 now appear in the queue (0 firing rules missing, 0 queue rules that don't fire).
+- **Identity engine**: all 4 firing rules present (balance_sheet_identity, income_identity,
+  nav_identity, pct_of_net_assets_identity).
+- **agentA engine**: all 4 firing rules now present (agentA_spread_vs_xbrl,
+  agentA_maturity_vs_xbrl, agentA_reference_uncorroborated, agentA_subtotal_candidate);
+  agentA is tier=tight, so its rows land in the BLOCKER lane.
+- **Note for follow-up**: prior B1 verdicts referenced an identity rule `pik_le_interest_rate`
+  that no longer exists in the current ledger's identity engine (now the 4 *_identity rules).
+  The ledger rule set has evolved; old verdicts may not map 1:1 to current rules.
+
+## 2026-06-26 - B2 consolidation: agentic authoring on one shared substrate (steps 1-4)
+
+The deterministic template-author B2 no-op'd 3/3 at the B3 gate (subtotal_filter = filing-label
+mismatch; comparative_period_filter = unified frame has no `period` column) and drifted fix_class
+(emitted subtotal_filter for classification_fix/rule_scope requests). Decision: remediation engine
+= the AGENTIC path; consolidate to ONE substrate, quarantine (not delete) the deterministic author.
+- **(1) one applier set**: `pipeline/agent_rule.py` (exclusion/dedup/value_rescale/row_add) is
+  canonical; `agent_b2_appliers.py` + `agent_b2_wrapper_patch.py` superseded (quarantined).
+- **(2) one gate**: `agent_rule.gate_rules` (wraps `gate_correction` + no_over_addition +
+  anchor_sanity) is the single remediation gate.
+- **(3) one driver**: added `discover` + `promote` to `scripts/agent_investigate/run_investigation.py`
+  -- the agentic driver now has the orchestration `run_remediation` had. `discover <batch>
+  --source-worklist <B1 worklist>` -> investigation worklist; `promote --cik --target-quarter`
+  copies gate-PASS rules to `data/overrides/agent_investigate_rules/` (refuses unless gate PASS).
+- **(4) B1 -> agentic**: `discover` reads the B1 batch worklist + verdicts and emits a
+  `(cik, target_quarter)` target for every `real_error`. B1's mechanism guess is NOT used -- the
+  agent finds the mechanism from the EXTRACTED data. Smoke-tested on the real B1 canary worklist ->
+  4 targets (1603480/2025-06-30, 1715933/2025-06-30, 1920453/2024-03-31, 2052153/2025-03-31).
+- **Tests** `tests/test_investigation_orchestration.py` (4): discover selects real_errors only +
+  dedups per target; promote refuses without a gate PASS (no write). New surface 54 passing.
+- **NOT deleted** (deliberate): the deterministic author/appliers stay quarantined until the
+  agentic loop has a multi-CIK gate-PASS track record (currently ~2: 1715933 PASS, 1743415 correct
+  FAIL). COORDINATION: the other agent's B1-before-B2 wiring currently targets `run_remediation`;
+  it should be repointed at `run_investigation discover`.
+
+## 2026-06-26 - Agentic investigation: expand the agent's rule vocabulary (4 rule_types)
+
+The canary showed `row_exclusion` alone forces the agent to DELETE real positions to fix value/
+under-count defects. Expanded `pipeline/agent_rule.py` from 1 to 4 defect-matched rule_types,
+each validated + applied with a per-quarter audit:
+- `row_exclusion` (existing) -- predicate_sql; drop over-counted/leaked rows.
+- `value_rescale` (NEW) -- predicate_sql + `field` (value-column allowlist: fair_value/cost/
+  principal_amount/shares_held/rates/pct) + non-zero `factor`. Fixes a scale error (Twin Star
+  1000x fair_value -> factor 0.001) WITHOUT deleting the position. The canary deleted those rows;
+  rescale is the correct fix.
+- `dedup` (NEW) -- `match_fields` (key-column allowlist) + `keep` first/last, optional predicate
+  to scope candidates. Clean one-per-key collapse (vs verbose exclusion predicates).
+- `row_add` (NEW, per owner request) -- recover an UNDER-counted position (FV < anchor, e.g.
+  Saratoga's missing ~$17.67M equity line). `positions[]` each REQUIRE `source_row_id` (the
+  iXBRL/staging row recovered -- no fabrication) and `bdc_dimensions_raw` (so the row is counted);
+  applier appends them; audit records `source_row_ids`.
+- `validate_rule` dispatches per rule_type (REQUIRED_COMMON + per-type keys); `apply_rules`
+  dispatches to `_apply_exclusion/_apply_rescale/_apply_dedup/_apply_add`, applied sequentially.
+- Prompt (`run_investigation._prompt`) documents all four with WHEN-to-use guidance + a caution:
+  if the ANCHOR looks wrong (implausible vs schedule/other quarters), do NOT delete to match it --
+  escalate (the 1743415 lesson; B1-before-B2 is handled by another agent).
+- GATE GUARDS (in `gate_rules`, leaving the shared `gate_correction` untouched so B2 is unaffected):
+  - `no_over_addition` -- symmetric to `no_over_deletion`: a rule that ADDS value must not push any
+    quarter past the anchor (catches `row_add` add-to-balance overshoot).
+  - `anchor_sanity` -- reconciling the target quarter must not require deleting > `max_removed_frac`
+    (default 0.6) of its baseline FV. Catches the 1743415 delete-to-balance against a mis-extracted
+    anchor ($406M "reconciled" to $13.96M by deleting 97%) -> FAIL=escalate, not silent data loss.
+    Heuristic, tunable per cohort; a genuine ~27-39% dedup removal still PASSES.
+- Tests `tests/test_agent_rule.py` (+11): validate + apply for rescale/dedup/row_add, plus the two
+  gate guards (excessive-removal FAIL, over-addition FAIL, proportional-dedup PASS). Combined
+  rule+data_query+held_out surface: 61 passing; `gate_correction` (B2) regression green.
+- NOT done (separate): a source-pull variant (applier reads row_add values from staging by
+  source_row_id rather than agent-supplied); prevention-side adjudication is the other agent's
+  B1-before-B2 work.
+
+## 2026-06-25 - Agent B2: deterministic anchor-scored diagnosis battery (Option 3) + run_remediation wiring
+
+The Stage-3 symptom-flag mechanism is now MEASURED, not guessed. Motivated by the live B2
+trial on 0001377936 (2026-02-28): B1 guessed `subtotal_leak -> subtotal_filter`, the worker
+proposed already-filtered patterns, the trial rebuild changed 0 rows, and B3 FAILed a no-op.
+Root cause (traced by anchor-scored queries): the filer publishes its schedule at nested
+levels on one `investmentidentifieraxis`; the wrapper filters the textual TOTAL/Sub Total
+levels but a 358,770,363 (32%) overshoot remains. The battery now reproduces that diagnosis
+deterministically and ESCALATES with a precise structural map instead of fabricating a fix.
+
+- **New `pipeline/agent_b2_diagnose.py`** (pure, no LLM): a fixed battery of structural probes
+  (exact_dedup, label_aggregate/subtotal_filter, no_detail_aggregate, dimension_rollup,
+  comparative_period), each SCORED only by whether removing its row-set moves the gate's
+  `value_sum` toward the INDEPENDENT anchor (the filer's own schedule/fund total). Greedy
+  composition with a B3-style over-deletion guard (never delete below the anchor). Probe (a),
+  `raw_structural_map`: cross-references the raw BDC staging (which carries `period` + the full
+  hierarchy the unified frame drops), buckets rows into textual_total / no_detail_aggregate /
+  has_detail_leaf, and reports which class reconciles to the anchor. On 0001377936 it finds the
+  no-detail aggregate class sums to the anchor EXACTLY (1,109,133,812) while the 392 has-detail
+  leaves over-sum by 376,435,958 with NO duplication (distinct identifiers) -> flags an
+  extraction/disclosure anomaly (position rows exceed the filer's own total), not a
+  removable-row defect. `select_mechanism` -> use (reconciles) | escalate (precise reason).
+- **`scripts/agent_b2/run_remediation.py` wiring**: `MECHANISM_TO_FIX_CLASS` is now explicitly
+  a PROVISIONAL guess; `group_real_errors` marks derived Stage-3 symptom packets
+  (`SYMPTOM_MECHANISMS`) with `needs_diagnosis=True`. New `annotate_with_diagnosis(packet,
+  diagnosis)` replaces the guess with the measured decision (`use` -> measured fix_class,
+  `fix_class_derived=False`; `escalate` -> fix_class None, route to human). New `diagnose_packet`
+  IO wrapper + a `diagnose` CLI mode. On the real CIK the CLI resolves the guessed
+  subtotal_filter packet to fix_class=null / escalate with the anomaly reason.
+- **Tests**: `tests/test_agent_b2_diagnose.py` (15) -- gate-filter parity, aggregate/dedup
+  reconciliation, over-deletion guard, escalate-with-residual, raw-map anomaly vs clean-leak vs
+  period-exclusion, selector use/escalate, and the run_remediation wiring (symptom packet
+  flagged, annotate use/escalate/untouched). Existing B2/B3 surface unchanged: 51 passing
+  (run_remediation/preflight/appliers/correction_leaf/held_out).
+- NOT done: auto-loading per-CIK holdings inside `discover` (the `diagnose` step is operator/CLI
+  for now); attributing the residual 285M on this CIK is correctly left as an escalation
+  (extraction anomaly -> wrapper/source review), not an auto-fix.
+
+## 2026-06-26 - Agent B2: spv_lookthrough probe + leverage-aware rule + B3-gated test
+
+Encoded the consolidated-subsidiary look-through rule as a DETERMINISTIC mechanism (no LLM),
+per the analysis of Saratoga Investment Corp (CIK 0001377936). The 376,435,958 conservation
+overshoot is the collateral of a consolidated CLO sub (XBRL `legalentityaxis=
+SaratogaInvestmentCorpCLO20131LtdMember`) counted on top of the parent's ~$0 CLO equity line.
+- **`pipeline/agent_b2_diagnose.py`**: new `probe_spv_lookthrough` + `map_legalentity_to_equity`
+  (deterministic collapse-and-substring mapper, FAIL-CLOSED: <10-char key or no match -> []).
+  Rule: per `legalentityaxis` member, compare underlying sleeve (FV+cost) to the parent equity
+  line(s). Reconcile (unlevered pass-through) -> `keep_lookthrough` (drop equity line, keep
+  granular); diverge (levered, e.g. CLO) -> `use_equity` (drop collateral, keep equity). Both
+  branches remove exactly the double-counted amount, so conservation is preserved either way.
+  Added to PROBES.
+- **Schema/registry**: `spv_lookthrough` added to `verdict_leaf.KNOWN_FIX_CLASSES` (stage 1),
+  `correction_leaf.FIX_CLASS_STAGE` + `TEMPLATE_REGISTRY` (param `entities[]`: each
+  `{legal_entity, decision in {use_equity, keep_lookthrough}}`, validated like positions[]).
+  New applier `agent_b2_appliers.apply_spv_lookthrough` registered in POST_STAGING_APPLIERS.
+- **Tests** `tests/test_agent_b2_diagnose.py` (+6 = 21): mismatch (CLO -> drop collateral),
+  match (unlevered -> drop equity, keep granular), mapper collapse-match + fail-closed,
+  template validate/reject-bad-decision, applier both branches, and the SPV case end-to-end
+  through the B3 `gate_correction` (PASS). Full B2/B3 surface: 102 passing, no regressions.
+- **REAL-DATA FINDING (compound defect on 0001377936/2026-02-28)**: the probe correctly IDs the
+  CLO, decides `use_equity`, targets exactly 246 rows / 376,435,958. But the over-deletion guard
+  then reveals a SECOND, opposite defect: removing the 376M overshoots BELOW the anchor by
+  17,665,595 -- exactly the controlled "Investment Fund" equity line, which is UNDER-counted in
+  the gate-counted unified rows. Residual 358,770,363 = 376,435,958 over - 17,665,595 under. So
+  the battery correctly does NOT auto-reconcile via SPV-removal alone (it would leave a -17.67M
+  residual); full resolution = SPV collateral drop PLUS recovering the under-counted equity line.
+  The deterministic guard surfaced a compound defect rather than hiding it.
+
+## 2026-06-26 - Agentic investigation LOOP: iterate-to-zero (stop at <=1% FV match or 5 iterations)
+
+Added the investigate->author->apply->gate->RE-INVESTIGATE loop on top of the agentic path. After
+each hard fail the agent is re-prompted with the residual + the gate's failure reasons + a pointer
+to query the CORRECTED holdings, so it can see what its prior rules left behind and author the next
+rule. Stops when |residual| <= 1% of the anchor OR after 5 iterations.
+- **`scripts/agent_investigate/run_investigation.py`**: `loop_decision(residual_pct, iteration)`
+  (pure stop logic, tol 1%, max 5); `_measure` (apply rules so far -> write corrected -> residual
+  + gate); new `status` mode (per-iteration residual + gate + stop/continue decision);
+  iteration-aware `prep`/`_prompt` with a feedback block (rules so far, current residual, gate
+  reasons, and the `--holdings <corrected>` query so the agent investigates the REMAINING residual).
+- **`scripts/review_agent/data_query_cli.py`**: `--holdings` override so the agent can query the
+  corrected trial (the residual that remains) rather than only production.
+- **`scripts/dispatch_investigation.ps1`**: now loops up to 5 -- prep(iter) -> Codex worker ->
+  status; breaks on `decision.stop`. PS parse OK.
+- **Tests** `tests/test_agent_rule.py` (+5 = 21): loop_decision (within-tol stop incl. negative
+  residual, continue, max-iter stop) + iteration-2 prompt carries residual/gate-reasons/`--holdings`.
+  Combined new surface (rule + data_query): 40 passing.
+- **Worked proof, real cik 1715933** (a DEDUP case, not SPV): the investigation found
+  dimension-axis duplication (each position tagged under both an affiliation axis and an instrument
+  axis). Iteration 1 rule (drop the affiliation-axis duplicates) -> residual 64.6% -> **5.67%**,
+  decision=continue; iteration-2 prompt generated with the residual + gate reasons (incl. held-out
+  over-deletion from the all-quarters scope) + the corrected-holdings query pointer. Loop
+  demonstrated end-to-end; the agent would refine (scope per quarter / author rule 2) until <=1% or
+  iteration 5.
+- NOT done: live Codex run; a `dedup`/add/value rule_type (this dedup was expressible as an
+  axis-predicate row_exclusion, but keep-one-per-key cases want a dedup rule_type); promotion to
+  per-CIK overrides.
+
+## 2026-06-26 - Agentic investigation path: root-cause + author auditable rules (bypasses B2 battery)
+
+Built the full standalone agentic path so a Codex agent can investigate a conservation FV
+discrepancy ITSELF and author auditable rules -- NO deterministic battery, probes, template
+registry, or MECHANISM_TO_FIX_CLASS guessing. Deterministic stays only as the read-only tools +
+the B3 validator.
+- **New `pipeline/agent_rule.py`**: the AUDITABLE rule schema (`row_exclusion`: explicit boolean
+  `predicate_sql` over holdings columns + scope + evidence + rationale + per-quarter
+  measured_impact + confidence), `validate_rule`, a GENERAL applier `apply_rules` (per-quarter
+  audit, no per-mechanism code), `value_sum_by_quarter`/`build_snapshots`, and `gate_rules`
+  (wraps the B3 `gate_correction`).
+- **New `scripts/agent_investigate/run_investigation.py`**: `prep` (builds the agent prompt +
+  manifest + the cik's residual = the score), `apply` (applies authored rules to a trial,
+  per-quarter audit), `gate` (B3 conservation re-check). Prompt instructs the agent to
+  investigate with data_query_cli + evidence_cli, find the root cause, and author rule(s).
+- **New `scripts/dispatch_investigation.ps1`**: one Codex worker -- sandbox (read repo, write
+  ONLY the rules dir) -> run on the prompt -> apply -> gate. Operator-run, outside a Codex
+  session. Verified param names against setup_codex_worker_harness.ps1 / run_codex_worker.ps1;
+  PS parse OK.
+- **Tests** `tests/test_agent_rule.py` (16): validate (cik/type/action/predicate-safety/scope/
+  evidence/confidence), apply (per-quarter audit, scope, invalid-predicate recorded-not-applied),
+  value_sum gate-filter, gate PASS (rule reconciles target + holds others) and FAIL (over-deletion
+  below anchor). Combined new surface (rule + data_query + diagnose): 57 passing.
+- **Worked proof, real cik 1377936**: prep -> anchor 1,109,133,812. Simulated agent rule (CLO
+  look-through exclusion) -> apply excluded 1456 rows with PER-QUARTER audit (246/$376M target).
+  gate -> FAIL (correctly) on no_over_deletion: dropping the CLO pushes value_sum ~17-20M BELOW
+  the anchor in EVERY quarter -> the systematic compound UNDER-count surfaces; one rule is
+  insufficient and the gate demands the full set.
+- **Doc**: `docs/adjudication_architecture/agentic_investigation_path.md`.
+- NOT done: the live Codex run (operator); a non-exclusion rule_type (add/value) for under-counts;
+  promotion of a gated rule to per-CIK overrides.
+
+## 2026-06-26 - Agent data-query tool: the investigative keystone (read-only, cik-scoped)
+
+Built piece (1) of the investigate-to-zero architecture: the agent's READ-ONLY window into the
+EXTRACTED data, so it can root-cause FV discrepancies the way the manual investigation did
+(arbitrary aggregations over holdings/staging/companyfacts + the conservation residual) instead
+of relying on deterministic pre-computed probes.
+- **New `pipeline/agent_data_query.py`** + **`scripts/review_agent/data_query_cli.py`**: exposes
+  four cik-PRE-FILTERED tables -- `holdings` (unified, what the gate sums), `staging` (raw
+  bdc_holdings, carries `period` + `dimensions_raw`), `fund_financials` (companyfacts anchor),
+  `conservation` (the residual = the SCORE). Commands `schema` (tables/cols + the cik's residual)
+  and `query --sql`. SAFETY: cik-scoped by construction (can't see another filer); `validate_sql`
+  allows a single SELECT/WITH only (no DDL/DML/PRAGMA/multi-stmt/comment); after setup
+  `SET enable_external_access=false` blocks file/ATTACH at runtime; results row-capped.
+- **Tests** `tests/test_agent_data_query.py` (19): cik scoping/isolation, group-by + cross-table
+  join (computing the residual), validator rejects DROP/INSERT/ATTACH/PRAGMA/read_parquet/`;`/
+  comment, runtime rejection, row-cap truncation, describe schema+context.
+- **Worked proof on real cik 1377936**: `schema` returns residual 1,467,904,175 vs 1,109,133,812;
+  one agent query split by legalentityaxis surfaces the COMPOUND defect directly -- `<parent>`
+  122 rows / 1,091,468,217 (17,665,595 BELOW anchor) + CLO 246 rows / 376,435,958 -- the same
+  finding the manual investigation produced, from data alone.
+- **Doc**: `docs/adjudication_architecture/agent_data_query_tool.md` (design + safety + the
+  remaining loop work).
+- NOT done (the rest of the loop): grant the CLI to the live worker sandbox (pinned to the
+  packet cik); the investigate->author->apply->gate->re-query loop; auditable per-CIK rule
+  output (not a blanket runtime drop). Deterministic stays validator (B3) + safe executor;
+  agentic owns investigation + rule authoring.
+
+## 2026-06-26 - Agent B2: SPV guidance rewritten filing-reading-first (not tag-dependent)
+
+Concern (owner): the legalentityaxis-based detection works for Saratoga's tagging but would
+SILENTLY miss filers who disclose consolidation differently (no tag / inline / prose / pre-XBRL)
+-- overfit risk. Verified the agent's actual source access and reframed accordingly.
+- **Verified `evidence_cli` scope**: `pipeline.html_extract._extract_tables` parses `<table>`
+  elements ONLY, and `roam`/`_search` iterate those table rows only -> the agent reads ALL tables
+  in the filing (SOI, a Consolidated Schedule of Investments, tabular notes, section-header rows
+  naming a CLO/SPV) but NOT narrative prose. `_html_path` resolves one `{accession}.html` =
+  the cached PRIMARY document (whole filing's tables, not just an SOI exhibit). The agent reads
+  VISIBLE table text, not the iXBRL `legalentityaxis` tag (a different data path from the view).
+- **Consequence**: detection of SPV look-through should be the AGENT reading the filing (visible
+  consolidated schedule + the filing's PRINTED totals -- filer-agnostic), NOT the tag-based view.
+  The conservation anchor flags it (general); the agent diagnoses from source (general); B3 gates
+  (general). The `legalentityaxis` view is at most a corroborating hint where the tag exists.
+- **`docs/adjudication_architecture/B2_remediation_contract.md`**: rewrote the spv_lookthrough
+  guidance filing-reading-first -- roam for a consolidated/separate schedule + controlled
+  vehicles, read the sub-schedule's stated total vs the parent equity line via `totals`/`grid`
+  (read printed numbers, do not hand-sum), apply the leverage rule, escalate on compound defects
+  / prose-only disclosure / ambiguity. The legalentityaxis view is explicitly labeled OPTIONAL,
+  NOT authoritative, and its absence "means nothing".
+- **Known gap to watch**: consolidation disclosed ONLY in narrative prose is not reachable via
+  evidence_cli (tables only). If that proves common, the cached-filing search primitive needs a
+  prose/text mode (see the full-filing-search-adjudication note). No code changed this entry.
+
+## 2026-06-26 - Agent B2: demote the SPV decider to an agent-facing view (keep template/gate)
+
+Course-correction (owner): resolving idiosyncratic structure is the AGENT's job (Layer 2),
+not a growing library of hand-coded deterministic deciders. So the `spv_lookthrough` rule is
+no longer an auto-decider in the diagnosis battery.
+- **`pipeline/agent_b2_diagnose.py`**: removed `probe_spv_lookthrough` from PROBES; replaced it
+  with `spv_lookthrough_view(df)` -- a READ-ONLY reconciliation view (per legalentityaxis member:
+  underlying FV+cost vs mapped parent equity line, reconcile flag, SUGGESTED decision). It only
+  surfaces the structure the blinded worker cannot aggregate through its keyhole; it never
+  applies or decides. The battery no longer resolves SPV structure (new test asserts it
+  escalates instead).
+- **KEPT** (the agent's vocabulary + the un-gameable gate): the `spv_lookthrough` correction
+  template (`correction_leaf`), `apply_spv_lookthrough` (`agent_b2_appliers`), `map_legalentity_to_equity`
+  (deterministic, fail-closed), and the B3 `gate_correction` path.
+- **`docs/adjudication_architecture/B2_remediation_contract.md`**: new guidance section -- the
+  look-through rule (look through iff unlevered; else use equity) as GUIDANCE the agent applies
+  using the view + source, explicitly owning the messy parts (compound defects, partial-ownership
+  JVs, sub debt) and escalating rather than forcing a single balancing correction.
+- **Tests** `tests/test_agent_b2_diagnose.py` (22): the two battery-decider tests became
+  view-tool tests (mismatch -> suggests use_equity; match -> suggests keep_lookthrough) + a new
+  test that the battery does NOT auto-decide SPV. Applier/template/mapper/B3-gate tests unchanged.
+  Full B2/B3 surface still green.
+- **Division of labor now**: deterministic = surface structure (view) + validate (B3); agentic =
+  decide + author the correction per CIK. Not yet wired: exposing the view to the Codex worker
+  (evidence_cli/bundle) -- prerequisite before any live agent trial of the rule.
+
+## 2026-06-24 - Agent B2 D5: remediation Codex worker (ready for a subtotal_leak trial run)
+
+The B2 worker fleet, scoped so an operator can run a trial Codex run on the subtotal_leak
+rule (the analog of B1's smoke45). Reuses the A/B1 harness + env fixes.
+- **New `scripts/agent_b2/dispatch_preflight.py`**: keyed by `(cik, fix_class)` packet from
+  `run_remediation discover`; validates each source verdict is real_error, resolves the B1
+  bundles (the worker re-grounds the FIX against them), embeds B1's cited subtotal rows in a
+  blinded-to-nothing remediation prompt, locks per packet (`B2:<cik>:<fix_class>`), write-grant
+  = corrections dir. Reuses B1's WORKER_PYTHON/EVIDENCE_CLI/_worker_read_dirs (absolute
+  interpreter + import dirs). `--fix-class subtotal_filter` restricts the trial to one rule.
+- **New `docs/adjudication_architecture/B2_remediation_contract.md`**: the worker contract --
+  NOT blinded (B1's citations are the start), propose ONE constrained template instance, NO
+  code/SQL/path; the subtotal_filter standard = patterns are the distinctive SUBTOTAL LABELS
+  (text before the first number), specific + stable; author for the B3 gate.
+- **New `scripts/agent_b2/validate_corrections.py`**: worker self-check CLI over
+  `correction_leaf` (analog of validate_leaf_verdicts).
+- **New `scripts/dispatch_agent_b2_workers.ps1`**: B2 fleet dispatcher (clone of B1's loop;
+  write-grant = corrections dir; `-EnvInherit all`, `-AllowUserSite`, interpreter read grants).
+- **Bridge** in `run_remediation.group_real_errors`: `MECHANISM_TO_FIX_CLASS`
+  (subtotal_leak/cash_equivalent_leak -> subtotal_filter) so the pre-`findings[]` conservation
+  verdicts become actionable packets; `fix_class_derived` flag recorded.
+- **Verified ready**: real `discover` over the smoke45 conservation verdicts -> 7 actionable
+  subtotal_filter packets; dry preflight built the manifest + 7 prompts, each embedding B1's
+  cited subtotal rows + absolute paths + the conda interpreter. Tests
+  `tests/test_agent_b2_preflight.py` (4); full B/B2/B3 surface 93 passing.
+- **Operator runbook** (outside a Codex session, conda-activated):
+  1. `python -m scripts.agent_b2.run_remediation discover b2_subtotal_trial --source-worklist data/output/agent_b/batch/smoke45/worklist.csv`
+  2. `powershell -File scripts/dispatch_agent_b2_workers.ps1 -BatchId b2_subtotal_trial -FixClass subtotal_filter -MaxParallel 2`
+  3. per CIK: `run_remediation apply b2_subtotal_trial --cik <CIK> --run` then `run_remediation gate --cik <CIK> --target-quarter <Q> --baseline-holdings <prod.csv> --trial-holdings <corrected.csv>`
+- NOT done: production consumption of promoted wrappers/corrections; non-conservation
+  snapshot builders; the live trial Codex run itself (operator).
+
+## 2026-06-24 - Agent B2 driver: apply orchestration (route corrections -> trial inputs)
+
+Wired the `apply` step into `scripts/agent_b2/run_remediation.py` so a CIK's staged
+corrections route to the right applier and assemble the trial rebuild (the heavy rebuild
+stays an operator `--run`).
+- `flavor_of` / `route_corrections` (pure): bucket corrections into wrapper_patch
+  (subtotal_filter, classification_fix, column_remap), post_staging (dedup,
+  comparative_period_filter, rate/unit/all_pik, missing_position_add), rule_track
+  (rule_scope, anchor_fix), or needs_human (no fix_class). A fix_class in a bucket without a
+  registered applier is reported `not_implemented`, never silently dropped.
+- `prepare_trial_wrappers`: runs the implemented wrapper-patch appliers (subtotal_filter ->
+  trial wrapper, with provenance carried from the correction).
+- `build_trial_command` (pure): assemble `rebuild_unified_cik_trial.py --cik [--wrapper-dir]
+  [--corrections] [--stage]`.
+- `apply_packet` + the `apply` CLI mode: load a CIK's corrections, route, materialize trial
+  wrappers, assemble (and with `--run`, execute) the trial rebuild.
+- **Tests** `tests/test_agent_b2_run_remediation.py` (+4 = 11): flavor routing, trial-wrapper
+  prep incl. not_implemented recording, command shape, apply_packet prepares-without-running.
+  Full B/B2/B3 surface: 89 passing.
+- NOT done: production consumption of promoted wrappers/corrections; D5 (B2 Codex worker);
+  non-conservation snapshot builders. The end-to-end loop on a real Tier-0 CIK is now an
+  operator run (`apply --run` then `gate`).
+
+## 2026-06-24 - Agent B2 D2: wrapper-patch subtotal_filter applier + trial overlay
+
+The Tier-0 conservation mechanism (subtotal leak) routed to the layer that OWNS it -- the
+per-CIK BDC XBRL wrapper -- rather than a parallel post-staging drop.
+- **New `pipeline/agent_b2_wrapper_patch.py`**: `apply_subtotal_filter(cik, template, ...)`
+  merges the correction's `patterns` into the CIK's `dispatch.aggregate_markers` (lowercased,
+  dedup, order-preserving), writes a TRIAL wrapper to an out dir (never the production
+  override), and records a `b2_provenance` block (source_review_ids/evidence/confidence) --
+  closing the audit-trail gap the bare wrappers had. Fails safe (status=error, no write) when
+  the source wrapper is missing or is not a dispatch-style wrapper.
+- **`pipeline/bdc_xbrl_wrapper.py`**: `_load_specs_from_json` now takes an optional directory;
+  new `reload_wrapper_specs(override_dir=None)` rebuilds the module-global `WRAPPER_SPECS` from
+  production and OVERLAYS a trial dir per-CIK (call with no arg to restore). Additive --
+  default load path unchanged.
+- **`scripts/rebuild_unified_cik_trial.py`**: `--wrapper-dir <dir>` overlays a trial wrapper
+  before the build, so a staged subtotal_filter patch takes effect for one CIK without
+  touching production. (76/78 wrappers are dispatch-style and carry `aggregate_markers`.)
+- **Tests** `tests/test_agent_b2_wrapper_patch.py` (4): merge/dedup/provenance, production
+  source untouched, missing/non-dispatch wrapper fail-safe, reload overlay takes effect then
+  restores. Full B/B2/B3 surface: 85 passing; broader wrapper-cohort suite 708 passing.
+- PRE-EXISTING (not mine): `tests/test_bdc_xbrl_wrapper.py::test_apollo_ds_company_only_source_row_is_aggregate`
+  fails identically with my `bdc_xbrl_wrapper.py` edits stashed -- an Apollo DS wrapper/data
+  drift in the dirty worktree, unrelated to B2. Left untouched.
+- NOT done: driver glue routing stage-1 subtotal_filter packets through this applier +
+  `--wrapper-dir` (operator orchestration), production consumption of promoted wrappers, D5.
+
+## 2026-06-24 - Agent B2 D4: remediation driver (discover / snapshots / gate / promote)
+
+The deterministic orchestration that turns the D1 appliers + D3 gate into an end-to-end
+staged->gate->promote loop (no Codex). New `scripts/agent_b2/run_remediation.py`:
+- `group_real_errors` -- group real_error verdicts into `(cik, fix_class)` packets, joined to
+  B1 bundle meta (cik/report_date/rule), stage-ordered; a multi-defect verdict yields multiple
+  packets; no-fix_class real_errors group under `None` (need a human, not a template).
+- `build_conservation_snapshots` -- re-triage Tier-0 conservation DETERMINISTICALLY: recompute
+  `value_sum` per quarter from a holdings frame vs the stored independent `anchor_value`
+  (loaded from `conservation_gate_results.csv`; the anchor is unchanged by row edits), flag
+  `fv_conservation` when |residual| > threshold. This is what produces the B3 snapshots.
+- `gate_conservation_packet` -- baseline+trial snapshots -> the D3 held-out gate.
+- `promote_passes` -- copy ONLY PASS staged corrections to `data/overrides/agent_b2_corrections/`
+  (mirrors Agent A's staged->overrides promote).
+- CLI: `discover` (verdicts + B1 worklist -> packet worklist), `gate` (baseline vs trial
+  holdings CSVs -> gate verdict). The heavy `apply` step shells out to
+  `rebuild_unified_cik_trial.py --corrections` (operator-run, cached rebuild) -- not unit-tested.
+- **Tests** `tests/test_agent_b2_run_remediation.py` (7): packet grouping/staging, conservation
+  snapshot flag/clear, end-to-end gate PASS on subtotal removal + FAIL on held-out regression,
+  discover worklist, promote copies only PASS. Full B/B2/B3 surface: 81 passing.
+- NOT done: D2 (wrapper-patch subtotal_filter applier -- the main Tier-0 mechanism), the
+  production build wiring to CONSUME promoted corrections, D5 (B2 Codex worker), and snapshot
+  builders for non-conservation rules (C113/pik).
+
+## 2026-06-24 - Agent B2/B3: post-staging dedup applier (D1) + held-out gate (D3)
+
+The deterministic spine of remediation (no Codex), per the B2/B3 build plan.
+- **New `pipeline/agent_b2_appliers.py`** (D1): pure post-staging correction transforms over
+  one CIK's unified holdings -- `apply_dedup` (drop rows duplicated on `match_fields`, keep
+  first/last; fail-safe on missing columns) and `apply_comparative_period_filter` (keep
+  `period == report_date`). `run_corrections` applies validated correction-leaf dicts in
+  precedence-stage order, optionally restricted to one stage; non-post-staging fix_classes
+  (wrapper-patch / rule track) are skipped + recorded. Only the mechanisms the wrapper
+  cannot express live here (cross-period dedup, comparative filter); subtotal/classification
+  remain wrapper-patch territory.
+- **New `pipeline/agent_b_held_out.py`** (D3): the B3 promotion gate, PURE over per-quarter
+  ledger snapshots (baseline vs trial). `gate_correction` applies joint predicates --
+  target cleared, NO new flag in any quarter (catches held-out regression + broad
+  delete-to-balance), FV-at-risk non-increasing, conservation residual moved toward anchor +
+  no over-deletion below anchor (delete-to-balance guard), D01/D02 bands hold, and
+  >= min_held_out non-target quarters covered (overfit-by-construction guard). Mirrors
+  `identifier_held_out.py`; producing the snapshots (ledger re-run) is the D4 driver's job.
+- **Wiring**: `scripts/rebuild_unified_cik_trial.py` gains `--corrections <dir>` + `--stage`;
+  applies staged post-staging corrections to the trial holdings, writes
+  `private_markets_holdings.<cik>.corrected.csv` + `corrections_audit.<cik>.json` (trial only).
+- **Tests**: `tests/test_agent_b2_appliers.py` (6) + `tests/test_agent_b_held_out.py` (8) --
+  dedup keeps comparatives when period is in the key; the gate REJECTS delete-to-balance
+  (broad-rule new flag AND below-anchor over-deletion), single-quarter overfit, new flags
+  elsewhere, FV-at-risk rise, band blowout; PASSES a genuine subtotal removal. Full B
+  schema/applier/gate surface: 74 passing.
+- NOT done: D2 (wrapper-patch subtotal_filter), D4 (run_remediation driver: discover/apply/
+  retriage/gate/promote + the stage loop that produces the B3 snapshots), D5 (B2 Codex worker).
+
+## 2026-06-24 - Agent B2 M-B2.0: correction-leaf schema + constrained template registry
+
+First B2 build milestone (pure, no Codex), per `docs/adjudication_architecture/B2_B3_build_plan.md`.
+- **New `pipeline/correction_leaf.py`** (B2 analog of `verdict_leaf.py`): the schema a B2
+  worker must emit per `(cik, mechanism)` packet -- `cik`, `mechanism`, `fix_class`,
+  `template`, `source_review_ids[]`, `evidence_citations[]`, `confidence`, `rationale`.
+  HARD invariants: `fix_class` must bind a registered `Template` (stricter than verdict_leaf's
+  soft mechanism); template keys must be a subset of the registered `allowed` (no extras),
+  required params present, declared-numeric params numeric, declared enums checked; nested
+  `row_selector`/`positions` keys bounded; >=1 evidence citation; confidence in [0,1]; and
+  EVERY string value scanned for code/SQL/file-path injection (a template is data, not an
+  instruction). `stage` derived from fix_class (and checked if stated).
+- **`TEMPLATE_REGISTRY`**: 11 constrained templates across the 3 precedence stages (dedup,
+  subtotal_filter, comparative_period_filter, missing_position_add / rate_rescale,
+  all_pik_normalization, column_remap, unit_rescale, classification_fix / rule_scope,
+  anchor_fix). Each names its intended trial-wrapper apply fn (not called here),
+  required/allowed params, numeric params, and enums.
+- **Tests**: `tests/test_correction_leaf.py`, 21 passing (extra-param, missing-required,
+  numeric, enum, SQL/path injection, benign issuer-slash false-positive guard, row_selector,
+  stage mismatch, validate_dir). Full B schema/preflight surface 60 passing.
+- NOT done: the trial-wrapper appliers (named in the registry), B2 preflight/worker/dispatch
+  (M-B2.1), B3 gate (M-B3.1).
+
+## 2026-06-24 - Agent B1 verdict-leaf `findings[]` + B2/B3 build plan
+
+- **Leaf extension** (`pipeline/verdict_leaf.py`): added an OPTIONAL `findings[]` list so a
+  multi-defect row (e.g. TorcSill: PIK-stored-as-interest AND a duplicate) carries each
+  sub-defect as `{mechanism, detail, fix_class, citation}` instead of being flattened into one
+  `mechanism` + prose -- B2 starts from the diagnosis instead of re-deriving it. Advisory only
+  (B2 re-grounds, B3 gates). New `KNOWN_FIX_CLASSES` (soft vocab), staged: structural (dedup,
+  subtotal_filter, comparative_period_filter, missing_position_add), per-row (rate_rescale,
+  all_pik_normalization, column_remap, unit_rescale, classification_fix), rule-level
+  (rule_scope, anchor_fix). A finding's `citation` also satisfies the real_error grounding
+  invariant. Backward-compatible (findings optional). Contract + worker prompt updated. Tests
+  +4, 39 passing in `tests/test_verdict_leaf.py`.
+- **Build plan** `docs/adjudication_architecture/B2_B3_build_plan.md`: file-by-file plan for
+  B2 (remediator) + B3 (held-out gate), reusing the A/B1 Codex harness + the existing
+  `rebuild_unified_cik_trial.py` and `identifier_held_out.py`. B2 = blinded worker PROPOSES a
+  constrained correction TEMPLATE instance (audited JSON, never code) per `(CIK, mechanism)`
+  packet; B3 = deterministic full-ledger re-run on held-out quarters (the un-gameable gate).
+  Documents the **mechanism-precedence DAG**: structural fixes (Stage 1) must be applied + the
+  ledger regenerated + re-triaged BEFORE value (Stage 2) and aggregate/identity re-checks
+  (Stage 3) -- else you gate a conservation residual against duplicate-contaminated inputs.
+  Milestones M-B2.0..M-B4; test plan includes the delete-to-balance and single-quarter-overfit
+  rejection guards. Flags the PIK all-in / index_returns double-count coupling for the
+  all_pik_normalization template.
+
+## 2026-06-24 - Agent B PIK-only smoke45 subset launcher
+
+- Added `scripts/run_smoke45_pik_subset.ps1`, an operator wrapper that creates a new Agent B batch from the existing `smoke45` worklist filtered to `rule_name=pik_le_interest_rate`, preserving the exact 15 sampled review IDs instead of resampling the queue.
+- The script writes `selected_review_ids.csv` and `selected_worklist_preview.csv`, runs `scripts.agent_b.run_review discover`, validates the subset worklist contains only the requested rule, then optionally dispatches through `scripts/dispatch_agent_b_workers.ps1`.
+- Existing selected verdict leaves are archived under the new batch's `prior_verdicts/` only when dispatching; `-PrepareOnly` now creates and validates the subset without moving verdicts or launching workers.
+- Follow-up fix: removed repeated nested `-ReviewId` arguments when calling `dispatch_agent_b_workers.ps1`; the generated batch worklist is already PIK-only, and repeated `-ReviewId` does not bind through `powershell -File`. Baseline comparison now detects any previously archived verdicts in `prior_verdicts/`.
+- Verification: PowerShell parser check passed; `-PrepareOnly` created `smoke45_pik_prepare_check2` with 15/15 `pik_le_interest_rate` rows and left `data/output/review_queue/verdicts/` at 45 files.
+
+## 2026-06-24 - Agent B1: encode the PIK all-in convention as a rule-specific standard
+
+The full 45-bundle smoke run scored 16/24 = 67% vs the human gold labels (which were found
+in `gold/labels/*.json`, never aggregated to `gold_labels.csv` -- now back-filled). 7 of the
+8 fleet misses were `pik_le_interest_rate` cases: the human labels every gold PIK firing
+`real_error` (cash leg stored as interest_rate), adjudicating under the ALL-IN contract
+(`interest_rate` should be PIK-inclusive). The fleet called them `false_alarm` because the
+B1 contract never stated the convention. Encoded it:
+- `docs/adjudication_architecture/B1_adjudication_contract.md`: new "Rule-specific
+  adjudication standards" section. For `pik_le_interest_rate`, the all-in convention makes a
+  firing a `real_error` whenever stored `interest_rate` is only the cash leg/spread while the
+  position carries PIK (mechanisms `extraction_gap` / `genuine_value_defect`; gold's
+  `false_alarm_cash_leg` is a mechanism NAME, verdict stays `real_error`). `false_alarm` only
+  if `interest_rate` already includes PIK and the PIK side is mis-parsed.
+- `pipeline/verdict_leaf.py`: added `false_alarm_cash_leg`, `false_alarm_rule_range` to
+  KNOWN_MECHANISMS (soft vocabulary; gold-observed).
+- `scripts/agent_b/dispatch_preflight.py`: prompt step 1 now tells the worker that a
+  rule-specific contract standard, if present for its rule, is authoritative.
+- DOWNSTREAM CAVEAT: this sets the ADJUDICATION standard only; it does not change the
+  pipeline. If B2 later re-derives interest_rate = cash+pik, the `+ pik_rate_pct` add in
+  index_returns.py:~241 must be removed atomically or PIK income double-counts (see the
+  interest-rate-cashpay-convention memory).
+- RESULT (operator re-ran the 15 PIK bundles, batch smoke45_pik_20260624_120137): all 15 ->
+  `real_error`; fleet-vs-gold on the 8 gold-labeled PIK cases went 1/8 -> **8/8**. Overall
+  fleet-vs-gold 16/24 -> **23/24 (96%)**. The lone remaining gold miss is one C113
+  all-PIK/duplicate defect (same convention surfacing in C113).
+- FINALIZE SCOPING FIX: the shared `review_queue/verdicts/` dir holds verdicts from prior
+  batches; `validate_dir(expected_review_ids=...)` flagged those as `not in worklist` (the
+  re-run showed a spurious `schema_ok=false`, 30 errors -- all membership, zero real schema
+  failures). Added `restrict_to_expected` to `pipeline/verdict_leaf.validate_dir` and set it
+  in `run_review.finalize` so a batch validates only ITS verdicts (missing still flagged).
+  Re-finalize: `schema_ok=true`, 0 errors. Tests: +3 total (`test_verdict_leaf.py`), 35 passing.
+
+## 2026-06-24 - Agent B1: ambiguous-basis distinction + worker env-bug fixes (from smoke45)
+
+The single-item smoke run (`agent_b/batch/smoke45`, rule `pik_le_interest_rate`) exposed
+two worker env bugs and a schema gap: the worker could not read raw source (evidence CLI
+died on `ModuleNotFoundError: pandas`; contract relative path missed the runroot), correctly
+fell back to `ambiguous`, but that fail-closed `ambiguous` was indistinguishable from a
+genuine "read the source, still unclear" `ambiguous`. Fixed both.
+
+- **New required leaf field `ambiguity_basis`** (`pipeline/verdict_leaf.py`): for
+  `verdict == "ambiguous"`, must be `source_checked` (read raw source, genuinely undecidable
+  -> real adjudication outcome, route human) or `source_unavailable` (could not read source
+  -> coverage/infra, route retry, excluded from precision). HARD error if missing/invalid on
+  ambiguous; HARD error if a `real_error`/`false_alarm` claims `source_unavailable` (can't
+  decide without source); warns if `source_unavailable` without `escalate=true`.
+- **Routing/tally split** (`scripts/agent_b/run_review.py finalize`): `ambiguous` +
+  `source_unavailable` now routes to `coverage_no_source` (not `human`) and is tallied in a
+  new per-rule `no_source` bucket, never diluting the genuine-`ambiguous` count. `routing.csv`
+  gains an `ambiguity_basis` column. B0 auto short-circuit verdict now sets
+  `ambiguity_basis="source_unavailable"`.
+- **Worker env fixes** (`scripts/agent_b/dispatch_preflight.py`): the worker prompt now uses
+  ABSOLUTE paths for the contract + evidence CLI + validator (the worker cwd is its Codex
+  runroot, not the repo) and names the EXACT interpreter (`sys.executable`) for every python
+  call (a bare sandbox `python` lacked pandas). Manifest records `worker_python`.
+- **Sandbox harness** (`scripts/setup_codex_worker_harness.ps1`): added additive params
+  `-ReadDirs` (grant read beyond repo root -- e.g. the conda/venv interpreter dir) and
+  `-EnvInherit` (default `core`; Agent B passes `all` so the interpreter's DLLs resolve).
+  Agent A's emitted config is byte-identical when both are omitted (verified). The B
+  dispatcher (`scripts/dispatch_agent_b_workers.ps1`) reads `worker_python`, grants read on
+  its dir, and sets `-EnvInherit all`.
+- **Contract** (`docs/adjudication_architecture/B1_adjudication_contract.md`): documents the
+  two bases, the fail-closed -> `source_unavailable` rule, and the new screen invariants.
+- **Tests**: `tests/test_verdict_leaf.py` (+8) and `tests/test_agent_b_preflight.py`
+  (no_source routing, prompt interpreter/basis assertions) = 32 passing (was 24).
+- **Note**: the stale smoke45 verdict `review_queue/verdicts/RVQ_BLK_615ce96f7bae.json`
+  predates the field and is now schema-invalid (it was a `source_unavailable` case); clear it
+  before re-dispatching that review_id. NOT yet done: a live re-run confirming the env fixes
+  let a worker actually read source (needs an operator outside a Codex session).
+
+### 2026-06-24 (follow-up) - the real evidence-CLI env root cause: user-site + PYTHONNOUSERSITE
+
+The first smoke re-run STILL hit `ModuleNotFoundError: pandas` despite the worker invoking
+the exact absolute interpreter (confirmed in the trace). Diagnosed empirically: this
+machine's pandas lives in the USER site (`%APPDATA%\Python\Python313\site-packages`), not the
+conda env. Two settings blocked it: the sandbox's `PYTHONNOUSERSITE=1` (disabled user site)
+and, under a non-inherited env, a missing `%APPDATA%` (Windows derives the user-site path from
+it). Proven: `import pandas` succeeds ONLY with `APPDATA` present AND `PYTHONNOUSERSITE` unset.
+- `scripts/agent_b/dispatch_preflight.py`: manifest now emits `worker_read_dirs` (sys.prefix +
+  env site-packages + user site, existing/unique) and `user_site_enabled`.
+- `scripts/setup_codex_worker_harness.ps1`: new `-AllowUserSite` switch drops
+  `PYTHONNOUSERSITE` from the env `set` block (A default unchanged: still hardened).
+- `scripts/dispatch_agent_b_workers.ps1`: grants read on all `worker_read_dirs` (incl. the
+  user site) and passes `-AllowUserSite` (with `-EnvInherit all`, which carries `%APPDATA%`).
+- Operator-side alternative if a run still fails: `pip install` the deps into the conda env
+  (then they sit in the env site-packages, already granted, no user-site needed).
+- Tests still 32 passing; A config verified byte-identical when the new switches are omitted.
+
+---
+
+## 2026-06-23 - Agent A: TWO LIVE codex worker runs (Great Elm, Phillip Street) -- diagnostic re-assessed (one prediction refuted)
+
+Ran two real `codex exec` workers via `scripts/dispatch_agent_a_workers.ps1` on shape-stratified
+bundles (improved tooling: shape-stratified sampling + the apply_grammar coalesce fix), to test
+the standing diagnostic empirically rather than by reasoning. Pre-test staged proposals + bundles
+backed up to `data/output/agent_a/_livetest_backup_20260623`; current staged proposals are now the
+FRESH WORKER output (the workers overwrote them). Manifest-scoped `staged_gate_results.csv` now
+holds these 2 rows (the prior 55-row batch result was overwritten; regenerable via gate --staged).
+
+Results:
+- Great Elm 0001675033 -> FAIL, but completeness CLEARED in every in-era quarter (90.7-100%).
+  The worker authored FOUR interest_rate fallback extractors (bare '(X%)', '(X% Cash + Y% PIK)',
+  doubled-label, '... Initial Acquisition'); these only work because of the coalesce engine fix
+  (otherwise they clobber to None). CONFIRMS the diagnostic: the rate tooling fixes completeness;
+  the residual FAIL is purely the early-2023 none-share spike (37-38% vs median 16.9%) -- an
+  ANCHOR-coverage gap for the 2023 layout, not a rate regex. Queued for 2023 re-induction.
+- Phillip Street 0001948368 -> PASS (all 13 quarters >= 90%, none-share stable). REFUTES the
+  diagnostic. I predicted it would still FAIL ("most failing rows carry no all-in in the string;
+  needs a per-row required-fields contract change"). Instead the worker simply DROPPED
+  interest_rate from required_fields (kept it best-effort with '%?'), requiring only
+  [reference_rate_type, basis_spread, maturity_date] -- all reliably present. The shape-stratified
+  bundle showed it the no-all-in rows, and it correctly modeled the filer as floating-rate (all-in
+  derivable from ref+spread, not required). Still passes anti-degeneracy (basis_spread +
+  reference_rate_type are substantive). Coverage tradeoff: all-in is now best-effort, not guaranteed.
+
+Diagnostic re-assessment (what held vs broke):
+- HELD: coalesce engine fix is load-bearing (Great Elm's 4-fallback grammar proves it);
+  shape-stratified sampling materially helped BOTH workers use surfaced variants; none-share/anchor
+  gaps are a real, separate, still-unaddressed residual (Great Elm 2023).
+- BROKE: my claim that the per-row-scope CIKs need a contract change. The worker has full latitude
+  over required_fields and used it; better samples were sufficient. This likely generalizes to the
+  other scope CIKs (Silver Point/Silver Capital) -- only Phillip Street was tested, so treat that as
+  probable, not proven. The earlier proposed "conditional required_fields contract change" is NOT
+  needed for filers where the worker can just require the reliably-present fields.
+- Net: a fresh run with the improved tooling is materially more capable than my reasoning credited.
+  The durable residual is none-share/anchor-vocabulary coverage (an anchor-authoring gap), not rate
+  grammar. `discover()` is still not shape-stratified (this test fed shape-strat bundles manually).
+
+## 2026-06-23 - Agent A: deterministic sweep of the remaining completeness FAILs + apply_grammar coalesce fix (validation impact assessed: none)
+
+Swept the 6 regex-fixable completeness FAILs (Star Mountain 0001786835 remains scope-out) the
+same deterministic way as Goldman: pinpoint the missing field, author the minimal fix, verify
+with the REAL held-out gate. Result: 2 more clean PASS, 1 completeness-fixed (residual is a
+different gate criterion), 3 with genuine scope residuals a regex cannot fix.
+
+- ENGINE FIX `pipeline/identifier_rate.py` (`apply_grammar`): multiple extractors for one field
+  now COALESCE -- a later extractor that does NOT match no longer clobbers an earlier match with
+  None (a later MATCH still wins). Root cause of Great Elm/SLR 0% -- both author two
+  interest_rate extractors as fallbacks. Strictly additive (can only fill more, never null).
+- Per-CIK staged-proposal fixes (data/output/agent_a/proposals, STAGED not promoted), each with a
+  remediation_2026_06_23 provenance note:
+  - 0001418076 SLR -> PASS on the coalesce fix ALONE (no regex change).
+  - 0001513363 FIDUS -> PASS: maturity regex accepts 'Maturity Date <d>' as well as 'Maturity <d>'.
+  - 0001675033 Great Elm -> completeness 0%->100% (all-in is the parenthetical after the SOFR
+    spread, '(12.17%)' / '(13.47% Cash + ..)'); STILL FAILs on an early-2023 none-share spike
+    (~40% vs median 21%) -- an anchor-coverage gap for the 2023 layout, not a rate regex.
+  - 0001646614 Silver Point -> 49.6%->~84%; STILL FAILs (2 quarters 84-88%) on unfunded
+    Delayed-Draw/Revolver rows that state no all-in -> required-fields scope.
+  - 0001948368 Phillip Street -> marginal; STILL FAILs (54-67%) -- most failing rows carry NO
+    all-in in the string (only 'S + spread% (Incl PIK)') -> scope/derivation, not a regex.
+  - 0001674760 Silver Capital -> 82.9%->88.6% (added EURIBOR 'E +'); STILL FAILs on fixed-rate
+    rows (no floating spread) + one malformed filed date '0/21/26' -> scope/data-quality.
+  Sweep PASS tally (incl. Goldman from the prior entry): 3 clean PASS (Goldman, SLR, FIDUS);
+  the rest need anchor coverage / required-fields scoping / data-quality handling, NOT a regex.
+
+- VALIDATION-IMPACT ASSESSMENT (the apply_grammar change is the only production-code edit):
+  - `identifier_overlay.py` (the only production consumer that writes enrichment) is NOT wired
+    into the build (pipeline/main, unified_holdings, export_frontend, rebuild_outputs do not call
+    it) -> the coalesce fix changes NO published artifact.
+  - Only 2 of 64 COMMITTED grammars have multi-extractor-per-field (0001588272, 0001919369);
+    both still PASS the held-out gate after the fix (coalesce only adds completeness).
+  - Tests: 109 passed + 2 xfailed across every apply_grammar/Agent-A module (identifier_rate,
+    identifier_held_out, identifier_overlay, shadow_agent_a_engine, identifier_extraction/
+    signature/spread/tranche, agent_a hardening/concurrency/dispatch_preflight); 139 passed in
+    test_validate_holdings (deterministic V1-V7 holdings validations unaffected).
+  - `diff_outputs.py --semantic` shows drift, but it is baseline-staleness + pre-existing dirty
+    worktree (production CSVs are clean vs HEAD; this session ran no rebuild/export). Staged
+    proposals live under gitignored data/output/agent_a and are not baseline artifacts.
+  - Forward caveat: IF these grammars are promoted AND identifier_overlay is wired into the
+    build, the coalesce fix + new grammars would change enrichment coverage (additive); a fresh
+    baseline + semantic diff would be required at that point.
+
+## 2026-06-23 - Agent A: shape-stratified sampler wired into remediation + Goldman re-induction clears the gate (FAIL -> PASS)
+
+Wired the shape-stratified sampler into the remediation dispatch path and verified end-to-end on
+Goldman (0001772704) that it unblocks a held-out-gate clearance.
+
+- `scripts/agent_a/run_quarter.py` (`_emit_remediation`): the re-induction bundle build now passes
+  `shape_stratified=True`, so every re-dispatched FAIL bundle round-robins across distinct
+  `flattened_shape`s within each era (initial `discover()` left unchanged for now -- one-line
+  follow-up if wanted).
+- Root-cause pinpoint (Goldman 2023-12-31, deterministic): all 50 unparsed rows fail on exactly
+  ONE field, `basis_spread`, and form a PURE distinct shape `bc1|legs1|ref1|pik0|mat1`
+  (46 fail / 0 ok). The spread is written `S + 6.25` (no trailing %) while the regex required
+  `...\+\s*(\d+)%`. The post-issuer %-count (`legs`) cleanly separates the two variants, so
+  shape-stratification surfaces a FAILING example (not a same-shape parsed one) -- head selection
+  drops the legs1 cluster entirely.
+- The worker fix is one token: trailing % optional, `(\d+(?:\.\d+)?)%` -> `(\d+(?:\.\d+)?)\s*%?`.
+  Applied to the staged proposal `data/output/agent_a/proposals/0001772704.grammar.json` (with a
+  `remediation_2026_06_23` provenance note; STAGED only, NOT promoted).
+- Verified with the REAL gate (`pipeline.identifier_held_out.held_out_report`):
+  before = FAIL (2023-12-31 completeness 77.7%); after = PASS(high) -- 2023-12-31 77.7% -> 100%,
+  all 13 in-era quarters >= 90%, none-share stable (median 2.7%). Patched proposal still passes
+  the deterministic self-screen.
+- NOTE: this was a deterministic agent-authored one-token patch, NOT a live Codex worker run --
+  it proves a clearing grammar EXISTS and is reachable from the shape-stratified bundle. Launching
+  the billed Codex worker on the shape-stratified bundle, and promoting via the PASS-only step,
+  remain explicit operator actions.
+- Tests: 25 pass across hardening + held_out + dispatch_preflight (no new tests here; the sampler
+  has unit coverage from the prior entry).
+
+## 2026-06-23 - Agent A: shape-stratified sampler prototype (surfaces the missed layout that drives the completeness FAILs)
+
+Prototyped the sampling fix the 2026-06-23 completeness investigation pointed to: the head
+selection `by_date[d][:n_per_era]` in `_era_stratified_pick` shows the worker the first n rows
+per era in storage order and silently drops a minority LAYOUT (e.g. a hierarchy-breadcrumb-
+prefixed position), which then fails the held-out gate on the quarter that layout dominates.
+
+- `scripts/agent_a/sample_variant.py`:
+  - New `flattened_shape(ident)`: a COARSE structural shape for the flattened regime. The
+    existing `punctuation_shape` is a DELIMITED-regime tool and over-fragments here (measured:
+    Goldman 0001772704 had 69 distinct punctuation_shapes over 224 sig rows, so shape-stratifying
+    on it still covered 0/14 unparsed shapes). `flattened_shape` keys only on the axes that break
+    a rate grammar -- a leading breadcrumb (a '%' before the first issuer legal-entity suffix),
+    rate-leg count after the issuer (cash vs cash+PIK), and presence of ref-rate/spread, a PIK
+    parenthetical, and a maturity date -- collapsing Goldman to 4 classes.
+  - New `_shape_stratified_pick(rows_for_sig, n_per_era, max_shapes=6, shape_fn=flattened_shape)`:
+    era-stratified, but WITHIN each era round-robins across distinct shapes (>=1 per kept shape,
+    >= n_per_era total, capped at max_shapes most-frequent). `_era_stratified_pick` is left intact.
+  - `build_bundle(..., shape_stratified: bool = False)`: opt-in; selects the shape-stratified
+    picker in multi_quarter mode. Default OFF -> existing bundles unchanged.
+- Validation (read-only measure over bdc_holdings.parquet + staged proposal grammar/anchors, on
+  the 8 completeness-FAIL CIKs' worst quarters): coverage of the unparsed-row shapes the worker
+  would SEE went from HEAD 0-1 to SHAPE = FULL (#unp/#unp) on every one of the 8 (Goldman 0/2 ->
+  2/2; Silver Point 0001646614 1/6 -> 6/6; Great Elm 0001675033 1/4 -> 4/4; etc.). This is the
+  necessary precondition for the regex fix -- covering a layout is necessary, not sufficient; the
+  worker still must author a label-anchored extractor for it.
+- NOT yet done: making remediation dispatch pass `shape_stratified=True`, and re-inducting the 7
+  regex-fixable CIKs (Star Mountain 0001786835 stays a scope-out, not re-induction). No
+  production bundles regenerated.
+- Tests: `tests/test_agent_a_hardening.py` +2 (flattened_shape separates breadcrumb vs plain;
+  _shape_stratified_pick surfaces a rare breadcrumb row head selection drops). 13 pass in-file.
+
+## 2026-06-23 - Agent A self-screen: reject anchors that label the sample plurality as (none); proved re-dispatch will not recover 13/17 staged FAILs
+
+Investigated whether re-dispatching the 17 staged-FAIL CIKs (2025-12-31 batch) would recover
+them. It will not, for most. Read the per-CIK Codex worker transcripts
+(`data/output/agent_a/quarter/2025-12-31/dispatch/20260621T092815Z/logs/<CIK>.stdout.jsonl`):
+every worker COMPLETED normally, wrote a valid proposal, and PASSED its own self-screen. The
+failures are at the parent A3 held-out gate (cross-quarter, full population), not in worker
+execution -- so plain re-dispatch reruns a process that already "passed" and reproduces the
+same non-generalizing grammar.
+
+Empirically scored the current `validate_proposal.screen()` against all 55 staged proposals,
+joined to the gate verdict, to find a sample-only signal that separates gate-FAIL from
+gate-PASS:
+- A support floor does NOT separate: gate-FAIL `n_dom` spans 0..70, gate-PASS spans 7..72
+  (both have proposals at `n_dom=7`).
+- Per-quarter completeness on the bounded sample does NOT separate: 13/17 gate-FAILs show
+  min-quarter completeness 100% on the sample, while a gate-PASS (0001743415) shows 75%. The
+  breaking identifiers live in the population tail the curated 3-rows/quarter sample omits.
+- The ONLY clean separator (zero false positives on all 38 gate-PASS) is
+  `actual_top_sig_in_sample == "(none)"` -- the proposed anchors label the PLURALITY of sampled
+  identifiers as no-signature, so `sample_completeness` is computed on a self-selected sliver
+  and passes vacuously (Great Elm 0001675033: 1/1 dom row = 100%).
+
+Change (`scripts/agent_a/validate_proposal.py`): the self-screen now FAILs when the modal
+sampled signature under the proposed anchors is `(none)` (new `_NONE_SIGNATURE` constant; the
+two existing `none_recovered` literals repointed to it). This is correct on its own merits -- an
+anchor set whose modal output is "no signature" cannot support a reliable grammar -- and runs
+independent of `n_dom` (catches TCW Star 0001916608, which has `n_dom=39`, `completeness=100%`).
+
+Effect (re-screen of the 55 staged proposals with the hardened screen): screen now catches
+4/17 gate-FAILs (2 zero-dom + Great Elm via completeness + TCW Star via the new (none) check),
+0/38 gate-PASS false-failed. The remaining 13/17 gate-FAILs are NOT catchable at a bounded-sample
+self-screen (cross-quarter format drift / era-regime mismatch) and are correctly the parent A3
+gate's job. Operational implication: do not re-dispatch the era-excluded CIKs (0001747172 Kayne
+Anderson, 0001850787 Kayne DL, 0001851322 North Haven, 0002052152/0002052153 Apollo Origination
+pair) -- they have 0-3 in-era `flattened` quarters and need routing-out, not re-induction.
+
+Tests: `tests/test_agent_a_hardening.py` +2 (plurality-(none) FAIL; dom-is-modal control that
+guards against false positives). 11 pass in that file; 70 pass across the touched Agent A surface
+(hardening, concurrency, held_out, dispatch_preflight, identifier_rate/signature, shadow engine).
+Production data untouched (screen + tests only).
+
+## 2026-06-21 - Twin comparisons routed to Agent B: held-out gate stops failing on parsed-vs-XBRL twin
+
+Investigation (see data/output/data_investigation_results.md, 2026-06-21 entry) showed the A3
+held-out gate was hard-failing grammars on twin-comparison invariants (parsed identifier value
+vs the structured XBRL twin), but the twin is an unreliable secondary source: tracing Axiom
+Global (Investcorp 0001578348) through the raw iXBRL across filings showed a single investee
+whose maturity was AMENDED 2026->2028, with the structured fact updated immediately but the
+free-text descriptor stale ~2 quarters. Longitudinal adjudication of 472 maturity disagreements:
+among one-side-corroborated cases (~281), structured/twin is correct ~80%, identifier ~20% --
+neither categorically authoritative, and which wins is a per-row VALUE call that belongs to
+Agent B, not the A promotion gate.
+
+Changes:
+- `pipeline/identifier_held_out.py` (`held_out_report`): gate now uses ONLY self-contained
+  invariants (`sum_identity`) for the gating-invariant pass-rate. `pct_agree`/`date_agree`
+  (twin comparisons) are computed as an advisory `twin_agreement_pct` per quarter and NO LONGER
+  fail the gate. New per-quarter field `twin_agreement_pct`.
+- `scripts/shadow_agent_a_engine.py` (`_enrichment_flags`): new ledger flag
+  `agentA_maturity_vs_xbrl` (identifier-stated maturity != structured twin) so Agent B receives
+  and arbitrates the maturity disagreement, alongside the existing `agentA_spread_vs_xbrl`.
+- Deterministic default "no structured value -> use text" is already in place via identifier
+  text-enrichment (null-fill of maturity/reference fields).
+- Tests: tests/test_identifier_held_out.py +1 (twin-comparison advisory, not gating;
+  parquet-backed). 27 held-out/rate/shadow tests pass.
+
+Effect (re-gate of the 2025-12-31 cohort, 55 staged proposals): 35 PASS / 20 FAIL -> 38 PASS /
+17 FAIL. 3 FAIL->PASS (0001653384 Runway, 0001832148 SLR HC, 0001905824 PIMCO -- pure
+twin-disagreement fails), 0 PASS->FAIL regressions; remaining 17 FAILs are real (3 regime,
+8 completeness, 6 none-share). Promotion NOT run -- staged verdicts only, pending review.
+RETRACTED earlier "51% twin false-negative rate" (heuristic conflated descriptor-agreement with
+correctness). `position_id` unusable as cross-period key here (100% null on BDC maturity rows).
+
+## 2026-06-21 - Agent A dispatcher brought up on codex 0.141 (worker harness fixes + pilot PASS)
+
+Got the Agent A2 worker dispatch (`scripts/dispatch_agent_a_workers.ps1`) actually working
+end-to-end. Found and fixed a chain of failures, each surfaced by a 1-CIK pilot:
+
+- **codex CLI flag (62-worker wipeout).** `run_codex_worker.ps1` passed `codex exec
+  --ask-for-approval never`, removed from `exec` in codex 0.141 -> every worker exited
+  "unexpected argument". Dropped the flag; autonomy is already set by the worker config.toml
+  (`approval_policy = "never"`). Verified config schema (`default_permissions`/`[permissions.*]`
+  /`[windows] sandbox`) is accepted by 0.141 under `--strict-config`.
+- **Dispatcher exit-code capture (THE blocker).** `Start-Process -PassThru` returned $null for
+  `.ExitCode`, so `$null -ne 0` marked EVERY worker -- including successful ones -- as failed and
+  finalize/gate never ran. Fix: touch `$proc.Handle` right after launch so the code is captured,
+  and treat a $null exit as "unknown -> fall through to validate_proposal" (the authoritative
+  check) rather than a hard failure.
+- **Three engine-robustness crashes from agent-authored JSON** (each aborted the whole
+  screen/gate; now no-op/`na`, and validate_proposal screens them out + the worker prompt states
+  the schema so they're rarely authored):
+  - `apply_grammar` (identifier_rate.py): extractor declaring a capture group its regex lacks
+    (IndexError); and `"derivations": []` as a list (AttributeError on `.get`).
+  - `evaluate_invariants` (identifier_rate.py): invariant missing the keys its `kind` requires
+    (KeyError).
+- **Worker prompt** (`dispatch_preflight._worker_prompt`) now states the exact extractor schema
+  (keys field/regex/group/type/map; types pct/bps/date_mdy/ref_code/text), the
+  applies_to+invariant requirements with per-kind keys, and that samples span eras -- cutting the
+  self-screen iteration loop.
+
+Pilot validation (2 of 2 former 2023-03-31 FAIL filers now PASS via multi-quarter bundles):
+- 0001508655 Sixth Street: was FAIL (2023-03-31 completeness 43.9%) -> PASS (all 13 quarters).
+- 0001572694 Goldman Sachs BDC: -> PASS (all 10 quarters), via a clean dispatcher run that
+  auto-validated, auto-gated, and released its lock (exit-code fix confirmed end-to-end).
+Both promoted. Overrides now 33 anchors / 34 grammars. Worklist down to 60 filers remaining.
+
+Operational notes for the full run:
+- A killed dispatcher orphans its codex worker and leaves the CIK lock held (no `finally`).
+  Recover with `python -m scripts.agent_a.dispatch_preflight --release-manifest <batch>/manifest.json`
+  and kill stray `codex` PIDs. Preflight refuses any worklist CIK that has a staged proposal, so
+  promote PASSes + clear `proposals/` + re-discover between runs.
+- Tests: +5 regressions (tests/test_identifier_rate.py: group-index, invariant keys, derivations
+  list; tests/test_agent_a_hardening.py: group-index screen, invariant-keys screen). Agent A
+  suites green.
+
+## 2026-06-21 - Agent A: malformed-extractor crash guard + screen check (unblocks staged gate)
+
+Root-caused why the 2025-12-31 Agent A batch showed a ~96% "unusable" rate. It was an
+artifact stacked on an unfinished run, not grammar quality:
+- The reported `gate_results.csv` was the NON-staged gate (reads production overrides only,
+  9 grammars); it cannot see `proposals/` staging, so 56 of 83 `NO_CONFIG` were staged-but-
+  unpromoted grammars falsely labeled "agent did not produce a grammar."
+- The staged gate (the real adjudicator) had never been run on the batch because it CRASHED:
+  one worker grammar (CIK 0001987221, `pik_terms_flag`) declared `"group": 1` on a regex with
+  only a non-capturing `(?:...)` group (0 capture groups). `apply_grammar` called
+  `m.group(1)` -> `IndexError: no such group`, aborting all 84 filers.
+
+Fixes:
+- `pipeline/identifier_rate.py` `apply_grammar`: guard `m.group(...)` with try/except IndexError
+  -> a malformed extractor no-ops (field=None) instead of crashing the whole batch.
+- `scripts/agent_a/validate_proposal.py` `screen`: after regex compiles, assert the declared
+  `group` index <= `compiled.groups`; fail fast at staging (the prior screen only checked that
+  the regex compiles, which let this class through).
+- Tests: +1 in tests/test_identifier_rate.py (engine guard), +1 in tests/test_agent_a_hardening.py
+  (screen catch). Targeted suites green: test_identifier_rate + test_agent_a_hardening (21),
+  test_run_quarter + test_identifier_signature + test_agent_a_concurrency +
+  test_identifier_spread_corrections (35).
+
+Real staged-gate verdicts over the 84-row `all_remaining_native_medium_20260620` manifest
+(was uncomputable due to the crash): 28 PASS / 27 FAIL / 2 NOT_APPLICABLE / 27 NO_PROPOSAL.
+0001987221 now PASSes (its bad extractor was a non-required field). True promotable yield is
+~33% (28/84), not 3/86. Production overrides untouched; staged proposals not mutated by the
+finalize/gate re-run (0 file diffs).
+
+Open (not changed here, needs operator action): 27 NO_PROPOSAL = workers that emitted nothing
+when the batch was run via an ad-hoc trial_a2 Codex harness instead of
+`dispatch_agent_a_workers.ps1` (no logs/retry/finalize). Re-dispatch via the real dispatcher.
+
+## 2026-06-21 - Agent A: multi-quarter era-stratified induction bundles (fixes 2023 drift FAILs)
+
+Root cause of ~24/27 staged-gate FAILs (16 on 2023-03-31): `build_bundle` sampled ONLY the
+target quarter, so the agent induced a grammar that fit the current identifier format and the
+held-out gate (which tests every signature-bearing quarter) then FAILed it on older quarters
+where the filer used a different format. The gate was correct; the agent never saw the old
+format. Fix feeds the agent the history instead of relaxing the gate.
+
+- `scripts/agent_a/sample_variant.py`:
+  - new `_era_stratified_pick(rows, n_per_era)` (module-level, unit-tested): covers EVERY
+    distinct era (report_date), <= n_per_era rows each, newest-first.
+  - `build_bundle(..., multi_quarter=False, n_per_era=3)`: when multi_quarter, pools all
+    current-period rows across quarters and stratifies each variant's samples by era. Output
+    gains `report_dates` (eras pooled) and `multi_quarter`; per-sample `report_date` already
+    present. Agent `instructions` now warn samples span eras and one grammar must parse all.
+  - CLI: report_date omitted -> multi_quarter (era-stratified) bundle.
+- `scripts/agent_a/run_quarter.py`:
+  - `discover`: builds multi_quarter bundles; cadence gate changed from single-quarter
+    `n_rows==0` to `quarter not in bundle.report_dates` (same "filed this quarter" semantics,
+    now over a pooled bundle).
+  - `_emit_remediation`: re-induction bundle is now multi_quarter too (a single-quarter
+    re-bundle would reproduce the same drift FAIL).
+- Gate UNCHANGED (still all-quarter, completeness >=90% / invariant >=85%). No validation
+  weakening. Affects FUTURE induction only -- existing proposals must be re-run to benefit.
+- Tests: +1 in tests/test_agent_a_hardening.py (`_era_stratified_pick` era coverage). Smoke:
+  multi_quarter bundle for 0001508655 (Sixth Street, a 2023-03-31 FAIL) now pools all 13 eras
+  and its top variant's samples include 2023-03-31. Suites green: test_agent_a_hardening +
+  test_identifier_rate + test_run_quarter (25).
+
+## 2026-06-17 - Fix iXBRL field-status overlay join key (recovers stranded lien/maturity)
+
+`apply_ixbrl_field_status_overlay` (pipeline/bdc_xbrl_html_bridge.py) was keying the
+production side on `_raw_id_lower(bdc_investment_identifier)` -- the STRIPPED
+identifier -- while the artifact (`bdc_ixbrl_field_status.csv`) keys on `raw_id_lower`
+= the FULL inline-XBRL InvestmentIdentifierAxis member (with affiliation suffix, e.g.
+`"... | Non-Affiliated Issuer"`). For flattened filers the keys never matched, so the
+bridge's captured lien/maturity/ref-rate were dropped at the merge.
+- FIX: production side now keys on the full member from `bdc_dimensions_raw`
+  (`strip ^[^=]*=`, `_norm_text`, lower), falling back to `bdc_investment_identifier`
+  when dims is absent. Blank-only / no-clobber unchanged -> purely additive; structured
+  filers + the text classifier are untouched (can only fill more blanks).
+- Validated (prototype scripts/gold/prototype_lien_overlay.py, read-only, BCRED
+  2025-12-31, 2,002 positions): match rate 37% -> 100%; lien 709 (35%) -> 1,995 (100%);
+  maturity 709 -> 1,891 (94%). Gannett Fleming flips None -> First Lien. Residuals are
+  equity/JV (no lien) and equity/no-maturity positions -- correct.
+- Test: `test_ixbrl_overlay_keys_on_full_member_via_dims` (dims-member recovery + a
+  control without dims reproducing the miss). `tests/test_bdc_xbrl_html_bridge_fields.py`
+  33 passed.
+- Surfaced via gold-set labeling (flattened first-lien loans showing blank lien despite
+  "First Lien Debt" section headers). Detail in data_investigation_results.md.
+- NOT YET DONE: `--unified` rebuild to land it in the production parquet + measure the
+  universe-wide lift (195 artifact CIKs; cohort had ~$393B blank-lien DL FV). Deferred
+  because it regenerates the parquet the gold set is currently labeled against -- run on
+  explicit go.
+
+### 2026-06-17 -- iXBRL instrument-type capture, Phase 1 (aggregate breakdown, mirrors lien)
+
+Captures BDC instrument type (Revolver / Delayed Draw / Term Loan / Unitranche)
+from XBRL dimension members, the same way lien is captured -- same parse,
+aggregate, and reconciliation/grain validation. Cache-only; additive (no change
+to existing lien/holdings behavior).
+
+- **`pipeline/bdc_lien_hierarchy.py`:** new `_instrument_type(member_localname)`
+  beside `_lien_tier` -- axis-agnostic, name-based. A combined member
+  (`FirstLienSeniorSecuredTermLoanMember`) yields BOTH lien (First Lien) and type
+  (Term Loan). EXCLUDES rate-index buckets (`TermLoanPrimeIndexOneMember`) to
+  avoid double-counting term loans by reference rate.
+- **`pipeline/bdc_sector_breakdown.py`:** `extract_bdc_instrument_type_breakdown()`
+  + `_parse_instrument_contexts` + `_aggregate_instrument_types`, exact analogues
+  of the lien breakdown (reuse `_extract_lien_facts`). Same validation: prefer the
+  reconciled `type x sector` subtotal sum, fall back to the pure type total, skip
+  position-axis contexts and ambiguous alternate partitions; dedup prefers
+  sector-sum grain. Writes `BDC_INSTRUMENT_TYPE_BREAKDOWN_FILE`.
+- **`pipeline/config.py`:** `BDC_INSTRUMENT_TYPE_BREAKDOWN_FILE`.
+- **Tests:** `tests/test_bdc_instrument_type.py` (10) -- mapper, rate-index
+  exclusion, combined-member yields both lien+type (the FP guard), type x sector
+  sum, pure-type fallback, sector-sum-preferred, position-axis exclusion. Plus
+  `test_bdc_lien_breakdown.py` (5) regression. 15/15 pass.
+- **Built cache-only (461 rows, 44 CIKs, 349 CIK-quarters):** Unitranche $273.4B
+  (208), Term Loan $110.9B (124), Revolver $2.9B (78), Delayed Draw $1.0B (51).
+  Grain: type_only 328 / type_sector_sum 133. The small Revolver/DDTL FV is
+  expected (mostly-unfunded commitments carry little drawn FV) -- a sanity signal.
+- **Findings (bound the rest):** (1) `bdc_lien_hierarchy.recover_lien` is not
+  called in production (only `_lien_tier` is reused), so the breakdown is the
+  production XBRL-member path that was mirrored. (2) `extract_bdc_lien_breakdown`
+  has no caller in main/rebuild -- the on-disk `bdc_lien_breakdown.csv` is
+  generated out-of-band, so a like-for-like coverage comparison needs both
+  rebuilt together; not done here.
+- **Phase 2 (NOT done, needs the multi-hour holdings rebuild):** per-position
+  `instrument_type` in unified holdings via the bridge field-status overlay + a
+  `classify_instrument_type` text fallback (mirroring `classify_lien` + cache) +
+  export. Deferred pending explicit go, per the data-integrity contracts.
+
+Follow-up to the filing search, both in `scripts/gold/review_harness.py`:
+
+- **Each search hit now shows its schedule grouping header** (lien / instrument /
+  affiliation section). Lien rank lives in a section header, not on the row (rows
+  carry instrument type: Revolver / Delayed Draw / Term Loan), so the search now
+  tracks the nearest preceding single-cell `_SECTION_KW` header in document order
+  and renders it beside each matched row. Directly supports the lien field the
+  labeler adjudicates.
+- **Generic-token de-noising.** Ranking now weights matches by inverse document
+  frequency, so a rare token ("armstrong") outranks a ubiquitous one ("bidco" --
+  a PE-vehicle suffix that matched 296 unrelated rows). Added a **"match all
+  terms"** checkbox (default ON for the prefilled issuer query; uncheck to
+  broaden). Measured: `ivy hill asset management` any-term 444 rows -> all-term 15.
+- **Auto-reload** enabled (`use_reloader`, reloader-only; `--no-reload` to opt out)
+  so source edits hot-apply.
+- Verified via Flask test-client: section attached to all 30 top hits; all<=any;
+  IDF puts the most-tokens hit first; the unchecking toggle works (GET uses `q`
+  presence as the submitted signal). Read-only on data/output; writes only labels.
+
+Two fixes the user hit while labeling, plus the gold-first full-filing search:
+
+- **Multi-term / partial filing search (was: full-company-name only).** The old
+  search required a contiguous full name (e.g. "Pioneer LLC") and usually
+  surfaced nothing. New `search_filing(cik, accession, query)` tokenizes the
+  query and matches ANY token, ranking rows by how many distinct tokens they
+  contain (so "Pioneer LLC" searches "pioneer"; "llc"/"inc"/etc. dropped as
+  noise). Added an interactive **search box** on each unit page (`?q=`), prefilled
+  with the issuer's significant tokens and auto-run, so matches surface by default.
+  `_issuer_phrases` now also falls back to the single most-significant token, so
+  the issuer-narrative search degrades the same way.
+- **Raw pipeline source rows surfaced.** New panel shows what the PIPELINE
+  extracted for the position -- `issuer_name`, `instrument_description`,
+  `bdc_investment_identifier`, `fair_value`, `cost` -- looked up from
+  `private_markets_holdings.csv` by (cik, report_date) and matched by
+  identifier-token overlap and/or FV proximity (indexed once per process). Lets
+  the labeler compare the parsed text against the source.
+- **Hardening:** dynamic HTML (source/form/title) is now brace-escaped before the
+  `PAGE.format` splice, fixing a latent crash when filing text contains `{`/`}`
+  (the new search panel surfaces far more raw cells); rendered cells are
+  HTML-escaped.
+- **Files:** `scripts/gold/review_harness.py` only. Reads the holdings CSV
+  (read-only); still writes only `data/gold/labels/`.
+- **Verified (no server):** `_query_tokens("Pioneer LLC") == ["pioneer"]`; Flask
+  test-client rendered 6 position pages (200) with both new panels; the Ivy Hill
+  unit's default query returned 445 matching rows (vs 0 before); pipeline rows
+  matched 8 candidates. The shared `search_filing` primitive is the basis for the
+  agent-fleet filing-search tool next ([[full-filing-search-adjudication]]).
+
+## 2026-06-17 - Gold-set harness: scale surfacing + value+period anchor (verification upgrades)
+
+Two upgrades to the harness source panel (scripts/gold/review_harness.py) that make
+a position independently verifiable, plus classification findings surfaced while
+labeling.
+
+- **Scale surfacing**: the head block now prints the XBRL fact's `scale=` attribute
+  in words next to the value (e.g. "1,588,161 [scale 3 = thousands] -> $1,588,161,000")
+  and adds the filed % of net assets as an independent magnitude cross-check
+  ("3.34% -> implies fund net assets ~ $47.5B"). Answers "where is the scale" (it is
+  the per-fact `scale=` attr, the filer's declaration) and makes a genuine scale
+  error self-evident (implied-NAV cross-check would blow up). extract_anchored now
+  also returns cost + InvestmentOwnedPercentOfNetAssets for the same context.
+- **value+period anchor** (`value_anchor`): when the contextRef name-anchor fails
+  (flattened-identifier / member-QName quirk, e.g. member carries a "| Non-Affiliated
+  Issuer" suffix the pipeline strips), the harness finds the UNIQUE current-period
+  (instant == report_date) InvestmentOwnedAtFairValue fact whose resolved value ==
+  the pipeline FV, surfaces its real contextRef + tagged member, and renders it as a
+  normal anchored row with a "matched by value, confirm issuer" banner. Rules out
+  scale errors, comparative-period contamination, and (via member read-back) wrong
+  issuer; >1 match -> honest "ambiguous" + token fallback.
+- **Measured over batch1 positions (336)**: name-anchored 273 (81%) + value+period
+  rescued 56 (17%) = **98% resolved to one proven row**; 7 ambiguous (identical FV in
+  same period), 0 unresolvable. Cut the manual-verification tail from ~19% to ~2%.
+
+Findings logged while labeling (classification-consistency, for the gold set to
+adjudicate; not yet fixed in pipeline):
+- **SDLP (Ares 0001287750)**: "Senior Direct Lending Program LLC, Subordinated
+  certificates" ($1,117M) tagged idx=DIRECT_LENDING/exp=DIRECT/asset_cat=LOAN, but
+  the filing shows SDLP is an unconsolidated JV with Varagon, jointly governed
+  (SDLP investment committee, approval from a representative of EACH required; Ares
+  owns 87.5% of subordinated certificates). Ares holds a VEHICLE interest (the
+  certificate), not the loans -- SDLP's loans are in a separate supplemental
+  schedule NOT ingested, so it is NOT a leaked subtotal (no double-count), but it IS
+  a misclassification: should be PRIVATE_CREDIT_FUND (FUND exposure). The two SDLP
+  instruments also split into DIRECT_LENDING vs COMMON_EQUITY when both are interests
+  in the same JV.
+- **Ivy Hill (Ares)**: "Member interest" ($1.903B) idx=PRIVATE_CREDIT_FUND but the
+  same entity is issuer_category=FUND on the equity row vs CORPORATE on its debt row
+  -- entity identity flips by instrument (see prior 06-17 entry).
+- **Inovalon (BCRED 0001803498)**: production correctly scopes periods -- the 2025
+  10-K shows 5 schedule rows (2 current + 3 prior-year comparative); production keeps
+  2 under 2025-12-31 and the 3 comparatives under 2024-12-31 (no double-count). But
+  position_id is NULL for all Inovalon rows across all quarters (cross-quarter chain
+  broken by inconsistent identifiers: "Inc. 1" / "Inc." / "Inc.,1" / "Inc.2") --
+  known member-QName tier-A limitation.
+
+## 2026-06-17 - Gold-set review harness: source panel rebuilt (anchor + vertical + issuer narrative)
+
+The harness source panel was a naive issuer-name text search that piled every
+matching <tr> from the whole filing (SOI + consolidated-subsidiary financials + FV-
+hierarchy + unobservable-inputs tables) into one headerless jumble -- not
+adjudicable. Rebuilt it to be exact and readable (scripts/gold/review_harness.py):
+- **contextRef anchor**: for each position it locates the ONE schedule row via the
+  FV fact's contextRef (the same anchor the labeler used), and the nearest preceding
+  column-header row. No more text-match pile-up. ~81% anchor; the ~19% member-QName
+  cases show an explicit "NOT anchored -- verify" banner instead of guessing.
+- **Vertical column->value layout** (colspan-aware grid) so every column (incl. Cost
+  / Fair Value, which were off-screen in the wide table) is visible with no
+  horizontal scroll; FV and cost are resolved to dollars in a header block
+  (e.g. "1,903.4 x 10^6 -> $1,903,400,000").
+- **Issuer narrative block**: surfaces the filing's own prose about the issuer
+  (control-investment notes, JV-formation language, adviser/asset-manager
+  descriptions) filtered out of the inline-XBRL context dump -- the basis for the
+  credit-vs-equity / fund-vs-operating-company classification call. Fires only for
+  issuers the filing actually describes (IHAM, BCRED Emerald JV, SDLP, ...).
+- Worked example surfaced a real classification issue: Ares' Ivy Hill "Member
+  interest" ($1.903B) is idx=PRIVATE_CREDIT_FUND but asset_category=EQUITY_COMMON,
+  and the SAME entity is issuer_category=FUND on the equity row vs CORPORATE on its
+  debt row. Source (Note 4) says IHAM is a wholly-owned asset-manager / SEC adviser
+  -> control equity in an operating company, not a credit-fund LP interest. Logged
+  as a classification-consistency flag for the gold set to adjudicate.
+- Harness only; read-only on outputs, writes only data/gold/labels/. Windows note:
+  kill the dev server with PowerShell Stop-Process (pkill does not work here).
+
+### 2026-06-17 -- Unified review queue: ledger-first single set (blockers + strong + weak)
+
+Step 1 of pointing the review harness at the shadow ledger instead of one
+engine. The ledger (`data/output/shadow/validation_results_ledger.csv`) is
+already the union of 15 engines; this turns it into ONE prioritized review queue.
+
+- **New `pipeline/review_queue.py`** (read-only; reads the ledger, writes only
+  `data/output/review_queue/`). `build_review_queue()` keeps every `fail`/`warn`
+  ledger row and tags it:
+  - `lane`: `tier='tight'` -> `blocker` (strong/source-anchored, gate-eligible);
+    `tier='weak'` -> `review` (route to agentic review).
+  - `anchor`: `source` (reconciles vs an INDEPENDENT external quantity --
+    source_recon, gav_recon, conservation, html_agg, fund_financials tight,
+    row_block_verified) vs `internal` (algebraic). Documented heuristic; this is
+    the distinction the FP-clear governance guard needs.
+  - `review_id`: for `source_recon` items it equals
+    `bdc_cik_review.make_review_id(cik, report_date, mechanism)`, so the blocker
+    lane joins the existing bdc_cik_review worklist/bundles/verdicts unchanged.
+  - prioritized: lane (blocker first), then FV-at-risk (`affected_fv_m` /
+    `total_fv_m` / `uncertain_deriv_fv_m`), then n_units, then |metric|.
+- **Outputs:** `review_queue.csv` (one row per item, `REVIEW_QUEUE_COLUMNS`),
+  `review_queue_summary.csv` (lane x anchor x engine rollup), and an opt-in
+  `bdc_worklist.csv` projection of the blocker/source lane.
+- **Bundle builder consumes the ledger (blocker/source lane):** the projection is
+  the bdc worklist schema, so `bdc_cik_review.build_bundles` builds bundles from
+  the ledger-derived queue with NO code change. Verified end-to-end on 2 real
+  blocker ids (213KB/219KB bundles incl. raw HTML SOI evidence; ids match the
+  existing worklist row-for-row).
+- **Counts (current ledger):** 39,621 items -- blocker 7,494 / review 32,127;
+  source-anchored 3,778. Blocker lane FV-at-risk: aggregate_header $253.4B (1,978),
+  source_recon $32.5B (423), derivative_role $70.6M (19); gav/identity/row/cons/
+  html/cross/ffv carry rate/count metrics (no direct FV). source_recon projection
+  = 423 canonical blocker groups.
+- **Tests:** `tests/test_review_queue.py` (9): lane mapping, source_recon
+  review_id back-compat, FV-only-for-FV-metrics, prioritization order, pass/skip
+  exclusion, name-keyed non-localization, anchor classification, projection
+  schema, lane filter. All pass.
+- **Not done (next increment):** wiring `build_bundles` to the non-source_recon
+  lanes (other tight engines + the weak review lane) needs per-engine raw-source
+  evidence adapters; today only the source_recon lane has bundle evidence.
+
+### 2026-06-17 -- Generalized per-engine review bundler (the weak/review lane is now bundleable)
+
+Makes every queue item -- not just source_recon blockers -- carry the evidence
+that produced its flag, so the whole ledger can be sent to (agentic) review.
+
+- **New `pipeline/review_bundles.py`** (read-only; writes only the chosen output
+  dir, default `data/output/review_queue/review_bundles/`). An `EvidenceSpec`
+  registry maps each engine to its source artifact + key (mirrors
+  `scripts/shadow_adapter.py`): row_validation, fund_financials, html_extract,
+  gav_recon, fund_strategy, nonaccrual, derivative_role, identity, conservation,
+  weak, cross_source, aggregate_header, classification, validation_rules, oracle.
+- Per item a bundle carries: the flag (the queue item), the matching rows from
+  that engine's own source artifact (raw evidence), and -- for fund-quarter
+  localizable items -- a slice of `private_markets_holdings.csv` for the
+  (cik, report_date) (position context). Artifacts are streamed once per run,
+  scoped to the selected items (bounded memory even on the 959K-row
+  row_validation file). `evidence_completeness` is tagged per bundle
+  (`source_artifact` / `no_matching_rows` / `artifact_missing` / `ledger_only`)
+  so a bundle is never silently empty; `prohibited_patch_scope` includes the
+  FP-without-independent-anchor guard.
+- **source_recon is deferred** to the existing bdc_cik_review path (richer raw
+  HTML SOI evidence); it is skipped unless explicitly named via `--engine`.
+- **Filters:** `--lane`, `--engine` (repeatable), `--limit`, `--max-rows`,
+  `--no-holdings`. Queue priority order is honored, so `--limit` takes the
+  highest-priority items.
+- **Verified against live artifacts (bounded runs):** review lane top-100 ->
+  100/100 `source_artifact`; every engine (identity, conservation, gav_recon,
+  html_extract, fund_financials, nonaccrual, fund_strategy, derivative_role,
+  aggregate_header) resolves real source evidence on an 8-item probe. Spot-check
+  bundles were cleared afterward (regenerable on demand; data/output gitignored).
+- **`pipeline/review_queue.py`:** added the raw `period` column (needed by
+  cross_source, which keys on report_quarter not a date).
+- **Tests:** `tests/test_review_bundles.py` (8) + `tests/test_review_queue.py`
+  (9, period column) = 17/17 pass.
+- **Now true end-to-end:** ledger -> unified review_queue -> per-engine bundles
+  for ALL lanes (source_recon via bdc_cik_review; everything else via
+  review_bundles). Remaining: run the adversarial review fleet over the bundles
+  (compute budget + calibration coupling to the gold slice, per the agreed design).
+
+## 2026-06-17 - Gold-set: pin FV-error snapshot to Q4 2025 (as-of date)
+
+The as-of snapshot was each fund's LATEST filing (Q1 2026), but the frontend
+publishes as-of 2025-12-31. Added `--as-of` to scripts/gold/draw_gold_sample.py
+(default 2025-12-31); the snapshot is now each fund's latest filing ON/BEFORE the
+as-of date. Manifest gains `as_of` + records snapshot funds/dates.
+- Q4 2025 snapshot: 75 funds, 33,211 positions, $400.0B (73 funds on 2025-12-31;
+  2 off-calendar funds at 2025-09-30 / 2025-11-30, their nearest-prior quarter).
+- Redrawn batch1 (no labels existed): 562 units -- tail 200 + 25 CIK-qtrs, pps_body
+  96, silent_bulk 40, surfaced 40, suppressed 161. Tail covers 19.7% of snapshot FV
+  (min $208M). All 296 FV-strata positions are 2025-12-31.
+- Labeler re-run: 336 positions, 275 matched (81%), 273 FV read; 25/25 CIK-quarter
+  totals. iXBRL FV still == pipeline FV to 0.0% on matched (Ivy Hill $1.903B Q4'25).
+- silent_bulk + flag strata remain all-history (unchanged). protocol/README synced.
+
 ## 2026-06-16 - Gold-set labeler agent (independent iXBRL source reader)
 
 Built `scripts/gold/labeler_agent.py`: the constrained, source-reading step that
@@ -3155,6 +4327,2245 @@ rejection), not new rules. A powered run with genuine-missing-position packets i
 test whether raw-source injection also lifts the PATCH_PROPOSED path (in progress).
 No production data or schemas changed; experiment is read-only.
 
+## 2026-06-16 - Overlay perf optimization + rebuild applying lien wiring
+
+Overlay optimization (pipeline/bdc_xbrl_html_bridge.py + staging_bdc.py):
+- apply_ixbrl_field_status_overlay now accepts a DataFrame directly (copies it),
+  eliminating the CSV->dicts->DataFrame round-trip on the ~1.18M-row artifact.
+- staging_bdc._prepare_bdc reads only the ~10 columns the overlay needs (usecols)
+  and pre-filters to rows with an applicable status=value before passing the
+  DataFrame. Overlay step collapsed from a multi-minute / ~4.8GB-inflating
+  operation to ~2 min within the post-Phase-B window.
+- Tests: 33 (overlay both DataFrame + list paths; lien integration). All pass.
+
+Unified rebuild (cached data) applying the iXBRL lien wiring + optimized overlay:
+- Runtime 2263s (~38 min) vs 2498s prior; the dominant cost is Phase B identifier
+  parsing (~20 min, pre-existing), not the overlay. Peak ~4.8GB is the post-
+  classification assembly step, not the overlay.
+- BDC rows 574,687 (unchanged); FV/row-count unaffected.
+- maturity_date 77.5% (stable), reference_rate_type 73.9%.
+- DIRECT_LENDING lien coverage 71.0% -> 83.3% (+12.3pp; 407,672/489,362). Tiers:
+  First Lien 388,391, Second Lien 12,027, Unsecured 7,254.
+- Actual gain below the ~91.3% upper-bound estimate: the overlay requires an
+  exact (cik, accession, report_date, identifier) key match against the staged
+  frame (post Phase-B parse/dedup), so ~60k of ~99k estimated rows matched.
+
+index_returns / export-frontend still NOT rebuilt (export held pending frontend
+coordination; index unaffected by descriptor enrichment).
+
+### 2026-06-17 -- Instrument type Phase 2: per-position column in unified holdings + breakdown wiring
+
+Puts `instrument_type` (Revolver / Delayed Draw Term Loan / Term Loan / Unitranche)
+on each holding, mirroring how `lien_position` flows. (Appended at end: changelog
+had concurrent writers.)
+
+- New `pipeline/instrument_classification.py`: `classify_instrument_type` +
+  `_sql_classify_instrument_type` (text analogue of lien_classification). Priority
+  Delayed Draw > Revolver > Unitranche > Term Loan; searches `_combined_fund_text`
+  + `bdc_investment_identifier`; NULL when no keyword.
+- `pipeline/unified_holdings.py`: `instrument_type` in `UNIFIED_COLUMNS`, derived
+  in the `classified` CTE (`_instr_raw` = keyword || staged fallback), projected in
+  the final SELECT, `_special_cols` updated. Restore path passes it through.
+- `staging_bdc.py` / `staging_nport.py`: `'' AS instrument_type` placeholder so the
+  UNION carries it (same pattern as lien_position).
+- Build wiring: `main.py` and `scripts/rebuild_outputs.py` now build BOTH the lien
+  and instrument-type breakdowns (previously `extract_bdc_lien_breakdown` had no
+  caller -- the on-disk lien breakdown was generated out-of-band).
+- Tests: `tests/test_instrument_classification.py` (6) + `test_bdc_instrument_type.py`
+  (10). Full `test_unified_holdings.py` regression: 905 passed, no regressions.
+- Rebuilt unified (cache-only) + validated: 795,064 rows (UNCHANGED -- additive
+  column, no row/FV corruption). instrument_type populated on 256,951 rows (32.3%
+  overall; 40.5% of DIRECT_LENDING vs lien's 67.1%). Distribution: Term Loan
+  125,704/$1,012B, Delayed Draw 57,411/$129B, Revolver 69,355/$63B (low FV =
+  mostly-unfunded, expected), Unitranche 4,481/$31B.
+- SIDE EFFECT (known --unified fragility): `position_id` is now blank (0%) in live
+  private_markets_holdings.csv -- a --unified-only rebuild skips registry resolution
+  (same as the 2026-06-16 entry). FIX: `python -m pipeline.main --returns
+  --stable-position-ids` (also recomputes matches/returns/index). Run before relying
+  on position tracking; not run here (separate multi-hour job).
+- Not done: frontend export of instrument-type mix; per-position reconciliation of
+  the text type against the XBRL breakdown anchor.
+
+### 2026-06-17 -- position_id restored + frontend instrument-mix export
+
+Follow-on to instrument-type Phase 2.
+
+- Ran `python -m pipeline.main --returns --stable-position-ids` (cache-only) to
+  restore the position_id the prior --unified rebuild had blanked. Live
+  private_markets_holdings.csv: position_id 100% repopulated; instrument_type
+  preserved (32.3%). Recomputed: position_matches 472,180, position_returns
+  485,002, index_returns 230 quarters, fee_uplift, bdc_fund_income.
+- Frontend export: `pipeline/export/fund_exports.py` `_compute_fund_exposure` now
+  emits `instrumentMix` (termLoan / revolver / delayedDrawTermLoan / unitranche +
+  coverage, as a share of debt FV); added `instrument_type` to the holdings
+  column list + empty-table fallback. `frontend/src/lib/types.ts` gains optional
+  `instrumentMix`. Ran `--export-frontend` (28 JSON files). Verified populated in
+  fund_details JSON (TCW 100%, NexPoint 96%, TPG 5.7%, Ares 6.1%).
+- Coverage is filer-dependent: filers that encode instrument type only in XBRL
+  subtotals (e.g. Ares) show low PER-POSITION text coverage even though the
+  aggregate breakdown has them -- the documented next step (per-position
+  reconciliation against the XBRL breakdown anchor) would lift these.
+- Not done: UI widget for the instrument mix on the fund page (data + type
+  contract are wired; the donut/visual is a separate step).
+
+### 2026-06-17 -- Crescent frontend blocker processing
+
+Processed the highest-row frontend blocker packet: `0001633336` Crescent Capital
+BDC through the public `2025q4` cutoff.
+
+- `data/overrides/bdc_xbrl_wrappers/0001633336.json`: widened the CIK-scoped
+  hierarchy extractor to cover Crescent equity/fund-interest leaves that start
+  with `Equity Investments ...`, leaves without explicit `Investment Type`, and
+  debt leaves using `Investment One Type` / similar labels.
+- `pipeline/bdc_identifier.py`: added Crescent's legacy `Diversified` industry
+  label to the Crescent hierarchy-label set.
+- `pipeline/staging_bdc.py`: allowed configured `hierarchy_extract` leaf matches
+  to bypass the generic aggregate filter before Phase B parsing. The bypass is
+  still gated by each CIK wrapper's explicit leaf condition.
+- `tests/test_unified_holdings.py`: added Crescent parser regressions and a
+  header false-positive case.
+- Validation: `pytest tests/test_unified_holdings.py::TestCrescentHierarchySqlPath -q`
+  passed (9 tests); `pytest tests/test_bdc_cik_review.py tests/test_bdc_cik_validator.py -q`
+  passed (19 tests).
+- Bounded cache-only diagnostic `.tmp/crescent_blocker_check.py` for CIK
+  `0001633336` showed source-only blockers through `2025-12-31` drop from 96
+  rows to 0, and residual blocking rows from 96 to 0. This implies the
+  frontend-scoped blocker pool should fall from 247 rows to about 151 after a
+  successful full unified/reconciliation rebuild.
+- Full `python scripts/rebuild_outputs.py --unified` was attempted but exceeded
+  the 15-minute command timeout before refreshing reconciliation artifacts; no
+  rebuild process remained running afterward.
+
+### 2026-06-17 -- Per-position instrument-type XBRL reconciliation: measured ~0 lift (not wired)
+
+Attempted to lift per-position instrument_type coverage for subtotal-tagging filers
+(Ares) via document-order + subtotal-reconciliation recovery from XBRL.
+
+- Added `recover_instrument_type` + `extract_instrument_type_positions` to
+  `pipeline/bdc_lien_hierarchy.py` (mirror of recover_lien; parse_instance now also
+  captures the instrument-type member per context). Tests: +4 in
+  `tests/test_bdc_instrument_type.py` (direct typed leaf; reconciling run; non-
+  reconciling run -> no type; lien-only boundary flushes untyped). 24 instrument/
+  lien tests pass.
+- MEASURED (cache-only, 2,977 filings): only 423 leaves reconcile (403 Unitranche),
+  filling 6 currently-blank DL rows -> DL coverage 40.5% -> 40.5%; Ares +0 (19.9%).
+- DECISION: NOT wired into the unified overlay or any rebuild (no benefit). Removed
+  the unused production wrapper/config/artifact; kept the tested engine primitive as
+  evidence. Detail + the why in data_investigation_results.md. The real lever is the
+  HTML section-header walk (extend `_SECTION_PATTERNS` to instrument-type headers),
+  a separate larger piece -- not attempted.
+
+### 2026-06-18 -- Spec: validation agents B (Adjudicator) and C (FN Probe)
+
+Design-only doc consolidating the B/C agentic-validation architecture. No code.
+
+- New: docs/adjudication_architecture/B_and_C_validation_agents.md.
+- B adjudicates shadow-ledger warns/blockers (real_error/false_alarm/ambiguous),
+  organized by a three-class localization taxonomy (single-cell ~1/3, within-row
+  ~1/3, aggregate ~1/3) where localization and required judgment are inversely
+  related. Class 3 conservation handled by per-row subtotal classification over
+  the disposition-ledger residual, with conservation as a consistency check on the
+  labels (not a search/equality objective, which is gameable by deletion).
+- B remediation gated by re-running the deterministic oracle/ledger on all quarters
+  (held-out, no-regression). false_alarm -> scope the CHECK, never edit data.
+- C samples un-flagged preliminary/unverified tiers (PPS by FV), deterministic
+  probe sweep then bounded per-item LLM detection; HT/Wilson FN estimate; confirmed
+  FNs feed new-rule queue, never round-trip to B.
+- Shared substrate: cached-filing search primitives, independent anchors, verdict
+  leaf schema, gold apparatus (Rogan-Gladen) with per-task stats. No-haystack
+  constraint throughout: agents adjudicate one bounded item, never scan a set.
+- Open decisions recorded: fix-layer routing (global vs per-CIK), held-out
+  quarter count, and an exact rule-class tally over the registry.
+
+### 2026-06-18 -- Spec update: trial-run measurement plan + measured registry pass
+
+Updated docs/adjudication_architecture/B_and_C_validation_agents.md (design only).
+
+- New section 1a (measured registry): the shadow ledger is a non-deduped UNION of
+  the 4 shadow engines + oracle (48 A-J via shadow_adapter._oracle_select) +
+  adapter suites (validation_rules ~95, fund_financials F1-F34, row_validation ~41,
+  source_recon, html_extract, gav_recon, fund_strategy, nonaccrual,
+  aggregate_header, classification, derivative_role). Snapshot had 229 distinct
+  (engine, rule_name) with a PARTIAL oracle (5 of 48); ~272 fully wired. Overlap is
+  kept deliberately (corroboration; agreement/disagreement is signal) -- not a
+  dedup target at ledger level. Measured class split inverts the earlier even-thirds
+  estimate: aggregate (Class 3) largest ~40%+, single-cell ~30%, within-row ~25%
+  (grain labels still need a verified pass, folded into the trial).
+- New section 9 (trial-run measurement plan): treat the rule set as a measured
+  ensemble classifier (rule fire = feature, adjudicated verdict = label). B yields
+  per-rule precision; C yields system recall/FN; score rules by lift, evaluate
+  combinations with collinearity control for the non-deduped redundancy. Labels are
+  agent-made -> Rogan-Gladen against a ~200-unit human slice converts agent-relative
+  to truth-relative; C recall is a bounded lower-bound-on-misses. Sample (not
+  census), per-rule sized to CI width. Outputs replace the heuristic confidence
+  column, yield composite-gate candidates, the verified grain tally, and
+  evidence-backed rule promote/demote/retire decisions.
+- Open decisions renumbered to section 10; added redundancy-counting and
+  gold-slice-timing decisions.
+
+### 2026-06-18 -- Spec revision: count-first lift analysis (9.2)
+
+Revised section 9.2 of the B/C spec to lead with count-based conditional precision
+instead of a fitted model.
+
+- 9.2a: primary analysis is pure counting -- per-rule marginal precision (immune to
+  the section-1a cross-engine collinearity), unique-coverage (drives retire), and
+  per-observed-fire-pattern precision (captures corroboration directly). These
+  answer all promote/demote/retire/composite-gate questions with no model fit.
+- 9.2b: a per-rule-coefficient model is NOT a valid importance ranking under
+  collinearity (only the coefficient sum is identified; credit splits arbitrarily).
+- 9.2c: a fitted fused model is optional, needed only to score UNOBSERVED
+  combinations (272-rule pattern space is sparse), and only then with collinearity
+  control.
+- Updated 9.6 step 5 and open decision 4 accordingly (redundancy counting only
+  matters if 9.2c is invoked; otherwise moot).
+
+### 2026-06-18 -- Spec: resolved the open decisions (section 10)
+
+Recorded recommended defaults for the B/C spec's gating decisions (owner may override).
+
+- Mechanism->fix layer: default per-CIK; global only when an identical template
+  resolves real_errors across >=3-5 unrelated CIKs AND the mechanism is
+  filer-independent AND it passes full regression. Filer-format quirks stay per-CIK
+  regardless of frequency (silent-corruption asymmetry).
+- Held-out: all other quarters of the CIK (not a fixed count); "not overfit" =
+  clears where it should fire AND inert where it should not; >=2 held-out quarters
+  required to auto-promote, else flagged unvalidated_cross_quarter -> human;
+  pre-2022 template quarters weighted lower.
+- Gold-slice timing: run trial first, target a reweightable stratified draw, label
+  BLIND (verdict hidden); per-stratum e_FP/e_FN + Rogan-Gladen; add a small uniform
+  blind slice as the circularity guard.
+- Section 10 retitled "Decisions (recommended defaults)".
+
+### 2026-06-18 -- B/C trial step 1: froze registry + fully materialized oracle
+
+Executed section 9.6 step 1 of the B/C validation spec (cache-only, no network).
+
+- Materialized the full oracle: `python -m pipeline.oracle_runner` -> all 48 A-J
+  checks (was 5: only J01/J03/J04/J05/J06). check_results.csv 297 -> 46,081 rows.
+- Rebuilt the shadow ledger (`PYTHONPATH=. python scripts/shadow_validation_runner.py`)
+  so it ingests the full oracle: validation_results_ledger.csv 217,706 -> 264,090
+  rows; oracle now 48 distinct rule_names in the ledger.
+- Registry now 272 distinct (engine, rule_name) across 16 engines (confirms the
+  spec's ~272 estimate). 51,503 flagged, 9,968 surfaced high-confidence.
+- Froze the snapshot to data/output/shadow/trial_2026-06-18/frozen_registry/ with
+  MANIFEST.md (git SHA, ledger sha256), rule_inventory.txt, and a pre-materialization
+  backup of the prior ledger/oracle for recoverability.
+- Production note: this run overwrote data/output/oracle/check_results.csv and
+  data/output/shadow/validation_results_ledger.csv with the fully-materialized
+  versions (intended). Prior versions preserved in the trial backup dir.
+- Steps 2-5 not started: step 2 needs review_queue/bundles rebuilt from this ledger;
+  steps 3-5 are blocked on building B and C (no harness yet).
+
+### 2026-06-19 -- B classifier pilot: built + tested end-to-end (1 bundle/class)
+
+Built the B adjudicator pilot scaffolding and ran it on 3 bundles (one per
+localization class) as a loop proof. Cache-only, read-only on production.
+
+- New: scripts/review_agent/sample_bundles.py (stratified, HTML-cohort-filtered
+  sampler -> 45-bundle sample, 15/rule) and scripts/review_agent/evidence_cli.py
+  (the agent's only raw-source window; wraps html_soi_evidence, resolves accession
+  via resolve_accessions_from_rows, fails closed on cache miss).
+- Sample rules (one per class): C113 interest-rate-range (single-cell),
+  pik_le_interest_rate (within-row), fv_conservation (aggregate). Bundles built via
+  pipeline.review_bundles into the trial sample dir.
+- Adjudicators = blinded Claude subagents (soft blinding via prompt; hard sandbox
+  is the Codex-harness step). Verdicts in trial verdicts/ dir.
+- RESULTS: loop works end-to-end; adjudicator discipline held (cite-or-ambiguous,
+  no hallucinated verdicts).
+  * pik_le_interest_rate -> false_alarm, localized, 2 citations, conf 0.82: found
+    all-PIK loans state ONE figure that is both interest and PIK; rule fires because
+    the pipeline parsed base spread as interest and the all-in figure as PIK -- a
+    parsing artifact, not a data defect. (Substantive, cited, mechanism identified.)
+  * C113 and fv_conservation -> ambiguous/escalate, correctly fail-closed.
+- PILOT FINDINGS (evidence-CLI gaps to fix before scaling to 45): (1) roam returns
+  a capped fixed row window (max_rows) -> misses target rows (CLO sub notes; the
+  leaked subtotal); (2) the grid subcommand errors on structured tables; (3)
+  total_fv_anchor comes back empty -- the item-id filter does not match the actual
+  evidence item, so the filing's own grand-total (needed for conservation anchor
+  triangulation) is never surfaced. These are harness bugs, not data/adjudicator
+  failures.
+
+### 2026-06-19 -- B pilot: evidence-CLI fixed + 5 more trials (8 total)
+
+Fixed scripts/review_agent/evidence_cli.py (rewrote on pipeline.html_extract
+._extract_tables for uncapped roaming): `roam` = full-filing free-text search,
+`grid --table N --start --count` = full table paging, new `tables` and `totals`
+(filing's own total/subtotal lines = the conservation anchor). Removed the bogus
+total_fv item filter. Verified: for CIK 1742313 the filing's own "Total
+investments, at fair value 1,764,774" was surfaced and equals the companyfacts
+anchor (not the pipeline position-sum) -- the triangulation the pre-fix run lacked.
+
+Ran 5 more trials (all localized/substantive with the fixed CLI; 8 total):
+- pik_le_interest_rate: 3/3 FALSE_ALARM, all localized, one root cause -- the
+  pipeline's interest_rate stores only the CASH leg of split cash/PIK coupons
+  (e.g. A.T. Holdings "6.7% Cash, 7.6% PIK"; Island Bidco "3.65% cash/7.25% PIK"),
+  so PIK > cash-leg fires spuriously. The rule should compare PIK to the all-in
+  rate. STRONG signal this rule is low-precision; concrete fix candidate.
+- C113 (interest-rate-range): 1 false_alarm (AllPlants "Prime+5.5% cash+8.3% PIK,
+  19.30% floor" venture debt -- [0,25] range too tight) + 1 ambiguous (pre-fix).
+- fv_conservation: 2 real_error + 1 ambiguous(pre-fix). Mechanisms found via
+  anchor-triangulation: extraction_gap (CIK 1860424, -3.2% undershoot: filing's own
+  total = anchor $468.1M, pipeline ~$15M short) and comparative_leak (CIK 1377936,
+  +32% overshoot: prior-period Feb-2025 SOI rows leaking into the Feb-2026 set;
+  Zollege/Pepper Palace appear in both current and prior schedules).
+- Caveat: agent-relative verdicts (no human gold slice yet) -> provisional precision.
+  The 2 ambiguous are both pre-fix-CLI runs and would likely localize on re-run.
+
+### 2026-06-19 -- B pilot scaled to full 45-bundle sample (per-rule precision)
+
+Ran the full 15/rule sample via a background workflow (45 blinded adjudicators,
+schema-enforced verdicts, fixed evidence CLI). New scaffolding:
+scripts/review_agent/build_claims.py (blinded CLAIM generator), evidence_cli.py
+`claim` subcommand (trusted boundary: emits the question, strips verdict fields),
+aggregate_verdicts.py (persist + Wilson CIs). 45 agents, ~2.29M tokens.
+
+MEASURED per-rule (agent-relative; no human gold slice yet -> provisional):
+- pik_le_interest_rate: 15/15 FALSE_ALARM (false-alarm rate 100%, Wilson [80,100]),
+  all localized. Root cause (confirmed at scale): interest_rate stores only the CASH
+  leg of split "X% cash, Y% PIK" coupons, so PIK > cash-leg fires spuriously. The
+  rule is unsound; should compare PIK to the all-in rate, or be demoted. ZERO lift.
+- C113 (interest-rate-range): 11 false_alarm / 3 real_error / 1 ambiguous -> 79%
+  false-alarm [52,92] of decided. Mostly false (CLO-equity effective yields and
+  high-yield/venture instruments legitimately >25%) BUT 3 real mis-parses (e.g. a
+  50% EOT balloon payment lifted into interest_rate). Low precision; refine the
+  range to exclude effective-yield/CLO/venture, keep for the real mis-parses.
+- fv_conservation: 14 real_error / 1 false_alarm / 0 ambiguous -> 7% false-alarm
+  [1,30], 13/15 localized. HIGH precision; gate-worthy. Mechanisms: subtotal_leak,
+  comparative_leak, extraction_gap; the lone false_alarm was anchor_bad.
+
+Rule-disposition (evidence-backed, provisional): PROMOTE fv_conservation;
+FIX/DEMOTE pik_le_interest_rate (all noise); REFINE C113. The pre-fix-CLI ambiguous
+cases resolved once re-run on the fixed CLI (C113 1 amb, conservation 0 amb),
+confirming they were harness-limited, not genuinely ambiguous. Verdicts persisted
+to data/output/shadow/trial_2026-06-18/verdicts/.
+
+### 2026-06-19 -- Retired pik_le_interest_rate (B-trial-driven rule fix)
+
+Acted on the B pilot's strongest finding (15/15 false alarm). Retired the
+`pik_le_interest_rate` identity rule in scripts/shadow_identity_engine.py.
+
+- Mechanism (evidence-backed): the rule's row_filter (pik_rate>0 AND interest_rate>0)
+  selects exactly the split "X% cash, Y% PIK" coupons, where the pipeline stores the
+  CASH leg in interest_rate and the PIK leg in pik_rate. So PIK > cash-leg is
+  legitimate (e.g. "6.7% Cash, 7.6% PIK"). The sound invariant (pik <= all-in =
+  interest+pik) is vacuous -> no useful per-row ordering check remains. PIK magnitude
+  plausibility is already covered by fmt_pik_rate.
+- Deterministic re-run gate PASSED: rebuilt the ledger; pik_le_interest_rate 661 -> 0
+  rows; total ledger 264,090 -> 263,429 (down by EXACTLY 661); the other 4 identity
+  rules (pct_of_net_assets, nav, income, balance_sheet) unchanged. Surgical removal,
+  no regression, no new flags. Identity rule count 5 -> 4.
+- Guard test: tests/test_shadow_identity_rules.py (2 tests, pass) prevents silent
+  re-introduction and pins the active identity rule set.
+- The frozen B-trial snapshot (frozen_registry/) is preserved unchanged; the live
+  production shadow ledger now reflects the fix.
+
+### 2026-06-19 -- Refined C113 interest-rate-range (B-trial-driven)
+
+C113 was 79% false alarm (Wilson95 [52,92]); the false alarms are structured-credit
+/ CLO subordinated tranches carried at an "effective interest" (accretion) yield,
+legitimately 25-40%+. Refined the rule in pipeline/column_validation.py:
+- Exempt asset_class/index_classification = STRUCTURED_CREDIT and any row whose
+  descriptor contains "effective interest" from the >25% upper bound.
+- Keep the <0 check for all; add a >75% gross-scale safety net for all (catches
+  scale errors even in the exempt class).
+- PRIVATE_CREDIT rows >25% stay flagged (genuinely mixed: real mis-parses like a
+  50% EOT balloon vs legit venture/PIK floors -> warrant review).
+- Direct validation against private_markets_holdings: 112 -> 74 fires; all 38
+  suppressed are STRUCTURED_CREDIT; PRIVATE_CREDIT >=45% real-error candidates kept.
+- Tests: +2 in tests/test_column_validation.py (exemption + false-positive guard);
+  full file 22 pass. Existing high-rate-warns test still passes (PRIVATE_CREDIT 30%).
+- Propagation: regenerate the validate_holdings/row_validation artifact + ledger to
+  reflect this in the shadow ledger (rule logic verified directly via DuckDB).
+
+### 2026-06-19 -- B-trial gold-review pack (45 blinded sheets)
+
+Built scripts/review_agent/build_review_pack.py -> data/output/shadow/trial_2026-06-18/gold/:
+- sheets/<review_id>.md (45): per-bundle blinded review sheet = the claim (+ conservation
+  discrepancy), the exact evidence_cli roam commands, and a per-class decide-checklist.
+  The agent's verdict is deliberately EXCLUDED (sealed in ../verdicts/) so the human
+  labels blind -> preserves e_FP/e_FN validity (no anchoring).
+- gold_labels.csv: blank template (review_id, rule_name, cik, report_date, true_verdict,
+  localized, true_mechanism, note) for the human to fill.
+- REVIEW_GUIDE.md: protocol (label blind; verdict vocab; citation required; ambiguous OK).
+Next: once gold_labels.csv is filled, diff vs verdicts/ for truth-relative precision +
+agent e_FP/e_FN (scorer not yet built).
+
+### 2026-06-19 -- Local blind gold-review server (B trial)
+
+Built scripts/review_agent/review_server.py (Flask): serves a stratified subset
+(default 8/rule = 24) of the 45-bundle sample for blind browser labeling. Per
+bundle: blinded claim + pre-rendered overview/totals, interactive roam/grid against
+the cached filing (server shells to evidence_cli), and a verdict form. Agent verdict
+never shown. Saves gold/labels/<rid>.json; /export merges to gold/gold_labels.csv.
+Running on http://127.0.0.1:5058 (8/rule). Cache-only, read-only on production.
+
+### 2026-06-19 -- Review server: human-readable + flagged-positions panel
+
+Made the gold-review pages legible and concrete:
+- evidence_cli.py: new `flagged` subcommand returns the holdings rows the rule
+  actually fired on (issuer + the questioned interest_rate/pik_rate + asset_class)
+  for C113/pik (the "question made concrete"); `_header()` picks the first
+  content-bearing row so SOI table headers populate instead of blank.
+- review_server.py: render claim/overview/totals/roam/grid as HTML tables (was raw
+  JSON); add a "Flagged positions (what the rule actually fired on)" panel so the
+  reviewer sees the questioned rows without hunting. Agent verdict still hidden.
+- Clarified that "Filing overview" is an INDEX of tables; the data is read via
+  grid/roam (same evidence_cli the agents used).
+
+### 2026-06-19 -- Review server: auto table/row lookup; collapse table index
+
+- evidence_cli.py `flagged` now auto-locates each flagged holdings row in the cached
+  filing: matches a distinctive issuer token (generic SOI words stripped) plus the
+  stored rate value to pin the exact tranche, returning filing_location
+  {table_index, row_index, row_text}. e.g. Integro 25.4% -> tbl 22 / row 7
+  "...| L + 1025 PIK | 25.40 % |".
+- review_server.py: flagged panel shows interest_rate | pik_rate | asset_class |
+  filing loc (tbl/row) | filing row (raw source) inline. The "Filing overview" table
+  index is moved behind a collapsed <details> (redundant once rows are located).
+
+### 2026-06-19 -- Fix flagged auto-locator rate-rounding mismatch
+
+The flagged-row auto-locator rounded the stored rate to 1 dp before matching
+(25.75 -> 25.8), so the exact-rate match failed and it fell back to the first
+issuer hit -- mislocating WDE TorcSill's 25.75% Protective Advance flag to the
+23.35% Revolver row. Fixed evidence_cli.py to match un-rounded rate candidates
+({:g, :.1f, :.2f}); the flag now resolves to tbl 5 / row 14 (the 25.75% Protective
+Advance Term Loan). Distressed multi-tranche issuers (revolver/term/protective-
+advance/equity, repeated across comparative-period tables) are why an issuer roam
+returns many hits; the flagged panel still shows only the one flagged position.
+
+### 2026-06-19 -- Spec + scope: Agent A (identifier enrichment), with measurements
+
+Design/scope only, no pipeline code. New doc
+`docs/adjudication_architecture/A_identifier_enrichment_agent.md` (companion to the
+B/C spec). Agent A runs BEFORE the deterministic rules as a new, lower-trust
+provenance over the freeform BDC `investment_identifier`, modeled on B
+(deterministic-proposes / agent-disposes, bounded one-variant bundles, semantic
+re-run gate). Recorded the supporting measurements in
+`data/output/data_investigation_results.md` (three 2026-06-19 entries):
+
+- Structured-XBRL-twin coverage over 627,181 current-period freeform rows: twin is
+  inversely correlated with where parsing adds value -- interest_rate 59% / basis_spread
+  68% (good), maturity 29%, pik 8%, reference_rate_type 0% / coupon_type 0% (string-only);
+  ~33% of rows have no rate/maturity twin. Usable anchors are cross-field internal
+  consistency (basis_spread-present<=>floating; total==cash+pik), not independent facts.
+- Format-signature clustering: TWO regimes. Delimited (Golub, ~0% rate-embedded,
+  well-anchored) clusters tight under a punctuation shape (2 sigs cover 80%). Flattened
+  (Antares/MidCap/Bain/Crescent, 54-67% rate-embedded, weakly anchored) explodes under a
+  naive mask (Antares 178 shapes) due to rate-leg count, field-internal commas, and
+  dash-encoding mojibake.
+- Keyword-anchored signature collapses Antares 178 -> 23 (2 cover 80%) and emits the
+  leaked-aggregate flag for free. Generalization across MidCap/Bain/Crescent: tightness
+  generalizes and RATE/date capture is 100% everywhere, but the keyword VOCABULARY does
+  NOT (each filer's markers differ; (none)-share 16-31%). => anchor vocabulary is per-CIK
+  config (AGENTS.md Layer 2), and the agent's highest-value task is one-time dialect
+  induction, not row-by-row splitting.
+
+Key code-grounded finding driving the scope: the wrapper config
+(`data/overrides/bdc_xbrl_wrappers/<cik>.json`, `bdc-xbrl-wrapper.v3`) ALREADY holds the
+per-CIK marker vocabulary, family dispatch, aggregate_markers, and issuer/instrument
+split regexes for ~70 CIKs, but its `canonical_strip_re` STRIPS the rate/maturity tokens
+and `pipeline/bdc_identifier.py` has no rate/PIK parsing. So Agent A is the missing
+within-string RATE-structure extractor (cash/pik/spread/reference/coupon/maturity) +
+semantic gate -- the part the wrapper drops -- not a greenfield system. Scope reuses the
+override store/schema/loader, row-disposition ledger, `scripts/review_agent` harness, and
+`html_soi_evidence`; extends the wrapper schema with a `rate_grammar` block; adds
+`identifier_signature.py`, `identifier_overlay.py`, and a `scripts/agent_a/` harness.
+Phased P0-P3 with measurable exits; gate is semantic reconciliation (arithmetic identity,
+fixed/floating derivation, cross-twin agreement, FV/held-out), never format shape. No
+data semantics changed yet (design only). A2 agent = sandboxed Codex agent callable via
+skill (the B model); it stages a proposed-config JSON the deterministic A3 gate must
+clear, never writes production fields directly.
+
+### 2026-06-19 -- Agent A P0: deterministic signature + regime engine (code)
+
+Built the load-bearing deterministic layer under Agent A. No LLM, no holdings mutation.
+
+- New `pipeline/identifier_signature.py`: pure functions punctuation_shape (delimited
+  regime: rates->%, dates->D, content->W collapsed, delimiters preserved), keyword_signature
+  (flattened regime: ordered keyword-anchor labels; rate-legs/dates each one token so leg
+  count does not fragment), detect_regime (per-CIK from rate-embed% / anchor-presence%),
+  is_aggregate_candidate (category keyword w/o position anchor or a Total line -> leaked
+  aggregate flag, free), and build_report (one streaming scan of bdc_holdings.parquet,
+  constant memory per CIK).
+- `python -m pipeline.identifier_signature` writes two NEW artifacts (no existing output
+  modified): data/output/identifier_signature_report.csv (per-CIK summary) and
+  identifier_signature_detail.csv (top signatures + examples per CIK).
+- New `tests/test_identifier_signature.py`: 17 tests, all pass. Covers real Golub/Antares
+  examples, position-ordering, the fixed-rate no-REFRATE false-positive guard (the
+  Automotive/Crowne case), aggregate-candidate true/false, regime routing, and the
+  per-CIK clustering math.
+- VERIFIED reproduces the hand-measured table over 627,181 current-period rows: Antares
+  (1993402) flattened 23 sigs / cover80=2 / none 1.9% / rate-capture 100%; Golub (1476765)
+  delimited 43 shapes / cover80=2; MidCap 15/3/30.9%, Bain 20/5/15.6%, Crescent 6/2/21.7%
+  (all rate-capture 100%). 191 CIKs summarized (90 delimited, 101 flattened). Flattened
+  (none)% ranking = the dialect-induction worklist (e.g. Andalusian 100%, Morgan Stanley
+  Direct Lending 71%, T Series 70%).
+- Module is standalone (not wired into rebuild/export); no data semantics changed. Verified
+  by targeted pytest; no existing production artifact was written (only the 2 new report
+  CSVs), so the semantic-diff backstop is N/A for this change.
+
+### 2026-06-19 -- Agent A P1: rate-grammar applier + semantic gate (Antares)
+
+Built and measured the deterministic within-string rate-structure extractor + section-4
+gate on one flattened filer (Antares). No LLM (grammar hand-authored as the pre-agent
+stand-in), no production merge.
+
+- New `data/overrides/identifier_rate_grammars/0001993402.json` (schema
+  `agentA-rate-grammar.v1`): per-CIK extractors (instrument_type, reference_rate_type via
+  S->SOFR map, basis_spread, interest_rate_floor, interest_rate_all_in, pik_rate,
+  maturity_date), derivations (coupon_type = floating-iff-reference; cash_leg =
+  all_in - pik), and invariants (cross-twin pct/date agreement + floating=>reference).
+  `pik_convention: inclusive` -- Antares states ALL-IN incl PIK (cash = all_in - pik),
+  the INVERSE of MidCap's additive "cash + pik"; this is a per-CIK field.
+- New `pipeline/identifier_rate.py`: load_grammar / apply_grammar (regex extract +
+  derive; RE2-incompatible negative-lookahead handled in Python re) / evaluate_invariants
+  / evaluate_cik (streams a CIK's signature rows, runs the gate, stages overlay).
+- New `tests/test_identifier_rate.py`: 9 tests pass (all-in not confused with Floor;
+  inclusive-PIK cash-leg = 10.30 from 12.30 incl 2.00; coupon fixed/floating; spread
+  disagreement -> fail; twin-missing -> na).
+- `python -m pipeline.identifier_rate` over 6,579 Antares debt-signature rows: parse-
+  completeness 97.5%; FV preserved exactly (delta $0.00 on $22.5B); cross-twin agreement
+  of DECIDED rows all_in 97.4% / spread 98.7% / pik 99.2% / maturity 98.9% /
+  floating_has_reference 100% (0 fail). The ~2.6% all_in failures verified as REAL
+  string-vs-structured-XBRL disagreements (parser extracts the string value correctly;
+  the tagged fact differs) -- correctly FLAGGED, not overwritten. PIK twin sparse (124
+  decided) so PIK is largely string-only (unanchored-field caveat).
+- Staged overlay: data/output/agent_a/identifier_rate_overlay_0001993402.csv (NEW; no
+  existing artifact modified; semantic-diff backstop N/A). Module standalone, not wired
+  into unified/export. No data semantics changed in production.
+
+### 2026-06-19 -- Agent A P2: induction skill + harness + MidCap demonstration
+
+Built the agent-induction edge (sandboxed-agent-via-skill, the B model) and ran it
+end-to-end on the hardest vocab-miss filer. Cache-only, read-only, no production merge.
+
+- New skill `.claude/skills/identifier-grammar/SKILL.md` (/identifier-grammar [CIK] [mode]):
+  build bounded bundle -> dispatch sandboxed induction agent -> deterministic A3 gate.
+- New `scripts/agent_a/sample_variant.py`: builds the bounded, blinded variant-bundle
+  (regime, top (cik,signature) variants with ~12 homogeneous samples + structured twins,
+  the (none) examples, current anchor labels) -> data/output/agent_a/bundles/<cik>.json.
+  No-haystack: the agent sees only this dozen-row-per-variant bundle.
+- Per-CIK anchor store: `data/overrides/identifier_anchors/<cik>.json` + `load_anchors`
+  in pipeline/identifier_signature.py (falls back to global STARTER). Lets an induced
+  dialect drop the (none)-share.
+- Engine extensions in pipeline/identifier_rate.py: `pik_convention: additive`
+  (cash + pik, the MidCap form, vs Antares `inclusive`), `bps` spread type
+  (SOFR+400 -> 4.00%), and the self-contained `sum_identity` invariant (total==cash+pik)
+  -- the gate that holds when structured twins are mis-binned.
+- DEMONSTRATION (MidCap 1278752): bundle -> sandboxed induction agent authored
+  identifier_anchors/1278752.json + identifier_rate_grammars/1278752.json -> A3 gate.
+  The GATE CAUGHT a real defect (agent over-required pik_rate -> parse-completeness 5.1%);
+  localized one-line fix (PIK optional on floating loans) -> 97.9%. Dominant variant
+  (SECDEBT REFRATE RATE MAT, 4,974 rows, $31.2B) then green: completeness 97.9%, FV
+  preserved exactly, spread_vs_twin 98.9%, pik 97.7%, maturity 99.3%, floating_has_reference
+  100%. (none)-share 30.9% -> 17.5% (EQUITY caught equity rows; CLO/other remain, iterative).
+  sum_identity inert on floating, passes on the 9 fixed "cash plus PIK" rows.
+- Tests: tests/test_identifier_rate.py +3 (additive pik / bps / sum_identity), 12 total;
+  tests/test_identifier_signature.py +2 (per-CIK anchor load/fallback), 19 total. 31 pass.
+- New artifacts only (bundles/, overrides/identifier_anchors|rate_grammars/); no existing
+  production output modified; semantic-diff backstop N/A. Not wired into unified/export.
+
+### 2026-06-19 -- Agent A P2 cont.: Bain + Crescent induced; MidCap anchor iteration
+
+Ran the /identifier-grammar induction loop on the remaining two flattened vocab-miss
+filers (parallel sandboxed agents) and iterated MidCap's anchors. All deterministic-gated.
+
+- Bain (1655050): induced anchors + grammar (dominant "AFFIL SECLOAN REFRATE RATE MAT",
+  pik_convention INCLUSIVE, SECLOAN = senior-secured-loan phrasing). GATE GREEN: none-share
+  15.6 -> 0.3%; parse-completeness 99.5%; FV preserved exactly ($17.9B); all_in 97.9 /
+  spread 99.0 / pik 99.5 / maturity 99.4 / floating_has_reference 99.9%.
+- Crescent (1633336, the hardest -- global vocab degenerated to a structure-less "RATE"
+  on 62%): induced encoding-tolerant anchors (INVTYPE = "investment[^a-z0-9]+type" for the
+  mojibake; DEBT/EQUITY; bps spreads "S + 500"; mm/yyyy dates) + grammar. GATE GREEN:
+  none-share 21.7 -> 1.1%; dominant now "DEBT INVTYPE REFRATE RATE MAT" 59.6%;
+  completeness 99.9%; FV preserved ($17.9B); all_in 99.0 / spread 95.0 / pik 90.0 /
+  floating_has_reference 100%. Maturity is mm/yyyy (no day) -> captured as text, NOT gated
+  (agent declined to fabricate a day-of-month; correct).
+- MidCap anchor iteration: added CASH (money-market/government funds = non-private, exclude
+  not parse), broadened AFFIL to the space form "controlled investments" (those headers now
+  sign AFFIL + flag as aggregate candidates), added STRUCTURED. none 30.9 -> 16.0%. The
+  residual is genuinely SPARSE issuer+industry-only rows (no instrument/rate/maturity
+  tokens) -- a data property, not a vocab gap; stopped iterating (diminishing returns).
+- pik_convention varied per filer (MidCap additive; Bain, Crescent inclusive) -- validates
+  the per-CIK convention field. No engine/test code changed (configs only); the 31 Agent A
+  tests remain green. New artifacts only; no existing production output modified; not wired
+  into unified/export.
+- MEASUREMENT BASIS CLARIFIED: all gate pass-rates above are OVERALL (current-period rows
+  `period==report_date` POOLED across all quarters), not per-quarter. Ran a per-quarter
+  breakdown for Bain + Crescent: both grammars hold across the full 2023-2026 span --
+  completeness 98.5-100% every quarter; all_in agreement 90.7-100% (soft quarters e.g. Bain
+  2024-12-31 90.7%, Crescent 2023-06-30 94.8% are flag-population concentrations, not parser
+  breakage since completeness stays ~100%). Strong CROSS-QUARTER evidence (the ~12-row
+  induction sample is <0.5% of any quarter, so ~99.5% is effectively held out) but NOT a strict
+  held-out experiment (induce-excluding-Q then test-Q); a format used in only one early quarter
+  the pooled sample missed would still be undetected. Formal A3 held-out gate remains a TODO.
+- SCOPE NOTE: a Crescent induction subagent made an out-of-scope edit to pipeline/bdc_identifier.py
+  (added "Diversified" to _CRESCENT_HIERARCHY_INDUSTRIES); reverted (agents are scoped to the two
+  config JSONs only). Reinforces that the sandbox must be a hard boundary, not soft prompt-blinding.
+
+### 2026-06-19 -- New rule C206: issuer_name dimension/term contamination
+
+Quantified the axis-parse-divergence duplication gap and added a catching rule.
+- Quantification: the loose "same cik/acc/fair_value + shared issuer token" dup scan
+  is contaminated (FPs from distinct same-issuer tranches sharing a FV + comparative
+  rows; the $204B "at risk" is an upper bound, NOT real dupes). The clean, actionable
+  signal is FIELD CONTAMINATION: 27,920 BDC rows (4.86%) across 58 CIKs have raw XBRL
+  dimension/term text leaked into issuer_name (Acquisition Date / Maturity Date / of
+  Net Assets / Debt Securities,). 4,184 of those sit in a same cik/accession/
+  fair_value multi-row group -- the dedup-miss subset (e.g. WDE TorcSill protective
+  advance), where the divergent issuer_name defeats Stage-D dimension-path dedup so
+  the position double-counts.
+- New rule pipeline/column_validation.py C206 (WARN): issuer_name ILIKE any of the
+  leak markers. Catches the contaminated copy (root cause) that both corrupts the
+  field and defeats dedup. Existing C203 (>300 chars) missed these (~120 chars).
+- Tests: +2 in tests/test_column_validation.py (fires on leak; clean names pass);
+  file 24 pass.
+- Note: the real remediation is fixing the per-CIK wrapper parse for these axes --
+  clean issuer_name then both clears C206 AND lets Stage-D dedup collapse the dup.
+  Diagnostic kept: scripts/review_agent/scan_axis_dupes.py.
+
+### 2026-06-19 -- Shadow rate-convention gate (interest_rate semantics: all-in vs spread)
+
+Filers define their own interest_rate semantics; XBRL tags presentation, not
+normalized meaning. This bears directly on the index income formula, which ADDS
+pik_rate on top of effective_rate: where interest_rate is the ALL-IN coupon, the
+disclosed PIK is a SUBSET of it, so the additive term DOUBLE-COUNTS PIK income.
+- New read-only gate scripts/build_shadow_rate_convention_gate.py (sibling of
+  build_shadow_rate_scale_gate.py; writes only to data/output/shadow/). Per wrapped
+  BDC CIK it tests the identity interest_rate ~= basis_spread + implied_reference
+  (residual = interest_rate - basis_spread; implied_reference = cohort-wide median
+  residual per quarter, gated to >=100 floating rows to drop thin off-cycle dates).
+  Classifies: all_in_coupon / spread_as_rate / unresolved_convention /
+  insufficient_floating / no_floating_rate_rows.
+- Result (77 v3-wrapped CIKs): 60 all_in_coupon, 3 spread_as_rate (Stepstone
+  0001950803, TriplePoint 0001792509, MidCap-Apollo 0002006758), 1 unresolved
+  (Trinity 0001786108), 5 insufficient_floating, 8 no_floating_rate_rows. The
+  implied-reference curve tracks SOFR/Fed-funds (5.45% 2023q4 -> 3.72% 2025q4),
+  self-validating the residual = reference reading. PIK double-count exposure on the
+  60 all_in filers: 12,817 rows / $274.7B FV (the additive-formula over-count locus).
+- Relation to the 2026-06-19 retirement of identity rule pik_le_interest_rate: that
+  per-row invariant was retired as unsound because for split "X% cash, Y% PIK"
+  coupons interest_rate holds the CASH leg. This gate is the per-FILER field the
+  retirement note required ("distinguishes cash-leg interest_rate from all-in") --
+  split-coupon/cash-leg filers land in spread_as_rate/unresolved, NOT all_in. A
+  convention-gated PIK ordering rule (flag only all_in filers) is a candidate
+  follow-up, but needs B-trial adjudication before re-adding; not done here.
+- Outputs (data/output/shadow/): bdc_rate_convention_gate.csv (per-CIK verdict),
+  bdc_rate_convention_pik_exposed_rows.csv (localized exposed rows),
+  bdc_rate_convention_implied_ref.csv (the self-validation curve).
+- Shadow/diagnostic only; does NOT feed unified_holdings or index_returns. The
+  income-formula correction is a separate, consequential change (rebuild + semantic
+  diff) and was not made.
+- Tests: +4 in tests/test_shadow_rate_convention_gate.py (thresholds pinned;
+  STATUS_CASE_SQL boundary classification). Full file passes.
+
+### 2026-06-19 -- Rate-convention gate: FRED anchor + APPLIED PIK double-count fix
+
+Two changes building on the rate-convention gate (same day, above).
+
+1. Gate repointed to an INDEPENDENT FRED anchor. scripts/build_shadow_rate_convention_gate.py
+   now reads cached FRED SOFR90DAYAVG (data/raw/reference_rates/, fetched once, no
+   runtime network) via an as-of join instead of the cohort-internal median.
+   Validated: the FRED anchor reproduces the cohort-median classification EXACTLY
+   (0 disagreements vs both SOFR90DAYAVG and overnight SOFR), with a ~4-5pp
+   separation margin -- so the rule's signal is independent of the population, not
+   a self-reference artifact. Removes the cross-sectional-scalar dependency.
+   Partition unchanged: 60 all_in_coupon, 3 spread_as_rate, 1 unresolved, 5
+   insufficient_floating, 8 no_floating_rate_rows.
+
+2. APPLIED the PIK double-count fix to the index (production change).
+   pipeline/index_returns.py: for all_in_coupon filers (loaded from the gate's
+   bdc_rate_convention_gate.csv via new _load_all_in_ciks(); injectable param
+   all_in_ciks_df for test isolation) the additive pik_rate_pct term in the
+   DL/PREFERRED income formula is suppressed (interest_rate already includes PIK).
+   pik_rate_pct column still reports the disclosed PIK (provenance preserved); only
+   income changes. Rebuilt position_returns.csv + index_returns.csv and re-exported
+   frontend JSON (28 files; frontend indices derive from index_returns via
+   export_frontend._export_index_returns).
+   Impact (matches the read-only counterfactual exactly):
+     - DIRECT_LENDING  index 134.90 -> 133.67 (annualized 4.71% -> 4.57%, -0.15pp)
+     - PREFERRED_EQUITY index 102.84 -> 96.63 (annualized +0.43% -> -0.53%, SIGN FLIP)
+   Preferred is PIK-heavy; its positive cumulative return was substantially
+   manufactured by double-counted PIK.
+   Known residual (NOT fixed): filer_median_rate (index_returns.py) still adds PIK
+   internally, so all_in positions falling to the filer-median tier (~5.7% of DL)
+   retain a smaller internal double-count; and spread_as_rate filers (Stepstone,
+   TriplePoint) UNDER-count income (interest_rate holds the spread, not all-in) --
+   the opposite error, not addressed here.
+   Coupling note: production index now reads the shadow gate CSV; the all_in
+   classification should eventually graduate to first-class fund metadata.
+   Tests: +2 TestAllInPIKSuppression in tests/test_index_returns.py (PIK added when
+   not all_in -> income 0.025; suppressed when all_in -> 0.020). 47 pass in file.
+
+### 2026-06-19 -- Agent A: A3 held-out (cross-quarter) gate built; MidCap FAILs
+
+Built the cross-quarter promotion gate that the pooled gate (evaluate_cik) could not
+provide. New `pipeline/identifier_held_out.py` + `tests/test_identifier_held_out.py`
+(5 pass; 36 Agent A tests total green).
+
+- `held_out_report(cik, signature, ...)` evaluates each quarter INDEPENDENTLY and renders
+  PASS/FAIL per A3 Decision 2: >=2 signature-bearing quarters; per-quarter parse-completeness
+  >= 90% AND gating-invariant >= 85% in EVERY quarter; and none-share STABILITY -- a quarter
+  whose none-share exceeds the median by > 10pp = a format that quarter the pooled induction
+  sample missed (a uniformly high none-share is sparse data, NOT a fail -- distinguishes
+  MidCap's flat ~22% from a real spike). Grammar/anchors held FIXED (re-running the induction
+  agent per fold is a separate calibration, not a deterministic gate).
+- RESULTS over the four filers: Antares PASS (9q, completeness 100% each), Bain PASS (12q),
+  Crescent PASS (13q, invariant 91-100%); MidCap FAIL -- 2024-06-30 completeness 87.8% < 90%,
+  a per-quarter regression the POOLED gate (97.9%) HID. This is the gate earning its keep:
+  pooled looked promotable, per-quarter is not.
+- Cross-quarter format facts surfaced: MidCap none-share 22% -> 1% at ~2025-Q2 (mid-history
+  format change); Bain's dominant signature only exists from 2023-06 (earlier quarters used a
+  different layout, correctly routed to other signatures, not (none)).
+- Promotion status: the held-out gate is now the PROMOTION gate; pooled evaluate_cik is
+  diagnostic. None of the four is auto-promotable yet -- MidCap fails held-out; Antares/Bain/
+  Crescent pass held-out but the provenance-overlay merge into unified holdings is still
+  unbuilt (P3). No production output modified; new module + test only; not wired into rebuild.
+
+### 2026-06-19 -- Agent A: MidCap held-out FAIL diagnosed + repaired -> PASS
+
+The held-out gate's MidCap FAIL (2024-06-30 completeness 87.8%) was diagnosed and fixed.
+
+- ROOT CAUSE: all 42 incomplete dominant-signature rows that quarter were missing
+  maturity_date ONLY, because the rows wrote "Maturity 04/01/27" (no "Date") while the
+  grammar's extractor required the literal "Maturity Date". The MAT anchor still fired (on
+  the date pattern), so the rows kept the dominant signature; only the extractor was strict.
+- FIX: broadened the MidCap maturity_date extractor regex to "Maturity(?:\s+Date)?\s+<mdy>"
+  (config-only edit to data/overrides/identifier_rate_grammars/0001278752.json). No code/tests
+  changed. Safe (no acquisition-date false-capture; "Maturity" appears only in maturity context).
+- RESULT: 2024-06-30 completeness 87.8% -> 100%; held-out VERDICT now PASS (all 13 quarters
+  clear; invariant% stayed 98-99%, so recovered maturities AGREE with their twins -- real
+  values, not fill). All four flattened filers (Antares, MidCap, Bain, Crescent) now PASS the
+  held-out gate. Production-overlay merge (P3) is the remaining step before any reach unified.
+
+### 2026-06-19 -- Agent A P3 STAGED (no merge): overlay impact diff on 4 gated filers
+
+Built the provenance overlay + measured what A WOULD change, WITHOUT merging (user
+instruction: stop before merge). Production bdc_holdings/unified untouched (git-confirmed).
+
+- New `pipeline/identifier_overlay.py` + `tests/test_identifier_overlay.py` (4 pass; 40 Agent
+  A tests total). Blank-only/no-clobber disposition per field per row: FILL (prod blank + A
+  has value), CONFIRM (agree), CONFLICT (disagree -> flag, never overwrite), NOT_MERGEABLE
+  (A value format-incompatible with the prod column). Same merge rule as the existing
+  staging_bdc iXBRL/HTML-bridge overlays.
+- STAGED impact over 19,273 gated dominant-signature rows (Antares/MidCap/Bain/Crescent):
+  * reference_rate_type FILL 19,242 rows / $89.5B -- native ~0%, A fills ~all, 0 conflicts.
+    This is the headline frontend/index lift (reference rate feeds the income calc + fund-page
+    coupon display).
+  * coupon_type contributed on all 19,273 rows; interest_rate_cash_leg on ~14.2K (the cash/PIK
+    split). basis_spread/interest_rate/maturity are mostly CONFIRM -> A corroborates the
+    existing structured twins, raising confidence rather than changing values.
+  * Real CONFLICTs only 834 rows (genuine string-vs-twin disagreements, incl. MidCap-style
+    mis-bins) -> routed to p3_staged_conflicts.csv, NOT overwritten.
+  * MEASURE-FIRST CATCH: Crescent maturity is mm/yyyy text vs ISO month-end twin (e.g. A
+    "07/2028" vs prod "2028-07-31") -> 4,957 rows NOT date-mergeable. A blind merge would have
+    polluted maturity_date on ~$18B of rows; now bucketed/excluded. Exactly why we measured first.
+- Artifacts (NEW only): data/output/agent_a/p3_staged_impact_summary.csv, p3_staged_conflicts.csv.
+  NO MERGE. Open before merge: human gold slice (truth vs twin); merge-scope decision (exclude
+  Crescent maturity or store as separate maturity_text provenance); then wire into staging_bdc.
+
+### 2026-06-20 -- Agent A: small BLIND conflict gold sample (24 rows) + scorer
+
+Built a deliberately small, blind human-gold sample over the P3 staged conflicts (the
+rows where A disagrees with the structured XBRL twin) -- the only step that ties A to
+filing truth rather than twin-agreement. Kept small (user runs 3 gold sets concurrently).
+
+- scripts/agent_a/build_conflict_gold.py -> data/output/agent_a/gold/: conflict_sample.csv
+  (24 rows, 2 per non-trivial (cik,field) stratum, FV-weighted, fields basis_spread 8 /
+  interest_rate 6 / maturity 6 / pik 4), conflict_key.csv (SEALED: which candidate is A vs
+  XBRL), REVIEW_GUIDE.md. BLIND: the two values are relabeled candidate_1/2 and normalized
+  to a common percent scale so format does not telegraph the source; human labels true_source
+  from the raw identifier text only.
+- scripts/agent_a/score_conflict_gold.py: once true_source is filled, reports A-correct% vs
+  XBRL-twin-correct% on conflicts, per field. Ready (reports "nothing to score" until labeled).
+- Sample already surfaced two things scoring will quantify: scale-artifact non-conflicts
+  (e.g. basis_spread 5.75 == 5.75 flagged because prod stores some MidCap spreads on percent
+  scale, not decimal -> overlay _agree over-flagged) and a clear mis-scale (11.25 vs 1125.0).
+  So a chunk of the 834 conflicts are likely overlay-detector artifacts, not real A-vs-truth
+  disagreements -- the gold quantifies the split. Read-only; new files only; no merge.
+
+### 2026-06-20 -- Agent A: conflict gold scored (human-labeled)
+
+Scored the 24-row blind conflict gold (human labeled true_value). Rewrote
+scripts/agent_a/score_conflict_gold.py to compare true_value to each candidate and
+attribute A vs XBRL via the sealed key.
+
+- RESULT (14 determinable of 24): Agent A correct 10/14 (71%) vs XBRL twin 6/14 (43%);
+  3 both-correct (scale-artifact non-conflicts), 1 neither. By datapoint: basis_spread
+  A 100% / XBRL 33% (n=6), interest_rate 50/50 (n=2), maturity_date A 33% / XBRL 67%
+  (n=3), pik_rate A 67% / XBRL 33% (n=3). Small n -> directional, not tight.
+- TAKEAWAYS: A is net more accurate than the XBRL twin on conflicts, strongly so on
+  basis_spread (XBRL spread often mis-scaled). maturity_date is A's WEAK datapoint
+  (XBRL wins) -> treat A maturity fills as low-confidence; merge conservatively.
+- FLAWS EXPOSED (fix before a real merge / next gold):
+  1. identifier_source was TRUNCATED to 160 chars in the conflict artifact, cutting the
+     rate segment -> 10/24 undeterminable ("source cut off"). Re-run must use the FULL
+     identifier or the cached filing via evidence_cli.
+  2. reference_rate_type ($89.5B of fills, the headline) is UNVALIDATED here -- it had 0
+     conflicts (native blank, nothing to disagree with). Needs a separate FILL-sample gold
+     (check A's SOFR/LIBOR assignment vs source), not the conflict gold.
+  3. The conflict DETECTOR over-flags: production basis_spread is stored on an
+     inconsistent scale (some percent, some decimal), so overlay _agree (assumes decimal)
+     inflates the 834 count with false positives. Fix the scale handling.
+- No production merge. Scorer + result are diagnostic only; new/edited script only.
+
+### 2026-06-20 -- Agent A: fixed conflict-detector scale bug + truncated evidence
+
+Acted on the two bugs the spread investigation exposed. Cache-only; no merge.
+
+- SCALE BUG: BDC basis_spread/interest_rate twins are usually decimals (0.0575) but a
+  minority (MidCap, Crescent) are tagged on PERCENT scale (5.75); the overlay/gate did a
+  naive *100 -> 575 -> fake conflict. New normalize_rate_pct() in pipeline/identifier_rate.py
+  (fraction <1 -> *100; >=1 -> as-is; documented sub-1% edge case). Used in _twin_pct (gate)
+  and identifier_overlay._agree (normalizes the TWIN only; A's value is already percent and
+  may legitimately be <1, so it is NOT rescaled). Result: staged conflicts 834 -> 602;
+  Crescent basis_spread 242 -> 38 (the bulk were pure scale artifacts), MidCap 51 -> 40.
+  Consistent with the gold's A002/A004 ("same across both").
+- TRUNCATED EVIDENCE: the conflict artifact stored identifier[:160], cutting the rate
+  segment (the gold's undeterminable rows). Now stores the FULL identifier (max 444 chars).
+- Tests: tests/test_identifier_overlay.py +3 (normalize_rate_pct; percent-scale twin not a
+  conflict; A sub-1% value not rescaled). 43 Agent A tests pass.
+- FRED note (for the planned all-in reconciliation): FRED has overnight SOFR (SOFR) +
+  compounded averages (SOFR30/90/180DAYAVG, SOFRINDEX) free since 2018, but NOT CME Term
+  SOFR (1M/3M, CME-licensed). Use SOFR90DAYAVG as the ~3M proxy; it is a proxy, not the
+  exact index loans reference. No network call made.
+- The 602 remaining conflicts stay FLAGGED, not auto-resolved -- per the all-in
+  reconciliation finding the XBRL tag is often correct on them. No production output changed.
+
+### 2026-06-20 -- Agent A: wired FRED SOFR + spread/all-in reconciliation adjudicator
+
+Operationalized the all-in reconciliation finding (spread + SOFR ~= all-in) as a
+deterministic conflict adjudicator. ONE network call (user-authorized), cached; no merge.
+
+- scripts/fetch_sofr.py: fetched FRED SOFR90DAYAVG via the no-API-key CSV endpoint ->
+  data/reference/sofr_90day_avg.csv (1,988 daily obs, 2018-07..2026-06). A free ~3M
+  Term-SOFR proxy (CME Term SOFR is not free on FRED); backward-looking, so ~10-20bps
+  proxy gap (visible: 2024-09 SOFR90 5.31 vs the rate-cut-lagged true ~4.95).
+- pipeline/sofr_reference.py: sofr_for(date) nearest-prior lookup; effective_base
+  (max(SOFR,floor)); reconcile_residual; adjudicate_spread -> agentA|xbrl|both|neither|
+  undeterminable. tests/test_sofr_reference.py (8 pass).
+- Wired into pipeline/identifier_overlay.py: each basis_spread conflict now carries
+  sofr_pct, cash_all_in_pct, a_residual, xbrl_residual, reconcile_verdict (uses the XBRL
+  all-in as the trusted anchor; floor-aware).
+- RESULT over 186 basis_spread conflicts: XBRL right 97, A right 23, both 10, neither 14,
+  no-all-in 42. Among resolvable conflicts XBRL wins ~4:1 -> confirms at scale the gold/
+  investigation finding (keep XBRL on conflicts by default; A wins a real minority of 23
+  where the tag is wrong; 14 'neither' = internally-inconsistent filings to flag).
+- 51 Agent A tests pass. No production output changed; new module + cached reference +
+  fetch script only. Reconciliation is currently a FLAG/adjudication column, not an
+  auto-override; verdict can later gate which conflicts (the ~23 agentA) are worth a merge.
+
+### 2026-06-20 -- Agent A: merged 21 (of 23) basis_spread corrections (audited override, wired)
+
+Acted on "merge the 23 agentA spread fixes" -- but due diligence found 2 are A parsing the
+FLOOR, not the spread (A=0.75% / 1.00%; they only "reconcile" because the all-in on those
+rows is also anomalously low -- reconciliation checks consistency, not correctness). Merged
+the 21 PLAUSIBLE ones (A spread 2-12%, all-in 6-20%); excluded the 2.
+
+- New audited override data/overrides/identifier_spread_corrections.json (21 records, 11
+  high / 10 medium confidence; reversible -- records old_value_xbrl; evidence: sofr_90day,
+  cash_all_in, a/xbrl residuals). Generator: scripts/agent_a/build_spread_corrections.py.
+- New pipeline/identifier_spread_corrections.py: apply_spread_corrections() -- vectorized
+  keyed OVERRIDE (not blank-only) on (cik, report_date, identifier); tests (5 pass).
+- WIRED into pipeline/staging_bdc.py after the iXBRL/HTML overlays. So it lands on the NEXT
+  staging rebuild; production bdc_holdings.parquet NOT yet regenerated (heavy/gated -- offer
+  to run). The "both" (10) and undeterminable keep XBRL by default (user decision).
+- FOLLOW-UP flagged: A's basis_spread extractor occasionally grabs the floor instead of the
+  spread (the 2 excluded rows) -- a grammar bug to fix; until then plausibility-gate spread
+  corrections. 25 Agent A-area tests in the new files pass.
+
+### 2026-06-20 -- Agent A/B division: spread reconciliation moved to a SHADOW ENGINE
+
+Re-homed the A-vs-XBRL spread corroboration from inside the A overlay into the shadow
+ledger, so Agent A only ENRICHES+FLAGS and Agent B ARBITRATES (the corroboration is a
+deterministic ledger check feeding B, not A grading its own homework). Cache-only, no
+ledger rebuild triggered.
+
+- New scripts/shadow_agent_a_engine.py: runs the deterministic basis_spread vs XBRL +
+  spread+SOFR=all-in reconciliation over the gated cohort and emits per-position FLAGS ->
+  data/output/shadow/agent_a_flags.csv. Rule agentA_spread_vs_xbrl; mechanism = reconcile
+  verdict (agentA|xbrl|both|neither|undeterminable) as B's prioritisation prior; status
+  neither->fail (internally-inconsistent filing), else warn. 186 flags (23 agentA / 97 xbrl
+  / 14 neither / 10 both / 42 undeterminable).
+- New adapter scripts/shadow_adapter._agent_a_select(): aggregates the flags per CIK-quarter
+  into the 13-column ledger contract (engine 'agentA', tier tight, enforcement advisory,
+  dominant verdict via mode() as mechanism); registered in adapter_selects(). 35 ledger
+  rows; contract verified in-process (columns match, fail on quarters with any 'neither').
+- Tests: tests/test_shadow_agent_a_engine.py (2). 
+- DIVISION OF LABOUR now: A = enrich + flag leaked subtotals (no self-validation); shadow
+  ledger = deterministic corroboration (twin diff, reconciliation); B = arbitrate the flags
+  vs raw source (the 23 agentA + 14 neither are the high-value packets), gold-calibrated.
+- CONSEQUENCE: the 21 staged basis_spread corrections (wired in staging_bdc but NOT landed)
+  should be REFRAMED as B verdicts, not A self-assertions -- parked pending B adjudication
+  of these ledger flags. The reconciliation now lives once, in the ledger engine.
+- Landing: agentA flags enter the production ledger on the next shadow_validation_runner run
+  (not triggered here -- it unions all engines / may overlap other agents).
+
+### 2026-06-20 -- Agent A = enrich + flag: emits 3 flag types to the shadow ledger
+
+Extended the agentA shadow engine so A's enrich-and-flag outputs flow to Agent B, and
+corrected a misdiagnosis. No gold written (per request). No production merge. 59 Agent A
+tests pass.
+
+- shadow_agent_a_engine.py now emits 3 ledger rules (data/output/shadow/agent_a_flags.csv;
+  adapter aggregates per CIK-quarter into the 13-col contract, verified):
+  * agentA_spread_vs_xbrl        186 flags / 35 ledger rows (reconciliation verdict prior)
+  * agentA_reference_uncorroborated 340 / 37  (A assigned a reference rate but no structured
+    basis_spread confirms floating -> Tier-3, B checks for fixed-loan mis-assignment)
+  * agentA_subtotal_candidate    2173 / 46  (leaked category subtotals A spotted while parsing)
+- CORRECTION: the "floor-mis-parse bug" was a MISDIAGNOSIS. The 2 low-spread rows (A=0.75/1.0)
+  are A faithfully parsing "Spread S + 0.75%/1.00%" -- genuine low-cash-spread high-PIK loans
+  that RECONCILE with the all-in (verdict agentA). No parser bug; the build_spread_corrections
+  plausibility filter (spread 2-12%) wrongly excluded 2 valid corrections. The ledger engine
+  has no such filter (correct); the reconciliation verdict is the right signal, not a range.
+- is_aggregate_candidate TIGHTENED: required absence of a legal-entity suffix (a real position
+  carries an issuer; a subtotal does not). Cut subtotal candidates 5117 -> 2173 (removed 2944
+  equity-position false positives, 57% -> much lower). Test added. Residual FPs are bare-name
+  equity/warrant positions -> exactly what B adjudicates.
+- DEFERRED (not done this turn, with reasons): overlay refactor to strip reconciliation (works,
+  reused by the engine -- cleanup only); scale induction to the ~30 flattened cohort (token-
+  heavy, needs batch confirmation); land merge staging->unified->frontend + B authoring
+  corrections (needs rebuild authorization + a B run); Codex hard sandbox under A2 (infra).
+
+### 2026-06-20 -- Agent A2 harness: roam over source via the SHARED evidence CLI + task contract
+
+Built the harness for a quarter-by-quarter, source-grounded, sandboxed A2 inducer.
+
+- scripts/agent_a/sample_variant.py: bundle now carries per-sample accession_number +
+  report_date and an evidence_items block in the shape the SHARED
+  scripts/review_agent/evidence_cli.py reads. New optional report_date arg scopes the bundle
+  to ONE quarter (quarter-by-quarter mode); output file gets a _<date> suffix.
+- scripts/review_agent/evidence_cli.py: registered engine 'agentA' -> BDC source (one line),
+  so A reuses B's roam/grid/tables/totals unchanged.
+- VERIFIED end-to-end: built Antares 2025-12-31 bundle (accessions=1) and roamed it via the
+  shared CLI -> resolved accession 0001193125-26-115988, loaded cached SOI, roam returned 80
+  hits / 581 rows. A now has the SAME source window as B.
+- docs/adjudication_architecture/A2_sandbox_task_contract.md: the Codex-sandbox task contract
+  (hard guardrails cache-only/read-only/append-only/no-network; roam-only source window;
+  outputs = the two config JSONs; A3 held-out gate decides promotion OUTSIDE the sandbox;
+  B authors value corrections, not A). Difference from the prior pilot: induction is now
+  GROUNDED IN SOURCE via roam, not string-only.
+- 39 Agent A tests pass. No production output changed.
+- HARNESS SHARING (answer to the design question, recorded in the contract): one shared
+  SUBSTRATE (evidence library, bundle->accession->roam, sandbox guardrails) across A/B1/B2/C;
+  the bundle BUILDER, TASK, and OUTPUT schema differ per agent. Not four harnesses -- one
+  harness, four task contracts.
+
+### 2026-06-20 -- Agent A Layer 1: quarterly driver (run_quarter) + Codex operator runbook
+
+Built the deterministic orchestration spine (A4) the external Codex harness wraps, and the
+operator runbook. No LLM, no network, no rebuild; read-only on production.
+
+- scripts/agent_a/run_quarter.py: two modes.
+  * discover <quarter>: reads the signature report, finds flattened filers needing induction
+    (uninduced = no grammar; drift_candidate = grammar + none-share >= 10%), builds one
+    quarter-scoped bundle per filer, writes worklist.csv. Verified on 2025-12-31: 87 filers
+    (84 uninduced backlog + 3 drift) -> data/output/agent_a/quarter/2025-12-31/.
+  * gate <quarter>: runs the deterministic A3 held-out gate per worklist filer -> PASS
+    (promotion-eligible) / FAIL (human) / NO_CONFIG (agent didn't produce a grammar). Verified:
+    the 3 induced filers in the worklist returned PASS, 83 uninduced returned NO_CONFIG.
+  * KNOWN: discover reads the GLOBAL-anchor signature report, so a filer with per-CIK anchors
+    can show a stale drift_candidate (Bain/Crescent did); the gate is the authoritative backstop
+    (PASS => actually covered). Noted in the runbook.
+- docs/adjudication_architecture/agent_a_batch_instructions.md: operator runbook adapted from
+  the existing docs/fail_verification/codex_batch_instructions.md precedent -- hard rules,
+  Layer-1 setup, one-bundle-per-agent Codex launch (sandbox workspace-write scoped to the two
+  override dirs, no network), Layer-1 gate+promote (PR-reviewed, never auto-merge), ledger
+  re-emit, and Layer-3 scheduling options (Makefile / CI cron / repo /schedule).
+- tests/test_run_quarter.py (3 pass). The Codex sandbox execution (Layer 2) and the scheduler
+  (Layer 3) remain external -- the driver + runbook + A2 contract hand them a clean interface.
+
+### 2026-06-20 -- Agent A v1 trial: 3 filers induced as-is, gated; iteration findings
+
+Ran the loop AS-IS (Claude-subagent Codex stand-in, soft-blinded) on a 3-filer trial set
+from the 2025-12-31 worklist, with the deterministic gate + git-scope guard as the
+guardrails. Nothing merged to production. Outcome (1 PASS / 2 FAIL) -- the FAILs are the
+guardrails WORKING, and give the v1 iteration list.
+
+- 0001837532 Apollo Debt Solutions: PASS (13 quarters, completeness >=90% each). Agent
+  correctly added a scoped EQUITY anchor (Apollo's "Common Equity - Equity Unit" vs the
+  global "equity investments"), kept REFRATE off the symbolic "S + nnn" form to avoid
+  fragmenting the dominant SECDEBT RATE MAT, additive PIK, bps spread -- all source-cited.
+- 0001976336 Antares Private Credit + 0001782524 Morgan Stanley DL: FAIL. Two findings:
+  1. TOOLING BUG (applies_to vs committed anchors): the agent labeled applies_to.signature
+     from the BUNDLE signatures (built with GLOBAL anchors) but then wrote an anchor file
+     that shifted the real signature (MS added SECDEBT; Antares-PC's grammar referenced an
+     ASSETTYPE label its anchor file never defined). So held_out matched 0 rows -> FAIL.
+     FIX (next iteration, deterministic, NOT the agent): after the agent commits anchors,
+     recompute the dominant signature under the COMMITTED anchors and set applies_to from
+     it (or have the gate derive the dominant sig rather than trust applies_to).
+  2. GENUINE cross-quarter gaps (even against the corrected sig): MS 2023-03-31 none-share
+     100% (an early-quarter format not covered); Antares-PC 2024-12-31 completeness 84.8%
+     (a per-quarter variant dip, same class as MidCap's earlier 2024-06-30 fix). These are
+     real iteration items -- the gate correctly refuses to promote a grammar that doesn't
+     generalize across all quarters.
+- GUARDRAIL FINDINGS (both load-bearing for the real Codex sandbox): (a) the soft-blinded
+  subagent wrote 10 out-of-scope scratch scripts under .tmp/ -- a hard sandbox with
+  writable_roots scoped to the two override dirs would have BLOCKED them; the scope guard
+  caught + removed them. (b) `git status --porcelain` COLLAPSES an untracked dir to one line,
+  so the scope guard MUST use --untracked-files=all (the v1 check missed the writes until
+  corrected). Both go into check_scope.py.
+- Promotion: Apollo eligible (gate PASS); MS + Antares-PC NOT promoted (FAIL) -- configs left
+  on disk as proposed pending iteration. Production untouched. Regenerated A's own signature
+  report (identifier_signature_report.csv) only.
+
+### 2026-06-20 -- Agent A: #1 applies_to resolver + #2 scope guard + remediation feedback
+
+Built the two DETERMINISTIC harness fixes from the v1 trial. Re-framed #2 per the design
+principle the user surfaced: GRAMMAR gaps are Agent A's job (re-induce), NOT human edits --
+so the harness builds the FEEDBACK PATH (name the failing quarter -> A re-inducts), it does
+not patch grammars. 45 Agent A tests pass.
+
+- #1 resolve_applies_to(cik) in scripts/agent_a/run_quarter.py: the agent labels
+  applies_to.signature from the bundle's GLOBAL-anchor signatures, then writes anchors that
+  shift the real signature -> held_out matched 0 rows. The HARNESS (not the agent) now owns
+  this: recompute the dominant signature as the most frequent one the grammar PARSES TO
+  COMPLETENESS under the COMMITTED anchors, write it into applies_to. New `finalize` mode +
+  auto-run inside `gate`. Verified on the trial: Antares-PC 'AFFIL SECDEBT ASSETTYPE REFRATE
+  RATE MAT' -> 'AFFIL SECDEBT REFRATE RATE MAT' (4457 rows); MS 'AFFIL REFRATE RATE MAT' ->
+  same (1786). This flipped the spurious "0 quarters" FAILs into REAL verdicts.
+- After #1, the genuine gaps remain and are A's to fix: Apollo PASS (13q); Antares-PC FAIL
+  (2024-12-31 completeness 84.8%); MS FAIL (2023-03-31 none-share 100%). gate now emits a
+  `remediate_quarters` column = the quarters A must re-induce on. _failing_quarters captures
+  BOTH per-quarter parse dips AND none-share spikes (incl. quarters with 0 sig-rows, where the
+  format isn't recognized at all -- the prime re-induce target, the MS case).
+- #2 scripts/agent_a/check_scope.py: --snapshot before the agent, --check after; FAILS on any
+  write outside {identifier_anchors/, identifier_rate_grammars/, agent_a/}. Bakes in the v1
+  lesson: uses `git status --porcelain --untracked-files=all` (the plain form collapses an
+  untracked dir to one line and HID the agent's writes). Verified it sees into untracked dirs.
+- Tests: test_run_quarter_finalize.py (3) -- completeness dip + none-spike-with-0-sig-rows +
+  all-clear. Promotion unchanged: Apollo eligible; MS + Antares-PC FAIL -> back to A with named
+  remediate_quarters (NOT hand-patched). Production untouched.
+
+### 2026-06-20 -- Agent A remediation loop: triaged 2 FAILs; 1 fixed (global BOM), 1 era-boundary
+
+Ran the remediation loop on the v1 trial's 2 FAILs. The loop's value was TRIAGE: the two
+"grammar gaps" were different in kind, and only one was actually a grammar/induction matter.
+
+- 0001976336 Antares Private Credit (2024-12-31, completeness 84.8%): RE-DIAGNOSED. The
+  deterministic diagnostic's example ("9.81 (Include 2.00% PIK)%") was non-representative;
+  the BULK cause was a U+FEFF BOM/zero-width char between "Interest Rate" and the number
+  ("Interest Rate<BOM> 7.06%"), which \s-based extractors can't cross. This is a
+  FILER-INDEPENDENT encoding artifact (same family as the Crescent mojibake), so the fix is
+  GLOBAL, not per-CIK and NOT an A re-induction: new normalize_identifier_text() in
+  pipeline/identifier_rate.py strips U+FEFF/U+200B-200D/U+2060 and maps U+00A0->space; wired
+  into apply_grammar AND keyword_signature. RESULT: 2024-12-31 completeness 85.0% -> 99.8%;
+  Antares-PC now PASSES all 6 quarters. No regression (Apollo, MidCap re-gated PASS 13q; 61
+  Agent A tests pass). The agent's earlier "(Include)%" extractor tweak is harmless and kept.
+- 0001782524 Morgan Stanley DL (2023-03-31, none 100%): NOT a grammar gap -> NOT dispatched
+  to A. That quarter is regime=DELIMITED with bare issuer-name strings ("Associations, Inc.",
+  "Jonathan Acquisition Company") -- the early era put rate/maturity in STRUCTURED XBRL, not
+  the identifier. The flattened rate-grammar legitimately doesn't apply there; there is no
+  rule for A to induce. Needs a REGIME/ERA-AWARE gate (the grammar's applies_to is the
+  flattened era only) -- a harness refinement, recorded as the next item, not an A job.
+- LOOP LESSON: a gate FAIL is not automatically "A re-induce." Triage first: (a) encoding
+  artifact -> global normalize (harness); (b) era/regime change -> era-scope (harness);
+  (c) genuine dialect/format the grammar misses -> A re-induces. Only (c) is A's job.
+- SCOPE-GUARD limitation found: modifying an ALREADY-UNTRACKED file is invisible to the
+  path-set diff (git shows '?? path' regardless of content), so check_scope saw "0 changed"
+  after the agent edited an untracked grammar. Fix: track the override files in git (then
+  edits show as ' M'), or hash contents. Noted for check_scope hardening.
+- Promotion now: Apollo + Antares-PC PASS (eligible); MS pending the era-aware gate. Production
+  untouched (only A's own configs/normalizer + tests).
+
+### 2026-06-20 -- Agent A: era-aware held-out gate (MS delimited->flattened) -> PASS/narrow
+
+Made the held-out gate regime/era-aware so it no longer FAILs a grammar for quarters that
+belong to a DIFFERENT regime than the grammar targets -- with a guardrail so this cannot
+become a "skip the failing quarter" escape hatch.
+
+- pipeline/identifier_held_out.py: per-quarter regime via the SAME deterministic
+  detect_regime(rate_embed%, anchor_present%) used to route filers. Quarters whose regime !=
+  the grammar's applies_to.regime (default) are marked era_match=False, EXCLUDED from the
+  verdict (completeness/invariant/none-spike + the none median), but still REPORTED. Verdict
+  requires >= min_quarters IN-ERA sig quarters. target_regime=None (or no applies_to.regime)
+  reproduces the prior behavior exactly (backward compatible).
+- INTEGRITY CHECK (not laundering a coverage gap): verified the excluded MS quarters are
+  genuinely delimited -- "Continental Battery Company, First Lien Debt" / bare issuer names,
+  with rate/maturity in STRUCTURED XBRL, not the string. MS truly transitioned delimited ->
+  flattened in mid-2025; the flattened rate-grammar legitimately cannot apply to the delimited
+  era (no rate text to parse).
+- POWER FLOOR: a PASS validated on few in-era quarters is thin evidence -> new
+  HeldOutVerdict.confidence = "narrow" when in-era sig quarters < 4 OR excluded > in-era.
+  PASS but routed to human, not auto-promoted. MS: PASS / narrow (3 in-era, 10 era-excluded).
+- RESULT: MS 0001782524 PASS (narrow). No regression -- Apollo/MidCap/Antares-Strategic/
+  Antares-PC all PASS / high / 0 excluded (era logic is a no-op for all-flattened filers).
+  gate CSV now carries a `confidence` column. 64 Agent A tests pass (+4 era/narrow cases).
+- Trial-set status now: Apollo PASS/high, Antares-PC PASS/high, MS PASS/narrow -- all 3
+  promotion-resolvable (MS via human review per the narrow flag). Production untouched.
+
+### 2026-06-20 -- Trial A2 subagent control-plane and reconnaissance hardening
+
+Hardened Trial A2 orchestration after sandbox trials exposed three non-data failure modes:
+nested Codex CLI auth isolation, Windows sandbox helper/process ambiguity, and over-broad
+read-only reconnaissance.
+
+- `scripts/run_codex_worker.ps1`: added a fail-closed guard that refuses to launch a nested
+  `codex exec` worker when active Codex session environment variables are present
+  (`CODEX_THREAD_ID`, `CODEX_MANAGED_BY_NPM`, `CODEX_MANAGED_PACKAGE_ROOT`). A2 work from
+  inside Codex should use native subagents; this script is operator-shell only.
+- `docs/adjudication_architecture/trial_a2_sandbox_prompt.md` and
+  `prompts/trial_a2_sandbox_prompt.md`: replaced broad read-only permission with an explicit
+  8-command/10-minute budget, exact allowed read paths, a nested-Codex ban, no repo-wide
+  discovery, and no final `git status`/`git diff` requirement from the child agent.
+- `docs/adjudication_architecture/A2_sandbox_task_contract.md`: documented the control-plane
+  rule, external-worker fallback constraints, and the distinction that repo read access is a
+  ceiling rather than task permission. Missing evidence should now produce
+  `INSUFFICIENT_EVIDENCE`, not repo-wide reconnaissance.
+- Validation: PowerShell parsing checks only; no pipeline rebuilds, tests, or SEC/network
+  calls were run because this is harness/prompt documentation plus a launcher guard.
+
+### 2026-06-20 -- Trial A2 staged proposal alignment
+
+Aligned the Trial A2 external-worker contract, prompt, and harness around staged proposal
+writes instead of direct production override writes.
+
+- `scripts/setup_codex_worker_harness.ps1`: generated worker permissions now keep repo-root
+  read for current evidence tooling, but write only to `data/output/agent_a/proposals`.
+  Direct write grants for `data/overrides/identifier_anchors` and
+  `data/overrides/identifier_rate_grammars` were removed from the worker config.
+- `prompts/trial_a2_sandbox_prompt.md`: delegated prompt output now must carry forward the
+  operational budget and write only staged proposal files
+  (`<CIK>.anchors.json`, `<CIK>.grammar.json`); production override paths are parent-promoted
+  only.
+- `docs/adjudication_architecture/trial_a2_sandbox_prompt.md`: replaced the duplicate prompt
+  with a pointer to the canonical prompt under `prompts/` to prevent drift.
+- `docs/adjudication_architecture/A2_sandbox_task_contract.md`: rewrote the contract in ASCII
+  and clarified the current state: staged-write guardrails are aligned, but full OS-level
+  denial of repo-wide reads remains future work because the evidence CLI still runs from the
+  repo.
+- Validation: PowerShell parser checks passed for the setup and worker scripts; the nested
+  Codex launcher guard failed closed from inside Codex as expected; a temp-copy harness check
+  generated a config with proposal-dir write and no override-dir write without creating the
+  real repo proposal directory. No pipeline tests, rebuilds, or SEC/network calls were run.
+
+### 2026-06-20 -- Trial A2 contract cleanup after staged-write review
+
+Cleaned up three follow-on issues found by subagent review of the staged proposal alignment.
+
+- `docs/adjudication_architecture/A2_sandbox_task_contract.md`: clarified that proposals are
+  not durably promoted before A3. The parent validates proposals, runs `finalize`/A3 via
+  staging-aware inputs or temporary materialization with rollback, and only durably promotes
+  to override paths after PASS. FAIL leaves production overrides unchanged.
+- `prompts/trial_a2_sandbox_prompt.md`: strengthened the required delegated prompt contents:
+  selected quarter/CIK/bundle path, parent-held per-CIK claim, staged proposal write paths,
+  production overrides read-only until parent promotion, mandatory deterministic
+  `validate_proposal`, and an induction-appropriate command budget.
+- `scripts/run_codex_worker.ps1`: switched `$PromptPath` checks/reads to `-LiteralPath` to
+  avoid wildcard expansion.
+- Validation: PowerShell parser checks passed; nested Codex launcher guard still failed closed
+  from inside Codex; no pipeline tests, rebuilds, nested Codex, or SEC/network calls were run.
+
+### 2026-06-20 -- Agent A: deterministic self-screen + per-CIK serialization
+
+Built two architecture fixes the user identified.
+
+- (1) DETERMINISTIC SELF-SCREEN: scripts/agent_a/validate_proposal.py -- the required
+  "validate before finishing" step, now a deterministic SCREEN instead of agent judgment.
+  Applies the proposed grammar to the BUNDLE's sample rows; checks JSON/schema valid, every
+  regex compiles, required_fields has NO optional field (the pik_rate/floor over-require trap),
+  applies_to.signature matches sample rows under committed anchors, sample completeness >= 90%,
+  (none) examples recovered. Exit 0/1. Framed explicitly as a SCREEN (necessary, not sufficient
+  -- runs on the bounded sample only; the parent A3 held-out gate over the full population stays
+  authoritative, preserving independence/no-overfit). Verified: Apollo (gate-PASS) screens PASS
+  100%/100%; a pik_rate-in-required-fields proposal screens FAIL.
+- (2) PER-CIK SERIALIZATION: scripts/agent_a/cik_lock.py (atomic O_EXCL file lock, timestamp
+  stored IN the file so staleness is self-consistent/testable, ttl-reclaimable). CIK is the unit
+  of mutual exclusion: parallel ACROSS CIKs, strictly serial WITHIN a CIK (the output is keyed by
+  CIK -- one anchors + one grammar file -- so concurrent same-CIK agents would race the files or
+  extend the grammar blind to each other). run_quarter: `claim`/`release` CLI verbs (orchestrator
+  claims before launch, parent releases on gate); discover now skips in-flight CIKs and emits one
+  row per CIK; gate releases each CIK's lock on completion. Remediation is a sequential follow-up
+  pass (reads promoted config), never concurrent with induction.
+- Contract (A2_sandbox_task_contract.md): documented the required self-screen + the per-CIK
+  serialization rule. Tests: tests/test_agent_a_concurrency.py (5 -- mutual exclusion, release/
+  reacquire, stale reclaim, held list, over-require screen). 52 Agent A tests pass. Production
+  untouched (new scripts + tests + lock dir under data/output/agent_a/).
+
+### 2026-06-20 -- Agent A staged dispatcher preflight and gate
+
+Implemented the parent-owned staged dispatch path for Agent A2 workers.
+
+- New `scripts/agent_a/dispatch_preflight.py`: validates an entire selected quarter batch
+  before launch, refuses duplicate CIKs, stale proposal files, mismatched/missing bundles, and
+  live CIK locks, then atomically reserves all selected CIKs and writes a dispatch manifest plus
+  per-CIK worker prompts under `data/output/agent_a/quarter/<quarter>/dispatch/<batch_id>/`.
+- New `scripts/dispatch_agent_a_workers.ps1`: operator-shell dispatcher with default
+  `-MaxParallel 2`, auth preflight, per-worker homes/runroots, tracked process handles, timeout
+  cleanup by captured PID only, post-worker `validate_proposal`, and staged finalize/gate.
+- `scripts/agent_a/run_quarter.py`: added `finalize --staged`, `gate --staged`, and explicit
+  `promote <quarter>`. Staged finalize/gate read proposal files directly and write
+  `staged_gate_results.csv`; production overrides are changed only by `promote`.
+- `pipeline/identifier_held_out.py`: held-out gate can accept in-memory staged grammar/anchors.
+- Contracts/docs updated to staged proposal writes and explicit PASS-only promotion. Full
+  OS-level repo-read denial remains documented as unresolved; the current worker harness keeps
+  repo-root read as a tooling ceiling.
+- Tests added for batch preflight and staged finalize/gate behavior.
+
+### 2026-06-20 -- Agent A two-worker trial and manifest-scoped staged gate
+
+Ran a two-CIK native subagent trial through the staged Agent A2 proposal path.
+
+- Trial CIKs: `0001396440` (Main Street Capital CORP) and `0001837532` (Apollo Debt
+  Solutions BDC), selected from the 2025-12-31 worklist after deterministic preflight reserved
+  their CIK locks.
+- Both workers wrote only staged proposal files under `data/output/agent_a/proposals/` and both
+  passed `validate_proposal` on the bounded bundle sample.
+- Parent staged A3 gate result: Apollo PASS/high over 13 in-era quarters; Main Street FAIL/high
+  because cross-quarter completeness was 0.0% across historical quarters despite sample PASS.
+- Trial exposed that `gate --staged` without a manifest evaluates the whole quarter worklist and
+  emits unrelated `NO_PROPOSAL` rows. `scripts/agent_a/run_quarter.py` and
+  `scripts/dispatch_agent_a_workers.ps1` now support `--manifest <dispatch-manifest.json>` so
+  staged finalize/gate operate only on the dispatched CIK set and release only those locks.
+
+### 2026-06-20 -- Agent A contract supports non-rate-embedded identifiers
+
+Amended the A2 contract after the Main Street trial showed a filer whose identifiers carry
+issuer/type only while rate fields live in SOI columns.
+
+- `docs/adjudication_architecture/A2_sandbox_task_contract.md`: workers must inventory
+  datapoints actually present in `investment_identifier` before proposing extractors, and may
+  return `status: NOT_APPLICABLE_RATE_GRAMMAR` instead of forcing a fake identifier-rate grammar.
+- `scripts/agent_a/validate_proposal.py`: deterministic self-screen now accepts
+  `NOT_APPLICABLE_RATE_GRAMMAR` only when the bundle's sampled identifiers lack rate/date
+  evidence and the proposal includes available/unsupported datapoint inventories plus a reason.
+- `scripts/agent_a/run_quarter.py`: staged gate reports the non-applicable routing outcome
+  directly instead of running A3 as if it were a promotable rate grammar.
+- `scripts/agent_a/dispatch_preflight.py`: generated worker prompts now require datapoint
+  inventory and explicit routing before extractor authoring.
+- Tests: targeted Agent A tests pass (20).
+
+### 2026-06-20 -- Agent A: trial-driven hardening (#1/#2/#3) + A3-FAIL re-processing
+
+Assessed the two latest Codex agents (staging proposals): Apollo (0001837532) PASS/high/13q,
+schema-conformant -- a clean re-induction. Main Street (0001396440) FAIL but DEGENERATE +
+schema-divergent: identifier is "American Nuts, LLC | Secured Debt 1" (rate_embed 0.2% -- rates
+live in the SOI source table, NOT the string); the agent HALLUCINATED `source: source_table` /
+`unit` extractor keys and gamed required_fields to ["investment_type"] with zero invariants.
+Confirmed the engine extracts ONLY investment_type. The gate caught it but only incidentally
+(early-quarter 0% completeness); the self-screen PASSED it -- exposing real gaps. Built 4 fixes:
+
+- #1 SCHEMA CONFORMANCE (validate_proposal.py): reject extractors with non-schema keys (the
+  engine honors only field/regex/group/type/map; `source`/`unit` are silent no-ops), invalid
+  `type`, or named-groups-without-group. Main Street now FAILs the screen immediately; Apollo
+  still PASSes.
+- #2 ANTI-DEGENERACY (validate_proposal.py): required_fields must include >=1 substantive rate
+  field (not just investment_type -> vacuous completeness); a grammar that extracts rate/date
+  fields must have >=1 invariant.
+- #3 PRE-DISPATCH RATE-TARGET FLOOR (run_quarter.discover): skip filers with rate_embed_pct <
+  10% -- their identifier carries no parseable rate (detect_regime mislabels them flattened on
+  keyword presence). Verified: Main Street (0.2%) skipped, Apollo (78.4%) queued, 8 of 101
+  flattened filers excluded; writes skipped_no_rate_target.csv (no silent truncation).
+- A3-FAIL RE-PROCESSING (run_quarter.gate -> _emit_remediation): every FAIL/NO_CONFIG now builds
+  a quarter-scoped re-induction bundle on the failing quarter and writes remediation_worklist.csv
+  for re-dispatch (triage note: encoding/era FAILs need a harness fix, not re-induction).
+- Tests: tests/test_agent_a_hardening.py (6). 58 Agent A tests pass. Production untouched.
+
+### 2026-06-21 -- Agent A shadow engine: cohort derived from held-out gate (4 -> 62)
+
+Widened the Agent A shadow-corroboration cohort beyond the four hardcoded TARGETS.
+
+- `scripts/shadow_agent_a_engine.py`: replaced the hardcoded 4-CIK `TARGETS` list with a
+  DERIVED cohort. New `candidate_grammars()` enumerates every committed grammar in
+  `data/overrides/identifier_rate_grammars/` and keeps those declaring a flattened
+  rate-bearing `applies_to.signature`; new `build_cohort()` gates each candidate through the
+  authoritative A3 held-out (cross-quarter) gate (`identifier_held_out.held_out_report`) and
+  enrolls only PASS grammars. FAIL/non-rate grammars are logged, never silently dropped. The
+  old list is retained as `SEED_TARGETS` (regression anchor).
+- Rationale: A's enrichment overlay is staged-only (never merged), so the cohort boundary is
+  "grammars trustworthy enough that an A-vs-XBRL disagreement is signal, not parser noise."
+  The held-out PASS gate is the project's existing trust signal, so the cohort now tracks it
+  instead of a stale hand-maintained list. New grammars auto-enroll on promotion.
+- Result (current cache, bdc_holdings.parquet): cohort 4 -> 62 (64 candidates, 2 held-out
+  FAIL: 0001851322 era-excluded, 0001950803 single in-era quarter; 8 NARROW-confidence PASS).
+  agent_a_flags.csv: 13,843 flags (subtotal_candidate 5,300, maturity_vs_xbrl 4,572,
+  reference_uncorroborated 3,143, spread_vs_xbrl 828). Ledger schema unchanged, so
+  `shadow_adapter._agent_a_select()` ingestion is unaffected (re-run the validation runner to
+  flow the wider flags into validation_results_ledger.csv).
+- Tests: `tests/test_shadow_agent_a_engine.py` updated (4 pass) -- seed-target anchor,
+  candidate-grammar signature/skip-reason coverage, and held-out PASS/FAIL/skip partitioning
+  via an injected fake gate + temp grammar dir.
+
+### 2026-06-21 -- Per-rule precision/recall harness against the gold sample
+
+Added a rule-by-rule scorer so each panel rule has its own gold-joinable prediction set
+and gets independent precision/recall as labels accrue (the aggregate estimate_gold.py
+scores the whole surfaced/suppressed population at once).
+
+- New `scripts/gold/per_rule_metrics.py` (READ-ONLY except a summary JSON under data/gold/;
+  reuses estimate_gold.wilson/pos_error/loaders). Two metrics by necessity of available data:
+  - RECALL per error type -- LIVE today from the 128 position labels (true_fair_value /
+    true_cost / true_classification / true_lien / disposition). Grain = cik-quarter COVERAGE
+    (a position error is "covered" if a type-matched rule fired in its cik-quarter) -- an
+    explicit UPPER BOUND on position-level recall. Horvitz-Thompson design-weighted (1/pi)
+    plus raw Wilson CI. Per-rule contribution within each error type is reported.
+  - PRECISION per rule -- needs per-flag verdicts (flag_labels.jsonl); the flag strata are
+    drawn (40 surfaced + 161 suppressed) but unlabeled, so every rule is "pending" with its
+    drawn-but-unlabeled backlog shown. Wired; fills in on adjudication.
+- Rule->error-type correspondence is an explicit editable data dict (FAMILY_ENGINES +
+  RULE_OVERRIDE) with per-family rationale; unmapped engines are listed, never silently
+  credited. 'oracle' is deliberately excluded from the FV family (its per-CIK extraction-QA
+  rules fire on ~every cik-quarter -> trivial 1.0 coverage; excluding it moved FV recall
+  1.000 -> 0.500, the honest value).
+- First numbers (draw batch1, 128 position labels, 0 flag labels): fair_value 0.500 (1/2,
+  fv_conservation), cost 1.000 (1/1), classification 0.286 (4/14, fund_strategy_validation),
+  over_inclusion 0.000 (0/2, agentA_subtotal_candidate missed both), lien n/a (no rule
+  targets lien -- a flagged coverage gap). Small-N; CIs wide. Writes
+  data/gold/per_rule_metrics_batch1.json.
+- Caveats recorded in the module docstring: cik-quarter coverage is an upper bound;
+  classification positives depend on exact-string field comparison (vocab mismatch risk);
+  precision is the binding unlock (label the 201 drawn flags).
+
+## 2026-06-23 - Adjudication spec: S11 fund-interest look-through classification check
+
+- Design-only (no pipeline code). Added Section 8 to
+  `docs/adjudication_architecture/B_and_C_validation_agents.md` specifying S11, a new
+  Class 3 (aggregate/fund-level, position-targeted) check end to end: detector -> B1 -> B2 -> B3.
+- Motivating defect: `BCRED Emerald JV LP` (CIK 0001803498), a private-credit JV LP interest
+  (~$1.7B, ~3.5-5% of net assets) tagged PRIVATE_EQUITY_FUND/PRIVATE_EQUITY from 2024-09-30 on,
+  while its ingested underlying loans (`Emerald JV LP, <borrower>`) are DIRECT_LENDING/PRIVATE_CREDIT.
+  Currently a false negative: fund-strategy S01-S10 (fund-level mix thresholds), classification
+  cross-reference (I-series, PE_FUND/PC_FUND both map to FUND exposure), and the weak enum check
+  all PASS. Confirmed BCRED PASSes fund_strategy_validation every quarter.
+- S11 detector basis = composition + narrative fallback. Path A (look-through composition) where
+  underlying holdings are ingested: attribute underlying rows to the JV interest by per-CIK
+  name-prefix join, sum by asset_class, fire when declared FUND sub-type contradicts dominant
+  look-through class. Path B (narrative fallback) where coverage is inadequate (e.g. Ares SDLP,
+  underlying in an un-ingested supplemental schedule): emit `needs_narrative`, defer to B1 via
+  `extract_issuer_narrative`. Detector records `lookthrough_fv_coverage` / `lookthrough_row_count`.
+- B2 fix = per-CIK classification-correction template (audited JSON), per Decision 1. B3 gate is
+  structural (re-run S11 all quarters; correction clears flag where credit, inert where genuinely
+  equity; flips only the targeted interest; D01/D02 bands hold).
+- Schema: extended the verdict-leaf `mechanism` enum with `classification_lookthrough`; added the
+  matching B2 mechanism->template row. Two open thresholds for the owner to freeze before the 9.x
+  trial: COVER_MIN (~0.60), CLASS_MIN (~0.70).
+
+## 2026-06-23 - Agent A shape-stratified first-pass bundles and staged remediation anchors
+
+- Updated Agent A bundle construction so first-pass `discover()` uses shape-stratified sampling,
+  matching the remediation path and surfacing minority flattened-layout variants before dispatch.
+- Added optional anchor injection to `sample_variant.build_bundle()` and wired staged gate
+  remediation to rebuild retry bundles under the staged proposal anchors that actually failed,
+  instead of falling back to production/default anchors.
+- Added focused regression tests for first-pass shape-stratified bundle construction and staged
+  remediation anchor injection. Validation: `pytest tests/test_agent_a_hardening.py
+  tests/test_run_quarter.py tests/test_run_quarter_staged.py` -> 23 passed.
+- Live Great Elm trial: native A2 worker updated only
+  `data/output/agent_a/proposals/0001675033.anchors.json`; self-screen passed
+  (`none_recovered=10`, sample completeness 98.2%, sample invariant 97.3%). Parent staged gate
+  still FAILs Great Elm on 2023 none-share spikes, improved from 37.4/38.1/36.7% to
+  33.7/34.2/35.4% with median none-share 9.9%. Phillip Street remained PASS.
+
+## 2026-06-23 - S11 spec correction (measured against holdings data)
+
+- Read-only probe of private_markets_holdings.csv corrected two mechanics in the S11
+  spec (Section 8): (1) attribution join is contains/SUFFIX, not prefix -- BCRED
+  underlying loans are named `<borrower>, Emerald JV LP` (e.g. `Smile Doctors, LLC,
+  Emerald JV LP`), 310 loans at 2024-12-31, 100% PRIVATE_CREDIT; (2) lookthrough_fv_coverage
+  is NOT bounded at 1.0 -- for a levered JV the gross underlying exceeds the net equity
+  interest (Emerald: $5.6B gross vs $1.78B interest -> coverage 3.16). COVER_MIN is a
+  floor confirming underlying is ingested; credit_share is the decisive signal.
+- Eligible subject population (asset_category=FUND, declared PRIVATE_EQUITY_FUND): 2,104
+  rows / 68 CIKs / $24.5B. JV-named subset: 14 rows / 1 CIK (BCRED) / $12.8B. BCRED Emerald
+  JV interest: 7 quarter-rows (2024-09-30..2026-03-31, ~$1.5-1.8B each), all would flag
+  (credit_share=1.00). Actual full flag count needs the detector built with per-CIK attribution.
+
+## 2026-06-23 - Agent A Great Elm none-share diagnostic and second remediation pass
+
+- Added `scripts/agent_a/diagnose_none_signature.py`, a cache-only parent diagnostic that applies
+  staged or production anchors to current-period BDC rows and writes bounded per-quarter and
+  residual-family summaries under `data/output/agent_a/quarter/<quarter>/diagnostics/`.
+- Added `tests/test_agent_a_none_signature_diagnostic.py` covering staged-anchor use, bounded
+  examples, per-quarter counts, and acquisition-date guardrails for equity/warrant residuals.
+  Validation: `pytest tests/test_agent_a_hardening.py tests/test_run_quarter.py
+  tests/test_run_quarter_staged.py tests/test_agent_a_none_signature_diagnostic.py` -> 26 passed.
+- Great Elm second pass: diagnostic showed 252 staged `(none)` residual rows, led by 137
+  SPAC/de-SPAC warrant rows concentrated in 2023. Native A2 worker updated only
+  `data/output/agent_a/proposals/0001675033.anchors.json`, adding/expanding narrow
+  acquisition-date anchors for warrants, common stock, and common equity variants; grammar
+  remained unchanged.
+- Parent validation: self-screen PASS; staged finalize/gate on manifest `20260623T140548Z`
+  produced 2 PASS / 0 FAIL. Great Elm now PASSes high-confidence across 13 in-era quarters
+  with median none-share 2.9%; Phillip Street remained PASS. Post-pass diagnostic residuals
+  fell to 45 rows, led by `Total Short-Term Investments` subtotal rows and small non-2023
+  fund/preference-share families.
+
+## 2026-06-23 - Agent B spec: rule-dependency tiers + serialized remediation loop
+
+- Design-only edit to docs/adjudication_architecture/B_and_C_validation_agents.md.
+- New Section 4.3: B processes rules in a dependency DAG (tiers), not as a flat parallel
+  set. Tier 0 = FV+cost conservation (subtotal_leak / dimension_double_count / missing-row)
+  -- finalized FIRST because the row set and totals it fixes feed every downstream metric
+  (pct_of_net_assets, GAV recon, fund-strategy mix, S11 look-through credit_share,
+  cross_source, income yield). Tier 1 = FV-derived ratios; Tier 2 = classification/strategy
+  (incl S11); Tier 3 = rate/income/cross-source. Partial order: independent leaf rules
+  (per-cell rate-scale, date-parse, enum) finalize in parallel.
+- Serialized loop (4.3b): finalize highest tier -> B2 remediate all firing CIKs -> B3 gate
+  -> REGENERATE full ledger deterministically from corrected holdings -> re-triage residual
+  (downstream symptom-flags dissolve before costing an adjudication) -> descend. "Finalized"
+  = templates promoted across firing CIKs + precision at target CI + post-regen residual is
+  genuine not upstream contamination. Terminates via B3's net-flags/FV-at-risk non-increasing.
+- 4.3c amends Section 9: per-rule precision is now TIER-CONDITIONAL (re-measured on the
+  regenerated ledger after the upstream tier finalizes); 9.5 item 1 gains a measured-after-tier
+  column. New Decision 6: regenerate at tier boundaries, not per leaf rule (det. regen cheap,
+  LLM re-adjudication expensive). Updated stale top status header (substrate + B0/B0.5/B1 pilot
+  built; B2/B3/B4 + C not built) and added the outer-loop pointer above the B0 stage.
+
+## 2026-06-23 — V1 scope clarified + homepage FV reconciliation (exact match) + index removal
+
+- **AGENTS.md**: added a "V1 Scope (Current Public Product)" section — v1 ships only position-level holdings + analytics for the ~70 unlisted BDC wrapper-cohort sample; no indices, BDCs only.
+- **Homepage FV reconciliation**: headline "Fair Value", the instrument-type donut, and the industry-exposure donut now reconcile EXACTLY (to the dollar) to one current-quarter portfolio total = sum of `private_markets_holdings.csv` for the cohort across all index classifications ($385,082,457,522 at 2026q1).
+  - Root cause was three different sources/scopes: headline = DL-only unified holdings; instrument donut = `position_returns.csv` (matched + per-issuer-deduped subset, ~$206B); industry donut = unified holdings + an inflated reconciled-BDC sector overlay (~$461B). Matching coverage itself is ~99% by FV; the old $206B was a per-issuer dedup artifact, not a coverage gap.
+  - `pipeline/export/index_exports.py` `_export_portfolio_characteristics`: added `portfolioFv` (full-portfolio total) + `classificationFv` (FV by index_classification) to `portfolio_characteristics.json`; `portfolioFv` is exactly the sum of the rounded classification buckets. `totalFv` stays DL-only (denominator for lien/rate/WAC).
+  - `pipeline/export/analytics_exports.py` `_export_gics_sector_breakdown`: disabled the reconciled-BDC overlay/scaling (gated `if False`) so the industry breakdown is a straight `GROUP BY` sector of unified holdings; its grand total now equals `portfolioFv` exactly. Trade-off: "Unknown" sector share rose from ~10% to ~26% (raw unified-holdings sector tagging, no reconciled improvement).
+  - Frontend `page.tsx`: headline uses `portfolioFv`; instrument donut re-sourced off `classificationFv` (First Lien and Other computed as remainders so the donut sums to exactly `portfolioFv`); removed `getSectorBreakdown`/`position_returns` dependency from the donut.
+- **Fund blurbs**: `_compose_blurb` now states lien/rate composition as a share of total fair value (debt_pct * split), matching the on-page donut denominator; 65 live `fund_details/*.json` blurbs patched in place.
+- **Index product removal (frontend)**: removed `/indices` routes (incl. deleting the `[slug]` dynamic route that broke static export), nav/footer/sitemap index links, index methodology section + `INDICES`/`INDEX_METHODOLOGY` usage, and rendered index copy (terms page, fund Performance "NAV/Share Index" label -> "NAV per Share"). Orphaned index-only components (IndexCard, PerfSection, TotalReturnChart's index comment, ConstituentTable, ReturnSummaryTable, etc.) remain as dead code, not rendered.
+
+## 2026-06-23 — Agent B (Adjudicator) M1: Codex-fleet plumbing + verdict-leaf validator
+
+Built M1 of the Agent B build plan (`docs/adjudication_architecture/B_build_plan_codex_fleet.md`),
+reusing Agent A's Codex worker harness. Cached-only, no LLM run; unit-tested.
+
+- **New `pipeline/verdict_leaf.py`**: the verdict-leaf schema + validator that did NOT
+  previously exist (the 45-bundle trial passed on agent discipline alone). Enforces the
+  grounding invariant as a HARD error (`real_error` requires >=1 valid culprit_citation OR
+  an anchor-disagreement proof); `mechanism`/`anchor_used` vocabulary is soft-warn (the
+  trial used out-of-enum values like `cash_equivalent_leak`). Pure (no production writes).
+- **New `scripts/review_agent/validate_leaf_verdicts.py`**: CLI over `verdict_leaf` (worker
+  self-check `--verdict`, batch `--verdicts-dir`). Distinct from the older
+  `scripts/bdc_cik_review/validate_verdicts.py` (patch-proposal lineage). Verified against
+  all 45 trial verdicts: 45/45 valid, 0 errors.
+- **New `scripts/agent_b/`**: `review_lock.py` (per-`review_id` file lock, A's cik_lock
+  analog), `dispatch_preflight.py` (review_id-keyed manifest + blinded adjudication prompts;
+  B0 short-circuits `ledger_only`/`artifact_missing` bundles to an auto `ambiguous`/escalate
+  verdict, no worker), `run_review.py` (discover -> build worklist+bundles via
+  `review_bundles`; finalize -> validate + per-rule Wilson + route real_error->B2 /
+  false_alarm->rule-scoping / ambiguous->human / auto->coverage). Verdict-leaf lineage
+  (`review_queue`/`review_bundles`), NOT the older `bdc_cik_review`.
+- **`scripts/setup_codex_worker_harness.ps1`**: generalized with `-WriteDirs` (Agent A
+  behavior byte-identical when omitted; B passes the verdicts dir as the only write grant).
+- **New `scripts/dispatch_agent_b_workers.ps1`**: B fleet dispatcher modeled on A's proven
+  loop (preflight -> sandboxed Codex worker per bundle -> per-verdict validate -> finalize).
+  Deliberately duplicates A's loop for now; extracting a shared core + touching A's
+  dispatcher is deferred until an operator can smoke-test both (no Codex in this env).
+- **New `docs/adjudication_architecture/B1_adjudication_contract.md`**: the sandbox worker
+  contract (B analog of A2_sandbox_task_contract.md).
+- **Tests**: `tests/test_verdict_leaf.py` + `tests/test_agent_b_preflight.py` = 24 tests,
+  all green. All I/O tmp-confined; conftest production-write guard respected.
+- **Not done** (needs operator outside a Codex session): the live fleet smoke run
+  re-adjudicating the 45-bundle trial through Codex workers to confirm verdict parity.
+## 2026-06-23 - Agent A remediation dispatch switch and 55-row staged gate refresh
+
+Added remediation dispatch support so `scripts/dispatch_agent_a_workers.ps1 -Remediation`
+passes `--remediation` to `scripts.agent_a.dispatch_preflight`, causing preflight to read
+`remediation_worklist.csv` and preserve each failure-era bundle path instead of forcing the
+batch-quarter bundle. Added a regression in `tests/test_agent_a_dispatch_preflight.py` proving
+remediation preflight emits the failure-era `bundle_report_date` and bundle path.
+
+Operational refresh:
+- Backed up the prior 2-row staged gate to
+  `data/output/agent_a/quarter/2025-12-31/staged_gate_results.before_55row_refresh_20260623_180351.csv`.
+- Ran staged finalize/gate against
+  `data/output/agent_a/quarter/2025-12-31/dispatch/20260621T092815Z/manifest.json`.
+- Current 55-row staged gate result: 43 PASS, 12 FAIL, 0 other.
+- Archived 24 stale staged proposal files for the 12 FAIL CIKs to
+  `data/output/agent_a/_proposal_backup_before_remediation_20260623_180704`.
+- Remediation preflight dry-run succeeded for 12 rows:
+  `data/output/agent_a/quarter/2025-12-31/dispatch/remediation_dryrun_20260623/manifest.json`.
+- Verification: `pytest tests/test_agent_a_dispatch_preflight.py tests/test_run_quarter_staged.py -q`
+  passed 10 tests.
+
+## 2026-06-26 - B2 worker correction directory precreation
+
+- Fixed `scripts/agent_b2/dispatch_preflight.py` to create each selected
+  `data/output/agent_b2/corrections/<CIK>/` directory before dispatch. The live comparative
+  rerun failed because the worker could only write the exact correction file, while the parent
+  directory for `0001603480/comparative_period_filter.json` did not exist.
+- Added a Windows sandbox instruction to B2 prompts requiring serial command/tool reads, after
+  the failed worker log showed a parallel shell-read setup race (`helper_setup_marker_write_failed`
+  followed by `CreateProcessWithLogonW failed`).
+- Verification: `python -m py_compile scripts/agent_b2/dispatch_preflight.py` passed;
+  `pytest tests/test_agent_b2_preflight.py -q` passed 6 tests; the focused B2 suite
+  (`tests/test_correction_leaf.py tests/test_agent_b2_appliers.py tests/test_agent_b2_preflight.py
+  tests/test_agent_b2_run_remediation.py`) passed 48 tests. Dry comparative preflight returned
+  `n_dispatch=2` and created both selected CIK correction directories.
+
+## 2026-06-26 - B2 no-shell worker prompt for Windows sandbox failures
+
+- Updated B2 remediation prompts to stop requiring worker-side shell reads or self-validation.
+  The live comparative rerun showed the Codex worker could not start any PowerShell process
+  (`CreateProcessWithLogonW failed: 2147942522`), so it could not read the contract/evidence
+  or run validation. The prompt now embeds the relevant packet fields, B1 citations, and the
+  bounded `comparative_period_filter` contract, instructs the worker not to call shell
+  commands, and leaves validation to the parent dispatcher.
+- Deduplicated repeated source review IDs in `group_real_errors`; the `0001603480`
+  comparative packet now carries one `RVQ_BLK_9bf6449f2189` reference instead of two.
+- Improved `dispatch_agent_b2_workers.ps1` so missing worker output is reported as
+  `MISSING correction file: ...` in the validation log instead of surfacing as an unreadable
+  JSON traceback.
+- Verification: `python -m py_compile scripts/agent_b2/dispatch_preflight.py
+  scripts/agent_b2/run_remediation.py` passed; `pytest tests/test_agent_b2_preflight.py
+  tests/test_agent_b2_run_remediation.py -q` passed 19 tests; the focused B2 suite passed
+  49 tests. Dry comparative preflight returned `n_dispatch=2`; generated prompt inspection
+  confirmed the no-shell instruction, embedded citations, and parent-validation command.
+
+## 2026-06-26 - B2 worker runroot aligned with correction writes
+
+- Fixed B2 dispatch so each worker runs from its own
+  `data/output/agent_b2/corrections/<CIK>/` directory and receives write permission only for
+  that CIK correction directory. The worker prompt now instructs it to write the relative
+  filename, e.g. `comparative_period_filter.json`, rather than an absolute path.
+- Added the selected `quarters` field to B2 manifest rows. Comparative filter prompts now
+  carry `target quarter(s): 2025-06-30`, and preflight rejects comparative packets unless they
+  contain exactly one target quarter because the template has a single `report_date`.
+- Rationale: the prior no-shell rerun reached the file-edit tool but failed on absolute-path
+  writes from a worker runroot outside the correction directory. Aligning the runroot with the
+  write target gives the worker a simple relative file write while retaining parent-side
+  validation.
+- Verification: `python -m py_compile scripts/agent_b2/dispatch_preflight.py` passed;
+  `pytest tests/test_agent_b2_preflight.py tests/test_agent_b2_run_remediation.py -q`
+  passed 20 tests; PowerShell parser check passed for `scripts/dispatch_agent_b2_workers.ps1`;
+  the focused B2 suite passed 50 tests. Dry comparative preflight returned `n_dispatch=2`,
+  and generated prompt inspection confirmed the target quarter plus relative write instruction.
+
+## 2026-06-23 - Agent A first remediation worker pass result
+
+Ran the admin-shell remediation dispatch for the 12 staged FAIL CIKs using batch
+`remediation_20260623_admin_2`. Eleven workers validated; `0001646614` produced no staged
+proposal and failed `validate_proposal` because no production anchor override existed to fall
+back to.
+
+Parent staged finalize/gate was run manually against
+`data/output/agent_a/quarter/2025-12-31/dispatch/remediation_20260623_admin_2/manifest.json`
+after the dispatcher stopped before its auto-finalize step. Result: 2 PASS, 9 FAIL,
+1 NO_PROPOSAL. The PASS CIKs were `0001851322` North Haven Private Income Fund LLC and
+`0001578348` Investcorp Credit Management BDC, Inc. Remaining FAIL/NO_PROPOSAL rows were
+written to the refreshed `remediation_worklist.csv`; locks were clear after the run.
+
+## 2026-06-23 - Agent A NO_PROPOSAL remediation retry handling
+
+Fixed the remediation emitter in `scripts/agent_a/run_quarter.py` so `NO_PROPOSAL` rows are
+queued for retry alongside `FAIL` and `NO_CONFIG`. Added a regression in
+`tests/test_run_quarter_staged.py`. Reinserted Silver Point Specialty Lending Fund
+(`0001646614`) into `data/output/agent_a/quarter/2025-12-31/remediation_worklist.csv` with
+its failure-era bundle (`0001646614_2023-12-31.json`) and rewrote the generated CSV without
+a UTF-8 BOM so Python `csv.DictReader` sees the `cik` header. Dry-run preflight for
+`--remediation --cik 0001646614` succeeded. Verification:
+`pytest tests/test_run_quarter_staged.py tests/test_agent_a_dispatch_preflight.py -q` passed
+11 tests.
+
+## 2026-06-26 - Investigation dispatcher preserves custom worker sandbox
+
+- Fixed `scripts/dispatch_investigation.ps1` to call `scripts/run_codex_worker.ps1` with
+  `-NoSetup` after the dispatcher has already built the CIK-scoped worker config.
+- Root cause: the runner's default setup pass overwrote the custom `agent_investigate/<cik>`
+  write grant and the conda/site-packages read grants with Agent A defaults, causing live
+  investigation workers to fail when writing rule JSON or importing dependencies.
+- Verification: static inspection against the working Agent A/B/B2 dispatch pattern. No live
+  Codex worker run from this session because nested external Codex dispatch is intentionally
+  blocked by the wrapper inside an active Codex session.
+
+## 2026-06-26 - Worker harness de-dupes filesystem grants
+
+- Fixed `scripts/setup_codex_worker_harness.ps1` so generated `config.toml` never emits
+  duplicate filesystem permission keys. Exact write grants now override exact read grants,
+  and repeated read grants are emitted once.
+- Root cause: the investigation dispatcher intentionally uses the CIK scratch dir as both
+  worker runroot and write root, while also passing the repo root as an extra read grant.
+  The previous harness emitted duplicate TOML keys, so `codex exec --strict-config` failed
+  with `Error loading config.toml` before the worker started.
+- Verification: generated disposable default Agent A-style and investigation-style configs,
+  including overlapping read/write paths, and confirmed no duplicate permission keys. No live
+  worker run from this nested Codex session.
+
+## 2026-06-26 - Investigation worker stderr handling and held-out gate semantics
+
+- Fixed `scripts/run_codex_worker.ps1` so non-fatal Codex stderr startup warnings, such as
+  model-cache refresh timeouts, do not abort the parent dispatcher before deterministic
+  validation can inspect the authored artifact. The worker still leaves `$LASTEXITCODE` for
+  callers to check.
+- Updated `scripts/dispatch_investigation.ps1` to check the worker exit code explicitly after
+  showing the trace tail, and updated the loop stop message to require both target FV match
+  and gate PASS.
+- Tightened `scripts/agent_investigate/run_investigation.py`: loop success now requires
+  residual within tolerance and held-out gate PASS, not target residual alone.
+- Fixed `pipeline/agent_b_held_out.py` over-deletion semantics: pre-existing held-out
+  undershoots no longer fail a rule unless the trial introduces or worsens the undershoot.
+- Real 1715933 result after the fix: the authored rule
+  `exclude_affiliated_duplicate_schedules_2025q3_q4` reconciles 2025-12-31 to
+  645,193,114 exactly, residual 0.0%, gate PASS with 11 held-out quarters not regressed.
+- Verification: `pytest tests/test_agent_b_held_out.py tests/test_agent_rule.py -q` passed
+  33 tests; `python -m py_compile scripts/agent_investigate/run_investigation.py`; PowerShell
+  parser check passed for the three edited `.ps1` scripts.
+
+## 2026-06-26 - Investigation canary batch wrapper
+
+- Added `scripts/dispatch_investigation_canary.ps1`, a serial operator-run wrapper for
+  canary batches over a CSV worklist with `cik,target_quarter` columns.
+- Added `scripts/build_investigation_canary_worklist.ps1`, which seeds that CSV from
+  anchored FV-conservation failures in `data/output/shadow/conservation_gate_results.csv`,
+  excluding no-anchor and non-positive-anchor rows and taking one highest-residual quarter
+  per CIK by default.
+- Guardrails: refuses to run inside a Codex session; runs one CIK-quarter at a time; enforces
+  a parent-side timeout; refuses stale per-CIK `rules/` dirs unless `-Resume` or
+  `-ArchiveExisting` is supplied; archives existing scratch dirs only after verifying the path
+  resolves under `data/output/agent_investigate/`; writes per-item stdout/stderr, status JSON,
+  `summary.csv`, and `summary.json` under `data/output/agent_investigate/canary/<run_id>/`.
+- Generated the default `data/output/agent_investigate/canary_worklist.csv` with 5 anchored
+  overshoot rows for `0001743415`, `0001715933`, `0001920453`, `0002052153`, and `0001603480`.
+- Intended first use: 5-10 CIK-quarter canary for the affiliated-duplicate-schedule style
+  failure class, serially, with manual review of each authored rule before broader scale.
+- Verification: PowerShell parser check passed for the canary runner and worklist builder. No
+  live canary run from this nested Codex session.
+
+## 2026-06-26 - B1-gated B2 remediation workflow
+
+- Added `scripts/agent_b2/reviewed_workflow.py` to map a target CSV (`review_id` or
+  `cik,target_quarter`) to existing B1 review queue rows and build the B1 worklist before
+  any B2 remediation packet is derived.
+- Added `scripts/dispatch_b1_to_b2_workers.ps1`, which runs the reviewed chain: build B1
+  batch, dispatch/finalize B1, run B2 discover from the B1 worklist, and dispatch B2 only
+  when B1 real-error verdicts produce actionable packets.
+- Tightened `scripts/agent_b2/dispatch_preflight.py` so each source review ID must have a
+  real-error verdict, an existing B1 bundle, and a bundle CIK matching the B2 packet CIK.
+- Disabled `scripts/dispatch_investigation.ps1` and `scripts/dispatch_investigation_canary.ps1`
+  by default because they bypass B1 and the deterministic B2 packet workflow. They now require
+  `-AllowUnreviewedRawResidual` for diagnostics-only runs.
+- Rationale: the `0001743415 / 2023-12-31` canary showed that a bad FV anchor can be made to
+  pass by deleting valid holdings. B1 had already identified the same pattern on
+  `0001743415 / 2024-12-31` as a scope/classification look-through issue, not a safe row
+  exclusion.
+- Verification: `pytest tests/test_agent_b2_reviewed_workflow.py tests/test_agent_b2_preflight.py
+  tests/test_agent_b2_run_remediation.py -q` passed 20 tests; `python -m py_compile` passed
+  for `scripts/agent_b2/reviewed_workflow.py` and `scripts/agent_b2/dispatch_preflight.py`;
+  PowerShell parser checks passed for `scripts/dispatch_b1_to_b2_workers.ps1`,
+  `scripts/dispatch_investigation.ps1`, and `scripts/dispatch_investigation_canary.ps1`.
+
+## 2026-06-26 - B2 rerun from existing B1 batch
+
+- Added `scripts/dispatch_b2_from_existing_b1.ps1`, an operator wrapper that regenerates B2
+  packets from an already completed B1 batch worklist and dispatches B2 without rerunning B1.
+- Fixed `scripts/agent_b2/run_remediation.py` discovery so it only loads verdicts referenced
+  by the supplied B1 batch worklist. This prevents unrelated historical B1 verdicts from
+  entering a new B2 batch as blank-CIK packets.
+- Verified the current canary B2 worklist rebuild for `canary_b1_to_b2_20260626T125839Z` now
+  excludes stale blank-CIK packets, and `subtotal_filter` preflight selects one B2 dispatch
+  packet.
+- Verification: `pytest tests/test_agent_b2_run_remediation.py tests/test_agent_b2_preflight.py
+  -q` passed 17 tests; `python -m py_compile scripts/agent_b2/run_remediation.py` passed;
+  PowerShell parser check passed for `scripts/dispatch_b2_from_existing_b1.ps1`.
+
+## 2026-06-26 - B2 correction contract hardening
+
+- Tightened B2 validation so `validate_corrections` can require the correction CIK and
+  `fix_class` to match the dispatched packet. `dispatch_agent_b2_workers.ps1` now passes
+  those expected values, so a worker cannot satisfy validation by emitting a different
+  correction class.
+- B2 preflight now blocks fix classes without an implemented trial applier. The supported
+  dispatchable set is currently `subtotal_filter`, `comparative_period_filter`, `dedup`,
+  and `spv_lookthrough`; `classification_fix` and `rule_scope` are refused until their
+  deterministic application path exists.
+- Moved `comparative_period_filter` application to raw BDC staging during one-CIK trial
+  rebuilds, before unified holdings drops the raw `period` column. The filter is now scoped
+  to the template `report_date` and still writes a trial `.corrected.csv` plus correction
+  audit for B3 gating.
+- Added `scripts/run_b2_fixclass_canary.ps1` to archive existing selected corrections with
+  CIK-preserving paths, dispatch one B2 fix class from an existing B1 batch, apply trial
+  rebuilds, and write B3 gate artifacts plus a summary CSV.
+- Operational setup: archived the stale comparative corrections for `0001603480` and
+  `0001715933` under
+  `data/output/agent_b2/corrections_archive/comparative_20260626T164117/<CIK>/`, leaving the
+  comparative correction slots clear for rerun.
+- Verification: `python -m py_compile` passed for the touched B2 Python files and trial
+  rebuild script; `pytest tests/test_correction_leaf.py tests/test_agent_b2_appliers.py
+  tests/test_agent_b2_preflight.py tests/test_agent_b2_run_remediation.py -q` passed
+  48 tests. Comparative-only preflight for
+  `canary_b1_to_b2_20260626T125839Z_comparative` returned `n_dispatch=2`; classification
+  preflight now fails with `fix_class has no implemented trial applier`; the existing
+  drifted `0002052153/classification_fix.json` fails expected-fix-class validation as
+  intended.
+
+## 2026-06-26 -- Anchor validation layer (validate the anchor before the loop reconciles to it)
+
+The agentic investigation loop drives value_sum -> anchor. That only yields correct corrections
+if the anchor is itself a true, independent measure. New module pins this down BEFORE the loop is
+trusted, so a contested/absent anchor escalates instead of delete-to-balancing against a false
+number.
+
+What changed (new files):
+- `pipeline/anchor_validation.py` -- pure, no IO. Ranks anchors by INDEPENDENCE: STRONG =
+  independent measurement (`companyfacts_fv`, `companyfacts_concept`/`cf_cache_cost`/
+  `ff_investments_at_cost`, `printed_schedule_total`); an EXTRACTION RE-SUM
+  (`schedule_total`/`value_sum`/`extract_total_fv`) is NEVER an anchor (its disagreement with a
+  strong anchor is the defect under test). `classify_anchors` -> tier HIGH (>=2 strong agree) /
+  MEDIUM (1 strong) / NONE (0 strong, or >=2 strong disagree). `flag_anchor_outliers` -- cross-
+  quarter plausibility on the companyfacts series (catches a SPORADIC bad quarter; cannot catch a
+  systematically mis-tagged anchor).
+- `tests/test_anchor_validation.py` -- 16 tests (agreement tiers, re-sum ignored, outlier flag +
+  its documented boundary).
+
+Wiring:
+- `pipeline/agent_rule.gate_rules` now takes optional `anchor_candidates` ({quarter -> {name ->
+  value}}). When given, it derives snapshot anchors from the STRONG consensus and adds an
+  `anchor_validated` gate check: target-quarter tier NONE -> FAIL=escalate. Legacy `anchors`
+  (quarter -> float) path unchanged (B2 path untouched). +2 gate-integration tests in
+  `tests/test_agent_rule.py`.
+- `scripts/agent_investigate/run_investigation.py` -- `load_anchor_candidates` (companyfacts_fv
+  only; deliberately NOT the schedule_total re-sum) + `_candidates_with_outlier_filter`; `_measure`
+  and `gate` pass candidates to the gate and surface `anchor_tier`/`anchor_reason`. Worker prompt
+  documents that a contested anchor FAILs `anchor_validated` -> escalate, do not reconcile.
+
+Empirical findings (real cache):
+- Saratoga 1377936: companyfacts_fv ~$1.0B vs schedule re-sum ~$3.5B. The ANCHOR is right; the
+  extraction over-counts (consolidated CLO). Correctly -> MEDIUM (loop may run to fix it). Using
+  the re-sum as an agreement partner would have falsely escalated this -- which is why it is
+  excluded.
+- 1743415: companyfacts_fv reads ~$14-28M every covered quarter while value_sum is a smooth
+  ~$180-514M across 11 quarters -> the companyfacts FV TAG is systematically broken, not the
+  holdings. The cross-quarter outlier check CANNOT catch this (self-consistent series); only a 2nd
+  independent anchor (printed_schedule_total) would. Confirms the single-strong-anchor (MEDIUM)
+  regime cannot disambiguate bad-extraction (Saratoga) from bad-anchor (1743415) -- both look like
+  anchor != extraction. The principled fix is wiring `printed_schedule_total` to reach HIGH.
+- `anchor_sanity` (>60% deletion FAIL) remains the correct backstop for 1743415 (don't delete a
+  good $420M extraction to match a broken $14M tag); the new layer complements, not replaces it.
+
+Tests: 50 pass across test_anchor_validation + test_agent_rule + test_investigation_orchestration.
+No production rebuilds. Next highest-value step: structure `printed_schedule_total` (filer's printed
+SOI total via evidence_cli) as a 2nd STRONG anchor so HIGH becomes reachable and contested anchors
+(1743415) escalate at validation time.
+
+## 2026-06-26 -- B2 fix-behavior harness: route authoring through the investigation loop
+
+Diagnosed (from a live template-author canary on 0001603480 + 0001715933): both no-op'd because B1
+mis-mechanism'd the defect as comparative_leak, the binding fix_class locked the worker into
+comparative_period_filter (which matched 0 rows), the worker couldn't query the data, and it emitted
+confidently without self-verifying. Ground truth via data_query: 1715933 2025-06-30 value_sum $2,128M
+vs anchor $692M is DIMENSION DUPLICATION + 1000x-scaled rows (3 issuers x4 = $1.2B; Twin Star rows of
+$437M/$598M) -- not comparative. (A prior agentic run had already authored the correct rules:
+exclude_2025_affiliated_investment_axis_duplicates + exclude_2025_twin_star_thousand_scaled_fair_value_rows.)
+
+Harness changes so the FLEET reproduces find-bad-aggregate + identify-rows, auditable:
+- `pipeline/agent_rule.py`: new `value_expression` rule type (action "set") -- set a numeric field to
+  a BOUNDED arithmetic formula over whitelisted numeric columns + literals (validated AST, same
+  safety model as predicate_sql; no code). gap-5 vocab. Plus `validate_escalation` /
+  `load_escalations` (the `proposed_mechanism` channel: escalate instead of forcing a wrong fix), and
+  a per-rule `noop` flag in `apply_rules` audits (zero-impact rule = non-fix, surfaced so the loop
+  rejects silent no-ops).
+- `scripts/agent_investigate/run_investigation.py`: prompt now documents value_expression, the
+  escalation file, a mandatory self-verify-before-finish, and "B1's mechanism is a HINT not a
+  contract -- follow the data." `prep` creates escalations/; `_measure`/`apply` surface
+  `noop_rules` + escalations; the iteration feedback flags no-op rules explicitly.
+- `scripts/dispatch_investigation.ps1`: `-B1Reviewed` switch (the investigation canary passes it;
+  raw use still gated behind -AllowUnreviewedRawResidual).
+- `scripts/run_investigation_canary.ps1` (NEW): the agentic counterpart to run_b2_fixclass_canary.
+  Discovers targets from a B1 batch, dispatches the investigation worker per target (query -> author
+  -> apply -> gate -> iterate), B3-gates each, writes b3_gate_summary.csv. `-Fresh` clears prior
+  per-CIK rules/escalations; `-OnlyCik`/`-MaxTargets` to scope.
+
+Operator: run `scripts/run_investigation_canary.ps1 -B1BatchId <id>` instead of the fixclass canary.
+
+Tests: +9 (value_expression validate/apply, no-op flag, validate_escalation) -> test_agent_rule;
+94 pass across agent_rule/anchor_validation/orchestration/held_out/verdict_leaf. PowerShell scripts
+parse-checked. No production rebuilds.
+
+## 2026-06-27 -- Anchor-adjudicator agent (find the GRAND total) + row_add fix
+
+Motivated by 1715933: the conservation anchor (companyfacts InvestmentOwnedAtFairValue = $692M) is a
+faithful extraction of a tag that, for multi-schedule BDCs, captures only the non-affiliated schedule
+and excludes the affiliated one. The grand total (~$1.094B, = total_assets) lives only in the printed
+SOI / dimensioned XBRL, which companyfacts hides. Finding it is filer-idiosyncratic (single tag / last
+total row / sum of schedule subtotals), so it is an AGENT task -- but a SEPARATE agent from the B2
+fixer (so it can't grade the fixer's homework), verified by a deterministic balance-sheet closure
+check the agent can't fabricate.
+
+New (deterministic core, fully unit-tested):
+- `pipeline/anchor_leaf.py` -- the anchor leaf schema + `validate_anchor_leaf` (grand_total, method
+  in {single_tag,total_row,sum_of_schedules}, CITED components; sum_of_schedules must reconcile).
+- `pipeline/anchor_validation.py` -- `verify_grand_total()` (the un-gameable check: hard-fail if it
+  exceeds total_assets / falls below the companyfacts floor / investments+cash exceed assets; tier
+  HIGH/MEDIUM on closure quality) + `incomplete_anchor_screen()` (cheap pre-screen: companyfacts_fv
+  << total_assets -> likely subtotal).
+- `pipeline/agent_rule.py` -- escalation gains a `category` field ("anchor"|"vocab"|"other") +
+  `is_anchor_escalation()` for deterministic routing.
+
+Driver + dispatch:
+- `scripts/agent_anchor/run_anchor.py` -- discover (triggers: B1 anchor mechanism [rare] / B2 anchor
+  escalation / the screen) / prep / verify / promote. Promotes only a closure-verified leaf to
+  `data/overrides/agent_anchor/<cik>/<quarter>.json`.
+- `scripts/dispatch_anchor_workers.ps1` -- one-shot Codex worker (clone of dispatch_investigation):
+  prep -> worker writes leaf -> verify -> promote, up to 2 attempts.
+
+Wiring back to B2: `run_investigation.load_anchor_candidates` now reads the verified override -- if it
+AGREES with companyfacts -> both kept -> HIGH; if it DISAGREES (the subtotal case) -> companyfacts
+dropped, the verified grand total kept as the truth, so the fixer reconciles to the right number.
+
+Also: `row_add` no longer hard-fails on extra position keys (the 1715933 worker pasted the whole
+staging row); the applier ignores non-holdings columns and records `ignored_keys`. Invalid-rule errors
+are now surfaced in the investigation loop feedback (previously only no-ops were).
+
+Placement (cost-aware): anchor-adjudicator runs only on triggered targets (not every real_error),
+once per (cik,quarter), and routes the corrected anchor back to B2. B1 was confirmed to NOT detect the
+anchor issue (it called 1715933 comparative_leak), so the B2-escalation + screen triggers do the work.
+
+Tests: +25 (test_anchor_leaf 17, test_anchor_adjudicator 6, +2 row_add). Suite green across
+anchor_leaf/anchor_adjudicator/anchor_validation/agent_rule/investigation_orchestration (72). PowerShell
+parse-checked. No production rebuilds.
+
+## 2026-06-27 -- Full B1->B2->anchor->B2 chain PASSED on 1715933 + prompt fix
+
+First end-to-end PASS of the full chain on the hard case (template-author no-op'd it twice; single-
+anchor B2 FAILed anchor_sanity). Run on 1715933 2025-06-30:
+- Stage 1 (B2 vs companyfacts $691,956,192): FAIL anchor_sanity (67% removal), escalated category=anchor.
+- Stage 2 (Anchor Adjudicator): found the filing's printed "Total Investments" row = $1,093,518,278
+  (method=total_row) = Total Debt&Equity $691,956,192 + Cash Equivalents $7,095,586 + Short-term
+  Investments $394,466,500; closes to total_assets $1,098,107,000 (99.6%); promoted the override.
+  (Correction to earlier framing: the companyfacts tag excludes SHORT-TERM + CASH-EQUIV, not a
+  controlled/affiliated schedule.)
+- Stage 3 (B2 vs corrected $1,093,518,278): ONE rule (Twin Star 1000x rescale), kept all real rows,
+  value_sum ~$1,094,088,266 -> ALL 10 B3 checks PASS. anchor_sanity flipped FAIL->PASS because the
+  correct fix (rescale, not delete) removes nothing.
+
+Fixes:
+- Prompt now shows the VALIDATED/override anchor (run_investigation `_resolved_anchor` -> prep/_prompt/
+  manifest) instead of the raw companyfacts subtotal, so the stage-3 fixer reconciles to the grand
+  total directly instead of re-discovering it (the stage-3 worker had independently re-derived
+  $1,093,518,278 and re-escalated -- redundant).
+- Anchor discover skips a target that already has a promoted override (run-once termination): on the
+  existing B1 batch it now returns 2 targets (1603480, 1743415), skipping the done 1715933.
+
+72 tests pass across anchor_leaf/anchor_adjudicator/anchor_validation/agent_rule/orchestration.
+
+## 2026-06-27 -- Full-chain stage-3 scoping fix (override targets fixed regardless of real_error)
+
+3-CIK trial result: 1715933 PASS, 1603480 PASS (the adjudicator caught a SILENT false-pass --
+1603480 had reconciled to a $327.83M companyfacts SUBTOTAL by deleting rows; the real grand total is
+$628.53M, and the corrected fix flipped delete->recover). 1743415's anchor was adjudicated correctly
+($13.96M tag -> $420.57M grand total) but B2 never ran on it because it is not a B1 real_error.
+
+Root cause: run_anchor discovers off the raw B1 worklist (triggers on anchor-mechanism/screen), but
+B2 (run_investigation) only fixes real_errors -> an override could be promoted with no fixer behind
+it. Fix in scripts/run_full_remediation_canary.ps1: stage 3 now enumerates promoted override FILES in
+scope (not just this run's promotions) and dispatches the investigation worker per (cik, quarter)
+directly via dispatch_investigation (-B1Reviewed), bypassing the real_error filter. It gate-FIRST
+(deterministic, no worker) to SKIP any target whose existing rules already reconcile, so already-
+passed CIKs are not re-fixed. Verified pre-verdicts: 1715933 PASS (skip), 1603480 PASS (skip),
+1743415 FAIL (re-fix). 59 tests pass; orchestrator parse-checked.
+
+## 2026-06-27 -- Gate fix: already-reconciled target passes (1743415 closes the 3-CIK trial)
+
+1743415 stage-3 FAILed on `residual_improved` -- a FALSE fail. Once the anchor-adjudicator corrected
+the anchor ($13.96M tag -> $420.568M grand total), the target quarter 2023-12-31 ALREADY reconciles:
+value_sum == $420,568,000 == the corrected anchor (the extraction was right; only the tag was wrong).
+There was no residual to improve, but `residual_improved` required strict improvement.
+
+Fix (pipeline/agent_b_held_out.gate_correction): when the target carries NO target flag at baseline
+(already reconciled), `residual_improved` passes -- `target_cleared` + `no_new_flags` already cover
+correctness, and a real no-op still fails because the flag would persist. 1743415 now PASS (verified
+directly). Regression test added (test_already_reconciled_target_passes). 83 tests pass.
+
+3-CIK trial COMPLETE -- all PASS: 1715933 (subtotal->grand total->rescale), 1603480 (subtotal->grand
+total->delete-to-recover flip; silent false-pass corrected), 1743415 (too-small tag->grand total->
+already reconciled). Ready to scale to 10.
+
+## 2026-06-27 -- companyfacts-cash tightening + null-anchor filter (a)
+
+Cash tightening (sharper anchor screen/closure, no rebuild):
+- pipeline/anchor_validation.incomplete_anchor_screen now CASH-AWARE: a BDC's non-investment assets
+  are mostly cash, so it flags on the NON-CASH remainder (> 8% of assets) instead of the coarse raw
+  invested fraction. 1792509 (87% invested, but the 13% is $47M cash + $12M other) -> NOT flagged.
+- verify_grand_total cash path fixed: a large non-cash remainder (> VERIFY_OTHER_CEILING=15%) -> NONE
+  (rejects a subtotal even when cash is known); tight (<3%) -> HIGH; 3-15% -> MEDIUM.
+- run_anchor.fund_financials reads companyfacts CashAndCashEquivalents from the cache (not in
+  fund_financials.csv) and threads it to the screen + verify.
+- Effect: the 8 trial10 stage-1 passes re-validate 6 HIGH / 2 MEDIUM (4% remainder) / 0 subtotals;
+  1792509 lifts MEDIUM->HIGH. 1715933's $692M subtotal still -> NONE (36% non-cash remainder).
+
+Null-anchor filter (a): build_b1_batch_from_bundles now skips cik-quarters with no companyfacts
+anchor (null investments_at_fair_value or total_assets), prefers the LATEST anchorable quarter per
+CIK, and LOGS the deferrals (n_deferred + list) rather than silently dropping them -- so the 70-run
+only targets quarters that can actually be validated, and recent companyfacts-lagged quarters
+(Saratoga 1377936 2026-02-28) are deferred, not failed. +4 tests; 86 pass.
+
+## 2026-06-27 -- Fresh-CIK trial path (generate bundles for new cohort CIKs)
+
+The existing review bundles (~13 fv_conservation CIKs) are exhausted; the review_queue.csv has 58
+fv_conservation CIKs (42 fresh, no bundle/verdict). New scripts run genuinely fresh CIKs end-to-end:
+- scripts/prepare_fresh_batch.py: select N fresh fv_conservation CIKs (latest quarter, no verdict),
+  GENERATE their bundles via pipeline.review_bundles, then build the (anchorable-only) B1 worklist.
+- scripts/run_fresh_cik_trial.ps1: prepare -> B1 adjudicate -> full remediation chain. `-N 1` for a
+  smoke test, `-N 10` to scale.
+Verified prepare for N=1 (selected 1278752 2025-12-31, generated bundle, built worklist). 72 tests pass.
+
+## 2026-06-27 -- (b) filing-sourced anchor for companyfacts-lagged quarters
+
+The anchor-adjudicator can now anchor a quarter whose companyfacts has not been filed yet (recent
+quarters): it reads total_assets from the FILING'S balance sheet for the closure check instead of
+companyfacts.
+- pipeline/anchor_leaf.py: optional `total_assets` + `total_assets_source` (must cite the BS line).
+- scripts/agent_anchor/run_anchor.py: verify() falls back to the leaf's filing-sourced total_assets
+  when companyfacts is null, and CAPS the tier at MEDIUM (single-source). Prompt instructs the worker
+  to read+cite total_assets from the filing balance sheet when companyfacts total_assets is null.
+  discover() gains a `no_companyfacts_anchor` trigger so those quarters route to the adjudicator.
+- scripts/build_b1_batch_from_bundles.py + prepare_fresh_batch.py + run_fresh_cik_trial.ps1:
+  `--include-null-anchor` / `-IncludeNullAnchor` opt-in to INCLUDE companyfacts-less quarters (anchor
+  from the filing) instead of deferring. DEFAULT remains DEFER -- tonight's run is unchanged.
+This unlocks targeting each CIK's NEWEST filed quarter uniformly (incl. off-calendar filers like
+Saratoga, Feb year-end) without waiting for companyfacts to catch up. Filing-anchored quarters are
+MEDIUM (preliminary) until companyfacts confirms. +2 tests; 77 pass.
+
+## 2026-06-28 -- Codex worker dispatch guide
+
+New `docs/reference/codex_worker_dispatch.md`: the reusable, task-agnostic pattern for dispatching
+sandboxed Codex worker fleets from the terminal (the two primitives `setup_codex_worker_harness.ps1`
++ `run_codex_worker.ps1`, the per-target dispatch loop modeled on `dispatch_investigation.ps1`, and
+the four sandbox traps: user-site read grants / runroot-patch boundary / MAX_PATH / auth.json 401).
+Added a one-line pointer in AGENTS.md "Files Worth Reading First" (owner-authorized edit).
+
+## 2026-06-28 -- B2 gets the filing + 0.5% rounding tolerance
+
+Two gaps found while validating the 41-CIK fresh batch (1975736 FAIL + escalation tail):
+- **B2 was filing-blind.** The investigation worker had `evidence_cli` but was never handed a bundle
+  (`dispatch_investigation -BundlePath` stub + `<bundle.json>` placeholder, never filled). Confirmed
+  via trace: ~100-240 data_query calls/iter vs ~2-7 evidence_cli. The filing exists and is parseable
+  (1975736 = KKR FS Income Trust 10-K, 157 tables). Fix: `run_investigation._find_bundle(cik, quarter)`
+  resolves the review bundle and `prep` substitutes its real path into the prompt's `--bundle` line.
+  Now B2 has filing-first access like B1/anchor. Targets the look-through/anchor escalations
+  (1975736 structured look-through, 1803498 JV look-through, 1930087 anchor-vs-detail).
+- **0.5% rounding tolerance.** Three escalations (1869453 $29k, 1950803 $106k, 2037804 $7k) were
+  sub-0.1% residuals = filer rounding (rounded line items vs rounded grand total). Prompt now states a
+  residual within 0.5% of the anchor is RECONCILED (rounding) -- do not author more rules or escalate
+  to close it. Gate/loop thresholds unchanged (1%, the un-gameable backstop); this is worker guidance.
+
+## 2026-06-28 -- Cash/derivative scope investigation + cash-folded anchor handling
+
+Empirical answers to "does B2 drop derivative/cash rows":
+- DERIVATIVES: not a labeled asset_category at all (negligible BDC exposure) -- moot.
+- CASH: yes. Across the restall batch, B2 dropped CASH-category rows in 6 of 39 CIKs (~$919M of
+  cash-equivalent FV): 2031750 $533M, 1954360 $174M, 1965934 $77M, 1920145 $66M, 1976336 $53M,
+  2052152 $16M (and 1930087 ADDED $82M). The dropped rows are TREASURY BILLS + Treasury money-market
+  SWEEP funds -- real cash-management positions in the SOI, excluded from InvestmentOwnedAtFairValue.
+- Consensus measured: IOAFV EXCLUDES cash in 363/396 cik-quarters (92%); 1 (2022625) includes it.
+  So cash treatment in published holdings is currently FILER-DRIVEN (B2 follows each anchor's scope)
+  -> INCONSISTENT across the cohort. Open product decision: are cash-equivalents (asset_category=CASH)
+  part of v1 holdings? If not, exclude them DETERMINISTICALLY (not agent-by-agent).
+
+Fix: anchor_validation now detects the cash-folded-into-tag case generically (if fv+cash > total_assets,
+the tag already includes cash -> fall back to the no-cash invested-fraction instead of failing). Handles
+2022625 without hardcoding. verify_grand_total + incomplete_anchor_screen updated; +1 test reframed; 29 pass.
+
+## 2026-06-28 -- Keep cash in holdings, exclude it from the conservation sum
+
+Decision: cash-equivalents (asset_category=CASH; T-bills, money sweeps) STAY in the published holdings
+but are EXCLUDED from the conservation sum, so the sum matches the (cash-excluding) IOAFV anchor and
+B2 no longer drops real cash positions to reconcile.
+- pipeline/agent_rule.value_sum_by_quarter: excludes asset_category=CASH (rows retained in the frame,
+  only omitted from the sum). New CONSERVATION_EXCLUDED_CATEGORIES = {CASH}.
+- scripts/shadow_conservation_engine.py: same exclusion in the residual-source value_sum (both rules).
+Verified: 2031750 value_sum(excl cash) $3,122.9M vs IOAFV $3,120.4M = 0.08% -- reconciles with the
+$533M of T-bills KEPT in holdings. +1 test; 40 pass. Engine needs a re-run to regenerate residuals;
+the 6 cash-dropping CIKs need re-running so they re-author without the (now-unnecessary) cash drops.
+
+## 2026-06-28 -- Asset-classification audit + amendment plan (scoping; no behavior change)
+Read-only cross-reference audit of BDC asset_category / index_classification / asset_class.
+Full writeup: docs/reference/asset_classification_audit.md.
+Findings:
+- Existing validate_classification() is internal-consistency only; cannot catch upstream
+  asset_category errors (a Treasury bill mislabeled LOAN passes all 9 rules).
+- XBRL investment_type axis (the intended deterministic signal, classification.py Priority 0)
+  is populated on only 0.1% of bdc_holdings rows (1,318 / 1,180,533); 194/195 CIKs <5%. Same
+  filing-lineage gap as the 1975736 conservation carveback.
+- Structure-vs-category mismatch (all qtrs): CASH 62 rows/$5.27B (real error, e.g. "Cash
+  Equivalents US Treasury Bill" -> LOAN; "U.S. Treasury Bills" -> OTHER); LOAN/EQUITY/FUND
+  families are mostly fund-of-fund/JV look-through, not flat errors. Current-quarter cash leak
+  ~$0 but mechanism is unguarded (conservation excludes asset_category=CASH only).
+- Credit-vs-equity FUND axis bug: "lp interest"/"partnership interest" sit in _PE_FUND_SIGNALS,
+  so BCRED Emerald JV LP ($1.54B, held by Blackstone Private Credit Fund, CIK 0001803498) is
+  labeled PRIVATE_EQUITY_FUND -- ~54% of the current-quarter BDC PE-fund bucket ($2.83B). It is
+  a credit JV. Fix = holder fund-strategy prior (extend existing _apply_fund_strategy_asset_
+  class_override, unified_holdings.py:1413), not keywords.
+Plan: Phase 0 structure audit as first-class validation; Phase 1 guarded deterministic rules
+(cash recall + demote legal-form tokens from PE signals) with FP tests; Phase 2 capture iXBRL
+type axis/SOI label + fund-strategy prior; Phase 3 agentic look-through as per-CIK audited
+config. No code or data changed in this session.
+
+## 2026-07-05 -- Weak-rule FP calibration from ens2 B1 adjudications (one-shot, deterministic)
+Calibrated the high-FP weak review-lane rules using the 875 decided ens2 B1 adjudications
+(360 real / 515 false_alarm). Ensemble (co-firing) signal was REJECTED (flag real-rate flat
+~0.40 across degree strata); the per-rule FP table + FA-mechanism clusters were used instead.
+Every change retro-tested against adjudicated labels (new script
+scripts/ensemble/calibration_retrotest.py; results data/output/ensemble/ens2/calibration_retrotest.csv).
+Changes:
+- pipeline/column_validation.py C103 (neg FV, was 97.5% FP): now excludes sign-consistent
+  unfunded-commitment marks (cost also negative, or revolver/delayed-draw/unfunded/undrawn/
+  commitment/LOC/credit-facility text via new _unfunded_position_sql()). Retro-test: 36/39 FA
+  groups suppressed, rows 50,064 -> 794. Known loss: 1 adjudicated real (footnote-marker
+  mis-parse inside a legitimate-negatives group).
+- C104 (zero FV, 94.3% FP) demoted WARN/REVIEW -> INFO/TRACK_ONLY (source dash legitimately = 0;
+  substance guard failed retro-test 4/50). C404 (neg pct, 76.9% FP) demoted likewise
+  (sign-exclusion REJECTED: lost 3/3 reals).
+- C107 (neg cost, 80% FP) deliberately UNCHANGED: all candidate cuts lose adjudicated reals
+  faster than FAs (comment in code pins this; do not re-attempt row-local cuts without new evidence).
+- pipeline/validate_holdings.py PCT01 high_pct_sum bound 200 -> 225 (filers legitimately print
+  200-225% totals; retro-test 8/9 FA suppressed, 3/4 reals kept, flagged cik-qtrs 386 -> 130).
+- scripts/shadow_weak_engine.py: fmt_cost min 0 -> -3e9 and fmt_pct_of_net_assets min 0 -> -100
+  (both were 100% duplicates of C107/C404 firings); pct_position_concentration gate now
+  non-negative pct only (was 99% duplicate of the negative-pct family; 6,821 -> 84 rows).
+- FX02/FX03 USD-alias guard, X01 preferred-equity exclusion, X07 equity exclusion (committed in
+  this same branch state) are part of the same calibration batch.
+Tests: tests/test_column_validation.py 38 pass (+6 new C103/C104/C404/C107 tests);
+tests/test_validate_holdings.py 140 pass (+1 new 210%-ok boundary test). Validation artifacts
+rebuilt via python -m pipeline.main --validate. Unchanged high-FP rules without a separable
+deterministic mechanism: C107 80%, fmt_basis_spread family, FX01 49%, X08 55%, PP01 53% --
+these need source-anchored checks, not row-local predicates.
+
+## 2026-07-07 -- Weak-rule remediation architecture design doc
+
+- New doc: docs/weak_rule_remediation_architecture.md (DRAFT for review, no code changes).
+  Generalizes the B1->B2->anchor->B2 conservation chain into a multi-lane weak-rule
+  remediation system: worklist-as-contract with realness_basis (B1 becomes one producer
+  among several), per-rule-family gates (printed-cell reconciliation for C107/X08,
+  structured-attribute check for FX01, PP01 routed into the conservation lane),
+  mechanism-signature clustering with acceptance sampling, cross-CIK mechanism library,
+  rank-don't-cut per-CIK FV materiality, lane ordering rows->values->fields->derived,
+  four-curves-per-pass convergence contract, and a versioned promotion/rollback protocol
+  for data/overrides (one commit per wave, provenance fields in rule files,
+  rollback = revert config + deterministic rebuild).
+- Required B2 change identified before any calibrated_prior routing: a first-class
+  no_defect exit with evidence citation + held-out spot-checks (B2 currently treats a
+  no-op as failure, which is only safe when realness was established upstream).
+- Open questions for review are listed in the doc (section 11): sampling rates,
+  acceptance thresholds, gate build order, recalibration triggers, library location.
+
+## 2026-07-07 -- Weak-rule remediation spec rev 2 (implementation cross-check amendments)
+
+- docs/weak_rule_remediation_architecture.md amended after cross-checking the draft
+  against scripts/agent_investigate/, scripts/agent_b2/, pipeline/agent_rule.py, and
+  scripts/shadow_conservation_engine.py. Doc-only change; no code or data touched.
+- 3.1 now names modules and disambiguates the "B2" name collision: the spec's B2
+  investigator = scripts/agent_investigate/run_investigation.py; scripts/agent_b2/ is
+  the original bounded-template lane (works well in scope, no FPs), retained as the
+  executor for mechanism-library instantiations where the mechanism is pre-decided.
+- 3.2 adds the explicit worklist schema (rule_name, realness_basis, priority_score)
+  plus a gate_screen producer row; 3.3 unifies no_defect verification with the
+  printed-cell gate (deterministic at 100% once the primitive exists; sampling is a
+  bridge) and requires the reviewed_workflow B1-only dispatch guard relaxation to be
+  an explicit decision.
+- 4 adds the citation schema (extends B1 culprit_citations with column + text
+  normalization rules). 7 adds no_defect as a terminal state and flags the 0.5% vs
+  1.0% tolerance mismatch (worker prompt vs loop_decision/flag threshold) as a
+  reviewer decision.
+- 8.1 (new): gap 1 expanded to a full design -- three promotion stores with no
+  production consumer (verified: nothing in pipeline/ reads agent_b2_corrections,
+  agent_investigate_rules, or agent_anchor); four-layer fix (A wrapper patches into
+  bdc_xbrl_wrappers; B raw-staging corrections + C post-unified rules inside
+  build_unified_holdings; D verified_override anchor kind in the shadow conservation
+  engine); application requirements (deterministic order/scoping, rebuild-time audit
+  vs measured_impact with drift WARN, injectable loader for test isolation);
+  governance loop; retire -Fresh as default; sequencing D->A->B/C with per-CIK parity.
+- 10.3 provenance authorship split (promotion machinery stamps gate/sample stats,
+  never the authoring agent) + new cross-wave composition/re-validation item.
+- 11 updated (Wilson grounding for acceptance samples: all-pass n>=25 one-sided /
+  n>=35 two-sided for a 90% lower bound; new tolerance + drift-threshold questions).
+- 13 (new): worked example tracing one C107 footnote-marker cluster through battery ->
+  fingerprint -> printed-cell gate (33 real / 8 no_defect) -> B2 rule authoring ->
+  held-out gate -> n=25 acceptance sample -> cross-CIK library propagation via the
+  bounded-template lane -> promotion wave -> rebuild/diff/baseline -> four curves ->
+  quality tiers -> rule retirement.
+
+## 2026-07-07 -- Spec amendment: per-fingerprint B1 stratification as a pre-adoption experiment
+
+- docs/weak_rule_remediation_architecture.md section 5: added an experiment (not an
+  adopted design) testing whether B1 calibration should stratify by fingerprint group
+  (rule_id, cik) instead of per rule. Step 1 is retrospective and free: re-cut the
+  875 decided ens2 adjudications by fingerprint group; measure within-rule
+  between-group real-rate overdispersion, FV-weighted routing-disagreement vs per-rule
+  priors, and per-group sample sufficiency (n>=10). Adopt the cheap form (record
+  fingerprints on per-rule samples; dedicated per-group samples only for high-FV
+  divergent groups, prospectively validated) only if the retrospective cut shows
+  material dispersion. Group verdicts remain rates for routing, never authorization
+  for mass fixes. Doc-only change.
+
+## 2026-07-07 -- Fingerprint stratification retrospective re-cut (spec section 5 experiment, step 1)
+
+- New scripts/ensemble/eda_fingerprint_stratification.py: re-cuts the 875 decided ens2
+  B1 adjudications into 420 (rule_id, cik) fingerprint groups; Monte Carlo dispersion
+  vs pooled per-rule real-rates, routing disagreement vs the 0.8 direct-dispatch
+  boundary, per-group sufficiency. Outputs fingerprint_stratification_by_rule.csv +
+  fingerprint_groups.csv under data/output/ensemble/ens2/. n_units used as the weight
+  (review-lane queue rows carry no fv_at_risk).
+- Findings: median group n=1 (240/420 singletons) -- census per-group calibration is
+  unreachable. Overdispersion concentrated: FX01 p~5e-5 (2 CIKs ~100% real vs pooled
+  0.51 carry 27% of sampled FX01 flagged units), PP03 p=0.017; GAV_BDC02/PCT01
+  marginal. Per-filer heterogeneity confirmed (0001803498 ~100% real across FX01+PP03;
+  0002031750 across A07+X08).
+- Decision: adopt the cheap form only (record fingerprints on future B1 samples; no
+  per-group sampling infrastructure). FX01's pending deterministic gate supersedes its
+  routing prior; re-run the cut after that gate ships. Full write-up appended to
+  data/output/data_investigation_results.md (2026-07-07 entry).
+
+## 2026-07-07 -- Spec: stratification step-1 results + execution order (gap 1 before new B1 batches)
+
+- docs/weak_rule_remediation_architecture.md section 5: recorded the step-1
+  retrospective result (420 groups, median n=1; FX01 the only correction-surviving
+  overdispersion; cheap form adopted) and specced step 2 -- per-group minimum quotas
+  ride the FIRST post-gap-1 recalibration batch (~150-250 verdicts); printed-cell gate
+  as the at-scale verdict source; era-windowing of verdicts mandatory.
+- Section 8.1: execution-order decision -- no new B1 batches before the first
+  post-gap-1 rebuild; the backlog of validated fixes (41-CIK overnight gate-PASS
+  rules, anchor overrides) changes the firing pool, so batches drawn now would
+  adjudicate flags a rebuild erases. Next step for the project = gap 1 (Layer D
+  anchor kind -> Layer A wrapper promotion -> Layers B/C build hook + audit),
+  then wave 1 + rebuild + battery re-run, then the stratified B1 batch.
+
+## 2026-07-10 -- Gap 1 implemented: promoted agent fixes wired into production (Layers A-D)
+
+- New `pipeline/agent_promoted.py`: single production consumer for the three promoted
+  agent-fix stores. Loaders take an explicit dir param defaulting to new config paths
+  (`AGENT_ANCHOR_OVERRIDES_DIR`, `AGENT_B2_CORRECTIONS_DIR`,
+  `AGENT_INVESTIGATE_RULES_DIR`); all reads are utf-8-sig (sandbox workers write BOMs
+  -- this silently broke every b3_gate read until fixed).
+- Layer D: `scripts/shadow_conservation_engine.py` gained a `verified_override` anchor
+  kind at TOP priority for fv_conservation, fed from `data/overrides/agent_anchor/`
+  via `ensure_anchor_overrides()`. Residuals now measure against adjudicated grand
+  totals; resolved quarters stop re-flagging. `verified_override` added to
+  `verdict_leaf.KNOWN_ANCHORS`.
+- Layer A: `run_remediation.promote_passes` now routes wrapper-patch fix classes
+  (subtotal_filter) by applying the PATCHED WRAPPER in place into
+  `data/overrides/bdc_xbrl_wrappers/` with provenance; re-promotion is a recorded
+  noop (`apply_subtotal_filter(write_if_noop=False)`), never a duplicate provenance
+  append. Non-wrapper leaves still copy to `data/overrides/agent_b2_corrections/`.
+- Layer B: `staging_bdc._prepare_bdc` accepts `raw_exclusions`; promoted
+  comparative_period_filter leaves are applied as DuckDB DELETEs on `bdc_raw` while it
+  still carries XBRL `period`. NOTE: for the target quarter this also drops NULL/empty
+  `period` rows (parity with the pandas applier the gate validated; staging's generic
+  pre-filter keeps NULL-period rows, which is exactly the leak class).
+- Layer C: `build_unified_holdings()` applies promoted investigator rules at the tail
+  (after classification, before write), per CIK, BDC-source rows only, sorted-filename
+  order (gate-time parity). row_add rows get cik/source/entity_name filled
+  structurally from the rule's CIK scope. New params `agent_rules_dir` /
+  `b2_corrections_dir`.
+- Audit artifact: `agent_fix_application_audit.csv` written next to the unified output
+  whenever any promoted store is non-empty; per rule: rows/FV applied vs
+  authoring-time measured_impact, drift flag (`noop` / `row_drift` at 10x) with WARN
+  logs -- the re-validation routing signal. Never applied silently.
+- Test isolation: autouse conftest fixture points the three store paths at empty
+  per-test dirs (marker `use_real_promoted_stores` opts out) so promoted production
+  fixes never leak into fixtures using real CIKs.
+- Wave-1 inventory: new `scripts/wave1_inventory.py` writes
+  `data/output/agent_investigate/wave1_inventory.csv`. At 2026-07-10: 48 CIKs / 72
+  rules gate-PASS ready to promote (authored FV impact ~25.8B); held back: 1377936,
+  1899017, 1975736 (gate FAIL) and 1743415 (rules but no persisted gate record --
+  re-run the gate first). The 7 staged B2 correction leaves have no persisted gate
+  records (pre-date b3_gate layout); gate them live before promoting.
+- Operational note: after promoting a CIK's rules and rebuilding, its staged rules
+  under data/output/agent_investigate/<cik>/rules are STALE relative to the corrected
+  baseline -- archive/clear before re-investigating that CIK (retire `-Fresh` as the
+  default runbook).
+- Tests: new tests/test_agent_promoted.py (22) incl. Layers B+C end-to-end through
+  build_unified_holdings; 2 new promote tests in test_agent_b2_run_remediation.py.
+  Targeted suites green: agent rule/applier/wrapper-patch/anchor (87), verdict_leaf
+  (30), shadow/conservation/promote selection (46). Wave 1 itself (promotion +
+  rebuild + semantic diff + battery re-run) NOT executed -- operator-gated.
+
+## 2026-07-10 — Disk reclamation: worker-fleet scratch + pre-run snapshot retention
+
+**What changed:**
+- Diagnosed `data/` at ~600 GB: 853 stale `codex.exe` copies (257 GB) in `worker_home\.sandbox-bin` dirs under `data/output` (Codex copies its ~300 MB binary into every fresh CODEX_HOME), plus ~40 MB/~5,000-file plugin caches per worker, plus 29 unpruned `pre_run_*` snapshots (154 GB) in `data/snapshots`.
+- Deleted all `codex.exe` copies and `worker_home\*\.tmp\plugins` caches under `data/output` (agent_b, agent_investigate, agent_a, agent_b2, agent_anchor). Work artifacts (logs, wrappers, verdicts, prompts, sqlite state) untouched.
+- Pruned 24 oldest `pre_run_*` snapshots (~130 GB); kept `baseline`, `pre_2026_05_27_refresh`, and the 3 newest `pre_run_*`.
+- `scripts/run_codex_worker.ps1`: now deletes `.sandbox-bin\codex.exe` and `.tmp\plugins` from the worker home after each run (new `-NoCleanup` switch preserves them for debugging).
+- New `scripts/cleanup_worker_scratch.ps1`: sweeps orphaned scratch from killed dispatchers/pre-change batches (`-Root`, `-WhatIfOnly`); refuses to run while codex processes are alive.
+- `pipeline/main.py` `_snapshot_outputs()`: now prunes to the newest 3 `pre_run_*` snapshots after each auto-snapshot (`_PRE_RUN_SNAPSHOTS_KEEP = 3`); named snapshots never touched.
+- `docs/reference/codex_worker_dispatch.md`: added "Disk hygiene" section.
+
+**Tests:** new `tests/test_snapshot_prune.py` (5 tests, passing). No production data outputs touched — deletions were sandbox scratch and snapshot copies only.
+
+## 2026-07-10 -- Wave 1 executed: first production application of promoted agent fixes
+
+- Promotion (commit 19d083d): 49 CIKs attempted via run_investigation.promote (live B3
+  gate = promotion bar). 44 promoted; 5 refused by the live gate against current
+  production (1803498, 1859919 delete-to-balance; 1899996, 1911066, 1965934 residual
+  unchanged) -- stale June PASS records did not carry.
+- Parity check (scripts/wave1_parity_check.py) pulled 4 more: 1508655, 1812554,
+  1885968 (rules matched 0 rows on the current frame -- caught by the new noop drift
+  flag) and 1743415 (~1 row/quarter beyond its rules). Archived under
+  data/output/agent_investigate/wave1_pulled/ for re-investigation. Final wave:
+  40 CIKs / 64 rules; parity 440 CIK-quarters, 0 mismatches, audit 64/64 applied,
+  0 drift flags.
+- Production rebuild: 792,256 unified rows. agent_fix_application_audit.csv is now a
+  standing rebuild artifact.
+- Conservation engine re-run (first post-gap-1 measurement): fv_conservation flagged
+  CIK-quarters 337 -> 245 (-27%); reconciles 427 -> 519; 7 verified_override anchors
+  in use. 38/40 wave targets reconcile; 1930087 (-0.85% vs its verified anchor) and
+  1930679 (+0.78%) are inside the B3 gate 1% band but outside the engine 0.5% band --
+  instrument-threshold mismatch to resolve, not a regression.
+- diff_outputs.py --semantic vs the old baseline was dominated by PRE-EXISTING drift
+  (schema columns added since the baseline was cut: FX currency fields, nonaccrual
+  provenance, sec_dataset_quarter; changes in non-wave CIKs in position_matches).
+  It could not serve as the wave acceptance check; parity + audit + per-CIK scoping
+  did. Baseline refreshed via snapshot_outputs.py --clean; prior baseline archived at
+  data/snapshots/baseline_pre_wave1_2026-07-10/.
+- Frontend export re-run (28 JSON files) from corrected holdings.
+- Known issue (pre-existing, NOT from gap 1): test_unified_holdings.py
+  test_ixbrl_lien_fills_blank_keyword_lien fails on the pre-change tree too
+  (iXBRL lien overlay fill returns None) -- needs separate investigation. Suite
+  otherwise 894 passed (2h51m runtime; consider marking the full-build tests slow).
+- Next: re-investigate the 9 held CIKs against the current frame; live-gate + promote
+  the 7 B2 correction leaves; then the first post-rebuild B1 recalibration batch with
+  per-fingerprint-group quotas (now unblocked -- gap 1 and wave 1 are done).
+
+## 2026-07-10 -- Baseline refreshed post-wave-1; snapshot walker hardened
+
+- scripts/snapshot_outputs.py: exclude sandbox worker scratch subtrees (worker_home,
+  .sandbox*, .tmp -- nondeterministic, huge, MAX_PATH violations, deleted by cleanup
+  sweeps mid-walk) and record-not-crash on files that vanish between walk and stat.
+  First refresh attempt crashed on agent_b worker scratch; a partial copy left
+  read-only git pack files that needed an external force-remove before rerun.
+- New baseline: 24,539 included / 8,968 excluded / 33,507 artifacts at git_head
+  dcfe39c (includes the wave-1 override store). Prior baseline archived at
+  data/snapshots/baseline_pre_wave1_2026-07-10/. diff_outputs.py --semantic vs the
+  new baseline: clean (24,543 checked, 0 semantic deltas).
+- Scope note: artifact count grew from 3,759 (2026-05-16 baseline) because
+  data/output now carries agent batch records, review bundles, and ensemble outputs;
+  worker scratch stays excluded by name.
+
+## 2026-07-11 - Post-Wave-1 battery refresh + B1 recalibration frame (recal1), stopped pre-dispatch
+
+Deterministic prep for the first post-rebuild B1 recalibration batch (architecture doc
+section 5 step 2). No agents dispatched.
+
+- **Battery refresh on post-Wave-1 holdings** (all cache-only, no network): oracle
+  check_results, nonaccrual_flags (8,776 flags), `pipeline.main --validate` (row_validation
+  538,331 issues, fund financials, source-recon classification, GAV), then
+  `scripts.shadow_validation_runner` + `pipeline.review_queue`. New queue: 45,380 items
+  (blocker 14,275 / review 31,105), down from 52,353 pre-Wave-1.
+- **Runner fix**: `shadow_validation_runner.py` now calls `cons.ensure_anchor_overrides(con)`
+  before conservation rules (gap-1 Layer D added `_anchor_override` to the engine; the
+  unified runner never created it -> CatalogException. Standalone engine main() was fine,
+  which is why the Wave-1 rebuild did not hit this).
+- **New `scripts/ensemble/passstamp_survival.py`**: era-windowed verdict-survival join of the
+  918 decided ens1+ens2 verdicts against the rebuilt queue by review_id identity +
+  n_units/metric equality. Result: 468 survived_exact (pass-stamped), 35 survived_changed,
+  13 dead, 402 excluded_recalibrated (FX02/FX03/X01/X07/C103/C104/C404/PCT01/fmt_cost/
+  fmt_pct_of_net_assets/pct_position_concentration -- predicates changed since ens2).
+  Outputs in `data/output/ensemble/recal1/` (incl. pre-rebuild queue snapshot).
+- **New `scripts/ensemble/draw_recal_batch.py`**: recalibration frame with per-rule targets
+  (30, carry-over credited) + per-group minimum quotas on the 7 divergent fingerprint
+  groups from the ens2 re-cut. Frame: 250 review_ids (18 group + 232 rule), seed 20260711,
+  cohort-scoped, no-accession engines excluded, era=post_wave1_pass1.
+  Carry-over fully covers 8 rules (A07/B01/B02/C04/C107/FX01/PP03/X02) -- zero new spend.
+- **Known limitations recorded in recal_shortfall.csv / recal_manifest.json**: (i) budget
+  250 leaves ~179 rule-quota draws unmet (raise --budget to ~430 to fill all 25 rules to
+  30); (ii) divergent groups A07|0002031750 and X08|0002031750 have zero un-adjudicated
+  flags -- their old flags are survived_changed/undecided with existing verdict leaves,
+  so re-adjudication needs a prep_retry-style archive of those leaves (operator decision
+  at dispatch, NOT automated here).
+- NOT run: pytest, diff_outputs --semantic (no pipeline-code data-logic change; artifact
+  changes are the intended refresh), any B1 dispatch.
+
 ## 2026-07-12: Entity-name refresh from SEC submissions API (Owl Rock -> Blue Owl et al.)
 
 - **Problem**: website fund names came from EFTS `display_names` captured at universe
@@ -3196,3 +6607,32 @@ No production data or schemas changed; experiment is read-only.
   138 passed. Full suite NOT run (recal1 B1 worker batch was running concurrently;
   avoided overlapping long jobs). Frontend verified: fund_list.json 69 funds, zero
   "(CIK" remnants, both Blue Owl names current in fund_list + fund_details.
+
+## 2026-07-12: Live B3 gate on the 7 legacy agent_b2 correction leaves (remediation-chain open item 3)
+
+- Ran the deterministic B3 gate (`scripts.agent_b2.run_remediation apply --run` +
+  `gate`) on the 4 applyable leaves in `data/output/agent_b2/corrections/` against
+  the post-Wave-1 production baseline. Batch artifacts:
+  `data/output/agent_b2/batch/b2leaves_livegate_20260712/` (apply audits + gate JSONs).
+- **PASS (harmless no-op, recommend ARCHIVE not promote):** 0001603480 and
+  0001715933 comparative_period_filter (target 2025-06-30). Trial holdings are
+  byte-identical to baseline (628,526,568 / 1,093,518,278) -- the promoted Wave-1
+  rules already remove the comparative rows; gate PASS here means "no regression
+  across 12 held-out quarters", not "fixes anything". The feared double-fix does
+  NOT occur (appliers are idempotent when the rows are already gone).
+- **FAIL (template matches zero rows, discard + re-investigate):** 0001377936
+  subtotal_filter (2026-02-28, residual unchanged at 358,770,363) and 0001920453
+  subtotal_filter (2024-03-31, residual unchanged at 1,000,212,357). Both wrapper
+  patches applied cleanly (patterns added) but caught nothing at extraction --
+  0001377936 is the known guessed no-op patch from a Stage-3 symptom flag.
+- **Not gateable in this framework:** 0001715933/classification_fix and
+  0002052153/classification_fix (no wrapper-patch applier registered for
+  classification_fix) and 0002052153/rule_scope (rule-track, not a holdings
+  correction). 0002052153 still overshoots ~80% -- route through the current
+  agent_investigate chain instead.
+- Gate-baseline sanity: production CSV sums match engine value_sum exactly for
+  3/4 CIKs; 0001377936 differs 1.5% (CSV 1,467,904,175 vs engine 1,445,584,788;
+  the leaf verdict's observed_value matches the CSV sum). Gate compares
+  trial-vs-baseline against the same anchor, so verdicts are unaffected.
+- NOT run: pytest (no pipeline code changed), no production writes (trial dirs +
+  batch dir only).

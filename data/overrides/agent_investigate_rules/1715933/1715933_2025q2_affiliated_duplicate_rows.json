@@ -1,0 +1,32 @@
+{
+  "cik": "1715933",
+  "rule_id": "1715933_2025q2_affiliated_duplicate_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-06-30' AND (bdc_dimensions_raw LIKE 'investmentidentifieraxis=Controlled Affiliated Investments%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Non-Controlled Affiliated Investments%')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-06-30, holdings split into schedule_detail rows=60 fv=1726029084.0 and affiliation_axis rows=28 fv=402132074.0. The affiliation-axis rows duplicate investments already present in the debt/equity detail schedule, e.g. Live Comfortably Borrower LLC Term Loan appears once as Debt Securities fair_value 54080611.0 and once as Controlled Affiliated Investments fair_value 54080611.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Anchor override rationale: The schedule presents a final Total Investments row after Total Debt & Equity Investments, Total Cash Equivalents, and Total Short-term Investments. Its fair value is 1,093,518,278, which equals 691,956,192 + 7,095,586 + 394,466,500."
+    }
+  ],
+  "rationale": "The controlled and non-controlled affiliated rows are alternate-axis presentations of underlying debt/equity positions already counted in the detailed schedule. They must be excluded as duplicates; the missing cash-equivalent and short-term investment components are handled by a separate row_add rule rather than by retaining duplicate private-position rows.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 28,
+      "fv": -402132074.0,
+      "residual_before": 569988.0,
+      "residual_after": -401562086.0
+    }
+  }
+}

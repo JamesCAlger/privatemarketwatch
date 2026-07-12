@@ -1,0 +1,116 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001372807",
+  "entity_name": "BCP Investment Corp",
+  "status": "ACTIVE",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "AFFIL SECDEBT RATE REFRATE MAT"
+  },
+  "available_identifier_datapoints": [
+    "issuer",
+    "portfolio relationship",
+    "instrument type",
+    "industry",
+    "interest_rate",
+    "interest_rate_cash_leg",
+    "pik_rate",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate_floor",
+    "maturity_date",
+    "initial_acquisition_date"
+  ],
+  "unsupported_identifier_datapoints": [],
+  "pik_convention": "additive",
+  "required_fields": [
+    "interest_rate",
+    "reference_rate_type",
+    "basis_spread",
+    "maturity_date"
+  ],
+  "extractors": [
+    {
+      "field": "interest_rate",
+      "regex": "\\bInterest Rate\\s+(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate_cash_leg",
+      "regex": "\\bInterest Rate\\s+(\\d+(?:\\.\\d+)?)%\\s+Cash\\s*\\+\\s*\\d+(?:\\.\\d+)?%\\s+PIK\\b",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "(?:,\\s*)?(\\d+(?:\\.\\d+)?)%\\s+PIK\\b",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "reference_rate_type",
+      "regex": "\\bReference Rate and Spread\\s+(SOFR|L)\\s*\\+",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "SOFR": "SOFR",
+        "L": "LIBOR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\bReference Rate and Spread\\s+(?:SOFR|L)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate_floor",
+      "regex": "\\bFloor\\s+(\\d+(?:\\.\\d+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "\\bMaturity\\s+(\\d{1,2}/\\d{1,2}/\\d{2,4})\\b",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": [
+    {
+      "field": "coupon_type",
+      "kind": "presence",
+      "source": "reference_rate_type",
+      "present_value": "floating",
+      "missing_value": "fixed"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "interest_rate_agrees_with_twin",
+      "kind": "pct_agree",
+      "parsed": "interest_rate",
+      "twin": "interest_rate"
+    },
+    {
+      "name": "basis_spread_agrees_with_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "maturity_date_agrees_with_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    },
+    {
+      "name": "reference_implies_spread",
+      "kind": "implication",
+      "if_present": "reference_rate_type",
+      "then_present": "basis_spread"
+    }
+  ],
+  "notes": "Bundle identifiers embed rate fields in newer SECDEBT RATE REFRATE MAT rows and older RATE REFRATE MAT rows. Regexes allow SOFR + 7.00%, SOFR+6.25%, and L+5.75% formats."
+}

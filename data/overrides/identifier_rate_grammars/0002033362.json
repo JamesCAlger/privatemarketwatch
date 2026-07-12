@@ -1,0 +1,99 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0002033362",
+  "entity_name": "Audax Private Credit Fund, LLC",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "issuer",
+    "investment_type",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "acquisition_date",
+    "maturity_date",
+    "pik_indicator_when_interest_rate_contains_PIK"
+  ],
+  "unsupported_identifier_datapoints": [
+    "cash_leg_rate",
+    "floor_rate",
+    "pik_rate_as_separate_component"
+  ],
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "RATE MAT",
+    "signatures": [
+      "RATE MAT",
+      "REFRATE MAT",
+      "MAT"
+    ]
+  },
+  "dominant_signature": "RATE MAT",
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "\\bIndex\\s+(?P<reference_rate_raw>S\\+)\\b",
+      "group": "reference_rate_raw",
+      "map": {
+        "S+": "SOFR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\bSpread\\s+(?P<basis_spread>\\d+(?:\\.\\d+)?)%",
+      "group": "basis_spread",
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "\\bInterest\\s+Rate\\s+(?P<interest_rate>\\d+(?:\\.\\d+)?)%\\s*(?P<pik_marker>PIK)?",
+      "group": "interest_rate",
+      "type": "pct"
+    },
+    {
+      "field": "acquisition_date",
+      "regex": "\\bAcquisition\\s+Date\\s+(?P<acquisition_date>\\d{1,2}/\\d{1,2}/\\d{4})\\b",
+      "group": "acquisition_date",
+      "type": "date_mdy"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "\\bMaturity\\s+(?:Date\\s+)?(?P<maturity_date>\\d{1,2}/\\d{1,2}/0?\\d{4})\\b",
+      "group": "maturity_date",
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": {
+      "floating_when": "reference_rate_type present",
+      "fixed_when": "reference_rate_type absent and interest_rate present"
+    },
+    "pik_current_status": {
+      "true_when": "interest_rate extractor captures pik_marker"
+    }
+  },
+  "invariants": [
+    {
+      "name": "maturity_date_matches_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date",
+      "when": "maturity_date present"
+    }
+  ],
+  "pik_convention": "inclusive",
+  "required_fields": [
+    "maturity_date"
+  ],
+  "evidence": [
+    "Bundle dominant RATE MAT identifiers embed Index S+, Spread, Interest Rate, Acquisition Date, and Maturity Date.",
+    "Evidence table 25 row 1 and later SOI tables confirm source columns Investment Type, Index (^), Spread, Interest Rate, Acquisition Date, and Maturity Date.",
+    "Evidence table 26 rows 12-13 confirm SavATree position rows with S+, 5.00%, 8.65%, and 6/6/2031 maturity.",
+    "Evidence table 27 row 28 shows an optional PIK marker in Interest Rate, but PIK is not present on nearly all dominant rows."
+  ],
+  "notes": [
+    "Spread and interest rate are stated as percentages in the identifier and should be divided by 100 by downstream conversion.",
+    "The REFRATE MAT minority samples include maturity but no embedded Index/Spread/Interest Rate text; rate values for those rows appear to live in SOI columns, not the identifier.",
+    "The MAT equity variant has issuer, investment type, and acquisition date only, with null rate and maturity twins."
+  ]
+}

@@ -58,7 +58,7 @@ _SCHEDULE_TOTAL_SQL = (
 @dataclass(frozen=True)
 class Anchor:
     """Where to get the independent fund-level total for one CIK-quarter."""
-    kind: str            # 'fund_financials' | 'schedule_total'
+    kind: str            # 'verified_override' | 'fund_financials' | 'schedule_total' | 'companyfacts_concept'
     label: str           # tier label recorded in output (e.g. 'companyfacts_fv')
     column: str          # fund_financials column, OR the value column for a schedule total row
 
@@ -80,6 +80,11 @@ RULES: list[ConservationRule] = [
         name="fv_conservation",
         value_column="fair_value",
         anchors=(
+            # TOP priority: Anchor-Adjudicator grand totals (data/overrides/agent_anchor/),
+            # each verified by the deterministic balance-sheet closure check. Without this,
+            # quarters whose companyfacts FV is an incomplete subtotal keep re-flagging
+            # after adjudication (gap 1 Layer D).
+            Anchor("verified_override", "verified_override", "grand_total"),
             Anchor("fund_financials", "companyfacts_fv", "investments_at_fair_value"),
             Anchor("schedule_total", "schedule_total", "fair_value"),
         ),
@@ -156,8 +161,24 @@ def ensure_companyfacts_cost(con: duckdb.DuckDBPyConnection) -> int:
     return len(rows)
 
 
+def ensure_anchor_overrides(con: duckdb.DuckDBPyConnection) -> int:
+    """Build TEMP TABLE _anchor_override(cik, report_date, anchor_value) from the
+    promoted Anchor-Adjudicator grand totals. Must be called before running any rule
+    with a verified_override anchor."""
+    from pipeline.agent_promoted import load_anchor_overrides
+    rows = [(o["cik"], o["report_date"], o["anchor_value"]) for o in load_anchor_overrides()]
+    con.execute("CREATE OR REPLACE TEMP TABLE _anchor_override("
+                "cik VARCHAR, report_date VARCHAR, anchor_value DOUBLE)")
+    if rows:
+        con.executemany("INSERT INTO _anchor_override VALUES (?, ?, ?)", rows)
+    return len(rows)
+
+
 def _anchor_table_sql(anchor: Anchor) -> str:
     """SQL returning (cik, report_date, anchor_value) for one anchor kind."""
+    if anchor.kind == "verified_override":
+        # Reads the table built by ensure_anchor_overrides() (promoted adjudications).
+        return "SELECT cik, report_date, anchor_value FROM _anchor_override"
     if anchor.kind == "fund_financials":
         return f"""
             SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
@@ -199,6 +220,9 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
         FROM {_unified()}
         WHERE bdc_dimensions_raw IS NOT NULL
           AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)
+          -- cash-equivalents (T-bills, money-market sweeps) stay in holdings but are NOT 'investments
+          -- at fair value'; the companyfacts anchor excludes them, so the conservation sum must too.
+          AND upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'
         GROUP BY 1, 2
         """
     )
@@ -250,8 +274,10 @@ def main(argv: list[str] | None = None) -> int:
     con.execute("CREATE TABLE wrapped(cik VARCHAR)")
     con.executemany("INSERT INTO wrapped VALUES (?)", [(c,) for c in ciks])
     n_cf = ensure_companyfacts_cost(con)
-    logger.info("conservation engine: cohort %d CIKs, %d rules, %d companyfacts cost facts",
-                len(ciks), len(RULES), n_cf)
+    n_ov = ensure_anchor_overrides(con)
+    logger.info("conservation engine: cohort %d CIKs, %d rules, %d companyfacts cost facts, "
+                "%d verified anchor overrides",
+                len(ciks), len(RULES), n_cf, n_ov)
 
     for rule in RULES:
         run_rule(con, rule)

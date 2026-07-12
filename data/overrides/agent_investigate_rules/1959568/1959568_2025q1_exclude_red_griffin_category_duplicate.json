@@ -1,0 +1,32 @@
+{
+  "cik": "1959568",
+  "rule_id": "1959568_2025q1_exclude_red_griffin_category_duplicate",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-03-31' AND bdc_dimensions_raw = 'investmentidentifieraxis=Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Common Stock Air Freight & Logistics'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-03-31 holdings, the category-only Red Griffin row has fair_value 3250000 and cost 3694000, and the named Red Griffin TopCo, LLC common stock row has the same fair_value 3250000 and cost 3694000. Adjacent quarters contain only the named Red Griffin TopCo, LLC row."
+    },
+    {
+      "source": "query",
+      "quote": "staging rows for 2025-03-31 include both dimensions_raw='investmentidentifieraxis=Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Common Stock Air Freight & Logistics' and dimensions_raw='... Red Griffin TopCo, LLC Investment Type Common Stock' with identical fair_value 3250000 and cost 3694000."
+    }
+  ],
+  "rationale": "The 2025-03-31 extraction leaked an equity category aggregate row in addition to the real named Red Griffin TopCo, LLC common stock position. The category-only row duplicates the named position's fair value and cost and is not present as a separate holding in adjacent quarters.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": -3250000.0,
+      "residual_before": 3316000.0,
+      "residual_after": 66000.0
+    }
+  }
+}

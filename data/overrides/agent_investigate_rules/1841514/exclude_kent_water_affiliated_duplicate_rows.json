@@ -1,0 +1,60 @@
+{
+  "cik": "1841514",
+  "rule_id": "exclude_kent_water_affiliated_duplicate_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw LIKE 'investmentidentifieraxis=Non-controlled, Affiliated investments, Kent Water Sports Holdings, LLC - Delayed Draw Loan%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings contains a Debt Investments Kent Water Sports Holdings, LLC - Delayed Draw Term Loan First-Out row with fair_value 8203000.0 and a Non-controlled, Affiliated investments, Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out row with the same fair_value 8203000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The selected Non-controlled, Affiliated investments Kent Water Sports rows explain the full fair-value residual in 2025-06-30 (9189000.0 to 0.0), 2025-09-30 (7442000.0 to 0.0), and 2025-12-31 (8203000.0 to 0.0); they also reduce 2025-03-31 residual from 16280000.0 to 6755000.0."
+    },
+    {
+      "source": "query",
+      "quote": "For 2026-03-31, the same pattern exists without an anchor: a Kent Water Sports debt row and a Non-controlled, Affiliated investments row both report fair_value 7854000.0 for the first-out delayed draw loan."
+    }
+  ],
+  "rationale": "The Non-controlled, Affiliated investments Kent Water Sports rows are duplicate disclosure-axis representations of positions already present in the Debt Investments schedule. They lack principal_amount and repeat the fair_value of the debt-position rows, so they should not be included as separate holdings in fair-value conservation.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 2,
+      "fv": 9525000.0,
+      "residual_before": 16280000.0,
+      "residual_after": 6755000.0
+    },
+    "2025-06-30": {
+      "rows": 2,
+      "fv": 9189000.0,
+      "residual_before": 9189000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 2,
+      "fv": 7442000.0,
+      "residual_before": 7442000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 8203000.0,
+      "residual_before": 8203000.0,
+      "residual_after": 0.0
+    },
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 7854000.0,
+      "residual_before": null,
+      "residual_after": null
+    }
+  }
+}

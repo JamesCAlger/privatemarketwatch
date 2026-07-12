@@ -1,0 +1,36 @@
+{
+  "cik": "1838126",
+  "rule_id": "1838126_2025q4_bare_axis_leak_exclusion",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw NOT LIKE '%Non-Affiliated Issuer%' AND bdc_dimensions_raw NOT IN ('investmentidentifieraxis=Brandt Information Services, LLC 2','investmentidentifieraxis=FH BMX Buyer, Inc. 2','investmentidentifieraxis=CCI Topco, Inc. - Preferred Stock','investmentidentifieraxis=AMR GP Holdings Ltd - Ordinary Shares','investmentidentifieraxis=FH BMX Buyer, Inc. 4','investmentidentifieraxis=FH BMX Buyer, Inc. 6','investmentidentifieraxis=FH BMX Buyer, Inc. 5','investmentidentifieraxis=Brandt Information Services, LLC')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "fund_financials for 2025-12-31 reports investments_at_fair_value=25337420000.0 and total_assets=26304427000.0; conservation reports value_sum=26786615000.0, anchor_value=25337420000.0, residual_pct=5.72."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-12-31 holdings, rows with bdc_dimensions_raw containing 'Non-Affiliated Issuer' sum to 25258694000.0 across 817 rows, while 25 bare investmentidentifieraxis rows without the affiliation member sum to 1527921000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The scoped predicate selects 17 bare-axis rows totaling 1449195000.0; value_sum 26786615000.0 less this exclusion equals 25337420000.0, residual_after=0.0."
+    }
+  ],
+  "rationale": "The 2025-12-31 filing introduced fully qualified investmentidentifieraxis dimensions with the Non-Affiliated Issuer member for the main schedule, but holdings also retained a set of leaked bare investmentidentifieraxis rows from the same schedule. Dropping every bare row would undershoot the validated anchor by 78726000.0, so the exclusion is scoped to the bare-axis rows that reconcile exactly as over-included leakage while retaining the small bare-axis rows needed by the filing total.",
+  "confidence": 0.86,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 17,
+      "fv": 1449195000.0,
+      "residual_before": 1449195000.0,
+      "residual_after": 0.0
+    }
+  }
+}

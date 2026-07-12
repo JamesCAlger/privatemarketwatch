@@ -33,6 +33,11 @@ EXCLUDE_PREFIXES = {
     "llm_": "LLM review output can depend on model/API behavior",
     "gics_label_cache": "GICS classification cache can depend on external model/API behavior",
 }
+# Directory names whose subtrees are never baseline artifacts: sandbox worker scratch
+# (codex homes with sqlite state, plugin caches, exe copies) is nondeterministic, huge,
+# can exceed MAX_PATH, and may be deleted by cleanup sweeps while the walk runs.
+EXCLUDE_DIR_NAMES = {"worker_home", "worker_homes", ".sandbox", ".sandbox-bin",
+                     ".sandbox-secrets", ".tmp"}
 
 
 def _sha256(path: Path) -> str:
@@ -78,10 +83,15 @@ def _exclusion_reason(path: Path) -> str | None:
     return None
 
 
+def _in_excluded_dir(path: Path) -> bool:
+    return any(part in EXCLUDE_DIR_NAMES for part in path.relative_to(ROOT).parts)
+
+
 def _iter_artifacts() -> list[Path]:
     paths: list[Path] = []
     if OUTPUT_DIR.exists():
-        paths.extend(p for p in OUTPUT_DIR.rglob("*") if p.is_file())
+        paths.extend(p for p in OUTPUT_DIR.rglob("*")
+                     if not _in_excluded_dir(p) and p.is_file())
     if FRONTEND_DATA_DIR.exists():
         paths.extend(p for p in FRONTEND_DATA_DIR.glob("*.json") if p.is_file())
         fund_details = FRONTEND_DATA_DIR / "fund_details"
@@ -132,10 +142,21 @@ def snapshot(clean: bool = False) -> dict:
     for path in _iter_artifacts():
         rel = path.relative_to(ROOT).as_posix()
         reason = _exclusion_reason(path)
+        try:
+            size = path.stat().st_size
+        except OSError as exc:
+            # File vanished between walk and stat (concurrent cleanup) or exceeds
+            # MAX_PATH -- record, never crash the snapshot.
+            artifacts.append({
+                "path": rel, "artifact_class": _artifact_class(path),
+                "status": "excluded_with_reason",
+                "reason": f"unreadable during walk: {exc.__class__.__name__}",
+            })
+            continue
         entry = {
             "path": rel,
             "artifact_class": _artifact_class(path),
-            "size_bytes": path.stat().st_size,
+            "size_bytes": size,
         }
         if reason:
             entry.update({

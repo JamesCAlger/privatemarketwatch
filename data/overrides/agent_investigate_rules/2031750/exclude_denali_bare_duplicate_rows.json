@@ -1,0 +1,56 @@
+{
+  "cik": "2031750",
+  "rule_id": "exclude_denali_bare_duplicate_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw = 'investmentidentifieraxis=Denali Equity Holdings LLC' AND shares_held IS NULL AND principal_amount IS NULL",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-06-30, holdings include Denali Equity Holdings LLC fv=782500 with dimensions investmentidentifieraxis=Denali Equity Holdings LLC, shares_held=NULL, principal_amount=NULL, and also the real Denali Equity Holdings LLC, Class A units fv=354076000 with shares_held=3749."
+    },
+    {
+      "source": "query",
+      "quote": "The bare Denali rows equal the residual after cash removal: 2025-03-31 fv=760400, 2025-06-30 fv=782500, 2025-09-30 fv=1544900, 2025-12-31 fv=2522500. Earlier 2024 Denali rows have shares_held=3749 and are not selected by this predicate."
+    }
+  ],
+  "rationale": "Beginning in 2025, the bare Denali axis row is a duplicate/non-position extraction with no share or principal detail while the actual Denali equity position is captured in a separate Class A/Other equity row. The predicate leaves the 2024 real Denali holdings untouched because those rows have shares_held populated.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": 760400.0,
+      "residual_before": 760400.0,
+      "residual_after": 0.0
+    },
+    "2025-06-30": {
+      "rows": 1,
+      "fv": 782500.0,
+      "residual_before": 782500.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 1544900.0,
+      "residual_before": 1544900.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 2522500.0,
+      "residual_before": 2522500.0,
+      "residual_after": 0.0
+    },
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 2657000.0,
+      "residual_before": null,
+      "residual_after": null
+    }
+  }
+}

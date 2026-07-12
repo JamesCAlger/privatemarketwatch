@@ -1,0 +1,51 @@
+{
+  "cik": "1950976",
+  "rule_id": "add_2025_short_term_investment",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Dreyfus Treasury Obligations Cash Management Money Market Fund",
+      "instrument_description": "Short-Term Investments",
+      "asset_category": "CASH_EQUIVALENT",
+      "issuer_category": "FUND",
+      "asset_class": "CASH_EQUIVALENTS",
+      "fair_value": 65057000.0,
+      "cost": 65057000.0,
+      "pct_of_net_assets": 10.70,
+      "bdc_investment_identifier": "Short-Term Investments | Dreyfus Treasury Obligations Cash Management Money Market Fund",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-Term Investments | Dreyfus Treasury Obligations Cash Management Money Market Fund",
+      "source_row_id": "ix:nonFraction:F_d21b1c2a-3027-4bea-989e-77e9a5906a30"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule row under Short-Term Investments: Dreyfus Treasury Obligations Cash Management Money Market Fund; cost 65,057; fair value 65,057; percent of net assets 10.70% (iXBRL fair value fact F_d21b1c2a-3027-4bea-989e-77e9a5906a30)."
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments at fair value is tagged 1,417,789, while the extracted non-short-term schedule total is separately tagged InvestmentOwnedAtFairValueExcludingShortTermInvestments at 1,352,732."
+    },
+    {
+      "source": "query",
+      "quote": "holdings value_sum for 2025-12-31 is 1,352,732,000 against companyfacts_fv anchor 1,417,789,000; staging has no row matching short-term/cash for report_date 2025-12-31, confirming the short-term investment was omitted before holdings."
+    }
+  ],
+  "rationale": "The extractor captured the long-term investment schedule excluding short-term investments but omitted the separate short-term money market fund row. Adding the one iXBRL-backed short-term investment reconciles holdings to the filer's total investments at fair value without deleting any real position.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 65057000.0,
+      "residual_before": -65057000.0,
+      "residual_after": 0.0
+    }
+  }
+}

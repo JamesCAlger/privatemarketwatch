@@ -1,0 +1,36 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001383414",
+  "entity_name": "PENNANTPARK INVESTMENT CORP",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\b(?:Non-Controlled, Non-Affiliated|Controlled, Affiliated|Affiliated Portfolio Companies|Related Party PSLF)\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:First Lien Secured Debt|Second Lien Secured Debt|Subordinated Debt|Debt Securities)\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\b(?:Common Equity|Preferred Equity|Preferred Equity/Partnership Interests|Equity Securities|Partnership Interests)\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\b(?:Funded Revolver|Unfunded Revolver|Revolver|Term Loan|Promissory Note|Second out|Class [A-Z] Preferred Equity)\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Current Coupon|Coupon)\\s+\\d+(?:\\.\\d+)?%"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:Basis Point Spread Above Index\\s+)?(?:SOFR|\\dM\\s+L|L)\\+\\d+\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b"
+    }
+  ]
+}

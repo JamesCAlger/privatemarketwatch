@@ -88,14 +88,17 @@ RULES: list[IdentityRule] = [
         residual_sql="fair_value - pct_of_net_assets/100.0*_scalar",
         tol_note="FV = pct/100 * net_assets, 10% rel-to-FV (pct rounding)",
     ),
-    IdentityRule(
-        name="pik_le_interest_rate", table="unified",
-        needed_cols=("pik_rate", "interest_rate"),
-        row_filter="pik_rate > 0 AND interest_rate > 0",
-        holds_sql="pik_rate <= interest_rate + 0.001",
-        residual_sql="pik_rate - interest_rate",
-        tol_note="pik_rate <= interest_rate",
-    ),
+    # RETIRED 2026-06-19 (B-trial evidence): "pik_le_interest_rate" was an unsound
+    # invariant. Its row_filter (pik_rate>0 AND interest_rate>0) selects EXACTLY the
+    # split "X% cash, Y% PIK" coupons, where the pipeline stores the CASH leg in
+    # interest_rate and the PIK leg in pik_rate -- so PIK legitimately exceeds the
+    # cash leg (e.g. "6.7% Cash, 7.6% PIK"; "3.65% cash / 7.25% PIK"). The sound
+    # invariant compares PIK to the ALL-IN coupon (interest_rate + pik_rate), which
+    # is vacuously true, so no useful per-row ordering check remains. The B pilot
+    # adjudicated 15/15 of this rule's flags as false alarms (Wilson95 [80,100]),
+    # all localized to legitimate split-coupon disclosures. Do NOT re-add without a
+    # field that distinguishes cash-leg interest_rate from all-in interest_rate.
+    # PIK magnitude plausibility is already covered by fmt_pik_rate (weak range).
     # fund-level (fund_financials -- the reliable balance-sheet schema)
     IdentityRule(
         name="nav_identity", table="fund_financials",

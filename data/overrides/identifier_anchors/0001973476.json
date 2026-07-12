@@ -1,0 +1,97 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001973476",
+  "entity_name": "North Haven Private Income Fund A LLC",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "issuer",
+    "affiliation_section",
+    "industry_or_sector",
+    "instrument_type",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "interest_rate",
+    "maturity_date",
+    "commitment_type",
+    "commitment_expiration_date",
+    "ordinal_suffix"
+  ],
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\bInvestments\\s*(?:-|\\u2014)?\\s*non-controlled/non-affiliated\\b",
+      "evidence": "Bundle identifiers use Investments-non-controlled/non-affiliated in debt rows and Investments \\u2014 non-controlled/non-affiliated in commitment rows."
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments\\b",
+      "evidence": "Existing CIK anchor vocabulary recognizes explicit Equity Investments section text."
+    },
+    {
+      "label": "SUBORD",
+      "regex": "\\bSubordinated Debt\\b",
+      "evidence": "Existing CIK anchor vocabulary recognizes explicit Subordinated Debt text."
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b",
+      "evidence": "Dominant bundle identifiers include Reference Rate and Spread before the embedded spread."
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b",
+      "evidence": "Dominant bundle identifiers include Interest Rate before the embedded coupon."
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b(?:Maturity Date|Acquisition Date|Commitment Expiration Date)\\b",
+      "evidence": "Bundle identifiers include Maturity Date for debt rows and Commitment Expiration Date for commitments."
+    },
+    {
+      "label": "COMMIT",
+      "regex": "\\bCommitment Type\\b",
+      "evidence": "Commitment bundle identifiers include Commitment Type."
+    },
+    {
+      "label": "COMMITEXP",
+      "regex": "\\bCommitment Expiration Date\\b",
+      "evidence": "Commitment bundle identifiers include Commitment Expiration Date."
+    },
+    {
+      "label": "TOTAL",
+      "regex": "\\b(?:Total Debt Investments|Total Equity Investments|Total Portfolio Investments)\\b",
+      "evidence": "Existing CIK anchor vocabulary recognizes explicit total-line markers."
+    },
+    {
+      "label": "INVESTMENT_ORDINAL",
+      "regex": "\\bInvestment\\s+(?:One|Two|Three)\\b",
+      "evidence": "Bundle rate-bearing identifiers include Investment One, Investment Two, and Investment Three suffix variants."
+    },
+    {
+      "label": "PLAIN_ISSUER",
+      "regex": "\\b(?:iCIMS|Associations|Granicus|Magneto Components Buyco),\\s+(?:Inc|LLC)\\.(?:\\s+\\d+)?\\b",
+      "evidence": "Bundle plain-issuer and none examples include iCIMS, Associations, Granicus, and Magneto Components Buyco with optional ordinal suffixes."
+    },
+    {
+      "label": "QUALIFYING_ASSET_TOTAL",
+      "regex": "\\b(?:Non[- ]?)?Qualifying Assets\\b",
+      "evidence": "Existing CIK anchor vocabulary includes these subtotal/category markers."
+    }
+  ],
+  "source_observations": [
+    {
+      "accession_number": "0001193125-26-088351",
+      "table_index": 34,
+      "row_index": 1,
+      "observation": "Existing CIK evidence cites a source header containing Investment, Reference Rate and Spread, Interest Rate, and Maturity Date."
+    },
+    {
+      "accession_number": "0001193125-26-088351",
+      "table_index": 47,
+      "row_index": 1,
+      "observation": "Existing CIK evidence cites a commitment schedule header containing Investments - non-controlled/non-affiliated, Commitment Type, and Commitment Expiration Date."
+    }
+  ]
+}

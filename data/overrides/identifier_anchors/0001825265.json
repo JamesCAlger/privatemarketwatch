@@ -1,0 +1,31 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001825265",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "\\bDebt Investments\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments\\b|\\bWarrant\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bCash Equivalents\\b|\\bShort-term Investments\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bSOFR\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b\\d+(?:\\.\\d+)?%\\s*(?:inc\\s*PIK)?\\s*\\(|\\bYield\\s+\\d+(?:\\.\\d+)?%|\\bNet Assets\\s+\\d+(?:\\.\\d+)?%"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity(?:\\s+Date)?\\b|\\bexpires\\b"
+    }
+  ]
+}

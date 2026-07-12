@@ -1,0 +1,40 @@
+{
+  "cik": "1633336",
+  "rule_id": "exclude_2024q4_patriot_growth_unrated_parent_term_loan",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2024-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-12-31' AND bdc_dimensions_raw = 'investmentidentifieraxis=Investments United States Debt Investments Insurance Patriot Growth Insurance Services, LLC Investment Type Unitranche First Lien Term Loan' AND TRY_CAST(fair_value AS DOUBLE) = 79604000.0 AND TRY_CAST(cost AS DOUBLE) = 79676000.0",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2024-12-31 sum to fair_value=1686825000.0 versus validated anchor=1598857000.0, an excess of 87968000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The row selected by the predicate appears once and only in report_date=2024-12-31, with fair_value=79604000.0 and cost=79676000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Staging for Patriot Growth Insurance Services, LLC at period=2024-12-31 contains an unrated/unmatured parent Unitranche First Lien Term Loan row for fair_value=79604000.0, plus detailed child rows with rates and maturities: Term Loan S+500 9.75% fair_value=9056000.0, Term Loan S+600 10.33% fair_value=4378000.0, delayed draw loans, and revolvers."
+    },
+    {
+      "source": "query",
+      "quote": "Excluding only the unrated Patriot parent term loan changes 2024-12-31 corrected fair value from 1686825000.0 to 1607221000.0, leaving residual_pct=0.523% against the 1598857000.0 anchor."
+    }
+  ],
+  "rationale": "The Patriot Growth Insurance Services row is a parent/aggregate representation: it lacks the rate and maturity fields that identify an individual debt position, while current-period staging and holdings also contain the detailed Patriot debt instruments with rates, maturities, and smaller fair values. Keeping both the parent and its detailed children over-counts the filing schedule. The exclusion is scoped to the single affected quarter and exact dimensional/value signature, so it does not delete other Patriot holdings or affect other quarters.",
+  "confidence": 0.86,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": -79604000.0,
+      "residual_before": 87968000.0,
+      "residual_after": 8364000.0
+    }
+  }
+}

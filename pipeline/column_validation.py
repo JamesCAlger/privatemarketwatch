@@ -159,6 +159,45 @@ def _value_sql(col: str) -> str:
     return f"COALESCE(CAST({col} AS VARCHAR), '')"
 
 
+def _is_usd_unit_sql(col: str) -> str:
+    """SQL boolean: does a currency/unit token denote USD?
+
+    BDC XBRL currency units frequently arrive as non-canonical USD tokens
+    ('U_USD', 'UNIT_USD', 'UNIT_STANDARD_USD_<hash>'). These are dollar-
+    denominated -- a bare `IN ('', 'USD')` match wrongly flags them (FX02/FX03
+    false-alarm rate ~85%). Treat blank, 'USD', or any token carrying 'USD' at a
+    token boundary as USD. No ISO currency other than USD contains the substring
+    'USD', so the boundary form does not mask a genuine non-USD unit (e.g. 'AUD',
+    'EUR', 'GBP').
+
+    NOTE: this only stops the *flag*. The durable fix is to canonicalize the
+    stored token upstream in unified_holdings so the dirty label never reaches
+    analytics; this rule guard is the interim measure.
+    """
+    tok = f"UPPER(TRIM(COALESCE(CAST({col} AS VARCHAR), '')))"
+    return (
+        f"({tok} = '' OR {tok} = 'USD' "
+        f"OR regexp_matches({tok}, '(^|[^A-Z])USD([^A-Z]|$)'))"
+    )
+
+
+def _unfunded_position_sql() -> str:
+    """SQL boolean: row text marks an unfunded-commitment style position.
+
+    Revolvers, delayed draws, and unfunded commitments are routinely carried
+    at negative cost/fair value in printed SOIs (parenthetical amounts are the
+    filer's own presentation, not extraction errors). Mirrors the X06 keyword
+    exemption but also scans instrument_description and
+    bdc_investment_identifier, where BDC filers usually put the tranche text.
+    """
+    text = ("lower(COALESCE(CAST(issuer_name AS VARCHAR), '') || ' ' || "
+            "COALESCE(CAST(instrument_description AS VARCHAR), '') || ' ' || "
+            "COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''))")
+    keywords = ("revolv", "delayed draw", "unfunded", "undrawn",
+                "commitment", "letter of credit", "credit facility")
+    return "(" + " OR ".join(f"{text} LIKE '%{k}%'" for k in keywords) + ")"
+
+
 def _issue_query(
     column: str,
     rule_id: str,
@@ -279,16 +318,31 @@ def validate_column_contracts(
             "fair_value is present but unparseable",
             "numeric fair_value is required when present",
         ),
+        # C103 calibrated 2026-07-05 (ens2 B1 adjudications: 97.5% FP, n=40).
+        # The false-alarm cluster is source-faithful parenthetical negatives on
+        # unfunded-commitment marks (cost also negative and/or revolver/delayed-
+        # draw text). Retro-test vs ens2 labels: 36/39 FA groups suppressed,
+        # rows 50,064 -> 794. Known loss: footnote-marker mis-parse negatives
+        # inside otherwise-legitimate groups (1 adjudicated real).
         _issue_query(
             "fair_value", "C103", SEVERITY_WARN, EVIDENCE_MODERATE,
             ACTION_REVIEW,
-            "TRY_CAST(fair_value AS DOUBLE) < 0",
-            "fair_value is negative",
-            "negative fair_value can be legitimate but needs review",
+            "TRY_CAST(fair_value AS DOUBLE) < 0 "
+            "AND NOT COALESCE(TRY_CAST(cost AS DOUBLE) < 0, FALSE) "
+            f"AND NOT {_unfunded_position_sql()}",
+            "fair_value is negative without a matching negative cost or "
+            "unfunded-commitment marker",
+            "sign-consistent unfunded-commitment marks are filer presentation; "
+            "unexplained negatives still need review",
         ),
+        # C104 demoted 2026-07-05 (ens2: 94.3% FP, n=53). A source dash
+        # legitimately normalizes to 0; the real-error class (zero where the
+        # source shows a value) is an extraction gap that only source
+        # reconciliation / FV-conservation anchoring can detect -- no row-local
+        # predicate separated it (substance guard suppressed just 4/50 FA).
         _issue_query(
-            "fair_value", "C104", SEVERITY_WARN, EVIDENCE_MODERATE,
-            ACTION_REVIEW,
+            "fair_value", "C104", SEVERITY_INFO, EVIDENCE_WEAK,
+            ACTION_TRACK_ONLY,
             "TRY_CAST(fair_value AS DOUBLE) = 0",
             "fair_value is zero",
             "zero fair_value may be legitimate but affects aggregation and returns",
@@ -307,6 +361,12 @@ def validate_column_contracts(
             "cost is present but unparseable",
             "numeric cost is required when present",
         ),
+        # C107 deliberately NOT scope-cut (ens2: 80% FP, n=40). Retro-test
+        # showed sign/keyword exclusions lose adjudicated reals faster than
+        # they suppress false alarms (excl negative-FV: 5/8 reals lost vs 9/32
+        # FA; keywords: 3/8 vs 11/32) -- the real errors (source dash extracted
+        # as negative) co-occur with legitimate negatives. Do not re-attempt a
+        # row-local cut without new evidence.
         _issue_query(
             "cost", "C107", SEVERITY_WARN, EVIDENCE_MODERATE,
             ACTION_REVIEW,
@@ -349,14 +409,14 @@ def validate_column_contracts(
         _issue_query(
             "fair_value_currency", "FX02", SEVERITY_WARN, EVIDENCE_STRONG,
             ACTION_REVIEW,
-            "source = 'bdc' AND NOT (TRIM(COALESCE(CAST(fair_value_currency AS VARCHAR), '')) IN ('', 'USD'))",
+            f"source = 'bdc' AND NOT {_is_usd_unit_sql('fair_value_currency')}",
             "BDC fair_value XBRL unit is not USD",
             "BDC valuation fields are expected to be USD-denominated",
         ),
         _issue_query(
             "cost_currency", "FX03", SEVERITY_WARN, EVIDENCE_STRONG,
             ACTION_REVIEW,
-            "source = 'bdc' AND NOT (TRIM(COALESCE(CAST(cost_currency AS VARCHAR), '')) IN ('', 'USD'))",
+            f"source = 'bdc' AND NOT {_is_usd_unit_sql('cost_currency')}",
             "BDC cost XBRL unit is not USD",
             "BDC valuation fields are expected to be USD-denominated",
         ),
@@ -381,12 +441,29 @@ def validate_column_contracts(
             "interest_rate is present but unparseable",
             "numeric interest_rate is required when present",
         ),
+        # C113 refined 2026-06-19 (B-trial evidence): the flat >25% bound was 79%
+        # false-alarm (Wilson95 [52,92]); the unambiguous false alarms are
+        # structured-credit / CLO subordinated tranches carried at an "effective
+        # interest" (accretion) yield, which legitimately runs 25-40%+ and is the
+        # filer's own disclosed figure -- not a coupon, not a mis-scale. Exempt that
+        # class from the upper bound (keep the <0 check and a >75% gross-scale safety
+        # net for ALL). PRIVATE_CREDIT rows >25% stay flagged: that bucket is
+        # genuinely mixed (real mis-parses like a 50% EOT balloon vs legit
+        # venture/PIK floors) and warrants review.
         _issue_query(
             "interest_rate", "C113", SEVERITY_WARN, EVIDENCE_MODERATE,
             ACTION_REVIEW,
-            "TRY_CAST(interest_rate AS DOUBLE) > 25 OR TRY_CAST(interest_rate AS DOUBLE) < 0",
-            "interest_rate is outside the expected percentage range",
-            "rates are stored as whole-number percentages",
+            "TRY_CAST(interest_rate AS DOUBLE) < 0 "
+            "OR TRY_CAST(interest_rate AS DOUBLE) > 75 "
+            "OR (TRY_CAST(interest_rate AS DOUBLE) > 25 "
+            "    AND COALESCE(asset_class, '') <> 'STRUCTURED_CREDIT' "
+            "    AND COALESCE(index_classification, '') <> 'STRUCTURED_CREDIT' "
+            "    AND lower(COALESCE(instrument_description, '') || ' ' "
+            "        || COALESCE(bdc_investment_identifier, '')) NOT LIKE '%effective interest%')",
+            "interest_rate is outside the expected percentage range "
+            "(excludes structured-credit effective yields)",
+            "rates are whole-number percentages; structured-credit effective "
+            "yields legitimately exceed 25%",
         ),
         _issue_query(
             "basis_spread", "C114", SEVERITY_FAIL, EVIDENCE_STRONG,
@@ -453,6 +530,25 @@ def validate_column_contracts(
             "length(TRIM(CAST(issuer_name AS VARCHAR))) > 300",
             "issuer_name is unusually long",
             "long issuer names may be full dimension strings",
+        ),
+        # C206 added 2026-06-19 (B-trial / TorcSill finding): a clean issuer_name
+        # never contains XBRL dimension-path or instrument/rate/maturity text. When
+        # the wrapper fails to parse one dimension axis, the raw path leaks into
+        # issuer_name (e.g. "Debt Securities, Energy ... Acquisition Date 08/13/24,
+        # Protective Advance"). This both corrupts the field AND defeats Stage-D
+        # dimension-path dedup (the divergent issuer_name no longer matches the clean
+        # copy's key), so the position double-counts. Catches ~4.9% of BDC rows / 58
+        # CIKs; ~4.2k are in same cik/accession/fair-value multi-row groups (the
+        # dedup-miss subset). C203 (>300 chars) misses these (~120 chars).
+        _issue_query(
+            "issuer_name", "C206", SEVERITY_WARN, EVIDENCE_MODERATE,
+            ACTION_REVIEW,
+            "issuer_name ILIKE '%Acquisition Date%' OR issuer_name ILIKE '%Maturity Date%' "
+            "OR issuer_name ILIKE '%of Net Assets%' OR issuer_name ILIKE '%Debt Securities,%'",
+            "issuer_name contains raw XBRL dimension/term text (parse leak)",
+            "issuer_name should be the clean entity; leaked dimension-path / maturity / "
+            "net-assets text indicates a wrapper parse failure and can defeat "
+            "dimension-path dedup (position double-counts)",
         ),
         _issue_query(
             "cusip", "C204", SEVERITY_FAIL, EVIDENCE_STRONG,
@@ -556,9 +652,14 @@ def validate_column_contracts(
             "pct_of_net_assets exceeds 100 percentage points",
             "usually a dimension-path duplication or denominator artifact",
         ),
+        # C404 demoted 2026-07-05 (ens2: 76.9% FP, n=13). Negative pct is
+        # usually filer presentation (negative FV positions, or negative NAV
+        # denominators). Excluding sign-consistent rows was retro-tested and
+        # REJECTED: it lost 3/3 adjudicated reals (wrong-sign display cells
+        # also sit on negative-FV rows). Low materiality field; track only.
         _issue_query(
-            "pct_of_net_assets", "C404", SEVERITY_WARN, EVIDENCE_MODERATE,
-            ACTION_REVIEW,
+            "pct_of_net_assets", "C404", SEVERITY_INFO, EVIDENCE_WEAK,
+            ACTION_TRACK_ONLY,
             "TRY_CAST(pct_of_net_assets AS DOUBLE) < 0",
             "pct_of_net_assets is negative",
             "negative pct_of_net_assets can be legitimate but should be monitored",
@@ -568,8 +669,14 @@ def validate_column_contracts(
         _issue_query(
             "interest_rate", "X01", SEVERITY_WARN, EVIDENCE_MODERATE,
             ACTION_REVIEW,
-            "asset_class = 'PRIVATE_EQUITY' AND TRY_CAST(interest_rate AS DOUBLE) > 0",
-            "PRIVATE_EQUITY row has interest_rate",
+            "asset_class = 'PRIVATE_EQUITY' AND TRY_CAST(interest_rate AS DOUBLE) > 0 "
+            # Preferred equity legitimately carries a stated dividend rate; those
+            # rows are the dominant X01 false alarm (~90% FP). Exclude them but
+            # keep firing on common equity / warrants and on bonds misclassified
+            # into PE (index_classification != PREFERRED_EQUITY), which are the
+            # adjudicated real classification errors.
+            "AND COALESCE(index_classification, '') <> 'PREFERRED_EQUITY'",
+            "PRIVATE_EQUITY (non-preferred) row has interest_rate",
             "likely convertible note or classification mismatch",
         ),
         _issue_query(
@@ -609,8 +716,14 @@ def validate_column_contracts(
             "cost", "X07", SEVERITY_WARN, EVIDENCE_WEAK,
             ACTION_REVIEW,
             "TRY_CAST(fair_value AS DOUBLE) > 0 AND TRY_CAST(cost AS DOUBLE) > 0 "
-            "AND TRY_CAST(fair_value AS DOUBLE) / TRY_CAST(cost AS DOUBLE) > 10",
-            "fair_value exceeds 10x cost",
+            "AND TRY_CAST(fair_value AS DOUBLE) / TRY_CAST(cost AS DOUBLE) > 10 "
+            # Equity / warrants legitimately appreciate >10x (source-confirmed);
+            # that is the dominant X07 false alarm (~90% FP). Restrict to
+            # non-equity so debt outliers (revolvers, column-position defects)
+            # still fire. Residual risk: a warrant misclassified outside
+            # PRIVATE_EQUITY is no longer caught by X07.
+            "AND COALESCE(asset_class, '') <> 'PRIVATE_EQUITY'",
+            "fair_value exceeds 10x cost (non-equity)",
             "extreme appreciation or data error",
         ),
         _issue_query(

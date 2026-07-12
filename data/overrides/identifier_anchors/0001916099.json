@@ -1,0 +1,94 @@
+{
+  "schema_version": "agentA-anchors.v1",
+  "cik": "0001916099",
+  "entity_name": "Diameter Credit Co",
+  "status": "NO_CHANGE",
+  "report_date": "2025-12-31",
+  "anchor_present_pct": 100.0,
+  "none_pct": 0.0,
+  "current_anchor_labels": [
+    "TOTAL",
+    "AFFIL",
+    "SECDEBT",
+    "EQUITY",
+    "SUBORD",
+    "ASSETTYPE",
+    "COMMIT",
+    "COMMITEXP",
+    "REFRATE",
+    "RATE",
+    "MAT"
+  ],
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\bNon-Controlled/Non-Affiliated\\b|\\bNon-controlled/non-affiliated\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b|\\bDividend Rate\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b"
+    }
+  ],
+  "proposed_anchors": [
+    {
+      "label": "AFFIL",
+      "markers": [
+        "Non-Controlled/Non-Affiliated",
+        "Non-controlled/non-affiliated"
+      ]
+    },
+    {
+      "label": "RATE",
+      "markers": [
+        "Interest Rate",
+        "Dividend Rate"
+      ]
+    },
+    {
+      "label": "REFRATE",
+      "markers": [
+        "Reference Rate"
+      ]
+    },
+    {
+      "label": "MAT",
+      "markers": [
+        "Maturity Date"
+      ]
+    }
+  ],
+  "available_identifier_datapoints": [
+    "affiliation bucket",
+    "asset class",
+    "industry",
+    "issuer",
+    "instrument type",
+    "interest rate",
+    "dividend rate",
+    "reference rate",
+    "spread",
+    "PIK rate or PIK marker",
+    "acquisition date",
+    "maturity date"
+  ],
+  "evidence": [
+    {
+      "source": "bundle",
+      "observation": "The bundle reports anchor_present_pct 100.0 and none_pct 0.0, with no none_examples.",
+      "support": "0001916099_2025-12-31.json"
+    },
+    {
+      "source": "evidence_cli roam",
+      "observation": "SOI headers contain Investments, Investment Type, Interest Rate, Reference Rate, Spread, Acquisition Date, and Maturity Date.",
+      "support": "accession 0001193125-26-104439 tables 45-50, 56-59 row 1"
+    }
+  ]
+}

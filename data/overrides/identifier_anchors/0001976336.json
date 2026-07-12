@@ -1,0 +1,43 @@
+{
+  "cik": "0001976336",
+  "_doc": "Antares Private Credit Fund anchor proposal for 2025-12-31 bundle. Bundle anchor_present_pct is 99.9%; the only none example is 'Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares'. Evidence CLI roam on accession 0001193125-26-115260 found table 65 row 20 'Short-term Investments' and row 21 'BlackRock Liquidity T-Fund - Institutional Shares', confirming a cash/short-term investment section rather than a private-markets position.",
+  "_doc2": "Dominant rate-bearing rows use the existing Antares-style SOI dialect confirmed by roam table 37 row 1 headers: Investments, Footnotes, Asset Type, Reference Rate and Spread, Interest Rate, Maturity Date. Example table 37 row 6: GSP Holdings, LLC | First Lien Term Loan | S + 6.50 % | 10.30 % (Incl. 0.75 % PIK) | 11/6/2026.",
+  "anchors": [
+    {
+      "label": "TOTAL",
+      "regex": "^\\s*total\\b"
+    },
+    {
+      "label": "CASH",
+      "regex": "money market|government fund|financial square|u\\.?s\\.? government|liquidity (?:fund|funds)|short-?term investments?|cash and cash equivalent"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "non-?controlled|controlled\\s*/|/\\s*non-?affiliated|/\\s*affiliated|\\bcontrolled investments?\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "secured debt"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "subordinated"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "equity investments?|common equity|preferred equity|equity interest|membership interest|preferred stock|common stock|warrant"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "reference rate|\\bsofr\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|(?:sofr|sf|libor|l|prime|p|euribor|e|s)\\s*\\+\\s*\\d"
+    },
+    {
+      "label": "RATE",
+      "regex": "[0-9]+\\.?[0-9]*\\s*%"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"
+    }
+  ]
+}

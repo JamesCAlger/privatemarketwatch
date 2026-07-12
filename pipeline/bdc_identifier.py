@@ -259,6 +259,7 @@ _CRESCENT_HIERARCHY_INDUSTRIES = [
     "Telecommunication Services",
     "Automobile & Components",
     "Diversified Financials",
+    "Diversified",
     "Consumer Services",
     "Financial Services",
     "Software & Services",

@@ -1,0 +1,102 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001988280",
+  "entity_name": "Manulife Private Credit Fund",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "SECDEBT REFRATE RATE",
+    "report_dates": [
+      "2025-12-31"
+    ]
+  },
+  "available_identifier_datapoints": [
+    "issuer",
+    "sector_or_industry_path",
+    "instrument_type",
+    "tranche_or_amendment_descriptor",
+    "reference_rate_type",
+    "reference_rate_tenor",
+    "basis_spread",
+    "pik_rate",
+    "commitment_marker",
+    "collateral_pledge_marker"
+  ],
+  "unsupported_identifier_datapoints": [
+    "maturity_date",
+    "current_interest_rate_column_value",
+    "par_value",
+    "fair_value"
+  ],
+  "not_applicable_reason": null,
+  "pik_convention": "additive",
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "\\b(?:\\d+(?:,\\s*\\d+)*(?:\\s+and\\s+\\d+)?\\s+month\\s+)?(CME\\s+Term\\s+SOFR|Prime rate)\\b",
+      "group": 1,
+      "map": {
+        "CME Term SOFR": "SOFR",
+        "Prime rate": "PRIME"
+      }
+    },
+    {
+      "field": "reference_rate_tenor",
+      "regex": "\\b(\\d+(?:,\\s*\\d+)*(?:\\s+and\\s+\\d+)?)\\s+month\\s+CME\\s+Term\\s+SOFR\\b",
+      "group": 1
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\b(?:\\d+(?:,\\s*\\d+)*(?:\\s+and\\s+\\d+)?\\s+month\\s+CME\\s+Term\\s+SOFR|Prime rate)\\s*\\+\\s*(\\d{1,2}\\.\\d{3})\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "(?:\\band\\s+|\\()(\\d{1,2}\\.\\d{3})\\s*%\\s*PIK\\b",
+      "group": 1,
+      "type": "pct"
+    }
+  ],
+  "derivations": {
+    "coupon_type": {
+      "floating_if": "reference_rate_type_present",
+      "fixed_if": "pik_rate_present_without_reference_rate_type"
+    }
+  },
+  "required_fields": [
+    "basis_spread"
+  ],
+  "invariants": [
+    {
+      "name": "basis_spread_matches_structured_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread",
+      "tolerance": 0.0001
+    }
+  ],
+  "evidence": [
+    {
+      "table_index": 149,
+      "row_index": 13,
+      "observation": "Bandon Fitness Delayed Draw Term Loan embeds 3 month CME Term SOFR + 6.000% and 0.500% PIK in the identifier."
+    },
+    {
+      "table_index": 151,
+      "row_index": 16,
+      "observation": "Beacon Behavioral Term Loan embeds 15.000% PIK without a reference rate."
+    },
+    {
+      "table_index": 153,
+      "row_index": 9,
+      "observation": "Vybond Buyer LLC Delayed Draw Term Loan (C) is a position row with a dash in the rate column; its identifier has no embedded rate."
+    },
+    {
+      "table_index": 160,
+      "row_index": 7,
+      "observation": "(C) denotes unfunded or partially unfunded loan commitments and can have no determined interest rate."
+    }
+  ]
+}

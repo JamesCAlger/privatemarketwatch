@@ -2914,6 +2914,52 @@ class TestBuildUnifiedHoldings:
 
     @pytest.mark.slow
     @pytest.mark.integration
+    def test_ixbrl_lien_fills_blank_keyword_lien(self, tmp_path):
+        """iXBRL section-header lien (staging lien_position, populated only by the
+        reconciled field-status overlay) fills lien where the keyword classifier is
+        blank; the keyword classifier still wins where both are present."""
+        common = {
+            "cik": "123", "entity_name": "Test BDC", "accession_number": "0001-23",
+            "form_type": "10-K", "filing_date": "2023-06-01", "report_date": "2023-03-31",
+            "cost": 990000.0, "interest_rate": 8.5, "basis_spread": 3.5,
+            "reference_rate_type": "SOFR", "maturity_date": "2028-01-15",
+            "pct_of_net_assets": 0.05, "pik_rate": None, "shares_held": None,
+            "unrealized_gain_loss": 10000.0, "dimensions_raw": "x=y",
+            "investment_type": "", "industry": "", "affiliation": "", "period": "2023-03-31",
+        }
+        bdc_df = pd.DataFrame([
+            # keyword-neutral DL row -> _sql_classify_lien NULL -> iXBRL fills it
+            {**common, "investment_identifier": "Acme Holdings - Term Loan B",
+             "fair_value": 1000000.0, "principal_amount": 1000000.0},
+            # keyword 'first lien' DL row -> keyword wins over the iXBRL value
+            {**common, "investment_identifier": "Beta Corp - First Lien Term Loan",
+             "fair_value": 2000000.0, "principal_amount": 2000000.0},
+        ])
+        status = pd.DataFrame([
+            {"cik": "123", "accession_number": "0001-23", "report_date": "2023-03-31",
+             "raw_id_lower": "acme holdings - term loan b", "maturity_date": "",
+             "maturity_status": "blank", "reference_rate_type": "",
+             "reference_rate_status": "blank", "lien_position": "Second Lien",
+             "lien_status": "value"},
+            {"cik": "123", "accession_number": "0001-23", "report_date": "2023-03-31",
+             "raw_id_lower": "beta corp - first lien term loan", "maturity_date": "",
+             "maturity_status": "blank", "reference_rate_type": "",
+             "reference_rate_status": "blank", "lien_position": "Second Lien",
+             "lien_status": "value"},
+        ])
+        status_path = tmp_path / "field_status.csv"
+        status.to_csv(status_path, index=False)
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE", tmp_path / "out.csv"), \
+             patch("pipeline.config.BDC_IXBRL_FIELD_STATUS_FILE", status_path):
+            result = build_unified_holdings(bdc_df=bdc_df, nport_df=self._make_nport_df())
+        acme = result[result["issuer_name"].str.contains("Acme", case=False)].iloc[0]
+        beta = result[result["issuer_name"].str.contains("Beta", case=False)].iloc[0]
+        assert acme["index_classification"] == "DIRECT_LENDING"
+        assert acme["lien_position"] == "Second Lien"   # iXBRL fallback filled blank keyword
+        assert beta["lien_position"] == "First Lien"     # keyword classifier wins over iXBRL
+
+    @pytest.mark.slow
+    @pytest.mark.integration
     def test_load_from_disk(self, tmp_path):
         """Test loading from CSV files."""
         bdc_df = self._make_bdc_df()
@@ -9210,6 +9256,66 @@ class TestCrescentHierarchySqlPath:
         assert row["instrument_description"] == "Unitranche First Lien Term Loan"
         assert row["maturity_date"] == "2028-03-31"
 
+    def test_crescent_capital_equity_leaf_without_country_prefix(self):
+        result = self._run_prepare_bdc([{
+            "investment_identifier": (
+                "Equity Investments Consumer Services Legalshield "
+                "Investment Type Common Stock"
+            ),
+            "shares_held": 100,
+        }])
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Legalshield"
+        assert row["instrument_description"] == "Common Stock"
+
+    def test_crescent_capital_equity_leaf_without_investment_type(self):
+        result = self._run_prepare_bdc([{
+            "investment_identifier": (
+                "Equity Investments Health Care Equipment & Services "
+                "Patriot Acquisition Topco S.A.R.L Common Stock One"
+            ),
+            "shares_held": 100,
+        }])
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Patriot Acquisition Topco S.A.R.L"
+        assert row["instrument_description"] == "Common Stock One"
+
+    def test_crescent_capital_legacy_diversified_partnership_interest(self):
+        result = self._run_prepare_bdc([{
+            "investment_identifier": (
+                "Equity Investments Diversified GACP II LP "
+                "Investment Type Partnership Interest"
+            ),
+            "shares_held": 100,
+        }])
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "GACP II LP"
+        assert row["instrument_description"] == "Partnership Interest"
+
+    def test_crescent_capital_investment_one_type_debt_leaf(self):
+        result = self._run_prepare_bdc([{
+            "investment_identifier": (
+                "Investments United Kingdom Debt Investments Commercial & "
+                "Professional Services Nurture Landscapes Investment One Type "
+                "Unitranche First Lien Delayed Draw Term Loan Interest Term "
+                "SN + 650 Interest Rate 10.96% Maturity/ Dissolution Date 06/2028"
+            ),
+            "principal_amount": 1000000,
+            "interest_rate": 0.1096,
+            "maturity_date": "2028-06-30",
+        }])
+
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Nurture Landscapes"
+        assert row["instrument_description"] == "Unitranche First Lien Delayed Draw Term Loan"
+
     def test_crescent_private_credit_no_legal_suffix_row(self):
         result = self._run_prepare_bdc([{
             "cik": "0001954360",
@@ -9253,6 +9359,14 @@ class TestCrescentHierarchySqlPath:
     def test_crescent_style_header_without_investment_type_filtered(self):
         result = self._run_prepare_bdc([{
             "investment_identifier": "Investments Canada Debt Investments",
+            "fair_value": 5000000,
+            "cost": 5000000,
+        }])
+        assert result.empty
+
+    def test_crescent_style_equity_header_without_leaf_instrument_filtered(self):
+        result = self._run_prepare_bdc([{
+            "investment_identifier": "Equity Investments Consumer Services",
             "fair_value": 5000000,
             "cost": 5000000,
         }])

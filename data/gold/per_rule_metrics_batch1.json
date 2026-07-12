@@ -1,0 +1,680 @@
+{
+  "draw": "batch1",
+  "n_position_labels": 128,
+  "n_flag_labels": 0,
+  "family_engines": {
+    "fair_value": [
+      "aggregate_header",
+      "conservation",
+      "gav_recon",
+      "html_extract",
+      "source_recon"
+    ],
+    "cost": [],
+    "classification": [
+      "classification",
+      "derivative_role",
+      "fund_strategy"
+    ],
+    "lien": [],
+    "over_inclusion": [
+      "aggregate_header"
+    ]
+  },
+  "rule_override": {
+    "cost_conservation": "cost",
+    "agentA_subtotal_candidate": "over_inclusion",
+    "R07": "fair_value",
+    "E02": "fair_value"
+  },
+  "recall_by_error_type": {
+    "fair_value": {
+      "positives": 2,
+      "covered": 1,
+      "recall_raw": 0.5,
+      "ci95": [
+        0.095,
+        0.905
+      ],
+      "recall_ht_weighted": 0.5,
+      "rules_credited": [
+        "E02",
+        "blocking_source_pct_ambiguous_after_review",
+        "blocking_source_pct_leaf_parser_mismatch",
+        "blocking_source_position_like_parser_mismatch",
+        "blocking_source_short_plain_unresolved",
+        "blocking_source_unclassifiable_after_review",
+        "fv_conservation",
+        "gav_reconciliation",
+        "html_agg",
+        "html_carry"
+      ],
+      "per_rule_covered": {
+        "fv_conservation": 1
+      },
+      "note": "cik-quarter coverage (upper bound)"
+    },
+    "cost": {
+      "positives": 1,
+      "covered": 1,
+      "recall_raw": 1.0,
+      "ci95": [
+        0.207,
+        1.0
+      ],
+      "recall_ht_weighted": 1.0,
+      "rules_credited": [
+        "cost_conservation"
+      ],
+      "per_rule_covered": {
+        "cost_conservation": 1
+      },
+      "note": "cik-quarter coverage (upper bound)"
+    },
+    "classification": {
+      "positives": 14,
+      "covered": 4,
+      "recall_raw": 0.286,
+      "ci95": [
+        0.117,
+        0.546
+      ],
+      "recall_ht_weighted": 0.286,
+      "rules_credited": [
+        "derivative_role_notional_contradiction",
+        "fund_strategy_validation"
+      ],
+      "per_rule_covered": {
+        "fund_strategy_validation": 4
+      },
+      "note": "cik-quarter coverage (upper bound)"
+    },
+    "lien": {
+      "positives": 0,
+      "covered": 0,
+      "recall_raw": null,
+      "ci95": null,
+      "recall_ht_weighted": null,
+      "rules_credited": [],
+      "per_rule_covered": {},
+      "note": "no rule targets this error type -- recall is a coverage gap"
+    },
+    "over_inclusion": {
+      "positives": 2,
+      "covered": 0,
+      "recall_raw": 0.0,
+      "ci95": [
+        0.0,
+        0.658
+      ],
+      "recall_ht_weighted": 0.0,
+      "rules_credited": [
+        "agentA_subtotal_candidate"
+      ],
+      "per_rule_covered": {},
+      "note": "cik-quarter coverage (upper bound)"
+    }
+  },
+  "precision_by_rule": {
+    "C103": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 3,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "C104": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "C201": {
+      "drawn_surfaced": 1,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "C203": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "C404": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 4,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "CNT01": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F10": {
+      "drawn_surfaced": 1,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F11": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F16": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 8,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F20": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F22": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 3,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F23": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F25": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F26": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F27": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F28": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 6,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F30": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "F33": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 2,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "FX01": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 5,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "FX02": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 4,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "FX03": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 4,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "GAV_BDC02": {
+      "drawn_surfaced": 3,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "J01": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 13,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "PP01": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "SRC_BDC01": {
+      "drawn_surfaced": 8,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "X02": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 3,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "X04": {
+      "drawn_surfaced": 3,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "X06": {
+      "drawn_surfaced": 6,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "X07": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 8,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "X08": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 4,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "balance_sheet_identity": {
+      "drawn_surfaced": 3,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "blocking_source_pct_leaf_parser_mismatch": {
+      "drawn_surfaced": 3,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "blocking_source_position_like_parser_mismatch": {
+      "drawn_surfaced": 1,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "blocking_source_short_plain_unresolved": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 13,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "cost_conservation": {
+      "drawn_surfaced": 2,
+      "drawn_suppressed": 5,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "dl_rate_fill": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "fmt_cost": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 3,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "fmt_pct_of_net_assets": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 5,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "fmt_pik_rate": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "fmt_principal_amount": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "fund_strategy_validation": {
+      "drawn_surfaced": 2,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "fv_conservation": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 13,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "gav_reconciliation": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 13,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "html_agg": {
+      "drawn_surfaced": 3,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "html_carry": {
+      "drawn_surfaced": 2,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "income_identity": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 2,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "maturity_not_past": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "nav_identity": {
+      "drawn_surfaced": 1,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "nonaccrual_flag": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 6,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "pct_of_net_assets_identity": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 4,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "pct_position_concentration": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "pik_le_interest_rate": {
+      "drawn_surfaced": 1,
+      "drawn_suppressed": 0,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "xs_nav_highlights_vs_companyfacts": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 6,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "xs_nii_highlights_vs_income": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 3,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "xs_shares_highlights_vs_companyfacts": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 3,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    },
+    "xs_tii_highlights_vs_income": {
+      "drawn_surfaced": 0,
+      "drawn_suppressed": 1,
+      "labeled": 0,
+      "real_error": 0,
+      "false_alarm": 0,
+      "ambiguous": 0,
+      "precision": "pending",
+      "ci95": null
+    }
+  }
+}

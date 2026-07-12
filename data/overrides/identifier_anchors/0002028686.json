@@ -1,0 +1,78 @@
+{
+  "schema_version": "agentA-anchors.v1",
+  "cik": "0002028686",
+  "entity_name": "SL Investment Fund II LLC",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "proposal_basis": {
+    "bundle": "data/output/agent_a/quarter/2025-12-31/bundles/0002028686_2025-12-31.json",
+    "none_examples_count": 10,
+    "anchor_present_pct": 59.0,
+    "evidence": [
+      {
+        "accession_number": "0001193125-26-223928",
+        "observation": "Bundle debt identifiers flatten section and rate labels including Reference Rate and Spread, Interest Rate, and Maturity Date into investment_identifier text."
+      },
+      {
+        "accession_number": "0001193125-26-091861",
+        "observation": "Bundle none_examples are issuer-only identifier strings such as Granicus, Inc., Firebird Acquisition Corp, Inc. 1, and Drivecentric Holdings, LLC 1; the narrow ISSUER_ONLY anchor is exact-line scoped so it does not alter debt signatures."
+      }
+    ]
+  },
+  "available_identifier_datapoints": [
+    "affiliation_marker",
+    "asset_class",
+    "industry",
+    "issuer",
+    "investment_type",
+    "tranche_or_index",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "pik_rate",
+    "maturity_date",
+    "acquisition_date"
+  ],
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "non-controlled/non-affiliated"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "Debt Investments|First Lien Debt|Second Lien Debt|Subordinated Debt"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "Equity Investments|Common Equity|Preferred Equity"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference Rate and Spread"
+    },
+    {
+      "label": "RATE",
+      "regex": "Interest Rate|[0-9]+(?:\\.[0-9]+)?%\\s+PIK"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity Date|Acquisition Date"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "^Total\\s+"
+    },
+    {
+      "label": "COMMIT",
+      "regex": "Unfunded Commitment|Commitment Type"
+    },
+    {
+      "label": "COMMITEXP",
+      "regex": "Commitment Expiration Date"
+    },
+    {
+      "label": "ISSUER_ONLY",
+      "regex": "^(?:Granicus, Inc\\.|Firebird Acquisition Corp, Inc\\.\\s*[0-9]+|Drivecentric Holdings, LLC\\s*[0-9]+)$"
+    }
+  ]
+}

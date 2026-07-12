@@ -1,0 +1,38 @@
+{
+  "cik": "1916099",
+  "rule_id": "fv_rescale_action_elevator_ddtl_2025q4",
+  "rule_type": "value_rescale",
+  "action": "rescale",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND issuer_name = 'Action Elevator Intermediate Holdings, LLC Delayed Draw Term Loan' AND bdc_dimensions_raw = 'investmentidentifieraxis=Investments Non-Controlled/Non-Affiliated First Lien Debt Commercial Services & Supplies Action Elevator Intermediate Holdings, LLC Delayed Draw Term Loan Reference Rate SOFR Spread 4.75% Acquisition Date 10/31/2024 Maturity Date 10/31/2030' AND TRY_CAST(fair_value AS DOUBLE) = -25957000.0",
+  "field": "fair_value",
+  "factor": -1.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings 2025-12-31 row: issuer_name='Action Elevator Intermediate Holdings, LLC Delayed Draw Term Loan', principal_amount=26932000.0, fair_value=-25957000.0, bdc_dimensions_raw contains First Lien Debt Commercial Services & Supplies Action Elevator Intermediate Holdings, LLC Delayed Draw Term Loan."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of investments table row: Action Elevator Intermediate Holdings, LLC | Delayed Draw Term Loan | SOFR | 4.75% | Acquisition Date 10/31/2024 | Maturity Date 10/31/2030 | Principal 26,932 | Amortized Cost 26,471 | Fair Value 25,957; no parentheses are printed around the fair value."
+    },
+    {
+      "source": "query",
+      "quote": "fv_conservation 2025-12-31 before rule: value_sum=2731562000.0, anchor_value=2783476000.0, residual=-51914000.0. Multiplying this row's fair_value by -1 changes it from -25957000.0 to 25957000.0, a +51914000.0 impact."
+    }
+  ],
+  "rationale": "The residual is caused by a sign error on one real first-lien debt position. The filing's printed row is a positive fair value, and the first-lien subtotal exceeds the extracted first-lien rows by exactly twice the extracted negative amount. This is a value sign correction, not an exclusion or row addition.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 51914000.0,
+      "residual_before": -51914000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -13,7 +13,13 @@ from typing import Optional, Union
 import duckdb
 import pandas as pd
 
-from pipeline import classification, lien_classification, staging_bdc, staging_nport
+from pipeline import (
+    classification,
+    instrument_classification,
+    lien_classification,
+    staging_bdc,
+    staging_nport,
+)
 from pipeline.config import (
     BDC_HOLDINGS_FILE,
     BDC_HOLDINGS_PARQUET_FILE,
@@ -63,10 +69,13 @@ UNIFIED_COLUMNS = [
     "exposure_type", "asset_class",
     "fair_value_level",
     # Rate/spread
-    "interest_rate", "basis_spread", "reference_rate_type",
+    "interest_rate", "interest_rate_source",
+    "basis_spread", "basis_spread_source",
+    "reference_rate_type",
+    "reference_rate_source",
     "coupon_type", "pik_rate",
     # Debt details
-    "maturity_date",
+    "maturity_date", "maturity_date_source",
     # Source-specific (BDC)
     "bdc_investment_identifier", "bdc_form_type", "bdc_dimensions_raw",
     "bdc_unrealized_gain_loss",
@@ -92,6 +101,8 @@ UNIFIED_COLUMNS = [
     "gics_sub_industry",
     # Lien position (First Lien / Second Lien / Unsecured; DIRECT_LENDING only)
     "lien_position",
+    # Instrument type (Revolver / Delayed Draw Term Loan / Term Loan / Unitranche)
+    "instrument_type",
     # Normalized position key for multi-tranche disambiguation
     "position_key",
     # Position tracking (populated by --returns step)
@@ -722,6 +733,8 @@ def build_unified_holdings(
     *,
     output_file: Optional[Path] = None,
     orphan_file: Optional[Path] = None,
+    agent_rules_dir: Optional[Path] = None,
+    b2_corrections_dir: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Build unified private markets holdings from BDC + N-PORT data.
 
@@ -736,11 +749,26 @@ def build_unified_holdings(
     orphan_file : Path, optional
         Write orphan holdings to this path instead of the default
         ``UNIVERSE_ORPHAN_HOLDINGS_FILE``.
+    agent_rules_dir, b2_corrections_dir : Path, optional
+        Promoted agent-fix stores (gap 1). Default to the config stores
+        (``AGENT_INVESTIGATE_RULES_DIR`` / ``AGENT_B2_CORRECTIONS_DIR``);
+        fixture-based tests pass an empty directory so promoted production
+        fixes never leak into fixtures that use real CIKs. Every application
+        is audited to ``agent_fix_application_audit.csv`` next to the output.
 
     Returns the combined DataFrame and saves to *output_file* (or the
     default production path).
     """
     t0 = time.time()
+
+    # Promoted agent fixes (gap 1): Layer B (raw-staging comparative filters) applies
+    # inside BDC staging while the frame still carries XBRL `period`; Layer C
+    # (investigator rules) applies at the tail. One code path for production, trial,
+    # and rebuild_outputs -- parity by construction.
+    from pipeline import agent_promoted
+    _agent_fix_audits: list[dict] = []
+    _raw_exclusions = agent_promoted.raw_staging_exclusions(
+        agent_promoted.load_promoted_corrections(b2_corrections_dir))
 
     # Prepare BDC: prefer Parquet > CSV file path (DuckDB direct read)
     # over pandas DataFrame.  This bypasses the slow pandas CSV parse +
@@ -752,9 +780,13 @@ def build_unified_holdings(
             else BDC_HOLDINGS_FILE
         )
         logger.info("Loading BDC holdings from %s (via DuckDB)", bdc_file.name)
-        bdc_unified = staging_bdc._prepare_bdc(bdc_file=bdc_file)
+        bdc_unified = staging_bdc._prepare_bdc(
+            bdc_file=bdc_file, raw_exclusions=_raw_exclusions,
+            raw_exclusion_audits=_agent_fix_audits)
     else:
-        bdc_unified = staging_bdc._prepare_bdc(bdc_df=bdc_df)
+        bdc_unified = staging_bdc._prepare_bdc(
+            bdc_df=bdc_df, raw_exclusions=_raw_exclusions,
+            raw_exclusion_audits=_agent_fix_audits)
 
     # Prepare N-PORT: same pattern -- file path for DuckDB direct read.
     nport_input: Union[pd.DataFrame, Path]
@@ -788,8 +820,10 @@ def build_unified_holdings(
     exposure_case = classification._sql_classify_exposure_type()
     asset_class_case = classification._sql_classify_asset_class()
     lien_case = lien_classification._sql_classify_lien()
+    instr_case = instrument_classification._sql_classify_instrument_type()
     _special_cols = {
         "index_classification", "exposure_type", "asset_class", "lien_position",
+        "instrument_type",
         "principal_amount", "principal_amount_usd", "principal_fx_status", "cusip",
     }
     col_list = ", ".join(c for c in UNIFIED_COLUMNS if c not in _special_cols)
@@ -978,7 +1012,14 @@ def build_unified_holdings(
             {idx_case} AS _index_class,
             {exposure_case} AS _exposure_type,
             {asset_class_case} AS _asset_class,
-            {lien_case} AS _lien_raw
+            -- Keyword classifier first; fall back to the iXBRL section-header lien
+            -- (staging lien_position is populated ONLY by the reconciled iXBRL
+            -- field-status overlay, so this is additive: it fills lien where the
+            -- keyword rule is blank without overriding existing classifications).
+            COALESCE(NULLIF(TRIM({lien_case}), ''), NULLIF(TRIM(lien_position), '')) AS _lien_raw,
+            -- Instrument type from row text (keyword), falling back to any staged
+            -- value. Applies to all rows; the keywords only fire on debt products.
+            COALESCE(NULLIF(TRIM({instr_case}), ''), NULLIF(TRIM(instrument_type), '')) AS _instr_raw
         FROM with_fund_text
     ),
     -- Cost proxy: fill NULL/zero cost with first observed fair_value
@@ -1110,7 +1151,8 @@ def build_unified_holdings(
         _exposure_type AS exposure_type,
         _asset_class AS asset_class,
         CASE WHEN _index_class = 'DIRECT_LENDING' THEN _lien_raw
-             ELSE NULL END AS lien_position
+             ELSE NULL END AS lien_position,
+        _instr_raw AS instrument_type
     FROM with_shares_fix
     """
 
@@ -1292,6 +1334,16 @@ def build_unified_holdings(
     # catches everything the row-level correction system missed)
     combined = _apply_fund_strategy_asset_class_override(combined)
 
+    # Promoted investigator rules (gap 1 Layer C): gate-PASS rules from the audited
+    # override store, applied per CIK to BDC-source rows only. Runs after
+    # classification (rule predicates reference unified-frame columns) and before the
+    # write, so validation, position matching, and frontend export all see corrected
+    # data -- no forked views.
+    _promoted_rules = agent_promoted.load_promoted_rules(agent_rules_dir)
+    if _promoted_rules:
+        combined, _rule_audits = agent_promoted.apply_promoted_rules(combined, _promoted_rules)
+        _agent_fix_audits.extend(_rule_audits)
+
     # Log cost proxy stats
     cost_filled = combined["cost"].notna() & (combined["cost"] != 0)
     logger.info("  Cost coverage: %d rows (%.1f%%)",
@@ -1336,6 +1388,13 @@ def build_unified_holdings(
     # Remap GICS sub-industry for RE-strategy fund holdings (runs after
     # _apply_gics_cache so that the LLM-assigned codes are already in place)
     combined = _apply_re_fund_gics_overrides(combined)
+
+    # Rebuild-time agent-fix audit: per-rule matched rows + FV deltas vs the rule's
+    # authoring-time measured_impact. Written whenever any promoted store is non-empty
+    # (drift there is the re-validation trigger; nothing promoted -> no artifact).
+    if _raw_exclusions or _promoted_rules:
+        agent_promoted.write_application_audit(
+            _agent_fix_audits, _out_file.parent / "agent_fix_application_audit.csv")
 
     # Save CSV + Parquet companion
     _out_file.parent.mkdir(parents=True, exist_ok=True)

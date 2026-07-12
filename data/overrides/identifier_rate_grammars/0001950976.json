@@ -1,0 +1,88 @@
+{
+  "schema": "agentA-rate-grammar.v1",
+  "cik": "0001950976",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "asset_class",
+    "issuer",
+    "instrument_type",
+    "industry",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "pik_rate",
+    "funding_or_acquisition_date",
+    "maturity_date"
+  ],
+  "unsupported_identifier_datapoints": [],
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "SECDEBT ASSETTYPE RATE MAT"
+  },
+  "required_fields": [
+    "maturity_date"
+  ],
+  "pik_convention": "inclusive",
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "(?i)^.*?\\b(SOFR)\\s*\\+.*$",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "SOFR": "SOFR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "(?i)^.*?\\bSOFR\\s*\\+\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%?.*$",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
+      "field": "pik_rate",
+      "regex": "(?i)^.*?\\b(?:incl\\.?|inc\\.?)\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%?\\s*PIK\\b.*$",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
+      "field": "interest_rate",
+      "regex": "^.*?\\|\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%?\\s*(?:\\((?i:incl\\.?|inc\\.?).*?PIK\\))?\\s*\\|\\s*(?:\\d{1,2}/\\d{1,2}/\\d{4}\\s*\\|\\s*)?\\d{1,2}/\\d{1,2}/\\d{2,4}\\s*$",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
+      "field": "maturity_date",
+      "regex": "^.*?\\|\\s*(\\d{1,2}/\\d{1,2}/\\d{4})\\s*$",
+      "group": 1,
+      "type": "date_mdy",
+      "map": {}
+    }
+  ],
+  "derivations": [
+    {
+      "field": "coupon_type",
+      "kind": "presence",
+      "source": "reference_rate_type",
+      "present_value": "floating",
+      "absent_value": "fixed"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "basis_spread_matches_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "maturity_date_matches_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    }
+  ]
+}

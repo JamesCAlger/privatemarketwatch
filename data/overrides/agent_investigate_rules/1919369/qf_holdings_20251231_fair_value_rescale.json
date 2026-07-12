@@ -1,0 +1,38 @@
+{
+  "cik": "1919369",
+  "rule_id": "qf_holdings_20251231_fair_value_rescale",
+  "rule_type": "value_rescale",
+  "action": "rescale",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "issuer_name = 'QF Holdings, Inc.' AND instrument_description = 'First-Lien Debt' AND fair_value = '33224.0' AND bdc_dimensions_raw LIKE '%QF Holdings, Inc.%'",
+  "field": "fair_value",
+  "factor": 1000.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "conservation shows fv_conservation 2025-12-31 value_sum=1435037224.0 anchor_value=1468228000.0, residual=-33190776.0."
+    },
+    {
+      "source": "query",
+      "quote": "holdings row for QF Holdings, Inc. at 2025-12-31 has principal_amount=33449.0, cost=33242.0, fair_value=33224.0; the same QF Holdings position at 2026-03-31 has principal_amount=33449000.0, cost=33248000.0, fair_value=33224000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Recomputed 2025-12-31 holdings sum with only QF Holdings, Inc. fair_value multiplied by 1000 gives corrected_fv=1468228000.0."
+    }
+  ],
+  "rationale": "The QF Holdings position is a real holding, but the 2025-12-31 numeric values were left in thousands while the holdings table sums dollar units. The next-quarter current QF row shows the same position at fair_value=33224000.0. Rescaling the malformed fair_value by 1000 adds exactly the missing 33190776.0 and reconciles to the validated anchor without deleting any rows.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 33190776.0,
+      "residual_before": -33190776.0,
+      "residual_after": 0.0
+    }
+  }
+}

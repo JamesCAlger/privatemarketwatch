@@ -1,0 +1,48 @@
+{
+  "cik": "2012139",
+  "rule_id": "exclude_short_investment_type_axis_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw ILIKE '% Investment Type %'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings rows with bdc_dimensions_raw ILIKE '% Investment Type %' sum to FV 71,140,000 for 2025-09-30 and 77,860,000 for 2025-12-31; those amounts exactly equal the fv_conservation residuals for the same quarters."
+    },
+    {
+      "source": "query",
+      "quote": "Applying the predicate gives corrected FV 978,839,000 vs anchor 978,839,000 for 2025-09-30 and corrected FV 1,488,856,000 vs anchor 1,488,856,000 for 2025-12-31."
+    },
+    {
+      "source": "query",
+      "quote": "The affected 2025-12-31 rows are short-axis records such as investmentidentifieraxis=Jupiter Refuel Canada Buyer, Inc. Investment Type First Lien - Term Loan, while full-context rows for the same issuer/instrument remain with industry, reference rate, interest rate, maturity date, and principal amount dimensions."
+    }
+  ],
+  "rationale": "The residual is caused by generic short investmentidentifieraxis members ending in issuer plus Investment Type plus instrument. These rows are leaked duplicate/alternate-context rows, not standalone positions: they lack the full schedule context and their aggregate fair value exactly equals the over-count in both anchored overshoot quarters. Excluding only these short-axis rows preserves the fully described investment rows and leaves the reconciled 2025-06-30 quarter unchanged.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 6,
+      "fv": -71140000.0,
+      "residual_before": 71140000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 8,
+      "fv": -77860000.0,
+      "residual_before": 77860000.0,
+      "residual_after": 0.0
+    },
+    "2026-03-31": {
+      "rows": 8,
+      "fv": -79078000.0,
+      "residual_before": null,
+      "residual_after": null
+    }
+  }
+}

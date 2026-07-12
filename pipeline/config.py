@@ -155,6 +155,14 @@ UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
 BDC_XBRL_ORACLE_EXCEPTIONS_FILE = OVERRIDES_DIR / "bdc_xbrl_oracle_exceptions.json"
 
+# Promoted agent-fix stores (gap 1): gate-PASS fixes with production consumers.
+# agent_anchor -> shadow conservation engine (verified_override anchor kind);
+# agent_b2_corrections -> raw BDC staging (comparative_period_filter);
+# agent_investigate_rules -> tail of build_unified_holdings (pipeline.agent_promoted).
+AGENT_ANCHOR_OVERRIDES_DIR = OVERRIDES_DIR / "agent_anchor"
+AGENT_B2_CORRECTIONS_DIR = OVERRIDES_DIR / "agent_b2_corrections"
+AGENT_INVESTIGATE_RULES_DIR = OVERRIDES_DIR / "agent_investigate_rules"
+
 # Position match overrides (per-CIK JSON files with reject/force_pair directives)
 POSITION_MATCH_OVERRIDES_DIR = OVERRIDES_DIR / "position_match_overrides"
 
@@ -242,6 +250,12 @@ POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
 POSITION_RETURNS_FILE = OUTPUT_DIR / "position_returns.csv"
 INDEX_RETURNS_FILE = OUTPUT_DIR / "index_returns.csv"
 POSITION_ID_EDGES_FILE = OUTPUT_DIR / "position_id_edges.csv"
+# Stable identifier registry (opt-in; see docs/position_id_stable_identifier_design.md).
+# Stateful artifact: lives under OVERRIDES_DIR (governed, NOT a rebuild target),
+# so `rebuild_outputs.py --clean` and output snapshots never wipe it.
+POSITION_ID_REGISTRY_DIR = OVERRIDES_DIR / "position_id_registry"
+POSITION_ID_REGISTRY_FILE = POSITION_ID_REGISTRY_DIR / "registry.csv"
+POSITION_ID_RETIREMENTS_FILE = POSITION_ID_REGISTRY_DIR / "retirements.csv"
 POSITION_MATCH_COVERAGE_FILE = OUTPUT_DIR / "position_match_coverage.csv"
 POSITION_MATCH_UNMATCHED_SUMMARY_FILE = OUTPUT_DIR / "position_match_unmatched_summary.csv"
 POSITION_MATCH_RESIDUALS_FILE = OUTPUT_DIR / "position_match_residuals.csv"
@@ -277,6 +291,9 @@ BDC_SECTOR_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_sector_breakdown.csv"
 BDC_SECTOR_RECONCILIATION_FILE = OUTPUT_DIR / "bdc_sector_reconciliation.csv"
 BDC_SECTOR_BREAKDOWN_RECONCILED_FILE = OUTPUT_DIR / "bdc_sector_breakdown_reconciled.csv"
 BDC_LIEN_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_lien_breakdown.csv"
+BDC_INSTRUMENT_TYPE_BREAKDOWN_FILE = OUTPUT_DIR / "bdc_instrument_type_breakdown.csv"
+# Per-position iXBRL descriptor field-status (maturity/lien/sector/ref + status)
+BDC_IXBRL_FIELD_STATUS_FILE = OUTPUT_DIR / "bdc_ixbrl_field_status.csv"
 FUND_FINANCIALS_VALIDATION_CURRENT_FILE = OUTPUT_DIR / "fund_financials_validation_current.csv"
 FUND_FINANCIALS_QUALITY_METRICS_FILE = OUTPUT_DIR / "fund_financials_quality_metrics.csv"
 FUND_FINANCIALS_CROSS_LEVEL_FILE = OUTPUT_DIR / "fund_financials_cross_level.csv"

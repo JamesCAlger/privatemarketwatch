@@ -1,0 +1,38 @@
+{
+  "cik": "1954360",
+  "rule_id": "1954360_fix_20240630_mph_healthcare_term_loan_fair_value",
+  "rule_type": "value_expression",
+  "action": "set",
+  "scope": {
+    "quarters": [
+      "2024-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-06-30' AND bdc_dimensions_raw = 'investmentidentifieraxis=Investments United States Debt Investments Health Care Equipment and Services MPH Acquisition Investment Type Senior Secured First Lien Term Loan Interest Term S + 425 (50 Floor) Interest Rate 9.86% Maturity/Dissolution Date 09/2028'",
+  "field": "fair_value",
+  "expression": "930000",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "After correcting the Pinnacle digit-drop, the only remaining 2024-06-30 held-out under-count is 99000. It localizes to U.S. Debt Investments Health Care Equipment and Services: staging subtotal fair_value=47811000 while detailed health-care debt rows sum to 47712000."
+    },
+    {
+      "source": "query",
+      "quote": "The MPH Acquisition health-care term loan is the detailed row with fair_value=831000, cost=968000, principal_amount=995000. Setting it to 930000 adds the exact 99000 health-care subtotal/detail gap and leaves the row below cost and principal."
+    },
+    {
+      "source": "query",
+      "quote": "The same MPH loan is valued near cost/principal in adjacent quarters before later decline: 2024-03-31 fair_value=966000 cost=969000 principal=997000; 2024-09-30 fair_value=753000 cost=967000 principal=992000."
+    }
+  ],
+  "rationale": "The remaining June 2024 held-out failure is not caused by cash equivalents or duplicate rows. It is a small health-care debt subtotal/detail mismatch. The MPH row is the specific detailed position whose fair value is inconsistent with the subtotal by the exact remaining amount while its other numeric columns support a higher value.",
+  "confidence": 0.78,
+  "measured_impact": {
+    "2024-06-30": {
+      "rows": 1,
+      "fv": 99000.0,
+      "residual_before": -99000.0,
+      "residual_after": 0.0
+    }
+  }
+}

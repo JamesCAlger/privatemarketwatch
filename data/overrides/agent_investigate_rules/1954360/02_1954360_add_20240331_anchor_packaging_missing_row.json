@@ -1,0 +1,44 @@
+{
+  "cik": "1954360",
+  "rule_id": "1954360_add_20240331_anchor_packaging_missing_row",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2024-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "cik": "1954360",
+      "report_date": "2024-03-31",
+      "fair_value": 745000.0,
+      "cost": 741000.0,
+      "principal_amount": 744000.0,
+      "issuer_name": "Anchor Packaging LLC",
+      "bdc_investment_identifier": "Investments United States Debt Investments Materials Anchor Packaging LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 350 Interest Rate 8.93% Maturity/Dissolution Date 07/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments United States Debt Investments Materials Anchor Packaging LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 350 Interest Rate 8.93% Maturity/Dissolution Date 07/2026",
+      "source_row_id": "staging:period=2024-03-31;dimensions_raw=investmentidentifieraxis=Investments United States Debt Investments Materials Anchor Packaging LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 350 Interest Rate 8.93% Maturity/Dissolution Date 07/2026"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Staging contains 2024-03-31 Anchor Packaging LLC with fair_value=745000, cost=741000, principal_amount=744000, dimensions_raw=investmentidentifieraxis=Investments United States Debt Investments Materials Anchor Packaging LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 350 Interest Rate 8.93% Maturity/Dissolution Date 07/2026."
+    },
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2024-03-31 contain no row whose bdc_dimensions_raw includes Anchor Packaging, while the U.S. debt subtotal is short after cash-equivalent exclusion."
+    }
+  ],
+  "rationale": "The source has a real detailed loan row for Anchor Packaging LLC that is absent from corrected holdings. Adding the omitted source row recovers part of the 2024-03-31 under-count without changing cash-equivalent treatment or deleting real rows.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2024-03-31": {
+      "rows": 1,
+      "fv": 745000.0,
+      "residual_before": -3834000.0,
+      "residual_after": -3089000.0
+    }
+  }
+}

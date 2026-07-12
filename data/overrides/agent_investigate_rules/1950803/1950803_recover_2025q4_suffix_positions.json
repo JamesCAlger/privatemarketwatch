@@ -1,0 +1,292 @@
+{
+  "cik": "1950803",
+  "rule_id": "1950803_recover_2025q4_suffix_positions",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": ["2025-12-31"]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31 current-period staging, 29 valued investment rows are absent from holdings after excluding the non-position Net Assets row; their fair_value sum is 141554000."
+    },
+    {
+      "source": "query",
+      "quote": "Existing wrapper override for cik 0001950803 documents STEPSTONE_DUPLICATE_SUFFIXES: trailing One/Two suffixes recur and are retained as position-level rows, not borrower-aggregated."
+    }
+  ],
+  "rationale": "The failing quarter is an under-count. Holdings are an exact subset of same-period staging: no included holdings row has a differing fair_value. The missing valued rows are real debt investment rows from the current-period source, mostly with trailing ordinal suffixes such as One, and were dropped as duplicate-like rows. Recovering these rows adds real source positions rather than deleting below the anchor.",
+  "confidence": 0.88,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 29,
+      "fv": 141554000,
+      "residual_before": -141659894,
+      "residual_after": -105894
+    }
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 9276000,
+      "cost": 9280000,
+      "principal_amount": 9417000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Leisure Products | Play Holdings, Inc. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 0.75% | Cash Interest Rate / PIK Rate | 9.07% | Maturity Date | 10/29/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Leisure Products | Play Holdings, Inc. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 0.75% | Cash Interest Rate / PIK Rate | 9.07% | Maturity Date | 10/29/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Leisure Products | Play Holdings, Inc. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 0.75% | Cash Interest Rate / PIK Rate | 9.07% | Maturity Date | 10/29/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 8944000,
+      "cost": 8957000,
+      "principal_amount": 9000000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Amplify Buyer, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 9/17/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Amplify Buyer, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 9/17/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Amplify Buyer, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 9/17/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 8253000,
+      "cost": 8255000,
+      "principal_amount": 8337000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Aptive Environmental, LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.47% | Maturity Date | 10/15/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Aptive Environmental, LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.47% | Maturity Date | 10/15/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Aptive Environmental, LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.47% | Maturity Date | 10/15/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 7846000,
+      "cost": 7859000,
+      "principal_amount": 7934000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Interactive Media & Services | Syndigo LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.00% / 0.75% | Cash Interest Rate / PIK Rate | 8.82% | Maturity Date | 9/2/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Interactive Media & Services | Syndigo LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.00% / 0.75% | Cash Interest Rate / PIK Rate | 8.82% | Maturity Date | 9/2/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Interactive Media & Services | Syndigo LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.00% / 0.75% | Cash Interest Rate / PIK Rate | 8.82% | Maturity Date | 9/2/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 7305000,
+      "cost": 7307000,
+      "principal_amount": 7342000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Financial Exchanges & Data | Wharf Street Ratings Acquisition LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.47% | Maturity Date | 9/16/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Financial Exchanges & Data | Wharf Street Ratings Acquisition LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.47% | Maturity Date | 9/16/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Financial Exchanges & Data | Wharf Street Ratings Acquisition LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.47% | Maturity Date | 9/16/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 7267000,
+      "cost": 7268000,
+      "principal_amount": 7303000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Facilities | Bristol Hospice, L.L.C. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.00% / 0.75% | Cash Interest Rate /PIK Rate | 8.72% | Maturity Date | 8/26/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Facilities | Bristol Hospice, L.L.C. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.00% / 0.75% | Cash Interest Rate /PIK Rate | 8.72% | Maturity Date | 8/26/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Facilities | Bristol Hospice, L.L.C. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.00% / 0.75% | Cash Interest Rate /PIK Rate | 8.72% | Maturity Date | 8/26/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 7223000,
+      "cost": 7225000,
+      "principal_amount": 7295000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Pharmaceuticals | Designs for Health, Inc. Initial Term B Loan (First Lien) | Reference Rate Spread / Floor | 3M SOFR + 6.00% / 0.75% | Cash Interest Rate / PIK Rate | 8.39% | Maturity Date | 10/16/2030 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Pharmaceuticals | Designs for Health, Inc. Initial Term B Loan (First Lien) | Reference Rate Spread / Floor | 3M SOFR + 6.00% / 0.75% | Cash Interest Rate / PIK Rate | 8.39% | Maturity Date | 10/16/2030 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Pharmaceuticals | Designs for Health, Inc. Initial Term B Loan (First Lien) | Reference Rate Spread / Floor | 3M SOFR + 6.00% / 0.75% | Cash Interest Rate / PIK Rate | 8.39% | Maturity Date | 10/16/2030 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 7215000,
+      "cost": 7216000,
+      "principal_amount": 7269000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Technology | mPulse Mobile, Inc. Initial Term Loan | Reference Rate Spread | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 8/26/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Technology | mPulse Mobile, Inc. Initial Term Loan | Reference Rate Spread | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 8/26/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Technology | mPulse Mobile, Inc. Initial Term Loan | Reference Rate Spread | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 8/26/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 7120000,
+      "cost": 7120000,
+      "principal_amount": 7262000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | IT Consulting & Other Services | Guava Buyer LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% /1.00% | Cash Interest Rate / PIK Rate | 9.34% | Maturity Date | 8/12/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | IT Consulting & Other Services | Guava Buyer LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% /1.00% | Cash Interest Rate / PIK Rate | 9.34% | Maturity Date | 8/12/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | IT Consulting & Other Services | Guava Buyer LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% /1.00% | Cash Interest Rate / PIK Rate | 9.34% | Maturity Date | 8/12/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 6829000,
+      "cost": 6836000,
+      "principal_amount": 6869000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Specialized Consumer Services | PestCo, LLC Term A Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.59% | Maturity Date | 8/6/2030 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Specialized Consumer Services | PestCo, LLC Term A Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.59% | Maturity Date | 8/6/2030 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Specialized Consumer Services | PestCo, LLC Term A Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.59% | Maturity Date | 8/6/2030 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 6741000,
+      "cost": 6746000,
+      "principal_amount": 6811000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Facilities | CRH Healthcare Purchaser, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 1.00% | Cash Interest Rate /PIK Rate | 8.92% | Maturity Date | 9/17/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Facilities | CRH Healthcare Purchaser, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 1.00% | Cash Interest Rate /PIK Rate | 8.92% | Maturity Date | 9/17/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Facilities | CRH Healthcare Purchaser, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 1.00% | Cash Interest Rate /PIK Rate | 8.92% | Maturity Date | 9/17/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 6447000,
+      "cost": 6445000,
+      "principal_amount": 6477000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Application Software | Durare Bidco, LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.50% | Cash Interest Rate / PIK Rate | 8.62% | Maturity Date | 8/9/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Application Software | Durare Bidco, LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.50% | Cash Interest Rate / PIK Rate | 8.62% | Maturity Date | 8/9/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Application Software | Durare Bidco, LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.50% | Cash Interest Rate / PIK Rate | 8.62% | Maturity Date | 8/9/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 6117000,
+      "cost": 6151000,
+      "principal_amount": 6171000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Diversified Support Services | Integrated Power Services Holdings, Inc. Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.58% | Maturity Date | 11/22/2028 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Diversified Support Services | Integrated Power Services Holdings, Inc. Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.58% | Maturity Date | 11/22/2028 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Diversified Support Services | Integrated Power Services Holdings, Inc. Term Loan | Reference Rate Spread / Floor | 1M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.58% | Maturity Date | 11/22/2028 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 5648000,
+      "cost": 5633000,
+      "principal_amount": 5657000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Services | KabaFusion Parent LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.42% | Maturity Date | 11/24/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Services | KabaFusion Parent LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.42% | Maturity Date | 11/24/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Health Care Services | KabaFusion Parent LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 0.75% | Cash Interest Rate /PIK Rate | 8.42% | Maturity Date | 11/24/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 5338000,
+      "cost": 5342000,
+      "principal_amount": 5388000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Education Services | Med Learning Group, LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.75% / 1.00% | Cash Interest Rate / PIK Rate | 9.42% | Maturity Date | 12/30/2027",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Education Services | Med Learning Group, LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.75% / 1.00% | Cash Interest Rate / PIK Rate | 9.42% | Maturity Date | 12/30/2027",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Education Services | Med Learning Group, LLC Initial Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.75% / 1.00% | Cash Interest Rate / PIK Rate | 9.42% | Maturity Date | 12/30/2027"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 5203000,
+      "cost": 5222000,
+      "principal_amount": 5290000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Kite Midco II LTD Term Loan B1 | Reference Rate Spread / Floor | 6M SOFR + 4.50% / 0.00% | Cash Interest Rate / PIK Rate | 8.23% | Maturity Date | 11/19/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Kite Midco II LTD Term Loan B1 | Reference Rate Spread / Floor | 6M SOFR + 4.50% / 0.00% | Cash Interest Rate / PIK Rate | 8.23% | Maturity Date | 11/19/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Kite Midco II LTD Term Loan B1 | Reference Rate Spread / Floor | 6M SOFR + 4.50% / 0.00% | Cash Interest Rate / PIK Rate | 8.23% | Maturity Date | 11/19/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 4647000,
+      "cost": 4647000,
+      "principal_amount": 4658000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Life Sciences Tools & Services | Quotient Science Term Loan USD1 B1 | Reference Rate Spread / Floor | 6M SOFR + 5.25% / 0.00% | Cash Interest Rate / PIK Rate | 9.45% | Maturity Date | 11/4/2029 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Life Sciences Tools & Services | Quotient Science Term Loan USD1 B1 | Reference Rate Spread / Floor | 6M SOFR + 5.25% / 0.00% | Cash Interest Rate / PIK Rate | 9.45% | Maturity Date | 11/4/2029 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Life Sciences Tools & Services | Quotient Science Term Loan USD1 B1 | Reference Rate Spread / Floor | 6M SOFR + 5.25% / 0.00% | Cash Interest Rate / PIK Rate | 9.45% | Maturity Date | 11/4/2029 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 3600000,
+      "cost": 3600000,
+      "principal_amount": 3636000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Diversified Support Services | TRAK Purchaser, Inc. Amendment No.1 Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 0.00% | Cash Interest Rate / PIK Rate | 9.20% | Maturity Date | 6/20/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Diversified Support Services | TRAK Purchaser, Inc. Amendment No.1 Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 0.00% | Cash Interest Rate / PIK Rate | 9.20% | Maturity Date | 6/20/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Diversified Support Services | TRAK Purchaser, Inc. Amendment No.1 Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 0.00% | Cash Interest Rate / PIK Rate | 9.20% | Maturity Date | 6/20/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 3522000,
+      "cost": 3492000,
+      "principal_amount": 3558000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Food Distributors | Sunset Distributing, LLC Term Loan A | Reference Rate Spread / Floor | 3M SOFR + 5.75% / 1.00% | Cash Interest Rate /PIK Rate | 9.42% | Maturity Date | 5/30/2030 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Food Distributors | Sunset Distributing, LLC Term Loan A | Reference Rate Spread / Floor | 3M SOFR + 5.75% / 1.00% | Cash Interest Rate /PIK Rate | 9.42% | Maturity Date | 5/30/2030 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Food Distributors | Sunset Distributing, LLC Term Loan A | Reference Rate Spread / Floor | 3M SOFR + 5.75% / 1.00% | Cash Interest Rate /PIK Rate | 9.42% | Maturity Date | 5/30/2030 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 3270000,
+      "cost": 3267000,
+      "principal_amount": 3283000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Asset Management & Custody Banks | Cornerstone Advisors of Arizona LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 5/13/2032 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Asset Management & Custody Banks | Cornerstone Advisors of Arizona LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 5/13/2032 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Asset Management & Custody Banks | Cornerstone Advisors of Arizona LLC Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75% / 1.00% | Cash Interest Rate / PIK Rate | 8.42% | Maturity Date | 5/13/2032 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 3245000,
+      "cost": 3260000,
+      "principal_amount": 3292000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Hotels, Resorts & Cruise Lines | Stonebridge Companies, LLC Term B Loan | Reference Rate Spread | 1M SOFR + 5.00% / 1.00% | Cash Interest Rate / PIK Rate | 8.72% | Maturity Date | 5/16/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Hotels, Resorts & Cruise Lines | Stonebridge Companies, LLC Term B Loan | Reference Rate Spread | 1M SOFR + 5.00% / 1.00% | Cash Interest Rate / PIK Rate | 8.72% | Maturity Date | 5/16/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Hotels, Resorts & Cruise Lines | Stonebridge Companies, LLC Term B Loan | Reference Rate Spread | 1M SOFR + 5.00% / 1.00% | Cash Interest Rate / PIK Rate | 8.72% | Maturity Date | 5/16/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 3017000,
+      "cost": 3016000,
+      "principal_amount": 3037000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | VTC Buyer Corp. Term A Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 1.00% | Cash Interest Rate /PIK Rate | 9.15% | Maturity Date | 7/15/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | VTC Buyer Corp. Term A Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 1.00% | Cash Interest Rate /PIK Rate | 9.15% | Maturity Date | 7/15/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | VTC Buyer Corp. Term A Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25% / 1.00% | Cash Interest Rate /PIK Rate | 9.15% | Maturity Date | 7/15/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 2189000,
+      "cost": 2195000,
+      "principal_amount": 2205000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Duke's Root Control, Inc. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 1.00% | Cash Interest Rate /PIK Rate | 9.85% | Maturity Date | 12/10/2029 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Duke's Root Control, Inc. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 1.00% | Cash Interest Rate /PIK Rate | 9.85% | Maturity Date | 12/10/2029 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Duke's Root Control, Inc. Initial Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 1.00% | Cash Interest Rate /PIK Rate | 9.85% | Maturity Date | 12/10/2029 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 1795000,
+      "cost": 1794000,
+      "principal_amount": 1805000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Internet & Direct Marketing Retail | Berlin Rosen Acquisition, LLC Small Girls Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.50% / 1.00% | Cash Interest Rate / PIK Rate | 9.47% | Maturity Date | 1/14/2027 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Internet & Direct Marketing Retail | Berlin Rosen Acquisition, LLC Small Girls Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.50% / 1.00% | Cash Interest Rate / PIK Rate | 9.47% | Maturity Date | 1/14/2027 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Internet & Direct Marketing Retail | Berlin Rosen Acquisition, LLC Small Girls Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.50% / 1.00% | Cash Interest Rate / PIK Rate | 9.47% | Maturity Date | 1/14/2027 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 1703000,
+      "cost": 1703000,
+      "principal_amount": 1707000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Life Sciences Tools & Services | Quotient Science Term Loan USD1 B2 | Reference Rate Spread / Floor | 3M SOFR + 6.00% / 0.00% | Cash Interest Rate / PIK Rate | 9.45% | Maturity Date | 11/4/2029 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Life Sciences Tools & Services | Quotient Science Term Loan USD1 B2 | Reference Rate Spread / Floor | 3M SOFR + 6.00% / 0.00% | Cash Interest Rate / PIK Rate | 9.45% | Maturity Date | 11/4/2029 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Life Sciences Tools & Services | Quotient Science Term Loan USD1 B2 | Reference Rate Spread / Floor | 3M SOFR + 6.00% / 0.00% | Cash Interest Rate / PIK Rate | 9.45% | Maturity Date | 11/4/2029 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 1034000,
+      "cost": 1040000,
+      "principal_amount": 1045000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Auto Parts & Equipment | Premier Tires & Service Acquisition, LLC Incremental Delayed Draw Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.40% / 1.00% | Cash Interest Rate / PIK Rate | 9.22% | Maturity Date | 5/17/2029 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Auto Parts & Equipment | Premier Tires & Service Acquisition, LLC Incremental Delayed Draw Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.40% / 1.00% | Cash Interest Rate / PIK Rate | 9.22% | Maturity Date | 5/17/2029 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Auto Parts & Equipment | Premier Tires & Service Acquisition, LLC Incremental Delayed Draw Term Loan | Reference Rate Spread / Floor | 1M SOFR + 5.40% / 1.00% | Cash Interest Rate / PIK Rate | 9.22% | Maturity Date | 5/17/2029 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 761000,
+      "cost": 760000,
+      "principal_amount": 765000,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Duke's Root Control, Inc. Second Amendment Incremental Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 1.00% | Cash Interest Rate /PIK Rate | 9.63% | Maturity Date | 12/10/2029 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Duke's Root Control, Inc. Second Amendment Incremental Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 1.00% | Cash Interest Rate /PIK Rate | 9.63% | Maturity Date | 12/10/2029 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Environmental & Facilities Services | Duke's Root Control, Inc. Second Amendment Incremental Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.50% / 1.00% | Cash Interest Rate /PIK Rate | 9.63% | Maturity Date | 12/10/2029 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 0,
+      "cost": -2000,
+      "principal_amount": 0,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Research & Consulting Services | Vensure Employer Services, Inc. Initial Delayed Draw Term Loan | Reference Rate Spread / Floor | 1M SOFR + 0.50% / 0.50% | Cash Interest Rate / PIK Rate | 0.50% | Maturity Date | 9/27/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Research & Consulting Services | Vensure Employer Services, Inc. Initial Delayed Draw Term Loan | Reference Rate Spread / Floor | 1M SOFR + 0.50% / 0.50% | Cash Interest Rate / PIK Rate | 0.50% | Maturity Date | 9/27/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Research & Consulting Services | Vensure Employer Services, Inc. Initial Delayed Draw Term Loan | Reference Rate Spread / Floor | 1M SOFR + 0.50% / 0.50% | Cash Interest Rate / PIK Rate | 0.50% | Maturity Date | 9/27/2031 One"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": -1000,
+      "cost": -8000,
+      "principal_amount": 0,
+      "bdc_investment_identifier": "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Kite Midco II LTD Term Loan B2 | Reference Rate Spread / Floor | 3M SOFR + 1.00% / 0.00% | Cash Interest Rate / PIK Rate | 1.00% | Maturity Date | 11/19/2031 One",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Kite Midco II LTD Term Loan B2 | Reference Rate Spread / Floor | 3M SOFR + 1.00% / 0.00% | Cash Interest Rate / PIK Rate | 1.00% | Maturity Date | 11/19/2031 One",
+      "source_row_id": "staging:investmentidentifieraxis=Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior Secured | Advertising | Kite Midco II LTD Term Loan B2 | Reference Rate Spread / Floor | 3M SOFR + 1.00% / 0.00% | Cash Interest Rate / PIK Rate | 1.00% | Maturity Date | 11/19/2031 One"
+    }
+  ]
+}

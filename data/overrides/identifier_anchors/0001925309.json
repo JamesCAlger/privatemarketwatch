@@ -1,0 +1,32 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001925309",
+  "entity_name": "Sixth Street Lending Partners",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "^Debt Investments(?:\\s|$)"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "^Equity(?: and Other)? Investments(?:\\s|$)"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "^(?:Debt Investments|Equity(?: and Other)? Investments)(?:\\s+[A-Z][A-Za-z,& -]+)?$"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b(?:Initial\\s+)?Acquisition Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\b|\\bdue\\s+\\d{1,2}/\\d{4}\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and (?:Spread\\s+)?(?:SOFR|S|E|\\$)\\s*\\+\\s*\\d"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\s+\\d+(?:\\.\\d+)?\\s*%"
+    }
+  ],
+  "notes": "Anchors recognize the section headings present in none_examples and the dominant debt identifier markers embedded in the bundle."
+}

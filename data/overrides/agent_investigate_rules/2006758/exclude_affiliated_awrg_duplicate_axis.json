@@ -1,0 +1,44 @@
+{
+  "cik": "2006758",
+  "rule_id": "exclude_affiliated_awrg_duplicate_axis",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw LIKE 'investmentidentifieraxis=Affiliated Investments AWRG%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings rows on the Affiliated Investments AWRG axis: 2025-06-30 has AWRG Borrower LLC, Term Loan fv=5557000 and AWRG Parent LLC, Stock fv=1659000; 2025-09-30 has AWRG Borrower LLC, Term Loan fv=5522000 and AWRG Parent LLC, Stock fv=1476000."
+    },
+    {
+      "source": "query",
+      "quote": "Removing only bdc_dimensions_raw LIKE '%Affiliated Investments%' changes 2025-06-30 fv from 936615000 to 929399000 and 2025-09-30 fv from 913524000 to 906526000, exactly matching the conservation anchors."
+    }
+  ],
+  "rationale": "The Affiliated Investments AWRG rows are duplicate-presented copies of real AWRG positions already included in the main investment schedule. They are over-counted leaked rows, not missing positions or value scale errors.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 2,
+      "fv": 7216000.0,
+      "residual_before": 7216000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 2,
+      "fv": 6998000.0,
+      "residual_before": 6998000.0,
+      "residual_after": 0.0
+    },
+    "2026-03-31": {
+      "rows": 2,
+      "fv": 4474000.0,
+      "residual_before": null,
+      "residual_after": null
+    }
+  }
+}

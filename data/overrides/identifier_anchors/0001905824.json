@@ -1,0 +1,43 @@
+{
+  "cik": "0001905824",
+  "schema": "agentA-identifier-anchors.v1",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "REFRATE",
+      "regex": "(?i)\\b(?:SOFR|LIBOR|PRIME)\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b\\d+(?:\\.\\d+)?\\s*%"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "(?i)\\b(?:First Lien Senior Secured|Second Lien Senior Secured|Senior Unsecured|Term Loan|Note)\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "(?i)\\b(?:Common Stocks?|Warrants?)\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "(?i)\\b(?:Debt Investments|Short-Term Investments|U\\.S\\. Treasury Bills?)\\b"
+    },
+    {
+      "label": "COMMON",
+      "regex": "(?i)\\bCommon Stocks?\\b"
+    },
+    {
+      "label": "SHORTTERM",
+      "regex": "(?i)\\bShort-Term Investments\\b"
+    },
+    {
+      "label": "TBILL",
+      "regex": "(?i)\\bU\\.S\\. Treasury Bills?\\b"
+    }
+  ]
+}

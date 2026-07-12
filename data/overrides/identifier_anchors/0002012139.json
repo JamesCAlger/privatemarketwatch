@@ -1,0 +1,30 @@
+{
+  "version": "agentA-identifier-anchors.v1",
+  "cik": "0002012139",
+  "entity_name": "Fortress Private Lending Fund",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\bNon-controlled,\\s*[Nn]on-affiliated [Ii]nvestments\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bInvestment Type\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b"
+    }
+  ],
+  "notes": [
+    "Bundle none_examples contain issuer plus 'Investment Type' plus tranche/type text; this marker is proposed so those rows no longer fall to (none)."
+  ]
+}

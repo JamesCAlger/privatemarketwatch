@@ -1,0 +1,51 @@
+{
+  "schema_version": "agentA-anchor-v1",
+  "cik": "0001726548",
+  "entity_name": "BC Partners Lending Corp",
+  "report_date": "2025-12-31",
+  "status": "NO_CHANGE",
+  "reason": "Bundle has no none_examples and existing signatures already cover all sampled identifiers; no new section anchor is supported or needed.",
+  "anchors": [
+    {
+      "label": "RATE",
+      "regex": "Interest Rate"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Reference Rate and Spread"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity(?: Date)?"
+    }
+  ],
+  "anchor_markers": [
+    "Interest Rate",
+    "Reference Rate and Spread",
+    "Maturity"
+  ],
+  "available_identifier_datapoints": [
+    "issuer",
+    "instrument_type",
+    "industry",
+    "interest_rate",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "floor",
+    "maturity_date",
+    "tranche_suffix"
+  ],
+  "evidence": [
+    {
+      "type": "bundle",
+      "observation": "none_examples is empty; top signatures RATE REFRATE MAT, RATE, and RATE MAT cover 131 sampled rows."
+    },
+    {
+      "type": "roam",
+      "table_index": 38,
+      "row_index": 1,
+      "observation": "SOI header contains Investment, Industry, Interest Rate, Reference Rate and Spread, Floor, and Maturity columns."
+    }
+  ]
+}

@@ -259,7 +259,11 @@ def rebuild_financials(
     logger.info("Fund financials: %d rows in %.1f s", len(df), time.time() - t0)
 
     if include_sector_breakdown:
-        from pipeline.bdc_sector_breakdown import extract_bdc_sector_breakdown
+        from pipeline.bdc_sector_breakdown import (
+            extract_bdc_instrument_type_breakdown,
+            extract_bdc_lien_breakdown,
+            extract_bdc_sector_breakdown,
+        )
         from pipeline.bdc_sector_reconciliation import (
             reconcile_bdc_sector_breakdown,
         )
@@ -269,6 +273,11 @@ def rebuild_financials(
         sector_df = extract_bdc_sector_breakdown()
         logger.info("Sector breakdown: %d rows in %.1f s",
                     len(sector_df), time.time() - t1)
+        logger.info("=== Rebuilding BDC lien + instrument-type breakdowns ===")
+        lien_df = extract_bdc_lien_breakdown()
+        instr_df = extract_bdc_instrument_type_breakdown()
+        logger.info("Lien breakdown: %d rows; instrument-type breakdown: %d rows",
+                    len(lien_df), len(instr_df))
         logger.info("=== Rebuilding BDC sector reconciliation ===")
         t2 = time.time()
         reconciliation_df, reconciled_df = reconcile_bdc_sector_breakdown()

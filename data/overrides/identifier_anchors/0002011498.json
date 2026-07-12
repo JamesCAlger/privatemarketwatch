@@ -1,0 +1,49 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0002011498",
+  "entity_name": "AGL Private Credit Income Fund",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\bNon-controlled/Non-affiliated\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\bDebt investments\\b|\\bdebt investments\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\b(?:First Lien|Delayed Draw|Revolving Loan|Term Loan|Subordinated Loan|Equity)\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bAll In Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b"
+    },
+    {
+      "label": "MMF",
+      "regex": "\\b(?:Goldman Sachs Financial Square Government Institutional Fund|State Street Institutional Treasury Money Market Fund|Money Market Fund)\\b"
+    }
+  ],
+  "available_identifier_datapoints": [
+    "issuer",
+    "instrument_type",
+    "asset_class",
+    "industry",
+    "affiliation_status",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate_all_in",
+    "pik_rate",
+    "acquisition_date",
+    "maturity_date"
+  ],
+  "evidence_note": "Bundle none_examples are money market fund identifiers; targeted evidence CLI could not run in this sandbox because the default Python environment lacks pandas."
+}

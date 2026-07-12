@@ -174,7 +174,11 @@ def main(argv: list[str] | None = None) -> int:
     parts: list[str] = []
 
     # 1. conservation (always creates result_<name>). cost_conservation uses the
-    #    companyfacts InvestmentOwnedAtCost anchor -> build it first.
+    #    companyfacts InvestmentOwnedAtCost anchor -> build it first. Layer D
+    #    promoted anchor overrides must exist before any rule references
+    #    _anchor_override (parity with shadow_conservation_engine.main).
+    n_ov = cons.ensure_anchor_overrides(con)
+    logger.info("conservation: %d promoted anchor overrides loaded", n_ov)
     cons.ensure_companyfacts_cost(con)
     for r in cons.RULES:
         cons.run_rule(con, r)

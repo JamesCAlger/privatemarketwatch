@@ -237,13 +237,21 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             CAST(TRY_CAST(fair_value_level AS INTEGER) AS VARCHAR) AS fair_value_level,
             CASE WHEN TRY_CAST(annualized_rate AS DOUBLE) >= 50 THEN NULL
                  ELSE TRY_CAST(annualized_rate AS DOUBLE) END AS interest_rate,
+            CASE WHEN TRY_CAST(annualized_rate AS DOUBLE) IS NOT NULL
+                      AND TRY_CAST(annualized_rate AS DOUBLE) < 50 THEN 'nport'
+                 ELSE '' END AS interest_rate_source,
             NULL AS basis_spread,
+            '' AS basis_spread_source,
             '' AS reference_rate_type,
+            '' AS reference_rate_source,
             coupon_type,
             NULL AS pik_rate,
             CASE WHEN TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
                       AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
                  THEN maturity_date ELSE '' END AS maturity_date,
+            CASE WHEN TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
+                      AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
+                 THEN 'nport' ELSE '' END AS maturity_date_source,
             CASE WHEN upper(trim(unit)) = 'NS'
                  THEN TRY_CAST(balance AS DOUBLE) END AS shares_held,
             CASE WHEN upper(trim(unit)) = 'PA'
@@ -315,6 +323,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS extracted_industry,
             '' AS gics_sub_industry,
             '' AS lien_position,
+            '' AS instrument_type,
             -- Position key: issuer/title based. issuer_cusip is issuer-level in
             -- N-PORT and cannot be the whole key for position-level matching.
             TRIM(REGEXP_REPLACE(

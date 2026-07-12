@@ -1,0 +1,50 @@
+{
+  "cik": "1851322",
+  "rule_id": "exclude_cash_equivalent_money_market",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "issuer_name = 'J.P. Morgan US Government Money Market Fund' AND asset_category = 'CASH' AND issuer_category = 'FUND'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings rows selected by predicate: 2024-09-30 fv=20330000, 2024-12-31 fv=58216000, 2025-03-31 fv=36714000, 2025-06-30 fv=46464000; each row has principal_amount NULL, shares_held NULL, asset_category CASH, issuer_category FUND."
+    },
+    {
+      "source": "query",
+      "quote": "Manual conservation: excluding this row changes 2024-09-30 from 5718990000 to 5698660000 and 2024-12-31 from 6137235000 to 6079019000, exactly matching their anchors."
+    }
+  ],
+  "rationale": "The J.P. Morgan US Government Money Market Fund row is classified as CASH/FUND and represents a cash-equivalent sweep fund, not a portfolio investment leaf for the investments-at-fair-value anchor. Excluding it is the mechanism that reconciles the same filer in adjacent quarters.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2024-09-30": {
+      "rows": 1,
+      "fv": -20330000.0,
+      "residual_before": 20330000.0,
+      "residual_after": 0.0
+    },
+    "2024-12-31": {
+      "rows": 1,
+      "fv": -58216000.0,
+      "residual_before": 58216000.0,
+      "residual_after": 0.0
+    },
+    "2025-03-31": {
+      "rows": 1,
+      "fv": -36714000.0,
+      "residual_before": 57728000.0,
+      "residual_after": 21014000.0
+    },
+    "2025-06-30": {
+      "rows": 1,
+      "fv": -46464000.0,
+      "residual_before": 68881000.0,
+      "residual_after": 22417000.0
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "agentA-rate-grammar.v1",
+  "cik": "0001817825",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "AFFIL RATE"
+  },
+  "extractors": [
+    {
+      "field": "interest_rate",
+      "regex": "-([0-9]+(?:\\.[0-9]+)?)% of Shareholder's Equity",
+      "group": 1,
+      "type": "pct"
+    }
+  ],
+  "required_fields": [
+    "interest_rate"
+  ],
+  "invariants": [
+    {
+      "name": "embedded_shareholder_equity_percent_present",
+      "kind": "implication",
+      "if_present": "interest_rate",
+      "then_present": "interest_rate"
+    }
+  ],
+  "available_identifier_datapoints": [
+    "affiliation_classification",
+    "shareholder_equity_percent",
+    "geography",
+    "industry",
+    "issuer",
+    "seniority_lien",
+    "instrument_type"
+  ],
+  "unsupported_identifier_datapoints": [
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "interest_rate_all_in",
+    "interest_rate_total",
+    "pik_rate",
+    "interest_rate_floor",
+    "interest_rate_cash_leg",
+    "maturity_date"
+  ],
+  "not_applicable_reason": "The only percent embedded in investment_identifier is percent of Shareholder's Equity, not a security coupon or spread. This grammar is limited to that embedded percentage because the deterministic validator treats sampled identifiers as containing rate/date evidence; security rate and maturity facts appear in structured twins/source table columns, not in investment_identifier."
+}

@@ -1,0 +1,58 @@
+{
+  "cik": "1976336",
+  "rule_id": "add_blackrock_short_term_investments",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-09-30",
+      "issuer_name": "BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_investment_identifier": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "source_row_id": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "fair_value": 29010000.0,
+      "cost": 29010000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_investment_identifier": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "source_row_id": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "fair_value": 56001000.0,
+      "cost": 56001000.0
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Staging has Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares at fair_value 29010000 on 2025-09-30 and 56001000 on 2025-12-31; holdings has no Short-term Investments or BlackRock row for those quarters."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, value_sum 1608021000 plus the 56001000 short-term row and excluding selected commitment marks reaches corrected_sum 1665503000, equal to the anchor."
+    }
+  ],
+  "rationale": "The BlackRock T-Fund row is labeled Short-term Investments, not Cash Equivalents, in 2025 Q3 and Q4. It exists in staging with cost equal to fair value and is required by the investments-at-fair-value anchor, but the holdings loader dropped it because the liquidity label was not admitted.",
+  "confidence": 0.95,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 29010000.0,
+      "residual_before": 29003000.0,
+      "residual_after": -7000.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 56001000.0,
+      "residual_before": 56001000.0,
+      "residual_after": 0.0
+    }
+  }
+}

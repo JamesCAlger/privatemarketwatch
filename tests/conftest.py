@@ -53,3 +53,29 @@ def _guarded_io_open(file: Any, mode: str = "r", *args: Any, **kwargs: Any) -> A
 
 builtins.open = _guarded_open
 io.open = _guarded_io_open
+
+
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def _isolate_promoted_agent_stores(request, monkeypatch, tmp_path):
+    """Point the promoted agent-fix stores (gap 1) at empty per-test dirs.
+
+    build_unified_holdings consumes data/overrides/agent_investigate_rules and
+    data/overrides/agent_b2_corrections by default; without this, promoted
+    production fixes would silently apply inside fixtures that use real CIKs.
+    Tests that exercise the loaders pass an explicit directory, which bypasses
+    the config lookup. Opt out with @pytest.mark.use_real_promoted_stores.
+    """
+    if request.node.get_closest_marker("use_real_promoted_stores"):
+        yield
+        return
+    from pipeline import config as _config
+    monkeypatch.setattr(_config, "AGENT_INVESTIGATE_RULES_DIR",
+                        tmp_path / "_promoted_agent_rules", raising=True)
+    monkeypatch.setattr(_config, "AGENT_B2_CORRECTIONS_DIR",
+                        tmp_path / "_promoted_b2_corrections", raising=True)
+    monkeypatch.setattr(_config, "AGENT_ANCHOR_OVERRIDES_DIR",
+                        tmp_path / "_promoted_anchor_overrides", raising=True)
+    yield

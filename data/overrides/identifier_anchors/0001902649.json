@@ -1,0 +1,90 @@
+{
+  "schema_version": "agentA-anchor-vocabulary.v1",
+  "cik": "0001902649",
+  "entity_name": "BlackRock Private Credit Fund",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "issuer",
+    "asset_class",
+    "industry",
+    "instrument_type",
+    "reference_rate",
+    "floor",
+    "spread",
+    "cash_pik_split",
+    "total_coupon",
+    "maturity_date"
+  ],
+  "anchors": [
+    {
+      "label": "REFRATE",
+      "regex": "\\bRef\\s+[A-Z]+(?:\\([A-Z]\\))?\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-085372",
+          "table_index": 32,
+          "row_indices": [
+            1
+          ],
+          "observation": "Portfolio schedule headers include Ref."
+        }
+      ]
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Floor|Spread|Total Coupon)\\s+\\d+(?:\\.\\d+)?%",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-085372",
+          "table_index": 32,
+          "row_indices": [
+            1
+          ],
+          "observation": "Portfolio schedule headers include Floor, Spread, and Total Coupon."
+        }
+      ]
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity(?:\\s+Date)?\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-085372",
+          "table_index": 32,
+          "row_indices": [
+            1
+          ],
+          "observation": "Portfolio schedule headers include Maturity."
+        }
+      ]
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\b(?:Common Stock|Common Shares|Common Units)\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-085372",
+          "table_index": 45,
+          "row_indices": [
+            10,
+            13,
+            16
+          ],
+          "observation": "Portfolio rows use Common Stock and Common Units as instrument labels."
+        },
+        {
+          "accession_number": "0001193125-26-085372",
+          "table_index": 92,
+          "row_indices": [
+            2,
+            3,
+            4
+          ],
+          "observation": "Acquisition-date rows use Common Shares and Common Units."
+        }
+      ]
+    }
+  ],
+  "notes": "Adds only equity/common-share markers observed in current none_examples. Debt rate anchors are already present on the dominant rows."
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001911321",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:SOFR|LIBOR)\\s*Spread\\b|\\bReference Rate and Spread\\b|\\b[SE]\\+"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b(?:Due|Maturity Date)\\s+[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:Senior Secured Loans\\s+-\\s+First Lien|Secured Loans\\s+-\\s+First Lien|First Lien Debt|First and Second Lien Debt)\\b"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "\\bKKR Tinder TFC Aggregator L\\.P\\.$"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\b(?:Aerospace and Defense|Automotive|Banking, Finance, Insurance & Real Estate|Beverage, Food and Tobacco|Capital Equipment)\\s+(?:Senior Secured Loans|Secured Loans)\\s+-\\s+First Lien\\b"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle.none_examples",
+      "examples": [
+        "KKR Tinder TFC Aggregator L.P.",
+        "Aerospace and Defense Senior Secured Loans - First Lien",
+        "Automotive Senior Secured Loans - First Lien",
+        "Banking, Finance, Insurance & Real Estate Secured Loans - First Lien",
+        "Beverage, Food and Tobacco Senior Secured Loans - First Lien",
+        "Capital Equipment Senior Secured Loans - First Lien"
+      ]
+    }
+  ]
+}

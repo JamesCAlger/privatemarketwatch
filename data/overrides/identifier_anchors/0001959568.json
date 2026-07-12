@@ -1,0 +1,94 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001959568",
+  "entity_name": "Senior Credit Investments, LLC",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\bNon-Controlled/Non-Affiliated Portfolio Company Investments\\b",
+      "scope": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-116346",
+          "table_index": 32,
+          "row_index": 2,
+          "observation": "SOI section row states Non-Controlled/Non-Affiliated Portfolio Company Investments."
+        }
+      ]
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments\\b",
+      "scope": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-116346",
+          "table_index": 47,
+          "row_index": 10,
+          "observation": "SOI total row identifies non-controlled-non-affiliated Portfolio Company equity investments."
+        }
+      ]
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b",
+      "scope": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-116346",
+          "table_index": 32,
+          "row_index": 1,
+          "observation": "Debt SOI header includes Reference Rate and Spread."
+        }
+      ]
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bS\\s*\\+\\s*[0-9]+(?:\\.[0-9]+)?%",
+      "scope": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-116346",
+          "table_index": 32,
+          "row_index": 1,
+          "observation": "Reference Rate and Spread column supplies spread values embedded in flattened identifiers."
+        }
+      ]
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b\\s+[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}",
+      "scope": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-116346",
+          "table_index": 32,
+          "row_index": 1,
+          "observation": "Debt SOI header includes Maturity Date."
+        }
+      ]
+    },
+    {
+      "label": "COMMIT",
+      "regex": "^(?!Non-Controlled/Non-Affiliated Portfolio Company Investments\\b)(?:Portfolio Company\\s+)?[A-Z0-9].*\\bInvestment Type\\b",
+      "scope": "investment_identifier",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-116346",
+          "table_index": 40,
+          "row_index": 1,
+          "observation": "SOI commitment table header includes Portfolio Company and Investment Type."
+        },
+        {
+          "accession_number": "0001193125-26-116346",
+          "table_index": 48,
+          "row_index": 1,
+          "observation": "Unfunded commitment table header repeats Portfolio Company, Investment Type, Commitment Expiration Date, Unfunded Commitment, and Fair Value."
+        }
+      ]
+    }
+  ],
+  "notes": "The bundle none_examples are unfunded commitment-style identifiers containing issuer and Investment Type only. The COMMIT rule is limited to that embedded identifier marker and does not infer rate fields from source-table columns."
+}

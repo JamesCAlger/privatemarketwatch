@@ -1,0 +1,117 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001916099",
+  "entity_name": "Diameter Credit Co",
+  "status": "PROPOSED_RATE_GRAMMAR",
+  "report_date": "2025-12-31",
+  "available_identifier_datapoints": [
+    "issuer",
+    "instrument type",
+    "interest rate",
+    "dividend rate",
+    "reference rate",
+    "spread",
+    "PIK rate or PIK marker",
+    "acquisition date",
+    "maturity date"
+  ],
+  "unsupported_identifier_datapoints": [
+    "floor",
+    "cash interest leg",
+    "all-in rate convention beyond stated interest or dividend text"
+  ],
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "AFFIL REFRATE MAT",
+    "report_date": "2025-12-31",
+    "_resolved_by": "harness resolve_applies_to (committed anchors)"
+  },
+  "pik_convention": "inclusive",
+  "required_fields": [
+    "maturity_date"
+  ],
+  "extractors": [
+    {
+      "field": "interest_rate",
+      "regex": "\\bInterest Rate\\s+([0-9]+(?:\\.[0-9]+)?)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "dividend_rate",
+      "regex": "\\bDividend Rate\\s+([0-9]+(?:\\.[0-9]+)?)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "reference_rate_type",
+      "regex": "\\bReference Rate\\s+(SOFR|EURIBOR|P|N/A)\\b",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "SOFR": "SOFR",
+        "EURIBOR": "EURIBOR",
+        "P": "PRIME",
+        "N/A": null
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\bSpread\\s+([0-9]+(?:\\.[0-9]+)?)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "(?:\\(\\s*|\\b)([0-9]+(?:\\.[0-9]+)?)\\s*%?\\s*PIK\\s*\\)?",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "acquisition_date",
+      "regex": "\\bAcquisition Date\\s+([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})\\b",
+      "group": 1,
+      "type": "date_mdy"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "\\bMaturity Date\\s+([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})\\b",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": {
+      "floating_if": "reference_rate_type in ['SOFR', 'EURIBOR', 'PRIME']",
+      "fixed_if": "interest_rate present and reference_rate_type missing"
+    }
+  },
+  "invariants": [
+    {
+      "name": "maturity_date_matches_twin",
+      "kind": "date_agree",
+      "field": "maturity_date",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "bundle",
+      "observation": "Dominant samples embed Interest Rate, optional parenthetical PIK, Reference Rate, Spread, Acquisition Date, and Maturity Date directly in investment_identifier.",
+      "support": "0001916099_2025-12-31.json top variants AFFIL RATE REFRATE MAT and AFFIL REFRATE RATE MAT"
+    },
+    {
+      "source": "evidence_cli roam",
+      "observation": "SOI row examples show PIK-bearing debt rows with rate, reference rate, spread, acquisition date, and maturity date columns matching the identifier text.",
+      "support": "accession 0001193125-26-104439 table 47 rows 24 and 26; table 48 rows 14 and 17; table 50 row 32"
+    },
+    {
+      "source": "evidence_cli roam",
+      "observation": "Preferred equity rows use Dividend Rate and PIK/N/A language, so dividend extraction is optional and not a required loan-rate field.",
+      "support": "accession 0001193125-26-104439 table 51 rows 6, 9, 10, 13, 16, 19, 20, 23"
+    }
+  ],
+  "confidence": "medium",
+  "residual_risk": "Some rows are fixed-rate or preferred/equity rows where structured twins do not populate rate fields even though identifiers include dividend or PIK text. The proposal therefore treats rate components other than maturity as optional and leaves promotion to the held-out gate."
+}

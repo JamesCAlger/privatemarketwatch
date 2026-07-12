@@ -1,0 +1,132 @@
+{
+  "cik": "1860424",
+  "rule_id": "add_missing_apryse_s4t_positions_2025h2",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-06-30",
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-06-30",
+      "issuer_name": "Apryse Software Corp",
+      "instrument_description": "Term Loan",
+      "bdc_investment_identifier": "Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+      "source_row_id": "staging:2025-06-30:investmentidentifieraxis=Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+      "fair_value": 14627755.0,
+      "cost": 14627818.0,
+      "principal_amount": 14775510.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "principal_amount_currency": "USD",
+      "asset_category": "LOAN",
+      "issuer_category": "CORPORATE"
+    },
+    {
+      "report_date": "2025-06-30",
+      "issuer_name": "S4T Holdings Corp.",
+      "instrument_description": "Equity Units",
+      "bdc_investment_identifier": "Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units",
+      "source_row_id": "staging:2025-06-30:investmentidentifieraxis=Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units",
+      "fair_value": 465608.0,
+      "cost": 200000.0,
+      "shares_held": 200.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "asset_category": "EQUITY",
+      "issuer_category": "CORPORATE"
+    },
+    {
+      "report_date": "2025-09-30",
+      "issuer_name": "Apryse Software Corp",
+      "instrument_description": "Term Loan",
+      "bdc_investment_identifier": "Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+      "source_row_id": "staging:2025-09-30:investmentidentifieraxis=Non-cNon-controlled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.05% Initial Acquisition Date 6/25/2025 Maturity Date 6/26/2032ontrolled/Non-affiliated investments Debt Investments High Tech Industries Apryse Software Corp 2024 Refinancing Term Loan Reference Rate and Spread 3M SOFR + 5.00% Floor 1.00% Interest Rate 9.29% Initial Acquisition Date 7/25/2024 Maturity Date 7/15/2027",
+      "fair_value": 14673559.0,
+      "cost": 14629183.0,
+      "principal_amount": 14775510.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "principal_amount_currency": "USD",
+      "asset_category": "LOAN",
+      "issuer_category": "CORPORATE"
+    },
+    {
+      "report_date": "2025-09-30",
+      "issuer_name": "S4T Holdings Corp.",
+      "instrument_description": "Equity Units",
+      "bdc_investment_identifier": "Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units",
+      "source_row_id": "staging:2025-09-30:investmentidentifieraxis=Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units",
+      "fair_value": 524598.0,
+      "cost": 200000.0,
+      "shares_held": 200.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "asset_category": "EQUITY",
+      "issuer_category": "CORPORATE"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "S4T Holdings Corp.",
+      "instrument_description": "Equity Units",
+      "bdc_investment_identifier": "Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units Initial Acquisition Date 12/27/2021",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units Initial Acquisition Date 12/27/2021",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Non-controlled/Non-affiliated investments Equity Sovereign & Public Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units Initial Acquisition Date 12/27/2021",
+      "fair_value": 542123.0,
+      "cost": 200000.0,
+      "shares_held": 200.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "asset_category": "EQUITY",
+      "issuer_category": "CORPORATE"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-06-30, staging current-period rows sum to fair_value=468088797 across 90 rows, exactly matching the fund_financials investments_at_fair_value anchor, while holdings sum to 452995434 across 77 rows."
+    },
+    {
+      "source": "query",
+      "quote": "An anti-join from staging current-period rows to holdings on report_date and bdc_dimensions_raw found 13 missing staging rows for 2025-06-30; only two have non-null fair_value: Apryse Software Corp Term Loan fair_value=14627755 and S4T Holdings Corp. Equity Units fair_value=465608. Their total is 15093363, exactly the 2025-06-30 fair-value residual."
+    },
+    {
+      "source": "query",
+      "quote": "The same missing-row mechanism repeats after 2025-06-30: 2025-09-30 is short Apryse Software Corp Term Loan fair_value=14673559 and S4T Holdings Corp. Equity Units fair_value=524598, and 2025-12-31 is short S4T Holdings Corp. Equity Units fair_value=542123."
+    },
+    {
+      "source": "query",
+      "quote": "Holdings already contains Apryse Software Corp Revolving Credit Facility rows and S4T Holdings Corp. Delayed Draw Term Loan rows, but not the missing Apryse term loan or S4T equity rows. In 2025-12-31, the Apryse term loan appears in holdings with clean dimensions and principal_amount=14775510, confirming the June and September Apryse term-loan staging rows are real positions whose earlier axis text was malformed."
+    }
+  ],
+  "rationale": "The target-quarter residual is an undercount caused by real source rows present in staging but absent from unified holdings. The two missing 2025-06-30 fair-value rows exactly bridge the validated anchor gap without deleting or rescaling any existing holding. The same extraction defect leaves the same S4T equity row out in 2025-09-30 and 2025-12-31 and leaves the Apryse term loan out in 2025-09-30; adding only these source-backed rows fixes the affected quarters and avoids touching earlier quarters where staging anti-joins are dominated by unrelated subtotal or axis artifacts.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 2,
+      "fv": 15093363.0,
+      "residual_before": -15093363.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 2,
+      "fv": 15198157.0,
+      "residual_before": -15198157.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 542123.0,
+      "residual_before": -542123.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "cik": "1976336",
+  "rule_id": "exclude_cash_equivalents_blackrock_q1",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw = 'investmentidentifieraxis=Cash Equivalents BlackRock Liquidity T-Fund - Institutional Shares'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Holdings contains one Cash Equivalents BlackRock Liquidity T-Fund row on 2025-03-31 with fair_value 52677000; the 2025-03-31 anchor is 1103954000, matching the staging Total Investments - non-controlled/non-affiliated subtotal rather than Total Portfolio Investments and Cash Equivalents."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-03-31, original residual is -51434000. Excluding the cash-equivalents row and the commitment fair-value rows gives corrected_sum 1103954000 and residual_after 0."
+    }
+  ],
+  "rationale": "The Q1 row is labeled Cash Equivalents, and the fund-financials anchor reconciles to investments excluding cash equivalents. This row is not an investment position for the fair-value conservation anchor and causes the Q1 overshoot unless excluded.",
+  "confidence": 0.92,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": 52677000.0,
+      "residual_before": -52677000.0,
+      "residual_after": 0.0
+    }
+  }
+}

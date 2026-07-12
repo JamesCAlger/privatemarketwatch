@@ -59,6 +59,7 @@ def _compute(matches_df, **kwargs):
     """Wrapper around compute_returns that defaults to empty auxiliary data."""
     kwargs.setdefault("fee_uplift_df", _EMPTY_FEE_UPLIFT)
     kwargs.setdefault("unified_pik_df", _EMPTY_PIK)
+    kwargs.setdefault("all_in_ciks_df", pd.DataFrame(columns=["cik"]))
     return compute_returns(matches_df=matches_df, **kwargs)
 
 
@@ -1069,6 +1070,49 @@ class TestPIKRate:
         }])
         pos, _ = _compute(matches)
         assert pos.iloc[0]["pik_rate_pct"] == 0
+
+
+class TestAllInPIKSuppression:
+    """All-in-coupon filers: interest_rate already includes PIK, so the additive
+    PIK term in the income formula must be suppressed to avoid double-counting."""
+
+    def _match(self):
+        return _make_matches([{
+            "cik": "100", "entity_name": "BDC1", "source": "bdc",
+            "index_classification": "DIRECT_LENDING",
+            "begin_quarter": "2024q1", "end_quarter": "2024q2",
+            "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+            "begin_issuer_name": "PIK Co", "end_issuer_name": "PIK Co",
+            "begin_fair_value": "1000000", "end_fair_value": "1000000",
+            "begin_cost": "1000000", "end_cost": "1000000",
+            "begin_principal_amount": "1000000",
+            "begin_interest_rate": "8",
+            "span_months": "3",
+            "match_method": "A_within_filing",
+            "asset_category": "LOAN_FIRST_LIEN",
+        }])
+
+    _PIK = pd.DataFrame([{
+        "cik": "100", "report_date": "2024-03-31",
+        "issuer_name": "PIK Co", "pik_rate": "2",
+    }])
+
+    def test_pik_added_when_not_all_in(self):
+        # default all_in set is empty -> PIK added: (8+2)%/yr * 3/12 = 0.025
+        pos, _ = _compute(self._match(), unified_pik_df=self._PIK)
+        row = pos.iloc[0]
+        assert row["pik_rate_pct"] == 2
+        assert abs(row["income_return"] - 0.025) < 1e-6
+
+    def test_pik_suppressed_when_all_in(self):
+        # cik 100 -> 10-digit '0000000100' flagged all_in -> PIK excluded from
+        # income: 8%/yr * 3/12 = 0.020. The disclosed pik_rate_pct is still
+        # reported in the column (provenance preserved), only the income changes.
+        allin = pd.DataFrame({"cik": ["0000000100"]})
+        pos, _ = _compute(self._match(), unified_pik_df=self._PIK, all_in_ciks_df=allin)
+        row = pos.iloc[0]
+        assert row["pik_rate_pct"] == 2
+        assert abs(row["income_return"] - 0.020) < 1e-6
 
 
 # ---------------------------------------------------------------------------

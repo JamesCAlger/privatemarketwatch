@@ -1,0 +1,50 @@
+{
+  "cik": "1976336",
+  "rule_id": "exclude_commitment_fair_value_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw LIKE '%Commitment Type%' AND (TRY_CAST(fair_value AS DOUBLE) <= 0 OR TRY_CAST(cost AS DOUBLE) = TRY_CAST(fair_value AS DOUBLE))",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Holdings commitment rows selected by predicate sum to -1327000 for 2024-12-31, -1243000 for 2025-03-31, -1122000 for 2025-09-30, and -1481000 for 2025-12-31."
+    },
+    {
+      "source": "query",
+      "quote": "Applying this commitment exclusion with the liquidity-label fixes gives residual_after 0 for 2024-12-31, 0 for 2025-03-31, about -7000 for 2025-09-30, and 0 for 2025-12-31."
+    }
+  ],
+  "rationale": "Rows identified only as Commitment Type are unfunded commitment fair-value marks, not schedule investments counted in the investments-at-fair-value anchor. Including negative and cost-equals-fair-value commitment marks depresses the conservation sum; excluding them aligns the schedule with the fund-financials investment anchor without deleting operating investment positions.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 271,
+      "fv": -1327000.0,
+      "residual_before": 1327000.0,
+      "residual_after": 0.0
+    },
+    "2025-03-31": {
+      "rows": 303,
+      "fv": -1243000.0,
+      "residual_before": -51434000.0,
+      "residual_after": -52677000.0
+    },
+    "2025-09-30": {
+      "rows": 352,
+      "fv": -1122000.0,
+      "residual_before": 30125000.0,
+      "residual_after": 29003000.0
+    },
+    "2025-12-31": {
+      "rows": 378,
+      "fv": -1481000.0,
+      "residual_before": 57482000.0,
+      "residual_after": 56001000.0
+    }
+  }
+}

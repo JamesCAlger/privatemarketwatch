@@ -1,0 +1,50 @@
+{
+  "cik": "2031750",
+  "rule_id": "exclude_cash_classified_holdings",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "asset_category = 'CASH'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-06-30, cash-classified holdings are Treasury Bill, Treasury Bill fv=99074000 and First American U.S. Treasury Sweep (Y Shares), Money Market fv=10101000; both have asset_category='CASH' and asset_class='CASH'."
+    },
+    {
+      "source": "query",
+      "quote": "Cash-like fair value by period: 2025-06-30=109175000, 2025-09-30=404000, 2025-12-31=347000; these amounts are included in holdings value_sum but excluded from investments_at_fair_value anchors."
+    }
+  ],
+  "rationale": "Rows classified as CASH are cash equivalents, not portfolio investments for the investments_at_fair_value conservation anchor. Including them overstates the holdings sum; excluding CASH rows removes the cash-equivalent leak without deleting real investment positions.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 2,
+      "fv": 109175000.0,
+      "residual_before": 109957500.0,
+      "residual_after": 782500.0
+    },
+    "2025-09-30": {
+      "rows": 2,
+      "fv": 404000.0,
+      "residual_before": 1948900.0,
+      "residual_after": 1544900.0
+    },
+    "2025-12-31": {
+      "rows": 2,
+      "fv": 347000.0,
+      "residual_before": 2869500.0,
+      "residual_after": 2522500.0
+    },
+    "2026-03-31": {
+      "rows": 4,
+      "fv": 423441000.0,
+      "residual_before": null,
+      "residual_after": null
+    }
+  }
+}

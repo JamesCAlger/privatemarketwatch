@@ -1,0 +1,17 @@
+{
+  "cik": "0001278752",
+  "_doc": "MidCap Financial Investment Corp anchor proposal for 2025-12-31 Agent A2 bundle. Preserves the dominant secured-debt signature and assigns narrow signatures to exact-line sector/category rows found in bundle none_examples.",
+  "anchors": [
+    {"label": "TOTAL", "regex": "^\\s*total\\b"},
+    {"label": "CASH", "regex": "money market|government fund|financial square|u\\.?s\\.? government|liquidity (?:fund|funds)|cash and cash equivalent"},
+    {"label": "AFFIL", "regex": "non-?controlled|controlled\\s*/|/\\s*non-?affiliated|/\\s*affiliated|\\bcontrolled investments?\\b|\\baffiliated investments?\\b"},
+    {"label": "SECTOR", "regex": "^\\s*(?:Diversified Investment Vehicles, Banking, Finance, Real Estate|Construction & Engineering Kauffman Kauffman Holdings, LLC|Advertising Printing & Publishing FingerPaint Marketing|Advertising Printing & Publishing Hero Digital|Automotive Club Car Wash|Automotive Crowne Automotive|Automotive Truck-Lite Co\\., LLC|Automotive|Aviation and Consumer Transport Merx Aviation Finance, LLC|Aviation and Consumer Transport|Beverage, Food & Tobacco(?: Berner Foods| Hive| Rise Baking| Turkey Hill)?|Business Services(?:, Accelerate Learning| AlpineX| AML Rightsource| HMA Health Management Associates Superholdings, Inc\\.| IRP)?)\\s*$"},
+    {"label": "SECDEBT", "regex": "secured debt"},
+    {"label": "SUBORD", "regex": "subordinated"},
+    {"label": "STRUCTURED", "regex": "structured products|asset backed security|\\bclo\\b"},
+    {"label": "EQUITY", "regex": "common equity|preferred equity|equity\\s*[-\\u2013\\u2014\\uFFFD]\\s*|equity interest|membership interest|preferred stock|common stock|warrant"},
+    {"label": "REFRATE", "regex": "reference rate|\\bsofr\\b|\\bson\\b|\\bcorra\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|(?:sofr|son|corra|sf|libor|l|prime|p|euribor|e)\\s*\\+\\s*\\d"},
+    {"label": "RATE", "regex": "[0-9]+\\.?[0-9]*\\s*%"},
+    {"label": "MAT", "regex": "\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"}
+  ]
+}

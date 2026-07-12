@@ -1,0 +1,54 @@
+{
+  "cik": "2052152",
+  "rule_id": "exclude_cash_equivalent_money_market_fund",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "asset_category = 'CASH' AND issuer_category = 'FUND' AND (issuer_name ILIKE '%Money Market Fund%' OR bdc_dimensions_raw ILIKE '%Money Market Fund%' OR bdc_dimensions_raw ILIKE '%Cash Equivalent%' OR bdc_dimensions_raw ILIKE '%Cash Equivalents%')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings 2025-03-31 contains exactly one CASH/FUND row: issuer_name='Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares', bdc_dimensions_raw='investmentidentifieraxis=Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares', fair_value=15981000, cost=15981000."
+    },
+    {
+      "source": "query",
+      "quote": "Excluding asset_category='CASH' changes 2025-03-31 fair_value sum from 1122702000 to 1106721000, matching anchor 1106721000 with residual_after=0; no other anchored quarter has CASH rows in holdings."
+    },
+    {
+      "source": "filing",
+      "quote": "Companyfacts for accession 0000950170-25-070628 reports us-gaap:InvestmentOwnedAtFairValue=1106721000 at 2025-03-31 and separately reports us-gaap:CashEquivalentsAtCarryingValue=15981000 and us-gaap:CashAndCashEquivalentsFairValueDisclosure=15981000 at 2025-03-31."
+    }
+  ],
+  "rationale": "The extracted residual is not a duplicate or scale error. It is a cash-equivalent money-market fund row leaking into the investment holdings population even though the validated conservation anchor is the filer-tagged investments-at-fair-value total. The row is separately tagged as cash equivalents in the filing/companyfacts cache and its fair value exactly equals the overshoot.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": -15981000.0,
+      "residual_before": 15981000.0,
+      "residual_after": 0.0
+    },
+    "2025-06-30": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": 1000.0,
+      "residual_after": 1000.0
+    },
+    "2025-09-30": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": 2000.0,
+      "residual_after": 2000.0
+    },
+    "2025-12-31": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": -36000.0,
+      "residual_after": -36000.0
+    }
+  }
+}

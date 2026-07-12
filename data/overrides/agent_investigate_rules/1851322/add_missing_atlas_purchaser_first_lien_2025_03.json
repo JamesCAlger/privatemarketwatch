@@ -1,0 +1,55 @@
+{
+  "cik": "1851322",
+  "rule_id": "add_missing_atlas_purchaser_first_lien_2025_03",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-03-31",
+      "issuer_name": "Atlas Purchaser, Inc. 1",
+      "bdc_investment_identifier": "Atlas Purchaser, Inc. 1",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Atlas Purchaser, Inc. 1",
+      "source_row_id": "filing:000185132225000044.html:Atlas Purchaser, Inc. first first-lien row before extracted Atlas Purchaser, Inc. row",
+      "asset_category": "LOAN",
+      "issuer_category": "CORPORATE",
+      "fair_value": 1093000.0,
+      "cost": 915000.0,
+      "principal_amount": 1093000.0,
+      "pct_of_net_assets": 0.03,
+      "interest_rate": 11.94,
+      "basis_spread": 7.5,
+      "pik_rate": 5.5,
+      "reference_rate_type": "SOFR",
+      "maturity_date": "2028-05-05"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "In 000185132225000044.html the schedule text around the omitted row reads: 'Atlas Purchaser, Inc. (6) (7) First Lien Debt S+ 7.50% (incl. 5.50% PIK) 11.94% 5/5/2028 1,093 915 1,093 0.03 Atlas Purchaser, Inc. (6) (7) First Lien Debt S + 7.50% (incl. 6.50% PIK) 11.94% 5/5/2028 2,524 1,674 ...'."
+    },
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2025-03-31 contain only one Atlas Purchaser, Inc. row: principal_amount=2524000, cost=1674000, fair_value=1287000, pct_of_net_assets=0.04. Staging also contains only the same bare investmentidentifieraxis=Atlas Purchaser, Inc. row."
+    },
+    {
+      "source": "query",
+      "quote": "2025-06-30 staging already separates the same issuer into Atlas Purchaser, Inc. 1 and Atlas Purchaser, Inc. 2, so this add is scoped only to the 2025-03-31 quarter where the first tranche collapsed out of staging."
+    }
+  ],
+  "rationale": "The remaining 1093000 fair-value shortfall after the supported cash-equivalent and KWOR aggregate exclusions is a real Atlas Purchaser first-lien tranche visible in the filed schedule. The extractor retained the adjacent Atlas tranche but collapsed the earlier tranche because both March rows share the same bare issuer identifier. Adding the missing tranche restores the filed investment schedule without deleting real holdings or changing other quarters.",
+  "confidence": 0.91,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": 1093000.0,
+      "residual_before": -1093000.0,
+      "residual_after": 0.0
+    }
+  }
+}

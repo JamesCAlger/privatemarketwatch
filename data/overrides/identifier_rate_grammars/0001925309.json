@@ -1,0 +1,100 @@
+{
+  "schema": "agentA-rate-grammar.v1",
+  "cik": "0001925309",
+  "entity_name": "Sixth Street Lending Partners",
+  "status": "APPLICABLE_RATE_GRAMMAR",
+  "available_identifier_datapoints": [
+    "asset_class",
+    "industry_or_sector",
+    "issuer_or_position_name",
+    "instrument_type",
+    "principal_or_unit_amount",
+    "maturity_month_year",
+    "acquisition_date",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "pik_rate"
+  ],
+  "unsupported_identifier_datapoints": [
+    "maturity_day",
+    "cash_interest_leg",
+    "interest_rate_floor"
+  ],
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "SECDEBT MAT REFRATE RATE"
+  },
+  "required_fields": [
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate"
+  ],
+  "pik_convention": "inclusive",
+  "extractors": [
+    {
+      "field": "maturity_date",
+      "regex": "\\bdue\\s+(\\d{1,2}/\\d{4})\\b",
+      "group": 1,
+      "type": "text"
+    },
+    {
+      "field": "reference_rate_type",
+      "regex": "\\bReference Rate and (?:Spread\\s+)?(SOFR|S|E|\\$)\\s*\\+\\s*\\d",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "SOFR": "SOFR",
+        "S": "SONIA",
+        "E": "EURIBOR",
+        "$": "SOFR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\bReference Rate and (?:Spread\\s+)?(?:SOFR|S|E|\\$)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "\\bInterest Rate\\s+(\\d+(?:\\.\\d+)?)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "\\(incl(?:\\.|d\\.)?\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s+PIK\\)",
+      "group": 1,
+      "type": "pct"
+    }
+  ],
+  "derivations": [
+    {
+      "field": "coupon_type",
+      "value": "floating",
+      "when_present": "reference_rate_type"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "interest_rate_matches_bundle_twin",
+      "kind": "pct_agree",
+      "parsed": "interest_rate",
+      "twin": "interest_rate"
+    },
+    {
+      "name": "basis_spread_matches_bundle_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "reference_implies_spread",
+      "kind": "implication",
+      "if_present": "reference_rate_type",
+      "then_present": "basis_spread"
+    }
+  ],
+  "notes": "Dominant debt identifiers embed rate/date fields across 2023-2026 eras. PIK is extracted when present but is not required."
+}

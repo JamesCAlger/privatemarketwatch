@@ -1,0 +1,32 @@
+{
+  "cik": "1905824",
+  "rule_id": "1905824_2023q4_exclude_subtotals",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2023-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2023-12-31' AND accession_number = '0001193125-24-066117' AND bdc_investment_identifier IN ('Warrants | Technology | Total Technology', 'Common Stocks | Retailers | Total Retailers')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings for 2023-12-31 includes subtotal identifiers 'Warrants | Technology | Total Technology' fair_value 2181000 and 'Common Stocks | Retailers | Total Retailers' fair_value 263000 alongside their detail rows."
+    },
+    {
+      "source": "query",
+      "quote": "staging accession 0001193125-24-066117 has both detail rows 'Warrants | Technology | GCOM | 08/11/2033' and 'Common Stocks | Retailers | West Marine/Rising Tide Holdings, Inc.' with the same fair values as the total rows."
+    }
+  ],
+  "rationale": "These two rows are category subtotals, not separate positions. Keeping them double-counts the GCOM warrant and West Marine common stock detail rows already present in holdings.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2023-12-31": {
+      "rows": 2,
+      "fv": -2444000.0,
+      "residual_before": -84170000.0,
+      "residual_after": -86614000.0
+    }
+  }
+}

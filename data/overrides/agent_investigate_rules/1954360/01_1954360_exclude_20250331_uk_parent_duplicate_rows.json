@@ -1,0 +1,32 @@
+{
+  "cik": "1954360",
+  "rule_id": "1954360_exclude_20250331_uk_parent_duplicate_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "predicate_sql": "bdc_dimensions_raw IN ('investmentidentifieraxis=Investments United Kingdom Debt Investments Diversified Financials Primrose Bidco Limited Investment Type Unitranche First Lien Term Loan', 'investmentidentifieraxis=Investments United Kingdom Debt Investments Software Sophos Holdings Investment Type Senior Secured First Lien Term Loan', 'investmentidentifieraxis=Investments United Kingdom Debt Investments Materials Fortis 333, Inc Investment Type Senior Secured First Lien Term Loan Interest Term S + 550')",
+  "scope": {
+    "quarters": [
+      "2025-03-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "In 2025-03-31 holdings, the Primrose, Sophos, and Fortis parent rows total 2833000 (2475000 + 226000 + 132000). After excluding cash equivalents first, the remaining residual is exactly 2833000."
+    },
+    {
+      "source": "query",
+      "quote": "Each selected parent row has a more complete child row in holdings with the same fair value: Primrose parent 2475000 -> child with Interest Term S + 550, Interest Rate 10.03%, Maturity 11/2031 also 2475000; Sophos parent 226000 -> child with Interest Term S + 550, Interest Rate 7.94%, Maturity 03/2027 also 226000; Fortis parent 132000 -> child with Interest Rate 10.03%, Maturity 11/2031 also 132000."
+    }
+  ],
+  "rationale": "These three rows are leaked hierarchy parent/member rows, not separate positions. The complete child rows are already present and carry the same fair value plus the missing rate and maturity detail, so counting both parent and child double-counts the same investment.",
+  "confidence": 0.91,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 3,
+      "fv": 2833000.0,
+      "residual_before": 2833000.0,
+      "residual_after": 0.0
+    }
+  }
+}

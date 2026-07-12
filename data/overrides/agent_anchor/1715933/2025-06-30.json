@@ -1,0 +1,34 @@
+{
+  "cik": "1715933",
+  "target_quarter": "2025-06-30",
+  "grand_total": 1093518278.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 1093518278.0,
+      "source": "filing accession 0000950170-25-107431, schedule of investments table 7 row 33: Total Investments (226.1%) fair value 1,093,518,278"
+    }
+  ],
+  "companyfacts_fv": 691956192.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 7 row 33: Total Investments (226.1%) | $ | 1,246,113,181 | $ | 1,093,518,278"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 7 rows 26, 29, 32 show Total Debt & Equity Investments fair value 691,956,192; Total Cash Equivalents fair value 7,095,586; Total Short-term Investments fair value 394,466,500."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 18 row 16: Total Assets | $ | 1,098,107 (thousands)."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials companyfacts for 2025-06-30: total_assets 1098107000.0, investments_at_fair_value 691956192.0, investments_at_cost 844551095.0."
+    }
+  ],
+  "rationale": "The schedule presents a final Total Investments row after Total Debt & Equity Investments, Total Cash Equivalents, and Total Short-term Investments. Its fair value is 1,093,518,278, which equals 691,956,192 + 7,095,586 + 394,466,500 and closes to 99.6% of total assets of 1,098,107,000. The companyfacts fair value captured only the Total Debt & Equity Investments subtotal and excluded cash equivalents and short-term investments.",
+  "confidence": 0.98
+}

@@ -16,12 +16,37 @@ import pandas as pd
 
 from pipeline.config import (
     INDEX_RETURNS_FILE,
+    OUTPUT_DIR,
     POSITION_MATCHES_FILE,
     POSITION_RETURNS_FILE,
     UNIFIED_HOLDINGS_FILE,
 )
 
 logger = logging.getLogger(__name__)
+
+# All-in-coupon classification from the FRED-anchored rate-convention gate.
+# For these CIKs interest_rate already includes disclosed PIK, so the additive
+# PIK term in the income formula would double-count. (Shadow diagnostic input;
+# the classification should eventually graduate to first-class fund metadata.)
+RATE_CONVENTION_GATE_FILE = OUTPUT_DIR / "shadow" / "bdc_rate_convention_gate.csv"
+
+
+def _load_all_in_ciks() -> pd.DataFrame:
+    """Return a one-column ('cik', 10-digit) frame of all_in_coupon filers.
+
+    Empty (no suppression) if the gate output is absent, so production never
+    hard-depends on the shadow artifact being present.
+    """
+    if RATE_CONVENTION_GATE_FILE.exists():
+        g = pd.read_csv(RATE_CONVENTION_GATE_FILE, dtype=str)
+        allin = g.loc[g["status"] == "all_in_coupon", ["cik"]].copy()
+        allin["cik"] = allin["cik"].str.zfill(10)
+        logger.info("Loaded %d all_in_coupon filers from %s (PIK suppressed in income)",
+                    len(allin), RATE_CONVENTION_GATE_FILE.name)
+        return allin
+    logger.info("No rate-convention gate output; additive PIK applied to all filers")
+    return pd.DataFrame(columns=["cik"])
+
 
 # Minimum constituents for a valid index quarter
 MIN_CONSTITUENTS = 10
@@ -39,6 +64,7 @@ def compute_returns(
     matches_df: Optional[pd.DataFrame] = None,
     fee_uplift_df: Optional[pd.DataFrame] = None,
     unified_pik_df: Optional[pd.DataFrame] = None,
+    all_in_ciks_df: Optional[pd.DataFrame] = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Compute position-level and index-level returns from matched pairs.
 
@@ -103,9 +129,13 @@ def compute_returns(
     # aggregation.  The refactor parity gate is byte-level, so keep this
     # deterministic.
     con.execute("PRAGMA threads=1")
+    if all_in_ciks_df is None:
+        all_in_ciks_df = _load_all_in_ciks()
+
     con.register("matches", matches_df)
     con.register("fee_uplift", fee_uplift_df)
     con.register("unified_pik", unified_pik_df)
+    con.register("rate_convention", all_in_ciks_df)
 
     # ------------------------------------------------------------------
     # Position-level returns
@@ -183,6 +213,10 @@ def compute_returns(
             END) AS effective_rate,
             -- PIK rate from unified holdings
             COALESCE(pk.pik_val, 0) AS pik_rate_pct,
+            -- All-in-coupon filer (FRED-anchored rate-convention gate): the
+            -- disclosed interest_rate already INCLUDES PIK, so adding pik below
+            -- would double-count. Suppress the additive PIK term for these CIKs.
+            (rc.cik IS NOT NULL) AS rate_all_in,
             -- Fee/OID uplift from fund-level income analysis
             COALESCE(TRY_CAST(u_fee.effective_uplift AS DOUBLE), 0) AS fee_uplift_pct,
             TRY_CAST(m.begin_shares_held AS DOUBLE) AS bsh,
@@ -200,6 +234,8 @@ def compute_returns(
         LEFT JOIN fee_uplift u_fee
             ON m.cik = CAST(u_fee.cik AS VARCHAR)
            AND m.begin_quarter = CAST(u_fee.quarter AS VARCHAR)
+        LEFT JOIN rate_convention rc
+            ON LPAD(CAST(m.cik AS VARCHAR), 10, '0') = rc.cik
         WHERE TRY_CAST(m.begin_fair_value AS DOUBLE) IS NOT NULL
           AND TRY_CAST(m.begin_fair_value AS DOUBLE) != 0
           AND TRY_CAST(m.end_fair_value AS DOUBLE) IS NOT NULL
@@ -238,7 +274,9 @@ def compute_returns(
                 -- Direct Lending + Preferred Equity: coupon/dividend + PIK + fee/OID uplift, scaled by span
                 WHEN index_classification IN ('DIRECT_LENDING', 'PREFERRED_EQUITY')
                 THEN (COALESCE(bpa, bfv)
-                      * (COALESCE(effective_rate, 0) + pik_rate_pct + fee_uplift_pct)
+                      * (COALESCE(effective_rate, 0)
+                         + CASE WHEN rate_all_in THEN 0 ELSE pik_rate_pct END
+                         + fee_uplift_pct)
                       / 100.0 * COALESCE(sm, 3) / 12.0) / bfv
                 -- Fund vehicles: return-of-capital proxy
                 WHEN index_classification IN ('PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND')

@@ -1,0 +1,125 @@
+{
+  "schema": "agentA-rate-grammar.v1",
+  "cik": "0001973476",
+  "entity_name": "North Haven Private Income Fund A LLC",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED_RATE_GRAMMAR",
+  "available_identifier_datapoints": [
+    "issuer",
+    "affiliation_section",
+    "industry_or_sector",
+    "instrument_type",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "interest_rate",
+    "maturity_date",
+    "commitment_type",
+    "commitment_expiration_date",
+    "ordinal_suffix"
+  ],
+  "unsupported_identifier_datapoints": [
+    "cash_leg_rate",
+    "floor_rate",
+    "rate_reset_frequency"
+  ],
+  "not_applicable_reason": null,
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "AFFIL REFRATE RATE MAT"
+  },
+  "dominant_signature": "AFFIL REFRATE RATE MAT",
+  "pik_convention": "inclusive",
+  "required_fields": [
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "maturity_date"
+  ],
+  "optional_fields": [
+    "pik_rate"
+  ],
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "Reference Rate and Spread\\s+(S)\\s*\\+",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "S": "SOFR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "Reference Rate and Spread\\s+S\\s*\\+\\s*([0-9]+(?:\\.[0-9]+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "\\(incl\\.\\s*([0-9]+(?:\\.[0-9]+)?)%\\s+PIK\\)",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "Interest Rate\\s+([0-9]+(?:\\.[0-9]+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "Maturity Date\\s+([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": {
+      "rule": "floating_if_reference_rate_type_present",
+      "floating_values": [
+        "SOFR"
+      ]
+    }
+  },
+  "invariants": [
+    {
+      "name": "interest_rate_matches_twin",
+      "kind": "pct_agree",
+      "parsed": "interest_rate",
+      "twin": "interest_rate"
+    },
+    {
+      "name": "basis_spread_matches_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "pik_rate_matches_twin_when_present",
+      "kind": "pct_agree",
+      "parsed": "pik_rate",
+      "twin": "pik_rate"
+    },
+    {
+      "name": "maturity_date_matches_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    }
+  ],
+  "source_observations": [
+    {
+      "accession_number": "0001193125-26-088351",
+      "table_index": 34,
+      "row_index": 1,
+      "observation": "Existing CIK evidence cites a source header containing Reference Rate and Spread, Interest Rate, and Maturity Date."
+    },
+    {
+      "accession_number": "0001193125-26-088351",
+      "table_index": 34,
+      "row_index": 4,
+      "observation": "Existing CIK evidence cites a sample debt row with S + 4.50%, 8.35%, and 11/29/2030."
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "cik": "1634452",
+  "rule_id": "exclude_cash_equivalents_from_investments_fv",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "asset_category = 'CASH'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2024-06-30, fv_conservation value_sum=1514882847 and anchor_value=1480958078, residual=33924769. Holdings rows with asset_category='CASH' are exactly 3 rows totaling fair_value=33924769: Blackrock T Fund I 18550354, State Street Institutional US Government Money Market Fund 335592, and US Bank MMDA GCTS Money Market 15038823."
+    },
+    {
+      "source": "query",
+      "quote": "Applying the same CASH exclusion to all quarters changes only 2023-12-31, 2024-03-31, and 2024-06-30. Corrected fair-value sums equal their investments_at_fair_value anchors: 1311120584, 1387137974, and 1480958078 respectively; later reconciled quarters have zero CASH rows."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials reports investments_at_fair_value=1480958078 for 2024-06-30, while total_assets=1560227783. The excluded rows are explicitly classified as CASH/cash equivalents, so they belong outside the investments-at-fair-value conservation anchor."
+    }
+  ],
+  "rationale": "The extractor included cash-equivalent money-market rows in holdings, but the conservation anchor is investments at fair value, not total assets or cash and investments. The cash rows are real balance-sheet assets, so they should not be deleted as fictitious positions; they should be excluded from the investment-holdings conservation population. Their fair value exactly equals the overshoot for 2024-06-30 and for the two earlier overshoot quarters, with no impact on already reconciled later quarters.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2023-12-31": {
+      "rows": 3,
+      "fv": -57230250.0,
+      "residual_before": 57230250.0,
+      "residual_after": 0.0
+    },
+    "2024-03-31": {
+      "rows": 3,
+      "fv": -35851659.0,
+      "residual_before": 35851659.0,
+      "residual_after": 0.0
+    },
+    "2024-06-30": {
+      "rows": 3,
+      "fv": -33924769.0,
+      "residual_before": 33924769.0,
+      "residual_after": 0.0
+    }
+  }
+}

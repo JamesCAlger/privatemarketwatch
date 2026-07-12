@@ -1,0 +1,88 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001899017",
+  "entity_name": "Bain Capital Private Credit",
+  "report_date": "2025-12-31",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "affiliation_section",
+    "industry_or_asset_section",
+    "issuer",
+    "instrument_type",
+    "tranche_or_facility_type",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "interest_rate",
+    "maturity_date"
+  ],
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "\\b(?:Controlled Affiliate Investments|Non[- ]controlled/Non[- ]Affiliated Investments|Non[- ]Controlled/Non[- ]Affiliate Investments|Non Controlled/Non Affiliate Investments)\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-104390",
+          "table_index": 65,
+          "row_index": 15,
+          "observation": "Controlled Affiliate Investments appears as an SOI section marker."
+        },
+        {
+          "accession_number": "0001193125-26-104390",
+          "table_index": 65,
+          "row_index": 17,
+          "observation": "Bain Capital Senior Loan Program II, LLC equity row follows Controlled Affiliate Investments and Investment Vehicles markers."
+        }
+      ]
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\bInvestment Vehicles\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-104390",
+          "table_index": 65,
+          "row_index": 16,
+          "observation": "Investment Vehicles appears as an SOI subsection marker."
+        }
+      ]
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\b(?:SOFR|EURIBOR)\\s+Spread\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-104390",
+          "table_index": 56,
+          "row_index": 1,
+          "observation": "SOI headers include Index and Spread columns; bundle identifiers embed SOFR Spread and EURIBOR Spread text."
+        }
+      ]
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-104390",
+          "table_index": 56,
+          "row_index": 1,
+          "observation": "Interest Rate appears as an SOI column header and as embedded identifier text."
+        }
+      ]
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity Date\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-104390",
+          "table_index": 56,
+          "row_index": 1,
+          "observation": "Maturity Date appears as an SOI column header and as embedded identifier text."
+        }
+      ]
+    }
+  ],
+  "notes": "Adds the controlled-affiliate and investment-vehicles section markers needed by the bundle none_examples; production overrides are not modified."
+}

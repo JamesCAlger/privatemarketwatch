@@ -1,0 +1,34 @@
+{
+  "cik": "0001603480",
+  "version": 1,
+  "anchors": [
+    {
+      "label": "SHORTTERM",
+      "regex": "\\bShort-term Investments\\b"
+    },
+    {
+      "label": "DEBT",
+      "regex": "\\bDebt Investments\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bEquity Investments\\b"
+    },
+    {
+      "label": "TERMLOAN",
+      "regex": "\\b(?:Term Loan|Priming Term Loan|First Out Term Loan|Incremental Term Loan|Delayed Draw Priming Term Loan)\\b"
+    },
+    {
+      "label": "REVOLVER",
+      "regex": "\\bRevolver\\b"
+    },
+    {
+      "label": "PREFERRED",
+      "regex": "\\bPreferred (?:Stock|Unit)\\b"
+    },
+    {
+      "label": "COMMON",
+      "regex": "\\bCommon (?:Stock|Unit)?\\b|\\bClass A Common\\b"
+    }
+  ]
+}

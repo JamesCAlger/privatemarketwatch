@@ -1,0 +1,56 @@
+{
+  "draw": "batch1",
+  "n_position_labels": 0,
+  "n_cik_quarter_labels": 0,
+  "n_flag_labels": 0,
+  "surfaced_precision": {
+    "real": 0,
+    "false_alarm": 0,
+    "ambiguous": 0,
+    "decided": 0,
+    "p_hat": NaN,
+    "ci95": [
+      0.0,
+      1.0
+    ]
+  },
+  "suppressed_fn_by_confidence": {},
+  "suppressed_fn_overall": {
+    "real": 0,
+    "false_alarm": 0,
+    "ambiguous": 0,
+    "decided": 0,
+    "p_hat": NaN,
+    "ci95": [
+      0.0,
+      1.0
+    ]
+  },
+  "tail_census": {
+    "n": 0,
+    "any_error": 0,
+    "error_rate": NaN,
+    "ci95": [
+      0.0,
+      1.0
+    ],
+    "fv_abs_error_usd": 0.0
+  },
+  "pps_body": {
+    "n": 0,
+    "ht_fv_error_usd": 0,
+    "ht_fv_error_se": null
+  },
+  "silent_bulk": {
+    "n": 0,
+    "any_error": 0,
+    "error_rate": NaN,
+    "ci95": [
+      0.0,
+      1.0
+    ]
+  },
+  "labeler_calibration": {
+    "status": "no audited slice yet; agent-drafted strata report sampling CI only"
+  }
+}

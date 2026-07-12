@@ -1,0 +1,36 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001508655",
+  "entity_name": "Sixth Street Specialty Lending, Inc.",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "DEBTINV",
+      "regex": "\\bDebt Investments\\b"
+    },
+    {
+      "label": "EQUITYINV",
+      "regex": "\\bEquity and Other Investments\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "\\b(?:First-lien loan|Second-lien loan|Subordinated loan|Membership Interest|Partnership Interest|Preferred Units|Common Units)\\b"
+    },
+    {
+      "label": "INDUSTRY",
+      "regex": "\\b(?:Business Services|Chemicals|Communications|Education|Financial Services|Healthcare|Hotel, Gaming and Leisure|Human Resource Support Services|Internet Services|Oil, Gas and Consumable Fuels)\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bdue\\s+\\d{1,2}/\\d{4}\\b|\\bInitial Acquisition Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\s+(?:SOFR|S|E|L)\\s*\\+"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\bInterest Rate\\s+\\d{1,2}(?:\\.\\d+)?%?\\b|\\b\\d{1,2}(?:\\.\\d+)?%\\s+ownership\\b"
+    }
+  ]
+}

@@ -29,6 +29,7 @@ from pipeline.bdc_xbrl_wrapper import (
 )
 from pipeline.bdc_xbrl_html_bridge import (
     BRIDGE_TABLE_COLUMNS,
+    apply_html_section_bridge_field_overlays,
     load_html_section_bridge_rows,
 )
 from pipeline.bdc_aggregate_overrides import load_bdc_aggregate_overrides
@@ -380,6 +381,8 @@ def _reclassify_named_fund_positions(df: pd.DataFrame) -> pd.DataFrame:
 def _prepare_bdc(
     bdc_df: pd.DataFrame | None = None,
     bdc_file: Union[Path, str, None] = None,
+    raw_exclusions: list[dict] | None = None,
+    raw_exclusion_audits: list[dict] | None = None,
 ) -> pd.DataFrame:
     """Filter, parse, classify, and map BDC holdings to unified schema.
 
@@ -393,6 +396,14 @@ def _prepare_bdc(
         Path to BDC holdings file (Parquet or CSV). When provided, DuckDB
         reads the file directly -- much faster than loading via pandas then
         registering.  Falls back to *bdc_df* when the file does not exist.
+    raw_exclusions : list of dict, optional
+        Promoted comparative-period targets [{cik, report_date}] (see
+        ``pipeline.agent_promoted.raw_staging_exclusions``). Applied as
+        DELETEs on the raw frame while it still carries XBRL ``period`` --
+        the layer where the comparative fix semantically applies.
+    raw_exclusion_audits : list, optional
+        When provided, application audit rows are appended to it (the caller
+        persists the rebuild audit artifact).
     """
     from pipeline.unified_holdings import UNIFIED_COLUMNS
 
@@ -453,6 +464,11 @@ def _prepare_bdc(
     else:
         raise ValueError("Either bdc_df or bdc_file must be provided")
     # --- end data source selection --------------------------------------------
+    if raw_exclusions:
+        from pipeline.agent_promoted import apply_raw_staging_exclusions
+        audits = apply_raw_staging_exclusions(con, raw_exclusions)
+        if raw_exclusion_audits is not None:
+            raw_exclusion_audits.extend(audits)
     if FX_RATES_FILE.exists():
         fx_path = str(FX_RATES_FILE).replace("\\", "/")
         con.execute(f"""
@@ -584,10 +600,13 @@ def _prepare_bdc(
         re.escape(label).replace(r"\ ", r"\s+")
         for label in sorted(_INDUSTRY_LABELS, key=len, reverse=True)
     )
-    # Crescent industry label regex (moved earlier for placeholder registry)
+    # Crescent industry label regex (moved earlier for placeholder registry).
+    # Sort by length desc so longer, more-specific labels are tried first --
+    # otherwise a shorter prefix (e.g. "Diversified") shadows a longer label
+    # ("Diversified Financials") in regex alternation (first-match-wins).
     _crescent_industry_re = "|".join(
         re.escape(label).replace("\\ ", "\\s+")
-        for label in _CRESCENT_HIERARCHY_INDUSTRIES
+        for label in sorted(_CRESCENT_HIERARCHY_INDUSTRIES, key=len, reverse=True)
     )
 
     # --- Load all staging configs once, expand placeholders, group by strategy ---
@@ -1473,6 +1492,7 @@ def _prepare_bdc(
               COALESCE(o.force_include, 0) = 1
               OR COALESCE(wd.wrapper_disposition, '') LIKE '%_position_leaf'
               OR COALESCE(hsb.disposition, '') LIKE '%_position_leaf'
+              OR ({_he_any_condition})
               OR ({_prefix_rules_hierarchy_condition})
               OR NOT ({agg_filter})
           )
@@ -2348,10 +2368,15 @@ def _prepare_bdc(
             END AS _text_ref_rate,
             -- Maturity date: extract from "M/D/YYYY Maturity", "Due M/D/YY",
             -- "Maturity Date MM/DD/YYYY", "Maturity M/D/YYYY" patterns
+            -- Scan both the identifier AND instrument_description: filers like
+            -- Blackstone leave the identifier bare ("Issuer | Non-Affiliated")
+            -- but put "... due 2/2032" in instrument_description.
             COALESCE(
                 NULLIF(regexp_extract(_raw_id,
                     '(\\d{{1,2}}/\\d{{1,2}}/\\d{{2,4}})\\s+[Mm]aturity', 1), ''),
                 NULLIF(regexp_extract(_raw_id,
+                    '(?:[Mm]aturity|[Dd]ue)\\s+(?:[Dd]ate\\s+)?(\\d{{1,2}}/\\d{{1,2}}/\\d{{2,4}})', 1), ''),
+                NULLIF(regexp_extract(CAST(instrument_description AS VARCHAR),
                     '(?:[Mm]aturity|[Dd]ue)\\s+(?:[Dd]ate\\s+)?(\\d{{1,2}}/\\d{{1,2}}/\\d{{2,4}})', 1), '')
             ) AS _text_maturity_raw,
             COALESCE(
@@ -2361,7 +2386,9 @@ def _prepare_bdc(
                     1
                 ), ''),
                 NULLIF(regexp_extract(_raw_id,
-                    '(?i)\\bdue\\s+(\\d{{1,2}}/\\d{{4}})', 1), '')
+                    '(?i)\\bdue\\s+(\\d{{1,2}}/\\d{{4}})', 1), ''),
+                NULLIF(regexp_extract(CAST(instrument_description AS VARCHAR),
+                    '(?i)\\b(?:due|maturity(?:\\s+date)?)\\s+(\\d{{1,2}}/\\d{{4}})', 1), '')
             ) AS _text_maturity_month_raw,
             -- Basis spread: "SOFR + 5.25%", "Prime + 6.0%", "S + 5.25%", "E + 5.75%"
             TRY_CAST(COALESCE(
@@ -2426,14 +2453,48 @@ def _prepare_bdc(
                  WHEN _ir IS NOT NULL THEN _ir
                  WHEN _text_interest_rate IS NOT NULL THEN _text_interest_rate
                  ELSE NULL END AS interest_rate,
+            -- provenance: did the value come from the structured XBRL tag (drift-immune)
+            -- or the identifier text fallback? (structured-first; mirrors reference_rate_source)
+            CASE WHEN _ir IS NOT NULL AND _ir >= 0 THEN 'xbrl_field'
+                 WHEN _ir IS NULL AND _text_interest_rate IS NOT NULL THEN 'identifier_text'
+                 ELSE '' END AS interest_rate_source,
             CASE WHEN _bs IS NOT NULL AND _bs < 0 THEN NULL
                  WHEN _bs IS NOT NULL AND _bs <= 0.50 THEN _bs * 100
                  WHEN _bs IS NOT NULL AND _bs >= 50 THEN _bs / 100
                  WHEN _bs IS NOT NULL THEN _bs
                  WHEN _text_basis_spread IS NOT NULL THEN _text_basis_spread
                  ELSE NULL END AS basis_spread,
-            COALESCE(NULLIF(CAST(reference_rate_type AS VARCHAR), ''), _text_ref_rate, '')
+            CASE WHEN _bs IS NOT NULL AND _bs >= 0 THEN 'xbrl_field'
+                 WHEN _bs IS NULL AND _text_basis_spread IS NOT NULL THEN 'identifier_text'
+                 ELSE '' END AS basis_spread_source,
+            -- reference_rate_type: XBRL field -> identifier text -> evidence-based
+            -- inference.  Filers like Blackstone/Nuveen Churchill/KKR FS tag the
+            -- variable-rate SPREAD per position but not the reference-rate NAME.
+            -- A present basis_spread means the coupon floats over a reference
+            -- rate; for USD that is SOFR post-LIBOR-cessation (30 Jun 2023) and
+            -- LIBOR before.  Inferred values are flagged in reference_rate_source.
+            COALESCE(
+                NULLIF(CAST(reference_rate_type AS VARCHAR), ''),
+                _text_ref_rate,
+                CASE WHEN _bs IS NOT NULL AND _bs <> 0
+                          AND NOT regexp_matches(lower(_raw_id),
+                              'euribor|sonia|\\beur\\b|\\bgbp\\b|sterling')
+                     THEN CASE WHEN CAST(report_date AS VARCHAR) >= '2023-07-01'
+                               THEN 'SOFR' ELSE 'LIBOR' END
+                     ELSE NULL END,
+                '')
                 AS reference_rate_type,
+            CASE
+                WHEN NULLIF(CAST(reference_rate_type AS VARCHAR), '') IS NOT NULL
+                    THEN 'xbrl_field'
+                WHEN _text_ref_rate IS NOT NULL THEN 'identifier_text'
+                WHEN _bs IS NOT NULL AND _bs <> 0
+                     AND NOT regexp_matches(lower(_raw_id),
+                         'euribor|sonia|\\beur\\b|\\bgbp\\b|sterling')
+                    THEN CASE WHEN CAST(report_date AS VARCHAR) >= '2023-07-01'
+                              THEN 'inferred_post_libor' ELSE 'inferred_pre_libor' END
+                ELSE ''
+            END AS reference_rate_source,
             CASE
                 WHEN coupon_type != '' THEN coupon_type
                 WHEN _text_basis_spread IS NOT NULL THEN 'Floating'
@@ -2486,6 +2547,16 @@ def _prepare_bdc(
                     ELSE '' END
                 ELSE ''
             END AS maturity_date,
+            -- provenance: structured XBRL maturity tag wins (when valid); identifier text
+            -- only fills when the structured tag is absent (structured-first).
+            CASE WHEN maturity_date IS NOT NULL AND CAST(maturity_date AS VARCHAR) != ''
+                      AND TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
+                      AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
+                     THEN 'xbrl_field'
+                 WHEN (maturity_date IS NULL OR CAST(maturity_date AS VARCHAR) = '')
+                      AND (_text_maturity_raw IS NOT NULL OR _text_maturity_month_raw IS NOT NULL)
+                     THEN 'identifier_text'
+                 ELSE '' END AS maturity_date_source,
             _sh AS shares_held,
             _pa AS principal_amount,
             upper(trim(regexp_replace(COALESCE(CAST(principal_amount_unit AS VARCHAR), ''), '^.*:', ''))) AS principal_amount_currency,
@@ -2541,6 +2612,7 @@ def _prepare_bdc(
             COALESCE(_hier_industry, '') AS extracted_industry,
             '' AS gics_sub_industry,
             '' AS lien_position,
+            '' AS instrument_type,
             -- Position key: normalized issuer+instrument identity, volatile parts stripped
             CASE
                 WHEN LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
@@ -2640,6 +2712,43 @@ def _prepare_bdc(
     logger.info("  BDC asset breakdown:")
     for cat, count in result["asset_category"].value_counts().items():
         logger.info("    %s: %d (%.1f%%)", cat, count, 100 * count / len(result))
+
+    # HTML-section bridge: overlay maturity_date / reference_rate_type from
+    # audited cached-HTML bridges for filers that leave these untagged in XBRL
+    # (Blackstone et al.).  Exact-keyed, blank-only, evidence-reconciled.
+    result = apply_html_section_bridge_field_overlays(
+        result, identifier_col="bdc_investment_identifier"
+    )
+
+    # iXBRL field-status overlay: apply only status=value maturity/lien/
+    # reference_rate from the per-position field-status artifact (blank-only;
+    # lien status already reflects the subtotal-reconciliation gate). No-op if
+    # the artifact has not been produced yet.
+    from pipeline.config import BDC_IXBRL_FIELD_STATUS_FILE
+    if BDC_IXBRL_FIELD_STATUS_FILE.exists():
+        from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+        # Read only the columns the overlay needs and keep only rows with an
+        # applicable status=value (the only rows that can be applied).  This is the
+        # difference between a full ~1M-row CSV->dicts->DataFrame round-trip and a
+        # narrow, pre-filtered DataFrame passed straight through.
+        _cols = ["cik", "accession_number", "report_date", "raw_id_lower",
+                 "maturity_date", "maturity_status", "reference_rate_type",
+                 "reference_rate_status", "lien_position", "lien_status"]
+        _sdf = pd.read_csv(BDC_IXBRL_FIELD_STATUS_FILE, dtype=str,
+                           usecols=lambda c: c in _cols)
+        _sdf = _sdf[(_sdf["maturity_status"] == "value")
+                    | (_sdf["lien_status"] == "value")
+                    | (_sdf["reference_rate_status"] == "value")]
+        result = apply_ixbrl_field_status_overlay(result, _sdf)
+
+    # Agent A basis_spread corrections: audited, keyed OVERRIDE (NOT blank-only) of the
+    # per-position spreads where the freeform-identifier spread reconciles with all-in+SOFR
+    # and the XBRL tag does not. Reversible (override records old_value_xbrl). No-op if the
+    # override file is absent.
+    from pipeline.identifier_spread_corrections import apply_spread_corrections
+    result, _n_spread = apply_spread_corrections(
+        result, identifier_col="bdc_investment_identifier"
+    )
 
     # Log text enrichment stats
     n = len(result)

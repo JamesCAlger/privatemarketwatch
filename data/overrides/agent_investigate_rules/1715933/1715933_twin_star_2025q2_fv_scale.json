@@ -1,0 +1,34 @@
+{
+  "cik": "1715933",
+  "rule_id": "1715933_twin_star_2025q2_fv_scale",
+  "rule_type": "value_rescale",
+  "action": "rescale",
+  "scope": {
+    "quarters": [
+      "2025-06-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-06-30' AND bdc_investment_identifier IN ('Debt Securities, Consumer Durables & Apparel, Twin Star International, Inc. Acquisition Date - 03/31/2025, 15th Amendment Delayed Draw Term Loan - 25.00% inc PIK (25.00%, Fixed Coupon, all PIK), % of Net Assets 0.1%, Maturity Date 06/18/26', 'Debt Securities, Consumer Durables & Apparel, Twin Star International, Inc. Acquisition Date - 06/11/2025, 16th Amendment Delayed Draw Term Loan - 25.00% inc PIK (25.00%, Fixed Coupon, all PIK), % of Net Assets 0.1%, Maturity Date 06/18/26')",
+  "field": "fair_value",
+  "factor": 0.001,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-06-30, the Twin Star 15th Amendment Delayed Draw Term Loan has fair_value 598100000.0 while cost and principal_amount are both 598100.0; the 16th Amendment Delayed Draw Term Loan has fair_value 437008000.0 while cost and principal_amount are both 437008.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Anchor override evidence: Table 7 row 33: Total Investments (226.1%) | $ | 1,246,113,181 | $ | 1,093,518,278."
+    }
+  ],
+  "rationale": "Two Twin Star fair values were extracted 1000x too large while their cost and principal columns are in dollar units. Rescaling only those two fair_value cells corrects the unit defect without deleting real positions.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 2,
+      "fv": -1034072892.0,
+      "residual_before": 1034642880.0,
+      "residual_after": 569988.0
+    }
+  }
+}

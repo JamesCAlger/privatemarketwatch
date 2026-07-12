@@ -1,0 +1,93 @@
+{
+  "schema": "agentA-rate-grammar.v1",
+  "cik": "0002065397",
+  "status": "PROPOSED",
+  "available_identifier_datapoints": [
+    "affiliation_bucket",
+    "investment_category",
+    "industry",
+    "issuer",
+    "asset_type",
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "pik_rate",
+    "maturity_date",
+    "commitment_type",
+    "commitment_expiration_date",
+    "equity_asset_type",
+    "acquisition_date"
+  ],
+  "unsupported_identifier_datapoints": [
+    "cash_interest_leg",
+    "interest_rate_floor",
+    "principal_amount",
+    "fair_value"
+  ],
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "AFFIL SECDEBT ASSETTYPE REFRATE RATE MAT"
+  },
+  "required_fields": [
+    "reference_rate_type",
+    "basis_spread",
+    "interest_rate",
+    "maturity_date"
+  ],
+  "pik_convention": "inclusive",
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "Reference Rate and Spread\\s+([A-Z]+)\\s*\\+",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "S": "SOFR"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "Reference Rate and Spread\\s+[A-Z]+\\s*\\+\\s*([0-9]+(?:\\.[0-9]+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "Interest Rate\\s+([0-9]+(?:\\.[0-9]+)?)%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "\\(Incl\\.\\s+([0-9]+(?:\\.[0-9]+)?)%\\s+PIK\\)",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "Maturity Date\\s+(\\d{1,2}/\\d{1,2}/\\d{4})",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "interest_rate_matches_twin",
+      "kind": "pct_agree",
+      "parsed": "interest_rate",
+      "twin": "interest_rate"
+    },
+    {
+      "name": "basis_spread_matches_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "maturity_date_matches_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    }
+  ]
+}

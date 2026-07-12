@@ -1,0 +1,23 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001817825",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Non-controlled/Non-Affiliated Investments"
+    },
+    {
+      "label": "RATE",
+      "regex": "% of Shareholder's Equity"
+    }
+  ],
+  "available_identifier_datapoints": [
+    "affiliation_classification",
+    "shareholder_equity_percent",
+    "geography",
+    "industry",
+    "issuer",
+    "seniority_lien",
+    "instrument_type"
+  ]
+}

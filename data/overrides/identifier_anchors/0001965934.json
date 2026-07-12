@@ -1,0 +1,52 @@
+{
+  "schema_version": "agentA-anchor-vocabulary.v1",
+  "cik": "0001965934",
+  "entity_name": "Overland Advantage",
+  "status": "PROPOSED",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "AFFIL",
+      "regex": "Non-controlled/non-affiliated"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "senior secured debt"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "Debt investments"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "Interest Rate\\s+[A-Z][A-Z0-9 /-]*\\s*\\+"
+    },
+    {
+      "label": "RATE",
+      "regex": "Interest Rate\\s+[A-Z][A-Z0-9 /-]*\\s*\\+\\s*[0-9]+(?:\\.[0-9]+)?%"
+    },
+    {
+      "label": "MAT",
+      "regex": "Maturity Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}"
+    },
+    {
+      "label": "USTBILL",
+      "regex": "^U\\.S\\. Treasury Bill$"
+    },
+    {
+      "label": "CASH_EQUIV",
+      "regex": "^(?:Cash Equivalents(?:\\s+BlackRock Liquidity FedFund\\s+-\\s+Institutional)?|Investments and Cash Equivalents)$"
+    },
+    {
+      "label": "INVESTMENTS",
+      "regex": "^Investments$"
+    },
+    {
+      "label": "DEBTINV",
+      "regex": "^Debt Investments$"
+    }
+  ],
+  "evidence": [
+    "Bundle none_examples include U.S. Treasury Bill, Cash Equivalents BlackRock Liquidity FedFund - Institutional, Investments, Investments and Cash Equivalents, and Debt Investments."
+  ]
+}

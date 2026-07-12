@@ -1,0 +1,89 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001588272",
+  "entity_name": "NexPoint Capital, Inc.",
+  "status": "APPLICABLE_RATE_GRAMMAR",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "ASSETTYPE RATE MAT"
+  },
+  "available_identifier_datapoints": [
+    "asset_type",
+    "industry",
+    "issuer",
+    "instrument_type",
+    "tranche_or_lien",
+    "reference_rate_type",
+    "basis_spread",
+    "coupon_or_rate_text",
+    "pik_indicator",
+    "stated_percent_rate",
+    "maturity_date"
+  ],
+  "unsupported_identifier_datapoints": [
+    "principal_amount",
+    "fair_value",
+    "cost",
+    "currency"
+  ],
+  "pik_convention": "inclusive",
+  "required_fields": [
+    "maturity_date"
+  ],
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "\\|\\s*(SOFR|SORF|PRIME)\\s*\\+\\s*\\d{3,4}\\s*\\|",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "SOFR": "SOFR",
+        "SORF": "SOFR",
+        "PRIME": "PRIME"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\|\\s*(?:Fixed|SOFR|SORF|PRIME)\\s*\\+\\s*(\\d{3,4})\\s*\\|",
+      "group": 1,
+      "type": "bps"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "\\|\\s*(\\d+(?:\\.\\d+)?)%\\s*(?:Fixed|PIK)\\s*\\|",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate",
+      "regex": "\\|\\s*PIK\\s*\\+\\s*(\\d+(?:\\.\\d+)?)%\\s*\\|",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "\\|\\s*(\\d{1,2}/\\d{1,2}/\\d{4})\\s*$",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "maturity_matches_structured_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    },
+    {
+      "name": "spread_implies_maturity",
+      "kind": "implication",
+      "if_present": "basis_spread",
+      "then_present": "maturity_date"
+    }
+  ],
+  "notes": [
+    "Samples span old and new report-date eras but retain the same pipe-delimited rate/maturity structure.",
+    "Structured twins appear to place bps spreads in interest_rate for some loans; the proposal extracts them as basis_spread from the identifier text.",
+    "RATE-only preferred-stock coupons and REFRATE RATE MAT floating-spread rows are present in identifiers but are outside this dominant-signature grammar."
+  ]
+}

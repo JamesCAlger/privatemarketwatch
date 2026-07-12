@@ -1,0 +1,54 @@
+{
+  "schema": "agentA-identifier-anchors.v1",
+  "cik": "0001950976",
+  "anchors": [
+    {
+      "label": "TOTAL",
+      "regex": "(?i)^\\s*Total\\b"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "(?i)\\bAffiliate(?:d)?\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "(?i)^\\s*Debt Investments\\s*$"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "(?i)^\\s*Debt Investments\\s*\\|"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "(?i)^\\s*Common Equity\\s*$"
+    },
+    {
+      "label": "SUBORD",
+      "regex": "(?i)\\bSubordinated\\b"
+    },
+    {
+      "label": "ASSETTYPE",
+      "regex": "(?i)\\b(?:First|Second) Lien Senior Secured\\b|\\b(?:Term Loan|Revolving Loan|Delayed Draw Term Loan|Delayed Payment Draw Term Loan)\\b"
+    },
+    {
+      "label": "COMMIT",
+      "regex": "(?i)\\bCommitment\\b"
+    },
+    {
+      "label": "COMMITEXP",
+      "regex": "(?i)\\bCommitment Expiration\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "(?i)\\bSOFR\\s*\\+"
+    },
+    {
+      "label": "RATE",
+      "regex": "(?i)\\|\\s*[0-9]+(?:\\.[0-9]+)?\\s*%?\\s*(?:\\((?:incl\\.?|inc\\.?).*?PIK\\))?\\s*\\|"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\|\\s*\\d{1,2}/\\d{1,2}/\\d{4}\\s*$"
+    }
+  ]
+}

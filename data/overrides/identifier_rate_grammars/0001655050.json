@@ -1,0 +1,118 @@
+{
+  "schema_version": "agentA-rate-grammar.v1",
+  "cik": "0001655050",
+  "entity_name": "Bain Capital Specialty Finance, Inc.",
+  "version": 1,
+  "author": "agentA A2 staged proposal from bundle data/output/agent_a/quarter/2025-12-31/bundles/0001655050_2025-12-31.json",
+  "applies_to": {
+    "regime": "flattened",
+    "signature": "AFFIL SECLOAN REFRATE RATE MAT",
+    "note": "Dominant rate-bearing bundle variant. Identifier strings contain affiliation/section text, industry, issuer, senior secured loan instrument type, optional tranche subtype, reference index, spread, optional PIK percentage, all-in Interest Rate, and Maturity Date. The second rate-bearing signature omits the affiliation marker but uses the same embedded rate/date phrase. Older SECLOAN-only variants carry issuer/type/tranche without embedded rate/date text, so this grammar extracts only fields actually present in rate-bearing identifier strings."
+  },
+  "available_identifier_datapoints": [
+    "affiliation_or_section_marker",
+    "industry",
+    "issuer",
+    "instrument_type",
+    "tranche_or_subtype",
+    "reference_rate_type",
+    "basis_spread",
+    "pik_rate",
+    "interest_rate_all_in",
+    "maturity_date",
+    "acquisition_date"
+  ],
+  "unsupported_identifier_datapoints": [
+    "reference_rate_value",
+    "cash_interest_rate_stated_separately",
+    "floor",
+    "principal_or_shares",
+    "cost",
+    "fair_value",
+    "percent_of_nav",
+    "rate_fields_for_secloan_only_older_identifiers"
+  ],
+  "pik_convention": "inclusive",
+  "_pik_convention_doc": "The identifier prints Spread, a parenthetical PIK percentage, and a separate all-in Interest Rate. The base index value is not embedded, so spread plus PIK cannot self-sum to the all-in rate from identifier text alone. Treat the stated Interest Rate as inclusive all-in and derive cash leg as all-in minus PIK only when PIK is present.",
+  "extractors": [
+    {
+      "field": "reference_rate_type",
+      "regex": "(SOFR|LIBOR|EURIBOR|Prime Rate|Prime|SONIA)\\s+Spread\\b",
+      "group": 1,
+      "type": "ref_code",
+      "map": {
+        "SOFR": "SOFR",
+        "LIBOR": "LIBOR",
+        "EURIBOR": "EURIBOR",
+        "PRIME RATE": "PRIME",
+        "PRIME": "PRIME",
+        "SONIA": "SONIA"
+      }
+    },
+    {
+      "field": "basis_spread",
+      "regex": "Spread\\s+([0-9]+\\.?[0-9]*)\\s*%?",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "\\(\\s*([0-9]+\\.?[0-9]*)\\s*%\\s*PIK\\s*\\)",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "interest_rate_all_in",
+      "regex": "Interest Rate\\s+([0-9]+\\.?[0-9]*)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "maturity_date",
+      "regex": "Maturity Date\\s+([0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4})",
+      "group": 1,
+      "type": "date_mdy"
+    }
+  ],
+  "derivations": {
+    "coupon_type": "floating_if_reference_rate_else_fixed",
+    "interest_rate_cash_leg": "interest_rate_all_in_minus_pik"
+  },
+  "invariants": [
+    {
+      "name": "all_in_vs_twin",
+      "kind": "pct_agree",
+      "parsed": "interest_rate_all_in",
+      "twin": "interest_rate"
+    },
+    {
+      "name": "spread_vs_twin",
+      "kind": "pct_agree",
+      "parsed": "basis_spread",
+      "twin": "basis_spread"
+    },
+    {
+      "name": "pik_vs_twin",
+      "kind": "pct_agree",
+      "parsed": "pik_rate",
+      "twin": "pik_rate"
+    },
+    {
+      "name": "maturity_vs_twin",
+      "kind": "date_agree",
+      "parsed": "maturity_date",
+      "twin": "maturity_date"
+    },
+    {
+      "name": "floating_has_reference",
+      "kind": "implication",
+      "if_present": "basis_spread",
+      "then_present": "reference_rate_type"
+    }
+  ],
+  "required_fields": [
+    "reference_rate_type",
+    "basis_spread",
+    "maturity_date"
+  ]
+}

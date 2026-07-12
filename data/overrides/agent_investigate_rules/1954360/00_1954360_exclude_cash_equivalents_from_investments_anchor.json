@@ -1,0 +1,68 @@
+{
+  "cik": "1954360",
+  "rule_id": "1954360_exclude_cash_equivalents_from_investments_anchor",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "predicate_sql": "lower(bdc_dimensions_raw) LIKE '%cash equivalent%'",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-03-31 staging has Investments=308031000, Investments United States Investments and Cash Equivalents=315009000, and Investments United States Cash Equivalents=6978000; holdings included two cash-equivalent rows totaling 6978000."
+    },
+    {
+      "source": "query",
+      "quote": "Across quarters, fv residual equals cash-equivalent FV exactly in 2023-12-31, 2024-09-30, and 2024-12-31, confirming the anchor is investments-only while holdings included cash equivalents."
+    }
+  ],
+  "rationale": "The conservation anchor is the filer's investments-at-fair-value subtotal, not investments plus cash equivalents. Cash-equivalent holdings are real liquidity rows, but they are outside this investments-only anchor and should not be counted in the fair-value conservation sum.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2023-09-30": {
+      "rows": 1,
+      "fv": 36082000.0,
+      "residual_before": 34591000.0,
+      "residual_after": -1491000.0
+    },
+    "2023-12-31": {
+      "rows": 2,
+      "fv": 28754000.0,
+      "residual_before": 28754000.0,
+      "residual_after": 0.0
+    },
+    "2024-03-31": {
+      "rows": 2,
+      "fv": 61693000.0,
+      "residual_before": 57859000.0,
+      "residual_after": -3834000.0
+    },
+    "2024-06-30": {
+      "rows": 2,
+      "fv": 14524000.0,
+      "residual_before": 11425000.0,
+      "residual_after": -3099000.0
+    },
+    "2024-09-30": {
+      "rows": 2,
+      "fv": 13977000.0,
+      "residual_before": 13977000.0,
+      "residual_after": 0.0
+    },
+    "2024-12-31": {
+      "rows": 2,
+      "fv": 11964000.0,
+      "residual_before": 11964000.0,
+      "residual_after": 0.0
+    },
+    "2025-03-31": {
+      "rows": 2,
+      "fv": 6978000.0,
+      "residual_before": 9811000.0,
+      "residual_after": 2833000.0
+    }
+  }
+}
