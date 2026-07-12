@@ -6532,6 +6532,40 @@ these need source-anchored checks, not row-local predicates.
   data/output now carries agent batch records, review bundles, and ensemble outputs;
   worker scratch stays excluded by name.
 
+## 2026-07-11 - Post-Wave-1 battery refresh + B1 recalibration frame (recal1), stopped pre-dispatch
+
+Deterministic prep for the first post-rebuild B1 recalibration batch (architecture doc
+section 5 step 2). No agents dispatched.
+
+- **Battery refresh on post-Wave-1 holdings** (all cache-only, no network): oracle
+  check_results, nonaccrual_flags (8,776 flags), `pipeline.main --validate` (row_validation
+  538,331 issues, fund financials, source-recon classification, GAV), then
+  `scripts.shadow_validation_runner` + `pipeline.review_queue`. New queue: 45,380 items
+  (blocker 14,275 / review 31,105), down from 52,353 pre-Wave-1.
+- **Runner fix**: `shadow_validation_runner.py` now calls `cons.ensure_anchor_overrides(con)`
+  before conservation rules (gap-1 Layer D added `_anchor_override` to the engine; the
+  unified runner never created it -> CatalogException. Standalone engine main() was fine,
+  which is why the Wave-1 rebuild did not hit this).
+- **New `scripts/ensemble/passstamp_survival.py`**: era-windowed verdict-survival join of the
+  918 decided ens1+ens2 verdicts against the rebuilt queue by review_id identity +
+  n_units/metric equality. Result: 468 survived_exact (pass-stamped), 35 survived_changed,
+  13 dead, 402 excluded_recalibrated (FX02/FX03/X01/X07/C103/C104/C404/PCT01/fmt_cost/
+  fmt_pct_of_net_assets/pct_position_concentration -- predicates changed since ens2).
+  Outputs in `data/output/ensemble/recal1/` (incl. pre-rebuild queue snapshot).
+- **New `scripts/ensemble/draw_recal_batch.py`**: recalibration frame with per-rule targets
+  (30, carry-over credited) + per-group minimum quotas on the 7 divergent fingerprint
+  groups from the ens2 re-cut. Frame: 250 review_ids (18 group + 232 rule), seed 20260711,
+  cohort-scoped, no-accession engines excluded, era=post_wave1_pass1.
+  Carry-over fully covers 8 rules (A07/B01/B02/C04/C107/FX01/PP03/X02) -- zero new spend.
+- **Known limitations recorded in recal_shortfall.csv / recal_manifest.json**: (i) budget
+  250 leaves ~179 rule-quota draws unmet (raise --budget to ~430 to fill all 25 rules to
+  30); (ii) divergent groups A07|0002031750 and X08|0002031750 have zero un-adjudicated
+  flags -- their old flags are survived_changed/undecided with existing verdict leaves,
+  so re-adjudication needs a prep_retry-style archive of those leaves (operator decision
+  at dispatch, NOT automated here).
+- NOT run: pytest, diff_outputs --semantic (no pipeline-code data-logic change; artifact
+  changes are the intended refresh), any B1 dispatch.
+
 ## 2026-07-12: Entity-name refresh from SEC submissions API (Owl Rock -> Blue Owl et al.)
 
 - **Problem**: website fund names came from EFTS `display_names` captured at universe
@@ -6573,3 +6607,32 @@ these need source-anchored checks, not row-local predicates.
   138 passed. Full suite NOT run (recal1 B1 worker batch was running concurrently;
   avoided overlapping long jobs). Frontend verified: fund_list.json 69 funds, zero
   "(CIK" remnants, both Blue Owl names current in fund_list + fund_details.
+
+## 2026-07-12: Live B3 gate on the 7 legacy agent_b2 correction leaves (remediation-chain open item 3)
+
+- Ran the deterministic B3 gate (`scripts.agent_b2.run_remediation apply --run` +
+  `gate`) on the 4 applyable leaves in `data/output/agent_b2/corrections/` against
+  the post-Wave-1 production baseline. Batch artifacts:
+  `data/output/agent_b2/batch/b2leaves_livegate_20260712/` (apply audits + gate JSONs).
+- **PASS (harmless no-op, recommend ARCHIVE not promote):** 0001603480 and
+  0001715933 comparative_period_filter (target 2025-06-30). Trial holdings are
+  byte-identical to baseline (628,526,568 / 1,093,518,278) -- the promoted Wave-1
+  rules already remove the comparative rows; gate PASS here means "no regression
+  across 12 held-out quarters", not "fixes anything". The feared double-fix does
+  NOT occur (appliers are idempotent when the rows are already gone).
+- **FAIL (template matches zero rows, discard + re-investigate):** 0001377936
+  subtotal_filter (2026-02-28, residual unchanged at 358,770,363) and 0001920453
+  subtotal_filter (2024-03-31, residual unchanged at 1,000,212,357). Both wrapper
+  patches applied cleanly (patterns added) but caught nothing at extraction --
+  0001377936 is the known guessed no-op patch from a Stage-3 symptom flag.
+- **Not gateable in this framework:** 0001715933/classification_fix and
+  0002052153/classification_fix (no wrapper-patch applier registered for
+  classification_fix) and 0002052153/rule_scope (rule-track, not a holdings
+  correction). 0002052153 still overshoots ~80% -- route through the current
+  agent_investigate chain instead.
+- Gate-baseline sanity: production CSV sums match engine value_sum exactly for
+  3/4 CIKs; 0001377936 differs 1.5% (CSV 1,467,904,175 vs engine 1,445,584,788;
+  the leaf verdict's observed_value matches the CSV sum). Gate compares
+  trial-vs-baseline against the same anchor, so verdicts are unaffected.
+- NOT run: pytest (no pipeline code changed), no production writes (trial dirs +
+  batch dir only).
