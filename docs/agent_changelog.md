@@ -6531,3 +6531,45 @@ these need source-anchored checks, not row-local predicates.
 - Scope note: artifact count grew from 3,759 (2026-05-16 baseline) because
   data/output now carries agent batch records, review bundles, and ensemble outputs;
   worker scratch stays excluded by name.
+
+## 2026-07-12: Entity-name refresh from SEC submissions API (Owl Rock -> Blue Owl et al.)
+
+- **Problem**: website fund names came from EFTS `display_names` captured at universe
+  discovery time, frozen at the filing-date name (e.g. "Owl Rock Core Income Corp.
+  (CIK 0001812554)" instead of "Blue Owl Credit Income Corp."). Chain: EFTS ->
+  combined_universe.csv -> fund_financials.csv backfill (companyfacts rows have no
+  name) -> fund_list.json / fund_details/*.json.
+- **New `scripts/refresh_entity_names.py`** (explicit-network script): fetches
+  data.sec.gov/submissions/CIK{cik}.json per universe CIK via the rate-limited
+  EdgarClient, writes audited overlay `data/reference/entity_current_names.csv`
+  (cik, entity_name, previous_name, changed, fetched_date, source), applies it to
+  combined_universe.csv/.json in place. Run 2026-07-12: 620 CIKs fetched, 172 genuine
+  renames (5 Owl Rock -> Blue Owl entities, Silver Spike -> Chicago Atlantic BDC,
+  AG Twin Brook -> TPG Twin Brook, BlackRock -> BlackRock HPS, etc.).
+- **`pipeline/merge.py`**: new `_apply_entity_name_overlay()` applied in
+  `merge_universes()` after CIK padding (before third-party fuzzy matching), so
+  refreshed names survive future universe rediscovery. New config path
+  `ENTITY_CURRENT_NAMES_FILE` in `pipeline/config.py`.
+- **`pipeline/export/fund_exports.py`**: new `_display_fund_name()` strips EFTS
+  "(CIK NNNN)" annotations at export; applied to fund_list `name`, fund-detail
+  `name`/blurb (blurb previously had its own inline regex, now shared).
+- **Tests**: new `tests/test_entity_name_refresh.py` (11 tests: suffix strip incl.
+  false-positive guard for ticker parentheticals; overlay apply/pad/noop/no-mutate).
+- **Rebuilt**: fund_financials.csv (cache-only `rebuild_outputs.py --financials`),
+  then `pipeline.main --export-frontend`. entity_name is the only intended semantic
+  change in fund_financials.
+- **Semantic diff vs baseline (post-rebuild)**: fund_financials delta was entity_name
+  plus exactly 6 rows for CIK 0002021966 (FT Vest Total Return Income Fund: Series A2)
+  flipping tender_offer_fund -> interval_fund. Root cause: that CIK has two universe
+  rows with conflicting vehicle_type; the backfill dedup tiebreak was name-length, and
+  name cleaning made the tie exact (nondeterministic ROW_NUMBER). Fixed by adding
+  COALESCE(vehicle_type,'') ASC as final tiebreak in the fund_financials univ dedup
+  (interval_fund now wins deterministically; matches current output, no re-rebuild).
+  The underlying dual-classification of 0002021966 is a residual data question --
+  not adjudicated here; fund is outside the v1 BDC cohort so no public-site impact.
+  Pre-existing source_reconciliation parquet-cache diffs vs baseline are from the
+  ongoing wave-1/recal1 work on this branch, not this change (verified by mtime).
+- **Tests**: tests/test_fund_financials.py + tests/test_entity_name_refresh.py =
+  138 passed. Full suite NOT run (recal1 B1 worker batch was running concurrently;
+  avoided overlapping long jobs). Frontend verified: fund_list.json 69 funds, zero
+  "(CIK" remnants, both Blue Owl names current in fund_list + fund_details.
