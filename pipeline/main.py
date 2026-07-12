@@ -206,13 +206,33 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+# Auto pre-run snapshots are ~5-6 GB each; without a cap they accumulated to
+# 154 GB (29 snapshots) by 2026-07-10. Named snapshots (baseline, pre_*_refresh)
+# are governed manually and never pruned here.
+_PRE_RUN_SNAPSHOTS_KEEP = 3
+
+
+def _prune_pre_run_snapshots(
+    snapshots_root: Path, logger: logging.Logger, keep: int = _PRE_RUN_SNAPSHOTS_KEEP
+) -> None:
+    """Delete all but the newest `keep` pre_run_* snapshot directories."""
+    pre_runs = sorted(
+        p for p in snapshots_root.glob("pre_run_*") if p.is_dir()
+    )
+    for stale in pre_runs[: max(0, len(pre_runs) - keep)]:
+        shutil.rmtree(stale, ignore_errors=True)
+        logger.info("Pruned stale pre-run snapshot: %s", stale.name)
+
+
 def _snapshot_outputs(logger: logging.Logger) -> Path | None:
     """Copy existing output CSVs/JSONs to a timestamped snapshot directory.
 
+    Keeps only the newest _PRE_RUN_SNAPSHOTS_KEEP pre_run_* snapshots.
     Returns the snapshot directory path, or None if there was nothing to copy.
     """
     stamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    snapshot_dir = OUTPUT_DIR.parent / "snapshots" / f"pre_run_{stamp}"
+    snapshots_root = OUTPUT_DIR.parent / "snapshots"
+    snapshot_dir = snapshots_root / f"pre_run_{stamp}"
     sources = [
         p for p in OUTPUT_DIR.iterdir()
         if p.is_file() and p.suffix in (".csv", ".json")
@@ -226,6 +246,7 @@ def _snapshot_outputs(logger: logging.Logger) -> Path | None:
     logger.info(
         "Snapshot: %d files saved to %s", len(sources), snapshot_dir.name
     )
+    _prune_pre_run_snapshots(snapshots_root, logger)
     return snapshot_dir
 
 

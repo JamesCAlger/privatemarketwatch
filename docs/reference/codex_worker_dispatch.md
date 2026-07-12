@@ -53,6 +53,19 @@ Mirror `scripts/dispatch_investigation.ps1` -- the cleanest end-to-end example. 
 4. **Auth into the fresh home.** Copy `auth.json` into each `-WorkerHome` (or set `CODEX_API_KEY`), or
    every worker 401s.
 
+## Disk hygiene (added 2026-07-10)
+
+Codex copies its full ~300 MB binary into `<WorkerHome>\.sandbox-bin\codex.exe` and syncs a
+~40 MB / ~5,000-file plugin cache into `<WorkerHome>\.tmp\plugins` for EVERY fresh CODEX_HOME.
+A 120-worker batch is therefore ~40 GB of pure scratch; by 2026-07-10 stale fleets had
+accumulated 853 codex.exe copies (257 GB) under `data/output`.
+
+- `run_codex_worker.ps1` now deletes both after each run (pass `-NoCleanup` to keep them for
+  debugging a single worker). Worker artifacts (logs, verdicts, sqlite state) are untouched.
+- `scripts/cleanup_worker_scratch.ps1` sweeps orphans from killed dispatchers or pre-change
+  batches: `.\scripts\cleanup_worker_scratch.ps1 [-Root <dir>] [-WhatIfOnly]`. It refuses to
+  run while any codex process is alive.
+
 ## Higher-level orchestration (for reference, not templates)
 
 These chain the primitive above into multi-agent pipelines; read them for parallelism/iteration

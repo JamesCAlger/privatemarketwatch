@@ -5,7 +5,9 @@ param(
   [string] $WorkerHome = (Join-Path $env:TEMP 'codex-worker-home'),
   [string] $WorkerRunroot = (Join-Path $env:TEMP 'codex-worker-runroot'),
   [string] $CodexBin = 'codex.cmd',
-  [switch] $NoSetup
+  [switch] $NoSetup,
+  # Skip post-run scratch cleanup (keep .sandbox-bin\codex.exe + .tmp\plugins for debugging).
+  [switch] $NoCleanup
 )
 
 $ErrorActionPreference = 'Stop'
@@ -71,5 +73,14 @@ try {
     Remove-Item Env:\CODEX_HOME -ErrorAction SilentlyContinue
   } else {
     $env:CODEX_HOME = $PreviousCodexHome
+  }
+  # Codex copies its full ~300 MB binary into <WorkerHome>\.sandbox-bin and syncs a
+  # ~40 MB / ~5,000-file plugin cache into <WorkerHome>\.tmp\plugins on every fresh
+  # CODEX_HOME. Left in place, a 120-worker batch is ~40 GB of pure scratch (853
+  # stale copies = 257 GB by 2026-07-10). Worker artifacts (logs, verdicts, sqlite
+  # state) are untouched; if the same home is reused, Codex just re-copies.
+  if (-not $NoCleanup) {
+    Remove-Item (Join-Path $WorkerHome '.sandbox-bin\codex.exe') -Force -ErrorAction SilentlyContinue
+    Remove-Item (Join-Path $WorkerHome '.tmp\plugins') -Recurse -Force -ErrorAction SilentlyContinue
   }
 }
