@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "calibration": "provisional",
+  "calibration_note": "Set 2026-07-12 from post-Wave-1 observables (one remediation wave of evidence). Provisional ship-bar values, not validated tolerances: recalibrate after Wave 2 (held-CIK re-investigation) and record the basis here. Post-Wave-1 actuals at 2025-12-31: reconcile_rate 78.8, flagged_fv_share 43.99 (the flagged funds are the LARGE funds), verified_fv_share 35.45, source_blocking_fv_share 0.46 -- so the contract currently reads FAIL on FV-share checks; that is the honest state, not a miscalibration. 2026-03-31 is NOT_ASSESSABLE (67/69 funds lack companyfacts anchors).",
+  "assessability": {
+    "metric": "conservation.anchored_rate_pct",
+    "min": 50.0,
+    "note": "below this anchor coverage the quarter is NOT_ASSESSABLE (companyfacts lag), not FAIL"
+  },
+  "checks": [
+    {
+      "id": "fund_coverage",
+      "metric": "cohort.funds_with_holdings",
+      "op": ">=",
+      "value": 60,
+      "note": "cohort funds with holdings in the target quarter (of 70)"
+    },
+    {
+      "id": "reconcile_rate",
+      "metric": "conservation.reconcile_rate_pct",
+      "op": ">=",
+      "value": 70.0,
+      "note": "fv_conservation reconciles / anchored, cohort target quarter"
+    },
+    {
+      "id": "flagged_fv_share",
+      "metric": "conservation.flagged_fv_share_pct",
+      "op": "<=",
+      "value": 20.0,
+      "note": "FV of conservation-flagged funds as pct of cohort FV"
+    },
+    {
+      "id": "source_blocking_fv_share",
+      "metric": "source_blockers.blocking_fv_share_pct",
+      "op": "<=",
+      "value": 5.0,
+      "note": "source-reconciliation blocking FV as pct of cohort FV"
+    },
+    {
+      "id": "verified_fv_share",
+      "metric": "cohort.verified_fv_share_pct",
+      "op": ">=",
+      "value": 50.0,
+      "note": "FV in verified-tier funds as pct of cohort FV"
+    },
+    {
+      "id": "promoted_rule_drift",
+      "metric": "promoted_rules.n_drift",
+      "op": "<=",
+      "value": 0,
+      "note": "promoted rules flagged for row-count drift in the last rebuild"
+    },
+    {
+      "id": "promoted_rule_health",
+      "metric": "promoted_rules.n_not_ok",
+      "op": "<=",
+      "value": 0,
+      "note": "promoted rules that failed to apply (noop/error) in the last rebuild"
+    }
+  ]
+}

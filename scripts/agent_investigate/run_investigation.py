@@ -59,7 +59,11 @@ def _find_bundle(cik: str, target_quarter: str):
                 and str(b.get("rule_name") or "") == "fv_conservation"):
             return p
     return None
-STOP_TOL_PCT = 1.0      # stop when |residual| <= 1% of the anchor
+# Stop tolerance = the shared engine reconcile band (pipeline.config), so a
+# loop-level "success" is also an engine-level reconcile. Was 1.0 while the
+# engine flagged at 0.5 -- two Wave-1 targets landed in the gap (1930087,
+# 1930679) and stayed flagged after promotion.
+STOP_TOL_PCT = config.FV_CONSERVATION_BAND_PCT
 MAX_ITER = 5            # ... or after 5 iterations
 
 

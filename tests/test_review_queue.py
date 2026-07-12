@@ -101,6 +101,61 @@ def test_prioritization_blocker_before_review_and_fv_desc(tmp_path):
     assert items[-1]["lane"] == "review"
 
 
+def _write_holdings(path: Path, rows: list[tuple[str, str, float]]) -> None:
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["cik", "report_date", "fair_value"])
+        for cik, report_date, fv in rows:
+            w.writerow([cik, report_date, fv])
+
+
+def test_fund_quarter_fv_join(tmp_path):
+    rows = [
+        _row(engine="row_validation", rule_name="C107", tier="weak", cik="0001287750",
+             period_kind="report_date", period="2025-12-31", status="warn",
+             metric="12.0", metric_name="violation_pct", n_units="4", mechanism="m"),
+        _row(engine="row_validation", rule_name="C107", tier="weak", cik="0001287750",
+             period_kind="report_date", period="2025-09-30", status="warn",
+             metric="5.0", metric_name="violation_pct", n_units="2", mechanism="m"),
+    ]
+    holdings = tmp_path / "holdings.csv"
+    # two positions in the matched quarter (sum 3.5M), unpadded cik on purpose
+    _write_holdings(holdings, [
+        ("1287750", "2025-12-31", 1_500_000.0),
+        ("1287750", "2025-12-31", 2_000_000.0),
+    ])
+    result, items = _build(tmp_path, rows, holdings_path=holdings)
+    by_period = {i["report_date"]: i for i in items}
+    assert by_period["2025-12-31"]["fund_quarter_fv_m"] == "3.500000"
+    assert by_period["2025-09-30"]["fund_quarter_fv_m"] == ""  # no holdings that quarter
+    assert result["fund_fv_weighted"] == 1
+
+
+def test_fund_quarter_fv_skipped_without_holdings(tmp_path):
+    rows = [
+        _row(engine="row_validation", rule_name="C107", tier="weak", cik="0001287750",
+             period_kind="report_date", period="2025-12-31", status="warn",
+             metric="12.0", metric_name="violation_pct", n_units="4", mechanism="m"),
+    ]
+    result, items = _build(tmp_path, rows)  # holdings_path=None -> no join
+    assert items[0]["fund_quarter_fv_m"] == ""
+    assert result["fund_fv_weighted"] == 0
+
+
+def test_fund_quarter_fv_does_not_touch_fv_at_risk(tmp_path):
+    rows = [
+        _row(engine="source_recon", rule_name="src", tier="tight", cik="0001287750",
+             period_kind="quarter", period="2025-12-31", status="fail",
+             metric="42.5", metric_name="affected_fv_m", n_units="1", mechanism="m"),
+    ]
+    holdings = tmp_path / "holdings.csv"
+    _write_holdings(holdings, [("1287750", "2025-12-31", 9_000_000.0)])
+    _, items = _build(tmp_path, rows, holdings_path=holdings)
+    # engine-declared FV-at-risk preserved; fund FV is the separate exposure column
+    assert items[0]["fv_at_risk_m"] == "42.500000"
+    assert items[0]["fund_quarter_fv_m"] == "9.000000"
+
+
 def test_pass_and_skip_excluded(tmp_path):
     rows = [
         _row(engine="gav_recon", rule_name="gav", tier="tight", cik="0000000001",
