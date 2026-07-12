@@ -6636,3 +6636,78 @@ section 5 step 2). No agents dispatched.
   trial-vs-baseline against the same anchor, so verdicts are unaffected.
 - NOT run: pytest (no pipeline code changed), no production writes (trial dirs +
   batch dir only).
+
+## 2026-07-12: B2 leaf archive + null-anchor trial prep (nanch1)
+
+- Archived all 7 legacy agent_b2 correction leaves out of
+  `data/output/agent_b2/corrections/` (now empty) into
+  `data/output/agent_b2/batch/b2leaves_livegate_20260712/archived_leaves/`,
+  alongside the gate JSONs and a `disposition.csv` (verdict + reason per leaf).
+  None promoted.
+- Prepared the first live validation of the filing-sourced anchor path
+  (`--include-null-anchor`): batch `nanch1`, CIK 1916608 @ 2025-03-31 -- the
+  target has NO companyfacts investments_at_fair_value but HAS total_assets
+  (186,046,000) + cash, so the closure check is independently grounded. Only 2
+  of 26 fresh fv_conservation CIKs are null-anchor-only (1916608, 1825265);
+  selection was forced via exclude list. Worklist:
+  `data/output/agent_b/batch/nanch1/worklist.csv`.
+- Dispatch DEFERRED: recal1_r2 Codex fleet still running (one fleet per
+  machine). Dispatch from admin terminal after it completes, using
+  `dispatch_agent_b_workers.ps1 -BatchId nanch1` then
+  `run_full_remediation_canary.ps1 -B1BatchId nanch1` -- do NOT re-run
+  run_fresh_cik_trial.ps1 with this batch id (its internal prepare would
+  re-select a different CIK under the default exclude list).
+- Also confirmed: pik_le_interest_rate was RETIRED 2026-06-19 as unsound under
+  cash-leg storage (15/15 FA); no shadow rule or pipeline transform currently
+  catches or corrects mixed cash-leg/all-in interest_rate semantics; index
+  income formula double-counts PIK for all-in reporters; public WAC understates
+  coupon for cash-leg reporters. The 2026-07-12 all-in contract decision is the
+  prerequisite for re-adding a sound pik <= interest gate.
+
+## 2026-07-12: Quarter acceptance contract (provisional) + checkpointed quarter-pass runbook
+
+Steps 3+4 of the autonomous-quarterly-cycle roadmap: the tolerance contract as a
+computed artifact, and the hand-run remediation pass codified as a runbook.
+
+- **Band unification**: new `pipeline.config.FV_CONSERVATION_BAND_PCT = 0.5`,
+  consumed by the shadow conservation engine (`tolerance_pct` default) AND the B2
+  investigation loop (`STOP_TOL_PCT`, was 1.0). Resolves the Wave-1 threshold
+  mismatch (1930087/1930679 stopped inside 1% but stayed engine-flagged at 0.5%).
+  Loops now iterate until the engine band. Worker prompt text already said 0.5%.
+- **Review queue FV weighting**: `pipeline.review_queue` gains a fund-quarter FV
+  join (`fund_quarter_fv_m` column, DuckDB, TRY_CAST for VARCHAR fair_value).
+  Explicitly an EXPOSURE weight (whole fund-quarter FV), not row-level FV-at-risk;
+  `fv_at_risk_m` stays engine-declared. Function default off (hermetic tests),
+  CLI default on (`--holdings` / `--no-fund-fv`). NOTE: the standing
+  review_queue.csv predates this and lacks the column until the next battery run.
+- **New `pipeline/quarter_acceptance.py`**: computes per-quarter cohort metrics
+  (conservation reconcile rate + anchored rate, flagged-FV share, source-blocking
+  FV share, promoted-rule drift, per-fund tiers verified/under_review/unanchored/
+  no_holdings) from artifacts agents cannot edit (shadow ledger, review queue,
+  fix-application audit). Thresholds are DATA:
+  `data/reference/quarter_acceptance_thresholds.json`, `calibration: provisional`.
+  Assessability pre-gate: anchored_rate < 50% -> NOT_ASSESSABLE (exit 2), not FAIL.
+  Artifacts: `data/output/quarter_acceptance.json` + `quarter_acceptance_funds.csv`.
+- **First verdicts (post-Wave-1 frame)**: 2025-12-31 = FAIL -- reconcile_rate 78.8
+  PASSES, but flagged_fv_share 43.99% and verified_fv_share 35.45% FAIL: the
+  flagged funds are the LARGE funds (BCRED $89.6B fail, Blue Owl Credit Income
+  $37.4B fail; 1803498/1812554/1859919/1508655 all in the 9 held CIKs -> Wave 2
+  targets the right funds). 2026-03-31 = NOT_ASSESSABLE (67/69 funds lack
+  companyfacts anchors -- filing lag; motivates the filing-sourced anchor work).
+- **New `scripts/run_quarter_pass.py`**: checkpointed runbook for ONE remediation
+  pass: rebuild -> oracle -> nonaccrual -> validate -> shadow -> queue ->
+  acceptance -> select (FV-ranked candidates + operator dispatch guidance, STOP),
+  then rebuild_post -> ... -> acceptance_post -> summary (acceptance pre/post
+  metric deltas = the measured effect of the pass). State per pass id under
+  `data/output/quarter_pass/<id>/`; `--from/--until/--force/--dry-run/--list`.
+  Never dispatches Codex itself (interactive-terminal constraint, one fleet per
+  machine).
+- **Tests**: 69 passed -- test_agent_rule 41 (incl. new band-parity test, one
+  updated for the tighter stop), test_review_queue 12 (3 new), NEW
+  test_quarter_acceptance 8, NEW test_run_quarter_pass 8. Full suite NOT run
+  (recal1_r2 B1 batch in flight; no-overlapping-long-jobs). No rebuilds run; only
+  production writes are the two new quarter_acceptance artifacts.
+- **Provisional-threshold caveat**: the FV-share bars (20%/50%) are ship-bar
+  GOALS, not validated tolerances; current state failing them is the honest
+  reading, not a miscalibration. Recalibrate after Wave 2 and record the basis in
+  the thresholds file.

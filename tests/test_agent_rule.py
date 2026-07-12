@@ -340,8 +340,26 @@ def test_loop_decision_stops_within_tolerance():
 
 def test_loop_decision_stops_on_negative_residual_within_tolerance():
     from scripts.agent_investigate.run_investigation import loop_decision
-    d = loop_decision(-0.8, iteration=1, gate_verdict="PASS")  # undershoot but |0.8| <= 1%
+    d = loop_decision(-0.4, iteration=1, gate_verdict="PASS")  # undershoot but |0.4| <= band
     assert d["stop"] is True and d["success"] is True
+
+
+def test_loop_decision_band_matches_engine_band():
+    """The loop stop tolerance and the engine reconcile band must be the SAME
+    constant -- a loop-level success outside the engine band re-flags after
+    promotion (Wave-1: 1930087/1930679 landed in the 0.5-1.0% gap)."""
+    from pipeline.config import FV_CONSERVATION_BAND_PCT
+    from scripts.agent_investigate.run_investigation import STOP_TOL_PCT
+    from scripts.shadow_conservation_engine import RULES
+    fv_rule = next(r for r in RULES if r.name == "fv_conservation")
+    assert STOP_TOL_PCT == FV_CONSERVATION_BAND_PCT
+    assert fv_rule.tolerance_pct == FV_CONSERVATION_BAND_PCT / 100.0
+    # residual just outside the band must iterate, just inside must stop
+    from scripts.agent_investigate.run_investigation import loop_decision
+    outside = loop_decision(FV_CONSERVATION_BAND_PCT + 0.01, iteration=1, gate_verdict="PASS")
+    inside = loop_decision(FV_CONSERVATION_BAND_PCT - 0.01, iteration=1, gate_verdict="PASS")
+    assert outside["stop"] is False
+    assert inside["stop"] is True and inside["success"] is True
 
 
 def test_loop_decision_continues_when_residual_ok_but_gate_fails():

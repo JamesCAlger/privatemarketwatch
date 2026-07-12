@@ -26,6 +26,7 @@ from pipeline.config import (
     BDC_HOLDINGS_FILE,
     BDC_HOLDINGS_PARQUET_FILE,
     COMPANYFACTS_CACHE_DIR,
+    FV_CONSERVATION_BAND_PCT,
     FUND_FINANCIALS_FILE,
     OUTPUT_DIR,
     OVERRIDES_DIR,
@@ -70,7 +71,8 @@ class ConservationRule:
     name: str
     value_column: str            # column in unified/bdc_holdings to sum
     anchors: tuple[Anchor, ...]  # priority-ordered
-    tolerance_pct: float = 0.005
+    # default band = the shared FV-conservation constant (pct -> fraction)
+    tolerance_pct: float = FV_CONSERVATION_BAND_PCT / 100.0
     tier: str = "tight"
     enforcement: str = "advisory"
 

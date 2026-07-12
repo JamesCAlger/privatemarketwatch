@@ -163,6 +163,20 @@ AGENT_ANCHOR_OVERRIDES_DIR = OVERRIDES_DIR / "agent_anchor"
 AGENT_B2_CORRECTIONS_DIR = OVERRIDES_DIR / "agent_b2_corrections"
 AGENT_INVESTIGATE_RULES_DIR = OVERRIDES_DIR / "agent_investigate_rules"
 
+# FV-conservation reconcile band, in percent of the anchor: |value_sum - anchor|
+# <= band% counts as reconciled. Shared by the shadow conservation engine
+# (flagging) and the B2 investigation loop stop rule so a loop-level "done"
+# cannot land outside the engine's reconcile band (pre-2026-07 mismatch: the
+# loop stopped at 1% while the engine flagged at 0.5%). Also consumed by the
+# quarter acceptance contract (pipeline.quarter_acceptance).
+FV_CONSERVATION_BAND_PCT = 0.5
+
+# Quarter acceptance contract: thresholds are DATA (reviewed, versioned), the
+# computed verdict is an output artifact. See pipeline/quarter_acceptance.py.
+QUARTER_ACCEPTANCE_THRESHOLDS_FILE = REFERENCE_DIR / "quarter_acceptance_thresholds.json"
+QUARTER_ACCEPTANCE_FILE = OUTPUT_DIR / "quarter_acceptance.json"
+QUARTER_ACCEPTANCE_FUNDS_FILE = OUTPUT_DIR / "quarter_acceptance_funds.csv"
+
 # Position match overrides (per-CIK JSON files with reject/force_pair directives)
 POSITION_MATCH_OVERRIDES_DIR = OVERRIDES_DIR / "position_match_overrides"
 
@@ -275,6 +289,10 @@ VALIDATION_RULES_TREND_FILE = OUTPUT_DIR / "validation_rules_trend.csv"
 # Derivatives (analytics-only; never index constituents)
 BDC_DERIVATIVES_FILE = OUTPUT_DIR / "bdc_derivatives.csv"
 DERIVATIVE_ROLE_REVIEW_FILE = OUTPUT_DIR / "derivative_role_review.csv"
+
+# Per-CIK interest_rate reporting-convention classification (cash_leg vs all_in;
+# measurement artifact consumed by the future all-in normalization transform)
+RATE_CONVENTION_FILE = OUTPUT_DIR / "rate_convention.csv"
 
 # Fund-level income and fee uplift
 BDC_FUND_INCOME_FILE = OUTPUT_DIR / "bdc_fund_income.csv"

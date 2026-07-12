@@ -75,6 +75,7 @@ REVIEW_QUEUE_COLUMNS = [
     "metric_name",
     "metric",
     "fv_at_risk_m",
+    "fund_quarter_fv_m",
 ]
 
 REVIEW_QUEUE_SUMMARY_COLUMNS = [
@@ -99,6 +100,41 @@ BDC_WORKLIST_PROJECTION_COLUMNS = [
     "affected_source_fair_value",
     "confidence",
 ]
+
+
+def default_holdings_path() -> Path | None:
+    """Production unified holdings, preferring parquet. None if neither exists."""
+    if config.UNIFIED_HOLDINGS_PARQUET_FILE.exists():
+        return config.UNIFIED_HOLDINGS_PARQUET_FILE
+    if config.UNIFIED_HOLDINGS_FILE.exists():
+        return config.UNIFIED_HOLDINGS_FILE
+    return None
+
+
+def _load_fund_quarter_fv(holdings_path: Path) -> dict[tuple[str, str], float]:
+    """(cik10, report_date) -> total fund-quarter fair value in USD millions.
+
+    This is the EXPOSURE weight for FV-prioritizing queue items whose engine
+    reports no FV metric of its own (review-lane rules count rows, not dollars).
+    It is the whole fund-quarter's FV, an upper bound -- NOT the FV actually at
+    risk from the specific flag; fv_at_risk_m stays the engine-declared figure.
+    """
+    import duckdb
+
+    src = (
+        f"read_csv_auto('{holdings_path.as_posix()}', sample_size=-1)"
+        if holdings_path.suffix == ".csv"
+        else f"read_parquet('{holdings_path.as_posix()}')"
+    )
+    rows = duckdb.connect().execute(
+        f"""SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                   CAST(report_date AS VARCHAR) AS report_date,
+                   sum(TRY_CAST(fair_value AS DOUBLE)) / 1e6 AS fv_m
+            FROM {src}
+            WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+            GROUP BY 1, 2"""
+    ).fetchall()
+    return {(c, d): float(v) for c, d, v in rows if v is not None}
 
 
 def _lane(tier: str) -> str:
@@ -228,8 +264,14 @@ def build_review_queue(
     ledger_path: Path = LEDGER_FILE,
     output_dir: Path = REVIEW_QUEUE_DIR,
     lanes: tuple[str, ...] = ("blocker", "review"),
+    holdings_path: Path | None = None,
 ) -> dict[str, Any]:
     """Build the single prioritized review queue from the shadow ledger.
+
+    ``holdings_path`` (unified holdings CSV/parquet) enables the fund-quarter FV
+    join: every localizable item gets ``fund_quarter_fv_m`` (fund-quarter total
+    FV, an exposure weight). None skips the join (column left empty); the CLI
+    defaults it to the production holdings file.
 
     Returns a summary dict; writes review_queue.csv + review_queue_summary.csv.
     """
@@ -239,11 +281,23 @@ def build_review_queue(
             "(run scripts/shadow_validation_runner.py first)"
         )
 
+    fund_fv: dict[tuple[str, str], float] = {}
+    if holdings_path is not None:
+        if holdings_path.exists():
+            fund_fv = _load_fund_quarter_fv(holdings_path)
+            logger.info("fund-quarter FV join: %d fund-quarters from %s",
+                        len(fund_fv), holdings_path.name)
+        else:
+            logger.warning("holdings file missing, fund_quarter_fv_m left empty: %s",
+                           holdings_path)
+
     items: list[dict[str, Any]] = []
     for row in read_csv_rows(ledger_path):
         item = _queue_item(row)
         if item is None or item["lane"] not in lanes:
             continue
+        fv = fund_fv.get((item["cik"], item["report_date"]))
+        item["fund_quarter_fv_m"] = "" if fv is None else f"{fv:.6f}"
         items.append(item)
 
     items.sort(key=_sort_key)
@@ -263,6 +317,7 @@ def build_review_queue(
         "blocker": sum(1 for i in items if i["lane"] == "blocker"),
         "review": sum(1 for i in items if i["lane"] == "review"),
         "source_anchored": sum(1 for i in items if i["anchor"] == "source"),
+        "fund_fv_weighted": sum(1 for i in items if i["fund_quarter_fv_m"]),
         "queue_path": str(queue_path),
         "summary_path": str(summary_path),
     }
@@ -352,16 +407,34 @@ def cli(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Also write the blocker/source lane projected to the bdc worklist schema.",
     )
+    parser.add_argument(
+        "--holdings",
+        type=Path,
+        default=None,
+        help="Unified holdings CSV/parquet for the fund-quarter FV join "
+        "(default: production holdings file). Pass --no-fund-fv to skip.",
+    )
+    parser.add_argument(
+        "--no-fund-fv",
+        action="store_true",
+        help="Skip the fund-quarter FV join (fund_quarter_fv_m left empty).",
+    )
     args = parser.parse_args(argv)
 
+    holdings = None if args.no_fund_fv else (args.holdings or default_holdings_path())
     lanes = ("blocker", "review") if args.lane == "both" else (args.lane,)
-    result = build_review_queue(ledger_path=args.ledger, output_dir=args.output_dir, lanes=lanes)
+    result = build_review_queue(
+        ledger_path=args.ledger, output_dir=args.output_dir, lanes=lanes,
+        holdings_path=holdings,
+    )
     logger.info(
-        "review queue: %d items (blocker %d, review %d; source-anchored %d)",
+        "review queue: %d items (blocker %d, review %d; source-anchored %d; "
+        "fund-FV weighted %d)",
         result["items"],
         result["blocker"],
         result["review"],
         result["source_anchored"],
+        result["fund_fv_weighted"],
     )
     logger.info("wrote %s", result["queue_path"])
     logger.info("wrote %s", result["summary_path"])
