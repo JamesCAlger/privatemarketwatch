@@ -10,6 +10,10 @@ DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 REFERENCE_DIR = DATA_DIR / "reference"
 FX_RATES_FILE = REFERENCE_DIR / "fx_rates.csv"
+# Current SEC registrant names per CIK (overlay written by
+# scripts/refresh_entity_names.py; applied by pipeline.merge on rebuilds).
+# EFTS display names are frozen at filing-date, so renamed funds go stale.
+ENTITY_CURRENT_NAMES_FILE = REFERENCE_DIR / "entity_current_names.csv"
 SEC_DATASETS_DIR = RAW_DIR / "sec_datasets"
 FILINGS_DIR = RAW_DIR / "filings"
 THIRD_PARTY_DIR = RAW_DIR / "third_party"

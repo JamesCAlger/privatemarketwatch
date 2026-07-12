@@ -15,6 +15,7 @@ import pandas as pd
 from pipeline.config import (
     COMBINED_UNIVERSE_FILE,
     COMBINED_UNIVERSE_JSON,
+    ENTITY_CURRENT_NAMES_FILE,
     VALIDATION_REPORT_FILE,
 )
 
@@ -82,6 +83,44 @@ def _fuzzy_match_score(a: str, b: str) -> float:
     return full
 
 
+def _apply_entity_name_overlay(
+    df: pd.DataFrame,
+    overlay_file=ENTITY_CURRENT_NAMES_FILE,
+) -> pd.DataFrame:
+    """Overwrite ``entity_name`` with current SEC registrant names.
+
+    Universe entity names come from EFTS ``display_names`` captured at
+    discovery time, which are frozen at the filing-date name -- funds that
+    rename after their election filing (e.g. Owl Rock -> Blue Owl) keep the
+    stale name. ``scripts/refresh_entity_names.py`` snapshots current names
+    from the SEC submissions API into ``overlay_file``; this applies them so
+    refreshed names survive universe rebuilds.
+    """
+    if not overlay_file.exists():
+        return df
+    try:
+        overlay = pd.read_csv(overlay_file, dtype=str)
+    except Exception as exc:
+        logger.warning("Could not read entity name overlay %s: %s",
+                       overlay_file, exc)
+        return df
+    if overlay.empty or not {"cik", "entity_name"} <= set(overlay.columns):
+        logger.warning("Entity name overlay %s missing cik/entity_name "
+                       "columns -- skipping", overlay_file)
+        return df
+    overlay = overlay.dropna(subset=["cik", "entity_name"])
+    overlay["cik"] = overlay["cik"].astype(str).str.strip().str.zfill(10)
+    name_by_cik = dict(zip(overlay["cik"], overlay["entity_name"]))
+    mapped = df["cik"].map(name_by_cik)
+    changed = mapped.notna() & (mapped != df["entity_name"])
+    if changed.any():
+        df = df.copy()
+        df.loc[changed, "entity_name"] = mapped[changed]
+        logger.info("Entity name overlay: updated %d universe rows from %s",
+                    int(changed.sum()), overlay_file.name)
+    return df
+
+
 def merge_universes(
     bdc_df: pd.DataFrame,
     fund_df: pd.DataFrame,
@@ -128,6 +167,10 @@ def merge_universes(
 
     # Pad CIK to 10 digits
     combined["cik"] = combined["cik"].astype(str).str.strip().str.zfill(10)
+
+    # Apply current-name overlay before third-party matching so fuzzy name
+    # matching runs against up-to-date registrant names.
+    combined = _apply_entity_name_overlay(combined)
 
     logger.info("Combined universe: %d entities before validation", len(combined))
     logger.info("  BDCs: %d", (combined["vehicle_type"] == "bdc").sum())

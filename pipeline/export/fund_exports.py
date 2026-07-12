@@ -1,6 +1,18 @@
 """Frontend export helpers split from pipeline.export_frontend."""
 
+import re
+
 from pipeline.export.helpers import *
+
+# EFTS-sourced universe names carry a "(CIK 0001234567)" suffix; never
+# let it reach the public UI.
+_CIK_SUFFIX_RE = re.compile(r"\s*\(CIK\s+\d+\)\s*")
+
+
+def _display_fund_name(name: str) -> str:
+    """Strip EFTS '(CIK NNNN)' annotations and collapse whitespace."""
+    return " ".join(_CIK_SUFFIX_RE.sub(" ", name or "").split()).strip()
+
 
 def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
     """Export fund_list.json -- universe with latest-quarter snapshot."""
@@ -144,7 +156,7 @@ def _export_fund_list(con: duckdb.DuckDBPyConnection) -> None:
         d = dict(zip(cols, row))
         out.append({
             "cik": d["cik"],
-            "name": d["name"],
+            "name": _display_fund_name(d["name"]),
             "vehicleType": d["vehicle_type"],
             "adviser": d["adviser"] or CIK_TO_MANAGER_BRAND.get(str(d["cik"]).zfill(10), ""),
             "ticker": d["ticker"],
@@ -605,8 +617,7 @@ def _compose_blurb(
     would require outside knowledge (market segment, manager strategy) are
     deliberately omitted to avoid unsourced assertions.
     """
-    import re
-    clean = re.sub(r"\s*\(CIK\s+\d+\)\s*", " ", name or "")
+    clean = _display_fund_name(name)
     tk = ticker
     m = re.search(r"\(([A-Z]{1,5})\)", clean)
     if m:
@@ -1028,7 +1039,7 @@ def _export_fund_details(con: duckdb.DuckDBPyConnection) -> None:
                 "totalAssets": _peer_num(_latest.get("total_assets")),
             })
 
-        _fund_name = str(rows.iloc[-1].get("entity_name", ""))
+        _fund_name = _display_fund_name(str(rows.iloc[-1].get("entity_name", "")))
         _ticker = id_info.get("ticker", "")
         fund_data = {
             "cik": cik_val,

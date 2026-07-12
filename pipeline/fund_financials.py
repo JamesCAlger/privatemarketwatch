@@ -1892,9 +1892,14 @@ def build_fund_financials(
                     entity_name AS univ_entity_name,
                     vehicle_type,
                     TRY_CAST(withdrawal_date AS DATE) AS withdrawal_date,
+                    -- vehicle_type tiebreak: some CIKs carry duplicate
+                    -- universe rows with identical names but conflicting
+                    -- types (e.g. interval vs tender_offer); without it the
+                    -- winner is nondeterministic.
                     ROW_NUMBER() OVER (
                         PARTITION BY LPAD(CAST(cik AS VARCHAR), 10, '0')
-                        ORDER BY LENGTH(entity_name) DESC, entity_name ASC
+                        ORDER BY LENGTH(entity_name) DESC, entity_name ASC,
+                                 COALESCE(vehicle_type, '') ASC
                     ) AS _rn
                 FROM universe
             ) WHERE _rn = 1
