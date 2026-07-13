@@ -6711,3 +6711,166 @@ computed artifact, and the hand-run remediation pass codified as a runbook.
   GOALS, not validated tolerances; current state failing them is the honest
   reading, not a miscalibration. Recalibrate after Wave 2 and record the basis in
   the thresholds file.
+
+## 2026-07-12: Rate-convention classifier (pipeline/rate_convention.py) -- built + effectiveness-tested
+
+Prerequisite for the decided all-in interest_rate migration and for re-adding the
+retired pik_le_interest_rate identity rule. Measurement only: writes
+data/output/rate_convention.csv (config RATE_CONVENTION_FILE); does NOT touch holdings.
+
+- **Design**: per-CIK label {cash_leg, all_in, unknown, no_pik} from 4 signals:
+  S1 ordering violations (interest < pik - 0.01 convicts cash_leg; rate>=5% AND
+  count>=8 -- rate-only thresholds miss Barings/Golub at 7-14%), S2 income
+  reconciliation (r=(interest_income-base)/pik_add ~0 all_in / ~1 cash_leg;
+  per-quarter votes, tagged interest_income else total_investment_income scaled
+  by calibrated non-interest share with stricter gates), S3 phrasing votes (3
+  global regexes recomputed live -- no stored grammar to go stale), S4
+  cross-quarter stability. Any signal conflict -> unknown (3 conflict routes),
+  never a guess. Epsilon matters: interest==pik is legitimate under all-in
+  storage (100%-PIK positions).
+- **Results (170 CIKs with PIK evidence)**: cash_leg 35 (6 high/23 med/6 low),
+  all_in 36 (7 med/29 low), unknown 90, no_pik 9. Decided CIKs carry ~2/3 of all
+  PIK rows (unknowns skew small: median 100 vs 273 pik rows).
+- **Effectiveness**: held-out eval (phrasing suppressed, numeric S1+S2 only,
+  judged against 45 decisive-phrasing gold CIKs): 7/8 decided agree (88%);
+  the 1 miss (0001786835) is routed to unknown by the full classifier's
+  s2_s3_conflict rule. Known-filer spot checks 4/4 correct (Barings 1859919,
+  Oaktree 1872371, Golub 1901612/1930087 -- all cash_leg/medium).
+- **Known limitations**: (i) decided coverage 44% of PIK-relevant CIKs -- the
+  90 unknowns are the bounded-adjudication residual; (ii) income signal reaches
+  only 36/161 CIKs (interest_income tagged in ~14% of quarterly income rows;
+  principal coverage + 0.4-2.5x coverage band); (iii) all_in detection is mostly
+  phrasing-based (low confidence) since S1 can only convict cash_leg;
+  (iv) keyed by CIK, not identifier-format-family (S4 unstable -> unknown is
+  the interim guard).
+- Tests: tests/test_rate_convention.py, 26 passed. Runtime ~90s. Full suite NOT
+  run (additive module; no existing behavior changed except config constant).
+
+## 2026-07-12: Rate-convention classifier -- V1 cohort run + negative-r floor
+
+- **INCOME_R_FLOOR=-0.25**: strongly negative r (predicted base income alone
+  overshoots actual interest income) is measurement noise, not all-in evidence;
+  such quarters no longer vote all_in. Flushed unsound income votes (universe
+  all_in/medium 7->2); Monroe (1742313) moved s1_s2_conflict -> s1_unstable
+  (S1 convicts but violations are quarter-concentrated -- format-change guard).
+  Held-out agreement unchanged at 7/8 (88%). 27 tests pass.
+- **V1 cohort (70 wrapper-cohort CIKs)**: 19 all_in / 13 cash_leg / 33 unknown /
+  5 no-PIK-evidence. Cohort latest-quarter PIK-position FV $43.6bn (of $391bn);
+  decided labels cover ~42% of cohort PIK FV. Largest cash_leg (site WAC
+  understates their coupon today): ARCC $6.2bn PIK FV (income_reconciliation),
+  Golub PCF $1.4bn, Barings $0.6bn. Largest unknowns (adjudication priority,
+  zero violations over 100s of dual rows + no informative income quarters --
+  plausibly all_in but unproven): BCRED $11.8bn, HPS CLF $3.4bn, Blue Owl OCIC
+  $3.3bn (no dual-rate rows at all), Ares Strategic Income $2.1bn.
+
+## 2026-07-12: Rate-convention classifier extensions -- statistical ceiling + spread arithmetic (S5)
+
+- **Statistical ceiling (all_in conviction)**: confirmed cash-leg filers violate on
+  7-40% of dual rows, so 0 violations across >=60 dual rows WITH >=8 near-cap rows
+  (pik >= 0.8*interest, incl. equality) is a hard ceiling at exactly interest_rate --
+  the signature of PIK being a subset of the stored rate. Guarded by conflict routing
+  (any cash signal -> ceiling_conflict/unknown).
+- **S5 spread arithmetic, ALL_IN-ONLY**: rows fitting ir = spread + bench_q + pik
+  (bench_q = per-quarter median of ir-spread over NON-PIK floating rows) prove the
+  spread is cash while ir is all-in. IMPORTANT NEGATIVE RESULT baked into the design:
+  the converse (ir = spread + bench) is AMBIGUOUS, not cash evidence -- "incl PIK"
+  filers quote all-in SPREADS too. The first S5 draft voted cash on that pattern and
+  wrongly convicted 14 gold all-in filers (held-out agreement fell to 44%); removed.
+- **Held-out (numeric-only vs 45 phrasing-gold)**: 13/15 decided agree (87%), coverage
+  doubled (was 8 decided). Both disagreements are conflicts the full classifier routes
+  to unknown (0001552198 ceiling_conflict, 0001786835 numeric_s3_conflict). 38 tests.
+- **Universe**: unknown 90 -> 70; all_in 36 -> 56 (8 high / 25 med / 23 low).
+- **V1 cohort**: 32 all_in / 12 cash_leg / 21 unknown / 5 no-pik; decided share of
+  cohort PIK FV 42% -> 79%. BCRED ($11.8bn), HPS ($3.4bn), OHA resolved all_in via
+  ceiling. Remaining unknown $9.0bn is adjudication-shaped: Blue Owl x2 ($4.1bn, no
+  dual-rate rows -- no numeric signal possible), Ares SIF ($2.1bn, 0/230 violations
+  but near-cap mass absent -- numerically indistinguishable), Monroe/Stellus
+  (s1_unstable conflicts), Diameter (53 dual rows, just under the 60-row ceiling
+  gate), + small tail.
+
+## 2026-07-12: Convention Adjudicator spec (rev 1)
+
+- New `docs/adjudication_architecture/convention_adjudicator_spec.md`: the agent
+  lane for the rate-convention classifier residual (currently 21 cohort / 70
+  universe unknowns). Anchor-shaped (per-CIK fact -> promoted override with a
+  deterministic verify gate), reusing the B1/anchor plumbing: discover/prep/
+  verify/promote driver, prompt+manifest+leaf lifecycle, evidence_cli bundles,
+  Codex dispatch harness with all known sandbox gotchas.
+- Key design points: prompt is BLIND to classifier signals (anti-anchoring;
+  keeps the verify cross-check non-circular); verify = citation reconciliation
+  against stored rates (0.05pp, >=2 positions, opposite-convention hard fail)
+  + signal-contradiction gate + MEDIUM tier caps; override merge in
+  pipeline.rate_convention with self-detecting staleness (later contradicting
+  signals demote the override and re-queue the CIK); `indeterminate` is a
+  promotable verdict -> conservative migration default + quality flag.
+- Spec only -- no code built. Tests enumerated in section 11 gate the first
+  dispatch.
+
+## 2026-07-13: Convention Adjudicator BUILT (spec rev 1 implemented)
+
+Agent lane for the rate-convention classifier residual. New modules:
+
+- `pipeline/convention_leaf.py`: leaf schema + validation (decided verdict
+  needs >=2 position citations with parsed printed numbers; indeterminate
+  needs a search_trail; utf-8-sig loader).
+- `pipeline/convention_validation.py`: the un-gameable verify -- citation
+  reconciliation against stored rates (0.05pp; opposite-convention hard fail;
+  multi-tranche issuers fit if ANY tranche fits), signal-contradiction gate
+  (thresholds imported from the classifier so they cannot drift), tier caps
+  (no header/footnote, applies_from backdating, pik-only). NEW vs spec:
+  pik-only PARTIAL reconciliation -- Blue Owl-shape filers store NULL
+  interest_rate on PIK rows, making full reconciliation unsatisfiable; pik
+  magnitude corroboration is accepted at a MEDIUM cap (found via live smoke).
+- `scripts/agent_convention/run_convention.py`: discover/prep/verify/promote
+  driver (anchor pattern). discover ranks unknowns by latest-quarter PIK FV,
+  run-once via override existence, matches existing review bundles (bundle
+  seam for evidence_cli). prep writes a BLIND prompt (no classifier signals;
+  navigation aids = 6 sample PIK issuers + the 3 disclosure patterns).
+  promote refuses unless verify ok; leaf + verify provenance ->
+  data/overrides/rate_convention/<cik>.json (config
+  RATE_CONVENTION_OVERRIDES_DIR).
+- `scripts/dispatch_convention_workers.ps1`: serial dispatcher (batch <= ~21;
+  avoids cloning B1's parallel job control untested); fresh per-cik TEMP
+  worker homes (stale-marker + disk-bloat safe).
+- `pipeline/rate_convention.py`: override merge -- supersedes unknown, demotes
+  stale overrides on later signal contradiction (self-detecting), terminal
+  `indeterminate` distinct from unknown, no_pik untouched.
+- **Smoke-tested on real data**: discover convsmoke found the 21 cohort
+  targets (20 with bundles; 1 NEEDS_BUNDLE = APS BDC 0002083477); prep built
+  the Blue Owl prompt with real sample positions; synthetic-leaf verify
+  exercised the pik-only path end-to-end (ok, MEDIUM, then deleted).
+- Tests: 67 passed (11 leaf + 14 validation + 42 rate_convention incl. 5
+  override-merge). Full suite NOT run (additive modules + one config constant).
+- NOT done: no workers dispatched (recal1_r2 fleet constraint applies);
+  operator runbook in the spec, section 9.
+
+## 2026-07-13: recal1 finalized + recalibration analysis (new analyze_recal.py)
+
+- recal1_r2 was already finalized (283 verdicts, schema clean). Finalized the full
+  429-rid `recal1` frame (run-1 + r2 verdicts all present in the shared store;
+  BOM strip ran clean first). Mix: 259 real / 146 false_alarm / 24 ambiguous,
+  ZERO no_source -- the cohort/engine scoping fixes hold.
+- New `scripts/ensemble/analyze_recal.py`: recal frames have no co-firing
+  manifest (analyze_ensemble refuses them by design). Computes per-rule and
+  per-fingerprint-group real/FA rates for the post-Wave-1 era, credits the 468
+  pass-stamped carry-over verdicts, and marks rules whose combined Wilson CI is
+  DISJOINT from the ens2 prior. Outputs recal_per_rule.csv, recal_per_group.csv,
+  recal_summary.md in data/output/ensemble/recal1/.
+- **Calibration validated out-of-sample (CI-disjoint shifts):** FX02 85%->3.3% FP,
+  FX03 82%->0% FP, X07 90%->54% FP. The one-shot USD-alias/category scope fixes
+  suppressed the FA mass; surviving FX02/FX03 flags are now ~97-100% REAL.
+- **New high-precision rules measured:** C206 30/30 real (no ens2 prior),
+  fmt_issuer_name 28/28 real, nonaccrual_flag still 0 FA (29 combined). D06
+  improved 60%->17% FP (not CI-disjoint). These are direct-route candidates
+  (skip B1, straight to mechanism lane).
+- **Regressions/kills:** X08 55%->89% FP (0 real in 12 new) -- demote candidate;
+  X10 20%->67% FP and fmt_basis_spread 0%->50% FP -- investigate composition vs
+  genuine regression before acting (ens2 priors were small-n for both). C107
+  unchanged at ~91% FP -- reconfirms it needs the printed-cell gate, not
+  row-local predicates.
+- **Divergent groups confirmed:** FX01|0001803498 and FX01|0001901037 are ~100%
+  real (comb FP 0%/6.7%) -- per-(rule,CIK) routing justified where rule-level
+  FX01 is 40% FP. A07|0002031750 carry-only (100% FA, n=2, wide CI);
+  X08|0002031750 still zero adjudicable flags (needs leaf archive, known).
+- NOT run: pytest (analysis script verified against finalize summaries + memory
+  counts: 429/429, mix exact match), no rebuilds, no dispatch.
