@@ -180,10 +180,83 @@ def _leaf_path(cik: str, target_quarter: str) -> Path:
     return BASE / _norm(cik) / "leaf" / f"convention.{target_quarter}.json"
 
 
+def _tagging_facts(cik: str, target_quarter: str) -> dict:
+    """Filer-authored XBRL tagging facts for the prompt (navigation aid).
+
+    Sourced from the SEC BDC dataset artifacts (linkbase_analysis). These are
+    the filer's OWN declarations -- which rate concepts it tags and the column
+    labels it filed in its presentation linkbase -- the same epistemic class
+    as the filing text, so the prompt stays blind to classifier/S0
+    conclusions (no sum-test results, no votes). Empty dict when artifacts
+    are absent or the CIK is uncovered.
+    """
+    sem_p = config.LINKBASE_ANALYSIS_DIR / "dataset_rate_semantics.csv"
+    lbl_p = config.LINKBASE_ANALYSIS_DIR / "dataset_pre_rate_labels.csv"
+    if not sem_p.exists():
+        return {}
+    key = _norm(cik)
+    periods: dict[str, dict] = {}
+    adshes: set[str] = set()
+    with open(sem_p, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if _norm(r.get("cik")) != key:
+                continue
+            adshes.add(r.get("adsh") or "")
+            p = (r.get("period") or "")[:10]
+            slot = periods.setdefault(p, {"bare": 0, "cash": 0, "pik": 0})
+            for src, dst in (("n_bare", "bare"), ("n_cash", "cash"), ("n_pik", "pik")):
+                try:
+                    slot[dst] += int(float(r.get(src) or 0))
+                except ValueError:
+                    pass
+    if not periods:
+        return {}
+    tq = target_quarter[:10]
+    usage = periods.get(tq) or periods[max(periods)]
+    # era transitions: first period each concept appears (helps applies_from)
+    first_seen = {}
+    for concept in ("bare", "cash", "pik"):
+        seen = sorted(p for p, s in periods.items() if p and s[concept] > 0)
+        if seen:
+            first_seen[concept] = seen[0]
+    labels: dict[str, list] = {}
+    if lbl_p.exists() and adshes:
+        with open(lbl_p, newline="", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if (r.get("adsh") or "") not in adshes:
+                    continue
+                tag = r.get("tag") or ""
+                lbl = (r.get("plabel") or "").strip()
+                if tag and lbl and lbl not in labels.setdefault(tag, []):
+                    labels[tag].append(lbl)
+    return {"target_usage": usage, "concept_first_seen": first_seen,
+            "declared_labels": {t: v[:4] for t, v in labels.items()}}
+
+
+def _tagging_section(facts: dict) -> str:
+    if not facts:
+        return ""
+    u = facts.get("target_usage") or {}
+    lines = [f"- rate concepts tagged (target quarter): bare InvestmentInterestRate on "
+             f"{u.get('bare', 0)} rows; PaidInCash on {u.get('cash', 0)}; "
+             f"PaidInKind on {u.get('pik', 0)}"]
+    fs = facts.get("concept_first_seen") or {}
+    if fs.get("cash"):
+        lines.append(f"- PaidInCash tagging first appears {fs['cash']} "
+                     "(weigh this when claiming applies_from)")
+    for tag, lbls in (facts.get("declared_labels") or {}).items():
+        lines.append(f"- declared label(s) for {tag}: " + "; ".join(f'"{x}"' for x in lbls))
+    return ("\n## Filer's own XBRL rate tagging (its declarations, not conclusions)\n"
+            + "\n".join(lines)
+            + "\nVerify against the PRINTED schedule -- do not decide from these alone.\n")
+
+
 def _prompt(cik: str, target_quarter: str, bundle_path: str,
-            samples: list[str], leaf_path: Path) -> str:
+            samples: list[str], leaf_path: Path,
+            tagging: dict | None = None) -> str:
     py = Path(WORKER_PYTHON).as_posix()
     names = "\n".join(f"- {s}" for s in samples) or "- (query the extracted data for PIK positions)"
+    tagging_section = _tagging_section(tagging or {})
     return f"""# What does this filer's stated interest rate MEAN? (cik {cik}, {target_quarter})
 
 You are the convention-adjudicator. ONE question, answered from the FILING: when this filer
@@ -202,7 +275,7 @@ Column HEADERS and rate FOOTNOTES are first-class evidence -- quote them. Then c
 actual schedule rows. These PIK positions exist in this filer's schedule (navigation aid
 only -- find their printed rate text):
 {names}
-
+{tagging_section}
 ## Tools (read-only; this cik only)
 - Filing (truth): {py} {_abs(EVIDENCE_CLI)} --bundle {bundle_path} totals|grid|roam|tables
 - Extracted data (to LOCATE positions, never to decide): {py} {_abs(DATA_QUERY)} --cik {cik} query --sql "<SELECT ...>"
@@ -236,14 +309,17 @@ def prep(cik: str, target_quarter: str, bundle_path: str | None = None) -> dict:
                 "note": "generate a review bundle for this cik-quarter first "
                         "(prepare_fresh_batch bundle-gen seam)"}
     samples = _sample_positions(cik, target_quarter)
+    tagging = _tagging_facts(cik, target_quarter)
     out = BASE / _norm(cik)
     leaf_path = _leaf_path(cik, target_quarter)
     leaf_path.parent.mkdir(parents=True, exist_ok=True)
     prompt_path = out / f"prompt.{target_quarter}.md"
     prompt_path.write_text(
-        _prompt(cik, target_quarter, bundle_path, samples, leaf_path), encoding="utf-8")
+        _prompt(cik, target_quarter, bundle_path, samples, leaf_path,
+                tagging=tagging), encoding="utf-8")
     manifest = {"cik": _norm(cik), "target_quarter": target_quarter,
                 "bundle_path": bundle_path, "sample_positions": samples,
+                "tagging_facts": tagging,
                 "leaf_path": str(leaf_path), "prompt": str(prompt_path),
                 "data_query_cli": DATA_QUERY, "evidence_cli": EVIDENCE_CLI}
     (out / f"manifest.{target_quarter}.json").write_text(
@@ -282,6 +358,16 @@ def _classifier_stats(cik: str) -> dict:
     return {}
 
 
+def _s0_signal(cik: str) -> dict:
+    """The CIK's S0 tag-fingerprint row (verify-side evidence; prompt stays
+    blind to it). Empty dict when the artifact is absent."""
+    from pipeline.rate_convention import load_s0_signal
+    try:
+        return load_s0_signal().get(int(_norm(cik)), {})
+    except (ValueError, TypeError):
+        return {}
+
+
 def verify(cik: str, target_quarter: str) -> dict:
     leaf_path = _leaf_path(cik, target_quarter)
     leaf = load_convention_leaf(leaf_path)
@@ -293,7 +379,7 @@ def verify(cik: str, target_quarter: str) -> dict:
         return {"cik": _norm(cik), "target_quarter": target_quarter,
                 "status": "schema_errors", "schema_errors": schema_errs, "ok": False}
     chk = verify_convention(leaf, _stored_rates(cik, target_quarter),
-                            _classifier_stats(cik))
+                            _classifier_stats(cik), s0=_s0_signal(cik))
     return {"cik": _norm(cik), "target_quarter": target_quarter,
             "convention": leaf.get("convention"), "tier": chk.tier,
             "n_reconciled": chk.n_reconciled, "n_pik_only": chk.n_pik_only,

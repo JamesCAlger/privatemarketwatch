@@ -16,8 +16,14 @@ worker never saw:
      S1-convicting ordering violations, is refused (flag for human review;
      both sides documented). Thresholds are imported from the classifier so
      the gate and the classifier can never drift apart.
-  3. TIER CAPPING -- no header/footnote citation, or an applies_from claim
-     earlier than the sampled filing, caps the tier at MEDIUM.
+     S0 extension: a cash_leg verdict against an S0 arithmetic all-in proof
+     (bare == cash + PIK across triple-tagged contexts), or an all_in verdict
+     against label-guarded S0 cash-concept dominance, is likewise refused.
+     The worker never sees S0 (prompt stays blind), so this is non-circular.
+  3. TIER CAPPING -- no header/footnote citation, an applies_from claim
+     earlier than the sampled filing, an S0 mixed_tag_semantics filer (single
+     per-CIK verdict is ill-posed; migration needs per-row concept
+     provenance), or a medium-confidence S0 disagreement, caps at MEDIUM.
 
 Pure, dependency-light (no IO): the driver assembles stored rates and the
 classifier stats and passes them in. ASCII-only.
@@ -98,12 +104,15 @@ def ceiling_signature(stats: dict) -> bool:
             and int(stats.get("n_nearcap") or 0) >= CEILING_MIN_NEARCAP)
 
 
-def verify_convention(leaf: dict, stored_rates: dict, stats: dict) -> ConventionCheck:
+def verify_convention(leaf: dict, stored_rates: dict, stats: dict,
+                      s0: dict | None = None) -> ConventionCheck:
     """Run checks 1-3 over a schema-valid leaf.
 
     ``stored_rates``: {issuer_name_lower: (interest_rate, pik_rate)} for the
     CIK's target quarter. ``stats``: the CIK's row from rate_convention.csv
-    (n_dual, n_viol, n_nearcap). Both come from data the worker never saw.
+    (n_dual, n_viol, n_nearcap). ``s0``: the CIK's S0 tag-fingerprint signal
+    (rate_convention.load_s0_signal), optional. All come from data the worker
+    never saw.
     """
     res = ConventionCheck()
     conv = str(leaf.get("convention") or "")
@@ -171,6 +180,22 @@ def verify_convention(leaf: dict, stored_rates: dict, stats: dict) -> Convention
                            "S1-convicting ordering violations -- human review")
         return res
 
+    # S0 contradiction gate (tag-fingerprint evidence; worker never saw it)
+    s0_vote = (s0 or {}).get("s0_vote")
+    s0_conf = (s0 or {}).get("s0_confidence")
+    if conv == "cash_leg" and s0_vote == "all_in":
+        res.ok = False
+        res.reasons.append("refused_contradiction: cash_leg verdict but S0 arithmetic "
+                           "proof shows bare rate == cash + PIK in the filer's own "
+                           "tagging -- human review")
+        return res
+    if conv == "all_in" and s0_vote == "cash_leg" and s0_conf == "high":
+        res.ok = False
+        res.reasons.append("refused_contradiction: all_in verdict but the stored rate "
+                           "column is label-guarded InvestmentInterestRatePaidInCash "
+                           "tagging -- human review")
+        return res
+
     # tier
     has_header = any((c or {}).get("kind") in ("header", "footnote")
                      for c in (leaf.get("citations") or []))
@@ -186,5 +211,14 @@ def verify_convention(leaf: dict, stored_rates: dict, stats: dict) -> Convention
     if af and str(af) < tq and res.tier == HIGH:
         res.tier = MEDIUM
         res.reasons.append("applies_from predates the sampled filing -- capped at MEDIUM")
+    if (s0 or {}).get("s0_mixed") and res.tier == HIGH:
+        res.tier = MEDIUM
+        res.reasons.append("S0: stored column mixes rate-concept semantics (per-CIK "
+                           "verdict is ill-posed; migration needs per-row provenance) "
+                           "-- capped at MEDIUM")
+    if conv == "all_in" and s0_vote == "cash_leg" and s0_conf != "high" and res.tier == HIGH:
+        res.tier = MEDIUM
+        res.reasons.append("S0 cash-concept dominance (unguarded labels) disagrees "
+                           "-- capped at MEDIUM")
     res.ok = True
     return res

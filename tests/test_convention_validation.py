@@ -114,3 +114,61 @@ def test_pik_only_with_wrong_pik_magnitude_refused():
     stored = {"acme corp": [(None, 9.99)], "beta llc": [(None, 9.99)]}
     chk = verify_convention(_leaf(), stored, NEUTRAL_STATS)
     assert not chk.ok
+
+
+# --------------------------------------------------------------------- S0 gate
+
+CASH_LEAF_CITS = [
+    {"kind": "header", "quote": "Cash Rate / PIK Rate", "where": "SOI"},
+    {"kind": "position", "issuer": "Acme Corp",
+     "quote": "9.50% Cash, 3.00% PIK", "printed_cash": 9.50, "printed_pik": 3.00},
+    {"kind": "position", "issuer": "Beta LLC",
+     "quote": "8.00% Cash, 2.00% PIK", "printed_cash": 8.00, "printed_pik": 2.00},
+]
+
+
+def test_s0_gate_refuses_cash_leg_against_arithmetic_all_in_proof():
+    s0 = {"s0_vote": "all_in", "s0_confidence": "high", "s0_mixed": False}
+    chk = verify_convention(
+        _leaf(convention="cash_leg", citations=CASH_LEAF_CITS),
+        CASH_STORED, NEUTRAL_STATS, s0=s0)
+    assert not chk.ok
+    assert any("refused_contradiction" in r and "bare rate == cash + PIK" in r
+               for r in chk.reasons)
+
+
+def test_s0_gate_refuses_all_in_against_high_cash_concept_dominance():
+    s0 = {"s0_vote": "cash_leg", "s0_confidence": "high", "s0_mixed": False}
+    chk = verify_convention(_leaf(), ALL_IN_STORED, NEUTRAL_STATS, s0=s0)
+    assert not chk.ok
+    assert any("PaidInCash" in r for r in chk.reasons)
+
+
+def test_s0_medium_cash_disagreement_caps_tier_not_refuses():
+    # unguarded-label S0 (First Eagle failure mode exists) -> cap, don't refuse
+    s0 = {"s0_vote": "cash_leg", "s0_confidence": "medium", "s0_mixed": False}
+    chk = verify_convention(_leaf(), ALL_IN_STORED, NEUTRAL_STATS, s0=s0)
+    assert chk.ok
+    assert chk.tier == MEDIUM
+    assert any("unguarded" in r for r in chk.reasons)
+
+
+def test_s0_mixed_semantics_caps_tier():
+    s0 = {"s0_vote": None, "s0_confidence": None, "s0_mixed": True}
+    chk = verify_convention(_leaf(), ALL_IN_STORED, NEUTRAL_STATS, s0=s0)
+    assert chk.ok
+    assert chk.tier == MEDIUM
+    assert any("per-row provenance" in r for r in chk.reasons)
+
+
+def test_s0_agreement_leaves_verdict_untouched():
+    s0 = {"s0_vote": "all_in", "s0_confidence": "high", "s0_mixed": False}
+    chk = verify_convention(_leaf(), ALL_IN_STORED, NEUTRAL_STATS, s0=s0)
+    assert chk.ok
+    assert chk.tier == HIGH
+
+
+def test_no_s0_behaves_exactly_as_before():
+    chk = verify_convention(_leaf(), ALL_IN_STORED, NEUTRAL_STATS)
+    assert chk.ok
+    assert chk.tier == HIGH

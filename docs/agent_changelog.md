@@ -6923,3 +6923,37 @@ Agent lane for the rate-convention classifier residual. New modules:
   evidence), soi.tsv row-set reconciliation (recommended future gate).
 - **Downloads:** user-approved 2026-07-20; 25 BDC dataset zips (~410 MB) via
   rate-limited sequential fetch with declared User-Agent.
+
+### 2026-07-21 -- interest_rate_concept backfill (full re-extraction) + S0 into adjudicator verify/prep
+
+- **Full cache re-extraction** (user-approved): 2,985 accessions re-parsed from
+  data/raw/filings/bdc_xbrl, zero parse errors. Parity vs pre-run snapshot
+  (data/snapshots/pre_reextract_2026-07-21/): all 1,922 previously-extracted
+  accessions identical in row count AND fair-value sum; 3 new filings added
+  3,568 rows (bdc_holdings.csv now 1,184,101 rows). interest_rate_concept
+  populated on 702,255 rate rows (32,487 paid_in_cash / 669,768 bare);
+  4,313 rate rows carry no provenance -- dedupe fill-ins where interest_rate
+  was borrowed from a sibling context (0.6%, expected).
+  NOTE: read_csv_auto(ignore_errors=true) on bdc_holdings.csv drops ~4K rows
+  nondeterministically by projection -- use the parquet companion for counts.
+- **Unified rebuild + shadow ledger validation:** private_markets_holdings
+  rebuilt (792,613 rows): 4,017/4,017 common CIK-quarter groups identical to
+  snapshot (0 differing), 1 new group (Saratoga 0001377936 2026-05-31, 357
+  rows). Shadow ledger regenerated: 261,123/261,141 statuses identical to
+  baseline, 24 additions (all the new Saratoga quarter), 0 real flips
+  (apparent I08/StepStone flips were a NULL-period join artifact; per-rule
+  distributions identical).
+- **S0 into the adjudicator (blind design preserved):**
+  - convention_validation.verify_convention gains optional s0 param:
+    refuses cash_leg vs S0 arithmetic all-in proof; refuses all_in vs
+    label-guarded S0 cash-concept dominance; medium (unguarded) S0
+    disagreement and mixed_tag_semantics cap tier at MEDIUM instead.
+    Driver verify passes s0 automatically (load_s0_signal).
+  - run_convention prep: prompt/manifest gain a "filer's own XBRL rate
+    tagging" section (concept usage counts, first-seen dates per concept for
+    applies_from, declared presentation-linkbase labels). Sum-test results,
+    S0 votes, and classifier stats stay OUT of the prompt; tests assert no
+    verdict-like text leaks.
+  - Tests: +6 verify-gate (test_convention_validation.py -> 22), +4 prep
+    tagging (new tests/test_convention_prep_tagging.py, incl. live Stellus
+    artifact check).
