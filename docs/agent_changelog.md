@@ -6957,3 +6957,117 @@ Agent lane for the rate-convention classifier residual. New modules:
   - Tests: +6 verify-gate (test_convention_validation.py -> 22), +4 prep
     tagging (new tests/test_convention_prep_tagging.py, incl. live Stellus
     artifact check).
+
+### 2026-07-21 -- Unique-catch analysis for high-FP review rules (kill-decision input)
+
+- New `scripts/ensemble/unique_catch_analysis.py`: joins all 1,323 decided
+  flag-level B1 verdicts (ens1+ens2+recal1 + survived_exact carryover) to
+  era-matched review-queue co-firing context; measures per-rule whether real
+  flags sit on units no other (kept) rule flags. Outputs in
+  `data/output/ensemble/unique_catch/`.
+- Result: ZERO unique catches across the 11-rule high-FP set (89 real flags,
+  all unit-covered by rules outside the set; X08 10/10 reals also have an
+  independent adjudicated real on the same unit). Full write-up in
+  `data/output/data_investigation_results.md` 2026-07-21.
+- Read-only analysis: no pipeline behavior, queue, or verdict changes; no
+  tests run (additive script, verified against known verdict counts).
+
+### 2026-07-21 -- Row-level unique-catch analysis (part 2): high-FP rules DO have unique catches
+
+- New `scripts/ensemble/row_level_unique_catch.py`: joins the 89 real high-FP
+  flags to row-level firings in `row_validation_issues.csv` (shared row_key
+  frame), pinpointing culprit rows via verdict observed_value. Outputs
+  row_level_* in `data/output/ensemble/unique_catch/`.
+- Result reverses the unit-level implication: 16 pinpointed real culprit rows
+  are flagged by NO other kept rule (zero same-column coverage even when
+  covered); all are small-magnitude extraction defects below the 0.5%
+  conservation band. Recommendation: TRACK_ONLY demotion, not deletion.
+  Full write-up: data_investigation_results.md 2026-07-21 part 2.
+- Read-only analysis; no pipeline/queue changes; no tests run.
+
+### 2026-07-21 -- Demote X08, X10, PP01 to INFO/TRACK_ONLY (user-approved routing decision)
+
+- `pipeline/column_validation.py`: X08 (recal1 89% FP) and X10 (67% FP)
+  demoted to SEVERITY_INFO + ACTION_TRACK_ONLY; PP01 likewise via a
+  per-family (severity, action) rule_map in `_adapt_position_purity`
+  (PP02/PP03 unchanged). INFO maps to ledger status `skip` in
+  `shadow_adapter._row_issues_select`, so these rules leave the review queue
+  and stop consuming B1 adjudications while still firing into
+  `row_validation_issues.csv` as investigator evidence.
+- Rationale pinned in code comments + a new Known Limitations entry
+  (`docs/reference/known_limitations.md`): these rules DO catch real errors
+  (16 row-level unique catches, see data_investigation_results.md 2026-07-21
+  part 2), but every known instance is sub-materiality ($1K-$2.2M stored FV
+  impact, below the 0.5% fv_conservation band). Deliberate trade: B1 budget
+  goes to material errors; known-class small-value defects are tracked, not
+  remediated.
+- NOT demoted: X07 (54% FP post-calibration, owns the distinctive
+  classification_lookthrough/unit_scale mechanisms -- stays live), C107
+  (pinned, awaiting printed-cell gate), C103 (already volume-cut), fmt_*
+  (small-n regressions need composition investigation first).
+- Tests: 40 test_column_validation (2 new demotion pins + PP-family update)
+  + 140 test_validate_holdings pass. `diff_outputs.py --semantic`: only the
+  known pre-existing 2026-07-11 source_reconciliation cache drift; no
+  artifact writes this session. Standing review_queue.csv still shows the
+  old severities until the next validate/battery run regenerates it.
+
+### 2026-07-21 -- Disposition-trace diagnosis of source-only blocking rows (new script + artifacts)
+
+- New `scripts/diagnose_parser_mismatch.py`: traces every blocking source-only
+  row (2,190 rows across the blocking_* mechanisms) to the production stage
+  that lost it, via DuckDB joins of the reconciliation detail parquets against
+  raw bdc_holdings.parquet, unified BDC rows, the global aggregate predicate,
+  and the promoted-rule application audit; production-code XML replay stage
+  for rows absent from raw (none needed this run).
+- New artifacts: `data/output/parser_mismatch_diagnosis.csv` + `.md`.
+- HEADLINE: zero rows are lost at XML extraction -- all 2,190 blocking rows
+  exist in raw bdc_holdings. 1,113 die at the aggregate-identifier filter
+  (mostly pct_leaf mechanism; many look like genuine aggregates the source-only
+  classifier fails to clear). 839 rows / $21.0B source FV across 11 CIKs are
+  candidate casualties of Wave-1 promoted row-removal rules (KKR FS 308,
+  New Mountain 206, MidCap 193, Ares 40 -- counts align with
+  agent_fix_application_audit exclusion counts; CIK-level attribution, needs
+  row-level confirmation). 236 rows unattributed (next: staging filters,
+  dedupe-collapse variants). Recon matcher gap: 2 rows.
+- Consequence: the "parser mismatch" mechanism names are misnomers; no
+  extraction-side selection-knob work is needed for this pool. Priority is
+  row-level verification of the promoted-rule overlap (delete-to-balance
+  check), then aggregate-classifier boundary calibration.
+- Read-only analysis; no pipeline behavior, holdings artifacts, ledger, or
+  queue changes. No tests run (additive script; verified against the
+  residual-classification row counts). Full write-up:
+  data_investigation_results.md 2026-07-21 part 3.
+
+### 2026-07-21 -- Row-level verification of Wave-1 promoted exclusions vs source-only blockers
+
+- New `scripts/verify_promoted_exclusions.py` + artifacts
+  `data/output/verify_promoted_exclusions.csv/.md`: replays every promoted
+  row-removal rule predicate (16 rules, 11 CIKs) over the 839 E1 blocking rows
+  from the disposition-trace diagnosis; adds surviving-FV-twin check vs unified
+  and a value-based soi.tsv match against the cached SEC BDC dataset zips
+  (filer-custom concept labels handled by matching numeric cells, not column
+  names).
+- Result: 553/839 rows are row-level confirmed as promoted-rule removals
+  (~$3.5B source FV) -- KKR exact-par 246/$987M (223 soi-confirmed), New
+  Mountain NEWCRED look-through 203/$703M, HPS bare-axis 15/$1.22B, Fortress
+  21/$228M, MidCap relationship-axis 14/$172M, Antares commitment rows 44/net
+  -$1.4M. 286 rows/$17.5B are NOT explained by any rule -- the part-3 CIK-level
+  E1 attribution was wrong for Ares (40 rows/$14.76B) and most of MidCap (179
+  rows/$2.5B); these rejoin the unattributed pool. 194 of the 286 are
+  soi-confirmed SOI rows dropped for a still-unidentified cause.
+- Phase 2 (not run): per-rule funded-vs-commitment semantics adjudication
+  against the printed SOI; soi.tsv confirms visibility, not semantics.
+- Read-only analysis; no pipeline, ledger, queue, or holdings changes; no
+  tests run (additive script). Write-up: data_investigation_results.md
+  2026-07-21 part 4.
+
+### 2026-07-21 -- Convention batch fully dispatchable: 23 review bundles generated
+
+- New scripts/generate_convention_bundles.py: builds review bundles for
+  NEEDS_BUNDLE convention-adjudicator targets from their review-queue rows
+  (per-CIK isolation; source_recon-engine rows excluded -- review_bundles
+  intentionally skips that engine and exits 0 having generated nothing,
+  which silently ate 2 of the first 21).
+- Batch conv_full_2026-07-21b: 66 targets, n_needs_bundle 0. Prep smoke test
+  (Silver Spike 1843162) confirms the S0 tagging-facts section renders in
+  worker prompts (incl. its 4-way overloaded bare-rate labels).
