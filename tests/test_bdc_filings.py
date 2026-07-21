@@ -2306,3 +2306,84 @@ class TestNonaccrualExtraction:
         result = _deduplicate_bdc_holdings(df)
         assert len(result) == 1
         assert bool(result.iloc[0]["nonaccrual_footnote"]) is True
+
+
+# ---------------------------------------------------------------------------
+# interest_rate_concept provenance (rate-convention S0 input)
+# ---------------------------------------------------------------------------
+
+XBRL_PAIDINCASH = textwrap.dedent("""\
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xbrl
+        xmlns="http://www.xbrl.org/2003/instance"
+        xmlns:xbrli="http://www.xbrl.org/2003/instance"
+        xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+        xmlns:f="http://example.com/filer"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <xbrli:context id="ctx_a">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001551901</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="f:InvestmentIdentifierAxis">
+                        <f:InvestmentIdentifierDomain>Cash Co Term Loan</f:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_b">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001551901</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="f:InvestmentIdentifierAxis">
+                        <f:InvestmentIdentifierDomain>Bare Co Term Loan</f:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <f:InvestmentInterestRatePaidInCash contextRef="ctx_a" unitRef="pure" decimals="4">0.0800</f:InvestmentInterestRatePaidInCash>
+        <f:InvestmentInterestRatePaidInKind contextRef="ctx_a" unitRef="pure" decimals="4">0.0250</f:InvestmentInterestRatePaidInKind>
+        <f:InvestmentOwnedAtFairValue contextRef="ctx_a" unitRef="usd" decimals="-3">5000000</f:InvestmentOwnedAtFairValue>
+        <f:InvestmentInterestRate contextRef="ctx_b" unitRef="pure" decimals="4">0.1050</f:InvestmentInterestRate>
+        <f:InvestmentOwnedAtFairValue contextRef="ctx_b" unitRef="usd" decimals="-3">3000000</f:InvestmentOwnedAtFairValue>
+    </xbrl>
+""")
+
+
+class TestInterestRateConceptProvenance:
+    def test_paidincash_maps_to_interest_rate_with_provenance(self, tmp_path):
+        from pipeline.bdc_filings import _parse_single_filing
+        xml = tmp_path / "pc.xml"
+        xml.write_text(XBRL_PAIDINCASH, encoding="utf-8")
+        meta = {"cik": "1551901", "entity_name": "T", "accession_number": "a",
+                "form_type": "10-K", "filing_date": "2026-02-01",
+                "report_date": "2025-12-31"}
+        records = _parse_single_filing(str(xml), meta)
+        by_id = {r["investment_identifier"]: r for r in records}
+        cash_row = by_id["Cash Co Term Loan"]
+        bare_row = by_id["Bare Co Term Loan"]
+        # value behavior unchanged: PaidInCash lands in interest_rate
+        assert cash_row["interest_rate"] == pytest.approx(0.08)
+        assert cash_row["pik_rate"] == pytest.approx(0.025)
+        # provenance records WHICH concept won the column
+        assert cash_row["interest_rate_concept"] == "paid_in_cash"
+        assert bare_row["interest_rate_concept"] == "bare"
+
+    def test_match_concept_paidincash_explicit(self):
+        from pipeline.bdc_filings import _match_concept
+        assert _match_concept("investmentinterestratepaidincash") == "interest_rate"
+
+    def test_no_rate_fact_leaves_provenance_empty(self, tmp_path):
+        from pipeline.bdc_filings import _parse_single_filing
+        xml = tmp_path / "m.xml"
+        xml.write_text(XBRL_MINIMAL, encoding="utf-8")
+        meta = {"cik": "1418076", "entity_name": "T", "accession_number": "a",
+                "form_type": "10-K", "filing_date": "2024-02-01",
+                "report_date": "2023-12-31"}
+        records = _parse_single_filing(str(xml), meta)
+        by_id = {r["investment_identifier"]: r for r in records}
+        # Beta Inc has no rate fact at all -> empty provenance
+        assert by_id["Beta Inc - Senior Secured Note"]["interest_rate_concept"] == ""
+        # Acme has a bare InvestmentInterestRate fact
+        assert by_id["Acme Corp - First Lien Term Loan"]["interest_rate_concept"] == "bare"

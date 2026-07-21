@@ -58,7 +58,12 @@ CONCEPT_MAP: list[tuple[str, str]] = [
     ("investmentownednumberofsharesornumberofcontracts", "shares_held"),
     # Interest rate -- IMPORTANT: longer/more-specific patterns MUST come
     # before the generic "investmentinterestrate" to avoid false matches.
+    # NOTE: InvestmentInterestRatePaidInCash maps to the SAME interest_rate
+    # column (34 filers use it; the value IS their reported cash-leg rate).
+    # Which concept won is recorded in interest_rate_concept so the rate-
+    # convention S0 signal and the all-in migration can act per row.
     ("investmentinterestratepaidinkind", "pik_rate"),
+    ("investmentinterestratepaidincash", "interest_rate"),
     ("investmentinterestratefloor", "interest_rate_floor"),
     ("investmentinterestrate", "interest_rate"),
     # PIK rate (alternate naming)
@@ -778,6 +783,12 @@ def _extract_investment_facts(
         # Keep first non-None value per column (some filings duplicate facts)
         if col not in facts_by_ctx[ctx_ref] or facts_by_ctx[ctx_ref][col] is None:
             facts_by_ctx[ctx_ref][col] = value
+            if col == "interest_rate":
+                # Provenance: which taxonomy concept won this column. A
+                # PaidInCash win means the stored value is the filer-declared
+                # CASH leg (rate-convention S0 / all-in migration input).
+                facts_by_ctx[ctx_ref]["interest_rate_concept"] = (
+                    "paid_in_cash" if "paidincash" in local else "bare")
             if col in ("fair_value", "cost", "principal_amount"):
                 facts_by_ctx[ctx_ref][f"{col}_unit"] = elem.get("unitRef", "") or ""
             if dec_val is not None:
@@ -813,6 +824,7 @@ def _extract_investment_facts(
             record[vc] = fact_vals.get(vc)
         for uc in _UNIT_COLUMNS:
             record[uc] = fact_vals.get(uc, "")
+        record["interest_rate_concept"] = fact_vals.get("interest_rate_concept", "")
         records.append(record)
 
     return records

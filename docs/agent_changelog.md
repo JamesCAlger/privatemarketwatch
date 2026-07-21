@@ -6874,3 +6874,52 @@ Agent lane for the rate-convention classifier residual. New modules:
   X08|0002031750 still zero adjudicable flags (needs leaf archive, known).
 - NOT run: pytest (analysis script verified against finalize summaries + memory
   counts: 429/429, mix exact match), no rebuilds, no dispatch.
+
+### 2026-07-20 -- Linkbase-layer evidence: S0 tag-fingerprint signal for rate convention; BDC dataset path fix
+
+- **What changed.**
+  - `pipeline/rate_convention.py`: new S0 signal (concept-QName + label-guarded
+    fingerprint; pure `s0_from_fingerprint`, opt-in `s0=` param on
+    `build_rate_convention`, artifact loader `load_s0_signal`). New output
+    columns: `s0_vote`, `s0_confidence`, `mixed_tag_semantics`. Basis
+    `tag_fingerprint`; conflicts `s0_s1_conflict` / `s0_ceiling_conflict` /
+    `s0_conflict`. Numeric signals block S0; S3 phrasing alone does not
+    (recorded as a note) -- rationale in module docstring.
+  - `pipeline/bdc_filings.py`: `InvestmentInterestRatePaidInCash` now an
+    explicit CONCEPT_MAP entry (same `interest_rate` column -- value behavior
+    unchanged) and new per-row provenance column `interest_rate_concept`
+    ('bare' | 'paid_in_cash' | ''). Backfills only as accessions are
+    (re)parsed; historical rows empty until a full cache re-extraction.
+  - `pipeline/config.py` + `pipeline/bdc_universe.py`: BDC dataset URL moved
+    by SEC to /files/datastandardsinnovation/ (old /structureddata/ 404s);
+    added `LINKBASE_ANALYSIS_DIR`, `S0_CONVENTION_SIGNAL_FILE`.
+  - New scripts: `scripts/scan_rate_tag_fingerprint.py` (17 GB instance-cache
+    scan -> rate fingerprints + FV dimension buckets),
+    `scripts/analyze_bdc_dataset_linkbase.py` (soi/cal/pre tables from the 25
+    downloaded dataset zips, now in `data/raw/sec_datasets/bdc_monthly/`),
+    `scripts/build_s0_convention_signal.py` (label-guarded S0 artifact).
+- **Verdict deltas (rate_convention.csv, 170 CIKs):** unknown 70 -> 66
+  (Gladstone 1143513 + Stellus 1551901/1901037 -> cash_leg high; WhiteHorse
+  1552198 -> all_in high via 589/594 sum proof), Fidus 1513363 medium -> high,
+  Great Elm 1675033 stays unknown with sharper basis (s0_s1_conflict),
+  9 CIKs flagged mixed_tag_semantics (incl. BlackRock TCP/DLC/PCF, StepStone,
+  Monroe CC, Sixth Street, Hercules, Portman, OFS): stored interest_rate
+  mixes concept semantics -- the all-in migration MUST use the new per-row
+  `interest_rate_concept` provenance for these, not the per-CIK label.
+  No deterministic conviction was overturned. First Eagle 1890107 S0 abstains
+  (label contradiction: PaidInKind tagged as "PIK loan concentration").
+- **Guardrails/validation:** 19 new tests (16 S0 in test_rate_convention.py ->
+  62 pass; 3 provenance in test_bdc_filings.py -> 116 pass). Shadow ledger
+  does not consume rate_convention.csv (verified: no reference in
+  shadow_validation_runner.py); holdings artifacts untouched this session.
+  Semantic diff run: pre-existing branch drift only (source_reconciliation
+  caches stamped 2026-07-11, before this session); session footprint =
+  rate_convention.csv + new data/output/linkbase_analysis/ artifacts.
+- **Explicitly NOT integrated (documented in data_investigation_results.md
+  2026-07-20):** instance-derived FV anchors as a conservation gate
+  (companyfacts_fv already serves; corpus join confounded by index-facing
+  exclusions -- artifact kept as future anchor-candidate source), plabel/
+  cal-arc auto-votes (2/34 filer concept-misuse rate; kept as adjudicator
+  evidence), soi.tsv row-set reconciliation (recommended future gate).
+- **Downloads:** user-approved 2026-07-20; 25 BDC dataset zips (~410 MB) via
+  rate-limited sequential fetch with declared User-Agent.

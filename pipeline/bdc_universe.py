@@ -157,10 +157,10 @@ def _load_bdc_dataset(client: EdgarClient) -> pd.DataFrame:
         client.download_file(BDC_DATASET_URL, dest)
     except Exception as exc:
         logger.warning("Could not download BDC data set: %s", exc)
-        # Try alternate months (same /structureddata/ path)
+        # Try alternate months (same /datastandardsinnovation/ path)
         alt_urls = [
-            "https://www.sec.gov/files/structureddata/data/business-development-company-bdc-data-sets/2026_01_bdc.zip",
-            "https://www.sec.gov/files/structureddata/data/business-development-company-bdc-data-sets/2025_12_bdc.zip",
+            "https://www.sec.gov/files/datastandardsinnovation/data/business-development-company-bdc-data-sets/2026_05_bdc.zip",
+            "https://www.sec.gov/files/datastandardsinnovation/data/business-development-company-bdc-data-sets/2026_04_bdc.zip",
         ]
         downloaded = False
         for alt in alt_urls:

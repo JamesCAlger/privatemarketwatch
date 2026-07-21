@@ -92,11 +92,12 @@ NCEN_QUARTERS = [
 # ---------------------------------------------------------------------------
 DATASET_QUARTER = "2025q4"
 
-# BDC data set — monthly ZIPs (e.g. 2026_02_bdc.zip)
-# Path: /files/structureddata/data/business-development-company-bdc-data-sets/
+# BDC data set — monthly ZIPs (e.g. 2026_06_bdc.zip)
+# Path moved 2026: /files/datastandardsinnovation/data/... (was /files/structureddata/data/)
+# Landing page: https://www.sec.gov/data-research/bdc-data-sets
 BDC_DATASET_URL = (
-    "https://www.sec.gov/files/structureddata/data/"
-    "business-development-company-bdc-data-sets/2026_02_bdc.zip"
+    "https://www.sec.gov/files/datastandardsinnovation/data/"
+    "business-development-company-bdc-data-sets/2026_06_bdc.zip"
 )
 
 # N-CEN data set (quarterly TSV files inside ZIP)
@@ -293,6 +294,14 @@ DERIVATIVE_ROLE_REVIEW_FILE = OUTPUT_DIR / "derivative_role_review.csv"
 # Per-CIK interest_rate reporting-convention classification (cash_leg vs all_in;
 # measurement artifact consumed by the future all-in normalization transform)
 RATE_CONVENTION_FILE = OUTPUT_DIR / "rate_convention.csv"
+# Convention Adjudicator promoted verdicts (per-CIK leaf JSONs; merged into the
+# classifier output -- see docs/adjudication_architecture/convention_adjudicator_spec.md)
+RATE_CONVENTION_OVERRIDES_DIR = OVERRIDES_DIR / "rate_convention"
+# Linkbase-derived analysis artifacts (XBRL concept fingerprints, dataset
+# cal/pre tables, FV dimension buckets). Built by scripts/scan_rate_tag_fingerprint.py
+# and scripts/analyze_bdc_dataset_linkbase.py; S0 signal consumed by rate_convention.
+LINKBASE_ANALYSIS_DIR = OUTPUT_DIR / "linkbase_analysis"
+S0_CONVENTION_SIGNAL_FILE = LINKBASE_ANALYSIS_DIR / "s0_convention_signal.csv"
 
 # Fund-level income and fee uplift
 BDC_FUND_INCOME_FILE = OUTPUT_DIR / "bdc_fund_income.csv"
