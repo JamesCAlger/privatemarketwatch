@@ -1,0 +1,66 @@
+{
+  "cik": "0001807427",
+  "target_quarter": "2024-09-30",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule uses a single column headed Interest. For floating-rate PIK debt, the displayed reference-rate spread is the cash spread and the PIK component is printed separately in parentheses in the same Interest cell, e.g. SR + 6.25% (2.75% PIK). Thus the stated spread excludes the PIK component, which is additive. For fixed-rate PIK-only instruments, the Interest cell prints the PIK rate directly, e.g. 9.00% PIK or 11.25% PIK.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company(1)(2)(5)(20)(25) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets",
+      "where": "Consolidated Schedule of Investments, September 30, 2024"
+    },
+    {
+      "kind": "footnote",
+      "quote": "PIK interest and dividends represent accrued interest or dividends that are added to the principal amount or liquidation amount of the investment on the respective interest or dividend payment dates rather than being paid in cash and generally becomes due at maturity or at the occurrence of a liquidation event.",
+      "where": "Notes to Consolidated Financial Statements, interest income / PIK income discussion"
+    },
+    {
+      "kind": "footnote",
+      "quote": "(24) Investment contains a fixed-rate structure.",
+      "where": "Consolidated Schedule of Investments, September 30, 2024, schedule footnotes"
+    },
+    {
+      "kind": "position",
+      "issuer": "Ocala Bidco, Inc.",
+      "quote": "Ocala Bidco, Inc.(5)(6)(18) | First lien senior secured loan | SR + 6.25 % ( 2.75 % PIK) | 11/2028",
+      "printed_pik": 2.75,
+      "printed_cash": 6.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Guidehouse Inc.",
+      "quote": "Guidehouse Inc.(6) | First lien senior secured loan | SR + 5.75 % ( 2.00 % PIK) | 12/2030",
+      "printed_pik": 2.0,
+      "printed_cash": 5.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Notorious Topco, LLC (dba Beauty Industry Group)",
+      "quote": "Notorious Topco, LLC (dba Beauty Industry Group)(7) | First lien senior secured loan | SR + 7.25 % ( 2.50 % PIK) | 11/2027",
+      "printed_pik": 2.5,
+      "printed_cash": 7.25
+    },
+    {
+      "kind": "position",
+      "issuer": "PCF Midco II, LLC (dba PCF Insurance Services)",
+      "quote": "PCF Midco II, LLC (dba PCF Insurance Services)(24) | First lien senior secured loan | 9.00 % PIK | 10/2031",
+      "printed_pik": 9.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Metis HoldCo, Inc. (dba Mavis Tire Express Services)",
+      "quote": "Metis HoldCo, Inc. (dba Mavis Tire Express Services)(22)(24) | Series A Convertible Preferred Stock | 7.00 % PIK | N/A",
+      "printed_pik": 7.0
+    },
+    {
+      "kind": "position",
+      "issuer": "WMC Bidco, Inc. (dba West Monroe)",
+      "quote": "WMC Bidco, Inc. (dba West Monroe)(22)(24) | Senior Preferred Stock | 11.25 % PIK | N/A",
+      "printed_pik": 11.25
+    }
+  ],
+  "rationale": "The decisive target-quarter evidence is the Interest column's additive formatting. Floating-rate PIK positions print a cash reference-rate spread followed by a separate parenthetical PIK rate, such as SR + 6.25% (2.75% PIK), SR + 5.75% (2.00% PIK), and SR + 7.25% (2.50% PIK). Because the PIK component is separately stated after the spread, the spread is not an all-in coupon. Fixed-rate PIK-only positions print only the PIK rate with the PIK label, which is consistent with the same component-specific convention rather than an all-in total column.",
+  "confidence": 0.93,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

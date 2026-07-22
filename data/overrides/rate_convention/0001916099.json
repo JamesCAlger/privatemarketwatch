@@ -1,0 +1,70 @@
+{
+  "cik": "0001916099",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule uses a single Interest Rate column for debt and a single Dividend Rate column for preferred equity. For PIK debt, the stated Interest Rate is the all-in current coupon and the PIK component is shown parenthetically within that stated rate; it is not a separate additive rate outside the printed Interest Rate. Preferred equity rows that are wholly PIK print the dividend rate as the PIK rate itself.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investments (1) | Footnotes | Investment Type | Interest Rate (2) | Reference Rate | Spread | Acquisition Date | Maturity Date | Principal | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares",
+      "where": "Schedule of Investments, debt tables 45-50, row 1"
+    },
+    {
+      "kind": "header",
+      "quote": "Investments (1) | Footnotes | Investment Type | Dividend Rate | Reference Rate | Spread | Acquisition Date | Maturity Date | Shares/Units | Amortized Cost | Fair Value (3) | % of Net Assets Applicable to Common Shares",
+      "where": "Schedule of Investments, preferred equity table 51, row 1"
+    },
+    {
+      "kind": "position",
+      "issuer": "BVI Medical, Inc.",
+      "quote": "Term Loan | 9.97 % ( 5.00 % PIK) | SOFR | 6.25 %",
+      "printed_total": 9.97,
+      "printed_pik": 5.0,
+      "printed_cash": 4.97
+    },
+    {
+      "kind": "position",
+      "issuer": "Deerfield Dakota Holding LLC",
+      "quote": "Term Loan | 9.42 % ( 2.75 % PIK) | SOFR | 5.75 %",
+      "printed_total": 9.42,
+      "printed_pik": 2.75,
+      "printed_cash": 6.67
+    },
+    {
+      "kind": "position",
+      "issuer": "Zayo Group Holdings Inc",
+      "quote": "Term Loan | 6.83 % ( 0.50 % PIK) | SOFR | 3.61 %",
+      "printed_total": 6.83,
+      "printed_pik": 0.5,
+      "printed_cash": 6.33
+    },
+    {
+      "kind": "position",
+      "issuer": "Legends Hospitality Holding Company, LLC and ASM Buyer, Inc.",
+      "quote": "Term Loan | 9.23 % ( 2.75 % PIK) | SOFR | 5.50 %",
+      "printed_total": 9.23,
+      "printed_pik": 2.75,
+      "printed_cash": 6.48
+    },
+    {
+      "kind": "position",
+      "issuer": "SVP MVP Holdings, L.P.",
+      "quote": "Preferred Units | 12.50 % PIK | N/A",
+      "printed_total": 12.5,
+      "printed_pik": 12.5,
+      "printed_cash": 0.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Ranger Parent I, Inc.",
+      "quote": "Preferred Shares | 14.50 % PIK | N/A",
+      "printed_total": 14.5,
+      "printed_pik": 14.5,
+      "printed_cash": 0.0
+    }
+  ],
+  "rationale": "The filing presents one Interest Rate column rather than separate cash and PIK columns. On floating-rate PIK debt, the displayed total rate is paired with Reference Rate and Spread columns and the PIK amount is parenthetical inside the displayed Interest Rate, for example 9.97% (5.00% PIK), SOFR, 6.25%. That format means the 9.97% printed rate is the all-in coupon, with 5.00% of that total paid in kind. Preferred equity rows with only PIK dividends likewise print the Dividend Rate as 12.50% PIK or 14.50% PIK.",
+  "confidence": 0.95,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

@@ -7217,3 +7217,53 @@ Agent lane for the rate-convention classifier residual. New modules:
   anchor, no rules) is itself a suspect-anchor case.
 - Anchor-lane queue now: 1377936 (no anchor), 1743415 (subtotal anchor),
   1965934 (suspect anchor). nanch1 validated the mechanism this morning.
+
+### 2026-07-22 -- Convention fleet conv_full_2026-07-21b dispatched: 66/66 leaves, 40 promoted; dispatcher + leaf-schema fixes
+
+- scripts/dispatch_convention_workers.ps1 live-debugged on its maiden run (it had
+  only ever been smoke-tested to the prep stage). Three latent defects fixed:
+  (1) the operator's auth.json was never copied into the fresh per-worker
+  CODEX_HOME -- every worker 401'd ("Missing bearer") in ~30s; (2) no -WriteDirs
+  was passed, so the sandbox harness fell back to its Agent-A default and DENIED
+  writes to data/output/agent_convention/<cik>/leaf/ -- workers ran full ~7-min
+  turns and could never save the leaf; (3) no interpreter -ReadDirs/-EnvInherit,
+  so the prompt-named miniconda python (evidence_cli/data_query_cli) could not
+  execute. The dispatcher now mirrors dispatch_anchor_workers.ps1 (the proven
+  nanch1 recipe): setup with per-cik write grant + interpreter read grants +
+  EnvInherit all + AllowUserSite, then auth copy, then runner -NoSetup.
+- Fleet result: 66/66 workers produced leaves, zero worker failures, 251 min
+  serial (~3.8 min/worker median).
+- pipeline/convention_leaf.py schema fix: printed_total/printed_cash on position
+  citations are now OPTIONAL -- PIK-only instruments (PIK-only notes, PIK
+  preferred) print no cash rate, and verify_convention already counts such
+  citations as pik-only partial evidence with MIN_RECONCILED and tier caps
+  discounting them; 15/66 leaves were wrongly schema-refused for citing them.
+  When present the fields must be numeric (a string "N/A" would crash _fits).
+  tests/test_convention_leaf.py: old pin replaced with pik-only-valid +
+  printed_pik-still-required + non-numeric-rejection guards; 32 pass across
+  test_convention_leaf.py + test_convention_validation.py.
+- Verify/promote sweep (log: batch/conv_full_2026-07-21b/verify_promote_log.jsonl):
+  40/66 promoted to data/overrides/rate_convention/ (29 first pass + 11 after the
+  schema fix, incl. 1812554 Blue Owl cash_leg MEDIUM; 2 of the 11 HIGH).
+  Residuals (26): 2 schema (position citations with no printed_pik at all --
+  weak evidence, deliberately not relaxed), 4 opposite-convention hard fails +
+  1 S1-contradiction refusal (1287032 all_in) -- human review BY DESIGN, and
+  19 zero-reconcile refusals now diagnosed into three mechanisms:
+  (a) ~8 lookup misses: workers kept filing footnote markers in issuer names
+      ("Zendesk, Inc. (c)"), defeating the _lookup containment match; stored
+      rates reconcile EXACTLY once matched (1490927 Zendesk 12.15/3.25 == cited
+      cash/pik) -> verifier-side issuer-name normalization is the fix candidate;
+  (b) ~8 neither-fits: stored interest_rate sits ~0.3pp under the printed
+      all-in total while stored basis_spread equals the printed spread EXACTLY
+      (1544206 Espresso 2.63/Hadrian 5.14) -> reference-rate observation drift
+      between tagging and printing; spread-aware reconciliation is the fix
+      candidate;
+  (c) stored-pik extraction defects (1544206 Integrity Marketing pik_rate=1.0
+      vs printed 10.5, with the true value sitting in basis_spread).
+- python -m pipeline.rate_convention deliberately NOT re-run yet: held until the
+  residual-class decisions (lookup normalization / spread-aware check) so the
+  frame rebuilds once against the fullest verdict set.
+- NOTE: concurrent-session activity observed in this worktree today
+  (staging_bdc.py, test_unified_holdings.py, agent_investigate_rules promotions
+  for the 9 held CIKs). This entry and its commit scope ONLY the convention-
+  fleet files; the concurrent work belongs to its owning session.

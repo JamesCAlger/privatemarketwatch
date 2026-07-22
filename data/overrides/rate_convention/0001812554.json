@@ -1,0 +1,62 @@
+{
+  "cik": "0001812554",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has an Interest super-header split into separate Ref. Rate, Cash, and PIK columns. For floating-rate debt, the printed Ref. Rate such as S+ plus the Cash percentage is the cash leg; any PIK coupon is printed separately in the PIK column and is additive, not included in the Cash percentage. Rows with only a PIK percentage show a PIK-only stated rate in the PIK column.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company(1)(25) | Investment | Interest | Maturity Date | Par | Amortized Cost(2)(27) | Fair Value | % of Net Assets",
+      "where": "Schedule of Investments, March 31, 2026, table 16 row 1"
+    },
+    {
+      "kind": "header",
+      "quote": "Ref. Rate | Cash | PIK | Units",
+      "where": "Schedule of Investments, March 31, 2026, table 16 row 2"
+    },
+    {
+      "kind": "position",
+      "issuer": "Deerfield Dakota Holdings",
+      "quote": "Deerfield Dakota Holdings(3)(4)(9) | First lien senior secured loan | S+ | 3.00 % | 2.75 % | 9/2032 | 508,164 | -- | 505,820 | 505,623",
+      "printed_cash": 3.0,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Inovalon Holdings, Inc.",
+      "quote": "Inovalon Holdings, Inc.(3)(4)(9) | First lien senior secured loan | S+ | 2.75 % | 2.75 % | 11/2028 | 311,584 | -- | 311,230 | 299,900",
+      "printed_cash": 2.75,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Bayshore Intermediate #2, L.P. (dba Boomi)",
+      "quote": "Bayshore Intermediate #2, L.P. (dba Boomi)(3)(4)(9) | First lien senior secured loan | S+ | 2.50 % | 3.00 % | 10/2028 | 222,310 | -- | 222,284 | 217,863",
+      "printed_cash": 2.5,
+      "printed_pik": 3.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Associations Finance, Inc.",
+      "quote": "Associations Finance, Inc.(3)(4)(6) | Unsecured notes | N/A | 14.25 % | 5/2030 | 196,386 | -- | 195,486 | 196,386",
+      "printed_pik": 14.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Minerva Holdco, Inc.",
+      "quote": "Minerva Holdco, Inc.(3)(4)(6)(30) | Senior A Preferred Stock | N/A | 10.75 % | N/A | -- | 100,000 | 154,682 | 150,403",
+      "printed_pik": 10.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Birdie Bidco, Inc. (dba Concert Golf Partners)",
+      "quote": "Birdie Bidco, Inc. (dba Concert Golf Partners)(3)(4)(9) | First lien senior secured loan | S+ | 2.50 % | 2.25 % | 11/2032 | 149,724 | -- | 149,009 | 148,975",
+      "printed_cash": 2.5,
+      "printed_pik": 2.25
+    }
+  ],
+  "rationale": "The filing does not present a single all-in interest-rate column for these PIK positions. Instead, the Interest header is subdivided into Ref. Rate, Cash, and PIK, and multiple actual rows print a cash spread/rate and a separate PIK percentage in adjacent columns. Therefore the stated position-level cash rate/spread excludes PIK; PIK is quoted separately on top.",
+  "confidence": 0.98,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

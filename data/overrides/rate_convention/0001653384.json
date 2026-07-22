@@ -1,0 +1,67 @@
+{
+  "cik": "0001653384",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has one Investment Description column, not separate Cash and PIK columns. Within that column, stated cash rates or spreads are printed separately from PIK rates when PIK applies, e.g. 'SOFR + 3.75 %, ... 3.00 % PIK' and 'FIXED 6.25 %, 6.25 % PIK'. Thus the stated non-PIK rate or spread is the cash leg; PIK is an additional separately quoted leg. When the printed rate itself is followed by 'PIK' (e.g. 'SOFR + 8.25 % PIK'), the printed rate is identified as PIK rather than cash.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company** | Investment Type | Investment Description (1)(2)(4) | Initial Acquisition Date | Maturity Date | Principal ($) / Shares | Cost ($) | Fair Value ($) (3) | Footnotes",
+      "where": "Schedule of Investments, March 31, 2026, tables 12-18, row 1"
+    },
+    {
+      "kind": "footnote",
+      "quote": "Disclosures of interest rates on notes include cash interest rates and payment-in-kind (\"PIK\") interest rates, as applicable. Unless otherwise indicated, all of the Company's variable interest debt instruments bear interest at a rate determined by reference to the U.S. Prime Rate (\"PRIME\") or the 1-month or 3-month Secured Overnight Financing Rate (\"SOFR\"). At March 31, 2026, the U.S. PRIME Rate was 6.75 %, the 1-Month SOFR was 3.66 %, and the 3-Month SOFR was 3.68 %.",
+      "where": "Schedule of Investments footnote (1), March 31, 2026, table 20 row 1"
+    },
+    {
+      "kind": "footnote",
+      "quote": "Represents a PIK security. PIK interest will be accrued and paid at maturity.",
+      "where": "Schedule of Investments footnote (10), March 31, 2026, table 20 row 10"
+    },
+    {
+      "kind": "position",
+      "issuer": "Airship Group, Inc.",
+      "quote": "SOFR + 3.75 %, 9.08 % floor, 3.00 % PIK, 3.25 % ETP",
+      "printed_cash": 3.75,
+      "printed_pik": 3.0
+    },
+    {
+      "kind": "position",
+      "issuer": "VTX Intermediate Holdings, Inc. (dba VertexOne)",
+      "quote": "SOFR + 7.00 %, 8.00 % floor, 1.00 % PIK, 3.00 % ETP",
+      "printed_cash": 7.0,
+      "printed_pik": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Bombora, Inc.",
+      "quote": "SOFR + 4.25 %, 6.75 % floor, 3.25 % PIK, 1.00 % ETP",
+      "printed_cash": 4.25,
+      "printed_pik": 3.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Hurricane Cleanco Limited",
+      "quote": "FIXED 6.25 %, 6.25 % PIK",
+      "printed_cash": 6.25,
+      "printed_pik": 6.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Marley Spoon SE",
+      "quote": "SOFR + 8.75 % PIK, 9.51 % floor, 1.00 % ETP",
+      "printed_pik": 8.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Blueshift Labs, Inc.",
+      "quote": "SOFR + 8.25 % PIK, 13.25 % floor, 1.50 % ETP",
+      "printed_pik": 8.25
+    }
+  ],
+  "rationale": "The filer does not present an all-in coupon column. Its own schedule header uses a single Investment Description column, and footnote (1) says interest-rate disclosures include both cash interest rates and PIK interest rates as applicable. Actual rows then quote cash spreads or fixed cash rates separately from PIK rates, such as SOFR + 3.75 % with 3.00 % PIK and FIXED 6.25 % with 6.25 % PIK. This means the stated non-PIK rate or spread excludes PIK; PIK is quoted separately and additively.",
+  "confidence": 0.96,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 1
+}

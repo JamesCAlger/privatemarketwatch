@@ -53,11 +53,33 @@ def test_decided_needs_two_position_citations():
     assert any("position" in e for e in errs)
 
 
-def test_position_citation_needs_printed_numbers():
+def test_position_citation_pik_only_is_valid():
+    # PIK-only instruments (PIK notes, PIK preferred) print no cash rate; the
+    # verifier counts these as pik-only partial evidence, so the schema must
+    # not reject them (2026-07-22: 15/66 conv_full leaves were wrongly refused).
     leaf = _leaf()
     del leaf["citations"][1]["printed_total"]
+    assert validate_convention_leaf(leaf) == []
+
+
+def test_position_citation_still_needs_printed_pik():
+    leaf = _leaf()
+    del leaf["citations"][1]["printed_pik"]
     errs = validate_convention_leaf(leaf)
-    assert any("printed_total or printed_cash" in e for e in errs)
+    assert any("printed_pik" in e for e in errs)
+
+
+def test_position_citation_rejects_non_numeric_total_or_cash():
+    # present-but-non-numeric would crash _fits() in the verifier
+    leaf = _leaf()
+    leaf["citations"][1]["printed_total"] = "N/A"
+    errs = validate_convention_leaf(leaf)
+    assert any("printed_total must be numeric when present" in e for e in errs)
+
+    leaf2 = _leaf()
+    leaf2["citations"][2]["printed_cash"] = "6.7%"
+    errs2 = validate_convention_leaf(leaf2)
+    assert any("printed_cash must be numeric when present" in e for e in errs2)
 
 
 def test_position_citation_accepts_printed_cash_instead_of_total():

@@ -27,6 +27,29 @@ if ($signals.Count -gt 0) {
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 
+# Auth: each worker gets a FRESH CODEX_HOME, so the operator's logged-in auth.json
+# must be copied into it (or CODEX_API_KEY relied on). Without this every worker
+# hits 401 Unauthorized and exits in seconds with no run logs (same pattern as
+# dispatch_agent_b_workers.ps1 / dispatch_investigation.ps1).
+$sourceHome = if (-not [string]::IsNullOrWhiteSpace($env:CODEX_HOME)) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }
+$sourceAuth = Join-Path $sourceHome "auth.json"
+$hasFileAuth = Test-Path -LiteralPath $sourceAuth -PathType Leaf
+$hasApiKey = -not [string]::IsNullOrWhiteSpace($env:CODEX_API_KEY)
+if (-not ($hasFileAuth -or $hasApiKey)) {
+  throw "No Codex auth available: neither $sourceAuth nor CODEX_API_KEY is set. Run 'codex login' from this operator shell first."
+}
+Write-Host "[auth] using $(if ($hasFileAuth) { 'auth.json' } else { 'CODEX_API_KEY' })"
+
+# Sandbox grants: the worker must WRITE its leaf under data/output/agent_convention/<cik>
+# and READ/EXECUTE the named python interpreter (evidence_cli/data_query_cli live outside
+# the repo, so the minimal sandbox blocks them). Without these the worker runs a full turn
+# but can never produce a leaf. Mirrors dispatch_anchor_workers.ps1 (proven nanch1 recipe).
+$setup = Join-Path $PSScriptRoot "setup_codex_worker_harness.ps1"
+$pyDirs = @(& python -c "from scripts.agent_b.dispatch_preflight import _worker_read_dirs as w`nfor d in w(): print(d)")
+$readGrants = @()
+foreach ($d in $pyDirs) { $s = [string]$d; if ($s.Trim() -and -not ($readGrants -contains $s)) { $readGrants += $s } }
+Write-Host "[grants] read ($($readGrants.Count) interpreter dirs) + per-cik write"
+
 $wl = Join-Path $root "data/output/agent_convention/batch/$BatchId/convention_worklist.csv"
 if (-not (Test-Path -LiteralPath $wl -PathType Leaf)) {
   throw "worklist missing: $wl (run: python -m scripts.agent_convention.run_convention discover $BatchId ...)"
@@ -62,9 +85,16 @@ foreach ($row in $rows) {
   $whome = Join-Path $env:TEMP "conv-worker\$BatchId\$cikNorm-$stamp\home"
   $wrun  = Join-Path $env:TEMP "conv-worker\$BatchId\$cikNorm-$stamp\run"
 
+  $convBase = Join-Path $root "data/output/agent_convention/$cikNorm"
+  & $setup -WorkerHome $whome -WorkerRunroot $wrun -WriteDirs @($convBase) `
+    -ReadDirs $readGrants -EnvInherit all -AllowUserSite | Out-Null
+  if ($hasFileAuth) {
+    Copy-Item -LiteralPath $sourceAuth -Destination (Join-Path $whome "auth.json") -Force
+  }
+
   Write-Host "==== worker $cik $q ===="
   & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run_codex_worker.ps1") `
-    -PromptPath $prompt -WorkerHome $whome -WorkerRunroot $wrun
+    -PromptPath $prompt -WorkerHome $whome -WorkerRunroot $wrun -NoSetup
   if ($LASTEXITCODE -ne 0) { Write-Host "[warn] worker exit $LASTEXITCODE for $cik" }
 
   if (Test-Path -LiteralPath $leaf -PathType Leaf) {

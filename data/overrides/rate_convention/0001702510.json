@@ -1,0 +1,62 @@
+{
+  "cik": "0001702510",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "For floating-rate debt, the schedule separates Reference Rate, Spread, and Interest Rate. PIK is printed as a component inside the Spread column, while the Interest Rate column prints the total all-in rate including reference rate, cash spread, and PIK. For fixed/all-in-rate positions, the schedule uses an All-In Rate column and parenthetically identifies 100% PIK when applicable.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investments--non-controlled/non-affiliated (1) | Footnotes | Industry | Reference Rate (2) | Spread (2) | Interest Rate (2) | Acquisition Date | Maturity Date | Par/ Principal Amount * | Amortized Cost (4) | Fair Value (5) | % of Net Assets",
+      "where": "Schedule of Investments, March 31, 2026, floating-rate non-controlled/non-affiliated investments; repeated on tables 14-24"
+    },
+    {
+      "kind": "header",
+      "quote": "Investments--non-controlled/non-affiliated (1) | Footnotes | Industry | All-In Rate | Acquisition Date | Shares/ Units | Cost | Fair Value (5) | % of Net Assets",
+      "where": "Schedule of Investments, March 31, 2026, all-in-rate non-controlled/non-affiliated investments; table 25"
+    },
+    {
+      "kind": "position",
+      "issuer": "Deerfield Dakota Holding, LLC",
+      "quote": "Reference Rate SOFR | Spread 3.00 %, 2.75 % PIK | Interest Rate 9.45 %",
+      "printed_total": 9.45,
+      "printed_pik": 2.75,
+      "printed_cash": 3.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Ellkay, LLC",
+      "quote": "Reference Rate SOFR | Spread 3.25 %, 3.50 % PIK | Interest Rate 10.60 %",
+      "printed_total": 10.6,
+      "printed_pik": 3.5,
+      "printed_cash": 3.25
+    },
+    {
+      "kind": "position",
+      "issuer": "US INFRA SVCS Buyer, LLC",
+      "quote": "Reference Rate SOFR | Spread 1.00 %, 5.75 % PIK | Interest Rate 10.42 %",
+      "printed_total": 10.42,
+      "printed_pik": 5.75,
+      "printed_cash": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Hadrian Acquisition Limited (United Kingdom)",
+      "quote": "Reference Rate SONIA | Spread 5.14 %, 3.14 % PIK | Interest Rate 12.01 %",
+      "printed_total": 12.01,
+      "printed_pik": 3.14,
+      "printed_cash": 5.14
+    },
+    {
+      "kind": "position",
+      "issuer": "Integrity Marketing Group, LLC",
+      "quote": "All-In Rate 10.50 % ( 100 % PIK)",
+      "printed_total": 10.5,
+      "printed_pik": 10.5,
+      "printed_cash": 0.0
+    }
+  ],
+  "rationale": "The filing does not use the stated Interest Rate column as the cash leg only. On floating-rate rows, PIK is appended in the Spread column, and the separate Interest Rate column prints a larger all-in total. For example, Deerfield shows SOFR with Spread 3.00 %, 2.75 % PIK and Interest Rate 9.45 %; Ellkay shows SOFR with Spread 3.25 %, 3.50 % PIK and Interest Rate 10.60 %. The dedicated All-In Rate header and Integrity's 10.50 % (100 % PIK) row confirm that position-level stated rates are all-in totals when printed as rate columns.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 4
+}

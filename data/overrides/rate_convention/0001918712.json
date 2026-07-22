@@ -1,0 +1,70 @@
+{
+  "cik": "0001918712",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has a single position-level Coupon column. For PIK instruments, the Coupon cell prints the all-in coupon first and then parenthetically identifies the PIK portion of that coupon. The Reference and Spread columns are separate rate components; there are no separate Cash and PIK rate columns.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company (1) | Investment | Coupon (3) | Reference (6) | Spread (3) | Acquisition Date | Maturity Date | Shares/ Units | Principal | Amortized Cost | Fair Value | % of Net Assets",
+      "where": "Consolidated Schedule of Investments as of March 31, 2026; repeated schedule header, e.g. table 8 row 1"
+    },
+    {
+      "kind": "footnote",
+      "quote": "(3) Investments without an interest rate are non-income producing.",
+      "where": "Notes to Consolidated Schedule of Investments as of March 31, 2026"
+    },
+    {
+      "kind": "position",
+      "issuer": "Adonis Bidco Inc.",
+      "quote": "Adonis Bidco Inc. (11) | First lien senior secured loan | 9.45 % ( 2.88 % PIK) | SOFR (Q) | 5.75 % | 02/2032 | 109,740.7 | 107,949.7 | 107,545.9 | (2)(8)(13)",
+      "printed_total": 9.45,
+      "printed_pik": 2.88,
+      "printed_cash": 6.57
+    },
+    {
+      "kind": "position",
+      "issuer": "BVI Medical, Inc. and BVI Group Limited",
+      "quote": "BVI Medical, Inc. and BVI Group Limited (11) | First lien senior secured loan | 9.92 % ( 5.00 % PIK) | SOFR (M) | 6.25 % | 03/2032 | 143,111.6 | 141,387.7 | 131,662.7 | (2)(6)(8)(13)",
+      "printed_total": 9.92,
+      "printed_pik": 5.0,
+      "printed_cash": 4.92
+    },
+    {
+      "kind": "position",
+      "issuer": "Netsmart, Inc. and Netsmart Technologies, Inc.",
+      "quote": "Netsmart, Inc. and Netsmart Technologies, Inc. (11) | First lien senior secured loan | 8.87 % ( 2.70 % PIK) | SOFR (M) | 5.20 % | 08/2031 | 92,810.0 | 92,180.3 | 92,810.0 | (2)(8)(13)",
+      "printed_total": 8.87,
+      "printed_pik": 2.7,
+      "printed_cash": 6.17
+    },
+    {
+      "kind": "position",
+      "issuer": "Severin Acquisition, LLC",
+      "quote": "Severin Acquisition, LLC (11) | First lien senior secured loan | 8.42 % ( 2.25 % PIK) | SOFR (M) | 4.75 % | 10/2031 | 111,215.5 | 110,321.3 | 108,633.3 | (2)(8)(13)",
+      "printed_total": 8.42,
+      "printed_pik": 2.25,
+      "printed_cash": 6.17
+    },
+    {
+      "kind": "position",
+      "issuer": "GHX Ultimate Parent Corporation and Nexus TopCo LP",
+      "quote": "GHX Ultimate Parent Corporation and Nexus TopCo LP (11) | First lien senior secured loan | 8.70 % ( 2.50 % PIK) | SOFR (Q) | 5.00 % | 02/2033 | 96,176.2 | 95,707.4 | 94,252.7 | (2)(8)(13)",
+      "printed_total": 8.7,
+      "printed_pik": 2.5,
+      "printed_cash": 6.2
+    },
+    {
+      "kind": "position",
+      "issuer": "Himalaya TopCo LLC and BCPE Hyperlink Holdings, LP",
+      "quote": "Himalaya TopCo LLC and BCPE Hyperlink Holdings, LP (11) | First lien senior secured loan | 8.70 % ( 2.25 % PIK) | SOFR (Q) | 5.00 % | 06/2032 | 160,658.7 | 157,945.3 | 160,658.7 | (2)(8)(13)",
+      "printed_total": 8.7,
+      "printed_pik": 2.25,
+      "printed_cash": 6.45
+    }
+  ],
+  "rationale": "The filing uses disclosure pattern 1. The March 31, 2026 schedule has one Coupon column rather than separate Cash and PIK columns, and PIK is shown in parentheses inside that Coupon cell. The printed number before the parenthetical is therefore the all-in coupon, with the parenthetical amount identifying the PIK component included in that stated coupon. Footnote (3) does not alter this; it only says that investments without an interest rate are non-income producing.",
+  "confidence": 0.94,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 5
+}

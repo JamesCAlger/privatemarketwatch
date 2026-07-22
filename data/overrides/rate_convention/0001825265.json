@@ -1,0 +1,59 @@
+{
+  "cik": "0001825265",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule does not use separate Cash and PIK rate columns. The position-level rate is printed in the Investment column as a single stated rate; for PIK instruments the stated rate is labeled 'inc PIK' and the PIK component is shown inside the parenthetical, so the stated rate is the all-in coupon including PIK.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value",
+      "where": "Consolidated Schedule of Investments as of March 31, 2026, table 5 header"
+    },
+    {
+      "kind": "position",
+      "issuer": "CSAT Holdings LLC",
+      "quote": "Term Loan - 14.46 % inc PIK ( SOFR + 10.50 %, 2.00 % Floor, 2.25 % PIK)",
+      "printed_total": 14.46,
+      "printed_pik": 2.25
+    },
+    {
+      "kind": "position",
+      "issuer": "The HC Companies, Inc.",
+      "quote": "Term Loan - 12.17 % inc PIK ( SOFR + 8.50 %, 2.00 % Floor, 1.00 % PIK)",
+      "printed_total": 12.17,
+      "printed_pik": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "The HC Companies, Inc.",
+      "quote": "Incremental Term Loan - 12.17 % inc PIK ( SOFR + 8.50 %, 2.00 % Floor, 1.00 % PIK)",
+      "printed_total": 12.17,
+      "printed_pik": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Five Star Buyer, Inc.",
+      "quote": "Term Loan - 12.98 % inc PIK ( SOFR + 9.00 %, 1.50 % Floor, 2.00 % PIK)",
+      "printed_total": 12.98,
+      "printed_pik": 2.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Mark Andy, Inc.",
+      "quote": "Term Loan - 12.60 % inc PIK ( SOFR + 8.75 %, 1.50 % Floor, 5.75 % PIK)",
+      "printed_total": 12.6,
+      "printed_pik": 5.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Pallet Logistics of America, LLC",
+      "quote": "Term Loan - 10.67 % inc PIK ( SOFR + 7.00 %, 1.00 % Floor, 0.50 % PIK)",
+      "printed_total": 10.67,
+      "printed_pik": 0.5
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule prints a single rate in the Investment description, not separate cash and PIK columns. Multiple PIK positions use the explicit phrase 'inc PIK' immediately after the stated rate, while the parenthetical separately identifies the PIK component. That disclosure pattern means the stated rate is all-in and includes the PIK leg.",
+  "confidence": 0.95,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 6
+}

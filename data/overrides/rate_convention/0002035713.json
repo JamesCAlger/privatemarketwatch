@@ -1,0 +1,59 @@
+{
+  "cik": "0002035713",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has separate columns for Reference Rate and Spread and Interest Rate. The Interest Rate column shows the stated total coupon; when a portion is PIK, the PIK amount is included parenthetically in that same Interest Rate value, or the whole Interest Rate is marked PIK.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company (1) | Investment | Acquisition Date | Maturity Date | Reference Rate and Spread | Interest Rate | Par | Units | Amortized Cost (2)(7) | Fair Value (6) | Percentage of Net Assets",
+      "where": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited), page 6, table 14 header"
+    },
+    {
+      "kind": "position",
+      "issuer": "Soapy Joe's Midco OC Holdings, LLC",
+      "quote": "Soapy Joe's Midco OC Holdings, LLC (3)(10) | First-lien loan | 4/22/2025 | 4/22/2030 | SOFR + | 5.85 | % | 9.52 % (incl 1.85 % PIK) | 6,914 | 6,856 | 6,838 | 2.0 | %",
+      "printed_total": 9.52,
+      "printed_pik": 1.85
+    },
+    {
+      "kind": "position",
+      "issuer": "Anasazi Medical Payment Solutions, Inc.",
+      "quote": "Anasazi Medical Payment Solutions, Inc. (10) | First-lien loan | 3/17/2025 | 6/8/2029 | 16.00 | % | 16.00 % (incl 6.00 %PIK) | 3,371 | 3,295 | 3,314 | 1.0 | %",
+      "printed_total": 16.0,
+      "printed_pik": 6.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Garden Owner, LLC",
+      "quote": "Garden Owner, LLC (3)(10) | First-lien loan | 12/30/2024 | 6/27/2026 | SOFR + | 9.25 | % | 10.25 % (incl 3.50 % PIK) | 3,799 | 3,799 | 3,827 | 1.1 | %",
+      "printed_total": 10.25,
+      "printed_pik": 3.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Emergence Mobility Technologies, Inc",
+      "quote": "Emergence Mobility Technologies, Inc (3)(10) | First-lien loan | 12/23/2025 | 12/18/2030 | SOFR + | 8.50 | % | 12.19 % (inc 3.50 % PIK) | 5,639 | 5,454 | 5,368 | 1.6 | %",
+      "printed_total": 12.19,
+      "printed_pik": 3.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Broadsign International Holding Company",
+      "quote": "Broadsign International Holding Company (4) | Second-lien loan | 11/24/2025 | 11/24/2031 | 14.00 | % | 14.00 % PIK | 12,000 | 10,263 | 9,843 | 2.9 | %",
+      "printed_total": 14.0,
+      "printed_pik": 14.0
+    },
+    {
+      "kind": "position",
+      "issuer": "CX Institutional, LLC",
+      "quote": "CX Institutional, LLC (3)(10) | First-lien loan | 9/6/2024 | 6/18/2029 | SOFR + | 6.00 | % | 9.17 | % | 1,784 | 1,720 | 1,788 | 0.5 | %; following row for same issuer: Second-lien loan | 11/21/2025 | 4/21/2031 | 8.00 | % | 8.00 % PIK | 8,167 | 6,307 | 6,182 | 1.8 | %",
+      "printed_total": 8.0,
+      "printed_pik": 8.0
+    }
+  ],
+  "rationale": "The printed March 31, 2026 schedule does not provide separate Cash and PIK interest columns. Instead, PIK appears in the single Interest Rate column as included in the displayed rate, for example 9.52% (incl 1.85% PIK), 10.25% (incl 3.50% PIK), and 12.19% (inc 3.50% PIK). All-PIK instruments are also shown as the same stated Interest Rate followed by PIK, such as 14.00% PIK. Therefore the filer's stated position-level Interest Rate is the all-in coupon, with PIK included in the stated rate.",
+  "confidence": 0.94,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 4
+}

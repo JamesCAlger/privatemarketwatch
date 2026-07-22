@@ -1,0 +1,41 @@
+{
+  "cik": "0001998387",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The March 31, 2026 schedule uses one Interest Rate column. For instruments with PIK and cash components, the printed Interest Rate is the all-in rate and the PIK component is shown parenthetically as included. For PIK-only instruments, the printed Interest Rate is the PIK rate itself.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company (1)(2)(7)(8)(13)(14)(15) | Investment Type | Initial Acquisition Date | Reference Rate and Spread | Interest Rate | Maturity Date | Par Amount/Units (4) | Amortized Cost (5)(6) | Fair Value | Percentage of Net Assets Applicable to Common Stock",
+      "where": "Schedule of Investments, March 31, 2026 (Unaudited), table 12 row 1; repeated on tables 13 and 14"
+    },
+    {
+      "kind": "position",
+      "issuer": "Titan BW Borrower L.P. (dba Triumph)",
+      "quote": "Titan BW Borrower L.P. (dba Triumph) (3)(16) | First Lien Term Loan | 7/2025 | SOFR + 5.38 % | 9.04 % (incl. 2.88 % PIK) | 7/2032",
+      "printed_total": 9.04,
+      "printed_pik": 2.88,
+      "printed_cash": 6.16
+    },
+    {
+      "kind": "position",
+      "issuer": "Homerun Blocker, Inc. (dba Excel Sports Management)",
+      "quote": "Homerun Blocker, Inc. (dba Excel Sports Management) (18) | Senior Subordinated Loan | 1/2026 | - | 11.50 % PIK | 1/2032",
+      "printed_total": 11.5,
+      "printed_pik": 11.5,
+      "printed_cash": 0.0
+    },
+    {
+      "kind": "position",
+      "issuer": "KPCI Holdings Ltd. (dba PCI Pharma Services)",
+      "quote": "KPCI Holdings Ltd. (dba PCI Pharma Services) (9)(11) | Preferred Equity | 10/2025 | - | 11.00 % PIK | -",
+      "printed_total": 11.0,
+      "printed_pik": 11.0,
+      "printed_cash": 0.0
+    }
+  ],
+  "rationale": "The filing presents a single Interest Rate column, not separate cash and PIK columns. The clearest mixed cash/PIK row, Titan BW Borrower L.P. (dba Triumph), prints '9.04 % (incl. 2.88 % PIK)', which states that the PIK rate is included in the printed 9.04% total. The PIK-only Homerun and KPCI rows print the rate as '11.50 % PIK' and '11.00 % PIK', consistent with the same single-column all-in convention for positions whose all-in rate is entirely PIK. Searches of the rendered filing evidence for PIK, incl, and paid-in-kind did not find a separate schedule footnote defining a different convention.",
+  "confidence": 0.93,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

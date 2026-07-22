@@ -1,0 +1,62 @@
+{
+  "cik": "0001786835",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has one Spread Above Index column and one Interest Rate column, but for PIK positions the printed text decomposes each into a cash component plus a separate PIK component. The numeric rate before 'Cash' is the cash leg only; the PIK percentage is quoted separately and is additive/on top. Pure PIK preferred equity rows print the PIK rate alone as PIK.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (1)(2)(3)(4)(5)(6) | Footnotes | Spread Above Index (7) | Interest Rate | Acquisition Date | Maturity | Principal, Shares, Units | Amortized Cost (8) | Fair Value (9) | % of Net Assets",
+      "where": "Consolidated Schedule of Investments, March 31, 2026, tables 12 and 14"
+    },
+    {
+      "kind": "footnote",
+      "quote": "The investment does not accrue payment-in-kind (\"PIK\") for the debt investment as of March 31, 2026. See Note 2. \"Significant Accounting Policies\".",
+      "where": "Consolidated Schedule of Investments, March 31, 2026, footnote 21"
+    },
+    {
+      "kind": "position",
+      "issuer": "Kassel Mechanical, LLC",
+      "quote": "S + 7.84 % Cash + 0.16 % PIK | 11.50 % Cash + 0.16 % PIK",
+      "printed_cash": 11.5,
+      "printed_pik": 0.16
+    },
+    {
+      "kind": "position",
+      "issuer": "TCP Acquisition, LLC (dba HighStar Traffic)",
+      "quote": "S + 7.50 % Cash + 2.00 % PIK | 11.18 % Cash + 2.00 % PIK",
+      "printed_cash": 11.18,
+      "printed_pik": 2.0
+    },
+    {
+      "kind": "position",
+      "issuer": "BB-HH Platform, Inc. (dba Preferred Care Home Health)",
+      "quote": "S + 7.00 % Cash + 1.50 % PIK | 10.68 % Cash + 1.50 % PIK",
+      "printed_cash": 10.68,
+      "printed_pik": 1.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Jefferson Consulting Group, LLC",
+      "quote": "S + 9.42 % Cash + 4.25 % PIK | 13.10 % Cash + 4.25 % PIK",
+      "printed_cash": 13.1,
+      "printed_pik": 4.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Delva Master Holdings",
+      "quote": "- | 18.00 % PIK",
+      "printed_pik": 18.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Watt Contracting Holdings, LLC",
+      "quote": "- | 15.00 % PIK",
+      "printed_pik": 15.0
+    }
+  ],
+  "rationale": "The filing does not present PIK as a parenthetical included in an all-in coupon. Instead, actual schedule rows label the cash rate and PIK rate separately within the printed Spread Above Index and Interest Rate cells, e.g. '11.50 % Cash + 0.16 % PIK' and '11.18 % Cash + 2.00 % PIK'. That means the stated cash percentage excludes PIK, and PIK is quoted separately on top.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

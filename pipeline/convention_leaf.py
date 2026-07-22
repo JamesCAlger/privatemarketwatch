@@ -26,8 +26,10 @@ Leaf (one JSON object)::
      "rationale": "...", "confidence": 0.9}
 
 A DECIDED leaf (all_in / cash_leg) requires >= 2 ``position`` citations, each
-carrying ``issuer``, ``quote``, a numeric ``printed_pik``, and a numeric
-``printed_total`` or ``printed_cash`` -- these feed the reconciliation check.
+carrying ``issuer``, ``quote``, and a numeric ``printed_pik``. ``printed_total``
+/ ``printed_cash`` feed the reconciliation check and must be numeric when
+present, but are optional: PIK-only instruments print no cash rate, and the
+verifier counts such citations as pik-only partial evidence (tier-capped).
 A header/footnote citation is strongly recommended; its absence caps the
 verify tier at MEDIUM (convention_validation), it is not a schema error.
 An INDETERMINATE leaf instead requires a non-empty ``search_trail`` (what was
@@ -69,8 +71,15 @@ def _position_citation_errors(c: dict, i: int) -> list[str]:
         errs.append(f"citations[{i}]: position citation needs a non-empty issuer")
     if not _is_num(c.get("printed_pik")):
         errs.append(f"citations[{i}]: position citation needs numeric printed_pik")
-    if not (_is_num(c.get("printed_total")) or _is_num(c.get("printed_cash"))):
-        errs.append(f"citations[{i}]: position citation needs numeric printed_total or printed_cash")
+    # printed_total / printed_cash are OPTIONAL: PIK-only instruments (PIK-only
+    # notes, PIK preferred) print no cash rate at all, and the verifier already
+    # treats such citations as pik-only partial evidence (n_pik_only) with the
+    # MIN_RECONCILED floor and tier cap discounting them. When present they
+    # must be numeric -- _fits() would crash on a string like "N/A".
+    for k in ("printed_total", "printed_cash"):
+        v = c.get(k)
+        if v is not None and not _is_num(v):
+            errs.append(f"citations[{i}]: {k} must be numeric when present")
     return errs
 
 

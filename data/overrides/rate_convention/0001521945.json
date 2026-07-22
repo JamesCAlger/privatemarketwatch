@@ -1,0 +1,59 @@
+{
+  "cik": "0001521945",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The March 31, 2026 schedule uses an All-in Rate column for the stated position rate, with separate Ref. Rate, Spread, and PIK (z) columns. Footnote (z) states that the difference between the All-In Rate and PIK Rate is the cash rate, so the stated All-in Rate includes PIK.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company / Security Type(x) | Industry (r) | Acquisition Date | All-in Rate | Ref. Rate | Spread | PIK (z) | Floor | Legal Maturity | Shares/Units | Principal | Amortized Cost (d) | Fair Value (c) | % of Net Assets",
+      "where": "Consolidated Schedule of Investments as of March 31, 2026, table 14 row 2"
+    },
+    {
+      "kind": "footnote",
+      "quote": "Investments may have a portion, or all, of their income received from Paid-in-Kind (\"PIK\") interest or dividends. PIK interest income and cumulative dividend income represent income not paid currently in cash. The difference between the All-In Rate and PIK Rate represents the cash rate as of March 31, 2026.",
+      "where": "Consolidated Schedule of Investments as of March 31, 2026, footnote (z)"
+    },
+    {
+      "kind": "header",
+      "quote": "Security Name | PIK Rate - Capitalized | PIK Rate - Paid as cash | Maximum Current PIK Rate",
+      "where": "Consolidated Schedule of Investments as of March 31, 2026, PIK schedule, table 18 row 1"
+    },
+    {
+      "kind": "position",
+      "issuer": "First Brands Group - First Lien DIP Term Loan A",
+      "quote": "First Brands Group - First Lien DIP Term Loan A (g)(i)(o)(q) | Automotive | 10/2/2025 | 13.67 % | 3M SOFR | 10.00 % | 13.67 % | 1.00 % | 6/29/2026",
+      "printed_total": 13.67,
+      "printed_pik": 13.67,
+      "printed_cash": 0.0
+    },
+    {
+      "kind": "position",
+      "issuer": "First Brands Group - First Lien Term Loan",
+      "quote": "First Brands Group - First Lien Term Loan (g)(i)(o)(q) | Automotive | 2/8/2024 | 10.78 % | 3M SOFR | 7.00 % | 10.78 % | 1.00 % | 3/30/2027",
+      "printed_total": 10.78,
+      "printed_pik": 10.78,
+      "printed_cash": 0.0
+    },
+    {
+      "kind": "position",
+      "issuer": "New WPCC Parent, LLC",
+      "quote": "New WPCC Parent, LLC(f)(h)(j)(m)(t) | Healthcare & Pharmaceuticals | 5/8/2025 | 13.17 % | 3M SOFR | 9.50 % | 2.00 % | 5/9/2030",
+      "printed_total": 13.17,
+      "printed_pik": 2.0,
+      "printed_cash": 11.17
+    },
+    {
+      "kind": "position",
+      "issuer": "Shoes West, LLC (d/b/a Taos Footwear) - First Lien Term Loan",
+      "quote": "Shoes West, LLC (d/b/a Taos Footwear) - First Lien Term Loan(f)(h)(s) | Consumer Goods: Non-Durable | 1/23/2025 | 10.96 % | 3M SOFR | 7.00 % | 3.00 % | 1/23/2030",
+      "printed_total": 10.96,
+      "printed_pik": 3.0,
+      "printed_cash": 7.96
+    }
+  ],
+  "rationale": "The filing is explicit: position-level stated rates are labeled All-in Rate, and footnote (z) says cash rate equals All-In Rate minus PIK Rate. The sample PIK rows confirm the same structure by printing an all-in rate and a separate PIK column, rather than using the stated rate as cash-only.",
+  "confidence": 0.98,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

@@ -1,0 +1,65 @@
+{
+  "cik": "0002006758",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has one column headed Interest Rate (8). For PIK instruments, that column prints an additive cash-leg quote: the base-rate spread is labeled Cash and the PIK percentage is quoted separately as PIK, so the stated cash spread excludes the PIK leg.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Industry/Company | Investment Type | Interest Rate (8) | Maturity Date | Par/Shares (3) | Cost (25) | Fair Value (1)(26)",
+      "where": "Schedule of Investments, March 31, 2026, table 10 row 1 and repeated schedule pages"
+    },
+    {
+      "kind": "position",
+      "issuer": "Lash OpCo, LLC",
+      "quote": "S + 510 Cash plus 2.00 % PIK, 1.00 % Floor",
+      "printed_cash": 5.1,
+      "printed_pik": 2.0,
+      "where": "Schedule of Investments, March 31, 2026, table 25 row 3"
+    },
+    {
+      "kind": "position",
+      "issuer": "Saffron Bidco Ltd",
+      "quote": "S + 325 Cash plus 2.50 % PIK, 0.75 % Floor",
+      "printed_cash": 3.25,
+      "printed_pik": 2.5,
+      "where": "Schedule of Investments, March 31, 2026, table 25 row 27"
+    },
+    {
+      "kind": "position",
+      "issuer": "TVG-MEDULLA, LLC",
+      "quote": "S + 460 Cash plus 2.50 % PIK, 1.00 % Floor",
+      "printed_cash": 4.6,
+      "printed_pik": 2.5,
+      "where": "Schedule of Investments, March 31, 2026, table 20 row 23"
+    },
+    {
+      "kind": "position",
+      "issuer": "Casper's Ice Cream, LLC",
+      "quote": "S + 100 Cash plus 5.25 % PIK, 1.00 % Floor",
+      "printed_cash": 1.0,
+      "printed_pik": 5.25,
+      "where": "Schedule of Investments, March 31, 2026, table 18 row 11"
+    },
+    {
+      "kind": "position",
+      "issuer": "LAV Gear Holdings Inc",
+      "quote": "S + 250 Cash plus 3.44 % PIK, 1.00 % Floor",
+      "printed_cash": 2.5,
+      "printed_pik": 3.44,
+      "where": "Schedule of Investments, March 31, 2026, table 12 row 24"
+    },
+    {
+      "kind": "position",
+      "issuer": "SEKO Global Logistics Network, LLC",
+      "quote": "S + 100 Cash plus 9.50 % PIK, 1.00 % Floor",
+      "printed_cash": 1.0,
+      "printed_pik": 9.5,
+      "where": "Schedule of Investments, March 31, 2026, table 10 row 29"
+    }
+  ],
+  "rationale": "The filing does not use separate Cash and PIK columns, and it does not state that the displayed rate includes PIK. Instead, multiple position rows in the Interest Rate (8) column use additive wording such as 'S + 510 Cash plus 2.00 % PIK' and 'S + 325 Cash plus 2.50 % PIK'. That wording makes the printed spread the cash leg, with PIK quoted separately on top.",
+  "confidence": 0.95,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

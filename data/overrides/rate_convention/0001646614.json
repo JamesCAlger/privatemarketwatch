@@ -1,0 +1,57 @@
+{
+  "cik": "0001646614",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule prints a descriptive Rate (2) column that includes the base/spread/floor and any PIK component in parentheses, plus a separate Interest Rate column. The stated position-level Interest Rate column is the current cash/non-PIK rate only; PIK is quoted separately in Rate (2), on top of the stated Interest Rate.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (1) | Instrument | Industry | Rate (2) | Interest Rate | Original Acquisition Date (17) | Maturity Date | Par Amount (3) | Cost / Amortized Cost (4) | Fair Value | % of Net Assets (5)",
+      "where": "Schedule of Investments, March 31, 2026, tables 11-19"
+    },
+    {
+      "kind": "position",
+      "issuer": "GOJO Industries Inc",
+      "quote": "GOJO Industries Inc | 1st Lien Term Loan | Consumer Products | S+ 8.00 %, 2.50 % Floor ( 4.50 % PIK) | 11.67 | 10/26/2023 | 10/26/2028",
+      "printed_total": 16.17,
+      "printed_pik": 4.5,
+      "printed_cash": 11.67
+    },
+    {
+      "kind": "position",
+      "issuer": "Gopher Resource LLC",
+      "quote": "Gopher Resource LLC | 1st Lien Term Loan | Environmental Solutions | S+ 5.75 %, 1.00 % Floor ( 2.50 % PIK) | 9.45 | 10/4/2024 | 10/4/2029",
+      "printed_total": 11.95,
+      "printed_pik": 2.5,
+      "printed_cash": 9.45
+    },
+    {
+      "kind": "position",
+      "issuer": "LAC Acquisition LLC d/b/a Lighthouse Autism Center",
+      "quote": "LAC Acquisition LLC d/b/a Lighthouse Autism Center | 1st Lien Term Loan | Healthcare Providers & Services | S+ 11.15 %, 3.00 % Floor ( 5.50 % PIK) | 14.82 | 7/23/2021 | 7/23/2027",
+      "printed_total": 20.32,
+      "printed_pik": 5.5,
+      "printed_cash": 14.82
+    },
+    {
+      "kind": "position",
+      "issuer": "Amerijet Holdings Inc",
+      "quote": "Amerijet Holdings Inc | 1st Lien Term Loan | Transportation & Logistics | 11.50 % ( 12.00 % PIK) | 11.50 | 12/19/2023 | 6/30/2027",
+      "printed_total": 23.5,
+      "printed_pik": 12.0,
+      "printed_cash": 11.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Takko Fashion Sarl",
+      "quote": "Takko Fashion Sarl | Subordinated Unsecured Debt | Specialty Retail | 15.00 % ( 15.00 % PIK) | 15.00 | 8/8/2023 | 10/15/2030",
+      "printed_total": 30.0,
+      "printed_pik": 15.0,
+      "printed_cash": 15.0
+    }
+  ],
+  "rationale": "The filing uses separate Rate (2) and Interest Rate columns rather than one all-in coupon column. In every checked PIK row, the PIK amount is parenthetical in Rate (2), while the adjacent Interest Rate column reports only the non-PIK current rate. For example, GOJO prints Rate (2) as S+ 8.00%, 2.50% Floor (4.50% PIK) and Interest Rate as 11.67%, which excludes the 4.50% PIK. Fixed-rate PIK rows show the same convention: Amerijet prints 11.50% (12.00% PIK) with Interest Rate 11.50%, not 23.50%. Therefore the stated position-level Interest Rate means cash leg only, with PIK quoted separately and additive.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

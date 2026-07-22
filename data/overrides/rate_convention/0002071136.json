@@ -1,0 +1,49 @@
+{
+  "cik": "0002071136",
+  "target_quarter": "2025-12-31",
+  "convention": "cash_leg",
+  "column_semantics": "The debt schedule has a single Interest Rate column, but for PIK instruments the printed Interest Rate cell breaks the rate into separate cash and PIK components, e.g. '<cash> % (Cash) <pik> % (PIK)'. For non-PIK floating-rate instruments, the Spread Above Reference Rate column shows the spread and the Interest Rate column shows the current cash rate. The stated cash component excludes PIK; PIK is quoted separately and additive.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (1) (2) (4) | Footnotes | Investment | Spread Above Reference Rate (3) | Interest Rate (3) | Maturity Date | Par Amount | Amortized Cost | Fair Value | % of Net Assets (5)",
+      "where": "Consolidated Schedule of Investments as of December 31, 2025, table 28 row 1"
+    },
+    {
+      "kind": "position",
+      "issuer": "Valkyrie Intermediate, LLC",
+      "quote": "Valkyrie Intermediate, LLC | Subordinated Debt | N/A | 10.50 % (Cash) 1.00 % (PIK) | 11/17/2027 | 10,473 | 10,356 | 10,402 | 3.08 | %",
+      "printed_cash": 10.5,
+      "printed_pik": 1.0,
+      "where": "Consolidated Schedule of Investments as of December 31, 2025, table 28 row 12"
+    },
+    {
+      "kind": "position",
+      "issuer": "Athlete Buyer, LLC (Allstar Holdings)",
+      "quote": "Athlete Buyer, LLC (Allstar Holdings) | Subordinated Debt | N/A | 1.00 % (Cash) 13.00 % (PIK) | 4/26/2030 | 527 | 508 | 496 | 0.15 | %",
+      "printed_cash": 1.0,
+      "printed_pik": 13.0,
+      "where": "Consolidated Schedule of Investments as of December 31, 2025, table 28 row 67"
+    },
+    {
+      "kind": "position",
+      "issuer": "ARC Health OPCO, LLC",
+      "quote": "ARC Health OPCO, LLC | Subordinated Debt | N/A | 8.00 % (Cash) 5.00 % (PIK) | 4/10/2031 | 6,743 | 6,547 | 6,545 | 1.94 | %",
+      "printed_cash": 8.0,
+      "printed_pik": 5.0,
+      "where": "Consolidated Schedule of Investments as of December 31, 2025, table 28 row 118"
+    },
+    {
+      "kind": "position",
+      "issuer": "Caldwell & Gregory LLC",
+      "quote": "Caldwell & Gregory LLC | Subordinated Debt | S + 8.75 % | 9.92 % (Cash) 2.50 % (PIK) | 3/31/2031 | 6,730 | 6,813 | 6,790 | 2.01 | %",
+      "printed_cash": 9.92,
+      "printed_pik": 2.5,
+      "where": "Consolidated Schedule of Investments as of December 31, 2025, table 28 row 170"
+    }
+  ],
+  "rationale": "The filing does not present PIK as a parenthetical included in an all-in rate. Instead, PIK positions print two separately labeled rate components within the Interest Rate column: one marked '(Cash)' and one marked '(PIK)'. Multiple schedule rows follow that pattern, including Valkyrie Intermediate, Athlete Buyer, ARC Health OPCO, and Caldwell & Gregory. Therefore a position-level stated cash rate means the cash leg only, with the printed PIK percentage separately quoted on top.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 4
+}

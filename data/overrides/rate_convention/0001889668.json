@@ -1,0 +1,64 @@
+{
+  "cik": "0001889668",
+  "target_quarter": "2024-12-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule uses a single Interest column. For floating-rate PIK loans, the printed spread/rate is the all-in stated spread/rate and the parenthetical PIK percentage is the PIK portion included in that stated rate; for pure PIK preferred or debt instruments, the Interest cell prints the PIK rate directly.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company(1)(4)(7)(18)(25) | Investment | Interest | Maturity Date | Par / Units | Amortized Cost(2)(3) | Fair Value | Percentage of Net Assets",
+      "where": "Blue Owl Technology Finance Corp. II Consolidated Schedule of Investments, As of December 31, 2024, pages F-6 to F-11"
+    },
+    {
+      "kind": "footnote",
+      "quote": "PIK interest and dividends represent accrued interest or dividends that are added to the principal amount or liquidation amount of the investment on the respective interest or dividend payment dates rather than being paid in cash and generally becomes due at maturity or at the occurrence of a liquidation event.",
+      "where": "Notes to Consolidated Financial Statements, Paid-in-kind interest and dividends"
+    },
+    {
+      "kind": "position",
+      "issuer": "Indikami Bidco, LLC (dba IntegriChain)",
+      "quote": "First lien senior secured loan | S + 6.50% (2.50% PIK)",
+      "printed_total": 6.5,
+      "printed_pik": 2.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Severin Acquisition, LLC (dba PowerSchool)",
+      "quote": "First lien senior secured loan | S + 5.00% (2.25% PIK)",
+      "printed_total": 5.0,
+      "printed_pik": 2.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Sitecore Holding III A/S",
+      "quote": "First lien senior secured EUR term loan | E + 7.75% (4.25% PIK)",
+      "printed_total": 7.75,
+      "printed_pik": 4.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Sitecore USA, Inc.",
+      "quote": "First lien senior secured loan | S + 7.75% (4.25% PIK)",
+      "printed_total": 7.75,
+      "printed_pik": 4.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Minerva Holdco, Inc.",
+      "quote": "Senior A Preferred Stock | 10.75% PIK",
+      "printed_total": 10.75,
+      "printed_pik": 10.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Knockout Intermediate Holdings I Inc. (dba Kaseya Inc.)",
+      "quote": "Perpetual Preferred Stock | S + 10.75% PIK",
+      "printed_total": 10.75,
+      "printed_pik": 10.75
+    }
+  ],
+  "rationale": "The filing does not present separate Cash and PIK columns. Its single Interest column prints PIK as part of the same rate cell, using parentheticals such as S + 6.50% (2.50% PIK) and E + 7.75% (4.25% PIK). That matches the all-in pattern: the displayed rate/spread is the stated total, with the PIK component disclosed inside the same cell. Pure PIK preferred/debt rows reinforce this convention by showing the PIK rate directly in the Interest column, e.g. 10.75% PIK.",
+  "confidence": 0.9,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

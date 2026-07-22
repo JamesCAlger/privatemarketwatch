@@ -1,0 +1,48 @@
+{
+  "cik": "0001911066",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The printed schedule uses an Interest Rate column, but PIK-bearing rows state cash and PIK components separately in the same cell, such as '10.00 % (Cash) 1.00 % (PIK)'. Thus the cash rate is not an all-in coupon; PIK is quoted separately and additive where shown.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (1) (2) | Footnotes | Investment | Spread Above Reference Rate (3) | Interest Rate (3) | Maturity Date | Par Amount / Unit | Amortized Cost | Fair Value (4) | % of Net Assets (5)",
+      "where": "Schedule of Investments, debt investments, evidence bundle accession 0001911066-25-000038, table 16 row 1; same header repeated through debt schedule tables 16-34"
+    },
+    {
+      "kind": "position",
+      "issuer": "Revision Buyer LLC (Revision Skincare)",
+      "quote": "Revision Buyer LLC (Revision Skincare) | (4) (6) | Subordinated Debt | N/A | 10.00 % (Cash) 1.00 % (PIK) | 12/1/2028 | 10,356 | 10,241 | 10,244 | 0.81 | %",
+      "printed_cash": 10.0,
+      "printed_pik": 1.0,
+      "where": "Schedule of Investments, debt investments, evidence bundle accession 0001911066-25-000038, table 22 row 4"
+    },
+    {
+      "kind": "position",
+      "issuer": "Image International Intermediate Holdco II, LLC",
+      "quote": "Image International Intermediate Holdco II, LLC | (4) (6) (7) | First Lien Debt | S + 5.00 % | 9.35 % (Cash) 0.50 % (PIK) | 9/10/2026 | 10,695 | 10,627 | 10,251 | 0.82 | %",
+      "printed_cash": 9.35,
+      "printed_pik": 0.5,
+      "where": "Schedule of Investments, debt investments, evidence bundle accession 0001911066-25-000038, table 21 row 25"
+    },
+    {
+      "kind": "position",
+      "issuer": "Kofile, Inc.",
+      "quote": "Kofile, Inc. | (4) (6) | Subordinated Debt | N/A | 9.00 % (Cash) 4.25 % (PIK) | 12/31/2027 | 6,818 | 6,818 | 6,622 | 0.53 | %",
+      "printed_cash": 9.0,
+      "printed_pik": 4.25,
+      "where": "Schedule of Investments, debt investments, evidence bundle accession 0001911066-25-000038, table 29 row 23"
+    },
+    {
+      "kind": "position",
+      "issuer": "Allredi, LLC (Abrasive Products and Equipment)",
+      "quote": "Allredi, LLC (Abrasive Products and Equipment) | (4) (6) | Subordinated Debt | N/A | 15.00 % (PIK) | 9/30/2027 | 1,006 | 1,006 | 841 | 0.07 | %",
+      "printed_pik": 15.0,
+      "where": "Schedule of Investments, debt investments, evidence bundle accession 0001911066-25-000038, table 22 row 28"
+    }
+  ],
+  "rationale": "The printed debt schedule does not present separate column headers for Cash and PIK, but PIK positions disclose the components explicitly inside the Interest Rate column using '(Cash)' and '(PIK)' labels. Rows with both components show the stated cash leg separately from the PIK leg, e.g. Revision Buyer at 10.00% cash plus 1.00% PIK, Image International at 9.35% cash plus 0.50% PIK, and Kofile at 9.00% cash plus 4.25% PIK. Rows that are entirely PIK-only are printed as '(PIK)' without a cash leg. Therefore the filer's stated position-level rate convention is cash_leg, with PIK quoted separately/additively where applicable. Note: the supplied filing evidence bundle available to verify printed schedule text is accession 0001911066-25-000038 with report_date 2025-09-30; no review bundle for accession 0001911066-26-000066 was present in the review_bundles directory.",
+  "confidence": 0.86,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 1
+}
