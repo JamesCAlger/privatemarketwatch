@@ -7071,3 +7071,77 @@ Agent lane for the rate-convention classifier residual. New modules:
 - Batch conv_full_2026-07-21b: 66 targets, n_needs_bundle 0. Prep smoke test
   (Silver Spike 1843162) confirms the S0 tagging-facts section renders in
   worker prompts (incl. its 4-way overloaded bare-rate labels).
+
+### 2026-07-21 -- Phase-2 adjudication of the five promoted exclusion rules (printed-SOI evidence)
+
+- Five parallel read-only agents adjudicated the row-level-confirmed exclusion
+  rules against cached filing HTML. Verdicts (all quote-backed, high confidence):
+  MidCap relationship-axis CORRECT (excluded rows = affiliated/controlled
+  rollforward-note aggregates; tranche FVs conserve exactly); HPS bare-axis
+  CORRECT (rows = ULTRA III JV note portfolio incl. 2024 comparatives; fund
+  keeps its $416M LLC-interest line); New Mountain NEWCRED CORRECT
+  (unconsolidated SLP I JV note portfolio, outside fund totals; $48M/$68M
+  membership interest retained); Fortress short-axis CORRECT (rows =
+  local-currency CAD/EUR restatements of surviving USD rows; FX-exact);
+  KKR exact-par MIXED -- aggregate-right (printed net total matches
+  post-exclusion to the dollar; contra-lines = $549,024K exactly) but the
+  FV=cost=principal proxy deletes real funded par positions (Woolpert 32,480,
+  VIB 30,616, PSKW) and misses non-par unfunded rows (Bausch, Curia); replace
+  with an unfunded-footnote-marker mechanism via B2 re-investigation.
+- Net: the delete-to-balance concern is resolved for 4/5 rules; ~1,530 of the
+  2,190 blocking rows now have verdicts (553 rule-explained with 4 rules
+  vindicated + KKR needing re-mechanization). Four generalizable source-recon
+  excusal classes identified: JV/equity-method-investee axes, non-USD unit
+  facts, relationship-axis rollforward rows, in-schedule unfunded-commitment
+  rows netted by contra-lines. These are also prime suspects for the Ares
+  $14.8B / MidCap $2.5B unexplained pools.
+- Read-only; no pipeline/ledger/queue/rule changes. Full write-up:
+  data_investigation_results.md 2026-07-21 part 5. Temp survivor-check script
+  removed.
+
+### 2026-07-22 -- Source-only classifier: JV look-through + non-USD unit excusal mechanisms
+
+- `pipeline/source_reconciliation.py`: two new documented mechanisms in
+  `build_source_only_blocker_detail`, from the 2026-07-21 printed-SOI
+  adjudication: `documented_jv_lookthrough_axis` (nonconsolidated-subsidiary /
+  equity-method-investee axis facts) and `documented_non_usd_fair_value_unit`
+  (fair-value unitRef names a non-USD ISO token, joined from
+  bdc_holdings.parquet via new `_fair_value_units_for_rows`; opaque ids and
+  USD aliases never match). Residual-classification documented predicate
+  widened from startswith("documented_source_") to startswith("documented_").
+- New `scripts/reassemble_source_recon_artifacts.py` (assembly-only re-run;
+  classifier changes do not dirty the reconciliation cache).
+- Measured: source-only blocking rows 2,190 -> 1,950; residual classification
+  blocking rows 2,305 -> 2,065, groups 461 -> 439. JV class = 233 rows/$1.50B
+  (NM+HPS adjudicated sets + 36 rows from other buckets); non-USD = 21 rows/
+  $228M (exact Fortress set). KKR exact-par rows deliberately remain blocking.
+- Tests: 7 new (incl. 4 false-positive guards); test_validate_holdings.py
+  147 pass. Standing review_queue.csv unchanged until next battery run.
+  Blocker accounting note: the current default counts are now 2,065 blocking
+  rows / 439 groups (source_reconciliation_residual_classification.md,
+  2026-07-22 assembly).
+
+### 2026-07-22 -- nanch1 null-anchor trial COMPLETE: filing-sourced anchor path validated end-to-end
+
+- First filing-sourced anchor promoted (remediation-chain open item 5): CIK
+  1916608 @ 2025-03-31 (no companyfacts FV). Anchor worker found the printed
+  SOI "Total Investments" row ($184,989,238; accession 0000950170-25-070658,
+  table 7 row 26), decomposed it (debt+equity 176,479,202 + cash equivalents
+  8,510,036), cross-checked the extracted 48-row sum (exact match to the
+  debt+equity subtotal). Verify: tier HIGH, balance-sheet closure ok
+  (invested_frac 99.4%). Override promoted to
+  data/overrides/agent_anchor/1916608/2025-03-31.json.
+- Shadow ledger refreshed: the quarter moved from unmeasurable (skip) to a
+  MEASURED fv_conservation fail at -4.60% -- exactly the cash-equivalents
+  component our extraction does not capture. cost_conservation 2025-03-31
+  flipped to pass. Follow-up decision: row_add extraction of the filer's
+  cash-equivalent SOI rows vs engine scope policy (leaf components support
+  either). Saratoga 0001377936 queued as the next null-anchor target (no
+  independent anchor at any recent quarter; dropped from the held-CIK
+  investigation batch for that reason).
+- Ops lessons: (1) Codex refresh tokens are SINGLE-USE and the dispatchers
+  copy auth.json into worker homes -- fleets launched from two shells race
+  the rotation and strand the operator token (recovered by copying the
+  worker-home auth.json back). One dispatching terminal at a time. (2) A
+  worker-home codex process hung after promote; kill of its subprocess tree
+  released it -- verify/promote are idempotent pure-python re-runs.
