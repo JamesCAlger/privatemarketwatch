@@ -7145,3 +7145,75 @@ Agent lane for the rate-convention classifier residual. New modules:
   worker-home auth.json back). One dispatching terminal at a time. (2) A
   worker-home codex process hung after promote; kill of its subprocess tree
   released it -- verify/promote are idempotent pure-python re-runs.
+
+### 2026-07-22 -- Attribution of rule-unexplained E1 drops (Ares $14.8B resolved as subtotals)
+
+- New `scripts/attribute_unexplained_drops.py` + artifacts
+  `data/output/unexplained_drop_attribution.csv/.md`: deterministic
+  sum/identity tests over the 286 blocker rows no promoted rule explains.
+- Result: 250/286 rows and 98% of the FV attributed. Ares 40/40 rows ($15.2B
+  raw FV) are issuer-level subtotal or rollforward-balance facts (Ivy Hill
+  et al.) whose tranche rows SURVIVE in unified -- correct drops the recon
+  classifier cannot yet clear. MidCap 156/179 same class (exact tranche
+  sums). KKR 54 rows are comparative/stale duplicate facts (identical FV
+  surviving at another quarter; weaker single-value evidence). Residual: 36
+  rows / $318M.
+- Implied future fix: extend documented_source_issuer_subtotal_arithmetic to
+  these identifier formats + adjacent-quarter sums; review-lane label for
+  comparative aliases. Not implemented in this pass.
+- Read-only analysis; no pipeline/artifact-semantics changes; no tests run
+  (additive script validated against known row counts).
+
+### 2026-07-22 -- JV-axis global staging drop rejected; equity-method axis added to is_subsidiary flag
+
+- Investigated making the HPS/NM JV-axis exclusions a global staging DROP.
+  Evidence rejected it: ~14 other BDCs carry JV-axis rows in unified
+  ($90.4B / 11,118 rows) under an EXISTING retain-and-flag design
+  (staging is_subsidiary -> GAV recon sum_holdings_fv_ex_sub, residuals ~0).
+  A drop would have created $0.4-2.3B/qtr undershoots across a dozen filers.
+- Root defect identified instead: the shadow conservation engine does not
+  consult is_subsidiary (sums all rows), which is why NM/HPS overshot anchors
+  and B2 deleted their JV rows while the GAV referee reconciles ex-sub.
+  Operator decisions raised (see data_investigation_results.md part 8):
+  ex-sub conservation sums, NM rule retirement, public-FV treatment of
+  flagged rows (cohort funds AGL/Bain PC currently double-count ~$0.6B in
+  the straight-sum headline), HPS re-scope (no axis in its extracted dims --
+  parts 5-6 correction: the 233 excused rows were NM 217 + Franklin BSP 15 +
+  FS KKR 1, NOT HPS).
+- Applied: staging_bdc.py is_subsidiary predicate extended to
+  scheduleofequitymethodinvestmentequitymethodinvesteenameaxis (16 NewtekOne
+  rows previously missed; future equity-method filers covered). 1 new test,
+  TestSubsidiaryFlag 6 pass. Materializes at next unified rebuild; no
+  artifacts rebuilt this session.
+
+### 2026-07-22 -- Held-CIK re-investigation batch: 10/11 gate PASS, 5 production clears, frame-mismatch cluster identified
+
+- Batch batch_held12_20260722 (9 held CIKs + gate-FAIL duo; Saratoga 1377936
+  excluded upfront -- no independent anchor, routed to the anchor lane).
+  Serial Codex investigation workers, trial apply + B3 gate per CIK.
+- Trial results: 10/11 PASS inside the 0.5% band (7 at 0.0%), incl. Blue Owl
+  1803498 (JV look-through dedup + 11 recovered staging rows, $220M) and
+  BCRED 1812554. 1743415 FAIL is an ANCHOR case: worker escalated 5x with
+  evidence that companyfacts_fv $24.99M is an affiliated-investment subtotal
+  vs the printed $275.4M schedule total -> anchor-lane queue.
+- Promote-time review caught: (a) 1899996 superseded row_add left beside its
+  replacement (double-add of 3 dead rows) -- archived, re-gated PASS;
+  (b) 1975736 unfunded-commitment exclusion examined against the KKR-MIXED
+  mechanism family -- issuer-enumerated, filing-cited, ambiguous row skipped
+  -- promoted.
+- Production (rebuild + shadow ledger): fv_conservation fail 245 -> 239,
+  pass 519 -> 526. Cleared: 1803498 (0.000%), 1899017, 1899996, 1911066,
+  1975736.
+- FRAME-MISMATCH CLUSTER (5/10, now task): 4 promoted rules noop at the
+  unified tail (1812554, 1859919, 1885968, 1508655 -- predicates match zero
+  production rows; their flags persist at different residuals than trial);
+  1965934's T-bill row_add applied to unified but is INVISIBLE to the
+  conservation engine (residual identical -11.472% with and without it --
+  the trial gate counts the row, the engine does not). Rule pulled to
+  data/overrides/agent_investigate_rules/_pulled_frame_mismatch_20260722
+  pending diagnosis. Root cause to fix BEFORE more investigation batches:
+  run_investigation._load_holdings trial frame != conservation-engine frame
+  (row countability + row identity). 1965934's underlying -11.47% (sum >
+  anchor, no rules) is itself a suspect-anchor case.
+- Anchor-lane queue now: 1377936 (no anchor), 1743415 (subtotal anchor),
+  1965934 (suspect anchor). nanch1 validated the mechanism this morning.
