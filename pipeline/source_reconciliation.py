@@ -52,6 +52,7 @@ from pipeline.classification import (
 )
 from pipeline.config import (
     BDC_FILINGS_INDEX_FILE,
+    OUTPUT_DIR,
     BDC_SOURCE_FACTS_CACHE_DIR,
     BDC_SOURCE_FACTS_CACHE_MANIFEST_FILE,
     SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE,
@@ -70,6 +71,20 @@ from pipeline.config import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Raw production extraction (carries fair_value_unit / unitRef per row); used by
+# the source-only classifier to identify local-currency restatement facts.
+BDC_HOLDINGS_PARQUET_FILE = OUTPUT_DIR / "bdc_holdings.parquet"
+
+# Non-USD ISO 4217 codes as standalone tokens inside a unitRef id (e.g. "U_CAD",
+# "iso4217:EUR"). Opaque unit ids (e.g. "u001") deliberately do NOT match; a row
+# is only excused when the unit clearly names a non-USD currency AND does not
+# mention USD anywhere (guards against "UNIT_STANDARD_USD_<hash>" aliases whose
+# hash could accidentally contain a code).
+_NON_USD_CURRENCY_UNIT_RE = (
+    r"(?:^|[^a-z])(?:cad|eur|gbp|aud|chf|jpy|sek|nok|dkk|nzd|sgd|hkd|cny|inr|"
+    r"brl|mxn|pln|czk|huf|krw|zar|ils)(?:[^a-z]|$)"
+)
 
 VALUE_COLUMNS = ["fair_value", "cost", "principal_amount", "shares_held"]
 RATE_COLUMNS = ["interest_rate", "basis_spread", "pik_rate"]
@@ -219,6 +234,8 @@ MECHANISM_RECOMMENDED_ACTIONS = {
     "documented_source_country_industry_header": "Keep documented as non-blocking country/industry hierarchy header without entity evidence.",
     "documented_source_pct_total_header": "Keep documented as non-blocking terminal-percentage total/header row without leaf-position evidence.",
     "documented_source_pct_category_rollup": "Keep documented as non-blocking terminal-percentage category/geography/security-type rollup without leaf-position evidence.",
+    "documented_jv_lookthrough_axis": "Keep documented as non-blocking unconsolidated JV/equity-method investee look-through fact; the fund's exposure is its retained JV interest position.",
+    "documented_non_usd_fair_value_unit": "Keep documented as non-blocking local-currency restatement fact; the USD-denominated row reconciles separately.",
     "blocking_source_pct_leaf_parser_mismatch": "Fix parser/staging for terminal-percentage source rows with issuer, instrument, rate, maturity, or other leaf evidence.",
     "blocking_source_pct_ambiguous_after_review": "Escalate terminal-percentage source rows that lack safe rollup evidence and do not have enough leaf evidence to parse.",
     "blocking_source_pct_hierarchy_parser_mismatch": "Compatibility label only; new classifications should use split pct total, rollup, leaf, or ambiguous mechanisms.",
@@ -263,6 +280,8 @@ MECHANISM_REASONS = {
     "documented_source_country_industry_header": "Source-only row is a country/industry hierarchy header lacking entity and position-level instrument signals.",
     "documented_source_pct_total_header": "Source-only row is a terminal-percentage total/header row without leaf-position evidence.",
     "documented_source_pct_category_rollup": "Source-only row is a terminal-percentage category/geography/security-type rollup without leaf-position evidence.",
+    "documented_jv_lookthrough_axis": "Source fact is tagged on a nonconsolidated-subsidiary or equity-method-investee axis; it describes the investee vehicle's portfolio, not the fund's direct holding.",
+    "documented_non_usd_fair_value_unit": "Source fair-value fact is denominated in a non-USD currency unit; it is a local-currency restatement of a separately tagged USD position row.",
     "blocking_source_pct_leaf_parser_mismatch": "Source-only terminal-percentage row has issuer, instrument, rate, maturity, or other leaf-position evidence.",
     "blocking_source_pct_ambiguous_after_review": "Source-only terminal-percentage row remains ambiguous after strict total/rollup and leaf-signal checks.",
     "blocking_source_pct_hierarchy_parser_mismatch": "Compatibility label only; new classifications should use split pct total, rollup, leaf, or ambiguous mechanisms.",
@@ -301,12 +320,75 @@ def _bool_series(value: bool, index: pd.Index) -> pd.Series:
     return pd.Series(value, index=index, dtype=bool)
 
 
-def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
+def _fair_value_units_for_rows(
+    rows: pd.DataFrame,
+    holdings_parquet_path: Optional[Path] = None,
+) -> pd.Series:
+    """Lowercased fair-value unitRef per source-only row, joined from the raw BDC
+    holdings parquet on (cik, accession, dimensions_raw). Empty string when the
+    parquet is missing, the join fails, or the row has no raw counterpart --
+    absence of unit evidence never excuses a row."""
+    path = Path(holdings_parquet_path) if holdings_parquet_path is not None else BDC_HOLDINGS_PARQUET_FILE
+    out = pd.Series("", index=rows.index, dtype=str)
+    if rows.empty or not path.exists():
+        return out
+    keys = pd.DataFrame({
+        "row_idx": rows.index,
+        "cik": rows["cik"].astype(str).str.zfill(10),
+        "accession_number": rows["accession_number"].astype(str),
+        "dimensions_raw": rows["dimensions_raw"].fillna("").astype(str),
+    })
+    con = duckdb.connect()
+    try:
+        con.register("so_keys", keys)
+        joined = con.execute(
+            """
+            SELECT k.row_idx AS row_idx,
+                   max(lower(COALESCE(r.fair_value_unit, ''))) AS unit
+            FROM so_keys k
+            JOIN (
+                SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik,
+                       CAST(accession_number AS VARCHAR) AS accession_number,
+                       CAST(dimensions_raw AS VARCHAR) AS dimensions_raw,
+                       CAST(fair_value_unit AS VARCHAR) AS fair_value_unit
+                FROM read_parquet(?)
+                WHERE CAST(accession_number AS VARCHAR)
+                      IN (SELECT DISTINCT accession_number FROM so_keys)
+            ) r
+              ON r.cik = k.cik
+             AND r.accession_number = k.accession_number
+             AND r.dimensions_raw = k.dimensions_raw
+            GROUP BY 1
+            """,
+            [str(path)],
+        ).fetchdf()
+    except Exception as exc:
+        logger.warning("Source-only fair-value unit join unavailable: %s", exc)
+        return out
+    finally:
+        con.close()
+    if joined.empty:
+        return out
+    unit_by_idx = dict(zip(joined["row_idx"], joined["unit"]))
+    return pd.Series(
+        [str(unit_by_idx.get(i, "") or "") for i in rows.index],
+        index=rows.index,
+        dtype=str,
+    )
+
+
+def build_source_only_blocker_detail(
+    detail_df: pd.DataFrame,
+    holdings_parquet_path: Optional[Path] = None,
+) -> pd.DataFrame:
     """Classify source-only BDC blockers with deterministic evidence buckets.
 
     This is an additive audit artifact.  It does not mutate
     ``source_reconciliation_detail.csv`` and it deliberately keeps ambiguous or
     position-like rows blocking.
+
+    ``holdings_parquet_path`` overrides the raw-holdings parquet used for the
+    fair-value unit join (tests); default is the production artifact.
     """
     if detail_df.empty:
         return _empty_source_only_detail()
@@ -708,6 +790,45 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
             "documented_non_position_exclusion" if not blocking else "blocking_parser_or_review_residual"
         )
 
+    # JV / equity-method look-through facts: the axis itself declares the fact
+    # describes a nonconsolidated investee vehicle's portfolio, not the fund's
+    # own holding (adjudicated against printed SOIs 2026-07-21, see
+    # data_investigation_results.md part 5: HPS/ULTRA III, New Mountain/SLP I --
+    # the fund's exposure is its retained JV-interest position line).
+    jv_lookthrough_axis = (
+        dimensions_lower.str.contains(
+            "investmentcompanynonconsolidatedsubsidiaryaxis", regex=False, na=False
+        )
+        | dimensions_lower.str.contains(
+            "equitymethodinvestmentequitymethodinvesteenameaxis", regex=False, na=False
+        )
+    )
+    assign(
+        jv_lookthrough_axis,
+        "documented_jv_lookthrough_axis",
+        "SRCONLY_JV_LOOKTHROUGH_AXIS",
+        "high",
+        False,
+    )
+
+    # Local-currency restatement facts: fair value tagged in a non-USD unit is a
+    # per-tranche FX restatement of a separately tagged USD row (adjudicated
+    # 2026-07-21 part 5: Fortress footnote-18 CAD/EUR tables, FX-exact matches
+    # to surviving USD rows). Unit evidence comes from the raw extraction's
+    # unitRef; opaque unit ids never match, and any unit mentioning USD is kept.
+    fv_units = _fair_value_units_for_rows(source_only, holdings_parquet_path)
+    non_usd_fv_unit = (
+        fv_units.str.contains(_NON_USD_CURRENCY_UNIT_RE, regex=True, na=False)
+        & ~fv_units.str.contains("usd", regex=False, na=False)
+    )
+    assign(
+        non_usd_fv_unit,
+        "documented_non_usd_fair_value_unit",
+        "SRCONLY_NON_USD_FV_UNIT",
+        "high",
+        False,
+    )
+
     # Issuer-level XBRL subtotals identified by wrapper disposition
     wrapper_disp = (
         source_only.get("source_wrapper_disposition", pd.Series("", index=source_only.index))
@@ -749,10 +870,12 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         MECHANISM_RECOMMENDED_ACTIONS
     ).fillna("Review source-only residual.")
     source_only["evidence_reviewed"] = (
-        "cached XBRL row identifier, dimensions, source FV, reconciliation evidence, "
-        "numeric alias evidence, and deterministic entity/header/instrument signals"
+        "cached XBRL row identifier, dimensions, source FV, fair-value unit currency, "
+        "reconciliation evidence, numeric alias evidence, and deterministic "
+        "entity/header/instrument signals"
     )
     source_only["hypotheses_tested"] = (
+        "JV/equity-method look-through axis; non-USD fair-value unit; "
         "issuer-level XBRL subtotal (wrapper disposition); "
         "numeric alias; total/subtotal header; cash or money-market bucket; "
         "affiliation/category/country-industry header; percentage total/header; "
@@ -760,6 +883,8 @@ def build_source_only_blocker_detail(detail_df: pd.DataFrame) -> pd.DataFrame:
         "position-like parser mismatch; short plain unresolved identifier"
     )
     source_only["why_not_cleared"] = source_only["mechanism"].map({
+        "documented_jv_lookthrough_axis": "cleared as documented unconsolidated JV/equity-method investee look-through fact outside the fund's own schedule",
+        "documented_non_usd_fair_value_unit": "cleared as documented local-currency restatement fact; the USD-denominated row reconciles separately",
         "documented_source_issuer_level_xbrl_subtotal": "cleared as documented issuer-level XBRL subtotal with position-leaf children in pipeline output",
         "documented_source_total_header": "cleared as documented non-position total/header row",
         "documented_source_cash_or_money_market_bucket": "cleared as documented cash or money-market bucket outside private-market output",
@@ -3125,8 +3250,11 @@ def build_source_reconciliation_residual_classification(
         return _empty_residual_classification()
 
     reviewable["confidence"] = "high"
+    # Any documented_* mechanism is a non-blocking exclusion (covers both the
+    # documented_source_* header/rollup family and evidence-class excusals like
+    # documented_jv_lookthrough_axis / documented_non_usd_fair_value_unit).
     documented_source_only = reviewable["mechanism"].astype(str).str.startswith(
-        "documented_source_"
+        "documented_"
     )
     reviewable.loc[documented_source_only, "blocking_issue"] = False
     reviewable.loc[documented_source_only, "residual_class"] = "documented_exclusion"

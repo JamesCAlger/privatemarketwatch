@@ -635,9 +635,14 @@ def validate_column_contracts(
             "maturity_date uses perpetual/no-maturity sentinel",
             "9999-12-31 is treated as a display sentinel",
         ),
+        # X10 demoted 2026-07-21 (recal1: 67% FP, up from a small-n 20% ens2
+        # prior). Its adjudicated reals are maturity-date extraction gaps --
+        # real but sub-materiality (no fair-value impact; affects maturity
+        # analytics only). Keeps firing as TRACK_ONLY evidence; no longer
+        # consumes B1 adjudications.
         _issue_query(
-            "maturity_date", "X10", SEVERITY_WARN, EVIDENCE_MODERATE,
-            ACTION_REVIEW,
+            "maturity_date", "X10", SEVERITY_INFO, EVIDENCE_MODERATE,
+            ACTION_TRACK_ONLY,
             "TRY_CAST(maturity_date AS DATE) IS NOT NULL "
             "AND TRY_CAST(report_date AS DATE) IS NOT NULL "
             "AND maturity_date != '9999-12-31' "
@@ -726,9 +731,16 @@ def validate_column_contracts(
             "fair_value exceeds 10x cost (non-equity)",
             "extreme appreciation or data error",
         ),
+        # X08 demoted 2026-07-21 (recal1: 89% FP, 0 real in 12 new; ens2 55%).
+        # Row-level unique-catch analysis (data_investigation_results.md
+        # 2026-07-21 part 2): 6/10 adjudicated reals already corrected on the
+        # current frame, 1 unique row-level catch -- a real but sub-materiality
+        # extraction defect (below the 0.5% fv_conservation band). Keeps firing
+        # into row_validation_issues.csv as investigator evidence; no longer
+        # consumes B1 adjudications.
         _issue_query(
-            "cost", "X08", SEVERITY_WARN, EVIDENCE_WEAK,
-            ACTION_REVIEW,
+            "cost", "X08", SEVERITY_INFO, EVIDENCE_WEAK,
+            ACTION_TRACK_ONLY,
             "TRY_CAST(fair_value AS DOUBLE) > 0 AND TRY_CAST(cost AS DOUBLE) > 0 "
             "AND TRY_CAST(fair_value AS DOUBLE) / TRY_CAST(cost AS DOUBLE) < 0.05",
             "fair_value is below 5% of cost",
@@ -1127,30 +1139,33 @@ def _adapt_aggregate_leaks(df: Optional[pd.DataFrame]) -> pd.DataFrame:
 def _adapt_position_purity(df: Optional[pd.DataFrame]) -> pd.DataFrame:
     if df is None or df.empty or "issue_family" not in df.columns:
         return _empty_issues()
+    # PP01 demoted 2026-07-21 (ens2/recal1: ~56-62% FP). Material subtotal
+    # leaks remain covered by fv_conservation (anchored, 0.5% band) and the
+    # AGG01 aggregate-header rule; PP01's residual adjudicated reals are
+    # sub-materiality leaks below that band. INFO severity maps to ledger
+    # status 'skip' (see shadow_adapter._row_issues_select) so it stops
+    # consuming B1 adjudications while still firing into the artifact.
     rule_map = {
         "subtotal_candidate": (
-            "PP01",
+            "PP01", SEVERITY_INFO, ACTION_TRACK_ONLY,
             "position purity subtotal candidate",
             "candidate subtotal/header row detected by diagnostic layer",
         ),
         "duplicate_dimension_candidate": (
-            "PP02",
+            "PP02", SEVERITY_WARN, ACTION_REVIEW,
             "position purity duplicate dimension candidate",
             "same normalized position identity and numeric facts on multiple dimension paths",
         ),
         "comparative_period": (
-            "PP03",
+            "PP03", SEVERITY_WARN, ACTION_TRACK_ONLY,
             "position purity comparative-period row",
             "period precedes report_date; tracked separately from duplicates",
         ),
     }
     rows = []
     for _, row in df[df["issue_family"].isin(rule_map)].iterrows():
-        rule_id, message, fallback_evidence = rule_map[str(row.get("issue_family", ""))]
-        action = (
-            ACTION_TRACK_ONLY
-            if str(row.get("issue_family", "")) == "comparative_period"
-            else ACTION_REVIEW
+        rule_id, severity, action, message, fallback_evidence = (
+            rule_map[str(row.get("issue_family", ""))]
         )
         rows.append({
             "source": row.get("source", ""),
@@ -1159,7 +1174,7 @@ def _adapt_position_purity(df: Optional[pd.DataFrame]) -> pd.DataFrame:
             "row_key": str(row.get("row_key", "")),
             "column": "bdc_investment_identifier",
             "rule_id": rule_id,
-            "severity": SEVERITY_WARN,
+            "severity": severity,
             "evidence_strength": EVIDENCE_MODERATE,
             "action": action,
             "value": str(row.get("bdc_investment_identifier", "") or row.get("issuer_name", "")),

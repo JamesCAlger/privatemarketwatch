@@ -321,6 +321,99 @@ class TestSourceOnlyBlockerClassification:
             "blocking_source_position_like_parser_mismatch",
         }
 
+    # --- JV look-through axis + non-USD unit excusals (2026-07-22) ---
+    # Evidence basis: printed-SOI adjudication 2026-07-21
+    # (data_investigation_results.md part 5): JV note portfolios (HPS/ULTRA III,
+    # New Mountain/SLP I) and local-currency restatement tables (Fortress).
+
+    def _frame_with_dims(self, identifier, dims):
+        df = _make_source_only_detail([identifier])
+        df["dimensions_raw"] = dims
+        return df
+
+    def test_jv_nonconsolidated_subsidiary_axis_documented(self):
+        # Entity-signal identifier would otherwise be position_like blocking;
+        # the JV axis must take priority.
+        df = self._frame_with_dims(
+            "Xplor T1, LLC| Software",
+            "investmentcompanynonconsolidatedsubsidiaryaxis=NEWCREDSeniorLoanProgramILLCMember"
+            "|investmentidentifieraxis=Xplor T1, LLC| Software",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == False
+
+    def test_equity_method_investee_axis_documented(self):
+        df = self._frame_with_dims(
+            "Bright Light Buyer, Inc. 1",
+            "scheduleofequitymethodinvestmentequitymethodinvesteenameaxis=ULTRAIIIMember"
+            "|investmentidentifieraxis=Bright Light Buyer, Inc. 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == False
+
+    def test_jv_name_in_identifier_without_axis_stays_blocking(self):
+        # False-positive guard: the fund's own JV-interest POSITION mentions the
+        # JV name in text but is not on a look-through axis -- must stay blocking.
+        df = self._frame_with_dims(
+            "NEWCRED Senior Loan Program I LLC Membership Interest",
+            "investmentidentifieraxis=NEWCRED Senior Loan Program I LLC Membership Interest",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    _FX_DIMS = (
+        "investmentidentifieraxis=Jupiter Refuel Canada Buyer, Inc. "
+        "Investment Type First Lien - Term Loan"
+    )
+    _FX_IDENT = (
+        "Jupiter Refuel Canada Buyer, Inc. Investment Type First Lien - Term Loan"
+    )
+
+    def _unit_parquet(self, tmp_path, unit):
+        path = tmp_path / "raw_holdings.parquet"
+        pd.DataFrame([{
+            "cik": 100,
+            "accession_number": "acc-001",
+            "dimensions_raw": self._FX_DIMS,
+            "fair_value_unit": unit,
+        }]).to_parquet(path)
+        return path
+
+    def test_non_usd_unit_documented(self, tmp_path):
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        parquet = self._unit_parquet(tmp_path, "U_CAD")
+        row = build_source_only_blocker_detail(df, holdings_parquet_path=parquet).iloc[0]
+        assert row["mechanism"] == "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == False
+
+    def test_usd_alias_unit_with_code_like_hash_stays_blocking(self, tmp_path):
+        # False-positive guard: USD-alias unit whose hash happens to contain a
+        # currency-code token must NOT be excused.
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        parquet = self._unit_parquet(tmp_path, "UNIT_STANDARD_USD_x_cad_hash")
+        row = build_source_only_blocker_detail(df, holdings_parquet_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == True
+
+    def test_opaque_unit_stays_blocking(self, tmp_path):
+        # False-positive guard: opaque unit ids carry no currency evidence.
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        parquet = self._unit_parquet(tmp_path, "u001")
+        row = build_source_only_blocker_detail(df, holdings_parquet_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == True
+
+    def test_missing_unit_parquet_stays_blocking(self, tmp_path):
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        row = build_source_only_blocker_detail(
+            df, holdings_parquet_path=tmp_path / "does_not_exist.parquet"
+        ).iloc[0]
+        assert row["mechanism"] != "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == True
+
     @pytest.mark.parametrize("identifier", [
         "Investment Portfolio",
         "Total Mutual Funds",
