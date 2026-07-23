@@ -28,6 +28,8 @@ import duckdb
 
 # sibling imports (the engines live in this dir; not a package)
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+# repo root so the engines (and this runner) can import pipeline.*
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import shadow_conservation_engine as cons   # noqa: E402
 import shadow_identity_engine as idn         # noqa: E402
 import shadow_cross_source_engine as xsrc    # noqa: E402

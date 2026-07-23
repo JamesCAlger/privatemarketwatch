@@ -7329,3 +7329,69 @@ Agent lane for the rate-convention classifier residual. New modules:
   protocol (new batch id, max 2 rounds), and hard stop-and-escalate rules
   (gate refusals are outcomes; never modify B1; never edit gates to pass;
   single dispatcher; cohort guard on every worklist).
+
+### 2026-07-23 -- Baseline refreshed to Q4-2025 remediation state (pre-Q1-refresh)
+
+- Retired the post-Phase-6 official baseline (archived intact at
+  `data/snapshots/baseline_post_phase6_retired_2026-07-23`) and re-snapshotted
+  `data/snapshots/baseline/` from current outputs via snapshot_outputs.py
+  (26,590 artifacts). Captured DELIBERATELY before the authorized 2026-07-23
+  Q1 companyfacts/holdings refresh wrote any outputs, so the new baseline is
+  the last deterministic rebuild (2026-07-22 16:17) reflecting all landed
+  Q4-2025 remediation: Wave-1 promotions, held-CIK batches, convention fleet.
+- Semantic deltas vs the retired baseline (from diff_outputs.py --semantic,
+  report archived in the run logs): holdings -1,264 rows net with 12
+  class-level FV delta rows (largest: unclassified +13 rows / +$281.7M),
+  fund_financials 2 delta rows, matches/position_returns/index_returns 0.
+  305 divergent artifacts overall, all with 2026-07-22 mtimes -- promotion
+  moves (agent_investigate/agent_b2 rules relocated into data/overrides/) and
+  the accompanying rebuild. No writes from the 2026-07-23 full pytest run
+  (guard held; verified by mtime audit).
+- Post-snapshot verification diff: 0 semantic delta rows on all five layers.
+  Only ncsr_financials.csv + ncsr_parse_progress.csv diverge, written
+  incrementally by the in-flight --financials refresh; baseline holds their
+  pre-refresh state.
+- KNOWN RESIDUALS baked into this baseline (pre-existing, audit-flagged in
+  agent_fix_application_audit.csv): 4 promoted rules noop on rebuild
+  (1508655 $191M, 1812554 $1.53B, 1859919 $115M, 1885968 $45M authoring FV
+  matching zero rows) and 1 no_rows rule with a malformed CIK-like id
+  `0020260722` (looks like date 2026-07-22 leaked into the CIK field).
+  These need mechanism review before the next promotion wave.
+- Full pytest suite (2026-07-23): 4,265 passed / 2 failed / 13 skipped /
+  2 xfailed in 2h41m. Failures: known test_ixbrl_lien_fills_blank_keyword_lien;
+  plus test_apollo_ds_company_only_source_row_is_aggregate (stale expectation
+  after ff97c2e changed the disposition equity_total_rollup -> aggregate;
+  both dispositions are non-leaf, no data effect).
+
+### 2026-07-23 -- Q1 2026 maiden quarter pass (q1shakedown): NOT_ASSESSABLE -> FAIL, now assessable
+
+- Phase 0 refresh (human-authorized): forced companyfacts re-fetch for all 374
+  BDC CIKs after finding that pipeline/extract_companyfacts.py fetches ONLY
+  missing CIKs (no staleness check) -- the first --financials run wrote zero
+  new facts (135 uncached CIKs all 404, i.e. non-XBRL filers). Stale cache
+  archived at data/raw/companyfacts_cache_stale_pre_q1_2026-07-23. TODO: a
+  --refresh-companyfacts staleness flag would make this scriptable.
+  fund_financials.csv rebuilt with 178 rows referencing 2026-03-31.
+  --holdings incremental: bdc_holdings.csv now 1,184,101 rows / 195 BDCs
+  (2026_06 BDC dataset + late Q1 XBRL instance docs).
+- TOOLING FIX: scripts/shadow_validation_runner.py was missing the repo-root
+  sys.path insert (only added scripts/), so the shadow stage crashed with
+  ModuleNotFoundError('pipeline') when launched as a run_quarter_pass
+  subprocess. One-line fix matching the repo-wide script idiom. Also noted:
+  resuming with --from shadow does not stop at select -- it runs the post
+  stages too (pre==post no-op here since nothing was dispatched).
+- q1shakedown acceptance (2026-03-31, provisional thresholds v1): verdict
+  FAIL, 3/7 checks pass. KEY RESULT: quarter is now ASSESSABLE --
+  anchored_rate_pct 98.551 vs the 50 gate (was NOT_ASSESSABLE on stale
+  companyfacts). Failing checks: reconcile_rate 66.2 (>=70),
+  flagged_fv_share 32.9 (<=20), verified_fv_share 35.9 (>=50),
+  promoted_rule_drift 5 (=0) + health 1 (=0) -- the drift/health flags are
+  the SAME pre-existing 4 noop rules + 1 no_rows malformed-CIK rule
+  (0020260722) documented at the 2026-07-23 baseline refresh; Q1 rebuild
+  added no new drift. Tiers: 39 verified / 29 under_review / 1 unanchored /
+  1 no_holdings; cohort FV $383.5B; flagged FV $126.0B concentrated in the
+  largest funds (BCRED, OCIC, Ares, HPS top the candidates queue).
+  candidates.csv: 29 under-review funds; extreme residuals TCW Star 141.9pct,
+  TCW DL 75.7pct, TCW VII 54.1pct, PIMCO CS -23.4pct, Bain 22.4pct.
+- Full pytest suite ran clean pre-refresh (see baseline entry above). No
+  fleet dispatched; operator stopped at the select boundary per protocol.
