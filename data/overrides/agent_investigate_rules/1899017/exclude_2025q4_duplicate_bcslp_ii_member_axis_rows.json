@@ -1,0 +1,40 @@
+{
+  "cik": "1899017",
+  "rule_id": "exclude_2025q4_duplicate_bcslp_ii_member_axis_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND bdc_dimensions_raw LIKE '%investmentcompanynonconsolidatedsubsidiaryaxis=BainCapitalSeniorLoanProgramIILLCMember%' AND issuer_name IN ('Hotel, Gaming & Leisure Awayday First Lien Senior Secured Loan SOFR Spread 5.25% Interest Rate 8.92% Maturity Date 5/6/2032', 'High Tech Industries Govineer Solutions (fka Black Mountain) First Lien Senior Secured Loan SOFR Spread 5.00% Interest Rate 8.67% Maturity Date 10/7/2030', 'FIRE: Finance PMA First Lien Senior Secured Loan SOFR Spread 4.75% Interest Rate 8.42% Maturity Date 1/31/2031', 'Healthcare & Pharmaceuticals RedMed Operations (Collage Rehabilitation) First Lien Senior Secured Loan SOFR Spread 5.00% Interest Rate 8.72% Maturity Date 2/28/2031', 'Services: Consumer CorePower Yoga, LLC First Lien Senior Secured Loan SOFR Spread 5.25% Interest Rate 8.92% Maturity Date 4/30/2031', 'Healthcare & Pharmaceuticals Red Nucleus First Lien Senior Secured Loan SOFR Spread 5.25% Interest Rate 9.02% Maturity Date 10/17/2031', 'Wholesale Fifty U.S. Bidco Inc First Lien Senior Secured Loan SOFR Spread 5.00% Interest Rate 8.67% Maturity Date 8/1/2031', 'Healthcare & Pharmaceuticals AOM Infusion First Lien Senior Secured Loan SOFR Spread 5.00% Interest Rate 8.69% Maturity Date 3/19/2032', 'Construction & Building AGS American Glass Services Acquisition, LLC First Lien Senior Secured Loan SOFR Spread 5.50% Interest Rate 9.22% Maturity Date 7/24/2031', 'Healthcare & Pharmaceuticals Odyssey Behavioral Health First Lien Senior Secured Loan SOFR Spread 5.25% Interest Rate 9.12% Maturity Date 5/21/2031', 'Healthcare & Pharmaceuticals EHE Health First Lien Senior Secured Loan SOFR Spread 5.50% Interest Rate 9.17% Maturity Date 8/7/2030', 'Healthcare & Pharmaceuticals AEG Vision First Lien Senior Secured Loan SOFR Spread 5.90% Interest Rate 9.57% Maturity Date 3/27/2027', 'Capital Equipment Ergotron Acquisition LLC First Lien Senior Secured Loan SOFR Spread 5.25% Interest Rate 8.97% Maturity Date 7/6/2028', 'Hotel, Gaming & Leisure City BBQ First Lien Senior Secured Loan SOFR Spread 5.35% Interest Rate 9.10% Maturity Date 9/4/2030', 'Automotive Chilton First Lien Senior Secured Loan SOFR Spread 5.50% Interest Rate 9.40% Maturity Date 2/5/2031', 'Services: Consumer Owl Acquisition, LLC First Lien Senior Secured Loan SOFR Spread 4.75% Interest Rate 8.63% Maturity Date 4/17/2032', 'Aerospace & Defense Saturn Purchaser Corp. First Lien Senior Secured Loan SOFR Spread 4.85% Interest Rate 8.72% Maturity Date 7/22/2030', 'High Tech Industries SensorTower First Lien Senior Secured Loan SOFR Spread 7.50% Interest Rate 11.20% Maturity Date 3/15/2029')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings value_sum is 1771110192.0 versus the validated investments_at_fair_value anchor 1681258000.0, an overshoot of 89852192.0."
+    },
+    {
+      "source": "query",
+      "quote": "Member-axis BainCapitalSeniorLoanProgramIILLCMember rows total 141011000.0 fair value; 19 of those rows have a same-quarter direct-axis issuer_name match and total 96891000.0 fair value. Excluding all 19 pushed value_after to 1674219192.0, which is 7038808.0 below the 1681258000.0 anchor."
+    },
+    {
+      "source": "query",
+      "quote": "Rows without a direct-axis issuer_name match total 44120000.0 fair value and are retained; excluding all member-axis rows would undercount 2025-12-31 by 51158808.0."
+    },
+    {
+      "source": "query",
+      "quote": "The revised predicate excludes 18 member-axis same-issuer rows totaling 86916000.0 fair value and retains the Chex member-axis row. On uncorrected holdings, value_after is 1684194192.0 and residual_after is 2936192.0, or 0.175% of the anchor."
+    }
+  ],
+  "rationale": "The residual is caused by look-through Bain Capital Senior Loan Program II member-axis positions leaking into holdings when the same investments are also represented as direct-axis positions for the same quarter. The prior 19-row version over-excluded and crossed below the validated anchor. This revision keeps the correction to the same member-axis leak but retains the Chex member-axis row, leaving the quarter within the 0.5% rounding tolerance without deleting below the anchor.",
+  "confidence": 0.82,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 18,
+      "fv": -86916000.0,
+      "residual_before": 89852192.0,
+      "residual_after": 2936192.0
+    }
+  }
+}

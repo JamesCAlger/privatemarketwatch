@@ -1,0 +1,127 @@
+{
+  "cik": "1899996",
+  "rule_id": "fidelity_money_market_row_add_2025_countable",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-06-30",
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "source": "bdc",
+      "cik": "0001899996",
+      "entity_name": "Fidelity Private Credit Co LLC",
+      "accession_number": "0000950170-25-108878",
+      "filing_date": "2025-08-13",
+      "report_date": "2025-06-30",
+      "fair_value": 17648924.0,
+      "cost": 17648924.0,
+      "shares_held": 17648924.0,
+      "fair_value_currency": "U_USD",
+      "cost_currency": "U_USD",
+      "asset_category": "FUND",
+      "issuer_category": "FUND",
+      "index_classification": "CASH",
+      "exposure_type": "LIQUID",
+      "asset_class": "CASH",
+      "issuer_name": "State Street Institutional Treasury Plus Money Market Fund",
+      "instrument_description": "Investor Class Units",
+      "bdc_form_type": "10-Q",
+      "bdc_investment_identifier": "Investments Investments -- non-controlled/ non-affiliated Money Market Mutual Funds Mutual Funds State Street Institutional Treasury Plus Money Market Fund - 4.17% Investor Class Units",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments Investments -- non-controlled/ non-affiliated Money Market Mutual Funds Mutual Funds State Street Institutional Treasury Plus Money Market Fund - 4.17% Investor Class Units",
+      "source_row_id": "0000950170-25-108878.xml:31170 ck0001899996:MoneyMarketFundsAtFairValue context C_f35a035a-1b79-40cf-8a45-2a3d754ed26c"
+    },
+    {
+      "source": "bdc",
+      "cik": "0001899996",
+      "entity_name": "Fidelity Private Credit Co LLC",
+      "accession_number": "0001193125-25-277220",
+      "filing_date": "2025-11-12",
+      "report_date": "2025-09-30",
+      "fair_value": 8814565.0,
+      "cost": 8814565.0,
+      "shares_held": 8814565.0,
+      "fair_value_currency": "U_USD",
+      "cost_currency": "U_USD",
+      "asset_category": "FUND",
+      "issuer_category": "FUND",
+      "index_classification": "CASH",
+      "exposure_type": "LIQUID",
+      "asset_class": "CASH",
+      "issuer_name": "State Street Institutional Treasury Plus Money Market Fund",
+      "instrument_description": "Investor Class Units",
+      "bdc_form_type": "10-Q",
+      "bdc_investment_identifier": "Money Market Mutual Funds State Street Institutional Treasury Plus Money Market Fund - Investor Class Units",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Money Market Mutual Funds State Street Institutional Treasury Plus Money Market Fund - Investor Class Units",
+      "source_row_id": "0001193125-25-277220.xml:29697 us-gaap:InvestmentOwnedAtFairValue money-market context"
+    },
+    {
+      "source": "bdc",
+      "cik": "0001899996",
+      "entity_name": "Fidelity Private Credit Co LLC",
+      "accession_number": "0001193125-26-119504",
+      "filing_date": "2026-03-19",
+      "report_date": "2025-12-31",
+      "fair_value": 19087624.0,
+      "cost": 19087624.0,
+      "shares_held": 19087624.0,
+      "fair_value_currency": "U_USD",
+      "cost_currency": "U_USD",
+      "asset_category": "FUND",
+      "issuer_category": "FUND",
+      "index_classification": "CASH",
+      "exposure_type": "LIQUID",
+      "asset_class": "CASH",
+      "issuer_name": "State Street Institutional Treasury Plus Money Market Fund",
+      "instrument_description": "Investor Class Units",
+      "bdc_form_type": "10-K",
+      "bdc_investment_identifier": "State Street Institutional Treasury Plus Money Market Fund - 3.66% Investor Class Units",
+      "bdc_dimensions_raw": "investmentidentifieraxis=State Street Institutional Treasury Plus Money Market Fund - 3.66% Investor Class Units",
+      "source_row_id": "0001193125-26-119504.xml:31952 ck0001899996:MoneyMarketFundsAtFairValue context C_fcc88fe4-28d8-4f9c-a42f-ae841f85675d"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected gate-counted holdings still sum to 1,620,593,897 for 2025-12-31 against anchor 1,639,681,521, leaving the exact 19,087,624 residual; the previously appended money-market row has blank cik and asset_category CASH, so it is not counted by the CIK-scoped conservation gate."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 56 row 26: State Street Institutional Treasury Plus Money Market Fund - 3.66 % (g)(n) | Investor Class Units | 19,087,624 | 19,087,624 | 19,087,624."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 57 row 2: Total Money Market Mutual Funds | $ | 19,087,624 | $ | 19,087,624 | 2.44 %; row 4: Total Investment Portfolio | $ | 1,677,854,551 | $ | 1,639,681,521 | 209.61 %."
+    },
+    {
+      "source": "filing",
+      "quote": "Fair value hierarchy table reports Total Investments with Level 1 19,087,624, Level 3 1,620,593,897, Total 1,639,681,521."
+    }
+  ],
+  "rationale": "The extractor captured the Level 3 investment schedule but omitted the filer's Level 1 money-market mutual fund from the countable holdings. The previous row_add rule identified the right source-backed money-market rows but omitted the cik field and classified the rows as CASH, leaving those appended rows outside the CIK-scoped conservation gate. The filing presents these as Money Market Mutual Funds within Total Investment Portfolio, so this rule adds the same real positions as FUND investments with CIK and filing identity populated. This reconciles the total investments anchor without deleting or rescaling real positions.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 1,
+      "fv": 17648924.0,
+      "residual_before": 17684623.0,
+      "residual_after": 35699.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 8814565.0,
+      "residual_before": 8814565.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 19087624.0,
+      "residual_before": 19087624.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -2605,6 +2605,12 @@ def _prepare_bdc(
                           LIKE '%nonconsolidatedsubsidiar%'
                       OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
                           LIKE '%subsidiar%'
+                      -- Equity-method investee (JV) look-through facts: same
+                      -- retain-and-flag treatment as the subsidiary axes
+                      -- (adjudicated 2026-07-21/22, data_investigation_results
+                      -- parts 5-8: JV note portfolios are not fund holdings).
+                      OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
+                          LIKE '%equitymethodinvestmentequitymethodinvesteenameaxis%'
                  THEN 1 ELSE 0 END AS is_subsidiary,
             '' AS jv_subsidiary,
             '' AS entity_id,

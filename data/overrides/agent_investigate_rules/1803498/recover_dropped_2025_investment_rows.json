@@ -1,0 +1,167 @@
+{
+  "cik": "1803498",
+  "rule_id": "recover_dropped_2025_investment_rows",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "CyrusOne Revolving Warehouse",
+      "bdc_investment_identifier": "CyrusOne Revolving Warehouse | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=CyrusOne Revolving Warehouse | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=CyrusOne Revolving Warehouse | Non-Affiliated Issuer",
+      "fair_value": 161381000.0,
+      "cost": 160839000.0,
+      "principal_amount": 161381000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Zoro",
+      "instrument_description": "Series A Preferred Shares",
+      "bdc_investment_identifier": "Zoro - Series A Preferred Shares | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Zoro - Series A Preferred Shares | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Zoro - Series A Preferred Shares | Non-Affiliated Issuer",
+      "fair_value": 22002000.0,
+      "cost": 14202000.0,
+      "asset_category": "EQUITY_PREFERRED"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Carlyle Global Market Strategies Euro CLO 2014-1 DAC",
+      "instrument_description": "Subordinated Notes",
+      "bdc_investment_identifier": "Carlyle Global Market Strategies Euro CLO 2014-1 DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Carlyle Global Market Strategies Euro CLO 2014-1 DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Carlyle Global Market Strategies Euro CLO 2014-1 DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "fair_value": 8689000.0,
+      "cost": 8213000.0,
+      "principal_amount": 11473000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "MidOcean Credit CLO XIX",
+      "instrument_description": "Subordinated Notes",
+      "bdc_investment_identifier": "MidOcean Credit CLO XIX - Subordinated Notes | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=MidOcean Credit CLO XIX - Subordinated Notes | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=MidOcean Credit CLO XIX - Subordinated Notes | Non-Affiliated Issuer",
+      "fair_value": 6729000.0,
+      "cost": 6878000.0,
+      "principal_amount": 9000000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Pikes Peak CLO 10",
+      "instrument_description": "Class ER",
+      "bdc_investment_identifier": "Pikes Peak CLO 10 - Class ER | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Pikes Peak CLO 10 - Class ER | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Pikes Peak CLO 10 - Class ER | Non-Affiliated Issuer",
+      "fair_value": 5006000.0,
+      "cost": 5000000.0,
+      "principal_amount": 5000000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Apidos CLO XXV",
+      "instrument_description": "Class E1R3",
+      "bdc_investment_identifier": "Apidos CLO XXV - Class E1R3 | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Apidos CLO XXV - Class E1R3 | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Apidos CLO XXV - Class E1R3 | Non-Affiliated Issuer",
+      "fair_value": 4010000.0,
+      "cost": 4000000.0,
+      "principal_amount": 4000000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "CVC Cordatus Loan Fund XXXIV DAC",
+      "instrument_description": "Subordinated Notes",
+      "bdc_investment_identifier": "CVC Cordatus Loan Fund XXXIV DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=CVC Cordatus Loan Fund XXXIV DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=CVC Cordatus Loan Fund XXXIV DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "fair_value": 3507000.0,
+      "cost": 3130000.0,
+      "principal_amount": 3250000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Pikes Peak CLO 3",
+      "instrument_description": "Class ERR",
+      "bdc_investment_identifier": "Pikes Peak CLO 3 - Class ERR | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Pikes Peak CLO 3 - Class ERR | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Pikes Peak CLO 3 - Class ERR | Non-Affiliated Issuer",
+      "fair_value": 2977000.0,
+      "cost": 3009000.0,
+      "principal_amount": 3000000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Pikes Peak CLO 10",
+      "instrument_description": "Subordinated Notes",
+      "bdc_investment_identifier": "Pikes Peak CLO 10 - Subordinated Notes | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Pikes Peak CLO 10 - Subordinated Notes | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Pikes Peak CLO 10 - Subordinated Notes | Non-Affiliated Issuer",
+      "fair_value": 2765000.0,
+      "cost": 3129000.0,
+      "principal_amount": 5200000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Carlyle Euro CLO 2022-5 DAC",
+      "instrument_description": "Subordinated Notes",
+      "bdc_investment_identifier": "Carlyle Euro CLO 2022-5 DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Carlyle Euro CLO 2022-5 DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Carlyle Euro CLO 2022-5 DAC - Subordinated Notes | Non-Affiliated Issuer",
+      "fair_value": 2369000.0,
+      "cost": 2355000.0,
+      "principal_amount": 3736000.0,
+      "asset_category": "LOAN"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Pikes Peak CLO 8",
+      "instrument_description": "Class ER",
+      "bdc_investment_identifier": "Pikes Peak CLO 8 - Class ER | Non-Affiliated Issuer",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Pikes Peak CLO 8 - Class ER | Non-Affiliated Issuer",
+      "source_row_id": "staging:investmentidentifieraxis=Pikes Peak CLO 8 - Class ER | Non-Affiliated Issuer",
+      "fair_value": 985000.0,
+      "cost": 1000000.0,
+      "principal_amount": 1000000.0,
+      "asset_category": "LOAN"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Anti-join from staging current-period rows to holdings found 14 missing staging rows with fair value. The three largest missing rows are cash; the 11 non-cash investment rows sum to 220,420,000, exactly the amount by which the correct JV look-through exclusion would otherwise push value_sum below the 82,199,346,000 anchor."
+    },
+    {
+      "source": "query",
+      "quote": "Missing non-cash staging examples: CyrusOne Revolving Warehouse | Non-Affiliated Issuer fair_value 161,381,000; Zoro - Series A Preferred Shares | Non-Affiliated Issuer fair_value 22,002,000; Carlyle Global Market Strategies Euro CLO 2014-1 DAC - Subordinated Notes | Non-Affiliated Issuer fair_value 8,689,000."
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investment Portfolio | 82,916,241 | 82,199,346 | 172.60"
+    }
+  ],
+  "rationale": "After removing duplicated JV look-through rows, unified holdings are short by 220,420,000. Staging contains 11 current-period non-cash investment rows with that exact fair value total that were dropped before holdings; adding only those source-backed investment rows restores the filer investment total without adding cash or weakening the look-through exclusion.",
+  "confidence": 0.92,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 11,
+      "fv": 220420000.0,
+      "residual_before": -0.2681529850614627,
+      "residual_after": 0.0
+    }
+  }
+}

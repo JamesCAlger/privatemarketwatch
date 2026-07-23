@@ -1,0 +1,48 @@
+{
+  "cik": "1885968",
+  "rule_id": "exclude_affiliated_first_lien_rollforward_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "issuer_name LIKE 'Investments in Non-Controlled, Affiliated First Lien Debt %' AND instrument_description IS NULL AND principal_amount IS NULL",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings include a non-position row issuer_name='Investments in Non-Controlled, Affiliated First Lien Debt KWOR Acquisition, Inc.', instrument_description NULL, principal_amount NULL, fair_value=13510000.0, alongside the real KWOR Acquisition debt positions fair_value=8991000.0, 3157000.0, 71000.0, and 49000.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule table 45 lists real KWOR Acquisition, Inc. debt rows of 8,991, 49, 71, and 3,157 fair value; table 56 is a roll-forward row: 'KWOR Acquisition, Inc. (a) | ... Gross Additions 14,778 | Net Change in Unrealized Gains (Losses) (1,268) | ... Fair Value as of December 31, 2025 13,510'."
+    },
+    {
+      "source": "filing",
+      "quote": "The filing total is 'Total Portfolio Investments | $ | 2,233,984 | $ | 2,185,948', and debt totals are 'Total Debt Investments | $ | 2,209,615 | $ | 2,166,821'."
+    }
+  ],
+  "rationale": "The extractor over-counted an affiliated first-lien debt roll-forward ending fair value as if it were a separate holding. The actual KWOR Acquisition debt positions are already present from the schedule of investments with instrument descriptions and principal amounts. Rows selected by this predicate are aggregate roll-forward labels with no position-level description or principal amount, so they should be excluded from holdings conservation.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 14045000.0,
+      "residual_before": 0.786233028102305,
+      "residual_after": 0.10395666852881882
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 13510000.0,
+      "residual_before": 0.7186813227030103,
+      "residual_after": 0.10064283322384612
+    },
+    "2026-03-31": {
+      "rows": 2,
+      "fv": 17408000.0,
+      "residual_before": null,
+      "residual_after": null
+    }
+  }
+}

@@ -6867,6 +6867,21 @@ class TestSubsidiaryFlag:
         assert len(result) == 1
         assert int(result.iloc[0]["is_subsidiary"]) == 1
 
+    def test_subsidiary_detected_equity_method_investee_axis(self):
+        """JV look-through facts on the equity-method-investee axis are flagged
+        (same retain-and-flag treatment as the subsidiary axes; adjudicated
+        2026-07-21/22, data_investigation_results parts 5-8)."""
+        rows = [self._make_bdc_row(
+            dimensions_raw=(
+                "scheduleofequitymethodinvestmentequitymethodinvesteenameaxis=UltraIiiMember"
+                "|investmentidentifieraxis=Bright Light Buyer, Inc. 1"
+            ),
+        )]
+        df = pd.DataFrame(rows)
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 1
+
     def test_non_subsidiary_not_flagged(self):
         """Normal rows without subsidiary dimensions are is_subsidiary=0."""
         rows = [self._make_bdc_row(

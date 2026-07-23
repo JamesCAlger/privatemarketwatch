@@ -1,0 +1,44 @@
+{
+  "cik": "1812554",
+  "rule_id": "exclude_2025q4_bare_axis_rollforward_leaks",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND instrument_description IS NULL AND (bdc_dimensions_raw LIKE 'rangeaxis=%|investmentidentifieraxis=%' OR (bdc_dimensions_raw LIKE 'investmentidentifieraxis=%' AND bdc_dimensions_raw NOT LIKE '%|%')) AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL",
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 90 row 35: Total Investments | $ | 35,983,158 | $ | 35,918,948 | 181.8 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 69 row 7: Total investments at fair value (amortized cost of $ 35,983,158 and $ 26,383,665, respectively) | 35,918,948 | 26,378,894"
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-12-31 the 11 rows selected by the predicate have null instrument_description, bare investmentidentifieraxis or rangeaxis dimensions, and fair_value sum 1,529,274,000. Holdings fair_value before exclusion is 37,448,222,000; anchor is 35,918,948,000; simulated fair_value after exclusion is 35,918,948,000."
+    },
+    {
+      "source": "filing",
+      "quote": "Examples of leaked roll-forward/summary rows have corresponding schedule rows: Table 90 row 19 shows Fifth Season Investments LLC | Specialty finance equity investment | ... | 310,978 | 344,960, while Table 103 row 8 separately shows Fifth Season Investments LLC | 223,274 | 108,603 | ... | 344,960."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 90 row 16 shows the countable Blue Owl Cross-Strategy Opportunities LLC schedule position as Specialty finance equity investment with cost 137,069 and fair value 136,815; the extracted bare investmentidentifieraxis row duplicates that fair value and the rangeaxis Minimum/Maximum rows are not standalone schedule positions."
+    }
+  ],
+  "rationale": "The 2025-12-31 filing contains normal schedule-of-investments rows with issuer, instrument type, and affiliation dimensions. The extractor also admitted a separate set of null-instrument bare investmentidentifieraxis and rangeaxis rows from roll-forward/summary/valuation disclosures. These rows are not additional portfolio positions: several duplicate fully dimensioned schedule rows exactly, and the rangeaxis rows are valuation range disclosures. Their fair values equal the full overshoot to the validated filer total, so excluding only this leaked disclosure shape reconciles fair value without deleting real schedule rows or affecting other quarters.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 11,
+      "fv": -1529274000.0,
+      "residual_before": 1529274000.0,
+      "residual_after": 0.0
+    }
+  }
+}
