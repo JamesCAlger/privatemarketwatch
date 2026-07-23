@@ -9,6 +9,12 @@ worker never saw:
      onto the STORED extracted rates under the claimed convention:
        all_in  : stored interest ~= printed_total   (and stored pik ~= printed_pik)
        cash_leg: stored interest ~= printed_cash, or printed_total - printed_pik
+     Spread-anchored path (floating-rate rows): when the printed cash-column
+     equals stored basis_spread and printed PIK equals stored pik EXACTLY, the
+     stored all-in level may sit within BASE_DRIFT_TOL of the printed total
+     (base-rate observation drift) -- provided the printed PIK magnitude still
+     separates the two conventions. Issuer lookup normalizes away printed
+     footnote markers ("(c)") before containment matching.
      A citation that reconciles under the OPPOSITE convention is a hard fail.
      >= 2 cited positions must reconcile under the claimed convention.
   2. SIGNAL-CONTRADICTION GATE -- a cash_leg verdict on a filer with the
@@ -31,6 +37,7 @@ classifier stats and passes them in. ASCII-only.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 
 from pipeline.anchor_validation import HIGH, MEDIUM
@@ -44,6 +51,14 @@ from pipeline.rate_convention import (
 
 RATE_TOL = 0.05          # pp tolerance printed-vs-stored (rounding in either)
 MIN_RECONCILED = 2
+# Max plausible reference-rate drift (pp) between the stored (tagged) all-in
+# level and the printed schedule's computation of the same row -- the two are
+# often computed at different base-rate observation dates (conv_full: stored
+# interest_rate sat ~0.3pp under printed totals while basis_spread matched
+# EXACTLY). Used only by the spread-anchored path, which additionally requires
+# the OPPOSITE convention's residual to exceed it, so the printed PIK magnitude
+# is the separator and tiny-PIK rows can never decide through this path.
+BASE_DRIFT_TOL = 0.75
 
 
 @dataclass
@@ -61,32 +76,79 @@ def _close(a, b) -> bool:
     return a is not None and b is not None and abs(float(a) - float(b)) <= RATE_TOL
 
 
-def _fits(convention: str, cit: dict, stored_ir, stored_pik) -> bool:
+def _triple(p) -> tuple:
+    """Stored-rate tuple compat: (ir, pik) -> (ir, pik, None); passthrough for 3."""
+    t = tuple(p)
+    return t if len(t) == 3 else (t[0], t[1], None)
+
+
+def _fits_spread(convention: str, pt, pp, pc, stored_ir, stored_pik, stored_spread) -> bool:
+    """Spread-anchored reconciliation for floating-rate rows.
+
+    The contractual terms (spread, PIK) are time-invariant; the all-in level
+    floats with the base rate and drifts between the tagging date and the
+    printed schedule's computation. Requires ALL of: printed cash-column ==
+    stored basis_spread (RATE_TOL), printed PIK == stored pik (RATE_TOL), and
+    a printed_total whose distance from stored interest_rate under the CLAIMED
+    convention is within BASE_DRIFT_TOL while the OPPOSITE convention's is
+    not. The two residuals differ by exactly the printed PIK, so this path
+    can only decide when the PIK magnitude cleanly separates the hypotheses.
+    """
+    if None in (pt, pp, pc, stored_ir, stored_spread):
+        return False
+    if not (_close(stored_spread, pc) and _close(stored_pik, pp)):
+        return False
+    r_all = abs(float(stored_ir) - float(pt))
+    r_cash = abs(float(stored_ir) - (float(pt) - float(pp)))
+    r_claimed, r_opposite = (r_all, r_cash) if convention == "all_in" else (r_cash, r_all)
+    return r_claimed <= BASE_DRIFT_TOL < r_opposite
+
+
+def _fits(convention: str, cit: dict, stored_ir, stored_pik, stored_spread=None) -> bool:
     """Does this position citation reconcile under ``convention``?"""
     pt, pp, pc = cit.get("printed_total"), cit.get("printed_pik"), cit.get("printed_cash")
     if convention == "all_in":
-        if pt is None:
-            return False
-        return _close(stored_ir, pt) and (pp is None or _close(stored_pik, pp))
+        if pt is not None and _close(stored_ir, pt) and (pp is None or _close(stored_pik, pp)):
+            return True
+        return _fits_spread(convention, pt, pp, pc, stored_ir, stored_pik, stored_spread)
     if convention == "cash_leg":
         pik_ok = pp is None or _close(stored_pik, pp)
-        if pc is not None:
-            return _close(stored_ir, pc) and pik_ok
-        if pt is not None and pp is not None:
-            return _close(stored_ir, float(pt) - float(pp)) and pik_ok
-        return False
+        if pc is not None and _close(stored_ir, pc) and pik_ok:
+            return True
+        if pt is not None and pp is not None and _close(stored_ir, float(pt) - float(pp)) and pik_ok:
+            return True
+        return _fits_spread(convention, pt, pp, pc, stored_ir, stored_pik, stored_spread)
     return False
 
 
+# Footnote markers only: 1-2 alphanumerics in parens ("(c)", "(h)", "(25)").
+# Substantive parentheticals -- "(dba Boomi)", "(United Kingdom)" -- are
+# distinguishing information and MUST survive normalization.
+_FOOTNOTE_MARKER_RE = re.compile(r"\(\s*[a-z0-9]{1,2}\s*\)")
+
+
+def _norm_issuer(name: str) -> str:
+    """Lowercase + strip printed footnote markers and collapsed whitespace.
+
+    Workers quote issuers as printed in the SOI, markers included ("Zendesk,
+    Inc. (c)"); stored names carry extraction decoration instead. The markers
+    defeat plain containment (conv_full: 8 leaves refused with rates that
+    reconciled EXACTLY once matched)."""
+    key = str(name or "").strip().lower()
+    key = _FOOTNOTE_MARKER_RE.sub(" ", key)
+    return re.sub(r"\s+", " ", key).strip(" ,;")
+
+
 def _lookup(issuer: str, stored_rates: dict):
-    """Fuzzy issuer match: exact, then containment either way (names are noisy)."""
-    key = str(issuer or "").strip().lower()
+    """Fuzzy issuer match: exact, then normalized containment either way."""
+    key = _norm_issuer(issuer)
     if not key:
         return None
     if key in stored_rates:
         return stored_rates[key]
     for name, rates in stored_rates.items():
-        if key in name or name in key:
+        n = _norm_issuer(name)
+        if key == n or key in n or n in key:
             return rates
     return None
 
@@ -134,10 +196,10 @@ def verify_convention(leaf: dict, stored_rates: dict, stats: dict,
             continue
         # an issuer may hold several tranches with different rates; the citation
         # reconciles if ANY tranche fits the claimed mapping
-        pairs = found if isinstance(found, list) else [found]
-        fits_claimed = any(_fits(conv, cit, ir, pik) for ir, pik in pairs)
-        fits_opposite = any(_fits(opposite, cit, ir, pik) for ir, pik in pairs)
-        ir, pik = pairs[0]
+        pairs = [_triple(p) for p in (found if isinstance(found, list) else [found])]
+        fits_claimed = any(_fits(conv, cit, ir, pik, sp) for ir, pik, sp in pairs)
+        fits_opposite = any(_fits(opposite, cit, ir, pik, sp) for ir, pik, sp in pairs)
+        ir, pik = pairs[0][0], pairs[0][1]
         if fits_claimed:
             res.n_reconciled += 1
         elif all(p[0] is None for p in pairs):

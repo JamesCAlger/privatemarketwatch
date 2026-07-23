@@ -59,6 +59,7 @@ def _holdings_sql(where: str) -> str:
                issuer_name,
                TRY_CAST(interest_rate AS DOUBLE) AS ir,
                TRY_CAST(pik_rate AS DOUBLE) AS pik,
+               TRY_CAST(basis_spread AS DOUBLE) AS spread,
                TRY_CAST(fair_value AS DOUBLE) AS fv
         FROM read_csv_auto('{h}')
         WHERE lower(COALESCE(source, '')) = 'bdc' AND ({where})
@@ -330,20 +331,20 @@ def prep(cik: str, target_quarter: str, bundle_path: str | None = None) -> dict:
 # --------------------------------------------------------------------- verify / promote
 
 def _stored_rates(cik: str, target_quarter: str) -> dict:
-    """{issuer_lower: [(ir, pik), ...]} for the target quarter (verify input)."""
+    """{issuer_lower: [(ir, pik, spread), ...]} for the target quarter (verify input)."""
     con = duckdb.connect()
     try:
         rows = con.execute(f"""
             WITH rows_ AS ({_holdings_sql("1=1")})
-            SELECT lower(issuer_name), ir, pik FROM rows_
+            SELECT lower(issuer_name), ir, pik, spread FROM rows_
             WHERE cik = '{_norm(cik)}' AND substr(q, 1, 10) = '{target_quarter[:10]}'
               AND issuer_name IS NOT NULL
         """).fetchall()
     finally:
         con.close()
     out: dict[str, list] = {}
-    for name, ir, pik in rows:
-        out.setdefault(str(name), []).append((ir, pik))
+    for name, ir, pik, spread in rows:
+        out.setdefault(str(name), []).append((ir, pik, spread))
     return out
 
 

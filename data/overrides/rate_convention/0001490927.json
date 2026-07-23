@@ -1,0 +1,57 @@
+{
+  "cik": "0001490927",
+  "target_quarter": "2023-09-30",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has one Investment Coupon Rate / Maturity column. For floating-rate investments it prints the spread over the reference rate and the current cash interest rate in parentheses; any PIK rate is appended separately outside the parenthetical, so the stated spread/current rate excludes PIK.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (f) (g) (q) | Industry | Investment Coupon Rate / Maturity (l) | Principal / Number of Shares | Amortized Cost | Fair Value | % of Net Assets (b)",
+      "where": "Consolidated Schedules of Investments as of September 30, 2023, tables 12-19"
+    },
+    {
+      "kind": "footnote",
+      "quote": "The majority of the investments bear interest at a rate that may be determined by reference to Secured Overnight Financing Rate (\"SOFR\" or \"S\"), or Prime (\"P\") and which reset daily, monthly, quarterly, or semiannually. For each, the Company has provided the spread over the relevant reference rate and the current interest rate in effect at September 30, 2023. Certain investments are subject to reference rate floors. For fixed rate loans, a spread above a reference rate is not applicable. For floating rate securities the all-in rate is disclosed within parentheses.",
+      "where": "Consolidated Schedules of Investments as of September 30, 2023, footnote (l)"
+    },
+    {
+      "kind": "position",
+      "issuer": "Zendesk, Inc. (c)",
+      "quote": "Zendesk, Inc. (c) | Software/Services | S+ 6.75 % ( 12.15 %) 3.25 % PIK, 11/22/2028 | 43,554 | 42,820 | 42,805 | 2.6 | %",
+      "printed_cash": 12.15,
+      "printed_pik": 3.25
+    },
+    {
+      "kind": "position",
+      "issuer": "The NPD Group, LP (c)",
+      "quote": "The NPD Group, LP (c) | Business Services | S+ 6.25 % ( 11.58 %) 2.75 % PIK, 12/1/2028 | 34,693 | 34,144 | 34,173 | 2.0 | %",
+      "printed_cash": 11.58,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Midwest Can Company, LLC (c) (h) (i)",
+      "quote": "Midwest Can Company, LLC (c) (h) (i) | Paper & Packaging | S+ 8.00 % ( 13.39 %) 2.00 % PIK, 3/2/2026 | 30,425 | 30,163 | 30,425 | 1.8 | %",
+      "printed_cash": 13.39,
+      "printed_pik": 2.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Aventine Holdings, LLC (c)",
+      "quote": "Aventine Holdings, LLC (c) | Media/Entertainment | S+ 6.00 % ( 11.49 %) 4.00 % PIK, 6/18/2027 | 10,698 | 10,698 | 10,558 | 0.6 | %",
+      "printed_cash": 11.49,
+      "printed_pik": 4.0
+    },
+    {
+      "kind": "position",
+      "issuer": "BCPE Oceandrive Buyer, Inc. (c)",
+      "quote": "BCPE Oceandrive Buyer, Inc. (c) | Healthcare | S+ 6.25 % ( 11.72 %) 3.00 % PIK, 12/29/2028 | 1,748 | 1,748 | 1,667 | 0.1 | %",
+      "printed_cash": 11.72,
+      "printed_pik": 3.0
+    }
+  ],
+  "rationale": "This filer uses additive cash-leg quoting for PIK positions. Footnote (l) says the spread over the reference rate and the current interest rate are provided, with the all-in floating rate shown in parentheses. The PIK rate is then printed as a separate trailing component on actual rows such as S+ 6.75% (12.15%) 3.25% PIK and S+ 6.25% (11.72%) 3.00% PIK. Therefore the printed spread/current rate is the cash leg and PIK is quoted separately on top.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 4
+}

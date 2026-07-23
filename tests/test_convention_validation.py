@@ -116,6 +116,93 @@ def test_pik_only_with_wrong_pik_magnitude_refused():
     assert not chk.ok
 
 
+# ------------------------------------------------------- issuer normalization
+
+def test_lookup_strips_footnote_markers():
+    # conv_full 1490927 shape: worker quotes "Zendesk, Inc. (c)"; stored name
+    # carries extraction decoration instead. Rates reconcile exactly once the
+    # markers stop defeating containment. (Also exercises 2-tuple compat.)
+    stored = {"zendesk, inc. software/services": [(12.15, 3.25)],
+              "the npd group, lp business services 1": [(11.58, 2.75)]}
+    cits = [
+        {"kind": "header", "quote": "Cash / PIK", "where": "SOI"},
+        {"kind": "position", "issuer": "Zendesk, Inc. (c)",
+         "quote": "12.15% Cash, 3.25% PIK", "printed_cash": 12.15, "printed_pik": 3.25},
+        {"kind": "position", "issuer": "The NPD Group, LP (c)",
+         "quote": "11.58% Cash, 2.75% PIK", "printed_cash": 11.58, "printed_pik": 2.75},
+    ]
+    chk = verify_convention(_leaf(convention="cash_leg", citations=cits),
+                            stored, NEUTRAL_STATS)
+    assert chk.ok and chk.n_reconciled == 2 and chk.n_unmatched == 0
+
+
+def test_lookup_preserves_substantive_parentheticals():
+    # "(dba ...)" / "(United Kingdom)" are distinguishing -- a different dba
+    # must NOT cross-match (false-positive guard on the normalization)
+    from pipeline.convention_validation import _lookup, _norm_issuer
+    stored = {"bayshore intermediate #2, l.p. (dba boomi)": [(7.0, 3.0)]}
+    assert _lookup("Bayshore Intermediate #2, L.P. (dba Chatter)", stored) is None
+    assert _lookup("Bayshore Intermediate #2, L.P. (dba Boomi)", stored) is not None
+    assert _norm_issuer("Midwest Can Company, LLC (c) (h) (i)") == "midwest can company, llc"
+
+
+# ------------------------------------------------------- spread-anchored path
+
+# conv_full 1544206 shape: stored all-in sits ~0.3pp under the printed total
+# (base-rate observation drift) while basis_spread and pik match EXACTLY
+SPREAD_STORED = {"ellkay, llc": [(10.60, 3.50, 3.25)],
+                 "espresso bidco inc.": [(9.46, 3.13, 2.63)]}
+SPREAD_CITS = [
+    {"kind": "header", "quote": "Ref. Rate | Cash | PIK | Total", "where": "SOI"},
+    {"kind": "position", "issuer": "Ellkay, LLC", "quote": "S+3.25%, 3.50% PIK, 10.98%",
+     "printed_total": 10.98, "printed_cash": 3.25, "printed_pik": 3.50},
+    {"kind": "position", "issuer": "Espresso Bidco Inc.", "quote": "S+2.63%, 3.13% PIK, 9.75%",
+     "printed_total": 9.75, "printed_cash": 2.63, "printed_pik": 3.13},
+]
+
+
+def test_spread_anchored_all_in_reconciles_through_base_drift():
+    chk = verify_convention(_leaf(citations=SPREAD_CITS), SPREAD_STORED, NEUTRAL_STATS)
+    assert chk.ok and chk.n_reconciled == 2
+
+
+def test_spread_anchored_evidence_still_hard_fails_opposite_claim():
+    # the same evidence proves all_in; a cash_leg claim must hard-fail, not pass
+    chk = verify_convention(_leaf(convention="cash_leg", citations=SPREAD_CITS),
+                            SPREAD_STORED, NEUTRAL_STATS)
+    assert not chk.ok and chk.n_opposite == 2
+
+
+def test_spread_path_refused_beyond_base_drift():
+    stored = {"ellkay, llc": [(9.00, 3.50, 3.25)],
+              "espresso bidco inc.": [(7.50, 3.13, 2.63)]}   # ~2pp off: not drift
+    chk = verify_convention(_leaf(citations=SPREAD_CITS), stored, NEUTRAL_STATS)
+    assert not chk.ok and chk.n_reconciled == 0
+
+
+def test_spread_path_requires_exact_pik_match():
+    stored = {"ellkay, llc": [(10.60, 2.00, 3.25)],
+              "espresso bidco inc.": [(9.46, 1.00, 2.63)]}   # pik mismatch
+    chk = verify_convention(_leaf(citations=SPREAD_CITS), stored, NEUTRAL_STATS)
+    assert not chk.ok and chk.n_reconciled == 0
+
+
+def test_spread_path_tiny_pik_cannot_decide():
+    # both conventions' residuals inside BASE_DRIFT_TOL when PIK is small ->
+    # the path must refuse BOTH claims rather than guess
+    stored = {"acme corp": [(10.00, 0.30, 3.25)], "beta llc": [(10.00, 0.30, 3.25)]}
+    cits = [
+        {"kind": "position", "issuer": "Acme Corp", "quote": "S+3.25%, 0.30% PIK, 10.25%",
+         "printed_total": 10.25, "printed_cash": 3.25, "printed_pik": 0.30},
+        {"kind": "position", "issuer": "Beta LLC", "quote": "S+3.25%, 0.30% PIK, 10.25%",
+         "printed_total": 10.25, "printed_cash": 3.25, "printed_pik": 0.30},
+    ]
+    for conv in ("all_in", "cash_leg"):
+        chk = verify_convention(_leaf(convention=conv, citations=cits),
+                                stored, NEUTRAL_STATS)
+        assert not chk.ok
+
+
 # --------------------------------------------------------------------- S0 gate
 
 CASH_LEAF_CITS = [

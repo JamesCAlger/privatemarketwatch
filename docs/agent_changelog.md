@@ -7267,3 +7267,39 @@ Agent lane for the rate-convention classifier residual. New modules:
   (staging_bdc.py, test_unified_holdings.py, agent_investigate_rules promotions
   for the 9 held CIKs). This entry and its commit scope ONLY the convention-
   fleet files; the concurrent work belongs to its owning session.
+
+### 2026-07-23 -- Convention verifier: issuer-name normalization + spread-anchored reconciliation; 42/66 promoted
+
+- pipeline/convention_validation.py, two verifier-side fixes (user-approved):
+  (1) `_lookup` now normalizes printed footnote markers out of issuer names
+  before containment matching (workers quote "Zendesk, Inc. (c)" as printed;
+  1-2-char parentheticals only -- "(dba Boomi)"/"(United Kingdom)" survive);
+  (2) spread-anchored reconciliation path in `_fits`: floating-rate citations
+  reconcile when printed cash-column == stored basis_spread AND printed PIK ==
+  stored pik_rate (both at RATE_TOL) AND the stored all-in sits within
+  BASE_DRIFT_TOL=0.75pp of the printed total under the CLAIMED convention
+  while the OPPOSITE convention's residual exceeds it -- printed PIK is the
+  separator, so tiny-PIK rows can never decide via this path, and the same
+  logic drives the opposite-convention hard-fail symmetrically. Stored-rate
+  tuples extended to (ir, pik, spread) with 2-tuple compat (`_triple`);
+  run_convention._holdings_sql/_stored_rates now carry basis_spread.
+- Tests: 7 new in test_convention_validation.py (footnote-marker recovery,
+  substantive-parenthetical FP guard, spread-path recovery, opposite-claim
+  hard-fail preserved, beyond-drift refusal, pik-mismatch refusal, tiny-pik
+  cannot-decide); 39 pass across convention leaf+validation.
+- Residual re-sweep: +2 promoted, BOTH diagnosed exemplars at HIGH tier
+  (1544206 spread path 3 reconciled; 1490927 lookup fix 4 reconciled).
+  Total 42/66 promoted. HONEST RESULT: the fixes generalized far less than
+  the class-level attribution predicted (2 of 19, not ~16) -- follow-up
+  probes show the remaining refusals are EXTRACTION-SIDE data defects at the
+  target quarter, e.g. 1905824: issuer_name = "Technology"/"Chemicals"
+  (industry captured as issuer, GCOM row unfindable), duplicate rows with
+  ir/pik SWAPPED (17.0/7.0 vs 7.0/17.0), and the K2 Pure 2L loan rates row
+  present at 2025-09-30 but absent at target 2026-03-31. The verifier is
+  correctly refusing to certify against defective stored rows; these CIKs
+  route to extraction remediation (B2 lanes), NOT further gate relaxation.
+- Verifier residuals stand at 24: ~17 extraction-defect refusals (above),
+  2 schema (no printed_pik cited), 4 opposite-convention hard fails,
+  1 S1 contradiction (1287032) -- the last 7 human-review by design.
+- python -m pipeline.rate_convention rebuild launched against the 42-override
+  store (the hold is released: no further verifier changes warranted).
