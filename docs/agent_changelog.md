@@ -7303,3 +7303,29 @@ Agent lane for the rate-convention classifier residual. New modules:
   1 S1 contradiction (1287032) -- the last 7 human-review by design.
 - python -m pipeline.rate_convention rebuild launched against the 42-override
   store (the hold is released: no further verifier changes warranted).
+
+### 2026-07-23 -- Cohort preflight guard + quarter-pass operator skill
+
+- New `pipeline/cohort_guard.py`: dispatch-chokepoint assertion that a fleet
+  worklist's CIKs are inside the v1 wrapper cohort (manifest `entries`;
+  held_back_ciks deliberately excluded). CLI exit contract 0/1/2;
+  `--all-vehicles` is an explicit logged bypass that still prints the
+  out-of-cohort list. 9 tests (tests/test_cohort_guard.py) incl. unpadded-cik
+  false-positive guard and missing-column-is-error.
+- Wired into scripts/dispatch_convention_workers.ps1 (new -AllVehicles switch).
+  Other dispatchers to follow; until then the operator skill applies the guard
+  at orchestration level for every lane.
+- MEASURED FINDING: the guard run against the conv_full_2026-07-21b worklist
+  shows 46/66 targets were OUTSIDE the v1 cohort -- ~70% of the 2026-07-22
+  fleet spend was out-of-scope (verdicts remain valid; spend policy did not).
+  Most of the 17 extraction-defect residual CIKs (1490927, 1544206, 1487918,
+  1504619, 1905824, ...) are in the out-of-cohort set, so their remediation
+  priority drops accordingly.
+- New `.claude/skills/quarter-pass-operator/SKILL.md`: the orchestrator runbook
+  for a Claude Code instance in an admin PowerShell driving a quarter pass:
+  preflight checklist, per-lane dispatch commands, the health-signature table
+  distilled from the 2026-07-22 maiden-run failures (auth seeding, sandbox
+  grants, stale markers, token rotation, fast-fail cadence), mechanical-retry
+  protocol (new batch id, max 2 rounds), and hard stop-and-escalate rules
+  (gate refusals are outcomes; never modify B1; never edit gates to pass;
+  single dispatcher; cohort guard on every worklist).

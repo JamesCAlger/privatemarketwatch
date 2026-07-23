@@ -3,7 +3,11 @@ param(
   [string] $BatchId,
 
   [int] $TimeoutMinutes = 30,
-  [switch] $SkipPrep
+  [switch] $SkipPrep,
+  # Explicit bypass of the v1 cohort scope (logged by the guard). The 2026-07-22
+  # conv_full batch dispatched 46/66 CIKs outside the wrapper cohort before this
+  # guard existed -- expensive fleet spend belongs on the cohort by default.
+  [switch] $AllVehicles
 )
 
 # Convention Adjudicator dispatcher. Serial by design (v1): the batch is small
@@ -53,6 +57,13 @@ Write-Host "[grants] read ($($readGrants.Count) interpreter dirs) + per-cik writ
 $wl = Join-Path $root "data/output/agent_convention/batch/$BatchId/convention_worklist.csv"
 if (-not (Test-Path -LiteralPath $wl -PathType Leaf)) {
   throw "worklist missing: $wl (run: python -m scripts.agent_convention.run_convention discover $BatchId ...)"
+}
+
+$guardArgs = @("-m", "pipeline.cohort_guard", "--worklist", $wl)
+if ($AllVehicles) { $guardArgs += "--all-vehicles" }
+& python @guardArgs
+if ($LASTEXITCODE -ne 0) {
+  throw "cohort preflight refused the worklist (see [cohort-guard] output above); re-draw cohort-scoped or pass -AllVehicles explicitly"
 }
 
 $rows = Import-Csv -LiteralPath $wl
