@@ -27,7 +27,9 @@ from pipeline.bdc_cik_review import normalize_cik
 from pipeline.correction_leaf import TEMPLATE_REGISTRY
 from scripts.agent_b import review_lock
 from scripts.agent_b.dispatch_preflight import WORKER_PYTHON, EVIDENCE_CLI, _worker_read_dirs
-from scripts.agent_b2.run_remediation import implemented_fix_classes
+from scripts.agent_b2.run_remediation import POLICY_FIX_CLASSES, implemented_fix_classes
+
+DEFAULT_REVIEW_QUEUE = config.OUTPUT_DIR / "review_queue" / "review_queue.csv"
 
 _CIK_RE = re.compile(r"^\d{1,10}$")
 
@@ -222,6 +224,7 @@ def preflight_batch(
     batch_id: str, *, base_dir: Path = DEFAULT_BASE, verdicts_dir: Path = DEFAULT_VERDICTS,
     bundles_dir: Path = DEFAULT_BUNDLES, corrections_dir: Path = DEFAULT_CORRECTIONS,
     contract_rel: str = DEFAULT_CONTRACT, fix_class: str | None = None, reserve: bool = False,
+    review_queue_path: Path | None = None,
 ) -> dict:
     batch_dir = _batch_dir(base_dir, batch_id)
     rows = _read_worklist(batch_dir)
@@ -237,20 +240,49 @@ def preflight_batch(
     contract_abs = (config.PROJECT_ROOT / contract_rel).resolve().as_posix()
     validator = VALIDATOR.resolve().as_posix()
 
+    # Frame revalidation (2026-08-13): a packet exists because a finding fired. If its
+    # source review_ids no longer appear in the CURRENT review queue, the target was
+    # fixed by another route since B1 adjudicated it -- skip it with a recorded reason
+    # (the q4b2t4b lesson: the wave's conservation targets had already been repaired
+    # by the same-day rule re-keying).
+    # Opt-in at the library level (tests use synthetic review ids); the CLI defaults
+    # this to the production review queue.
+    open_review_ids: set[str] | None = None
+    if review_queue_path is not None and Path(review_queue_path).exists():
+        with open(review_queue_path, newline="", encoding="utf-8-sig") as fh:
+            open_review_ids = {r.get("review_id", "") for r in csv.DictReader(fh)}
+
     seen: set[tuple] = set()
     manifest_rows: list[dict] = []
     skipped_no_citations: list[dict] = []
+    skipped_policy: list[dict] = []
+    skipped_stale: list[dict] = []
     supported_fix_classes = implemented_fix_classes()
     for row in rows:
         cik = str(row.get("cik") or "").strip()
         fc = str(row.get("fix_class") or "").strip()
         if not _CIK_RE.match(cik):
             raise PreflightError(f"invalid cik in worklist: {cik!r}")
+        if fc in POLICY_FIX_CLASSES:
+            skipped_policy.append({
+                "cik": cik, "fix_class": fc,
+                "source_review_ids": [s for s in (row.get("source_review_ids") or "").split(";") if s],
+                "reason": "detector-policy fix_class (validation-rule scope change); "
+                          "routed to the human escalation basket, not worker dispatch"})
+            continue
         if fc not in supported_fix_classes:
             raise PreflightError(
                 f"{cik}/{fc}: fix_class has no implemented trial applier; "
                 f"supported={sorted(supported_fix_classes)}"
             )
+        _rids_now = [s for s in (row.get("source_review_ids") or "").split(";") if s.strip()]
+        if open_review_ids is not None and _rids_now and \
+                not any(r in open_review_ids for r in _rids_now):
+            skipped_stale.append({
+                "cik": cik, "fix_class": fc, "source_review_ids": _rids_now,
+                "reason": "stale target: no source finding still open in the current "
+                          "review queue (fixed upstream since B1 adjudication)"})
+            continue
         quarters = [q for q in str(row.get("quarters") or "").split(";") if q.strip()]
         if fc == "comparative_period_filter" and len(quarters) != 1:
             raise PreflightError(
@@ -328,18 +360,23 @@ def preflight_batch(
     if not manifest_rows:
         raise PreflightError(
             "no dispatchable packets after skips "
-            f"(skipped_no_citations={len(skipped_no_citations)})")
+            f"(no_citations={len(skipped_no_citations)}, policy={len(skipped_policy)}, "
+            f"stale={len(skipped_stale)})")
     manifest = {
         "batch_id": batch_id, "created_at": datetime.now(timezone.utc).isoformat(),
         "locks_reserved": reserve, "max_parallel_default": 2,
         "corrections_dir": str(corrections_dir), "worker_python": WORKER_PYTHON,
         "worker_read_dirs": _worker_read_dirs(), "n_dispatch": len(manifest_rows),
         "skipped_no_citations": skipped_no_citations,
+        "skipped_policy": skipped_policy,
+        "skipped_stale": skipped_stale,
         "rows": manifest_rows}
     manifest_path = batch_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return {"manifest_path": str(manifest_path), "n_dispatch": len(manifest_rows),
-            "n_skipped_no_citations": len(skipped_no_citations), "batch_id": batch_id}
+            "n_skipped_no_citations": len(skipped_no_citations),
+            "n_skipped_policy": len(skipped_policy),
+            "n_skipped_stale": len(skipped_stale), "batch_id": batch_id}
 
 
 def release_manifest(manifest_path: str) -> None:
@@ -354,6 +391,11 @@ def main(argv=None) -> int:
     p.add_argument("--fix-class", default=None, help="Restrict to one fix_class (e.g. subtotal_filter).")
     p.add_argument("--reserve", action="store_true")
     p.add_argument("--release-manifest")
+    p.add_argument("--review-queue", type=Path, default=DEFAULT_REVIEW_QUEUE,
+                   help="Current review queue for stale-target revalidation "
+                        "(--no-revalidate to disable).")
+    p.add_argument("--no-revalidate", action="store_true",
+                   help="Skip stale-target revalidation against the review queue.")
     args = p.parse_args(argv)
     try:
         if args.release_manifest:
@@ -362,7 +404,9 @@ def main(argv=None) -> int:
             return 0
         if not args.batch_id:
             raise PreflightError("--batch-id is required")
-        print(json.dumps(preflight_batch(args.batch_id, fix_class=args.fix_class, reserve=args.reserve)))
+        print(json.dumps(preflight_batch(
+            args.batch_id, fix_class=args.fix_class, reserve=args.reserve,
+            review_queue_path=(None if args.no_revalidate else args.review_queue))))
         return 0
     except PreflightError as exc:
         print(f"PRECHECK_FAIL: {exc}", file=sys.stderr)

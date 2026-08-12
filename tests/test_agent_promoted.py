@@ -454,3 +454,57 @@ def test_build_unified_holdings_empty_stores_no_audit(tmp_path):
             b2_corrections_dir=tmp_path / "empty_corrections")
     assert len(result) == 1
     assert not (tmp_path / "agent_fix_application_audit.csv").exists()
+
+
+# --------------------------------------------------------------- Layer B stage-2 (2026-08-13)
+
+def test_apply_promoted_stage2_corrections_scoped_per_cik():
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Alpha Corp",
+         "report_date": "2025-12-31", "fair_value": 1000.0, "interest_rate": 0.105},
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+        {"cik": "0000000456", "source": "bdc", "issuer_name": "Alpha Corp",
+         "report_date": "2025-12-31", "fair_value": 3000.0, "interest_rate": 0.09},
+        {"cik": "0001715933", "source": "nport", "issuer_name": "Alpha Corp",
+         "report_date": "2025-12-31", "fair_value": 4000.0, "interest_rate": 0.08},
+    ])
+    corrections = [{"cik": "1715933", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100,
+                                 "row_selector": {"issuer_name": "Alpha Corp"}}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert len(out) == 4
+    # only the target CIK's BDC Alpha row rescaled
+    tgt = out[(out["cik"] == "0001715933") & (out["source"] == "bdc")
+              & (out["issuer_name"] == "Alpha Corp")]
+    assert tgt["interest_rate"].iloc[0] == 10.5
+    # other CIK and N-PORT rows untouched
+    assert out[(out["cik"] == "0000000456")]["interest_rate"].iloc[0] == 0.09
+    assert out[(out["source"] == "nport")]["interest_rate"].iloc[0] == 0.08
+    assert audits[0]["layer"] == "unified_b2_corrections"
+    assert audits[0]["status"] == "ok" and audits[0]["rows_changed"] == 1
+    assert audits[0]["drift"] == ""
+
+
+def test_apply_promoted_stage2_corrections_noop_drift_flagged():
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+    ])
+    corrections = [{"cik": "1715933", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100,
+                                 "row_selector": {"issuer_name": "Gone Issuer"}}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert out["interest_rate"].iloc[0] == 11.5
+    assert audits[0]["drift"] == "noop"  # stale promoted correction must surface
+
+
+def test_apply_promoted_stage2_skips_comparative_class():
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+    ])
+    corrections = [{"cik": "1715933", "fix_class": "comparative_period_filter",
+                    "template": {"report_date": "2025-12-31"}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert len(out) == 1 and audits == []  # raw-staging family is not applied here

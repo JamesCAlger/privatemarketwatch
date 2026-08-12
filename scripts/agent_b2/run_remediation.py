@@ -65,11 +65,16 @@ MECHANISM_TO_FIX_CLASS = {
 SYMPTOM_MECHANISMS = {"subtotal_leak", "cash_equivalent_leak", "fv_conservation",
                       "conservation_overshoot"}
 
-WRAPPER_PATCH_FIX_CLASSES = {"subtotal_filter", "classification_fix", "column_remap"}
+# 2026-08-13: classification_fix and column_remap moved from the (never-implemented)
+# wrapper-patch aspiration to concrete post-staging frame appliers; rule_scope moved to
+# the human policy stream (it asks to change a VALIDATION RULE's scope -- a detector
+# decision, not a data fix -- and belongs in the end-of-quarter escalation basket).
+WRAPPER_PATCH_FIX_CLASSES = {"subtotal_filter"}
 POST_STAGING_FIX_CLASSES = {"dedup", "comparative_period_filter", "spv_lookthrough",
                             "rate_rescale", "unit_rescale", "all_pik_normalization",
-                            "missing_position_add"}
-RULE_TRACK_FIX_CLASSES = {"rule_scope", "anchor_fix"}
+                            "missing_position_add", "classification_fix", "column_remap"}
+RULE_TRACK_FIX_CLASSES = {"anchor_fix"}
+POLICY_FIX_CLASSES = {"rule_scope"}
 WRAPPER_PATCH_APPLIERS = {"subtotal_filter": apply_subtotal_filter}
 
 WORKLIST_COLUMNS = ["cik", "fix_class", "stage", "mechanism", "fix_class_derived",
@@ -243,6 +248,143 @@ def gate_conservation_packet(
     return gate_correction(cik=cik, target_quarter=target_quarter,
                            target_flags=["fv_conservation"], baseline=baseline, trial=trial,
                            **gate_kwargs)
+
+
+# --------------------------------------------------------------------------- value gate (2026-08-13)
+
+# Fields the value gate audits for off-target invariance and canonical comparison.
+_VALUE_GATE_COLUMNS = [
+    "report_date", "issuer_name", "bdc_investment_identifier", "instrument_description",
+    "fair_value", "cost", "principal_amount", "interest_rate", "pik_rate", "basis_spread",
+    "asset_class", "index_classification", "exposure_type",
+]
+# Post-fix plausibility bounds for rate-family fields (percentage scale).
+_FIELD_BOUNDS = {"interest_rate": (0.0, 60.0), "pik_rate": (0.0, 30.0),
+                 "basis_spread": (0.0, 30.0)}
+_FV_TOUCHING = {"missing_position_add"}  # plus unit_rescale when field == fair_value
+
+
+def _canonical_value_frame(df: pd.DataFrame) -> pd.DataFrame:
+    """Comparison-stable projection: shared audit columns, numerics coerced+rounded,
+    strings stripped, sorted by everything. Robust to CSV round-trip dtype noise."""
+    cols = [c for c in _VALUE_GATE_COLUMNS if c in df.columns]
+    out = pd.DataFrame(index=range(len(df)))
+    for c in cols:
+        num = pd.to_numeric(df[c], errors="coerce")
+        if num.notna().sum() >= max(1, int(0.5 * df[c].notna().sum())):
+            out[c] = num.round(4).values
+        else:
+            out[c] = df[c].fillna("").astype(str).str.strip().values
+    return out.sort_values(cols, kind="mergesort", na_position="last").reset_index(drop=True)
+
+
+def gate_value_packet(
+    *, cik: str, target_quarter: str, baseline_df: pd.DataFrame, trial_df: pd.DataFrame,
+    correction: dict, grounding_df: pd.DataFrame | None = None,
+) -> dict:
+    """B3 gate for stage-2 VALUE corrections (and missing_position_add).
+
+    The conservation gate sees only aggregates, which a rate rescale or column remap
+    never moves -- so value fixes need per-row predicates:
+
+    - replay_equivalence: trial frame must equal applier(baseline) exactly under the
+      canonical projection. This subsumes off-target invariance AND expected-change
+      verification in one deterministic check: the promoted correction may do exactly
+      what the applier does to the baseline, nothing else.
+    - field_sanity: post-fix values of the changed rate-family field inside plausibility
+      bounds; fair_value magnitudes sane.
+    - fv_change_scoped: for non-FV fix classes, total FV identical to baseline (< $1
+      drift); FV-touching classes defer to the conservation gate run alongside.
+    - grounding_verified (missing_position_add only): every position's source_row_id
+      must exist in the grounding frame for this CIK with fair_value within 0.5%.
+      Missing grounding data FAILS (fail-closed; no fabricated positions).
+    """
+    from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS
+
+    fix_class = str(correction.get("fix_class") or "")
+    template = correction.get("template") or {}
+    checks: dict[str, bool] = {}
+    reasons: list[str] = []
+
+    applier = POST_STAGING_APPLIERS.get(fix_class)
+    if applier is None:
+        return {"cik": cik, "target_quarter": target_quarter, "verdict": "FAIL",
+                "checks": {}, "reasons": [f"no applier for fix_class {fix_class!r}"]}
+
+    expected_df, replay_audit = applier(baseline_df, template)
+    if replay_audit.get("status") != "ok":
+        return {"cik": cik, "target_quarter": target_quarter, "verdict": "FAIL",
+                "checks": {"replay_ok": False},
+                "reasons": [f"applier replay error: {replay_audit.get('message')}"]}
+    if not int(replay_audit.get("rows_changed") or 0):
+        checks["replay_ok"] = False
+        reasons.append("correction is a no-op on the baseline frame (stale or mis-selected)")
+
+    exp_c, got_c = _canonical_value_frame(expected_df), _canonical_value_frame(trial_df)
+    replay_eq = exp_c.shape == got_c.shape and exp_c.equals(got_c)
+    checks["replay_equivalence"] = replay_eq
+    if not replay_eq:
+        reasons.append(
+            f"trial != applier(baseline): expected {exp_c.shape[0]} rows, got {got_c.shape[0]}"
+            if exp_c.shape != got_c.shape else
+            "trial frame diverges from applier(baseline) beyond the correction itself")
+
+    field = str(template.get("field") or "")
+    sane = True
+    if field in _FIELD_BOUNDS and field in trial_df.columns:
+        lo, hi = _FIELD_BOUNDS[field]
+        vals = pd.to_numeric(trial_df[field], errors="coerce").dropna()
+        bad = int(((vals < lo) | (vals > hi)).sum())
+        if bad:
+            sane = False
+            reasons.append(f"{bad} post-fix {field} value(s) outside ({lo}, {hi}]")
+    if "fair_value" in trial_df.columns:
+        fv = pd.to_numeric(trial_df["fair_value"], errors="coerce").abs()
+        if int((fv > 1e12).sum()):
+            sane = False
+            reasons.append("post-fix |fair_value| exceeds $1T sanity bound")
+    checks["field_sanity"] = sane
+
+    fv_touching = fix_class in _FV_TOUCHING or (
+        fix_class == "unit_rescale" and field == "fair_value")
+    base_fv = pd.to_numeric(baseline_df.get("fair_value"), errors="coerce").fillna(0).sum()
+    trial_fv = pd.to_numeric(trial_df.get("fair_value"), errors="coerce").fillna(0).sum()
+    if fv_touching:
+        checks["fv_change_scoped"] = True  # conservation gate owns the FV judgement
+    else:
+        scoped = abs(float(base_fv) - float(trial_fv)) < 1.0
+        checks["fv_change_scoped"] = scoped
+        if not scoped:
+            reasons.append(f"non-FV fix moved total FV by {float(trial_fv) - float(base_fv):,.0f}")
+
+    if fix_class == "missing_position_add":
+        grounded = False
+        positions = list(template.get("positions") or [])
+        if grounding_df is not None and len(grounding_df) and "source_row_id" in grounding_df.columns:
+            gid = grounding_df["source_row_id"].astype(str)
+            gfv = pd.to_numeric(grounding_df.get("fair_value"), errors="coerce")
+            misses = []
+            for p in positions:
+                sid, want = str(p.get("source_row_id") or ""), float(p.get("fair_value") or 0)
+                hit = grounding_df.index[gid == sid]
+                ok = any(abs(float(gfv.loc[i] or 0) - want) <= max(1000.0, abs(want) * 0.005)
+                         for i in hit)
+                if not ok:
+                    misses.append(sid)
+            grounded = not misses
+            if misses:
+                reasons.append(f"position source_row_id(s) not grounded in staging: {misses}")
+        else:
+            reasons.append("no grounding frame supplied for missing_position_add (fail-closed)")
+        checks["grounding_verified"] = grounded
+    else:
+        checks["grounding_verified"] = True
+
+    checks.setdefault("replay_ok", True)
+    verdict = "PASS" if all(checks.values()) else "FAIL"
+    return {"cik": cik, "target_quarter": target_quarter, "verdict": verdict,
+            "gate_kind": "value", "fix_class": fix_class, "checks": checks,
+            "reasons": reasons or ["all value-gate predicates clear"]}
 
 
 def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides_dir: Path,
@@ -464,6 +606,13 @@ def main(argv=None) -> int:
     g.add_argument("--trial-holdings", type=Path, required=True)
     g.add_argument("--conservation", type=Path, default=DEFAULT_CONSERVATION)
     g.add_argument("--threshold-pct", type=float, default=1.0)
+    g.add_argument("--correction", type=Path, default=None,
+                   help="Correction leaf JSON: stage-2 value classes run the per-row "
+                        "value gate (replay-equivalence etc.) IN ADDITION to the "
+                        "conservation gate; combined verdict is the AND.")
+    g.add_argument("--grounding", type=Path, default=None,
+                   help="Frame with source_row_id+fair_value for missing_position_add "
+                        "grounding (csv/parquet). Fail-closed when absent.")
 
     dx = sub.add_parser("diagnose", help="Anchor-scored battery for a Stage-3 symptom packet "
                                          "(replaces the guessed mechanism with a measured decision).")
@@ -490,9 +639,23 @@ def main(argv=None) -> int:
         res = gate_conservation_packet(cik=args.cik, target_quarter=args.target_quarter,
                                        baseline_df=base_df, trial_df=trial_df, anchors=anchors,
                                        threshold_pct=args.threshold_pct)
-        print(json.dumps({"cik": res.cik, "target_quarter": res.target_quarter,
-                          "verdict": res.verdict, "checks": res.checks, "reasons": res.reasons}, indent=2))
-        return 0 if res.verdict == "PASS" else 1
+        out = {"cik": res.cik, "target_quarter": res.target_quarter,
+               "verdict": res.verdict, "checks": res.checks, "reasons": res.reasons}
+        if args.correction is not None:
+            correction = json.loads(Path(args.correction).read_text(encoding="utf-8-sig"))
+            grounding_df = None
+            if args.grounding is not None and Path(args.grounding).exists():
+                gp = Path(args.grounding)
+                grounding_df = (pd.read_parquet(gp) if gp.suffix == ".parquet"
+                                else pd.read_csv(gp, low_memory=False))
+            vres = gate_value_packet(cik=args.cik, target_quarter=args.target_quarter,
+                                     baseline_df=base_df, trial_df=trial_df,
+                                     correction=correction, grounding_df=grounding_df)
+            out["value_gate"] = {k: vres[k] for k in ("verdict", "checks", "reasons")}
+            out["verdict"] = "PASS" if (res.verdict == "PASS"
+                                        and vres["verdict"] == "PASS") else "FAIL"
+        print(json.dumps(out, indent=2))
+        return 0 if out["verdict"] == "PASS" else 1
     if args.mode == "diagnose":
         packet = {"cik": args.cik, "quarters": [args.target_quarter], "needs_diagnosis": True,
                   "fix_class": "subtotal_filter", "fix_class_derived": True, "mechanism": "subtotal_leak"}

@@ -160,10 +160,12 @@ def test_route_corrections_by_flavor():
         {"fix_class": "rule_scope"}, {"fix_class": None}, {"fix_class": "classification_fix"},
     ]
     routed = rr.route_corrections(corrections)
-    assert len(routed["wrapper_patch"]) == 2   # subtotal_filter + classification_fix
-    assert len(routed["post_staging"]) == 1    # dedup
-    assert len(routed["rule_track"]) == 1      # rule_scope
-    assert len(routed["needs_human"]) == 1     # no fix_class
+    # 2026-08-13: classification_fix is now a post-staging frame applier; rule_scope
+    # is a detector-policy decision routed to the human basket.
+    assert len(routed["wrapper_patch"]) == 1   # subtotal_filter
+    assert len(routed["post_staging"]) == 2    # dedup + classification_fix
+    assert len(routed["rule_track"]) == 0
+    assert len(routed["needs_human"]) == 2     # rule_scope + no fix_class
 
 
 def test_prepare_trial_wrappers_runs_subtotal_filter(tmp_path):
@@ -176,14 +178,12 @@ def test_prepare_trial_wrappers_runs_subtotal_filter(tmp_path):
     corrections = [
         {"cik": cik, "fix_class": "subtotal_filter", "template": {"patterns": ["Leaked Rollup"]},
          "source_review_ids": ["RVQ_x"], "confidence": 0.9},
-        {"cik": cik, "fix_class": "classification_fix", "template": {}},  # not implemented -> recorded
     ]
     out = tmp_path / "trial_wrappers"
     audits = rr.prepare_trial_wrappers(cik, corrections, out_wrapper_dir=out, source_wrapper_dir=src)
     by = {a["fix_class"]: a for a in audits}
     assert by["subtotal_filter"]["status"] == "ok"
     assert "leaked rollup" in by["subtotal_filter"]["patterns_added"]
-    assert by["classification_fix"]["status"] == "not_implemented"
     assert (out / f"{cik}.json").exists()
 
 
@@ -267,3 +267,120 @@ def test_promote_wrapper_patch_applies_to_production_wrapper(tmp_path):
     assert promoted2[0]["status"] == "noop"
     wrapper2 = json.loads((wrappers / f"{cik}.json").read_text(encoding="utf-8"))
     assert len(wrapper2["b2_provenance"]) == 1
+
+
+# --------------------------------------------------------------------------- value gate (2026-08-13)
+
+
+def _vg_frame():
+    return pd.DataFrame([
+        {"issuer_name": "Alpha Corp", "report_date": "2025-12-31", "fair_value": 1000.0,
+         "interest_rate": 0.105, "pik_rate": None, "basis_spread": 5.0,
+         "asset_class": "PRIVATE_CREDIT"},
+        {"issuer_name": "Beta LLC", "report_date": "2025-12-31", "fair_value": 2000.0,
+         "interest_rate": 11.5, "pik_rate": 2.0, "basis_spread": 6.0,
+         "asset_class": "PRIVATE_CREDIT"},
+    ])
+
+
+def _vg_corr(**kw):
+    base = {"cik": "0000000100", "fix_class": "rate_rescale",
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    base.update(kw)
+    return base
+
+
+def test_value_gate_passes_on_exact_replay():
+    from pipeline.agent_b2_appliers import apply_rate_rescale
+    base = _vg_frame()
+    trial, _ = apply_rate_rescale(base, _vg_corr()["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=_vg_corr())
+    assert res["verdict"] == "PASS", res["reasons"]
+    assert res["checks"]["replay_equivalence"] is True
+
+
+def test_value_gate_fails_on_off_target_drift():
+    from pipeline.agent_b2_appliers import apply_rate_rescale
+    base = _vg_frame()
+    trial, _ = apply_rate_rescale(base, _vg_corr()["template"])
+    trial = trial.copy()
+    trial.loc[trial["issuer_name"] == "Beta LLC", "fair_value"] = 2500.0  # unrelated edit
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=_vg_corr())
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["replay_equivalence"] is False
+
+
+def test_value_gate_fails_on_noop_correction():
+    # Stale-fix guard: a correction that changes nothing on the baseline must not promote.
+    base = _vg_frame()
+    corr = _vg_corr()
+    corr["template"] = {"field": "interest_rate", "factor": 100,
+                        "row_selector": {"issuer_name": "No Such Issuer"}}
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=base.copy(), correction=corr)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["replay_ok"] is False
+
+
+def test_value_gate_fails_on_out_of_bounds_rate():
+    from pipeline.agent_b2_appliers import apply_rate_rescale
+    base = _vg_frame()
+    corr = _vg_corr()
+    corr["template"] = {"field": "interest_rate", "factor": 1000,
+                        "row_selector": {"issuer_name": "Alpha Corp"}}  # 0.105 -> 105
+    trial, _ = apply_rate_rescale(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["field_sanity"] is False
+
+
+def test_value_gate_missing_position_add_fails_closed_without_grounding():
+    from pipeline.agent_b2_appliers import apply_missing_position_add
+    base = _vg_frame()
+    corr = {"cik": "0000000100", "fix_class": "missing_position_add",
+            "template": {"positions": [{"issuer_name": "Gamma Bill", "fair_value": 500.0,
+                                        "report_date": "2025-12-31",
+                                        "source_row_id": "SRC-42",
+                                        "bdc_dimensions_raw": "investmentidentifieraxis=Gamma"}]}}
+    trial, _ = apply_missing_position_add(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["grounding_verified"] is False
+
+
+def test_value_gate_missing_position_add_passes_with_grounding():
+    from pipeline.agent_b2_appliers import apply_missing_position_add
+    base = _vg_frame()
+    corr = {"cik": "0000000100", "fix_class": "missing_position_add",
+            "template": {"positions": [{"issuer_name": "Gamma Bill", "fair_value": 500.0,
+                                        "report_date": "2025-12-31",
+                                        "source_row_id": "SRC-42",
+                                        "bdc_dimensions_raw": "investmentidentifieraxis=Gamma"}]}}
+    trial, _ = apply_missing_position_add(base, corr["template"])
+    grounding = pd.DataFrame([{"source_row_id": "SRC-42", "fair_value": 500.0}])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr,
+                               grounding_df=grounding)
+    assert res["verdict"] == "PASS", res["reasons"]
+
+
+def test_value_gate_grounding_fv_mismatch_fails():
+    from pipeline.agent_b2_appliers import apply_missing_position_add
+    base = _vg_frame()
+    corr = {"cik": "0000000100", "fix_class": "missing_position_add",
+            "template": {"positions": [{"issuer_name": "Gamma Bill", "fair_value": 500000.0,
+                                        "report_date": "2025-12-31",
+                                        "source_row_id": "SRC-42",
+                                        "bdc_dimensions_raw": "investmentidentifieraxis=Gamma"}]}}
+    trial, _ = apply_missing_position_add(base, corr["template"])
+    grounding = pd.DataFrame([{"source_row_id": "SRC-42", "fair_value": 500.0}])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr,
+                               grounding_df=grounding)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["grounding_verified"] is False

@@ -1334,6 +1334,16 @@ def build_unified_holdings(
     # catches everything the row-level correction system missed)
     combined = _apply_fund_strategy_asset_class_override(combined)
 
+    # Promoted B2 stage-2 corrections (2026-08-13, gap-1 Layer B post-staging): the
+    # non-comparative correction classes apply to the unified frame here, per CIK,
+    # BDC rows only -- BEFORE Layer C rules so rules see corrected values. The
+    # comparative_period_filter family already applied at raw staging above.
+    _promoted_corrections = agent_promoted.load_promoted_corrections(b2_corrections_dir)
+    if _promoted_corrections:
+        combined, _b2_audits = agent_promoted.apply_promoted_stage2_corrections(
+            combined, _promoted_corrections)
+        _agent_fix_audits.extend(_b2_audits)
+
     # Promoted investigator rules (gap 1 Layer C): gate-PASS rules from the audited
     # override store, applied per CIK to BDC-source rows only. Runs after
     # classification (rule predicates reference unified-frame columns) and before the

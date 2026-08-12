@@ -222,13 +222,15 @@ def test_preflight_rejects_fix_class_without_trial_applier(tmp_path):
     d = _dirs(tmp_path)
     batch = "B2U"
     batch_dir = d["base_dir"] / "batch" / batch
+    # 2026-08-13: classification_fix now HAS an applier; anchor_fix remains the
+    # rule-track class with no trial applier.
     _seed(d, "RVQ_BLK_aaa")
-    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "classification_fix",
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "anchor_fix",
                                  "source_review_ids": "RVQ_BLK_aaa"}])
     with pytest.raises(pf.PreflightError, match="no implemented trial applier"):
         pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
                            bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
-                           fix_class="classification_fix")
+                           fix_class="anchor_fix")
 
 
 def test_preflight_rejects_ambiguous_comparative_quarters(tmp_path):
@@ -243,3 +245,47 @@ def test_preflight_rejects_ambiguous_comparative_quarters(tmp_path):
         pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
                            bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
                            fix_class="comparative_period_filter")
+
+
+def test_preflight_skips_policy_fix_class_with_reason(tmp_path):
+    # rule_scope asks to change a VALIDATION RULE's scope -- human basket, not a
+    # worker dispatch, and not a whole-lane error.
+    d = _dirs(tmp_path)
+    batch = "B2P"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_aaa"},
+        {"cik": "0001999988", "fix_class": "rule_scope", "source_review_ids": "RVQ_BLK_aaa"},
+    ])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    assert res["n_dispatch"] == 1
+    assert res["n_skipped_policy"] == 1
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["skipped_policy"][0]["fix_class"] == "rule_scope"
+    assert "human escalation basket" in manifest["skipped_policy"][0]["reason"]
+
+
+def test_preflight_skips_stale_targets_against_review_queue(tmp_path):
+    # Frame revalidation: a packet whose source finding no longer appears in the
+    # current review queue was fixed upstream -- skip, don't dispatch (q4b2t4b lesson).
+    d = _dirs(tmp_path)
+    batch = "B2S"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _seed(d, "RVQ_BLK_bbb", cik="0001743415")
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_aaa"},
+        {"cik": "0001743415", "fix_class": "dedup", "source_review_ids": "RVQ_BLK_bbb"},
+    ])
+    queue = tmp_path / "review_queue.csv"
+    queue.write_text("review_id,lane\nRVQ_BLK_aaa,blocker\n", encoding="utf-8")
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                             review_queue_path=queue)
+    assert res["n_dispatch"] == 1          # only the still-open finding dispatches
+    assert res["n_skipped_stale"] == 1     # RVQ_BLK_bbb no longer fires
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["skipped_stale"][0]["fix_class"] == "dedup"
+    assert "fixed upstream" in manifest["skipped_stale"][0]["reason"]

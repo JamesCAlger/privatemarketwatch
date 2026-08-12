@@ -53,6 +53,11 @@ ROW_SELECTOR_KEYS = frozenset({
 ALLOWED_POSITION_KEYS = frozenset({
     "issuer_name", "fair_value", "cost", "principal_amount", "interest_rate", "pik_rate",
     "report_date", "instrument_description", "asset_class",
+    # Anti-fabrication grounding (2026-08-13, parity with agent_rule row_add): every
+    # added position must name the staging row it recovers; bdc_dimensions_raw makes
+    # the row countable by the gates. The 1965934/1993402 fabricated-FV incidents are
+    # why these are REQUIRED, not optional.
+    "source_row_id", "bdc_dimensions_raw",
 })
 # spv_lookthrough: one decision per consolidated legal entity.
 ENTITY_KEYS = frozenset({"legal_entity", "decision"})
@@ -192,7 +197,8 @@ def _validate_template(fix_class: str, template: Any, tpl: Template, rep: Correc
                 bad = set(p) - ALLOWED_POSITION_KEYS
                 if bad:
                     rep.errors.append(f"template.positions[{i}] has unknown key(s): {sorted(bad)}")
-                for req in ("issuer_name", "fair_value"):
+                for req in ("issuer_name", "fair_value", "report_date",
+                            "source_row_id", "bdc_dimensions_raw"):
                     if not str(p.get(req) or "").strip() and not _is_number(p.get(req)):
                         rep.errors.append(f"template.positions[{i}] missing {req}")
     if "entities" in keys:

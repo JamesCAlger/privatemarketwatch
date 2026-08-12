@@ -138,14 +138,24 @@ def test_stage_for_helper():
 
 
 def test_missing_position_add_validates_positions():
+    # 2026-08-13: positions REQUIRE grounding (source_row_id + bdc_dimensions_raw +
+    # report_date) -- anti-fabrication parity with agent_rule row_add.
     ok = cl.validate_correction(_corr(
         mechanism="extraction_gap", fix_class="missing_position_add",
-        template={"positions": [{"issuer_name": "Acme Term Loan", "fair_value": 1000.0}]}))
+        template={"positions": [{"issuer_name": "Acme Term Loan", "fair_value": 1000.0,
+                                 "report_date": "2025-12-31", "source_row_id": "SRC-1",
+                                 "bdc_dimensions_raw": "investmentidentifieraxis=Acme"}]}))
     assert ok.ok, ok.errors
     bad = cl.validate_correction(_corr(
         mechanism="extraction_gap", fix_class="missing_position_add",
         template={"positions": [{"fair_value": 1000.0}]}))  # no issuer_name
     assert not bad.ok
+    ungrounded = cl.validate_correction(_corr(
+        mechanism="extraction_gap", fix_class="missing_position_add",
+        template={"positions": [{"issuer_name": "Acme Term Loan", "fair_value": 1000.0,
+                                 "report_date": "2025-12-31"}]}))  # no source_row_id
+    assert not ungrounded.ok
+    assert any("source_row_id" in e for e in ungrounded.errors)
 
 
 def test_bad_cik_rejected():

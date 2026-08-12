@@ -98,6 +98,75 @@ def load_promoted_corrections(corrections_dir: Optional[Path] = None) -> list[di
     return out
 
 
+def apply_promoted_stage2_corrections(
+    combined: pd.DataFrame, corrections: list[dict],
+) -> tuple[pd.DataFrame, list[dict]]:
+    """Apply gate-PASS POST-STAGING correction leaves to the unified frame (2026-08-13).
+
+    Production consumer for the non-comparative correction classes (rate/unit rescale,
+    column remap, classification fix, all-PIK normalization, missing-position add,
+    dedup, spv_lookthrough). Scoping is structural, like apply_promoted_rules: each
+    leaf is evaluated ONLY against its own CIK's BDC-source rows. Runs BEFORE Layer C
+    rules so rules see corrected values. Emits one audit row per leaf with noop drift
+    detection (a promoted correction that changes nothing has gone stale)."""
+    from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS
+
+    audits: list[dict] = []
+    todo = [c for c in corrections
+            if str(c.get("fix_class") or "") in POST_STAGING_APPLIERS
+            and str(c.get("fix_class")) != "comparative_period_filter"]
+    if not todo or combined.empty or "cik" not in combined.columns:
+        return combined, audits
+    cik_norm = combined["cik"].astype(str).str.replace(r"\D", "", regex=True).str.zfill(10)
+    is_bdc = (combined["source"].astype(str).str.lower() == "bdc") if "source" in combined.columns \
+        else pd.Series(True, index=combined.index)
+    by_cik: dict[str, list[dict]] = {}
+    for c in todo:
+        cik = normalize_cik10(c.get("cik"))
+        if cik:
+            by_cik.setdefault(cik, []).append(c)
+    replaced: list[pd.DataFrame] = []
+    drop_mask = pd.Series(False, index=combined.index)
+    for cik in sorted(by_cik):
+        mask = (cik_norm == cik) & is_bdc
+        sub = combined.loc[mask]
+        if sub.empty:
+            for c in by_cik[cik]:
+                audits.append({"layer": "unified_b2_corrections", "cik": cik,
+                               "rule_id": str(c.get("fix_class")), "rule_type": "b2_correction",
+                               "status": "no_rows", "rows_changed": 0, "fv_affected": 0.0,
+                               "drift": "noop", "message": "no BDC rows for CIK in frame"})
+            continue
+        corrected = sub
+        for c in sorted(by_cik[cik], key=lambda x: str(x.get("fix_class"))):
+            fc = str(c.get("fix_class"))
+            applier = POST_STAGING_APPLIERS[fc]
+            corrected, audit = applier(corrected, c.get("template") or {})
+            # fill structural identity on added rows (missing_position_add)
+            if "cik" in corrected.columns and corrected["cik"].isna().any():
+                added = corrected["cik"].isna()
+                corrected.loc[added, "cik"] = cik
+                if "source" in corrected.columns:
+                    corrected.loc[added & corrected["source"].isna(), "source"] = "bdc"
+            rows = int(audit.get("rows_changed") or audit.get("rows_dropped") or 0)
+            status = str(audit.get("status") or "")
+            audits.append({"layer": "unified_b2_corrections", "cik": cik,
+                           "rule_id": fc, "rule_type": "b2_correction", "status": status,
+                           "rows_changed": rows,
+                           "fv_affected": abs(float(audit.get("fv_delta")
+                                                    or audit.get("fv_dropped") or 0.0)),
+                           "drift": ("noop" if status == "ok" and rows == 0 else ""),
+                           "message": str(audit.get("message") or "")})
+            if status != "ok":
+                logger.warning("promoted b2 correction %s (cik=%s) did not apply: %s",
+                               fc, cik, audit.get("message"))
+        replaced.append(corrected)
+        drop_mask |= mask
+    if replaced:
+        combined = pd.concat([combined.loc[~drop_mask], *replaced], ignore_index=True)
+    return combined, audits
+
+
 def raw_staging_exclusions(corrections: list[dict]) -> list[dict]:
     """Deterministic (cik, report_date) targets for the raw-staging comparative filter."""
     targets: set[tuple[str, str]] = set()
