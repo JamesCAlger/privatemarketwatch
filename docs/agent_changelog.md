@@ -7887,3 +7887,56 @@ Agent lane for the rate-convention classifier residual. New modules:
 - Mechanism 4 (verdict 865d933112): output-only rows with output wrapper disposition non_private_market AND family cash get status `excluded_non_private_market_output` (non-blocking, documented_exclusion; mechanism `documented_non_private_market_cash_output`). Keyed strictly on the audited wrapper classification, never cash/PIK text. Distinct from the 1993402 escalation (2026-07-26 entry above): a row_add with fabricated FV has no agreeing source fact and no cash wrapper on a real loan row, so it still blocks under these changes.
 - Real-data verification (read-only, per-CIK reconcile on cached facts + current unified holdings, 2025-12-31): 1919369 blockers 1 -> 0; 1803498 extras 11 -> 0 (686 JV missing_from_pipeline rows remain, separate pre-existing mechanism); 1899996 1 -> 0; 1950803 29 -> 0; 1976336 extras 1 -> 0 (5 pre-existing negative-commitment missing rows remain); 1950976 1 -> 0.
 - Tests: +13 in `tests/test_validate_holdings.py` (3 new classes: TestAuditedValueRescaleSourceNormalization, TestRowAddRecoveredOutputIdentityRescue, TestOutputOnlyWrapperCashCalibration; each mechanism has a false-positive guard), +9 in `tests/test_source_reconciliation_cache.py` (liquid-fund admission incl. footnote-only FP + non-MM cash member FP + zero-FV guard, extraction-version hash test, 2 reconcile-level MM regressions). test_validate_holdings.py 161 passed; test_source_reconciliation_cache.py 18 passed; test_bdc_cik_review.py + test_bdc_xbrl_wrapper_oracle.py 109 passed. Full suite and pipeline rebuild NOT run (parent session rebuilds once after all agents land). logic_hash + override_hash + facts-cache version all changed, so next cached run fully recomputes.
+
+## 2026-08-12 - Q4 2025 B1 tier-4 resumed and CLOSED; campaign in-cohort gate green (q4t4c/d/e/f)
+
+- Resumed the 2026-07-25 quota halt: q4t4c discovered from _q4_tier4_resume2.csv
+  (177 items, cohort-guard OK). Banked 36, then hit an operator token strand
+  (refresh_token_reused: a worker rotated the single-use Codex refresh token;
+  141 workers 401ed in seconds). Recovery per runbook: newest worker-home
+  auth.json (RVQ_REV_da8a3d20531a) copied back to ~/.codex/ (prior file kept as
+  auth.json.stranded_20260811).
+- q4t4d (141 retry, resume3): 133 banked (incl. 2 workers that wrote verdicts
+  then exited 1), 8 mechanical failures (sleep/wake websocket drops, no-artifact
+  exits). q4t4e (8, resume4): 7 banked. RVQ_REV_5611e8ad60bc failed twice
+  mechanically (sandbox ACL setup_marker access-denied + CreateProcessWithLogonW
+  1326) -> documented residual in _q4_campaign_residuals.csv per 2-round retry
+  protocol.
+- Coverage gate exposed 2 sandbox-fail-closed ambiguous/source_unavailable
+  verdicts (RVQ_REV_2755462bd83b from pre-halt q4t4, RVQ_REV_b1ed381666df from
+  q4t4d; both cite CreateProcessWithLogonW 1326, not missing cache). Archived to
+  q4t4f/verdicts_source_unavailable_archive (q4t3 pattern) and re-dispatched as
+  q4t4f: clean re-adjudications (real_error 0.82 / false_alarm 0.86).
+- Finalized q4t4/q4t4b/q4t4c/q4t4d/q4t4e/q4t4f; only cross error anywhere is the
+  documented residual. BOM strip: 993 verdicts checked, 0 BOMs (newer harness
+  writes clean UTF-8).
+- TIER 4 CLOSED 506/506: 277 real_error / 196 false_alarm / 32 ambiguous /
+  1 documented residual. Tiers 0-3 re-verified CLOSED with the same gate ->
+  campaign in-cohort adjudication complete. Routing/per-rule false-alarm stats
+  in each batch dir (notable: C107 FA 87 pct n=46, C103 FA 100 pct n=5,
+  B02 FA 67 pct n=31, F16 FA 65 pct n=37 -> rule_scoping_queue demotion
+  candidates; C206 0 pct n=13, FX02/FX03 0 pct).
+- Recon artifacts rebuilt (python -m pipeline.main --validate-all
+  --reconcile-full, cached only): residual classification refreshed 2026-08-12
+  (was 2026-07-23). All six 2026-07-26 patch deltas confirmed on real data:
+  1919369/1899996/1950803/1950976 blocking -> 0, 1976336 -> 5 pre-existing,
+  1803498 extras -> 0 (682 JV rows remain, separate mechanism). HPS 1838126:
+  21 blocking rows vs predicted ~16 -- composition needs a look when the JV
+  axis-omission excusal is designed. Source-only totals now 14,831 reviewed /
+  10,489 blocking. NEW promoted FAILs RI02 (4 CIKs in matches missing from
+  holdings) + RI07 (blank position IDs in returns build): position_matches/
+  position_returns are stale vs the 2026-07-26 unified rebuild -- needs a
+  matches/returns rebuild, not a data fix.
+- 2026-07-26 session work landed as cae290d (verified: 25 + 161 targeted tests).
+- Dispatch tooling lessons: (a) dispatch_agent_b_workers.ps1 runs its own
+  preflight --reserve -- do NOT reserve manually first (double-lock PRECHECK_FAIL);
+  (b) prep_retry.py + strip_verdict_bom.py assume the ensemble/ batch layout --
+  for agent_b batches, re-discover from a review_id CSV and strip BOMs directly;
+  (c) machine sleep pauses fleet+dispatcher wall-clock and can convert in-flight
+  workers into 30-min TIMEOUT entries that DID write verdicts -- reconcile
+  dispatch_failures.txt against the verdict store before retrying.
+- Parked (unchanged): out-of-cohort pool (1,025), rule demotions
+  (X06/SRC_BDC02/X04/income_identity + the FA-rate candidates above), t2/t3 B2
+  backlog (~120 real_errors), 9 tier-1 PATCH_PROPOSED human merges, 1993402
+  fabricated-FV escalation, evidence_cli.py worktree modification (not mine,
+  not committed).
