@@ -8055,3 +8055,19 @@ Agent lane for the rate-convention classifier residual. New modules:
 - SCP 1743415 anchor induction: worker found Total Investments $184.5M but the closure
   gate REFUSED (non-cash remainder 24% > 15%; looks like a subtotal). Refusal stands
   per gate rules; fund remains unanchored ($184M, immaterial to the FV bar).
+
+## 2026-08-13 - Golub/North Haven diagnose batteries (post-PASS durability)
+
+- run_remediation diagnose with PER-CIK holdings slices (first attempt fed the full
+  cohort parquet -> $540B garbage residuals; the --holdings arg means a per-CIK file).
+- Golub 1930087: RECONCILES (residual $2.7M = 0.03% of fund; probes tie value_sum to
+  anchor). The acceptance ledger's -0.852% flag is an anchor-basis discrepancy between
+  the shadow ledger anchor and the battery anchor -- anchor review, not a data defect.
+- North Haven 1851322: ESCALATE (terminal): $249.7M residual (3.6%), deterministic
+  probes explain 0.0 -- needs human/wrapper investigation per the battery's own
+  instruction; consistent with the known bare-name-era wrapper gaps (2026-06-05 entry).
+- Remaining durability queue after Q4-2025 PASS: Overland 1965934 row_add re-author
+  (pulled rule has empty positions[]; needs staging source_row_id, agent_rule track),
+  OCIC BOCSO/Notorious adjudication, Fidelity 1920453 output-only central-fund row,
+  SCP 1743415 anchor (gate-refused), North Haven wrapper investigation, Golub anchor
+  basis review, position_matches/returns rebuild (RI02/RI07).
