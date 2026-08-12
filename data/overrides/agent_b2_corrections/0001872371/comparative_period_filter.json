@@ -1,0 +1,40 @@
+{
+  "cik": "0001872371",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_d49be49e7857"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 27,
+      "row_index": 27,
+      "quoted_text": "Blue Bidco Ltd | Wireless Telecommunication Services | First Lien Term Loan | SONIA+ | 5.00 % | 9.16 % | 6/14/2032 | GBP | 3,381 | 3,337 | 3,355 | (5)(8)(9)(10)"
+    },
+    {
+      "table_index": 29,
+      "row_index": 23,
+      "quoted_text": "F&M BUYER LLC | Systems Software | First Lien Revolver | SOFR+ | 4.50 % | 3/18/2032 | - | ( 35 ) | ( 35 ) | (5)(8)(9)"
+    },
+    {
+      "table_index": 36,
+      "row_index": 6,
+      "quoted_text": "Whitney Merger Sub, Inc. | Application Software | First Lien Revolver | SOFR+ | 4.75 % | 7/3/2032 | - | ( 98 ) | ( 91 ) | (5)(8)(9)"
+    },
+    {
+      "table_index": 22,
+      "row_index": 28,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 159.4 % of net assets) | $ | 7,429,166 | $ | 7,433,861"
+    },
+    {
+      "table_index": 36,
+      "row_index": 13,
+      "quoted_text": "Total Non-Control/Non-Affiliate Investments ( 151.90 % of net assets) | $ | 6,863,940 | $ | 6,899,031"
+    }
+  ],
+  "confidence": 0.87,
+  "rationale": "B1 localized repeated comparative-period leakage in the 2025-12-31 quarter, including investment rows and aggregate non-control/non-affiliate totals that show paired current and comparative amounts. The bounded comparative_period_filter correction should filter comparative-period facts for report_date 2025-12-31 without targeting individual rows or changing unrelated quarters."
+}

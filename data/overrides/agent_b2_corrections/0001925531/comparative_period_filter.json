@@ -1,0 +1,30 @@
+{
+  "cik": "0001925531",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_1b765c6756f3"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 66,
+      "row_index": 4,
+      "quoted_text": "Foreside Financial Group, LLC / First Lien(8)(9) - Undrawn / purchase 05/2022 / maturity 09/2027 / principal 581 / cost (1) / fair value dash"
+    },
+    {
+      "table_index": 78,
+      "row_index": 7,
+      "quoted_text": "Total investments | $ | 1,503,719 | $ | 1,516,623"
+    },
+    {
+      "table_index": 48,
+      "row_index": 25,
+      "quoted_text": "Total Investments | $ | 2,006,365 | $ | 2,006,885 | 166.30 | %"
+    }
+  ],
+  "confidence": 0.86,
+  "rationale": "B1 localized a comparative leak affecting the 2025-12-31 quarter, where current-period investment detail and total investment rows are mixed with comparative-period totals. The bounded correction applies the supported comparative_period_filter template for report_date 2025-12-31 only, without row-specific deletions or broader mechanism changes."
+}

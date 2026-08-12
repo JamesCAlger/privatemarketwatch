@@ -1,0 +1,31 @@
+{
+  "cik": "0001916099",
+  "mechanism": "dimension_double_count",
+  "fix_class": "dedup",
+  "template": {
+    "match_fields": [
+      "concept",
+      "period_end",
+      "unit",
+      "dimensions"
+    ],
+    "keep": "first"
+  },
+  "source_review_ids": [
+    "RVQ_REV_747d2adf2f55"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 51,
+      "row_index": 7,
+      "quoted_text": "21,773 | 21,349 | 21,338 | 1.53 %"
+    },
+    {
+      "table_index": 51,
+      "row_index": 11,
+      "quoted_text": "20,694 | 20,395 | 20,797 | 1.49 %"
+    }
+  ],
+  "confidence": 0.64,
+  "rationale": "B1 localized a dimension double-counting defect for 2025-12-31 in table 51 rows 7 and 11. The bounded deduplication correction matches duplicate facts only when concept, period end, unit, and dimensions are identical, preserving the first occurrence to avoid broad row removal or cross-dimensional merging."
+}

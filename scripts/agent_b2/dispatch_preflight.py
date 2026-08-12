@@ -24,6 +24,7 @@ from pathlib import Path
 
 from pipeline import config
 from pipeline.bdc_cik_review import normalize_cik
+from pipeline.correction_leaf import TEMPLATE_REGISTRY
 from scripts.agent_b import review_lock
 from scripts.agent_b.dispatch_preflight import WORKER_PYTHON, EVIDENCE_CLI, _worker_read_dirs
 from scripts.agent_b2.run_remediation import implemented_fix_classes
@@ -84,7 +85,14 @@ def _load_bundle(rid: str, bundles_dir: Path) -> tuple[Path, dict]:
     return p, bundle
 
 
+def _has_coord(c: dict) -> bool:
+    return c.get("table_index") is not None and c.get("row_index") is not None
+
+
 def _citations_block(verdicts: list[dict]) -> str:
+    # validate_corrections accepts a citation with a quote OR a table/row coordinate;
+    # coordinate-only citations must survive into the prompt (q4b2t4b lesson: Ares'
+    # coordinate-only verdict produced an empty block and a guaranteed-invalid leaf).
     lines = []
     for v in verdicts:
         for c in (v.get("culprit_citations") or []):
@@ -92,6 +100,8 @@ def _citations_block(verdicts: list[dict]) -> str:
             coord = f"t{c.get('table_index')}/r{c.get('row_index')}"
             if q:
                 lines.append(f"  - [{coord}] {q[:160]}")
+            elif _has_coord(c):
+                lines.append(f"  - [{coord}] (coordinate-only citation; no quote in verdict)")
     return "\n".join(lines) if lines else "  (no quoted citations; re-ground from source)"
 
 
@@ -106,10 +116,35 @@ def _citations_json(verdicts: list[dict]) -> str:
                 "quoted_text": str(c.get("quoted_text") or "").strip()[:240],
             }
             key = (cite["table_index"], cite["row_index"], cite["quoted_text"])
-            if cite["quoted_text"] and key not in seen:
+            if (cite["quoted_text"] or _has_coord(cite)) and key not in seen:
                 cites.append(cite)
                 seen.add(key)
     return json.dumps(cites[:8], indent=2)
+
+
+def _contract_excerpt(fix_class: str) -> str:
+    """Schema-accurate template contract for the packet's fix_class, generated from the
+    validator's own TEMPLATE_REGISTRY so prompt and validation can never disagree.
+    (Regression: the excerpt was hard-coded to comparative_period_filter, so every other
+    lane's worker authored that template shape and failed validate_corrections.)"""
+    tpl = TEMPLATE_REGISTRY.get(fix_class)
+    if tpl is None:
+        return (f"Embedded contract excerpt for {fix_class}:\n"
+                f"- No registered template; write the narrowest correction and set low confidence.")
+    lines = [f"Embedded contract excerpt for {fix_class}:"]
+    lines.append(f"- Required template param(s): {sorted(tpl.required)}")
+    optional = sorted(tpl.allowed - tpl.required)
+    if optional:
+        lines.append(f"- Optional template param(s): {optional}")
+    lines.append("- The template object may contain ONLY these params -- anything else is "
+                 "rejected by the validator.")
+    for k in sorted(getattr(tpl, "numeric", ()) or ()):
+        lines.append(f"- template.{k} must be a number.")
+    for k, vals in sorted((getattr(tpl, "enums", {}) or {}).items()):
+        lines.append(f"- template.{k} must be one of {sorted(vals)}.")
+    lines.append("- Do not emit code, SQL, file paths, or row-index deletions.")
+    lines.append("- The prompt's CIK and fix_class are binding; do not switch fix_class.")
+    return "\n".join(lines)
 
 
 def _worker_prompt(row: dict, verdicts: list[dict], *, contract_abs: str, bundle_paths: list[str],
@@ -153,11 +188,7 @@ What B1 localized as the defect (re-ground these against source before trusting 
 All paths are ABSOLUTE; your working directory is NOT the repo root. Invoke Python via the
 exact interpreter shown ("{py}").
 
-Embedded contract excerpt for comparative_period_filter:
-- Use only for prior-period comparative facts leaking into the current filing report_date.
-- The bounded template is exactly {{"report_date": "<target report_date>"}}.
-- Do not emit subtotal patterns, row indices, code, SQL, or file paths.
-- The prompt's CIK and fix_class are binding; do not switch fix_class.
+{_contract_excerpt(fix_class)}
 
 Allowed write (exactly one file):
 - {correction_leaf}
@@ -169,8 +200,8 @@ validate the resulting file at:
 
 Required workflow:
 1. Use the embedded packet fields and citations below. Do not call shell commands.
-2. Choose template params that match the requested fix_class. For comparative_period_filter,
-   set template.report_date to the packet target quarter.
+2. Choose template params that match the requested fix_class, using EXACTLY the params in
+   the embedded contract excerpt above (required params present, no extras).
 3. Write the correction leaf JSON to the one allowed path: cik, mechanism, fix_class,
    template (the bounded params), source_review_ids, evidence_citations (the cited rows),
    confidence (0..1), rationale. NO code, SQL, paths, or row-index deletions.
@@ -208,6 +239,7 @@ def preflight_batch(
 
     seen: set[tuple] = set()
     manifest_rows: list[dict] = []
+    skipped_no_citations: list[dict] = []
     supported_fix_classes = implemented_fix_classes()
     for row in rows:
         cik = str(row.get("cik") or "").strip()
@@ -234,6 +266,19 @@ def preflight_batch(
         if not rids:
             raise PreflightError(f"{cik}/{fc}: no source_review_ids")
         verdicts = [_load_verdict(rid, verdicts_dir) for rid in rids]
+        # validate_corrections requires >=1 citation (quote or table/row coordinate).
+        # A packet whose source verdicts carry none can only produce a guaranteed-invalid
+        # correction -- skip it with a recorded reason instead of burning a worker on it.
+        n_usable_citations = sum(
+            1 for v in verdicts for c in (v.get("culprit_citations") or [])
+            if str(c.get("quoted_text") or "").strip()
+            or (c.get("table_index") is not None and c.get("row_index") is not None))
+        if n_usable_citations == 0:
+            skipped_no_citations.append({
+                "cik": cik, "fix_class": fc, "source_review_ids": rids,
+                "reason": "source verdict(s) carry no usable culprit citations; "
+                          "needs evidence re-enrichment before B2 dispatch"})
+            continue
         bundles = [_load_bundle(rid, bundles_dir) for rid in rids]
         for rid, (_, bundle) in zip(rids, bundles):
             bundle_cik = normalize_cik(bundle.get("cik"))
@@ -280,15 +325,21 @@ def preflight_batch(
                            correction_path=Path(r["correction_path"]), validator=validator, py=WORKER_PYTHON),
             encoding="utf-8")
 
+    if not manifest_rows:
+        raise PreflightError(
+            "no dispatchable packets after skips "
+            f"(skipped_no_citations={len(skipped_no_citations)})")
     manifest = {
         "batch_id": batch_id, "created_at": datetime.now(timezone.utc).isoformat(),
         "locks_reserved": reserve, "max_parallel_default": 2,
         "corrections_dir": str(corrections_dir), "worker_python": WORKER_PYTHON,
         "worker_read_dirs": _worker_read_dirs(), "n_dispatch": len(manifest_rows),
+        "skipped_no_citations": skipped_no_citations,
         "rows": manifest_rows}
     manifest_path = batch_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    return {"manifest_path": str(manifest_path), "n_dispatch": len(manifest_rows), "batch_id": batch_id}
+    return {"manifest_path": str(manifest_path), "n_dispatch": len(manifest_rows),
+            "n_skipped_no_citations": len(skipped_no_citations), "batch_id": batch_id}
 
 
 def release_manifest(manifest_path: str) -> None:

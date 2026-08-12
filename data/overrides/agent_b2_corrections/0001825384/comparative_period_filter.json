@@ -1,0 +1,30 @@
+{
+  "cik": "0001825384",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_c89148bd1adc"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 55,
+      "row_index": 18,
+      "quoted_text": "Lytx, Inc. | First Lien Term Loan | (10) | SOFR + 5.00 %, 1.00 % Floor | 9.48 | % | 2/28/2028 | 19,661 | 19,661 | 19,661 | 1.6 | %"
+    },
+    {
+      "table_index": 58,
+      "row_index": 37,
+      "quoted_text": "Total Non-Controlled/Non-Affiliated Investments | $ | 2,502,807 | $ | 2,504,242"
+    },
+    {
+      "table_index": 11,
+      "row_index": 8,
+      "quoted_text": "Total Investments | $ | 2,883,469 | $ | 2,882,954 | 100.0 | % | $ | 2,502,807 | $ | 2,504,242 | 100.0 | %"
+    }
+  ],
+  "confidence": 0.79,
+  "rationale": "B1 localized comparative-period values leaking into the 2025-12-31 quarter, with cited investment rows showing duplicated current/comparative amounts and totals. The bounded correction filters comparative-period facts for the report date using only the required report_date parameter."
+}

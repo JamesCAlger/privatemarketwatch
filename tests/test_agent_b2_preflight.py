@@ -73,6 +73,92 @@ def test_preflight_builds_packet_manifest_and_prompt(tmp_path):
     assert pf.WORKER_PYTHON in prompt
 
 
+def test_prompt_contract_excerpt_matches_fix_class(tmp_path):
+    # Regression: the contract excerpt was hard-coded to comparative_period_filter,
+    # so a subtotal_filter worker authored {"report_date": ...} and failed the
+    # validator ("unexpected param(s)"). The excerpt must come from TEMPLATE_REGISTRY
+    # for the packet's own fix_class.
+    d = _dirs(tmp_path)
+    batch = "B2X"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "mechanism": "subtotal_leak", "quarters": "2024-12-31",
+                                 "source_review_ids": "RVQ_BLK_aaa"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter")
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Embedded contract excerpt for subtotal_filter" in prompt
+    assert "'patterns'" in prompt
+    assert "'match_mode'" in prompt
+    assert '{"report_date"' not in prompt
+    assert "excerpt for comparative_period_filter" not in prompt
+
+
+def test_preflight_skips_packets_without_usable_citations(tmp_path):
+    # A packet whose source verdicts carry no culprit citations can only produce a
+    # correction that validate_corrections rejects (">=1 valid citation"). Preflight
+    # must skip it with a recorded reason, not dispatch a doomed worker (q4b2t4b
+    # canary lesson: Ares comparative packet burned a worker on a guaranteed reject).
+    d = _dirs(tmp_path)
+    batch = "B2C"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_good")
+    # second packet: real_error verdict but with NO citations
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    v = _verdict("RVQ_BLK_nocite")
+    v["culprit_citations"] = []
+    (d["verdicts_dir"] / "RVQ_BLK_nocite.json").write_text(json.dumps(v), encoding="utf-8")
+    (d["bundles_dir"] / "RVQ_BLK_nocite.json").write_text(
+        json.dumps({"review_id": "RVQ_BLK_nocite", "cik": "0001999988"}), encoding="utf-8")
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_good"},
+        {"cik": "0001999988", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_nocite"},
+    ])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                             fix_class="subtotal_filter")
+    assert res["n_dispatch"] == 1
+    assert res["n_skipped_no_citations"] == 1
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["skipped_no_citations"][0]["cik"] == "0001999988"
+    assert "re-enrichment" in manifest["skipped_no_citations"][0]["reason"]
+
+
+def test_coordinate_only_citations_survive_into_prompt(tmp_path):
+    # validate_corrections accepts quote OR table/row coordinate; the prompt's copyable
+    # citations JSON must not drop coordinate-only citations (Ares q4b2t4b lesson).
+    d = _dirs(tmp_path)
+    batch = "B2K"
+    batch_dir = d["base_dir"] / "batch" / batch
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    v = _verdict("RVQ_BLK_coord")
+    v["culprit_citations"] = [{"table_index": 190, "row_index": 5}]
+    (d["verdicts_dir"] / "RVQ_BLK_coord.json").write_text(json.dumps(v), encoding="utf-8")
+    d["bundles_dir"].mkdir(parents=True, exist_ok=True)
+    (d["bundles_dir"] / "RVQ_BLK_coord.json").write_text(
+        json.dumps({"review_id": "RVQ_BLK_coord", "cik": "0001743415"}), encoding="utf-8")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_coord"}])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                             fix_class="subtotal_filter")
+    assert res["n_dispatch"] == 1 and res["n_skipped_no_citations"] == 0
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert '"table_index": 190' in prompt
+    assert "coordinate-only citation" in prompt
+
+
+def test_contract_excerpt_covers_all_registered_classes():
+    from pipeline.correction_leaf import TEMPLATE_REGISTRY
+    for fc, tpl in TEMPLATE_REGISTRY.items():
+        text = pf._contract_excerpt(fc)
+        assert f"Embedded contract excerpt for {fc}" in text
+        for k in tpl.required:
+            assert f"'{k}'" in text
+
+
 def test_preflight_skips_non_actionable_packets(tmp_path):
     d = _dirs(tmp_path)
     batch = "B2N"

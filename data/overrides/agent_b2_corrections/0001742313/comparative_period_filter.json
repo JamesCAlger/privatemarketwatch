@@ -1,0 +1,30 @@
+{
+  "cik": "0001742313",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_e9b12b2158dd"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 80,
+      "row_index": 4,
+      "quoted_text": "Acquia Inc. | (10) | SF | 7.15 | % | 11.73 | % | 11/11/2023 | 10/31/2025 | 3,092 | 3,092 | 3,092 | 0.2 | %"
+    },
+    {
+      "table_index": 89,
+      "row_index": 34,
+      "quoted_text": "ASG II, LLC | SF | 6.40 | % | 10.99 | % | 5/25/2022 | 5/25/2028 | 2,250 | 2,250 | 2,247 | 0.1 | %"
+    },
+    {
+      "table_index": 98,
+      "row_index": 19,
+      "quoted_text": "BTR Opco LLC (fka Born To Run, LLC) ( 659 Class A common units) | - | - | - | 6/21/2024 | - | - | 639 | - | 0.0 | %"
+    }
+  ],
+  "confidence": 0.86,
+  "rationale": "B1 localized rows for the 2025-12-31 target quarter that appear to leak comparative-period schedule entries into the current-quarter output. The bounded correction applies the comparative period filter at the report date only, without row-specific deletions or additional parameters."
+}

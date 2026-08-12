@@ -1,0 +1,35 @@
+{
+  "cik": "0001508655",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_26d8ebaaa6ba"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 20,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 20.0 | 0.6 | 49.0 | 1.4"
+    },
+    {
+      "table_index": 38,
+      "row_index": 2,
+      "quoted_text": "Astra Acquisition Corp. (3)(14) | Second-lien loan ($ 40,084 par, due 10/2029 ) | 10/22/2021 | P + 9.88 % | 16.63 | % | 39,489 | - | 0.0 | %"
+    },
+    {
+      "table_index": 40,
+      "row_index": 4,
+      "quoted_text": "Second-lien note ($ 2,024 par, due 9/2029 ) (14) | 8/31/2023 | 7.10 | % | 7.10 % (incl. 1.25 % PIK) | 1,559 | 223 | 0.0 | %"
+    },
+    {
+      "table_index": 40,
+      "row_index": 32,
+      "quoted_text": "American Achievement, Corp. (3)(14) | First-lien loan ($ 26,664 par, due 9/2026 ) | 9/30/2015 | SOFR + 7.35 % | 11.22 % (incl. 10.72 % PIK) | 25,848 | 19,665 | 1.2 | %"
+    }
+  ],
+  "confidence": 0.86,
+  "rationale": "B1 localized comparative-leak evidence in the 2025-12-31 packet, including prior-period style values appearing in rows for non-accrual and portfolio investments. The bounded comparative_period_filter template supports only report_date, so the correction filters comparative-period leakage for 2025-12-31 without specifying row deletions or broader mechanisms."
+}

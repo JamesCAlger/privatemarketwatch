@@ -1,0 +1,25 @@
+{
+  "cik": "0001959568",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_1be676f4330c"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 44,
+      "row_index": 52,
+      "quoted_text": "SG Acquisition, Inc. | First Lien Revolver | S + 4.75 % | 4/3/2030 | - | ( 1 ) | - | 9"
+    },
+    {
+      "table_index": 47,
+      "row_index": 11,
+      "quoted_text": "Total non-controlled-non-affiliated Portfolio Company investments | $ | 316,371 | $ | 318,629 | 206.5 | %"
+    }
+  ],
+  "confidence": 0.86,
+  "rationale": "B1 localized a comparative-period leak for the 2025-12-31 quarter: a current-period holding row appears with a current fair value marker while the aggregate row carries both current and comparative values, indicating the comparative-period column should be filtered for this report date. The correction is limited to the requested comparative_period_filter template and supplies only the required report_date parameter."
+}

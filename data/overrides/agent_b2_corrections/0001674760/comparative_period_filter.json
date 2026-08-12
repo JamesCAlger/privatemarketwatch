@@ -1,0 +1,40 @@
+{
+  "cik": "0001674760",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_195dacced3a8"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 39,
+      "row_index": 46,
+      "quoted_text": "Lithium Technologies, Inc. | Interactive Media & Services | S + 11.00 % PIK | 01/03/25 | 70,660 | 64,001 | 22,611 | (7) (8) (10)"
+    },
+    {
+      "table_index": 40,
+      "row_index": 36,
+      "quoted_text": "Chase Industries, Inc. (dba Senneca Holdings) | Building Products | 10.00 % PIK | 05/11/27 | 12,850 | 11,531 | 5,815 | (7) (8) (10)"
+    },
+    {
+      "table_index": 40,
+      "row_index": 39,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | $ | 21,349 | $ | - | $ | - | (7) (8) (10) (12)"
+    },
+    {
+      "table_index": 40,
+      "row_index": 40,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | 12,314 | 4,042 | - | (7) (8) (10) (12)"
+    },
+    {
+      "table_index": 40,
+      "row_index": 41,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | 7,488 | 9,489 | - | (7) (8) (10)"
+    }
+  ],
+  "confidence": 0.88,
+  "rationale": "B1 localized a comparative-period leak affecting the 2025-12-31 target quarter. The bounded comparative_period_filter template should exclude comparative rows for this report date without specifying row-level deletions or adding unsupported parameters."
+}

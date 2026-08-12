@@ -7977,3 +7977,49 @@ Agent lane for the rate-convention classifier residual. New modules:
   boundary or gate rules against the in-build frame; until then any new B2 rule
   authored with bare IS NULL text predicates will noop in production. Consider a
   roundtrip-equivalence check in the B3 gate.
+
+## 2026-08-12 - First full B2 wave through the gap-1 promotion pipeline (q4b2t4b); 3 dispatcher defects fixed
+
+- Acceptance rerun + C103/HPS investigations preceded the wave: 2025-12-31 FAIL 1/7
+  (verified_fv_share 44.4 vs >=50 only). C103 NOT demoted (user decision rule: demote
+  if <=5 total firings; actual 793 rows / 231 CIK-quarter groups / 56 CIKs incl.
+  out-of-cohort). HPS 1838126's 21 blocking rows = the ULTRA III JV note facts to the
+  dollar ($1,514.8M vs printed $1,514.9M); 16-vs-21 gap fully explained by the corrected
+  rule evicting the prior revision's 6 subset-sum-retained rows; needs the JV
+  axis-omission excusal (source_reconciliation design decision, not patched).
+- B2 canary (2-packet subtotal_filter lane) caught 3 dispatcher defects before the
+  fleet burned quota; all fixed in scripts/agent_b2/dispatch_preflight.py with
+  regression tests (tests/test_agent_b2_preflight.py 11 passed):
+  (1) the prompt's contract excerpt was HARD-CODED to comparative_period_filter --
+  workers in every other lane authored the wrong template shape; now generated from
+  pipeline.correction_leaf.TEMPLATE_REGISTRY (prompt and validator share one truth);
+  (2) _citations_json dropped coordinate-only citations (valid to validate_corrections)
+  -- Ares' coordinate-only verdict produced an empty copyable block and a guaranteed
+  reject; now carried through with a coordinate-only marker;
+  (3) packets whose verdicts carry no usable citations are skipped at preflight with a
+  recorded reason (manifest.skipped_no_citations) instead of dispatching doomed workers.
+- Fleet result (batch q4b2t4b, MaxParallel 2): 22/22 workers validated (2
+  subtotal_filter, 18 comparative_period_filter, 2 dedup). Trial apply + B3 gate per
+  CIK: 20/21 CIKs PASS; 0001965934 FAIL (residual 172,864,000 -> unchanged) --
+  diagnosis: that is EXACTLY the pulled add_2025q4_us_treasury_bills row_add's FV; the
+  fund's gap is a MISSING POSITION, wrong mechanism class; correction archived per
+  gate-refusal rule, needs a repaired missing_position_add once that applier exists.
+- Promotion via run_remediation.promote_passes: 19 leaves -> data/overrides/
+  agent_b2_corrections (first population of the store; 17 comparative + 2 dedup),
+  2 subtotal wrapper patches -> bdc_xbrl_wrappers/0001508655.json + 0001812554.json
+  with gate provenance. Production rebuild applies them: 17 raw_bdc_staging
+  comparative filters (~6,000 prior-period rows dropped at staging) + dedups + wrappers.
+- HONEST MEASUREMENT: post-promotion acceptance metrics are IDENTICAL to pre-B2
+  (verified_fv_share 44.399, reconcile 95.455, flagged 4.846). Comparative-period rows
+  do not enter current-quarter FV sums, and the conservation-shaped defects at these
+  funds were already cleared by the same-day rule re-keying. The wave's value this
+  round is pipeline-infrastructural (dispatch -> validate -> apply -> B3 gate ->
+  promote -> production apply now proven end-to-end) plus row hygiene, NOT acceptance
+  movement.
+- STRUCTURAL LIMIT SURFACED: only 4 fix classes have trial appliers
+  (comparative_period_filter, dedup, spv_lookthrough, subtotal_filter). 121 of 143
+  actionable tier-4 B2 packets are blocked on unimplemented appliers: column_remap 53,
+  classification_fix 23, unit_rescale 14, rate_rescale 11, rule_scope 11,
+  missing_position_add 7, all_pik_normalization 2. Closing verified_fv_share 44.4 ->
+  50 likely requires implementing appliers (esp. column_remap + classification_fix,
+  76 packets) or direct human review of the 17 under-review funds' flag classes.

@@ -1,0 +1,20 @@
+{
+  "cik": "0001633858",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_1071fea18b05"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 39,
+      "row_index": 38,
+      "quoted_text": "Alliance Environmental Group | (j) (o) (az) | A-1 Preferred Units | 9/30/2019 | 331 | 331,126 | -"
+    }
+  ],
+  "confidence": 0.84,
+  "rationale": "B1 localized a comparative-period leak in the 2025-12-31 quarter: the cited row carries a 9/30/2019 period value for Alliance Environmental Group A-1 Preferred Units inside the target quarter packet. The bounded comparative_period_filter correction therefore filters comparative-period facts for report_date 2025-12-31 without specifying row-level deletion logic or extra parameters."
+}
