@@ -6263,6 +6263,41 @@ def test_onex_falcon_equity_leaf_classified():
     assert result["wrapper_disposition"] == "equity_position_leaf"
 
 
+def test_onex_falcon_s4t_equity_units_classified_as_equity_leaf():
+    # BDCSRC_0001860424_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_6ba0aec009:
+    # bare "Equity Units" positions (no common/preferred qualifier) must be
+    # equity position leaves, not aggregate candidates.
+    result = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Equity Sovereign & Public "
+        "Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units "
+        "Initial Acquisition Date 12/27/2021",
+    )
+
+    assert result["wrapper_family"] == "equity"
+    assert result["wrapper_disposition"] == "equity_position_leaf"
+    assert result["wrapper_rule_id"] == "ONEX_FALCON_DIRECT_LENDING_EQUITY_LEAF_V1"
+    assert result["wrapper_position_key"]
+
+
+def test_onex_falcon_equity_totals_and_headers_stay_aggregate():
+    # False-positive guard for the "equity units" leaf marker: true equity
+    # totals/headers must keep aggregate treatment.
+    total = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Total Equity Investments",
+    )
+    header = classify_identifier(
+        ONEX_FALCON_DIRECT_LENDING_CIK,
+        "Non-controlled/Non-affiliated investments Equity",
+    )
+
+    assert not total["wrapper_disposition"].endswith("_position_leaf")
+    assert total["wrapper_position_key"] == ""
+    assert header["wrapper_disposition"] == "aggregate"
+    assert header["wrapper_position_key"] == ""
+
+
 def test_onex_falcon_category_and_cash_rows_not_leaves():
     category = classify_identifier(
         ONEX_FALCON_DIRECT_LENDING_CIK,

@@ -1171,6 +1171,57 @@ class TestBdcSourceReconciliation:
         assert source_row["blocking_issue"] == False
         assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
 
+    def test_onex_s4t_equity_units_source_row_reconciles_as_leaf(self):
+        # BDCSRC_0001860424_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_6ba0aec009:
+        # the S4T Holdings Corp. equity-units source fact must classify as an
+        # equity position leaf and reconcile to the pipeline row instead of
+        # being excluded as an aggregate candidate.
+        identifier = (
+            "Non-controlled/Non-affiliated investments Equity Sovereign & Public "
+            "Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units "
+            "Initial Acquisition Date 12/27/2021"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001860424",
+            "entity_name": "Onex Falcon Direct Lending BDC Fund",
+            "report_date": "2025-12-31",
+            "period": "2025-12-31",
+            "investment_identifier": identifier,
+            "dimensions_raw": f"investmentidentifieraxis={identifier}",
+            "context_id": "ctx_onex_s4t_equity_units",
+            "fair_value": "542123",
+            "cost": "200000",
+            "principal_amount": "",
+            "shares_held": "200",
+            "interest_rate": "",
+            "basis_spread": "",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001860424",
+            "entity_name": "Onex Falcon Direct Lending BDC Fund",
+            "report_date": "2025-12-31",
+            "bdc_investment_identifier": identifier,
+            "bdc_dimensions_raw": f"investmentidentifieraxis={identifier}",
+            "issuer_name": "S4T Holdings Corp.",
+            "instrument_description": "Equity Units",
+            "fair_value": "542123",
+            "cost": "200000",
+            "principal_amount": "",
+            "shares_held": "200",
+            "interest_rate": "",
+            "basis_spread": "",
+            "asset_category": "EQUITY",
+            "index_classification": "DIRECT_EQUITY",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"].astype(str).ne("")].iloc[0]
+
+        assert source_row["source_wrapper_disposition"] == "equity_position_leaf"
+        assert source_row["status"] == "matched"
+        assert source_row["blocking_issue"] == False
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
     def test_saratoga_wrapper_position_leaf_still_blocks_when_missing(self):
         identifier = (
             "Non-control/Non-affiliate investments - 229.3% - Alternative Investment "
@@ -4647,3 +4698,398 @@ class TestWrapperStagingDiagnostics:
         assert len(beta_rows) > 0
         flagged = beta_rows[beta_rows["wrapper_leaf_staging_excluded"] == "affiliation_dedup"]
         assert len(flagged) > 0
+
+
+def _no_rescales():
+    """Empty audited value_rescale frame for isolation-sensitive tests."""
+    return pd.DataFrame(columns=["cik", "field", "factor"])
+
+
+class TestAuditedValueRescaleSourceNormalization:
+    """Verdict BDCSRC_0001919369_2025-12-31 (QF Holdings 1000x scale)."""
+
+    _RULES = pd.DataFrame([
+        {"cik": "100", "field": "fair_value", "factor": 1000.0},
+        {"cik": "100", "field": "cost", "factor": 1000.0},
+        {"cik": "100", "field": "principal_amount", "factor": 1000.0},
+    ])
+
+    def _qf_source(self, fair_value="33224", cost="33242", principal="33449"):
+        return _make_bdc_source([{
+            "investment_identifier": "QF Holdings, Inc. First-Lien Debt",
+            "dimensions_raw": "investmentidentifier=QF Holdings, Inc. First-Lien Debt",
+            "fair_value": fair_value,
+            "cost": cost,
+            "principal_amount": principal,
+        }])
+
+    def _qf_output(self, fair_value="33224000", cost="33242000", principal="33449000"):
+        return _make_bdc_output([{
+            "bdc_investment_identifier": "QF Holdings, Inc. First-Lien Debt",
+            "bdc_dimensions_raw": "investmentidentifier=QF Holdings, Inc. First-Lien Debt",
+            "issuer_name": "QF Holdings, Inc.",
+            "fair_value": fair_value,
+            "cost": cost,
+            "principal_amount": principal,
+        }])
+
+    def test_audited_rescale_normalizes_matched_source_scale(self):
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            self._qf_source(),
+            self._qf_output(),
+            audited_value_rescales=self._RULES,
+        )
+
+        assert set(detail["status"]) == {"matched"}
+        row = detail.iloc[0]
+        assert row["blocking_issue"] == False  # noqa: E712
+        assert float(row["source_fair_value"]) == 33224000.0
+        assert float(row["source_cost"]) == 33242000.0
+        assert "audited value_rescale" in row["evidence"]
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_non_factor_difference_stays_blocking(self):
+        # False positive guard: a difference the audited factor does NOT
+        # explain must remain a blocking value mismatch.
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            self._qf_source(fair_value="500"),
+            self._qf_output(fair_value="800000"),
+            audited_value_rescales=self._RULES,
+        )
+
+        row = detail.iloc[0]
+        assert row["status"] == "value_mismatch"
+        assert row["blocking_issue"] == True  # noqa: E712
+        assert float(row["source_fair_value"]) == 500.0
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 1
+
+    def test_already_reconciling_rows_are_never_rescaled(self):
+        detail, _ = reconcile_bdc_source_to_holdings(
+            self._qf_source(fair_value="1000000", cost="990000", principal="1000000"),
+            self._qf_output(fair_value="1000000", cost="990000", principal="1000000"),
+            audited_value_rescales=self._RULES,
+        )
+
+        row = detail.iloc[0]
+        assert row["status"] == "matched"
+        assert float(row["source_fair_value"]) == 1000000.0
+        assert "audited value_rescale" not in row["evidence"]
+
+    def test_scale_mismatch_without_audited_rule_stays_blocking(self):
+        detail, _ = reconcile_bdc_source_to_holdings(
+            self._qf_source(),
+            self._qf_output(),
+            audited_value_rescales=_no_rescales(),
+        )
+
+        row = detail.iloc[0]
+        assert row["status"] == "value_mismatch"
+        assert row["blocking_issue"] == True  # noqa: E712
+
+
+class TestRowAddRecoveredOutputIdentityRescue:
+    """Verdicts BDCSRC_0001803498 / BDCSRC_0001950803 / BDCSRC_0001950976
+    (audited row_add recoveries carry no accession_number, so accession-scoped
+    match tiers can never claim them)."""
+
+    def test_collapsed_duplicate_supports_accessionless_output_row(self):
+        identifier = "Apidos CLO XXV - Class E1R3"
+        source = _make_bdc_source([
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}",
+                "context_id": "ctx_canonical",
+                "fair_value": "4010000",
+            },
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}|affiliation=NonAffiliated",
+                "context_id": "ctx_duplicate_path",
+                "fair_value": "4010000",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": identifier,
+                "bdc_dimensions_raw": f"investmentidentifier={identifier}",
+                "issuer_name": "Apidos CLO XXV",
+                "fair_value": "4010000",
+            },
+            {
+                # Audited row_add recovery: no accession_number.
+                "accession_number": "",
+                "bdc_form_type": "",
+                "filing_date": "",
+                "bdc_investment_identifier": identifier,
+                "bdc_dimensions_raw": f"investmentidentifier={identifier}|affiliation=NonAffiliated",
+                "issuer_name": "Apidos CLO XXV",
+                "fair_value": "4010000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        assert "extra_in_pipeline" not in set(detail["status"])
+        # True duplicate collapse still dedupes: the second dimension path is
+        # reported as collapsed, not matched a second time.
+        assert (detail["status"] == "collapsed_duplicate_dimension_path").sum() == 1
+        assert (detail["status"] == "matched").sum() == 1
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_true_duplicate_collapse_still_dedupes_without_extra_output(self):
+        identifier = "Beta Holdings, LLC First Lien Term Loan"
+        source = _make_bdc_source([
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}",
+                "context_id": "ctx_a",
+                "fair_value": "2500000",
+            },
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}|axis=alt",
+                "context_id": "ctx_b",
+                "fair_value": "2500000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": identifier,
+            "bdc_dimensions_raw": f"investmentidentifier={identifier}",
+            "issuer_name": "Beta Holdings, LLC",
+            "fair_value": "2500000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        assert (detail["status"] == "matched").sum() == 1
+        assert (detail["status"] == "collapsed_duplicate_dimension_path").sum() == 1
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_accessionless_output_without_source_support_stays_blocking(self):
+        output = _make_bdc_output([{
+            "accession_number": "",
+            "bdc_form_type": "",
+            "filing_date": "",
+            "bdc_investment_identifier": "Phantom Holdings, LLC Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Phantom Holdings, LLC Term Loan",
+            "issuer_name": "Phantom Holdings, LLC",
+            "fair_value": "7000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]),
+            pd.concat([_make_bdc_output([{}]), output], ignore_index=True),
+            audited_value_rescales=_no_rescales(),
+        )
+
+        phantom = detail[detail["raw_investment_identifier"].str.contains("Phantom", na=False)]
+        assert len(phantom) == 1
+        assert phantom.iloc[0]["status"] == "extra_in_pipeline"
+        assert phantom.iloc[0]["blocking_issue"] == True  # noqa: E712
+
+    def test_comparative_period_source_does_not_excuse_accessionless_output(self):
+        identifier = "Gamma Credit Partners LP Term Loan"
+        source = _make_bdc_source([{
+            "investment_identifier": identifier,
+            "dimensions_raw": f"investmentidentifier={identifier}",
+            "period": "2023-12-31",
+            "fair_value": "5000000",
+        }])
+        output = _make_bdc_output([{
+            "accession_number": "",
+            "bdc_form_type": "",
+            "filing_date": "",
+            "bdc_investment_identifier": identifier,
+            "bdc_dimensions_raw": f"investmentidentifier={identifier}",
+            "issuer_name": "Gamma Credit Partners LP",
+            "fair_value": "5000000",
+        }])
+
+        detail, _ = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        gamma_output = detail[detail["status"] == "extra_in_pipeline"]
+        assert len(gamma_output) == 1
+        assert gamma_output.iloc[0]["blocking_issue"] == True  # noqa: E712
+        assert "excluded_comparative_period" in set(detail["status"])
+
+    def test_one_suffix_row_add_recovery_not_extra(self):
+        # Stepstone 2025Q4 shape: the filer disambiguates duplicate members
+        # with a terminal 'One'; the suffixed source fact exists and the
+        # audited row_add output row carries the identical suffixed identity.
+        base = (
+            "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior "
+            "Secured | Advertising | Amplify Buyer, Inc. Term Loan | 3M SOFR + "
+            "4.75% / 0.75% | Maturity Date | 9/17/2032"
+        )
+        suffixed = base + " One"
+        source = _make_bdc_source([
+            {
+                "investment_identifier": base,
+                "dimensions_raw": f"investmentidentifieraxis={base}",
+                "context_id": "ctx_base",
+                "fair_value": "8944000",
+            },
+            {
+                "investment_identifier": suffixed,
+                "dimensions_raw": f"investmentidentifieraxis={suffixed}",
+                "context_id": "ctx_one",
+                "fair_value": "8944000",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": base,
+                "bdc_dimensions_raw": f"investmentidentifieraxis={base}",
+                "issuer_name": "Amplify Buyer, Inc.",
+                "fair_value": "8944000",
+            },
+            {
+                "accession_number": "",
+                "bdc_form_type": "",
+                "filing_date": "",
+                "bdc_investment_identifier": suffixed,
+                "bdc_dimensions_raw": f"investmentidentifieraxis={suffixed}",
+                "issuer_name": "Amplify Buyer, Inc.",
+                "fair_value": "8944000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        assert "extra_in_pipeline" not in set(detail["status"])
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_one_suffix_distinct_position_with_other_values_stays_blocking(self):
+        # False positive guard: a terminal token that is part of a genuinely
+        # distinct position (different fair value) must remain distinct.
+        base = "Square Holdings, LLC Term Loan"
+        suffixed = base + " One"
+        source = _make_bdc_source([{
+            "investment_identifier": suffixed,
+            "dimensions_raw": f"investmentidentifieraxis={suffixed}",
+            "fair_value": "1000000",
+        }])
+        output = _make_bdc_output([{
+            "accession_number": "",
+            "bdc_form_type": "",
+            "filing_date": "",
+            "bdc_investment_identifier": suffixed,
+            "bdc_dimensions_raw": f"investmentidentifieraxis={suffixed}",
+            "issuer_name": "Square Holdings, LLC",
+            "fair_value": "2000000",
+        }])
+
+        detail, _ = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        extras = detail[detail["status"] == "extra_in_pipeline"]
+        assert len(extras) == 1
+        assert extras.iloc[0]["blocking_issue"] == True  # noqa: E712
+
+
+class TestOutputOnlyWrapperCashCalibration:
+    """Verdict BDCSRC_0001976336_2025-12-31 (BlackRock Liquidity T-Fund):
+    output-only rows the per-CIK wrapper classifies non_private_market/cash
+    are retained analytics cash buckets, not blocking private positions."""
+
+    def _with_fake_wrappers(self, monkeypatch):
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            id_col = kwargs.get("identifier_col", "investment_identifier")
+            if id_col in result.columns and len(result) > 0:
+                cash_mask = result[id_col].str.contains("T-Fund", na=False)
+                result.loc[cash_mask, "wrapper_disposition"] = "non_private_market"
+                result.loc[cash_mask, "wrapper_family"] = "cash"
+                loan_mask = result[id_col].str.contains("Cash Interest Rate", na=False)
+                result.loc[loan_mask, "wrapper_disposition"] = "debt_position_leaf"
+                result.loc[loan_mask, "wrapper_family"] = "debt"
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+    def test_output_only_wrapper_cash_row_documented_not_blocking(self, monkeypatch):
+        self._with_fake_wrappers(monkeypatch)
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "issuer_name": "BlackRock Liquidity T-Fund",
+            "fair_value": "56001000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]).iloc[0:0],
+            output,
+            audited_value_rescales=_no_rescales(),
+        )
+
+        assert len(detail) == 1
+        row = detail.iloc[0]
+        assert row["status"] == "excluded_non_private_market_output"
+        assert row["blocking_issue"] == False  # noqa: E712
+        assert row["residual_class"] == "documented_exclusion"
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_output_only_loan_row_with_cash_text_stays_blocking(self, monkeypatch):
+        # False positive guard: a real loan row whose identifier merely
+        # CONTAINS cash/PIK coupon language keeps blocking when it has no
+        # current-period source fact.
+        self._with_fake_wrappers(monkeypatch)
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": (
+                "Delta Buyer, Inc. Term Loan | 3M SOFR + 4.75% | "
+                "Cash Interest Rate / PIK Rate | 8.42%"
+            ),
+            "bdc_dimensions_raw": (
+                "investmentidentifieraxis=Delta Buyer, Inc. Term Loan | 3M SOFR + 4.75% | "
+                "Cash Interest Rate / PIK Rate | 8.42%"
+            ),
+            "issuer_name": "Delta Buyer, Inc.",
+            "fair_value": "9000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]).iloc[0:0],
+            output,
+            audited_value_rescales=_no_rescales(),
+        )
+
+        assert len(detail) == 1
+        row = detail.iloc[0]
+        assert row["status"] == "extra_in_pipeline"
+        assert row["blocking_issue"] == True  # noqa: E712
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 1
+
+    def test_documented_cash_output_maps_to_documented_mechanism(self, monkeypatch):
+        self._with_fake_wrappers(monkeypatch)
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "issuer_name": "BlackRock Liquidity T-Fund",
+            "fair_value": "56001000",
+        }])
+
+        detail, _ = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]).iloc[0:0],
+            output,
+            audited_value_rescales=_no_rescales(),
+        )
+        classified = build_source_reconciliation_residual_classification(detail)
+
+        cash_rows = classified[
+            classified["mechanism"] == "documented_non_private_market_cash_output"
+        ]
+        assert len(cash_rows) == 1
+        assert cash_rows.iloc[0]["blocking_issue"] == False  # noqa: E712
+        assert cash_rows.iloc[0]["residual_class"] == "documented_exclusion"

@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 import hashlib
 import inspect
+import re
 import time
 from pathlib import Path
 from typing import Any, Optional
@@ -38,6 +39,7 @@ from pipeline.bdc_identifier import (
     _INVESTMENTS_HIERARCHY_RE,
     _sql_is_bdc_aggregate,
 )
+from pipeline.agent_promoted import load_promoted_rules
 from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS, add_bdc_xbrl_wrapper_columns
 from pipeline.bdc_xbrl_html_bridge import apply_html_section_bridge_wrapper_columns
 from pipeline.classification import (
@@ -199,6 +201,7 @@ DOCUMENTED_MECHANISMS = {
     "excluded_money_market_fund": "documented_money_market_fund",
     "excluded_bad_issuer_name": "documented_bad_issuer_name",
     "excluded_affiliation_dedup": "documented_affiliation_dedup",
+    "excluded_non_private_market_output": "documented_non_private_market_cash_output",
     "documented_source_issuer_level_xbrl_subtotal": "documented_source_issuer_level_xbrl_subtotal",
     "documented_source_issuer_subtotal_arithmetic": "documented_source_issuer_subtotal_arithmetic",
 }
@@ -215,6 +218,7 @@ MECHANISM_RECOMMENDED_ACTIONS = {
     "documented_money_market_fund": "Keep documented as non-blocking money market fund position filtered during staging.",
     "documented_bad_issuer_name": "Keep documented as non-blocking generic/bad issuer name filtered during staging.",
     "documented_affiliation_dedup": "Keep documented as non-blocking affiliation-axis duplicate of a matched position.",
+    "documented_non_private_market_cash_output": "Keep documented as non-blocking analytics cash bucket; wrapper classifies the output row non_private_market/cash.",
     "documented_source_issuer_level_xbrl_subtotal": "Keep documented as non-blocking issuer-level XBRL subtotal; verify issuer identity and FV match to position leaves.",
     "documented_source_issuer_subtotal_arithmetic": "Keep documented as non-blocking issuer-level subtotal whose FV matches sum of output leaf positions for the same issuer name.",
     "diagnostic_secondary_field_mismatch": "Review secondary field extraction only if diagnostics cluster by filer.",
@@ -261,6 +265,7 @@ MECHANISM_REASONS = {
     "documented_money_market_fund": "Source row is a money market fund position filtered during BDC staging.",
     "documented_bad_issuer_name": "Source row has a generic/bad issuer name (e.g. 'Investments', 'First Lien Debt') filtered during staging.",
     "documented_affiliation_dedup": "Source row is an affiliation-axis duplicate of another source row that matched to output.",
+    "documented_non_private_market_cash_output": "Output-only row is a retained analytics cash bucket the per-CIK wrapper classifies as non_private_market/cash; it is not a private production position.",
     "documented_source_issuer_level_xbrl_subtotal": "Source row is an issuer-level XBRL subtotal whose fair value matches the sum of position-leaf rows for the same issuer.",
     "documented_source_issuer_subtotal_arithmetic": "Source row is an issuer-level subtotal whose FV matches sum of multiple output leaf positions for the same extracted issuer name.",
     "diagnostic_secondary_field_mismatch": "Matched row has a non-fair-value field mismatch tracked as diagnostic.",
@@ -1129,6 +1134,48 @@ def _material_mismatch_sql(source_expr: str, output_expr: str) -> str:
     """
 
 
+def _empty_audited_value_rescales() -> pd.DataFrame:
+    return pd.DataFrame({
+        "cik": pd.Series(dtype="string"),
+        "field": pd.Series(dtype="string"),
+        "factor": pd.Series(dtype="float64"),
+    })
+
+
+def _load_audited_value_rescales() -> pd.DataFrame:
+    """Promoted ``value_rescale`` rules as (cik, field, factor) rows.
+
+    Promoted value_rescale rules (``pipeline.agent_promoted``) fix output-side
+    scale defects at unified-holdings build time, so the raw source facts for
+    an affected matched pair still carry the filer's mis-scaled values and the
+    pair reports a false blocking value mismatch (verdict
+    BDCSRC_0001919369_2025-12-31_..., QF Holdings 33224.0 vs 33224000.0).
+
+    Only the audited (cik, field, factor) triple is consumed here; the rule's
+    predicate/scope reference output-side columns and are not re-evaluated
+    against source rows. The comparison-time guard in
+    ``audited_value_rescale_pairs`` requires the factor to EXACTLY explain the
+    matched-pair difference AND the raw values to disagree, so rows that
+    already reconcile in dollars are never rescaled and non-factor
+    differences remain blockers.
+    """
+    rows: list[dict[str, Any]] = []
+    for cik, rules in load_promoted_rules().items():
+        for rule in rules:
+            if str(rule.get("rule_type")) != "value_rescale":
+                continue
+            field = str(rule.get("field") or "")
+            factor = rule.get("factor")
+            if field not in VALUE_COLUMNS:
+                continue
+            if not isinstance(factor, (int, float)) or not float(factor):
+                continue
+            rows.append({"cik": cik, "field": field, "factor": float(factor)})
+    if not rows:
+        return _empty_audited_value_rescales()
+    return pd.DataFrame(rows, columns=["cik", "field", "factor"])
+
+
 def _ensure_empty_wrapper_columns(df: pd.DataFrame) -> pd.DataFrame:
     result = df.copy()
     for col in WRAPPER_COLUMNS:
@@ -1218,6 +1265,66 @@ def extract_bdc_source_facts_from_xbrl(
     return pd.DataFrame(records)
 
 
+# --- Liquid-fund / cash-equivalent source admission (reconciliation only) ---
+# Some filers tag money market sweep positions on a us-gaap
+# CashAndCashEquivalentsAxis explicit member instead of the typed
+# InvestmentIdentifierAxis (verdicts BDCSRC_0001899996_2025-12-31_... and
+# BDCSRC_0001950976_2025-12-31_...). Those SOI short-term-investment rows are
+# real current-period positions with InvestmentOwned* (or MoneyMarketFunds*)
+# facts, but the investment-context filter drops them, so audited row_add
+# recoveries in unified holdings show up as blocking pipeline-only extras.
+# Admission is deliberately gated on the SAME money-market keyword list the
+# reconciliation uses to document unmatched money-market source rows
+# (_money_market_check_sql / _MONEY_MARKET_KEYWORDS), so an admitted row that
+# fails to match can only land in the non-blocking excluded_money_market_fund
+# bucket -- the admission cannot create new blockers. Numeric truth stays the
+# parsed XBRL facts; footnote-only money-market mentions have no such context
+# and are never admitted. This path does NOT touch production BDC extraction
+# (pipeline.bdc_filings), which still only reads investment contexts.
+_CASH_EQUIVALENTS_DIM_RE = re.compile(r"(?:^|\|)cashandcashequivalentsaxis=([^|]+)")
+_CAMEL_BOUNDARY_RE = re.compile(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])")
+# Concepts seen on cash-equivalent member contexts that name the position's
+# value without the InvestmentOwned* vocabulary. Carrying value doubles as the
+# cost basis for money market sweeps (amortized cost reporting) and is only a
+# fair-value fallback when the filer tags no explicit fair-value fact.
+_LIQUID_FUND_CONCEPT_MAP = [
+    ("moneymarketfundsatfairvalue", "fair_value"),
+    ("moneymarketfundsatcarryingvalue", "mm_carrying_value"),
+]
+
+
+def _match_liquid_fund_concept(local_lower: str) -> Optional[str]:
+    for pattern, col in _LIQUID_FUND_CONCEPT_MAP:
+        if pattern in local_lower:
+            return col
+    return None
+
+
+def _humanize_member_local_name(member: str) -> str:
+    """'DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember' ->
+    'Dreyfus Treasury Obligations Cash Management Money Market Fund'."""
+    name = str(member or "").strip()
+    if ":" in name:
+        name = name.split(":", 1)[1]
+    if name.lower().endswith("member"):
+        name = name[: -len("member")]
+    return _CAMEL_BOUNDARY_RE.sub(" ", name).strip()
+
+
+def _liquid_fund_identifier(ctx_info: dict[str, Any]) -> str:
+    """Named cash-equivalent member identifier, or '' when not admissible."""
+    if ctx_info.get("is_investment"):
+        return ""
+    match = _CASH_EQUIVALENTS_DIM_RE.search(str(ctx_info.get("dimensions_raw") or ""))
+    if not match:
+        return ""
+    name = _humanize_member_local_name(match.group(1))
+    lowered = name.lower()
+    if not any(keyword in lowered for keyword in _MONEY_MARKET_KEYWORDS):
+        return ""
+    return name
+
+
 def _extract_single_xbrl_source_file(
     xml_path: Path,
     filing_meta: dict[str, Any],
@@ -1232,7 +1339,13 @@ def _extract_single_xbrl_source_file(
     investment_contexts = {
         cid: info for cid, info in contexts.items() if info.get("is_investment")
     }
-    if not investment_contexts:
+    liquid_fund_contexts: dict[str, dict[str, Any]] = {}
+    for cid, info in contexts.items():
+        identifier = _liquid_fund_identifier(info)
+        if identifier:
+            liquid_fund_contexts[cid] = {**info, "investment_identifier": identifier}
+    admitted_contexts = {**investment_contexts, **liquid_fund_contexts}
+    if not admitted_contexts:
         return []
 
     facts_by_ctx: dict[str, dict[str, Any]] = {}
@@ -1241,13 +1354,15 @@ def _extract_single_xbrl_source_file(
     root = tree.getroot()
     for elem in root.iter():
         ctx_ref = elem.get("contextRef")
-        if ctx_ref not in investment_contexts:
+        if ctx_ref not in admitted_contexts:
             continue
         raw_text = (elem.text or "").strip()
         if not raw_text:
             continue
         local = _local_name(elem.tag)
         col = _match_concept(local.lower())
+        if col is None and ctx_ref in liquid_fund_contexts:
+            col = _match_liquid_fund_concept(local.lower())
         if col is None:
             continue
         value = _parse_fact_value(col, raw_text)
@@ -1266,8 +1381,20 @@ def _extract_single_xbrl_source_file(
     _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored)
 
     rows: list[dict[str, Any]] = []
-    for ctx_id, ctx_info in investment_contexts.items():
+    for ctx_id, ctx_info in admitted_contexts.items():
         fact_vals = facts_by_ctx.get(ctx_id, {})
+        if ctx_id in liquid_fund_contexts:
+            carrying = fact_vals.pop("mm_carrying_value", None)
+            if isinstance(carrying, (int, float)):
+                if not isinstance(fact_vals.get("fair_value"), (int, float)):
+                    fact_vals["fair_value"] = carrying
+                if not isinstance(fact_vals.get("cost"), (int, float)):
+                    fact_vals["cost"] = carrying
+            fair_value = fact_vals.get("fair_value")
+            # Position-row support: a liquid-fund member row is only admitted
+            # with a nonzero fair value from the audited fact path.
+            if not isinstance(fair_value, (int, float)) or fair_value == 0:
+                continue
         if not fact_vals:
             continue
         row = {
@@ -1298,16 +1425,37 @@ def reconcile_bdc_source_to_holdings(
     holdings_df: pd.DataFrame,
     *,
     enable_bdc_xbrl_wrappers: bool = True,
+    audited_value_rescales: Optional[pd.DataFrame] = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Reconcile BDC source facts to unified BDC holdings rows."""
+    """Reconcile BDC source facts to unified BDC holdings rows.
+
+    ``audited_value_rescales`` (cik, field, factor) defaults to the promoted
+    agent value_rescale rules; pass an empty frame to disable source-side
+    scale normalization in isolation-sensitive tests.
+    """
     if source_df.empty and holdings_df.empty:
         return _empty_detail(), _empty_metrics()
 
     source = _coerce_source_df(source_df, enable_bdc_xbrl_wrappers=enable_bdc_xbrl_wrappers)
     output = _coerce_output_df(holdings_df, enable_bdc_xbrl_wrappers=enable_bdc_xbrl_wrappers)
+    if audited_value_rescales is None:
+        audited_value_rescales = _load_audited_value_rescales()
+    rescales = audited_value_rescales.copy()
+    if rescales.empty or not {"cik", "field", "factor"}.issubset(rescales.columns):
+        rescales = _empty_audited_value_rescales()
+    else:
+        rescales["cik"] = (
+            rescales["cik"].astype(str)
+            .str.replace(r"[^0-9]", "", regex=True)
+            .str.zfill(10)
+        )
+        rescales["field"] = rescales["field"].astype(str)
+        rescales["factor"] = pd.to_numeric(rescales["factor"], errors="coerce")
+        rescales = rescales.dropna(subset=["factor"])
     con = duckdb.connect()
     con.register("source_raw", source)
     con.register("output_raw", output)
+    con.register("audited_value_rescales", rescales[["cik", "field", "factor"]])
     aggregate_overrides = load_bdc_aggregate_overrides()
     con.register("bdc_aggregate_overrides", aggregate_overrides)
     agg_filter = (
@@ -1316,14 +1464,54 @@ def reconcile_bdc_source_to_holdings(
         .replace("_raw_id", "raw_investment_identifier")
     )
 
-    mismatch_checks = {
-        "fair_value": _material_mismatch_sql("s.source_fair_value", "o.output_fair_value"),
-        "cost": _material_mismatch_sql("s.source_cost", "o.output_cost"),
-        "principal_amount": _material_mismatch_sql(
-            "s.source_principal_amount", "o.output_principal_amount"
-        ),
-        "shares_held": _material_mismatch_sql("s.source_shares_held", "o.output_shares_held"),
+    # Matched-pair value comparison uses audited-rescale-adjusted source values
+    # (see audited_value_rescale_pairs); unmatched rows are unaffected because
+    # every factor requires a matched output row to agree with.
+    audited_rescale_fields = ["fair_value", "cost", "principal_amount", "shares_held"]
+    adjusted_source_exprs = {
+        field: (
+            f"CASE WHEN arp.{field}_factor IS NOT NULL "
+            f"THEN s.source_{field} * arp.{field}_factor "
+            f"ELSE s.source_{field} END"
+        )
+        for field in audited_rescale_fields
     }
+    audited_rescale_applied_expr = " OR ".join(
+        f"arp.{field}_factor IS NOT NULL" for field in audited_rescale_fields
+    )
+
+    def _audited_factor_select(field: str) -> str:
+        src = f"s.source_{field}"
+        out = f"o.output_{field}"
+        return (
+            f"MAX(CASE WHEN r.field = '{field}'\n"
+            f"                     AND {src} IS NOT NULL AND {out} IS NOT NULL\n"
+            f"                     AND abs({src} * r.factor - {out})\n"
+            f"                         <= greatest(1.0, 0.0001 * greatest(abs({src} * r.factor), abs({out})))\n"
+            f"                     AND abs({src} - {out})\n"
+            f"                         > greatest(1.0, 0.0001 * greatest(abs({src}), abs({out})))\n"
+            f"                    THEN r.factor END) AS {field}_factor"
+        )
+
+    audited_factor_selects = ",\n                ".join(
+        _audited_factor_select(field) for field in audited_rescale_fields
+    )
+
+    mismatch_checks = {
+        field: _material_mismatch_sql(adjusted_source_exprs[field], f"o.output_{field}")
+        for field in audited_rescale_fields
+    }
+    # Output-only cash/money-market calibration (verdict
+    # BDCSRC_0001976336_2025-12-31_...): a retained analytics cash bucket the
+    # per-CIK wrapper classifies non_private_market/cash is not a private
+    # production position and must not become a blocking pipeline-only
+    # residual. Keyed strictly on the audited wrapper classification, never on
+    # cash/PIK coupon text, so real loan rows with cash-pay language that lack
+    # a source fact remain blocking extras.
+    output_cash_expr = (
+        "(COALESCE(o.output_wrapper_disposition, '') = 'non_private_market' "
+        "AND COALESCE(o.output_wrapper_family, '') = 'cash')"
+    )
     fair_value_mismatch_expr = mismatch_checks["fair_value"]
     diagnostic_mismatch_expr = " OR ".join(
         mismatch_checks[field] for field in ["cost", "principal_amount", "shares_held"]
@@ -2110,6 +2298,22 @@ def reconcile_bdc_source_to_holdings(
             SELECT * FROM all_matches_with_fv
             UNION ALL
             SELECT * FROM partial_name_matches
+        ), audited_value_rescale_pairs AS (
+            -- Audited promoted value_rescale rules fixed OUTPUT-side scale
+            -- defects at unified-holdings build time; the raw source facts
+            -- still carry the filer's mis-scaled values. For a matched pair,
+            -- a per-field factor is only recorded when multiplying the source
+            -- value by the audited factor makes it agree with the output
+            -- value AND the raw values disagree, so already-reconciling rows
+            -- are never rescaled and non-factor differences stay blockers.
+            SELECT
+                m.source_row_id,
+                {audited_factor_selects}
+            FROM all_matches m
+            JOIN eligible_source s ON m.source_row_id = s.source_row_id
+            JOIN output_prepared o ON m.output_row_id = o.output_row_id
+            JOIN audited_value_rescales r ON r.cik = s.cik
+            GROUP BY m.source_row_id
         ), source_affiliation_dupes AS (
             SELECT DISTINCT s2.source_row_id
             FROM eligible_source s1
@@ -2567,6 +2771,8 @@ def reconcile_bdc_source_to_holdings(
                          AND contains({mismatch_fields_expr}, 'principal_amount')
                         THEN 'principal_amount differs on fund position; tracked as diagnostic'
                     WHEN {diagnostic_mismatch_expr} THEN 'secondary source field differs without fair_value mismatch'
+                    WHEN m.source_row_id IS NOT NULL AND ({audited_rescale_applied_expr})
+                        THEN 'matched after audited value_rescale source-side normalization'
                     WHEN m.match_tier = 'reconciled_numeric_identity'
                         THEN 'source row reconciled to pipeline output by one-to-one numeric identity'
                     WHEN m.match_tier = 'reconciled_issuer_name_extraction'
@@ -2609,10 +2815,10 @@ def reconcile_bdc_source_to_holdings(
                 COALESCE(o.output_wrapper_rate_key, '') AS output_wrapper_rate_key,
                 COALESCE(o.output_wrapper_signature_status, '') AS output_wrapper_signature_status,
                 COALESCE(o.output_wrapper_unparsed_remainder, '') AS output_wrapper_unparsed_remainder,
-                s.source_fair_value, o.output_fair_value,
-                s.source_cost, o.output_cost,
-                s.source_principal_amount, o.output_principal_amount,
-                s.source_shares_held, o.output_shares_held,
+                {adjusted_source_exprs['fair_value']} AS source_fair_value, o.output_fair_value,
+                {adjusted_source_exprs['cost']} AS source_cost, o.output_cost,
+                {adjusted_source_exprs['principal_amount']} AS source_principal_amount, o.output_principal_amount,
+                {adjusted_source_exprs['shares_held']} AS source_shares_held, o.output_shares_held,
                 s.source_interest_rate, o.output_interest_rate,
                 s.source_basis_spread, o.output_basis_spread,
                 s.source_pik_rate, o.output_pik_rate,
@@ -2718,6 +2924,8 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL THEN 'eligible current-period source row has no pipeline output row'
                     WHEN {fair_value_mismatch_expr} THEN 'matched source/output row has materially different fair_value'
                     WHEN {diagnostic_mismatch_expr} THEN 'matched source/output row has secondary-field diagnostic mismatch'
+                    WHEN m.source_row_id IS NOT NULL AND ({audited_rescale_applied_expr})
+                        THEN 'matched after audited value_rescale source-side normalization'
                     WHEN m.match_tier = 'reconciled_numeric_identity'
                         THEN 'source row reconciled to pipeline output by one-to-one numeric identity'
                     WHEN m.match_tier = 'reconciled_issuer_name_extraction'
@@ -2735,6 +2943,7 @@ def reconcile_bdc_source_to_holdings(
             FROM eligible_source s
             LEFT JOIN all_matches m ON s.source_row_id = m.source_row_id
             LEFT JOIN output_prepared o ON m.output_row_id = o.output_row_id
+            LEFT JOIN audited_value_rescale_pairs arp ON s.source_row_id = arp.source_row_id
             LEFT JOIN documented_source_rollups sr ON s.source_row_id = sr.source_row_id
             LEFT JOIN source_issuer_subtotal_arithmetic sisa ON s.source_row_id = sisa.source_row_id
             LEFT JOIN source_self_referential_subtotals srs ON s.source_row_id = srs.source_row_id
@@ -2785,15 +2994,83 @@ def reconcile_bdc_source_to_holdings(
                         AND s.source_wrapper_structured_leaf_key = o.output_wrapper_structured_leaf_key
                     )
               )
+        ), output_recovered_row_identity AS (
+            -- Unified BDC rows appended by promoted agent row_add rules carry
+            -- no accession_number, so the accession-scoped match tiers can
+            -- never claim them. When such an accessionless output row has an
+            -- exact-identity current-period source counterpart (same
+            -- cik/report_date; identical dimensions path, raw identifier, or
+            -- staging identifier, or one staging identifier containing the
+            -- other at length >= 12) whose fair value agrees within
+            -- tolerance, and that source row is not already matched to a
+            -- different output row, the pair is the same production
+            -- position: do not report a blocking pipeline-only extra.
+            -- Collapsed duplicate-dimension-path source rows stay eligible
+            -- as identity anchors here; comparative-period, superseded-
+            -- amendment, and pre-2022 source rows never qualify
+            -- (source_exclusion_status covers all three).
+            SELECT DISTINCT o.output_row_id
+            FROM output_prepared o
+            JOIN eligible_source s
+              ON s.cik = o.cik
+             AND s.report_date = o.report_date
+            LEFT JOIN all_matches sm ON s.source_row_id = sm.source_row_id
+            WHERE NULLIF(trim(COALESCE(o.accession_number, '')), '') IS NULL
+              AND sm.source_row_id IS NULL
+              AND COALESCE(s.source_exclusion_status, '') = ''
+              AND s.source_fair_value IS NOT NULL
+              AND o.output_fair_value IS NOT NULL
+              AND abs(s.source_fair_value - o.output_fair_value)
+                  <= greatest(1.0, 0.0001 * greatest(abs(s.source_fair_value), abs(o.output_fair_value)))
+              AND (
+                    (
+                        NULLIF(trim(COALESCE(s.dimensions_raw, '')), '') IS NOT NULL
+                        AND s.dimensions_raw = o.dimensions_raw
+                    )
+                    OR (
+                        NULLIF(trim(COALESCE(s.raw_investment_identifier, '')), '') IS NOT NULL
+                        AND s.raw_investment_identifier = o.raw_investment_identifier
+                    )
+                    OR (
+                        NULLIF(trim(COALESCE(s.staging_normalized_investment_identifier, '')), '') IS NOT NULL
+                        AND s.staging_normalized_investment_identifier
+                            = o.staging_normalized_investment_identifier
+                    )
+                    OR (
+                        LENGTH(COALESCE(s.staging_normalized_investment_identifier, '')) >= 12
+                        AND NULLIF(trim(COALESCE(o.staging_normalized_investment_identifier, '')), '') IS NOT NULL
+                        AND (
+                            contains(o.staging_normalized_investment_identifier,
+                                     s.staging_normalized_investment_identifier)
+                            OR (
+                                LENGTH(COALESCE(o.staging_normalized_investment_identifier, '')) >= 12
+                                AND contains(s.staging_normalized_investment_identifier,
+                                             o.staging_normalized_investment_identifier)
+                            )
+                        )
+                    )
+              )
         ), output_extras AS (
             SELECT
-                'extra_in_pipeline' AS status,
+                CASE WHEN {output_cash_expr}
+                    THEN 'excluded_non_private_market_output'
+                    ELSE 'extra_in_pipeline'
+                END AS status,
                 '' AS match_tier,
-                'FAIL' AS issue_severity,
-                'row_identity' AS residual_class,
-                true AS blocking_issue,
-                'blocking_extra_in_pipeline' AS calibrated_status,
-                'pipeline BDC row has no matching current-period source fact' AS calibration_reason,
+                CASE WHEN {output_cash_expr} THEN '' ELSE 'FAIL' END AS issue_severity,
+                CASE WHEN {output_cash_expr}
+                    THEN 'documented_exclusion'
+                    ELSE 'row_identity'
+                END AS residual_class,
+                CASE WHEN {output_cash_expr} THEN false ELSE true END AS blocking_issue,
+                CASE WHEN {output_cash_expr}
+                    THEN 'excluded_non_private_market_output'
+                    ELSE 'blocking_extra_in_pipeline'
+                END AS calibrated_status,
+                CASE WHEN {output_cash_expr}
+                    THEN 'output-only cash bucket classified non_private_market by per-CIK wrapper; not a private production position'
+                    ELSE 'pipeline BDC row has no matching current-period source fact'
+                END AS calibration_reason,
                 o.cik, o.entity_name, o.report_date,
                 '' AS period, o.accession_number, o.form_type, o.filing_date,
                 '' AS context_id,
@@ -2841,14 +3118,19 @@ def reconcile_bdc_source_to_holdings(
                 '' AS identifier_normalization_impact,
                 '' AS family_vs_asset_category_disagreement,
                 '' AS wrapper_leaf_staging_excluded,
-                'pipeline BDC row has no matching current-period source fact' AS evidence
+                CASE WHEN {output_cash_expr}
+                    THEN 'output-only cash bucket classified non_private_market by per-CIK wrapper; not a private production position'
+                    ELSE 'pipeline BDC row has no matching current-period source fact'
+                END AS evidence
             FROM output_prepared o
             LEFT JOIN all_matches m ON o.output_row_id = m.output_row_id
             LEFT JOIN rollup_child_outputs rco ON o.output_row_id = rco.output_row_id
             LEFT JOIN output_collapsed_source_duplicates ocsd ON o.output_row_id = ocsd.output_row_id
+            LEFT JOIN output_recovered_row_identity orri ON o.output_row_id = orri.output_row_id
             WHERE m.output_row_id IS NULL
               AND rco.output_row_id IS NULL
               AND ocsd.output_row_id IS NULL
+              AND orri.output_row_id IS NULL
               AND TRY_CAST(o.report_date AS DATE) >= '2022-01-01'
         )
         SELECT {", ".join(DETAIL_COLUMNS)}
@@ -3693,9 +3975,19 @@ def _write_csv_atomic(df: pd.DataFrame, path: Path, columns: Optional[list[str]]
     tmp_path.replace(path)
 
 
+# Bump whenever _extract_single_xbrl_source_file changes WHAT it emits, so the
+# per-accession source-fact parquet cache is re-extracted instead of silently
+# reused with stale extraction semantics.
+# v2: liquid-fund/cash-equivalent member admission (CashAndCashEquivalentsAxis).
+_SOURCE_FACT_EXTRACTION_VERSION = "2"
+
+
 def _filing_metadata_hash(filing: dict[str, Any]) -> str:
     keys = ["cik", "entity_name", "accession_number", "form_type", "filing_date", "report_date"]
-    payload = "\x1f".join(str(filing.get(k, "") or "") for k in keys)
+    payload = "\x1f".join(
+        [_SOURCE_FACT_EXTRACTION_VERSION]
+        + [str(filing.get(k, "") or "") for k in keys]
+    )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -3865,9 +4157,21 @@ def compute_reconciliation_logic_hash() -> str:
 
 def _compute_override_hash() -> str:
     overrides_file = resolve_bdc_aggregate_overrides_file()
-    if not overrides_file.exists():
-        return hashlib.sha256(b"").hexdigest()
-    return _file_sha256(overrides_file)
+    if overrides_file.exists():
+        base = _file_sha256(overrides_file)
+    else:
+        base = hashlib.sha256(b"").hexdigest()
+    # Promoted value_rescale rules feed matched-pair source-side scale
+    # normalization inside reconcile_bdc_source_to_holdings; include their
+    # identity so cached CIK partitions recompute when rules change.
+    rescales = _load_audited_value_rescales()
+    rescale_payload = "|".join(sorted(
+        f"{row.cik}:{row.field}:{row.factor}"
+        for row in rescales.itertuples(index=False)
+    ))
+    return hashlib.sha256(
+        (base + "\x1f" + rescale_payload).encode("utf-8")
+    ).hexdigest()
 
 
 def plan_dirty_reconciliation_ciks(

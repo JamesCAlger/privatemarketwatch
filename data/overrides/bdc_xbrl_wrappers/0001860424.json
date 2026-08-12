@@ -40,6 +40,7 @@
         "common units",
         "preferred equity",
         "preferred units",
+        "equity units",
         "class a",
         "class b",
         "series",
@@ -208,6 +209,13 @@
       "description": "Some 2024 rows use all-caps hierarchy labels and spaced legal suffixes or rate tokens such as L L C and S O F R.",
       "first_seen_quarter": "2024-12-31",
       "detection_pattern": "NON-CONTROLLED/NON-AFFILIATED INVESTMENTS DEBT INVESTMENTS ...",
+      "disposition": "expected"
+    },
+    {
+      "id": "onex_s4t_equity_units_leaf",
+      "description": "S4T Holdings Corp. (Vistria ESS Holdings, LLC) discloses an equity position as bare 'Equity Units' rather than common/preferred units. 'equity units' is an equity leaf marker so the current-period source fact (2025-12-31 fair value 542123.0) reconciles to the pipeline row instead of being excluded as an aggregate candidate. True equity totals/headers keep aggregate treatment.",
+      "first_seen_quarter": "2025-12-31",
+      "detection_pattern": "Non-controlled/Non-affiliated investments Equity <industry> <issuer> Equity Units Initial Acquisition Date <date>",
       "disposition": "expected"
     },
     {

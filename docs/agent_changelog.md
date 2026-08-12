@@ -7395,3 +7395,495 @@ Agent lane for the rate-convention classifier residual. New modules:
   TCW DL 75.7pct, TCW VII 54.1pct, PIMCO CS -23.4pct, Bain 22.4pct.
 - Full pytest suite ran clean pre-refresh (see baseline entry above). No
   fleet dispatched; operator stopped at the select boundary per protocol.
+
+### 2026-07-24 -- Q4 2025 B-agent campaign worklist builder
+
+- New script `scripts/build_q4_campaign_worklist.py`: builds the two-part Q4 2025
+  adjudication worklist. Part A = aggregate_header ledger names (fail/warn) joined
+  into 2025-12-31 unified holdings on lower(trim(issuer_name)) (same key as the
+  shadow runner localization). Part B = all 2,659 Q4 review-queue items annotated
+  with dispatch tier (0-4), likely B2 lane, wrapper/verdict/bundle existence.
+- Outputs (scratch, underscore convention): `data/output/review_queue/
+  _q4_campaign_partA_aggregate_names.csv` (450 name-CIK groups) and
+  `_q4_campaign_partB_items.csv` (2,659 items). Also `_q4_2025_blocker_queue.csv`
+  (frozen 863-row blocker slice) and `_orphan_verdict_diagnosis*.csv` (orphan
+  verdict audit: 600 orphans = 396 resolved + 204 rule demotion/retirement;
+  review_ids ARE stable, no churn).
+- Measured: Q4 aggregate_header footprint INSIDE the wrapped cohort is small
+  (1 AGGREGATE_HEADER group / 3.4 FV_m + 32 JV_SUBSIDIARY groups / 812 FV_m,
+  13 CIKs); 417 groups / 8,385 FV_m sit outside the wrapped cohort; 1,585
+  flagged names have no Q4 footprint.
+- Verdict-store coverage note: source_recon adjudication lives in
+  data/output/bdc_cik_review/verdicts (1,251 files), review_queue/verdicts has
+  1,615; per-quarter coverage must join through bundles, not current queue ids.
+
+### 2026-07-24 -- Agent A Q1 cohort induction batch (a_q1_cohort_20260724c)
+
+- Dispatched 23 in-cohort CIKs (discover found 43; cohort_guard refused 20
+  out-of-cohort -- excluded) at MaxParallel 1. 22/23 workers validated; 1
+  (1743415 SCP) failed the advisory A2 self-screen (completeness 80.6%) but
+  PASSED the deciding A3 held-out gate. Two pre-launch dispatch stumbles,
+  no quota burned: (a) PowerShell parses unquoted -Cik values as ints,
+  stripping lead zeros -- quote them; (b) dispatch preflight fail-closes on
+  stale staging proposals -- June leftovers archived to
+  data/output/agent_a/proposals_archive_pre_q1_20260724 (+ post-batch
+  staging swept to proposals_archive_q1_batch_20260724; staging now empty).
+- Staged A3 gate: 16/23 batch PASS -> promoted to production overrides
+  (identifier_anchors + identifier_rate_grammars). 7 gate refusals
+  (completeness / none-share spikes on held-out quarters) queued in
+  remediation_worklist.csv with target quarters -- NOT retried, incl. TCW
+  Star 1916608 (75.5%). Post-promotion production gate: 27 PASS / 0 FAIL
+  (the 1851322 era-FAIL is cured by its new grammar); 16 NO_CONFIG remain
+  (7 batch refusals + 9 out-of-cohort).
+- agent_a_flags rebuilt via python -m scripts.shadow_agent_a_engine (NOTE:
+  direct script invocation lacks the repo-root sys.path insert): cohort now
+  64 held-out-PASS grammars, 14,567 flags. Shadow ledger + review queue
+  rebuilt: 43,630 items (agentA blockers 1,107 stale -> 1,165 fresh);
+  agentA Q1: 10 fail / 113 warn on refreshed data.
+- Known follow-ups: 1950803 Stepstone excluded from flags cohort
+  (single-quarter signature, overfit risk); B-lane dispatch plan still
+  awaiting human approval.
+
+### 2026-07-24 -- Tier coverage checker (campaign completion gate)
+
+- New script `scripts/check_tier_coverage.py`: joins a frozen tier slice
+  (review_id column) against BOTH verdict stores (review_queue/verdicts,
+  bdc_cik_review/verdicts) plus an optional operator residuals CSV
+  (review_id,reason). Validates verdict files (parse, vocabulary, embedded-id
+  == filename). Exit 0 = tier closed; exit 1 = remainder (written to
+  <slice>.coverage.csv, feeds prep_retry). Intended as the mechanical gate
+  between Q4-campaign tiers.
+- Verdict vocabulary measured 2026-07-24: review_queue store uses
+  real_error/false_alarm/ambiguous; bdc_cik_review store uses PATCH_PROPOSED
+  (48) / NO_PATCH_NEEDED (15) / INSUFFICIENT_EVIDENCE (1,175) / ESCALATE (13).
+- FINDING: 94% of bdc_cik_review verdicts are INSUFFICIENT_EVIDENCE --
+  source_recon items were extensively ATTEMPTED but mostly fail-closed on
+  missing source evidence. 28 of the 863 Q4 2025 blocker items are in this
+  state. Evidence/caching completeness is the bottleneck for the source_recon
+  lane; fix before dispatching tier 1 or the fleet reproduces
+  INSUFFICIENT_EVIDENCE at quota cost.
+- Q4 blocker slice baseline: 863 items = 6 verdict_real_error +
+  28 verdict_INSUFFICIENT_EVIDENCE + 829 MISSING (exit 1, as expected).
+
+### 2026-07-24 -- CORRECTION: bdc_cik_review INSUFFICIENT_EVIDENCE verdicts are placeholders
+
+- Spot-check (user-prompted) of the 1,175 INSUFFICIENT_EVIDENCE verdicts in
+  data/output/bdc_cik_review/verdicts: 1,174 carry reviewer_notes starting
+  "Auto-drafted from the completed BDC bundle and worklist for full-pool
+  accounting", identical boilerplate, ALL 1,251 store files written in one
+  batch on 2026-05-28. These are bookkeeping placeholders, NOT adjudications;
+  no agent examined the packets.
+- Retracts two claims from earlier 2026-07-24 entries: (1) source_recon was
+  NOT "extensively adjudicated" -- only 77 genuine verdicts exist store-wide
+  (48 PATCH_PROPOSED, 15 NO_PATCH_NEEDED, 13 ESCALATE, 1 genuine
+  INSUFFICIENT_EVIDENCE); (2) there is NO measured evidence-availability
+  bottleneck for tier 1 -- the placeholder text is generic and predates the
+  June/July full-filing-search tooling.
+- `scripts/check_tier_coverage.py` now detects the Auto-drafted marker and
+  classifies such files as placeholder_autodrafted, counted in the remainder
+  (not covered). Q4 blocker slice rebaseline: 863 = 6 verdict_real_error +
+  857 remainder (829 MISSING + 28 placeholder_autodrafted).
+
+### 2026-07-24 -- Q4 campaign source admissibility: audit + backfill + gate hardening (tiers 0-4)
+
+- INCIDENT: first q4t0 dispatch (113-item tier-0 slice, 107 dispatched) aborted
+  after 9 workers: every finished verdict was ambiguous/source_unavailable
+  (evidence CLI missing_cached_html). Junk verdicts archived to
+  data/output/agent_b/batch/q4t0/verdicts_source_unavailable_archive; locks
+  released; ~9 workers quota burned. Root cause: bundle
+  evidence_completeness=source_artifact does NOT imply the raw SOI HTML is
+  cached, and preflight never checks cache coverage.
+- New scripts/campaign_source_admissibility.py (audit / extend-index /
+  download): per-item admissibility using the evidence CLI's EXACT accession
+  resolution (accs[0] from bundle evidence rows), classifying
+  cached/downloadable/not_in_index/no_accession/no_bundle. extend-index
+  fetches submissions (rate-limited EdgarClient) and merges the filings
+  index; download uses the audited sec_download_guard path (user authorized
+  2026-07-24). Built 2,463 missing B1 bundles in the process.
+- MEASURED (2,659-item Q4 campaign partB population): BDC source coverage was
+  already near-complete -- only 9 accessions needed downloading (5 new + 4
+  after fallback; all now cached). The real gaps: (a) 776 not_in_index items
+  are ALL interval/tender-offer funds (N-2 filers, no 10-K/10-Q exists --
+  submissions API verified 0 matching filings for 60/60 tier-0 CIKs); (b) 30
+  no_accession items = fund_financials F28 on funds or newly-registered CIKs
+  whose first covering filing is 2026-03-31 or later; (c) tier 1 (53
+  source_recon BDCSRC_* items) bundles via the bdc_cik_review lane, not
+  review_queue (DEFERRED_ENGINES by design).
+- New pipeline/html_soi_evidence.resolve_accessions_from_index(): filings-index
+  fallback accession resolution (annual form first, then latest filing_date)
+  wired into scripts/review_agent/evidence_cli.py _load() -- engines whose
+  evidence rows carry no accession (fund_financials) can now resolve the
+  covering filing. Auditor mirrors it.
+- scripts/check_tier_coverage.py hardened: ambiguous/source_unavailable and
+  auto=true verdicts now classify no_source_not_covered and count in the
+  REMAINDER (behaviorally tested). Previously they would have spuriously
+  closed a tier no agent examined.
+- data/output/review_queue/_q4_campaign_residuals.csv: 806 documented
+  residuals (776 non-BDC + 30 no-covering-filing) with per-item reasons;
+  feeds check_tier_coverage --residuals. Future path for the non-BDC items is
+  the interval_source N-CSR lane, not the BDC-SOI fleet.
+- bdc_cik_review worklist rebuilt --top-n 5000 (prior top-100 build lacked 27
+  of tier 1's 53 ids; backup at worklist.backup_20260724.csv); all 53 tier-1
+  bundles built cache-only; 40/40 tier-1 CIKs have cached Q4 HTML.
+- Admissibility ledger (2,659): dispatchable now = 1,800 B1-lane cached
+  (tier 0: 53, tier 2: 221, tier 3: 285, tier 4: 1,241) + 53 tier-1
+  lane-bundled; documented residuals = 806. Sum = 2,659 (complete).
+- q4t0 re-dispatched with the 47 uncovered admissible items (6 pre-existing
+  real_error verdicts kept; 60 non-BDC documented). NOTE: the sec download
+  manifest gained 106 unknown_accession failure receipts from one download
+  call that wrongly included not_in_index items (guard fail-closed correctly,
+  zero network requests; subcommand since fixed to downloadable-only).
+- Known follow-up: B dispatch preflight should assert cache coverage per item
+  (call the auditor) before reserving locks, so an inadmissible batch fails
+  closed BEFORE burning quota.
+
+### 2026-07-24 -- q4t0 dispatcher crash at 35/47 + fix (validator stderr x EAP Stop)
+
+- Worker RVQ_BLK_fca05dfbd2d5 hit a transient Codex Windows sandbox failure
+  ("helper_unknown_error: setup refresh had errors" -- all commands AND the
+  verdict write blocked; NOT a usage limit). validate_leaf_verdicts then
+  printed "INVALID: ..." to stderr, which PS 5.1 under the script-wide
+  ErrorActionPreference=Stop wrapped in a terminating NativeCommandError --
+  killing the whole dispatch AND skipping the finally-block lock release.
+  Latent since the dispatcher was built: it only fires when a worker fails
+  leaf validation (no prior B fleet did).
+- Fix in scripts/dispatch_agent_b_workers.ps1 Invoke-ValidateVerdict: EAP
+  relaxed to Continue around the native validator call (exit code is the only
+  signal used), restored in finally.
+- Recovery: locks released via --release-manifest; 35/47 verdicts intact and
+  clean (31 real_error / 4 false_alarm, ZERO source_unavailable -- the
+  admissibility backfill held); 12 undecided re-discovered and re-dispatched.
+- NOTE: data/output/agent_b/locks holds 47 stale RVQ_REV_* locks from the
+  2026-06-28 ens1_pilot batch (reclaimable by TTL; left in place).
+
+### 2026-07-24 -- q4t0 fleet stranded at 36/47: Windows sandbox helper failures (needs elevated dispatch)
+
+- After 35 clean verdicts (~12:00-13:10 local), EVERY subsequent Codex worker
+  failed sandbox setup: "helper_setup_marker_write_failed ... failed: 80" /
+  "helper_unknown_error: setup refresh had errors" -- in FRESH worker homes
+  (q4t0_r2), so NOT the stale-marker trap. codex npm pkg unchanged since
+  2026-06-26 (0.142.2); 820GB disk free; no usage-limit signals. Working
+  hypothesis: the sandbox's elevated helper context went away ~13:10 (the
+  quarter-pass-operator runbook requires dispatch from an ADMIN PowerShell;
+  this session's shell is non-elevated). 11 workers x2 attempts produced NO
+  junk verdicts (workers could not even write fallback ambiguous verdicts).
+- State: tier-0 slice = 42/113 verdicted (6 pre-existing + 36 fleet: all 36
+  clean, 0 source_unavailable) + 60 documented residuals + 11 stranded
+  (ids in data/output/review_queue/_q4_tier0_dispatch_todo.csv). All locks
+  released (q4t0 + q4t0_r2 manifests).
+- DISCLOSURE (hard-rule 1 conflict): scripts/review_agent/evidence_cli.py was
+  modified today (filings-index fallback in _load) as part of the
+  user-directed admissibility work, before the operator-skill rule "never
+  modify B1 ... or its evidence CLI" was re-read. The fallback is additive
+  (fires only when evidence rows resolve NO accession) and NO dispatched
+  worker today took that path (all 47 tier-0 items resolve from rows;
+  verified in the pre-fallback audit). Escalated to the user: keep (blesses
+  fund_financials-class items) or revert (those items become residuals).
+- Remainder protocol: relaunch the 11 from an elevated PowerShell as a fresh
+  batch id (q4t0_r3), or document them as mechanical-failure residuals per
+  the tier-coverage contract if elevation is unavailable.
+
+### 2026-07-24 -- User decision: evidence CLI index-fallback KEPT
+
+- The user reviewed the hard-rule-1 disclosure (evidence_cli.py filings-index
+  fallback added during the admissibility work) and directed: KEEP it, along
+  with the rest of the admissibility tooling. The B1 no-modify constraint is
+  user-waived for this specific additive change. fund_financials-class items
+  (44 tier-4 + 2 stragglers) remain adjudicable rather than residual.
+- q4t0_r3 (final 11 tier-0 items) dispatched from an ELEVATED PowerShell per
+  the operator runbook, confirming the elevation hypothesis is testable: if
+  r3 succeeds where r2's fresh homes failed, non-elevated dispatch was the
+  differentiator.
+
+### 2026-07-24 -- ROOT CAUSE of the q4t0 fleet strandings: verdicts-dir DACL full (1,821 ACEs)
+
+- The sandbox failures were NOT elevation (r3 from an admin shell failed
+  identically) and NOT stale markers (fresh homes failed). The worker-home
+  .sandbox\sandbox.<date>.log names the real failure: every setup refresh
+  died at "write ACE grant failed on data\output\review_queue\verdicts:
+  SetEntriesInAclW failed: 87" (ERROR_INVALID_PARAMETER). The
+  helper_setup_marker_write_failed: 80 lines are a secondary symptom of
+  retries; setup_error.json carries the real code.
+- Mechanism: EVERY B1 worker run grants a write ACE for its unique per-worker
+  capability SID on the shared verdicts dir and never removes it. Measured:
+  1,821 ACEs, 1,817 orphaned unresolved SIDs -- the Windows 64KB DACL
+  ceiling. Today's 35th worker filled it (~13:10 local); all later setups
+  failed deterministically regardless of batch id, home freshness, or shell
+  elevation.
+- Fix applied: icacls data\output\review_queue\verdicts /reset /t /c /q
+  (1,652 files; DACL 1,821 -> 6 inherited ACEs; an inherited
+  CodexSandboxUsers modify grant already covers the sandbox group). Other
+  fleet write roots checked clean (bdc_cik_review\verdicts, agent_a,
+  agent_b, review_queue: 6 ACEs each).
+- RECURRENCE WARNING: this WILL happen again after ~1,800 worker runs against
+  any single write-granted dir. Follow-ups: (a) post-run ACE removal in
+  run_codex_worker.ps1 or dispatcher finalize; (b) a preflight ACE-count
+  check (fail closed > ~1,500 with a pointer to this entry). q4t0_r4
+  dispatched post-fix (the same 11 items, fresh batch id due to r3 stale
+  markers).
+
+### 2026-07-24 -- Q4 tier 0 (q4t0) CLOSED: 113/113 accounted
+
+- check_tier_coverage exit 0 on the frozen 113-item tier-0 slice with the
+  campaign residuals file: 48 verdict_real_error + 5 verdict_false_alarm +
+  60 residual_documented (non-BDC vehicles). Coverage report:
+  data/output/review_queue/_q4_tier0_slice.coverage.csv.
+- Fleet arc: 47 dispatchable items adjudicated across 4 dispatch attempts
+  (q4t0 x2, q4t0_r2, q4t0_r4; r3 consumed by the DACL diagnosis). Verdict
+  quality: zero source_unavailable across all 47; q4t0_r4 finalize 11/11
+  schema-ok (gav_recon 7 real / 1 false_alarm; html_agg 3 real).
+- q4t0 batch worklist restored to the full 47 ids
+  (_q4_tier0_dispatched47.csv) for the downstream B2 discover handoff;
+  NOTE the q4t0 manifest.json still reflects the last 12-item attempt --
+  per-rule precision for the full 47 should be computed from the verdict
+  store, not that manifest.
+- Tier 1 next: dispatch goes through the bdc_cik_review lane (53 bundles
+  built, 40/40 CIKs cached). Before ANY further fleet: the verdicts-dir ACE
+  leak recurs (~1,800 runs to the next ceiling) -- preventions still
+  unbuilt.
+
+### 2026-07-24 -- ACE-leak preventions + tier-1 (source_recon) fleet dispatcher
+
+- New scripts/clean_sandbox_acl_orphans.ps1: removes DACL ACEs whose S-1-5-21-*
+  identity no longer resolves (dead per-run Codex sandbox users), fails exit 2
+  if a dir still exceeds -FailThreshold (1500) after the sweep. Wired into
+  dispatch_agent_b_workers.ps1 preflight AND the new tier-1 dispatcher.
+  Verified live twice (removed 11 leaked SIDs post-r4, then 1 post-canary).
+- New scripts/dispatch_bdc_review_workers.ps1: Codex fleet dispatcher for the
+  bdc_cik_review (source_recon) lane -- per-item prompts from
+  prompts/bdc_cik_review_prompt.md with absolute bundle/verdict path
+  assignment, no python grants (bundles are self-contained), archives
+  2026-05-28 "Auto-drafted" placeholder verdicts before dispatch (matching
+  check_tier_coverage semantics), per-item schema validation via new
+  scripts/bdc_cik_review/validate_one_verdict.py (validate_verdicts.py --all
+  is NOT usable as a batch gate: ~1,900 historical verdicts from retired
+  worklists fail its worklist-membership check), usage-limit breaker, ACE
+  guard.
+- COHORT GUARD on tier 1: 25 of 40 CIKs (35/53 items) are outside the v1
+  70-fund cohort -- held in _q4_tier1_outcohort.csv pending the human's
+  explicit bypass decision (hard rule 6). In-cohort: 18 items
+  (_q4_tier1_incohort.csv; 13 unverdicted + 5 placeholders archived).
+- Canary results (BDCSRC 1803498 2025-12-31 position_like_parser_mismatch):
+  attempt 1 wrote a schema-INVALID verdict (html evidence_ref without
+  coordinate citation -- caught, archived under fleet/t1c2); attempt 2 with
+  per-item validation passed clean: NO_PATCH_NEEDED / HIGH /
+  DUPLICATE_DIMENSION_PATH. NOTE verdict drift between attempts (ESCALATE ->
+  NO_PATCH_NEEDED, same diagnosis) -- single-adjudication verdicts in this
+  lane should be read with that variance in mind.
+- t1a batch (remaining 17 in-cohort items) dispatched MaxParallel 2.
+
+### 2026-07-24 -- Tier 1 (source_recon) in-cohort COMPLETE: 18/18 adjudicated
+
+- Schema-compliance appendix added to the dispatcher-generated per-item prompt
+  (shared lane template untouched): exact row_classification enum, the
+  coordinate-citation rule for HTML evidence_refs, diagnosis-consistency
+  constraints, and the GAV-justification bar -- all quoted from
+  validate_verdict_file. Rejection rate: t1a 8/17 -> t1b 1/8 -> t1c4 0/1.
+- Final verdict distribution (18 in-cohort items, all schema-valid, zero
+  INSUFFICIENT_EVIDENCE verdicts): 9 PATCH_PROPOSED (3
+  RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED, 2 HTML_PRESENT_TABLE_NOT_PARSED, 2
+  DUPLICATE_DIMENSION_PATH, 1 ZERO_OR_UNFUNDED_NON_INDEX_ROW, 1
+  XBRL_ONLY_NO_HTML_COORDINATE), 5 ESCALATE, 4 NO_PATCH_NEEDED. Invalid
+  first-attempt verdicts archived under fleet/t1a and fleet/t1b
+  invalid_verdicts_archive (audit trail, not adjudications).
+- ACE guard swept 18 leaked SIDs before t1b -- one afternoon of fleets is
+  ~1/5 of the way to the DACL ceiling; the per-dispatch sweep amortizes it.
+- OUTSTANDING: 35 out-of-cohort tier-1 items (25 CIKs,
+  _q4_tier1_outcohort.csv) held at the cohort guard for the human bypass /
+  residual decision. The 9 PATCH_PROPOSED verdicts are B2-remediator input;
+  requires_human_merge=true on all patch attempts per the lane contract.
+
+### 2026-07-24 -- B1 verdict-stability experiment (53-item blind re-adjudication)
+
+- Re-ran all 53 B1-adjudicated tier-0 items through a fresh blinded fleet into
+  a SCRATCH verdicts dir (data/output/agent_b/batch/q4t0s/verdicts_rerun;
+  production store untouched, originals remain canonical). Plumbing: new
+  --verdicts-dir passthrough on dispatch_preflight + -VerdictsDirOverride on
+  the B dispatcher (skips finalize on scratch runs).
+- RESULTS (53 pairs): verdict agreement 50/53 = 94.3 pct; mechanism agreement
+  34/53 = 64.2 pct. June-era subsample (6 items adjudicated 2026-06-28):
+  6/6 verdict agreement across a month. By rule: gav_reconciliation 15/15,
+  cost_conservation 9/9, html_agg 15/16, fv_conservation 11/13 verdict
+  agreement.
+- The 3 verdict flips are two-sided boundary calls (2x false_alarm ->
+  real_error, 1x real_error -> false_alarm; fv_conservation x2, html_agg x1).
+  CONFIDENCE DOES NOT FLAG INSTABILITY: all six sides of the flips carried
+  0.86-0.98.
+- Mechanism drift is broad (19 mismatches; 8 land on subtotal_leak, 6 leave
+  "unknown") but LOW-CONSEQUENCE BY DESIGN: B2's discover deliberately
+  ignores B1's mechanism guess and re-derives mechanism from extracted data.
+- Tier-1 lane contrast (9 retry pairs, biased sample): verdict flips 7/9 but
+  diagnosis flips only 2/9 -- that lane's 4-way disposition vocabulary
+  (PATCH/NO_PATCH/INSUFFICIENT/ESCALATE) is the unstable surface, while its
+  mechanism diagnosis is stable. Canary trace comparison shows both runs
+  agreeing on all facts (collapsed_duplicate_dimension_path rows, no parser
+  miss) and flipping only on the disposition of that agreed finding.
+- Implications: (a) B1 binary verdicts are solid single-shot; the ~6 pct
+  flip band is concentrated at the real/false boundary -- a 3-vote tiebreak
+  on just fv_conservation/html_agg boundary items would cost little;
+  (b) do not treat B1 confidence as a reliability signal; (c) disposition
+  vocabularies (tier-1 lane) need either crisper definitions or majority
+  voting before their verdicts drive automation.
+
+### 2026-07-24 -- DECISION: single-shot B1 accepted for the Q4 campaign; vote tracks deferred
+
+- Owner decision: 94.3 pct single-shot verdict reproducibility is good enough
+  to ship the Q4 campaign; throughput priority wins. The 2-vote-then-tiebreak
+  and 3-vote majority tracks (see the stability-experiment entry above: ~6x
+  boundary-error reduction at ~2.06x cost, vote-split as the calibration
+  signal confidence fails to provide) are EXCELLENT candidates for a later
+  precision-improvement pass -- all machinery is dispatch-layer (verdicts-dir
+  override + a small vote-merge script), no B1 changes needed. Revisit after
+  the campaign ships, ideally seeded with the 3 known flip items.
+
+### 2026-07-25 -- Tier 2 in-cohort CLOSED (124/124); tier 3 dispatched
+
+- q4t2: 123/124 first-pass + 2 retries (1 worker timeout, 1 transient sandbox
+  logon failure CreateProcessWithLogonW 1326 -> source_unavailable, archived)
+  + 1 late C006 no_source retry. Final: 124/124 genuine verdicts, finalize
+  schema_ok, 61 real_error / 57 false_alarm / 6 ambiguous(source_checked).
+- PER-RULE PRECISION (agent-relative, n small): C-series strong (C201 8/8,
+  C301, C303 ~0 FA); heavy false-alarm rules: X06 11/12 FA (92 pct),
+  SRC_BDC02 8/9 (89 pct), X04 9/12 (75 pct), income_identity 6/9 (67 pct),
+  pct_of_net_assets_identity 16/26 (62 pct), nav_identity 1/1. These feed
+  the rule_scoping_queue via routing.csv -- demotion candidates for the
+  ensemble/rule-scoping decisions.
+- q4t3 (127 tier-3 in-cohort items) dispatched. Standing owner auth
+  2026-07-24: proceed through tier 4 unattended.
+
+### 2026-07-25 -- Tier-3 defect: agentA engine had NO EVIDENCE_SPECS entry (50 B0 short-circuits)
+
+- q4t3 first pass: 76/127 genuine worker verdicts + 1 timeout + 50 B0
+  preflight short-circuits (auto ambiguous/source_unavailable, NO quota
+  burned). Root cause: the agentA engine joined the ledger/queue 2026-06-28
+  and the evidence CLI's _ENGINE_SOURCE map, but pipeline/review_bundles.py
+  EVIDENCE_SPECS never got an entry -- every agentA bundle built
+  evidence_completeness=ledger_only, which preflight short-circuits by
+  design.
+- Fix: added the agentA EvidenceSpec (artifact
+  data/output/shadow/agent_a_flags.csv, keyed cik/report_date/rule_name).
+  Rebuilt bundles now come out source_artifact (probe-verified); the
+  evidence CLI resolves the covering filing via the 2026-07-24 filings-index
+  fallback (agentA flag rows carry no accession field).
+- LESSON for the admissibility auditor: dispatch admissibility = cached
+  source AND non-short-circuit bundle completeness; the auditor checked only
+  the former. (agentA items audited "cached" because accession resolution
+  succeeded, while their bundles were still ledger_only.)
+- 49 auto verdicts + 1 worker source_unavailable archived
+  (verdicts_auto_shortcircuit_archive / verdicts_source_unavailable_archive
+  under batch q4t3); q4t3r (51 = 50 + 1 timeout) dispatched with rebuilt
+  bundles. Tier 4 has 0 agentA items in-cohort (unaffected).
+
+### 2026-07-25 -- Tier 3 in-cohort CLOSED (127/127); tier 4 dispatched (431 items)
+
+- q4t3 + q4t3r: 127/127 genuine verdicts (56 real_error / 67 false_alarm /
+  4 ambiguous source_checked), finalize schema_ok, zero junk after the
+  agentA-spec fix + retry.
+- q4t4: 506 tier-4 in-cohort items -> 75 already covered by prior-batch
+  genuine verdicts, 431 dispatched. Pre-dispatch bundle-completeness check
+  (new lesson applied): 431/431 source_artifact. ACE guard swept 80 leaked
+  SIDs before the q4t3r dispatch -- the DACL prevention is carrying the
+  campaign.
+
+### 2026-07-25 -- Process lesson (owner discussion): ring-based B1->B2 pipelining for future campaigns
+
+- Measured: 201/757 (27 pct) of tier-2/3/4 in-cohort items sit on the 35
+  CIKs where tier 0 confirmed real_error upstream defects -- the upper bound
+  of adjudications a t0-B2-rebuild cycle would have retired before dispatch
+  (consistent with wave-1: fv_conservation 337->245, ~27 pct).
+- Recommended shape for the NEXT quarter pass: ring-based fixpoint with
+  pipelining -- B1(blocker ring) -> dispatch B2 wave; run B1(next ring)
+  CONCURRENTLY with B2 investigation/review; rebuild + re-flag at each B2
+  landing; re-freeze the next ring from the residual population. Strict
+  serialization would park autonomous B1 compute behind human-gated
+  B2/B3/merge loops; pipelining keeps both lanes full.
+- Counterweights that justified all-B1-first for THIS campaign: first full
+  precision map of the rule set (FA-heavy rules X06/SRC_BDC02/X04 only
+  visible because tiers were adjudicated), and per-cycle rebuild/re-freeze
+  cost.
+- Planned measurement: after the first B2 wave + rebuild, count how many
+  already-adjudicated tier-2/3/4 flags disappear -- converts the 27 pct
+  bound into a measured waste figure for the quarter-pass runbook.
+
+### 2026-07-25 -- Tier-0 B2 wave complete: 26/31 gate-PASS promoted; rebuild running
+
+- investigate_q4t0 (agentic loop, sequential, -Fresh): 31 (cik, 2025-12-31)
+  targets from the 42 q4t0 real_errors. B3 gates: 26 PASS (25 MEDIUM + 1
+  HIGH anchor tier: 1803498, the BCRED JV dimension-path case) / 5 FAIL
+  (1487918, 1534254, 1985375 MEDIUM; 1495584, 1930679 anchor_tier=NONE --
+  the two NONE cases are anchor-adjudicator candidates; 1930679 filed 1
+  escalation). FAILs are residuals per contract -- not retried.
+- All 26 PASS targets promoted to data/overrides/agent_investigate_rules
+  (promote gate-checked each). Unified rebuild applied them (781,177 rows,
+  2,467s); shadow ledger + review queue rebuild in progress. Next: measure
+  flag retirement against banked t2/t3 verdicts + the paused t4 remainder
+  (241 items), then per owner decision rule (>=2/3 PASS met; >=10 pct t4
+  retirement pending) either B2 waves on t2/t3 or resume t4.
+
+### 2026-07-25 -- Flag-retirement measurement: ring-pipelining hypothesis REFUTED at this composition
+
+- Post-B2-wave rebuild (unified 781,177 rows + shadow ledger + queue 43,601):
+  tier-4 remainder retired 0/241; adjudicated t2 1/124, t3 0/127. The
+  earlier 27 pct CIK overlap was CO-LOCATION, NOT CAUSATION: tier-4
+  row-level flags (rates/maturity/PIK on other rows) are independent
+  defects even on fixed CIKs.
+- CONTROL: the fixes themselves WORK -- probe 1321741 gav_ratio 1.0,
+  residual 0.0, reconciliation PASS; 10/48 tier-0 real_error flags retired.
+  Of the 38 persisting: 6 on gate-FAIL CIKs (correct); html_agg 16 persist
+  STRUCTURALLY (B2 rules apply at the unified layer; html_agg measures
+  upstream HTML-extraction vs companyfacts, untouched by unified-level
+  exclusions); gav/conservation persisters warrant a later look (possibly
+  band-edge residuals or artifact staleness).
+- DECISION (owner rule: >=10 pct t4 retirement): NOT positive -> tier-2/3
+  B2 waves NOT launched; t4 resumed as q4t4b (241 items, bundles rebuilt
+  against post-fix artifacts). The banked t2/t3 real_errors remain B2
+  backlog -- their value is fixing data for the quarter gate, not saving
+  B1 adjudications.
+- Memory updated: ring-based-campaign-pipelining now records the measured
+  refutation (interleaving saves B1 runs only when later rings measure the
+  SAME defect layer; aggregate-vs-row-level tiers do not cascade).
+
+### 2026-07-25 -- CAMPAIGN HALTED by Codex quota exhaustion (t4 at 254/431)
+
+- q4t4b tripped the usage-limit circuit breaker after 64 clean verdicts.
+  Account cap resets Jul 29 08:22 or purchase credits
+  (chatgpt.com/codex/settings/usage). Locks released; zero junk among banked
+  verdicts; 177 items outstanding in
+  data/output/review_queue/_q4_tier4_resume2.csv.
+- RESUME (post-quota, elevated shell, fresh batch id):
+    python -m scripts.agent_b.run_review discover q4t4c --review-ids-from "data/output/review_queue/_q4_tier4_resume2.csv"
+    powershell -File scripts\dispatch_agent_b_workers.ps1 -BatchId q4t4c
+  Then: straggler retries -> finalize q4t4/q4t4b/q4t4c -> campaign in-cohort
+  gate.
+- Campaign standing at halt: t0 closed 113/113; t1 in-cohort 18/18; t2
+  124/124; t3 127/127; t4 254/431 banked. B2: 26 CIKs fixed+promoted (tier-0
+  wave), 5 gate-FAIL residuals (2 anchor-adjudicator candidates). Parked
+  human decisions: out-of-cohort pool (1,025), rule demotions
+  (X06/SRC_BDC02/X04/income_identity), t2/t3 B2 backlog (~120 real_errors),
+  tier-1 patch merges (9 PATCH_PROPOSED, requires_human_merge).
+
+## 2026-07-26 - Onex wrapper: "Equity Units" equity leaf marker (B2 patch 6ba0aec009)
+
+- Verdict BDCSRC_0001860424_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_6ba0aec009 (PATCH_PROPOSED).
+- `data/overrides/bdc_xbrl_wrappers/0001860424.json`: added "equity units" to `dispatch.leaf_markers_by_family.equity` and a `known_edge_cases` entry (`onex_s4t_equity_units_leaf`). The S4T Holdings Corp. (Vistria ESS Holdings, LLC) "Equity Units" identifier now classifies as `equity_position_leaf` (ONEX_FALCON_DIRECT_LENDING_EQUITY_LEAF_V1) instead of `aggregate`, so the current-period source fact (2025-12-31, FV 542,123) becomes match-eligible and the blocking_pipeline_only_position residual should clear on next reconciliation rebuild.
+- Tests: +2 in `tests/test_bdc_xbrl_wrapper.py` (S4T equity-units leaf regression + false-positive guard that equity totals/headers stay non-leaf), +1 in `tests/test_validate_holdings.py` (reconciliation-level: S4T source row reconciles as matched leaf, blocking_issue_count 0). test_bdc_xbrl_wrapper.py: 516 passed, 1 PRE-EXISTING failure (test_apollo_ds_company_only_source_row_is_aggregate, fails identically without this change). test_validate_holdings.py: 148 passed.
+- NOT implemented: companion proposal BDCSRC_0001993402_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_052463eeeb ("include short-term cash-equivalent SOI rows in raw BDC source extraction"). Investigation shows the proposed target module (`pipeline/bdc_source_extraction.py`) does not exist, the BlackRock Liquidity T-Fund 2025-12-31 fact IS extracted from cached XBRL (bdc_holdings.csv: cost=FV=71,644,000, accession 0001193125-26-115988), and the blocker is actually caused by (a) the Antares wrapper classifying the row `non_private_market` on the source side and (b) untracked row_add rule `data/overrides/agent_investigate_rules/1993402/add_blackrock_short_term_investment_2025.json` injecting a synthetic pipeline row with anchor-derived FV 75,879,000 that appears in NO cached filing. The blocker is flagging a real defect (fabricated FV + cash row in private-market output); patching extraction would suppress a valid signal. Escalated to human review.
+
+## 2026-07-26 - HPS 1838126 2025-12-31 bare-axis rule revised: printed-schedule partition (B2 patch 1a08ff0732)
+
+- Verdict BDCSRC_0001838126_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_1a08ff0732 (PATCH_PROPOSED, MEDIUM) proposed routing all 17 blocked HPS_CORPORATE_LENDING_DEBT_LEAF_V3 bare-axis rows into unified holdings as omitted SOI continuation rows. Investigation REFUTES that diagnosis for 16 of 17: the printed 10-K note "schedule of investments of ULTRA III as of December 31, 2025" plus its unfunded-commitment table reconcile to the dollar with the bare-axis facts (JV portfolio FV $1,514,360k; matching XBRL bare rows + tagged unfunded facts = $1,514,871k). These are unconsolidated-JV look-through facts (same class as the SRCONLY_JV_LOOKTHROUGH_AXIS excusal and the 2026-07-21 part-5 adjudication); the filer omitted hps:ULTRAIIIMember on the typed InvestmentIdentifierAxis contexts, so the axis-based excusal cannot see them.
+- 1 of 17 IS a real missing fund position: SLF V AD1 Holdings, LLC - LLC Interest (FV 9,298,000), printed in the fund's own consolidated SOI but tagged bare, and wrongly excluded by the prior revision of `data/overrides/agent_investigate_rules/1838126/1838126_2025q4_bare_axis_leak_exclusion.json`.
+- Rule revised in place (same rule_id): predicate now keeps the three printed main-SOI bare positions (SLF V AD1 9,298k, CCI Topco Preferred 2,184k, AMR GP Ordinary 1,568k) and excludes the other 22 bare rows (ULTRA III note facts, $1,514,871k). Prior revision's retained-8 list was a subset-sum fit to the anchor: it retained six ULTRA III note rows (Brandt 2, Brandt bare, FH BMX 2/4/5/6, net $74,974k) and dropped SLF V AD1. Corrected partition: kept total = 25,337,420,000 = fund_financials investments_at_fair_value EXACTLY (current bdc_holdings basis: 823 suffixed rows $25,324,370k + 3 bare $13,050k); prior rule on current data left +65,676k residual due to 6-row upstream drift since authoring.
+- Tests: new `tests/test_hps_bare_axis_rule.py` (7 passed): rule validity, main-SOI bare leaves admitted (incl. the SLF V AD1 blocker row), 22 JV note rows still rejected, suffixed false-positive guard (incl. same-issuer name collisions + double-pipe variants), anchor reconciliation identity, out-of-scope-quarter guard, bare subtotal/header rows still rejected. No pipeline code changed; no rebuild run (rule takes effect at next --unified rebuild; expected rows 22/fv 1,514,871k in the application audit).
+- Blocker accounting for the 17-row packet: 1 addressed by admission (SLF V AD1 gains an output identity); 16 remain source-only by design (JV look-through). Clearing their blocking status needs a source-reconciliation-side excusal for filer-omitted JV axes (e.g. keyed on the adjudicated identifier set or wrapper config) - that is pipeline/source_reconciliation.py territory, NOT patched here. Follow-up: the Q1-2026 10-Q repeats the same bare ULTRA III tagging (EHOB 90,446k etc. at 2026-03-31); this rule is scoped to 2025-12-31 only, so 2026-03-31 will need the same partition once its blocker packet is worked.
+
+## 2026-07-26 - Source reconciliation: 6 audited B2 remediation patches (1919369 / 1803498 / 1899996 / 1950803 / 1976336 / 1950976)
+
+- Implemented the six PATCH_PROPOSED verdicts (all 2025-12-31) in `pipeline/source_reconciliation.py` ONLY; `pipeline/bdc_identifier.py`, `pipeline/bdc_filings.py`, `pipeline/bdc_xbrl_html_bridge.py` intentionally untouched (root causes did not require them; see below).
+- Root-cause finding shared by 5 of 6 blockers: they are downstream artifacts of PROMOTED agent rules the reconciliation did not know about. value_rescale rules fix output-side scale, so matched pairs mismatch vs raw source (1919369); row_add recoveries carry no accession_number, so accession-scoped match tiers can never claim them and they become blocking_extra_in_pipeline (1803498 x11, 1950803 x29, 1976336 x1, 1950976 x1).
+- Mechanism 1 (verdict 79b1ba05b1): `audited_value_rescale_pairs` CTE - promoted value_rescale rules load as (cik, field, factor); a matched pair's source value is normalized ONLY when source*factor equals output within tolerance AND raw values disagree. Non-factor differences stay blocking; already-reconciling rows never rescaled. New reconcile kwarg `audited_value_rescales` (None=load promoted rules; empty frame disables). `_compute_override_hash` now includes rescale-rule identity so cached partitions recompute on rule change.
+- Mechanism 2 (verdicts 3fb55f7e62, d08f66b566, plus rescue leg of 865d933112/ee5618e322): `output_recovered_row_identity` CTE - an ACCESSIONLESS output row (audited row_add) with an exact-identity current-period source counterpart (dims/raw id/staging id equality, or staging containment at len>=12) at the same FV (0.01% tol), where the source row is not matched elsewhere, is no longer a blocking extra. Collapsed_duplicate_dimension_path rows stay eligible as identity anchors; comparative/superseded/pre-2022 source rows never qualify. True duplicate collapses still dedupe (canonical matches once; duplicate path stays collapsed). NOTE for d08f66b566: no trailing-'One' identifier normalization was needed or added - the suffixed source facts exist verbatim, exact identity suffices (safer than suffix-stripping).
+- Mechanism 3 (verdicts 5b71968aa1, ee5618e322): `_extract_single_xbrl_source_file` now admits liquid-fund/cash-equivalent contexts: not is_investment, CashAndCashEquivalentsAxis explicit member whose humanized name hits `_MONEY_MARKET_KEYWORDS`, nonzero fair value from parsed facts (InvestmentOwned* or MoneyMarketFundsAtFairValue/AtCarryingValue mapped locally; carrying value doubles as cost). Admission gate == the excluded_money_market_fund classifier keyword list, so an admitted-but-unmatched row can only land in the documented non-blocking bucket - the admission cannot mint new blockers. Production BDC extraction (bdc_filings) untouched. `_SOURCE_FACT_EXTRACTION_VERSION` = "2" mixed into `_filing_metadata_hash` so the per-accession facts cache re-extracts.
+- Mechanism 4 (verdict 865d933112): output-only rows with output wrapper disposition non_private_market AND family cash get status `excluded_non_private_market_output` (non-blocking, documented_exclusion; mechanism `documented_non_private_market_cash_output`). Keyed strictly on the audited wrapper classification, never cash/PIK text. Distinct from the 1993402 escalation (2026-07-26 entry above): a row_add with fabricated FV has no agreeing source fact and no cash wrapper on a real loan row, so it still blocks under these changes.
+- Real-data verification (read-only, per-CIK reconcile on cached facts + current unified holdings, 2025-12-31): 1919369 blockers 1 -> 0; 1803498 extras 11 -> 0 (686 JV missing_from_pipeline rows remain, separate pre-existing mechanism); 1899996 1 -> 0; 1950803 29 -> 0; 1976336 extras 1 -> 0 (5 pre-existing negative-commitment missing rows remain); 1950976 1 -> 0.
+- Tests: +13 in `tests/test_validate_holdings.py` (3 new classes: TestAuditedValueRescaleSourceNormalization, TestRowAddRecoveredOutputIdentityRescue, TestOutputOnlyWrapperCashCalibration; each mechanism has a false-positive guard), +9 in `tests/test_source_reconciliation_cache.py` (liquid-fund admission incl. footnote-only FP + non-MM cash member FP + zero-FV guard, extraction-version hash test, 2 reconcile-level MM regressions). test_validate_holdings.py 161 passed; test_source_reconciliation_cache.py 18 passed; test_bdc_cik_review.py + test_bdc_xbrl_wrapper_oracle.py 109 passed. Full suite and pipeline rebuild NOT run (parent session rebuilds once after all agents land). logic_hash + override_hash + facts-cache version all changed, so next cached run fully recomputes.
