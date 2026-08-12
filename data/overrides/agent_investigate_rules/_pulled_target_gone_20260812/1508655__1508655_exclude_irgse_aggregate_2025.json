@@ -1,0 +1,56 @@
+{
+  "cik": "1508655",
+  "rule_id": "1508655_exclude_irgse_aggregate_2025",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "issuer_name = 'IRGSE Holding Corp' AND bdc_dimensions_raw = 'investmentidentifieraxis=IRGSE Holding Corp' AND asset_category = 'OTHER' AND asset_class = 'PRIVATE_CREDIT'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "The leaked aggregate row has issuer_name='IRGSE Holding Corp', bdc_dimensions_raw='investmentidentifieraxis=IRGSE Holding Corp', asset_category='OTHER', asset_class='PRIVATE_CREDIT'. Its fair value equals the fair-value conservation residual in each overshoot quarter: 66,498,000 on 2025-06-30, 66,339,000 on 2025-09-30, and 58,372,000 on 2025-12-31."
+    },
+    {
+      "source": "query",
+      "quote": "Separate detailed IRGSE positions are present and sum to the same values: four detailed IRGSE rows total 66,498,000 on 2025-06-30, 66,339,000 on 2025-09-30, and 58,372,000 on 2025-12-31."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule rows list the real IRGSE positions separately, including 'IRGSE Holding Corp. (3)(6) | First-lien loan ($ 30,261 par, due 6/2026 ) | ... | 28,594 | 30,261 | 1.9%' and 'IRGSE Holding Corp. (6)(11) | Class A Units ( 50,140,171 units) | ... | 21,883 | 125 | 0.0%'."
+    },
+    {
+      "source": "filing",
+      "quote": "The filing's affiliate rollforward has a non-position aggregate line for IRGSE: 'IRGSE Holding Corp. | $ | 65,095 | ... | $ | 58,372 | $ | 11 | $ | 10,347', followed by a 'Total' line with the same structure."
+    },
+    {
+      "source": "filing",
+      "quote": "The filing states the 2025-12-31 investment total as 'Total Investments | $ | 3,323,282 | $ | 3,347,317 | 208.2%'."
+    }
+  ],
+  "rationale": "The extractor admitted an issuer-level affiliate rollforward aggregate as a holding even though the detailed IRGSE first-lien, revolver, and equity positions were already extracted from the schedule of investments. The aggregate row has no instrument detail, no cost, and no principal amount, and it exactly duplicates the detailed IRGSE fair value, producing the conservation overshoot. Excluding only this aggregate row removes the over-count without deleting the real IRGSE positions.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 1,
+      "fv": -66498000.0,
+      "residual_before": 66498000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": -66339000.0,
+      "residual_before": 66339000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": -58372000.0,
+      "residual_before": 58372000.0,
+      "residual_after": 0.0
+    }
+  }
+}

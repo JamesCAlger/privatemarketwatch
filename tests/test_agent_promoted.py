@@ -175,6 +175,18 @@ def test_load_promoted_rules_missing_dir(tmp_path):
     assert ap.load_promoted_rules(tmp_path / "nope") == {}
 
 
+def test_load_promoted_rules_skips_pulled_dirs(tmp_path):
+    # Operator pull convention: `_pulled_<reason>_<date>/` retires a rule from
+    # production. Regression: the dir name used to normalize into a garbage CIK
+    # (e.g. _pulled_frame_mismatch_20260722 -> 0020260722) and keep loading.
+    _write_json(tmp_path / "1715933" / "live.json", _valid_rule(cik="1715933", rule_id="live"))
+    _write_json(tmp_path / "_pulled_frame_mismatch_20260722" / "1965934__pulled.json",
+                _valid_rule(cik="1965934", rule_id="pulled"))
+    out = ap.load_promoted_rules(tmp_path)
+    assert set(out) == {"0001715933"}
+    assert [r["rule_id"] for r in out["0001715933"]] == ["live"]
+
+
 # --------------------------------------------------------------------------- Layer C apply
 
 def test_apply_promoted_rules_scoped_to_cik_and_bdc_source():

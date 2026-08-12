@@ -177,6 +177,12 @@ def load_promoted_rules(rules_dir: Optional[Path] = None) -> dict[str, list[dict
     base = Path(rules_dir) if rules_dir is not None else config.AGENT_INVESTIGATE_RULES_DIR
     out: dict[str, list[dict]] = {}
     for p in sorted(base.glob("*/*.json")) if base.exists() else []:
+        # Operator pull convention: rules quarantined into `_pulled_<reason>_<date>/`
+        # are retired from production application. Without this guard the dir name
+        # normalizes into a garbage CIK (e.g. 0020260722) and the pulled rule keeps
+        # loading, permanently failing the promoted-rule health gate.
+        if p.parent.name.startswith("_"):
+            continue
         try:
             rule = json.loads(p.read_text(encoding="utf-8-sig"))
         except (OSError, json.JSONDecodeError) as exc:

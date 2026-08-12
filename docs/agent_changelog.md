@@ -7940,3 +7940,40 @@ Agent lane for the rate-convention classifier residual. New modules:
   backlog (~120 real_errors), 9 tier-1 PATCH_PROPOSED human merges, 1993402
   fabricated-FV escalation, evidence_cli.py worktree modification (not mine,
   not committed).
+
+## 2026-08-12 - Promoted-rule noop regression fixed: IS NULL re-keying + pulled-dir loader guard
+
+- Root cause 1 (representation mismatch): production applies promoted rules to the
+  in-memory build frame where missing text fields are EMPTY STRINGS; rules are
+  authored and B3-gated against CSV/parquet artifacts where the roundtrip collapses
+  '' to NULL (write_parquet_companion reads the CSV). Every instrument_description/
+  principal_amount IS NULL predicate silently nooped in production while passing the
+  gate. Proven: agent_rule.apply_rules on the parquet frame excludes Monroe's 54
+  rows / $308,170,000 exactly; production audit showed rows_changed=0.
+- Fix: 7 rules re-keyed in place to `col IS NULL OR CAST(col AS VARCHAR) IN
+  ('','nan')` (parquet-NULL == in-build ''-or-NULL, so parquet verification is an
+  exact equivalence proof): 1742313 (54/$308.2M), 1512931 (19/$78.5M), 1859919
+  (1/$115M), 1825248 (376/$2.86B), 1508655 rollforward (3 authored + same leak's
+  2026-03-31 recurrence $58.5M, scope=all working as designed), 1885968 (4/$45.0M),
+  1812554 bare_axis (11/$1.53B). All verified vs authored measured_impact.
+- Root cause 2 (loader leak): operator pull convention `_pulled_<reason>_<date>/`
+  was not honored by load_promoted_rules; the 2026-07-22 pulled rule loaded under
+  garbage CIK 0020260722 (dir-name normalization), permanently failing
+  promoted_rule_health. Fix: skip underscore-prefixed dirs; +1 regression test
+  (tests/test_agent_promoted.py, 23 passed).
+- Pulled per convention: 1508655_exclude_irgse_aggregate_2025 (its negative
+  counterpart row no longer exists upstream) -> _pulled_target_gone_20260812/;
+  1812554_exclude_2025q4_rollforward_disclosure_rows -> _pulled_duplicate_20260812/
+  (exact duplicate of bare_axis_rollforward_leaks: same 11 rows; the broad NULL-or-''
+  predicate was the one accidentally working while the precise rule nooped).
+  OPERATOR ERROR RECORDED: the duplicate was briefly pulled as "target_gone" first,
+  which put the $1.53B OCIC leak back for one rebuild cycle (flagged_fv_share
+  spiked to 14.8 in the interim chain) before the re-keyed precise rule restored it.
+- 2025-12-31 acceptance after fix (rebuild -> validate -> shadow -> queue ->
+  acceptance): FAIL 1/7 (was 3/7). reconcile_rate 95.5 (89.4), flagged_fv_share
+  4.85 (9.32; July Wave-1 43.99), source_blocking 2.51, drift 0 (9), health 0 (1).
+  Only verified_fv_share 44.4 vs >=50 remains -- the B2 wave target.
+- SYSTEMIC FOLLOW-UP (human design decision): normalize ''/NULL at the frame
+  boundary or gate rules against the in-build frame; until then any new B2 rule
+  authored with bare IS NULL text predicates will noop in production. Consider a
+  roundtrip-equivalence check in the B3 gate.

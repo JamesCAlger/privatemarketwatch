@@ -1,0 +1,36 @@
+{
+  "cik": "1812554",
+  "rule_id": "1812554_exclude_2025q4_rollforward_disclosure_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND (instrument_description IS NULL OR instrument_description = '')",
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule table 90 reports Total Investments: amortized cost 35,983,158 and fair value 35,918,948."
+    },
+    {
+      "source": "filing",
+      "quote": "Affiliate roll-forward table 103 separately reports controlled affiliate fair value as of December 31, 2025 totaling 1,517,562, including rows such as Fifth Season Investments LLC 344,960, OCIC SLF LLC 280,331, and Blue Owl Cross-Strategy Opportunities LLC 136,815."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings rows where instrument_description is null or empty have count 11 and fair_value sum 1,529,274,000. Subtracting those disclosure rows changes value_sum from 37,448,222,000 to 35,918,948,000, matching the validated anchor."
+    }
+  ],
+  "rationale": "The 2025-12-31 extraction included issuer-level affiliate roll-forward and range disclosure rows as holdings. These rows have no investment instrument description and duplicate issuer-level fair values already represented by the schedule line items. They are disclosure summaries, not additional portfolio positions, and their aggregate fair value exactly equals the conservation overshoot.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 11,
+      "fv": -1529274000.0,
+      "residual_before": 1529274000.0,
+      "residual_after": 0.0
+    }
+  }
+}

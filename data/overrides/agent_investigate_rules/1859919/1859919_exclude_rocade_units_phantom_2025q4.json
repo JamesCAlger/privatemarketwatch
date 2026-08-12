@@ -8,7 +8,7 @@
       "2025-12-31"
     ]
   },
-  "predicate_sql": "report_date = '2025-12-31' AND issuer_name = 'Rocade Holdings LLC' AND instrument_description IS NULL AND bdc_dimensions_raw = 'investmentidentifieraxis=Rocade Holdings LLC' AND fair_value = '115000000.0'",
+  "predicate_sql": "report_date = '2025-12-31' AND issuer_name = 'Rocade Holdings LLC' AND (instrument_description IS NULL OR CAST(instrument_description AS VARCHAR) IN ('', 'nan')) AND bdc_dimensions_raw = 'investmentidentifieraxis=Rocade Holdings LLC' AND TRY_CAST(fair_value AS DOUBLE) = 115000000.0",
   "evidence": [
     {
       "source": "query",

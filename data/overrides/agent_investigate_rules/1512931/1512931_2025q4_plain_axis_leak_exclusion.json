@@ -1,0 +1,36 @@
+{
+  "cik": "1512931",
+  "rule_id": "1512931_2025q4_plain_axis_leak_exclusion",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND bdc_dimensions_raw NOT LIKE '%|%' AND (instrument_description IS NULL OR CAST(instrument_description AS VARCHAR) IN ('', 'nan')) AND COALESCE(TRY_CAST(fair_value AS DOUBLE), 0) <> 0",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For holdings report_date 2025-12-31: COUNT(*)=305, value_sum=413375000.0, detailed_fv where bdc_dimensions_raw LIKE '%|%'=334855000.0, plain_no_detail_fv where bdc_dimensions_raw NOT LIKE '%|%' and instrument_description IS NULL and fair_value<>0=78520000.0, anchor=334855000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The 19 excluded 2025-12-31 rows are plain investmentidentifieraxis rows with no instrument_description, including MC Asset Management (Corporate), LLC 1 fair_value 13968000.0, HFZ Capital Group, LLC 1 fair_value 13347000.0, American Community Homes, Inc. 1 fair_value 8543000.0, and SFR Holdco, LLC fair_value 5874000.0; corresponding detailed rows in the same quarter carry instrument categories such as Senior Secured Loans, Junior Secured Loans, Equity Investments, and Affiliated."
+    },
+    {
+      "source": "query",
+      "quote": "Across all holdings quarters the same broad no-pipe/no-instrument predicate would remove real extracted value in prior periods, so the rule is scoped to 2025-12-31 only; for 2025-12-31 the predicate selects exactly 19 rows and fair_value 78520000.0, equal to the residual before correction."
+    }
+  ],
+  "rationale": "The target quarter includes an alternate plain investmentidentifieraxis representation in addition to the detailed schedule rows. The detailed rows alone reconcile exactly to the validated investments-at-fair-value anchor, while the plain no-instrument rows sum exactly to the overage. These plain rows are leaked duplicate representations for this quarter, not distinct investments.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 19,
+      "fv": 78520000.0,
+      "residual_before": 78520000.0,
+      "residual_after": 0.0
+    }
+  }
+}

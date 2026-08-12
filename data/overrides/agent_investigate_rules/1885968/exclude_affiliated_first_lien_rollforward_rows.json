@@ -8,7 +8,7 @@
       "all"
     ]
   },
-  "predicate_sql": "issuer_name LIKE 'Investments in Non-Controlled, Affiliated First Lien Debt %' AND instrument_description IS NULL AND principal_amount IS NULL",
+  "predicate_sql": "issuer_name LIKE 'Investments in Non-Controlled, Affiliated First Lien Debt %' AND (instrument_description IS NULL OR CAST(instrument_description AS VARCHAR) IN ('', 'nan')) AND (principal_amount IS NULL OR CAST(principal_amount AS VARCHAR) IN ('', 'nan'))",
   "evidence": [
     {
       "source": "query",
