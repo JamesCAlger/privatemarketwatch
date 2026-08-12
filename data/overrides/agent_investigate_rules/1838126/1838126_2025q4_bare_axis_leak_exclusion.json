@@ -3,6 +3,7 @@
   "rule_id": "1838126_2025q4_bare_axis_leak_exclusion",
   "rule_type": "row_exclusion",
   "action": "exclude",
+  "jv_lookthrough": true,
   "scope": {
     "quarters": [
       "2025-12-31"

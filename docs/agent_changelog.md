@@ -8023,3 +8023,35 @@ Agent lane for the rate-convention classifier residual. New modules:
   missing_position_add 7, all_pik_normalization 2. Closing verified_fv_share 44.4 ->
   50 likely requires implementing appliers (esp. column_remap + classification_fix,
   76 packets) or direct human review of the 17 under-review funds' flag classes.
+
+## 2026-08-12/13 - Q4 2025 ACCEPTANCE PASS (7/7): JV axis-omission excusal + prefix-rollup mechanism
+
+- Three new deterministic source-only mechanisms in pipeline/source_reconciliation.py,
+  all structural-evidence-keyed (no keyword matching), each with false-positive tests:
+  (1) SRCONLY_JV_LOOKTHROUGH_SUFFIX -- `<investee> | <JV vehicle>` rows whose entity-form
+  suffix (lp/llc/ltd token required) endswith-matches a FUND-classified retained-interest
+  issuer in the SAME fund-quarter's unified output. Clears BCRED 1803498: 1,359 rows
+  across 2025-12-31 + 2026-03-31 ($7.06B + $7.5B), incl. the Pinnacle FV-alias row.
+  (2) SRCONLY_JV_LOOKTHROUGH_PROMOTED_RULE -- rows matching a promoted row_exclusion
+  rule marked "jv_lookthrough": true (marker added to the HPS 1838126 bare-axis rule);
+  clears exactly the 21 ULTRA III rows ($1.51B). Fail-closed on predicate/schema errors.
+  (3) SRCONLY_ISSUER_PREFIX_ROLLUP_SUM -- source identifier is a strict prefix of >=2
+  same-fund-quarter output rows AND FV ties to the children's sum (0.01%/1k tol).
+  Clears Ares 1287750 multi-entity rollups (exact to the dollar) + 220 rows cohort-wide.
+- Precedence fixes: JV excusals run after the specific documented buckets (cash keeps
+  the Dreyfus-in-JV row) and BEFORE numeric_alias (FV coincidence is weaker evidence);
+  residual classifier now lets documented source-only mechanisms outrank the
+  blocking_numeric_* family.
+- FALSE-POSITIVE CAUGHT DURING BUILD: industry suffixes ("Telecommunications") endswith-
+  matched output text at 1544206 (Carlyle) -- right outcome, wrong mechanism. Fixed with
+  the entity-form + FUND-classification guards; the 142 Carlyle rows correctly reverted
+  to blocking pending their own evidence path. Tests: 173 passed (validate_holdings).
+- Artifacts re-banked via reassemble_source_recon_artifacts (classifier-only change);
+  shadow -> queue -> acceptance rerun: 2025-12-31 verdict PASS 7/7 (first ever;
+  calibration=provisional). verified_fv_share 44.4 -> 81.1 (54 verified / 12
+  under_review / 1 unanchored / 3 no_holdings); source_blocking_fv_share 2.48 -> 0.163.
+- OCIC 1812554 deliberately NOT excused: BOCSO $328.7M source vs $136.8M output and
+  Notorious Topco $124.2M vs $50.5M are real discrepancies needing adjudication.
+- SCP 1743415 anchor induction: worker found Total Investments $184.5M but the closure
+  gate REFUSED (non-cash remainder 24% > 15%; looks like a subtotal). Refusal stands
+  per gate rules; fund remains unanchored ($184M, immaterial to the FV bar).

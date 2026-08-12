@@ -414,6 +414,175 @@ class TestSourceOnlyBlockerClassification:
         assert row["mechanism"] != "documented_non_usd_fair_value_unit"
         assert row["is_blocking"] == True
 
+    # --- JV look-through with filer-OMITTED axis (2026-08-12) ---
+    # Evidence basis: BCRED Emerald/Verdelite `<investee> | <JV> LP` suffix rows
+    # reconcile to the JV note and the LP-interest lines exist in unified output;
+    # HPS ULTRA III bare-axis rows are enumerated by a promoted jv_lookthrough rule.
+
+    def _jv_unified_parquet(self, tmp_path, issuer, report_date="2024-03-31",
+                            cik="0000000100", asset_category="FUND"):
+        path = tmp_path / "unified.parquet"
+        pd.DataFrame([{
+            "cik": cik, "report_date": report_date, "issuer_name": issuer,
+            "asset_category": asset_category,
+        }]).to_parquet(path)
+        return path
+
+    def test_jv_suffix_with_retained_interest_in_output_documented(self, tmp_path):
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["rule_id"] == "SRCONLY_JV_LOOKTHROUGH_SUFFIX"
+        assert row["is_blocking"] == False
+
+    def test_jv_suffix_without_output_interest_stays_blocking(self, tmp_path):
+        # False-positive guard: suffix names nothing in the fund's output.
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "Some Unrelated Fund LP")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_suffix_other_quarter_output_stays_blocking(self, tmp_path):
+        # False-positive guard: the retained-interest line must exist in the SAME
+        # fund-quarter, not another period.
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP",
+                                           report_date="2023-12-31")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_instrument_suffix_stays_blocking(self, tmp_path):
+        # False-positive guard: instrument-text suffixes never name an output issuer.
+        df = _make_source_only_detail(["Acme Corp | First Lien Term Loan"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_industry_suffix_stays_blocking(self, tmp_path):
+        # False-positive guard (1544206 lesson): an industry suffix that happens to
+        # endswith-match output identifier text has no entity form and must not
+        # excuse; nor may a non-FUND output row anchor the excusal.
+        df = _make_source_only_detail(
+            ["Credit Fund | First Lien Debt | AGS Health BCP LLC | Telecommunications"])
+        parquet = self._jv_unified_parquet(
+            tmp_path, "Some Borrower | Telecommunications", asset_category="LOAN")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_suffix_non_fund_output_row_stays_blocking(self, tmp_path):
+        # False-positive guard: even an entity-form suffix must anchor to a
+        # FUND-classified retained-interest row, not an ordinary position.
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP",
+                                           asset_category="LOAN")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    # --- issuer-prefix rollup with exact child-sum tie (2026-08-12, Ares) ---
+
+    def _rollup_parquet(self, tmp_path, children):
+        path = tmp_path / "unified.parquet"
+        pd.DataFrame([
+            {"cik": "0000000100", "report_date": "2024-03-31",
+             "issuer_name": name, "fair_value": fv}
+            for name, fv in children
+        ]).to_parquet(path)
+        return path
+
+    def test_issuer_prefix_rollup_exact_sum_documented(self, tmp_path):
+        df = _make_source_only_detail(
+            ["Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P."])
+        df["source_fair_value"] = "84800000"
+        parquet = self._rollup_parquet(tmp_path, [
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., First lien", 56400000.0),
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., Common equity", 28400000.0),
+        ])
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] == "documented_source_issuer_level_xbrl_subtotal"
+        assert row["rule_id"] == "SRCONLY_ISSUER_PREFIX_ROLLUP_SUM"
+        assert row["is_blocking"] == False
+
+    def test_issuer_prefix_rollup_sum_mismatch_stays_blocking(self, tmp_path):
+        # False-positive guard: prefix children exist but the sum does not tie.
+        df = _make_source_only_detail(
+            ["Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P."])
+        df["source_fair_value"] = "84800000"
+        parquet = self._rollup_parquet(tmp_path, [
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., First lien", 56400000.0),
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., Common equity", 20000000.0),
+        ])
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_source_issuer_level_xbrl_subtotal"
+        assert row["is_blocking"] == True
+
+    def test_issuer_prefix_rollup_single_child_stays_blocking(self, tmp_path):
+        # False-positive guard: one child equal to the source FV is an identity
+        # candidate for the matchers, not a rollup -- must stay blocking here.
+        df = _make_source_only_detail(
+            ["Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P."])
+        df["source_fair_value"] = "84800000"
+        parquet = self._rollup_parquet(tmp_path, [
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., First lien", 84800000.0),
+        ])
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_source_issuer_level_xbrl_subtotal"
+        assert row["is_blocking"] == True
+
+    def _jv_rule(self, *, marked=True, predicate="bdc_dimensions_raw NOT LIKE '%Non-Affiliated%'"):
+        rule = {"cik": "100", "rule_id": "test_jv_rule", "rule_type": "row_exclusion",
+                "action": "exclude", "scope": {"quarters": ["2024-03-31"]},
+                "predicate_sql": predicate, "evidence": [{"source": "filing", "quote": "x"}],
+                "rationale": "test", "confidence": 0.9}
+        if marked:
+            rule["jv_lookthrough"] = True
+        return {"0000000100": [rule]}
+
+    def test_promoted_jv_rule_rows_documented(self, tmp_path, monkeypatch):
+        import pipeline.source_reconciliation as sr
+        monkeypatch.setattr(sr, "load_promoted_rules", lambda *a, **k: self._jv_rule())
+        df = self._frame_with_dims(
+            "Brandt Information Services, LLC 1",
+            "investmentidentifieraxis=Brandt Information Services, LLC 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["rule_id"] == "SRCONLY_JV_LOOKTHROUGH_PROMOTED_RULE"
+        assert row["is_blocking"] == False
+
+    def test_unmarked_rule_does_not_excuse(self, monkeypatch):
+        # False-positive guard: an ordinary row_exclusion rule (no jv_lookthrough
+        # marker) must never document source rows.
+        import pipeline.source_reconciliation as sr
+        monkeypatch.setattr(sr, "load_promoted_rules",
+                            lambda *a, **k: self._jv_rule(marked=False))
+        df = self._frame_with_dims(
+            "Brandt Information Services, LLC 1",
+            "investmentidentifieraxis=Brandt Information Services, LLC 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_rule_bad_predicate_fails_closed(self, monkeypatch):
+        # A predicate referencing columns the source frame lacks excuses nothing.
+        import pipeline.source_reconciliation as sr
+        monkeypatch.setattr(sr, "load_promoted_rules",
+                            lambda *a, **k: self._jv_rule(
+                                predicate="no_such_column = 'x'"))
+        df = self._frame_with_dims(
+            "Brandt Information Services, LLC 1",
+            "investmentidentifieraxis=Brandt Information Services, LLC 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
     @pytest.mark.parametrize("identifier", [
         "Investment Portfolio",
         "Total Mutual Funds",

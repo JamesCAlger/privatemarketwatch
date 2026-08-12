@@ -70,6 +70,7 @@ from pipeline.config import (
     SOURCE_RECONCILIATION_SOURCE_ONLY_CLUSTERS_FILE,
     SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
     UNIFIED_HOLDINGS_FILE,
+    UNIFIED_HOLDINGS_PARQUET_FILE,
 )
 
 logger = logging.getLogger(__name__)
@@ -382,9 +383,170 @@ def _fair_value_units_for_rows(
     )
 
 
+def _jv_suffix_lookthrough_mask(
+    source_only: pd.DataFrame, raw: pd.Series, unified_holdings_path: Optional[Path]
+) -> pd.Series:
+    """Identifier-suffix JV look-through: ``<investee> | <JV vehicle>`` rows whose
+    trailing pipe segment names a retained JV-interest position present in the SAME
+    fund-quarter's unified output (endswith-anchored against output issuer_name; the
+    filer named the JV in the identifier instead of tagging the nonconsolidated-
+    subsidiary axis). Adjudicated 2026-08-12: BCRED Emerald/Verdelite JV suffix rows
+    ($7.06B) describe the JV vehicles' portfolios; the fund's exposure is its LP
+    interest lines, which exist in unified output (Emerald $1.815B / Verdelite
+    $117.7M FUND positions)."""
+    mask = pd.Series(False, index=source_only.index)
+    path = Path(unified_holdings_path) if unified_holdings_path else UNIFIED_HOLDINGS_PARQUET_FILE
+    if not path.exists():
+        return mask
+    suffix = raw.str.rsplit("|", n=1).str[-1].str.strip().str.lower()
+    # The suffix must look like a legal ENTITY (a JV vehicle), not an industry or
+    # instrument tag -- an industry suffix like "Telecommunications" can endswith-
+    # match unrelated output identifier text (1544206 false-positive, 2026-08-12).
+    entity_form = suffix.str.contains(
+        r"\b(?:lp|l\.p\.|llc|l\.l\.c\.|ltd|limited)\b", regex=True, na=False
+    )
+    candidate = raw.str.contains("|", regex=False) & (suffix.str.len() >= 10) & entity_form
+    if not candidate.any():
+        return mask
+    cand = source_only.loc[candidate, ["cik", "report_date"]].copy()
+    cand["_jv_src_idx"] = cand.index
+    cand["jv_suffix"] = suffix[candidate]
+    con = duckdb.connect()
+    try:
+        con.register("jv_cand", cand)
+        hits = con.execute(
+            f"""
+            SELECT DISTINCT c._jv_src_idx
+            FROM jv_cand c
+            JOIN read_parquet('{path.as_posix()}') h
+              ON lpad(regexp_replace(CAST(h.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+                 = lpad(regexp_replace(CAST(c.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+             AND CAST(h.report_date AS VARCHAR) = CAST(c.report_date AS VARCHAR)
+             AND ends_with(lower(trim(CAST(h.issuer_name AS VARCHAR))), c.jv_suffix)
+             AND lower(COALESCE(CAST(h.asset_category AS VARCHAR), '')) = 'fund'
+            """
+        ).fetchall()
+    except duckdb.Error:  # holdings schema mismatch -> excuse nothing (fail closed)
+        hits = []
+    finally:
+        con.close()
+    if hits:
+        mask.loc[[h[0] for h in hits]] = True
+    return mask
+
+
+def _issuer_prefix_rollup_sum_mask(
+    source_only: pd.DataFrame, raw: pd.Series, unified_holdings_path: Optional[Path]
+) -> pd.Series:
+    """Issuer-level rollup whose children are already in output: the source
+    identifier is a STRICT PREFIX of >=2 same-fund-quarter output rows and the
+    source FV equals the children's FV sum exactly (0.01% / $1k tolerance).
+    Adjudicated 2026-08-12 on Ares 1287750 multi-entity rows (Align Precision
+    $14.6M / Centric Brands $84.8M / Visual Edge $71.9M -- child sums tie to the
+    dollar). All three guards must hold; a prefix without the sum tie, or a sum
+    tie with a single child, stays blocking."""
+    mask = pd.Series(False, index=source_only.index)
+    path = Path(unified_holdings_path) if unified_holdings_path else UNIFIED_HOLDINGS_PARQUET_FILE
+    if not path.exists():
+        return mask
+    ident = raw.str.strip().str.lower()
+    fv = pd.to_numeric(source_only["source_fair_value"], errors="coerce")
+    candidate = (ident.str.len() >= 15) & fv.notna() & (fv != 0)
+    if not candidate.any():
+        return mask
+    cand = source_only.loc[candidate, ["cik", "report_date"]].copy()
+    cand["_ro_src_idx"] = cand.index
+    cand["src_ident"] = ident[candidate]
+    cand["src_fv"] = fv[candidate]
+    con = duckdb.connect()
+    try:
+        con.register("ro_cand", cand)
+        hits = con.execute(
+            f"""
+            SELECT c._ro_src_idx
+            FROM ro_cand c
+            JOIN read_parquet('{path.as_posix()}') h
+              ON lpad(regexp_replace(CAST(h.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+                 = lpad(regexp_replace(CAST(c.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')
+             AND CAST(h.report_date AS VARCHAR) = CAST(c.report_date AS VARCHAR)
+             AND starts_with(lower(trim(CAST(h.issuer_name AS VARCHAR))), c.src_ident)
+             AND length(lower(trim(CAST(h.issuer_name AS VARCHAR)))) > length(c.src_ident)
+            GROUP BY c._ro_src_idx, c.src_fv
+            HAVING COUNT(*) >= 2
+               AND ABS(SUM(TRY_CAST(h.fair_value AS DOUBLE)) - c.src_fv)
+                   <= GREATEST(1000.0, ABS(c.src_fv) * 0.0001)
+            """
+        ).fetchall()
+    except duckdb.Error:  # holdings schema mismatch -> excuse nothing (fail closed)
+        hits = []
+    finally:
+        con.close()
+    if hits:
+        mask.loc[[h[0] for h in hits]] = True
+    return mask
+
+
+def _jv_promoted_rule_lookthrough_mask(source_only: pd.DataFrame) -> pd.Series:
+    """Rows matching a promoted, audited row_exclusion rule explicitly marked
+    ``"jv_lookthrough": true``. Such a rule already excludes these facts from unified
+    output on printed-JV-note evidence (e.g. HPS 1838126 bare-axis ULTRA III rows,
+    $1.51B reconciling to the 10-K JV schedule to the dollar); reconciliation mirrors
+    that adjudication so the excluded look-through set is documented instead of
+    blocking. The rule predicate is evaluated over the source frame with
+    ``dimensions_raw`` exposed as ``bdc_dimensions_raw`` and the raw identifier as
+    ``bdc_investment_identifier``; a predicate referencing columns the source frame
+    lacks excuses nothing (fail-closed)."""
+    mask = pd.Series(False, index=source_only.index)
+    try:
+        rules_by_cik = load_promoted_rules()
+    except Exception:  # noqa: BLE001 - overrides dir problems must not break recon
+        return mask
+    cik10 = (
+        source_only["cik"].astype(str).str.replace(r"\D", "", regex=True).str.zfill(10)
+    )
+    for cik, rules in rules_by_cik.items():
+        sub_idx = source_only.index[cik10 == cik]
+        if not len(sub_idx):
+            continue
+        jv_rules = [
+            r for r in rules
+            if r.get("rule_type") == "row_exclusion" and r.get("jv_lookthrough") is True
+            and str(r.get("predicate_sql") or "").strip()
+        ]
+        if not jv_rules:
+            continue
+        frame = source_only.loc[
+            sub_idx, ["report_date", "dimensions_raw", "raw_investment_identifier"]
+        ].rename(columns={
+            "dimensions_raw": "bdc_dimensions_raw",
+            "raw_investment_identifier": "bdc_investment_identifier",
+        })
+        frame["_jv_rule_idx"] = frame.index
+        for r in jv_rules:
+            quarters = (r.get("scope") or {}).get("quarters") or ["all"]
+            where = [f"({r['predicate_sql']})"]
+            if "all" not in quarters:
+                qs = ",".join("'" + str(q).replace("'", "''") + "'" for q in quarters)
+                where.append(f"CAST(report_date AS VARCHAR) IN ({qs})")
+            con = duckdb.connect()
+            try:
+                con.register("jv_src", frame)
+                hits = [h[0] for h in con.execute(
+                    f"SELECT _jv_rule_idx FROM jv_src WHERE {' AND '.join(where)}"
+                ).fetchall()]
+            except duckdb.Error:
+                hits = []
+            finally:
+                con.close()
+            if hits:
+                mask.loc[hits] = True
+    return mask
+
+
 def build_source_only_blocker_detail(
     detail_df: pd.DataFrame,
     holdings_parquet_path: Optional[Path] = None,
+    unified_holdings_path: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Classify source-only BDC blockers with deterministic evidence buckets.
 
@@ -849,13 +1011,6 @@ def build_source_only_blocker_detail(
     )
     assign(wrapper_rollup, "documented_source_total_header", "SRCONLY_WRAPPER_ROLLUP_XBRL", "high", False)
 
-    assign(
-        numeric_alias,
-        "blocking_numeric_already_matched_output_alias",
-        "SRCONLY_NUMERIC_ALIAS_PRESERVE",
-        "medium",
-        True,
-    )
     assign(total_header, "documented_source_total_header", "SRCONLY_TOTAL_HEADER_EXACT", "high", False)
     assign(total_pipe_segment, "documented_source_total_header", "SRCONLY_TOTAL_PIPE_HEADER", "high", False)
     assign(cash_bucket, "documented_source_cash_or_money_market_bucket", "SRCONLY_CASH_MM_BUCKET", "high", False)
@@ -865,6 +1020,48 @@ def build_source_only_blocker_detail(
     assign(category_instrument_rollup, "documented_source_category_header", "SRCONLY_CATEGORY_INSTRUMENT_ROLLUP", "high", False)
     assign(pct_total_documented, "documented_source_pct_total_header", "SRCONLY_PCT_TOTAL_HEADER", "high", False)
     assign(pct_category_rollup, "documented_source_pct_category_rollup", "SRCONLY_PCT_CATEGORY_ROLLUP", "high", False)
+    # Filer-omitted-axis JV look-through (2026-08-12): same fact class as the axis
+    # excusal above but the filer skipped the axis member. Runs AFTER the specific
+    # documented buckets (cash/headers keep precedence, e.g. a money-market row held
+    # inside a JV stays cash-bucket) and BEFORE the blocking fallbacks. Two
+    # structural evidence keys -- an identifier suffix naming a retained JV-interest
+    # position present in the fund's own unified output, or membership in a promoted
+    # audited row_exclusion rule marked jv_lookthrough. Keyword matching is
+    # deliberately NOT used.
+    assign(
+        _jv_suffix_lookthrough_mask(source_only, raw, unified_holdings_path),
+        "documented_jv_lookthrough_axis",
+        "SRCONLY_JV_LOOKTHROUGH_SUFFIX",
+        "high",
+        False,
+    )
+    assign(
+        _jv_promoted_rule_lookthrough_mask(source_only),
+        "documented_jv_lookthrough_axis",
+        "SRCONLY_JV_LOOKTHROUGH_PROMOTED_RULE",
+        "high",
+        False,
+    )
+    # Issuer-prefix rollup with exact child-sum tie (2026-08-12, Ares multi-entity
+    # rows): strict prefix + >=2 children + FV sum identity, all required.
+    assign(
+        _issuer_prefix_rollup_sum_mask(source_only, raw, unified_holdings_path),
+        "documented_source_issuer_level_xbrl_subtotal",
+        "SRCONLY_ISSUER_PREFIX_ROLLUP_SUM",
+        "high",
+        False,
+    )
+    # numeric_alias runs AFTER the JV excusals (2026-08-12): a JV-suffix row whose FV
+    # happens to coincide with a matched output row is still a look-through fact
+    # (BCRED "Pinnacle Buyer, LLC | Emerald JV LP" $10.1M); FV coincidence is weaker
+    # evidence than the structural suffix/rule keys.
+    assign(
+        numeric_alias,
+        "blocking_numeric_already_matched_output_alias",
+        "SRCONLY_NUMERIC_ALIAS_PRESERVE",
+        "medium",
+        True,
+    )
     assign(pct_leaf_parser, "blocking_source_pct_leaf_parser_mismatch", "SRCONLY_PCT_LEAF_PARSER", "medium", True)
     assign(pct_ambiguous, "blocking_source_pct_ambiguous_after_review", "SRCONLY_PCT_AMBIGUOUS_REVIEW", "medium", True)
     assign(non_terminal_pct_or_rate_hierarchy, "blocking_source_pct_leaf_parser_mismatch", "SRCONLY_PCT_OR_RATE_LEAF_PARSER", "medium", True)
@@ -3493,6 +3690,16 @@ def build_source_reconciliation_residual_classification(
             df["status"].astype(str).eq("missing_from_pipeline")
             & df["mechanism"].eq("")
             & df["source_only_mechanism"].fillna("").ne(""),
+            "mechanism",
+        ] = df["source_only_mechanism"]
+        # A documented source-only mechanism carries structural identifier/rule
+        # evidence; it outranks the numeric-coincidence family assigned above
+        # (2026-08-12: BCRED "Pinnacle Buyer, LLC | Emerald JV LP" is a JV
+        # look-through fact whose FV happens to alias a matched output row).
+        df.loc[
+            df["status"].astype(str).eq("missing_from_pipeline")
+            & df["mechanism"].astype(str).str.startswith("blocking_numeric_")
+            & df["source_only_mechanism"].fillna("").str.startswith("documented_"),
             "mechanism",
         ] = df["source_only_mechanism"]
         df = df.drop(columns=["source_only_mechanism"])
