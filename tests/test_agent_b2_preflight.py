@@ -212,7 +212,9 @@ def test_preflight_rejects_existing_correction(tmp_path):
     existing = d["corrections_dir"] / "0001743415"
     existing.mkdir(parents=True)
     (existing / "subtotal_filter.json").write_text("{}", encoding="utf-8")
-    with pytest.raises(pf.PreflightError):
+    # 2026-08-13: a staged leaf awaiting its gate SKIPS the packet (iterative
+    # rounds) instead of halting the lane; with no other packet the batch is empty.
+    with pytest.raises(pf.PreflightError, match="existing=1"):
         pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
                            bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
                            fix_class="subtotal_filter")

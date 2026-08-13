@@ -64,6 +64,14 @@ ENTITY_KEYS = frozenset({"legal_entity", "decision"})
 ENTITY_DECISIONS = frozenset({"use_equity", "keep_lookthrough"})
 _RATE_FIELDS = frozenset({"interest_rate", "pik_rate", "basis_spread"})
 _CLASS_FIELDS = frozenset({"asset_class", "index_classification", "exposure_type"})
+# 2026-08-13 (q4b2exp round-1 lesson): remap/rescale fields must be UNIFIED-FRAME
+# columns. Round 1 accepted any string, so workers named the FILING's columns
+# ("spread", "footnotes", "Fa") and every leaf failed its applier. The template is a
+# contract with the holdings schema, not a description of the source table.
+_REMAP_FIELDS = frozenset({
+    "fair_value", "cost", "principal_amount", "shares_held",
+    "interest_rate", "pik_rate", "basis_spread", "pct_of_net_assets",
+})
 
 
 @dataclass(frozen=True)
@@ -102,10 +110,12 @@ TEMPLATE_REGISTRY: dict[str, Template] = {
         numeric=frozenset({"cash_rate", "pik_rate"})),
     "column_remap": Template(
         2, "apply_column_remap", frozenset({"from_field", "to_field"}),
-        frozenset({"from_field", "to_field", "row_selector"})),
+        frozenset({"from_field", "to_field", "row_selector"}),
+        enums={"from_field": _REMAP_FIELDS, "to_field": _REMAP_FIELDS}),
     "unit_rescale": Template(
         2, "apply_unit_rescale", frozenset({"field", "factor"}),
-        frozenset({"field", "factor", "row_selector"}), numeric=frozenset({"factor"})),
+        frozenset({"field", "factor", "row_selector"}), numeric=frozenset({"factor"}),
+        enums={"field": _REMAP_FIELDS}),
     "classification_fix": Template(
         2, "apply_classification_fix", frozenset({"field", "value"}),
         frozenset({"field", "value", "row_selector"}), enums={"field": _CLASS_FIELDS}),
@@ -185,6 +195,13 @@ def _validate_template(fix_class: str, template: Any, tpl: Template, rep: Correc
             bad = set(sel) - ROW_SELECTOR_KEYS
             if bad:
                 rep.errors.append(f"template.row_selector has unknown key(s): {sorted(bad)}")
+            # 2026-08-13 (q4b2exp round-1 lesson): coordinates identify EVIDENCE, not
+            # holdings rows -- a selector must carry at least one matchable identity key.
+            if not ({"issuer_name", "bdc_investment_identifier"} & set(sel)):
+                rep.errors.append(
+                    "template.row_selector must include issuer_name or "
+                    "bdc_investment_identifier (table/row coordinates cannot select "
+                    "holdings rows)")
     if "positions" in keys:
         positions = template.get("positions")
         if not isinstance(positions, list) or not positions:

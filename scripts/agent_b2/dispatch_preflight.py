@@ -144,6 +144,26 @@ def _contract_excerpt(fix_class: str) -> str:
         lines.append(f"- template.{k} must be a number.")
     for k, vals in sorted((getattr(tpl, "enums", {}) or {}).items()):
         lines.append(f"- template.{k} must be one of {sorted(vals)}.")
+    # Nested-structure contracts (the validator enforces these too).
+    if "row_selector" in tpl.allowed:
+        from pipeline.correction_leaf import ROW_SELECTOR_KEYS
+        lines.append(f"- template.row_selector (object) keys must be from "
+                     f"{sorted(ROW_SELECTOR_KEYS)}; equality match, AND-combined. It MUST "
+                     f"include issuer_name or bdc_investment_identifier -- copy the exact "
+                     f"issuer/identifier text from the cited evidence row; table/row "
+                     f"coordinates alone cannot select holdings rows.")
+    if {"from_field", "to_field", "field"} & tpl.allowed:
+        lines.append("- Field names refer to the UNIFIED HOLDINGS schema (the allowed "
+                     "lists above), NEVER the filing table's own column headings.")
+    if "positions" in tpl.allowed:
+        lines.append("- Each template.positions[] entry REQUIRES issuer_name, fair_value "
+                     "(number), report_date, source_row_id (the staging/source row id "
+                     "being recovered -- copy it from the evidence; NEVER invent one), "
+                     "and bdc_dimensions_raw. The gate re-verifies source_row_id and "
+                     "fair_value against raw staging; a fabricated position cannot pass.")
+    if "entities" in tpl.allowed:
+        lines.append("- Each template.entities[] entry: {legal_entity, decision in "
+                     "{use_equity, keep_lookthrough}}.")
     lines.append("- Do not emit code, SQL, file paths, or row-index deletions.")
     lines.append("- The prompt's CIK and fix_class are binding; do not switch fix_class.")
     return "\n".join(lines)
@@ -257,6 +277,7 @@ def preflight_batch(
     skipped_no_citations: list[dict] = []
     skipped_policy: list[dict] = []
     skipped_stale: list[dict] = []
+    skipped_existing: list[dict] = []
     supported_fix_classes = implemented_fix_classes()
     for row in rows:
         cik = str(row.get("cik") or "").strip()
@@ -324,7 +345,12 @@ def preflight_batch(
 
         correction_path = (corrections_dir / cik / f"{fc}.json").resolve()
         if correction_path.exists():
-            raise PreflightError(f"{cik}/{fc}: correction already exists at {correction_path}; clear before re-dispatch")
+            # Iterative rounds (2026-08-13): a staged valid leaf from a prior round is
+            # awaiting its gate -- skip the packet, do not halt the lane.
+            skipped_existing.append({
+                "cik": cik, "fix_class": fc,
+                "reason": f"staged correction already exists at {correction_path}"})
+            continue
         correction_path.parent.mkdir(parents=True, exist_ok=True)
         # Lock key doubles as a lock filename ({lock_key}.lock); Windows forbids ':'
         # in filenames (reserved for drive letters / NTFS ADS), so use a safe separator.
@@ -361,7 +387,7 @@ def preflight_batch(
         raise PreflightError(
             "no dispatchable packets after skips "
             f"(no_citations={len(skipped_no_citations)}, policy={len(skipped_policy)}, "
-            f"stale={len(skipped_stale)})")
+            f"stale={len(skipped_stale)}, existing={len(skipped_existing)})")
     manifest = {
         "batch_id": batch_id, "created_at": datetime.now(timezone.utc).isoformat(),
         "locks_reserved": reserve, "max_parallel_default": 2,
@@ -370,13 +396,15 @@ def preflight_batch(
         "skipped_no_citations": skipped_no_citations,
         "skipped_policy": skipped_policy,
         "skipped_stale": skipped_stale,
+        "skipped_existing": skipped_existing,
         "rows": manifest_rows}
     manifest_path = batch_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return {"manifest_path": str(manifest_path), "n_dispatch": len(manifest_rows),
             "n_skipped_no_citations": len(skipped_no_citations),
             "n_skipped_policy": len(skipped_policy),
-            "n_skipped_stale": len(skipped_stale), "batch_id": batch_id}
+            "n_skipped_stale": len(skipped_stale),
+            "n_skipped_existing": len(skipped_existing), "batch_id": batch_id}
 
 
 def release_manifest(manifest_path: str) -> None:
