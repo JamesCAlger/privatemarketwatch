@@ -30,6 +30,7 @@ def test_valid_dedup_correction():
 def test_valid_rate_rescale_with_factor():
     rep = cl.validate_correction(_corr(
         mechanism="rate_scale", fix_class="rate_rescale",
+        scope={"quarters": ["2025-12-31"]},
         template={"field": "interest_rate", "factor": 0.1,
                   "row_selector": {"issuer_name": "InFarm Technologies Limited"}}))
     assert rep.ok, rep.errors
@@ -38,6 +39,7 @@ def test_valid_rate_rescale_with_factor():
 def test_valid_all_pik_normalization():
     rep = cl.validate_correction(_corr(
         mechanism="genuine_value_defect", fix_class="all_pik_normalization",
+        scope={"quarters": ["2025-12-31"]},
         template={"row_selector": {"issuer_name": "WDE TorcSill"}, "cash_rate": 0.0, "pik_rate": 25.75}))
     assert rep.ok, rep.errors
 
@@ -184,3 +186,18 @@ def test_validate_dir(tmp_path):
     assert summary["n_files"] == 2
     assert summary["n_valid"] == 1
     assert not summary["ok"]
+
+
+def test_stage2_requires_explicit_quarter_scope():
+    # 2026-08-13 blast-radius lesson: unscoped value fixes rewrote correct history.
+    base = dict(mechanism="rate_scale_error", fix_class="rate_rescale",
+                template={"field": "interest_rate", "factor": 100,
+                          "row_selector": {"issuer_name": "Alpha Corp"}})
+    no_scope = cl.validate_correction(_corr(**base))
+    assert not no_scope.ok
+    assert any("scope.quarters" in e for e in no_scope.errors)
+    with_scope = cl.validate_correction(_corr(**base, scope={"quarters": ["2025-12-31"]}))
+    assert with_scope.ok, with_scope.errors
+    all_scope = cl.validate_correction(_corr(**base, scope={"quarters": ["all"]}))
+    assert not all_scope.ok
+    assert any("explicit YYYY-MM-DD" in e for e in all_scope.errors)

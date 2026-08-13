@@ -287,8 +287,16 @@ def apply_missing_position_add(df: pd.DataFrame, template: dict) -> tuple[pd.Dat
                 row[k] = v
         new_rows.append(row)
         fv_added += float(p.get("fair_value") or 0)
-    out = pd.concat([df, pd.DataFrame(new_rows, columns=cols)], ignore_index=True) \
-        if new_rows else df.copy()
+    if new_rows:
+        # Fresh tail indices (not ignore_index): callers restore the frame's original
+        # row order by sort_index after per-CIK application.
+        start = (int(pd.to_numeric(pd.Series(df.index), errors="coerce").max()) + 1
+                 if len(df) else 0)
+        add = pd.DataFrame(new_rows, columns=cols,
+                           index=range(start, start + len(new_rows)))
+        out = pd.concat([df, add])
+    else:
+        out = df.copy()
     audit.update(status="ok", rows_changed=len(new_rows), rows_out=int(len(out)),
                  fv_delta=round(fv_added, 2),
                  source_row_ids=[str(p.get("source_row_id")) for p in positions])
@@ -308,11 +316,42 @@ POST_STAGING_APPLIERS: dict[str, Callable[[pd.DataFrame, dict], tuple[pd.DataFra
 }
 
 
+def apply_scoped(
+    df: pd.DataFrame, correction: dict,
+) -> tuple[pd.DataFrame, dict]:
+    """Apply one correction with STRUCTURAL quarter-scope enforcement (2026-08-13).
+
+    Rows outside ``correction['scope']['quarters']`` are physically excluded from the
+    applier's view and re-joined unchanged afterwards (original row order preserved) --
+    an over-broad selector cannot touch an out-of-scope quarter no matter what the
+    worker wrote. A scoped correction whose quarters match no rows is an 'ok' no-op
+    audit (surfaced by drift detection downstream). Corrections without an explicit
+    quarter scope (the stage-1 structural family) apply unscoped as before."""
+    fc = str(correction.get("fix_class") or "")
+    applier = POST_STAGING_APPLIERS.get(fc)
+    template = correction.get("template") or {}
+    if applier is None:
+        return df, {"fix_class": fc, "status": "skipped",
+                    "message": "not a post-staging applier (wrapper-patch or rule track)"}
+    quarters = [str(q) for q in (correction.get("scope") or {}).get("quarters", [])
+                if q and str(q) != "all"]
+    if not quarters or "report_date" not in df.columns:
+        out, audit = applier(df, template)
+        return out, audit
+    in_scope = df["report_date"].astype(str).isin(quarters)
+    applied, audit = applier(df.loc[in_scope], template)
+    out = pd.concat([df.loc[~in_scope], applied]).sort_index(kind="mergesort")
+    audit["scope_quarters"] = quarters
+    audit["rows_out_of_scope_protected"] = int((~in_scope).sum())
+    return out, audit
+
+
 def run_corrections(
     df: pd.DataFrame, corrections: list[dict], *, stage: int | None = None,
 ) -> tuple[pd.DataFrame, list[dict]]:
     """Apply post-staging corrections (validated correction-leaf dicts) to one CIK's
-    holdings, in precedence-stage order. ``stage`` (if given) restricts to that stage --
+    holdings, in precedence-stage order, each under structural quarter-scope
+    enforcement (``apply_scoped``). ``stage`` (if given) restricts to that stage --
     the B2 driver applies ONE stage, regenerates the ledger, re-triages, then advances.
     Corrections whose fix_class is not a post-staging applier are skipped (recorded)."""
     audits: list[dict] = []
@@ -321,12 +360,7 @@ def run_corrections(
         fc = str(c.get("fix_class") or "")
         if stage is not None and stage_for(fc) != stage:
             continue
-        applier = POST_STAGING_APPLIERS.get(fc)
-        if applier is None:
-            audits.append({"fix_class": fc, "status": "skipped",
-                           "message": "not a post-staging applier (wrapper-patch or rule track)"})
-            continue
-        df, audit = applier(df, c.get("template") or {})
+        df, audit = apply_scoped(df, c)
         audit["cik"] = c.get("cik")
         audits.append(audit)
     return df, audits

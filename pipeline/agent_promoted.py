@@ -140,8 +140,8 @@ def apply_promoted_stage2_corrections(
         corrected = sub
         for c in sorted(by_cik[cik], key=lambda x: str(x.get("fix_class"))):
             fc = str(c.get("fix_class"))
-            applier = POST_STAGING_APPLIERS[fc]
-            corrected, audit = applier(corrected, c.get("template") or {})
+            from pipeline.agent_b2_appliers import apply_scoped
+            corrected, audit = apply_scoped(corrected, c)
             # fill structural identity on added rows (missing_position_add)
             if "cik" in corrected.columns and corrected["cik"].isna().any():
                 added = corrected["cik"].isna()
@@ -163,7 +163,13 @@ def apply_promoted_stage2_corrections(
         replaced.append(corrected)
         drop_mask |= mask
     if replaced:
-        combined = pd.concat([combined.loc[~drop_mask], *replaced], ignore_index=True)
+        # Preserve the frame's original row order (2026-08-13 blast-radius lesson: a
+        # concat that reorders rows perturbs downstream tie-breaks -- mode/first-value
+        # fills -- at CIKs no correction touched). Added rows (NaN original index)
+        # sort to the end.
+        untouched = combined.loc[~drop_mask]
+        merged = pd.concat([untouched, *replaced])
+        combined = merged.sort_index(kind="mergesort").reset_index(drop=True)
     return combined, audits
 
 

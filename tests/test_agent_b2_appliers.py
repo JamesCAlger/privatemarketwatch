@@ -200,3 +200,57 @@ def test_missing_position_add_appends_grounded_position():
     assert audit["source_row_ids"] == ["SRC-42"]
     # source_row_id is grounding metadata, never a holdings column
     assert "source_row_id" not in df.columns
+
+
+# --------------------------------------------------------------- quarter scoping (2026-08-13)
+
+
+def _two_quarter_frame():
+    return pd.DataFrame([
+        {"issuer_name": "Alpha Corp", "report_date": "2025-12-31",
+         "fair_value": 1000.0, "interest_rate": 0.105},
+        {"issuer_name": "Alpha Corp", "report_date": "2023-09-30",
+         "fair_value": 900.0, "interest_rate": 0.100},  # same defect, historical
+        {"issuer_name": "Alpha Corp", "report_date": "2023-06-30",
+         "fair_value": 800.0, "interest_rate": 9.5},    # historical, already correct
+    ])
+
+
+def test_apply_scoped_protects_out_of_scope_quarters():
+    # The selector matches ALL Alpha rows; the scope physically restricts the applier
+    # to 2025-12-31 -- the historical rows cannot be touched.
+    corr = {"fix_class": "rate_rescale", "scope": {"quarters": ["2025-12-31"]},
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    df, audit = ap.apply_scoped(_two_quarter_frame(), corr)
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    assert audit["rows_out_of_scope_protected"] == 2
+    by_q = df.set_index("report_date")["interest_rate"]
+    assert by_q["2025-12-31"] == 10.5
+    assert by_q["2023-09-30"] == 0.100   # untouched despite matching selector
+    assert by_q["2023-06-30"] == 9.5
+    # original row order preserved
+    assert df["report_date"].tolist() == ["2025-12-31", "2023-09-30", "2023-06-30"]
+
+
+def test_apply_scoped_multi_quarter_evidence():
+    # A defect evidenced in BOTH quarters may scope both -- and still leaves the
+    # correct quarter alone only via its own evidence, not accident.
+    corr = {"fix_class": "rate_rescale",
+            "scope": {"quarters": ["2025-12-31", "2023-09-30"]},
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    df, audit = ap.apply_scoped(_two_quarter_frame(), corr)
+    assert audit["rows_changed"] == 2
+    by_q = df.set_index("report_date")["interest_rate"]
+    assert by_q["2025-12-31"] == 10.5 and by_q["2023-09-30"] == 10.0
+    assert by_q["2023-06-30"] == 9.5
+
+
+def test_apply_scoped_noop_when_no_rows_in_scope():
+    corr = {"fix_class": "rate_rescale", "scope": {"quarters": ["2020-03-31"]},
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    df, audit = ap.apply_scoped(_two_quarter_frame(), corr)
+    assert audit["status"] == "ok" and audit["rows_changed"] == 0
+    assert df["interest_rate"].tolist() == [0.105, 0.100, 9.5]

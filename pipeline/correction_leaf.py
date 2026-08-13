@@ -72,6 +72,15 @@ _REMAP_FIELDS = frozenset({
     "fair_value", "cost", "principal_amount", "shares_held",
     "interest_rate", "pik_rate", "basis_spread", "pct_of_net_assets",
 })
+# 2026-08-13 (blast-radius lesson): stage-2 value fixes MUST declare the quarters they
+# are evidenced for -- explicit dates, never "all". Unscoped round-2 fixes rewrote
+# already-correct 2023 history (Goldman principal x1000 et al.). The applier enforces
+# the scope structurally; the gate proves off-scope invariance.
+STAGE2_SCOPED_CLASSES = frozenset({
+    "rate_rescale", "unit_rescale", "column_remap", "classification_fix",
+    "all_pik_normalization",
+})
+_QUARTER_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 @dataclass(frozen=True)
@@ -277,6 +286,20 @@ def validate_correction(
         if "stage" in obj and obj.get("stage") != tpl.stage:
             rep.errors.append(f"stage {obj.get('stage')!r} does not match fix_class {fix_class} (stage {tpl.stage})")
         _validate_template(fix_class, obj.get("template"), tpl, rep)
+
+    if fix_class in STAGE2_SCOPED_CLASSES:
+        quarters = (obj.get("scope") or {}).get("quarters") if isinstance(obj.get("scope"), dict) else None
+        if not isinstance(quarters, list) or not quarters:
+            rep.errors.append(
+                f"{fix_class} requires scope.quarters: the explicit list of quarters "
+                "this fix is evidenced for (a value fix may only touch quarters whose "
+                "filings show the defect)")
+        else:
+            bad = [q for q in quarters if not _QUARTER_RE.match(str(q or ""))]
+            if bad:
+                rep.errors.append(
+                    f"scope.quarters must be explicit YYYY-MM-DD dates (never 'all'); "
+                    f"got {bad}")
 
     srids = obj.get("source_review_ids")
     if not isinstance(srids, list) or not [s for s in srids if str(s or "").strip()]:

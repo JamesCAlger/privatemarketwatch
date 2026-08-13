@@ -155,6 +155,14 @@ def _contract_excerpt(fix_class: str) -> str:
     if {"from_field", "to_field", "field"} & tpl.allowed:
         lines.append("- Field names refer to the UNIFIED HOLDINGS schema (the allowed "
                      "lists above), NEVER the filing table's own column headings.")
+    from pipeline.correction_leaf import STAGE2_SCOPED_CLASSES
+    if fix_class in STAGE2_SCOPED_CLASSES:
+        lines.append("- The leaf MUST carry top-level scope.quarters: the explicit "
+                     "YYYY-MM-DD list of quarters your cited evidence covers (never "
+                     "'all'). The applier physically cannot touch other quarters, and "
+                     "the gate proves they were left byte-identical. If the same "
+                     "defect exists in another quarter, cite THAT quarter's filing "
+                     "and add it to the scope.")
     if "positions" in tpl.allowed:
         lines.append("- Each template.positions[] entry REQUIRES issuer_name, fair_value "
                      "(number), report_date, source_row_id (the staging/source row id "
