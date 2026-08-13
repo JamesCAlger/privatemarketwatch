@@ -8071,3 +8071,42 @@ Agent lane for the rate-convention classifier residual. New modules:
   OCIC BOCSO/Notorious adjudication, Fidelity 1920453 output-only central-fund row,
   SCP 1743415 anchor (gate-refused), North Haven wrapper investigation, Golub anchor
   basis review, position_matches/returns rebuild (RI02/RI07).
+
+## 2026-08-13 - Overnight B2 expansion experiment CLOSED: quarter-scoped fixes, 2025-12-31 acceptance PASS 7/7
+
+- Objective (owner): every identified B2 packet gets a working, gated fix without
+  making unaffected data worse. Three fleet/gate iterations over ~24h, ~230 workers.
+- ROUND 1 (q4b2exp, 130 workers): 124 leaves authored; 94 schema-unusable (validator
+  accepted filing-column names + coordinate-only selectors). Fixes: unified-schema
+  field enums, identity-key selectors, registry-generated prompts (26d6607).
+- ROUND 2 (q4b2exp2, 94 workers): 97 pct valid authoring (vs 24 pct). Gate v2 (composed
+  replay-equivalence vs trial base): 30/60 CIK PASS, 58 leaves promoted. BLAST-RADIUS
+  AUDIT then found 23 CIKs with HISTORICAL quarters rewritten (unscoped selectors:
+  Goldman principal x1000 in 2023 etc.) -> ALL 58 REVERTED (integrity first; revert
+  proved clean). Also fixed: production concat row-reorder perturbing tie-breaks at
+  untouched CIKs; trial-output filename contract (.corrected.csv) in the gate driver.
+- ROUND 3 (scoped): four-layer quarter-scope enforcement (a8120c7): scope.quarters
+  REQUIRED on stage-2 leaves (explicit dates); apply_scoped structurally partitions
+  out-of-scope rows away from every applier; gate adds off-scope byte-invariance +
+  rate defect-signature predicates; fingerprint_blast_radius.py is standing tooling.
+  Re-gate of the 58 under scope [2025-12-31]: 22 CIK PASS / 8 FAIL -- every failure
+  the defect-signature predicate (fixes for rates that were already plausible).
+  40 promoted; then 7 pulled on the fingerprint's magnitude finding (principal x1000,
+  rates /100 WITHIN the scoped quarter -- cross-field magnitude plausibility is the
+  ROUND-4 gate predicate, precisely specified); then 13 pulled as production noops /
+  inert first-wave dedups (drift+health gates caught them).
+- FINAL STATE: 39 promoted B2 corrections live (19 wave-1 + ~20 scoped stage-2).
+  2025-12-31 acceptance PASS 7/7: coverage 67, reconcile 95.5, flagged_fv 4.85,
+  blocking_fv 0.164, verified_fv 80.5, drift 0, health 0. Fingerprint: correction
+  effects confined to target-quarter cells at promoted CIKs; total FV delta $16K on
+  $7.46T (single 1911066 cell, remap-to-FV audit gap logged); ZERO correction-layer
+  historical mutation.
+- KNOWN RESIDUAL (pre-existing, not the corrections layer): validate->rebuild
+  fund-strategy artifact feedback oscillates marginal classifications at ~20
+  non-corrected CIKs (n_asset_classes flips, small cost cells). Fix: freeze/pin
+  fund_strategy correction inputs per quarter-pass round.
+- ROUND-4 BACKLOG (mechanical): grounded holdings-side identifiers in prompts (20
+  selector-noop refusals), cross-field magnitude predicate, re-author pulled leaves,
+  re-type the 8 wrong-diagnosis B1 verdicts, retire remains in archive dirs
+  (q4b2exp_*). Human basket unchanged (rule_scope 11, extraction-scope decision,
+  OCIC/North Haven/SCP/1993402, out-of-cohort pool, threshold calibration sign-off).
