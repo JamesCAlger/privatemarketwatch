@@ -1,0 +1,31 @@
+{
+  "cik": "0001860424",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "principal_amount",
+    "to_field": "shares_held"
+  },
+  "source_review_ids": [
+    "RVQ_REV_5870dc9382db"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 51,
+      "row_index": 23,
+      "quoted_text": "Wash & Wax Holdings LLC | Class A Common Share | 4/30/2025 | N/A | 1,440 | 3,309,552 | 1,550,053 | 0.8 | % | (16)"
+    },
+    {
+      "table_index": 51,
+      "row_index": 34,
+      "quoted_text": "IMB Holdco LLC | Series Z Units | 5/20/2024 | N/A | 164 | 163,748 | 10,045 | 0.0 | % | (6) (16)"
+    }
+  ],
+  "confidence": 0.78,
+  "rationale": "The cited rows are equity holdings, Class A Common Share and Series Z Units, where the numeric quantities 1,440 and 164 represent shares or units rather than debt principal. A bounded column_remap from principal_amount to shares_held addresses the extraction gap for these holdings while preserving cost, fair_value, and pct_of_net_assets values shown later in the same rows.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

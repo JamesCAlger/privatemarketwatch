@@ -1,0 +1,36 @@
+{
+  "cik": "0002031750",
+  "mechanism": "classification_lookthrough",
+  "fix_class": "classification_fix",
+  "template": {
+    "field": "asset_class",
+    "value": "debt"
+  },
+  "source_review_ids": [
+    "RVQ_REV_e8aed66616da"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 52,
+      "row_index": 9,
+      "quoted_text": "Total debt investments | $ | 597,964 | $ | 597,891 | 28.54 | %"
+    },
+    {
+      "table_index": 52,
+      "row_index": 25,
+      "quoted_text": "Total equity investments | $ | 2,152,344 | $ | 2,269,950 | 108.37 | %"
+    },
+    {
+      "table_index": 53,
+      "row_index": 13,
+      "quoted_text": "Total investments | $ | 2,988,655 | $ | 3,120,386 | 148.98 | %"
+    }
+  ],
+  "confidence": 0.35,
+  "rationale": "B1 localized the defect to aggregate investment classification totals for 2025-12-31, including separate debt and equity investment totals and an overall total investment percentage. The requested correction class is classification_fix with mechanism classification_lookthrough. Because the cited evidence rows are aggregate total rows and do not provide an issuer_name or bdc_investment_identifier suitable for a holdings row_selector, this correction uses the narrow required asset_class template only and assigns the lookthrough asset class indicated by the debt investment total. Residual risk remains that the held-out gate may require issuer-level row selection or an equity-side companion correction that is not present in the embedded citations.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

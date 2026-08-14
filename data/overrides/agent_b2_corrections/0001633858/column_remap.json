@@ -1,0 +1,41 @@
+{
+  "cik": "0001633858",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "basis_spread",
+    "to_field": "pik_rate",
+    "row_selector": {
+      "issuer_name": "API Technologies",
+      "report_date": "2025-12-31"
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_91e5bc39ab8c",
+    "RVQ_REV_98927d227685"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 36,
+      "row_index": 32,
+      "quoted_text": "API Technologies | Senior Secured Term B-2 Loan (First Lien) | S+ | 1.00 %, 6.00 % PIK | 10.65 % | 1/15/2020 | 5/9/2027 | 1,125,639 | 1,123,491 | 1,089,055"
+    },
+    {
+      "table_index": 36,
+      "row_index": 36,
+      "quoted_text": "API Technologies | Senior Secured Term B-1 Loan (First Lien) | S+ | 1.00 %, 6.00 % PIK | 10.65 % | 11/3/2023 | 3/25/2027 | 99,191 | 98,576 | 97,207"
+    },
+    {
+      "table_index": 57,
+      "row_index": 9,
+      "quoted_text": "Total Investments | $ | 420,392,905 | 100.00 | % | $ | 407,509,401 | 100.00 | %"
+    }
+  ],
+  "confidence": 0.63,
+  "rationale": "The cited API Technologies loan rows show a separate PIK component, '6.00 % PIK', adjacent to the basis spread disclosure. For the requested column_remap class, the narrow correction is to remap the extracted basis_spread value to pik_rate for API Technologies holdings in the target quarter, because the defect appears to be an extraction gap around the PIK rate column rather than a row-level deletion or total-row issue.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "cik": "0001920453",
+  "mechanism": "extraction_gap",
+  "fix_class": "unit_rescale",
+  "template": {
+    "factor": 1000,
+    "field": "principal_amount",
+    "row_selector": {
+      "table_index": 46,
+      "row_index": 26,
+      "issuer_name": "Dynamic Connections, Ltd",
+      "report_date": "2025-12-31"
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_8108d7051ec3"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 46,
+      "row_index": 26,
+      "quoted_text": "Dynamic Connections, Ltd (i)(l)(m)(t) | Term Loan | CORRA + 5.75 % | 8.30 % | 11/27/2030 | 10,047,242 | 7,072,548 | 7,188,366"
+    }
+  ],
+  "confidence": 0.66,
+  "rationale": "B1 localized a unit-rescale extraction gap to table 46 row 26 for Dynamic Connections, Ltd. The cited source row reports a principal amount of 10,047,242 alongside cost and fair value amounts, so this correction narrowly rescales the principal_amount field for that exact row by 1000 while preserving the requested unit_rescale fix class.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

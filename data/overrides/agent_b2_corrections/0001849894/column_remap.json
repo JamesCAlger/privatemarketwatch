@@ -1,0 +1,41 @@
+{
+  "cik": "0001849894",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "principal_amount",
+    "to_field": "shares_held"
+  },
+  "source_review_ids": [
+    "RVQ_REV_8b9df1e4fe96"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 37,
+      "row_index": 4,
+      "quoted_text": "Metropolis Technologies Inc. - Class B Preferred Stock | Par Amount / Shares (7): 8,162"
+    },
+    {
+      "table_index": 37,
+      "row_index": 5,
+      "quoted_text": "Metropolis Technologies Inc. - Class D Preferred Stock | Par Amount / Shares (7): 24"
+    },
+    {
+      "table_index": 37,
+      "row_index": 6,
+      "quoted_text": "Metropolis Technologies Inc. - Warrant | Par Amount / Shares (7): 4"
+    },
+    {
+      "table_index": 37,
+      "row_index": 11,
+      "quoted_text": "S.A.F.E. Management Equity | Par Amount / Shares (7): 3,478"
+    }
+  ],
+  "confidence": 0.74,
+  "rationale": "The cited rows are equity-like holdings where values presented under the filing column 'Par Amount / Shares' represent share counts rather than debt principal. Within the unified holdings schema, those extracted values should be remapped from principal_amount to shares_held. The correction is left without a row_selector so the column-level mapping can cover both cited issuers in the affected table.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

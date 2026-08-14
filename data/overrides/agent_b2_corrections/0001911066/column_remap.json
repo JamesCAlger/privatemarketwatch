@@ -1,0 +1,32 @@
+{
+  "cik": "0001911066",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "cost",
+    "to_field": "fair_value",
+    "row_selector": {
+      "issuer_name": "360 Holdco, Inc. (360 Training)",
+      "report_date": "2025-12-31",
+      "table_index": 63,
+      "row_index": 14
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_5ee9e24bcc74"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 63,
+      "row_index": 14,
+      "quoted_text": "360 Holdco, Inc. (360 Training) | (6) (10) | First Lien Debt (Delayed Draw) | S + 4.75 % | 8.42 | % | 8/2/2028 | 3,580 | - | ( 32 ) | - | %"
+    }
+  ],
+  "confidence": 0.74,
+  "rationale": "The cited holding row shows principal amount 3,580 followed by a dash in the cost column and (32) in the fair value column, then dash percent for net assets. This supports a narrow row-scoped remap from cost to fair_value where an extraction gap likely shifted the fair value into the cost field.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

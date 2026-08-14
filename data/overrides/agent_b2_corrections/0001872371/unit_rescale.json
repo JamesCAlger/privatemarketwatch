@@ -1,0 +1,36 @@
+{
+  "cik": "0001872371",
+  "mechanism": "extraction_gap",
+  "fix_class": "unit_rescale",
+  "template": {
+    "factor": 1000,
+    "field": "principal_amount"
+  },
+  "source_review_ids": [
+    "RVQ_REV_a894751c5054"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 12,
+      "row_index": 8,
+      "quoted_text": "ACESO Holding 4 S.A.R.L. | First Lien Term Loan | Principal (6): EUR 8,508 | Cost: 9,816 | Fair Value: 9,877 | Notes: (5)(8)(10)"
+    },
+    {
+      "table_index": 12,
+      "row_index": 37,
+      "quoted_text": "Aurelia Netherlands B.V. | First Lien Term Loan | Principal (6): EUR 99,155 | Cost: 110,705 | Fair Value: 116,453 | Notes: (5)(8)(10)"
+    },
+    {
+      "table_index": 22,
+      "row_index": 13,
+      "quoted_text": "Violin Finco Guernsey Limited | First Lien Term Loan | Principal (6): GBP 40,334 | Cost: 50,780 | Fair Value: 54,251 | Notes: (5)(8)(10)"
+    }
+  ],
+  "confidence": 0.72,
+  "rationale": "B1 localized three rows where foreign-currency Principal amounts are reported in filing table units while the unified holdings principal_amount needs whole currency units. The supported unit_rescale correction multiplies principal_amount by 1000, matching the scale implied by the cited Cost and Fair Value values shown in thousands. The template is intentionally limited to the requested fix_class and allowed params.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

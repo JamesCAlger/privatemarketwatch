@@ -1,0 +1,35 @@
+{
+  "cik": "0001920145",
+  "mechanism": "genuine_value_defect",
+  "fix_class": "classification_fix",
+  "template": {
+    "field": "index_classification",
+    "value": "Non-accrual",
+    "row_selector": {
+      "issuer_name": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands)",
+      "report_date": "2025-12-31"
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_6f00b49abfec"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 58,
+      "row_index": 33,
+      "quoted_text": "Vardiman Black Holdings, LLC (dba Specialty Dental Brands) | Health Care Providers & Services | S + 7.00 % PIK | 03/18/27 | 30,694 | 27,212 | 18,800 | (7) (8) (13) (14)"
+    },
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Non-accrual | 27.21 | 0.2 | - | -"
+    }
+  ],
+  "confidence": 0.86,
+  "rationale": "B1 localized the affected investment row for Vardiman Black Holdings, LLC (dba Specialty Dental Brands) at 2025-12-31 and cited the filing's non-accrual summary amount matching the row's 27.212 million fair value. The bounded classification correction sets the investment's index classification to Non-accrual without changing reported amounts.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}
