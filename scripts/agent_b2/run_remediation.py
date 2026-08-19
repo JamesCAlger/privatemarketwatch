@@ -263,6 +263,160 @@ _FIELD_BOUNDS = {"interest_rate": (0.0, 60.0), "pik_rate": (0.0, 30.0),
                  "basis_spread": (0.0, 30.0)}
 _FV_TOUCHING = {"missing_position_add"}  # plus unit_rescale when field == fair_value
 
+# Cross-field magnitude plausibility (round-4 predicate). The q4b2exp_v3 magnitude
+# pulls showed the failure mode: a quarter-scoped but UNSELECTED rescale/remap can push
+# an entire quarter's values 10x-1000x away from the fund's own norm while staying
+# inside the absolute _FIELD_BOUNDS (1572694 principal x1000 on every row for a 2-row
+# FX defect; 1646614 rates /100; 1508655 pct_of_net_assets remapped into
+# interest_rate). The un-gameable reference is the fund's OFF-target quarters, which a
+# scoped correction structurally cannot touch: the post-fix target-quarter per-field
+# average (and per-row principal/FV ratio median) must land within one order of
+# magnitude of the median of the off-target per-quarter statistics -- unless the
+# baseline target quarter was already at least that far out, in which case the fix is
+# repairing a magnitude defect, not creating one.
+_MAGNITUDE_NUMERIC_FIELDS = {"interest_rate", "pik_rate", "basis_spread",
+                             "principal_amount", "shares_held", "fair_value", "cost",
+                             "pct_of_net_assets"}
+_MAGNITUDE_LOG10_TOL = 1.0      # 10x -- the repo's order-of-magnitude convention
+_MAGNITUDE_MIN_VALUES = 3       # a quarter statistic needs >= this many non-zero values
+_MAGNITUDE_MIN_NORM_QUARTERS = 2  # off-target quarters needed to establish a fund norm
+_MAGNITUDE_IMPROVE_EPS = 0.05   # log10 slack: "not worse than baseline" tolerance
+
+
+def _quarter_field_means(df: pd.DataFrame, field: str) -> dict[str, float]:
+    """{report_date: mean(|field|)} over non-null non-zero values, per quarter with
+    >= _MAGNITUDE_MIN_VALUES observations."""
+    if field not in df.columns or "report_date" not in df.columns or not len(df):
+        return {}
+    vals = pd.to_numeric(df[field], errors="coerce").abs()
+    ok = vals.notna() & (vals > 0)
+    if not ok.any():
+        return {}
+    grouped = vals[ok].groupby(df.loc[ok, "report_date"].astype(str))
+    return {q: float(s.mean()) for q, s in grouped if len(s) >= _MAGNITUDE_MIN_VALUES}
+
+
+def _quarter_ratio_medians(df: pd.DataFrame) -> dict[str, float]:
+    """{report_date: median(|principal_amount| / |fair_value|)} per row, per quarter
+    with >= _MAGNITUDE_MIN_VALUES rows carrying both. The ratio is scale-free across
+    portfolio growth, so it stays a stable norm even when a fund's per-quarter dollar
+    averages legitimately move."""
+    need = {"principal_amount", "fair_value", "report_date"}
+    if not need <= set(df.columns) or not len(df):
+        return {}
+    pa = pd.to_numeric(df["principal_amount"], errors="coerce").abs()
+    fv = pd.to_numeric(df["fair_value"], errors="coerce").abs()
+    ok = pa.notna() & fv.notna() & (pa > 0) & (fv > 0)
+    if not ok.any():
+        return {}
+    ratio = pa[ok] / fv[ok]
+    grouped = ratio.groupby(df.loc[ok, "report_date"].astype(str))
+    return {q: float(s.median()) for q, s in grouped if len(s) >= _MAGNITUDE_MIN_VALUES}
+
+
+def _magnitude_fields(correction: dict) -> list[str]:
+    """Numeric holdings fields a stage-2 correction writes to (magnitude-relevant)."""
+    fix_class = str(correction.get("fix_class") or "")
+    template = correction.get("template") or {}
+    if fix_class in {"rate_rescale", "unit_rescale"}:
+        fields = [str(template.get("field") or "")]
+    elif fix_class == "column_remap":
+        fields = [str(template.get("from_field") or ""), str(template.get("to_field") or "")]
+    elif fix_class == "all_pik_normalization":
+        fields = ["pik_rate"] + (["interest_rate"] if template.get("set_interest_to_cash") else [])
+    else:
+        fields = []
+    return [f for f in fields if f in _MAGNITUDE_NUMERIC_FIELDS]
+
+
+def _changed_row_means(
+    base_df: pd.DataFrame, trial_df: pd.DataFrame, field: str, tq: str,
+) -> tuple[float | None, float | None, int]:
+    """(baseline_mean, trial_mean, n_changed) over target-quarter rows whose ``field``
+    value the fix changed. Requires index alignment (trial derived from base via
+    ``apply_scoped``); the caller passes the gate's own replay frame to guarantee it.
+    Means are over non-zero absolute values; None when < _MAGNITUDE_MIN_VALUES."""
+    if field not in base_df.columns or field not in trial_df.columns:
+        return None, None, 0
+    if "report_date" not in base_df.columns:
+        return None, None, 0
+    in_q = base_df["report_date"].astype(str) == tq
+    b = pd.to_numeric(base_df.loc[in_q, field], errors="coerce")
+    t = pd.to_numeric(trial_df[field].reindex(base_df.index), errors="coerce").loc[in_q]
+    changed = (b != t) & ~(b.isna() & t.isna())
+    tv = t[changed].abs()
+    tv = tv[tv > 0]
+    bv = b[changed].abs()
+    bv = bv[bv > 0]
+    t_mean = float(tv.mean()) if len(tv) >= _MAGNITUDE_MIN_VALUES else None
+    b_mean = float(bv.mean()) if len(bv) else None
+    return b_mean, t_mean, int(changed.sum())
+
+
+def check_magnitude_plausibility(
+    *, baseline_df: pd.DataFrame, trial_df: pd.DataFrame, correction: dict,
+    target_quarter: str,
+) -> tuple[bool, list[str]]:
+    """Cross-field magnitude predicate for stage-2 value corrections.
+
+    Three legs per touched field, all judged against the fund norm (median of the
+    OFF-target per-quarter statistics, which a scoped fix cannot touch):
+     - target-quarter average of the field;
+     - average over the CHANGED rows only -- a blended quarter (many small remapped
+       values mixed with surviving in-band values) can sit inside the 10x band while
+       the rows the fix actually wrote are an order of magnitude off (the 1508655
+       pct_of_net_assets -> interest_rate shape);
+     - per-row principal/FV ratio median when principal/FV is touched (scale-free
+       under portfolio growth).
+
+    Returns ``(ok, reasons)``. Skips (passes) any leg where the fund norm cannot be
+    established (< _MAGNITUDE_MIN_NORM_QUARTERS off-target quarters with data) or the
+    target quarter has no post-fix values for the field (a vacated from_field is a
+    remap consequence, not a magnitude break); those cases stay covered by
+    replay-equivalence, _FIELD_BOUNDS sanity, and the conservation gate."""
+    import math
+    import statistics
+
+    tq = str(target_quarter)
+    reasons: list[str] = []
+
+    def _norm(base_stats: dict[str, float]) -> tuple[float, int] | None:
+        off = [v for q, v in base_stats.items() if q != tq and v > 0]
+        if len(off) < _MAGNITUDE_MIN_NORM_QUARTERS:
+            return None
+        norm = float(statistics.median(off))
+        return (norm, len(off)) if norm > 0 else None
+
+    def _judge(label: str, norm_info: tuple[float, int] | None,
+               base_val: float | None, trial_val: float | None) -> None:
+        if norm_info is None or trial_val is None or trial_val <= 0:
+            return
+        norm, n_off = norm_info
+        dev_trial = abs(math.log10(trial_val / norm))
+        if dev_trial <= _MAGNITUDE_LOG10_TOL:
+            return
+        if (base_val is not None and base_val > 0
+                and dev_trial <= abs(math.log10(base_val / norm)) + _MAGNITUDE_IMPROVE_EPS):
+            return  # baseline was already at least this far out: repairing, not breaking
+        reasons.append(
+            f"{label} in {tq} lands {10 ** dev_trial:,.0f}x from the fund norm "
+            f"({trial_val:,.4g} vs norm {norm:,.4g} from {n_off} off-target quarter(s))")
+
+    fields = _magnitude_fields(correction)
+    for f in fields:
+        base_stats = _quarter_field_means(baseline_df, f)
+        trial_stats = _quarter_field_means(trial_df, f)
+        norm_info = _norm(base_stats)
+        _judge(f"post-fix {f} quarter average", norm_info,
+               base_stats.get(tq), trial_stats.get(tq))
+        cr_base, cr_trial, _n = _changed_row_means(baseline_df, trial_df, f, tq)
+        _judge(f"post-fix {f} changed-row average", norm_info, cr_base, cr_trial)
+    if "principal_amount" in fields or "fair_value" in fields:
+        base_r = _quarter_ratio_medians(baseline_df)
+        _judge("post-fix principal/FV row-ratio median", _norm(base_r),
+               base_r.get(tq), _quarter_ratio_medians(trial_df).get(tq))
+    return (not reasons), reasons
+
 
 def _canonical_value_frame(df: pd.DataFrame) -> pd.DataFrame:
     """Comparison-stable projection: shared audit columns, numerics coerced+rounded,
@@ -295,11 +449,18 @@ def gate_value_packet(
       bounds; fair_value magnitudes sane.
     - fv_change_scoped: for non-FV fix classes, total FV identical to baseline (< $1
       drift); FV-touching classes defer to the conservation gate run alongside.
+    - magnitude_plausible (round-4): the fix must leave the target quarter's per-field
+      averages and principal/FV row ratio within one order of magnitude of the fund's
+      off-target-quarter norm (see check_magnitude_plausibility).
     - grounding_verified (missing_position_add only): every position's source_row_id
       must exist in the grounding frame for this CIK with fair_value within 0.5%.
       Missing grounding data FAILS (fail-closed; no fabricated positions).
+
+    Replay uses ``apply_scoped`` (not the bare applier) so the expected frame matches
+    the production application path: a scoped correction replayed over a multi-quarter
+    baseline must not touch off-scope quarters.
     """
-    from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS
+    from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS, apply_scoped
 
     fix_class = str(correction.get("fix_class") or "")
     template = correction.get("template") or {}
@@ -311,7 +472,7 @@ def gate_value_packet(
         return {"cik": cik, "target_quarter": target_quarter, "verdict": "FAIL",
                 "checks": {}, "reasons": [f"no applier for fix_class {fix_class!r}"]}
 
-    expected_df, replay_audit = applier(baseline_df, template)
+    expected_df, replay_audit = apply_scoped(baseline_df, correction)
     if replay_audit.get("status") != "ok":
         return {"cik": cik, "target_quarter": target_quarter, "verdict": "FAIL",
                 "checks": {"replay_ok": False},
@@ -344,6 +505,14 @@ def gate_value_packet(
             sane = False
             reasons.append("post-fix |fair_value| exceeds $1T sanity bound")
     checks["field_sanity"] = sane
+
+    # Judged on the gate's own replay frame (row-aligned with baseline by
+    # construction); replay_equivalence pins trial_df to it canonically.
+    mag_ok, mag_reasons = check_magnitude_plausibility(
+        baseline_df=baseline_df, trial_df=expected_df, correction=correction,
+        target_quarter=target_quarter)
+    checks["magnitude_plausible"] = mag_ok
+    reasons.extend(mag_reasons)
 
     fv_touching = fix_class in _FV_TOUCHING or (
         fix_class == "unit_rescale" and field == "fair_value")

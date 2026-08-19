@@ -378,6 +378,9 @@ def main(argv=None) -> int:
     parser.add_argument("--review-id", action="append", default=[])
     parser.add_argument("--reserve", action="store_true")
     parser.add_argument("--release-manifest")
+    parser.add_argument("--verdicts-dir", type=Path, default=None,
+                        help="Override the verdict output dir (e.g. a scratch dir for a "
+                             "stability re-run that must not touch the production store).")
     args = parser.parse_args(argv)
 
     try:
@@ -387,10 +390,14 @@ def main(argv=None) -> int:
             return 0
         if not args.batch_id:
             raise PreflightError("--batch-id is required")
+        kwargs = {}
+        if args.verdicts_dir is not None:
+            kwargs["verdicts_dir"] = args.verdicts_dir
         result = preflight_batch(
             args.batch_id,
             selected_ids=set(args.review_id) if args.review_id else None,
             reserve=args.reserve,
+            **kwargs,
         )
         print(json.dumps(result))
         return 0

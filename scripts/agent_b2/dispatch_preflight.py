@@ -124,6 +124,94 @@ def _citations_json(verdicts: list[dict]) -> str:
     return json.dumps(cites[:8], indent=2)
 
 
+def _bundle_identifier_rows(bundles: list[dict]) -> list[dict]:
+    """Distinct holdings-side identifier candidates from the bundles' evidence items
+    (e.g. the ``holdings_slice`` rows the flag fired on). These carry the UNIFIED
+    holdings text a row_selector must equality-match -- filing-citation text often
+    differs (normalization, suffixes) and produces a no-op selector (the 20
+    selector-noop gate refusals of q4b2exp round 3)."""
+    out: list[dict] = []
+    seen: set[tuple] = set()
+    for b in bundles:
+        for item in (b.get("evidence_items") or []):
+            data = item.get("data")
+            rows = data if isinstance(data, list) else [data]
+            for r in rows:
+                if not isinstance(r, dict):
+                    continue
+                name = str(r.get("issuer_name") or "").strip()
+                ident = str(r.get("bdc_investment_identifier") or "").strip()
+                if not (name or ident):
+                    continue
+                rec = {"issuer_name": name, "bdc_investment_identifier": ident,
+                       "report_date": str(r.get("report_date") or "").strip()}
+                key = (name, ident, rec["report_date"])
+                if key not in seen:
+                    seen.add(key)
+                    out.append(rec)
+    return out
+
+
+def _verify_identifiers(rows: list[dict], cik: str,
+                        holdings_path: Path | None) -> list[dict]:
+    """Annotate each candidate with ``match_count`` against the CURRENT unified
+    holdings for the CIK, using the applier's own selector semantics (strip + string
+    equality, AND over provided keys). ``match_count`` is None when the holdings file
+    is unavailable (candidates stay usable but unverified)."""
+    if not rows:
+        return rows
+    if holdings_path is None or not Path(holdings_path).exists():
+        for r in rows:
+            r["match_count"] = None
+        return rows
+    import duckdb
+    src = str(holdings_path).replace("'", "''")
+    reader = ("read_parquet" if str(holdings_path).endswith(".parquet")
+              else "read_csv_auto")
+    df = duckdb.connect().execute(
+        f"SELECT issuer_name, bdc_investment_identifier, report_date FROM {reader}('{src}') "
+        f"WHERE ltrim(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), '0') = ?",
+        [str(cik).lstrip("0")]).fetchdf()
+    cols = {c: df[c].fillna("").astype(str).str.strip() for c in df.columns}
+    for r in rows:
+        mask = None
+        for key in ("issuer_name", "bdc_investment_identifier", "report_date"):
+            want = r.get(key) or ""
+            if not want:
+                continue
+            m = cols[key] == want.strip()
+            mask = m if mask is None else (mask & m)
+        r["match_count"] = int(mask.sum()) if mask is not None else 0
+    return rows
+
+
+_MAX_GROUNDED_IDENTIFIERS = 20
+
+
+def _grounding_block(rows: list[dict]) -> str:
+    if not rows:
+        return ("  (no holdings-side identifier rows in the source bundles; copy selector "
+                "text with extra care -- a selector that matches no holdings rows is "
+                "refused by the gate as a no-op)")
+    lines = []
+    for r in rows[:_MAX_GROUNDED_IDENTIFIERS]:
+        parts = []
+        if r.get("issuer_name"):
+            parts.append(f"issuer_name: {json.dumps(r['issuer_name'])}")
+        if r.get("bdc_investment_identifier"):
+            parts.append(f"bdc_investment_identifier: {json.dumps(r['bdc_investment_identifier'])}")
+        if r.get("report_date"):
+            parts.append(f"report_date: {json.dumps(r['report_date'])}")
+        mc = r.get("match_count")
+        tag = ("UNVERIFIED: holdings file unavailable at preflight" if mc is None else
+               f"matches {mc} current holdings row(s)" if mc else
+               "NO MATCH in current holdings -- do NOT use as a selector")
+        lines.append(f"  - {'; '.join(parts)} [{tag}]")
+    if len(rows) > _MAX_GROUNDED_IDENTIFIERS:
+        lines.append(f"  - ... {len(rows) - _MAX_GROUNDED_IDENTIFIERS} more not shown")
+    return "\n".join(lines)
+
+
 def _contract_excerpt(fix_class: str) -> str:
     """Schema-accurate template contract for the packet's fix_class, generated from the
     validator's own TEMPLATE_REGISTRY so prompt and validation can never disagree.
@@ -150,8 +238,10 @@ def _contract_excerpt(fix_class: str) -> str:
         lines.append(f"- template.row_selector (object) keys must be from "
                      f"{sorted(ROW_SELECTOR_KEYS)}; equality match, AND-combined. It MUST "
                      f"include issuer_name or bdc_investment_identifier -- copy the exact "
-                     f"issuer/identifier text from the cited evidence row; table/row "
-                     f"coordinates alone cannot select holdings rows.")
+                     f"string from the 'Holdings-side selector identifiers' section above "
+                     f"(NOT the filing-citation text, which often differs and produces a "
+                     f"no-op selector the gate refuses); table/row coordinates alone "
+                     f"cannot select holdings rows.")
     if {"from_field", "to_field", "field"} & tpl.allowed:
         lines.append("- Field names refer to the UNIFIED HOLDINGS schema (the allowed "
                      "lists above), NEVER the filing table's own column headings.")
@@ -178,7 +268,8 @@ def _contract_excerpt(fix_class: str) -> str:
 
 
 def _worker_prompt(row: dict, verdicts: list[dict], *, contract_abs: str, bundle_paths: list[str],
-                   correction_path: Path, validator: str, py: str) -> str:
+                   correction_path: Path, validator: str, py: str,
+                   grounded_identifiers: list[dict] | None = None) -> str:
     cik = row["cik"]
     fix_class = row["fix_class"]
     mechanism = row.get("mechanism", "")
@@ -214,6 +305,11 @@ for the requested class with low confidence and explain the residual risk.
 
 What B1 localized as the defect (re-ground these against source before trusting them):
 {_citations_block(verdicts)}
+
+Holdings-side selector identifiers (the EXACT text in the unified holdings frame; any
+template.row_selector must equality-match one of these strings -- filing-citation text
+often differs and produces a no-op selector that the gate refuses):
+{_grounding_block(grounded_identifiers or [])}
 
 All paths are ABSOLUTE; your working directory is NOT the repo root. Invoke Python via the
 exact interpreter shown ("{py}").
@@ -253,6 +349,7 @@ def preflight_batch(
     bundles_dir: Path = DEFAULT_BUNDLES, corrections_dir: Path = DEFAULT_CORRECTIONS,
     contract_rel: str = DEFAULT_CONTRACT, fix_class: str | None = None, reserve: bool = False,
     review_queue_path: Path | None = None,
+    holdings_path: Path | None = config.UNIFIED_HOLDINGS_PARQUET_FILE,
 ) -> dict:
     batch_dir = _batch_dir(base_dir, batch_id)
     rows = _read_worklist(batch_dir)
@@ -386,9 +483,13 @@ def preflight_batch(
 
     for r in manifest_rows:
         verdicts = [json.loads(Path(p).read_text(encoding="utf-8")) for p in r["verdict_paths"]]
+        bundles = [json.loads(Path(p).read_text(encoding="utf-8")) for p in r["bundle_paths"]]
+        grounded = _verify_identifiers(_bundle_identifier_rows(bundles), r["cik"], holdings_path)
+        r["n_grounded_identifiers"] = len(grounded)
         Path(r["prompt_path"]).write_text(
             _worker_prompt(r, verdicts, contract_abs=contract_abs, bundle_paths=r["bundle_paths"],
-                           correction_path=Path(r["correction_path"]), validator=validator, py=WORKER_PYTHON),
+                           correction_path=Path(r["correction_path"]), validator=validator, py=WORKER_PYTHON,
+                           grounded_identifiers=grounded),
             encoding="utf-8")
 
     if not manifest_rows:

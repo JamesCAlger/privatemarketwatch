@@ -84,7 +84,14 @@ def _stages(quarter: str) -> list[Stage]:
     acceptance_argv = [py, "-m", "pipeline.quarter_acceptance", "--quarter", quarter]
 
     def battery(suffix: str) -> list[Stage]:
-        return [
+        # Pre-dispatch only: freeze fund-strategy correction inputs at the pass
+        # boundary (the post battery reuses the same pin -- one frozen input set
+        # per pass round).
+        pin = [] if suffix else [
+            Stage("pin_inputs", func="pin_fund_strategy_inputs",
+                  note="freeze fund-strategy correction inputs for this pass "
+                       "(breaks the validate->rebuild oscillation)")]
+        return pin + [
             Stage(f"rebuild{suffix}", [py, "scripts/rebuild_outputs.py", "--unified"],
                   note="unified rebuild from cached inputs (applies promoted rules + audit)"),
             Stage(f"oracle{suffix}", [py, "-m", "pipeline.oracle_runner"]),
@@ -92,6 +99,9 @@ def _stages(quarter: str) -> list[Stage]:
             Stage(f"validate{suffix}", [py, "-m", "pipeline.main", "--validate"]),
             Stage(f"shadow{suffix}", [py, "scripts/shadow_validation_runner.py"]),
             Stage(f"queue{suffix}", [py, "-m", "pipeline.review_queue", "--emit-bdc-worklist"]),
+            Stage(f"ledger{suffix}", func=f"build_findings_ledger{suffix or '_pre'}",
+                  note="findings lifecycle ledger; post round diffs against pre "
+                       "(loop-until-dry input)"),
             Stage(
                 f"acceptance{suffix}",
                 acceptance_argv,
@@ -175,6 +185,53 @@ class Runner:
         return ok
 
     # ------------------------------------------------------------ functions
+    def pin_fund_strategy_inputs(self) -> None:
+        """Freeze fund-strategy correction inputs for this pass round.
+
+        The validate stage regenerates ``fund_strategy_correction_candidates.csv``
+        from CURRENT holdings while the rebuild stage applies it, so each
+        validate->rebuild cycle feeds validation output back into the next build
+        and oscillates marginal classifications (~20 non-corrected CIKs). This
+        stage copies the live candidates to the PINNED path that
+        ``_apply_fund_strategy_corrections`` prefers; every rebuild in this pass
+        (pre AND post dispatch) then consumes one frozen input set. The live file
+        keeps regenerating for diagnostics; the pin refreshes only at the next
+        pass boundary. A snapshot of the pin lands in the pass dir for audit."""
+        src = config.FUND_STRATEGY_CORRECTION_CANDIDATES_FILE
+        dst = config.FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE
+        meta = {"pass_id": self.pass_id, "quarter": self.quarter, "pinned_utc": _now(),
+                "source": str(src)}
+        if src.exists():
+            shutil.copy2(src, dst)
+            shutil.copy2(src, self.pass_dir / dst.name)
+            meta["pinned"] = True
+        else:
+            # No live candidates: drop any stale pin so rebuilds apply nothing
+            # rather than a previous pass's corrections.
+            if dst.exists():
+                dst.unlink()
+            meta["pinned"] = False
+            meta["note"] = "no live candidates file; stale pin removed"
+        (self.pass_dir / "fund_strategy_pin.json").write_text(
+            json.dumps(meta, indent=2), encoding="utf-8")
+        logger.info("pin_inputs: %s", meta)
+
+    def _build_findings_ledger(self, phase: str) -> None:
+        from scripts import findings_ledger as fl
+        ledger = fl.build_ledger()
+        out = self.pass_dir / f"findings_ledger_{phase}.csv"
+        compare_path = (self.pass_dir / "findings_ledger_pre.csv"
+                        if phase == "post" else None)
+        summary = fl.write_ledger(ledger, out, compare_path=compare_path)
+        logger.info("ledger_%s: %d findings, %d actionable, dry=%s", phase,
+                    summary["n_findings"], summary["n_actionable"], summary["dry"])
+
+    def build_findings_ledger_pre(self) -> None:
+        self._build_findings_ledger("pre")
+
+    def build_findings_ledger_post(self) -> None:
+        self._build_findings_ledger("post")
+
     def select_candidates(self) -> None:
         """Rank under-review cohort funds by FV into candidates.csv + guidance."""
         funds_path = config.QUARTER_ACCEPTANCE_FUNDS_FILE
@@ -225,11 +282,30 @@ class Runner:
             "checks_pre_fail": [c["id"] for c in pre.get("checks", []) if not c["pass"]],
             "checks_post_fail": [c["id"] for c in post.get("checks", []) if not c["pass"]],
         }
+        # Loop-until-dry decision: the post-round findings ledger says whether
+        # another dispatch round is warranted. Dry -> the pass converged; not dry
+        # -> start the next round (new pass id) and dispatch the actionable pool.
+        ledger_summary_p = self.pass_dir / "findings_ledger_post.summary.json"
+        if ledger_summary_p.exists():
+            ls = json.loads(ledger_summary_p.read_text(encoding="utf-8-sig"))
+            summary["next_round"] = {
+                "dry": ls.get("dry"), "n_actionable": ls.get("n_actionable"),
+                "states": ls.get("states"),
+                "round_delta": ls.get("round_delta"),
+                "guidance": ("converged: actionable pool empty; no further round"
+                             if ls.get("dry") else
+                             "NOT dry: re-run with a fresh --pass-id and dispatch "
+                             "the actionable pool (see findings_ledger_post.csv)"),
+            }
         out = self.pass_dir / "pass_summary.json"
         out.write_text(json.dumps(summary, indent=2), encoding="utf-8")
         logger.info("pass %s: verdict %s -> %s; %d metric deltas; wrote %s",
                     self.pass_id, summary["verdict_pre"], summary["verdict_post"],
                     len(deltas), out)
+        nr = summary.get("next_round")
+        if nr:
+            logger.info("next_round: dry=%s n_actionable=%s -- %s",
+                        nr["dry"], nr["n_actionable"], nr["guidance"])
 
     # ---------------------------------------------------------------- drive
     def run(self, *, from_stage: str | None = None, until_stage: str | None = None,

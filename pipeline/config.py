@@ -254,6 +254,12 @@ FUND_STRATEGY_REVIEW_QUEUE_FILE = OUTPUT_DIR / "fund_strategy_review_queue.csv"
 FUND_STRATEGY_CORRECTION_CANDIDATES_FILE = (
     OUTPUT_DIR / "fund_strategy_correction_candidates.csv"
 )
+# Frozen per-quarter-pass copy (see run_quarter_pass pin stage). When present, unified
+# rebuilds consume THIS instead of the live file above, breaking the validate->rebuild
+# feedback loop that oscillates marginal fund-strategy classifications.
+FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE = (
+    OUTPUT_DIR / "fund_strategy_correction_candidates.pinned.csv"
+)
 FUND_STRATEGY_OVERRIDES_FILE = OVERRIDES_DIR / "fund_strategy_overrides.json"
 COLUMN_QUALITY_METRICS_FILE = OUTPUT_DIR / "column_quality_metrics.csv"
 ROW_VALIDATION_ISSUES_FILE = OUTPUT_DIR / "row_validation_issues.csv"

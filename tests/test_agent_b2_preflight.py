@@ -269,6 +269,95 @@ def test_preflight_skips_policy_fix_class_with_reason(tmp_path):
     assert "human escalation basket" in manifest["skipped_policy"][0]["reason"]
 
 
+def test_prompt_grounds_holdings_identifiers_with_match_verification(tmp_path):
+    # Round-4: the prompt must carry the EXACT holdings-side identifier strings
+    # (from the bundle's holdings_slice) verified against current unified holdings --
+    # the fix for the 20 selector-noop gate refusals (workers copied filing-citation
+    # text that equality-matches nothing in the holdings frame).
+    import pandas as pd
+    d = _dirs(tmp_path)
+    batch = "B2G"
+    batch_dir = d["base_dir"] / "batch" / batch
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    (d["verdicts_dir"] / "RVQ_BLK_gr.json").write_text(
+        json.dumps(_verdict("RVQ_BLK_gr")), encoding="utf-8")
+    d["bundles_dir"].mkdir(parents=True, exist_ok=True)
+    (d["bundles_dir"] / "RVQ_BLK_gr.json").write_text(json.dumps({
+        "review_id": "RVQ_BLK_gr", "cik": "0001743415",
+        "evidence_items": [
+            {"evidence_id": "flag", "data": {"cik": "0001743415"}},
+            {"evidence_id": "holdings_slice", "data": [
+                {"issuer_name": "Astra Acquisition Corp.",
+                 "bdc_investment_identifier": "Astra | Second-lien loan",
+                 "fair_value": 1.0},
+                {"issuer_name": "Ghost Issuer That Left The Frame",
+                 "bdc_investment_identifier": "", "fair_value": 2.0},
+            ]},
+        ]}), encoding="utf-8")
+    holdings = tmp_path / "holdings.parquet"
+    pd.DataFrame([
+        {"cik": "0001743415", "issuer_name": "Astra Acquisition Corp.",
+         "bdc_investment_identifier": "Astra | Second-lien loan",
+         "report_date": "2024-12-31"},
+        {"cik": "0001743415", "issuer_name": "Other Co",
+         "bdc_investment_identifier": "", "report_date": "2024-12-31"},
+    ]).to_parquet(holdings)
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "mechanism": "subtotal_leak", "quarters": "2024-12-31",
+                                 "source_review_ids": "RVQ_BLK_gr"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=holdings)
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Holdings-side selector identifiers" in prompt
+    assert '"Astra Acquisition Corp."' in prompt
+    assert "matches 1 current holdings row(s)" in prompt
+    assert "Ghost Issuer That Left The Frame" in prompt
+    assert "NO MATCH in current holdings -- do NOT use as a selector" in prompt
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["rows"][0]["n_grounded_identifiers"] == 2
+
+
+def test_prompt_grounding_unverified_without_holdings_file(tmp_path):
+    d = _dirs(tmp_path)
+    batch = "B2GU"
+    batch_dir = d["base_dir"] / "batch" / batch
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    (d["verdicts_dir"] / "RVQ_BLK_gu.json").write_text(
+        json.dumps(_verdict("RVQ_BLK_gu")), encoding="utf-8")
+    d["bundles_dir"].mkdir(parents=True, exist_ok=True)
+    (d["bundles_dir"] / "RVQ_BLK_gu.json").write_text(json.dumps({
+        "review_id": "RVQ_BLK_gu", "cik": "0001743415",
+        "evidence_items": [{"evidence_id": "holdings_slice",
+                            "data": [{"issuer_name": "Astra Acquisition Corp."}]}],
+        }), encoding="utf-8")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_gu"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter",
+                       holdings_path=tmp_path / "no_such_holdings.parquet")
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "UNVERIFIED: holdings file unavailable at preflight" in prompt
+
+
+def test_prompt_grounding_absent_notes_care(tmp_path):
+    # Bundles without holdings rows: the section still appears with the caution line
+    # (the worker must know selector no-ops are gate refusals).
+    d = _dirs(tmp_path)
+    batch = "B2GN"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_gn")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_gn"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=None)
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Holdings-side selector identifiers" in prompt
+    assert "no holdings-side identifier rows in the source bundles" in prompt
+
+
 def test_preflight_skips_stale_targets_against_review_queue(tmp_path):
     # Frame revalidation: a packet whose source finding no longer appears in the
     # current review queue was fixed upstream -- skip, don't dispatch (q4b2t4b lesson).

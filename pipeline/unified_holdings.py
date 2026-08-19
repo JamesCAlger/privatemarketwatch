@@ -27,6 +27,7 @@ from pipeline.config import (
     ENTITY_LOOKUP_FILE,
     FUND_FINANCIALS_FILE,
     FUND_STRATEGY_CORRECTION_CANDIDATES_FILE,
+    FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE,
     FUND_STRATEGY_REFERENCE_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_HOLDINGS_FILE,
@@ -1433,8 +1434,19 @@ def _apply_fund_strategy_corrections(
     Loads the correction candidates CSV, delegates to
     ``fund_strategy_validation.apply_fund_strategy_correction_candidates``
     which handles APPLY filtering, excluded-transition guards, and DuckDB join.
+
+    When a per-pass PINNED copy exists (written by the run_quarter_pass pin stage),
+    it takes precedence over the live file: the validate stage regenerates the live
+    candidates from CURRENT holdings, so consuming them directly feeds validation
+    output back into the next rebuild and oscillates marginal classifications
+    (~20 non-corrected CIKs, 2026-08-13 known residual). The pin freezes the
+    inputs for the whole pass round.
     """
-    path = candidates_path or FUND_STRATEGY_CORRECTION_CANDIDATES_FILE
+    path = candidates_path
+    if path is None:
+        path = (FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE
+                if FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE.exists()
+                else FUND_STRATEGY_CORRECTION_CANDIDATES_FILE)
     if not path.exists():
         return df
 

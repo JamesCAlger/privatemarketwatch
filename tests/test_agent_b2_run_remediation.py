@@ -384,3 +384,178 @@ def test_value_gate_grounding_fv_mismatch_fails():
                                grounding_df=grounding)
     assert res["verdict"] == "FAIL"
     assert res["checks"]["grounding_verified"] is False
+
+
+# ------------------------------------------------- magnitude plausibility (round 4)
+# Modeled on the q4b2exp_v3 magnitude pulls: quarter-scoped but UNSELECTED
+# rescales/remaps that pushed a whole quarter 10x-1000x off the fund's own norm while
+# staying inside the absolute _FIELD_BOUNDS.
+
+_MQ = ["2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"]
+
+
+def _mag_frame(target_rate=None, target_principal=None, target_pct=0.2):
+    """4 quarters x 4 rows; rates ~10, principal ~ fair_value ~1000 (ratio ~1)."""
+    rows = []
+    for q in _MQ:
+        for i in range(4):
+            rate = (target_rate if (target_rate is not None and q == "2025-12-31")
+                    else 9.0 + i)
+            principal = (target_principal if (target_principal is not None and q == "2025-12-31")
+                         else 950.0 + 30 * i)
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": 1000.0 + 10 * i, "cost": 990.0 + 10 * i,
+                         "principal_amount": principal, "interest_rate": rate,
+                         "pik_rate": None, "basis_spread": 5.0,
+                         "pct_of_net_assets": target_pct + 0.05 * i,
+                         "asset_class": "PRIVATE_CREDIT"})
+    return pd.DataFrame(rows)
+
+
+def _scoped(corr):
+    corr["scope"] = {"quarters": ["2025-12-31"]}
+    return corr
+
+
+def _gate_scoped(base, corr):
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, audit = apply_scoped(base, corr)
+    assert audit.get("status") == "ok", audit
+    return rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                                baseline_df=base, trial_df=trial, correction=corr)
+
+
+def test_magnitude_gate_refuses_unselected_principal_x1000():
+    # 1572694 shape: evidence cites 2 FX rows, fix multiplies EVERY row's principal.
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "principal_amount", "factor": 1000}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is False
+    assert res["verdict"] == "FAIL"
+    assert any("principal" in r for r in res["reasons"])
+
+
+def test_magnitude_gate_refuses_unselected_rate_div100():
+    # 1646614 shape: interest_rate x0.01 across the quarter; post-fix values (~0.1)
+    # are INSIDE the absolute bounds, so only the fund-norm comparison catches it.
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "interest_rate", "factor": 0.01}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["field_sanity"] is True
+    assert res["checks"]["magnitude_plausible"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_magnitude_gate_refuses_remap_pct_into_rate():
+    # 1508655 shape: pct_of_net_assets (~0.2) remapped into interest_rate (norm ~10).
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "column_remap",
+                    "template": {"from_field": "pct_of_net_assets",
+                                 "to_field": "interest_rate"}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_magnitude_gate_passes_scale_repair():
+    # The legitimate direction: the target quarter's rates were stored /100 (0.09-0.12
+    # vs fund norm ~10); rate_rescale x100 REPAIRS the magnitude defect.
+    base = _mag_frame(target_rate=0.105)
+    corr = _scoped({"cik": "0000000100", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is True, res["reasons"]
+    assert res["verdict"] == "PASS", res["reasons"]
+
+
+def test_magnitude_gate_passes_selected_single_row_fix():
+    # An issuer-selected fix moves one row of four: the quarter average stays within
+    # one order of magnitude of the norm; bounded fixes are not refused.
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 0.01,
+                                 "row_selector": {"issuer_name": "Issuer 0"}}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is True, res["reasons"]
+
+
+def test_magnitude_gate_vacated_from_field_not_a_break():
+    # A remap that vacates from_field in the target quarter is a remap consequence,
+    # not a magnitude break; the newly populated to_field lands on the norm.
+    rows = []
+    for q in _MQ:
+        for i in range(4):
+            principal = None if q == "2025-12-31" else 950.0 + 30 * i
+            shares = (950.0 + 30 * i) if q == "2025-12-31" else None
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": 1000.0, "principal_amount": principal,
+                         "shares_held": shares, "interest_rate": 10.0})
+    base = pd.DataFrame(rows)
+    corr = _scoped({"cik": "0000000100", "fix_class": "column_remap",
+                    "template": {"from_field": "shares_held",
+                                 "to_field": "principal_amount"}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is True, res["reasons"]
+
+
+def test_magnitude_gate_changed_row_leg_catches_blended_remap():
+    # 1508655 shape on real data: most rows get small remapped values, a minority keep
+    # in-band rates, so the QUARTER average stays inside 10x -- but the rows the fix
+    # actually wrote land an order of magnitude off the norm.
+    rows = []
+    for q in _MQ:
+        for i in range(10):
+            has_pct = i < 7
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": 1000.0, "interest_rate": 10.5 + 0.1 * i,
+                         "pct_of_net_assets": (0.7 + 0.02 * i) if has_pct else None})
+    base = pd.DataFrame(rows)
+    corr = _scoped({"cik": "0000000100", "fix_class": "column_remap",
+                    "template": {"from_field": "pct_of_net_assets",
+                                 "to_field": "interest_rate"}})
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, _ = apply_scoped(base, corr)
+    # quarter average post-fix: (7 * ~0.77 + 3 * ~11) / 10 ~= 3.8 -> inside 10x of ~11
+    ok, reasons = rr.check_magnitude_plausibility(
+        baseline_df=base, trial_df=trial, correction=corr, target_quarter="2025-12-31")
+    assert ok is False
+    assert any("changed-row" in r for r in reasons)
+
+
+def test_magnitude_check_skips_without_fund_norm():
+    # Only one off-target quarter -> no norm -> the predicate abstains (other gate
+    # checks still apply); it must not fabricate a refusal from thin history.
+    base = _mag_frame()
+    base = base[base["report_date"].isin(["2025-09-30", "2025-12-31"])].reset_index(drop=True)
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "principal_amount", "factor": 1000}})
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, _ = apply_scoped(base, corr)
+    ok, reasons = rr.check_magnitude_plausibility(
+        baseline_df=base, trial_df=trial, correction=corr, target_quarter="2025-12-31")
+    assert ok is True and reasons == []
+
+
+def test_magnitude_check_ratio_leg_catches_principal_break_when_fund_grows():
+    # Dollar averages legitimately drift with portfolio growth, but the per-row
+    # principal/FV ratio does not: a x1000 principal rescale must still be refused
+    # when the fund tripled in size across quarters.
+    rows = []
+    for k, q in enumerate(_MQ):
+        scale = (1 + k)  # fund grows 4x over the year
+        for i in range(4):
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": scale * (1000.0 + 10 * i),
+                         "principal_amount": scale * (950.0 + 30 * i),
+                         "interest_rate": 10.0})
+    base = pd.DataFrame(rows)
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "principal_amount", "factor": 1000}})
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, _ = apply_scoped(base, corr)
+    ok, reasons = rr.check_magnitude_plausibility(
+        baseline_df=base, trial_df=trial, correction=corr, target_quarter="2025-12-31")
+    assert ok is False
+    assert any("principal/FV" in r for r in reasons)

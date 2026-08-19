@@ -8110,3 +8110,98 @@ Agent lane for the rate-convention classifier residual. New modules:
   re-type the 8 wrong-diagnosis B1 verdicts, retire remains in archive dirs
   (q4b2exp_*). Human basket unchanged (rule_scope 11, extraction-scope decision,
   OCIC/North Haven/SCP/1993402, out-of-cohort pool, threshold calibration sign-off).
+
+## 2026-08-16 - Round-4 mechanical backlog shipped; 5 live B2 leaves pulled on the new magnitude gate (production principal restored)
+
+- CROSS-FIELD MAGNITUDE PREDICATE (the round-4 gate spec) is live in the B3 value
+  gate (`gate_value_packet` -> `check_magnitude_plausibility`, run_remediation.py).
+  Three legs judged against the fund norm (median of OFF-target per-quarter stats,
+  untouchable by a scoped fix): target-quarter field average, CHANGED-ROW average
+  (catches blends the quarter average hides), and per-row principal/FV ratio median
+  (scale-free under portfolio growth). Refuses only when the fix lands >10x off the
+  norm AND made it worse than baseline (scale REPAIRS still pass). Value-gate replay
+  now goes through apply_scoped (production application path) instead of the bare
+  applier. New standing tool `scripts/agent_b2/replay_gate.py` (replay staged or
+  archived leaves against per-CIK production slices; --stats-only audits live ones).
+- VALIDATION VS PAST DATA: replay of the q4b2exp_v3_magnitude_pull archive refuses
+  all 3 magnitude-defective fixes on the real frames (1572694 principal x1000: 796x
+  field avg + 1,043x principal/FV ratio; 1646614 rates x0.01: 112x; 1508655
+  pct_of_net_assets->interest_rate: 10x on the changed-row leg -- the quarter-average
+  leg alone sat at 5.7x, which is why the changed-row leg exists).
+- LIVE-STORE AUDIT FINDING (--stats-only over the 39 promoted leaves): 5 live
+  corrections were the SAME defect class and had corrupted production 2025-12-31:
+  unit_rescale principal x1000 unselected at 1702510/1872371/2011498 (principal/FV
+  median ~1000 vs raw-staging ~1.0 -- raw was already correct) and column_remap
+  principal->shares unselected at 1849894/1860424 (quarter principal vacated; loan
+  par sitting in shares_held). All FV-invariant, so conservation/acceptance were
+  blind. PULLED to corrections_archive/q4b2exp_round4_magnitude_pull_20260816
+  (README with evidence table); unified rebuilt from cache; fingerprint diff vs the
+  saved pre-pull fingerprint confirms the 5 CIK-quarters restored, total FV delta 0.
+  Remaining deltas outside the pulled set are the aeaa03f recorded pulls
+  materializing in their first rebuild (81955 IRGSE) plus the documented
+  fund-strategy classification oscillation. Live B2 corrections now 34.
+  Watchlist (flagged, NOT pulled): 1674760 selected single-row remap.
+  2025-12-31 acceptance re-verified PASS 7/7 post-pull.
+- GROUNDED SELECTORS (fixes the 20 selector-noop refusals): dispatch_preflight
+  extracts holdings-side issuer_name/bdc_investment_identifier from bundle
+  evidence_items and VERIFIES each against current unified holdings with the
+  applier's own selector semantics; the worker prompt now carries a "Holdings-side
+  selector identifiers" section with per-string match counts (NO MATCH strings are
+  marked do-not-use); contract excerpt points row_selector at that section.
+  n_grounded_identifiers recorded per manifest row.
+- FUND-STRATEGY INPUT FREEZE: new pin_inputs stage at the run_quarter_pass pass
+  boundary copies fund_strategy_correction_candidates.csv to a .pinned.csv that
+  `_apply_fund_strategy_corrections` prefers; every rebuild in a pass (pre AND post)
+  consumes one frozen input set (validate keeps regenerating the live file for
+  diagnostics). Activates at the next quarter pass.
+- FINDINGS LEDGER + LOOP-UNTIL-DRY: new scripts/findings_ledger.py generalizes
+  check_tier_coverage to full lifecycle states (open / real_error_unremediated /
+  remediation_staged|pulled|promoted / adjudicated_false_alarm / needs_human /
+  evidence_backlog / resolved_upstream / gone_unadjudicated) across queue, both
+  verdict stores, staged/promoted/archived corrections, and wrapper b2_provenance.
+  Dry decision counts blocker-lane opens only (review lane is triage, not dispatch).
+  run_quarter_pass gains ledger/ledger_post stages and a next_round block in
+  pass_summary (dry -> converged; else dispatch the actionable pool ->  the
+  iterate signal). Current production: 44,863 findings; 14,890 actionable
+  (14,025 open blocker-lane + 708 real_error_unremediated + 126 pulled + 31 staged).
+- RI02/RI07 CLEARED: scripts/rebuild_outputs.py --returns re-ran on the corrected
+  holdings (477,335 position rows, 233 index rows); targeted RI-category run
+  (write=False) shows RI02 PASS and RI07 PASS, no detail rows.
+- Tests: +25 across test_agent_b2_run_remediation (30), test_agent_b2_preflight
+  (16), test_run_quarter_pass (11), test_findings_ledger (9, new file); full B2
+  surface battery 101 passing. Full suite run at session end.
+- NOT run: shadow/oracle/queue ledger refresh (non-FV artifacts reflect pre-pull
+  state until the next quarter-pass battery). Re-authoring the pulled/archived
+  leaves under the new contracts is fleet work (round-4 dispatch).
+
+## 2026-08-19 - Interrupted 2026-08-16 full-suite run triaged; 2 stale tests fixed, 1 real flag left standing
+
+- The 2026-08-16 session ended on a dropped connection at the exact moment its
+  session-end full pytest suite finished: 3 failed / 4,362 passed / 13 skipped
+  (2h11m), never triaged. All 3 reproduce deterministically. Drift backstop:
+  file mtimes confirm NO data/output writes during the pytest window (the
+  15:25-15:41 local writes are the session's own pre-suite rebuild tasks);
+  conftest write-guard held.
+- FIXED test_anchor_adjudicator::test_verify_uses_filing_total_assets_when_companyfacts_null:
+  premise decay, not a code bug. The test relied on 1377936 2026-02-28 having
+  NULL companyfacts total_assets; fund_financials.csv now carries 1,139,265,104
+  (companyfacts caught up after the rebuild). fund_financials is now stubbed via
+  monkeypatch so the lagged-quarter fallback path is pinned, not live-data-dependent.
+- FIXED test_unified_holdings TestBuildUnifiedHoldings::test_ixbrl_lien_fills_blank_keyword_lien:
+  stale fixture. Commit 345aa68 re-keyed apply_ixbrl_field_status_overlay on the
+  FULL InvestmentIdentifierAxis member from bdc_dimensions_raw; the fixture still
+  carried placeholder dims "x=y", so the join key became "y" and the overlay
+  no-opped. Fixture dims now carry the real member per row. Both fixes verified:
+  full test_anchor_adjudicator.py (7 passed) + the lien test pass.
+- NOT FIXED (deliberate) test_bdc_xbrl_wrapper::test_apollo_ds_company_only_source_row_is_aggregate:
+  wrapper_disposition flipped equity_total_rollup -> aggregate for CIK 0001837532.
+  Attribution: the uncommitted identifier_anchors/identifier_rate_grammars edits
+  for exactly this CIK (part of the dirty per-CIK dialect experiment on
+  ensemble-fp-experiment). NOT merely cosmetic: source_reconciliation.py grants
+  *_total_rollup dispositions parent-key prefix rollup matching that plain
+  'aggregate' does not get. The test is correctly guarding committed behavior;
+  resolve when the dialect experiment is adjudicated (either revert the override
+  edits or re-baseline the expected disposition with reconciliation evidence).
+- Net expected full-suite state: 1 failed / 4,364 passed (the Apollo guard) until
+  the 0001837532 dialect edits are adjudicated. No pipeline code changed; test
+  files only.
