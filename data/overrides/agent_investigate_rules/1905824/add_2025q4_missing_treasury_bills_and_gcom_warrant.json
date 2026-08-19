@@ -1,0 +1,240 @@
+{
+  "cik": "1905824",
+  "rule_id": "add_2025q4_missing_treasury_bills_and_gcom_warrant",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Gate base holdings for 2025-12-31 summed to 154151000.0 against anchor 183056000.0. Staging rows absent from the gate base for the current table-179 tail comprise GCOM warrant plus Short-Term Investments: COUNT=16, SUM(fair_value)=28905000.0, SUM(cost)=31007000.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule table 179 lists GCOM warrant cost 2,491 and fair value 387; Total U.S. Government Agencies cost 19,061 and fair value 19,063; Total U.S. Treasury Bills cost 9,455 and fair value 9,455; Total Short-Term Investments fair value 28,518; Total Investments fair value 183,056."
+    }
+  ],
+  "rationale": "The extracted holdings under-count the 2025-12-31 schedule because the gate base omitted real current-period line items from the tail of table 179: the GCOM warrant and the Short-Term Investments section. The missing GCOM warrant fair value of 387,000 plus short-term investments fair value of 28,518,000 exactly explains the 28,905,000 gap from the gate base value of 154,151,000 to the filer's total investments fair value of 183,056,000. These rows exist in staging and are printed in the filing, so this is an under-count recoverable as row_add, not a deletion, dedup, or rescale.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 16,
+      "fv": 28905000.0,
+      "residual_before": -28905000.0,
+      "residual_after": 0.0
+    }
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Federal Home Loan Bank Discount Note",
+      "bdc_investment_identifier": "Debt Investments |Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills |Federal Home Loan Bank Discount Note| 3.510 %| 01/30/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments |Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills |Federal Home Loan Bank Discount Note| 3.510 %| 01/30/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments |Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills |Federal Home Loan Bank Discount Note| 3.510 %| 01/30/2026",
+      "cost": 4187000.0,
+      "fair_value": 4188000.0,
+      "principal_amount": 4200000.0,
+      "interest_rate": 0.0351,
+      "maturity_date": "2026-01-30",
+      "pct_of_net_assets": 0.0241
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Federal Home Loan Bank Discount Note",
+      "bdc_investment_identifier": "Debt Investments |Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note| 3.530 %| 12/13/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments |Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note| 3.530 %| 12/13/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments |Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note| 3.530 %| 12/13/2026",
+      "cost": 2190000.0,
+      "fair_value": 2190000.0,
+      "principal_amount": 2200000.0,
+      "interest_rate": 0.0353,
+      "maturity_date": "2026-02-13",
+      "pct_of_net_assets": 0.0126
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Federal Home Loan Bank Discount Note",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.533 % | 02/20/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.533 % | 02/20/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.533 % | 02/20/2026",
+      "cost": 2686000.0,
+      "fair_value": 2687000.0,
+      "principal_amount": 2700000.0,
+      "interest_rate": 0.03533,
+      "maturity_date": "2026-02-20",
+      "pct_of_net_assets": 0.0155
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Federal Home Loan Bank Discount Note",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.534 % | 02/25/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.534 % | 02/25/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.534 % | 02/25/2026",
+      "cost": 199000.0,
+      "fair_value": 199000.0,
+      "principal_amount": 200000.0,
+      "interest_rate": 0.03534,
+      "maturity_date": "2026-02-25",
+      "pct_of_net_assets": 0.0011
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Federal Home Loan Bank Discount Note",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.537 % | 03/20/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.537 % | 03/20/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.537 % | 03/20/2026",
+      "cost": 1588000.0,
+      "fair_value": 1588000.0,
+      "principal_amount": 1600000.0,
+      "interest_rate": 0.03537,
+      "maturity_date": "2026-03-20",
+      "pct_of_net_assets": 0.0092
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Federal Home Loan Bank Discount Note",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.567% | 04/17/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.567% | 04/17/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.567% | 04/17/2026",
+      "cost": 7916000.0,
+      "fair_value": 7916000.0,
+      "principal_amount": 8000000.0,
+      "interest_rate": 0.03567,
+      "maturity_date": "2026-04-17",
+      "pct_of_net_assets": 0.0457
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Federal Home Loan Bank Discount Note",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.509 % | 06/24/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.509 % | 06/24/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Government Agencies | U.S. Treasury Bills | Federal Home Loan Bank Discount Note | 3.509 % | 06/24/2026",
+      "cost": 295000.0,
+      "fair_value": 295000.0,
+      "principal_amount": 300000.0,
+      "interest_rate": 0.03509,
+      "maturity_date": "2026-06-24",
+      "pct_of_net_assets": 0.0017
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.071% | 01/15/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.071% | 01/15/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.071% | 01/15/2026",
+      "cost": 799000.0,
+      "fair_value": 799000.0,
+      "principal_amount": 800000.0,
+      "interest_rate": 0.03071,
+      "maturity_date": "2026-01-15",
+      "pct_of_net_assets": 0.0046
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.187 % | 01/20/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.187 % | 01/20/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.187 % | 01/20/2026",
+      "cost": 1797000.0,
+      "fair_value": 1797000.0,
+      "principal_amount": 1800000.0,
+      "interest_rate": 0.03187,
+      "maturity_date": "2026-01-20",
+      "pct_of_net_assets": 0.0104
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.287 % | 01/29/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.287 % | 01/29/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.287 % | 01/29/2026",
+      "cost": 3391000.0,
+      "fair_value": 3391000.0,
+      "principal_amount": 3400000.0,
+      "interest_rate": 0.03287,
+      "maturity_date": "2026-01-29",
+      "pct_of_net_assets": 0.0195
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.315% | 02/23/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.315% | 02/23/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.315% | 02/23/2026",
+      "cost": 100000.0,
+      "fair_value": 100000.0,
+      "principal_amount": 100000.0,
+      "interest_rate": 0.03315,
+      "maturity_date": "2026-02-03",
+      "pct_of_net_assets": 0.0006
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.570 % | 02/12/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.570 % | 02/12/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.570 % | 02/12/2026",
+      "cost": 896000.0,
+      "fair_value": 896000.0,
+      "principal_amount": 900000.0,
+      "interest_rate": 0.0357,
+      "maturity_date": "2026-02-12",
+      "pct_of_net_assets": 0.0052
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.419% | 02/24/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.419% | 02/24/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.419% | 02/24/2026",
+      "cost": 497000.0,
+      "fair_value": 497000.0,
+      "principal_amount": 500000.0,
+      "interest_rate": 0.03419,
+      "maturity_date": "2026-02-24",
+      "pct_of_net_assets": 0.0029
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.495% | 04/28/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.495% | 04/28/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.495% | 04/28/2026",
+      "cost": 1582000.0,
+      "fair_value": 1582000.0,
+      "principal_amount": 1600000.0,
+      "interest_rate": 0.03495,
+      "maturity_date": "2026-04-28",
+      "pct_of_net_assets": 0.0091
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_investment_identifier": "Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.509 % | 06/18/2026",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.509 % | 06/18/2026",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Short-Term Investments | U.S. Treasury Bills | U.S. Treasury Bill | 3.509 % | 06/18/2026",
+      "cost": 393000.0,
+      "fair_value": 393000.0,
+      "principal_amount": 400000.0,
+      "interest_rate": 0.03509,
+      "maturity_date": "2026-06-18",
+      "pct_of_net_assets": 0.0023
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "GCOM",
+      "bdc_investment_identifier": "Debt Investments | Warrants |Technology | GCOM | 08/11/2033",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Debt Investments | Warrants |Technology | GCOM | 08/11/2033",
+      "source_row_id": "staging:investmentidentifieraxis=Debt Investments | Warrants |Technology | GCOM | 08/11/2033",
+      "cost": 2491000.0,
+      "fair_value": 387000.0,
+      "principal_amount": 2491250000.0,
+      "maturity_date": "2033-08-11",
+      "pct_of_net_assets": 0.0022
+    }
+  ]
+}

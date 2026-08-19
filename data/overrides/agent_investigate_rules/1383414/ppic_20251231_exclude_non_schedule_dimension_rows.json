@@ -1,0 +1,36 @@
+{
+  "cik": "1383414",
+  "rule_id": "ppic_20251231_exclude_non_schedule_dimension_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw NOT LIKE 'investmentidentifieraxis=Investments in %'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For holdings report_date 2025-12-31, non-prefixed dimensions (bdc_dimensions_raw NOT LIKE 'investmentidentifieraxis=Investments in %') contain 132 rows totaling fair_value 1,723,731,000; prefixed schedule dimensions contain 459 rows totaling 1,000,876,000."
+    },
+    {
+      "source": "query",
+      "quote": "Staging period 2025-12-31 prefixed rows contain 465 rows totaling fair_value 1,218,474,000, exactly matching the validated anchor. Staging also has unprefixed issuer/detail rows totaling 1,357,342,000 and issuer-only rows totaling 366,389,000, showing a duplicated non-schedule presentation population."
+    },
+    {
+      "source": "query",
+      "quote": "Issuer-only rows are subtotals duplicated by detailed prefixed rows: for AKW Holdings Limited, the issuer-only fair_value is 101,421,000 and detailed AKW rows sum to 101,421,000; for PennantPark Senior Loan Fund, LLC, issuer-only fair_value is 200,054,000 and detailed debt/equity rows sum to 200,054,000."
+    }
+  ],
+  "rationale": "The filing extraction retained a duplicate/non-schedule presentation population whose dimensions do not begin with the full investment schedule prefix. The validated anchor is reconciled by the current-period prefixed staging schedule, not by issuer-only subtotals or short unprefixed duplicate rows.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 132,
+      "fv": 1723731000.0,
+      "residual_before": 1506133000.0,
+      "residual_after": -217598000.0
+    }
+  }
+}

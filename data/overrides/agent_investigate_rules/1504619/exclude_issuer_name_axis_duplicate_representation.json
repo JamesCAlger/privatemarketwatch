@@ -1,0 +1,112 @@
+{
+  "cik": "1504619",
+  "rule_id": "exclude_issuer_name_axis_duplicate_representation",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw LIKE '%Issuer Name%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For report_date 2025-12-31, holdings split by bdc_dimensions_raw style: full_schedule_axis rows=509 fv_sum=2605347000.0; issuer_name_axis rows=174 fv_sum=1388167000.0. The validated anchor in fund_financials is investments_at_fair_value=2605347000.0."
+    },
+    {
+      "source": "query",
+      "quote": "For report_date 2025-12-31, total extracted holdings fair value before the rule is 3993514000.0; excluding bdc_dimensions_raw LIKE '%Issuer Name%' removes 174 rows and 1388167000.0 of fair value, leaving 2605347000.0 against the 2605347000.0 anchor."
+    },
+    {
+      "source": "query",
+      "quote": "The same predicate improves all queried anchor quarters: 2024-09-30 residual moves from 46.38% to 0.34%, 2024-12-31 from 47.88% to 0.20%, 2025-03-31 from 45.42% to 0.47%, 2025-09-30 from 39.23% to 0.12%, 2025-12-31 from 53.28% to 0.00%, and 2026-03-31 from 60.03% to 0.00%."
+    },
+    {
+      "source": "query",
+      "quote": "Sample leaked rows have bdc_dimensions_raw beginning with 'investmentidentifieraxis=First Lien Secured Debt Issuer Name ...' and carry acquisition dates inside issuer_name, e.g. 'Beacon Behavioral Support Services, LLC Acquisition 10/9/2024' fair_value=24965000.0. This is an alternate axis representation, not the full schedule axis that reconciles to the filer total."
+    }
+  ],
+  "rationale": "The extracted holdings over-count because rows under the short 'Issuer Name' investmentidentifieraxis are an alternate representation of schedule positions. The full schedule axis alone reconciles the target quarter exactly to the validated filer total, while the Issuer Name axis contributes the entire residual. A position-level dedup key is not reliable because the alternate rows include acquisition dates and inconsistent issuer spelling, and the BDC has legitimate multiple tranches per issuer. Excluding the leaked axis removes the over-count without deleting below the anchor and improves every queried quarter with an available anchor.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2023-03-31": {
+      "rows": 110,
+      "fv": 771417000.0,
+      "residual_before": 0.8950389680008797,
+      "residual_after": 0.2323278054211568
+    },
+    "2023-06-30": {
+      "rows": 113,
+      "fv": 800525000.0,
+      "residual_before": 0.9710974291233324,
+      "residual_after": 0.2468141124526697
+    },
+    "2023-09-30": {
+      "rows": 114,
+      "fv": 785860000.0,
+      "residual_before": 1.7492395804245606,
+      "residual_after": 1.0128460775843489
+    },
+    "2023-12-31": {
+      "rows": 159,
+      "fv": 1164039000.0,
+      "residual_before": 1.1777348344948215,
+      "residual_after": 0.26183722589889113
+    },
+    "2024-03-31": {
+      "rows": 115,
+      "fv": 869684000.0,
+      "residual_before": 1.4815394723398265,
+      "residual_after": 0.8930734029689765
+    },
+    "2024-06-30": {
+      "rows": 118,
+      "fv": 904179000.0,
+      "residual_before": 0.7363208161336369,
+      "residual_after": 0.19128795185370934
+    },
+    "2024-09-30": {
+      "rows": 128,
+      "fv": 913281000.0,
+      "residual_before": 0.4638347086771693,
+      "residual_after": 0.0033965144511934435
+    },
+    "2024-12-31": {
+      "rows": 129,
+      "fv": 1046178000.0,
+      "residual_before": 0.47882000629013954,
+      "residual_after": 0.0019645290827791477
+    },
+    "2025-03-31": {
+      "rows": 129,
+      "fv": 1053755000.0,
+      "residual_before": 0.45421389969164505,
+      "residual_after": 0.004669691628001427
+    },
+    "2025-06-30": {
+      "rows": 130,
+      "fv": 1049130000.0,
+      "residual_before": 0.5602174315533708,
+      "residual_after": 0.12371921955968654
+    },
+    "2025-09-30": {
+      "rows": 133,
+      "fv": 1084649000.0,
+      "residual_before": 0.39226842263158196,
+      "residual_after": 0.001168271477445149
+    },
+    "2025-12-31": {
+      "rows": 174,
+      "fv": 1388167000.0,
+      "residual_before": 0.5328146308342037,
+      "residual_after": 0.0
+    },
+    "2026-03-31": {
+      "rows": 190,
+      "fv": 1548973000.0,
+      "residual_before": 0.6003117489916796,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "cik": "1803498",
+  "rule_id": "exclude_cash_from_investment_conservation",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2022-09-30",
+      "2022-12-31",
+      "2023-03-31",
+      "2023-06-30",
+      "2023-09-30",
+      "2023-12-31",
+      "2024-03-31",
+      "2024-06-30",
+      "2024-09-30",
+      "2024-12-31",
+      "2025-03-31",
+      "2025-06-30",
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "asset_category = 'CASH'",
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 99 presents Total Investment Portfolio | 82,916,241 | 82,199,346, then a separate Cash and Cash Equivalents section, Total Cash and Cash Equivalents | 2,348,711 | 2,348,711, and finally Total Portfolio Investments, Cash and Cash Equivalents | 85,264,952 | 84,548,057."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-12-31 current holdings, rows with asset_category='CASH' total 8 rows and fair_value 429,819,000; current holdings fair_value is 82,629,165,000 versus the validated investment anchor 82,199,346,000, so the cash rows exactly explain the remaining overage."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials reports investments_at_fair_value 82,199,346,000 and total_assets 85,992,162,000 for 2025-12-31, confirming the anchor is investments only, not investments plus cash."
+    },
+    {
+      "source": "query",
+      "quote": "Across scoped anchored quarters 2022-09-30 through 2025-12-31, excluding asset_category='CASH' moves value_sum toward the investments_at_fair_value anchor and does not push any scoped quarter below its anchor."
+    }
+  ],
+  "rationale": "The conservation anchor is the filer's Total Investment Portfolio / investments_at_fair_value amount. Cash and cash equivalents are presented separately below that subtotal and are included only in a later portfolio-plus-cash total. Rows classified as CASH are therefore outside the investment fair-value conservation population and should not be summed against the investment anchor.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 8,
+      "fv": 429819000.0,
+      "residual_before": 429819000.0,
+      "residual_after": 0.0
+    }
+  }
+}

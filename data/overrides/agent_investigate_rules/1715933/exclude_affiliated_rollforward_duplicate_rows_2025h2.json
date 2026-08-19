@@ -1,0 +1,51 @@
+{
+  "cik": "1715933",
+  "rule_id": "exclude_affiliated_rollforward_duplicate_rows_2025h2",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw ILIKE '%Affiliated Investment%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings fair_value sum is 1,061,901,106; rows with bdc_dimensions_raw ILIKE '%Affiliated Investment%' are 29 rows totaling 416,707,992. Excluding them leaves 645,193,114, equal to the fv_conservation anchor."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-09-30, holdings fair_value sum is 1,084,215,154; rows with bdc_dimensions_raw ILIKE '%Affiliated Investment%' are 28 rows totaling 414,622,307. Excluding them leaves 669,592,847, equal to the fv_conservation anchor."
+    },
+    {
+      "source": "filing",
+      "quote": "Main schedule total: Total Debt & Equity Investments (7) | 148.3 | % | 809,253,307 | 645,193,114."
+    },
+    {
+      "source": "filing",
+      "quote": "Affiliate roll-forward totals: Total Controlled Affiliated investments | ... | Fair Value at December 31, 2025 | 308,845,992; Total Non-Controlled Affiliated Investments | ... | Fair Value at December 31, 2025 | 107,862,000."
+    },
+    {
+      "source": "filing",
+      "quote": "Example duplicate position: Tabhi Purchaser, LLC appears in the main schedule as Term Loan B fair value 56,634,539 and again in the controlled-affiliate roll-forward as Tabhi Purchaser, LLC (Mondee) Term Loan B fair value 56,634,539."
+    }
+  ],
+  "rationale": "The extracted data includes affiliate roll-forward disclosure rows as if they were additional holdings. These rows present beginning fair value, additions, reductions, realized/unrealized changes, and ending fair value for controlled and non-controlled affiliated investments; they duplicate positions already counted in the main schedule of investments. For the affected 2025-09-30 and 2025-12-31 quarters, the affiliated-roll-forward ending fair values exactly equal the conservation overshoot, so excluding those leaked disclosure rows reconciles fair value to the validated anchor without deleting real main-schedule positions.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 28,
+      "fv": 414622307.0,
+      "residual_before": 414622307.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 29,
+      "fv": 416707992.0,
+      "residual_before": 416707992.0,
+      "residual_after": 0.0
+    }
+  }
+}

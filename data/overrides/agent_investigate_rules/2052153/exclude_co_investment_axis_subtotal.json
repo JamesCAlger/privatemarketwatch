@@ -1,0 +1,58 @@
+{
+  "cik": "2052153",
+  "rule_id": "exclude_co_investment_axis_subtotal",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw = 'investmentidentifieraxis=Co-investment'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings contains one row per extracted period with issuer_name='Co-investment', bdc_dimensions_raw='investmentidentifieraxis=Co-investment', and fair_value 525968000.0 for 2025-12-31; conservation value_sum 1166044000.0 minus this row equals the anchor 640076000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Subtracting the Co-investment row from fv_conservation value_sum gives corrected_value_sum/anchor: 2025-03-31 475610000.0/475610000.0, 2025-06-30 499808000.0/499809000.0, 2025-09-30 544302000.0/544304000.0, 2025-12-31 640076000.0/640076000.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule table 32 states 'Total Investments before Cash Equivalents | $ | 638,563 | $ | 640,076' and separately lists the Money Market Fund and 'Total Investments after Cash Equivalents | $ | 667,334 | $ | 668,847'."
+    },
+    {
+      "source": "filing",
+      "quote": "Fair value hierarchy table 38 states 'Total Investments | $ | 638,563 | $ | 640,076' and the cached filing search found no printed schedule row for 'Co-investment'."
+    }
+  ],
+  "rationale": "The extracted Co-investment row is not a real portfolio position in the printed schedule. It is an XBRL dimension/subtotal leak whose fair value duplicates part of the investment schedule and exactly explains the 2025-12-31 over-count. Excluding this row reconciles the target quarter exactly and improves all anchored quarters to within rounding tolerance without deleting real investment rows.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": 382018000.0,
+      "residual_before": 382018000.0,
+      "residual_after": 0.0
+    },
+    "2025-06-30": {
+      "rows": 1,
+      "fv": 391798000.0,
+      "residual_before": 391797000.0,
+      "residual_after": -1000.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 439650000.0,
+      "residual_before": 439648000.0,
+      "residual_after": -2000.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 525968000.0,
+      "residual_before": 525968000.0,
+      "residual_after": 0.0
+    }
+  }
+}

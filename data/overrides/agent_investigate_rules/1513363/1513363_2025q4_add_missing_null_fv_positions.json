@@ -1,0 +1,70 @@
+{
+  "cik": "1513363",
+  "rule_id": "1513363_2025q4_add_missing_null_fv_positions",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Holdings for 2025-12-31 sum to 1313759000.0 versus fund_financials investments_at_fair_value anchor 1324753000.0, residual -10994000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Staging period 2025-12-31 in accession 0001193125-26-076572 contains AMOpportunities First Lien Debt with fair_value null, cost 9957000.0, principal_amount 10000000.0, dimensions_raw investmentidentifieraxis=Non-control/Non-affiliate AMOpportunities, Inc. Information Technology Services First Lien Debt Cash 12.50% Rate PIK 0.00% Investment date 3/12/2025 Maturity 3/12/2029."
+    },
+    {
+      "source": "query",
+      "quote": "The same 2025-12-31 period in the next filing accession 0001193125-26-211915 reports AMOpportunities First Lien Debt fair_value 10000000.0 with the same cost 9957000.0 and principal_amount 10000000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Staging period 2025-12-31 in accession 0001193125-26-076572 contains Tedia Company preferred equity with fair_value null, cost 1000000.0, shares_held 1000.0, dimensions_raw investmentidentifieraxis=Non-control/Non-affiliate Investments Tedia Company, LLC Healthcare Products Preferred Equity (1,000 units) Investment date 3/4/2022."
+    },
+    {
+      "source": "query",
+      "quote": "The same 2025-12-31 period in the next filing accession 0001193125-26-211915 reports Tedia Company preferred equity fair_value 994000.0 with the same cost 1000000.0 and shares_held 1000.0."
+    }
+  ],
+  "rationale": "The extractor dropped two real 2025-12-31 positions because their fair_value was null in the 2025 filing staging rows. They are not overcounted or duplicated rows; they are undercounted real positions already present in staging, and the next filing's comparative 2025-12-31 staging period supplies the missing fair values. Adding these two positions increases holdings by 10994000.0, exactly eliminating the residual to the validated investments_at_fair_value anchor.",
+  "confidence": 0.95,
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "AMOpportunities, Inc.",
+      "bdc_investment_identifier": "Non-control/Non-affiliate AMOpportunities, Inc. Information Technology Services First Lien Debt Cash 12.50% Rate PIK 0.00% Investment date 3/12/2025 Maturity 3/12/2029",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-control/Non-affiliate AMOpportunities, Inc. Information Technology Services First Lien Debt Cash 12.50% Rate PIK 0.00% Investment date 3/12/2025 Maturity 3/12/2029",
+      "source_row_id": "staging:0001193125-26-076572:investmentidentifieraxis=Non-control/Non-affiliate AMOpportunities, Inc. Information Technology Services First Lien Debt Cash 12.50% Rate PIK 0.00% Investment date 3/12/2025 Maturity 3/12/2029",
+      "fair_value": 10000000.0,
+      "cost": 9957000.0,
+      "principal_amount": 10000000.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "principal_amount_currency": "USD"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Tedia Company, LLC",
+      "bdc_investment_identifier": "Non-control/Non-affiliate Investments Tedia Company, LLC Healthcare Products Preferred Equity (1,000 units) Investment date 3/4/2022",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-control/Non-affiliate Investments Tedia Company, LLC Healthcare Products Preferred Equity (1,000 units) Investment date 3/4/2022",
+      "source_row_id": "staging:0001193125-26-076572:investmentidentifieraxis=Non-control/Non-affiliate Investments Tedia Company, LLC Healthcare Products Preferred Equity (1,000 units) Investment date 3/4/2022",
+      "fair_value": 994000.0,
+      "cost": 1000000.0,
+      "shares_held": 1000.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD"
+    }
+  ],
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 2,
+      "fv": 10994000.0,
+      "residual_before": -10994000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "cik": "81955",
+  "rule_id": "81955_2025q4_inter_national_alias_preferred_dedup",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND issuer_name IN ('Inter-National Electronic Alloys LLC', 'Inter-National Electronic Alloys LLC d/b/a EFINEA') AND instrument_description = 'Class B Preferred Units'",
+  "match_fields": [
+    "report_date",
+    "instrument_description",
+    "fair_value",
+    "cost"
+  ],
+  "keep": "last",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "2025-12-31 holdings include Inter-National Electronic Alloys LLC - 75.3 Class B Preferred Units and Inter-National Electronic Alloys LLC d/b/a EFINEA - 75.3 Class B Preferred Units, both with fair_value 1,800,000, cost 1,011,765, and shares_held 75.3."
+    },
+    {
+      "source": "query",
+      "quote": "After the same-canonical duplicate rule, the residual is 1,940,213. Deduplicating this alias preferred-unit pair removes 1 row and 1,800,000 of fair value, leaving value_sum 48,620,709 and residual 140,213, which is 0.289% of the 48,480,496 anchor."
+    }
+  ],
+  "rationale": "The same preferred-unit holding is represented under both the legal name and the d/b/a EFINEA name with identical security economics. Because canonical_name differs, it needs a separate economic-key dedup scoped to this issuer alias pair.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 1800000.0,
+      "residual_before": 1940213.0,
+      "residual_after": 140213.0
+    }
+  }
+}

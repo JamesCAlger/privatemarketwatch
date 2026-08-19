@@ -1,0 +1,52 @@
+{
+  "cik": "1544206",
+  "rule_id": "add_dropped_2025q4_investment_rows",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Holding Argon (France)",
+      "bdc_investment_identifier": "Investment | Non-Affiliated Issuer | First Lien Debt | Holding Argon (France) | Business Services",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investment | Non-Affiliated Issuer | First Lien Debt | Holding Argon (France) | Business Services",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Investment | Non-Affiliated Issuer | First Lien Debt | Holding Argon (France) | Business Services",
+      "fair_value": 16144000.0,
+      "cost": 15605000.0,
+      "principal_amount": 14102000.0
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Sinch AB (Sweden)",
+      "bdc_investment_identifier": "Investment | Non-Affiliated Issuer | Common and Preferred Equity Investments | Sinch AB (Sweden) | High Tech Industries",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investment | Non-Affiliated Issuer | Common and Preferred Equity Investments | Sinch AB (Sweden) | High Tech Industries",
+      "source_row_id": "staging:2025-12-31:investmentidentifieraxis=Investment | Non-Affiliated Issuer | Common and Preferred Equity Investments | Sinch AB (Sweden) | High Tech Industries",
+      "fair_value": 363000.0,
+      "cost": 1168000.0
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Staging for 2025-12-31 contains Holding Argon (France) with dimensions_raw investmentidentifieraxis=Investment | Non-Affiliated Issuer | First Lien Debt | Holding Argon (France) | Business Services, fair_value 16144000.0, cost 15605000.0, principal_amount 14102000.0; holdings has no row matching Holding Argon."
+    },
+    {
+      "source": "query",
+      "quote": "Staging for 2025-12-31 contains Sinch AB (Sweden) common and preferred equity with fair_value 363000.0 and cost 1168000.0; holdings has no row matching Sinch AB."
+    }
+  ],
+  "rationale": "After removing the over-included Credit Fund look-through rows and duplicate short Middle Market axes, the quarter is short by 16414000.0. These two real source rows are present in staging but absent from holdings and recover 16507000.0, leaving a 93000.0 residual, which is within the 0.5% filer-rounding tolerance.",
+  "confidence": 0.82,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 2,
+      "fv": 16507000.0,
+      "residual_before": -16414000.0,
+      "residual_after": 93000.0
+    }
+  }
+}

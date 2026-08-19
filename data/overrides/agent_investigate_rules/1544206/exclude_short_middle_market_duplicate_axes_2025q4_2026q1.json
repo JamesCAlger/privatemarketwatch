@@ -1,0 +1,39 @@
+{
+  "cik": "1544206",
+  "rule_id": "exclude_short_middle_market_duplicate_axes_2025q4_2026q1",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31",
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw IN ('investmentidentifieraxis=Middle Market Credit Fund, LLC, Subordinated Loan and Member''s Interest', 'investmentidentifieraxis=Middle Market Credit Fund, LLC, Subordinated Loan and Member\u2019s Interest', 'investmentidentifieraxis=Middle Market Credit Fund, LLC, Mezzanine Loan', 'investmentidentifieraxis=Middle Market Credit Fund II, LLC, Member''s Interest', 'investmentidentifieraxis=Middle Market Credit Fund II, LLC, Member\u2019s Interest')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, short Middle Market axes contain three holdings rows totaling fair_value 163614000.0, while full Investment | Affiliated Issuer | Investment Funds rows contain the same Middle Market Credit Fund subordinated loan/member interest at 123114000.0 and mezzanine loan at 40500000.0 with complete cost/principal fields."
+    },
+    {
+      "source": "query",
+      "quote": "For 2026-03-31, the same short-axis family contains two rows totaling fair_value 122983000.0 and causes the same duplicate pattern after Credit Fund look-through rows are removed."
+    }
+  ],
+  "rationale": "The short Middle Market Credit Fund investmentidentifieraxis rows duplicate the complete Investment | Affiliated Issuer | Investment Funds rows once that full axis family appears. The short rows lack the full schedule classification and, in 2025-12-31, duplicate the same fair values already carried by the complete positions.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 3,
+      "fv": 163614000.0,
+      "residual_before": 147200000.0,
+      "residual_after": -16414000.0
+    },
+    "2026-03-31": {
+      "rows": 2,
+      "fv": 122983000.0,
+      "residual_before": 122393000.0,
+      "residual_after": -590000.0
+    }
+  }
+}

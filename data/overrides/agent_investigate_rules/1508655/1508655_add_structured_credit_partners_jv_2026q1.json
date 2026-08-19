@@ -1,0 +1,54 @@
+{
+  "cik": "1508655",
+  "rule_id": "1508655_add_structured_credit_partners_jv_2026q1",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "issuer_name": "Structured Credit Partners JV, LLC",
+      "bdc_investment_identifier": "Structured Credit Partners JV, LLC",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Structured Credit Partners JV, LLC",
+      "fair_value": 14665000.0,
+      "cost": 14665000.0,
+      "source_row_id": "staging:report_date=2026-03-31|period=2026-03-31|investment_identifier=Structured Credit Partners JV, LLC|dimensions_raw=investmentidentifieraxis=Structured Credit Partners JV, LLC"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings after the prior IRGSE rule sum to fair_value 3,298,776,000 for 2026-03-31 versus the fund_financials anchor 3,313,441,000, a shortfall of 14,665,000."
+    },
+    {
+      "source": "query",
+      "quote": "staging for report_date 2026-03-31 contains investment_identifier Structured Credit Partners JV, LLC, dimensions_raw investmentidentifieraxis=Structured Credit Partners JV, LLC, fair_value 14,665,000."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule total: Total Investments | $ | 3,324,332 | $ | 3,313,441 | 214.8 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Component totals: Total Debt Investments | 3,057,466 | 3,053,979; Total Equity Investments | 153,647 | 150,992; Total Structured Credit Investments | 98,554 | 93,805; Total Equity, Structured Credit and Joint Venture Investments | 266,866 | 259,462. The 14,665 difference is the joint venture investment."
+    },
+    {
+      "source": "filing",
+      "quote": "Joint venture disclosure: Total contributed capital by Sixth Street Specialty Lending Inc. | $ | 14,665"
+    }
+  ],
+  "rationale": "The 2026-03-31 Schedule of Investments includes a joint venture investment in Structured Credit Partners JV, LLC. The extracted staging table recovered the row, but holdings omitted it, leaving the corrected holdings exactly 14.665 million below the validated fair-value anchor after the IRGSE rollforward summary exclusion. Adding the staging-backed JV row restores a real investment rather than deleting positions to balance.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 14665000.0,
+      "residual_before": -14665000.0,
+      "residual_after": 0.0
+    }
+  }
+}

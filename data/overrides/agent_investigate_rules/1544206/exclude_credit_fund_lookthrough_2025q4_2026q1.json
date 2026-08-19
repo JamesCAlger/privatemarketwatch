@@ -1,0 +1,39 @@
+{
+  "cik": "1544206",
+  "rule_id": "exclude_credit_fund_lookthrough_2025q4_2026q1",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31",
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw LIKE 'investmentidentifieraxis=Credit Fund |%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings rows with bdc_dimensions_raw LIKE 'investmentidentifieraxis=Credit Fund |%' count 60 rows and sum to fair_value 957830000.0; for 2026-03-31, the same pattern count 70 rows and sum to 1020183000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The same target quarter also has direct affiliated investment-fund positions for Middle Market Credit Fund, LLC in the Investment | Affiliated Issuer | Investment Funds section, showing the Credit Fund rows are look-through portfolio rows rather than additional direct filer positions."
+    }
+  ],
+  "rationale": "Rows under the Credit Fund axis are a look-through schedule of the credit fund portfolio. They are over-included in the filer holdings alongside the filer's direct investment-fund positions and should not be summed against the filer's total investments anchor.",
+  "confidence": 0.92,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 60,
+      "fv": 957830000.0,
+      "residual_before": 1105030000.0,
+      "residual_after": 147200000.0
+    },
+    "2026-03-31": {
+      "rows": 70,
+      "fv": 1020183000.0,
+      "residual_before": 1142576000.0,
+      "residual_after": 122393000.0
+    }
+  }
+}

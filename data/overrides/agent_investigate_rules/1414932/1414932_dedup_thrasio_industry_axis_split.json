@@ -1,0 +1,38 @@
+{
+  "cik": "1414932",
+  "rule_id": "1414932_dedup_thrasio_industry_axis_split",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "is_subsidiary = '0' AND issuer_name LIKE 'Thrasio, LLC,%' AND (bdc_dimensions_raw LIKE 'investmentidentifieraxis=Thrasio, LLC, Application Software,%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Thrasio, LLC, Broadline Retail,%')",
+  "match_fields": [
+    "report_date",
+    "fair_value",
+    "principal_amount"
+  ],
+  "keep": "last",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, Thrasio appears twice under different industry labels: Application Software and Broadline Retail. The First Lien Term Loan 1 rows both have fair_value 7584000.0 and principal_amount 7584000.0; the First Lien Term Loan 2 rows both have fair_value 16057000.0 and principal_amount 23271000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Keeping the Broadline Retail representation and removing the duplicate Application Software representation reduces the post-subsidiary residual from 28992000.0 to 5351000.0, which is 0.181% of the 2949092000.0 anchor."
+    }
+  ],
+  "rationale": "The remaining target-quarter overage after removing the subsidiary-axis leak is explained by a duplicated Thrasio industry-axis split. The duplicated debt rows have identical fair values and principal amounts but differ only by industry label. A dedup rule scoped to the Thrasio Application Software/Broadline Retail split removes the duplicate representation without deleting an unrelated real position.",
+  "confidence": 0.88,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 3,
+      "fv": 23641000.0,
+      "residual_before": 28992000.0,
+      "residual_after": 5351000.0
+    }
+  }
+}

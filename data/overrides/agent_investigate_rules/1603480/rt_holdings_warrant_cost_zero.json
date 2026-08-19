@@ -1,0 +1,51 @@
+{
+  "cik": "1603480",
+  "rule_id": "rt_holdings_warrant_cost_zero",
+  "rule_type": "value_expression",
+  "action": "set",
+  "scope": {
+    "quarters": [
+      "2024-12-31",
+      "2025-09-30",
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "issuer_name = 'RT Holdings Parent, LLC' AND instrument_description ILIKE '%Warrant%' AND bdc_dimensions_raw ILIKE '%Warrant, expires 2/24/27%'",
+  "field": "cost",
+  "expression": "0",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Staging detailed warrant rows for RT Holdings Parent, LLC show cost = 0.0 for the counted detailed member: 2024-12-31 fair_value 2532687.0 cost 0.0; 2025-09-30 fair_value 3393587.0 cost 0.0; 2025-12-31 fair_value 3171813.0 cost 0.0."
+    },
+    {
+      "source": "query",
+      "quote": "Corrected holdings carried cost 2532687.0 on the RT Holdings Parent, LLC Warrant, expires 2/24/27 row in 2024-12-31, 2025-09-30, and 2025-12-31, producing a cost residual of exactly 2532687.0 in each quarter while fair value already reconciled."
+    }
+  ],
+  "rationale": "The detailed source rows identify the RT Holdings Parent warrant as a zero-cost equity warrant. Holdings incorrectly retained 2532687.0 as cost on the counted detailed warrant rows, equal to the stale 2024-12-31 fair value, causing the held-out cost conservation remainder without affecting fair-value conservation.",
+  "confidence": 0.92,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": 0.0,
+      "cost": -2532687.0,
+      "residual_before": 2532687.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 0.0,
+      "cost": -2532687.0,
+      "residual_before": 2532687.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 0.0,
+      "cost": -2532687.0,
+      "residual_before": 2532687.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "cik": "1414932",
+  "rule_id": "1414932_exclude_nonconsolidated_subsidiary_axis",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "is_subsidiary = '1' AND bdc_dimensions_raw LIKE '%investmentcompanynonconsolidatedsubsidiaryaxis=%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings value_sum is 3488756000.0 versus investments_at_fair_value anchor 2949092000.0, residual 539664000.0. Rows with is_subsidiary='1' and investmentcompanynonconsolidatedsubsidiaryaxis contribute 218 rows and 510672000.0 fair value."
+    },
+    {
+      "source": "query",
+      "quote": "Example leaked rows carry investmentcompanynonconsolidatedsubsidiaryaxis=SLFJVIMember, such as 'Access CIG LLC, First Lien Term Loan' fair_value 10027000.0 and 'LTI Holdings, Inc., First Lien Term Loan' fair_value 9948000.0; these are underlying nonconsolidated subsidiary holdings, not direct portfolio positions for the conservation anchor."
+    }
+  ],
+  "rationale": "The conservation anchor is the filer's investments at fair value. Holdings include a separate nonconsolidated subsidiary axis schedule, marked is_subsidiary='1', which leaks underlying subsidiary investments into the direct holdings sum. Excluding this axis removes over-counted rows while retaining the real direct investments, and it improves the target residual from 539664000.0 to 28992000.0 before the separate duplicate-axis correction.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 218,
+      "fv": 510672000.0,
+      "residual_before": 539664000.0,
+      "residual_after": 28992000.0
+    }
+  }
+}
