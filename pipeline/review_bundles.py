@@ -179,6 +179,17 @@ EVIDENCE_SPECS: dict[str, EvidenceSpec] = {
         lambda it: (_ck(it), _nt(it.get("report_date")), _nt(it.get("rule_name"))),
         "Oracle check result for this CIK/quarter/check.",
     ),
+    # Added 2026-07-25: the agentA engine joined the queue 2026-06-28 but never got a
+    # spec here, so every agentA bundle was ledger_only and B1 preflight
+    # short-circuited it (50 items in the q4t3 fleet). Flag rows carry the grammar
+    # metrics + identifier; the evidence CLI resolves the covering filing via the
+    # filings-index fallback (rows have no accession field).
+    "agentA": EvidenceSpec(
+        "agentA", SHADOW_DIR / "agent_a_flags.csv",
+        lambda r: (normalize_cik(r.get("cik")), _nt(r.get("report_date")), _nt(r.get("rule_name"))),
+        lambda it: (_ck(it), _nt(it.get("report_date")), _nt(it.get("rule_name"))),
+        "Agent A identifier-grammar flag rows (metric, mechanism, identifier).",
+    ),
 }
 
 DEFERRED_ENGINES = {"source_recon"}

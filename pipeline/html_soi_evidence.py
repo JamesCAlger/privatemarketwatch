@@ -8,6 +8,7 @@ learned grid/template files.
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import html as html_mod
 import re
@@ -793,3 +794,50 @@ def resolve_accessions_from_rows(rows: Iterable[dict[str, Any]]) -> list[str]:
                 if part and part.lower() != "nan" and part not in accessions:
                     accessions.append(part)
     return accessions
+
+
+def resolve_accessions_from_index(
+    source: str, cik: str, report_date: str
+) -> list[str]:
+    """Fallback accession resolution via the source filings index.
+
+    Some engines' evidence rows carry no accession fields (e.g. fund_financials,
+    which flags companyfacts-level facts), so ``resolve_accessions_from_rows``
+    returns nothing even when the filer's covering filing IS cached. This looks
+    up the filings index for (cik, report_date) rows of the source's form types,
+    preferring annual forms (richer SOI) then latest filing_date. Cache-only and
+    deterministic; returns [] when the index has no match.
+    """
+    source_config = _html_source_config(source)
+    if source_config is None or not report_date:
+        return []
+    index_file, form_types = source_config[1], source_config[2]
+    if not index_file.exists():
+        return []
+    cik_key = normalize_cik(cik).lstrip("0")
+    candidates: list[tuple[int, str, str]] = []
+    with index_file.open("r", encoding="utf-8-sig", newline="") as f:
+        for row in csv.DictReader(f):
+            if normalize_cik(row.get("cik", "")).lstrip("0") != cik_key:
+                continue
+            if normalize_text(row.get("report_date")) != report_date:
+                continue
+            form = normalize_text(row.get("form_type"))
+            if form not in form_types:
+                continue
+            acc = normalize_text(row.get("accession_number"))
+            if not acc:
+                continue
+            annual_base = form_types[0].split("/")[0]
+            annual = 0 if form.split("/")[0] == annual_base else 1
+            candidates.append((annual, normalize_text(row.get("filing_date")), acc))
+    # annual forms first; within a form class, most recent filing_date first
+    candidates.sort(key=lambda t: t[1], reverse=True)
+    candidates.sort(key=lambda t: t[0])
+    seen: set[str] = set()
+    out: list[str] = []
+    for _, _, acc in candidates:
+        if acc not in seen:
+            seen.add(acc)
+            out.append(acc)
+    return out
