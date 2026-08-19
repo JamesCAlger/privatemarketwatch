@@ -31,9 +31,12 @@ def test_verify_accepts_real_grand_total(tmp_path, monkeypatch):
 
 
 def test_verify_uses_filing_total_assets_when_companyfacts_null(tmp_path, monkeypatch):
-    # (b) 1377936 2026-02-28 has NULL companyfacts -> verify falls back to the leaf's filing-sourced
-    # total_assets and caps the tier at MEDIUM.
+    # (b) companyfacts total_assets NULL (lagged quarter) -> verify falls back to the leaf's
+    # filing-sourced total_assets and caps the tier at MEDIUM. Stub fund_financials rather than
+    # rely on a real lagged quarter: companyfacts catches up over time (1377936 2026-02-28 was
+    # null when this test was written, then filled, breaking the premise).
     monkeypatch.setattr(run_anchor, "BASE", tmp_path / "agent_anchor")
+    monkeypatch.setattr(run_anchor, "fund_financials", lambda cik: {})
     p = run_anchor._leaf_path("1377936", "2026-02-28")
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps({

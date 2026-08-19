@@ -2924,15 +2924,20 @@ class TestBuildUnifiedHoldings:
             "cost": 990000.0, "interest_rate": 8.5, "basis_spread": 3.5,
             "reference_rate_type": "SOFR", "maturity_date": "2028-01-15",
             "pct_of_net_assets": 0.05, "pik_rate": None, "shares_held": None,
-            "unrealized_gain_loss": 10000.0, "dimensions_raw": "x=y",
+            "unrealized_gain_loss": 10000.0,
             "investment_type": "", "industry": "", "affiliation": "", "period": "2023-03-31",
         }
+        # The overlay keys on the FULL InvestmentIdentifierAxis member carried in
+        # dimensions_raw (falling back to the identifier only when dims is absent),
+        # so the fixture dims must hold the real member, not a placeholder.
         bdc_df = pd.DataFrame([
             # keyword-neutral DL row -> _sql_classify_lien NULL -> iXBRL fills it
             {**common, "investment_identifier": "Acme Holdings - Term Loan B",
+             "dimensions_raw": "us-gaap:InvestmentIdentifierAxis=Acme Holdings - Term Loan B",
              "fair_value": 1000000.0, "principal_amount": 1000000.0},
             # keyword 'first lien' DL row -> keyword wins over the iXBRL value
             {**common, "investment_identifier": "Beta Corp - First Lien Term Loan",
+             "dimensions_raw": "us-gaap:InvestmentIdentifierAxis=Beta Corp - First Lien Term Loan",
              "fair_value": 2000000.0, "principal_amount": 2000000.0},
         ])
         status = pd.DataFrame([
