@@ -8264,3 +8264,67 @@ Agent lane for the rate-convention classifier residual. New modules:
   shadow/oracle/queue artifacts, then the human basket (OCIC, Golub, North
   Haven, Overland/Fidelity extraction scope, SCP anchor, 1919369 narrow-conf
   dialect review, 1993402, rule demotions, 9 tier-1 PATCH_PROPOSED merges).
+
+## 2026-08-20 - B2 Q4 track record measured: cross-batch metrics rollup, taxonomy verified, round-4 acceptance criteria pre-declared
+
+- New reusable extractor `scripts/b2_run_metrics.py` -> `data/output/agent_b2/
+  b2_run_metrics.csv` (154 rows): per-batch dispatch/authoring/gate/lifecycle
+  metrics for q4b2t4a, q4b2t4b, q4b2exp, q4b2exp2, plus archive counts,
+  findings-ledger state reconciliation, and fix-application audit summary.
+  Analysis only -- NOTHING dispatched, promoted, or pulled; read-only outside
+  the three deliverable files. Full write-up appended to
+  `data/output/data_investigation_results.md` (2026-08-20 B2 entry).
+- Measured trend: true authoring validity 24% (q4b2exp round 1; the
+  dispatch-time validator itself was the defect) -> 97.9% (q4b2exp2) -> 100%
+  (q4b2t4b mature classes). CIK-level gate pass 0% (v1) -> 50% (v2) -> 73%
+  (v3) -> 95% (wave-1 value gate). v3 refusals are 100% defect_signature (B1
+  diagnosis quality), zero authoring-mechanics failures.
+- Artifact-vs-narrative discrepancies found: manifest.json only records the
+  LAST dispatch wave (use wrappers/logs for true counts); q4b2t4b gate log
+  has 19 PASS / 1 FAIL over 20 CIK entries (changelog 2026-08-12 narrated
+  20/21); validate.txt is UTF-16 LE and the t4b gate log is UTF-8-BOM.
+- All 10 Q4 failure classes verified against reason-tagged
+  corrections_archive dirs; each mapped to its mechanical contract
+  (TEMPLATE_REGISTRY prompts, correction_leaf schema, skipped_existing,
+  apply_scoped + off_scope_invariance, defect_signature,
+  check_magnitude_plausibility, grounded selectors, replay_gate.py).
+  Incomplete contracts: B1 verdict re-typing after defect_signature refusal,
+  magnitude no_norm blind spot (2 live shares_held legs), 0001674760
+  watchlist, rule_scope (human by design).
+- Ledger reconciliation (2025-12-31, ledger as of 2026-08-16 15:04): all
+  brief-expected numbers reproduce exactly -- 2,609 findings, 763 B1 verdicts,
+  312/202(187 in-cohort)/124/51/42/30/2 states; zero drift (q4final had not
+  refreshed the ledger at read time). Live store reconciles: 21 + 40 - 7 - 13
+  - 2 - 5 = 34 leaves; agent_fix_application_audit 140/140 ok, 0 drift;
+  2026-08-16 live replay: 11 out-of-band magnitude legs -> 5 pulled / 1
+  evidence-kept / 1 watchlisted, matching the archive README to the leaf.
+- Round-4 fleet acceptance criteria PRE-DECLARED (8 bars in the
+  investigation entry): authoring validity >= 95%, selector no-ops = 0,
+  replay/off-scope failures = 0, ZERO post-promotion discoveries, mandatory
+  post-promotion replay_gate --stats-only + acceptance PASS 7/7 under v2,
+  zero new failure classes, defect_signature <= 10% of gated CIKs (else
+  pause for B1 re-adjudication), pool = 202 real_error_unremediated + 124
+  remediation_pulled.
+
+## 2026-08-20 - Q4 2025 FINALIZED: full quarter pass q4final clean, PASS 7/7 calibrated on committed state
+
+- Full checkpointed pass (run_quarter_pass --pass-id q4final --quarter 2025-12-31)
+  ran end to end (~2h50m): pin_inputs (FIRST live run -- fund-strategy candidates
+  frozen for the pass), rebuild, oracle, nonaccrual, validate, shadow, queue,
+  ledger, acceptance, select, then the full _post battery and summary. Exit 0.
+- Verdict PASS -> PASS with ZERO metric deltas and zero failed checks pre or post:
+  the quarter is stable under a full rebuild-validate cycle on the committed
+  worktree (all round-4 work, investigation rules, dialects, and thresholds v2 in
+  git as of 482fc2b/86f7539). Acceptance stamped calibration=signed_off,
+  thresholds_version 2, generated 2026-08-20T15:51:30Z.
+- Monitoring artifacts REFRESHED (were pre-pull-stale since 08-13/08-16): shadow
+  ledger, oracle, review queue, findings ledger. Ledger post: 44,840 findings,
+  14,878 actionable, dry=False -> next_round guidance is to dispatch the
+  actionable pool with a fresh pass id (the round-4 re-author fleet; operator
+  decision, NOT taken in this pass). 13 under-review funds ranked in
+  quarter_pass/q4final/candidates.csv.
+- Q4 2025 status: FINAL. PASS 7/7 under owner-signed v2 thresholds, reproducible
+  from git, fresh artifacts. Remaining OPTIONAL improvements (affect the 80.5%
+  verified-FV headline, not the verdict): human basket (OCIC, Golub, North Haven,
+  Overland/Fidelity extraction scope, SCP anchor, 1919369 narrow-conf dialect,
+  9 tier-1 PATCH_PROPOSED merges) and the round-4 B2 re-author fleet.
