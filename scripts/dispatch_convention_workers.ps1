@@ -104,8 +104,11 @@ foreach ($row in $rows) {
   }
 
   Write-Host "==== worker $cik $q ===="
+  # Traces must land under the per-cik repo dir, NOT the TEMP worker home (which is
+  # discarded scratch) -- otherwise the rollout is lost with the TEMP tree.
   & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run_codex_worker.ps1") `
-    -PromptPath $prompt -WorkerHome $whome -WorkerRunroot $wrun -NoSetup
+    -PromptPath $prompt -WorkerHome $whome -WorkerRunroot $wrun -NoSetup `
+    -TraceDir (Join-Path $convBase "logs") -TracePrefix "worker.$q."
   if ($LASTEXITCODE -ne 0) { Write-Host "[warn] worker exit $LASTEXITCODE for $cik" }
 
   if (Test-Path -LiteralPath $leaf -PathType Leaf) {

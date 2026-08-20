@@ -82,7 +82,9 @@ function New-WorkerWrapper {
     [Parameter(Mandatory = $true)] $Row,
     [Parameter(Mandatory = $true)][string] $WorkerHome,
     [Parameter(Mandatory = $true)][string] $WorkerRunroot,
-    [Parameter(Mandatory = $true)][string] $WrapperPath
+    [Parameter(Mandatory = $true)][string] $WrapperPath,
+    [Parameter(Mandatory = $true)][string] $TraceDir,
+    [Parameter(Mandatory = $true)][string] $TracePrefix
   )
 
   $runScript = Join-Path $PSScriptRoot "run_codex_worker.ps1"
@@ -93,6 +95,8 @@ function New-WorkerWrapper {
   -WorkerHome $(Quote-ForWrapper $WorkerHome) ``
   -WorkerRunroot $(Quote-ForWrapper $WorkerRunroot) ``
   -CodexBin $(Quote-ForWrapper $CodexBin) ``
+  -TraceDir $(Quote-ForWrapper $TraceDir) ``
+  -TracePrefix $(Quote-ForWrapper $TracePrefix) ``
   -NoSetup
 exit `$LASTEXITCODE
 "@
@@ -235,7 +239,8 @@ try {
       }
 
       $wrapperPath = Join-Path $wrapperDir "$idSafe.ps1"
-      New-WorkerWrapper -Row $row -WorkerHome $workerHome -WorkerRunroot $workerRunroot -WrapperPath $wrapperPath
+      New-WorkerWrapper -Row $row -WorkerHome $workerHome -WorkerRunroot $workerRunroot -WrapperPath $wrapperPath `
+        -TraceDir $logDir -TracePrefix "${idSafe}__"
 
       $stdout = Join-Path $logDir "$idSafe.stdout.jsonl"
       $stderr = Join-Path $logDir "$idSafe.stderr.txt"

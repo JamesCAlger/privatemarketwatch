@@ -231,6 +231,8 @@ try {
   -WorkerHome $(Quote-ForWrapper $workerHome) ``
   -WorkerRunroot $(Quote-ForWrapper $workerRunroot) ``
   -CodexBin $(Quote-ForWrapper $CodexBin) ``
+  -TraceDir $(Quote-ForWrapper $logDir) ``
+  -TracePrefix $(Quote-ForWrapper "${rid}__") ``
   -NoSetup
 exit `$LASTEXITCODE
 "@

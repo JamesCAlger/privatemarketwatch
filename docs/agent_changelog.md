@@ -8328,3 +8328,159 @@ Agent lane for the rate-convention classifier residual. New modules:
   verified-FV headline, not the verdict): human basket (OCIC, Golub, North Haven,
   Overland/Fidelity extraction scope, SCP anchor, 1919369 narrow-conf dialect,
   9 tier-1 PATCH_PROPOSED merges) and the round-4 B2 re-author fleet.
+
+## 2026-08-20 - Worker-home waste scrub expanded to a shared allowlist; auth.json credential sprawl found and scrubbed going forward
+
+- FINDING: the post-run cleanup in run_codex_worker.ps1 (2026-07-10 fix) only
+  deleted .sandbox-bin\codex.exe + .tmp\plugins. It missed plugins\cache (~26 MB
+  / ~5,000 files PER WORKER -- the dominant batch-scratch cost; 6.3 GB in
+  agent_b2 alone), the command-runner exe, codex_apps caches, models_cache.json,
+  skills, and -- security-relevant -- auth.json: every worker home keeps a copy
+  of the operator's logged-in credentials. Measured: 262 auth.json copies under
+  agent_b2 batches, 3,334 under agent_b (~3,600 total live-credential copies in
+  scratch).
+- NEW scripts/codex_worker_waste_allowlist.ps1: single source of truth for the
+  waste allowlist + Remove-CodexWorkerWaste (best-effort scrub, never fails the
+  worker). Keepers documented and preserved: config.toml, sqlite event logs,
+  sandbox logs, sessions rollout traces. Smoke-tested on a synthetic home: all
+  waste removed, all four keeper classes intact.
+- run_codex_worker.ps1 finally-block now calls Remove-CodexWorkerWaste
+  (unconditional on worker failure too -- failed workers also hold credentials;
+  -NoCleanup remains the debug escape hatch). Parse-checked, behavior otherwise
+  unchanged. Every future fleet self-scrubs.
+- NEW scripts/sweep_worker_scratch_waste.ps1: retroactive/backstop sweeper for
+  killed-dispatcher orphans and pre-fix batches (the finally block cannot cover
+  those). Same shared allowlist; structural guard (only inside \worker_home\
+  paths); dry-run default with manifest CSV written before any deletion; skips
+  homes touched <48h (correctly skipped the live canary_trace_20260820 run).
+  Dry-run measured: agent_b2 6,958.5 MB reclaimable (99%+ of the dir).
+  Manifests: data\output\scratch_sweep_manifest_dryrun_b2.csv (+ _rest.csv for
+  agent_b/agent_investigate/agent_a/agent_anchor when its background run lands).
+- NOT run: -Apply (deletion). Owner-gated; review manifests then
+  `powershell -File scripts\sweep_worker_scratch_waste.ps1 -Apply`.
+- Context: part of the trace-capture fix (drop codex exec --ephemeral so worker
+  rollout traces persist; one-packet canary running separately). Deletion
+  expansion decoupled from that canary -- it has no dependency on session
+  persistence. Pending after canary PASS: harvest step (sessions rollout ->
+  batch logs\<worker>__trace.jsonl) ahead of the scrub in the finally block.
+
+## 2026-08-20 -- Canary PASS: drop --ephemeral from the Codex worker harness (one-worker trial)
+
+- One-worker canary validating removal of `--ephemeral` from `codex exec` in the worker
+  runner, so rollout traces (tool calls with arguments, outputs, reasoning items)
+  persist under the worker CODEX_HOME. NEW `scripts/run_codex_worker_canary.ps1`
+  (copy of run_codex_worker.ps1 minus only the --ephemeral line). Production runner,
+  dispatchers, and data/overrides untouched.
+- Packet: archived q4b2exp2 prompt 0001508655__classification_fix (disposable output),
+  rewritten into `data/output/agent_b2/batch/canary_trace_20260820/` with the sandbox
+  write grant limited to the canary runroot. Full assertions, artifacts, and rollout
+  paths in `canary_trace_20260820/canary_report.md`.
+- Result: PASS on 7/7 assertions (run 2). Exit 0 + turn.completed; correction leaf
+  passes validate_corrections; EXACTLY one rollout per worker home (~65 KB, far under
+  the 50 MB bound); rollout contains full apply_patch arguments (complete correction
+  JSON body) + tool outputs + session/turn metadata that the dispatcher stdout JSONL
+  (7 events, ~3.3 KB, no patch bodies) lacks; zero files outside the sandbox grants
+  (47,054-file before/after listing of data/output/agent_b2, zero diff); operator
+  ~/.codex never touched. Worker-home auth.json copies deleted post-run.
+- Run 1 (archived prompt verbatim) FAILED the validator on missing scope.quarters:
+  prompt/validator drift from a8120c7 (2026-08-13 quarter-scope enforcement), NOT a
+  flag effect. Single allowed retry with the current-fleet scope instruction passed.
+  Note: pre-a8120c7 archived prompts cannot be replayed against the current validator
+  without amendment; current preflight-built prompts are unaffected.
+- CAVEAT: rollout reasoning items carry encrypted_content with EMPTY summaries --
+  readable chain-of-thought is NOT recoverable. Harvest value = tool-call arguments/
+  outputs + metadata, not reasoning text.
+- Verdict: safe to remove --ephemeral fleet-wide BEHIND A HARVEST STEP (collect
+  sessions/YYYY/MM/DD/rollout-*.jsonl per worker home, then prune sessions; runner
+  cleanup currently only removes .sandbox-bin and .tmp/plugins).
+
+## 2026-08-20 -- Fleet-wide: --ephemeral removed from codex exec; rollout-trace harvest step live
+
+- `scripts/run_codex_worker.ps1`: dropped `--ephemeral` (per the same-day canary PASS,
+  `data/output/agent_b2/batch/canary_trace_20260820/canary_report.md`) and added the
+  harvest step to the finally block, AHEAD of the waste scrub: moves every
+  `sessions\YYYY\MM\DD\rollout-*.jsonl` to `-TraceDir` (new param; default
+  `<WorkerHome>\traces`) named `<TracePrefix><original-name>` (new param), then prunes
+  `sessions\` so reused homes never accumulate per-run session state. Best-effort:
+  harvest failure warns on stderr only (stdout stays a pure JSONL event stream) and
+  never fails the worker run. `-NoCleanup` skips harvest too (raw layout for debugging).
+- All six fleet dispatchers now route traces into their batch/target `logs\` dirs:
+  `dispatch_agent_a_workers.ps1` (`<cik>__`), `dispatch_agent_b_workers.ps1` (`<id>__`),
+  `dispatch_agent_b2_workers.ps1` (`<cik>__<fix_class>__`),
+  `dispatch_bdc_review_workers.ps1` (`<review_id>__`), `dispatch_investigation.ps1`
+  (`iter<i>__`), `dispatch_anchor_workers.ps1` (`attempt<i>__`),
+  `dispatch_convention_workers.ps1` (per-cik `logs\worker.<quarter>.` -- REQUIRED there:
+  its worker homes are discarded TEMP scratch, the default would lose the trace).
+- Verified: PowerShell parser clean on all 8 edited scripts; offline stub-codex smoke
+  test (no API call) confirmed harvest to explicit TraceDir, harvest to the default
+  `<WorkerHome>\traces`, sessions pruned, auth.json scrubbed, and -NoCleanup leaving
+  sessions raw. NOT run: a live fleet batch (next real dispatch exercises it end to end;
+  the canary already proved the no-ephemeral codex path itself).
+- `scripts/run_codex_worker_canary.ps1` retired (deleted): superseded by the production
+  runner; keeping a near-copy of the runner in scripts/ was a drift trap.
+- `docs/reference/codex_worker_dispatch.md`: new "Rollout traces" section (harvest flow,
+  naming, the encrypted-reasoning caveat: rollouts carry tool-call arguments/outputs,
+  NOT readable chain-of-thought).
+
+## 2026-08-20 - Investigations split into docs/investigations/ (derived view, pre-cutover); full scratch-sweep dry-run totals
+
+- NEW scripts/split_investigations.py: deterministically splits data/output/
+  data_investigation_results.md (61 entries, 3,209 body lines -- previously a
+  single 235 KB file in the GITIGNORED data/output tree, i.e. the project's
+  entire investigation knowledge base was unversioned) into 9 topical files
+  under git-tracked docs/investigations/ plus a generated INDEX.md:
+  classification_holdings_eda (7), frontend_data_checks (3),
+  data_quality_audits (6), source_reconciliation (16, keeps the 2026-07-21/22
+  parts 1-8 chain whole), wrapper_residuals (7), conservation_shadow_engine
+  (11), identifier_rate_semantics (7), agent_campaigns (2), quarter_eda (2).
+  Verification gate: entries in == out AND body lines preserved exactly, else
+  nothing is written; unmapped headings go loudly to uncategorized.md (never
+  silently dropped). Modes: default (regenerate from source), --check
+  (verify only), --reindex (rebuild INDEX from topic files; post-cutover mode).
+- PRE-CUTOVER DESIGN: the topic files are DERIVED VIEWS (banner in each file);
+  data/output/data_investigation_results.md remains the canonical append target
+  until the owner ratifies the convention change. Concurrent appends by other
+  agents are harmless -- re-run the script. Safe to run alongside live
+  canaries/quarter passes (creates new tracked files only).
+- PROPOSED AGENTS.md wording for the "Data Investigations" section (owner edit,
+  agents must not touch AGENTS.md): "Ad-hoc data analyses are filed under
+  docs/investigations/ (git-tracked). Append each new investigation to the
+  matching topic file with a dated heading, the question asked, and the results
+  found, then rebuild the index: python scripts/split_investigations.py
+  --reindex. See INDEX.md for topics." At cutover: freeze the old file with a
+  pointer header, strip the GENERATED banners from the topic files.
+- Scratch-sweep dry-run over agent_b/agent_investigate/agent_a/agent_anchor
+  completed: 39,318.7 MB reclaimable across 22,181 items (plugins\cache 33.6 GB
+  dominant; 3,515 auth.json credential copies). Combined with agent_b2:
+  ~46.3 GB and ~3,776 credential copies actionable. Manifests:
+  data\output\scratch_sweep_manifest_dryrun_b2.csv + _rest.csv. -Apply remains
+  owner-gated. Sweeper also hardened this session with a per-worker_home
+  root-level scan (flat-layout homes like the trace canary's were previously a
+  silent coverage gap for root-level files incl. auth.json).
+
+## 2026-08-20 - Campaign shards relocated out of the data/output root (528 files; root CSVs 408 -> 144)
+
+- Moved the GICS and unclassified classification campaign shards --
+  gics_agent_chunk/results (207+207) and unclassified_agent_chunk/results
+  (57+57) -- from the data/output root to data/output/campaign_results/
+  {gics,unclassified}/ (README there). Root file count: 408 -> 144 CSVs,
+  327 -> 63 txt. The shards are deliberate per-worker files (write-contention
+  safety) and resumability inputs (chunk-vs-result number diff = done/pending);
+  they were merged intermediates left at the root, ~65 pct of root clutter.
+- Path constants updated in all five consumers: merge_agent_results.py,
+  generate_agent_chunks.py, gics_quality_gate.py (validate_agent_results
+  default), consolidate_agent_results.py, generate_unclassified_chunks.py
+  (each gains CAMPAIGN_DIR); worker prompt prompts/classify_unclassified_chunk.md
+  output path updated. Inert one-off repair scripts write_gics_074.py /
+  classify_chunk_009.py still reference old root paths (documented, not fixed).
+- BASELINE HANDLED FAITHFULLY: docs/refactoring/baseline_manifest.json entry
+  `path` fields rename-edited for the 528 moved artifacts (snapshot_path,
+  sha256, status untouched; git diff exactly 529 line-pairs). Verified: all
+  264 byte_identical entries hash-match at their new paths, zero drift
+  introduced, zero pre-existing drift found. diff_outputs.py therefore keeps
+  its exact prior semantics -- same bytes compared against same snapshots.
+- Verified post-move: generate_agent_chunks --stats 207/207 done 0 pending;
+  generate_unclassified_chunks --stats 57/57; merge_agent_results --stats
+  207 files / 9,813 rows; consolidate_agent_results --stats 57 files / 2,809
+  rows. The ~10 malformed gics shards (CSV quoting) failing to tokenize are
+  PRE-EXISTING campaign defects the merger has always skipped -- not the move.
