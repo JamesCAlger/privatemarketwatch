@@ -8241,3 +8241,26 @@ Agent lane for the rate-convention classifier residual. New modules:
   parent-key matching) is moot for the dialect decision -- the disposition came
   from a June wrapper-spec change that production (incl. the Q4 PASS) has used
   throughout.
+
+## 2026-08-20 - Acceptance thresholds v2 SIGNED OFF by owner; Q4 2025 re-stamped PASS 7/7 calibrated
+
+- Owner ratified the acceptance contract (calibration provisional -> signed_off,
+  version 1 -> 2) with tightened bars: reconcile_rate >=70 -> >=90,
+  flagged_fv_share <=20 -> <=10, source_blocking_fv_share <=5 -> <=1,
+  verified_fv_share >=50 -> >=70. fund_coverage (>=60), rule drift/health (0),
+  and the assessability rule (anchored_rate >= 50 else NOT_ASSESSABLE) unchanged.
+- Basis recorded in the thresholds file calibration_note: Q4 2025 is the first
+  full-cycle quarter; v1 bars were provisional ship-bars that initially read FAIL
+  and were earned to PASS by remediation waves. v2 bars clear Q4 actuals with
+  honest headroom and avoid incentivizing forced reconciliation (reconcile_rate
+  90 tolerates ~6 escalated funds of ~66 anchored).
+- Owner proviso: Q1 2026 (2026-03-31) and Q2 2026 (2026-06-30) passes may
+  recalibrate further; any v3 basis to be recorded in the file.
+- Re-ran python -m pipeline.quarter_acceptance --quarter 2025-12-31 under v2:
+  PASS 7/7, calibration=signed_off. Actuals unchanged (reconcile 95.5, flagged
+  4.85, blocking 0.164, verified_fv 80.5). quarter_acceptance.json +
+  quarter_acceptance_funds.csv rewritten.
+- Q4 2025 finalization remaining: quarter-pass rerun to refresh pre-pull
+  shadow/oracle/queue artifacts, then the human basket (OCIC, Golub, North
+  Haven, Overland/Fidelity extraction scope, SCP anchor, 1919369 narrow-conf
+  dialect review, 1993402, rule demotions, 9 tier-1 PATCH_PROPOSED merges).
