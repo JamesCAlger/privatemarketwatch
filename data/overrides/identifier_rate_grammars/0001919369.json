@@ -4,7 +4,8 @@
   "status": "PROPOSED",
   "applies_to": {
     "regime": "flattened",
-    "signature": "INVESTMENTS AFFIL SECDEBT REFRATE RATE MAT"
+    "signature": "INVESTMENTS AFFIL SECDEBT REFRATE RATE MAT",
+    "_resolved_by": "harness resolve_applies_to (committed anchors)"
   },
   "pik_convention": "additive",
   "required_fields": [

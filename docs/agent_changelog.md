@@ -8205,3 +8205,39 @@ Agent lane for the rate-convention classifier residual. New modules:
 - Net expected full-suite state: 1 failed / 4,364 passed (the Apollo guard) until
   the 0001837532 dialect edits are adjudicated. No pipeline code changed; test
   files only.
+
+## 2026-08-20 - Dialect adjudication CLOSED: 2026-07-24 Agent A promotion ratified and committed; Apollo wrapper test root-caused to June, not the dialects
+
+- ATTRIBUTION CORRECTED (supersedes the 2026-08-19 entry note): the uncommitted
+  identifier_anchors/identifier_rate_grammars files do NOT affect wrapper
+  dispositions or any production holdings values. classify_identifier reads only
+  data/overrides/bdc_xbrl_wrappers/*.json (committed, clean). The dialect files
+  are consumed by pipeline/identifier_rate.py + identifier_signature.py, whose
+  only consumers are the Agent A shadow engine (agent_a_flags.csv -> review
+  queue), the A3 held-out/production gates, and agent_a tooling. Validation
+  layer only.
+- AUDIT (the adjudication evidence): production gate re-run on current Q4 data
+  (python -m scripts.agent_a.run_quarter gate 2025-12-31): 27 PASS / 0 FAIL /
+  15 NO_CONFIG, identical to the documented 2026-07-24 post-promotion state.
+  All 16 promoted CIKs PASS: 12 high confidence; 1851322 + 1885968 narrow
+  (3 in-era quarters, 10 era-excluded as flattened-regime), 1919369 narrow
+  (4 in-era quarters; gate reason says "promote with human review, not auto" --
+  live since 07-24, flagged here for the human basket rather than re-litigated).
+- Committed the 32 dialect files (15 anchor + 15 grammar updates, 2 new for
+  0001772704) closing the audit trail on the a_q1_cohort_20260724c promotion.
+  The worktree is now fully clean of config the Q4 PASS depends on.
+- APOLLO TEST ROOT CAUSE (was misattributed to the dialects on 08-19): the test
+  (bc679b0, 2026-06-11 09:44:27) landed 26 seconds BEFORE f3ffc1a (09:44:53)
+  added company-suffix fallback_family_patterns to the Apollo wrapper spec,
+  routing issuer-only rows to family=debt where the category-before-total branch
+  yields 'aggregate'. The test was also born internally inconsistent:
+  'equity_total_rollup' can only pair with an EQUITY_TOTAL_ROLLUP rule id, but
+  the test asserts APOLLO_DEBT_SOLUTIONS_DEBT_AGGREGATE_V1 on the next line. It
+  had been failing since 2026-06-11. Fixed to assert 'aggregate' (consistent
+  with the rule id and 2.5 months of production behavior). test_bdc_xbrl_wrapper
+  517 passed.
+- Net: full suite expected GREEN (the last standing failure is resolved).
+  Reconciliation-semantics concern raised on 08-19 (aggregate vs *_total_rollup
+  parent-key matching) is moot for the dialect decision -- the disposition came
+  from a June wrapper-spec change that production (incl. the Q4 PASS) has used
+  throughout.

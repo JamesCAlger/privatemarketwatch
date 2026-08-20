@@ -2,12 +2,11 @@
   "schema_version": "agentA-rate-grammar.v1",
   "cik": "0001837532",
   "entity_name": "Apollo Debt Solutions BDC",
-  "version": 1,
-  "author": "agentA2 sandbox proposal from bundle 0001837532_2025-12-31.json",
+  "version": 2,
+  "author": "agentA2 sandbox proposal from bundle 0001837532_2026-03-31.json",
   "applies_to": {
     "regime": "flattened",
-    "signature": "CATEGORY SECDEBT RATE REFRATE MAT",
-    "_resolved_by": "harness resolve_applies_to (committed anchors)"
+    "signature": "CATEGORY SECDEBT RATE REFRATE MAT"
   },
   "available_identifier_datapoints": [
     "issuer",
@@ -19,7 +18,6 @@
     "maturity_date"
   ],
   "unsupported_identifier_datapoints": [
-    "interest_rate",
     "interest_rate_all_in",
     "interest_rate_total",
     "interest_rate_cash_leg"
@@ -28,7 +26,7 @@
   "extractors": [
     {
       "field": "reference_rate_type",
-      "regex": "Interest\\s+Rate\\s+(SONIA|SOFR|SF|LIBOR|EURIBOR|PRIME|S|L|P|E)\\s*\\+\\s*[0-9]",
+      "regex": "\\b(SONIA|SOFR|SF|LIBOR|BBSW|PRIME|EURIBOR|S|L|P|E)\\s*\\+\\s*[0-9]{2,4}\\b",
       "group": 1,
       "type": "ref_code",
       "map": {
@@ -41,30 +39,25 @@
         "PRIME": "PRIME",
         "P": "PRIME",
         "EURIBOR": "EURIBOR",
-        "E": "EURIBOR"
+        "E": "EURIBOR",
+        "BBSW": "BBSW"
       }
     },
     {
       "field": "basis_spread",
-      "regex": "Interest\\s+Rate\\s+(?:SONIA|SOFR|SF|LIBOR|EURIBOR|PRIME|S|L|P|E)\\s*\\+\\s*([0-9]{2,4})\\b(?!\\s*%)",
+      "regex": "\\b(?:SONIA|SOFR|SF|LIBOR|BBSW|PRIME|EURIBOR|S|L|P|E)\\s*\\+\\s*([0-9]{2,4})\\b(?!\\s*%)",
       "group": 1,
       "type": "bps"
     },
     {
       "field": "pik_rate",
-      "regex": "(?:Cash\\s+plus,?\\s+|Includes\\s+)([0-9]+(?:\\.[0-9]+)?)\\s*%\\s*PIK",
-      "group": 1,
-      "type": "pct"
-    },
-    {
-      "field": "interest_rate_floor",
-      "regex": "([0-9]+(?:\\.[0-9]+)?)\\s*%\\s*Floor",
+      "regex": "(?:Cash\\s+plus\\s+|\\(?[Ii]ncludes\\s+)([0-9]+(?:\\.[0-9]+)?)\\s*%\\s*PIK",
       "group": 1,
       "type": "pct"
     },
     {
       "field": "maturity_date",
-      "regex": "Maturity\\s*Date\\s*([0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4})",
+      "regex": "Maturity\\s*Date\\s*([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})\\b",
       "group": 1,
       "type": "date_mdy"
     }

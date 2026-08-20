@@ -1,0 +1,44 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001772704",
+  "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
+  "regime": "flattened",
+  "anchors": [
+    {
+      "label": "INVEST",
+      "regex": "\\bInvestments?\\b"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:Debt Investments|1st Lien/Last-Out Unitranche|1st Lien/Senior Secured Debt|Senior Secured Debt)\\b"
+    },
+    {
+      "label": "COUNTRY",
+      "regex": "\\b(?:Canada|United Kingdom|United States)\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "\\b(?:Interest Rate|Initial Acquisition Date)\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "\\bReference Rate and Spread\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\bMaturity\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\b(?:Equity Securities|Preferred Stock|Common Stock|Warrants)\\b"
+    },
+    {
+      "label": "AFFIL",
+      "regex": "\\bInvestments in Affiliated Money Market Fund\\b"
+    }
+  ],
+  "evidence": [
+    "Bundle none_examples include Investments, Debt Investments, 1st Lien/Last-Out Unitranche, Canada, United Kingdom, and United States.",
+    "Dominant bundle identifiers use Debt Investments / 1st Lien/Senior Secured Debt for debt rows, and equity and affiliated money market section text for non-debt rows."
+  ]
+}

@@ -26,8 +26,6 @@
     "signature": "SECDEBT MAT REFRATE RATE"
   },
   "required_fields": [
-    "reference_rate_type",
-    "basis_spread",
     "interest_rate"
   ],
   "pik_convention": "inclusive",
@@ -40,19 +38,27 @@
     },
     {
       "field": "reference_rate_type",
-      "regex": "\\bReference Rate and (?:Spread\\s+)?(SOFR|S|E|\\$)\\s*\\+\\s*\\d",
+      "regex": "\\bReference Rate and Spread\\s+(SOFR|STIBOR|S|E|N|\\$)\\s*\\+\\s*\\d",
       "group": 1,
       "type": "ref_code",
       "map": {
         "SOFR": "SOFR",
+        "STIBOR": "STIBOR",
         "S": "SONIA",
         "E": "EURIBOR",
+        "N": "NIBOR",
         "$": "SOFR"
       }
     },
     {
       "field": "basis_spread",
-      "regex": "\\bReference Rate and (?:Spread\\s+)?(?:SOFR|S|E|\\$)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%",
+      "regex": "\\bReference Rate and Spread\\s+(?:SOFR|STIBOR|S|E|N|\\$)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%",
+      "group": 1,
+      "type": "pct"
+    },
+    {
+      "field": "basis_spread",
+      "regex": "\\bReference Rate(?: and Spread)?\\s+(\\d+(?:\\.\\d+)?)\\s*%\\s+Interest Rate\\s+\\d",
       "group": 1,
       "type": "pct"
     },
@@ -64,16 +70,15 @@
     },
     {
       "field": "pik_rate",
-      "regex": "\\(incl(?:\\.|d\\.)?\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s+PIK\\)",
+      "regex": "\\(incl\\.?\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*(?:\\+\\s*)?PIK\\)",
       "group": 1,
       "type": "pct"
-    }
-  ],
-  "derivations": [
+    },
     {
-      "field": "coupon_type",
-      "value": "floating",
-      "when_present": "reference_rate_type"
+      "field": "pik_rate",
+      "regex": "\\bInterest Rate\\s+(\\d+(?:\\.\\d+)?)\\s*%\\s*\\(?PIK\\)?",
+      "group": 1,
+      "type": "pct"
     }
   ],
   "invariants": [
@@ -96,5 +101,5 @@
       "then_present": "basis_spread"
     }
   ],
-  "notes": "Dominant debt identifiers embed rate/date fields across 2023-2026 eras. PIK is extracted when present but is not required."
+  "notes": "Identifiers embed maturity month/year, acquisition date, reference/spread or fixed reference rate, stated interest rate, and optional PIK. PIK is optional and inclusive when stated as incl.; suffix PIK rows generally use the same stated coupon as the PIK twin, so it is not required."
 }

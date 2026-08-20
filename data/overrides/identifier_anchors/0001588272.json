@@ -6,7 +6,7 @@
   "anchors": [
     {
       "label": "ASSETTYPE",
-      "regex": "(?:^|\\|\\s*)(?:Asset-Backed Securities|Common Stocks|LLC Interests|Preferred Stocks|Senior Secured Loans)(?:\\s*\\||$)"
+      "regex": "(?:^|\\|\\s*)(?:Asset-Backed Securities|Common Stocks|LLC Interests|Preferred Stocks|Senior Secured Loans|Warrants)(?:\\s*\\||$)"
     },
     {
       "label": "REFRATE",
@@ -22,6 +22,7 @@
     }
   ],
   "notes": [
-    "Identifier strings use pipe-delimited asset type, industry, issuer/instrument/tranche, rate descriptor or reference-rate spread, stated percentage, and maturity date when present."
+    "Bundle identifiers are pipe-delimited and carry asset type, industry, issuer/instrument/tranche, and sometimes reference rate, spread, coupon text, stated percent rate, PIK text, and maturity date.",
+    "Warrants appears in bundle none_examples as an asset-type token; source evidence CLI confirmation could not run in this sandbox because pandas is unavailable."
   ]
 }

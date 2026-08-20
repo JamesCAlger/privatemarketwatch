@@ -2,7 +2,7 @@
   "schema_version": "agentA-rate-grammar.v1",
   "cik": "0001715933",
   "entity_name": "TCW Direct Lending VII LLC",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "status": "PROPOSED",
   "applies_to": {
     "regime": "flattened",
@@ -22,13 +22,18 @@
     "pik_terms_text",
     "pik_rate",
     "pct_of_net_assets",
-    "maturity_date"
+    "maturity_date",
+    "cash_equivalent_yield",
+    "short_term_investment_yield",
+    "warrant_expiration_date"
   ],
   "unsupported_identifier_datapoints": [
     "principal_or_par_amount",
     "amortized_cost",
     "fair_value",
-    "share_or_unit_count"
+    "share_or_unit_count",
+    "affiliated_investment_basis_spread",
+    "affiliated_investment_maturity_date"
   ],
   "pik_convention": "inclusive",
   "extractors": [
@@ -68,7 +73,7 @@
     },
     {
       "field": "maturity_date",
-      "regex": "Maturity Date\\s+(\\d{2}/\\d{2}/\\d{2})",
+      "regex": "Maturity Date\\s+(\\d{1,2}/\\d{1,2}/\\d{2})",
       "group": 1,
       "type": "date_mdy"
     }
@@ -107,17 +112,17 @@
   ],
   "evidence": [
     {
-      "accession_number": "0001193125-26-141887",
+      "accession_number": "0001193125-26-221880",
       "table_index": 24,
       "row_index": 4,
-      "observation": "Recent debt identifiers embed rate, SOFR spread, floor, PIK wording, percent of net assets, and maturity date."
+      "observation": "Recent dominant debt identifiers embed coupon, SOFR spread, floor, PIK wording, percent of net assets, and maturity date."
     },
     {
       "accession_number": "0000950170-23-020312",
       "table_index": 24,
       "row_index": 4,
-      "observation": "Oldest-era bundle samples use the same rate/reference/spread/floor/PIK/maturity pattern with two-digit maturity dates."
+      "observation": "Oldest-era dominant debt identifiers use the same embedded coupon, reference-rate spread, floor, PIK wording, and maturity-date pattern."
     }
   ],
-  "notes": "Grammar extracts only datapoints present in the investment_identifier text. It does not use source-table amount, cost, value, or share columns."
+  "notes": "Grammar is scoped to identifiers that actually contain reference-rate, spread, coupon, and maturity text. The separate RATE signature embeds only headline coupon, so affiliated basis spread and maturity date are listed as unsupported for that identifier signature rather than inferred from source columns."
 }

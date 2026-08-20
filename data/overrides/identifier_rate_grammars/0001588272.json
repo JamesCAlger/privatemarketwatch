@@ -33,7 +33,7 @@
   "extractors": [
     {
       "field": "reference_rate_type",
-      "regex": "\\|\\s*(SOFR|SORF|PRIME)\\s*\\+\\s*\\d{3,4}\\s*\\|",
+      "regex": "\\|\\s*(SOFR|SORF|PRIME)\\s*\\+\\s*\\d{1,4}\\s*\\|",
       "group": 1,
       "type": "ref_code",
       "map": {
@@ -44,7 +44,7 @@
     },
     {
       "field": "basis_spread",
-      "regex": "\\|\\s*(?:Fixed|SOFR|SORF|PRIME)\\s*\\+\\s*(\\d{3,4})\\s*\\|",
+      "regex": "\\|\\s*(?:Fixed|SOFR|SORF|PRIME)\\s*\\+\\s*(\\d{1,4})\\s*\\|",
       "group": 1,
       "type": "bps"
     },
@@ -82,8 +82,9 @@
     }
   ],
   "notes": [
-    "Samples span old and new report-date eras but retain the same pipe-delimited rate/maturity structure.",
-    "Structured twins appear to place bps spreads in interest_rate for some loans; the proposal extracts them as basis_spread from the identifier text.",
-    "RATE-only preferred-stock coupons and REFRATE RATE MAT floating-spread rows are present in identifiers but are outside this dominant-signature grammar."
+    "The dominant rate-bearing loan signature spans old and new report-date eras with the same terminal maturity-date pattern.",
+    "Identifier spread tokens such as SOFR + 750, PRIME + 750, SORF + 400, and Fixed + 1600 are extracted as basis_spread in bps.",
+    "Some structured twins appear to place bps spread values in interest_rate; this proposal follows the identifier text rather than fitting those twin bins.",
+    "Preferred-stock pure coupon strings are present in identifiers but do not carry maturity dates and are not forced into this rate/maturity grammar."
   ]
 }

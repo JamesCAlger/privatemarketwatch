@@ -8,17 +8,21 @@
   },
   "available_identifier_datapoints": [
     "issuer",
+    "industry",
+    "country",
     "instrument_type",
     "tranche",
     "origination_date",
     "interest_rate",
     "reference_rate_type",
     "basis_spread",
+    "interest_rate_floor",
     "pik_rate",
     "maturity_date",
     "net_assets_percent"
   ],
   "unsupported_identifier_datapoints": [
+    "origination_date",
     "interest_rate_floor",
     "net_assets_percent"
   ],
@@ -29,7 +33,7 @@
   "extractors": [
     {
       "field": "interest_rate",
-      "regex": ".*[\\-–]\\s*([0-9]+(?:\\.[0-9]+)?)%.*",
+      "regex": ".*\\bTerm Loan(?:\\s+[A-Z])?\\b\\s*[\\-\\u2013]\\s*([0-9]+(?:\\.[0-9]+)?)%.*",
       "group": 1,
       "type": "pct"
     },
@@ -88,5 +92,5 @@
       "then_present": "reference_rate_type"
     }
   ],
-  "notes": "Identifier strings include a simple fixed-rate era such as 'Term Loan - 13.09%' and a detailed floating-rate era such as 'Term Loan - 12.51% inc PIK (SOFR + 8.38%, 1.00% Floor, 0.38% PIK) ... Maturity 05/01/26'. Net Assets percentages are present but are not rate fields and are not extracted."
+  "notes": "Debt term-loan identifiers embed issuer/context, origination Date, instrument/tranche, stated coupon percent, optional SOFR/LIBOR spread and PIK terms, Net Assets percent, and Maturity date. Equity/common/preferred and debt aggregate identifiers do not carry rate datapoints. Net Assets percent and floor values are embedded but intentionally not extracted as rate grammar fields."
 }

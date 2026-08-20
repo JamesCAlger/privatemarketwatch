@@ -2,7 +2,7 @@
   "schema_version": "agentA-identifier-anchors.v1",
   "cik": "0001786108",
   "entity_name": "Trinity Capital Inc.",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "status": "PROPOSED",
   "available_identifier_datapoints": [
     "issuer",
@@ -33,11 +33,11 @@
     },
     {
       "label": "WARRANT",
-      "regex": "Warrant Investments-"
+      "regex": "Warrant\\s*Investments-"
     },
     {
       "label": "DEBT_SECTION",
-      "regex": "^Portfolio Company Debt Securities- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?$"
+      "regex": "^(?!.*\\bType of Investment\\b)Portfolio Company Debt Securities(?:- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?)?$"
     }
   ],
   "anchor_rules": [
@@ -47,10 +47,10 @@
       "applies_to": "investment_identifier",
       "evidence": [
         {
-          "accession_number": "0001193125-26-068600",
-          "table_index": 32,
-          "row_index": 27,
-          "observation": "Recent variable-rate debt rows include Prime/PRIME plus a spread embedded in the identifier."
+          "accession_number": "0001193125-26-207620",
+          "table_index": null,
+          "row_index": null,
+          "observation": "Bundle samples for 2026-03-31 include variable-rate debt rows with Prime plus a spread embedded in the identifier."
         },
         {
           "accession_number": "0000950170-23-017817",
@@ -66,48 +66,43 @@
       "applies_to": "investment_identifier",
       "evidence": [
         {
-          "accession_number": "0001193125-26-068600",
-          "table_index": 32,
-          "row_index": 27,
-          "observation": "Variable-rate debt rows include Interest Rate / Variable interest rate text embedded in the identifier."
-        },
-        {
-          "accession_number": "0000950170-23-017817",
+          "accession_number": "0001193125-26-207620",
           "table_index": null,
           "row_index": null,
-          "observation": "Older bundle samples include Interest Rate / Fixed interest rate and Interest Rate / Variable interest rate text embedded in the identifier."
+          "observation": "Debt rows include Interest Rate / Variable interest rate / Fixed interest rate text embedded in the identifier."
         }
       ]
     },
     {
       "label": "WARRANT",
-      "pattern": "Warrant Investments-",
+      "pattern": "Warrant\\s*Investments-",
       "applies_to": "investment_identifier",
       "evidence": [
         {
-          "accession_number": "0001193125-26-068600",
-          "table_index": 44,
-          "row_index": 2,
-          "observation": "Warrant rows begin with Portfolio Company Warrant Investments- and carry Expiration Date and Series text in the identifier."
+          "accession_number": "0001193125-26-207620",
+          "table_index": null,
+          "row_index": null,
+          "observation": "Warrant rows begin with Portfolio Company Warrant Investments- and carry Expiration Date and Series text in the identifier; the bundle also includes a WarrantInvestments- spacing variant."
         }
       ]
     },
     {
       "label": "DEBT_SECTION",
-      "pattern": "^Portfolio Company Debt Securities- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?$",
+      "pattern": "^(?!.*\\bType of Investment\\b)Portfolio Company Debt Securities(?:- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?)?$",
       "applies_to": "investment_identifier",
       "evidence": [
         {
-          "accession_number": "0001193125-26-068600",
+          "accession_number": "0001193125-26-207620",
           "table_index": null,
           "row_index": null,
-          "observation": "Bundle none_examples are category-only debt section markers such as Portfolio Company Debt Securities- United States Construction Technology, including United Sates typo variants."
+          "observation": "Bundle none_examples include category-only debt section markers such as Portfolio Company Debt Securities."
         }
       ]
     }
   ],
   "notes": [
-    "DEBT_SECTION is intentionally constrained to category-only debt section identifiers and does not match position rows containing Type of Investment.",
-    "Only datapoints embedded in investment_identifier strings were inventoried; source-table-only numeric columns are not treated as identifier datapoints."
+    "DEBT_SECTION is constrained to category-only debt section identifiers by excluding rows that contain Type of Investment.",
+    "Only datapoints embedded in investment_identifier strings were inventoried; source-table-only numeric columns are not treated as identifier datapoints.",
+    "The evidence CLI could not run in this worker because pandas is unavailable, so observations are grounded in the allowed bundle samples and existing read-only production override context."
   ]
 }

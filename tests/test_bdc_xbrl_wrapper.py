@@ -3385,13 +3385,18 @@ def test_apollo_ds_sector_subtotal_is_not_leaf():
 
 
 def test_apollo_ds_company_only_source_row_is_aggregate():
-    """Issuer-only source facts are XBRL totals, not position-level leaves."""
+    """Issuer-only source facts are XBRL totals, not position-level leaves.
+
+    Disposition is 'aggregate' (not 'equity_total_rollup'): f3ffc1a's company-suffix
+    fallback routes these to family=debt, where the category-before-total branch
+    fires. The original 'equity_total_rollup' expectation was inconsistent with the
+    DEBT_AGGREGATE rule id asserted below and never matched the committed spec."""
     result = classify_identifier(
         APOLLO_DS_CIK,
         "Commercial Services & Supplies Associa Associations Inc.",
     )
 
-    assert result["wrapper_disposition"] == "equity_total_rollup"
+    assert result["wrapper_disposition"] == "aggregate"
     assert result["wrapper_rule_id"] == "APOLLO_DEBT_SOLUTIONS_DEBT_AGGREGATE_V1"
 
 
