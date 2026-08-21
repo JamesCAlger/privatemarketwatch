@@ -113,7 +113,16 @@ def _stages(quarter: str) -> list[Stage]:
         ]
 
     return (
-        battery("")
+        # Machine-checked readiness gate FIRST: exit 1 halts the pass before hours of
+        # battery burn (applier coverage, anchor assessability, rule hygiene, stale
+        # staged, re-adjudication worklist, competing processes). Probe mode:
+        # --until preflight. On FAIL the artifact stays at data/output/
+        # pass_preflight.json and the enumerated list is in preflight.log
+        # (post_copy fires only on success).
+        [Stage("preflight", [py, "-m", "scripts.pass_preflight", "--quarter", quarter],
+               note="machine-checked readiness gate; exit 1 halts the pass",
+               post_copy=(config.OUTPUT_DIR / "pass_preflight.json", "preflight.json"))]
+        + battery("")
         + [Stage("select", func="select_candidates",
                  note="rank under-review funds by FV; STOP for operator dispatch")]
         + battery("_post")

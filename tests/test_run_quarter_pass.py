@@ -32,14 +32,17 @@ def _pin_paths(tmp_path: Path, monkeypatch):
 
 def test_stage_order_pre_dispatch_ends_at_select():
     names = [s.name for s in _stages(Q)]
-    # pin_inputs freezes fund-strategy inputs at the pass boundary (pre only);
-    # the post battery reuses the same pin -- one frozen input set per round.
-    assert names[:10] == ["pin_inputs", "rebuild", "oracle", "nonaccrual", "validate",
-                          "shadow", "queue", "ledger", "acceptance", "select"]
-    assert names[10:] == ["rebuild_post", "oracle_post", "nonaccrual_post",
+    # preflight is the machine-checked readiness gate (2026-08-21): exit 1 halts
+    # the pass before hours of battery burn. pin_inputs freezes fund-strategy
+    # inputs at the pass boundary (pre only); the post battery reuses the pin.
+    assert names[:11] == ["preflight", "pin_inputs", "rebuild", "oracle", "nonaccrual",
+                          "validate", "shadow", "queue", "ledger", "acceptance",
+                          "select"]
+    assert names[11:] == ["rebuild_post", "oracle_post", "nonaccrual_post",
                           "validate_post", "shadow_post", "queue_post", "ledger_post",
                           "acceptance_post", "summary"]
     assert "pin_inputs_post" not in names
+    assert "preflight_post" not in names
 
 
 def test_acceptance_verdict_exit_codes_are_outcomes():
@@ -67,9 +70,10 @@ def test_until_select_runs_pre_half_and_checkpoints(tmp_path, monkeypatch):
     executed: list[list[str]] = []
     r = _runner(tmp_path, executed)
     assert r.run(until_stage="select") == 0
-    # 7 subprocess stages ran (select is a function stage)
-    assert len(executed) == 7
-    assert "rebuild_outputs.py" in " ".join(executed[0])
+    # 8 subprocess stages ran (select is a function stage; preflight is cmd)
+    assert len(executed) == 8
+    assert "pass_preflight" in " ".join(executed[0])
+    assert "rebuild_outputs.py" in " ".join(executed[1])
 
     state = json.loads(r.state_path.read_text(encoding="utf-8"))
     assert state["stages"]["select"]["status"] == "completed"
@@ -210,3 +214,33 @@ def test_dry_run_executes_nothing(tmp_path):
     assert r.run() == 0
     assert executed == []
     assert not r.state_path.exists()
+
+
+# ------------------------------------------------ preflight stage (2026-08-21)
+
+
+def test_preflight_hard_fail_halts_pass(tmp_path, monkeypatch):
+    _pin_paths(tmp_path, monkeypatch)
+    executed: list[list[str]] = []
+    r = _runner(tmp_path, executed, fail_on="pass_preflight")
+    assert r.run(until_stage="queue") == 1
+    state = json.loads(r.state_path.read_text(encoding="utf-8"))
+    assert state["stages"]["preflight"]["status"] == "failed"
+    assert "pin_inputs" not in state["stages"]     # nothing after the gate ran
+    assert len(executed) == 1                       # only preflight was attempted
+
+
+def test_until_preflight_probe_stops_after_first_stage(tmp_path, monkeypatch):
+    _pin_paths(tmp_path, monkeypatch)
+    executed: list[list[str]] = []
+    r = _runner(tmp_path, executed)
+    assert r.run(until_stage="preflight") == 0
+    assert len(executed) == 1
+    state = json.loads(r.state_path.read_text(encoding="utf-8"))
+    assert state["stages"]["preflight"]["status"] == "completed"
+    assert "rebuild" not in state["stages"]
+
+
+def test_preflight_allows_only_exit_zero():
+    stages = {s.name: s for s in _stages(Q)}
+    assert stages["preflight"].allowed_exit == (0,)
