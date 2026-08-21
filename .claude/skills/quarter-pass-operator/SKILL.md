@@ -35,16 +35,35 @@ subroutines inside a deterministic pipeline (AGENTS.md); so are you.
 7. **No SEC downloads** unless the human asked for the refresh phase.
 8. Respect the append-only changelog protocol; never edit AGENTS.md.
 
-## Preflight (run all before any dispatch; abort on any failure)
+## Preflight (machine-checked since 2026-08-21)
+
+The pass's FIRST STAGE is the machine-checked readiness gate -- probe it
+standalone before committing to a pass:
+
+```powershell
+python -m scripts.run_quarter_pass --pass-id <id> --quarter <q> --until preflight
+# or directly: python -m scripts.pass_preflight --quarter <q> [--strict]
+```
+
+It hard-fails on: uncovered fix classes in the actionable pool (the 121/143
+lesson), anchor assessability below min (prints the lagging CIKs + the exact
+`refresh_companyfacts` remedy), live-rule noop/drift, codex processes running.
+It warns on: stale staged leaves/proposals, a non-empty re-adjudication
+worklist, other python processes. Exit 1 = enumerated readiness list in
+`preflight.log`. The two things the machine CANNOT see -- still check by hand:
 
 ```powershell
 codex login status                      # must print a logged-in identity
-Get-Process | Where-Object { $_.ProcessName -match 'codex' }   # must be empty
+Get-PSDrive C | Select-Object Free      # want > 50GB free (worker scratch)
 git status --short                      # note concurrent-session activity; do
                                         # NOT commit files you did not create
 python -m pipeline.cohort_guard --worklist <the batch worklist>
-Get-PSDrive C | Select-Object Free      # want > 50GB free (worker scratch)
 ```
+
+If anchor assessability fails, the ONLY networked step (operator-run, never
+called by the pass): `python -m scripts.refresh_companyfacts --quarter <q>
+--ciks <lagging list>` (archives stale cache files to `_archive/`, re-fetches
+through the 10 req/s EdgarClient, reports which CIKs still lag SEC).
 
 Also check `data/output/quarter_pass/<pass_id>/state.json` for a resumable
 prior pass before starting a new one (`--list`, `--from`, `--force`).
@@ -53,13 +72,14 @@ prior pass before starting a new one (`--list`, `--from`, `--force`).
 
 ```
 battery:   python scripts/run_quarter_pass.py --pass-id <id> --quarter <q>
-           runs rebuild -> oracle -> nonaccrual -> validate -> shadow ->
-           queue -> acceptance -> select, then STOPS for dispatch.
-           Acceptance exit 1 (FAIL) / 2 (NOT_ASSESSABLE) are recorded
-           outcomes, not stage failures.
+           runs preflight -> pin_inputs -> rebuild -> oracle -> nonaccrual ->
+           validate -> shadow -> queue -> ledger -> acceptance -> select,
+           then STOPS for dispatch. Acceptance exit 1 (FAIL) /
+           2 (NOT_ASSESSABLE) are recorded outcomes, not stage failures.
 dispatch:  fleets below, driven from candidates.csv + any human-approved
            seed lists (triage identifier-shaped defects to Agent A,
-           row-shaped to B2).
+           row-shaped to B2). Dispatch manifests are wave-stamped
+           (manifest.NNN.json per wave; manifest.json = latest pointer).
 post:      python scripts/run_quarter_pass.py --pass-id <id> --quarter <q> --from rebuild_post
            re-runs the battery and writes pass_summary.json (pre-vs-post
            acceptance deltas = the measured effect of the pass).
@@ -118,15 +138,41 @@ lane; other healthy lanes may continue.
 ## After the fleet
 
 1. Run each lane's verify/promote sweep; log to the batch dir (JSONL).
-2. Run the post battery (`--from rebuild_post`); read `pass_summary.json`.
-3. Check `agent_fix_application_audit.csv` for noop/drift flags on newly
+   Promotion refuses to overwrite a LIVE leaf without `--allow-overwrite`
+   (status `refused_overwrite` in the promote records) -- a sanctioned
+   re-author means the operator pulled the old leaf to a
+   `_pulled_<reason>_<date>/` dir (with a README naming rule_id + reason)
+   first, or passes the flag deliberately.
+2. **Fleet acceptance (B2 lanes):**
+   `python -m scripts.fleet_acceptance --batch-id <id>` -- evaluates the
+   pre-declared criteria (validity >= 95%, selector noops = 0, equivalence/
+   off-scope fails = 0, no post-promotion discoveries, no new failure classes,
+   defect-signature rate <= 10%) and writes
+   `data/output/agent_b2/fleet_acceptance_<id>.json`. ADVISORY while the
+   thresholds file's `enforce.*` flags are off: read the artifact, record the
+   verdict in the batch dir. A FAIL means stop, diagnose, re-fleet -- never
+   widen a bar (hard rule 3 applies to these thresholds too).
+3. **Mandatory post-promotion audit (before the post battery):**
+   `python -m scripts.agent_b2.replay_gate --corrections-dir
+   data/overrides/agent_b2_corrections --stats-only --out
+   data/output/agent_b2/replay_live_stats_<id>.json` -- the live-store
+   magnitude sweep that caught the 5 FV-invariant corrupting corrections.
+   Every out-of-band leg needs evidence, a pull, or a watchlist entry.
+4. **Re-adjudication worklist:** if
+   `data/output/agent_b2/readjudication_worklist.csv` is non-empty
+   (wrong-diagnosis gate refusals), dispatch a B1 re-adjudication batch from
+   it (NEW batch id) before any further B2 fleet on those findings. Never
+   delete or edit B1 verdict files.
+5. Run the post battery (`--from rebuild_post`); read `pass_summary.json`.
+6. Check `agent_fix_application_audit.csv` for noop/drift flags on newly
    promoted rules.
-4. Append a dated entry to `docs/agent_changelog.md` (counts, residuals,
+7. Append a dated entry to `docs/agent_changelog.md` (counts, residuals,
    anything fixed in dispatch tooling). Commit ONLY files this session
    created or changed -- concurrent sessions share this worktree.
-5. Sweep worker scratch: `.\scripts\cleanup_worker_scratch.ps1`.
-6. Report: promoted counts per lane, residual classes with mechanisms,
-   acceptance delta, and the queue state left for the next pass.
+8. Sweep worker scratch: `.\scripts\cleanup_worker_scratch.ps1`.
+9. Report: promoted counts per lane, fleet-acceptance verdicts, residual
+   classes with mechanisms, acceptance delta, and the queue state left for
+   the next pass.
 
 ## Reference docs
 

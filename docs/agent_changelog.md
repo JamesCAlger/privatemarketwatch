@@ -8538,3 +8538,117 @@ Agent lane for the rate-convention classifier residual. New modules:
   byte-identical, every line still valid JSON) + read-only dry run against the real
   2026-08-20 summarytest rollout (66,457 -> 60,293 chars, 9.3% saved, all lines valid,
   summaries intact). Expect a larger fraction on reasoning-heavy workers.
+
+## 2026-08-21 -- row_id: rebuild-stable content-derived per-row identifier in unified holdings
+
+- `pipeline/unified_holdings.py`: new `_assign_row_ids()` runs as the LAST step of
+  `build_unified_holdings` (after every correction/cache layer, before save). It hashes
+  the drift-resistant natural key from `position_id_registry.compute_natural_keys`
+  (cik|source|report_date|rawid|principal|shares, disambiguated by XBRL dimension path
+  then stable-field ordinal; issuer_name excluded by design) into
+  `row_id = 'ROW-' + md5[:16]` via DuckDB (vectorized, order-pinned).
+- Motivation: `position_id` is a dense enumeration ordinal -- measured 0.00% stable
+  across rebuilds (462,911 joined match-pairs baseline vs current, constant -684
+  shift) and currently all-NULL in production holdings. `row_id` gives B2
+  row_selectors, review bundles, and gates a rebuild-stable row handle.
+- SCHEMA CONTRACT: `row_id` is deliberately NOT in `UNIFIED_COLUMNS` -- that list
+  doubles as the in-flight SQL schema (UNION ALL + classification-stabilization
+  passes) where the column does not exist yet; first attempt put it there and broke
+  the union binder 40 min into a rebuild (no artifacts written). The saved artifact
+  is UNIFIED_COLUMNS + [row_id]; a comment at the list documents this.
+- Semantics: row_id names the row AS PUBLISHED. A correction changing
+  principal/shares changes that row's id. It is a per-quarter row handle, not the
+  cross-quarter chain id (that remains position_id).
+- `scripts/diff_outputs.py`: hardened -- per-entry OSError (e.g. the ACL-denied
+  `data/output/_pytest_cache/` scratch that a sandboxed pytest run created and the
+  baseline manifest captured) is reported as a failure line instead of crashing the
+  walk. That scratch dir needs an elevated one-time delete and exclusion from the
+  next baseline snapshot.
+- Tests: new `tests/test_row_id.py` (7: format, uniqueness, row-order invariance,
+  issuer-name-drift invariance, principal-change sensitivity, dimension-path and lot
+  disambiguation, empty frame). Two exact-schema assertions in
+  `tests/test_unified_holdings.py` updated to UNIFIED_COLUMNS + [row_id] (one now
+  also asserts row_id format+uniqueness on the end-to-end build). Full
+  test_unified_holdings.py: 896 passed. Unified rebuild from cache: 780,726 rows,
+  row_id 100% populated, 100% unique, 100% format-valid; row count identical to
+  pre-change artifact. Semantic diff deltas vs the 2026-07-23 baseline are
+  pre-existing staleness (Q2-2026 filings + live corrections), measured identical
+  before and after this change.
+
+## 2026-08-21 - AGENTS.md investigations cutover ratified; auth.json deny-read ACL live (canary-verified); scratch sweep applied
+
+- OWNER-DIRECTED AGENTS.md edit (Data Investigations section only): now points
+  at docs/investigations/ with the dated-heading + --reindex convention and
+  marks the old data/output path as a frozen stub. This ratifies the
+  2026-08-20 cutover; the protocol exception was explicit owner instruction.
+- CREDENTIAL EXPOSURE FINDING (2026-08-21 audit): worker agents had READ
+  access to their own copied auth.json -- it sat inside BOTH the repo-wide
+  policy read grant (worker homes live in-repo) and the CodexSandboxUsers
+  inherited Modify NTFS ACL; the harness deny-ACL mechanism only covered
+  C:	mp. FIX: run_codex_worker.ps1 now applies an icacls deny-read ACE
+  ('CodexSandboxUsers:(R)') to auth.json* in the worker home before every
+  launch (best-effort; warns if the group is absent).
+- CANARY-VERIFIED (one worker, reused canary_trace_20260820 home): exit 0 +
+  turn.completed (codex authenticates as the OPERATOR, unaffected by the
+  deny), worker shell read attempt -> ACCESS_DENIED (result file), post-run
+  scrub still deletes the denied file (operator retains Full), rollout trace
+  harvested. Residual: recommend rotating the OpenAI credential (historical
+  copies sat sandbox-readable for weeks; no evidence of access -- prudential).
+  Longer-term hardening option: move worker homes OUT of the repo tree to
+  shrink the policy read-grant surface.
+- Scratch sweep -Apply launched over all six agent roots (manifest
+  data/output/scratch_sweep_manifest_APPLY_20260821.csv); ~46.3 GB allowlisted
+  waste + ~3,776 auth.json copies per the dry-runs. Running in background at
+  entry time; completion counts to be recorded when it finishes.
+
+## 2026-08-21 - Q1 2026 quarter-pass hardening: preflight gate, fleet acceptance, wave manifests, re-adjudication loop
+
+Six infrastructure items making the Q1 2026 run correct by construction (each
+maps to a measured Q4 incident; plan approved by owner; commits e9a726f..HEAD).
+
+- WAVE-STAMPED DISPATCH MANIFESTS (ebb62e4): dispatch_preflight writes durable
+  manifest.NNN.json per wave + manifest.json latest pointer (old behavior lost
+  every prior wave -- q4b2exp recorded 2 rows where 126 dispatched);
+  b2_run_metrics aggregates across waves, legacy fallback labeled honestly.
+- RE-ADJUDICATION WORKLIST (af237bc): value-gate refusals that implicate the B1
+  DIAGNOSIS (magnitude_plausible false / rate-signature reason) append to
+  data/output/agent_b2/readjudication_worklist.csv (append-only, deduped on
+  review_id+fix_class); replay_gate opt-in for bulk re-gates; verdict files are
+  never deleted or edited. Preflight warns while non-empty.
+- LEDGER FV ACCOUNTING (1a86f2e): findings ledger rows carry fund_quarter_fv_m
+  (all-engine exposure weight) -- FV-by-lifecycle-state now readable; documented
+  fv_at_risk_m engine sparsity (3 engines only).
+- FLEET ACCEPTANCE, ADVISORY (7f0feac): scripts/fleet_acceptance.py +
+  data/reference/fleet_acceptance_thresholds.json mechanize the 8 pre-declared
+  round-4 criteria (thresholds as data; exit 0/1/2). enforce.* flags OFF for the
+  first fleet; flipping them makes promote_passes require a PASS artifact and
+  the pass resume require the post-promotion replay audit. Retro-proof: q4b2exp
+  FAILs on exactly its documented defects (20 selector noops, 30 equivalence
+  fails, 4 pull dirs, no audit artifact). HARD guard shipped ON: promote_passes
+  refuses to overwrite a live leaf without --allow-overwrite (recorded
+  refused_overwrite, never silent).
+- MACHINE-CHECKED PREFLIGHT STAGE (36d6d61): scripts/pass_preflight.py runs as
+  the FIRST run_quarter_pass stage (exit 1 halts before battery burn) and as a
+  standalone probe (--until preflight). Hard: applier coverage for the
+  actionable pool (the 121/143 lesson), anchor assessability (lists lagging
+  CIKs + exact refresh command, NO network), rule noop/drift hygiene, codex
+  processes. Warn: stale staged leaves, re-adjudication worklist, other python.
+  Q1 2026 PROBE RESULT: READY -- 0 hard fails (anchored 98.55, rules 140/140
+  ok, all fix classes covered), 1 warn: 150 staged leaves/proposals awaiting
+  gate or archive.
+- OPERATOR TOOLING: scripts/refresh_companyfacts.py (the ONLY networked script;
+  operator-invoked; archives stale cache to _archive/<stamp>/ then re-fetches
+  via the 10 req/s EdgarClient; replaces the q1shakedown cache-surgery hack).
+  quarter-pass-operator SKILL.md updated to v2 (machine preflight, fleet
+  acceptance step, mandatory post-promotion replay audit, re-adjudication
+  dispatch step, _pulled_ retirement + --allow-overwrite semantics). READMEs
+  added to the three _pulled_* rule dirs (duplicate 1812554, frame-mismatch
+  1965934, target-gone 1508655); audit is clean 140/140 so no further pulls.
+- ENCODING (uncommitted by design): dispatch_agent_b2_workers.ps1 /
+  dispatch_agent_b_workers.ps1 validate-log redirects now write UTF-8 (were
+  UTF-16 LE); lands with the concurrent trace-harvest session's dispatcher
+  changes after its live-fleet smoke.
+- Tests: +31 across test_agent_b2_preflight (18), test_b2_run_metrics (3, new),
+  test_agent_b2_run_remediation (39), test_findings_ledger (9),
+  test_fleet_acceptance (5, new), test_pass_preflight (16, new),
+  test_run_quarter_pass (14), test_refresh_companyfacts (3, new).
