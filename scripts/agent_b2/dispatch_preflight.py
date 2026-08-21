@@ -497,8 +497,10 @@ def preflight_batch(
             "no dispatchable packets after skips "
             f"(no_citations={len(skipped_no_citations)}, policy={len(skipped_policy)}, "
             f"stale={len(skipped_stale)}, existing={len(skipped_existing)})")
+    wave_path, wave = _next_manifest_path(batch_dir)
     manifest = {
         "batch_id": batch_id, "created_at": datetime.now(timezone.utc).isoformat(),
+        "wave": wave,
         "locks_reserved": reserve, "max_parallel_default": 2,
         "corrections_dir": str(corrections_dir), "worker_python": WORKER_PYTHON,
         "worker_read_dirs": _worker_read_dirs(), "n_dispatch": len(manifest_rows),
@@ -507,13 +509,32 @@ def preflight_batch(
         "skipped_stale": skipped_stale,
         "skipped_existing": skipped_existing,
         "rows": manifest_rows}
-    manifest_path = batch_dir / "manifest.json"
-    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    return {"manifest_path": str(manifest_path), "n_dispatch": len(manifest_rows),
+    # Wave-stamped manifest is the durable record (one per dispatch wave; the old
+    # single manifest.json was overwritten by every wave, so q4b2exp recorded 2 rows
+    # where 126 were dispatched). manifest.json remains as a latest-wave pointer for
+    # tooling that globs the fixed name.
+    payload = json.dumps(manifest, indent=2)
+    wave_path.write_text(payload, encoding="utf-8")
+    (batch_dir / "manifest.json").write_text(payload, encoding="utf-8")
+    return {"manifest_path": str(wave_path),
+            "manifest_latest": str(batch_dir / "manifest.json"),
+            "wave": wave, "n_dispatch": len(manifest_rows),
             "n_skipped_no_citations": len(skipped_no_citations),
             "n_skipped_policy": len(skipped_policy),
             "n_skipped_stale": len(skipped_stale),
             "n_skipped_existing": len(skipped_existing), "batch_id": batch_id}
+
+
+def _next_manifest_path(batch_dir: Path) -> tuple[Path, int]:
+    """Next wave-stamped manifest path (manifest.001.json, .002, ...)."""
+    waves = []
+    for p in batch_dir.glob("manifest.[0-9][0-9][0-9].json"):
+        try:
+            waves.append(int(p.name.split(".")[1]))
+        except (IndexError, ValueError):
+            continue
+    n = (max(waves) + 1) if waves else 1
+    return batch_dir / f"manifest.{n:03d}.json", n
 
 
 def release_manifest(manifest_path: str) -> None:

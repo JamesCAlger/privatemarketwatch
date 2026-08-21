@@ -380,3 +380,48 @@ def test_preflight_skips_stale_targets_against_review_queue(tmp_path):
     manifest = json.loads((batch_dir / "manifest.json").read_text())
     assert manifest["skipped_stale"][0]["fix_class"] == "dedup"
     assert "fixed upstream" in manifest["skipped_stale"][0]["reason"]
+
+
+def test_manifest_wave_stamping(tmp_path):
+    # Each dispatch wave writes a durable manifest.NNN.json; manifest.json is a
+    # latest-wave pointer. The old overwrite behavior lost every prior wave
+    # (q4b2exp recorded 2 rows where 126 were dispatched).
+    d = _dirs(tmp_path)
+    batch = "B2W"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _seed(d, "RVQ_BLK_bbb", cik="0001999988")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_aaa"}])
+    res1 = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                              bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    assert res1["wave"] == 1
+    assert res1["manifest_path"].endswith("manifest.001.json")
+    # second wave: different packet (first cik now has a staged leaf and would be skipped)
+    _write_worklist(batch_dir, [{"cik": "0001999988", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_bbb"}])
+    res2 = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                              bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    assert res2["wave"] == 2
+    m1 = json.loads((batch_dir / "manifest.001.json").read_text())
+    m2 = json.loads((batch_dir / "manifest.002.json").read_text())
+    latest = json.loads((batch_dir / "manifest.json").read_text())
+    assert m1["rows"][0]["cik"] == "0001743415" and m1["wave"] == 1
+    assert m2["rows"][0]["cik"] == "0001999988" and m2["wave"] == 2
+    assert latest == m2                      # pointer duplicates the last wave
+    assert res2["manifest_latest"].endswith("manifest.json")
+
+
+def test_release_manifest_accepts_wave_path(tmp_path, monkeypatch):
+    d = _dirs(tmp_path)
+    batch = "B2R"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_aaa"}])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    released = []
+    monkeypatch.setattr(pf.review_lock, "release", lambda k: released.append(k))
+    pf.release_manifest(res["manifest_path"])
+    assert released == ["B2__0001743415__subtotal_filter"]

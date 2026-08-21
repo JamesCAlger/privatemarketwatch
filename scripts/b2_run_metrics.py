@@ -116,29 +116,46 @@ def rows_for_batch(batch_dir: Path, batch_id: str):
             }
         )
 
-    manifest_path = batch_dir / "manifest.json"
-    if manifest_path.exists():
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
-        add("manifest_created_at", manifest.get("created_at", ""))
-        add(
-            "manifest_last_wave_rows",
-            len(manifest.get("rows", [])),
-            "manifest is overwritten per dispatch wave; last wave only",
-        )
-        add("manifest_n_dispatch_last_wave", manifest.get("n_dispatch", ""))
-        for key, entries in sorted(manifest.items()):
-            if not key.startswith("skipped_"):
-                continue
-            reasons = "; ".join(
-                sorted(
-                    {
-                        str(e.get("reason", ""))[:120]
-                        for e in entries
-                        if isinstance(e, dict)
-                    }
+    # Wave-stamped manifests (manifest.NNN.json, dispatch_preflight 2026-08-21) are the
+    # durable per-wave records; plain manifest.json is a latest-wave pointer duplicating
+    # the last wave. Legacy batches (all Q4) have only the plain file.
+    wave_files = sorted(batch_dir.glob("manifest.[0-9][0-9][0-9].json"))
+    manifest_files = wave_files or (
+        [batch_dir / "manifest.json"] if (batch_dir / "manifest.json").exists() else []
+    )
+    if manifest_files:
+        skipped_totals: dict[str, int] = {}
+        skipped_reasons: dict[str, set] = {}
+        total_rows = 0
+        last = None
+        for mf in manifest_files:
+            manifest = json.loads(mf.read_text(encoding="utf-8-sig"))
+            last = manifest
+            total_rows += len(manifest.get("rows", []))
+            if wave_files:
+                add(
+                    "manifest_wave_rows",
+                    len(manifest.get("rows", [])),
+                    f"wave {manifest.get('wave', mf.name)}",
                 )
-            )
-            add(key, len(entries), reasons)
+            for key, entries in sorted(manifest.items()):
+                if not key.startswith("skipped_"):
+                    continue
+                skipped_totals[key] = skipped_totals.get(key, 0) + len(entries)
+                skipped_reasons.setdefault(key, set()).update(
+                    str(e.get("reason", ""))[:120]
+                    for e in entries
+                    if isinstance(e, dict)
+                )
+        add("manifest_created_at", last.get("created_at", ""))
+        add("manifest_total_waves", len(manifest_files),
+            "wave-stamped" if wave_files else "legacy single manifest (last wave only)")
+        add("manifest_total_rows", total_rows,
+            "" if wave_files else "manifest was overwritten per dispatch wave; last wave only")
+        add("manifest_last_wave_rows", len(last.get("rows", [])))
+        add("manifest_n_dispatch_last_wave", last.get("n_dispatch", ""))
+        for key in sorted(skipped_totals):
+            add(key, skipped_totals[key], "; ".join(sorted(skipped_reasons[key])))
     else:
         add("manifest_missing", 1)
 
