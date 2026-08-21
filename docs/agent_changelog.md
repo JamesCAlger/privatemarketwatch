@@ -8652,3 +8652,16 @@ maps to a measured Q4 incident; plan approved by owner; commits e9a726f..HEAD).
   test_agent_b2_run_remediation (39), test_findings_ledger (9),
   test_fleet_acceptance (5, new), test_pass_preflight (16, new),
   test_run_quarter_pass (14), test_refresh_companyfacts (3, new).
+
+## 2026-08-21 -- data/output/_pytest_cache removed (elevated one-time); excluded from future baselines
+
+- Deleted `data/output/_pytest_cache/` via takeown + icacls /reset + Remove-Item from an
+  elevated shell (7 items, ~1 KB; sandboxed pytest had created it with ACLs no
+  non-elevated shell could touch). Verified a genuine pytest cache (CACHEDIR.TAG layout)
+  before deletion.
+- `scripts/snapshot_outputs.py`: added `_pytest_cache` and pytest's default
+  `.pytest_cache` to EXCLUDE_DIR_NAMES so a recreation can never pollute the manifest.
+- Current `docs/refactoring/baseline_manifest.json` still carries 4 stale
+  `_pytest_cache` entries (with copies under `data/snapshots/baseline/`); they clear at
+  the next owner-gated baseline refresh. Until then `diff_outputs.py` will report those
+  4 as missing-current -- expected, benign.

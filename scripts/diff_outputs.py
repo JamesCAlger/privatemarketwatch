@@ -270,14 +270,22 @@ def diff(compare_sql: bool = True, semantic: bool = False) -> int:
         current = ROOT / rel
         baseline = ROOT / entry["snapshot_path"]
         checked += 1
-        if not current.exists():
-            failures.append(f"{rel}: current file is missing")
+        try:
+            if not current.exists():
+                failures.append(f"{rel}: current file is missing")
+                continue
+            if not baseline.exists():
+                failures.append(f"{rel}: baseline snapshot is missing")
+                continue
+            current_sha = _sha256(current)
+            unchanged = (current_sha == entry["sha256"]
+                         and filecmp.cmp(current, baseline, shallow=False))
+        except OSError as exc:
+            # e.g. ACL-denied scratch (a sandboxed pytest run's cache dir was
+            # snapshotted into the baseline manifest); report, don't crash the walk.
+            failures.append(f"{rel}: unreadable ({exc})")
             continue
-        if not baseline.exists():
-            failures.append(f"{rel}: baseline snapshot is missing")
-            continue
-        current_sha = _sha256(current)
-        if current_sha == entry["sha256"] and filecmp.cmp(current, baseline, shallow=False):
+        if unchanged:
             continue
         detail = ""
         if current.suffix.lower() == ".csv":
