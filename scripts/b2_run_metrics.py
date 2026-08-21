@@ -254,6 +254,113 @@ def rows_for_batch(batch_dir: Path, batch_id: str):
     return rows
 
 
+def rows_for_packet_nunits(batch_dir: Path, batch_id: str, bundles_dir: Path,
+                           staged_dir: Path, live_dir: Path, archive_root: Path):
+    """Join gate verdicts to source-bundle flag n_units (affected-row count).
+
+    Measured 2026-08-20 on q4b2t4b/q4b2exp: gate pass rate RISES with n_units
+    (<=1: 14%, 6-25: 33%, 26-100: 71%, >100: 93% among join-resolved packets) --
+    broad structural defects fit bounded templates; single-row packets hit
+    signature/selector refusals. Emitted per fleet so the go/no-go can see it.
+    Join is best-effort: manifest.json only holds the LAST dispatch wave, and
+    archived failure leaves may be gone -- unresolved packets are counted, not
+    guessed.
+    """
+    rows = []
+
+    def add(metric, value, detail=""):
+        rows.append({"section": "packet_nunits", "batch_id": batch_id,
+                     "metric": metric, "value": value, "detail": detail})
+
+    # verdict per cik: later gate files supersede (v2/v3 re-gates).
+    gate = {}
+    for gp in sorted(batch_dir.glob("apply_gate*.jsonl")):
+        for ln in gp.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+            ln = ln.strip().lstrip("﻿")
+            if not ln:
+                continue
+            try:
+                e = json.loads(ln)
+            except json.JSONDecodeError:
+                continue
+            if e.get("cik"):
+                gate[str(e["cik"])] = e
+    if not gate:
+        return rows
+
+    def rids_for(cik: str) -> set:
+        rids = set()
+        mp = batch_dir / "manifest.json"
+        if mp.exists():
+            try:
+                m = json.loads(mp.read_text(encoding="utf-8-sig"))
+            except json.JSONDecodeError:
+                m = {}
+            for r in m.get("rows", []):
+                if str(r.get("cik")) == cik:
+                    v = r.get("source_review_ids") or []
+                    if isinstance(v, str):
+                        v = [s for s in v.split(";") if s.strip()]
+                    rids.update(v)
+        for root in (staged_dir, live_dir, archive_root):
+            if not root.exists():
+                continue
+            for p in root.rglob(f"*{cik}*/*.json"):
+                try:
+                    leaf = json.loads(p.read_text(encoding="utf-8-sig"))
+                except Exception:
+                    continue
+                if str(leaf.get("cik")) == cik:
+                    rids.update(leaf.get("source_review_ids") or [])
+        return rids
+
+    def n_units_for(rid: str):
+        p = bundles_dir / f"{rid}.json"
+        if not p.exists():
+            return None
+        try:
+            b = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+        for ev in b.get("evidence_items", []):
+            if ev.get("evidence_id") == "flag":
+                try:
+                    return int(float(ev["data"].get("n_units") or 0))
+                except (TypeError, ValueError):
+                    return None
+        return None
+
+    buckets = [(0, 1, "<=1"), (2, 5, "2-5"), (6, 25, "6-25"),
+               (26, 100, "26-100"), (101, 10**9, ">100")]
+    tallies = {lbl: [0, 0] for _, _, lbl in buckets}  # lbl -> [pass, total]
+    unresolved = [0, 0]
+    for cik, e in sorted(gate.items()):
+        verdict = e.get("verdict", "?")
+        known = [n for n in (n_units_for(r) for r in rids_for(cik)) if n is not None]
+        nu = max(known) if known else None
+        add(f"packet__{cik}", "" if nu is None else nu,
+            f"verdict={verdict}; n_rids_joined={len(known)}")
+        if nu is None:
+            unresolved[1] += 1
+            unresolved[0] += verdict == "PASS"
+            continue
+        for lo, hi, lbl in buckets:
+            if lo <= nu <= hi:
+                tallies[lbl][1] += 1
+                tallies[lbl][0] += verdict == "PASS"
+                break
+    for _, _, lbl in buckets:
+        p, t = tallies[lbl]
+        if t:
+            add(f"pass_rate__n_units_{lbl}", round(100.0 * p / t, 1), f"{p}/{t} PASS")
+    if unresolved[1]:
+        add("pass_rate__n_units_unresolved",
+            round(100.0 * unresolved[0] / unresolved[1], 1),
+            f"{unresolved[0]}/{unresolved[1]} PASS; no bundle join "
+            "(stale manifest wave or archived leaf)")
+    return rows
+
+
 def rows_for_archives(archive_root: Path, prefixes):
     rows = []
     if not archive_root.exists():
@@ -422,6 +529,9 @@ def main(argv=None):
     ap.add_argument("--cohort-manifest", type=Path, default=DEFAULT_COHORT)
     ap.add_argument("--report-date", default="2025-12-31")
     ap.add_argument("--audit", type=Path, default=DEFAULT_AUDIT)
+    ap.add_argument("--bundles-dir", type=Path,
+                    default=REPO_ROOT / "data" / "output" / "review_queue" / "review_bundles",
+                    help="review bundles dir for the n_units-vs-gate join")
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = ap.parse_args(argv)
 
@@ -433,6 +543,9 @@ def main(argv=None):
             continue
         print(f"[b2_run_metrics] batch {batch_id}")
         all_rows.extend(rows_for_batch(batch_dir, batch_id))
+        all_rows.extend(rows_for_packet_nunits(
+            batch_dir, batch_id, args.bundles_dir,
+            args.staged_dir, args.live_dir, args.archive_root))
 
     print("[b2_run_metrics] archives")
     all_rows.extend(rows_for_archives(args.archive_root, args.archive_prefixes))
