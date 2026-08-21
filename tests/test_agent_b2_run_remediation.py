@@ -559,3 +559,52 @@ def test_magnitude_check_ratio_leg_catches_principal_break_when_fund_grows():
         baseline_df=base, trial_df=trial, correction=corr, target_quarter="2025-12-31")
     assert ok is False
     assert any("principal/FV" in r for r in reasons)
+
+
+# ---------------------------------------------------------------------------
+# Re-adjudication worklist (wrong-diagnosis loop, 2026-08-21)
+# ---------------------------------------------------------------------------
+
+class TestReadjudicationWorklist:
+    def test_is_diagnosis_refusal_on_magnitude_check_false(self):
+        assert rr.is_diagnosis_refusal(
+            {"verdict": "FAIL", "checks": {"magnitude_plausible": False}, "reasons": []})
+
+    def test_is_diagnosis_refusal_on_rate_signature_reason(self):
+        assert rr.is_diagnosis_refusal(
+            {"verdict": "FAIL", "checks": {"replay_ok": True},
+             "reasons": ["rate signature already plausible before fix"]})
+
+    def test_is_diagnosis_refusal_false_on_authoring_fail(self):
+        # replay-equivalence failure = B2 authoring defect, NOT a B1 diagnosis defect
+        assert not rr.is_diagnosis_refusal(
+            {"verdict": "FAIL", "checks": {"replay_equivalence": False,
+                                           "magnitude_plausible": True},
+             "reasons": ["trial does not match applier(baseline)"]})
+        assert not rr.is_diagnosis_refusal(
+            {"verdict": "PASS", "checks": {"magnitude_plausible": False}, "reasons": []})
+
+    def _entry(self, rid="RVQ_BLK_x", fc="unit_rescale", cik="0001234567"):
+        return {"cik": cik, "fix_class": fc, "source_review_ids": rid,
+                "batch_id": "b1", "gated_utc": "2026-08-21T00:00:00+00:00",
+                "reason": "magnitude_plausible false"}
+
+    def test_append_readjudication_dedupes_by_review_id_and_fix_class(self, tmp_path):
+        p = tmp_path / "readju.csv"
+        assert rr.append_readjudication([self._entry()], path=p) == 1
+        # same (review_id, fix_class) pair again -> no-op
+        assert rr.append_readjudication([self._entry()], path=p) == 0
+        # same review_id but different fix_class -> new row
+        assert rr.append_readjudication([self._entry(fc="column_remap")], path=p) == 1
+        rows = list(csv.DictReader(p.open(encoding="utf-8-sig")))
+        assert len(rows) == 2
+        assert {r["fix_class"] for r in rows} == {"unit_rescale", "column_remap"}
+
+    def test_append_readjudication_is_append_only(self, tmp_path):
+        p = tmp_path / "readju.csv"
+        rr.append_readjudication([self._entry()], path=p)
+        before = p.read_text(encoding="utf-8")
+        rr.append_readjudication([self._entry(rid="RVQ_BLK_y")], path=p)
+        after = p.read_text(encoding="utf-8")
+        assert after.startswith(before)          # existing rows never rewritten
+        assert after.count("\n") == before.count("\n") + 1

@@ -27,6 +27,7 @@ import json
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -43,6 +44,13 @@ DEFAULT_CORRECTIONS = DEFAULT_BASE / "corrections"
 DEFAULT_OVERRIDES = config.AGENT_B2_CORRECTIONS_DIR
 DEFAULT_CONSERVATION = config.OUTPUT_DIR / "shadow" / "conservation_gate_results.csv"
 TRIAL_REBUILD = config.PROJECT_ROOT / "scripts" / "rebuild_unified_cik_trial.py"
+# Wrong-diagnosis loop (2026-08-21): a value-gate refusal that implicates the B1 VERDICT
+# (fix authored for a defect the data does not show) appends here; the pass preflight
+# warns while it is non-empty. Re-dispatching the review_ids to B1 stays an operator
+# action -- verdict files are NEVER deleted or edited by this lane.
+READJUDICATION_WORKLIST = DEFAULT_BASE / "readjudication_worklist.csv"
+READJUDICATION_COLUMNS = ["cik", "fix_class", "source_review_ids", "batch_id",
+                          "gated_utc", "reason"]
 
 # Which layer applies each fix_class. wrapper_patch -> edit the per-CIK wrapper (staging);
 # post_staging -> transform the unified holdings (agent_b2_appliers); rule_track -> a
@@ -752,6 +760,55 @@ def discover(batch_id: str, *, base_dir: Path = DEFAULT_BASE, verdicts_dir: Path
             "n_actionable": sum(1 for p in packets if p["fix_class"]), "worklist": str(out)}
 
 
+def is_diagnosis_refusal(value_gate_result: dict) -> bool:
+    """True when a value-gate FAIL implicates the B1 DIAGNOSIS, not B2 authoring.
+
+    The v3-era 'defect_signature' check name is legacy; on the current gate the
+    wrong-diagnosis signal is the magnitude predicate refusing (the field the fix
+    'repairs' was already plausible) or a reason naming the rate signature."""
+    if value_gate_result.get("verdict") != "FAIL":
+        return False
+    if value_gate_result.get("checks", {}).get("magnitude_plausible") is False:
+        return True
+    reasons = value_gate_result.get("reasons") or []
+    return any(("rate signature" in str(r).lower()) or ("magnitude" in str(r).lower())
+               for r in reasons)
+
+
+def append_readjudication(entries: list[dict], path: Path = READJUDICATION_WORKLIST) -> int:
+    """Append wrong-diagnosis rows to the re-adjudication worklist (append-only).
+
+    Dedupe key: (review_id, fix_class) pairs derived by splitting each row's
+    ``source_review_ids`` on ';'. Rows whose every pair is already present are
+    dropped. Never touches verdict files."""
+    seen: set[tuple[str, str]] = set()
+    if path.exists():
+        with path.open("r", encoding="utf-8-sig", newline="") as f:
+            for row in csv.DictReader(f):
+                for rid in str(row.get("source_review_ids", "")).split(";"):
+                    if rid:
+                        seen.add((rid, row.get("fix_class", "")))
+    fresh = []
+    for e in entries:
+        pairs = [(rid, e.get("fix_class", ""))
+                 for rid in str(e.get("source_review_ids", "")).split(";") if rid]
+        if pairs and all(p in seen for p in pairs):
+            continue
+        seen.update(pairs)
+        fresh.append({c: e.get(c, "") for c in READJUDICATION_COLUMNS})
+    if not fresh:
+        return 0
+    path.parent.mkdir(parents=True, exist_ok=True)
+    new_file = not path.exists()
+    with path.open("a", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=READJUDICATION_COLUMNS)
+        if new_file:
+            w.writeheader()
+        for row in fresh:
+            w.writerow(row)
+    return len(fresh)
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Agent B2 remediation driver (discover/gate/promote).")
     sub = ap.add_subparsers(dest="mode", required=True)
@@ -782,6 +839,11 @@ def main(argv=None) -> int:
     g.add_argument("--grounding", type=Path, default=None,
                    help="Frame with source_row_id+fair_value for missing_position_add "
                         "grounding (csv/parquet). Fail-closed when absent.")
+    g.add_argument("--batch-id", default="",
+                   help="Batch id recorded on re-adjudication worklist rows.")
+    g.add_argument("--readju-worklist", type=Path, default=READJUDICATION_WORKLIST,
+                   help="Wrong-diagnosis refusals append here (append-only; "
+                        "verdicts are never touched).")
 
     dx = sub.add_parser("diagnose", help="Anchor-scored battery for a Stage-3 symptom packet "
                                          "(replaces the guessed mechanism with a measured decision).")
@@ -823,6 +885,19 @@ def main(argv=None) -> int:
             out["value_gate"] = {k: vres[k] for k in ("verdict", "checks", "reasons")}
             out["verdict"] = "PASS" if (res.verdict == "PASS"
                                         and vres["verdict"] == "PASS") else "FAIL"
+            if is_diagnosis_refusal(vres):
+                reasons = vres.get("reasons") or []
+                n = append_readjudication([{
+                    "cik": args.cik,
+                    "fix_class": correction.get("fix_class", ""),
+                    "source_review_ids": ";".join(correction.get("source_review_ids") or []),
+                    "batch_id": args.batch_id,
+                    "gated_utc": datetime.now(timezone.utc).isoformat(),
+                    "reason": str(reasons[0]) if reasons else "magnitude_plausible false",
+                }], path=args.readju_worklist)
+                if n:
+                    print(f"[gate] appended re-adjudication worklist row for "
+                          f"{args.cik}/{correction.get('fix_class', '')}", file=sys.stderr)
         print(json.dumps(out, indent=2))
         return 0 if out["verdict"] == "PASS" else 1
     if args.mode == "diagnose":

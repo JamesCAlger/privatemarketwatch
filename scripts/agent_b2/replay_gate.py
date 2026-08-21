@@ -28,6 +28,7 @@ import argparse
 import json
 import math
 import statistics
+from datetime import datetime, timezone
 from pathlib import Path
 
 import duckdb
@@ -114,12 +115,23 @@ def main(argv=None) -> int:
     ap.add_argument("--stats-only", action="store_true",
                     help="No replay: magnitude stats of the CURRENT frame (for live leaves).")
     ap.add_argument("--limit", type=int, default=200, help="Max leaves to process.")
+    ap.add_argument("--out", type=Path, default=None,
+                    help="Also write the results JSON here (utf-8, no BOM) -- used for "
+                         "the mandatory post-promotion audit artifact "
+                         "replay_live_stats_<batch_id>.json.")
+    ap.add_argument("--readju-worklist", type=Path, default=None,
+                    help="Append wrong-diagnosis gate refusals to this re-adjudication "
+                         "worklist (default: no writes; preserves read-only behavior).")
+    ap.add_argument("--batch-id", default="",
+                    help="Batch id recorded on re-adjudication worklist rows.")
     args = ap.parse_args(argv)
 
     leaves = load_leaves(args.corrections_dir)[: args.limit]
     print(f"[replay_gate] {len(leaves)} leaf(s) from {args.corrections_dir}")
     con = duckdb.connect()
     results = []
+    leaf_map = {str(path.relative_to(args.corrections_dir)): leaf
+                for path, leaf in leaves if "_load_error" not in leaf}
     for i, (path, leaf) in enumerate(leaves, 1):
         rec: dict = {"leaf": str(path.relative_to(args.corrections_dir))}
         if "_load_error" in leaf:
@@ -148,6 +160,26 @@ def main(argv=None) -> int:
                        reasons=res["reasons"])
         results.append(rec)
     print(json.dumps(results, indent=2, default=str))
+    if args.out is not None:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
+        print(f"[replay_gate] wrote {args.out}")
+    if args.readju_worklist is not None and not args.stats_only:
+        entries = []
+        for r in results:
+            vres = {"verdict": r.get("verdict"), "checks": r.get("checks", {}),
+                    "reasons": r.get("reasons", [])}
+            if r.get("status") == "gated" and rr.is_diagnosis_refusal(vres):
+                reasons = r.get("reasons") or []
+                entries.append({
+                    "cik": r.get("cik", ""), "fix_class": r.get("fix_class", ""),
+                    "source_review_ids": ";".join(
+                        (leaf_map.get(r["leaf"], {}).get("source_review_ids") or [])),
+                    "batch_id": args.batch_id,
+                    "gated_utc": datetime.now(timezone.utc).isoformat(),
+                    "reason": str(reasons[0]) if reasons else "magnitude_plausible false"})
+        n = rr.append_readjudication(entries, path=args.readju_worklist)
+        print(f"[replay_gate] {n} re-adjudication worklist row(s) appended")
     n_fail = sum(1 for r in results if r.get("verdict") == "FAIL")
     n_out = sum(1 for r in results
                 for m in (r.get("magnitude") or []) if m.get("in_band") is False)
