@@ -86,6 +86,12 @@ approval_policy = "never"
 default_permissions = "pm_worker"
 web_search = "disabled"
 project_root_markers = []
+# Emit model-written reasoning summaries into the persisted rollout trace (live-verified
+# 2026-08-20, worker_home3 in the canary batch). Raw chain-of-thought stays encrypted;
+# summaries are headline-to-paragraph digests per reasoning burst. TOML: this key MUST
+# stay above the first [table] header or it lands inside that table and --strict-config
+# rejects the file.
+model_reasoning_summary = "detailed"
 
 [windows]
 sandbox = "elevated"

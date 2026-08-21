@@ -85,8 +85,11 @@ omit patch content entirely). ~65 KB for a no-shell B2 packet.
   anchor loops, the per-cik `logs\worker.<quarter>.` for convention, whose worker homes are
   discarded TEMP scratch).
 - `-NoCleanup` skips the harvest too (raw sessions layout kept for debugging one worker).
-- Reasoning items in the rollout carry `encrypted_content` with EMPTY summaries -- readable
-  chain-of-thought is NOT recoverable. Do not build tooling that expects reasoning text.
+- Raw chain-of-thought is NOT recoverable (reasoning items carry `encrypted_content`), but
+  since 2026-08-20 the generated worker config sets `model_reasoning_summary = "detailed"`,
+  so reasoning items also carry readable `summary_text` parts: model-written digests per
+  reasoning burst (headline-length on small no-shell packets, longer on shell-heavy work).
+  Build tooling against the summaries, not the encrypted payload.
 - The scratch sweepers explicitly KEEP `sessions\**\rollout-*.jsonl` (see
   `codex_worker_waste_allowlist.ps1`), so unharvested traces from killed dispatchers survive
   until collected.

@@ -8484,3 +8484,43 @@ Agent lane for the rate-convention classifier residual. New modules:
   207 files / 9,813 rows; consolidate_agent_results --stats 57 files / 2,809
   rows. The ~10 malformed gics shards (CSV quoting) failing to tokenize are
   PRE-EXISTING campaign defects the merger has always skipped -- not the move.
+
+## 2026-08-20 - Investigations CUTOVER: docs/investigations/ now canonical; old data/output file frozen
+
+- Canary complete, cutover executed per the owner's go-ahead. The 9 topic files
+  under docs/investigations/ are now CANONICAL and appendable (derived-view
+  banners replaced with append instructions); INDEX.md is rebuilt from them via
+  python scripts/split_investigations.py --reindex.
+- data/output/data_investigation_results.md is now a frozen redirect stub
+  (marker CUTOVER-COMPLETE) pointing agents at docs/investigations/. Full
+  pre-cutover content (61 entries, verified byte-preserved in the split)
+  archived at data/output/data_investigation_results_ARCHIVED_20260820.md --
+  archive kept on disk because data/output is gitignored and the topic files
+  are not yet committed; safe to delete the archive after a commit lands.
+- split_investigations.py regenerate mode now REFUSES when the source carries
+  the CUTOVER-COMPLETE marker (regenerating from the stub/archive would destroy
+  post-cutover appends); verified: regenerate exits 1 with explanation,
+  --reindex works (61 entries across 9 files).
+- STILL PENDING (owner): AGENTS.md "Data Investigations" section still points
+  at the old path -- replacement wording is in the 2026-08-20 split changelog
+  entry; the stub redirects stale-instructed agents in the meantime. Also
+  pending: sweeper -Apply (deletion of ~46.3 GB scratch + ~3,776 auth.json
+  copies) remains owner-gated and is NOT covered by this cutover.
+
+## 2026-08-20 -- Reasoning summaries enabled for fleet workers (model_reasoning_summary = "detailed")
+
+- `scripts/setup_codex_worker_harness.ps1`: generated worker config.toml now sets
+  `model_reasoning_summary = "detailed"` (top-level, ABOVE the first [table] header --
+  TOML scoping puts trailing keys inside the last table and --strict-config then
+  rejects the file; that ordering mistake cost one failed run during verification).
+- Live-verified with one worker (worker_home3 in the canary batch): rollout reasoning
+  items now carry readable `summary_text` parts (e.g. "Deciding classification fix for
+  Apidos CLO" -> "Finalizing exact issuer_name with footnotes") alongside the still-
+  encrypted raw content. Summaries are model-written digests per reasoning burst --
+  headline-length on small no-shell packets -- NOT raw chain-of-thought.
+- Same run was the first live exercise of the committed harvest step (7409f13): traces
+  landed in the batch logs dir with the per-worker prefix, sessions pruned, auth
+  scrubbed; a prior failed run's leftover session was swept up by the reused-home path.
+- Operational note surfaced by the verification: the post-run scrub deletes auth.json
+  after EVERY run including failures, so auth must be re-copied before every manual
+  re-run (fleet dispatchers already copy per-run).
