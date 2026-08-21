@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "calibration": "provisional",
+  "calibration_note": "Round-4 pre-declared fleet acceptance criteria (data_investigation_results.md 2026-08-20 entry), mechanized 2026-08-21. ADVISORY for the first fleet: enforce.* flags are OFF; promotion proceeds regardless of the verdict and the operator reads the artifact. Flip enforce.promote_requires_pass / enforce.resume_requires_audit to true after the round-4 fleet validates the evaluator itself. Baselines: authoring validity 97.9% (q4b2exp2), selector noops 20 (v2 gate), replay/off-scope fails 0 (v3 gate), defect-signature refusal rate 27% (v3). A FAIL means stop, diagnose, re-fleet -- not widen the bar.",
+  "enforce": {
+    "promote_requires_pass": false,
+    "resume_requires_audit": false
+  },
+  "known_archive_reason_tokens": [
+    "invalid_template",
+    "schema_invalid",
+    "gate_fail",
+    "duplicate_of_promoted",
+    "REVERTED",
+    "magnitude_pull",
+    "production_noop_pull",
+    "comparative",
+    "readjudication"
+  ],
+  "checks": [
+    {
+      "id": "authoring_validity",
+      "metric": "batch.authoring_validity_pct",
+      "op": ">=",
+      "value": 95.0,
+      "note": "valid worker outputs / dispatched packets (dispatch-time validator)"
+    },
+    {
+      "id": "selector_noop_refusals",
+      "metric": "derived.selector_noop_refusals",
+      "op": "==",
+      "value": 0,
+      "note": "grounded selectors are designed to zero this; any occurrence is a grounding-pipeline defect"
+    },
+    {
+      "id": "replay_offscope_failures",
+      "metric": "derived.replay_offscope_failures",
+      "op": "==",
+      "value": 0,
+      "note": "replay_equivalence + off_scope_invariance gate check failures"
+    },
+    {
+      "id": "post_promotion_discoveries",
+      "metric": "derived.post_promotion_pull_dirs",
+      "op": "==",
+      "value": 0,
+      "note": "pull/revert archive dirs for this batch AFTER promotion; gate-time refusals are acceptable outcomes"
+    },
+    {
+      "id": "post_promotion_audit",
+      "metric": "derived.post_promotion_audit_present",
+      "op": "==",
+      "value": 1,
+      "note": "replay_gate --stats-only --out data/output/agent_b2/replay_live_stats_<batch_id>.json must exist"
+    },
+    {
+      "id": "new_failure_classes",
+      "metric": "derived.unknown_archive_dirs",
+      "op": "==",
+      "value": 0,
+      "note": "any batch archive dir whose name matches none of known_archive_reason_tokens = new failure class; stop and update the taxonomy"
+    },
+    {
+      "id": "defect_signature_rate",
+      "metric": "derived.defect_signature_refusal_pct",
+      "op": "<=",
+      "value": 10.0,
+      "note": "wrong-diagnosis refusals / gated CIKs; if high, B1 verdict quality is the binding constraint -- pause for re-adjudication"
+    }
+  ]
+}

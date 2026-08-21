@@ -565,7 +565,9 @@ def gate_value_packet(
 
 
 def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides_dir: Path,
-                   wrapper_dir: Path = PROD_WRAPPER_DIR) -> list[dict]:
+                   wrapper_dir: Path = PROD_WRAPPER_DIR, batch_id: str | None = None,
+                   allow_overwrite: bool = False,
+                   fleet_thresholds_path: Path | None = None) -> list[dict]:
     """Promote only PASS staged corrections into their PRODUCTION consumer store.
 
     Layer routing (gap 1): a wrapper-patch correction (e.g. subtotal_filter) applies the
@@ -573,8 +575,18 @@ def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides
     the store production staging already reads), with provenance; re-promotion is a
     recorded no-op, never a duplicate provenance append. Every other correction copies
     the leaf to ``overrides_dir`` (data/overrides/agent_b2_corrections), which
-    ``build_unified_holdings`` consumes at raw staging. Returns the promoted records."""
+    ``build_unified_holdings`` consumes at raw staging. Returns the promoted records.
+
+    Guards (2026-08-21):
+      - HARD refuse-overwrite: promotion never overwrites an existing LIVE leaf unless
+        ``allow_overwrite`` is passed explicitly (sanctioned re-author after an operator
+        pull). Refusals are recorded as status ``refused_overwrite``, never silent.
+      - Fleet acceptance (flag-gated by the thresholds file's ``enforce`` block, OFF at
+        ship): when ``enforce.promote_requires_pass`` is true and ``batch_id`` is given,
+        promotion requires a PASS ``fleet_acceptance_<batch_id>.json`` artifact."""
     corrections_dir, overrides_dir = Path(corrections_dir), Path(overrides_dir)
+    if batch_id:
+        _require_fleet_acceptance(batch_id, fleet_thresholds_path)
     promoted: list[dict] = []
     for g in gate_results:
         if g.get("verdict") != "PASS":
@@ -602,11 +614,48 @@ def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides
                              "status": audit.get("status"), "audit": audit})
         else:
             dst = overrides_dir / cik / f"{mech}.json"
+            if dst.exists() and not allow_overwrite:
+                # HARD data-protection guard: dispatch preflight skips existing packets,
+                # but nothing at PROMOTE time prevented a same-keyed staged leaf from
+                # silently overwriting a live rule via a path that bypassed dispatch.
+                # Sanctioned re-authors (operator pulled the old leaf first, or passes
+                # --allow-overwrite deliberately) are the only overwrite route.
+                promoted.append({"cik": cik, "mechanism": mech, "layer": "post_staging",
+                                 "src": str(src), "dst": str(dst),
+                                 "status": "refused_overwrite"})
+                continue
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dst)
             promoted.append({"cik": cik, "mechanism": mech, "layer": "post_staging",
                              "src": str(src), "dst": str(dst), "status": "ok"})
     return promoted
+
+
+def _require_fleet_acceptance(batch_id: str, thresholds_path: Path | None = None) -> None:
+    """Raise unless fleet acceptance allows promotion for this batch.
+
+    No-op while the thresholds file's ``enforce.promote_requires_pass`` is false
+    (advisory mode -- the first fleet validates the evaluator itself)."""
+    from scripts import fleet_acceptance as fa
+    try:
+        thresholds = fa.load_thresholds(thresholds_path)
+    except (OSError, json.JSONDecodeError):
+        return  # no thresholds file -> advisory-off behavior
+    if not thresholds.get("enforce", {}).get("promote_requires_pass"):
+        return
+    artifact = fa.acceptance_artifact_path(batch_id)
+    if not artifact.exists():
+        raise RuntimeError(
+            f"fleet acceptance enforce.promote_requires_pass is ON and no artifact "
+            f"exists for batch {batch_id}: run python -m scripts.fleet_acceptance "
+            f"--batch-id {batch_id} first ({artifact})")
+    result = json.loads(artifact.read_text(encoding="utf-8-sig"))
+    if result.get("verdict") != "PASS":
+        failing = [c["id"] for c in result.get("checks", []) if not c.get("pass")]
+        raise RuntimeError(
+            f"fleet acceptance verdict is {result.get('verdict')} for batch "
+            f"{batch_id}; failing checks: {', '.join(failing) or '(none listed)'}. "
+            f"Stop, diagnose, re-fleet -- do not widen the bar.")
 
 
 # --------------------------------------------------------------------------- apply orchestration

@@ -316,6 +316,12 @@ class Runner:
                 logger.error("%s %s is not a stage; stages: %s", label, val, ", ".join(names))
                 return 2
         state = self.load_state()
+        if from_stage is not None and (from_stage.endswith("_post")
+                                       or from_stage == "rebuild_post"):
+            err = _fleet_enforce(state)
+            if err:
+                logger.error("%s", err)
+                return 2
         started = from_stage is None
         for stage in self.stages:
             if not started:
@@ -333,6 +339,36 @@ class Runner:
                 logger.info("stopped after --until %s", until_stage)
                 return 0
         return 0
+
+
+def _fleet_enforce(state: dict,
+                   thresholds_path: Path | None = None) -> str | None:
+    """Post-dispatch resume gate (flag-gated OFF at ship).
+
+    When the fleet-acceptance thresholds file sets ``enforce.resume_requires_audit``,
+    resuming past ``select`` requires a post-promotion live-store audit artifact
+    (data/output/agent_b2/replay_live_stats_*.json) newer than the select stage --
+    the check that caught the 5 FV-invariant corrupting corrections must have run
+    before the post battery measures the fleet's effect. Returns an ASCII error
+    string, or None when allowed."""
+    tp = thresholds_path or (config.REFERENCE_DIR / "fleet_acceptance_thresholds.json")
+    try:
+        thresholds = json.loads(Path(tp).read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not thresholds.get("enforce", {}).get("resume_requires_audit"):
+        return None
+    select_done = state.get("stages", {}).get("select", {}).get("finished_utc", "")
+    audits = sorted((config.OUTPUT_DIR / "agent_b2").glob("replay_live_stats_*.json"))
+    fresh = [p for p in audits
+             if datetime.fromtimestamp(p.stat().st_mtime, tz=timezone.utc)
+             .strftime("%Y-%m-%dT%H:%M:%SZ") >= select_done]
+    if fresh:
+        return None
+    return ("resume_requires_audit is ON: run the post-promotion audit first "
+            "(python -m scripts.agent_b2.replay_gate --corrections-dir "
+            "data/overrides/agent_b2_corrections --stats-only --out "
+            "data/output/agent_b2/replay_live_stats_<batch_id>.json)")
 
 
 def _now() -> str:

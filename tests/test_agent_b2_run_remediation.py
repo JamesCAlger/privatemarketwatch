@@ -6,6 +6,7 @@ import csv
 import json
 
 import pandas as pd
+import pytest
 
 from scripts.agent_b2 import run_remediation as rr
 
@@ -608,3 +609,91 @@ class TestReadjudicationWorklist:
         after = p.read_text(encoding="utf-8")
         assert after.startswith(before)          # existing rows never rewritten
         assert after.count("\n") == before.count("\n") + 1
+
+
+# ---------------------------------------------------------------------------
+# Promote guards (2026-08-21): HARD refuse-overwrite + flag-gated fleet acceptance
+# ---------------------------------------------------------------------------
+
+class TestPromoteGuards:
+    def _stage(self, tmp_path, mech="unit_rescale", content=None):
+        corr = tmp_path / "corrections" / "0001743415"
+        corr.mkdir(parents=True, exist_ok=True)
+        (corr / f"{mech}.json").write_text(
+            json.dumps(content or {"cik": "0001743415", "fix_class": mech}),
+            encoding="utf-8")
+        return tmp_path / "corrections", tmp_path / "overrides"
+
+    def test_promote_refuses_overwrite_of_live_leaf(self, tmp_path):
+        corrections, overrides = self._stage(tmp_path)
+        live = overrides / "0001743415" / "unit_rescale.json"
+        live.parent.mkdir(parents=True)
+        live.write_text(json.dumps({"cik": "0001743415", "live": True}), encoding="utf-8")
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers")
+        assert promoted[0]["status"] == "refused_overwrite"
+        assert json.loads(live.read_text(encoding="utf-8")) == {
+            "cik": "0001743415", "live": True}          # untouched
+
+    def test_promote_allow_overwrite_flag(self, tmp_path):
+        corrections, overrides = self._stage(tmp_path)
+        live = overrides / "0001743415" / "unit_rescale.json"
+        live.parent.mkdir(parents=True)
+        live.write_text(json.dumps({"old": True}), encoding="utf-8")
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers", allow_overwrite=True)
+        assert promoted[0]["status"] == "ok"
+        assert json.loads(live.read_text(encoding="utf-8"))["fix_class"] == "unit_rescale"
+
+    def _thresholds(self, tmp_path, *, enforce):
+        p = tmp_path / "fleet_thresholds.json"
+        p.write_text(json.dumps({"version": 1,
+                                 "enforce": {"promote_requires_pass": enforce},
+                                 "checks": []}), encoding="utf-8")
+        return p
+
+    def test_promote_enforce_off_ignores_missing_artifact(self, tmp_path):
+        corrections, overrides = self._stage(tmp_path)
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+            fleet_thresholds_path=self._thresholds(tmp_path, enforce=False))
+        assert promoted[0]["status"] == "ok"
+
+    def test_promote_enforce_on_requires_pass_artifact(self, tmp_path, monkeypatch):
+        from scripts import fleet_acceptance as fa
+        corrections, overrides = self._stage(tmp_path)
+        tp = self._thresholds(tmp_path, enforce=True)
+        monkeypatch.setattr(fa, "DEFAULT_AUDIT_DIR", tmp_path / "audit")
+        with pytest.raises(RuntimeError, match="no artifact"):
+            rr.promote_passes(
+                [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+                corrections_dir=corrections, overrides_dir=overrides,
+                wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+                fleet_thresholds_path=tp)
+        # FAIL artifact -> refuses with the failing check ids
+        art = tmp_path / "audit" / "fleet_acceptance_bX.json"
+        art.parent.mkdir(parents=True, exist_ok=True)
+        art.write_text(json.dumps({"batch_id": "bX", "verdict": "FAIL",
+                                   "checks": [{"id": "authoring_validity", "pass": False}]}),
+                       encoding="utf-8")
+        with pytest.raises(RuntimeError, match="authoring_validity"):
+            rr.promote_passes(
+                [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+                corrections_dir=corrections, overrides_dir=overrides,
+                wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+                fleet_thresholds_path=tp)
+        # PASS artifact -> promotes
+        art.write_text(json.dumps({"batch_id": "bX", "verdict": "PASS", "checks": []}),
+                       encoding="utf-8")
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+            fleet_thresholds_path=tp)
+        assert promoted[0]["status"] == "ok"
