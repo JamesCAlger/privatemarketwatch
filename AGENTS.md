@@ -242,7 +242,7 @@ See [`docs/reference/known_limitations.md`](./docs/reference/known_limitations.m
 
 ## Data Investigations
 
-Ad-hoc data analyses (e.g., classification stability, outlier deep-dives, coverage checks) should be saved to `data/output/data_investigation_results.md`. Append each new investigation with a numbered heading, the question asked, and the results found.
+Ad-hoc data analyses (e.g., classification stability, outlier deep-dives, coverage checks) are filed under `docs/investigations/` (git-tracked; see `INDEX.md` there for topics). Append each new investigation to the matching topic file with a dated heading, the question asked, and the results found, then rebuild the index: `python scripts/split_investigations.py --reindex`. The old `data/output/data_investigation_results.md` is a frozen redirect stub (cutover 2026-08-20) -- do not append there.
 
 ## Frontend
 
