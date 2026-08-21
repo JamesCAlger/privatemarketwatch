@@ -132,7 +132,10 @@ function Invoke-ValidateVerdict {
   $prevEap = $ErrorActionPreference
   $ErrorActionPreference = "Continue"
   try {
-    & python -m scripts.review_agent.validate_leaf_verdicts --verdict $Row.verdict_path *> $LogPath
+    # Merge streams + explicit UTF-8: the bare `*> $LogPath` wrote UTF-16 LE
+    # (PS 5.1 default), which naive UTF-8 readers misparse.
+    & python -m scripts.review_agent.validate_leaf_verdicts --verdict $Row.verdict_path *>&1 |
+      Out-File -LiteralPath $LogPath -Encoding utf8
     return $LASTEXITCODE
   } finally {
     $ErrorActionPreference = $prevEap

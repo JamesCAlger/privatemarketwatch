@@ -76,11 +76,20 @@ function Invoke-ValidateCorrection {
     Set-Content -LiteralPath $LogPath -Value "MISSING correction file: $($Row.correction_path)" -Encoding ASCII
     return 1
   }
+  # Merge all streams and write UTF-8 explicitly: the bare `*> $LogPath` redirect
+  # wrote UTF-16 LE (PS 5.1 default), which naive UTF-8 readers misparse. The local
+  # ErrorActionPreference shield is required -- under 'Stop', PS 5.1 turns redirected
+  # native stderr into terminating ErrorRecords.
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
   & python -m scripts.agent_b2.validate_corrections `
     --correction $Row.correction_path `
     --expected-cik $Row.cik `
-    --expected-fix-class $Row.fix_class *> $LogPath
-  return $LASTEXITCODE
+    --expected-fix-class $Row.fix_class *>&1 |
+    Out-File -LiteralPath $LogPath -Encoding utf8
+  $ec = $LASTEXITCODE
+  $ErrorActionPreference = $prevEap
+  return $ec
 }
 
 function Stop-TrackedProcessTree {
