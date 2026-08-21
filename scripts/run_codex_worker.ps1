@@ -53,6 +53,17 @@ if (-not (Test-Path -LiteralPath $ConfigPath -PathType Leaf)) {
   throw "Worker config does not exist: $ConfigPath"
 }
 
+# Deny the sandbox users read on the copied operator credentials BEFORE launch.
+# The codex process itself runs as the OPERATOR and authenticates fine; only the
+# agent's sandboxed shell commands (run as CodexSandboxUsers members) are blocked.
+# Closes the gap where auth.json sat inside both the repo-wide policy read grant
+# and the sandbox group's inherited Modify ACL. Best-effort: a machine without
+# the harness group must not block the worker (warn and continue).
+foreach ($AuthFile in (Get-ChildItem -LiteralPath $WorkerHome -Force -Filter 'auth.json*' -File -ErrorAction SilentlyContinue)) {
+  icacls $AuthFile.FullName /deny 'CodexSandboxUsers:(R)' | Out-Null
+  if ($LASTEXITCODE -ne 0) { Write-Warning "Could not apply deny-read ACL to $($AuthFile.Name)" }
+}
+
 $PreviousCodexHome = $env:CODEX_HOME
 $PreviousErrorActionPreference = $ErrorActionPreference
 try {
