@@ -77,7 +77,7 @@ If in doubt whether something is a real entity vs. a header, consider: would a r
 
 ## Output
 
-Write results to `data/output/unclassified_agent_results_NNN.csv` (same NNN as the input chunk). CSV with header row and these columns:
+Write results to `data/output/campaign_results/unclassified/unclassified_agent_results_NNN.csv` (same NNN as the input chunk). CSV with header row and these columns:
 
 ```
 name_norm,verdict,new_index_classification,asset_class,confidence,evidence

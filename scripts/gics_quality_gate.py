@@ -44,6 +44,8 @@ EXPECTED_AGENT_COLS = [
 VALID_VERDICTS = {"GICS", "AGGREGATE_HEADER", "JV_SUBSIDIARY", "UNRESOLVABLE"}
 VALID_CONFIDENCE = {"high", "medium", "low"}
 QUARANTINE_FILE = OUTPUT_DIR / "gics_cache_quarantine.csv"
+# Campaign shards live under campaign_results/ -- relocated 2026-08-20.
+GICS_CAMPAIGN_DIR = OUTPUT_DIR / "campaign_results" / "gics"
 
 # Only aliases where the target is a direct spelling/taxonomy update or a
 # one-to-one old-name-to-current-name mapping. Broad industry groups and numeric
@@ -218,7 +220,7 @@ def validate_agent_result_file(
 
 
 def validate_agent_results(
-    output_dir: Path = OUTPUT_DIR,
+    output_dir: Path = GICS_CAMPAIGN_DIR,
     start: int = 0,
     end: int = 9999,
 ) -> list[GateResult]:
