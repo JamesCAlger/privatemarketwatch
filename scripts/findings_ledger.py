@@ -159,6 +159,11 @@ def build_ledger(
             "cik": q.get("cik", ""), "rule_name": q.get("rule_name", ""),
             "report_date": q.get("report_date", ""), "lane": q.get("lane", ""),
             "engine": q.get("engine", ""), "fv_at_risk_m": q.get("fv_at_risk_m", ""),
+            # fv_at_risk_m is engine-sparse (only aggregate_header / derivative_role /
+            # source_recon populate it in the queue); fund_quarter_fv_m is the queue's
+            # exposure weight carried for ALL rows -- use it for FV-by-lifecycle-state
+            # accounting.
+            "fund_quarter_fv_m": q.get("fund_quarter_fv_m", ""),
         })
     return ledger
 

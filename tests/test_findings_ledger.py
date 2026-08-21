@@ -67,12 +67,14 @@ def _seed_stores(tmp_path: Path):
 def _write_queue(path: Path, rids, *, lane="blocker"):
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["review_id", "cik", "rule_name",
-                                          "report_date", "lane", "engine", "fv_at_risk_m"])
+                                          "report_date", "lane", "engine",
+                                          "fv_at_risk_m", "fund_quarter_fv_m"])
         w.writeheader()
         for rid in rids:
             w.writerow({"review_id": rid, "cik": "0000000001",
                         "rule_name": "fv_conservation", "report_date": "2025-12-31",
-                        "lane": lane, "engine": "conservation", "fv_at_risk_m": "1.0"})
+                        "lane": lane, "engine": "conservation", "fv_at_risk_m": "1.0",
+                        "fund_quarter_fv_m": "1234.5"})
 
 
 def _verdict_file(vdir: Path, rid: str, verdict: str):
@@ -114,6 +116,12 @@ def test_build_ledger_end_to_end(tmp_path):
     summary = fl.summarize(ledger)
     assert summary["n_actionable"] == 3  # open + unremediated + pulled
     assert summary["dry"] is False
+    # fund_quarter_fv_m (all-engine exposure weight) is carried for every state
+    # with a queue row, so FV-by-lifecycle-state is readable from the ledger.
+    by_rid = {r["review_id"]: r for r in ledger}
+    assert by_rid["RVQ_open"]["fund_quarter_fv_m"] == "1234.5"
+    assert by_rid["RVQ_unrem"]["fund_quarter_fv_m"] == "1234.5"
+    assert by_rid["RVQ_upstream"]["fund_quarter_fv_m"] == ""  # no queue row
 
 
 def test_wrapper_provenance_counts_as_promoted(tmp_path):
