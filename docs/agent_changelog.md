@@ -8524,3 +8524,17 @@ Agent lane for the rate-convention classifier residual. New modules:
 - Operational note surfaced by the verification: the post-run scrub deletes auth.json
   after EVERY run including failures, so auth must be re-copied before every manual
   re-run (fleet dispatchers already copy per-run).
+
+## 2026-08-21 -- Harvest now strips encrypted_content from worker rollout traces
+
+- `scripts/run_codex_worker.ps1`: the trace harvest nulls `"encrypted_content"` in the
+  rollout it writes to -TraceDir. The payload is undecryptable outside OpenAI serving
+  and only ever enabled codex session resume, which is impossible anyway once the
+  rollout is moved out of sessions\ and renamed. Readable summary_text parts are kept.
+- Mechanism: value regex ("encrypted_content"\s*:\s*"[^"]*" -> :null); safe because the
+  payload is fernet base64url (no quotes/backslashes possible inside the string). On
+  any transform error the trace is moved verbatim -- the strip can never lose a trace.
+- Verified: offline stub-codex smoke (blob nulled, summaries kept, non-reasoning lines
+  byte-identical, every line still valid JSON) + read-only dry run against the real
+  2026-08-20 summarytest rollout (66,457 -> 60,293 chars, 9.3% saved, all lines valid,
+  summaries intact). Expect a larger fraction on reasoning-heavy workers.

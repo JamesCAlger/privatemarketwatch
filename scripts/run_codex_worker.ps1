@@ -100,7 +100,22 @@ try {
       if ($Rollouts.Count -gt 0) {
         New-Item -ItemType Directory -Force -Path $TraceDir | Out-Null
         foreach ($Rollout in $Rollouts) {
-          Move-Item -LiteralPath $Rollout.FullName -Destination (Join-Path $TraceDir "$TracePrefix$($Rollout.Name)") -Force
+          $Dest = Join-Path $TraceDir "$TracePrefix$($Rollout.Name)"
+          # Strip the encrypted reasoning payload while harvesting: it is undecryptable
+          # by us and only ever served codex session resume, which is impossible anyway
+          # once the rollout leaves sessions\. The readable summary_text parts are kept.
+          # The payload is fernet base64url (no quotes/backslashes), so a value-regex is
+          # byte-safe; null keeps the JSON valid wherever the field sits. On any
+          # transform error, fall back to moving the trace verbatim -- never lose it.
+          try {
+            $Raw = [System.IO.File]::ReadAllText($Rollout.FullName)
+            $Stripped = [regex]::Replace($Raw, '"encrypted_content"\s*:\s*"[^"]*"', '"encrypted_content":null')
+            [System.IO.File]::WriteAllText($Dest, $Stripped, (New-Object System.Text.UTF8Encoding($false)))
+            Remove-Item -LiteralPath $Rollout.FullName -Force
+          } catch {
+            Write-Warning "Trace strip failed ($($_.Exception.Message)); moving verbatim."
+            Move-Item -LiteralPath $Rollout.FullName -Destination $Dest -Force
+          }
         }
         Remove-Item -LiteralPath $SessionsDir -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
       } else {

@@ -89,7 +89,10 @@ omit patch content entirely). ~65 KB for a no-shell B2 packet.
   since 2026-08-20 the generated worker config sets `model_reasoning_summary = "detailed"`,
   so reasoning items also carry readable `summary_text` parts: model-written digests per
   reasoning burst (headline-length on small no-shell packets, longer on shell-heavy work).
-  Build tooling against the summaries, not the encrypted payload.
+- The harvest NULLS `encrypted_content` in the trace it writes (~9% of a no-shell B2 trace,
+  more on reasoning-heavy work): the payload is undecryptable by us and only served codex
+  session resume, which is impossible anyway once the rollout leaves `sessions\`. On any
+  transform error the trace is moved verbatim instead -- a trace is never lost to the strip.
 - The scratch sweepers explicitly KEEP `sessions\**\rollout-*.jsonl` (see
   `codex_worker_waste_allowlist.ps1`), so unharvested traces from killed dispatchers survive
   until collected.
