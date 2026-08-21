@@ -2890,8 +2890,11 @@ class TestBuildUnifiedHoldings:
         # 2 BDC (Acme Corp + Growth Fund) + 1 N-PORT (Private Borrower) = 3
         assert len(result) == 3
 
-        # Check column count matches schema
-        assert list(result.columns) == UNIFIED_COLUMNS
+        # Check column count matches schema (row_id is appended as the final
+        # build step and lives outside UNIFIED_COLUMNS by design)
+        assert list(result.columns) == UNIFIED_COLUMNS + ["row_id"]
+        assert result["row_id"].str.match(r"^ROW-[0-9a-f]{16}$").all()
+        assert result["row_id"].nunique() == len(result)
 
         # Verify BDC aggregate was filtered
         assert not result["issuer_name"].str.contains("Total Investments").any()
@@ -3134,7 +3137,8 @@ class TestEntityEnrichment:
                     lookup_path):
             result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
 
-        assert list(result.columns) == UNIFIED_COLUMNS
+        # row_id is appended after all enrichment layers, outside UNIFIED_COLUMNS
+        assert list(result.columns) == UNIFIED_COLUMNS + ["row_id"]
 
 
 # ---------------------------------------------------------------------------

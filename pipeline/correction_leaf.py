@@ -47,9 +47,14 @@ FIX_CLASS_STAGE: dict[str, int] = {
 }
 
 # Bounded vocabularies for nested template structures.
+# row_id (2026-08-21): the rebuild-stable content-derived id on unified holdings
+# (ROW- + md5[:16] of the natural key). Preferred selector anchor -- immune to the
+# issuer-text normalization drift behind the round-3/4 selector-noop refusals.
 ROW_SELECTOR_KEYS = frozenset({
-    "issuer_name", "bdc_investment_identifier", "report_date", "table_index", "row_index",
+    "issuer_name", "bdc_investment_identifier", "row_id", "report_date",
+    "table_index", "row_index",
 })
+_ROW_ID_RE = re.compile(r"^ROW-[0-9a-f]{16}$")
 ALLOWED_POSITION_KEYS = frozenset({
     "issuer_name", "fair_value", "cost", "principal_amount", "interest_rate", "pik_rate",
     "report_date", "instrument_description", "asset_class",
@@ -206,11 +211,17 @@ def _validate_template(fix_class: str, template: Any, tpl: Template, rep: Correc
                 rep.errors.append(f"template.row_selector has unknown key(s): {sorted(bad)}")
             # 2026-08-13 (q4b2exp round-1 lesson): coordinates identify EVIDENCE, not
             # holdings rows -- a selector must carry at least one matchable identity key.
-            if not ({"issuer_name", "bdc_investment_identifier"} & set(sel)):
+            if not ({"issuer_name", "bdc_investment_identifier", "row_id"} & set(sel)):
                 rep.errors.append(
-                    "template.row_selector must include issuer_name or "
+                    "template.row_selector must include row_id, issuer_name, or "
                     "bdc_investment_identifier (table/row coordinates cannot select "
                     "holdings rows)")
+            # row_id is a fixed-format hash; a malformed one can only be a typo or
+            # fabrication and would silently select nothing -- reject at the screen.
+            if "row_id" in sel and not _ROW_ID_RE.match(str(sel.get("row_id") or "").strip()):
+                rep.errors.append(
+                    "template.row_selector.row_id must match ROW-<16 hex chars> "
+                    "(copy it verbatim from the grounded identifier list)")
     if "positions" in keys:
         positions = template.get("positions")
         if not isinstance(positions, list) or not positions:

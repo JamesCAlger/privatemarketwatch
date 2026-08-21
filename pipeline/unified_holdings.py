@@ -109,6 +109,11 @@ UNIFIED_COLUMNS = [
     # Position tracking (populated by --returns step)
     "position_id",
 ]
+# NOTE: the saved artifact carries one column beyond UNIFIED_COLUMNS: row_id,
+# appended by _assign_row_ids as the last step of build_unified_holdings.
+# It is deliberately NOT in UNIFIED_COLUMNS -- that list doubles as the
+# in-flight SQL schema (union/stabilization passes) where row_id does not
+# exist yet.
 
 ORPHAN_HOLDINGS_COLUMNS = [
     "cik", "entity_name", "source", "first_report_date", "last_report_date",
@@ -1407,6 +1412,10 @@ def build_unified_holdings(
         agent_promoted.write_application_audit(
             _agent_fix_audits, _out_file.parent / "agent_fix_application_audit.csv")
 
+    # Rebuild-stable per-row identifier, computed on the FINAL frame (after all
+    # correction/cache layers) so the id reflects the row as published.
+    combined = _assign_row_ids(combined)
+
     # Save CSV + Parquet companion
     _out_file.parent.mkdir(parents=True, exist_ok=True)
     combined.to_csv(_out_file, index=False)
@@ -1423,6 +1432,42 @@ def build_unified_holdings(
     logger.info("Unified holdings built in %.1f s", elapsed)
 
     return combined
+
+
+def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
+    """Populate ``row_id``: a rebuild-stable, content-derived per-row identifier.
+
+    ``ROW-`` + first 16 hex chars of md5 over the drift-resistant natural key
+    from ``position_id_registry.compute_natural_keys`` (cik | source |
+    report_date | rawid | principal | shares, disambiguated by XBRL dimension
+    path then a stable-field ordinal; issuer_name excluded by design).
+
+    Unlike ``position_id`` (dense enumeration ordinals that renumber wholesale
+    when any upstream row count changes), ``row_id`` survives rebuilds as long
+    as the row's extracted content is unchanged. A correction that alters
+    principal/shares changes that row's id: the id names the row as published,
+    not the position across restatements.
+    """
+    if df.empty:
+        df["row_id"] = pd.Series(dtype=str)
+        return df
+    from pipeline.position_id_registry import compute_natural_keys
+
+    keys = compute_natural_keys(df).reset_index(drop=True)
+    con = duckdb.connect()
+    con.register("nk", pd.DataFrame({"i": range(len(keys)), "k": keys}))
+    hashed = con.execute(
+        "SELECT 'ROW-' || substr(md5(k), 1, 16) AS row_id FROM nk ORDER BY i"
+    ).fetchdf()["row_id"]
+    df["row_id"] = hashed.values
+    n_dup = int(df["row_id"].duplicated().sum())
+    if n_dup:
+        logger.warning(
+            "row_id: %d duplicate id(s) (natural-key or md5-prefix collision)",
+            n_dup)
+    else:
+        logger.info("row_id: %d unique ids assigned", len(df))
+    return df
 
 
 def _apply_fund_strategy_corrections(
