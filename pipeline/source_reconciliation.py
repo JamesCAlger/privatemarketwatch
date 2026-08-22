@@ -1444,6 +1444,15 @@ def _coerce_output_df(holdings_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bo
             df[col] = ""
     df = df[df["source"].astype(str).str.lower().eq("bdc")].copy()
     df["output_row_id"] = range(len(df))
+    # Published anchor: the unified row_id (itself anchor-derived since
+    # 2026-08-22) when present; ordinal string otherwise (test fixtures,
+    # pre-row_id frames). Internal ordinal above remains the SQL key.
+    if "row_id" in df.columns:
+        _rid = df["row_id"].fillna("").astype(str).str.strip()
+    else:
+        _rid = pd.Series("", index=df.index, dtype=str)
+    df["output_anchor_id"] = _rid.where(
+        _rid.ne(""), df["output_row_id"].astype(str))
     if not enable_bdc_xbrl_wrappers:
         return _ensure_empty_wrapper_columns(df)
     df = add_bdc_xbrl_wrapper_columns(df, identifier_col="bdc_investment_identifier", cik_col="cik")

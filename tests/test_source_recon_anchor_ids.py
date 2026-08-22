@@ -59,3 +59,42 @@ class TestSourceAnchorId:
                            {"context_id": "ctx_1"}]),
             enable_bdc_xbrl_wrappers=False)
         assert out["source_anchor_id"].nunique() == 3
+
+
+from pipeline.source_reconciliation import _coerce_output_df  # noqa: E402
+
+
+def _holdings_frame(rows):
+    base = {
+        "source": "bdc", "cik": "0001418076", "entity_name": "Test BDC",
+        "report_date": "2026-03-31", "period": "2026-03-31",
+        "accession_number": "0001418076-26-000001", "filing_date": "2026-05-10",
+        "bdc_form_type": "10-Q",
+        "bdc_investment_identifier": "Acme Corp - First Lien",
+        "bdc_dimensions_raw": "", "issuer_name": "Acme Corp",
+        "instrument_description": "", "index_classification": "DIRECT_LENDING",
+        "asset_category": "", "issuer_category": "", "maturity_date": "",
+        "fair_value": "1000000", "cost": "", "principal_amount": "",
+        "shares_held": "", "interest_rate": "", "basis_spread": "",
+        "pik_rate": "",
+    }
+    return pd.DataFrame([{**base, **r} for r in rows])
+
+
+class TestOutputAnchorId:
+    def test_uses_unified_row_id_when_present(self):
+        out = _coerce_output_df(
+            _holdings_frame([{"row_id": "ROW-0123456789abcdef"}]),
+            enable_bdc_xbrl_wrappers=False)
+        assert out.iloc[0]["output_anchor_id"] == "ROW-0123456789abcdef"
+        assert list(out["output_row_id"]) == [0]
+
+    def test_falls_back_to_ordinal_without_row_id(self):
+        out = _coerce_output_df(
+            _holdings_frame([{}, {}]), enable_bdc_xbrl_wrappers=False)
+        assert list(out["output_anchor_id"]) == ["0", "1"]
+
+    def test_empty_row_id_value_falls_back(self):
+        out = _coerce_output_df(
+            _holdings_frame([{"row_id": ""}]), enable_bdc_xbrl_wrappers=False)
+        assert out.iloc[0]["output_anchor_id"] == "0"
