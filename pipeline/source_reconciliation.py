@@ -1398,6 +1398,26 @@ def _coerce_source_df(source_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bool
         if col not in df.columns:
             df[col] = ""
     df["source_row_id"] = range(len(df))
+    # Published grounding anchor (2026-08-22): stable across frame reorders
+    # and re-extraction, unlike the positional ordinal above (which remains
+    # the INTERNAL join/rank key inside the reconciliation SQL).
+    _acc = df["accession_number"].fillna("").astype(str).str.strip()
+    _ctx = df["context_id"].fillna("").astype(str).str.strip()
+    _anchor = "src:" + _acc + ":" + _ctx
+    _dup_rank = _anchor.groupby(_anchor).cumcount()
+    if (_dup_rank > 0).any():
+        logger.warning(
+            "source anchor: %d duplicate (accession, context_id) row(s) "
+            "suffixed #k", int((_dup_rank > 0).sum()))
+    _anchor = _anchor.where(
+        _dup_rank == 0, _anchor + "#" + (_dup_rank + 1).astype(str))
+    _has_parts = _acc.ne("") & _ctx.ne("")
+    if (~_has_parts).any():
+        logger.warning(
+            "source anchor: %d row(s) missing accession/context, using "
+            "ordinal fallback", int((~_has_parts).sum()))
+    df["source_anchor_id"] = _anchor.where(
+        _has_parts, "src-ord:" + df["source_row_id"].astype(str))
     if not enable_bdc_xbrl_wrappers:
         return _ensure_empty_wrapper_columns(df)
     df = add_bdc_xbrl_wrapper_columns(df, identifier_col="investment_identifier", cik_col="cik")
