@@ -29,6 +29,27 @@ Extracted from AGENTS.md for reference. See AGENTS.md for operational guardrails
 | `investment_type` | str | Investment type axis (rarely populated) |
 | `affiliation` | str | Issuer affiliation (rarely populated) |
 | `dimensions_raw` | str | Full XBRL dimension string for audit |
+| `src_context_id` | str | XBRL contextRef of the winning dedup row (2026-08-22). With `accession_number`, locates the fact context in the cached filing. Primary-of-N when `dedupe_context_count` > 1; `''` for rows built before the anchor migration or merged from a legacy CSV. |
+
+## Row Identity (`row_id` / `row_id_basis`, unified holdings)
+
+`private_markets_holdings.csv` appends two columns AFTER `UNIFIED_COLUMNS`
+(they are not in the constant by design; `_assign_row_ids` is the final build
+step and re-runs after `assign_position_ids` re-saves):
+
+- `row_id` = `ROW-` + first 16 hex chars of md5 over the row's source anchor:
+  `source|accession_number|src_context_id` for BDC rows,
+  `source|accession_number|nport_holding_id` for N-PORT rows.
+  The anchor names the filing fact context, so the id survives rebuilds,
+  staging reorders, promoted corrections, and parser fixes. It is an
+  **as-filed claim**: an amendment (new accession) is a new id by design.
+- `row_id_basis` = `src_anchor` when the anchor exists, else `natural_key` --
+  the legacy fallback hash over `position_id_registry.compute_natural_keys`
+  (content-sensitive: a corrected principal changes a fallback row's id).
+- `row_id` is a within-build row name, not a cross-quarter identity --
+  `position_id` owns that layer and is unchanged.
+- Migration tooling: `scripts/restamp_row_selectors.py` maps legacy
+  natural-key ids cited in correction-leaf `row_selector`s to anchor ids.
 
 ## Position-Level PIK Status
 

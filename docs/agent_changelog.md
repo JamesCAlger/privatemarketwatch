@@ -8665,3 +8665,527 @@ maps to a measured Q4 incident; plan approved by owner; commits e9a726f..HEAD).
   `_pytest_cache` entries (with copies under `data/snapshots/baseline/`); they clear at
   the next owner-gated baseline refresh. Until then `diff_outputs.py` will report those
   4 as missing-current -- expected, benign.
+
+## 2026-08-21 -- row_id accepted as B2 row_selector key; n_units join in b2_run_metrics
+
+- `pipeline/correction_leaf.py`: `row_id` added to ROW_SELECTOR_KEYS. It now
+  satisfies the selector identity-key requirement (previously issuer_name or
+  bdc_investment_identifier only), and the screen rejects a malformed row_id
+  (must match ROW-<16 hex>) -- a typo'd hash can only select nothing.
+  `_selector_mask` in the appliers needed NO change (generic strip+equality
+  over holdings columns; the frame now carries row_id).
+- `pipeline/review_bundles.py`: bundle `holdings_slice` keep_cols now include
+  `row_id`, so future bundles carry the stable anchor. Existing bundles
+  (pre-2026-08-21) lack it; text selectors remain the fallback there.
+- `scripts/agent_b2/dispatch_preflight.py`: grounded-identifier harvest,
+  match_count verification (schema-aware -- tolerates holdings frames without
+  row_id), grounding block, and the row_selector prompt excerpt now carry/
+  prefer row_id. Closes the selector-noop failure mode (2 refusals in q4b2exp,
+  20 in round 3) at its root: the selector can anchor on an id immune to
+  issuer-text normalization drift.
+- `scripts/b2_run_metrics.py`: new `packet_nunits` section per batch -- joins
+  gate verdicts to source-bundle flag n_units (manifest rows + staged/live/
+  archived leaves -> bundles) and emits per-packet n_units plus pass-rate by
+  bucket. Reproduces the 2026-08-20 finding (q4b2exp: <=1: 14%, 6-25: 33%,
+  26-100: 71%, >100: 93%; unresolved joins reported, not guessed). The three
+  scripts/tmp_* diagnostics from that analysis are deleted.
+- `pipeline/agent_promoted.py` (production-apply gap, found before ship):
+  `apply_promoted_stage2_corrections` runs MID-BUILD, before `_assign_row_ids`,
+  so a promoted row_id selector would error "column missing" in the rebuild
+  while the B3 gate replay (published frame, which HAS row_id) passes --
+  a gate-pass/production-noop divergence. Fix: JIT-materialize row_id on the
+  CIK sub-frame when a leaf selects by it (natural keys group per
+  cik/source/report_date, so sub-frame ids equal published full-frame ids),
+  drop the transient column after the CIK's leaves apply.
+- Tests: +3 correction_leaf (row_id valid alone / malformed rejected / counts
+  as identity key), +2 appliers (row_id selection; no-match is applier-ok,
+  gate-refused), +1 agent_promoted (JIT materialization end-to-end: published
+  id selects the mid-build row, transient column does not leak). Touched
+  suites green: 78 + 27 passed.
+- NOTE: row_id names the row AS PUBLISHED (hash includes principal/shares).
+  A correction that changes those key fields makes the published id drift from
+  the pre-correction id -- the noop-drift audit flags the resulting stale
+  selector; a re-authored leaf must re-copy the current id from its
+  regenerated packet prompt. Bundles built before 2026-08-21 lack row_id in
+  holdings_slice; text selectors remain the fallback there.
+
+## 2026-08-21 -- scratch/ home for operator/agent session artifacts
+
+- New git-ignored `scratch/` directory (README tracked) is the single home for
+  ad-hoc session artifacts: shell redirect logs, one-off plots, kickoff notes.
+  Convention: one subdir per session, `YYYY-MM-DD_<topic>/`.
+- Machine-written fleet/pipeline logs are explicitly out of scope and stay in
+  their existing homes: `data/output/pipeline.log`,
+  `data/output/quarter_pass/<pass_id>/<stage>.log`, agent batch dirs.
+- Relocated the 12 stray root-level `*.log` files + `q1_kickoff.md` into
+  `scratch/2026-07-23_q1shakedown/` and `bundle_nunits_hist.png` into
+  `scratch/2026-08-20_b2_nunits/`. Repo root is now free of session noise.
+- `.gitignore`: `scratch/*` with `!scratch/README.md` carve-out.
+
+## 2026-08-21 -- Round-4 B2 canary fleet (q4b2r4canary): 5 packets, 1 promoted, gates verified live
+
+- Operator canary before the full round-4 re-author fleet (owner asked for 5 agents max,
+  given the volume of recent B2 architecture amendments). Batch `q4b2r4canary`: 5
+  conflict-free packets hand-picked from the 90-packet archived-refusal pool (67 have no
+  staged-leaf collision; all 90 still map to open review-queue findings), spanning 5 fix
+  classes / 5 CIKs / both failure archives. Cohort guard 5/5; pass_preflight READY;
+  uncommitted row_id amendments re-verified green first (76 + 18 targeted tests).
+- Dispatch: 5/5 workers completed, 5/5 leaves passed validate_corrections (authoring
+  validity 100%), zero mechanical failures, zero retries. Trial rebuilds + B3 gates run
+  per packet via run_remediation apply/gate.
+- Gate verdicts: 1 PASS / 4 FAIL, every FAIL with a correct specific mechanism:
+  - 0001287750/all_pik_normalization PASS (1 row, FV delta 0, 14 held-out quarters
+    unregressed) -- PROMOTED to data/overrides/agent_b2_corrections (live store now 35).
+  - 0001838126/unit_rescale REFUSED by the NEW cross-field magnitude predicate, all 3
+    legs (1,273x fund norm; leaf was a whole-quarter FV x1000 at confidence 0.22) and
+    auto-appended to readjudication_worklist.csv (wrong-diagnosis -> B1). First live
+    confirmation the round-4 magnitude gate + re-adjudication hook work end-to-end.
+  - 0001634452/dedup REFUSED: over-deletion (656 rows/$692M for one cited duplicate
+    pair) caught by conservation + delete-to-balance + FV-at-risk.
+  - 0001588272/rate_rescale REFUSED: field sanity (25 post-fix basis_spread out of
+    (0,30]).
+  - 0001812554/column_remap REFUSED: selector no-op.
+- CANARY FINDING 1 (fleet-blocking for row_id benefit): grounded prompts carried ZERO
+  row_ids -- grounding is harvested from source-bundle holdings_slice, and ALL round-4
+  bundles predate the 2026-08-21 review_bundles row_id change. The row_id selector path
+  is inert for the whole round-4 pool unless bundles are regenerated or the harvest
+  backfills row_id from its own holdings match join.
+- CANARY FINDING 2 (selector-noop root cause deepened): the 0001812554 worker followed
+  instructions correctly -- its selector is byte-identical to a grounded identifier the
+  preflight verified at match_count=2 against PUBLISHED holdings -- yet it no-opped on
+  BOTH the trial frame and the gate replay. Blue Owl 2025-12-31 identifiers are
+  pipe-delimited in the published frame but differently formatted in the single-CIK
+  trial rebuild output. Grounding-vs-trial frame divergence is a distinct defect from
+  worker citation-copying; needs a mechanism investigation before the full fleet.
+- CANARY FINDING 3 (tooling gap): fleet_acceptance is NOT_ASSESSABLE for operator-driven
+  batches -- all 7 bars PASS but the evaluator reads apply_gate_log.jsonl, which the
+  `run_remediation gate` CLI does not write. Either the CLI should append the canonical
+  log or the evaluator should also read gate_<cik>.json artifacts.
+- Post-promotion audit: replay_gate --stats-only over the 35-leaf live store: 0 gate
+  FAIL; 1 out-of-band magnitude leg = the already-documented 1674760 shares_held
+  watchlist entry. Artifact: replay_live_stats_q4b2r4canary.json.
+- Hygiene: 4 failed leaves archived to corrections_archive/q4b2r4canary_gate_fail/,
+  promoted staging copy to corrections_archive/promoted_q4b2r4canary/; staging clean for
+  all 5 canary CIKs; worker scratch swept (0 GB orphaned).
+- Queue state: readjudication_worklist.csv has 1 row (0001838126/unit_rescale) -- needs
+  a B1 re-adjudication batch before any further B2 work on that finding. Round-4 pool
+  remaining: 85 archived packets (66 conflict-free) + the 23 staged-leaf collisions to
+  triage. Full-fleet go/no-go: owner decision, informed by findings 1-2 above.
+
+## 2026-08-21 -- Round-4 bundle regeneration (row_id grounding live) + canary finding 2 resolved
+
+- CANARY FINDING 2 RESOLVED as NOT a defect -- and the "trial-vs-published identifier
+  divergence" framing in the earlier entry today was a misread (naive comma-splitting of
+  quoted CSV during triage; a DuckDB column-aware re-check shows production and trial
+  frames byte-identical for Blue Owl 2025-12-31, both pipe-style, selector strict-eq
+  matches 8/2 rows). The 0001812554/column_remap no-op's real mechanism: the applier
+  remaps only rows with a NON-EMPTY from_field, and pik_rate is NULL on all three AI
+  Titan 2025-12-31 rows -- the worker diagnosed a pik_rate->principal displacement that
+  does not exist in the frame (the row's actual defect is an unextracted revolver par,
+  out of column_remap's reach). Selector, applier, and gate all behaved correctly;
+  wrong-diagnosis authoring burned the worker. RECOMMENDATION (not shipped): include
+  current frame field values (pik_rate/principal_amount/interest_rate/fair_value) in the
+  grounded-identifier block so workers can see an empty from_field before authoring.
+  Diagnostics preserved in scratch/2026-08-21_q4b2r4canary/.
+- CANARY FINDING 1 FIXED: regenerated the source bundles for the full round-4 pool (90
+  packets -> 157 review_ids) via a targeted build_review_bundles(review_ids=...) run.
+  All 157 rebuilt at source_artifact completeness; 156/156 holdings slices now carry
+  ROW- ids (the one slice-less bundle is RVQ_REV_9cf98329746d, fund_financials/F16 for
+  0002006758, which has no holdings rows at 2025-12-31 -- text-selector fallback stays
+  for that packet). Originals archived to
+  data/output/review_queue/review_bundles_pre_rowid_20260821/.
+  Operational trap documented: a targeted build_review_bundles run REWRITES
+  review_bundle_manifest.csv with only the selected items, so the regen built into a
+  temp dir and installed only the bundle JSONs; the production manifest is untouched
+  (its sha256 entries for the 157 regenerated bundles are now stale until the next full
+  queue/bundle pass).
+- END-TO-END VERIFIED: a no-reserve dispatch_preflight probe batch over the 5 canary
+  packets now grounds 20 ROW- ids per prompt (was 0), row_id-refined match_counts
+  tighten to 1 row, 5/5 packets dispatchable, zero skips. Probe batch and temp dirs
+  deleted after verification.
+- Round-4 fleet go/no-go inputs updated: row_id grounding is now LIVE for the whole
+  pool; no new failure class exists; remaining pre-fleet items are the B1
+  re-adjudication of 0001838126/unit_rescale (worklist row from the canary), the 23
+  staged-leaf collisions to triage, and the optional grounding field-value enrichment.
+
+### 2026-08-21 -- B2 analyst mode: workers get the source filing + per-CIK holdings CSV
+
+- Shell revived for B2 workers: the 2026-06-26 CreateProcessWithLogonW failure no longer
+  reproduces under the current hardened harness (spike worker read a sentinel file and ran
+  the worker interpreter inside the B2 sandbox; artifacts in scratch/2026-08-21_analyst_spike/).
+- scripts/agent_b2/dispatch_preflight.py: per-packet analyst staging. Stages
+  <batch>/staging/<cik>_holdings.csv (ALL quarters, ALL columns incl row_id; DuckDB slice of
+  the unified holdings parquet, memoized per CIK) and resolves cached filing HTML paths from
+  the source bundles. Manifest rows carry holdings_csv_path / filing_html_paths.
+- Worker prompt rewritten (analyst mode): no-shell block removed; evidence CLI roam commands
+  embedded (overview/tables/grid/roam/totals via scripts/review_agent/evidence_cli.py);
+  re-grounding is mandatory -- every numeric template param must be derived as "filing shows
+  X, extracted shows Y" in the rationale; the leaf must be written with the file-edit tool
+  only (BOM lesson below). Two fossil no-shell-era instructions removed.
+- scripts/dispatch_agent_b2_workers.ps1: intake normalization strips a UTF-8 BOM from worker
+  leaves before validation (2 of 5 canary workers wrote the leaf via PowerShell redirection,
+  which stamps a BOM in PS 5.1; content was valid).
+- Canary rerun (batch q4b2r4an, same 5 packets as q4b2r4canary): 5/5 leaves validate OK.
+  Quality deltas vs the morning no-shell leaves:
+  - 0001838126 unit_rescale: was an ungrounded quarter-wide fair_value x1000 rescale
+    (conf 0.22); now a deliberate no-op (factor 1.0, single row, conf 0.05) after the worker
+    verified extracted FV reconciles with the filing (25.27B, 123Dentist 17,264 thousands ==
+    17,264,000 extracted) and localized the real defect to fund-financials NAV-per-share
+    (1000.0 vs filing 25.22), which the holdings-field template cannot express.
+  - 0001812554 column_remap: re-diagnosed -- pik_rate -> interest_rate for the AAM row
+    (filing Cash 12.00% with blank PIK vs extracted pik_rate 12.0, interest_rate blank),
+    replacing the morning header-inferred pik_rate -> principal_amount guess; verified the
+    other cited rows did NOT need remapping.
+  - 0001588272 rate_rescale: narrowed from quarter-wide basis_spread x0.01 to row-scoped
+    interest_rate x0.1 on the CCS row (filing Fixed+1600 = 16.00% vs extracted 1.6);
+    explicitly excluded the Carestream row after checking its extracted values.
+  - 0001287750 all_pik_normalization: selector upgraded from multi-match issuer text to the
+    stable row_id; rates verified against extracted row values.
+  - 0001634452 dedup: honest confidence drop (0.68 -> 0.42) -- the dedup contract has no
+    row_selector, so the key cannot scope to the two grounded row_ids; documented that other
+    same-term groups may collapse. Template-expressiveness gap to fix before round 4.
+  - All five leaves now select by rebuild-stable row_id where the contract allows (the
+    current holdings frame carries row_id; prompt identifier lists show 1:1 matches).
+- Cost: analyst workers ~280-710K tokens and 14-21 tool calls each (vs ~26-54K tokens and
+  1-3 calls no-shell). Deliberate trade while validating the approach.
+- Tests: tests/test_agent_b2_preflight.py 21 passed (4 new/updated: staging slice, per-CIK
+  staging memoization, analyst prompt content, BOM guidance); focused B2 suite 113 passed.
+  Not run: full pytest suite; B3 gate on the new leaves (operator step, as usual).
+
+### 2026-08-21 -- B2 template expressiveness: selector lists, dedup row_selector, escalation leaf
+
+Trace-audit-driven fixes from the q4b2r4an analyst canary (see prior entry):
+
+- pipeline/correction_leaf.py:
+  - template.row_selector may now be ONE selector object OR a non-empty LIST of selector
+    objects (OR-combined by the applier; per-object rules unchanged). Lets a leaf bind
+    every cited row instead of widening to a whole quarter or fixing one row.
+  - dedup template gains optional row_selector (563-group blast-radius lesson).
+  - New validate_escalation() + ESCALATION_SUFFIX: escalation leaf schema (cik, binding
+    fix_class, mechanism, diagnosis >= 40 chars with filing-vs-extracted evidence,
+    evidence_citations, confidence, optional suggested_fix_class). validate_dir skips
+    *.escalation.json.
+- pipeline/agent_b2_appliers.py: _selector_mask handles selector lists (OR across
+  entries, AND within; any entry error fails the whole selector, no partial
+  application); apply_dedup optional row_selector restricts which rows may be DROPPED
+  (group membership still judged over the whole scoped frame); fails safe when the
+  selector matches nothing.
+- scripts/agent_b2/validate_corrections.py: escalation-aware -- when the correction is
+  missing but <fix_class>.escalation.json exists, validates it and reports ESCALATED
+  (exit 0).
+- scripts/dispatch_agent_b2_workers.ps1: missing-correction check accepts the
+  escalation sibling; BOM intake-strip applies to whichever artifact exists.
+- scripts/agent_b2/run_remediation.py: load_corrections excludes *.escalation.json
+  (diagnoses are never applied).
+- scripts/agent_b2/dispatch_preflight.py: prompt drops the forced low-confidence
+  authoring rule -- a worker whose binding fix_class cannot express the verified defect
+  writes <fix_class>.escalation.json instead (exactly one file either way); contract
+  excerpt documents selector lists; preflight skips packets with a staged escalation
+  (skipped_escalated, in manifest + result counts). Also: evidence-CLI prompt lines now
+  carry the PowerShell call operator (& ...) -- q4b2r4an workers copied the unprefixed
+  line verbatim and every first CLI call failed on quoting.
+- Prompt worked-example embedding (same session, earlier): one PROMOTED leaf of the
+  packet fix_class embedded per prompt (schema-archaeology lesson).
+- Tests: 128 passed across test_correction_leaf.py / test_agent_b2_appliers.py /
+  test_agent_b2_preflight.py / test_agent_b2_run_remediation.py (15 new); wider B2 net
+  59 passed (reviewed_workflow, wrapper_patch, diagnose, b2_run_metrics,
+  agent_promoted). Full suite not run.
+- NOT changed by design (owner instruction): the non-admin-terminal sandbox-helper
+  failures (ShellExecuteExW 1223/UAC) get no code workaround -- dispatch fleets from an
+  elevated operator shell per the quarter-pass-operator flow.
+- Pending decision: source_anchored_value fix_class design (proposed separately).
+
+### 2026-08-21 -- source_anchored_value: general-but-verifiable stage-2 correction class
+
+Approved design implemented (amended with row-fingerprint witnesses, XBRL bridge co-sign,
+parse-health gate). The worker never authors a number: each assertion POINTS at a filing
+cell and deterministic re-parse refuses the leaf on any mismatch.
+
+- pipeline/verdict_leaf.py + pipeline/correction_leaf.py: "source_anchored_value" added to
+  KNOWN_FIX_CLASSES / FIX_CLASS_STAGE (2) / STAGE2_SCOPED_CLASSES / TEMPLATE_REGISTRY.
+  Template = assertions[] (<= 20): {row_selector (object or list), field (unified numeric
+  fields), source {accession_number, table_index, row_index, cell_index, quoted_text,
+  value, unit_multiplier in {1,1000,1000000}; mult must be 1 for rate fields},
+  witnesses >= 2 {cell_index, field != asserted (anti-circular), value}}.
+- NEW pipeline/source_anchor_verify.py: cache-only verifier using the SAME parser as the
+  evidence CLI (html_extract._extract_tables). Four checks per assertion: (1) cited cell
+  parses to exactly source.value + quoted_text present in the row; (2) row fingerprint --
+  all witnesses must match both the parsed row AND the selected position's known-correct
+  extracted values, with the table scale INFERRED from scaled witnesses (one common m in
+  {1,1000,1e6}; a scaled asserted field's declared unit_multiplier must equal the inferred
+  scale -- closes the last worker-controlled degree of freedom); (3) table parse-health
+  heuristic (modal-width deviation; fail closed on mangled parses); (4) XBRL HTML-section
+  bridge co-sign where an audited bridge entry covers the cited row (sparse by design;
+  no coverage recorded, not failed). Fail closed on missing/unparseable filings.
+- pipeline/agent_b2_appliers.py: apply_source_anchored_value (all-or-nothing; sets
+  field = value x multiplier for selector rows; per-assertion audit; real fv_delta when
+  fair_value asserted). Registered in POST_STAGING_APPLIERS.
+- scripts/agent_b2/validate_corrections.py: --verify-source flag runs the verifier at
+  dispatcher intake (SOURCE-VERIFIED line on pass); dispatch_agent_b2_workers.ps1 now
+  passes it. scripts/agent_b2/run_remediation.py: POST_STAGING_FIX_CLASSES includes the
+  class; apply_packet re-verifies every source_anchored_value leaf gate-side (fail
+  closed; refusals recorded in result.source_anchor_refusals, leaf excluded from trial).
+- dispatch_preflight._contract_excerpt: assertions guidance (copy coordinates/values
+  straight from grid output; verify witness values in the holdings CSV).
+- Tests: NEW tests/test_source_anchor_verify.py (13: pass path, fabricated value,
+  wrong quote, wrong-row fingerprint, missing filing, selector no-match, scale
+  cross-check both directions, mangled-parse refusal, numeric normalization) + 2
+  applier tests. Full B2 + schema net: 232 passed. Full suite not run.
+- Operational follow-ups (not code): gold-set calibration of pointer->intent per filer
+  before fleet-wide enablement; start the class on filers whose templates already
+  validate. Packet-builder assignment of the new class is a separate decision.
+
+### 2026-08-21 -- Admin-dispatch UAC spike (PASS) + source_anchored_value live canary (refusal matrix verified)
+
+- TASK 1 (UAC hypothesis test): 3 diagnostic Codex worker runs dispatched from an
+  ELEVATED operator PowerShell (WorkerHome %TEMP%\b2adm, B2-style harness grants:
+  -WriteDirs runroot, -ReadDirs miniconda3, -EnvInherit all, -AllowUserSite; prompt
+  scratch/2026-08-21_admin_spike/spike_prompt.md = 10 trivial shell commands per run).
+  Result: 30/30 shell commands succeeded across the 3 runs; ZERO occurrences of
+  "1223", "1326", "orchestrator_helper_launch_canceled", "ShellExecuteExW", or
+  "CreateProcessWithLogonW" in all stdout + rollout-trace logs (baseline from the
+  non-admin q4b2r4an canary: ~6 such failures across 5 workers). VERDICT: consistent
+  with the UAC hypothesis -- dispatching from an elevated terminal eliminates the
+  transient shell-launch failures. Recommend dispatching B2 analyst fleets from an
+  admin shell.
+- Task 1 operational note (re-learned): run_codex_worker.ps1's post-run waste scrub
+  deletes auth.json from the worker home, so back-to-back runs against a reused
+  WorkerHome must re-copy auth.json before EVERY run (first attempt at runs 2-3
+  401'd in ~15s; succeeded after re-copy). The B2 dispatcher already re-copies per
+  worker; only manual/spike reuse hits this.
+- TASK 2 (source_anchored_value first live canary; verifier only, nothing applied):
+  hand-authored scratch/2026-08-21_admin_spike/sav_canary_0001812554.json for CIK
+  0001812554 / 2025-12-31 / ROW-a7f8a13bfb1589de (AAM Series 1.1 Rail and Domestic
+  Intermodal Feeder, LLC; known defect: extracted pik_rate 12.0 with blank
+  interest_rate vs filing Cash 12.00% with blank PIK). Anchor: accession
+  0001812554-26-000011, table_index 89, row_index 47, cell_index 18 (quoted_text
+  "12.00 %", value 12.0, unit_multiplier 1, field interest_rate); witnesses
+  cell 30 principal_amount 58,702 / cell 37 cost 58,702 / cell 43 fair_value 58,702,
+  each matching extracted 58,702,000 (verifier-inferred table scale 1000).
+- Good leaf verdict (validate_corrections --verify-source, default unified parquet):
+  "SOURCE-VERIFIED 0001812554/cash_rate_extracted_as_pik (1 assertion(s))" then
+  "OK", exit 0.
+- Refusal matrix (each edit made in turn; validator exit 1 with a specific error;
+  leaf restored and re-verified OK after):
+  (a) value 12.0 -> 14.5: "cited cell parses to 12.0, leaf claims 14.5 -- the filing
+      does not contain the asserted value at these coordinates".
+  (b) witness principal 58702 -> 58703: "witness cell parses to 58702.0, leaf claims
+      58703" plus "row fingerprint failed (2/3 witnesses usable, need >= 2 and all
+      passing)".
+  (c) row_selector -> ROW-faeb14c3f5df1849 (Xplor row, no extracted principal):
+      "selected rows carry no extracted principal_amount to witness against" plus
+      row-fingerprint refusal; c-variant against a full-witness wrong row
+      (ROW-17e624b7cd76963b, AAM Series 2.1): "no single table scale in
+      {1, 1000, 1000000} explains the scaled witnesses -- the cited row does not
+      describe the selected position".
+- All four verifier defenses exercised live: cell check (a), witness transcription
+  (b), row fingerprint / scale inference (c). Nothing copied into
+  data/output/agent_b2/corrections/; no apply, no rebuild, no locks or staged leaves
+  touched. Artifacts in scratch/2026-08-21_admin_spike/ (results, stdout, traces).
+
+### 2026-08-21 -- source_anchored_value worker-authored canary: 1 verified leaf + 2 correct escalations (3/3 right calls)
+
+- Dispatched 3 Codex analyst workers (admin shell, B2-style harness, WorkerHomes
+  %TEMP%\b2sav1-3) on 3 known 2025-12-31 defects with fix_class source_anchored_value
+  binding. Prompts + leaves + traces in scratch/2026-08-21_sav_worker_canary/.
+  Canary design: 1 defect expressible by the class, 2 deliberately inexpressible
+  (corrected value exists in no parseable filing cell) to test escalation honesty.
+- Worker 1 (0001812554, AAM Series 1.1 row ROW-a7f8a13bfb1589de): authored a leaf
+  INDEPENDENTLY matching the operator hand-authored ground truth exactly -- anchor
+  t89/r47/cell 18 ("12.00 %", interest_rate 12.0), witnesses cells 30/37/43
+  (principal/cost/fair_value 58,702 vs extracted 58,702,000). Validator:
+  "SOURCE-VERIFIED 0001812554/extraction_gap (1 assertion(s))" then "OK", exit 0.
+- Worker 2 (0001588272, CCS Medical ROW-5fc443b59f9a09ce, extracted interest_rate 1.6
+  vs true 16.00): wrote source_anchored_value.escalation.json -- correctly identified
+  that "Fixed + 1600" is a mixed text cell and 16.0 exists in no parseable cell, so
+  the class cannot express the 10x fix; suggested_fix_class identifier_rate_scale;
+  conf 0.86. Validator: "ESCALATED 0001588272/rate_scale", exit 0.
+- Worker 3 (0001287750, 15484880 Canada Inc senior sub loan ROW-d9cfbfcb882d5425,
+  interest_rate NULL for a PIK-only loan): wrote escalation -- correctly identified
+  that "14.00 % PIK" is unparseable and no standalone 0 cash-rate cell exists, so an
+  inferred zero cannot be source-anchored; suggested_fix_class derived_value; conf
+  0.92. Validator: "ESCALATED 0001287750/extraction_gap", exit 0.
+- Zero fabricated anchors; zero verifier refusals needed. 3/3 workers made the right
+  authoring decision on the first attempt.
+- Cost per worker (turn.completed usage): input 210K/364K/440K tokens (82-89% cached),
+  output 3.3-4.5K tokens, ~24-30 command items each. Wall clock ~4-9 min/worker,
+  3 workers run concurrently.
+- Calibration findings for rollout: (1) PIK rates formatted as mixed text ("14.00 %
+  PIK", filer 0001287750/Ares style) cannot be anchored by this class -- per-filer
+  gold-set calibration should catch this pattern up front; (2) rate-in-identifier
+  filers (0001588272 style, "Fixed + 1600") are likewise out of the class's reach;
+  both escalation diagnoses point at real template-vocabulary gaps
+  (identifier_rate_scale / derived_value are reasonable future class candidates).
+- Nothing promoted, applied, or copied into data/output/agent_b2/corrections/; no
+  rebuild; production store untouched. Full pytest suite not run (no code changed).
+
+### 2026-08-21 -- CCS Medical rate semantics corrected + staged rate_rescale leaf found DEFECTIVE (never applied; do not gate as-is)
+
+- Owner challenge prompted a re-read of the 0001588272 (NexPoint Capital) 2025-12-31
+  10-K. Filing footnote (5) (table 257 row 0), which the CCS Medical row carries,
+  states: "The interest rate on these investments is subject to a base rate of
+  3-Month SOFR, which at December 31, 2025 was 4.27%." Therefore "Fixed + 1600" is
+  base + spread (like Carestream "SOFR + 750"), NOT a fixed 16.00% coupon: all-in
+  rate ~= 4.27 + 16.00 = ~20.27%. The 0.00% cell is a base-rate FLOOR (floating-loan
+  concept), corroborating. Every prior reading of this row as "fixed 16% coupon"
+  (B1 packet framing, the q4b2r4an worker rationale, and today's SAV-canary prompt/
+  escalation) was wrong about the economics. Under the CURRENT pipeline convention
+  (spread-as-rate, cf. Carestream extracted interest_rate 7.5 from "750"), the
+  convention-consistent extracted value is 16.0 with basis_spread 1600; under the
+  DECIDED-but-unmigrated all-in convention (2026-07-12 decision) the target becomes
+  ~20.27 and must be handled by that migration, not a leaf.
+- SEPARATE DEFECT FOUND in the staged (NOT live) leaf
+  data/output/agent_b2/corrections/0001588272/rate_rescale.json: it sets field
+  interest_rate, factor 0.1 on ROW-5fc443b59f9a09ce where extracted interest_rate is
+  1.6. apply_rate_rescale MULTIPLIES by factor -> 1.6 x 0.1 = 0.16, not 16.0; the
+  intended correction required factor 10. The leaf's own rationale states "filing
+  shows 16.00% and extracted shows 1.6" and then derives the inverted factor. Status:
+  staging only, never B3-gated, never promoted, never applied -- no data impact. Do
+  NOT gate/promote it as-is; it needs re-authoring (factor 10 under the current
+  convention, or retirement in favor of a per-CIK identifier-rate-grammar fix that
+  also writes basis_spread 1600 and handles the all-in migration coherently).
+- Status clarification (correcting an overstatement in this session's discussion, not
+  in prior changelog entries): NONE of the three canary-adjacent defects is fixed in
+  built data today. (a) 0001588272 rate_rescale: staging only + defective (above).
+  (b) 0001287750 all_pik_normalization: sits in the LIVE store path
+  (data/overrides/agent_b2_corrections/0001287750/, uncommitted) but the B3 gate was
+  NOT run on it (per the q4b2r4an entry) and no unified rebuild has occurred since --
+  current holdings still show interest_rate NULL on ROW-d9cfbfcb882d5425. GOVERNANCE
+  FLAG: an ungated leaf in the live store WILL apply silently at the next rebuild;
+  operator should either run the gate on it or move it back to staging before any
+  rebuild. (c) 0001812554 AAM: canary leaves live in scratch/ by design; the q4b2r4an
+  column_remap leaf is staging only. Current holdings still carry all three defects,
+  which is why source-reconciliation queues still flag these CIK-quarters: the queue
+  derives from BUILT artifacts and clears only after gate -> promote -> rebuild ->
+  re-reconcile.
+
+### 2026-08-21 -- 0001287750 all_pik leaf: "ungated" claim corrected, NO-OP defect found, re-authored + gated + promoted
+
+- CORRECTION to the earlier entry today ("GOVERNANCE FLAG: an ungated leaf in the live
+  store"): WRONG. The live-store copy of 0001287750/all_pik_normalization.json was
+  legitimately B3-gated (gate_0001287750.json, PASS, q4b2r4canary) and promoted via
+  promote_log.jsonl this morning -- it was the morning canary's 1 promoted leaf. The
+  q4b2r4an "gate not run" note referred to the newer ANALYST leaves in staging.
+- NEW DEFECT FOUND while gating the staging copy: the leaf was a SEMANTIC NO-OP. Both
+  copies set cash_rate 0.0 but omitted set_interest_to_cash, and
+  apply_all_pik_normalization only writes interest_rate when that flag is true. The
+  only actual write was pik_rate 14.000000000000002 -> 14.0 (float-noise). The
+  substantive fix per the leaf's own rationale -- explicit interest_rate 0.0 on the
+  PIK-only 15484880 Canada Inc senior subordinated loan (ROW-d9cfbfcb882d5425), which
+  stops tier-3 filer-median cash-income imputation on a loan with no cash coupon --
+  was never applied. Both gate PASSes (morning + this session's first) were no-op
+  passes: every conservation/value predicate holds trivially when nothing changes.
+  GATE GAP: the B3 gate has no "leaf effect is non-trivial / matches stated intent"
+  predicate; a rows_changed>0 audit with zero substantive delta passes silently.
+- Remediation this session (operator actions, q4b2r4an batch):
+  1. Staging leaf re-authored: added set_interest_to_cash: true (one-boolean change
+     consistent with the leaf's rationale + filing evidence); prior staging copy
+     archived to the batch dir (leaves_pre_setcash_fix_...). validate_corrections OK.
+  2. Trial rebuild re-run (apply q4b2r4an --cik 0001287750 --run, rc 0); trial row now
+     shows interest_rate 0.0 / pik_rate 14.0.
+  3. B3 gate PASS (conservation 7/7 + value gate 6/6, 14 held-out quarters not
+     regressed); verdict at data/output/agent_b2/batch/q4b2r4an/gate_0001287750.json.
+  4. Live no-op copy PULLED to data/overrides/agent_b2_corrections/0001287750/
+     _pulled_noop_setcash_20260821/ (README with mechanism); gated re-authored leaf
+     promoted in its place; promotion logged to the q4b2r4an batch promote_log.jsonl.
+  5. Mandatory post-promotion audit: replay_gate --stats-only over the 36-leaf live
+     store -> 0 gate FAIL; the single out-of-band magnitude leg is the pre-existing
+     0001674760 column_remap shares_held watchlist entry (dev_log10 2.253). Artifact:
+     replay_live_stats_q4b2r4an_setcash.json.
+- Production holdings pick up the fix at the next unified rebuild (not run this
+  session). Queue rows for this packet clear at the next reconcile after that.
+- Follow-ups surfaced: (a) consider a gate predicate for no-op/intent-mismatch leaves
+  (verifier change = user decision, per hard rules; NOT implemented); (b) the q4b2r4an
+  0001588272 rate_rescale staging leaf remains defective (inverted factor) and
+  unrouted -- superseded by the identifier-rate-grammar work (next entry).
+
+### 2026-08-21 -- identifier_rate_grammar added as a routable stage-3 fix class + first proposal leaf (0001588272)
+
+- New fix class `identifier_rate_grammar` (stage 3, rule_track): routes rate-in-
+  identifier dialect defects to the Agent A lane (per-CIK grammar repair + the
+  deterministic A3 gate) instead of the human basket or a per-row value leaf. Never
+  applied to holdings data. Motivated by the sav-canary escalations: worker 2
+  suggested `identifier_rate_scale` for the 0001588272 "Fixed + 1600" defect and had
+  nowhere to route it.
+- Files: pipeline/verdict_leaf.py (KNOWN_FIX_CLASSES), pipeline/correction_leaf.py
+  (FIX_CLASS_STAGE + TEMPLATE_REGISTRY: required dialect_example + target_field
+  (enum = unified REMAP fields), optional numeric observed_value +
+  expected_semantics), scripts/agent_b2/run_remediation.py (RULE_TRACK_FIX_CLASSES).
+  Tests: +6 in tests/test_correction_leaf.py, +1 routing test in
+  tests/test_agent_b2_run_remediation.py; focused suite 112 passed
+  (test_correction_leaf + test_agent_b2_run_remediation + test_verdict_leaf).
+- 0001588272 (NexPoint) grammar state measured per the identifier-grammar skill:
+  grammar + anchors ALREADY exist and the A3 gate is GREEN (58 signature rows, 100%
+  parse-completeness, FV preserved, invariants 100%; bundle rebuilt, none%=10.0).
+  The grammar already extracts "Fixed + 1600" as basis_spread 1600 bps and its note 3
+  already records the twin disagreement. The production defect (interest_rate 1.6 on
+  the CCS row) is the STRUCTURED TWIN value: unified_holdings.py does not consume
+  identifier_rate grammar outputs at all yet -- that integration is part of the
+  pending all-in convention migration (2026-07-12 decision), where the twin-override
+  policy is the open user decision.
+- First instance leaf: data/output/agent_b2/corrections/0001588272/
+  identifier_rate_grammar.json (staging; validate_corrections OK; routes to
+  rule_track end-to-end). Cites both the SOI row and footnote (5) (3M SOFR base
+  4.27% => CCS ~20.27% all-in; 16.0 under current spread-as-rate convention).
+- Hygiene: the defective rate_rescale staging leaf (inverted factor 0.1) MOVED out of
+  the gateable slot to the q4b2r4an batch dir
+  (leaves_defective_inverted_factor_0001588272_rate_rescale.json).
+- Backstop: diff_outputs --semantic run post-tests. All divergences are PRE-EXISTING
+  drift vs the active baseline (production holdings last written 2026-08-20 22:14,
+  before this session; agent_a/proposals swept empty by an earlier session after
+  grammar promotion -- 65 grammars live in data/overrides; plus prior 14/7/11/8/3
+  semantic delta rows in holdings/matches/returns/fund_financials). NO production
+  artifact was modified by this session (verified by mtime). Baseline refresh remains
+  an owner decision per governance.
+
+## 2026-08-22 -- Anchor-based row_id: src_context_id captured, row_id re-derived from source anchor
+
+Implemented per docs/superpowers/plans/2026-08-22-anchor-row-id.md (scoped from
+docs/provenance_columns_scoping.md section 2.4 item 2 plus the 2026-08-22 owner
+decision to replace the row_id hash input).
+
+- What changed (commits 6328a4b, 5704a00, f757b66, b26ef34 on ensemble-fp-experiment):
+  - pipeline/bdc_filings.py: _deduplicate_bdc_holdings publishes the winning
+    row's XBRL contextRef as new bdc_holdings.csv column src_context_id.
+  - pipeline/staging_bdc.py + staging_nport.py + unified_holdings.py:
+    src_context_id staged through to UNIFIED_COLUMNS (nport emits '').
+  - pipeline/unified_holdings.py _assign_row_ids: row_id now hashes the source
+    anchor (source|accession|src_context_id for bdc, |nport_holding_id for
+    nport); ROW-<16hex> format unchanged. New appended column row_id_basis
+    (src_anchor | natural_key). Anchorless rows keep the legacy natural-key
+    hash. row_id is now stable across rebuilds/corrections/parser fixes.
+  - pipeline/main.py: --returns re-save re-derives row_id (fixes latent bug
+    where assign_position_ids' UNIFIED_COLUMNS reorder silently dropped it).
+  - scripts/restamp_row_selectors.py (new): legacy->anchor id migration for
+    correction-leaf row_selectors; fail-loud on ambiguous/unknown ids.
+  - UNCOMMITTED (pre-dirty file, other session's WIP): pipeline/agent_promoted.py
+    JIT drop now removes row_id_basis alongside row_id (2-line edit).
+- Data migration (gates all PASS):
+  - Full cache re-extraction (scripts/rebuild_outputs.py --bdc-holdings):
+    1,184,101 rows from 3,037 filings; values-identical to pre-migration
+    snapshot per accession (counts + FV to the dollar). Two 2026-Q1 accessions
+    (Investcorp US PC BDC II 0001193125-26-224761, Silver Point PC Fund
+    0001193125-26-221014) had lost their bdc_filings_index cache pointers;
+    cached XML verified on disk and index rows repaired, then re-extracted.
+  - Anchor coverage 100%; ZERO duplicate (accession, src_context_id) pairs.
+  - Unified rebuilt twice around restamp: 780,726 rows, values-identical to
+    snapshot (total, per classification, per cik-quarter). Basis split:
+    780,567 src_anchor (99.98%) / 159 natural_key (all correction-added rows
+    without accession -- expected).
+  - Restamp applied to the ONE live leaf citing a row_id
+    (0001287750/all_pik_normalization.json: ROW-d9cfbfcb882d5425 ->
+    ROW-62c19264d44492af); pass-2 audit shows status=ok rows_changed=1.
+  - Pre-migration artifacts preserved: data/snapshots/pre_anchor_rowid_20260822/.
+- Contracts/guardrails:
+  - row_id is a within-build row name pinned to the filing fact context
+    (as-filed claim: amendments mint new ids). NOT for cross-quarter identity;
+    position_id layer untouched. See docs/reference/schemas.md.
+  - New-leaf convention: cite row_id from the published CSV as before; ids no
+    longer drift when corrections change principal/shares.
+- Validation: full suite 4,479 passed / 13 skipped / 2 xfailed (2h23m).
+  diff_outputs --semantic deltas vs official baseline are all PRE-EXISTING
+  staleness (proven: dedicated pre/post gates show this change is
+  values-identical); baseline refresh remains an owner decision.
+- Test counts: +3 dedup context tests (test_bdc_filings: 119), +2 staging
+  passthrough (test_unified_holdings: 898), test_row_id rewritten (11),
+  +7 restamp (test_restamp_row_selectors, new file).
