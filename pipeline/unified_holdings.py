@@ -1436,38 +1436,61 @@ def build_unified_holdings(
 
 
 def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
-    """Populate ``row_id``: a rebuild-stable, content-derived per-row identifier.
+    """Populate ``row_id`` and ``row_id_basis`` (appended, not in UNIFIED_COLUMNS).
 
-    ``ROW-`` + first 16 hex chars of md5 over the drift-resistant natural key
-    from ``position_id_registry.compute_natural_keys`` (cik | source |
-    report_date | rawid | principal | shares, disambiguated by XBRL dimension
-    path then a stable-field ordinal; issuer_name excluded by design).
+    ``row_id`` = ``ROW-`` + first 16 hex chars of md5 over the row's source
+    anchor when one exists (``row_id_basis='src_anchor'``):
 
-    Unlike ``position_id`` (dense enumeration ordinals that renumber wholesale
-    when any upstream row count changes), ``row_id`` survives rebuilds as long
-    as the row's extracted content is unchanged. A correction that alters
-    principal/shares changes that row's id: the id names the row as published,
-    not the position across restatements.
+        bdc:   source|accession_number|src_context_id
+        nport: source|accession_number|nport_holding_id
+
+    The anchor names the filing fact context (accessions are immutable), so
+    the id survives rebuilds, staging reorders, value corrections, and parser
+    fixes. It is an as-filed claim: an amendment (new accession) is a new id.
+    Rows missing accession or the per-source anchor part fall back to the
+    legacy drift-resistant natural key from
+    ``position_id_registry.compute_natural_keys``
+    (``row_id_basis='natural_key'``; content-sensitive by design).
+
+    NOT a cross-quarter identity -- ``position_id`` owns that layer.
     """
     if df.empty:
         df["row_id"] = pd.Series(dtype=str)
+        df["row_id_basis"] = pd.Series(dtype=str)
         return df
     from pipeline.position_id_registry import compute_natural_keys
 
-    keys = compute_natural_keys(df).reset_index(drop=True)
+    def _col(name: str) -> pd.Series:
+        if name in df.columns:
+            return df[name].fillna("").astype(str).str.strip()
+        return pd.Series("", index=df.index, dtype=str)
+
+    source = _col("source").str.lower()
+    accession = _col("accession_number")
+    anchor_part = _col("src_context_id").where(
+        source.ne("nport"), _col("nport_holding_id"))
+    has_anchor = accession.ne("") & anchor_part.ne("")
+
+    keys = (source + "|" + accession + "|" + anchor_part).where(
+        has_anchor, compute_natural_keys(df))
+    keys = keys.reset_index(drop=True)
+
     con = duckdb.connect()
     con.register("nk", pd.DataFrame({"i": range(len(keys)), "k": keys}))
     hashed = con.execute(
         "SELECT 'ROW-' || substr(md5(k), 1, 16) AS row_id FROM nk ORDER BY i"
     ).fetchdf()["row_id"]
     df["row_id"] = hashed.values
+    df["row_id_basis"] = has_anchor.map(
+        {True: "src_anchor", False: "natural_key"}).values
+    n_anchor = int(has_anchor.sum())
     n_dup = int(df["row_id"].duplicated().sum())
     if n_dup:
         logger.warning(
-            "row_id: %d duplicate id(s) (natural-key or md5-prefix collision)",
-            n_dup)
-    else:
-        logger.info("row_id: %d unique ids assigned", len(df))
+            "row_id: %d duplicate id(s) (anchor collision, natural-key "
+            "collision, or md5-prefix collision)", n_dup)
+    logger.info("row_id: %d assigned (%d src_anchor, %d natural_key)",
+                len(df), n_anchor, len(df) - n_anchor)
     return df
 
 
