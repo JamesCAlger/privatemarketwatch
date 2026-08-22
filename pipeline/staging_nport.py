@@ -296,6 +296,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             '' AS bdc_dimensions_raw,
             NULL AS bdc_unrealized_gain_loss,
             '' AS bdc_investment_country,
+            '' AS src_context_id,
             holding_id AS nport_holding_id,
             series_name AS nport_series_name,
             series_id AS nport_series_id,

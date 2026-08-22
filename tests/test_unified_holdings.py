@@ -1303,6 +1303,25 @@ class TestPrepareBdc:
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Caitec, Inc."
 
+    def test_src_context_id_passes_through_bdc_staging(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000, "src_context_id": "ctx_acme_tl1"},
+        ])
+        result = _prepare_bdc(df)
+        assert "src_context_id" in result.columns
+        assert list(result["src_context_id"]) == ["ctx_acme_tl1"]
+
+    def test_src_context_id_defaults_empty_when_absent(self):
+        # bdc_holdings.csv built before the migration has no src_context_id
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert "src_context_id" in result.columns
+        assert list(result["src_context_id"]) == [""]
+
     def test_returns_empty_when_wrapper_filters_all_phase_a_rows(self):
         """All-rollup wrapper CIKs return an empty staged frame, not Phase B SQL errors."""
         df = self._make_bdc_df([

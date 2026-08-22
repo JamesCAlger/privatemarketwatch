@@ -411,6 +411,7 @@ def _prepare_bdc(
         "fair_value_unit", "cost_unit", "principal_amount_unit",
         "industry", "investment_type", "affiliation",
         "nonaccrual_footnote", "nonaccrual_dimension",
+        "src_context_id",
     )
 
     con = duckdb.connect()
@@ -2585,6 +2586,7 @@ def _prepare_bdc(
             dimensions_raw AS bdc_dimensions_raw,
             _ugl AS bdc_unrealized_gain_loss,
             COALESCE(_hier_country, '') AS bdc_investment_country,
+            COALESCE(CAST(src_context_id AS VARCHAR), '') AS src_context_id,
             '' AS nport_holding_id,
             '' AS nport_series_name,
             '' AS nport_series_id,
