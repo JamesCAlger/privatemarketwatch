@@ -1646,6 +1646,25 @@ def _extract_single_xbrl_source_file(
     return rows
 
 
+def _publish_anchor_row_ids(
+    detail: pd.DataFrame, source: pd.DataFrame, output: pd.DataFrame,
+) -> pd.DataFrame:
+    """Swap the detail frame's published ordinal ids for stable anchors.
+
+    Internal SQL joins/ranking ran on the ordinals; this is the single
+    publish chokepoint. Unmapped/empty values pass through unchanged.
+    """
+    src_map = dict(zip(source["source_row_id"].astype(str),
+                       source["source_anchor_id"].astype(str)))
+    out_map = dict(zip(output["output_row_id"].astype(str),
+                       output["output_anchor_id"].astype(str)))
+    sid = detail["source_row_id"].fillna("").astype(str)
+    oid = detail["output_row_id"].fillna("").astype(str)
+    detail["source_row_id"] = sid.map(src_map).fillna(sid)
+    detail["output_row_id"] = oid.map(out_map).fillna(oid)
+    return detail
+
+
 def reconcile_bdc_source_to_holdings(
     source_df: pd.DataFrame,
     holdings_df: pd.DataFrame,
@@ -3368,6 +3387,9 @@ def reconcile_bdc_source_to_holdings(
     """).fetchdf()
 
     metrics = build_source_reconciliation_metrics(detail)
+    # Published-id swap AFTER metrics: metric inputs stay bit-identical to
+    # the pre-anchor regime; only the published detail id columns change.
+    detail = _publish_anchor_row_ids(detail, source, output)
     con.close()
 
     # Log wrapper-vs-staging diagnostic disagreements

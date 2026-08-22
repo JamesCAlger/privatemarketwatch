@@ -98,3 +98,35 @@ class TestOutputAnchorId:
         out = _coerce_output_df(
             _holdings_frame([{"row_id": ""}]), enable_bdc_xbrl_wrappers=False)
         assert out.iloc[0]["output_anchor_id"] == "0"
+
+
+from pipeline.source_reconciliation import (  # noqa: E402
+    reconcile_bdc_source_to_holdings,
+)
+
+_NO_RESCALES = pd.DataFrame(columns=["cik", "field", "factor"])
+
+
+class TestPublishedDetailIds:
+    def test_source_only_row_publishes_src_anchor(self):
+        source = _source_frame([{"context_id": "ctx_lonely",
+                                 "report_date": "2026-03-31"}])
+        detail, _metrics = reconcile_bdc_source_to_holdings(
+            source, _holdings_frame([]).iloc[0:0],
+            enable_bdc_xbrl_wrappers=False,
+            audited_value_rescales=_NO_RESCALES)
+        src_rows = detail[detail["source_row_id"].astype(str).ne("")]
+        assert len(src_rows) >= 1
+        assert set(src_rows["source_row_id"]) == {
+            "src:0001418076-26-000001:ctx_lonely"}
+
+    def test_output_extra_row_publishes_unified_row_id(self):
+        holdings = _holdings_frame([{"row_id": "ROW-feedfeedfeedfeed",
+                                     "report_date": "2026-03-31"}])
+        detail, _metrics = reconcile_bdc_source_to_holdings(
+            _source_frame([]).iloc[0:0], holdings,
+            enable_bdc_xbrl_wrappers=False,
+            audited_value_rescales=_NO_RESCALES)
+        out_rows = detail[detail["output_row_id"].astype(str).ne("")]
+        assert len(out_rows) >= 1
+        assert set(out_rows["output_row_id"]) == {"ROW-feedfeedfeedfeed"}
