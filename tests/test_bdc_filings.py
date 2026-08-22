@@ -1716,6 +1716,85 @@ class TestParseAllFilings:
         assert len(result) == 1
         assert int(result.iloc[0]["dedupe_context_count"]) == 2
 
+    def test_dedupe_publishes_winner_context_as_src_context_id(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_sparse",
+                "fair_value": "",
+                "cost": "",
+                "principal_amount": "",
+                "interest_rate": "SOFR+500",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_complete",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "interest_rate": "",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 1
+        # internal column still dropped; published anchor is the winner's ctx
+        assert "_context_id" not in result.columns
+        assert result.iloc[0]["src_context_id"] == "ctx_complete"
+
+    def test_dedupe_fv_split_rows_keep_own_contexts(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_a",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_b",
+                "fair_value": "2000000",
+                "cost": "990000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 2
+        assert set(result["src_context_id"]) == {"ctx_a", "ctx_b"}
+        # distinct contexts -> distinct anchors even under axis split
+        assert result["src_context_id"].nunique() == 2
+
+    def test_dedupe_without_context_column_yields_empty_src_context_id(self):
+        # legacy-CSV merge path: rows may arrive with no _context_id at all
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+        assert len(result) == 1
+        assert result.iloc[0]["src_context_id"] == ""
+
     @patch("pipeline.bdc_filings.BDC_HOLDINGS_FILE")
     @patch("pipeline.bdc_filings.BDC_PARSE_PROGRESS_FILE")
     def test_parses_and_saves(self, mock_progress, mock_holdings, tmp_dir):

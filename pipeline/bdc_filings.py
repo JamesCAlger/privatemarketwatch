@@ -1146,6 +1146,14 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             int(conflicts.sum()),
         )
 
+    # Publish the winning row's XBRL contextRef as the row's source anchor.
+    # accession_number + src_context_id locates the ix:nonFraction facts in
+    # the cached filing (primary-of-N when dedupe_context_count > 1).
+    if "_context_id" in picked.columns:
+        picked["src_context_id"] = picked["_context_id"].fillna("").astype(str)
+    else:
+        picked["src_context_id"] = ""
+
     drop_cols = ["_dedupe_row_order", "_dedupe_score", "_fv_split_key"]
     if "_context_id" in picked.columns:
         drop_cols.append("_context_id")
