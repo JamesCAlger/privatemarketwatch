@@ -9189,3 +9189,48 @@ decision to replace the row_id hash input).
 - Test counts: +3 dedup context tests (test_bdc_filings: 119), +2 staging
   passthrough (test_unified_holdings: 898), test_row_id rewritten (11),
   +7 restamp (test_restamp_row_selectors, new file).
+
+## 2026-08-22 -- source_row_id grounding migrated to src:{accession}:{context_id} anchors
+
+Implemented per docs/superpowers/plans/2026-08-22-source-row-id-anchor.md
+(follow-on to the same-day anchor row_id migration; kills the last positional
+grounding key).
+
+- What changed (commits 85df277, 6a8fa4b, f60921a, 88502b3):
+  - pipeline/source_reconciliation.py: _coerce_source_df mints source_anchor_id
+    (src:{accession}:{context_id}; #k suffix on duplicate contexts, src-ord:{n}
+    fallback, both warned); _coerce_output_df mints output_anchor_id (unified
+    row_id when present, ordinal fallback); _publish_anchor_row_ids swaps the
+    PUBLISHED detail ids at a single post-metrics chokepoint. Internal SQL
+    ordinals (joins, duplicate-rank, tie-breaks) are untouched.
+  - All reconciliation artifacts inherit: detail CSV, per-CIK parquets,
+    source-only detail, residual classification. Grounding frames for the B2
+    missing_position_add gate are now independently re-derivable from the
+    source-facts cache (order-independent).
+  - UNCOMMITTED (pre-dirty, other session's WIP): scripts/agent_b2/
+    dispatch_preflight.py worker prompt now names the src:{...} format.
+  - Out of scope by design: agent_investigate_rules "staging:" source_row_id
+    dialect (separately minted, self-describing); zero live B2 correction
+    leaves cited reconciliation ordinals, so NO restamp was needed.
+- Regeneration + gates (artifacts regenerated via run_bdc_source_reconciliation_cached,
+  logic-hash flip -> full re-run; 1,423,871 detail rows / 1,933 metric rows):
+  - Id formats: 1,423,838 src:-anchored source ids, ZERO src-ord fallbacks,
+    ZERO unexpected; 559,992/559,992 output ids are unified ROW- anchors.
+  - source_only_detail (blocker accounting basis): ZERO group-count changes.
+  - Explained delta 1: CIKs 0001984739 / 0002033382 (2026-03-31) gained source
+    coverage from the same-day filings-index pointer repair and flipped
+    UNDER_REVIEW -> RECONCILED.
+  - Explained delta 2: 8 rows (of 1.42M) flipped matched <->
+    diagnostic_field_mismatch because the full re-extraction reordered
+    byte-identical duplicate rows and ordinal TIE-BREAKS picked different,
+    equally-valid partners (tier swaps exact_identifier <->
+    exact_dimensions_raw; cost diagnostic appears/disappears with the twin
+    chosen). Zero FV/blocker impact. Known residual: matching tie-breaks
+    still use ordinals; RECOMMENDED FOLLOW-UP: tie-break on anchors to make
+    these flips impossible.
+  - Pre-migration artifacts: data/snapshots/pre_srcanchor_20260822/.
+- Validation: full suite 4,488 passed / 13 skipped / 2 xfailed (2h27m).
+  New tests: tests/test_source_recon_anchor_ids.py (9).
+- Next in the provenance chain: docs/superpowers/plans/
+  2026-08-22-provenance-step1-passthroughs.md (six-column step-1 batch,
+  ready to execute).
