@@ -50,6 +50,15 @@ step and re-runs after `assign_position_ids` re-saves):
   `position_id` owns that layer and is unchanged.
 - Migration tooling: `scripts/restamp_row_selectors.py` maps legacy
   natural-key ids cited in correction-leaf `row_selector`s to anchor ids.
+- Source-reconciliation published ids (2026-08-22): detail artifacts carry
+  `source_row_id` = `src:{accession_number}:{context_id}` (stable grounding
+  anchor; `#k` suffix on within-frame duplicate contexts, `src-ord:{n}`
+  fallback when a part is missing) and `output_row_id` = the unified
+  `row_id` when available. The positional ordinals remain internal to the
+  reconciliation SQL only. Correction-leaf `positions[].source_row_id`
+  citations copy the published anchor verbatim; the value gate re-verifies
+  by string equality + fair_value tolerance against a grounding frame that
+  is now independently re-derivable from the source-facts cache.
 
 ## Position-Level PIK Status
 
