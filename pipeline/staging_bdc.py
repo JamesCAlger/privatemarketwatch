@@ -413,6 +413,7 @@ def _prepare_bdc(
         "nonaccrual_footnote", "nonaccrual_dimension",
         "src_context_id",
         "dedupe_context_count", "dedupe_conflict_fields",
+        "src_facts", "dedupe_filled_fields",
     )
 
     con = duckdb.connect()
@@ -2610,6 +2611,16 @@ def _prepare_bdc(
             '' AS src_field_overrides,
             '' AS cost_source,
             '' AS shares_held_source,
+            CASE WHEN _fv IS NOT NULL THEN 'xbrl_field' ELSE '' END AS fair_value_source,
+            CASE WHEN _pa IS NOT NULL THEN 'xbrl_field' ELSE '' END AS principal_amount_source,
+            CASE WHEN _pct IS NOT NULL THEN 'xbrl_field' ELSE '' END AS pct_of_net_assets_source,
+            CASE WHEN _pik IS NOT NULL AND _pik >= 0 THEN 'xbrl_field'
+                 WHEN _pik IS NULL AND _text_pik_rate IS NOT NULL THEN 'identifier_text'
+                 ELSE '' END AS pik_rate_source,
+            CASE WHEN _ugl IS NOT NULL THEN 'xbrl_field' ELSE '' END AS bdc_unrealized_gain_loss_source,
+            COALESCE(CAST(src_facts AS VARCHAR), '') AS src_facts,
+            COALESCE(CAST(dedupe_filled_fields AS VARCHAR), '') AS src_filled_fields,
+            '' AS corrected_fields,
             '' AS nport_holding_id,
             '' AS nport_series_name,
             '' AS nport_series_id,

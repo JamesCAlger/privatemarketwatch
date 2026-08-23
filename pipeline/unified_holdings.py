@@ -88,6 +88,14 @@ UNIFIED_COLUMNS = [
     "src_field_overrides",
     "cost_source",
     "shares_held_source",
+    "fair_value_source",
+    "principal_amount_source",
+    "pct_of_net_assets_source",
+    "pik_rate_source",
+    "bdc_unrealized_gain_loss_source",
+    "src_facts",
+    "src_filled_fields",
+    "corrected_fields",
     # Non-accrual signals (BDC only -- extracted from XBRL footnotes/dimensions)
     "nonaccrual_footnote", "nonaccrual_dimension",
     # Source-specific (N-PORT)

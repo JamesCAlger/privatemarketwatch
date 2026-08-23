@@ -2265,6 +2265,51 @@ class TestPrepareBdc:
             f"src_transforms should be '' when no events fire, got {val!r}"
         )
 
+    def test_src_facts_and_filled_fields_pass_through(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000,
+             "src_facts": '{"interest_rate":{"r":0.105}}',
+             "dedupe_filled_fields": "cost"},
+        ])
+        result = _prepare_bdc(df)
+        assert list(result["src_facts"]) == ['{"interest_rate":{"r":0.105}}']
+        assert list(result["src_filled_fields"]) == ["cost"]
+        assert list(result["corrected_fields"]) == [""]
+
+    def test_value_field_pathway_enums(self):
+        df = self._make_bdc_df([
+            # fv + principal + pct + ugl from XBRL; pik from identifier text
+            {"investment_identifier":
+                 "Acme Corp - Term Loan 10.5% (incl. 2.0% PIK)",
+             "cik": "123", "fair_value": 1000000, "principal_amount": 900000,
+             "pct_of_net_assets": 0.4, "unrealized_gain_loss": 5000},
+            # fv only -- no pik/principal/pct/ugl so those sources must be ''
+            {"investment_identifier": "Bare Corp - Equity", "cik": "123",
+             "fair_value": 500000},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        acme = result.loc["Acme Corp"]
+        assert acme["fair_value_source"] == "xbrl_field"
+        assert acme["principal_amount_source"] == "xbrl_field"
+        assert acme["pct_of_net_assets_source"] == "xbrl_field"
+        assert acme["bdc_unrealized_gain_loss_source"] == "xbrl_field"
+        assert acme["pik_rate_source"] == "identifier_text"
+        assert acme["pik_rate"] == pytest.approx(2.0)
+        bare = result.loc["Bare Corp"]
+        assert bare["fair_value_source"] == "xbrl_field"
+        for col in ("principal_amount_source", "pct_of_net_assets_source",
+                    "pik_rate_source", "bdc_unrealized_gain_loss_source"):
+            assert bare[col] == ""
+
+    def test_pik_rate_xbrl_pathway(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Pik Corp - Term Loan", "cik": "123",
+             "fair_value": 1, "pik_rate": 2.0},
+        ])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate_source"] == "xbrl_field"
+
 
 # ---------------------------------------------------------------------------
 # Amendment dedup in _prepare_bdc (CTE 1b)
