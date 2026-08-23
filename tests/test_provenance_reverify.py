@@ -309,7 +309,26 @@ class TestLedger:
         _, sp = build_ledger(df, out_dir=tmp_path)
         summary = pd.read_csv(sp)
         cols = set(summary.columns)
-        assert "verified" in cols or "no_provenance" in cols
+        assert "verified" in cols
+        assert "no_provenance" in cols
+
+    def test_summary_row_for_cik_quarter_without_fair_value_rows(self, tmp_path):
+        """For a cik-quarter with no fair_value rows, FV buckets must be 0 not NaN."""
+        df = pd.DataFrame([
+            {"row_id": "ROW-ir", "cik": "9", "accession_number": "E",
+             "report_date": "2025-12-31", "src_context_id": "ctx-ir",
+             "field": "interest_rate", "pathway": "xbrl_field",
+             "declared_raw": 0.105, "declared_events": "interest_rate:rate_x100",
+             "published": 10.5, "expected": 10.5, "instance_raw": None,
+             "cheap_status": "pass", "full_status": "not_checked"},
+        ])
+        _, sp = build_ledger(df, out_dir=tmp_path)
+        summary = pd.read_csv(sp)
+        row = summary.iloc[0]
+        assert int(row["cik"]) == 9
+        assert row["verified_fv"] == 0
+        assert row["total_fv"] == 0
+        assert row["unchecked_trivial"] == 1
 
     # ------------------------------------------------------------------
     # Folded-in items from Task 8 review

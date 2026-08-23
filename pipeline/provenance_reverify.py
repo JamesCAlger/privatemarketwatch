@@ -522,6 +522,12 @@ def build_ledger(
     )
     summary = summary.merge(counts, on=["cik", "report_date"], how="right")
 
+    # Zero-fill FV buckets for cik-quarters with no fair_value rows
+    summary[["n_fields", "n_verified", "verified_fv", "derived_fv",
+             "corrected_fv", "total_fv"]] = summary[[
+        "n_fields", "n_verified", "verified_fv", "derived_fv",
+        "corrected_fv", "total_fv"]].fillna(0)
+
     summary_path = out_dir / "provenance_ledger_summary.csv"
     summary.to_csv(summary_path, index=False)
 
