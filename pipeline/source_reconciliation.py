@@ -1576,7 +1576,7 @@ def _extract_single_xbrl_source_file(
 
     facts_by_ctx: dict[str, dict[str, Any]] = {}
     concepts_by_ctx: dict[str, set[str]] = {}
-    monetary_facts_stored: list[tuple[str, str, int]] = []
+    monetary_facts_stored: list[tuple[str, str, int, str]] = []
     root = tree.getroot()
     for elem in root.iter():
         ctx_ref = elem.get("contextRef")
@@ -1599,7 +1599,7 @@ def _extract_single_xbrl_source_file(
                 dec_attr = elem.get("decimals")
                 if dec_attr is not None:
                     try:
-                        monetary_facts_stored.append((ctx_ref, col, int(dec_attr)))
+                        monetary_facts_stored.append((ctx_ref, col, int(dec_attr), local.lower()))
                     except ValueError:
                         pass
         concepts_by_ctx.setdefault(ctx_ref, set()).add(local)
