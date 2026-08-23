@@ -153,7 +153,20 @@ cohort's holdings values. The 45K field-level mismatches are measured residue, n
 hidden -- adjudication/routing is the scoping doc's section-8 design, deliberately
 not built in this plan.
 
-### Full suite: [PENDING - controller appends]
+### Full suite (final HEAD)
+
+4568 passed, 1 failed, 13 skipped, 2 xfailed in 9171s (2:32:50) at commit 5968777.
+The single failure was a REAL cross-module catch: `pipeline/source_reconciliation.py`
+still built 3-tuple `monetary_facts_stored` entries after 5b6a4fe extended the schema
+to 4-tuples -- fixed at 8ae780a (append `local.lower()`; annotation updated); the
+failing test and its whole file (173 tests) plus test_bdc_filings.py (129) green
+post-fix. Suite grew 4501 -> 4569 collected (this plan's new tests).
+
+Semantic diff backstop (`diff_outputs.py --semantic`): identical delta profile to the
+step-1 record (holdings 14 / matches 7 / position_returns 11 / index_returns 8 /
+fund_financials 3 + pre-existing retired-artifact drift) -- the steps-2-4 migration
+added no new semantic deltas vs the official baseline. Baseline refresh remains
+owner-gated and is NOT done here.
 
 ### Docs updated
 
