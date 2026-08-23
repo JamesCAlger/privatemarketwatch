@@ -122,6 +122,40 @@ class TestCheapTier:
         ir = out[out["field"] == "interest_rate"].iloc[0]
         assert ir["cheap_status"] == "pass_trivial"
 
+    def test_ciks_filter_scopes_rows(self):
+        """ciks= must filter rows without creating a self-referential view.
+
+        Regression for BinderException: infinite recursion detected when
+        cheap_tier did CREATE OR REPLACE VIEW h AS SELECT * FROM h WHERE ...
+        """
+        row_a = _row(
+            row_id="ROW-A1",
+            cik="0001287750",
+            fair_value=1_000_000.0,
+            fair_value_source="xbrl_field",
+        )
+        row_b = _row(
+            row_id="ROW-B1",
+            cik="0000081955",
+            fair_value=2_000_000.0,
+            fair_value_source="xbrl_field",
+        )
+        df = pd.DataFrame([row_a, row_b])
+
+        # Filter to first CIK (leading zeros stripped by normalization).
+        filtered = cheap_tier(holdings_df=df, ciks=["1287750"])
+        fv_rows = filtered[filtered["field"] == "fair_value"]
+        assert set(fv_rows["row_id"]) == {"ROW-A1"}, (
+            "ciks filter should include only the requested CIK"
+        )
+
+        # No filter -> both rows returned.
+        unfiltered = cheap_tier(holdings_df=df, ciks=None)
+        fv_all = unfiltered[unfiltered["field"] == "fair_value"]
+        assert set(fv_all["row_id"]) == {"ROW-A1", "ROW-B1"}, (
+            "ciks=None should return all rows"
+        )
+
 
 _FIXTURE_XML = (
     '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'

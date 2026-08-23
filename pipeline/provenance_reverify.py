@@ -196,7 +196,7 @@ def cheap_tier(
     try:
         if holdings_df is not None:
             con.register("h_src", holdings_df)
-            con.execute("CREATE VIEW h AS SELECT * FROM h_src")
+            con.execute("CREATE VIEW h_base AS SELECT * FROM h_src")
         else:
             if holdings_path is None:
                 from pipeline import config  # noqa: PLC0415
@@ -207,7 +207,7 @@ def cheap_tier(
                 if str(holdings_path).endswith(".parquet")
                 else "read_csv_auto"
             )
-            con.execute(f"CREATE VIEW h AS SELECT * FROM {reader}('{src}')")
+            con.execute(f"CREATE VIEW h_base AS SELECT * FROM {reader}('{src}')")
 
         if ciks:
             wanted = ",".join(
@@ -215,10 +215,12 @@ def cheap_tier(
                 for c in sorted(set(ciks))
             )
             con.execute(
-                "CREATE OR REPLACE VIEW h AS SELECT * FROM h WHERE "
+                "CREATE VIEW h AS SELECT * FROM h_base WHERE "
                 "ltrim(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), '0') "
                 f"IN ({wanted})"
             )
+        else:
+            con.execute("CREATE VIEW h AS SELECT * FROM h_base")
 
         parts = [_field_sql(f, sc) for f, sc in CHEAP_FIELDS.items()]
         sql = " UNION ALL ".join(parts)
