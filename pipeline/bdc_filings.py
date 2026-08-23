@@ -8,6 +8,7 @@ Public API
 extract_bdc_holdings(client, bdc_universe=None) -> pd.DataFrame
 """
 
+import json
 import logging
 import re
 import time
@@ -98,6 +99,50 @@ _MONETARY_COLUMNS = frozenset({
     "fair_value", "cost", "principal_amount", "face_amount",
     "unrealized_gain_loss", "realized_gain_loss",
 })
+
+# Fields whose raw as-extracted value is ALWAYS recorded in src_facts: staging
+# applies threshold-heuristic rescales to these, so the cheap re-verification
+# tier needs the pre-pipeline value (scoping doc 2.3/2.4).
+_RATE_PROV_COLUMNS = frozenset({
+    "interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets",
+})
+
+# col -> its canonical CONCEPT_MAP pattern.  For most columns this is the
+# first (most specific) pattern in CONCEPT_MAP for that column.  src_facts
+# records the winning concept only when it is non-canonical -- the full
+# re-verify tier re-locates canonical facts by replaying _match_concept.
+#
+# Special case: interest_rate.  CONCEPT_MAP intentionally places
+# "investmentinterestratepaidincash" before "investmentinterestrate" so
+# that paidincash facts are not mis-classified as bare rates.  But the bare
+# "investmentinterestrate" concept is the canonical/primary form.  We set
+# the canonical explicitly so the non-canonical paidincash variant is
+# recorded in src_facts while bare rates are not.
+CANONICAL_CONCEPT: dict[str, str] = {}
+for _pat, _col in CONCEPT_MAP:
+    CANONICAL_CONCEPT.setdefault(_col, _pat)
+# Override: bare InvestmentInterestRate is the canonical interest_rate concept.
+CANONICAL_CONCEPT["interest_rate"] = "investmentinterestrate"
+
+
+def _record_value_xform(
+    record: dict[str, Any], col: str, old_value: Any, code: str,
+) -> None:
+    """Record an extractor-side value transform into the record's src_facts.
+
+    Sets ``r`` to the pre-transform value (first writer wins -- chained
+    transforms keep the original instance value) and appends ``code`` to the
+    ordered ``x`` event list.
+    """
+    try:
+        prov = json.loads(record.get("src_facts") or "{}")
+    except json.JSONDecodeError:
+        prov = {}
+    entry = prov.setdefault(col, {})
+    entry.setdefault("r", old_value)
+    entry.setdefault("x", []).append(code)
+    record["src_facts"] = json.dumps(prov, sort_keys=True, separators=(",", ":"))
+
 
 # Dimension local-name substrings used to identify the investment axis
 _INVESTMENT_ID_DIMS = ("investmentidentifier", "investmentcompany")
@@ -572,7 +617,8 @@ def _is_non_position_identifier(value: str) -> bool:
 
 def _normalize_mixed_decimals_monetary_facts(
     facts_by_ctx: dict[str, dict[str, Any]],
-    monetary_facts_stored: list[tuple[str, str, int]],
+    monetary_facts_stored: list[tuple[str, str, int, str]],
+    prov_by_ctx: dict[str, dict[str, dict]] | None = None,
 ) -> None:
     """Normalize rare mixed-decimals monetary outliers in-place.
 
@@ -583,14 +629,14 @@ def _normalize_mixed_decimals_monetary_facts(
     if len(monetary_facts_stored) < 5:
         return
 
-    decimals_tracker = [dec for _, _, dec in monetary_facts_stored]
+    decimals_tracker = [dec for _, _, dec, _loc in monetary_facts_stored]
     dec_counts = Counter(decimals_tracker)
     dominant_dec, dominant_count = dec_counts.most_common(1)[0]
     if dominant_count / len(decimals_tracker) < 0.75:
         return
 
     dominant_abs_vals = []
-    for ctx_ref, col, fact_dec in monetary_facts_stored:
+    for ctx_ref, col, fact_dec, _loc in monetary_facts_stored:
         if fact_dec != dominant_dec:
             continue
         val = facts_by_ctx[ctx_ref].get(col)
@@ -605,7 +651,7 @@ def _normalize_mixed_decimals_monetary_facts(
     if median_dominant <= 0:
         return
 
-    for ctx_ref, col, fact_dec in monetary_facts_stored:
+    for ctx_ref, col, fact_dec, local in monetary_facts_stored:
         diff = fact_dec - dominant_dec
         if abs(diff) < 3:
             continue
@@ -620,6 +666,13 @@ def _normalize_mixed_decimals_monetary_facts(
                 "(dominant=%d) %s -> %s",
                 ctx_ref, col, fact_dec, dominant_dec, val, corrected,
             )
+            if prov_by_ctx is not None:
+                entry = prov_by_ctx.setdefault(ctx_ref, {}).setdefault(col, {})
+                entry.setdefault("r", val)
+                entry.setdefault("x", []).append(f"decimals_rescale:10^{diff}")
+                # Retain the exact winning concept so the full re-verify tier
+                # can exact-match the transformed fact.
+                entry.setdefault("c", local)
 
 
 def _normalize_cik_digits(value: Any) -> str:
@@ -714,6 +767,7 @@ def _apply_stepstone_2025q4_monetary_scale_correction(
                     and pd.isna(before)
                 )
             ):
+                _record_value_xform(row, col, before, "cik_scale_fix:x1000")
                 row[col] = after
                 row_corrected = True
         if row_corrected:
@@ -741,8 +795,13 @@ def _extract_investment_facts(
     # Accumulate facts by context ID
     facts_by_ctx: dict[str, dict[str, Any]] = {}
 
+    # Sparse provenance entries: col -> {r, c, x} built during fact ingestion.
+    prov_by_ctx: dict[str, dict[str, dict]] = {}
+
     # Track decimals attribute for monetary facts (for cross-fact normalization)
-    monetary_facts_stored: list[tuple[str, str, int]] = []  # (ctx_ref, col, dec)
+    # Tuple extended to (ctx_ref, col, dec, local) so normalization can record
+    # the exact winning concept in src_facts.
+    monetary_facts_stored: list[tuple[str, str, int, str]] = []  # (ctx_ref, col, dec, local)
 
     root = tree.getroot()
     for elem in root.iter():
@@ -792,7 +851,15 @@ def _extract_investment_facts(
             if col in ("fair_value", "cost", "principal_amount"):
                 facts_by_ctx[ctx_ref][f"{col}_unit"] = elem.get("unitRef", "") or ""
             if dec_val is not None:
-                monetary_facts_stored.append((ctx_ref, col, dec_val))
+                monetary_facts_stored.append((ctx_ref, col, dec_val, local))
+            # --- src_facts provenance entry ---
+            entry: dict[str, Any] = {}
+            if CANONICAL_CONCEPT.get(col, "") not in local:
+                entry["c"] = local
+            if col in _RATE_PROV_COLUMNS and isinstance(value, (int, float)):
+                entry["r"] = value
+            if entry:
+                prov_by_ctx.setdefault(ctx_ref, {})[col] = entry
 
     # --- Normalize mixed-decimals monetary facts ---
     # Some filers tag a handful of facts with decimals="-6" while the majority
@@ -804,7 +871,7 @@ def _extract_investment_facts(
     #   3. Decimals diff >= 3 (1000x+ scale difference)
     #   4. Outlier value must be > 100x the median of dominant-decimals values
     #      (prevents false corrections when decimals differ only in precision)
-    _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored)
+    _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored, prov_by_ctx)
 
     # Build output records
     records: list[dict[str, Any]] = []
@@ -825,6 +892,9 @@ def _extract_investment_facts(
         for uc in _UNIT_COLUMNS:
             record[uc] = fact_vals.get(uc, "")
         record["interest_rate_concept"] = fact_vals.get("interest_rate_concept", "")
+        prov = prov_by_ctx.get(ctx_id) or {}
+        record["src_facts"] = (
+            json.dumps(prov, sort_keys=True, separators=(",", ":")) if prov else "")
         records.append(record)
 
     return records

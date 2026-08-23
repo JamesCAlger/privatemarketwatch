@@ -2466,3 +2466,84 @@ class TestInterestRateConceptProvenance:
         assert by_id["Beta Inc - Senior Secured Note"]["interest_rate_concept"] == ""
         # Acme has a bare InvestmentInterestRate fact
         assert by_id["Acme Corp - First Lien Term Loan"]["interest_rate_concept"] == "bare"
+
+
+# ---------------------------------------------------------------------------
+# src_facts provenance capture
+# ---------------------------------------------------------------------------
+
+import json
+
+from pipeline.bdc_filings import _extract_investment_facts
+
+
+def _ctx(period="2025-12-31", ident="Acme Corp - Term Loan"):
+    return {
+        "is_investment": True, "period": period,
+        "investment_identifier": ident, "industry": "", "investment_type": "",
+        "affiliation": "", "dimensions_raw": f"investmentidentifieraxis={ident}",
+    }
+
+
+def _tree(facts_xml: str):
+    return etree.ElementTree(etree.fromstring(
+        f'<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">{facts_xml}</xbrl>'
+    ))
+
+
+class TestSrcFactsCapture:
+    def test_rate_fields_record_raw_value(self):
+        tree = _tree(
+            '<us-gaap:InvestmentInterestRate contextRef="c1">0.105'
+            '</us-gaap:InvestmentInterestRate>'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="c1" unitRef="usd" '
+            'decimals="-3">1000000</us-gaap:InvestmentOwnedAtFairValue>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        prov = json.loads(recs[0]["src_facts"])
+        assert prov["interest_rate"]["r"] == 0.105
+        # canonical concept, no transform -> no "c", no "x"
+        assert "c" not in prov["interest_rate"]
+        # fair_value: canonical concept, no transform -> NO entry at all
+        assert "fair_value" not in prov
+
+    def test_noncanonical_concept_recorded(self):
+        # SharesOrNumberOfContractsOrPrincipalAmount is the NON-canonical
+        # principal_amount concept (canonical = InvestmentOwnedBalancePrincipalAmount)
+        tree = _tree(
+            '<us-gaap:InvestmentOwnedBalanceSharesOrNumberOfContractsOr'
+            'PrincipalAmount contextRef="c1" unitRef="usd" decimals="0">58702'
+            '</us-gaap:InvestmentOwnedBalanceSharesOrNumberOfContractsOr'
+            'PrincipalAmount>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        prov = json.loads(recs[0]["src_facts"])
+        assert prov["principal_amount"]["c"] == (
+            "investmentownedbalancesharesornumberofcontractsorprincipalamount")
+
+    def test_decimals_rescale_records_raw_and_event(self):
+        # 5+ facts at decimals=-3, one outlier at -6 and >100x the median:
+        # normalization multiplies the outlier by 10^-3; src_facts must keep
+        # the pre-fix raw and the event.
+        base = "".join(
+            f'<us-gaap:InvestmentOwnedAtFairValue contextRef="c{i}" '
+            f'unitRef="usd" decimals="-3">{1000000 + i}'
+            f'</us-gaap:InvestmentOwnedAtFairValue>' for i in range(5))
+        outlier = ('<us-gaap:InvestmentOwnedAtFairValue contextRef="c9" '
+                   'unitRef="usd" decimals="-6">500000000'
+                   '</us-gaap:InvestmentOwnedAtFairValue>')
+        contexts = {f"c{i}": _ctx(ident=f"P{i}") for i in range(5)}
+        contexts["c9"] = _ctx(ident="Outlier LP")
+        recs = _extract_investment_facts(_tree(base + outlier), contexts)
+        by_ctx = {r["_context_id"]: r for r in recs}
+        assert by_ctx["c9"]["fair_value"] == 500000000 * 10 ** -3
+        prov = json.loads(by_ctx["c9"]["src_facts"])
+        assert prov["fair_value"]["r"] == 500000000
+        assert prov["fair_value"]["x"] == ["decimals_rescale:10^-3"]
+
+    def test_no_facts_means_empty_src_facts(self):
+        tree = _tree('<us-gaap:InvestmentOwnedAtFairValue contextRef="c1" '
+                     'unitRef="usd">1000</us-gaap:InvestmentOwnedAtFairValue>')
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        # fair_value canonical + untransformed and no rate facts -> "" not "{}"
+        assert recs[0]["src_facts"] == ""
