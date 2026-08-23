@@ -150,6 +150,8 @@ NPORT_PARSE_PROGRESS_FILE = OUTPUT_DIR / "nport_parse_progress.csv"
 # Unified private markets holdings
 UNIFIED_HOLDINGS_FILE = OUTPUT_DIR / "private_markets_holdings.csv"
 UNIFIED_HOLDINGS_PARQUET_FILE = OUTPUT_DIR / "private_markets_holdings.parquet"
+PROVENANCE_LEDGER_FILE = OUTPUT_DIR / "provenance_ledger.csv"
+PROVENANCE_LEDGER_SUMMARY_FILE = OUTPUT_DIR / "provenance_ledger_summary.csv"
 UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 
 # Manual row-level corrections overlay (checked into data/overrides/)

@@ -5,7 +5,12 @@ import json
 import pandas as pd
 import pytest
 
-from pipeline.provenance_reverify import cheap_tier, classify_reason, full_tier
+from pipeline.provenance_reverify import (
+    build_ledger,
+    cheap_tier,
+    classify_reason,
+    full_tier,
+)
 
 
 def _row(**kw):
@@ -209,3 +214,171 @@ class TestClassifyReason:
     ])
     def test_table(self, cheap, full, reason):
         assert classify_reason(cheap, full) == reason
+
+
+class TestLedger:
+    def test_ledger_and_summary_written(self, tmp_path):
+        df = pd.DataFrame([
+            {"row_id": "ROW-a", "cik": "1", "accession_number": "A",
+             "report_date": "2025-12-31", "src_context_id": "c1",
+             "field": "fair_value", "pathway": "xbrl_field",
+             "declared_raw": None, "declared_events": "",
+             "published": 100.0, "expected": None, "instance_raw": 100.0,
+             "cheap_status": "pass_trivial", "full_status": "raw_match"},
+            {"row_id": "ROW-b", "cik": "1", "accession_number": "A",
+             "report_date": "2025-12-31", "src_context_id": "c2",
+             "field": "fair_value", "pathway": "",
+             "declared_raw": None, "declared_events": "",
+             "published": 50.0, "expected": None, "instance_raw": None,
+             "cheap_status": "corrected", "full_status": "not_checked"},
+        ])
+        ledger_path, summary_path = build_ledger(
+            df, out_dir=tmp_path, holdings_mtime="2026-08-23T00:00:00")
+        ledger = pd.read_csv(ledger_path)
+        assert set(["row_id", "field", "reason_code"]) <= set(ledger.columns)
+        assert ledger.set_index("row_id").loc["ROW-a", "reason_code"] == "verified"
+        assert ledger.set_index("row_id").loc["ROW-b", "reason_code"] == "corrected"
+        summary = pd.read_csv(summary_path)
+        row = summary.iloc[0]
+        assert row["verified_fv"] == 100.0
+        assert row["total_fv"] == 150.0
+        assert row["verified_fv_share"] == pytest.approx(100.0 / 150.0)
+
+    def test_holdings_mtime_recorded(self, tmp_path):
+        """holdings_artifact_mtime column must propagate to every ledger row."""
+        df = pd.DataFrame([
+            {"row_id": "ROW-x", "cik": "2", "accession_number": "B",
+             "report_date": "2025-09-30", "src_context_id": "cx",
+             "field": "interest_rate", "pathway": "xbrl_field",
+             "declared_raw": 0.1, "declared_events": "interest_rate:rate_x100",
+             "published": 10.0, "expected": 10.0, "instance_raw": None,
+             "cheap_status": "pass", "full_status": "not_checked"},
+        ])
+        mtime = "2026-08-23T12:34:56"
+        lp, _ = build_ledger(df, out_dir=tmp_path, holdings_mtime=mtime)
+        ledger = pd.read_csv(lp)
+        assert (ledger["holdings_artifact_mtime"] == mtime).all()
+
+    def test_verified_fv_only_counts_verified_reason(self, tmp_path):
+        """derived/corrected FV must NOT appear in verified_fv numerator."""
+        df = pd.DataFrame([
+            {"row_id": "ROW-v", "cik": "3", "accession_number": "C",
+             "report_date": "2025-12-31", "src_context_id": "cv",
+             "field": "fair_value", "pathway": "xbrl_field",
+             "declared_raw": None, "declared_events": "",
+             "published": 200.0, "expected": None, "instance_raw": 200.0,
+             "cheap_status": "pass_trivial", "full_status": "raw_match"},
+            {"row_id": "ROW-d", "cik": "3", "accession_number": "C",
+             "report_date": "2025-12-31", "src_context_id": "cd",
+             "field": "fair_value", "pathway": "derived_proxy",
+             "declared_raw": None, "declared_events": "",
+             "published": 80.0, "expected": None, "instance_raw": None,
+             "cheap_status": "derived", "full_status": "not_checked"},
+            {"row_id": "ROW-c", "cik": "3", "accession_number": "C",
+             "report_date": "2025-12-31", "src_context_id": "cc",
+             "field": "fair_value", "pathway": "",
+             "declared_raw": None, "declared_events": "",
+             "published": 30.0, "expected": None, "instance_raw": None,
+             "cheap_status": "corrected", "full_status": "not_checked"},
+        ])
+        _, sp = build_ledger(df, out_dir=tmp_path)
+        summary = pd.read_csv(sp)
+        row = summary.iloc[0]
+        assert row["verified_fv"] == pytest.approx(200.0)
+        assert row["derived_fv"] == pytest.approx(80.0)
+        assert row["corrected_fv"] == pytest.approx(30.0)
+        assert row["total_fv"] == pytest.approx(310.0)
+        assert row["verified_fv_share"] == pytest.approx(200.0 / 310.0)
+
+    def test_reason_code_counts_wide_in_summary(self, tmp_path):
+        """Wide reason-code count columns must appear in summary."""
+        df = pd.DataFrame([
+            {"row_id": "ROW-1", "cik": "4", "accession_number": "D",
+             "report_date": "2025-12-31", "src_context_id": "c1",
+             "field": "fair_value", "pathway": "xbrl_field",
+             "declared_raw": None, "declared_events": "",
+             "published": 100.0, "expected": None, "instance_raw": 100.0,
+             "cheap_status": "pass_trivial", "full_status": "raw_match"},
+            {"row_id": "ROW-2", "cik": "4", "accession_number": "D",
+             "report_date": "2025-12-31", "src_context_id": "c2",
+             "field": "interest_rate", "pathway": "xbrl_field",
+             "declared_raw": None, "declared_events": "",
+             "published": 8.0, "expected": None, "instance_raw": None,
+             "cheap_status": "no_provenance", "full_status": "not_checked"},
+        ])
+        _, sp = build_ledger(df, out_dir=tmp_path)
+        summary = pd.read_csv(sp)
+        cols = set(summary.columns)
+        assert "verified" in cols or "no_provenance" in cols
+
+    # ------------------------------------------------------------------
+    # Folded-in items from Task 8 review
+    # ------------------------------------------------------------------
+
+    def test_full_tier_decimals_rescale_expect_raw_match(self):
+        """Folded (a): src_facts carries decimals_rescale:10^-3, published 500000.0,
+        XML fact value 500000000 -- full_tier must resolve raw_match (proves
+        _extractor_multiplier applied in published recomputation)."""
+        xml_src = (
+            '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx-dec" unitRef="usd">'
+            '500000000'
+            '</us-gaap:InvestmentOwnedAtFairValue>'
+            '</xbrl>'
+        )
+
+        def _ldr(cik, accession):
+            from lxml import etree
+            return etree.ElementTree(etree.fromstring(xml_src.encode()))
+
+        cheap_df = pd.DataFrame([{
+            "row_id": "ROW-dec", "cik": "0001287750",
+            "accession_number": "0001287750-26-000001",
+            "report_date": "2025-12-31", "src_context_id": "ctx-dec",
+            "field": "fair_value", "pathway": "xbrl_field",
+            "declared_raw": 500000000,
+            "declared_events": "",
+            "published": 500000.0,
+            "expected": 500000.0,
+            "cheap_status": "pass",
+            "src_facts": json.dumps({
+                "fair_value": {
+                    "c": "investmentownedatfairvalue",
+                    "r": 500000000,
+                    "x": ["decimals_rescale:10^-3"],
+                }
+            }),
+        }])
+        out = full_tier(cheap_df, xml_loader=_ldr)
+        assert out.iloc[0]["full_status"] == "raw_match"
+
+    def test_full_tier_missing_raw_with_transform_becomes_transform_drift(self):
+        """Folded (b): cheap_status='missing_raw_with_transform', filing supports
+        published value -- full_status should be raw_match, classify_reason
+        should return 'transform_drift'."""
+        xml_src = (
+            '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+            '<us-gaap:InvestmentInterestRate contextRef="ctx-tr">0.105'
+            '</us-gaap:InvestmentInterestRate>'
+            '</xbrl>'
+        )
+
+        def _ldr(cik, accession):
+            from lxml import etree
+            return etree.ElementTree(etree.fromstring(xml_src.encode()))
+
+        cheap_df = pd.DataFrame([{
+            "row_id": "ROW-tr", "cik": "0001287750",
+            "accession_number": "0001287750-26-000001",
+            "report_date": "2025-12-31", "src_context_id": "ctx-tr",
+            "field": "interest_rate", "pathway": "xbrl_field",
+            "declared_raw": None,
+            "declared_events": "interest_rate:rate_x100",
+            "published": 10.5,
+            "expected": None,
+            "cheap_status": "missing_raw_with_transform",
+            "src_facts": "",
+        }])
+        out = full_tier(cheap_df, xml_loader=_ldr)
+        assert out.iloc[0]["full_status"] == "raw_match"
+        assert classify_reason("missing_raw_with_transform", "raw_match") == "transform_drift"

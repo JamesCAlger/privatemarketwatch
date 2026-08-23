@@ -439,3 +439,141 @@ def classify_reason(cheap_status: str, full_status: str) -> str:
                 if cheap_status in ("fail", "missing_raw_with_transform")
                 else "verified")
     return "unchecked_trivial"
+
+
+# ---------------------------------------------------------------------------
+# Ledger artifact (scoping doc 8.1)
+# ---------------------------------------------------------------------------
+
+def build_ledger(
+    tier_df: pd.DataFrame,
+    out_dir: Path,
+    holdings_mtime: str = "",
+) -> tuple[Path, Path]:
+    """Write provenance_ledger.csv and provenance_ledger_summary.csv.
+
+    Parameters
+    ----------
+    tier_df:
+        Combined cheap + full tier DataFrame (output of full_tier or cheap
+        with full_status='not_checked' appended).
+    out_dir:
+        Directory to write output files into (created if absent).
+    holdings_mtime:
+        ISO-format mtime of the holdings artifact this run was computed
+        against; recorded verbatim in every ledger row.
+
+    Returns
+    -------
+    tuple[Path, Path]
+        (ledger_path, summary_path)
+    """
+    ledger = tier_df.copy()
+    ledger["reason_code"] = [
+        classify_reason(str(c), str(f))
+        for c, f in zip(ledger["cheap_status"], ledger["full_status"])
+    ]
+    ledger["holdings_artifact_mtime"] = holdings_mtime
+
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    ledger_path = out_dir / "provenance_ledger.csv"
+    ledger.to_csv(ledger_path, index=False)
+
+    # Summary: aggregate over fair_value rows only for FV buckets.
+    fv = ledger[ledger["field"] == "fair_value"].copy()
+    fv["published"] = pd.to_numeric(fv["published"], errors="coerce").fillna(0.0)
+
+    if fv.empty:
+        summary = pd.DataFrame(columns=[
+            "cik", "report_date", "n_fields", "n_verified",
+            "verified_fv", "derived_fv", "corrected_fv", "total_fv",
+            "verified_fv_share",
+        ])
+    else:
+        grp = fv.groupby(["cik", "report_date"], dropna=False)
+        summary = grp.apply(
+            lambda g: pd.Series({
+                "n_fields": len(g),
+                "n_verified": int((g["reason_code"] == "verified").sum()),
+                "verified_fv": g.loc[
+                    g["reason_code"] == "verified", "published"].sum(),
+                "derived_fv": g.loc[
+                    g["reason_code"] == "derived", "published"].sum(),
+                "corrected_fv": g.loc[
+                    g["reason_code"] == "corrected", "published"].sum(),
+                "total_fv": g["published"].sum(),
+            }),
+            include_groups=False,
+        ).reset_index()
+
+        summary["verified_fv_share"] = (
+            summary["verified_fv"]
+            / summary["total_fv"].replace(0, pd.NA)
+        )
+
+    # Wide reason-code counts across ALL fields (not just fair_value).
+    counts = (
+        ledger.groupby(["cik", "report_date", "reason_code"])
+        .size()
+        .unstack(fill_value=0)
+        .reset_index()
+    )
+    summary = summary.merge(counts, on=["cik", "report_date"], how="right")
+
+    summary_path = out_dir / "provenance_ledger_summary.csv"
+    summary.to_csv(summary_path, index=False)
+
+    return ledger_path, summary_path
+
+
+# ---------------------------------------------------------------------------
+# CLI entry point
+# ---------------------------------------------------------------------------
+
+def main(argv: list | None = None) -> int:
+    """CLI: python -m pipeline.provenance_reverify --cohort [--cheap-only] ..."""
+    import argparse
+
+    ap = argparse.ArgumentParser(
+        description="Deterministic provenance re-verification -> ledger.")
+    ap.add_argument("--ciks", nargs="*", default=None)
+    ap.add_argument("--cohort", action="store_true")
+    ap.add_argument("--cheap-only", action="store_true")
+    ap.add_argument("--out", default=None,
+                    help="output dir (default: data/output)")
+    args = ap.parse_args(argv)
+
+    from pipeline import config  # noqa: PLC0415
+
+    ciks = args.ciks
+    if args.cohort:
+        from pipeline.cohort_guard import load_cohort_ciks  # noqa: PLC0415
+        ciks = sorted(load_cohort_ciks())
+
+    holdings = config.UNIFIED_HOLDINGS_PARQUET_FILE
+    logger.info("Cheap tier over %s (ciks=%s)", holdings.name,
+                len(ciks) if ciks else "all")
+
+    cheap = cheap_tier(holdings_path=holdings, ciks=ciks)
+
+    if args.cheap_only:
+        tiers = cheap.assign(instance_raw=None, full_status="not_checked")
+    else:
+        tiers = full_tier(cheap)
+
+    import datetime as _dt  # noqa: PLC0415
+    mtime = _dt.datetime.fromtimestamp(holdings.stat().st_mtime).isoformat()
+
+    out_dir = Path(args.out) if args.out else config.OUTPUT_DIR
+    lp, sp = build_ledger(tiers, out_dir=out_dir, holdings_mtime=mtime)
+    logger.info("Ledger: %s; summary: %s", lp, sp)
+    return 0
+
+
+if __name__ == "__main__":
+    import sys
+    logging.basicConfig(level=logging.INFO,
+                        format="%(asctime)s %(levelname)-8s %(message)s")
+    sys.exit(main())
