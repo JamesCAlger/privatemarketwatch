@@ -6,6 +6,176 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-08-23 - Provenance steps 2-4: src_facts extractor, two-tier re-verifier, ledger artifact
+
+### What shipped (commits 5b6a4fe..e079407 + step-2 unified rebuild)
+
+- **src_facts JSON column** (Tasks 1-2): BDC extractor now records the declared raw XBRL value
+  (`r`), winning concept name when non-canonical (`c`), and extractor-side scale events (`x`:
+  `decimals_rescale:10^<k>`, `cik_scale_fix:x1000`) per field in a per-row JSON blob. Dedup step
+  carries the winner's src_facts; `src_filled_fields` (comma-joined) records fields filled from
+  secondary contexts. Grammar: `{field: {r: float, c?: str, x?: [str]}}`. Three defects caught and
+  fixed during this task: (1) paidincash concept-recording substring bug -- exact inequality fix
+  (commit 54081a4); (2) NaN!=NaN mass-stamp at Agent A spread corrections site -- null-safe guard
+  (commit ef4a49a); (3) self-referential ciks view in staging -- fixed (commit e079407).
+- **Five new *_source pathway columns** (Task 4): `fair_value_source`, `pct_of_net_assets_source`,
+  `pik_rate_source`, `principal_amount_source`, `bdc_unrealized_gain_loss_source` added to unified
+  holdings. Values: `'xbrl_field'` (direct XBRL tag), `'identifier_text'` (parsed from identifier
+  string), `''` (not re-extracted or N-PORT row).
+- **corrected_fields column** (Task 5): semicolon-joined field names overridden post-extraction.
+  `_row:added` marker for rows added by corrections (not in the original filing). Writers: B2
+  stage-2 leaves, promoted rules, manual row corrections, Agent A spread corrections. The iXBRL
+  overlay is blank-fill-only by determination and does NOT stamp corrected_fields.
+- **Total: 8 new columns** added in the step-2 unified rebuild.
+- **Cheap-tier re-verifier** (Task 7): `pipeline/provenance_reverify.py:cheap_tier()` -- DuckDB
+  SQL over parquet, no filing access, one row per (bdc_row, field). Cheap-status enum includes
+  corrected / derived / text_pathway / filled_field / merged_conflict / no_provenance /
+  pass_trivial / pass / fail / missing_raw_with_transform.
+- **Full-tier re-verifier** (Task 8): `full_tier()` iterates accessions (one XML parse per filing),
+  re-reads each anchored fact from the cached iXBRL instance at (accession, src_context_id,
+  concept). Full-status enum: raw_match / raw_stale / published_mismatch / anchor_missing /
+  context_missing / source_unavailable / not_checked.
+- **Ledger artifact + CLI** (Task 9): `build_ledger()` writes `provenance_ledger.csv` (keyed
+  (row_id, field), identity cols + both tiers' evidence + reason_code + holdings_artifact_mtime)
+  and `provenance_ledger_summary.csv` (per cik x report_date: field counts per reason_code,
+  verified_fv, derived_fv, corrected_fv, total_fv, verified_fv_share). CLI:
+  `python -m pipeline.provenance_reverify --cohort [--cheap-only] [--ciks ...] [--out DIR]`.
+- **Config additions** (`pipeline/config.py`): `PROVENANCE_LEDGER_FILE`,
+  `PROVENANCE_LEDGER_SUMMARY_FILE`.
+- **Files modified**: `pipeline/provenance_reverify.py` (new module, Tasks 7-9),
+  `pipeline/config.py`, `pipeline/unified_holdings.py`, `pipeline/staging_bdc.py`,
+  `pipeline/agent_promoted.py`, `tests/test_provenance_reverify.py` (new),
+  `tests/test_unified_holdings.py`, `tests/test_agent_promoted.py`.
+
+### Gate 1 (cohort re-extraction): PASS (adjudicated)
+
+- 933 filings, 1,184,101 bdc_holdings rows, 464s. src_facts populated on 465,051 bdc-level rows.
+- GATE 1 raw result: FAIL on shares_sum (old=342,844,973,150,193.25
+  new=342,844,973,150,193.0, delta=0.25 at 3.4e14 magnitude = 17th significant digit).
+- ADJUDICATION (controller): the 0.25 delta is float64 aggregation-order noise. Exact
+  DECIMAL(38,6) sums are equal old vs new. All other checks (row_count, per_cik_acc_groups,
+  fv_sum, cost_sum, principal_sum, ir_sum, column diff) are exact-pass. GATE 1 = PASS.
+  The gate script's float SUM is noted as the artifact; values-identical requirement satisfied.
+
+### Gate 2 (unified rebuild): PASS_WITH_FLIPS (adjudicated)
+
+- 780,726 rows, 2567.6s. src_facts populated on 240,198 unified rows (cohort latest-period slice).
+- GATE 2 raw result: FAIL. Column diff: exactly the 8 expected columns added, none removed. FV
+  total EXACT. Row count EXACT. Per-cik-quarter FV: 0 mismatches. Stable-row value diff: 0 rows
+  changed value. 20 row-identity flips (20 old-only ids, 20 new-only ids) carrying cost
+  +29,989,024 (4.2ppm) / shares -253,165 / principal -1,542,997. Hard failure line in the gate
+  script: "per-classification FV: 2 mismatches."
+- ADJUDICATION (controller):
+  - The 20 row-identity flips and their cost/shares/principal deltas are ACCEPTED as the same
+    ordinal tie-break residual class as the step-1 migration's 13 CIK-quarters and the
+    anchor-row_id migration's 8 flips. Protocol: stable-row value diff = 0 (satisfied), FV
+    conserved (satisfied). Root cause: DuckDB physical row-order perturbation hitting pre-existing
+    order-sensitive tie-breaks. Future hardening: deterministic ORDER BY in tie-break windows
+    (not done in this step).
+  - The "per-classification 2 mismatches" was a gate-script SQL artifact: NULL-key join in a FULL
+    OUTER JOIN (NULL != NULL) produced 2 phantom mismatches. The NULL-classification bucket totals
+    are IDENTICAL both sides (1,773,578 approx.) and zero stable rows changed classification.
+    Not a data defect.
+  - GATE 2 = PASS_WITH_FLIPS.
+
+### Coverage stats (from scratch/2026-08-23_prov_step2/coverage_stats.py)
+
+- src_facts non-empty: 240,198 rows (BDC cohort latest-period slice; 465,051 bdc-level
+  rows populated in bdc_holdings.csv).
+- Pathway enum counts: fair_value_source='xbrl_field' 560,406; pct_of_net_assets_source
+  'xbrl_field' 300,027; pik_rate_source 'xbrl_field' 46,433 / 'identifier_text' 1,036;
+  principal_amount_source 'xbrl_field' 459,398; bdc_unrealized_gain_loss_source '' all 780,726.
+- src_filled_fields non-empty: 26,614 rows.
+- corrected_fields non-empty: 2,069 rows (159 '_row:added'), reconciling with the live
+  correction stores' footprint. (An interim build carried 273,362/262,572 false marks from
+  the `_row:added` index-reset defect -- root-caused to agent_rule.apply_rules resetting
+  indices, fixed via ordinal-key diff in commits cec4e61/0d1e612 and rebuilt; the false
+  numbers never shipped in a committed artifact record.)
+- src_facts with "c": (concept-disambiguated): 11,435 rows.
+- src_facts with "x": (extractor transform events): 117 rows.
+
+### Five defects caught and fixed during this plan
+
+1. paidincash concept-recording substring bug: `CANONICAL_CONCEPT.get(col) not in local` never
+   recorded `c` for paidincash because the canonical bare name is a prefix of the paidincash
+   localname. Fixed to exact inequality `local != CANONICAL_CONCEPT.get(col, "")`. (commit 54081a4)
+2. NaN mass-stamp at Agent A spread corrections site: `NaN != NaN` caused every spread row to be
+   stamped in corrected_fields. Fixed with null-safe comparison. (commit ef4a49a)
+3. Self-referential ciks view in provenance_reverify.cheap_tier: `CREATE OR REPLACE VIEW h AS
+   SELECT * FROM h WHERE ...` -> DuckDB infinite-recursion error on the first scoped run.
+   Fixed via h_base view. (commit e079407)
+4. cik_scale_fix event-code parsing: `code.split("x", 1)` split inside "cik_scale_fi-x-",
+   crashing the full-tier cohort run with ValueError(':x1000'). Fixed to split(":x"); the
+   full tier also gained per-(row,field) exception containment (source_unavailable + warning
+   instead of aborting the run). (commit cec4e61)
+5. corrected_fields `_row:added` mass-marking (262,572 rows in an interim build): root cause
+   agent_rule.apply_rules resets indices (reset_index at entry + ignore_index concat), so the
+   index-based diff saw every row as new; a positional-alignment guard was still wrong under
+   row drops/adds (186,353 in a second interim build). Final fix: explicit ordinal-key diff
+   (`_cf_ord`) through the rules applier, immune to resets/drops/adds. (commits cec4e61,
+   ecbcfcf, 0d1e612 -- ecbcfcf's hand-staged blob was itself mangled and repaired in 0d1e612,
+   which also commits the 2026-08-21 workstream's JIT row_id hunks with attribution)
+
+### Gate 3 (final corrective rebuild, corrected_fields fixed)
+
+- Same accepted profile as gate 2: FV total exact; row count exact; per-cik-quarter FV 0
+  mismatches; stable-row value diff 0 rows; 17 row-identity flips (ordinal tie-break residual,
+  accepted per protocol); per-classification "2 mismatches" again the NULL-key join artifact
+  (bucket totals identical). corrected_fields now sane: 2,069 marked rows, 159 _row:added.
+
+### Cheap-tier cohort smoke (--cheap-only)
+
+- 26s. Ledger output: ~680MB CSV (~2M (row, field) pairs). Size is a documented watch item;
+  parquet migration is deferred but the full ledger v1 (including pass_trivial rows) is kept for
+  completeness. Revisit if ledger size becomes operationally unwieldy.
+
+### Re-verifier cohort run (first production ledger, 2026-08-23)
+
+`python -m pipeline.provenance_reverify --cohort` (70 CIKs), 4m17s total (cheap tier
+DuckDB + full-tier re-read of every anchored fact from cached iXBRL instances).
+Artifacts: `data/output/provenance_ledger.csv` (676MB, ~2.13M (row,field) pairs) +
+`provenance_ledger_summary.csv`.
+
+Reason-code distribution (all fields): verified 1,274,064; unchecked_trivial 790,637;
+filing_mismatch 45,011 (2.1% of checked -- the residue that seeds the future routing
+lanes); derived 11,236; text_pathway 7,498; corrected 1,963; no_provenance 1,104;
+anchor_missing 663; merged_context_excluded 336. Zero transform_drift, zero
+anchor_stale, zero source_unavailable.
+
+fair_value specifically: 266,340 of 266,564 rows VERIFIED against the filing =
+**cohort verified-FV share 99.9%** ($3,436.56B of $3,439.30B). FV filing_mismatch:
+32 rows / $0.39B; no_provenance 138 rows / $1.74B; merged_context_excluded 45 rows /
+$0.51B; corrected 9 rows / $0.09B. Per the verified-FV accounting rule, derived and
+corrected FV are excluded from the verified numerator.
+
+This is the first deterministic, pointer-level source verification of the public
+cohort's holdings values. The 45K field-level mismatches are measured residue, not
+hidden -- adjudication/routing is the scoping doc's section-8 design, deliberately
+not built in this plan.
+
+### Full suite: [PENDING - controller appends]
+
+### Docs updated
+
+- `docs/reference/schemas.md`: 8 new columns documented, src_facts JSON grammar v1 (keys c/r/x;
+  r always for 4 rate fields; c when non-exact-canonical; x for decimals_rescale/cik_scale_fix),
+  pathway enum values, corrected_fields writers (B2 leaves / promoted rules / manual corrections /
+  Agent A spread corrections; iXBRL overlay explicitly NOT stamping), provenance ledger + summary
+  schemas, reason-code enum with 8.2 semantics (anchor_stale vs filing_mismatch distinction),
+  verified-FV accounting rule, known-empty regions. Coverage stats table.
+- `scratch/2026-08-23_prov_step2/coverage_stats.py` + `coverage_stats.log`: read-only DuckDB
+  coverage stats script and its output.
+- `docs/agent_changelog.md`: this entry.
+
+### Section-5 guard (verbatim, scoping doc section 5)
+
+The provenance ledger does NOT change any public export basis. The homepage headline stays
+the all-rows cohort sum until the owner explicitly decides scoping-doc section-5 option (A)
+keep-headline+publish-verified-share (recommended) or (B) verified-rows-everywhere. Any export
+change is a separate, owner-approved task.
+
+---
+
 ## 2026-06-28 - Rebuild stale review queue; verify ledger->queue rule coverage
 
 The review queue (`data/output/review_queue/review_queue.csv`, last built 2026-06-18 22:31)
