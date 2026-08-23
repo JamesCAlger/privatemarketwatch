@@ -2590,7 +2590,7 @@ def _prepare_bdc(
             COALESCE(CAST(src_context_id AS VARCHAR), '') AS src_context_id,
             COALESCE(CAST(dedupe_context_count AS VARCHAR), '') AS src_context_count,
             COALESCE(CAST(dedupe_conflict_fields AS VARCHAR), '') AS src_conflict_fields,
-            concat_ws(';',
+            COALESCE(concat_ws(';',
                 CASE WHEN _ir IS NOT NULL AND _ir < 0 THEN 'interest_rate:neg_null'
                      WHEN _ir IS NOT NULL AND _ir <= 0.50 THEN 'interest_rate:rate_x100'
                      WHEN _ir IS NOT NULL AND _ir >= 50 THEN 'interest_rate:rate_div100'
@@ -2606,7 +2606,7 @@ def _prepare_bdc(
                 CASE WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
                      WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
                      ELSE NULL END
-            ) AS src_transforms,
+            ), '') AS src_transforms,
             '' AS src_field_overrides,
             '' AS cost_source,
             '' AS shares_held_source,

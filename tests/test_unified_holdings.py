@@ -2223,6 +2223,20 @@ class TestPrepareBdc:
         assert result.iloc[0]["pik_rate"] == 0.25
         assert "pik_rate:pik_boundary_div100" in result.iloc[0]["src_transforms"]
 
+    def test_src_transforms_empty_string_when_no_events_fire(self):
+        # Regression: when no transform event fires, src_transforms must be ''
+        # (not None/NaN). concat_ws(';', NULL, NULL, NULL, NULL) may return NULL
+        # in DuckDB; COALESCE(..., '') is required to guarantee the empty string.
+        df = self._make_bdc_df([
+            {"investment_identifier": "H Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5},  # identity: no event fires
+        ])
+        result = _prepare_bdc(df)
+        val = result.iloc[0]["src_transforms"]
+        assert val == "", (
+            f"src_transforms should be '' when no events fire, got {val!r}"
+        )
+
 
 # ---------------------------------------------------------------------------
 # Amendment dedup in _prepare_bdc (CTE 1b)
