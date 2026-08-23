@@ -79,8 +79,50 @@ def mark_corrected_fields(before_tracked: pd.DataFrame,
     """Stamp after['corrected_fields'] with tracked fields whose value changed
     vs the pre-applier snapshot. Index-aligned (appliers preserve the original
     index; added rows appear as new labels and are marked '_row:added').
-    NA-safe string comparison; per-CIK sub-frames only -- never the full frame."""
+    NA-safe string comparison; per-CIK sub-frames only -- never the full frame.
+
+    Index-reset guard: agent_rule.apply_rules resets the frame to a 0-based
+    integer index (reset_index + ignore_index in concat for row_add). When the
+    index overlap with before_tracked is empty but lengths are compatible, align
+    positionally so we do not mass-mark every row as '_row:added'.
+    """
     common = after.index.intersection(before_tracked.index)
+
+    # Detect index reset: no overlap, non-empty before, and after is at least as
+    # long as before (appliers only drop or append rows, never reorder).
+    index_reset = (
+        len(common) == 0
+        and len(before_tracked) > 0
+        and len(after) >= len(before_tracked)
+    )
+
+    if index_reset:
+        # Compare the first len(before) rows positionally.
+        n = len(before_tracked)
+        after_cmp = after.iloc[:n].set_axis(before_tracked.index)
+        for col in before_tracked.columns:
+            if col not in after_cmp.columns:
+                continue
+            b = before_tracked[col].astype("string").str.strip().fillna("")
+            a = after_cmp[col].astype("string").str.strip().fillna("")
+            changed_before_idx = before_tracked.index[(a != b).to_numpy()]
+            # Map back to after's positional index for stamping.
+            changed_pos = after.index[:n][
+                before_tracked.index.isin(changed_before_idx)
+                if len(changed_before_idx) < len(before_tracked.index)
+                else slice(None)
+            ]
+            # Simpler: use a boolean mask over the first n rows.
+            changed_mask = (a != b).to_numpy()
+            changed_after_idx = after.index[:n][changed_mask]
+            if len(changed_after_idx):
+                append_corrected_fields(after, changed_after_idx, [col])
+        # Tail rows beyond before length are genuinely added.
+        if len(after) > n:
+            append_corrected_fields(after, after.index[n:], ["_row:added"])
+        return after
+
+    # Normal case: index labels are preserved.
     added = after.index.difference(before_tracked.index)
     if len(added):
         append_corrected_fields(after, added, ["_row:added"])

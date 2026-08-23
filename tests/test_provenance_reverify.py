@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 
 from pipeline.provenance_reverify import (
+    _extractor_multiplier,
     build_ledger,
     cheap_tier,
     classify_reason,
@@ -292,6 +293,92 @@ class TestLedger:
         lp, _ = build_ledger(df, out_dir=tmp_path, holdings_mtime=mtime)
         ledger = pd.read_csv(lp)
         assert (ledger["holdings_artifact_mtime"] == mtime).all()
+
+
+class TestExtractorMultiplier:
+    def test_cik_scale_fix_x1000_parses_correctly(self):
+        """Regression: 'cik_scale_fix:x1000' must parse multiplier as 1000.0 not ':x1000'.
+
+        Before fix: code.split('x', 1)[1] on 'cik_scale_fix:x1000' splits at the 'x'
+        inside 'fix', returning ':x1000', which float() cannot convert.
+        After fix: code.split(':x', 1)[1] returns '1000'.
+        """
+        mult = _extractor_multiplier(["cik_scale_fix:x1000"])
+        assert mult == pytest.approx(1000.0)
+
+    def test_cik_scale_fix_full_tier_does_not_crash(self):
+        """full_tier must not raise on a row carrying cik_scale_fix:x1000.
+
+        raw=500, published=500000 -> instance_raw * 1000 == 500000 -> raw_match.
+        """
+        _FIXTURE = (
+            '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx1">500'
+            '</us-gaap:InvestmentOwnedAtFairValue>'
+            '</xbrl>'
+        )
+        from lxml import etree
+        def _loader(cik, accession):
+            return etree.ElementTree(etree.fromstring(_FIXTURE.encode()))
+
+        df = pd.DataFrame([{
+            "row_id": "ROW-scale", "cik": "0001287750",
+            "accession_number": "0001287750-26-000001",
+            "report_date": "2025-12-31", "src_context_id": "ctx1",
+            "field": "fair_value", "pathway": "xbrl_field",
+            "declared_raw": 500.0,
+            "declared_events": "",
+            "published": 500000.0,
+            "expected": 500000.0,
+            "cheap_status": "pass",
+            "src_facts": json.dumps({"fair_value": {
+                "c": "investmentownedatfairvalue",
+                "r": 500.0,
+                "x": ["cik_scale_fix:x1000"],
+            }}),
+        }])
+        # Must not raise ValueError
+        out = full_tier(df, xml_loader=_loader)
+        assert out.iloc[0]["full_status"] == "raw_match"
+        assert out.iloc[0]["instance_raw"] == pytest.approx(500.0)
+
+    def test_malformed_x_event_does_not_crash_run(self):
+        """A malformed x event like 'cik_scale_fix:xBAD' must not abort the run.
+
+        'cik_scale_fix:xBAD'.split(':x', 1)[1] == 'BAD'; float('BAD') raises
+        ValueError. The per-row guard must catch it, set full_status='source_unavailable',
+        and continue. (Note: 'xNaN' is valid Python -- float('NaN') returns nan --
+        so we use 'xBAD' to produce a genuine ValueError.)
+        """
+        _FIXTURE = (
+            '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx1">500'
+            '</us-gaap:InvestmentOwnedAtFairValue>'
+            '</xbrl>'
+        )
+        from lxml import etree
+        def _loader(cik, accession):
+            return etree.ElementTree(etree.fromstring(_FIXTURE.encode()))
+
+        df = pd.DataFrame([{
+            "row_id": "ROW-bad", "cik": "0001287750",
+            "accession_number": "0001287750-26-000001",
+            "report_date": "2025-12-31", "src_context_id": "ctx1",
+            "field": "fair_value", "pathway": "xbrl_field",
+            "declared_raw": 500.0,
+            "declared_events": "",
+            "published": 500000.0,
+            "expected": 500000.0,
+            "cheap_status": "pass",
+            "src_facts": json.dumps({"fair_value": {
+                "c": "investmentownedatfairvalue",
+                "r": 500.0,
+                "x": ["cik_scale_fix:xBAD"],
+            }}),
+        }])
+        # Must not raise; per-row guard catches the ValueError and sets source_unavailable
+        out = full_tier(df, xml_loader=_loader)
+        assert out.iloc[0]["full_status"] == "source_unavailable"
 
     def test_verified_fv_only_counts_verified_reason(self, tmp_path):
         """derived/corrected FV must NOT appear in verified_fv numerator."""

@@ -256,7 +256,9 @@ def _extractor_multiplier(x_events: list) -> float:
         if code.startswith("decimals_rescale:10^"):
             mult *= 10.0 ** int(code.split("^", 1)[1])
         elif code.startswith("cik_scale_fix:x"):
-            mult *= float(code.split("x", 1)[1])
+            # Split on ':x' (not bare 'x') so the 'x' inside 'fix' is not the split point.
+            # 'cik_scale_fix:x1000'.split(':x', 1)[1] == '1000', not ':x1000'.
+            mult *= float(code.split(":x", 1)[1])
     return mult
 
 
@@ -346,58 +348,66 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 out.at[i, "full_status"] = "context_missing"
                 continue
 
-            field = str(r["field"])
-
-            # Resolve declared concept + x events from src_facts JSON.
-            declared_c = ""
-            x_events: list = []
             try:
-                sf = json.loads(str(r.get("src_facts") or "") or "{}")
-                field_sf = sf.get(field) or {}
-                declared_c = str(field_sf.get("c") or "").lower()
-                x_events = list(field_sf.get("x") or [])
-            except (json.JSONDecodeError, AttributeError, TypeError):
-                pass
+                field = str(r["field"])
 
-            ctx_facts = facts.get(ctx, {})
-            if declared_c:
-                hit = ctx_facts.get(f"__local__{declared_c}")
-            else:
-                hit = ctx_facts.get(field)
+                # Resolve declared concept + x events from src_facts JSON.
+                declared_c = ""
+                x_events: list = []
+                try:
+                    sf = json.loads(str(r.get("src_facts") or "") or "{}")
+                    field_sf = sf.get(field) or {}
+                    declared_c = str(field_sf.get("c") or "").lower()
+                    x_events = list(field_sf.get("x") or [])
+                except (json.JSONDecodeError, AttributeError, TypeError):
+                    pass
 
-            if hit is None:
-                out.at[i, "full_status"] = "anchor_missing"
-                continue
+                ctx_facts = facts.get(ctx, {})
+                if declared_c:
+                    hit = ctx_facts.get(f"__local__{declared_c}")
+                else:
+                    hit = ctx_facts.get(field)
 
-            _local, raw_text = hit
-            instance_raw = _parse_fact_value(field, raw_text)
-            out.at[i, "instance_raw"] = instance_raw
+                if hit is None:
+                    out.at[i, "full_status"] = "anchor_missing"
+                    continue
 
-            if not isinstance(instance_raw, (int, float)):
-                out.at[i, "full_status"] = "anchor_missing"
-                continue
+                _local, raw_text = hit
+                instance_raw = _parse_fact_value(field, raw_text)
+                out.at[i, "instance_raw"] = instance_raw
 
-            mult = (_extractor_multiplier(x_events)
-                    * _staging_multiplier(field, str(r.get("declared_events") or "")))
-            neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
-            published = r["published"]
+                if not isinstance(instance_raw, (int, float)):
+                    out.at[i, "full_status"] = "anchor_missing"
+                    continue
 
-            if neg_null:
-                pub_ok = pd.isna(published) and instance_raw < 0
-            else:
-                pub_ok = (not pd.isna(published)
-                          and _numbers_close(instance_raw * mult, float(published)))
+                mult = (_extractor_multiplier(x_events)
+                        * _staging_multiplier(field, str(r.get("declared_events") or "")))
+                neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
+                published = r["published"]
 
-            if not pub_ok:
-                out.at[i, "full_status"] = "published_mismatch"
-                continue
+                if neg_null:
+                    pub_ok = pd.isna(published) and instance_raw < 0
+                else:
+                    pub_ok = (not pd.isna(published)
+                              and _numbers_close(instance_raw * mult, float(published)))
 
-            declared_raw = r.get("declared_raw")
-            if pd.isna(declared_raw) or _numbers_close(float(declared_raw),
-                                                        float(instance_raw)):
-                out.at[i, "full_status"] = "raw_match"
-            else:
-                out.at[i, "full_status"] = "raw_stale"
+                if not pub_ok:
+                    out.at[i, "full_status"] = "published_mismatch"
+                    continue
+
+                declared_raw = r.get("declared_raw")
+                if pd.isna(declared_raw) or _numbers_close(float(declared_raw),
+                                                            float(instance_raw)):
+                    out.at[i, "full_status"] = "raw_match"
+                else:
+                    out.at[i, "full_status"] = "raw_stale"
+
+            except Exception as exc:  # noqa: BLE001
+                logger.warning(
+                    "full_tier: unexpected error on row %s field %s -- set source_unavailable: %s",
+                    i, r.get("field", "?"), str(exc)
+                )
+                out.at[i, "full_status"] = "source_unavailable"
 
     return out
 

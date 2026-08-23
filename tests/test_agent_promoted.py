@@ -545,3 +545,46 @@ class TestCorrectedFieldsMarking:
         after = pd.DataFrame({"fair_value": [None], "corrected_fields": [""]},
                              index=[0])
         assert ap.mark_corrected_fields(before, after).loc[0, "corrected_fields"] == ""
+
+    def test_reset_index_same_length_marks_fields_not_row_added(self):
+        """Regression: agent_rule.apply_rules resets index to 0-based integers.
+
+        When before has index [5, 9] and after has index [0, 1] (reset), the
+        intersection is empty. Without the positional-alignment guard, ALL rows
+        would fall into the 'added' path and be stamped '_row:added'.
+        After fix: align positionally; mark the changed field on index 1, not
+        '_row:added' on both rows.
+        """
+        before = pd.DataFrame(
+            {"fair_value": [100.0, 200.0]},
+            index=[5, 9])
+        # apply_rules resets index: same data, new 0-based index, one field changed
+        after = pd.DataFrame(
+            {"fair_value": [100.0, 250.0], "corrected_fields": ["", ""]},
+            index=[0, 1])
+        out = ap.mark_corrected_fields(before, after)
+        # No _row:added entries
+        assert "_row:added" not in out["corrected_fields"].values
+        # The changed row (positional index 1) must be stamped
+        assert out.iloc[1]["corrected_fields"] == "fair_value"
+        # The unchanged row (positional index 0) must be empty
+        assert out.iloc[0]["corrected_fields"] == ""
+
+    def test_reset_index_with_added_rows_marks_tail(self):
+        """Regression: reset-index + row_add case.
+
+        agent_rule._apply_add uses pd.concat([work, new_rows], ignore_index=True),
+        which resets index for the whole frame. len(after) > len(before): the first
+        len(before) rows must be compared positionally; the tail must be '_row:added'.
+        """
+        before = pd.DataFrame(
+            {"fair_value": [100.0, 200.0]},
+            index=[5, 9])
+        # After apply_rules with row_add: same 2 rows (no field changes) + 1 new
+        after = pd.DataFrame(
+            {"fair_value": [100.0, 200.0, 999.0], "corrected_fields": ["", "", ""]},
+            index=[0, 1, 2])
+        out = ap.mark_corrected_fields(before, after)
+        assert out.iloc[0]["corrected_fields"] == ""
+        assert out.iloc[1]["corrected_fields"] == ""
+        assert out.iloc[2]["corrected_fields"] == "_row:added"
