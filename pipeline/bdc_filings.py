@@ -1341,12 +1341,23 @@ def _parse_all_filings(filings_index: pd.DataFrame) -> pd.DataFrame:
 
 def rebuild_cached_bdc_holdings(
     filings_index: pd.DataFrame | None = None,
+    ciks: list[str] | None = None,
 ) -> pd.DataFrame:
     """Rebuild ``bdc_holdings.csv`` from already-cached XBRL files only.
 
     This intentionally does not call EDGAR or use the parse progress file.  It
     is for parser/dedupe changes where every cached instance should be
     reinterpreted with current code.
+
+    Parameters
+    ----------
+    filings_index : pd.DataFrame, optional
+        Pre-loaded filings index.  If *None*, loaded from ``BDC_FILINGS_INDEX_FILE``.
+    ciks : list[str], optional
+        When given, only those CIKs' cached filings are re-parsed and the
+        result is merged over the existing ``bdc_holdings.csv`` (other CIKs'
+        rows are preserved byte-identically).  When *None*, a full rebuild is
+        performed (existing behaviour).
     """
     if filings_index is None:
         if not BDC_FILINGS_INDEX_FILE.exists():
@@ -1358,6 +1369,17 @@ def rebuild_cached_bdc_holdings(
     if filings_index.empty or "xbrl_local_path" not in filings_index.columns:
         logger.warning("No cached BDC filings available for holdings rebuild")
         return pd.DataFrame()
+
+    # Cohort-scoped rebuild: restrict index to requested CIKs only
+    wanted: set[str] = set()
+    if ciks:
+        wanted = {_normalize_cik_digits(c) for c in ciks}
+        cik_norm = filings_index["cik"].map(_normalize_cik_digits)
+        filings_index = filings_index.loc[cik_norm.isin(wanted)]
+        logger.info(
+            "Cohort-scoped rebuild: %d CIKs, %d index rows",
+            len(wanted), len(filings_index),
+        )
 
     records: list[dict[str, Any]] = []
     total = len(filings_index)
@@ -1382,6 +1404,24 @@ def rebuild_cached_bdc_holdings(
         return pd.DataFrame()
 
     holdings = _deduplicate_bdc_holdings(pd.DataFrame(records))
+
+    # Merge back over existing artifact when scoped to specific CIKs
+    if ciks and BDC_HOLDINGS_FILE.exists():
+        existing = pd.read_csv(BDC_HOLDINGS_FILE, dtype=str)
+        keep = ~existing["cik"].map(_normalize_cik_digits).isin(wanted)
+        existing = existing.loc[keep]
+        for col in holdings.columns:
+            if col not in existing.columns:
+                existing[col] = ""
+        for col in existing.columns:
+            if col not in holdings.columns:
+                holdings[col] = ""
+        holdings = pd.concat([existing, holdings], ignore_index=True)
+        logger.info(
+            "Merged over existing artifact: %d kept + %d re-extracted",
+            int(keep.sum()), len(holdings) - int(keep.sum()),
+        )
+
     holdings.to_csv(BDC_HOLDINGS_FILE, index=False)
     from pipeline.utils import write_parquet_companion
     write_parquet_companion(BDC_HOLDINGS_FILE)

@@ -2625,3 +2625,40 @@ class TestDedupeFilledFields:
         ])
         out = _deduplicate_bdc_holdings(df)
         assert out.iloc[0]["dedupe_filled_fields"] == ""
+
+
+class TestCohortScopedRebuild:
+    def test_ciks_filter_merges_over_existing(self, tmp_path, monkeypatch):
+        import pipeline.bdc_filings as bf
+        out_file = tmp_path / "bdc_holdings.csv"
+        monkeypatch.setattr(bf, "BDC_HOLDINGS_FILE", out_file)
+        # existing artifact: one cohort CIK (stale) + one out-of-scope CIK
+        pd.DataFrame([
+            {"cik": "0000000001", "accession_number": "A1",
+             "investment_identifier": "Old Row", "period": "2025-12-31",
+             "dimensions_raw": "d", "fair_value": "1"},
+            {"cik": "0000000002", "accession_number": "B1",
+             "investment_identifier": "Keep Row", "period": "2025-12-31",
+             "dimensions_raw": "d", "fair_value": "2"},
+        ]).to_csv(out_file, index=False)
+        # index: both CIKs cached; parse stub returns fresh rows w/ src_facts
+        idx = pd.DataFrame([
+            {"cik": "1", "accession_number": "A1",
+             "xbrl_download_status": "cached", "xbrl_local_path": "x.xml"},
+            {"cik": "2", "accession_number": "B1",
+             "xbrl_download_status": "cached", "xbrl_local_path": "y.xml"},
+        ])
+        monkeypatch.setattr(Path, "exists", lambda self: True)
+        monkeypatch.setattr(bf, "_parse_single_filing", lambda p, m: [{
+            "cik": m["cik"], "accession_number": m["accession_number"],
+            "investment_identifier": "New Row", "period": "2025-12-31",
+            "dimensions_raw": "d", "_context_id": "c1", "fair_value": 9.0,
+            "src_facts": '{"interest_rate":{"r":0.1}}'}])
+        out = bf.rebuild_cached_bdc_holdings(filings_index=idx, ciks=["1"])
+        cik1 = out[out["cik"].astype(str).str.contains("1")]
+        cik2 = out[out["cik"].astype(str).str.contains("2")]
+        assert list(cik1["investment_identifier"]) == ["New Row"]   # replaced
+        assert list(cik2["investment_identifier"]) == ["Keep Row"]  # untouched
+        assert "src_facts" in out.columns
+        # untouched rows get '' in the new column, not NaN
+        assert cik2["src_facts"].fillna("").iloc[0] == ""
