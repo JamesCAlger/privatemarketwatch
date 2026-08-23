@@ -508,3 +508,40 @@ def test_apply_promoted_stage2_skips_comparative_class():
                     "template": {"report_date": "2025-12-31"}}]
     out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
     assert len(out) == 1 and audits == []  # raw-staging family is not applied here
+
+
+class TestCorrectedFieldsMarking:
+    def _frames(self):
+        before = pd.DataFrame(
+            {"fair_value": [100.0, 200.0], "interest_rate": [10.0, 11.0]},
+            index=[5, 9])
+        after = pd.DataFrame(
+            {"fair_value": [100.0, 250.0], "interest_rate": [10.0, 11.0],
+             "corrected_fields": ["", ""]},
+            index=[5, 9])
+        return before, after
+
+    def test_changed_field_marked_on_changed_row_only(self):
+        before, after = self._frames()
+        out = ap.mark_corrected_fields(before, after)
+        assert out.loc[9, "corrected_fields"] == "fair_value"
+        assert out.loc[5, "corrected_fields"] == ""
+
+    def test_added_row_marked(self):
+        before, after = self._frames()
+        after.loc[77] = {"fair_value": 5.0, "interest_rate": 8.0,
+                         "corrected_fields": ""}
+        out = ap.mark_corrected_fields(before, after)
+        assert out.loc[77, "corrected_fields"] == "_row:added"
+
+    def test_append_dedupes_and_sorts_incrementally(self):
+        df = pd.DataFrame({"corrected_fields": ["fair_value", ""]}, index=[1, 2])
+        ap.append_corrected_fields(df, pd.Index([1, 2]), ["fair_value", "cost"])
+        assert df.loc[1, "corrected_fields"] == "fair_value;cost"
+        assert df.loc[2, "corrected_fields"] == "fair_value;cost"
+
+    def test_nan_vs_nan_not_marked(self):
+        before = pd.DataFrame({"fair_value": [None]}, index=[0])
+        after = pd.DataFrame({"fair_value": [None], "corrected_fields": [""]},
+                             index=[0])
+        assert ap.mark_corrected_fields(before, after).loc[0, "corrected_fields"] == ""

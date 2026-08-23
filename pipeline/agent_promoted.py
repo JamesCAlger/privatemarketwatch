@@ -45,6 +45,55 @@ _DIGITS_RE = re.compile(r"\D")
 AUDIT_COLUMNS = ["layer", "cik", "rule_id", "rule_type", "status", "rows_changed",
                  "fv_affected", "authoring_rows", "authoring_fv", "drift", "message"]
 
+# Fields whose modification by a correction layer is stamped into
+# corrected_fields. Value fields feed the provenance re-verifier (a corrected
+# row legitimately disagrees with its anchor -- scoping doc risk 4);
+# classification fields are marked for audit symmetry.
+CORRECTED_TRACKED_FIELDS = [
+    "fair_value", "cost", "principal_amount", "shares_held",
+    "pct_of_net_assets", "interest_rate", "basis_spread", "pik_rate",
+    "maturity_date", "reference_rate_type", "coupon_type",
+    "issuer_name", "instrument_description", "bdc_unrealized_gain_loss",
+    "asset_category", "issuer_category", "index_classification",
+    "exposure_type", "asset_class", "lien_position", "instrument_type",
+    "is_subsidiary",
+]
+
+
+def append_corrected_fields(df: pd.DataFrame, idx, fields: list) -> None:
+    """Append field names to df['corrected_fields'] at idx (';'-joined, deduped,
+    order-preserving). Creates the column if absent."""
+    if "corrected_fields" not in df.columns:
+        df["corrected_fields"] = ""
+
+    def _merge(val: object) -> str:
+        parts = [p for p in str(val or "").split(";") if p]
+        parts.extend(f for f in fields if f and f not in parts)
+        return ";".join(parts)
+
+    df.loc[idx, "corrected_fields"] = df.loc[idx, "corrected_fields"].map(_merge)
+
+
+def mark_corrected_fields(before_tracked: pd.DataFrame,
+                          after: pd.DataFrame) -> pd.DataFrame:
+    """Stamp after['corrected_fields'] with tracked fields whose value changed
+    vs the pre-applier snapshot. Index-aligned (appliers preserve the original
+    index; added rows appear as new labels and are marked '_row:added').
+    NA-safe string comparison; per-CIK sub-frames only -- never the full frame."""
+    common = after.index.intersection(before_tracked.index)
+    added = after.index.difference(before_tracked.index)
+    if len(added):
+        append_corrected_fields(after, added, ["_row:added"])
+    for col in before_tracked.columns:
+        if col not in after.columns:
+            continue
+        b = before_tracked.loc[common, col].astype("string").str.strip().fillna("")
+        a = after.loc[common, col].astype("string").str.strip().fillna("")
+        changed = common[(a != b).to_numpy()]
+        if len(changed):
+            append_corrected_fields(after, changed, [col])
+    return after
+
 
 def normalize_cik10(raw) -> str:
     """10-digit zero-padded CIK from any int/str form (empty stays empty)."""
@@ -141,7 +190,11 @@ def apply_promoted_stage2_corrections(
         for c in sorted(by_cik[cik], key=lambda x: str(x.get("fix_class"))):
             fc = str(c.get("fix_class"))
             from pipeline.agent_b2_appliers import apply_scoped
+            _before = corrected[
+                [tc for tc in CORRECTED_TRACKED_FIELDS if tc in corrected.columns]
+            ].copy()
             corrected, audit = apply_scoped(corrected, c)
+            corrected = mark_corrected_fields(_before, corrected)
             # fill structural identity on added rows (missing_position_add)
             if "cik" in corrected.columns and corrected["cik"].isna().any():
                 added = corrected["cik"].isna()
@@ -341,7 +394,10 @@ def apply_promoted_rules(
                 logger.warning("promoted rule %s: no BDC rows for cik=%s in frame",
                                r.get("rule_id"), cik)
             continue
+        _before = sub[
+            [tc for tc in CORRECTED_TRACKED_FIELDS if tc in sub.columns]].copy()
         corrected, rule_audits = apply_rules(sub, rules)
+        corrected = mark_corrected_fields(_before, corrected)
         # row_add positions carry only holdings fields (see agent_rule.ADD_POSITION_KEYS);
         # identity columns are filled STRUCTURALLY from the rule's own CIK scope so an
         # added row can never orphan out of its filer.
