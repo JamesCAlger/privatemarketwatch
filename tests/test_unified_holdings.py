@@ -5099,26 +5099,40 @@ class TestCostProxy:
         assert "cost:" not in row["src_transforms"]
 
     def test_cost_proxy_fill_fires_on_zero_cost(self, tmp_path):
-        """N-PORT position with explicit cost=0: proxy fill sets cost_source and event."""
-        nport_df = self._make_nport_df([
-            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
-             "issuer_type": "CORP", "issuer_name": "Zero Cost Co",
-             "currency_value": 100000, "report_date": "2023-03-31",
-             "accession_number": "001"},
-            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
-             "issuer_type": "CORP", "issuer_name": "Zero Cost Co",
-             "currency_value": 110000, "report_date": "2023-06-30",
-             "accession_number": "002"},
+        """BDC position with explicit cost=0 fires the proxy, unlike the NULL-cost case.
+
+        The prior version of this test used an N-PORT fixture with no cost column
+        at all -- N-PORT staging hard-codes NULL AS cost, so that test only
+        exercised the NULL path (same as test_cost_proxy_fill_records_derived_proxy).
+
+        This test uses _make_bdc_df with "cost": 0 (integer zero). BDC staging
+        passes it through as TRY_CAST(cost AS DOUBLE) = 0.0. In the with_cost CTE,
+        NULLIF(TRY_CAST(cost AS DOUBLE), 0) converts 0.0 to NULL and the proxy
+        fires: cost becomes the FIRST_VALUE of fair_value across the window and
+        cost_source is set to 'derived_proxy'.
+        """
+        bdc_df = self._make_bdc_df([
+            {"cik": "200", "investment_identifier": "Zero Cost Co - Term Loan",
+             "fair_value": 60000, "cost": 0,
+             "report_date": "2023-03-31", "accession_number": "001"},
+            {"cik": "200", "investment_identifier": "Zero Cost Co - Term Loan",
+             "fair_value": 70000, "cost": 0,
+             "report_date": "2023-06-30", "accession_number": "002"},
         ])
         with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
                     tmp_path / "test.csv"):
             result = build_unified_holdings(
-                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+                bdc_df=bdc_df, nport_df=self._empty_nport_df())
         company = result[result["issuer_name"] == "Zero Cost Co"]
-        # Both rows get a proxy cost (cost=0 is treated as NULL)
+        assert len(company) == 2, "Expected both BDC rows in output"
+        # Both rows have explicit cost=0 -- proxy must fire for each
         for _, row in company.iterrows():
-            assert row["cost_source"] == "derived_proxy"
-            assert "cost:cost_proxy_fv" in row["src_transforms"]
+            assert row["cost_source"] == "derived_proxy", (
+                f"Expected derived_proxy, got {row['cost_source']!r}"
+            )
+            assert "cost:cost_proxy_fv" in row["src_transforms"], (
+                f"Expected cost:cost_proxy_fv in {row['src_transforms']!r}"
+            )
 
 
 class TestSharesNormalization:
