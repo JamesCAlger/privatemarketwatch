@@ -5060,6 +5060,44 @@ class TestCostProxy:
         borrower = result[result["issuer_name"] == "Borrower C"]
         assert pd.isna(borrower.iloc[0]["cost"]) or borrower.iloc[0]["cost"] == 0
 
+    def test_cost_proxy_fill_records_derived_proxy(self, tmp_path):
+        """N-PORT position with NULL cost: proxy fill sets cost_source and event."""
+        nport_df = self._make_nport_df([
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "issuer_name": "Borrower A",
+             "currency_value": 100000, "report_date": "2023-03-31",
+             "accession_number": "001"},
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "issuer_name": "Borrower A",
+             "currency_value": 110000, "report_date": "2023-06-30",
+             "accession_number": "002"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+        borrower = result[result["issuer_name"] == "Borrower A"]
+        # Both rows get a proxy cost (no real cost present)
+        for _, row in borrower.iterrows():
+            assert row["cost_source"] == "derived_proxy"
+            assert "cost:cost_proxy_fv" in row["src_transforms"]
+
+    def test_unproxied_cost_keeps_empty_source(self, tmp_path):
+        """BDC position with real non-zero cost: cost_source stays empty."""
+        bdc_df = self._make_bdc_df([{
+            "cik": "123", "investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": 60000, "cost": 50000,
+            "report_date": "2023-03-31", "accession_number": "001",
+        }])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=bdc_df, nport_df=self._empty_nport_df())
+        acme = result[result["issuer_name"] == "Acme Corp"]
+        row = acme.iloc[0]
+        assert row["cost_source"] == ""
+        assert "cost:" not in row["src_transforms"]
+
 
 class TestSharesNormalization:
     pytestmark = SLOW_INTEGRATION_MARKS
@@ -5266,6 +5304,67 @@ class TestSharesNormalization:
         shares = widget["shares_held"].tolist()
         # Q3 outlier (200) replaced with Q2's shares (200000)
         assert shares == [200000.0, 200000.0, 200000.0, 200000.0]
+
+    def test_shares_pow10_fix_records_derived_proxy(self, tmp_path):
+        """N-PORT outlier row gets shares_held_source=derived_proxy and event appended."""
+        # 4 periods; Q3 has outlier shares=400 (should be 400000)
+        nport_df = self._make_nport_df([
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4000000,
+             "report_date": "2023-03-31", "balance": "400000", "unit": "NS",
+             "accession_number": "001"},
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4100000,
+             "report_date": "2023-06-30", "balance": "400000", "unit": "NS",
+             "accession_number": "002"},
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4200000,
+             "report_date": "2023-09-30", "balance": "400", "unit": "NS",
+             "accession_number": "003"},
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4300000,
+             "report_date": "2023-12-31", "balance": "400000", "unit": "NS",
+             "accession_number": "004"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+        acme = result[result["issuer_name"] == "Acme Corp"].sort_values("report_date").reset_index(drop=True)
+        # Q3 row (index 2) is the outlier that was fixed
+        fixed_row = acme.iloc[2]
+        assert fixed_row["shares_held_source"] == "derived_proxy"
+        assert "shares_held:pow10_shares" in fixed_row["src_transforms"]
+        # Non-outlier rows must not be flagged
+        for i in [0, 1, 3]:
+            non_outlier = acme.iloc[i]
+            assert non_outlier["shares_held_source"] == ""
+            assert "shares_held:pow10_shares" not in non_outlier["src_transforms"]
+
+    def test_consistent_shares_no_derived_proxy(self, tmp_path):
+        """Positions with consistent shares have no shares_held_source flag."""
+        nport_df = self._make_nport_df([
+            {"cik": "100", "issuer_name": "Stable Co", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 5000000,
+             "report_date": "2023-03-31", "balance": "50000", "unit": "NS",
+             "accession_number": "001"},
+            {"cik": "100", "issuer_name": "Stable Co", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 5100000,
+             "report_date": "2023-06-30", "balance": "50000", "unit": "NS",
+             "accession_number": "002"},
+            {"cik": "100", "issuer_name": "Stable Co", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 5200000,
+             "report_date": "2023-09-30", "balance": "50000", "unit": "NS",
+             "accession_number": "003"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+        stable = result[result["issuer_name"] == "Stable Co"]
+        for _, row in stable.iterrows():
+            assert row["shares_held_source"] == ""
+            assert "shares_held:pow10_shares" not in row["src_transforms"]
 
 
 # ---------------------------------------------------------------------------

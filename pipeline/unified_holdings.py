@@ -1041,10 +1041,26 @@ def build_unified_holdings(
     -- its own proxy (e.g. Term Loan A vs Term Loan B).  The tiebreaker
     -- fair_value makes the result deterministic when multiple rows share
     -- the earliest report_date.
+    --
+    -- Provenance: when the proxy fires (original cost NULL/zero but a
+    -- non-zero FV proxy is available), cost_source is set to
+    -- 'derived_proxy' and 'cost:cost_proxy_fv' is appended to
+    -- src_transforms.  Rows with a real non-zero cost keep cost_source
+    -- and src_transforms unchanged.
     with_cost AS (
-        SELECT * EXCLUDE (cost),
-            COALESCE(
-                NULLIF(TRY_CAST(cost AS DOUBLE), 0),
+        SELECT * EXCLUDE (cost, cost_source, src_transforms, _cost_orig, _cost_proxy),
+            COALESCE(_cost_orig, _cost_proxy) AS cost,
+            CASE WHEN _cost_orig IS NULL AND _cost_proxy IS NOT NULL
+                 THEN 'derived_proxy'
+                 ELSE cost_source
+            END AS cost_source,
+            CASE WHEN _cost_orig IS NULL AND _cost_proxy IS NOT NULL
+                 THEN concat_ws(';', NULLIF(src_transforms, ''), 'cost:cost_proxy_fv')
+                 ELSE src_transforms
+            END AS src_transforms
+        FROM (
+            SELECT *,
+                NULLIF(TRY_CAST(cost AS DOUBLE), 0) AS _cost_orig,
                 FIRST_VALUE(
                     NULLIF(TRY_CAST(fair_value AS DOUBLE), 0)
                     IGNORE NULLS
@@ -1063,16 +1079,20 @@ def build_unified_holdings(
                         COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
                         COALESCE(CAST(shares_held AS VARCHAR), '')
                     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-                )
-            ) AS cost
-        FROM classified
+                ) AS _cost_proxy
+            FROM classified
+        )
     ),
     -- Shares normalization: detect power-of-10 unit mismatches within
     -- the same position (cik + issuer_name) by comparing each row's
     -- per-unit price (fair_value / shares_held) against the group median.
     -- Outliers are replaced with the nearest non-outlier shares value.
+    --
+    -- Provenance: when the outlier flag fires, shares_held_source is set
+    -- to 'derived_proxy' and 'shares_held:pow10_shares' is appended to
+    -- src_transforms.  Non-outlier rows keep both columns unchanged.
     with_shares_fix AS (
-        SELECT * EXCLUDE (shares_held),
+        SELECT * EXCLUDE (shares_held, shares_held_source, src_transforms),
             CASE
                 WHEN _is_outlier THEN COALESCE(
                     -- Nearest previous non-outlier shares
@@ -1099,7 +1119,14 @@ def build_unified_holdings(
                         ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING)
                 )
                 ELSE _sh_val
-            END AS shares_held
+            END AS shares_held,
+            CASE WHEN _is_outlier THEN 'derived_proxy'
+                 ELSE shares_held_source
+            END AS shares_held_source,
+            CASE WHEN _is_outlier
+                 THEN concat_ws(';', NULLIF(src_transforms, ''), 'shares_held:pow10_shares')
+                 ELSE src_transforms
+            END AS src_transforms
         FROM (
             SELECT *,
                 TRY_CAST(shares_held AS DOUBLE) AS _sh_val,
