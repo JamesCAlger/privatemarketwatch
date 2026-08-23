@@ -279,6 +279,21 @@ def apply_promoted_stage2_corrections(
                                "drift": "noop", "message": "no BDC rows for CIK in frame"})
             continue
         corrected = sub
+        # JIT row_id (2026-08-21): row_id is assigned at the END of the build, so the
+        # mid-build frame lacks the column and a row_id selector would error as
+        # "column missing" here while the B3 gate replay (published frame, which HAS
+        # row_id) passes. Materialize it on this CIK's sub-frame only when a leaf
+        # selects by it; natural keys group by (cik, source, report_date), so the
+        # sub-frame ids equal the published full-frame ids. Parity caveat: if another
+        # leaf on the SAME CIK changes a key field (principal/shares), the published
+        # id can drift from the pre-correction id -- the noop-drift audit flags that.
+        _jit_row_id = False
+        if "row_id" not in corrected.columns and any(
+                str((((c.get("template") or {}).get("row_selector")) or {}).get("row_id") or "")
+                for c in by_cik[cik]):
+            from pipeline.unified_holdings import _assign_row_ids
+            corrected = _assign_row_ids(corrected.copy())
+            _jit_row_id = True
         for c in sorted(by_cik[cik], key=lambda x: str(x.get("fix_class"))):
             fc = str(c.get("fix_class"))
             from pipeline.agent_b2_appliers import apply_scoped
@@ -305,6 +320,12 @@ def apply_promoted_stage2_corrections(
             if status != "ok":
                 logger.warning("promoted b2 correction %s (cik=%s) did not apply: %s",
                                fc, cik, audit.get("message"))
+        if _jit_row_id:
+            # transient selector anchor only -- the end-of-build assignment owns the
+            # published column; keeping it here would raggedly concat with untouched rows
+            corrected = corrected.drop(
+                columns=[c for c in ("row_id", "row_id_basis")
+                         if c in corrected.columns])
         replaced.append(corrected)
         drop_mask |= mask
     if replaced:
@@ -497,7 +518,6 @@ def apply_promoted_rules(
         before_tracked = sub[tracked_cols + ["_cf_ord"]].copy()
         corrected, rule_audits = apply_rules(sub, rules)
         corrected = mark_corrected_fields_by_ordinal(before_tracked, corrected, tracked_cols)
-        corrected = mark_corrected_fields(_before, corrected)
         # row_add positions carry only holdings fields (see agent_rule.ADD_POSITION_KEYS);
         # identity columns are filled STRUCTURALLY from the rule's own CIK scope so an
         # added row can never orphan out of its filer.
