@@ -5098,6 +5098,28 @@ class TestCostProxy:
         assert row["cost_source"] == ""
         assert "cost:" not in row["src_transforms"]
 
+    def test_cost_proxy_fill_fires_on_zero_cost(self, tmp_path):
+        """N-PORT position with explicit cost=0: proxy fill sets cost_source and event."""
+        nport_df = self._make_nport_df([
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "issuer_name": "Zero Cost Co",
+             "currency_value": 100000, "report_date": "2023-03-31",
+             "accession_number": "001"},
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "issuer_name": "Zero Cost Co",
+             "currency_value": 110000, "report_date": "2023-06-30",
+             "accession_number": "002"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+        company = result[result["issuer_name"] == "Zero Cost Co"]
+        # Both rows get a proxy cost (cost=0 is treated as NULL)
+        for _, row in company.iterrows():
+            assert row["cost_source"] == "derived_proxy"
+            assert "cost:cost_proxy_fv" in row["src_transforms"]
+
 
 class TestSharesNormalization:
     pytestmark = SLOW_INTEGRATION_MARKS
