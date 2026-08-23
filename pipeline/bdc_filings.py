@@ -854,7 +854,12 @@ def _extract_investment_facts(
                 monetary_facts_stored.append((ctx_ref, col, dec_val, local))
             # --- src_facts provenance entry ---
             entry: dict[str, Any] = {}
-            if CANONICAL_CONCEPT.get(col, "") not in local:
+            # Exact inequality: over-recording c (any non-canonical local) is
+            # harmless; under-recording breaks the re-verifier's concept-
+            # disambiguation contract.  The old substring test ("not in") was
+            # wrong: "investmentinterestrate" IS a substring of
+            # "investmentinterestratepaidincash", so paidincash never got a c.
+            if local != CANONICAL_CONCEPT.get(col, ""):
                 entry["c"] = local
             if col in _RATE_PROV_COLUMNS and isinstance(value, (int, float)):
                 entry["r"] = value

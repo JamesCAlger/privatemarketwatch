@@ -2547,3 +2547,41 @@ class TestSrcFactsCapture:
         recs = _extract_investment_facts(tree, {"c1": _ctx()})
         # fair_value canonical + untransformed and no rate facts -> "" not "{}"
         assert recs[0]["src_facts"] == ""
+
+    def test_paidincash_concept_records_c_and_r(self):
+        # InvestmentInterestRatePaidInCash maps to interest_rate (non-canonical).
+        # src_facts must carry both "c" (winning concept) and "r" (raw rate value).
+        # interest_rate_concept must be "paid_in_cash" to prove the right branch fired.
+        tree = _tree(
+            '<us-gaap:InvestmentInterestRatePaidInCash contextRef="c1">0.08'
+            '</us-gaap:InvestmentInterestRatePaidInCash>'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="c1" unitRef="usd" '
+            'decimals="-3">2000000</us-gaap:InvestmentOwnedAtFairValue>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        assert len(recs) == 1
+        rec = recs[0]
+        # Published value matches the raw paidincash fact
+        assert rec["interest_rate"] == 0.08
+        # interest_rate_concept confirms the paidincash branch fired
+        assert rec["interest_rate_concept"] == "paid_in_cash"
+        prov = json.loads(rec["src_facts"])
+        # Non-canonical concept -> "c" present
+        assert prov["interest_rate"]["c"] == "investmentinterestratepaidincash"
+        # interest_rate is in _RATE_PROV_COLUMNS -> "r" present with raw value
+        assert prov["interest_rate"]["r"] == 0.08
+
+    def test_cik_scale_fix_records_raw_and_chains(self):
+        from pipeline.bdc_filings import _record_value_xform
+        # Single transform: record dict starts empty, call once with x1000 code
+        record: dict = {"src_facts": ""}
+        _record_value_xform(record, "fair_value", 500000, "cik_scale_fix:x1000")
+        prov = json.loads(record["src_facts"])
+        assert prov["fair_value"]["r"] == 500000
+        assert prov["fair_value"]["x"] == ["cik_scale_fix:x1000"]
+        # Chaining: second call with a different code preserves original "r"
+        # and appends the new code to "x"
+        _record_value_xform(record, "fair_value", 999999, "some_other_fix")
+        prov2 = json.loads(record["src_facts"])
+        assert prov2["fair_value"]["r"] == 500000  # first-writer wins
+        assert prov2["fair_value"]["x"] == ["cik_scale_fix:x1000", "some_other_fix"]
