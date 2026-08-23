@@ -2177,6 +2177,52 @@ class TestPrepareBdc:
         assert gamma["nonaccrual_footnote"] in (False, "false", "False", 0)
         assert gamma["nonaccrual_dimension"] in (False, "false", "False", 0)
 
+    def test_src_transforms_records_rate_rescale_branches(self):
+        df = self._make_bdc_df([
+            # <=0.50 -> x100 branch
+            {"investment_identifier": "A Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 0.105},
+            # >=50 -> /100 branch
+            {"investment_identifier": "B Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 62.5},
+            # identity: no event
+            {"investment_identifier": "C Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5},
+            # negative -> nulled
+            {"investment_identifier": "D Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": -1.0},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        assert result.loc["A Corp", "interest_rate"] == 10.5
+        assert "interest_rate:rate_x100" in result.loc["A Corp", "src_transforms"]
+        assert result.loc["B Corp", "interest_rate"] == 0.625
+        assert "interest_rate:rate_div100" in result.loc["B Corp", "src_transforms"]
+        assert "interest_rate" not in result.loc["C Corp", "src_transforms"]
+        assert pd.isna(result.loc["D Corp", "interest_rate"])
+        assert "interest_rate:neg_null" in result.loc["D Corp", "src_transforms"]
+
+    def test_src_transforms_records_pct_branches_with_pct_thresholds(self):
+        # pct uses > 50 (strict), rates use >= 50 -- events must match values
+        df = self._make_bdc_df([
+            {"investment_identifier": "E Corp - TL", "cik": "123",
+             "fair_value": 1, "pct_of_net_assets": 0.004},
+            {"investment_identifier": "F Corp - TL", "cik": "123",
+             "fair_value": 1, "pct_of_net_assets": 50.0},  # boundary: NO event
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        assert "pct_of_net_assets:rate_x100" in result.loc["E Corp", "src_transforms"]
+        assert "pct_of_net_assets" not in result.loc["F Corp", "src_transforms"]
+
+    def test_src_transforms_records_pik_boundary_fix(self):
+        # CTE 12a: pik 20-50 exceeding interest_rate was bps -> /100 + event
+        df = self._make_bdc_df([
+            {"investment_identifier": "G Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.0, "pik_rate": 25.0},
+        ])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate"] == 0.25
+        assert "pik_rate:pik_boundary_div100" in result.iloc[0]["src_transforms"]
+
 
 # ---------------------------------------------------------------------------
 # Amendment dedup in _prepare_bdc (CTE 1b)

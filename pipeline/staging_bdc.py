@@ -2590,7 +2590,23 @@ def _prepare_bdc(
             COALESCE(CAST(src_context_id AS VARCHAR), '') AS src_context_id,
             COALESCE(CAST(dedupe_context_count AS VARCHAR), '') AS src_context_count,
             COALESCE(CAST(dedupe_conflict_fields AS VARCHAR), '') AS src_conflict_fields,
-            '' AS src_transforms,
+            concat_ws(';',
+                CASE WHEN _ir IS NOT NULL AND _ir < 0 THEN 'interest_rate:neg_null'
+                     WHEN _ir IS NOT NULL AND _ir <= 0.50 THEN 'interest_rate:rate_x100'
+                     WHEN _ir IS NOT NULL AND _ir >= 50 THEN 'interest_rate:rate_div100'
+                     ELSE NULL END,
+                CASE WHEN _bs IS NOT NULL AND _bs < 0 THEN 'basis_spread:neg_null'
+                     WHEN _bs IS NOT NULL AND _bs <= 0.50 THEN 'basis_spread:rate_x100'
+                     WHEN _bs IS NOT NULL AND _bs >= 50 THEN 'basis_spread:rate_div100'
+                     ELSE NULL END,
+                CASE WHEN _pik IS NOT NULL AND _pik < 0 THEN 'pik_rate:neg_null'
+                     WHEN _pik IS NOT NULL AND _pik <= 0.50 THEN 'pik_rate:rate_x100'
+                     WHEN _pik IS NOT NULL AND _pik >= 50 THEN 'pik_rate:rate_div100'
+                     ELSE NULL END,
+                CASE WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
+                     WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
+                     ELSE NULL END
+            ) AS src_transforms,
             '' AS src_field_overrides,
             '' AS cost_source,
             '' AS shares_held_source,
@@ -2666,12 +2682,18 @@ def _prepare_bdc(
     -- Raw XBRL pik_rate at 0.20-0.50 (20-50 bps) gets wrongly *100'd to 20-50%.
     -- If normalized pik_rate >= 20 and exceeds interest_rate, it was bps: /100.
     unified_pik_fixed AS (
-        SELECT * EXCLUDE (pik_rate),
+        SELECT * EXCLUDE (pik_rate, src_transforms),
             CASE WHEN pik_rate >= 20
                   AND interest_rate IS NOT NULL
                   AND pik_rate > interest_rate
                  THEN pik_rate / 100
-                 ELSE pik_rate END AS pik_rate
+                 ELSE pik_rate END AS pik_rate,
+            CASE WHEN pik_rate >= 20
+                  AND interest_rate IS NOT NULL
+                  AND pik_rate > interest_rate
+                 THEN concat_ws(';', NULLIF(src_transforms, ''),
+                                'pik_rate:pik_boundary_div100')
+                 ELSE src_transforms END AS src_transforms
         FROM unified
     ),
 
