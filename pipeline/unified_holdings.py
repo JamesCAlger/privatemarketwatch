@@ -82,6 +82,12 @@ UNIFIED_COLUMNS = [
     "bdc_unrealized_gain_loss",
     "bdc_investment_country",
     "src_context_id",
+    "src_context_count",
+    "src_conflict_fields",
+    "src_transforms",
+    "src_field_overrides",
+    "cost_source",
+    "shares_held_source",
     # Non-accrual signals (BDC only -- extracted from XBRL footnotes/dimensions)
     "nonaccrual_footnote", "nonaccrual_dimension",
     # Source-specific (N-PORT)

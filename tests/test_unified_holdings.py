@@ -1322,6 +1322,28 @@ class TestPrepareBdc:
         assert "src_context_id" in result.columns
         assert list(result["src_context_id"]) == [""]
 
+    def test_dedup_audit_columns_pass_through(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000, "dedupe_context_count": "3",
+             "dedupe_conflict_fields": "cost"},
+        ])
+        result = _prepare_bdc(df)
+        assert list(result["src_context_count"]) == ["3"]
+        assert list(result["src_conflict_fields"]) == ["cost"]
+
+    def test_dedup_audit_columns_default_empty(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert list(result["src_context_count"]) == [""]
+        assert list(result["src_conflict_fields"]) == [""]
+        # the batch's other columns exist and default empty at this stage
+        for col in ("src_field_overrides", "cost_source", "shares_held_source"):
+            assert list(result[col]) == [""]
+
     def test_returns_empty_when_wrapper_filters_all_phase_a_rows(self):
         """All-rollup wrapper CIKs return an empty staged frame, not Phase B SQL errors."""
         df = self._make_bdc_df([

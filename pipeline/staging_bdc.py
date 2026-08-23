@@ -412,6 +412,7 @@ def _prepare_bdc(
         "industry", "investment_type", "affiliation",
         "nonaccrual_footnote", "nonaccrual_dimension",
         "src_context_id",
+        "dedupe_context_count", "dedupe_conflict_fields",
     )
 
     con = duckdb.connect()
@@ -2587,6 +2588,12 @@ def _prepare_bdc(
             _ugl AS bdc_unrealized_gain_loss,
             COALESCE(_hier_country, '') AS bdc_investment_country,
             COALESCE(CAST(src_context_id AS VARCHAR), '') AS src_context_id,
+            COALESCE(CAST(dedupe_context_count AS VARCHAR), '') AS src_context_count,
+            COALESCE(CAST(dedupe_conflict_fields AS VARCHAR), '') AS src_conflict_fields,
+            '' AS src_transforms,
+            '' AS src_field_overrides,
+            '' AS cost_source,
+            '' AS shares_held_source,
             '' AS nport_holding_id,
             '' AS nport_series_name,
             '' AS nport_series_id,
