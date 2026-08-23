@@ -5,7 +5,7 @@ import json
 import pandas as pd
 import pytest
 
-from pipeline.provenance_reverify import cheap_tier
+from pipeline.provenance_reverify import cheap_tier, classify_reason, full_tier
 
 
 def _row(**kw):
@@ -102,3 +102,110 @@ class TestCheapTier:
         """Task 8 NOTE: src_facts must be included in output columns."""
         out = cheap_tier(holdings_df=pd.DataFrame([_row()]))
         assert "src_facts" in out.columns
+
+    def test_rate_absent_trivial_not_fail(self):
+        """Folded item (a): rate field, pathway='', published NULL, no raw,
+        no events -> pass_trivial (not fail)."""
+        df = pd.DataFrame([_row(
+            row_id="ROW-trivial",
+            interest_rate=None,
+            interest_rate_source="",
+            src_facts="",
+            src_transforms="",
+        )])
+        out = cheap_tier(holdings_df=df)
+        ir = out[out["field"] == "interest_rate"].iloc[0]
+        assert ir["cheap_status"] == "pass_trivial"
+
+
+_FIXTURE_XML = (
+    '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+    '<us-gaap:InvestmentInterestRate contextRef="ctx1">0.105'
+    '</us-gaap:InvestmentInterestRate>'
+    '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx1" unitRef="usd">'
+    '1000000</us-gaap:InvestmentOwnedAtFairValue>'
+    '</xbrl>'
+)
+
+
+def _loader(cik, accession):
+    from lxml import etree
+    return etree.ElementTree(etree.fromstring(_FIXTURE_XML.encode()))
+
+
+class TestFullTier:
+    def _cheap(self, **kw):
+        base = {
+            "row_id": "ROW-a", "cik": "0001287750",
+            "accession_number": "0001287750-26-000001",
+            "report_date": "2025-12-31", "src_context_id": "ctx1",
+            "field": "interest_rate", "pathway": "xbrl_field",
+            "declared_raw": 0.105,
+            "declared_events": "interest_rate:rate_x100",
+            "published": 10.5, "expected": 10.5, "cheap_status": "pass",
+            "src_facts": json.dumps({"interest_rate": {"r": 0.105}}),
+        }
+        return pd.DataFrame([{**base, **kw}])
+
+    def test_verified_roundtrip(self):
+        out = full_tier(self._cheap(), xml_loader=_loader)
+        assert out.iloc[0]["full_status"] == "raw_match"
+        assert out.iloc[0]["instance_raw"] == pytest.approx(0.105)
+
+    def test_stale_declared_raw_but_published_consistent(self):
+        # declared_raw is stale (0.2) but published 10.5 == instance 0.105*100
+        out = full_tier(
+            self._cheap(declared_raw=0.2, cheap_status="fail"),
+            xml_loader=_loader,
+        )
+        assert out.iloc[0]["full_status"] == "raw_stale"
+
+    def test_published_no_longer_matches_filing(self):
+        out = full_tier(self._cheap(published=99.0), xml_loader=_loader)
+        assert out.iloc[0]["full_status"] == "published_mismatch"
+
+    def test_anchor_and_context_and_file_missing(self):
+        assert full_tier(
+            self._cheap(field="basis_spread", declared_raw=None,
+                        declared_events="", published=None,
+                        src_facts=""),
+            xml_loader=_loader,
+        ).iloc[0]["full_status"] == "anchor_missing"
+
+        assert full_tier(
+            self._cheap(src_context_id="ctxZZ"),
+            xml_loader=_loader,
+        ).iloc[0]["full_status"] == "context_missing"
+
+        assert full_tier(
+            self._cheap(),
+            xml_loader=lambda c, a: None,
+        ).iloc[0]["full_status"] == "source_unavailable"
+
+    def test_short_circuits_not_checked(self):
+        out = full_tier(
+            self._cheap(cheap_status="corrected"),
+            xml_loader=_loader,
+        )
+        assert out.iloc[0]["full_status"] == "not_checked"
+
+
+class TestClassifyReason:
+    @pytest.mark.parametrize("cheap,full,reason", [
+        ("pass",                   "raw_match",          "verified"),
+        ("pass",                   "raw_stale",          "anchor_stale"),
+        ("fail",                   "raw_match",          "transform_drift"),
+        ("pass",                   "published_mismatch", "filing_mismatch"),
+        ("pass",                   "anchor_missing",     "anchor_missing"),
+        ("pass",                   "context_missing",    "provenance_wrong"),
+        ("pass",                   "source_unavailable", "source_unavailable"),
+        ("corrected",              "not_checked",        "corrected"),
+        ("derived",                "not_checked",        "derived"),
+        ("text_pathway",           "not_checked",        "text_pathway"),
+        ("filled_field",           "not_checked",        "merged_context_excluded"),
+        ("merged_conflict",        "not_checked",        "merged_context_excluded"),
+        ("no_provenance",          "not_checked",        "no_provenance"),
+        ("pass_trivial",           "not_checked",        "unchecked_trivial"),
+    ])
+    def test_table(self, cheap, full, reason):
+        assert classify_reason(cheap, full) == reason

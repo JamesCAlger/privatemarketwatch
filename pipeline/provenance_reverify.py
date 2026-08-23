@@ -9,6 +9,7 @@ lives in the ledger only -- scoping doc section 2). ASCII-only. Cache-only.
 """
 from __future__ import annotations
 
+import json
 import logging
 from pathlib import Path
 
@@ -17,17 +18,19 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-# field -> (pathway enum column, empty-pathway-means-xbrl?)
-# cost/shares: '' = as-extracted xbrl pathway (trivial pass if no event).
-CHEAP_FIELDS: dict[str, tuple[str, bool]] = {
-    "interest_rate": ("interest_rate_source", False),
-    "basis_spread": ("basis_spread_source", False),
-    "pik_rate": ("pik_rate_source", False),
-    "pct_of_net_assets": ("pct_of_net_assets_source", False),
-    "fair_value": ("fair_value_source", False),
-    "cost": ("cost_source", True),
-    "principal_amount": ("principal_amount_source", False),
-    "shares_held": ("shares_held_source", True),
+# field -> pathway enum column.
+# cost/shares '' pathway = as-extracted xbrl (trivial pass when no event).
+# Monetary fields (cost, shares_held) reach pass_trivial via raw IS NULL /
+# no event branch; no separate flag is needed.
+CHEAP_FIELDS: dict[str, str] = {
+    "interest_rate": "interest_rate_source",
+    "basis_spread": "basis_spread_source",
+    "pik_rate": "pik_rate_source",
+    "pct_of_net_assets": "pct_of_net_assets_source",
+    "fair_value": "fair_value_source",
+    "cost": "cost_source",
+    "principal_amount": "principal_amount_source",
+    "shares_held": "shares_held_source",
 }
 _RATE_FIELDS = ("interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets")
 
@@ -36,7 +39,7 @@ _RATE_FIELDS = ("interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets"
 _ID_COLS = "row_id, cik, accession_number, report_date, src_context_id, src_facts"
 
 
-def _field_sql(field: str, source_col: str, empty_is_xbrl: bool) -> str:  # noqa: ARG001
+def _field_sql(field: str, source_col: str) -> str:
     """One SELECT producing the cheap-tier verdict for *field* (long format).
 
     src_facts.x is stored as a JSON array (e.g. '["decimals_rescale:10^-3"]').
@@ -217,10 +220,222 @@ def cheap_tier(
                 f"IN ({wanted})"
             )
 
-        parts = [_field_sql(f, sc, e) for f, (sc, e) in CHEAP_FIELDS.items()]
+        parts = [_field_sql(f, sc) for f, sc in CHEAP_FIELDS.items()]
         sql = " UNION ALL ".join(parts)
         out: pd.DataFrame = con.execute(sql).fetchdf()
     finally:
         con.close()
 
     return out
+
+
+# ---------------------------------------------------------------------------
+# Full tier
+# ---------------------------------------------------------------------------
+
+# cheap_status values that short-circuit full-tier (no filing access needed).
+_SHORT_CIRCUIT = frozenset({"corrected", "derived", "text_pathway",
+                             "filled_field", "merged_conflict", "no_provenance"})
+
+
+def _staging_multiplier(field: str, events: str) -> float:
+    """Staging transform multiplier for *field* from declared_events string."""
+    if f"{field}:rate_x100" in events:
+        return 100.0
+    if f"{field}:rate_div100" in events or f"{field}:pik_boundary_div100" in events:
+        return 0.01
+    return 1.0
+
+
+def _extractor_multiplier(x_events: list) -> float:
+    """Product of extractor-side scale events (decimals_rescale, cik_scale_fix)."""
+    mult = 1.0
+    for code in x_events or []:
+        if code.startswith("decimals_rescale:10^"):
+            mult *= 10.0 ** int(code.split("^", 1)[1])
+        elif code.startswith("cik_scale_fix:x"):
+            mult *= float(code.split("x", 1)[1])
+    return mult
+
+
+def _numbers_close(a: float, b: float) -> bool:
+    return abs(a - b) <= 1e-6 * max(abs(a), abs(b), 1e-12)
+
+
+def _default_xml_loader(filings_index: pd.DataFrame):
+    """Build production loader from the filings index CSV."""
+    paths = dict(zip(filings_index["accession_number"].astype(str),
+                     filings_index["xbrl_local_path"].astype(str)))
+
+    def _load(cik: str, accession: str):
+        from lxml import etree
+        p = paths.get(str(accession), "")
+        if not p or not Path(p).exists():
+            return None
+        try:
+            return etree.parse(p)
+        except Exception:
+            return None
+    return _load
+
+
+def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
+              filings_index: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Re-read each anchored fact from the cached instance document.
+
+    Iterates over accessions (filing count), not holdings rows -- one XML parse
+    per accession.  Appends ``instance_raw`` (float|None) and ``full_status``
+    to the cheap-tier frame.
+
+    full_status enum: raw_match | raw_stale | published_mismatch |
+    anchor_missing | context_missing | source_unavailable | not_checked.
+    """
+    from pipeline.bdc_filings import _local_name, _match_concept, _parse_fact_value
+
+    if xml_loader is None:
+        if filings_index is None:
+            from pipeline.config import BDC_FILINGS_INDEX_FILE
+            filings_index = pd.read_csv(BDC_FILINGS_INDEX_FILE, dtype=str)
+        xml_loader = _default_xml_loader(filings_index)
+
+    out = cheap_df.copy()
+    out["instance_raw"] = None
+    out["full_status"] = "not_checked"
+
+    # pass_trivial rows with no published value have nothing to look up.
+    checkable = (~out["cheap_status"].isin(_SHORT_CIRCUIT)
+                 & ~((out["cheap_status"] == "pass_trivial")
+                     & out["published"].isna()))
+
+    for (cik, accession), grp in out.loc[checkable].groupby(
+            ["cik", "accession_number"], sort=False):
+        tree = xml_loader(str(cik), str(accession))
+        if tree is None:
+            out.loc[grp.index, "full_status"] = "source_unavailable"
+            continue
+
+        # Single pass over the tree for all wanted contexts in this accession.
+        wanted_ctx = set(grp["src_context_id"].astype(str))
+        # facts[ctx][col] = (local_name, raw_text)  first-wins per col
+        facts: dict[str, dict[str, tuple[str, str]]] = {}
+        seen_ctx: set[str] = set()
+
+        for elem in tree.getroot().iter():
+            ctx = elem.get("contextRef")
+            if ctx is None or ctx not in wanted_ctx:
+                continue
+            seen_ctx.add(ctx)
+            local = _local_name(elem.tag).lower()
+            raw_text = (elem.text or "").strip()
+            if not raw_text:
+                continue
+            col = _match_concept(local)
+            if col is None:
+                continue
+            ctx_facts = facts.setdefault(ctx, {})
+            # first-wins by column name (extractor rule)
+            ctx_facts.setdefault(col, (local, raw_text))
+            # also index by exact localname so declared-c lookups work
+            ctx_facts.setdefault(f"__local__{local}", (local, raw_text))
+
+        for i, r in grp.iterrows():
+            ctx = str(r["src_context_id"])
+            if ctx not in seen_ctx:
+                out.at[i, "full_status"] = "context_missing"
+                continue
+
+            field = str(r["field"])
+
+            # Resolve declared concept + x events from src_facts JSON.
+            declared_c = ""
+            x_events: list = []
+            try:
+                sf = json.loads(str(r.get("src_facts") or "") or "{}")
+                field_sf = sf.get(field) or {}
+                declared_c = str(field_sf.get("c") or "").lower()
+                x_events = list(field_sf.get("x") or [])
+            except (json.JSONDecodeError, AttributeError, TypeError):
+                pass
+
+            ctx_facts = facts.get(ctx, {})
+            if declared_c:
+                hit = ctx_facts.get(f"__local__{declared_c}")
+            else:
+                hit = ctx_facts.get(field)
+
+            if hit is None:
+                out.at[i, "full_status"] = "anchor_missing"
+                continue
+
+            _local, raw_text = hit
+            instance_raw = _parse_fact_value(field, raw_text)
+            out.at[i, "instance_raw"] = instance_raw
+
+            if not isinstance(instance_raw, (int, float)):
+                out.at[i, "full_status"] = "anchor_missing"
+                continue
+
+            mult = (_extractor_multiplier(x_events)
+                    * _staging_multiplier(field, str(r.get("declared_events") or "")))
+            neg_null = f"{field}:neg_null" in str(r.get("declared_events") or "")
+            published = r["published"]
+
+            if neg_null:
+                pub_ok = pd.isna(published) and instance_raw < 0
+            else:
+                pub_ok = (not pd.isna(published)
+                          and _numbers_close(instance_raw * mult, float(published)))
+
+            if not pub_ok:
+                out.at[i, "full_status"] = "published_mismatch"
+                continue
+
+            declared_raw = r.get("declared_raw")
+            if pd.isna(declared_raw) or _numbers_close(float(declared_raw),
+                                                        float(instance_raw)):
+                out.at[i, "full_status"] = "raw_match"
+            else:
+                out.at[i, "full_status"] = "raw_stale"
+
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Reason triage (scoping doc 8.2)
+# ---------------------------------------------------------------------------
+
+_CHEAP_REASON: dict[str, str] = {
+    "corrected":       "corrected",
+    "derived":         "derived",
+    "text_pathway":    "text_pathway",
+    "filled_field":    "merged_context_excluded",
+    "merged_conflict": "merged_context_excluded",
+    "no_provenance":   "no_provenance",
+}
+
+_FULL_REASON: dict[str, str] = {
+    "source_unavailable": "source_unavailable",
+    "context_missing":    "provenance_wrong",
+    "anchor_missing":     "anchor_missing",
+    "published_mismatch": "filing_mismatch",
+    "raw_stale":          "anchor_stale",
+}
+
+
+def classify_reason(cheap_status: str, full_status: str) -> str:
+    """Pure deterministic triage from the scoping doc 8.2 table.
+
+    Reason enum: verified | anchor_stale | transform_drift | filing_mismatch |
+    anchor_missing | provenance_wrong | source_unavailable | corrected |
+    derived | text_pathway | merged_context_excluded | no_provenance |
+    unchecked_trivial.
+    """
+    if cheap_status in _CHEAP_REASON:
+        return _CHEAP_REASON[cheap_status]
+    if full_status in _FULL_REASON:
+        return _FULL_REASON[full_status]
+    if full_status == "raw_match":
+        return ("transform_drift"
+                if cheap_status in ("fail", "missing_raw_with_transform")
+                else "verified")
+    return "unchecked_trivial"
