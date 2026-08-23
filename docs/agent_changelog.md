@@ -9299,7 +9299,7 @@ known limitation, not done now): deterministic ORDER BY in tie-break windows.
 | shares_held:pow10_shares | 2,847 |
 | Any src_transforms event | 730,363 (93.6%) |
 | cost_source='derived_proxy' | 252,559 |
-| shares_held_source='derived_proxy' | 2,847 (baseline ~1,902 pre this rebuild) |
+| shares_held_source='derived_proxy' | 2,847 (2026-04 historical reference figure: ~1,902 on the then-current dataset; no shares values moved in this migration -- see gate) |
 | src_context_count > 1 | 103,365 |
 | src_conflict_fields non-empty | 8 |
 | src_field_overrides non-empty | 0 (no bridge overlay hits in this cohort) |

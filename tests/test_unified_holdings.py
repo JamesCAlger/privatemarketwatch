@@ -2207,11 +2207,39 @@ class TestPrepareBdc:
             {"investment_identifier": "E Corp - TL", "cik": "123",
              "fair_value": 1, "pct_of_net_assets": 0.004},
             {"investment_identifier": "F Corp - TL", "cik": "123",
-             "fair_value": 1, "pct_of_net_assets": 50.0},  # boundary: NO event
+             "fair_value": 1, "pct_of_net_assets": 50.0},  # boundary: strict > 50, so NO event
         ])
         result = _prepare_bdc(df).set_index("issuer_name")
+        # event side
         assert "pct_of_net_assets:rate_x100" in result.loc["E Corp", "src_transforms"]
         assert "pct_of_net_assets" not in result.loc["F Corp", "src_transforms"]
+        # published-value side (boundary asymmetry is real -- schemas.md claims tests enforce this)
+        assert result.loc["E Corp", "pct_of_net_assets"] == pytest.approx(0.4)   # 0.004 * 100
+        assert result.loc["F Corp", "pct_of_net_assets"] == pytest.approx(50.0)  # unchanged (strict >50 threshold)
+
+    def test_src_transforms_rate_at_exact_50_boundary(self):
+        # rates use >= 50 (inclusive), so interest_rate=50.0 -> /100 branch, value published 0.5
+        df = self._make_bdc_df([
+            {"investment_identifier": "I Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 50.0},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        assert result.loc["I Corp", "interest_rate"] == pytest.approx(0.5)
+        assert "interest_rate:rate_div100" in result.loc["I Corp", "src_transforms"]
+
+    def test_src_transforms_basis_spread_and_pik_rate_x100_branch(self):
+        # basis_spread and pik_rate x100 branch: small decimal input -> scaled value + event
+        df = self._make_bdc_df([
+            {"investment_identifier": "J Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5, "basis_spread": 0.045},
+            {"investment_identifier": "K Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5, "pik_rate": 0.02},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        assert result.loc["J Corp", "basis_spread"] == pytest.approx(4.5)
+        assert "basis_spread:rate_x100" in result.loc["J Corp", "src_transforms"]
+        assert result.loc["K Corp", "pik_rate"] == pytest.approx(2.0)
+        assert "pik_rate:rate_x100" in result.loc["K Corp", "src_transforms"]
 
     def test_src_transforms_records_pik_boundary_fix(self):
         # CTE 12a: pik 20-50 exceeding interest_rate was bps -> /100 + event
