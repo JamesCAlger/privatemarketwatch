@@ -8451,6 +8451,35 @@ class TestApplyRowCorrections:
         assert result.iloc[0]["fair_value"] == "5000000"
         assert result.iloc[1]["fair_value"] == "2000000"
 
+    def test_row_correction_stamps_corrected_fields(self, tmp_path):
+        """Applied correction stamps the changed field name into corrected_fields."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "",
+            "issuer_name": "Acme Corp",
+            "corrected_fields": "",
+        }])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "1234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "field": "fair_value",
+            "value": "5000000",
+            "reason": "test correction",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["fair_value"] == "5000000"
+        assert result.iloc[0]["corrected_fields"] == "fair_value"
+
     def test_correctable_fields_includes_key_fields(self):
         """Spot-check that _CORRECTABLE_FIELDS includes the expected set."""
         for f in ("fair_value", "cost", "principal_amount",

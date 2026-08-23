@@ -2611,6 +2611,7 @@ def _prepare_bdc(
             '' AS src_field_overrides,
             '' AS cost_source,
             '' AS shares_held_source,
+            -- ELSE '' is dead: has_fv CTE (Phase C input gate) requires _fv IS NOT NULL.
             CASE WHEN _fv IS NOT NULL THEN 'xbrl_field' ELSE '' END AS fair_value_source,
             CASE WHEN _pa IS NOT NULL THEN 'xbrl_field' ELSE '' END AS principal_amount_source,
             CASE WHEN _pct IS NOT NULL THEN 'xbrl_field' ELSE '' END AS pct_of_net_assets_source,
@@ -2794,9 +2795,15 @@ def _prepare_bdc(
     # and the XBRL tag does not. Reversible (override records old_value_xbrl). No-op if the
     # override file is absent.
     from pipeline.identifier_spread_corrections import apply_spread_corrections
+    _spread_before = result["basis_spread"].copy() if "basis_spread" in result.columns else None
     result, _n_spread = apply_spread_corrections(
         result, identifier_col="bdc_investment_identifier"
     )
+    if _n_spread and _spread_before is not None and "corrected_fields" in result.columns:
+        from pipeline.agent_promoted import append_corrected_fields
+        _spread_changed = result.index[result["basis_spread"] != _spread_before]
+        if len(_spread_changed):
+            append_corrected_fields(result, _spread_changed, ["basis_spread"])
 
     # Log text enrichment stats
     n = len(result)

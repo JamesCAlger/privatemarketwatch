@@ -1948,6 +1948,9 @@ def _apply_row_corrections(
 
         for field, value, reason in patches:
             df.loc[mask, field] = value
+            if "corrected_fields" in df.columns:
+                from pipeline.agent_promoted import append_corrected_fields
+                append_corrected_fields(df, df.index[mask], [field])
             n_applied += 1
             logger.info(
                 "Row correction applied: field=%s value=%s reason=%r key=%s",
