@@ -1146,6 +1146,7 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             suffixes=("", "_dedupe_fill"),
         )
     )
+    picked["dedupe_filled_fields"] = ""
 
     for col in value_cols:
         fill_col = f"{col}_dedupe_fill"
@@ -1160,9 +1161,18 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
             picked[col].isna()
             | (picked[col].astype("string").str.strip() == "")
         )
+        actually_filled = (
+            missing_value & ~has_conflict
+            & picked[fill_col].notna()
+            & (picked[fill_col].astype("string").str.strip() != "")
+        )
         picked.loc[missing_value & ~has_conflict, col] = picked.loc[
             missing_value & ~has_conflict, fill_col
         ]
+        picked.loc[actually_filled, "dedupe_filled_fields"] = (
+            picked.loc[actually_filled, "dedupe_filled_fields"]
+            .map(lambda val, field=col: field if val == "" else f"{val},{field}")
+        )
         picked.drop(columns=[fill_col], inplace=True)
 
     # Non-accrual OR-merge: if any row in a dedup group has True, the

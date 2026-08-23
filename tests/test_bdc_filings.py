@@ -2585,3 +2585,43 @@ class TestSrcFactsCapture:
         prov2 = json.loads(record["src_facts"])
         assert prov2["fair_value"]["r"] == 500000  # first-writer wins
         assert prov2["fair_value"]["x"] == ["cik_scale_fix:x1000", "some_other_fix"]
+
+
+def _dedup_frame(rows):
+    base = {
+        "accession_number": "0001-24-000001", "investment_identifier": "Acme TL",
+        "period": "2025-12-31", "dimensions_raw": "axis=Acme",
+    }
+    return pd.DataFrame([{**base, **r} for r in rows])
+
+
+class TestDedupeFilledFields:
+    def test_fill_from_losing_context_is_marked(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+        # winner (complete row, ctxA) is missing cost; loser (ctxB) has it
+        df = _dedup_frame([
+            {"_context_id": "ctxA", "fair_value": 1000.0, "cost": None,
+             "principal_amount": 900.0,
+             "src_facts": '{"interest_rate":{"r":0.1}}'},
+            {"_context_id": "ctxB", "fair_value": None, "cost": 950.0,
+             "principal_amount": None, "src_facts": ""},
+        ])
+        out = _deduplicate_bdc_holdings(df)
+        assert len(out) == 1
+        row = out.iloc[0]
+        assert row["src_context_id"] == "ctxA"
+        assert row["cost"] == 950.0
+        assert "cost" in str(row["dedupe_filled_fields"]).split(",")
+        # fair_value came from the winner itself -> not marked
+        assert "fair_value" not in str(row["dedupe_filled_fields"]).split(",")
+        # src_facts is the WINNER's payload, never filled from the loser
+        assert row["src_facts"] == '{"interest_rate":{"r":0.1}}'
+
+    def test_single_context_group_unmarked(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+        df = _dedup_frame([
+            {"_context_id": "ctxA", "fair_value": 1000.0, "cost": 950.0,
+             "principal_amount": 900.0, "src_facts": ""},
+        ])
+        out = _deduplicate_bdc_holdings(df)
+        assert out.iloc[0]["dedupe_filled_fields"] == ""
