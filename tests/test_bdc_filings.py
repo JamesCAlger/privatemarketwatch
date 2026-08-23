@@ -2586,6 +2586,32 @@ class TestSrcFactsCapture:
         assert prov2["fair_value"]["r"] == 500000  # first-writer wins
         assert prov2["fair_value"]["x"] == ["cik_scale_fix:x1000", "some_other_fix"]
 
+    def test_canonical_concept_interest_rate_override_coupled_to_concept_map(self):
+        """CANONICAL_CONCEPT['interest_rate'] must be 'investmentinterestrate' AND that
+        string must appear as a CONCEPT_MAP pattern mapped to interest_rate.
+
+        This makes the explicit override's coupling to CONCEPT_MAP loud: if someone
+        reorders CONCEPT_MAP so 'investmentinterestrate' is no longer present, or maps
+        it to a different column, this test breaks immediately rather than silently
+        misrecording src_facts for the canonical interest_rate concept."""
+        from pipeline.bdc_filings import CANONICAL_CONCEPT, CONCEPT_MAP
+        assert CANONICAL_CONCEPT["interest_rate"] == "investmentinterestrate", (
+            "CANONICAL_CONCEPT['interest_rate'] must be 'investmentinterestrate'; "
+            "the explicit post-loop override must not have been removed."
+        )
+        # Verify the override is consistent with CONCEPT_MAP: the canonical pattern
+        # must appear in CONCEPT_MAP and must map to the interest_rate column.
+        concept_map_dict = {pat: col for pat, col in CONCEPT_MAP}
+        assert "investmentinterestrate" in concept_map_dict, (
+            "'investmentinterestrate' not found in CONCEPT_MAP patterns; "
+            "CANONICAL_CONCEPT override is now dangling."
+        )
+        assert concept_map_dict["investmentinterestrate"] == "interest_rate", (
+            "CONCEPT_MAP maps 'investmentinterestrate' to "
+            f"'{concept_map_dict['investmentinterestrate']}', not 'interest_rate'; "
+            "CANONICAL_CONCEPT override is now inconsistent."
+        )
+
 
 def _dedup_frame(rows):
     base = {

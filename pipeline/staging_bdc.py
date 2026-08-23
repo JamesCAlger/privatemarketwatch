@@ -2794,17 +2794,17 @@ def _prepare_bdc(
     # per-position spreads where the freeform-identifier spread reconciles with all-in+SOFR
     # and the XBRL tag does not. Reversible (override records old_value_xbrl). No-op if the
     # override file is absent.
-    from pipeline.identifier_spread_corrections import apply_spread_corrections
+    from pipeline.identifier_spread_corrections import (
+        apply_spread_corrections,
+        spread_changed_index,
+    )
     _spread_before = result["basis_spread"].copy() if "basis_spread" in result.columns else None
     result, _n_spread = apply_spread_corrections(
         result, identifier_col="bdc_investment_identifier"
     )
     if _n_spread and _spread_before is not None and "corrected_fields" in result.columns:
         from pipeline.agent_promoted import append_corrected_fields
-        _spread_changed = result.index[
-            result["basis_spread"].ne(_spread_before)
-            & ~(result["basis_spread"].isna() & _spread_before.isna())
-        ]
+        _spread_changed = spread_changed_index(_spread_before, result["basis_spread"])
         if len(_spread_changed):
             append_corrected_fields(result, _spread_changed, ["basis_spread"])
 

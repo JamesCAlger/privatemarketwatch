@@ -151,6 +151,9 @@ def _field_sql(field: str, source_col: str) -> str:
                THEN 'pass_trivial'
              WHEN {neg_null}
                THEN CASE WHEN {published} IS NULL THEN 'pass' ELSE 'fail' END
+             WHEN COALESCE(NULLIF(CAST(src_facts AS VARCHAR), ''), '') = ''
+               AND {ev} LIKE '%{field}:%'
+               THEN 'undeclared'
              WHEN {raw} IS NULL AND {has_event}
                THEN 'missing_raw_with_transform'
              {rate_absent_trivial}
@@ -237,7 +240,8 @@ def cheap_tier(
 
 # cheap_status values that short-circuit full-tier (no filing access needed).
 _SHORT_CIRCUIT = frozenset({"corrected", "derived", "text_pathway",
-                             "filled_field", "merged_conflict", "no_provenance"})
+                             "filled_field", "merged_conflict", "no_provenance",
+                             "undeclared"})
 
 
 def _staging_multiplier(field: str, events: str) -> float:
@@ -423,6 +427,7 @@ _CHEAP_REASON: dict[str, str] = {
     "filled_field":    "merged_context_excluded",
     "merged_conflict": "merged_context_excluded",
     "no_provenance":   "no_provenance",
+    "undeclared":      "no_provenance",
 }
 
 _FULL_REASON: dict[str, str] = {
@@ -558,10 +563,23 @@ def main(argv: list | None = None) -> int:
         description="Deterministic provenance re-verification -> ledger.")
     ap.add_argument("--ciks", nargs="*", default=None)
     ap.add_argument("--cohort", action="store_true")
+    ap.add_argument("--all-rows", action="store_true",
+                    help="Run universe-wide (required when neither --cohort nor --ciks given).")
     ap.add_argument("--cheap-only", action="store_true")
     ap.add_argument("--out", default=None,
                     help="output dir (default: data/output)")
     args = ap.parse_args(argv)
+
+    if not args.cohort and not args.ciks and not args.all_rows:
+        print(
+            "ERROR: scope required. Pass --cohort, --ciks <cik...>, or --all-rows.\n"
+            "Running without a scope filter would classify out-of-cohort BDC rows\n"
+            "that have src_transforms events but empty src_facts as 'undeclared',\n"
+            "which correctly avoids misclassifying them as missing_raw_with_transform.\n"
+            "However, an unscoped run is expensive and usually unintended.\n"
+            "Pass --all-rows explicitly to confirm a universe-wide run."
+        )
+        return 2
 
     from pipeline import config  # noqa: PLC0415
 

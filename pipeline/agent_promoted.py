@@ -105,14 +105,6 @@ def mark_corrected_fields(before_tracked: pd.DataFrame,
                 continue
             b = before_tracked[col].astype("string").str.strip().fillna("")
             a = after_cmp[col].astype("string").str.strip().fillna("")
-            changed_before_idx = before_tracked.index[(a != b).to_numpy()]
-            # Map back to after's positional index for stamping.
-            changed_pos = after.index[:n][
-                before_tracked.index.isin(changed_before_idx)
-                if len(changed_before_idx) < len(before_tracked.index)
-                else slice(None)
-            ]
-            # Simpler: use a boolean mask over the first n rows.
             changed_mask = (a != b).to_numpy()
             changed_after_idx = after.index[:n][changed_mask]
             if len(changed_after_idx):

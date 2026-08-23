@@ -3,7 +3,10 @@
 import pandas as pd
 import numpy as np
 
-from pipeline.identifier_spread_corrections import apply_spread_corrections
+from pipeline.identifier_spread_corrections import (
+    apply_spread_corrections,
+    spread_changed_index,
+)
 from pipeline.agent_promoted import append_corrected_fields
 
 _CORR = [
@@ -58,7 +61,12 @@ def test_missing_columns_safe():
 def test_spread_stamp_nan_rows_not_falsely_marked():
     """NaN-safe stamp: rows with NaN basis_spread that are NOT corrected must not
     get 'basis_spread' stamped in corrected_fields.  Only the one corrected row
-    (index 0) should be stamped; the NaN row (index 1) must stay empty."""
+    (index 0) should be stamped; the NaN row (index 1) must stay empty.
+
+    Uses spread_changed_index() -- the production helper from
+    identifier_spread_corrections -- rather than an inline re-implementation,
+    so this test exercises exactly the same code path as staging_bdc.py.
+    """
     _CORR_SINGLE = [
         {"cik": "0001993402", "report_date": "2025-03-31",
          "identifier": _CORR[0]["identifier"],
@@ -76,11 +84,8 @@ def test_spread_stamp_nan_rows_not_falsely_marked():
     result, _n = apply_spread_corrections(
         df, corrections=_CORR_SINGLE, log=lambda *_: None
     )
-    # Simulate the null-safe stamp logic from staging_bdc.py
-    _spread_changed = result.index[
-        result["basis_spread"].ne(_spread_before)
-        & ~(result["basis_spread"].isna() & _spread_before.isna())
-    ]
+    # Call the production helper (same code path as staging_bdc.py).
+    _spread_changed = spread_changed_index(_spread_before, result["basis_spread"])
     if len(_spread_changed):
         append_corrected_fields(result, _spread_changed, ["basis_spread"])
     assert result.loc[0, "corrected_fields"] == "basis_spread"  # corrected row stamped

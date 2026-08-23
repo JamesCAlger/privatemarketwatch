@@ -10,9 +10,36 @@ from __future__ import annotations
 
 import json
 
+import pandas as pd
+
 from pipeline import config
 
 CORRECTIONS_FILE = config.DATA_DIR / "overrides" / "identifier_spread_corrections.json"
+
+
+def spread_changed_index(before: pd.Series, after: pd.Series) -> pd.Index:
+    """Return the index positions where basis_spread changed, NaN-safe.
+
+    A row is considered changed when the new value differs from the old value
+    AND it is not the case that both values are NaN (NaN != NaN in pandas
+    would otherwise flag NaN->NaN as a change).
+
+    Parameters
+    ----------
+    before:
+        basis_spread column values before apply_spread_corrections.
+    after:
+        basis_spread column values after apply_spread_corrections
+        (same index as before).
+
+    Returns
+    -------
+    pd.Index
+        Index labels of rows where a real change occurred.
+    """
+    return after.index[
+        after.ne(before) & ~(after.isna() & before.isna())
+    ]
 
 
 def load_corrections():
