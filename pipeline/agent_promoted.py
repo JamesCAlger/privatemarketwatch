@@ -137,6 +137,56 @@ def mark_corrected_fields(before_tracked: pd.DataFrame,
     return after
 
 
+def mark_corrected_fields_by_ordinal(
+    before_tracked: pd.DataFrame,
+    corrected: pd.DataFrame,
+    tracked_cols: list,
+) -> pd.DataFrame:
+    """Stamp corrected['corrected_fields'] using an ordinal key ('_cf_ord') that survives
+    index resets, row drops, and row adds from agent_rule.apply_rules.
+
+    before_tracked must contain '_cf_ord' (range(len(sub)) assigned before apply_rules).
+    apply_rules passes unknown columns through (only drops '_rid'), so _cf_ord persists
+    in corrected. Rows with NaN _cf_ord are genuinely added (row_add rule); inner-joined
+    rows are compared field-by-field; dropped rows simply have no match and are silent.
+
+    This replaces the positional-alignment guard in mark_corrected_fields for the Layer C
+    rules path, which is the only path where apply_rules can both drop and add rows.
+    """
+    if "corrected_fields" not in corrected.columns:
+        corrected["corrected_fields"] = ""
+
+    # Added rows: _cf_ord is NaN (row_add appended with ignore_index=True -> no _cf_ord).
+    if "_cf_ord" in corrected.columns:
+        added_mask = corrected["_cf_ord"].isna()
+    else:
+        # Fallback: _cf_ord was not passed through (should not happen; see docstring).
+        added_mask = pd.Series(False, index=corrected.index)
+
+    if added_mask.any():
+        append_corrected_fields(corrected, corrected.index[added_mask.to_numpy()], ["_row:added"])
+
+    # Existing rows: inner-merge on _cf_ord to pair each surviving row with its before snapshot.
+    if "_cf_ord" in corrected.columns and not corrected[~added_mask].empty:
+        surviving = corrected.loc[~added_mask].copy()
+        # before_tracked has _cf_ord as a regular column (set before apply_rules call).
+        merged = surviving.reset_index(names=["_orig_idx"]).merge(
+            before_tracked, on="_cf_ord", suffixes=("_after", "_before"), how="inner"
+        )
+        for col in tracked_cols:
+            col_after = col + "_after" if (col + "_after") in merged.columns else col
+            col_before = col + "_before" if (col + "_before") in merged.columns else None
+            if col_before is None or col_before not in merged.columns:
+                continue
+            a = merged[col_after].astype("string").str.strip().fillna("")
+            b = merged[col_before].astype("string").str.strip().fillna("")
+            changed_rows = merged.loc[(a != b).to_numpy(), "_orig_idx"]
+            if len(changed_rows):
+                append_corrected_fields(corrected, pd.Index(changed_rows), [col])
+
+    return corrected
+
+
 def normalize_cik10(raw) -> str:
     """10-digit zero-padded CIK from any int/str form (empty stays empty)."""
     digits = _DIGITS_RE.sub("", str(raw or ""))
@@ -436,9 +486,17 @@ def apply_promoted_rules(
                 logger.warning("promoted rule %s: no BDC rows for cik=%s in frame",
                                r.get("rule_id"), cik)
             continue
-        _before = sub[
-            [tc for tc in CORRECTED_TRACKED_FIELDS if tc in sub.columns]].copy()
+        tracked_cols = [tc for tc in CORRECTED_TRACKED_FIELDS if tc in sub.columns]
+        # Ordinal-key diff: immune to index resets, row drops, and row adds.
+        # apply_rules does reset_index(drop=True) which makes the returned index
+        # 0-based; a positional-only guard fails when rows are dropped (len shrinks).
+        # Stamping _cf_ord before the call lets us inner-merge on a stable ordinal
+        # key after the call so dropped rows vanish cleanly, added rows have NaN _cf_ord.
+        sub = sub.copy()
+        sub["_cf_ord"] = range(len(sub))
+        before_tracked = sub[tracked_cols + ["_cf_ord"]].copy()
         corrected, rule_audits = apply_rules(sub, rules)
+        corrected = mark_corrected_fields_by_ordinal(before_tracked, corrected, tracked_cols)
         corrected = mark_corrected_fields(_before, corrected)
         # row_add positions carry only holdings fields (see agent_rule.ADD_POSITION_KEYS);
         # identity columns are filled STRUCTURALLY from the rule's own CIK scope so an
@@ -470,6 +528,8 @@ def apply_promoted_rules(
                 logger.warning("promoted rule %s (cik=%s) DRIFT=%s: applied rows=%d vs "
                                "authored rows=%s -- route to re-validation",
                                a.get("rule_id"), cik, drift, rows, authored_rows)
+        # Drop the transient ordinal key before concat; combined.columns won't have it.
+        corrected = corrected.drop(columns=["_cf_ord"], errors="ignore")
         drop_mask = drop_mask | mask
         replaced_parts.append(corrected)
 

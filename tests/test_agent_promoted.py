@@ -588,3 +588,107 @@ class TestCorrectedFieldsMarking:
         assert out.iloc[0]["corrected_fields"] == ""
         assert out.iloc[1]["corrected_fields"] == ""
         assert out.iloc[2]["corrected_fields"] == "_row:added"
+
+
+class TestMarkCorrectedFieldsByOrdinal:
+    """Unit tests for the ordinal-key diff helper used in apply_promoted_rules."""
+
+    def _before(self, rows):
+        """Build a before_tracked frame with _cf_ord as a regular column."""
+        df = pd.DataFrame(rows)
+        df["_cf_ord"] = range(len(df))
+        return df
+
+    def test_drop_rule_no_row_added_only_changed_marked(self):
+        """Drop-rule scenario: before 4 rows, rule drops row at ordinal 1,
+        changes fair_value on row at ordinal 2. Result must have NO _row:added
+        and only the changed row marked. Dropped row is absent and silent."""
+        before = self._before([
+            {"fair_value": 100.0, "interest_rate": 10.0},
+            {"fair_value": 200.0, "interest_rate": 11.0},  # will be dropped
+            {"fair_value": 300.0, "interest_rate": 12.0},  # will be changed
+            {"fair_value": 400.0, "interest_rate": 13.0},
+        ])
+        # Simulate what apply_rules returns after dropping ordinal-1 and changing ordinal-2:
+        # reset_index gives 0-based index; _cf_ord survives (apply_rules passes extra cols through).
+        after = pd.DataFrame([
+            {"fair_value": 100.0, "interest_rate": 10.0, "_cf_ord": 0.0, "corrected_fields": ""},
+            {"fair_value": 350.0, "interest_rate": 12.0, "_cf_ord": 2.0, "corrected_fields": ""},
+            {"fair_value": 400.0, "interest_rate": 13.0, "_cf_ord": 3.0, "corrected_fields": ""},
+        ])
+        tracked = [c for c in before.columns if c != "_cf_ord"]
+        result = ap.mark_corrected_fields_by_ordinal(before, after, tracked)
+        assert "_row:added" not in result["corrected_fields"].values
+        # ordinal 2 (positional row 1 in result) changed fair_value
+        changed = result[result["_cf_ord"] == 2.0]
+        assert changed.iloc[0]["corrected_fields"] == "fair_value"
+        # ordinal 0 and 3 unchanged
+        assert result[result["_cf_ord"] == 0.0].iloc[0]["corrected_fields"] == ""
+        assert result[result["_cf_ord"] == 3.0].iloc[0]["corrected_fields"] == ""
+
+    def test_add_rule_added_row_marked_others_unmarked(self):
+        """Add-rule scenario: apply_rules appends a new row with ignore_index=True,
+        so the new row has NaN _cf_ord. Original rows must be unmarked (no field changes)."""
+        before = self._before([
+            {"fair_value": 100.0, "interest_rate": 10.0},
+            {"fair_value": 200.0, "interest_rate": 11.0},
+        ])
+        # Simulate row_add output: original rows have _cf_ord; added row has NaN.
+        after = pd.DataFrame([
+            {"fair_value": 100.0, "interest_rate": 10.0, "_cf_ord": 0.0, "corrected_fields": ""},
+            {"fair_value": 200.0, "interest_rate": 11.0, "_cf_ord": 1.0, "corrected_fields": ""},
+            {"fair_value": 999.0, "interest_rate": 8.0,  "_cf_ord": float("nan"), "corrected_fields": ""},
+        ])
+        tracked = [c for c in before.columns if c != "_cf_ord"]
+        result = ap.mark_corrected_fields_by_ordinal(before, after, tracked)
+        assert result.iloc[0]["corrected_fields"] == ""
+        assert result.iloc[1]["corrected_fields"] == ""
+        assert result.iloc[2]["corrected_fields"] == "_row:added"
+
+    def test_mixed_drop_add_change(self):
+        """Mixed scenario: drop 1 row, add 1 row, change 1 field on a surviving row.
+        Only the changed row gets a field mark; only the added row gets _row:added."""
+        before = self._before([
+            {"fair_value": 100.0, "interest_rate": 10.0},
+            {"fair_value": 200.0, "interest_rate": 11.0},  # will be dropped
+            {"fair_value": 300.0, "interest_rate": 12.0},  # will be changed
+        ])
+        after = pd.DataFrame([
+            {"fair_value": 100.0, "interest_rate": 10.0,  "_cf_ord": 0.0,           "corrected_fields": ""},
+            {"fair_value": 350.0, "interest_rate": 12.0,  "_cf_ord": 2.0,           "corrected_fields": ""},
+            {"fair_value": 999.0, "interest_rate": 5.0,   "_cf_ord": float("nan"),  "corrected_fields": ""},
+        ])
+        tracked = [c for c in before.columns if c != "_cf_ord"]
+        result = ap.mark_corrected_fields_by_ordinal(before, after, tracked)
+        assert result[result["_cf_ord"] == 0.0].iloc[0]["corrected_fields"] == ""
+        assert result[result["_cf_ord"] == 2.0].iloc[0]["corrected_fields"] == "fair_value"
+        assert result[result["_cf_ord"].isna()].iloc[0]["corrected_fields"] == "_row:added"
+
+
+def test_apply_promoted_stage2_row_id_selector_jit_materialized():
+    # 2026-08-21: row_id is assigned at the END of the build, so the mid-build frame
+    # has no row_id column. A promoted leaf selecting by row_id must still apply:
+    # the applier JIT-computes row_id on the CIK sub-frame (same natural-key ids as
+    # the published artifact) and drops the transient column afterwards.
+    from pipeline.unified_holdings import _assign_row_ids
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Alpha Corp",
+         "bdc_investment_identifier": "Alpha Corp TL",
+         "report_date": "2025-12-31", "fair_value": 1000.0, "interest_rate": 0.105},
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "bdc_investment_identifier": "Beta LLC 2L",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+    ])
+    # the id a worker would copy from the published artifact
+    published = _assign_row_ids(combined.copy())
+    alpha_id = published.loc[published["issuer_name"] == "Alpha Corp", "row_id"].iloc[0]
+
+    corrections = [{"cik": "1715933", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100,
+                                 "row_selector": {"row_id": alpha_id}}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert audits[0]["status"] == "ok" and audits[0]["rows_changed"] == 1
+    assert out[out["issuer_name"] == "Alpha Corp"]["interest_rate"].iloc[0] == 10.5
+    assert out[out["issuer_name"] == "Beta LLC"]["interest_rate"].iloc[0] == 11.5
+    # transient column must not leak into the frame (end-of-build assignment owns it)
+    assert "row_id" not in out.columns
