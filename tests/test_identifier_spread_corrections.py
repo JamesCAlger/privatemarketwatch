@@ -1,8 +1,10 @@
 """Tests for the audited Agent A basis_spread correction applier."""
 
 import pandas as pd
+import numpy as np
 
 from pipeline.identifier_spread_corrections import apply_spread_corrections
+from pipeline.agent_promoted import append_corrected_fields
 
 _CORR = [
     {"cik": "0001993402", "report_date": "2025-03-31",
@@ -51,3 +53,35 @@ def test_missing_columns_safe():
     df = pd.DataFrame([{"cik": "1", "report_date": "2025-03-31"}])  # no basis_spread/identifier
     out, n = apply_spread_corrections(df, corrections=_CORR, log=lambda *_: None)
     assert n == 0
+
+
+def test_spread_stamp_nan_rows_not_falsely_marked():
+    """NaN-safe stamp: rows with NaN basis_spread that are NOT corrected must not
+    get 'basis_spread' stamped in corrected_fields.  Only the one corrected row
+    (index 0) should be stamped; the NaN row (index 1) must stay empty."""
+    _CORR_SINGLE = [
+        {"cik": "0001993402", "report_date": "2025-03-31",
+         "identifier": _CORR[0]["identifier"],
+         "new_value_decimal": 0.0475, "old_value_xbrl": 0.04},
+    ]
+    df = pd.DataFrame([
+        {"cik": "1993402", "report_date": "2025-03-31 00:00:00",
+         "bdc_investment_identifier": _CORR[0]["identifier"],
+         "basis_spread": 0.04, "corrected_fields": ""},
+        {"cik": "0001993402", "report_date": "2025-03-31",
+         "bdc_investment_identifier": "NaN row no spread",
+         "basis_spread": np.nan, "corrected_fields": ""},
+    ])
+    _spread_before = df["basis_spread"].copy()
+    result, _n = apply_spread_corrections(
+        df, corrections=_CORR_SINGLE, log=lambda *_: None
+    )
+    # Simulate the null-safe stamp logic from staging_bdc.py
+    _spread_changed = result.index[
+        result["basis_spread"].ne(_spread_before)
+        & ~(result["basis_spread"].isna() & _spread_before.isna())
+    ]
+    if len(_spread_changed):
+        append_corrected_fields(result, _spread_changed, ["basis_spread"])
+    assert result.loc[0, "corrected_fields"] == "basis_spread"  # corrected row stamped
+    assert result.loc[1, "corrected_fields"] == ""              # NaN row NOT stamped

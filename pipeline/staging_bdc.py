@@ -2801,7 +2801,10 @@ def _prepare_bdc(
     )
     if _n_spread and _spread_before is not None and "corrected_fields" in result.columns:
         from pipeline.agent_promoted import append_corrected_fields
-        _spread_changed = result.index[result["basis_spread"] != _spread_before]
+        _spread_changed = result.index[
+            result["basis_spread"].ne(_spread_before)
+            & ~(result["basis_spread"].isna() & _spread_before.isna())
+        ]
         if len(_spread_changed):
             append_corrected_fields(result, _spread_changed, ["basis_spread"])
 
