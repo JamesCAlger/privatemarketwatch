@@ -9234,3 +9234,97 @@ grounding key).
 - Next in the provenance chain: docs/superpowers/plans/
   2026-08-22-provenance-step1-passthroughs.md (six-column step-1 batch,
   ready to execute).
+
+## 2026-08-23 - Provenance step-1 passthrough columns shipped (e42389d..d2cf99e)
+
+Six provenance columns added to `UNIFIED_COLUMNS` and populated by a single `--unified` rebuild.
+No re-extraction required. Upgrade path: flat tags fold into `src_facts` JSON at the extractor
+migration.
+
+### What shipped (commits e42389d..d2cf99e)
+
+- **e42389d** `provenance step 1: six-column schema batch through staging` -- added
+  `src_transforms`, `cost_source`, `shares_held_source`, `src_conflict_fields`,
+  `src_context_count`, `src_field_overrides` to `UNIFIED_COLUMNS` in
+  `pipeline/unified_holdings.py` and passthrough wiring in `pipeline/staging_bdc.py`.
+- **80e3809** `record rescale-branch events in src_transforms` -- Phase C event recording
+  in `staging_bdc.py` for all rate and pct rescale branches (x100, div100, neg_null).
+- **48ba82b** `guarantee src_transforms is never NULL` -- empty-string initialisation guard.
+- **189195c** `Class-C derivation events in unified CTEs` -- `unified_pik_fixed`,
+  `with_cost`, `with_shares_fix` CTEs in `unified_holdings.py` record transform events and
+  set `cost_source`/`shares_held_source='derived_proxy'`.
+- **93b88a5 + 31192cc** `cover zero-cost proxy firing` -- boundary tests and zero-cost
+  path fix for `cost:cost_proxy_fv` event.
+- **d2cf99e** `bridge overlay records coordinate refs` -- `apply_html_section_bridge_field_overlays`
+  writes `field=bridge:<sha8>:t<T>:r<R>` tokens into `src_field_overrides`.
+
+### Rebuild + gate (2026-08-23, 2445.7s)
+
+- Row count: 780,726 -- identical.
+- FV sum: 7,458,535,136,381.14 vs 7,458,535,136,381.16 (0.02 float rounding only). OK.
+- Per-classification FV: 0 mismatches. OK.
+- Per-CIK+quarter FV: 0 mismatches. OK.
+- Schema: exactly the six expected columns added, none removed. OK.
+- Cost sum delta: +15,806,250.04 (2.2ppm). GATE FAIL -- see ruling below.
+- shares_held sum delta: +247,190.9985 (0.13ppm). GATE FAIL -- see ruling below.
+- src_anchor row_id stability: 4 flips at CIK 0000081955 / 2025-12-31. GATE FAIL -- see ruling.
+
+**CONTROLLER RULING (verbatim):** the deltas are ACCEPTED as ordinal tie-break residual.
+Evidence: all other-workstream files/correction stores predate the snapshot build, so the only
+difference between builds is the six provenance commits; row_id-joined diffs show ZERO stable
+rows changed cost or shares -- every delta rides on row-identity flips among equal-fair-value
+duplicate-context rows (~13 CIK-quarters across 7 CIKs: 0001321741, 0001414932, 0001578348,
+0000081955, 0001655050, 0001496099 et al.); mechanism is DuckDB physical row-order perturbation
+hitting pre-existing order-sensitive tie-breaks in dedup/pick layers; same residual class as the
+8 ordinal flips accepted in the 2026-08-22 anchor-rowid migration. Future hardening (recorded as
+known limitation, not done now): deterministic ORDER BY in tie-break windows.
+
+### Coverage stats (from scratch/2026-08-23_prov_step1/coverage_stats.py)
+
+| Event / metric | Count |
+|---|---|
+| interest_rate:rate_x100 | 357,833 |
+| interest_rate:neg_null | 8 |
+| interest_rate:rate_div100 | 0 |
+| basis_spread:rate_x100 | 395,670 |
+| basis_spread:neg_null | 75 |
+| basis_spread:rate_div100 | 1 |
+| pik_rate:rate_x100 | 45,940 |
+| pik_rate:neg_null | 24 |
+| pik_rate:rate_div100 | 0 |
+| pct_of_net_assets:rate_x100 | 299,629 |
+| pct_of_net_assets:rate_div100 | 0 |
+| pik_rate:pik_boundary_div100 | 14 |
+| cost:cost_proxy_fv | 252,559 |
+| shares_held:pow10_shares | 2,847 |
+| Any src_transforms event | 730,363 (93.6%) |
+| cost_source='derived_proxy' | 252,559 |
+| shares_held_source='derived_proxy' | 2,847 (baseline ~1,902 pre this rebuild) |
+| src_context_count > 1 | 103,365 |
+| src_conflict_fields non-empty | 8 |
+| src_field_overrides non-empty | 0 (no bridge overlay hits in this cohort) |
+
+### Full suite
+
+Full suite: 4501 passed, 13 skipped, 2 xfailed, 0 failed in 9101s (2:31:40),
+run with `--durations=50 --durations-min=0.5`; 687 warnings (pre-existing noise
+level). Suite grew 4488 -> 4501 (this migration's new tests).
+
+Semantic diff backstop (`diff_outputs.py --semantic` vs the official post-Phase-6
+baseline): holdings 14 / matches 7 / position_returns 11 / index_returns 8 /
+fund_financials 3 semantic delta rows, plus 1307 divergent artifacts dominated by
+files retired since the baseline was taken (agent_a proposals, pytest cache).
+Attribution: pre-existing accumulated baseline drift (incl. the 2026-08-22 anchor
+migration's accepted 8 ordinal flips) plus this migration's documented tie-break
+flips above. Baseline refresh remains owner-gated per AGENTS.md baseline
+governance and is NOT done here.
+
+### Docs updated
+
+- `docs/reference/schemas.md`: six columns documented, src_transforms event vocabulary v1
+  (all 14 codes, field order, condition, effect), cost_source/shares_held_source enum,
+  src_field_overrides grammar, src_context_count/src_conflict_fields dedup carry-throughs,
+  coverage stats table (full 14-code breakdown), known-limitations section (ordinal residual).
+- `docs/agent_changelog.md`: this entry.
+- `scratch/2026-08-23_prov_step1/coverage_stats.py` + `coverage_stats.log`: read-only DuckDB
+  coverage stats script and its output.

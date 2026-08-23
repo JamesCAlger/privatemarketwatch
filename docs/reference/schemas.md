@@ -83,3 +83,110 @@ PIK outputs intentionally separate strict current-payment/accrual evidence from 
 - **V7 (Affiliation-axis dedup + pct correction):** Implemented. Fixes FV inflation from affiliation-axis duplication (12 CIKs) via 3 mechanisms: affiliation prefix/suffix stripping from `_raw_id`, expanded `_BAD_ISSUER_NAMES_EXACT`, and ROW_NUMBER dedup over (cik, report_date, issuer_name, FV). Corrects `pct_of_net_assets` for multi-dimension-path BDCs (263 CIK-quarters, 116K rows) by recalculating with consolidated `net_assets` from `fund_financials.csv`. Dimension-path duplicates resolved by `no_dim_dupes` CTE (case/punctuation-normalized key excluding cost) + majority casing vote in `_prepare_bdc` + N-PORT cross-quarter dedup via `nport_deduped` CTE. Cost proxy made deterministic with per-tranche partition key (instrument_description + cusip) and fair_value tiebreaker. Tier A within-filing position matching case-folded to recover 2,386 cross-period pairs that previously fell to lower-confidence tiers.
 
 All validation functions use DuckDB SQL (no pandas .iterrows/.apply).
+
+## Provenance Passthrough Columns (step 1, 2026-08-23)
+
+Six new columns appended to `UNIFIED_COLUMNS` after `src_context_id`.
+Populated by a single `--unified` rebuild; no re-extraction required.
+Upgrade path: these flat-tag columns fold into `src_facts` (per-field
+JSON with instance-raw values) when the extractor migration ships.
+
+### Dedup carry-throughs (from `bdc_holdings.csv`)
+
+| Column | Type | Description |
+|---|---|---|
+| `src_context_count` | str | Number of XBRL contexts deduplicated into this row (`dedupe_context_count` passed through from bdc_holdings). Empty for N-PORT and for BDC rows built before the dedup audit. |
+| `src_conflict_fields` | str | Comma-joined field names where deduplicated contexts disagreed on value (`dedupe_conflict_fields` pass-through). Empty when all contexts agreed or only one context existed. |
+
+### Pipeline transform events (`src_transforms`)
+
+Flat `;`-joined ordered list of `field:code` events recording which
+pipeline heuristic fired on which field. One entry per branch that fired;
+silent when the field passed through unchanged. Event/value CASE
+conditions are colocated in `staging_bdc.py` Phase C and in the
+`unified_pik_fixed`, `with_cost`, and `with_shares_fix` CTEs.
+
+**Event vocabulary v1** (fires in this field order where applicable):
+
+| Event code | Field | Condition | Effect |
+|---|---|---|---|
+| `interest_rate:neg_null` | `interest_rate` | raw < 0 | set to NULL |
+| `interest_rate:rate_x100` | `interest_rate` | raw <= 0.50 | multiply by 100 |
+| `interest_rate:rate_div100` | `interest_rate` | raw >= 50 | divide by 100 |
+| `basis_spread:neg_null` | `basis_spread` | raw < 0 | set to NULL |
+| `basis_spread:rate_x100` | `basis_spread` | raw <= 0.50 | multiply by 100 |
+| `basis_spread:rate_div100` | `basis_spread` | raw >= 50 | divide by 100 |
+| `pik_rate:neg_null` | `pik_rate` | raw < 0 | set to NULL |
+| `pik_rate:rate_x100` | `pik_rate` | raw <= 0.50 | multiply by 100 |
+| `pik_rate:rate_div100` | `pik_rate` | raw >= 50 | divide by 100 |
+| `pct_of_net_assets:rate_x100` | `pct_of_net_assets` | raw <= 0.50 | multiply by 100 |
+| `pct_of_net_assets:rate_div100` | `pct_of_net_assets` | raw > 50 (strict) | divide by 100 |
+| `pik_rate:pik_boundary_div100` | `pik_rate` | pik >= 20 AND pik > interest_rate | divide by 100 (bps->pct fix, appended by `unified_pik_fixed` CTE) |
+| `cost:cost_proxy_fv` | `cost` | cost NULL/zero but FV proxy available | cost filled from FV proxy (appended by `with_cost` CTE) |
+| `shares_held:pow10_shares` | `shares_held` | shares >30x deviation from issuer median | pow-10 outlier corrected (appended by `with_shares_fix` CTE) |
+
+Note: `pct_of_net_assets` uses a strict `> 50` threshold for the div/100
+branch (not `>= 50`); all rate fields use `>= 50`. This asymmetry is
+enforced by boundary tests in `tests/test_unified_holdings.py`.
+
+### Class-C pathway enums
+
+| Column | Type | Values | Description |
+|---|---|---|---|
+| `cost_source` | str | `''` or `'derived_proxy'` | `'derived_proxy'` when `with_cost` CTE filled a NULL/zero cost from the cross-quarter FV proxy. Extends the existing `*_source` enum pattern used by `interest_rate_source`, `basis_spread_source`, etc. |
+| `shares_held_source` | str | `''` or `'derived_proxy'` | `'derived_proxy'` when `with_shares_fix` CTE applied a pow-10 correction to an outlier shares value. |
+
+Rows where `cost_source='derived_proxy'` or `shares_held_source='derived_proxy'`
+should be excluded from verified-FV numerators that require independently
+confirmed position economics (per scoping doc accounting rule).
+
+### Bridge overlay coordinate refs (`src_field_overrides`)
+
+| Column | Type | Grammar | Description |
+|---|---|---|---|
+| `src_field_overrides` | str | `;`-joined `field=bridge:<sha8>:t<T>:r<R>` | Written by `apply_html_section_bridge_field_overlays` for each field overridden by the HTML-section bridge. `<sha8>` = first 8 chars of the HTML file's sha256; `<T>` = table index; `<R>` = row index within the bridge table. Empty when no bridge overlay applied to this row. |
+
+Example: `maturity_date=bridge:a1b2c3d4:t2:r15` means `maturity_date`
+was sourced from the HTML bridge file whose sha256 starts `a1b2c3d4`,
+table 2, row 15.
+
+### Coverage stats (2026-08-23 rebuild, 780,726 rows)
+
+Measured from `private_markets_holdings.parquet` via `scratch/2026-08-23_prov_step1/coverage_stats.py`.
+
+| Metric | Count |
+|---|---|
+| interest_rate:rate_x100 events | 357,833 |
+| interest_rate:rate_div100 events | 0 |
+| interest_rate:neg_null events | 8 |
+| basis_spread:rate_x100 events | 395,670 |
+| basis_spread:rate_div100 events | 1 |
+| basis_spread:neg_null events | 75 |
+| pik_rate:rate_x100 events | 45,940 |
+| pik_rate:rate_div100 events | 0 |
+| pik_rate:neg_null events | 24 |
+| pct_of_net_assets:rate_x100 events | 299,629 |
+| pct_of_net_assets:rate_div100 events | 0 |
+| pik_rate:pik_boundary_div100 events | 14 |
+| cost:cost_proxy_fv events | 252,559 |
+| shares_held:pow10_shares events | 2,847 |
+| Total rows with any src_transforms event | 730,363 (93.6%) |
+| cost_source='derived_proxy' | 252,559 |
+| shares_held_source='derived_proxy' | 2,847 (historical baseline ~1,902 pre-rebuild) |
+| src_context_count > 1 | 103,365 |
+| src_conflict_fields non-empty | 8 |
+| src_field_overrides non-empty | 0 (bridge overlay had no matches in this cohort) |
+
+### Known limitations
+
+- **Values populated on rebuild only.** All six provenance columns are empty strings in cached
+  `bdc_holdings.csv` rows generated before this migration. They are populated correctly on any
+  full `--unified` rebuild from cached extraction data; partial rebuilds or legacy CSV imports
+  may leave the columns empty.
+- **Ordinal tie-break residual.** The 2026-08-23 rebuild produced four `src_anchor` row_id flips
+  at CIK 0000081955 / 2025-12-31 (and cost/shares deltas at ~13 CIK-quarters across 7 CIKs:
+  0001321741, 0001414932, 0001578348, 0000081955, 0001655050, 0001496099 et al.) due to DuckDB
+  physical row-order perturbation hitting pre-existing order-sensitive tie-breaks in dedup/pick
+  layers. All deltas are ACCEPTED as the same residual class as the 8 ordinal flips in the
+  2026-08-22 anchor-row_id migration. Future hardening: deterministic ORDER BY in tie-break
+  windows (not done in step 1).
