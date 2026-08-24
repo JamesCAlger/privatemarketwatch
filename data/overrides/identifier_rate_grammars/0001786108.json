@@ -2,7 +2,7 @@
   "schema_version": "agentA-rate-grammar.v1",
   "cik": "0001786108",
   "entity_name": "Trinity Capital Inc.",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "status": "PROPOSED",
   "applies_to": {
     "regime": "flattened",
@@ -136,7 +136,7 @@
   ],
   "evidence": [
     {
-      "accession_number": "0001193125-26-068600",
+      "accession_number": "0001193125-26-207620",
       "table_index": null,
       "row_index": null,
       "observation": "Recent bundle samples contain Prime/PRIME variable-rate clauses with maturity date, spread, floor rate, optional PIK, and EOT text embedded in the identifier."
@@ -151,12 +151,13 @@
       "accession_number": "0000950170-23-017817",
       "table_index": null,
       "row_index": null,
-      "observation": "Oldest bundle samples include LIBOR + spread clauses and fixed-rate clauses; some dates omit a space after the comma."
+      "observation": "Oldest bundle samples include LIBOR plus spread clauses and fixed-rate clauses; some dates omit a space after the comma."
     }
   ],
   "notes": [
     "basis_spread is encoded as percent text in identifiers, so type pct is used rather than bps.",
-    "The regexes allow non-breaking-space-normalized spacing variants such as Maturity DateMarch and dates with no space after the comma.",
-    "Only fields embedded in investment_identifier strings are extracted; principal, cost, fair value, shares, strike price, and footnotes are not identifier datapoints."
+    "The regexes allow non-breaking-space-normalized spacing variants and dates with no space after the comma.",
+    "Only fields embedded in investment_identifier strings are extracted; principal, cost, fair value, shares, strike price, and footnotes are not identifier datapoints.",
+    "The evidence CLI could not run in this worker because pandas is unavailable, so observations are grounded in the allowed bundle samples and existing read-only production override context."
   ]
 }

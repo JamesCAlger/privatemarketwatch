@@ -1716,6 +1716,85 @@ class TestParseAllFilings:
         assert len(result) == 1
         assert int(result.iloc[0]["dedupe_context_count"]) == 2
 
+    def test_dedupe_publishes_winner_context_as_src_context_id(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_sparse",
+                "fair_value": "",
+                "cost": "",
+                "principal_amount": "",
+                "interest_rate": "SOFR+500",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_complete",
+                "fair_value": "1000000",
+                "cost": "990000",
+                "principal_amount": "1000000",
+                "interest_rate": "",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 1
+        # internal column still dropped; published anchor is the winner's ctx
+        assert "_context_id" not in result.columns
+        assert result.iloc[0]["src_context_id"] == "ctx_complete"
+
+    def test_dedupe_fv_split_rows_keep_own_contexts(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_a",
+                "fair_value": "1000000",
+                "cost": "990000",
+            },
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "_context_id": "ctx_b",
+                "fair_value": "2000000",
+                "cost": "990000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+
+        assert len(result) == 2
+        assert set(result["src_context_id"]) == {"ctx_a", "ctx_b"}
+        # distinct contexts -> distinct anchors even under axis split
+        assert result["src_context_id"].nunique() == 2
+
+    def test_dedupe_without_context_column_yields_empty_src_context_id(self):
+        # legacy-CSV merge path: rows may arrive with no _context_id at all
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+
+        raw = pd.DataFrame([
+            {
+                "accession_number": "acc-001",
+                "investment_identifier": "Acme Corp - First Lien",
+                "period": "2024-03-31",
+                "fair_value": "1000000",
+            },
+        ])
+
+        result = _deduplicate_bdc_holdings(raw)
+        assert len(result) == 1
+        assert result.iloc[0]["src_context_id"] == ""
+
     @patch("pipeline.bdc_filings.BDC_HOLDINGS_FILE")
     @patch("pipeline.bdc_filings.BDC_PARSE_PROGRESS_FILE")
     def test_parses_and_saves(self, mock_progress, mock_holdings, tmp_dir):
@@ -2306,3 +2385,306 @@ class TestNonaccrualExtraction:
         result = _deduplicate_bdc_holdings(df)
         assert len(result) == 1
         assert bool(result.iloc[0]["nonaccrual_footnote"]) is True
+
+
+# ---------------------------------------------------------------------------
+# interest_rate_concept provenance (rate-convention S0 input)
+# ---------------------------------------------------------------------------
+
+XBRL_PAIDINCASH = textwrap.dedent("""\
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xbrl
+        xmlns="http://www.xbrl.org/2003/instance"
+        xmlns:xbrli="http://www.xbrl.org/2003/instance"
+        xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+        xmlns:f="http://example.com/filer"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <xbrli:context id="ctx_a">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001551901</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="f:InvestmentIdentifierAxis">
+                        <f:InvestmentIdentifierDomain>Cash Co Term Loan</f:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="ctx_b">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001551901</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:typedMember dimension="f:InvestmentIdentifierAxis">
+                        <f:InvestmentIdentifierDomain>Bare Co Term Loan</f:InvestmentIdentifierDomain>
+                    </xbrldi:typedMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <f:InvestmentInterestRatePaidInCash contextRef="ctx_a" unitRef="pure" decimals="4">0.0800</f:InvestmentInterestRatePaidInCash>
+        <f:InvestmentInterestRatePaidInKind contextRef="ctx_a" unitRef="pure" decimals="4">0.0250</f:InvestmentInterestRatePaidInKind>
+        <f:InvestmentOwnedAtFairValue contextRef="ctx_a" unitRef="usd" decimals="-3">5000000</f:InvestmentOwnedAtFairValue>
+        <f:InvestmentInterestRate contextRef="ctx_b" unitRef="pure" decimals="4">0.1050</f:InvestmentInterestRate>
+        <f:InvestmentOwnedAtFairValue contextRef="ctx_b" unitRef="usd" decimals="-3">3000000</f:InvestmentOwnedAtFairValue>
+    </xbrl>
+""")
+
+
+class TestInterestRateConceptProvenance:
+    def test_paidincash_maps_to_interest_rate_with_provenance(self, tmp_path):
+        from pipeline.bdc_filings import _parse_single_filing
+        xml = tmp_path / "pc.xml"
+        xml.write_text(XBRL_PAIDINCASH, encoding="utf-8")
+        meta = {"cik": "1551901", "entity_name": "T", "accession_number": "a",
+                "form_type": "10-K", "filing_date": "2026-02-01",
+                "report_date": "2025-12-31"}
+        records = _parse_single_filing(str(xml), meta)
+        by_id = {r["investment_identifier"]: r for r in records}
+        cash_row = by_id["Cash Co Term Loan"]
+        bare_row = by_id["Bare Co Term Loan"]
+        # value behavior unchanged: PaidInCash lands in interest_rate
+        assert cash_row["interest_rate"] == pytest.approx(0.08)
+        assert cash_row["pik_rate"] == pytest.approx(0.025)
+        # provenance records WHICH concept won the column
+        assert cash_row["interest_rate_concept"] == "paid_in_cash"
+        assert bare_row["interest_rate_concept"] == "bare"
+
+    def test_match_concept_paidincash_explicit(self):
+        from pipeline.bdc_filings import _match_concept
+        assert _match_concept("investmentinterestratepaidincash") == "interest_rate"
+
+    def test_no_rate_fact_leaves_provenance_empty(self, tmp_path):
+        from pipeline.bdc_filings import _parse_single_filing
+        xml = tmp_path / "m.xml"
+        xml.write_text(XBRL_MINIMAL, encoding="utf-8")
+        meta = {"cik": "1418076", "entity_name": "T", "accession_number": "a",
+                "form_type": "10-K", "filing_date": "2024-02-01",
+                "report_date": "2023-12-31"}
+        records = _parse_single_filing(str(xml), meta)
+        by_id = {r["investment_identifier"]: r for r in records}
+        # Beta Inc has no rate fact at all -> empty provenance
+        assert by_id["Beta Inc - Senior Secured Note"]["interest_rate_concept"] == ""
+        # Acme has a bare InvestmentInterestRate fact
+        assert by_id["Acme Corp - First Lien Term Loan"]["interest_rate_concept"] == "bare"
+
+
+# ---------------------------------------------------------------------------
+# src_facts provenance capture
+# ---------------------------------------------------------------------------
+
+import json
+
+from pipeline.bdc_filings import _extract_investment_facts
+
+
+def _ctx(period="2025-12-31", ident="Acme Corp - Term Loan"):
+    return {
+        "is_investment": True, "period": period,
+        "investment_identifier": ident, "industry": "", "investment_type": "",
+        "affiliation": "", "dimensions_raw": f"investmentidentifieraxis={ident}",
+    }
+
+
+def _tree(facts_xml: str):
+    return etree.ElementTree(etree.fromstring(
+        f'<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">{facts_xml}</xbrl>'
+    ))
+
+
+class TestSrcFactsCapture:
+    def test_rate_fields_record_raw_value(self):
+        tree = _tree(
+            '<us-gaap:InvestmentInterestRate contextRef="c1">0.105'
+            '</us-gaap:InvestmentInterestRate>'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="c1" unitRef="usd" '
+            'decimals="-3">1000000</us-gaap:InvestmentOwnedAtFairValue>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        prov = json.loads(recs[0]["src_facts"])
+        assert prov["interest_rate"]["r"] == 0.105
+        # canonical concept, no transform -> no "c", no "x"
+        assert "c" not in prov["interest_rate"]
+        # fair_value: canonical concept, no transform -> NO entry at all
+        assert "fair_value" not in prov
+
+    def test_noncanonical_concept_recorded(self):
+        # SharesOrNumberOfContractsOrPrincipalAmount is the NON-canonical
+        # principal_amount concept (canonical = InvestmentOwnedBalancePrincipalAmount)
+        tree = _tree(
+            '<us-gaap:InvestmentOwnedBalanceSharesOrNumberOfContractsOr'
+            'PrincipalAmount contextRef="c1" unitRef="usd" decimals="0">58702'
+            '</us-gaap:InvestmentOwnedBalanceSharesOrNumberOfContractsOr'
+            'PrincipalAmount>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        prov = json.loads(recs[0]["src_facts"])
+        assert prov["principal_amount"]["c"] == (
+            "investmentownedbalancesharesornumberofcontractsorprincipalamount")
+
+    def test_decimals_rescale_records_raw_and_event(self):
+        # 5+ facts at decimals=-3, one outlier at -6 and >100x the median:
+        # normalization multiplies the outlier by 10^-3; src_facts must keep
+        # the pre-fix raw and the event.
+        base = "".join(
+            f'<us-gaap:InvestmentOwnedAtFairValue contextRef="c{i}" '
+            f'unitRef="usd" decimals="-3">{1000000 + i}'
+            f'</us-gaap:InvestmentOwnedAtFairValue>' for i in range(5))
+        outlier = ('<us-gaap:InvestmentOwnedAtFairValue contextRef="c9" '
+                   'unitRef="usd" decimals="-6">500000000'
+                   '</us-gaap:InvestmentOwnedAtFairValue>')
+        contexts = {f"c{i}": _ctx(ident=f"P{i}") for i in range(5)}
+        contexts["c9"] = _ctx(ident="Outlier LP")
+        recs = _extract_investment_facts(_tree(base + outlier), contexts)
+        by_ctx = {r["_context_id"]: r for r in recs}
+        assert by_ctx["c9"]["fair_value"] == 500000000 * 10 ** -3
+        prov = json.loads(by_ctx["c9"]["src_facts"])
+        assert prov["fair_value"]["r"] == 500000000
+        assert prov["fair_value"]["x"] == ["decimals_rescale:10^-3"]
+
+    def test_no_facts_means_empty_src_facts(self):
+        tree = _tree('<us-gaap:InvestmentOwnedAtFairValue contextRef="c1" '
+                     'unitRef="usd">1000</us-gaap:InvestmentOwnedAtFairValue>')
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        # fair_value canonical + untransformed and no rate facts -> "" not "{}"
+        assert recs[0]["src_facts"] == ""
+
+    def test_paidincash_concept_records_c_and_r(self):
+        # InvestmentInterestRatePaidInCash maps to interest_rate (non-canonical).
+        # src_facts must carry both "c" (winning concept) and "r" (raw rate value).
+        # interest_rate_concept must be "paid_in_cash" to prove the right branch fired.
+        tree = _tree(
+            '<us-gaap:InvestmentInterestRatePaidInCash contextRef="c1">0.08'
+            '</us-gaap:InvestmentInterestRatePaidInCash>'
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="c1" unitRef="usd" '
+            'decimals="-3">2000000</us-gaap:InvestmentOwnedAtFairValue>'
+        )
+        recs = _extract_investment_facts(tree, {"c1": _ctx()})
+        assert len(recs) == 1
+        rec = recs[0]
+        # Published value matches the raw paidincash fact
+        assert rec["interest_rate"] == 0.08
+        # interest_rate_concept confirms the paidincash branch fired
+        assert rec["interest_rate_concept"] == "paid_in_cash"
+        prov = json.loads(rec["src_facts"])
+        # Non-canonical concept -> "c" present
+        assert prov["interest_rate"]["c"] == "investmentinterestratepaidincash"
+        # interest_rate is in _RATE_PROV_COLUMNS -> "r" present with raw value
+        assert prov["interest_rate"]["r"] == 0.08
+
+    def test_cik_scale_fix_records_raw_and_chains(self):
+        from pipeline.bdc_filings import _record_value_xform
+        # Single transform: record dict starts empty, call once with x1000 code
+        record: dict = {"src_facts": ""}
+        _record_value_xform(record, "fair_value", 500000, "cik_scale_fix:x1000")
+        prov = json.loads(record["src_facts"])
+        assert prov["fair_value"]["r"] == 500000
+        assert prov["fair_value"]["x"] == ["cik_scale_fix:x1000"]
+        # Chaining: second call with a different code preserves original "r"
+        # and appends the new code to "x"
+        _record_value_xform(record, "fair_value", 999999, "some_other_fix")
+        prov2 = json.loads(record["src_facts"])
+        assert prov2["fair_value"]["r"] == 500000  # first-writer wins
+        assert prov2["fair_value"]["x"] == ["cik_scale_fix:x1000", "some_other_fix"]
+
+    def test_canonical_concept_interest_rate_override_coupled_to_concept_map(self):
+        """CANONICAL_CONCEPT['interest_rate'] must be 'investmentinterestrate' AND that
+        string must appear as a CONCEPT_MAP pattern mapped to interest_rate.
+
+        This makes the explicit override's coupling to CONCEPT_MAP loud: if someone
+        reorders CONCEPT_MAP so 'investmentinterestrate' is no longer present, or maps
+        it to a different column, this test breaks immediately rather than silently
+        misrecording src_facts for the canonical interest_rate concept."""
+        from pipeline.bdc_filings import CANONICAL_CONCEPT, CONCEPT_MAP
+        assert CANONICAL_CONCEPT["interest_rate"] == "investmentinterestrate", (
+            "CANONICAL_CONCEPT['interest_rate'] must be 'investmentinterestrate'; "
+            "the explicit post-loop override must not have been removed."
+        )
+        # Verify the override is consistent with CONCEPT_MAP: the canonical pattern
+        # must appear in CONCEPT_MAP and must map to the interest_rate column.
+        concept_map_dict = {pat: col for pat, col in CONCEPT_MAP}
+        assert "investmentinterestrate" in concept_map_dict, (
+            "'investmentinterestrate' not found in CONCEPT_MAP patterns; "
+            "CANONICAL_CONCEPT override is now dangling."
+        )
+        assert concept_map_dict["investmentinterestrate"] == "interest_rate", (
+            "CONCEPT_MAP maps 'investmentinterestrate' to "
+            f"'{concept_map_dict['investmentinterestrate']}', not 'interest_rate'; "
+            "CANONICAL_CONCEPT override is now inconsistent."
+        )
+
+
+def _dedup_frame(rows):
+    base = {
+        "accession_number": "0001-24-000001", "investment_identifier": "Acme TL",
+        "period": "2025-12-31", "dimensions_raw": "axis=Acme",
+    }
+    return pd.DataFrame([{**base, **r} for r in rows])
+
+
+class TestDedupeFilledFields:
+    def test_fill_from_losing_context_is_marked(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+        # winner (complete row, ctxA) is missing cost; loser (ctxB) has it
+        df = _dedup_frame([
+            {"_context_id": "ctxA", "fair_value": 1000.0, "cost": None,
+             "principal_amount": 900.0,
+             "src_facts": '{"interest_rate":{"r":0.1}}'},
+            {"_context_id": "ctxB", "fair_value": None, "cost": 950.0,
+             "principal_amount": None, "src_facts": ""},
+        ])
+        out = _deduplicate_bdc_holdings(df)
+        assert len(out) == 1
+        row = out.iloc[0]
+        assert row["src_context_id"] == "ctxA"
+        assert row["cost"] == 950.0
+        assert "cost" in str(row["dedupe_filled_fields"]).split(",")
+        # fair_value came from the winner itself -> not marked
+        assert "fair_value" not in str(row["dedupe_filled_fields"]).split(",")
+        # src_facts is the WINNER's payload, never filled from the loser
+        assert row["src_facts"] == '{"interest_rate":{"r":0.1}}'
+
+    def test_single_context_group_unmarked(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+        df = _dedup_frame([
+            {"_context_id": "ctxA", "fair_value": 1000.0, "cost": 950.0,
+             "principal_amount": 900.0, "src_facts": ""},
+        ])
+        out = _deduplicate_bdc_holdings(df)
+        assert out.iloc[0]["dedupe_filled_fields"] == ""
+
+
+class TestCohortScopedRebuild:
+    def test_ciks_filter_merges_over_existing(self, tmp_path, monkeypatch):
+        import pipeline.bdc_filings as bf
+        out_file = tmp_path / "bdc_holdings.csv"
+        monkeypatch.setattr(bf, "BDC_HOLDINGS_FILE", out_file)
+        # existing artifact: one cohort CIK (stale) + one out-of-scope CIK
+        pd.DataFrame([
+            {"cik": "0000000001", "accession_number": "A1",
+             "investment_identifier": "Old Row", "period": "2025-12-31",
+             "dimensions_raw": "d", "fair_value": "1"},
+            {"cik": "0000000002", "accession_number": "B1",
+             "investment_identifier": "Keep Row", "period": "2025-12-31",
+             "dimensions_raw": "d", "fair_value": "2"},
+        ]).to_csv(out_file, index=False)
+        # index: both CIKs cached; parse stub returns fresh rows w/ src_facts
+        idx = pd.DataFrame([
+            {"cik": "1", "accession_number": "A1",
+             "xbrl_download_status": "cached", "xbrl_local_path": "x.xml"},
+            {"cik": "2", "accession_number": "B1",
+             "xbrl_download_status": "cached", "xbrl_local_path": "y.xml"},
+        ])
+        monkeypatch.setattr(Path, "exists", lambda self: True)
+        monkeypatch.setattr(bf, "_parse_single_filing", lambda p, m: [{
+            "cik": m["cik"], "accession_number": m["accession_number"],
+            "investment_identifier": "New Row", "period": "2025-12-31",
+            "dimensions_raw": "d", "_context_id": "c1", "fair_value": 9.0,
+            "src_facts": '{"interest_rate":{"r":0.1}}'}])
+        out = bf.rebuild_cached_bdc_holdings(filings_index=idx, ciks=["1"])
+        cik1 = out[out["cik"].astype(str).str.contains("1")]
+        cik2 = out[out["cik"].astype(str).str.contains("2")]
+        assert list(cik1["investment_identifier"]) == ["New Row"]   # replaced
+        assert list(cik2["investment_identifier"]) == ["Keep Row"]  # untouched
+        assert "src_facts" in out.columns
+        # untouched rows get '' in the new column, not NaN
+        assert cik2["src_facts"].fillna("").iloc[0] == ""

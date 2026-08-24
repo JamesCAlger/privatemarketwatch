@@ -1,0 +1,53 @@
+{
+  "cik": "0002011498",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "principal_amount",
+    "to_field": "shares_held",
+    "row_selector": {
+      "issuer_name": "Saturn Sound Bidco Limited",
+      "report_date": "2025-12-31",
+      "table_index": 29,
+      "row_index": 6
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_9e077439ebd6",
+    "RVQ_REV_f644d0b0e9a8"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 32,
+      "row_index": 6,
+      "quoted_text": "Total investments | 1,350,788 | 1,355,641 | 254.1 %"
+    },
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Saturn Sound Bidco Limited | First Lien Term Loan | SOFR + 5.25 % | 9.09 % | 12/2/2024 | 12/3/2031 | 60,289 | 59,359 | 59,836 | 11.2 %"
+    },
+    {
+      "table_index": 32,
+      "row_index": 4,
+      "quoted_text": "Firebird Co-Invest L.P. | LP Interest | 1/29/2025 | N/A | 4,790 | 5,315 | 1.0 %"
+    },
+    {
+      "table_index": 29,
+      "row_index": 6,
+      "quoted_text": "Saturn Sound Bidco Limited | First Lien Term Loan | SOFR + 5.25 % | 9.09 % | 12/2/2024 | 12/3/2031 | Par ($) / Shares: 60,289 | Cost/Amortized Cost: 59,359 | Fair Value: 59,836"
+    },
+    {
+      "table_index": 31,
+      "row_index": 34,
+      "quoted_text": "Flexera Software LLC | First Lien Term Loan | EURIBOR + 4.50 % | 6.38 % | 8/15/2025 | 8/16/2032 | Par: 10,601 | Cost/Amortized Cost: 12,386 | Fair Value: 12,419"
+    }
+  ],
+  "confidence": 0.41,
+  "rationale": "The cited Saturn Sound Bidco Limited row labels the amount column as 'Par ($) / Shares' while the unified schema separates debt principal_amount from equity shares_held. The narrow requested column_remap correction maps the extracted principal_amount value into shares_held only for the cited issuer/date/table row. Confidence is low because the cited instrument is a First Lien Term Loan, so the filing text supports principal treatment more strongly than shares treatment; this correction is bounded to the requested class and row to minimize residual risk.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

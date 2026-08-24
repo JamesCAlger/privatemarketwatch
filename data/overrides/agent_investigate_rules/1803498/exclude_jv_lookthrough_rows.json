@@ -1,0 +1,40 @@
+{
+  "cik": "1803498",
+  "rule_id": "exclude_jv_lookthrough_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "asset_category <> 'CASH' AND (bdc_dimensions_raw LIKE '%| Emerald JV LP%' OR bdc_dimensions_raw LIKE '%| Verdelite JV LP%')",
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Total Investment Portfolio | 82,916,241 | 82,199,346 | 172.60"
+    },
+    {
+      "source": "filing",
+      "quote": "BCRED Emerald JV LP - LP Interest | (6)(16) | 1/19/2022 | 1,815,000 | 1,678,745 | 3.53; BCRED Verdelite JV LP - LP Interest | (6)(16) | 10/21/2022 | 117,706 | 113,068 | 0.25"
+    },
+    {
+      "source": "query",
+      "quote": "Rows with bdc_dimensions_raw ending in JV look-through suffixes, excluding CASH, total 725 rows and fair value 7,211,180,000 for 2025-12-31; examples include Smile Doctors, LLC | Emerald JV LP and Trinity Air Consultants Holdings Corp. | Emerald JV LP."
+    },
+    {
+      "source": "query",
+      "quote": "Applying the exclusion to the conservation sum changes 2025-12-31 from 89,190,106,000 versus anchor 82,199,346,000 (+8.505%) to 81,978,926,000 (-0.268%)."
+    }
+  ],
+  "rationale": "The filing counts the joint ventures as LP interests in the investment portfolio. The extracted holdings also include the underlying investments held inside Emerald JV LP and Verdelite JV LP, which are look-through detail and duplicate economic exposure when summed with the LP interests. Exclude non-cash look-through rows identified by the JV suffix while retaining the filer's actual JV LP interest positions.",
+  "confidence": 0.95,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 725,
+      "fv": 7211180000.0,
+      "residual_before": 8.505,
+      "residual_after": -0.2681529850614627
+    }
+  }
+}

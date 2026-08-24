@@ -27,6 +27,7 @@ from pipeline.config import (
     ENTITY_LOOKUP_FILE,
     FUND_FINANCIALS_FILE,
     FUND_STRATEGY_CORRECTION_CANDIDATES_FILE,
+    FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE,
     FUND_STRATEGY_REFERENCE_FILE,
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_HOLDINGS_FILE,
@@ -80,6 +81,21 @@ UNIFIED_COLUMNS = [
     "bdc_investment_identifier", "bdc_form_type", "bdc_dimensions_raw",
     "bdc_unrealized_gain_loss",
     "bdc_investment_country",
+    "src_context_id",
+    "src_context_count",
+    "src_conflict_fields",
+    "src_transforms",
+    "src_field_overrides",
+    "cost_source",
+    "shares_held_source",
+    "fair_value_source",
+    "principal_amount_source",
+    "pct_of_net_assets_source",
+    "pik_rate_source",
+    "bdc_unrealized_gain_loss_source",
+    "src_facts",
+    "src_filled_fields",
+    "corrected_fields",
     # Non-accrual signals (BDC only -- extracted from XBRL footnotes/dimensions)
     "nonaccrual_footnote", "nonaccrual_dimension",
     # Source-specific (N-PORT)
@@ -108,6 +124,11 @@ UNIFIED_COLUMNS = [
     # Position tracking (populated by --returns step)
     "position_id",
 ]
+# NOTE: the saved artifact carries one column beyond UNIFIED_COLUMNS: row_id,
+# appended by _assign_row_ids as the last step of build_unified_holdings.
+# It is deliberately NOT in UNIFIED_COLUMNS -- that list doubles as the
+# in-flight SQL schema (union/stabilization passes) where row_id does not
+# exist yet.
 
 ORPHAN_HOLDINGS_COLUMNS = [
     "cik", "entity_name", "source", "first_report_date", "last_report_date",
@@ -1028,10 +1049,26 @@ def build_unified_holdings(
     -- its own proxy (e.g. Term Loan A vs Term Loan B).  The tiebreaker
     -- fair_value makes the result deterministic when multiple rows share
     -- the earliest report_date.
+    --
+    -- Provenance: when the proxy fires (original cost NULL/zero but a
+    -- non-zero FV proxy is available), cost_source is set to
+    -- 'derived_proxy' and 'cost:cost_proxy_fv' is appended to
+    -- src_transforms.  Rows with a real non-zero cost keep cost_source
+    -- and src_transforms unchanged.
     with_cost AS (
-        SELECT * EXCLUDE (cost),
-            COALESCE(
-                NULLIF(TRY_CAST(cost AS DOUBLE), 0),
+        SELECT * EXCLUDE (cost, cost_source, src_transforms, _cost_orig, _cost_proxy),
+            COALESCE(_cost_orig, _cost_proxy) AS cost,
+            CASE WHEN _cost_orig IS NULL AND _cost_proxy IS NOT NULL
+                 THEN 'derived_proxy'
+                 ELSE cost_source
+            END AS cost_source,
+            CASE WHEN _cost_orig IS NULL AND _cost_proxy IS NOT NULL
+                 THEN concat_ws(';', NULLIF(src_transforms, ''), 'cost:cost_proxy_fv')
+                 ELSE src_transforms
+            END AS src_transforms
+        FROM (
+            SELECT *,
+                NULLIF(TRY_CAST(cost AS DOUBLE), 0) AS _cost_orig,
                 FIRST_VALUE(
                     NULLIF(TRY_CAST(fair_value AS DOUBLE), 0)
                     IGNORE NULLS
@@ -1050,16 +1087,20 @@ def build_unified_holdings(
                         COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
                         COALESCE(CAST(shares_held AS VARCHAR), '')
                     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-                )
-            ) AS cost
-        FROM classified
+                ) AS _cost_proxy
+            FROM classified
+        )
     ),
     -- Shares normalization: detect power-of-10 unit mismatches within
     -- the same position (cik + issuer_name) by comparing each row's
     -- per-unit price (fair_value / shares_held) against the group median.
     -- Outliers are replaced with the nearest non-outlier shares value.
+    --
+    -- Provenance: when the outlier flag fires, shares_held_source is set
+    -- to 'derived_proxy' and 'shares_held:pow10_shares' is appended to
+    -- src_transforms.  Non-outlier rows keep both columns unchanged.
     with_shares_fix AS (
-        SELECT * EXCLUDE (shares_held),
+        SELECT * EXCLUDE (shares_held, shares_held_source, src_transforms),
             CASE
                 WHEN _is_outlier THEN COALESCE(
                     -- Nearest previous non-outlier shares
@@ -1086,7 +1127,14 @@ def build_unified_holdings(
                         ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING)
                 )
                 ELSE _sh_val
-            END AS shares_held
+            END AS shares_held,
+            CASE WHEN _is_outlier THEN 'derived_proxy'
+                 ELSE shares_held_source
+            END AS shares_held_source,
+            CASE WHEN _is_outlier
+                 THEN concat_ws(';', NULLIF(src_transforms, ''), 'shares_held:pow10_shares')
+                 ELSE src_transforms
+            END AS src_transforms
         FROM (
             SELECT *,
                 TRY_CAST(shares_held AS DOUBLE) AS _sh_val,
@@ -1334,6 +1382,16 @@ def build_unified_holdings(
     # catches everything the row-level correction system missed)
     combined = _apply_fund_strategy_asset_class_override(combined)
 
+    # Promoted B2 stage-2 corrections (2026-08-13, gap-1 Layer B post-staging): the
+    # non-comparative correction classes apply to the unified frame here, per CIK,
+    # BDC rows only -- BEFORE Layer C rules so rules see corrected values. The
+    # comparative_period_filter family already applied at raw staging above.
+    _promoted_corrections = agent_promoted.load_promoted_corrections(b2_corrections_dir)
+    if _promoted_corrections:
+        combined, _b2_audits = agent_promoted.apply_promoted_stage2_corrections(
+            combined, _promoted_corrections)
+        _agent_fix_audits.extend(_b2_audits)
+
     # Promoted investigator rules (gap 1 Layer C): gate-PASS rules from the audited
     # override store, applied per CIK to BDC-source rows only. Runs after
     # classification (rule predicates reference unified-frame columns) and before the
@@ -1396,6 +1454,10 @@ def build_unified_holdings(
         agent_promoted.write_application_audit(
             _agent_fix_audits, _out_file.parent / "agent_fix_application_audit.csv")
 
+    # Rebuild-stable per-row identifier, computed on the FINAL frame (after all
+    # correction/cache layers) so the id reflects the row as published.
+    combined = _assign_row_ids(combined)
+
     # Save CSV + Parquet companion
     _out_file.parent.mkdir(parents=True, exist_ok=True)
     combined.to_csv(_out_file, index=False)
@@ -1414,6 +1476,65 @@ def build_unified_holdings(
     return combined
 
 
+def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
+    """Populate ``row_id`` and ``row_id_basis`` (appended, not in UNIFIED_COLUMNS).
+
+    ``row_id`` = ``ROW-`` + first 16 hex chars of md5 over the row's source
+    anchor when one exists (``row_id_basis='src_anchor'``):
+
+        bdc:   source|accession_number|src_context_id
+        nport: source|accession_number|nport_holding_id
+
+    The anchor names the filing fact context (accessions are immutable), so
+    the id survives rebuilds, staging reorders, value corrections, and parser
+    fixes. It is an as-filed claim: an amendment (new accession) is a new id.
+    Rows missing accession or the per-source anchor part fall back to the
+    legacy drift-resistant natural key from
+    ``position_id_registry.compute_natural_keys``
+    (``row_id_basis='natural_key'``; content-sensitive by design).
+
+    NOT a cross-quarter identity -- ``position_id`` owns that layer.
+    """
+    if df.empty:
+        df["row_id"] = pd.Series(dtype=str)
+        df["row_id_basis"] = pd.Series(dtype=str)
+        return df
+    from pipeline.position_id_registry import compute_natural_keys
+
+    def _col(name: str) -> pd.Series:
+        if name in df.columns:
+            return df[name].fillna("").astype(str).str.strip()
+        return pd.Series("", index=df.index, dtype=str)
+
+    source = _col("source").str.lower()
+    accession = _col("accession_number")
+    anchor_part = _col("src_context_id").where(
+        source.ne("nport"), _col("nport_holding_id"))
+    has_anchor = accession.ne("") & anchor_part.ne("")
+
+    keys = (source + "|" + accession + "|" + anchor_part).where(
+        has_anchor, compute_natural_keys(df))
+    keys = keys.reset_index(drop=True)
+
+    con = duckdb.connect()
+    con.register("nk", pd.DataFrame({"i": range(len(keys)), "k": keys}))
+    hashed = con.execute(
+        "SELECT 'ROW-' || substr(md5(k), 1, 16) AS row_id FROM nk ORDER BY i"
+    ).fetchdf()["row_id"]
+    df["row_id"] = hashed.values
+    df["row_id_basis"] = has_anchor.map(
+        {True: "src_anchor", False: "natural_key"}).values
+    n_anchor = int(has_anchor.sum())
+    n_dup = int(df["row_id"].duplicated().sum())
+    if n_dup:
+        logger.warning(
+            "row_id: %d duplicate id(s) (anchor collision, natural-key "
+            "collision, or md5-prefix collision)", n_dup)
+    logger.info("row_id: %d assigned (%d src_anchor, %d natural_key)",
+                len(df), n_anchor, len(df) - n_anchor)
+    return df
+
+
 def _apply_fund_strategy_corrections(
     df: pd.DataFrame,
     candidates_path: Optional[Path] = None,
@@ -1423,8 +1544,19 @@ def _apply_fund_strategy_corrections(
     Loads the correction candidates CSV, delegates to
     ``fund_strategy_validation.apply_fund_strategy_correction_candidates``
     which handles APPLY filtering, excluded-transition guards, and DuckDB join.
+
+    When a per-pass PINNED copy exists (written by the run_quarter_pass pin stage),
+    it takes precedence over the live file: the validate stage regenerates the live
+    candidates from CURRENT holdings, so consuming them directly feeds validation
+    output back into the next rebuild and oscillates marginal classifications
+    (~20 non-corrected CIKs, 2026-08-13 known residual). The pin freezes the
+    inputs for the whole pass round.
     """
-    path = candidates_path or FUND_STRATEGY_CORRECTION_CANDIDATES_FILE
+    path = candidates_path
+    if path is None:
+        path = (FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE
+                if FUND_STRATEGY_CORRECTION_CANDIDATES_PINNED_FILE.exists()
+                else FUND_STRATEGY_CORRECTION_CANDIDATES_FILE)
     if not path.exists():
         return df
 
@@ -1816,6 +1948,9 @@ def _apply_row_corrections(
 
         for field, value, reason in patches:
             df.loc[mask, field] = value
+            if "corrected_fields" in df.columns:
+                from pipeline.agent_promoted import append_corrected_fields
+                append_corrected_fields(df, df.index[mask], [field])
             n_applied += 1
             logger.info(
                 "Row correction applied: field=%s value=%s reason=%r key=%s",

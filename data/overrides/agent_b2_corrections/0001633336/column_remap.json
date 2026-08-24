@@ -1,0 +1,57 @@
+{
+  "cik": "0001633336",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "shares_held",
+    "to_field": "principal_amount"
+  },
+  "source_review_ids": [
+    "RVQ_REV_24a3663f98a7",
+    "RVQ_REV_cbdcf522fcf1"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 56,
+      "row_index": 6,
+      "quoted_text": "SC MidCo Oy term debt row reports principal EUR 83 while the flagged normalized principal_amount_usd is blank."
+    },
+    {
+      "table_index": 60,
+      "row_index": 4,
+      "quoted_text": "Greencross term debt row reports principal AUD 19,270 with USD cost/fair-value columns while principal_amount_usd is blank."
+    },
+    {
+      "table_index": 60,
+      "row_index": 18,
+      "quoted_text": "AX VI INV2 Holding AB term debt row reports principal EUR 10,735 with USD cost/fair-value columns while principal_amount_usd is blank."
+    },
+    {
+      "table_index": 9,
+      "row_index": 4,
+      "quoted_text": "Non-Accrual | 61.8 | 4.1% of cost | 28.8 | 2.0% of fair value as of December 31, 2025"
+    },
+    {
+      "table_index": 27,
+      "row_index": 9,
+      "quoted_text": "Continental Battery Company (9) | Unitranche First Lien Term Loan | 07/2028 | 8,428 | 7,469 | 0.6 | 3,884"
+    },
+    {
+      "table_index": 28,
+      "row_index": 11,
+      "quoted_text": "TriStrux, LLC (9) | Senior Secured First Lien Term Loan | 12/2027 | 2,798 | 2,674 | 0.1 | 930"
+    },
+    {
+      "table_index": 43,
+      "row_index": 7,
+      "quoted_text": "A&A Global Imports, LLC (9) | Senior Secured First Lien Term Loan | 06/2026 | 1,645 | 992 | 0.0 | fair value --"
+    }
+  ],
+  "confidence": 0.62,
+  "rationale": "The cited debt rows show disclosed principal amounts while normalized principal_amount is blank, consistent with the principal column being captured into the holdings field used for share counts rather than the debt principal field. The bounded remap moves shares_held into principal_amount so debt principal values populate the unified principal_amount field without changing cost, fair_value, pct_of_net_assets, or interest fields.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

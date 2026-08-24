@@ -1,0 +1,63 @@
+{
+  "cik": "0002082559",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has a separate 'Spread Above Index (1)' column and an 'Interest Rate (2)' column. For PIK investments, the interest-rate cell prints the cash coupon followed by a separately labelled PIK component, e.g. '6.70 % cash/ 1.75 % PIK'; the stated interest-rate number is the cash leg and PIK is quoted separately, on top.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investment Type | Spread Above Index (1) | Interest Rate (2) | Maturity Date | Principal ($) / Shares (3) | Amortized Cost | Percentage of Net Assets | Fair Value (4)",
+      "where": "Consolidated Schedule of Investments, March 31, 2026, debt investment schedule tables 9-15"
+    },
+    {
+      "kind": "position",
+      "issuer": "PT Intermediate Holdings III, LLC*(18)",
+      "quote": "PT Intermediate Holdings III, LLC*(18) | One stop | SF + | 4.75 % | (g) | 6.70 % | cash/ | 1.75 % | PIK | 04/2030 | 8,174 | 8,174 | 4.1 | 8,158",
+      "printed_cash": 6.7,
+      "printed_pik": 1.75
+    },
+    {
+      "kind": "position",
+      "issuer": "PDI TA Holdings, Inc.*(18)",
+      "quote": "PDI TA Holdings, Inc.*(18) | One stop | SF + | 6.00 % | (g) | 7.17 % | cash/ | 2.50 % | PIK | 02/2031 | 4,141 | 4,141 | 2.0 | 4,058",
+      "printed_cash": 7.17,
+      "printed_pik": 2.5
+    },
+    {
+      "kind": "position",
+      "issuer": "GHX Ultimate Parent Corporation*(18)",
+      "quote": "GHX Ultimate Parent Corporation*(18) | One stop | SF + | 5.00 % | (g) | 6.20 % | cash/ | 2.50 % | PIK | 02/2033 | 6,754 | 6,738 | 3.4 | 6,686",
+      "printed_cash": 6.2,
+      "printed_pik": 2.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Netsmart Technologies, Inc.*(18)",
+      "quote": "Netsmart Technologies, Inc.*(18) | One stop | SF + | 5.20 % | (f) | 6.17 % | cash/ | 2.70 % | PIK | 08/2031 | 7,033 | 7,033 | 3.5 | 6,858",
+      "printed_cash": 6.17,
+      "printed_pik": 2.7
+    },
+    {
+      "kind": "position",
+      "issuer": "ReliaQuest Holdings, LLC*(18)",
+      "quote": "ReliaQuest Holdings, LLC*(18) | One stop | SF + | 6.00 % | (g) | 6.42 % | cash/ | 3.25 % | PIK | 04/2031 | 7,931 | 7,931 | 4.0 | 7,852",
+      "printed_cash": 6.42,
+      "printed_pik": 3.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Bayshore Intermediate #2, L.P.*(18)",
+      "quote": "Bayshore Intermediate #2, L.P.*(18) | One stop | SF + | 5.50 % | (g) | 6.18 % | cash/ | 3.00 % | PIK | 10/2028 | 7,467 | 7,467 | 3.7 | 7,280",
+      "printed_cash": 6.18,
+      "printed_pik": 3.0
+    }
+  ],
+  "search_trail": [
+    "Searched rendered filing evidence for 'paid-in-kind' and 'paid in kind'; no explicit PIK explanatory footnote text was returned.",
+    "Checked table inventory around the Consolidated Schedule of Investments; captured schedule header tables 9-17 and adjacent table 18, which only contained the collateral marker footnote."
+  ],
+  "rationale": "The printed schedule does not present one all-in coupon with a PIK parenthetical. Instead, PIK positions show the cash coupon and PIK percentage as distinct labels inside the interest-rate area, such as '6.70 % cash/ 1.75 % PIK'. Because the PIK component is separately printed and additive to the cash coupon, the filer's stated position-level interest rate means the cash leg only when PIK is present.",
+  "confidence": 0.93,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 6
+}

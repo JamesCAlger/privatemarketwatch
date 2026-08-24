@@ -1,0 +1,55 @@
+{
+  "cik": "0001859919",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_9544b09aefa6"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 45,
+      "row_index": 8,
+      "quoted_text": "Consolidated Schedule of Investments as of December 31, 2024 | F- 37"
+    },
+    {
+      "table_index": 99,
+      "row_index": 25,
+      "quoted_text": "Aptus 1829. GmbH | Common Stock | 09/21 | 49 | 12 | - | - | % | (3)(7)(27)(32)"
+    },
+    {
+      "table_index": 100,
+      "row_index": 28,
+      "quoted_text": "Argus Bidco Limited | Common Stock | 07/22 | 929 | 1 | - | - | % | (3)(7)(27)(32)"
+    },
+    {
+      "table_index": 100,
+      "row_index": 12,
+      "quoted_text": "Canadian Orthodontic Partners Corp. | Class A Equity | 05/22 | 500,000 | 389 | - | - | % | (3)(7)(27)(32)"
+    },
+    {
+      "table_index": 100,
+      "row_index": 14,
+      "quoted_text": "Canadian Orthodontic Partners Corp. | Class X Equity | 05/22 | 45,604 | 35 | - | - | % | (3)(7)(27)(32)"
+    },
+    {
+      "table_index": 99,
+      "row_index": 35,
+      "quoted_text": "DecksDirect, LLC | Class A Units | 04/24 | 1,016.1 | 47 | - | - | % | (7)(27)(32)"
+    },
+    {
+      "table_index": 99,
+      "row_index": 36,
+      "quoted_text": "DecksDirect, LLC | Common Stock | 12/21 | 1,280.8 | 55 | - | - | % | (7)(27)(32)"
+    },
+    {
+      "table_index": 98,
+      "row_index": 27,
+      "quoted_text": "Megawatt Acquisitionco, Inc. | Common Stock | 03/24 | 615 | 62 | - | - | % | (7)(27)(32)"
+    }
+  ],
+  "confidence": 0.91,
+  "rationale": "B1 localized rows from a Consolidated Schedule of Investments headed as of December 31, 2024 appearing in the target 2025-12-31 packet. The bounded correction applies the comparative-period filter for report_date 2025-12-31 so prior-period schedule rows are excluded without specifying row deletions or changing the adjudicated fix class."
+}

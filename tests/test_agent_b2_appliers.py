@@ -94,3 +94,163 @@ def test_run_corrections_stage_filter():
     df, audits = ap.run_corrections(_holdings(), corrections, stage=2)
     assert audits == []
     assert len(df) == 4
+
+
+# --------------------------------------------------------------------------- 2026-08-13 expansion
+
+
+def _value_frame():
+    return pd.DataFrame([
+        {"issuer_name": "Alpha Corp", "bdc_investment_identifier": "Alpha Corp TL",
+         "report_date": "2025-12-31", "fair_value": 1000.0, "cost": 900.0,
+         "principal_amount": None, "interest_rate": 0.105, "pik_rate": None,
+         "basis_spread": 5.0, "asset_class": "PRIVATE_CREDIT"},
+        {"issuer_name": "Beta LLC", "bdc_investment_identifier": "Beta LLC 2L",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "cost": 2100.0,
+         "principal_amount": 2050.0, "interest_rate": 11.5, "pik_rate": 2.0,
+         "basis_spread": 6.0, "asset_class": "PRIVATE_CREDIT"},
+    ])
+
+
+def test_rate_rescale_selected_rows_only():
+    df, audit = ap.apply_rate_rescale(_value_frame(), {
+        "field": "interest_rate", "factor": 100,
+        "row_selector": {"issuer_name": "Alpha Corp"}})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    assert df.loc[df["issuer_name"] == "Alpha Corp", "interest_rate"].iloc[0] == 10.5
+    assert df.loc[df["issuer_name"] == "Beta LLC", "interest_rate"].iloc[0] == 11.5
+    assert audit["fv_delta"] == 0.0
+
+
+def test_rate_rescale_missing_selector_column_fails_safe():
+    df, audit = ap.apply_rate_rescale(_value_frame(), {
+        "field": "interest_rate", "factor": 100, "row_selector": {"table_index": 5}})
+    assert audit["status"] == "error"
+    assert df["interest_rate"].tolist() == [0.105, 11.5]
+
+
+def test_unit_rescale_fair_value_records_delta():
+    df, audit = ap.apply_unit_rescale(_value_frame(), {
+        "field": "fair_value", "factor": 1000,
+        "row_selector": {"issuer_name": "Alpha Corp"}})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    assert audit["fv_delta"] == 999000.0
+    assert df.loc[df["issuer_name"] == "Beta LLC", "fair_value"].iloc[0] == 2000.0
+
+
+def test_column_remap_moves_and_clears():
+    frame = _value_frame()
+    df, audit = ap.apply_column_remap(frame, {
+        "from_field": "basis_spread", "to_field": "principal_amount",
+        "row_selector": {"issuer_name": "Alpha Corp"}})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    a = df[df["issuer_name"] == "Alpha Corp"].iloc[0]
+    assert a["principal_amount"] == 5.0 and pd.isna(a["basis_spread"])
+    b = df[df["issuer_name"] == "Beta LLC"].iloc[0]
+    assert b["principal_amount"] == 2050.0 and b["basis_spread"] == 6.0
+    assert audit["rows_overwritten"] == 0
+
+
+def test_column_remap_counts_overwrites():
+    df, audit = ap.apply_column_remap(_value_frame(), {
+        "from_field": "basis_spread", "to_field": "principal_amount",
+        "row_selector": {"issuer_name": "Beta LLC"}})
+    assert audit["rows_overwritten"] == 1  # Beta already had principal_amount
+
+
+def test_classification_fix_sets_value_and_records_prior():
+    df, audit = ap.apply_classification_fix(_value_frame(), {
+        "field": "asset_class", "value": "PRIVATE_EQUITY",
+        "row_selector": {"issuer_name": "Alpha Corp"}})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    assert df.loc[df["issuer_name"] == "Alpha Corp", "asset_class"].iloc[0] == "PRIVATE_EQUITY"
+    assert audit["prior_values"] == {"PRIVATE_CREDIT": 1}
+    assert df.loc[df["issuer_name"] == "Beta LLC", "asset_class"].iloc[0] == "PRIVATE_CREDIT"
+
+
+def test_all_pik_normalization_sets_legs():
+    df, audit = ap.apply_all_pik_normalization(_value_frame(), {
+        "row_selector": {"issuer_name": "Beta LLC"},
+        "cash_rate": 9.5, "pik_rate": 2.5, "set_interest_to_cash": True})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    b = df[df["issuer_name"] == "Beta LLC"].iloc[0]
+    assert b["interest_rate"] == 9.5 and b["pik_rate"] == 2.5
+
+
+def test_all_pik_normalization_requires_a_leg():
+    _, audit = ap.apply_all_pik_normalization(_value_frame(), {
+        "row_selector": {"issuer_name": "Beta LLC"}})
+    assert audit["status"] == "error"
+
+
+def test_missing_position_add_requires_source_row_id():
+    _, audit = ap.apply_missing_position_add(_value_frame(), {
+        "positions": [{"issuer_name": "Gamma Bill", "fair_value": 500.0,
+                       "report_date": "2025-12-31"}]})
+    assert audit["status"] == "error"
+    assert "source_row_id" in audit["message"]
+
+
+def test_missing_position_add_appends_grounded_position():
+    df, audit = ap.apply_missing_position_add(_value_frame(), {
+        "positions": [{"issuer_name": "Gamma Bill", "fair_value": 500.0,
+                       "report_date": "2025-12-31", "source_row_id": "SRC-42"}]})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    assert len(df) == 3 and audit["fv_delta"] == 500.0
+    assert audit["source_row_ids"] == ["SRC-42"]
+    # source_row_id is grounding metadata, never a holdings column
+    assert "source_row_id" not in df.columns
+
+
+# --------------------------------------------------------------- quarter scoping (2026-08-13)
+
+
+def _two_quarter_frame():
+    return pd.DataFrame([
+        {"issuer_name": "Alpha Corp", "report_date": "2025-12-31",
+         "fair_value": 1000.0, "interest_rate": 0.105},
+        {"issuer_name": "Alpha Corp", "report_date": "2023-09-30",
+         "fair_value": 900.0, "interest_rate": 0.100},  # same defect, historical
+        {"issuer_name": "Alpha Corp", "report_date": "2023-06-30",
+         "fair_value": 800.0, "interest_rate": 9.5},    # historical, already correct
+    ])
+
+
+def test_apply_scoped_protects_out_of_scope_quarters():
+    # The selector matches ALL Alpha rows; the scope physically restricts the applier
+    # to 2025-12-31 -- the historical rows cannot be touched.
+    corr = {"fix_class": "rate_rescale", "scope": {"quarters": ["2025-12-31"]},
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    df, audit = ap.apply_scoped(_two_quarter_frame(), corr)
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    assert audit["rows_out_of_scope_protected"] == 2
+    by_q = df.set_index("report_date")["interest_rate"]
+    assert by_q["2025-12-31"] == 10.5
+    assert by_q["2023-09-30"] == 0.100   # untouched despite matching selector
+    assert by_q["2023-06-30"] == 9.5
+    # original row order preserved
+    assert df["report_date"].tolist() == ["2025-12-31", "2023-09-30", "2023-06-30"]
+
+
+def test_apply_scoped_multi_quarter_evidence():
+    # A defect evidenced in BOTH quarters may scope both -- and still leaves the
+    # correct quarter alone only via its own evidence, not accident.
+    corr = {"fix_class": "rate_rescale",
+            "scope": {"quarters": ["2025-12-31", "2023-09-30"]},
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    df, audit = ap.apply_scoped(_two_quarter_frame(), corr)
+    assert audit["rows_changed"] == 2
+    by_q = df.set_index("report_date")["interest_rate"]
+    assert by_q["2025-12-31"] == 10.5 and by_q["2023-09-30"] == 10.0
+    assert by_q["2023-06-30"] == 9.5
+
+
+def test_apply_scoped_noop_when_no_rows_in_scope():
+    corr = {"fix_class": "rate_rescale", "scope": {"quarters": ["2020-03-31"]},
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    df, audit = ap.apply_scoped(_two_quarter_frame(), corr)
+    assert audit["status"] == "ok" and audit["rows_changed"] == 0
+    assert df["interest_rate"].tolist() == [0.105, 0.100, 9.5]

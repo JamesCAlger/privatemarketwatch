@@ -1,0 +1,61 @@
+{
+  "cik": "1965934",
+  "rule_id": "add_2025q4_us_treasury_bills",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "In the 2025-12-31 investments table, the row labeled U.S. treasury bills reports amortized cost 172,875 and fair value 172,864 ($ in thousands), tagged as us-gaap:InvestmentOwnedAtCost and us-gaap:InvestmentOwnedAtFairValue."
+    },
+    {
+      "source": "filing",
+      "quote": "The same table reports Total Investments fair value 1,506,869 ($ in thousands), matching the conservation anchor 1506869000."
+    },
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2025-12-31 sum to fair_value 1334005000 over 46 rows; fund_financials investments_at_fair_value is 1506869000, leaving a fair-value residual of 172864000."
+    },
+    {
+      "source": "query",
+      "quote": "Current-period staging for report_date='2025-12-31' contains only 46 period='2025-12-31' debt investment rows totaling 1334005000 fair value and no U.S. treasury bills row, so the source investment line was omitted before holdings."
+    }
+  ],
+  "rationale": "The failing quarter is an under-count caused by omission of a real source investment line. The extracted private debt positions already total 1334005000; the cached filing's investments table separately includes U.S. treasury bills at fair value 172864000 and cost 172875000, and adding that single line reconciles exactly to the filer Total Investments anchor without deleting real positions or adding a synthetic balancing amount.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 172864000.0,
+      "residual_before": -172864000.0,
+      "residual_after": 0.0
+    }
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 172864000.0,
+      "cost": 172875000.0,
+      "fair_value_currency": "USD",
+      "cost_currency": "USD",
+      "issuer_name": "U.S. treasury bills",
+      "instrument_description": "U.S. treasury bills",
+      "asset_category": "SHORT_TERM_INVESTMENT",
+      "asset_class": "SHORT_TERM_INVESTMENT",
+      "bdc_investment_identifier": "U.S. treasury bills",
+      "bdc_dimensions_raw": "investmentidentifieraxis=U.S. treasury bills",
+      "source": "bdc_xbrl",
+      "cik": "1965934",
+      "entity_name": "Overland Advantage",
+      "accession_number": "0001193125-26-117368",
+      "filing_date": "2026-03-20",
+      "bdc_form_type": "10-K",
+      "source_row_id": "ixbrl:000119312526117368:F_1f17b35d-3b33-4e8a-85db-8ff7927ef577"
+    }
+  ]
+}

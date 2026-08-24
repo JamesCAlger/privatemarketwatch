@@ -2,13 +2,13 @@
   "version": "agentA-identifier-anchors.v1",
   "cik": "0001743415",
   "entity_name": "SCP Private Credit Income BDC LLC",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "regime": "flattened",
   "status": "PROPOSED",
   "anchors": [
     {
       "label": "SECDEBT",
-      "regex": "Bank Debt/Senior Secured Loans"
+      "regex": "(?:Bank Debt/Senior Secured Loans|ank Debt/Senior Secured Loans)"
     },
     {
       "label": "EQUITY",
@@ -16,17 +16,18 @@
     },
     {
       "label": "PREFEQUITY",
-      "regex": "Preferred Equity"
+      "regex": "(?:Preferred Equity|Oldco AI, LLC|SLR-AMI Topco Blocker, LLC)"
     },
     {
       "label": "TOTAL",
-      "regex": "(?:Investments|Net Assets|Liabilities in Excess of Other Assets)"
+      "regex": "(?:Total Investments(?: & Cash Equivalents)?|Investments|Net Assets|Liabilities in Excess of Other(?: Assets)?|Cash Equivalents)"
     }
   ],
   "aggregate_candidate_patterns": [
+    "Total Investments",
     "Investments",
     "Net Assets",
-    "Liabilities in Excess of Other Assets"
+    "Liabilities in Excess of Other"
   ],
   "available_identifier_datapoints": [
     "instrument_type",
@@ -46,7 +47,8 @@
     "all_in_interest_rate_breakout"
   ],
   "evidence_notes": [
-    "Bundle none_examples show Common Equity/Equity Interests/Warrants, Preferred Equity, Investments, Net Assets, and Liabilities in Excess of Other Assets as identifier-level section or aggregate markers.",
-    "Evidence CLI roam could not be used in this sandbox because the active Python environment is missing pandas."
+    "Bundle top_variants identify Bank Debt/Senior Secured Loans, Common Equity/Equity Interests/Warrants, and aggregate Investments/Net Assets/Liabilities labels as active identifier signatures.",
+    "Bundle none_examples include a truncated 'ank Debt/Senior Secured Loans' marker, Cash Equivalents, Oldco AI, LLC, and SLR-AMI Topco Blocker, LLC; these are covered so rows stop landing in none.",
+    "Evidence CLI roam was attempted against the exact bundle but could not run in this sandbox because the active Python environment is missing pandas."
   ]
 }

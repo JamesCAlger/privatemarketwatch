@@ -1,0 +1,37 @@
+{
+  "cik": "1578348",
+  "rule_id": "1578348_20251231_affiliated_axis_dedup",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND (bdc_dimensions_raw LIKE 'investmentidentifieraxis=Investment in non-controlled, Affiliated Investments, Crafty Apes,%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Investment in non-controlled, Affiliated Investments, American Nuts Holdings,%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Non-Controlled/Affiliated Investments, %Crafty Apes%' OR bdc_dimensions_raw LIKE 'investmentidentifieraxis=Non-Controlled/Affiliated Investments, %American Nuts Holdings%')",
+  "match_fields": [
+    "report_date",
+    "fair_value"
+  ],
+  "keep": "first",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For report_date 2025-12-31, the affiliated duplicate candidate predicate selects 10 holdings rows with fv_sum 25346290. Grouping those rows by fair_value gives five two-row groups: 5924664, 2125975, 1867369, 1827102, and 928035."
+    },
+    {
+      "source": "query",
+      "quote": "Each duplicated fair_value group contains one terse 'Investment in non-controlled, Affiliated Investments...' representation and one detailed 'Non-Controlled/Affiliated Investments...' representation of the same Crafty Apes or American Nuts position."
+    }
+  ],
+  "rationale": "The 2025-12-31 holdings include the same five affiliated positions twice under two axis representations. Deduplicating within the scoped affiliated candidate set by report_date and fair_value removes one copy of each repeated position without deleting unique investments.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 5,
+      "fv": -12673145.0,
+      "residual_before": 10039059.0,
+      "residual_after": -2634086.0
+    }
+  }
+}

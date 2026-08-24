@@ -1,0 +1,60 @@
+{
+  "cik": "2052153",
+  "rule_id": "exclude_cash_equivalent_money_market_row",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw = 'investmentidentifieraxis=Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "In corrected holdings, the only row with bdc_dimensions_raw='investmentidentifieraxis=Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares' is report_date 2025-03-31 with fair_value 20976000.0; the corrected value_sum is 496586000.0 versus anchor 475610000.0, so this row exactly explains the 20976000.0 residual."
+    },
+    {
+      "source": "query",
+      "quote": "Raw staging for 2025-03-31 contains 'Investments before Cash Equivalents' fair_value 475610000.0, 'Investments after Cash Equivalents' fair_value 496586000.0, and 'Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares' fair_value 20976000.0."
+    },
+    {
+      "source": "filing",
+      "quote": "The annual filing distinguishes the conservation total from cash equivalents: 'Total Investments before Cash Equivalents | $ | 638,563 | $ | 640,076', 'Total Cash Equivalents | 28,771 | 28,771 | 28,771 | - | -', and 'Total Investments after Cash Equivalents | $ | 667,334 | $ | 668,847'."
+    }
+  ],
+  "rationale": "The Goldman Sachs money market fund row is a cash-equivalent line. The conservation anchor uses investments before cash equivalents, so including this row over-counts the Q1 holdings by exactly the difference between the staging before-cash and after-cash totals. Excluding the cash-equivalent row fixes the remaining held-out over-count without changing the already reconciled target quarter or the small Q2/Q3 rounding residuals.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 1,
+      "fv": 20976000.0,
+      "residual_before": 20976000.0,
+      "residual_after": 0.0
+    },
+    "2025-06-30": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": -1000.0,
+      "residual_after": -1000.0
+    },
+    "2025-09-30": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": -2000.0,
+      "residual_after": -2000.0
+    },
+    "2025-12-31": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": 0.0,
+      "residual_after": 0.0
+    },
+    "2026-03-31": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": 0.0,
+      "residual_after": 0.0
+    }
+  }
+}

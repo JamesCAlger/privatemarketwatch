@@ -1,0 +1,63 @@
+{
+  "cik": "0001747777",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The Schedule of Investments splits interest into separate Ref. Rate, Cash, and PIK columns. For floating-rate debt, the Ref. Rate column gives the base rate abbreviation, the Cash column gives the cash spread/rate, and the PIK column gives the separate paid-in-kind spread/rate on top. Rows with only PIK economics leave Cash blank and put the PIK rate in the PIK column.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Interest | Company(1)(25) | Investment | Ref. Rate | Cash | PIK | Maturity Date | Par | Shares/Units | Amortized Cost(2)(27) | Fair Value | % of Net Assets",
+      "where": "Schedule of Investments, March 31, 2026, tables 13-29, header rows 1-2"
+    },
+    {
+      "kind": "position",
+      "issuer": "Inovalon Holdings, Inc.",
+      "quote": "Inovalon Holdings, Inc.(3)(4)(9) | First lien senior secured loan | S+ | 2.75 % | 2.75 % | 11/2028 | 194,550 | - | 194,327 | 187,254",
+      "where": "Schedule of Investments, March 31, 2026, table 18, row 5; columns Ref. Rate, Cash, PIK",
+      "printed_cash": 2.75,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Bayshore Intermediate #2, L.P. (dba Boomi)",
+      "quote": "Bayshore Intermediate #2, L.P. (dba Boomi)(3)(4)(9) | First lien senior secured loan | S+ | 2.50 % | 3.00 % | 10/2028 | 159,208 | - | 159,233 | 156,024",
+      "where": "Schedule of Investments, March 31, 2026, table 22, row 4; columns Ref. Rate, Cash, PIK",
+      "printed_cash": 2.5,
+      "printed_pik": 3.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Modernizing Medicine, Inc. (dba ModMed)",
+      "quote": "Modernizing Medicine, Inc. (dba ModMed)(3)(4)(9) | First lien senior secured loan | S+ | 2.50 % | 2.25 % | 4/2032 | 148,121 | - | 146,818 | 147,381",
+      "where": "Schedule of Investments, March 31, 2026, table 18, row 8; columns Ref. Rate, Cash, PIK",
+      "printed_cash": 2.5,
+      "printed_pik": 2.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Indikami Bidco, LLC (dba IntegriChain)",
+      "quote": "Indikami Bidco, LLC (dba IntegriChain)(3)(4)(8) | First lien senior secured loan | S+ | 4.00 % | 2.50 % | 12/2030 | 137,236 | - | 135,638 | 132,433",
+      "where": "Schedule of Investments, March 31, 2026, table 17, row 33; columns Ref. Rate, Cash, PIK",
+      "printed_cash": 4.0,
+      "printed_pik": 2.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Arctic Wolf Networks, Inc.",
+      "quote": "Arctic Wolf Networks, Inc.(3)(4)(6) | Senior convertible notes | N/A | 3.00 % | 11/2030 | 132,871 | - | 190,375 | 190,375",
+      "where": "Schedule of Investments, March 31, 2026, table 21, row 31; columns Ref. Rate, Cash, PIK",
+      "printed_pik": 3.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Minerva Holdco, Inc.",
+      "quote": "Minerva Holdco, Inc.(3)(4)(6)(30) | Senior A Preferred Stock | N/A | 10.75 % | N/A | - | 100,000 | 153,325 | 150,403",
+      "where": "Schedule of Investments, March 31, 2026, table 25, row 16; columns Ref. Rate, Cash, PIK",
+      "printed_pik": 10.75
+    }
+  ],
+  "rationale": "The filing does not present one all-in rate with PIK included. It prints separate interest columns headed Ref. Rate, Cash, and PIK. Named rows with PIK show the cash spread in Cash and the PIK spread in PIK, for example S+ / 2.75% cash / 2.75% PIK for Inovalon and S+ / 2.50% cash / 3.00% PIK for Bayshore. Therefore the stated cash/spread rate excludes PIK; PIK is quoted separately and is additive.",
+  "confidence": 0.97,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

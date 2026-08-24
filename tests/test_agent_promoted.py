@@ -175,6 +175,18 @@ def test_load_promoted_rules_missing_dir(tmp_path):
     assert ap.load_promoted_rules(tmp_path / "nope") == {}
 
 
+def test_load_promoted_rules_skips_pulled_dirs(tmp_path):
+    # Operator pull convention: `_pulled_<reason>_<date>/` retires a rule from
+    # production. Regression: the dir name used to normalize into a garbage CIK
+    # (e.g. _pulled_frame_mismatch_20260722 -> 0020260722) and keep loading.
+    _write_json(tmp_path / "1715933" / "live.json", _valid_rule(cik="1715933", rule_id="live"))
+    _write_json(tmp_path / "_pulled_frame_mismatch_20260722" / "1965934__pulled.json",
+                _valid_rule(cik="1965934", rule_id="pulled"))
+    out = ap.load_promoted_rules(tmp_path)
+    assert set(out) == {"0001715933"}
+    assert [r["rule_id"] for r in out["0001715933"]] == ["live"]
+
+
 # --------------------------------------------------------------------------- Layer C apply
 
 def test_apply_promoted_rules_scoped_to_cik_and_bdc_source():
@@ -442,3 +454,241 @@ def test_build_unified_holdings_empty_stores_no_audit(tmp_path):
             b2_corrections_dir=tmp_path / "empty_corrections")
     assert len(result) == 1
     assert not (tmp_path / "agent_fix_application_audit.csv").exists()
+
+
+# --------------------------------------------------------------- Layer B stage-2 (2026-08-13)
+
+def test_apply_promoted_stage2_corrections_scoped_per_cik():
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Alpha Corp",
+         "report_date": "2025-12-31", "fair_value": 1000.0, "interest_rate": 0.105},
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+        {"cik": "0000000456", "source": "bdc", "issuer_name": "Alpha Corp",
+         "report_date": "2025-12-31", "fair_value": 3000.0, "interest_rate": 0.09},
+        {"cik": "0001715933", "source": "nport", "issuer_name": "Alpha Corp",
+         "report_date": "2025-12-31", "fair_value": 4000.0, "interest_rate": 0.08},
+    ])
+    corrections = [{"cik": "1715933", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100,
+                                 "row_selector": {"issuer_name": "Alpha Corp"}}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert len(out) == 4
+    # only the target CIK's BDC Alpha row rescaled
+    tgt = out[(out["cik"] == "0001715933") & (out["source"] == "bdc")
+              & (out["issuer_name"] == "Alpha Corp")]
+    assert tgt["interest_rate"].iloc[0] == 10.5
+    # other CIK and N-PORT rows untouched
+    assert out[(out["cik"] == "0000000456")]["interest_rate"].iloc[0] == 0.09
+    assert out[(out["source"] == "nport")]["interest_rate"].iloc[0] == 0.08
+    assert audits[0]["layer"] == "unified_b2_corrections"
+    assert audits[0]["status"] == "ok" and audits[0]["rows_changed"] == 1
+    assert audits[0]["drift"] == ""
+
+
+def test_apply_promoted_stage2_corrections_noop_drift_flagged():
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+    ])
+    corrections = [{"cik": "1715933", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100,
+                                 "row_selector": {"issuer_name": "Gone Issuer"}}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert out["interest_rate"].iloc[0] == 11.5
+    assert audits[0]["drift"] == "noop"  # stale promoted correction must surface
+
+
+def test_apply_promoted_stage2_skips_comparative_class():
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+    ])
+    corrections = [{"cik": "1715933", "fix_class": "comparative_period_filter",
+                    "template": {"report_date": "2025-12-31"}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert len(out) == 1 and audits == []  # raw-staging family is not applied here
+
+
+class TestCorrectedFieldsMarking:
+    def _frames(self):
+        before = pd.DataFrame(
+            {"fair_value": [100.0, 200.0], "interest_rate": [10.0, 11.0]},
+            index=[5, 9])
+        after = pd.DataFrame(
+            {"fair_value": [100.0, 250.0], "interest_rate": [10.0, 11.0],
+             "corrected_fields": ["", ""]},
+            index=[5, 9])
+        return before, after
+
+    def test_changed_field_marked_on_changed_row_only(self):
+        before, after = self._frames()
+        out = ap.mark_corrected_fields(before, after)
+        assert out.loc[9, "corrected_fields"] == "fair_value"
+        assert out.loc[5, "corrected_fields"] == ""
+
+    def test_added_row_marked(self):
+        before, after = self._frames()
+        after.loc[77] = {"fair_value": 5.0, "interest_rate": 8.0,
+                         "corrected_fields": ""}
+        out = ap.mark_corrected_fields(before, after)
+        assert out.loc[77, "corrected_fields"] == "_row:added"
+
+    def test_append_dedupes_and_sorts_incrementally(self):
+        df = pd.DataFrame({"corrected_fields": ["fair_value", ""]}, index=[1, 2])
+        ap.append_corrected_fields(df, pd.Index([1, 2]), ["fair_value", "cost"])
+        assert df.loc[1, "corrected_fields"] == "fair_value;cost"
+        assert df.loc[2, "corrected_fields"] == "fair_value;cost"
+
+    def test_nan_vs_nan_not_marked(self):
+        before = pd.DataFrame({"fair_value": [None]}, index=[0])
+        after = pd.DataFrame({"fair_value": [None], "corrected_fields": [""]},
+                             index=[0])
+        assert ap.mark_corrected_fields(before, after).loc[0, "corrected_fields"] == ""
+
+    def test_reset_index_same_length_marks_fields_not_row_added(self):
+        """Regression: agent_rule.apply_rules resets index to 0-based integers.
+
+        When before has index [5, 9] and after has index [0, 1] (reset), the
+        intersection is empty. Without the positional-alignment guard, ALL rows
+        would fall into the 'added' path and be stamped '_row:added'.
+        After fix: align positionally; mark the changed field on index 1, not
+        '_row:added' on both rows.
+        """
+        before = pd.DataFrame(
+            {"fair_value": [100.0, 200.0]},
+            index=[5, 9])
+        # apply_rules resets index: same data, new 0-based index, one field changed
+        after = pd.DataFrame(
+            {"fair_value": [100.0, 250.0], "corrected_fields": ["", ""]},
+            index=[0, 1])
+        out = ap.mark_corrected_fields(before, after)
+        # No _row:added entries
+        assert "_row:added" not in out["corrected_fields"].values
+        # The changed row (positional index 1) must be stamped
+        assert out.iloc[1]["corrected_fields"] == "fair_value"
+        # The unchanged row (positional index 0) must be empty
+        assert out.iloc[0]["corrected_fields"] == ""
+
+    def test_reset_index_with_added_rows_marks_tail(self):
+        """Regression: reset-index + row_add case.
+
+        agent_rule._apply_add uses pd.concat([work, new_rows], ignore_index=True),
+        which resets index for the whole frame. len(after) > len(before): the first
+        len(before) rows must be compared positionally; the tail must be '_row:added'.
+        """
+        before = pd.DataFrame(
+            {"fair_value": [100.0, 200.0]},
+            index=[5, 9])
+        # After apply_rules with row_add: same 2 rows (no field changes) + 1 new
+        after = pd.DataFrame(
+            {"fair_value": [100.0, 200.0, 999.0], "corrected_fields": ["", "", ""]},
+            index=[0, 1, 2])
+        out = ap.mark_corrected_fields(before, after)
+        assert out.iloc[0]["corrected_fields"] == ""
+        assert out.iloc[1]["corrected_fields"] == ""
+        assert out.iloc[2]["corrected_fields"] == "_row:added"
+
+
+class TestMarkCorrectedFieldsByOrdinal:
+    """Unit tests for the ordinal-key diff helper used in apply_promoted_rules."""
+
+    def _before(self, rows):
+        """Build a before_tracked frame with _cf_ord as a regular column."""
+        df = pd.DataFrame(rows)
+        df["_cf_ord"] = range(len(df))
+        return df
+
+    def test_drop_rule_no_row_added_only_changed_marked(self):
+        """Drop-rule scenario: before 4 rows, rule drops row at ordinal 1,
+        changes fair_value on row at ordinal 2. Result must have NO _row:added
+        and only the changed row marked. Dropped row is absent and silent."""
+        before = self._before([
+            {"fair_value": 100.0, "interest_rate": 10.0},
+            {"fair_value": 200.0, "interest_rate": 11.0},  # will be dropped
+            {"fair_value": 300.0, "interest_rate": 12.0},  # will be changed
+            {"fair_value": 400.0, "interest_rate": 13.0},
+        ])
+        # Simulate what apply_rules returns after dropping ordinal-1 and changing ordinal-2:
+        # reset_index gives 0-based index; _cf_ord survives (apply_rules passes extra cols through).
+        after = pd.DataFrame([
+            {"fair_value": 100.0, "interest_rate": 10.0, "_cf_ord": 0.0, "corrected_fields": ""},
+            {"fair_value": 350.0, "interest_rate": 12.0, "_cf_ord": 2.0, "corrected_fields": ""},
+            {"fair_value": 400.0, "interest_rate": 13.0, "_cf_ord": 3.0, "corrected_fields": ""},
+        ])
+        tracked = [c for c in before.columns if c != "_cf_ord"]
+        result = ap.mark_corrected_fields_by_ordinal(before, after, tracked)
+        assert "_row:added" not in result["corrected_fields"].values
+        # ordinal 2 (positional row 1 in result) changed fair_value
+        changed = result[result["_cf_ord"] == 2.0]
+        assert changed.iloc[0]["corrected_fields"] == "fair_value"
+        # ordinal 0 and 3 unchanged
+        assert result[result["_cf_ord"] == 0.0].iloc[0]["corrected_fields"] == ""
+        assert result[result["_cf_ord"] == 3.0].iloc[0]["corrected_fields"] == ""
+
+    def test_add_rule_added_row_marked_others_unmarked(self):
+        """Add-rule scenario: apply_rules appends a new row with ignore_index=True,
+        so the new row has NaN _cf_ord. Original rows must be unmarked (no field changes)."""
+        before = self._before([
+            {"fair_value": 100.0, "interest_rate": 10.0},
+            {"fair_value": 200.0, "interest_rate": 11.0},
+        ])
+        # Simulate row_add output: original rows have _cf_ord; added row has NaN.
+        after = pd.DataFrame([
+            {"fair_value": 100.0, "interest_rate": 10.0, "_cf_ord": 0.0, "corrected_fields": ""},
+            {"fair_value": 200.0, "interest_rate": 11.0, "_cf_ord": 1.0, "corrected_fields": ""},
+            {"fair_value": 999.0, "interest_rate": 8.0,  "_cf_ord": float("nan"), "corrected_fields": ""},
+        ])
+        tracked = [c for c in before.columns if c != "_cf_ord"]
+        result = ap.mark_corrected_fields_by_ordinal(before, after, tracked)
+        assert result.iloc[0]["corrected_fields"] == ""
+        assert result.iloc[1]["corrected_fields"] == ""
+        assert result.iloc[2]["corrected_fields"] == "_row:added"
+
+    def test_mixed_drop_add_change(self):
+        """Mixed scenario: drop 1 row, add 1 row, change 1 field on a surviving row.
+        Only the changed row gets a field mark; only the added row gets _row:added."""
+        before = self._before([
+            {"fair_value": 100.0, "interest_rate": 10.0},
+            {"fair_value": 200.0, "interest_rate": 11.0},  # will be dropped
+            {"fair_value": 300.0, "interest_rate": 12.0},  # will be changed
+        ])
+        after = pd.DataFrame([
+            {"fair_value": 100.0, "interest_rate": 10.0,  "_cf_ord": 0.0,           "corrected_fields": ""},
+            {"fair_value": 350.0, "interest_rate": 12.0,  "_cf_ord": 2.0,           "corrected_fields": ""},
+            {"fair_value": 999.0, "interest_rate": 5.0,   "_cf_ord": float("nan"),  "corrected_fields": ""},
+        ])
+        tracked = [c for c in before.columns if c != "_cf_ord"]
+        result = ap.mark_corrected_fields_by_ordinal(before, after, tracked)
+        assert result[result["_cf_ord"] == 0.0].iloc[0]["corrected_fields"] == ""
+        assert result[result["_cf_ord"] == 2.0].iloc[0]["corrected_fields"] == "fair_value"
+        assert result[result["_cf_ord"].isna()].iloc[0]["corrected_fields"] == "_row:added"
+
+
+def test_apply_promoted_stage2_row_id_selector_jit_materialized():
+    # 2026-08-21: row_id is assigned at the END of the build, so the mid-build frame
+    # has no row_id column. A promoted leaf selecting by row_id must still apply:
+    # the applier JIT-computes row_id on the CIK sub-frame (same natural-key ids as
+    # the published artifact) and drops the transient column afterwards.
+    from pipeline.unified_holdings import _assign_row_ids
+    combined = pd.DataFrame([
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Alpha Corp",
+         "bdc_investment_identifier": "Alpha Corp TL",
+         "report_date": "2025-12-31", "fair_value": 1000.0, "interest_rate": 0.105},
+        {"cik": "0001715933", "source": "bdc", "issuer_name": "Beta LLC",
+         "bdc_investment_identifier": "Beta LLC 2L",
+         "report_date": "2025-12-31", "fair_value": 2000.0, "interest_rate": 11.5},
+    ])
+    # the id a worker would copy from the published artifact
+    published = _assign_row_ids(combined.copy())
+    alpha_id = published.loc[published["issuer_name"] == "Alpha Corp", "row_id"].iloc[0]
+
+    corrections = [{"cik": "1715933", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100,
+                                 "row_selector": {"row_id": alpha_id}}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert audits[0]["status"] == "ok" and audits[0]["rows_changed"] == 1
+    assert out[out["issuer_name"] == "Alpha Corp"]["interest_rate"].iloc[0] == 10.5
+    assert out[out["issuer_name"] == "Beta LLC"]["interest_rate"].iloc[0] == 11.5
+    # transient column must not leak into the frame (end-of-build assignment owns it)
+    assert "row_id" not in out.columns

@@ -1,0 +1,71 @@
+{
+  "cik": "0001860424",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has a single position-level Interest Rate (2) column. For PIK investments, that column prints the all-in stated coupon/rate, with the PIK component disclosed in the same cell as a parenthetical or as a PIK label for a 100% PIK rate; it does not provide separate cash and PIK rate columns.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (1) | Investment Type | Reference Rate and Spread (2) | Floor | Interest Rate (2) | Initial Acquisition Date | Maturity Date | Par/Shares | Amortized Cost (3) | Fair Value (4) | % of Net Assets (17) | Footnotes",
+      "where": "Schedule of Investments, March 31, 2026, table 8 row 1; repeated on tables 9-11"
+    },
+    {
+      "kind": "position",
+      "issuer": "CoolSys, Inc.",
+      "quote": "CoolSys, Inc. | Closing Date Initial Term Loan | 3M SOFR + 6.00 % | 0.75 | % | 9.68 % ( 3.5 % PIK)",
+      "printed_total": 9.68,
+      "printed_pik": 3.5,
+      "printed_cash": 6.18,
+      "where": "Schedule of Investments, March 31, 2026, table 8 row 15"
+    },
+    {
+      "kind": "position",
+      "issuer": "Medallia, Inc.",
+      "quote": "Medallia, Inc. | Initial Term Loan | 6M SOFR + 6.00 % | 0.75 | % | 9.70 % ( 4.00 % PIK)",
+      "printed_total": 9.7,
+      "printed_pik": 4.0,
+      "printed_cash": 5.7,
+      "where": "Schedule of Investments, March 31, 2026, table 10 row 15"
+    },
+    {
+      "kind": "position",
+      "issuer": "Deerfield Dakota Holding, LLC",
+      "quote": "Deerfield Dakota Holding, LLC | Initial Term Loan | 3M SOFR + 3.00 % | 0.75 | % | 9.45 % ( 2.75 % PIK)",
+      "printed_total": 9.45,
+      "printed_pik": 2.75,
+      "printed_cash": 6.7,
+      "where": "Schedule of Investments, March 31, 2026, table 9 row 19"
+    },
+    {
+      "kind": "position",
+      "issuer": "Amplity Parent, Inc.",
+      "quote": "Amplity Parent, Inc. | Restatement Date Term Loan (First Lien) | 1M SOFR + 6.00 % | 1.00 | % | 12.27 % ( 2.50 % PIK)",
+      "printed_total": 12.27,
+      "printed_pik": 2.5,
+      "printed_cash": 9.77,
+      "where": "Schedule of Investments, March 31, 2026, table 9 row 31"
+    },
+    {
+      "kind": "position",
+      "issuer": "IMB Midco LLC",
+      "quote": "IMB Midco LLC | Term Loan A | 3M SOFR + 5.00 % | 1.00 | % | 8.82 % ( 4.00 % PIK)",
+      "printed_total": 8.82,
+      "printed_pik": 4.0,
+      "printed_cash": 4.82,
+      "where": "Schedule of Investments, March 31, 2026, table 10 row 39"
+    },
+    {
+      "kind": "position",
+      "issuer": "Wash & Wax Holdings LLC",
+      "quote": "Wash & Wax Holdings LLC | HoldCo Term Loan | 12.00 % | - | 12.00 % PIK",
+      "printed_total": 12.0,
+      "printed_pik": 12.0,
+      "printed_cash": 0.0,
+      "where": "Schedule of Investments, March 31, 2026, table 9 row 10"
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule does not have separate Cash and PIK interest-rate columns. Its header provides a separate Reference Rate and Spread (2) column and a single Interest Rate (2) column. In actual PIK rows, the Interest Rate (2) cell shows a total rate followed by the PIK component in the same cell, such as 9.70% (4.00% PIK), 12.27% (2.50% PIK), and 9.45% (2.75% PIK). The non-PIK portion is the arithmetic remainder of the printed total less printed PIK, so the stated Interest Rate (2) means the all-in rate with PIK included.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 4
+}

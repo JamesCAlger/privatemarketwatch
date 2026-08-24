@@ -523,6 +523,11 @@ def apply_html_section_bridge_field_overlays(
     Exact-keyed by (cik, accession_number, report_date, raw_id_lower) -- never a
     broad fallback.  Bridged maturity comes from an HTML row whose fair value
     already reconciled to the XBRL position, so it inherits that evidence.
+
+    src_field_overrides: for each overlaid field, appends a coordinate ref of the
+    form ``field=bridge:<sha8>:t<table_index>:r<row_index>`` (';'-joined across
+    fields), enabling downstream consumers to trace each bridge-sourced value back
+    to the exact HTML table cell that supplied it.
     """
     if df.empty or identifier_col not in df.columns:
         return df
@@ -535,7 +540,8 @@ def apply_html_section_bridge_field_overlays(
 
     result = df.copy()
     for col in ("maturity_date", "maturity_date_source",
-                "reference_rate_type", "reference_rate_source"):
+                "reference_rate_type", "reference_rate_source",
+                "src_field_overrides"):
         if col not in result.columns:
             result[col] = ""
 
@@ -552,6 +558,7 @@ def apply_html_section_bridge_field_overlays(
         bridges[[
             "cik", "accession_number", "report_date", "raw_id_lower",
             "maturity_date", "reference_rate_type",
+            "html_sha256", "table_index", "row_index",
         ]],
         on=["cik", "accession_number", "report_date", "raw_id_lower"],
         how="inner",
@@ -562,16 +569,26 @@ def apply_html_section_bridge_field_overlays(
     def _blank(v: Any) -> bool:
         return v is None or str(v).strip() in ("", "nan", "NaT")
 
+    def _append_override(idx: Any, field: str, row: Any) -> None:
+        sha8 = _norm_text(row.get("html_sha256"))[:8]
+        ref = (f"{field}=bridge:{sha8}"
+               f":t{int(row.get('table_index', -1))}"
+               f":r{int(row.get('row_index', -1))}")
+        prev = str(result.at[idx, "src_field_overrides"] or "").strip()
+        result.at[idx, "src_field_overrides"] = f"{prev};{ref}" if prev else ref
+
     for _, row in matched.iterrows():
         idx = row["_idx"]
         mat = _norm_text(row.get("maturity_date"))
         if mat and _blank(result.at[idx, "maturity_date"]):
             result.at[idx, "maturity_date"] = mat
             result.at[idx, "maturity_date_source"] = "html_section_bridge"
+            _append_override(idx, "maturity_date", row)
         rrt = _norm_text(row.get("reference_rate_type"))
         if rrt and _blank(result.at[idx, "reference_rate_type"]):
             result.at[idx, "reference_rate_type"] = rrt
             result.at[idx, "reference_rate_source"] = "html_section_bridge"
+            _append_override(idx, "reference_rate_type", row)
     return result
 
 

@@ -1,0 +1,94 @@
+{
+  "cik": "2052153",
+  "rule_id": "recover_de_minimis_revolver_rows_from_staging",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-06-30",
+      "2025-09-30"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-06-30",
+      "issuer_name": "Heritage Environmental Services Heritage Environmental Services, Inc.",
+      "bdc_investment_identifier": "Commercial Services & Supplies Heritage Environmental Services Heritage Environmental Services, Inc. Investment Type First Lien Secured Debt \u2013 Revolver Interest Rate S+500, 4.50% Floor Maturity Date 1/31/2030",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Commercial Services & Supplies Heritage Environmental Services Heritage Environmental Services, Inc. Investment Type First Lien Secured Debt \u2013 Revolver Interest Rate S+500, 4.50% Floor Maturity Date 1/31/2030",
+      "source_row_id": "staging:2025-06-30:investmentidentifieraxis=Commercial Services & Supplies Heritage Environmental Services Heritage Environmental Services, Inc. Investment Type First Lien Secured Debt \\u2013 Revolver Interest Rate S+500, 4.50% Floor Maturity Date 1/31/2030",
+      "fair_value": 1000.0,
+      "cost": 1000.0,
+      "principal_amount": 706000.0
+    },
+    {
+      "report_date": "2025-06-30",
+      "issuer_name": "Zeus Zeus Company LLC",
+      "bdc_investment_identifier": "Health Care Equipment & Supplies Zeus Zeus Company LLC Investment Type First Lien Secured Debt - Revolver Interest Rate S+550, 0.75% Floor Maturity Date 2/28/2030",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Health Care Equipment & Supplies Zeus Zeus Company LLC Investment Type First Lien Secured Debt - Revolver Interest Rate S+550, 0.75% Floor Maturity Date 2/28/2030",
+      "source_row_id": "staging:2025-06-30:investmentidentifieraxis=Health Care Equipment & Supplies Zeus Zeus Company LLC Investment Type First Lien Secured Debt - Revolver Interest Rate S+550, 0.75% Floor Maturity Date 2/28/2030",
+      "fair_value": 1000.0,
+      "cost": 1000.0,
+      "principal_amount": 492000.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "issuer_name": "Heritage Environmental Services Arcwood Environmental, Inc.",
+      "bdc_investment_identifier": "Commercial Services & Supplies Heritage Environmental Services Arcwood Environmental, Inc. Investment Type First Lien Secured Debt - Revolver Interest Rate S+550, 0.75% Floor Maturity Date 1/31/2030",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Commercial Services & Supplies Heritage Environmental Services Arcwood Environmental, Inc. Investment Type First Lien Secured Debt - Revolver Interest Rate S+550, 0.75% Floor Maturity Date 1/31/2030",
+      "source_row_id": "staging:2025-09-30:investmentidentifieraxis=Commercial Services & Supplies Heritage Environmental Services Arcwood Environmental, Inc. Investment Type First Lien Secured Debt - Revolver Interest Rate S+550, 0.75% Floor Maturity Date 1/31/2030",
+      "fair_value": 1000.0,
+      "cost": 1000.0,
+      "principal_amount": 0.0
+    },
+    {
+      "report_date": "2025-09-30",
+      "issuer_name": "Everbridge Everbridge Holdings, LLC",
+      "bdc_investment_identifier": "Software Everbridge Everbridge Holdings, LLC Investment Type First Lien Secured Debt \u2013 Revolver Interest Rate S+500, 0.75% Floor Maturity Date 7/2/2031",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Software Everbridge Everbridge Holdings, LLC Investment Type First Lien Secured Debt \u2013 Revolver Interest Rate S+500, 0.75% Floor Maturity Date 7/2/2031",
+      "source_row_id": "staging:2025-09-30:investmentidentifieraxis=Software Everbridge Everbridge Holdings, LLC Investment Type First Lien Secured Debt \\u2013 Revolver Interest Rate S+500, 0.75% Floor Maturity Date 7/2/2031",
+      "fair_value": 1000.0,
+      "cost": 1000.0,
+      "principal_amount": 0.0
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings residuals versus fund_financials fair-value anchors are 2025-06-30 value_sum 499808000.0 vs anchor 499809000.0 (residual -1000.0) and 2025-09-30 value_sum 544302000.0 vs anchor 544304000.0 (residual -2000.0)."
+    },
+    {
+      "source": "query",
+      "quote": "Staging has exactly four positive-cost rows with fair_value IS NULL: two 2025-06-30 revolvers with cost 1000.0 each (Heritage Environmental Services and Zeus) and two 2025-09-30 revolvers with cost 1000.0 each (Heritage Environmental Services and Everbridge)."
+    },
+    {
+      "source": "query",
+      "quote": "A staging-to-corrected-holdings anti-join shows these four source rows are absent from corrected holdings, while related issuer term-loan and delayed-draw positions are present."
+    },
+    {
+      "source": "filing",
+      "quote": "The annual schedule presents the fair-value conservation anchor as 'Total Investments before Cash Equivalents | $ | 638,563 | $ | 640,076' and the fair-value hierarchy repeats 'Total Investments | $ | 638,563 | $ | 640,076', confirming that de minimis investment rows belong in the investment total rather than cash equivalents."
+    }
+  ],
+  "rationale": "After excluding the Co-investment subtotal leak, the held-out June and September detailed holdings are only 1 thousand and 2 thousand below the independently tagged investment fair-value anchors. The remaining source rows absent from corrected holdings are de minimis revolver investment rows whose fair_value cell failed extraction but whose cost/principal data were retained in staging. Adding those source-backed rows restores the missing investment lines and leaves all affected periods within the 0.5% rounding tolerance without changing the already reconciled December quarter.",
+  "confidence": 0.82,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 2,
+      "fv": 2000.0,
+      "residual_before": -1000.0,
+      "residual_after": 1000.0
+    },
+    "2025-09-30": {
+      "rows": 2,
+      "fv": 2000.0,
+      "residual_before": -2000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 0,
+      "fv": 0.0,
+      "residual_before": 0.0,
+      "residual_after": 0.0
+    }
+  }
+}

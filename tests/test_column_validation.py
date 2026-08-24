@@ -331,6 +331,28 @@ class TestColumnContracts:
         assert result.iloc[0]["severity"] == SEVERITY_INFO
         assert result.iloc[0]["action"] == "TRACK_ONLY"
 
+    def test_x08_low_fv_to_cost_is_info_track_only(self):
+        # X08 demoted 2026-07-21 (recal1 89% FP; unique catches are real but
+        # sub-materiality extraction defects -- keep firing, stop B1 review).
+        df = _make_unified_df([{"fair_value": "1000", "cost": "1000000"}])
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "X08")
+        assert len(result) == 1
+        assert result.iloc[0]["severity"] == SEVERITY_INFO
+        assert result.iloc[0]["action"] == "TRACK_ONLY"
+
+    def test_x10_past_maturity_is_info_track_only(self):
+        # X10 demoted 2026-07-21 (recal1 67% FP; reals are maturity extraction
+        # gaps with no fair-value impact).
+        df = _make_unified_df([{
+            "maturity_date": "2020-01-01", "report_date": "2024-03-31",
+        }])
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "X10")
+        assert len(result) == 1
+        assert result.iloc[0]["severity"] == SEVERITY_INFO
+        assert result.iloc[0]["action"] == "TRACK_ONLY"
+
     def test_c107_negative_cost_still_warns(self):
         # Regression pin: C107 was deliberately NOT scope-cut (retro-test
         # showed sign/keyword exclusions lose reals faster than false alarms).
@@ -513,8 +535,15 @@ class TestReportAdapters:
             "position_purity_diagnostics": diagnostics,
         })
         assert set(issues["rule_id"]) == {"PP01", "PP02", "PP03"}
-        assert set(issues["severity"]) == {SEVERITY_WARN}
-        assert set(issues[issues["rule_id"].isin(["PP01", "PP02"])]["action"]) == {"REVIEW"}
+        # PP01 demoted 2026-07-21: INFO/TRACK_ONLY (sub-materiality subtotal
+        # residue; material leaks covered by fv_conservation + AGG01).
+        pp01 = issues[issues["rule_id"] == "PP01"]
+        assert set(pp01["severity"]) == {SEVERITY_INFO}
+        assert set(pp01["action"]) == {"TRACK_ONLY"}
+        pp02 = issues[issues["rule_id"] == "PP02"]
+        assert set(pp02["severity"]) == {SEVERITY_WARN}
+        assert set(pp02["action"]) == {"REVIEW"}
+        assert set(issues[issues["rule_id"] == "PP03"]["severity"]) == {SEVERITY_WARN}
 
         summary = build_quality_summary(_make_unified_df([{}]), issues)
         assert summary.iloc[0]["validation_tier"] == "VERIFIED"

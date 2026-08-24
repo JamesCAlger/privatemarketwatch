@@ -1,0 +1,126 @@
+param(
+  [Parameter(Mandatory = $true)]
+  [string] $BatchId,
+
+  [int] $TimeoutMinutes = 30,
+  [switch] $SkipPrep,
+  # Explicit bypass of the v1 cohort scope (logged by the guard). The 2026-07-22
+  # conv_full batch dispatched 46/66 CIKs outside the wrapper cohort before this
+  # guard existed -- expensive fleet spend belongs on the cohort by default.
+  [switch] $AllVehicles
+)
+
+# Convention Adjudicator dispatcher. Serial by design (v1): the batch is small
+# (<= ~21 workers) and the Codex elevated sandbox races its shared account
+# password above 2-wide anyway; serial avoids cloning B1's parallel job control
+# untested. Run from an operator shell OUTSIDE a Codex session (codex login done).
+#
+# Prerequisite: python -m scripts.agent_convention.run_convention discover <BatchId> ...
+# After: strip_verdict_bom is NOT needed (leaves are read utf-8-sig), then per cik:
+#   run_convention verify --cik <cik> --target-quarter <q>
+#   run_convention promote --cik <cik> --target-quarter <q>
+
+$ErrorActionPreference = "Stop"
+
+$signals = @("CODEX_THREAD_ID", "CODEX_MANAGED_BY_NPM", "CODEX_MANAGED_PACKAGE_ROOT") |
+  Where-Object { -not [string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($_)) }
+if ($signals.Count -gt 0) {
+  throw "Refusing to dispatch Codex workers from inside a Codex session: $($signals -join ', ')"
+}
+
+$root = Split-Path -Parent $PSScriptRoot
+Set-Location $root
+
+# Auth: each worker gets a FRESH CODEX_HOME, so the operator's logged-in auth.json
+# must be copied into it (or CODEX_API_KEY relied on). Without this every worker
+# hits 401 Unauthorized and exits in seconds with no run logs (same pattern as
+# dispatch_agent_b_workers.ps1 / dispatch_investigation.ps1).
+$sourceHome = if (-not [string]::IsNullOrWhiteSpace($env:CODEX_HOME)) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }
+$sourceAuth = Join-Path $sourceHome "auth.json"
+$hasFileAuth = Test-Path -LiteralPath $sourceAuth -PathType Leaf
+$hasApiKey = -not [string]::IsNullOrWhiteSpace($env:CODEX_API_KEY)
+if (-not ($hasFileAuth -or $hasApiKey)) {
+  throw "No Codex auth available: neither $sourceAuth nor CODEX_API_KEY is set. Run 'codex login' from this operator shell first."
+}
+Write-Host "[auth] using $(if ($hasFileAuth) { 'auth.json' } else { 'CODEX_API_KEY' })"
+
+# Sandbox grants: the worker must WRITE its leaf under data/output/agent_convention/<cik>
+# and READ/EXECUTE the named python interpreter (evidence_cli/data_query_cli live outside
+# the repo, so the minimal sandbox blocks them). Without these the worker runs a full turn
+# but can never produce a leaf. Mirrors dispatch_anchor_workers.ps1 (proven nanch1 recipe).
+$setup = Join-Path $PSScriptRoot "setup_codex_worker_harness.ps1"
+$pyDirs = @(& python -c "from scripts.agent_b.dispatch_preflight import _worker_read_dirs as w`nfor d in w(): print(d)")
+$readGrants = @()
+foreach ($d in $pyDirs) { $s = [string]$d; if ($s.Trim() -and -not ($readGrants -contains $s)) { $readGrants += $s } }
+Write-Host "[grants] read ($($readGrants.Count) interpreter dirs) + per-cik write"
+
+$wl = Join-Path $root "data/output/agent_convention/batch/$BatchId/convention_worklist.csv"
+if (-not (Test-Path -LiteralPath $wl -PathType Leaf)) {
+  throw "worklist missing: $wl (run: python -m scripts.agent_convention.run_convention discover $BatchId ...)"
+}
+
+$guardArgs = @("-m", "pipeline.cohort_guard", "--worklist", $wl)
+if ($AllVehicles) { $guardArgs += "--all-vehicles" }
+& python @guardArgs
+if ($LASTEXITCODE -ne 0) {
+  throw "cohort preflight refused the worklist (see [cohort-guard] output above); re-draw cohort-scoped or pass -AllVehicles explicitly"
+}
+
+$rows = Import-Csv -LiteralPath $wl
+$done = 0; $failed = @(); $skipped = @()
+foreach ($row in $rows) {
+  $cik = $row.cik; $q = $row.target_quarter
+  if ($row.bundle_path -eq "NEEDS_BUNDLE") {
+    Write-Host "[skip] $cik $q -- no review bundle (generate one first)"
+    $skipped += $cik
+    continue
+  }
+
+  if (-not $SkipPrep) {
+    Write-Host "==== prep $cik $q ===="
+    & python -m scripts.agent_convention.run_convention prep --cik $cik --target-quarter $q --bundle $row.bundle_path
+    if ($LASTEXITCODE -ne 0) { Write-Host "[warn] prep failed for $cik"; $failed += $cik; continue }
+  }
+
+  $cikNorm = $cik.TrimStart('0')
+  $prompt = Join-Path $root "data/output/agent_convention/$cikNorm/prompt.$q.md"
+  $leaf = Join-Path $root "data/output/agent_convention/$cikNorm/leaf/convention.$q.json"
+  if (-not (Test-Path -LiteralPath $prompt -PathType Leaf)) {
+    Write-Host "[warn] prompt missing for $cik"; $failed += $cik; continue
+  }
+
+  # Fresh per-cik worker home under TEMP: avoids the stale setup-marker trap
+  # (error 80) on re-runs and keeps the 308MB per-home Codex exe out of the repo;
+  # run_codex_worker.ps1 cleans scratch post-run.
+  $stamp = Get-Date -Format "yyyyMMddHHmmss"
+  $whome = Join-Path $env:TEMP "conv-worker\$BatchId\$cikNorm-$stamp\home"
+  $wrun  = Join-Path $env:TEMP "conv-worker\$BatchId\$cikNorm-$stamp\run"
+
+  $convBase = Join-Path $root "data/output/agent_convention/$cikNorm"
+  & $setup -WorkerHome $whome -WorkerRunroot $wrun -WriteDirs @($convBase) `
+    -ReadDirs $readGrants -EnvInherit all -AllowUserSite | Out-Null
+  if ($hasFileAuth) {
+    Copy-Item -LiteralPath $sourceAuth -Destination (Join-Path $whome "auth.json") -Force
+  }
+
+  Write-Host "==== worker $cik $q ===="
+  # Traces must land under the per-cik repo dir, NOT the TEMP worker home (which is
+  # discarded scratch) -- otherwise the rollout is lost with the TEMP tree.
+  & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "run_codex_worker.ps1") `
+    -PromptPath $prompt -WorkerHome $whome -WorkerRunroot $wrun -NoSetup `
+    -TraceDir (Join-Path $convBase "logs") -TracePrefix "worker.$q."
+  if ($LASTEXITCODE -ne 0) { Write-Host "[warn] worker exit $LASTEXITCODE for $cik" }
+
+  if (Test-Path -LiteralPath $leaf -PathType Leaf) {
+    Write-Host "[ok] leaf written: $leaf"
+    $done += 1
+  } else {
+    Write-Host "[fail] no leaf for $cik $q"
+    $failed += $cik
+  }
+}
+
+Write-Host "================ DONE ($BatchId): $done leaves, $($failed.Count) failed, $($skipped.Count) skipped ================"
+if ($failed.Count -gt 0) { Write-Host "failed: $($failed -join ', ')" }
+if ($skipped.Count -gt 0) { Write-Host "needs bundle: $($skipped -join ', ')" }
+Write-Host "Next: run_convention verify/promote per cik, then python -m pipeline.rate_convention"

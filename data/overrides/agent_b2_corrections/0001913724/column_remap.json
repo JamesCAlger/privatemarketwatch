@@ -1,0 +1,61 @@
+{
+  "cik": "0001913724",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "basis_spread",
+    "to_field": "pik_rate",
+    "row_selector": {
+      "issuer_name": "SimiTree Acquisition, LLC",
+      "report_date": "2025-12-31"
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_23bb7bec3a4b",
+    "RVQ_REV_9737b6bab7ad"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 73,
+      "row_index": 9,
+      "quoted_text": "SimiTree Acquisition, LLC | First lien senior secured delayed draw term loan | S + | 5.25 % + 1.75 PIK | 11.10 | % | 2/26/2025 | 5/17/2026 | 886 | 884 | 881 | 0.04 | %"
+    },
+    {
+      "table_index": 73,
+      "row_index": 11,
+      "quoted_text": "SimiTree Acquisition, LLC | First lien senior secured term loan | S + | 5.25 % + 1.75 PIK | 11.10 | % | 2/26/2025 | 5/17/2026 | 1,239 | 1,236 | 1,232 | 0.05 | %"
+    },
+    {
+      "table_index": 69,
+      "row_index": 9,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured delayed draw term loan | T + | 9.00 % PIK | 11.62 | % | 7/28/2023 | 3/19/2026 | C$ | 372 | 258 | 73 | 0.00 | %"
+    },
+    {
+      "table_index": 69,
+      "row_index": 10,
+      "quoted_text": "Canadian Orthodontic Partners Corp (8) | First lien senior secured revolving loan | T + | 9.00 % | 12.93 | % | 7/28/2023 | 12/31/2026 | C$ | 151 | 137 | 41 | 0.00 | %"
+    },
+    {
+      "table_index": 69,
+      "row_index": 11,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured revolving loan | T + | 9.00 % | 11.62 | % | 7/28/2023 | 12/31/2026 | C$ | 264 | 184 | 52 | 0.00 | %"
+    },
+    {
+      "table_index": 69,
+      "row_index": 12,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured revolving loan | T + | 9.00 % PIK | 12.93 | % | 7/28/2023 | 12/31/2026 | C$ | 101 | 134 | 20 | 0.00 | %"
+    },
+    {
+      "table_index": 69,
+      "row_index": 13,
+      "quoted_text": "Canadian Orthodontic Partners Corp (7)(8) | First lien senior secured term loan | T + | 9.00 % | 11.62 | % | 2/26/2025 | 12/31/2026 | C$ | 307 | 202 | 60 | 0.00 | %"
+    }
+  ],
+  "confidence": 0.42,
+  "rationale": "The SimiTree rows show PIK-bearing rate text embedded in the spread column as '5.25 % + 1.75 PIK' while the unified schema has a separate pik_rate field. For the requested column_remap class, the narrow valid correction is to remap the issuer's basis_spread source into pik_rate for the 2025-12-31 holdings rows. Confidence is limited because the cited Canadian rows also show amount and percent extraction gaps that a simple two-field remap cannot fully express.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

@@ -11,7 +11,11 @@ param(
   # Codex "usage limit" error. The cap is account-level, so once it is hit every
   # remaining worker fails the same way in seconds; 1 is definitive. Set to 0 to
   # disable the breaker (old behaviour: try every worker, then throw at the end).
-  [int] $UsageLimitAbortThreshold = 1
+  [int] $UsageLimitAbortThreshold = 1,
+
+  # Optional verdict-dir override (scratch dir for stability re-runs that must
+  # not touch the production verdict store). Passed through to the preflight.
+  [string] $VerdictsDirOverride = ""
 )
 
 # Agent B1 adjudication dispatcher. The B analog of dispatch_agent_a_workers.ps1:
@@ -58,6 +62,9 @@ function Invoke-Preflight {
   foreach ($OneId in $ReviewId) {
     $args += @("--review-id", $OneId)
   }
+  if (-not [string]::IsNullOrWhiteSpace($VerdictsDirOverride)) {
+    $args += @("--verdicts-dir", $VerdictsDirOverride)
+  }
   $json = & python @args
   if ($LASTEXITCODE -ne 0) {
     throw "Agent B dispatch preflight failed."
@@ -75,7 +82,9 @@ function New-WorkerWrapper {
     [Parameter(Mandatory = $true)] $Row,
     [Parameter(Mandatory = $true)][string] $WorkerHome,
     [Parameter(Mandatory = $true)][string] $WorkerRunroot,
-    [Parameter(Mandatory = $true)][string] $WrapperPath
+    [Parameter(Mandatory = $true)][string] $WrapperPath,
+    [Parameter(Mandatory = $true)][string] $TraceDir,
+    [Parameter(Mandatory = $true)][string] $TracePrefix
   )
 
   $runScript = Join-Path $PSScriptRoot "run_codex_worker.ps1"
@@ -86,6 +95,8 @@ function New-WorkerWrapper {
   -WorkerHome $(Quote-ForWrapper $WorkerHome) ``
   -WorkerRunroot $(Quote-ForWrapper $WorkerRunroot) ``
   -CodexBin $(Quote-ForWrapper $CodexBin) ``
+  -TraceDir $(Quote-ForWrapper $TraceDir) ``
+  -TracePrefix $(Quote-ForWrapper $TracePrefix) ``
   -NoSetup
 exit `$LASTEXITCODE
 "@
@@ -113,8 +124,22 @@ function Invoke-ValidateVerdict {
     [Parameter(Mandatory = $true)] $Row,
     [Parameter(Mandatory = $true)][string] $LogPath
   )
-  & python -m scripts.review_agent.validate_leaf_verdicts --verdict $Row.verdict_path *> $LogPath
-  return $LASTEXITCODE
+  # A FAILING validator prints "INVALID: ..." to stderr; under the script-wide
+  # ErrorActionPreference=Stop, PS 5.1 wraps that stderr line in a terminating
+  # NativeCommandError and kills the whole dispatch (2026-07-24 q4t0 crash at
+  # 35/47) instead of counting one failure. Relax EAP around the native call;
+  # the exit code is the only signal we use.
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"
+  try {
+    # Merge streams + explicit UTF-8: the bare `*> $LogPath` wrote UTF-16 LE
+    # (PS 5.1 default), which naive UTF-8 readers misparse.
+    & python -m scripts.review_agent.validate_leaf_verdicts --verdict $Row.verdict_path *>&1 |
+      Out-File -LiteralPath $LogPath -Encoding utf8
+    return $LASTEXITCODE
+  } finally {
+    $ErrorActionPreference = $prevEap
+  }
 }
 
 function Stop-TrackedProcessTree {
@@ -148,6 +173,15 @@ $manifestPath = $preflight.manifest_path
 $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
 $batchDir = Split-Path -Parent $manifestPath
 $verdictsDir = $manifest.verdicts_dir
+
+# ACE-leak guard (2026-07-24): every worker run leaks one sandbox-SID ACE onto the
+# verdicts dir; at ~1,820 the DACL is full and ALL sandbox setups fail
+# (SetEntriesInAclW 87). Sweep dead SIDs and fail closed if still near the ceiling.
+& (Join-Path $PSScriptRoot "clean_sandbox_acl_orphans.ps1") -Path @($verdictsDir)
+if ($LASTEXITCODE -ne 0) {
+  Invoke-ReleaseManifest -ManifestPath $manifestPath
+  throw "Verdicts-dir DACL near the 64KB ceiling even after orphan sweep; aborting before stranding workers."
+}
 
 # The worker prompt names an absolute Python interpreter (the one preflight ran under,
 # which has the project deps). Grant the sandbox READ on that interpreter's import roots
@@ -208,7 +242,8 @@ try {
       }
 
       $wrapperPath = Join-Path $wrapperDir "$idSafe.ps1"
-      New-WorkerWrapper -Row $row -WorkerHome $workerHome -WorkerRunroot $workerRunroot -WrapperPath $wrapperPath
+      New-WorkerWrapper -Row $row -WorkerHome $workerHome -WorkerRunroot $workerRunroot -WrapperPath $wrapperPath `
+        -TraceDir $logDir -TracePrefix "${idSafe}__"
 
       $stdout = Join-Path $logDir "$idSafe.stdout.jsonl"
       $stderr = Join-Path $logDir "$idSafe.stderr.txt"
@@ -311,7 +346,11 @@ try {
     throw "Agent B dispatch completed with $($failures.Count) failure(s); see $failurePath"
   }
 
-  & python -m scripts.agent_b.run_review finalize $BatchId
+  if ([string]::IsNullOrWhiteSpace($VerdictsDirOverride)) {
+    & python -m scripts.agent_b.run_review finalize $BatchId
+  } else {
+    Write-Host "Scratch verdicts-dir run: skipping finalize (it reads the production store)."
+  }
   Write-Host "Agent B dispatch complete. Manifest: $manifestPath"
 } finally {
   foreach ($job in $running) {

@@ -71,7 +71,8 @@
       "total debt investments",
       "total equity investments",
       "sub-total",
-      "subtotal"
+      "subtotal",
+      "aam series 1.1 rail and domestic intermodal feeder, llc | specialty finance equity investment"
     ],
     "non_private_markers": [],
     "fallback_family_patterns": [
@@ -295,7 +296,23 @@
   ],
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
-  }
+  },
+  "b2_provenance": [
+    {
+      "fix_class": "subtotal_filter",
+      "patterns_added": [
+        "aam series 1.1 rail and domestic intermodal feeder, llc | specialty finance equity investment"
+      ],
+      "source_review_ids": [
+        "RVQ_REV_ff46a16101dc"
+      ],
+      "confidence": 0.82,
+      "promoted_gate": {
+        "mechanism": "subtotal_filter",
+        "verdict": "PASS"
+      }
+    }
+  ]
 }

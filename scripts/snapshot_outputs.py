@@ -36,8 +36,11 @@ EXCLUDE_PREFIXES = {
 # Directory names whose subtrees are never baseline artifacts: sandbox worker scratch
 # (codex homes with sqlite state, plugin caches, exe copies) is nondeterministic, huge,
 # can exceed MAX_PATH, and may be deleted by cleanup sweeps while the walk runs.
+# _pytest_cache: sandboxed pytest runs have dropped a cache dir under data/output with
+# ACLs no non-elevated shell can touch (one-time elevated delete 2026-08-21); exclude
+# both it and pytest's default cache name so a recreation never pollutes the manifest.
 EXCLUDE_DIR_NAMES = {"worker_home", "worker_homes", ".sandbox", ".sandbox-bin",
-                     ".sandbox-secrets", ".tmp"}
+                     ".sandbox-secrets", ".tmp", "_pytest_cache", ".pytest_cache"}
 
 
 def _sha256(path: Path) -> str:

@@ -47,18 +47,45 @@ FIX_CLASS_STAGE: dict[str, int] = {
 }
 
 # Bounded vocabularies for nested template structures.
+# row_id (2026-08-21): the rebuild-stable content-derived id on unified holdings
+# (ROW- + md5[:16] of the natural key). Preferred selector anchor -- immune to the
+# issuer-text normalization drift behind the round-3/4 selector-noop refusals.
 ROW_SELECTOR_KEYS = frozenset({
-    "issuer_name", "bdc_investment_identifier", "report_date", "table_index", "row_index",
+    "issuer_name", "bdc_investment_identifier", "row_id", "report_date",
+    "table_index", "row_index",
 })
+_ROW_ID_RE = re.compile(r"^ROW-[0-9a-f]{16}$")
 ALLOWED_POSITION_KEYS = frozenset({
     "issuer_name", "fair_value", "cost", "principal_amount", "interest_rate", "pik_rate",
     "report_date", "instrument_description", "asset_class",
+    # Anti-fabrication grounding (2026-08-13, parity with agent_rule row_add): every
+    # added position must name the staging row it recovers; bdc_dimensions_raw makes
+    # the row countable by the gates. The 1965934/1993402 fabricated-FV incidents are
+    # why these are REQUIRED, not optional.
+    "source_row_id", "bdc_dimensions_raw",
 })
 # spv_lookthrough: one decision per consolidated legal entity.
 ENTITY_KEYS = frozenset({"legal_entity", "decision"})
 ENTITY_DECISIONS = frozenset({"use_equity", "keep_lookthrough"})
 _RATE_FIELDS = frozenset({"interest_rate", "pik_rate", "basis_spread"})
 _CLASS_FIELDS = frozenset({"asset_class", "index_classification", "exposure_type"})
+# 2026-08-13 (q4b2exp round-1 lesson): remap/rescale fields must be UNIFIED-FRAME
+# columns. Round 1 accepted any string, so workers named the FILING's columns
+# ("spread", "footnotes", "Fa") and every leaf failed its applier. The template is a
+# contract with the holdings schema, not a description of the source table.
+_REMAP_FIELDS = frozenset({
+    "fair_value", "cost", "principal_amount", "shares_held",
+    "interest_rate", "pik_rate", "basis_spread", "pct_of_net_assets",
+})
+# 2026-08-13 (blast-radius lesson): stage-2 value fixes MUST declare the quarters they
+# are evidenced for -- explicit dates, never "all". Unscoped round-2 fixes rewrote
+# already-correct 2023 history (Goldman principal x1000 et al.). The applier enforces
+# the scope structurally; the gate proves off-scope invariance.
+STAGE2_SCOPED_CLASSES = frozenset({
+    "rate_rescale", "unit_rescale", "column_remap", "classification_fix",
+    "all_pik_normalization",
+})
+_QUARTER_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 @dataclass(frozen=True)
@@ -97,10 +124,12 @@ TEMPLATE_REGISTRY: dict[str, Template] = {
         numeric=frozenset({"cash_rate", "pik_rate"})),
     "column_remap": Template(
         2, "apply_column_remap", frozenset({"from_field", "to_field"}),
-        frozenset({"from_field", "to_field", "row_selector"})),
+        frozenset({"from_field", "to_field", "row_selector"}),
+        enums={"from_field": _REMAP_FIELDS, "to_field": _REMAP_FIELDS}),
     "unit_rescale": Template(
         2, "apply_unit_rescale", frozenset({"field", "factor"}),
-        frozenset({"field", "factor", "row_selector"}), numeric=frozenset({"factor"})),
+        frozenset({"field", "factor", "row_selector"}), numeric=frozenset({"factor"}),
+        enums={"field": _REMAP_FIELDS}),
     "classification_fix": Template(
         2, "apply_classification_fix", frozenset({"field", "value"}),
         frozenset({"field", "value", "row_selector"}), enums={"field": _CLASS_FIELDS}),
@@ -180,6 +209,19 @@ def _validate_template(fix_class: str, template: Any, tpl: Template, rep: Correc
             bad = set(sel) - ROW_SELECTOR_KEYS
             if bad:
                 rep.errors.append(f"template.row_selector has unknown key(s): {sorted(bad)}")
+            # 2026-08-13 (q4b2exp round-1 lesson): coordinates identify EVIDENCE, not
+            # holdings rows -- a selector must carry at least one matchable identity key.
+            if not ({"issuer_name", "bdc_investment_identifier", "row_id"} & set(sel)):
+                rep.errors.append(
+                    "template.row_selector must include row_id, issuer_name, or "
+                    "bdc_investment_identifier (table/row coordinates cannot select "
+                    "holdings rows)")
+            # row_id is a fixed-format hash; a malformed one can only be a typo or
+            # fabrication and would silently select nothing -- reject at the screen.
+            if "row_id" in sel and not _ROW_ID_RE.match(str(sel.get("row_id") or "").strip()):
+                rep.errors.append(
+                    "template.row_selector.row_id must match ROW-<16 hex chars> "
+                    "(copy it verbatim from the grounded identifier list)")
     if "positions" in keys:
         positions = template.get("positions")
         if not isinstance(positions, list) or not positions:
@@ -192,7 +234,8 @@ def _validate_template(fix_class: str, template: Any, tpl: Template, rep: Correc
                 bad = set(p) - ALLOWED_POSITION_KEYS
                 if bad:
                     rep.errors.append(f"template.positions[{i}] has unknown key(s): {sorted(bad)}")
-                for req in ("issuer_name", "fair_value"):
+                for req in ("issuer_name", "fair_value", "report_date",
+                            "source_row_id", "bdc_dimensions_raw"):
                     if not str(p.get(req) or "").strip() and not _is_number(p.get(req)):
                         rep.errors.append(f"template.positions[{i}] missing {req}")
     if "entities" in keys:
@@ -254,6 +297,20 @@ def validate_correction(
         if "stage" in obj and obj.get("stage") != tpl.stage:
             rep.errors.append(f"stage {obj.get('stage')!r} does not match fix_class {fix_class} (stage {tpl.stage})")
         _validate_template(fix_class, obj.get("template"), tpl, rep)
+
+    if fix_class in STAGE2_SCOPED_CLASSES:
+        quarters = (obj.get("scope") or {}).get("quarters") if isinstance(obj.get("scope"), dict) else None
+        if not isinstance(quarters, list) or not quarters:
+            rep.errors.append(
+                f"{fix_class} requires scope.quarters: the explicit list of quarters "
+                "this fix is evidenced for (a value fix may only touch quarters whose "
+                "filings show the defect)")
+        else:
+            bad = [q for q in quarters if not _QUARTER_RE.match(str(q or ""))]
+            if bad:
+                rep.errors.append(
+                    f"scope.quarters must be explicit YYYY-MM-DD dates (never 'all'); "
+                    f"got {bad}")
 
     srids = obj.get("source_review_ids")
     if not isinstance(srids, list) or not [s for s in srids if str(s or "").strip()]:

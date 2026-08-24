@@ -1,0 +1,36 @@
+{
+  "cik": "1859919",
+  "rule_id": "1859919_exclude_rocade_units_phantom_2025q4",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND issuer_name = 'Rocade Holdings LLC' AND (instrument_description IS NULL OR CAST(instrument_description AS VARCHAR) IN ('', 'nan')) AND bdc_dimensions_raw = 'investmentidentifieraxis=Rocade Holdings LLC' AND TRY_CAST(fair_value AS DOUBLE) = 115000000.0",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings row: issuer_name=Rocade Holdings LLC, instrument_description=NULL, fair_value=115000000.0, cost=108000000.0, bdc_dimensions_raw=investmentidentifieraxis=Rocade Holdings LLC. Predicate hit count=1 and fv_hit=115000000.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Rocade Holdings LLC | Preferred LP Units | SOFR + 6.00 %, 9.9 % PIK | 02/23 | 115,000 | 141,249 | 141,247 | 5.0 | % | (7)(15)(32)"
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments, December 31, 2023 ( 171.6 %)* | $ | 4,898,459 | $ | 4,876,989"
+    }
+  ],
+  "rationale": "The extracted blank-instrument Rocade row is not a separate investment line. In the filing, 115,000 is the units/shares quantity on the real Preferred LP Units row whose fair value is 141,247 thousand. Holdings already contains that real Preferred LP Units position separately, so the blank Rocade row over-counts fair value by 115,000,000.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 115000000.0,
+      "residual_before": 138921000.0,
+      "residual_after": 23921000.0
+    }
+  }
+}

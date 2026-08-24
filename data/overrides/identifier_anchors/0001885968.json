@@ -2,7 +2,7 @@
   "schema": "agentA-identifier-anchors.v1",
   "cik": "0001885968",
   "entity_name": "T Series BDC LLC",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "status": "PROPOSED",
   "anchors": [
     {
@@ -10,31 +10,31 @@
       "regex": "\\bInvestments?\\b",
       "evidence": [
         "Bundle top variants show modern identifiers beginning with Debt Investments or Equity Investments.",
-        "Existing production anchor evidence cites grid table 32 row 1 and table 46 row 1 as SOI section/header markers containing Investments and Investment."
+        "Bundle INVESTMENT samples include source-like section wording such as Equity Investments - non-controlled/non-affiliated."
       ]
     },
     {
       "label": "INVESTMENT",
-      "regex": "\\b[A-Z][A-Za-z0-9&.,'() -]+\\s+(?:Inc\\.|LLC|Corp\\.|LP|L\\.P\\.|Ltd\\.|Holdings?|Group|Company)(?:\\s+\\d+)?\\b",
+      "regex": "\\b[A-Z][A-Za-z0-9&.,'() -]+\\s*(?:Inc\\.|LLC|Corp\\.|LP|L\\.P\\.|Ltd\\.|Holdings?|Group|Company)(?:\\s+\\d+)?\\b",
       "evidence": [
-        "Bundle none_examples are old-era issuer-only or issuer-plus-tranche position identifiers such as Cyara AcquisitionCo,LLC, Mantech International CP 1, ARI Network Services, Inc., and Procure Acquireco, Inc. (Procure Analytics) 1.",
+        "Bundle none_examples are old-era issuer-only or issuer-plus-tranche identifiers such as Cyara AcquisitionCo,LLC, Mantech International CP 1, ARI Network Services, Inc., and Procure Acquireco, Inc. (Procure Analytics) 1.",
         "Bundle older INVESTMENT samples include the same issuer-only pattern with numbered tranches, including Associations, Inc. 1, Kaseya, Inc. 1, Lightspeed Solution, LLC 1, and Firebird Acquisition Corp, Inc. 1."
       ]
     },
     {
       "label": "DEBT",
-      "regex": "\\b(?:Debt Investments|First Lien Debt|Second Lien Debt|Other Debt Investments)\\b",
+      "regex": "\\b(?:Debt Investments|First Lien Debt|Second Lien Debt|Other Debt)\\b",
       "evidence": [
         "Bundle dominant DEBT INVESTMENT samples contain Debt Investments and First Lien Debt in the identifier.",
-        "Existing production anchor evidence cites grid table 32 row 2 for Debt Investments and rows 4-7 for First Lien Debt."
+        "Bundle samples also include Second Lien Debt and Other Debt as instrument markers in identifier text."
       ]
     },
     {
       "label": "PREFEQUITY",
       "regex": "\\bPreferred Equity(?: Positions)?\\b",
       "evidence": [
-        "Bundle INVESTMENT PREFEQUITY samples contain Preferred Equity in the identifier.",
-        "Existing production anchor evidence cites Preferred Equity rows in tables 46 and 47."
+        "Existing CIK-specific anchor vocabulary used Preferred Equity for this filer.",
+        "This marker remains scoped to explicit preferred equity identifier text and does not infer fields from separate table columns."
       ]
     }
   ]

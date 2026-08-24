@@ -1,0 +1,38 @@
+{
+  "cik": "1544206",
+  "rule_id": "set_comar_aggregator_equity_fv_2026q1",
+  "rule_type": "value_expression",
+  "action": "set",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw = 'investmentidentifieraxis=Investment | Non-Affiliated Issuer | Equity Investments | Comar Aggregator Co, LLC | Containers, Packaging & Glass'",
+  "field": "fair_value",
+  "expression": "11247000",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Staging for 2026-03-31 contains the source row investmentidentifieraxis=Investment | Non-Affiliated Issuer | Common and Preferred Equity Investments | Comar Aggregator Co, LLC | Containers, Packaging & Glass with fair_value 11247000.0 and cost 10674000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Holdings for 2026-03-31 contains the normalized position investmentidentifieraxis=Investment | Non-Affiliated Issuer | Equity Investments | Comar Aggregator Co, LLC | Containers, Packaging & Glass with the same cost 10674000.0 but fair_value 10617000.0."
+    },
+    {
+      "source": "query",
+      "quote": "After the existing Credit Fund look-through and short Middle Market duplicate exclusions, 2026-03-31 value_sum is 2276515000.0 versus anchor 2277105000.0, a -590000.0 residual. Correcting Comar fair_value by +630000.0 gives 2277145000.0, a +40000.0 residual."
+    }
+  ],
+  "rationale": "The extractor normalized the Comar equity axis from Common and Preferred Equity Investments to Equity Investments but retained the lower duplicate-axis fair value. The source row with the same position and cost carries fair_value 11247000.0, so this is a row-level value defect rather than a row to delete or add.",
+  "confidence": 0.84,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 630000.0,
+      "residual_before": -590000.0,
+      "residual_after": 40000.0
+    }
+  }
+}

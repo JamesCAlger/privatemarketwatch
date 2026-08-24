@@ -1,0 +1,44 @@
+{
+  "cik": "1552198",
+  "rule_id": "exclude_2025q4_no_pct_detail_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "pct_of_net_assets IS NULL AND TRY_CAST(fair_value AS DOUBLE) > 408000",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For report_date 2025-12-31, all extracted holdings sum to fair_value 932947000.0 versus the fund_financials investments_at_fair_value anchor 578649000.0, an overage of 354298000.0."
+    },
+    {
+      "source": "query",
+      "quote": "For report_date 2025-12-31, holdings with pct_of_net_assets IS NOT NULL have 105 rows and fair_value 578207000.0; holdings with pct_of_net_assets IS NULL have 115 rows and fair_value 354740000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The prior predicate pct_of_net_assets IS NULL removed all no-percent rows and pushed value_sum below the 578649000.0 anchor by 442000.0. Narrowing the exclusion to no-percent rows with fair_value > 408000 removes 63 material no-percent detail rows totaling 351415000.0 and retains 52 immaterial no-percent rows totaling 3325000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Self-join examples show material no-percent rows are alternate/no-detail representations beside percent-bearing rows for the same entity and instrument class, e.g. Arcserve Cayman Topco Common Units Two fair_value 9144000.0 has a matching percent-bearing Arcserve Cayman Topco Common Units fair_value 9144000.0; Quest Events term loan no-percent fair_value 11041000.0 appears beside percent-bearing Quest Events term loan fair_value 1187000.0."
+    },
+    {
+      "source": "query",
+      "quote": "Simulating the revised predicate leaves value_sum 581532000.0 versus anchor 578649000.0, residual 2883000.0 or 0.4982294966378582%, within the 0.5% rounding tolerance and not below the anchor."
+    }
+  ],
+  "rationale": "The extracted 2025-12-31 holdings include both the primary schedule rows carrying pct_of_net_assets and additional no-detail rows lacking pct_of_net_assets. The material no-percent rows account for nearly all of the over-count and include alternate/no-detail representations beside percent-bearing rows. Excluding the material no-percent detail rows removes the leak while leaving the corrected value_sum above the single-sourced anchor and within the required 0.5% rounding tolerance.",
+  "confidence": 0.86,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 63,
+      "fv": 351415000.0,
+      "residual_before": 354298000.0,
+      "residual_after": 2883000.0
+    }
+  }
+}

@@ -321,6 +321,268 @@ class TestSourceOnlyBlockerClassification:
             "blocking_source_position_like_parser_mismatch",
         }
 
+    # --- JV look-through axis + non-USD unit excusals (2026-07-22) ---
+    # Evidence basis: printed-SOI adjudication 2026-07-21
+    # (data_investigation_results.md part 5): JV note portfolios (HPS/ULTRA III,
+    # New Mountain/SLP I) and local-currency restatement tables (Fortress).
+
+    def _frame_with_dims(self, identifier, dims):
+        df = _make_source_only_detail([identifier])
+        df["dimensions_raw"] = dims
+        return df
+
+    def test_jv_nonconsolidated_subsidiary_axis_documented(self):
+        # Entity-signal identifier would otherwise be position_like blocking;
+        # the JV axis must take priority.
+        df = self._frame_with_dims(
+            "Xplor T1, LLC| Software",
+            "investmentcompanynonconsolidatedsubsidiaryaxis=NEWCREDSeniorLoanProgramILLCMember"
+            "|investmentidentifieraxis=Xplor T1, LLC| Software",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == False
+
+    def test_equity_method_investee_axis_documented(self):
+        df = self._frame_with_dims(
+            "Bright Light Buyer, Inc. 1",
+            "scheduleofequitymethodinvestmentequitymethodinvesteenameaxis=ULTRAIIIMember"
+            "|investmentidentifieraxis=Bright Light Buyer, Inc. 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == False
+
+    def test_jv_name_in_identifier_without_axis_stays_blocking(self):
+        # False-positive guard: the fund's own JV-interest POSITION mentions the
+        # JV name in text but is not on a look-through axis -- must stay blocking.
+        df = self._frame_with_dims(
+            "NEWCRED Senior Loan Program I LLC Membership Interest",
+            "investmentidentifieraxis=NEWCRED Senior Loan Program I LLC Membership Interest",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    _FX_DIMS = (
+        "investmentidentifieraxis=Jupiter Refuel Canada Buyer, Inc. "
+        "Investment Type First Lien - Term Loan"
+    )
+    _FX_IDENT = (
+        "Jupiter Refuel Canada Buyer, Inc. Investment Type First Lien - Term Loan"
+    )
+
+    def _unit_parquet(self, tmp_path, unit):
+        path = tmp_path / "raw_holdings.parquet"
+        pd.DataFrame([{
+            "cik": 100,
+            "accession_number": "acc-001",
+            "dimensions_raw": self._FX_DIMS,
+            "fair_value_unit": unit,
+        }]).to_parquet(path)
+        return path
+
+    def test_non_usd_unit_documented(self, tmp_path):
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        parquet = self._unit_parquet(tmp_path, "U_CAD")
+        row = build_source_only_blocker_detail(df, holdings_parquet_path=parquet).iloc[0]
+        assert row["mechanism"] == "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == False
+
+    def test_usd_alias_unit_with_code_like_hash_stays_blocking(self, tmp_path):
+        # False-positive guard: USD-alias unit whose hash happens to contain a
+        # currency-code token must NOT be excused.
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        parquet = self._unit_parquet(tmp_path, "UNIT_STANDARD_USD_x_cad_hash")
+        row = build_source_only_blocker_detail(df, holdings_parquet_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == True
+
+    def test_opaque_unit_stays_blocking(self, tmp_path):
+        # False-positive guard: opaque unit ids carry no currency evidence.
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        parquet = self._unit_parquet(tmp_path, "u001")
+        row = build_source_only_blocker_detail(df, holdings_parquet_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == True
+
+    def test_missing_unit_parquet_stays_blocking(self, tmp_path):
+        df = self._frame_with_dims(self._FX_IDENT, self._FX_DIMS)
+        row = build_source_only_blocker_detail(
+            df, holdings_parquet_path=tmp_path / "does_not_exist.parquet"
+        ).iloc[0]
+        assert row["mechanism"] != "documented_non_usd_fair_value_unit"
+        assert row["is_blocking"] == True
+
+    # --- JV look-through with filer-OMITTED axis (2026-08-12) ---
+    # Evidence basis: BCRED Emerald/Verdelite `<investee> | <JV> LP` suffix rows
+    # reconcile to the JV note and the LP-interest lines exist in unified output;
+    # HPS ULTRA III bare-axis rows are enumerated by a promoted jv_lookthrough rule.
+
+    def _jv_unified_parquet(self, tmp_path, issuer, report_date="2024-03-31",
+                            cik="0000000100", asset_category="FUND"):
+        path = tmp_path / "unified.parquet"
+        pd.DataFrame([{
+            "cik": cik, "report_date": report_date, "issuer_name": issuer,
+            "asset_category": asset_category,
+        }]).to_parquet(path)
+        return path
+
+    def test_jv_suffix_with_retained_interest_in_output_documented(self, tmp_path):
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["rule_id"] == "SRCONLY_JV_LOOKTHROUGH_SUFFIX"
+        assert row["is_blocking"] == False
+
+    def test_jv_suffix_without_output_interest_stays_blocking(self, tmp_path):
+        # False-positive guard: suffix names nothing in the fund's output.
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "Some Unrelated Fund LP")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_suffix_other_quarter_output_stays_blocking(self, tmp_path):
+        # False-positive guard: the retained-interest line must exist in the SAME
+        # fund-quarter, not another period.
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP",
+                                           report_date="2023-12-31")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_instrument_suffix_stays_blocking(self, tmp_path):
+        # False-positive guard: instrument-text suffixes never name an output issuer.
+        df = _make_source_only_detail(["Acme Corp | First Lien Term Loan"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_industry_suffix_stays_blocking(self, tmp_path):
+        # False-positive guard (1544206 lesson): an industry suffix that happens to
+        # endswith-match output identifier text has no entity form and must not
+        # excuse; nor may a non-FUND output row anchor the excusal.
+        df = _make_source_only_detail(
+            ["Credit Fund | First Lien Debt | AGS Health BCP LLC | Telecommunications"])
+        parquet = self._jv_unified_parquet(
+            tmp_path, "Some Borrower | Telecommunications", asset_category="LOAN")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_suffix_non_fund_output_row_stays_blocking(self, tmp_path):
+        # False-positive guard: even an entity-form suffix must anchor to a
+        # FUND-classified retained-interest row, not an ordinary position.
+        df = _make_source_only_detail(["ACI Group Holdings, Inc. | Emerald JV LP"])
+        parquet = self._jv_unified_parquet(tmp_path, "BCRED Emerald JV LP",
+                                           asset_category="LOAN")
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    # --- issuer-prefix rollup with exact child-sum tie (2026-08-12, Ares) ---
+
+    def _rollup_parquet(self, tmp_path, children):
+        path = tmp_path / "unified.parquet"
+        pd.DataFrame([
+            {"cik": "0000000100", "report_date": "2024-03-31",
+             "issuer_name": name, "fair_value": fv}
+            for name, fv in children
+        ]).to_parquet(path)
+        return path
+
+    def test_issuer_prefix_rollup_exact_sum_documented(self, tmp_path):
+        df = _make_source_only_detail(
+            ["Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P."])
+        df["source_fair_value"] = "84800000"
+        parquet = self._rollup_parquet(tmp_path, [
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., First lien", 56400000.0),
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., Common equity", 28400000.0),
+        ])
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] == "documented_source_issuer_level_xbrl_subtotal"
+        assert row["rule_id"] == "SRCONLY_ISSUER_PREFIX_ROLLUP_SUM"
+        assert row["is_blocking"] == False
+
+    def test_issuer_prefix_rollup_sum_mismatch_stays_blocking(self, tmp_path):
+        # False-positive guard: prefix children exist but the sum does not tie.
+        df = _make_source_only_detail(
+            ["Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P."])
+        df["source_fair_value"] = "84800000"
+        parquet = self._rollup_parquet(tmp_path, [
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., First lien", 56400000.0),
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., Common equity", 20000000.0),
+        ])
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_source_issuer_level_xbrl_subtotal"
+        assert row["is_blocking"] == True
+
+    def test_issuer_prefix_rollup_single_child_stays_blocking(self, tmp_path):
+        # False-positive guard: one child equal to the source FV is an identity
+        # candidate for the matchers, not a rollup -- must stay blocking here.
+        df = _make_source_only_detail(
+            ["Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P."])
+        df["source_fair_value"] = "84800000"
+        parquet = self._rollup_parquet(tmp_path, [
+            ("Centric Brands LLC, Centric Brands TopCo, LLC, and Centric Brands L.P., First lien", 84800000.0),
+        ])
+        row = build_source_only_blocker_detail(df, unified_holdings_path=parquet).iloc[0]
+        assert row["mechanism"] != "documented_source_issuer_level_xbrl_subtotal"
+        assert row["is_blocking"] == True
+
+    def _jv_rule(self, *, marked=True, predicate="bdc_dimensions_raw NOT LIKE '%Non-Affiliated%'"):
+        rule = {"cik": "100", "rule_id": "test_jv_rule", "rule_type": "row_exclusion",
+                "action": "exclude", "scope": {"quarters": ["2024-03-31"]},
+                "predicate_sql": predicate, "evidence": [{"source": "filing", "quote": "x"}],
+                "rationale": "test", "confidence": 0.9}
+        if marked:
+            rule["jv_lookthrough"] = True
+        return {"0000000100": [rule]}
+
+    def test_promoted_jv_rule_rows_documented(self, tmp_path, monkeypatch):
+        import pipeline.source_reconciliation as sr
+        monkeypatch.setattr(sr, "load_promoted_rules", lambda *a, **k: self._jv_rule())
+        df = self._frame_with_dims(
+            "Brandt Information Services, LLC 1",
+            "investmentidentifieraxis=Brandt Information Services, LLC 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] == "documented_jv_lookthrough_axis"
+        assert row["rule_id"] == "SRCONLY_JV_LOOKTHROUGH_PROMOTED_RULE"
+        assert row["is_blocking"] == False
+
+    def test_unmarked_rule_does_not_excuse(self, monkeypatch):
+        # False-positive guard: an ordinary row_exclusion rule (no jv_lookthrough
+        # marker) must never document source rows.
+        import pipeline.source_reconciliation as sr
+        monkeypatch.setattr(sr, "load_promoted_rules",
+                            lambda *a, **k: self._jv_rule(marked=False))
+        df = self._frame_with_dims(
+            "Brandt Information Services, LLC 1",
+            "investmentidentifieraxis=Brandt Information Services, LLC 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
+    def test_jv_rule_bad_predicate_fails_closed(self, monkeypatch):
+        # A predicate referencing columns the source frame lacks excuses nothing.
+        import pipeline.source_reconciliation as sr
+        monkeypatch.setattr(sr, "load_promoted_rules",
+                            lambda *a, **k: self._jv_rule(
+                                predicate="no_such_column = 'x'"))
+        df = self._frame_with_dims(
+            "Brandt Information Services, LLC 1",
+            "investmentidentifieraxis=Brandt Information Services, LLC 1",
+        )
+        row = build_source_only_blocker_detail(df).iloc[0]
+        assert row["mechanism"] != "documented_jv_lookthrough_axis"
+        assert row["is_blocking"] == True
+
     @pytest.mark.parametrize("identifier", [
         "Investment Portfolio",
         "Total Mutual Funds",
@@ -1075,6 +1337,57 @@ class TestBdcSourceReconciliation:
         assert source_row["source_wrapper_disposition"] == "mixed_category_rollup"
         assert source_row["status"] == "excluded_aggregate_candidate"
         assert source_row["residual_class"] == "documented_exclusion"
+        assert source_row["blocking_issue"] == False
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_onex_s4t_equity_units_source_row_reconciles_as_leaf(self):
+        # BDCSRC_0001860424_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_6ba0aec009:
+        # the S4T Holdings Corp. equity-units source fact must classify as an
+        # equity position leaf and reconcile to the pipeline row instead of
+        # being excluded as an aggregate candidate.
+        identifier = (
+            "Non-controlled/Non-affiliated investments Equity Sovereign & Public "
+            "Finance S4T Holdings Corp. (Vistria ESS Holdings, LLC) Equity Units "
+            "Initial Acquisition Date 12/27/2021"
+        )
+        source = _make_bdc_source([{
+            "cik": "0001860424",
+            "entity_name": "Onex Falcon Direct Lending BDC Fund",
+            "report_date": "2025-12-31",
+            "period": "2025-12-31",
+            "investment_identifier": identifier,
+            "dimensions_raw": f"investmentidentifieraxis={identifier}",
+            "context_id": "ctx_onex_s4t_equity_units",
+            "fair_value": "542123",
+            "cost": "200000",
+            "principal_amount": "",
+            "shares_held": "200",
+            "interest_rate": "",
+            "basis_spread": "",
+        }])
+        output = _make_bdc_output([{
+            "cik": "0001860424",
+            "entity_name": "Onex Falcon Direct Lending BDC Fund",
+            "report_date": "2025-12-31",
+            "bdc_investment_identifier": identifier,
+            "bdc_dimensions_raw": f"investmentidentifieraxis={identifier}",
+            "issuer_name": "S4T Holdings Corp.",
+            "instrument_description": "Equity Units",
+            "fair_value": "542123",
+            "cost": "200000",
+            "principal_amount": "",
+            "shares_held": "200",
+            "interest_rate": "",
+            "basis_spread": "",
+            "asset_category": "EQUITY",
+            "index_classification": "DIRECT_EQUITY",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(source, output)
+        source_row = detail[detail["source_row_id"].astype(str).ne("")].iloc[0]
+
+        assert source_row["source_wrapper_disposition"] == "equity_position_leaf"
+        assert source_row["status"] == "matched"
         assert source_row["blocking_issue"] == False
         assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
 
@@ -4554,3 +4867,398 @@ class TestWrapperStagingDiagnostics:
         assert len(beta_rows) > 0
         flagged = beta_rows[beta_rows["wrapper_leaf_staging_excluded"] == "affiliation_dedup"]
         assert len(flagged) > 0
+
+
+def _no_rescales():
+    """Empty audited value_rescale frame for isolation-sensitive tests."""
+    return pd.DataFrame(columns=["cik", "field", "factor"])
+
+
+class TestAuditedValueRescaleSourceNormalization:
+    """Verdict BDCSRC_0001919369_2025-12-31 (QF Holdings 1000x scale)."""
+
+    _RULES = pd.DataFrame([
+        {"cik": "100", "field": "fair_value", "factor": 1000.0},
+        {"cik": "100", "field": "cost", "factor": 1000.0},
+        {"cik": "100", "field": "principal_amount", "factor": 1000.0},
+    ])
+
+    def _qf_source(self, fair_value="33224", cost="33242", principal="33449"):
+        return _make_bdc_source([{
+            "investment_identifier": "QF Holdings, Inc. First-Lien Debt",
+            "dimensions_raw": "investmentidentifier=QF Holdings, Inc. First-Lien Debt",
+            "fair_value": fair_value,
+            "cost": cost,
+            "principal_amount": principal,
+        }])
+
+    def _qf_output(self, fair_value="33224000", cost="33242000", principal="33449000"):
+        return _make_bdc_output([{
+            "bdc_investment_identifier": "QF Holdings, Inc. First-Lien Debt",
+            "bdc_dimensions_raw": "investmentidentifier=QF Holdings, Inc. First-Lien Debt",
+            "issuer_name": "QF Holdings, Inc.",
+            "fair_value": fair_value,
+            "cost": cost,
+            "principal_amount": principal,
+        }])
+
+    def test_audited_rescale_normalizes_matched_source_scale(self):
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            self._qf_source(),
+            self._qf_output(),
+            audited_value_rescales=self._RULES,
+        )
+
+        assert set(detail["status"]) == {"matched"}
+        row = detail.iloc[0]
+        assert row["blocking_issue"] == False  # noqa: E712
+        assert float(row["source_fair_value"]) == 33224000.0
+        assert float(row["source_cost"]) == 33242000.0
+        assert "audited value_rescale" in row["evidence"]
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_non_factor_difference_stays_blocking(self):
+        # False positive guard: a difference the audited factor does NOT
+        # explain must remain a blocking value mismatch.
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            self._qf_source(fair_value="500"),
+            self._qf_output(fair_value="800000"),
+            audited_value_rescales=self._RULES,
+        )
+
+        row = detail.iloc[0]
+        assert row["status"] == "value_mismatch"
+        assert row["blocking_issue"] == True  # noqa: E712
+        assert float(row["source_fair_value"]) == 500.0
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 1
+
+    def test_already_reconciling_rows_are_never_rescaled(self):
+        detail, _ = reconcile_bdc_source_to_holdings(
+            self._qf_source(fair_value="1000000", cost="990000", principal="1000000"),
+            self._qf_output(fair_value="1000000", cost="990000", principal="1000000"),
+            audited_value_rescales=self._RULES,
+        )
+
+        row = detail.iloc[0]
+        assert row["status"] == "matched"
+        assert float(row["source_fair_value"]) == 1000000.0
+        assert "audited value_rescale" not in row["evidence"]
+
+    def test_scale_mismatch_without_audited_rule_stays_blocking(self):
+        detail, _ = reconcile_bdc_source_to_holdings(
+            self._qf_source(),
+            self._qf_output(),
+            audited_value_rescales=_no_rescales(),
+        )
+
+        row = detail.iloc[0]
+        assert row["status"] == "value_mismatch"
+        assert row["blocking_issue"] == True  # noqa: E712
+
+
+class TestRowAddRecoveredOutputIdentityRescue:
+    """Verdicts BDCSRC_0001803498 / BDCSRC_0001950803 / BDCSRC_0001950976
+    (audited row_add recoveries carry no accession_number, so accession-scoped
+    match tiers can never claim them)."""
+
+    def test_collapsed_duplicate_supports_accessionless_output_row(self):
+        identifier = "Apidos CLO XXV - Class E1R3"
+        source = _make_bdc_source([
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}",
+                "context_id": "ctx_canonical",
+                "fair_value": "4010000",
+            },
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}|affiliation=NonAffiliated",
+                "context_id": "ctx_duplicate_path",
+                "fair_value": "4010000",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": identifier,
+                "bdc_dimensions_raw": f"investmentidentifier={identifier}",
+                "issuer_name": "Apidos CLO XXV",
+                "fair_value": "4010000",
+            },
+            {
+                # Audited row_add recovery: no accession_number.
+                "accession_number": "",
+                "bdc_form_type": "",
+                "filing_date": "",
+                "bdc_investment_identifier": identifier,
+                "bdc_dimensions_raw": f"investmentidentifier={identifier}|affiliation=NonAffiliated",
+                "issuer_name": "Apidos CLO XXV",
+                "fair_value": "4010000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        assert "extra_in_pipeline" not in set(detail["status"])
+        # True duplicate collapse still dedupes: the second dimension path is
+        # reported as collapsed, not matched a second time.
+        assert (detail["status"] == "collapsed_duplicate_dimension_path").sum() == 1
+        assert (detail["status"] == "matched").sum() == 1
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_true_duplicate_collapse_still_dedupes_without_extra_output(self):
+        identifier = "Beta Holdings, LLC First Lien Term Loan"
+        source = _make_bdc_source([
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}",
+                "context_id": "ctx_a",
+                "fair_value": "2500000",
+            },
+            {
+                "investment_identifier": identifier,
+                "dimensions_raw": f"investmentidentifier={identifier}|axis=alt",
+                "context_id": "ctx_b",
+                "fair_value": "2500000",
+            },
+        ])
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": identifier,
+            "bdc_dimensions_raw": f"investmentidentifier={identifier}",
+            "issuer_name": "Beta Holdings, LLC",
+            "fair_value": "2500000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        assert (detail["status"] == "matched").sum() == 1
+        assert (detail["status"] == "collapsed_duplicate_dimension_path").sum() == 1
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_accessionless_output_without_source_support_stays_blocking(self):
+        output = _make_bdc_output([{
+            "accession_number": "",
+            "bdc_form_type": "",
+            "filing_date": "",
+            "bdc_investment_identifier": "Phantom Holdings, LLC Term Loan",
+            "bdc_dimensions_raw": "investmentidentifier=Phantom Holdings, LLC Term Loan",
+            "issuer_name": "Phantom Holdings, LLC",
+            "fair_value": "7000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]),
+            pd.concat([_make_bdc_output([{}]), output], ignore_index=True),
+            audited_value_rescales=_no_rescales(),
+        )
+
+        phantom = detail[detail["raw_investment_identifier"].str.contains("Phantom", na=False)]
+        assert len(phantom) == 1
+        assert phantom.iloc[0]["status"] == "extra_in_pipeline"
+        assert phantom.iloc[0]["blocking_issue"] == True  # noqa: E712
+
+    def test_comparative_period_source_does_not_excuse_accessionless_output(self):
+        identifier = "Gamma Credit Partners LP Term Loan"
+        source = _make_bdc_source([{
+            "investment_identifier": identifier,
+            "dimensions_raw": f"investmentidentifier={identifier}",
+            "period": "2023-12-31",
+            "fair_value": "5000000",
+        }])
+        output = _make_bdc_output([{
+            "accession_number": "",
+            "bdc_form_type": "",
+            "filing_date": "",
+            "bdc_investment_identifier": identifier,
+            "bdc_dimensions_raw": f"investmentidentifier={identifier}",
+            "issuer_name": "Gamma Credit Partners LP",
+            "fair_value": "5000000",
+        }])
+
+        detail, _ = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        gamma_output = detail[detail["status"] == "extra_in_pipeline"]
+        assert len(gamma_output) == 1
+        assert gamma_output.iloc[0]["blocking_issue"] == True  # noqa: E712
+        assert "excluded_comparative_period" in set(detail["status"])
+
+    def test_one_suffix_row_add_recovery_not_extra(self):
+        # Stepstone 2025Q4 shape: the filer disambiguates duplicate members
+        # with a terminal 'One'; the suffixed source fact exists and the
+        # audited row_add output row carries the identical suffixed identity.
+        base = (
+            "Non-Controlled, Non-Affiliated Debt Investments | First Lien Senior "
+            "Secured | Advertising | Amplify Buyer, Inc. Term Loan | 3M SOFR + "
+            "4.75% / 0.75% | Maturity Date | 9/17/2032"
+        )
+        suffixed = base + " One"
+        source = _make_bdc_source([
+            {
+                "investment_identifier": base,
+                "dimensions_raw": f"investmentidentifieraxis={base}",
+                "context_id": "ctx_base",
+                "fair_value": "8944000",
+            },
+            {
+                "investment_identifier": suffixed,
+                "dimensions_raw": f"investmentidentifieraxis={suffixed}",
+                "context_id": "ctx_one",
+                "fair_value": "8944000",
+            },
+        ])
+        output = _make_bdc_output([
+            {
+                "bdc_investment_identifier": base,
+                "bdc_dimensions_raw": f"investmentidentifieraxis={base}",
+                "issuer_name": "Amplify Buyer, Inc.",
+                "fair_value": "8944000",
+            },
+            {
+                "accession_number": "",
+                "bdc_form_type": "",
+                "filing_date": "",
+                "bdc_investment_identifier": suffixed,
+                "bdc_dimensions_raw": f"investmentidentifieraxis={suffixed}",
+                "issuer_name": "Amplify Buyer, Inc.",
+                "fair_value": "8944000",
+            },
+        ])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        assert "extra_in_pipeline" not in set(detail["status"])
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_one_suffix_distinct_position_with_other_values_stays_blocking(self):
+        # False positive guard: a terminal token that is part of a genuinely
+        # distinct position (different fair value) must remain distinct.
+        base = "Square Holdings, LLC Term Loan"
+        suffixed = base + " One"
+        source = _make_bdc_source([{
+            "investment_identifier": suffixed,
+            "dimensions_raw": f"investmentidentifieraxis={suffixed}",
+            "fair_value": "1000000",
+        }])
+        output = _make_bdc_output([{
+            "accession_number": "",
+            "bdc_form_type": "",
+            "filing_date": "",
+            "bdc_investment_identifier": suffixed,
+            "bdc_dimensions_raw": f"investmentidentifieraxis={suffixed}",
+            "issuer_name": "Square Holdings, LLC",
+            "fair_value": "2000000",
+        }])
+
+        detail, _ = reconcile_bdc_source_to_holdings(
+            source, output, audited_value_rescales=_no_rescales(),
+        )
+
+        extras = detail[detail["status"] == "extra_in_pipeline"]
+        assert len(extras) == 1
+        assert extras.iloc[0]["blocking_issue"] == True  # noqa: E712
+
+
+class TestOutputOnlyWrapperCashCalibration:
+    """Verdict BDCSRC_0001976336_2025-12-31 (BlackRock Liquidity T-Fund):
+    output-only rows the per-CIK wrapper classifies non_private_market/cash
+    are retained analytics cash buckets, not blocking private positions."""
+
+    def _with_fake_wrappers(self, monkeypatch):
+        import pipeline.source_reconciliation as sr_mod
+        real_add = sr_mod.add_bdc_xbrl_wrapper_columns
+
+        def fake_add_wrapper_columns(df, **kwargs):
+            result = real_add(df, **kwargs)
+            id_col = kwargs.get("identifier_col", "investment_identifier")
+            if id_col in result.columns and len(result) > 0:
+                cash_mask = result[id_col].str.contains("T-Fund", na=False)
+                result.loc[cash_mask, "wrapper_disposition"] = "non_private_market"
+                result.loc[cash_mask, "wrapper_family"] = "cash"
+                loan_mask = result[id_col].str.contains("Cash Interest Rate", na=False)
+                result.loc[loan_mask, "wrapper_disposition"] = "debt_position_leaf"
+                result.loc[loan_mask, "wrapper_family"] = "debt"
+            return result
+
+        monkeypatch.setattr(sr_mod, "add_bdc_xbrl_wrapper_columns", fake_add_wrapper_columns)
+
+    def test_output_only_wrapper_cash_row_documented_not_blocking(self, monkeypatch):
+        self._with_fake_wrappers(monkeypatch)
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "issuer_name": "BlackRock Liquidity T-Fund",
+            "fair_value": "56001000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]).iloc[0:0],
+            output,
+            audited_value_rescales=_no_rescales(),
+        )
+
+        assert len(detail) == 1
+        row = detail.iloc[0]
+        assert row["status"] == "excluded_non_private_market_output"
+        assert row["blocking_issue"] == False  # noqa: E712
+        assert row["residual_class"] == "documented_exclusion"
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+    def test_output_only_loan_row_with_cash_text_stays_blocking(self, monkeypatch):
+        # False positive guard: a real loan row whose identifier merely
+        # CONTAINS cash/PIK coupon language keeps blocking when it has no
+        # current-period source fact.
+        self._with_fake_wrappers(monkeypatch)
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": (
+                "Delta Buyer, Inc. Term Loan | 3M SOFR + 4.75% | "
+                "Cash Interest Rate / PIK Rate | 8.42%"
+            ),
+            "bdc_dimensions_raw": (
+                "investmentidentifieraxis=Delta Buyer, Inc. Term Loan | 3M SOFR + 4.75% | "
+                "Cash Interest Rate / PIK Rate | 8.42%"
+            ),
+            "issuer_name": "Delta Buyer, Inc.",
+            "fair_value": "9000000",
+        }])
+
+        detail, metrics = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]).iloc[0:0],
+            output,
+            audited_value_rescales=_no_rescales(),
+        )
+
+        assert len(detail) == 1
+        row = detail.iloc[0]
+        assert row["status"] == "extra_in_pipeline"
+        assert row["blocking_issue"] == True  # noqa: E712
+        assert int(metrics.iloc[0]["blocking_issue_count"]) == 1
+
+    def test_documented_cash_output_maps_to_documented_mechanism(self, monkeypatch):
+        self._with_fake_wrappers(monkeypatch)
+        output = _make_bdc_output([{
+            "bdc_investment_identifier": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+            "issuer_name": "BlackRock Liquidity T-Fund",
+            "fair_value": "56001000",
+        }])
+
+        detail, _ = reconcile_bdc_source_to_holdings(
+            _make_bdc_source([{}]).iloc[0:0],
+            output,
+            audited_value_rescales=_no_rescales(),
+        )
+        classified = build_source_reconciliation_residual_classification(detail)
+
+        cash_rows = classified[
+            classified["mechanism"] == "documented_non_private_market_cash_output"
+        ]
+        assert len(cash_rows) == 1
+        assert cash_rows.iloc[0]["blocking_issue"] == False  # noqa: E712
+        assert cash_rows.iloc[0]["residual_class"] == "documented_exclusion"

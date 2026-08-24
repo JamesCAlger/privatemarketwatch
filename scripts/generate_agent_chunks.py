@@ -26,6 +26,9 @@ logging.basicConfig(
 logger = logging.getLogger("gen_chunks")
 
 OUTPUT_DIR = PROJECT_ROOT / "data" / "output"
+# Campaign shards (chunks + per-batch results) live under campaign_results/,
+# not the output root -- relocated 2026-08-20, see agent_changelog.
+CAMPAIGN_DIR = OUTPUT_DIR / "campaign_results" / "gics"
 
 
 def generate_chunks(chunk_size: int = 50, start: int = 0, end: int = 9999) -> int:
@@ -51,7 +54,8 @@ def generate_chunks(chunk_size: int = 50, start: int = 0, end: int = 9999) -> in
             fv = float(row.get('total_fv', 0))
             lines.append(f'{nn}||{sn}||{fv:.0f}||{si}')
 
-        chunk_path = OUTPUT_DIR / f"gics_agent_chunk_{chunk:03d}.txt"
+        CAMPAIGN_DIR.mkdir(parents=True, exist_ok=True)
+        chunk_path = CAMPAIGN_DIR / f"gics_agent_chunk_{chunk:03d}.txt"
         chunk_path.write_text('\n'.join(lines), encoding='utf-8')
         generated += 1
 
@@ -62,8 +66,8 @@ def generate_chunks(chunk_size: int = 50, start: int = 0, end: int = 9999) -> in
 
 def show_stats() -> None:
     """Show which chunks have been processed."""
-    chunk_files = sorted(OUTPUT_DIR.glob("gics_agent_chunk_*.txt"))
-    result_files = sorted(OUTPUT_DIR.glob("gics_agent_results_*.csv"))
+    chunk_files = sorted(CAMPAIGN_DIR.glob("gics_agent_chunk_*.txt"))
+    result_files = sorted(CAMPAIGN_DIR.glob("gics_agent_results_*.csv"))
 
     result_nums = set()
     for f in result_files:

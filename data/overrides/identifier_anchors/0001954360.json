@@ -35,6 +35,14 @@
     {
       "label": "SUBORD",
       "regex": "\\b(?:Unsecured Debt|Subordinated)\\b"
+    },
+    {
+      "label": "ROOTINV",
+      "regex": "^Investments$"
+    },
+    {
+      "label": "CASHEQ",
+      "regex": "\\b(?:Cash Equivalents|Investments and Cash Equivalents)\\b"
     }
   ]
 }

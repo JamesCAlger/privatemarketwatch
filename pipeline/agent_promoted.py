@@ -45,6 +45,139 @@ _DIGITS_RE = re.compile(r"\D")
 AUDIT_COLUMNS = ["layer", "cik", "rule_id", "rule_type", "status", "rows_changed",
                  "fv_affected", "authoring_rows", "authoring_fv", "drift", "message"]
 
+# Fields whose modification by a correction layer is stamped into
+# corrected_fields. Value fields feed the provenance re-verifier (a corrected
+# row legitimately disagrees with its anchor -- scoping doc risk 4);
+# classification fields are marked for audit symmetry.
+CORRECTED_TRACKED_FIELDS = [
+    "fair_value", "cost", "principal_amount", "shares_held",
+    "pct_of_net_assets", "interest_rate", "basis_spread", "pik_rate",
+    "maturity_date", "reference_rate_type", "coupon_type",
+    "issuer_name", "instrument_description", "bdc_unrealized_gain_loss",
+    "asset_category", "issuer_category", "index_classification",
+    "exposure_type", "asset_class", "lien_position", "instrument_type",
+    "is_subsidiary",
+]
+
+
+def append_corrected_fields(df: pd.DataFrame, idx, fields: list) -> None:
+    """Append field names to df['corrected_fields'] at idx (';'-joined, deduped,
+    order-preserving). Creates the column if absent."""
+    if "corrected_fields" not in df.columns:
+        df["corrected_fields"] = ""
+
+    def _merge(val: object) -> str:
+        parts = [p for p in str(val or "").split(";") if p]
+        parts.extend(f for f in fields if f and f not in parts)
+        return ";".join(parts)
+
+    df.loc[idx, "corrected_fields"] = df.loc[idx, "corrected_fields"].map(_merge)
+
+
+def mark_corrected_fields(before_tracked: pd.DataFrame,
+                          after: pd.DataFrame) -> pd.DataFrame:
+    """Stamp after['corrected_fields'] with tracked fields whose value changed
+    vs the pre-applier snapshot. Index-aligned (appliers preserve the original
+    index; added rows appear as new labels and are marked '_row:added').
+    NA-safe string comparison; per-CIK sub-frames only -- never the full frame.
+
+    Index-reset guard: agent_rule.apply_rules resets the frame to a 0-based
+    integer index (reset_index + ignore_index in concat for row_add). When the
+    index overlap with before_tracked is empty but lengths are compatible, align
+    positionally so we do not mass-mark every row as '_row:added'.
+    """
+    common = after.index.intersection(before_tracked.index)
+
+    # Detect index reset: no overlap, non-empty before, and after is at least as
+    # long as before (appliers only drop or append rows, never reorder).
+    index_reset = (
+        len(common) == 0
+        and len(before_tracked) > 0
+        and len(after) >= len(before_tracked)
+    )
+
+    if index_reset:
+        # Compare the first len(before) rows positionally.
+        n = len(before_tracked)
+        after_cmp = after.iloc[:n].set_axis(before_tracked.index)
+        for col in before_tracked.columns:
+            if col not in after_cmp.columns:
+                continue
+            b = before_tracked[col].astype("string").str.strip().fillna("")
+            a = after_cmp[col].astype("string").str.strip().fillna("")
+            changed_mask = (a != b).to_numpy()
+            changed_after_idx = after.index[:n][changed_mask]
+            if len(changed_after_idx):
+                append_corrected_fields(after, changed_after_idx, [col])
+        # Tail rows beyond before length are genuinely added.
+        if len(after) > n:
+            append_corrected_fields(after, after.index[n:], ["_row:added"])
+        return after
+
+    # Normal case: index labels are preserved.
+    added = after.index.difference(before_tracked.index)
+    if len(added):
+        append_corrected_fields(after, added, ["_row:added"])
+    for col in before_tracked.columns:
+        if col not in after.columns:
+            continue
+        b = before_tracked.loc[common, col].astype("string").str.strip().fillna("")
+        a = after.loc[common, col].astype("string").str.strip().fillna("")
+        changed = common[(a != b).to_numpy()]
+        if len(changed):
+            append_corrected_fields(after, changed, [col])
+    return after
+
+
+def mark_corrected_fields_by_ordinal(
+    before_tracked: pd.DataFrame,
+    corrected: pd.DataFrame,
+    tracked_cols: list,
+) -> pd.DataFrame:
+    """Stamp corrected['corrected_fields'] using an ordinal key ('_cf_ord') that survives
+    index resets, row drops, and row adds from agent_rule.apply_rules.
+
+    before_tracked must contain '_cf_ord' (range(len(sub)) assigned before apply_rules).
+    apply_rules passes unknown columns through (only drops '_rid'), so _cf_ord persists
+    in corrected. Rows with NaN _cf_ord are genuinely added (row_add rule); inner-joined
+    rows are compared field-by-field; dropped rows simply have no match and are silent.
+
+    This replaces the positional-alignment guard in mark_corrected_fields for the Layer C
+    rules path, which is the only path where apply_rules can both drop and add rows.
+    """
+    if "corrected_fields" not in corrected.columns:
+        corrected["corrected_fields"] = ""
+
+    # Added rows: _cf_ord is NaN (row_add appended with ignore_index=True -> no _cf_ord).
+    if "_cf_ord" in corrected.columns:
+        added_mask = corrected["_cf_ord"].isna()
+    else:
+        # Fallback: _cf_ord was not passed through (should not happen; see docstring).
+        added_mask = pd.Series(False, index=corrected.index)
+
+    if added_mask.any():
+        append_corrected_fields(corrected, corrected.index[added_mask.to_numpy()], ["_row:added"])
+
+    # Existing rows: inner-merge on _cf_ord to pair each surviving row with its before snapshot.
+    if "_cf_ord" in corrected.columns and not corrected[~added_mask].empty:
+        surviving = corrected.loc[~added_mask].copy()
+        # before_tracked has _cf_ord as a regular column (set before apply_rules call).
+        merged = surviving.reset_index(names=["_orig_idx"]).merge(
+            before_tracked, on="_cf_ord", suffixes=("_after", "_before"), how="inner"
+        )
+        for col in tracked_cols:
+            col_after = col + "_after" if (col + "_after") in merged.columns else col
+            col_before = col + "_before" if (col + "_before") in merged.columns else None
+            if col_before is None or col_before not in merged.columns:
+                continue
+            a = merged[col_after].astype("string").str.strip().fillna("")
+            b = merged[col_before].astype("string").str.strip().fillna("")
+            changed_rows = merged.loc[(a != b).to_numpy(), "_orig_idx"]
+            if len(changed_rows):
+                append_corrected_fields(corrected, pd.Index(changed_rows), [col])
+
+    return corrected
+
 
 def normalize_cik10(raw) -> str:
     """10-digit zero-padded CIK from any int/str form (empty stays empty)."""
@@ -96,6 +229,106 @@ def load_promoted_corrections(corrections_dir: Optional[Path] = None) -> list[di
         if isinstance(leaf, dict):
             out.append(leaf)
     return out
+
+
+def apply_promoted_stage2_corrections(
+    combined: pd.DataFrame, corrections: list[dict],
+) -> tuple[pd.DataFrame, list[dict]]:
+    """Apply gate-PASS POST-STAGING correction leaves to the unified frame (2026-08-13).
+
+    Production consumer for the non-comparative correction classes (rate/unit rescale,
+    column remap, classification fix, all-PIK normalization, missing-position add,
+    dedup, spv_lookthrough). Scoping is structural, like apply_promoted_rules: each
+    leaf is evaluated ONLY against its own CIK's BDC-source rows. Runs BEFORE Layer C
+    rules so rules see corrected values. Emits one audit row per leaf with noop drift
+    detection (a promoted correction that changes nothing has gone stale)."""
+    from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS
+
+    audits: list[dict] = []
+    todo = [c for c in corrections
+            if str(c.get("fix_class") or "") in POST_STAGING_APPLIERS
+            and str(c.get("fix_class")) != "comparative_period_filter"]
+    if not todo or combined.empty or "cik" not in combined.columns:
+        return combined, audits
+    cik_norm = combined["cik"].astype(str).str.replace(r"\D", "", regex=True).str.zfill(10)
+    is_bdc = (combined["source"].astype(str).str.lower() == "bdc") if "source" in combined.columns \
+        else pd.Series(True, index=combined.index)
+    by_cik: dict[str, list[dict]] = {}
+    for c in todo:
+        cik = normalize_cik10(c.get("cik"))
+        if cik:
+            by_cik.setdefault(cik, []).append(c)
+    replaced: list[pd.DataFrame] = []
+    drop_mask = pd.Series(False, index=combined.index)
+    for cik in sorted(by_cik):
+        mask = (cik_norm == cik) & is_bdc
+        sub = combined.loc[mask]
+        if sub.empty:
+            for c in by_cik[cik]:
+                audits.append({"layer": "unified_b2_corrections", "cik": cik,
+                               "rule_id": str(c.get("fix_class")), "rule_type": "b2_correction",
+                               "status": "no_rows", "rows_changed": 0, "fv_affected": 0.0,
+                               "drift": "noop", "message": "no BDC rows for CIK in frame"})
+            continue
+        corrected = sub
+        # JIT row_id (2026-08-21): row_id is assigned at the END of the build, so the
+        # mid-build frame lacks the column and a row_id selector would error as
+        # "column missing" here while the B3 gate replay (published frame, which HAS
+        # row_id) passes. Materialize it on this CIK's sub-frame only when a leaf
+        # selects by it; natural keys group by (cik, source, report_date), so the
+        # sub-frame ids equal the published full-frame ids. Parity caveat: if another
+        # leaf on the SAME CIK changes a key field (principal/shares), the published
+        # id can drift from the pre-correction id -- the noop-drift audit flags that.
+        _jit_row_id = False
+        if "row_id" not in corrected.columns and any(
+                str((((c.get("template") or {}).get("row_selector")) or {}).get("row_id") or "")
+                for c in by_cik[cik]):
+            from pipeline.unified_holdings import _assign_row_ids
+            corrected = _assign_row_ids(corrected.copy())
+            _jit_row_id = True
+        for c in sorted(by_cik[cik], key=lambda x: str(x.get("fix_class"))):
+            fc = str(c.get("fix_class"))
+            from pipeline.agent_b2_appliers import apply_scoped
+            _before = corrected[
+                [tc for tc in CORRECTED_TRACKED_FIELDS if tc in corrected.columns]
+            ].copy()
+            corrected, audit = apply_scoped(corrected, c)
+            corrected = mark_corrected_fields(_before, corrected)
+            # fill structural identity on added rows (missing_position_add)
+            if "cik" in corrected.columns and corrected["cik"].isna().any():
+                added = corrected["cik"].isna()
+                corrected.loc[added, "cik"] = cik
+                if "source" in corrected.columns:
+                    corrected.loc[added & corrected["source"].isna(), "source"] = "bdc"
+            rows = int(audit.get("rows_changed") or audit.get("rows_dropped") or 0)
+            status = str(audit.get("status") or "")
+            audits.append({"layer": "unified_b2_corrections", "cik": cik,
+                           "rule_id": fc, "rule_type": "b2_correction", "status": status,
+                           "rows_changed": rows,
+                           "fv_affected": abs(float(audit.get("fv_delta")
+                                                    or audit.get("fv_dropped") or 0.0)),
+                           "drift": ("noop" if status == "ok" and rows == 0 else ""),
+                           "message": str(audit.get("message") or "")})
+            if status != "ok":
+                logger.warning("promoted b2 correction %s (cik=%s) did not apply: %s",
+                               fc, cik, audit.get("message"))
+        if _jit_row_id:
+            # transient selector anchor only -- the end-of-build assignment owns the
+            # published column; keeping it here would raggedly concat with untouched rows
+            corrected = corrected.drop(
+                columns=[c for c in ("row_id", "row_id_basis")
+                         if c in corrected.columns])
+        replaced.append(corrected)
+        drop_mask |= mask
+    if replaced:
+        # Preserve the frame's original row order (2026-08-13 blast-radius lesson: a
+        # concat that reorders rows perturbs downstream tie-breaks -- mode/first-value
+        # fills -- at CIKs no correction touched). Added rows (NaN original index)
+        # sort to the end.
+        untouched = combined.loc[~drop_mask]
+        merged = pd.concat([untouched, *replaced])
+        combined = merged.sort_index(kind="mergesort").reset_index(drop=True)
+    return combined, audits
 
 
 def raw_staging_exclusions(corrections: list[dict]) -> list[dict]:
@@ -177,6 +410,12 @@ def load_promoted_rules(rules_dir: Optional[Path] = None) -> dict[str, list[dict
     base = Path(rules_dir) if rules_dir is not None else config.AGENT_INVESTIGATE_RULES_DIR
     out: dict[str, list[dict]] = {}
     for p in sorted(base.glob("*/*.json")) if base.exists() else []:
+        # Operator pull convention: rules quarantined into `_pulled_<reason>_<date>/`
+        # are retired from production application. Without this guard the dir name
+        # normalizes into a garbage CIK (e.g. 0020260722) and the pulled rule keeps
+        # loading, permanently failing the promoted-rule health gate.
+        if p.parent.name.startswith("_"):
+            continue
         try:
             rule = json.loads(p.read_text(encoding="utf-8-sig"))
         except (OSError, json.JSONDecodeError) as exc:
@@ -260,7 +499,17 @@ def apply_promoted_rules(
                 logger.warning("promoted rule %s: no BDC rows for cik=%s in frame",
                                r.get("rule_id"), cik)
             continue
+        tracked_cols = [tc for tc in CORRECTED_TRACKED_FIELDS if tc in sub.columns]
+        # Ordinal-key diff: immune to index resets, row drops, and row adds.
+        # apply_rules does reset_index(drop=True) which makes the returned index
+        # 0-based; a positional-only guard fails when rows are dropped (len shrinks).
+        # Stamping _cf_ord before the call lets us inner-merge on a stable ordinal
+        # key after the call so dropped rows vanish cleanly, added rows have NaN _cf_ord.
+        sub = sub.copy()
+        sub["_cf_ord"] = range(len(sub))
+        before_tracked = sub[tracked_cols + ["_cf_ord"]].copy()
         corrected, rule_audits = apply_rules(sub, rules)
+        corrected = mark_corrected_fields_by_ordinal(before_tracked, corrected, tracked_cols)
         # row_add positions carry only holdings fields (see agent_rule.ADD_POSITION_KEYS);
         # identity columns are filled STRUCTURALLY from the rule's own CIK scope so an
         # added row can never orphan out of its filer.
@@ -291,6 +540,8 @@ def apply_promoted_rules(
                 logger.warning("promoted rule %s (cik=%s) DRIFT=%s: applied rows=%d vs "
                                "authored rows=%s -- route to re-validation",
                                a.get("rule_id"), cik, drift, rows, authored_rows)
+        # Drop the transient ordinal key before concat; combined.columns won't have it.
+        corrected = corrected.drop(columns=["_cf_ord"], errors="ignore")
         drop_mask = drop_mask | mask
         replaced_parts.append(corrected)
 

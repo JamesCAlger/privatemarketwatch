@@ -1,0 +1,42 @@
+{
+  "cik": "1321741",
+  "rule_id": "1321741_2026q1_punctuation_variant_dedup",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-03-31' AND bdc_investment_identifier IN ('Nielsen-Kellerman Acquisition Corp. -  Term Debt', 'Nielsen-Kellerman Acquisition Corp. \u2013 Term Debt', 'Nielsen-Kellerman Acquisition Corp.\u2013 Preferred Stock', 'Nielsen-Kellerman Acquisition Corp. \u2013 Preferred Stock', 'UPB Acquisition, Inc. - Preferred Stock', 'UPB Acquisition, Inc \u2013 Preferred Stock', 'Pyrotek Special Effects, Inc. - Term Debt', 'Pyrotek Special Effects, Inc. \u2013 Term Debt', 'The Maids International, LLC - Preferred Stock', 'The Maids International, LLC \u2013 Preferred Stock')",
+  "match_fields": [
+    "report_date",
+    "fair_value",
+    "principal_amount"
+  ],
+  "keep": "first",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2026-03-31 sum to 1423435000.0 while fund_financials.investments_at_fair_value is 1309248000.0, an overcount of 114187000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The overcount equals five same-date punctuation/name variant duplicates: Nielsen-Kellerman term debt 48082000.0, UPB preferred stock 26713000.0, Pyrotek term debt 20120000.0, Nielsen-Kellerman preferred stock 14641000.0, and The Maids preferred stock 4631000.0."
+    },
+    {
+      "source": "query",
+      "quote": "For each duplicate pair, the candidate rows share report_date plus the same fair_value and principal_amount/null principal_amount, while the investment identifiers differ only by punctuation, dash spacing, or issuer-name punctuation."
+    }
+  ],
+  "rationale": "The 2026-03-31 held-out failure is caused by duplicate extracted positions represented under punctuation/name variants, not by wrong values or a bad anchor. Deduplicating only the 2026-03-31 candidate variant set by report_date, fair_value, and principal_amount removes one copy of each duplicate pair and does not touch already reconciled 2025-12-31 rows.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 5,
+      "fv": 114187000.0,
+      "residual_before": 114187000.0,
+      "residual_after": 0.0
+    }
+  }
+}

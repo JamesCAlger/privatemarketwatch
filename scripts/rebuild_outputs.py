@@ -36,13 +36,20 @@ logging.basicConfig(
 logger = logging.getLogger("rebuild")
 
 
-def rebuild_bdc_holdings():
-    """Rebuild BDC holdings from cached XBRL instance files only."""
+def rebuild_bdc_holdings(ciks=None):
+    """Rebuild BDC holdings from cached XBRL instance files only.
+
+    Parameters
+    ----------
+    ciks : list[str] or None
+        When given, only those CIKs are re-parsed and merged over the
+        existing artifact.  None means full rebuild.
+    """
     from pipeline.bdc_filings import rebuild_cached_bdc_holdings
 
     logger.info("=== Rebuilding cached BDC holdings ===")
     t0 = time.time()
-    df = rebuild_cached_bdc_holdings()
+    df = rebuild_cached_bdc_holdings(ciks=ciks)
     logger.info("BDC holdings: %d rows in %.1f s", len(df), time.time() - t0)
     return df
 
@@ -460,6 +467,10 @@ def main():
     )
     parser.add_argument("--bdc-holdings", action="store_true",
                         help="Rebuild BDC holdings from cached XBRL only")
+    parser.add_argument("--ciks", nargs="*", metavar="CIK",
+                        help="With --bdc-holdings: re-parse only these CIK(s) and merge over existing artifact")
+    parser.add_argument("--cohort", action="store_true",
+                        help="With --bdc-holdings: re-parse cohort manifest CIKs only (uses load_cohort_ciks)")
     parser.add_argument("--unified", action="store_true",
                         help="Rebuild unified holdings only")
     parser.add_argument("--income", action="store_true",
@@ -519,7 +530,11 @@ def main():
     t_start = time.time()
 
     if rebuild_all or args.bdc_holdings:
-        rebuild_bdc_holdings()
+        ciks = args.ciks or None
+        if args.cohort:
+            from pipeline.cohort_guard import load_cohort_ciks
+            ciks = sorted(load_cohort_ciks())
+        rebuild_bdc_holdings(ciks=ciks)
 
     if rebuild_all or args.unified:
         rebuild_unified()

@@ -1,0 +1,39 @@
+{
+  "cik": "1988280",
+  "rule_id": "fill_missing_cost_from_fair_value.1988280",
+  "rule_type": "value_expression",
+  "action": "set",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "cost IS NULL AND fair_value IS NOT NULL",
+  "field": "cost",
+  "expression": "fair_value",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2025-12-31 have four rows where cost is NULL and fair_value is populated: Less unfunded loan commitments -105,643,990; Dreyfus Government Cash Management Fund 16,403,149; P.J. Fitzpatrick LLC 314,500; Rapid Aggregator LLC 105,029."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 159 reports Total investments (Cost $419,789,179) fair value $419,814,228; Less unfunded loan commitments (105,643,990); Net investments (Cost $314,145,189) fair value $314,170,238."
+    },
+    {
+      "source": "query",
+      "quote": "Applying cost = fair_value to the missing-cost rows changes 2025-12-31 cost_sum from 402,991,550 to 314,170,238 versus the cost anchor 314,145,189, reducing the cost residual from 28.2819% to 0.0080%."
+    }
+  ],
+  "rationale": "The target fair-value schedule already reconciles because holdings include the negative unfunded loan commitment line. The remaining held-out conservation failure is in cost: the same rows that carry valid fair values have NULL cost, including the contra unfunded commitment. For cash-like and commitment contra rows where the filing presents no separate per-row cost but the net schedule cost differs from gross by the same commitment amount, setting missing cost equal to fair_value restores the filer net cost within rounding tolerance and does not change fair value.",
+  "confidence": 0.9,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 4,
+      "fv": 0.0,
+      "cost_delta": -88821312.0,
+      "residual_before": 28.281942270966944,
+      "residual_after": 0.007973701612218546
+    }
+  }
+}

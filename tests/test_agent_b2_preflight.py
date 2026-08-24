@@ -73,6 +73,92 @@ def test_preflight_builds_packet_manifest_and_prompt(tmp_path):
     assert pf.WORKER_PYTHON in prompt
 
 
+def test_prompt_contract_excerpt_matches_fix_class(tmp_path):
+    # Regression: the contract excerpt was hard-coded to comparative_period_filter,
+    # so a subtotal_filter worker authored {"report_date": ...} and failed the
+    # validator ("unexpected param(s)"). The excerpt must come from TEMPLATE_REGISTRY
+    # for the packet's own fix_class.
+    d = _dirs(tmp_path)
+    batch = "B2X"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "mechanism": "subtotal_leak", "quarters": "2024-12-31",
+                                 "source_review_ids": "RVQ_BLK_aaa"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter")
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Embedded contract excerpt for subtotal_filter" in prompt
+    assert "'patterns'" in prompt
+    assert "'match_mode'" in prompt
+    assert '{"report_date"' not in prompt
+    assert "excerpt for comparative_period_filter" not in prompt
+
+
+def test_preflight_skips_packets_without_usable_citations(tmp_path):
+    # A packet whose source verdicts carry no culprit citations can only produce a
+    # correction that validate_corrections rejects (">=1 valid citation"). Preflight
+    # must skip it with a recorded reason, not dispatch a doomed worker (q4b2t4b
+    # canary lesson: Ares comparative packet burned a worker on a guaranteed reject).
+    d = _dirs(tmp_path)
+    batch = "B2C"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_good")
+    # second packet: real_error verdict but with NO citations
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    v = _verdict("RVQ_BLK_nocite")
+    v["culprit_citations"] = []
+    (d["verdicts_dir"] / "RVQ_BLK_nocite.json").write_text(json.dumps(v), encoding="utf-8")
+    (d["bundles_dir"] / "RVQ_BLK_nocite.json").write_text(
+        json.dumps({"review_id": "RVQ_BLK_nocite", "cik": "0001999988"}), encoding="utf-8")
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_good"},
+        {"cik": "0001999988", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_nocite"},
+    ])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                             fix_class="subtotal_filter")
+    assert res["n_dispatch"] == 1
+    assert res["n_skipped_no_citations"] == 1
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["skipped_no_citations"][0]["cik"] == "0001999988"
+    assert "re-enrichment" in manifest["skipped_no_citations"][0]["reason"]
+
+
+def test_coordinate_only_citations_survive_into_prompt(tmp_path):
+    # validate_corrections accepts quote OR table/row coordinate; the prompt's copyable
+    # citations JSON must not drop coordinate-only citations (Ares q4b2t4b lesson).
+    d = _dirs(tmp_path)
+    batch = "B2K"
+    batch_dir = d["base_dir"] / "batch" / batch
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    v = _verdict("RVQ_BLK_coord")
+    v["culprit_citations"] = [{"table_index": 190, "row_index": 5}]
+    (d["verdicts_dir"] / "RVQ_BLK_coord.json").write_text(json.dumps(v), encoding="utf-8")
+    d["bundles_dir"].mkdir(parents=True, exist_ok=True)
+    (d["bundles_dir"] / "RVQ_BLK_coord.json").write_text(
+        json.dumps({"review_id": "RVQ_BLK_coord", "cik": "0001743415"}), encoding="utf-8")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_coord"}])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                             fix_class="subtotal_filter")
+    assert res["n_dispatch"] == 1 and res["n_skipped_no_citations"] == 0
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert '"table_index": 190' in prompt
+    assert "coordinate-only citation" in prompt
+
+
+def test_contract_excerpt_covers_all_registered_classes():
+    from pipeline.correction_leaf import TEMPLATE_REGISTRY
+    for fc, tpl in TEMPLATE_REGISTRY.items():
+        text = pf._contract_excerpt(fc)
+        assert f"Embedded contract excerpt for {fc}" in text
+        for k in tpl.required:
+            assert f"'{k}'" in text
+
+
 def test_preflight_skips_non_actionable_packets(tmp_path):
     d = _dirs(tmp_path)
     batch = "B2N"
@@ -126,7 +212,9 @@ def test_preflight_rejects_existing_correction(tmp_path):
     existing = d["corrections_dir"] / "0001743415"
     existing.mkdir(parents=True)
     (existing / "subtotal_filter.json").write_text("{}", encoding="utf-8")
-    with pytest.raises(pf.PreflightError):
+    # 2026-08-13: a staged leaf awaiting its gate SKIPS the packet (iterative
+    # rounds) instead of halting the lane; with no other packet the batch is empty.
+    with pytest.raises(pf.PreflightError, match="existing=1"):
         pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
                            bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
                            fix_class="subtotal_filter")
@@ -136,13 +224,15 @@ def test_preflight_rejects_fix_class_without_trial_applier(tmp_path):
     d = _dirs(tmp_path)
     batch = "B2U"
     batch_dir = d["base_dir"] / "batch" / batch
+    # 2026-08-13: classification_fix now HAS an applier; anchor_fix remains the
+    # rule-track class with no trial applier.
     _seed(d, "RVQ_BLK_aaa")
-    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "classification_fix",
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "anchor_fix",
                                  "source_review_ids": "RVQ_BLK_aaa"}])
     with pytest.raises(pf.PreflightError, match="no implemented trial applier"):
         pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
                            bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
-                           fix_class="classification_fix")
+                           fix_class="anchor_fix")
 
 
 def test_preflight_rejects_ambiguous_comparative_quarters(tmp_path):
@@ -157,3 +247,181 @@ def test_preflight_rejects_ambiguous_comparative_quarters(tmp_path):
         pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
                            bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
                            fix_class="comparative_period_filter")
+
+
+def test_preflight_skips_policy_fix_class_with_reason(tmp_path):
+    # rule_scope asks to change a VALIDATION RULE's scope -- human basket, not a
+    # worker dispatch, and not a whole-lane error.
+    d = _dirs(tmp_path)
+    batch = "B2P"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_aaa"},
+        {"cik": "0001999988", "fix_class": "rule_scope", "source_review_ids": "RVQ_BLK_aaa"},
+    ])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    assert res["n_dispatch"] == 1
+    assert res["n_skipped_policy"] == 1
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["skipped_policy"][0]["fix_class"] == "rule_scope"
+    assert "human escalation basket" in manifest["skipped_policy"][0]["reason"]
+
+
+def test_prompt_grounds_holdings_identifiers_with_match_verification(tmp_path):
+    # Round-4: the prompt must carry the EXACT holdings-side identifier strings
+    # (from the bundle's holdings_slice) verified against current unified holdings --
+    # the fix for the 20 selector-noop gate refusals (workers copied filing-citation
+    # text that equality-matches nothing in the holdings frame).
+    import pandas as pd
+    d = _dirs(tmp_path)
+    batch = "B2G"
+    batch_dir = d["base_dir"] / "batch" / batch
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    (d["verdicts_dir"] / "RVQ_BLK_gr.json").write_text(
+        json.dumps(_verdict("RVQ_BLK_gr")), encoding="utf-8")
+    d["bundles_dir"].mkdir(parents=True, exist_ok=True)
+    (d["bundles_dir"] / "RVQ_BLK_gr.json").write_text(json.dumps({
+        "review_id": "RVQ_BLK_gr", "cik": "0001743415",
+        "evidence_items": [
+            {"evidence_id": "flag", "data": {"cik": "0001743415"}},
+            {"evidence_id": "holdings_slice", "data": [
+                {"issuer_name": "Astra Acquisition Corp.",
+                 "bdc_investment_identifier": "Astra | Second-lien loan",
+                 "fair_value": 1.0},
+                {"issuer_name": "Ghost Issuer That Left The Frame",
+                 "bdc_investment_identifier": "", "fair_value": 2.0},
+            ]},
+        ]}), encoding="utf-8")
+    holdings = tmp_path / "holdings.parquet"
+    pd.DataFrame([
+        {"cik": "0001743415", "issuer_name": "Astra Acquisition Corp.",
+         "bdc_investment_identifier": "Astra | Second-lien loan",
+         "report_date": "2024-12-31"},
+        {"cik": "0001743415", "issuer_name": "Other Co",
+         "bdc_investment_identifier": "", "report_date": "2024-12-31"},
+    ]).to_parquet(holdings)
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "mechanism": "subtotal_leak", "quarters": "2024-12-31",
+                                 "source_review_ids": "RVQ_BLK_gr"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=holdings)
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Holdings-side selector identifiers" in prompt
+    assert '"Astra Acquisition Corp."' in prompt
+    assert "matches 1 current holdings row(s)" in prompt
+    assert "Ghost Issuer That Left The Frame" in prompt
+    assert "NO MATCH in current holdings -- do NOT use as a selector" in prompt
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["rows"][0]["n_grounded_identifiers"] == 2
+
+
+def test_prompt_grounding_unverified_without_holdings_file(tmp_path):
+    d = _dirs(tmp_path)
+    batch = "B2GU"
+    batch_dir = d["base_dir"] / "batch" / batch
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    (d["verdicts_dir"] / "RVQ_BLK_gu.json").write_text(
+        json.dumps(_verdict("RVQ_BLK_gu")), encoding="utf-8")
+    d["bundles_dir"].mkdir(parents=True, exist_ok=True)
+    (d["bundles_dir"] / "RVQ_BLK_gu.json").write_text(json.dumps({
+        "review_id": "RVQ_BLK_gu", "cik": "0001743415",
+        "evidence_items": [{"evidence_id": "holdings_slice",
+                            "data": [{"issuer_name": "Astra Acquisition Corp."}]}],
+        }), encoding="utf-8")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_gu"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter",
+                       holdings_path=tmp_path / "no_such_holdings.parquet")
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "UNVERIFIED: holdings file unavailable at preflight" in prompt
+
+
+def test_prompt_grounding_absent_notes_care(tmp_path):
+    # Bundles without holdings rows: the section still appears with the caution line
+    # (the worker must know selector no-ops are gate refusals).
+    d = _dirs(tmp_path)
+    batch = "B2GN"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_gn")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_gn"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=None)
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Holdings-side selector identifiers" in prompt
+    assert "no holdings-side identifier rows in the source bundles" in prompt
+
+
+def test_preflight_skips_stale_targets_against_review_queue(tmp_path):
+    # Frame revalidation: a packet whose source finding no longer appears in the
+    # current review queue was fixed upstream -- skip, don't dispatch (q4b2t4b lesson).
+    d = _dirs(tmp_path)
+    batch = "B2S"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _seed(d, "RVQ_BLK_bbb", cik="0001743415")
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_aaa"},
+        {"cik": "0001743415", "fix_class": "dedup", "source_review_ids": "RVQ_BLK_bbb"},
+    ])
+    queue = tmp_path / "review_queue.csv"
+    queue.write_text("review_id,lane\nRVQ_BLK_aaa,blocker\n", encoding="utf-8")
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                             review_queue_path=queue)
+    assert res["n_dispatch"] == 1          # only the still-open finding dispatches
+    assert res["n_skipped_stale"] == 1     # RVQ_BLK_bbb no longer fires
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["skipped_stale"][0]["fix_class"] == "dedup"
+    assert "fixed upstream" in manifest["skipped_stale"][0]["reason"]
+
+
+def test_manifest_wave_stamping(tmp_path):
+    # Each dispatch wave writes a durable manifest.NNN.json; manifest.json is a
+    # latest-wave pointer. The old overwrite behavior lost every prior wave
+    # (q4b2exp recorded 2 rows where 126 were dispatched).
+    d = _dirs(tmp_path)
+    batch = "B2W"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _seed(d, "RVQ_BLK_bbb", cik="0001999988")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_aaa"}])
+    res1 = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                              bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    assert res1["wave"] == 1
+    assert res1["manifest_path"].endswith("manifest.001.json")
+    # second wave: different packet (first cik now has a staged leaf and would be skipped)
+    _write_worklist(batch_dir, [{"cik": "0001999988", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_bbb"}])
+    res2 = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                              bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    assert res2["wave"] == 2
+    m1 = json.loads((batch_dir / "manifest.001.json").read_text())
+    m2 = json.loads((batch_dir / "manifest.002.json").read_text())
+    latest = json.loads((batch_dir / "manifest.json").read_text())
+    assert m1["rows"][0]["cik"] == "0001743415" and m1["wave"] == 1
+    assert m2["rows"][0]["cik"] == "0001999988" and m2["wave"] == 2
+    assert latest == m2                      # pointer duplicates the last wave
+    assert res2["manifest_latest"].endswith("manifest.json")
+
+
+def test_release_manifest_accepts_wave_path(tmp_path, monkeypatch):
+    d = _dirs(tmp_path)
+    batch = "B2R"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_aaa")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_aaa"}])
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"])
+    released = []
+    monkeypatch.setattr(pf.review_lock, "release", lambda k: released.append(k))
+    pf.release_manifest(res["manifest_path"])
+    assert released == ["B2__0001743415__subtotal_filter"]

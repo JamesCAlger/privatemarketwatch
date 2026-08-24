@@ -65,7 +65,8 @@ for ($i = 1; $i -le $MaxAttempts; $i++) {
 
   $log = Join-Path $logDir "attempt$i.trace.jsonl"
   Write-Host "[attempt $i] running Codex (trace -> $log)"
-  & $runner -PromptPath $promptPath -WorkerHome $workerHome -WorkerRunroot $workerRunroot -NoSetup *> $log
+  & $runner -PromptPath $promptPath -WorkerHome $workerHome -WorkerRunroot $workerRunroot -NoSetup `
+    -TraceDir $logDir -TracePrefix "attempt${i}__" *> $log
   $workerExit = $LASTEXITCODE
   Get-Content $log -Tail 6
   if ($null -ne $workerExit -and $workerExit -ne 0) { throw "Codex worker exited $workerExit; see $log" }

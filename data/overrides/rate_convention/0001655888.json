@@ -1,0 +1,66 @@
+{
+  "cik": "0001655888",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule presents position-level interest in separate columns under the Interest heading: Ref. Rate, Cash, and PIK. Cash is the cash spread/rate leg and PIK is quoted separately on top; a row with both Cash and PIK does not present an all-in stated rate in a single column.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Interest | Company(1)(25) | Investment | Ref. Rate | Cash | PIK | Maturity Date | Par | Shares/Units | Amortized Cost(2)(27) | Fair Value | % of Net Assets",
+      "where": "Blue Owl Capital Corporation Consolidated Schedule of Investments, As of March 31, 2026"
+    },
+    {
+      "kind": "footnote",
+      "quote": "(8) The interest rate on these loans is subject to 1 month SOFR, which as of March 31, 2026 was 3.66 %.",
+      "where": "Blue Owl Capital Corporation Consolidated Schedule of Investments, As of March 31, 2026, schedule footnotes"
+    },
+    {
+      "kind": "footnote",
+      "quote": "(9) The interest rate on these loans is subject to 3 month SOFR, which as of March 31, 2026 was 3.68 % .",
+      "where": "Blue Owl Capital Corporation Consolidated Schedule of Investments, As of March 31, 2026, schedule footnotes"
+    },
+    {
+      "kind": "position",
+      "issuer": "Deerfield Dakota Holdings",
+      "quote": "First lien senior secured loan | Ref. Rate S+ | Cash 3.00 % | PIK 2.75 %",
+      "printed_cash": 3.0,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Inovalon Holdings, Inc.",
+      "quote": "First lien senior secured loan | Ref. Rate S+ | Cash 2.75 % | PIK 2.75 %",
+      "printed_cash": 2.75,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "HGH Purchaser, Inc. (dba Horizon Services)",
+      "quote": "First lien senior secured loan | Ref. Rate S+ | Cash 3.25 % | PIK 3.75 %",
+      "printed_cash": 3.25,
+      "printed_pik": 3.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Associations Finance, Inc.",
+      "quote": "Unsecured notes | Ref. Rate N/A | Cash [blank] | PIK 14.25 %",
+      "printed_pik": 14.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Ex Vivo Parent Inc. (dba OB Hospitalist)",
+      "quote": "First lien senior secured loan | Ref. Rate S+ | Cash [blank] | PIK 9.50 %",
+      "printed_pik": 9.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Metis HoldCo, Inc. (dba Mavis Tire Express Services)",
+      "quote": "Series A Convertible Preferred Stock | Ref. Rate N/A | Cash [blank] | PIK 7.00 %",
+      "printed_pik": 7.0
+    }
+  ],
+  "rationale": "The filing does not use a single all-in interest-rate column for these positions. Its schedule header splits Interest into Ref. Rate, Cash, and PIK, and actual rows print values such as S+ / Cash 3.00% / PIK 2.75% and S+ / Cash 3.25% / PIK 3.75%. Therefore the stated cash rate or spread excludes the separately printed PIK leg.",
+  "confidence": 0.98,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

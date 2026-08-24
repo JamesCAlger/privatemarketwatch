@@ -1,0 +1,36 @@
+{
+  "cik": "0001849894",
+  "mechanism": "extraction_gap",
+  "fix_class": "classification_fix",
+  "template": {
+    "field": "index_classification",
+    "value": "SOFR",
+    "row_selector": {
+      "issuer_name": "Legends Hospitality Holding Company",
+      "report_date": "2025-12-31",
+      "table_index": 35
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_5229461db412"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 16,
+      "row_index": 10,
+      "quoted_text": "Number of debt investments on non-accrual status | 1 | 1"
+    },
+    {
+      "table_index": 35,
+      "row_index": 4,
+      "quoted_text": "Legends Hospitality Holding Company | [blank Footnotes] | S + 5.50 % | 0.75 % | 9.23 % (Incl 2.75 % PIK) | 8/22/2031 | 65,519 | 64,436 | 64,504 | 1.97"
+    }
+  ],
+  "confidence": 0.78,
+  "rationale": "The cited debt investment row shows a floating-rate spread expressed as \"S + 5.50 %\", which supports classifying the investment's rate index as SOFR. The correction is scoped to the Legends Hospitality Holding Company row for the target report date and table.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

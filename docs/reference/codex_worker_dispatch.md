@@ -23,6 +23,9 @@ inside one, to avoid recursion).
 - **`scripts/run_codex_worker.ps1`** -- runs Codex against a prompt file:
   - `-PromptPath` (required), `-WorkerHome`, `-WorkerRunroot`, `-CodexBin` (default `codex.cmd`),
     `-NoSetup` (skip the setup call when you've already run it).
+  - `-TraceDir` / `-TracePrefix` -- where the harvested rollout trace lands (see "Rollout
+    traces" below). Dispatchers pass their batch logs dir + a per-worker prefix; default is
+    `<WorkerHome>\traces` so no caller loses the trace.
 
 ## The dispatch loop (per target)
 
@@ -65,6 +68,34 @@ accumulated 853 codex.exe copies (257 GB) under `data/output`.
 - `scripts/cleanup_worker_scratch.ps1` sweeps orphans from killed dispatchers or pre-change
   batches: `.\scripts\cleanup_worker_scratch.ps1 [-Root <dir>] [-WhatIfOnly]`. It refuses to
   run while any codex process is alive.
+
+## Rollout traces (added 2026-08-20)
+
+Workers no longer pass `--ephemeral` to `codex exec` (removed after the one-worker canary in
+`data/output/agent_b2/batch/canary_trace_20260820/canary_report.md`). Codex therefore persists
+one `sessions\YYYY\MM\DD\rollout-*.jsonl` per run under the worker CODEX_HOME: the full agent
+trace -- tool calls WITH arguments (complete apply_patch bodies), tool outputs, and
+session/turn metadata that the `--json` stdout stream does not carry (its `file_change` items
+omit patch content entirely). ~65 KB for a no-shell B2 packet.
+
+- The runner's finally block HARVESTS the rollout: moves it to `-TraceDir` (renamed
+  `<TracePrefix><original-name>`) and prunes `sessions\`, so reused homes never accumulate
+  session state. All fleet dispatchers pass their batch `logs\` dir + a per-worker prefix
+  (`<id>__` for A/B1/B2/bdc_review, `iter<i>__` / `attempt<i>__` for the investigation and
+  anchor loops, the per-cik `logs\worker.<quarter>.` for convention, whose worker homes are
+  discarded TEMP scratch).
+- `-NoCleanup` skips the harvest too (raw sessions layout kept for debugging one worker).
+- Raw chain-of-thought is NOT recoverable (reasoning items carry `encrypted_content`), but
+  since 2026-08-20 the generated worker config sets `model_reasoning_summary = "detailed"`,
+  so reasoning items also carry readable `summary_text` parts: model-written digests per
+  reasoning burst (headline-length on small no-shell packets, longer on shell-heavy work).
+- The harvest NULLS `encrypted_content` in the trace it writes (~9% of a no-shell B2 trace,
+  more on reasoning-heavy work): the payload is undecryptable by us and only served codex
+  session resume, which is impossible anyway once the rollout leaves `sessions\`. On any
+  transform error the trace is moved verbatim instead -- a trace is never lost to the strip.
+- The scratch sweepers explicitly KEEP `sessions\**\rollout-*.jsonl` (see
+  `codex_worker_waste_allowlist.ps1`), so unharvested traces from killed dispatchers survive
+  until collected.
 
 ## Higher-level orchestration (for reference, not templates)
 

@@ -1,0 +1,69 @@
+{
+  "cik": "0001825248",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule uses one 'Investment Coupon Rate/ Maturity' column. For floating-rate debt it prints the reference-rate spread and the current cash/all-in floating rate in parentheses, then prints any PIK percentage separately after the parenthetical rate. Thus the stated parenthetical Investment Coupon Rate excludes the separately quoted PIK leg.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (k) (o) | Industry | Acquisition Date | Investment Coupon Rate/ Maturity (i) | Principal/ Numbers of Shares | Amortized Cost | Fair Value | % of Net Assets (d)",
+      "where": "Consolidated Schedules of Investments, March 31, 2026"
+    },
+    {
+      "kind": "footnote",
+      "quote": "(i) The majority of the investments bear interest at a rate that may be determined by reference Secured Overnight Financing Rate (\"SOFR\" or \"S\"), Canadian Overnight Repo Rate Average (\"C\"), or Prime (\"P\") and which reset daily, monthly, quarterly, or semiannually. For each, the Company has provided the spread over the relevant reference rate and the current interest rate in effect at March 31, 2026. Certain investments are subject to reference rate floors. For fixed rate loans, a spread above a reference rate is not applicable. For funded floating rate securities, the all-in rate is disclosed within parentheses.",
+      "where": "Consolidated Schedules of Investments footnote (i), March 31, 2026"
+    },
+    {
+      "kind": "position",
+      "issuer": "Aventine Holdings, LLC",
+      "quote": "S+ 6.00 % ( 9.80 %) 3.50 % PIK, 6/18/2029",
+      "printed_pik": 3.5,
+      "printed_cash": 9.8
+    },
+    {
+      "kind": "position",
+      "issuer": "FGT Purchaser, LLC",
+      "quote": "S+ 5.50 % ( 9.30 %) 3.00 % PIK, 9/13/2028",
+      "printed_pik": 3.0,
+      "printed_cash": 9.3
+    },
+    {
+      "kind": "position",
+      "issuer": "Lighthouse Intelligence, Ltd.",
+      "quote": "S+ 5.00 % ( 8.67 %) 2.50 % PIK, 4/10/2030",
+      "printed_pik": 2.5,
+      "printed_cash": 8.67
+    },
+    {
+      "kind": "position",
+      "issuer": "TEI Intermediate, LLC",
+      "quote": "S+ 5.25 % ( 8.85 %) 2.88 % PIK, 12/15/2031",
+      "printed_pik": 2.88,
+      "printed_cash": 8.85
+    },
+    {
+      "kind": "position",
+      "issuer": "WHCG Purchaser III, Inc.",
+      "quote": "S+ 6.50 % ( 10.17 %) 3.25 % PIK, 6/29/2029",
+      "printed_pik": 3.25,
+      "printed_cash": 10.17
+    },
+    {
+      "kind": "position",
+      "issuer": "Aventine Holdings, LLC",
+      "quote": "10.25 % PIK, 12/22/2030",
+      "printed_pik": 10.25
+    },
+    {
+      "kind": "position",
+      "issuer": "WHCG Purchaser III, Inc.",
+      "quote": "10.00 % PIK, 6/30/2030",
+      "printed_pik": 10.0
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule header points to footnote (i), which says the Company provides the spread and current interest rate, with the all-in rate for funded floating-rate securities disclosed in parentheses. On PIK rows, the parenthetical current rate is followed by a separately printed PIK percentage, for example 'S+ 5.50 % ( 9.30 %) 3.00 % PIK'. Because PIK is appended outside the parenthetical stated rate rather than described as included in it, the stated Investment Coupon Rate is the cash/current floating leg and PIK is an additional separately quoted leg.",
+  "confidence": 0.93,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 5
+}

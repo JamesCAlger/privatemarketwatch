@@ -7,7 +7,15 @@ param(
   [string] $CodexBin = 'codex.cmd',
   [switch] $NoSetup,
   # Skip post-run scratch cleanup (keep .sandbox-bin\codex.exe + .tmp\plugins for debugging).
-  [switch] $NoCleanup
+  # Also skips the rollout-trace harvest, leaving the raw sessions\ layout in place.
+  [switch] $NoCleanup,
+  # Destination dir for the harvested rollout trace (the sessions\YYYY\MM\DD\rollout-*.jsonl
+  # codex exec persists now that --ephemeral is gone). Dispatchers pass their batch logs dir;
+  # default keeps the trace in <WorkerHome>\traces so no caller loses it.
+  [string] $TraceDir = '',
+  # Prefix prepended to the harvested trace filename (the worker id) so traces from many
+  # workers can share one TraceDir without colliding or losing attribution.
+  [string] $TracePrefix = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -45,6 +53,17 @@ if (-not (Test-Path -LiteralPath $ConfigPath -PathType Leaf)) {
   throw "Worker config does not exist: $ConfigPath"
 }
 
+# Deny the sandbox users read on the copied operator credentials BEFORE launch.
+# The codex process itself runs as the OPERATOR and authenticates fine; only the
+# agent's sandboxed shell commands (run as CodexSandboxUsers members) are blocked.
+# Closes the gap where auth.json sat inside both the repo-wide policy read grant
+# and the sandbox group's inherited Modify ACL. Best-effort: a machine without
+# the harness group must not block the worker (warn and continue).
+foreach ($AuthFile in (Get-ChildItem -LiteralPath $WorkerHome -Force -Filter 'auth.json*' -File -ErrorAction SilentlyContinue)) {
+  icacls $AuthFile.FullName /deny 'CodexSandboxUsers:(R)' | Out-Null
+  if ($LASTEXITCODE -ne 0) { Write-Warning "Could not apply deny-read ACL to $($AuthFile.Name)" }
+}
+
 $PreviousCodexHome = $env:CODEX_HOME
 $PreviousErrorActionPreference = $ErrorActionPreference
 try {
@@ -59,8 +78,13 @@ try {
   # parent dispatcher before it can run deterministic validation. Let the native process finish;
   # callers inspect `$LASTEXITCODE` and validate the worker artifact.
   $ErrorActionPreference = 'Continue'
+  # --ephemeral was removed 2026-08-20 (one-worker canary: data\output\agent_b2\batch\
+  # canary_trace_20260820\canary_report.md). It suppressed session persistence, so no
+  # rollout trace (tool calls WITH arguments, tool outputs, reasoning items) survived any
+  # worker run. Without it codex writes exactly one sessions\YYYY\MM\DD\rollout-*.jsonl
+  # (~65 KB for a no-shell B2 packet), harvested in the finally block below. Reasoning
+  # items carry encrypted_content only -- do not expect readable chain-of-thought.
   Get-Content -LiteralPath $PromptPath -Raw | & $CodexBin exec `
-    --ephemeral `
     --strict-config `
     --skip-git-repo-check `
     --ignore-rules `
@@ -74,13 +98,55 @@ try {
   } else {
     $env:CODEX_HOME = $PreviousCodexHome
   }
-  # Codex copies its full ~300 MB binary into <WorkerHome>\.sandbox-bin and syncs a
-  # ~40 MB / ~5,000-file plugin cache into <WorkerHome>\.tmp\plugins on every fresh
-  # CODEX_HOME. Left in place, a 120-worker batch is ~40 GB of pure scratch (853
-  # stale copies = 257 GB by 2026-07-10). Worker artifacts (logs, verdicts, sqlite
-  # state) are untouched; if the same home is reused, Codex just re-copies.
+  # Harvest the rollout trace ahead of the scrub. Best-effort: harvest failure must
+  # never fail the worker run, and warnings go to stderr only -- stdout is the JSONL
+  # event stream dispatchers parse. Moving the rollout out of sessions\ (then removing
+  # sessions\) keeps reused worker homes from accumulating per-run session state and
+  # gives each run exactly one deterministic trace artifact.
   if (-not $NoCleanup) {
-    Remove-Item (Join-Path $WorkerHome '.sandbox-bin\codex.exe') -Force -ErrorAction SilentlyContinue
-    Remove-Item (Join-Path $WorkerHome '.tmp\plugins') -Recurse -Force -ErrorAction SilentlyContinue
+    try {
+      $SessionsDir = Join-Path $WorkerHome 'sessions'
+      if ([string]::IsNullOrWhiteSpace($TraceDir)) { $TraceDir = Join-Path $WorkerHome 'traces' }
+      $Rollouts = @(Get-ChildItem -LiteralPath $SessionsDir -Recurse -Filter 'rollout-*.jsonl' -File -ErrorAction SilentlyContinue)
+      if ($Rollouts.Count -gt 0) {
+        New-Item -ItemType Directory -Force -Path $TraceDir | Out-Null
+        foreach ($Rollout in $Rollouts) {
+          $Dest = Join-Path $TraceDir "$TracePrefix$($Rollout.Name)"
+          # Strip the encrypted reasoning payload while harvesting: it is undecryptable
+          # by us and only ever served codex session resume, which is impossible anyway
+          # once the rollout leaves sessions\. The readable summary_text parts are kept.
+          # The payload is fernet base64url (no quotes/backslashes), so a value-regex is
+          # byte-safe; null keeps the JSON valid wherever the field sits. On any
+          # transform error, fall back to moving the trace verbatim -- never lose it.
+          try {
+            $Raw = [System.IO.File]::ReadAllText($Rollout.FullName)
+            $Stripped = [regex]::Replace($Raw, '"encrypted_content"\s*:\s*"[^"]*"', '"encrypted_content":null')
+            [System.IO.File]::WriteAllText($Dest, $Stripped, (New-Object System.Text.UTF8Encoding($false)))
+            Remove-Item -LiteralPath $Rollout.FullName -Force
+          } catch {
+            Write-Warning "Trace strip failed ($($_.Exception.Message)); moving verbatim."
+            Move-Item -LiteralPath $Rollout.FullName -Destination $Dest -Force
+          }
+        }
+        Remove-Item -LiteralPath $SessionsDir -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
+      } else {
+        Write-Warning "No rollout trace found under $SessionsDir to harvest."
+      }
+    } catch {
+      Write-Warning "Rollout trace harvest failed: $($_.Exception.Message)"
+    }
+  }
+  # Codex copies its full binary, plugin caches, model caches, AND the operator's
+  # logged-in auth.json into every fresh CODEX_HOME. The full waste allowlist lives
+  # in codex_worker_waste_allowlist.ps1 (shared with sweep_worker_scratch_waste.ps1
+  # so wrapper and sweeper cannot drift). 2026-08-20 expansion: the previous
+  # two-item cleanup here missed plugins\cache (~26 MB / ~5,000 files per worker --
+  # the dominant batch-scratch cost) and auth.json (live credentials in scratch).
+  # Scrub runs on worker failure too (failed workers also hold credentials);
+  # worker artifacts (logs, verdicts, sqlite state, and any sessions\rollout-*.jsonl
+  # traces) are untouched. If the home is reused, Codex just re-copies what it needs.
+  if (-not $NoCleanup) {
+    . (Join-Path $PSScriptRoot 'codex_worker_waste_allowlist.ps1')
+    Remove-CodexWorkerWaste -WorkerHome $WorkerHome
   }
 }

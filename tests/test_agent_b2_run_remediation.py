@@ -6,6 +6,7 @@ import csv
 import json
 
 import pandas as pd
+import pytest
 
 from scripts.agent_b2 import run_remediation as rr
 
@@ -160,10 +161,12 @@ def test_route_corrections_by_flavor():
         {"fix_class": "rule_scope"}, {"fix_class": None}, {"fix_class": "classification_fix"},
     ]
     routed = rr.route_corrections(corrections)
-    assert len(routed["wrapper_patch"]) == 2   # subtotal_filter + classification_fix
-    assert len(routed["post_staging"]) == 1    # dedup
-    assert len(routed["rule_track"]) == 1      # rule_scope
-    assert len(routed["needs_human"]) == 1     # no fix_class
+    # 2026-08-13: classification_fix is now a post-staging frame applier; rule_scope
+    # is a detector-policy decision routed to the human basket.
+    assert len(routed["wrapper_patch"]) == 1   # subtotal_filter
+    assert len(routed["post_staging"]) == 2    # dedup + classification_fix
+    assert len(routed["rule_track"]) == 0
+    assert len(routed["needs_human"]) == 2     # rule_scope + no fix_class
 
 
 def test_prepare_trial_wrappers_runs_subtotal_filter(tmp_path):
@@ -176,14 +179,12 @@ def test_prepare_trial_wrappers_runs_subtotal_filter(tmp_path):
     corrections = [
         {"cik": cik, "fix_class": "subtotal_filter", "template": {"patterns": ["Leaked Rollup"]},
          "source_review_ids": ["RVQ_x"], "confidence": 0.9},
-        {"cik": cik, "fix_class": "classification_fix", "template": {}},  # not implemented -> recorded
     ]
     out = tmp_path / "trial_wrappers"
     audits = rr.prepare_trial_wrappers(cik, corrections, out_wrapper_dir=out, source_wrapper_dir=src)
     by = {a["fix_class"]: a for a in audits}
     assert by["subtotal_filter"]["status"] == "ok"
     assert "leaked rollup" in by["subtotal_filter"]["patterns_added"]
-    assert by["classification_fix"]["status"] == "not_implemented"
     assert (out / f"{cik}.json").exists()
 
 
@@ -267,3 +268,432 @@ def test_promote_wrapper_patch_applies_to_production_wrapper(tmp_path):
     assert promoted2[0]["status"] == "noop"
     wrapper2 = json.loads((wrappers / f"{cik}.json").read_text(encoding="utf-8"))
     assert len(wrapper2["b2_provenance"]) == 1
+
+
+# --------------------------------------------------------------------------- value gate (2026-08-13)
+
+
+def _vg_frame():
+    return pd.DataFrame([
+        {"issuer_name": "Alpha Corp", "report_date": "2025-12-31", "fair_value": 1000.0,
+         "interest_rate": 0.105, "pik_rate": None, "basis_spread": 5.0,
+         "asset_class": "PRIVATE_CREDIT"},
+        {"issuer_name": "Beta LLC", "report_date": "2025-12-31", "fair_value": 2000.0,
+         "interest_rate": 11.5, "pik_rate": 2.0, "basis_spread": 6.0,
+         "asset_class": "PRIVATE_CREDIT"},
+    ])
+
+
+def _vg_corr(**kw):
+    base = {"cik": "0000000100", "fix_class": "rate_rescale",
+            "template": {"field": "interest_rate", "factor": 100,
+                         "row_selector": {"issuer_name": "Alpha Corp"}}}
+    base.update(kw)
+    return base
+
+
+def test_value_gate_passes_on_exact_replay():
+    from pipeline.agent_b2_appliers import apply_rate_rescale
+    base = _vg_frame()
+    trial, _ = apply_rate_rescale(base, _vg_corr()["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=_vg_corr())
+    assert res["verdict"] == "PASS", res["reasons"]
+    assert res["checks"]["replay_equivalence"] is True
+
+
+def test_value_gate_fails_on_off_target_drift():
+    from pipeline.agent_b2_appliers import apply_rate_rescale
+    base = _vg_frame()
+    trial, _ = apply_rate_rescale(base, _vg_corr()["template"])
+    trial = trial.copy()
+    trial.loc[trial["issuer_name"] == "Beta LLC", "fair_value"] = 2500.0  # unrelated edit
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=_vg_corr())
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["replay_equivalence"] is False
+
+
+def test_value_gate_fails_on_noop_correction():
+    # Stale-fix guard: a correction that changes nothing on the baseline must not promote.
+    base = _vg_frame()
+    corr = _vg_corr()
+    corr["template"] = {"field": "interest_rate", "factor": 100,
+                        "row_selector": {"issuer_name": "No Such Issuer"}}
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=base.copy(), correction=corr)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["replay_ok"] is False
+
+
+def test_value_gate_fails_on_out_of_bounds_rate():
+    from pipeline.agent_b2_appliers import apply_rate_rescale
+    base = _vg_frame()
+    corr = _vg_corr()
+    corr["template"] = {"field": "interest_rate", "factor": 1000,
+                        "row_selector": {"issuer_name": "Alpha Corp"}}  # 0.105 -> 105
+    trial, _ = apply_rate_rescale(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["field_sanity"] is False
+
+
+def test_value_gate_missing_position_add_fails_closed_without_grounding():
+    from pipeline.agent_b2_appliers import apply_missing_position_add
+    base = _vg_frame()
+    corr = {"cik": "0000000100", "fix_class": "missing_position_add",
+            "template": {"positions": [{"issuer_name": "Gamma Bill", "fair_value": 500.0,
+                                        "report_date": "2025-12-31",
+                                        "source_row_id": "SRC-42",
+                                        "bdc_dimensions_raw": "investmentidentifieraxis=Gamma"}]}}
+    trial, _ = apply_missing_position_add(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["grounding_verified"] is False
+
+
+def test_value_gate_missing_position_add_passes_with_grounding():
+    from pipeline.agent_b2_appliers import apply_missing_position_add
+    base = _vg_frame()
+    corr = {"cik": "0000000100", "fix_class": "missing_position_add",
+            "template": {"positions": [{"issuer_name": "Gamma Bill", "fair_value": 500.0,
+                                        "report_date": "2025-12-31",
+                                        "source_row_id": "SRC-42",
+                                        "bdc_dimensions_raw": "investmentidentifieraxis=Gamma"}]}}
+    trial, _ = apply_missing_position_add(base, corr["template"])
+    grounding = pd.DataFrame([{"source_row_id": "SRC-42", "fair_value": 500.0}])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr,
+                               grounding_df=grounding)
+    assert res["verdict"] == "PASS", res["reasons"]
+
+
+def test_value_gate_grounding_fv_mismatch_fails():
+    from pipeline.agent_b2_appliers import apply_missing_position_add
+    base = _vg_frame()
+    corr = {"cik": "0000000100", "fix_class": "missing_position_add",
+            "template": {"positions": [{"issuer_name": "Gamma Bill", "fair_value": 500000.0,
+                                        "report_date": "2025-12-31",
+                                        "source_row_id": "SRC-42",
+                                        "bdc_dimensions_raw": "investmentidentifieraxis=Gamma"}]}}
+    trial, _ = apply_missing_position_add(base, corr["template"])
+    grounding = pd.DataFrame([{"source_row_id": "SRC-42", "fair_value": 500.0}])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr,
+                               grounding_df=grounding)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["grounding_verified"] is False
+
+
+# ------------------------------------------------- magnitude plausibility (round 4)
+# Modeled on the q4b2exp_v3 magnitude pulls: quarter-scoped but UNSELECTED
+# rescales/remaps that pushed a whole quarter 10x-1000x off the fund's own norm while
+# staying inside the absolute _FIELD_BOUNDS.
+
+_MQ = ["2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"]
+
+
+def _mag_frame(target_rate=None, target_principal=None, target_pct=0.2):
+    """4 quarters x 4 rows; rates ~10, principal ~ fair_value ~1000 (ratio ~1)."""
+    rows = []
+    for q in _MQ:
+        for i in range(4):
+            rate = (target_rate if (target_rate is not None and q == "2025-12-31")
+                    else 9.0 + i)
+            principal = (target_principal if (target_principal is not None and q == "2025-12-31")
+                         else 950.0 + 30 * i)
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": 1000.0 + 10 * i, "cost": 990.0 + 10 * i,
+                         "principal_amount": principal, "interest_rate": rate,
+                         "pik_rate": None, "basis_spread": 5.0,
+                         "pct_of_net_assets": target_pct + 0.05 * i,
+                         "asset_class": "PRIVATE_CREDIT"})
+    return pd.DataFrame(rows)
+
+
+def _scoped(corr):
+    corr["scope"] = {"quarters": ["2025-12-31"]}
+    return corr
+
+
+def _gate_scoped(base, corr):
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, audit = apply_scoped(base, corr)
+    assert audit.get("status") == "ok", audit
+    return rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                                baseline_df=base, trial_df=trial, correction=corr)
+
+
+def test_magnitude_gate_refuses_unselected_principal_x1000():
+    # 1572694 shape: evidence cites 2 FX rows, fix multiplies EVERY row's principal.
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "principal_amount", "factor": 1000}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is False
+    assert res["verdict"] == "FAIL"
+    assert any("principal" in r for r in res["reasons"])
+
+
+def test_magnitude_gate_refuses_unselected_rate_div100():
+    # 1646614 shape: interest_rate x0.01 across the quarter; post-fix values (~0.1)
+    # are INSIDE the absolute bounds, so only the fund-norm comparison catches it.
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "interest_rate", "factor": 0.01}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["field_sanity"] is True
+    assert res["checks"]["magnitude_plausible"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_magnitude_gate_refuses_remap_pct_into_rate():
+    # 1508655 shape: pct_of_net_assets (~0.2) remapped into interest_rate (norm ~10).
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "column_remap",
+                    "template": {"from_field": "pct_of_net_assets",
+                                 "to_field": "interest_rate"}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_magnitude_gate_passes_scale_repair():
+    # The legitimate direction: the target quarter's rates were stored /100 (0.09-0.12
+    # vs fund norm ~10); rate_rescale x100 REPAIRS the magnitude defect.
+    base = _mag_frame(target_rate=0.105)
+    corr = _scoped({"cik": "0000000100", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 100}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is True, res["reasons"]
+    assert res["verdict"] == "PASS", res["reasons"]
+
+
+def test_magnitude_gate_passes_selected_single_row_fix():
+    # An issuer-selected fix moves one row of four: the quarter average stays within
+    # one order of magnitude of the norm; bounded fixes are not refused.
+    base = _mag_frame()
+    corr = _scoped({"cik": "0000000100", "fix_class": "rate_rescale",
+                    "template": {"field": "interest_rate", "factor": 0.01,
+                                 "row_selector": {"issuer_name": "Issuer 0"}}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is True, res["reasons"]
+
+
+def test_magnitude_gate_vacated_from_field_not_a_break():
+    # A remap that vacates from_field in the target quarter is a remap consequence,
+    # not a magnitude break; the newly populated to_field lands on the norm.
+    rows = []
+    for q in _MQ:
+        for i in range(4):
+            principal = None if q == "2025-12-31" else 950.0 + 30 * i
+            shares = (950.0 + 30 * i) if q == "2025-12-31" else None
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": 1000.0, "principal_amount": principal,
+                         "shares_held": shares, "interest_rate": 10.0})
+    base = pd.DataFrame(rows)
+    corr = _scoped({"cik": "0000000100", "fix_class": "column_remap",
+                    "template": {"from_field": "shares_held",
+                                 "to_field": "principal_amount"}})
+    res = _gate_scoped(base, corr)
+    assert res["checks"]["magnitude_plausible"] is True, res["reasons"]
+
+
+def test_magnitude_gate_changed_row_leg_catches_blended_remap():
+    # 1508655 shape on real data: most rows get small remapped values, a minority keep
+    # in-band rates, so the QUARTER average stays inside 10x -- but the rows the fix
+    # actually wrote land an order of magnitude off the norm.
+    rows = []
+    for q in _MQ:
+        for i in range(10):
+            has_pct = i < 7
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": 1000.0, "interest_rate": 10.5 + 0.1 * i,
+                         "pct_of_net_assets": (0.7 + 0.02 * i) if has_pct else None})
+    base = pd.DataFrame(rows)
+    corr = _scoped({"cik": "0000000100", "fix_class": "column_remap",
+                    "template": {"from_field": "pct_of_net_assets",
+                                 "to_field": "interest_rate"}})
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, _ = apply_scoped(base, corr)
+    # quarter average post-fix: (7 * ~0.77 + 3 * ~11) / 10 ~= 3.8 -> inside 10x of ~11
+    ok, reasons = rr.check_magnitude_plausibility(
+        baseline_df=base, trial_df=trial, correction=corr, target_quarter="2025-12-31")
+    assert ok is False
+    assert any("changed-row" in r for r in reasons)
+
+
+def test_magnitude_check_skips_without_fund_norm():
+    # Only one off-target quarter -> no norm -> the predicate abstains (other gate
+    # checks still apply); it must not fabricate a refusal from thin history.
+    base = _mag_frame()
+    base = base[base["report_date"].isin(["2025-09-30", "2025-12-31"])].reset_index(drop=True)
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "principal_amount", "factor": 1000}})
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, _ = apply_scoped(base, corr)
+    ok, reasons = rr.check_magnitude_plausibility(
+        baseline_df=base, trial_df=trial, correction=corr, target_quarter="2025-12-31")
+    assert ok is True and reasons == []
+
+
+def test_magnitude_check_ratio_leg_catches_principal_break_when_fund_grows():
+    # Dollar averages legitimately drift with portfolio growth, but the per-row
+    # principal/FV ratio does not: a x1000 principal rescale must still be refused
+    # when the fund tripled in size across quarters.
+    rows = []
+    for k, q in enumerate(_MQ):
+        scale = (1 + k)  # fund grows 4x over the year
+        for i in range(4):
+            rows.append({"issuer_name": f"Issuer {i}", "report_date": q,
+                         "fair_value": scale * (1000.0 + 10 * i),
+                         "principal_amount": scale * (950.0 + 30 * i),
+                         "interest_rate": 10.0})
+    base = pd.DataFrame(rows)
+    corr = _scoped({"cik": "0000000100", "fix_class": "unit_rescale",
+                    "template": {"field": "principal_amount", "factor": 1000}})
+    from pipeline.agent_b2_appliers import apply_scoped
+    trial, _ = apply_scoped(base, corr)
+    ok, reasons = rr.check_magnitude_plausibility(
+        baseline_df=base, trial_df=trial, correction=corr, target_quarter="2025-12-31")
+    assert ok is False
+    assert any("principal/FV" in r for r in reasons)
+
+
+# ---------------------------------------------------------------------------
+# Re-adjudication worklist (wrong-diagnosis loop, 2026-08-21)
+# ---------------------------------------------------------------------------
+
+class TestReadjudicationWorklist:
+    def test_is_diagnosis_refusal_on_magnitude_check_false(self):
+        assert rr.is_diagnosis_refusal(
+            {"verdict": "FAIL", "checks": {"magnitude_plausible": False}, "reasons": []})
+
+    def test_is_diagnosis_refusal_on_rate_signature_reason(self):
+        assert rr.is_diagnosis_refusal(
+            {"verdict": "FAIL", "checks": {"replay_ok": True},
+             "reasons": ["rate signature already plausible before fix"]})
+
+    def test_is_diagnosis_refusal_false_on_authoring_fail(self):
+        # replay-equivalence failure = B2 authoring defect, NOT a B1 diagnosis defect
+        assert not rr.is_diagnosis_refusal(
+            {"verdict": "FAIL", "checks": {"replay_equivalence": False,
+                                           "magnitude_plausible": True},
+             "reasons": ["trial does not match applier(baseline)"]})
+        assert not rr.is_diagnosis_refusal(
+            {"verdict": "PASS", "checks": {"magnitude_plausible": False}, "reasons": []})
+
+    def _entry(self, rid="RVQ_BLK_x", fc="unit_rescale", cik="0001234567"):
+        return {"cik": cik, "fix_class": fc, "source_review_ids": rid,
+                "batch_id": "b1", "gated_utc": "2026-08-21T00:00:00+00:00",
+                "reason": "magnitude_plausible false"}
+
+    def test_append_readjudication_dedupes_by_review_id_and_fix_class(self, tmp_path):
+        p = tmp_path / "readju.csv"
+        assert rr.append_readjudication([self._entry()], path=p) == 1
+        # same (review_id, fix_class) pair again -> no-op
+        assert rr.append_readjudication([self._entry()], path=p) == 0
+        # same review_id but different fix_class -> new row
+        assert rr.append_readjudication([self._entry(fc="column_remap")], path=p) == 1
+        rows = list(csv.DictReader(p.open(encoding="utf-8-sig")))
+        assert len(rows) == 2
+        assert {r["fix_class"] for r in rows} == {"unit_rescale", "column_remap"}
+
+    def test_append_readjudication_is_append_only(self, tmp_path):
+        p = tmp_path / "readju.csv"
+        rr.append_readjudication([self._entry()], path=p)
+        before = p.read_text(encoding="utf-8")
+        rr.append_readjudication([self._entry(rid="RVQ_BLK_y")], path=p)
+        after = p.read_text(encoding="utf-8")
+        assert after.startswith(before)          # existing rows never rewritten
+        assert after.count("\n") == before.count("\n") + 1
+
+
+# ---------------------------------------------------------------------------
+# Promote guards (2026-08-21): HARD refuse-overwrite + flag-gated fleet acceptance
+# ---------------------------------------------------------------------------
+
+class TestPromoteGuards:
+    def _stage(self, tmp_path, mech="unit_rescale", content=None):
+        corr = tmp_path / "corrections" / "0001743415"
+        corr.mkdir(parents=True, exist_ok=True)
+        (corr / f"{mech}.json").write_text(
+            json.dumps(content or {"cik": "0001743415", "fix_class": mech}),
+            encoding="utf-8")
+        return tmp_path / "corrections", tmp_path / "overrides"
+
+    def test_promote_refuses_overwrite_of_live_leaf(self, tmp_path):
+        corrections, overrides = self._stage(tmp_path)
+        live = overrides / "0001743415" / "unit_rescale.json"
+        live.parent.mkdir(parents=True)
+        live.write_text(json.dumps({"cik": "0001743415", "live": True}), encoding="utf-8")
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers")
+        assert promoted[0]["status"] == "refused_overwrite"
+        assert json.loads(live.read_text(encoding="utf-8")) == {
+            "cik": "0001743415", "live": True}          # untouched
+
+    def test_promote_allow_overwrite_flag(self, tmp_path):
+        corrections, overrides = self._stage(tmp_path)
+        live = overrides / "0001743415" / "unit_rescale.json"
+        live.parent.mkdir(parents=True)
+        live.write_text(json.dumps({"old": True}), encoding="utf-8")
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers", allow_overwrite=True)
+        assert promoted[0]["status"] == "ok"
+        assert json.loads(live.read_text(encoding="utf-8"))["fix_class"] == "unit_rescale"
+
+    def _thresholds(self, tmp_path, *, enforce):
+        p = tmp_path / "fleet_thresholds.json"
+        p.write_text(json.dumps({"version": 1,
+                                 "enforce": {"promote_requires_pass": enforce},
+                                 "checks": []}), encoding="utf-8")
+        return p
+
+    def test_promote_enforce_off_ignores_missing_artifact(self, tmp_path):
+        corrections, overrides = self._stage(tmp_path)
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+            fleet_thresholds_path=self._thresholds(tmp_path, enforce=False))
+        assert promoted[0]["status"] == "ok"
+
+    def test_promote_enforce_on_requires_pass_artifact(self, tmp_path, monkeypatch):
+        from scripts import fleet_acceptance as fa
+        corrections, overrides = self._stage(tmp_path)
+        tp = self._thresholds(tmp_path, enforce=True)
+        monkeypatch.setattr(fa, "DEFAULT_AUDIT_DIR", tmp_path / "audit")
+        with pytest.raises(RuntimeError, match="no artifact"):
+            rr.promote_passes(
+                [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+                corrections_dir=corrections, overrides_dir=overrides,
+                wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+                fleet_thresholds_path=tp)
+        # FAIL artifact -> refuses with the failing check ids
+        art = tmp_path / "audit" / "fleet_acceptance_bX.json"
+        art.parent.mkdir(parents=True, exist_ok=True)
+        art.write_text(json.dumps({"batch_id": "bX", "verdict": "FAIL",
+                                   "checks": [{"id": "authoring_validity", "pass": False}]}),
+                       encoding="utf-8")
+        with pytest.raises(RuntimeError, match="authoring_validity"):
+            rr.promote_passes(
+                [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+                corrections_dir=corrections, overrides_dir=overrides,
+                wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+                fleet_thresholds_path=tp)
+        # PASS artifact -> promotes
+        art.write_text(json.dumps({"batch_id": "bX", "verdict": "PASS", "checks": []}),
+                       encoding="utf-8")
+        promoted = rr.promote_passes(
+            [{"cik": "0001743415", "mechanism": "unit_rescale", "verdict": "PASS"}],
+            corrections_dir=corrections, overrides_dir=overrides,
+            wrapper_dir=tmp_path / "wrappers", batch_id="bX",
+            fleet_thresholds_path=tp)
+        assert promoted[0]["status"] == "ok"

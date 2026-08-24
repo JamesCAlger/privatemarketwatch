@@ -6,6 +6,189 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-08-23 - Provenance steps 2-4: src_facts extractor, two-tier re-verifier, ledger artifact
+
+### What shipped (commits 5b6a4fe..e079407 + step-2 unified rebuild)
+
+- **src_facts JSON column** (Tasks 1-2): BDC extractor now records the declared raw XBRL value
+  (`r`), winning concept name when non-canonical (`c`), and extractor-side scale events (`x`:
+  `decimals_rescale:10^<k>`, `cik_scale_fix:x1000`) per field in a per-row JSON blob. Dedup step
+  carries the winner's src_facts; `src_filled_fields` (comma-joined) records fields filled from
+  secondary contexts. Grammar: `{field: {r: float, c?: str, x?: [str]}}`. Three defects caught and
+  fixed during this task: (1) paidincash concept-recording substring bug -- exact inequality fix
+  (commit 54081a4); (2) NaN!=NaN mass-stamp at Agent A spread corrections site -- null-safe guard
+  (commit ef4a49a); (3) self-referential ciks view in staging -- fixed (commit e079407).
+- **Five new *_source pathway columns** (Task 4): `fair_value_source`, `pct_of_net_assets_source`,
+  `pik_rate_source`, `principal_amount_source`, `bdc_unrealized_gain_loss_source` added to unified
+  holdings. Values: `'xbrl_field'` (direct XBRL tag), `'identifier_text'` (parsed from identifier
+  string), `''` (not re-extracted or N-PORT row).
+- **corrected_fields column** (Task 5): semicolon-joined field names overridden post-extraction.
+  `_row:added` marker for rows added by corrections (not in the original filing). Writers: B2
+  stage-2 leaves, promoted rules, manual row corrections, Agent A spread corrections. The iXBRL
+  overlay is blank-fill-only by determination and does NOT stamp corrected_fields.
+- **Total: 8 new columns** added in the step-2 unified rebuild.
+- **Cheap-tier re-verifier** (Task 7): `pipeline/provenance_reverify.py:cheap_tier()` -- DuckDB
+  SQL over parquet, no filing access, one row per (bdc_row, field). Cheap-status enum includes
+  corrected / derived / text_pathway / filled_field / merged_conflict / no_provenance /
+  pass_trivial / pass / fail / missing_raw_with_transform.
+- **Full-tier re-verifier** (Task 8): `full_tier()` iterates accessions (one XML parse per filing),
+  re-reads each anchored fact from the cached iXBRL instance at (accession, src_context_id,
+  concept). Full-status enum: raw_match / raw_stale / published_mismatch / anchor_missing /
+  context_missing / source_unavailable / not_checked.
+- **Ledger artifact + CLI** (Task 9): `build_ledger()` writes `provenance_ledger.csv` (keyed
+  (row_id, field), identity cols + both tiers' evidence + reason_code + holdings_artifact_mtime)
+  and `provenance_ledger_summary.csv` (per cik x report_date: field counts per reason_code,
+  verified_fv, derived_fv, corrected_fv, total_fv, verified_fv_share). CLI:
+  `python -m pipeline.provenance_reverify --cohort [--cheap-only] [--ciks ...] [--out DIR]`.
+- **Config additions** (`pipeline/config.py`): `PROVENANCE_LEDGER_FILE`,
+  `PROVENANCE_LEDGER_SUMMARY_FILE`.
+- **Files modified**: `pipeline/provenance_reverify.py` (new module, Tasks 7-9),
+  `pipeline/config.py`, `pipeline/unified_holdings.py`, `pipeline/staging_bdc.py`,
+  `pipeline/agent_promoted.py`, `tests/test_provenance_reverify.py` (new),
+  `tests/test_unified_holdings.py`, `tests/test_agent_promoted.py`.
+
+### Gate 1 (cohort re-extraction): PASS (adjudicated)
+
+- 933 filings, 1,184,101 bdc_holdings rows, 464s. src_facts populated on 465,051 bdc-level rows.
+- GATE 1 raw result: FAIL on shares_sum (old=342,844,973,150,193.25
+  new=342,844,973,150,193.0, delta=0.25 at 3.4e14 magnitude = 17th significant digit).
+- ADJUDICATION (controller): the 0.25 delta is float64 aggregation-order noise. Exact
+  DECIMAL(38,6) sums are equal old vs new. All other checks (row_count, per_cik_acc_groups,
+  fv_sum, cost_sum, principal_sum, ir_sum, column diff) are exact-pass. GATE 1 = PASS.
+  The gate script's float SUM is noted as the artifact; values-identical requirement satisfied.
+
+### Gate 2 (unified rebuild): PASS_WITH_FLIPS (adjudicated)
+
+- 780,726 rows, 2567.6s. src_facts populated on 240,198 unified rows (cohort latest-period slice).
+- GATE 2 raw result: FAIL. Column diff: exactly the 8 expected columns added, none removed. FV
+  total EXACT. Row count EXACT. Per-cik-quarter FV: 0 mismatches. Stable-row value diff: 0 rows
+  changed value. 20 row-identity flips (20 old-only ids, 20 new-only ids) carrying cost
+  +29,989,024 (4.2ppm) / shares -253,165 / principal -1,542,997. Hard failure line in the gate
+  script: "per-classification FV: 2 mismatches."
+- ADJUDICATION (controller):
+  - The 20 row-identity flips and their cost/shares/principal deltas are ACCEPTED as the same
+    ordinal tie-break residual class as the step-1 migration's 13 CIK-quarters and the
+    anchor-row_id migration's 8 flips. Protocol: stable-row value diff = 0 (satisfied), FV
+    conserved (satisfied). Root cause: DuckDB physical row-order perturbation hitting pre-existing
+    order-sensitive tie-breaks. Future hardening: deterministic ORDER BY in tie-break windows
+    (not done in this step).
+  - The "per-classification 2 mismatches" was a gate-script SQL artifact: NULL-key join in a FULL
+    OUTER JOIN (NULL != NULL) produced 2 phantom mismatches. The NULL-classification bucket totals
+    are IDENTICAL both sides (1,773,578 approx.) and zero stable rows changed classification.
+    Not a data defect.
+  - GATE 2 = PASS_WITH_FLIPS.
+
+### Coverage stats (from scratch/2026-08-23_prov_step2/coverage_stats.py)
+
+- src_facts non-empty: 240,198 rows (BDC cohort latest-period slice; 465,051 bdc-level
+  rows populated in bdc_holdings.csv).
+- Pathway enum counts: fair_value_source='xbrl_field' 560,406; pct_of_net_assets_source
+  'xbrl_field' 300,027; pik_rate_source 'xbrl_field' 46,433 / 'identifier_text' 1,036;
+  principal_amount_source 'xbrl_field' 459,398; bdc_unrealized_gain_loss_source '' all 780,726.
+- src_filled_fields non-empty: 26,614 rows.
+- corrected_fields non-empty: 2,069 rows (159 '_row:added'), reconciling with the live
+  correction stores' footprint. (An interim build carried 273,362/262,572 false marks from
+  the `_row:added` index-reset defect -- root-caused to agent_rule.apply_rules resetting
+  indices, fixed via ordinal-key diff in commits cec4e61/0d1e612 and rebuilt; the false
+  numbers never shipped in a committed artifact record.)
+- src_facts with "c": (concept-disambiguated): 11,435 rows.
+- src_facts with "x": (extractor transform events): 117 rows.
+
+### Five defects caught and fixed during this plan
+
+1. paidincash concept-recording substring bug: `CANONICAL_CONCEPT.get(col) not in local` never
+   recorded `c` for paidincash because the canonical bare name is a prefix of the paidincash
+   localname. Fixed to exact inequality `local != CANONICAL_CONCEPT.get(col, "")`. (commit 54081a4)
+2. NaN mass-stamp at Agent A spread corrections site: `NaN != NaN` caused every spread row to be
+   stamped in corrected_fields. Fixed with null-safe comparison. (commit ef4a49a)
+3. Self-referential ciks view in provenance_reverify.cheap_tier: `CREATE OR REPLACE VIEW h AS
+   SELECT * FROM h WHERE ...` -> DuckDB infinite-recursion error on the first scoped run.
+   Fixed via h_base view. (commit e079407)
+4. cik_scale_fix event-code parsing: `code.split("x", 1)` split inside "cik_scale_fi-x-",
+   crashing the full-tier cohort run with ValueError(':x1000'). Fixed to split(":x"); the
+   full tier also gained per-(row,field) exception containment (source_unavailable + warning
+   instead of aborting the run). (commit cec4e61)
+5. corrected_fields `_row:added` mass-marking (262,572 rows in an interim build): root cause
+   agent_rule.apply_rules resets indices (reset_index at entry + ignore_index concat), so the
+   index-based diff saw every row as new; a positional-alignment guard was still wrong under
+   row drops/adds (186,353 in a second interim build). Final fix: explicit ordinal-key diff
+   (`_cf_ord`) through the rules applier, immune to resets/drops/adds. (commits cec4e61,
+   ecbcfcf, 0d1e612 -- ecbcfcf's hand-staged blob was itself mangled and repaired in 0d1e612,
+   which also commits the 2026-08-21 workstream's JIT row_id hunks with attribution)
+
+### Gate 3 (final corrective rebuild, corrected_fields fixed)
+
+- Same accepted profile as gate 2: FV total exact; row count exact; per-cik-quarter FV 0
+  mismatches; stable-row value diff 0 rows; 17 row-identity flips (ordinal tie-break residual,
+  accepted per protocol); per-classification "2 mismatches" again the NULL-key join artifact
+  (bucket totals identical). corrected_fields now sane: 2,069 marked rows, 159 _row:added.
+
+### Cheap-tier cohort smoke (--cheap-only)
+
+- 26s. Ledger output: ~680MB CSV (~2M (row, field) pairs). Size is a documented watch item;
+  parquet migration is deferred but the full ledger v1 (including pass_trivial rows) is kept for
+  completeness. Revisit if ledger size becomes operationally unwieldy.
+
+### Re-verifier cohort run (first production ledger, 2026-08-23)
+
+`python -m pipeline.provenance_reverify --cohort` (70 CIKs), 4m17s total (cheap tier
+DuckDB + full-tier re-read of every anchored fact from cached iXBRL instances).
+Artifacts: `data/output/provenance_ledger.csv` (676MB, ~2.13M (row,field) pairs) +
+`provenance_ledger_summary.csv`.
+
+Reason-code distribution (all fields): verified 1,274,064; unchecked_trivial 790,637;
+filing_mismatch 45,011 (2.1% of checked -- the residue that seeds the future routing
+lanes); derived 11,236; text_pathway 7,498; corrected 1,963; no_provenance 1,104;
+anchor_missing 663; merged_context_excluded 336. Zero transform_drift, zero
+anchor_stale, zero source_unavailable.
+
+fair_value specifically: 266,340 of 266,564 rows VERIFIED against the filing =
+**cohort verified-FV share 99.9%** ($3,436.56B of $3,439.30B). FV filing_mismatch:
+32 rows / $0.39B; no_provenance 138 rows / $1.74B; merged_context_excluded 45 rows /
+$0.51B; corrected 9 rows / $0.09B. Per the verified-FV accounting rule, derived and
+corrected FV are excluded from the verified numerator.
+
+This is the first deterministic, pointer-level source verification of the public
+cohort's holdings values. The 45K field-level mismatches are measured residue, not
+hidden -- adjudication/routing is the scoping doc's section-8 design, deliberately
+not built in this plan.
+
+### Full suite (final HEAD)
+
+4568 passed, 1 failed, 13 skipped, 2 xfailed in 9171s (2:32:50) at commit 5968777.
+The single failure was a REAL cross-module catch: `pipeline/source_reconciliation.py`
+still built 3-tuple `monetary_facts_stored` entries after 5b6a4fe extended the schema
+to 4-tuples -- fixed at 8ae780a (append `local.lower()`; annotation updated); the
+failing test and its whole file (173 tests) plus test_bdc_filings.py (129) green
+post-fix. Suite grew 4501 -> 4569 collected (this plan's new tests).
+
+Semantic diff backstop (`diff_outputs.py --semantic`): identical delta profile to the
+step-1 record (holdings 14 / matches 7 / position_returns 11 / index_returns 8 /
+fund_financials 3 + pre-existing retired-artifact drift) -- the steps-2-4 migration
+added no new semantic deltas vs the official baseline. Baseline refresh remains
+owner-gated and is NOT done here.
+
+### Docs updated
+
+- `docs/reference/schemas.md`: 8 new columns documented, src_facts JSON grammar v1 (keys c/r/x;
+  r always for 4 rate fields; c when non-exact-canonical; x for decimals_rescale/cik_scale_fix),
+  pathway enum values, corrected_fields writers (B2 leaves / promoted rules / manual corrections /
+  Agent A spread corrections; iXBRL overlay explicitly NOT stamping), provenance ledger + summary
+  schemas, reason-code enum with 8.2 semantics (anchor_stale vs filing_mismatch distinction),
+  verified-FV accounting rule, known-empty regions. Coverage stats table.
+- `scratch/2026-08-23_prov_step2/coverage_stats.py` + `coverage_stats.log`: read-only DuckDB
+  coverage stats script and its output.
+- `docs/agent_changelog.md`: this entry.
+
+### Section-5 guard (verbatim, scoping doc section 5)
+
+The provenance ledger does NOT change any public export basis. The homepage headline stays
+the all-rows cohort sum until the owner explicitly decides scoping-doc section-5 option (A)
+keep-headline+publish-verified-share (recommended) or (B) verified-rows-everywhere. Any export
+change is a separate, owner-approved task.
+
+---
+
 ## 2026-06-28 - Rebuild stale review queue; verify ledger->queue rule coverage
 
 The review queue (`data/output/review_queue/review_queue.csv`, last built 2026-06-18 22:31)
@@ -6711,3 +6894,2620 @@ computed artifact, and the hand-run remediation pass codified as a runbook.
   GOALS, not validated tolerances; current state failing them is the honest
   reading, not a miscalibration. Recalibrate after Wave 2 and record the basis in
   the thresholds file.
+
+## 2026-07-12: Rate-convention classifier (pipeline/rate_convention.py) -- built + effectiveness-tested
+
+Prerequisite for the decided all-in interest_rate migration and for re-adding the
+retired pik_le_interest_rate identity rule. Measurement only: writes
+data/output/rate_convention.csv (config RATE_CONVENTION_FILE); does NOT touch holdings.
+
+- **Design**: per-CIK label {cash_leg, all_in, unknown, no_pik} from 4 signals:
+  S1 ordering violations (interest < pik - 0.01 convicts cash_leg; rate>=5% AND
+  count>=8 -- rate-only thresholds miss Barings/Golub at 7-14%), S2 income
+  reconciliation (r=(interest_income-base)/pik_add ~0 all_in / ~1 cash_leg;
+  per-quarter votes, tagged interest_income else total_investment_income scaled
+  by calibrated non-interest share with stricter gates), S3 phrasing votes (3
+  global regexes recomputed live -- no stored grammar to go stale), S4
+  cross-quarter stability. Any signal conflict -> unknown (3 conflict routes),
+  never a guess. Epsilon matters: interest==pik is legitimate under all-in
+  storage (100%-PIK positions).
+- **Results (170 CIKs with PIK evidence)**: cash_leg 35 (6 high/23 med/6 low),
+  all_in 36 (7 med/29 low), unknown 90, no_pik 9. Decided CIKs carry ~2/3 of all
+  PIK rows (unknowns skew small: median 100 vs 273 pik rows).
+- **Effectiveness**: held-out eval (phrasing suppressed, numeric S1+S2 only,
+  judged against 45 decisive-phrasing gold CIKs): 7/8 decided agree (88%);
+  the 1 miss (0001786835) is routed to unknown by the full classifier's
+  s2_s3_conflict rule. Known-filer spot checks 4/4 correct (Barings 1859919,
+  Oaktree 1872371, Golub 1901612/1930087 -- all cash_leg/medium).
+- **Known limitations**: (i) decided coverage 44% of PIK-relevant CIKs -- the
+  90 unknowns are the bounded-adjudication residual; (ii) income signal reaches
+  only 36/161 CIKs (interest_income tagged in ~14% of quarterly income rows;
+  principal coverage + 0.4-2.5x coverage band); (iii) all_in detection is mostly
+  phrasing-based (low confidence) since S1 can only convict cash_leg;
+  (iv) keyed by CIK, not identifier-format-family (S4 unstable -> unknown is
+  the interim guard).
+- Tests: tests/test_rate_convention.py, 26 passed. Runtime ~90s. Full suite NOT
+  run (additive module; no existing behavior changed except config constant).
+
+## 2026-07-12: Rate-convention classifier -- V1 cohort run + negative-r floor
+
+- **INCOME_R_FLOOR=-0.25**: strongly negative r (predicted base income alone
+  overshoots actual interest income) is measurement noise, not all-in evidence;
+  such quarters no longer vote all_in. Flushed unsound income votes (universe
+  all_in/medium 7->2); Monroe (1742313) moved s1_s2_conflict -> s1_unstable
+  (S1 convicts but violations are quarter-concentrated -- format-change guard).
+  Held-out agreement unchanged at 7/8 (88%). 27 tests pass.
+- **V1 cohort (70 wrapper-cohort CIKs)**: 19 all_in / 13 cash_leg / 33 unknown /
+  5 no-PIK-evidence. Cohort latest-quarter PIK-position FV $43.6bn (of $391bn);
+  decided labels cover ~42% of cohort PIK FV. Largest cash_leg (site WAC
+  understates their coupon today): ARCC $6.2bn PIK FV (income_reconciliation),
+  Golub PCF $1.4bn, Barings $0.6bn. Largest unknowns (adjudication priority,
+  zero violations over 100s of dual rows + no informative income quarters --
+  plausibly all_in but unproven): BCRED $11.8bn, HPS CLF $3.4bn, Blue Owl OCIC
+  $3.3bn (no dual-rate rows at all), Ares Strategic Income $2.1bn.
+
+## 2026-07-12: Rate-convention classifier extensions -- statistical ceiling + spread arithmetic (S5)
+
+- **Statistical ceiling (all_in conviction)**: confirmed cash-leg filers violate on
+  7-40% of dual rows, so 0 violations across >=60 dual rows WITH >=8 near-cap rows
+  (pik >= 0.8*interest, incl. equality) is a hard ceiling at exactly interest_rate --
+  the signature of PIK being a subset of the stored rate. Guarded by conflict routing
+  (any cash signal -> ceiling_conflict/unknown).
+- **S5 spread arithmetic, ALL_IN-ONLY**: rows fitting ir = spread + bench_q + pik
+  (bench_q = per-quarter median of ir-spread over NON-PIK floating rows) prove the
+  spread is cash while ir is all-in. IMPORTANT NEGATIVE RESULT baked into the design:
+  the converse (ir = spread + bench) is AMBIGUOUS, not cash evidence -- "incl PIK"
+  filers quote all-in SPREADS too. The first S5 draft voted cash on that pattern and
+  wrongly convicted 14 gold all-in filers (held-out agreement fell to 44%); removed.
+- **Held-out (numeric-only vs 45 phrasing-gold)**: 13/15 decided agree (87%), coverage
+  doubled (was 8 decided). Both disagreements are conflicts the full classifier routes
+  to unknown (0001552198 ceiling_conflict, 0001786835 numeric_s3_conflict). 38 tests.
+- **Universe**: unknown 90 -> 70; all_in 36 -> 56 (8 high / 25 med / 23 low).
+- **V1 cohort**: 32 all_in / 12 cash_leg / 21 unknown / 5 no-pik; decided share of
+  cohort PIK FV 42% -> 79%. BCRED ($11.8bn), HPS ($3.4bn), OHA resolved all_in via
+  ceiling. Remaining unknown $9.0bn is adjudication-shaped: Blue Owl x2 ($4.1bn, no
+  dual-rate rows -- no numeric signal possible), Ares SIF ($2.1bn, 0/230 violations
+  but near-cap mass absent -- numerically indistinguishable), Monroe/Stellus
+  (s1_unstable conflicts), Diameter (53 dual rows, just under the 60-row ceiling
+  gate), + small tail.
+
+## 2026-07-12: Convention Adjudicator spec (rev 1)
+
+- New `docs/adjudication_architecture/convention_adjudicator_spec.md`: the agent
+  lane for the rate-convention classifier residual (currently 21 cohort / 70
+  universe unknowns). Anchor-shaped (per-CIK fact -> promoted override with a
+  deterministic verify gate), reusing the B1/anchor plumbing: discover/prep/
+  verify/promote driver, prompt+manifest+leaf lifecycle, evidence_cli bundles,
+  Codex dispatch harness with all known sandbox gotchas.
+- Key design points: prompt is BLIND to classifier signals (anti-anchoring;
+  keeps the verify cross-check non-circular); verify = citation reconciliation
+  against stored rates (0.05pp, >=2 positions, opposite-convention hard fail)
+  + signal-contradiction gate + MEDIUM tier caps; override merge in
+  pipeline.rate_convention with self-detecting staleness (later contradicting
+  signals demote the override and re-queue the CIK); `indeterminate` is a
+  promotable verdict -> conservative migration default + quality flag.
+- Spec only -- no code built. Tests enumerated in section 11 gate the first
+  dispatch.
+
+## 2026-07-13: Convention Adjudicator BUILT (spec rev 1 implemented)
+
+Agent lane for the rate-convention classifier residual. New modules:
+
+- `pipeline/convention_leaf.py`: leaf schema + validation (decided verdict
+  needs >=2 position citations with parsed printed numbers; indeterminate
+  needs a search_trail; utf-8-sig loader).
+- `pipeline/convention_validation.py`: the un-gameable verify -- citation
+  reconciliation against stored rates (0.05pp; opposite-convention hard fail;
+  multi-tranche issuers fit if ANY tranche fits), signal-contradiction gate
+  (thresholds imported from the classifier so they cannot drift), tier caps
+  (no header/footnote, applies_from backdating, pik-only). NEW vs spec:
+  pik-only PARTIAL reconciliation -- Blue Owl-shape filers store NULL
+  interest_rate on PIK rows, making full reconciliation unsatisfiable; pik
+  magnitude corroboration is accepted at a MEDIUM cap (found via live smoke).
+- `scripts/agent_convention/run_convention.py`: discover/prep/verify/promote
+  driver (anchor pattern). discover ranks unknowns by latest-quarter PIK FV,
+  run-once via override existence, matches existing review bundles (bundle
+  seam for evidence_cli). prep writes a BLIND prompt (no classifier signals;
+  navigation aids = 6 sample PIK issuers + the 3 disclosure patterns).
+  promote refuses unless verify ok; leaf + verify provenance ->
+  data/overrides/rate_convention/<cik>.json (config
+  RATE_CONVENTION_OVERRIDES_DIR).
+- `scripts/dispatch_convention_workers.ps1`: serial dispatcher (batch <= ~21;
+  avoids cloning B1's parallel job control untested); fresh per-cik TEMP
+  worker homes (stale-marker + disk-bloat safe).
+- `pipeline/rate_convention.py`: override merge -- supersedes unknown, demotes
+  stale overrides on later signal contradiction (self-detecting), terminal
+  `indeterminate` distinct from unknown, no_pik untouched.
+- **Smoke-tested on real data**: discover convsmoke found the 21 cohort
+  targets (20 with bundles; 1 NEEDS_BUNDLE = APS BDC 0002083477); prep built
+  the Blue Owl prompt with real sample positions; synthetic-leaf verify
+  exercised the pik-only path end-to-end (ok, MEDIUM, then deleted).
+- Tests: 67 passed (11 leaf + 14 validation + 42 rate_convention incl. 5
+  override-merge). Full suite NOT run (additive modules + one config constant).
+- NOT done: no workers dispatched (recal1_r2 fleet constraint applies);
+  operator runbook in the spec, section 9.
+
+## 2026-07-13: recal1 finalized + recalibration analysis (new analyze_recal.py)
+
+- recal1_r2 was already finalized (283 verdicts, schema clean). Finalized the full
+  429-rid `recal1` frame (run-1 + r2 verdicts all present in the shared store;
+  BOM strip ran clean first). Mix: 259 real / 146 false_alarm / 24 ambiguous,
+  ZERO no_source -- the cohort/engine scoping fixes hold.
+- New `scripts/ensemble/analyze_recal.py`: recal frames have no co-firing
+  manifest (analyze_ensemble refuses them by design). Computes per-rule and
+  per-fingerprint-group real/FA rates for the post-Wave-1 era, credits the 468
+  pass-stamped carry-over verdicts, and marks rules whose combined Wilson CI is
+  DISJOINT from the ens2 prior. Outputs recal_per_rule.csv, recal_per_group.csv,
+  recal_summary.md in data/output/ensemble/recal1/.
+- **Calibration validated out-of-sample (CI-disjoint shifts):** FX02 85%->3.3% FP,
+  FX03 82%->0% FP, X07 90%->54% FP. The one-shot USD-alias/category scope fixes
+  suppressed the FA mass; surviving FX02/FX03 flags are now ~97-100% REAL.
+- **New high-precision rules measured:** C206 30/30 real (no ens2 prior),
+  fmt_issuer_name 28/28 real, nonaccrual_flag still 0 FA (29 combined). D06
+  improved 60%->17% FP (not CI-disjoint). These are direct-route candidates
+  (skip B1, straight to mechanism lane).
+- **Regressions/kills:** X08 55%->89% FP (0 real in 12 new) -- demote candidate;
+  X10 20%->67% FP and fmt_basis_spread 0%->50% FP -- investigate composition vs
+  genuine regression before acting (ens2 priors were small-n for both). C107
+  unchanged at ~91% FP -- reconfirms it needs the printed-cell gate, not
+  row-local predicates.
+- **Divergent groups confirmed:** FX01|0001803498 and FX01|0001901037 are ~100%
+  real (comb FP 0%/6.7%) -- per-(rule,CIK) routing justified where rule-level
+  FX01 is 40% FP. A07|0002031750 carry-only (100% FA, n=2, wide CI);
+  X08|0002031750 still zero adjudicable flags (needs leaf archive, known).
+- NOT run: pytest (analysis script verified against finalize summaries + memory
+  counts: 429/429, mix exact match), no rebuilds, no dispatch.
+
+### 2026-07-20 -- Linkbase-layer evidence: S0 tag-fingerprint signal for rate convention; BDC dataset path fix
+
+- **What changed.**
+  - `pipeline/rate_convention.py`: new S0 signal (concept-QName + label-guarded
+    fingerprint; pure `s0_from_fingerprint`, opt-in `s0=` param on
+    `build_rate_convention`, artifact loader `load_s0_signal`). New output
+    columns: `s0_vote`, `s0_confidence`, `mixed_tag_semantics`. Basis
+    `tag_fingerprint`; conflicts `s0_s1_conflict` / `s0_ceiling_conflict` /
+    `s0_conflict`. Numeric signals block S0; S3 phrasing alone does not
+    (recorded as a note) -- rationale in module docstring.
+  - `pipeline/bdc_filings.py`: `InvestmentInterestRatePaidInCash` now an
+    explicit CONCEPT_MAP entry (same `interest_rate` column -- value behavior
+    unchanged) and new per-row provenance column `interest_rate_concept`
+    ('bare' | 'paid_in_cash' | ''). Backfills only as accessions are
+    (re)parsed; historical rows empty until a full cache re-extraction.
+  - `pipeline/config.py` + `pipeline/bdc_universe.py`: BDC dataset URL moved
+    by SEC to /files/datastandardsinnovation/ (old /structureddata/ 404s);
+    added `LINKBASE_ANALYSIS_DIR`, `S0_CONVENTION_SIGNAL_FILE`.
+  - New scripts: `scripts/scan_rate_tag_fingerprint.py` (17 GB instance-cache
+    scan -> rate fingerprints + FV dimension buckets),
+    `scripts/analyze_bdc_dataset_linkbase.py` (soi/cal/pre tables from the 25
+    downloaded dataset zips, now in `data/raw/sec_datasets/bdc_monthly/`),
+    `scripts/build_s0_convention_signal.py` (label-guarded S0 artifact).
+- **Verdict deltas (rate_convention.csv, 170 CIKs):** unknown 70 -> 66
+  (Gladstone 1143513 + Stellus 1551901/1901037 -> cash_leg high; WhiteHorse
+  1552198 -> all_in high via 589/594 sum proof), Fidus 1513363 medium -> high,
+  Great Elm 1675033 stays unknown with sharper basis (s0_s1_conflict),
+  9 CIKs flagged mixed_tag_semantics (incl. BlackRock TCP/DLC/PCF, StepStone,
+  Monroe CC, Sixth Street, Hercules, Portman, OFS): stored interest_rate
+  mixes concept semantics -- the all-in migration MUST use the new per-row
+  `interest_rate_concept` provenance for these, not the per-CIK label.
+  No deterministic conviction was overturned. First Eagle 1890107 S0 abstains
+  (label contradiction: PaidInKind tagged as "PIK loan concentration").
+- **Guardrails/validation:** 19 new tests (16 S0 in test_rate_convention.py ->
+  62 pass; 3 provenance in test_bdc_filings.py -> 116 pass). Shadow ledger
+  does not consume rate_convention.csv (verified: no reference in
+  shadow_validation_runner.py); holdings artifacts untouched this session.
+  Semantic diff run: pre-existing branch drift only (source_reconciliation
+  caches stamped 2026-07-11, before this session); session footprint =
+  rate_convention.csv + new data/output/linkbase_analysis/ artifacts.
+- **Explicitly NOT integrated (documented in data_investigation_results.md
+  2026-07-20):** instance-derived FV anchors as a conservation gate
+  (companyfacts_fv already serves; corpus join confounded by index-facing
+  exclusions -- artifact kept as future anchor-candidate source), plabel/
+  cal-arc auto-votes (2/34 filer concept-misuse rate; kept as adjudicator
+  evidence), soi.tsv row-set reconciliation (recommended future gate).
+- **Downloads:** user-approved 2026-07-20; 25 BDC dataset zips (~410 MB) via
+  rate-limited sequential fetch with declared User-Agent.
+
+### 2026-07-21 -- interest_rate_concept backfill (full re-extraction) + S0 into adjudicator verify/prep
+
+- **Full cache re-extraction** (user-approved): 2,985 accessions re-parsed from
+  data/raw/filings/bdc_xbrl, zero parse errors. Parity vs pre-run snapshot
+  (data/snapshots/pre_reextract_2026-07-21/): all 1,922 previously-extracted
+  accessions identical in row count AND fair-value sum; 3 new filings added
+  3,568 rows (bdc_holdings.csv now 1,184,101 rows). interest_rate_concept
+  populated on 702,255 rate rows (32,487 paid_in_cash / 669,768 bare);
+  4,313 rate rows carry no provenance -- dedupe fill-ins where interest_rate
+  was borrowed from a sibling context (0.6%, expected).
+  NOTE: read_csv_auto(ignore_errors=true) on bdc_holdings.csv drops ~4K rows
+  nondeterministically by projection -- use the parquet companion for counts.
+- **Unified rebuild + shadow ledger validation:** private_markets_holdings
+  rebuilt (792,613 rows): 4,017/4,017 common CIK-quarter groups identical to
+  snapshot (0 differing), 1 new group (Saratoga 0001377936 2026-05-31, 357
+  rows). Shadow ledger regenerated: 261,123/261,141 statuses identical to
+  baseline, 24 additions (all the new Saratoga quarter), 0 real flips
+  (apparent I08/StepStone flips were a NULL-period join artifact; per-rule
+  distributions identical).
+- **S0 into the adjudicator (blind design preserved):**
+  - convention_validation.verify_convention gains optional s0 param:
+    refuses cash_leg vs S0 arithmetic all-in proof; refuses all_in vs
+    label-guarded S0 cash-concept dominance; medium (unguarded) S0
+    disagreement and mixed_tag_semantics cap tier at MEDIUM instead.
+    Driver verify passes s0 automatically (load_s0_signal).
+  - run_convention prep: prompt/manifest gain a "filer's own XBRL rate
+    tagging" section (concept usage counts, first-seen dates per concept for
+    applies_from, declared presentation-linkbase labels). Sum-test results,
+    S0 votes, and classifier stats stay OUT of the prompt; tests assert no
+    verdict-like text leaks.
+  - Tests: +6 verify-gate (test_convention_validation.py -> 22), +4 prep
+    tagging (new tests/test_convention_prep_tagging.py, incl. live Stellus
+    artifact check).
+
+### 2026-07-21 -- Unique-catch analysis for high-FP review rules (kill-decision input)
+
+- New `scripts/ensemble/unique_catch_analysis.py`: joins all 1,323 decided
+  flag-level B1 verdicts (ens1+ens2+recal1 + survived_exact carryover) to
+  era-matched review-queue co-firing context; measures per-rule whether real
+  flags sit on units no other (kept) rule flags. Outputs in
+  `data/output/ensemble/unique_catch/`.
+- Result: ZERO unique catches across the 11-rule high-FP set (89 real flags,
+  all unit-covered by rules outside the set; X08 10/10 reals also have an
+  independent adjudicated real on the same unit). Full write-up in
+  `data/output/data_investigation_results.md` 2026-07-21.
+- Read-only analysis: no pipeline behavior, queue, or verdict changes; no
+  tests run (additive script, verified against known verdict counts).
+
+### 2026-07-21 -- Row-level unique-catch analysis (part 2): high-FP rules DO have unique catches
+
+- New `scripts/ensemble/row_level_unique_catch.py`: joins the 89 real high-FP
+  flags to row-level firings in `row_validation_issues.csv` (shared row_key
+  frame), pinpointing culprit rows via verdict observed_value. Outputs
+  row_level_* in `data/output/ensemble/unique_catch/`.
+- Result reverses the unit-level implication: 16 pinpointed real culprit rows
+  are flagged by NO other kept rule (zero same-column coverage even when
+  covered); all are small-magnitude extraction defects below the 0.5%
+  conservation band. Recommendation: TRACK_ONLY demotion, not deletion.
+  Full write-up: data_investigation_results.md 2026-07-21 part 2.
+- Read-only analysis; no pipeline/queue changes; no tests run.
+
+### 2026-07-21 -- Demote X08, X10, PP01 to INFO/TRACK_ONLY (user-approved routing decision)
+
+- `pipeline/column_validation.py`: X08 (recal1 89% FP) and X10 (67% FP)
+  demoted to SEVERITY_INFO + ACTION_TRACK_ONLY; PP01 likewise via a
+  per-family (severity, action) rule_map in `_adapt_position_purity`
+  (PP02/PP03 unchanged). INFO maps to ledger status `skip` in
+  `shadow_adapter._row_issues_select`, so these rules leave the review queue
+  and stop consuming B1 adjudications while still firing into
+  `row_validation_issues.csv` as investigator evidence.
+- Rationale pinned in code comments + a new Known Limitations entry
+  (`docs/reference/known_limitations.md`): these rules DO catch real errors
+  (16 row-level unique catches, see data_investigation_results.md 2026-07-21
+  part 2), but every known instance is sub-materiality ($1K-$2.2M stored FV
+  impact, below the 0.5% fv_conservation band). Deliberate trade: B1 budget
+  goes to material errors; known-class small-value defects are tracked, not
+  remediated.
+- NOT demoted: X07 (54% FP post-calibration, owns the distinctive
+  classification_lookthrough/unit_scale mechanisms -- stays live), C107
+  (pinned, awaiting printed-cell gate), C103 (already volume-cut), fmt_*
+  (small-n regressions need composition investigation first).
+- Tests: 40 test_column_validation (2 new demotion pins + PP-family update)
+  + 140 test_validate_holdings pass. `diff_outputs.py --semantic`: only the
+  known pre-existing 2026-07-11 source_reconciliation cache drift; no
+  artifact writes this session. Standing review_queue.csv still shows the
+  old severities until the next validate/battery run regenerates it.
+
+### 2026-07-21 -- Disposition-trace diagnosis of source-only blocking rows (new script + artifacts)
+
+- New `scripts/diagnose_parser_mismatch.py`: traces every blocking source-only
+  row (2,190 rows across the blocking_* mechanisms) to the production stage
+  that lost it, via DuckDB joins of the reconciliation detail parquets against
+  raw bdc_holdings.parquet, unified BDC rows, the global aggregate predicate,
+  and the promoted-rule application audit; production-code XML replay stage
+  for rows absent from raw (none needed this run).
+- New artifacts: `data/output/parser_mismatch_diagnosis.csv` + `.md`.
+- HEADLINE: zero rows are lost at XML extraction -- all 2,190 blocking rows
+  exist in raw bdc_holdings. 1,113 die at the aggregate-identifier filter
+  (mostly pct_leaf mechanism; many look like genuine aggregates the source-only
+  classifier fails to clear). 839 rows / $21.0B source FV across 11 CIKs are
+  candidate casualties of Wave-1 promoted row-removal rules (KKR FS 308,
+  New Mountain 206, MidCap 193, Ares 40 -- counts align with
+  agent_fix_application_audit exclusion counts; CIK-level attribution, needs
+  row-level confirmation). 236 rows unattributed (next: staging filters,
+  dedupe-collapse variants). Recon matcher gap: 2 rows.
+- Consequence: the "parser mismatch" mechanism names are misnomers; no
+  extraction-side selection-knob work is needed for this pool. Priority is
+  row-level verification of the promoted-rule overlap (delete-to-balance
+  check), then aggregate-classifier boundary calibration.
+- Read-only analysis; no pipeline behavior, holdings artifacts, ledger, or
+  queue changes. No tests run (additive script; verified against the
+  residual-classification row counts). Full write-up:
+  data_investigation_results.md 2026-07-21 part 3.
+
+### 2026-07-21 -- Row-level verification of Wave-1 promoted exclusions vs source-only blockers
+
+- New `scripts/verify_promoted_exclusions.py` + artifacts
+  `data/output/verify_promoted_exclusions.csv/.md`: replays every promoted
+  row-removal rule predicate (16 rules, 11 CIKs) over the 839 E1 blocking rows
+  from the disposition-trace diagnosis; adds surviving-FV-twin check vs unified
+  and a value-based soi.tsv match against the cached SEC BDC dataset zips
+  (filer-custom concept labels handled by matching numeric cells, not column
+  names).
+- Result: 553/839 rows are row-level confirmed as promoted-rule removals
+  (~$3.5B source FV) -- KKR exact-par 246/$987M (223 soi-confirmed), New
+  Mountain NEWCRED look-through 203/$703M, HPS bare-axis 15/$1.22B, Fortress
+  21/$228M, MidCap relationship-axis 14/$172M, Antares commitment rows 44/net
+  -$1.4M. 286 rows/$17.5B are NOT explained by any rule -- the part-3 CIK-level
+  E1 attribution was wrong for Ares (40 rows/$14.76B) and most of MidCap (179
+  rows/$2.5B); these rejoin the unattributed pool. 194 of the 286 are
+  soi-confirmed SOI rows dropped for a still-unidentified cause.
+- Phase 2 (not run): per-rule funded-vs-commitment semantics adjudication
+  against the printed SOI; soi.tsv confirms visibility, not semantics.
+- Read-only analysis; no pipeline, ledger, queue, or holdings changes; no
+  tests run (additive script). Write-up: data_investigation_results.md
+  2026-07-21 part 4.
+
+### 2026-07-21 -- Convention batch fully dispatchable: 23 review bundles generated
+
+- New scripts/generate_convention_bundles.py: builds review bundles for
+  NEEDS_BUNDLE convention-adjudicator targets from their review-queue rows
+  (per-CIK isolation; source_recon-engine rows excluded -- review_bundles
+  intentionally skips that engine and exits 0 having generated nothing,
+  which silently ate 2 of the first 21).
+- Batch conv_full_2026-07-21b: 66 targets, n_needs_bundle 0. Prep smoke test
+  (Silver Spike 1843162) confirms the S0 tagging-facts section renders in
+  worker prompts (incl. its 4-way overloaded bare-rate labels).
+
+### 2026-07-21 -- Phase-2 adjudication of the five promoted exclusion rules (printed-SOI evidence)
+
+- Five parallel read-only agents adjudicated the row-level-confirmed exclusion
+  rules against cached filing HTML. Verdicts (all quote-backed, high confidence):
+  MidCap relationship-axis CORRECT (excluded rows = affiliated/controlled
+  rollforward-note aggregates; tranche FVs conserve exactly); HPS bare-axis
+  CORRECT (rows = ULTRA III JV note portfolio incl. 2024 comparatives; fund
+  keeps its $416M LLC-interest line); New Mountain NEWCRED CORRECT
+  (unconsolidated SLP I JV note portfolio, outside fund totals; $48M/$68M
+  membership interest retained); Fortress short-axis CORRECT (rows =
+  local-currency CAD/EUR restatements of surviving USD rows; FX-exact);
+  KKR exact-par MIXED -- aggregate-right (printed net total matches
+  post-exclusion to the dollar; contra-lines = $549,024K exactly) but the
+  FV=cost=principal proxy deletes real funded par positions (Woolpert 32,480,
+  VIB 30,616, PSKW) and misses non-par unfunded rows (Bausch, Curia); replace
+  with an unfunded-footnote-marker mechanism via B2 re-investigation.
+- Net: the delete-to-balance concern is resolved for 4/5 rules; ~1,530 of the
+  2,190 blocking rows now have verdicts (553 rule-explained with 4 rules
+  vindicated + KKR needing re-mechanization). Four generalizable source-recon
+  excusal classes identified: JV/equity-method-investee axes, non-USD unit
+  facts, relationship-axis rollforward rows, in-schedule unfunded-commitment
+  rows netted by contra-lines. These are also prime suspects for the Ares
+  $14.8B / MidCap $2.5B unexplained pools.
+- Read-only; no pipeline/ledger/queue/rule changes. Full write-up:
+  data_investigation_results.md 2026-07-21 part 5. Temp survivor-check script
+  removed.
+
+### 2026-07-22 -- Source-only classifier: JV look-through + non-USD unit excusal mechanisms
+
+- `pipeline/source_reconciliation.py`: two new documented mechanisms in
+  `build_source_only_blocker_detail`, from the 2026-07-21 printed-SOI
+  adjudication: `documented_jv_lookthrough_axis` (nonconsolidated-subsidiary /
+  equity-method-investee axis facts) and `documented_non_usd_fair_value_unit`
+  (fair-value unitRef names a non-USD ISO token, joined from
+  bdc_holdings.parquet via new `_fair_value_units_for_rows`; opaque ids and
+  USD aliases never match). Residual-classification documented predicate
+  widened from startswith("documented_source_") to startswith("documented_").
+- New `scripts/reassemble_source_recon_artifacts.py` (assembly-only re-run;
+  classifier changes do not dirty the reconciliation cache).
+- Measured: source-only blocking rows 2,190 -> 1,950; residual classification
+  blocking rows 2,305 -> 2,065, groups 461 -> 439. JV class = 233 rows/$1.50B
+  (NM+HPS adjudicated sets + 36 rows from other buckets); non-USD = 21 rows/
+  $228M (exact Fortress set). KKR exact-par rows deliberately remain blocking.
+- Tests: 7 new (incl. 4 false-positive guards); test_validate_holdings.py
+  147 pass. Standing review_queue.csv unchanged until next battery run.
+  Blocker accounting note: the current default counts are now 2,065 blocking
+  rows / 439 groups (source_reconciliation_residual_classification.md,
+  2026-07-22 assembly).
+
+### 2026-07-22 -- nanch1 null-anchor trial COMPLETE: filing-sourced anchor path validated end-to-end
+
+- First filing-sourced anchor promoted (remediation-chain open item 5): CIK
+  1916608 @ 2025-03-31 (no companyfacts FV). Anchor worker found the printed
+  SOI "Total Investments" row ($184,989,238; accession 0000950170-25-070658,
+  table 7 row 26), decomposed it (debt+equity 176,479,202 + cash equivalents
+  8,510,036), cross-checked the extracted 48-row sum (exact match to the
+  debt+equity subtotal). Verify: tier HIGH, balance-sheet closure ok
+  (invested_frac 99.4%). Override promoted to
+  data/overrides/agent_anchor/1916608/2025-03-31.json.
+- Shadow ledger refreshed: the quarter moved from unmeasurable (skip) to a
+  MEASURED fv_conservation fail at -4.60% -- exactly the cash-equivalents
+  component our extraction does not capture. cost_conservation 2025-03-31
+  flipped to pass. Follow-up decision: row_add extraction of the filer's
+  cash-equivalent SOI rows vs engine scope policy (leaf components support
+  either). Saratoga 0001377936 queued as the next null-anchor target (no
+  independent anchor at any recent quarter; dropped from the held-CIK
+  investigation batch for that reason).
+- Ops lessons: (1) Codex refresh tokens are SINGLE-USE and the dispatchers
+  copy auth.json into worker homes -- fleets launched from two shells race
+  the rotation and strand the operator token (recovered by copying the
+  worker-home auth.json back). One dispatching terminal at a time. (2) A
+  worker-home codex process hung after promote; kill of its subprocess tree
+  released it -- verify/promote are idempotent pure-python re-runs.
+
+### 2026-07-22 -- Attribution of rule-unexplained E1 drops (Ares $14.8B resolved as subtotals)
+
+- New `scripts/attribute_unexplained_drops.py` + artifacts
+  `data/output/unexplained_drop_attribution.csv/.md`: deterministic
+  sum/identity tests over the 286 blocker rows no promoted rule explains.
+- Result: 250/286 rows and 98% of the FV attributed. Ares 40/40 rows ($15.2B
+  raw FV) are issuer-level subtotal or rollforward-balance facts (Ivy Hill
+  et al.) whose tranche rows SURVIVE in unified -- correct drops the recon
+  classifier cannot yet clear. MidCap 156/179 same class (exact tranche
+  sums). KKR 54 rows are comparative/stale duplicate facts (identical FV
+  surviving at another quarter; weaker single-value evidence). Residual: 36
+  rows / $318M.
+- Implied future fix: extend documented_source_issuer_subtotal_arithmetic to
+  these identifier formats + adjacent-quarter sums; review-lane label for
+  comparative aliases. Not implemented in this pass.
+- Read-only analysis; no pipeline/artifact-semantics changes; no tests run
+  (additive script validated against known row counts).
+
+### 2026-07-22 -- JV-axis global staging drop rejected; equity-method axis added to is_subsidiary flag
+
+- Investigated making the HPS/NM JV-axis exclusions a global staging DROP.
+  Evidence rejected it: ~14 other BDCs carry JV-axis rows in unified
+  ($90.4B / 11,118 rows) under an EXISTING retain-and-flag design
+  (staging is_subsidiary -> GAV recon sum_holdings_fv_ex_sub, residuals ~0).
+  A drop would have created $0.4-2.3B/qtr undershoots across a dozen filers.
+- Root defect identified instead: the shadow conservation engine does not
+  consult is_subsidiary (sums all rows), which is why NM/HPS overshot anchors
+  and B2 deleted their JV rows while the GAV referee reconciles ex-sub.
+  Operator decisions raised (see data_investigation_results.md part 8):
+  ex-sub conservation sums, NM rule retirement, public-FV treatment of
+  flagged rows (cohort funds AGL/Bain PC currently double-count ~$0.6B in
+  the straight-sum headline), HPS re-scope (no axis in its extracted dims --
+  parts 5-6 correction: the 233 excused rows were NM 217 + Franklin BSP 15 +
+  FS KKR 1, NOT HPS).
+- Applied: staging_bdc.py is_subsidiary predicate extended to
+  scheduleofequitymethodinvestmentequitymethodinvesteenameaxis (16 NewtekOne
+  rows previously missed; future equity-method filers covered). 1 new test,
+  TestSubsidiaryFlag 6 pass. Materializes at next unified rebuild; no
+  artifacts rebuilt this session.
+
+### 2026-07-22 -- Held-CIK re-investigation batch: 10/11 gate PASS, 5 production clears, frame-mismatch cluster identified
+
+- Batch batch_held12_20260722 (9 held CIKs + gate-FAIL duo; Saratoga 1377936
+  excluded upfront -- no independent anchor, routed to the anchor lane).
+  Serial Codex investigation workers, trial apply + B3 gate per CIK.
+- Trial results: 10/11 PASS inside the 0.5% band (7 at 0.0%), incl. Blue Owl
+  1803498 (JV look-through dedup + 11 recovered staging rows, $220M) and
+  BCRED 1812554. 1743415 FAIL is an ANCHOR case: worker escalated 5x with
+  evidence that companyfacts_fv $24.99M is an affiliated-investment subtotal
+  vs the printed $275.4M schedule total -> anchor-lane queue.
+- Promote-time review caught: (a) 1899996 superseded row_add left beside its
+  replacement (double-add of 3 dead rows) -- archived, re-gated PASS;
+  (b) 1975736 unfunded-commitment exclusion examined against the KKR-MIXED
+  mechanism family -- issuer-enumerated, filing-cited, ambiguous row skipped
+  -- promoted.
+- Production (rebuild + shadow ledger): fv_conservation fail 245 -> 239,
+  pass 519 -> 526. Cleared: 1803498 (0.000%), 1899017, 1899996, 1911066,
+  1975736.
+- FRAME-MISMATCH CLUSTER (5/10, now task): 4 promoted rules noop at the
+  unified tail (1812554, 1859919, 1885968, 1508655 -- predicates match zero
+  production rows; their flags persist at different residuals than trial);
+  1965934's T-bill row_add applied to unified but is INVISIBLE to the
+  conservation engine (residual identical -11.472% with and without it --
+  the trial gate counts the row, the engine does not). Rule pulled to
+  data/overrides/agent_investigate_rules/_pulled_frame_mismatch_20260722
+  pending diagnosis. Root cause to fix BEFORE more investigation batches:
+  run_investigation._load_holdings trial frame != conservation-engine frame
+  (row countability + row identity). 1965934's underlying -11.47% (sum >
+  anchor, no rules) is itself a suspect-anchor case.
+- Anchor-lane queue now: 1377936 (no anchor), 1743415 (subtotal anchor),
+  1965934 (suspect anchor). nanch1 validated the mechanism this morning.
+
+### 2026-07-22 -- Convention fleet conv_full_2026-07-21b dispatched: 66/66 leaves, 40 promoted; dispatcher + leaf-schema fixes
+
+- scripts/dispatch_convention_workers.ps1 live-debugged on its maiden run (it had
+  only ever been smoke-tested to the prep stage). Three latent defects fixed:
+  (1) the operator's auth.json was never copied into the fresh per-worker
+  CODEX_HOME -- every worker 401'd ("Missing bearer") in ~30s; (2) no -WriteDirs
+  was passed, so the sandbox harness fell back to its Agent-A default and DENIED
+  writes to data/output/agent_convention/<cik>/leaf/ -- workers ran full ~7-min
+  turns and could never save the leaf; (3) no interpreter -ReadDirs/-EnvInherit,
+  so the prompt-named miniconda python (evidence_cli/data_query_cli) could not
+  execute. The dispatcher now mirrors dispatch_anchor_workers.ps1 (the proven
+  nanch1 recipe): setup with per-cik write grant + interpreter read grants +
+  EnvInherit all + AllowUserSite, then auth copy, then runner -NoSetup.
+- Fleet result: 66/66 workers produced leaves, zero worker failures, 251 min
+  serial (~3.8 min/worker median).
+- pipeline/convention_leaf.py schema fix: printed_total/printed_cash on position
+  citations are now OPTIONAL -- PIK-only instruments (PIK-only notes, PIK
+  preferred) print no cash rate, and verify_convention already counts such
+  citations as pik-only partial evidence with MIN_RECONCILED and tier caps
+  discounting them; 15/66 leaves were wrongly schema-refused for citing them.
+  When present the fields must be numeric (a string "N/A" would crash _fits).
+  tests/test_convention_leaf.py: old pin replaced with pik-only-valid +
+  printed_pik-still-required + non-numeric-rejection guards; 32 pass across
+  test_convention_leaf.py + test_convention_validation.py.
+- Verify/promote sweep (log: batch/conv_full_2026-07-21b/verify_promote_log.jsonl):
+  40/66 promoted to data/overrides/rate_convention/ (29 first pass + 11 after the
+  schema fix, incl. 1812554 Blue Owl cash_leg MEDIUM; 2 of the 11 HIGH).
+  Residuals (26): 2 schema (position citations with no printed_pik at all --
+  weak evidence, deliberately not relaxed), 4 opposite-convention hard fails +
+  1 S1-contradiction refusal (1287032 all_in) -- human review BY DESIGN, and
+  19 zero-reconcile refusals now diagnosed into three mechanisms:
+  (a) ~8 lookup misses: workers kept filing footnote markers in issuer names
+      ("Zendesk, Inc. (c)"), defeating the _lookup containment match; stored
+      rates reconcile EXACTLY once matched (1490927 Zendesk 12.15/3.25 == cited
+      cash/pik) -> verifier-side issuer-name normalization is the fix candidate;
+  (b) ~8 neither-fits: stored interest_rate sits ~0.3pp under the printed
+      all-in total while stored basis_spread equals the printed spread EXACTLY
+      (1544206 Espresso 2.63/Hadrian 5.14) -> reference-rate observation drift
+      between tagging and printing; spread-aware reconciliation is the fix
+      candidate;
+  (c) stored-pik extraction defects (1544206 Integrity Marketing pik_rate=1.0
+      vs printed 10.5, with the true value sitting in basis_spread).
+- python -m pipeline.rate_convention deliberately NOT re-run yet: held until the
+  residual-class decisions (lookup normalization / spread-aware check) so the
+  frame rebuilds once against the fullest verdict set.
+- NOTE: concurrent-session activity observed in this worktree today
+  (staging_bdc.py, test_unified_holdings.py, agent_investigate_rules promotions
+  for the 9 held CIKs). This entry and its commit scope ONLY the convention-
+  fleet files; the concurrent work belongs to its owning session.
+
+### 2026-07-23 -- Convention verifier: issuer-name normalization + spread-anchored reconciliation; 42/66 promoted
+
+- pipeline/convention_validation.py, two verifier-side fixes (user-approved):
+  (1) `_lookup` now normalizes printed footnote markers out of issuer names
+  before containment matching (workers quote "Zendesk, Inc. (c)" as printed;
+  1-2-char parentheticals only -- "(dba Boomi)"/"(United Kingdom)" survive);
+  (2) spread-anchored reconciliation path in `_fits`: floating-rate citations
+  reconcile when printed cash-column == stored basis_spread AND printed PIK ==
+  stored pik_rate (both at RATE_TOL) AND the stored all-in sits within
+  BASE_DRIFT_TOL=0.75pp of the printed total under the CLAIMED convention
+  while the OPPOSITE convention's residual exceeds it -- printed PIK is the
+  separator, so tiny-PIK rows can never decide via this path, and the same
+  logic drives the opposite-convention hard-fail symmetrically. Stored-rate
+  tuples extended to (ir, pik, spread) with 2-tuple compat (`_triple`);
+  run_convention._holdings_sql/_stored_rates now carry basis_spread.
+- Tests: 7 new in test_convention_validation.py (footnote-marker recovery,
+  substantive-parenthetical FP guard, spread-path recovery, opposite-claim
+  hard-fail preserved, beyond-drift refusal, pik-mismatch refusal, tiny-pik
+  cannot-decide); 39 pass across convention leaf+validation.
+- Residual re-sweep: +2 promoted, BOTH diagnosed exemplars at HIGH tier
+  (1544206 spread path 3 reconciled; 1490927 lookup fix 4 reconciled).
+  Total 42/66 promoted. HONEST RESULT: the fixes generalized far less than
+  the class-level attribution predicted (2 of 19, not ~16) -- follow-up
+  probes show the remaining refusals are EXTRACTION-SIDE data defects at the
+  target quarter, e.g. 1905824: issuer_name = "Technology"/"Chemicals"
+  (industry captured as issuer, GCOM row unfindable), duplicate rows with
+  ir/pik SWAPPED (17.0/7.0 vs 7.0/17.0), and the K2 Pure 2L loan rates row
+  present at 2025-09-30 but absent at target 2026-03-31. The verifier is
+  correctly refusing to certify against defective stored rows; these CIKs
+  route to extraction remediation (B2 lanes), NOT further gate relaxation.
+- Verifier residuals stand at 24: ~17 extraction-defect refusals (above),
+  2 schema (no printed_pik cited), 4 opposite-convention hard fails,
+  1 S1 contradiction (1287032) -- the last 7 human-review by design.
+- python -m pipeline.rate_convention rebuild launched against the 42-override
+  store (the hold is released: no further verifier changes warranted).
+
+### 2026-07-23 -- Cohort preflight guard + quarter-pass operator skill
+
+- New `pipeline/cohort_guard.py`: dispatch-chokepoint assertion that a fleet
+  worklist's CIKs are inside the v1 wrapper cohort (manifest `entries`;
+  held_back_ciks deliberately excluded). CLI exit contract 0/1/2;
+  `--all-vehicles` is an explicit logged bypass that still prints the
+  out-of-cohort list. 9 tests (tests/test_cohort_guard.py) incl. unpadded-cik
+  false-positive guard and missing-column-is-error.
+- Wired into scripts/dispatch_convention_workers.ps1 (new -AllVehicles switch).
+  Other dispatchers to follow; until then the operator skill applies the guard
+  at orchestration level for every lane.
+- MEASURED FINDING: the guard run against the conv_full_2026-07-21b worklist
+  shows 46/66 targets were OUTSIDE the v1 cohort -- ~70% of the 2026-07-22
+  fleet spend was out-of-scope (verdicts remain valid; spend policy did not).
+  Most of the 17 extraction-defect residual CIKs (1490927, 1544206, 1487918,
+  1504619, 1905824, ...) are in the out-of-cohort set, so their remediation
+  priority drops accordingly.
+- New `.claude/skills/quarter-pass-operator/SKILL.md`: the orchestrator runbook
+  for a Claude Code instance in an admin PowerShell driving a quarter pass:
+  preflight checklist, per-lane dispatch commands, the health-signature table
+  distilled from the 2026-07-22 maiden-run failures (auth seeding, sandbox
+  grants, stale markers, token rotation, fast-fail cadence), mechanical-retry
+  protocol (new batch id, max 2 rounds), and hard stop-and-escalate rules
+  (gate refusals are outcomes; never modify B1; never edit gates to pass;
+  single dispatcher; cohort guard on every worklist).
+
+### 2026-07-23 -- Baseline refreshed to Q4-2025 remediation state (pre-Q1-refresh)
+
+- Retired the post-Phase-6 official baseline (archived intact at
+  `data/snapshots/baseline_post_phase6_retired_2026-07-23`) and re-snapshotted
+  `data/snapshots/baseline/` from current outputs via snapshot_outputs.py
+  (26,590 artifacts). Captured DELIBERATELY before the authorized 2026-07-23
+  Q1 companyfacts/holdings refresh wrote any outputs, so the new baseline is
+  the last deterministic rebuild (2026-07-22 16:17) reflecting all landed
+  Q4-2025 remediation: Wave-1 promotions, held-CIK batches, convention fleet.
+- Semantic deltas vs the retired baseline (from diff_outputs.py --semantic,
+  report archived in the run logs): holdings -1,264 rows net with 12
+  class-level FV delta rows (largest: unclassified +13 rows / +$281.7M),
+  fund_financials 2 delta rows, matches/position_returns/index_returns 0.
+  305 divergent artifacts overall, all with 2026-07-22 mtimes -- promotion
+  moves (agent_investigate/agent_b2 rules relocated into data/overrides/) and
+  the accompanying rebuild. No writes from the 2026-07-23 full pytest run
+  (guard held; verified by mtime audit).
+- Post-snapshot verification diff: 0 semantic delta rows on all five layers.
+  Only ncsr_financials.csv + ncsr_parse_progress.csv diverge, written
+  incrementally by the in-flight --financials refresh; baseline holds their
+  pre-refresh state.
+- KNOWN RESIDUALS baked into this baseline (pre-existing, audit-flagged in
+  agent_fix_application_audit.csv): 4 promoted rules noop on rebuild
+  (1508655 $191M, 1812554 $1.53B, 1859919 $115M, 1885968 $45M authoring FV
+  matching zero rows) and 1 no_rows rule with a malformed CIK-like id
+  `0020260722` (looks like date 2026-07-22 leaked into the CIK field).
+  These need mechanism review before the next promotion wave.
+- Full pytest suite (2026-07-23): 4,265 passed / 2 failed / 13 skipped /
+  2 xfailed in 2h41m. Failures: known test_ixbrl_lien_fills_blank_keyword_lien;
+  plus test_apollo_ds_company_only_source_row_is_aggregate (stale expectation
+  after ff97c2e changed the disposition equity_total_rollup -> aggregate;
+  both dispositions are non-leaf, no data effect).
+
+### 2026-07-23 -- Q1 2026 maiden quarter pass (q1shakedown): NOT_ASSESSABLE -> FAIL, now assessable
+
+- Phase 0 refresh (human-authorized): forced companyfacts re-fetch for all 374
+  BDC CIKs after finding that pipeline/extract_companyfacts.py fetches ONLY
+  missing CIKs (no staleness check) -- the first --financials run wrote zero
+  new facts (135 uncached CIKs all 404, i.e. non-XBRL filers). Stale cache
+  archived at data/raw/companyfacts_cache_stale_pre_q1_2026-07-23. TODO: a
+  --refresh-companyfacts staleness flag would make this scriptable.
+  fund_financials.csv rebuilt with 178 rows referencing 2026-03-31.
+  --holdings incremental: bdc_holdings.csv now 1,184,101 rows / 195 BDCs
+  (2026_06 BDC dataset + late Q1 XBRL instance docs).
+- TOOLING FIX: scripts/shadow_validation_runner.py was missing the repo-root
+  sys.path insert (only added scripts/), so the shadow stage crashed with
+  ModuleNotFoundError('pipeline') when launched as a run_quarter_pass
+  subprocess. One-line fix matching the repo-wide script idiom. Also noted:
+  resuming with --from shadow does not stop at select -- it runs the post
+  stages too (pre==post no-op here since nothing was dispatched).
+- q1shakedown acceptance (2026-03-31, provisional thresholds v1): verdict
+  FAIL, 3/7 checks pass. KEY RESULT: quarter is now ASSESSABLE --
+  anchored_rate_pct 98.551 vs the 50 gate (was NOT_ASSESSABLE on stale
+  companyfacts). Failing checks: reconcile_rate 66.2 (>=70),
+  flagged_fv_share 32.9 (<=20), verified_fv_share 35.9 (>=50),
+  promoted_rule_drift 5 (=0) + health 1 (=0) -- the drift/health flags are
+  the SAME pre-existing 4 noop rules + 1 no_rows malformed-CIK rule
+  (0020260722) documented at the 2026-07-23 baseline refresh; Q1 rebuild
+  added no new drift. Tiers: 39 verified / 29 under_review / 1 unanchored /
+  1 no_holdings; cohort FV $383.5B; flagged FV $126.0B concentrated in the
+  largest funds (BCRED, OCIC, Ares, HPS top the candidates queue).
+  candidates.csv: 29 under-review funds; extreme residuals TCW Star 141.9pct,
+  TCW DL 75.7pct, TCW VII 54.1pct, PIMCO CS -23.4pct, Bain 22.4pct.
+- Full pytest suite ran clean pre-refresh (see baseline entry above). No
+  fleet dispatched; operator stopped at the select boundary per protocol.
+
+### 2026-07-24 -- Q4 2025 B-agent campaign worklist builder
+
+- New script `scripts/build_q4_campaign_worklist.py`: builds the two-part Q4 2025
+  adjudication worklist. Part A = aggregate_header ledger names (fail/warn) joined
+  into 2025-12-31 unified holdings on lower(trim(issuer_name)) (same key as the
+  shadow runner localization). Part B = all 2,659 Q4 review-queue items annotated
+  with dispatch tier (0-4), likely B2 lane, wrapper/verdict/bundle existence.
+- Outputs (scratch, underscore convention): `data/output/review_queue/
+  _q4_campaign_partA_aggregate_names.csv` (450 name-CIK groups) and
+  `_q4_campaign_partB_items.csv` (2,659 items). Also `_q4_2025_blocker_queue.csv`
+  (frozen 863-row blocker slice) and `_orphan_verdict_diagnosis*.csv` (orphan
+  verdict audit: 600 orphans = 396 resolved + 204 rule demotion/retirement;
+  review_ids ARE stable, no churn).
+- Measured: Q4 aggregate_header footprint INSIDE the wrapped cohort is small
+  (1 AGGREGATE_HEADER group / 3.4 FV_m + 32 JV_SUBSIDIARY groups / 812 FV_m,
+  13 CIKs); 417 groups / 8,385 FV_m sit outside the wrapped cohort; 1,585
+  flagged names have no Q4 footprint.
+- Verdict-store coverage note: source_recon adjudication lives in
+  data/output/bdc_cik_review/verdicts (1,251 files), review_queue/verdicts has
+  1,615; per-quarter coverage must join through bundles, not current queue ids.
+
+### 2026-07-24 -- Agent A Q1 cohort induction batch (a_q1_cohort_20260724c)
+
+- Dispatched 23 in-cohort CIKs (discover found 43; cohort_guard refused 20
+  out-of-cohort -- excluded) at MaxParallel 1. 22/23 workers validated; 1
+  (1743415 SCP) failed the advisory A2 self-screen (completeness 80.6%) but
+  PASSED the deciding A3 held-out gate. Two pre-launch dispatch stumbles,
+  no quota burned: (a) PowerShell parses unquoted -Cik values as ints,
+  stripping lead zeros -- quote them; (b) dispatch preflight fail-closes on
+  stale staging proposals -- June leftovers archived to
+  data/output/agent_a/proposals_archive_pre_q1_20260724 (+ post-batch
+  staging swept to proposals_archive_q1_batch_20260724; staging now empty).
+- Staged A3 gate: 16/23 batch PASS -> promoted to production overrides
+  (identifier_anchors + identifier_rate_grammars). 7 gate refusals
+  (completeness / none-share spikes on held-out quarters) queued in
+  remediation_worklist.csv with target quarters -- NOT retried, incl. TCW
+  Star 1916608 (75.5%). Post-promotion production gate: 27 PASS / 0 FAIL
+  (the 1851322 era-FAIL is cured by its new grammar); 16 NO_CONFIG remain
+  (7 batch refusals + 9 out-of-cohort).
+- agent_a_flags rebuilt via python -m scripts.shadow_agent_a_engine (NOTE:
+  direct script invocation lacks the repo-root sys.path insert): cohort now
+  64 held-out-PASS grammars, 14,567 flags. Shadow ledger + review queue
+  rebuilt: 43,630 items (agentA blockers 1,107 stale -> 1,165 fresh);
+  agentA Q1: 10 fail / 113 warn on refreshed data.
+- Known follow-ups: 1950803 Stepstone excluded from flags cohort
+  (single-quarter signature, overfit risk); B-lane dispatch plan still
+  awaiting human approval.
+
+### 2026-07-24 -- Tier coverage checker (campaign completion gate)
+
+- New script `scripts/check_tier_coverage.py`: joins a frozen tier slice
+  (review_id column) against BOTH verdict stores (review_queue/verdicts,
+  bdc_cik_review/verdicts) plus an optional operator residuals CSV
+  (review_id,reason). Validates verdict files (parse, vocabulary, embedded-id
+  == filename). Exit 0 = tier closed; exit 1 = remainder (written to
+  <slice>.coverage.csv, feeds prep_retry). Intended as the mechanical gate
+  between Q4-campaign tiers.
+- Verdict vocabulary measured 2026-07-24: review_queue store uses
+  real_error/false_alarm/ambiguous; bdc_cik_review store uses PATCH_PROPOSED
+  (48) / NO_PATCH_NEEDED (15) / INSUFFICIENT_EVIDENCE (1,175) / ESCALATE (13).
+- FINDING: 94% of bdc_cik_review verdicts are INSUFFICIENT_EVIDENCE --
+  source_recon items were extensively ATTEMPTED but mostly fail-closed on
+  missing source evidence. 28 of the 863 Q4 2025 blocker items are in this
+  state. Evidence/caching completeness is the bottleneck for the source_recon
+  lane; fix before dispatching tier 1 or the fleet reproduces
+  INSUFFICIENT_EVIDENCE at quota cost.
+- Q4 blocker slice baseline: 863 items = 6 verdict_real_error +
+  28 verdict_INSUFFICIENT_EVIDENCE + 829 MISSING (exit 1, as expected).
+
+### 2026-07-24 -- CORRECTION: bdc_cik_review INSUFFICIENT_EVIDENCE verdicts are placeholders
+
+- Spot-check (user-prompted) of the 1,175 INSUFFICIENT_EVIDENCE verdicts in
+  data/output/bdc_cik_review/verdicts: 1,174 carry reviewer_notes starting
+  "Auto-drafted from the completed BDC bundle and worklist for full-pool
+  accounting", identical boilerplate, ALL 1,251 store files written in one
+  batch on 2026-05-28. These are bookkeeping placeholders, NOT adjudications;
+  no agent examined the packets.
+- Retracts two claims from earlier 2026-07-24 entries: (1) source_recon was
+  NOT "extensively adjudicated" -- only 77 genuine verdicts exist store-wide
+  (48 PATCH_PROPOSED, 15 NO_PATCH_NEEDED, 13 ESCALATE, 1 genuine
+  INSUFFICIENT_EVIDENCE); (2) there is NO measured evidence-availability
+  bottleneck for tier 1 -- the placeholder text is generic and predates the
+  June/July full-filing-search tooling.
+- `scripts/check_tier_coverage.py` now detects the Auto-drafted marker and
+  classifies such files as placeholder_autodrafted, counted in the remainder
+  (not covered). Q4 blocker slice rebaseline: 863 = 6 verdict_real_error +
+  857 remainder (829 MISSING + 28 placeholder_autodrafted).
+
+### 2026-07-24 -- Q4 campaign source admissibility: audit + backfill + gate hardening (tiers 0-4)
+
+- INCIDENT: first q4t0 dispatch (113-item tier-0 slice, 107 dispatched) aborted
+  after 9 workers: every finished verdict was ambiguous/source_unavailable
+  (evidence CLI missing_cached_html). Junk verdicts archived to
+  data/output/agent_b/batch/q4t0/verdicts_source_unavailable_archive; locks
+  released; ~9 workers quota burned. Root cause: bundle
+  evidence_completeness=source_artifact does NOT imply the raw SOI HTML is
+  cached, and preflight never checks cache coverage.
+- New scripts/campaign_source_admissibility.py (audit / extend-index /
+  download): per-item admissibility using the evidence CLI's EXACT accession
+  resolution (accs[0] from bundle evidence rows), classifying
+  cached/downloadable/not_in_index/no_accession/no_bundle. extend-index
+  fetches submissions (rate-limited EdgarClient) and merges the filings
+  index; download uses the audited sec_download_guard path (user authorized
+  2026-07-24). Built 2,463 missing B1 bundles in the process.
+- MEASURED (2,659-item Q4 campaign partB population): BDC source coverage was
+  already near-complete -- only 9 accessions needed downloading (5 new + 4
+  after fallback; all now cached). The real gaps: (a) 776 not_in_index items
+  are ALL interval/tender-offer funds (N-2 filers, no 10-K/10-Q exists --
+  submissions API verified 0 matching filings for 60/60 tier-0 CIKs); (b) 30
+  no_accession items = fund_financials F28 on funds or newly-registered CIKs
+  whose first covering filing is 2026-03-31 or later; (c) tier 1 (53
+  source_recon BDCSRC_* items) bundles via the bdc_cik_review lane, not
+  review_queue (DEFERRED_ENGINES by design).
+- New pipeline/html_soi_evidence.resolve_accessions_from_index(): filings-index
+  fallback accession resolution (annual form first, then latest filing_date)
+  wired into scripts/review_agent/evidence_cli.py _load() -- engines whose
+  evidence rows carry no accession (fund_financials) can now resolve the
+  covering filing. Auditor mirrors it.
+- scripts/check_tier_coverage.py hardened: ambiguous/source_unavailable and
+  auto=true verdicts now classify no_source_not_covered and count in the
+  REMAINDER (behaviorally tested). Previously they would have spuriously
+  closed a tier no agent examined.
+- data/output/review_queue/_q4_campaign_residuals.csv: 806 documented
+  residuals (776 non-BDC + 30 no-covering-filing) with per-item reasons;
+  feeds check_tier_coverage --residuals. Future path for the non-BDC items is
+  the interval_source N-CSR lane, not the BDC-SOI fleet.
+- bdc_cik_review worklist rebuilt --top-n 5000 (prior top-100 build lacked 27
+  of tier 1's 53 ids; backup at worklist.backup_20260724.csv); all 53 tier-1
+  bundles built cache-only; 40/40 tier-1 CIKs have cached Q4 HTML.
+- Admissibility ledger (2,659): dispatchable now = 1,800 B1-lane cached
+  (tier 0: 53, tier 2: 221, tier 3: 285, tier 4: 1,241) + 53 tier-1
+  lane-bundled; documented residuals = 806. Sum = 2,659 (complete).
+- q4t0 re-dispatched with the 47 uncovered admissible items (6 pre-existing
+  real_error verdicts kept; 60 non-BDC documented). NOTE: the sec download
+  manifest gained 106 unknown_accession failure receipts from one download
+  call that wrongly included not_in_index items (guard fail-closed correctly,
+  zero network requests; subcommand since fixed to downloadable-only).
+- Known follow-up: B dispatch preflight should assert cache coverage per item
+  (call the auditor) before reserving locks, so an inadmissible batch fails
+  closed BEFORE burning quota.
+
+### 2026-07-24 -- q4t0 dispatcher crash at 35/47 + fix (validator stderr x EAP Stop)
+
+- Worker RVQ_BLK_fca05dfbd2d5 hit a transient Codex Windows sandbox failure
+  ("helper_unknown_error: setup refresh had errors" -- all commands AND the
+  verdict write blocked; NOT a usage limit). validate_leaf_verdicts then
+  printed "INVALID: ..." to stderr, which PS 5.1 under the script-wide
+  ErrorActionPreference=Stop wrapped in a terminating NativeCommandError --
+  killing the whole dispatch AND skipping the finally-block lock release.
+  Latent since the dispatcher was built: it only fires when a worker fails
+  leaf validation (no prior B fleet did).
+- Fix in scripts/dispatch_agent_b_workers.ps1 Invoke-ValidateVerdict: EAP
+  relaxed to Continue around the native validator call (exit code is the only
+  signal used), restored in finally.
+- Recovery: locks released via --release-manifest; 35/47 verdicts intact and
+  clean (31 real_error / 4 false_alarm, ZERO source_unavailable -- the
+  admissibility backfill held); 12 undecided re-discovered and re-dispatched.
+- NOTE: data/output/agent_b/locks holds 47 stale RVQ_REV_* locks from the
+  2026-06-28 ens1_pilot batch (reclaimable by TTL; left in place).
+
+### 2026-07-24 -- q4t0 fleet stranded at 36/47: Windows sandbox helper failures (needs elevated dispatch)
+
+- After 35 clean verdicts (~12:00-13:10 local), EVERY subsequent Codex worker
+  failed sandbox setup: "helper_setup_marker_write_failed ... failed: 80" /
+  "helper_unknown_error: setup refresh had errors" -- in FRESH worker homes
+  (q4t0_r2), so NOT the stale-marker trap. codex npm pkg unchanged since
+  2026-06-26 (0.142.2); 820GB disk free; no usage-limit signals. Working
+  hypothesis: the sandbox's elevated helper context went away ~13:10 (the
+  quarter-pass-operator runbook requires dispatch from an ADMIN PowerShell;
+  this session's shell is non-elevated). 11 workers x2 attempts produced NO
+  junk verdicts (workers could not even write fallback ambiguous verdicts).
+- State: tier-0 slice = 42/113 verdicted (6 pre-existing + 36 fleet: all 36
+  clean, 0 source_unavailable) + 60 documented residuals + 11 stranded
+  (ids in data/output/review_queue/_q4_tier0_dispatch_todo.csv). All locks
+  released (q4t0 + q4t0_r2 manifests).
+- DISCLOSURE (hard-rule 1 conflict): scripts/review_agent/evidence_cli.py was
+  modified today (filings-index fallback in _load) as part of the
+  user-directed admissibility work, before the operator-skill rule "never
+  modify B1 ... or its evidence CLI" was re-read. The fallback is additive
+  (fires only when evidence rows resolve NO accession) and NO dispatched
+  worker today took that path (all 47 tier-0 items resolve from rows;
+  verified in the pre-fallback audit). Escalated to the user: keep (blesses
+  fund_financials-class items) or revert (those items become residuals).
+- Remainder protocol: relaunch the 11 from an elevated PowerShell as a fresh
+  batch id (q4t0_r3), or document them as mechanical-failure residuals per
+  the tier-coverage contract if elevation is unavailable.
+
+### 2026-07-24 -- User decision: evidence CLI index-fallback KEPT
+
+- The user reviewed the hard-rule-1 disclosure (evidence_cli.py filings-index
+  fallback added during the admissibility work) and directed: KEEP it, along
+  with the rest of the admissibility tooling. The B1 no-modify constraint is
+  user-waived for this specific additive change. fund_financials-class items
+  (44 tier-4 + 2 stragglers) remain adjudicable rather than residual.
+- q4t0_r3 (final 11 tier-0 items) dispatched from an ELEVATED PowerShell per
+  the operator runbook, confirming the elevation hypothesis is testable: if
+  r3 succeeds where r2's fresh homes failed, non-elevated dispatch was the
+  differentiator.
+
+### 2026-07-24 -- ROOT CAUSE of the q4t0 fleet strandings: verdicts-dir DACL full (1,821 ACEs)
+
+- The sandbox failures were NOT elevation (r3 from an admin shell failed
+  identically) and NOT stale markers (fresh homes failed). The worker-home
+  .sandbox\sandbox.<date>.log names the real failure: every setup refresh
+  died at "write ACE grant failed on data\output\review_queue\verdicts:
+  SetEntriesInAclW failed: 87" (ERROR_INVALID_PARAMETER). The
+  helper_setup_marker_write_failed: 80 lines are a secondary symptom of
+  retries; setup_error.json carries the real code.
+- Mechanism: EVERY B1 worker run grants a write ACE for its unique per-worker
+  capability SID on the shared verdicts dir and never removes it. Measured:
+  1,821 ACEs, 1,817 orphaned unresolved SIDs -- the Windows 64KB DACL
+  ceiling. Today's 35th worker filled it (~13:10 local); all later setups
+  failed deterministically regardless of batch id, home freshness, or shell
+  elevation.
+- Fix applied: icacls data\output\review_queue\verdicts /reset /t /c /q
+  (1,652 files; DACL 1,821 -> 6 inherited ACEs; an inherited
+  CodexSandboxUsers modify grant already covers the sandbox group). Other
+  fleet write roots checked clean (bdc_cik_review\verdicts, agent_a,
+  agent_b, review_queue: 6 ACEs each).
+- RECURRENCE WARNING: this WILL happen again after ~1,800 worker runs against
+  any single write-granted dir. Follow-ups: (a) post-run ACE removal in
+  run_codex_worker.ps1 or dispatcher finalize; (b) a preflight ACE-count
+  check (fail closed > ~1,500 with a pointer to this entry). q4t0_r4
+  dispatched post-fix (the same 11 items, fresh batch id due to r3 stale
+  markers).
+
+### 2026-07-24 -- Q4 tier 0 (q4t0) CLOSED: 113/113 accounted
+
+- check_tier_coverage exit 0 on the frozen 113-item tier-0 slice with the
+  campaign residuals file: 48 verdict_real_error + 5 verdict_false_alarm +
+  60 residual_documented (non-BDC vehicles). Coverage report:
+  data/output/review_queue/_q4_tier0_slice.coverage.csv.
+- Fleet arc: 47 dispatchable items adjudicated across 4 dispatch attempts
+  (q4t0 x2, q4t0_r2, q4t0_r4; r3 consumed by the DACL diagnosis). Verdict
+  quality: zero source_unavailable across all 47; q4t0_r4 finalize 11/11
+  schema-ok (gav_recon 7 real / 1 false_alarm; html_agg 3 real).
+- q4t0 batch worklist restored to the full 47 ids
+  (_q4_tier0_dispatched47.csv) for the downstream B2 discover handoff;
+  NOTE the q4t0 manifest.json still reflects the last 12-item attempt --
+  per-rule precision for the full 47 should be computed from the verdict
+  store, not that manifest.
+- Tier 1 next: dispatch goes through the bdc_cik_review lane (53 bundles
+  built, 40/40 CIKs cached). Before ANY further fleet: the verdicts-dir ACE
+  leak recurs (~1,800 runs to the next ceiling) -- preventions still
+  unbuilt.
+
+### 2026-07-24 -- ACE-leak preventions + tier-1 (source_recon) fleet dispatcher
+
+- New scripts/clean_sandbox_acl_orphans.ps1: removes DACL ACEs whose S-1-5-21-*
+  identity no longer resolves (dead per-run Codex sandbox users), fails exit 2
+  if a dir still exceeds -FailThreshold (1500) after the sweep. Wired into
+  dispatch_agent_b_workers.ps1 preflight AND the new tier-1 dispatcher.
+  Verified live twice (removed 11 leaked SIDs post-r4, then 1 post-canary).
+- New scripts/dispatch_bdc_review_workers.ps1: Codex fleet dispatcher for the
+  bdc_cik_review (source_recon) lane -- per-item prompts from
+  prompts/bdc_cik_review_prompt.md with absolute bundle/verdict path
+  assignment, no python grants (bundles are self-contained), archives
+  2026-05-28 "Auto-drafted" placeholder verdicts before dispatch (matching
+  check_tier_coverage semantics), per-item schema validation via new
+  scripts/bdc_cik_review/validate_one_verdict.py (validate_verdicts.py --all
+  is NOT usable as a batch gate: ~1,900 historical verdicts from retired
+  worklists fail its worklist-membership check), usage-limit breaker, ACE
+  guard.
+- COHORT GUARD on tier 1: 25 of 40 CIKs (35/53 items) are outside the v1
+  70-fund cohort -- held in _q4_tier1_outcohort.csv pending the human's
+  explicit bypass decision (hard rule 6). In-cohort: 18 items
+  (_q4_tier1_incohort.csv; 13 unverdicted + 5 placeholders archived).
+- Canary results (BDCSRC 1803498 2025-12-31 position_like_parser_mismatch):
+  attempt 1 wrote a schema-INVALID verdict (html evidence_ref without
+  coordinate citation -- caught, archived under fleet/t1c2); attempt 2 with
+  per-item validation passed clean: NO_PATCH_NEEDED / HIGH /
+  DUPLICATE_DIMENSION_PATH. NOTE verdict drift between attempts (ESCALATE ->
+  NO_PATCH_NEEDED, same diagnosis) -- single-adjudication verdicts in this
+  lane should be read with that variance in mind.
+- t1a batch (remaining 17 in-cohort items) dispatched MaxParallel 2.
+
+### 2026-07-24 -- Tier 1 (source_recon) in-cohort COMPLETE: 18/18 adjudicated
+
+- Schema-compliance appendix added to the dispatcher-generated per-item prompt
+  (shared lane template untouched): exact row_classification enum, the
+  coordinate-citation rule for HTML evidence_refs, diagnosis-consistency
+  constraints, and the GAV-justification bar -- all quoted from
+  validate_verdict_file. Rejection rate: t1a 8/17 -> t1b 1/8 -> t1c4 0/1.
+- Final verdict distribution (18 in-cohort items, all schema-valid, zero
+  INSUFFICIENT_EVIDENCE verdicts): 9 PATCH_PROPOSED (3
+  RAW_XBRL_PRESENT_BUT_UNIFIED_FILTERED, 2 HTML_PRESENT_TABLE_NOT_PARSED, 2
+  DUPLICATE_DIMENSION_PATH, 1 ZERO_OR_UNFUNDED_NON_INDEX_ROW, 1
+  XBRL_ONLY_NO_HTML_COORDINATE), 5 ESCALATE, 4 NO_PATCH_NEEDED. Invalid
+  first-attempt verdicts archived under fleet/t1a and fleet/t1b
+  invalid_verdicts_archive (audit trail, not adjudications).
+- ACE guard swept 18 leaked SIDs before t1b -- one afternoon of fleets is
+  ~1/5 of the way to the DACL ceiling; the per-dispatch sweep amortizes it.
+- OUTSTANDING: 35 out-of-cohort tier-1 items (25 CIKs,
+  _q4_tier1_outcohort.csv) held at the cohort guard for the human bypass /
+  residual decision. The 9 PATCH_PROPOSED verdicts are B2-remediator input;
+  requires_human_merge=true on all patch attempts per the lane contract.
+
+### 2026-07-24 -- B1 verdict-stability experiment (53-item blind re-adjudication)
+
+- Re-ran all 53 B1-adjudicated tier-0 items through a fresh blinded fleet into
+  a SCRATCH verdicts dir (data/output/agent_b/batch/q4t0s/verdicts_rerun;
+  production store untouched, originals remain canonical). Plumbing: new
+  --verdicts-dir passthrough on dispatch_preflight + -VerdictsDirOverride on
+  the B dispatcher (skips finalize on scratch runs).
+- RESULTS (53 pairs): verdict agreement 50/53 = 94.3 pct; mechanism agreement
+  34/53 = 64.2 pct. June-era subsample (6 items adjudicated 2026-06-28):
+  6/6 verdict agreement across a month. By rule: gav_reconciliation 15/15,
+  cost_conservation 9/9, html_agg 15/16, fv_conservation 11/13 verdict
+  agreement.
+- The 3 verdict flips are two-sided boundary calls (2x false_alarm ->
+  real_error, 1x real_error -> false_alarm; fv_conservation x2, html_agg x1).
+  CONFIDENCE DOES NOT FLAG INSTABILITY: all six sides of the flips carried
+  0.86-0.98.
+- Mechanism drift is broad (19 mismatches; 8 land on subtotal_leak, 6 leave
+  "unknown") but LOW-CONSEQUENCE BY DESIGN: B2's discover deliberately
+  ignores B1's mechanism guess and re-derives mechanism from extracted data.
+- Tier-1 lane contrast (9 retry pairs, biased sample): verdict flips 7/9 but
+  diagnosis flips only 2/9 -- that lane's 4-way disposition vocabulary
+  (PATCH/NO_PATCH/INSUFFICIENT/ESCALATE) is the unstable surface, while its
+  mechanism diagnosis is stable. Canary trace comparison shows both runs
+  agreeing on all facts (collapsed_duplicate_dimension_path rows, no parser
+  miss) and flipping only on the disposition of that agreed finding.
+- Implications: (a) B1 binary verdicts are solid single-shot; the ~6 pct
+  flip band is concentrated at the real/false boundary -- a 3-vote tiebreak
+  on just fv_conservation/html_agg boundary items would cost little;
+  (b) do not treat B1 confidence as a reliability signal; (c) disposition
+  vocabularies (tier-1 lane) need either crisper definitions or majority
+  voting before their verdicts drive automation.
+
+### 2026-07-24 -- DECISION: single-shot B1 accepted for the Q4 campaign; vote tracks deferred
+
+- Owner decision: 94.3 pct single-shot verdict reproducibility is good enough
+  to ship the Q4 campaign; throughput priority wins. The 2-vote-then-tiebreak
+  and 3-vote majority tracks (see the stability-experiment entry above: ~6x
+  boundary-error reduction at ~2.06x cost, vote-split as the calibration
+  signal confidence fails to provide) are EXCELLENT candidates for a later
+  precision-improvement pass -- all machinery is dispatch-layer (verdicts-dir
+  override + a small vote-merge script), no B1 changes needed. Revisit after
+  the campaign ships, ideally seeded with the 3 known flip items.
+
+### 2026-07-25 -- Tier 2 in-cohort CLOSED (124/124); tier 3 dispatched
+
+- q4t2: 123/124 first-pass + 2 retries (1 worker timeout, 1 transient sandbox
+  logon failure CreateProcessWithLogonW 1326 -> source_unavailable, archived)
+  + 1 late C006 no_source retry. Final: 124/124 genuine verdicts, finalize
+  schema_ok, 61 real_error / 57 false_alarm / 6 ambiguous(source_checked).
+- PER-RULE PRECISION (agent-relative, n small): C-series strong (C201 8/8,
+  C301, C303 ~0 FA); heavy false-alarm rules: X06 11/12 FA (92 pct),
+  SRC_BDC02 8/9 (89 pct), X04 9/12 (75 pct), income_identity 6/9 (67 pct),
+  pct_of_net_assets_identity 16/26 (62 pct), nav_identity 1/1. These feed
+  the rule_scoping_queue via routing.csv -- demotion candidates for the
+  ensemble/rule-scoping decisions.
+- q4t3 (127 tier-3 in-cohort items) dispatched. Standing owner auth
+  2026-07-24: proceed through tier 4 unattended.
+
+### 2026-07-25 -- Tier-3 defect: agentA engine had NO EVIDENCE_SPECS entry (50 B0 short-circuits)
+
+- q4t3 first pass: 76/127 genuine worker verdicts + 1 timeout + 50 B0
+  preflight short-circuits (auto ambiguous/source_unavailable, NO quota
+  burned). Root cause: the agentA engine joined the ledger/queue 2026-06-28
+  and the evidence CLI's _ENGINE_SOURCE map, but pipeline/review_bundles.py
+  EVIDENCE_SPECS never got an entry -- every agentA bundle built
+  evidence_completeness=ledger_only, which preflight short-circuits by
+  design.
+- Fix: added the agentA EvidenceSpec (artifact
+  data/output/shadow/agent_a_flags.csv, keyed cik/report_date/rule_name).
+  Rebuilt bundles now come out source_artifact (probe-verified); the
+  evidence CLI resolves the covering filing via the 2026-07-24 filings-index
+  fallback (agentA flag rows carry no accession field).
+- LESSON for the admissibility auditor: dispatch admissibility = cached
+  source AND non-short-circuit bundle completeness; the auditor checked only
+  the former. (agentA items audited "cached" because accession resolution
+  succeeded, while their bundles were still ledger_only.)
+- 49 auto verdicts + 1 worker source_unavailable archived
+  (verdicts_auto_shortcircuit_archive / verdicts_source_unavailable_archive
+  under batch q4t3); q4t3r (51 = 50 + 1 timeout) dispatched with rebuilt
+  bundles. Tier 4 has 0 agentA items in-cohort (unaffected).
+
+### 2026-07-25 -- Tier 3 in-cohort CLOSED (127/127); tier 4 dispatched (431 items)
+
+- q4t3 + q4t3r: 127/127 genuine verdicts (56 real_error / 67 false_alarm /
+  4 ambiguous source_checked), finalize schema_ok, zero junk after the
+  agentA-spec fix + retry.
+- q4t4: 506 tier-4 in-cohort items -> 75 already covered by prior-batch
+  genuine verdicts, 431 dispatched. Pre-dispatch bundle-completeness check
+  (new lesson applied): 431/431 source_artifact. ACE guard swept 80 leaked
+  SIDs before the q4t3r dispatch -- the DACL prevention is carrying the
+  campaign.
+
+### 2026-07-25 -- Process lesson (owner discussion): ring-based B1->B2 pipelining for future campaigns
+
+- Measured: 201/757 (27 pct) of tier-2/3/4 in-cohort items sit on the 35
+  CIKs where tier 0 confirmed real_error upstream defects -- the upper bound
+  of adjudications a t0-B2-rebuild cycle would have retired before dispatch
+  (consistent with wave-1: fv_conservation 337->245, ~27 pct).
+- Recommended shape for the NEXT quarter pass: ring-based fixpoint with
+  pipelining -- B1(blocker ring) -> dispatch B2 wave; run B1(next ring)
+  CONCURRENTLY with B2 investigation/review; rebuild + re-flag at each B2
+  landing; re-freeze the next ring from the residual population. Strict
+  serialization would park autonomous B1 compute behind human-gated
+  B2/B3/merge loops; pipelining keeps both lanes full.
+- Counterweights that justified all-B1-first for THIS campaign: first full
+  precision map of the rule set (FA-heavy rules X06/SRC_BDC02/X04 only
+  visible because tiers were adjudicated), and per-cycle rebuild/re-freeze
+  cost.
+- Planned measurement: after the first B2 wave + rebuild, count how many
+  already-adjudicated tier-2/3/4 flags disappear -- converts the 27 pct
+  bound into a measured waste figure for the quarter-pass runbook.
+
+### 2026-07-25 -- Tier-0 B2 wave complete: 26/31 gate-PASS promoted; rebuild running
+
+- investigate_q4t0 (agentic loop, sequential, -Fresh): 31 (cik, 2025-12-31)
+  targets from the 42 q4t0 real_errors. B3 gates: 26 PASS (25 MEDIUM + 1
+  HIGH anchor tier: 1803498, the BCRED JV dimension-path case) / 5 FAIL
+  (1487918, 1534254, 1985375 MEDIUM; 1495584, 1930679 anchor_tier=NONE --
+  the two NONE cases are anchor-adjudicator candidates; 1930679 filed 1
+  escalation). FAILs are residuals per contract -- not retried.
+- All 26 PASS targets promoted to data/overrides/agent_investigate_rules
+  (promote gate-checked each). Unified rebuild applied them (781,177 rows,
+  2,467s); shadow ledger + review queue rebuild in progress. Next: measure
+  flag retirement against banked t2/t3 verdicts + the paused t4 remainder
+  (241 items), then per owner decision rule (>=2/3 PASS met; >=10 pct t4
+  retirement pending) either B2 waves on t2/t3 or resume t4.
+
+### 2026-07-25 -- Flag-retirement measurement: ring-pipelining hypothesis REFUTED at this composition
+
+- Post-B2-wave rebuild (unified 781,177 rows + shadow ledger + queue 43,601):
+  tier-4 remainder retired 0/241; adjudicated t2 1/124, t3 0/127. The
+  earlier 27 pct CIK overlap was CO-LOCATION, NOT CAUSATION: tier-4
+  row-level flags (rates/maturity/PIK on other rows) are independent
+  defects even on fixed CIKs.
+- CONTROL: the fixes themselves WORK -- probe 1321741 gav_ratio 1.0,
+  residual 0.0, reconciliation PASS; 10/48 tier-0 real_error flags retired.
+  Of the 38 persisting: 6 on gate-FAIL CIKs (correct); html_agg 16 persist
+  STRUCTURALLY (B2 rules apply at the unified layer; html_agg measures
+  upstream HTML-extraction vs companyfacts, untouched by unified-level
+  exclusions); gav/conservation persisters warrant a later look (possibly
+  band-edge residuals or artifact staleness).
+- DECISION (owner rule: >=10 pct t4 retirement): NOT positive -> tier-2/3
+  B2 waves NOT launched; t4 resumed as q4t4b (241 items, bundles rebuilt
+  against post-fix artifacts). The banked t2/t3 real_errors remain B2
+  backlog -- their value is fixing data for the quarter gate, not saving
+  B1 adjudications.
+- Memory updated: ring-based-campaign-pipelining now records the measured
+  refutation (interleaving saves B1 runs only when later rings measure the
+  SAME defect layer; aggregate-vs-row-level tiers do not cascade).
+
+### 2026-07-25 -- CAMPAIGN HALTED by Codex quota exhaustion (t4 at 254/431)
+
+- q4t4b tripped the usage-limit circuit breaker after 64 clean verdicts.
+  Account cap resets Jul 29 08:22 or purchase credits
+  (chatgpt.com/codex/settings/usage). Locks released; zero junk among banked
+  verdicts; 177 items outstanding in
+  data/output/review_queue/_q4_tier4_resume2.csv.
+- RESUME (post-quota, elevated shell, fresh batch id):
+    python -m scripts.agent_b.run_review discover q4t4c --review-ids-from "data/output/review_queue/_q4_tier4_resume2.csv"
+    powershell -File scripts\dispatch_agent_b_workers.ps1 -BatchId q4t4c
+  Then: straggler retries -> finalize q4t4/q4t4b/q4t4c -> campaign in-cohort
+  gate.
+- Campaign standing at halt: t0 closed 113/113; t1 in-cohort 18/18; t2
+  124/124; t3 127/127; t4 254/431 banked. B2: 26 CIKs fixed+promoted (tier-0
+  wave), 5 gate-FAIL residuals (2 anchor-adjudicator candidates). Parked
+  human decisions: out-of-cohort pool (1,025), rule demotions
+  (X06/SRC_BDC02/X04/income_identity), t2/t3 B2 backlog (~120 real_errors),
+  tier-1 patch merges (9 PATCH_PROPOSED, requires_human_merge).
+
+## 2026-07-26 - Onex wrapper: "Equity Units" equity leaf marker (B2 patch 6ba0aec009)
+
+- Verdict BDCSRC_0001860424_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_6ba0aec009 (PATCH_PROPOSED).
+- `data/overrides/bdc_xbrl_wrappers/0001860424.json`: added "equity units" to `dispatch.leaf_markers_by_family.equity` and a `known_edge_cases` entry (`onex_s4t_equity_units_leaf`). The S4T Holdings Corp. (Vistria ESS Holdings, LLC) "Equity Units" identifier now classifies as `equity_position_leaf` (ONEX_FALCON_DIRECT_LENDING_EQUITY_LEAF_V1) instead of `aggregate`, so the current-period source fact (2025-12-31, FV 542,123) becomes match-eligible and the blocking_pipeline_only_position residual should clear on next reconciliation rebuild.
+- Tests: +2 in `tests/test_bdc_xbrl_wrapper.py` (S4T equity-units leaf regression + false-positive guard that equity totals/headers stay non-leaf), +1 in `tests/test_validate_holdings.py` (reconciliation-level: S4T source row reconciles as matched leaf, blocking_issue_count 0). test_bdc_xbrl_wrapper.py: 516 passed, 1 PRE-EXISTING failure (test_apollo_ds_company_only_source_row_is_aggregate, fails identically without this change). test_validate_holdings.py: 148 passed.
+- NOT implemented: companion proposal BDCSRC_0001993402_2025-12-31_BLOCKING_PIPELINE_ONLY_POSITION_052463eeeb ("include short-term cash-equivalent SOI rows in raw BDC source extraction"). Investigation shows the proposed target module (`pipeline/bdc_source_extraction.py`) does not exist, the BlackRock Liquidity T-Fund 2025-12-31 fact IS extracted from cached XBRL (bdc_holdings.csv: cost=FV=71,644,000, accession 0001193125-26-115988), and the blocker is actually caused by (a) the Antares wrapper classifying the row `non_private_market` on the source side and (b) untracked row_add rule `data/overrides/agent_investigate_rules/1993402/add_blackrock_short_term_investment_2025.json` injecting a synthetic pipeline row with anchor-derived FV 75,879,000 that appears in NO cached filing. The blocker is flagging a real defect (fabricated FV + cash row in private-market output); patching extraction would suppress a valid signal. Escalated to human review.
+
+## 2026-07-26 - HPS 1838126 2025-12-31 bare-axis rule revised: printed-schedule partition (B2 patch 1a08ff0732)
+
+- Verdict BDCSRC_0001838126_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_1a08ff0732 (PATCH_PROPOSED, MEDIUM) proposed routing all 17 blocked HPS_CORPORATE_LENDING_DEBT_LEAF_V3 bare-axis rows into unified holdings as omitted SOI continuation rows. Investigation REFUTES that diagnosis for 16 of 17: the printed 10-K note "schedule of investments of ULTRA III as of December 31, 2025" plus its unfunded-commitment table reconcile to the dollar with the bare-axis facts (JV portfolio FV $1,514,360k; matching XBRL bare rows + tagged unfunded facts = $1,514,871k). These are unconsolidated-JV look-through facts (same class as the SRCONLY_JV_LOOKTHROUGH_AXIS excusal and the 2026-07-21 part-5 adjudication); the filer omitted hps:ULTRAIIIMember on the typed InvestmentIdentifierAxis contexts, so the axis-based excusal cannot see them.
+- 1 of 17 IS a real missing fund position: SLF V AD1 Holdings, LLC - LLC Interest (FV 9,298,000), printed in the fund's own consolidated SOI but tagged bare, and wrongly excluded by the prior revision of `data/overrides/agent_investigate_rules/1838126/1838126_2025q4_bare_axis_leak_exclusion.json`.
+- Rule revised in place (same rule_id): predicate now keeps the three printed main-SOI bare positions (SLF V AD1 9,298k, CCI Topco Preferred 2,184k, AMR GP Ordinary 1,568k) and excludes the other 22 bare rows (ULTRA III note facts, $1,514,871k). Prior revision's retained-8 list was a subset-sum fit to the anchor: it retained six ULTRA III note rows (Brandt 2, Brandt bare, FH BMX 2/4/5/6, net $74,974k) and dropped SLF V AD1. Corrected partition: kept total = 25,337,420,000 = fund_financials investments_at_fair_value EXACTLY (current bdc_holdings basis: 823 suffixed rows $25,324,370k + 3 bare $13,050k); prior rule on current data left +65,676k residual due to 6-row upstream drift since authoring.
+- Tests: new `tests/test_hps_bare_axis_rule.py` (7 passed): rule validity, main-SOI bare leaves admitted (incl. the SLF V AD1 blocker row), 22 JV note rows still rejected, suffixed false-positive guard (incl. same-issuer name collisions + double-pipe variants), anchor reconciliation identity, out-of-scope-quarter guard, bare subtotal/header rows still rejected. No pipeline code changed; no rebuild run (rule takes effect at next --unified rebuild; expected rows 22/fv 1,514,871k in the application audit).
+- Blocker accounting for the 17-row packet: 1 addressed by admission (SLF V AD1 gains an output identity); 16 remain source-only by design (JV look-through). Clearing their blocking status needs a source-reconciliation-side excusal for filer-omitted JV axes (e.g. keyed on the adjudicated identifier set or wrapper config) - that is pipeline/source_reconciliation.py territory, NOT patched here. Follow-up: the Q1-2026 10-Q repeats the same bare ULTRA III tagging (EHOB 90,446k etc. at 2026-03-31); this rule is scoped to 2025-12-31 only, so 2026-03-31 will need the same partition once its blocker packet is worked.
+
+## 2026-07-26 - Source reconciliation: 6 audited B2 remediation patches (1919369 / 1803498 / 1899996 / 1950803 / 1976336 / 1950976)
+
+- Implemented the six PATCH_PROPOSED verdicts (all 2025-12-31) in `pipeline/source_reconciliation.py` ONLY; `pipeline/bdc_identifier.py`, `pipeline/bdc_filings.py`, `pipeline/bdc_xbrl_html_bridge.py` intentionally untouched (root causes did not require them; see below).
+- Root-cause finding shared by 5 of 6 blockers: they are downstream artifacts of PROMOTED agent rules the reconciliation did not know about. value_rescale rules fix output-side scale, so matched pairs mismatch vs raw source (1919369); row_add recoveries carry no accession_number, so accession-scoped match tiers can never claim them and they become blocking_extra_in_pipeline (1803498 x11, 1950803 x29, 1976336 x1, 1950976 x1).
+- Mechanism 1 (verdict 79b1ba05b1): `audited_value_rescale_pairs` CTE - promoted value_rescale rules load as (cik, field, factor); a matched pair's source value is normalized ONLY when source*factor equals output within tolerance AND raw values disagree. Non-factor differences stay blocking; already-reconciling rows never rescaled. New reconcile kwarg `audited_value_rescales` (None=load promoted rules; empty frame disables). `_compute_override_hash` now includes rescale-rule identity so cached partitions recompute on rule change.
+- Mechanism 2 (verdicts 3fb55f7e62, d08f66b566, plus rescue leg of 865d933112/ee5618e322): `output_recovered_row_identity` CTE - an ACCESSIONLESS output row (audited row_add) with an exact-identity current-period source counterpart (dims/raw id/staging id equality, or staging containment at len>=12) at the same FV (0.01% tol), where the source row is not matched elsewhere, is no longer a blocking extra. Collapsed_duplicate_dimension_path rows stay eligible as identity anchors; comparative/superseded/pre-2022 source rows never qualify. True duplicate collapses still dedupe (canonical matches once; duplicate path stays collapsed). NOTE for d08f66b566: no trailing-'One' identifier normalization was needed or added - the suffixed source facts exist verbatim, exact identity suffices (safer than suffix-stripping).
+- Mechanism 3 (verdicts 5b71968aa1, ee5618e322): `_extract_single_xbrl_source_file` now admits liquid-fund/cash-equivalent contexts: not is_investment, CashAndCashEquivalentsAxis explicit member whose humanized name hits `_MONEY_MARKET_KEYWORDS`, nonzero fair value from parsed facts (InvestmentOwned* or MoneyMarketFundsAtFairValue/AtCarryingValue mapped locally; carrying value doubles as cost). Admission gate == the excluded_money_market_fund classifier keyword list, so an admitted-but-unmatched row can only land in the documented non-blocking bucket - the admission cannot mint new blockers. Production BDC extraction (bdc_filings) untouched. `_SOURCE_FACT_EXTRACTION_VERSION` = "2" mixed into `_filing_metadata_hash` so the per-accession facts cache re-extracts.
+- Mechanism 4 (verdict 865d933112): output-only rows with output wrapper disposition non_private_market AND family cash get status `excluded_non_private_market_output` (non-blocking, documented_exclusion; mechanism `documented_non_private_market_cash_output`). Keyed strictly on the audited wrapper classification, never cash/PIK text. Distinct from the 1993402 escalation (2026-07-26 entry above): a row_add with fabricated FV has no agreeing source fact and no cash wrapper on a real loan row, so it still blocks under these changes.
+- Real-data verification (read-only, per-CIK reconcile on cached facts + current unified holdings, 2025-12-31): 1919369 blockers 1 -> 0; 1803498 extras 11 -> 0 (686 JV missing_from_pipeline rows remain, separate pre-existing mechanism); 1899996 1 -> 0; 1950803 29 -> 0; 1976336 extras 1 -> 0 (5 pre-existing negative-commitment missing rows remain); 1950976 1 -> 0.
+- Tests: +13 in `tests/test_validate_holdings.py` (3 new classes: TestAuditedValueRescaleSourceNormalization, TestRowAddRecoveredOutputIdentityRescue, TestOutputOnlyWrapperCashCalibration; each mechanism has a false-positive guard), +9 in `tests/test_source_reconciliation_cache.py` (liquid-fund admission incl. footnote-only FP + non-MM cash member FP + zero-FV guard, extraction-version hash test, 2 reconcile-level MM regressions). test_validate_holdings.py 161 passed; test_source_reconciliation_cache.py 18 passed; test_bdc_cik_review.py + test_bdc_xbrl_wrapper_oracle.py 109 passed. Full suite and pipeline rebuild NOT run (parent session rebuilds once after all agents land). logic_hash + override_hash + facts-cache version all changed, so next cached run fully recomputes.
+
+## 2026-08-12 - Q4 2025 B1 tier-4 resumed and CLOSED; campaign in-cohort gate green (q4t4c/d/e/f)
+
+- Resumed the 2026-07-25 quota halt: q4t4c discovered from _q4_tier4_resume2.csv
+  (177 items, cohort-guard OK). Banked 36, then hit an operator token strand
+  (refresh_token_reused: a worker rotated the single-use Codex refresh token;
+  141 workers 401ed in seconds). Recovery per runbook: newest worker-home
+  auth.json (RVQ_REV_da8a3d20531a) copied back to ~/.codex/ (prior file kept as
+  auth.json.stranded_20260811).
+- q4t4d (141 retry, resume3): 133 banked (incl. 2 workers that wrote verdicts
+  then exited 1), 8 mechanical failures (sleep/wake websocket drops, no-artifact
+  exits). q4t4e (8, resume4): 7 banked. RVQ_REV_5611e8ad60bc failed twice
+  mechanically (sandbox ACL setup_marker access-denied + CreateProcessWithLogonW
+  1326) -> documented residual in _q4_campaign_residuals.csv per 2-round retry
+  protocol.
+- Coverage gate exposed 2 sandbox-fail-closed ambiguous/source_unavailable
+  verdicts (RVQ_REV_2755462bd83b from pre-halt q4t4, RVQ_REV_b1ed381666df from
+  q4t4d; both cite CreateProcessWithLogonW 1326, not missing cache). Archived to
+  q4t4f/verdicts_source_unavailable_archive (q4t3 pattern) and re-dispatched as
+  q4t4f: clean re-adjudications (real_error 0.82 / false_alarm 0.86).
+- Finalized q4t4/q4t4b/q4t4c/q4t4d/q4t4e/q4t4f; only cross error anywhere is the
+  documented residual. BOM strip: 993 verdicts checked, 0 BOMs (newer harness
+  writes clean UTF-8).
+- TIER 4 CLOSED 506/506: 277 real_error / 196 false_alarm / 32 ambiguous /
+  1 documented residual. Tiers 0-3 re-verified CLOSED with the same gate ->
+  campaign in-cohort adjudication complete. Routing/per-rule false-alarm stats
+  in each batch dir (notable: C107 FA 87 pct n=46, C103 FA 100 pct n=5,
+  B02 FA 67 pct n=31, F16 FA 65 pct n=37 -> rule_scoping_queue demotion
+  candidates; C206 0 pct n=13, FX02/FX03 0 pct).
+- Recon artifacts rebuilt (python -m pipeline.main --validate-all
+  --reconcile-full, cached only): residual classification refreshed 2026-08-12
+  (was 2026-07-23). All six 2026-07-26 patch deltas confirmed on real data:
+  1919369/1899996/1950803/1950976 blocking -> 0, 1976336 -> 5 pre-existing,
+  1803498 extras -> 0 (682 JV rows remain, separate mechanism). HPS 1838126:
+  21 blocking rows vs predicted ~16 -- composition needs a look when the JV
+  axis-omission excusal is designed. Source-only totals now 14,831 reviewed /
+  10,489 blocking. NEW promoted FAILs RI02 (4 CIKs in matches missing from
+  holdings) + RI07 (blank position IDs in returns build): position_matches/
+  position_returns are stale vs the 2026-07-26 unified rebuild -- needs a
+  matches/returns rebuild, not a data fix.
+- 2026-07-26 session work landed as cae290d (verified: 25 + 161 targeted tests).
+- Dispatch tooling lessons: (a) dispatch_agent_b_workers.ps1 runs its own
+  preflight --reserve -- do NOT reserve manually first (double-lock PRECHECK_FAIL);
+  (b) prep_retry.py + strip_verdict_bom.py assume the ensemble/ batch layout --
+  for agent_b batches, re-discover from a review_id CSV and strip BOMs directly;
+  (c) machine sleep pauses fleet+dispatcher wall-clock and can convert in-flight
+  workers into 30-min TIMEOUT entries that DID write verdicts -- reconcile
+  dispatch_failures.txt against the verdict store before retrying.
+- Parked (unchanged): out-of-cohort pool (1,025), rule demotions
+  (X06/SRC_BDC02/X04/income_identity + the FA-rate candidates above), t2/t3 B2
+  backlog (~120 real_errors), 9 tier-1 PATCH_PROPOSED human merges, 1993402
+  fabricated-FV escalation, evidence_cli.py worktree modification (not mine,
+  not committed).
+
+## 2026-08-12 - Promoted-rule noop regression fixed: IS NULL re-keying + pulled-dir loader guard
+
+- Root cause 1 (representation mismatch): production applies promoted rules to the
+  in-memory build frame where missing text fields are EMPTY STRINGS; rules are
+  authored and B3-gated against CSV/parquet artifacts where the roundtrip collapses
+  '' to NULL (write_parquet_companion reads the CSV). Every instrument_description/
+  principal_amount IS NULL predicate silently nooped in production while passing the
+  gate. Proven: agent_rule.apply_rules on the parquet frame excludes Monroe's 54
+  rows / $308,170,000 exactly; production audit showed rows_changed=0.
+- Fix: 7 rules re-keyed in place to `col IS NULL OR CAST(col AS VARCHAR) IN
+  ('','nan')` (parquet-NULL == in-build ''-or-NULL, so parquet verification is an
+  exact equivalence proof): 1742313 (54/$308.2M), 1512931 (19/$78.5M), 1859919
+  (1/$115M), 1825248 (376/$2.86B), 1508655 rollforward (3 authored + same leak's
+  2026-03-31 recurrence $58.5M, scope=all working as designed), 1885968 (4/$45.0M),
+  1812554 bare_axis (11/$1.53B). All verified vs authored measured_impact.
+- Root cause 2 (loader leak): operator pull convention `_pulled_<reason>_<date>/`
+  was not honored by load_promoted_rules; the 2026-07-22 pulled rule loaded under
+  garbage CIK 0020260722 (dir-name normalization), permanently failing
+  promoted_rule_health. Fix: skip underscore-prefixed dirs; +1 regression test
+  (tests/test_agent_promoted.py, 23 passed).
+- Pulled per convention: 1508655_exclude_irgse_aggregate_2025 (its negative
+  counterpart row no longer exists upstream) -> _pulled_target_gone_20260812/;
+  1812554_exclude_2025q4_rollforward_disclosure_rows -> _pulled_duplicate_20260812/
+  (exact duplicate of bare_axis_rollforward_leaks: same 11 rows; the broad NULL-or-''
+  predicate was the one accidentally working while the precise rule nooped).
+  OPERATOR ERROR RECORDED: the duplicate was briefly pulled as "target_gone" first,
+  which put the $1.53B OCIC leak back for one rebuild cycle (flagged_fv_share
+  spiked to 14.8 in the interim chain) before the re-keyed precise rule restored it.
+- 2025-12-31 acceptance after fix (rebuild -> validate -> shadow -> queue ->
+  acceptance): FAIL 1/7 (was 3/7). reconcile_rate 95.5 (89.4), flagged_fv_share
+  4.85 (9.32; July Wave-1 43.99), source_blocking 2.51, drift 0 (9), health 0 (1).
+  Only verified_fv_share 44.4 vs >=50 remains -- the B2 wave target.
+- SYSTEMIC FOLLOW-UP (human design decision): normalize ''/NULL at the frame
+  boundary or gate rules against the in-build frame; until then any new B2 rule
+  authored with bare IS NULL text predicates will noop in production. Consider a
+  roundtrip-equivalence check in the B3 gate.
+
+## 2026-08-12 - First full B2 wave through the gap-1 promotion pipeline (q4b2t4b); 3 dispatcher defects fixed
+
+- Acceptance rerun + C103/HPS investigations preceded the wave: 2025-12-31 FAIL 1/7
+  (verified_fv_share 44.4 vs >=50 only). C103 NOT demoted (user decision rule: demote
+  if <=5 total firings; actual 793 rows / 231 CIK-quarter groups / 56 CIKs incl.
+  out-of-cohort). HPS 1838126's 21 blocking rows = the ULTRA III JV note facts to the
+  dollar ($1,514.8M vs printed $1,514.9M); 16-vs-21 gap fully explained by the corrected
+  rule evicting the prior revision's 6 subset-sum-retained rows; needs the JV
+  axis-omission excusal (source_reconciliation design decision, not patched).
+- B2 canary (2-packet subtotal_filter lane) caught 3 dispatcher defects before the
+  fleet burned quota; all fixed in scripts/agent_b2/dispatch_preflight.py with
+  regression tests (tests/test_agent_b2_preflight.py 11 passed):
+  (1) the prompt's contract excerpt was HARD-CODED to comparative_period_filter --
+  workers in every other lane authored the wrong template shape; now generated from
+  pipeline.correction_leaf.TEMPLATE_REGISTRY (prompt and validator share one truth);
+  (2) _citations_json dropped coordinate-only citations (valid to validate_corrections)
+  -- Ares' coordinate-only verdict produced an empty copyable block and a guaranteed
+  reject; now carried through with a coordinate-only marker;
+  (3) packets whose verdicts carry no usable citations are skipped at preflight with a
+  recorded reason (manifest.skipped_no_citations) instead of dispatching doomed workers.
+- Fleet result (batch q4b2t4b, MaxParallel 2): 22/22 workers validated (2
+  subtotal_filter, 18 comparative_period_filter, 2 dedup). Trial apply + B3 gate per
+  CIK: 20/21 CIKs PASS; 0001965934 FAIL (residual 172,864,000 -> unchanged) --
+  diagnosis: that is EXACTLY the pulled add_2025q4_us_treasury_bills row_add's FV; the
+  fund's gap is a MISSING POSITION, wrong mechanism class; correction archived per
+  gate-refusal rule, needs a repaired missing_position_add once that applier exists.
+- Promotion via run_remediation.promote_passes: 19 leaves -> data/overrides/
+  agent_b2_corrections (first population of the store; 17 comparative + 2 dedup),
+  2 subtotal wrapper patches -> bdc_xbrl_wrappers/0001508655.json + 0001812554.json
+  with gate provenance. Production rebuild applies them: 17 raw_bdc_staging
+  comparative filters (~6,000 prior-period rows dropped at staging) + dedups + wrappers.
+- HONEST MEASUREMENT: post-promotion acceptance metrics are IDENTICAL to pre-B2
+  (verified_fv_share 44.399, reconcile 95.455, flagged 4.846). Comparative-period rows
+  do not enter current-quarter FV sums, and the conservation-shaped defects at these
+  funds were already cleared by the same-day rule re-keying. The wave's value this
+  round is pipeline-infrastructural (dispatch -> validate -> apply -> B3 gate ->
+  promote -> production apply now proven end-to-end) plus row hygiene, NOT acceptance
+  movement.
+- STRUCTURAL LIMIT SURFACED: only 4 fix classes have trial appliers
+  (comparative_period_filter, dedup, spv_lookthrough, subtotal_filter). 121 of 143
+  actionable tier-4 B2 packets are blocked on unimplemented appliers: column_remap 53,
+  classification_fix 23, unit_rescale 14, rate_rescale 11, rule_scope 11,
+  missing_position_add 7, all_pik_normalization 2. Closing verified_fv_share 44.4 ->
+  50 likely requires implementing appliers (esp. column_remap + classification_fix,
+  76 packets) or direct human review of the 17 under-review funds' flag classes.
+
+## 2026-08-12/13 - Q4 2025 ACCEPTANCE PASS (7/7): JV axis-omission excusal + prefix-rollup mechanism
+
+- Three new deterministic source-only mechanisms in pipeline/source_reconciliation.py,
+  all structural-evidence-keyed (no keyword matching), each with false-positive tests:
+  (1) SRCONLY_JV_LOOKTHROUGH_SUFFIX -- `<investee> | <JV vehicle>` rows whose entity-form
+  suffix (lp/llc/ltd token required) endswith-matches a FUND-classified retained-interest
+  issuer in the SAME fund-quarter's unified output. Clears BCRED 1803498: 1,359 rows
+  across 2025-12-31 + 2026-03-31 ($7.06B + $7.5B), incl. the Pinnacle FV-alias row.
+  (2) SRCONLY_JV_LOOKTHROUGH_PROMOTED_RULE -- rows matching a promoted row_exclusion
+  rule marked "jv_lookthrough": true (marker added to the HPS 1838126 bare-axis rule);
+  clears exactly the 21 ULTRA III rows ($1.51B). Fail-closed on predicate/schema errors.
+  (3) SRCONLY_ISSUER_PREFIX_ROLLUP_SUM -- source identifier is a strict prefix of >=2
+  same-fund-quarter output rows AND FV ties to the children's sum (0.01%/1k tol).
+  Clears Ares 1287750 multi-entity rollups (exact to the dollar) + 220 rows cohort-wide.
+- Precedence fixes: JV excusals run after the specific documented buckets (cash keeps
+  the Dreyfus-in-JV row) and BEFORE numeric_alias (FV coincidence is weaker evidence);
+  residual classifier now lets documented source-only mechanisms outrank the
+  blocking_numeric_* family.
+- FALSE-POSITIVE CAUGHT DURING BUILD: industry suffixes ("Telecommunications") endswith-
+  matched output text at 1544206 (Carlyle) -- right outcome, wrong mechanism. Fixed with
+  the entity-form + FUND-classification guards; the 142 Carlyle rows correctly reverted
+  to blocking pending their own evidence path. Tests: 173 passed (validate_holdings).
+- Artifacts re-banked via reassemble_source_recon_artifacts (classifier-only change);
+  shadow -> queue -> acceptance rerun: 2025-12-31 verdict PASS 7/7 (first ever;
+  calibration=provisional). verified_fv_share 44.4 -> 81.1 (54 verified / 12
+  under_review / 1 unanchored / 3 no_holdings); source_blocking_fv_share 2.48 -> 0.163.
+- OCIC 1812554 deliberately NOT excused: BOCSO $328.7M source vs $136.8M output and
+  Notorious Topco $124.2M vs $50.5M are real discrepancies needing adjudication.
+- SCP 1743415 anchor induction: worker found Total Investments $184.5M but the closure
+  gate REFUSED (non-cash remainder 24% > 15%; looks like a subtotal). Refusal stands
+  per gate rules; fund remains unanchored ($184M, immaterial to the FV bar).
+
+## 2026-08-13 - Golub/North Haven diagnose batteries (post-PASS durability)
+
+- run_remediation diagnose with PER-CIK holdings slices (first attempt fed the full
+  cohort parquet -> $540B garbage residuals; the --holdings arg means a per-CIK file).
+- Golub 1930087: RECONCILES (residual $2.7M = 0.03% of fund; probes tie value_sum to
+  anchor). The acceptance ledger's -0.852% flag is an anchor-basis discrepancy between
+  the shadow ledger anchor and the battery anchor -- anchor review, not a data defect.
+- North Haven 1851322: ESCALATE (terminal): $249.7M residual (3.6%), deterministic
+  probes explain 0.0 -- needs human/wrapper investigation per the battery's own
+  instruction; consistent with the known bare-name-era wrapper gaps (2026-06-05 entry).
+- Remaining durability queue after Q4-2025 PASS: Overland 1965934 row_add re-author
+  (pulled rule has empty positions[]; needs staging source_row_id, agent_rule track),
+  OCIC BOCSO/Notorious adjudication, Fidelity 1920453 output-only central-fund row,
+  SCP 1743415 anchor (gate-refused), North Haven wrapper investigation, Golub anchor
+  basis review, position_matches/returns rebuild (RI02/RI07).
+
+## 2026-08-13 - Overnight B2 expansion experiment CLOSED: quarter-scoped fixes, 2025-12-31 acceptance PASS 7/7
+
+- Objective (owner): every identified B2 packet gets a working, gated fix without
+  making unaffected data worse. Three fleet/gate iterations over ~24h, ~230 workers.
+- ROUND 1 (q4b2exp, 130 workers): 124 leaves authored; 94 schema-unusable (validator
+  accepted filing-column names + coordinate-only selectors). Fixes: unified-schema
+  field enums, identity-key selectors, registry-generated prompts (26d6607).
+- ROUND 2 (q4b2exp2, 94 workers): 97 pct valid authoring (vs 24 pct). Gate v2 (composed
+  replay-equivalence vs trial base): 30/60 CIK PASS, 58 leaves promoted. BLAST-RADIUS
+  AUDIT then found 23 CIKs with HISTORICAL quarters rewritten (unscoped selectors:
+  Goldman principal x1000 in 2023 etc.) -> ALL 58 REVERTED (integrity first; revert
+  proved clean). Also fixed: production concat row-reorder perturbing tie-breaks at
+  untouched CIKs; trial-output filename contract (.corrected.csv) in the gate driver.
+- ROUND 3 (scoped): four-layer quarter-scope enforcement (a8120c7): scope.quarters
+  REQUIRED on stage-2 leaves (explicit dates); apply_scoped structurally partitions
+  out-of-scope rows away from every applier; gate adds off-scope byte-invariance +
+  rate defect-signature predicates; fingerprint_blast_radius.py is standing tooling.
+  Re-gate of the 58 under scope [2025-12-31]: 22 CIK PASS / 8 FAIL -- every failure
+  the defect-signature predicate (fixes for rates that were already plausible).
+  40 promoted; then 7 pulled on the fingerprint's magnitude finding (principal x1000,
+  rates /100 WITHIN the scoped quarter -- cross-field magnitude plausibility is the
+  ROUND-4 gate predicate, precisely specified); then 13 pulled as production noops /
+  inert first-wave dedups (drift+health gates caught them).
+- FINAL STATE: 39 promoted B2 corrections live (19 wave-1 + ~20 scoped stage-2).
+  2025-12-31 acceptance PASS 7/7: coverage 67, reconcile 95.5, flagged_fv 4.85,
+  blocking_fv 0.164, verified_fv 80.5, drift 0, health 0. Fingerprint: correction
+  effects confined to target-quarter cells at promoted CIKs; total FV delta $16K on
+  $7.46T (single 1911066 cell, remap-to-FV audit gap logged); ZERO correction-layer
+  historical mutation.
+- KNOWN RESIDUAL (pre-existing, not the corrections layer): validate->rebuild
+  fund-strategy artifact feedback oscillates marginal classifications at ~20
+  non-corrected CIKs (n_asset_classes flips, small cost cells). Fix: freeze/pin
+  fund_strategy correction inputs per quarter-pass round.
+- ROUND-4 BACKLOG (mechanical): grounded holdings-side identifiers in prompts (20
+  selector-noop refusals), cross-field magnitude predicate, re-author pulled leaves,
+  re-type the 8 wrong-diagnosis B1 verdicts, retire remains in archive dirs
+  (q4b2exp_*). Human basket unchanged (rule_scope 11, extraction-scope decision,
+  OCIC/North Haven/SCP/1993402, out-of-cohort pool, threshold calibration sign-off).
+
+## 2026-08-16 - Round-4 mechanical backlog shipped; 5 live B2 leaves pulled on the new magnitude gate (production principal restored)
+
+- CROSS-FIELD MAGNITUDE PREDICATE (the round-4 gate spec) is live in the B3 value
+  gate (`gate_value_packet` -> `check_magnitude_plausibility`, run_remediation.py).
+  Three legs judged against the fund norm (median of OFF-target per-quarter stats,
+  untouchable by a scoped fix): target-quarter field average, CHANGED-ROW average
+  (catches blends the quarter average hides), and per-row principal/FV ratio median
+  (scale-free under portfolio growth). Refuses only when the fix lands >10x off the
+  norm AND made it worse than baseline (scale REPAIRS still pass). Value-gate replay
+  now goes through apply_scoped (production application path) instead of the bare
+  applier. New standing tool `scripts/agent_b2/replay_gate.py` (replay staged or
+  archived leaves against per-CIK production slices; --stats-only audits live ones).
+- VALIDATION VS PAST DATA: replay of the q4b2exp_v3_magnitude_pull archive refuses
+  all 3 magnitude-defective fixes on the real frames (1572694 principal x1000: 796x
+  field avg + 1,043x principal/FV ratio; 1646614 rates x0.01: 112x; 1508655
+  pct_of_net_assets->interest_rate: 10x on the changed-row leg -- the quarter-average
+  leg alone sat at 5.7x, which is why the changed-row leg exists).
+- LIVE-STORE AUDIT FINDING (--stats-only over the 39 promoted leaves): 5 live
+  corrections were the SAME defect class and had corrupted production 2025-12-31:
+  unit_rescale principal x1000 unselected at 1702510/1872371/2011498 (principal/FV
+  median ~1000 vs raw-staging ~1.0 -- raw was already correct) and column_remap
+  principal->shares unselected at 1849894/1860424 (quarter principal vacated; loan
+  par sitting in shares_held). All FV-invariant, so conservation/acceptance were
+  blind. PULLED to corrections_archive/q4b2exp_round4_magnitude_pull_20260816
+  (README with evidence table); unified rebuilt from cache; fingerprint diff vs the
+  saved pre-pull fingerprint confirms the 5 CIK-quarters restored, total FV delta 0.
+  Remaining deltas outside the pulled set are the aeaa03f recorded pulls
+  materializing in their first rebuild (81955 IRGSE) plus the documented
+  fund-strategy classification oscillation. Live B2 corrections now 34.
+  Watchlist (flagged, NOT pulled): 1674760 selected single-row remap.
+  2025-12-31 acceptance re-verified PASS 7/7 post-pull.
+- GROUNDED SELECTORS (fixes the 20 selector-noop refusals): dispatch_preflight
+  extracts holdings-side issuer_name/bdc_investment_identifier from bundle
+  evidence_items and VERIFIES each against current unified holdings with the
+  applier's own selector semantics; the worker prompt now carries a "Holdings-side
+  selector identifiers" section with per-string match counts (NO MATCH strings are
+  marked do-not-use); contract excerpt points row_selector at that section.
+  n_grounded_identifiers recorded per manifest row.
+- FUND-STRATEGY INPUT FREEZE: new pin_inputs stage at the run_quarter_pass pass
+  boundary copies fund_strategy_correction_candidates.csv to a .pinned.csv that
+  `_apply_fund_strategy_corrections` prefers; every rebuild in a pass (pre AND post)
+  consumes one frozen input set (validate keeps regenerating the live file for
+  diagnostics). Activates at the next quarter pass.
+- FINDINGS LEDGER + LOOP-UNTIL-DRY: new scripts/findings_ledger.py generalizes
+  check_tier_coverage to full lifecycle states (open / real_error_unremediated /
+  remediation_staged|pulled|promoted / adjudicated_false_alarm / needs_human /
+  evidence_backlog / resolved_upstream / gone_unadjudicated) across queue, both
+  verdict stores, staged/promoted/archived corrections, and wrapper b2_provenance.
+  Dry decision counts blocker-lane opens only (review lane is triage, not dispatch).
+  run_quarter_pass gains ledger/ledger_post stages and a next_round block in
+  pass_summary (dry -> converged; else dispatch the actionable pool ->  the
+  iterate signal). Current production: 44,863 findings; 14,890 actionable
+  (14,025 open blocker-lane + 708 real_error_unremediated + 126 pulled + 31 staged).
+- RI02/RI07 CLEARED: scripts/rebuild_outputs.py --returns re-ran on the corrected
+  holdings (477,335 position rows, 233 index rows); targeted RI-category run
+  (write=False) shows RI02 PASS and RI07 PASS, no detail rows.
+- Tests: +25 across test_agent_b2_run_remediation (30), test_agent_b2_preflight
+  (16), test_run_quarter_pass (11), test_findings_ledger (9, new file); full B2
+  surface battery 101 passing. Full suite run at session end.
+- NOT run: shadow/oracle/queue ledger refresh (non-FV artifacts reflect pre-pull
+  state until the next quarter-pass battery). Re-authoring the pulled/archived
+  leaves under the new contracts is fleet work (round-4 dispatch).
+
+## 2026-08-19 - Interrupted 2026-08-16 full-suite run triaged; 2 stale tests fixed, 1 real flag left standing
+
+- The 2026-08-16 session ended on a dropped connection at the exact moment its
+  session-end full pytest suite finished: 3 failed / 4,362 passed / 13 skipped
+  (2h11m), never triaged. All 3 reproduce deterministically. Drift backstop:
+  file mtimes confirm NO data/output writes during the pytest window (the
+  15:25-15:41 local writes are the session's own pre-suite rebuild tasks);
+  conftest write-guard held.
+- FIXED test_anchor_adjudicator::test_verify_uses_filing_total_assets_when_companyfacts_null:
+  premise decay, not a code bug. The test relied on 1377936 2026-02-28 having
+  NULL companyfacts total_assets; fund_financials.csv now carries 1,139,265,104
+  (companyfacts caught up after the rebuild). fund_financials is now stubbed via
+  monkeypatch so the lagged-quarter fallback path is pinned, not live-data-dependent.
+- FIXED test_unified_holdings TestBuildUnifiedHoldings::test_ixbrl_lien_fills_blank_keyword_lien:
+  stale fixture. Commit 345aa68 re-keyed apply_ixbrl_field_status_overlay on the
+  FULL InvestmentIdentifierAxis member from bdc_dimensions_raw; the fixture still
+  carried placeholder dims "x=y", so the join key became "y" and the overlay
+  no-opped. Fixture dims now carry the real member per row. Both fixes verified:
+  full test_anchor_adjudicator.py (7 passed) + the lien test pass.
+- NOT FIXED (deliberate) test_bdc_xbrl_wrapper::test_apollo_ds_company_only_source_row_is_aggregate:
+  wrapper_disposition flipped equity_total_rollup -> aggregate for CIK 0001837532.
+  Attribution: the uncommitted identifier_anchors/identifier_rate_grammars edits
+  for exactly this CIK (part of the dirty per-CIK dialect experiment on
+  ensemble-fp-experiment). NOT merely cosmetic: source_reconciliation.py grants
+  *_total_rollup dispositions parent-key prefix rollup matching that plain
+  'aggregate' does not get. The test is correctly guarding committed behavior;
+  resolve when the dialect experiment is adjudicated (either revert the override
+  edits or re-baseline the expected disposition with reconciliation evidence).
+- Net expected full-suite state: 1 failed / 4,364 passed (the Apollo guard) until
+  the 0001837532 dialect edits are adjudicated. No pipeline code changed; test
+  files only.
+
+## 2026-08-20 - Dialect adjudication CLOSED: 2026-07-24 Agent A promotion ratified and committed; Apollo wrapper test root-caused to June, not the dialects
+
+- ATTRIBUTION CORRECTED (supersedes the 2026-08-19 entry note): the uncommitted
+  identifier_anchors/identifier_rate_grammars files do NOT affect wrapper
+  dispositions or any production holdings values. classify_identifier reads only
+  data/overrides/bdc_xbrl_wrappers/*.json (committed, clean). The dialect files
+  are consumed by pipeline/identifier_rate.py + identifier_signature.py, whose
+  only consumers are the Agent A shadow engine (agent_a_flags.csv -> review
+  queue), the A3 held-out/production gates, and agent_a tooling. Validation
+  layer only.
+- AUDIT (the adjudication evidence): production gate re-run on current Q4 data
+  (python -m scripts.agent_a.run_quarter gate 2025-12-31): 27 PASS / 0 FAIL /
+  15 NO_CONFIG, identical to the documented 2026-07-24 post-promotion state.
+  All 16 promoted CIKs PASS: 12 high confidence; 1851322 + 1885968 narrow
+  (3 in-era quarters, 10 era-excluded as flattened-regime), 1919369 narrow
+  (4 in-era quarters; gate reason says "promote with human review, not auto" --
+  live since 07-24, flagged here for the human basket rather than re-litigated).
+- Committed the 32 dialect files (15 anchor + 15 grammar updates, 2 new for
+  0001772704) closing the audit trail on the a_q1_cohort_20260724c promotion.
+  The worktree is now fully clean of config the Q4 PASS depends on.
+- APOLLO TEST ROOT CAUSE (was misattributed to the dialects on 08-19): the test
+  (bc679b0, 2026-06-11 09:44:27) landed 26 seconds BEFORE f3ffc1a (09:44:53)
+  added company-suffix fallback_family_patterns to the Apollo wrapper spec,
+  routing issuer-only rows to family=debt where the category-before-total branch
+  yields 'aggregate'. The test was also born internally inconsistent:
+  'equity_total_rollup' can only pair with an EQUITY_TOTAL_ROLLUP rule id, but
+  the test asserts APOLLO_DEBT_SOLUTIONS_DEBT_AGGREGATE_V1 on the next line. It
+  had been failing since 2026-06-11. Fixed to assert 'aggregate' (consistent
+  with the rule id and 2.5 months of production behavior). test_bdc_xbrl_wrapper
+  517 passed.
+- Net: full suite expected GREEN (the last standing failure is resolved).
+  Reconciliation-semantics concern raised on 08-19 (aggregate vs *_total_rollup
+  parent-key matching) is moot for the dialect decision -- the disposition came
+  from a June wrapper-spec change that production (incl. the Q4 PASS) has used
+  throughout.
+
+## 2026-08-20 - Acceptance thresholds v2 SIGNED OFF by owner; Q4 2025 re-stamped PASS 7/7 calibrated
+
+- Owner ratified the acceptance contract (calibration provisional -> signed_off,
+  version 1 -> 2) with tightened bars: reconcile_rate >=70 -> >=90,
+  flagged_fv_share <=20 -> <=10, source_blocking_fv_share <=5 -> <=1,
+  verified_fv_share >=50 -> >=70. fund_coverage (>=60), rule drift/health (0),
+  and the assessability rule (anchored_rate >= 50 else NOT_ASSESSABLE) unchanged.
+- Basis recorded in the thresholds file calibration_note: Q4 2025 is the first
+  full-cycle quarter; v1 bars were provisional ship-bars that initially read FAIL
+  and were earned to PASS by remediation waves. v2 bars clear Q4 actuals with
+  honest headroom and avoid incentivizing forced reconciliation (reconcile_rate
+  90 tolerates ~6 escalated funds of ~66 anchored).
+- Owner proviso: Q1 2026 (2026-03-31) and Q2 2026 (2026-06-30) passes may
+  recalibrate further; any v3 basis to be recorded in the file.
+- Re-ran python -m pipeline.quarter_acceptance --quarter 2025-12-31 under v2:
+  PASS 7/7, calibration=signed_off. Actuals unchanged (reconcile 95.5, flagged
+  4.85, blocking 0.164, verified_fv 80.5). quarter_acceptance.json +
+  quarter_acceptance_funds.csv rewritten.
+- Q4 2025 finalization remaining: quarter-pass rerun to refresh pre-pull
+  shadow/oracle/queue artifacts, then the human basket (OCIC, Golub, North
+  Haven, Overland/Fidelity extraction scope, SCP anchor, 1919369 narrow-conf
+  dialect review, 1993402, rule demotions, 9 tier-1 PATCH_PROPOSED merges).
+
+## 2026-08-20 - B2 Q4 track record measured: cross-batch metrics rollup, taxonomy verified, round-4 acceptance criteria pre-declared
+
+- New reusable extractor `scripts/b2_run_metrics.py` -> `data/output/agent_b2/
+  b2_run_metrics.csv` (154 rows): per-batch dispatch/authoring/gate/lifecycle
+  metrics for q4b2t4a, q4b2t4b, q4b2exp, q4b2exp2, plus archive counts,
+  findings-ledger state reconciliation, and fix-application audit summary.
+  Analysis only -- NOTHING dispatched, promoted, or pulled; read-only outside
+  the three deliverable files. Full write-up appended to
+  `data/output/data_investigation_results.md` (2026-08-20 B2 entry).
+- Measured trend: true authoring validity 24% (q4b2exp round 1; the
+  dispatch-time validator itself was the defect) -> 97.9% (q4b2exp2) -> 100%
+  (q4b2t4b mature classes). CIK-level gate pass 0% (v1) -> 50% (v2) -> 73%
+  (v3) -> 95% (wave-1 value gate). v3 refusals are 100% defect_signature (B1
+  diagnosis quality), zero authoring-mechanics failures.
+- Artifact-vs-narrative discrepancies found: manifest.json only records the
+  LAST dispatch wave (use wrappers/logs for true counts); q4b2t4b gate log
+  has 19 PASS / 1 FAIL over 20 CIK entries (changelog 2026-08-12 narrated
+  20/21); validate.txt is UTF-16 LE and the t4b gate log is UTF-8-BOM.
+- All 10 Q4 failure classes verified against reason-tagged
+  corrections_archive dirs; each mapped to its mechanical contract
+  (TEMPLATE_REGISTRY prompts, correction_leaf schema, skipped_existing,
+  apply_scoped + off_scope_invariance, defect_signature,
+  check_magnitude_plausibility, grounded selectors, replay_gate.py).
+  Incomplete contracts: B1 verdict re-typing after defect_signature refusal,
+  magnitude no_norm blind spot (2 live shares_held legs), 0001674760
+  watchlist, rule_scope (human by design).
+- Ledger reconciliation (2025-12-31, ledger as of 2026-08-16 15:04): all
+  brief-expected numbers reproduce exactly -- 2,609 findings, 763 B1 verdicts,
+  312/202(187 in-cohort)/124/51/42/30/2 states; zero drift (q4final had not
+  refreshed the ledger at read time). Live store reconciles: 21 + 40 - 7 - 13
+  - 2 - 5 = 34 leaves; agent_fix_application_audit 140/140 ok, 0 drift;
+  2026-08-16 live replay: 11 out-of-band magnitude legs -> 5 pulled / 1
+  evidence-kept / 1 watchlisted, matching the archive README to the leaf.
+- Round-4 fleet acceptance criteria PRE-DECLARED (8 bars in the
+  investigation entry): authoring validity >= 95%, selector no-ops = 0,
+  replay/off-scope failures = 0, ZERO post-promotion discoveries, mandatory
+  post-promotion replay_gate --stats-only + acceptance PASS 7/7 under v2,
+  zero new failure classes, defect_signature <= 10% of gated CIKs (else
+  pause for B1 re-adjudication), pool = 202 real_error_unremediated + 124
+  remediation_pulled.
+
+## 2026-08-20 - Q4 2025 FINALIZED: full quarter pass q4final clean, PASS 7/7 calibrated on committed state
+
+- Full checkpointed pass (run_quarter_pass --pass-id q4final --quarter 2025-12-31)
+  ran end to end (~2h50m): pin_inputs (FIRST live run -- fund-strategy candidates
+  frozen for the pass), rebuild, oracle, nonaccrual, validate, shadow, queue,
+  ledger, acceptance, select, then the full _post battery and summary. Exit 0.
+- Verdict PASS -> PASS with ZERO metric deltas and zero failed checks pre or post:
+  the quarter is stable under a full rebuild-validate cycle on the committed
+  worktree (all round-4 work, investigation rules, dialects, and thresholds v2 in
+  git as of 482fc2b/86f7539). Acceptance stamped calibration=signed_off,
+  thresholds_version 2, generated 2026-08-20T15:51:30Z.
+- Monitoring artifacts REFRESHED (were pre-pull-stale since 08-13/08-16): shadow
+  ledger, oracle, review queue, findings ledger. Ledger post: 44,840 findings,
+  14,878 actionable, dry=False -> next_round guidance is to dispatch the
+  actionable pool with a fresh pass id (the round-4 re-author fleet; operator
+  decision, NOT taken in this pass). 13 under-review funds ranked in
+  quarter_pass/q4final/candidates.csv.
+- Q4 2025 status: FINAL. PASS 7/7 under owner-signed v2 thresholds, reproducible
+  from git, fresh artifacts. Remaining OPTIONAL improvements (affect the 80.5%
+  verified-FV headline, not the verdict): human basket (OCIC, Golub, North Haven,
+  Overland/Fidelity extraction scope, SCP anchor, 1919369 narrow-conf dialect,
+  9 tier-1 PATCH_PROPOSED merges) and the round-4 B2 re-author fleet.
+
+## 2026-08-20 - Worker-home waste scrub expanded to a shared allowlist; auth.json credential sprawl found and scrubbed going forward
+
+- FINDING: the post-run cleanup in run_codex_worker.ps1 (2026-07-10 fix) only
+  deleted .sandbox-bin\codex.exe + .tmp\plugins. It missed plugins\cache (~26 MB
+  / ~5,000 files PER WORKER -- the dominant batch-scratch cost; 6.3 GB in
+  agent_b2 alone), the command-runner exe, codex_apps caches, models_cache.json,
+  skills, and -- security-relevant -- auth.json: every worker home keeps a copy
+  of the operator's logged-in credentials. Measured: 262 auth.json copies under
+  agent_b2 batches, 3,334 under agent_b (~3,600 total live-credential copies in
+  scratch).
+- NEW scripts/codex_worker_waste_allowlist.ps1: single source of truth for the
+  waste allowlist + Remove-CodexWorkerWaste (best-effort scrub, never fails the
+  worker). Keepers documented and preserved: config.toml, sqlite event logs,
+  sandbox logs, sessions rollout traces. Smoke-tested on a synthetic home: all
+  waste removed, all four keeper classes intact.
+- run_codex_worker.ps1 finally-block now calls Remove-CodexWorkerWaste
+  (unconditional on worker failure too -- failed workers also hold credentials;
+  -NoCleanup remains the debug escape hatch). Parse-checked, behavior otherwise
+  unchanged. Every future fleet self-scrubs.
+- NEW scripts/sweep_worker_scratch_waste.ps1: retroactive/backstop sweeper for
+  killed-dispatcher orphans and pre-fix batches (the finally block cannot cover
+  those). Same shared allowlist; structural guard (only inside \worker_home\
+  paths); dry-run default with manifest CSV written before any deletion; skips
+  homes touched <48h (correctly skipped the live canary_trace_20260820 run).
+  Dry-run measured: agent_b2 6,958.5 MB reclaimable (99%+ of the dir).
+  Manifests: data\output\scratch_sweep_manifest_dryrun_b2.csv (+ _rest.csv for
+  agent_b/agent_investigate/agent_a/agent_anchor when its background run lands).
+- NOT run: -Apply (deletion). Owner-gated; review manifests then
+  `powershell -File scripts\sweep_worker_scratch_waste.ps1 -Apply`.
+- Context: part of the trace-capture fix (drop codex exec --ephemeral so worker
+  rollout traces persist; one-packet canary running separately). Deletion
+  expansion decoupled from that canary -- it has no dependency on session
+  persistence. Pending after canary PASS: harvest step (sessions rollout ->
+  batch logs\<worker>__trace.jsonl) ahead of the scrub in the finally block.
+
+## 2026-08-20 -- Canary PASS: drop --ephemeral from the Codex worker harness (one-worker trial)
+
+- One-worker canary validating removal of `--ephemeral` from `codex exec` in the worker
+  runner, so rollout traces (tool calls with arguments, outputs, reasoning items)
+  persist under the worker CODEX_HOME. NEW `scripts/run_codex_worker_canary.ps1`
+  (copy of run_codex_worker.ps1 minus only the --ephemeral line). Production runner,
+  dispatchers, and data/overrides untouched.
+- Packet: archived q4b2exp2 prompt 0001508655__classification_fix (disposable output),
+  rewritten into `data/output/agent_b2/batch/canary_trace_20260820/` with the sandbox
+  write grant limited to the canary runroot. Full assertions, artifacts, and rollout
+  paths in `canary_trace_20260820/canary_report.md`.
+- Result: PASS on 7/7 assertions (run 2). Exit 0 + turn.completed; correction leaf
+  passes validate_corrections; EXACTLY one rollout per worker home (~65 KB, far under
+  the 50 MB bound); rollout contains full apply_patch arguments (complete correction
+  JSON body) + tool outputs + session/turn metadata that the dispatcher stdout JSONL
+  (7 events, ~3.3 KB, no patch bodies) lacks; zero files outside the sandbox grants
+  (47,054-file before/after listing of data/output/agent_b2, zero diff); operator
+  ~/.codex never touched. Worker-home auth.json copies deleted post-run.
+- Run 1 (archived prompt verbatim) FAILED the validator on missing scope.quarters:
+  prompt/validator drift from a8120c7 (2026-08-13 quarter-scope enforcement), NOT a
+  flag effect. Single allowed retry with the current-fleet scope instruction passed.
+  Note: pre-a8120c7 archived prompts cannot be replayed against the current validator
+  without amendment; current preflight-built prompts are unaffected.
+- CAVEAT: rollout reasoning items carry encrypted_content with EMPTY summaries --
+  readable chain-of-thought is NOT recoverable. Harvest value = tool-call arguments/
+  outputs + metadata, not reasoning text.
+- Verdict: safe to remove --ephemeral fleet-wide BEHIND A HARVEST STEP (collect
+  sessions/YYYY/MM/DD/rollout-*.jsonl per worker home, then prune sessions; runner
+  cleanup currently only removes .sandbox-bin and .tmp/plugins).
+
+## 2026-08-20 -- Fleet-wide: --ephemeral removed from codex exec; rollout-trace harvest step live
+
+- `scripts/run_codex_worker.ps1`: dropped `--ephemeral` (per the same-day canary PASS,
+  `data/output/agent_b2/batch/canary_trace_20260820/canary_report.md`) and added the
+  harvest step to the finally block, AHEAD of the waste scrub: moves every
+  `sessions\YYYY\MM\DD\rollout-*.jsonl` to `-TraceDir` (new param; default
+  `<WorkerHome>\traces`) named `<TracePrefix><original-name>` (new param), then prunes
+  `sessions\` so reused homes never accumulate per-run session state. Best-effort:
+  harvest failure warns on stderr only (stdout stays a pure JSONL event stream) and
+  never fails the worker run. `-NoCleanup` skips harvest too (raw layout for debugging).
+- All six fleet dispatchers now route traces into their batch/target `logs\` dirs:
+  `dispatch_agent_a_workers.ps1` (`<cik>__`), `dispatch_agent_b_workers.ps1` (`<id>__`),
+  `dispatch_agent_b2_workers.ps1` (`<cik>__<fix_class>__`),
+  `dispatch_bdc_review_workers.ps1` (`<review_id>__`), `dispatch_investigation.ps1`
+  (`iter<i>__`), `dispatch_anchor_workers.ps1` (`attempt<i>__`),
+  `dispatch_convention_workers.ps1` (per-cik `logs\worker.<quarter>.` -- REQUIRED there:
+  its worker homes are discarded TEMP scratch, the default would lose the trace).
+- Verified: PowerShell parser clean on all 8 edited scripts; offline stub-codex smoke
+  test (no API call) confirmed harvest to explicit TraceDir, harvest to the default
+  `<WorkerHome>\traces`, sessions pruned, auth.json scrubbed, and -NoCleanup leaving
+  sessions raw. NOT run: a live fleet batch (next real dispatch exercises it end to end;
+  the canary already proved the no-ephemeral codex path itself).
+- `scripts/run_codex_worker_canary.ps1` retired (deleted): superseded by the production
+  runner; keeping a near-copy of the runner in scripts/ was a drift trap.
+- `docs/reference/codex_worker_dispatch.md`: new "Rollout traces" section (harvest flow,
+  naming, the encrypted-reasoning caveat: rollouts carry tool-call arguments/outputs,
+  NOT readable chain-of-thought).
+
+## 2026-08-20 - Investigations split into docs/investigations/ (derived view, pre-cutover); full scratch-sweep dry-run totals
+
+- NEW scripts/split_investigations.py: deterministically splits data/output/
+  data_investigation_results.md (61 entries, 3,209 body lines -- previously a
+  single 235 KB file in the GITIGNORED data/output tree, i.e. the project's
+  entire investigation knowledge base was unversioned) into 9 topical files
+  under git-tracked docs/investigations/ plus a generated INDEX.md:
+  classification_holdings_eda (7), frontend_data_checks (3),
+  data_quality_audits (6), source_reconciliation (16, keeps the 2026-07-21/22
+  parts 1-8 chain whole), wrapper_residuals (7), conservation_shadow_engine
+  (11), identifier_rate_semantics (7), agent_campaigns (2), quarter_eda (2).
+  Verification gate: entries in == out AND body lines preserved exactly, else
+  nothing is written; unmapped headings go loudly to uncategorized.md (never
+  silently dropped). Modes: default (regenerate from source), --check
+  (verify only), --reindex (rebuild INDEX from topic files; post-cutover mode).
+- PRE-CUTOVER DESIGN: the topic files are DERIVED VIEWS (banner in each file);
+  data/output/data_investigation_results.md remains the canonical append target
+  until the owner ratifies the convention change. Concurrent appends by other
+  agents are harmless -- re-run the script. Safe to run alongside live
+  canaries/quarter passes (creates new tracked files only).
+- PROPOSED AGENTS.md wording for the "Data Investigations" section (owner edit,
+  agents must not touch AGENTS.md): "Ad-hoc data analyses are filed under
+  docs/investigations/ (git-tracked). Append each new investigation to the
+  matching topic file with a dated heading, the question asked, and the results
+  found, then rebuild the index: python scripts/split_investigations.py
+  --reindex. See INDEX.md for topics." At cutover: freeze the old file with a
+  pointer header, strip the GENERATED banners from the topic files.
+- Scratch-sweep dry-run over agent_b/agent_investigate/agent_a/agent_anchor
+  completed: 39,318.7 MB reclaimable across 22,181 items (plugins\cache 33.6 GB
+  dominant; 3,515 auth.json credential copies). Combined with agent_b2:
+  ~46.3 GB and ~3,776 credential copies actionable. Manifests:
+  data\output\scratch_sweep_manifest_dryrun_b2.csv + _rest.csv. -Apply remains
+  owner-gated. Sweeper also hardened this session with a per-worker_home
+  root-level scan (flat-layout homes like the trace canary's were previously a
+  silent coverage gap for root-level files incl. auth.json).
+
+## 2026-08-20 - Campaign shards relocated out of the data/output root (528 files; root CSVs 408 -> 144)
+
+- Moved the GICS and unclassified classification campaign shards --
+  gics_agent_chunk/results (207+207) and unclassified_agent_chunk/results
+  (57+57) -- from the data/output root to data/output/campaign_results/
+  {gics,unclassified}/ (README there). Root file count: 408 -> 144 CSVs,
+  327 -> 63 txt. The shards are deliberate per-worker files (write-contention
+  safety) and resumability inputs (chunk-vs-result number diff = done/pending);
+  they were merged intermediates left at the root, ~65 pct of root clutter.
+- Path constants updated in all five consumers: merge_agent_results.py,
+  generate_agent_chunks.py, gics_quality_gate.py (validate_agent_results
+  default), consolidate_agent_results.py, generate_unclassified_chunks.py
+  (each gains CAMPAIGN_DIR); worker prompt prompts/classify_unclassified_chunk.md
+  output path updated. Inert one-off repair scripts write_gics_074.py /
+  classify_chunk_009.py still reference old root paths (documented, not fixed).
+- BASELINE HANDLED FAITHFULLY: docs/refactoring/baseline_manifest.json entry
+  `path` fields rename-edited for the 528 moved artifacts (snapshot_path,
+  sha256, status untouched; git diff exactly 529 line-pairs). Verified: all
+  264 byte_identical entries hash-match at their new paths, zero drift
+  introduced, zero pre-existing drift found. diff_outputs.py therefore keeps
+  its exact prior semantics -- same bytes compared against same snapshots.
+- Verified post-move: generate_agent_chunks --stats 207/207 done 0 pending;
+  generate_unclassified_chunks --stats 57/57; merge_agent_results --stats
+  207 files / 9,813 rows; consolidate_agent_results --stats 57 files / 2,809
+  rows. The ~10 malformed gics shards (CSV quoting) failing to tokenize are
+  PRE-EXISTING campaign defects the merger has always skipped -- not the move.
+
+## 2026-08-20 - Investigations CUTOVER: docs/investigations/ now canonical; old data/output file frozen
+
+- Canary complete, cutover executed per the owner's go-ahead. The 9 topic files
+  under docs/investigations/ are now CANONICAL and appendable (derived-view
+  banners replaced with append instructions); INDEX.md is rebuilt from them via
+  python scripts/split_investigations.py --reindex.
+- data/output/data_investigation_results.md is now a frozen redirect stub
+  (marker CUTOVER-COMPLETE) pointing agents at docs/investigations/. Full
+  pre-cutover content (61 entries, verified byte-preserved in the split)
+  archived at data/output/data_investigation_results_ARCHIVED_20260820.md --
+  archive kept on disk because data/output is gitignored and the topic files
+  are not yet committed; safe to delete the archive after a commit lands.
+- split_investigations.py regenerate mode now REFUSES when the source carries
+  the CUTOVER-COMPLETE marker (regenerating from the stub/archive would destroy
+  post-cutover appends); verified: regenerate exits 1 with explanation,
+  --reindex works (61 entries across 9 files).
+- STILL PENDING (owner): AGENTS.md "Data Investigations" section still points
+  at the old path -- replacement wording is in the 2026-08-20 split changelog
+  entry; the stub redirects stale-instructed agents in the meantime. Also
+  pending: sweeper -Apply (deletion of ~46.3 GB scratch + ~3,776 auth.json
+  copies) remains owner-gated and is NOT covered by this cutover.
+
+## 2026-08-20 -- Reasoning summaries enabled for fleet workers (model_reasoning_summary = "detailed")
+
+- `scripts/setup_codex_worker_harness.ps1`: generated worker config.toml now sets
+  `model_reasoning_summary = "detailed"` (top-level, ABOVE the first [table] header --
+  TOML scoping puts trailing keys inside the last table and --strict-config then
+  rejects the file; that ordering mistake cost one failed run during verification).
+- Live-verified with one worker (worker_home3 in the canary batch): rollout reasoning
+  items now carry readable `summary_text` parts (e.g. "Deciding classification fix for
+  Apidos CLO" -> "Finalizing exact issuer_name with footnotes") alongside the still-
+  encrypted raw content. Summaries are model-written digests per reasoning burst --
+  headline-length on small no-shell packets -- NOT raw chain-of-thought.
+- Same run was the first live exercise of the committed harvest step (7409f13): traces
+  landed in the batch logs dir with the per-worker prefix, sessions pruned, auth
+  scrubbed; a prior failed run's leftover session was swept up by the reused-home path.
+- Operational note surfaced by the verification: the post-run scrub deletes auth.json
+  after EVERY run including failures, so auth must be re-copied before every manual
+  re-run (fleet dispatchers already copy per-run).
+
+## 2026-08-21 -- Harvest now strips encrypted_content from worker rollout traces
+
+- `scripts/run_codex_worker.ps1`: the trace harvest nulls `"encrypted_content"` in the
+  rollout it writes to -TraceDir. The payload is undecryptable outside OpenAI serving
+  and only ever enabled codex session resume, which is impossible anyway once the
+  rollout is moved out of sessions\ and renamed. Readable summary_text parts are kept.
+- Mechanism: value regex ("encrypted_content"\s*:\s*"[^"]*" -> :null); safe because the
+  payload is fernet base64url (no quotes/backslashes possible inside the string). On
+  any transform error the trace is moved verbatim -- the strip can never lose a trace.
+- Verified: offline stub-codex smoke (blob nulled, summaries kept, non-reasoning lines
+  byte-identical, every line still valid JSON) + read-only dry run against the real
+  2026-08-20 summarytest rollout (66,457 -> 60,293 chars, 9.3% saved, all lines valid,
+  summaries intact). Expect a larger fraction on reasoning-heavy workers.
+
+## 2026-08-21 -- row_id: rebuild-stable content-derived per-row identifier in unified holdings
+
+- `pipeline/unified_holdings.py`: new `_assign_row_ids()` runs as the LAST step of
+  `build_unified_holdings` (after every correction/cache layer, before save). It hashes
+  the drift-resistant natural key from `position_id_registry.compute_natural_keys`
+  (cik|source|report_date|rawid|principal|shares, disambiguated by XBRL dimension path
+  then stable-field ordinal; issuer_name excluded by design) into
+  `row_id = 'ROW-' + md5[:16]` via DuckDB (vectorized, order-pinned).
+- Motivation: `position_id` is a dense enumeration ordinal -- measured 0.00% stable
+  across rebuilds (462,911 joined match-pairs baseline vs current, constant -684
+  shift) and currently all-NULL in production holdings. `row_id` gives B2
+  row_selectors, review bundles, and gates a rebuild-stable row handle.
+- SCHEMA CONTRACT: `row_id` is deliberately NOT in `UNIFIED_COLUMNS` -- that list
+  doubles as the in-flight SQL schema (UNION ALL + classification-stabilization
+  passes) where the column does not exist yet; first attempt put it there and broke
+  the union binder 40 min into a rebuild (no artifacts written). The saved artifact
+  is UNIFIED_COLUMNS + [row_id]; a comment at the list documents this.
+- Semantics: row_id names the row AS PUBLISHED. A correction changing
+  principal/shares changes that row's id. It is a per-quarter row handle, not the
+  cross-quarter chain id (that remains position_id).
+- `scripts/diff_outputs.py`: hardened -- per-entry OSError (e.g. the ACL-denied
+  `data/output/_pytest_cache/` scratch that a sandboxed pytest run created and the
+  baseline manifest captured) is reported as a failure line instead of crashing the
+  walk. That scratch dir needs an elevated one-time delete and exclusion from the
+  next baseline snapshot.
+- Tests: new `tests/test_row_id.py` (7: format, uniqueness, row-order invariance,
+  issuer-name-drift invariance, principal-change sensitivity, dimension-path and lot
+  disambiguation, empty frame). Two exact-schema assertions in
+  `tests/test_unified_holdings.py` updated to UNIFIED_COLUMNS + [row_id] (one now
+  also asserts row_id format+uniqueness on the end-to-end build). Full
+  test_unified_holdings.py: 896 passed. Unified rebuild from cache: 780,726 rows,
+  row_id 100% populated, 100% unique, 100% format-valid; row count identical to
+  pre-change artifact. Semantic diff deltas vs the 2026-07-23 baseline are
+  pre-existing staleness (Q2-2026 filings + live corrections), measured identical
+  before and after this change.
+
+## 2026-08-21 - AGENTS.md investigations cutover ratified; auth.json deny-read ACL live (canary-verified); scratch sweep applied
+
+- OWNER-DIRECTED AGENTS.md edit (Data Investigations section only): now points
+  at docs/investigations/ with the dated-heading + --reindex convention and
+  marks the old data/output path as a frozen stub. This ratifies the
+  2026-08-20 cutover; the protocol exception was explicit owner instruction.
+- CREDENTIAL EXPOSURE FINDING (2026-08-21 audit): worker agents had READ
+  access to their own copied auth.json -- it sat inside BOTH the repo-wide
+  policy read grant (worker homes live in-repo) and the CodexSandboxUsers
+  inherited Modify NTFS ACL; the harness deny-ACL mechanism only covered
+  C:	mp. FIX: run_codex_worker.ps1 now applies an icacls deny-read ACE
+  ('CodexSandboxUsers:(R)') to auth.json* in the worker home before every
+  launch (best-effort; warns if the group is absent).
+- CANARY-VERIFIED (one worker, reused canary_trace_20260820 home): exit 0 +
+  turn.completed (codex authenticates as the OPERATOR, unaffected by the
+  deny), worker shell read attempt -> ACCESS_DENIED (result file), post-run
+  scrub still deletes the denied file (operator retains Full), rollout trace
+  harvested. Residual: recommend rotating the OpenAI credential (historical
+  copies sat sandbox-readable for weeks; no evidence of access -- prudential).
+  Longer-term hardening option: move worker homes OUT of the repo tree to
+  shrink the policy read-grant surface.
+- Scratch sweep -Apply launched over all six agent roots (manifest
+  data/output/scratch_sweep_manifest_APPLY_20260821.csv); ~46.3 GB allowlisted
+  waste + ~3,776 auth.json copies per the dry-runs. Running in background at
+  entry time; completion counts to be recorded when it finishes.
+
+## 2026-08-21 - Q1 2026 quarter-pass hardening: preflight gate, fleet acceptance, wave manifests, re-adjudication loop
+
+Six infrastructure items making the Q1 2026 run correct by construction (each
+maps to a measured Q4 incident; plan approved by owner; commits e9a726f..HEAD).
+
+- WAVE-STAMPED DISPATCH MANIFESTS (ebb62e4): dispatch_preflight writes durable
+  manifest.NNN.json per wave + manifest.json latest pointer (old behavior lost
+  every prior wave -- q4b2exp recorded 2 rows where 126 dispatched);
+  b2_run_metrics aggregates across waves, legacy fallback labeled honestly.
+- RE-ADJUDICATION WORKLIST (af237bc): value-gate refusals that implicate the B1
+  DIAGNOSIS (magnitude_plausible false / rate-signature reason) append to
+  data/output/agent_b2/readjudication_worklist.csv (append-only, deduped on
+  review_id+fix_class); replay_gate opt-in for bulk re-gates; verdict files are
+  never deleted or edited. Preflight warns while non-empty.
+- LEDGER FV ACCOUNTING (1a86f2e): findings ledger rows carry fund_quarter_fv_m
+  (all-engine exposure weight) -- FV-by-lifecycle-state now readable; documented
+  fv_at_risk_m engine sparsity (3 engines only).
+- FLEET ACCEPTANCE, ADVISORY (7f0feac): scripts/fleet_acceptance.py +
+  data/reference/fleet_acceptance_thresholds.json mechanize the 8 pre-declared
+  round-4 criteria (thresholds as data; exit 0/1/2). enforce.* flags OFF for the
+  first fleet; flipping them makes promote_passes require a PASS artifact and
+  the pass resume require the post-promotion replay audit. Retro-proof: q4b2exp
+  FAILs on exactly its documented defects (20 selector noops, 30 equivalence
+  fails, 4 pull dirs, no audit artifact). HARD guard shipped ON: promote_passes
+  refuses to overwrite a live leaf without --allow-overwrite (recorded
+  refused_overwrite, never silent).
+- MACHINE-CHECKED PREFLIGHT STAGE (36d6d61): scripts/pass_preflight.py runs as
+  the FIRST run_quarter_pass stage (exit 1 halts before battery burn) and as a
+  standalone probe (--until preflight). Hard: applier coverage for the
+  actionable pool (the 121/143 lesson), anchor assessability (lists lagging
+  CIKs + exact refresh command, NO network), rule noop/drift hygiene, codex
+  processes. Warn: stale staged leaves, re-adjudication worklist, other python.
+  Q1 2026 PROBE RESULT: READY -- 0 hard fails (anchored 98.55, rules 140/140
+  ok, all fix classes covered), 1 warn: 150 staged leaves/proposals awaiting
+  gate or archive.
+- OPERATOR TOOLING: scripts/refresh_companyfacts.py (the ONLY networked script;
+  operator-invoked; archives stale cache to _archive/<stamp>/ then re-fetches
+  via the 10 req/s EdgarClient; replaces the q1shakedown cache-surgery hack).
+  quarter-pass-operator SKILL.md updated to v2 (machine preflight, fleet
+  acceptance step, mandatory post-promotion replay audit, re-adjudication
+  dispatch step, _pulled_ retirement + --allow-overwrite semantics). READMEs
+  added to the three _pulled_* rule dirs (duplicate 1812554, frame-mismatch
+  1965934, target-gone 1508655); audit is clean 140/140 so no further pulls.
+- ENCODING (uncommitted by design): dispatch_agent_b2_workers.ps1 /
+  dispatch_agent_b_workers.ps1 validate-log redirects now write UTF-8 (were
+  UTF-16 LE); lands with the concurrent trace-harvest session's dispatcher
+  changes after its live-fleet smoke.
+- Tests: +31 across test_agent_b2_preflight (18), test_b2_run_metrics (3, new),
+  test_agent_b2_run_remediation (39), test_findings_ledger (9),
+  test_fleet_acceptance (5, new), test_pass_preflight (16, new),
+  test_run_quarter_pass (14), test_refresh_companyfacts (3, new).
+
+## 2026-08-21 -- data/output/_pytest_cache removed (elevated one-time); excluded from future baselines
+
+- Deleted `data/output/_pytest_cache/` via takeown + icacls /reset + Remove-Item from an
+  elevated shell (7 items, ~1 KB; sandboxed pytest had created it with ACLs no
+  non-elevated shell could touch). Verified a genuine pytest cache (CACHEDIR.TAG layout)
+  before deletion.
+- `scripts/snapshot_outputs.py`: added `_pytest_cache` and pytest's default
+  `.pytest_cache` to EXCLUDE_DIR_NAMES so a recreation can never pollute the manifest.
+- Current `docs/refactoring/baseline_manifest.json` still carries 4 stale
+  `_pytest_cache` entries (with copies under `data/snapshots/baseline/`); they clear at
+  the next owner-gated baseline refresh. Until then `diff_outputs.py` will report those
+  4 as missing-current -- expected, benign.
+
+## 2026-08-21 -- row_id accepted as B2 row_selector key; n_units join in b2_run_metrics
+
+- `pipeline/correction_leaf.py`: `row_id` added to ROW_SELECTOR_KEYS. It now
+  satisfies the selector identity-key requirement (previously issuer_name or
+  bdc_investment_identifier only), and the screen rejects a malformed row_id
+  (must match ROW-<16 hex>) -- a typo'd hash can only select nothing.
+  `_selector_mask` in the appliers needed NO change (generic strip+equality
+  over holdings columns; the frame now carries row_id).
+- `pipeline/review_bundles.py`: bundle `holdings_slice` keep_cols now include
+  `row_id`, so future bundles carry the stable anchor. Existing bundles
+  (pre-2026-08-21) lack it; text selectors remain the fallback there.
+- `scripts/agent_b2/dispatch_preflight.py`: grounded-identifier harvest,
+  match_count verification (schema-aware -- tolerates holdings frames without
+  row_id), grounding block, and the row_selector prompt excerpt now carry/
+  prefer row_id. Closes the selector-noop failure mode (2 refusals in q4b2exp,
+  20 in round 3) at its root: the selector can anchor on an id immune to
+  issuer-text normalization drift.
+- `scripts/b2_run_metrics.py`: new `packet_nunits` section per batch -- joins
+  gate verdicts to source-bundle flag n_units (manifest rows + staged/live/
+  archived leaves -> bundles) and emits per-packet n_units plus pass-rate by
+  bucket. Reproduces the 2026-08-20 finding (q4b2exp: <=1: 14%, 6-25: 33%,
+  26-100: 71%, >100: 93%; unresolved joins reported, not guessed). The three
+  scripts/tmp_* diagnostics from that analysis are deleted.
+- `pipeline/agent_promoted.py` (production-apply gap, found before ship):
+  `apply_promoted_stage2_corrections` runs MID-BUILD, before `_assign_row_ids`,
+  so a promoted row_id selector would error "column missing" in the rebuild
+  while the B3 gate replay (published frame, which HAS row_id) passes --
+  a gate-pass/production-noop divergence. Fix: JIT-materialize row_id on the
+  CIK sub-frame when a leaf selects by it (natural keys group per
+  cik/source/report_date, so sub-frame ids equal published full-frame ids),
+  drop the transient column after the CIK's leaves apply.
+- Tests: +3 correction_leaf (row_id valid alone / malformed rejected / counts
+  as identity key), +2 appliers (row_id selection; no-match is applier-ok,
+  gate-refused), +1 agent_promoted (JIT materialization end-to-end: published
+  id selects the mid-build row, transient column does not leak). Touched
+  suites green: 78 + 27 passed.
+- NOTE: row_id names the row AS PUBLISHED (hash includes principal/shares).
+  A correction that changes those key fields makes the published id drift from
+  the pre-correction id -- the noop-drift audit flags the resulting stale
+  selector; a re-authored leaf must re-copy the current id from its
+  regenerated packet prompt. Bundles built before 2026-08-21 lack row_id in
+  holdings_slice; text selectors remain the fallback there.
+
+## 2026-08-21 -- scratch/ home for operator/agent session artifacts
+
+- New git-ignored `scratch/` directory (README tracked) is the single home for
+  ad-hoc session artifacts: shell redirect logs, one-off plots, kickoff notes.
+  Convention: one subdir per session, `YYYY-MM-DD_<topic>/`.
+- Machine-written fleet/pipeline logs are explicitly out of scope and stay in
+  their existing homes: `data/output/pipeline.log`,
+  `data/output/quarter_pass/<pass_id>/<stage>.log`, agent batch dirs.
+- Relocated the 12 stray root-level `*.log` files + `q1_kickoff.md` into
+  `scratch/2026-07-23_q1shakedown/` and `bundle_nunits_hist.png` into
+  `scratch/2026-08-20_b2_nunits/`. Repo root is now free of session noise.
+- `.gitignore`: `scratch/*` with `!scratch/README.md` carve-out.
+
+## 2026-08-21 -- Round-4 B2 canary fleet (q4b2r4canary): 5 packets, 1 promoted, gates verified live
+
+- Operator canary before the full round-4 re-author fleet (owner asked for 5 agents max,
+  given the volume of recent B2 architecture amendments). Batch `q4b2r4canary`: 5
+  conflict-free packets hand-picked from the 90-packet archived-refusal pool (67 have no
+  staged-leaf collision; all 90 still map to open review-queue findings), spanning 5 fix
+  classes / 5 CIKs / both failure archives. Cohort guard 5/5; pass_preflight READY;
+  uncommitted row_id amendments re-verified green first (76 + 18 targeted tests).
+- Dispatch: 5/5 workers completed, 5/5 leaves passed validate_corrections (authoring
+  validity 100%), zero mechanical failures, zero retries. Trial rebuilds + B3 gates run
+  per packet via run_remediation apply/gate.
+- Gate verdicts: 1 PASS / 4 FAIL, every FAIL with a correct specific mechanism:
+  - 0001287750/all_pik_normalization PASS (1 row, FV delta 0, 14 held-out quarters
+    unregressed) -- PROMOTED to data/overrides/agent_b2_corrections (live store now 35).
+  - 0001838126/unit_rescale REFUSED by the NEW cross-field magnitude predicate, all 3
+    legs (1,273x fund norm; leaf was a whole-quarter FV x1000 at confidence 0.22) and
+    auto-appended to readjudication_worklist.csv (wrong-diagnosis -> B1). First live
+    confirmation the round-4 magnitude gate + re-adjudication hook work end-to-end.
+  - 0001634452/dedup REFUSED: over-deletion (656 rows/$692M for one cited duplicate
+    pair) caught by conservation + delete-to-balance + FV-at-risk.
+  - 0001588272/rate_rescale REFUSED: field sanity (25 post-fix basis_spread out of
+    (0,30]).
+  - 0001812554/column_remap REFUSED: selector no-op.
+- CANARY FINDING 1 (fleet-blocking for row_id benefit): grounded prompts carried ZERO
+  row_ids -- grounding is harvested from source-bundle holdings_slice, and ALL round-4
+  bundles predate the 2026-08-21 review_bundles row_id change. The row_id selector path
+  is inert for the whole round-4 pool unless bundles are regenerated or the harvest
+  backfills row_id from its own holdings match join.
+- CANARY FINDING 2 (selector-noop root cause deepened): the 0001812554 worker followed
+  instructions correctly -- its selector is byte-identical to a grounded identifier the
+  preflight verified at match_count=2 against PUBLISHED holdings -- yet it no-opped on
+  BOTH the trial frame and the gate replay. Blue Owl 2025-12-31 identifiers are
+  pipe-delimited in the published frame but differently formatted in the single-CIK
+  trial rebuild output. Grounding-vs-trial frame divergence is a distinct defect from
+  worker citation-copying; needs a mechanism investigation before the full fleet.
+- CANARY FINDING 3 (tooling gap): fleet_acceptance is NOT_ASSESSABLE for operator-driven
+  batches -- all 7 bars PASS but the evaluator reads apply_gate_log.jsonl, which the
+  `run_remediation gate` CLI does not write. Either the CLI should append the canonical
+  log or the evaluator should also read gate_<cik>.json artifacts.
+- Post-promotion audit: replay_gate --stats-only over the 35-leaf live store: 0 gate
+  FAIL; 1 out-of-band magnitude leg = the already-documented 1674760 shares_held
+  watchlist entry. Artifact: replay_live_stats_q4b2r4canary.json.
+- Hygiene: 4 failed leaves archived to corrections_archive/q4b2r4canary_gate_fail/,
+  promoted staging copy to corrections_archive/promoted_q4b2r4canary/; staging clean for
+  all 5 canary CIKs; worker scratch swept (0 GB orphaned).
+- Queue state: readjudication_worklist.csv has 1 row (0001838126/unit_rescale) -- needs
+  a B1 re-adjudication batch before any further B2 work on that finding. Round-4 pool
+  remaining: 85 archived packets (66 conflict-free) + the 23 staged-leaf collisions to
+  triage. Full-fleet go/no-go: owner decision, informed by findings 1-2 above.
+
+## 2026-08-21 -- Round-4 bundle regeneration (row_id grounding live) + canary finding 2 resolved
+
+- CANARY FINDING 2 RESOLVED as NOT a defect -- and the "trial-vs-published identifier
+  divergence" framing in the earlier entry today was a misread (naive comma-splitting of
+  quoted CSV during triage; a DuckDB column-aware re-check shows production and trial
+  frames byte-identical for Blue Owl 2025-12-31, both pipe-style, selector strict-eq
+  matches 8/2 rows). The 0001812554/column_remap no-op's real mechanism: the applier
+  remaps only rows with a NON-EMPTY from_field, and pik_rate is NULL on all three AI
+  Titan 2025-12-31 rows -- the worker diagnosed a pik_rate->principal displacement that
+  does not exist in the frame (the row's actual defect is an unextracted revolver par,
+  out of column_remap's reach). Selector, applier, and gate all behaved correctly;
+  wrong-diagnosis authoring burned the worker. RECOMMENDATION (not shipped): include
+  current frame field values (pik_rate/principal_amount/interest_rate/fair_value) in the
+  grounded-identifier block so workers can see an empty from_field before authoring.
+  Diagnostics preserved in scratch/2026-08-21_q4b2r4canary/.
+- CANARY FINDING 1 FIXED: regenerated the source bundles for the full round-4 pool (90
+  packets -> 157 review_ids) via a targeted build_review_bundles(review_ids=...) run.
+  All 157 rebuilt at source_artifact completeness; 156/156 holdings slices now carry
+  ROW- ids (the one slice-less bundle is RVQ_REV_9cf98329746d, fund_financials/F16 for
+  0002006758, which has no holdings rows at 2025-12-31 -- text-selector fallback stays
+  for that packet). Originals archived to
+  data/output/review_queue/review_bundles_pre_rowid_20260821/.
+  Operational trap documented: a targeted build_review_bundles run REWRITES
+  review_bundle_manifest.csv with only the selected items, so the regen built into a
+  temp dir and installed only the bundle JSONs; the production manifest is untouched
+  (its sha256 entries for the 157 regenerated bundles are now stale until the next full
+  queue/bundle pass).
+- END-TO-END VERIFIED: a no-reserve dispatch_preflight probe batch over the 5 canary
+  packets now grounds 20 ROW- ids per prompt (was 0), row_id-refined match_counts
+  tighten to 1 row, 5/5 packets dispatchable, zero skips. Probe batch and temp dirs
+  deleted after verification.
+- Round-4 fleet go/no-go inputs updated: row_id grounding is now LIVE for the whole
+  pool; no new failure class exists; remaining pre-fleet items are the B1
+  re-adjudication of 0001838126/unit_rescale (worklist row from the canary), the 23
+  staged-leaf collisions to triage, and the optional grounding field-value enrichment.
+
+### 2026-08-21 -- B2 analyst mode: workers get the source filing + per-CIK holdings CSV
+
+- Shell revived for B2 workers: the 2026-06-26 CreateProcessWithLogonW failure no longer
+  reproduces under the current hardened harness (spike worker read a sentinel file and ran
+  the worker interpreter inside the B2 sandbox; artifacts in scratch/2026-08-21_analyst_spike/).
+- scripts/agent_b2/dispatch_preflight.py: per-packet analyst staging. Stages
+  <batch>/staging/<cik>_holdings.csv (ALL quarters, ALL columns incl row_id; DuckDB slice of
+  the unified holdings parquet, memoized per CIK) and resolves cached filing HTML paths from
+  the source bundles. Manifest rows carry holdings_csv_path / filing_html_paths.
+- Worker prompt rewritten (analyst mode): no-shell block removed; evidence CLI roam commands
+  embedded (overview/tables/grid/roam/totals via scripts/review_agent/evidence_cli.py);
+  re-grounding is mandatory -- every numeric template param must be derived as "filing shows
+  X, extracted shows Y" in the rationale; the leaf must be written with the file-edit tool
+  only (BOM lesson below). Two fossil no-shell-era instructions removed.
+- scripts/dispatch_agent_b2_workers.ps1: intake normalization strips a UTF-8 BOM from worker
+  leaves before validation (2 of 5 canary workers wrote the leaf via PowerShell redirection,
+  which stamps a BOM in PS 5.1; content was valid).
+- Canary rerun (batch q4b2r4an, same 5 packets as q4b2r4canary): 5/5 leaves validate OK.
+  Quality deltas vs the morning no-shell leaves:
+  - 0001838126 unit_rescale: was an ungrounded quarter-wide fair_value x1000 rescale
+    (conf 0.22); now a deliberate no-op (factor 1.0, single row, conf 0.05) after the worker
+    verified extracted FV reconciles with the filing (25.27B, 123Dentist 17,264 thousands ==
+    17,264,000 extracted) and localized the real defect to fund-financials NAV-per-share
+    (1000.0 vs filing 25.22), which the holdings-field template cannot express.
+  - 0001812554 column_remap: re-diagnosed -- pik_rate -> interest_rate for the AAM row
+    (filing Cash 12.00% with blank PIK vs extracted pik_rate 12.0, interest_rate blank),
+    replacing the morning header-inferred pik_rate -> principal_amount guess; verified the
+    other cited rows did NOT need remapping.
+  - 0001588272 rate_rescale: narrowed from quarter-wide basis_spread x0.01 to row-scoped
+    interest_rate x0.1 on the CCS row (filing Fixed+1600 = 16.00% vs extracted 1.6);
+    explicitly excluded the Carestream row after checking its extracted values.
+  - 0001287750 all_pik_normalization: selector upgraded from multi-match issuer text to the
+    stable row_id; rates verified against extracted row values.
+  - 0001634452 dedup: honest confidence drop (0.68 -> 0.42) -- the dedup contract has no
+    row_selector, so the key cannot scope to the two grounded row_ids; documented that other
+    same-term groups may collapse. Template-expressiveness gap to fix before round 4.
+  - All five leaves now select by rebuild-stable row_id where the contract allows (the
+    current holdings frame carries row_id; prompt identifier lists show 1:1 matches).
+- Cost: analyst workers ~280-710K tokens and 14-21 tool calls each (vs ~26-54K tokens and
+  1-3 calls no-shell). Deliberate trade while validating the approach.
+- Tests: tests/test_agent_b2_preflight.py 21 passed (4 new/updated: staging slice, per-CIK
+  staging memoization, analyst prompt content, BOM guidance); focused B2 suite 113 passed.
+  Not run: full pytest suite; B3 gate on the new leaves (operator step, as usual).
+
+### 2026-08-21 -- B2 template expressiveness: selector lists, dedup row_selector, escalation leaf
+
+Trace-audit-driven fixes from the q4b2r4an analyst canary (see prior entry):
+
+- pipeline/correction_leaf.py:
+  - template.row_selector may now be ONE selector object OR a non-empty LIST of selector
+    objects (OR-combined by the applier; per-object rules unchanged). Lets a leaf bind
+    every cited row instead of widening to a whole quarter or fixing one row.
+  - dedup template gains optional row_selector (563-group blast-radius lesson).
+  - New validate_escalation() + ESCALATION_SUFFIX: escalation leaf schema (cik, binding
+    fix_class, mechanism, diagnosis >= 40 chars with filing-vs-extracted evidence,
+    evidence_citations, confidence, optional suggested_fix_class). validate_dir skips
+    *.escalation.json.
+- pipeline/agent_b2_appliers.py: _selector_mask handles selector lists (OR across
+  entries, AND within; any entry error fails the whole selector, no partial
+  application); apply_dedup optional row_selector restricts which rows may be DROPPED
+  (group membership still judged over the whole scoped frame); fails safe when the
+  selector matches nothing.
+- scripts/agent_b2/validate_corrections.py: escalation-aware -- when the correction is
+  missing but <fix_class>.escalation.json exists, validates it and reports ESCALATED
+  (exit 0).
+- scripts/dispatch_agent_b2_workers.ps1: missing-correction check accepts the
+  escalation sibling; BOM intake-strip applies to whichever artifact exists.
+- scripts/agent_b2/run_remediation.py: load_corrections excludes *.escalation.json
+  (diagnoses are never applied).
+- scripts/agent_b2/dispatch_preflight.py: prompt drops the forced low-confidence
+  authoring rule -- a worker whose binding fix_class cannot express the verified defect
+  writes <fix_class>.escalation.json instead (exactly one file either way); contract
+  excerpt documents selector lists; preflight skips packets with a staged escalation
+  (skipped_escalated, in manifest + result counts). Also: evidence-CLI prompt lines now
+  carry the PowerShell call operator (& ...) -- q4b2r4an workers copied the unprefixed
+  line verbatim and every first CLI call failed on quoting.
+- Prompt worked-example embedding (same session, earlier): one PROMOTED leaf of the
+  packet fix_class embedded per prompt (schema-archaeology lesson).
+- Tests: 128 passed across test_correction_leaf.py / test_agent_b2_appliers.py /
+  test_agent_b2_preflight.py / test_agent_b2_run_remediation.py (15 new); wider B2 net
+  59 passed (reviewed_workflow, wrapper_patch, diagnose, b2_run_metrics,
+  agent_promoted). Full suite not run.
+- NOT changed by design (owner instruction): the non-admin-terminal sandbox-helper
+  failures (ShellExecuteExW 1223/UAC) get no code workaround -- dispatch fleets from an
+  elevated operator shell per the quarter-pass-operator flow.
+- Pending decision: source_anchored_value fix_class design (proposed separately).
+
+### 2026-08-21 -- source_anchored_value: general-but-verifiable stage-2 correction class
+
+Approved design implemented (amended with row-fingerprint witnesses, XBRL bridge co-sign,
+parse-health gate). The worker never authors a number: each assertion POINTS at a filing
+cell and deterministic re-parse refuses the leaf on any mismatch.
+
+- pipeline/verdict_leaf.py + pipeline/correction_leaf.py: "source_anchored_value" added to
+  KNOWN_FIX_CLASSES / FIX_CLASS_STAGE (2) / STAGE2_SCOPED_CLASSES / TEMPLATE_REGISTRY.
+  Template = assertions[] (<= 20): {row_selector (object or list), field (unified numeric
+  fields), source {accession_number, table_index, row_index, cell_index, quoted_text,
+  value, unit_multiplier in {1,1000,1000000}; mult must be 1 for rate fields},
+  witnesses >= 2 {cell_index, field != asserted (anti-circular), value}}.
+- NEW pipeline/source_anchor_verify.py: cache-only verifier using the SAME parser as the
+  evidence CLI (html_extract._extract_tables). Four checks per assertion: (1) cited cell
+  parses to exactly source.value + quoted_text present in the row; (2) row fingerprint --
+  all witnesses must match both the parsed row AND the selected position's known-correct
+  extracted values, with the table scale INFERRED from scaled witnesses (one common m in
+  {1,1000,1e6}; a scaled asserted field's declared unit_multiplier must equal the inferred
+  scale -- closes the last worker-controlled degree of freedom); (3) table parse-health
+  heuristic (modal-width deviation; fail closed on mangled parses); (4) XBRL HTML-section
+  bridge co-sign where an audited bridge entry covers the cited row (sparse by design;
+  no coverage recorded, not failed). Fail closed on missing/unparseable filings.
+- pipeline/agent_b2_appliers.py: apply_source_anchored_value (all-or-nothing; sets
+  field = value x multiplier for selector rows; per-assertion audit; real fv_delta when
+  fair_value asserted). Registered in POST_STAGING_APPLIERS.
+- scripts/agent_b2/validate_corrections.py: --verify-source flag runs the verifier at
+  dispatcher intake (SOURCE-VERIFIED line on pass); dispatch_agent_b2_workers.ps1 now
+  passes it. scripts/agent_b2/run_remediation.py: POST_STAGING_FIX_CLASSES includes the
+  class; apply_packet re-verifies every source_anchored_value leaf gate-side (fail
+  closed; refusals recorded in result.source_anchor_refusals, leaf excluded from trial).
+- dispatch_preflight._contract_excerpt: assertions guidance (copy coordinates/values
+  straight from grid output; verify witness values in the holdings CSV).
+- Tests: NEW tests/test_source_anchor_verify.py (13: pass path, fabricated value,
+  wrong quote, wrong-row fingerprint, missing filing, selector no-match, scale
+  cross-check both directions, mangled-parse refusal, numeric normalization) + 2
+  applier tests. Full B2 + schema net: 232 passed. Full suite not run.
+- Operational follow-ups (not code): gold-set calibration of pointer->intent per filer
+  before fleet-wide enablement; start the class on filers whose templates already
+  validate. Packet-builder assignment of the new class is a separate decision.
+
+### 2026-08-21 -- Admin-dispatch UAC spike (PASS) + source_anchored_value live canary (refusal matrix verified)
+
+- TASK 1 (UAC hypothesis test): 3 diagnostic Codex worker runs dispatched from an
+  ELEVATED operator PowerShell (WorkerHome %TEMP%\b2adm, B2-style harness grants:
+  -WriteDirs runroot, -ReadDirs miniconda3, -EnvInherit all, -AllowUserSite; prompt
+  scratch/2026-08-21_admin_spike/spike_prompt.md = 10 trivial shell commands per run).
+  Result: 30/30 shell commands succeeded across the 3 runs; ZERO occurrences of
+  "1223", "1326", "orchestrator_helper_launch_canceled", "ShellExecuteExW", or
+  "CreateProcessWithLogonW" in all stdout + rollout-trace logs (baseline from the
+  non-admin q4b2r4an canary: ~6 such failures across 5 workers). VERDICT: consistent
+  with the UAC hypothesis -- dispatching from an elevated terminal eliminates the
+  transient shell-launch failures. Recommend dispatching B2 analyst fleets from an
+  admin shell.
+- Task 1 operational note (re-learned): run_codex_worker.ps1's post-run waste scrub
+  deletes auth.json from the worker home, so back-to-back runs against a reused
+  WorkerHome must re-copy auth.json before EVERY run (first attempt at runs 2-3
+  401'd in ~15s; succeeded after re-copy). The B2 dispatcher already re-copies per
+  worker; only manual/spike reuse hits this.
+- TASK 2 (source_anchored_value first live canary; verifier only, nothing applied):
+  hand-authored scratch/2026-08-21_admin_spike/sav_canary_0001812554.json for CIK
+  0001812554 / 2025-12-31 / ROW-a7f8a13bfb1589de (AAM Series 1.1 Rail and Domestic
+  Intermodal Feeder, LLC; known defect: extracted pik_rate 12.0 with blank
+  interest_rate vs filing Cash 12.00% with blank PIK). Anchor: accession
+  0001812554-26-000011, table_index 89, row_index 47, cell_index 18 (quoted_text
+  "12.00 %", value 12.0, unit_multiplier 1, field interest_rate); witnesses
+  cell 30 principal_amount 58,702 / cell 37 cost 58,702 / cell 43 fair_value 58,702,
+  each matching extracted 58,702,000 (verifier-inferred table scale 1000).
+- Good leaf verdict (validate_corrections --verify-source, default unified parquet):
+  "SOURCE-VERIFIED 0001812554/cash_rate_extracted_as_pik (1 assertion(s))" then
+  "OK", exit 0.
+- Refusal matrix (each edit made in turn; validator exit 1 with a specific error;
+  leaf restored and re-verified OK after):
+  (a) value 12.0 -> 14.5: "cited cell parses to 12.0, leaf claims 14.5 -- the filing
+      does not contain the asserted value at these coordinates".
+  (b) witness principal 58702 -> 58703: "witness cell parses to 58702.0, leaf claims
+      58703" plus "row fingerprint failed (2/3 witnesses usable, need >= 2 and all
+      passing)".
+  (c) row_selector -> ROW-faeb14c3f5df1849 (Xplor row, no extracted principal):
+      "selected rows carry no extracted principal_amount to witness against" plus
+      row-fingerprint refusal; c-variant against a full-witness wrong row
+      (ROW-17e624b7cd76963b, AAM Series 2.1): "no single table scale in
+      {1, 1000, 1000000} explains the scaled witnesses -- the cited row does not
+      describe the selected position".
+- All four verifier defenses exercised live: cell check (a), witness transcription
+  (b), row fingerprint / scale inference (c). Nothing copied into
+  data/output/agent_b2/corrections/; no apply, no rebuild, no locks or staged leaves
+  touched. Artifacts in scratch/2026-08-21_admin_spike/ (results, stdout, traces).
+
+### 2026-08-21 -- source_anchored_value worker-authored canary: 1 verified leaf + 2 correct escalations (3/3 right calls)
+
+- Dispatched 3 Codex analyst workers (admin shell, B2-style harness, WorkerHomes
+  %TEMP%\b2sav1-3) on 3 known 2025-12-31 defects with fix_class source_anchored_value
+  binding. Prompts + leaves + traces in scratch/2026-08-21_sav_worker_canary/.
+  Canary design: 1 defect expressible by the class, 2 deliberately inexpressible
+  (corrected value exists in no parseable filing cell) to test escalation honesty.
+- Worker 1 (0001812554, AAM Series 1.1 row ROW-a7f8a13bfb1589de): authored a leaf
+  INDEPENDENTLY matching the operator hand-authored ground truth exactly -- anchor
+  t89/r47/cell 18 ("12.00 %", interest_rate 12.0), witnesses cells 30/37/43
+  (principal/cost/fair_value 58,702 vs extracted 58,702,000). Validator:
+  "SOURCE-VERIFIED 0001812554/extraction_gap (1 assertion(s))" then "OK", exit 0.
+- Worker 2 (0001588272, CCS Medical ROW-5fc443b59f9a09ce, extracted interest_rate 1.6
+  vs true 16.00): wrote source_anchored_value.escalation.json -- correctly identified
+  that "Fixed + 1600" is a mixed text cell and 16.0 exists in no parseable cell, so
+  the class cannot express the 10x fix; suggested_fix_class identifier_rate_scale;
+  conf 0.86. Validator: "ESCALATED 0001588272/rate_scale", exit 0.
+- Worker 3 (0001287750, 15484880 Canada Inc senior sub loan ROW-d9cfbfcb882d5425,
+  interest_rate NULL for a PIK-only loan): wrote escalation -- correctly identified
+  that "14.00 % PIK" is unparseable and no standalone 0 cash-rate cell exists, so an
+  inferred zero cannot be source-anchored; suggested_fix_class derived_value; conf
+  0.92. Validator: "ESCALATED 0001287750/extraction_gap", exit 0.
+- Zero fabricated anchors; zero verifier refusals needed. 3/3 workers made the right
+  authoring decision on the first attempt.
+- Cost per worker (turn.completed usage): input 210K/364K/440K tokens (82-89% cached),
+  output 3.3-4.5K tokens, ~24-30 command items each. Wall clock ~4-9 min/worker,
+  3 workers run concurrently.
+- Calibration findings for rollout: (1) PIK rates formatted as mixed text ("14.00 %
+  PIK", filer 0001287750/Ares style) cannot be anchored by this class -- per-filer
+  gold-set calibration should catch this pattern up front; (2) rate-in-identifier
+  filers (0001588272 style, "Fixed + 1600") are likewise out of the class's reach;
+  both escalation diagnoses point at real template-vocabulary gaps
+  (identifier_rate_scale / derived_value are reasonable future class candidates).
+- Nothing promoted, applied, or copied into data/output/agent_b2/corrections/; no
+  rebuild; production store untouched. Full pytest suite not run (no code changed).
+
+### 2026-08-21 -- CCS Medical rate semantics corrected + staged rate_rescale leaf found DEFECTIVE (never applied; do not gate as-is)
+
+- Owner challenge prompted a re-read of the 0001588272 (NexPoint Capital) 2025-12-31
+  10-K. Filing footnote (5) (table 257 row 0), which the CCS Medical row carries,
+  states: "The interest rate on these investments is subject to a base rate of
+  3-Month SOFR, which at December 31, 2025 was 4.27%." Therefore "Fixed + 1600" is
+  base + spread (like Carestream "SOFR + 750"), NOT a fixed 16.00% coupon: all-in
+  rate ~= 4.27 + 16.00 = ~20.27%. The 0.00% cell is a base-rate FLOOR (floating-loan
+  concept), corroborating. Every prior reading of this row as "fixed 16% coupon"
+  (B1 packet framing, the q4b2r4an worker rationale, and today's SAV-canary prompt/
+  escalation) was wrong about the economics. Under the CURRENT pipeline convention
+  (spread-as-rate, cf. Carestream extracted interest_rate 7.5 from "750"), the
+  convention-consistent extracted value is 16.0 with basis_spread 1600; under the
+  DECIDED-but-unmigrated all-in convention (2026-07-12 decision) the target becomes
+  ~20.27 and must be handled by that migration, not a leaf.
+- SEPARATE DEFECT FOUND in the staged (NOT live) leaf
+  data/output/agent_b2/corrections/0001588272/rate_rescale.json: it sets field
+  interest_rate, factor 0.1 on ROW-5fc443b59f9a09ce where extracted interest_rate is
+  1.6. apply_rate_rescale MULTIPLIES by factor -> 1.6 x 0.1 = 0.16, not 16.0; the
+  intended correction required factor 10. The leaf's own rationale states "filing
+  shows 16.00% and extracted shows 1.6" and then derives the inverted factor. Status:
+  staging only, never B3-gated, never promoted, never applied -- no data impact. Do
+  NOT gate/promote it as-is; it needs re-authoring (factor 10 under the current
+  convention, or retirement in favor of a per-CIK identifier-rate-grammar fix that
+  also writes basis_spread 1600 and handles the all-in migration coherently).
+- Status clarification (correcting an overstatement in this session's discussion, not
+  in prior changelog entries): NONE of the three canary-adjacent defects is fixed in
+  built data today. (a) 0001588272 rate_rescale: staging only + defective (above).
+  (b) 0001287750 all_pik_normalization: sits in the LIVE store path
+  (data/overrides/agent_b2_corrections/0001287750/, uncommitted) but the B3 gate was
+  NOT run on it (per the q4b2r4an entry) and no unified rebuild has occurred since --
+  current holdings still show interest_rate NULL on ROW-d9cfbfcb882d5425. GOVERNANCE
+  FLAG: an ungated leaf in the live store WILL apply silently at the next rebuild;
+  operator should either run the gate on it or move it back to staging before any
+  rebuild. (c) 0001812554 AAM: canary leaves live in scratch/ by design; the q4b2r4an
+  column_remap leaf is staging only. Current holdings still carry all three defects,
+  which is why source-reconciliation queues still flag these CIK-quarters: the queue
+  derives from BUILT artifacts and clears only after gate -> promote -> rebuild ->
+  re-reconcile.
+
+### 2026-08-21 -- 0001287750 all_pik leaf: "ungated" claim corrected, NO-OP defect found, re-authored + gated + promoted
+
+- CORRECTION to the earlier entry today ("GOVERNANCE FLAG: an ungated leaf in the live
+  store"): WRONG. The live-store copy of 0001287750/all_pik_normalization.json was
+  legitimately B3-gated (gate_0001287750.json, PASS, q4b2r4canary) and promoted via
+  promote_log.jsonl this morning -- it was the morning canary's 1 promoted leaf. The
+  q4b2r4an "gate not run" note referred to the newer ANALYST leaves in staging.
+- NEW DEFECT FOUND while gating the staging copy: the leaf was a SEMANTIC NO-OP. Both
+  copies set cash_rate 0.0 but omitted set_interest_to_cash, and
+  apply_all_pik_normalization only writes interest_rate when that flag is true. The
+  only actual write was pik_rate 14.000000000000002 -> 14.0 (float-noise). The
+  substantive fix per the leaf's own rationale -- explicit interest_rate 0.0 on the
+  PIK-only 15484880 Canada Inc senior subordinated loan (ROW-d9cfbfcb882d5425), which
+  stops tier-3 filer-median cash-income imputation on a loan with no cash coupon --
+  was never applied. Both gate PASSes (morning + this session's first) were no-op
+  passes: every conservation/value predicate holds trivially when nothing changes.
+  GATE GAP: the B3 gate has no "leaf effect is non-trivial / matches stated intent"
+  predicate; a rows_changed>0 audit with zero substantive delta passes silently.
+- Remediation this session (operator actions, q4b2r4an batch):
+  1. Staging leaf re-authored: added set_interest_to_cash: true (one-boolean change
+     consistent with the leaf's rationale + filing evidence); prior staging copy
+     archived to the batch dir (leaves_pre_setcash_fix_...). validate_corrections OK.
+  2. Trial rebuild re-run (apply q4b2r4an --cik 0001287750 --run, rc 0); trial row now
+     shows interest_rate 0.0 / pik_rate 14.0.
+  3. B3 gate PASS (conservation 7/7 + value gate 6/6, 14 held-out quarters not
+     regressed); verdict at data/output/agent_b2/batch/q4b2r4an/gate_0001287750.json.
+  4. Live no-op copy PULLED to data/overrides/agent_b2_corrections/0001287750/
+     _pulled_noop_setcash_20260821/ (README with mechanism); gated re-authored leaf
+     promoted in its place; promotion logged to the q4b2r4an batch promote_log.jsonl.
+  5. Mandatory post-promotion audit: replay_gate --stats-only over the 36-leaf live
+     store -> 0 gate FAIL; the single out-of-band magnitude leg is the pre-existing
+     0001674760 column_remap shares_held watchlist entry (dev_log10 2.253). Artifact:
+     replay_live_stats_q4b2r4an_setcash.json.
+- Production holdings pick up the fix at the next unified rebuild (not run this
+  session). Queue rows for this packet clear at the next reconcile after that.
+- Follow-ups surfaced: (a) consider a gate predicate for no-op/intent-mismatch leaves
+  (verifier change = user decision, per hard rules; NOT implemented); (b) the q4b2r4an
+  0001588272 rate_rescale staging leaf remains defective (inverted factor) and
+  unrouted -- superseded by the identifier-rate-grammar work (next entry).
+
+### 2026-08-21 -- identifier_rate_grammar added as a routable stage-3 fix class + first proposal leaf (0001588272)
+
+- New fix class `identifier_rate_grammar` (stage 3, rule_track): routes rate-in-
+  identifier dialect defects to the Agent A lane (per-CIK grammar repair + the
+  deterministic A3 gate) instead of the human basket or a per-row value leaf. Never
+  applied to holdings data. Motivated by the sav-canary escalations: worker 2
+  suggested `identifier_rate_scale` for the 0001588272 "Fixed + 1600" defect and had
+  nowhere to route it.
+- Files: pipeline/verdict_leaf.py (KNOWN_FIX_CLASSES), pipeline/correction_leaf.py
+  (FIX_CLASS_STAGE + TEMPLATE_REGISTRY: required dialect_example + target_field
+  (enum = unified REMAP fields), optional numeric observed_value +
+  expected_semantics), scripts/agent_b2/run_remediation.py (RULE_TRACK_FIX_CLASSES).
+  Tests: +6 in tests/test_correction_leaf.py, +1 routing test in
+  tests/test_agent_b2_run_remediation.py; focused suite 112 passed
+  (test_correction_leaf + test_agent_b2_run_remediation + test_verdict_leaf).
+- 0001588272 (NexPoint) grammar state measured per the identifier-grammar skill:
+  grammar + anchors ALREADY exist and the A3 gate is GREEN (58 signature rows, 100%
+  parse-completeness, FV preserved, invariants 100%; bundle rebuilt, none%=10.0).
+  The grammar already extracts "Fixed + 1600" as basis_spread 1600 bps and its note 3
+  already records the twin disagreement. The production defect (interest_rate 1.6 on
+  the CCS row) is the STRUCTURED TWIN value: unified_holdings.py does not consume
+  identifier_rate grammar outputs at all yet -- that integration is part of the
+  pending all-in convention migration (2026-07-12 decision), where the twin-override
+  policy is the open user decision.
+- First instance leaf: data/output/agent_b2/corrections/0001588272/
+  identifier_rate_grammar.json (staging; validate_corrections OK; routes to
+  rule_track end-to-end). Cites both the SOI row and footnote (5) (3M SOFR base
+  4.27% => CCS ~20.27% all-in; 16.0 under current spread-as-rate convention).
+- Hygiene: the defective rate_rescale staging leaf (inverted factor 0.1) MOVED out of
+  the gateable slot to the q4b2r4an batch dir
+  (leaves_defective_inverted_factor_0001588272_rate_rescale.json).
+- Backstop: diff_outputs --semantic run post-tests. All divergences are PRE-EXISTING
+  drift vs the active baseline (production holdings last written 2026-08-20 22:14,
+  before this session; agent_a/proposals swept empty by an earlier session after
+  grammar promotion -- 65 grammars live in data/overrides; plus prior 14/7/11/8/3
+  semantic delta rows in holdings/matches/returns/fund_financials). NO production
+  artifact was modified by this session (verified by mtime). Baseline refresh remains
+  an owner decision per governance.
+
+## 2026-08-22 -- Anchor-based row_id: src_context_id captured, row_id re-derived from source anchor
+
+Implemented per docs/superpowers/plans/2026-08-22-anchor-row-id.md (scoped from
+docs/provenance_columns_scoping.md section 2.4 item 2 plus the 2026-08-22 owner
+decision to replace the row_id hash input).
+
+- What changed (commits 6328a4b, 5704a00, f757b66, b26ef34 on ensemble-fp-experiment):
+  - pipeline/bdc_filings.py: _deduplicate_bdc_holdings publishes the winning
+    row's XBRL contextRef as new bdc_holdings.csv column src_context_id.
+  - pipeline/staging_bdc.py + staging_nport.py + unified_holdings.py:
+    src_context_id staged through to UNIFIED_COLUMNS (nport emits '').
+  - pipeline/unified_holdings.py _assign_row_ids: row_id now hashes the source
+    anchor (source|accession|src_context_id for bdc, |nport_holding_id for
+    nport); ROW-<16hex> format unchanged. New appended column row_id_basis
+    (src_anchor | natural_key). Anchorless rows keep the legacy natural-key
+    hash. row_id is now stable across rebuilds/corrections/parser fixes.
+  - pipeline/main.py: --returns re-save re-derives row_id (fixes latent bug
+    where assign_position_ids' UNIFIED_COLUMNS reorder silently dropped it).
+  - scripts/restamp_row_selectors.py (new): legacy->anchor id migration for
+    correction-leaf row_selectors; fail-loud on ambiguous/unknown ids.
+  - UNCOMMITTED (pre-dirty file, other session's WIP): pipeline/agent_promoted.py
+    JIT drop now removes row_id_basis alongside row_id (2-line edit).
+- Data migration (gates all PASS):
+  - Full cache re-extraction (scripts/rebuild_outputs.py --bdc-holdings):
+    1,184,101 rows from 3,037 filings; values-identical to pre-migration
+    snapshot per accession (counts + FV to the dollar). Two 2026-Q1 accessions
+    (Investcorp US PC BDC II 0001193125-26-224761, Silver Point PC Fund
+    0001193125-26-221014) had lost their bdc_filings_index cache pointers;
+    cached XML verified on disk and index rows repaired, then re-extracted.
+  - Anchor coverage 100%; ZERO duplicate (accession, src_context_id) pairs.
+  - Unified rebuilt twice around restamp: 780,726 rows, values-identical to
+    snapshot (total, per classification, per cik-quarter). Basis split:
+    780,567 src_anchor (99.98%) / 159 natural_key (all correction-added rows
+    without accession -- expected).
+  - Restamp applied to the ONE live leaf citing a row_id
+    (0001287750/all_pik_normalization.json: ROW-d9cfbfcb882d5425 ->
+    ROW-62c19264d44492af); pass-2 audit shows status=ok rows_changed=1.
+  - Pre-migration artifacts preserved: data/snapshots/pre_anchor_rowid_20260822/.
+- Contracts/guardrails:
+  - row_id is a within-build row name pinned to the filing fact context
+    (as-filed claim: amendments mint new ids). NOT for cross-quarter identity;
+    position_id layer untouched. See docs/reference/schemas.md.
+  - New-leaf convention: cite row_id from the published CSV as before; ids no
+    longer drift when corrections change principal/shares.
+- Validation: full suite 4,479 passed / 13 skipped / 2 xfailed (2h23m).
+  diff_outputs --semantic deltas vs official baseline are all PRE-EXISTING
+  staleness (proven: dedicated pre/post gates show this change is
+  values-identical); baseline refresh remains an owner decision.
+- Test counts: +3 dedup context tests (test_bdc_filings: 119), +2 staging
+  passthrough (test_unified_holdings: 898), test_row_id rewritten (11),
+  +7 restamp (test_restamp_row_selectors, new file).
+
+## 2026-08-22 -- source_row_id grounding migrated to src:{accession}:{context_id} anchors
+
+Implemented per docs/superpowers/plans/2026-08-22-source-row-id-anchor.md
+(follow-on to the same-day anchor row_id migration; kills the last positional
+grounding key).
+
+- What changed (commits 85df277, 6a8fa4b, f60921a, 88502b3):
+  - pipeline/source_reconciliation.py: _coerce_source_df mints source_anchor_id
+    (src:{accession}:{context_id}; #k suffix on duplicate contexts, src-ord:{n}
+    fallback, both warned); _coerce_output_df mints output_anchor_id (unified
+    row_id when present, ordinal fallback); _publish_anchor_row_ids swaps the
+    PUBLISHED detail ids at a single post-metrics chokepoint. Internal SQL
+    ordinals (joins, duplicate-rank, tie-breaks) are untouched.
+  - All reconciliation artifacts inherit: detail CSV, per-CIK parquets,
+    source-only detail, residual classification. Grounding frames for the B2
+    missing_position_add gate are now independently re-derivable from the
+    source-facts cache (order-independent).
+  - UNCOMMITTED (pre-dirty, other session's WIP): scripts/agent_b2/
+    dispatch_preflight.py worker prompt now names the src:{...} format.
+  - Out of scope by design: agent_investigate_rules "staging:" source_row_id
+    dialect (separately minted, self-describing); zero live B2 correction
+    leaves cited reconciliation ordinals, so NO restamp was needed.
+- Regeneration + gates (artifacts regenerated via run_bdc_source_reconciliation_cached,
+  logic-hash flip -> full re-run; 1,423,871 detail rows / 1,933 metric rows):
+  - Id formats: 1,423,838 src:-anchored source ids, ZERO src-ord fallbacks,
+    ZERO unexpected; 559,992/559,992 output ids are unified ROW- anchors.
+  - source_only_detail (blocker accounting basis): ZERO group-count changes.
+  - Explained delta 1: CIKs 0001984739 / 0002033382 (2026-03-31) gained source
+    coverage from the same-day filings-index pointer repair and flipped
+    UNDER_REVIEW -> RECONCILED.
+  - Explained delta 2: 8 rows (of 1.42M) flipped matched <->
+    diagnostic_field_mismatch because the full re-extraction reordered
+    byte-identical duplicate rows and ordinal TIE-BREAKS picked different,
+    equally-valid partners (tier swaps exact_identifier <->
+    exact_dimensions_raw; cost diagnostic appears/disappears with the twin
+    chosen). Zero FV/blocker impact. Known residual: matching tie-breaks
+    still use ordinals; RECOMMENDED FOLLOW-UP: tie-break on anchors to make
+    these flips impossible.
+  - Pre-migration artifacts: data/snapshots/pre_srcanchor_20260822/.
+- Validation: full suite 4,488 passed / 13 skipped / 2 xfailed (2h27m).
+  New tests: tests/test_source_recon_anchor_ids.py (9).
+- Next in the provenance chain: docs/superpowers/plans/
+  2026-08-22-provenance-step1-passthroughs.md (six-column step-1 batch,
+  ready to execute).
+
+## 2026-08-23 - Provenance step-1 passthrough columns shipped (e42389d..d2cf99e)
+
+Six provenance columns added to `UNIFIED_COLUMNS` and populated by a single `--unified` rebuild.
+No re-extraction required. Upgrade path: flat tags fold into `src_facts` JSON at the extractor
+migration.
+
+### What shipped (commits e42389d..d2cf99e)
+
+- **e42389d** `provenance step 1: six-column schema batch through staging` -- added
+  `src_transforms`, `cost_source`, `shares_held_source`, `src_conflict_fields`,
+  `src_context_count`, `src_field_overrides` to `UNIFIED_COLUMNS` in
+  `pipeline/unified_holdings.py` and passthrough wiring in `pipeline/staging_bdc.py`.
+- **80e3809** `record rescale-branch events in src_transforms` -- Phase C event recording
+  in `staging_bdc.py` for all rate and pct rescale branches (x100, div100, neg_null).
+- **48ba82b** `guarantee src_transforms is never NULL` -- empty-string initialisation guard.
+- **189195c** `Class-C derivation events in unified CTEs` -- `unified_pik_fixed`,
+  `with_cost`, `with_shares_fix` CTEs in `unified_holdings.py` record transform events and
+  set `cost_source`/`shares_held_source='derived_proxy'`.
+- **93b88a5 + 31192cc** `cover zero-cost proxy firing` -- boundary tests and zero-cost
+  path fix for `cost:cost_proxy_fv` event.
+- **d2cf99e** `bridge overlay records coordinate refs` -- `apply_html_section_bridge_field_overlays`
+  writes `field=bridge:<sha8>:t<T>:r<R>` tokens into `src_field_overrides`.
+
+### Rebuild + gate (2026-08-23, 2445.7s)
+
+- Row count: 780,726 -- identical.
+- FV sum: 7,458,535,136,381.14 vs 7,458,535,136,381.16 (0.02 float rounding only). OK.
+- Per-classification FV: 0 mismatches. OK.
+- Per-CIK+quarter FV: 0 mismatches. OK.
+- Schema: exactly the six expected columns added, none removed. OK.
+- Cost sum delta: +15,806,250.04 (2.2ppm). GATE FAIL -- see ruling below.
+- shares_held sum delta: +247,190.9985 (0.13ppm). GATE FAIL -- see ruling below.
+- src_anchor row_id stability: 4 flips at CIK 0000081955 / 2025-12-31. GATE FAIL -- see ruling.
+
+**CONTROLLER RULING (verbatim):** the deltas are ACCEPTED as ordinal tie-break residual.
+Evidence: all other-workstream files/correction stores predate the snapshot build, so the only
+difference between builds is the six provenance commits; row_id-joined diffs show ZERO stable
+rows changed cost or shares -- every delta rides on row-identity flips among equal-fair-value
+duplicate-context rows (~13 CIK-quarters across 7 CIKs: 0001321741, 0001414932, 0001578348,
+0000081955, 0001655050, 0001496099 et al.); mechanism is DuckDB physical row-order perturbation
+hitting pre-existing order-sensitive tie-breaks in dedup/pick layers; same residual class as the
+8 ordinal flips accepted in the 2026-08-22 anchor-rowid migration. Future hardening (recorded as
+known limitation, not done now): deterministic ORDER BY in tie-break windows.
+
+### Coverage stats (from scratch/2026-08-23_prov_step1/coverage_stats.py)
+
+| Event / metric | Count |
+|---|---|
+| interest_rate:rate_x100 | 357,833 |
+| interest_rate:neg_null | 8 |
+| interest_rate:rate_div100 | 0 |
+| basis_spread:rate_x100 | 395,670 |
+| basis_spread:neg_null | 75 |
+| basis_spread:rate_div100 | 1 |
+| pik_rate:rate_x100 | 45,940 |
+| pik_rate:neg_null | 24 |
+| pik_rate:rate_div100 | 0 |
+| pct_of_net_assets:rate_x100 | 299,629 |
+| pct_of_net_assets:rate_div100 | 0 |
+| pik_rate:pik_boundary_div100 | 14 |
+| cost:cost_proxy_fv | 252,559 |
+| shares_held:pow10_shares | 2,847 |
+| Any src_transforms event | 730,363 (93.6%) |
+| cost_source='derived_proxy' | 252,559 |
+| shares_held_source='derived_proxy' | 2,847 (2026-04 historical reference figure: ~1,902 on the then-current dataset; no shares values moved in this migration -- see gate) |
+| src_context_count > 1 | 103,365 |
+| src_conflict_fields non-empty | 8 |
+| src_field_overrides non-empty | 0 (no bridge overlay hits in this cohort) |
+
+### Full suite
+
+Full suite: 4501 passed, 13 skipped, 2 xfailed, 0 failed in 9101s (2:31:40),
+run with `--durations=50 --durations-min=0.5`; 687 warnings (pre-existing noise
+level). Suite grew 4488 -> 4501 (this migration's new tests).
+
+Semantic diff backstop (`diff_outputs.py --semantic` vs the official post-Phase-6
+baseline): holdings 14 / matches 7 / position_returns 11 / index_returns 8 /
+fund_financials 3 semantic delta rows, plus 1307 divergent artifacts dominated by
+files retired since the baseline was taken (agent_a proposals, pytest cache).
+Attribution: pre-existing accumulated baseline drift (incl. the 2026-08-22 anchor
+migration's accepted 8 ordinal flips) plus this migration's documented tie-break
+flips above. Baseline refresh remains owner-gated per AGENTS.md baseline
+governance and is NOT done here.
+
+### Docs updated
+
+- `docs/reference/schemas.md`: six columns documented, src_transforms event vocabulary v1
+  (all 14 codes, field order, condition, effect), cost_source/shares_held_source enum,
+  src_field_overrides grammar, src_context_count/src_conflict_fields dedup carry-throughs,
+  coverage stats table (full 14-code breakdown), known-limitations section (ordinal residual).
+- `docs/agent_changelog.md`: this entry.
+- `scratch/2026-08-23_prov_step1/coverage_stats.py` + `coverage_stats.log`: read-only DuckDB
+  coverage stats script and its output.

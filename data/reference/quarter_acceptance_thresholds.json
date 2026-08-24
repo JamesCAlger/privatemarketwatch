@@ -1,7 +1,7 @@
 {
-  "version": 1,
-  "calibration": "provisional",
-  "calibration_note": "Set 2026-07-12 from post-Wave-1 observables (one remediation wave of evidence). Provisional ship-bar values, not validated tolerances: recalibrate after Wave 2 (held-CIK re-investigation) and record the basis here. Post-Wave-1 actuals at 2025-12-31: reconcile_rate 78.8, flagged_fv_share 43.99 (the flagged funds are the LARGE funds), verified_fv_share 35.45, source_blocking_fv_share 0.46 -- so the contract currently reads FAIL on FV-share checks; that is the honest state, not a miscalibration. 2026-03-31 is NOT_ASSESSABLE (67/69 funds lack companyfacts anchors).",
+  "version": 2,
+  "calibration": "signed_off",
+  "calibration_note": "v2 signed off 2026-08-20 by the project owner. Basis: Q4 2025 (2025-12-31) is the first quarter through the full remediation cycle; v1 provisional ship-bars were set 2026-07-12 with one wave of evidence and the contract then read FAIL (verified_fv 35.45, flagged 43.99); remediation waves earned PASS 7/7 with actuals reconcile_rate 95.5, flagged_fv_share 4.85, source_blocking 0.164, verified_fv_share 80.5. v2 tightens to bars the Q4 actuals clear with honest headroom: reconcile_rate 70->90 (tolerates ~6 escalated funds of ~66 anchored without incentivizing forced reconciliation), flagged_fv_share 20->10, source_blocking_fv_share 5->1, verified_fv_share 50->70. fund_coverage, rule drift/health, and assessability unchanged. Owner proviso: Q1 2026 (2026-03-31) and Q2 2026 (2026-06-30) passes may be used to recalibrate further; record any v3 basis here. Prior v1 note (2026-07-12): set from post-Wave-1 observables; provisional ship-bar values, not validated tolerances.",
   "assessability": {
     "metric": "conservation.anchored_rate_pct",
     "min": 50.0,
@@ -19,28 +19,28 @@
       "id": "reconcile_rate",
       "metric": "conservation.reconcile_rate_pct",
       "op": ">=",
-      "value": 70.0,
+      "value": 90.0,
       "note": "fv_conservation reconciles / anchored, cohort target quarter"
     },
     {
       "id": "flagged_fv_share",
       "metric": "conservation.flagged_fv_share_pct",
       "op": "<=",
-      "value": 20.0,
+      "value": 10.0,
       "note": "FV of conservation-flagged funds as pct of cohort FV"
     },
     {
       "id": "source_blocking_fv_share",
       "metric": "source_blockers.blocking_fv_share_pct",
       "op": "<=",
-      "value": 5.0,
+      "value": 1.0,
       "note": "source-reconciliation blocking FV as pct of cohort FV"
     },
     {
       "id": "verified_fv_share",
       "metric": "cohort.verified_fv_share_pct",
       "op": ">=",
-      "value": 50.0,
+      "value": 70.0,
       "note": "FV in verified-tier funds as pct of cohort FV"
     },
     {

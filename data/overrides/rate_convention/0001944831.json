@@ -1,0 +1,57 @@
+{
+  "cik": "0001944831",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has a Reference Rate and Spread column and a separate Interest Rate column. When PIK is present, the Reference Rate and Spread cell identifies the PIK portion of the quoted spread, and the Interest Rate column shows the current all-in coupon based on the reference rate plus that full spread. The schedule does not print a separate cash-leg rate column.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investments (1)(7)(8) | Footnotes | Investment Type | Reference Rate and Spread (2) | Interest Rate (2) | Acquisition Date | Maturity Date | Par Amount/Units (1) | Cost (3) | Fair Value | % of Net Assets",
+      "where": "Willow Tree Capital Corporation Consolidated Schedule of Investments as of March 31, 2026 (Unaudited), table 18 row 2"
+    },
+    {
+      "kind": "position",
+      "issuer": "Dentive Capital, LLC",
+      "quote": "Dentive Capital, LLC | (4) | Term Loan | SOFR + 7.25 % ( 4.25 % PIK) | 10.95 %",
+      "printed_total": 10.95,
+      "printed_pik": 4.25,
+      "where": "Willow Tree Capital Corporation Consolidated Schedule of Investments as of March 31, 2026 (Unaudited), table 18 row 29"
+    },
+    {
+      "kind": "position",
+      "issuer": "Dentive Capital, LLC",
+      "quote": "Dentive Capital, LLC | (4) | Delayed Draw Term Loan | SOFR + 7.25 % ( 4.25 % PIK) | 10.95 %",
+      "printed_total": 10.95,
+      "printed_pik": 4.25,
+      "where": "Willow Tree Capital Corporation Consolidated Schedule of Investments as of March 31, 2026 (Unaudited), table 18 row 31"
+    },
+    {
+      "kind": "position",
+      "issuer": "LCM SDC Holdings, LLC",
+      "quote": "LCM SDC Holdings, LLC | (6) | Term Loan | SOFR + 13.25 % PIK | 17.02 %",
+      "printed_total": 17.02,
+      "printed_pik": 13.25,
+      "where": "Willow Tree Capital Corporation Consolidated Schedule of Investments as of March 31, 2026 (Unaudited), table 18 row 38"
+    },
+    {
+      "kind": "position",
+      "issuer": "LCM SDC Holdings, LLC",
+      "quote": "LCM SDC Holdings, LLC | (6) | Term Loan | SOFR + 10.00 % PIK | 13.77 %",
+      "printed_total": 13.77,
+      "printed_pik": 10.0,
+      "where": "Willow Tree Capital Corporation Consolidated Schedule of Investments as of March 31, 2026 (Unaudited), table 19 row 5"
+    },
+    {
+      "kind": "position",
+      "issuer": "Lash Opco, LLC",
+      "quote": "Lash Opco, LLC | (4) | Term Loan | SOFR + 7.00 % ( 2.00 % PIK) | 8.77 %",
+      "printed_total": 8.77,
+      "printed_pik": 2.0,
+      "where": "Willow Tree Capital Corporation Consolidated Schedule of Investments as of March 31, 2026 (Unaudited), table 21 row 7"
+    }
+  ],
+  "rationale": "The printed schedule's Reference Rate and Spread column quotes the full spread and identifies the PIK portion in that same cell, e.g. SOFR + 7.25 % (4.25 % PIK), while the Interest Rate column prints 10.95 %, the current coupon for SOFR plus the full 7.25 % spread. LCM SDC rows similarly print SOFR + 13.25 % PIK beside a 17.02 % Interest Rate and SOFR + 10.00 % PIK beside a 13.77 % Interest Rate, indicating the stated Interest Rate includes the PIK spread rather than excluding it. No separate cash-leg rate column is printed.",
+  "confidence": 0.9,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 5
+}

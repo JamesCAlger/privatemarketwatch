@@ -4,7 +4,7 @@
   "anchors": [
     {
       "label": "SHORTTERM",
-      "regex": "\\bShort-term Investments\\b"
+      "regex": "\\b(?:Short-term Investments|Cash Equivalents)\\b"
     },
     {
       "label": "DEBT",
@@ -24,11 +24,11 @@
     },
     {
       "label": "PREFERRED",
-      "regex": "\\bPreferred (?:Stock|Unit)\\b"
+      "regex": "\\bPreferred (?:Stock|Unit|Units|Equity|membership Interests)\\b"
     },
     {
       "label": "COMMON",
-      "regex": "\\bCommon (?:Stock|Unit)?\\b|\\bClass A Common\\b"
+      "regex": "\\bCommon (?:Stock|Unit|Units|membership Interests)?\\b|\\bClass [A-Z] Common\\b"
     }
   ]
 }

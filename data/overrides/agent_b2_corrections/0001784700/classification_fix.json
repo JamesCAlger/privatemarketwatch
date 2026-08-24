@@ -1,0 +1,41 @@
+{
+  "cik": "0001784700",
+  "mechanism": "classification_lookthrough",
+  "fix_class": "classification_fix",
+  "template": {
+    "field": "exposure_type",
+    "value": "Senior Secured First Lien Loans"
+  },
+  "source_review_ids": [
+    "RVQ_REV_04fc65bef4c2"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 42,
+      "row_index": 2,
+      "quoted_text": "Non-Controlled/Non-Affiliated Investments:"
+    },
+    {
+      "table_index": 42,
+      "row_index": 3,
+      "quoted_text": "Senior Secured First Lien Loans"
+    },
+    {
+      "table_index": 42,
+      "row_index": 4,
+      "quoted_text": "Aerospace & Defense"
+    },
+    {
+      "table_index": 56,
+      "row_index": 30,
+      "quoted_text": "Total Investments, December 31, 2025 | $ 874,196 | $ 849,354 | 221.43 %"
+    }
+  ],
+  "confidence": 0.69,
+  "rationale": "The cited filing hierarchy places the affected investment rows under Non-Controlled/Non-Affiliated Investments and the Senior Secured First Lien Loans heading, with Aerospace & Defense as the industry grouping. For the requested classification_fix mechanism, the bounded correction is to look through the heading and set the unified holdings exposure_type to Senior Secured First Lien Loans. No row_selector is included because the cited evidence rows are section headings and a total row, not issuer-level holding rows with an exact issuer_name or bdc_investment_identifier permitted by the template contract.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

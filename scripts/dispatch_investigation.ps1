@@ -98,7 +98,8 @@ for ($i = 1; $i -le $MaxIter; $i++) {
   # readable after the fact); show only the tail.
   $log = Join-Path $logDir "iter$i.trace.jsonl"
   Write-Host "[iter $i] running Codex (trace -> $log)"
-  & $runner -PromptPath $promptPath -WorkerHome $workerHome -WorkerRunroot $workerRunroot -NoSetup *> $log
+  & $runner -PromptPath $promptPath -WorkerHome $workerHome -WorkerRunroot $workerRunroot -NoSetup `
+    -TraceDir $logDir -TracePrefix "iter${i}__" *> $log
   $workerExit = $LASTEXITCODE
   Write-Host "---- iter $i trace tail ----"
   Get-Content $log -Tail 8

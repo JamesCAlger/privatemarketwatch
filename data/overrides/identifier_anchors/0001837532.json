@@ -11,7 +11,7 @@
     },
     {
       "label": "SECDEBT",
-      "regex": "secured debt|term loan|delayed draw term loan|revolver|senior secured|first lien|second lien"
+      "regex": "secured debt|term loan|delayed draw term loan|revolver|senior secured|first lien|second lien|corporate bond"
     },
     {
       "label": "SUBORD",
@@ -27,15 +27,15 @@
     },
     {
       "label": "CATEGORY",
-      "regex": "^(Aerospace & Defense|Asset Backed Securities|Auto Components|Automobile Components|Biotechnology|Building Products|Capital Markets|Chemicals|Commercial Services & Supplies|Communications Equipment|Consumer Finance|Diversified Consumer Services|Diversified Financial Services|Diversified Telecommunication Services|Electronic Equipment, Instruments & Components|Energy Equipment & Services|Food Products|Health Care Equipment & Supplies|Health Care Providers & Services|Health Care Technology|Hotels, Restaurants & Leisure|Household Durables|Household Products|Insurance|Internet & Direct Marketing Retail|IT Services|Life Sciences Tools & Services|Machinery|Media|Metals & Mining|Oil, Gas & Consumable Fuels|Pharmaceuticals|Professional Services|Real Estate Management & Development|Road & Rail|Software|Specialty Retail|Technology Hardware, Storage & Peripherals|Textiles, Apparel & Luxury Goods|Trading Companies & Distributors)(\\s+.+)?$"
+      "regex": "^(Aerospace & Defense|Asset Backed Securities|Auto Components|Automobile Components|Biotechnology|Building Products|Capital Markets|Chemicals|Commercial Services & Supplies|Communications Equipment|Construction & Engineering|Consumer Finance|Containers & Packaging|Diversified Consumer Services|Diversified Financial Services|Diversified Telecommunication Services|Electric Utilities|Electrical Equipment|Electronic Equipment, Instruments & Components|Energy Equipment & Services|Entertainment|Equity Real Estate Investment Trusts \\(REITs\\)|Financial Services|Financing|Food & Staples Retailing|Food Products|Health Care Equipment & Supplies|Health Care Providers & Services|Health Care Technology|Hotels, Restaurants & Leisure|Household Durables|Household Products|Insurance|Internet & Direct Marketing Retail|IT Services|Life Sciences Tools & Services|Machinery|Media|Metals & Mining|Oil, Gas & Consumable Fuels|Pharmaceuticals|Professional Services|Real Estate Management & Development|Road & Rail|Software|Specialty Retail|Technology Hardware, Storage & Peripherals|Textiles, Apparel & Luxury Goods|Trading Companies & Distributors)(\\s+.+)?$"
     },
     {
       "label": "REFRATE",
-      "regex": "reference rate|\\bsofr\\b|\\bsonia\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|\\bS\\s*\\+\\s*[0-9]"
+      "regex": "reference rate|\\bsofr\\b|\\bsonia\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|\\bbbsw\\b|\\b(?:S|SF|SOFR|SONIA|L|LIBOR|P|PRIME|E|EURIBOR|BBSW)\\s*\\+\\s*[0-9]"
     },
     {
       "label": "RATE",
-      "regex": "interest rate|[0-9]+\\.?[0-9]*\\s*%|\\b(?:S|SF|SOFR|SONIA|L|LIBOR|P|PRIME|E|EURIBOR)\\s*\\+\\s*[0-9]{2,4}\\b"
+      "regex": "interest rate|[0-9]+\\.?[0-9]*\\s*%|\\b(?:S|SF|SOFR|SONIA|L|LIBOR|P|PRIME|E|EURIBOR|BBSW)\\s*\\+\\s*[0-9]{2,4}\\b"
     },
     {
       "label": "MAT",

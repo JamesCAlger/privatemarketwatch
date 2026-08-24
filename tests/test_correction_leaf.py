@@ -30,6 +30,7 @@ def test_valid_dedup_correction():
 def test_valid_rate_rescale_with_factor():
     rep = cl.validate_correction(_corr(
         mechanism="rate_scale", fix_class="rate_rescale",
+        scope={"quarters": ["2025-12-31"]},
         template={"field": "interest_rate", "factor": 0.1,
                   "row_selector": {"issuer_name": "InFarm Technologies Limited"}}))
     assert rep.ok, rep.errors
@@ -38,6 +39,7 @@ def test_valid_rate_rescale_with_factor():
 def test_valid_all_pik_normalization():
     rep = cl.validate_correction(_corr(
         mechanism="genuine_value_defect", fix_class="all_pik_normalization",
+        scope={"quarters": ["2025-12-31"]},
         template={"row_selector": {"issuer_name": "WDE TorcSill"}, "cash_rate": 0.0, "pik_rate": 25.75}))
     assert rep.ok, rep.errors
 
@@ -138,14 +140,24 @@ def test_stage_for_helper():
 
 
 def test_missing_position_add_validates_positions():
+    # 2026-08-13: positions REQUIRE grounding (source_row_id + bdc_dimensions_raw +
+    # report_date) -- anti-fabrication parity with agent_rule row_add.
     ok = cl.validate_correction(_corr(
         mechanism="extraction_gap", fix_class="missing_position_add",
-        template={"positions": [{"issuer_name": "Acme Term Loan", "fair_value": 1000.0}]}))
+        template={"positions": [{"issuer_name": "Acme Term Loan", "fair_value": 1000.0,
+                                 "report_date": "2025-12-31", "source_row_id": "SRC-1",
+                                 "bdc_dimensions_raw": "investmentidentifieraxis=Acme"}]}))
     assert ok.ok, ok.errors
     bad = cl.validate_correction(_corr(
         mechanism="extraction_gap", fix_class="missing_position_add",
         template={"positions": [{"fair_value": 1000.0}]}))  # no issuer_name
     assert not bad.ok
+    ungrounded = cl.validate_correction(_corr(
+        mechanism="extraction_gap", fix_class="missing_position_add",
+        template={"positions": [{"issuer_name": "Acme Term Loan", "fair_value": 1000.0,
+                                 "report_date": "2025-12-31"}]}))  # no source_row_id
+    assert not ungrounded.ok
+    assert any("source_row_id" in e for e in ungrounded.errors)
 
 
 def test_bad_cik_rejected():
@@ -174,3 +186,18 @@ def test_validate_dir(tmp_path):
     assert summary["n_files"] == 2
     assert summary["n_valid"] == 1
     assert not summary["ok"]
+
+
+def test_stage2_requires_explicit_quarter_scope():
+    # 2026-08-13 blast-radius lesson: unscoped value fixes rewrote correct history.
+    base = dict(mechanism="rate_scale_error", fix_class="rate_rescale",
+                template={"field": "interest_rate", "factor": 100,
+                          "row_selector": {"issuer_name": "Alpha Corp"}})
+    no_scope = cl.validate_correction(_corr(**base))
+    assert not no_scope.ok
+    assert any("scope.quarters" in e for e in no_scope.errors)
+    with_scope = cl.validate_correction(_corr(**base, scope={"quarters": ["2025-12-31"]}))
+    assert with_scope.ok, with_scope.errors
+    all_scope = cl.validate_correction(_corr(**base, scope={"quarters": ["all"]}))
+    assert not all_scope.ok
+    assert any("explicit YYYY-MM-DD" in e for e in all_scope.errors)

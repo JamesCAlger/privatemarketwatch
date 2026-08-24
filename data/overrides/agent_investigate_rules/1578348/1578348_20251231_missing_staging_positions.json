@@ -1,0 +1,83 @@
+{
+  "cik": "1578348",
+  "rule_id": "1578348_20251231_missing_staging_positions",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 978270.0,
+      "cost": 1116853.0,
+      "principal_amount": 1159774.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Term Loan, Interest Rate 17.00% PIK, Maturity Date 12/19/2026",
+      "issuer_name": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Term Loan",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Term Loan, Interest Rate 17.00% PIK, Maturity Date 12/19/2026",
+      "source_row_id": "staging:period=2025-12-31;dimensions_raw=investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Term Loan, Interest Rate 17.00% PIK, Maturity Date 12/19/2026"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 825000.0,
+      "cost": 500000.0,
+      "shares_held": 500000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Professional Services, Victors CCC Aggregator LP - Equity Interest, Initial Acquisition Date 5/27/2022",
+      "issuer_name": "Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Professional Services, Victors CCC Aggregator LP",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Professional Services, Victors CCC Aggregator LP - Equity Interest, Initial Acquisition Date 5/27/2022",
+      "source_row_id": "staging:period=2025-12-31;dimensions_raw=investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Professional Services, Victors CCC Aggregator LP - Equity Interest, Initial Acquisition Date 5/27/2022"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 747080.0,
+      "cost": 876340.0,
+      "principal_amount": 945001.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Exit Term Loan, Interest Rate 10.00% PIK, Maturity Date 6/18/2027",
+      "issuer_name": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Exit Term Loan",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Exit Term Loan, Interest Rate 10.00% PIK, Maturity Date 6/18/2027",
+      "source_row_id": "staging:period=2025-12-31;dimensions_raw=investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Senior Secured First Lien Debt Investments, Automobile Components, Techniplas Foreign Holdco LP Exit Term Loan, Interest Rate 10.00% PIK, Maturity Date 6/18/2027"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 75644.0,
+      "cost": 46169.0,
+      "shares_held": 2989254.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP - Class C Preferred Units, Initial Acquisition Date 12/5/2024",
+      "issuer_name": "Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP - Class C Preferred Units, Initial Acquisition Date 12/5/2024",
+      "source_row_id": "staging:period=2025-12-31;dimensions_raw=investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP - Class C Preferred Units, Initial Acquisition Date 12/5/2024"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 8092.0,
+      "cost": 14336791.0,
+      "shares_held": 879559.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP - Equity Interest, Initial Acquisition Date 6/19/2020",
+      "issuer_name": "Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP",
+      "bdc_investment_identifier": "Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP - Equity Interest, Initial Acquisition Date 6/19/2020",
+      "source_row_id": "staging:period=2025-12-31;dimensions_raw=investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments, Equity, Warrants and Other Investments, Automobile Components, Techniplas Foreign Holdco LP - Equity Interest, Initial Acquisition Date 6/19/2020"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "A staging-to-holdings anti-join for period 2025-12-31 finds unique current-period rows absent from holdings for Techniplas Foreign Holdco LP and Victors CCC Aggregator LP with fair values 978270, 825000, 747080, 75644, and 8092."
+    },
+    {
+      "source": "query",
+      "quote": "The five missing staging positions sum to 2634086, exactly the underage remaining after the affiliated-axis dedup rule."
+    }
+  ],
+  "rationale": "After removing duplicated affiliated rows, holdings are short by the exact fair value of five real current-period staging positions that did not reach holdings. The rows are added from staging with their original dimensions so they are counted as source-backed investments.",
+  "confidence": 0.91,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 5,
+      "fv": 2634086.0,
+      "residual_before": -2634086.0,
+      "residual_after": 0.0
+    }
+  }
+}

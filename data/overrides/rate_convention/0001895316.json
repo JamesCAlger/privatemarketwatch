@@ -1,0 +1,59 @@
+{
+  "cik": "0001895316",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has a spread column headed 'Spread Above Reference Rate (4)' and a single rate column headed 'Interest Rate (4)'. The printed interest-rate figure is the cash/current non-PIK leg when a separate parenthetical PIK component is shown; when the whole rate is paid in kind, the rate itself is printed with 'PIK'. Thus PIK is quoted separately or appended, not folded into an all-in stated rate.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Spread Above Reference Rate (4) | Interest Rate (4)",
+      "where": "Schedule of Investments, March 31, 2026, tables 11-12, header rows 1-3"
+    },
+    {
+      "kind": "footnote",
+      "quote": "For each such investment, the Company has provided the spread over P and SOFR and the current contractual interest rate in effect at March 31, 2026.",
+      "where": "Schedule of Investments, March 31, 2026, footnote (4)"
+    },
+    {
+      "kind": "footnote",
+      "quote": "Cost includes accrual of interest income paid in-kind (\"PIK\"). See Note 2 \"Summary of Significant Accounting Policies.",
+      "where": "Schedule of Investments, March 31, 2026, footnote (11)"
+    },
+    {
+      "kind": "position",
+      "issuer": "ESN Venture Holdings, LLC",
+      "quote": "Senior Secured First Lien Term Loan | 3M | S + | 2.88 | % | 6.57 | % ( 3.38 % PIK)",
+      "printed_cash": 6.57,
+      "printed_pik": 3.38
+    },
+    {
+      "kind": "position",
+      "issuer": "Shiftkey, LLC",
+      "quote": "Senior Secured First Lien Term Loan | 3M | S + | 5.75 | % | 9.71 | % ( 0.50 % PIK)",
+      "printed_cash": 9.71,
+      "printed_pik": 0.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Contract Datascan, LP",
+      "quote": "Senior Secured First Lien Term Loan | 3M | S + | 4.00 | % | 7.77 | % PIK",
+      "printed_pik": 7.77
+    },
+    {
+      "kind": "position",
+      "issuer": "Subsea Global Solutions, LLC",
+      "quote": "Senior Secured Term Loan | 6M | S + | 7.00 | % | 10.60 | % PIK",
+      "printed_pik": 10.6
+    },
+    {
+      "kind": "position",
+      "issuer": "Legacy Restoration LLC",
+      "quote": "Senior Secured Term Loan | 3M | S + | 6.25 | % | 9.95 | % PIK",
+      "printed_pik": 9.95
+    }
+  ],
+  "rationale": "The filing's schedule does not disclose an all-in coupon convention. It presents the reference-rate spread and the current contractual interest rate in separate columns, and PIK appears as an appended or parenthetical component in the printed rate cell. Rows such as ESN Venture Holdings and Shiftkey print a base/current rate followed by a separate PIK amount in parentheses, while rows such as Contract Datascan, Subsea Global Solutions, and Legacy Restoration mark the stated rate as PIK. This is a cash-leg/additive presentation rather than a single all-in rate.",
+  "confidence": 0.9,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 1
+}

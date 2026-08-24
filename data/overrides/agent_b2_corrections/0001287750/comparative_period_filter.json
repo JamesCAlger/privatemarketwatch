@@ -1,0 +1,30 @@
+{
+  "cik": "0001287750",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_df8f4191a98f"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 190,
+      "row_index": 5,
+      "quoted_text": ""
+    },
+    {
+      "table_index": 208,
+      "row_index": 18,
+      "quoted_text": ""
+    },
+    {
+      "table_index": 138,
+      "row_index": 32,
+      "quoted_text": ""
+    }
+  ],
+  "confidence": 0.72,
+  "rationale": "B1 adjudicated a comparative-period leak affecting the 2025-12-31 quarter. The bounded correction applies the comparative_period_filter template for that report date only, using the localized cited rows as evidence and avoiding any row-specific deletion or broader mechanism change."
+}

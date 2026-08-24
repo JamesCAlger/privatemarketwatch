@@ -15,7 +15,8 @@
       "total investments",
       "total debt investments",
       "total equity investments",
-      "structured credit"
+      "structured credit",
+      "total"
     ]
   },
   "staging": {
@@ -140,7 +141,23 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
-  }
+  },
+  "b2_provenance": [
+    {
+      "fix_class": "subtotal_filter",
+      "patterns_added": [
+        "total"
+      ],
+      "source_review_ids": [
+        "RVQ_REV_d15b22c15a27"
+      ],
+      "confidence": 0.78,
+      "promoted_gate": {
+        "mechanism": "subtotal_filter",
+        "verdict": "PASS"
+      }
+    }
+  ]
 }

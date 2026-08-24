@@ -1,0 +1,64 @@
+{
+  "cik": "0001959568",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "shares_held",
+    "to_field": "principal_amount"
+  },
+  "source_review_ids": [
+    "RVQ_REV_17aaa51ea52d",
+    "RVQ_REV_228b2eeb8d47",
+    "RVQ_REV_6c1e8b24f7ce",
+    "RVQ_REV_a5e9ae2a8a00"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Term Loan | S + 4.50 % | 11/29/2030 | cost $7,874 | fair value $7,873"
+    },
+    {
+      "table_index": 32,
+      "row_index": 8,
+      "quoted_text": "PPW Aero Buyer, Inc. | First Lien Term Loan | S + 5.00 % | 9/30/2031 | cost $907 | fair value $909"
+    },
+    {
+      "table_index": 32,
+      "row_index": 11,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | cost $4,970 | fair value $5,017"
+    },
+    {
+      "table_index": 32,
+      "row_index": 11,
+      "quoted_text": "Titan BW Borrower L.P. | First Lien Term Loan | S + 5.38 % (includes 2.88 % PIK) | 7/26/2032 | 5,017 | 4,970 | 5,017 | 9"
+    },
+    {
+      "table_index": 34,
+      "row_index": 28,
+      "quoted_text": "Spruce Bidco II Inc. | First Lien Term Loan | C + 4.75 % | 1/30/2032 | CAD 194 | 132 | 141 | 11"
+    },
+    {
+      "table_index": 34,
+      "row_index": 30,
+      "quoted_text": "Spruce Bidco II Inc. | First Lien Term Loan | T + 5.00 % | 1/30/2032 | JPY 20,745 | 132 | 132 | 17"
+    },
+    {
+      "table_index": 32,
+      "row_index": 5,
+      "quoted_text": "GB Eagle Buyer, Inc. | First Lien Term Loan | S + 4.50 % | 11/29/2030 | $ | 7,952 | $ | 7,874 | $ | 7,873 | 9"
+    },
+    {
+      "table_index": 32,
+      "row_index": 21,
+      "quoted_text": "Seko Global Logistics Network, LLC | First Lien Term Loan, Last-out | S + 7.00 % (includes 5.00 % PIK) | 5/27/2030 | 1,714 | 1,633 | 1,714 | 9"
+    }
+  ],
+  "confidence": 0.72,
+  "rationale": "The cited debt holdings show a principal or par amount immediately before cost and fair value, including examples with currency-denominated principal amounts and separate cost and fair value values. This bounded column remap treats amounts extracted into shares_held for debt rows as principal_amount so the following cost and fair_value columns can remain aligned to the unified holdings schema. Residual risk remains because the contract allows only one equality row_selector or a global remap, while the evidence spans multiple issuers in the same quarter.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "cik": "0002043759",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The debt schedule has a single column headed Interest Rate (d). For PIK loans, the printed rate text gives the cash/base-rate spread first and then appends a separate PIK percentage, e.g. SOFR + 8.0 %, 1.0 % PIK. The stated SOFR/PRIME spread is therefore the cash leg, with PIK quoted separately on top.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investments (a) | Type of Investment (b) | Interest Rate (d) | Maturity Date | Principal Amount (e) | Cost | Fair Value (f) | % of Net Assets",
+      "where": "Schedule of Investments, Debt Investments, table 11 row 1; repeated on continuation tables 12 and 13"
+    },
+    {
+      "kind": "position",
+      "issuer": "Pensa Systems Inc.",
+      "quote": "Pensa Systems Inc. | First lien senior secured term loan | SOFR + 8.0 %, 1.0 % PIK | 12/11/2028",
+      "printed_pik": 1.0,
+      "printed_cash": 8.0
+    },
+    {
+      "kind": "position",
+      "issuer": "CoreX, Inc.",
+      "quote": "CoreX, Inc. | First lien senior secured term loan | SOFR + 7.5 %, 1.5% PIK | 12/19/2029",
+      "printed_pik": 1.5,
+      "printed_cash": 7.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Beach House Group Global LLC",
+      "quote": "Beach House Group Global LLC | First lien senior secured term loan | SOFR + 8.25 %, 1.75 % PIK | 7/28/2027",
+      "printed_pik": 1.75,
+      "printed_cash": 8.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Tulip.IO, Inc.",
+      "quote": "Tulip.IO, Inc. (i)(k) | First lien senior secured term loan | PRIME + 4.0 %, 2.0 % PIK | 11/4/2028",
+      "printed_pik": 2.0,
+      "printed_cash": 4.0
+    }
+  ],
+  "rationale": "The filing does not present separate Cash and PIK columns, but its single Interest Rate column prints PIK as a separate appended component after the cash/base spread across multiple current-quarter debt rows. This matches the CASH LEG additive quote convention: the stated SOFR or PRIME spread excludes the PIK percentage.",
+  "confidence": 0.95,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

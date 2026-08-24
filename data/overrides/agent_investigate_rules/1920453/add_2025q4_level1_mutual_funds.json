@@ -1,0 +1,65 @@
+{
+  "cik": "1920453",
+  "rule_id": "add_2025q4_level1_mutual_funds",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "State Street Institutional Treasury Plus Money Market Fund",
+      "instrument_description": "Investor Class Units",
+      "bdc_investment_identifier": "Investments -- non-controlled/ non-affiliate Money Market Mutual Funds Mutual Funds State Street Institutional Treasury Plus Money Market Fund - 3.66% Investor Class Units",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments -- non-controlled/ non-affiliate Money Market Mutual Funds Mutual Funds State Street Institutional Treasury Plus Money Market Fund - 3.66% Investor Class Units",
+      "fair_value": 13143788.0,
+      "cost": 13143788.0,
+      "principal_amount": 13143788.0,
+      "pct_of_net_assets": 1.03,
+      "source_row_id": "filing_table_64_row_22"
+    },
+    {
+      "report_date": "2025-12-31",
+      "issuer_name": "Fidelity Floating Rate Central Fund",
+      "instrument_description": "Mutual Fund",
+      "bdc_investment_identifier": "Investments -- non-controlled/ affiliate Fixed Income Mutual Funds Mutual Funds Fidelity Floating Rate Central Fund Mutual Fund",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments -- non-controlled/ affiliate Fixed Income Mutual Funds Mutual Funds Fidelity Floating Rate Central Fund Mutual Fund",
+      "fair_value": 178106038.0,
+      "cost": 179607284.0,
+      "principal_amount": 1863034.0,
+      "pct_of_net_assets": 13.96,
+      "source_row_id": "filing_table_65_row_2"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "fv_conservation 2025-12-31: value_sum=2101364499.0, anchor_value=2292614325.0, residual_pct=-8.342; shortfall is 191249826.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 93 row 11: Total Investments | $ | 191,249,826 | $ | 80,534,379 | $ | 2,020,830,120 | $ | 2,292,614,325. The Level 1 total equals the extracted shortfall."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 64 row 22: State Street Institutional Treasury Plus Money Market Fund - 3.66 % ... Cost $13,143,788; Fair Value $13,143,788. Table 65 row 2: Fidelity Floating Rate Central Fund ... Cost $179,607,284; Fair Value $178,106,038."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, staging query for dimensions containing fidelity, state street, or mutual fund returned row_count=0, while prior quarters contain mutual-fund staging rows; the current extractor dropped these real positions before holdings."
+    }
+  ],
+  "rationale": "The filing's grand total includes two Level 1 mutual-fund investments. The extracted holdings total equals the filing total less the exact Level 1 amount, and the two Level 1 line items are absent from holdings and staging for 2025-12-31. These are real investment positions, so the matching defect is an under-count that should be corrected by adding the dropped positions, not by deleting or rescaling existing holdings.",
+  "confidence": 0.94,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 2,
+      "fv": 191249826.0,
+      "residual_before": -191249826.0,
+      "residual_after": 0.0
+    }
+  }
+}

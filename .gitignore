@@ -60,6 +60,12 @@ agent_tmp/
 _tmp_*
 tmp_*
 
+# Operator/agent session scratch (ad-hoc redirect logs, one-off plots, session
+# notes). See scratch/README.md. Fleet/pipeline machine logs do NOT go here --
+# they live under data/output/ (pipeline.log, quarter_pass/<id>/, agent batch dirs).
+scratch/*
+!scratch/README.md
+
 # Loose scratch analysis / logs / one-off wrapper dumps
 err.txt
 roam2.txt

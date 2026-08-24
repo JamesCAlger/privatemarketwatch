@@ -1,0 +1,25 @@
+{
+  "cik": "0001925309",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_fdd01089f54e"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 40,
+      "row_index": 40,
+      "quoted_text": "Total Investments | $ | 7,892,866 | $ | 8,108,654 | 194.4 | %"
+    },
+    {
+      "table_index": 44,
+      "row_index": 46,
+      "quoted_text": "Total Investments | $ | 7,079,994 | $ | 7,244,282 | 179.5 | %"
+    }
+  ],
+  "confidence": 0.86,
+  "rationale": "B1 localized two Total Investments rows in the 2025-12-31 packet where prior-period comparative investment values appear to have leaked into the current-period extraction. The bounded comparative_period_filter correction scopes filtering to report_date 2025-12-31 only, matching the requested fix_class without adding unsupported parameters."
+}

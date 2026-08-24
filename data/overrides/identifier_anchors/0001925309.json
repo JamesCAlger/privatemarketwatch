@@ -21,12 +21,20 @@
     },
     {
       "label": "REFRATE",
-      "regex": "\\bReference Rate and (?:Spread\\s+)?(?:SOFR|S|E|\\$)\\s*\\+\\s*\\d"
+      "regex": "\\bReference Rate(?: and Spread)?(?:\\s+(?:SOFR|STIBOR|S|E|N|\\$)\\s*\\+\\s*\\d|\\s+\\d+(?:\\.\\d+)?\\s*%|\\s+Interest Rate)"
     },
     {
       "label": "RATE",
       "regex": "\\bInterest Rate\\s+\\d+(?:\\.\\d+)?\\s*%"
+    },
+    {
+      "label": "AGGREGATE",
+      "regex": "^Total Investments$"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "^Structured Credit Partners JV, LLC$"
     }
   ],
-  "notes": "Anchors recognize the section headings present in none_examples and the dominant debt identifier markers embedded in the bundle."
+  "notes": "Anchors recognize section headings, aggregate total lines present in none_examples, the named JV line present in none_examples, and the debt identifier markers embedded in the bundle, including floating spread references and fixed-rate Reference Rate forms observed across 2023-2026 samples. Evidence CLI roam could not be used because pandas is unavailable in this worker environment."
 }

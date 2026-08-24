@@ -2,10 +2,9 @@
   "schema": "agentA-rate-grammar.v1",
   "cik": "0001885968",
   "entity_name": "T Series BDC LLC",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "status": "PROPOSED",
   "applies_to": {
-    "cik": "0001885968",
     "regime": "flattened",
     "signature": "DEBT INVESTMENT INVESTMENT"
   },
@@ -46,7 +45,7 @@
     },
     {
       "field": "interest_rate",
-      "regex": "\\bInterest Rate\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%",
+      "regex": "\\bInterest Rate\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%?",
       "group": 1,
       "type": "pct"
     },
@@ -63,23 +62,8 @@
       "type": "date_mdy"
     }
   ],
-  "field_notes": {
-    "basis_spread": "Identifier values are stated as percentages, for example S + 6.25%.",
-    "interest_rate": "Identifier values are stated as percentages, for example Interest Rate 9.77%.",
-    "pik_rate": "PIK is optional and appears inside '(incl. X% PIK)' in the debt identifiers sampled for this signature.",
-    "maturity_date": "Debt identifiers state Maturity Date in M/D/YYYY or MM/DD/YYYY form.",
-    "old_era_investment_rows": "Older INVESTMENT samples may have rate twins, but the identifier strings only carry issuer and tranche/index; those rates are not identifier-embedded datapoints."
-  },
-  "derivations": {
-    "coupon_type": {
-      "floating_when": "reference_rate_type present",
-      "fixed_when": "reference_rate_type absent and basis_spread or pik_rate present"
-    }
-  },
   "pik_convention": "inclusive",
   "required_fields": [
-    "basis_spread",
-    "interest_rate",
     "maturity_date"
   ],
   "invariants": [
@@ -100,11 +84,25 @@
       "kind": "date_agree",
       "parsed": "maturity_date",
       "twin": "maturity_date"
+    },
+    {
+      "name": "floating_reference_implies_spread",
+      "kind": "implication",
+      "if_present": "reference_rate_type",
+      "then_present": "basis_spread"
     }
   ],
+  "field_notes": {
+    "basis_spread": "Identifier values are stated as percentages, for example S + 6.25%; no bps literals are embedded in the sampled identifiers.",
+    "interest_rate": "Identifier values are stated as percentages after Interest Rate; one sample omits the percent sign after 8.92, so the regex allows an optional percent sign.",
+    "pik_rate": "PIK is optional and appears inside '(incl. X% PIK)' for inclusive all-in spread wording, or as 'X% PIK' where the PIK value is not safely distinguishable from basis_spread.",
+    "maturity_date": "Debt identifiers state Maturity Date in M/D/YYYY or MM/DD/YYYY form.",
+    "old_era_investment_rows": "Older INVESTMENT samples may have rate twins, but the identifier strings only carry issuer and tranche/index; those rates are not identifier-embedded datapoints."
+  },
   "evidence": [
-    "Bundle dominant DEBT INVESTMENT INVESTMENT samples across 2025-09-30, 2025-12-31, and 2026-03-31 embed Reference Rate and Spread S + spread, optional incl. PIK, Interest Rate, and Maturity Date.",
-    "Bundle DEBT INVESTMENT samples use the same embedded debt rate/date format as DEBT INVESTMENT INVESTMENT, including S + spread, incl. PIK, Interest Rate, and Maturity Date.",
-    "Bundle older INVESTMENT samples across 2023-03-31 through 2025-06-30 carry issuer-only or issuer-plus-tranche identifiers such as Associations, Inc. 1 and Firebird Acquisition Corp, Inc. 1 even when structured twins have rates, so those source-column rates are not used as identifier grammar fields."
+    "Bundle DEBT INVESTMENT INVESTMENT samples for 2025-09-30, 2025-12-31, and 2026-03-31 embed Reference Rate and Spread, optional incl. PIK, Interest Rate, and Maturity Date.",
+    "Bundle DEBT INVESTMENT samples use the same embedded debt rate/date format, including S + spread, Interest Rate, and Maturity Date, but the validator accepts one applies_to signature object, so this proposal scopes to the dominant DEBT INVESTMENT INVESTMENT signature.",
+    "Bundle older INVESTMENT samples across 2023-03-31 through 2025-06-30 carry issuer-only or issuer-plus-tranche identifiers such as Associations, Inc. 1 and Firebird Acquisition Corp, Inc. 1 even when structured twins have rates, so those source-column rates are not used as identifier grammar fields.",
+    "Targeted evidence CLI roam attempts failed in this sandbox because pandas is unavailable; proposal grounding is therefore limited to the provided bundle strings and existing read-only CIK override context."
   ]
 }

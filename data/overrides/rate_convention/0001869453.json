@@ -1,0 +1,58 @@
+{
+  "cik": "0001869453",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The Consolidated Schedules of Investments present position interest as separate component columns under an Interest heading: Ref. Rate, Cash, and PIK. The Cash percentage is the cash coupon/spread component and the PIK percentage is separately quoted on top; there is no single all-in rate column for these PIK rows.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Interest | Ref. Rate | Cash | PIK",
+      "where": "Consolidated Schedules of Investments as of March 31, 2026 (Unaudited), investment table header repeated across schedule tables"
+    },
+    {
+      "kind": "position",
+      "issuer": "Inovalon Holdings, Inc.",
+      "quote": "Inovalon Holdings, Inc.(3)(4)(9) | First lien senior secured loan | S+ | 2.75 % | 2.75 % | 11/2028",
+      "printed_cash": 2.75,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Severin Acquisition, LLC (dba PowerSchool)",
+      "quote": "Severin Acquisition, LLC (dba PowerSchool)(3)(4)(8) | First lien senior secured loan | S+ | 2.50 % | 2.25 % | 10/2031",
+      "printed_cash": 2.5,
+      "printed_pik": 2.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Modernizing Medicine, Inc. (dba ModMed)",
+      "quote": "Modernizing Medicine, Inc. (dba ModMed)(3)(4)(9) | First lien senior secured loan | S+ | 2.50 % | 2.25 % | 4/2032",
+      "printed_cash": 2.5,
+      "printed_pik": 2.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Tricentis Operations Holdings, Inc.",
+      "quote": "Tricentis Operations Holdings, Inc.(3)(4)(9) | First lien senior secured loan | S+ | 2.75 % | 3.25 % | 2/2032",
+      "printed_cash": 2.75,
+      "printed_pik": 3.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Deerfield Dakota Holdings",
+      "quote": "Deerfield Dakota Holdings(3)(4)(9) | First lien senior secured loan | S+ | 3.00 % | 2.75 % | 9/2032",
+      "printed_cash": 3.0,
+      "printed_pik": 2.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Minerva Holdco, Inc.",
+      "quote": "Minerva Holdco, Inc.(3)(4)(6)(30) | Senior A Preferred Stock | N/A | 10.75 % | N/A",
+      "printed_pik": 10.75
+    }
+  ],
+  "rationale": "The filing uses disclosure pattern 2. Its schedule header separates Interest into Ref. Rate, Cash, and PIK columns, and multiple actual PIK rows print two distinct rate percentages in the Cash and PIK columns, such as 2.75% cash plus 2.75% PIK for Inovalon and 2.50% cash plus 2.25% PIK for PowerSchool/ModMed. Therefore a stated position-level cash rate or spread excludes the separately quoted PIK amount.",
+  "confidence": 0.96,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

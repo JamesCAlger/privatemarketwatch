@@ -1,0 +1,54 @@
+{
+  "cik": "0001743415",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "For bank debt, the schedule has a Spread above Index column and an Interest Rate column; when PIK appears, it is attached to the printed spread (for example, S+ 725 PIK) while the Interest Rate column shows the resulting stated current rate. For preferred equity, the Interest Rate column prints the PIK rate directly (for example, 10.00 % PIK). The filing does not present separate cash and PIK rate columns or a separate additive PIK percentage on top of the stated rate.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Description | Industry | Spread above Index (3) | Floor | Interest Rate (1) | Acquisition Date | Maturity Date | Par Amount | Cost | Fair Value",
+      "where": "Schedule of Investments, Bank Debt/Senior Secured Loans, table 10 row 1"
+    },
+    {
+      "kind": "header",
+      "quote": "Description | Industry | Interest Rate | Acquisition Date | Maturity Date | Shares/ Units | Cost | Fair Value",
+      "where": "Schedule of Investments, Preferred Equity, table 11 row 1"
+    },
+    {
+      "kind": "position",
+      "issuer": "RQM+ Corp.",
+      "quote": "RQM+ Corp. (2) | Life Sciences Tools & Services | S+ 725 PIK | 1.00 | % | 11.21 | %",
+      "printed_total": 11.21,
+      "printed_pik": 7.25,
+      "where": "Schedule of Investments, Bank Debt/Senior Secured Loans, table 10 row 13"
+    },
+    {
+      "kind": "position",
+      "issuer": "TAUC Management, LLC",
+      "quote": "TAUC Management, LLC (2) | Health Care Providers & Services | S+ 700 PIK | 1.00 | % | 10.82 | %",
+      "printed_total": 10.82,
+      "printed_pik": 7.0,
+      "where": "Schedule of Investments, Bank Debt/Senior Secured Loans, table 10 row 15"
+    },
+    {
+      "kind": "position",
+      "issuer": "TI TopCo Holdings, LLC",
+      "quote": "TI TopCo Holdings, LLC | Ground Transportation | 10.00 % PIK",
+      "printed_total": 10.0,
+      "printed_pik": 10.0,
+      "where": "Schedule of Investments, Preferred Equity, table 11 row 3"
+    },
+    {
+      "kind": "position",
+      "issuer": "Veronica Holdings, LLC (Vapotherm)",
+      "quote": "Veronica Holdings, LLC (Vapotherm) (8) | Health Care Equipment & Supplies | 9.00 % PIK",
+      "printed_total": 9.0,
+      "printed_pik": 9.0,
+      "where": "Schedule of Investments, Preferred Equity, table 11 row 4"
+    }
+  ],
+  "rationale": "The printed schedule marks PIK within the stated rate/spread text itself. Loan rows show a single current Interest Rate computed from the printed index spread, with PIK attached to that spread rather than a separate numeric PIK rate. Preferred equity rows print one Interest Rate value followed by PIK. Because no separate Cash/Paid-in-Kind columns or additive separate PIK percentages are printed, the stated position-level rate is the all-in stated coupon/rate with PIK included where marked.",
+  "confidence": 0.9,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 4
+}

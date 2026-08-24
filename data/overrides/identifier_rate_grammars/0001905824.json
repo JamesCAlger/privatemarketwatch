@@ -29,16 +29,19 @@
   "extractors": [
     {
       "field": "reference_rate_type",
-      "regex": "\\|\\s*([A-Z][A-Z0-9 -]{1,20})\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%",
+      "regex": "\\|\\s*([A-Z][A-Z0-9 -]{1,20})\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%?",
       "group": 1,
       "type": "ref_code",
       "map": {
-        "SOFR": "SOFR"
+        "SOFR": "SOFR",
+        "EURIBOR": "EURIBOR",
+        "LIBOR": "LIBOR",
+        "PRIME": "PRIME"
       }
     },
     {
       "field": "basis_spread",
-      "regex": "\\|\\s*[A-Z][A-Z0-9 -]{1,20}\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%",
+      "regex": "\\|\\s*[A-Z][A-Z0-9 -]{1,20}\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%?",
       "group": 1,
       "type": "pct",
       "map": {}
@@ -51,8 +54,15 @@
       "map": {}
     },
     {
+      "field": "pik_rate",
+      "regex": "\\((\\d+(?:\\.\\d+)?)\\s*%\\s*PIK\\)",
+      "group": 1,
+      "type": "pct",
+      "map": {}
+    },
+    {
       "field": "maturity_date",
-      "regex": "\\|\\s*\\d+(?:\\.\\d+)?\\s*%\\s*\\|\\s*(\\d{1,2}/\\d{1,2}/\\d{4})\\b",
+      "regex": "\\|\\s*(?:\\d+(?:\\.\\d+)?\\s*%|0\\.\\d{3,})\\s*\\|\\s*(\\d{1,2}/\\d{1,2}/\\d{4})\\b",
       "group": 1,
       "type": "date_mdy",
       "map": {}

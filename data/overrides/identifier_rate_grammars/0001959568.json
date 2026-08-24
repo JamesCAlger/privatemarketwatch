@@ -2,7 +2,7 @@
   "schema_version": "agentA-rate-grammar.v1",
   "cik": "0001959568",
   "entity_name": "Senior Credit Investments, LLC",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "status": "PROPOSED",
   "applies_to": {
     "regime": "flattened",
@@ -20,7 +20,13 @@
     "maturity_date"
   ],
   "unsupported_identifier_datapoints": [
-    "interest_rate"
+    "interest_rate",
+    "interest_rate_all_in",
+    "interest_rate_floor",
+    "interest_rate_cash_leg",
+    "commitment_expiration_date",
+    "unfunded_commitment",
+    "fair_value"
   ],
   "pik_convention": "inclusive",
   "extractors": [
@@ -90,5 +96,5 @@
       "observation": "Rows sit under Non-Controlled/Non-Affiliated Portfolio Company Investments."
     }
   ],
-  "notes": "Rate grammar covers only the dominant identifier form where Reference Rate and Spread and Maturity Date are embedded in investment_identifier. It handles old S+N% and new S + N% spacing. PIK is extracted when embedded but is not required because early samples omit it. Commitment identifiers carry issuer and investment type only and are not forced into this grammar."
+  "notes": "Rate grammar covers the dominant identifier form where Reference Rate and Spread and Maturity Date are embedded in investment_identifier. It handles old S+N% and new S + N% spacing. PIK is extracted when embedded but is not required. Commitment identifiers carry issuer and investment type only, and unfunded commitment section/total labels carry no embedded rate or date datapoints."
 }

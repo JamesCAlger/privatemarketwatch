@@ -2,12 +2,12 @@
   "schema_version": "agentA-rate-grammar.v1",
   "cik": "0001633336",
   "entity_name": "Crescent Capital BDC, Inc.",
-  "version": 1,
-  "author": "Agent A2 sandboxed staged proposal from 2025-12-31 bundle 0001633336_2025-12-31.json",
+  "version": 2,
+  "author": "Agent A2 sandboxed staged proposal from 2026-03-31 bundle 0001633336_2026-03-31.json",
   "applies_to": {
     "regime": "flattened",
     "signature": "DEBT INVTYPE REFRATE RATE MAT",
-    "note": "Dominant debt identifiers embed issuer/industry, investment type, reference-rate code, basis spread, optional floor and PIK terms, all-in interest rate, and mm/yyyy maturity. Observed old and new formats include 'Interest Term S + 500 (100 Floor) (including 100 PIK)' and 'Interest Term S + 600 (100 PIK), 100 Floor'."
+    "note": "Dominant debt identifiers embed issuer/industry, investment type, reference-rate code, basis spread, optional floor and PIK terms, all-in interest rate, and mm/yyyy maturity. Observed old and new formats include 'Interest Term S + 500 (100 Floor) (including 100 PIK)', 'Interest Term S + 600 (100 PIK), 100 Floor', and non-breaking-space variants."
   },
   "available_identifier_datapoints": [
     "issuer_or_borrower_name",
@@ -29,21 +29,47 @@
     "fair_value",
     "currency",
     "shares_or_units",
-    "portfolio_company_affiliation_status"
+    "portfolio_company_affiliation_status",
+    "maturity_date_exact_day"
   ],
   "pik_convention": "inclusive",
-  "_pik_convention_doc": "The dominant identifiers state PIK inside the rate phrase before an all-in Interest Rate percentage. PIK is parsed as optional and not used as a required field.",
+  "_pik_convention_doc": "The identifiers state optional PIK inside the rate phrase before an all-in Interest Rate percentage. PIK is parsed as optional and is not a required field.",
   "extractors": [
     {
       "field": "reference_rate_type",
       "regex": "(?:Interest\\s+(?:Term\\s+)?|\\bTerm\\s+)([A-Za-z]+)\\s*\\+\\s*[0-9]",
       "group": 1,
       "type": "ref_code",
-      "map": {"S": "SOFR", "SF": "SOFR", "SOFR": "SOFR", "L": "LIBOR", "LIBOR": "LIBOR", "P": "PRIME", "PRIME": "PRIME", "E": "EURIBOR", "EURIBOR": "EURIBOR", "C": "CDOR"}
+      "map": {
+        "S": "SOFR",
+        "SF": "SOFR",
+        "SOFR": "SOFR",
+        "SN": "SONIA",
+        "P": "PRIME",
+        "PRIME": "PRIME",
+        "E": "EURIBOR",
+        "EURIBOR": "EURIBOR",
+        "SR": "SARON",
+        "L": "LIBOR",
+        "LIBOR": "LIBOR",
+        "C": "CDOR"
+      }
     },
     {
       "field": "basis_spread",
       "regex": "(?:Interest\\s+(?:Term\\s+)?|\\bTerm\\s+)[A-Za-z]+\\s*\\+\\s*([0-9]{2,4}(?:\\.[0-9]+)?)\\b",
+      "group": 1,
+      "type": "bps"
+    },
+    {
+      "field": "pik_rate",
+      "regex": "(?:\\(|(?:including|plus)\\s+)([0-9]{2,4}(?:\\.[0-9]+)?)\\s*PIK",
+      "group": 1,
+      "type": "bps"
+    },
+    {
+      "field": "interest_rate_floor",
+      "regex": "([0-9]{2,4}(?:\\.[0-9]+)?)\\s*Floor",
       "group": 1,
       "type": "bps"
     },

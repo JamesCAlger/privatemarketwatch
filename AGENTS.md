@@ -242,7 +242,11 @@ See [`docs/reference/known_limitations.md`](./docs/reference/known_limitations.m
 
 ## Data Investigations
 
-Ad-hoc data analyses (e.g., classification stability, outlier deep-dives, coverage checks) should be saved to `data/output/data_investigation_results.md`. Append each new investigation with a numbered heading, the question asked, and the results found.
+Ad-hoc data analyses (e.g., classification stability, outlier deep-dives, coverage checks) are filed under `docs/investigations/` (git-tracked; see `INDEX.md` there for topics). Append each new investigation to the matching topic file with a dated heading, the question asked, and the results found, then rebuild the index: `python scripts/split_investigations.py --reindex`. The old `data/output/data_investigation_results.md` is a frozen redirect stub (cutover 2026-08-20) -- do not append there.
+
+## Session Scratch
+
+Ad-hoc artifacts from interactive operator/agent sessions -- shell redirect logs (`command > foo.log`), one-off plots, session kickoff notes, throwaway dumps -- go under `scratch/` in a per-session subdirectory named `YYYY-MM-DD_<topic>/` (git-ignored except its README; see `scratch/README.md`). Do not leave them in the repo root. Machine-written fleet/pipeline logs are out of scope and stay in their existing homes: `data/output/pipeline.log`, `data/output/quarter_pass/<pass_id>/<stage>.log`, and the agent batch dirs -- those are run provenance, not scratch. Scratch is disposable: once findings are recorded in `docs/investigations/` or the changelog, the session dir can be deleted.
 
 ## Frontend
 

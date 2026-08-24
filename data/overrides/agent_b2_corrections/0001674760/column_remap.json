@@ -1,0 +1,65 @@
+{
+  "cik": "0001674760",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "principal_amount",
+    "to_field": "shares_held",
+    "row_selector": {
+      "issuer_name": "Khoros, LLC (fka Lithium Technologies, Inc.)",
+      "report_date": "2025-12-31",
+      "table_index": 38,
+      "row_index": 11
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_2be03e27f593",
+    "RVQ_REV_43492b8f7ede",
+    "RVQ_REV_819b71684d43",
+    "RVQ_REV_aefca8faf0b4"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 38,
+      "row_index": 5,
+      "quoted_text": "Elah Holdings, Inc. | Capital Markets | 05/09/18 | 69,386 | $ | 3,354 | $ | 3,354 | (6) (8) (13) (14)"
+    },
+    {
+      "table_index": 38,
+      "row_index": 11,
+      "quoted_text": "Khoros, LLC (fka Lithium Technologies, Inc.) | Interactive Media & Services | 05/23/25 | 133,523 | 5,739 | 5,728 | (6) (8) (13)"
+    },
+    {
+      "table_index": 38,
+      "row_index": 20,
+      "quoted_text": "Total Investments - 103.1 % | $ | 349,365 | $ | 329,255"
+    },
+    {
+      "table_index": 37,
+      "row_index": 7,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | [blank Interest Rate] | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | $ | 10,879 | $ | 9,410 | $ | 7,506 | (6) (8) (11)"
+    },
+    {
+      "table_index": 37,
+      "row_index": 7,
+      "quoted_text": "Streamland Media Midco LLC | Entertainment | S + 6.50 % (Incl. 5.50 % PIK) | 04/02/29 | $ | 10,879 | $ | 9,410 | $ | 7,506 | (6) (8) (11)"
+    },
+    {
+      "table_index": 38,
+      "row_index": 9,
+      "quoted_text": "Wine.com, LLC | Beverages | 11/14/18 | 337,425 | $ | 2,900 | $ | -- | (6) (8) (13)"
+    },
+    {
+      "table_index": 40,
+      "row_index": 39,
+      "quoted_text": "Wine.com, Inc. | Beverages | S + 15.00 % PIK | 04/03/27 | $ | 21,349 | $ | -- | $ | -- | (7) (8) (10) (12)"
+    }
+  ],
+  "confidence": 0.7,
+  "rationale": "The cited table 38 equity rows show an acquisition date followed by a share quantity before cost and fair value. For Khoros, LLC (fka Lithium Technologies, Inc.), the value 133,523 is a shares-held quantity, not debt principal. A row-scoped remap from principal_amount to shares_held corrects that extraction gap while avoiding broader debt rows whose principal_amount values are valid.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

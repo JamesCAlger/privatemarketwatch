@@ -1,0 +1,65 @@
+{
+  "cik": "0001578348",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule uses one column headed Interest Rate. For floating-rate PIK positions, the printed reference-rate spread is the cash leg when separately shown, and PIK is appended as an additional component, e.g. 3M S + 1.50% + 5.00% PIK. For PIK-only positions, the column prints only the PIK rate, e.g. 15.00% PIK or 12.50% PIK.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investments* (1)(2) | Interest Rate | Initial Acquisition Date | Maturity Date | Principal Amount/ Shares | Amortized Cost | Fair Value | % of Net Assets",
+      "where": "Consolidated Schedule of Investments, March 31, 2026, tables 8-11"
+    },
+    {
+      "kind": "footnote",
+      "quote": "PIK - Payment-In-Kind",
+      "where": "Consolidated Schedule of Investments abbreviation block, March 31, 2026"
+    },
+    {
+      "kind": "footnote",
+      "quote": "Principal amount includes capitalized PIK interest.",
+      "where": "Consolidated Schedule of Investments footnote (4), March 31, 2026"
+    },
+    {
+      "kind": "position",
+      "issuer": "Easy Way Leisure Corporation Term Loan",
+      "quote": "Easy Way Leisure Corporation Term Loan | 3M S + 2.50 % + 5.00 % PIK ( 1.00 % Floor) | 10/15/2026",
+      "printed_pik": 5.0,
+      "printed_cash": 2.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Congruex Group LLC Term Loan B",
+      "quote": "Congruex Group LLC Term Loan B | 3M S + 1.50 % + 5.00 % PIK ( 1.50 % Floor) | 5/3/2029",
+      "printed_pik": 5.0,
+      "printed_cash": 1.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Arborworks Acquisition LLC - Reinstated Take Back Term Loan",
+      "quote": "Arborworks Acquisition LLC - Reinstated Take Back Term Loan | 1M S + 6.50 % PIK ( 1.00 % Floor) | 11/6/2028",
+      "printed_pik": 6.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Fusion Connect, Inc. - Series A Preferred",
+      "quote": "Fusion Connect, Inc. - Series A Preferred | 12.50 % PIK | 1/12/2022",
+      "printed_pik": 12.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Crafty Apes, LLC Term Loan - Second Out",
+      "quote": "Crafty Apes, LLC Term Loan - Second Out | 1M S + 6.50 % PIK ( 1.00 % Floor) | 6/1/2027",
+      "printed_pik": 6.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Crafty Apes, LLC",
+      "quote": "Senior Secured First Lien Debt - Second Out Investment ( 1M S + 6.50 % PIK ( 1.00 % Floor)",
+      "printed_pik": 6.5
+    }
+  ],
+  "rationale": "The filing does not present separate Cash and PIK columns, but its single Interest Rate column prints PIK as a distinct additive component when a cash spread is also present: Easy Way is 3M S + 2.50% + 5.00% PIK and Congruex is 3M S + 1.50% + 5.00% PIK. That syntax means the spread before the added PIK is not an all-in coupon; PIK is quoted separately on top. Other schedule rows confirm the same treatment with PIK-only rates such as 15.00% PIK and 12.50% PIK.",
+  "confidence": 0.93,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

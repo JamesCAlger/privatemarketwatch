@@ -1,0 +1,36 @@
+{
+  "cik": "1742313",
+  "rule_id": "1742313_exclude_2025_affiliate_identifier_only_duplicates",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND (instrument_description IS NULL OR CAST(instrument_description AS VARCHAR) IN ('', 'nan')) AND (principal_amount IS NULL OR CAST(principal_amount AS VARCHAR) IN ('', 'nan'))",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings value_sum is 6,127,925,000 versus anchor 5,819,755,000, an overshoot of 308,170,000. Rows where instrument_description IS NULL and principal_amount IS NULL count 54 and sum to fair_value 308,170,000; excluding them gives corrected_sum 5,819,755,000 and residual_pct_after 0.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 70 row 33: Total Non-Controlled/Affiliate Company Investments | $ | 343,639 | $ | 308,170 | 10.9 | %. Table 70 row 35: TOTAL INVESTMENTS | $ | 5,913,363 | $ | 5,819,755 | 205.6 | %."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 69 row 29 shows MC Aviation Limited (commitment to purchase up to 40.0% of the equity) with amortized cost 22,809 and fair value 23,603; the extracted holdings contain both this scheduled position and an identifier-only duplicate for MC Aviation Limited with the same fair value."
+    }
+  ],
+  "rationale": "The residual equals the filing's Non-Controlled/Affiliate Company Investments subtotal. The extracted holdings already include those affiliate investments in the detailed schedule rows that carry investment-category context; the additional identifier-only rows have no instrument_description and no principal_amount, duplicate the affiliate block at subtotal level, and over-count the grand total. The rule is scoped to the affected 2025-12-31 filing because the same null-description shape appears in earlier quarters where it does not represent this annual affiliate duplicate leak.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 54,
+      "fv": 308170000.0,
+      "residual_before": 308170000.0,
+      "residual_after": 0.0
+    }
+  }
+}

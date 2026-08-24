@@ -328,6 +328,221 @@ def test_issuer_subtotal_arithmetic_pipe_delimited():
     assert epsilon_row.iloc[0]["blocking_issue"] == False  # noqa: E712
 
 
+# ---- Liquid-fund / cash-equivalent source admission ----
+# Verdicts BDCSRC_0001899996_2025-12-31 and BDCSRC_0001950976_2025-12-31:
+# money market sweep positions tagged on CashAndCashEquivalentsAxis explicit
+# members (instead of the typed InvestmentIdentifierAxis) must reach the
+# reconciliation source set when they carry current-period fair-value facts.
+
+
+_XML_HEADER = (
+    '<xbrl xmlns="http://www.xbrl.org/2003/instance" '
+    'xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+    'xmlns:xbrldi="http://xbrl.org/2006/xbrldi" '
+    'xmlns:us-gaap="http://fasb.org/us-gaap/2025" '
+    'xmlns:test="http://example.com/test">'
+)
+
+
+def _cash_equivalents_context(ctx_id: str, member: str, instant: str = "2025-03-31") -> str:
+    return f"""
+        <xbrli:context id="{ctx_id}">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">100</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:explicitMember dimension="us-gaap:CashAndCashEquivalentsAxis">test:{member}</xbrldi:explicitMember>
+                    <xbrldi:explicitMember dimension="us-gaap:InvestmentTypeAxis">us-gaap:ShortTermInvestmentsMember</xbrldi:explicitMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>{instant}</xbrli:instant></xbrli:period>
+        </xbrli:context>
+    """
+
+
+_FILING_META = {
+    "cik": "100",
+    "entity_name": "Test BDC",
+    "accession_number": "acc-mm",
+    "form_type": "10-K",
+    "filing_date": "2025-05-01",
+    "report_date": "2025-03-31",
+}
+
+
+def _extract(tmp_path, xml_body: str):
+    path = tmp_path / "mm.xml"
+    path.write_text(_XML_HEADER + xml_body + "</xbrl>", encoding="utf-8")
+    return sr._extract_single_xbrl_source_file(path, dict(_FILING_META))
+
+
+def test_liquid_fund_member_context_admitted_with_investment_owned_facts(tmp_path):
+    # 1950976 shape: standard InvestmentOwned* facts on a cash-equivalents
+    # member context (no InvestmentIdentifierAxis).
+    body = _cash_equivalents_context(
+        "ctx_mm", "DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember"
+    ) + (
+        '<us-gaap:InvestmentOwnedAtCost contextRef="ctx_mm" unitRef="usd" decimals="-3">65057000</us-gaap:InvestmentOwnedAtCost>'
+        '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx_mm" unitRef="usd" decimals="-3">65057000</us-gaap:InvestmentOwnedAtFairValue>'
+        '<us-gaap:InvestmentInterestRate contextRef="ctx_mm" unitRef="pure" decimals="4">0.0365</us-gaap:InvestmentInterestRate>'
+    )
+
+    rows = _extract(tmp_path, body)
+
+    assert len(rows) == 1
+    row = rows[0]
+    assert row["investment_identifier"] == (
+        "Dreyfus Treasury Obligations Cash Management Money Market Fund"
+    )
+    assert row["fair_value"] == 65057000.0
+    assert row["cost"] == 65057000.0
+    assert row["interest_rate"] == 0.0365
+    assert "cashandcashequivalentsaxis=" in row["dimensions_raw"]
+
+
+def test_liquid_fund_custom_money_market_concepts_mapped(tmp_path):
+    # 1899996 shape: custom MoneyMarketFundsAtFairValue / AtCarryingValue
+    # concepts; carrying value doubles as cost basis.
+    body = _cash_equivalents_context(
+        "ctx_ss", "StateStreetInstitutionalTreasuryPlusMoneyMarketFundMember"
+    ) + (
+        '<us-gaap:MoneyMarketFundsAtCarryingValue contextRef="ctx_ss" unitRef="usd" decimals="0">19087624</us-gaap:MoneyMarketFundsAtCarryingValue>'
+        '<test:MoneyMarketFundsAtFairValue contextRef="ctx_ss" unitRef="usd" decimals="0">19087624</test:MoneyMarketFundsAtFairValue>'
+        '<us-gaap:InvestmentOwnedBalanceShares contextRef="ctx_ss" unitRef="shares" decimals="0">19087624</us-gaap:InvestmentOwnedBalanceShares>'
+    )
+
+    rows = _extract(tmp_path, body)
+
+    assert len(rows) == 1
+    row = rows[0]
+    assert row["investment_identifier"] == (
+        "State Street Institutional Treasury Plus Money Market Fund"
+    )
+    assert row["fair_value"] == 19087624.0
+    assert row["cost"] == 19087624.0
+    assert row["shares_held"] == 19087624.0
+
+
+def test_non_money_market_cash_member_not_admitted(tmp_path):
+    # Admission is gated on the money-market keyword list; an arbitrary cash
+    # member cannot become a source row (it could only turn into a NEW
+    # missing_from_pipeline blocker, never a documented exclusion).
+    body = _cash_equivalents_context("ctx_ops", "OperatingCashAccountMember") + (
+        '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx_ops" unitRef="usd" decimals="0">123456</us-gaap:InvestmentOwnedAtFairValue>'
+    )
+
+    rows = _extract(tmp_path, body)
+
+    assert rows == []
+
+
+def test_zero_fair_value_liquid_fund_member_not_admitted(tmp_path):
+    body = _cash_equivalents_context(
+        "ctx_zero", "DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember"
+    ) + (
+        '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx_zero" unitRef="usd" decimals="0">0</us-gaap:InvestmentOwnedAtFairValue>'
+    )
+
+    rows = _extract(tmp_path, body)
+
+    assert rows == []
+
+
+def test_footnote_only_money_market_mention_not_admitted(tmp_path):
+    # False positive guard (verdict 0001950976): a money-market fund named
+    # only in narrative/footnote text has no cash-equivalents member context
+    # and must not become a source row -- numeric truth comes only through
+    # the audited dimensioned-fact path.
+    body = (
+        """
+        <xbrli:context id="ctx_plain">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">100</xbrli:identifier>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2025-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        """
+        '<test:InvestmentCompanyFootnoteTextBlock contextRef="ctx_plain">'
+        'Dreyfus Treasury Obligations Cash Management Money Market Fund 3.65% 65,057'
+        '</test:InvestmentCompanyFootnoteTextBlock>'
+    )
+
+    rows = _extract(tmp_path, body)
+
+    assert rows == []
+
+
+def test_source_fact_extraction_version_participates_in_metadata_hash(monkeypatch):
+    filing = dict(_FILING_META)
+    before = sr._filing_metadata_hash(filing)
+    monkeypatch.setattr(sr, "_SOURCE_FACT_EXTRACTION_VERSION", "test-bump")
+    after = sr._filing_metadata_hash(filing)
+    assert before != after
+
+
+def _mm_reconcile(source_rows, output_rows):
+    source_df = pd.DataFrame(source_rows, columns=sr.SOURCE_FACT_COLUMNS)
+    holdings_df = pd.DataFrame(output_rows)
+    return sr.reconcile_bdc_source_to_holdings(
+        source_df,
+        holdings_df,
+        enable_bdc_xbrl_wrappers=False,
+        audited_value_rescales=pd.DataFrame(columns=["cik", "field", "factor"]),
+    )
+
+
+def test_named_money_market_source_row_matches_output_position():
+    # 1899996 shape: the named member row matches the pipeline row (which has
+    # a filer-suffixed identifier) while generic bucket rows stay documented.
+    named = _make_source_row(
+        "State Street Institutional Treasury Plus Money Market Fund", 19087624.0
+    )
+    named["cost"] = 19087624.0
+    generic_a = _make_source_row("Money Market Funds", 19087624.0)
+    generic_a["context_id"] = "c2"
+    generic_b = _make_source_row("Money Market Funds", 19087624.0)
+    generic_b["context_id"] = "c3"
+    output = _make_output_row(
+        "State Street Institutional Treasury Plus Money Market Fund - 3.66% Investor Class Units",
+        19087624.0,
+        issuer_name="State Street Institutional Treasury Plus Money Market Fund",
+    )
+    output["cost"] = 19087624.0
+
+    detail, metrics = _mm_reconcile([named, generic_a, generic_b], [output])
+
+    named_rows = detail[detail["raw_investment_identifier"].str.contains("State Street", na=False)]
+    assert len(named_rows) == 1
+    assert named_rows.iloc[0]["status"] == "matched"
+    assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+    generic_rows = detail[detail["raw_investment_identifier"].eq("Money Market Funds")]
+    assert len(generic_rows) >= 1
+    assert not generic_rows["blocking_issue"].astype(bool).any()
+
+
+def test_short_term_investment_row_add_rescued_by_admitted_source_row():
+    # 1950976 shape: the audited row_add output row has no accession_number;
+    # the admitted short-term-investment source row carries the identity and
+    # fair value, so the output row is not a blocking pipeline-only extra.
+    source = _make_source_row(
+        "Dreyfus Treasury Obligations Cash Management Money Market Fund", 65057000.0
+    )
+    output = _make_output_row(
+        "Short-Term Investments | Dreyfus Treasury Obligations Cash Management Money Market Fund",
+        65057000.0,
+        issuer_name="Dreyfus Treasury Obligations Cash Management Money Market Fund",
+    )
+    output["accession_number"] = ""
+    output["bdc_form_type"] = ""
+    output["filing_date"] = ""
+
+    detail, metrics = _mm_reconcile([source], [output])
+
+    assert "extra_in_pipeline" not in set(detail["status"])
+    source_rows = detail[detail["source_row_id"].astype(str) != ""]
+    assert set(source_rows["status"]) == {"excluded_money_market_fund"}
+    assert int(metrics.iloc[0]["blocking_issue_count"]) == 0
+
+
 def test_forced_reconciliation_recomputes_each_cik_partition(tmp_path, monkeypatch):
     _patch_cache_paths(monkeypatch, tmp_path)
     source_manifest = pd.DataFrame([

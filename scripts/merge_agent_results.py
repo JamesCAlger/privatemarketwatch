@@ -35,6 +35,9 @@ logging.basicConfig(
 logger = logging.getLogger("merge_results")
 
 OUTPUT_DIR = PROJECT_ROOT / "data" / "output"
+# Campaign shards (chunks + per-batch results) live under campaign_results/,
+# not the output root -- relocated 2026-08-20, see agent_changelog.
+CAMPAIGN_DIR = OUTPUT_DIR / "campaign_results" / "gics"
 RESULT_PATTERN = "gics_agent_results_*.csv"
 
 # Expected columns in agent result CSVs
@@ -170,7 +173,7 @@ def _load_valid_gics() -> set:
 
 def find_result_files(start: int = 0, end: int = 9999) -> list[Path]:
     """Find agent result CSVs in range."""
-    files = sorted(OUTPUT_DIR.glob(RESULT_PATTERN))
+    files = sorted(CAMPAIGN_DIR.glob(RESULT_PATTERN))
     filtered = []
     for f in files:
         try:

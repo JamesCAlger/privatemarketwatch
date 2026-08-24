@@ -1,0 +1,52 @@
+{
+  "cik": "0001950803",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "pik_rate",
+    "to_field": "interest_rate"
+  },
+  "source_review_ids": [
+    "RVQ_REV_09c24b11bfac",
+    "RVQ_REV_66eeb8c7f2ab"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 27,
+      "row_index": 7,
+      "quoted_text": "Amplify Buyer, Inc. Term Loan | Reference Rate Spread / Floor | 3M SOFR + 4.75 % / 0.75 % | Cash Interest Rate / PIK Rate | 8.42 %"
+    },
+    {
+      "table_index": 27,
+      "row_index": 9,
+      "quoted_text": "Assembled Intelligence LLC Term Loan | Reference Rate Spread / Floor | 3M SOFR + 5.25 % / 1.00 % | Cash Interest Rate / PIK Rate | 8.92 %"
+    },
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | Reference Rate Spread / Floor | 3M SOFR + 5.00 % / 1.00 % | Cash Interest Rate / PIK Rate | 8.67 %"
+    },
+    {
+      "table_index": 27,
+      "row_index": 23,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | (3)(4)(5)(7) | 3M SOFR + 5.00 % / 1.00 % | 8.67 % | 5/3/2029 | 3,838 | 3,823 | 3,826 | 0.21 %"
+    },
+    {
+      "table_index": 27,
+      "row_index": 24,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | (3)(4)(5)(7)(14) | 3M SOFR + 5.00 % / 1.00 % | 8.67 % | 5/3/2029 | 3,366 | 3,346 | 3,356 | 0.18 %"
+    },
+    {
+      "table_index": 27,
+      "row_index": 25,
+      "quoted_text": "Minds Buyer, LLC Second Amendment Incremental Term Loan (First Lien) | (3)(4)(5)(7)(15) | 3M SOFR + 5.00 % / 1.00 % | 8.67 % | 5/3/2029 | 4,057 | 4,024 | 4,044 | 0.22 %"
+    }
+  ],
+  "confidence": 0.72,
+  "rationale": "The cited table presents the 8.42%, 8.92%, and 8.67% values under the filing column 'Cash Interest Rate / PIK Rate'. In the unified holdings schema these cash coupon values belong in interest_rate, not pik_rate. The reference-rate spread/floor text remains separate from the cash interest percentages, so the narrow supported column remap is pik_rate to interest_rate for this extraction gap.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

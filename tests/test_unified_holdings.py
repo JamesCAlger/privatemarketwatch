@@ -1303,6 +1303,47 @@ class TestPrepareBdc:
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Caitec, Inc."
 
+    def test_src_context_id_passes_through_bdc_staging(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000, "src_context_id": "ctx_acme_tl1"},
+        ])
+        result = _prepare_bdc(df)
+        assert "src_context_id" in result.columns
+        assert list(result["src_context_id"]) == ["ctx_acme_tl1"]
+
+    def test_src_context_id_defaults_empty_when_absent(self):
+        # bdc_holdings.csv built before the migration has no src_context_id
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert "src_context_id" in result.columns
+        assert list(result["src_context_id"]) == [""]
+
+    def test_dedup_audit_columns_pass_through(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000, "dedupe_context_count": "3",
+             "dedupe_conflict_fields": "cost"},
+        ])
+        result = _prepare_bdc(df)
+        assert list(result["src_context_count"]) == ["3"]
+        assert list(result["src_conflict_fields"]) == ["cost"]
+
+    def test_dedup_audit_columns_default_empty(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000},
+        ])
+        result = _prepare_bdc(df)
+        assert list(result["src_context_count"]) == [""]
+        assert list(result["src_conflict_fields"]) == [""]
+        # the batch's other columns exist and default empty at this stage
+        for col in ("src_field_overrides", "cost_source", "shares_held_source"):
+            assert list(result[col]) == [""]
+
     def test_returns_empty_when_wrapper_filters_all_phase_a_rows(self):
         """All-rollup wrapper CIKs return an empty staged frame, not Phase B SQL errors."""
         df = self._make_bdc_df([
@@ -2136,6 +2177,139 @@ class TestPrepareBdc:
         assert gamma["nonaccrual_footnote"] in (False, "false", "False", 0)
         assert gamma["nonaccrual_dimension"] in (False, "false", "False", 0)
 
+    def test_src_transforms_records_rate_rescale_branches(self):
+        df = self._make_bdc_df([
+            # <=0.50 -> x100 branch
+            {"investment_identifier": "A Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 0.105},
+            # >=50 -> /100 branch
+            {"investment_identifier": "B Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 62.5},
+            # identity: no event
+            {"investment_identifier": "C Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5},
+            # negative -> nulled
+            {"investment_identifier": "D Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": -1.0},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        assert result.loc["A Corp", "interest_rate"] == 10.5
+        assert "interest_rate:rate_x100" in result.loc["A Corp", "src_transforms"]
+        assert result.loc["B Corp", "interest_rate"] == 0.625
+        assert "interest_rate:rate_div100" in result.loc["B Corp", "src_transforms"]
+        assert "interest_rate" not in result.loc["C Corp", "src_transforms"]
+        assert pd.isna(result.loc["D Corp", "interest_rate"])
+        assert "interest_rate:neg_null" in result.loc["D Corp", "src_transforms"]
+
+    def test_src_transforms_records_pct_branches_with_pct_thresholds(self):
+        # pct uses > 50 (strict), rates use >= 50 -- events must match values
+        df = self._make_bdc_df([
+            {"investment_identifier": "E Corp - TL", "cik": "123",
+             "fair_value": 1, "pct_of_net_assets": 0.004},
+            {"investment_identifier": "F Corp - TL", "cik": "123",
+             "fair_value": 1, "pct_of_net_assets": 50.0},  # boundary: strict > 50, so NO event
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        # event side
+        assert "pct_of_net_assets:rate_x100" in result.loc["E Corp", "src_transforms"]
+        assert "pct_of_net_assets" not in result.loc["F Corp", "src_transforms"]
+        # published-value side (boundary asymmetry is real -- schemas.md claims tests enforce this)
+        assert result.loc["E Corp", "pct_of_net_assets"] == pytest.approx(0.4)   # 0.004 * 100
+        assert result.loc["F Corp", "pct_of_net_assets"] == pytest.approx(50.0)  # unchanged (strict >50 threshold)
+
+    def test_src_transforms_rate_at_exact_50_boundary(self):
+        # rates use >= 50 (inclusive), so interest_rate=50.0 -> /100 branch, value published 0.5
+        df = self._make_bdc_df([
+            {"investment_identifier": "I Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 50.0},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        assert result.loc["I Corp", "interest_rate"] == pytest.approx(0.5)
+        assert "interest_rate:rate_div100" in result.loc["I Corp", "src_transforms"]
+
+    def test_src_transforms_basis_spread_and_pik_rate_x100_branch(self):
+        # basis_spread and pik_rate x100 branch: small decimal input -> scaled value + event
+        df = self._make_bdc_df([
+            {"investment_identifier": "J Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5, "basis_spread": 0.045},
+            {"investment_identifier": "K Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5, "pik_rate": 0.02},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        assert result.loc["J Corp", "basis_spread"] == pytest.approx(4.5)
+        assert "basis_spread:rate_x100" in result.loc["J Corp", "src_transforms"]
+        assert result.loc["K Corp", "pik_rate"] == pytest.approx(2.0)
+        assert "pik_rate:rate_x100" in result.loc["K Corp", "src_transforms"]
+
+    def test_src_transforms_records_pik_boundary_fix(self):
+        # CTE 12a: pik 20-50 exceeding interest_rate was bps -> /100 + event
+        df = self._make_bdc_df([
+            {"investment_identifier": "G Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.0, "pik_rate": 25.0},
+        ])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate"] == 0.25
+        assert "pik_rate:pik_boundary_div100" in result.iloc[0]["src_transforms"]
+
+    def test_src_transforms_empty_string_when_no_events_fire(self):
+        # Regression: when no transform event fires, src_transforms must be ''
+        # (not None/NaN). concat_ws(';', NULL, NULL, NULL, NULL) may return NULL
+        # in DuckDB; COALESCE(..., '') is required to guarantee the empty string.
+        df = self._make_bdc_df([
+            {"investment_identifier": "H Corp - TL", "cik": "123",
+             "fair_value": 1, "interest_rate": 10.5},  # identity: no event fires
+        ])
+        result = _prepare_bdc(df)
+        val = result.iloc[0]["src_transforms"]
+        assert val == "", (
+            f"src_transforms should be '' when no events fire, got {val!r}"
+        )
+
+    def test_src_facts_and_filled_fields_pass_through(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000,
+             "src_facts": '{"interest_rate":{"r":0.105}}',
+             "dedupe_filled_fields": "cost"},
+        ])
+        result = _prepare_bdc(df)
+        assert list(result["src_facts"]) == ['{"interest_rate":{"r":0.105}}']
+        assert list(result["src_filled_fields"]) == ["cost"]
+        assert list(result["corrected_fields"]) == [""]
+
+    def test_value_field_pathway_enums(self):
+        df = self._make_bdc_df([
+            # fv + principal + pct + ugl from XBRL; pik from identifier text
+            {"investment_identifier":
+                 "Acme Corp - Term Loan 10.5% (incl. 2.0% PIK)",
+             "cik": "123", "fair_value": 1000000, "principal_amount": 900000,
+             "pct_of_net_assets": 0.4, "unrealized_gain_loss": 5000},
+            # fv only -- no pik/principal/pct/ugl so those sources must be ''
+            {"investment_identifier": "Bare Corp - Equity", "cik": "123",
+             "fair_value": 500000},
+        ])
+        result = _prepare_bdc(df).set_index("issuer_name")
+        acme = result.loc["Acme Corp"]
+        assert acme["fair_value_source"] == "xbrl_field"
+        assert acme["principal_amount_source"] == "xbrl_field"
+        assert acme["pct_of_net_assets_source"] == "xbrl_field"
+        assert acme["bdc_unrealized_gain_loss_source"] == "xbrl_field"
+        assert acme["pik_rate_source"] == "identifier_text"
+        assert acme["pik_rate"] == pytest.approx(2.0)
+        bare = result.loc["Bare Corp"]
+        assert bare["fair_value_source"] == "xbrl_field"
+        for col in ("principal_amount_source", "pct_of_net_assets_source",
+                    "pik_rate_source", "bdc_unrealized_gain_loss_source"):
+            assert bare[col] == ""
+
+    def test_pik_rate_xbrl_pathway(self):
+        df = self._make_bdc_df([
+            {"investment_identifier": "Pik Corp - Term Loan", "cik": "123",
+             "fair_value": 1, "pik_rate": 2.0},
+        ])
+        result = _prepare_bdc(df)
+        assert result.iloc[0]["pik_rate_source"] == "xbrl_field"
+
 
 # ---------------------------------------------------------------------------
 # Amendment dedup in _prepare_bdc (CTE 1b)
@@ -2890,8 +3064,11 @@ class TestBuildUnifiedHoldings:
         # 2 BDC (Acme Corp + Growth Fund) + 1 N-PORT (Private Borrower) = 3
         assert len(result) == 3
 
-        # Check column count matches schema
-        assert list(result.columns) == UNIFIED_COLUMNS
+        # Check column count matches schema (row_id/row_id_basis are appended
+        # as the final build step and live outside UNIFIED_COLUMNS by design)
+        assert list(result.columns) == UNIFIED_COLUMNS + ["row_id", "row_id_basis"]
+        assert result["row_id"].str.match(r"^ROW-[0-9a-f]{16}$").all()
+        assert result["row_id"].nunique() == len(result)
 
         # Verify BDC aggregate was filtered
         assert not result["issuer_name"].str.contains("Total Investments").any()
@@ -2924,15 +3101,20 @@ class TestBuildUnifiedHoldings:
             "cost": 990000.0, "interest_rate": 8.5, "basis_spread": 3.5,
             "reference_rate_type": "SOFR", "maturity_date": "2028-01-15",
             "pct_of_net_assets": 0.05, "pik_rate": None, "shares_held": None,
-            "unrealized_gain_loss": 10000.0, "dimensions_raw": "x=y",
+            "unrealized_gain_loss": 10000.0,
             "investment_type": "", "industry": "", "affiliation": "", "period": "2023-03-31",
         }
+        # The overlay keys on the FULL InvestmentIdentifierAxis member carried in
+        # dimensions_raw (falling back to the identifier only when dims is absent),
+        # so the fixture dims must hold the real member, not a placeholder.
         bdc_df = pd.DataFrame([
             # keyword-neutral DL row -> _sql_classify_lien NULL -> iXBRL fills it
             {**common, "investment_identifier": "Acme Holdings - Term Loan B",
+             "dimensions_raw": "us-gaap:InvestmentIdentifierAxis=Acme Holdings - Term Loan B",
              "fair_value": 1000000.0, "principal_amount": 1000000.0},
             # keyword 'first lien' DL row -> keyword wins over the iXBRL value
             {**common, "investment_identifier": "Beta Corp - First Lien Term Loan",
+             "dimensions_raw": "us-gaap:InvestmentIdentifierAxis=Beta Corp - First Lien Term Loan",
              "fair_value": 2000000.0, "principal_amount": 2000000.0},
         ])
         status = pd.DataFrame([
@@ -3129,7 +3311,9 @@ class TestEntityEnrichment:
                     lookup_path):
             result = build_unified_holdings(bdc_df=bdc_df, nport_df=nport_df)
 
-        assert list(result.columns) == UNIFIED_COLUMNS
+        # row_id/row_id_basis are appended after all enrichment layers,
+        # outside UNIFIED_COLUMNS
+        assert list(result.columns) == UNIFIED_COLUMNS + ["row_id", "row_id_basis"]
 
 
 # ---------------------------------------------------------------------------
@@ -4949,6 +5133,80 @@ class TestCostProxy:
         borrower = result[result["issuer_name"] == "Borrower C"]
         assert pd.isna(borrower.iloc[0]["cost"]) or borrower.iloc[0]["cost"] == 0
 
+    def test_cost_proxy_fill_records_derived_proxy(self, tmp_path):
+        """N-PORT position with NULL cost: proxy fill sets cost_source and event."""
+        nport_df = self._make_nport_df([
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "issuer_name": "Borrower A",
+             "currency_value": 100000, "report_date": "2023-03-31",
+             "accession_number": "001"},
+            {"fair_value_level": "3", "cik": "100", "asset_cat": "LON",
+             "issuer_type": "CORP", "issuer_name": "Borrower A",
+             "currency_value": 110000, "report_date": "2023-06-30",
+             "accession_number": "002"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+        borrower = result[result["issuer_name"] == "Borrower A"]
+        # Both rows get a proxy cost (no real cost present)
+        for _, row in borrower.iterrows():
+            assert row["cost_source"] == "derived_proxy"
+            assert "cost:cost_proxy_fv" in row["src_transforms"]
+
+    def test_unproxied_cost_keeps_empty_source(self, tmp_path):
+        """BDC position with real non-zero cost: cost_source stays empty."""
+        bdc_df = self._make_bdc_df([{
+            "cik": "123", "investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": 60000, "cost": 50000,
+            "report_date": "2023-03-31", "accession_number": "001",
+        }])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=bdc_df, nport_df=self._empty_nport_df())
+        acme = result[result["issuer_name"] == "Acme Corp"]
+        row = acme.iloc[0]
+        assert row["cost_source"] == ""
+        assert "cost:" not in row["src_transforms"]
+
+    def test_cost_proxy_fill_fires_on_zero_cost(self, tmp_path):
+        """BDC position with explicit cost=0 fires the proxy, unlike the NULL-cost case.
+
+        The prior version of this test used an N-PORT fixture with no cost column
+        at all -- N-PORT staging hard-codes NULL AS cost, so that test only
+        exercised the NULL path (same as test_cost_proxy_fill_records_derived_proxy).
+
+        This test uses _make_bdc_df with "cost": 0 (integer zero). BDC staging
+        passes it through as TRY_CAST(cost AS DOUBLE) = 0.0. In the with_cost CTE,
+        NULLIF(TRY_CAST(cost AS DOUBLE), 0) converts 0.0 to NULL and the proxy
+        fires: cost becomes the FIRST_VALUE of fair_value across the window and
+        cost_source is set to 'derived_proxy'.
+        """
+        bdc_df = self._make_bdc_df([
+            {"cik": "200", "investment_identifier": "Zero Cost Co - Term Loan",
+             "fair_value": 60000, "cost": 0,
+             "report_date": "2023-03-31", "accession_number": "001"},
+            {"cik": "200", "investment_identifier": "Zero Cost Co - Term Loan",
+             "fair_value": 70000, "cost": 0,
+             "report_date": "2023-06-30", "accession_number": "002"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=bdc_df, nport_df=self._empty_nport_df())
+        company = result[result["issuer_name"] == "Zero Cost Co"]
+        assert len(company) == 2, "Expected both BDC rows in output"
+        # Both rows have explicit cost=0 -- proxy must fire for each
+        for _, row in company.iterrows():
+            assert row["cost_source"] == "derived_proxy", (
+                f"Expected derived_proxy, got {row['cost_source']!r}"
+            )
+            assert "cost:cost_proxy_fv" in row["src_transforms"], (
+                f"Expected cost:cost_proxy_fv in {row['src_transforms']!r}"
+            )
+
 
 class TestSharesNormalization:
     pytestmark = SLOW_INTEGRATION_MARKS
@@ -5155,6 +5413,67 @@ class TestSharesNormalization:
         shares = widget["shares_held"].tolist()
         # Q3 outlier (200) replaced with Q2's shares (200000)
         assert shares == [200000.0, 200000.0, 200000.0, 200000.0]
+
+    def test_shares_pow10_fix_records_derived_proxy(self, tmp_path):
+        """N-PORT outlier row gets shares_held_source=derived_proxy and event appended."""
+        # 4 periods; Q3 has outlier shares=400 (should be 400000)
+        nport_df = self._make_nport_df([
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4000000,
+             "report_date": "2023-03-31", "balance": "400000", "unit": "NS",
+             "accession_number": "001"},
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4100000,
+             "report_date": "2023-06-30", "balance": "400000", "unit": "NS",
+             "accession_number": "002"},
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4200000,
+             "report_date": "2023-09-30", "balance": "400", "unit": "NS",
+             "accession_number": "003"},
+            {"cik": "100", "issuer_name": "Acme Corp", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 4300000,
+             "report_date": "2023-12-31", "balance": "400000", "unit": "NS",
+             "accession_number": "004"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+        acme = result[result["issuer_name"] == "Acme Corp"].sort_values("report_date").reset_index(drop=True)
+        # Q3 row (index 2) is the outlier that was fixed
+        fixed_row = acme.iloc[2]
+        assert fixed_row["shares_held_source"] == "derived_proxy"
+        assert "shares_held:pow10_shares" in fixed_row["src_transforms"]
+        # Non-outlier rows must not be flagged
+        for i in [0, 1, 3]:
+            non_outlier = acme.iloc[i]
+            assert non_outlier["shares_held_source"] == ""
+            assert "shares_held:pow10_shares" not in non_outlier["src_transforms"]
+
+    def test_consistent_shares_no_derived_proxy(self, tmp_path):
+        """Positions with consistent shares have no shares_held_source flag."""
+        nport_df = self._make_nport_df([
+            {"cik": "100", "issuer_name": "Stable Co", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 5000000,
+             "report_date": "2023-03-31", "balance": "50000", "unit": "NS",
+             "accession_number": "001"},
+            {"cik": "100", "issuer_name": "Stable Co", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 5100000,
+             "report_date": "2023-06-30", "balance": "50000", "unit": "NS",
+             "accession_number": "002"},
+            {"cik": "100", "issuer_name": "Stable Co", "asset_cat": "EC",
+             "issuer_type": "CORP", "currency_value": 5200000,
+             "report_date": "2023-09-30", "balance": "50000", "unit": "NS",
+             "accession_number": "003"},
+        ])
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                    tmp_path / "test.csv"):
+            result = build_unified_holdings(
+                bdc_df=self._empty_bdc_df(), nport_df=nport_df)
+        stable = result[result["issuer_name"] == "Stable Co"]
+        for _, row in stable.iterrows():
+            assert row["shares_held_source"] == ""
+            assert "shares_held:pow10_shares" not in row["src_transforms"]
 
 
 # ---------------------------------------------------------------------------
@@ -6867,6 +7186,21 @@ class TestSubsidiaryFlag:
         assert len(result) == 1
         assert int(result.iloc[0]["is_subsidiary"]) == 1
 
+    def test_subsidiary_detected_equity_method_investee_axis(self):
+        """JV look-through facts on the equity-method-investee axis are flagged
+        (same retain-and-flag treatment as the subsidiary axes; adjudicated
+        2026-07-21/22, data_investigation_results parts 5-8)."""
+        rows = [self._make_bdc_row(
+            dimensions_raw=(
+                "scheduleofequitymethodinvestmentequitymethodinvesteenameaxis=UltraIiiMember"
+                "|investmentidentifieraxis=Bright Light Buyer, Inc. 1"
+            ),
+        )]
+        df = pd.DataFrame(rows)
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 1
+
     def test_non_subsidiary_not_flagged(self):
         """Normal rows without subsidiary dimensions are is_subsidiary=0."""
         rows = [self._make_bdc_row(
@@ -8116,6 +8450,35 @@ class TestApplyRowCorrections:
         result = _apply_row_corrections(df, corrections_path=corr_path)
         assert result.iloc[0]["fair_value"] == "5000000"
         assert result.iloc[1]["fair_value"] == "2000000"
+
+    def test_row_correction_stamps_corrected_fields(self, tmp_path):
+        """Applied correction stamps the changed field name into corrected_fields."""
+        df = self._make_holdings_df([{
+            "source": "bdc",
+            "cik": "0000001234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "fair_value": "",
+            "issuer_name": "Acme Corp",
+            "corrected_fields": "",
+        }])
+        corr_path = self._write_corrections(tmp_path, [{
+            "cik": "1234",
+            "report_date": "2024-06-30",
+            "accession_number": "0000000001-24-000001",
+            "bdc_investment_identifier": "Acme Corp - Term Loan",
+            "field": "fair_value",
+            "value": "5000000",
+            "reason": "test correction",
+            "source_evidence": "test",
+            "author": "test",
+            "date_added": "2026-01-01",
+        }])
+
+        result = _apply_row_corrections(df, corrections_path=corr_path)
+        assert result.iloc[0]["fair_value"] == "5000000"
+        assert result.iloc[0]["corrected_fields"] == "fair_value"
 
     def test_correctable_fields_includes_key_fields(self):
         """Spot-check that _CORRECTABLE_FIELDS includes the expected set."""

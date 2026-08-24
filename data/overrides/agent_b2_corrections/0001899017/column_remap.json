@@ -1,0 +1,65 @@
+{
+  "cik": "0001899017",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "cost",
+    "to_field": "principal_amount"
+  },
+  "source_review_ids": [
+    "RVQ_REV_0916150967d3",
+    "RVQ_REV_221475790ab5",
+    "RVQ_REV_3c79654f0eee",
+    "RVQ_REV_60470d36b8cc",
+    "RVQ_REV_6dba4c92994b"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 57,
+      "row_index": 1,
+      "quoted_text": "Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3)"
+    },
+    {
+      "table_index": 57,
+      "row_index": 31,
+      "quoted_text": "Goodfellow (6)(17)(18) | First Lien Senior Secured Loan - Delayed Draw | SONIA | 5.25 % | 8.98 | % | 2/10/2032 | GBP symbol | 265 | 341 | 352"
+    },
+    {
+      "table_index": 59,
+      "row_index": 14,
+      "quoted_text": "Reconomy (6)(13)(17)(21) | First Lien Senior Secured Loan | EURIBOR | 6.25 % | 8.27 | % | 7/12/2029 | EUR symbol | 937 | 1,022 | 1,100"
+    },
+    {
+      "table_index": 59,
+      "row_index": 1,
+      "quoted_text": "Header places Principal/Shares before Cost and Market Value; the foreign currency symbol belongs to Principal/Shares, not Cost."
+    },
+    {
+      "table_index": 59,
+      "row_index": 12,
+      "quoted_text": "Reconomy row shows a non-USD symbol in the Principal/Shares area, followed by Cost 3,113 and Market Value 3,339."
+    },
+    {
+      "table_index": 59,
+      "row_index": 15,
+      "quoted_text": "Environmental Industries Total shows Cost and Market Value with USD dollar signs."
+    },
+    {
+      "table_index": 65,
+      "row_index": 22,
+      "quoted_text": "Investments Total | $ | 1,664,992 | $ | 1,681,258 | 181.4 | %"
+    },
+    {
+      "table_index": 56,
+      "row_index": 9,
+      "quoted_text": "BTX Precision (10)(12)(17) | Equity Interest | - | - | - | - | 1 | 1,253 | 1,917"
+    }
+  ],
+  "confidence": 0.74,
+  "rationale": "The cited headers place Principal/Shares immediately before Cost and Market Value, while cited holding rows show the first post-maturity numeric value is the principal or share quantity and the next values are Cost and Market Value. This supports a column remap from unified cost to unified principal_amount for the skipped Principal/Shares extraction. Residual risk remains because the observed row shift likely also requires downstream remaps for cost and fair_value, but this correction is limited to the requested single column_remap template.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

@@ -111,6 +111,78 @@ def test_field_overlay_no_match_is_noop(tmp_path):
     assert out.iloc[0]["maturity_date"] == ""
 
 
+def test_overlay_records_src_field_override_ref(tmp_path):
+    """Overlaying a bridge value must record coordinate refs in src_field_overrides."""
+    _write_bridge(tmp_path, [{
+        "accession_number": "0001803498-26-000014", "report_date": "2025-12-31",
+        "raw_id_lower": "acme corp 1 | non-affiliated issuer", "family": "debt",
+        "maturity_date": "2030-05-25", "reference_rate_type": "SOFR",
+        "html_sha256": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+        "table_index": 2, "row_index": 15,
+    }])
+    df = pd.DataFrame([{
+        "cik": "0001803498", "accession_number": "0001803498-26-000014",
+        "report_date": "2025-12-31",
+        "bdc_investment_identifier": "Acme Corp 1 | Non-Affiliated Issuer",
+        "maturity_date": "", "reference_rate_type": "", "reference_rate_source": "",
+    }])
+    out = apply_html_section_bridge_field_overlays(
+        df, identifier_col="bdc_investment_identifier", bridge_dir=tmp_path)
+    ref = out.iloc[0]["src_field_overrides"]
+    assert "maturity_date=bridge:a1b2c3d4:t2:r15" in ref
+    assert "reference_rate_type=bridge:a1b2c3d4:t2:r15" in ref
+    # both refs present, joined by semicolons
+    parts = ref.split(";")
+    assert len(parts) == 2
+
+
+def test_overlay_degraded_bridge_ref_missing_sha(tmp_path):
+    """A bridge record with a missing html_sha256 must produce a degraded ref (empty sha8)
+    rather than crashing. Expected format: field=bridge::t<T>:r<R>."""
+    _write_bridge(tmp_path, [{
+        "accession_number": "0001803498-26-000014", "report_date": "2025-12-31",
+        "raw_id_lower": "acme corp 1 | non-affiliated issuer", "family": "debt",
+        "maturity_date": "2030-05-25", "reference_rate_type": "SOFR",
+        # html_sha256 intentionally absent (missing key)
+        "table_index": 3, "row_index": 9,
+    }])
+    df = pd.DataFrame([{
+        "cik": "0001803498", "accession_number": "0001803498-26-000014",
+        "report_date": "2025-12-31",
+        "bdc_investment_identifier": "Acme Corp 1 | Non-Affiliated Issuer",
+        "maturity_date": "", "reference_rate_type": "", "reference_rate_source": "",
+    }])
+    out = apply_html_section_bridge_field_overlays(
+        df, identifier_col="bdc_investment_identifier", bridge_dir=tmp_path)
+    ref = out.iloc[0]["src_field_overrides"]
+    # degraded ref: sha8 is empty string -> "bridge::t3:r9"
+    assert "maturity_date=bridge::t3:r9" in ref
+    assert "reference_rate_type=bridge::t3:r9" in ref
+
+
+def test_overlay_src_field_overrides_appends_to_existing(tmp_path):
+    """If src_field_overrides already has a value, the bridge ref is appended with ';'."""
+    _write_bridge(tmp_path, [{
+        "accession_number": "0001803498-26-000014", "report_date": "2025-12-31",
+        "raw_id_lower": "acme corp 1 | non-affiliated issuer", "family": "debt",
+        "maturity_date": "2030-05-25", "reference_rate_type": "",
+        "html_sha256": "ffffffff000000001111111122222222ffffffff000000001111111122222222",
+        "table_index": 0, "row_index": 7,
+    }])
+    df = pd.DataFrame([{
+        "cik": "0001803498", "accession_number": "0001803498-26-000014",
+        "report_date": "2025-12-31",
+        "bdc_investment_identifier": "Acme Corp 1 | Non-Affiliated Issuer",
+        "maturity_date": "", "reference_rate_type": "", "reference_rate_source": "",
+        "src_field_overrides": "some_prior_ref=xbrl:ctx123",
+    }])
+    out = apply_html_section_bridge_field_overlays(
+        df, identifier_col="bdc_investment_identifier", bridge_dir=tmp_path)
+    ref = out.iloc[0]["src_field_overrides"]
+    assert ref.startswith("some_prior_ref=xbrl:ctx123;")
+    assert "maturity_date=bridge:ffffffff:t0:r7" in ref
+
+
 # --- iXBRL contextRef-anchored field bridge ---
 _IX_NS = (
     'xmlns:xbrli="http://www.xbrl.org/2003/instance" '

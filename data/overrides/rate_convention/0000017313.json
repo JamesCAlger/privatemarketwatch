@@ -1,0 +1,57 @@
+{
+  "cik": "0000017313",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The debt schedule groups rate disclosures under 'Current Interest Rate' and separates the stated coupon/current contractual rate from Reference, Spread, Floor, and a separate PIK column. For floating-rate rows, the Coupon equals the reference rate plus spread/adjustment and excludes the separately printed PIK percentage; PIK is quoted separately and additive where applicable.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company 1,5,21 | Type of Investment 2 | Current Interest Rate 3 | Acquisition Date 14 | Maturity | Principal | Cost 12,17 | Fair Value 4 | % of Net Assets; Debt Investments | Coupon | Reference | Spread | Floor | PIK",
+      "where": "CAPITAL SOUTHWEST CORPORATION AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS, March 31, 2026"
+    },
+    {
+      "kind": "footnote",
+      "quote": "(3) The majority of investments bear interest at a rate that may be determined by reference to Secured Overnight Financing Rate (\"SOFR\") or Prime (\"P\") and reset daily (D), monthly (M), quarterly (Q), or semiannually (S). For each investment, the Company has provided the spread over SOFR or Prime and the current contractual interest rate in effect at March 31, 2026. Certain investments are subject to an interest rate floor. As noted above, certain investments accrue payment-in-kind (\"PIK\") interest.",
+      "where": "Notes to Consolidated Schedule of Investments, March 31, 2026"
+    },
+    {
+      "kind": "position",
+      "issuer": "LASH OPCO, LLC",
+      "quote": "LASH OPCO, LLC | First Lien | 10.77 % | SOFR (Q) | 7.00 % | 1.00 % | 2.00 % | 12/29/2021 | 9/17/2027 | 18,440 | 18,294 | 17,149 | (20)",
+      "printed_cash": 10.77,
+      "printed_pik": 2.0
+    },
+    {
+      "kind": "position",
+      "issuer": "GUARDIAN FLEET SERVICES, INC.",
+      "quote": "GUARDIAN FLEET SERVICES, INC. | First Lien | 12.81 % | SOFR (Q) | 9.00 % | 2.50 % | 1.75 % | 2/10/2023 | 2/10/2028 | 26,641 | 26,139 | 26,641",
+      "printed_cash": 12.81,
+      "printed_pik": 1.75
+    },
+    {
+      "kind": "position",
+      "issuer": "CAMPANY ROOF MAINTENANCE, LLC",
+      "quote": "CAMPANY ROOF MAINTENANCE, LLC | First Lien | 11.77 % | SOFR (M) | 8.00 % | 1.50 % | 1.50 % | 7/26/2024 | 11/27/2028 | 13,162 | 12,920 | 10,859",
+      "printed_cash": 11.77,
+      "printed_pik": 1.5
+    },
+    {
+      "kind": "position",
+      "issuer": "MUENSTER MILLING COMPANY",
+      "quote": "MUENSTER MILLING COMPANY | First Lien | 12.81 % | SOFR (Q) | 9.00 % | 1.00 % | 12.81 % | 8/10/2021 | 2/10/2027 | 25,783 | 25,655 | 22,999",
+      "printed_cash": 12.81,
+      "printed_pik": 12.81
+    },
+    {
+      "kind": "position",
+      "issuer": "APPLE ROOFING ADMINISTRATIVE SERVICES, LLC (FKA ROOF OPCO, LLC)",
+      "quote": "APPLE ROOFING ADMINISTRATIVE SERVICES, LLC (FKA ROOF OPCO, LLC) | First Lien - Term Loan A | 10.00 % | Fixed | 10.00 % | 8/27/2021 | 8/31/2029 | 14,079 | 13,942 | 12,263",
+      "printed_cash": 10.0,
+      "printed_pik": 10.0
+    }
+  ],
+  "rationale": "The filing does not present one all-in rate with PIK only parenthetical/footnoted. It prints a rate grid with a distinct PIK subcolumn under Current Interest Rate. Rows such as Guardian Fleet, Lash OpCo, and Campany Roof show a coupon/current rate and also a separate PIK percentage, so the stated Coupon/current rate excludes the PIK leg; PIK is separately quoted on top when applicable.",
+  "confidence": 0.94,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 5
+}

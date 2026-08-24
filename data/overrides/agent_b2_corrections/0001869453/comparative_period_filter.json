@@ -1,0 +1,35 @@
+{
+  "cik": "0001869453",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_ce3aab5ebbb5"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 86,
+      "row_index": 30,
+      "quoted_text": "Associations, Inc. | First lien senior secured revolving loan | 7/2028 | 2,058 | 2,058 | --"
+    },
+    {
+      "table_index": 86,
+      "row_index": 33,
+      "quoted_text": "Bamboo US BidCo LLC | First lien senior secured revolving loan | 10/2029 | -- | 4,103 | --"
+    },
+    {
+      "table_index": 88,
+      "row_index": 21,
+      "quoted_text": "Total Portfolio Company Commitments | $ | 84,739 | $ | 544,431 | $ | (1,374)"
+    },
+    {
+      "table_index": 83,
+      "row_index": 24,
+      "quoted_text": "Total Investments | $ | 5,187,099 | $ | 5,203,798 | 173.0 %"
+    }
+  ],
+  "confidence": 0.86,
+  "rationale": "B1 localized a comparative-period leak affecting the 2025-12-31 target quarter, with current and comparative values intermingled across investment and commitment rows. The bounded comparative_period_filter template should filter facts by report_date 2025-12-31 without specifying row deletions or any mechanism outside the requested class. Residual risk is that some cited rows may include legitimate comparative columns, but the correction is limited to the adjudicated target report date."
+}

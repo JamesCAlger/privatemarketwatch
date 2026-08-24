@@ -30,6 +30,7 @@ from pipeline.html_soi_evidence import (  # noqa: E402
     _html_path,
     _load_filing_meta,
     normalize_text,
+    resolve_accessions_from_index,
     resolve_accessions_from_rows,
 )
 
@@ -80,6 +81,10 @@ def _load(bundle: dict):
     cik = bundle.get("cik", "")
     report_date = bundle.get("report_date", "")
     source = _ENGINE_SOURCE.get(bundle.get("engine", ""), "BDC")
+    if not accs:
+        # Some engines' evidence rows carry no accession (e.g. fund_financials);
+        # fall back to the filings index for the covering filing.
+        accs = resolve_accessions_from_index(source, cik, report_date)
     if not accs:
         return None, {"status": "no_accession_resolved", "cik": cik,
                       "report_date": report_date, "rows_seen": len(rows)}, None

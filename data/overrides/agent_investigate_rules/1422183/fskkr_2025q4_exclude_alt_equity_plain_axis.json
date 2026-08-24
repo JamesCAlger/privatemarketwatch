@@ -1,0 +1,44 @@
+{
+  "cik": "1422183",
+  "rule_id": "fskkr_2025q4_exclude_alt_equity_plain_axis",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND (bdc_dimensions_raw NOT LIKE '% | %' OR asset_category = 'EQUITY_PREFERRED' OR (asset_category = 'EQUITY_COMMON' AND (issuer_name LIKE '%Common Stock%' OR bdc_investment_identifier LIKE '%Common Stock%'))) AND bdc_dimensions_raw NOT IN ('investmentidentifieraxis=HM Dunn Co Inc, Preferred Equity | Capital Goods', 'investmentidentifieraxis=Kellermeyer Bergensons Services LLC, Preferred Stock | Commercial & Professional Services')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "holdings 2025-12-31 before correction: 733 rows, fair_value sum 19,267,000,000; fund_financials investments_at_fair_value anchor 13,008,600,000; residual_before 6,258,400,000."
+    },
+    {
+      "source": "query",
+      "quote": "Dimension grouping for 2025-12-31: bdc_dimensions_raw LIKE '% | %' has 603 rows and 14,456,700,000 fair value; plain-axis rows have 130 rows and 4,810,300,000 fair value. Staging current-period plain-axis rows carry fair_value only and no cost/principal, while industry-axis rows carry the normal schedule line attributes."
+    },
+    {
+      "source": "query",
+      "quote": "After excluding plain-axis rows plus industry-axis preferred-stock and common-stock equity rows, retained rows are 541 with fair_value 12,995,200,000 and cost 13,676,100,000, versus fund_financials anchors of 13,008,600,000 fair value and 13,740,800,000 cost."
+    },
+    {
+      "source": "query",
+      "quote": "The broad exclusion also removed two industry-axis detailed rows that should remain: HM Dunn Co Inc, Preferred Equity | Capital Goods (fair_value 15,600,000; cost 13,400,000; shares_held 1,590) and Kellermeyer Bergensons Services LLC, Preferred Stock | Commercial & Professional Services (fair_value 0; cost 48,300,000; shares_held 26,230,661). Their plain-axis alternates remain excluded."
+    },
+    {
+      "source": "query",
+      "quote": "With the revised predicate, retained 2025-12-31 holdings are 543 rows with fair_value 13,010,800,000 and cost 13,737,800,000, versus anchors of 13,008,600,000 fair value and 13,740,800,000 cost."
+    }
+  ],
+  "rationale": "The extractor over-included alternate-presentation rows from the 2025-12-31 filing. Plain investment-axis rows are duplicate/summary contexts, and most preferred-stock/common-stock equity rows from the industry-axis presentation are part of the same over-included alternate schedule rather than the filer-level investment total validated in fund_financials. The prior predicate was slightly overbroad because it also removed two industry-axis detailed rows whose retention reconciles both fair value and cost to the filer anchors within the required 0.5% rounding tolerance without pushing fair value below the anchor.",
+  "confidence": 0.86,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 190,
+      "fv": 6256200000.0,
+      "residual_before": 6258400000.0,
+      "residual_after": 2200000.0
+    }
+  }
+}

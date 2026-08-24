@@ -1,0 +1,40 @@
+{
+  "cik": "1379785",
+  "rule_id": "1379785_exclude_2025q4_duplicate_alternate_investment_labels",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw IN ('investmentidentifieraxis=Security Holdings B.V | Common Stock Series B', 'investmentidentifieraxis=Security Holdings B.V | Bridge Loan', 'investmentidentifieraxis=Security Holdings B.V| Revolver', 'investmentidentifieraxis=Security Holdings B.V | Senior Unsecured Term Loan', 'investmentidentifieraxis=Security Holdings B.V | Common Stock Series A', 'investmentidentifieraxis=Jocassee Partners LLC, Member Interest', 'investmentidentifieraxis=Sierra Senior Loan Strategy JV I LLC, Member Interest', 'investmentidentifieraxis=Waccamaw River LLC | Member Interest', 'investmentidentifieraxis=Thompson Rivers LLC | Member Interest', 'investmentidentifieraxis=Eclipse Business Capital Holdings LLC, Revolver, Funded', 'investmentidentifieraxis=Security Holdings B.V | Senior Unsecured Term Loan 2')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings value_sum is 2545121000.0 versus the validated anchor investments_at_fair_value 2398524000.0, residual_before 146597000.0. The selected duplicate alternate-label rows total 11 rows and 141884000.0 fair value; excluding them gives corrected_sum 2403237000.0 and residual_after 4713000.0, or 0.1965% of the anchor."
+    },
+    {
+      "source": "query",
+      "quote": "Exact duplicate position_key groups in 2025-12-31 holdings include Security Holdings B.V Common Stock Series B twice for 40702000.0 each, Security Holdings B.V Bridge Loan twice for 6997000.0 each, Security Holdings B.V Revolver twice for 6225000.0 each, Security Holdings B.V Senior Unsecured Term Loan twice for 2909000.0 each, and Security Holdings B.V Common Stock Series A twice for 436000.0 each."
+    },
+    {
+      "source": "query",
+      "quote": "Additional alternate-label duplicate pairs in 2025-12-31 holdings are Jocassee Partners LLC 9.1% Member Interest and Jocassee Partners LLC, Member Interest at 37986000.0 each; Sierra Senior Loan Strategy JV I LLC 89.01% Member Interest and Sierra Senior Loan Strategy JV I LLC, Member Interest at 16404000.0 each; Waccamaw River LLC 20% Member Interest and Waccamaw River LLC Member Interest at 4489000.0 each; Thompson Rivers LLC 16.0% Member Interest and Thompson Rivers LLC Member Interest at 4271000.0 each; Eclipse Business Capital, LLC Revolver 9909000.0 and Eclipse Business Capital Holdings LLC, Revolver, Funded 9900000.0; Security Holdings B.V Senior Subordinated Term Loan and Security Holdings B.V Senior Unsecured Term Loan 2 at 11565000.0 each."
+    },
+    {
+      "source": "query",
+      "quote": "The raw staging rows for 2025-12-31 contain the same duplicate representations: Security Holdings B.V and Security Holdings B.V. variants, Jocassee Partners LLC | 9.1% Member Interest plus Jocassee Partners LLC, Member Interest, Sierra Senior Loan Strategy JV I LLC | 89.01% Member Interest plus Sierra Senior Loan Strategy JV I LLC, Member Interest, and Eclipse Business Capital, LLC | Revolver plus Eclipse Business Capital Holdings LLC, Revolver, Funded."
+    }
+  ],
+  "rationale": "The 2025-12-31 extraction over-counts positions presented under alternate investment labels. These rows are not missing investments and their fair values should not be rescaled; they are duplicate representations of positions already retained under the detailed schedule labels. Removing the duplicate alternate labels reduces the residual below the 0.5% filer-rounding tolerance without deleting below the validated anchor.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 11,
+      "fv": 141884000.0,
+      "residual_before": 146597000.0,
+      "residual_after": 4713000.0
+    }
+  }
+}

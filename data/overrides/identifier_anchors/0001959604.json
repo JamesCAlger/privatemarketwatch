@@ -17,7 +17,7 @@
     },
     {
       "label": "ASSETTYPE",
-      "regex": "(?i)\\b(?:First Lien Debt Investments|First Lien Term Loan|First Lien Delayed Draw Term Loan|First Lien Revolver|Preferred Stock|Common Stock|L\\.P\\.? Interests?)\\b"
+      "regex": "(?i)\\b(?:First Lien Debt Investments|First Lien Term Loan|First Lien Delayed Draw Term Loan|First Lien Revolver|First Lein Delayed Draw Term Loan|First Lein Revolver|Preferred Stock|Common Stock|L\\.P\\.? Interests?)\\b"
     },
     {
       "label": "REFRATE",
@@ -32,8 +32,12 @@
       "regex": "(?i)\\bMaturity Date\\s+\\d{1,2}/\\d{1,2}/\\d{4}\\b"
     },
     {
+      "label": "COMMIT",
+      "regex": "(?i)\\bUnfunded Portfolio Company Commitments\\b"
+    },
+    {
       "label": "TOTAL",
-      "regex": "(?i)\\bTotal\\s+non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio Company\\s+(?:equity\\s+)?investments\\b"
+      "regex": "(?i)\\b(?:Total\\s+non[- ]controlled[- ]non[- ]affiliated\\s+Portfolio Company\\s+(?:equity\\s+)?investments|Total\\s+Unfunded Portfolio Company Commitments)\\b"
     }
   ]
 }

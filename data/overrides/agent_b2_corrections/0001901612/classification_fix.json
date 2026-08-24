@@ -1,0 +1,41 @@
+{
+  "cik": "0001901612",
+  "mechanism": "extraction_gap",
+  "fix_class": "classification_fix",
+  "template": {
+    "field": "asset_class",
+    "value": "Debt"
+  },
+  "source_review_ids": [
+    "RVQ_REV_f49e7c48b6fa"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 16,
+      "row_index": 40,
+      "quoted_text": ""
+    },
+    {
+      "table_index": 16,
+      "row_index": 41,
+      "quoted_text": ""
+    },
+    {
+      "table_index": 16,
+      "row_index": 42,
+      "quoted_text": ""
+    },
+    {
+      "table_index": 90,
+      "row_index": 9,
+      "quoted_text": ""
+    }
+  ],
+  "confidence": 0.35,
+  "rationale": "B1 localized a real classification extraction gap to the cited filing coordinates for the 2025-12-31 packet. The correction uses the requested classification_fix template and assigns the unified holdings asset_class to Debt, while omitting a row_selector because the embedded packet did not include exact issuer_name or bdc_investment_identifier text required for a valid selector.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

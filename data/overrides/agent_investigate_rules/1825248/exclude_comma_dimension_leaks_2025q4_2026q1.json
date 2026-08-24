@@ -1,0 +1,43 @@
+{
+  "cik": "1825248",
+  "rule_id": "exclude_comma_dimension_leaks_2025q4_2026q1",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31",
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date IN ('2025-12-31', '2026-03-31') AND bdc_dimensions_raw LIKE '%,%' AND (instrument_description IS NULL OR CAST(instrument_description AS VARCHAR) IN ('', 'nan'))",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, holdings value_sum was 5,511,632,000 against investments_at_fair_value anchor 4,071,008,000. Rows where bdc_dimensions_raw contains a comma and instrument_description is NULL totaled 193 rows and 1,438,422,000 fair value; excluding them leaves 4,073,210,000, a residual of 2,202,000 or 0.054%."
+    },
+    {
+      "source": "query",
+      "quote": "Staging shows duplicate dimensional representations for the same investments: 'FBLC Senior Loan Fund, LLC | Investment in Joint Ventures' has fair_value 224,956,000 and cost 225,161,000, while 'FBLC Senior Loan Fund, LLC, Joint Venture' has the same fair_value 224,956,000 but no principal_amount and no detailed investment_type. Similar pairs occur for Post Road Equipment Finance and Siena Capital Finance, where pipe-delimited detailed rows coexist with comma-delimited investment-type rows."
+    },
+    {
+      "source": "query",
+      "quote": "The same scoped predicate improves 2026-03-31 from value_sum 5,470,686,000 to 4,050,457,000, exactly matching the fund_financials investments_at_fair_value anchor. Applying the predicate to earlier quarters was intentionally avoided because those quarters do not have the same pipe-delimited holdings representation in holdings."
+    }
+  ],
+  "rationale": "Beginning with 2025-12-31, the holdings table contains detailed pipe-delimited issuer/industry rows that represent the portfolio schedule and reconcile to the fund investment total within rounding tolerance. The comma-delimited rows with NULL instrument_description are leaked alternate dimensional representations/subtotals for investment type or joint venture labels. They duplicate real positions already present in the detailed rows and overstate fair value; the rule is scoped to quarters where this extraction shape is observable to avoid deleting real rows in earlier periods.",
+  "confidence": 0.95,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 193,
+      "fv": 1438422000.0,
+      "residual_before": 1440624000.0,
+      "residual_after": 2202000.0
+    },
+    "2026-03-31": {
+      "rows": 183,
+      "fv": 1420229000.0,
+      "residual_before": 1420229000.0,
+      "residual_after": 0.0
+    }
+  }
+}

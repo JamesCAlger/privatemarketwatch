@@ -1,0 +1,43 @@
+{
+  "cik": "0001974793",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule presents separate rate columns: Spread, Cash Interest Rate, and PIK. The stated position-level Cash Interest Rate is the cash coupon/leg as of period end; any PIK rate is shown in the adjacent PIK column and is additional to the cash rate.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company | Industry | Type of Investment (1)(2) | Index | Spread | Cash Interest Rate (3)(4) | PIK | Maturity Date | Shares | Principal (5) | Cost | Fair Value | Notes",
+      "where": "Schedule of Investments, March 31, 2026, table 9 row 1 / table 10 row 1"
+    },
+    {
+      "kind": "footnote",
+      "quote": "For each of these loans, the Company has provided the applicable margin over the reference rate based on each respective credit agreement and the cash interest rate as of period end.",
+      "where": "Schedule of Investments footnote (4), March 31, 2026"
+    },
+    {
+      "kind": "position",
+      "issuer": "USIC Holdings, Inc.",
+      "quote": "USIC Holdings, Inc. | Diversified Support Services | First Lien Term Loan | SOFR+ | 5.75 % | 6.30 % | 3.13 % | 9/10/2031 | 9,629 | 9,535 | 9,680 | (4)(7)",
+      "printed_cash": 6.3,
+      "printed_pik": 3.13
+    },
+    {
+      "kind": "position",
+      "issuer": "WP CPP Holdings, LLC",
+      "quote": "WP CPP Holdings, LLC | Aerospace & Defense | First Lien Term Loan | SOFR+ | 7.00 % | 6.04 % | 3.88 % | 11/28/2029 | 25,697 | 25,335 | 25,674 | (4)(7)",
+      "printed_cash": 6.04,
+      "printed_pik": 3.88
+    },
+    {
+      "kind": "position",
+      "issuer": "WP CPP Holdings, LLC",
+      "quote": "WP CPP Holdings, LLC | Aerospace & Defense | First Lien Term Loan | SOFR+ | 7.00 % | 6.04 % | 3.88 % | 11/29/2029 | 1,218 | 1,218 | 1,217 | (4)(7)",
+      "printed_cash": 6.04,
+      "printed_pik": 3.88
+    }
+  ],
+  "rationale": "The filing's schedule header separates Cash Interest Rate from PIK, and the rate footnote describes the disclosed rate as the cash interest rate as of period end. The actual PIK rows print a cash rate in the Cash Interest Rate column and a separate PIK percentage in the adjacent PIK column, so the stated interest rate means the cash leg only, with PIK quoted separately on top.",
+  "confidence": 0.98,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 3
+}

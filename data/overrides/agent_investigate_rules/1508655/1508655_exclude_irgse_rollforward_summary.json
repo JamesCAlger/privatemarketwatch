@@ -1,0 +1,52 @@
+{
+  "cik": "1508655",
+  "rule_id": "1508655_exclude_irgse_rollforward_summary",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw = 'investmentidentifieraxis=IRGSE Holding Corp' AND bdc_investment_identifier = 'IRGSE Holding Corp' AND (instrument_description IS NULL OR CAST(instrument_description AS VARCHAR) IN ('', 'nan'))",
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments total: Total Investments | $ | 3,323,282 | $ | 3,347,317 | 208.2 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Affiliated rollforward table row: IRGSE Holding Corp. | $ | 65,095 | $ | 11,630 | $ | ( 5,310 | ) | $ | 3,266 | $ | ( 16,309 | ) | $ | - | $ | 58,372 | $ | 11 | $ | 10,347"
+    },
+    {
+      "source": "query",
+      "quote": "holdings row selected by the predicate for 2025-12-31 has issuer_name IRGSE Holding Corp, no instrument_description, fair_value 58,372,000, cost 66,498,000, and dimensions_raw investmentidentifieraxis=IRGSE Holding Corp"
+    },
+    {
+      "source": "query",
+      "quote": "Real 2025-12-31 IRGSE Schedule of Investments rows remain separately identified with full dimensions: first-lien loan fair_value 30,261,000; first-lien revolving loan fair_value 27,943,000; Class A Units fair_value 125,000; Class C-1 Units fair_value 43,000"
+    }
+  ],
+  "rationale": "The extractor included an affiliated-investment rollforward summary row as if it were a holding. Its value is the IRGSE fair value at December 31, 2025 from the rollforward table, not a standalone Schedule of Investments position. The actual IRGSE positions are already present as separate debt and equity line items with full investment descriptions, so this summary row over-counts fair value.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2025-06-30": {
+      "rows": 1,
+      "fv": 66498000.0,
+      "residual_before": 66498000.0,
+      "residual_after": 0.0
+    },
+    "2025-09-30": {
+      "rows": 1,
+      "fv": 66339000.0,
+      "residual_before": 66339000.0,
+      "residual_after": 0.0
+    },
+    "2025-12-31": {
+      "rows": 1,
+      "fv": 58372000.0,
+      "residual_before": 58372000.0,
+      "residual_after": 0.0
+    }
+  }
+}

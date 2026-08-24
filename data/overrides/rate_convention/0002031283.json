@@ -1,0 +1,50 @@
+{
+  "cik": "0002031283",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has a single Interest Rate column. For PIK-bearing rows, that column prints the total stated rate and either marks the entire rate as PIK or states that the printed rate includes a specified PIK component; the filing does not present separate cash and PIK rate columns.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company 1 2 3 4 | Investment Type | Reference Rate and Floor | Footnotes | Interest Rate 11 | Maturity Date 5 | Par Amount / Units | Cost 6 | Fair Value | Percentage of Net Assets 7",
+      "where": "Schedule of Investments, debt investments, tables 17-22"
+    },
+    {
+      "kind": "header",
+      "quote": "Portfolio Company 1 2 3 4 | Investment Type | Footnotes | Interest Rate 11 | Acquisition Date | Par Amount / Units | Cost | Fair Value | Percentage of Net Assets 7",
+      "where": "Schedule of Investments, preferred equity, table 23"
+    },
+    {
+      "kind": "position",
+      "issuer": "Accuserve Solutions, Inc.",
+      "quote": "Accuserve Solutions, Inc. | First Lien Term Loan | SOFR+ | 6.00 % (incl 3.38 % PIK) | 1.00 % | Floor | 9.68 % | 3/15/2030 | 8,663,018 | 8,566,248 | 8,326,893 | 2.4 | %",
+      "printed_total": 9.68,
+      "printed_pik": 3.38
+    },
+    {
+      "kind": "position",
+      "issuer": "GovDelivery Holdings, LLC",
+      "quote": "GovDelivery Holdings, LLC | First Lien Term Loan | SOFR+ | 5.50 % (incl 2.00 % PIK) | 0.75 % | Floor | 9.17 % | 1/17/2031 | 2,771,770 | 2,771,770 | 2,771,770 | 0.8 | %",
+      "printed_total": 9.17,
+      "printed_pik": 2.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Fullsteam Holdco, L.P.",
+      "quote": "Fullsteam Holdco, L.P. | Unsecured Note | N/A | 13.00 % PIK | 8/9/2032 | 5,432,814 | 5,364,734 | 5,275,806 | 1.5 | %",
+      "printed_total": 13.0,
+      "printed_pik": 13.0
+    },
+    {
+      "kind": "position",
+      "issuer": "MC CIF Wealth Management (UK) Ltd.",
+      "quote": "MC CIF Wealth Management (UK) Ltd. | Preferred Equity | 12.00 % (incl 6.00 % PIK) | 8/12/2025 | 908,700 | 899,950 | 895,251 | 0.3 | %",
+      "printed_total": 12.0,
+      "printed_pik": 6.0
+    }
+  ],
+  "rationale": "The target-quarter schedule uses one Interest Rate column, not separate Cash and PIK columns. PIK is disclosed inside that same rate text: some rows print a total rate followed by '(incl ... PIK)', and fully PIK instruments print the PIK rate as the Interest Rate. This means the stated position-level interest rate is all-in, with the PIK component included in the printed rate rather than added on top.",
+  "confidence": 0.93,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

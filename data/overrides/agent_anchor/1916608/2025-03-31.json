@@ -1,0 +1,30 @@
+{
+  "cik": "1916608",
+  "target_quarter": "2025-03-31",
+  "grand_total": 184989238.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 184989238.0,
+      "source": "filing accession 0000950170-25-070658, Consolidated Schedule of Investments table 7 row 26: Total Investments (115.8%) fair value $184,989,238"
+    }
+  ],
+  "companyfacts_fv": null,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Consolidated Schedule of Investments as of March 31, 2025, table 7 row 26: Total Investments (115.8%) | $ | 186,896,307 | $ | 184,989,238"
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule subtotal rows show Total Debt & Equity Investments (2) fair value 176,479,202 and Total Cash Equivalents fair value 8,510,036, which sum to the final Total Investments fair value 184,989,238."
+    },
+    {
+      "source": "query",
+      "quote": "Extracted holdings for accession 0000950170-25-070658, report_date 2025-03-31: 48 rows, SUM(fair_value)=176,479,202; this matches the debt and equity subtotal before cash equivalents."
+    }
+  ],
+  "rationale": "The filing presents a single final Total Investments row in the March 31, 2025 consolidated schedule of investments. The 176,479,202 amount is only the Total Debt & Equity Investments subtotal; adding the separately presented cash equivalents of 8,510,036 yields the schedule's final fair value total of 184,989,238. Companyfacts investments_at_fair_value is null and captured no amount for this quarter. The selected total is below total assets of 186,046,000 and represents about 99.4% of total assets, which is the plausible grand total for this BDC schedule.",
+  "confidence": 0.95
+}

@@ -1,0 +1,53 @@
+{
+  "cik": "0001544206",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "For debt investments, the schedule has Reference Rate (2), Spread (2), and Interest Rate (2). PIK is printed as a component inside Spread (2), while Interest Rate (2) prints the all-in total rate including the reference rate, cash spread, and PIK component. For equity/preferred-style rows, the schedule uses All-In Rate and prints 100% PIK directly in that all-in rate cell.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investments--non-controlled/non-affiliated (1) | Footnotes | Industry | Reference Rate (2) | Spread (2) | Interest Rate (2) | Acquisition Date | Maturity Date | Par/ Principal Amount * | Amortized Cost (4) | Fair Value (5) | % of Net Assets",
+      "where": "Schedule of Investments, table 20 row 1 in provided filing evidence for accession 0001544206-25-000077"
+    },
+    {
+      "kind": "header",
+      "quote": "Investments--non-controlled/non-affiliated (1) | Footnotes | Industry | All-In Rate | Acquisition Date | Shares/ Units | Cost | Fair Value (5) | % of Net Assets",
+      "where": "Schedule of Investments, equity investments tables 26-27 in provided filing evidence for accession 0001544206-25-000077"
+    },
+    {
+      "kind": "position",
+      "issuer": "Ellkay, LLC",
+      "quote": "Ellkay, LLC | (a) | (2)(3)(15) | Healthcare & Pharmaceuticals | SOFR | 3.25 %, 3.50 % PIK | 10.98 % | 5/14/2025 | 9/14/2030 | 37,633 | 37,256 | 37,811 | 3.17",
+      "printed_total": 10.98,
+      "printed_pik": 3.5,
+      "printed_cash": 3.25
+    },
+    {
+      "kind": "position",
+      "issuer": "Hadrian Acquisition Limited (United Kingdom)",
+      "quote": "Hadrian Acquisition Limited (United Kingdom) | (a) | (2)(3)(7) | Diversified Financial Services | SONIA | 5.16 %, 3.18 % PIK | 12.32 % | 2/28/2022 | 2/28/2029 | GBP | 6,101 | 8,014 | 8,262 | 0.69",
+      "printed_total": 12.32,
+      "printed_pik": 3.18,
+      "printed_cash": 5.16
+    },
+    {
+      "kind": "position",
+      "issuer": "Espresso Bidco Inc.",
+      "quote": "Espresso Bidco Inc. | (a) | (2)(3)(15) | Software | SOFR | 2.63 %, 3.13 % PIK | 9.75 % | 3/25/2025 | 3/25/2032 | 21,607 | 21,209 | 21,451 | 1.80",
+      "printed_total": 9.75,
+      "printed_pik": 3.13,
+      "printed_cash": 2.63
+    },
+    {
+      "kind": "position",
+      "issuer": "Integrity Marketing Group, LLC",
+      "quote": "Integrity Marketing Group, LLC | (a) | (6) | Diversified Financial Services | 10.50 % ( 100 % PIK) | 12/21/2021 | 22,240 | 22,238 | 21,750 | 1.82",
+      "printed_total": 10.5,
+      "printed_pik": 10.5
+    }
+  ],
+  "rationale": "The printed debt schedule does not label the InvestmentInterestRate column as cash-only. Instead, it separates the additive rate mechanics: Reference Rate (2), Spread (2), and Interest Rate (2). Actual PIK rows show the cash spread and PIK component in the Spread (2) cell, while the Interest Rate (2) cell is the total rate, e.g. Ellkay shows SOFR, spread '3.25 %, 3.50 % PIK', and interest rate '10.98 %'; Espresso shows SOFR, spread '2.63 %, 3.13 % PIK', and interest rate '9.75 %'. Equity/preferred-style rows use an explicit All-In Rate column and print '10.50 % ( 100 % PIK)' for Integrity Marketing Group. The user-requested target_quarter is 2026-03-31, but the provided filing-evidence bundle for this CIK is report_date 2025-09-30/accession 0001544206-25-000077; no 2026-03-31 bundle for this CIK was found in the local review_bundles scan.",
+  "confidence": 0.9,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 3
+}

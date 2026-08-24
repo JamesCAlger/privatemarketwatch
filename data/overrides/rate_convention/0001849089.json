@@ -1,0 +1,36 @@
+{
+  "cik": "0001849089",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has separate columns for Reference Rate and Spread and Interest Rate. For the PIK subordinated debt, the Reference Rate and Spread cell prints the all-in stated rate with an inline PIK component, while the Interest Rate column repeats the same all-in total rate; there are no separate Cash and PIK columns.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company (1)(3)(11)(13) | Footnotes | Investment Type | Reference Rate and Spread | Interest Rate | Acquisition Date | Maturity Date | Par Amount/ Shares (4) | Amortized Cost | Fair Value | Percentage of Net Assets (5)",
+      "where": "Schedule of Investments, September 30, 2025, table 16 row 1"
+    },
+    {
+      "kind": "header",
+      "quote": "Company (1)(2)(3)(11)(13) | Footnotes | Investment Type | Reference Rate and Spread | Interest Rate | Acquisition Date | Maturity Date | Par Amount/ Shares (4) | Amortized Cost | Fair Value | Percentage of Net Assets (5)",
+      "where": "Schedule of Investments, December 31, 2024 comparative schedule, table 27 row 1"
+    },
+    {
+      "kind": "position",
+      "issuer": "ZWR Holdings, Inc.",
+      "quote": "ZWR Holdings, Inc. | (23) | Subordinated debt | 14.00 % (Inc. 10.00 % PIK) | 14.00 % | 8/16/2021 | 2/12/2027 | 1,845 | 1,845 | 1,845 | 0.5 %",
+      "printed_total": 14.0,
+      "printed_pik": 10.0
+    },
+    {
+      "kind": "position",
+      "issuer": "ZWR Holdings, Inc.",
+      "quote": "ZWR Holdings, Inc. | (19) | Subordinated debt | 14.00 % (Inc. 10.00 % PIK) | 14.00 % | 8/16/2021 | 2/16/2027 | 1,738 | 1,738 | 1,712 | 0.5 %",
+      "printed_total": 14.0,
+      "printed_pik": 10.0
+    }
+  ],
+  "rationale": "The filing's printed PIK rows use an inline parenthetical, not separate cash and PIK columns and not an additive spread quote. In both cited ZWR rows, the Reference Rate and Spread cell says 14.00% including 10.00% PIK, and the Interest Rate column is 14.00%. That means the stated position-level interest rate is the all-in coupon including PIK.",
+  "confidence": 0.93,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

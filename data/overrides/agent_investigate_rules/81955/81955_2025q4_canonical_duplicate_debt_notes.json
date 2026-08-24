@@ -1,0 +1,37 @@
+{
+  "cik": "81955",
+  "rule_id": "81955_2025q4_canonical_duplicate_debt_notes",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND ((issuer_name = 'Applied Image, Inc.' AND instrument_description IN ('Term Note', 'Term Note at 12%')) OR (issuer_name = 'BMP Food Service Supply Holdco, LLC' AND instrument_description LIKE 'Third Amended and Restated Term Note%') OR (issuer_name = 'BMP Swanson Holdco, LLC' AND instrument_description IN ('Term Note', 'Term Note at 5%')) OR (issuer_name = 'Caitec, Inc.' AND instrument_description IN ('Subordinated Secured Promissory Note', 'Subordinated Secured Promissory Note One')) OR (canonical_name = 'Mobile RN Holdings LLC' AND instrument_description IN ('Term Note', 'Term Note at 14%')))",
+  "match_fields": [
+    "report_date",
+    "fair_value"
+  ],
+  "keep": "first",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Grouping 2025-12-31 holdings by canonical_name and fair_value within the candidate predicate produced five duplicate groups: Applied Image 1,750,000; BMP Food Service Supply Holdco 3,859,834; BMP Swanson Holdco 1,754,587; Caitec 2,525,032; Mobile RN Holdings 2,531,827."
+    },
+    {
+      "source": "query",
+      "quote": "Current 2025-12-31 holdings sum fair_value 62,841,989 against anchor 48,480,496. Deduplicating these five same-canonical groups removes 5 rows and 12,421,280 of fair value, leaving 50,420,709 before the remaining alias duplicate."
+    }
+  ],
+  "rationale": "The selected holdings contain duplicate debt/note positions represented once with a generic description and once with a verbose rate or alias description. The duplicated rows share the same report date, canonical issuer, and fair value, so this is a duplicate-selection defect rather than a value scale or missing-row defect.",
+  "confidence": 0.91,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 5,
+      "fv": 12421280.0,
+      "residual_before": 14361493.0,
+      "residual_after": 1940213.0
+    }
+  }
+}

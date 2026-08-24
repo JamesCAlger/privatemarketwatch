@@ -2,7 +2,7 @@
   "schema_version": "agentA-anchor-vocabulary.v1",
   "cik": "0001715933",
   "entity_name": "TCW Direct Lending VII LLC",
-  "report_date": "2025-12-31",
+  "report_date": "2026-03-31",
   "status": "PROPOSED",
   "anchors": [
     {
@@ -10,10 +10,10 @@
       "regex": "^Debt Securities\\b",
       "evidence": [
         {
-          "accession_number": "0001193125-26-141887",
+          "accession_number": "0001193125-26-221880",
           "table_index": 24,
-          "row_index": 1,
-          "observation": "Debt schedule identifiers and category rows begin with Debt Securities, including bundle none examples such as Debt Securities Aerospace & Defense."
+          "row_index": 4,
+          "observation": "Bundle debt samples begin with Debt Securities and carry issuer, acquisition date, instrument, rate terms, net asset percentage, and maturity date."
         }
       ]
     },
@@ -22,10 +22,10 @@
       "regex": "Maturity Date",
       "evidence": [
         {
-          "accession_number": "0001193125-26-141887",
+          "accession_number": "0001193125-26-221880",
           "table_index": 24,
           "row_index": 4,
-          "observation": "Debt identifiers include explicit Maturity Date followed by an mm/dd/yy date."
+          "observation": "Dominant debt identifiers include a literal Maturity Date marker followed by an mm/dd/yy date."
         }
       ]
     },
@@ -34,10 +34,10 @@
       "regex": "-\\s*\\d+(?:\\.\\d+)?\\s*%",
       "evidence": [
         {
-          "accession_number": "0001193125-26-141887",
+          "accession_number": "0001193125-26-221880",
           "table_index": 24,
           "row_index": 4,
-          "observation": "Debt identifiers include a leading stated coupon after the instrument name."
+          "observation": "Debt and affiliated investment identifiers embed a stated coupon after the instrument name."
         }
       ]
     },
@@ -46,10 +46,10 @@
       "regex": "\\b(?:SOFR|PRIME)\\b",
       "evidence": [
         {
-          "accession_number": "0001193125-26-141887",
+          "accession_number": "0001193125-26-221880",
           "table_index": 24,
           "row_index": 4,
-          "observation": "Debt identifiers include SOFR plus spread in parentheses; other rows include PRIME plus spread."
+          "observation": "Dominant debt identifiers include reference-rate text such as SOFR plus a stated spread."
         }
       ]
     },
@@ -58,13 +58,49 @@
       "regex": "^Equity Securities\\b",
       "evidence": [
         {
-          "accession_number": "0001193125-26-141887",
+          "accession_number": "0001193125-26-221880",
           "table_index": 27,
           "row_index": 1,
-          "observation": "Equity schedule identifiers begin with Equity Securities and generally do not carry debt rate or maturity terms."
+          "observation": "Equity security identifiers begin with Equity Securities and do not embed debt rate terms."
+        }
+      ]
+    },
+    {
+      "label": "EQUITY_INVESTMENTS",
+      "regex": "^Equity Investments\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-221880",
+          "table_index": 27,
+          "row_index": 1,
+          "observation": "Bundle none examples include the standalone section marker Equity Investments."
+        }
+      ]
+    },
+    {
+      "label": "CASH_EQUIV",
+      "regex": "^Cash Equivalents\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-26-221880",
+          "table_index": 24,
+          "row_index": 1,
+          "observation": "Bundle none examples include Cash Equivalents rows with embedded money-market yield text."
+        }
+      ]
+    },
+    {
+      "label": "SHORT_TERM",
+      "regex": "^Short-term Investments\\b",
+      "evidence": [
+        {
+          "accession_number": "0001193125-25-276898",
+          "table_index": 24,
+          "row_index": 1,
+          "observation": "Bundle none examples include Short-term Investments rows with U.S. Treasury Bill yield text."
         }
       ]
     }
   ],
-  "notes": "Debt and equity section anchors give category identifiers a signature; rate grammar remains scoped to rows with embedded rate/reference/maturity datapoints."
+  "notes": "Anchors cover the dominant debt, equity, cash-equivalent, short-term investment, and equity-investment section markers present in bundle identifier strings."
 }

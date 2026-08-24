@@ -1,0 +1,32 @@
+{
+  "cik": "1975736",
+  "rule_id": "exclude_affiliated_issuer_duplicate_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_investment_identifier LIKE 'Affiliated Issuer |%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2025-12-31, bdc_investment_identifier LIKE 'Affiliated Issuer |%' selects 10 holdings rows totaling fair_value 23,078,000."
+    },
+    {
+      "source": "query",
+      "quote": "Examples in staging show paired rows: 'Affiliated Issuer | Discover Financial Services, ABF Equity' fair_value 1,372,000 and 'Discover Financial Services, ABF Equity | Financial Services' fair_value 1,372,000; 'Affiliated Issuer | KSC I Aircraft LP, ABF Equity' fair_value 12,152,000 and 'KSC I Aircraft LP, ABF Equity | Capital Goods' fair_value 12,152,000."
+    }
+  ],
+  "rationale": "Rows prefixed 'Affiliated Issuer |' are duplicate axis representations of real investments already present under their portfolio company and industry identifiers. Counting both overstates fair value.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 10,
+      "fv": -23078000.0,
+      "residual_before": 22873000.0,
+      "residual_after": -205000.0
+    }
+  }
+}

@@ -5,11 +5,11 @@
   "anchors": [
     {
       "label": "REFRATE",
-      "regex": "(?i)\\b(?:SOFR|LIBOR|PRIME)\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%"
+      "regex": "(?i)\\b(?:SOFR|LIBOR|PRIME|EURIBOR)\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%?"
     },
     {
       "label": "RATE",
-      "regex": "\\b\\d+(?:\\.\\d+)?\\s*%"
+      "regex": "\\b\\d+(?:\\.\\d+)?\\s*%|\\b0\\.\\d{3,}\\b"
     },
     {
       "label": "MAT",
@@ -21,15 +21,27 @@
     },
     {
       "label": "EQUITY",
-      "regex": "(?i)\\b(?:Common Stocks?|Warrants?)\\b"
+      "regex": "(?i)\\b(?:Common Stocks?|Preferred Stocks?|Warrants?)\\b"
     },
     {
       "label": "ASSETTYPE",
-      "regex": "(?i)\\b(?:Debt Investments|Short-Term Investments|U\\.S\\. Treasury Bills?)\\b"
+      "regex": "(?i)\\b(?:Debt Investments|Short-Term Investments|U\\.S\\. Treasury Bills?|Corporate Bonds?|Preferred Stocks?)\\b"
     },
     {
       "label": "COMMON",
       "regex": "(?i)\\bCommon Stocks?\\b"
+    },
+    {
+      "label": "PREFERRED",
+      "regex": "(?i)\\bPreferred Stocks?\\b"
+    },
+    {
+      "label": "CORPBOND",
+      "regex": "(?i)\\bCorporate Bonds?\\b"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "(?i)\\bTotal\\b"
     },
     {
       "label": "SHORTTERM",

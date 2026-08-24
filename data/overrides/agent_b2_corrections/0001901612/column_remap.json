@@ -1,0 +1,36 @@
+{
+  "cik": "0001901612",
+  "mechanism": "extraction_gap",
+  "fix_class": "column_remap",
+  "template": {
+    "from_field": "basis_spread",
+    "to_field": "pik_rate"
+  },
+  "source_review_ids": [
+    "RVQ_REV_48332110496c"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 12,
+      "row_index": 19,
+      "quoted_text": "Any Hour, LLC(25) | One stop | N/A | 13.00 % | PIK | 05/2031 | 3,047 | 3,009 | 0.2 | 2,620"
+    },
+    {
+      "table_index": 15,
+      "row_index": 39,
+      "quoted_text": "PPV Intermediate Holdings, LLC(25) | One stop | N/A | 14.75 % | PIK | 08/2030 | 9,679 | 9,543 | 0.8 | 9,679"
+    },
+    {
+      "table_index": 22,
+      "row_index": 21,
+      "quoted_text": "Denali Bidco Limited(8)(9)(10)(25) | Subordinated debt | N/A | 11.20 % | PIK | 09/2032 | 6,937 | 6,890 | 0.6 | 6,937"
+    }
+  ],
+  "confidence": 0.62,
+  "rationale": "The cited rows show a recurring debt-column pattern where the filing has N/A in the spread column followed by a PIK indicator after the numeric interest rate. For the requested column_remap class, the bounded correction is to remap values extracted under the unified basis_spread field into pik_rate, capturing the PIK column without changing principal, cost, fair value, interest rate, or percent of net assets. Because the template contract allows only one optional selector object and the defect is evidenced across multiple issuers/tables, no row_selector is used.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

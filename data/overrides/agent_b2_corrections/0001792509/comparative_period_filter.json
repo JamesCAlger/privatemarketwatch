@@ -1,0 +1,30 @@
+{
+  "cik": "0001792509",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_1dab8d58d8c8"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 25,
+      "row_index": 29,
+      "quoted_text": "Total cash distributions | $ | 8.41"
+    },
+    {
+      "table_index": 89,
+      "row_index": 4,
+      "quoted_text": "Common stock distributions from distributable earnings | 2025 | ( 0.91 )"
+    },
+    {
+      "table_index": 89,
+      "row_index": 16,
+      "quoted_text": "Net investment income to average net asset value (4) | 2025 | 10.4 | %"
+    }
+  ],
+  "confidence": 0.82,
+  "rationale": "B1 localized comparative-year values leaking into the 2025-12-31 quarter, including distribution and ratio rows labeled or positioned as 2025 comparative data. The bounded comparative_period_filter template only supports report_date, so the correction scopes filtering to the affected 2025-12-31 report date without row-specific deletion logic."
+}

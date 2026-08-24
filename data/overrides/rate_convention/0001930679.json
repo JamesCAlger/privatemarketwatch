@@ -1,0 +1,50 @@
+{
+  "cik": "0001930679",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule uses a single Rate (b) column. For variable-rate investments, the printed base-rate spread is the cash/base-rate spread and any PIK component is printed separately in the same rate cell, e.g. in parentheses after the spread. For fixed PIK-only instruments, the rate is printed with PIK after it, meaning the printed percentage is a PIK rate rather than an all-in cash-plus-PIK coupon.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company (a) | Footnotes | Industry | Rate (b) | Floor (b) | Maturity | Principal Amount (c) /Shares | Amortized Cost | Fair Value (d)",
+      "where": "Unaudited Consolidated Schedule of Investments as of March 31, 2026, table 17 row 1"
+    },
+    {
+      "kind": "footnote",
+      "quote": "(b) Certain variable rate securities in the Company's portfolio bear interest at a rate determined by a publicly disclosed base rate plus a basis point spread. As of March 31, 2026, the Secured Overnight Financing Rate, or SOFR or \"SF\", was 3.68 %, the Sterling Overnight Index Average, or SONIA or \"SA\", was 3.85 % and the Euro Interbank Offered Rate, or EURIBOR or \"E\", was 2.08 %. PIK means paid-in-kind. PIK income accruals may be adjusted based on the performance of the underlying investment. Variable rate securities with no floor rate use the respective benchmark rate in all cases.",
+      "where": "Schedule of Investments notes following March 31, 2026 schedule"
+    },
+    {
+      "kind": "position",
+      "issuer": "Newday Group Jersey Ltd, Bond",
+      "quote": "Newday Group Jersey Ltd, Bond | (f)(k) | Financial Services | 12.8 % | PIK | 08/36 | GBP | 23,921 | 31,926 | 31,538",
+      "printed_pik": 12.8,
+      "printed_cash": 0.0
+    },
+    {
+      "kind": "position",
+      "issuer": "GreenSky Holdings LLC, Term Loan",
+      "quote": "GreenSky Holdings LLC, Term Loan | (f)(n) | Financial Services | 9.3 % | PIK | 03/34 | $ | 4,132 | 4,132 | 4,132",
+      "printed_pik": 9.3,
+      "printed_cash": 0.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Apex Service Partners LLC",
+      "quote": "Apex Service Partners LLC | (f) | Commercial & Professional Services | 14.3 % | PIK | 04/31 | 2,025 | 2,008 | 2,086",
+      "printed_pik": 14.3,
+      "printed_cash": 0.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Affordable Care Inc",
+      "quote": "Affordable Care Inc | (f)(l)(m) | Health Care Equipment & Services | SF | + | 6.0 % | ( 3.3 % PIK | / 3.3 % PIK) | 0.8 % | 08/28 | 1,727 | 1,713 | 1,247",
+      "printed_cash": 6.0,
+      "printed_pik": 3.3
+    }
+  ],
+  "rationale": "The filer does not present one all-in rate with a PIK-included footnote. Instead, footnote (b) says variable-rate securities bear interest at a base rate plus a basis point spread, and the same note separately defines PIK. The schedule rows confirm that the spread/rate and PIK are separately printed: variable-rate PIK rows show the spread first with PIK appended, while PIK-only fixed instruments print the percentage followed by PIK. Therefore the stated position-level rate/spread excludes separately quoted PIK unless the rate itself is explicitly marked PIK.",
+  "confidence": 0.94,
+  "verify_tier": "MEDIUM",
+  "verify_n_reconciled": 0
+}

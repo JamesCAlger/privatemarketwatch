@@ -411,6 +411,9 @@ def _prepare_bdc(
         "fair_value_unit", "cost_unit", "principal_amount_unit",
         "industry", "investment_type", "affiliation",
         "nonaccrual_footnote", "nonaccrual_dimension",
+        "src_context_id",
+        "dedupe_context_count", "dedupe_conflict_fields",
+        "src_facts", "dedupe_filled_fields",
     )
 
     con = duckdb.connect()
@@ -2585,6 +2588,40 @@ def _prepare_bdc(
             dimensions_raw AS bdc_dimensions_raw,
             _ugl AS bdc_unrealized_gain_loss,
             COALESCE(_hier_country, '') AS bdc_investment_country,
+            COALESCE(CAST(src_context_id AS VARCHAR), '') AS src_context_id,
+            COALESCE(CAST(dedupe_context_count AS VARCHAR), '') AS src_context_count,
+            COALESCE(CAST(dedupe_conflict_fields AS VARCHAR), '') AS src_conflict_fields,
+            COALESCE(concat_ws(';',
+                CASE WHEN _ir IS NOT NULL AND _ir < 0 THEN 'interest_rate:neg_null'
+                     WHEN _ir IS NOT NULL AND _ir <= 0.50 THEN 'interest_rate:rate_x100'
+                     WHEN _ir IS NOT NULL AND _ir >= 50 THEN 'interest_rate:rate_div100'
+                     ELSE NULL END,
+                CASE WHEN _bs IS NOT NULL AND _bs < 0 THEN 'basis_spread:neg_null'
+                     WHEN _bs IS NOT NULL AND _bs <= 0.50 THEN 'basis_spread:rate_x100'
+                     WHEN _bs IS NOT NULL AND _bs >= 50 THEN 'basis_spread:rate_div100'
+                     ELSE NULL END,
+                CASE WHEN _pik IS NOT NULL AND _pik < 0 THEN 'pik_rate:neg_null'
+                     WHEN _pik IS NOT NULL AND _pik <= 0.50 THEN 'pik_rate:rate_x100'
+                     WHEN _pik IS NOT NULL AND _pik >= 50 THEN 'pik_rate:rate_div100'
+                     ELSE NULL END,
+                CASE WHEN _pct IS NOT NULL AND _pct <= 0.50 THEN 'pct_of_net_assets:rate_x100'
+                     WHEN _pct IS NOT NULL AND _pct > 50 THEN 'pct_of_net_assets:rate_div100'
+                     ELSE NULL END
+            ), '') AS src_transforms,
+            '' AS src_field_overrides,
+            '' AS cost_source,
+            '' AS shares_held_source,
+            -- ELSE '' is dead: has_fv CTE (Phase C input gate) requires _fv IS NOT NULL.
+            CASE WHEN _fv IS NOT NULL THEN 'xbrl_field' ELSE '' END AS fair_value_source,
+            CASE WHEN _pa IS NOT NULL THEN 'xbrl_field' ELSE '' END AS principal_amount_source,
+            CASE WHEN _pct IS NOT NULL THEN 'xbrl_field' ELSE '' END AS pct_of_net_assets_source,
+            CASE WHEN _pik IS NOT NULL AND _pik >= 0 THEN 'xbrl_field'
+                 WHEN _pik IS NULL AND _text_pik_rate IS NOT NULL THEN 'identifier_text'
+                 ELSE '' END AS pik_rate_source,
+            CASE WHEN _ugl IS NOT NULL THEN 'xbrl_field' ELSE '' END AS bdc_unrealized_gain_loss_source,
+            COALESCE(CAST(src_facts AS VARCHAR), '') AS src_facts,
+            COALESCE(CAST(dedupe_filled_fields AS VARCHAR), '') AS src_filled_fields,
+            '' AS corrected_fields,
             '' AS nport_holding_id,
             '' AS nport_series_name,
             '' AS nport_series_id,
@@ -2605,6 +2642,12 @@ def _prepare_bdc(
                           LIKE '%nonconsolidatedsubsidiar%'
                       OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
                           LIKE '%subsidiar%'
+                      -- Equity-method investee (JV) look-through facts: same
+                      -- retain-and-flag treatment as the subsidiary axes
+                      -- (adjudicated 2026-07-21/22, data_investigation_results
+                      -- parts 5-8: JV note portfolios are not fund holdings).
+                      OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
+                          LIKE '%equitymethodinvestmentequitymethodinvesteenameaxis%'
                  THEN 1 ELSE 0 END AS is_subsidiary,
             '' AS jv_subsidiary,
             '' AS entity_id,
@@ -2651,12 +2694,18 @@ def _prepare_bdc(
     -- Raw XBRL pik_rate at 0.20-0.50 (20-50 bps) gets wrongly *100'd to 20-50%.
     -- If normalized pik_rate >= 20 and exceeds interest_rate, it was bps: /100.
     unified_pik_fixed AS (
-        SELECT * EXCLUDE (pik_rate),
+        SELECT * EXCLUDE (pik_rate, src_transforms),
             CASE WHEN pik_rate >= 20
                   AND interest_rate IS NOT NULL
                   AND pik_rate > interest_rate
                  THEN pik_rate / 100
-                 ELSE pik_rate END AS pik_rate
+                 ELSE pik_rate END AS pik_rate,
+            CASE WHEN pik_rate >= 20
+                  AND interest_rate IS NOT NULL
+                  AND pik_rate > interest_rate
+                 THEN concat_ws(';', NULLIF(src_transforms, ''),
+                                'pik_rate:pik_boundary_div100')
+                 ELSE src_transforms END AS src_transforms
         FROM unified
     ),
 
@@ -2745,10 +2794,19 @@ def _prepare_bdc(
     # per-position spreads where the freeform-identifier spread reconciles with all-in+SOFR
     # and the XBRL tag does not. Reversible (override records old_value_xbrl). No-op if the
     # override file is absent.
-    from pipeline.identifier_spread_corrections import apply_spread_corrections
+    from pipeline.identifier_spread_corrections import (
+        apply_spread_corrections,
+        spread_changed_index,
+    )
+    _spread_before = result["basis_spread"].copy() if "basis_spread" in result.columns else None
     result, _n_spread = apply_spread_corrections(
         result, identifier_col="bdc_investment_identifier"
     )
+    if _n_spread and _spread_before is not None and "corrected_fields" in result.columns:
+        from pipeline.agent_promoted import append_corrected_fields
+        _spread_changed = spread_changed_index(_spread_before, result["basis_spread"])
+        if len(_spread_changed):
+            append_corrected_fields(result, _spread_changed, ["basis_spread"])
 
     # Log text enrichment stats
     n = len(result)

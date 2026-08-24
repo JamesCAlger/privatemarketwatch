@@ -27,6 +27,7 @@ import json
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -43,6 +44,13 @@ DEFAULT_CORRECTIONS = DEFAULT_BASE / "corrections"
 DEFAULT_OVERRIDES = config.AGENT_B2_CORRECTIONS_DIR
 DEFAULT_CONSERVATION = config.OUTPUT_DIR / "shadow" / "conservation_gate_results.csv"
 TRIAL_REBUILD = config.PROJECT_ROOT / "scripts" / "rebuild_unified_cik_trial.py"
+# Wrong-diagnosis loop (2026-08-21): a value-gate refusal that implicates the B1 VERDICT
+# (fix authored for a defect the data does not show) appends here; the pass preflight
+# warns while it is non-empty. Re-dispatching the review_ids to B1 stays an operator
+# action -- verdict files are NEVER deleted or edited by this lane.
+READJUDICATION_WORKLIST = DEFAULT_BASE / "readjudication_worklist.csv"
+READJUDICATION_COLUMNS = ["cik", "fix_class", "source_review_ids", "batch_id",
+                          "gated_utc", "reason"]
 
 # Which layer applies each fix_class. wrapper_patch -> edit the per-CIK wrapper (staging);
 # post_staging -> transform the unified holdings (agent_b2_appliers); rule_track -> a
@@ -65,11 +73,16 @@ MECHANISM_TO_FIX_CLASS = {
 SYMPTOM_MECHANISMS = {"subtotal_leak", "cash_equivalent_leak", "fv_conservation",
                       "conservation_overshoot"}
 
-WRAPPER_PATCH_FIX_CLASSES = {"subtotal_filter", "classification_fix", "column_remap"}
+# 2026-08-13: classification_fix and column_remap moved from the (never-implemented)
+# wrapper-patch aspiration to concrete post-staging frame appliers; rule_scope moved to
+# the human policy stream (it asks to change a VALIDATION RULE's scope -- a detector
+# decision, not a data fix -- and belongs in the end-of-quarter escalation basket).
+WRAPPER_PATCH_FIX_CLASSES = {"subtotal_filter"}
 POST_STAGING_FIX_CLASSES = {"dedup", "comparative_period_filter", "spv_lookthrough",
                             "rate_rescale", "unit_rescale", "all_pik_normalization",
-                            "missing_position_add"}
-RULE_TRACK_FIX_CLASSES = {"rule_scope", "anchor_fix"}
+                            "missing_position_add", "classification_fix", "column_remap"}
+RULE_TRACK_FIX_CLASSES = {"anchor_fix"}
+POLICY_FIX_CLASSES = {"rule_scope"}
 WRAPPER_PATCH_APPLIERS = {"subtotal_filter": apply_subtotal_filter}
 
 WORKLIST_COLUMNS = ["cik", "fix_class", "stage", "mechanism", "fix_class_derived",
@@ -245,8 +258,316 @@ def gate_conservation_packet(
                            **gate_kwargs)
 
 
+# --------------------------------------------------------------------------- value gate (2026-08-13)
+
+# Fields the value gate audits for off-target invariance and canonical comparison.
+_VALUE_GATE_COLUMNS = [
+    "report_date", "issuer_name", "bdc_investment_identifier", "instrument_description",
+    "fair_value", "cost", "principal_amount", "interest_rate", "pik_rate", "basis_spread",
+    "asset_class", "index_classification", "exposure_type",
+]
+# Post-fix plausibility bounds for rate-family fields (percentage scale).
+_FIELD_BOUNDS = {"interest_rate": (0.0, 60.0), "pik_rate": (0.0, 30.0),
+                 "basis_spread": (0.0, 30.0)}
+_FV_TOUCHING = {"missing_position_add"}  # plus unit_rescale when field == fair_value
+
+# Cross-field magnitude plausibility (round-4 predicate). The q4b2exp_v3 magnitude
+# pulls showed the failure mode: a quarter-scoped but UNSELECTED rescale/remap can push
+# an entire quarter's values 10x-1000x away from the fund's own norm while staying
+# inside the absolute _FIELD_BOUNDS (1572694 principal x1000 on every row for a 2-row
+# FX defect; 1646614 rates /100; 1508655 pct_of_net_assets remapped into
+# interest_rate). The un-gameable reference is the fund's OFF-target quarters, which a
+# scoped correction structurally cannot touch: the post-fix target-quarter per-field
+# average (and per-row principal/FV ratio median) must land within one order of
+# magnitude of the median of the off-target per-quarter statistics -- unless the
+# baseline target quarter was already at least that far out, in which case the fix is
+# repairing a magnitude defect, not creating one.
+_MAGNITUDE_NUMERIC_FIELDS = {"interest_rate", "pik_rate", "basis_spread",
+                             "principal_amount", "shares_held", "fair_value", "cost",
+                             "pct_of_net_assets"}
+_MAGNITUDE_LOG10_TOL = 1.0      # 10x -- the repo's order-of-magnitude convention
+_MAGNITUDE_MIN_VALUES = 3       # a quarter statistic needs >= this many non-zero values
+_MAGNITUDE_MIN_NORM_QUARTERS = 2  # off-target quarters needed to establish a fund norm
+_MAGNITUDE_IMPROVE_EPS = 0.05   # log10 slack: "not worse than baseline" tolerance
+
+
+def _quarter_field_means(df: pd.DataFrame, field: str) -> dict[str, float]:
+    """{report_date: mean(|field|)} over non-null non-zero values, per quarter with
+    >= _MAGNITUDE_MIN_VALUES observations."""
+    if field not in df.columns or "report_date" not in df.columns or not len(df):
+        return {}
+    vals = pd.to_numeric(df[field], errors="coerce").abs()
+    ok = vals.notna() & (vals > 0)
+    if not ok.any():
+        return {}
+    grouped = vals[ok].groupby(df.loc[ok, "report_date"].astype(str))
+    return {q: float(s.mean()) for q, s in grouped if len(s) >= _MAGNITUDE_MIN_VALUES}
+
+
+def _quarter_ratio_medians(df: pd.DataFrame) -> dict[str, float]:
+    """{report_date: median(|principal_amount| / |fair_value|)} per row, per quarter
+    with >= _MAGNITUDE_MIN_VALUES rows carrying both. The ratio is scale-free across
+    portfolio growth, so it stays a stable norm even when a fund's per-quarter dollar
+    averages legitimately move."""
+    need = {"principal_amount", "fair_value", "report_date"}
+    if not need <= set(df.columns) or not len(df):
+        return {}
+    pa = pd.to_numeric(df["principal_amount"], errors="coerce").abs()
+    fv = pd.to_numeric(df["fair_value"], errors="coerce").abs()
+    ok = pa.notna() & fv.notna() & (pa > 0) & (fv > 0)
+    if not ok.any():
+        return {}
+    ratio = pa[ok] / fv[ok]
+    grouped = ratio.groupby(df.loc[ok, "report_date"].astype(str))
+    return {q: float(s.median()) for q, s in grouped if len(s) >= _MAGNITUDE_MIN_VALUES}
+
+
+def _magnitude_fields(correction: dict) -> list[str]:
+    """Numeric holdings fields a stage-2 correction writes to (magnitude-relevant)."""
+    fix_class = str(correction.get("fix_class") or "")
+    template = correction.get("template") or {}
+    if fix_class in {"rate_rescale", "unit_rescale"}:
+        fields = [str(template.get("field") or "")]
+    elif fix_class == "column_remap":
+        fields = [str(template.get("from_field") or ""), str(template.get("to_field") or "")]
+    elif fix_class == "all_pik_normalization":
+        fields = ["pik_rate"] + (["interest_rate"] if template.get("set_interest_to_cash") else [])
+    else:
+        fields = []
+    return [f for f in fields if f in _MAGNITUDE_NUMERIC_FIELDS]
+
+
+def _changed_row_means(
+    base_df: pd.DataFrame, trial_df: pd.DataFrame, field: str, tq: str,
+) -> tuple[float | None, float | None, int]:
+    """(baseline_mean, trial_mean, n_changed) over target-quarter rows whose ``field``
+    value the fix changed. Requires index alignment (trial derived from base via
+    ``apply_scoped``); the caller passes the gate's own replay frame to guarantee it.
+    Means are over non-zero absolute values; None when < _MAGNITUDE_MIN_VALUES."""
+    if field not in base_df.columns or field not in trial_df.columns:
+        return None, None, 0
+    if "report_date" not in base_df.columns:
+        return None, None, 0
+    in_q = base_df["report_date"].astype(str) == tq
+    b = pd.to_numeric(base_df.loc[in_q, field], errors="coerce")
+    t = pd.to_numeric(trial_df[field].reindex(base_df.index), errors="coerce").loc[in_q]
+    changed = (b != t) & ~(b.isna() & t.isna())
+    tv = t[changed].abs()
+    tv = tv[tv > 0]
+    bv = b[changed].abs()
+    bv = bv[bv > 0]
+    t_mean = float(tv.mean()) if len(tv) >= _MAGNITUDE_MIN_VALUES else None
+    b_mean = float(bv.mean()) if len(bv) else None
+    return b_mean, t_mean, int(changed.sum())
+
+
+def check_magnitude_plausibility(
+    *, baseline_df: pd.DataFrame, trial_df: pd.DataFrame, correction: dict,
+    target_quarter: str,
+) -> tuple[bool, list[str]]:
+    """Cross-field magnitude predicate for stage-2 value corrections.
+
+    Three legs per touched field, all judged against the fund norm (median of the
+    OFF-target per-quarter statistics, which a scoped fix cannot touch):
+     - target-quarter average of the field;
+     - average over the CHANGED rows only -- a blended quarter (many small remapped
+       values mixed with surviving in-band values) can sit inside the 10x band while
+       the rows the fix actually wrote are an order of magnitude off (the 1508655
+       pct_of_net_assets -> interest_rate shape);
+     - per-row principal/FV ratio median when principal/FV is touched (scale-free
+       under portfolio growth).
+
+    Returns ``(ok, reasons)``. Skips (passes) any leg where the fund norm cannot be
+    established (< _MAGNITUDE_MIN_NORM_QUARTERS off-target quarters with data) or the
+    target quarter has no post-fix values for the field (a vacated from_field is a
+    remap consequence, not a magnitude break); those cases stay covered by
+    replay-equivalence, _FIELD_BOUNDS sanity, and the conservation gate."""
+    import math
+    import statistics
+
+    tq = str(target_quarter)
+    reasons: list[str] = []
+
+    def _norm(base_stats: dict[str, float]) -> tuple[float, int] | None:
+        off = [v for q, v in base_stats.items() if q != tq and v > 0]
+        if len(off) < _MAGNITUDE_MIN_NORM_QUARTERS:
+            return None
+        norm = float(statistics.median(off))
+        return (norm, len(off)) if norm > 0 else None
+
+    def _judge(label: str, norm_info: tuple[float, int] | None,
+               base_val: float | None, trial_val: float | None) -> None:
+        if norm_info is None or trial_val is None or trial_val <= 0:
+            return
+        norm, n_off = norm_info
+        dev_trial = abs(math.log10(trial_val / norm))
+        if dev_trial <= _MAGNITUDE_LOG10_TOL:
+            return
+        if (base_val is not None and base_val > 0
+                and dev_trial <= abs(math.log10(base_val / norm)) + _MAGNITUDE_IMPROVE_EPS):
+            return  # baseline was already at least this far out: repairing, not breaking
+        reasons.append(
+            f"{label} in {tq} lands {10 ** dev_trial:,.0f}x from the fund norm "
+            f"({trial_val:,.4g} vs norm {norm:,.4g} from {n_off} off-target quarter(s))")
+
+    fields = _magnitude_fields(correction)
+    for f in fields:
+        base_stats = _quarter_field_means(baseline_df, f)
+        trial_stats = _quarter_field_means(trial_df, f)
+        norm_info = _norm(base_stats)
+        _judge(f"post-fix {f} quarter average", norm_info,
+               base_stats.get(tq), trial_stats.get(tq))
+        cr_base, cr_trial, _n = _changed_row_means(baseline_df, trial_df, f, tq)
+        _judge(f"post-fix {f} changed-row average", norm_info, cr_base, cr_trial)
+    if "principal_amount" in fields or "fair_value" in fields:
+        base_r = _quarter_ratio_medians(baseline_df)
+        _judge("post-fix principal/FV row-ratio median", _norm(base_r),
+               base_r.get(tq), _quarter_ratio_medians(trial_df).get(tq))
+    return (not reasons), reasons
+
+
+def _canonical_value_frame(df: pd.DataFrame) -> pd.DataFrame:
+    """Comparison-stable projection: shared audit columns, numerics coerced+rounded,
+    strings stripped, sorted by everything. Robust to CSV round-trip dtype noise."""
+    cols = [c for c in _VALUE_GATE_COLUMNS if c in df.columns]
+    out = pd.DataFrame(index=range(len(df)))
+    for c in cols:
+        num = pd.to_numeric(df[c], errors="coerce")
+        if num.notna().sum() >= max(1, int(0.5 * df[c].notna().sum())):
+            out[c] = num.round(4).values
+        else:
+            out[c] = df[c].fillna("").astype(str).str.strip().values
+    return out.sort_values(cols, kind="mergesort", na_position="last").reset_index(drop=True)
+
+
+def gate_value_packet(
+    *, cik: str, target_quarter: str, baseline_df: pd.DataFrame, trial_df: pd.DataFrame,
+    correction: dict, grounding_df: pd.DataFrame | None = None,
+) -> dict:
+    """B3 gate for stage-2 VALUE corrections (and missing_position_add).
+
+    The conservation gate sees only aggregates, which a rate rescale or column remap
+    never moves -- so value fixes need per-row predicates:
+
+    - replay_equivalence: trial frame must equal applier(baseline) exactly under the
+      canonical projection. This subsumes off-target invariance AND expected-change
+      verification in one deterministic check: the promoted correction may do exactly
+      what the applier does to the baseline, nothing else.
+    - field_sanity: post-fix values of the changed rate-family field inside plausibility
+      bounds; fair_value magnitudes sane.
+    - fv_change_scoped: for non-FV fix classes, total FV identical to baseline (< $1
+      drift); FV-touching classes defer to the conservation gate run alongside.
+    - magnitude_plausible (round-4): the fix must leave the target quarter's per-field
+      averages and principal/FV row ratio within one order of magnitude of the fund's
+      off-target-quarter norm (see check_magnitude_plausibility).
+    - grounding_verified (missing_position_add only): every position's source_row_id
+      must exist in the grounding frame for this CIK with fair_value within 0.5%.
+      Missing grounding data FAILS (fail-closed; no fabricated positions).
+
+    Replay uses ``apply_scoped`` (not the bare applier) so the expected frame matches
+    the production application path: a scoped correction replayed over a multi-quarter
+    baseline must not touch off-scope quarters.
+    """
+    from pipeline.agent_b2_appliers import POST_STAGING_APPLIERS, apply_scoped
+
+    fix_class = str(correction.get("fix_class") or "")
+    template = correction.get("template") or {}
+    checks: dict[str, bool] = {}
+    reasons: list[str] = []
+
+    applier = POST_STAGING_APPLIERS.get(fix_class)
+    if applier is None:
+        return {"cik": cik, "target_quarter": target_quarter, "verdict": "FAIL",
+                "checks": {}, "reasons": [f"no applier for fix_class {fix_class!r}"]}
+
+    expected_df, replay_audit = apply_scoped(baseline_df, correction)
+    if replay_audit.get("status") != "ok":
+        return {"cik": cik, "target_quarter": target_quarter, "verdict": "FAIL",
+                "checks": {"replay_ok": False},
+                "reasons": [f"applier replay error: {replay_audit.get('message')}"]}
+    if not int(replay_audit.get("rows_changed") or 0):
+        checks["replay_ok"] = False
+        reasons.append("correction is a no-op on the baseline frame (stale or mis-selected)")
+
+    exp_c, got_c = _canonical_value_frame(expected_df), _canonical_value_frame(trial_df)
+    replay_eq = exp_c.shape == got_c.shape and exp_c.equals(got_c)
+    checks["replay_equivalence"] = replay_eq
+    if not replay_eq:
+        reasons.append(
+            f"trial != applier(baseline): expected {exp_c.shape[0]} rows, got {got_c.shape[0]}"
+            if exp_c.shape != got_c.shape else
+            "trial frame diverges from applier(baseline) beyond the correction itself")
+
+    field = str(template.get("field") or "")
+    sane = True
+    if field in _FIELD_BOUNDS and field in trial_df.columns:
+        lo, hi = _FIELD_BOUNDS[field]
+        vals = pd.to_numeric(trial_df[field], errors="coerce").dropna()
+        bad = int(((vals < lo) | (vals > hi)).sum())
+        if bad:
+            sane = False
+            reasons.append(f"{bad} post-fix {field} value(s) outside ({lo}, {hi}]")
+    if "fair_value" in trial_df.columns:
+        fv = pd.to_numeric(trial_df["fair_value"], errors="coerce").abs()
+        if int((fv > 1e12).sum()):
+            sane = False
+            reasons.append("post-fix |fair_value| exceeds $1T sanity bound")
+    checks["field_sanity"] = sane
+
+    # Judged on the gate's own replay frame (row-aligned with baseline by
+    # construction); replay_equivalence pins trial_df to it canonically.
+    mag_ok, mag_reasons = check_magnitude_plausibility(
+        baseline_df=baseline_df, trial_df=expected_df, correction=correction,
+        target_quarter=target_quarter)
+    checks["magnitude_plausible"] = mag_ok
+    reasons.extend(mag_reasons)
+
+    fv_touching = fix_class in _FV_TOUCHING or (
+        fix_class == "unit_rescale" and field == "fair_value")
+    base_fv = pd.to_numeric(baseline_df.get("fair_value"), errors="coerce").fillna(0).sum()
+    trial_fv = pd.to_numeric(trial_df.get("fair_value"), errors="coerce").fillna(0).sum()
+    if fv_touching:
+        checks["fv_change_scoped"] = True  # conservation gate owns the FV judgement
+    else:
+        scoped = abs(float(base_fv) - float(trial_fv)) < 1.0
+        checks["fv_change_scoped"] = scoped
+        if not scoped:
+            reasons.append(f"non-FV fix moved total FV by {float(trial_fv) - float(base_fv):,.0f}")
+
+    if fix_class == "missing_position_add":
+        grounded = False
+        positions = list(template.get("positions") or [])
+        if grounding_df is not None and len(grounding_df) and "source_row_id" in grounding_df.columns:
+            gid = grounding_df["source_row_id"].astype(str)
+            gfv = pd.to_numeric(grounding_df.get("fair_value"), errors="coerce")
+            misses = []
+            for p in positions:
+                sid, want = str(p.get("source_row_id") or ""), float(p.get("fair_value") or 0)
+                hit = grounding_df.index[gid == sid]
+                ok = any(abs(float(gfv.loc[i] or 0) - want) <= max(1000.0, abs(want) * 0.005)
+                         for i in hit)
+                if not ok:
+                    misses.append(sid)
+            grounded = not misses
+            if misses:
+                reasons.append(f"position source_row_id(s) not grounded in staging: {misses}")
+        else:
+            reasons.append("no grounding frame supplied for missing_position_add (fail-closed)")
+        checks["grounding_verified"] = grounded
+    else:
+        checks["grounding_verified"] = True
+
+    checks.setdefault("replay_ok", True)
+    verdict = "PASS" if all(checks.values()) else "FAIL"
+    return {"cik": cik, "target_quarter": target_quarter, "verdict": verdict,
+            "gate_kind": "value", "fix_class": fix_class, "checks": checks,
+            "reasons": reasons or ["all value-gate predicates clear"]}
+
+
 def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides_dir: Path,
-                   wrapper_dir: Path = PROD_WRAPPER_DIR) -> list[dict]:
+                   wrapper_dir: Path = PROD_WRAPPER_DIR, batch_id: str | None = None,
+                   allow_overwrite: bool = False,
+                   fleet_thresholds_path: Path | None = None) -> list[dict]:
     """Promote only PASS staged corrections into their PRODUCTION consumer store.
 
     Layer routing (gap 1): a wrapper-patch correction (e.g. subtotal_filter) applies the
@@ -254,8 +575,18 @@ def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides
     the store production staging already reads), with provenance; re-promotion is a
     recorded no-op, never a duplicate provenance append. Every other correction copies
     the leaf to ``overrides_dir`` (data/overrides/agent_b2_corrections), which
-    ``build_unified_holdings`` consumes at raw staging. Returns the promoted records."""
+    ``build_unified_holdings`` consumes at raw staging. Returns the promoted records.
+
+    Guards (2026-08-21):
+      - HARD refuse-overwrite: promotion never overwrites an existing LIVE leaf unless
+        ``allow_overwrite`` is passed explicitly (sanctioned re-author after an operator
+        pull). Refusals are recorded as status ``refused_overwrite``, never silent.
+      - Fleet acceptance (flag-gated by the thresholds file's ``enforce`` block, OFF at
+        ship): when ``enforce.promote_requires_pass`` is true and ``batch_id`` is given,
+        promotion requires a PASS ``fleet_acceptance_<batch_id>.json`` artifact."""
     corrections_dir, overrides_dir = Path(corrections_dir), Path(overrides_dir)
+    if batch_id:
+        _require_fleet_acceptance(batch_id, fleet_thresholds_path)
     promoted: list[dict] = []
     for g in gate_results:
         if g.get("verdict") != "PASS":
@@ -283,11 +614,48 @@ def promote_passes(gate_results: list[dict], *, corrections_dir: Path, overrides
                              "status": audit.get("status"), "audit": audit})
         else:
             dst = overrides_dir / cik / f"{mech}.json"
+            if dst.exists() and not allow_overwrite:
+                # HARD data-protection guard: dispatch preflight skips existing packets,
+                # but nothing at PROMOTE time prevented a same-keyed staged leaf from
+                # silently overwriting a live rule via a path that bypassed dispatch.
+                # Sanctioned re-authors (operator pulled the old leaf first, or passes
+                # --allow-overwrite deliberately) are the only overwrite route.
+                promoted.append({"cik": cik, "mechanism": mech, "layer": "post_staging",
+                                 "src": str(src), "dst": str(dst),
+                                 "status": "refused_overwrite"})
+                continue
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dst)
             promoted.append({"cik": cik, "mechanism": mech, "layer": "post_staging",
                              "src": str(src), "dst": str(dst), "status": "ok"})
     return promoted
+
+
+def _require_fleet_acceptance(batch_id: str, thresholds_path: Path | None = None) -> None:
+    """Raise unless fleet acceptance allows promotion for this batch.
+
+    No-op while the thresholds file's ``enforce.promote_requires_pass`` is false
+    (advisory mode -- the first fleet validates the evaluator itself)."""
+    from scripts import fleet_acceptance as fa
+    try:
+        thresholds = fa.load_thresholds(thresholds_path)
+    except (OSError, json.JSONDecodeError):
+        return  # no thresholds file -> advisory-off behavior
+    if not thresholds.get("enforce", {}).get("promote_requires_pass"):
+        return
+    artifact = fa.acceptance_artifact_path(batch_id)
+    if not artifact.exists():
+        raise RuntimeError(
+            f"fleet acceptance enforce.promote_requires_pass is ON and no artifact "
+            f"exists for batch {batch_id}: run python -m scripts.fleet_acceptance "
+            f"--batch-id {batch_id} first ({artifact})")
+    result = json.loads(artifact.read_text(encoding="utf-8-sig"))
+    if result.get("verdict") != "PASS":
+        failing = [c["id"] for c in result.get("checks", []) if not c.get("pass")]
+        raise RuntimeError(
+            f"fleet acceptance verdict is {result.get('verdict')} for batch "
+            f"{batch_id}; failing checks: {', '.join(failing) or '(none listed)'}. "
+            f"Stop, diagnose, re-fleet -- do not widen the bar.")
 
 
 # --------------------------------------------------------------------------- apply orchestration
@@ -441,6 +809,55 @@ def discover(batch_id: str, *, base_dir: Path = DEFAULT_BASE, verdicts_dir: Path
             "n_actionable": sum(1 for p in packets if p["fix_class"]), "worklist": str(out)}
 
 
+def is_diagnosis_refusal(value_gate_result: dict) -> bool:
+    """True when a value-gate FAIL implicates the B1 DIAGNOSIS, not B2 authoring.
+
+    The v3-era 'defect_signature' check name is legacy; on the current gate the
+    wrong-diagnosis signal is the magnitude predicate refusing (the field the fix
+    'repairs' was already plausible) or a reason naming the rate signature."""
+    if value_gate_result.get("verdict") != "FAIL":
+        return False
+    if value_gate_result.get("checks", {}).get("magnitude_plausible") is False:
+        return True
+    reasons = value_gate_result.get("reasons") or []
+    return any(("rate signature" in str(r).lower()) or ("magnitude" in str(r).lower())
+               for r in reasons)
+
+
+def append_readjudication(entries: list[dict], path: Path = READJUDICATION_WORKLIST) -> int:
+    """Append wrong-diagnosis rows to the re-adjudication worklist (append-only).
+
+    Dedupe key: (review_id, fix_class) pairs derived by splitting each row's
+    ``source_review_ids`` on ';'. Rows whose every pair is already present are
+    dropped. Never touches verdict files."""
+    seen: set[tuple[str, str]] = set()
+    if path.exists():
+        with path.open("r", encoding="utf-8-sig", newline="") as f:
+            for row in csv.DictReader(f):
+                for rid in str(row.get("source_review_ids", "")).split(";"):
+                    if rid:
+                        seen.add((rid, row.get("fix_class", "")))
+    fresh = []
+    for e in entries:
+        pairs = [(rid, e.get("fix_class", ""))
+                 for rid in str(e.get("source_review_ids", "")).split(";") if rid]
+        if pairs and all(p in seen for p in pairs):
+            continue
+        seen.update(pairs)
+        fresh.append({c: e.get(c, "") for c in READJUDICATION_COLUMNS})
+    if not fresh:
+        return 0
+    path.parent.mkdir(parents=True, exist_ok=True)
+    new_file = not path.exists()
+    with path.open("a", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=READJUDICATION_COLUMNS)
+        if new_file:
+            w.writeheader()
+        for row in fresh:
+            w.writerow(row)
+    return len(fresh)
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Agent B2 remediation driver (discover/gate/promote).")
     sub = ap.add_subparsers(dest="mode", required=True)
@@ -464,6 +881,18 @@ def main(argv=None) -> int:
     g.add_argument("--trial-holdings", type=Path, required=True)
     g.add_argument("--conservation", type=Path, default=DEFAULT_CONSERVATION)
     g.add_argument("--threshold-pct", type=float, default=1.0)
+    g.add_argument("--correction", type=Path, default=None,
+                   help="Correction leaf JSON: stage-2 value classes run the per-row "
+                        "value gate (replay-equivalence etc.) IN ADDITION to the "
+                        "conservation gate; combined verdict is the AND.")
+    g.add_argument("--grounding", type=Path, default=None,
+                   help="Frame with source_row_id+fair_value for missing_position_add "
+                        "grounding (csv/parquet). Fail-closed when absent.")
+    g.add_argument("--batch-id", default="",
+                   help="Batch id recorded on re-adjudication worklist rows.")
+    g.add_argument("--readju-worklist", type=Path, default=READJUDICATION_WORKLIST,
+                   help="Wrong-diagnosis refusals append here (append-only; "
+                        "verdicts are never touched).")
 
     dx = sub.add_parser("diagnose", help="Anchor-scored battery for a Stage-3 symptom packet "
                                          "(replaces the guessed mechanism with a measured decision).")
@@ -490,9 +919,36 @@ def main(argv=None) -> int:
         res = gate_conservation_packet(cik=args.cik, target_quarter=args.target_quarter,
                                        baseline_df=base_df, trial_df=trial_df, anchors=anchors,
                                        threshold_pct=args.threshold_pct)
-        print(json.dumps({"cik": res.cik, "target_quarter": res.target_quarter,
-                          "verdict": res.verdict, "checks": res.checks, "reasons": res.reasons}, indent=2))
-        return 0 if res.verdict == "PASS" else 1
+        out = {"cik": res.cik, "target_quarter": res.target_quarter,
+               "verdict": res.verdict, "checks": res.checks, "reasons": res.reasons}
+        if args.correction is not None:
+            correction = json.loads(Path(args.correction).read_text(encoding="utf-8-sig"))
+            grounding_df = None
+            if args.grounding is not None and Path(args.grounding).exists():
+                gp = Path(args.grounding)
+                grounding_df = (pd.read_parquet(gp) if gp.suffix == ".parquet"
+                                else pd.read_csv(gp, low_memory=False))
+            vres = gate_value_packet(cik=args.cik, target_quarter=args.target_quarter,
+                                     baseline_df=base_df, trial_df=trial_df,
+                                     correction=correction, grounding_df=grounding_df)
+            out["value_gate"] = {k: vres[k] for k in ("verdict", "checks", "reasons")}
+            out["verdict"] = "PASS" if (res.verdict == "PASS"
+                                        and vres["verdict"] == "PASS") else "FAIL"
+            if is_diagnosis_refusal(vres):
+                reasons = vres.get("reasons") or []
+                n = append_readjudication([{
+                    "cik": args.cik,
+                    "fix_class": correction.get("fix_class", ""),
+                    "source_review_ids": ";".join(correction.get("source_review_ids") or []),
+                    "batch_id": args.batch_id,
+                    "gated_utc": datetime.now(timezone.utc).isoformat(),
+                    "reason": str(reasons[0]) if reasons else "magnitude_plausible false",
+                }], path=args.readju_worklist)
+                if n:
+                    print(f"[gate] appended re-adjudication worklist row for "
+                          f"{args.cik}/{correction.get('fix_class', '')}", file=sys.stderr)
+        print(json.dumps(out, indent=2))
+        return 0 if out["verdict"] == "PASS" else 1
     if args.mode == "diagnose":
         packet = {"cik": args.cik, "quarters": [args.target_quarter], "needs_diagnosis": True,
                   "fix_class": "subtotal_filter", "fix_class_derived": True, "mechanism": "subtotal_leak"}

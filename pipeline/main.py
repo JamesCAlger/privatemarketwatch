@@ -964,6 +964,11 @@ def main() -> None:
                 unified_df, matches_df,
                 use_registry=getattr(args, "stable_position_ids", False),
             )
+            # assign_position_ids reorders to UNIFIED_COLUMNS, which drops the
+            # appended row_id/row_id_basis -- re-derive before the re-save
+            # (anchor-based ids are deterministic, so this is a pure re-add).
+            from pipeline.unified_holdings import _assign_row_ids
+            unified_df = _assign_row_ids(unified_df)
             # Re-save unified holdings with position_id populated
             unified_df.to_csv(
                 OUTPUT_DIR / "private_markets_holdings.csv", index=False,

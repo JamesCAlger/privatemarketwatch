@@ -1,0 +1,25 @@
+{
+  "cik": "0001913724",
+  "mechanism": "comparative_leak",
+  "fix_class": "comparative_period_filter",
+  "template": {
+    "report_date": "2025-12-31"
+  },
+  "source_review_ids": [
+    "RVQ_REV_01899e04cce8"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 98,
+      "row_index": 15,
+      "quoted_text": ""
+    },
+    {
+      "table_index": 112,
+      "row_index": 8,
+      "quoted_text": ""
+    }
+  ],
+  "confidence": 0.72,
+  "rationale": "B1 adjudicated a comparative leak localized to the cited rows for CIK 0001913724. The bounded correction applies the comparative_period_filter template to report_date 2025-12-31 only, matching the target quarter and avoiding row-specific deletion or unsupported parameters. Residual risk is that the embedded citations are coordinate-only, so the correction relies on B1 localization rather than independently quoted source text."
+}

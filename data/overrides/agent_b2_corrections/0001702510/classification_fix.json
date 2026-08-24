@@ -1,0 +1,67 @@
+{
+  "cik": "0001702510",
+  "mechanism": "extraction_gap",
+  "fix_class": "classification_fix",
+  "template": {
+    "field": "index_classification",
+    "value": "SOFR",
+    "row_selector": {
+      "issuer_name": "Alpine Acquisition Corp II",
+      "report_date": "2025-12-31",
+      "table_index": 47,
+      "row_index": 13
+    }
+  },
+  "source_review_ids": [
+    "RVQ_REV_cb691dc43d33"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 28,
+      "row_index": 4,
+      "quoted_text": "Non-accrual (1) | 7 | 27,340 | 1.0 | 4 | 10,487 | 0.5"
+    },
+    {
+      "table_index": 47,
+      "row_index": 13,
+      "quoted_text": "Alpine Acquisition Corp II | (a)(b) | (2)(3)(8)(15) | Transportation: Cargo | SOFR | 6.00 % | 9.65 % | 4/19/2022 | 11/30/2029 | 23,824 | 23,167 | 10,561 | 0.60"
+    },
+    {
+      "table_index": 49,
+      "row_index": 4,
+      "quoted_text": "DCA Investment Holding LLC | (a)(b) | (2)(3)(8) | Healthcare & Pharmaceuticals | SOFR | 6.41 % | 10.06 % | 3/11/2021 | 4/3/2028 | 11,816 | 11,745 | 10,348 | 0.59"
+    },
+    {
+      "table_index": 50,
+      "row_index": 27,
+      "quoted_text": "Jeg's Automotive, LLC | (c) | (2)(3)(8) | Auto Aftermarket & Services | SOFR | 8.90 % ( 100 % PIK) | 12.55 % | 12/22/2021 | 12/31/2029 | 5,459 | 5,017 | 5,459 | 0.31"
+    },
+    {
+      "table_index": 51,
+      "row_index": 2,
+      "quoted_text": "Jeg's Automotive, LLC | (c) | (2)(3)(8) | Auto Aftermarket & Services | SOFR | 7.00 % ( 100 % PIK) | 10.65 % | 12/22/2021 | 12/31/2029 | $ | 907 | $ | 833 | $ | 907 | 0.05 | %"
+    },
+    {
+      "table_index": 51,
+      "row_index": 8,
+      "quoted_text": "Material Holdings, LLC | (c) | (2)(3)(8)(11) | Business Services | SOFR | 6.00 % ( 100 % PIK) | 9.65 % | 8/19/2021 | 8/19/2027 | 3,654 | 1,118 | - | -"
+    },
+    {
+      "table_index": 54,
+      "row_index": 17,
+      "quoted_text": "FPG Intermediate Holdco, LLC | (a) | (2)(3)(8) | Consumer Services | SOFR | 5.00 % | 8.65 % | 7/25/2025 | 6/30/2029 | 65 | 64 | 65 | 0.00"
+    },
+    {
+      "table_index": 58,
+      "row_index": 9,
+      "quoted_text": "Buckeye Group Holdings, L.P. | (a) | (6)(8) | Auto Aftermarket & Services | 10.65 % ( 100 % PIK) | 12/31/2024 | 4,099 | 1,218 | - | -"
+    }
+  ],
+  "confidence": 0.74,
+  "rationale": "The cited Alpine Acquisition Corp II holding row explicitly contains SOFR in the rate/index position for the 2025-12-31 quarter. The correction is scoped to that exact issuer and cited row to fill the missing unified index_classification without changing broader extraction behavior. Related cited rows show the same extraction pattern, but this leaf remains narrow for the requested classification_fix class.",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  }
+}

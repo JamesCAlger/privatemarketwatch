@@ -52,7 +52,8 @@ function Invoke-ReleaseManifest {
 }
 
 function New-WorkerWrapper {
-  param($Row, [string] $WorkerHome, [string] $WorkerRunroot, [string] $WrapperPath)
+  param($Row, [string] $WorkerHome, [string] $WorkerRunroot, [string] $WrapperPath,
+    [string] $TraceDir, [string] $TracePrefix)
   $runScript = Join-Path $PSScriptRoot "run_codex_worker.ps1"
   $content = @"
 `$ErrorActionPreference = 'Stop'
@@ -61,6 +62,8 @@ function New-WorkerWrapper {
   -WorkerHome $(Quote-ForWrapper $WorkerHome) ``
   -WorkerRunroot $(Quote-ForWrapper $WorkerRunroot) ``
   -CodexBin $(Quote-ForWrapper $CodexBin) ``
+  -TraceDir $(Quote-ForWrapper $TraceDir) ``
+  -TracePrefix $(Quote-ForWrapper $TracePrefix) ``
   -NoSetup
 exit `$LASTEXITCODE
 "@
@@ -73,11 +76,20 @@ function Invoke-ValidateCorrection {
     Set-Content -LiteralPath $LogPath -Value "MISSING correction file: $($Row.correction_path)" -Encoding ASCII
     return 1
   }
+  # Merge all streams and write UTF-8 explicitly: the bare `*> $LogPath` redirect
+  # wrote UTF-16 LE (PS 5.1 default), which naive UTF-8 readers misparse. The local
+  # ErrorActionPreference shield is required -- under 'Stop', PS 5.1 turns redirected
+  # native stderr into terminating ErrorRecords.
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
   & python -m scripts.agent_b2.validate_corrections `
     --correction $Row.correction_path `
     --expected-cik $Row.cik `
-    --expected-fix-class $Row.fix_class *> $LogPath
-  return $LASTEXITCODE
+    --expected-fix-class $Row.fix_class *>&1 |
+    Out-File -LiteralPath $LogPath -Encoding utf8
+  $ec = $LASTEXITCODE
+  $ErrorActionPreference = $prevEap
+  return $ec
 }
 
 function Stop-TrackedProcessTree {
@@ -152,7 +164,8 @@ try {
       }
 
       $wrapperPath = Join-Path $wrapperDir "$idSafe.ps1"
-      New-WorkerWrapper -Row $row -WorkerHome $workerHome -WorkerRunroot $workerRunroot -WrapperPath $wrapperPath
+      New-WorkerWrapper -Row $row -WorkerHome $workerHome -WorkerRunroot $workerRunroot -WrapperPath $wrapperPath `
+        -TraceDir $logDir -TracePrefix "${idSafe}__"
       $stdout = Join-Path $logDir "$idSafe.stdout.jsonl"
       $stderr = Join-Path $logDir "$idSafe.stderr.txt"
       $proc = Start-Process -FilePath "powershell.exe" `

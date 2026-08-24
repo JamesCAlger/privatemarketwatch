@@ -1,0 +1,64 @@
+{
+  "cik": "0001825384",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has a Reference Rate and Spread column and an Interest Rate column. The Interest Rate column shows the total stated coupon/rate. For PIK debt, the PIK component is included in the stated spread/rate text, either parenthetically as '(incl ... % PIK)' or as a rate followed by 'PIK'; it is not disclosed as a separate additive cash-leg column.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Portfolio Company 1 2 3 4 | Type of Investment | Footnotes | Reference Rate and Spread 5 | Interest Rate 5 | Maturity 6 | Par Amount / Units | Cost 7 | Fair Value | Percentage of Net Assets 8",
+      "where": "Schedule of Investments, March 31, 2026, debt investment tables"
+    },
+    {
+      "kind": "header",
+      "quote": "Portfolio Company 1 2 3 4 | Type of Investment | Footnotes | Interest Rate 5 | Acquisition Date | Par Amount / Units | Cost 7 | Fair Value | Percentage of Net Assets 8",
+      "where": "Schedule of Investments, March 31, 2026, preferred equity/common equity tables"
+    },
+    {
+      "kind": "position",
+      "issuer": "Accuserve Solutions, Inc.",
+      "quote": "Accuserve Solutions, Inc. | First Lien Term Loan | SOFR + 6.00 % (incl 3.38 % PIK), 1.00 % Floor | 9.68 % | 3/15/2030",
+      "printed_total": 9.68,
+      "printed_pik": 3.38
+    },
+    {
+      "kind": "position",
+      "issuer": "GovDelivery Holdings LLC",
+      "quote": "GovDelivery Holdings LLC | First Lien Term Loan | SOFR + 5.50 % (incl 2.00 % PIK), 0.75 % Floor | 9.17 % | 1/17/2031",
+      "printed_total": 9.17,
+      "printed_pik": 2.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Mandolin Technology Intermediate Holdings, Inc.",
+      "quote": "Mandolin Technology Intermediate Holdings, Inc. | Second Lien Term Loan | SOFR + 6.50 % PIK, 1.00 % Floor | 10.30 % | 7/30/2029",
+      "printed_total": 10.3,
+      "printed_pik": 6.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Accordion Partners Holdings LLC",
+      "quote": "Accordion Partners Holdings LLC | Unsecured Note | N/A | 12.75 % PIK | 11/15/2034",
+      "printed_total": 12.75,
+      "printed_pik": 12.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Fullsteam Holdco L.P. LLC",
+      "quote": "Fullsteam Holdco L.P. LLC | Unsecured Note | N/A | 13.00 % PIK | 8/9/2032",
+      "printed_total": 13.0,
+      "printed_pik": 13.0
+    },
+    {
+      "kind": "position",
+      "issuer": "WEG Sub Intermediate Holdings, LLC",
+      "quote": "WEG Sub Intermediate Holdings, LLC | Unsecured Note | N/A | 13.00 % PIK | 5/26/2033",
+      "printed_total": 13.0,
+      "printed_pik": 13.0
+    }
+  ],
+  "rationale": "The filing does not present separate Cash and PIK rate columns. Instead, PIK is embedded in the printed rate/spread disclosure: floating-rate loans show the spread with '(incl ... % PIK)' and a single Interest Rate total, while fixed PIK notes show a single Interest Rate such as '13.00 % PIK'. This matches an all-in convention for the position-level Interest Rate.",
+  "confidence": 0.93,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}

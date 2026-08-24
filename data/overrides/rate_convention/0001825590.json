@@ -1,0 +1,62 @@
+{
+  "cik": "0001825590",
+  "target_quarter": "2024-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has a 'Reference Rate and Spread' column and a separate 'Interest Rate (2)' column. For PIK loans, the printed spread is a single all-in spread with the PIK component shown parenthetically as included, e.g. 'S + 7.00 % (incl. 2.00 % PIK)'; the 'Interest Rate (2)' column then shows the current all-in rate in effect, not a cash-only rate.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Reference Rate and Spread | Interest Rate (2)",
+      "where": "Consolidated Schedule of Investments as of March 31, 2024, table 22 row 1"
+    },
+    {
+      "kind": "footnote",
+      "quote": "For each loan, the Company has indicated the reference rate used and provided the spread and the interest rate in effect as of March 31, 2024.",
+      "where": "Consolidated Schedule of Investments as of March 31, 2024, note (2), table 25 row 2"
+    },
+    {
+      "kind": "position",
+      "issuer": "Apex Service Partners, LLC",
+      "quote": "S + | 7.00 % (incl. 2.00 % PIK) | 12.32 %",
+      "printed_total": 12.32,
+      "printed_pik": 2.0,
+      "where": "Consolidated Schedule of Investments as of March 31, 2024, table 14 row 22"
+    },
+    {
+      "kind": "position",
+      "issuer": "Spectrio, LLC",
+      "quote": "S + | 6.00 % (incl. 5.00 % PIK) | 11.34 %",
+      "printed_total": 11.34,
+      "printed_pik": 5.0,
+      "where": "Consolidated Schedule of Investments as of March 31, 2024, table 18 row 18"
+    },
+    {
+      "kind": "position",
+      "issuer": "Associations, Inc.",
+      "quote": "S + | 6.50 % (incl. 2.50 % PIK) | 12.09 %",
+      "printed_total": 12.09,
+      "printed_pik": 2.5,
+      "where": "Consolidated Schedule of Investments as of March 31, 2024, table 20 row 18"
+    },
+    {
+      "kind": "position",
+      "issuer": "Continental Battery Company",
+      "quote": "S + | 7.00 % (incl 4.08 % PIK) | 12.46 %",
+      "printed_total": 12.46,
+      "printed_pik": 4.08,
+      "where": "Consolidated Schedule of Investments as of March 31, 2024, table 11 row 23"
+    },
+    {
+      "kind": "position",
+      "issuer": "Lightspeed Solution, LLC",
+      "quote": "S + | 6.50 % (incl. 2.17 % PIK) | 11.84 %",
+      "printed_total": 11.84,
+      "printed_pik": 2.17,
+      "where": "Consolidated Schedule of Investments as of March 31, 2024, table 14 row 33"
+    }
+  ],
+  "rationale": "The printed schedule does not present separate cash and PIK columns and does not append PIK as an additive amount outside the stated spread. Instead, each PIK example prints the PIK component parenthetically as included in the stated spread, while note (2) says the schedule provides the reference rate, spread, and interest rate in effect. Therefore the stated position-level rate/spread is all-in, with PIK included.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 5
+}

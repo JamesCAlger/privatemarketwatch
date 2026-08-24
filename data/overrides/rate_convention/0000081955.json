@@ -1,0 +1,64 @@
+{
+  "cik": "0000081955",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule does not have separate cash and PIK rate columns; the '(a) Type of Investment' column embeds the instrument principal, stated cash interest rate, and any PIK term. The PIK footnote says PIK is included in the detailed interest rate unless marked with '(+)', in which case the PIK is additional to the stated face/cash interest rate. For the cited '(+ x% PIK)' rows, the printed stated rate is the cash leg and the printed PIK rate is on top.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Company, Geographic Location, Business Description, (Industry) and Website | (a) Type of Investment | (b) Date Acquired | (c) Equity | Cost | (d)(f) Fair Value | Percent of Net Assets",
+      "where": "Schedule of Investments, March 31, 2026"
+    },
+    {
+      "kind": "footnote",
+      "quote": "Payment in kind (PIK) represents earned interest that is added to the cost basis of the investment and due at maturity. The amount of PIK earned is included in the interest rate detailed in the \"Type of Investment\" column, unless it has been noted with a (+), in which case the PIK is in addition to the face amount of interest due on the security.",
+      "where": "Schedule of Investments footnote (q), March 31, 2026"
+    },
+    {
+      "kind": "position",
+      "issuer": "Highland All About People Holdings, Inc.",
+      "quote": "$ 3,000,000 Term Note at 12 % (+ 4 % PIK) due August 7, 2028.",
+      "printed_cash": 12.0,
+      "printed_pik": 4.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Mobile RN Holdings LLC d/b/a Mobile IV Nurses",
+      "quote": "$ 2,500,000 Term Note at 14 % (+ 1 % PIK) due October 2, 2029.",
+      "printed_cash": 14.0,
+      "printed_pik": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Mobile RN Holdings LLC",
+      "quote": "$ 2,500,000 Term Note at 14 % (+ 1 % PIK) due October 2, 2029.",
+      "printed_cash": 14.0,
+      "printed_pik": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "BlackJet Direct Marketing, LLC",
+      "quote": "$ 2,250,000 Term Note at 14 % (+ 1 % PIK) due December 12, 2030.",
+      "printed_cash": 14.0,
+      "printed_pik": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "BMP Swanson Holdco, LLC",
+      "quote": "$ 1,600,000 Term Note at 5 % (+ 7 % PIK) through July 31, 2026, thereafter 12 %, due March 31, 2027.",
+      "printed_cash": 5.0,
+      "printed_pik": 7.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Caitec, Inc.",
+      "quote": "$ 1,750,000 Subordinated Secured Promissory Note at 12 % (+ 2 % PIK), due July 2, 2027.",
+      "printed_cash": 12.0,
+      "printed_pik": 2.0
+    }
+  ],
+  "rationale": "The filing's footnote makes '(+)' the decisive marker: PIK is otherwise included in the Type of Investment interest rate, but when '(+)' appears, the PIK is in addition to the face amount of interest due. The requested PIK positions print rates such as '12 % (+ 4 % PIK)' and '14 % (+ 1 % PIK)', so their stated rate is the cash/face interest leg and the PIK percentage is additive.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 6
+}

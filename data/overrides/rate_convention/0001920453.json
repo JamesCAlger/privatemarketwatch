@@ -1,0 +1,59 @@
+{
+  "cik": "0001920453",
+  "target_quarter": "2026-03-31",
+  "convention": "cash_leg",
+  "column_semantics": "The schedule has separate columns for Reference Rate and Spread (b) and Interest Rate (b). For PIK loans, the Reference Rate and Spread column prints the cash spread with the PIK component appended parenthetically, e.g. SOFR + 7.00% (0.50% PIK). The Interest Rate column prints the current cash leg rate excluding the parenthetical PIK amount; PIK is additive/on top, not included in that stated interest rate.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Investments (a) | Type | Reference Rate and Spread (b) | Interest Rate (b) | Maturity Date | Par Amount/Units (c) | Cost (d) | Fair Value (e) | Percentage of Net Assets",
+      "where": "Consolidated Schedules of Investments as of March 31, 2026, table 13 row 1"
+    },
+    {
+      "kind": "position",
+      "issuer": "Pla Buyer, LLC",
+      "quote": "Pla Buyer, LLC (i)(l)(q)(r) | Term Loan | SOFR + 7.00 % ( 0.50 % PIK) | 10.67 % | 11/22/2029",
+      "printed_pik": 0.5,
+      "printed_cash": 10.67
+    },
+    {
+      "kind": "position",
+      "issuer": "User Zoom Technologies, Inc",
+      "quote": "User Zoom Technologies, Inc (i)(l) | Term Loan | SOFR + 7.50 % ( 0.25 % PIK) | 11.42 % | 4/5/2029",
+      "printed_pik": 0.25,
+      "printed_cash": 11.42
+    },
+    {
+      "kind": "position",
+      "issuer": "CCI Prime, LLC",
+      "quote": "CCI Prime, LLC (i)(l) | Term Loan | SOFR + 7.25 % ( 5.50 % PIK) | 10.95 % | 10/18/2029",
+      "printed_pik": 5.5,
+      "printed_cash": 10.95
+    },
+    {
+      "kind": "position",
+      "issuer": "Roofing Services Solutions LLC",
+      "quote": "Roofing Services Solutions LLC (i)(l) | Delayed Draw Term Loan | SOFR + 6.25 % ( 0.50 % PIK) | 9.95 % | 11/27/2029",
+      "printed_pik": 0.5,
+      "printed_cash": 9.95
+    },
+    {
+      "kind": "position",
+      "issuer": "Unified Service Partners, LLC",
+      "quote": "Unified Service Partners, LLC (i)(l) | Delayed Draw Term Loan | SOFR + 8.00 % ( 4.00 % PIK) | 11.60 % | 4/14/2030",
+      "printed_pik": 4.0,
+      "printed_cash": 11.6
+    },
+    {
+      "kind": "position",
+      "issuer": "Personal Care (Itc) Intermediate Holdings, LLC",
+      "quote": "Personal Care (Itc) Intermediate Holdings, LLC (i)(l) | Term Loan | SOFR + 10.00 % ( 10.00 % PIK) | 13.67 % | 3/17/2029",
+      "printed_pik": 10.0,
+      "printed_cash": 13.67
+    }
+  ],
+  "rationale": "The filing does not use a single all-in coupon column for PIK loans. Instead, each PIK row places the PIK percentage in parentheses after the spread in the Reference Rate and Spread column while the adjacent Interest Rate column remains the current cash rate. Large PIK examples make this especially clear: Personal Care prints SOFR + 10.00% (10.00% PIK) with Interest Rate 13.67%, and CCI Prime prints SOFR + 7.25% (5.50% PIK) with Interest Rate 10.95%; those Interest Rate values are not all-in coupons including the PIK component.",
+  "confidence": 0.95,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 6
+}

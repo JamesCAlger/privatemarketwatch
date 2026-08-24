@@ -1,0 +1,67 @@
+{
+  "cik": "1383414",
+  "rule_id": "ppic_20251231_add_missing_prefixed_schedule_rows",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 209485000.0,
+      "cost": 209555000.0,
+      "shares_held": 210000.0,
+      "maturity_date": "2026-01-27",
+      "interest_rate": 0.0398,
+      "bdc_investment_identifier": "Investments in Non-Controlled, Non-Affiliated Portfolio Companies US Government Securities of Net Assets Issuer Name U.S. Treasury Bill Acquisition 01/02/2026 Maturity 01/27/2026 Industry Short-Term U.S. Government Securities Current Coupon 3.98%",
+      "issuer_name": "U.S. Treasury Bill",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments in Non-Controlled, Non-Affiliated Portfolio Companies US Government Securities of Net Assets Issuer Name U.S. Treasury Bill Acquisition 01/02/2026 Maturity 01/27/2026 Industry Short-Term U.S. Government Securities Current Coupon 3.98%",
+      "source_row_id": "staging:0001193125-26-042780:2025-12-31:investmentidentifieraxis=Investments in Non-Controlled, Non-Affiliated Portfolio Companies US Government Securities of Net Assets Issuer Name U.S. Treasury Bill Acquisition 01/02/2026 Maturity 01/27/2026 Industry Short-Term U.S. Government Securities Current Coupon 3.98%"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 8000000.0,
+      "cost": 7758000.0,
+      "principal_amount": 8000000.0,
+      "maturity_date": "2030-07-28",
+      "interest_rate": 0.1294,
+      "bdc_investment_identifier": "Investments in Non-Controlled, Non-Affiliated Portfolio Companies Second Lien Secured Debt of Net Assets Issuer Name Acquisition 07/026/2022 Maturity 07/28/2030 Industry Current Coupon 12.94% Basis Point Spread Above Index 3M SOFR+910",
+      "issuer_name": "Second Lien Secured Debt Issuer Name Acquisition 07/026/2022",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments in Non-Controlled, Non-Affiliated Portfolio Companies Second Lien Secured Debt of Net Assets Issuer Name Acquisition 07/026/2022 Maturity 07/28/2030 Industry Current Coupon 12.94% Basis Point Spread Above Index 3M SOFR+910",
+      "source_row_id": "staging:0001193125-26-042780:2025-12-31:investmentidentifieraxis=Investments in Non-Controlled, Non-Affiliated Portfolio Companies Second Lien Secured Debt of Net Assets Issuer Name Acquisition 07/026/2022 Maturity 07/28/2030 Industry Current Coupon 12.94% Basis Point Spread Above Index 3M SOFR+910"
+    },
+    {
+      "report_date": "2025-12-31",
+      "fair_value": 113000.0,
+      "cost": 0.0,
+      "shares_held": 400.0,
+      "bdc_investment_identifier": "Investments in Non-Controlled, Non-Affiliated Portfolio Companies Common Equity/Partnership Interests/Warrants of Net Assets Issuer Name UniVista Insurance Acquisition 06/14/2021 Industry Business Services",
+      "issuer_name": "UniVista Insurance",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments in Non-Controlled, Non-Affiliated Portfolio Companies Common Equity/Partnership Interests/Warrants of Net Assets Issuer Name UniVista Insurance Acquisition 06/14/2021 Industry Business Services",
+      "source_row_id": "staging:0001193125-26-042780:2025-12-31:investmentidentifieraxis=Investments in Non-Controlled, Non-Affiliated Portfolio Companies Common Equity/Partnership Interests/Warrants of Net Assets Issuer Name UniVista Insurance Acquisition 06/14/2021 Industry Business Services"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Staging current-period prefixed schedule rows for report_date 2025-12-31 sum to fair_value 1,218,474,000, exactly the validated anchor, but holdings prefixed rows sum to only 1,000,876,000 after the non-prefixed duplicate population is removed."
+    },
+    {
+      "source": "query",
+      "quote": "The three non-null fair_value prefixed staging rows absent from holdings are U.S. Treasury Bill fair_value 209,485,000; Second Lien Secured Debt of Net Assets Issuer Name Acquisition 07/026/2022 fair_value 8,000,000; and UniVista Insurance fair_value 113,000. These total 217,598,000."
+    }
+  ],
+  "rationale": "After excluding the duplicate non-prefixed population, holdings undercount the validated anchor by exactly the three non-null current-period prefixed schedule rows present in staging but absent from holdings. Adding only those source-backed rows restores the schedule population without deleting real investments below the anchor.",
+  "confidence": 0.95,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 3,
+      "fv": 217598000.0,
+      "residual_before": -217598000.0,
+      "residual_after": 0.0
+    }
+  }
+}

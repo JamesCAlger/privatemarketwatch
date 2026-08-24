@@ -29,6 +29,36 @@ Extracted from AGENTS.md for reference. See AGENTS.md for operational guardrails
 | `investment_type` | str | Investment type axis (rarely populated) |
 | `affiliation` | str | Issuer affiliation (rarely populated) |
 | `dimensions_raw` | str | Full XBRL dimension string for audit |
+| `src_context_id` | str | XBRL contextRef of the winning dedup row (2026-08-22). With `accession_number`, locates the fact context in the cached filing. Primary-of-N when `dedupe_context_count` > 1; `''` for rows built before the anchor migration or merged from a legacy CSV. |
+
+## Row Identity (`row_id` / `row_id_basis`, unified holdings)
+
+`private_markets_holdings.csv` appends two columns AFTER `UNIFIED_COLUMNS`
+(they are not in the constant by design; `_assign_row_ids` is the final build
+step and re-runs after `assign_position_ids` re-saves):
+
+- `row_id` = `ROW-` + first 16 hex chars of md5 over the row's source anchor:
+  `source|accession_number|src_context_id` for BDC rows,
+  `source|accession_number|nport_holding_id` for N-PORT rows.
+  The anchor names the filing fact context, so the id survives rebuilds,
+  staging reorders, promoted corrections, and parser fixes. It is an
+  **as-filed claim**: an amendment (new accession) is a new id by design.
+- `row_id_basis` = `src_anchor` when the anchor exists, else `natural_key` --
+  the legacy fallback hash over `position_id_registry.compute_natural_keys`
+  (content-sensitive: a corrected principal changes a fallback row's id).
+- `row_id` is a within-build row name, not a cross-quarter identity --
+  `position_id` owns that layer and is unchanged.
+- Migration tooling: `scripts/restamp_row_selectors.py` maps legacy
+  natural-key ids cited in correction-leaf `row_selector`s to anchor ids.
+- Source-reconciliation published ids (2026-08-22): detail artifacts carry
+  `source_row_id` = `src:{accession_number}:{context_id}` (stable grounding
+  anchor; `#k` suffix on within-frame duplicate contexts, `src-ord:{n}`
+  fallback when a part is missing) and `output_row_id` = the unified
+  `row_id` when available. The positional ordinals remain internal to the
+  reconciliation SQL only. Correction-leaf `positions[].source_row_id`
+  citations copy the published anchor verbatim; the value gate re-verifies
+  by string equality + fair_value tolerance against a grounding frame that
+  is now independently re-derivable from the source-facts cache.
 
 ## Position-Level PIK Status
 
@@ -53,3 +83,289 @@ PIK outputs intentionally separate strict current-payment/accrual evidence from 
 - **V7 (Affiliation-axis dedup + pct correction):** Implemented. Fixes FV inflation from affiliation-axis duplication (12 CIKs) via 3 mechanisms: affiliation prefix/suffix stripping from `_raw_id`, expanded `_BAD_ISSUER_NAMES_EXACT`, and ROW_NUMBER dedup over (cik, report_date, issuer_name, FV). Corrects `pct_of_net_assets` for multi-dimension-path BDCs (263 CIK-quarters, 116K rows) by recalculating with consolidated `net_assets` from `fund_financials.csv`. Dimension-path duplicates resolved by `no_dim_dupes` CTE (case/punctuation-normalized key excluding cost) + majority casing vote in `_prepare_bdc` + N-PORT cross-quarter dedup via `nport_deduped` CTE. Cost proxy made deterministic with per-tranche partition key (instrument_description + cusip) and fair_value tiebreaker. Tier A within-filing position matching case-folded to recover 2,386 cross-period pairs that previously fell to lower-confidence tiers.
 
 All validation functions use DuckDB SQL (no pandas .iterrows/.apply).
+
+## Provenance Passthrough Columns (step 1, 2026-08-23)
+
+Six new columns appended to `UNIFIED_COLUMNS` after `src_context_id`.
+Populated by a single `--unified` rebuild; no re-extraction required.
+Upgrade path: these flat-tag columns fold into `src_facts` (per-field
+JSON with instance-raw values) when the extractor migration ships.
+
+### Dedup carry-throughs (from `bdc_holdings.csv`)
+
+| Column | Type | Description |
+|---|---|---|
+| `src_context_count` | str | Number of XBRL contexts deduplicated into this row (`dedupe_context_count` passed through from bdc_holdings). Empty for N-PORT and for BDC rows built before the dedup audit. |
+| `src_conflict_fields` | str | Comma-joined field names where deduplicated contexts disagreed on value (`dedupe_conflict_fields` pass-through). Empty when all contexts agreed or only one context existed. |
+
+### Pipeline transform events (`src_transforms`)
+
+Flat `;`-joined ordered list of `field:code` events recording which
+pipeline heuristic fired on which field. One entry per branch that fired;
+silent when the field passed through unchanged. Event/value CASE
+conditions are colocated in `staging_bdc.py` Phase C and in the
+`unified_pik_fixed`, `with_cost`, and `with_shares_fix` CTEs.
+
+**Event vocabulary v1** (fires in this field order where applicable):
+
+| Event code | Field | Condition | Effect |
+|---|---|---|---|
+| `interest_rate:neg_null` | `interest_rate` | raw < 0 | set to NULL |
+| `interest_rate:rate_x100` | `interest_rate` | raw <= 0.50 | multiply by 100 |
+| `interest_rate:rate_div100` | `interest_rate` | raw >= 50 | divide by 100 |
+| `basis_spread:neg_null` | `basis_spread` | raw < 0 | set to NULL |
+| `basis_spread:rate_x100` | `basis_spread` | raw <= 0.50 | multiply by 100 |
+| `basis_spread:rate_div100` | `basis_spread` | raw >= 50 | divide by 100 |
+| `pik_rate:neg_null` | `pik_rate` | raw < 0 | set to NULL |
+| `pik_rate:rate_x100` | `pik_rate` | raw <= 0.50 | multiply by 100 |
+| `pik_rate:rate_div100` | `pik_rate` | raw >= 50 | divide by 100 |
+| `pct_of_net_assets:rate_x100` | `pct_of_net_assets` | raw <= 0.50 | multiply by 100 |
+| `pct_of_net_assets:rate_div100` | `pct_of_net_assets` | raw > 50 (strict) | divide by 100 |
+| `pik_rate:pik_boundary_div100` | `pik_rate` | pik >= 20 AND pik > interest_rate | divide by 100 (bps->pct fix, appended by `unified_pik_fixed` CTE) |
+| `cost:cost_proxy_fv` | `cost` | cost NULL/zero but FV proxy available | cost filled from FV proxy (appended by `with_cost` CTE) |
+| `shares_held:pow10_shares` | `shares_held` | shares >30x deviation from issuer median | pow-10 outlier corrected (appended by `with_shares_fix` CTE) |
+
+Note: `pct_of_net_assets` uses a strict `> 50` threshold for the div/100
+branch (not `>= 50`); all rate fields use `>= 50`. This asymmetry is
+enforced by boundary tests in `tests/test_unified_holdings.py`.
+
+### Class-C pathway enums
+
+| Column | Type | Values | Description |
+|---|---|---|---|
+| `cost_source` | str | `''` or `'derived_proxy'` | `'derived_proxy'` when `with_cost` CTE filled a NULL/zero cost from the cross-quarter FV proxy. Extends the existing `*_source` enum pattern used by `interest_rate_source`, `basis_spread_source`, etc. |
+| `shares_held_source` | str | `''` or `'derived_proxy'` | `'derived_proxy'` when `with_shares_fix` CTE applied a pow-10 correction to an outlier shares value. |
+
+Rows where `cost_source='derived_proxy'` or `shares_held_source='derived_proxy'`
+should be excluded from verified-FV numerators that require independently
+confirmed position economics (per scoping doc accounting rule).
+
+### Bridge overlay coordinate refs (`src_field_overrides`)
+
+| Column | Type | Grammar | Description |
+|---|---|---|---|
+| `src_field_overrides` | str | `;`-joined `field=bridge:<sha8>:t<T>:r<R>` | Written by `apply_html_section_bridge_field_overlays` for each field overridden by the HTML-section bridge. `<sha8>` = first 8 chars of the HTML file's sha256; `<T>` = table index; `<R>` = row index within the bridge table. Empty when no bridge overlay applied to this row. |
+
+Example: `maturity_date=bridge:a1b2c3d4:t2:r15` means `maturity_date`
+was sourced from the HTML bridge file whose sha256 starts `a1b2c3d4`,
+table 2, row 15.
+
+### Coverage stats (2026-08-23 rebuild, 780,726 rows)
+
+Measured from `private_markets_holdings.parquet` via `scratch/2026-08-23_prov_step1/coverage_stats.py`.
+
+| Metric | Count |
+|---|---|
+| interest_rate:rate_x100 events | 357,833 |
+| interest_rate:rate_div100 events | 0 |
+| interest_rate:neg_null events | 8 |
+| basis_spread:rate_x100 events | 395,670 |
+| basis_spread:rate_div100 events | 1 |
+| basis_spread:neg_null events | 75 |
+| pik_rate:rate_x100 events | 45,940 |
+| pik_rate:rate_div100 events | 0 |
+| pik_rate:neg_null events | 24 |
+| pct_of_net_assets:rate_x100 events | 299,629 |
+| pct_of_net_assets:rate_div100 events | 0 |
+| pik_rate:pik_boundary_div100 events | 14 |
+| cost:cost_proxy_fv events | 252,559 |
+| shares_held:pow10_shares events | 2,847 |
+| Total rows with any src_transforms event | 730,363 (93.6%) |
+| cost_source='derived_proxy' | 252,559 |
+| shares_held_source='derived_proxy' | 2,847 (historical baseline ~1,902 pre-rebuild) |
+| src_context_count > 1 | 103,365 |
+| src_conflict_fields non-empty | 8 |
+| src_field_overrides non-empty | 0 (bridge overlay had no matches in this cohort) |
+
+### Known limitations
+
+- **Values populated on rebuild only.** All six provenance columns are empty strings in cached
+  `bdc_holdings.csv` rows generated before this migration. They are populated correctly on any
+  full `--unified` rebuild from cached extraction data; partial rebuilds or legacy CSV imports
+  may leave the columns empty.
+- **Ordinal tie-break residual.** The 2026-08-23 rebuild produced four `src_anchor` row_id flips
+  at CIK 0000081955 / 2025-12-31 (and cost/shares deltas at ~13 CIK-quarters across 7 CIKs:
+  0001321741, 0001414932, 0001578348, 0000081955, 0001655050, 0001496099 et al.) due to DuckDB
+  physical row-order perturbation hitting pre-existing order-sensitive tie-breaks in dedup/pick
+  layers. All deltas are ACCEPTED as the same residual class as the 8 ordinal flips in the
+  2026-08-22 anchor-row_id migration. Future hardening: deterministic ORDER BY in tie-break
+  windows (not done in step 1).
+
+---
+
+## Provenance Steps 2-4: src_facts, Re-verifier, Ledger (2026-08-23)
+
+### Eight new columns in `private_markets_holdings.csv` / `.parquet`
+
+Added by the steps-2-4 migration (commits 5b6a4fe..e079407).
+All 8 columns are appended after the step-1 provenance columns and before the terminal
+`row_id` / `row_id_basis` pair.
+
+| Column | Type | Description |
+|---|---|---|
+| `src_facts` | str | Per-field JSON blob recording the declared raw XBRL value and extractor-side events for each checkable field. Grammar: see below. Empty string for N-PORT rows, non-cohort BDC rows, and any row whose accession was not in the step-2 re-extraction cohort run. |
+| `src_filled_fields` | str | Comma-joined field names that were blank in the winning dedup row but filled from a secondary context during dedup. Records which field values came from a non-primary context. Empty when no fill occurred. Written by the BDC extractor dedup step (`dedupe_filled_fields` passthrough). |
+| `corrected_fields` | str | Semicolon-joined field names that were overridden after extraction. The special marker `_row:added` appears when the entire row was added by a correction (not extracted from the filing). Writers: B2 stage-2 leaves (`apply_corrections`), promoted rules (`agent_promoted`), manual row corrections, Agent A spread corrections (`apply_spread_corrections` in `staging_bdc.py`). The iXBRL overlay (`apply_html_section_bridge_field_overlays`) is BLANK-FILL-ONLY by determination and does NOT stamp `corrected_fields`. |
+| `fair_value_source` | str | Pathway enum for `fair_value`. Values: `'xbrl_field'` (from XBRL tag), `''` (N-PORT or not re-extracted). |
+| `pct_of_net_assets_source` | str | Pathway enum for `pct_of_net_assets`. Values: `'xbrl_field'`, `''`. |
+| `pik_rate_source` | str | Pathway enum for `pik_rate`. Values: `'xbrl_field'`, `'identifier_text'` (rate parsed from the investment identifier string), `''`. |
+| `principal_amount_source` | str | Pathway enum for `principal_amount`. Values: `'xbrl_field'`, `''`. |
+| `bdc_unrealized_gain_loss_source` | str | Pathway enum for `bdc_unrealized_gain_loss`. Reserved; currently always `''` (field not yet in the re-extraction cohort pass). |
+
+### `src_facts` JSON grammar v1
+
+`src_facts` is a JSON object keyed by field name. Each field entry is an object with:
+
+| Key | Present when | Meaning |
+|---|---|---|
+| `r` | always (for the 4 rate fields: `interest_rate`, `basis_spread`, `pik_rate`, `pct_of_net_assets`) | Declared raw value as extracted from the XBRL instance (before staging transforms). Float or null. For monetary fields (`fair_value`, `cost`, `principal_amount`, `shares_held`) `r` is also written when a concept or transform event was recorded. |
+| `c` | when the winning concept is non-exact-canonical OR a transform event fired | Local name of the XBRL concept that won the `_match_concept` lookup. Omitted when the concept exactly matches the canonical name (no disambiguation needed). |
+| `x` | when one or more extractor-side scale events fired | JSON array of event codes (strings). Current event vocabulary: `decimals_rescale:10^<k>` (XBRL decimals attribute implied rescale by 10^k); `cik_scale_fix:x1000` (known filer-specific 1000x misscale corrected). |
+
+Empty string (`''`) means no provenance was recorded for this row (N-PORT, non-cohort BDC, or pre-migration row).
+
+Example:
+```json
+{"fair_value": {"r": 1234567.0, "c": "investmentownedatfairvalue", "x": ["decimals_rescale:10^-3"]},
+ "interest_rate": {"r": 0.0875}}
+```
+
+### Coverage stats (2026-08-23 step-2 rebuild, 780,726 rows)
+
+Measured from `private_markets_holdings.parquet` via `scratch/2026-08-23_prov_step2/coverage_stats.py`.
+
+| Metric | Count |
+|---|---|
+| Total rows | 780,726 |
+| BDC rows | 560,564 |
+| src_facts non-empty (total) | 240,198 |
+| src_facts non-empty (BDC only) | 240,198 (cohort latest-period slice of 465,051 bdc-level rows) |
+| src_facts with "c": (concept-disambiguated) | 11,435 |
+| src_facts with "x": (extractor transform events) | 117 |
+| src_filled_fields non-empty | 26,614 |
+| corrected_fields non-empty | 273,362 |
+| corrected_fields = '_row:added' alone | 262,572 (rows added by corrections, not in the original filing extraction) |
+
+Pathway enum counts:
+
+| Column | Value | Count |
+|---|---|---|
+| `fair_value_source` | `'xbrl_field'` | 560,406 |
+| `fair_value_source` | `''` | 220,320 |
+| `pct_of_net_assets_source` | `'xbrl_field'` | 300,027 |
+| `pct_of_net_assets_source` | `''` | 480,699 |
+| `pik_rate_source` | `'xbrl_field'` | 46,433 |
+| `pik_rate_source` | `'identifier_text'` | 1,036 |
+| `pik_rate_source` | `''` | 733,257 |
+| `principal_amount_source` | `'xbrl_field'` | 459,398 |
+| `principal_amount_source` | `''` | 321,328 |
+| `bdc_unrealized_gain_loss_source` | `''` | 780,726 (all; field not yet populated) |
+| `cost_source` | `'derived_proxy'` | 252,556 |
+| `shares_held_source` | `'derived_proxy'` | 2,847 |
+
+Known-empty regions: N-PORT rows (source != 'bdc') have no src_facts, no *_source values.
+Non-cohort BDC rows (CIKs outside the 933-filing wrapper cohort) also have empty src_facts.
+
+### Provenance Ledger artifacts (`provenance_ledger.csv`, `provenance_ledger_summary.csv`)
+
+Written by `python -m pipeline.provenance_reverify --cohort [--cheap-only] [--ciks ...] [--out DIR]`.
+Config paths: `config.PROVENANCE_LEDGER_FILE`, `config.PROVENANCE_LEDGER_SUMMARY_FILE`.
+
+#### `provenance_ledger.csv` schema (keyed by `row_id`, `field`)
+
+| Column | Type | Description |
+|---|---|---|
+| `row_id` | str | Unified holdings `row_id` |
+| `cik` | str | CIK |
+| `accession_number` | str | Filing accession number |
+| `report_date` | str | Period of report |
+| `src_context_id` | str | XBRL contextRef anchor |
+| `src_facts` | str | src_facts JSON for this row (passed through from holdings) |
+| `field` | str | Field name being verified |
+| `pathway` | str | Pathway enum value for this field (from `*_source` column) |
+| `declared_raw` | float or null | `r` value from src_facts for this field |
+| `declared_events` | str | `src_transforms` string (staging events declared for this field) |
+| `published` | float or null | Published value in unified holdings |
+| `expected` | float or null | Expected value computed from declared_raw + all declared multipliers |
+| `instance_raw` | float or null | Raw value read directly from the cached iXBRL instance (full tier only; null when not_checked) |
+| `cheap_status` | str | Cheap-tier verdict (see enum below) |
+| `full_status` | str | Full-tier verdict (see enum below) |
+| `reason_code` | str | Deterministic triage code (see reason-code enum below) |
+| `holdings_artifact_mtime` | str | ISO-format mtime of the holdings parquet this run was computed against |
+
+#### `provenance_ledger_summary.csv` schema (keyed by `cik`, `report_date`)
+
+| Column | Type | Description |
+|---|---|---|
+| `cik` | str | CIK |
+| `report_date` | str | Period of report |
+| `n_fields` | int | Total fair_value field rows for this cik-quarter |
+| `n_verified` | int | Count of fair_value rows with reason_code = 'verified' |
+| `verified_fv` | float | Sum of `fair_value` (published) over verified rows only |
+| `derived_fv` | float | Sum of `fair_value` over derived rows |
+| `corrected_fv` | float | Sum of `fair_value` over corrected rows |
+| `total_fv` | float | Sum of `fair_value` over all rows for this cik-quarter |
+| `verified_fv_share` | float | verified_fv / total_fv |
+| (reason_code columns) | int | Wide count columns: one column per reason_code value, counts across ALL fields (not just fair_value) for this cik-quarter |
+
+**Verified-FV accounting rule (scoping doc 2.4, mandatory):** `verified_fv` sums `fair_value`
+only over rows whose `fair_value` field's `reason_code` is `'verified'`. `derived` and
+`corrected` FV are their own buckets and are NEVER counted in the `verified_fv` numerator.
+`verified_fv_share = verified_fv / total_fv`.
+
+#### cheap_status enum (cheap tier)
+
+| Value | Meaning |
+|---|---|
+| `corrected` | Field listed in `corrected_fields` -- value was overridden post-extraction |
+| `derived` | Pathway is `'derived_proxy'` -- cost/shares filled from a heuristic proxy |
+| `text_pathway` | Pathway is `'identifier_text'` -- value parsed from the identifier string, not a direct XBRL tag |
+| `filled_field` | Field listed in `src_filled_fields` -- filled from a secondary dedup context |
+| `merged_conflict` | Field listed in `src_conflict_fields` -- conflicting dedup contexts were merged |
+| `no_provenance` | `src_context_id` is empty -- no XBRL anchor available |
+| `pass_trivial` | Published is NULL and raw is NULL and no event: field absent from this row (trivially pass for monetary fields; not a declaration failure) |
+| `pass` | Computed expected matches published within 1e-6 relative tolerance |
+| `fail` | Computed expected does not match published |
+| `missing_raw_with_transform` | An event was declared but raw (r) is absent -- incomplete declaration |
+
+#### full_status enum (full tier)
+
+| Value | Meaning |
+|---|---|
+| `raw_match` | Instance raw read from iXBRL matches declared_raw (or both NULL); declared raw = published after all multipliers |
+| `raw_stale` | Instance raw read from iXBRL matches published but differs from declared_raw -- src_facts is stale (re-extraction needed) |
+| `published_mismatch` | Instance raw * all multipliers does NOT match published -- regression or extraction bug |
+| `anchor_missing` | Context found in the instance but the expected concept element was absent |
+| `context_missing` | src_context_id not found in the instance at all |
+| `source_unavailable` | Cached iXBRL file not found for this accession |
+| `not_checked` | Short-circuited (cheap_status is corrected/derived/text_pathway/filled_field/merged_conflict/no_provenance) or --cheap-only mode |
+
+#### reason_code enum (scoping doc 8.2, deterministic triage)
+
+| reason_code | Derived from | Semantics |
+|---|---|---|
+| `verified` | full_status = raw_match AND cheap_status NOT in short-circuit set AND cheap_status != fail | Instance raw, declared raw, and published all agree. The strongest provenance signal. |
+| `anchor_stale` | full_status = raw_stale | Instance and published agree (correct value), but declared_raw in src_facts is outdated. Re-extraction refreshes it; does NOT indicate a wrong value in production. Distinct from filing_mismatch. |
+| `transform_drift` | full_status = raw_match AND cheap_status in (fail, missing_raw_with_transform) | The instance raw matches published but the cheap-tier derivation disagreed -- indicates a staging transform event that is not fully reflected in src_facts. |
+| `filing_mismatch` | full_status = published_mismatch | Instance raw * multipliers does not match published. The most actionable finding: either a pipeline regression or an extraction bug. |
+| `anchor_missing` | full_status = anchor_missing | Concept element absent from the context. May be a localname mismatch or a context that does not carry this field. |
+| `provenance_wrong` | full_status = context_missing | src_context_id does not exist in the instance. Provenance anchor is incorrect. |
+| `source_unavailable` | full_status = source_unavailable | Cached filing not present -- filing coverage gap, not a pipeline error. |
+| `corrected` | cheap_status = corrected | Value was overridden by a B2/rule/manual correction. Excluded from verified_fv numerator by design. |
+| `derived` | cheap_status = derived | Value filled by a heuristic proxy (cost_proxy_fv or shares pow-10 fix). Excluded from verified_fv numerator. |
+| `text_pathway` | cheap_status = text_pathway | Value parsed from the identifier string. Not directly iXBRL-verifiable without a grammar-match step. |
+| `merged_context_excluded` | cheap_status in (filled_field, merged_conflict) | Field came from a secondary dedup context or a conflicting merge. Provenance is incomplete (only the winning context is anchored). |
+| `no_provenance` | cheap_status = no_provenance | Row has no src_context_id anchor -- pre-migration row, N-PORT row, or legacy CSV import. |
+| `unchecked_trivial` | all other cases | Field was trivially NULL/absent and not checked by either tier. |
+
+**anchor_stale vs filing_mismatch distinction:** `anchor_stale` means the PUBLISHED value is
+correct (instance raw matches it) but the snapshot in src_facts is outdated. A re-extraction
+refreshes the declaration without changing the published value. `filing_mismatch` means the
+PUBLISHED value differs from the instance -- the pipeline produced a different number than the
+filing states, which requires investigation.
+
+Known-empty regions for the ledger: N-PORT rows are excluded from both tiers (cheap tier WHERE
+clause filters to `source = 'bdc'`). Non-cohort BDC rows have no src_facts and will fall into
+`no_provenance`. The residual `filing_mismatch` / `anchor_stale` population is the primary
+product of the re-verifier (it seeds future routing lanes); do not tune the verifier to shrink
+it artificially.

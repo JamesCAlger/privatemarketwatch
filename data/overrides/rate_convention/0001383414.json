@@ -1,0 +1,64 @@
+{
+  "cik": "0001383414",
+  "target_quarter": "2026-03-31",
+  "convention": "all_in",
+  "column_semantics": "The schedule has one position-level rate column, 'Current Coupon', which shows the actual interest rate in effect. PIK is included in that stated current coupon/rate, either by printing the rate as 'PIK x.xx %' in the Current Coupon column or by printing a total current coupon with a PIK parenthetical immediately under the same column. The spread column is also inclusive: its footnote says the spread provided includes PIK interest and other fee rates, if any.",
+  "citations": [
+    {
+      "kind": "header",
+      "quote": "Issuer Name | Acquisition | Maturity | Industry | Current Coupon | Basis Point Spread Above Index (4) | Par / Shares | Cost | Fair Value (3)",
+      "where": "Schedule of Investments, March 31, 2026, repeated table headers (e.g. evidence table 13 row 1 and table 16 row 1)"
+    },
+    {
+      "kind": "footnote",
+      "quote": "The terms in the Schedule of Investments disclose the actual interest rate in effect as of the reporting period. ... The spread provided includes PIK interest and other fee rates, if any.",
+      "where": "Schedule of Investments footnote (4) to 'Basis Point Spread Above Index'"
+    },
+    {
+      "kind": "position",
+      "issuer": "United Land Services Intermediate Parent Holdings, LLC",
+      "quote": "United Land Services Intermediate Parent Holdings, LLC | 07/12/2024 | 12/23/2026 | Environmental Services | PIK 14.75 % | - | 22,121 | 21,881 | 22,121",
+      "printed_total": 14.75,
+      "printed_pik": 14.75
+    },
+    {
+      "kind": "position",
+      "issuer": "Northwinds Topco, Inc.",
+      "quote": "Northwinds Topco, Inc. | 08/16/2024 | 10/30/2029 | Consumer Services | PIK 15.00 % | - | 12,821 | 12,744 | 12,693",
+      "printed_total": 15.0,
+      "printed_pik": 15.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Beacon Behavioral Holdings, LLC",
+      "quote": "Beacon Behavioral Holdings, LLC | 06/21/2024 | 06/21/2030 | Healthcare, Education and Childcare | PIK 15.00 % | - | 6,407 | 6,351 | 6,407",
+      "printed_total": 15.0,
+      "printed_pik": 15.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Shiftkey, LLC",
+      "quote": "Shiftkey, LLC | 06/17/2022 | 06/21/2027 | Business Services | 9.68 % | 3M SOFR+ 601 | 16,545 | 16,487 | 15,764; immediately following Current Coupon cell: (PIK 0.50 %)",
+      "printed_total": 9.68,
+      "printed_pik": 0.5
+    },
+    {
+      "kind": "position",
+      "issuer": "Ledge Lounger, Inc.",
+      "quote": "Ledge Lounger, Inc. | 11/04/2021 | 11/09/2026 | Consumer Products | 11.32 % | 3M SOFR+ 765 | 9,818 | 9,796 | 7,584; immediately following Current Coupon cell: (PIK 1.00 %)",
+      "printed_total": 11.32,
+      "printed_pik": 1.0
+    },
+    {
+      "kind": "position",
+      "issuer": "Lash OpCo, LLC - Funded Revolver",
+      "quote": "Lash OpCo, LLC - Funded Revolver | 08/16/2021 | 08/16/2026 | Consumer Products | 8.94 % | 3M SOFR+ 510 | 252 | 252 | 248; immediately following Current Coupon cell: (PIK 5.10 %)",
+      "printed_total": 8.94,
+      "printed_pik": 5.1
+    }
+  ],
+  "rationale": "This is the ALL-IN pattern. The filing does not present separate Cash and PIK rate columns. Instead, PIK appears within the same Current Coupon column: pure PIK positions are printed as 'PIK 14.75 %' or 'PIK 15.00 %', and mixed positions show a Current Coupon total such as 9.68% or 11.32% with a PIK parenthetical directly below that same column. Footnote (4) confirms the same inclusive convention for spreads by stating that the spread provided includes PIK interest and other fee rates, if any.",
+  "confidence": 0.96,
+  "verify_tier": "HIGH",
+  "verify_n_reconciled": 2
+}
