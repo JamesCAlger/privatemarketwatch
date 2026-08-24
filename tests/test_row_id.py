@@ -126,7 +126,8 @@ def test_row_order_invariance():
     assert map_a == map_b
 
 
-def test_duplicate_anchor_warns_but_assigns(caplog):
+def test_duplicate_anchor_assigns_unique_ids(caplog):
+    """Duplicate anchor keys get distinct ids via collision suffix; no warning."""
     import logging
     df = _base_df()
     twin = df.iloc[[0]].copy()
@@ -134,10 +135,85 @@ def test_duplicate_anchor_warns_but_assigns(caplog):
     with caplog.at_level(logging.WARNING):
         out = _assign_row_ids(both)
     assert len(out) == 5
-    assert "duplicate" in caplog.text.lower()
+    # collision suffix resolves duplicates -- all ids must be unique
+    assert out["row_id"].nunique() == 5
+    # no warning expected: suffix prevents any post-assignment duplicates
+    assert "uniqueness violated" not in caplog.text.lower()
 
 
 def test_empty_frame():
     out = _assign_row_ids(pd.DataFrame())
     assert "row_id" in out.columns and "row_id_basis" in out.columns
     assert len(out) == 0
+
+
+# ---------------------------------------------------------------------------
+# Collision-suffix tests (Task 2: row_id uniqueness invariant)
+# ---------------------------------------------------------------------------
+
+def _frame(rows: list) -> pd.DataFrame:
+    """Build a minimal DataFrame suitable for _assign_row_ids from row dicts.
+
+    Provides all columns required by _assign_row_ids / compute_natural_keys;
+    callers only need to supply the fields that matter for their test.
+    """
+    defaults = {
+        "cik": "0000000001",
+        "source": "bdc",
+        "report_date": "2025-12-31",
+        "accession_number": "0000000001-26-000001",
+        "src_context_id": "ctx1",
+        "bdc_investment_identifier": "",
+        "nport_holding_id": "",
+        "principal_amount": None,
+        "shares_held": None,
+        "issuer_name": "Test Corp",
+        "fair_value": 1.0,
+        "cost": 1.0,
+        "bdc_dimensions_raw": "",
+    }
+    merged = [{**defaults, **r} for r in rows]
+    return pd.DataFrame(merged)
+
+
+def test_unique_anchor_ids_unchanged():
+    """Pin: non-colliding anchor id must equal the pre-change formula exactly."""
+    df = _frame([{"source": "bdc", "accession_number": "A1",
+                  "src_context_id": "ctxZ", "fair_value": 5.0}])
+    expected = "ROW-" + hashlib.md5(b"bdc|A1|ctxZ").hexdigest()[:16]
+    assert _assign_row_ids(df).iloc[0]["row_id"] == expected
+
+
+def test_colliding_anchors_get_distinct_ids_content_ranked():
+    """Two rows sharing the same anchor key must get distinct row_ids.
+
+    The row with the lower fair_value (100.0) is rank-0 and keeps the bare
+    unsuffixed id; the row with fair_value=200.0 gets a |dup1 suffix.
+    """
+    df = _frame([
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": 200.0, "cost": 90.0},
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": 100.0, "cost": 90.0},
+    ])
+    out = _assign_row_ids(df)
+    assert out["row_id"].nunique() == 2
+    # rank-0 row (lowest fair_value=100.0) keeps the unsuffixed id
+    base = hashlib.md5(b"bdc|A1|ctx1").hexdigest()[:16]
+    low_fv_id = out.loc[out["fair_value"] == 100.0, "row_id"].iloc[0]
+    assert low_fv_id == f"ROW-{base}"
+
+
+def test_collision_ids_independent_of_frame_order():
+    """The id assigned to each logical row must not depend on frame order."""
+    rows = [
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": 200.0, "cost": 90.0},
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": 100.0, "cost": 90.0},
+    ]
+    out_fwd = _assign_row_ids(_frame(rows))
+    out_rev = _assign_row_ids(_frame(list(reversed(rows))))
+    fwd = dict(zip(out_fwd["fair_value"].astype(str), out_fwd["row_id"]))
+    rev = dict(zip(out_rev["fair_value"].astype(str), out_rev["row_id"]))
+    assert fwd == rev

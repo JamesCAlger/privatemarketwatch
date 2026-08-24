@@ -1516,6 +1516,27 @@ def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
         has_anchor, compute_natural_keys(df))
     keys = keys.reset_index(drop=True)
 
+    # Collision suffix: rows sharing an anchor key get content-ranked |dup<k>
+    # suffixes (k>=1); rank 0 keeps the bare key so existing ids never change.
+    # Content rank (not frame order) keeps the ids rebuild-stable.
+    rank_frame = pd.DataFrame({
+        "k": keys,
+        "_fv": _col("fair_value"),
+        "_cost": _col("cost"),
+        "_pa": _col("principal_amount"),
+        "_sh": _col("shares_held"),
+        "_bid": _col("bdc_investment_identifier"),
+    })
+    dup_rank = (
+        rank_frame
+        .sort_values(["k", "_fv", "_cost", "_pa", "_sh", "_bid"],
+                     kind="mergesort")
+        .groupby("k", sort=False)
+        .cumcount()
+        .reindex(rank_frame.index)
+    )
+    keys = keys.where(dup_rank == 0, keys + "|dup" + dup_rank.astype(str))
+
     con = duckdb.connect()
     con.register("nk", pd.DataFrame({"i": range(len(keys)), "k": keys}))
     hashed = con.execute(
@@ -1528,8 +1549,8 @@ def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
     n_dup = int(df["row_id"].duplicated().sum())
     if n_dup:
         logger.warning(
-            "row_id: %d duplicate id(s) (anchor collision, natural-key "
-            "collision, or md5-prefix collision)", n_dup)
+            "row_id uniqueness violated on %d rows after "
+            "collision suffixing -- investigate", n_dup)
     logger.info("row_id: %d assigned (%d src_anchor, %d natural_key)",
                 len(df), n_anchor, len(df) - n_anchor)
     return df
