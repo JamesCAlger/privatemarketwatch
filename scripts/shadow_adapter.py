@@ -30,6 +30,7 @@ from pipeline.config import (
     HTML_TEMPLATE_VALIDATION_FILE,
     ORACLE_CHECK_RESULTS_FILE,
     OUTPUT_DIR,
+    PROVENANCE_LEDGER_FILE,
     ROW_VALIDATION_ISSUES_FILE,
     SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
     SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
@@ -445,6 +446,103 @@ def _agent_a_select() -> str | None:
     """
 
 
+# Provenance re-verifier reason codes (pipeline/provenance_reverify.py).
+# tight/fail = pointer-verification failures that belong in the blocker lane;
+# weak/warn = informational states (incl. anchor_stale: re-stamp maintenance,
+# not a data error); weak/pass = healthy states kept for coverage measurement.
+PROV_TIGHT_FAIL = {"filing_mismatch", "anchor_missing", "provenance_wrong",
+                   "source_unavailable", "transform_drift"}
+PROV_WEAK_WARN = {"anchor_stale", "no_provenance", "text_pathway",
+                  "merged_context_excluded"}
+# everything else (verified, corrected, derived, unchecked_trivial) -> weak/pass
+
+
+def _provenance_select() -> str | None:
+    """Provenance re-verifier verdicts, aggregated to (cik, quarter, reason_code).
+
+    8.1 dedup: tight-lane rows whose fact anchor (src:<accession>:<context>)
+    already sits in a BLOCKING source-only packet for the same cik-quarter are
+    excluded from the queue-facing groups and counted in a per-cik-quarter
+    'provenance_already_queued' audit row instead (no silent truncation).
+    """
+    if not PROVENANCE_LEDGER_FILE.exists():
+        return None
+    prov = PROVENANCE_LEDGER_FILE.as_posix()
+    so = SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE
+    so_exists = so.exists()
+    tight = ", ".join(f"'{c}'" for c in sorted(PROV_TIGHT_FAIL))
+    warn = ", ".join(f"'{c}'" for c in sorted(PROV_WEAK_WARN))
+    if so_exists:
+        queued_cte = f"""
+        queued AS (
+            SELECT DISTINCT cik, report_date,
+                   regexp_replace(source_row_id, '#[0-9]+$', '') AS anchor
+            FROM read_csv_auto('{so.as_posix()}', header=true, all_varchar=true)
+            WHERE lower(COALESCE(is_blocking, '')) IN ('true', '1')
+        ),"""
+    else:
+        queued_cte = """
+        queued AS (
+            SELECT NULL::VARCHAR AS cik, NULL::VARCHAR AS report_date,
+                   NULL::VARCHAR AS anchor WHERE 1=0
+        ),"""
+    return f"""
+    WITH {queued_cte}
+    prov AS (
+        SELECT p.*,
+               'src:' || COALESCE(p.accession_number, '') || ':'
+                      || COALESCE(p.src_context_id, '') AS anchor,
+               (q.anchor IS NOT NULL
+                AND p.reason_code IN ({tight})) AS already_queued
+        FROM read_csv_auto('{prov}', header=true, all_varchar=true) p
+        LEFT JOIN queued q
+          ON q.cik = p.cik AND q.report_date = p.report_date
+         AND q.anchor = 'src:' || COALESCE(p.accession_number, '') || ':'
+                              || COALESCE(p.src_context_id, '')
+    ),
+    grouped AS (
+        SELECT cik, report_date, reason_code,
+               COUNT(DISTINCT row_id) AS n_rows,
+               ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
+                     THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
+                   AS fv_m
+        FROM prov WHERE NOT already_queued
+        GROUP BY 1, 2, 3
+    ),
+    excluded AS (
+        SELECT cik, report_date,
+               COUNT(DISTINCT row_id) AS n_rows,
+               ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
+                     THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
+                   AS fv_m
+        FROM prov WHERE already_queued
+        GROUP BY 1, 2
+    )
+    SELECT 'provenance_reverify' AS engine,
+           reason_code AS rule_name,
+           CASE WHEN reason_code IN ({tight}) THEN 'tight' ELSE 'weak' END AS tier,
+           'advisory' AS enforcement,
+           cik,
+           'quarter' AS period_kind,
+           report_date AS period,
+           CASE WHEN reason_code IN ({tight}) THEN 'fail'
+                WHEN reason_code IN ({warn}) THEN 'warn'
+                ELSE 'pass' END AS status,
+           CAST(fv_m AS DOUBLE) AS metric,
+           'affected_fv_m' AS metric_name,
+           CAST(n_rows AS BIGINT) AS n_units,
+           reason_code AS mechanism,
+           CAST(NULL AS VARCHAR) AS src_confidence
+    FROM grouped
+    UNION ALL
+    SELECT 'provenance_reverify', 'provenance_already_queued', 'weak',
+           'advisory', cik, 'quarter', report_date, 'pass',
+           CAST(fv_m AS DOUBLE), 'affected_fv_m', CAST(n_rows AS BIGINT),
+           'dedup_source_recon', CAST(NULL AS VARCHAR)
+    FROM excluded
+    """
+
+
 def adapter_selects() -> list[str]:
     """Return normalized ledger-schema SELECT fragments for every available source."""
     return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select(),
@@ -452,4 +550,5 @@ def adapter_selects() -> list[str]:
                         _html_template_select(), _gav_recon_select(),
                         _fund_strategy_select(), _nonaccrual_select(),
                         _aggregate_header_select(), _classification_select(),
-                        _derivative_role_select(), _agent_a_select()) if s]
+                        _derivative_role_select(), _agent_a_select(),
+                        _provenance_select()) if s]
