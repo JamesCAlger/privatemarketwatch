@@ -6,6 +6,103 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-08-24 - Tiebreak hardening: build-determinism migration (commits 97a127f..6198812)
+
+### What shipped (Tasks 1-4, commits 97a127f..6198812)
+
+- **Task 1 -- extractor dedup determinism (commit 97a127f):** `_deduplicate_bdc_holdings`
+  in `pipeline/bdc_filings.py` sorted on physical row order when dedup scores tied. Fix:
+  `_context_id` (XBRL contextRef) inserted as the penultimate sort key at all three tie-break
+  sites (S11 stamp, S12 fill sort, S13 winner pick). Winner within tied groups is now
+  lexicographically-first context, stable across XBRL parse iteration order. Tests:
+  `TestDedupeDeterminism` (2 tests) in `tests/test_bdc_filings.py`.
+
+- **Task 2 -- row_id collision suffix (commits ea93302, 504294b):** `_assign_row_ids` in
+  `pipeline/unified_holdings.py` now resolves anchor collisions before hashing by appending
+  `|dup<k>` (k >= 1, content-ranked by (fair_value, cost, principal_amount, shares_held,
+  bdc_investment_identifier), nulls-last). Rank-0 rows keep bare keys -- zero live id changes
+  on current artifact (0 collisions in 780,726 rows). Three correctness defects fixed in
+  follow-on commit: index misalignment on non-default DataFrame index, nulls-first inversion,
+  fragile `groupby(sort=False)`. Tests: `tests/test_row_id.py` (14 -> 17 tests post-review).
+
+- **Task 3 -- SQL pick sites anchor keys (commit 92fb8a6):** `src_context_id` / `nport_holding_id`
+  appended as final ORDER BY keys at 7 SQL sites: nport_deduped (S4), cross-source dedup (S5),
+  bdc_dim_ranked (S6), with_cost FIRST_VALUE (S7), with_shares_fix LAST/FIRST_VALUE (S8),
+  no_affil_dupes in staging_bdc.py (S3), level3 ROW_NUMBER in staging_nport.py (S20). All
+  COALESCE-wrapped, nulls-last. Tests: `TestSqlTiebreakDeterminism` (2 tests) in
+  `tests/test_unified_holdings.py`.
+
+- **Task 4 -- pandas pick sites (commit 6198812):** 5 pandas sites ordered before picking:
+  unclassified-cache dedup in `_apply_unclassified_cache` (S14, stable content sort before
+  `drop_duplicates`); wrapper lot rank in `_apply_wrapper_position_keys` (S19, anchor key
+  replaces `_source_index` as secondary sort, `_source_index` stays as last resort);
+  bridge dedups in `bdc_xbrl_html_bridge.py` (S15/S16, sorted file glob + stable sort on
+  `html_sha256/table_index/row_index` before keep="last"); agent-rule dedup in
+  `agent_rule._apply_dedup` (S17, sort by match_fields + anchor for mask determination,
+  caller row order restored after mask). Tests added for S14, S15, S16, S17, S19.
+
+- **Files modified:** `pipeline/bdc_filings.py`, `pipeline/unified_holdings.py`,
+  `pipeline/staging_bdc.py`, `pipeline/staging_nport.py`, `pipeline/bdc_xbrl_html_bridge.py`,
+  `pipeline/agent_rule.py`, `tests/test_bdc_filings.py`, `tests/test_unified_holdings.py`,
+  `tests/test_row_id.py`, `tests/test_bdc_xbrl_html_bridge_fields.py`.
+
+- **New reference doc:** `docs/reference/tiebreak_site_inventory.md` -- full S-numbered
+  site table with disposition column.
+
+### Gate results
+
+- **Extractor gate (PASS_WITH_FLIPS):** BDC rebuild 1,184,101 rows. 1,774 winner flips
+  (0.15%), ALL confined to multi-context tied groups, 0 outside class. Row count and
+  per-CIK-accession group counts identical.
+
+- **GATE A -- unified rebuild (PASS_WITH_FLIPS, the final flip event):** 780,726 rows.
+  FV total EXACT ($7,458,535,136,381.15). Per-classification (NULL-safe) 0 mismatches.
+  Per-CIK-quarter FV 0 mismatches. Stable-row value diff 0 rows. Row count identical.
+  222 flip rows (111 row-identity re-picks) inventoried in
+  `scratch/2026-08-24_tiebreak/flip_inventory.csv`: 18 distinct CIKs, 0000081955
+  through 0001859919. Non-FV deltas riding on those 111 re-picks: cost +30,069,843
+  (4.2 ppm), shares +765,809, principal -20,729,525. FV is conserved exactly.
+
+  This is the one-time final flip event. It supersedes the three prior accepted-residual
+  events (anchor migration 8 flips; provenance step-1 13 CIK-quarters; steps-2-4 17-20
+  flips). No further flips are accepted: the twin-build gate is now strictly binary.
+
+- **GATE B -- twin build (PASS):** Two consecutive `--unified` builds content-identical
+  (780,726 rows, DuckDB EXCEPT = 0 both directions). Build-determinism contract established.
+
+  Honest residual (final review): the S4 nport-dedup hardening was a no-op (keys
+  already present); blank-holding-id N-PORT payload ties (S4, attenuated S5/S20) remain
+  physical-order and are twin-build-stable via cached-TSV read order, not content
+  anchors. Real fix scheduled as a small re-gated follow-up; until then the
+  strictly-binary gate claim carries this one documented exception.
+
+### Reverify smoke (cheap tier, rebuilt artifact)
+
+Profile unchanged post-rebuild: pass_trivial 1,553,699 / pass 511,122 / fail 45,579 /
+derived 11,236 / text_pathway 7,498 / corrected 1,963. No regression introduced by
+the tiebreak migration.
+
+### Full suite
+
+Full pytest suite: 4585 passed, 13 skipped, 2 xfailed, 0 failed in 9047s (2:30:46)
+at commit 6198812 (`--durations=50 --durations-min=0.5`; 689 warnings, pre-existing
+noise level). Suite grew 4569 -> 4585 (this migration's order-invariance tests).
+Semantic diff backstop: identical delta profile to the 2026-08-23 records (holdings
+14 / matches 7 / position_returns 11 / index_returns 8 / fund_financials 3 + the
+pre-existing retired-artifact drift) -- the tiebreak migration added no new semantic
+deltas vs the official baseline. Baseline refresh remains owner-gated, not done here.
+
+### New contracts
+
+- Build-determinism invariant: consecutive `--unified` builds are content-identical.
+  Twin-build gate (DuckDB EXCEPT = 0 both directions) is the standing acceptance test;
+  strictly binary -- no accepted-flip residuals going forward.
+- Future new pick sites MUST append anchor keys + include an order-invariance test.
+- row_id collision suffix `|dup<k>` resolves anchor collisions before hashing; current
+  artifact carries 0 suffixes (invariant).
+
+---
+
 ## 2026-08-23 - Provenance steps 2-4: src_facts extractor, two-tier re-verifier, ledger artifact
 
 ### What shipped (commits 5b6a4fe..e079407 + step-2 unified rebuild)
