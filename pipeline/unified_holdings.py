@@ -1514,24 +1514,50 @@ def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
 
     keys = (source + "|" + accession + "|" + anchor_part).where(
         has_anchor, compute_natural_keys(df))
+    # Reset to RangeIndex so rank_frame construction aligns by position, not
+    # by the caller frame's (potentially non-contiguous) index labels.
     keys = keys.reset_index(drop=True)
+
+    def _col_r(name: str) -> pd.Series:
+        """Like _col but always RangeIndex-aligned (safe inside rank_frame)."""
+        s = _col(name)
+        return s.reset_index(drop=True)
 
     # Collision suffix: rows sharing an anchor key get content-ranked |dup<k>
     # suffixes (k>=1); rank 0 keeps the bare key so existing ids never change.
     # Content rank (not frame order) keeps the ids rebuild-stable.
+    #
+    # For each content column we add a null-indicator (0=value present,
+    # 1=null/empty) sorted BEFORE the stringified value so that null rows
+    # always rank LAST within a collision group.
+    def _null_ind(series: pd.Series) -> pd.Series:
+        """Return 0 where series has a non-empty value, 1 where null/empty."""
+        return series.eq("").astype("int8")
+
+    fv = _col_r("fair_value")
+    cost = _col_r("cost")
+    pa = _col_r("principal_amount")
+    sh = _col_r("shares_held")
+    bid = _col_r("bdc_investment_identifier")
     rank_frame = pd.DataFrame({
         "k": keys,
-        "_fv": _col("fair_value"),
-        "_cost": _col("cost"),
-        "_pa": _col("principal_amount"),
-        "_sh": _col("shares_held"),
-        "_bid": _col("bdc_investment_identifier"),
+        "_fv_null": _null_ind(fv),   "_fv": fv,
+        "_co_null": _null_ind(cost),  "_cost": cost,
+        "_pa_null": _null_ind(pa),    "_pa": pa,
+        "_sh_null": _null_ind(sh),    "_sh": sh,
+        "_bi_null": _null_ind(bid),   "_bid": bid,
     })
     dup_rank = (
         rank_frame
-        .sort_values(["k", "_fv", "_cost", "_pa", "_sh", "_bid"],
-                     kind="mergesort")
-        .groupby("k", sort=False)
+        .sort_values(
+            ["k", "_fv_null", "_fv",
+             "_co_null", "_cost",
+             "_pa_null", "_pa",
+             "_sh_null", "_sh",
+             "_bi_null", "_bid"],
+            kind="mergesort",
+        )
+        .groupby("k")          # sort=True (default) -- stable re-sort on key only
         .cumcount()
         .reindex(rank_frame.index)
     )

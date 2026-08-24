@@ -217,3 +217,47 @@ def test_collision_ids_independent_of_frame_order():
     fwd = dict(zip(out_fwd["fair_value"].astype(str), out_fwd["row_id"]))
     rev = dict(zip(out_rev["fair_value"].astype(str), out_rev["row_id"]))
     assert fwd == rev
+
+
+def test_non_default_index_collision_distinct_ids():
+    """Collision suffix must work correctly when df carries a non-default index.
+
+    Realistic case: a concat-assembled frame retains the original integer labels
+    (e.g. index=[5, 9]) rather than 0..N-1.  The two rows share the same anchor
+    key, so both receive rank-0/rank-1 treatment, and the resulting row_ids
+    must be DISTINCT.  The rank-0 row (lower fair_value=100.0) must keep the
+    bare unsuffixed id.
+    """
+    df = _frame([
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": 200.0, "cost": 90.0},
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": 100.0, "cost": 90.0},
+    ])
+    # Simulate a concat-assembled frame with non-contiguous labels
+    df.index = [5, 9]
+    out = _assign_row_ids(df)
+    assert out["row_id"].nunique() == 2, "non-default index must still yield distinct ids"
+    base = hashlib.md5(b"bdc|A1|ctx1").hexdigest()[:16]
+    # row with index label 9 has fair_value=100.0 and should be rank-0 (bare key)
+    low_fv_id = out.loc[out["fair_value"] == 100.0, "row_id"].iloc[0]
+    assert low_fv_id == f"ROW-{base}", "rank-0 row must keep the bare unsuffixed id"
+
+
+def test_null_fv_ranks_after_non_null_fv():
+    """A collision where one row has fair_value=NaN: the NON-null row must keep
+    the bare key (rank 0).  With the naive fillna('') approach, '' < '100.0' so
+    the null row wins rank 0 incorrectly.  Nulls must sort LAST.
+    """
+    df = _frame([
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": float("nan"), "cost": 90.0},
+        {"source": "bdc", "accession_number": "A1", "src_context_id": "ctx1",
+         "fair_value": 100.0, "cost": 90.0},
+    ])
+    out = _assign_row_ids(df)
+    assert out["row_id"].nunique() == 2, "null fv collision must still yield distinct ids"
+    base = hashlib.md5(b"bdc|A1|ctx1").hexdigest()[:16]
+    # The NON-null row (fair_value=100.0) must keep the bare unsuffixed id
+    non_null_id = out.loc[out["fair_value"] == 100.0, "row_id"].iloc[0]
+    assert non_null_id == f"ROW-{base}", "non-null fair_value row must be rank-0 (bare key)"
