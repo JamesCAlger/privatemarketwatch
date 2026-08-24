@@ -233,7 +233,8 @@ def _index_artifact(
 
 
 _PROVENANCE_KEEP_COLS = ("row_id", "cik", "report_date", "reason_code", "field",
-                         "declared_raw", "instance_raw", "published")
+                         "declared_raw", "instance_raw", "published",
+                         "cheap_status", "full_status", "expected", "src_context_id")
 _PROVENANCE_ENGINE = "provenance_reverify"
 
 

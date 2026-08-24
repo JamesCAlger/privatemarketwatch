@@ -449,9 +449,13 @@ whose population is disjoint from the provenance ledger by construction.
 #### Evidence-slice contract (Task 2 drill-down)
 
 When a `review_bundle` is assembled for a provenance-engine item, the bundle
-includes an evidence slice (`evidence_slice.csv`) with one row per
-`(row_id, field)` from the provenance ledger for that `(cik, report_date)`.
-Columns retained: `row_id`, `field`, `reason_code`, `cheap_status`,
-`full_status`, `declared_raw`, `instance_raw`, `published`, `expected`,
-`src_context_id`. This slice is the drill-down surface for B2/B3 workers
-adjudicating filing_mismatch or anchor_missing packets.
+includes the evidence rows INLINE inside the bundle JSON as
+`evidence_items[?evidence_id=="source_artifact_rows"].data` -- there is no
+separate `evidence_slice.csv` file. The rows are keyed by
+`(cik, report_date, reason_code)` (matching `rule_name` in the queue item)
+and capped at 25 rows per target (the shared `max_rows` default; the
+implementation plan said 50 -- the actual default shipped as 25).
+Columns retained: `row_id`, `cik`, `report_date`, `reason_code`, `field`,
+`declared_raw`, `instance_raw`, `published`, `cheap_status`, `full_status`,
+`expected`, `src_context_id`. This slice is the drill-down surface for
+B2/B3 workers adjudicating filing_mismatch or anchor_missing packets.

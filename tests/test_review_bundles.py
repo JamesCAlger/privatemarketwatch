@@ -189,6 +189,7 @@ def test_lane_and_limit_filters(tmp_path):
 PROV_COLS = [
     "row_id", "cik", "report_date", "reason_code", "field",
     "declared_raw", "instance_raw", "published",
+    "cheap_status", "full_status", "expected", "src_context_id",
 ]
 
 
@@ -234,9 +235,10 @@ def test_provenance_reverify_matching_rows_attached(tmp_path, monkeypatch):
     assert len(src["data"]) == 3
     row_ids = {row["row_id"] for row in src["data"]}
     assert row_ids == {"r1", "r2", "r3"}
-    # required columns must be present
+    # required columns must be present (includes adjudication split cols added 2026-08-24)
     for row in src["data"]:
-        for col in ("row_id", "field", "declared_raw", "instance_raw", "published"):
+        for col in ("row_id", "field", "declared_raw", "instance_raw", "published",
+                    "cheap_status", "full_status", "expected", "src_context_id"):
             assert col in row, f"missing column {col}"
     assert manifest[0]["evidence_completeness"] == "source_artifact"
 

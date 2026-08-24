@@ -455,7 +455,9 @@ PROV_TIGHT_FAIL = {"filing_mismatch", "anchor_missing", "provenance_wrong",
                    "source_unavailable", "transform_drift"}
 PROV_WEAK_WARN = {"anchor_stale", "no_provenance", "text_pathway",
                   "merged_context_excluded"}
-# everything else (verified, corrected, derived, unchecked_trivial) -> weak/pass
+# Known-pass codes -- anything NOT in tight_fail or weak_warn AND NOT in this set
+# is an unrecognized code and routes to weak/warn (safe default, not weak/pass).
+PROV_WEAK_PASS = {"verified", "corrected", "derived", "unchecked_trivial"}
 
 
 def _provenance_select() -> str | None:
@@ -477,6 +479,7 @@ def _provenance_select() -> str | None:
     det_exists = det.exists()
     tight = ", ".join(f"'{c}'" for c in sorted(PROV_TIGHT_FAIL))
     warn = ", ".join(f"'{c}'" for c in sorted(PROV_WEAK_WARN))
+    known_pass = ", ".join(f"'{c}'" for c in sorted(PROV_WEAK_PASS))
     if det_exists:
         queued_cte = f"""
         queued AS (
@@ -531,7 +534,8 @@ def _provenance_select() -> str | None:
                report_date AS period,
                CASE WHEN reason_code IN ({tight}) THEN 'fail'
                     WHEN reason_code IN ({warn}) THEN 'warn'
-                    ELSE 'pass' END AS status,
+                    WHEN reason_code IN ({known_pass}) THEN 'pass'
+                    ELSE 'warn' END AS status,
                fv_m AS metric,
                'affected_fv_m' AS metric_name,
                CAST(n_rows AS BIGINT) AS n_units,

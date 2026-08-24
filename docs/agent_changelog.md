@@ -9659,3 +9659,31 @@ Review queue provenance items (review_queue.csv):
 Quarter-acceptance artifacts: UNTOUCHED (mtime unchanged, 2026-08-20 15:51:30 UTC).
 
 enforcement=advisory; no gate or acceptance-threshold changes.
+
+## 2026-08-24: CORRECTION to provenance shadow-adapter entry above
+
+The prior entry claimed 0 dedup exclusions because "the source_recon blocker population
+uses a different row_id namespace than the current provenance ledger." This is WRONG.
+The namespace is identical: both sides use the same ROW- prefixed md5 anchor hashes
+minted by `_assign_row_ids`. A live join verified 22 informational row_ids in common.
+
+The true mechanism for 0 dedup exclusions is structural:
+- Of the 15,160 blocking detail rows in source_reconciliation_detail.csv, 15,130 have
+  EMPTY output_row_id (these are source-only/unmatched rows; they have no output-side
+  counterpart and therefore no row_id to collide with).
+- The remaining 30 anchored blocking rows carry no tight provenance reason code today
+  (they do not appear in PROV_TIGHT_FAIL), so the dedup gate correctly passes them
+  through.
+
+Corrected label notes (prior entry used ambiguous terms):
+- "45,607" = distinct row_ids in the tight/fail group (the ledger has 45,674 rows total
+  including a small count of duplicate row_id/field pairs; 45,607 is the DISTINCT count).
+- "545,040" = sum of n_units across weak/pass groups (each unit is one ledger row);
+  this is NOT a group count.
+
+Additional note on identity vs. position dedup: row-identity dedup (above) is not
+position-identity dedup. A blocking source-only packet and a provenance flag can describe
+the SAME POSITION via different rows (the source-only row has no output_row_id; the
+provenance row tracks the published value). Future packet-assembly lanes that operate at
+position level must handle this overlap explicitly -- it is not handled by the current
+row-id join.

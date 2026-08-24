@@ -113,3 +113,12 @@ class TestProvenanceFeed:
             "engine", "rule_name", "tier", "enforcement", "cik",
             "period_kind", "period", "status", "metric", "metric_name",
             "n_units", "mechanism", "src_confidence"]
+
+    def test_unknown_reason_code_routes_to_weak_warn(self, monkeypatch, tmp_path):
+        # 'amended' is a spec-reserved code that is not in PROV_TIGHT_FAIL,
+        # PROV_WEAK_WARN, or PROV_WEAK_PASS.  Unknown codes must land
+        # tier=weak, status=warn (safe default, not pass).
+        df = _prov_rows([{"row_id": "ROW-x", "reason_code": "amended"}])
+        out = _run_fragment(monkeypatch, tmp_path, df).set_index("rule_name")
+        assert out.loc["amended", "tier"] == "weak"
+        assert out.loc["amended", "status"] == "warn"
