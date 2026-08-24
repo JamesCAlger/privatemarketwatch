@@ -35,12 +35,12 @@ def test_stage_order_pre_dispatch_ends_at_select():
     # preflight is the machine-checked readiness gate (2026-08-21): exit 1 halts
     # the pass before hours of battery burn. pin_inputs freezes fund-strategy
     # inputs at the pass boundary (pre only); the post battery reuses the pin.
-    assert names[:11] == ["preflight", "pin_inputs", "rebuild", "oracle", "nonaccrual",
-                          "validate", "shadow", "queue", "ledger", "acceptance",
-                          "select"]
-    assert names[11:] == ["rebuild_post", "oracle_post", "nonaccrual_post",
-                          "validate_post", "shadow_post", "queue_post", "ledger_post",
-                          "acceptance_post", "summary"]
+    assert names[:12] == ["preflight", "pin_inputs", "rebuild", "oracle", "nonaccrual",
+                          "validate", "provenance", "shadow", "queue", "ledger",
+                          "acceptance", "select"]
+    assert names[12:] == ["rebuild_post", "oracle_post", "nonaccrual_post",
+                          "validate_post", "provenance_post", "shadow_post",
+                          "queue_post", "ledger_post", "acceptance_post", "summary"]
     assert "pin_inputs_post" not in names
     assert "preflight_post" not in names
 
@@ -70,8 +70,9 @@ def test_until_select_runs_pre_half_and_checkpoints(tmp_path, monkeypatch):
     executed: list[list[str]] = []
     r = _runner(tmp_path, executed)
     assert r.run(until_stage="select") == 0
-    # 8 subprocess stages ran (select is a function stage; preflight is cmd)
-    assert len(executed) == 8
+    # 9 subprocess stages ran (select/pin_inputs/ledger are function stages; preflight is cmd)
+    # provenance inserted before shadow in 2026-08-24 battery update
+    assert len(executed) == 9
     assert "pass_preflight" in " ".join(executed[0])
     assert "rebuild_outputs.py" in " ".join(executed[1])
 

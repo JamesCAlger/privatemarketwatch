@@ -490,58 +490,61 @@ def _provenance_select() -> str | None:
             SELECT NULL::VARCHAR AS cik, NULL::VARCHAR AS report_date,
                    NULL::VARCHAR AS qrow WHERE 1=0
         ),"""
+    # Wrap the CTE in a subquery so it can participate in the runner's UNION ALL
+    # chain. A bare WITH ... SELECT cannot appear in UNION ALL position in DuckDB.
     return f"""
-    WITH {queued_cte}
-    prov AS (
-        SELECT p.*,
-               (q.qrow IS NOT NULL
-                AND p.reason_code IN ({tight})) AS already_queued
-        FROM read_csv_auto('{prov}', header=true, all_varchar=true) p
-        LEFT JOIN queued q
-          ON q.cik = p.cik AND q.report_date = p.report_date
-         AND q.qrow = p.row_id
-    ),
-    grouped AS (
-        SELECT cik, report_date, reason_code,
-               COUNT(DISTINCT row_id) AS n_rows,
-               ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
-                     THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
-                   AS fv_m
-        FROM prov WHERE NOT already_queued
-        GROUP BY 1, 2, 3
-    ),
-    excluded AS (
-        SELECT cik, report_date,
-               COUNT(DISTINCT row_id) AS n_rows,
-               ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
-                     THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
-                   AS fv_m
-        FROM prov WHERE already_queued
-        GROUP BY 1, 2
-    )
-    SELECT 'provenance_reverify' AS engine,
-           reason_code AS rule_name,
-           CASE WHEN reason_code IN ({tight}) THEN 'tight' ELSE 'weak' END AS tier,
-           'advisory' AS enforcement,
-           cik,
-           'report_date' AS period_kind,
-           report_date AS period,
-           CASE WHEN reason_code IN ({tight}) THEN 'fail'
-                WHEN reason_code IN ({warn}) THEN 'warn'
-                ELSE 'pass' END AS status,
-           fv_m AS metric,
-           'affected_fv_m' AS metric_name,
-           CAST(n_rows AS BIGINT) AS n_units,
-           reason_code AS mechanism,
-           CAST(NULL AS VARCHAR) AS src_confidence
-    FROM grouped
-    UNION ALL
-    SELECT 'provenance_reverify', 'provenance_already_queued', 'weak',
-           'advisory', cik, 'report_date', report_date, 'pass',
-           fv_m, 'affected_fv_m', CAST(n_rows AS BIGINT),
-           'dedup_source_recon', CAST(NULL AS VARCHAR)
-    FROM excluded
-    """
+    SELECT * FROM (
+        WITH {queued_cte}
+        prov AS (
+            SELECT p.*,
+                   (q.qrow IS NOT NULL
+                    AND p.reason_code IN ({tight})) AS already_queued
+            FROM read_csv_auto('{prov}', header=true, all_varchar=true) p
+            LEFT JOIN queued q
+              ON q.cik = p.cik AND q.report_date = p.report_date
+             AND q.qrow = p.row_id
+        ),
+        grouped AS (
+            SELECT cik, report_date, reason_code,
+                   COUNT(DISTINCT row_id) AS n_rows,
+                   ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
+                         THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
+                       AS fv_m
+            FROM prov WHERE NOT already_queued
+            GROUP BY 1, 2, 3
+        ),
+        excluded AS (
+            SELECT cik, report_date,
+                   COUNT(DISTINCT row_id) AS n_rows,
+                   ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
+                         THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
+                       AS fv_m
+            FROM prov WHERE already_queued
+            GROUP BY 1, 2
+        )
+        SELECT 'provenance_reverify' AS engine,
+               reason_code AS rule_name,
+               CASE WHEN reason_code IN ({tight}) THEN 'tight' ELSE 'weak' END AS tier,
+               'advisory' AS enforcement,
+               cik,
+               'report_date' AS period_kind,
+               report_date AS period,
+               CASE WHEN reason_code IN ({tight}) THEN 'fail'
+                    WHEN reason_code IN ({warn}) THEN 'warn'
+                    ELSE 'pass' END AS status,
+               fv_m AS metric,
+               'affected_fv_m' AS metric_name,
+               CAST(n_rows AS BIGINT) AS n_units,
+               reason_code AS mechanism,
+               CAST(NULL AS VARCHAR) AS src_confidence
+        FROM grouped
+        UNION ALL
+        SELECT 'provenance_reverify', 'provenance_already_queued', 'weak',
+               'advisory', cik, 'report_date', report_date, 'pass',
+               fv_m, 'affected_fv_m', CAST(n_rows AS BIGINT),
+               'dedup_source_recon', CAST(NULL AS VARCHAR)
+        FROM excluded
+    )"""
 
 
 def adapter_selects() -> list[str]:

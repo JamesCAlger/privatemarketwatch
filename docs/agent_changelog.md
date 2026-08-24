@@ -9608,3 +9608,54 @@ governance and is NOT done here.
 - `docs/agent_changelog.md`: this entry.
 - `scratch/2026-08-23_prov_step1/coverage_stats.py` + `coverage_stats.log`: read-only DuckDB
   coverage stats script and its output.
+
+## 2026-08-24: provenance shadow-adapter feed shipped (Task 3)
+
+### What changed
+- `scripts/run_quarter_pass.py`: `provenance{suffix}` stage inserted immediately before
+  `shadow{suffix}` in the battery function, pre and post halves. This ensures the provenance
+  ledger is always refreshed within a pass before the shadow validation runner reads it.
+  Stage argv: `[py, "-m", "pipeline.provenance_reverify", "--cohort"]`.
+- `tests/test_run_quarter_pass.py`: stage-order test and subprocess-count assertion updated
+  to reflect the new 12-stage pre-dispatch half (was 11 stages, 8 subprocess; now 12 stages,
+  9 subprocess). All 14 tests pass.
+- `scripts/shadow_adapter.py`: `_provenance_select()` CTE fragment wrapped in
+  `SELECT * FROM (...)` subquery so it can participate in the runner's UNION ALL chain.
+  (Bare `WITH ... SELECT` is not valid in UNION ALL position in DuckDB.)
+- `docs/reference/schemas.md`: provenance feed section added -- reason-code to tier/status
+  mapping table, audit-row semantics (provenance_already_queued), evidence-slice contract.
+- `docs/agent_changelog.md`: this entry.
+
+### First-run counts (2026-08-24 operator run)
+
+provenance_ledger.csv total rows: 2,132,512
+
+Per reason_code in the raw ledger:
+- verified: 1,274,092
+- unchecked_trivial: 790,634
+- filing_mismatch: 45,011
+- derived: 11,236
+- text_pathway: 7,498
+- corrected: 1,963
+- no_provenance: 1,104
+- anchor_missing: 663
+- merged_context_excluded: 311
+
+Shadow ledger aggregated (cik x report_date x reason_code groups, n_units = ledger rows):
+- tight/fail: 45,607 (filing_mismatch + anchor_missing; ledger rows, not deduplicated positions)
+- weak/warn: 7,696 (no_provenance + text_pathway + merged_context_excluded)
+- weak/pass: 545,040 (verified + corrected + derived + unchecked_trivial)
+
+Dedup exclusions (provenance_already_queued): 0 rows
+(source_reconciliation_detail.csv exists; no tight-fail row_ids overlapped blocking detail rows
+on this run -- the source_recon blocker population uses a different row_id namespace than the
+current provenance ledger.)
+
+Review queue provenance items (review_queue.csv):
+- blocker lane: 107 items (anchor_missing=20, filing_mismatch=87)
+- review lane: 345 items (merged_context_excluded=53, no_provenance=29, text_pathway=263)
+- pass rows: 0 (correct; pass rows not queued)
+
+Quarter-acceptance artifacts: UNTOUCHED (mtime unchanged, 2026-08-20 15:51:30 UTC).
+
+enforcement=advisory; no gate or acceptance-threshold changes.

@@ -97,6 +97,8 @@ def _stages(quarter: str) -> list[Stage]:
             Stage(f"oracle{suffix}", [py, "-m", "pipeline.oracle_runner"]),
             Stage(f"nonaccrual{suffix}", [py, "-m", "pipeline.extract_nonaccrual_flags"]),
             Stage(f"validate{suffix}", [py, "-m", "pipeline.main", "--validate"]),
+            Stage(f"provenance{suffix}", [py, "-m", "pipeline.provenance_reverify",
+                                          "--cohort"]),
             Stage(f"shadow{suffix}", [py, "scripts/shadow_validation_runner.py"]),
             Stage(f"queue{suffix}", [py, "-m", "pipeline.review_queue", "--emit-bdc-worklist"]),
             Stage(f"ledger{suffix}", func=f"build_findings_ledger{suffix or '_pre'}",
