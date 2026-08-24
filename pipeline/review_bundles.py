@@ -237,6 +237,52 @@ _PROVENANCE_KEEP_COLS = ("row_id", "cik", "report_date", "reason_code", "field",
 _PROVENANCE_ENGINE = "provenance_reverify"
 
 
+def _build_provenance_sql(
+    targets: set[tuple],
+    cap: int,
+) -> tuple[str, list]:
+    """Build a parameterized DuckDB SQL string + params list for the provenance ledger.
+
+    Uses ? placeholders for all cik/report_date/reason_code values and a QUALIFY
+    ROW_NUMBER() clause to enforce the per-target row cap at the SQL level (not in
+    Python).  Returns (sql, params) so callers can unit-test the SQL shape and
+    call duckdb.execute(sql, params).
+
+    targets: set of (norm_cik, norm_report_date, norm_reason_code) tuples.
+    cap: maximum rows per (cik, report_date, reason_code) group.
+    """
+    # Cast date-typed columns to VARCHAR so str() gives "2026-03-31" not
+    # "2026-03-31 00:00:00" when DuckDB auto-infers a DATE column.
+    _date_cols = {"report_date"}
+    col_exprs = ", ".join(
+        f'CAST("{c}" AS VARCHAR) AS "{c}"' if c in _date_cols else f'"{c}"'
+        for c in _PROVENANCE_KEEP_COLS
+    )
+    # Build WHERE using ? placeholders -- values are bound via params, not interpolated.
+    where_parts = []
+    params: list = []
+    for cik, report_date, reason_code in targets:
+        where_parts.append(
+            "(LPAD(CAST(cik AS VARCHAR), 10, '0') = ?"
+            " AND CAST(report_date AS VARCHAR) = ?"
+            " AND CAST(reason_code AS VARCHAR) = ?)"
+        )
+        params.extend([cik, report_date, reason_code])
+    where_clause = " OR ".join(where_parts)
+    # QUALIFY enforces per-target cap at SQL level -- DuckDB supports QUALIFY natively.
+    sql = (
+        f"SELECT {col_exprs}"
+        f" FROM __LEDGER__"
+        f" WHERE {where_clause}"
+        f" QUALIFY ROW_NUMBER() OVER"
+        f" (PARTITION BY LPAD(CAST(cik AS VARCHAR), 10, '0'),"
+        f" CAST(report_date AS VARCHAR), CAST(reason_code AS VARCHAR)"
+        f" ORDER BY row_id) <= ?"
+    )
+    params.append(cap)
+    return sql, params
+
+
 def _index_provenance_ledger(
     targets: set[tuple],
     cap: int,
@@ -251,30 +297,13 @@ def _index_provenance_ledger(
     idx: dict[tuple, list[dict[str, str]]] = defaultdict(list)
     if not ledger_file.exists() or not targets:
         return idx
-    # Build WHERE clause from target tuples -- values come from normalize_cik/
-    # normalize_text which strip/lower; no external user input reaches here.
-    where_parts = []
-    for cik, report_date, reason_code in targets:
-        where_parts.append(
-            f"(LPAD(CAST(cik AS VARCHAR), 10, '0') = '{cik}'"
-            f" AND CAST(report_date AS VARCHAR) = '{report_date}'"
-            f" AND CAST(reason_code AS VARCHAR) = '{reason_code}')"
-        )
-    where_clause = " OR ".join(where_parts)
-    # Cast date-typed columns to VARCHAR so str() conversion in iterrows() is
-    # clean ("2026-03-31" not "2026-03-31 00:00:00").
-    _date_cols = {"report_date"}
-    col_exprs = ", ".join(
-        f'CAST("{c}" AS VARCHAR) AS "{c}"' if c in _date_cols else f'"{c}"'
-        for c in _PROVENANCE_KEEP_COLS
-    )
+    sql_template, params = _build_provenance_sql(targets, cap)
     ledger_path = str(ledger_file).replace("\\", "/")
-    sql = (
-        f"SELECT {col_exprs} FROM read_csv_auto('{ledger_path}', header=true)"
-        f" WHERE {where_clause}"
-    )
+    # Substitute the __LEDGER__ placeholder with the actual file path (path is local
+    # filesystem, not user input, so this f-string substitution is safe).
+    sql = sql_template.replace("__LEDGER__", f"read_csv_auto('{ledger_path}', header=true)")
     try:
-        rows_df = duckdb.execute(sql).fetchdf()
+        rows_df = duckdb.execute(sql, params).fetchdf()
     except Exception as exc:
         logger.warning("provenance ledger DuckDB read failed: %s", exc)
         return idx
@@ -285,7 +314,7 @@ def _index_provenance_ledger(
             _nt(row_d.get("report_date")),
             _nt(row_d.get("reason_code")),
         )
-        if key in targets and len(idx[key]) < cap:
+        if key in targets:
             idx[key].append(row_d)
     return idx
 

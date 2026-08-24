@@ -267,3 +267,41 @@ def test_provenance_reverify_non_matching_engine_no_slice(tmp_path, monkeypatch)
     assert src["data"][0].get("rule_id") == "filing_mismatch"
     # no row_id from the provenance ledger (prov ledger has field col, rowval does not)
     assert "field" not in src["data"][0]
+
+
+def test_provenance_sql_qualify_and_cap(tmp_path, monkeypatch):
+    """SQL-level cap: QUALIFY clause present + exactly cap rows attach when cap+5 rows exist."""
+    cap = 3
+    n_rows = cap + 5  # 8 matching rows
+    ledger = tmp_path / "provenance_ledger.csv"
+    rows = [
+        _prov_row(
+            row_id=f"r{i}", cik="0001287750", report_date="2026-03-31",
+            reason_code="filing_mismatch", field="fair_value",
+            declared_raw=str(i * 100), instance_raw=str(i * 100 + 1), published=str(i * 100),
+        )
+        for i in range(n_rows)
+    ]
+    _write_csv(ledger, PROV_COLS, rows)
+    monkeypatch.setattr(review_bundles.config, "PROVENANCE_LEDGER_FILE", ledger)
+
+    # Verify the SQL string itself contains QUALIFY (SQL-level cap, not Python-level).
+    targets = {("0001287750", "2026-03-31", "filing_mismatch")}
+    sql, _ = review_bundles._build_provenance_sql(targets, cap)
+    assert "QUALIFY" in sql.upper(), "SQL must contain QUALIFY for SQL-level per-target row cap"
+    assert sql.count("?") >= 1, "SQL must use ? placeholders (no f-string value interpolation)"
+
+    # Verify the end-to-end bundle path also returns exactly cap rows (not cap+5).
+    _write_queue(tmp_path / "review_queue.csv", [
+        _q(review_id="PROV_CAP", lane="review", engine="provenance_reverify",
+           rule_name="filing_mismatch", cik="0001287750",
+           report_date="2026-03-31", period="2026-03-31"),
+    ])
+    out = tmp_path / "out"
+    review_bundles.build_review_bundles(
+        queue_path=tmp_path / "review_queue.csv", output_dir=out,
+        attach_holdings=False, max_rows=cap,
+    )
+    b = json.loads((out / "review_bundles" / "PROV_CAP.json").read_text(encoding="utf-8"))
+    src = next(e for e in b["evidence_items"] if e["evidence_id"] == "source_artifact_rows")
+    assert len(src["data"]) == cap, f"Expected exactly {cap} rows (SQL-level cap), got {len(src['data'])}"
