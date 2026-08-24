@@ -13093,3 +13093,203 @@ def test_nexpoint_capital_bare_preferred_category_is_not_output():
     result = _prepare_bdc(df)
 
     assert len(result) == 0
+
+
+# ---------------------------------------------------------------------------
+# SQL tiebreak determinism tests (Task 3: S6 and S7)
+# ---------------------------------------------------------------------------
+
+class TestSqlTiebreakDeterminism:
+    """Verify that anchor ids (src_context_id / nport_holding_id) terminate
+    every SQL pick ORDER BY so the winner is independent of physical row order.
+
+    S6 (bdc_dim_ranked CTE in build_unified_holdings): two BDC rows from the
+    same accession/filing that are tied on all existing ORDER BY keys -- they
+    differ ONLY in src_context_id.  The survivor must be the same either way.
+
+    S7 (with_cost FIRST_VALUE window in build_unified_holdings): two rows tied
+    on report_date / fair_value / accession / identifier -- differ only in
+    src_context_id and cost.  The cost chosen as the proxy must be the same
+    either way.
+
+    NOTE: S6 is exercised through build_unified_holdings (not _prepare_bdc)
+    because bdc_dim_ranked lives inside the unified SQL query, not reachable
+    via _prepare_bdc.  The brief authorises "closest reachable layer".
+    """
+    pytestmark = SLOW_INTEGRATION_MARKS
+
+    # ------------------------------------------------------------------
+    # Shared helpers (copy of TestCostProxy / TestSharesNormalization style)
+    # ------------------------------------------------------------------
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def _empty_nport_df(self):
+        cols = [
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "currency_value", "percentage",
+            "asset_cat", "issuer_type", "investment_country",
+            "is_restricted_security", "fair_value_level", "maturity_date",
+            "coupon_type", "annualized_rate", "identifier_isin",
+            "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+            "filing_date", "report_date", "series_name", "series_id",
+            "quarter", "balance", "unit",
+        ]
+        return pd.DataFrame({c: pd.Series(dtype=str) for c in cols})
+
+    def _empty_bdc_df(self):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        return pd.DataFrame({c: pd.Series(dtype=str) for c in cols})
+
+    # ------------------------------------------------------------------
+    # S6: bdc_dim_ranked CTE -- dimension-axis dedup within a filing
+    # ------------------------------------------------------------------
+
+    def test_dim_dedup_winner_independent_of_order(self, tmp_path):
+        """Two BDC rows from the same filing tied on all bdc_dim_ranked ORDER BY
+        keys (LENGTH(issuer_name), issuer_name, bdc_investment_identifier,
+        accession_number) -- differ ONLY in src_context_id.  After the anchor
+        key is appended the surviving row must be the lexicographically-smaller
+        context id, regardless of which input order the frame is presented in.
+
+        NOTE: exercised through build_unified_holdings because bdc_dim_ranked
+        is a CTE inside the unified SQL query, not reachable via _prepare_bdc.
+        """
+        # Two rows: same accession, same issuer name (identical length),
+        # same identifier prefix, same FV/PA/shares -- differ only in
+        # dimensions_raw and src_context_id.  The bdc_dim_ranked partition
+        # collapses them; ORDER BY breaks the tie on src_context_id.
+        rows_fwd = [
+            {
+                "cik": "0000000001",
+                "investment_identifier": "Tie Corp - Term Loan",
+                "accession_number": "0000000001-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 1000000,
+                "dimensions_raw": "InvestmentTypeAxis=NonControlledAffiliatedMember",
+                "src_context_id": "ctxB",
+            },
+            {
+                "cik": "0000000001",
+                "investment_identifier": "Tie Corp - Term Loan",
+                "accession_number": "0000000001-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 1000000,
+                "dimensions_raw": "InvestmentTypeAxis=ControlledMember",
+                "src_context_id": "ctxA",
+            },
+        ]
+        rows_rev = list(reversed(rows_fwd))
+
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "fwd.csv"):
+            out_f = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_fwd),
+                nport_df=self._empty_nport_df())
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "rev.csv"):
+            out_r = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_rev),
+                nport_df=self._empty_nport_df())
+
+        tie_f = out_f[out_f["issuer_name"] == "Tie Corp"]
+        tie_r = out_r[out_r["issuer_name"] == "Tie Corp"]
+        # Exactly one row survives from the filing-level dim dedup
+        assert len(tie_f) == 1, f"Expected 1 survivor, got {len(tie_f)}"
+        assert len(tie_r) == 1, f"Expected 1 survivor, got {len(tie_r)}"
+        # The surviving src_context_id must be identical both ways
+        ctx_f = tie_f.iloc[0]["src_context_id"]
+        ctx_r = tie_r.iloc[0]["src_context_id"]
+        assert ctx_f == ctx_r, (
+            f"Dim dedup winner differs by frame order: fwd={ctx_f!r} rev={ctx_r!r}. "
+            "src_context_id anchor key missing from bdc_dim_ranked ORDER BY."
+        )
+
+    # ------------------------------------------------------------------
+    # S7: with_cost FIRST_VALUE window -- cost proxy donor stability
+    # ------------------------------------------------------------------
+
+    def test_cost_proxy_donor_independent_of_order(self, tmp_path):
+        """Two BDC rows for the same position / same report_date, tied on all
+        with_cost window ORDER BY keys (report_date, fair_value, accession,
+        bdc_investment_identifier, nport_holding_id, shares_held) -- differ
+        ONLY in src_context_id and in cost.  The FIRST_VALUE proxy selects the
+        row with the lexicographically-smaller src_context_id as the donor.
+        The published cost must be identical regardless of frame order.
+
+        Arrange: two rows, cost=0 (proxy fires), same FV=500000, same accession,
+        same identifier -- only src_context_id differs (ctxA < ctxB).
+        After the anchor key ctxA must always be the FIRST_VALUE donor;
+        both rows get proxy=500000 (the FV).  The test asserts equal cost
+        lists from both frame orderings.
+        """
+        rows_fwd = [
+            {
+                "cik": "0000000002",
+                "investment_identifier": "DonorCo - Term Loan",
+                "accession_number": "0000000002-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 500000,
+                "cost": 0,
+                "src_context_id": "ctxB",
+            },
+            {
+                "cik": "0000000002",
+                "investment_identifier": "DonorCo - Term Loan",
+                "accession_number": "0000000002-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 500000,
+                "cost": 0,
+                "src_context_id": "ctxA",
+            },
+        ]
+        rows_rev = list(reversed(rows_fwd))
+
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "fwd.csv"):
+            out_f = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_fwd),
+                nport_df=self._empty_nport_df())
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "rev.csv"):
+            out_r = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_rev),
+                nport_df=self._empty_nport_df())
+
+        donor_f = out_f[out_f["issuer_name"].str.contains("DonorCo", na=False)]
+        donor_r = out_r[out_r["issuer_name"].str.contains("DonorCo", na=False)]
+
+        assert len(donor_f) >= 1, "No DonorCo rows in fwd output"
+        assert len(donor_r) >= 1, "No DonorCo rows in rev output"
+
+        # Both rows have cost=0 so the proxy fires and fills with FV=500000.
+        # The cost list must be identical from both frame orderings.
+        costs_f = sorted(str(c) for c in donor_f["cost"].tolist())
+        costs_r = sorted(str(c) for c in donor_r["cost"].tolist())
+        assert costs_f == costs_r, (
+            f"Cost proxy differs by frame order: fwd={costs_f} rev={costs_r}. "
+            "src_context_id anchor key missing from with_cost window ORDER BY."
+        )

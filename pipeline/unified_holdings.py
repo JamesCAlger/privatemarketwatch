@@ -888,7 +888,9 @@ def build_unified_holdings(
                     COALESCE(CAST(cusip AS VARCHAR), ''),
                     COALESCE(CAST(fair_value AS VARCHAR), ''),
                     COALESCE(CAST(cost AS VARCHAR), ''),
-                    COALESCE(CAST(shares_held AS VARCHAR), '')
+                    COALESCE(CAST(shares_held AS VARCHAR), ''),
+                    COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                    COALESCE(CAST(accession_number AS VARCHAR), '')
                 ) AS _nport_rank
             FROM nport_part
         ) sub
@@ -941,7 +943,9 @@ def build_unified_holdings(
                     COALESCE(CAST(cusip AS VARCHAR), ''),
                     COALESCE(CAST(fair_value AS VARCHAR), ''),
                     COALESCE(CAST(cost AS VARCHAR), ''),
-                    COALESCE(CAST(shares_held AS VARCHAR), '')
+                    COALESCE(CAST(shares_held AS VARCHAR), ''),
+                    COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                    COALESCE(CAST(nport_holding_id AS VARCHAR), '')
             ) AS _dedup_rank
         FROM combined
     ),
@@ -1008,7 +1012,8 @@ def build_unified_holdings(
                     LENGTH(COALESCE(CAST(issuer_name AS VARCHAR), '')),
                     COALESCE(CAST(issuer_name AS VARCHAR), ''),
                     COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
-                    COALESCE(CAST(accession_number AS VARCHAR), '')
+                    COALESCE(CAST(accession_number AS VARCHAR), ''),
+                    COALESCE(CAST(src_context_id AS VARCHAR), '')
             ) AS _dim_rank
         FROM no_sub_dupes
         WHERE source = 'bdc'
@@ -1047,8 +1052,10 @@ def build_unified_holdings(
     -- for that specific position, ordered by report_date.  The partition
     -- key includes instrument_description and cusip so each tranche gets
     -- its own proxy (e.g. Term Loan A vs Term Loan B).  The tiebreaker
-    -- fair_value makes the result deterministic when multiple rows share
-    -- the earliest report_date.
+    -- fair_value and the anchor keys src_context_id / nport_holding_id
+    -- make the result deterministic when multiple rows share the earliest
+    -- report_date.  (Amended per tiebreak-hardening plan to append anchor
+    -- keys after the existing ORDER BY keys.)
     --
     -- Provenance: when the proxy fires (original cost NULL/zero but a
     -- non-zero FV proxy is available), cost_source is set to
@@ -1085,7 +1092,9 @@ def build_unified_holdings(
                         COALESCE(CAST(accession_number AS VARCHAR), ''),
                         COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
                         COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
-                        COALESCE(CAST(shares_held AS VARCHAR), '')
+                        COALESCE(CAST(shares_held AS VARCHAR), ''),
+                        COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                        COALESCE(CAST(nport_holding_id AS VARCHAR), '')
                     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                 ) AS _cost_proxy
             FROM classified
@@ -1095,6 +1104,10 @@ def build_unified_holdings(
     -- the same position (cik + issuer_name) by comparing each row's
     -- per-unit price (fair_value / shares_held) against the group median.
     -- Outliers are replaced with the nearest non-outlier shares value.
+    -- The window ORDER BY terminates with anchor keys src_context_id /
+    -- nport_holding_id for deterministic donor selection on ties.
+    -- (Amended per tiebreak-hardening plan; prior byte-identical contract
+    -- from the provenance migration is hereby superseded.)
     --
     -- Provenance: when the outlier flag fires, shares_held_source is set
     -- to 'derived_proxy' and 'shares_held:pow10_shares' is appended to
@@ -1112,7 +1125,9 @@ def build_unified_holdings(
                             COALESCE(CAST(accession_number AS VARCHAR), ''),
                             COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
                             COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
-                            COALESCE(CAST(_sh_val AS VARCHAR), '')
+                            COALESCE(CAST(_sh_val AS VARCHAR), ''),
+                            COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                            COALESCE(CAST(nport_holding_id AS VARCHAR), '')
                         ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING),
                     -- Nearest following non-outlier shares
                     FIRST_VALUE(CASE WHEN NOT _is_outlier THEN _sh_val END
@@ -1123,7 +1138,9 @@ def build_unified_holdings(
                             COALESCE(CAST(accession_number AS VARCHAR), ''),
                             COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
                             COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
-                            COALESCE(CAST(_sh_val AS VARCHAR), '')
+                            COALESCE(CAST(_sh_val AS VARCHAR), ''),
+                            COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                            COALESCE(CAST(nport_holding_id AS VARCHAR), '')
                         ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING)
                 )
                 ELSE _sh_val
