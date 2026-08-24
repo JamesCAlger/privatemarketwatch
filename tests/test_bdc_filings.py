@@ -2688,3 +2688,46 @@ class TestCohortScopedRebuild:
         assert "src_facts" in out.columns
         # untouched rows get '' in the new column, not NaN
         assert cik2["src_facts"].fillna("").iloc[0] == ""
+
+
+class TestDedupeDeterminism:
+    def _rows(self):
+        # two candidates TIED on completeness score (same non-empty fields),
+        # different contexts, different cost values
+        return [
+            {"_context_id": "ctxB", "fair_value": 1000.0, "cost": 950.0,
+             "principal_amount": 900.0, "src_facts": ""},
+            {"_context_id": "ctxA", "fair_value": 1000.0, "cost": 940.0,
+             "principal_amount": 900.0, "src_facts": ""},
+        ]
+
+    def test_winner_independent_of_input_order(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+        rows = self._rows()
+        out_fwd = _deduplicate_bdc_holdings(_dedup_frame(rows))
+        out_rev = _deduplicate_bdc_holdings(_dedup_frame(list(reversed(rows))))
+        assert len(out_fwd) == 1 and len(out_rev) == 1
+        # deterministic winner: lexicographically-first context (ctxA)
+        assert out_fwd.iloc[0]["src_context_id"] == "ctxA"
+        assert out_rev.iloc[0]["src_context_id"] == "ctxA"
+        assert out_fwd.iloc[0]["cost"] == 940.0
+        assert out_rev.iloc[0]["cost"] == 940.0
+
+    def test_fill_donor_independent_of_input_order(self):
+        from pipeline.bdc_filings import _deduplicate_bdc_holdings
+        # winner (ctxW) missing interest_rate; two tied donors (ctxX, ctxY)
+        # both supply interest_rate (not a conflict column) but disagree --
+        # the donated value must not depend on input order;
+        # lex-first context (ctxX < ctxY) should win the fill sort
+        rows = [
+            {"_context_id": "ctxW", "fair_value": 1000.0, "cost": 950.0,
+             "principal_amount": 900.0, "interest_rate": None, "src_facts": ""},
+            {"_context_id": "ctxY", "fair_value": None, "cost": None,
+             "principal_amount": None, "interest_rate": 9.5, "src_facts": ""},
+            {"_context_id": "ctxX", "fair_value": None, "cost": None,
+             "principal_amount": None, "interest_rate": 9.4, "src_facts": ""},
+        ]
+        out_fwd = _deduplicate_bdc_holdings(_dedup_frame(rows))
+        out_rev = _deduplicate_bdc_holdings(_dedup_frame(list(reversed(rows))))
+        # lex-first donor (ctxX) should donate interest_rate=9.4 regardless of order
+        assert out_fwd.iloc[0]["interest_rate"] == out_rev.iloc[0]["interest_rate"] == 9.4
