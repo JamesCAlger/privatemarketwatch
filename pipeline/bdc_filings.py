@@ -1044,6 +1044,8 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
     for col in score_cols:
         as_text = result[col].astype("string").str.strip()
         result["_dedupe_score"] += as_text.notna() & (as_text != "")
+    if "_context_id" not in result.columns:
+        result["_context_id"] = ""
 
     group_sizes = result.groupby(_DEDUP_KEY_COLUMNS, dropna=False)[
         "_dedupe_row_order"
@@ -1075,8 +1077,8 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
         best_key = (
             result[has_fv_conflict & fv_rounded.notna()]
             .sort_values(
-                by=["_dedupe_score", "_dedupe_row_order"],
-                ascending=[False, True],
+                by=["_dedupe_score", "_context_id", "_dedupe_row_order"],
+                ascending=[False, True, True],
                 kind="mergesort",
             )
             .groupby(_DEDUP_KEY_COLUMNS, dropna=False)["_fv_split_key"]
@@ -1123,8 +1125,8 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
     fill_values = (
         fill_source
         .sort_values(
-            by=["_dedupe_score", "_dedupe_row_order"],
-            ascending=[False, True],
+            by=["_dedupe_score", "_context_id", "_dedupe_row_order"],
+            ascending=[False, True, True],
             kind="mergesort",
         )
         .groupby(_EFFECTIVE_KEY, dropna=False)[value_cols]
@@ -1134,8 +1136,8 @@ def _deduplicate_bdc_holdings(df: pd.DataFrame) -> pd.DataFrame:
 
     picked = (
         result.sort_values(
-            by=["_dedupe_score", "_dedupe_row_order"],
-            ascending=[False, True],
+            by=["_dedupe_score", "_context_id", "_dedupe_row_order"],
+            ascending=[False, True, True],
             kind="mergesort",
         )
         .drop_duplicates(subset=_EFFECTIVE_KEY, keep="first")

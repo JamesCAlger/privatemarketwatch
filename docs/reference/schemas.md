@@ -60,6 +60,42 @@ step and re-runs after `assign_position_ids` re-saves):
   by string equality + fair_value tolerance against a grounding frame that
   is now independently re-derivable from the source-facts cache.
 
+### row_id collision-suffix rule (2026-08-24)
+
+When two rows share the same source anchor
+(`source|accession_number|src_context_id` for BDC, or the N-PORT equivalent),
+`_assign_row_ids` appends `|dup<k>` to the key before hashing, where k is the
+0-based content rank within the collision group. The rank is determined by sorting
+on `(fair_value, cost, principal_amount, shares_held, bdc_investment_identifier)`
+with nulls-last (stable mergesort). Rank-0 rows keep the bare key unchanged.
+Current live artifact has 0 collision groups (780,726 rows, 0 duplicate row_ids),
+so no live ids carry suffixes. The suffix is an internal disambiguation device
+inside the hash pre-image; only the final `ROW-<hex16>` string is surfaced in
+the artifact.
+
+### Build determinism invariant (2026-08-24)
+
+As of the 2026-08-24 tiebreak-hardening migration, `private_markets_holdings.csv`
+is content-deterministic: two consecutive `--unified` builds from the same cached
+inputs produce byte-identical artifacts (780,726 rows, DuckDB EXCEPT both
+directions = 0).
+
+**Standing acceptance test (twin-build gate):** run `--unified` twice, then:
+
+```sql
+SELECT COUNT(*) FROM build1 EXCEPT SELECT COUNT(*) FROM build2;  -- must be 0
+SELECT COUNT(*) FROM build2 EXCEPT SELECT COUNT(*) FROM build1;  -- must be 0
+```
+
+The gate is strictly binary -- any non-zero EXCEPT count is a regression. No
+accepted-flip residuals are permitted going forward. The three prior accepted-residual
+events (anchor migration 8 flips, provenance step-1 13 CIK-quarters, steps-2-4 17-20
+flips) were one-time events resolved by the 2026-08-24 tiebreak migration; they are
+documented in the changelog as the "final flip event." Exception: N-PORT blank-holding-id
+payload ties (sites S4, S5, S20 in tiebreak_site_inventory.md) remain physical-order and
+are deterministic only via stable cached-TSV read order, not content-anchored keys; these
+are scheduled as a small re-gated follow-up.
+
 ## Position-Level PIK Status
 
 PIK outputs intentionally separate strict current-payment/accrual evidence from schedule-rate proxy metrics:

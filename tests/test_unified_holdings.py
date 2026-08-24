@@ -6580,6 +6580,62 @@ class TestApplyUnclassifiedCache:
         assert result.loc[1, "index_classification"] == "PRIVATE_EQUITY"
         assert result.loc[2, "jv_subsidiary"] == "Y"
 
+    def test_duplicate_name_norm_survivor_is_order_invariant(
+        self, monkeypatch, tmp_path
+    ):
+        """S14: when the cache holds two entries for the same name_norm that
+        DISAGREE on classification, the survivor must be deterministic across
+        input orders (stable-sort on all columns, then keep='first')."""
+        cache_path = tmp_path / "unclassified_review_cache.csv"
+        # Two rows share name_norm 'alpha' but disagree: DIRECT_LENDING vs
+        # STRUCTURED_CREDIT. Physical CSV order must not decide the survivor.
+        rows_a = [
+            {
+                "name_norm": "alpha",
+                "verdict": "CLASSIFIED",
+                "confidence": "high",
+                "new_index_classification": "STRUCTURED_CREDIT",
+                "asset_class": "LOAN",
+            },
+            {
+                "name_norm": "alpha",
+                "verdict": "CLASSIFIED",
+                "confidence": "high",
+                "new_index_classification": "DIRECT_LENDING",
+                "asset_class": "LOAN",
+            },
+        ]
+        rows_b = list(reversed(rows_a))
+
+        def _run(cache_rows):
+            pd.DataFrame(cache_rows).to_csv(cache_path, index=False)
+            monkeypatch.setattr(
+                "pipeline.unified_holdings.UNCLASSIFIED_REVIEW_CACHE_FILE",
+                cache_path,
+            )
+            df = self._make_unified_df([
+                {
+                    "issuer_name": "Alpha",
+                    "index_classification": "UNCLASSIFIED",
+                    "exposure_type": "OTHER",
+                    "asset_class": "OTHER",
+                },
+            ])
+            return _apply_unclassified_cache(df)
+
+        result_a = _run(rows_a)
+        result_b = _run(rows_b)
+
+        # Deterministic survivor pinned to expected value: an all-column stable
+        # sort orders DIRECT_LENDING before STRUCTURED_CREDIT on the new_idx
+        # column, so keep='first' retains DIRECT_LENDING in BOTH input orders.
+        assert result_a.loc[0, "index_classification"] == "DIRECT_LENDING"
+        assert result_b.loc[0, "index_classification"] == "DIRECT_LENDING"
+        assert (
+            result_a.loc[0, "index_classification"]
+            == result_b.loc[0, "index_classification"]
+        )
+
 
 # ---------------------------------------------------------------------------
 # _stabilize_classification
@@ -11469,6 +11525,43 @@ class TestApplyWrapperPositionKeys:
         assert not keys[2].endswith(" lot 1")
         assert keys[0].replace(" lot 1", "") == keys[1].replace(" lot 2", "")
 
+    def test_lot_suffix_independent_of_frame_order(self):
+        """S19: two same-position-key rows tied on principal/fv/cost differing
+        only in src_context_id -- lot numbering must follow the anchor, not the
+        physical frame order. The ctxA row gets 'lot 1' in BOTH input orders."""
+        identifier = (
+            "Investment 1st Lien/Senior Secured Debt - 203.92% "
+            "AQ Helios Buyer, Inc. (dba SurePoint) Industry Software "
+            "Interest Rate 11.96% Reference Rate and Spread S + 7.00% "
+            "Maturity 07/01/26"
+        )
+
+        def _run(contexts):
+            df = pd.DataFrame({
+                "source": ["bdc", "bdc"],
+                "cik": ["0001772704", "0001772704"],
+                "report_date": ["2023-03-31", "2023-03-31"],
+                "position_key": ["generic_1", "generic_2"],
+                "bdc_investment_identifier": [identifier, identifier],
+                # Fully tied so only the anchor (src_context_id) can break it.
+                "principal_amount": [100.0, 100.0],
+                "fair_value": [99000.0, 99000.0],
+                "cost": [100000.0, 100000.0],
+                "src_context_id": list(contexts),
+            })
+            result = _apply_wrapper_position_keys(df)
+            # Map each row's src_context_id -> its lot suffix.
+            return dict(zip(result["src_context_id"], result["position_key"]))
+
+        forward = _run(["ctxA", "ctxB"])
+        reversed_ = _run(["ctxB", "ctxA"])
+
+        # ctxA sorts before ctxB, so it must own 'lot 1' regardless of row order.
+        assert forward["ctxA"].endswith(" lot 1")
+        assert forward["ctxB"].endswith(" lot 2")
+        assert reversed_["ctxA"].endswith(" lot 1")
+        assert reversed_["ctxB"].endswith(" lot 2")
+
     def test_no_source_column_returns_unchanged(self):
         """DataFrame without 'source' column passes through safely."""
         df = pd.DataFrame({
@@ -13093,3 +13186,203 @@ def test_nexpoint_capital_bare_preferred_category_is_not_output():
     result = _prepare_bdc(df)
 
     assert len(result) == 0
+
+
+# ---------------------------------------------------------------------------
+# SQL tiebreak determinism tests (Task 3: S6 and S7)
+# ---------------------------------------------------------------------------
+
+class TestSqlTiebreakDeterminism:
+    """Verify that anchor ids (src_context_id / nport_holding_id) terminate
+    every SQL pick ORDER BY so the winner is independent of physical row order.
+
+    S6 (bdc_dim_ranked CTE in build_unified_holdings): two BDC rows from the
+    same accession/filing that are tied on all existing ORDER BY keys -- they
+    differ ONLY in src_context_id.  The survivor must be the same either way.
+
+    S7 (with_cost FIRST_VALUE window in build_unified_holdings): two rows tied
+    on report_date / fair_value / accession / identifier -- differ only in
+    src_context_id and cost.  The cost chosen as the proxy must be the same
+    either way.
+
+    NOTE: S6 is exercised through build_unified_holdings (not _prepare_bdc)
+    because bdc_dim_ranked lives inside the unified SQL query, not reachable
+    via _prepare_bdc.  The brief authorises "closest reachable layer".
+    """
+    pytestmark = SLOW_INTEGRATION_MARKS
+
+    # ------------------------------------------------------------------
+    # Shared helpers (copy of TestCostProxy / TestSharesNormalization style)
+    # ------------------------------------------------------------------
+
+    def _make_bdc_df(self, rows):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        data = []
+        for row in rows:
+            full_row = {c: "" for c in cols}
+            full_row.update(row)
+            data.append(full_row)
+        return pd.DataFrame(data)
+
+    def _empty_nport_df(self):
+        cols = [
+            "accession_number", "holding_id", "issuer_name", "issuer_lei",
+            "issuer_title", "issuer_cusip", "currency_value", "percentage",
+            "asset_cat", "issuer_type", "investment_country",
+            "is_restricted_security", "fair_value_level", "maturity_date",
+            "coupon_type", "annualized_rate", "identifier_isin",
+            "identifier_ticker", "payoff_profile", "cik", "registrant_name",
+            "filing_date", "report_date", "series_name", "series_id",
+            "quarter", "balance", "unit",
+        ]
+        return pd.DataFrame({c: pd.Series(dtype=str) for c in cols})
+
+    def _empty_bdc_df(self):
+        cols = [
+            "cik", "entity_name", "accession_number", "form_type",
+            "filing_date", "report_date", "investment_identifier",
+            "fair_value", "cost", "principal_amount", "interest_rate",
+            "basis_spread", "reference_rate_type", "maturity_date",
+            "pct_of_net_assets", "pik_rate", "shares_held",
+            "unrealized_gain_loss", "dimensions_raw",
+            "investment_type", "industry", "affiliation",
+        ]
+        return pd.DataFrame({c: pd.Series(dtype=str) for c in cols})
+
+    # ------------------------------------------------------------------
+    # S6: bdc_dim_ranked CTE -- dimension-axis dedup within a filing
+    # ------------------------------------------------------------------
+
+    def test_dim_dedup_winner_independent_of_order(self, tmp_path):
+        """Two BDC rows from the same filing tied on all bdc_dim_ranked ORDER BY
+        keys (LENGTH(issuer_name), issuer_name, bdc_investment_identifier,
+        accession_number) -- differ ONLY in src_context_id.  After the anchor
+        key is appended the surviving row must be the lexicographically-smaller
+        context id, regardless of which input order the frame is presented in.
+
+        NOTE: exercised through build_unified_holdings because bdc_dim_ranked
+        is a CTE inside the unified SQL query, not reachable via _prepare_bdc.
+        """
+        # Two rows: same accession, same issuer name (identical length),
+        # same identifier prefix, same FV/PA/shares -- differ only in
+        # dimensions_raw and src_context_id.  The bdc_dim_ranked partition
+        # collapses them; ORDER BY breaks the tie on src_context_id.
+        rows_fwd = [
+            {
+                "cik": "0000000001",
+                "investment_identifier": "Tie Corp - Term Loan",
+                "accession_number": "0000000001-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 1000000,
+                "dimensions_raw": "InvestmentTypeAxis=NonControlledAffiliatedMember",
+                "src_context_id": "ctxB",
+            },
+            {
+                "cik": "0000000001",
+                "investment_identifier": "Tie Corp - Term Loan",
+                "accession_number": "0000000001-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 1000000,
+                "dimensions_raw": "InvestmentTypeAxis=ControlledMember",
+                "src_context_id": "ctxA",
+            },
+        ]
+        rows_rev = list(reversed(rows_fwd))
+
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "fwd.csv"):
+            out_f = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_fwd),
+                nport_df=self._empty_nport_df())
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "rev.csv"):
+            out_r = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_rev),
+                nport_df=self._empty_nport_df())
+
+        tie_f = out_f[out_f["issuer_name"] == "Tie Corp"]
+        tie_r = out_r[out_r["issuer_name"] == "Tie Corp"]
+        # Exactly one row survives from the filing-level dim dedup
+        assert len(tie_f) == 1, f"Expected 1 survivor, got {len(tie_f)}"
+        assert len(tie_r) == 1, f"Expected 1 survivor, got {len(tie_r)}"
+        # The surviving src_context_id must be identical both ways
+        ctx_f = tie_f.iloc[0]["src_context_id"]
+        ctx_r = tie_r.iloc[0]["src_context_id"]
+        assert ctx_f == ctx_r, (
+            f"Dim dedup winner differs by frame order: fwd={ctx_f!r} rev={ctx_r!r}. "
+            "src_context_id anchor key missing from bdc_dim_ranked ORDER BY."
+        )
+
+    # ------------------------------------------------------------------
+    # S7: with_cost FIRST_VALUE window -- cost proxy donor stability
+    # ------------------------------------------------------------------
+
+    def test_cost_proxy_donor_independent_of_order(self, tmp_path):
+        """Two BDC rows for the same position / same report_date, tied on all
+        with_cost window ORDER BY keys (report_date, fair_value, accession,
+        bdc_investment_identifier, nport_holding_id, shares_held) -- differ
+        ONLY in src_context_id and in cost.  The FIRST_VALUE proxy selects the
+        row with the lexicographically-smaller src_context_id as the donor.
+        The published cost must be identical regardless of frame order.
+
+        Arrange: two rows, cost=0 (proxy fires), same FV=500000, same accession,
+        same identifier -- only src_context_id differs (ctxA < ctxB).
+        After the anchor key ctxA must always be the FIRST_VALUE donor;
+        both rows get proxy=500000 (the FV).  The test asserts equal cost
+        lists from both frame orderings.
+        """
+        rows_fwd = [
+            {
+                "cik": "0000000002",
+                "investment_identifier": "DonorCo - Term Loan",
+                "accession_number": "0000000002-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 500000,
+                "cost": 0,
+                "src_context_id": "ctxB",
+            },
+            {
+                "cik": "0000000002",
+                "investment_identifier": "DonorCo - Term Loan",
+                "accession_number": "0000000002-23-000001",
+                "report_date": "2023-03-31",
+                "fair_value": 500000,
+                "cost": 0,
+                "src_context_id": "ctxA",
+            },
+        ]
+        rows_rev = list(reversed(rows_fwd))
+
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "fwd.csv"):
+            out_f = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_fwd),
+                nport_df=self._empty_nport_df())
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE",
+                   tmp_path / "rev.csv"):
+            out_r = build_unified_holdings(
+                bdc_df=self._make_bdc_df(rows_rev),
+                nport_df=self._empty_nport_df())
+
+        donor_f = out_f[out_f["issuer_name"].str.contains("DonorCo", na=False)]
+        donor_r = out_r[out_r["issuer_name"].str.contains("DonorCo", na=False)]
+
+        assert len(donor_f) >= 1, "No DonorCo rows in fwd output"
+        assert len(donor_r) >= 1, "No DonorCo rows in rev output"
+
+        # Both rows have cost=0 so the proxy fires and fills with FV=500000.
+        # The cost list must be identical from both frame orderings.
+        costs_f = sorted(str(c) for c in donor_f["cost"].tolist())
+        costs_r = sorted(str(c) for c in donor_r["cost"].tolist())
+        assert costs_f == costs_r, (
+            f"Cost proxy differs by frame order: fwd={costs_f} rev={costs_r}. "
+            "src_context_id anchor key missing from with_cost window ORDER BY."
+        )

@@ -291,10 +291,19 @@ def load_html_section_bridge_rows(
 
     if not rows:
         return _empty_bridge_df()
-    return pd.DataFrame(rows, columns=BRIDGE_TABLE_COLUMNS).drop_duplicates(
-        ["cik", "accession_number", "report_date", "raw_id_lower"],
-        keep="last",
+    frame = pd.DataFrame(rows, columns=BRIDGE_TABLE_COLUMNS)
+    # S15 tie-break: file glob is already sorted, but two records can collide on
+    # (cik, accession, report_date, raw_id_lower) with different payloads. Make
+    # keep='last' pick a deterministic survivor by stable-sorting on the dedup
+    # subset plus the source-location keys (html_sha256/table_index/row_index)
+    # before dropping -- the last record in that fixed order wins regardless of
+    # physical append order across files/bridges.
+    _subset = ["cik", "accession_number", "report_date", "raw_id_lower"]
+    frame = frame.sort_values(
+        _subset + ["html_sha256", "table_index", "row_index"],
+        kind="mergesort",
     )
+    return frame.drop_duplicates(_subset, keep="last")
 
 
 def apply_html_section_bridge_wrapper_columns(
@@ -1082,7 +1091,11 @@ def apply_ixbrl_field_status_overlay(
         + (sdf["raw_id_lower"].map(_raw_id_lower) if "raw_id_lower" in sdf.columns else sdf[id_src].map(_raw_id_lower))
 
     keep = ["_k"] + [c for f in _OVERLAY_FIELDS for c in (f, _OVERLAY_FIELDS[f]) if c in sdf.columns]
-    sdf = sdf[keep].drop_duplicates("_k", keep="last")
+    # S16 tie-break: two status rows can collide on _k with different payloads.
+    # The status frame has no source-location keys, so stable-sort on _k plus the
+    # full payload before keep='last' -- the survivor is then a deterministic
+    # function of the row content, not the caller's physical row order.
+    sdf = sdf[keep].sort_values(keep, kind="mergesort").drop_duplicates("_k", keep="last")
     merged = result.merge(sdf, on="_k", how="left", suffixes=("", "_ix"))
 
     blank = lambda col: col.isna() | col.astype(str).str.strip().isin(["", "nan", "NaT"])

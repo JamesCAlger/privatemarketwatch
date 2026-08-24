@@ -2151,6 +2151,7 @@ def _prepare_bdc(
                         COALESCE(CAST(_raw_id AS VARCHAR), ''),
                         COALESCE(CAST(dimensions_raw AS VARCHAR), ''),
                         COALESCE(CAST(affiliation AS VARCHAR), ''),
+                        COALESCE(CAST(src_context_id AS VARCHAR), ''),
                         _row_id
                 ) AS _affil_rank
             FROM {_affil_dedup_source}

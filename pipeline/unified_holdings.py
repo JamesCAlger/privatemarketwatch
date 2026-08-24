@@ -675,9 +675,32 @@ def _apply_unclassified_cache(combined: pd.DataFrame) -> pd.DataFrame:
             classify_df["new_idx"],
         )
     ]
-    classify_df = classify_df[
-        ["name_norm", "new_idx", "new_exp", "new_ac"]
-    ].drop_duplicates(subset=["name_norm"], keep="first")
+    classify_df = classify_df[["name_norm", "new_idx", "new_exp", "new_ac"]]
+    # S14 tie-break: the cache CSV row order must not decide which entry survives
+    # when the same name_norm appears twice. Stable-sort on ALL columns so the
+    # kept ('first') survivor is deterministic, and warn once if the collapsed
+    # duplicates DISAGREE on the classification we are about to apply.
+    classify_df = classify_df.sort_values(
+        list(classify_df.columns), kind="mergesort"
+    )
+    _dup_mask = classify_df.duplicated(subset=["name_norm"], keep=False)
+    if _dup_mask.any():
+        _disagree = (
+            classify_df.loc[_dup_mask]
+            .groupby("name_norm")[["new_idx", "new_exp", "new_ac"]]
+            .nunique()
+            .gt(1)
+            .any(axis=1)
+        )
+        _disagree_names = sorted(_disagree[_disagree].index.astype(str))
+        if _disagree_names:
+            logger.warning(
+                "Unclassified cache: %d name_norm(s) have DISAGREEING duplicate "
+                "classifications; keeping deterministic first after stable sort: %s",
+                len(_disagree_names),
+                ", ".join(_disagree_names[:20]),
+            )
+    classify_df = classify_df.drop_duplicates(subset=["name_norm"], keep="first")
 
     jv_names = set(jv_cache["name_norm"].str.strip().values)
 
@@ -888,7 +911,9 @@ def build_unified_holdings(
                     COALESCE(CAST(cusip AS VARCHAR), ''),
                     COALESCE(CAST(fair_value AS VARCHAR), ''),
                     COALESCE(CAST(cost AS VARCHAR), ''),
-                    COALESCE(CAST(shares_held AS VARCHAR), '')
+                    COALESCE(CAST(shares_held AS VARCHAR), ''),
+                    COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
+                    COALESCE(CAST(accession_number AS VARCHAR), '')
                 ) AS _nport_rank
             FROM nport_part
         ) sub
@@ -941,7 +966,9 @@ def build_unified_holdings(
                     COALESCE(CAST(cusip AS VARCHAR), ''),
                     COALESCE(CAST(fair_value AS VARCHAR), ''),
                     COALESCE(CAST(cost AS VARCHAR), ''),
-                    COALESCE(CAST(shares_held AS VARCHAR), '')
+                    COALESCE(CAST(shares_held AS VARCHAR), ''),
+                    COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                    COALESCE(CAST(nport_holding_id AS VARCHAR), '')
             ) AS _dedup_rank
         FROM combined
     ),
@@ -1008,7 +1035,8 @@ def build_unified_holdings(
                     LENGTH(COALESCE(CAST(issuer_name AS VARCHAR), '')),
                     COALESCE(CAST(issuer_name AS VARCHAR), ''),
                     COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
-                    COALESCE(CAST(accession_number AS VARCHAR), '')
+                    COALESCE(CAST(accession_number AS VARCHAR), ''),
+                    COALESCE(CAST(src_context_id AS VARCHAR), '')
             ) AS _dim_rank
         FROM no_sub_dupes
         WHERE source = 'bdc'
@@ -1047,8 +1075,10 @@ def build_unified_holdings(
     -- for that specific position, ordered by report_date.  The partition
     -- key includes instrument_description and cusip so each tranche gets
     -- its own proxy (e.g. Term Loan A vs Term Loan B).  The tiebreaker
-    -- fair_value makes the result deterministic when multiple rows share
-    -- the earliest report_date.
+    -- fair_value and the anchor keys src_context_id / nport_holding_id
+    -- make the result deterministic when multiple rows share the earliest
+    -- report_date.  (Amended per tiebreak-hardening plan to append anchor
+    -- keys after the existing ORDER BY keys.)
     --
     -- Provenance: when the proxy fires (original cost NULL/zero but a
     -- non-zero FV proxy is available), cost_source is set to
@@ -1085,7 +1115,9 @@ def build_unified_holdings(
                         COALESCE(CAST(accession_number AS VARCHAR), ''),
                         COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
                         COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
-                        COALESCE(CAST(shares_held AS VARCHAR), '')
+                        COALESCE(CAST(shares_held AS VARCHAR), ''),
+                        COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                        COALESCE(CAST(nport_holding_id AS VARCHAR), '')
                     ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
                 ) AS _cost_proxy
             FROM classified
@@ -1095,6 +1127,10 @@ def build_unified_holdings(
     -- the same position (cik + issuer_name) by comparing each row's
     -- per-unit price (fair_value / shares_held) against the group median.
     -- Outliers are replaced with the nearest non-outlier shares value.
+    -- The window ORDER BY terminates with anchor keys src_context_id /
+    -- nport_holding_id for deterministic donor selection on ties.
+    -- (Amended per tiebreak-hardening plan; prior byte-identical contract
+    -- from the provenance migration is hereby superseded.)
     --
     -- Provenance: when the outlier flag fires, shares_held_source is set
     -- to 'derived_proxy' and 'shares_held:pow10_shares' is appended to
@@ -1112,7 +1148,9 @@ def build_unified_holdings(
                             COALESCE(CAST(accession_number AS VARCHAR), ''),
                             COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
                             COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
-                            COALESCE(CAST(_sh_val AS VARCHAR), '')
+                            COALESCE(CAST(_sh_val AS VARCHAR), ''),
+                            COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                            COALESCE(CAST(nport_holding_id AS VARCHAR), '')
                         ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING),
                     -- Nearest following non-outlier shares
                     FIRST_VALUE(CASE WHEN NOT _is_outlier THEN _sh_val END
@@ -1123,7 +1161,9 @@ def build_unified_holdings(
                             COALESCE(CAST(accession_number AS VARCHAR), ''),
                             COALESCE(CAST(bdc_investment_identifier AS VARCHAR), ''),
                             COALESCE(CAST(nport_holding_id AS VARCHAR), ''),
-                            COALESCE(CAST(_sh_val AS VARCHAR), '')
+                            COALESCE(CAST(_sh_val AS VARCHAR), ''),
+                            COALESCE(CAST(src_context_id AS VARCHAR), ''),
+                            COALESCE(CAST(nport_holding_id AS VARCHAR), '')
                         ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING)
                 )
                 ELSE _sh_val
@@ -1514,7 +1554,54 @@ def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
 
     keys = (source + "|" + accession + "|" + anchor_part).where(
         has_anchor, compute_natural_keys(df))
+    # Reset to RangeIndex so rank_frame construction aligns by position, not
+    # by the caller frame's (potentially non-contiguous) index labels.
     keys = keys.reset_index(drop=True)
+
+    def _col_r(name: str) -> pd.Series:
+        """Like _col but always RangeIndex-aligned (safe inside rank_frame)."""
+        s = _col(name)
+        return s.reset_index(drop=True)
+
+    # Collision suffix: rows sharing an anchor key get content-ranked |dup<k>
+    # suffixes (k>=1); rank 0 keeps the bare key so existing ids never change.
+    # Content rank (not frame order) keeps the ids rebuild-stable.
+    #
+    # For each content column we add a null-indicator (0=value present,
+    # 1=null/empty) sorted BEFORE the stringified value so that null rows
+    # always rank LAST within a collision group.
+    def _null_ind(series: pd.Series) -> pd.Series:
+        """Return 0 where series has a non-empty value, 1 where null/empty."""
+        return series.eq("").astype("int8")
+
+    fv = _col_r("fair_value")
+    cost = _col_r("cost")
+    pa = _col_r("principal_amount")
+    sh = _col_r("shares_held")
+    bid = _col_r("bdc_investment_identifier")
+    rank_frame = pd.DataFrame({
+        "k": keys,
+        "_fv_null": _null_ind(fv),   "_fv": fv,
+        "_co_null": _null_ind(cost),  "_cost": cost,
+        "_pa_null": _null_ind(pa),    "_pa": pa,
+        "_sh_null": _null_ind(sh),    "_sh": sh,
+        "_bi_null": _null_ind(bid),   "_bid": bid,
+    })
+    dup_rank = (
+        rank_frame
+        .sort_values(
+            ["k", "_fv_null", "_fv",
+             "_co_null", "_cost",
+             "_pa_null", "_pa",
+             "_sh_null", "_sh",
+             "_bi_null", "_bid"],
+            kind="mergesort",
+        )
+        .groupby("k")          # sort=True (default) -- stable re-sort on key only
+        .cumcount()
+        .reindex(rank_frame.index)
+    )
+    keys = keys.where(dup_rank == 0, keys + "|dup" + dup_rank.astype(str))
 
     con = duckdb.connect()
     con.register("nk", pd.DataFrame({"i": range(len(keys)), "k": keys}))
@@ -1528,8 +1615,8 @@ def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
     n_dup = int(df["row_id"].duplicated().sum())
     if n_dup:
         logger.warning(
-            "row_id: %d duplicate id(s) (anchor collision, natural-key "
-            "collision, or md5-prefix collision)", n_dup)
+            "row_id uniqueness violated on %d rows after "
+            "collision suffixing -- investigate", n_dup)
     logger.info("row_id: %d assigned (%d src_anchor, %d natural_key)",
                 len(df), n_anchor, len(df) - n_anchor)
     return df
@@ -1750,14 +1837,29 @@ def _append_duplicate_wrapper_lot_keys(
     if len(duplicate_index) == 0:
         return df
 
-    work = df.loc[duplicate_index, key_cols + ["principal_amount", "fair_value", "cost"]].copy()
+    anchor_cols = [c for c in ("src_context_id", "nport_holding_id") if c in df.columns]
+    work = df.loc[
+        duplicate_index,
+        key_cols + ["principal_amount", "fair_value", "cost"] + anchor_cols,
+    ].copy()
     work["_principal_abs"] = pd.to_numeric(work["principal_amount"], errors="coerce").abs().fillna(-1)
     work["_fair_value_abs"] = pd.to_numeric(work["fair_value"], errors="coerce").abs().fillna(-1)
     work["_cost_abs"] = pd.to_numeric(work["cost"], errors="coerce").abs().fillna(-1)
+    # S19 tie-break: when principal/fv/cost are all tied, break by a stable
+    # source anchor (src_context_id, then nport_holding_id) BEFORE falling back
+    # to physical frame order. _source_index stays as the true last resort so
+    # rows with no anchor at all remain deterministically ranked.
+    if "src_context_id" in work.columns:
+        _anchor = work["src_context_id"].fillna("").astype(str)
+    else:
+        _anchor = pd.Series("", index=work.index, dtype=object)
+    if "nport_holding_id" in work.columns:
+        _anchor = _anchor.where(_anchor != "", work["nport_holding_id"].fillna("").astype(str))
+    work["_anchor"] = _anchor
     work["_source_index"] = range(len(work))
     work = work.sort_values(
-        key_cols + ["_principal_abs", "_fair_value_abs", "_cost_abs", "_source_index"],
-        ascending=[True, True, True, True, False, False, False, True],
+        key_cols + ["_principal_abs", "_fair_value_abs", "_cost_abs", "_anchor", "_source_index"],
+        ascending=[True, True, True, True, False, False, False, True, True],
         kind="mergesort",
     )
     work["_lot_rank"] = work.groupby(key_cols, dropna=False).cumcount() + 1

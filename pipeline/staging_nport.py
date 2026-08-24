@@ -121,7 +121,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
     WITH
     -- CTE 1: Filter to Level 3 or NULL/empty fair_value_level
     level3 AS (
-        SELECT *, ROW_NUMBER() OVER () AS _row_id
+        SELECT *, ROW_NUMBER() OVER (ORDER BY accession_number, holding_id) AS _row_id
         FROM nport_raw
         WHERE TRY_CAST(fair_value_level AS INTEGER) = 3
            OR fair_value_level IS NULL

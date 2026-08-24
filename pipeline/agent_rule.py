@@ -294,8 +294,24 @@ def _apply_dedup(work, r):
     cand = {int(x[0]) for x in rows}
     mf, keep = list(r["match_fields"]), str(r.get("keep", "first"))
     sub = work[work["_rid"].isin(cand)]
-    dup = sub.duplicated(subset=mf, keep=keep)
-    drop = set(sub.loc[dup, "_rid"].astype(int))
+    # S17 tie-break: which duplicate survives keep=first/last must not depend on
+    # the caller's physical row order. Stable-sort candidates by [match_fields,
+    # anchor] to fix the survivor deterministically, compute the drop mask on the
+    # SORTED frame, then map it back by _rid. The RETURNED frame keeps the
+    # caller's incoming order (sort is for mask determination only) so downstream
+    # index-aligned appliers/concat are not perturbed (agent_promoted lesson).
+    if "row_id" in sub.columns:
+        anchor = sub["row_id"].fillna("").astype(str)
+    else:
+        anchor = pd.Series("", index=sub.index, dtype=object)
+        for col in ("accession_number", "src_context_id", "nport_holding_id"):
+            if col in sub.columns:
+                anchor = anchor + sub[col].fillna("").astype(str) + "|"
+    sub_sorted = sub.assign(_anchor=anchor.values).sort_values(
+        list(mf) + ["_anchor"], kind="mergesort"
+    )
+    dup = sub_sorted.duplicated(subset=mf, keep=keep)
+    drop = set(sub_sorted.loc[dup, "_rid"].astype(int))
     dropped_rows = [x for x in rows if int(x[0]) in drop]
     out = work[~work["_rid"].isin(drop)].copy()
     return out, {"rule_id": r.get("rule_id"), "rule_type": "dedup", "status": "ok",
