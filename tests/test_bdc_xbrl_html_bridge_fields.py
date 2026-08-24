@@ -539,3 +539,96 @@ def test_reconcile_uses_current_period_fv_only():
     rows = build_field_status_rows(bridges, flat, {"First Lien": 100e6})
     cur = [r for r in rows if r["period_role"] == "current"][0]
     assert cur["lien_status"] == "value"   # reconciles to 100M; comparative 90M excluded
+
+
+# --- S15: load_html_section_bridge_rows dedup is order-invariant ---
+def _bridge_record(family, sha, table_index, row_index):
+    """A bridge record colliding on the dedup key (cik/accession/report_date/
+    raw_id_lower) with the others; only family + source-location keys differ."""
+    return {
+        "accession_number": "0000000000-26-000001",
+        "report_date": "2026-03-31",
+        "raw_id_lower": "acme corp",
+        "issuer_name": "Acme Corp",
+        "instrument_description": "First Lien Debt",
+        "family": family,
+        "html_sha256": sha,
+        "table_index": table_index,
+        "section_row_index": 4,
+        "row_index": row_index,
+        "cell_indices": [0, 4, 5],
+        "section_label": "First Lien Debt",
+    }
+
+
+def _write_bridge_file(path, records):
+    path.write_text(
+        json.dumps({
+            "schema_version": BRIDGE_SCHEMA_VERSION,
+            "cik": "0000000123",
+            "version": 1,
+            "source": "bdc_xbrl",
+            "bridges": records,
+        }),
+        encoding="utf-8",
+    )
+
+
+def test_load_bridge_rows_dedup_survivor_is_order_invariant(tmp_path):
+    """S15: two bridge records collide on (cik, accession, report_date,
+    raw_id_lower) with different payloads + source-location keys. keep='last'
+    must select the same survivor regardless of the physical record order,
+    because we stable-sort on the dedup subset plus html_sha256/table_index/
+    row_index first."""
+    from pipeline.bdc_xbrl_html_bridge import load_html_section_bridge_rows
+
+    # rec_hi has the larger source-location tuple (sha 'bbb...' > 'aaa...') so it
+    # is the deterministic keep='last' survivor. Its family is the pinned value.
+    rec_lo = _bridge_record("debt", "a" * 64, 1, 3)
+    rec_hi = _bridge_record("equity", "b" * 64, 2, 9)
+
+    def _run(records):
+        bridge_dir = tmp_path / "bridges"
+        if bridge_dir.exists():
+            for p in bridge_dir.glob("*.json"):
+                p.unlink()
+        else:
+            bridge_dir.mkdir()
+        _write_bridge_file(bridge_dir / "0000000123.json", records)
+        rows = load_html_section_bridge_rows(bridge_dir)
+        assert len(rows) == 1                      # collapsed to one survivor
+        return rows.iloc[0]["family"]
+
+    fam_forward = _run([rec_lo, rec_hi])
+    fam_reversed = _run([rec_hi, rec_lo])
+    assert fam_forward == "equity"                 # rec_hi wins (largest tuple)
+    assert fam_reversed == "equity"                # same survivor, order flipped
+
+
+# --- S16: apply_ixbrl_field_status_overlay dedup is order-invariant ---
+def test_ixbrl_overlay_status_dedup_is_order_invariant():
+    """S16: two status rows collide on the overlay key with different payloads.
+    The applied value must be the deterministic keep='last' survivor regardless
+    of the caller's row order (stable-sort on the payload before dedup)."""
+    import pandas as pd
+    from pipeline.bdc_xbrl_html_bridge import apply_ixbrl_field_status_overlay
+
+    df = pd.DataFrame([
+        {"cik": "0001803498", "accession_number": "A", "report_date": "2025-12-31",
+         "bdc_investment_identifier": "Acme Corp 1 | Non-Affiliated Issuer",
+         "maturity_date": "", "reference_rate_type": "", "lien_position": "",
+         "reference_rate_source": ""},
+    ])
+    # Same overlay key, disagreeing maturity_date. keep='last' after a stable
+    # payload sort selects the lexicographically larger date deterministically.
+    row_lo = {"cik": "0001803498", "accession_number": "A", "report_date": "2025-12-31",
+              "raw_id_lower": "acme corp 1 | non-affiliated issuer",
+              "maturity_date": "2029-01-01", "maturity_status": "value"}
+    row_hi = {"cik": "0001803498", "accession_number": "A", "report_date": "2025-12-31",
+              "raw_id_lower": "acme corp 1 | non-affiliated issuer",
+              "maturity_date": "2030-12-31", "maturity_status": "value"}
+
+    out_forward = apply_ixbrl_field_status_overlay(df.copy(), [row_lo, row_hi])
+    out_reversed = apply_ixbrl_field_status_overlay(df.copy(), [row_hi, row_lo])
+    assert out_forward.iloc[0]["maturity_date"] == "2030-12-31"
+    assert out_reversed.iloc[0]["maturity_date"] == "2030-12-31"

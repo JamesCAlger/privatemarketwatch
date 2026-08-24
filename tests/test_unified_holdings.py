@@ -6580,6 +6580,62 @@ class TestApplyUnclassifiedCache:
         assert result.loc[1, "index_classification"] == "PRIVATE_EQUITY"
         assert result.loc[2, "jv_subsidiary"] == "Y"
 
+    def test_duplicate_name_norm_survivor_is_order_invariant(
+        self, monkeypatch, tmp_path
+    ):
+        """S14: when the cache holds two entries for the same name_norm that
+        DISAGREE on classification, the survivor must be deterministic across
+        input orders (stable-sort on all columns, then keep='first')."""
+        cache_path = tmp_path / "unclassified_review_cache.csv"
+        # Two rows share name_norm 'alpha' but disagree: DIRECT_LENDING vs
+        # STRUCTURED_CREDIT. Physical CSV order must not decide the survivor.
+        rows_a = [
+            {
+                "name_norm": "alpha",
+                "verdict": "CLASSIFIED",
+                "confidence": "high",
+                "new_index_classification": "STRUCTURED_CREDIT",
+                "asset_class": "LOAN",
+            },
+            {
+                "name_norm": "alpha",
+                "verdict": "CLASSIFIED",
+                "confidence": "high",
+                "new_index_classification": "DIRECT_LENDING",
+                "asset_class": "LOAN",
+            },
+        ]
+        rows_b = list(reversed(rows_a))
+
+        def _run(cache_rows):
+            pd.DataFrame(cache_rows).to_csv(cache_path, index=False)
+            monkeypatch.setattr(
+                "pipeline.unified_holdings.UNCLASSIFIED_REVIEW_CACHE_FILE",
+                cache_path,
+            )
+            df = self._make_unified_df([
+                {
+                    "issuer_name": "Alpha",
+                    "index_classification": "UNCLASSIFIED",
+                    "exposure_type": "OTHER",
+                    "asset_class": "OTHER",
+                },
+            ])
+            return _apply_unclassified_cache(df)
+
+        result_a = _run(rows_a)
+        result_b = _run(rows_b)
+
+        # Deterministic survivor pinned to expected value: an all-column stable
+        # sort orders DIRECT_LENDING before STRUCTURED_CREDIT on the new_idx
+        # column, so keep='first' retains DIRECT_LENDING in BOTH input orders.
+        assert result_a.loc[0, "index_classification"] == "DIRECT_LENDING"
+        assert result_b.loc[0, "index_classification"] == "DIRECT_LENDING"
+        assert (
+            result_a.loc[0, "index_classification"]
+            == result_b.loc[0, "index_classification"]
+        )
+
 
 # ---------------------------------------------------------------------------
 # _stabilize_classification
@@ -11468,6 +11524,43 @@ class TestApplyWrapperPositionKeys:
         assert keys[1].endswith(" lot 2")
         assert not keys[2].endswith(" lot 1")
         assert keys[0].replace(" lot 1", "") == keys[1].replace(" lot 2", "")
+
+    def test_lot_suffix_independent_of_frame_order(self):
+        """S19: two same-position-key rows tied on principal/fv/cost differing
+        only in src_context_id -- lot numbering must follow the anchor, not the
+        physical frame order. The ctxA row gets 'lot 1' in BOTH input orders."""
+        identifier = (
+            "Investment 1st Lien/Senior Secured Debt - 203.92% "
+            "AQ Helios Buyer, Inc. (dba SurePoint) Industry Software "
+            "Interest Rate 11.96% Reference Rate and Spread S + 7.00% "
+            "Maturity 07/01/26"
+        )
+
+        def _run(contexts):
+            df = pd.DataFrame({
+                "source": ["bdc", "bdc"],
+                "cik": ["0001772704", "0001772704"],
+                "report_date": ["2023-03-31", "2023-03-31"],
+                "position_key": ["generic_1", "generic_2"],
+                "bdc_investment_identifier": [identifier, identifier],
+                # Fully tied so only the anchor (src_context_id) can break it.
+                "principal_amount": [100.0, 100.0],
+                "fair_value": [99000.0, 99000.0],
+                "cost": [100000.0, 100000.0],
+                "src_context_id": list(contexts),
+            })
+            result = _apply_wrapper_position_keys(df)
+            # Map each row's src_context_id -> its lot suffix.
+            return dict(zip(result["src_context_id"], result["position_key"]))
+
+        forward = _run(["ctxA", "ctxB"])
+        reversed_ = _run(["ctxB", "ctxA"])
+
+        # ctxA sorts before ctxB, so it must own 'lot 1' regardless of row order.
+        assert forward["ctxA"].endswith(" lot 1")
+        assert forward["ctxB"].endswith(" lot 2")
+        assert reversed_["ctxA"].endswith(" lot 1")
+        assert reversed_["ctxB"].endswith(" lot 2")
 
     def test_no_source_column_returns_unchanged(self):
         """DataFrame without 'source' column passes through safely."""

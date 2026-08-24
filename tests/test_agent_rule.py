@@ -127,6 +127,81 @@ def test_dedup_keeps_one_per_key():
     assert audits[0]["rows_excluded"] == 1 and len(corrected) == 2
 
 
+def _dd_content_rows(order):
+    """Two content-identical dedup candidates differing only in src_context_id
+    plus one unrelated row. `order` in ('ab', 'ba') places ctxA-then-ctxB or the
+    reverse. issuer_name/fair_value are the content match_fields."""
+    a = {"cik": "1", "report_date": "q", "issuer_name": "Dup Co", "fair_value": 100.0,
+         "src_context_id": "ctxA", "accession_number": "acc-1"}
+    b = {"cik": "1", "report_date": "q", "issuer_name": "Dup Co", "fair_value": 100.0,
+         "src_context_id": "ctxB", "accession_number": "acc-1"}
+    other = {"cik": "1", "report_date": "q", "issuer_name": "Solo Co", "fair_value": 50.0,
+             "src_context_id": "ctxZ", "accession_number": "acc-1"}
+    dup = [a, b] if order == "ab" else [b, a]
+    # `other` sits between the two duplicates so caller order is observable.
+    return pd.DataFrame([dup[0], other, dup[1]])
+
+
+def test_dedup_survivor_is_order_invariant_and_preserves_caller_order():
+    """S17: the surviving duplicate must be the same context regardless of the
+    caller's incoming row order (sort-for-mask), AND the returned frame must keep
+    the caller's incoming order (mask-only sort, never a reorder)."""
+    rule = _dd(match_fields=["issuer_name", "fair_value"], keep="first")
+
+    corr_ab, aud_ab = apply_rules(_dd_content_rows("ab"), [rule])
+    corr_ba, aud_ba = apply_rules(_dd_content_rows("ba"), [rule])
+
+    # (a) One duplicate removed in each order.
+    assert aud_ab[0]["rows_excluded"] == 1
+    assert aud_ba[0]["rows_excluded"] == 1
+
+    # (b) Deterministic survivor pinned to the anchor: ctxA sorts before ctxB, so
+    # keep='first' after the anchor sort must retain ctxA in BOTH input orders.
+    surv_ab = set(corr_ab.loc[corr_ab["issuer_name"] == "Dup Co", "src_context_id"])
+    surv_ba = set(corr_ba.loc[corr_ba["issuer_name"] == "Dup Co", "src_context_id"])
+    assert surv_ab == {"ctxA"}
+    assert surv_ba == {"ctxA"}
+
+    # (c) Caller row order preserved. In 'ab' order the surviving rows were rows
+    # 0 (Dup Co ctxA) then 1 (Solo Co); the dropped row was index 2. Output must
+    # read Dup Co, Solo Co -- NOT reordered by the internal anchor sort.
+    assert list(corr_ab["issuer_name"]) == ["Dup Co", "Solo Co"]
+    # In 'ba' order the surviving Dup Co (ctxA) was row 2, after Solo Co (row 1);
+    # the dropped row (ctxB) was index 0. Output must read Solo Co, Dup Co.
+    assert list(corr_ba["issuer_name"]) == ["Solo Co", "Dup Co"]
+
+
+def test_dedup_anchor_falls_back_to_accession_when_no_row_id():
+    """S17: with no row_id column, the anchor is accession+src_context_id+
+    nport_holding_id (fillna). ctxA still wins deterministically via the tie key."""
+    rule = _dd(match_fields=["issuer_name", "fair_value"], keep="first")
+    corr_ab, _ = apply_rules(_dd_content_rows("ab"), [rule])
+    corr_ba, _ = apply_rules(_dd_content_rows("ba"), [rule])
+    surv_ab = set(corr_ab.loc[corr_ab["issuer_name"] == "Dup Co", "src_context_id"])
+    surv_ba = set(corr_ba.loc[corr_ba["issuer_name"] == "Dup Co", "src_context_id"])
+    assert surv_ab == surv_ba == {"ctxA"}
+
+
+def test_dedup_anchor_prefers_row_id_when_present():
+    """S17: when row_id is present it is the sole anchor. Pin the survivor to the
+    lower row_id regardless of caller order (row_id 'r1' < 'r2')."""
+    rule = _dd(match_fields=["issuer_name", "fair_value"], keep="first")
+
+    def _rows(order):
+        a = {"cik": "1", "report_date": "q", "issuer_name": "Dup Co", "fair_value": 100.0,
+             "row_id": "r1", "src_context_id": "ctxB", "accession_number": "acc-1"}
+        b = {"cik": "1", "report_date": "q", "issuer_name": "Dup Co", "fair_value": 100.0,
+             "row_id": "r2", "src_context_id": "ctxA", "accession_number": "acc-1"}
+        pair = [a, b] if order == "ab" else [b, a]
+        return pd.DataFrame(pair)
+
+    corr_ab, _ = apply_rules(_rows("ab"), [rule])
+    corr_ba, _ = apply_rules(_rows("ba"), [rule])
+    # row_id 'r1' wins in both orders even though its src_context_id sorts later.
+    assert set(corr_ab["row_id"]) == {"r1"}
+    assert set(corr_ba["row_id"]) == {"r1"}
+
+
 # -- value_expression (bounded arithmetic DSL; gap-5 vocab) -----------------------------
 
 def _vexpr(**kw):

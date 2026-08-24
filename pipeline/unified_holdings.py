@@ -675,9 +675,32 @@ def _apply_unclassified_cache(combined: pd.DataFrame) -> pd.DataFrame:
             classify_df["new_idx"],
         )
     ]
-    classify_df = classify_df[
-        ["name_norm", "new_idx", "new_exp", "new_ac"]
-    ].drop_duplicates(subset=["name_norm"], keep="first")
+    classify_df = classify_df[["name_norm", "new_idx", "new_exp", "new_ac"]]
+    # S14 tie-break: the cache CSV row order must not decide which entry survives
+    # when the same name_norm appears twice. Stable-sort on ALL columns so the
+    # kept ('first') survivor is deterministic, and warn once if the collapsed
+    # duplicates DISAGREE on the classification we are about to apply.
+    classify_df = classify_df.sort_values(
+        list(classify_df.columns), kind="mergesort"
+    )
+    _dup_mask = classify_df.duplicated(subset=["name_norm"], keep=False)
+    if _dup_mask.any():
+        _disagree = (
+            classify_df.loc[_dup_mask]
+            .groupby("name_norm")[["new_idx", "new_exp", "new_ac"]]
+            .nunique()
+            .gt(1)
+            .any(axis=1)
+        )
+        _disagree_names = sorted(_disagree[_disagree].index.astype(str))
+        if _disagree_names:
+            logger.warning(
+                "Unclassified cache: %d name_norm(s) have DISAGREEING duplicate "
+                "classifications; keeping deterministic first after stable sort: %s",
+                len(_disagree_names),
+                ", ".join(_disagree_names[:20]),
+            )
+    classify_df = classify_df.drop_duplicates(subset=["name_norm"], keep="first")
 
     jv_names = set(jv_cache["name_norm"].str.strip().values)
 
@@ -1814,14 +1837,29 @@ def _append_duplicate_wrapper_lot_keys(
     if len(duplicate_index) == 0:
         return df
 
-    work = df.loc[duplicate_index, key_cols + ["principal_amount", "fair_value", "cost"]].copy()
+    anchor_cols = [c for c in ("src_context_id", "nport_holding_id") if c in df.columns]
+    work = df.loc[
+        duplicate_index,
+        key_cols + ["principal_amount", "fair_value", "cost"] + anchor_cols,
+    ].copy()
     work["_principal_abs"] = pd.to_numeric(work["principal_amount"], errors="coerce").abs().fillna(-1)
     work["_fair_value_abs"] = pd.to_numeric(work["fair_value"], errors="coerce").abs().fillna(-1)
     work["_cost_abs"] = pd.to_numeric(work["cost"], errors="coerce").abs().fillna(-1)
+    # S19 tie-break: when principal/fv/cost are all tied, break by a stable
+    # source anchor (src_context_id, then nport_holding_id) BEFORE falling back
+    # to physical frame order. _source_index stays as the true last resort so
+    # rows with no anchor at all remain deterministically ranked.
+    if "src_context_id" in work.columns:
+        _anchor = work["src_context_id"].fillna("").astype(str)
+    else:
+        _anchor = pd.Series("", index=work.index, dtype=object)
+    if "nport_holding_id" in work.columns:
+        _anchor = _anchor.where(_anchor != "", work["nport_holding_id"].fillna("").astype(str))
+    work["_anchor"] = _anchor
     work["_source_index"] = range(len(work))
     work = work.sort_values(
-        key_cols + ["_principal_abs", "_fair_value_abs", "_cost_abs", "_source_index"],
-        ascending=[True, True, True, True, False, False, False, True],
+        key_cols + ["_principal_abs", "_fair_value_abs", "_cost_abs", "_anchor", "_source_index"],
+        ascending=[True, True, True, True, False, False, False, True, True],
         kind="mergesort",
     )
     work["_lot_rank"] = work.groupby(key_cols, dropna=False).cumcount() + 1
