@@ -506,6 +506,10 @@ A verdict is **REFUSED** if any citation fails any of these checks:
 
 Verdicts without `culprit_citations` (false_flag, amended, ambiguous) pass the gate trivially.
 The gate is fail-closed: a missing ledger file produces a clear error, never a silent pass.
+Packet-scope binding is enforced at batch intake: `validate_dir` reads `cik` and `report_date`
+from the worklist and passes them to `rederive_citations` as a `packet`; any citation whose
+ledger row belongs to a different `(cik, report_date)` is refused with "citation outside packet
+scope" even if all numeric values match.
 
 ### Escalation sibling convention
 

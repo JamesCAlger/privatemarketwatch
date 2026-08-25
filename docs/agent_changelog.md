@@ -6,6 +6,15 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-08-25 - Ledger-error-classifier: packet-scope binding + intake hardening
+
+### Files changed
+- `pipeline/ledger_error_verdict.py` -- packet-scope binding (cik+report_date added to _LEDGER_KEEP_COLS; rederive_citations gains optional packet param; validate_dir reads packet from worklist and passes per review_id; missing worklist now refuses; drift_fingerprint coverage check; all-malformed-citations early-exit without full scan); `pipeline/review_queue.py` -- priority_rank sentinel changed from 0 to 999999 in provenance_worklist_projection; `tests/test_ledger_error_verdict.py` -- 16 new tests (scope binding, missing worklist, fingerprint coverage, malformed citations; DuckDB CSV fixtures updated to include cik+report_date columns); `docs/reference/schemas.md` -- gate contract note added for packet-scope binding; `docs/agent_changelog.md` -- this entry; `.superpowers/sdd/2026-08-25-ledger-error-classifier-lane/task-4-report.md` -- fix report. Test suite: 90 passed (test_ledger_error_verdict + test_review_queue + test_ledger_error_classifier_dispatch).
+
+**Correction (2026-08-25):** The 2026-08-25 entry above stated "manifest_w1.json committed" -- this is FALSE. `data/output/` is gitignored; batch artifacts are written to disk only and are not committed to the repository.
+
+---
+
 ## 2026-08-25 - Ledger-error-classifier lane: built and batch prepared (not dispatched)
 
 ### What shipped

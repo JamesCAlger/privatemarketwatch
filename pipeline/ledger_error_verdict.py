@@ -42,6 +42,7 @@ from typing import Any
 import pandas as pd
 
 from pipeline import config
+from pipeline.bdc_cik_review import normalize_cik
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -83,6 +84,7 @@ _REL_TOL = 1e-9
 _LEDGER_KEEP_COLS = (
     "row_id", "field", "reason_code",
     "declared_raw", "instance_raw", "published",
+    "cik", "report_date",
 )
 
 
@@ -257,6 +259,7 @@ def rederive_citations(
     *,
     ledger_path: Path | None = None,
     ledger_df: pd.DataFrame | None = None,
+    packet: "dict | None" = None,
 ) -> dict[str, Any]:
     """THE GATE (fail-closed).
 
@@ -265,6 +268,10 @@ def rederive_citations(
     - Its reason_code is a tight fail code.
     - Every cited numeric (declared_raw / instance_raw / published) matches the
       ledger value within rel-tol 1e-9 (None matches NULL/NaN).
+    - When ``packet`` is provided (keys: cik, report_date -- both normalized as
+      elsewhere), every cited ledger row MUST match the packet's cik AND report_date.
+      A citation whose ledger row belongs to a different (cik, report_date) is refused
+      with "citation outside packet scope" even if all numeric values match.
 
     Any miss -> {"ok": False, "errors": [...]}. A verdict whose citations do not
     reproduce is REFUSED regardless of schema validity.
@@ -280,6 +287,13 @@ def rederive_citations(
         # Verdicts without citations (false_flag, amended, ambiguous, etc.) pass trivially
         return {"ok": True, "errors": [], "warnings": []}
 
+    # Normalise packet scope once (avoid repeating inside the loop)
+    _packet_cik: str | None = None
+    _packet_rd: str | None = None
+    if packet is not None:
+        _packet_cik = normalize_cik(str(packet.get("cik") or ""))
+        _packet_rd = str(packet.get("report_date") or "").strip()
+
     # Collect cited (row_id, field) pairs to pass as filter to DuckDB path
     cited_pairs: list[tuple[str, str]] = []
     for c in cites:
@@ -289,12 +303,14 @@ def rederive_citations(
             if rid and fld:
                 cited_pairs.append((rid, fld))
 
-    # Build lookup: (row_id, field) -> ledger row dict
+    # Build lookup: (row_id, field) -> ledger row dict.
+    # Pass cited_pairs even when empty so _build_ledger_lookup/_duckdb_lookup can
+    # refuse without doing a full ledger scan (all-malformed-citations guard).
     lookup = _build_ledger_lookup(
         ledger_path=ledger_path,
         ledger_df=ledger_df,
         errors=errors,
-        cited_pairs=cited_pairs or None,
+        cited_pairs=cited_pairs,
     )
     if errors:
         return {"ok": False, "errors": errors, "warnings": []}
@@ -314,6 +330,18 @@ def rederive_citations(
 
         row = lookup[key]
 
+        # Packet-scope check: cited ledger row must belong to the packet's (cik, report_date)
+        if _packet_cik is not None:
+            row_cik = normalize_cik(str(row.get("cik") or ""))
+            row_rd = str(row.get("report_date") or "").strip()
+            if row_cik != _packet_cik or row_rd != _packet_rd:
+                _err(errors,
+                     f"culprit_citations[{i}]: citation outside packet scope: "
+                     f"cited (row_id={row_id!r}) belongs to "
+                     f"cik={row_cik!r} report_date={row_rd!r} but packet is "
+                     f"cik={_packet_cik!r} report_date={_packet_rd!r}")
+                continue
+
         # reason_code must be a tight fail code
         rc = str(row.get("reason_code") or "").strip()
         if rc not in _PROV_TIGHT_FAIL_LOCAL:
@@ -329,6 +357,24 @@ def rederive_citations(
                 _err(errors,
                      f"culprit_citations[{i}]: {num_key} mismatch: "
                      f"cited={cited_val!r} vs ledger={ledger_val!r}")
+
+    # parser_drift: every cited citation row_id must appear in drift_fingerprint.affected_row_ids
+    # (the fingerprint must cover its own evidence)
+    if leaf.get("verdict") == "parser_drift" and not errors:
+        fp = leaf.get("drift_fingerprint")
+        if isinstance(fp, dict):
+            affected = fp.get("affected_row_ids")
+            if isinstance(affected, list):
+                affected_set = set(str(x) for x in affected)
+                for i, cite in enumerate(cites):
+                    if not isinstance(cite, dict):
+                        continue
+                    row_id = str(cite.get("row_id") or "").strip()
+                    if row_id and row_id not in affected_set:
+                        _err(errors,
+                             f"culprit_citations[{i}]: row_id {row_id!r} is not in "
+                             f"drift_fingerprint.affected_row_ids; fingerprint must cover "
+                             f"its own evidence")
 
     return {"ok": not errors, "errors": errors, "warnings": []}
 
@@ -365,6 +411,12 @@ def _build_ledger_lookup(
     cited_pairs: list[tuple[str, str]] | None = None,
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Return a dict keyed by (row_id, field).  Populates errors on failure."""
+    # Empty cited_pairs means all citations were malformed -- refuse without scanning
+    if isinstance(cited_pairs, list) and len(cited_pairs) == 0:
+        _err(errors, "re-derivation refused: citations present but all are malformed "
+             "(no valid row_id+field pairs found)")
+        return {}
+
     if ledger_df is not None:
         # Pre-filter ledger_df to cited pairs (vectorized membership check),
         # mirroring the DuckDB post-filter in _duckdb_lookup.
@@ -450,6 +502,8 @@ def _duckdb_lookup(
 
     When cited_pairs is provided a WHERE clause restricts the scan to those pairs
     so the full 676MB ledger is not read into memory.
+    An empty cited_pairs list is refused upstream in _build_ledger_lookup before
+    this function is reached.
     """
     try:
         import duckdb
@@ -528,14 +582,31 @@ def validate_dir(
     verdicts_dir = Path(verdicts_dir)
     worklist_path = Path(worklist_path)
 
-    # Load worklist
+    # Missing worklist -> refuse (fail-closed; never silently open)
+    if not worklist_path.exists():
+        return {
+            "ok": False,
+            "errors": [f"worklist not found: {worklist_path}"],
+            "verdicts_dir": str(verdicts_dir),
+            "n_files": 0,
+            "n_valid": 0,
+            "n_error_files": 0,
+            "cross_errors": [],
+            "per_file": [],
+        }
+
+    # Load worklist -- build expected set AND packet map (review_id -> {cik, report_date})
     expected: set[str] = set()
-    if worklist_path.exists():
-        with worklist_path.open(newline="", encoding="utf-8-sig") as f:
-            for row in csv.DictReader(f):
-                rid = str(row.get("review_id") or "").strip()
-                if rid:
-                    expected.add(rid)
+    packet_map: dict[str, dict[str, str]] = {}
+    with worklist_path.open(newline="", encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            rid = str(row.get("review_id") or "").strip()
+            if rid:
+                expected.add(rid)
+                cik_raw = str(row.get("cik") or "").strip()
+                rd_raw = str(row.get("report_date") or "").strip()
+                if cik_raw and rd_raw:
+                    packet_map[rid] = {"cik": cik_raw, "report_date": rd_raw}
 
     cross_errors: list[str] = []
     per_file: list[dict[str, Any]] = []
@@ -580,7 +651,13 @@ def validate_dir(
             cross_errors.append(f"unknown review_id (not in worklist): {rid}")
 
         schema_result = validate_ledger_verdict(leaf)
-        gate_result = rederive_citations(leaf, ledger_path=ledger_path, ledger_df=ledger_df)
+        # Pass packet for scope binding when the worklist provides cik+report_date
+        gate_result = rederive_citations(
+            leaf,
+            ledger_path=ledger_path,
+            ledger_df=ledger_df,
+            packet=packet_map.get(rid),
+        )
 
         combined_errors = schema_result["errors"] + gate_result["errors"]
         combined_warnings = schema_result["warnings"] + gate_result["warnings"]

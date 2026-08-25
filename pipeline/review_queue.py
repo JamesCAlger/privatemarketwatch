@@ -428,9 +428,11 @@ def provenance_worklist_projection(
             n_units = 0
         priority_raw = item.get("priority_rank", "")
         try:
-            priority_rank = int(priority_raw) if priority_raw and priority_raw.strip() else 0
+            # Sentinel 999999 = sorts LAST (unparseable rank treated as lowest priority).
+            # build_dispatch uses 999999 for the same sentinel; 0 would sort FIRST.
+            priority_rank = int(priority_raw) if priority_raw and priority_raw.strip() else 999999
         except ValueError:
-            priority_rank = 0
+            priority_rank = 999999
         projection.append(
             {
                 "review_id": normalize_text(item.get("review_id")),

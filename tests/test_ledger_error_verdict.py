@@ -591,10 +591,13 @@ class TestDuplicateLedgerRows:
         """Same duplicate-agree semantics via the DuckDB path (small tmp_path CSV)."""
         import csv as _csv
         ledger_csv = tmp_path / "ledger.csv"
-        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published"]
+        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published",
+                "cik", "report_date"]
         rows = [
-            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
-            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0",
+             "0001287750", "2025-12-31"],
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0",
+             "0001287750", "2025-12-31"],
         ]
         with ledger_csv.open("w", newline="", encoding="utf-8") as f:
             w = _csv.writer(f)
@@ -607,10 +610,13 @@ class TestDuplicateLedgerRows:
         """Duplicate-differ semantics via DuckDB path -> refused with ambiguous/duplicate error."""
         import csv as _csv
         ledger_csv = tmp_path / "ledger.csv"
-        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published"]
+        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published",
+                "cik", "report_date"]
         rows = [
-            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
-            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "999.0", "990.0"],
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0",
+             "0001287750", "2025-12-31"],
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "999.0", "990.0",
+             "0001287750", "2025-12-31"],
         ]
         with ledger_csv.open("w", newline="", encoding="utf-8") as f:
             w = _csv.writer(f)
@@ -697,12 +703,15 @@ class TestDuckDBFilteredRead:
         """
         import csv as _csv
         ledger_csv = tmp_path / "ledger.csv"
-        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published"]
+        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published",
+                "cik", "report_date"]
         rows = [
             # cited row -- correct
-            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0",
+             "0001287750", "2025-12-31"],
             # uncited row with bad reason_code -- should be irrelevant
-            ["ROW-bbbb", "interest_rate", "verified", "5.0", "5.0", "5.0"],
+            ["ROW-bbbb", "interest_rate", "verified", "5.0", "5.0", "5.0",
+             "0001287750", "2025-12-31"],
         ]
         with ledger_csv.open("w", newline="", encoding="utf-8") as f:
             w = _csv.writer(f)
@@ -884,3 +893,213 @@ class TestEndToEndValidateDir:
         assert any("instance_raw" in e for e in fab_errors), (
             f"Gate error should identify 'instance_raw' as the fabricated field; got {fab_errors}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Finding 1: packet-scope binding
+# ---------------------------------------------------------------------------
+
+
+def _ledger_df_two_ciks():
+    """Ledger with two rows: ROW-aaaa belongs to CIK-A, ROW-bbbb belongs to CIK-B."""
+    return pd.DataFrame([
+        {
+            "row_id": "ROW-aaaa",
+            "field": "fair_value",
+            "reason_code": "filing_mismatch",
+            "declared_raw": 1000.0,
+            "instance_raw": 1000.0,
+            "published": 990.0,
+            "cheap_status": "pass",
+            "full_status": "published_mismatch",
+            "cik": "0001287750",
+            "report_date": "2025-12-31",
+            "expected": 1000.0,
+            "src_context_id": "ctx1",
+        },
+        {
+            "row_id": "ROW-bbbb",
+            "field": "fair_value",
+            "reason_code": "filing_mismatch",
+            "declared_raw": 2000.0,
+            "instance_raw": 2000.0,
+            "published": 1980.0,
+            "cheap_status": "pass",
+            "full_status": "published_mismatch",
+            "cik": "0001803498",  # different CIK
+            "report_date": "2025-12-31",
+            "expected": 2000.0,
+            "src_context_id": "ctx2",
+        },
+    ])
+
+
+class TestPacketScopeBinding:
+    """Finding 1: citations must belong to the packet's (cik, report_date)."""
+
+    def test_same_packet_citation_accepted(self):
+        """Citation from the correct cik+report_date is accepted."""
+        leaf = _leaf()  # cites ROW-aaaa which belongs to 0001287750 / 2025-12-31
+        packet = {"cik": "0001287750", "report_date": "2025-12-31"}
+        out = rederive_citations(leaf, ledger_df=_ledger_df_two_ciks(), packet=packet)
+        assert out["ok"], out["errors"]
+
+    def test_cross_cik_citation_refused(self):
+        """Row exists and values match, but it belongs to a different CIK -- refused."""
+        # Build a leaf that cites ROW-bbbb (which exists in the ledger but belongs to
+        # CIK 0001803498) while the packet declares CIK 0001287750.
+        leaf = {
+            "review_id": "RVQ_BLK_scope_test",
+            "verdict": "extraction_wrong",
+            "confidence": 0.8,
+            "mechanism": "wrong_concept",
+            "culprit_citations": [
+                {
+                    "row_id": "ROW-bbbb",
+                    "field": "fair_value",
+                    "declared_raw": 2000.0,
+                    "instance_raw": 2000.0,
+                    "published": 1980.0,
+                }
+            ],
+        }
+        packet = {"cik": "0001287750", "report_date": "2025-12-31"}
+        out = rederive_citations(leaf, ledger_df=_ledger_df_two_ciks(), packet=packet)
+        assert not out["ok"]
+        err_text = " ".join(out["errors"])
+        assert "packet scope" in err_text or "outside packet" in err_text
+
+    def test_no_packet_skips_scope_check(self):
+        """When packet is None, no scope check is run -- cross-CIK row is accepted."""
+        leaf = {
+            "review_id": "RVQ_BLK_scope_test2",
+            "verdict": "extraction_wrong",
+            "confidence": 0.8,
+            "mechanism": "wrong_concept",
+            "culprit_citations": [
+                {
+                    "row_id": "ROW-bbbb",
+                    "field": "fair_value",
+                    "declared_raw": 2000.0,
+                    "instance_raw": 2000.0,
+                    "published": 1980.0,
+                }
+            ],
+        }
+        out = rederive_citations(leaf, ledger_df=_ledger_df_two_ciks(), packet=None)
+        assert out["ok"], out["errors"]
+
+    def test_validate_dir_cross_packet_citation_refused(self, tmp_path):
+        """validate_dir enforces scope: a verdict citing a row from another CIK is refused."""
+        vd = tmp_path / "verdicts"
+        vd.mkdir()
+        # Leaf cites ROW-bbbb (CIK 0001803498) but worklist says this is CIK 0001287750
+        leaf = {
+            "review_id": "RVQ_BLK_scope_dir",
+            "verdict": "extraction_wrong",
+            "confidence": 0.8,
+            "mechanism": "wrong_concept",
+            "culprit_citations": [
+                {
+                    "row_id": "ROW-bbbb",
+                    "field": "fair_value",
+                    "declared_raw": 2000.0,
+                    "instance_raw": 2000.0,
+                    "published": 1980.0,
+                }
+            ],
+        }
+        (vd / "RVQ_BLK_scope_dir.json").write_text(json.dumps(leaf), encoding="utf-8")
+        wl = tmp_path / "worklist.csv"
+        wl.write_text(
+            "review_id,cik,report_date\nRVQ_BLK_scope_dir,0001287750,2025-12-31",
+            encoding="utf-8",
+        )
+        result = validate_dir(vd, wl, ledger_df=_ledger_df_two_ciks())
+        assert not result["ok"]
+        pf = result["per_file"][0]
+        assert not pf["ok"]
+        assert any("packet scope" in e or "outside packet" in e for e in pf["errors"])
+
+
+# ---------------------------------------------------------------------------
+# Finding 2: validate_dir missing worklist
+# ---------------------------------------------------------------------------
+
+
+class TestValidateDirMissingWorklist:
+    def test_missing_worklist_refuses(self, tmp_path):
+        """validate_dir with a non-existent worklist returns ok=False immediately."""
+        vd = tmp_path / "verdicts"
+        vd.mkdir()
+        wl = tmp_path / "no_such_worklist.csv"
+        result = validate_dir(vd, wl)
+        assert not result["ok"]
+        assert result["errors"]
+        assert any("worklist not found" in e for e in result["errors"])
+
+
+# ---------------------------------------------------------------------------
+# Finding 3: drift_fingerprint.affected_row_ids must cover cited citations
+# ---------------------------------------------------------------------------
+
+
+class TestDriftFingerprintCoverage:
+    def test_fingerprint_covering_cited_row_passes(self):
+        """parser_drift verdict with cited row_id in affected_row_ids passes."""
+        leaf = _leaf(
+            verdict="parser_drift",
+            drift_fingerprint={
+                "field": "interest_rate",
+                "transform_code": "rate_x100",
+                "affected_row_ids": ["ROW-aaaa"],  # covers the cited row
+            },
+        )
+        out = rederive_citations(leaf, ledger_df=_ledger_df())
+        assert out["ok"], out["errors"]
+
+    def test_fingerprint_missing_cited_row_refused(self):
+        """parser_drift verdict where cited row_id is NOT in affected_row_ids is refused."""
+        leaf = _leaf(
+            verdict="parser_drift",
+            drift_fingerprint={
+                "field": "interest_rate",
+                "transform_code": "rate_x100",
+                "affected_row_ids": ["ROW-xxxx"],  # does NOT cover ROW-aaaa (the cited row)
+            },
+        )
+        out = rederive_citations(leaf, ledger_df=_ledger_df())
+        assert not out["ok"]
+        assert any("affected_row_ids" in e for e in out["errors"])
+
+    def test_fingerprint_check_only_runs_for_parser_drift(self):
+        """For extraction_wrong, the fingerprint coverage check is not applied."""
+        leaf = _leaf(
+            verdict="extraction_wrong",
+            # No drift_fingerprint -- that is fine for extraction_wrong
+        )
+        out = rederive_citations(leaf, ledger_df=_ledger_df())
+        assert out["ok"], out["errors"]
+
+
+# ---------------------------------------------------------------------------
+# Finding 6: all-malformed citations refuse without full scan
+# ---------------------------------------------------------------------------
+
+
+class TestAllMalformedCitations:
+    def test_all_malformed_citations_refused_no_scan(self):
+        """When all citations are malformed (missing row_id+field), refuse without scanning."""
+        leaf = {
+            "review_id": "RVQ_BLK_malformed",
+            "verdict": "extraction_wrong",
+            "confidence": 0.8,
+            "mechanism": "test",
+            "culprit_citations": [
+                {"declared_raw": 1.0},  # no row_id or field
+                {"row_id": "", "field": ""},  # empty row_id and field
+            ],
+        }
+        out = rederive_citations(leaf, ledger_df=_ledger_df())
+        assert not out["ok"]
+        assert any("malformed" in e for e in out["errors"])
