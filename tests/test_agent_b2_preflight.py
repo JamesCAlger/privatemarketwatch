@@ -64,7 +64,7 @@ def test_preflight_builds_packet_manifest_and_prompt(tmp_path):
     prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
     # the prompt carries B1's localized citation plus parent-validation instructions.
     assert "Total Senior Unsecured" in prompt
-    assert "Do not call shell commands" in prompt
+    assert "Shell commands ARE allowed" in prompt
     assert "Write the relative" in prompt
     assert "target quarter(s): 2024-12-31" in prompt
     assert "validate_corrections.py" in prompt
@@ -412,6 +412,142 @@ def test_manifest_wave_stamping(tmp_path):
     assert res2["manifest_latest"].endswith("manifest.json")
 
 
+def test_preflight_stages_per_cik_holdings_csv(tmp_path):
+    # Analyst mode: each packet stages a per-CIK, ALL-quarters holdings CSV under the
+    # batch staging dir so the worker can compare filing values against extracted
+    # values (the 0001838126 canary lesson: a unit_rescale factor authored with no
+    # numeric basis because the packet withheld the extracted numbers).
+    import pandas as pd
+    from pathlib import Path
+    d = _dirs(tmp_path)
+    batch = "B2AS"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_stg")
+    holdings = tmp_path / "holdings.parquet"
+    pd.DataFrame([
+        {"cik": "0001743415", "issuer_name": "Astra Acquisition Corp.",
+         "bdc_investment_identifier": "Astra | Second-lien loan",
+         "report_date": "2024-12-31", "fair_value": 100.0, "row_id": "ROW-aaa"},
+        {"cik": "0001743415", "issuer_name": "Astra Acquisition Corp.",
+         "bdc_investment_identifier": "Astra | Second-lien loan",
+         "report_date": "2024-09-30", "fair_value": 90.0, "row_id": "ROW-bbb"},
+        {"cik": "0009999999", "issuer_name": "Other Fund Position",
+         "bdc_investment_identifier": "", "report_date": "2024-12-31",
+         "fair_value": 5.0, "row_id": "ROW-ccc"},
+    ]).to_parquet(holdings)
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "quarters": "2024-12-31",
+                                 "source_review_ids": "RVQ_BLK_stg"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=holdings)
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    staged = manifest["rows"][0]["holdings_csv_path"]
+    assert staged
+    assert (batch_dir / "staging") in Path(staged).parents
+    df = pd.read_csv(staged)
+    assert set(df["cik"].astype(str).str.zfill(10)) == {"0001743415"}
+    assert len(df) == 2                     # ALL quarters for the cik; other ciks excluded
+    assert "row_id" in df.columns and "fair_value" in df.columns
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert staged in prompt
+
+
+def test_preflight_stages_holdings_csv_once_per_cik(tmp_path):
+    # Two packets for the same CIK share one staged CSV (no duplicate work or files).
+    import pandas as pd
+    d = _dirs(tmp_path)
+    batch = "B2A1"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_s1")
+    _seed(d, "RVQ_BLK_s2")
+    holdings = tmp_path / "holdings.parquet"
+    pd.DataFrame([{"cik": "0001743415", "issuer_name": "Astra Acquisition Corp.",
+                   "bdc_investment_identifier": "", "report_date": "2024-12-31",
+                   "fair_value": 1.0, "row_id": "ROW-aaa"}]).to_parquet(holdings)
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_s1"},
+        {"cik": "0001743415", "fix_class": "dedup", "source_review_ids": "RVQ_BLK_s2"},
+    ])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       holdings_path=holdings)
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    paths = {r["holdings_csv_path"] for r in manifest["rows"]}
+    assert len(paths) == 1
+    staged_files = list((batch_dir / "staging").glob("*.csv"))
+    assert len(staged_files) == 1
+
+
+def test_analyst_prompt_enables_shell_and_regrounding(tmp_path):
+    # Analyst mode: the no-shell block is gone; the prompt carries the evidence-CLI
+    # roam commands, requires citation resolution + filing-vs-extracted comparison,
+    # and says plainly when the holdings CSV could not be staged.
+    d = _dirs(tmp_path)
+    batch = "B2AP"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_ap")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_ap"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=None)
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Do not call shell commands" not in prompt
+    assert "do NOT use shell" not in prompt
+    assert "Shell commands ARE allowed" in prompt
+    assert "evidence_cli.py" in prompt
+    assert "--bundle" in prompt
+    assert "grid --table" in prompt
+    assert "roam --query" in prompt
+    assert "filing shows X, extracted shows Y" in prompt
+    assert "FILE EDIT tool ONLY" in prompt      # BOM lesson: shell-written leaves fail intake
+    assert "holdings CSV unavailable at preflight" in prompt
+    # tmp bundles carry no accession and no filings index exists here
+    assert "no cached filing resolved" in prompt
+
+
+def test_prompt_embeds_promoted_example_leaf(tmp_path):
+    # q4b2r4an trace lesson: workers spent 3-6 shell calls hunting the repo for a
+    # worked leaf example despite the embedded contract. Embed one PROMOTED leaf of
+    # the same fix_class (shape precedent, another CIK's values) in the prompt.
+    d = _dirs(tmp_path)
+    batch = "B2EX"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_ex")
+    promoted = tmp_path / "promoted"
+    (promoted / "0009990001").mkdir(parents=True)
+    (promoted / "0009990001" / "subtotal_filter.json").write_text(json.dumps({
+        "cik": "0009990001", "fix_class": "subtotal_filter",
+        "template": {"patterns": ["total senior secured example"], "match_mode": "exact"},
+        "confidence": 0.9, "rationale": "promoted example rationale"}), encoding="utf-8")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_ex"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=None,
+                       promoted_dir=promoted)
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "Worked example" in prompt
+    assert "match its SHAPE, not its values" in prompt
+    assert "total senior secured example" in prompt
+
+
+def test_prompt_example_absent_notes_no_promoted_leaf(tmp_path):
+    d = _dirs(tmp_path)
+    batch = "B2EN"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_en")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_en"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=None,
+                       promoted_dir=tmp_path / "no_such_promoted")
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "no promoted leaf of this fix_class" in prompt
+
+
 def test_release_manifest_accepts_wave_path(tmp_path, monkeypatch):
     d = _dirs(tmp_path)
     batch = "B2R"
@@ -425,3 +561,68 @@ def test_release_manifest_accepts_wave_path(tmp_path, monkeypatch):
     monkeypatch.setattr(pf.review_lock, "release", lambda k: released.append(k))
     pf.release_manifest(res["manifest_path"])
     assert released == ["B2__0001743415__subtotal_filter"]
+
+
+# --- escalation leaf (2026-08-21) -------------------------------------------------
+
+
+def test_prompt_offers_escalation_path(tmp_path):
+    # The forced-authoring rule is gone: a worker whose binding fix_class cannot
+    # express the verified defect writes <fix_class>.escalation.json instead of a
+    # plausible-looking no-op (the 0001838126 factor-1.0 lesson).
+    d = _dirs(tmp_path)
+    batch = "B2ESC"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_esc")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "subtotal_filter",
+                                 "source_review_ids": "RVQ_BLK_esc"}])
+    pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                       bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                       fix_class="subtotal_filter", holdings_path=None)
+    prompt = (batch_dir / "prompts" / "0001743415__subtotal_filter.md").read_text()
+    assert "subtotal_filter.escalation.json" in prompt
+    assert "never both" in prompt
+    assert "write the narrowest valid correction" not in prompt
+
+
+def test_preflight_skips_escalated_packets(tmp_path):
+    d = _dirs(tmp_path)
+    batch = "B2ES"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_e1")
+    _seed(d, "RVQ_BLK_e2", cik="0001999988")
+    _write_worklist(batch_dir, [
+        {"cik": "0001743415", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_e1"},
+        {"cik": "0001999988", "fix_class": "subtotal_filter", "source_review_ids": "RVQ_BLK_e2"},
+    ])
+    esc_dir = d["corrections_dir"] / "0001999988"
+    esc_dir.mkdir(parents=True)
+    (esc_dir / "subtotal_filter.escalation.json").write_text("{}", encoding="utf-8")
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                             bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                             fix_class="subtotal_filter")
+    assert res["n_dispatch"] == 1
+    assert res["n_skipped_escalated"] == 1
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert manifest["skipped_escalated"][0]["cik"] == "0001999988"
+    assert "template-authoring" in manifest["skipped_escalated"][0]["reason"]
+
+
+def test_validator_cli_accepts_escalation_sibling(tmp_path, capsys):
+    from scripts.agent_b2 import validate_corrections as vc
+    d = tmp_path / "0001838126"
+    d.mkdir()
+    (d / "unit_rescale.escalation.json").write_text(json.dumps({
+        "cik": "0001838126", "mechanism": "unit_scale", "fix_class": "unit_rescale",
+        "diagnosis": "Filing NAV-per-share 25.22 vs extracted fund-financials 1000.0; "
+                     "defect is outside the holdings template's reach.",
+        "suggested_fix_class": "fund_financials_value_fix",
+        "evidence_citations": [{"table_index": 54, "row_index": 6,
+                                "quoted_text": "Net asset value per share"}],
+        "confidence": 0.8}), encoding="utf-8")
+    rc = vc.main(["--correction", str(d / "unit_rescale.json"),
+                  "--expected-cik", "0001838126",
+                  "--expected-fix-class", "unit_rescale"])
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "ESCALATED" in out

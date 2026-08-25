@@ -73,9 +73,9 @@ KNOWN_FIX_CLASSES = frozenset({
     "spv_lookthrough",
     # stage 2 -- per-row value/scale/mapping (change row VALUES)
     "rate_rescale", "all_pik_normalization", "column_remap", "unit_rescale",
-    "classification_fix",
+    "classification_fix", "source_anchored_value",
     # stage 3 -- not a data fix: the rule/anchor is what is wrong
-    "rule_scope", "anchor_fix",
+    "rule_scope", "anchor_fix", "identifier_rate_grammar",
     "unknown",
 })
 

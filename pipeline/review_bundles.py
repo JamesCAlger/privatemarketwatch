@@ -325,6 +325,7 @@ def _index_holdings(pairs: set[tuple[str, str]], cap: int) -> dict[tuple[str, st
     if not HOLDINGS_FILE.exists() or not pairs:
         return idx
     keep_cols = (
+        "row_id",  # rebuild-stable selector anchor for B2 row_selector grounding
         "issuer_name", "investment_identifier", "bdc_investment_identifier",
         "fair_value", "cost", "interest_rate", "maturity_date",
         "index_classification", "asset_class", "source", "accession_number",

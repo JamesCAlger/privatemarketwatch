@@ -33,21 +33,55 @@ def main(argv=None) -> int:
     p.add_argument(
         "--expected-fix-class", default=None, help="Require the correction fix_class to match."
     )
+    p.add_argument(
+        "--verify-source", action="store_true",
+        help="For source_anchored_value leaves, re-parse the cached filing and verify "
+             "every assertion (cell value, quoted text, row-fingerprint witnesses, "
+             "table health, bridge co-sign). Cache-only; fail closed.")
+    p.add_argument("--holdings", type=Path, default=None,
+                   help="Holdings frame for witness verification (default: unified parquet).")
     args = p.parse_args(argv)
 
     if args.correction is not None:
+        # Escalation-aware (2026-08-21): a worker may write <fix_class>.escalation.json
+        # INSTEAD of the correction when the binding fix_class cannot express the
+        # verified defect. Resolve which artifact exists, then validate it with the
+        # matching schema. An escalation validates as ESCALATED (exit 0) -- the
+        # dispatcher routes it; it is never applied to data.
+        path = args.correction
+        is_escalation = path.name.endswith(correction_leaf.ESCALATION_SUFFIX)
+        if not is_escalation and not path.exists():
+            sibling = path.with_name(path.stem + correction_leaf.ESCALATION_SUFFIX)
+            if sibling.exists():
+                path, is_escalation = sibling, True
         try:
-            obj = json.loads(args.correction.read_text(encoding="utf-8"))
+            obj = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
             print(f"INVALID: unreadable/invalid JSON: {exc}", file=sys.stderr)
             return 1
-        rep = correction_leaf.validate_correction(
-            obj, expected_cik=args.expected_cik, expected_fix_class=args.expected_fix_class,
-        )
+        if is_escalation:
+            rep = correction_leaf.validate_escalation(
+                obj, expected_cik=args.expected_cik, expected_fix_class=args.expected_fix_class,
+            )
+        else:
+            rep = correction_leaf.validate_correction(
+                obj, expected_cik=args.expected_cik, expected_fix_class=args.expected_fix_class,
+            )
         for w in rep.warnings:
             print(f"WARN  {rep.cik}/{rep.mechanism}: {w}")
+        if rep.ok and not is_escalation and args.verify_source \
+                and str(obj.get("fix_class")) == "source_anchored_value":
+            from pipeline.source_anchor_verify import verify_leaf
+            vrep = verify_leaf(obj, holdings_path=args.holdings)
+            if not vrep["ok"]:
+                for e in vrep["errors"]:
+                    print(f"ERROR {rep.cik}/{rep.mechanism}: source-verify: {e}",
+                          file=sys.stderr)
+                return 1
+            print(f"SOURCE-VERIFIED {rep.cik}/{rep.mechanism} "
+                  f"({len(vrep['checks'])} assertion(s))")
         if rep.ok:
-            print(f"OK    {rep.cik}/{rep.mechanism}")
+            print(f"{'ESCALATED' if is_escalation else 'OK'}    {rep.cik}/{rep.mechanism}")
             return 0
         for e in rep.errors:
             print(f"ERROR {rep.cik}/{rep.mechanism}: {e}", file=sys.stderr)

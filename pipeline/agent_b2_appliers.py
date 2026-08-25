@@ -35,11 +35,19 @@ def _fv_sum(df: pd.DataFrame, mask) -> float | None:
 def apply_dedup(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
     """Drop rows duplicated on ``template['match_fields']`` (keep first/last). match_fields
     must scope a true duplicate (typically INCLUDING report_date) so legitimate
-    comparative-period rows are not collapsed."""
+    comparative-period rows are not collapsed.
+
+    Optional ``row_selector`` (2026-08-21) restricts which rows may be DROPPED: group
+    membership is still judged over the whole (already quarter-scoped) frame, but only
+    selector-matched rows are eligible for deletion. Bounds the blast radius to the
+    grounded rows (q4b2r4an: a key-only dedup for two cited rows collapsed 563 groups)."""
     match_fields = list(template.get("match_fields") or [])
     keep = template.get("keep", "first")
+    row_selector = template.get("row_selector")
     audit: dict = {"fix_class": "dedup", "match_fields": match_fields, "keep": keep,
                    "rows_in": int(len(df))}
+    if row_selector is not None:
+        audit["row_selector"] = row_selector
     missing = [c for c in match_fields if c not in df.columns]
     if not match_fields or missing:
         audit.update(status="error", rows_dropped=0, rows_out=int(len(df)),
@@ -47,6 +55,14 @@ def apply_dedup(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
                               else "no match_fields"))
         return df, audit
     dup_mask = df.duplicated(subset=match_fields, keep=keep)
+    if row_selector is not None:
+        sel_mask, err = _selector_mask(df, row_selector)
+        if err or not sel_mask.any():
+            audit.update(status="error", rows_dropped=0, rows_out=int(len(df)),
+                         message=err or "row_selector matched no rows")
+            return df, audit
+        audit["rows_selected"] = int(sel_mask.sum())
+        dup_mask = dup_mask & sel_mask
     audit.update(status="ok", rows_dropped=int(dup_mask.sum()),
                  rows_out=int((~dup_mask).sum()), fv_dropped=_fv_sum(df, dup_mask))
     return df.loc[~dup_mask].copy(), audit
@@ -109,7 +125,7 @@ def apply_spv_lookthrough(df: pd.DataFrame, template: dict) -> tuple[pd.DataFram
     return df.loc[~drop].copy(), audit
 
 
-def _selector_mask(df: pd.DataFrame, row_selector: dict | None) -> tuple[pd.Series, str]:
+def _one_selector_mask(df: pd.DataFrame, row_selector: dict | None) -> tuple[pd.Series, str]:
     """AND-of-equalities mask over ROW_SELECTOR_KEYS that are holdings columns.
 
     Empty/missing selector selects ALL rows (the correction is already scoped to one
@@ -131,9 +147,29 @@ def _selector_mask(df: pd.DataFrame, row_selector: dict | None) -> tuple[pd.Seri
     return mask, ""
 
 
+def _selector_mask(df: pd.DataFrame, row_selector) -> tuple[pd.Series, str]:
+    """Selector mask: one selector object, or a list of selector objects OR-combined
+    (2026-08-21, q4b2r4an lesson -- a leaf may bind every cited row instead of
+    widening to a whole quarter or fixing one row and abandoning the rest). List
+    semantics: OR across entries, AND within an entry; any entry error fails the
+    whole selector (fail-safe, no partial application)."""
+    if isinstance(row_selector, list):
+        if not row_selector:
+            return pd.Series(False, index=df.index), "row_selector list is empty"
+        combined = pd.Series(False, index=df.index)
+        for i, sel in enumerate(row_selector):
+            m, err = _one_selector_mask(df, sel)
+            if err:
+                return pd.Series(False, index=df.index), f"row_selector[{i}]: {err}"
+            combined |= m
+        return combined, ""
+    return _one_selector_mask(df, row_selector)
+
+
 def _value_fix_audit(fix_class: str, df: pd.DataFrame, template: dict) -> dict:
+    sel = template.get("row_selector")
     return {"fix_class": fix_class, "rows_in": int(len(df)),
-            "row_selector": dict(template.get("row_selector") or {})}
+            "row_selector": (list(sel) if isinstance(sel, list) else dict(sel or {}))}
 
 
 def apply_rate_rescale(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
@@ -264,6 +300,60 @@ def apply_all_pik_normalization(df: pd.DataFrame, template: dict) -> tuple[pd.Da
     return out, audit
 
 
+def apply_source_anchored_value(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
+    """Set each assertion's holdings field to the FILING's own value (source.value x
+    unit_multiplier) for the selected rows. The worker never authors a number the
+    filing does not contain: ``pipeline.source_anchor_verify`` re-parses the cached
+    filing at intake + gate and refuses the leaf on any cell/witness mismatch, so this
+    applier trusts an already-verified leaf. All-or-nothing: any unresolvable
+    assertion fails the whole leaf unchanged (no partial application)."""
+    assertions = list(template.get("assertions") or [])
+    audit: dict = {"fix_class": "source_anchored_value", "rows_in": int(len(df)),
+                   "n_assertions": len(assertions), "assertions": []}
+    if not assertions:
+        audit.update(status="error", rows_changed=0, message="no assertions")
+        return df, audit
+    resolved: list[tuple[pd.Series, str, float]] = []
+    for i, a in enumerate(assertions):
+        field = str((a or {}).get("field") or "")
+        src = (a or {}).get("source") or {}
+        value, mult = src.get("value"), src.get("unit_multiplier", 1)
+        if field not in df.columns:
+            audit.update(status="error", rows_changed=0,
+                         message=f"assertions[{i}]: field column missing: {field!r}")
+            return df, audit
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            audit.update(status="error", rows_changed=0,
+                         message=f"assertions[{i}]: bad source.value: {value!r}")
+            return df, audit
+        mask, err = _selector_mask(df, (a or {}).get("row_selector"))
+        if err or not mask.any():
+            audit.update(status="error", rows_changed=0,
+                         message=f"assertions[{i}]: {err or 'row_selector matched no rows'}")
+            return df, audit
+        resolved.append((mask, field, float(value) * float(mult)))
+    out = df.copy()
+    total_changed = 0
+    for i, (mask, field, target) in enumerate(resolved):
+        before = out.loc[mask, field].head(3).tolist()
+        out.loc[mask, field] = target
+        total_changed += int(mask.sum())
+        audit["assertions"].append({"index": i, "field": field, "value_set": target,
+                                    "rows_changed": int(mask.sum()),
+                                    "before_sample": before})
+    fv_masks = [m for m, f, _ in resolved if f == "fair_value"]
+    if fv_masks:
+        union = fv_masks[0]
+        for m in fv_masks[1:]:
+            union = union | m
+        fv_delta = round((_fv_sum(out, union) or 0.0) - (_fv_sum(df, union) or 0.0), 2)
+    else:
+        fv_delta = 0.0
+    audit.update(status="ok", rows_changed=total_changed, rows_out=int(len(out)),
+                 fv_delta=fv_delta)
+    return out, audit
+
+
 def apply_missing_position_add(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
     """Append under-counted positions. Every position MUST carry ``source_row_id`` (the
     staging row being recovered -- no fabrication; parity with agent_rule row_add) plus
@@ -313,6 +403,7 @@ POST_STAGING_APPLIERS: dict[str, Callable[[pd.DataFrame, dict], tuple[pd.DataFra
     "classification_fix": apply_classification_fix,
     "all_pik_normalization": apply_all_pik_normalization,
     "missing_position_add": apply_missing_position_add,
+    "source_anchored_value": apply_source_anchored_value,
 }
 
 

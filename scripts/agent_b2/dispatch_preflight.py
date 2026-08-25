@@ -141,11 +141,13 @@ def _bundle_identifier_rows(bundles: list[dict]) -> list[dict]:
                     continue
                 name = str(r.get("issuer_name") or "").strip()
                 ident = str(r.get("bdc_investment_identifier") or "").strip()
-                if not (name or ident):
+                rid = str(r.get("row_id") or "").strip()
+                if not (name or ident or rid):
                     continue
                 rec = {"issuer_name": name, "bdc_investment_identifier": ident,
+                       "row_id": rid,
                        "report_date": str(r.get("report_date") or "").strip()}
-                key = (name, ident, rec["report_date"])
+                key = (name, ident, rid, rec["report_date"])
                 if key not in seen:
                     seen.add(key)
                     out.append(rec)
@@ -165,24 +167,84 @@ def _verify_identifiers(rows: list[dict], cik: str,
             r["match_count"] = None
         return rows
     import duckdb
+    con = duckdb.connect()
     src = str(holdings_path).replace("'", "''")
     reader = ("read_parquet" if str(holdings_path).endswith(".parquet")
               else "read_csv_auto")
-    df = duckdb.connect().execute(
-        f"SELECT issuer_name, bdc_investment_identifier, report_date FROM {reader}('{src}') "
+    # row_id only exists on holdings built >= 2026-08-21; select it when present
+    # so candidates ground on the stable id, but stay usable on older frames.
+    have = {r[0] for r in con.execute(
+        f"DESCRIBE SELECT * FROM {reader}('{src}') LIMIT 0").fetchall()}
+    sel = ["issuer_name", "bdc_investment_identifier", "report_date"]
+    if "row_id" in have:
+        sel.append("row_id")
+    df = con.execute(
+        f"SELECT {', '.join(sel)} FROM {reader}('{src}') "
         f"WHERE ltrim(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), '0') = ?",
         [str(cik).lstrip("0")]).fetchdf()
     cols = {c: df[c].fillna("").astype(str).str.strip() for c in df.columns}
     for r in rows:
         mask = None
-        for key in ("issuer_name", "bdc_investment_identifier", "report_date"):
+        for key in ("row_id", "issuer_name", "bdc_investment_identifier", "report_date"):
             want = r.get(key) or ""
-            if not want:
+            if not want or key not in cols:
                 continue
             m = cols[key] == want.strip()
             mask = m if mask is None else (mask & m)
         r["match_count"] = int(mask.sum()) if mask is not None else 0
     return rows
+
+
+def _stage_holdings_csv(cik: str, holdings_path: Path | None,
+                        staging_dir: Path) -> Path | None:
+    """Stage the per-CIK, ALL-quarters extracted holdings slice as a CSV the worker
+    can read (analyst mode). Every column survives -- the worker needs the extracted
+    values (fair_value, rates, principal, row_id) to compare against the filing, not
+    just the identifiers. Returns None when the holdings frame is unavailable
+    (workers then see an explicit 'unavailable' note, never a silent gap)."""
+    if holdings_path is None or not Path(holdings_path).exists():
+        return None
+    staging_dir.mkdir(parents=True, exist_ok=True)
+    out = staging_dir / f"{cik}_holdings.csv"
+    import duckdb
+    con = duckdb.connect()
+    src = str(holdings_path).replace("'", "''")
+    reader = ("read_parquet" if str(holdings_path).endswith(".parquet")
+              else "read_csv_auto")
+    dst = str(out).replace("'", "''")
+    cik_digits = str(cik).lstrip("0")  # cik already validated against _CIK_RE upstream
+    con.execute(
+        f"COPY (SELECT * FROM {reader}('{src}') "
+        f"WHERE ltrim(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), '0') "
+        f"= '{cik_digits}' ORDER BY report_date, issuer_name) "
+        f"TO '{dst}' (HEADER, DELIMITER ',')")
+    return out
+
+
+def _filing_html_paths(bundles: list[dict]) -> list[str]:
+    """Resolve the cached source filing HTML path(s) the bundles' evidence points at,
+    so the analyst worker can open the raw document directly (the evidence CLI remains
+    the preferred, parsed view). Path construction is deterministic and cache-only;
+    a missing cache is annotated, not hidden."""
+    from pipeline.html_soi_evidence import (
+        _html_path, resolve_accessions_from_index, resolve_accessions_from_rows)
+    from scripts.review_agent.evidence_cli import _ENGINE_SOURCE, _rows_from_bundle
+    out: list[str] = []
+    seen: set[str] = set()
+    for b in bundles:
+        source = _ENGINE_SOURCE.get(str(b.get("engine") or ""), "BDC")
+        accs = resolve_accessions_from_rows(_rows_from_bundle(b))
+        if not accs:
+            accs = resolve_accessions_from_index(
+                source, str(b.get("cik") or ""), str(b.get("report_date") or ""))
+        for acc in accs[:2]:
+            p = _html_path(source, str(b.get("cik") or ""), acc)
+            key = str(p)
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(key if p.exists() else f"{key}  [NOT CACHED]")
+    return out
 
 
 _MAX_GROUNDED_IDENTIFIERS = 20
@@ -196,6 +258,8 @@ def _grounding_block(rows: list[dict]) -> str:
     lines = []
     for r in rows[:_MAX_GROUNDED_IDENTIFIERS]:
         parts = []
+        if r.get("row_id"):
+            parts.append(f"row_id: {json.dumps(r['row_id'])}")
         if r.get("issuer_name"):
             parts.append(f"issuer_name: {json.dumps(r['issuer_name'])}")
         if r.get("bdc_investment_identifier"):
@@ -210,6 +274,34 @@ def _grounding_block(rows: list[dict]) -> str:
     if len(rows) > _MAX_GROUNDED_IDENTIFIERS:
         lines.append(f"  - ... {len(rows) - _MAX_GROUNDED_IDENTIFIERS} more not shown")
     return "\n".join(lines)
+
+
+DEFAULT_PROMOTED = config.PROJECT_ROOT / "data" / "overrides" / "agent_b2_corrections"
+
+
+def _example_leaf_block(fix_class: str, promoted_dir: Path = DEFAULT_PROMOTED) -> str:
+    """One PROMOTED leaf of the same fix_class, embedded as a worked example.
+    q4b2r4an trace lesson: workers spent 3-6 shell calls each hunting the repo for
+    schema precedent despite the embedded contract excerpt. Deterministic pick
+    (first by path); rationale truncated; the values belong to another CIK."""
+    try:
+        candidates = sorted(Path(promoted_dir).glob(f"*/{fix_class}.json"))
+    except OSError:
+        candidates = []
+    for p in candidates:
+        try:
+            leaf = json.loads(p.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if str(leaf.get("fix_class") or "") != fix_class:
+            continue
+        rationale = str(leaf.get("rationale") or "")
+        if len(rationale) > 240:
+            leaf["rationale"] = rationale[:240] + " ..."
+        return ("Worked example (a PROMOTED leaf of this fix_class from another CIK; "
+                "match its SHAPE, not its values):\n" + json.dumps(leaf, indent=2))
+    return ("Worked example: no promoted leaf of this fix_class exists yet; follow the "
+            "contract excerpt above exactly.")
 
 
 def _contract_excerpt(fix_class: str) -> str:
@@ -235,13 +327,18 @@ def _contract_excerpt(fix_class: str) -> str:
     # Nested-structure contracts (the validator enforces these too).
     if "row_selector" in tpl.allowed:
         from pipeline.correction_leaf import ROW_SELECTOR_KEYS
-        lines.append(f"- template.row_selector (object) keys must be from "
-                     f"{sorted(ROW_SELECTOR_KEYS)}; equality match, AND-combined. It MUST "
-                     f"include issuer_name or bdc_investment_identifier -- copy the exact "
-                     f"string from the 'Holdings-side selector identifiers' section above "
+        lines.append(f"- template.row_selector: ONE selector object, or a LIST of selector "
+                     f"objects (OR-combined) to bind EVERY cited row -- use the list instead "
+                     f"of widening scope or fixing one row and abandoning the rest. Object "
+                     f"keys must be from {sorted(ROW_SELECTOR_KEYS)}; equality match, "
+                     f"AND-combined within an object. Each object MUST include row_id, "
+                     f"issuer_name, or bdc_investment_identifier. PREFER row_id when the "
+                     f"grounded identifier list above shows one (it is the rebuild-stable "
+                     f"ROW-... id and cannot drift with issuer-text normalization); "
+                     f"otherwise copy the exact issuer/identifier string from that list "
                      f"(NOT the filing-citation text, which often differs and produces a "
-                     f"no-op selector the gate refuses); table/row coordinates alone "
-                     f"cannot select holdings rows.")
+                     f"no-op selector the gate refuses); table/row coordinates alone cannot "
+                     f"select holdings rows.")
     if {"from_field", "to_field", "field"} & tpl.allowed:
         lines.append("- Field names refer to the UNIFIED HOLDINGS schema (the allowed "
                      "lists above), NEVER the filing table's own column headings.")
@@ -256,12 +353,28 @@ def _contract_excerpt(fix_class: str) -> str:
     if "positions" in tpl.allowed:
         lines.append("- Each template.positions[] entry REQUIRES issuer_name, fair_value "
                      "(number), report_date, source_row_id (the staging/source row id "
-                     "being recovered -- copy it from the evidence; NEVER invent one), "
+                     "being recovered -- copy it from the evidence; NEVER invent one; "
+                     "current format src:{accession}:{context_id}), "
                      "and bdc_dimensions_raw. The gate re-verifies source_row_id and "
                      "fair_value against raw staging; a fabricated position cannot pass.")
     if "entities" in tpl.allowed:
         lines.append("- Each template.entities[] entry: {legal_entity, decision in "
                      "{use_equity, keep_lookthrough}}.")
+    if "assertions" in tpl.allowed:
+        lines.append(
+            "- Each template.assertions[] entry: {row_selector (object or list, same "
+            "rules as above), field (unified holdings numeric field), source "
+            "{accession_number, table_index, row_index, cell_index, quoted_text (the "
+            "cell as the grid shows it), value (the LITERAL number in that cell), "
+            "unit_multiplier in {1, 1000, 1000000} (must be 1 for rate fields)}, "
+            "witnesses: >= 2 entries {cell_index, field (!= the asserted field), "
+            "value} naming OTHER cells in the SAME row whose values match the "
+            "position's already-correct extracted fields. You never author a number: "
+            "you point at the filing cell that contains it. The parent re-parses the "
+            "cached filing and REFUSES the leaf if any cited cell, quoted text, or "
+            "witness does not match exactly -- copy coordinates and values straight "
+            "from the grid output, and pick witnesses whose extracted values you "
+            "verified in the holdings CSV.")
     lines.append("- Do not emit code, SQL, file paths, or row-index deletions.")
     lines.append("- The prompt's CIK and fix_class are binding; do not switch fix_class.")
     return "\n".join(lines)
@@ -269,7 +382,10 @@ def _contract_excerpt(fix_class: str) -> str:
 
 def _worker_prompt(row: dict, verdicts: list[dict], *, contract_abs: str, bundle_paths: list[str],
                    correction_path: Path, validator: str, py: str,
-                   grounded_identifiers: list[dict] | None = None) -> str:
+                   grounded_identifiers: list[dict] | None = None,
+                   holdings_csv: Path | None = None,
+                   filing_paths: list[str] | None = None,
+                   example_block: str = "") -> str:
     cik = row["cik"]
     fix_class = row["fix_class"]
     mechanism = row.get("mechanism", "")
@@ -278,18 +394,24 @@ def _worker_prompt(row: dict, verdicts: list[dict], *, contract_abs: str, bundle
     srids = row.get("source_review_ids") or []
     if isinstance(srids, str):
         srids = [s for s in srids.split(";") if s.strip()]
-    bundle_lines = "\n".join(f"    \"{py}\" \"{EVIDENCE_CLI.resolve().as_posix()}\" --bundle \"{b}\" totals"
+    cli = EVIDENCE_CLI.resolve().as_posix()
+    # The leading "& " is load-bearing: without the PowerShell call operator every
+    # worker's first CLI attempt fails on quoting (q4b2r4an trace lesson -- workers
+    # copy this line verbatim).
+    bundle_lines = "\n".join(f"    & \"{py}\" \"{cli}\" --bundle \"{b}\" overview"
                              for b in bundle_paths) or "    (no bundles resolved)"
-    return f"""Agent B2 remediation worker.
+    holdings_line = (f"  \"{holdings_csv}\"" if holdings_csv is not None
+                     else "  (holdings CSV unavailable at preflight)")
+    filing_lines = "\n".join(f"  - {p}" for p in (filing_paths or [])) or \
+        "  (no cached filing resolved from the source bundles at preflight)"
+    return f"""Agent B2 remediation worker (analyst mode).
 
 You author ONE constrained correction for ONE (cik, fix_class) packet that Agent B1 already
 adjudicated as a real data error. You do NOT re-decide the error -- you propose the bounded
-TEMPLATE that fixes it. Do not launch nested Codex; no tests, rebuilds, network, SEC, repo
-scans, git, package installs, or shell commands.
-
-Windows sandbox note: do NOT use shell/command tools for this packet. The parent preflight has
-embedded the packet fields and B1 citations below, and the parent dispatcher re-validates your
-JSON after you exit. Use only the file edit tool to write the one correction file.
+TEMPLATE that fixes it, and you GROUND every numeric and selector choice in the source
+filing and the extracted holdings data before writing it. Do not launch nested Codex; no
+tests, rebuilds, network, SEC downloads, git, or package installs.
+Shell commands ARE allowed, but ONLY for the read-only analyst tools listed below.
 
 The packet:
 - CIK: {cik}    fix_class: {fix_class}    mechanism: {mechanism}
@@ -299,42 +421,74 @@ The packet:
 The CIK and fix_class are binding. The JSON you write MUST keep:
 - "cik": "{cik}"
 - "fix_class": "{fix_class}"
-Do not emit a different fix_class, even if the filing suggests another mechanism. If the
-requested fix_class is not supported by source evidence, write the narrowest valid correction
-for the requested class with low confidence and explain the residual risk.
+Do not emit a different fix_class, even if the filing suggests another mechanism. If, after
+grounding, the requested fix_class CANNOT express the defect you verified (wrong layer,
+unsupported field, inexpressible row shape), do NOT author a plausible-looking correction.
+Write `{fix_class}.escalation.json` INSTEAD (see Allowed write below) with: cik, fix_class
+(keep "{fix_class}"), mechanism, diagnosis (the verified defect WITH the filing-vs-extracted
+numbers), suggested_fix_class (free text; it may name a class that does not exist yet),
+evidence_citations, confidence, rationale. An escalation routes the packet to the
+template-authoring basket; it is never applied to data.
 
 What B1 localized as the defect (re-ground these against source before trusting them):
 {_citations_block(verdicts)}
+
+Analyst workspace (READ-ONLY; all paths ABSOLUTE; your working directory is NOT the repo
+root; invoke Python via the exact interpreter shown, "{py}"):
+- Extracted holdings for CIK {cik} -- ALL quarters, ALL columns, including the
+  rebuild-stable row_id (read with pandas or PowerShell Import-Csv):
+{holdings_line}
+- Source filing roam (the cached filing parsed to the SAME table grid the [tN/rM]
+  citations index; run one line at a time):
+{bundle_lines}
+  Subcommands: overview (SOI-like tables), tables (all tables), grid --table N
+  [--start M --count K] (read rows -- resolves a [tN/rM] citation exactly),
+  roam --query "term1,term2" (search the whole filing), totals (the filing's own
+  total/subtotal lines).
+- Raw cached filing HTML (large; prefer the roam CLI above):
+{filing_lines}
 
 Holdings-side selector identifiers (the EXACT text in the unified holdings frame; any
 template.row_selector must equality-match one of these strings -- filing-citation text
 often differs and produces a no-op selector that the gate refuses):
 {_grounding_block(grounded_identifiers or [])}
 
-All paths are ABSOLUTE; your working directory is NOT the repo root. Invoke Python via the
-exact interpreter shown ("{py}").
-
 {_contract_excerpt(fix_class)}
 
-Allowed write (exactly one file):
+{example_block or _example_leaf_block(fix_class)}
+
+Allowed write (exactly ONE file -- the correction OR the escalation, never both):
 - {correction_leaf}
+- {fix_class}.escalation.json  (ONLY when the requested class cannot express the
+  verified defect)
 
 Your current working directory is the correction directory for CIK {cik}. Write the relative
 file name `{correction_leaf}` only. Do not write an absolute path. The parent dispatcher will
 validate the resulting file at:
 - {correction_path}
 
-Required workflow:
-1. Use the embedded packet fields and citations below. Do not call shell commands.
-2. Choose template params that match the requested fix_class, using EXACTLY the params in
+Required workflow (analyst mode):
+1. Resolve EVERY citation above with grid/roam and read the surrounding rows for context.
+2. Find the corresponding extracted rows in the holdings CSV (by row_id, issuer_name, or
+   bdc_investment_identifier) and note their values.
+3. Compare the filing values with the extracted values. Every numeric template param
+   (factor, rate, fair_value, ...) MUST be derived from that comparison, and the rationale
+   must state it as "filing shows X, extracted shows Y". If you cannot derive a param this
+   way, say so explicitly in the rationale and lower the confidence accordingly.
+4. Choose template params that match the requested fix_class, using EXACTLY the params in
    the embedded contract excerpt above (required params present, no extras).
-3. Write the correction leaf JSON to the one allowed path: cik, mechanism, fix_class,
+5. Write the correction leaf JSON to the one allowed path: cik, mechanism, fix_class,
    template (the bounded params), source_review_ids, evidence_citations (the cited rows),
    confidence (0..1), rationale. NO code, SQL, paths, or row-index deletions.
-4. Do not run validation inside the worker. The parent dispatcher validates with:
+   Write the leaf with the FILE EDIT tool ONLY -- never via shell redirection
+   (PowerShell Out-File/Set-Content stamps a UTF-8 BOM the validator rejects).
+6. Do not run validation inside the worker. The parent dispatcher validates with:
    "{py}" "{validator}" --correction "{correction_path}" --expected-cik "{cik}" --expected-fix-class "{fix_class}"
-5. Finish with a concise report: cik, fix_class, template, confidence, residual risk,
-   correction path.
+7. Finish with a concise report: cik, fix_class, template, confidence, what you verified
+   vs could not verify, residual risk, correction path.
+
+Keep the investigation bounded: prefer roam/grid over dumping whole tables; you should
+rarely need more than ~15 shell commands.
 
 Evidence citations to copy into evidence_citations:
 {_citations_json(verdicts)}
@@ -350,6 +504,7 @@ def preflight_batch(
     contract_rel: str = DEFAULT_CONTRACT, fix_class: str | None = None, reserve: bool = False,
     review_queue_path: Path | None = None,
     holdings_path: Path | None = config.UNIFIED_HOLDINGS_PARQUET_FILE,
+    promoted_dir: Path = DEFAULT_PROMOTED,
 ) -> dict:
     batch_dir = _batch_dir(base_dir, batch_id)
     rows = _read_worklist(batch_dir)
@@ -383,6 +538,7 @@ def preflight_batch(
     skipped_policy: list[dict] = []
     skipped_stale: list[dict] = []
     skipped_existing: list[dict] = []
+    skipped_escalated: list[dict] = []
     supported_fix_classes = implemented_fix_classes()
     for row in rows:
         cik = str(row.get("cik") or "").strip()
@@ -456,6 +612,15 @@ def preflight_batch(
                 "cik": cik, "fix_class": fc,
                 "reason": f"staged correction already exists at {correction_path}"})
             continue
+        escalation_path = correction_path.with_name(f"{fc}.escalation.json")
+        if escalation_path.exists():
+            # An escalated packet needs template authoring / human review, not another
+            # worker -- redispatching would just re-derive the same inexpressible defect.
+            skipped_escalated.append({
+                "cik": cik, "fix_class": fc,
+                "reason": f"escalation already staged at {escalation_path}; awaiting "
+                          "template-authoring/human basket"})
+            continue
         correction_path.parent.mkdir(parents=True, exist_ok=True)
         # Lock key doubles as a lock filename ({lock_key}.lock); Windows forbids ':'
         # in filenames (reserved for drive letters / NTFS ADS), so use a safe separator.
@@ -481,22 +646,40 @@ def preflight_batch(
                 raise PreflightError(f"{r['lock_key']}: failed to acquire lock; released prior claims")
             acquired.append(r["lock_key"])
 
+    staging_dir = batch_dir / "staging"
+    staged_by_cik: dict[str, Path | None] = {}
+    example_by_fc: dict[str, str] = {}
     for r in manifest_rows:
         verdicts = [json.loads(Path(p).read_text(encoding="utf-8")) for p in r["verdict_paths"]]
         bundles = [json.loads(Path(p).read_text(encoding="utf-8")) for p in r["bundle_paths"]]
         grounded = _verify_identifiers(_bundle_identifier_rows(bundles), r["cik"], holdings_path)
         r["n_grounded_identifiers"] = len(grounded)
+        # Analyst mode: stage the per-CIK holdings slice once per CIK and resolve the
+        # cached filing paths, so the worker can compare filing values against
+        # extracted values instead of authoring numeric params blind.
+        if r["cik"] not in staged_by_cik:
+            staged_by_cik[r["cik"]] = _stage_holdings_csv(
+                r["cik"], holdings_path, staging_dir)
+        staged_csv = staged_by_cik[r["cik"]]
+        filing_paths = _filing_html_paths(bundles)
+        r["holdings_csv_path"] = str(staged_csv) if staged_csv is not None else None
+        r["filing_html_paths"] = filing_paths
+        if r["fix_class"] not in example_by_fc:
+            example_by_fc[r["fix_class"]] = _example_leaf_block(r["fix_class"], promoted_dir)
         Path(r["prompt_path"]).write_text(
             _worker_prompt(r, verdicts, contract_abs=contract_abs, bundle_paths=r["bundle_paths"],
                            correction_path=Path(r["correction_path"]), validator=validator, py=WORKER_PYTHON,
-                           grounded_identifiers=grounded),
+                           grounded_identifiers=grounded, holdings_csv=staged_csv,
+                           filing_paths=filing_paths,
+                           example_block=example_by_fc[r["fix_class"]]),
             encoding="utf-8")
 
     if not manifest_rows:
         raise PreflightError(
             "no dispatchable packets after skips "
             f"(no_citations={len(skipped_no_citations)}, policy={len(skipped_policy)}, "
-            f"stale={len(skipped_stale)}, existing={len(skipped_existing)})")
+            f"stale={len(skipped_stale)}, existing={len(skipped_existing)}, "
+            f"escalated={len(skipped_escalated)})")
     wave_path, wave = _next_manifest_path(batch_dir)
     manifest = {
         "batch_id": batch_id, "created_at": datetime.now(timezone.utc).isoformat(),
@@ -508,6 +691,7 @@ def preflight_batch(
         "skipped_policy": skipped_policy,
         "skipped_stale": skipped_stale,
         "skipped_existing": skipped_existing,
+        "skipped_escalated": skipped_escalated,
         "rows": manifest_rows}
     # Wave-stamped manifest is the durable record (one per dispatch wave; the old
     # single manifest.json was overwritten by every wave, so q4b2exp recorded 2 rows
@@ -522,7 +706,8 @@ def preflight_batch(
             "n_skipped_no_citations": len(skipped_no_citations),
             "n_skipped_policy": len(skipped_policy),
             "n_skipped_stale": len(skipped_stale),
-            "n_skipped_existing": len(skipped_existing), "batch_id": batch_id}
+            "n_skipped_existing": len(skipped_existing),
+            "n_skipped_escalated": len(skipped_escalated), "batch_id": batch_id}
 
 
 def _next_manifest_path(batch_dir: Path) -> tuple[Path, int]:

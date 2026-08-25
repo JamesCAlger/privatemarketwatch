@@ -254,3 +254,122 @@ def test_apply_scoped_noop_when_no_rows_in_scope():
     df, audit = ap.apply_scoped(_two_quarter_frame(), corr)
     assert audit["status"] == "ok" and audit["rows_changed"] == 0
     assert df["interest_rate"].tolist() == [0.105, 0.100, 9.5]
+
+
+# --------------------------------------------------------------------------- 2026-08-21 row_id selector
+
+
+def test_rate_rescale_selects_by_row_id():
+    frame = _value_frame()
+    frame["row_id"] = ["ROW-00000000000000aa", "ROW-00000000000000bb"]
+    df, audit = ap.apply_rate_rescale(frame, {
+        "field": "interest_rate", "factor": 100,
+        "row_selector": {"row_id": "ROW-00000000000000aa"}})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 1
+    assert df.loc[df["row_id"] == "ROW-00000000000000aa", "interest_rate"].iloc[0] == 10.5
+    assert df.loc[df["row_id"] == "ROW-00000000000000bb", "interest_rate"].iloc[0] == 11.5
+
+
+def test_row_id_selector_no_match_is_noop():
+    # rate_rescale reports ok/rows_changed=0 on a no-match selector; the
+    # no-op is refused downstream by the gate (selector_noop), not the applier.
+    frame = _value_frame()
+    frame["row_id"] = ["ROW-00000000000000aa", "ROW-00000000000000bb"]
+    df, audit = ap.apply_rate_rescale(frame, {
+        "field": "interest_rate", "factor": 100,
+        "row_selector": {"row_id": "ROW-00000000000000cc"}})
+    assert audit["status"] == "ok" and audit["rows_changed"] == 0
+    assert df["interest_rate"].tolist() == [0.105, 11.5]
+
+
+# --- selector lists + dedup row_selector (2026-08-21) -----------------------------
+
+
+def test_dedup_row_selector_bounds_blast_radius():
+    # Two duplicate GROUPS exist; a selector on one group's rows must leave the other
+    # group untouched (q4b2r4an: key-only dedup for two cited rows collapsed 563 groups).
+    df = pd.DataFrame([
+        {"row_id": "ROW-aaaaaaaaaaaaaaaa", "issuer_name": "AAH Topco",
+         "interest_rate": 9.06, "report_date": "2025-12-31", "fair_value": 100.0},
+        {"row_id": "ROW-bbbbbbbbbbbbbbbb", "issuer_name": "AAH Topco",
+         "interest_rate": 9.06, "report_date": "2025-12-31", "fair_value": 200.0},
+        {"row_id": "ROW-cccccccccccccccc", "issuer_name": "Other Dup Co",
+         "interest_rate": 5.0, "report_date": "2025-12-31", "fair_value": 300.0},
+        {"row_id": "ROW-dddddddddddddddd", "issuer_name": "Other Dup Co",
+         "interest_rate": 5.0, "report_date": "2025-12-31", "fair_value": 300.0},
+    ])
+    out, audit = ap.apply_dedup(df, {
+        "match_fields": ["issuer_name", "interest_rate", "report_date"], "keep": "first",
+        "row_selector": [{"row_id": "ROW-aaaaaaaaaaaaaaaa"},
+                         {"row_id": "ROW-bbbbbbbbbbbbbbbb"}]})
+    assert audit["status"] == "ok"
+    assert audit["rows_dropped"] == 1                       # only the selected AAH dup
+    assert (out["issuer_name"] == "Other Dup Co").sum() == 2  # other group untouched
+
+
+def test_dedup_row_selector_no_match_fails_safe():
+    df = _holdings()
+    out, audit = ap.apply_dedup(df, {
+        "match_fields": ["issuer_name", "report_date", "period"],
+        "row_selector": {"issuer_name": "No Such Issuer"}})
+    assert audit["status"] == "error"
+    assert len(out) == len(df)
+
+
+def test_selector_list_or_combines_rows():
+    df = _holdings()
+    out, audit = ap.apply_rate_rescale(df, {
+        "field": "interest_rate", "factor": 0.1,
+        "row_selector": [{"issuer_name": "WDE TorcSill"},
+                         {"issuer_name": "Acme Term Loan"}]})
+    assert audit["status"] == "ok"
+    assert audit["rows_changed"] == 4       # both issuers' rows selected
+    assert (pd.to_numeric(out["interest_rate"]) < 3).all()
+
+
+def test_selector_list_entry_error_fails_whole_selector():
+    df = _holdings()
+    out, audit = ap.apply_rate_rescale(df, {
+        "field": "interest_rate", "factor": 0.1,
+        "row_selector": [{"issuer_name": "WDE TorcSill"},
+                         {"nonexistent_col": "x"}]})
+    assert audit["status"] == "error"
+    assert "row_selector[1]" in audit["message"]
+    assert (pd.to_numeric(out["interest_rate"]) > 3).any()  # unchanged
+
+
+def test_source_anchored_value_sets_filing_value():
+    df = pd.DataFrame([
+        {"row_id": "ROW-00000000000000aa", "issuer_name": "AAM", "report_date": "2025-12-31",
+         "interest_rate": None, "pik_rate": 12.0, "fair_value": 58702000.0},
+        {"row_id": "ROW-00000000000000bb", "issuer_name": "Other", "report_date": "2025-12-31",
+         "interest_rate": 9.0, "pik_rate": None, "fair_value": 995000.0},
+    ])
+    out, audit = ap.apply_source_anchored_value(df, {"assertions": [{
+        "row_selector": {"row_id": "ROW-00000000000000aa"},
+        "field": "interest_rate",
+        "source": {"accession_number": "0001628280-26-020206", "table_index": 0,
+                   "row_index": 1, "cell_index": 2, "quoted_text": "12.00 %",
+                   "value": 12.0, "unit_multiplier": 1},
+        "witnesses": [{"cell_index": 5, "field": "fair_value", "value": 58702}],
+    }]})
+    assert audit["status"] == "ok"
+    assert audit["rows_changed"] == 1
+    assert out.loc[out["row_id"] == "ROW-00000000000000aa", "interest_rate"].iloc[0] == 12.0
+    assert out.loc[out["row_id"] == "ROW-00000000000000bb", "interest_rate"].iloc[0] == 9.0
+
+
+def test_source_anchored_value_all_or_nothing():
+    df = pd.DataFrame([
+        {"row_id": "ROW-00000000000000aa", "issuer_name": "AAM", "report_date": "2025-12-31",
+         "interest_rate": 1.0, "fair_value": 100.0},
+    ])
+    out, audit = ap.apply_source_anchored_value(df, {"assertions": [
+        {"row_selector": {"row_id": "ROW-00000000000000aa"}, "field": "interest_rate",
+         "source": {"value": 12.0}},
+        {"row_selector": {"row_id": "ROW-00000000000000zz"}, "field": "interest_rate",
+         "source": {"value": 8.0}},
+    ]})
+    assert audit["status"] == "error"
+    assert "matched no rows" in audit["message"]
+    assert out.loc[0, "interest_rate"] == 1.0   # first assertion NOT applied

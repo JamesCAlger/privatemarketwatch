@@ -72,9 +72,26 @@ exit `$LASTEXITCODE
 
 function Invoke-ValidateCorrection {
   param($Row, [string] $LogPath)
-  if (-not (Test-Path -LiteralPath $Row.correction_path -PathType Leaf)) {
-    Set-Content -LiteralPath $LogPath -Value "MISSING correction file: $($Row.correction_path)" -Encoding ASCII
+  # Escalation-aware (2026-08-21): a worker may write <fix_class>.escalation.json
+  # INSTEAD of the correction leaf; the python validator resolves and validates the
+  # sibling, reporting ESCALATED. Only fail fast when NEITHER artifact exists.
+  $escalationPath = $Row.correction_path -replace '\.json$', '.escalation.json'
+  $artifact = $null
+  if (Test-Path -LiteralPath $Row.correction_path -PathType Leaf) {
+    $artifact = $Row.correction_path
+  } elseif (Test-Path -LiteralPath $escalationPath -PathType Leaf) {
+    $artifact = $escalationPath
+  } else {
+    Set-Content -LiteralPath $LogPath -Value "MISSING correction file: $($Row.correction_path) (no escalation either)" -Encoding ASCII
     return 1
+  }
+  # Intake normalization: strip a UTF-8 BOM before validation. Analyst-mode workers
+  # sometimes write the leaf via PowerShell redirection (PS 5.1 stamps a BOM) instead
+  # of the file-edit tool; the validator and downstream appliers require BOM-less
+  # UTF-8. Deterministic parent-side fix -- content is untouched.
+  $leafBytes = [System.IO.File]::ReadAllBytes($artifact)
+  if ($leafBytes.Length -ge 3 -and $leafBytes[0] -eq 0xEF -and $leafBytes[1] -eq 0xBB -and $leafBytes[2] -eq 0xBF) {
+    [System.IO.File]::WriteAllBytes($artifact, $leafBytes[3..($leafBytes.Length - 1)])
   }
   # Merge all streams and write UTF-8 explicitly: the bare `*> $LogPath` redirect
   # wrote UTF-16 LE (PS 5.1 default), which naive UTF-8 readers misparse. The local
@@ -85,7 +102,8 @@ function Invoke-ValidateCorrection {
   & python -m scripts.agent_b2.validate_corrections `
     --correction $Row.correction_path `
     --expected-cik $Row.cik `
-    --expected-fix-class $Row.fix_class *>&1 |
+    --expected-fix-class $Row.fix_class `
+    --verify-source *>&1 |
     Out-File -LiteralPath $LogPath -Encoding utf8
   $ec = $LASTEXITCODE
   $ErrorActionPreference = $prevEap
