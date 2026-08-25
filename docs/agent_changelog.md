@@ -9969,3 +9969,44 @@ Rebuild chain (unified 780,726 rows -> reverify --cohort -> shadow -> queue), me
 
 Semantic diff: private_markets_holdings corrected_fields deltas are the intended change;
 the pre-existing agent_a/proposals baseline discrepancy (1,258 files) persists unrelated.
+
+
+## 2026-08-25: lec_live7 dispatch -- full remaining blocker pool adjudicated (7/7 gate-clean); ALL flags are verifier artifacts
+
+Batch lec_live7_20260825: the entire post-relane provenance blocker pool (7 filing_mismatch
+packets: 0001825265, 0001916608 monetary; 0001633336 x2, 0001860424 x2, 0001918712 pik_rate).
+Bundles regenerated from the live ledger before dispatch; cohort guard PASS. 7 workers
+(max_parallel 2, scratch/2026-08-25_lec_live7/dispatch_live7.ps1); 2 transient launch failures
+auto-recovered by the built-in retry (fresh auth re-copy). Intake gate: 7/7 valid, zero
+refusals, packet-scope binding active, full coverage, no escalations.
+
+Worker verdicts: 4 false_flag (conf 0.99, all with basis + gate-re-derived citations under the
+hardened schema), 2 extraction_wrong, 1 parser_drift.
+
+Manual adjudication (mandatory for false_flag; extended to all 7 due to an inter-rater split --
+three workers gave three different labels to the same pik evidence shape):
+- ALL 5 pik packets are FALSE FLAGS. Root cause found: every flagged row's declared_events
+  carries BOTH pik_rate:rate_x100 AND pik_rate:pik_boundary_div100 (the staging boundary
+  normalization at staging_bdc.py:2695-2708), but provenance_reverify._staging_multiplier
+  (:262) returns on FIRST match -> multiplier 100 instead of the composed 100*0.01=1 ->
+  expected exactly 100x too high. The extraction_wrong (0.48 packet) and parser_drift (0.25
+  packet) verdicts are mislabels of this same verifier bug.
+- BOTH monetary packets are FALSE FLAGS. Independent check: published FV sums reconcile to
+  fund-level XBRL net_assets (0001825265: $315.0M vs $323.9M NAV, ratio 0.97; 0001916608:
+  $75.9M vs $66.7M, 1.14). The filers' instance facts are 1000x mis-scaled; the pipeline's
+  /1000 normalization is CORRECT but not recorded as a provenance scale event, so the full
+  tier cannot reproduce published from instance. This also overturns the canary-era
+  extraction_wrong verdict for 0001825265 (both the worker and the operator's manual
+  concurrence were wrong; the fund-total reconciliation is the decisive evidence neither used).
+
+Routing conclusion: ZERO fixer work on published data -- the pool's published values are all
+correct. Two verifier/provenance-metadata fixes route instead:
+(1) _staging_multiplier must COMPOSE event multipliers (product over the field's events),
+    not first-match -- clears all 5 pik packets.
+(2) The 1000x monetary normalization for the 2 CIKs must be recorded as a scale event in
+    src_facts.x (or equivalent) so full-tier re-derivation reproduces published -- clears
+    the 2 monetary packets.
+Lane lesson (3rd occurrence): workers reliably produce gate-clean citations but are
+unreliable on WHICH SIDE is wrong; the prompt needs a mandatory fund-total sanity check
+before extraction_wrong/parser_drift verdicts. Evidence: scratch/2026-08-25_lec_live7/
+adjudication_checks.py output.
