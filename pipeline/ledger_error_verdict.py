@@ -366,6 +366,16 @@ def _build_ledger_lookup(
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Return a dict keyed by (row_id, field).  Populates errors on failure."""
     if ledger_df is not None:
+        # Pre-filter ledger_df to cited pairs (vectorized membership check),
+        # mirroring the DuckDB post-filter in _duckdb_lookup.
+        # This prevents duplicate-detection from running on uncited (row_id, field) pairs.
+        if cited_pairs:
+            cited_set = set(cited_pairs)
+            pair_series = list(
+                zip(ledger_df["row_id"].astype(str), ledger_df["field"].astype(str))
+            )
+            mask = pd.array([p in cited_set for p in pair_series], dtype="boolean")
+            ledger_df = ledger_df[mask].reset_index(drop=True)
         return _df_to_lookup(ledger_df, errors)
 
     # Resolve file path

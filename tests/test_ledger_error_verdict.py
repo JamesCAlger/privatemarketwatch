@@ -627,6 +627,61 @@ class TestDuplicateLedgerRows:
 # ---------------------------------------------------------------------------
 
 
+class TestDataFrameFilteredRead:
+    """Finding 2: _build_ledger_lookup ledger_df path must pre-filter to cited pairs
+    before calling _df_to_lookup, so duplicate-detection runs only on cited pairs.
+
+    Uncited duplicates with differing values should NOT generate ambiguous errors
+    that block otherwise valid citations.
+    """
+
+    def test_ledger_df_cited_only_ignores_uncited_duplicates(self):
+        """ledger_df containing an uncited duplicate pair (differing values) must not
+        cause re-derivation to fail when only the cited row ROW-aaaa is cited.
+
+        Scenario:
+        - ledger_df has ROW-aaaa/fair_value once (cited)
+        - ledger_df has ROW-bbbb/cost twice with DIFFERING values (uncited)
+        - Leaf cites only ROW-aaaa/fair_value
+
+        Expected: ok=True, no errors. The uncited duplicate mismatch is irrelevant.
+        Current (broken): ambiguous error from uncited ROW-bbbb/cost pair blocks the gate.
+        """
+        df = pd.DataFrame([
+            # Cited: ROW-aaaa/fair_value once
+            {
+                "row_id": "ROW-aaaa", "field": "fair_value",
+                "reason_code": "filing_mismatch",
+                "declared_raw": 1000.0, "instance_raw": 1000.0, "published": 990.0,
+                "cheap_status": "pass", "full_status": "published_mismatch",
+                "cik": "0001287750", "report_date": "2025-12-31",
+                "expected": 1000.0, "src_context_id": "ctx1",
+            },
+            # Uncited: ROW-bbbb/cost row 1
+            {
+                "row_id": "ROW-bbbb", "field": "cost",
+                "reason_code": "filing_mismatch",
+                "declared_raw": 500.0, "instance_raw": 500.0, "published": 500.0,
+                "cheap_status": "pass", "full_status": "pass",
+                "cik": "0001287750", "report_date": "2025-12-31",
+                "expected": 500.0, "src_context_id": "ctx1",
+            },
+            # Uncited: ROW-bbbb/cost row 2 (same row_id/field, DIFFERING published)
+            {
+                "row_id": "ROW-bbbb", "field": "cost",
+                "reason_code": "filing_mismatch",
+                "declared_raw": 500.0, "instance_raw": 500.0, "published": 510.0,  # DIFFERS
+                "cheap_status": "pass", "full_status": "pass",
+                "cik": "0001287750", "report_date": "2025-12-31",
+                "expected": 500.0, "src_context_id": "ctx2",
+            },
+        ])
+        # Leaf only cites ROW-aaaa
+        leaf = _leaf()
+        out = rederive_citations(leaf, ledger_df=df)
+        assert out["ok"], f"Expected ok=True, but got errors: {out['errors']}"
+
+
 class TestDuckDBFilteredRead:
     """Finding 3: _duckdb_lookup must apply a WHERE clause restricting to cited pairs."""
 
