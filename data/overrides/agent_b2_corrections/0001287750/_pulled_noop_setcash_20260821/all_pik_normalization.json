@@ -1,0 +1,29 @@
+{
+  "cik": "0001287750",
+  "mechanism": "extraction_gap",
+  "fix_class": "all_pik_normalization",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "template": {
+    "row_selector": {
+      "issuer_name": "15484880 Canada Inc. and 15484910 Canada Inc., Senior subordinated loan"
+    },
+    "cash_rate": 0.0,
+    "pik_rate": 14.0
+  },
+  "source_review_ids": [
+    "RVQ_REV_fac7362b0e31"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 112,
+      "row_index": 10,
+      "quoted_text": "15484880 Canada Inc. and 15484910 Canada Inc. continuation row: Senior subordinated loan | 14.00 % PIK | 04/2025 | 04/2035 | fair value 14.7"
+    }
+  ],
+  "confidence": 0.9,
+  "rationale": "The cited continuation row for the 2025-12-31 quarter states the senior subordinated loan bears 14.00% PIK, so this correction normalizes the selected holdings row to 0.0% cash interest and 14.0% PIK interest for that quarter only."
+}

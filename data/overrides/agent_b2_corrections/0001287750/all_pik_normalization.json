@@ -1,0 +1,30 @@
+{
+  "cik": "0001287750",
+  "mechanism": "extraction_gap",
+  "fix_class": "all_pik_normalization",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "template": {
+    "row_selector": {
+      "row_id": "ROW-62c19264d44492af"
+    },
+    "cash_rate": 0.0,
+    "pik_rate": 14.0,
+    "set_interest_to_cash": true
+  },
+  "source_review_ids": [
+    "RVQ_REV_fac7362b0e31"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 112,
+      "row_index": 10,
+      "quoted_text": "15484880 Canada Inc. and 15484910 Canada Inc. continuation row: Senior subordinated loan | 14.00 % PIK | 04/2025 | 04/2035 | fair value 14.7"
+    }
+  ],
+  "confidence": 0.9,
+  "rationale": "For 2025-12-31, filing table 112 row 10 shows the 15484880 Canada Inc. and 15484910 Canada Inc. Senior subordinated loan with a coupon of 14.00% PIK, origination 04/2025, maturity 04/2035, cost 14.2, and fair value 14.7. The extracted holdings row ROW-d9cfbfcb882d5425 shows issuer_name and bdc_investment_identifier equal to 15484880 Canada Inc. and 15484910 Canada Inc., Senior subordinated loan, report_date 2025-12-31, interest_rate blank/NaN, pik_rate 14.0, cost 14200000.0, and fair_value 14700000.0. Filing shows an all-PIK 14.00% rate with no cash-rate component, while extracted shows no ordinary interest_rate and a 14.0 pik_rate; this bounded all_pik_normalization sets cash_rate to 0.0 and pik_rate to 14.0 for the stable selected row only."
+}
