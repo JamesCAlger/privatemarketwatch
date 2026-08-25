@@ -575,3 +575,112 @@ class TestExtractorMultiplier:
         out = full_tier(cheap_df, xml_loader=_ldr)
         assert out.iloc[0]["full_status"] == "raw_match"
         assert classify_reason("missing_raw_with_transform", "raw_match") == "transform_drift"
+
+
+# ---------------------------------------------------------------------------
+# Task 1 (2026-08-25): pct_of_net_assets rounding-aware tolerance
+# ---------------------------------------------------------------------------
+
+_PCT_FIXTURE_XML = (
+    '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+    '<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef="ctxp">0.0043'
+    '</us-gaap:InvestmentOwnedPercentOfNetAssets>'
+    '</xbrl>'
+)
+
+
+def _pct_loader(cik, accession):
+    from lxml import etree
+    return etree.ElementTree(etree.fromstring(_PCT_FIXTURE_XML.encode()))
+
+
+class TestPctSenseCheck:
+    """Canary 2026-08-25: pct_of_net_assets published is recomputed FV/NAV while
+    declared is the filer's 2-decimal rounded fraction. Rounding-consistent rows
+    (within +-0.005 pp) must PASS; divergent rows must route to the new
+    pct_recompute_divergence -> pct_sense_check (warn lane), NOT filing_mismatch."""
+
+    # --- cheap tier ---------------------------------------------------------
+
+    def _pct_holding(self, published, raw):
+        return _row(
+            row_id="ROW-p", pct_of_net_assets=published,
+            pct_of_net_assets_source="xbrl_field",
+            src_facts=json.dumps({"pct_of_net_assets": {"r": raw}}),
+            src_transforms="pct_of_net_assets:rate_x100",
+        )
+
+    def test_cheap_rounding_consistent_passes(self):
+        # declared 0.0043 -> expected 0.43; published 0.4311 (recomputed): diff 0.0011 pp
+        df = pd.DataFrame([self._pct_holding(published=0.4311, raw=0.0043)])
+        out = cheap_tier(holdings_df=df)
+        row = out[out["field"] == "pct_of_net_assets"].iloc[0]
+        assert row["cheap_status"] == "pass"
+
+    def test_cheap_divergent_still_fails(self):
+        # declared 0.0159 -> expected 1.59; published 0.004425: diff 1.586 pp
+        df = pd.DataFrame([self._pct_holding(published=0.004425, raw=0.0159)])
+        out = cheap_tier(holdings_df=df)
+        row = out[out["field"] == "pct_of_net_assets"].iloc[0]
+        assert row["cheap_status"] == "fail"
+
+    def test_cheap_other_rate_fields_keep_strict_tolerance(self):
+        # interest_rate 0.0011-pp slack must NOT pass: strict 1e-6 relative only
+        df = pd.DataFrame([_row(
+            row_id="ROW-i", interest_rate=10.5011,
+            interest_rate_source="xbrl_field",
+            src_facts=json.dumps({"interest_rate": {"r": 0.105}}),
+            src_transforms="interest_rate:rate_x100")])
+        out = cheap_tier(holdings_df=df)
+        row = out[out["field"] == "interest_rate"].iloc[0]
+        assert row["cheap_status"] == "fail"
+
+    # --- full tier ----------------------------------------------------------
+
+    def _pct_cheap(self, **kw):
+        base = {
+            "row_id": "ROW-p", "cik": "0001803498",
+            "accession_number": "0001803498-25-000081",
+            "report_date": "2025-09-30", "src_context_id": "ctxp",
+            "field": "pct_of_net_assets", "pathway": "xbrl_field",
+            "declared_raw": 0.0043,
+            "declared_events": "pct_of_net_assets:rate_x100",
+            "published": 0.4311, "expected": 0.43, "cheap_status": "pass",
+            "src_facts": json.dumps({"pct_of_net_assets": {
+                "c": "investmentownedpercentofnetassets", "r": 0.0043}}),
+        }
+        return pd.DataFrame([{**base, **kw}])
+
+    def test_full_rounding_consistent_is_raw_match(self):
+        out = full_tier(self._pct_cheap(), xml_loader=_pct_loader)
+        assert out.iloc[0]["full_status"] == "raw_match"
+
+    def test_full_divergent_is_pct_recompute_divergence(self):
+        # instance 0.0043 * 100 = 0.43 vs published 2.0 -> divergent, pct-specific status
+        out = full_tier(self._pct_cheap(published=2.0, cheap_status="fail"),
+                        xml_loader=_pct_loader)
+        assert out.iloc[0]["full_status"] == "pct_recompute_divergence"
+
+    def test_full_monetary_mismatch_still_published_mismatch(self):
+        # interest_rate row from the existing fixture keeps the old status
+        cheap = pd.DataFrame([{
+            "row_id": "ROW-a", "cik": "0001287750",
+            "accession_number": "0001287750-26-000001",
+            "report_date": "2025-12-31", "src_context_id": "ctx1",
+            "field": "interest_rate", "pathway": "xbrl_field",
+            "declared_raw": 0.105,
+            "declared_events": "interest_rate:rate_x100",
+            "published": 99.0, "expected": 10.5, "cheap_status": "fail",
+            "src_facts": json.dumps({"interest_rate": {"r": 0.105}}),
+        }])
+        out = full_tier(cheap, xml_loader=_loader)
+        assert out.iloc[0]["full_status"] == "published_mismatch"
+
+    # --- reason triage ------------------------------------------------------
+
+    def test_classify_reason_pct_sense_check(self):
+        assert classify_reason("fail", "pct_recompute_divergence") == "pct_sense_check"
+        assert classify_reason("pass", "pct_recompute_divergence") == "pct_sense_check"
+
+    def test_classify_reason_filing_mismatch_unchanged(self):
+        assert classify_reason("pass", "published_mismatch") == "filing_mismatch"

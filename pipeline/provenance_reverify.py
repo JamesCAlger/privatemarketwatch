@@ -18,6 +18,12 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+# Rounding-aware tolerance for the pct_of_net_assets sense check, in percentage
+# points. Filers disclose pct to 2 decimals; published is a recomputed FV/NAV
+# figure, so agreement within half-ULP of the disclosure (+-0.005 pp) is
+# confirmation, not error. Canary 2026-08-25.
+PCT_SENSE_TOL_PP = 0.005
+
 # field -> pathway enum column.
 # cost/shares '' pathway = as-extracted xbrl (trivial pass when no event).
 # Monetary fields (cost, shares_held) reach pass_trivial via raw IS NULL /
@@ -118,6 +124,14 @@ def _field_sql(field: str, source_col: str) -> str:
             f" OR (';' || COALESCE(CAST({col} AS VARCHAR), '') || ';') LIKE '%;{field};%')"
         )
 
+    # pct_of_net_assets: published is recomputed FV/NAV, declared is the filer's
+    # 2-decimal rounded fraction -- exact equality is unreachable. Within the
+    # disclosure's rounding tolerance -> pass (sense check confirmed).
+    pct_round_pass = (
+        f"WHEN ABS({expected} - {published}) <= {PCT_SENSE_TOL_PP} THEN 'pass'"
+        if field == "pct_of_net_assets" else ""
+    )
+
     # Rate fields: when pathway='' and published IS NULL, the field is simply
     # absent from this row -- trivial pass, not a declaration failure.
     # This branch must come ABOVE the raw IS NULL -> fail branch.
@@ -159,6 +173,7 @@ def _field_sql(field: str, source_col: str) -> str:
              {rate_absent_trivial}
              WHEN {raw} IS NULL
                THEN {raw_null_no_event_status}
+             {pct_round_pass}
              WHEN ABS({expected} - {published})
                   <= 1e-6 * GREATEST(ABS({expected}), ABS({published}), 1e-12)
                THEN 'pass'
@@ -296,7 +311,8 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
     to the cheap-tier frame.
 
     full_status enum: raw_match | raw_stale | published_mismatch |
-    anchor_missing | context_missing | source_unavailable | not_checked.
+    pct_recompute_divergence | anchor_missing | context_missing |
+    source_unavailable | not_checked.
     """
     from pipeline.bdc_filings import _local_name, _match_concept, _parse_fact_value
 
@@ -394,9 +410,17 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 else:
                     pub_ok = (not pd.isna(published)
                               and _numbers_close(instance_raw * mult, float(published)))
+                    if (not pub_ok and field == "pct_of_net_assets"
+                            and not pd.isna(published)):
+                        # Rounding-aware sense-check tolerance (see PCT_SENSE_TOL_PP)
+                        pub_ok = abs(instance_raw * mult
+                                     - float(published)) <= PCT_SENSE_TOL_PP
 
                 if not pub_ok:
-                    out.at[i, "full_status"] = "published_mismatch"
+                    out.at[i, "full_status"] = (
+                        "pct_recompute_divergence"
+                        if field == "pct_of_net_assets"
+                        else "published_mismatch")
                     continue
 
                 declared_raw = r.get("declared_raw")
@@ -431,11 +455,12 @@ _CHEAP_REASON: dict[str, str] = {
 }
 
 _FULL_REASON: dict[str, str] = {
-    "source_unavailable": "source_unavailable",
-    "context_missing":    "provenance_wrong",
-    "anchor_missing":     "anchor_missing",
-    "published_mismatch": "filing_mismatch",
-    "raw_stale":          "anchor_stale",
+    "source_unavailable":      "source_unavailable",
+    "context_missing":         "provenance_wrong",
+    "anchor_missing":          "anchor_missing",
+    "published_mismatch":      "filing_mismatch",
+    "raw_stale":               "anchor_stale",
+    "pct_recompute_divergence": "pct_sense_check",
 }
 
 
@@ -443,8 +468,8 @@ def classify_reason(cheap_status: str, full_status: str) -> str:
     """Pure deterministic triage from the scoping doc 8.2 table.
 
     Reason enum: verified | anchor_stale | transform_drift | filing_mismatch |
-    anchor_missing | provenance_wrong | source_unavailable | corrected |
-    derived | text_pathway | merged_context_excluded | no_provenance |
+    pct_sense_check | anchor_missing | provenance_wrong | source_unavailable |
+    corrected | derived | text_pathway | merged_context_excluded | no_provenance |
     unchecked_trivial.
     """
     if cheap_status in _CHEAP_REASON:
