@@ -443,6 +443,77 @@ def _canonical_value_frame(df: pd.DataFrame) -> pd.DataFrame:
     return out.sort_values(cols, kind="mergesort", na_position="last").reset_index(drop=True)
 
 
+# --------------------------------------------------------------------------- provenance gate (2026-08-25)
+
+# Provenance/anchor columns an applier must NEVER write. These carry the
+# re-verifier's anchor state (pipeline/provenance_reverify.py) plus the
+# corrected_fields stamp, which production applies OUTSIDE the applier
+# (pipeline/agent_promoted.py mark_corrected_fields). Any applier diff here is
+# a defect, not a correction. source_row_id may be absent from holdings frames
+# (recon-side id); only columns present in the baseline are inspected.
+_PROVENANCE_COLUMNS = [
+    "row_id", "source_row_id", "src_context_id", "src_context_count",
+    "src_facts", "src_transforms", "src_filled_fields", "src_conflict_fields",
+    "src_field_overrides", "corrected_fields",
+]
+
+
+def _norm_str(s: pd.Series) -> pd.Series:
+    """mark_corrected_fields comparison normalization -- the gate's notion of
+    'changed' must equal the production stamp's notion."""
+    return s.astype("string").str.strip().fillna("")
+
+
+def check_provenance_integrity(
+    baseline_df: pd.DataFrame, expected_df: pd.DataFrame,
+) -> tuple[dict[str, bool], list[str]]:
+    """Provenance predicates over the gate's own replay frame:
+
+    - provenance_invariant: _PROVENANCE_COLUMNS byte-identical on rows that
+      survive the applier (index intersection; appliers preserve labels).
+      A provenance column dropped by the applier also fails.
+    - changed_fields_tracked: every other changed column is in
+      CORRECTED_TRACKED_FIELDS, so the production corrected_fields stamp
+      records it and the re-verifier excuses it; a changed untracked column
+      would surface post-promotion as unexplained ledger drift.
+
+    Rows added by the applier (new index labels) are exempt -- production
+    stamps them '_row:added'. Judged on expected_df (applier(baseline)), not
+    the staged trial: promotion re-applies the correction JSON in production,
+    so the applier's own behavior is what ships.
+    """
+    from pipeline.agent_promoted import CORRECTED_TRACKED_FIELDS
+
+    checks = {"provenance_invariant": True, "changed_fields_tracked": True}
+    reasons: list[str] = []
+    common = baseline_df.index.intersection(expected_df.index)
+
+    prov_bad: list[str] = []
+    untracked: list[str] = []
+    for col in baseline_df.columns:
+        if col not in expected_df.columns:
+            if col in _PROVENANCE_COLUMNS:
+                prov_bad.append(f"{col} (dropped)")
+            continue
+        b = _norm_str(baseline_df.loc[common, col])
+        e = _norm_str(expected_df.loc[common, col])
+        if bool((b != e).any()):
+            if col in _PROVENANCE_COLUMNS:
+                prov_bad.append(col)
+            elif col not in CORRECTED_TRACKED_FIELDS:
+                untracked.append(col)
+
+    if prov_bad:
+        checks["provenance_invariant"] = False
+        reasons.append(f"applier modified provenance column(s): {prov_bad}")
+    if untracked:
+        checks["changed_fields_tracked"] = False
+        reasons.append(
+            f"applier changed untracked column(s) {untracked}: the production "
+            f"corrected_fields stamp would miss them (unexplained reverifier drift)")
+    return checks, reasons
+
+
 def gate_value_packet(
     *, cik: str, target_quarter: str, baseline_df: pd.DataFrame, trial_df: pd.DataFrame,
     correction: dict, grounding_df: pd.DataFrame | None = None,

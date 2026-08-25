@@ -719,3 +719,90 @@ def test_identifier_rate_grammar_routes_to_rule_track():
         {"fix_class": "identifier_rate_grammar", "cik": "0001588272"}])
     assert len(routed["rule_track"]) == 1
     assert not routed["needs_human"]
+
+
+# --------------------------------------------------------------------------- provenance gate (2026-08-25)
+
+
+def _vg_frame_prov():
+    """_vg_frame plus the provenance/anchor columns the re-verifier consumes."""
+    df = _vg_frame()
+    df["row_id"] = ["r1", "r2"]
+    df["src_context_id"] = ["ctx1", "ctx2"]
+    df["src_facts"] = ["interest_rate=0.105", "interest_rate=11.5"]
+    df["src_transforms"] = ["", ""]
+    df["corrected_fields"] = ["", ""]
+    return df
+
+
+def test_provenance_integrity_clean_tracked_change():
+    base = _vg_frame_prov()
+    exp = base.copy()
+    exp.loc[0, "interest_rate"] = 10.5  # tracked field, provenance untouched
+    checks, reasons = rr.check_provenance_integrity(base, exp)
+    assert checks == {"provenance_invariant": True, "changed_fields_tracked": True}
+    assert reasons == []
+
+
+def test_provenance_integrity_flags_modified_src_column():
+    base = _vg_frame_prov()
+    exp = base.copy()
+    exp.loc[0, "interest_rate"] = 10.5
+    exp["src_facts"] = ""  # applier clobbered the anchor state
+    checks, reasons = rr.check_provenance_integrity(base, exp)
+    assert checks["provenance_invariant"] is False
+    assert any("src_facts" in r for r in reasons)
+
+
+def test_provenance_integrity_flags_stamped_corrected_fields():
+    # Production stamps corrected_fields OUTSIDE the applier; an applier
+    # writing it directly is a defect, not a convenience.
+    base = _vg_frame_prov()
+    exp = base.copy()
+    exp.loc[0, "interest_rate"] = 10.5
+    exp.loc[0, "corrected_fields"] = "interest_rate"
+    checks, _ = rr.check_provenance_integrity(base, exp)
+    assert checks["provenance_invariant"] is False
+
+
+def test_provenance_integrity_flags_dropped_prov_column():
+    base = _vg_frame_prov()
+    exp = base.copy().drop(columns=["src_context_id"])
+    checks, reasons = rr.check_provenance_integrity(base, exp)
+    assert checks["provenance_invariant"] is False
+    assert any("src_context_id" in r for r in reasons)
+
+
+def test_provenance_integrity_flags_untracked_changed_column():
+    base = _vg_frame_prov()
+    base["bdc_form_type"] = ["10-K", "10-K"]  # not in CORRECTED_TRACKED_FIELDS
+    exp = base.copy()
+    exp.loc[0, "bdc_form_type"] = "10-Q"
+    checks, reasons = rr.check_provenance_integrity(base, exp)
+    assert checks["changed_fields_tracked"] is False
+    assert any("bdc_form_type" in r for r in reasons)
+
+
+def test_provenance_integrity_ignores_added_rows():
+    # missing_position_add appends new index labels; production stamps them
+    # '_row:added'. Only surviving rows are compared.
+    base = _vg_frame_prov()
+    new_row = base.iloc[[0]].copy()
+    new_row.index = [99]
+    new_row["issuer_name"] = "Gamma Inc"
+    new_row["src_facts"] = "fair_value=500"
+    exp = pd.concat([base, new_row])
+    checks, reasons = rr.check_provenance_integrity(base, exp)
+    assert checks == {"provenance_invariant": True, "changed_fields_tracked": True}
+    assert reasons == []
+
+
+def test_provenance_integrity_trivial_without_prov_columns():
+    # Minimal fixtures (existing value-gate tests) carry no provenance columns:
+    # nothing to check, both predicates pass.
+    base = _vg_frame()
+    exp = base.copy()
+    exp.loc[0, "interest_rate"] = 10.5
+    checks, reasons = rr.check_provenance_integrity(base, exp)
+    assert checks == {"provenance_invariant": True, "changed_fields_tracked": True}
+    assert reasons == []
