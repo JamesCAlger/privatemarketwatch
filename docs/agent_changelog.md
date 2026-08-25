@@ -9872,3 +9872,24 @@ tests/test_ledger_error_classifier_dispatch.py +1 prompt assertion (83 total acr
 files, all green). Semantic diff backstop run: no artifact drift from this change (agent_a
 proposals baseline discrepancies are pre-existing). Existing batch prompts on disk still
 show the old false_flag text -- rebuild the batch before dispatching.
+
+
+## 2026-08-25: lec batch rebuilt (hardened prompts) + 77ad re-adjudicated + mismatch pool profiled
+
+- Batch `lec_hard_20260825` built from the same provenance worklist (10 packets, cohort-guard PASS);
+  prompts now carry the false_flag_basis + citation requirements. Old batch lec_smoke_20260825 kept
+  as canary record; do not dispatch from it.
+- RVQ_BLK_77ad57cdee2c (0001803498) re-adjudicated by one worker under the hardened schema:
+  verdict flipped false_flag -> extraction_wrong (conf 0.98), mechanism "pct_of_net_assets facts
+  from unrelated XBRL contexts attributed to individual holdings", 1 citation (declared 1.59 vs
+  published 0.004425). Intake gate PASS with packet-scope binding ACTIVE (date fix verified live).
+  The evidence-forcing schema worked: same worker, same bundle, now an adjudicable evidence-bearing
+  verdict instead of a bare false_flag.
+- Ledger profile (DuckDB, read-only): filing_mismatch pool is 45,011 rows; 44,907 (99.8%) are
+  pct_of_net_assets spanning 20 CIKs / 81 of 87 filing_mismatch packets. Monetary-field mismatches:
+  95 rows across 2 CIKs (the two canary filers). Implication: one re-verifier comparison fix for
+  pct_of_net_assets (recomputed FV/NAV vs declared rounded fraction, plus context-attribution
+  pairing) would clear ~81 packets without adjudication; only ~26 packets (6 filing_mismatch
+  monetary/pik + 20 anchor_missing) would still need classifier workers.
+- Queue counts (basis: review_queue artifacts of 2026-08-25 06:25): provenance classifier lane
+  107 packets (87 filing_mismatch, 20 anchor_missing); B1 bdc_worklist.csv 446 rows (2026-08-24).
