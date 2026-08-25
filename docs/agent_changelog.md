@@ -9773,3 +9773,72 @@ the SAME POSITION via different rows (the source-only row has no output_row_id; 
 provenance row tracks the published value). Future packet-assembly lanes that operate at
 position level must handle this overlap explicitly -- it is not handled by the current
 row-id join.
+
+
+## 2026-08-25: ledger-error-classifier CANARY (3 workers) -- first live dispatch of the lane
+
+Batch `lec_smoke_20260825` (10 packets, all filing_mismatch, cohort-guard PASS 10/10). Dispatched
+3 packets for filer diversity per the canary protocol: RVQ_BLK_5cb54e47dfb3 (0001825265, 2023-03-31),
+RVQ_BLK_a2c79196d680 (0001916608, 2023-06-30), RVQ_BLK_77ad57cdee2c (0001803498, 2025-09-30 -- the
+suspected systematic filer, 8/10 packets). Ad-hoc canary dispatcher adapted from the B2 dispatcher
+(scratch/2026-08-25_lec_canary/dispatch_canary.ps1); write grant = batch verdicts dir ONLY; admin shell.
+NO pipeline code modified, NO correction stores touched, NO fleet dispatched.
+
+Verdict distribution (3/3 coverage, no escalation siblings):
+- 5cb54e47dfb3: extraction_wrong, conf 0.99, 2 citations (published = instance/1000; $315M fund with
+  thousand-dollar published positions). Manual check AGREES -- correct verdict, correct direction.
+- a2c79196d680: extraction_wrong, conf 0.99, 3 citations (instance = 1000x published). Manual check
+  DISAGREES with the label: published values match the holdings slice, the identifier-text pct-of-NAV,
+  and the $75.9M fund total; the INSTANCE side is mis-scaled. Should have been false_flag or
+  filer_error. Same 1000x signature as 5cb but opposite direction -- the worker pattern-matched the
+  ratio without asking which side is wrong. Its own mechanism text describes a comparison-scaling
+  defect while the label routes a fixer at correct published data.
+- 77ad57cdee2c: false_flag, conf 0.98, NO other keys (schema-legal). Trace shows the worker DID find
+  the mechanism (published pct_of_net_assets is independently recomputed FV/NAV at split-position
+  granularity vs declared XBRL fraction x100) then explicitly chose false_flag "which requires no
+  citations". Diagnosis plausibly right; evidence discarded because the schema allowed it.
+
+Gate results (pipeline.ledger_error_verdict.validate_dir):
+- GATE BUG FOUND (fail-closed, so false REFUSALS not false passes): packet-scope binding refuses ALL
+  citations because DuckDB type-infers ledger report_date as TIMESTAMP ("2023-03-31 00:00:00") vs the
+  worklist's "2023-03-31" -- string compare in rederive_citations fails. Verbatim error:
+  "citation outside packet scope: cited (row_id='ROW-06023cfb58f6a490') belongs to cik='0001825265'
+  report_date='2023-03-31 00:00:00' but packet is cik='0001825265' report_date='2023-03-31'".
+  Needs date normalization in the packet-scope check before any fleet dispatch.
+- With scope binding isolated (diagnostic worklist without cik/report_date): 3/3 verdicts pass schema
+  + numeric re-derivation. ZERO fabricated citations -- every cited (row_id, field, values) tuple
+  reproduced exactly from the live 676MB ledger.
+- Fabrication probe (doctored instance_raw in a scratch copy): REFUSED with exact mismatch error.
+  The core gate design works against the live ledger.
+
+CIK 0001803498 systematic question: YES, one mechanism. All sampled bundles (2022-12-31, 2025-03-31,
+2025-09-30) carry exclusively pct_of_net_assets evidence rows; published pct is recomputed FV/NAV,
+declared is the filer's rounded XBRL fraction x100, so every position flags every quarter
+(fv_at_risk_m=0 on all 8 packets). One re-verifier/comparison fix (or exclusion of recomputed pct
+from declared-vs-published comparison) clears ~12,400 flagged rows across 8 packets, not eight fixes.
+
+Pre-dispatch hardening list -- proven necessary vs theoretical:
+- PROVEN (new, was NOT on the list): report_date type normalization in packet-scope binding (above).
+- PROVEN: false_flag (and amended) must require a basis/mechanism + citations. false_flag is
+  currently a zero-evidence escape hatch and a worker used it as exactly that.
+- PROVEN (operational): worker retry needs auth re-copy -- run_codex_worker cleanup removes
+  worker-home auth.json, so re-running a wrapper 401s.
+- THEORETICAL this run: amended accession-format validation (no amended verdicts), escalation-sibling
+  JSON-parse checks (no escalations), missing-cik/report_date cross-error (shipped worklists carry
+  both), explicit worker_write_dirs in manifest (write scoping held via harness WriteDirs).
+
+Routing demand signal: 2 extraction_wrong (but 1 mislabeled on manual review -> real B2-fixer demand
+is ~1 of 3), 0 parser_drift (no parser-patch-author justification yet), 1 false_flag pointing at a
+RE-VERIFIER comparison defect class (recomputed-vs-declared pct; also the likely true class of the
+mislabeled a2c). Biggest immediate win is re-verifier comparison hygiene, not fixer lanes.
+
+Operational notes: worker runtime 1-2.5 min each, 3-5 tool calls, ~40KB stdout + ~200KB rollout
+trace each (harvested to batch logs incl. both retry attempts). One transient sandbox-init failure
+(CreateProcessWithLogonW 1326) while 2 workers initialized concurrently from an admin shell; retry
+succeeded -- watch 1326 rate at fleet scale before raising max_parallel. Worker-home cleanup
+verified: no .sandbox-bin codex.exe, no plugin cache, sessions pruned (~17MB sqlite residue per
+home). Operator codex --yolo session (PID 14988) left untouched; orphan sweeper not run.
+
+Verification run: cohort_guard PASS; validate_dir (2 configurations) + fabrication probe; manual
+adjudication of all 3 verdicts + 2 extra 0001803498 bundles. NOT run: pytest (no code changed),
+rebuilds (no data changed).
