@@ -236,3 +236,27 @@ def test_lane_filter_blocker_only(tmp_path):
     result, items = _build(tmp_path, rows, lanes=("blocker",))
     assert result["items"] == 1
     assert items[0]["lane"] == "blocker"
+
+
+class TestProvenanceWorklistProjection:
+    def _items(self):
+        base = {"lane": "blocker", "engine": "provenance_reverify",
+                "rule_name": "filing_mismatch", "cik": "0001287750",
+                "report_date": "2025-12-31", "review_id": "RVQ_BLK_abc123def456",
+                "n_units": "12", "fv_at_risk_m": "3.25", "confidence": "",
+                "priority_rank": "4"}
+        return [
+            dict(base),
+            {**base, "engine": "source_recon", "review_id": "RVQ_BLK_other1"},
+            {**base, "lane": "review", "rule_name": "no_provenance",
+             "review_id": "RVQ_REV_warnrow1"},
+        ]
+
+    def test_filters_engine_and_lane(self):
+        rows = review_queue.provenance_worklist_projection(items=self._items())
+        assert [r["review_id"] for r in rows] == ["RVQ_BLK_abc123def456"]
+        assert rows[0]["reason_code"] == "filing_mismatch"
+
+    def test_columns_exact(self):
+        rows = review_queue.provenance_worklist_projection(items=self._items())
+        assert list(rows[0].keys()) == review_queue.PROVENANCE_WORKLIST_COLUMNS

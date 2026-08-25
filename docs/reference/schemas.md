@@ -459,3 +459,98 @@ Columns retained: `row_id`, `cik`, `report_date`, `reason_code`, `field`,
 `declared_raw`, `instance_raw`, `published`, `cheap_status`, `full_status`,
 `expected`, `src_context_id`. This slice is the drill-down surface for
 B2/B3 workers adjudicating filing_mismatch or anchor_missing packets.
+
+---
+
+## Ledger-Error-Classifier: Verdict Leaf Schema, Re-Derivation Gate, Batch/Manifest Layout
+
+Module: `pipeline/ledger_error_verdict.py`. Builder: `scripts/ledger_error_classifier/build_dispatch.py`.
+
+### Verdict leaf (top-level keys)
+
+| Key | Type | Required | Notes |
+|---|---|---|---|
+| `review_id` | str | always | Queue review_id (RVQ_BLK_* format) |
+| `verdict` | str | always | One of the ADJUDICATIONS enum below |
+| `confidence` | float | always | In [0.0, 1.0]; hard error outside range |
+| `mechanism` | str | extraction_wrong, parser_drift | Non-empty string describing the defect |
+| `culprit_citations` | list | extraction_wrong, parser_drift, filer_error | At least 1 entry; each entry: {row_id (str), field (str), declared_raw (float or null), instance_raw (float or null), published (float or null)} |
+| `drift_fingerprint` | obj | parser_drift only | {field (str), transform_code (str), affected_row_ids (list, non-empty)} |
+| `filer_error_basis` | str | filer_error | Non-empty string explaining why it is a filer error |
+| `superseding_accession` | str | amended | Non-empty accession number of amending filing |
+| `ambiguity_basis` | str | ambiguous | One of: evidence_insufficient, source_unavailable |
+| `escalate` | bool | filer_error, ambiguous/source_unavailable | Strongly recommended; omitting produces a validation warning, not a refusal |
+
+### ADJUDICATIONS enum
+
+| Verdict | Meaning |
+|---|---|
+| `extraction_wrong` | Pipeline extracted the wrong value; citation re-derivable from ledger |
+| `parser_drift` | A staging transform was applied incorrectly or inconsistently; drift_fingerprint identifies the future parser-patch-author packet key |
+| `filer_error` | The filer reported a wrong value in the filing itself |
+| `amended` | A later filing corrects this value; superseding_accession provided |
+| `false_flag` | The provenance flag was a false positive; no defect in the pipeline or filer |
+| `ambiguous` | Evidence is insufficient or the source filing is unavailable |
+
+### Re-derivation gate contract (`rederive_citations`)
+
+Every `culprit_citations` entry is re-derived from `provenance_ledger.csv` at intake.
+A verdict is **REFUSED** if any citation fails any of these checks:
+
+1. The `(row_id, field)` pair exists in the ledger.
+2. The pair's `reason_code` is a provenance tight-fail code (PROV_TIGHT_FAIL set).
+3. Every cited numeric (`declared_raw`, `instance_raw`, `published`) matches the ledger
+   value within relative tolerance 1e-9. `None` in the leaf matches NULL/NaN in the ledger.
+4. Duplicate `(row_id, field)` rows in the ledger that DIFFER on any cited numeric produce
+   an ambiguous-evidence error (refused). Agreeing duplicates are collapsed to one row.
+
+Verdicts without `culprit_citations` (false_flag, amended, ambiguous) pass the gate trivially.
+The gate is fail-closed: a missing ledger file produces a clear error, never a silent pass.
+Packet-scope binding is enforced at batch intake: `validate_dir` reads `cik` and `report_date`
+from the worklist and passes them to `rederive_citations` as a `packet`; any citation whose
+ledger row belongs to a different `(cik, report_date)` is refused with "citation outside packet
+scope" even if all numeric values match.
+
+### Escalation sibling convention
+
+When evidence is insufficient or unavailable, the worker writes
+`{review_id}.escalation.json` in the verdicts directory instead of a verdict file.
+Escalation siblings count as coverage in `validate_dir`.
+
+Shape: `{review_id, ambiguity_basis, escalation_reason (str), confidence (float)}`.
+
+An escalation sibling is not itself gated by `rederive_citations`; it is taken at face
+value as a "could not classify" signal.
+
+### Batch and manifest layout
+
+```
+data/output/ledger_error_classifier/batch/<batch_id>/
+  worklist.csv                   -- selected rows (PROVENANCE_WORKLIST_COLUMNS)
+  prompts/<review_id>.md         -- one prompt per selected item
+  verdicts/<review_id>.json      -- written by workers (not by the builder)
+  manifest.json                  -- latest-wave pointer
+  manifest_w<N>.json             -- wave-stamped durable record
+```
+
+**`manifest.json` required fields:**
+
+| Field | Value | Notes |
+|---|---|---|
+| `batch_id` | str | Batch identifier |
+| `created_at` | ISO-8601 UTC | Build timestamp |
+| `wave` | int | Wave number (starts at 1; increments on rebuild) |
+| `worker_python` | str | Python interpreter path |
+| `worker_read_dirs` | list[str] | Python import roots + 4 read-only grant dirs |
+| `grant_profile` | `read_only_classifier` | No write grants; enforced at dispatch |
+| `dispatch_requires` | `admin_shell` | Must not be dispatched from a worker process |
+| `n_dispatch` | int | Number of items in this batch |
+| `rows` | list[obj] | One entry per item: review_id, cik, report_date, reason_code, prompt_path, bundle_path, verdict_path, lock_key |
+
+`corrections_dir` must NOT appear in the manifest (this lane classifies, it does not author corrections).
+
+**First smoke batch (`lec_smoke_20260825`, 2026-08-25):**
+- 10 items, all `reason_code=filing_mismatch`
+- All 10 bundles: `evidence_completeness=source_artifact`
+- All 10 prompts written; manifest_w1.json committed
+- NO dispatch: admin shell required
