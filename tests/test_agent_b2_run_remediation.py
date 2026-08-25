@@ -697,3 +697,25 @@ class TestPromoteGuards:
             wrapper_dir=tmp_path / "wrappers", batch_id="bX",
             fleet_thresholds_path=tp)
         assert promoted[0]["status"] == "ok"
+
+
+def test_load_corrections_excludes_escalation_files(tmp_path):
+    # Escalations are diagnoses for the human basket, never applied to data.
+    import json as _json
+    from scripts.agent_b2.run_remediation import load_corrections
+    d = tmp_path / "0001838126"
+    d.mkdir()
+    (d / "dedup.json").write_text(_json.dumps({"fix_class": "dedup"}), encoding="utf-8")
+    (d / "unit_rescale.escalation.json").write_text(
+        _json.dumps({"fix_class": "unit_rescale"}), encoding="utf-8")
+    loaded = load_corrections(tmp_path, "0001838126")
+    assert [c["fix_class"] for c in loaded] == ["dedup"]
+
+
+def test_identifier_rate_grammar_routes_to_rule_track():
+    from scripts.agent_b2.run_remediation import flavor_of, route_corrections
+    assert flavor_of("identifier_rate_grammar") == "rule_track"
+    routed = route_corrections([
+        {"fix_class": "identifier_rate_grammar", "cik": "0001588272"}])
+    assert len(routed["rule_track"]) == 1
+    assert not routed["needs_human"]

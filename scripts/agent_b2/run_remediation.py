@@ -80,8 +80,11 @@ SYMPTOM_MECHANISMS = {"subtotal_leak", "cash_equivalent_leak", "fv_conservation"
 WRAPPER_PATCH_FIX_CLASSES = {"subtotal_filter"}
 POST_STAGING_FIX_CLASSES = {"dedup", "comparative_period_filter", "spv_lookthrough",
                             "rate_rescale", "unit_rescale", "all_pik_normalization",
-                            "missing_position_add", "classification_fix", "column_remap"}
-RULE_TRACK_FIX_CLASSES = {"anchor_fix"}
+                            "missing_position_add", "classification_fix", "column_remap",
+                            "source_anchored_value"}
+# identifier_rate_grammar (2026-08-21): a rate-in-identifier dialect proposal routed to
+# the Agent A lane (grammar repair + deterministic A3 gate), never applied to holdings.
+RULE_TRACK_FIX_CLASSES = {"anchor_fix", "identifier_rate_grammar"}
 POLICY_FIX_CLASSES = {"rule_scope"}
 WRAPPER_PATCH_APPLIERS = {"subtotal_filter": apply_subtotal_filter}
 
@@ -681,12 +684,15 @@ def route_corrections(corrections: list[dict]) -> dict[str, list[dict]]:
 
 
 def load_corrections(corrections_dir: Path, cik: str) -> list[dict]:
-    """Load staged correction leaves for one CIK (corrections/<cik>/<mechanism>.json)."""
+    """Load staged correction leaves for one CIK (corrections/<cik>/<mechanism>.json).
+    Escalation leaves (*.escalation.json) are diagnoses for the human/template-authoring
+    basket, never applied -- excluded here."""
     d = Path(corrections_dir) / str(cik)
     out: list[dict] = []
     if not d.exists():
         return out
-    for p in sorted(d.glob("*.json")):
+    for p in sorted(q for q in d.glob("*.json")
+                    if not q.name.endswith(".escalation.json")):
         try:
             out.append(json.loads(p.read_text(encoding="utf-8")))
         except (OSError, json.JSONDecodeError):
@@ -744,6 +750,25 @@ def apply_packet(
     corrections = load_corrections(corrections_dir, cik)
     if stage is not None:
         corrections = [c for c in corrections if stage_for(str(c.get("fix_class") or "")) == stage]
+    # Gate-side source verification (2026-08-21): a source_anchored_value leaf must
+    # survive the filing re-parse (cell + row-fingerprint witnesses + table health +
+    # bridge co-sign) HERE too, not only at dispatcher intake -- the apply path may be
+    # run on leaves that never went through this batch's dispatcher. Fail closed.
+    source_anchor_refusals: list[dict] = []
+    kept: list[dict] = []
+    for c in corrections:
+        if str(c.get("fix_class") or "") != "source_anchored_value":
+            kept.append(c)
+            continue
+        from pipeline.source_anchor_verify import verify_leaf
+        vrep = verify_leaf(c)
+        if vrep["ok"]:
+            kept.append(c)
+        else:
+            source_anchor_refusals.append(
+                {"cik": cik, "fix_class": "source_anchored_value",
+                 "errors": vrep["errors"][:6]})
+    corrections = kept
     routed = route_corrections(corrections)
     trial_wrapper_dir = base_dir / "batch" / batch_id / "trial_wrappers" / str(cik)
     wrapper_audits = prepare_trial_wrappers(cik, routed["wrapper_patch"],
@@ -756,6 +781,7 @@ def apply_packet(
               "n_wrapper_patch": len(routed["wrapper_patch"]),
               "n_post_staging": len(routed["post_staging"]),
               "n_needs_human": len(routed["needs_human"]),
+              "source_anchor_refusals": source_anchor_refusals,
               "wrapper_audits": wrapper_audits, "trial_command": cmd, "ran": False}
     if run:
         proc = subprocess.run(cmd, capture_output=True, text=True)
