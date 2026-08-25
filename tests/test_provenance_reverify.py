@@ -684,3 +684,26 @@ class TestPctSenseCheck:
 
     def test_classify_reason_filing_mismatch_unchanged(self):
         assert classify_reason("pass", "published_mismatch") == "filing_mismatch"
+
+    def test_cheap_just_inside_tolerance_passes(self):
+        # declared 0.0043 -> expected 0.43; published 0.4349: diff 0.0049 pp <= 0.005
+        df = pd.DataFrame([self._pct_holding(published=0.4349, raw=0.0043)])
+        out = cheap_tier(holdings_df=df)
+        row = out[out["field"] == "pct_of_net_assets"].iloc[0]
+        assert row["cheap_status"] == "pass"
+
+    def test_cheap_just_outside_tolerance_fails(self):
+        # published 0.4351: diff 0.0051 pp > 0.005
+        df = pd.DataFrame([self._pct_holding(published=0.4351, raw=0.0043)])
+        out = cheap_tier(holdings_df=df)
+        row = out[out["field"] == "pct_of_net_assets"].iloc[0]
+        assert row["cheap_status"] == "fail"
+
+    def test_full_just_inside_tolerance_is_raw_match(self):
+        out = full_tier(self._pct_cheap(published=0.4349), xml_loader=_pct_loader)
+        assert out.iloc[0]["full_status"] == "raw_match"
+
+    def test_full_just_outside_tolerance_is_divergence(self):
+        out = full_tier(self._pct_cheap(published=0.4351, cheap_status="fail"),
+                        xml_loader=_pct_loader)
+        assert out.iloc[0]["full_status"] == "pct_recompute_divergence"
