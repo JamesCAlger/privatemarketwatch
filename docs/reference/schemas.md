@@ -392,6 +392,7 @@ only over rows whose `fair_value` field's `reason_code` is `'verified'`. `derive
 | `text_pathway` | cheap_status = text_pathway | Value parsed from the identifier string. Not directly iXBRL-verifiable without a grammar-match step. |
 | `merged_context_excluded` | cheap_status in (filled_field, merged_conflict) | Field came from a secondary dedup context or a conflicting merge. Provenance is incomplete (only the winning context is anchored). |
 | `no_provenance` | cheap_status = no_provenance | Row has no src_context_id anchor -- pre-migration row, N-PORT row, or legacy CSV import. |
+| `pct_sense_check` | full_status = pct_recompute_divergence | Recompute-vs-disclosure divergence on the derived pct_of_net_assets field (beyond +-0.005 pp); warn lane (2026-08-25 re-lane). |
 | `unchecked_trivial` | all other cases | Field was trivially NULL/absent and not checked by either tier. |
 
 **anchor_stale vs filing_mismatch distinction:** `anchor_stale` means the PUBLISHED value is
@@ -425,6 +426,7 @@ The provenance re-verifier is surfaced in the unified shadow ledger via
 | `no_provenance` | weak | warn | review |
 | `text_pathway` | weak | warn | review |
 | `merged_context_excluded` | weak | warn | review |
+| `pct_sense_check` | weak | warn | review |
 | `verified` | weak | pass | not queued (coverage measurement only) |
 | `corrected` | weak | pass | not queued |
 | `derived` | weak | pass | not queued |

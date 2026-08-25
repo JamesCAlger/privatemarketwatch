@@ -9913,10 +9913,9 @@ The provenance re-verifier's `pct_of_net_assets` comparison was re-laned from a 
 
 - `pipeline/provenance_reverify.py` -- PCT_SENSE_TOL_PP constant, pct_of_net_assets re-laning logic in cheap and full tiers, new `pct_sense_check_summary` artifact builder.
 - `scripts/shadow_adapter.py` -- "pct_sense_check" -> ("weak", "warn") mapping in reason-code to tier/status.
-- `pipeline/review_queue.py` -- updated reason_code enum documentation.
-- `tests/test_provenance_reverify.py` -- 3 new tests for tolerance rounding, pct_sense_check routing, summary artifact.
-- `tests/test_shadow_adapter.py` -- 2 new tests for warn-lane mapping.
-- `docs/reference/schemas.md` -- reason-code to tier/status table updated; new pct_sense_check documentation paragraph added after packet-scope binding section.
+- `tests/test_provenance_reverify.py` -- 13 new tests for tolerance rounding, pct_sense_check routing, summary artifact.
+- `tests/test_shadow_adapter.py` -- 1 new test for warn-lane mapping.
+- `docs/reference/schemas.md` -- both enum tables updated: reason-code enum now includes pct_sense_check (derived from full_status = pct_recompute_divergence); reason-code to tier/status mapping table now includes pct_sense_check -> (weak, warn, review).
 
 ### Measured before/after (2026-08-25 rebuild)
 
