@@ -101,6 +101,18 @@ BDC_WORKLIST_PROJECTION_COLUMNS = [
     "confidence",
 ]
 
+# Projection of the provenance re-verify blocker lane into a flat worklist.
+PROVENANCE_WORKLIST_COLUMNS = [
+    "review_id",
+    "cik",
+    "report_date",
+    "reason_code",
+    "n_units",
+    "fv_at_risk_m",
+    "confidence",
+    "priority_rank",
+]
+
 
 def default_holdings_path() -> Path | None:
     """Production unified holdings, preferring parquet. None if neither exists."""
@@ -392,6 +404,60 @@ def write_bdc_worklist_projection(
     return len(projection)
 
 
+def provenance_worklist_projection(
+    *,
+    queue_path: Path | None = None,
+    items: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    """Project the provenance_reverify blocker lane to the provenance worklist schema."""
+    if items is None:
+        if queue_path is None:
+            queue_path = REVIEW_QUEUE_DIR / "review_queue.csv"
+        items = read_csv_rows(queue_path)
+    projection: list[dict[str, Any]] = []
+    for item in items:
+        if normalize_text(item.get("engine")) != "provenance_reverify":
+            continue
+        if normalize_text(item.get("lane")) != "blocker":
+            continue
+        fv_m = parse_float(item.get("fv_at_risk_m"))
+        n_units_raw = item.get("n_units", "")
+        try:
+            n_units = int(n_units_raw) if n_units_raw and n_units_raw.strip() else 0
+        except ValueError:
+            n_units = 0
+        priority_raw = item.get("priority_rank", "")
+        try:
+            priority_rank = int(priority_raw) if priority_raw and priority_raw.strip() else 0
+        except ValueError:
+            priority_rank = 0
+        projection.append(
+            {
+                "review_id": normalize_text(item.get("review_id")),
+                "cik": normalize_cik(item.get("cik")),
+                "report_date": normalize_text(item.get("report_date")),
+                "reason_code": normalize_text(item.get("rule_name")),
+                "n_units": n_units,
+                "fv_at_risk_m": f"{fv_m:.6f}" if fv_m is not None else "",
+                "confidence": normalize_text(item.get("confidence")),
+                "priority_rank": priority_rank,
+            }
+        )
+    return projection
+
+
+def write_provenance_worklist_projection(
+    *,
+    queue_path: Path | None = None,
+    out_path: Path | None = None,
+) -> int:
+    projection = provenance_worklist_projection(queue_path=queue_path)
+    if out_path is None:
+        out_path = REVIEW_QUEUE_DIR / "provenance_worklist.csv"
+    write_csv_rows(out_path, projection, PROVENANCE_WORKLIST_COLUMNS)
+    return len(projection)
+
+
 def cli(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build the unified review queue from the shadow ledger.")
     parser.add_argument("--ledger", type=Path, default=LEDGER_FILE)
@@ -406,6 +472,11 @@ def cli(argv: list[str] | None = None) -> int:
         "--emit-bdc-worklist",
         action="store_true",
         help="Also write the blocker/source lane projected to the bdc worklist schema.",
+    )
+    parser.add_argument(
+        "--emit-provenance-worklist",
+        action="store_true",
+        help="Also write the provenance_reverify blocker lane projected to the provenance worklist schema.",
     )
     parser.add_argument(
         "--holdings",
@@ -441,6 +512,9 @@ def cli(argv: list[str] | None = None) -> int:
     if args.emit_bdc_worklist:
         n = write_bdc_worklist_projection(queue_path=args.output_dir / "review_queue.csv")
         logger.info("wrote bdc worklist projection: %d source_recon blocker rows", n)
+    if args.emit_provenance_worklist:
+        n = write_provenance_worklist_projection(queue_path=args.output_dir / "review_queue.csv")
+        logger.info("wrote provenance worklist projection: %d provenance_reverify blocker rows", n)
     return 0
 
 
