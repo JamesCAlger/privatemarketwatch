@@ -1,5 +1,7 @@
 # Private Markets Data Platform — SEC XBRL Pipeline
 
+The user has ADHD and requires a cocise communication style.
+
 ## Project Goal
 
 Build a data platform for SEC-registered private markets vehicles (BDCs, interval funds, tender offer funds) with private markets indices derived from the data. The pipeline discovers all such vehicles, extracts investee-level portfolio holdings from their structured filings, and computes fund-level analytics, portfolio characteristics, and position-level indices.
