@@ -514,6 +514,8 @@ scope" even if all numeric values match. Report dates are normalized to `YYYY-MM
 comparison (DuckDB type-infers the ledger's `report_date` as TIMESTAMP, which the 2026-08-25
 canary showed falsely refusing every citation on a raw string compare).
 
+Provenance reason codes: `pct_sense_check` (added 2026-08-25) is the recompute-vs-disclosure divergence on the derived `pct_of_net_assets` field -- a warn-lane sense-check signal, never packetized as a blocker and never a valid tight-code citation for classifier verdicts. Rounding-consistent pct rows (within +-0.005 pp of the filer's 2-decimal disclosure) verify normally. Divergence profile artifact: `data/output/provenance_pct_sense_check_summary.csv`.
+
 ### Escalation sibling convention
 
 When evidence is insufficient or unavailable, the worker writes

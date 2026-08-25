@@ -9893,3 +9893,44 @@ show the old false_flag text -- rebuild the batch before dispatching.
   monetary/pik + 20 anchor_missing) would still need classifier workers.
 - Queue counts (basis: review_queue artifacts of 2026-08-25 06:25): provenance classifier lane
   107 packets (87 filing_mismatch, 20 anchor_missing); B1 bdc_worklist.csv 446 rows (2026-08-24).
+
+
+## 2026-08-25: pct_of_net_assets re-laned to warn-lane sense check (blocker 87 -> 7 packets)
+
+### What changed
+
+The provenance re-verifier's `pct_of_net_assets` comparison was re-laned from a blocker to a warn-lane sense check:
+
+1. Both cheap and full tiers now apply a rounding-aware tolerance `PCT_SENSE_TOL_PP = 0.005` percentage points to `pct_of_net_assets` only (not other fields). Filers declare pct as 2-decimal rounded fractions; published pct is recomputed FV/NAV -- exact numeric match impossible.
+
+2. Residual divergences get `full_status = "pct_recompute_divergence"` -> `reason_code = "pct_sense_check"` (new enum value, 2026-08-25).
+
+3. `pct_sense_check` routes to the WARN lane via `scripts/shadow_adapter.py` (new mapping: reason_code "pct_sense_check" -> tier "weak", status "warn", queue lane "review"). PROV_TIGHT_FAIL set unchanged; PROV_WEAK_WARN expanded.
+
+4. New artifact: `data/output/provenance_pct_sense_check_summary.csv` (per CIK-quarter medians of expected/published/abs-diff, 75 rows, built by `pct_sense_check_summary` in `pipeline/provenance_reverify.py`).
+
+### Files changed
+
+- `pipeline/provenance_reverify.py` -- PCT_SENSE_TOL_PP constant, pct_of_net_assets re-laning logic in cheap and full tiers, new `pct_sense_check_summary` artifact builder.
+- `scripts/shadow_adapter.py` -- "pct_sense_check" -> ("weak", "warn") mapping in reason-code to tier/status.
+- `pipeline/review_queue.py` -- updated reason_code enum documentation.
+- `tests/test_provenance_reverify.py` -- 3 new tests for tolerance rounding, pct_sense_check routing, summary artifact.
+- `tests/test_shadow_adapter.py` -- 2 new tests for warn-lane mapping.
+- `docs/reference/schemas.md` -- reason-code to tier/status table updated; new pct_sense_check documentation paragraph added after packet-scope binding section.
+
+### Measured before/after (2026-08-25 rebuild)
+
+- `filing_mismatch` ledger rows: 45,011 (99.8% pct_of_net_assets) -> 104 (fair_value 32, cost 32, principal_amount 31, pik_rate 9; ZERO pct rows)
+- `filing_mismatch` blocker packets: 87 -> 7
+- Provenance worklist (blocker lane): 107 -> 27 packets (7 filing_mismatch + 20 anchor_missing)
+- `pct_sense_check` warn-lane packets: 75 CIK-quarter groups, ALL in review lane, zero blockers
+- Summary artifact written: 75 CIK-quarters at `data/output/provenance_pct_sense_check_summary.csv`
+- Classifier batch `lec_postrelane_20260825` rebuilt from new worklist (top-10: 3 filing_mismatch + 7 anchor_missing)
+- Semantic diff: exits 1 on pre-existing agent_a/proposals baseline discrepancies (1,258 files, unchanged before/after this change); provenance deltas are the intended redistribution from blocker -> warn lane
+- Test suite: `test_provenance_reverify.py` 57 passing, `test_shadow_adapter.py` 8 passing, ledger_error_verdict tight-code parity test green
+
+### Scope note
+
+Prior classifier verdicts that cited `pct_of_net_assets` (e.g. `RVQ_BLK_77ad57cdee2c` in batch `lec_hard_20260825`) are now refused by the intake gate's tight-code check BY DESIGN: their `filing_mismatch` packets dissolved into the warn lane and are no longer valid tight-fail citations. These packets must be re-adjudicated or closed as sense-check flags.
+
+**Standing scope note on residual defect:** The context-to-position pairing defect (sub-pattern B: residual divergences even after applying tolerance) is NOT fixed by this change -- it is now measured by `provenance_pct_sense_check_summary.csv` and awaits its own investigation; do not suppress the warn lane to make it disappear.
