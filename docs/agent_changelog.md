@@ -9947,3 +9947,25 @@ WITHOUT stamping corrected_fields -- a provenance-silent correction, not a pairi
 Recommended follow-up (not applied): stamp corrected_fields/transform event on corrected
 rows so the cheap tier routes them to 'corrected' and the sense-check lane carries only
 unexplained divergences.
+
+
+## 2026-08-25: corrected_fields stamp on pct consolidated-NAV recompute -- warn lane drained to zero
+
+Follow-up to the pairing-defect investigation (same date). `_correct_pct_of_net_assets`
+now appends `pct_of_net_assets` to `corrected_fields` on exactly the rows it overwrites
+(via agent_promoted.append_corrected_fields; commit 497e40c; 4 new tests, full
+tests/test_unified_holdings.py 923 green in 2h25m).
+
+Rebuild chain (unified 780,726 rows -> reverify --cohort -> shadow -> queue), measured:
+- pct rows in the 81 multi-entity packets: reason 'corrected' 45,571 rows (was: 25,727
+  tolerance-passing + 19,180 pct_sense_check + ~600 anchor_missing under various codes)
+- pct_sense_check: 75 cik-quarters -> 0 (lane empty; remains live as a guard for future
+  genuine divergences on passthrough filers)
+- anchor_missing: 20 packets -> 0 (all were pct-field rows in corrected quarters; the
+  cheap-tier corrected short-circuit now fires before full-tier anchor lookup)
+- provenance blocker worklist: 27 -> 7 packets (all filing_mismatch: monetary/pik,
+  104 rows, 2+5 CIKs -- the genuine extraction/scale pool)
+- verified-FV metrics unaffected (fair_value rows untouched by the stamp)
+
+Semantic diff: private_markets_holdings corrected_fields deltas are the intended change;
+the pre-existing agent_a/proposals baseline discrepancy (1,258 files) persists unrelated.
