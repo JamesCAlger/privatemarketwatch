@@ -122,3 +122,12 @@ class TestProvenanceFeed:
         out = _run_fragment(monkeypatch, tmp_path, df).set_index("rule_name")
         assert out.loc["amended", "tier"] == "weak"
         assert out.loc["amended", "status"] == "warn"
+
+    def test_pct_sense_check_is_warn_lane_not_tight(self):
+        """Canary re-lane 2026-08-25: pct_sense_check must be weak/warn and must
+        NOT join the tight-fail (blocker) set -- PROV_TIGHT_FAIL is frozen by the
+        ledger_error_verdict parity test."""
+        import scripts.shadow_adapter as adp
+        assert "pct_sense_check" in adp.PROV_WEAK_WARN
+        assert "pct_sense_check" not in adp.PROV_TIGHT_FAIL
+        assert "filing_mismatch" in adp.PROV_TIGHT_FAIL  # monetary mismatches stay blockers

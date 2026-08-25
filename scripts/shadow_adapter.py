@@ -454,7 +454,8 @@ def _agent_a_select() -> str | None:
 PROV_TIGHT_FAIL = {"filing_mismatch", "anchor_missing", "provenance_wrong",
                    "source_unavailable", "transform_drift"}
 PROV_WEAK_WARN = {"anchor_stale", "no_provenance", "text_pathway",
-                  "merged_context_excluded"}
+                  "merged_context_excluded", "pct_sense_check"}
+# pct_sense_check: recompute-vs-disclosure divergence on the derived pct field -- sense-check signal, not a pointer-verification failure (re-laned 2026-08-25).
 # Known-pass codes -- anything NOT in tight_fail or weak_warn AND NOT in this set
 # is an unrecognized code and routes to weak/warn (safe default, not weak/pass).
 PROV_WEAK_PASS = {"verified", "corrected", "derived", "unchecked_trivial"}
