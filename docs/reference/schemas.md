@@ -474,9 +474,10 @@ Module: `pipeline/ledger_error_verdict.py`. Builder: `scripts/ledger_error_class
 | `verdict` | str | always | One of the ADJUDICATIONS enum below |
 | `confidence` | float | always | In [0.0, 1.0]; hard error outside range |
 | `mechanism` | str | extraction_wrong, parser_drift | Non-empty string describing the defect |
-| `culprit_citations` | list | extraction_wrong, parser_drift, filer_error | At least 1 entry; each entry: {row_id (str), field (str), declared_raw (float or null), instance_raw (float or null), published (float or null)} |
+| `culprit_citations` | list | extraction_wrong, parser_drift, filer_error, false_flag | At least 1 entry; each entry: {row_id (str), field (str), declared_raw (float or null), instance_raw (float or null), published (float or null)} |
 | `drift_fingerprint` | obj | parser_drift only | {field (str), transform_code (str), affected_row_ids (list, non-empty)} |
 | `filer_error_basis` | str | filer_error | Non-empty string explaining why it is a filer error |
+| `false_flag_basis` | str | false_flag | Non-empty string explaining why the flag itself is spurious (canary hardening 2026-08-25; false_flag previously required no evidence) |
 | `superseding_accession` | str | amended | Non-empty accession number of amending filing |
 | `ambiguity_basis` | str | ambiguous | One of: evidence_insufficient, source_unavailable |
 | `escalate` | bool | filer_error, ambiguous/source_unavailable | Strongly recommended; omitting produces a validation warning, not a refusal |
@@ -489,7 +490,7 @@ Module: `pipeline/ledger_error_verdict.py`. Builder: `scripts/ledger_error_class
 | `parser_drift` | A staging transform was applied incorrectly or inconsistently; drift_fingerprint identifies the future parser-patch-author packet key |
 | `filer_error` | The filer reported a wrong value in the filing itself |
 | `amended` | A later filing corrects this value; superseding_accession provided |
-| `false_flag` | The provenance flag was a false positive; no defect in the pipeline or filer |
+| `false_flag` | The provenance flag was a false positive; no defect in the pipeline or filer. Requires false_flag_basis + >=1 citation so the spurious-flag claim is itself re-derivable |
 | `ambiguous` | Evidence is insufficient or the source filing is unavailable |
 
 ### Re-derivation gate contract (`rederive_citations`)
@@ -504,12 +505,14 @@ A verdict is **REFUSED** if any citation fails any of these checks:
 4. Duplicate `(row_id, field)` rows in the ledger that DIFFER on any cited numeric produce
    an ambiguous-evidence error (refused). Agreeing duplicates are collapsed to one row.
 
-Verdicts without `culprit_citations` (false_flag, amended, ambiguous) pass the gate trivially.
+Verdicts without `culprit_citations` (amended, ambiguous) pass the gate trivially.
 The gate is fail-closed: a missing ledger file produces a clear error, never a silent pass.
 Packet-scope binding is enforced at batch intake: `validate_dir` reads `cik` and `report_date`
 from the worklist and passes them to `rederive_citations` as a `packet`; any citation whose
 ledger row belongs to a different `(cik, report_date)` is refused with "citation outside packet
-scope" even if all numeric values match.
+scope" even if all numeric values match. Report dates are normalized to `YYYY-MM-DD` before
+comparison (DuckDB type-infers the ledger's `report_date` as TIMESTAMP, which the 2026-08-25
+canary showed falsely refusing every citation on a raw string compare).
 
 ### Escalation sibling convention
 

@@ -225,14 +225,32 @@ class TestSchema:
         assert validate_ledger_verdict(ok)["ok"]
 
     # --- false_flag ---------------------------------------------------------
+    # Canary 2026-08-25: a worker chose false_flag explicitly because it required
+    # no evidence. false_flag now requires a basis AND >=1 citation so the claim
+    # "this flag is spurious" is itself re-derivable at the gate.
 
-    def test_false_flag_minimal_passes(self):
+    def test_false_flag_requires_basis_and_citation(self):
+        ok = _leaf(
+            verdict="false_flag",
+            false_flag_basis="Published pct is recomputed FV/NAV; declared is the rounded fraction x100 -- comparison artifact.",
+        )
+        assert validate_ledger_verdict(ok)["ok"]
+
+    def test_false_flag_bare_leaf_fails(self):
         leaf = {"review_id": "RVQ_BLK_ff1", "verdict": "false_flag", "confidence": 0.9}
-        assert validate_ledger_verdict(leaf)["ok"]
+        assert not validate_ledger_verdict(leaf)["ok"]
 
-    def test_false_flag_does_not_require_citations(self):
-        leaf = {"review_id": "RVQ_BLK_ff2", "verdict": "false_flag", "confidence": 0.7}
-        assert validate_ledger_verdict(leaf)["ok"]
+    def test_false_flag_empty_basis_fails(self):
+        leaf = _leaf(verdict="false_flag", false_flag_basis="")
+        assert not validate_ledger_verdict(leaf)["ok"]
+
+    def test_false_flag_missing_citations_fails(self):
+        leaf = _leaf(
+            verdict="false_flag",
+            false_flag_basis="Comparison artifact.",
+            culprit_citations=[],
+        )
+        assert not validate_ledger_verdict(leaf)["ok"]
 
     # --- ambiguous ----------------------------------------------------------
 
@@ -365,8 +383,14 @@ class TestRederivation:
         assert "declared_raw" in str(out["errors"])
 
     def test_no_citations_skips_gate(self):
-        # verdicts without culprit_citations (e.g. false_flag) pass the gate trivially
-        leaf = {"review_id": "RVQ_BLK_x", "verdict": "false_flag", "confidence": 0.9}
+        # verdicts without culprit_citations (e.g. amended) pass the gate trivially
+        # (schema-level citation requirements are validate_ledger_verdict's job)
+        leaf = {
+            "review_id": "RVQ_BLK_x",
+            "verdict": "amended",
+            "confidence": 0.9,
+            "superseding_accession": "0001-26-000009",
+        }
         assert rederive_citations(leaf, ledger_df=_ledger_df())["ok"]
 
     def test_near_equal_passes_within_reltol(self):
@@ -396,8 +420,13 @@ class TestValidateDir:
         (dirpath / f"{review_id}.json").write_text(json.dumps(leaf), encoding="utf-8")
 
     def _write_simple_leaf(self, dirpath: Path, review_id: str):
-        """Write a false_flag leaf (no citations -> gate trivially passes)."""
-        leaf = {"review_id": review_id, "verdict": "false_flag", "confidence": 0.9}
+        """Write an amended leaf (no citations -> gate trivially passes)."""
+        leaf = {
+            "review_id": review_id,
+            "verdict": "amended",
+            "confidence": 0.9,
+            "superseding_accession": "0001-26-000009",
+        }
         (dirpath / f"{review_id}.json").write_text(json.dumps(leaf), encoding="utf-8")
 
     def _write_worklist(self, dirpath: Path, review_ids: list[str]) -> Path:
@@ -1020,6 +1049,68 @@ class TestPacketScopeBinding:
         pf = result["per_file"][0]
         assert not pf["ok"]
         assert any("packet scope" in e or "outside packet" in e for e in pf["errors"])
+
+
+# ---------------------------------------------------------------------------
+# Canary finding 2026-08-25: report_date type normalization in packet scope
+# ---------------------------------------------------------------------------
+
+
+class TestPacketScopeDateNormalization:
+    """DuckDB type-infers the ledger's report_date column as TIMESTAMP, so the
+    live gate saw '2023-03-31 00:00:00' vs the worklist's '2023-03-31' and
+    refused every citation. Packet-scope binding must compare normalized dates."""
+
+    def _df_with_date(self, value):
+        df = _ledger_df()
+        df["report_date"] = [value]
+        return df
+
+    def test_timestamp_string_ledger_date_matches_packet_date(self):
+        packet = {"cik": "0001287750", "report_date": "2025-12-31"}
+        out = rederive_citations(
+            _leaf(), ledger_df=self._df_with_date("2025-12-31 00:00:00"), packet=packet
+        )
+        assert out["ok"], out["errors"]
+
+    def test_pandas_timestamp_ledger_date_matches_packet_date(self):
+        packet = {"cik": "0001287750", "report_date": "2025-12-31"}
+        out = rederive_citations(
+            _leaf(), ledger_df=self._df_with_date(pd.Timestamp("2025-12-31")), packet=packet
+        )
+        assert out["ok"], out["errors"]
+
+    def test_iso_t_separator_ledger_date_matches_packet_date(self):
+        packet = {"cik": "0001287750", "report_date": "2025-12-31"}
+        out = rederive_citations(
+            _leaf(), ledger_df=self._df_with_date("2025-12-31T00:00:00"), packet=packet
+        )
+        assert out["ok"], out["errors"]
+
+    def test_genuinely_different_date_still_refused(self):
+        packet = {"cik": "0001287750", "report_date": "2025-12-31"}
+        out = rederive_citations(
+            _leaf(), ledger_df=self._df_with_date("2025-09-30 00:00:00"), packet=packet
+        )
+        assert not out["ok"]
+        assert any("packet scope" in e or "outside packet" in e for e in out["errors"])
+
+    def test_validate_dir_with_timestamp_ledger_dates(self, tmp_path):
+        """End-to-end reproduction of the canary refusal: worklist date is plain,
+        ledger date is timestamp-formatted -- must pass after normalization."""
+        vd = tmp_path / "verdicts"
+        vd.mkdir()
+        leaf = {**_leaf(), "review_id": "RVQ_BLK_ts"}
+        (vd / "RVQ_BLK_ts.json").write_text(json.dumps(leaf), encoding="utf-8")
+        wl = tmp_path / "worklist.csv"
+        wl.write_text(
+            "review_id,cik,report_date\nRVQ_BLK_ts,0001287750,2025-12-31",
+            encoding="utf-8",
+        )
+        result = validate_dir(
+            vd, wl, ledger_df=self._df_with_date("2025-12-31 00:00:00")
+        )
+        assert result["ok"], result
 
 
 # ---------------------------------------------------------------------------

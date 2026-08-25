@@ -115,6 +115,23 @@ def _near_equal(a: Any, b: Any) -> bool:
     return abs(float(a) - float(b)) / denom <= _REL_TOL
 
 
+def _normalize_report_date(v: Any) -> str:
+    """Normalize a report_date to 'YYYY-MM-DD' for packet-scope comparison.
+
+    DuckDB's read_csv_auto type-infers the ledger's report_date column as
+    TIMESTAMP, so str() yields '2023-03-31 00:00:00' while worklists carry
+    '2023-03-31' -- a raw string compare falsely refuses every citation
+    (found live in the 2026-08-25 canary). Strips any time component
+    (space- or T-separated); empty/NaT/None normalize to "".
+    """
+    if v is None:
+        return ""
+    s = str(v).strip()
+    if s in ("", "nan", "NaT", "None", "null"):
+        return ""
+    return s.split(" ")[0].split("T")[0]
+
+
 def _valid_culprit_citation(c: Any) -> bool:
     """A culprit citation must have row_id (str) and field (str).
     declared_raw/instance_raw/published may be numeric or None."""
@@ -202,7 +219,15 @@ def validate_ledger_verdict(leaf: dict) -> dict[str, Any]:
         if not acc:
             _err(errors, "amended requires non-empty superseding_accession")
 
-    # false_flag: no additional required keys
+    # false_flag: requires false_flag_basis + >=1 citation. The 2026-08-25 canary
+    # showed a worker choosing false_flag specifically because it carried no
+    # evidence requirement; the claim "this flag is spurious" must itself be
+    # re-derivable at the gate.
+    elif verdict == "false_flag":
+        basis = str(leaf.get("false_flag_basis") or "").strip()
+        if not basis:
+            _err(errors, "false_flag requires non-empty false_flag_basis")
+        _check_citations_required(leaf, errors)
 
     # ambiguous: requires ambiguity_basis in the allowed set; source_unavailable -> escalate warn
     elif verdict == "ambiguous":
@@ -292,7 +317,7 @@ def rederive_citations(
     _packet_rd: str | None = None
     if packet is not None:
         _packet_cik = normalize_cik(str(packet.get("cik") or ""))
-        _packet_rd = str(packet.get("report_date") or "").strip()
+        _packet_rd = _normalize_report_date(packet.get("report_date"))
 
     # Collect cited (row_id, field) pairs to pass as filter to DuckDB path
     cited_pairs: list[tuple[str, str]] = []
@@ -333,7 +358,7 @@ def rederive_citations(
         # Packet-scope check: cited ledger row must belong to the packet's (cik, report_date)
         if _packet_cik is not None:
             row_cik = normalize_cik(str(row.get("cik") or ""))
-            row_rd = str(row.get("report_date") or "").strip()
+            row_rd = _normalize_report_date(row.get("report_date"))
             if row_cik != _packet_cik or row_rd != _packet_rd:
                 _err(errors,
                      f"culprit_citations[{i}]: citation outside packet scope: "

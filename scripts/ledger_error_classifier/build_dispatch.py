@@ -178,7 +178,10 @@ def _adjudication_vocab_block() -> str:
         "    - (no citations required)",
         "",
         "  false_flag",
-        "    - no additional required keys",
+        "    - false_flag_basis: non-empty string explaining why the flag itself is",
+        "      spurious (what the comparison got wrong; both data sides correct)",
+        "    - culprit_citations: >= 1 entry (same shape as extraction_wrong) citing",
+        "      the ledger rows that demonstrate the flag is a comparison artifact",
         "",
         "  ambiguous",
         "    - ambiguity_basis: one of ('evidence_insufficient', 'source_unavailable')",
@@ -257,8 +260,9 @@ WORKFLOW
    if parser_drift.
 5. If verdict is filer_error: fill filer_error_basis + culprit_citations.
 6. If verdict is amended: fill superseding_accession.
-7. If verdict is ambiguous: fill ambiguity_basis.
-8. Write the verdict JSON to the verdict_path shown above.
+7. If verdict is false_flag: fill false_flag_basis + culprit_citations.
+8. If verdict is ambiguous: fill ambiguity_basis.
+9. Write the verdict JSON to the verdict_path shown above.
 
 Keep investigation bounded -- you should not need more than a few reads of
 the bundle.  The gate re-derives every citation from the provenance ledger;

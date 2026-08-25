@@ -9842,3 +9842,33 @@ home). Operator codex --yolo session (PID 14988) left untouched; orphan sweeper 
 Verification run: cohort_guard PASS; validate_dir (2 configurations) + fabrication probe; manual
 adjudication of all 3 verdicts + 2 extra 0001803498 bundles. NOT run: pytest (no code changed),
 rebuilds (no data changed).
+
+
+## 2026-08-25: ledger-error-classifier canary hardening (date normalization + false_flag evidence)
+
+The two PROVEN items from the canary entry above, fixed TDD-first:
+
+1. Packet-scope date normalization (`pipeline/ledger_error_verdict.py`): new
+   `_normalize_report_date` strips time components before the packet-scope compare
+   (DuckDB type-infers ledger report_date as TIMESTAMP -> '2023-03-31 00:00:00' vs
+   worklist '2023-03-31' falsely refused every citation). Applied to both packet and
+   ledger sides; genuinely different dates still refuse.
+2. false_flag evidence requirement: `validate_ledger_verdict` now requires non-empty
+   `false_flag_basis` AND >=1 `culprit_citations` entry for false_flag (citations are
+   then re-derived by the gate like any other verdict). Closes the zero-evidence escape
+   hatch a canary worker explicitly exploited. Prompt scaffolding in
+   `scripts/ledger_error_classifier/build_dispatch.py` updated to match exactly;
+   `docs/reference/schemas.md` lane record updated.
+
+Live verification against the canary batch (lec_smoke_20260825, full scoped worklist):
+RVQ_BLK_5cb54e47dfb3 and RVQ_BLK_a2c79196d680 now PASS with packet-scope binding active;
+RVQ_BLK_77ad57cdee2c (bare false_flag) now REFUSED with "false_flag requires non-empty
+false_flag_basis" + "requires >=1 culprit_citations entry" -- the intended new behavior.
+That packet needs re-adjudication under the hardened schema before any fleet dispatch.
+
+Tests: tests/test_ledger_error_verdict.py 68 -> 76 (5 new date-normalization tests, 4 new
+false_flag tests replacing the 2 loophole tests; 2 helper leaves switched to amended);
+tests/test_ledger_error_classifier_dispatch.py +1 prompt assertion (83 total across both
+files, all green). Semantic diff backstop run: no artifact drift from this change (agent_a
+proposals baseline discrepancies are pre-existing). Existing batch prompts on disk still
+show the old false_flag text -- rebuild the batch before dispatching.

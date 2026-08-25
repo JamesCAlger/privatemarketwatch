@@ -373,6 +373,8 @@ def test_prompt_contains_per_verdict_requirements(tmp_path, monkeypatch):
     assert "culprit_citations" in prompt_text
     # filer_error -> filer_error_basis
     assert "filer_error_basis" in prompt_text
+    # false_flag -> false_flag_basis (canary hardening 2026-08-25)
+    assert "false_flag_basis" in prompt_text
     # amended -> superseding_accession
     assert "superseding_accession" in prompt_text
     # ambiguous -> ambiguity_basis
