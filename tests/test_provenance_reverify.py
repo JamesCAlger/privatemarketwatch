@@ -731,10 +731,18 @@ class TestPctSenseSummary:
         assert row["n_rows"] == 2
         assert row["median_abs_diff_pp"] == pytest.approx((1.5856 + 2.2138) / 2)
 
-    def test_empty_ledger_gives_empty_frame(self):
+    def test_no_pct_rows_gives_empty_frame(self):
         from pipeline.provenance_reverify import pct_sense_check_summary
         out = pct_sense_check_summary(self._ledger().iloc[2:3])
         assert out.empty
+
+    def test_truly_empty_dataframe_gives_empty_frame(self):
+        from pipeline.provenance_reverify import pct_sense_check_summary
+        out = pct_sense_check_summary(pd.DataFrame())
+        assert out.empty
+        assert list(out.columns) == ["cik", "report_date", "n_rows",
+                                     "median_expected_pp", "median_published_pp",
+                                     "median_abs_diff_pp"]
 
     def test_build_ledger_writes_summary_artifact(self, tmp_path):
         tier = pd.DataFrame([{

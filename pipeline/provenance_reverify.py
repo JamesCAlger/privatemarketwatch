@@ -493,6 +493,8 @@ def pct_sense_check_summary(ledger: pd.DataFrame) -> pd.DataFrame:
     """
     cols = ["cik", "report_date", "n_rows", "median_expected_pp",
             "median_published_pp", "median_abs_diff_pp"]
+    if ledger.empty or "reason_code" not in ledger.columns:
+        return pd.DataFrame(columns=cols)
     rows = ledger[ledger["reason_code"] == "pct_sense_check"].copy()
     if rows.empty:
         return pd.DataFrame(columns=cols)
