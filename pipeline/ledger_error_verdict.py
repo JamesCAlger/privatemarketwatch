@@ -280,8 +280,22 @@ def rederive_citations(
         # Verdicts without citations (false_flag, amended, ambiguous, etc.) pass trivially
         return {"ok": True, "errors": [], "warnings": []}
 
+    # Collect cited (row_id, field) pairs to pass as filter to DuckDB path
+    cited_pairs: list[tuple[str, str]] = []
+    for c in cites:
+        if isinstance(c, dict):
+            rid = str(c.get("row_id") or "").strip()
+            fld = str(c.get("field") or "").strip()
+            if rid and fld:
+                cited_pairs.append((rid, fld))
+
     # Build lookup: (row_id, field) -> ledger row dict
-    lookup = _build_ledger_lookup(ledger_path=ledger_path, ledger_df=ledger_df, errors=errors)
+    lookup = _build_ledger_lookup(
+        ledger_path=ledger_path,
+        ledger_df=ledger_df,
+        errors=errors,
+        cited_pairs=cited_pairs or None,
+    )
     if errors:
         return {"ok": False, "errors": errors, "warnings": []}
 
@@ -320,7 +334,13 @@ def rederive_citations(
 
 
 def _coerce_numeric(v: Any) -> Any:
-    """Convert a ledger value (possibly string or NaN) to float or None."""
+    """Convert a ledger value (possibly string or NaN) to float or None.
+
+    bool is intentionally mapped to None rather than 0.0/1.0: a boolean in a
+    numeric ledger column signals a schema anomaly (e.g. pandas reading "True"
+    from a CSV that should contain a number).  Treating it as None causes a
+    mismatch rather than silently accepting a fabricated 0.0 or 1.0 value.
+    """
     if v is None:
         return None
     if isinstance(v, float):
@@ -342,10 +362,11 @@ def _build_ledger_lookup(
     ledger_path: Path | None,
     ledger_df: pd.DataFrame | None,
     errors: list[str],
+    cited_pairs: list[tuple[str, str]] | None = None,
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Return a dict keyed by (row_id, field).  Populates errors on failure."""
     if ledger_df is not None:
-        return _df_to_lookup(ledger_df)
+        return _df_to_lookup(ledger_df, errors)
 
     # Resolve file path
     if ledger_path is None:
@@ -356,22 +377,70 @@ def _build_ledger_lookup(
              f"re-derivation refused: provenance ledger not found at {ledger_path}")
         return {}
 
-    return _duckdb_lookup(ledger_path, errors)
+    return _duckdb_lookup(ledger_path, errors, cited_pairs=cited_pairs)
 
 
-def _df_to_lookup(df: pd.DataFrame) -> dict[tuple[str, str], dict[str, Any]]:
+def _df_to_lookup(
+    df: pd.DataFrame,
+    errors: list[str],
+) -> dict[tuple[str, str], dict[str, Any]]:
+    """Build (row_id, field) -> row dict from a DataFrame.
+
+    Duplicate (row_id, field) rows where ALL cited numeric columns agree -> keep one.
+    Duplicate rows that DIFFER on any of declared_raw / instance_raw / published ->
+    append an ambiguous-evidence error and return an empty lookup for that key so the
+    caller's gate refuses the citation.
+    """
+    _CITED_NUMS = ("declared_raw", "instance_raw", "published")
+
+    # Vectorized group-by build: collect all rows per (row_id, field)
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for rec in df.to_dict(orient="records"):
+        key = (str(rec.get("row_id") or ""), str(rec.get("field") or ""))
+        grouped.setdefault(key, []).append(rec)
+
     lookup: dict[tuple[str, str], dict[str, Any]] = {}
-    for _, row in df.iterrows():
-        key = (str(row.get("row_id", "") or ""), str(row.get("field", "") or ""))
-        lookup[key] = dict(row)
+    for key, rows in grouped.items():
+        if len(rows) == 1:
+            lookup[key] = rows[0]
+            continue
+        # Multiple rows -- check whether all cited numeric columns agree
+        first = rows[0]
+        all_agree = True
+        conflicting_col: str | None = None
+        for col in _CITED_NUMS:
+            v0 = _coerce_numeric(first.get(col))
+            for r in rows[1:]:
+                if not _near_equal(v0, _coerce_numeric(r.get(col))):
+                    all_agree = False
+                    conflicting_col = col
+                    break
+            if not all_agree:
+                break
+        if all_agree:
+            # Duplicates agree on all cited columns -- accept the first row
+            lookup[key] = first
+        else:
+            # Ambiguous evidence: duplicates differ -- emit error, leave key absent
+            _err(
+                errors,
+                f"ambiguous ledger evidence: duplicate (row_id={key[0]!r},"
+                f" field={key[1]!r}) rows differ on {conflicting_col!r};"
+                f" citation refused",
+            )
     return lookup
 
 
 def _duckdb_lookup(
     ledger_path: Path,
     errors: list[str],
+    cited_pairs: list[tuple[str, str]] | None = None,
 ) -> dict[tuple[str, str], dict[str, Any]]:
-    """DuckDB parameterized read -- loads only the columns we need."""
+    """DuckDB parameterized filtered read -- loads only cited (row_id, field) pairs.
+
+    When cited_pairs is provided a WHERE clause restricts the scan to those pairs
+    so the full 676MB ledger is not read into memory.
+    """
     try:
         import duckdb
     except ImportError:
@@ -380,16 +449,46 @@ def _duckdb_lookup(
 
     safe_path = str(ledger_path).replace("\\", "/")
     col_list = ", ".join(f'"{c}"' for c in _LEDGER_KEEP_COLS)
-    sql = (
-        f"SELECT {col_list}"
-        f" FROM read_csv_auto('{safe_path}', header=true)"
-    )
+
+    if cited_pairs:
+        # Build parameterized WHERE: row_id IN (...) AND field IN (...)
+        # then exact-pair filter applied in Python (avoids cross-product).
+        row_ids = list({p[0] for p in cited_pairs})
+        fields = list({p[1] for p in cited_pairs})
+        # DuckDB positional params via duckdb.execute(sql, params)
+        row_id_placeholders = ", ".join("?" for _ in row_ids)
+        field_placeholders = ", ".join("?" for _ in fields)
+        sql = (
+            f"SELECT {col_list}"
+            f" FROM read_csv_auto('{safe_path}', header=true)"
+            f' WHERE "row_id" IN ({row_id_placeholders})'
+            f' AND "field" IN ({field_placeholders})'
+        )
+        params = row_ids + fields
+    else:
+        sql = (
+            f"SELECT {col_list}"
+            f" FROM read_csv_auto('{safe_path}', header=true)"
+        )
+        params = []
+
     try:
-        df = duckdb.execute(sql).fetchdf()
+        df = duckdb.execute(sql, params).fetchdf()
     except Exception as exc:
         _err(errors, f"re-derivation refused: DuckDB read of ledger failed: {exc}")
         return {}
-    return _df_to_lookup(df)
+
+    # Exact-pair post-filter when we used IN(...) (avoids cross-product false matches).
+    # Use a two-column tuple merge via pandas MultiIndex membership check.
+    if cited_pairs and not df.empty:
+        cited_set = set(cited_pairs)
+        pair_series = list(
+            zip(df["row_id"].astype(str), df["field"].astype(str))
+        )
+        mask = pd.array([p in cited_set for p in pair_series], dtype="boolean")
+        df = df[mask].reset_index(drop=True)
+
+    return _df_to_lookup(df, errors)
 
 
 # ---------------------------------------------------------------------------

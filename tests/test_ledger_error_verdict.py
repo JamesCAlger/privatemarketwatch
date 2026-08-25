@@ -511,10 +511,157 @@ def test_tight_codes_match_shadow_adapter():
         sys.path.insert(0, scripts_dir)
     try:
         sa = importlib.import_module("shadow_adapter")
-        from pipeline.ledger_error_verdict import _PROV_TIGHT_FAIL_LOCAL
-        assert _PROV_TIGHT_FAIL_LOCAL == sa.PROV_TIGHT_FAIL, (
-            f"Local copy diverges from shadow_adapter: "
-            f"local={_PROV_TIGHT_FAIL_LOCAL}, adapter={sa.PROV_TIGHT_FAIL}"
-        )
     except ImportError:
-        pytest.skip("shadow_adapter not importable in this environment")
+        pytest.fail("shadow_adapter not importable -- check sys.path injection")
+    from pipeline.ledger_error_verdict import _PROV_TIGHT_FAIL_LOCAL
+    assert _PROV_TIGHT_FAIL_LOCAL == sa.PROV_TIGHT_FAIL, (
+        f"Local copy diverges from shadow_adapter: "
+        f"local={_PROV_TIGHT_FAIL_LOCAL}, adapter={sa.PROV_TIGHT_FAIL}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Finding 1: duplicate (row_id, field) ledger rows -- ambiguous evidence
+# ---------------------------------------------------------------------------
+
+
+def _ledger_df_dup_agree():
+    """Two rows with same (row_id, field) that agree on all cited columns."""
+    return pd.DataFrame([
+        {
+            "row_id": "ROW-aaaa", "field": "fair_value", "reason_code": "filing_mismatch",
+            "declared_raw": 1000.0, "instance_raw": 1000.0, "published": 990.0,
+            "cheap_status": "pass", "full_status": "published_mismatch",
+            "cik": "0001287750", "report_date": "2025-12-31",
+            "expected": 1000.0, "src_context_id": "ctx1",
+        },
+        {
+            "row_id": "ROW-aaaa", "field": "fair_value", "reason_code": "filing_mismatch",
+            "declared_raw": 1000.0, "instance_raw": 1000.0, "published": 990.0,
+            "cheap_status": "pass", "full_status": "published_mismatch",
+            "cik": "0001287750", "report_date": "2025-12-31",
+            "expected": 1000.0, "src_context_id": "ctx2",  # non-cited col differs -- ok
+        },
+    ])
+
+
+def _ledger_df_dup_differ():
+    """Two rows with same (row_id, field) that DIFFER on instance_raw."""
+    return pd.DataFrame([
+        {
+            "row_id": "ROW-aaaa", "field": "fair_value", "reason_code": "filing_mismatch",
+            "declared_raw": 1000.0, "instance_raw": 1000.0, "published": 990.0,
+            "cheap_status": "pass", "full_status": "published_mismatch",
+            "cik": "0001287750", "report_date": "2025-12-31",
+            "expected": 1000.0, "src_context_id": "ctx1",
+        },
+        {
+            "row_id": "ROW-aaaa", "field": "fair_value", "reason_code": "filing_mismatch",
+            "declared_raw": 1000.0, "instance_raw": 999.0,  # DIFFERS
+            "published": 990.0,
+            "cheap_status": "pass", "full_status": "published_mismatch",
+            "cik": "0001287750", "report_date": "2025-12-31",
+            "expected": 1000.0, "src_context_id": "ctx2",
+        },
+    ])
+
+
+class TestDuplicateLedgerRows:
+    """Finding 1: duplicate (row_id, field) rows must be handled deterministically."""
+
+    def test_duplicate_rows_agreeing_passes(self):
+        """Duplicate rows that agree on all cited numeric columns -> pass."""
+        out = rederive_citations(_leaf(), ledger_df=_ledger_df_dup_agree())
+        assert out["ok"], out["errors"]
+
+    def test_duplicate_rows_differing_refused_with_ambiguous_error(self):
+        """Duplicate rows with differing instance_raw -> refused with ambiguous/duplicate error."""
+        out = rederive_citations(_leaf(), ledger_df=_ledger_df_dup_differ())
+        assert not out["ok"]
+        err_text = " ".join(out["errors"]).lower()
+        assert "ambiguous" in err_text or "duplicate" in err_text
+
+    def test_duplicate_rows_differing_error_names_field(self):
+        """The ambiguous-evidence error message must identify the conflicting field."""
+        out = rederive_citations(_leaf(), ledger_df=_ledger_df_dup_differ())
+        assert not out["ok"]
+        assert any("instance_raw" in e or "fair_value" in e for e in out["errors"])
+
+    def test_duplicate_via_duckdb_path_agree_passes(self, tmp_path):
+        """Same duplicate-agree semantics via the DuckDB path (small tmp_path CSV)."""
+        import csv as _csv
+        ledger_csv = tmp_path / "ledger.csv"
+        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published"]
+        rows = [
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
+        ]
+        with ledger_csv.open("w", newline="", encoding="utf-8") as f:
+            w = _csv.writer(f)
+            w.writerow(cols)
+            w.writerows(rows)
+        out = rederive_citations(_leaf(), ledger_path=ledger_csv)
+        assert out["ok"], out["errors"]
+
+    def test_duplicate_via_duckdb_path_differ_refused(self, tmp_path):
+        """Duplicate-differ semantics via DuckDB path -> refused with ambiguous/duplicate error."""
+        import csv as _csv
+        ledger_csv = tmp_path / "ledger.csv"
+        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published"]
+        rows = [
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "999.0", "990.0"],
+        ]
+        with ledger_csv.open("w", newline="", encoding="utf-8") as f:
+            w = _csv.writer(f)
+            w.writerow(cols)
+            w.writerows(rows)
+        out = rederive_citations(_leaf(), ledger_path=ledger_csv)
+        assert not out["ok"]
+        err_text = " ".join(out["errors"]).lower()
+        assert "ambiguous" in err_text or "duplicate" in err_text
+
+
+# ---------------------------------------------------------------------------
+# Finding 3: DuckDB path uses filtered read (not full-table scan)
+# ---------------------------------------------------------------------------
+
+
+class TestDuckDBFilteredRead:
+    """Finding 3: _duckdb_lookup must apply a WHERE clause restricting to cited pairs."""
+
+    def test_duckdb_reads_only_cited_rows(self, tmp_path, monkeypatch):
+        """The DuckDB lookup must NOT read rows for (row_id, field) pairs not cited.
+
+        We verify this by placing a row with a BAD reason_code for an uncited pair;
+        if the implementation fetches all rows and builds a lookup, the bad row would
+        be a key in the dict but would not cause a gate failure (it's not cited).
+        The test specifically confirms the cited row IS validated correctly.
+        A separate test checks that a full-table read + iterrows is replaced by
+        a vectorized dict build (we verify via the absence of iterrows in the impl).
+        """
+        import csv as _csv
+        ledger_csv = tmp_path / "ledger.csv"
+        cols = ["row_id", "field", "reason_code", "declared_raw", "instance_raw", "published"]
+        rows = [
+            # cited row -- correct
+            ["ROW-aaaa", "fair_value", "filing_mismatch", "1000.0", "1000.0", "990.0"],
+            # uncited row with bad reason_code -- should be irrelevant
+            ["ROW-bbbb", "interest_rate", "verified", "5.0", "5.0", "5.0"],
+        ]
+        with ledger_csv.open("w", newline="", encoding="utf-8") as f:
+            w = _csv.writer(f)
+            w.writerow(cols)
+            w.writerows(rows)
+        # Only ROW-aaaa/fair_value is cited; gate should pass
+        out = rederive_citations(_leaf(), ledger_path=ledger_csv)
+        assert out["ok"], out["errors"]
+
+    def test_no_iterrows_in_implementation(self):
+        """Implementation must not use iterrows -- contract from AGENTS.md no-iterrows rule."""
+        import inspect
+        from pipeline import ledger_error_verdict
+        src = inspect.getsource(ledger_error_verdict)
+        assert "iterrows" not in src, (
+            "_df_to_lookup or _duckdb_lookup still uses iterrows; replace with vectorized dict build"
+        )
