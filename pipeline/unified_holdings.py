@@ -469,7 +469,10 @@ def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
                  AND TRY_CAST(h.fair_value AS DOUBLE) != 0
             THEN TRY_CAST(h.fair_value AS DOUBLE) / c.net_assets * 100
             ELSE TRY_CAST(h.pct_of_net_assets AS DOUBLE)
-        END AS pct_of_net_assets
+        END AS pct_of_net_assets,
+        (c.net_assets IS NOT NULL
+         AND TRY_CAST(h.fair_value AS DOUBLE) IS NOT NULL
+         AND TRY_CAST(h.fair_value AS DOUBLE) != 0) AS _pct_corrected_flag
     FROM holdings h
     LEFT JOIN corrections c
         ON h.cik = c.cik AND h.report_date = c.report_date
@@ -477,6 +480,14 @@ def _correct_pct_of_net_assets(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     result = con.execute(sql).fetchdf()
+
+    # Provenance stamp (2026-08-25): the recompute must be declared in
+    # corrected_fields or the provenance re-verifier sees an unexplained
+    # declared-vs-published mismatch (the pct_sense_check warn flood).
+    flag = result.pop("_pct_corrected_flag").fillna(False).astype(bool)
+    if flag.any():
+        from pipeline.agent_promoted import append_corrected_fields
+        append_corrected_fields(result, result.index[flag], ["pct_of_net_assets"])
 
     # Log stats
     try:

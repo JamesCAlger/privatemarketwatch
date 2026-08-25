@@ -8230,6 +8230,97 @@ class TestCorrectPctOfNetAssets:
         acme = result[result["issuer_name"] == "Acme Corp"].iloc[0]
         assert abs(float(acme["pct_of_net_assets"]) - 80.0) < 0.01
 
+    # -- corrected_fields stamping (2026-08-25: correction must be provenance-
+    #    visible; the silent overwrite caused the pct_sense_check warn flood) --
+
+    def test_corrected_rows_stamp_corrected_fields(self, tmp_path):
+        """Rows whose pct is recalculated get 'pct_of_net_assets' in corrected_fields."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000700", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 1000000,
+             "pct_of_net_assets": 100.0},
+            {"source": "bdc", "cik": "0000000700", "report_date": "2023-03-31",
+             "issuer_name": "Beta Inc", "fair_value": 2000000,
+             "pct_of_net_assets": 150.0},
+        ])
+        ff_path = tmp_path / "fund_financials.csv"
+        pd.DataFrame([{
+            "cik": "700", "report_date": "2023-03-31", "net_assets": "5000000",
+        }]).to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        for name in ("Acme Corp", "Beta Inc"):
+            row = result[result["issuer_name"] == name].iloc[0]
+            assert "pct_of_net_assets" in str(row["corrected_fields"]), name
+
+    def test_uncorrected_rows_not_stamped(self, tmp_path):
+        """Below-threshold CIK-quarter: corrected_fields stays empty."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000701", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 800000,
+             "pct_of_net_assets": 80.0},
+        ])
+        ff_path = tmp_path / "fund_financials.csv"
+        pd.DataFrame([{
+            "cik": "701", "report_date": "2023-03-31", "net_assets": "1000000",
+        }]).to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        row = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert "pct_of_net_assets" not in str(row["corrected_fields"])
+
+    def test_null_fv_row_in_corrected_quarter_not_stamped(self, tmp_path):
+        """A row the CASE leaves unchanged (no fair_value) must NOT be stamped,
+        even inside a corrected CIK-quarter."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000702", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 1000000,
+             "pct_of_net_assets": 150.0},
+            {"source": "bdc", "cik": "0000000702", "report_date": "2023-03-31",
+             "issuer_name": "NoFV LLC", "fair_value": "",
+             "pct_of_net_assets": 90.0},
+        ])
+        ff_path = tmp_path / "fund_financials.csv"
+        pd.DataFrame([{
+            "cik": "702", "report_date": "2023-03-31", "net_assets": "2000000",
+        }]).to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        stamped = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        assert "pct_of_net_assets" in str(stamped["corrected_fields"])
+        unstamped = result[result["issuer_name"] == "NoFV LLC"].iloc[0]
+        assert "pct_of_net_assets" not in str(unstamped["corrected_fields"])
+        assert abs(float(unstamped["pct_of_net_assets"]) - 90.0) < 0.01
+
+    def test_stamp_appends_to_existing_corrected_fields(self, tmp_path):
+        """Pre-existing corrected_fields entries are preserved (';'-joined append)."""
+        holdings = self._make_holdings_df([
+            {"source": "bdc", "cik": "0000000703", "report_date": "2023-03-31",
+             "issuer_name": "Acme Corp", "fair_value": 1000000,
+             "pct_of_net_assets": 150.0, "corrected_fields": "fair_value"},
+            {"source": "bdc", "cik": "0000000703", "report_date": "2023-03-31",
+             "issuer_name": "Beta Inc", "fair_value": 2000000,
+             "pct_of_net_assets": 120.0},
+        ])
+        ff_path = tmp_path / "fund_financials.csv"
+        pd.DataFrame([{
+            "cik": "703", "report_date": "2023-03-31", "net_assets": "6000000",
+        }]).to_csv(ff_path, index=False)
+
+        with patch("pipeline.unified_holdings.FUND_FINANCIALS_FILE", ff_path):
+            result = _correct_pct_of_net_assets(holdings)
+
+        row = result[result["issuer_name"] == "Acme Corp"].iloc[0]
+        cf = str(row["corrected_fields"])
+        assert "fair_value" in cf
+        assert "pct_of_net_assets" in cf
+
 
 # ---------------------------------------------------------------------------
 # _apply_row_corrections
