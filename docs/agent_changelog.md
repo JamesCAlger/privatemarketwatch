@@ -10010,3 +10010,18 @@ Lane lesson (3rd occurrence): workers reliably produce gate-clean citations but 
 unreliable on WHICH SIDE is wrong; the prompt needs a mandatory fund-total sanity check
 before extraction_wrong/parser_drift verdicts. Evidence: scratch/2026-08-25_lec_live7/
 adjudication_checks.py output.
+
+## 2026-08-25: Provenance-integrity predicates in the B2 value gate
+
+- `scripts/agent_b2/run_remediation.py`: new `check_provenance_integrity` +
+  `_PROVENANCE_COLUMNS`; `gate_value_packet` gains two predicates:
+  `provenance_invariant` (appliers must not write/drop src_*, row_id,
+  corrected_fields) and `changed_fields_tracked` (every applier-changed column
+  must be in CORRECTED_TRACKED_FIELDS, else the production stamp would miss it
+  and the provenance re-verifier would report unexplained drift post-promotion).
+- Judged on the gate's replay frame (applier(baseline)); comparison semantics
+  mirror `mark_corrected_fields`. Scope: value gate only -- wrapper-patch
+  (stage-1) corrections legitimately change source-level provenance.
+- Contract: promotion-time detection of provenance clobbering/unstamped drift;
+  previously only detectable post-promotion in the quarter-pass ledger.
+- Tests: +9 in `tests/test_agent_b2_run_remediation.py` (7 unit, 2 gate-level).
