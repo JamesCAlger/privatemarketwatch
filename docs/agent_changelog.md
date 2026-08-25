@@ -6,6 +6,83 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-08-25 - Ledger-error-classifier lane: built and batch prepared (not dispatched)
+
+### What shipped
+
+- **Lane modules (Tasks 1-3, commits through 0175a70):** `pipeline/review_queue.py`
+  (provenance worklist projection, `--emit-provenance-worklist` flag, `PROVENANCE_WORKLIST_COLUMNS`);
+  `pipeline/ledger_error_verdict.py` (ADJUDICATIONS enum, verdict schema validator,
+  `rederive_citations` gate, `validate_dir` batch intake); `scripts/ledger_error_classifier/build_dispatch.py`
+  (batch builder: worklist.csv + prompts + manifest, cohort guard, bundle-ensure, NO dispatch).
+
+- **Prompt text fix (Task 4, folded-in item):** Overstated enforcement language corrected in
+  `_adjudication_vocab_block()`:
+  - `escalate: true (required when ambiguity_basis='source_unavailable')` ->
+    `escalate: true (strongly recommended ... -- omitting produces a validation warning, not a refusal)`
+  - `escalate: true (recommended; ...)` for filer_error ->
+    `escalate: true (strongly recommended -- omitting produces a validation warning, not a refusal)`
+  No tests asserted these strings; dispatch tests still 7/7 green.
+
+- **Live batch `lec_smoke_20260825` (Task 4):**
+  - Input: `python -m pipeline.review_queue --emit-provenance-worklist` ->
+    107 provenance_reverify blocker rows (review_queue: 43,827 total, 14,532 blocker, 29,295 review).
+  - Builder: `python -m scripts.ledger_error_classifier.build_dispatch --batch-id lec_smoke_20260825 --top-n 10`
+  - Output: 10 prompts + manifest.json at
+    `data/output/ledger_error_classifier/batch/lec_smoke_20260825/`
+  - All 10 items: `reason_code=filing_mismatch`; all 10 bundles: `evidence_completeness=source_artifact`
+  - Manifest: `dispatch_requires=admin_shell`, `grant_profile=read_only_classifier`, no `corrections_dir`
+  - Worklist count == provenance blocker count: PASS (both 107)
+  - **NO dispatch performed:** admin shell required.
+
+- **Gate proof (Task 4, `tests/test_ledger_error_verdict.py`):** Extended with
+  `TestEndToEndValidateDir.test_end_to_end_gate_proof` -- hand-authored no-canary substitute:
+  valid extraction_wrong verdict ACCEPTED (citations re-derive from ledger_df);
+  fabricated instance_raw verdict REFUSED (gate identifies `instance_raw` mismatch);
+  escalation sibling counts as coverage (no missing-verdict cross_error).
+  Test suite: 60 passed (was 56; 4 new tests including e2e).
+
+- **Verification scratch:** `scratch/2026-08-25_lec/verify_batch.py` + `verify_batch.log`
+  (all 5 checks PASS: worklist/blocker count parity; 10 prompts; manifest fields;
+  no corrections_dir; all bundles source_artifact).
+
+### Convergence checklist (7 items, all satisfied)
+
+1. Output is a verdict leaf only -- bounded enum + evidence + confidence (ADJUDICATIONS in ledger_error_verdict.py).
+2. Escalation is a first-class `*.escalation.json` sibling, not a degraded low-confidence output;
+   counts as coverage in validate_dir.
+3. Gate (`rederive_citations`) is deterministic and lives outside the agent's write reach;
+   fabricated citations refused.
+4. Grant profile documented per-lane at dispatch: `read_only_classifier` (4 read dirs, no write);
+   `dispatch_requires=admin_shell`; per manifest field spec in schemas.md.
+5. Evidence citations sufficient for gate-side re-derivation: every `culprit_citations` entry
+   re-derived from the provenance ledger within rel-tol 1e-9.
+6. Prompt scaffolding taken from B1 (B2 dispatch_preflight.py conventions for manifest fields);
+   divergences documented in build_dispatch.py module docstring (no corrections_dir; vocab differs).
+7. Dispatch unit = queue review_id packets (CIK x quarter x reason_code); dedup handled upstream
+   by the review_queue 8.1 feed dedup (provenance_already_queued anti-join).
+
+### Standing note: drift_fingerprint as parser-patch-author packet key
+
+`parser_drift` verdicts carry `drift_fingerprint.{field, transform_code, affected_row_ids}`.
+This object is the FUTURE input packet for the `parser-patch-author` fixer/code lane.
+Once the classifier has been dispatched and produces `parser_drift` verdicts at scale, the
+drift_fingerprint values are the natural dedup key for batching parser-patch-author work.
+Do NOT pre-build the parser-patch-author lane before the classifier has been dispatched and
+has produced real drift fingerprints to generalize from (sequencing doctrine).
+
+### Files changed (Task 4)
+
+- `scripts/ledger_error_classifier/build_dispatch.py` -- prompt text fix (escalate wording)
+- `tests/test_ledger_error_verdict.py` -- `TestEndToEndValidateDir` + `_e2e_ledger_df` helper
+- `docs/agent_family_architecture.md` -- ledger-error-classifier BUILT entry + status table
+- `docs/reference/schemas.md` -- new section: verdict-leaf schema, re-derivation gate contract,
+  ADJUDICATIONS enum, batch/manifest layout, smoke batch counts
+- `scratch/2026-08-25_lec/verify_batch.py` + `verify_batch.log` -- verification script and output
+- `docs/agent_changelog.md` -- this entry
+
+---
+
 ## 2026-08-24 - Tiebreak hardening: build-determinism migration (commits 97a127f..6198812)
 
 ### What shipped (Tasks 1-4, commits 97a127f..6198812)

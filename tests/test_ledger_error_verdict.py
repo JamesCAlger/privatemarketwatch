@@ -720,3 +720,167 @@ class TestDuckDBFilteredRead:
         assert "iterrows" not in src, (
             "_df_to_lookup or _duckdb_lookup still uses iterrows; replace with vectorized dict build"
         )
+
+
+# ---------------------------------------------------------------------------
+# End-to-end validate_dir gate proof (Task 4 -- no canary substitute)
+#
+# Three review_ids in a 2-row worklist + 1 escalation:
+#   RVQ_BLK_e2e_valid    -- valid extraction_wrong verdict, citations reproduce -> ACCEPTED
+#   RVQ_BLK_e2e_fab      -- fabricated instance_raw in citation -> gate REFUSES
+#   RVQ_BLK_e2e_esc      -- escalation sibling only (no verdict file) -> counts as coverage
+#
+# Gate proof contract:
+#   - validate_dir overall ok=False (one fabricated citation blocked)
+#   - RVQ_BLK_e2e_valid ok=True (n_valid == 1)
+#   - RVQ_BLK_e2e_fab ok=False (n_invalid == 1)
+#   - RVQ_BLK_e2e_esc covered by escalation sibling (no missing-verdict cross_error)
+# ---------------------------------------------------------------------------
+
+
+def _e2e_ledger_df():
+    """Two-row ledger that covers both the valid and fabricated review items."""
+    return pd.DataFrame([
+        {
+            "row_id": "ROW-e2e1",
+            "field": "fair_value",
+            "reason_code": "filing_mismatch",
+            "declared_raw": 2000.0,
+            "instance_raw": 2000.0,
+            "published": 1950.0,
+            "cheap_status": "pass",
+            "full_status": "published_mismatch",
+            "cik": "0001803498",
+            "report_date": "2025-09-30",
+            "expected": 2000.0,
+            "src_context_id": "ctx_e2e",
+        },
+        {
+            "row_id": "ROW-e2e2",
+            "field": "fair_value",
+            "reason_code": "filing_mismatch",
+            "declared_raw": 3000.0,
+            "instance_raw": 3000.0,
+            "published": 2900.0,
+            "cheap_status": "pass",
+            "full_status": "published_mismatch",
+            "cik": "0001803498",
+            "report_date": "2025-06-30",
+            "expected": 3000.0,
+            "src_context_id": "ctx_e2e2",
+        },
+    ])
+
+
+class TestEndToEndValidateDir:
+    """Gate proof: valid verdict ACCEPTED, fabricated citation REFUSED,
+    escalation sibling satisfies coverage -- all via validate_dir fixture call.
+
+    No workers are dispatched; this is the hand-authored no-canary substitute.
+    """
+
+    def _write_verdict(self, dirpath: Path, review_id: str, leaf: dict) -> None:
+        (dirpath / f"{review_id}.json").write_text(
+            json.dumps({**leaf, "review_id": review_id}), encoding="utf-8"
+        )
+
+    def _write_escalation(self, dirpath: Path, review_id: str) -> None:
+        esc = {
+            "review_id": review_id,
+            "ambiguity_basis": "source_unavailable",
+            "escalation_reason": "Source filing not yet cached; cannot verify citation.",
+            "confidence": 0.1,
+        }
+        (dirpath / f"{review_id}.escalation.json").write_text(
+            json.dumps(esc), encoding="utf-8"
+        )
+
+    def _write_worklist(self, dirpath: Path, review_ids: list[str]) -> Path:
+        wl = dirpath / "worklist.csv"
+        wl.write_text("review_id\n" + "\n".join(review_ids), encoding="utf-8")
+        return wl
+
+    def test_end_to_end_gate_proof(self, tmp_path):
+        """Full e2e: valid ACCEPTED, fabricated citation REFUSED, escalation covers."""
+        vd = tmp_path / "verdicts"
+        vd.mkdir()
+
+        # (1) Valid verdict: citations exactly match the fixture ledger
+        valid_leaf = {
+            "verdict": "extraction_wrong",
+            "confidence": 0.9,
+            "mechanism": "xbrl_concept_mismatch",
+            "culprit_citations": [
+                {
+                    "row_id": "ROW-e2e1",
+                    "field": "fair_value",
+                    "declared_raw": 2000.0,
+                    "instance_raw": 2000.0,
+                    "published": 1950.0,
+                }
+            ],
+        }
+        self._write_verdict(vd, "RVQ_BLK_e2e_valid", valid_leaf)
+
+        # (2) Fabricated citation: instance_raw 555.0 does not match ledger 3000.0
+        fabricated_leaf = {
+            "verdict": "extraction_wrong",
+            "confidence": 0.8,
+            "mechanism": "wrong_scale_applied",
+            "culprit_citations": [
+                {
+                    "row_id": "ROW-e2e2",
+                    "field": "fair_value",
+                    "declared_raw": 3000.0,
+                    "instance_raw": 555.0,   # fabricated -- ledger has 3000.0
+                    "published": 2900.0,
+                }
+            ],
+        }
+        self._write_verdict(vd, "RVQ_BLK_e2e_fab", fabricated_leaf)
+
+        # (3) Escalation sibling -- no verdict file; counts as coverage
+        self._write_escalation(vd, "RVQ_BLK_e2e_esc")
+
+        # Worklist covers all three review_ids
+        wl = self._write_worklist(tmp_path, [
+            "RVQ_BLK_e2e_valid",
+            "RVQ_BLK_e2e_fab",
+            "RVQ_BLK_e2e_esc",
+        ])
+
+        result = validate_dir(vd, wl, ledger_df=_e2e_ledger_df())
+
+        # Overall: NOT ok (fabricated citation causes failure)
+        assert not result["ok"], (
+            "validate_dir should be not-ok when one verdict has a fabricated citation"
+        )
+
+        # n_valid == 1 (the valid leaf passed both schema and gate)
+        assert result["n_valid"] == 1, f"Expected n_valid=1, got {result['n_valid']}"
+
+        # n_error_files == 1 (the fabricated-citation leaf failed the gate)
+        assert result["n_error_files"] == 1, (
+            f"Expected n_error_files=1, got {result['n_error_files']}"
+        )
+
+        # No missing-verdict cross_error for the escalation sibling
+        cross_err_text = " ".join(result.get("cross_errors", []))
+        assert "RVQ_BLK_e2e_esc" not in cross_err_text, (
+            "Escalation sibling should satisfy coverage; 'missing' error should not name it"
+        )
+
+        # The fabricated-citation leaf should appear in per_file as not-ok
+        per_file_map = {pf["review_id"]: pf for pf in result.get("per_file", [])}
+        assert "RVQ_BLK_e2e_valid" in per_file_map
+        assert per_file_map["RVQ_BLK_e2e_valid"]["ok"] is True, (
+            "Valid leaf should pass both schema and gate"
+        )
+        assert "RVQ_BLK_e2e_fab" in per_file_map
+        assert per_file_map["RVQ_BLK_e2e_fab"]["ok"] is False, (
+            "Fabricated-citation leaf should fail at the re-derivation gate"
+        )
+        fab_errors = per_file_map["RVQ_BLK_e2e_fab"]["errors"]
+        assert any("instance_raw" in e for e in fab_errors), (
+            f"Gate error should identify 'instance_raw' as the fabricated field; got {fab_errors}"
+        )

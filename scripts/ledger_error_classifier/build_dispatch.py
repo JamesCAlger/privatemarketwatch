@@ -170,7 +170,8 @@ def _adjudication_vocab_block() -> str:
         "  filer_error",
         "    - filer_error_basis: non-empty string explaining why it is a filer error",
         "    - culprit_citations: >= 1 entry (same shape as extraction_wrong)",
-        "    - escalate: true (recommended; this is an escalation-shaped outcome)",
+        "    - escalate: true (strongly recommended -- omitting produces a validation"
+        " warning, not a refusal)",
         "",
         "  amended",
         "    - superseding_accession: non-empty accession number of the amending filing",
@@ -181,7 +182,8 @@ def _adjudication_vocab_block() -> str:
         "",
         "  ambiguous",
         "    - ambiguity_basis: one of ('evidence_insufficient', 'source_unavailable')",
-        "    - escalate: true (required when ambiguity_basis='source_unavailable')",
+        "    - escalate: true (strongly recommended when ambiguity_basis='source_unavailable'"
+        " -- omitting produces a validation warning, not a refusal)",
         "",
         "ESCALATION SIBLING CONVENTION",
         "=============================",
