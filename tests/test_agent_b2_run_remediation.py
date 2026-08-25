@@ -806,3 +806,33 @@ def test_provenance_integrity_trivial_without_prov_columns():
     checks, reasons = rr.check_provenance_integrity(base, exp)
     assert checks == {"provenance_invariant": True, "changed_fields_tracked": True}
     assert reasons == []
+
+
+def test_value_gate_passes_with_provenance_columns_intact():
+    from pipeline.agent_b2_appliers import apply_rate_rescale
+    base = _vg_frame_prov()
+    trial, _ = apply_rate_rescale(base, _vg_corr()["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=_vg_corr())
+    assert res["verdict"] == "PASS", res["reasons"]
+    assert res["checks"]["provenance_invariant"] is True
+    assert res["checks"]["changed_fields_tracked"] is True
+
+
+def test_value_gate_fails_when_applier_clobbers_provenance(monkeypatch):
+    import pipeline.agent_b2_appliers as appliers
+    base = _vg_frame_prov()
+
+    def bad_apply_scoped(df, correction):
+        out = df.copy()
+        out.loc[out["issuer_name"] == "Alpha Corp", "interest_rate"] = 10.5
+        out["src_facts"] = ""  # simulated applier defect
+        return out, {"status": "ok", "rows_changed": 1}
+
+    monkeypatch.setattr(appliers, "apply_scoped", bad_apply_scoped)
+    trial, _ = bad_apply_scoped(base, None)
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=_vg_corr())
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["provenance_invariant"] is False
+    assert any("src_facts" in r for r in res["reasons"])

@@ -534,6 +534,12 @@ def gate_value_packet(
     - magnitude_plausible (round-4): the fix must leave the target quarter's per-field
       averages and principal/FV row ratio within one order of magnitude of the fund's
       off-target-quarter norm (see check_magnitude_plausibility).
+    - provenance_invariant: the applier must not write or drop provenance/anchor
+      columns (src_*, row_id, corrected_fields); production stamps corrected_fields
+      outside the applier, and the re-verifier's anchor state must survive.
+    - changed_fields_tracked: every column the applier changes must be in
+      CORRECTED_TRACKED_FIELDS so the production corrected_fields stamp records
+      it; an untracked change would surface as unexplained reverifier drift.
     - grounding_verified (missing_position_add only): every position's source_row_id
       must exist in the grounding frame for this CIK with fair_value within 0.5%.
       Missing grounding data FAILS (fail-closed; no fabricated positions).
@@ -595,6 +601,10 @@ def gate_value_packet(
         target_quarter=target_quarter)
     checks["magnitude_plausible"] = mag_ok
     reasons.extend(mag_reasons)
+
+    prov_checks, prov_reasons = check_provenance_integrity(baseline_df, expected_df)
+    checks.update(prov_checks)
+    reasons.extend(prov_reasons)
 
     fv_touching = fix_class in _FV_TOUCHING or (
         fix_class == "unit_rescale" and field == "fair_value")
