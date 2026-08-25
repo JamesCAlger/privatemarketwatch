@@ -41,6 +41,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-07-22 (part 6) - Two evidence-class excusal mechanisms added to the source-only classifier; blocking pool 2,305 -> 2,065
 - 2026-07-22 (part 7) - Attribution of the rule-unexplained E1 drops (Ares $14.8B solved)
 - 2026-07-22 (part 8) - Global JV-axis staging drop REJECTED by evidence; the pipeline already has a retain-and-flag design the conservation engine ignores
+- 2026-08-25: pct_sense_check "context-to-position pairing defect" -- resolved, no pairing defect exists
 
 ## Per-CIK wrapper residual reviews ([wrapper_residuals.md](wrapper_residuals.md))
 - 2026-06-04 - Golub bare-name 2024-06-30 wrapper residuals

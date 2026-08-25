@@ -853,3 +853,39 @@ before their rule scopes expire (HPS: 2025-12-31 only; NM: through 2026-03-31)?
 - (d) HPS rule re-scope (its whitelist mechanism is fragile for future
   quarters; a B2 re-investigation with a structural signature is safer).
 
+
+## 2026-08-25: pct_sense_check "context-to-position pairing defect" -- resolved, no pairing defect exists
+
+**Question:** After the pct_of_net_assets re-lane (blocker 87 -> 7 packets), 75 cik-quarters /
+19,180 ledger rows remained in the warn lane as pct_sense_check divergences. The working
+hypothesis (canary worker + operator reading of context-id clustering) was a
+context-to-position pairing defect: declared pct facts attributed to the wrong published rows.
+Is it real?
+
+**Method:** (1) traced the published pct_of_net_assets data flow: staging_bdc.py passes the
+declared fact through with scale harmonization (_pct*100), but unified_holdings.py
+`_correct_pct_of_net_assets` overwrites the column for multi-entity BDCs (cik-quarter
+pct_sum > 200%) with fair_value / consolidated net_assets * 100 from fund_financials.csv.
+(2) Numeric test (scratch/2026-08-25_pct_pairing/verify_recompute_hypothesis.py, DuckDB):
+join all pct_sense_check ledger rows -> holdings (row_id) -> fund_financials (cik, quarter),
+compute |published - fv/net_assets*100|.
+
+**Result:** 19,180 / 19,180 rows reproduce the recompute EXACTLY (max residual 0.0 pp);
+all 75 quarters join. Spot check 0001803498 2025-09-30: net_assets $46.7B consolidated;
+published 0.257887 = 120,534,000 / 46,739,130,000 * 100.
+
+**Conclusion:** There is NO pairing defect. The divergences are the intentional multi-entity
+consolidated-NAV correction. Sub-pattern A (close values) = positions whose filer-declared pct
+was against ~the consolidated NAV; sub-pattern B (wildly-off values, high context ids) =
+positions declared against small SUB-ENTITY net assets in sub-entity sections of the filing --
+declared 1.59% of a feeder's NAV vs 0.0044% of consolidated NAV are both "correct" numbers
+with different denominators.
+
+**The real defect:** `_correct_pct_of_net_assets` is provenance-silent. It overwrites the
+value but does not stamp `corrected_fields` (nor a transform event or source change), so the
+provenance chain still claims an xbrl_field passthrough. Had it stamped corrected_fields, the
+re-verifier cheap tier would have routed these rows to reason 'corrected' (weak/pass) and no
+flags would ever have fired. Recommended fix (NOT applied in this investigation): stamp
+`corrected_fields` += pct_of_net_assets (or a dedicated transform event, e.g.
+'pct_of_net_assets:recompute_consolidated_nav') on exactly the corrected rows, leaving the
+pct_sense_check lane to carry only genuinely unexplained divergences.

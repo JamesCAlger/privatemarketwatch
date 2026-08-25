@@ -9933,3 +9933,17 @@ The provenance re-verifier's `pct_of_net_assets` comparison was re-laned from a 
 Prior classifier verdicts that cited `pct_of_net_assets` (e.g. `RVQ_BLK_77ad57cdee2c` in batch `lec_hard_20260825`) are now refused by the intake gate's tight-code check BY DESIGN: their `filing_mismatch` packets dissolved into the warn lane and are no longer valid tight-fail citations. These packets must be re-adjudicated or closed as sense-check flags.
 
 **Standing scope note on residual defect:** The context-to-position pairing defect (sub-pattern B: residual divergences even after applying tolerance) is NOT fixed by this change -- it is now measured by `provenance_pct_sense_check_summary.csv` and awaits its own investigation; do not suppress the warn lane to make it disappear.
+
+
+## 2026-08-25: pct_sense_check pairing-defect investigation -- CLOSED, no pairing defect
+
+The standing scope note from the re-lane entry is resolved. Full writeup:
+docs/investigations/source_reconciliation.md (2026-08-25 entry). Summary: all 19,180
+pct_sense_check rows reproduce fair_value / consolidated net_assets * 100 EXACTLY
+(max residual 0.0 pp; scratch/2026-08-25_pct_pairing/verify_recompute_hypothesis.py).
+The divergences are unified_holdings._correct_pct_of_net_assets (multi-entity BDC
+consolidated-NAV correction, pct_sum>200 trigger), which overwrites the published value
+WITHOUT stamping corrected_fields -- a provenance-silent correction, not a pairing bug.
+Recommended follow-up (not applied): stamp corrected_fields/transform event on corrected
+rows so the cheap tier routes them to 'corrected' and the sense-check lane carries only
+unexplained divergences.
