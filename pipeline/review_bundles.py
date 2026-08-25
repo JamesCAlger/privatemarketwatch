@@ -30,6 +30,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+import duckdb
+
 from pipeline import config
 from pipeline.bdc_cik_review import (
     BdcCikReviewError,
@@ -190,6 +192,16 @@ EVIDENCE_SPECS: dict[str, EvidenceSpec] = {
         lambda it: (_ck(it), _nt(it.get("report_date")), _nt(it.get("rule_name"))),
         "Agent A identifier-grammar flag rows (metric, mechanism, identifier).",
     ),
+    # Added 2026-08-24: provenance re-verify engine (shadow ledger Task 1).
+    # The ledger is ~676MB so _index_artifact (streaming full-file read) is
+    # forbidden here.  build_review_bundles detects this engine key and calls
+    # _index_provenance_ledger (DuckDB filtered read) instead.
+    "provenance_reverify": EvidenceSpec(
+        "provenance_reverify", config.PROVENANCE_LEDGER_FILE,
+        lambda r: (normalize_cik(r.get("cik")), _nt(r.get("report_date")), _nt(r.get("reason_code"))),
+        lambda it: (_ck(it), _nt(it.get("report_date")), _nt(it.get("rule_name"))),
+        "Provenance ledger rows matching this CIK/quarter/reason_code (field, declared_raw, instance_raw, published).",
+    ),
 }
 
 DEFERRED_ENGINES = {"source_recon"}
@@ -217,6 +229,94 @@ def _index_artifact(
                 continue
             if len(idx[key]) < cap:
                 idx[key].append(row)
+    return idx
+
+
+_PROVENANCE_KEEP_COLS = ("row_id", "cik", "report_date", "reason_code", "field",
+                         "declared_raw", "instance_raw", "published",
+                         "cheap_status", "full_status", "expected", "src_context_id")
+_PROVENANCE_ENGINE = "provenance_reverify"
+
+
+def _build_provenance_sql(
+    targets: set[tuple],
+    cap: int,
+) -> tuple[str, list]:
+    """Build a parameterized DuckDB SQL string + params list for the provenance ledger.
+
+    Uses ? placeholders for all cik/report_date/reason_code values and a QUALIFY
+    ROW_NUMBER() clause to enforce the per-target row cap at the SQL level (not in
+    Python).  Returns (sql, params) so callers can unit-test the SQL shape and
+    call duckdb.execute(sql, params).
+
+    targets: set of (norm_cik, norm_report_date, norm_reason_code) tuples.
+    cap: maximum rows per (cik, report_date, reason_code) group.
+    """
+    # Cast date-typed columns to VARCHAR so str() gives "2026-03-31" not
+    # "2026-03-31 00:00:00" when DuckDB auto-infers a DATE column.
+    _date_cols = {"report_date"}
+    col_exprs = ", ".join(
+        f'CAST("{c}" AS VARCHAR) AS "{c}"' if c in _date_cols else f'"{c}"'
+        for c in _PROVENANCE_KEEP_COLS
+    )
+    # Build WHERE using ? placeholders -- values are bound via params, not interpolated.
+    where_parts = []
+    params: list = []
+    for cik, report_date, reason_code in targets:
+        where_parts.append(
+            "(LPAD(CAST(cik AS VARCHAR), 10, '0') = ?"
+            " AND CAST(report_date AS VARCHAR) = ?"
+            " AND CAST(reason_code AS VARCHAR) = ?)"
+        )
+        params.extend([cik, report_date, reason_code])
+    where_clause = " OR ".join(where_parts)
+    # QUALIFY enforces per-target cap at SQL level -- DuckDB supports QUALIFY natively.
+    sql = (
+        f"SELECT {col_exprs}"
+        f" FROM __LEDGER__"
+        f" WHERE {where_clause}"
+        f" QUALIFY ROW_NUMBER() OVER"
+        f" (PARTITION BY LPAD(CAST(cik AS VARCHAR), 10, '0'),"
+        f" CAST(report_date AS VARCHAR), CAST(reason_code AS VARCHAR)"
+        f" ORDER BY row_id) <= ?"
+    )
+    params.append(cap)
+    return sql, params
+
+
+def _index_provenance_ledger(
+    targets: set[tuple],
+    cap: int,
+) -> dict[tuple, list[dict[str, str]]]:
+    """DuckDB filtered read of the provenance ledger (avoids streaming 676MB).
+
+    targets: set of (norm_cik, norm_report_date, norm_reason_code) tuples.
+    Returns a dict keyed the same way as _index_artifact.
+    """
+    # Read config.PROVENANCE_LEDGER_FILE at call time so monkeypatching works in tests.
+    ledger_file: Path = config.PROVENANCE_LEDGER_FILE
+    idx: dict[tuple, list[dict[str, str]]] = defaultdict(list)
+    if not ledger_file.exists() or not targets:
+        return idx
+    sql_template, params = _build_provenance_sql(targets, cap)
+    ledger_path = str(ledger_file).replace("\\", "/")
+    # Substitute the __LEDGER__ placeholder with the actual file path (path is local
+    # filesystem, not user input, so this f-string substitution is safe).
+    sql = sql_template.replace("__LEDGER__", f"read_csv_auto('{ledger_path}', header=true)")
+    try:
+        rows_df = duckdb.execute(sql, params).fetchdf()
+    except Exception as exc:
+        logger.warning("provenance ledger DuckDB read failed: %s", exc)
+        return idx
+    for _, row in rows_df.iterrows():
+        row_d = {c: str(row[c]) if c in row.index else "" for c in _PROVENANCE_KEEP_COLS}
+        key = (
+            normalize_cik(row_d.get("cik")),
+            _nt(row_d.get("report_date")),
+            _nt(row_d.get("reason_code")),
+        )
+        if key in targets:
+            idx[key].append(row_d)
     return idx
 
 
@@ -301,9 +401,15 @@ def build_review_bundles(
         if spec is None:
             continue
         targets = {spec.item_key(it) for it in eng_items}
-        engine_idx[eng] = _index_artifact(spec, targets, max_rows)
-        if spec.artifact.exists():
-            artifact_hashes[str(spec.artifact)] = _artifact(spec.artifact)
+        if eng == _PROVENANCE_ENGINE:
+            # 676MB ledger -- use DuckDB filtered read instead of full streaming scan.
+            engine_idx[eng] = _index_provenance_ledger(targets, max_rows)
+            eff_art = config.PROVENANCE_LEDGER_FILE
+        else:
+            engine_idx[eng] = _index_artifact(spec, targets, max_rows)
+            eff_art = spec.artifact
+        if eff_art.exists():
+            artifact_hashes[str(eff_art)] = _artifact(eff_art)
 
     holdings_idx: dict[tuple[str, str], list[dict[str, str]]] = {}
     if attach_holdings:
@@ -324,9 +430,15 @@ def build_review_bundles(
         if spec is not None:
             artifact_rows = engine_idx.get(engine, {}).get(spec.item_key(it), [])
 
+        # For provenance_reverify the ledger path is resolved at call time via
+        # config (supports monkeypatching in tests and future path changes).
+        _eff_artifact = (
+            config.PROVENANCE_LEDGER_FILE if engine == _PROVENANCE_ENGINE and spec is not None
+            else (spec.artifact if spec is not None else None)
+        )
         if spec is None:
             completeness = "ledger_only"
-        elif not spec.artifact.exists():
+        elif not _eff_artifact.exists():
             completeness = "artifact_missing"
         elif artifact_rows:
             completeness = "source_artifact"

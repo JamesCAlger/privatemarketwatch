@@ -30,7 +30,9 @@ from pipeline.config import (
     HTML_TEMPLATE_VALIDATION_FILE,
     ORACLE_CHECK_RESULTS_FILE,
     OUTPUT_DIR,
+    PROVENANCE_LEDGER_FILE,
     ROW_VALIDATION_ISSUES_FILE,
+    SOURCE_RECONCILIATION_DETAIL_FILE,
     SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE,
     SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE,
     VALIDATION_RULES_AGGREGATE_FILE,
@@ -445,6 +447,110 @@ def _agent_a_select() -> str | None:
     """
 
 
+# Provenance re-verifier reason codes (pipeline/provenance_reverify.py).
+# tight/fail = pointer-verification failures that belong in the blocker lane;
+# weak/warn = informational states (incl. anchor_stale: re-stamp maintenance,
+# not a data error); weak/pass = healthy states kept for coverage measurement.
+PROV_TIGHT_FAIL = {"filing_mismatch", "anchor_missing", "provenance_wrong",
+                   "source_unavailable", "transform_drift"}
+PROV_WEAK_WARN = {"anchor_stale", "no_provenance", "text_pathway",
+                  "merged_context_excluded"}
+# Known-pass codes -- anything NOT in tight_fail or weak_warn AND NOT in this set
+# is an unrecognized code and routes to weak/warn (safe default, not weak/pass).
+PROV_WEAK_PASS = {"verified", "corrected", "derived", "unchecked_trivial"}
+
+
+def _provenance_select() -> str | None:
+    """Provenance re-verifier verdicts, aggregated to (cik, report_date, reason_code).
+
+    8.1 dedup: tight-lane rows whose output_row_id matches a BLOCKING row in
+    source_reconciliation_detail.csv for the same cik-report_date are excluded
+    from the queue-facing groups and counted in a per-cik-quarter
+    'provenance_already_queued' audit row (no silent truncation).
+
+    The dedup surface is the MATCHED detail file (output_row_id direct identity
+    join), not the source-only file. Source-only rows are UNMATCHED filing facts
+    whose population is disjoint from the provenance ledger by construction.
+    """
+    if not PROVENANCE_LEDGER_FILE.exists():
+        return None
+    prov = PROVENANCE_LEDGER_FILE.as_posix()
+    det = SOURCE_RECONCILIATION_DETAIL_FILE
+    det_exists = det.exists()
+    tight = ", ".join(f"'{c}'" for c in sorted(PROV_TIGHT_FAIL))
+    warn = ", ".join(f"'{c}'" for c in sorted(PROV_WEAK_WARN))
+    known_pass = ", ".join(f"'{c}'" for c in sorted(PROV_WEAK_PASS))
+    if det_exists:
+        queued_cte = f"""
+        queued AS (
+            SELECT DISTINCT cik, report_date, output_row_id AS qrow
+            FROM read_csv_auto('{det.as_posix()}', header=true, all_varchar=true)
+            WHERE lower(COALESCE(blocking_issue, '')) IN ('true', '1')
+        ),"""
+    else:
+        queued_cte = """
+        queued AS (
+            SELECT NULL::VARCHAR AS cik, NULL::VARCHAR AS report_date,
+                   NULL::VARCHAR AS qrow WHERE 1=0
+        ),"""
+    # Wrap the CTE in a subquery so it can participate in the runner's UNION ALL
+    # chain. A bare WITH ... SELECT cannot appear in UNION ALL position in DuckDB.
+    return f"""
+    SELECT * FROM (
+        WITH {queued_cte}
+        prov AS (
+            SELECT p.*,
+                   (q.qrow IS NOT NULL
+                    AND p.reason_code IN ({tight})) AS already_queued
+            FROM read_csv_auto('{prov}', header=true, all_varchar=true) p
+            LEFT JOIN queued q
+              ON q.cik = p.cik AND q.report_date = p.report_date
+             AND q.qrow = p.row_id
+        ),
+        grouped AS (
+            SELECT cik, report_date, reason_code,
+                   COUNT(DISTINCT row_id) AS n_rows,
+                   ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
+                         THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
+                       AS fv_m
+            FROM prov WHERE NOT already_queued
+            GROUP BY 1, 2, 3
+        ),
+        excluded AS (
+            SELECT cik, report_date,
+                   COUNT(DISTINCT row_id) AS n_rows,
+                   ROUND(COALESCE(SUM(CASE WHEN field = 'fair_value'
+                         THEN TRY_CAST(published AS DOUBLE) END), 0) / 1e6, 2)
+                       AS fv_m
+            FROM prov WHERE already_queued
+            GROUP BY 1, 2
+        )
+        SELECT 'provenance_reverify' AS engine,
+               reason_code AS rule_name,
+               CASE WHEN reason_code IN ({tight}) THEN 'tight' ELSE 'weak' END AS tier,
+               'advisory' AS enforcement,
+               cik,
+               'report_date' AS period_kind,
+               report_date AS period,
+               CASE WHEN reason_code IN ({tight}) THEN 'fail'
+                    WHEN reason_code IN ({warn}) THEN 'warn'
+                    WHEN reason_code IN ({known_pass}) THEN 'pass'
+                    ELSE 'warn' END AS status,
+               fv_m AS metric,
+               'affected_fv_m' AS metric_name,
+               CAST(n_rows AS BIGINT) AS n_units,
+               reason_code AS mechanism,
+               CAST(NULL AS VARCHAR) AS src_confidence
+        FROM grouped
+        UNION ALL
+        SELECT 'provenance_reverify', 'provenance_already_queued', 'weak',
+               'advisory', cik, 'report_date', report_date, 'pass',
+               fv_m, 'affected_fv_m', CAST(n_rows AS BIGINT),
+               'dedup_source_recon', CAST(NULL AS VARCHAR)
+        FROM excluded
+    )"""
+
+
 def adapter_selects() -> list[str]:
     """Return normalized ledger-schema SELECT fragments for every available source."""
     return [s for s in (_oracle_select(), _vrules_select(), _source_recon_select(),
@@ -452,4 +558,5 @@ def adapter_selects() -> list[str]:
                         _html_template_select(), _gav_recon_select(),
                         _fund_strategy_select(), _nonaccrual_select(),
                         _aggregate_header_select(), _classification_select(),
-                        _derivative_role_select(), _agent_a_select()) if s]
+                        _derivative_role_select(), _agent_a_select(),
+                        _provenance_select()) if s]

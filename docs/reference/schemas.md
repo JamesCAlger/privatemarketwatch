@@ -405,3 +405,57 @@ clause filters to `source = 'bdc'`). Non-cohort BDC rows have no src_facts and w
 `no_provenance`. The residual `filing_mismatch` / `anchor_stale` population is the primary
 product of the re-verifier (it seeds future routing lanes); do not tune the verifier to shrink
 it artificially.
+
+### Provenance feed in the shadow validation ledger
+
+The provenance re-verifier is surfaced in the unified shadow ledger via
+`scripts/shadow_adapter.py::_provenance_select()`, which aggregates
+`provenance_ledger.csv` to one ledger row per `(cik, report_date, reason_code)`.
+
+#### Reason-code to tier/status mapping
+
+| reason_code | tier | status | Queue lane |
+|---|---|---|---|
+| `filing_mismatch` | tight | fail | blocker |
+| `anchor_missing` | tight | fail | blocker |
+| `provenance_wrong` | tight | fail | blocker |
+| `source_unavailable` | tight | fail | blocker |
+| `transform_drift` | tight | fail | blocker |
+| `anchor_stale` | weak | warn | review (re-stamp maintenance, not a value error) |
+| `no_provenance` | weak | warn | review |
+| `text_pathway` | weak | warn | review |
+| `merged_context_excluded` | weak | warn | review |
+| `verified` | weak | pass | not queued (coverage measurement only) |
+| `corrected` | weak | pass | not queued |
+| `derived` | weak | pass | not queued |
+| `unchecked_trivial` | weak | pass | not queued |
+
+enforcement=advisory for all provenance rows; no gate or acceptance-threshold changes.
+
+#### Dedup audit row (8.1 anti-join)
+
+Before the ledger rows are written, tight-fail rows whose `row_id` matches an
+`output_row_id` in `source_reconciliation_detail.csv` (for the same `cik` and
+`report_date`, where `blocking_issue` is true) are excluded from the
+queue-facing groups and counted in a per-`(cik, report_date)` audit row with
+`rule_name = 'provenance_already_queued'`, `tier = 'weak'`, `status = 'pass'`,
+`mechanism = 'dedup_source_recon'`. This prevents double-queuing rows already
+in the source-reconciliation blocker lane.
+
+The dedup surface is the MATCHED detail file (output_row_id direct identity
+join), NOT the source-only file. Source-only rows are unmatched filing facts
+whose population is disjoint from the provenance ledger by construction.
+
+#### Evidence-slice contract (Task 2 drill-down)
+
+When a `review_bundle` is assembled for a provenance-engine item, the bundle
+includes the evidence rows INLINE inside the bundle JSON as
+`evidence_items[?evidence_id=="source_artifact_rows"].data` -- there is no
+separate `evidence_slice.csv` file. The rows are keyed by
+`(cik, report_date, reason_code)` (matching `rule_name` in the queue item)
+and capped at 25 rows per target (the shared `max_rows` default; the
+implementation plan said 50 -- the actual default shipped as 25).
+Columns retained: `row_id`, `cik`, `report_date`, `reason_code`, `field`,
+`declared_raw`, `instance_raw`, `published`, `cheap_status`, `full_status`,
+`expected`, `src_context_id`. This slice is the drill-down surface for
+B2/B3 workers adjudicating filing_mismatch or anchor_missing packets.

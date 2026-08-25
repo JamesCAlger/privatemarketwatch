@@ -180,3 +180,130 @@ def test_lane_and_limit_filters(tmp_path):
     result, out, _ = _run(tmp_path, lane="review", limit=1)
     assert result["bundles"] == 1
     assert (out / "review_bundles" / "b.json").exists()
+
+
+# ---------------------------------------------------------------------------
+# provenance_reverify evidence slice
+# ---------------------------------------------------------------------------
+
+PROV_COLS = [
+    "row_id", "cik", "report_date", "reason_code", "field",
+    "declared_raw", "instance_raw", "published",
+    "cheap_status", "full_status", "expected", "src_context_id",
+]
+
+
+def _prov_row(**kw) -> dict[str, str]:
+    base = {c: "" for c in PROV_COLS}
+    base.update({k: str(v) for k, v in kw.items()})
+    return base
+
+
+def test_provenance_reverify_matching_rows_attached(tmp_path, monkeypatch):
+    """3 matching + 2 non-matching rows in ledger -> bundle carries exactly 3."""
+    ledger = tmp_path / "provenance_ledger.csv"
+    _write_csv(ledger, PROV_COLS, [
+        # 3 matching rows
+        _prov_row(row_id="r1", cik="0001287750", report_date="2026-03-31",
+                  reason_code="filing_mismatch", field="fair_value",
+                  declared_raw="1000", instance_raw="1001", published="1000"),
+        _prov_row(row_id="r2", cik="0001287750", report_date="2026-03-31",
+                  reason_code="filing_mismatch", field="interest_rate",
+                  declared_raw="0.08", instance_raw="0.09", published="0.08"),
+        _prov_row(row_id="r3", cik="0001287750", report_date="2026-03-31",
+                  reason_code="filing_mismatch", field="cost",
+                  declared_raw="900", instance_raw="950", published="900"),
+        # 2 non-matching rows (wrong reason_code and wrong cik)
+        _prov_row(row_id="r4", cik="0001287750", report_date="2026-03-31",
+                  reason_code="other_rule", field="fair_value",
+                  declared_raw="500", instance_raw="500", published="500"),
+        _prov_row(row_id="r5", cik="0009999999", report_date="2026-03-31",
+                  reason_code="filing_mismatch", field="fair_value",
+                  declared_raw="200", instance_raw="200", published="200"),
+    ])
+    monkeypatch.setattr(review_bundles.config, "PROVENANCE_LEDGER_FILE", ledger)
+    _write_queue(tmp_path / "review_queue.csv", [
+        _q(review_id="PROV_001", lane="review", engine="provenance_reverify",
+           rule_name="filing_mismatch", cik="0001287750",
+           report_date="2026-03-31", period="2026-03-31"),
+    ])
+    result, out, manifest = _run(tmp_path)
+    assert result["bundles"] == 1
+    b = _load_bundle(out, "PROV_001")
+    assert b["evidence_completeness"] == "source_artifact"
+    src = next(e for e in b["evidence_items"] if e["evidence_id"] == "source_artifact_rows")
+    assert len(src["data"]) == 3
+    row_ids = {row["row_id"] for row in src["data"]}
+    assert row_ids == {"r1", "r2", "r3"}
+    # required columns must be present (includes adjudication split cols added 2026-08-24)
+    for row in src["data"]:
+        for col in ("row_id", "field", "declared_raw", "instance_raw", "published",
+                    "cheap_status", "full_status", "expected", "src_context_id"):
+            assert col in row, f"missing column {col}"
+    assert manifest[0]["evidence_completeness"] == "source_artifact"
+
+
+def test_provenance_reverify_non_matching_engine_no_slice(tmp_path, monkeypatch):
+    """An item with a different engine does not pick up the provenance ledger rows."""
+    ledger = tmp_path / "provenance_ledger.csv"
+    _write_csv(ledger, PROV_COLS, [
+        _prov_row(row_id="r1", cik="0001287750", report_date="2026-03-31",
+                  reason_code="filing_mismatch", field="fair_value",
+                  declared_raw="1000", instance_raw="1001", published="1000"),
+    ])
+    monkeypatch.setattr(review_bundles.config, "PROVENANCE_LEDGER_FILE", ledger)
+    art = tmp_path / "rowval.csv"
+    _write_csv(art, ["cik", "report_date", "rule_id"], [
+        {"cik": "0001287750", "report_date": "2026-03-31", "rule_id": "filing_mismatch"},
+    ])
+    _point_spec_at(monkeypatch, "row_validation", art)
+    _write_queue(tmp_path / "review_queue.csv", [
+        _q(review_id="RV_001", lane="review", engine="row_validation",
+           rule_name="filing_mismatch", cik="0001287750",
+           report_date="2026-03-31", period="2026-03-31"),
+    ])
+    result, out, _ = _run(tmp_path)
+    b = _load_bundle(out, "RV_001")
+    src = next(e for e in b["evidence_items"] if e["evidence_id"] == "source_artifact_rows")
+    # Should have 1 row from row_validation, NOT the provenance ledger row
+    assert src["data"][0].get("rule_id") == "filing_mismatch"
+    # no row_id from the provenance ledger (prov ledger has field col, rowval does not)
+    assert "field" not in src["data"][0]
+
+
+def test_provenance_sql_qualify_and_cap(tmp_path, monkeypatch):
+    """SQL-level cap: QUALIFY clause present + exactly cap rows attach when cap+5 rows exist."""
+    cap = 3
+    n_rows = cap + 5  # 8 matching rows
+    ledger = tmp_path / "provenance_ledger.csv"
+    rows = [
+        _prov_row(
+            row_id=f"r{i}", cik="0001287750", report_date="2026-03-31",
+            reason_code="filing_mismatch", field="fair_value",
+            declared_raw=str(i * 100), instance_raw=str(i * 100 + 1), published=str(i * 100),
+        )
+        for i in range(n_rows)
+    ]
+    _write_csv(ledger, PROV_COLS, rows)
+    monkeypatch.setattr(review_bundles.config, "PROVENANCE_LEDGER_FILE", ledger)
+
+    # Verify the SQL string itself contains QUALIFY (SQL-level cap, not Python-level).
+    targets = {("0001287750", "2026-03-31", "filing_mismatch")}
+    sql, _ = review_bundles._build_provenance_sql(targets, cap)
+    assert "QUALIFY" in sql.upper(), "SQL must contain QUALIFY for SQL-level per-target row cap"
+    assert sql.count("?") >= 1, "SQL must use ? placeholders (no f-string value interpolation)"
+
+    # Verify the end-to-end bundle path also returns exactly cap rows (not cap+5).
+    _write_queue(tmp_path / "review_queue.csv", [
+        _q(review_id="PROV_CAP", lane="review", engine="provenance_reverify",
+           rule_name="filing_mismatch", cik="0001287750",
+           report_date="2026-03-31", period="2026-03-31"),
+    ])
+    out = tmp_path / "out"
+    review_bundles.build_review_bundles(
+        queue_path=tmp_path / "review_queue.csv", output_dir=out,
+        attach_holdings=False, max_rows=cap,
+    )
+    b = json.loads((out / "review_bundles" / "PROV_CAP.json").read_text(encoding="utf-8"))
+    src = next(e for e in b["evidence_items"] if e["evidence_id"] == "source_artifact_rows")
+    assert len(src["data"]) == cap, f"Expected exactly {cap} rows (SQL-level cap), got {len(src['data'])}"
