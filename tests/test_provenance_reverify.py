@@ -707,3 +707,47 @@ class TestPctSenseCheck:
         out = full_tier(self._pct_cheap(published=0.4351, cheap_status="fail"),
                         xml_loader=_pct_loader)
         assert out.iloc[0]["full_status"] == "pct_recompute_divergence"
+
+
+class TestPctSenseSummary:
+    def _ledger(self):
+        return pd.DataFrame([
+            {"cik": "0001803498", "report_date": "2025-09-30", "row_id": "ROW-1",
+             "reason_code": "pct_sense_check", "expected": 1.59, "published": 0.0044},
+            {"cik": "0001803498", "report_date": "2025-09-30", "row_id": "ROW-2",
+             "reason_code": "pct_sense_check", "expected": 2.22, "published": 0.0062},
+            {"cik": "0001287750", "report_date": "2025-12-31", "row_id": "ROW-3",
+             "reason_code": "verified", "expected": 10.5, "published": 10.5},
+        ])
+
+    def test_groups_and_medians(self):
+        from pipeline.provenance_reverify import pct_sense_check_summary
+        out = pct_sense_check_summary(self._ledger())
+        assert list(out.columns) == ["cik", "report_date", "n_rows",
+                                     "median_expected_pp", "median_published_pp",
+                                     "median_abs_diff_pp"]
+        assert len(out) == 1  # only the pct_sense_check group
+        row = out.iloc[0]
+        assert row["n_rows"] == 2
+        assert row["median_abs_diff_pp"] == pytest.approx((1.5856 + 2.2138) / 2)
+
+    def test_empty_ledger_gives_empty_frame(self):
+        from pipeline.provenance_reverify import pct_sense_check_summary
+        out = pct_sense_check_summary(self._ledger().iloc[2:3])
+        assert out.empty
+
+    def test_build_ledger_writes_summary_artifact(self, tmp_path):
+        tier = pd.DataFrame([{
+            "row_id": "ROW-1", "cik": "0001803498", "accession_number": "a",
+            "report_date": "2025-09-30", "src_context_id": "c-1", "src_facts": "",
+            "field": "pct_of_net_assets", "pathway": "xbrl_field",
+            "declared_raw": 0.0159, "declared_events": "",
+            "published": 0.0044, "expected": 1.59,
+            "cheap_status": "fail", "full_status": "pct_recompute_divergence",
+            "instance_raw": 0.0159,
+        }])
+        build_ledger(tier, out_dir=tmp_path)
+        art = tmp_path / "provenance_pct_sense_check_summary.csv"
+        assert art.exists()
+        got = pd.read_csv(art, dtype={"cik": str})
+        assert got.iloc[0]["n_rows"] == 1

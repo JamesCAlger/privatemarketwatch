@@ -483,6 +483,31 @@ def classify_reason(cheap_status: str, full_status: str) -> str:
     return "unchecked_trivial"
 
 
+def pct_sense_check_summary(ledger: pd.DataFrame) -> pd.DataFrame:
+    """Per (cik, report_date) profile of pct_sense_check divergences.
+
+    Supports the context-to-position pairing investigation: a quarter where
+    every position diverges by a similar factor points at a denominator or
+    pairing defect; scattered large diffs point at per-position misattribution.
+    Vectorized; the pct_sense_check population is ~19K rows.
+    """
+    cols = ["cik", "report_date", "n_rows", "median_expected_pp",
+            "median_published_pp", "median_abs_diff_pp"]
+    rows = ledger[ledger["reason_code"] == "pct_sense_check"].copy()
+    if rows.empty:
+        return pd.DataFrame(columns=cols)
+    rows["expected_pp"] = pd.to_numeric(rows["expected"], errors="coerce")
+    rows["published_pp"] = pd.to_numeric(rows["published"], errors="coerce")
+    rows["abs_diff_pp"] = (rows["expected_pp"] - rows["published_pp"]).abs()
+    out = (rows.groupby(["cik", "report_date"], dropna=False)
+           .agg(n_rows=("row_id", "nunique"),
+                median_expected_pp=("expected_pp", "median"),
+                median_published_pp=("published_pp", "median"),
+                median_abs_diff_pp=("abs_diff_pp", "median"))
+           .reset_index())
+    return out[cols]
+
+
 # ---------------------------------------------------------------------------
 # Ledger artifact (scoping doc 8.1)
 # ---------------------------------------------------------------------------
@@ -569,6 +594,12 @@ def build_ledger(
              "corrected_fv", "total_fv"]] = summary[[
         "n_fields", "n_verified", "verified_fv", "derived_fv",
         "corrected_fv", "total_fv"]].fillna(0)
+
+    pct_summary = pct_sense_check_summary(ledger)
+    pct_summary_path = out_dir / "provenance_pct_sense_check_summary.csv"
+    pct_summary.to_csv(pct_summary_path, index=False)
+    logger.info("pct sense-check summary: %d cik-quarters -> %s",
+                len(pct_summary), pct_summary_path)
 
     summary_path = out_dir / "provenance_ledger_summary.csv"
     summary.to_csv(summary_path, index=False)
