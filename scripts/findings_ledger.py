@@ -38,6 +38,7 @@ import csv
 import json
 import sys
 from pathlib import Path
+from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -58,6 +59,16 @@ EVIDENCE_VERDICTS = {"INSUFFICIENT_EVIDENCE"}
 
 ACTIONABLE_STATES = ("open", "real_error_unremediated", "remediation_pulled",
                      "remediation_staged")
+
+# Closure-mode states deliberately distinguish a finding that has disappeared from a
+# live queue from one whose disappearance was checked by the post-remediation
+# battery.  The historic ledger did not retain a frozen population, so it could not
+# make that distinction.
+CLOSURE_ACTIONABLE_STATES = (
+    "open", "real_error_unremediated", "remediation_pulled", "remediation_staged",
+    "b1_route_missing", "b1_re_adjudication_required", "b2_execution_unproven",
+    "b3_pass_pending_promotion", "promoted_pending_verification", "unverified_absence",
+)
 
 
 def _leaf_review_ids(root: Path) -> set[str]:
@@ -93,6 +104,7 @@ def _wrapper_provenance_ids(wrapper_dir: Path) -> set[str]:
 def classify_finding(
     rid: str, *, in_queue: bool, verdict_status: str,
     staged_ids: set[str], promoted_ids: set[str], pulled_ids: set[str],
+    seeded: bool = False, has_fix_route: bool = True, closure_mode: bool = False,
 ) -> str:
     """Pure state assignment for one finding. ``verdict_status`` is
     check_tier_coverage.load_verdict's status ('MISSING' when no verdict file)."""
@@ -104,13 +116,18 @@ def classify_finding(
             return "evidence_backlog"
         if verdict in REAL_ERROR_VERDICTS:
             if rid in promoted_ids:
-                return "remediated_promoted"
+                # A B3 pass/promotion is not proof that the next deterministic
+                # queue no longer contains this finding.  Closure mode preserves
+                # that necessary post-rebuild verification step.
+                return "promoted_pending_verification" if closure_mode else "remediated_promoted"
             if rid in staged_ids:
                 return "remediation_staged"
             if rid in pulled_ids:
                 return "remediation_pulled"
             if not in_queue:
-                return "resolved_upstream"
+                return "unverified_absence" if closure_mode and seeded else "resolved_upstream"
+            if closure_mode and not has_fix_route:
+                return "b1_route_missing"
             return "real_error_unremediated"
         if verdict in HUMAN_VERDICTS:
             return "needs_human"
@@ -118,21 +135,76 @@ def classify_finding(
     if verdict_status == "no_source_not_covered":
         return "evidence_backlog"
     # MISSING / invalid_verdict / placeholder_autodrafted -> not adjudicated
-    return "open" if in_queue else "gone_unadjudicated"
+    if in_queue:
+        return "open"
+    return "unverified_absence" if closure_mode and seeded else "gone_unadjudicated"
+
+
+def _read_csv_rows(path: Path) -> list[dict]:
+    if not Path(path).exists():
+        return []
+    with open(path, newline="", encoding="utf-8-sig") as f:
+        return [dict(row) for row in csv.DictReader(f)]
+
+
+def _manifest_ciks(path: Path | None) -> set[str] | None:
+    if path is None:
+        return None
+    raw = json.loads(Path(path).read_text(encoding="utf-8-sig"))
+    entries = raw.get("entries", raw) if isinstance(raw, dict) else raw
+    return {str(e.get("cik") or "").zfill(10) for e in entries if e.get("cik")}
+
+
+def _in_scope(row: dict, *, quarter: str | None, cohort: set[str] | None) -> bool:
+    if quarter and str(row.get("report_date") or "") != quarter:
+        return False
+    if cohort is not None and str(row.get("cik") or "").zfill(10) not in cohort:
+        return False
+    return True
+
+
+def _has_fix_route(verdict_path: Path | None) -> bool:
+    """A real-error verdict must name a concrete fix class in closure mode."""
+    if verdict_path is None:
+        return False
+    try:
+        raw = json.loads(verdict_path.read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    if any(str(f.get("fix_class") or "").strip() for f in raw.get("findings") or []):
+        return True
+    # Some early verdicts expressed the route only at packet level.  A mechanism is
+    # deliberately insufficient: it can be a symptom, not an executable fix route.
+    return bool(str(raw.get("fix_class") or "").strip())
 
 
 def build_ledger(
     *, queue_path: Path = DEFAULT_QUEUE, staged_dir: Path = DEFAULT_STAGED,
     promoted_dir: Path = DEFAULT_PROMOTED, archive_dir: Path = DEFAULT_ARCHIVE,
     wrapper_dir: Path = DEFAULT_WRAPPERS, verdict_dirs=VERDICT_DIRS,
+    seed_paths: Iterable[Path] = (), quarter: str | None = None,
+    manifest_path: Path | None = None, closure_mode: bool = False,
 ) -> list[dict]:
+    """Build the lifecycle ledger.
+
+    ``seed_paths`` freezes a population for a closure round.  Seeded records are
+    retained even when absent from the current queue, and closure mode fails closed
+    on that absence.  ``quarter`` + ``manifest_path`` make the requested scope a
+    first-class operation rather than a report-side filter.
+    """
+    cohort = _manifest_ciks(manifest_path)
     queue_rows: dict[str, dict] = {}
-    if Path(queue_path).exists():
-        with open(queue_path, newline="", encoding="utf-8-sig") as f:
-            for r in csv.DictReader(f):
-                rid = (r.get("review_id") or "").strip()
-                if rid:
-                    queue_rows[rid] = r
+    for r in _read_csv_rows(Path(queue_path)):
+        rid = (r.get("review_id") or "").strip()
+        if rid and _in_scope(r, quarter=quarter, cohort=cohort):
+            queue_rows[rid] = r
+
+    seed_rows: dict[str, dict] = {}
+    for p in seed_paths:
+        for r in _read_csv_rows(Path(p)):
+            rid = (r.get("review_id") or "").strip()
+            if rid and _in_scope(r, quarter=quarter, cohort=cohort):
+                seed_rows.setdefault(rid, r)
 
     verdict_paths: dict[str, Path] = {}
     for vdir in verdict_dirs:
@@ -145,17 +217,27 @@ def build_ledger(
     pulled_ids = _leaf_review_ids(Path(archive_dir)) - promoted_ids - staged_ids
 
     ledger = []
-    for rid in sorted(set(queue_rows) | set(verdict_paths)):
+    universe = set(queue_rows) | set(seed_rows)
+    # In scoped closure mode, do not accidentally pull every historic verdict into
+    # a quarter-only artifact.  Existing unscoped behavior remains unchanged.
+    if quarter is None and cohort is None:
+        universe |= set(verdict_paths)
+    for rid in sorted(universe):
         vstatus, vdetail = ("MISSING", "")
         if rid in verdict_paths:
             vstatus, vdetail = load_verdict(verdict_paths[rid])
         state = classify_finding(
             rid, in_queue=rid in queue_rows, verdict_status=vstatus,
-            staged_ids=staged_ids, promoted_ids=promoted_ids, pulled_ids=pulled_ids)
-        q = queue_rows.get(rid, {})
+            staged_ids=staged_ids, promoted_ids=promoted_ids, pulled_ids=pulled_ids,
+            seeded=rid in seed_rows, has_fix_route=_has_fix_route(verdict_paths.get(rid)),
+            closure_mode=closure_mode)
+        q = queue_rows.get(rid, seed_rows.get(rid, {}))
         ledger.append({
             "review_id": rid, "state": state, "in_queue": rid in queue_rows,
+            "population_origin": ("frozen_and_live" if rid in queue_rows and rid in seed_rows
+                                  else "live" if rid in queue_rows else "frozen"),
             "verdict_status": vstatus, "verdict_detail": vdetail,
+            "has_fix_route": _has_fix_route(verdict_paths.get(rid)),
             "cik": q.get("cik", ""), "rule_name": q.get("rule_name", ""),
             "report_date": q.get("report_date", ""), "lane": q.get("lane", ""),
             "engine": q.get("engine", ""), "fv_at_risk_m": q.get("fv_at_risk_m", ""),
@@ -168,7 +250,7 @@ def build_ledger(
     return ledger
 
 
-def summarize(ledger: list[dict]) -> dict:
+def summarize(ledger: list[dict], *, closure_mode: bool = False) -> dict:
     """State counts + the dry decision. ``open`` findings count as actionable only in
     the blocker lane -- the review lane is a triage pool, not the fleet-dispatch pool
     (27.5K review-lane opens would otherwise make the loop unconvergeable by
@@ -180,13 +262,20 @@ def summarize(ledger: list[dict]) -> dict:
         if row["state"] == "open":
             lane = str(row.get("lane") or "(none)")
             open_by_lane[lane] = open_by_lane.get(lane, 0) + 1
-    actionable = (open_by_lane.get("blocker", 0)
-                  + sum(counts.get(s, 0) for s in ACTIONABLE_STATES if s != "open"))
+    active_states = CLOSURE_ACTIONABLE_STATES if closure_mode else ACTIONABLE_STATES
+    if closure_mode:
+        # A frozen closure population is deliberately stronger than the normal
+        # fleet loop: every unadjudicated finding must be accounted for, including
+        # review-lane records.
+        actionable = sum(counts.get(s, 0) for s in active_states)
+    else:
+        actionable = (open_by_lane.get("blocker", 0)
+                      + sum(counts.get(s, 0) for s in active_states if s != "open"))
     return {"n_findings": len(ledger), "states": dict(sorted(counts.items())),
             "open_by_lane": dict(sorted(open_by_lane.items())),
             "n_actionable": actionable, "dry": actionable == 0,
             "actionable_states": [s if s != "open" else "open(blocker lane)"
-                                  for s in ACTIONABLE_STATES]}
+                                  for s in active_states]}
 
 
 def compare(prior: list[dict], current: list[dict]) -> dict:
@@ -204,7 +293,7 @@ def compare(prior: list[dict], current: list[dict]) -> dict:
 
 
 def write_ledger(ledger: list[dict], out: Path, *,
-                 compare_path: Path | None = None) -> dict:
+                 compare_path: Path | None = None, closure_mode: bool = False) -> dict:
     """Write ledger CSV + summary JSON sidecar; returns the summary (with
     ``round_delta`` when a prior ledger is given)."""
     out = Path(out)
@@ -214,7 +303,7 @@ def write_ledger(ledger: list[dict], out: Path, *,
                            ["review_id", "state"])
         w.writeheader()
         w.writerows(ledger)
-    summary = summarize(ledger)
+    summary = summarize(ledger, closure_mode=closure_mode)
     if compare_path and Path(compare_path).exists():
         with open(compare_path, newline="", encoding="utf-8-sig") as f:
             prior = list(csv.DictReader(f))
@@ -230,10 +319,20 @@ def main(argv=None) -> int:
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--compare", type=Path, default=None,
                     help="prior ledger CSV; prints round-over-round transitions")
+    ap.add_argument("--seed", type=Path, action="append", default=[],
+                    help="frozen population CSV retained even if absent from live queue")
+    ap.add_argument("--quarter", default=None, help="restrict to report_date")
+    ap.add_argument("--manifest", type=Path, default=None,
+                    help="restrict to manifest CIKs")
+    ap.add_argument("--closure-mode", action="store_true",
+                    help="fail closed on frozen absence and missing B1 fix routes")
     args = ap.parse_args(argv)
 
-    ledger = build_ledger(queue_path=args.queue)
-    summary = write_ledger(ledger, args.out, compare_path=args.compare)
+    ledger = build_ledger(queue_path=args.queue, seed_paths=args.seed,
+                          quarter=args.quarter, manifest_path=args.manifest,
+                          closure_mode=args.closure_mode)
+    summary = write_ledger(ledger, args.out, compare_path=args.compare,
+                           closure_mode=args.closure_mode)
     print(json.dumps(summary, indent=2))
     print(f"ledger: {args.out}")
     # exit 0 dry, 1 not-dry (loop drivers key off this; both are valid outcomes)

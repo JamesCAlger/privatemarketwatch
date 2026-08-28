@@ -10025,3 +10025,45 @@ adjudication_checks.py output.
 - Contract: promotion-time detection of provenance clobbering/unstamped drift;
   previously only detectable post-promotion in the quarter-pass ledger.
 - Tests: +9 in `tests/test_agent_b2_run_remediation.py` (7 unit, 2 gate-level).
+
+## 2026-08-26: Fail closed on already-present B2 position additions
+
+- `pipeline/agent_b2_appliers.py` and `scripts/agent_b2/run_remediation.py` now derive
+  the BDC source identity `src:{accession_number}:{src_context_id}` from the baseline and
+  make `baseline_absent` a mandatory B3 value-gate predicate for `missing_position_add`.
+  A source row that already exists cannot be promoted, regardless of aggregate FV tolerance.
+- `scripts/agent_b2/validate_corrections.py` and `scripts/dispatch_agent_b2_workers.ps1`
+  add the same cache-only baseline check at dispatcher intake. `pipeline/review_bundles.py`
+  records exact source-identity collisions as bundle `integrity_errors`; B1 and B2
+  preflight refuse those bundles.
+- Added regression coverage for exact accession/context collisions and B1/B2 preflight
+  refusal. Focused suites: 99 passed. The current `0001287750` retry leaf is correctly
+  rejected because all three proposed source rows already exist in the baseline.
+
+## 2026-08-26: Q4-2025 v1 cohort adjudication funnel report
+
+- Added `scripts/report_q4_v1_funnel.py`, a cache-only report for the canonical 70-fund
+  wrapper cohort. It reports, per fund, Q4 shadow-ledger flags, B1 verdict outcomes,
+  B1 fix-class proposals, B2 worklist/leaf/promotion traces, and the ledger's outstanding
+  count.
+- The report explicitly preserves the ledger snapshot versus later B2-store timing and
+  records that the current B2 contract has no terminal `no_fix_necessary` disposition;
+  a missing B2 leaf is therefore not treated as evidence of resolution.
+
+## 2026-08-26: Q4-2025 v1 auditable closure lifecycle
+
+- `scripts/findings_ledger.py` now supports a frozen population, quarter/manifest scope,
+  and closure mode. Closure mode retains findings absent from the live queue, requires a
+  concrete B1 fix class for real errors, and treats promotions as pending post-rebuild
+  verification rather than terminal resolution.
+- `scripts/report_q4_v1_funnel.py` now emits the canonical Q4 lifecycle alongside the
+  70-fund funnel. B2 worklist-only history is `b2_execution_unproven`; gates count only
+  when they carry exact `source_review_ids`.
+- `scripts/agent_b2/run_remediation.py` adds keyed B3 `--out` artifacts and a
+  deterministic `no-change-disposition` command for already-present
+  `missing_position_add` source identities. It wrote two validated retry dispositions
+  for `RVQ_BLK_e82819f3b9e1` and `RVQ_BLK_2d5caa82bb01`, both routed to B1
+  re-adjudication.
+- Current Q4 closure snapshot: 837 findings, 483 actionable, 43 declared
+  human/evidence exceptions, and not dry. B1 totals: 746 adjudicated, 391 real errors,
+  372 with explicit fix classes, 19 route-missing. Focused tests: 64 passed.

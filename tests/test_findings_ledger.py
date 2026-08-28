@@ -178,6 +178,32 @@ def test_dry_when_only_terminal_states(tmp_path):
     assert summary["dry"] is True and summary["n_actionable"] == 0
 
 
+def test_closure_seed_retains_absent_finding_and_fails_closed(tmp_path):
+    d = _seed_stores(tmp_path)
+    _write_queue(d["queue"], ["RVQ_live"])
+    seed = tmp_path / "frozen.csv"
+    _write_queue(seed, ["RVQ_frozen"])
+    ledger = fl.build_ledger(queue_path=d["queue"], staged_dir=d["staged"],
+                             promoted_dir=d["promoted"], archive_dir=d["archive"],
+                             wrapper_dir=d["wrappers"], verdict_dirs=(d["verdicts"],),
+                             seed_paths=(seed,), quarter="2025-12-31", closure_mode=True)
+    states = {r["review_id"]: r["state"] for r in ledger}
+    assert states == {"RVQ_frozen": "unverified_absence", "RVQ_live": "open"}
+    summary = fl.summarize(ledger, closure_mode=True)
+    assert summary["n_actionable"] == 2 and summary["dry"] is False
+
+
+def test_closure_real_error_without_route_requires_b1(tmp_path):
+    d = _seed_stores(tmp_path)
+    _write_queue(d["queue"], ["RVQ_route"])
+    _verdict_file(d["verdicts"], "RVQ_route", "real_error")
+    ledger = fl.build_ledger(queue_path=d["queue"], staged_dir=d["staged"],
+                             promoted_dir=d["promoted"], archive_dir=d["archive"],
+                             wrapper_dir=d["wrappers"], verdict_dirs=(d["verdicts"],),
+                             closure_mode=True)
+    assert ledger[0]["state"] == "b1_route_missing"
+
+
 # --------------------------------------------------------------- compare / write
 
 def test_compare_reports_transitions():
