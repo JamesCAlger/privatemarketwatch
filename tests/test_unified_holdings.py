@@ -1988,6 +1988,55 @@ class TestPrepareBdc:
         assert abs(inflated.iloc[0]["fair_value"] - 40000000) < 1
         assert abs(inflated.iloc[0]["cost"] - 42000000) < 1
 
+    def test_1000x_scale_correction_stamps_corrected_fields(self):
+        """Scale-corrected rows must declare the /1000 in corrected_fields
+        (lec_live7 finding 2026-08-25: the silent division left the provenance
+        chain claiming passthrough, flooding filing_mismatch)."""
+        rows = []
+        for rd in ["2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31"]:
+            rows.append({
+                "investment_identifier": "Del Real LLC - First Lien Term Loan",
+                "cik": "9999", "entity_name": "Test BDC",
+                "accession_number": f"ACC-{rd}", "form_type": "10-Q",
+                "filing_date": rd, "report_date": rd,
+                "fair_value": 40000000, "cost": 42000000,
+                "principal_amount": 45000000,
+            })
+        rows.append({
+            "investment_identifier": "Del Real LLC - First Lien Term Loan",
+            "cik": "9999", "entity_name": "Test BDC",
+            "accession_number": "ACC-2023-03-31", "form_type": "10-Q",
+            "filing_date": "2023-03-31", "report_date": "2023-03-31",
+            "fair_value": 40000000000, "cost": 42000000000,
+            "principal_amount": 45000000000,
+        })
+        # Second position in the corrected quarter with fair_value ONLY
+        rows.append({
+            "investment_identifier": "FVOnly Corp - Equity",
+            "cik": "9999", "entity_name": "Test BDC",
+            "accession_number": "ACC-2023-03-31", "form_type": "10-Q",
+            "filing_date": "2023-03-31", "report_date": "2023-03-31",
+            "fair_value": 5000000000,
+        })
+        df = self._make_bdc_df(rows)
+        result = _prepare_bdc(df)
+
+        inflated = result[result["report_date"].astype(str) == "2023-03-31"]
+        full = inflated[inflated["bdc_investment_identifier"].str.contains("Del Real")].iloc[0]
+        cf_full = str(full["corrected_fields"])
+        assert "fair_value" in cf_full
+        assert "cost" in cf_full
+        assert "principal_amount" in cf_full
+
+        fv_only = inflated[inflated["bdc_investment_identifier"].str.contains("FVOnly")].iloc[0]
+        cf_fv = str(fv_only["corrected_fields"])
+        assert "fair_value" in cf_fv
+        assert "cost" not in cf_fv
+        assert "principal_amount" not in cf_fv
+
+        normal = result[result["report_date"].astype(str) == "2023-06-30"].iloc[0]
+        assert "fair_value" not in str(normal["corrected_fields"])
+
     def test_1000x_scale_no_false_positive_on_growth(self):
         """CIK with only 2 quarters does NOT trigger scale correction."""
         rows = []

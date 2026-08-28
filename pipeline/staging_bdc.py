@@ -1376,7 +1376,11 @@ def _prepare_bdc(
         SELECT r.* EXCLUDE (_fv, _cost, _pa),
             CASE WHEN s.cik IS NOT NULL THEN r._fv / 1000 ELSE r._fv END AS _fv,
             CASE WHEN s.cik IS NOT NULL THEN r._cost / 1000 ELSE r._cost END AS _cost,
-            CASE WHEN s.cik IS NOT NULL THEN r._pa / 1000 ELSE r._pa END AS _pa
+            CASE WHEN s.cik IS NOT NULL THEN r._pa / 1000 ELSE r._pa END AS _pa,
+            -- Provenance flag: the /1000 must be declared in corrected_fields
+            -- downstream or the re-verifier sees an unexplained mismatch
+            -- (lec_live7 finding 2026-08-25).
+            (s.cik IS NOT NULL) AS _scale_div1000
         FROM raw r
         LEFT JOIN _scale_errors s
           ON r.cik = s.cik
@@ -2622,7 +2626,11 @@ def _prepare_bdc(
             CASE WHEN _ugl IS NOT NULL THEN 'xbrl_field' ELSE '' END AS bdc_unrealized_gain_loss_source,
             COALESCE(CAST(src_facts AS VARCHAR), '') AS src_facts,
             COALESCE(CAST(dedupe_filled_fields AS VARCHAR), '') AS src_filled_fields,
-            '' AS corrected_fields,
+            concat_ws(';',
+                CASE WHEN _scale_div1000 AND _fv IS NOT NULL THEN 'fair_value' END,
+                CASE WHEN _scale_div1000 AND _cost IS NOT NULL THEN 'cost' END,
+                CASE WHEN _scale_div1000 AND _pa IS NOT NULL THEN 'principal_amount' END
+            ) AS corrected_fields,
             '' AS nport_holding_id,
             '' AS nport_series_name,
             '' AS nport_series_id,

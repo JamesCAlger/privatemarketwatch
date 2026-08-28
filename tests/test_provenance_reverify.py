@@ -578,6 +578,75 @@ class TestExtractorMultiplier:
 
 
 # ---------------------------------------------------------------------------
+# lec_live7 finding 2026-08-25: staging multiplier must COMPOSE event
+# multipliers. Staging records BOTH pik_rate:rate_x100 and
+# pik_rate:pik_boundary_div100 on boundary rows (staging_bdc.py:2695-2708);
+# first-match returned 100 instead of 100*0.01=1, flagging correct data.
+# ---------------------------------------------------------------------------
+
+from pipeline.provenance_reverify import _staging_multiplier  # noqa: E402
+
+
+class TestStagingMultiplierComposition:
+    def test_rate_x100_alone(self):
+        assert _staging_multiplier("pik_rate", "pik_rate:rate_x100") == 100.0
+
+    def test_boundary_div100_alone(self):
+        assert _staging_multiplier("pik_rate", "pik_rate:pik_boundary_div100") == 0.01
+
+    def test_x100_and_boundary_compose_to_identity(self):
+        events = "pik_rate:rate_x100;pik_rate:pik_boundary_div100"
+        assert _staging_multiplier("pik_rate", events) == pytest.approx(1.0)
+
+    def test_other_field_events_do_not_leak(self):
+        events = "interest_rate:rate_x100;pik_rate:pik_boundary_div100"
+        assert _staging_multiplier("pik_rate", events) == 0.01
+
+
+_PIK_FIXTURE_XML = (
+    '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+    '<us-gaap:InvestmentInterestRatePaidInKind contextRef="ctxk">0.5'
+    '</us-gaap:InvestmentInterestRatePaidInKind>'
+    '</xbrl>'
+)
+
+
+def _pik_loader(cik, accession):
+    from lxml import etree
+    return etree.ElementTree(etree.fromstring(_PIK_FIXTURE_XML.encode()))
+
+
+class TestPikBoundaryComposition:
+    """Cheap and full tiers must both reproduce published 0.5 when staging
+    recorded x100 followed by the boundary div100 (net multiplier 1)."""
+
+    def test_cheap_tier_composed_events_pass(self):
+        df = pd.DataFrame([_row(
+            row_id="ROW-k", pik_rate=0.5,
+            pik_rate_source="xbrl_field",
+            src_facts=json.dumps({"pik_rate": {"r": 0.5}}),
+            src_transforms="pik_rate:rate_x100;pik_rate:pik_boundary_div100")])
+        out = cheap_tier(holdings_df=df)
+        row = out[out["field"] == "pik_rate"].iloc[0]
+        assert row["cheap_status"] == "pass"
+
+    def test_full_tier_composed_events_raw_match(self):
+        cheap = pd.DataFrame([{
+            "row_id": "ROW-k", "cik": "0001633336",
+            "accession_number": "0001633336-24-000001",
+            "report_date": "2024-09-30", "src_context_id": "ctxk",
+            "field": "pik_rate", "pathway": "xbrl_field",
+            "declared_raw": 0.5,
+            "declared_events": "pik_rate:rate_x100;pik_rate:pik_boundary_div100",
+            "published": 0.5, "expected": 0.5, "cheap_status": "pass",
+            "src_facts": json.dumps({"pik_rate": {
+                "c": "investmentinterestratepaidinkind", "r": 0.5}}),
+        }])
+        out = full_tier(cheap, xml_loader=_pik_loader)
+        assert out.iloc[0]["full_status"] == "raw_match"
+
+
+# ---------------------------------------------------------------------------
 # Task 1 (2026-08-25): pct_of_net_assets rounding-aware tolerance
 # ---------------------------------------------------------------------------
 

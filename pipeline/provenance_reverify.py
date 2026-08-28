@@ -93,15 +93,16 @@ def _field_sql(field: str, source_col: str) -> str:
         f"     ELSE 1.0 END"
     )
 
-    # Staging events from src_transforms (flat 'field:code;...' string)
+    # Staging events from src_transforms (flat 'field:code;...' string).
+    # Multipliers COMPOSE (product), mirroring _staging_multiplier: boundary
+    # pik rows carry BOTH rate_x100 and pik_boundary_div100 (net 1.0).
     ev = "COALESCE(CAST(src_transforms AS VARCHAR), '')"
     stag = (
-        f"CASE"
-        f"  WHEN {ev} LIKE '%{field}:rate_x100%' THEN 100.0"
-        f"  WHEN {ev} LIKE '%{field}:rate_div100%' THEN 0.01"
-        f"  WHEN {ev} LIKE '%{field}:pik_boundary_div100%' THEN 0.01"
-        f"  ELSE 1.0"
-        f"END"
+        f"("
+        f"  (CASE WHEN {ev} LIKE '%{field}:rate_x100%' THEN 100.0 ELSE 1.0 END)"
+        f"  * (CASE WHEN {ev} LIKE '%{field}:rate_div100%' THEN 0.01 ELSE 1.0 END)"
+        f"  * (CASE WHEN {ev} LIKE '%{field}:pik_boundary_div100%' THEN 0.01 ELSE 1.0 END)"
+        f")"
     )
 
     neg_null = f"({ev} LIKE '%{field}:neg_null%')"
@@ -260,12 +261,21 @@ _SHORT_CIRCUIT = frozenset({"corrected", "derived", "text_pathway",
 
 
 def _staging_multiplier(field: str, events: str) -> float:
-    """Staging transform multiplier for *field* from declared_events string."""
+    """Product of staging transform multipliers for *field* from declared_events.
+
+    Events COMPOSE: staging records rate_x100 followed by pik_boundary_div100
+    on the same field for boundary un-scaled pik rates (staging_bdc.py
+    pik_boundary CTE), so the multiplier is the product of every recorded
+    event, never first-match (lec_live7 finding 2026-08-25).
+    """
+    mult = 1.0
     if f"{field}:rate_x100" in events:
-        return 100.0
-    if f"{field}:rate_div100" in events or f"{field}:pik_boundary_div100" in events:
-        return 0.01
-    return 1.0
+        mult *= 100.0
+    if f"{field}:rate_div100" in events:
+        mult *= 0.01
+    if f"{field}:pik_boundary_div100" in events:
+        mult *= 0.01
+    return mult
 
 
 def _extractor_multiplier(x_events: list) -> float:
