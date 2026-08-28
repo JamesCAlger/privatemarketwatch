@@ -168,6 +168,33 @@ def test_holdings_slice_attached(tmp_path, monkeypatch):
     assert b["has_raw_source"] is True
 
 
+def test_bundle_marks_source_identity_already_in_holdings(tmp_path, monkeypatch):
+    art = tmp_path / "rowval.csv"
+    _write_csv(art, ["cik", "report_date", "rule_id", "source_row_id"], [
+        {"cik": "0001287750", "report_date": "2026-03-31", "rule_id": "R12",
+         "source_row_id": "src:0001287750-26-000001:c-42"},
+    ])
+    _point_spec_at(monkeypatch, "row_validation", art)
+    holdings = tmp_path / "holdings.csv"
+    _write_csv(holdings, ["cik", "report_date", "accession_number", "src_context_id"], [
+        {"cik": "0001287750", "report_date": "2026-03-31",
+         "accession_number": "0001287750-26-000001", "src_context_id": "c-42"},
+    ])
+    monkeypatch.setattr(review_bundles, "HOLDINGS_FILE", holdings)
+    _write_queue(tmp_path / "review_queue.csv", [
+        _q(review_id="identity1", lane="review", engine="row_validation", rule_name="R12",
+           cik="0001287750", report_date="2026-03-31", period="2026-03-31"),
+    ])
+    out = tmp_path / "out"
+    review_bundles.build_review_bundles(
+        queue_path=tmp_path / "review_queue.csv", output_dir=out, attach_holdings=True,
+    )
+    bundle = _load_bundle(out, "identity1")
+    assert bundle["integrity_errors"] == [
+        "source row already present in holdings: src:0001287750-26-000001:c-42"
+    ]
+
+
 def test_lane_and_limit_filters(tmp_path):
     _write_queue(tmp_path / "review_queue.csv", [
         _q(review_id="a", lane="blocker", engine="made_up", rule_name="z", cik="0000000001",

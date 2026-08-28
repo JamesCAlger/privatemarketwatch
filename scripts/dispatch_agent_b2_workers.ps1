@@ -103,7 +103,8 @@ function Invoke-ValidateCorrection {
     --correction $Row.correction_path `
     --expected-cik $Row.cik `
     --expected-fix-class $Row.fix_class `
-    --verify-source *>&1 |
+    --verify-source `
+    --verify-baseline *>&1 |
     Out-File -LiteralPath $LogPath -Encoding utf8
   $ec = $LASTEXITCODE
   $ErrorActionPreference = $prevEap

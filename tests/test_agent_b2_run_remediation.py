@@ -94,6 +94,27 @@ def test_filter_holdings_cik_normalizes():
     assert len(out) == 2 and out["fair_value"].tolist() == [1.0, 2.0]
 
 
+def test_no_change_disposition_requires_baseline_collision(tmp_path):
+    correction = tmp_path / "add.json"
+    correction.write_text(json.dumps({
+        "cik": "0000000001", "fix_class": "missing_position_add",
+        "source_review_ids": ["R1"],
+        "template": {"positions": [{"source_row_id": "src:a:c", "fair_value": 1.0}]},
+    }), encoding="utf-8")
+    holdings = tmp_path / "holdings.csv"
+    pd.DataFrame([{"cik": "1", "accession_number": "a", "src_context_id": "c"}]).to_csv(
+        holdings, index=False)
+    out = tmp_path / "disposition.json"
+    readju = tmp_path / "readjudication.csv"
+    assert rr.main(["no-change-disposition", "--correction", str(correction),
+                    "--holdings", str(holdings), "--batch-id", "b1", "--out", str(out),
+                    "--readju-worklist", str(readju)]) == 0
+    raw = json.loads(out.read_text(encoding="utf-8"))
+    assert raw["disposition"] == "no_change_required"
+    assert raw["source_review_ids"] == ["R1"]
+    assert "R1" in readju.read_text(encoding="utf-8")
+
+
 def test_gate_conservation_packet_pass_on_subtotal_removal():
     anchors = {"2024-12-31": 200.0, "2024-09-30": 300.0, "2024-06-30": 280.0}
     baseline = _holdings([
@@ -368,6 +389,25 @@ def test_value_gate_missing_position_add_passes_with_grounding():
                                baseline_df=base, trial_df=trial, correction=corr,
                                grounding_df=grounding)
     assert res["verdict"] == "PASS", res["reasons"]
+
+
+def test_value_gate_missing_position_add_rejects_existing_accession_context():
+    from pipeline.agent_b2_appliers import apply_missing_position_add
+    base = _vg_frame()
+    base.loc[0, "accession_number"] = "0000000100-26-000001"
+    base.loc[0, "src_context_id"] = "c-42"
+    corr = {"cik": "0000000100", "fix_class": "missing_position_add",
+            "template": {"positions": [{"issuer_name": "Different display name", "fair_value": 500.0,
+                                        "report_date": "2025-12-31",
+                                        "source_row_id": "src:0000000100-26-000001:c-42",
+                                        "bdc_dimensions_raw": "investmentidentifieraxis=Gamma"}]}}
+    trial, _ = apply_missing_position_add(base, corr["template"])
+    grounding = pd.DataFrame([{"source_row_id": "src:0000000100-26-000001:c-42", "fair_value": 500.0}])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr,
+                               grounding_df=grounding)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["baseline_absent"] is False
 
 
 def test_value_gate_grounding_fv_mismatch_fails():

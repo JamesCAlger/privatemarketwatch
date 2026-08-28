@@ -354,6 +354,26 @@ def apply_source_anchored_value(df: pd.DataFrame, template: dict) -> tuple[pd.Da
     return out, audit
 
 
+def missing_position_source_collisions(df: pd.DataFrame, positions: list[dict]) -> list[str]:
+    """Return proposed source ids that are already represented in a holdings frame.
+
+    ``source_row_id`` is reconciliation metadata and is normally not retained on
+    unified holdings.  For BDC rows its stable equivalent is
+    ``src:{accession_number}:{src_context_id}``; check both forms so a B2 add
+    cannot turn a false ``missing_from_pipeline`` claim into a duplicate position.
+    """
+    existing: set[str] = set()
+    if "source_row_id" in df.columns:
+        existing.update(df["source_row_id"].fillna("").astype(str).str.strip())
+    if "source" in df.columns:
+        existing.update(df["source"].fillna("").astype(str).str.strip())
+    if {"accession_number", "src_context_id"}.issubset(df.columns):
+        accession = df["accession_number"].fillna("").astype(str).str.strip()
+        context = df["src_context_id"].fillna("").astype(str).str.strip()
+        existing.update(("src:" + accession + ":" + context)[(accession != "") & (context != "")])
+    return sorted({str(p.get("source_row_id") or "").strip() for p in positions} & existing - {""})
+
+
 def apply_missing_position_add(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
     """Append under-counted positions. Every position MUST carry ``source_row_id`` (the
     staging row being recovered -- no fabrication; parity with agent_rule row_add) plus

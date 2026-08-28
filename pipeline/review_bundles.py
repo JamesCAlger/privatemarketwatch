@@ -328,7 +328,7 @@ def _index_holdings(pairs: set[tuple[str, str]], cap: int) -> dict[tuple[str, st
         "row_id",  # rebuild-stable selector anchor for B2 row_selector grounding
         "issuer_name", "investment_identifier", "bdc_investment_identifier",
         "fair_value", "cost", "interest_rate", "maturity_date",
-        "index_classification", "asset_class", "source", "accession_number",
+        "index_classification", "asset_class", "source", "accession_number", "src_context_id",
     )
     with HOLDINGS_FILE.open(newline="", encoding="utf-8-sig") as f:
         for row in csv.DictReader(f):
@@ -337,6 +337,28 @@ def _index_holdings(pairs: set[tuple[str, str]], cap: int) -> dict[tuple[str, st
                 continue
             idx[pair].append({c: row.get(c, "") for c in keep_cols if c in row})
     return idx
+
+
+def _identity_integrity_errors(artifact_rows: list[dict[str, str]],
+                               holdings_rows: list[dict[str, str]]) -> list[str]:
+    """Detect a source row labelled absent that is already in the holdings slice.
+
+    BDC unified holdings preserve the reconciliation source identity as
+    accession_number + src_context_id, while source artifacts use
+    src:{accession}:{context}.  This check is deliberately exact and only acts on
+    that canonical form; issuer text is not an identity key.
+    """
+    present = {
+        f"src:{str(h.get('accession_number') or '').strip()}:{str(h.get('src_context_id') or '').strip()}"
+        for h in holdings_rows
+        if str(h.get("accession_number") or "").strip() and str(h.get("src_context_id") or "").strip()
+    }
+    cited = {
+        str(row.get("source_row_id") or "").strip()
+        for row in artifact_rows
+        if str(row.get("source_row_id") or "").strip().startswith("src:")
+    }
+    return [f"source row already present in holdings: {sid}" for sid in sorted(present & cited)]
 
 
 def _load_queue(
@@ -452,6 +474,7 @@ def build_review_bundles(
             continue
 
         holdings_rows = holdings_idx.get((_ck(it), _nt(it.get("report_date"))), [])
+        integrity_errors = _identity_integrity_errors(artifact_rows, holdings_rows)
 
         evidence_items = [
             _ev("flag", "The queue item (the flag being reviewed), derived from the shadow ledger.", it),
@@ -478,6 +501,7 @@ def build_review_bundles(
             "unit_label": _nt(it.get("unit_label")),
             "evidence_completeness": completeness,
             "has_raw_source": bool(artifact_rows or holdings_rows),
+            "integrity_errors": integrity_errors,
             "artifact_hashes": list(artifact_hashes.values()),
             "evidence_items": evidence_items,
             "allowed_patch_scope": ALLOWED_PATCH_SCOPE,

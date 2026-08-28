@@ -123,6 +123,11 @@ def _validate_bundle(rid: str, bundle_path: Path) -> dict:
         raise PreflightError(f"{rid}: bundle missing evidence_completeness")
     if not bundle.get("evidence_items"):
         raise PreflightError(f"{rid}: bundle has no evidence_items")
+    # A source-to-output identity collision means the packet's claimed absence is
+    # disproven by the baseline. Do not dispatch an internally contradictory packet.
+    integrity_errors = bundle.get("integrity_errors") or []
+    if integrity_errors:
+        raise PreflightError(f"{rid}: bundle identity-integrity failure: {integrity_errors}")
     return bundle
 
 

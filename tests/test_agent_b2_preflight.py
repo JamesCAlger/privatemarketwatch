@@ -202,6 +202,23 @@ def test_preflight_rejects_source_bundle_cik_mismatch(tmp_path):
                            fix_class="subtotal_filter")
 
 
+def test_preflight_rejects_missing_position_bundle_identity_failure(tmp_path):
+    d = _dirs(tmp_path)
+    batch = "B2I"
+    batch_dir = d["base_dir"] / "batch" / batch
+    _seed(d, "RVQ_BLK_identity")
+    bundle_path = d["bundles_dir"] / "RVQ_BLK_identity.json"
+    bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+    bundle["integrity_errors"] = ["source row src:0001743415-26-000001:c-9 already present"]
+    bundle_path.write_text(json.dumps(bundle), encoding="utf-8")
+    _write_worklist(batch_dir, [{"cik": "0001743415", "fix_class": "missing_position_add",
+                                 "source_review_ids": "RVQ_BLK_identity"}])
+    with pytest.raises(pf.PreflightError, match="identity-integrity"):
+        pf.preflight_batch(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                           bundles_dir=d["bundles_dir"], corrections_dir=d["corrections_dir"],
+                           fix_class="missing_position_add")
+
+
 def test_preflight_rejects_existing_correction(tmp_path):
     d = _dirs(tmp_path)
     batch = "B2E"

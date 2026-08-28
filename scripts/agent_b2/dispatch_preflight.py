@@ -602,6 +602,11 @@ def preflight_batch(
                 raise PreflightError(
                     f"{cik}/{fc}: source bundle {rid} belongs to CIK {bundle_cik}"
                 )
+            if fc == "missing_position_add" and (bundle.get("integrity_errors") or []):
+                raise PreflightError(
+                    f"{cik}/{fc}: source bundle {rid} has identity-integrity failure: "
+                    f"{bundle['integrity_errors']}"
+                )
         bundle_paths = [str(path) for path, _ in bundles]
 
         correction_path = (corrections_dir / cik / f"{fc}.json").resolve()

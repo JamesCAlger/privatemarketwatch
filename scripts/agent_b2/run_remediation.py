@@ -51,6 +51,7 @@ TRIAL_REBUILD = config.PROJECT_ROOT / "scripts" / "rebuild_unified_cik_trial.py"
 READJUDICATION_WORKLIST = DEFAULT_BASE / "readjudication_worklist.csv"
 READJUDICATION_COLUMNS = ["cik", "fix_class", "source_review_ids", "batch_id",
                           "gated_utc", "reason"]
+B2_DISPOSITION_SCHEMA_VERSION = 1
 
 # Which layer applies each fix_class. wrapper_patch -> edit the per-CIK wrapper (staging);
 # post_staging -> transform the unified holdings (agent_b2_appliers); rule_track -> a
@@ -543,6 +544,10 @@ def gate_value_packet(
     - grounding_verified (missing_position_add only): every position's source_row_id
       must exist in the grounding frame for this CIK with fair_value within 0.5%.
       Missing grounding data FAILS (fail-closed; no fabricated positions).
+    - baseline_absent (missing_position_add only): every source row must be absent
+      from the baseline holdings.  This is an identity gate, not an aggregate-FV
+      tolerance, and prevents adding a source row already represented by its
+      accession/context anchors.
 
     Replay uses ``apply_scoped`` (not the bare applier) so the expected frame matches
     the production application path: a scoped correction replayed over a multi-quarter
@@ -619,8 +624,16 @@ def gate_value_packet(
             reasons.append(f"non-FV fix moved total FV by {float(trial_fv) - float(base_fv):,.0f}")
 
     if fix_class == "missing_position_add":
+        from pipeline.agent_b2_appliers import missing_position_source_collisions
+
         grounded = False
         positions = list(template.get("positions") or [])
+        collisions = missing_position_source_collisions(baseline_df, positions)
+        checks["baseline_absent"] = not collisions
+        if collisions:
+            reasons.append(
+                "position source_row_id(s) already present in baseline holdings: "
+                f"{collisions}")
         if grounding_df is not None and len(grounding_df) and "source_row_id" in grounding_df.columns:
             gid = grounding_df["source_row_id"].astype(str)
             gfv = pd.to_numeric(grounding_df.get("fair_value"), errors="coerce")
@@ -1000,6 +1013,18 @@ def main(argv=None) -> int:
     g.add_argument("--readju-worklist", type=Path, default=READJUDICATION_WORKLIST,
                    help="Wrong-diagnosis refusals append here (append-only; "
                         "verdicts are never touched).")
+    g.add_argument("--out", type=Path, default=None,
+                   help="Write the keyed B3 gate artifact. Required by closure reporting "
+                        "when a gate result will be relied on as lifecycle evidence.")
+
+    nd = sub.add_parser("no-change-disposition",
+                        help="Record a deterministic B2 no-change result for a rejected add.")
+    nd.add_argument("--correction", type=Path, required=True,
+                    help="missing_position_add leaf whose source identities are already live")
+    nd.add_argument("--holdings", type=Path, default=config.UNIFIED_HOLDINGS_PARQUET_FILE)
+    nd.add_argument("--batch-id", required=True)
+    nd.add_argument("--out", type=Path, required=True)
+    nd.add_argument("--readju-worklist", type=Path, default=READJUDICATION_WORKLIST)
 
     dx = sub.add_parser("diagnose", help="Anchor-scored battery for a Stage-3 symptom packet "
                                          "(replaces the guessed mechanism with a measured decision).")
@@ -1054,8 +1079,67 @@ def main(argv=None) -> int:
                 if n:
                     print(f"[gate] appended re-adjudication worklist row for "
                           f"{args.cik}/{correction.get('fix_class', '')}", file=sys.stderr)
+            # Gate artifacts historically named only a CIK, which cannot prove which
+            # of several review findings was assessed.  New artifacts carry the exact
+            # source review ids and are the only gate form the closure ledger treats
+            # as finding-level evidence.
+            out["source_review_ids"] = list(correction.get("source_review_ids") or [])
+            out["correction_path"] = str(args.correction)
+            out["batch_id"] = args.batch_id
+        if args.out is not None:
+            args.out.parent.mkdir(parents=True, exist_ok=True)
+            args.out.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(out, indent=2))
         return 0 if out["verdict"] == "PASS" else 1
+    if args.mode == "no-change-disposition":
+        correction = json.loads(args.correction.read_text(encoding="utf-8-sig"))
+        if str(correction.get("fix_class") or "") != "missing_position_add":
+            print("ERROR no-change-disposition only supports missing_position_add", file=sys.stderr)
+            return 2
+        review_ids = [str(x) for x in correction.get("source_review_ids") or [] if str(x)]
+        if not review_ids:
+            print("ERROR correction has no source_review_ids", file=sys.stderr)
+            return 2
+        hp = Path(args.holdings)
+        if not hp.exists():
+            print(f"ERROR holdings unavailable: {hp}", file=sys.stderr)
+            return 2
+        frame = pd.read_parquet(hp) if hp.suffix == ".parquet" else pd.read_csv(hp, low_memory=False)
+        from pipeline.agent_b2_appliers import missing_position_source_collisions
+        cik = str(correction.get("cik") or "").lstrip("0") or "0"
+        if "cik" in frame.columns:
+            frame = frame[frame["cik"].astype(str).str.replace(r"\D", "", regex=True)
+                          .str.lstrip("0").eq(cik)]
+        collisions = missing_position_source_collisions(
+            frame, list((correction.get("template") or {}).get("positions") or []))
+        if not collisions:
+            print("ERROR no current baseline source-identity collision; refusing no-change disposition",
+                  file=sys.stderr)
+            return 1
+        record = {
+            "schema_version": B2_DISPOSITION_SCHEMA_VERSION,
+            "disposition": "no_change_required",
+            "reason_code": "baseline_source_identity_present",
+            "cik": str(correction.get("cik") or "").zfill(10),
+            "fix_class": "missing_position_add",
+            "source_review_ids": review_ids,
+            "batch_id": args.batch_id,
+            "validated_utc": datetime.now(timezone.utc).isoformat(),
+            "baseline_holdings": str(hp),
+            "colliding_source_row_ids": collisions,
+            "required_next_owner": "B1",
+            "required_next_state": "b1_re_adjudication_required",
+        }
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+        append_readjudication([{
+            "cik": record["cik"], "fix_class": record["fix_class"],
+            "source_review_ids": ";".join(review_ids), "batch_id": args.batch_id,
+            "gated_utc": record["validated_utc"],
+            "reason": "baseline_source_identity_present; B2 no-change disposition",
+        }], path=args.readju_worklist)
+        print(json.dumps(record, indent=2))
+        return 0
     if args.mode == "diagnose":
         packet = {"cik": args.cik, "quarters": [args.target_quarter], "needs_diagnosis": True,
                   "fix_class": "subtotal_filter", "fix_class_derived": True, "mechanism": "subtotal_leak"}

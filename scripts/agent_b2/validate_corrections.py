@@ -40,6 +40,9 @@ def main(argv=None) -> int:
              "table health, bridge co-sign). Cache-only; fail closed.")
     p.add_argument("--holdings", type=Path, default=None,
                    help="Holdings frame for witness verification (default: unified parquet).")
+    p.add_argument("--verify-baseline", action="store_true",
+                   help="For missing_position_add, refuse source_row_ids already represented "
+                        "in the current unified holdings baseline. Cache-only; fail closed.")
     args = p.parse_args(argv)
 
     if args.correction is not None:
@@ -80,6 +83,31 @@ def main(argv=None) -> int:
                 return 1
             print(f"SOURCE-VERIFIED {rep.cik}/{rep.mechanism} "
                   f"({len(vrep['checks'])} assertion(s))")
+        if rep.ok and not is_escalation and args.verify_baseline \
+                and str(obj.get("fix_class")) == "missing_position_add":
+            import pandas as pd
+            from pipeline import config
+            from pipeline.agent_b2_appliers import missing_position_source_collisions
+
+            holdings_path = args.holdings or config.UNIFIED_HOLDINGS_PARQUET_FILE
+            if not holdings_path.exists():
+                print(f"ERROR {rep.cik}/{rep.mechanism}: baseline holdings unavailable: {holdings_path}",
+                      file=sys.stderr)
+                return 1
+            frame = (pd.read_parquet(holdings_path) if holdings_path.suffix == ".parquet"
+                     else pd.read_csv(holdings_path, low_memory=False))
+            if "cik" not in frame.columns:
+                print(f"ERROR {rep.cik}/{rep.mechanism}: baseline has no cik column", file=sys.stderr)
+                return 1
+            cik = str(obj.get("cik") or "").lstrip("0") or "0"
+            frame = frame[frame["cik"].astype(str).str.replace(r"\D", "", regex=True).str.lstrip("0").eq(cik)]
+            collisions = missing_position_source_collisions(
+                frame, list((obj.get("template") or {}).get("positions") or []))
+            if collisions:
+                print(f"ERROR {rep.cik}/{rep.mechanism}: source_row_id(s) already present "
+                      f"in baseline: {collisions}", file=sys.stderr)
+                return 1
+            print(f"BASELINE-ABSENT {rep.cik}/{rep.mechanism}")
         if rep.ok:
             print(f"{'ESCALATED' if is_escalation else 'OK'}    {rep.cik}/{rep.mechanism}")
             return 0
