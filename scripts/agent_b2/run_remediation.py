@@ -273,7 +273,11 @@ _VALUE_GATE_COLUMNS = [
 # Post-fix plausibility bounds for rate-family fields (percentage scale).
 _FIELD_BOUNDS = {"interest_rate": (0.0, 60.0), "pik_rate": (0.0, 30.0),
                  "basis_spread": (0.0, 30.0)}
-_FV_TOUCHING = {"missing_position_add"}  # plus unit_rescale when field == fair_value
+# Classes whose fix legitimately moves total FV: position adds AND row-dropping classes
+# (dedup, comparative-period filter, SPV look-through) -- their FV judgement belongs to
+# the conservation gate run alongside; plus unit_rescale when field == fair_value.
+_FV_TOUCHING = {"missing_position_add", "dedup", "comparative_period_filter",
+                "spv_lookthrough"}
 
 # Cross-field magnitude plausibility (round-4 predicate). The q4b2exp_v3 magnitude
 # pulls showed the failure mode: a quarter-scoped but UNSELECTED rescale/remap can push
@@ -570,7 +574,11 @@ def gate_value_packet(
         return {"cik": cik, "target_quarter": target_quarter, "verdict": "FAIL",
                 "checks": {"replay_ok": False},
                 "reasons": [f"applier replay error: {replay_audit.get('message')}"]}
-    if not int(replay_audit.get("rows_changed") or 0):
+    # Value appliers audit "rows_changed"; row-dropping appliers (dedup,
+    # comparative_period_filter, spv_lookthrough) audit "rows_dropped". Read both, or a
+    # working dedup replay is misreported as a no-op (q1w1b2 0001603480 gate defect).
+    n_replayed = int(replay_audit.get("rows_changed") or 0) + int(replay_audit.get("rows_dropped") or 0)
+    if not n_replayed:
         checks["replay_ok"] = False
         reasons.append("correction is a no-op on the baseline frame (stale or mis-selected)")
 

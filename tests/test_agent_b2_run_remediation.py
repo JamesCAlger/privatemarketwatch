@@ -360,6 +360,66 @@ def test_value_gate_fails_on_out_of_bounds_rate():
     assert res["checks"]["field_sanity"] is False
 
 
+def _vg_dup_frame():
+    # Alpha Corp appears twice on identical (report_date, issuer_name, fair_value) --
+    # the dimension-double-count shape a dedup leaf targets.
+    return pd.DataFrame([
+        {"issuer_name": "Alpha Corp", "report_date": "2025-12-31", "fair_value": 1000.0,
+         "interest_rate": 0.105, "asset_class": "PRIVATE_CREDIT"},
+        {"issuer_name": "Alpha Corp", "report_date": "2025-12-31", "fair_value": 1000.0,
+         "interest_rate": 0.105, "asset_class": "PRIVATE_CREDIT"},
+        {"issuer_name": "Beta LLC", "report_date": "2025-12-31", "fair_value": 2000.0,
+         "interest_rate": 11.5, "asset_class": "PRIVATE_CREDIT"},
+    ])
+
+
+def _vg_dedup_corr():
+    return {"cik": "0000000100", "fix_class": "dedup",
+            "template": {"match_fields": ["report_date", "issuer_name", "fair_value"],
+                         "keep": "first"}}
+
+
+def test_value_gate_dedup_replay_not_flagged_noop():
+    # q1w1b2 gate defect 1: the no-op check read replay_audit["rows_changed"], but
+    # row-dropping appliers (dedup et al.) emit "rows_dropped" -- a working dedup was
+    # reported as "no-op on the baseline frame" while replay_equivalence proved it
+    # dropped rows.
+    from pipeline.agent_b2_appliers import apply_dedup
+    base = _vg_dup_frame()
+    corr = _vg_dedup_corr()
+    trial, audit = apply_dedup(base, corr["template"])
+    assert audit["rows_dropped"] == 1  # precondition: the replay genuinely drops a row
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["checks"]["replay_ok"] is True, res["reasons"]
+
+
+def test_value_gate_dedup_fv_drop_defers_to_conservation_gate():
+    # q1w1b2 gate defect 2: dedup was absent from _FV_TOUCHING, so fv_change_scoped
+    # demanded zero FV movement from a row-DROPPING fix. Row-dropping classes defer
+    # their FV judgement to the conservation gate run alongside (like
+    # missing_position_add already does).
+    from pipeline.agent_b2_appliers import apply_dedup
+    base = _vg_dup_frame()
+    corr = _vg_dedup_corr()
+    trial, _ = apply_dedup(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["checks"]["fv_change_scoped"] is True, res["reasons"]
+    assert res["verdict"] == "PASS", res["reasons"]
+
+
+def test_value_gate_dedup_true_noop_still_fails():
+    # False-positive guard: the stale-fix no-op check must still catch a dedup whose
+    # match_fields select no duplicate group (nothing dropped on the baseline).
+    base = _vg_frame()  # no duplicate rows
+    corr = _vg_dedup_corr()
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=base.copy(), correction=corr)
+    assert res["verdict"] == "FAIL"
+    assert res["checks"]["replay_ok"] is False
+
+
 def test_value_gate_missing_position_add_fails_closed_without_grounding():
     from pipeline.agent_b2_appliers import apply_missing_position_add
     base = _vg_frame()

@@ -10067,3 +10067,208 @@ adjudication_checks.py output.
 - Current Q4 closure snapshot: 837 findings, 483 actionable, 43 declared
   human/evidence exceptions, and not dry. B1 totals: 746 adjudicated, 391 real errors,
   372 with explicit fix classes, 19 route-missing. Focused tests: 64 passed.
+
+## 2026-08-29: Q1-2026 Agent A induction, promotion, rebuild, and B1 queue prep
+
+- Ran the Agent A rate-grammar induction fleet for 2026-03-31 over the 22 in-cohort
+  CIKs (`cohort_guard` clean). Root-caused a fleet-wide `CreateProcessWithLogonW 1326`
+  fast-fail to a parallel password race on the single shared `CodexSandboxOffline`
+  Windows sandbox account (Security 4625, substatus 0xc000006a; a new batch id did not
+  fix it). Serializing to `MaxParallel 1` cleared it; all 22 workers then ran clean.
+- Staged gate: 20 PASS (promotion-eligible) / 2 FAIL. The 2 FAILs
+  (`0001674760` 2024-09-30, `0002052152` 2025-03-31) are the gate correctly failing
+  closed on elevated `none_share`; the unparsed rows are subtotals/geographic
+  aggregates and industry/category headers, not missed rate formats. Verified the
+  affected rows are byte-identical to the official baseline (current vs Jul-22) and are
+  already filtered out of `private_markets_holdings.csv` (0 aggregate rows in-product):
+  the leakage is neither new nor product-facing; remedy is an Agent-A `none_share`
+  denominator/anchor-vocab refinement, not re-induction. The 3 NARROW passes
+  (`0001851322`, `0001885968`, `0001919369`) are correct era-scoping: those filers
+  switched from structured-rate to identifier-embedded-rate disclosure recently, so the
+  grammar validates only on the 3-4 in-era quarters (confirmed: `id_has_rate_text` 0% ->
+  ~90% at the era break).
+- Promoted all 20 PASS grammars + anchors to `data/overrides/identifier_rate_grammars/`
+  and `identifier_anchors/` (git-tracked). Ran the full post-battery
+  (`run_quarter_pass --from rebuild_post --until queue_post`) on pass
+  `q1trial_20260828`; all 7 stages completed (exit 0). `agent_fix_application_audit.csv`
+  shows no noop/drift on the promoted CIKs.
+- The review queue is byte-identical pre/post promotion (43,730 items; 446 source_recon
+  blocker rows). Expected: Agent A grammars feed the shadow/source-anchored path
+  (verified_fv), not the source-reconciliation blocker count. `acceptance_post` was not
+  run, so the promotion's effect on the Q1 FAIL metrics is not yet measured.
+- Built the cohort-scoped B1 batch `q1b1c_20260829`: 89 source_recon blocker bundles
+  across 22 in-cohort CIKs (`cohort_guard` PASS). The full 446-row worklist splits 22
+  in-cohort CIKs (89 rows) / 48 out-of-cohort CIKs (357 rows); the out-of-cohort rows
+  are deferred per the v1 cohort decision. Stopped before `dispatch_preflight --reserve`
+  and worker dispatch.
+
+## 2026-08-29: q1b1c B1 bundle build (89 BDCSRC bundles generated and placed)
+
+- Root-caused the first bundle-build failure: `pipeline.review_bundles` hard-skips
+  `source_recon` rows (`DEFERRED_ENGINES`, review_bundles.py:382) unless
+  `--engine source_recon` is passed, so the run selected 0 items and overwrote
+  `review_queue/review_bundle_manifest.csv` with an empty per-run manifest. No data
+  lost; that manifest is per-run, not cumulative.
+- Correct generator for BDCSRC source_recon packets is
+  `pipeline.bdc_cik_review.build_bundles` fed by the bdc_worklist projection
+  (`pipeline/review_queue.py:bdc_worklist_projection`). Sliced the 89 in-cohort
+  q1b1c_20260829 review_ids from `review_queue/bdc_worklist.csv` (89/89 matched) into
+  `agent_b/batch/q1b1c_20260829/bundle_build/worklist.csv` and ran
+  `scripts/bdc_cik_review/build_bundles.py --all --overwrite` (cache-only, no HTML
+  downloads). Result: bundle_count=89, exit 0.
+- Copied the 89 bundles into `review_queue/review_bundles/`; all 89 worklist
+  `bundle_path`s now resolve. Validation: 0 invalid/ID-mismatched bundles; all 89
+  carry the full evidence set (worklist_row, source_only_blocker_rows,
+  source_residual_rows, detail samples, HTML artifact/grid, holdings, GAV, purity,
+  XBRL rows). The 15 bundles with empty source-only rows are the
+  pipeline_only/fair_value_disagreement/scale_or_unit mechanisms whose blocking
+  evidence correctly lives in `source_reconciliation_detail_samples` (spot-checked
+  `extra_in_pipeline` rows present).
+- Batch q1b1c_20260829 is now dispatch-ready; next step is
+  `dispatch_preflight --reserve` and B1 worker dispatch from an ADMIN shell.
+
+## 2026-08-29: B1 discover now builds deferred source_recon bundles (skill flow fixed)
+
+- `scripts/agent_b/run_review.py discover` previously delegated ALL bundle building
+  to `pipeline.review_bundles`, whose `DEFERRED_ENGINES` skip silently dropped
+  source_recon rows even when selected by explicit review_id -- a source_recon-only
+  discover wrote a worklist with dead bundle_paths and overwrote the shared
+  `review_bundle_manifest.csv` with an empty file (the q1b1c first-attempt failure).
+- discover now splits the selection: generic engines go through
+  `pipeline.review_bundles` (skipped entirely when empty, so the shared manifest is
+  no longer wiped), and source_recon rows are routed through the richer
+  `pipeline.bdc_cik_review.build_bundles` via a `bdc_worklist_projection` worklist
+  written under `<batch_dir>/bundle_build/`, with the built bundles copied into the
+  shared `review_queue/review_bundles/` dir. Agent B1 itself (prompts, evidence CLI,
+  verdict contract) is untouched -- this is the deterministic driver only.
+- Tests: 2 new in `tests/test_agent_b_preflight.py` (source_recon-only discover
+  produces bundles + no generic call; mixed batch splits correctly). File total 11
+  passed.
+- `.claude/skills/quarter-pass-operator/SKILL.md` amended: notes the engine routing
+  and adds a pre-dispatch check that every worklist bundle_path exists.
+- Re-ran `discover q1b1c_20260829 --review-ids-from <worklist>` end-to-end: 89 items,
+  89/89 bundle_paths exist, 0 invalid, cohort_guard OK (all 22 CIKs in the 70-fund
+  cohort). Batch remains staged before `dispatch_preflight --reserve`.
+
+## 2026-08-29: q1b1c_20260829 batch deleted at operator request
+
+- Removed `data/output/agent_b/batch/q1b1c_20260829/` and its 89 BDCSRC_* bundles
+  from `review_queue/review_bundles/` (RVQ_* stock untouched at 4,983). The batch was
+  never dispatched and no locks were reserved; all contents are deterministically
+  regenerable via `run_review discover`. Reason: scope superseded -- 46/89 rows had
+  existing July verdicts (would abort dispatch_preflight) and the batch covered only
+  source_recon; the warranted Q1 pool is 842 cohort triggers / 288 blocker rows across
+  all engines. Next batch should be scoped from the current queue with verdict
+  exclusion.
+
+## 2026-08-29: Q1-2026 wave-1 B1 batch staged (q1w1_20260829)
+
+- First tier-0 batch for the 2026-03-31 pass, scoped per the Q4 campaign tiering
+  (conservation/gav_recon cascade first). Selection from the current review queue:
+  cohort + Q1-2026 + blocker lane + engine in (conservation, gav_recon) + no existing
+  verdict = 35 rows (31 conservation, 4 gav_recon) across 23 funds. ID list in
+  scratch/2026-08-29_q1_wave1/.
+- Built via the fixed `run_review discover` (generic engine path): 35/35 bundle_paths
+  exist, 0 invalid, all `source_artifact` completeness (no preflight auto-ambiguous),
+  all class3_aggregate. cohort_guard OK.
+- Staged before `dispatch_preflight --reserve`. Planned sequence: dispatch wave 1 ->
+  promote fixes -> post battery/requeue -> re-scope tier 1 (source_recon, 7 Q1 rows)
+  and tier 2 (identity+row_validation) from the fresh queue, since review IDs re-hash
+  after rebuilds.
+
+## 2026-08-29: q1w1_20260829 B1 dispatched + finalized (35/35 adjudicated)
+
+- Dispatched the 35-item wave-1 batch at MaxParallel 2. First round: 27/35 validated;
+  8 workers died at session init with `CreateProcessWithLogonW failed: 1326` (parallel
+  password race, a known MP2 transient) -- no verdict written, not gate refusals.
+- Retried the 8 undecided rids as a NEW batch `q1w1_20260829_r2` at MaxParallel 1
+  (serial => no password race; fresh worker homes => no stale setup markers). 8/8
+  validated, 0 schema errors. MP1 cleared the race completely.
+- `run_review finalize q1w1_20260829` (no BOMs present; 35/35 verdicts, 0 schema/cross
+  errors). Routing: 28 real_error -> b2_remediator_queue, 3 false_alarm ->
+  rule_scoping_queue, 4 ambiguous/source_unavailable -> coverage_no_source.
+- Per-rule agent-relative false-alarm among decided: cost_conservation 0/10,
+  fv_conservation 2/18, gav_reconciliation 1/3.
+- Coverage retry `q1w1_20260829_r3` (MaxParallel 1): the 4 source_unavailable rids
+  (0780b2e43acb, 994b63150cb1, eb30e3b146ec fv_conservation; f536d103f4b2
+  gav_reconciliation) re-adjudicated 4/4, ZERO source_unavailable -> all real_error.
+  DIAGNOSIS (from the verdict rationales, not assumed): the source_unavailable was NOT a
+  stale companyfacts cache -- 3/4 rationales cite the evidence CLI subprocess failing to
+  spawn with `CreateProcessWithLogonW 1326` (the SAME MP2 password race, hitting the
+  worker's child process instead of the worker), and the 4th confirms the CLI parsed the
+  cached filing. companyfacts refresh was therefore correctly NOT run (would have been a
+  no-op + an unwarranted EDGAR fetch); the fix was the serial MP1 re-run.
+- Final `finalize q1w1_20260829`: 35/35 decided, 0 ambiguous, 0 coverage residual.
+  Routing: 32 real_error -> b2_remediator_queue, 3 false_alarm -> rule_scoping_queue.
+  Per-rule false-alarm: cost_conservation 0/10, fv_conservation 2/21, gav_reconciliation
+  1/4.
+- Operator lesson reaffirmed: at MaxParallel 2 expect a fraction of 1326 password-race
+  failures -- they surface both as dead workers AND as in-worker source_unavailable when
+  the race hits the evidence-CLI subprocess. Fix for both is a fresh-batch-id MP1 retry,
+  never a same-id re-run; check verdict rationales before attributing source_unavailable
+  to a cache gap.
+
+## 2026-08-29: q1w1b2_20260829 B2 dedup lane -- 1 correction gated, 4 honest escalations
+
+- B2 discover from the q1w1 B1 worklist: 30 packets (20 actionable; 5 dedup, 6
+  subtotal_filter, 5 missing_position_add, 4 classification_fix; 10 fix_class-less need
+  human). Dedup lane dispatched at MaxParallel 1: 5/5 workers validated, 0 mechanical
+  failures.
+- 4/5 dedup packets ESCALATED (0001715933, 0001851322, 0001899017, 0002011498): each
+  worker grounded its dimension double-count against the filing (e.g. 0001851322
+  extracted-minus-consolidated FV diff is exactly the 294,975,000 consolidated-sub
+  table) but correctly refused to express parent/subsidiary or transaction-schedule
+  structures through the flat single-match_fields dedup template. Fail-closed by
+  design; mechanism choice escalated to the human. Not retried.
+- 0001603480 produced a row-scoped correction (4 row_ids, the Overton Chicago Gear
+  Revolver 17,092,378 + Term Loan A 11,499,903 duplicated via dimension paths; conf
+  0.98). Trial rebuild: -2 rows / -28,592,281 FV in 2026-03-31 ONLY, zero delta in all
+  12 other quarters (trial_vs_production_summary).
+- B3 gate: conservation gate PASS 5/5 (target cleared, no new flags, fv-at-risk
+  non-increasing, bands hold, 12 held-out quarters not regressed). value_gate FAIL on
+  two predicates BOTH characterized as gate-side misapplication, not correction
+  defects: (1) replay_ok reads replay_audit["rows_changed"] but apply_dedup emits
+  "rows_dropped" -- the adjacent replay_equivalence=true proves applier(baseline)==
+  trial exactly, so the "no-op" reason is self-contradicted; (2) _FV_TOUCHING =
+  {missing_position_add} excludes dedup, so fv_change_scoped demands zero FV movement
+  from a row-dropping fix -- the docstring itself says FV-touching classes defer to the
+  conservation gate. The value gate is documented as stage-2 machinery; dedup is
+  stage 1 and was pulled under it only because the operator passed --correction.
+- Recorded as a gate FAIL outcome per the contract; NOT promoted, NOT re-gated. No
+  wrong-diagnosis routing (magnitude_plausible=true; readjudication worklist
+  untouched). Decision escalated to the owner: gate stage-1 dedup by the conservation
+  gate alone vs first fixing the two value-gate defects (rows_dropped key + dedup
+  FV-touching membership) as a reviewed verifier change outside the run.
+
+## 2026-08-29: value-gate defects fixed (owner-approved Option B); 0001603480 dedup PASS + promoted
+
+- Owner approved fixing the two gate defects over bypassing the value gate. TDD:
+  3 new tests in tests/test_agent_b2_run_remediation.py written FIRST and observed
+  failing with the exact production reasons ("no-op on the baseline frame",
+  "non-FV fix moved total FV") -- test_value_gate_dedup_replay_not_flagged_noop,
+  test_value_gate_dedup_fv_drop_defers_to_conservation_gate, plus false-positive
+  guard test_value_gate_dedup_true_noop_still_fails (a genuinely no-op dedup must
+  still FAIL replay_ok).
+- Fix 1 (scripts/agent_b2/run_remediation.py gate_value_packet): the no-op check now
+  reads rows_changed + rows_dropped -- row-dropping appliers (dedup,
+  comparative_period_filter, spv_lookthrough) audit "rows_dropped", value appliers
+  "rows_changed". Fix 2: _FV_TOUCHING extended from {missing_position_add} to include
+  the three row-dropping classes; their FV judgement defers to the conservation gate
+  run alongside (per the gate docstring's own contract).
+- Tests: test_agent_b2_run_remediation.py 55/55 (52 existing + 3 new) + adjacent B2
+  files (appliers/diagnose/reviewed_workflow/run_metrics) 57/57. Full suite NOT run
+  (proportional verification; no shared contract changed).
+- Re-gate 0001603480 dedup through the FULL fixed gate: PASS on all 13 predicates
+  (conservation 5/5 + value gate 8/8). Gate artifact recorded at
+  data/output/agent_b2/batch/q1w1b2_20260829/gate_0001603480_dedup.json; leaf promoted
+  via promote_passes to data/overrides/agent_b2_corrections/0001603480/dedup.json
+  (status ok, promote_log.jsonl appended). Production holdings NOT yet rebuilt -- the
+  leaf is consumed at the next unified rebuild.
+- Post-promotion replay_gate sweep (replay_live_stats_q1w1b2_20260829.json): 37 live
+  leaves, 0 gate FAIL, 1 magnitude leg out of band = 0001674760 column_remap
+  shares_held (dev_log10 2.253) -- byte-identical to the Aug-21 q4b2r4an_setcash
+  sweep, pre-existing and unchanged by this session; no new disposition needed.
+- Residuals unchanged: 4 dedup escalations (0001715933, 0001851322, 0001899017,
+  0002011498) await the owner's mechanism decision; subtotal_filter (6),
+  missing_position_add (5), classification_fix (4) B2 lanes not yet dispatched;
+  10 fix_class-less packets need human review.
