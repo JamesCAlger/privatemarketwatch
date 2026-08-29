@@ -10272,3 +10272,37 @@ adjudication_checks.py output.
   0002011498) await the owner's mechanism decision; subtotal_filter (6),
   missing_position_add (5), classification_fix (4) B2 lanes not yet dispatched;
   10 fix_class-less packets need human review.
+
+## 2026-08-29: retain-and-flag shipped -- conservation sums are now subsidiary-aware
+
+- Owner decision (resolves the "ex-sub conservation sums" pending item from
+  2026-07-21/22): conservation value_sums EXCLUDE is_subsidiary=1 look-through rows
+  (rows stay in holdings; the consolidated anchor already contains them once). Public
+  FV/export semantics deliberately NOT touched -- separate open decision.
+- TDD (4 tests written first, all observed failing, incl. the shadow engine showing
+  the exact 1400-vs-1000 overshoot): value_sum_by_quarter (pipeline/agent_rule.py),
+  _gate_rows (pipeline/agent_b2_diagnose.py), build_conservation_snapshots
+  (scripts/agent_b2/run_remediation.py), run_rule (scripts/shadow_conservation_engine.py,
+  column probed via DESCRIBE so frames without is_subsidiary keep working). GAV
+  reconciliation NOT changed -- validate_holdings already dual-tracks
+  sum_holdings_fv_ex_sub with its own test. Suites: agent_rule + agent_b2_diagnose +
+  agent_b2_run_remediation + agent_promoted = 161/161 green. Full suite not run.
+- Shadow engine re-run (cohort, cache-only). Pre/post diff ATTRIBUTED: only rows whose
+  value_sum moved are this change (168 rows / 22 CIKs); 126 further status changes had
+  identical sums = concurrent anchor-store drift (Q1 anchors landing), not this change.
+- Effect of the change: 64 CIK-quarter rows cleared to reconciles (incl. 2052153's
+  ~80% overshoots across 4 quarters, 1715933 2025-Q3/Q4, 1899017, 1812554, 1975736,
+  1988280, 1905824, 1920453); 15 rows worsened, concentrated in TWO CIKs: 1633336
+  (10 quarters, reconciles -> ~-0.9% undershoot) and 1930087 (3 quarters, ~-1.0%).
+  For both, pre-change residuals were ~0.000 WITH subs included -- their anchors
+  evidently INCLUDE the subsidiary layer (or the rows are mis-flagged). Honest new
+  flags routed to the normal review queue; NOT tuned away (hard rule 3).
+- Escalated-CIK outcome at 2026-03-31: 0001899017 fv+cost RECONCILES (0.000/0.110),
+  0002011498 fv+cost RECONCILES (0.000/0.000) -- both dedup escalations resolved with
+  NO per-CIK correction. Residuals as predicted: 0001715933 still ~54%/49% overshoot
+  (transaction-schedule rows carry no subsidiary dimension -- extraction-side fix
+  needed) and 0001851322 fv still 4.65% overshoot (table-79 layer not dimension-
+  flagged). 0001899017's missing parent ATS row remains a separate extraction defect.
+- Pre-change artifact preserved at scratch/2026-08-29_q1w1_dedup_gate/
+  conservation_gate_results.pre_subaware.csv. Review queue NOT yet regenerated;
+  blocker requeue belongs to the post-battery step.

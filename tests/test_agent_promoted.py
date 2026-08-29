@@ -337,6 +337,41 @@ def test_engine_prefers_verified_override(monkeypatch, tmp_path):
     assert rows["0000000456"][1:] == (500.0, "schedule_total", "reconciles")
 
 
+def test_engine_conservation_sum_excludes_subsidiary_rows(monkeypatch):
+    """Retain-and-flag (owner decision 2026-08-29): the conservation value_sum excludes
+    is_subsidiary=1 look-through rows -- the consolidated anchor already contains them
+    once. A parent 1000 + subsidiary-layer 400 frame must reconcile against a 1000
+    anchor, not overshoot at 1400. Frames WITHOUT the column keep working (the other
+    engine tests pin that)."""
+    import scripts.shadow_conservation_engine as sce
+
+    con = duckdb.connect()
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    con.execute("INSERT INTO wrapped VALUES ('0001899017')")
+    con.execute("""
+        CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
+            ('0001899017', '2026-03-31', 600.0, 'x=y', 'LOAN', 0),
+            ('0001899017', '2026-03-31', 400.0, 'x=y', 'LOAN', 0),
+            ('0001899017', '2026-03-31', 400.0, 'nonconsolidatedsubsidiaryaxis=SLP', 'LOAN', 1)
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, is_subsidiary)
+    """)
+    con.execute("""
+        CREATE TABLE bdc_tbl AS SELECT * FROM (VALUES
+            ('0001899017', '2026-03-31', '2026-03-31', 'Total Investments', 1000.0)
+        ) AS t(cik, report_date, period, investment_identifier, fair_value)
+    """)
+    monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
+    monkeypatch.setattr(sce, "_bdc", lambda: "bdc_tbl")
+
+    rule = sce.ConservationRule(
+        name="fv_sub_test", value_column="fair_value",
+        anchors=(sce.Anchor("schedule_total", "schedule_total", "fair_value"),))
+    sce.run_rule(con, rule)
+    row = con.execute(
+        "SELECT value_sum, anchor_value, status FROM result_fv_sub_test").fetchone()
+    assert row == (1000.0, 1000.0, "reconciles"), row
+
+
 # --------------------------------------------------------------------------- integration
 
 @pytest.mark.integration

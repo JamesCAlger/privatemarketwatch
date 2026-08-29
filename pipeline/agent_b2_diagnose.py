@@ -33,10 +33,13 @@ def _num(s: pd.Series) -> pd.Series:
 
 
 def _gate_rows(df: pd.DataFrame) -> pd.Series:
-    """Boolean mask of rows the conservation value_sum includes."""
-    if GATE_FILTER in df.columns:
-        return df[GATE_FILTER].notna()
-    return pd.Series(True, index=df.index)
+    """Boolean mask of rows the conservation value_sum includes. is_subsidiary=1
+    look-through rows are excluded (retain-and-flag, 2026-08-29): the consolidated
+    anchor already contains them once, so summing them again double-counts."""
+    keep = df[GATE_FILTER].notna() if GATE_FILTER in df.columns else pd.Series(True, index=df.index)
+    if "is_subsidiary" in df.columns:
+        keep = keep & (pd.to_numeric(df["is_subsidiary"], errors="coerce").fillna(0) != 1)
+    return keep
 
 
 def value_sum(df: pd.DataFrame, drop: pd.Series | None = None) -> float:

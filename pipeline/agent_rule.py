@@ -392,10 +392,14 @@ CONSERVATION_EXCLUDED_CATEGORIES = frozenset({"CASH"})
 
 def value_sum_by_quarter(df: pd.DataFrame) -> dict[str, float]:
     """Conservation value_sum per report_date: sum(fair_value) over gate-counted rows, EXCLUDING
-    cash-equivalents (kept in holdings, not part of 'investments at fair value')."""
+    cash-equivalents (kept in holdings, not part of 'investments at fair value') and
+    is_subsidiary=1 look-through rows (retain-and-flag, 2026-08-29: the consolidated
+    anchor already contains them once, so summing them again double-counts)."""
     sub = df[df["bdc_dimensions_raw"].notna()] if "bdc_dimensions_raw" in df.columns else df
     if "asset_category" in sub.columns:
         sub = sub[~sub["asset_category"].astype(str).str.upper().isin(CONSERVATION_EXCLUDED_CATEGORIES)]
+    if "is_subsidiary" in sub.columns:
+        sub = sub[pd.to_numeric(sub["is_subsidiary"], errors="coerce").fillna(0) != 1]
     fv = pd.to_numeric(sub["fair_value"], errors="coerce").fillna(0)
     return {str(k): float(v) for k, v in fv.groupby(sub["report_date"].astype(str)).sum().items()}
 

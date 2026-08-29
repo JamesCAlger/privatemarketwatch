@@ -212,6 +212,15 @@ def _anchor_table_sql(anchor: Anchor) -> str:
 def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
     """Run one conservation rule into a per-(cik,report_date) result table
     named result_<rule>."""
+    # Retain-and-flag (owner decision 2026-08-29): is_subsidiary=1 look-through rows
+    # (nonconsolidated-subsidiary / equity-method dimensions) stay in holdings, but the
+    # consolidated anchor already contains them once -- summing them again double-counts
+    # every subsidiary-reporting fund into a permanent overshoot. Probe the column so
+    # older frames/fixtures without it keep working.
+    src_cols = {r[0].lower() for r in
+                con.execute(f"DESCRIBE SELECT * FROM {_unified()} LIMIT 0").fetchall()}
+    sub_filter = ("AND COALESCE(TRY_CAST(is_subsidiary AS INT), 0) <> 1"
+                  if "is_subsidiary" in src_cols else "")
     # Production quantity: sum of the value column over unified BDC rows.
     con.execute(
         f"""
@@ -225,6 +234,7 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
           -- cash-equivalents (T-bills, money-market sweeps) stay in holdings but are NOT 'investments
           -- at fair value'; the companyfacts anchor excludes them, so the conservation sum must too.
           AND upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'
+          {sub_filter}
         GROUP BY 1, 2
         """
     )

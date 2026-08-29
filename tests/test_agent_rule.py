@@ -485,3 +485,17 @@ def test_value_sum_excludes_cash_but_keeps_rows():
     ])
     assert value_sum_by_quarter(df)["q"] == 1000.0   # cash excluded from the sum
     assert len(df) == 2                              # but the cash row is retained in the frame
+
+
+def test_value_sum_excludes_subsidiary_rows_but_keeps_them():
+    # Retain-and-flag (owner decision 2026-08-29): nonconsolidated-subsidiary /
+    # look-through rows stay in holdings, but the filing's consolidated total already
+    # contains them once -- summing them again double-counts, so the conservation
+    # frame excludes is_subsidiary=1.
+    df = pd.DataFrame([
+        {**_h("1", "q", 1815.0), "is_subsidiary": 0},
+        {**_h("1", "q", 406.0), "is_subsidiary": 1},     # look-through layer
+        {**_h("1", "q", 100.0), "is_subsidiary": None},  # unset counts as not-subsidiary
+    ])
+    assert value_sum_by_quarter(df)["q"] == 1915.0
+    assert len(df) == 3  # rows retained, only the sum is subsidiary-aware

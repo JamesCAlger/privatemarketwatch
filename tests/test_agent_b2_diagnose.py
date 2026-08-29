@@ -40,6 +40,15 @@ def test_value_sum_honors_gate_filter():
     assert value_sum(df) == 100.0
 
 
+def test_value_sum_excludes_subsidiary_rows():
+    # Retain-and-flag (2026-08-29): is_subsidiary=1 look-through rows are retained in
+    # holdings but excluded from the conservation frame -- the consolidated anchor
+    # already contains them once. Column absent (as in _uframe) => nothing excluded.
+    df = _uframe([_u(100.0, "A"), _u(40.0, "SubLayer")])
+    df["is_subsidiary"] = [0, 1]
+    assert value_sum(df) == 100.0
+
+
 # -- battery: a clean aggregate leak reconciles -----------------------------------------
 
 def test_no_detail_aggregate_reconciles():
