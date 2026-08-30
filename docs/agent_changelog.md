@@ -10390,3 +10390,31 @@ adjudication_checks.py output.
   wrapper investigation. CAUTION: those two report residuals of ~530B/~440B on
   ~1.5B funds -- an off-scale anchor artifact in the diagnose input assembly, not a
   real magnitude; trust the escalate action, not the residual number.
+
+## 2026-08-30: focused 1812554/1838126 forensics + row-provenance/layer-exclusion spec
+
+- The two funds are $63.8B of the $118.3B Q1 flagged-FV pool. Both overshoot fv AND
+  cost by similar magnitude vs independent companyfacts anchors (1812554: fv gap
+  $1.72B / 4.85%; 1838126: $1.58B / 6.32%) -- whole-extra-row shape, not value scale.
+- Deterministic forensics (DuckDB, read-only): in BOTH funds the BARE-AXIS bucket
+  (rows whose bdc_dimensions_raw axis profile is only investmentidentifieraxis, no
+  affiliation member) matches the gap: 1838126 23 rows $1.611B ~= gap; 1812554 14
+  rows $1.365B + $0.394B exact (issuer,fv) dupes ~= gap. Zero is_subsidiary-tagged
+  rows at Q1 for either. No printed SOI totals in extracted raw (hence companyfacts
+  anchors).
+- The bare rows differ in kind: 1812554 = the fund's own JV/financing vehicles
+  (OCIC SLF, Blue Owl Credit SLF, AAM Feeders, Fifth Season; several issuers appear
+  twice bare+affiliated) -> untagged JV-layer duplication. 1838126 = tranche-suffixed
+  borrower names (Emerus Holdings 1/2, FH BMX Buyer 1/2/3) -> likely dual-presentation
+  duplication with differently-formed identifiers.
+- Not remediable in current B2 vocabulary (dedup: no equality key; spv_lookthrough:
+  no legalentityaxis; subtotal_filter: no aggregate labels -- 1838126's noop proved
+  it; arbitrary row-delete deliberately does not exist). Wave-1 verdicts already
+  stand on these rids, so no B1 re-dispatch either.
+- SPEC WRITTEN (DRAFT, owner review):
+  docs/adjudication_architecture/row_provenance_and_layer_exclusion_spec.md --
+  Part A: axis_profile + source_table provenance columns at staging (Layer 1);
+  Part B: one layer_exclusion class with a CLOSED structural-selector whitelist and
+  a mandatory anchor-equality gate predicate (excluded set FV must equal a cited,
+  re-verifiable quantity). Non-goals: extraction gaps, public-FV semantics, free
+  row_selector widening. Migration order + owner questions in the spec.
