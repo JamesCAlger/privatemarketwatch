@@ -2647,10 +2647,15 @@ def _prepare_bdc(
             '' AS nport_liquidity_classification,
             COALESCE(TRY_CAST(nonaccrual_footnote AS BOOLEAN), FALSE) AS nonaccrual_footnote,
             COALESCE(TRY_CAST(nonaccrual_dimension AS BOOLEAN), FALSE) AS nonaccrual_dimension,
+            -- Two PRECISE axis patterns only. The broad '%subsidiar%' catch-all was
+            -- removed 2026-08-30: cohort-wide it contributed ZERO axis-name matches
+            -- beyond these two and 568 FALSE positives ($1.79B / 14 CIKs) where the
+            -- word sits inside a borrower's legal name in an investmentidentifieraxis
+            -- member value ('AVG Subsidiary Holdings LLC', '... & Subsidiaries') --
+            -- ordinary in-total positions wrongly excluded from conservation sums
+            -- (the 1633336/1930087 flags incl. the Q4-2025 regression).
             CASE WHEN lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
                           LIKE '%nonconsolidatedsubsidiar%'
-                      OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
-                          LIKE '%subsidiar%'
                       -- Equity-method investee (JV) look-through facts: same
                       -- retain-and-flag treatment as the subsidiary axes
                       -- (adjudicated 2026-07-21/22, data_investigation_results

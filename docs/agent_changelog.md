@@ -10453,3 +10453,32 @@ adjudication_checks.py output.
   instead of vague overshoots. Next decisions: filing-level row splitting of the
   1838126 bucket (~$32M to attribute), a bounded row-cited dedup leaf for
   1812554's $394M exact-dup groups, and tranche-2 filing_table proof kind.
+
+## 2026-08-30: is_subsidiary broad-substring false positives FIXED; Q4-2025 re-attests PASS
+
+- Deterministic attribution of the '1633336/1930087 anchor question' resolved the
+  fork nobody guessed: their flags were FALSE POSITIVES of the staging matcher's
+  broad LIKE '%subsidiar%' catch-all firing on BORROWER NAMES inside
+  investmentidentifieraxis member values ('AVG Subsidiary Holdings LLC',
+  '... & Subsidiaries'). Cohort-wide the catch-all had ZERO axis-name true
+  positives beyond the two precise axes and 568 false positives ($1.79B / 14
+  CIKs) -- ordinary in-total positions wrongly excluded from conservation sums.
+- Fix (TDD): broad clause DELETED from staging_bdc; two precise axes remain
+  (nonconsolidatedsubsidiar + equity-method). test_subsidiary_detected_
+  subsidiary_keyword REWRITTEN (it pinned the FP-generating behavior;
+  consolidated-subsidiary axes are now also unflagged -- consolidated subs are
+  inside fund totals; no cohort filer uses that axis) + new borrower-name FP
+  guard. TestSubsidiaryFlag 10/10.
+- Rebuild + shadow re-run: flagged rows 9,587 -> 9,019 (exactly the two-axis
+  population, $83.32B); ZERO row_id changes (no dedup-outcome shifts); conservation
+  diff = 15 status changes, ALL undershoot->reconciles, ZERO new failures.
+  1633336 Q4-2025 back to reconciles (-0.001%).
+- RE-ATTESTATION TOOLING SHIPPED (owner decision: freeze the attestation, not the
+  code): scripts/reattest_quarters.py attest/check + append-only regression ledger
+  + git tag signoff-2025-12-31 at 9a56802 + Q4 attestation stored; operator skill
+  updated (check after any semantics change + in every pass preflight; regression
+  = stop-and-report). First live check: [2025-12-31] PASS -> PASS, no flips.
+- Residual flags after the fix (genuine, pre-existing): 1633336 2023-12-31
+  (-1.95%); 1930087 2025-12-31 (-0.85%, part of the signed Q4 state) and
+  2026-03-31 (-0.85%). The 'anchor question' human-decision item is CLOSED --
+  no anchor overrides needed.

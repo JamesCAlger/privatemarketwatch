@@ -7281,15 +7281,33 @@ class TestSubsidiaryFlag:
         assert len(result) == 1
         assert int(result.iloc[0]["is_subsidiary"]) == 1
 
-    def test_subsidiary_detected_subsidiary_keyword(self):
-        """Rows with 'subsidiary' in dimensions are flagged."""
+    def test_consolidated_subsidiary_axis_not_flagged(self):
+        """2026-08-30: the broad '%subsidiar%' catch-all is GONE. Cohort-wide it had
+        ZERO axis-name true positives and 568 member-value false positives ($1.79B /
+        14 CIKs -- borrower names like 'AVG Subsidiary Holdings LLC'). A
+        consolidated-subsidiary axis is also NOT flagged: consolidated subs'
+        positions are inside the fund's consolidated totals (no cohort filer uses
+        this axis; pinned for the semantics, not an observed case)."""
         rows = [self._make_bdc_row(
             dimensions_raw="consolidatedsubsidiaryaxis=SubCo",
         )]
         df = pd.DataFrame(rows)
         result = _prepare_bdc(df)
         assert len(result) == 1
-        assert int(result.iloc[0]["is_subsidiary"]) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 0
+
+    def test_subsidiary_in_borrower_name_not_flagged(self):
+        """False-positive guard (the 1633336/1930087 Q4-regression root cause): the
+        word 'Subsidiary' inside an investmentidentifieraxis MEMBER VALUE (a
+        borrower's legal name) must not flag the row."""
+        rows = [self._make_bdc_row(
+            dimensions_raw=("investmentidentifieraxis="
+                            "AVG Intermediate Holdings & AVG Subsidiary Holdings LLC"),
+        )]
+        df = pd.DataFrame(rows)
+        result = _prepare_bdc(df)
+        assert len(result) == 1
+        assert int(result.iloc[0]["is_subsidiary"]) == 0
 
     def test_subsidiary_detected_equity_method_investee_axis(self):
         """JV look-through facts on the equity-method-investee axis are flagged
