@@ -39,7 +39,7 @@ from pipeline.verdict_leaf import KNOWN_FIX_CLASSES, _is_number, _valid_citation
 # stage-3 rule/anchor track. ``unknown`` is unstaged (0) and never bindable.
 FIX_CLASS_STAGE: dict[str, int] = {
     "dedup": 1, "subtotal_filter": 1, "comparative_period_filter": 1, "missing_position_add": 1,
-    "spv_lookthrough": 1,
+    "spv_lookthrough": 1, "layer_exclusion": 1,
     "rate_rescale": 2, "all_pik_normalization": 2, "column_remap": 2, "unit_rescale": 2,
     "classification_fix": 2, "source_anchored_value": 2,
     "rule_scope": 3, "anchor_fix": 3, "identifier_rate_grammar": 3,
@@ -135,6 +135,12 @@ TEMPLATE_REGISTRY: dict[str, Template] = {
         1, "apply_missing_position_add", frozenset({"positions"}), frozenset({"positions"})),
     "spv_lookthrough": Template(
         1, "apply_spv_lookthrough", frozenset({"entities"}), frozenset({"entities"})),
+    # Row-provenance layer exclusion (spec 2026-08-30): closed structural-selector
+    # whitelist + mandatory anchor-equality proof (enforced at the B3 value gate).
+    "layer_exclusion": Template(
+        1, "apply_layer_exclusion",
+        frozenset({"scope_quarters", "selector", "anchor_proof"}),
+        frozenset({"scope_quarters", "selector", "anchor_proof"})),
     # --- stage 2: per-row value/scale/mapping ---
     "rate_rescale": Template(
         2, "apply_rate_rescale", frozenset({"field", "factor"}),
@@ -346,6 +352,49 @@ def _validate_assertions(assertions: Any, rep: CorrectionReport) -> None:
                     f"{wpath}.cell_index must differ from the asserted source cell")
 
 
+# layer_exclusion nested bounds (spec 2026-08-30). Selector: closed STRUCTURAL
+# whitelist, exact-match only. anchor_proof: deterministic gap kinds, positive
+# numeric cited_value, non-empty citation. tolerance_pct is capped harder at the
+# gate (0.5%); here we only require it be a number if present.
+LAYER_EXCLUSION_SELECTOR_KEYS = frozenset({"axis_profile", "source_table", "is_subsidiary"})
+LAYER_EXCLUSION_PROOF_KINDS = frozenset({"named_anchor_gap", "companyfacts_fv_gap"})
+_LAYER_PROOF_KEYS = frozenset({"kind", "cited_value", "tolerance_pct", "citation"})
+
+
+def _validate_layer_exclusion(template: dict, rep: CorrectionReport) -> None:
+    quarters = template.get("scope_quarters")
+    if not isinstance(quarters, list) or not quarters or not all(
+            isinstance(q, str) and _QUARTER_RE.match(q) for q in quarters):
+        rep.errors.append("template.scope_quarters must be a non-empty list of YYYY-MM-DD dates")
+    sel = template.get("selector")
+    if not isinstance(sel, dict):
+        rep.errors.append("template.selector must be an object")
+    else:
+        bad = set(sel) - LAYER_EXCLUSION_SELECTOR_KEYS
+        if bad:
+            rep.errors.append(
+                f"template.selector key(s) outside the closed whitelist: {sorted(bad)}")
+        if not any(v is not None for k, v in sel.items()
+                   if k in LAYER_EXCLUSION_SELECTOR_KEYS):
+            rep.errors.append("template.selector needs at least one non-null whitelisted field")
+    proof = template.get("anchor_proof")
+    if not isinstance(proof, dict):
+        rep.errors.append("template.anchor_proof is required (fail-closed)")
+        return
+    bad = set(proof) - _LAYER_PROOF_KEYS
+    if bad:
+        rep.errors.append(f"template.anchor_proof has unknown key(s): {sorted(bad)}")
+    if str(proof.get("kind")) not in LAYER_EXCLUSION_PROOF_KINDS:
+        rep.errors.append(
+            f"template.anchor_proof.kind must be one of {sorted(LAYER_EXCLUSION_PROOF_KINDS)}")
+    if not _is_number(proof.get("cited_value")) or float(proof.get("cited_value") or 0) <= 0:
+        rep.errors.append("template.anchor_proof.cited_value must be a positive number")
+    if "tolerance_pct" in proof and not _is_number(proof.get("tolerance_pct")):
+        rep.errors.append("template.anchor_proof.tolerance_pct must be a number")
+    if not str(proof.get("citation") or "").strip():
+        rep.errors.append("template.anchor_proof.citation is required")
+
+
 def _validate_template(fix_class: str, template: Any, tpl: Template, rep: CorrectionReport) -> None:
     if not isinstance(template, dict):
         rep.errors.append("template must be an object")
@@ -364,6 +413,8 @@ def _validate_template(fix_class: str, template: Any, tpl: Template, rep: Correc
         if k in keys and str(template.get(k)) not in allowed_vals:
             rep.errors.append(f"template.{k} must be one of {sorted(allowed_vals)}, got {template.get(k)!r}")
     # Nested structures.
+    if fix_class == "layer_exclusion":
+        _validate_layer_exclusion(template, rep)
     if "row_selector" in keys:
         _validate_row_selector(template.get("row_selector"), rep)
     if "assertions" in keys:

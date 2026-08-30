@@ -2658,6 +2658,21 @@ def _prepare_bdc(
                       OR lower(COALESCE(CAST(dimensions_raw AS VARCHAR), ''))
                           LIKE '%equitymethodinvestmentequitymethodinvesteenameaxis%'
                  THEN 1 ELSE 0 END AS is_subsidiary,
+            -- Row provenance (spec 2026-08-30): the row's normalized presentation
+            -- profile. Lowercase, '='-attached member values stripped, segments
+            -- trimmed and SORTED for order stability. Plain (no '=') member-label
+            -- segments are KEPT deliberately -- they discriminate bare-axis rows
+            -- from affiliation-labeled presentations (the 1812554/1838126 layer
+            -- forensics). Derived-only; appliers never write it.
+            CASE WHEN COALESCE(TRIM(CAST(dimensions_raw AS VARCHAR)), '') = '' THEN ''
+                 ELSE array_to_string(list_sort(list_filter(
+                        list_transform(
+                            string_split(
+                                regexp_replace(lower(CAST(dimensions_raw AS VARCHAR)),
+                                               '=[^|]*', '', 'g'), '|'),
+                            x -> trim(x)),
+                        x -> x <> '')), '|')
+            END AS axis_profile,
             '' AS jv_subsidiary,
             '' AS entity_id,
             '' AS canonical_name,

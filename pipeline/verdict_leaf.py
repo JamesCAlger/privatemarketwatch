@@ -70,7 +70,7 @@ KNOWN_ANCHORS = frozenset({"companyfacts_fv", "schedule_total", "extract_total_f
 KNOWN_FIX_CLASSES = frozenset({
     # stage 1 -- population/structure (change WHICH rows exist; must run first)
     "dedup", "subtotal_filter", "comparative_period_filter", "missing_position_add",
-    "spv_lookthrough",
+    "spv_lookthrough", "layer_exclusion",
     # stage 2 -- per-row value/scale/mapping (change row VALUES)
     "rate_rescale", "all_pik_normalization", "column_remap", "unit_rescale",
     "classification_fix", "source_anchored_value",

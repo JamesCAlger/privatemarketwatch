@@ -96,6 +96,70 @@ def test_run_corrections_stage_filter():
     assert len(df) == 4
 
 
+def _layer_frame():
+    # Two presentations of a fund's book: dimensioned rows + a bare-axis layer
+    # (the 1812554/1838126 shape). One off-scope quarter row guards scoping.
+    return pd.DataFrame([
+        {"issuer_name": "Acme TL", "report_date": "2026-03-31", "fair_value": 1000.0,
+         "axis_profile": "investmentidentifieraxis|non-affiliated issuer", "is_subsidiary": 0},
+        {"issuer_name": "Beta TL", "report_date": "2026-03-31", "fair_value": 2000.0,
+         "axis_profile": "investmentidentifieraxis|non-affiliated issuer", "is_subsidiary": 0},
+        {"issuer_name": "JV Feeder LLC", "report_date": "2026-03-31", "fair_value": 400.0,
+         "axis_profile": "investmentidentifieraxis", "is_subsidiary": 0},
+        {"issuer_name": "JV Feeder II LLC", "report_date": "2026-03-31", "fair_value": 100.0,
+         "axis_profile": "investmentidentifieraxis", "is_subsidiary": 0},
+        {"issuer_name": "JV Feeder LLC", "report_date": "2025-12-31", "fair_value": 390.0,
+         "axis_profile": "investmentidentifieraxis", "is_subsidiary": 0},  # off-scope
+    ])
+
+
+def _layer_template(**kw):
+    base = {"scope_quarters": ["2026-03-31"],
+            "selector": {"axis_profile": "investmentidentifieraxis",
+                         "source_table": None, "is_subsidiary": None},
+            "anchor_proof": {"kind": "named_anchor_gap", "cited_value": 500.0,
+                             "tolerance_pct": 0.5,
+                             "citation": "companyfacts fv gap 2026-03-31"}}
+    base.update(kw)
+    return base
+
+
+def test_layer_exclusion_drops_selected_layer_in_scope_only():
+    df, audit = ap.apply_layer_exclusion(_layer_frame(), _layer_template())
+    assert audit["status"] == "ok"
+    assert audit["rows_dropped"] == 2 and audit["fv_dropped"] == 500.0
+    assert len(df) == 3
+    # off-scope quarter's bare-axis row is retained
+    assert (df["report_date"] == "2025-12-31").sum() == 1
+
+
+def test_layer_exclusion_refuses_non_whitelist_selector_field():
+    t = _layer_template(selector={"issuer_name": "JV Feeder LLC"})
+    df, audit = ap.apply_layer_exclusion(_layer_frame(), t)
+    assert audit["status"] == "error" and audit["rows_dropped"] == 0
+    assert len(df) == 5
+
+
+def test_layer_exclusion_requires_scope_quarters_and_a_selector_value():
+    t1 = _layer_template(scope_quarters=[])
+    _, a1 = ap.apply_layer_exclusion(_layer_frame(), t1)
+    assert a1["status"] == "error"
+    t2 = _layer_template(selector={"axis_profile": None, "source_table": None,
+                                   "is_subsidiary": None})
+    _, a2 = ap.apply_layer_exclusion(_layer_frame(), t2)
+    assert a2["status"] == "error"
+
+
+def test_layer_exclusion_null_selector_never_matches_null_data():
+    # A NULL selector field must not match rows where the column is NULL/missing.
+    df = _layer_frame()
+    df.loc[2, "axis_profile"] = None
+    t = _layer_template(selector={"axis_profile": "investmentidentifieraxis",
+                                  "source_table": None, "is_subsidiary": None})
+    out, audit = ap.apply_layer_exclusion(df, t)
+    assert audit["rows_dropped"] == 1  # only the non-null exact match in scope
+
+
 def test_run_corrections_fills_structural_identity_on_added_rows():
     # 2026-08-30 trial-gate defect: missing_position_add rows carry only the position
     # fields; without the cik/source fill (which agent_promoted does in production)

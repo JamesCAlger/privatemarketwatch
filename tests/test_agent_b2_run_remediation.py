@@ -435,6 +435,90 @@ def test_value_gate_dedup_fv_drop_defers_to_conservation_gate():
     assert res["verdict"] == "PASS", res["reasons"]
 
 
+def _le_frame():
+    return pd.DataFrame([
+        {"issuer_name": "Acme TL", "report_date": "2025-12-31", "fair_value": 1000.0,
+         "axis_profile": "investmentidentifieraxis|non-affiliated issuer"},
+        {"issuer_name": "Beta TL", "report_date": "2025-12-31", "fair_value": 2000.0,
+         "axis_profile": "investmentidentifieraxis|non-affiliated issuer"},
+        {"issuer_name": "JV Feeder LLC", "report_date": "2025-12-31", "fair_value": 400.0,
+         "axis_profile": "investmentidentifieraxis"},
+        {"issuer_name": "JV Feeder II LLC", "report_date": "2025-12-31", "fair_value": 100.0,
+         "axis_profile": "investmentidentifieraxis"},
+    ])
+
+
+def _le_corr(cited=500.0, tol=0.5, kind="named_anchor_gap", with_proof=True):
+    t = {"scope_quarters": ["2025-12-31"],
+         "selector": {"axis_profile": "investmentidentifieraxis",
+                      "source_table": None, "is_subsidiary": None}}
+    if with_proof:
+        t["anchor_proof"] = {"kind": kind, "cited_value": cited, "tolerance_pct": tol,
+                             "citation": "companyfacts fv gap 2025-12-31"}
+    return {"cik": "0000000100", "fix_class": "layer_exclusion", "template": t}
+
+
+def test_value_gate_layer_exclusion_passes_with_exact_anchor_proof():
+    from pipeline.agent_b2_appliers import apply_layer_exclusion
+    base = _le_frame()
+    corr = _le_corr(cited=500.0)
+    trial, _ = apply_layer_exclusion(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["checks"]["excluded_set_anchored"] is True, res["reasons"]
+    assert res["checks"]["fv_change_scoped"] is True  # row-dropping class defers FV
+    assert res["verdict"] == "PASS", res["reasons"]
+
+
+def test_value_gate_layer_exclusion_false_positive_selector_fails_anchor_proof():
+    # False-positive guard (spec step 3): a selector that sweeps in legitimate rows
+    # sums past the cited quantity and MUST fail the anchor-equality proof.
+    from pipeline.agent_b2_appliers import apply_layer_exclusion
+    base = _le_frame()
+    corr = _le_corr(cited=400.0)  # cites only JV Feeder LLC, selector drops 500
+    trial, _ = apply_layer_exclusion(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["checks"]["excluded_set_anchored"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_value_gate_layer_exclusion_requires_anchor_proof():
+    from pipeline.agent_b2_appliers import apply_layer_exclusion
+    base = _le_frame()
+    corr = _le_corr(with_proof=False)
+    trial, _ = apply_layer_exclusion(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["checks"]["excluded_set_anchored"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_value_gate_layer_exclusion_tolerance_capped_at_half_percent():
+    # Owner decision 2026-08-30: cap 0.5%. A leaf asking 5% must not loosen the bar.
+    from pipeline.agent_b2_appliers import apply_layer_exclusion
+    base = _le_frame()
+    corr = _le_corr(cited=496.0, tol=5.0)  # 0.8% off -- inside 5%, outside 0.5%
+    trial, _ = apply_layer_exclusion(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["checks"]["excluded_set_anchored"] is False
+    assert res["verdict"] == "FAIL"
+
+
+def test_value_gate_layer_exclusion_filing_table_kind_fails_closed():
+    # Tranche 1 supports deterministic anchor-gap kinds only; the filing-table kind
+    # needs evidence-CLI re-verification and fails closed until built.
+    from pipeline.agent_b2_appliers import apply_layer_exclusion
+    base = _le_frame()
+    corr = _le_corr(cited=500.0, kind="filing_table")
+    trial, _ = apply_layer_exclusion(base, corr["template"])
+    res = rr.gate_value_packet(cik="0000000100", target_quarter="2025-12-31",
+                               baseline_df=base, trial_df=trial, correction=corr)
+    assert res["checks"]["excluded_set_anchored"] is False
+    assert res["verdict"] == "FAIL"
+
+
 def test_value_gate_dedup_true_noop_still_fails():
     # False-positive guard: the stale-fix no-op check must still catch a dedup whose
     # match_fields select no duplicate group (nothing dropped on the baseline).

@@ -384,3 +384,51 @@ def test_identifier_rate_grammar_no_quarter_scope_required():
         mechanism="rate_scale", fix_class="identifier_rate_grammar",
         template={"dialect_example": "Fixed + 1600", "target_field": "interest_rate"}))
     assert rep.ok, rep.errors
+
+
+# --- layer_exclusion (row provenance spec, 2026-08-30) ---------------------------------
+
+def _le(**over):
+    base = _corr(
+        mechanism="dimension_double_count", fix_class="layer_exclusion",
+        template={"scope_quarters": ["2026-03-31"],
+                  "selector": {"axis_profile": "investmentidentifieraxis",
+                               "source_table": None, "is_subsidiary": None},
+                  "anchor_proof": {"kind": "named_anchor_gap", "cited_value": 1580000000.0,
+                                   "tolerance_pct": 0.5,
+                                   "citation": "companyfacts fv gap 2026-03-31"}})
+    base.update(over)
+    return base
+
+
+def test_valid_layer_exclusion_leaf():
+    rep = cl.validate_correction(_le())
+    assert rep.ok, rep.errors
+
+
+def test_layer_exclusion_selector_outside_whitelist_rejected():
+    t = _le()["template"]
+    t["selector"] = {"issuer_name": "JV Feeder LLC"}
+    rep = cl.validate_correction(_le(template=t))
+    assert not rep.ok
+    assert any("selector" in e for e in rep.errors)
+
+
+def test_layer_exclusion_requires_anchor_proof_and_scope():
+    t = _le()["template"]
+    del t["anchor_proof"]
+    rep = cl.validate_correction(_le(template=t))
+    assert not rep.ok
+    t2 = _le()["template"]
+    t2["scope_quarters"] = []
+    rep2 = cl.validate_correction(_le(template=t2))
+    assert not rep2.ok
+
+
+def test_layer_exclusion_anchor_proof_shape_checked():
+    t = _le()["template"]
+    t["anchor_proof"] = {"kind": "filing_table", "cited_value": "lots",
+                         "citation": ""}
+    rep = cl.validate_correction(_le(template=t))
+    assert not rep.ok
+    assert any("cited_value" in e or "anchor_proof" in e for e in rep.errors)

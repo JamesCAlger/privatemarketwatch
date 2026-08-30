@@ -7316,6 +7316,34 @@ class TestSubsidiaryFlag:
         assert len(result) == 1
         assert int(result.iloc[0]["is_subsidiary"]) == 0
 
+    # -- axis_profile (row provenance, spec 2026-08-30) ------------------------
+
+    def test_axis_profile_strips_values_keeps_plain_segments_sorted(self):
+        """axis_profile = the row's normalized presentation profile: lowercase,
+        '='-attached member values stripped, segments trimmed and SORTED.
+        Plain (no '=') member-label segments are KEPT -- they are the
+        discriminator between bare-axis and affiliation-labeled presentations
+        (1812554/1838126 forensics)."""
+        rows = [self._make_bdc_row(
+            dimensions_raw="investmentIdentifierAxis=Overton | Revolver | Non-Affiliated Issuer",
+        )]
+        result = _prepare_bdc(pd.DataFrame(rows))
+        assert result.iloc[0]["axis_profile"] == "investmentidentifieraxis|non-affiliated issuer|revolver"
+
+    def test_axis_profile_sorted_order_stable(self):
+        """Same segments in a different filer order produce the same profile."""
+        a = _prepare_bdc(pd.DataFrame([self._make_bdc_row(
+            dimensions_raw="Non-Affiliated Issuer | investmentIdentifierAxis=X")]))
+        b = _prepare_bdc(pd.DataFrame([self._make_bdc_row(
+            dimensions_raw="investmentIdentifierAxis=Y | Non-Affiliated Issuer")]))
+        assert a.iloc[0]["axis_profile"] == b.iloc[0]["axis_profile"] == \
+            "investmentidentifieraxis|non-affiliated issuer"
+
+    def test_axis_profile_empty_dimensions(self):
+        """NULL/empty dimensions_raw yields an empty profile, never NULL."""
+        result = _prepare_bdc(pd.DataFrame([self._make_bdc_row(dimensions_raw="")]))
+        assert result.iloc[0]["axis_profile"] == ""
+
     def test_null_dimensions_not_flagged(self):
         """Rows with NULL/empty dimensions_raw are is_subsidiary=0."""
         rows = [self._make_bdc_row(dimensions_raw="")]

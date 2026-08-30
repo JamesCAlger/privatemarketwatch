@@ -413,8 +413,53 @@ def apply_missing_position_add(df: pd.DataFrame, template: dict) -> tuple[pd.Dat
     return out, audit
 
 
+# Closed selector whitelist for layer_exclusion (spec 2026-08-30, owner-approved):
+# STRUCTURAL columns only -- never names, identifiers, values, regex, or row lists.
+LAYER_EXCLUSION_SELECTOR_FIELDS = frozenset({"axis_profile", "source_table", "is_subsidiary"})
+
+
+def apply_layer_exclusion(df: pd.DataFrame, template: dict) -> tuple[pd.DataFrame, dict]:
+    """Drop a presentation LAYER identified by structural provenance (spec:
+    docs/adjudication_architecture/row_provenance_and_layer_exclusion_spec.md).
+
+    Selector: exact-match on the closed whitelist above; at least one non-null
+    field; NULL selector fields never match NULL data. ``scope_quarters`` is
+    required and explicit. The anchor-equality proof (excluded FV == a cited,
+    re-verifiable quantity) is enforced by the B3 value gate, not here -- the
+    applier only records fv_dropped for the gate to check."""
+    selector = dict(template.get("selector") or {})
+    quarters = [str(q) for q in (template.get("scope_quarters") or []) if str(q).strip()]
+    audit: dict = {"fix_class": "layer_exclusion", "rows_in": int(len(df)),
+                   "selector": selector, "scope_quarters": quarters}
+    bad_fields = sorted(set(selector) - LAYER_EXCLUSION_SELECTOR_FIELDS)
+    active = {k: v for k, v in selector.items()
+              if k in LAYER_EXCLUSION_SELECTOR_FIELDS and v is not None}
+    if bad_fields or not active or not quarters:
+        msg = (f"selector fields outside the closed whitelist: {bad_fields}" if bad_fields
+               else "no non-null whitelisted selector field" if not active
+               else "scope_quarters is required")
+        audit.update(status="error", rows_dropped=0, rows_out=int(len(df)), message=msg)
+        return df, audit
+    missing_cols = [k for k in active if k not in df.columns]
+    if missing_cols or "report_date" not in df.columns:
+        audit.update(status="error", rows_dropped=0, rows_out=int(len(df)),
+                     message=f"missing frame column(s): {missing_cols or ['report_date']}")
+        return df, audit
+    drop = df["report_date"].astype(str).isin(quarters)
+    for k, v in active.items():
+        col = df[k]
+        if k == "is_subsidiary":
+            drop = drop & (pd.to_numeric(col, errors="coerce") == pd.to_numeric(v, errors="coerce"))
+        else:
+            drop = drop & col.notna() & (col.astype(str) == str(v))
+    audit.update(status="ok", rows_dropped=int(drop.sum()), rows_out=int((~drop).sum()),
+                 fv_dropped=_fv_sum(df, drop))
+    return df.loc[~drop].copy(), audit
+
+
 POST_STAGING_APPLIERS: dict[str, Callable[[pd.DataFrame, dict], tuple[pd.DataFrame, dict]]] = {
     "dedup": apply_dedup,
+    "layer_exclusion": apply_layer_exclusion,
     "comparative_period_filter": apply_comparative_period_filter,
     "spv_lookthrough": apply_spv_lookthrough,
     "rate_rescale": apply_rate_rescale,

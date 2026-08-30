@@ -10418,3 +10418,38 @@ adjudication_checks.py output.
   a mandatory anchor-equality gate predicate (excluded set FV must equal a cited,
   re-verifiable quantity). Non-goals: extraction gaps, public-FV semantics, free
   row_selector widening. Migration order + owner questions in the spec.
+
+## 2026-08-30: row-provenance spec IMPLEMENTED (tranche 1); both big-fund leaves honestly gated FAIL
+
+- Owner approved spec + recommendations (whitelist as-is, 0.5% tolerance cap,
+  globalization deferred per-class, axis_profile-first split). All TDD.
+- Part A: `axis_profile` derived at staging (staging_bdc SELECT next to
+  is_subsidiary; lowercase, '='-values stripped, segments trimmed + SORTED; plain
+  member-label segments KEPT -- they are the bare-vs-affiliated discriminator);
+  '' stub on N-PORT; propagated through unified column list. Migration gates PASS:
+  rebuild produced ZERO unexplained deltas -- the single +1 row / +$49,874,000 is
+  exactly the 0001993402 mpa leaf promoted after the overnight battery (verified by
+  row_id + leaf position match). 560,404 BDC rows carry profiles.
+- Step-2 validation: scripts/report_axis_profiles.py --validate-known PASS -- the
+  staged column reproduces the hand forensics exactly (0001838126 23 rows
+  $1,611,219,000; 0001812554 14 rows $1,364,937,000).
+- Part B: apply_layer_exclusion (closed whitelist axis_profile/source_table/
+  is_subsidiary, exact match, scope_quarters required, NULL never matches NULL);
+  registered in POST_STAGING_APPLIERS, FIX_CLASS_STAGE(1), KNOWN_FIX_CLASSES,
+  TEMPLATE_REGISTRY + nested leaf validation (proof kinds, positive cited_value,
+  citation required). B3 value gate: new `excluded_set_anchored` predicate --
+  min(leaf tol, 0.5%) cap, deterministic gap kinds only, filing_table fails closed
+  (tranche 2). layer_exclusion added to _FV_TOUCHING. Suites: 171 leaf/gate/applier
+  + 9 staging + 17 row_id green.
+- Both operator-authored leaves gated through the FULL machinery and FAILED
+  honestly (staged, NOT promoted -- recorded outcomes, not retried):
+  - 0001838126: excluded 1,611,219,000 vs cited gap 1,579,360,000 -> 2.02% off the
+    0.5% bar; conservation shows target_cleared TRUE but no_over_deletion FALSE --
+    the bucket contains ~$31.9M of legitimate rows.
+  - 0001812554: excluded 1,364,937,000 vs cited gap 1,722,750,000 -> 20.77% off;
+    the bare bucket is only 79% of the gap (the $394M exact-dup groups are outside
+    this leaf); target_cleared FALSE (post-exclusion residual ~1.0%).
+- Net: the two dominant flagged funds now carry precise machine-checkable residuals
+  instead of vague overshoots. Next decisions: filing-level row splitting of the
+  1838126 bucket (~$32M to attribute), a bounded row-cited dedup leaf for
+  1812554's $394M exact-dup groups, and tranche-2 filing_table proof kind.

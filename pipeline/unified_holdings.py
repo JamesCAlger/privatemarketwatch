@@ -107,6 +107,9 @@ UNIFIED_COLUMNS = [
     "nport_liquidity_classification",
     # Subsidiary flag (BDC only -- nonconsolidated JV/subsidiary positions)
     "is_subsidiary",
+    # Row provenance: normalized presentation profile of bdc_dimensions_raw
+    # (BDC only; '' for N-PORT). Derived at staging, never corrected.
+    "axis_profile",
     # JV/subsidiary flag from agent review of unclassified positions
     "jv_subsidiary",
     # Entity resolution (populated by --entities step)

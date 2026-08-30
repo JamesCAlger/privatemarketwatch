@@ -332,6 +332,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             FALSE AS nonaccrual_footnote,
             FALSE AS nonaccrual_dimension,
             0 AS is_subsidiary,
+            '' AS axis_profile,
             '' AS jv_subsidiary,
             '' AS entity_id,
             '' AS canonical_name,

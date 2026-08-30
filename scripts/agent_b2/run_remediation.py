@@ -283,10 +283,20 @@ _VALUE_GATE_COLUMNS = [
 _FIELD_BOUNDS = {"interest_rate": (0.0, 60.0), "pik_rate": (0.0, 30.0),
                  "basis_spread": (0.0, 30.0)}
 # Classes whose fix legitimately moves total FV: position adds AND row-dropping classes
-# (dedup, comparative-period filter, SPV look-through) -- their FV judgement belongs to
-# the conservation gate run alongside; plus unit_rescale when field == fair_value.
+# (dedup, comparative-period filter, SPV look-through, layer exclusion) -- their FV
+# judgement belongs to the conservation gate run alongside; plus unit_rescale when
+# field == fair_value.
 _FV_TOUCHING = {"missing_position_add", "dedup", "comparative_period_filter",
-                "spv_lookthrough"}
+                "spv_lookthrough", "layer_exclusion"}
+
+# layer_exclusion anchor-equality proof (spec 2026-08-30, owner-approved): the
+# excluded set's FV must equal the leaf's cited quantity within min(leaf tolerance,
+# this cap). Five of the six known cases reconcile to the dollar; 0.5% matches the
+# conservation band.
+_LAYER_EXCLUSION_TOL_CAP_PCT = 0.5
+# Deterministic proof kinds supported in tranche 1. "filing_table" requires
+# evidence-CLI re-verification and fails closed until built.
+_LAYER_EXCLUSION_PROOF_KINDS = {"named_anchor_gap", "companyfacts_fv_gap"}
 
 # Cross-field magnitude plausibility (round-4 predicate). The q4b2exp_v3 magnitude
 # pulls showed the failure mode: a quarter-scoped but UNSELECTED rescale/remap can push
@@ -639,6 +649,36 @@ def gate_value_packet(
         checks["fv_change_scoped"] = scoped
         if not scoped:
             reasons.append(f"non-FV fix moved total FV by {float(trial_fv) - float(base_fv):,.0f}")
+
+    if fix_class == "layer_exclusion":
+        # Anchor-equality proof (spec 2026-08-30): the excluded set's FV must equal
+        # the leaf's cited, re-verifiable quantity within min(leaf tol, 0.5% cap).
+        # This is the containment that keeps a structural-selector exclusion from
+        # becoming free-form row deletion: arbitrary rows do not share a whitelisted
+        # key AND sum to a cited anchor quantity. Fail-closed on any missing piece.
+        proof = dict((template.get("anchor_proof") or {}))
+        kind = str(proof.get("kind") or "")
+        cited = proof.get("cited_value")
+        fv_dropped = float(replay_audit.get("fv_dropped") or 0.0)
+        anchored = False
+        if cited is None or float(cited or 0) <= 0.0:
+            reasons.append("layer_exclusion requires anchor_proof with a positive "
+                           "cited_value (fail-closed)")
+        elif kind not in _LAYER_EXCLUSION_PROOF_KINDS:
+            reasons.append(f"anchor_proof kind {kind!r} not supported in tranche 1 "
+                           "(fail-closed; deterministic gap kinds only)")
+        else:
+            tol = min(float(proof.get("tolerance_pct") or _LAYER_EXCLUSION_TOL_CAP_PCT),
+                      _LAYER_EXCLUSION_TOL_CAP_PCT)
+            diff_pct = abs(fv_dropped - float(cited)) / abs(float(cited)) * 100.0
+            anchored = diff_pct <= tol
+            if not anchored:
+                reasons.append(
+                    f"excluded set FV {fv_dropped:,.0f} vs cited {float(cited):,.0f}: "
+                    f"off by {diff_pct:.2f}% > {tol}% (cap {_LAYER_EXCLUSION_TOL_CAP_PCT}%)")
+        checks["excluded_set_anchored"] = anchored
+    else:
+        checks["excluded_set_anchored"] = True
 
     if fix_class == "missing_position_add":
         from pipeline.agent_b2_appliers import missing_position_source_collisions
