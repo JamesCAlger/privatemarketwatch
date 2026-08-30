@@ -1,0 +1,114 @@
+{
+  "attested_utc": "2026-08-30T19:18:42.565641+00:00",
+  "signoff_commit": "9a56802",
+  "source_artifact": "data\\output\\quarter_pass\\q4final\\acceptance_post.json",
+  "acceptance": {
+    "schema_version": 1,
+    "generated_utc": "2026-08-20T15:51:30Z",
+    "target_quarter": "2025-12-31",
+    "cohort_id": "v2_70_gate_verified_wrapper_bdc",
+    "calibration": "signed_off",
+    "thresholds_version": 2,
+    "verdict": "PASS",
+    "checks": [
+      {
+        "id": "fund_coverage",
+        "metric": "cohort.funds_with_holdings",
+        "op": ">=",
+        "value": 60,
+        "actual": 67,
+        "pass": true
+      },
+      {
+        "id": "reconcile_rate",
+        "metric": "conservation.reconcile_rate_pct",
+        "op": ">=",
+        "value": 90.0,
+        "actual": 95.455,
+        "pass": true
+      },
+      {
+        "id": "flagged_fv_share",
+        "metric": "conservation.flagged_fv_share_pct",
+        "op": "<=",
+        "value": 10.0,
+        "actual": 4.846,
+        "pass": true
+      },
+      {
+        "id": "source_blocking_fv_share",
+        "metric": "source_blockers.blocking_fv_share_pct",
+        "op": "<=",
+        "value": 1.0,
+        "actual": 0.164,
+        "pass": true
+      },
+      {
+        "id": "verified_fv_share",
+        "metric": "cohort.verified_fv_share_pct",
+        "op": ">=",
+        "value": 70.0,
+        "actual": 80.508,
+        "pass": true
+      },
+      {
+        "id": "promoted_rule_drift",
+        "metric": "promoted_rules.n_drift",
+        "op": "<=",
+        "value": 0,
+        "actual": 0,
+        "pass": true
+      },
+      {
+        "id": "promoted_rule_health",
+        "metric": "promoted_rules.n_not_ok",
+        "op": "<=",
+        "value": 0,
+        "actual": 0,
+        "pass": true
+      }
+    ],
+    "metrics": {
+      "cohort": {
+        "funds": 70,
+        "funds_with_holdings": 67,
+        "cohort_fv_m": 373632.294,
+        "tiers": {
+          "verified": 53,
+          "under_review": 13,
+          "unanchored": 1,
+          "no_holdings": 3
+        },
+        "verified_fv_share_pct": 80.508
+      },
+      "conservation": {
+        "n_reconciles": 63,
+        "n_flagged": 3,
+        "n_no_anchor": 1,
+        "anchored_rate_pct": 98.507,
+        "reconcile_rate_pct": 95.455,
+        "flagged_fv_m": 18105.005,
+        "flagged_fv_share_pct": 4.846,
+        "band_pct": 0.5
+      },
+      "source_blockers": {
+        "n_funds": 10,
+        "n_items": 10,
+        "blocking_fv_m": 612.76,
+        "blocking_fv_share_pct": 0.164
+      },
+      "promoted_rules": {
+        "n_rules": 140,
+        "n_not_ok": 0,
+        "n_drift": 0
+      }
+    },
+    "inputs": {
+      "ledger": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\shadow\\validation_results_ledger.csv",
+      "queue": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\review_queue\\review_queue.csv",
+      "audit": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\agent_fix_application_audit.csv",
+      "holdings": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\private_markets_holdings.parquet"
+    }
+  },
+  "note": "retroactive attestation 2026-08-30; sign-off commit is the 2026-08-20 finalization (git tag signoff-2025-12-31)"
+}

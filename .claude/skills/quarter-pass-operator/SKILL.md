@@ -95,6 +95,14 @@ post:      python scripts/run_quarter_pass.py --pass-id <id> --quarter <q> --fro
 | Convention | `.\scripts\dispatch_convention_workers.ps1 -BatchId <id>` | `run_convention verify` then `promote` per cik (utf-8-sig; no BOM strip needed) |
 | Chain | `.\scripts\run_full_remediation_canary.ps1 -B1BatchId <id>` (B2 -> anchor -> B2 over a B1 batch) | built in |
 
+B1 `discover` builds bundles for every selected engine: generic engines via
+`pipeline.review_bundles`, and `source_recon` rows via the richer
+`pipeline.bdc_cik_review` generator (routed automatically since 2026-08-29;
+before that, a source_recon-only discover wrote a worklist with dead
+bundle_paths and wiped the shared bundle manifest). Before `dispatch_preflight`,
+spot-check that the worklist's `bundle_path`s exist -- a worklist row without
+its bundle file means the build step failed, not that the packet is resolved.
+
 ## Health signatures (diagnose from the filesystem, not hope)
 
 | Signature | Meaning | Action (autonomous) |
@@ -173,6 +181,27 @@ lane; other healthy lanes may continue.
 9. Report: promoted counts per lane, fleet-acceptance verdicts, residual
    classes with mechanisms, acceptance delta, and the queue state left for
    the next pass.
+
+## Quarter sign-off + re-attestation (owner decision 2026-08-30)
+
+The codebase deliberately evolves; a semantics change can retroactively flip a
+signed-off quarter's acceptance (observed: retain-and-flag regressed 1633336's
+signed Q4-2025 until the is_subsidiary false-positive fix). We freeze the
+ATTESTATION, not the code:
+
+- AT SIGN-OFF (after the human accepts a quarter's PASS):
+    python -m scripts.reattest_quarters attest --quarter <q>         --source data/output/quarter_pass/<pass_id>/acceptance_post.json
+    git tag signoff-<q> <signoff-commit>
+- AFTER any validation-semantics change, AND in the preflight window of every
+  new pass:
+    python -m scripts.reattest_quarters check
+  Exit 1 = a signed-off quarter REGRESSED under current code. That is a
+  stop-and-report event: append the ledger row's attribution to the changelog
+  and surface it to the human BEFORE dispatching the pass. Never re-attest
+  over a regression without the human's explicit sign-off; improvements
+  (FAIL->PASS flips) are recorded but need no escalation.
+- Ledger: data/output/acceptance_reattestation_ledger.csv (append-only).
+  Stored attestations: data/reference/acceptance_attestations/<q>.json.
 
 ## Reference docs
 
