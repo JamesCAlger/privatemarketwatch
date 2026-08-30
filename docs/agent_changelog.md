@@ -10306,3 +10306,42 @@ adjudication_checks.py output.
 - Pre-change artifact preserved at scratch/2026-08-29_q1w1_dedup_gate/
   conservation_gate_results.pre_subaware.csv. Review queue NOT yet regenerated;
   blocker requeue belongs to the post-battery step.
+
+## 2026-08-30: overnight run -- B2 lanes, agent_promoted list-selector fix, battery, fresh B1 batch
+
+- B2 lanes on q1w1b2_20260829 (MP1, 12 workers, 0 mechanical failures):
+  - subtotal_filter 6 packets -> 5 corrections + 1 escalation (0001916608). ALL 5
+    gates FAIL with residual-unchanged: the leaves were NOOP re-proposals
+    (patterns_added=[] -- every proposed pattern already lives in the production
+    wrappers). Stale-diagnosis class (B1 verdicts predate retain-and-flag); nothing
+    promoted, no re-fleet on the same diagnoses.
+  - classification_fix -> 2 dispatched (2 skipped: live leaves), 1 correction
+    (0002011498) + 1 escalation (0001905824). Apply/gate DEFERRED: stale Aug-13/26
+    staged leaves in the corrections dir would stack into the trial and break replay
+    equivalence (double-apply hazard) -- needs a scoping decision in daylight.
+  - missing_position_add -> 4 dispatched (1 skipped), 3 corrections + 1 escalation
+    (0001930087, one of the two retain-and-flag new-flag CIKs). 0001905824 apply
+    crashed: TypeError fillna('') on Int32 masked column inside the mpa applier
+    (known all-NULL->Int32 inference family) -- applier defect, deferred.
+    0001950976/0001993402 deferred on the same stacking hazard as classification_fix.
+- PRODUCTION FIX (pipeline/agent_promoted.py, TDD, commit pending): the first
+  quarter-pass rebuild HALTED on the promoted 0001603480 dedup leaf --
+  apply_promoted_stage2_corrections' JIT row_id probe assumed dict-form row_selector
+  and raised AttributeError on the documented list form. Probe now handles both;
+  test_apply_promoted_stage2_list_form_row_selector_jit_materialized reproduces the
+  exact crash; 38/38 agent_promoted tests green.
+- Quarter pass q1p2_20260830 (2026-03-31) ran full through post stages after the fix:
+  queue regenerated under subsidiary-aware conservation, ledger 45,185 findings /
+  14,870 actionable, acceptance FAIL -> FAIL with 0 metric deltas (both builds
+  contained the same promotions), 25 candidate funds ranked.
+- Fresh B1 batch q1b1n2_20260830 from the new queue: prepare_fresh_batch --n 10 drew
+  8 items; cohort_guard REFUSED 2 out-of-cohort CIKs (0001278752, 0001377936) --
+  worklist re-drawn cohort-scoped to 6, NOT bypassed. Dispatch MP2: 5/6 + one 1326
+  password-race failure retried at MP1 as q1b1n2_20260830_r2 (validated). Finalize:
+  6/6 decided -- 5 real_error -> b2_remediator_queue (1572694 2024-Q4, 1633336
+  2026-Q1, 1646614 2025-Q1, 1702510 2024-Q4, 1742313 2025-Q3), 1 false_alarm
+  (1588272 2026-Q1). Notable: 1633336's new flag (a retain-and-flag surface) was
+  independently adjudicated REAL by a blinded worker.
+- Codex quota: no usage-limit breaker trips all night (19 workers total).
+- Uncommitted from the overnight: pipeline/agent_promoted.py + its test. Batch
+  artifacts under data/output/agent_b{,2}/batch/ and quarter_pass/q1p2_20260830/.

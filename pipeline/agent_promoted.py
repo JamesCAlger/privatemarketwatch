@@ -279,10 +279,22 @@ def apply_promoted_stage2_corrections(
         # sub-frame ids equal the published full-frame ids. Parity caveat: if another
         # leaf on the SAME CIK changes a key field (principal/shares), the published
         # id can drift from the pre-correction id -- the noop-drift audit flags that.
+        # row_selector has two documented forms: a dict ({"row_id": ...} / field
+        # equality) and a LIST of per-row dicts ([{"row_id": ...}, ...] -- the
+        # bounded-dedup form, 2026-08-21). Probe both: the dict-only probe crashed
+        # the rebuild on the first promoted dedup leaf (2026-08-30).
+        def _selects_by_row_id(c: dict) -> bool:
+            sel = (c.get("template") or {}).get("row_selector")
+            if isinstance(sel, dict):
+                return bool(str(sel.get("row_id") or ""))
+            if isinstance(sel, list):
+                return any(bool(str(s.get("row_id") or "")) for s in sel
+                           if isinstance(s, dict))
+            return False
+
         _jit_row_id = False
         if "row_id" not in corrected.columns and any(
-                str((((c.get("template") or {}).get("row_selector")) or {}).get("row_id") or "")
-                for c in by_cik[cik]):
+                _selects_by_row_id(c) for c in by_cik[cik]):
             from pipeline.unified_holdings import _assign_row_ids
             corrected = _assign_row_ids(corrected.copy())
             _jit_row_id = True

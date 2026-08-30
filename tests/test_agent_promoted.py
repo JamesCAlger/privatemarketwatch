@@ -727,3 +727,33 @@ def test_apply_promoted_stage2_row_id_selector_jit_materialized():
     assert out[out["issuer_name"] == "Beta LLC"]["interest_rate"].iloc[0] == 11.5
     # transient column must not leak into the frame (end-of-build assignment owns it)
     assert "row_id" not in out.columns
+
+
+def test_apply_promoted_stage2_list_form_row_selector_jit_materialized():
+    # 2026-08-30 production-rebuild crash: apply_dedup documents the LIST form
+    # row_selector ([{"row_id": ...}, ...], 2026-08-21) and the B3 gate replays it,
+    # but the JIT row_id probe assumed a dict and raised AttributeError on the first
+    # promoted dedup leaf, halting build_unified_holdings. Both forms must probe.
+    from pipeline.unified_holdings import _assign_row_ids
+    combined = pd.DataFrame([
+        {"cik": "0001603480", "source": "bdc", "issuer_name": "Alpha Corp",
+         "bdc_investment_identifier": "Alpha Corp TL",
+         "report_date": "2026-03-31", "fair_value": 1000.0},
+        {"cik": "0001603480", "source": "bdc", "issuer_name": "Alpha Corp",
+         "bdc_investment_identifier": "Alpha Corp TL",
+         "report_date": "2026-03-31", "fair_value": 1000.0},  # dimension duplicate
+        {"cik": "0001603480", "source": "bdc", "issuer_name": "Beta LLC",
+         "bdc_investment_identifier": "Beta LLC 2L",
+         "report_date": "2026-03-31", "fair_value": 2000.0},
+    ])
+    published = _assign_row_ids(combined.copy())
+    dup_ids = published.loc[published["issuer_name"] == "Alpha Corp", "row_id"].tolist()
+
+    corrections = [{"cik": "1603480", "fix_class": "dedup",
+                    "template": {"match_fields": ["report_date", "issuer_name", "fair_value"],
+                                 "keep": "last",
+                                 "row_selector": [{"row_id": rid} for rid in dup_ids]}}]
+    out, audits = ap.apply_promoted_stage2_corrections(combined, corrections)
+    assert audits[0]["status"] == "ok", audits
+    assert len(out) == 2  # one duplicate dropped
+    assert "row_id" not in out.columns
