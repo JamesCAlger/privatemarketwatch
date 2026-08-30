@@ -10382,3 +10382,11 @@ adjudication_checks.py output.
 - Tooling note: prepare_fresh_batch worklists carry UNPADDED ciks, so B2 leaves land
   in corrections/1702510/ vs the padded 0001702510/ convention -- consolidate before
   the next fleet.
+- Diagnosis battery on the 4 fix_class-less q1b1n2 packets (all action=escalate,
+  measured not guessed): 0001572694 (2024-Q4) and 0001742313 (2025-Q3) -- "raw
+  position-detail rows reconcile to the anchor; the AGGREGATE rows are the leak ->
+  aggregate_row_filter on the no-detail class" (wrapper/global-rule domain, concrete
+  mechanism). 0001633336 (2026-Q1) and 0001646614 (2025-Q1) -- unattributed, human/
+  wrapper investigation. CAUTION: those two report residuals of ~530B/~440B on
+  ~1.5B funds -- an off-scale anchor artifact in the diagnose input assembly, not a
+  real magnitude; trust the escalate action, not the residual number.
