@@ -219,11 +219,15 @@ def load_conservation_anchors(path: Path, cik: str, *, rule_name: str = "fv_cons
 def filter_holdings_cik(df: pd.DataFrame, cik: str) -> pd.DataFrame:
     """Restrict a holdings frame to one CIK (the gate sums fair_value per quarter, so an
     all-CIK frame would mix filers). Normalizes both sides (strip non-digits, drop leading
-    zeros)."""
+    zeros). A float-typed cik column (one NULL floats the column; str(1905824.0) would
+    digit-strip to "19058240" and drop every row, 2026-08-30) is stripped of its
+    ".0" tail before normalization."""
     if "cik" not in df.columns:
         return df
     target = str(cik).lstrip("0")
-    norm = df["cik"].astype(str).str.replace(r"\D", "", regex=True).str.lstrip("0")
+    norm = (df["cik"].astype(str)
+            .str.replace(r"\.0$", "", regex=True)
+            .str.replace(r"\D", "", regex=True).str.lstrip("0"))
     return df[norm == target]
 
 

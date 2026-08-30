@@ -473,5 +473,16 @@ def run_corrections(
             continue
         df, audit = apply_scoped(df, c)
         audit["cik"] = c.get("cik")
+        # Fill structural identity on added rows (missing_position_add) -- parity with
+        # the production path (agent_promoted): without it the trial frame carries a
+        # NULL-cik row, the cik column floats, and the gate's CIK filter drops the
+        # whole frame (2026-08-30).
+        cik = str(c.get("cik") or "")
+        if cik and "cik" in df.columns and df["cik"].isna().any():
+            added = df["cik"].isna()
+            df = df.copy()
+            df.loc[added, "cik"] = cik.zfill(10) if cik.isdigit() else cik
+            if "source" in df.columns:
+                df.loc[added & df["source"].isna(), "source"] = "bdc"
         audits.append(audit)
     return df, audits

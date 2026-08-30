@@ -261,3 +261,15 @@ def test_null_fv_ranks_after_non_null_fv():
     # The NON-null row (fair_value=100.0) must keep the bare unsuffixed id
     non_null_id = out.loc[out["fair_value"] == 100.0, "row_id"].iloc[0]
     assert non_null_id == f"ROW-{base}", "non-null fair_value row must be rank-0 (bare key)"
+
+
+def test_masked_integer_columns_with_na_do_not_crash():
+    # 2026-08-30 mpa trial crash: a masked Int64/Int32 content column (DuckDB
+    # integer inference; missing_position_add appends None rows) made
+    # _col's fillna("") raise TypeError ("Invalid value '' for dtype Int32").
+    # _assign_row_ids must stringify masked integer columns dtype-safely.
+    df = _base_df()
+    df["shares_held"] = pd.array([100, None, 500, None], dtype="Int64")
+    out = _assign_row_ids(df)
+    assert out["row_id"].nunique() == len(out)
+    assert _ROW_ID_RE.match(out["row_id"].iloc[0])

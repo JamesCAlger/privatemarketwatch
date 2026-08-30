@@ -107,6 +107,19 @@ def test_filter_holdings_cik_normalizes():
     assert len(out) == 2 and out["fair_value"].tolist() == [1.0, 2.0]
 
 
+def test_filter_holdings_cik_survives_float_typed_column():
+    # 2026-08-30 gate defect: one NULL cik (an mpa-added row before the structural
+    # fill) floats the whole column; str(1905824.0) digit-stripped becomes
+    # "19058240" and EVERY row of the trial frame was filtered out at the gate.
+    df = _holdings([
+        {"cik": 1905824.0, "report_date": "2026-03-31", "fair_value": 1.0},
+        {"cik": None, "report_date": "2026-03-31", "fair_value": 2.0},
+        {"cik": 1742313.0, "report_date": "2026-03-31", "fair_value": 9.0},
+    ])
+    out = rr.filter_holdings_cik(df, "0001905824")
+    assert out["fair_value"].tolist() == [1.0]
+
+
 def test_no_change_disposition_requires_baseline_collision(tmp_path):
     correction = tmp_path / "add.json"
     correction.write_text(json.dumps({

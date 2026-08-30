@@ -147,7 +147,11 @@ def main(argv: list[str] | None = None) -> int:
         from pipeline.correction_leaf import stage_for
 
         corr_dir = Path(args.corrections)
-        for p in sorted(corr_dir.glob("**/*.json")):
+        # Escalation leaves are diagnoses for the human basket, never applied --
+        # same exclusion as run_remediation.load_corrections (2026-08-30: an
+        # escalation was globbed here and errored through the applier as a noop).
+        for p in sorted(q for q in corr_dir.glob("**/*.json")
+                        if not q.name.endswith(".escalation.json")):
             try:
                 staged_corrections.append(json.loads(p.read_text(encoding="utf-8")))
             except (OSError, json.JSONDecodeError):

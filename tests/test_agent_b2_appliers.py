@@ -96,6 +96,24 @@ def test_run_corrections_stage_filter():
     assert len(df) == 4
 
 
+def test_run_corrections_fills_structural_identity_on_added_rows():
+    # 2026-08-30 trial-gate defect: missing_position_add rows carry only the position
+    # fields; without the cik/source fill (which agent_promoted does in production)
+    # the trial CSV had a NULL-cik row, the cik column went float64, and
+    # filter_holdings_cik dropped EVERY row of the trial frame at the gate.
+    base = _holdings().assign(cik="0001715933", source="bdc")
+    corrections = [{"cik": "0001715933", "fix_class": "missing_position_add",
+                    "template": {"positions": [
+                        {"source_row_id": "src:acc-1:ctx-9", "issuer_name": "Gamma Warrant",
+                         "report_date": "2025-03-31", "fair_value": 250.0}]}}]
+    df, audits = ap.run_corrections(base, corrections)
+    assert audits[0]["status"] == "ok"
+    added = df[df["issuer_name"] == "Gamma Warrant"]
+    assert len(added) == 1
+    assert added["cik"].iloc[0] == "0001715933"
+    assert added["source"].iloc[0] == "bdc"
+
+
 # --------------------------------------------------------------------------- 2026-08-13 expansion
 
 

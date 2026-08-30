@@ -10345,3 +10345,40 @@ adjudication_checks.py output.
 - Codex quota: no usage-limit breaker trips all night (19 workers total).
 - Uncommitted from the overnight: pipeline/agent_promoted.py + its test. Batch
   artifacts under data/output/agent_b{,2}/batch/ and quarter_pass/q1p2_20260830/.
+
+## 2026-08-30 (morning): trial/gate defect fixes, deferred packets gated, 2 more promotions
+
+- Three TDD fixes (tests first, observed failing with the production signatures):
+  1. unified_holdings._assign_row_ids._col: fillna("") crashed on masked Int32/Int64
+     columns (mpa-added None rows; DuckDB integer inference). astype(object)+where --
+     dtype-safe, vectorized, no downcast FutureWarning; published row_ids unchanged
+     (order-invariance + anchor tests pin the strings). tests/test_row_id.py 17/17
+     under -W error::FutureWarning.
+  2. agent_b2_appliers.run_corrections: now fills structural identity (cik zfill-10,
+     source='bdc') on mpa-added rows -- parity with agent_promoted; without it the
+     trial CSV's NULL-cik row floated the cik column and the gate's CIK filter
+     dropped the ENTIRE trial frame ("expected N rows, got 0").
+  3. run_remediation.filter_holdings_cik: strips a float ".0" tail before digit
+     normalization (str(1905824.0) -> "19058240" mangle).
+  Plus rebuild_unified_cik_trial now excludes *.escalation.json (was globbing
+  escalations into the applier; errored harmlessly but could apply a templated
+  escalation). B2 suites 87/87 + row_id 17/17 + agent_promoted 38/38.
+- Stale staged leaves archived to corrections_archive/2026-08-30_pre_q1w1_stale/
+  (README): 2 never-gated Aug-26 classification_fix (1950976, 1993402), 1 stale
+  byte-identical duplicate of the LIVE 2011498 column_remap, 1 never-gated Aug-13
+  unit_rescale (2011498). Reversible; nothing live touched.
+- Deferred q1w1b2 packets gated: 0002011498 classification_fix PASS 13/13 ->
+  PROMOTED; 0001993402 missing_position_add PASS (grounded in staging) -> PROMOTED
+  (live store 39 leaves). 0001905824 + 0001950976 mpa: correct fail-closed grounding
+  refusals -- the cited src contexts are NOT in staged bdc_holdings although their
+  accessions are (168/261 staged rows) = context-level extraction gaps; route to the
+  wrapper/extraction lane, NOT retried.
+- Fresh B2 from q1b1n2_20260830: discover -> 5 packets, 1 actionable. 1702510 mpa
+  worker -> honest escalation ($62.5M Structured Credit section entirely absent from
+  extraction -- no recoverable leaf rows). 4 fix_class-less packets sent through the
+  deterministic diagnosis battery (results pending in this session).
+- Post-promotion replay sweep (replay_live_stats_q1w1b2_20260830.json): 39 leaves,
+  0 gate FAIL, only the known pre-existing 0001674760 shares_held leg out of band.
+- Tooling note: prepare_fresh_batch worklists carry UNPADDED ciks, so B2 leaves land
+  in corrections/1702510/ vs the padded 0001702510/ convention -- consolidate before
+  the next fleet.

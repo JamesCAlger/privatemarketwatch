@@ -1554,7 +1554,13 @@ def _assign_row_ids(df: pd.DataFrame) -> pd.DataFrame:
 
     def _col(name: str) -> pd.Series:
         if name in df.columns:
-            return df[name].fillna("").astype(str).str.strip()
+            # astype(object) + where (not fillna): fillna("") on a masked integer
+            # column (Int32/Int64 from DuckDB inference, NAs from appended
+            # correction rows) raises TypeError -- '' is not a valid integer
+            # (2026-08-30 mpa trial crash); object-fillna trips the pandas
+            # downcasting FutureWarning.
+            s = df[name].astype(object)
+            return s.where(s.notna(), "").astype(str).str.strip()
         return pd.Series("", index=df.index, dtype=str)
 
     source = _col("source").str.lower()
