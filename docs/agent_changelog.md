@@ -10482,3 +10482,25 @@ adjudication_checks.py output.
   (-1.95%); 1930087 2025-12-31 (-0.85%, part of the signed Q4 state) and
   2026-03-31 (-0.85%). The 'anchor question' human-decision item is CLOSED --
   no anchor overrides needed.
+
+## 2026-09-01 - B1 dispatch tooling: rid regex widened for deferred BDCSRC ids; two wave/bundle defects documented
+
+- `dispatch_preflight._RID_RE` widened `^[A-Za-z0-9_]{3,64}$` -> `^[A-Za-z0-9_-]{3,128}$`
+  (TDD: 2 new tests in test_agent_b_preflight.py). The deferred source_recon bundles
+  route into B1 batches since 2026-08-29 but their BDCSRC_* review_ids (hyphenated
+  dates, ~90 chars) failed the rid guard. Path-unsafe ids (slashes, dots, spaces)
+  stay rejected. Found during pass q1p3_20260831 (743-packet cohort-Q1 B1 fleet).
+- DEFECT (documented, not fixed): B1 dispatch_preflight overwrites manifest.json on
+  every dispatch wave -- the 2026-08-21 wave-durability fix (manifest.NNN.json,
+  ebb62e4) landed in the B2 dispatcher only. A multi-wave B1 batch loses prior-wave
+  rows and finalize routes only the last wave (observed: 150 of 743). Workaround
+  used: manifest rows rebuilt from worklist.csv (original kept as
+  manifest.wave5_only.bak.json). Fix: port per-wave manifests to the B1 preflight.
+- DEFECT (documented, not fixed): review bundles for row-keyed rules (C301/C303/
+  C304/C207) carry only the internal row_key -- blinded B1 workers cannot map the
+  flag to a filing row and correctly return ambiguous/source_checked (top ambiguity
+  driver in the q1p3 fleet). Recommend bundle enrichment with issuer_name +
+  bdc_investment_identifier alongside row_key.
+- BDCSRC deferred-bundle schema ('bdc-cik-review-bundle.v1') remains unsupported by
+  the preflight bundle validator + B1 prompt contract; 7 source_recon packets
+  deferred by owner decision (residual log: scratch/2026-08-31_q1p3_dispatch/).

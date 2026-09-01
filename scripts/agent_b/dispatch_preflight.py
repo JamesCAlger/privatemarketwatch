@@ -26,7 +26,9 @@ from pathlib import Path
 from pipeline import config
 from scripts.agent_b import review_lock
 
-_RID_RE = re.compile(r"^[A-Za-z0-9_]{3,64}$")
+# rid becomes a filename (bundle/prompt/verdict); allow the BDCSRC_* deferred
+# source_recon ids (hyphenated dates, ~90 chars) while still rejecting path chars.
+_RID_RE = re.compile(r"^[A-Za-z0-9_-]{3,128}$")
 
 # evidence_completeness states with no raw source to adjudicate against -> short-circuit.
 _SHORT_CIRCUIT = {"ledger_only", "artifact_missing"}

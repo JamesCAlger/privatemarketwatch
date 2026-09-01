@@ -262,3 +262,37 @@ def test_review_lock_roundtrip(tmp_path, monkeypatch):
     assert review_lock.is_locked("RVQ_BLK_lock", now=1000.0 + 4000) is False
     review_lock.release("RVQ_BLK_lock")
     assert review_lock.is_locked("RVQ_BLK_lock", now=1000.0) is False
+
+
+def test_preflight_accepts_bdcsrc_review_ids(tmp_path):
+    """Deferred source_recon bundles carry BDCSRC_* review_ids (hyphenated dates,
+    >64 chars). The preflight rid guard must accept them -- discover routes them
+    into B1 batches since 2026-08-29."""
+    d = _dirs(tmp_path)
+    batch = "B_SRC"
+    batch_dir = d["base_dir"] / "batch" / batch
+    rid = "BDCSRC_0001508655_2026-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_1e4ab0f33c"
+    _write_bundle(d["bundles_dir"], rid, engine="source_recon",
+                  rule="blocking_source_position_like_parser_mismatch")
+    _write_worklist(batch_dir, [
+        {"review_id": rid, "engine": "source_recon",
+         "rule_name": "blocking_source_position_like_parser_mismatch"},
+    ])
+
+    res = pf.preflight_batch(batch, base_dir=d["base_dir"], bundles_dir=d["bundles_dir"],
+                             verdicts_dir=d["verdicts_dir"])
+    assert res["n_dispatch"] == 1
+    manifest = json.loads((batch_dir / "manifest.json").read_text())
+    assert {r["review_id"] for r in manifest["rows"]} == {rid}
+
+
+def test_preflight_still_rejects_unsafe_review_ids(tmp_path):
+    """rid becomes a filename: path separators, dots, spaces stay rejected."""
+    d = _dirs(tmp_path)
+    for bad in ("..\\evil", "a/b", "rid with space", "rid.json", "x" * 129):
+        batch_dir = d["base_dir"] / "batch" / "B_BAD"
+        _write_worklist(batch_dir, [{"review_id": bad}])
+        with pytest.raises(pf.PreflightError, match="invalid review_id"):
+            pf.preflight_batch("B_BAD", base_dir=d["base_dir"],
+                               bundles_dir=d["bundles_dir"],
+                               verdicts_dir=d["verdicts_dir"])
