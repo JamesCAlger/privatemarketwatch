@@ -159,12 +159,26 @@ def finalize(
     compare_baseline: Path | None = None,
 ) -> dict:
     batch_dir = _batch_dir(base_dir, batch_id)
-    manifest_path = batch_dir / "manifest.json"
-    if not manifest_path.exists():
-        raise FileNotFoundError(f"missing manifest: {manifest_path} (run preflight first)")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    dispatch_rows = manifest.get("rows", [])
-    auto_rows = manifest.get("auto_resolved", [])
+    # Wave-stamped manifests (manifest.001.json, ...) are the durable per-wave records;
+    # manifest.json is only a latest-wave pointer (and the legacy single-manifest form).
+    # Aggregating across waves is what makes multi-wave finalize see every dispatched
+    # packet (q1p3 routed 150 of 743 off the pointer alone). Later waves win on rid
+    # collision (a retry wave re-dispatches the same review_id).
+    wave_paths = sorted(batch_dir.glob("manifest.[0-9][0-9][0-9].json"))
+    if not wave_paths:
+        wave_paths = [batch_dir / "manifest.json"]
+        if not wave_paths[0].exists():
+            raise FileNotFoundError(f"missing manifest: {wave_paths[0]} (run preflight first)")
+    dispatch_by_id: dict[str, dict] = {}
+    auto_by_id: dict[str, dict] = {}
+    for path in wave_paths:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        for row in manifest.get("rows", []):
+            dispatch_by_id[row["review_id"]] = row
+        for row in manifest.get("auto_resolved", []):
+            auto_by_id[row["review_id"]] = row
+    dispatch_rows = list(dispatch_by_id.values())
+    auto_rows = list(auto_by_id.values())
     dispatched_ids = {r["review_id"] for r in dispatch_rows}
     auto_ids = {r["review_id"] for r in auto_rows}
     expected = dispatched_ids | auto_ids

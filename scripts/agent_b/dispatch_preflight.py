@@ -363,14 +363,35 @@ def preflight_batch(
         "auto_resolved": auto_rows,
         "rows": manifest_rows,
     }
-    manifest_path = batch_dir / "manifest.json"
-    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    # Wave-stamped manifest is the durable record (one per dispatch wave; the old
+    # single manifest.json was overwritten by every wave, so q1p3 finalize routed
+    # only 150 of 743 dispatched packets). manifest.json remains as a latest-wave
+    # pointer for tooling that globs the fixed name. Same fix as agent_b2 (ebb62e4).
+    wave_path, wave = _next_manifest_path(batch_dir)
+    manifest["wave"] = wave
+    payload = json.dumps(manifest, indent=2)
+    wave_path.write_text(payload, encoding="utf-8")
+    (batch_dir / "manifest.json").write_text(payload, encoding="utf-8")
     return {
-        "manifest_path": str(manifest_path),
+        "manifest_path": str(wave_path),
+        "manifest_latest": str(batch_dir / "manifest.json"),
+        "wave": wave,
         "n_dispatch": len(manifest_rows),
         "n_auto_resolved": len(auto_rows),
         "batch_id": batch_id,
     }
+
+
+def _next_manifest_path(batch_dir: Path) -> tuple[Path, int]:
+    """Next wave-stamped manifest path (manifest.001.json, .002, ...)."""
+    waves = []
+    for p in batch_dir.glob("manifest.[0-9][0-9][0-9].json"):
+        try:
+            waves.append(int(p.name.split(".")[1]))
+        except (IndexError, ValueError):
+            continue
+    n = (max(waves) + 1) if waves else 1
+    return batch_dir / f"manifest.{n:03d}.json", n
 
 
 def release_manifest(manifest_path: str) -> None:

@@ -286,6 +286,83 @@ def test_preflight_accepts_bdcsrc_review_ids(tmp_path):
     assert {r["review_id"] for r in manifest["rows"]} == {rid}
 
 
+def test_preflight_writes_wave_stamped_manifests(tmp_path):
+    """Each dispatch wave must leave a durable manifest.NNN.json; the plain
+    manifest.json is only a latest-wave pointer. (q1p3 B1 lost 5 of 6 waves:
+    finalize routed 150 of 743 packets.)"""
+    d = _dirs(tmp_path)
+    batch = "BW"
+    batch_dir = d["base_dir"] / "batch" / batch
+    for rid in ("RVQ_BLK_aaa", "RVQ_BLK_bbb"):
+        _write_bundle(d["bundles_dir"], rid)
+    _write_worklist(batch_dir, [
+        {"review_id": "RVQ_BLK_aaa"},
+        {"review_id": "RVQ_BLK_bbb"},
+    ])
+
+    res1 = pf.preflight_batch(batch, base_dir=d["base_dir"], bundles_dir=d["bundles_dir"],
+                              verdicts_dir=d["verdicts_dir"], selected_ids={"RVQ_BLK_aaa"})
+    res2 = pf.preflight_batch(batch, base_dir=d["base_dir"], bundles_dir=d["bundles_dir"],
+                              verdicts_dir=d["verdicts_dir"], selected_ids={"RVQ_BLK_bbb"})
+
+    assert res1["wave"] == 1 and res2["wave"] == 2
+    assert res1["manifest_path"].endswith("manifest.001.json")
+    assert res2["manifest_path"].endswith("manifest.002.json")
+    w1 = json.loads((batch_dir / "manifest.001.json").read_text())
+    w2 = json.loads((batch_dir / "manifest.002.json").read_text())
+    assert {r["review_id"] for r in w1["rows"]} == {"RVQ_BLK_aaa"}
+    assert {r["review_id"] for r in w2["rows"]} == {"RVQ_BLK_bbb"}
+    # manifest.json is the latest-wave pointer (wave 2), not an overwrite casualty
+    latest = json.loads((batch_dir / "manifest.json").read_text())
+    assert latest["wave"] == 2
+    assert {r["review_id"] for r in latest["rows"]} == {"RVQ_BLK_bbb"}
+
+
+def test_finalize_aggregates_wave_manifests(tmp_path):
+    """finalize must see EVERY dispatched wave, not just the last one."""
+    d = _dirs(tmp_path)
+    batch = "FW"
+    batch_dir = d["base_dir"] / "batch" / batch
+    batch_dir.mkdir(parents=True, exist_ok=True)
+    wave1 = {
+        "batch_id": batch, "wave": 1, "verdicts_dir": str(d["verdicts_dir"]),
+        "rows": [{"review_id": "RVQ_BLK_aaa", "rule_name": "fv_conservation"}],
+        "auto_resolved": [{"review_id": "RVQ_BLK_zzz"}],
+    }
+    wave2 = {
+        "batch_id": batch, "wave": 2, "verdicts_dir": str(d["verdicts_dir"]),
+        "rows": [{"review_id": "RVQ_BLK_bbb", "rule_name": "C113"}],
+        "auto_resolved": [],
+    }
+    (batch_dir / "manifest.001.json").write_text(json.dumps(wave1), encoding="utf-8")
+    (batch_dir / "manifest.002.json").write_text(json.dumps(wave2), encoding="utf-8")
+    # latest pointer duplicates wave 2 -- must NOT hide wave 1 or double-count wave 2
+    (batch_dir / "manifest.json").write_text(json.dumps(wave2), encoding="utf-8")
+
+    d["verdicts_dir"].mkdir(parents=True, exist_ok=True)
+    verds = {
+        "RVQ_BLK_aaa": {"review_id": "RVQ_BLK_aaa", "verdict": "real_error", "mechanism": "subtotal_leak",
+                        "confidence": 0.9, "culprit_citations": [{"quoted_text": "x"}], "rationale": "r"},
+        "RVQ_BLK_bbb": {"review_id": "RVQ_BLK_bbb", "verdict": "false_alarm", "confidence": 0.7, "rationale": "r"},
+        "RVQ_BLK_zzz": {"review_id": "RVQ_BLK_zzz", "verdict": "ambiguous", "confidence": 0.0,
+                        "ambiguity_basis": "source_unavailable",
+                        "escalate": True, "auto": True, "rationale": "auto"},
+    }
+    for rid, v in verds.items():
+        (d["verdicts_dir"] / f"{rid}.json").write_text(json.dumps(v), encoding="utf-8")
+
+    res = run_review.finalize(batch, base_dir=d["base_dir"], verdicts_dir=d["verdicts_dir"],
+                              release_locks=False)
+    assert res["n_dispatched"] == 2
+    assert res["n_auto"] == 1
+    routes = {r["review_id"]: r["route"] for r in csv.DictReader(open(batch_dir / "routing.csv"))}
+    assert routes["RVQ_BLK_aaa"] == "b2_remediator_queue"
+    assert routes["RVQ_BLK_bbb"] == "rule_scoping_queue"
+    assert routes["RVQ_BLK_zzz"] == "coverage"
+    # per-rule table sees the wave-1 rule, not "?"
+    assert {r["rule_name"] for r in res["per_rule"]} == {"fv_conservation", "C113"}
+
+
 def test_preflight_still_rejects_unsafe_review_ids(tmp_path):
     """rid becomes a filename: path separators, dots, spaces stay rejected."""
     d = _dirs(tmp_path)
