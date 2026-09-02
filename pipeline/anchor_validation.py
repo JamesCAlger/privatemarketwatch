@@ -69,6 +69,7 @@ STRONG_ANCHORS = frozenset({
 
 DEFAULT_AGREE_TOL = 0.01    # 1% -- "are these the same quantity", looser than the reconcile band
 DEFAULT_OUTLIER_FOLD = 3.0  # cross-quarter: flag a companyfacts total >3x or <1/3 the CIK median
+DEFAULT_QOQ_FOLD = 2.0      # growth-aware: a quarter continuous with its neighbor is not an outlier
 MIN_OUTLIER_HISTORY = 3     # need at least this many quarters to judge an outlier
 
 HIGH, MEDIUM, NONE = "HIGH", "MEDIUM", "NONE"
@@ -150,32 +151,56 @@ class OutlierFlag:
 
 
 def flag_anchor_outliers(series, *, fold: float = DEFAULT_OUTLIER_FOLD,
-                         min_history: int = MIN_OUTLIER_HISTORY) -> dict[str, OutlierFlag]:
+                         min_history: int = MIN_OUTLIER_HISTORY,
+                         qoq_fold: float = DEFAULT_QOQ_FOLD) -> dict[str, OutlierFlag]:
     """Cross-quarter plausibility on a CIK's companyfacts total series {quarter -> value}.
 
     A quarter whose value is > ``fold`` x or < 1/``fold`` x the CIK's MEDIAN is flagged as a
-    suspect (likely mis-extracted) anchor. Catches a SPORADIC mis-extraction (one quarter off its
-    neighbors); a SYSTEMATICALLY wrong tag (every quarter wrong by the same factor) is self-
-    consistent here and needs a second independent anchor instead. Independent of the line-item
-    extraction (companyfacts vs companyfacts over time). With fewer than ``min_history`` usable
-    quarters there is no basis to judge -> nothing flagged.
+    suspect (likely mis-extracted) anchor UNLESS it is QoQ-continuous with its immediately
+    preceding usable quarter (ratio within [1/qoq_fold, qoq_fold]). The AND-composition
+    (owner-approved 2026-09-02) rescues ramping/declining funds that drift far from their
+    LIFETIME median while staying continuous with their neighbor; a SPORADIC mis-extraction is
+    discontinuous by definition so it is still caught. The first usable quarter (no previous
+    neighbor) uses the median rule alone -- unchanged behavior.
+
+    Catches a SPORADIC mis-extraction (one quarter off its neighbors); a SYSTEMATICALLY wrong
+    tag (every quarter wrong by the same factor) is self-consistent here and needs a second
+    independent anchor instead. Independent of the line-item extraction (companyfacts vs
+    companyfacts over time). With fewer than ``min_history`` usable quarters there is no basis
+    to judge -> nothing flagged.
     """
-    usable = {str(q): float(v) for q, v in (series or {}).items()
-              if _is_pos(v)}
+    usable = {str(q): float(v) for q, v in (series or {}).items() if _is_pos(v)}
     out: dict[str, OutlierFlag] = {q: OutlierFlag() for q in usable}
     if len(usable) < min_history:
         return out
     med = statistics.median(usable.values())
     if med <= 0:
         return out
-    for q, v in usable.items():
+    ordered = sorted(usable)
+    for i, q in enumerate(ordered):
+        v = usable[q]
         ratio = v / med
-        if ratio > fold or ratio < 1.0 / fold:
-            out[q] = OutlierFlag(
-                flagged=True, ratio=round(ratio, 3),
-                reason=(f"companyfacts total {v:.0f} is {ratio:.2g}x the CIK median {med:.0f} "
-                        f"(outside {1/fold:.2g}x-{fold:.2g}x) -- likely a mis-extracted anchor; "
-                        f"escalate, do not reconcile to it"))
+        if not (ratio > fold or ratio < 1.0 / fold):
+            continue
+        # Growth-aware rescue (owner-approved 2026-09-02): a ramping or shrinking fund drifts
+        # far from its LIFETIME median while staying continuous with its neighbor; a sporadic
+        # mis-extraction is discontinuous by definition.
+        # q1p3: 5/5 median-only rejections were exact-match false positives.
+        prev = usable[ordered[i - 1]] if i > 0 else None
+        if prev is not None and prev > 0:
+            qoq = v / prev
+            if 1.0 / qoq_fold <= qoq <= qoq_fold:
+                out[q] = OutlierFlag(
+                    flagged=False, ratio=round(ratio, 3),
+                    reason=(f"companyfacts total {v:.0f} is {ratio:.2g}x the CIK median but "
+                            f"QoQ-continuous ({qoq:.2g}x prior quarter) -- growth regime, "
+                            f"not flagged"))
+                continue
+        out[q] = OutlierFlag(
+            flagged=True, ratio=round(ratio, 3),
+            reason=(f"companyfacts total {v:.0f} is {ratio:.2g}x the CIK median {med:.0f} "
+                    f"(outside {1/fold:.2g}x-{fold:.2g}x) and discontinuous QoQ -- likely a "
+                    f"mis-extracted anchor; escalate, do not reconcile to it"))
     return out
 
 

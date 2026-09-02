@@ -98,3 +98,43 @@ def test_systematically_wrong_anchor_is_not_an_outlier():
     series = {"2023-12-31": 13.96e6, "2024-09-30": 28.7e6, "2024-12-31": 26.7e6, "2025-03-31": 25.0e6}
     flags = flag_anchor_outliers(series)
     assert not any(f.flagged for f in flags.values())
+
+
+# -- growth-aware QoQ rescue (owner-approved 2026-09-02) ------------------------------------
+
+def test_ramp_up_fund_not_flagged():
+    """1954360: 3.1x lifetime median but QoQ-continuous -- the q1p3 FP class.
+    Full companyfacts series required so median (~282M) makes 2026-03-31 (~877M) a 3.1x outlier.
+    """
+    series = {"2023-09-30": 49_589_000, "2023-12-31": 114_294_000,
+              "2024-03-31": 164_431_000, "2024-06-30": 228_717_000,
+              "2024-09-30": 258_282_000, "2024-12-31": 282_161_000,
+              "2025-03-31": 308_031_000, "2025-06-30": 487_664_000,
+              "2025-09-30": 614_062_000, "2025-12-31": 879_592_000,
+              "2026-03-31": 877_060_000}
+    flags = flag_anchor_outliers(series)
+    assert not flags["2026-03-31"].flagged
+    assert "continu" in flags["2026-03-31"].reason
+
+
+def test_declining_fund_not_flagged():
+    """1495584: 0.21x median but a smooth decline."""
+    series = {"2024-12-31": 1_060_474, "2025-06-30": 723_147,
+              "2025-09-30": 256_934, "2025-12-31": 225_436, "2026-03-31": 146_430}
+    flags = flag_anchor_outliers(series)
+    assert not flags["2025-12-31"].flagged
+
+
+def test_sporadic_misextraction_still_flagged():
+    """The true-positive class: one quarter collapses against BOTH median and neighbor."""
+    series = {"2025-03-31": 1_000_000, "2025-06-30": 1_050_000,
+              "2025-09-30": 90_000, "2025-12-31": 1_100_000}
+    flags = flag_anchor_outliers(series)
+    assert flags["2025-09-30"].flagged
+
+
+def test_first_quarter_median_rule_unchanged():
+    """No previous quarter -> QoQ cannot rescue; median rule alone decides."""
+    series = {"2025-03-31": 10_000_000, "2025-06-30": 1_000_000, "2025-09-30": 1_050_000}
+    flags = flag_anchor_outliers(series)
+    assert flags["2025-03-31"].flagged
