@@ -488,12 +488,14 @@ def apply(cik: str) -> dict:
     corrected, audits = apply_rules(base, rules)
     corrected_path = out / f"corrected_holdings.{_norm(cik)}.csv"
     corrected.to_csv(corrected_path, index=False)
-    escalations = load_escalations(out / "escalations")
-    bad_esc = [{"errors": validate_escalation(e)} for e in escalations if validate_escalation(e)]
+    raw_escalations = load_escalations(out / "escalations")
+    deduped_escalations = dedupe_escalations(raw_escalations)
+    bad_esc = [{"errors": validate_escalation(e)} for e in raw_escalations if validate_escalation(e)]
     res = {"cik": _norm(cik), "n_rules": len(rules), "rows_in": int(len(base)),
            "rows_out": int(len(corrected)), "audits": audits, "invalid_rules": invalid,
            "noop_rules": [a.get("rule_id") for a in audits if a.get("noop")],
-           "n_escalations": len(escalations), "invalid_escalations": bad_esc,
+           "n_escalations": len(deduped_escalations), "n_escalation_files": len(raw_escalations),
+           "invalid_escalations": bad_esc,
            "corrected_holdings": str(corrected_path)}
     (out / "apply_audit.json").write_text(json.dumps(res, indent=2), encoding="utf-8")
     return res

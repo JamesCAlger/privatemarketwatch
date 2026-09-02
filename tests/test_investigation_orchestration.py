@@ -198,3 +198,59 @@ def test_prep_prompt_lists_existing_escalations(tmp_path, monkeypatch):
     prompt = (tmp_path / "999" / "prompt.md").read_text(encoding="utf-8")
     assert "missing cash row" in prompt
     assert "do not re-author" in prompt.lower()
+
+
+# --- apply() escalation count consistency: n_escalations=deduped, n_escalation_files=raw ----
+# apply_audit.json reported raw len(load_escalations()) as n_escalations while _measure/status
+# used the deduped count -- two semantics under the same key. apply() now mirrors _measure.
+
+def _apply_fixture(tmp_path, monkeypatch):
+    """Wire BASE and _load_holdings so apply('888') runs without filesystem/pipeline deps.
+    Creates a minimal valid rule so apply() does not early-return on no_rules."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["888"], "report_date": ["2026-03-31"],
+                       "issuer_name": ["Acme Corp"], "fair_value": [100.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    out = tmp_path / "888"
+    out.mkdir(parents=True)
+    # A rule that matches nothing (noop) -- sufficient to pass the no_rules guard.
+    rules_dir = out / "rules"
+    rules_dir.mkdir()
+    rule = _valid_rule("stub_rule", "issuer_name = 'Nobody'", cik="888")
+    (rules_dir / "stub_rule.json").write_text(json.dumps(rule), encoding="utf-8")
+    return out
+
+
+def test_apply_escalation_counts_deduped_vs_raw(tmp_path, monkeypatch):
+    """Two files with the same (target_quarter, category) key -> n_escalations=1, n_escalation_files=2."""
+    out = _apply_fixture(tmp_path, monkeypatch)
+    esc_dir = out / "escalations"
+    esc_dir.mkdir()
+    # Two escalation files with identical (target_quarter, category) -- second should win after dedup.
+    esc_base = {"target_quarter": "2026-03-31", "category": "structural",
+                "kind": "no_known_mechanism", "summary": "first write",
+                "evidence": [{"source": "query", "quote": "x"}], "confidence": 0.7}
+    esc_dir.joinpath("esc_v1.json").write_text(json.dumps(esc_base), encoding="utf-8")
+    esc_base2 = dict(esc_base, summary="second write")
+    esc_dir.joinpath("esc_v2.json").write_text(json.dumps(esc_base2), encoding="utf-8")
+
+    res = ri.apply("888")
+    assert res["n_escalations"] == 1, f"expected deduped count 1, got {res['n_escalations']}"
+    assert res["n_escalation_files"] == 2, f"expected raw count 2, got {res['n_escalation_files']}"
+
+
+def test_apply_escalation_counts_no_duplicates(tmp_path, monkeypatch):
+    """Two files with DIFFERENT keys -> both counts are 2 (no dedup collapses them)."""
+    out = _apply_fixture(tmp_path, monkeypatch)
+    esc_dir = out / "escalations"
+    esc_dir.mkdir()
+    esc1 = {"target_quarter": "2026-03-31", "category": "structural",
+            "kind": "no_known_mechanism", "summary": "s1",
+            "evidence": [{"source": "q", "quote": "x"}], "confidence": 0.7}
+    esc2 = dict(esc1, category="vocab", summary="s2")
+    esc_dir.joinpath("esc1.json").write_text(json.dumps(esc1), encoding="utf-8")
+    esc_dir.joinpath("esc2.json").write_text(json.dumps(esc2), encoding="utf-8")
+
+    res = ri.apply("888")
+    assert res["n_escalations"] == 2
+    assert res["n_escalation_files"] == 2
