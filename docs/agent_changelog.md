@@ -10869,3 +10869,7 @@ discover work, and resolving the packets involves validation-semantics judgment.
   (conservation_scope 8, agent_rule 48 file-total green). Commits 0bc4e91, cc3f67a,
   8a4b052, eaa9ba5 (+ plan doc).
 - Scratch: scratch/2026-09-02_q1p3_signoff/ (2 row-limited DuckDB diagnostics).
+- **Update (same day)**: CI GREEN on run 3 (33686751554: python-tests 43m, frontend-build 1m).
+  Fixes en route: requirements gained bs4/numpy/urllib3/pyarrow + pandas pinned >=2.2,<3.0
+  (21 tests fail under pandas 3.x -- known deferred migration). Ruleset 22149712 on main:
+  required checks python-tests + frontend-build, no force-push/deletion, admin bypass enabled.

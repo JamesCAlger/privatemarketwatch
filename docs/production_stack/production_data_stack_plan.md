@@ -138,8 +138,15 @@ acceptance gate; do not start the next phase while the previous gate is red.
 - [x] Repo hardening: secret scanning + push protection + Dependabot (done).
 - [ ] Raw cache backup to R2 (owner: one-time Cloudflare setup, then
       `scripts/backup_raw_to_r2.ps1`; re-run after each quarter ingest).
-- [ ] CI live: `needs_cache` split + workflow green on GitHub.
-- [ ] Branch ruleset on main requiring the two CI checks (after first green run).
+- [x] CI live: `needs_cache` split + workflow green on GitHub (done 2026-09-02:
+      run 33686751554, python-tests 43m + frontend-build 1m; 3 runs to green —
+      undeclared deps bs4/numpy/urllib3/pyarrow + pandas pinned <3.0.
+      FOLLOW-UP: replace loose pins with a compiled lockfile (pip-tools/uv);
+      pandas-3 migration is a known deferred item, worklist = the 21 tests
+      that failed under 3.x in run 33682466464).
+- [x] Branch ruleset on main requiring the two CI checks (done 2026-09-02:
+      ruleset 22149712, also blocks force-push/deletion; admin bypass "always"
+      as solo-operator escape hatch — normal path to main is now a PR).
 - GATE: CI green on a fresh runner; raw cache verified in R2 via
   `rclone check` (checksum comparison — `rclone lsd` only proves folders
   exist, not that 121GB transferred intact) AND one restore drill:
