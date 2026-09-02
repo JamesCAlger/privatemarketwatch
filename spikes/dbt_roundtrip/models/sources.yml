@@ -1,0 +1,8 @@
+version: 2
+sources:
+  - name: spike
+    schema: main
+    tables:
+      - name: staged_predim
+        meta:
+          external_location: "artifacts/staged_predim.parquet"

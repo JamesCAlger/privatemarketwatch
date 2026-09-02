@@ -1,0 +1,7 @@
+dbt_roundtrip:
+  target: spike
+  outputs:
+    spike:
+      type: duckdb
+      path: artifacts/spike.duckdb
+      threads: 1

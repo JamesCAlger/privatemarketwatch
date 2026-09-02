@@ -1,0 +1,5 @@
+name: dbt_roundtrip
+version: "0.1.0"
+profile: dbt_roundtrip
+model-paths: ["models"]
+test-paths: ["tests"]

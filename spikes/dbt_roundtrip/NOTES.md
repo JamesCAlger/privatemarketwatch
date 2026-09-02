@@ -8,3 +8,7 @@ Record every framework workaround (dbt quirk, config fight, docs gap) as its own
 [2026-09-02 21:46] Task 2 end - exit 0; staged 576590 rows in 2141s (slow: concurrent Q1 pass); top CIKs 0000017313/0001959604/0001959568; dup groups 1000; dropped rows 1004; empty-ctx 0
 [2026-09-02 21:46] Task 2 sanity check - top CIK-quarter: 0001959604 / 2026-03-31 / 96 dropped rows
 [2026-09-02 22:58] Task 2 review audit: three concurrent instances launched (PIDs 21060, 17624, 8780). All instances deterministic and produced identical output. PID 17624 crashed (OOM/tee issue, no artifacts). PIDs 21060 and 8780 both wrote artifacts; artifact internal consistency verified post-hoc (1000 groups; sum(group_size-1)=1004=dropped rows). No stray process remains.
+[2026-09-02 21:54] Task 3 start
+[2026-09-02 21:56] Task 3 friction: dbt models default to VIEW not TABLE; spike.duckdb ends up with views + stored-failure audit tables only (no materialized tables). Not a problem for this spike but differs from production pattern.
+[2026-09-02 21:56] Task 3 friction: python -c with nested double-quotes fails in PowerShell 5.1 due to quote-mangling. Workaround: wrote temp .py script, ran python <script>, deleted script.
+[2026-09-02 21:56] Task 3 end - 2 models OK; duplicate_dimension_paths FAIL 2004 (expected); dedup_output_unique PASS; provenance source_row_id all populated as src:{acc}:{ctx}; kill criterion 1 CLEAR
