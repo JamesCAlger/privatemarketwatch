@@ -30,3 +30,4 @@ Incumbent artifact (source_reconciliation_residual_classification.csv) records 1
 [2026-09-02 23:50] Task 5 end - commit below
 [2026-09-02 23:52] Task 6 start - decision report + changelog + commit
 [2026-09-02 23:58] Task 6 end - report written (docs/production_stack/dbt_spike_report.md), changelog prepended, NOTES.md updated, committed
+[2026-09-03 00:20] Correction: line 28 above misnames the packet boundary_model as bdc_dim_ranked (a production CTE name, not a dbt model). The packet field is boundary_model=stg_bdc_holdings (where the boundary test fires); downstream_fix_model=bdc_dim_deduped. Report corrected in 7ed5268; this line corrects the log at source.
