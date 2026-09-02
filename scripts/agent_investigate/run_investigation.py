@@ -84,10 +84,11 @@ def _noop_gate_verdict(residual_pct, anchor_tier) -> dict | None:
         f"(tier {anchor_tier}, residual {residual_pct}%) -- nothing to promote"]}
 
 
-def loop_decision(residual_pct, iteration, *, gate_verdict=None, max_iter=MAX_ITER,
+def loop_decision(residual_pct, iteration, *, gate_verdict=None, n_escalations=0, max_iter=MAX_ITER,
                   tol_pct=STOP_TOL_PCT) -> dict:
     """Stop successfully only when FV matches within tol_pct and the held-out gate passes.
-    Stop unsuccessfully after max_iter iterations; otherwise iterate."""
+    Stop unsuccessfully after max_iter iterations; otherwise iterate.
+    If a worker escalated and we are past iteration 1, treat escalation as a terminal outcome."""
     if residual_pct is not None and abs(residual_pct) <= tol_pct:
         if gate_verdict in ("PASS", "PASS_NOOP"):
             return {"stop": True, "success": True,
@@ -96,11 +97,19 @@ def loop_decision(residual_pct, iteration, *, gate_verdict=None, max_iter=MAX_IT
             return {"stop": True, "success": False,
                     "reason": f"max iterations ({max_iter}) reached with gate {gate_verdict} "
                               f"(residual {residual_pct}%)"}
+        if n_escalations > 0 and iteration >= 2:
+            return {"stop": True, "success": False,
+                    "reason": f"worker escalated (n={n_escalations}); honest stop -- "
+                              "escalation is the outcome, do not re-iterate"}
         return {"stop": False, "success": False,
                 "reason": f"FV within {tol_pct}% but gate {gate_verdict}; iterate"}
     if iteration >= max_iter:
         return {"stop": True, "success": False,
                 "reason": f"max iterations ({max_iter}) reached (residual {residual_pct}%)"}
+    if n_escalations > 0 and iteration >= 2:
+        return {"stop": True, "success": False,
+                "reason": f"worker escalated (n={n_escalations}); honest stop -- "
+                          "escalation is the outcome, do not re-iterate"}
     return {"stop": False, "success": False,
             "reason": f"residual {residual_pct}% exceeds {tol_pct}%; iterate"}
 
@@ -400,7 +409,8 @@ def status(cik: str, target_quarter: str, iteration: int) -> dict:
     """Loop assessment for one iteration: residual + gate + the stop/continue decision."""
     m = _measure(cik, target_quarter)
     m["iteration"] = iteration
-    m["decision"] = loop_decision(m["residual_pct"], iteration, gate_verdict=m["gate_verdict"])
+    m["decision"] = loop_decision(m["residual_pct"], iteration, gate_verdict=m["gate_verdict"],
+                                  n_escalations=m["n_escalations"])
     return m
 
 

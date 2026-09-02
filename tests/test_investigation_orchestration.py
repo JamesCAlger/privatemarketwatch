@@ -155,3 +155,25 @@ def test_promote_copies_valid_effective_rules(tmp_path, monkeypatch):
     res = promote("2083477", "2026-03-31", overrides_dir=ov)
     assert res["status"] == "promoted" and res["n_rules"] == 1
     assert (ov / "2083477" / "exclude_total.json").exists()
+
+
+# --- escalation handling: workers who escalate get one post-escalation iteration ---
+# Before iter 2, the escalation does not stop the loop; at iter 2+ with escalation,
+# the loop stops (honest outcome -- escalation is a terminal decision).
+
+
+def test_loop_decision_stops_on_escalation_after_iter1():
+    d = loop_decision(-1.6, 2, gate_verdict="FAIL", n_escalations=1)
+    assert d["stop"] is True and d["success"] is False
+    assert "escalat" in d["reason"]
+
+
+def test_loop_decision_iteration_one_still_iterates_despite_escalation():
+    # give the worker one post-escalation iteration to also author expressible rules
+    d = loop_decision(-1.6, 1, gate_verdict="FAIL", n_escalations=1)
+    assert d["stop"] is False
+
+
+def test_loop_decision_pass_beats_escalation():
+    d = loop_decision(0.0, 2, gate_verdict="PASS", n_escalations=1)
+    assert d["stop"] is True and d["success"] is True
