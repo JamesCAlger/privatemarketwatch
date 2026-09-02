@@ -1,5 +1,6 @@
 """Tests for the agentic driver's orchestration: discover (B1 -> investigation targets) and
 promote (gate-PASS rules -> overrides). Steps 3-4 of the B2 consolidation."""
+import csv
 import json
 
 import pandas as pd
@@ -254,3 +255,26 @@ def test_apply_escalation_counts_no_duplicates(tmp_path, monkeypatch):
     res = ri.apply("888")
     assert res["n_escalations"] == 2
     assert res["n_escalation_files"] == 2
+
+
+# --- route_escalations: category -> lane routing ------------------------------------
+
+def test_route_escalations_by_category(tmp_path):
+    def _esc(cik, name, category, quarter="2026-03-31"):
+        d = tmp_path / cik / "escalations"
+        d.mkdir(parents=True, exist_ok=True)
+        d.joinpath(name).write_text(json.dumps(
+            {"cik": cik, "target_quarter": quarter, "category": category,
+             "summary": f"{category} finding", "confidence": 0.9}), encoding="utf-8")
+    _esc("111", "a.json", "anchor")
+    _esc("222", "v1.json", "vocab")
+    _esc("222", "v2_restated.json", "vocab")     # duplicate -> collapsed
+    _esc("333", "o.json", "other")
+    res = ri.route_escalations(base_dir=tmp_path, out_dir=tmp_path / "routing")
+    assert res["n_files"] == 4 and res["n_distinct"] == 3
+    assert res["by_route"] == {"anchor_lane": 1, "extraction_review": 1, "human_review": 1}
+    rows = list(csv.DictReader(open(tmp_path / "routing" / "escalation_routing.csv",
+                                    encoding="utf-8")))
+    routes = {r["cik"]: r["route"] for r in rows}
+    assert routes == {"111": "anchor_lane", "222": "extraction_review", "333": "human_review"}
+    assert rows[[r["cik"] for r in rows].index("222")]["n_duplicate_files"] == "2"

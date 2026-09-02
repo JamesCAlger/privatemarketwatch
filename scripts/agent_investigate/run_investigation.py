@@ -608,6 +608,80 @@ def promote(cik: str, target_quarter: str, *, overrides_dir=DEFAULT_OVERRIDES) -
             "rules": copied, "overrides_dir": str(dst)}
 
 
+_ROUTE_MAP = {"anchor": "anchor_lane", "vocab": "extraction_review"}
+_SKIP_DIRS = {"batch", "_qcache", "routing"}
+
+
+def route_escalations(base_dir=BASE, out_dir=None) -> dict:
+    """Scan <base_dir>/<cik>/escalations/*.json, dedupe per CIK, route by category.
+
+    Routes: anchor -> anchor_lane, vocab -> extraction_review, else -> human_review.
+    Writes <out_dir>/escalation_routing.csv.
+    Returns {n_files, n_distinct, by_route, csv}.
+    """
+    base_dir = Path(base_dir)
+    if out_dir is None:
+        out_dir = base_dir / "routing"
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    n_files = 0
+    n_distinct = 0
+    by_route: dict[str, int] = {}
+    rows = []
+
+    for child in sorted(base_dir.iterdir()):
+        if not child.is_dir():
+            continue
+        if child.name in _SKIP_DIRS:
+            continue
+        cik = child.name
+        esc_dir = child / "escalations"
+        if not esc_dir.exists():
+            continue
+        raw = load_escalations(esc_dir)
+        if not raw:
+            continue
+        n_files += len(raw)
+
+        # Count raw files per (target_quarter, category) key for duplicate reporting
+        key_counts: dict[tuple, int] = {}
+        for e in raw:
+            k = (str(e.get("target_quarter") or ""), str(e.get("category") or ""))
+            key_counts[k] = key_counts.get(k, 0) + 1
+
+        distinct = dedupe_escalations(raw)
+        n_distinct += len(distinct)
+
+        for e in distinct:
+            cat = str(e.get("category") or "")
+            route = _ROUTE_MAP.get(cat, "human_review")
+            by_route[route] = by_route.get(route, 0) + 1
+            k = (str(e.get("target_quarter") or ""), cat)
+            n_dup = key_counts.get(k, 1)
+            rows.append({
+                "cik": cik,
+                "target_quarter": str(e.get("target_quarter") or ""),
+                "category": cat,
+                "route": route,
+                "summary": str(e.get("summary") or ""),
+                "confidence": str(e.get("confidence") or ""),
+                "escalation_path": str(esc_dir),
+                "n_duplicate_files": str(n_dup),
+            })
+
+    csv_path = out_dir / "escalation_routing.csv"
+    fieldnames = ["cik", "target_quarter", "category", "route", "summary",
+                  "confidence", "escalation_path", "n_duplicate_files"]
+    with open(csv_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames)
+        w.writeheader()
+        w.writerows(rows)
+
+    return {"n_files": n_files, "n_distinct": n_distinct, "by_route": by_route,
+            "csv": str(csv_path)}
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Agentic investigation driver (bypasses the B2 battery).")
     sub = ap.add_subparsers(dest="mode", required=True)
@@ -624,6 +698,10 @@ def main(argv=None) -> int:
             p.add_argument("--target-quarter", required=True)
         if m in ("prep", "status"):
             p.add_argument("--iteration", type=int, default=1)
+    # escalations subcommand: no --cik; scans all CIK dirs
+    p_esc = sub.add_parser("escalations")
+    p_esc.add_argument("--out-dir", type=Path, default=None,
+                       help="Output directory for escalation_routing.csv (default: <base>/routing)")
     args = ap.parse_args(argv)
     if args.mode == "prep":
         print(json.dumps(prep(args.cik, args.target_quarter, args.iteration), indent=2, default=str))
@@ -644,6 +722,9 @@ def main(argv=None) -> int:
         res = promote(args.cik, args.target_quarter)
         print(json.dumps(res, indent=2, default=str))
         return 0 if res.get("status") == "promoted" else 1
+    elif args.mode == "escalations":
+        res = route_escalations(base_dir=BASE, out_dir=args.out_dir)
+        print(json.dumps(res, indent=2, default=str))
     return 0
 
 
