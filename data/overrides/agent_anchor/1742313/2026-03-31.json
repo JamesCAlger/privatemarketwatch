@@ -1,0 +1,30 @@
+{
+  "cik": "1742313",
+  "target_quarter": "2026-03-31",
+  "grand_total": 5804557000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments",
+      "value": 5804557000.0,
+      "source": "Filing accession 0001742313-26-000026, Schedule of Investments, table 41 row 34: TOTAL INVESTMENTS, fair value $5,804,557 thousand"
+    }
+  ],
+  "companyfacts_fv": 5804557000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 41 row 34: TOTAL INVESTMENTS | $ | 5,916,273 | $ | 5,804,557 | 208.5 | % (amounts in thousands; cost then fair value)."
+    },
+    {
+      "source": "filing",
+      "quote": "Consolidated Statement of Assets and Liabilities, table 8 row 7: Total investments, at fair value (amortized cost of: $5,916,273) | 5,804,557."
+    },
+    {
+      "source": "filing",
+      "quote": "Consolidated Statement of Assets and Liabilities, table 8 row 16: Total assets | 6,161,191 (amounts in thousands)."
+    }
+  ],
+  "rationale": "The filing's final Schedule of Investments row explicitly reports TOTAL INVESTMENTS at fair value of $5,804,557 thousand, and the balance sheet independently reports the same total. It equals the companyfacts value and is 94.21% of total assets, leaving a plausible $356.634 million for cash and other assets. The apparent $322.187 million excess from summing extracted holdings is not a separate affiliated or controlled schedule; the filing's schedule already includes both non-controlled/non-affiliate company investments ($5,478.700 million) and non-controlled/affiliate company investments ($325.857 million), which sum to the reported grand total. The extraction excess reflects duplicated/incomplete-axis position rows, not additional investments.",
+  "confidence": 0.99
+}

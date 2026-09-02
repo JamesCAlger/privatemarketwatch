@@ -1,0 +1,30 @@
+{
+  "cik": "1976336",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1730366000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments at fair value",
+      "value": 1730366000.0,
+      "source": "Filing Schedule of Investments, table 41 row 23: Total Investments at fair value; fair value $1,730,366 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 1730366000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 41 row 23: Total Investments at fair value | $ | 1,750,309 | $ | 1,730,366 | 217.49 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 8 row 7: Total investments at fair value | 1,730,366 | 1,665,503"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 8 row 16: Total assets | $ | 1,776,000 | $ | 1,700,727"
+    }
+  ],
+  "rationale": "The final Schedule of Investments row explicitly reports total investments at fair value of $1,730,366 thousand, including $1,687,345 thousand of non-controlled/non-affiliated investments and $43,021 thousand of short-term investments. The balance sheet independently repeats the same investment total. After scaling from thousands, $1,730,366,000 equals the companyfacts value and is 97.43% of total assets, leaving a plausible $45,634,000 non-investment remainder. The companyfacts tag therefore captured the complete grand total.",
+  "confidence": 0.99
+}

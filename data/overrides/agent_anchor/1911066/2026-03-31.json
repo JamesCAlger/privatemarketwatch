@@ -1,0 +1,34 @@
+{
+  "cik": "1911066",
+  "target_quarter": "2026-03-31",
+  "grand_total": 2415980000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 2415980000.0,
+      "source": "Filing accession 0001911066-26-000066, Schedule of Investments, table 42 row 24: Total Investments; fair value $2,415,980 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 2415980000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Total Investments | $ | 2,440,232 | $ | 2,415,980 | 166.92 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Non-controlled/non-affiliate company investments, at fair value (cost of $2,440,232 and $2,164,611, respectively) | $ | 2,415,980 | $ | 2,155,846"
+    },
+    {
+      "source": "query",
+      "quote": "staging rows for period 2026-03-31: count 666; sum(fair_value) = 2415980000.0; sum(cost) = 2440232000.0"
+    },
+    {
+      "source": "filing",
+      "quote": "Total assets | $ | 2,513,978 | $ | 2,226,562"
+    }
+  ],
+  "rationale": "The current-period Schedule of Investments has a single final Total Investments row with fair value of $2,415,980 thousand. The balance sheet identifies the same amount as non-controlled/non-affiliate company investments at fair value, and the 666 current-period extracted position values sum exactly to it. The filer presents no affiliated or controlled investment schedule requiring an additional subtotal. Thus the companyfacts tag captured the full investment total, not a partial schedule. The total is 96.10% of total assets, leaving a plausible $97.998 million non-investment remainder.",
+  "confidence": 0.99
+}

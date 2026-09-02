@@ -83,8 +83,8 @@
   ],
   "notes": [
     "The dominant rate-bearing loan signature spans old and new report-date eras with the same terminal maturity-date pattern.",
-    "Identifier spread tokens such as SOFR + 750, PRIME + 750, SORF + 400, and Fixed + 1600 are extracted as basis_spread in bps.",
-    "Some structured twins appear to place bps spread values in interest_rate; this proposal follows the identifier text rather than fitting those twin bins.",
-    "Preferred-stock pure coupon strings are present in identifiers but do not carry maturity dates and are not forced into this rate/maturity grammar."
+    "Identifier spread tokens such as SOFR + 750, PRIME + 750, SORF + 400, and Fixed + 1600 are basis-point spreads.",
+    "Structured twins appear to place bps spread values in interest_rate; extraction follows identifier semantics instead of fitting those twin bins.",
+    "Preferred-stock coupon strings do not carry maturity dates and are not forced into this loan rate/maturity grammar."
   ]
 }

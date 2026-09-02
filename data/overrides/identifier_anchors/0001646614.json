@@ -1,0 +1,11 @@
+{
+  "cik": "0001646614",
+  "anchors": [
+    {"label": "AFFIL", "regex": "(?:Non-Controlled/(?:Non-)?Affiliated Investments|Fund's affiliated/non-controlled investments)"},
+    {"label": "RATE", "regex": "(?:^|[, ]+)Rate\\s"},
+    {"label": "MAT", "regex": "Maturity Date"},
+    {"label": "CONTROLLED", "regex": "(?<!Non-)Controlled Investments"},
+    {"label": "CASH", "regex": "(?:Cash Equivalents|Restricted Cash Equivalents)"},
+    {"label": "INVESTMENTS", "regex": "^Investments$"}
+  ]
+}

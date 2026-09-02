@@ -1,0 +1,38 @@
+{
+  "cik": "1674760",
+  "target_quarter": "2026-03-31",
+  "grand_total": 447150000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments and Investments in Affiliated Money Market Fund",
+      "value": 447150000.0,
+      "source": "Filing accession 0001193125-26-219865, Schedule of Investments, table 10 row 26: Total Investments and Investments in Affiliated Money Market Fund - 138.5%; fair value $447,150 (thousands)"
+    }
+  ],
+  "companyfacts_fv": 289479000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 10 row 20: Total Investments - 89.7% | cost $310,164 | fair value $289,479 (thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 10 row 25: Total Investments in Affiliated Money Market Fund | cost $157,671 | fair value $157,671 (thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 10 row 26: Total Investments and Investments in Affiliated Money Market Fund - 138.5% | cost $467,835 | fair value $447,150 (thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 4 row 12: Total assets | $480,412 (thousands) at March 31, 2026."
+    },
+    {
+      "source": "query",
+      "quote": "holdings for report_date 2026-03-31: 34 rows with summed fair value 289,479,000, matching only the filing's Total Investments subtotal."
+    }
+  ],
+  "rationale": "The final Schedule of Investments row explicitly combines Total Investments fair value of $289.479 million with the separately presented affiliated money market fund fair value of $157.671 million, yielding the grand total of $447.150 million. The companyfacts tag captured only the $289.479 million Total Investments subtotal and excluded the affiliated money market fund. The grand total is 93.1% of total assets of $480.412 million, leaving a plausible $33.262 million non-investment remainder.",
+  "confidence": 0.99
+}

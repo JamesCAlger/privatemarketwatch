@@ -1,0 +1,30 @@
+{
+  "cik": "2031750",
+  "target_quarter": "2026-03-31",
+  "grand_total": 3466654000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 3466654000.0,
+      "source": "2026-03-31 Form 10-Q balance sheet, Total investments at fair value row"
+    }
+  ],
+  "companyfacts_fv": 3466654000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Balance sheet (amounts in thousands): Non-controlled/non-affiliated investments $3,128,225; Controlled/affiliated investments $338,429; Total investments at fair value $3,466,654."
+    },
+    {
+      "source": "filing",
+      "quote": "Investment summary as of March 31, 2026 (amounts in thousands): Total investments, cost $3,293,622 and fair value $3,466,654."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2026-03-31 reports investments_at_fair_value 3466654000.0 and total_assets 4365604000.0."
+    }
+  ],
+  "rationale": "The filing presents an explicit grand-total row after both investment categories, so total_row is the appropriate method. The total equals $3,128,225,000 of non-controlled/non-affiliated investments plus $338,429,000 of controlled/affiliated investments and matches the companyfacts value. It is 79.4% of total assets; the $898,950,000 remainder is plausible because the balance sheet separately reports $865,013,000 of cash and cash equivalents.",
+  "confidence": 0.99
+}

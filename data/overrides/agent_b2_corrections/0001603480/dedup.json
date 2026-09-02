@@ -1,0 +1,60 @@
+{
+  "cik": "0001603480",
+  "mechanism": "dimension_double_count",
+  "fix_class": "dedup",
+  "template": {
+    "match_fields": [
+      "report_date",
+      "issuer_name",
+      "fair_value"
+    ],
+    "keep": "last",
+    "row_selector": [
+      {
+        "row_id": "ROW-44ac05794fd3ecbb"
+      },
+      {
+        "row_id": "ROW-ee8f2bc842ee6412"
+      },
+      {
+        "row_id": "ROW-71ca8c63f27c0760"
+      },
+      {
+        "row_id": "ROW-695a00030b49c401"
+      }
+    ]
+  },
+  "source_review_ids": [
+    "RVQ_BLK_811e0d9c00c1",
+    "RVQ_BLK_f80b8e22150a"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4 | % | 258,299,078 | 249,694,433"
+    },
+    {
+      "table_index": 4,
+      "row_index": 12,
+      "quoted_text": "Overton Chicago Gear, LLC - Revolver - 6.00% inc PIK - fair value 17,092,378"
+    },
+    {
+      "table_index": 4,
+      "row_index": 13,
+      "quoted_text": "Overton Chicago Gear, LLC - Term Loan A - 6.00% inc PIK - fair value 11,499,903"
+    },
+    {
+      "table_index": 6,
+      "row_index": 29,
+      "quoted_text": "Total Controlled Affiliated Investments | Fair Value at March 31, 2026 | 222,075,628"
+    },
+    {
+      "table_index": 5,
+      "row_index": 31,
+      "quoted_text": "Total Debt & Equity Investments (7) | 114.4% | 258,299,078 | 249,694,433"
+    }
+  ],
+  "confidence": 0.98,
+  "rationale": "The filing shows the Overton Chicago Gear Revolver once at fair value 17,092,378 in table 4 row 12, while the extracted 2026-03-31 holdings show two dimension-derived rows at 17,092,378 each, totaling 34,184,756 before deduplication. The filing shows the Overton Chicago Gear Term Loan A once at fair value 11,499,903 in table 4 row 13, while the extracted holdings show two dimension-derived rows at 11,499,903 each, totaling 22,999,806 before deduplication. Table 5 row 31 shows total debt and equity investments of fair value 249,694,433, and table 6 row 29 separately presents the controlled-affiliated rollforward total of 222,075,628, supporting that the rollforward dimension must not create additional holdings. Matching on report_date, issuer_name, and fair_value groups each duplicated Overton pair without merging the Revolver with the Term Loan. Keeping last preserves the schedule-of-investments rows ROW-ee8f2bc842ee6412 and ROW-695a00030b49c401, whose descriptions and values directly match table 4, and removes the earlier rollforward-derived duplicates ROW-44ac05794fd3ecbb and ROW-71ca8c63f27c0760."
+}

@@ -1,0 +1,26 @@
+{
+  "cik": "1633336",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1562470000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Investments at fair value",
+      "value": 1562470000.0,
+      "source": "Filing accession 0001193125-26-221936, March 31, 2026 XBRL investments-at-fair-value fact"
+    }
+  ],
+  "companyfacts_fv": 1562470000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Accession 0001193125-26-221936 reports investments at fair value of $1,562,470,000 as of March 31, 2026."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for report_date 2026-03-31: investments_at_fair_value=1562470000.0; total_assets=1617654000.0."
+    }
+  ],
+  "rationale": "The filing's single investments-at-fair-value fact is the grand total. It equals the companyfacts value and represents 96.59% of total assets, leaving $55,184,000 of non-investment assets, which is plausible for a BDC. The extracted holdings sum of $1,546,856,000 undershoots this filing anchor by $15,614,000 and therefore is incomplete; the companyfacts tag did not capture merely a schedule subtotal.",
+  "confidence": 0.96
+}

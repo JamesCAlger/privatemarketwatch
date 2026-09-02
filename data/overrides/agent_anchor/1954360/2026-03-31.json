@@ -1,0 +1,30 @@
+{
+  "cik": "1954360",
+  "target_quarter": "2026-03-31",
+  "grand_total": 877060000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 877060000.0,
+      "source": "2026 Q1 filing, undimensioned us-gaap:InvestmentsFairValueDisclosure, context C_db640061-0e96-406b-9ae3-8a878766e62d, 2026-03-31"
+    }
+  ],
+  "companyfacts_fv": 877060000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Undimensioned us-gaap:InvestmentsFairValueDisclosure for 2026-03-31: 877060000."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule row: Total Investments; fair value 877,060 (in thousands)."
+    },
+    {
+      "source": "query",
+      "quote": "staging for report_date 2026-03-31 sums to fair value 877060000 across 381 rows; companyfacts investments_at_fair_value is 877060000."
+    }
+  ],
+  "rationale": "The filing contains an undimensioned 2026-03-31 investments fair value disclosure of 877060000 and repeated Total Investments rows of 877,060 thousand. The extracted target-period holdings also sum to the same amount. Thus the companyfacts tag captured the grand total, not an incomplete non-affiliated subtotal. The total is 86.3% of total assets of 1015964000, leaving a plausible 138904000 of non-investment assets.",
+  "confidence": 0.99
+}

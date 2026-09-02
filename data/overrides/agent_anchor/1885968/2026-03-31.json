@@ -1,0 +1,30 @@
+{
+  "cik": "1885968",
+  "target_quarter": "2026-03-31",
+  "grand_total": 2153908000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Portfolio Investments",
+      "value": 2153908000.0,
+      "source": "Filing accession 0001193125-26-219405, Schedule of Investments, table 24 row 22: Total Portfolio Investments, fair value 2,153,908 (USD thousands)"
+    }
+  ],
+  "companyfacts_fv": 2153908000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 24 row 22: Total Portfolio Investments | $ | 2,210,744 | $ | 2,153,908 | 186.14 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 4 row 7: Total investments, at fair value (cost of $ 2,210,744 and $ 2,233,984) | 2,153,908 | 2,185,948"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 24 rows 21-22: Total Equity Investments fair value 23,129; Total Portfolio Investments fair value 2,153,908 (USD thousands)"
+    }
+  ],
+  "rationale": "The filing contains a single final schedule grand-total row: Total Portfolio Investments at fair value of $2,153,908 thousand. It equals the balance-sheet Total investments, at fair value line and the companyfacts value. The separately shown non-controlled/non-affiliated and non-controlled/affiliated debt and equity sections roll into this row; there is no separate controlled-investments schedule to add. Cash and cash equivalents and short-term investments are presented in a following row and are not part of investments at fair value.",
+  "confidence": 0.99
+}

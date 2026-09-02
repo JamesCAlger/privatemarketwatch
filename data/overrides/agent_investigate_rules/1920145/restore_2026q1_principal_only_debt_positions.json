@@ -1,0 +1,51 @@
+{
+  "cik": "1920145",
+  "rule_id": "restore_2026q1_principal_only_debt_positions",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "fair_value": 193000000.0,
+      "principal_amount": 193000000.0,
+      "issuer_name": "Auctane, Inc.",
+      "bdc_investment_identifier": "Investment Debt Investments - 179.3% United States - 161.1% 1st Lien/Senior Secured Debt - 155.1% Auctane, Inc. Industry Air Freight & Logistics Reference Rate and Spread S + 4.75% Maturity 12/31/32",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 179.3% United States - 161.1% 1st Lien/Senior Secured Debt - 155.1% Auctane, Inc. Industry Air Freight & Logistics Reference Rate and Spread S + 4.75% Maturity 12/31/32",
+      "source_row_id": "C_8eecc644-187b-48c8-a528-0a9db9830fc1"
+    },
+    {
+      "report_date": "2026-03-31",
+      "fair_value": 156392000.0,
+      "principal_amount": 156392000.0,
+      "issuer_name": "Tiger Acquisition, LLC (dba Sabre Industries)",
+      "bdc_investment_identifier": "Investment Debt Investments - 179.3% United States - 161.1% 2nd Lien/Senior Secured Debt-3.6% Tiger Acquisition, LLC (dba Sabre Industries) Industry Wireless Telecommunication Services Reference Rate and Spread S + 5.25% Maturity 05/01/34",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investment Debt Investments - 179.3% United States - 161.1% 2nd Lien/Senior Secured Debt-3.6% Tiger Acquisition, LLC (dba Sabre Industries) Industry Wireless Telecommunication Services Reference Rate and Spread S + 5.25% Maturity 05/01/34",
+      "source_row_id": "C_c92da75d-6cf7-49d1-b962-6c142925d865"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "staging for 2026-03-31 contains Auctane context C_8eecc644-187b-48c8-a528-0a9db9830fc1 with principal_amount 193000000 and Tiger Acquisition context C_c92da75d-6cf7-49d1-b962-6c142925d865 with principal_amount 156392000; neither context is represented in holdings, and both have null extracted fair_value/cost."
+    },
+    {
+      "source": "query",
+      "quote": "holdings fair-value sum is 16502831000. Adding the two omitted principal-only debt positions contributes 349392000 and produces 16852223000 versus the adjudicated printed schedule total 16852129000, a 94000 residual (0.00056%)."
+    }
+  ],
+  "rationale": "Two real debt positions disclosed in staging were dropped because their contexts carry principal amount but no attached fair-value fact. For these principal-only debt rows, restore the positions using disclosed principal as the fair-value proxy. Their aggregate exactly explains the adjudicated grand-total gap within filer rounding tolerance. The quarter-specific scope avoids affecting quarters in which these positions are absent.",
+  "confidence": 0.96,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 2,
+      "fv": 349392000.0,
+      "residual_before": -349298000.0,
+      "residual_after": 94000.0
+    }
+  }
+}

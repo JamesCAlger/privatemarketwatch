@@ -1,0 +1,34 @@
+{
+  "cik": "1913724",
+  "target_quarter": "2026-03-31",
+  "grand_total": 4481018000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 4481018000.0,
+      "source": "Filing accession 0001913724-26-000015, Schedule of Investments table 42 row 21: Total investments, Fair Value $4,481,018 (amounts in thousands)"
+    }
+  ],
+  "companyfacts_fv": 4481018000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 42 row 21: Total investments | $ | 4,479,699 | $ | 4,481,018 | 175.76 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 42 row 15: Total non-controlled/non-affiliated investments | $ | 4,393,198 | $ | 4,382,413 | 171.89 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 42 row 20: Total non-controlled/affiliated investments | 86,501 | 98,605 | 3.87 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 128 row 2 states amounts are in thousands and identifies the columns as Amortized Cost and Fair Value; row 6 reports Total investments of 4,479,699 and 4,481,018 for March 31, 2026."
+    }
+  ],
+  "rationale": "The filing presents a single explicit Total investments row after both the non-controlled/non-affiliated subtotal and the non-controlled/affiliated subtotal. Its fair value is $4,481,018 thousand, or $4,481,018,000. The same amount appears in the filing's investment summary and equals the companyfacts tag, so companyfacts captured the grand total rather than only one schedule. The result is 96.12% of total assets of $4,662,060,000 and leaves a plausible $181,042,000 of non-investment assets.",
+  "confidence": 0.99
+}

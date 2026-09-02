@@ -1,0 +1,34 @@
+{
+  "cik": "1837532",
+  "target_quarter": "2026-03-31",
+  "grand_total": 25149083000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Non-controlled/non-affiliated investments at fair value",
+      "value": 25149083000.0,
+      "source": "Filing table 6 row 9: Non-controlled/non-affiliated investments, March 31, 2026 fair value $25,149,083 thousand"
+    }
+  ],
+  "companyfacts_fv": 25149083000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 6 row 9: Non-controlled/non-affiliated investments (cost - $25,426,426 at March 31, 2026) | $ | 25,149,083"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 61 row 20: Total Investments before Cash Equivalents | $ | 25,426,426 | $ | 25,149,083"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 6 row 16: Total assets | $ | 26,933,918"
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials companyfacts for 2026-03-31: investments_at_fair_value=25149083000.0; total_assets=26933918000.0"
+    }
+  ],
+  "rationale": "The filing presents only non-controlled/non-affiliated investments on the balance sheet; no affiliated or controlled investment schedule is present. The undimensioned balance-sheet amount of $25,149,083 thousand agrees exactly with the schedule's final Total Investments before Cash Equivalents fair-value amount and with companyfacts. Cash equivalents of $159,399 thousand are presented separately and are excluded. The grand total is 93.37% of total assets, leaving a plausible non-investment remainder of $1,784,835 thousand.",
+  "confidence": 0.99
+}

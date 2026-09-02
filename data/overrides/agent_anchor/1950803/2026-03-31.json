@@ -1,0 +1,34 @@
+{
+  "cik": "1950803",
+  "target_quarter": "2026-03-31",
+  "grand_total": 3313853000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 3313853000.0,
+      "source": "filing accession 0001193125-26-224111, evidence_cli totals table 50 row 5: Total Investments fair value $3,313,853 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 3313853000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "evidence_cli totals table 50 row 5: Total Investments | $ | 3,320,878 | $ | 3,313,853 | 158.88 | %."
+    },
+    {
+      "source": "filing",
+      "quote": "evidence_cli grid table 6 row 4: Investments in securities of unaffiliated issuers at fair value (cost $3,320,878 and $3,008,238, respectively) | $ | 3,313,853 | $ | 3,008,628."
+    },
+    {
+      "source": "filing",
+      "quote": "evidence_cli totals table 6 row 10: Total assets | $ | 3,442,769 | $ | 3,198,869."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2026-03-31 reports investments_at_fair_value=3313853000.0 and total_assets=3442769000.0."
+    }
+  ],
+  "rationale": "The March 31, 2026 schedule of investments contains a single final Total Investments row with fair value of $3,313,853 thousand. The same amount appears on the balance sheet as investments in securities of unaffiliated issuers at fair value, so the companyfacts tag captured the complete portfolio rather than a partial schedule. The total is 96.25% of total assets of $3,442,769 thousand and leaves a plausible non-investment asset remainder of $128,916 thousand.",
+  "confidence": 0.98
+}

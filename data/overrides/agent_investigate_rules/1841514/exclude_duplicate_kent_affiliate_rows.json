@@ -1,0 +1,22 @@
+{
+  "cik": "1841514",
+  "rule_id": "exclude_duplicate_kent_affiliate_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {"quarters": ["all"]},
+  "predicate_sql": "issuer_name IN ('Affiliate company investment, Kent Water Sports Holdings, LLC', 'Affiliated investments, Kent Water Sports Holdings, LLC') AND src_transforms = 'cost:cost_proxy_fv' AND principal_amount IS NULL AND pct_of_net_assets IS NULL",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "In each quarter from 2024-03-31 through 2024-12-31, two Affiliate/Affiliated investments Kent Water Sports rows exactly duplicate the fair values of the two detailed Kent Water Sports loan rows: 5,217,000 + 6,257,000; 5,637,000 + 5,224,000; 5,862,000 + 4,024,000; and 6,256,000 + 3,330,000. The duplicate representation has no principal_amount or pct_of_net_assets and is tagged only cost:cost_proxy_fv."
+    }
+  ],
+  "rationale": "These affiliate-disclosure representations repeat the same two Kent Water Sports positions already captured from the detailed investment schedule. Excluding only the detail-free proxy representation preserves the real positions and their principal, percentage, rate, and maturity data.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2024-03-31": {"rows": 2, "fv": 11474000.0, "residual_before": 11474000.0, "residual_after": 0.0},
+    "2024-06-30": {"rows": 2, "fv": 10861000.0, "residual_before": 10861000.0, "residual_after": 0.0},
+    "2024-09-30": {"rows": 2, "fv": 9886000.0, "residual_before": 9886000.0, "residual_after": 0.0},
+    "2024-12-31": {"rows": 2, "fv": 9586000.0, "residual_before": 9586000.0, "residual_after": 0.0}
+  }
+}

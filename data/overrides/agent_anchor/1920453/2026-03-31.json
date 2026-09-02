@@ -1,0 +1,30 @@
+{
+  "cik": "1920453",
+  "target_quarter": "2026-03-31",
+  "grand_total": 2487588823.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investment Portfolio",
+      "value": 2487588823.0,
+      "source": "Filing accession 0001193125-26-214226, Schedule of Investments, table 33 row 22: Total Investment Portfolio fair value $2,487,588,823"
+    }
+  ],
+  "companyfacts_fv": 2487588823.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Total Investment Portfolio | $ | 2,513,533,478 | $ | 2,487,588,823 | 186.80 %"
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments | $ | 2,513,533,478 | $ | 2,487,588,823 | 100.0 %"
+    },
+    {
+      "source": "filing",
+      "quote": "Total Assets | $ | 2,556,398,515 | $ | 2,359,180,649"
+    }
+  ],
+  "rationale": "The Schedule of Investments presents a single final Total Investment Portfolio row whose fair-value column is $2,487,588,823. A separate investments summary independently reports the same current-period total at 100.0%. The amount equals the companyfacts investments-at-fair-value tag and is 97.31% of total assets, leaving a plausible $68,809,692 of non-investment assets. The companyfacts tag therefore captured the complete portfolio, including the non-controlled/non-affiliate and non-controlled/affiliate schedules, rather than only a subtotal.",
+  "confidence": 0.99
+}

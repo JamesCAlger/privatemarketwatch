@@ -1,0 +1,37 @@
+{
+  "cik": "1603480",
+  "rule_id": "add_cash_and_treasury_investments_20260331",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {"quarters": ["2026-03-31"]},
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "issuer_name": "First American Government Obligation Fund",
+      "bdc_investment_identifier": "First American Government Obligation Fund, Class X (FGXXX)",
+      "bdc_dimensions_raw": "investmentidentifieraxis=First American Government Obligation Fund Yield 3.63% Class X FGXXX",
+      "fair_value": 1906618.0,
+      "cost": 1906618.0,
+      "shares_held": 1906618.0,
+      "source_row_id": "0001193125-26-221900-table5-row33"
+    },
+    {
+      "report_date": "2026-03-31",
+      "issuer_name": "United States Treasury",
+      "bdc_investment_identifier": "U.S. Treasury Bill, Yield 3.62%, Maturity Date 04/28/26",
+      "bdc_dimensions_raw": "investmentidentifieraxis=US Treasury Bill Yield 3.62% Maturity Date 04/28/26",
+      "fair_value": 321170326.0,
+      "cost": 321170326.0,
+      "principal_amount": 325000000.0,
+      "maturity_date": "2026-04-28",
+      "source_row_id": "0001193125-26-221900-table5-row36"
+    }
+  ],
+  "evidence": [
+    {"source": "filing", "quote": "Table 5 prints Total Cash Equivalents fair value 1906618 and Total Short-term Investments fair value 321170326; Total Investments fair value is 572771377."},
+    {"source": "query", "quote": "After removing 160356162.0 of duplicate position facts, holdings equal the printed Debt & Equity subtotal 249694433.0; adding the two omitted source rows (323076944.0) yields 572771377.0."}
+  ],
+  "rationale": "The extractor omitted two real schedule rows because cash-equivalent and short-term investment facts lack the position-axis shape used for debt/equity holdings. Restore the filing rows rather than deleting positions to match the smaller subtotal.",
+  "confidence": 0.99,
+  "measured_impact": {"2026-03-31": {"rows": 2, "fv": 323076944.0, "residual_before": -323076945.0, "residual_after": -1.0}}
+}

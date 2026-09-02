@@ -1,0 +1,30 @@
+{
+  "cik": "1838126",
+  "target_quarter": "2026-03-31",
+  "grand_total": 25007853000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investment Portfolio",
+      "value": 25007853000.0,
+      "source": "Filing accession 0001628280-26-033248, Schedule of Investments, table 37 row 20: Total Investment Portfolio fair value $25,007,853 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 25007853000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 37 row 20: Total Investment Portfolio | $ | 25,063,146 | $ | 25,007,853 | 201.09 | % (amounts in thousands)"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 8 row 7: Total investments at fair value (amortized cost of $25,063,146 at March 31, 2026) | 25,007,853 (amounts in thousands)"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 8 row 18: Total assets | $ | 26,289,900 (amounts in thousands)"
+    }
+  ],
+  "rationale": "The Schedule of Investments has an explicit final Total Investment Portfolio row of $25.007853 billion, after the non-controlled/non-affiliated, non-controlled/affiliated, and controlled/affiliated sections. The same amount appears on the balance sheet as total investments at fair value and exactly matches the companyfacts tag. It is 95.12% of total assets, leaving a plausible $1.282047 billion of non-investment assets.",
+  "confidence": 0.99
+}

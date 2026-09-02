@@ -1,0 +1,30 @@
+{
+  "cik": "2011498",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1249444000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Investments, at fair value",
+      "value": 1249444000.0,
+      "source": "fund_financials companyfacts row for report_date 2026-03-31: investments_at_fair_value = 1249444000.0"
+    }
+  ],
+  "companyfacts_fv": 1249444000.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "fund_financials, report_date 2026-03-31: total_assets = 1316257000.0; investments_at_fair_value = 1249444000.0"
+    },
+    {
+      "source": "query",
+      "quote": "holdings, report_date 2026-03-31: non-affiliated recognized positions = 1228169000.0 and affiliated AGL EPCI I equity = 21275000.0; sum = 1249444000.0"
+    },
+    {
+      "source": "query",
+      "quote": "holdings subsidiary look-through rows identified by investmentcompanynonconsolidatedsubsidiaryaxis=AGLEPCIIMember total 231531000.0 and are excluded to avoid double counting the AGL EPCI I equity investment"
+    }
+  ],
+  "rationale": "The single reported investments-at-fair-value balance is the grand total. It equals the recognized non-affiliated positions of 1228169000.0 plus the affiliated AGL EPCI I equity investment of 21275000.0. The additional 231531000.0 in extracted holdings consists of look-through positions dimensioned to the nonconsolidated subsidiary AGL EPCI I and would double count that equity investment. The grand total is 94.9% of total assets of 1316257000.0, leaving a plausible non-investment remainder of 66813000.0. The companyfacts tag therefore captured the complete recognized investment balance, not merely a non-affiliated subtotal.",
+  "confidence": 0.95
+}

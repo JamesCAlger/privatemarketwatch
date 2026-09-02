@@ -3,43 +3,23 @@
   "cik": "0001954360",
   "entity_name": "Crescent Private Credit Income Corp",
   "status": "ACTIVE",
-  "applies_to": {
-    "regime": "flattened",
-    "signature": "SECDEBT ASSETTYPE REFRATE RATE MAT"
-  },
+  "applies_to": {"regime": "flattened", "signature": "SECDEBT ASSETTYPE REFRATE RATE MAT"},
   "available_identifier_datapoints": [
-    "issuer",
-    "investment_type",
-    "reference_rate_type",
-    "basis_spread",
-    "pik_rate",
-    "interest_rate_floor",
-    "interest_rate",
-    "maturity_date"
+    "issuer", "investment_type", "reference_rate_type", "basis_spread",
+    "pik_rate", "interest_rate_floor", "interest_rate", "maturity_date"
   ],
   "unsupported_identifier_datapoints": [
-    "interest_rate_cash_leg",
-    "interest_rate_all_in",
-    "interest_rate_total"
+    "interest_rate_cash_leg", "interest_rate_all_in", "interest_rate_total"
   ],
   "pik_convention": "inclusive",
-  "required_fields": [
-    "reference_rate_type",
-    "basis_spread",
-    "interest_rate"
-  ],
+  "required_fields": ["reference_rate_type", "basis_spread", "interest_rate"],
   "extractors": [
     {
       "field": "reference_rate_type",
       "regex": "\\bInterest Term\\s+([A-Z])\\s*\\+",
       "group": 1,
       "type": "ref_code",
-      "map": {
-        "S": "SOFR",
-        "E": "EURIBOR",
-        "B": "BASE",
-        "P": "PRIME"
-      }
+      "map": {"S": "SOFR", "E": "EURIBOR", "B": "BASE", "P": "PRIME"}
     },
     {
       "field": "basis_spread",
@@ -71,24 +51,9 @@
     }
   ],
   "invariants": [
-    {
-      "name": "interest_rate_matches_bundle_twin",
-      "kind": "pct_agree",
-      "parsed": "interest_rate",
-      "twin": "interest_rate"
-    },
-    {
-      "name": "maturity_matches_bundle_twin_when_available",
-      "kind": "date_agree",
-      "parsed": "maturity_date",
-      "twin": "maturity_date"
-    },
-    {
-      "name": "floating_reference_implies_spread",
-      "kind": "implication",
-      "if_present": "reference_rate_type",
-      "then_present": "basis_spread"
-    }
+    {"name": "interest_rate_matches_bundle_twin", "kind": "pct_agree", "parsed": "interest_rate", "twin": "interest_rate"},
+    {"name": "maturity_matches_bundle_twin_when_available", "kind": "date_agree", "parsed": "maturity_date", "twin": "maturity_date"},
+    {"name": "floating_reference_implies_spread", "kind": "implication", "if_present": "reference_rate_type", "then_present": "basis_spread"}
   ],
   "notes": [
     "Dominant RATE identifiers embed Interest Term, Interest Rate, and Maturity/Dissolution Date across old and new eras.",

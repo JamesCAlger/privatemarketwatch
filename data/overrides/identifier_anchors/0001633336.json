@@ -1,8 +1,8 @@
 {
   "cik": "0001633336",
-  "_doc": "Crescent Capital BDC A2 staged anchor proposal from the 2026-03-31 multi-quarter bundle. Bundle identifiers use Debt Investments, Equity Investments, Investment Type, Interest Term/rate phrases, Interest Rate, and Maturity/Dissolution Date. Exact-only GEO coverage handles country-only section rows in none_examples without changing full position signatures.",
+  "_doc": "Crescent Capital BDC A2 staged anchor proposal from the 2026-03-31 multi-quarter bundle. The exact section-only none_example 'Investments' is classified as TOTAL; other anchors preserve the observed debt/equity/rate signatures.",
   "anchors": [
-    {"label": "TOTAL", "regex": "^\\s*total\\b|investments and cash equivalents total|cash equivalents total"},
+    {"label": "TOTAL", "regex": "^\\s*(?:total\\b.*|investments)\\s*$|investments and cash equivalents total|cash equivalents total"},
     {"label": "CASH", "regex": "money market|government fund|u\\.?s\\.? government|treasury bill|liquidity (?:fund|funds)|cash and cash equivalent|cash equivalents"},
     {"label": "AFFIL", "regex": "non-?controlled|controlled\\s*/|/\\s*non-?affiliated|/\\s*affiliated|\\bcontrolled investments?\\b|\\baffiliated investments?\\b"},
     {"label": "GEO", "regex": "^\\s*investments\\s+(?:finland|france|united states|canada|united kingdom|netherlands|belgium|australia|sweden|jersey|switzerland)\\s*$"},

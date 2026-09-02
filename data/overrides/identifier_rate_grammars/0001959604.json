@@ -87,8 +87,8 @@
     }
   ],
   "notes": [
-    "Dominant embedded-rate identifier format is 'Reference Rate and Spread S + X% ... Maturity Date M/D/YYYY'.",
+    "Dominant embedded-rate identifier format is 'Reference Rate and Spread S + X% ... Maturity Date M/D/YYYY' across all sampled report-date eras from 2023-12-31 through 2026-03-31.",
     "PIK is optional and appears as '(includes X% PIK)'; it is not a required field.",
-    "The 2024-12-31 Seko sample has identifier maturity 12/30/2026 but structured twin maturity 2030-05-27, so maturity-date agreement may flag a source/twin inconsistency rather than a regex failure."
+    "The 2024-12-31 NRO Holdings sample has identifier maturity 7/15/2031 but structured twin maturity 2030-07-15, so maturity-date agreement may flag a source/twin inconsistency rather than a regex failure."
   ]
 }

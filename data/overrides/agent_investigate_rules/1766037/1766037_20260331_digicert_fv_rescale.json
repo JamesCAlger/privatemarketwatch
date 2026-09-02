@@ -1,0 +1,38 @@
+{
+  "cik": "1766037",
+  "rule_id": "1766037_20260331_digicert_fv_rescale",
+  "rule_type": "value_rescale",
+  "action": "rescale",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-03-31' AND src_context_id = 'c-242' AND TRY_CAST(fair_value AS DOUBLE) = 0.0073",
+  "field": "fair_value",
+  "factor": 1000000000.0,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-03-31 DigiCert, Inc., First Lien (src_context_id c-242), fair_value is 0.0073 while cost is 7010000 and principal_amount is 7016000; it is the only positive sub-dollar fair value in all holdings quarters."
+    },
+    {
+      "source": "query",
+      "quote": "The same DigiCert position has fair_value 7045000 at 2025-09-30 and 7028000 at 2025-12-31. Multiplying the anomalous 0.0073 by 1000000000 yields 7300000, consistent with the position's scale and adjacent quarters."
+    },
+    {
+      "source": "query",
+      "quote": "The validated 2026-03-31 anchor is 1457048000; extracted value_sum is 1452790000.0073 (-0.292%). Correcting c-242 produces 1460090000 (+0.209%), within the 0.5% rounding tolerance."
+    }
+  ],
+  "rationale": "The DigiCert position is real and must not be excluded. Its fair value was extracted at a billionth of the intended dollar scale: 0.0073 instead of 7300000. The quarter- and context-specific rescale fixes exactly that mis-scaled field without affecting other positions or quarters. The remaining 3042000 difference is 0.209% of the validated grand total and is filer rounding under the stated tolerance.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 7299999.9927,
+      "residual_before": -4257999.9927,
+      "residual_after": 3042000.0
+    }
+  }
+}

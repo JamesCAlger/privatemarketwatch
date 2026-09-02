@@ -1,45 +1,15 @@
 {
   "cik": "0001837532",
   "anchors": [
-    {
-      "label": "TOTAL",
-      "regex": "^\\s*total\\b"
-    },
-    {
-      "label": "AFFIL",
-      "regex": "non-?controlled|controlled/|/non-?affiliated|/affiliated"
-    },
-    {
-      "label": "SECDEBT",
-      "regex": "secured debt|term loan|delayed draw term loan|revolver|senior secured|first lien|second lien|corporate bond"
-    },
-    {
-      "label": "SUBORD",
-      "regex": "subordinated"
-    },
-    {
-      "label": "EQUITY",
-      "regex": "common equity|preferred equity|membership interest|equity\\s+unit|equity interest|stock equity|preferred stock|common stock|cumulative preferred|\\bwarrant"
-    },
-    {
-      "label": "CASH",
-      "regex": "Goldman Sachs Financial Square Government Fund|State Street Institutional U\\.S\\. Government Money Market Fund|US BANK GCTS[0-9]+"
-    },
-    {
-      "label": "CATEGORY",
-      "regex": "^(Aerospace & Defense|Asset Backed Securities|Auto Components|Automobile Components|Biotechnology|Building Products|Capital Markets|Chemicals|Commercial Services & Supplies|Communications Equipment|Construction & Engineering|Consumer Finance|Containers & Packaging|Diversified Consumer Services|Diversified Financial Services|Diversified Telecommunication Services|Electric Utilities|Electrical Equipment|Electronic Equipment, Instruments & Components|Energy Equipment & Services|Entertainment|Equity Real Estate Investment Trusts \\(REITs\\)|Financial Services|Financing|Food & Staples Retailing|Food Products|Health Care Equipment & Supplies|Health Care Providers & Services|Health Care Technology|Hotels, Restaurants & Leisure|Household Durables|Household Products|Insurance|Internet & Direct Marketing Retail|IT Services|Life Sciences Tools & Services|Machinery|Media|Metals & Mining|Oil, Gas & Consumable Fuels|Pharmaceuticals|Professional Services|Real Estate Management & Development|Road & Rail|Software|Specialty Retail|Technology Hardware, Storage & Peripherals|Textiles, Apparel & Luxury Goods|Trading Companies & Distributors)(\\s+.+)?$"
-    },
-    {
-      "label": "REFRATE",
-      "regex": "reference rate|\\bsofr\\b|\\bsonia\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|\\bbbsw\\b|\\b(?:S|SF|SOFR|SONIA|L|LIBOR|P|PRIME|E|EURIBOR|BBSW)\\s*\\+\\s*[0-9]"
-    },
-    {
-      "label": "RATE",
-      "regex": "interest rate|[0-9]+\\.?[0-9]*\\s*%|\\b(?:S|SF|SOFR|SONIA|L|LIBOR|P|PRIME|E|EURIBOR|BBSW)\\s*\\+\\s*[0-9]{2,4}\\b"
-    },
-    {
-      "label": "MAT",
-      "regex": "maturity date|\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"
-    }
+    {"label": "TOTAL", "regex": "^\\s*total\\b"},
+    {"label": "AFFIL", "regex": "non-?controlled|controlled/|/non-?affiliated|/affiliated"},
+    {"label": "SECDEBT", "regex": "secured debt|term loan|delayed draw term loan|revolver|senior secured|first lien|second lien|corporate bond|convertible bond|mortgage loan"},
+    {"label": "SUBORD", "regex": "subordinated"},
+    {"label": "EQUITY", "regex": "common equity|preferred equity|membership interest|equity\\s+unit|equity interest|stock equity|preferred stock|common stock|cumulative preferred|\\bwarrant"},
+    {"label": "CASH", "regex": "Goldman Sachs Financial Square Government Fund|State Street Institutional U\\.S\\. Government Money Market Fund|US BANK GCTS[0-9]+"},
+    {"label": "CATEGORY", "regex": "^(Aerospace & Defense|Asset Backed Securities|Auto Components|Automobile Components|Banks|Biotechnology|Building Products|Capital Markets|Chemicals|Commercial Services & Supplies|Communications Equipment|Construction & Engineering|Construction Materials|Consumer Finance|Consumer Staples Distribution & Retail|Containers & Packaging|Diversified Consumer Services|Diversified Financial Services|Diversified REITs|Diversified Telecommunication Services|Electric Equipment|Electric Utilities|Electrical Equipment|Electronic Equipment, Instruments & Components|Energy Equipment & Services|Entertainment|Equity Real Estate Investment Trusts \\(REITs\\)|Financial Services|Financing|Food & Staples Retailing|Food Products|Ground Transportation|Health Care|Health Care Equipment & Supplies|Health Care Providers & Services|Health Care Technology|Hotels, Restaurants & Leisure|Household Durables|Household Products|Independent Power & Renewable Electricity Producers|Insurance|Interactive Media & Services|Internet & Direct Marketing Retail|IT Services|Leisure Products|Life Sciences Tools & Services|Machinery|Marine Transportation|Media|Metals & Mining|Multi-Utilities|Oil, Gas & Consumable Fuels|Paper & Forest Products|Personal Care Products|Pharmaceuticals|Professional Services|Real Estate Management & Development|Road & Rail|Semiconductors & Semiconductor Equipment|Software|Special Purpose Entity|Specialty Retail|Technology Hardware, Storage & Peripherals|Textiles, Apparel & Luxury Goods|Trading Companies & Distributors|Transportation Infrastructure)(\\s+.+)?$"},
+    {"label": "REFRATE", "regex": "reference rate|\\bsofr\\b|\\bsonia\\b|\\blibor\\b|\\bprime\\b|\\beuribor\\b|\\bbbsw\\b|\\bsaron\\b|\\bstibor\\b|\\b(?:S|SF|SOFR|SONIA|L|LIBOR|P|PRIME|E|EURIBOR|BBSW|SARON|STIBOR|K|C|T|N)\\s*\\+\\s*[0-9]"},
+    {"label": "RATE", "regex": "interest rate|[0-9]+\\.?[0-9]*\\s*%|\\b(?:S|SF|SOFR|SONIA|L|LIBOR|P|PRIME|E|EURIBOR|BBSW|SARON|STIBOR|K|C|T|N)\\s*\\+\\s*[0-9]{2,4}\\b"},
+    {"label": "MAT", "regex": "maturity date|\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"}
   ]
 }

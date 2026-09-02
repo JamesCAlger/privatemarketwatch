@@ -1,0 +1,32 @@
+{
+  "cik": "1803498",
+  "rule_id": "exclude_cash_from_investments_fv",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "asset_category = 'CASH'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-03-31, the six holdings classified asset_category='CASH' sum to 681375000.0: State Street and Fidelity/Dreyfus money-market cash-management positions. No CASH-classified holdings occur in any other extracted quarter."
+    },
+    {
+      "source": "query",
+      "quote": "Corrected holdings before exclusion sum to 80938296000.0 versus the validated investments-at-fair-value anchor of 80469381000.0. Excluding CASH gives 80256921000.0, a -0.264% residual that is within the 0.5% rounding tolerance."
+    }
+  ],
+  "rationale": "Cash and money-market cash-management rows leaked into the unified holdings sum, but the validated conservation anchor measures investments at fair value. The CASH class exactly explains the 681375000.0 difference between the corrected holdings sum and the conservation-view sum. Excluding the semantic asset class preserves real investment positions and does not affect prior quarters because they contain no CASH-classified rows.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 6,
+      "fv": 681375000.0,
+      "residual_before": 0.583,
+      "residual_after": -0.264
+    }
+  }
+}

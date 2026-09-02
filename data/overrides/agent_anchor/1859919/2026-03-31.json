@@ -1,0 +1,30 @@
+{
+  "cik": "1859919",
+  "target_quarter": "2026-03-31",
+  "grand_total": 5156571000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments, March 31, 2026 - fair value",
+      "value": 5156571000.0,
+      "source": "filing accession 0001859919-26-000041, Schedule of Investments, table 40 row 31: Total Investments, March 31, 2026; fair value $5,156,571 thousand"
+    }
+  ],
+  "companyfacts_fv": 5156571000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 40 row 31: Total Investments, March 31, 2026 (175.7%)* | $ | 5,231,456 | $ | 5,156,571"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 6 row 9: Total investments at fair value | 5,156,571 | 4,876,989"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 6 row 18: Total assets | $ | 5,550,664 | $ | 5,133,708"
+    }
+  ],
+  "rationale": "The final Total Investments row of the March 31, 2026 Schedule of Investments reports fair value of $5,156,571 thousand. It agrees exactly with the filing balance-sheet line and the companyfacts value, so companyfacts captured the complete portfolio rather than only a non-affiliated subtotal. The total is 92.9% of total assets of $5,550,664 thousand and leaves a plausible $394,093 thousand non-investment remainder.",
+  "confidence": 0.99
+}

@@ -1,0 +1,30 @@
+{
+  "cik": "1899017",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1815082000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Investments Total",
+      "value": 1815082000.0,
+      "source": "Filing accession 0001193125-26-224183, Schedule of Investments table 22, row 39, Market Value column: Investments Total $1,815,082 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 1815082000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 22 row 39: Investments Total | Cost $1,811,390 | Market Value $1,815,082 | 180.5% of NAV (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 22 rows 17, 30, and 38: Non-Controlled/Non-Affiliate Investments Total market value $1,735,938; Non-Controlled/Affiliate Investments Total market value $28,222; Controlled Affiliate Investments Total market value $50,922 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 6 rows 6-8 reports fair values of $1,735,938, $28,222, and $50,922 thousand for non-controlled/non-affiliate, non-controlled affiliate, and controlled affiliate investments, respectively; table 6 row 21 reports Total Assets of $2,089,533 thousand."
+    }
+  ],
+  "rationale": "The filing provides an explicit Investments Total row after all three investment classifications. Its market value is $1,815,082 thousand, exactly equal to the sum of the three schedule subtotals ($1,735,938 + $28,222 + $50,922 thousand) and to the three investment lines on the balance sheet. It also equals the companyfacts investments-at-fair-value tag, showing that the tag captured the complete portfolio rather than only the non-affiliated schedule. The total is 86.9% of total assets, a plausible balance-sheet closure for a BDC; cash and other assets explain the remainder.",
+  "confidence": 0.99
+}

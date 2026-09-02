@@ -1,0 +1,34 @@
+{
+  "cik": "1603480",
+  "target_quarter": "2026-03-31",
+  "grand_total": 572771377.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 572771377.0,
+      "source": "Filing accession 0001193125-26-221900, Schedule of Investments table 5 row 38: Total Investments (262.7%), fair value $572,771,377"
+    }
+  ],
+  "companyfacts_fv": 249694433.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 5 row 38: Total Investments (262.7%) | $581,376,022 amortized cost | $572,771,377 fair value."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 5 row 31: Total Debt & Equity Investments (7) | 114.4% | $258,299,078 amortized cost | $249,694,433 fair value."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 5 rows 34 and 37: Total Cash Equivalents fair value $1,906,618; Total Short-term Investments fair value $321,170,326."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 13 row 14: Total Assets | $573,517 thousand at March 31, 2026."
+    }
+  ],
+  "rationale": "The filing provides a final Total Investments row with fair value of $572,771,377. It reconciles exactly as $249,694,433 of debt and equity investments plus $1,906,618 of cash equivalents plus $321,170,326 of short-term investments. The companyfacts value therefore captured only the debt and equity subtotal. The grand total is below total assets of $573,517,000 and equals about 99.87% of assets, leaving a plausible $745,623 non-investment remainder. The separately disclosed $222,075,628 controlled-affiliated rollforward is already included within the $249,694,433 debt and equity subtotal and must not be added again.",
+  "confidence": 0.99
+}

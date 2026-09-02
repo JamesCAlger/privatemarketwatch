@@ -5,104 +5,39 @@
   "report_date": "2026-03-31",
   "status": "PROPOSED",
   "available_identifier_datapoints": [
-    "issuer",
-    "investment_category",
-    "geography",
-    "industry",
-    "instrument_type",
-    "investment_date",
-    "maturity_date",
-    "expiration_date",
-    "series",
-    "coupon_type",
-    "reference_rate_type",
-    "basis_spread",
-    "floor_rate",
-    "interest_rate",
-    "pik_rate",
-    "eot_rate"
+    "issuer", "investment_category", "geography", "industry", "instrument_type",
+    "investment_date", "maturity_date", "expiration_date", "series", "coupon_type",
+    "reference_rate_type", "basis_spread", "floor_rate", "interest_rate", "pik_rate", "eot_rate"
   ],
   "anchors": [
-    {
-      "label": "REFRATE",
-      "regex": "\\b(?:Prime|PRIME|Base Rate|SOFR 30 Day Forward|SOFR \\d+ Month Term|LIBOR|0)\\s*\\+"
-    },
-    {
-      "label": "RATE",
-      "regex": "\\b(?:Variable interest rate|Fixed interest rate|Interest Rate)\\b"
-    },
-    {
-      "label": "WARRANT",
-      "regex": "Warrant\\s*Investments-"
-    },
-    {
-      "label": "DEBT_SECTION",
-      "regex": "^(?!.*\\bType of Investment\\b)Portfolio Company Debt Securities(?:- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?)?$"
-    }
+    {"label": "REFRATE", "regex": "\\b(?:Prime|PRIME|Base Rate|SOFR 30 Day Forward|SOFR \\d+ Month Term|LIBOR|0)\\s*\\+"},
+    {"label": "RATE", "regex": "\\b(?:Variable interest rate|Fixed interest rate|Interest Rate)\\b"},
+    {"label": "WARRANT", "regex": "Warrant\\s*Investments(?:\\s*[-–])?"},
+    {"label": "DEBT_SECTION", "regex": "^(?!.*\\bType of Investment\\b)Portfolio Company Debt Securities(?:- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?)?$"}
   ],
   "anchor_rules": [
     {
-      "label": "REFRATE",
-      "pattern": "\\b(?:Prime|PRIME|Base Rate|SOFR 30 Day Forward|SOFR \\d+ Month Term|LIBOR|0)\\s*\\+",
-      "applies_to": "investment_identifier",
+      "label": "REFRATE", "pattern": "\\b(?:Prime|PRIME|Base Rate|SOFR 30 Day Forward|SOFR \\d+ Month Term|LIBOR|0)\\s*\\+", "applies_to": "investment_identifier",
       "evidence": [
-        {
-          "accession_number": "0001193125-26-207620",
-          "table_index": null,
-          "row_index": null,
-          "observation": "Bundle samples for 2026-03-31 include variable-rate debt rows with Prime plus a spread embedded in the identifier."
-        },
-        {
-          "accession_number": "0000950170-23-017817",
-          "table_index": null,
-          "row_index": null,
-          "observation": "Older bundle samples include SOFR 30 Day Forward and LIBOR plus a spread embedded in the identifier."
-        }
+        {"accession_number": "0001193125-26-207620", "table_index": null, "row_index": null, "observation": "2026-03-31 bundle samples embed Prime, Base Rate, and SOFR term reference-rate clauses."},
+        {"accession_number": "0000950170-23-017817", "table_index": null, "row_index": null, "observation": "Oldest bundle era embeds Prime and older SOFR/LIBOR-style reference-rate clauses."}
       ]
     },
     {
-      "label": "RATE",
-      "pattern": "\\b(?:Variable interest rate|Fixed interest rate|Interest Rate)\\b",
-      "applies_to": "investment_identifier",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-207620",
-          "table_index": null,
-          "row_index": null,
-          "observation": "Debt rows include Interest Rate / Variable interest rate / Fixed interest rate text embedded in the identifier."
-        }
-      ]
+      "label": "RATE", "pattern": "\\b(?:Variable interest rate|Fixed interest rate|Interest Rate)\\b", "applies_to": "investment_identifier",
+      "evidence": [{"accession_number": "0001193125-26-207620", "table_index": null, "row_index": null, "observation": "Debt identifiers embed Interest Rate, Variable interest rate, or Fixed interest rate text."}]
     },
     {
-      "label": "WARRANT",
-      "pattern": "Warrant\\s*Investments-",
-      "applies_to": "investment_identifier",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-207620",
-          "table_index": null,
-          "row_index": null,
-          "observation": "Warrant rows begin with Portfolio Company Warrant Investments- and carry Expiration Date and Series text in the identifier; the bundle also includes a WarrantInvestments- spacing variant."
-        }
-      ]
+      "label": "WARRANT", "pattern": "Warrant\\s*Investments(?:\\s*[-–])?", "applies_to": "investment_identifier",
+      "evidence": [{"accession_number": "0001193125-26-207620", "table_index": null, "row_index": null, "observation": "Bundle samples use Warrant Investments- while all none_examples use Warrant Investments without the hyphen, including an en-dash geography separator."}]
     },
     {
-      "label": "DEBT_SECTION",
-      "pattern": "^(?!.*\\bType of Investment\\b)Portfolio Company Debt Securities(?:- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?)?$",
-      "applies_to": "investment_identifier",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-207620",
-          "table_index": null,
-          "row_index": null,
-          "observation": "Bundle none_examples include category-only debt section markers such as Portfolio Company Debt Securities."
-        }
-      ]
+      "label": "DEBT_SECTION", "pattern": "^(?!.*\\bType of Investment\\b)Portfolio Company Debt Securities(?:- (?:United Sates|United States|Canada|Europe)(?: [^;]+)?)?$", "applies_to": "investment_identifier",
+      "evidence": [{"accession_number": "0001193125-26-207620", "table_index": null, "row_index": null, "observation": "Category-only debt section identifiers are distinguished from position rows by excluding Type of Investment."}]
     }
   ],
   "notes": [
-    "DEBT_SECTION is constrained to category-only debt section identifiers by excluding rows that contain Type of Investment.",
-    "Only datapoints embedded in investment_identifier strings were inventoried; source-table-only numeric columns are not treated as identifier datapoints.",
-    "The evidence CLI could not run in this worker because pandas is unavailable, so observations are grounded in the allowed bundle samples and existing read-only production override context."
+    "WARRANT accepts both hyphenated and unhyphenated section-marker forms so the supplied none_examples gain a signature.",
+    "Only datapoints embedded in investment_identifier strings were inventoried."
   ]
 }

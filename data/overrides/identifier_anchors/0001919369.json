@@ -3,37 +3,13 @@
   "regime": "flattened",
   "status": "PROPOSED",
   "anchors": [
-    {
-      "label": "AFFIL",
-      "regex": "non-controlled/non-affiliated"
-    },
-    {
-      "label": "SECDEBT",
-      "regex": "First-Lien Debt"
-    },
-    {
-      "label": "EQUITY",
-      "regex": "Other Equity"
-    },
-    {
-      "label": "REFRATE",
-      "regex": "Reference Rate and Spread"
-    },
-    {
-      "label": "RATE",
-      "regex": "Interest Rate"
-    },
-    {
-      "label": "MAT",
-      "regex": "Maturity Date"
-    },
-    {
-      "label": "INVESTMENTS",
-      "regex": "^Investments(?:\\s|\\u2013|$)"
-    },
-    {
-      "label": "ISSUER",
-      "regex": "Central Parent, Inc\\.|Gainwell Acquisition Corp\\.|Rapyd Netherlands B\\.V\\.|LeadVenture Inc\\.|OEConnection LLC|SumUp Holdings Midco S\\.\\u00e0 r\\.l|Zinnia Corporate Holdings, LLC|Acronis International|Noynim, LLC|Azurite Intermediate Holdings, Inc\\.|CData Software, Inc\\.|Databricks, Inc\\.|Inmar, Inc\\.|CB Buyer Inc\\.|Blackhawk Network Holdings, Inc\\.|Dragon Buyer Inc"
-    }
+    {"label": "AFFIL", "regex": "non-controlled/non-affiliated"},
+    {"label": "SECDEBT", "regex": "First-Lien Debt"},
+    {"label": "EQUITY", "regex": "Other Equity"},
+    {"label": "REFRATE", "regex": "Reference Rate and Spread"},
+    {"label": "RATE", "regex": "Interest Rate"},
+    {"label": "MAT", "regex": "Maturity Date"},
+    {"label": "INVESTMENTS", "regex": "^Investments(?:\\s|\\u2013|$)"},
+    {"label": "ISSUER", "regex": "Softeon, Inc\\.|Flash Charm, Inc\\.|Mews Systems B\\.V\\.|McKissock Investment Holdings|Zelis Healthcare Corporation|Rocket Software, Inc\\.|Aptean, Inc\\.|ASG III, LLC|MRI Software, LLC|Redwood Services Group, LLC|Central Parent, Inc\\.|Gainwell Acquisition Corp\\.|Rapyd Netherlands B\\.V\\.|LeadVenture Inc\\.|OEConnection LLC|OEconnection LLC|SumUp Holdings Midco S\\.\\u00e0 r\\.l|Zinnia Corporate Holdings, LLC|Acronis International|Noynim, LLC|Azurite Intermediate Holdings, Inc\\.|CData Software, Inc\\.|Databricks, Inc\\.|Inmar, Inc\\.|CB Buyer Inc\\.|Blackhawk Network Holdings, Inc\\.|Dragon Buyer Inc"}
   ]
 }

@@ -1,0 +1,40 @@
+{
+  "cik": "2011498",
+  "rule_id": "exclude_nonconsolidated_subsidiary_lookthrough",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "all"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw LIKE '%investmentcompanynonconsolidatedsubsidiaryaxis=%'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-03-31, holdings has 179 rows and fair value 1480975000. Rows whose bdc_dimensions_raw contains investmentcompanynonconsolidatedsubsidiaryaxis number 71 and sum to fair value 231531000; excluding them leaves 108 rows and fair value 1249444000, exactly the validated anchor. The predicate matches zero rows in all five earlier quarters."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 33: Total portfolio investments | $ | 234,025 | $ | 231,731 | $ | 231,531."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 20: AGL EPCI I | LP Interest | 3/25/2026 | N/A | 21,275 | 21,275 | 4.0 %."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 12: Total investments at fair value (cost/amortized cost of $ 1,246,701 and $ 1,350,788, respectively) | 1,249,444 | 1,355,641."
+    }
+  ],
+  "rationale": "The axis-scoped rows are the underlying portfolio of a nonconsolidated investment-company subsidiary, disclosed separately for look-through information. They are not additional fund-level positions. The fund-level schedule already includes the real AGL EPCI I LP interest at fair value 21275000. Including both the LP interest and the subsidiary portfolio over-counts fair value by exactly 231531000. Excluding only the explicitly axis-marked look-through rows preserves all real fund-level positions and does not affect earlier quarters.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 71,
+      "fv": 231531000.0,
+      "residual_before": 231531000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "cik": "1603480",
+  "rule_id": "dedup_parallel_position_facts_20260331",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {"quarters": ["2026-03-31"]},
+  "match_fields": ["report_date", "asset_category", "fair_value"],
+  "keep": "first",
+  "predicate_sql": "report_date = '2026-03-31' AND fair_value IN (44325407, 33303300, 18060308, 10753179, 10752127, 10603403, 8343085, 5284268, 4209728, 2981609, 2928000, 1840065)",
+  "evidence": [
+    {"source": "query", "quote": "Grouping corrected 2026-03-31 holdings by the allowed fields asset_category and fair_value identifies 12 positive-value groups with count 2; one copy of each totals 153384479.0. The predicate lists exactly those 12 values and excludes unrelated zero-value positions."},
+    {"source": "filing", "quote": "Table 5 reports Total Debt & Equity Investments fair value of 249694433, while holdings include both schedule-detail and parallel InvestmentIdentifierAxis representations of the same positions."}
+  ],
+  "rationale": "The same 12 positions were loaded twice from a verbose schedule-detail identifier and a short position identifier. Within the quarter, asset category plus exact fair value identifies each demonstrated pair. The explicit positive-value list prevents unrelated zero-value positions from collapsing.",
+  "confidence": 0.99,
+  "measured_impact": {"2026-03-31": {"rows": 12, "fv": -153384479.0, "residual_before": 160356162.0, "residual_after": 6971683.0}}
+}

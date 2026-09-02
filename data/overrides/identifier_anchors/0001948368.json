@@ -1,0 +1,14 @@
+{
+  "cik": "0001948368",
+  "schema_version": "agentA-identifier-anchors.v1",
+  "anchors": [
+    {"label": "TOTAL", "regex": "\\bInvestments?\\b"},
+    {"label": "AFFIL", "regex": "\\bInvestments? in Affiliated Money Market Fund\\b"},
+    {"label": "SECDEBT", "regex": "\\b(?:Debt Investments|1st Lien(?:/Last-Out Unitranche|/Senior Secured Debt))\\b"},
+    {"label": "EQUITY", "regex": "\\bEquity Securities\\b"},
+    {"label": "COUNTRY", "regex": "^United States(?:\\s*-|$)"},
+    {"label": "REFRATE", "regex": "\\bReference Rate and Spread\\b"},
+    {"label": "RATE", "regex": "\\bInterest Rate\\b"},
+    {"label": "MAT", "regex": "\\bMaturity\\b"}
+  ]
+}

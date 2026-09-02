@@ -1,0 +1,30 @@
+{
+  "cik": "1920145",
+  "target_quarter": "2026-03-31",
+  "grand_total": 16852129000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments and Investments in Affiliated Money Market Fund",
+      "value": 16852129000.0,
+      "source": "2026-03-31 Consolidated Schedule of Investments, final combined total row: fair value $16,852,129 thousand"
+    }
+  ],
+  "companyfacts_fv": 16508590000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Total Investments - fair value $16,508,590 thousand."
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments in Affiliated Money Market Fund - fair value $343,539 thousand."
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments and Investments in Affiliated Money Market Fund - fair value $16,852,129 thousand."
+    }
+  ],
+  "rationale": "The schedule's last combined total row is the grand total: $16,508,590 thousand of other investments plus $343,539 thousand in the separately presented affiliated money market fund equals $16,852,129 thousand. The companyfacts value captured only the former subtotal. The grand total is 96.23% of total assets of $17,512,572 thousand and leaves a plausible non-investment remainder of $660,443 thousand.",
+  "confidence": 0.99
+}

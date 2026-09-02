@@ -1,0 +1,32 @@
+{
+  "cik": "1869453",
+  "rule_id": "exclude_fiesta_revolver_partial_context_20260331",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-03-31' AND bdc_investment_identifier = 'Fiesta Purchaser, Inc. (dba Shearer''s Foods) | First lien senior secured revolving loan' AND COALESCE(fair_value, 0) = 0",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2026-03-31 contain two rows with the identical identifier 'Fiesta Purchaser, Inc. (dba Shearer''s Foods) | First lien senior secured revolving loan': ROW-47ce13d27c5db932 from c-441 has fair_value 0 and cost 269000, while ROW-0d9f96f674caa4bf from c-116 has fair_value 269000, cost 290000, and principal_amount 310000."
+    },
+    {
+      "source": "query",
+      "quote": "Staging marks both current-period contexts c-116 and c-441 with dedupe_context_count=2 and dedupe_axis_split=True; both have the identical investment_identifier and dimensions_raw. The complete c-116 row carries fair_value 269000, cost 290000, and principal_amount 310000, whereas c-441 is a partial zero-fair-value context."
+    }
+  ],
+  "rationale": "The axis split leaked two representations of one current-quarter position into unified holdings. Excluding the zero-fair-value partial representation (c-441) retains the complete c-116 row. Reauthored 2026-09-02 as a row_exclusion: the original dedup form keyed on position_key, which is not a legal DEDUP_KEY_FIELDS member, so it errored in production; the exclusion predicate targets the exact identifier, target quarter, and the zero fair value that distinguishes the partial context, so similarly named but genuinely distinct instruments and other quarters are unaffected.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 0.0,
+      "residual_before": 0.0,
+      "residual_after": 0.0
+    }
+  }
+}

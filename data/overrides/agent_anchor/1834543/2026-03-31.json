@@ -1,0 +1,34 @@
+{
+  "cik": "1834543",
+  "target_quarter": "2026-03-31",
+  "grand_total": 201772770.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 201772770.0,
+      "source": "Filing accession 0001193125-26-212288, Schedule of Investments, table 17 row 43: Total Investments - 89.33% of Net Assets; fair value $201,772,770"
+    }
+  ],
+  "companyfacts_fv": 201772770.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 17 row 43: Total Investments - 89.33% of Net Assets | cost $215,078,392 | fair value $201,772,770 | 89.53% of Total Cash and Investments."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 6 row 5: Total investments (cost of $215,078,392) | $201,772,770."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 6 row 11: Total assets | $227,206,838."
+    },
+    {
+      "source": "filing",
+      "quote": "Fair value hierarchy, table 25 row 5: Total | Bank Debt $197,975,769 | Equity Securities $3,797,001 | Total $201,772,770."
+    }
+  ],
+  "rationale": "The Schedule of Investments has a single final Total Investments row with fair value of $201,772,770. The same amount appears independently on the balance sheet and in the fair value hierarchy, where bank debt plus equity securities equals $201,772,770. It matches the companyfacts tag exactly and is 88.80% of total assets of $227,206,838, leaving a plausible $25,434,068 of non-investment assets. Therefore the companyfacts tag captured the complete investment total, not a schedule subtotal.",
+  "confidence": 0.99
+}

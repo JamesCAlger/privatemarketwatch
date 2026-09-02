@@ -6,49 +6,18 @@
   "regime": "flattened",
   "status": "PROPOSED",
   "anchors": [
-    {
-      "label": "SECDEBT",
-      "regex": "(?:Bank Debt/Senior Secured Loans|ank Debt/Senior Secured Loans)"
-    },
-    {
-      "label": "EQUITY",
-      "regex": "(?:Common Equity/Equity Interests/Warrants|Common Equity|Equity Interests|Warrants)"
-    },
-    {
-      "label": "PREFEQUITY",
-      "regex": "(?:Preferred Equity|Oldco AI, LLC|SLR-AMI Topco Blocker, LLC)"
-    },
-    {
-      "label": "TOTAL",
-      "regex": "(?:Total Investments(?: & Cash Equivalents)?|Investments|Net Assets|Liabilities in Excess of Other(?: Assets)?|Cash Equivalents)"
-    }
+    {"label": "SECDEBT", "regex": "(?:Bank Debt/Senior Secured Loans|ank Debt/Senior Secured Loans)(?=.*(?:Industry|\\|))"},
+    {"label": "EQUITY", "regex": "(?:Common Equity/Equity Interests/Warrants|Common Equity|Equity Interests|Warrants)"},
+    {"label": "PREFEQUITY", "regex": "(?:Preferred Equity|Oldco AI, LLC|SLR-AMI Topco Blocker, LLC|Vapotherm, Inc\\.)"},
+    {"label": "TOTAL", "regex": "(?:Total Investments(?: & Cash Equivalents)?|Investments|Net Assets|Liabilities in Excess of Other(?: Assets)?|Cash Equivalents)"}
   ],
-  "aggregate_candidate_patterns": [
-    "Total Investments",
-    "Investments",
-    "Net Assets",
-    "Liabilities in Excess of Other"
-  ],
-  "available_identifier_datapoints": [
-    "instrument_type",
-    "issuer",
-    "industry",
-    "reference_rate_type",
-    "basis_spread",
-    "interest_rate_floor",
-    "interest_rate",
-    "acquisition_date",
-    "maturity_date",
-    "section_percent_of_net_assets"
-  ],
-  "unsupported_identifier_datapoints": [
-    "pik_rate",
-    "cash_interest_rate",
-    "all_in_interest_rate_breakout"
-  ],
+  "aggregate_candidate_patterns": ["Total Investments", "Investments", "Net Assets", "Liabilities in Excess of Other"],
+  "available_identifier_datapoints": ["instrument_type", "issuer", "industry", "reference_rate_type", "basis_spread", "interest_rate_floor", "interest_rate", "acquisition_date", "maturity_date", "section_percent_of_net_assets"],
+  "unsupported_identifier_datapoints": ["pik_rate", "cash_interest_rate", "all_in_interest_rate_breakout"],
   "evidence_notes": [
-    "Bundle top_variants identify Bank Debt/Senior Secured Loans, Common Equity/Equity Interests/Warrants, and aggregate Investments/Net Assets/Liabilities labels as active identifier signatures.",
-    "Bundle none_examples include a truncated 'ank Debt/Senior Secured Loans' marker, Cash Equivalents, Oldco AI, LLC, and SLR-AMI Topco Blocker, LLC; these are covered so rows stop landing in none.",
-    "Evidence CLI roam was attempted against the exact bundle but could not run in this sandbox because the active Python environment is missing pandas."
+    "Bundle identifiers explicitly contain section/instrument labels, issuer, industry, reference code and spread, floor, stated interest rate, acquisition date, maturity date, and section percentage in applicable rows.",
+    "Bundle none_examples are Vapotherm, Inc.; explicit PREFEQUITY coverage routes those rows out of (none).",
+    "SECDEBT requires an Industry or pipe-delimited payload, excluding bare section headings and leaked percentage-only section rows from the position grammar.",
+    "Aggregate candidate patterns are limited to explicit total/net-assets/liabilities category identifiers in the bundle."
   ]
 }

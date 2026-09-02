@@ -1,0 +1,30 @@
+{
+  "cik": "2012139",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1694770000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments",
+      "value": 1694770000.0,
+      "source": "Filing accession 0001193125-26-224353, consolidated schedule of investments, table 13 row 55 (USD in thousands): Total investments; fair value 1,694,770"
+    }
+  ],
+  "companyfacts_fv": 1694770000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 13 row 55 (USD in thousands): Total investments | $ | 1,735,720 | 1,694,770 | 166.2"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 6 rows 4-7 (USD in thousands): non-controlled, non-affiliated investments 1,675,484; non-controlled, affiliated investments 8,469; controlled, affiliated investments 10,817; Total investments, at fair value 1,694,770."
+    },
+    {
+      "source": "query",
+      "quote": "Holdings for report_date 2026-03-31 sum to 1,675,484,000 non-affiliated plus 19,286,000 affiliated, or 1,694,770,000 total."
+    }
+  ],
+  "rationale": "The filing provides an explicit final Total investments row, so total_row is the appropriate method. The row includes non-controlled non-affiliated, non-controlled affiliated, and controlled affiliated investments. Its fair value is 1,694,770,000, exactly matching companyfacts. The companyfacts tag therefore captured the full investment total, not only the non-affiliated subtotal. The result is 96.05% of total assets of 1,764,592,000, leaving a plausible non-investment remainder of 69,822,000.",
+  "confidence": 0.99
+}

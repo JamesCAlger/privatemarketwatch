@@ -4,125 +4,28 @@
   "entity_name": "TCW Direct Lending VII LLC",
   "report_date": "2026-03-31",
   "status": "PROPOSED",
-  "applies_to": {
-    "regime": "flattened",
-    "signature": "DEBT RATE REFRATE MAT"
-  },
-  "available_identifier_datapoints": [
-    "section_or_asset_class",
-    "industry_or_category",
-    "issuer",
-    "acquisition_date",
-    "instrument_type",
-    "tranche_or_position_descriptor",
-    "interest_rate",
-    "reference_rate_type",
-    "basis_spread",
-    "interest_rate_floor",
-    "pik_terms_text",
-    "pik_rate",
-    "pct_of_net_assets",
-    "maturity_date",
-    "cash_equivalent_yield",
-    "short_term_investment_yield",
-    "warrant_expiration_date"
-  ],
-  "unsupported_identifier_datapoints": [
-    "principal_or_par_amount",
-    "amortized_cost",
-    "fair_value",
-    "share_or_unit_count",
-    "affiliated_investment_basis_spread",
-    "affiliated_investment_maturity_date"
-  ],
+  "applies_to": {"regime":"flattened","signature":"DEBT RATE REFRATE MAT"},
+  "available_identifier_datapoints": ["section_or_asset_class","industry_or_category","issuer","acquisition_date","instrument_type","tranche_or_position_descriptor","interest_rate","reference_rate_type","basis_spread","interest_rate_floor","pik_terms_text","pik_rate","pct_of_net_assets","maturity_date"],
+  "unsupported_identifier_datapoints": ["principal_or_par_amount","amortized_cost","fair_value","share_or_unit_count","affiliated_investment_basis_spread","affiliated_investment_maturity_date"],
   "pik_convention": "inclusive",
   "extractors": [
-    {
-      "field": "interest_rate",
-      "regex": "-\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*(?:inc\\s+PIK)?",
-      "group": 1,
-      "type": "pct"
-    },
-    {
-      "field": "reference_rate_type",
-      "regex": "\\((SOFR|PRIME)\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%",
-      "group": 1,
-      "type": "ref_code",
-      "map": {
-        "SOFR": "SOFR",
-        "PRIME": "PRIME"
-      }
-    },
-    {
-      "field": "basis_spread",
-      "regex": "\\((?:SOFR|PRIME)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%",
-      "group": 1,
-      "type": "pct"
-    },
-    {
-      "field": "interest_rate_floor",
-      "regex": ",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*Floor",
-      "group": 1,
-      "type": "pct"
-    },
-    {
-      "field": "pik_rate",
-      "regex": ",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*PIK\\)",
-      "group": 1,
-      "type": "pct"
-    },
-    {
-      "field": "maturity_date",
-      "regex": "Maturity Date\\s+(\\d{1,2}/\\d{1,2}/\\d{2})",
-      "group": 1,
-      "type": "date_mdy"
-    }
+    {"field":"interest_rate","regex":"-\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*(?:inc\\s+PIK)?","group":1,"type":"pct"},
+    {"field":"reference_rate_type","regex":"\\((SOFR|PRIME)\\s*\\+\\s*\\d+(?:\\.\\d+)?\\s*%","group":1,"type":"ref_code","map":{"SOFR":"SOFR","PRIME":"PRIME"}},
+    {"field":"basis_spread","regex":"\\((?:SOFR|PRIME)\\s*\\+\\s*(\\d+(?:\\.\\d+)?)\\s*%","group":1,"type":"pct"},
+    {"field":"interest_rate_floor","regex":",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*Floor","group":1,"type":"pct"},
+    {"field":"pik_rate","regex":",\\s*(\\d+(?:\\.\\d+)?)\\s*%\\s*PIK\\)","group":1,"type":"pct"},
+    {"field":"maturity_date","regex":"Maturity Date\\s+(\\d{1,2}/\\d{1,2}/\\d{2})","group":1,"type":"date_mdy"}
   ],
-  "required_fields": [
-    "interest_rate",
-    "reference_rate_type",
-    "basis_spread",
-    "maturity_date"
-  ],
+  "required_fields": ["interest_rate","reference_rate_type","basis_spread","maturity_date"],
   "invariants": [
-    {
-      "name": "interest_rate_identifier_matches_twin",
-      "kind": "pct_agree",
-      "parsed": "interest_rate",
-      "twin": "interest_rate"
-    },
-    {
-      "name": "basis_spread_identifier_matches_twin",
-      "kind": "pct_agree",
-      "parsed": "basis_spread",
-      "twin": "basis_spread"
-    },
-    {
-      "name": "maturity_date_identifier_matches_twin",
-      "kind": "date_agree",
-      "parsed": "maturity_date",
-      "twin": "maturity_date"
-    },
-    {
-      "name": "reference_rate_implies_spread",
-      "kind": "implication",
-      "if_present": "reference_rate_type",
-      "then_present": "basis_spread"
-    }
+    {"name":"interest_rate_identifier_matches_twin","kind":"pct_agree","parsed":"interest_rate","twin":"interest_rate"},
+    {"name":"basis_spread_identifier_matches_twin","kind":"pct_agree","parsed":"basis_spread","twin":"basis_spread"},
+    {"name":"maturity_date_identifier_matches_twin","kind":"date_agree","parsed":"maturity_date","twin":"maturity_date"},
+    {"name":"reference_rate_implies_spread","kind":"implication","if_present":"reference_rate_type","then_present":"basis_spread"}
   ],
   "evidence": [
-    {
-      "accession_number": "0001193125-26-221880",
-      "table_index": 24,
-      "row_index": 4,
-      "observation": "Recent dominant debt identifiers embed coupon, SOFR spread, floor, PIK wording, percent of net assets, and maturity date."
-    },
-    {
-      "accession_number": "0000950170-23-020312",
-      "table_index": 24,
-      "row_index": 4,
-      "observation": "Oldest-era dominant debt identifiers use the same embedded coupon, reference-rate spread, floor, PIK wording, and maturity-date pattern."
-    }
+    {"accession_number":"0001193125-26-221880","table_index":24,"row_index":4,"observation":"Recent dominant debt identifiers embed headline rate, reference rate, spread, floor or PIK terms, and maturity date."},
+    {"accession_number":"0000950170-23-020312","table_index":24,"row_index":4,"observation":"Oldest sampled era uses the same headline-rate, reference-plus-spread, and maturity markers."}
   ],
-  "notes": "Grammar is scoped to identifiers that actually contain reference-rate, spread, coupon, and maturity text. The separate RATE signature embeds only headline coupon, so affiliated basis spread and maturity date are listed as unsupported for that identifier signature rather than inferred from source columns."
+  "notes": "Scoped only to the dominant signature containing embedded rate and maturity datapoints. RATE-only affiliated identifiers support headline interest_rate but not spread or maturity and are excluded from this grammar."
 }

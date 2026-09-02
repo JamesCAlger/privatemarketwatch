@@ -1,6 +1,5 @@
 {
   "cik": "0001851322",
-  "_doc": "North Haven Private Income Fund LLC anchor proposal for 2026-03-31 A2 bundle. Keeps the existing production section/rate/date anchors and adds only a narrow terminal TRANCHE marker for bare issuer fragments such as 'Associations, Inc. 1'. This does not infer SOI columns or rate fields; it only prevents issuer-plus-index identifiers from landing in an empty signature.",
   "anchors": [
     {"label": "TOTAL", "regex": "^\\s*total\\b"},
     {"label": "CASH", "regex": "money market|government fund|financial square|u\\.?s\\.? government|liquidity (?:fund|funds)|cash and cash equivalent"},
@@ -10,6 +9,7 @@
     {"label": "REFRATE", "regex": "reference rate\\s*(?:&|and)\\s*spread|reference rate|\\bsofr\\b|\\blibor\\b|\\beuribor\\b|\\bprime\\b|\\b[SP]\\s*\\+"},
     {"label": "RATE", "regex": "[0-9]+\\.?[0-9]*\\s*%"},
     {"label": "MAT", "regex": "\\b[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}\\b"},
-    {"label": "TRANCHE", "regex": "(?<!/)\\b[1-9][0-9]?\\s*$"}
+    {"label": "TRANCHE", "regex": "(?<!/)\\b[1-9][0-9]?\\s*$"},
+    {"label": "ISSUER", "regex": "\\b(?:LLC|L\\.L\\.C\\.|Inc\\.|Corp\\.|Company|Holdco|Holdings|Foods)\\s*(?:\\([^)]*\\))?\\s*$"}
   ]
 }

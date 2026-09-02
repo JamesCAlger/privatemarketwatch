@@ -1,0 +1,47 @@
+{
+  "cik": "1976336",
+  "rule_id": "1976336-2026q1-missing-short-term-investment",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Current-period staging contains BlackRock Liquidity T-Fund - Institutional Shares at fair_value 43021000 and cost 43021000 in src_context_id C_84286155-698e-43fe-aae4-f44f4c9d9151, but the context is absent from holdings. Holdings fair value is 1687339000 before recovery."
+    },
+    {
+      "source": "filing",
+      "quote": "BlackRock Liquidity T-Fund - Institutional Shares | (11) | $ | 43,021 | $ | 43,021 | 5.41 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments - non-controlled/non-affiliated | 1,707,288 | 1,687,345 | 212.08; Total Short-term Investments | 43,021 | 43,021 | 5.41; Total Investments at fair value | $ | 1,750,309 | $ | 1,730,366 | 217.49 | %"
+    }
+  ],
+  "rationale": "The unified holdings omitted a real, separately presented short-term investment that exists in current-period staging. The extracted holdings approximate the filing's non-controlled/non-affiliated subtotal, while the validated grand total also includes this BlackRock liquidity position. Recovering the exact source row fixes the under-count without deleting or altering any real position and is quarter-scoped because adjacent quarters already reconcile and contain their own period-specific BlackRock positions.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 43021000.0,
+      "residual_before": -43027000.0,
+      "residual_after": -6000.0
+    }
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "fair_value": 43021000.0,
+      "cost": 43021000.0,
+      "pct_of_net_assets": 0.0541,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "bdc_investment_identifier": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares",
+      "issuer_name": "BlackRock Liquidity T-Fund - Institutional Shares",
+      "source_row_id": "C_84286155-698e-43fe-aae4-f44f4c9d9151"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "cik": "1841514",
+  "rule_id": "exclude_equity_subtotal_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {"quarters": ["all"]},
+  "predicate_sql": "bdc_investment_identifier IN ('Common Equity', 'Total Equity Investments') AND COALESCE(instrument_description, '') = ''",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "The only rows with identifiers Common Equity or Total Equity Investments have no instrument_description and fair values of 3,962,000 (2023-06-30), 3,777,000 (2023-09-30), 6,173,000 (2023-12-31), 9,239,000 (2024-03-31), 8,480,000 (2024-06-30), 9,137,000 (2024-09-30), 8,259,000 (2024-12-31), and 6,755,000 (2025-03-31). Each amount equals the quarter's full residual or the subtotal component of it."
+    }
+  ],
+  "rationale": "These are labeled equity subtotals, not investee positions. The detailed equity positions are already present, so summing these rows double-counts the equity section. The exact identifier and missing-detail guard avoid issuers whose legal names contain the word Total. COALESCE(instrument_description, '') = '' matches both frames: mid-build Layer C sees '' (staging fills empty string) while the published CSV frame round-trips '' to NULL; the original IS NULL form was inert in production (reauthored 2026-09-02).",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2023-06-30": {"rows": 1, "fv": 3962000.0, "residual_before": 3962000.0, "residual_after": 0.0},
+    "2023-09-30": {"rows": 1, "fv": 3777000.0, "residual_before": 3777000.0, "residual_after": 0.0},
+    "2023-12-31": {"rows": 1, "fv": 6173000.0, "residual_before": 6173000.0, "residual_after": 0.0},
+    "2024-03-31": {"rows": 1, "fv": 9239000.0, "residual_before": 20713000.0, "residual_after": 11474000.0},
+    "2024-06-30": {"rows": 1, "fv": 8480000.0, "residual_before": 19341000.0, "residual_after": 10861000.0},
+    "2024-09-30": {"rows": 1, "fv": 9137000.0, "residual_before": 19023000.0, "residual_after": 9886000.0},
+    "2024-12-31": {"rows": 1, "fv": 8259000.0, "residual_before": 17845000.0, "residual_after": 9586000.0},
+    "2025-03-31": {"rows": 1, "fv": 6755000.0, "residual_before": 6755000.0, "residual_after": 0.0}
+  }
+}

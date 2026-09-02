@@ -1,0 +1,30 @@
+{
+  "cik": "2052152",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1495157000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments before Cash Equivalents - fair value",
+      "value": 1495157000.0,
+      "source": "Filing accession 0001193125-26-221801, Schedule of Investments, table 22 row 2: Total Investments before Cash Equivalents; Fair Value $1,495,157 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 1495157000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 22 row 2: Total Investments before Cash Equivalents | Cost $1,507,910 | Fair Value $1,495,157 (in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Fair value hierarchy, table 45 row 7: Total Investments | Cost $1,507,910 | Fair Value $1,495,157 (in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 6 rows 5 and 10: Non-controlled/non-affiliated investments $1,495,157 and Total Assets $1,552,028 (in thousands) at March 31, 2026."
+    }
+  ],
+  "rationale": "The filing presents one investment schedule and identifies the portfolio entirely as non-controlled/non-affiliated. Its final investment row reports fair value of $1,495,157 thousand, independently repeated by the fair value hierarchy and the balance sheet. The separately shown $31,431 thousand money market fund is classified as a cash equivalent and is excluded from Total Investments. The grand total equals 96.34% of total assets; the $56.871 million remainder exactly reconciles to cash and cash equivalents, due from counterparties, interest receivable, and other assets. The companyfacts tag therefore captured the complete investment total, not a subtotal.",
+  "confidence": 0.99
+}

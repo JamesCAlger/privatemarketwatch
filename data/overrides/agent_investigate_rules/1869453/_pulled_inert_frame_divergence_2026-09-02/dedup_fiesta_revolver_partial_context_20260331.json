@@ -1,0 +1,37 @@
+{
+  "cik": "1869453",
+  "rule_id": "dedup_fiesta_revolver_partial_context_20260331",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "match_fields": [
+    "report_date",
+    "position_key"
+  ],
+  "keep": "last",
+  "predicate_sql": "bdc_investment_identifier = 'Fiesta Purchaser, Inc. (dba Shearer''s Foods) | First lien senior secured revolving loan'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings for 2026-03-31 contain two rows with position_key 'fiesta purchaser inc dba shearer s foods first lien senior secured revolving loan': ROW-47ce13d27c5db932 from c-441 has fair_value 0 and cost 269000, while ROW-0d9f96f674caa4bf from c-116 has fair_value 269000, cost 290000, and principal_amount 310000."
+    },
+    {
+      "source": "query",
+      "quote": "Staging marks both current-period contexts c-116 and c-441 with dedupe_context_count=2 and dedupe_axis_split=True; both have the identical investment_identifier and dimensions_raw. The complete c-116 row carries fair_value 269000, cost 290000, and principal_amount 310000, whereas c-441 is a partial zero-fair-value context."
+    }
+  ],
+  "rationale": "The axis split leaked two representations of one current-quarter position into unified holdings. Retain the complete c-116 representation and remove the partial c-441 representation. The rule is limited to the exact identifier and target quarter so similarly named but genuinely distinct instruments and other quarters are unaffected.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 0.0,
+      "residual_before": 0.0,
+      "residual_after": 0.0
+    }
+  }
+}

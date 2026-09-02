@@ -1,0 +1,47 @@
+{
+  "cik": "2006758",
+  "rule_id": "add_2026q1_seko_common_equity",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "fair_value": 11188000.0,
+      "cost": 2736000.0,
+      "shares_held": 876.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Air Freight & Logistics SEKO Global Logistics Network, LLC SEKO Global Logistics Network, LLC Common Equity - Equity Unit",
+      "bdc_investment_identifier": "Air Freight & Logistics SEKO Global Logistics Network, LLC SEKO Global Logistics Network, LLC Common Equity - Equity Unit",
+      "issuer_name": "SEKO Global Logistics Network, LLC",
+      "source_row_id": "C_11af3230-b1d8-44f8-9893-7012aa14be73"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-03-31, holdings sum to 934425000 while the adjudicated printed schedule grand total is 945613000, an under-count of 11188000."
+    },
+    {
+      "source": "query",
+      "quote": "Staging source context C_11af3230-b1d8-44f8-9893-7012aa14be73 is SEKO Global Logistics Network common equity (Equity Unit), with cost 2736000 and shares_held 876, but fair_value NULL; no corresponding SEKO common-equity row exists in holdings."
+    },
+    {
+      "source": "query",
+      "quote": "The other numeric omitted staging contexts are Affiliated Investments AWRG summary rows totaling 4474000 and duplicate the included AWRG term-loan and stock detail totaling 4473000; adding them would double count real positions."
+    }
+  ],
+  "rationale": "The extractor dropped a real SEKO common-equity position because its staging fair value was absent, even though the source context retained the position, cost, and unit count. It is the only substantive omitted source position without corresponding detailed holdings. Recovering that row at the independently adjudicated printed-schedule residual restores the filer's grand total without deleting positions or adding duplicate AWRG summary rows. The quarter-only scope avoids changing earlier quarters where the required fair value is not independently established.",
+  "confidence": 0.93,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 11188000.0,
+      "residual_before": -11188000.0,
+      "residual_after": 0.0
+    }
+  }
+}

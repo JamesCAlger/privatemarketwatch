@@ -1,0 +1,21 @@
+{
+  "cik": "0001916608",
+  "anchors": [
+    {
+      "label": "MAT",
+      "regex": "Maturity Date"
+    },
+    {
+      "label": "RATE",
+      "regex": "%"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "SOFR"
+    },
+    {
+      "label": "SECDEBT",
+      "regex": "(?i)\\bDebt Investments\\b"
+    }
+  ]
+}

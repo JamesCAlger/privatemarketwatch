@@ -1,0 +1,37 @@
+{
+  "cik": "1674760",
+  "rule_id": "add_2026q1_goldman_government_fund",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For report_date and period 2026-03-31, staging contains Goldman Sachs Financial Square Government Fund at fair_value 157671000 with src_context_id C_ca1e2b91-605b-4bf7-a59f-4b3d988606f4; holdings has no matching Goldman Sachs row. Holdings fair value 289479000 plus this omitted source position equals the validated printed schedule grand total 447150000."
+    }
+  ],
+  "rationale": "The extractor omitted the current-period affiliated money market fund position from unified holdings. The existing 289479000 holdings sum is the investment-portfolio subtotal reflected in fund_financials, while the validated filing schedule grand total also includes the separately presented 157671000 Goldman Sachs government money market fund position. Recovering the exact staging row reconciles the grand total without deleting or altering any real holding and is scoped to the affected filing quarter to avoid changing quarters whose existing anchors reconcile.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 157671000.0,
+      "residual_before": -157671000.0,
+      "residual_after": 0.0
+    }
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "fair_value": 157671000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled Affiliated Investments Goldman Sachs Financial Square Government Fund",
+      "bdc_investment_identifier": "Non-Controlled Affiliated Investments Goldman Sachs Financial Square Government Fund",
+      "issuer_name": "Goldman Sachs Financial Square Government Fund",
+      "source_row_id": "C_ca1e2b91-605b-4bf7-a59f-4b3d988606f4"
+    }
+  ]
+}

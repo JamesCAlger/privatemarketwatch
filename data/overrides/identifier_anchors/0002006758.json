@@ -1,0 +1,22 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0002006758",
+  "anchors": [
+    {
+      "label": "SECDEBT",
+      "regex": "\\b(?:First|Second) Lien Secured Debt\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "(?:\\bInterest Rate\\b|\\b(?:CORRA|S|E)\\+\\d+|\\b\\d+(?:\\.\\d+)?%\\s+PIK\\b)"
+    },
+    {
+      "label": "MAT",
+      "regex": "\\b[Mm]aturity Date\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "\\bCommon Equity\\b"
+    }
+  ]
+}

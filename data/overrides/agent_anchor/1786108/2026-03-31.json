@@ -1,0 +1,34 @@
+{
+  "cik": "1786108",
+  "target_quarter": "2026-03-31",
+  "grand_total": 2483554000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments at fair value",
+      "value": 2483554000.0,
+      "source": "Filing accession 0001193125-26-207620, table 79, row 10: Total Investments at fair value; total column 2,483,554 (USD thousands)"
+    }
+  ],
+  "companyfacts_fv": 2483554000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 79, row 10: Total Investments at fair value | - | - | 2,450,836 | 32,718 | 2,483,554 (USD thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 7, row 9: Total investments (cost of $2,468,380 and $2,396,883, respectively) | 2,483,554 | 2,418,075 (USD thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 7, row 14: Total assets | $ | 2,555,832 | $ | 2,484,519 (USD thousands)."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2026-03-31 reports investments_at_fair_value 2,483,554,000 and total_assets 2,555,832,000."
+    }
+  ],
+  "rationale": "The filing presents a single explicit Total Investments at fair value row of $2,483,554,000. The same amount appears as Total investments on the balance sheet and equals the companyfacts value, so companyfacts captured the full grand total rather than a schedule subtotal. The amount is 97.17% of total assets and leaves a plausible $72,278,000 non-investment remainder.",
+  "confidence": 0.99
+}

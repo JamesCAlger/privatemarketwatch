@@ -1,0 +1,30 @@
+{
+  "cik": "1812554",
+  "target_quarter": "2026-03-31",
+  "grand_total": 35500450000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 35500450000.0,
+      "source": "Filing accession 0001812554-26-000027, balance sheet table 10, row 7, March 31, 2026 column (amounts in thousands): 35,500,450"
+    }
+  ],
+  "companyfacts_fv": 35500450000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 10 rows 4-7 (amounts in thousands): Non-controlled, non-affiliated investments 33,607,175; Non-controlled, affiliated investments 15,961; Controlled, affiliated investments 1,877,314; Total investments at fair value 35,500,450."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 90 row 11, March 31, 2026 Fair Value (amounts in thousands): Total Investments 35,500,450."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 10 row 14, March 31, 2026 (amounts in thousands): Total Assets 36,907,971."
+    }
+  ],
+  "rationale": "The filing presents an explicit March 31, 2026 total row, corroborated by the investment summary. The balance-sheet affiliation classes sum exactly to 35,500,450 thousand: 33,607,175 + 15,961 + 1,877,314. Thus the companyfacts value captured the complete grand total, not merely the non-controlled/non-affiliated subtotal. The grand total is 96.19% of total assets and leaves 1,407,521 thousand of non-investment assets, which closes plausibly.",
+  "confidence": 0.99
+}

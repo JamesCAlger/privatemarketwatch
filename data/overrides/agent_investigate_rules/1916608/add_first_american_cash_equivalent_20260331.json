@@ -1,0 +1,45 @@
+{
+  "cik": "1916608",
+  "rule_id": "add_first_american_cash_equivalent_20260331",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "cik": "1916608",
+      "report_date": "2026-03-31",
+      "issuer_name": "First American Government Obligation Fund",
+      "instrument_description": "Yield 3.58%, Class X (FGXXX)",
+      "fair_value": 5325046.0,
+      "cost": 5325046.0,
+      "shares_held": 5325046.0,
+      "asset_category": "Cash Equivalents",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Cash Equivalents, First American Government Obligation Fund, Yield 3.58%, Class X (FGXXX), % of Net Assets - 2.5%",
+      "source_row_id": "0001193125-26-221949:table_8:row_18"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule table 8 row 18 prints Cash Equivalents, First American Government Obligation Fund, Yield 3.58%, Class X (FGXXX), with shares, amortized cost, and fair value each 5,325,046; row 20 prints Total Investments fair value 230,281,379."
+    },
+    {
+      "source": "query",
+      "quote": "Corrected holdings sum to 224,956,333 for 2026-03-31, exactly matching filing table 8 row 16 Total Debt & Equity Investments; no holding or staging row has fair_value, cost, or shares_held of 5,325,046."
+    }
+  ],
+  "rationale": "The extractor omitted the separately presented cash-equivalent position while the validated grand-total anchor includes it. This is a real filing position, so it must be added rather than changing or deleting debt and equity holdings. The quarter-specific scope avoids regressions elsewhere.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 5325046.0,
+      "residual_before": -5325046.0,
+      "residual_after": 0.0
+    }
+  }
+}

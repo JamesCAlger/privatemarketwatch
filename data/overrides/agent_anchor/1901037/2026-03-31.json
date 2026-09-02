@@ -1,0 +1,34 @@
+{
+  "cik": "1901037",
+  "target_quarter": "2026-03-31",
+  "grand_total": 405398306.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 405398306.0,
+      "source": "Filing accession 0001104659-26-059217, Schedule of Investments, table 18 row 47: Total Investments; fair value $405,398,306"
+    }
+  ],
+  "companyfacts_fv": 405398306.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 18 row 46: Total Non-controlled, non-affiliated investments | $ | 402,245,114 | $ | 405,398,306 | 206.36 %"
+    },
+    {
+      "source": "filing",
+      "quote": "Table 18 row 47: Total Investments | $ | 402,245,114 | $ | 405,398,306 | 206.36 %"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 6 row 12: Total Assets | $ | 410,565,306 | $ | 404,727,054"
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for report_date 2026-03-31 reports investments_at_fair_value 405398306.0 and total_assets 410565306.0"
+    }
+  ],
+  "rationale": "The filing's final Schedule of Investments row explicitly reports Total Investments at fair value of $405,398,306. The immediately preceding subtotal is the same amount and is labeled Total Non-controlled, non-affiliated investments, showing that there are no additional affiliated or controlled schedules to add. The companyfacts tag therefore captured the complete investment schedule, not an incomplete subtotal. The total is 98.74% of total assets and leaves $5,167,000 of non-investment assets, so it closes plausibly to the balance sheet.",
+  "confidence": 0.99
+}

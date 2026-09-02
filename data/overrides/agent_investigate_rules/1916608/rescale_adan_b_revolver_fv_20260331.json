@@ -1,0 +1,34 @@
+{
+  "cik": "1916608",
+  "rule_id": "rescale_adan_b_revolver_fv_20260331",
+  "rule_type": "value_rescale",
+  "action": "rescale",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-03-31' AND row_id = 'ROW-dfb5f116e8fbd5e3' AND TRY_CAST(fair_value AS DOUBLE) = 319534000",
+  "field": "fair_value",
+  "factor": 0.001,
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "ROW-dfb5f116e8fbd5e3 (ADAN-B LLC (24 Hour Fitness), Revolver) has fair_value 319534000, cost 322111000, principal_amount 322111000, while its dimensions state 0.1% of net assets."
+    },
+    {
+      "source": "filing",
+      "quote": "The March 31, 2026 schedule totals debt and equity investments at fair value of 224,956,333; rescaling this one row by 0.001 changes the extracted sum from 544,170,799 to exactly 224,956,333 before cash equivalents."
+    }
+  ],
+  "rationale": "The ADAN-B revolver's fair value, cost, and principal were extracted 1,000 times too large. The row is a real position and must be rescaled, not excluded. The exact row predicate prevents changes to other quarters or positions.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": -319214466.0,
+      "residual_before": 313889420.0,
+      "residual_after": -5325046.0
+    }
+  }
+}

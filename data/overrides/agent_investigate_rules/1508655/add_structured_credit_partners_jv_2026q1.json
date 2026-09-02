@@ -1,0 +1,41 @@
+{
+  "cik": "1508655",
+  "rule_id": "add_structured_credit_partners_jv_2026q1",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "fair_value": 14665000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Structured Credit Partners JV, LLC",
+      "issuer_name": "Structured Credit Partners JV, LLC",
+      "bdc_investment_identifier": "Structured Credit Partners JV, LLC",
+      "source_row_id": "C_c927b4cf-cde0-40cd-af8c-e6094b4a42b9"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "staging has one current-period row for Structured Credit Partners JV, LLC: period=2026-03-31, report_date=2026-03-31, fair_value=14665000.0, dimensions_raw=investmentidentifieraxis=Structured Credit Partners JV, LLC, src_context_id=C_c927b4cf-cde0-40cd-af8c-e6094b4a42b9; the position was absent from the uncorrected unified holdings."
+    },
+    {
+      "source": "query",
+      "quote": "The uncorrected holdings fair-value sum is 3298776000.0. Adding the single recovered staging position increases it by 14665000.0 to 3313441000.0, exactly the validated conservation anchor."
+    }
+  ],
+  "rationale": "The extractor dropped a genuine, uniquely dimensioned current-quarter investment row that remains present in staging. Recovering the source row corrects the under-count without deleting or altering any real holding and is scoped to the only affected report date.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 14665000.0,
+      "residual_before": -14665000.0,
+      "residual_after": 0.0
+    }
+  }
+}

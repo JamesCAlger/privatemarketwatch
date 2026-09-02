@@ -1,0 +1,36 @@
+{
+  "cik": "1702510",
+  "rule_id": "exclude_affiliated_rollforward_20260331",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "bdc_dimensions_raw LIKE 'investmentidentifieraxis=Investments | Affiliated Issuer | %'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-03-31, the predicate selects 5 holdings with aggregate fair_value 32227000.0; it selects no rows in any other extracted quarter. Extracted fair value is 2636306000.0 against the validated anchor 2604079000.0, an excess of exactly 32227000.0."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule table 29 states Total investments--non-controlled/affiliated fair value 32,227 and Total investments fair value 2,604,079 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Rollforward table 32 repeats five affiliated ending fair values for March 31, 2026: 20,824; 3,819; 5,383; 1; and 2,200 (amounts in thousands), totaling 32,227."
+    }
+  ],
+  "rationale": "These five rows are ending-balance facts from the affiliated-investment rollforward, not additional positions. The actual affiliated positions are already present in the schedule of investments. Counting both representations duplicates the full affiliated subtotal. Excluding only the rollforward representation removes the exact over-count while retaining every real schedule position.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 5,
+      "fv": -32227000.0,
+      "residual_before": 32227000.0,
+      "residual_after": 0.0
+    }
+  }
+}

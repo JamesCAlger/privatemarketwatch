@@ -1,0 +1,47 @@
+{
+  "cik": "1851322",
+  "rule_id": "exclude_keystone_lookthrough",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31",
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "(report_date = '2025-12-31' AND bdc_dimensions_raw LIKE '%Debt Investments%' AND bdc_dimensions_raw NOT LIKE '%Interest Rate%') OR (report_date = '2026-03-31' AND bdc_dimensions_raw LIKE '%Debt Investments%' AND bdc_dimensions_raw NOT LIKE '%Interest Rate%' AND bdc_dimensions_raw NOT LIKE '%Sweep Midco, LLC%')",
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Consolidated schedule: Total Portfolio Investments, cost $6,472,428 thousand and fair value $6,342,711 thousand."
+    },
+    {
+      "source": "filing",
+      "quote": "North Haven Keystone, LLC look-through schedule: Total Portfolio Investments, cost $296,441 thousand and fair value $294,975 thousand."
+    },
+    {
+      "source": "query",
+      "quote": "For 2026-03-31 the selected 120 debt detail rows sum to fair value $294,975,000 and cost $296,430,000; removing their fair value changes $6,637,686,000 to the validated $6,342,711,000 anchor."
+    },
+    {
+      "source": "query",
+      "quote": "For 2025-12-31 the selected 97 rows sum to $249,685,000, exactly the filing's comparative subsidiary portfolio total and exactly the quarter's $249,685,000 overshoot."
+    }
+  ],
+  "rationale": "The extractor merged debt positions from the separately presented North Haven Keystone, LLC look-through schedule into consolidated holdings. The consolidated schedule already carries the fund's equity investment in North Haven Keystone, so counting the vehicle's underlying debt positions again overstates investments. These leaked facts are identifiable in the two affected quarters because their investment identifiers omit the consolidated schedule's Interest Rate segment. Sweep Midco is a real consolidated position that also lacks that segment at 2026-03-31 and is therefore explicitly retained.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 97,
+      "fv": 249685000.0,
+      "residual_before": 249685000.0,
+      "residual_after": 0.0
+    },
+    "2026-03-31": {
+      "rows": 120,
+      "fv": 294975000.0,
+      "residual_before": 294975000.0,
+      "residual_after": 0.0
+    }
+  }
+}

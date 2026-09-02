@@ -1,0 +1,29 @@
+{
+  "cik": "1646614",
+  "rule_id": "01_historical_axis_subtotals",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31"]
+  },
+  "predicate_sql": "bdc_dimensions_raw IN ('investmentidentifieraxis=Controlled Investments United States of America', 'investmentidentifieraxis=Non-controlled Investments United States of America', 'investmentidentifieraxis=Non-Controlled Investments United States of America', 'investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments United States of America 2nd Lien Term Loan', 'investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments of Senior Secured Bonds', 'investmentidentifieraxis=Non-Controlled/Non-Affiliated Investments of Senior Secured Debt')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Short axis-only rows are portfolio subtotals rather than positions: 2024-03 Controlled Investments United States of America FV 39,739,494 and Non-controlled Investments United States of America FV 13,559,245; together they equal the 53,298,739 residual remaining after exact-position deduplication."
+    },
+    {
+      "source": "query",
+      "quote": "The same mechanism totals 57,028,753 at 2024-06 (37,144,955 + 14,628,922 + 5,254,876), 54,925,517 at 2024-09 (33,271,543 + 16,493,151 + 5,160,823), and 6,991,897 at 2025-03."
+    }
+  ],
+  "rationale": "These members name geography/affiliation/instrument groupings and omit an investee and instrument-level identity. Detailed position rows for the grouped investments are already present, so the axis-only subtotal facts leak an additional portfolio subtotal into holdings.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2024-03-31": {"rows": 2, "fv": 53298739.0, "residual_before": 73268197.0, "residual_after": 19969458.0},
+    "2024-06-30": {"rows": 3, "fv": 57028753.0, "residual_before": 130356702.0, "residual_after": 73327949.0},
+    "2024-09-30": {"rows": 3, "fv": 54925517.0, "residual_before": 106968987.0, "residual_after": 52043470.0},
+    "2024-12-31": {"rows": 1, "fv": 13865943.0, "residual_before": 69946096.0, "residual_after": 56080153.0},
+    "2025-03-31": {"rows": 1, "fv": 6991897.0, "residual_before": 20120060.0, "residual_after": 13128163.0}
+  }
+}

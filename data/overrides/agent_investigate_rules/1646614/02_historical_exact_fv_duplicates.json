@@ -1,0 +1,34 @@
+{
+  "cik": "1646614",
+  "rule_id": "02_historical_exact_fv_duplicates",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {
+    "quarters": ["2023-06-30", "2023-09-30", "2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31"]
+  },
+  "match_fields": ["report_date", "fair_value"],
+  "keep": "first",
+  "predicate_sql": "TRY_CAST(fair_value AS DOUBLE) <> 0",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Within each affected quarter, repeated nonzero fair values identify the same position under a detailed member and a shortened member: e.g. 2023-06 SP-CREH 19 Highline LLC FV 20,925,450 appears twice, and 2024-06 Universal Entertainment/Japan Senior Secured Bonds FV 21,802,799 appears twice."
+    },
+    {
+      "source": "query",
+      "quote": "Duplicate FV impact exactly equals the held-out FV overshoot in 2023-06 (40,890,051), 2023-09 (54,168,657), and 2023-12 (52,948,918); after subtotal removal it also closes the later affected quarters to rounding."
+    }
+  ],
+  "rationale": "Legacy extraction emitted the same investment once under its full investment identifier and again under a shortened axis representation. Exact quarter and nonzero fair value is an auditable duplicate key for this bounded historical scope; zero-value positions are excluded from deduplication because equal zero values are not evidence of duplication.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2023-06-30": {"rows": 6, "fv": 40890051.0, "residual_before": 40890051.0, "residual_after": 0.0},
+    "2023-09-30": {"rows": 7, "fv": 54168657.0, "residual_before": 54168657.0, "residual_after": 0.0},
+    "2023-12-31": {"rows": 7, "fv": 52948918.0, "residual_before": 52948918.0, "residual_after": 0.0},
+    "2024-03-31": {"rows": 3, "fv": 19969458.0, "residual_before": 19969458.0, "residual_after": 0.0},
+    "2024-06-30": {"rows": 7, "fv": 73327949.0, "residual_before": 73327949.0, "residual_after": 0.0},
+    "2024-09-30": {"rows": 6, "fv": 52043470.0, "residual_before": 52043470.0, "residual_after": 0.0},
+    "2024-12-31": {"rows": 8, "fv": 56082335.0, "residual_before": 56080153.0, "residual_after": -2182.0},
+    "2025-03-31": {"rows": 3, "fv": 13128163.0, "residual_before": 13128163.0, "residual_after": 0.0}
+  }
+}

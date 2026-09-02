@@ -1,0 +1,34 @@
+{
+  "cik": "1905824",
+  "target_quarter": "2026-03-31",
+  "grand_total": 203856000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 203856000.0,
+      "source": "filing accession 0001193125-26-224212, Schedule of Investments, table 13 row 65: Total Investments, fair value $203,856 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 203856000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 13 row 65: Total Investments | $ | 210,328 | $ | 203,856 | 119.73 | % (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 13 row 63: Total Non-Controlled, Non-Affiliated Investments | $ | 210,328 | $ | 203,856 | 119.73 | % (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 7 row 14: Total Assets | $ | 209,770 | $ | 212,761 (amounts in thousands; March 31, 2026 first)."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for report_date 2026-03-31 reports investments_at_fair_value 203856000.0 and total_assets 209770000.0."
+    }
+  ],
+  "rationale": "The filing's final Schedule of Investments row explicitly reports Total Investments at fair value of $203.856 million. It equals the immediately preceding Total Non-Controlled, Non-Affiliated Investments row, demonstrating that no separately presented affiliated or controlled schedule contributes an additional amount. The companyfacts tag therefore captured the complete grand total. The amount is 97.18% of total assets of $209.770 million, leaving a plausible $5.914 million non-investment remainder and satisfying balance-sheet closure.",
+  "confidence": 0.99
+}

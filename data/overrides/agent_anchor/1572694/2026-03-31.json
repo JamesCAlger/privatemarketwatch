@@ -1,0 +1,30 @@
+{
+  "cik": "1572694",
+  "target_quarter": "2026-03-31",
+  "grand_total": 3228940000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 3228940000.0,
+      "source": "Filing accession 0001193125-26-212431, Schedule of Investments, table 23 row 19: Total Investments - 235.7%, fair value $3,228,940 (thousands)"
+    }
+  ],
+  "companyfacts_fv": 3228940000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 23 row 19: Total Investments - 235.7% | $ | 3,403,111 | $ | 3,228,940"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 4 row 6: Total investments, at fair value (cost of $3,403,111) | $ | 3,228,940"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 4 row 4: Non-controlled/non-affiliated investments | $ | 3,159,468; row 5: Non-controlled affiliated investments | 69,472; these sum to 3,228,940 (all amounts in thousands)"
+    }
+  ],
+  "rationale": "The filing presents a single final Total Investments row at fair value of $3,228,940 thousand. The balance sheet independently reports the same amount, composed of $3,159,468 thousand non-controlled/non-affiliated investments plus $69,472 thousand non-controlled affiliated investments. Thus the companyfacts tag is complete and already includes the affiliated investment schedule. The separately reported $2,476 thousand affiliated money market fund is cash-equivalent collateral outside the balance-sheet line Total investments, at fair value, and is not part of this anchor. The total equals 96.59% of total assets of $3,342,857 thousand, leaving a plausible non-investment remainder.",
+  "confidence": 0.99
+}

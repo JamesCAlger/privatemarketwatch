@@ -1,0 +1,30 @@
+{
+  "cik": "1287750",
+  "target_quarter": "2026-03-31",
+  "grand_total": 29499300000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 29499300000.0,
+      "source": "Filing accession 0001628280-26-027688, schedule of investments table 74, row 29: Total Investments; fair value $29,499.3 million"
+    }
+  ],
+  "companyfacts_fv": 29499300000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of investments, table 74 row 29: Total Investments | amortized cost $29,647.5 million | fair value $29,499.3 million | 209.73% of net assets."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 7 rows 7-10 ($ in millions): non-controlled/non-affiliate $24,607; non-controlled affiliate $581; controlled affiliate $4,311; Total investments at fair value $29,499."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for report_date 2026-03-31: investments_at_fair_value=29499300000.0 and total_assets=30679000000.0."
+    }
+  ],
+  "rationale": "The final Total Investments row of the filing's schedule of investments reports exact fair value of $29,499.3 million. The balance sheet independently presents the same grand total rounded to $29,499 million and identifies its three included classes: non-controlled/non-affiliate, non-controlled affiliate, and controlled affiliate. Thus the companyfacts value captured the full grand total, not only a non-affiliated subtotal. The result equals companyfacts, is below total assets, and represents about 96.16% of total assets, leaving a plausible non-investment remainder of about $1.180 billion.",
+  "confidence": 0.99
+}

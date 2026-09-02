@@ -1,0 +1,34 @@
+{
+  "cik": "2006758",
+  "target_quarter": "2026-03-31",
+  "grand_total": 945613000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investment after Cash Equivalents",
+      "value": 945613000.0,
+      "source": "Filing accession 0001193125-26-214580, Schedule of Investments, table 28, row 36, Fair Value column (amounts in thousands)"
+    }
+  ],
+  "companyfacts_fv": 934425000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 28 row 33: Total Investments before Cash Equivalents | Cost $968,958 | Fair Value $934,425 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 28 rows 34-35: Goldman Sachs Financial Square Government Institutional Fund fair value $7,665 and State Street Institutional U.S. Government Money Market Fund Opportunity fair value $3,523 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 28 row 36: Total Investment after Cash Equivalents | Cost $980,146 | Fair Value $945,613 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 6 row 17: Total assets | $964,691 (amounts in thousands)."
+    }
+  ],
+  "rationale": "The filing presents a final schedule total after cash equivalents of $945.613 million. The $934.425 million companyfacts value is explicitly the subtotal before cash equivalents and excludes the two money-market investments totaling $11.188 million. The final total equals $934.425 million + $7.665 million + $3.523 million and is 98.02% of total assets, leaving a plausible $19.078 million non-investment remainder.",
+  "confidence": 0.99
+}

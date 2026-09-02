@@ -1,0 +1,32 @@
+{
+  "cik": "1925309",
+  "rule_id": "exclude_2023q1_erling_eur_comparative_leak",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2023-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2023-03-31' AND row_id = 'ROW-10f662ad3cf42671' AND bdc_dimensions_raw = 'investmentidentifieraxis=Debt Investments Chemicals Erling Lux Bidco SARL First-lien loan (EUR 7,726 par, due 9/2028) Initial Acquisition Date 9/6/2022 Reference Rate and Spread E + 6.75% Interest Rate 8.73 %'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected holdings contains exactly one selected row, ROW-10f662ad3cf42671, with fair_value=6864000 and cost=6864000; the 2023-03-31 FV and cost overshoots are each exactly 6864000."
+    },
+    {
+      "source": "query",
+      "quote": "Staging identifies the EUR 7,726 Erling position as period 2022-12-31 (fair_value=7326000, cost=6907000), while the actual 2023-03-31 Erling EUR position is EUR 7,239 (fair_value=7594000, cost=6899000). The leaked 2023 context for EUR 7,726 has fair_value=6864000, null cost, and no src_facts."
+    }
+  ],
+  "rationale": "The EUR 7,726 Erling row is a stale comparative representation that leaked into the 2023-03-31 holdings beside the valid current-period EUR 7,239 position. Its exact value equals the held-out conservation overshoot in both FV and cost after downstream filling. Excluding only this leaked row restores both independently stated totals and does not affect later quarters or the exact 2026-03-31 reconciliation.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2023-03-31": {
+      "rows": 1,
+      "fv": -6864000.0,
+      "residual_before": 6864000.0,
+      "residual_after": 0.0
+    }
+  }
+}

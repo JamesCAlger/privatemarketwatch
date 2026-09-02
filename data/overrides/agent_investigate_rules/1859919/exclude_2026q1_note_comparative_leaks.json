@@ -1,0 +1,40 @@
+{
+  "cik": "1859919",
+  "rule_id": "exclude_2026q1_note_comparative_leaks",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-03-31' AND src_context_id IN ('c-2146', 'c-2153', 'c-2155', 'c-970')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "The four selected holdings contexts c-2146, c-2153, c-2155, and c-970 contain 4 rows with fair value 179,839,000; applying the predicate changes the target-quarter raw holdings sum from 5,364,481,000 to 5,184,642,000 and changes zero rows in every other quarter."
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments, March 31, 2026 (175.7%)* | $ | 5,231,456 | $ | 5,156,571"
+    },
+    {
+      "source": "filing",
+      "quote": "CPCF BPCC LLC appears only in the comparative rollforward: CPCF BPCC LLC | 9.1% Member Interest | 8,889 | - | (8,714) | (479) | 304 | - | 236; the current schedule instead reports Cardinal Senior Loan Fund LLC | 17.2% Member Interest | 40,289 | 40,539."
+    },
+    {
+      "source": "filing",
+      "quote": "The current schedule reports Rocade as explicit positions (including Preferred LP Units at fair value 141,242 and Second Lien Senior Secured Term Loan at 14,045); the leaked generic Rocade and Funded note contexts are not additional schedule positions."
+    }
+  ],
+  "rationale": "The extractor admitted four non-position facts from financing/collateral note and comparative rollforward contexts into the current-quarter holdings set. They are representations outside the March 31, 2026 schedule, not real additional investments. Excluding precisely those source contexts removes the evidenced over-count while preserving all current schedule rows. The remaining residual is 0.333% of the validated anchor and therefore filer rounding under the stated tolerance.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 4,
+      "fv": 179839000.0,
+      "residual_before": 197003000.0,
+      "residual_after": 17164000.0
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "cik": "1603480",
+  "rule_id": "dedup_ssi_term_loan_rounding_20260331",
+  "rule_type": "dedup",
+  "action": "dedup",
+  "scope": {"quarters": ["2026-03-31"]},
+  "match_fields": ["report_date", "asset_category"],
+  "keep": "first",
+  "predicate_sql": "report_date = '2026-03-31' AND row_id IN ('ROW-c06084893a5d3124', 'ROW-62e2b0be782f3416')",
+  "evidence": [
+    {"source": "query", "quote": "SSI Parent, LLC Term Loan appears in corrected holdings as ROW-c06084893a5d3124 at 6971683.0 and ROW-62e2b0be782f3416 at 6971684.0; both are LOAN rows and the source-order first row is the filing value."},
+    {"source": "filing", "quote": "Table 4 row 4 prints SSI Parent Term Loan fair value 6971683; the one-dollar difference in the parallel fact is rounding, not a second position."}
+  ],
+  "rationale": "This parallel-representation duplicate evades exact-value deduplication because its facts differ by one dollar. The predicate isolates only the two proven row IDs; the allowed key report_date plus asset_category then collapses the pair, and keep first retains the filing schedule value.",
+  "confidence": 0.99,
+  "measured_impact": {"2026-03-31": {"rows": 1, "fv": -6971684.0, "residual_before": 6971683.0, "residual_after": -1.0}}
+}

@@ -5,102 +5,16 @@
   "report_date": "2026-03-31",
   "status": "PROPOSED",
   "anchors": [
-    {
-      "label": "DEBT",
-      "regex": "^Debt Securities\\b",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-221880",
-          "table_index": 24,
-          "row_index": 4,
-          "observation": "Bundle debt samples begin with Debt Securities and carry issuer, acquisition date, instrument, rate terms, net asset percentage, and maturity date."
-        }
-      ]
-    },
-    {
-      "label": "MAT",
-      "regex": "Maturity Date",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-221880",
-          "table_index": 24,
-          "row_index": 4,
-          "observation": "Dominant debt identifiers include a literal Maturity Date marker followed by an mm/dd/yy date."
-        }
-      ]
-    },
-    {
-      "label": "RATE",
-      "regex": "-\\s*\\d+(?:\\.\\d+)?\\s*%",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-221880",
-          "table_index": 24,
-          "row_index": 4,
-          "observation": "Debt and affiliated investment identifiers embed a stated coupon after the instrument name."
-        }
-      ]
-    },
-    {
-      "label": "REFRATE",
-      "regex": "\\b(?:SOFR|PRIME)\\b",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-221880",
-          "table_index": 24,
-          "row_index": 4,
-          "observation": "Dominant debt identifiers include reference-rate text such as SOFR plus a stated spread."
-        }
-      ]
-    },
-    {
-      "label": "EQUITY",
-      "regex": "^Equity Securities\\b",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-221880",
-          "table_index": 27,
-          "row_index": 1,
-          "observation": "Equity security identifiers begin with Equity Securities and do not embed debt rate terms."
-        }
-      ]
-    },
-    {
-      "label": "EQUITY_INVESTMENTS",
-      "regex": "^Equity Investments\\b",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-221880",
-          "table_index": 27,
-          "row_index": 1,
-          "observation": "Bundle none examples include the standalone section marker Equity Investments."
-        }
-      ]
-    },
-    {
-      "label": "CASH_EQUIV",
-      "regex": "^Cash Equivalents\\b",
-      "evidence": [
-        {
-          "accession_number": "0001193125-26-221880",
-          "table_index": 24,
-          "row_index": 1,
-          "observation": "Bundle none examples include Cash Equivalents rows with embedded money-market yield text."
-        }
-      ]
-    },
-    {
-      "label": "SHORT_TERM",
-      "regex": "^Short-term Investments\\b",
-      "evidence": [
-        {
-          "accession_number": "0001193125-25-276898",
-          "table_index": 24,
-          "row_index": 1,
-          "observation": "Bundle none examples include Short-term Investments rows with U.S. Treasury Bill yield text."
-        }
-      ]
-    }
+    {"label":"DEBT","regex":"^Debt Securities\\b","evidence":[{"accession_number":"0001193125-26-221880","table_index":24,"row_index":4,"observation":"Debt position identifiers begin with Debt Securities."}]},
+    {"label":"MAT","regex":"Maturity Date","evidence":[{"accession_number":"0001193125-26-221880","table_index":24,"row_index":4,"observation":"Dominant debt identifiers contain the literal Maturity Date marker."}]},
+    {"label":"RATE","regex":"-\\s*\\d+(?:\\.\\d+)?\\s*%","evidence":[{"accession_number":"0001193125-26-221880","table_index":24,"row_index":4,"observation":"Debt identifiers embed the headline interest rate after the instrument descriptor."}]},
+    {"label":"REFRATE","regex":"\\b(?:SOFR|PRIME)\\b","evidence":[{"accession_number":"0001193125-26-221880","table_index":24,"row_index":4,"observation":"Floating debt identifiers name SOFR or Prime."}]},
+    {"label":"EQUITY","regex":"^Equity Securities\\b","evidence":[{"accession_number":"0001193125-26-221880","table_index":27,"row_index":1,"observation":"Equity position identifiers begin with Equity Securities."}]},
+    {"label":"EQUITY_INVESTMENTS","regex":"^Equity Investments\\b","evidence":[{"accession_number":"0001193125-26-221880","table_index":27,"row_index":1,"observation":"Equity Investments is a section marker in identifier text."}]},
+    {"label":"CASH_EQUIV","regex":"^Cash Equivalents\\b","evidence":[{"accession_number":"0001193125-26-221880","table_index":24,"row_index":1,"observation":"Cash Equivalents is a section marker in identifier text."}]},
+    {"label":"SHORT_TERM","regex":"^Short-term Investments\\b","evidence":[{"accession_number":"0001193125-25-276898","table_index":24,"row_index":1,"observation":"Short-term Investments is a section marker in identifier text."}]},
+    {"label":"TOTAL_INVESTMENTS","regex":"^Total Investments(?:\\s*\\(|\\b)","evidence":[{"accession_number":"0001193125-26-221880","table_index":24,"row_index":1,"observation":"Bundle none_examples repeatedly contain the aggregate marker Total Investments followed by a parenthesized net-assets percentage."}]},
+    {"label":"DEBT_EQUITY","regex":"^Debt \\& Equity Securities$","evidence":[{"accession_number":"0000950170-23-020312","table_index":24,"row_index":1,"observation":"Bundle none_examples contain the standalone combined-section marker Debt & Equity Securities."}]}
   ],
-  "notes": "Anchors cover the dominant debt, equity, cash-equivalent, short-term investment, and equity-investment section markers present in bundle identifier strings."
+  "notes": "Adds narrow anchors for both marker forms represented in none_examples; Total Investments is an aggregate marker, not a position grammar input."
 }

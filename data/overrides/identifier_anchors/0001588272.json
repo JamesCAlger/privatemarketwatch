@@ -6,7 +6,11 @@
   "anchors": [
     {
       "label": "ASSETTYPE",
-      "regex": "(?:^|\\|\\s*)(?:Asset-Backed Securities|Common Stocks|LLC Interests|Preferred Stocks|Senior Secured Loans|Warrants)(?:\\s*\\||$)"
+      "regex": "(?:^|\\|\\s*)(?:Asset-Backed Securities|Common Stocks|Corporate Bonds|LLC Interests|Preferred Stocks|Senior Secured Loans|Warrants)(?:\\s*\\||$)"
+    },
+    {
+      "label": "TOTAL",
+      "regex": "^(?:Net Assets|Total Investments)(?:\\s*\\||$)"
     },
     {
       "label": "REFRATE",
@@ -22,7 +26,8 @@
     }
   ],
   "notes": [
-    "Bundle identifiers are pipe-delimited and carry asset type, industry, issuer/instrument/tranche, and sometimes reference rate, spread, coupon text, stated percent rate, PIK text, and maturity date.",
-    "Warrants appears in bundle none_examples as an asset-type token; source evidence CLI confirmation could not run in this sandbox because pandas is unavailable."
+    "Bundle identifiers contain asset type, industry, issuer/instrument/tranche, and sometimes reference rate, spread, coupon/rate text, PIK text, and maturity date.",
+    "Corporate Bonds, Net Assets, and Total Investments occur in bundle none_examples and are added conservatively so those identifiers receive signatures.",
+    "Evidence CLI source confirmation was attempted but could not run because pandas is unavailable in the sandbox."
   ]
 }

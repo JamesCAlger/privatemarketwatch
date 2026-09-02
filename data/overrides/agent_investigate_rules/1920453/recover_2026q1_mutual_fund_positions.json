@@ -1,0 +1,60 @@
+{
+  "cik": "1920453",
+  "rule_id": "recover_2026q1_mutual_fund_positions",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "issuer_name": "State Street Institutional Treasury Plus Money Market Fund - Investor Class",
+      "bdc_investment_identifier": "Investments -- non-controlled/non-affiliate, Money Market Mutual Funds, State Street Institutional Treasury Plus Money Market Fund - Investor Class",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments -- non-controlled/non-affiliate, Money Market Mutual Funds, State Street Institutional Treasury Plus Money Market Fund - Investor Class",
+      "source_row_id": "filing_table_33_row_11",
+      "fair_value": 16951323.0,
+      "cost": 16951323.0,
+      "shares_held": 16951323.0,
+      "asset_category": "Money Market Mutual Funds",
+      "instrument_description": "Investor Class Units"
+    },
+    {
+      "report_date": "2026-03-31",
+      "issuer_name": "Fidelity Floating Rate Central Fund",
+      "bdc_investment_identifier": "Investments -- non-controlled/affiliate, Fixed Income Mutual Funds, Fidelity Floating Rate Central Fund",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Investments -- non-controlled/affiliate, Fixed Income Mutual Funds, Fidelity Floating Rate Central Fund",
+      "source_row_id": "filing_table_33_row_18",
+      "fair_value": 179450525.0,
+      "cost": 184021376.0,
+      "shares_held": 1909454.0,
+      "asset_category": "Fixed Income Mutual Funds"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Corrected 2026-03-31 holdings fair value is 2,291,186,975 versus anchor 2,487,588,823, an undercount of 196,401,848; staging has the same 2,291,186,975 sum."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 33 row 11 reports State Street Institutional Treasury Plus Money Market Fund at cost and fair value 16,951,323; row 18 reports Fidelity Floating Rate Central Fund at cost 184,021,376 and fair value 179,450,525."
+    },
+    {
+      "source": "filing",
+      "quote": "Fair-value hierarchy table 68 reports Level 1 investments of 196,401,848 and total investments of 2,487,588,823. The two omitted fund positions sum exactly to the Level 1 amount and the conservation residual."
+    }
+  ],
+  "rationale": "The extractor omitted the two genuine mutual-fund position lines from both staging and unified holdings. Their combined fair value exactly equals the corrected residual and the filing's independently presented Level 1 investment total. Recovering the filing rows restores the grand investment portfolio without deleting any real position.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 2,
+      "fv": 196401848.0,
+      "residual_before": -196401848.0,
+      "residual_after": 0.0
+    }
+  }
+}

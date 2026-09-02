@@ -1,0 +1,44 @@
+{
+  "cik": "1812554",
+  "rule_id": "1812554_20260331_supplemental_fact_leak",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-03-31' AND (bdc_dimensions_raw LIKE '%rangeaxis=%' OR src_context_id IN ('c-1013','c-1018','c-1021','c-1024','c-1027','c-1030','c-1033','c-1036','c-1042','c-1045','c-1048'))",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-03-31, 14 holdings whose bdc_dimensions_raw has no pipe sum to fair value 1,364,937,000; two rangeaxis holdings sum to 402,700,000. The remaining 860 schedule-dimensioned rows sum to 35,455,566,000 versus the 35,500,450,000 anchor."
+    },
+    {
+      "source": "query",
+      "quote": "The broad no-pipe predicate also caught three genuine schedule loans: Motus Group 30,115,000 (c-504), Level 3 Financing 13,387,000 (c-500), and EOS Finco 1,382,000 (c-499). Their combined fair value is exactly 44,884,000, the amount by which the first correction fell below the anchor. Retaining these three and excluding only the eleven identified supplemental contexts plus two range-axis valuation facts yields 35,500,450,000."
+    },
+    {
+      "source": "query",
+      "quote": "Fifth Season Investments LLC appears twice at fair value 345,840,000: ROW-36491d0a72fa92b5 has only investmentidentifieraxis=Fifth Season Investments LLC, while ROW-8e704f166f702807 has the schedule dimensions investment identifier, Specialty finance equity investment, and Affiliated Issuer. Equivalent duplicate supplemental representations occur for Blue Owl Cross-Strategy Opportunities, OWL-HP Finance, LSI Financing 1 DAC, and Blue Owl Leasing."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 37 presents Fifth Season Investments LLC as a Specialty finance equity investment with fair value 345,840 (thousands), while table 50 separately repeats 345,840 in an investment roll-forward. The latter is a supplemental disclosure balance, not another position."
+    },
+    {
+      "source": "filing",
+      "quote": "Table 90 states March 31, 2026 Total Investments fair value of 35,500,450 (thousands)."
+    }
+  ],
+  "rationale": "The 2026 filing tags facts from supplemental investment roll-forwards and valuation-range disclosures with investment identifiers, causing them to enter unified holdings alongside the actual schedule positions. The eleven identified c-1013 through c-1048 supplemental contexts are duplicate disclosure balances, and the two rangeaxis facts are valuation inputs rather than positions. Three no-pipe contexts (c-499, c-500, and c-504) are genuine schedule loans and are deliberately retained. The narrowed exclusion therefore removes only the 13 leaked facts and preserves every real position.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 13,
+      "fv": 1722753000.0,
+      "residual_before": 1722753000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "cik": "1959604",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1780072000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Non-controlled/non-affiliated investments at fair value",
+      "value": 1780072000.0,
+      "source": "Filing accession 0001193125-26-221855, balance sheet table 6, rows 4-5: Investments at fair value; Non-controlled/non-affiliated investments, March 31, 2026, $1,780,072 thousand"
+    }
+  ],
+  "companyfacts_fv": 1780072000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 6, rows 4-5: Investments at fair value: Non-controlled/non-affiliated investments ... $1,780,072 (thousands) at March 31, 2026."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of investments table 19, row 19: Total non-controlled-non-affiliated Portfolio Company investments | $ | 1,783,987 | $ | 1,780,072 | 218.2 | %."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 6, row 14: Total assets | $ | 1,892,718 (thousands) at March 31, 2026."
+    }
+  ],
+  "rationale": "The filing presents one investment category on the balance sheet: non-controlled/non-affiliated investments at fair value of $1,780,072 thousand. The schedule's final total matches that amount exactly, and no affiliated or controlled investment schedule or balance-sheet category is presented. Thus the companyfacts tag captured the full investments-at-fair-value balance, not a partial subtotal. The amount is 94.05% of total assets and leaves a plausible $112.646 million of cash, restricted cash, receivables, deferred costs, and other assets.",
+  "confidence": 0.99
+}

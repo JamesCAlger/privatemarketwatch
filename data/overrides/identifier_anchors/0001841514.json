@@ -1,0 +1,26 @@
+{
+  "schema_version": "agentA-identifier-anchors.v1",
+  "cik": "0001841514",
+  "anchors": [
+    {
+      "label": "TOTAL",
+      "regex": "(?i)\\bTotal\\s+First\\s+Lien\\s+Senior\\s+Secured\\b"
+    },
+    {
+      "label": "EQUITY",
+      "regex": "(?i)^(?:Equity|Membership\\s+Interest)\\s+Investments\\b"
+    },
+    {
+      "label": "REFRATE",
+      "regex": "(?i)Spread\\s+Above\\s+Index\\s+(?:SOFR|L)\\b"
+    },
+    {
+      "label": "RATE",
+      "regex": "(?i)Interest\\s+Rate\\b"
+    },
+    {
+      "label": "MAT",
+      "regex": "(?i)Maturity\\s+Date\\b"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "cik": "1872371",
+  "target_quarter": "2026-03-31",
+  "grand_total": 7019058000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 7019058000.0,
+      "source": "Filing 0001872371-26-000009, fair-value hierarchy table 47, row 6 (amounts in thousands): Total investments at fair value = 7,019,058"
+    }
+  ],
+  "companyfacts_fv": 7019058000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Fair-value hierarchy table 47, row 6: Total investments at fair value | Level 1 17 | Level 2 1,198,090 | Level 3 5,820,951 | Total 7,019,058 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of investments table 22, row 10: Total Non-Control/Non-Affiliate Investments (159.4% of net assets) | Cost 7,114,591 | Fair Value 7,019,058 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 7, row 4: Investments - Non-control/Non-affiliate, at fair value | 7,019,058 (amounts in thousands); row 15: Total assets | 7,425,453 (amounts in thousands)."
+    }
+  ],
+  "rationale": "The filing presents a single explicit Total investments at fair value row of 7,019,058 thousand. It agrees exactly with the schedule subtotal and the balance-sheet investment line, and it equals the companyfacts value of 7,019,058,000. No separately presented affiliated or controlled investment schedule or balance-sheet line is present. The total is 94.5% of total assets, leaving a plausible 406,395,000 of non-investment assets.",
+  "confidence": 0.99
+}

@@ -1,0 +1,36 @@
+{
+  "cik": "1913724",
+  "rule_id": "exclude_twin_brook_rollforward_leak_20260331",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2026-03-31' AND issuer_name = 'Twin Brook Equity Holdings, LLC' AND COALESCE(instrument_description, '') = '' AND bdc_dimensions_raw = 'investmentidentifieraxis=Twin Brook Equity Holdings, LLC'",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For 2026-03-31 holdings contains two Twin Brook Equity Holdings rows at fair value 98589000: the real Equity interest row has cost 86482000 and dimension 'Twin Brook Equity Holdings, LLC | Equity interest'; the leaked no-instrument row has cost 38564000, dimension 'Twin Brook Equity Holdings, LLC', and row_id ROW-67f1adff470a63a7. No other quarter contains both representations."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule table 42 row 18: 'Twin Brook Equity Holdings, LLC ... Equity - 16.73 % membership interest | $ | 86,482 | $ | 98,589 | 3.87 | %'. The filing therefore supports the detailed row, not a second no-instrument position."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule table 42 reports 'Total non-controlled/affiliated investments | 86,501 | 98,605' and 'Total investments | $ | 4,479,699 | $ | 4,481,018'. The 16000 difference between the detailed Twin Brook fair value and the affiliated subtotal is rounding/another small schedule component, not another 98589000 position."
+    }
+  ],
+  "rationale": "A disclosure/roll-forward context with issuer-only dimensions leaked into unified holdings and duplicates the fair value of the actual schedule position. Excluding the issuer-only, no-instrument representation preserves the real Equity interest position and does not affect earlier quarters. COALESCE(instrument_description, '') = '' matches both frames: mid-build Layer C sees '' (staging fills empty string) while the published CSV frame round-trips '' to NULL; the original IS NULL form was inert in production (reauthored 2026-09-02).",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 98589000.0,
+      "residual_before": 98605000.0,
+      "residual_after": 16000.0
+    }
+  }
+}

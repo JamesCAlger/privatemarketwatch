@@ -1,0 +1,44 @@
+{
+  "cik": "1899017",
+  "rule_id": "1899017_recover_cash_equivalent_from_schedule",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2023-12-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2023-12-31",
+      "fair_value": 18995000.0,
+      "cost": 18995000.0,
+      "principal_amount": 18995000.0,
+      "interest_rate": 0.0525,
+      "issuer_name": "Goldman Sachs Financial Square Government Fund Institutional Share Class",
+      "bdc_investment_identifier": "Controlled Affiliate Investments Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class Cash Equivalents Interest Rate 5.25%",
+      "bdc_dimensions_raw": "investmentidentifieraxis=Controlled Affiliate Investments Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class Cash Equivalents Interest Rate 5.25%",
+      "source_row_id": "staging:C_d13f0650-d1a3-46d1-ab33-a4e6daf6a049"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule table 36 prints Goldman Sachs Financial Square Government Fund Institutional Share Class under Cash Equivalents at cost and market value $18,995 thousand; Investments and Cash Equivalents Total market value is $211,749 thousand."
+    },
+    {
+      "source": "query",
+      "quote": "For 2023-12-31 conservation counts 31 rows and sums fair value to 192,754,000, while staging context C_d13f0650-d1a3-46d1-ab33-a4e6daf6a049 contains the omitted cash-equivalent schedule row at fair value 18,995,000; 192,754,000 + 18,995,000 = 211,749,000."
+    }
+  ],
+  "rationale": "The fair-value anchor is the filing's printed grand total of investments and cash equivalents, but the conservation population excludes the separately classified CASH row. Recover the exact source-backed schedule position into the counted correction population. The rule is quarter-scoped because later quarters already reconcile to their validated anchors and applying this cash recovery there would regress them.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2023-12-31": {
+      "rows": 1,
+      "fv": 18995000.0,
+      "residual_before": -18995000.0,
+      "residual_after": 0.0
+    }
+  }
+}

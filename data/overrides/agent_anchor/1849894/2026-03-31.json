@@ -1,0 +1,30 @@
+{
+  "cik": "1849894",
+  "target_quarter": "2026-03-31",
+  "grand_total": 6824822000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Investments at fair value",
+      "value": 6824822000.0,
+      "source": "2026-03-31 Form 10-Q, accession 0001193125-26-222241, Investments at fair value tag"
+    }
+  ],
+  "companyfacts_fv": 6824822000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Form 10-Q accession 0001193125-26-222241 reports Investments at fair value of $6,824,822,000 at March 31, 2026."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2026-03-31: investments_at_fair_value = 6824822000.0; total_assets = 7012012000.0."
+    },
+    {
+      "source": "query",
+      "quote": "holdings for accession 0001193125-26-222241: 217 rows; SUM(fair_value) = 6824822000.0."
+    }
+  ],
+  "rationale": "The filing's investments-at-fair-value amount is a complete single-tag grand total, not a schedule subtotal. It exactly equals the sum of all 217 extracted holding fair values. It is 97.33% of total assets and leaves $187,190,000 of non-investment assets, a plausible balance-sheet remainder. The companyfacts tag therefore captured the full investment portfolio.",
+  "confidence": 0.99
+}

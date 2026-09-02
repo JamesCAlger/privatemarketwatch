@@ -1,0 +1,30 @@
+{
+  "cik": "1792509",
+  "target_quarter": "2026-03-31",
+  "grand_total": 385098000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments in Portfolio Companies",
+      "value": 385098000.0,
+      "source": "Filing accession 0001792509-26-000017, Consolidated Schedule of Investments, table 31 row 8, Fair Value column (dollars in thousands): $385,098"
+    }
+  ],
+  "companyfacts_fv": 385098000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "TRIPLEPOINT PRIVATE VENTURE CREDIT INC. AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS (dollars in thousands) (unaudited) As of March 31, 2026; Total Investments in Portfolio Companies - 148.25% (4)(5) | Cost $382,308 | Fair Value $385,098"
+    },
+    {
+      "source": "filing",
+      "quote": "Total assets | $399,853 (dollars in thousands)"
+    },
+    {
+      "source": "query",
+      "quote": "holdings for report_date 2026-03-31: 464 rows; summed extracted fair_value $385,048,000, within $50,000 (0.013%) of the filing total"
+    }
+  ],
+  "rationale": "The consolidated schedule has one explicit final portfolio-wide total row, so no separate affiliated or controlled schedule subtotals need to be added. Its Fair Value column reports $385.098 million, exactly matching the companyfacts value. The total is 96.31% of $399.853 million in total assets, leaving a plausible $14.755 million for cash and other assets. Therefore the companyfacts tag captured the filing's grand total rather than a partial schedule.",
+  "confidence": 0.99
+}

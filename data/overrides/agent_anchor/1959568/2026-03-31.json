@@ -1,0 +1,30 @@
+{
+  "cik": "1959568",
+  "target_quarter": "2026-03-31",
+  "grand_total": 591810000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total non-controlled/non-affiliated Portfolio Company investments",
+      "value": 591810000.0,
+      "source": "Filing accession 0001193125-26-221845, Schedule of Investments, table 18 row 46: Total non-controlled-non-affiliated Portfolio Company investments; fair value $591,810 thousand"
+    }
+  ],
+  "companyfacts_fv": 591810000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 18 row 46: Total non-controlled-non-affiliated Portfolio Company investments | $ | 593,625 | $ | 591,810 | 226.7 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 6 row 5: Non-controlled/non-affiliated investments (amortized cost of $593,625 and $546,560, at March 31, 2026 and December 31, 2025, respectively) | $ | 591,810 | $ | 545,727"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 6 row 12: Total assets | $ | 627,871 | $ | 571,632"
+    }
+  ],
+  "rationale": "The March 31, 2026 Schedule of Investments contains one final portfolio total, for non-controlled/non-affiliated investments, at fair value of $591.810 million. The filing presents no affiliated or controlled investment schedule requiring addition, and the balance sheet reports the same $591.810 million investment amount. Thus the companyfacts tag captured the complete portfolio rather than a subtotal. The total is 94.3% of total assets, leaving a plausible $36.061 million of non-investment assets.",
+  "confidence": 0.99
+}

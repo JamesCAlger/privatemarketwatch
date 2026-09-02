@@ -1,0 +1,34 @@
+{
+  "cik": "1989817",
+  "target_quarter": "2026-03-31",
+  "grand_total": 2205572000.0,
+  "method": "single_tag",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 2205572000.0,
+      "source": "Filing accession 0001628280-26-035294, balance sheet table 8 row 6: Total investments at fair value, March 31, 2026 = $2,205,572 thousand"
+    }
+  ],
+  "companyfacts_fv": 2205572000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Total investments at fair value (amortized cost of $2,182,115 at March 31, 2026) | 2,205,572"
+    },
+    {
+      "source": "filing",
+      "quote": "Non-controlled/non-affiliated investments | $2,197,284; Non-controlled/affiliated investments | $8,288; together they equal total investments at fair value of $2,205,572 (amounts in thousands)."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of investments: Total Investment Portfolio | cost $2,182,115 | fair value $2,205,572 | 167.86% of net assets."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2026-03-31 reports investments_at_fair_value = 2205572000.0 and total_assets = 2346143000.0."
+    }
+  ],
+  "rationale": "The filing presents one explicit grand total on the balance sheet and repeats the same fair value in the final Total Investment Portfolio row of the schedule. The two affiliation subtotals are $2,197,284 thousand non-controlled/non-affiliated plus $8,288 thousand non-controlled/affiliated, which equals $2,205,572 thousand. There is no separately presented controlled schedule to add. Thus the companyfacts tag captured the complete investment portfolio, not merely a subtotal. The total is 94.01% of total assets and leaves $140,571 thousand of non-investment assets, a plausible balance-sheet remainder.",
+  "confidence": 0.99
+}

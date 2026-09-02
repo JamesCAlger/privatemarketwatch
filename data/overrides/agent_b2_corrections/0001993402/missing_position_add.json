@@ -1,0 +1,38 @@
+{
+  "cik": "0001993402",
+  "mechanism": "extraction_gap",
+  "fix_class": "missing_position_add",
+  "template": {
+    "positions": [
+      {
+        "issuer_name": "BlackRock Liquidity T-Fund - Institutional Shares",
+        "fair_value": 49874000.0,
+        "report_date": "2026-03-31",
+        "source_row_id": "src:0001193125-26-221769:C_c98b2083-acaf-452a-ad90-02f76271fdb9",
+        "bdc_dimensions_raw": "investmentidentifieraxis=Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares"
+      }
+    ]
+  },
+  "source_review_ids": [
+    "RVQ_BLK_27d0b1a1d0ed"
+  ],
+  "evidence_citations": [
+    {
+      "table_index": 48,
+      "row_index": 23,
+      "quoted_text": "Total Short-Term Investments | 49,874 | 49,874 | 2.31"
+    },
+    {
+      "table_index": 61,
+      "row_index": 41,
+      "quoted_text": "Total Unfunded Commitments | $ | 1,087,013 | $ | ( 9,492 | )"
+    },
+    {
+      "table_index": 48,
+      "row_index": 24,
+      "quoted_text": "Total Investments at fair value | $ | 4,537,269 | $ | 4,493,774 | 208.26 | %"
+    }
+  ],
+  "confidence": 0.98,
+  "rationale": "For 2026-03-31, filing table 48 row 22 shows the sole Short-Term Investments leaf, BlackRock Liquidity T-Fund - Institutional Shares, at 49,874 (thousands) of fair value, while the extracted holdings CSV shows zero matching BlackRock or Liquidity T-Fund rows, so filing shows 49,874,000 and extracted shows 0 for this position. The raw source-facts row independently shows fair_value 49,874,000, report date 2026-03-31, context C_c98b2083-acaf-452a-ad90-02f76271fdb9, and dimensions investmentidentifieraxis=Short-Term Investments BlackRock Liquidity T-Fund - Institutional Shares. Filing table 48 row 23 confirms total short-term investments of 49,874 (thousands), and row 24 shows total investment fair value of 4,493,774 (thousands), while extracted holdings fair value sums to 4,434,408,000. The cited 9,492 (thousands) unfunded-commitment fair value explains a separate gross-versus-net relationship and is not added by this bounded missing-position correction."
+}

@@ -1,0 +1,36 @@
+{
+  "cik": "1287750",
+  "rule_id": "exclude_2025q3_issuer_subtotals",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-09-30"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-09-30' AND row_id IN ('ROW-15deede0dc238497', 'ROW-662e31ea3d1f3204')",
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "Apex Clean Energy TopCo, LLC issuer-level row ROW-15deede0dc238497 has FV 244800000, while its Class A and Class B detail rows have FV 225600000 and 19100000 (244700000 combined)."
+    },
+    {
+      "source": "query",
+      "quote": "Implus issuer-level row ROW-662e31ea3d1f3204 has FV 84100000, while its three loan detail rows have FV 28000000, 42100000, and 14000000 (84100000 combined)."
+    },
+    {
+      "source": "query",
+      "quote": "Corrected 2025-09-30 FV before exclusion is 29051900000 versus validated anchor 28692600000, an overshoot of 359300000; the two subtotal rows total 328900000."
+    }
+  ],
+  "rationale": "The two selected rows are issuer-level subtotals represented alongside the position-level rows that compose them. They are leaked summary representations, not independent investments. Excluding the subtotal representations preserves every real underlying position and reduces the held-out residual to rounding tolerance.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2025-09-30": {
+      "rows": 2,
+      "fv": 328900000.0,
+      "residual_before": 359300000.0,
+      "residual_after": 30400000.0
+    }
+  }
+}

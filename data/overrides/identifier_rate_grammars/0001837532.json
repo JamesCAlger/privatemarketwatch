@@ -2,92 +2,30 @@
   "schema_version": "agentA-rate-grammar.v1",
   "cik": "0001837532",
   "entity_name": "Apollo Debt Solutions BDC",
-  "version": 2,
+  "version": 3,
   "author": "agentA2 sandbox proposal from bundle 0001837532_2026-03-31.json",
-  "applies_to": {
-    "regime": "flattened",
-    "signature": "CATEGORY SECDEBT RATE REFRATE MAT"
-  },
-  "available_identifier_datapoints": [
-    "issuer",
-    "investment_type",
-    "reference_rate_type",
-    "basis_spread",
-    "pik_rate",
-    "interest_rate_floor",
-    "maturity_date"
-  ],
-  "unsupported_identifier_datapoints": [
-    "interest_rate_all_in",
-    "interest_rate_total",
-    "interest_rate_cash_leg"
-  ],
+  "applies_to": {"regime": "flattened", "signature": "CATEGORY SECDEBT RATE REFRATE MAT"},
+  "available_identifier_datapoints": ["issuer", "investment_type", "reference_rate_type", "basis_spread", "interest_rate", "pik_rate", "interest_rate_floor", "maturity_date"],
+  "unsupported_identifier_datapoints": ["interest_rate_all_in", "interest_rate_total", "interest_rate_cash_leg"],
   "pik_convention": "additive",
   "extractors": [
     {
       "field": "reference_rate_type",
-      "regex": "\\b(SONIA|SOFR|SF|LIBOR|BBSW|PRIME|EURIBOR|S|L|P|E)\\s*\\+\\s*[0-9]{2,4}\\b",
+      "regex": "\\b(SONIA|SOFR|SF|LIBOR|BBSW|PRIME|EURIBOR|SARON|STIBOR|S|L|P|E|K|C|T|N)\\s*\\+\\s*[0-9]{2,4}\\b",
       "group": 1,
       "type": "ref_code",
-      "map": {
-        "SONIA": "SONIA",
-        "SOFR": "SOFR",
-        "SF": "SOFR",
-        "S": "SOFR",
-        "LIBOR": "LIBOR",
-        "L": "LIBOR",
-        "PRIME": "PRIME",
-        "P": "PRIME",
-        "EURIBOR": "EURIBOR",
-        "E": "EURIBOR",
-        "BBSW": "BBSW"
-      }
+      "map": {"SONIA":"SONIA","SOFR":"SOFR","SF":"SOFR","S":"SOFR","LIBOR":"LIBOR","L":"LIBOR","PRIME":"PRIME","P":"PRIME","EURIBOR":"EURIBOR","E":"EURIBOR","BBSW":"BBSW","SARON":"SARON","STIBOR":"STIBOR","K":"K","C":"C","T":"T","N":"N"}
     },
-    {
-      "field": "basis_spread",
-      "regex": "\\b(?:SONIA|SOFR|SF|LIBOR|BBSW|PRIME|EURIBOR|S|L|P|E)\\s*\\+\\s*([0-9]{2,4})\\b(?!\\s*%)",
-      "group": 1,
-      "type": "bps"
-    },
-    {
-      "field": "pik_rate",
-      "regex": "(?:Cash\\s+plus\\s+|\\(?[Ii]ncludes\\s+)([0-9]+(?:\\.[0-9]+)?)\\s*%\\s*PIK",
-      "group": 1,
-      "type": "pct"
-    },
-    {
-      "field": "maturity_date",
-      "regex": "Maturity\\s*Date\\s*([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})\\b",
-      "group": 1,
-      "type": "date_mdy"
-    }
+    {"field": "basis_spread", "regex": "\\b(?:SONIA|SOFR|SF|LIBOR|BBSW|PRIME|EURIBOR|SARON|STIBOR|S|L|P|E|K|C|T|N)\\s*\\+\\s*([0-9]{2,4})\\b", "group": 1, "type": "bps"},
+    {"field": "interest_rate", "regex": "Interest\\s*Rate\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%?\\s*(?=(?:Cash|\\(|PIK|Maturity))", "group": 1, "type": "pct"},
+    {"field": "pik_rate", "regex": "(?:Cash(?:\\s+plus)?|\\(?[Ii]ncludes?|\\(?)\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%\\s*(?:Floor\\s+)?PIK", "group": 1, "type": "pct"},
+    {"field": "interest_rate_floor", "regex": "(?:,\\s*)?([0-9]+(?:\\.[0-9]+)?)\\s*%?\\s*Floor", "group": 1, "type": "pct"},
+    {"field": "maturity_date", "regex": "Maturity\\s*Date\\s*([0-9]{1,2}/[0-9]{1,2}/[0-9]{4})\\b", "group": 1, "type": "date_mdy"}
   ],
-  "derivations": {
-    "coupon_type": "floating_if_reference_rate_else_fixed"
-  },
+  "derivations": {"coupon_type": "floating_if_reference_rate_else_fixed"},
   "invariants": [
-    {
-      "name": "spread_vs_twin",
-      "kind": "pct_agree",
-      "parsed": "basis_spread",
-      "twin": "basis_spread"
-    },
-    {
-      "name": "maturity_vs_twin",
-      "kind": "date_agree",
-      "parsed": "maturity_date",
-      "twin": "maturity_date"
-    },
-    {
-      "name": "floating_has_reference",
-      "kind": "implication",
-      "if_present": "basis_spread",
-      "then_present": "reference_rate_type"
-    }
+    {"name": "maturity_vs_twin", "kind": "date_agree", "parsed": "maturity_date", "twin": "maturity_date"},
+    {"name": "floating_has_reference", "kind": "implication", "if_present": "basis_spread", "then_present": "reference_rate_type"}
   ],
-  "required_fields": [
-    "reference_rate_type",
-    "basis_spread",
-    "maturity_date"
-  ]
+  "required_fields": ["maturity_date"]
 }

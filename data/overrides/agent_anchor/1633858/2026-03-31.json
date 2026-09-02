@@ -1,0 +1,34 @@
+{
+  "cik": "1633858",
+  "target_quarter": "2026-03-31",
+  "grand_total": 402522665.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Portfolio Investments - market value",
+      "value": 402522665.0,
+      "source": "Filing accession 0001193125-26-219725, Schedule of Investments, table 20 row 38: Total Portfolio Investments, Market Value $402,522,665"
+    }
+  ],
+  "companyfacts_fv": 402522665.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 20 row 38: Total Portfolio Investments | Amortized Cost $421,382,402 | Market Value $402,522,665"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 6 rows 4-5: Investments, at fair value; Non-Control/Non-Affiliate investments (Cost of $421,382,402) | $402,522,665"
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 6 row 10: Total Assets | $416,710,958"
+    },
+    {
+      "source": "query",
+      "quote": "holdings for report_date 2026-03-31: 456 non-control/non-affiliate positions, sum(fair_value) = $402,522,665; no affiliated or controlled schedule population"
+    }
+  ],
+  "rationale": "The final aggregation row of the March 31, 2026 Schedule of Investments reports Total Portfolio Investments at market value of $402,522,665. The schedule separately shows $402,507,665 for Audax Credit BDC, Inc. and $15,000 for Audax Credit BDC Equity, LLC, which aggregate to the final row, so neither intermediate Total Investments row is the grand total by itself. The balance sheet identifies the entire investment amount as non-control/non-affiliate investments; therefore the companyfacts tag captured the full portfolio, not a subtotal. The grand total is 96.59% of total assets and leaves $14,188,293 for cash and other assets, consistent with the balance sheet.",
+  "confidence": 0.99
+}

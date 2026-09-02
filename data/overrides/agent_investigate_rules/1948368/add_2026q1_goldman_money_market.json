@@ -1,0 +1,41 @@
+{
+  "cik": "1948368",
+  "rule_id": "add_2026q1_goldman_money_market",
+  "rule_type": "row_add",
+  "action": "add",
+  "scope": {
+    "quarters": [
+      "2026-03-31"
+    ]
+  },
+  "positions": [
+    {
+      "report_date": "2026-03-31",
+      "fair_value": 14973000.0,
+      "bdc_dimensions_raw": "investmentidentifieraxis=Non-Controlled Affiliates Goldman Sachs Financial Square Government Fund - Institutional Shares",
+      "issuer_name": "Goldman Sachs Financial Square Government Fund - Institutional Shares",
+      "bdc_investment_identifier": "Non-Controlled Affiliates Goldman Sachs Financial Square Government Fund - Institutional Shares",
+      "source_row_id": "C_d7ddaa72-3ff8-4ed0-a782-425aec963a57"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "query",
+      "quote": "For report_date and period 2026-03-31, staging has 286 rows summing to fair value 941948000.0, while holdings has 280 rows summing to 926975000.0."
+    },
+    {
+      "source": "query",
+      "quote": "The staging-to-holdings src_context_id anti-join finds exactly one omitted row with non-null fair value: C_d7ddaa72-3ff8-4ed0-a782-425aec963a57, Goldman Sachs Financial Square Government Fund - Institutional Shares, fair_value 14973000.0, unit U_USD. The other five unmatched contexts have null fair value."
+    }
+  ],
+  "rationale": "The unified holdings filter omitted a real non-controlled affiliate money-market investment that exists in the current-period staging schedule. Its 14973000.0 fair value exactly explains the gap between extracted holdings and the adjudicated filer grand total. Recovering the source row is the matching under-count correction; quarter scope prevents regression of earlier quarters that use narrower validated anchors.",
+  "confidence": 0.99,
+  "measured_impact": {
+    "2026-03-31": {
+      "rows": 1,
+      "fv": 14973000.0,
+      "residual_before": -14973000.0,
+      "residual_after": 0.0
+    }
+  }
+}

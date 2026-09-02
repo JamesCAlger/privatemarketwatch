@@ -1,0 +1,30 @@
+{
+  "cik": "1901612",
+  "target_quarter": "2026-03-31",
+  "grand_total": 2483694000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 2483694000.0,
+      "source": "Filing accession 0001901612-26-000020, Schedule of Investments, table 30 row 26: Total investments; fair value 2,483,694 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 2483694000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 30 row 26: Total investments | $ | 2,489,435 | 204.9 | % | $ | 2,483,694 (amounts in thousands; final amount is fair value)."
+    },
+    {
+      "source": "filing",
+      "quote": "Consolidated Statement of Assets and Liabilities, table 4 row 20: Total Assets | $ | 2,566,283 (amounts in thousands) at March 31, 2026."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for report_date 2026-03-31 reports investments_at_fair_value 2483694000.0 and total_assets 2566283000.0."
+    }
+  ],
+  "rationale": "The filing presents a single final Total investments row whose fair-value column is 2,483,694 thousand, or 2,483,694,000. This exactly matches the companyfacts investments-at-fair-value tag, indicating that the tag captured the complete investment total rather than a partial affiliated or non-affiliated schedule. The result is 96.8% of total assets and leaves 82,589,000 of non-investment assets, a plausible balance-sheet remainder for this BDC. Money market funds are separately presented after Total investments and therefore are not included in the requested investments-at-fair-value total.",
+  "confidence": 0.99
+}

@@ -1,0 +1,38 @@
+{
+  "cik": "1784700",
+  "target_quarter": "2026-03-31",
+  "grand_total": 825525000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments, March 31, 2026",
+      "value": 825525000.0,
+      "source": "Filing accession 0001193125-26-219643, Schedule of Investments, table 28 row 7: Total Investments, March 31, 2026; fair value $825,525 (in thousands)"
+    }
+  ],
+  "companyfacts_fv": 825525000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Subtotal Non-Controlled/Non-Affiliated Investments | 674,718 | 653,893 | 174.30 %"
+    },
+    {
+      "source": "filing",
+      "quote": "Subtotal Controlled Investments | $ 184,233 | $ 171,632 | 45.75 %"
+    },
+    {
+      "source": "filing",
+      "quote": "Total Investments, March 31, 2026 | $ 858,951 | $ 825,525 | 220.04 %"
+    },
+    {
+      "source": "filing",
+      "quote": "Total investments, at fair value (amortized cost of $ 858,951 and $ 874,196, respectively) | 825,525 | 849,354"
+    },
+    {
+      "source": "filing",
+      "quote": "Total assets | $ | 861,863 | $ | 895,829"
+    }
+  ],
+  "rationale": "The final Schedule of Investments total row reports fair value of $825.525 million and incorporates both the $653.893 million non-controlled/non-affiliated subtotal and the $171.632 million controlled subtotal. It agrees with the balance-sheet investments-at-fair-value line and companyfacts. The total is 95.79% of $861.863 million total assets, leaving a plausible $36.338 million non-investment remainder. Companyfacts captured the complete investment total, not only one schedule.",
+  "confidence": 0.99
+}

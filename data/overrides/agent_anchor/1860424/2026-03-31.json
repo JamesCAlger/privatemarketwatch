@@ -1,0 +1,34 @@
+{
+  "cik": "1860424",
+  "target_quarter": "2026-03-31",
+  "grand_total": 352232987.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 352232987.0,
+      "source": "Filing Schedule of Investments, table 11, row 28: Total Investments | $ | 414,055,669 | $ | 352,232,987 | 211.7 | %"
+    }
+  ],
+  "companyfacts_fv": 352232987.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 11, row 27: Total Non-controlled/non-affiliated Investments | $ | 414,055,669 | 352,232,987 | 211.7 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 11, row 28: Total Investments | $ | 414,055,669 | $ | 352,232,987 | 211.7 | %"
+    },
+    {
+      "source": "filing",
+      "quote": "Fair value hierarchy, table 23, row 4: Total Investments | $ | - | $ | 79,494,423 | $ | 272,738,564 | $ | 352,232,987"
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for report_date 2026-03-31 reports total_assets 387,387,898 and investments_at_fair_value 352,232,987."
+    }
+  ],
+  "rationale": "The final Total Investments row in the filing reports fair value of 352,232,987, equal to the preceding Total Non-controlled/non-affiliated Investments row because the filing presents no separate affiliated or controlled investment schedule. The fair value hierarchy independently reconciles Level 2 fair value of 79,494,423 plus Level 3 fair value of 272,738,564 to the same grand total. The companyfacts tag therefore captured the complete investment schedule. The grand total is 90.93% of total assets of 387,387,898 and leaves a plausible non-investment remainder of 35,154,911.",
+  "confidence": 0.99
+}

@@ -1,0 +1,30 @@
+{
+  "cik": "1825265",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1310254473.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments",
+      "value": 1310254473.0,
+      "source": "Filing accession 0001193125-26-221923, Schedule of Investments, table 9, row 20, Fair Value column: Total Investments (160.7%) = $1,310,254,473"
+    }
+  ],
+  "companyfacts_fv": 1309653222.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 9 row 20: Total Investments (160.7%) | Amortized Cost $1,332,762,855 | Fair Value $1,310,254,473."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments table 9 rows 16 and 19: Total Debt & Equity Investments fair value $1,309,653,222; Total Cash Equivalents fair value $601,251."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for report_date 2026-03-31 reports investments_at_fair_value 1309653222.0 and total_assets 1380848000.0."
+    }
+  ],
+  "rationale": "The filing's final Schedule of Investments row is the grand total at fair value. It equals debt and equity investments of $1,309,653,222 plus cash equivalents of $601,251, yielding $1,310,254,473. The companyfacts tag captured only Total Debt & Equity Investments and omitted the separately presented cash-equivalents investment. The grand total is 94.89% of total assets and exceeds the companyfacts subtotal by exactly $601,251.",
+  "confidence": 0.99
+}

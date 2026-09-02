@@ -1,0 +1,26 @@
+{
+  "cik": "1702510",
+  "target_quarter": "2026-03-31",
+  "grand_total": 2604079000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total investments at fair value",
+      "value": 2604079000.0,
+      "source": "Filing accession 0001702510-26-000049, Schedule of Investments, table 29 row 8: Total investments; fair value 2,604,079 (USD thousands)"
+    }
+  ],
+  "companyfacts_fv": 2604079000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Table 29 row 7: Total investments-non-controlled/affiliated | $ | 32,648 | $ | 32,227 | 1.79%. Table 29 row 8: Total investments | $ | 2,654,429 | $ | 2,604,079 | 145.11%."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet table 10 row 6: Total investments, at fair value (amortized cost of $2,654,429) | 2,604,079. Table 10 row 15: Total assets | $ | 2,830,160. Amounts are in thousands."
+    }
+  ],
+  "rationale": "The Schedule of Investments contains an explicit final Total investments row after the separately displayed non-controlled/non-affiliated and non-controlled/affiliated sections. Its fair value is $2,604,079 thousand, equal to $2,604,079,000. The affiliated subtotal of $32,227 thousand is already included in that final row, so it must not be added again. The balance sheet independently reports the same total investments at fair value. Therefore the companyfacts tag captured the complete grand total, not merely the non-affiliated subtotal. The result is 92.01% of total assets and leaves $226.081 million of non-investment assets, a plausible balance-sheet remainder.",
+  "confidence": 0.99
+}

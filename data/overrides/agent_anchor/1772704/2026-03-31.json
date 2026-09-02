@@ -1,0 +1,38 @@
+{
+  "cik": "1772704",
+  "target_quarter": "2026-03-31",
+  "grand_total": 1591636000.0,
+  "method": "total_row",
+  "components": [
+    {
+      "label": "Total Investments and Investments in Affiliated Money Market Fund",
+      "value": 1591636000.0,
+      "source": "Filing accession 0001193125-26-219875, Schedule of Investments, table 13 row 31: Total Investments and Investments in Affiliated Money Market Fund - 167.7%; fair value $1,591,636 thousand"
+    }
+  ],
+  "companyfacts_fv": 1469243000.0,
+  "evidence": [
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 13 row 25: Total Investments - 154.8%; cost $1,557,384 thousand; fair value $1,469,243 thousand."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 13 row 29: Total Investments in Affiliated Money Market Fund; cost $122,393 thousand; fair value $122,393 thousand."
+    },
+    {
+      "source": "filing",
+      "quote": "Schedule of Investments, table 13 row 31: Total Investments and Investments in Affiliated Money Market Fund - 167.7%; cost $1,679,777 thousand; fair value $1,591,636 thousand."
+    },
+    {
+      "source": "filing",
+      "quote": "Balance sheet, table 4 rows 7-8: Total investments, at fair value $1,469,243 thousand; Investments in affiliated money market fund $122,393 thousand."
+    },
+    {
+      "source": "query",
+      "quote": "fund_financials for 2026-03-31 reports investments_at_fair_value $1,469,243,000 and total_assets $1,625,940,000."
+    }
+  ],
+  "rationale": "The filing's last combined Schedule of Investments total is $1,591,636,000. It consists of the $1,469,243,000 Total Investments row plus the separately presented $122,393,000 affiliated money market fund. The companyfacts tag captured only the former balance-sheet line and omitted the separately presented affiliated money market fund. The grand total is 97.89% of total assets and leaves a plausible $34,304,000 non-investment remainder.",
+  "confidence": 0.99
+}
