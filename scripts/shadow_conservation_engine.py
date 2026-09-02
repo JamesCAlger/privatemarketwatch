@@ -209,22 +209,10 @@ def _anchor_table_sql(anchor: Anchor) -> str:
     raise ValueError(f"unknown anchor kind: {anchor.kind}")
 
 
-def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
-    """Run one conservation rule into a per-(cik,report_date) result table
-    named result_<rule>."""
-    # Retain-and-flag (owner decision 2026-08-29): is_subsidiary=1 look-through rows
-    # (nonconsolidated-subsidiary / equity-method dimensions) stay in holdings, but the
-    # consolidated anchor already contains them once -- summing them again double-counts
-    # every subsidiary-reporting fund into a permanent overshoot. Probe the column so
-    # older frames/fixtures without it keep working.
-    src_cols = {r[0].lower() for r in
-                con.execute(f"DESCRIBE SELECT * FROM {_unified()} LIMIT 0").fetchall()}
-    sub_filter = ("AND COALESCE(TRY_CAST(is_subsidiary AS INT), 0) <> 1"
-                  if "is_subsidiary" in src_cols else "")
-    # Per-CIK conservation-scope carve-outs: some filers' printed Total Investments include
-    # asset_category values the global sum excludes (e.g. 1905824 FHLB discount notes = CASH).
-    # Generate CIK-specific SQL exceptions so the engine mirrors the filer's anchor scope.
-    # Consumed from pipeline.conservation_scope so trial and production frames cannot diverge.
+def build_cash_filter() -> str:
+    """Build the asset_category cash-exclusion SQL fragment, incorporating any
+    per-CIK conservation-scope carve-outs.  Reads SCOPE_DIR once -- callers
+    should compute this once per engine run and pass it to run_rule()."""
     from pipeline.conservation_scope import SCOPE_DIR, included_categories_for
     carve = []
     for p in (sorted(SCOPE_DIR.glob("*.json")) if SCOPE_DIR.exists() else []):
@@ -235,9 +223,32 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
                 "(LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')"
                 f" = '{p.stem.zfill(10)}' AND upper(COALESCE(CAST(asset_category AS VARCHAR), ''))"
                 f" IN ({in_list}))")
-    cash_filter = "upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'"
+    base = "upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'"
     if carve:
-        cash_filter = f"({cash_filter} OR {' OR '.join(carve)})"
+        return f"({base} OR {' OR '.join(carve)})"
+    return base
+
+
+def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule,
+             cash_filter: str | None = None) -> None:
+    """Run one conservation rule into a per-(cik,report_date) result table
+    named result_<rule>.
+
+    cash_filter: pre-built SQL fragment from build_cash_filter().  If None
+    (e.g. direct call from tests), it is computed here so existing call sites
+    keep working without change.
+    """
+    if cash_filter is None:
+        cash_filter = build_cash_filter()
+    # Retain-and-flag (owner decision 2026-08-29): is_subsidiary=1 look-through rows
+    # (nonconsolidated-subsidiary / equity-method dimensions) stay in holdings, but the
+    # consolidated anchor already contains them once -- summing them again double-counts
+    # every subsidiary-reporting fund into a permanent overshoot. Probe the column so
+    # older frames/fixtures without it keep working.
+    src_cols = {r[0].lower() for r in
+                con.execute(f"DESCRIBE SELECT * FROM {_unified()} LIMIT 0").fetchall()}
+    sub_filter = ("AND COALESCE(TRY_CAST(is_subsidiary AS INT), 0) <> 1"
+                  if "is_subsidiary" in src_cols else "")
     # Production quantity: sum of the value column over unified BDC rows.
     con.execute(
         f"""
@@ -310,8 +321,9 @@ def main(argv: list[str] | None = None) -> int:
                 "%d verified anchor overrides",
                 len(ciks), len(RULES), n_cf, n_ov)
 
+    cash_filter = build_cash_filter()
     for rule in RULES:
-        run_rule(con, rule)
+        run_rule(con, rule, cash_filter=cash_filter)
 
     SHADOW_DIR.mkdir(parents=True, exist_ok=True)
     out = SHADOW_DIR / "conservation_gate_results.csv"

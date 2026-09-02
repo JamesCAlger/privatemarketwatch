@@ -24,7 +24,13 @@ def _norm(cik) -> str:
 
 def included_categories_for(cik) -> frozenset[str]:
     """asset_category values this CIK's anchor scope INCLUDES despite the
-    global conservation exclusion. Empty set when no valid override exists."""
+    global conservation exclusion. Empty set when no valid override exists.
+
+    Fail-closed on scope_quarters: any override whose scope_quarters is not
+    exactly ["all"] is not yet implemented -- it is warned and ignored so that
+    a future quarter-scoped override does not silently apply to all quarters.
+    A missing or empty scope_quarters is similarly invalid and ignored.
+    """
     if not SCOPE_DIR.exists():
         return frozenset()
     target = _norm(cik)
@@ -39,6 +45,17 @@ def included_categories_for(cik) -> frozenset[str]:
         cats = obj.get("include_asset_categories")
         if not (isinstance(cats, list) and cats and obj.get("evidence")):
             logger.warning("conservation_scope override invalid, ignored: %s", p)
+            return frozenset()
+        sq = obj.get("scope_quarters")
+        if not (isinstance(sq, list) and sq):
+            logger.warning(
+                "conservation_scope override %s has missing/empty scope_quarters"
+                " -- ignored (fail-closed)", p.stem)
+            return frozenset()
+        if sq != ["all"]:
+            logger.warning(
+                "conservation_scope override %s has quarter scoping, not yet"
+                " implemented -- ignored (fail-closed)", p.stem)
             return frozenset()
         return frozenset(str(c).upper() for c in cats)
     return frozenset()
