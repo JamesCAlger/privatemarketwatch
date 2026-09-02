@@ -67,14 +67,31 @@ STOP_TOL_PCT = config.FV_CONSERVATION_BAND_PCT
 MAX_ITER = 5            # ... or after 5 iterations
 
 
+def _noop_gate_verdict(residual_pct, anchor_tier) -> dict | None:
+    """PASS_NOOP short-circuit for ZERO-RULE investigations: the baseline already
+    reconciles to a validated anchor, so there is no correction to overfit and
+    held_out_coverage's rationale is vacuous (2083477 q1p3: a first-time filer with
+    one anchored quarter and residual 0.0 could never pass). Mirrors the
+    residual_improved already-reconciled carve-out inside the gate. Over-band or
+    unvalidated-anchor no-ops return None and fall through to the full gate FAIL --
+    that is a worker that gave up, not a clean quarter."""
+    if anchor_tier not in ("HIGH", "MEDIUM"):
+        return None
+    if residual_pct is None or abs(residual_pct) > STOP_TOL_PCT:
+        return None
+    return {"verdict": "PASS_NOOP", "reasons": [
+        f"no rules authored; baseline already reconciles to validated anchor "
+        f"(tier {anchor_tier}, residual {residual_pct}%) -- nothing to promote"]}
+
+
 def loop_decision(residual_pct, iteration, *, gate_verdict=None, max_iter=MAX_ITER,
                   tol_pct=STOP_TOL_PCT) -> dict:
     """Stop successfully only when FV matches within tol_pct and the held-out gate passes.
     Stop unsuccessfully after max_iter iterations; otherwise iterate."""
     if residual_pct is not None and abs(residual_pct) <= tol_pct:
-        if gate_verdict == "PASS":
+        if gate_verdict in ("PASS", "PASS_NOOP"):
             return {"stop": True, "success": True,
-                    "reason": f"FV within {tol_pct}% and gate PASS (residual {residual_pct}%)"}
+                    "reason": f"FV within {tol_pct}% and gate {gate_verdict} (residual {residual_pct}%)"}
         if iteration >= max_iter:
             return {"stop": True, "success": False,
                     "reason": f"max iterations ({max_iter}) reached with gate {gate_verdict} "
@@ -366,13 +383,14 @@ def _measure(cik: str, target_quarter: str) -> dict:
     invalid_rules = [{"rule_id": a.get("rule_id"), "errors": a.get("errors")}
                      for a in audits if a.get("status") == "invalid"]
     escalations = load_escalations(out / "escalations")
+    noop = None if rules else _noop_gate_verdict(residual_pct, av.tier)
     return {"cik": _norm(cik), "target_quarter": target_quarter, "n_rules": len(rules),
             "value_sum": round(vs, 2), "anchor": anchor, "residual_pct": residual_pct,
             "anchor_tier": av.tier, "anchor_reason": anchor_reason,
             "noop_rules": noop_rules, "invalid_rules": invalid_rules,
             "n_escalations": len(escalations),
-            "gate_verdict": (g.verdict if g else "NO_RULES"),
-            "gate_reasons": (list(g.reasons) if g else []),
+            "gate_verdict": (g.verdict if g else (noop["verdict"] if noop else "NO_RULES")),
+            "gate_reasons": (list(g.reasons) if g else (noop["reasons"] if noop else [])),
             "rule_summary": [{"rule_id": r.get("rule_id"), "predicate_sql": r.get("predicate_sql"),
                               "measured_impact": r.get("measured_impact")} for r in rules],
             "corrected_holdings": str(corrected_path), "audits": audits}
@@ -471,6 +489,16 @@ def gate(cik: str, target_quarter: str) -> dict:
     av = classify_anchors(candidates.get(tq, {}))
     out_flag = flags.get(tq)
     anchor_reason = (out_flag.reason if (out_flag and out_flag.flagged) else av.reason)
+    if not load_rules(out / "rules"):
+        vs = value_sum_by_quarter(base).get(tq, 0.0)
+        residual_pct = (round((vs - av.consensus) / av.consensus * 100.0, 3)
+                        if av.consensus else None)
+        noop = _noop_gate_verdict(residual_pct, av.tier)
+        if noop:
+            return {"cik": _norm(cik), "target_quarter": target_quarter,
+                    "verdict": noop["verdict"], "anchor_tier": av.tier,
+                    "anchor_reason": anchor_reason,
+                    "checks": {"noop_reconciled": True}, "reasons": noop["reasons"]}
     g = gate_rules(base, corrected, cik=cik, target_quarter=target_quarter,
                    anchor_candidates=candidates)
     return {"cik": _norm(cik), "target_quarter": target_quarter, "verdict": g.verdict,
@@ -522,10 +550,30 @@ def promote(cik: str, target_quarter: str, *, overrides_dir=DEFAULT_OVERRIDES) -
     """Copy a CIK's gate-PASS rules to production overrides. REFUSES unless the held-out gate
     PASSes -- the un-gameable check is the promotion bar (mirrors run_remediation.promote_passes)."""
     g = gate(cik, target_quarter)
+    if g.get("verdict") == "PASS_NOOP":
+        # Clean zero-rule investigation: nothing to copy, and not a refusal.
+        return {"cik": _norm(cik), "status": "no_rules_to_promote", "gate": "PASS_NOOP",
+                "reasons": g.get("reasons")}
     if g.get("verdict") != "PASS":
         return {"cik": _norm(cik), "status": "refused", "gate": g.get("verdict"),
                 "reasons": g.get("reasons")}
     src = BASE / _norm(cik) / "rules"
+    # Audit guard (q1p3 Fiesta dedup): the conservation gate can PASS trivially for an
+    # FV-neutral rule on an already-reconciled quarter, so gate-PASS alone does not prove
+    # every rule in the set is sound. An invalid or nothing-matches rule reaching
+    # production is a guaranteed inert promotion -- refuse the SET and force reauthoring
+    # rather than silently copying a partial one (the gate evaluated the set as a whole).
+    rules = load_rules(src)
+    invalid = [{"rule_id": r.get("rule_id"), "errors": validate_rule(r)}
+               for r in rules if validate_rule(r)]
+    if invalid:
+        return {"cik": _norm(cik), "status": "refused_invalid_rules", "gate": "PASS",
+                "invalid_rules": invalid}
+    _, audits = apply_rules(_load_holdings(cik), rules)
+    noops = [a.get("rule_id") for a in audits if a.get("noop")]
+    if noops:
+        return {"cik": _norm(cik), "status": "refused_noop_rules", "gate": "PASS",
+                "noop_rules": noops}
     dst = Path(overrides_dir) / _norm(cik)
     dst.mkdir(parents=True, exist_ok=True)
     copied = []
@@ -560,7 +608,7 @@ def main(argv=None) -> int:
     elif args.mode == "gate":
         res = gate(args.cik, args.target_quarter)
         print(json.dumps(res, indent=2, default=str))
-        return 0 if res.get("verdict") == "PASS" else 1
+        return 0 if res.get("verdict") in ("PASS", "PASS_NOOP") else 1
     elif args.mode == "status":
         res = status(args.cik, args.target_quarter, args.iteration)
         print(json.dumps(res, indent=2, default=str))
