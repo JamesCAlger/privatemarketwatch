@@ -4,3 +4,4 @@ logs/
 dbt_packages/
 *.duckdb
 *.duckdb.wal
+.venv/

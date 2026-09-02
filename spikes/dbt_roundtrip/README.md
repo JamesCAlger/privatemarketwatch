@@ -10,7 +10,7 @@ Decision report: docs/production_stack/dbt_spike_report.md.
 
 Rerun order:
 1. python spikes/dbt_roundtrip/extract_staged.py
-2. cd spikes/dbt_roundtrip; $env:DBT_PROFILES_DIR = "."; dbt run; dbt test --store-failures
+2. cd spikes/dbt_roundtrip; $env:DBT_PROFILES_DIR = "."; .\.venv\Scripts\dbt.exe run; .\.venv\Scripts\dbt.exe test --store-failures
 3. python spikes/dbt_roundtrip/failures_to_packet.py
 4. python spikes/dbt_roundtrip/compare_and_verdict.py
 
