@@ -10883,6 +10883,31 @@ class TestWrapperNonPrivateMarketFiltering:
         assert len(result) == 2
         assert set(result["asset_category"]) == {"CASH"}
 
+    def test_cash_axis_dimension_forces_cash_category(self):
+        """A row tagged on CashAndCashEquivalentsAxis is CASH by construction.
+
+        The filer's own dimension tagging is stronger evidence than name
+        keywords: 'First American Government Obligation Fund' matches no cash
+        keyword, but its cash-axis dimension must stamp asset_category=CASH
+        (2026-09-02 extraction fix; keeps ingested MMF sweeps out of
+        conservation sums for non-carve-out CIKs).
+        """
+        df = self._make_bdc_df([
+            {"investment_identifier": "First American Government Obligation Fund",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 13933721,
+             "dimensions_raw": "cashandcashequivalentsaxis=First American Government Obligation Fund|investmenttypeaxis=ShortTermInvestmentsMember"},
+            {"investment_identifier": "Acme Corp - First Lien Term Loan",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 1000000,
+             "dimensions_raw": "investmentidentifieraxis=Acme Corp - First Lien Term Loan"},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+        by_id = {r["bdc_investment_identifier"]: r for _, r in result.iterrows()}
+        fa = next(v for k, v in by_id.items() if "First American" in str(k))
+        assert fa["asset_category"] == "CASH"
+        acme = next(v for k, v in by_id.items() if "Acme" in str(k))
+        assert acme["asset_category"] != "CASH"
+
     def test_global_mm_keyword_retained_as_cash(self):
         """Row with 'Money Market' for any CIK is retained, marked asset_category=CASH."""
         df = self._make_bdc_df([

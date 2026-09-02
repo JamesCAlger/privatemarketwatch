@@ -1,0 +1,11 @@
+{
+  "cik": "1899996",
+  "include_asset_categories": ["CASH"],
+  "scope_quarters": ["all"],
+  "evidence": [
+    {"source": "filing", "quote": "Accession 000119312526214221 context C_5f128ccb-856f-4779-9f2a-ee563c0a1308 (2026-03-31, CashAndCashEquivalentsAxis=StateStreetInstitutionalTreasuryPlusMoneyMarketFundMember): MoneyMarketFundsAtFairValue 26,887,322; MoneyMarketFundsAtCarryingValue 26,887,322"},
+    {"source": "query", "quote": "Extracted 2026-03-31 sum 1,635,656,618 + 26,887,322 = 1,662,543,940 vs anchor 1,635,656,618/0.98383 ~= 1,662,540,000; residual -1.617% -> ~0.000%"}
+  ],
+  "rationale": "Filer's printed Total Investments includes the State Street MMF sweep (cash-axis schedule row after the portfolio schedule, now ingested via the cash-axis extraction fix and classified CASH); the conservation-eligible set must mirror the anchor's scope.",
+  "confidence": 0.97
+}

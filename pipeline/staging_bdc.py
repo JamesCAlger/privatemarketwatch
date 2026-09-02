@@ -2334,19 +2334,27 @@ def _prepare_bdc(
     -- constituents (position matching excludes asset_class='CASH'), so the
     -- position-level indices are unchanged.
     no_mm AS (
-        SELECT * EXCLUDE (asset_category_final, _cash_filter_match, _cash_identity),
+        SELECT * EXCLUDE (asset_category_final, _cash_filter_match, _cash_identity, _cash_dim),
             CASE
-                WHEN _cash_filter_match AND _cash_identity THEN 'CASH'
+                WHEN (_cash_filter_match AND _cash_identity) OR _cash_dim THEN 'CASH'
                 ELSE asset_category_final
             END AS asset_category_final
         FROM (
             SELECT wr.*,
                 (({mm_check}) OR wnp._row_id IS NOT NULL) AS _cash_filter_match,
-                ({cash_identity_check}) AS _cash_identity
+                ({cash_identity_check}) AS _cash_identity,
+                -- Filer-tagged cash equivalents: a CashAndCashEquivalentsAxis
+                -- dimension is the filer's own declaration that the row is a
+                -- cash-equivalent schedule position (extraction fix
+                -- 2026-09-02). Stronger than name keywords; forces CASH so
+                -- these rows stay out of conservation sums except for
+                -- carve-out CIKs (pipeline.conservation_scope).
+                contains(lower(COALESCE(CAST(dimensions_raw AS VARCHAR), '')),
+                         'cashandcashequivalent') AS _cash_dim
             FROM with_reclass wr
             LEFT JOIN _wrapper_non_private wnp ON wr._row_id = wnp._row_id
         )
-        WHERE NOT (_cash_filter_match AND NOT _cash_identity)
+        WHERE NOT (_cash_filter_match AND NOT _cash_identity AND NOT _cash_dim)
     ),
 
     -- CTE 10: Infer coupon type
