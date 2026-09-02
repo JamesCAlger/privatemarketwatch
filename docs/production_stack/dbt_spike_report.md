@@ -2,14 +2,14 @@
 
 Date: 2026-09-02
 Spec: production_data_stack_plan.md, Phase 2 spike criterion.
-Code: spikes/dbt_roundtrip/ (branch ensemble-fp-experiment, commits 96ec694..4d6ae20)
+Code: spikes/dbt_roundtrip/ (branch ensemble-fp-experiment, commits 96ec694..4d6ae20, range includes two unrelated CI commits, 70b4c8b and af52d8a, from a concurrent session)
 
 ## Verdict: GO for phase 2
 
 | Kill criterion | Result | Evidence |
 |---|---|---|
 | 1. Stored failures carry provenance keys | PASS | 2,004 failure rows, all with populated src:{accession}:{contextRef} source_row_id (0 empty; artifacts/verdict.json + Task 3 dbt run output) |
-| 2. Packet strictly better localized than incumbent | PASS | packet: boundary_model=bdc_dim_ranked + downstream_fix_model=bdc_dim_deduped + per-group source_row_ids (1,000 groups); incumbent for same CIKs: documented_duplicate_dimension_path label on 12 rows, no boundary model, no fix model, no per-group ids |
+| 2. Packet strictly better localized than incumbent | PASS | packet: boundary_model=stg_bdc_holdings + downstream_fix_model=bdc_dim_deduped + per-group source_row_ids (1,000 groups); incumbent for same CIKs: documented_duplicate_dimension_path label on 12 rows, no boundary model, no fix model, no per-group ids |
 | 3. Port friction under ~1 day | PASS | NOTES.md log: ~3h15m wall time (20:35-23:50), 4 dbt-specific workarounds (see Ergonomics) |
 
 ## Replay facts
@@ -33,6 +33,7 @@ Code: spikes/dbt_roundtrip/ (branch ensemble-fp-experiment, commits 96ec694..4d6
 
 - Single defect class, 3 CIKs, BDC-only slice; N-PORT branch and the cross-source dedup CTEs were not ported.
 - source_row_id here lacks the incumbent's _{periodSuffix}; join on accession+context prefix when comparing to source_only_detail.csv.
+- The same three CIKs carry 5,068 blocking rows of blocking_source_position_like_parser_mismatch -- a separate, extraction-side defect class the spike does not address; the 12-row incumbent comparison covers only the duplicate-dimension class.
 - Framework choice (dbt vs SQLMesh) is NOT decided by this spike; if verdict is GO on criteria but ergonomics were poor, run the same replay on SQLMesh before committing (plan section 7). SQLMesh comparison remains open.
 - The semantic-diff backstop (python scripts/diff_outputs.py --semantic) was skipped by controller ruling: a Q1 2026 quarter pass ran concurrently and rebuilt bdc_holdings + unified outputs on the same date, making baseline deltas unattributable -- the check would be a false alarm, not evidence. Substitute evidence: (a) all spike write paths land under spikes/dbt_roundtrip/ (verified across five task reviews); (b) the production input bdc_holdings.parquet mtime was verified unchanged after the extractor ran.
 - compare_and_verdict.py reuses con.description after fetchall -- this is correct in current DuckDB but is fragile; if promoted, replace with an explicit schema capture before fetchall.
