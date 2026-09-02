@@ -401,13 +401,19 @@ def value_sum_by_quarter(df: pd.DataFrame, cik=None) -> dict[str, float]:
     """
     from pipeline import conservation_scope
     if cik is not None:
-        included = conservation_scope.included_categories_for(cik)
-        excluded = CONSERVATION_EXCLUDED_CATEGORIES - included
+        included, scoped_quarters = conservation_scope.scope_override_for(cik)
     else:
-        excluded = CONSERVATION_EXCLUDED_CATEGORIES
+        included, scoped_quarters = frozenset(), None
     sub = df[df["bdc_dimensions_raw"].notna()] if "bdc_dimensions_raw" in df.columns else df
     if "asset_category" in sub.columns:
-        sub = sub[~sub["asset_category"].astype(str).str.upper().isin(excluded)]
+        cat_u = sub["asset_category"].astype(str).str.upper()
+        excluded_mask = cat_u.isin(CONSERVATION_EXCLUDED_CATEGORIES)
+        if included:
+            rescue = cat_u.isin(included)
+            if scoped_quarters is not None:
+                rescue &= sub["report_date"].astype(str).isin(scoped_quarters)
+            excluded_mask &= ~rescue
+        sub = sub[~excluded_mask]
     if "is_subsidiary" in sub.columns:
         sub = sub[pd.to_numeric(sub["is_subsidiary"], errors="coerce").fillna(0) != 1]
     fv = pd.to_numeric(sub["fair_value"], errors="coerce").fillna(0)

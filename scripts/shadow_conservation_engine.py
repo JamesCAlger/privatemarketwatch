@@ -213,16 +213,20 @@ def build_cash_filter() -> str:
     """Build the asset_category cash-exclusion SQL fragment, incorporating any
     per-CIK conservation-scope carve-outs.  Reads SCOPE_DIR once -- callers
     should compute this once per engine run and pass it to run_rule()."""
-    from pipeline.conservation_scope import SCOPE_DIR, included_categories_for
+    from pipeline.conservation_scope import SCOPE_DIR, scope_override_for
     carve = []
     for p in (sorted(SCOPE_DIR.glob("*.json")) if SCOPE_DIR.exists() else []):
-        cats = included_categories_for(p.stem)
+        cats, quarters = scope_override_for(p.stem)
         if cats:
             in_list = ",".join("'" + c.replace("'", "''") + "'" for c in sorted(cats))
-            carve.append(
+            clause = (
                 "(LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')"
                 f" = '{p.stem.zfill(10)}' AND upper(COALESCE(CAST(asset_category AS VARCHAR), ''))"
-                f" IN ({in_list}))")
+                f" IN ({in_list})")
+            if quarters is not None:
+                q_list = ",".join("'" + q.replace("'", "''") + "'" for q in sorted(quarters))
+                clause += f" AND CAST(report_date AS VARCHAR) IN ({q_list})"
+            carve.append(clause + ")")
     base = "upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'"
     if carve:
         return f"({base} OR {' OR '.join(carve)})"

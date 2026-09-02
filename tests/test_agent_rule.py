@@ -540,6 +540,23 @@ def test_value_sum_respects_conservation_scope(monkeypatch):
         "asset_category": ["LOAN", "CASH"],
     })
     assert value_sum_by_quarter(df)["2026-03-31"] == 156_078_000.0   # default: CASH out
-    monkeypatch.setattr(conservation_scope, "included_categories_for",
-                        lambda cik: frozenset({"CASH"}))
+    monkeypatch.setattr(conservation_scope, "scope_override_for",
+                        lambda cik: (frozenset({"CASH"}), None))
     assert value_sum_by_quarter(df, cik="1905824")["2026-03-31"] == 194_845_000.0
+
+
+def test_value_sum_quarter_scoped_carveout_leaves_other_quarters(monkeypatch):
+    """A carve-out scoped to Q1-2026 must not pull CASH into the Q4-2025 sum
+    (the "all"-scope regression of the attested 2025-12-31, 2026-09-02)."""
+    from pipeline import conservation_scope
+    df = pd.DataFrame({
+        "cik": ["1950976"] * 4,
+        "report_date": ["2026-03-31", "2026-03-31", "2025-12-31", "2025-12-31"],
+        "fair_value": [1_588_604_000.0, 36_885_000.0, 1_482_846_000.0, 65_057_000.0],
+        "asset_category": ["LOAN", "CASH", "LOAN", "CASH"],
+    })
+    monkeypatch.setattr(conservation_scope, "scope_override_for",
+                        lambda cik: (frozenset({"CASH"}), frozenset({"2026-03-31"})))
+    vs = value_sum_by_quarter(df, cik="1950976")
+    assert vs["2026-03-31"] == 1_625_489_000.0   # CASH rescued in-scope
+    assert vs["2025-12-31"] == 1_482_846_000.0   # CASH still excluded out-of-scope

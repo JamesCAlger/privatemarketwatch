@@ -1,11 +1,21 @@
-{
-  "cik": "1905824",
-  "include_asset_categories": ["CASH"],
-  "scope_quarters": ["all"],
-  "evidence": [
-    {"source": "filing", "quote": "Table 13: Total U.S. Government Agencies | 38,771 | 38,767 | 22.77%; Total Short-Term Investments | 47,530 | 47,526 | 27.91%; Total Investments | 210,328 | 203,856 | 119.73%"},
-    {"source": "query", "quote": "13 CASH rows totaling 38,767,000; conservation remainder after recover_dropped_march_positions is exactly -38,767,000"}
-  ],
-  "rationale": "Filer's printed Total Investments includes FHLB discount notes that this pipeline classifies CASH; the conservation-eligible set must mirror the anchor's scope.",
-  "confidence": 0.99
+﻿{
+    "cik":  "1905824",
+    "include_asset_categories":  [
+                                     "CASH"
+                                 ],
+    "scope_quarters":  [
+                           "2026-03-31"
+                       ],
+    "evidence":  [
+                     {
+                         "source":  "filing",
+                         "quote":  "Table 13: Total U.S. Government Agencies | 38,771 | 38,767 | 22.77%; Total Short-Term Investments | 47,530 | 47,526 | 27.91%; Total Investments | 210,328 | 203,856 | 119.73%"
+                     },
+                     {
+                         "source":  "query",
+                         "quote":  "13 CASH rows totaling 38,767,000; conservation remainder after recover_dropped_march_positions is exactly -38,767,000"
+                     }
+                 ],
+    "rationale":  "Filer\u0027s printed Total Investments includes FHLB discount notes that this pipeline classifies CASH; the conservation-eligible set must mirror the anchor\u0027s scope.",
+    "confidence":  0.99
 }

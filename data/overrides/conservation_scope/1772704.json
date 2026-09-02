@@ -1,11 +1,21 @@
-{
-  "cik": "1772704",
-  "include_asset_categories": ["CASH"],
-  "scope_quarters": ["all"],
-  "evidence": [
-    {"source": "filing", "quote": "Accession 000119312526219875 context C_90391c74-6f39-4ae6-9f76-544fbe108e89 (2026-03-31, CashAndCashEquivalentsAxis=GoldmanSachsFinancialSquareGovernmentFundMember): MoneyMarketFundsAtFairValue 122,393,000; MoneyMarketFundsAtCarryingValue 122,393,000"},
-    {"source": "query", "quote": "Extracted 2026-03-31 sum 1,469,243,000 + 122,393,000 = 1,591,636,000 vs anchor 1,469,243,000/0.9231 ~= 1,591,641,000; residual -7.690% -> ~0.000%"}
-  ],
-  "rationale": "Filer's printed Total Investments includes the Goldman Sachs Financial Square Government Fund MMF position (cash-axis schedule row, now ingested via the cash-axis extraction fix and classified CASH); the conservation-eligible set must mirror the anchor's scope. The separate ForeignCurrencyMember context carries only us-gaap:Cash (a balance, not an investment fact) and is not ingested.",
-  "confidence": 0.97
+﻿{
+    "cik":  "1772704",
+    "include_asset_categories":  [
+                                     "CASH"
+                                 ],
+    "scope_quarters":  [
+                           "2026-03-31"
+                       ],
+    "evidence":  [
+                     {
+                         "source":  "filing",
+                         "quote":  "Accession 000119312526219875 context C_90391c74-6f39-4ae6-9f76-544fbe108e89 (2026-03-31, CashAndCashEquivalentsAxis=GoldmanSachsFinancialSquareGovernmentFundMember): MoneyMarketFundsAtFairValue 122,393,000; MoneyMarketFundsAtCarryingValue 122,393,000"
+                     },
+                     {
+                         "source":  "query",
+                         "quote":  "Extracted 2026-03-31 sum 1,469,243,000 + 122,393,000 = 1,591,636,000 vs anchor 1,469,243,000/0.9231 ~= 1,591,641,000; residual -7.690% -\u003e ~0.000%"
+                     }
+                 ],
+    "rationale":  "Filer\u0027s printed Total Investments includes the Goldman Sachs Financial Square Government Fund MMF position (cash-axis schedule row, now ingested via the cash-axis extraction fix and classified CASH); the conservation-eligible set must mirror the anchor\u0027s scope. The separate ForeignCurrencyMember context carries only us-gaap:Cash (a balance, not an investment fact) and is not ingested.",
+    "confidence":  0.97
 }

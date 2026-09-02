@@ -1,11 +1,21 @@
-{
-  "cik": "1916608",
-  "include_asset_categories": ["CASH"],
-  "scope_quarters": ["all"],
-  "evidence": [
-    {"source": "filing", "quote": "Accession 000119312526221949 context C_9455f6bc-22ce-48aa-a297-09f104975a9d (2026-03-31, CashAndCashEquivalentsAxis=FirstAmericanGovernmentObligationFundYieldClassXMember): InvestmentOwnedAtFairValue 5,325,046; InvestmentOwnedAtCost 5,325,046"},
-    {"source": "query", "quote": "Extracted 2026-03-31 sum 230,281,379 + 5,325,046 = 235,606,425 vs anchor 230,281,379/0.97688 ~= 235,730,000; residual -2.312% -> ~-0.05% (inside 0.5% band)"}
-  ],
-  "rationale": "Filer's printed Total Investments includes the First American Government Obligation Fund MMF position (cash-axis schedule row, now ingested via the cash-axis extraction fix and classified CASH); the conservation-eligible set must mirror the anchor's scope.",
-  "confidence": 0.96
+﻿{
+    "cik":  "1916608",
+    "include_asset_categories":  [
+                                     "CASH"
+                                 ],
+    "scope_quarters":  [
+                           "2026-03-31"
+                       ],
+    "evidence":  [
+                     {
+                         "source":  "filing",
+                         "quote":  "Accession 000119312526221949 context C_9455f6bc-22ce-48aa-a297-09f104975a9d (2026-03-31, CashAndCashEquivalentsAxis=FirstAmericanGovernmentObligationFundYieldClassXMember): InvestmentOwnedAtFairValue 5,325,046; InvestmentOwnedAtCost 5,325,046"
+                     },
+                     {
+                         "source":  "query",
+                         "quote":  "Extracted 2026-03-31 sum 230,281,379 + 5,325,046 = 235,606,425 vs anchor 230,281,379/0.97688 ~= 235,730,000; residual -2.312% -\u003e ~-0.05% (inside 0.5% band)"
+                     }
+                 ],
+    "rationale":  "Filer\u0027s printed Total Investments includes the First American Government Obligation Fund MMF position (cash-axis schedule row, now ingested via the cash-axis extraction fix and classified CASH); the conservation-eligible set must mirror the anchor\u0027s scope.",
+    "confidence":  0.96
 }

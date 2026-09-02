@@ -1,11 +1,21 @@
-{
-  "cik": "1950976",
-  "include_asset_categories": ["CASH"],
-  "scope_quarters": ["all"],
-  "evidence": [
-    {"source": "filing", "quote": "Accession 000119312526214004 context C_680a5380-d8f5-445b-bad3-203a63d51265 (2026-03-31, CashAndCashEquivalentsAxis=DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember): InvestmentOwnedAtFairValue 36,885,000"},
-    {"source": "query", "quote": "Extracted 2026-03-31 sum 1,588,604,000 (= printed Total Portfolio Investments) + 36,885,000 = 1,625,489,000 = filing Total Investments at Fair Value anchor; residual -2.269% -> 0.000%"}
-  ],
-  "rationale": "Filer's printed Total Investments includes the Dreyfus MMF short-term position (schedule row after Total Portfolio Investments, now ingested via the cash-axis extraction fix and classified CASH); the conservation-eligible set must mirror the anchor's scope.",
-  "confidence": 0.98
+﻿{
+    "cik":  "1950976",
+    "include_asset_categories":  [
+                                     "CASH"
+                                 ],
+    "scope_quarters":  [
+                           "2026-03-31"
+                       ],
+    "evidence":  [
+                     {
+                         "source":  "filing",
+                         "quote":  "Accession 000119312526214004 context C_680a5380-d8f5-445b-bad3-203a63d51265 (2026-03-31, CashAndCashEquivalentsAxis=DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember): InvestmentOwnedAtFairValue 36,885,000"
+                     },
+                     {
+                         "source":  "query",
+                         "quote":  "Extracted 2026-03-31 sum 1,588,604,000 (= printed Total Portfolio Investments) + 36,885,000 = 1,625,489,000 = filing Total Investments at Fair Value anchor; residual -2.269% -\u003e 0.000%"
+                     }
+                 ],
+    "rationale":  "Filer\u0027s printed Total Investments includes the Dreyfus MMF short-term position (schedule row after Total Portfolio Investments, now ingested via the cash-axis extraction fix and classified CASH); the conservation-eligible set must mirror the anchor\u0027s scope.",
+    "confidence":  0.98
 }
