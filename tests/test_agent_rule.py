@@ -5,6 +5,7 @@ import pytest
 
 from pipeline.agent_rule import (
     validate_rule, apply_rules, value_sum_by_quarter, build_snapshots, gate_rules,
+    dedupe_escalations,
 )
 
 _CLO = "bdc_dimensions_raw LIKE '%legalentityaxis=FooCloMember%'"
@@ -515,3 +516,17 @@ def test_value_sum_excludes_subsidiary_rows_but_keeps_them():
     ])
     assert value_sum_by_quarter(df)["q"] == 1915.0
     assert len(df) == 3  # rows retained, only the sum is subsidiary-aware
+
+
+# -- dedupe_escalations ---------------------------------------------------------------
+
+def test_dedupe_escalations_collapses_same_quarter_category():
+    escs = [
+        {"target_quarter": "2026-03-31", "category": "vocab", "summary": "v1"},
+        {"target_quarter": "2026-03-31", "category": "vocab", "summary": "v2 restated"},
+        {"target_quarter": "2026-03-31", "category": "anchor", "summary": "a1"},
+        {"target_quarter": "2025-12-31", "category": "vocab", "summary": "other quarter"},
+    ]
+    out = dedupe_escalations(escs)
+    assert len(out) == 3
+    assert {e["summary"] for e in out} == {"v2 restated", "a1", "other quarter"}

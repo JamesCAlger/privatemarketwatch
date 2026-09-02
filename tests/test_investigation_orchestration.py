@@ -177,3 +177,24 @@ def test_loop_decision_iteration_one_still_iterates_despite_escalation():
 def test_loop_decision_pass_beats_escalation():
     d = loop_decision(0.0, 2, gate_verdict="PASS", n_escalations=1)
     assert d["stop"] is True and d["success"] is True
+
+
+# --- escalation dedup + idempotency prompt ------------------------------------------
+
+def test_prep_prompt_lists_existing_escalations(tmp_path, monkeypatch):
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["999"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    esc_dir = tmp_path / "999" / "escalations"
+    esc_dir.mkdir(parents=True)
+    esc_dir.joinpath("prior.json").write_text(json.dumps(
+        {"target_quarter": "2026-03-31", "category": "vocab", "kind": "proposed_mechanism",
+         "summary": "missing cash row", "evidence": [{"source": "query", "quote": "x"}],
+         "why_no_vocab_fits": "w", "suggested_applier": "s", "confidence": 0.9}),
+        encoding="utf-8")
+    ri.prep("999", "2026-03-31", iteration=2)
+    prompt = (tmp_path / "999" / "prompt.md").read_text(encoding="utf-8")
+    assert "missing cash row" in prompt
+    assert "do not re-author" in prompt.lower()

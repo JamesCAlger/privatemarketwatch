@@ -564,6 +564,16 @@ def load_escalations(esc_dir: Path) -> list[dict]:
     return out
 
 
+def dedupe_escalations(escs: list[dict]) -> list[dict]:
+    """Collapse iteration re-statements: keep the LAST escalation per
+    (target_quarter, category). q1p3: 18 of 41 files were same-finding
+    re-authors across loop iterations."""
+    by_key: dict[tuple, dict] = {}
+    for e in escs:
+        by_key[(str(e.get("target_quarter") or ""), str(e.get("category") or ""))] = e
+    return list(by_key.values())
+
+
 def load_rules(rules_dir: Path) -> list[dict]:
     rules_dir = Path(rules_dir)
     out = []

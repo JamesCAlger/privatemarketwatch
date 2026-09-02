@@ -26,8 +26,8 @@ import pandas as pd
 
 from pipeline import config
 from pipeline.agent_rule import (
-    apply_rules, gate_rules, load_escalations, load_rules, validate_escalation, validate_rule,
-    value_sum_by_quarter,
+    apply_rules, dedupe_escalations, gate_rules, load_escalations, load_rules,
+    validate_escalation, validate_rule, value_sum_by_quarter,
 )
 from pipeline.anchor_leaf import load_anchor_leaf, validate_anchor_leaf
 from pipeline.anchor_validation import classify_anchors, flag_anchor_outliers
@@ -251,7 +251,8 @@ remainder is rounding -- stop) AND the held-out gate passes.
 
 def _prompt(cik: str, target_quarter: str, anchors: dict, rules_out: Path,
            iteration: int = 1, state: dict | None = None, anchor_tier: str = "",
-           anchor_reason: str = "", bundle_path: str = "") -> str:
+           anchor_reason: str = "", bundle_path: str = "",
+           existing_escalations: list | None = None) -> str:
     a = anchors.get(target_quarter)
     py = Path(WORKER_PYTHON).as_posix()
     evid = (f"2. Read the FILING (truth) -- this cik's cached filing. START with `overview` to see the\n"
@@ -266,10 +267,18 @@ def _prompt(cik: str, target_quarter: str, anchors: dict, rules_out: Path,
                    f"investments (not the companyfacts subtotal) -- reconcile value_sum to THIS number "
                    f"and do NOT delete real rows to reach a smaller figure. ({anchor_reason})\n"
                    if anchor_tier else "")
+    esc_list = existing_escalations or []
+    esc_lines = (
+        "\n".join(f"  - [{e.get('category')}] {e.get('summary')}" for e in esc_list)
+        or "  (none)"
+    )
+    esc_block = (
+        f"\n## Existing escalations for this target (do not re-author these; write a NEW escalation"
+        f" file ONLY for a materially different finding):\n{esc_lines}\n"
+    )
     return f"""# Investigate and resolve a fair-value conservation discrepancy (cik {cik})
 
-{feedback}""" + f"""
-
+{feedback}{esc_block}
 You are a data-quality analyst. For BDC cik {cik}, the holdings the pipeline EXTRACTED do not
 reconcile to the filing's own stated total in quarter {target_quarter}
 (conservation anchor = {a}).{anchor_note} Find the ROOT CAUSE and author rule(s) that drive the residual to
@@ -391,13 +400,14 @@ def _measure(cik: str, target_quarter: str) -> dict:
     noop_rules = [a.get("rule_id") for a in audits if a.get("noop")]
     invalid_rules = [{"rule_id": a.get("rule_id"), "errors": a.get("errors")}
                      for a in audits if a.get("status") == "invalid"]
-    escalations = load_escalations(out / "escalations")
+    raw_escalations = load_escalations(out / "escalations")
+    escalations = dedupe_escalations(raw_escalations)
     noop = None if rules else _noop_gate_verdict(residual_pct, av.tier)
     return {"cik": _norm(cik), "target_quarter": target_quarter, "n_rules": len(rules),
             "value_sum": round(vs, 2), "anchor": anchor, "residual_pct": residual_pct,
             "anchor_tier": av.tier, "anchor_reason": anchor_reason,
             "noop_rules": noop_rules, "invalid_rules": invalid_rules,
-            "n_escalations": len(escalations),
+            "n_escalations": len(escalations), "n_escalation_files": len(raw_escalations),
             "gate_verdict": (g.verdict if g else (noop["verdict"] if noop else "NO_RULES")),
             "gate_reasons": (list(g.reasons) if g else (noop["reasons"] if noop else [])),
             "rule_summary": [{"rule_id": r.get("rule_id"), "predicate_sql": r.get("predicate_sql"),
@@ -451,9 +461,11 @@ def prep(cik: str, target_quarter: str, iteration: int = 1) -> dict:
     state = _measure(cik, target_quarter) if iteration > 1 else None
     bundle = _find_bundle(cik, target_quarter)          # give the worker the FILING, not just data
     bundle_path = bundle.as_posix() if bundle else ""
+    existing_escalations = dedupe_escalations(load_escalations(out / "escalations"))
     prompt_path = out / "prompt.md"
     prompt_path.write_text(_prompt(cik, target_quarter, anchors_display, rules_out, iteration, state,
-                                   anchor_tier=tier, anchor_reason=reason, bundle_path=bundle_path),
+                                   anchor_tier=tier, anchor_reason=reason, bundle_path=bundle_path,
+                                   existing_escalations=existing_escalations),
                            encoding="utf-8")
     manifest = {"cik": _norm(cik), "target_quarter": target_quarter, "iteration": iteration,
                 "anchor": resolved, "anchor_tier": tier, "anchor_reason": reason, "bundle": bundle_path,
