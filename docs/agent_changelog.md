@@ -10705,3 +10705,20 @@ pass state vs frozen baseline).
   1743415 unanchorable) for reconcile_rate. Ledger NOT dry: 14,949 actionable.
 - Session artifacts: scratch/2026-09-02_q1p3_residual_retries/ (session_log.md, chain log,
   battery logs). Worker scratch swept (0.0 GB -- post-run cleanup held).
+
+---
+
+## 2026-09-02 - CORRECTION to previous entry (2026-09-02 B2 escalation-driven fixes)
+
+Two descriptions in the d177253 changelog entry were inaccurate:
+
+- **T2 description error:** The entry stated T2 makes the NONE-tier result "a soft failure
+  rather than a hard block." This is FALSE. The NONE-tier anchor_validated=False result is
+  STILL a hard FAIL (verdict="FAIL"). The change consolidates the failure to a SINGLE
+  actionable check (anchor_validated) instead of emitting a cascade of absent-snapshot
+  failures for the same upstream cause. The verdict and hard-fail semantics are unchanged.
+
+- **T5 file description error:** The entry listed "scripts/agent_investigate/route_escalations.py
+  (new)" as a new file. No such file exists. The route_escalations functionality is a
+  route_escalations() function plus an escalations subcommand inside the existing
+  scripts/agent_investigate/run_investigation.py. No new file was created.
