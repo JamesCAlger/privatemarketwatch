@@ -6,6 +6,18 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-09-02 - Production stack plan: gates hardened after assessment
+
+- `docs/production_stack/production_data_stack_plan.md` updated (docs only, no code/data changes):
+  - Phase 0 gate: R2 backup verified via `rclone check` (checksums) + subset restore drill, replacing `rclone lsd` listing.
+  - Phase 1 gate: semantic diff may show individually-explained type-fidelity deltas (all-NULL->INT32, CIK padding) instead of strict zero; each documented, no bulk waivers.
+  - Phase 2: spike success criterion added — model-boundary test failure must round-trip into a B1-bundlable packet with better mechanism localization than the residual classifier; "keep Python SQL" is a valid spike outcome. Open-decisions table updated to match.
+  - Phase 2: write-guard replacement mandated — DuckDB/dbt native IO bypasses the `builtins.open` monkeypatch guard in `tests/conftest.py`; replacement (scratch-dir dbt profile + post-suite filesystem manifest check) ships with the first materialized model. Also added to Risks.
+  - Phase 2 gates: twin-build determinism now per-increment (window/ROW_NUMBER tiebreak drift); phase completion requires provenance re-verifier verified-FV >= 99.9% on migrated output.
+- Verification: none required (pure docs change).
+
+---
+
 ## 2026-08-25 - Ledger-error-classifier: packet-scope binding + intake hardening
 
 ### Files changed
