@@ -10722,3 +10722,22 @@ Two descriptions in the d177253 changelog entry were inaccurate:
   (new)" as a new file. No such file exists. The route_escalations functionality is a
   route_escalations() function plus an escalations subcommand inside the existing
   scripts/agent_investigate/run_investigation.py. No new file was created.
+
+---
+
+## 2026-09-02 - quarter-pass-operator skill wired for escalation semantics
+
+- `.claude/skills/quarter-pass-operator/SKILL.md`: added the three operator-side
+  behaviors shipped in the b2-escalation-fixes plan (docs only, no code change):
+  - new section "Investigation-loop escalation semantics": prep
+    `blocked_no_bundle` = skip-and-queue (not a dispatch error);
+    loop escalation-stop = terminal outcome with gate-refusal standing.
+  - "After the fleet" step 5 (steps renumbered 5-9 -> 6-10): run
+    `run_investigation escalations` before the post battery; routes to
+    anchor_lane / extraction_review / human_review via escalation_routing.csv.
+  - Retry protocol rule 5: both statuses excluded from retry rounds and
+    failure-rate counts.
+- Verification: CLI names/statuses/paths checked against
+  scripts/agent_investigate/run_investigation.py (BASE, prep, loop_decision,
+  route_escalations). Not pressure-tested; GREEN check is the next operator
+  session or a status-mode dry run on an escalated CIK (e.g. 1743415).

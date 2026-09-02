@@ -103,6 +103,28 @@ bundle_paths and wiped the shared bundle manifest). Before `dispatch_preflight`,
 spot-check that the worklist's `bundle_path`s exist -- a worklist row without
 its bundle file means the build step failed, not that the packet is resolved.
 
+## Investigation-loop escalation semantics (live since 2026-09-02)
+
+The B2-investigator/chain loop (`scripts/agent_investigate/run_investigation.py`)
+is escalation-aware. Two statuses change operator behavior:
+
+- **`prep` returns `status: blocked_no_bundle`** -- no cached filing bundle for
+  the target. This is SKIP-AND-QUEUE, not a dispatch error: record the packet
+  on the bundle-build queue and move to the next one. Do not retry, do not
+  count it toward the lane's failure rate. `--allow-missing-bundle` overrides
+  only with the human's explicit say-so (a bundle-less worker can only refuse).
+- **Loop stops with reason `worker escalated ... honest stop`** -- once a
+  worker files an escalation, the loop terminates at the next decision point
+  (iteration >= 2) instead of burning the remaining iterations. This is a
+  TERMINAL OUTCOME, same standing as a gate refusal (hard rule 2): never
+  re-dispatch iterations to "finish" the packet. The escalation is the
+  deliverable; it gets routed at close-out (After the fleet, escalations step).
+
+Why this exists: pre-fix, workers refused honestly early then fabricated
+gate-passing corrections under iteration pressure (1905824 duplicate row_add,
+2008748 subtotals-as-positions -- both operator-vetoed), and 1743415 burned
+all 5 iterations on an unanchorable target.
+
 ## Health signatures (diagnose from the filesystem, not hope)
 
 | Signature | Meaning | Action (autonomous) |
@@ -127,6 +149,8 @@ not the dispatcher's silence. A worker is only DONE when its artifact exists.
    with a worklist of only the failed rows.
 3. Max 2 retry rounds. A CIK failing twice mechanically = residual; report it.
 4. Verify-gate refusals are NOT retried (hard rule 2).
+5. `blocked_no_bundle` prep statuses and escalation-stops are outcomes, not
+   mechanical failures -- excluded from retry rounds and failure-rate counts.
 
 ## Stop-and-escalate triggers (PushNotification + halt the lane)
 
@@ -171,16 +195,26 @@ lane; other healthy lanes may continue.
    (wrong-diagnosis gate refusals), dispatch a B1 re-adjudication batch from
    it (NEW batch id) before any further B2 fleet on those findings. Never
    delete or edit B1 verdict files.
-5. Run the post battery (`--from rebuild_post`); read `pass_summary.json`.
-6. Check `agent_fix_application_audit.csv` for noop/drift flags on newly
+5. **Route accumulated escalations (before the post battery):**
+   `python -m scripts.agent_investigate.run_investigation escalations` --
+   scans `data/output/agent_investigate/<cik>/escalations/`, dedupes per
+   (target_quarter, category), writes
+   `data/output/agent_investigate/routing/escalation_routing.csv` with routes
+   anchor_lane / extraction_review / human_review. anchor_lane rows seed the
+   next anchor-fleet worklist; extraction_review rows are extraction-defect
+   candidates for a B2/staging plan; human_review rows go into the close-out
+   report verbatim. Routing reads escalation files, never consumes them --
+   do not delete them after routing.
+6. Run the post battery (`--from rebuild_post`); read `pass_summary.json`.
+7. Check `agent_fix_application_audit.csv` for noop/drift flags on newly
    promoted rules.
-7. Append a dated entry to `docs/agent_changelog.md` (counts, residuals,
+8. Append a dated entry to `docs/agent_changelog.md` (counts, residuals,
    anything fixed in dispatch tooling). Commit ONLY files this session
    created or changed -- concurrent sessions share this worktree.
-8. Sweep worker scratch: `.\scripts\cleanup_worker_scratch.ps1`.
-9. Report: promoted counts per lane, fleet-acceptance verdicts, residual
-   classes with mechanisms, acceptance delta, and the queue state left for
-   the next pass.
+9. Sweep worker scratch: `.\scripts\cleanup_worker_scratch.ps1`.
+10. Report: promoted counts per lane, fleet-acceptance verdicts, residual
+    classes with mechanisms, acceptance delta, and the queue state left for
+    the next pass.
 
 ## Quarter sign-off + re-attestation (owner decision 2026-08-30)
 
