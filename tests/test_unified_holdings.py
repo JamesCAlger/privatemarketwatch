@@ -10863,6 +10863,26 @@ class TestWrapperNonPrivateMarketFiltering:
         assert len(result) == 1
         assert result.iloc[0]["asset_category"] != "CASH"
 
+    def test_humanized_cash_axis_identifiers_classify_cash(self):
+        """The two real cash-equivalents-axis identifiers classify as CASH.
+
+        These identifiers are produced by _humanize_member_local_name from
+        CashAndCashEquivalentsAxis filer-extension members (2026-09-02
+        extraction fix). They must land asset_category=CASH so they stay out
+        of conservation sums for non-carve-out CIKs and out of the indices.
+        """
+        df = self._make_bdc_df([
+            {"investment_identifier":
+                 "Dreyfus Treasury Obligations Cash Management Money Market Fund",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 36885000},
+            {"investment_identifier":
+                 "State Street Institutional Treasury Plus Money Market Fund",
+             "cik": self._NON_WRAPPER_CIK, "fair_value": 13000000},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 2
+        assert set(result["asset_category"]) == {"CASH"}
+
     def test_global_mm_keyword_retained_as_cash(self):
         """Row with 'Money Market' for any CIK is retained, marked asset_category=CASH."""
         df = self._make_bdc_df([

@@ -2731,3 +2731,120 @@ class TestDedupeDeterminism:
         out_rev = _deduplicate_bdc_holdings(_dedup_frame(list(reversed(rows))))
         # lex-first donor (ctxX) should donate interest_rate=9.4 regardless of order
         assert out_fwd.iloc[0]["interest_rate"] == out_rev.iloc[0]["interest_rate"] == 9.4
+
+
+# ---------------------------------------------------------------------------
+# Cash-equivalents-axis extraction (2026-09-02 escalation deep-dive class)
+# ---------------------------------------------------------------------------
+
+_CASH_AXIS_XML = textwrap.dedent("""\
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xbrl
+        xmlns="http://www.xbrl.org/2003/instance"
+        xmlns:xbrli="http://www.xbrl.org/2003/instance"
+        xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+        xmlns:test="http://example.com/test"
+        xmlns:us-gaap="http://fasb.org/us-gaap/2025">
+        <xbrli:context id="c_dreyfus">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001950976</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:explicitMember dimension="us-gaap:CashAndCashEquivalentsAxis">ck0001950976:DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember</xbrldi:explicitMember>
+                    <xbrldi:explicitMember dimension="us-gaap:InvestmentTypeAxis">us-gaap:ShortTermInvestmentsMember</xbrldi:explicitMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2026-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="c_generic_member">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001950976</xbrli:identifier>
+                <xbrli:segment>
+                    <xbrldi:explicitMember dimension="us-gaap:CashAndCashEquivalentsAxis">us-gaap:MoneyMarketFundsMember</xbrldi:explicitMember>
+                </xbrli:segment>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2026-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <xbrli:context id="c_undimensioned">
+            <xbrli:entity>
+                <xbrli:identifier scheme="http://www.sec.gov/CIK">0001950976</xbrli:identifier>
+            </xbrli:entity>
+            <xbrli:period><xbrli:instant>2026-03-31</xbrli:instant></xbrli:period>
+        </xbrli:context>
+        <us-gaap:InvestmentOwnedAtFairValue contextRef="c_dreyfus" unitRef="usd" decimals="-3">36885000</us-gaap:InvestmentOwnedAtFairValue>
+        <us-gaap:InvestmentOwnedAtCost contextRef="c_dreyfus" unitRef="usd" decimals="-3">36885000</us-gaap:InvestmentOwnedAtCost>
+        <us-gaap:InvestmentOwnedAtFairValue contextRef="c_generic_member" unitRef="usd" decimals="-3">99999000</us-gaap:InvestmentOwnedAtFairValue>
+        <us-gaap:InvestmentOwnedAtFairValue contextRef="c_undimensioned" unitRef="usd" decimals="-3">1625489000</us-gaap:InvestmentOwnedAtFairValue>
+    </xbrl>
+""")
+
+
+class TestHumanizeMemberLocalName:
+    def test_mmf_member_decamelized(self):
+        from pipeline.bdc_filings import _humanize_member_local_name
+        assert _humanize_member_local_name(
+            "DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember"
+        ) == "Dreyfus Treasury Obligations Cash Management Money Market Fund"
+
+    def test_acronym_run_preserved(self):
+        from pipeline.bdc_filings import _humanize_member_local_name
+        assert _humanize_member_local_name(
+            "StateStreetInstitutionalUSGovernmentMoneyMarketFundMember"
+        ) == "State Street Institutional US Government Money Market Fund"
+
+    def test_digits_split(self):
+        from pipeline.bdc_filings import _humanize_member_local_name
+        assert _humanize_member_local_name("FirstAmerican2Member") == "First American 2"
+
+    def test_no_member_suffix(self):
+        from pipeline.bdc_filings import _humanize_member_local_name
+        assert _humanize_member_local_name("TreasuryBill") == "Treasury Bill"
+
+    def test_empty(self):
+        from pipeline.bdc_filings import _humanize_member_local_name
+        assert _humanize_member_local_name("") == ""
+
+
+class TestCashAxisContexts:
+    def _parse(self, xml=None):
+        from pipeline.bdc_filings import _parse_xbrl_contexts
+        tree = etree.ElementTree(etree.fromstring((xml or _CASH_AXIS_XML).encode("utf-8")))
+        return tree, _parse_xbrl_contexts(tree)
+
+    def test_filer_extension_cash_member_is_investment(self):
+        _, ctxs = self._parse()
+        ctx = ctxs["c_dreyfus"]
+        assert ctx["is_investment"] is True
+        assert ctx["investment_identifier"] == (
+            "Dreyfus Treasury Obligations Cash Management Money Market Fund"
+        )
+        assert ctx["investment_type"] == "ShortTermInvestmentsMember"
+
+    def test_generic_usgaap_cash_member_not_investment(self):
+        # us-gaap: members on the cash axis are category aggregates, never positions
+        _, ctxs = self._parse()
+        assert ctxs["c_generic_member"]["is_investment"] is False
+
+    def test_undimensioned_total_context_not_investment(self):
+        _, ctxs = self._parse()
+        assert ctxs["c_undimensioned"]["is_investment"] is False
+
+    def test_facts_extracted_for_cash_axis_row(self):
+        from pipeline.bdc_filings import _extract_investment_facts
+        tree, ctxs = self._parse()
+        facts = _extract_investment_facts(tree, ctxs)
+        by_ctx = {f["_context_id"]: f for f in facts}
+        assert "c_dreyfus" in by_ctx
+        assert by_ctx["c_dreyfus"]["fair_value"] == 36885000
+        assert "c_generic_member" not in by_ctx
+        assert "c_undimensioned" not in by_ctx
+
+    def test_identifier_axis_context_still_wins_over_cash_axis(self):
+        # A context carrying BOTH an investment-identifier dim and a cash-axis
+        # dim must keep the identifier-axis value.
+        xml = _CASH_AXIS_XML.replace(
+            '<xbrldi:explicitMember dimension="us-gaap:InvestmentTypeAxis">us-gaap:ShortTermInvestmentsMember</xbrldi:explicitMember>',
+            '<xbrldi:typedMember dimension="test:InvestmentIdentifierAxis"><test:InvestmentIdentifierDomain>Real Co | First Lien</test:InvestmentIdentifierDomain></xbrldi:typedMember>',
+        )
+        _, ctxs = self._parse(xml)
+        assert ctxs["c_dreyfus"]["investment_identifier"] == "Real Co | First Lien"
+        assert ctxs["c_dreyfus"]["is_investment"] is True

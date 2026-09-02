@@ -146,6 +146,10 @@ def _record_value_xform(
 
 # Dimension local-name substrings used to identify the investment axis
 _INVESTMENT_ID_DIMS = ("investmentidentifier", "investmentcompany")
+# Cash-equivalents axis: filers tag MMF/T-bill schedule rows here (printed
+# after "Total Portfolio Investments"). Only filer-extension members name a
+# specific instrument; us-gaap: members are category aggregates.
+_CASH_EQUIV_DIMS = ("cashandcashequivalent",)
 _COMPANY_ID_DIMS = ("portfoliocompan", "portfolioinvestment", "issuer")
 _INDUSTRY_DIMS = ("industr",)
 _TYPE_DIMS = ("investmenttype", "investmentinstrument")
@@ -504,6 +508,24 @@ def _local_name(tag: str) -> str:
     return tag
 
 
+_CAMEL_BOUNDARY_RE = re.compile(
+    r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|"
+    r"(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])"
+)
+
+
+def _humanize_member_local_name(name: str) -> str:
+    """Turn an XBRL member local-name into a readable identifier.
+
+    ``DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember`` ->
+    ``Dreyfus Treasury Obligations Cash Management Money Market Fund``.
+    """
+    text = str(name or "").strip()
+    if text.endswith("Member"):
+        text = text[: -len("Member")]
+    return _CAMEL_BOUNDARY_RE.sub(" ", text).strip()
+
+
 def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
     """Parse ``<xbrli:context>`` elements and identify investment contexts.
 
@@ -537,6 +559,7 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
         # -- Dimensions --
         investment_id = ""
         company_id = ""
+        cash_equiv_id = ""
         industry = ""
         investment_type = ""
         affiliation = ""
@@ -563,6 +586,8 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
                     is_investment = True
                 elif any(kw in dim_ln for kw in _COMPANY_ID_DIMS):
                     company_id = val
+                elif any(kw in dim_ln for kw in _CASH_EQUIV_DIMS):
+                    cash_equiv_id = val
 
             elif seg_ln == "explicitMember":
                 dim_attr = seg.get("dimension", "")
@@ -582,8 +607,27 @@ def _parse_xbrl_contexts(tree: etree._ElementTree) -> dict[str, dict]:
                 if any(kw in dim_ln for kw in _COMPANY_ID_DIMS) and not company_id:
                     company_id = member_ln
 
+                if (
+                    any(kw in dim_ln for kw in _CASH_EQUIV_DIMS)
+                    and member_val
+                    and not member_val.lower().startswith("us-gaap:")
+                ):
+                    cash_equiv_id = _humanize_member_local_name(member_ln)
+
         if company_id and _is_non_position_identifier(investment_id):
             investment_id = company_id
+
+        # Cash-equivalents-axis rescue: filer-extension members on the cash
+        # axis name a specific schedule position (Dreyfus/State Street MMF
+        # class, 2026-09-02 escalation deep-dive). Generic us-gaap members and
+        # fully undimensioned contexts (the printed totals) never reach here.
+        if (
+            not is_investment
+            and cash_equiv_id
+            and not _is_non_position_identifier(cash_equiv_id)
+        ):
+            investment_id = cash_equiv_id
+            is_investment = True
 
         contexts[ctx_id] = {
             "period": period_str,
