@@ -518,6 +518,18 @@ def apply_promoted_rules(
         # Stamping _cf_ord before the call lets us inner-merge on a stable ordinal
         # key after the call so dropped rows vanish cleanly, added rows have NaN _cf_ord.
         sub = sub.copy()
+        # JIT row_id (2026-09-02, ports the Layer B stage2 patch of 2026-08-21):
+        # row_id is assigned at the END of the build, so the mid-build frame lacks the
+        # column and a row_id predicate Binder-errors here while the B3 gate replay
+        # (published frame, which HAS row_id) passes -- the q1p3 inert-rule cause for
+        # 1287750/1916608/1925309. src-anchor keys are frame-independent
+        # (source|accession|context), so the sub-frame ids equal the published ids.
+        _jit_row_id = False
+        if "row_id" not in sub.columns and any(
+                re.search(r"\brow_id\b", str(r.get("predicate_sql") or "")) for r in rules):
+            from pipeline.unified_holdings import _assign_row_ids
+            sub = _assign_row_ids(sub)
+            _jit_row_id = True
         sub["_cf_ord"] = range(len(sub))
         before_tracked = sub[tracked_cols + ["_cf_ord"]].copy()
         corrected, rule_audits = apply_rules(sub, rules)
@@ -552,8 +564,11 @@ def apply_promoted_rules(
                 logger.warning("promoted rule %s (cik=%s) DRIFT=%s: applied rows=%d vs "
                                "authored rows=%s -- route to re-validation",
                                a.get("rule_id"), cik, drift, rows, authored_rows)
-        # Drop the transient ordinal key before concat; combined.columns won't have it.
-        corrected = corrected.drop(columns=["_cf_ord"], errors="ignore")
+        # Drop the transient keys before concat; combined.columns won't have them.
+        # (JIT row_id is a selector anchor only -- the end-of-build assignment owns
+        # the published column.)
+        drop_cols = ["_cf_ord"] + (["row_id", "row_id_basis"] if _jit_row_id else [])
+        corrected = corrected.drop(columns=drop_cols, errors="ignore")
         drop_mask = drop_mask | mask
         replaced_parts.append(corrected)
 

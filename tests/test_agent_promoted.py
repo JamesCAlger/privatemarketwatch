@@ -219,6 +219,33 @@ def test_apply_promoted_rules_noop_rule_flagged():
     assert audits[0]["rows_changed"] == 0 and audits[0]["drift"] == "noop"
 
 
+def test_apply_promoted_rules_row_id_predicate_jit_materialized():
+    """q1p3: 3 promoted rules (1287750/1916608/1925309) selected rows by row_id and
+    Binder-errored in production -- the mid-build frame lacks row_id (assigned at the
+    END of the build) while the authoring/gate frame (published) has it. The Layer C
+    applier must materialize row_id just-in-time when a predicate references it,
+    mirroring the Layer B stage2 JIT patch (2026-08-21)."""
+    from pipeline.unified_holdings import _assign_row_ids
+    df = pd.DataFrame([
+        {"cik": "0000000123", "source": "bdc", "report_date": "2025-06-30",
+         "issuer_name": "Bad Row", "entity_name": "Fund A", "fair_value": 100.0,
+         "bdc_dimensions_raw": "x=y", "accession_number": "0000000123-25-000001",
+         "src_context_id": "c-1"},
+        {"cik": "0000000123", "source": "bdc", "report_date": "2025-06-30",
+         "issuer_name": "Good Row", "entity_name": "Fund A", "fair_value": 200.0,
+         "bdc_dimensions_raw": "x=y", "accession_number": "0000000123-25-000001",
+         "src_context_id": "c-2"},
+    ])
+    published = _assign_row_ids(df.copy())
+    target = published.loc[published["issuer_name"] == "Bad Row", "row_id"].iloc[0]
+    rule = _valid_rule(predicate=f"row_id = '{target}'")
+    out, audits = ap.apply_promoted_rules(df, {"0000000123": [rule]})
+    assert audits[0]["status"] == "ok", audits[0]["message"]
+    assert audits[0]["rows_changed"] == 1
+    assert len(out) == 1 and out.iloc[0]["issuer_name"] == "Good Row"
+    assert "row_id" not in out.columns          # transient selector anchor only
+
+
 def test_apply_promoted_rules_row_drift():
     rows = [{"cik": "0000000123", "source": "bdc", "report_date": "2025-06-30",
              "issuer_name": f"Bad Row", "entity_name": "Fund A", "fair_value": 10.0,
