@@ -1,0 +1,6 @@
+artifacts/
+target/
+logs/
+dbt_packages/
+*.duckdb
+*.duckdb.wal
