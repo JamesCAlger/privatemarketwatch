@@ -6,6 +6,16 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-09-02 - dbt round-trip spike executed (phase 2 go/no-go)
+
+- Spike code: spikes/dbt_roundtrip/ (2 dbt models, boundary test with store_failures, packet converter + equality proof). Report: docs/production_stack/dbt_spike_report.md.
+- Verdict: GO for phase 2. Kill criteria: 1 PASS, 2 PASS, 3 PASS.
+- Replayed duplicate-dimension-path class on CIKs 0000017313, 0001959568, 0001959604: 1,000 groups, 1,004 dropped rows; packet/ground-truth match: True; twin-build hash equal (bf8de820f32778e3553bd9531edf773c).
+- No production outputs touched (all artifacts under spikes/dbt_roundtrip/artifacts/, git-ignored). New dependency installed: dbt-duckdb (spike-only venv; not added to requirements.txt).
+- Tests: 4 converter tests (pytest spikes/dbt_roundtrip/test_failures_to_packet.py). Full suite NOT run (spike touches no pipeline code).
+
+---
+
 ## 2026-09-02 - Production stack plan: gates hardened after assessment
 
 - `docs/production_stack/production_data_stack_plan.md` updated (docs only, no code/data changes):
