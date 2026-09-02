@@ -118,11 +118,23 @@ def test_ramp_up_fund_not_flagged():
 
 
 def test_declining_fund_not_flagged():
-    """1495584: 0.21x median but a smooth decline."""
-    series = {"2024-12-31": 1_060_474, "2025-06-30": 723_147,
-              "2025-09-30": 256_934, "2025-12-31": 225_436, "2026-03-31": 146_430}
+    """1495584: full 11-quarter series from fund_financials.csv (investments_at_fair_value).
+    Median = 1,060,474.  2025-12-31 ratio = 225,436 / 1,060,474 = 0.213x (outside [1/3, 3]).
+    QoQ vs 2025-09-30 = 225,436 / 256,934 = 0.877x (within [0.5, 2.0]) -> rescued, not flagged.
+    Under OLD median-only code 2025-12-31 would be flagged (0.213x < 1/3) -- discriminating.
+    Note: 2025-09-30 ratio=0.242x AND QoQ=256,934/723,147=0.355x (discontinuous) -> still flagged.
+    """
+    series = {
+        "2022-12-31": 40_121_924, "2023-12-31": 8_733_779,
+        "2024-03-31":  4_695_742, "2024-06-30": 5_676_686,
+        "2024-09-30":  1_431_160, "2024-12-31": 1_060_474,
+        "2025-03-31":    698_169, "2025-06-30":   723_147,
+        "2025-09-30":    256_934, "2025-12-31":   225_436,
+        "2026-03-31":    146_430,
+    }
     flags = flag_anchor_outliers(series)
     assert not flags["2025-12-31"].flagged
+    assert "continu" in flags["2025-12-31"].reason
 
 
 def test_sporadic_misextraction_still_flagged():
