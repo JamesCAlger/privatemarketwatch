@@ -393,7 +393,7 @@ def _measure(cik: str, target_quarter: str) -> dict:
     out_flag = flags.get(tq)
     anchor_reason = (out_flag.reason if (out_flag and out_flag.flagged) else av.reason)
     anchor = av.consensus if av.consensus is not None else anchors.get(target_quarter)
-    vs = value_sum_by_quarter(corrected).get(tq, 0.0)
+    vs = value_sum_by_quarter(corrected, cik=cik).get(tq, 0.0)
     residual_pct = round((vs - anchor) / anchor * 100.0, 3) if anchor else None
     g = (gate_rules(base, corrected, cik=cik, target_quarter=target_quarter,
                     anchor_candidates=candidates) if rules else None)
@@ -520,7 +520,7 @@ def gate(cik: str, target_quarter: str) -> dict:
     out_flag = flags.get(tq)
     anchor_reason = (out_flag.reason if (out_flag and out_flag.flagged) else av.reason)
     if not load_rules(out / "rules"):
-        vs = value_sum_by_quarter(base).get(tq, 0.0)
+        vs = value_sum_by_quarter(base, cik=cik).get(tq, 0.0)
         residual_pct = (round((vs - av.consensus) / av.consensus * 100.0, 3)
                         if av.consensus else None)
         noop = _noop_gate_verdict(residual_pct, av.tier)

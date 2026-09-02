@@ -390,23 +390,34 @@ def apply_rules(df: pd.DataFrame, rules: list[dict]) -> tuple[pd.DataFrame, list
 CONSERVATION_EXCLUDED_CATEGORIES = frozenset({"CASH"})
 
 
-def value_sum_by_quarter(df: pd.DataFrame) -> dict[str, float]:
+def value_sum_by_quarter(df: pd.DataFrame, cik=None) -> dict[str, float]:
     """Conservation value_sum per report_date: sum(fair_value) over gate-counted rows, EXCLUDING
     cash-equivalents (kept in holdings, not part of 'investments at fair value') and
     is_subsidiary=1 look-through rows (retain-and-flag, 2026-08-29: the consolidated
-    anchor already contains them once, so summing them again double-counts)."""
+    anchor already contains them once, so summing them again double-counts).
+
+    When ``cik`` is given, per-CIK scope overrides (pipeline.conservation_scope) are
+    applied so asset_category values the filer's anchor INCLUDES are not excluded.
+    """
+    from pipeline import conservation_scope
+    if cik is not None:
+        included = conservation_scope.included_categories_for(cik)
+        excluded = CONSERVATION_EXCLUDED_CATEGORIES - included
+    else:
+        excluded = CONSERVATION_EXCLUDED_CATEGORIES
     sub = df[df["bdc_dimensions_raw"].notna()] if "bdc_dimensions_raw" in df.columns else df
     if "asset_category" in sub.columns:
-        sub = sub[~sub["asset_category"].astype(str).str.upper().isin(CONSERVATION_EXCLUDED_CATEGORIES)]
+        sub = sub[~sub["asset_category"].astype(str).str.upper().isin(excluded)]
     if "is_subsidiary" in sub.columns:
         sub = sub[pd.to_numeric(sub["is_subsidiary"], errors="coerce").fillna(0) != 1]
     fv = pd.to_numeric(sub["fair_value"], errors="coerce").fillna(0)
     return {str(k): float(v) for k, v in fv.groupby(sub["report_date"].astype(str)).sum().items()}
 
 
-def build_snapshots(df: pd.DataFrame, anchors: dict[str, float], threshold_pct: float = 1.0) -> dict:
+def build_snapshots(df: pd.DataFrame, anchors: dict[str, float], threshold_pct: float = 1.0,
+                    cik=None) -> dict:
     """One conservation snapshot per quarter that has an anchor."""
-    vs = value_sum_by_quarter(df)
+    vs = value_sum_by_quarter(df, cik=cik)
     out = {}
     for q, anchor in anchors.items():
         v = vs.get(str(q), 0.0)
@@ -463,8 +474,8 @@ def gate_rules(baseline_df, corrected_df, *, cik, target_quarter, anchors=None, 
         anchors = {q: v.consensus for q, v in anchor_verdicts.items() if v.consensus is not None}
     anchors = anchors or {}
 
-    base = build_snapshots(baseline_df, anchors, threshold_pct)
-    trial = build_snapshots(corrected_df, anchors, threshold_pct)
+    base = build_snapshots(baseline_df, anchors, threshold_pct, cik=cik)
+    trial = build_snapshots(corrected_df, anchors, threshold_pct, cik=cik)
     tol = threshold_pct / 100.0
     res = gate_correction(cik=str(cik), target_quarter=str(target_quarter),
                           target_flags={"fv_conservation"}, baseline=base, trial=trial,

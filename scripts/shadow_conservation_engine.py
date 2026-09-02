@@ -221,6 +221,23 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
                 con.execute(f"DESCRIBE SELECT * FROM {_unified()} LIMIT 0").fetchall()}
     sub_filter = ("AND COALESCE(TRY_CAST(is_subsidiary AS INT), 0) <> 1"
                   if "is_subsidiary" in src_cols else "")
+    # Per-CIK conservation-scope carve-outs: some filers' printed Total Investments include
+    # asset_category values the global sum excludes (e.g. 1905824 FHLB discount notes = CASH).
+    # Generate CIK-specific SQL exceptions so the engine mirrors the filer's anchor scope.
+    # Consumed from pipeline.conservation_scope so trial and production frames cannot diverge.
+    from pipeline.conservation_scope import SCOPE_DIR, included_categories_for
+    carve = []
+    for p in (sorted(SCOPE_DIR.glob("*.json")) if SCOPE_DIR.exists() else []):
+        cats = included_categories_for(p.stem)
+        if cats:
+            in_list = ",".join("'" + c.replace("'", "''") + "'" for c in sorted(cats))
+            carve.append(
+                "(LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')"
+                f" = '{p.stem.zfill(10)}' AND upper(COALESCE(CAST(asset_category AS VARCHAR), ''))"
+                f" IN ({in_list}))")
+    cash_filter = "upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'"
+    if carve:
+        cash_filter = f"({cash_filter} OR {' OR '.join(carve)})"
     # Production quantity: sum of the value column over unified BDC rows.
     con.execute(
         f"""
@@ -233,7 +250,9 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
           AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)
           -- cash-equivalents (T-bills, money-market sweeps) stay in holdings but are NOT 'investments
           -- at fair value'; the companyfacts anchor excludes them, so the conservation sum must too.
-          AND upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'
+          -- Per-CIK overrides in pipeline.conservation_scope carve out exceptions for filers whose
+          -- anchor INCLUDES cash-like instruments in their printed Total Investments.
+          AND {cash_filter}
           {sub_filter}
         GROUP BY 1, 2
         """

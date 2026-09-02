@@ -399,6 +399,66 @@ def test_engine_conservation_sum_excludes_subsidiary_rows(monkeypatch):
     assert row == (1000.0, 1000.0, "reconciles"), row
 
 
+def test_engine_conservation_scope_carveout_is_cik_scoped(monkeypatch, tmp_path):
+    """Per-CIK conservation-scope override: 1905824's CASH rows are included in the
+    conservation sum; another CIK's CASH rows are still excluded. Dual-consumer test:
+    the same SCOPE_DIR drives both value_sum_by_quarter and run_rule so the two
+    implementations cannot diverge."""
+    import json
+    import scripts.shadow_conservation_engine as sce
+    from pipeline import conservation_scope
+
+    # Write a minimal valid override for 1905824 into tmp scope dir.
+    scope_dir = tmp_path / "conservation_scope"
+    scope_dir.mkdir()
+    scope_dir.joinpath("1905824.json").write_text(json.dumps({
+        "cik": "1905824", "include_asset_categories": ["CASH"],
+        "scope_quarters": ["all"],
+        "evidence": [{"source": "filing", "quote": "Total Investments includes FHLB notes"}],
+        "rationale": "FHLB discount notes classified CASH must be in anchor scope",
+        "confidence": 0.99,
+    }), encoding="utf-8")
+    monkeypatch.setattr(conservation_scope, "SCOPE_DIR", scope_dir)
+
+    con = duckdb.connect()
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    con.executemany("INSERT INTO wrapped VALUES (?)",
+                    [("0001905824",), ("0000000999",)])
+    # 1905824: LOAN 156_078 + CASH 38_767 -> with override sum = 194_845
+    # 0000000999: LOAN 100_000 + CASH 50_000 -> without override sum = 100_000 (CASH excluded)
+    con.execute("""
+        CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
+            ('0001905824', '2026-03-31', 156078000.0, 'x=y', 'LOAN'),
+            ('0001905824', '2026-03-31',  38767000.0, 'x=y', 'CASH'),
+            ('0000000999', '2026-03-31', 100000000.0, 'x=y', 'LOAN'),
+            ('0000000999', '2026-03-31',  50000000.0, 'x=y', 'CASH')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category)
+    """)
+    con.execute("""
+        CREATE TABLE bdc_tbl AS SELECT * FROM (VALUES
+            ('0001905824', '2026-03-31', '2026-03-31', 'Total Investments', 194845000.0),
+            ('0000000999', '2026-03-31', '2026-03-31', 'Total Investments', 100000000.0)
+        ) AS t(cik, report_date, period, investment_identifier, fair_value)
+    """)
+    monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
+    monkeypatch.setattr(sce, "_bdc", lambda: "bdc_tbl")
+
+    rule = sce.ConservationRule(
+        name="fv_scope_test", value_column="fair_value",
+        anchors=(sce.Anchor("schedule_total", "schedule_total", "fair_value"),))
+    sce.run_rule(con, rule)
+    rows = {r[0]: r for r in con.execute(
+        "SELECT cik, value_sum, anchor_value, status FROM result_fv_scope_test").fetchall()}
+
+    # 1905824: CASH included -> sum = 194_845_000, anchor = 194_845_000 -> reconciles
+    assert rows["0001905824"][1] == pytest.approx(194_845_000.0), rows
+    assert rows["0001905824"][3] == "reconciles", rows
+
+    # 0000000999: CASH excluded -> sum = 100_000_000, anchor = 100_000_000 -> reconciles
+    assert rows["0000000999"][1] == pytest.approx(100_000_000.0), rows
+    assert rows["0000000999"][3] == "reconciles", rows
+
+
 # --------------------------------------------------------------------------- integration
 
 @pytest.mark.integration

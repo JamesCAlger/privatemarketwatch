@@ -165,6 +165,7 @@ BDC_XBRL_ORACLE_EXCEPTIONS_FILE = OVERRIDES_DIR / "bdc_xbrl_oracle_exceptions.js
 AGENT_ANCHOR_OVERRIDES_DIR = OVERRIDES_DIR / "agent_anchor"
 AGENT_B2_CORRECTIONS_DIR = OVERRIDES_DIR / "agent_b2_corrections"
 AGENT_INVESTIGATE_RULES_DIR = OVERRIDES_DIR / "agent_investigate_rules"
+CONSERVATION_SCOPE_DIR = OVERRIDES_DIR / "conservation_scope"
 
 # FV-conservation reconcile band, in percent of the anchor: |value_sum - anchor|
 # <= band% counts as reconciled. Shared by the shadow conservation engine

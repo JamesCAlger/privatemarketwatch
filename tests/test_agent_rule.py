@@ -530,3 +530,16 @@ def test_dedupe_escalations_collapses_same_quarter_category():
     out = dedupe_escalations(escs)
     assert len(out) == 3
     assert {e["summary"] for e in out} == {"v2 restated", "a1", "other quarter"}
+
+
+def test_value_sum_respects_conservation_scope(monkeypatch):
+    from pipeline import conservation_scope
+    df = pd.DataFrame({
+        "cik": ["1905824"] * 2, "report_date": ["2026-03-31"] * 2,
+        "fair_value": [156_078_000.0, 38_767_000.0],
+        "asset_category": ["LOAN", "CASH"],
+    })
+    assert value_sum_by_quarter(df)["2026-03-31"] == 156_078_000.0   # default: CASH out
+    monkeypatch.setattr(conservation_scope, "included_categories_for",
+                        lambda cik: frozenset({"CASH"}))
+    assert value_sum_by_quarter(df, cik="1905824")["2026-03-31"] == 194_845_000.0
