@@ -444,6 +444,22 @@ def test_loop_decision_continues_when_residual_ok_but_gate_fails():
     assert "gate FAIL" in d["reason"]
 
 
+def test_gate_rules_none_tier_target_fails_only_anchor_validated():
+    """1930679 circularity: a NONE-tier target must produce ONE actionable
+    failure, not a cascade of absent-snapshot failures."""
+    import pandas as pd
+    df = pd.DataFrame({
+        "cik": ["1930679"] * 2, "report_date": ["2025-12-31"] * 2,
+        "fair_value": [1_000_000.0, 2_000_000.0], "asset_category": ["LOAN", "LOAN"],
+    })
+    res = gate_rules(df, df.copy(), cik="1930679", target_quarter="2025-12-31",
+                     anchor_candidates={"2025-12-31": {}})   # no candidates -> tier NONE
+    assert res.verdict == "FAIL"
+    assert res.checks == {"anchor_validated": False}
+    assert any("snapshot checks skipped" in r for r in res.reasons)
+    assert not any("absent from trial snapshots" in r for r in res.reasons)
+
+
 def test_loop_decision_continues_when_outside_tolerance():
     from scripts.agent_investigate.run_investigation import loop_decision
     d = loop_decision(11.3, iteration=2)

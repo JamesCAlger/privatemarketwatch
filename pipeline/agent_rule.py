@@ -33,7 +33,7 @@ from pathlib import Path
 import duckdb
 import pandas as pd
 
-from pipeline.agent_b_held_out import gate_correction
+from pipeline.agent_b_held_out import GateResult, gate_correction
 
 # Common keys every rule carries; per-type keys (predicate_sql / field+factor / match_fields+keep)
 # are checked in validate_rule by rule_type.
@@ -442,11 +442,24 @@ def gate_rules(baseline_df, corrected_df, *, cik, target_quarter, anchors=None, 
     """
     # Anchor validation: derive the snapshot anchors from validated STRONG consensus when the
     # caller provides candidate values; otherwise fall back to the legacy single-anchor dict.
+    # This runs FIRST so a NONE-tier target short-circuits before build_snapshots is called --
+    # with no validated anchor the target quarter is absent from snapshots, which would produce
+    # a confusing cascade of absent-snapshot failures for the same upstream cause (1930679).
     anchor_verdicts = {}
     if anchor_candidates is not None:
         from pipeline.anchor_validation import DEFAULT_AGREE_TOL, classify_many
-        tol = anchor_agree_tol if anchor_agree_tol is not None else DEFAULT_AGREE_TOL
-        anchor_verdicts = classify_many(anchor_candidates, agree_tol=tol)
+        tol_a = anchor_agree_tol if anchor_agree_tol is not None else DEFAULT_AGREE_TOL
+        anchor_verdicts = classify_many(anchor_candidates, agree_tol=tol_a)
+        tv = anchor_verdicts.get(str(target_quarter))
+        if tv is None or tv.tier == "NONE":
+            # Snapshot circularity guard (1930679): with no validated target anchor the
+            # target quarter never enters snapshots, and every snapshot check then fails
+            # for the same upstream cause. Emit the ONE actionable failure instead.
+            res = GateResult(cik=str(cik), target_quarter=str(target_quarter))
+            why = tv.reason if tv else "no anchor candidates for the target quarter"
+            res._fail("anchor_validated", f"target anchor not validated ({why})")
+            res.reasons.append("snapshot checks skipped: target anchor unvalidated")
+            return res
         anchors = {q: v.consensus for q, v in anchor_verdicts.items() if v.consensus is not None}
     anchors = anchors or {}
 
@@ -459,17 +472,12 @@ def gate_rules(baseline_df, corrected_df, *, cik, target_quarter, anchors=None, 
 
     # anchor_validated -- is the TARGET anchor itself TRUE before we let the loop reconcile to it?
     # Only enforced when the caller supplies anchor_candidates (independent values to cross-check).
-    # A contested/absent anchor (tier NONE) means the residual is undefined: FAIL=escalate, so the
-    # loop never delete-to-balances against a number it cannot trust.
+    # NONE-tier is already handled by the early return above; only MEDIUM/STRONG reach here.
     if anchor_candidates is not None:
         tv = anchor_verdicts.get(str(target_quarter))
-        if tv is None or tv.tier == "NONE":
-            why = tv.reason if tv else "no anchor candidates for the target quarter"
-            res._fail("anchor_validated", f"target anchor not validated ({why})")
-        else:
-            res._pass("anchor_validated")
-            if tv.tier == "MEDIUM":
-                res.reasons.append(f"anchor_validated=MEDIUM: {tv.reason}")
+        res._pass("anchor_validated")
+        if tv is not None and tv.tier == "MEDIUM":
+            res.reasons.append(f"anchor_validated=MEDIUM: {tv.reason}")
 
     # no_over_addition -- a rule that increases value_sum must not push any quarter PAST the anchor.
     over_add = {}
