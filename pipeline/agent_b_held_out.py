@@ -67,6 +67,7 @@ def gate_correction(
     band_count_tol: int = 0,
     band_fv_tol: float = 0.0,
     anchor_undershoot_tol: float = 0.0,
+    anchor_undershoot_tol_frac: float = 0.0,
 ) -> GateResult:
     """Apply the joint promotion predicates over baseline vs trial quarter snapshots."""
     target_flags = set(target_flags) if not isinstance(target_flags, str) else {target_flags}
@@ -126,6 +127,10 @@ def gate_correction(
         # Over-deletion guard across ALL quarters with conservation in both. Reject only
         # newly introduced or worsened undershoots; pre-existing undercounts are separate
         # blockers and should not invalidate an otherwise targeted rule.
+        # Tolerance mirrors the flagging band: a quarter INSIDE the band is not
+        # flagged at all, so an undershoot inside it cannot be delete-to-balance
+        # (q1p3: -$1K on a $409M anchor failed at tol=0.0 and taught workers to
+        # author balancing plugs).
         overdel = {}
         for q in trial:
             tc, bc = _cons(trial.get(q)), _cons(baseline.get(q))
@@ -134,7 +139,8 @@ def gate_correction(
             a = float(tc.get("anchor_value", bc.get("anchor_value", 0)) or 0)
             trial_delta = float(tc.get("value_sum", 0) or 0) - a
             base_delta = float(bc.get("value_sum", 0) or 0) - a
-            if trial_delta < -anchor_undershoot_tol and trial_delta < base_delta - anchor_undershoot_tol:
+            tol_q = max(anchor_undershoot_tol, anchor_undershoot_tol_frac * abs(a))
+            if trial_delta < -tol_q and trial_delta < base_delta - tol_q:
                 overdel[q] = round(trial_delta, 2)
         if overdel:
             res._fail("no_over_deletion",

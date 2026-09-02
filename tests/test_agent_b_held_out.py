@@ -168,3 +168,42 @@ def test_band_blowout_fails():
                           baseline=base, trial=trial)
     assert res.verdict == "FAIL"
     assert res.checks["bands_hold"] is False
+
+
+def test_over_deletion_tolerates_sub_band_undershoot():
+    """A valid dedup landing $1K below a $409M anchor (-0.0002%) is not
+    delete-to-balance (q1p3 escalations 1487918/2052153)."""
+    baseline = {"2024-12-31": {"flags": ["fv_conservation"], "fv_at_risk": 20.0,
+                               "conservation": _cons(421_554_000.0, 409_665_000.0)}}
+    trial = {"2024-12-31": {"flags": [], "fv_at_risk": 0.0,
+                           "conservation": _cons(409_664_000.0, 409_665_000.0)},
+             "2024-09-30": {"flags": [], "fv_at_risk": 0.0,
+                           "conservation": _cons(300.0, 300.0)},
+             "2024-06-30": {"flags": [], "fv_at_risk": 0.0,
+                           "conservation": _cons(280.0, 280.0)}}
+    res = gate_correction(cik="1487918", target_quarter="2024-12-31",
+                          target_flags={"fv_conservation"},
+                          baseline=baseline, trial=trial, min_held_out=0,
+                          anchor_undershoot_tol_frac=0.01)
+    assert res.checks["no_over_deletion"] is True
+
+
+def test_over_deletion_still_fails_above_band():
+    """The 1838126 catch (-$29.63M on a ~$1.6B anchor = 1.85%) must keep failing."""
+    baseline = {"2026-03-31": {"flags": ["fv_conservation"], "fv_at_risk": 30.0,
+                               "conservation": _cons(1_641_000_000.0, 1_611_219_000.0)},
+                "2025-12-31": {"flags": [], "fv_at_risk": 0.0,
+                              "conservation": _cons(300.0, 300.0)},
+                "2025-09-30": {"flags": [], "fv_at_risk": 0.0,
+                              "conservation": _cons(280.0, 280.0)}}
+    trial = {"2026-03-31": {"flags": [], "fv_at_risk": 0.0,
+                           "conservation": _cons(1_581_589_000.0, 1_611_219_000.0)},
+             "2025-12-31": {"flags": [], "fv_at_risk": 0.0,
+                           "conservation": _cons(300.0, 300.0)},
+             "2025-09-30": {"flags": [], "fv_at_risk": 0.0,
+                           "conservation": _cons(280.0, 280.0)}}
+    res = gate_correction(cik="1838126", target_quarter="2026-03-31",
+                          target_flags={"fv_conservation"},
+                          baseline=baseline, trial=trial, min_held_out=2,
+                          anchor_undershoot_tol_frac=0.01)
+    assert res.checks["no_over_deletion"] is False

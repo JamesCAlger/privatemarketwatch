@@ -452,9 +452,10 @@ def gate_rules(baseline_df, corrected_df, *, cik, target_quarter, anchors=None, 
 
     base = build_snapshots(baseline_df, anchors, threshold_pct)
     trial = build_snapshots(corrected_df, anchors, threshold_pct)
-    res = gate_correction(cik=str(cik), target_quarter=str(target_quarter),
-                          target_flags={"fv_conservation"}, baseline=base, trial=trial)
     tol = threshold_pct / 100.0
+    res = gate_correction(cik=str(cik), target_quarter=str(target_quarter),
+                          target_flags={"fv_conservation"}, baseline=base, trial=trial,
+                          anchor_undershoot_tol_frac=tol)
 
     # anchor_validated -- is the TARGET anchor itself TRUE before we let the loop reconcile to it?
     # Only enforced when the caller supplies anchor_candidates (independent values to cross-check).
