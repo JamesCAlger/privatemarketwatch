@@ -252,6 +252,99 @@ def test_finalize_parity_compare(tmp_path):
     assert parity["RVQ_BLK_bbb"] == "False"
 
 
+_QUEUE_COLS = ["priority_rank", "review_id", "lane", "anchor", "engine", "rule_name",
+               "tier", "enforcement", "cik", "report_date", "period", "period_kind",
+               "unit_label", "status", "mechanism", "confidence", "src_confidence",
+               "surface", "n_units", "metric_name", "metric", "fv_at_risk_m",
+               "fund_quarter_fv_m"]
+
+
+def _write_queue(path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=_QUEUE_COLS)
+        w.writeheader()
+        for r in rows:
+            w.writerow({c: r.get(c, "") for c in _QUEUE_COLS})
+
+
+def _queue_row(rid, engine, **kw):
+    base = {"review_id": rid, "lane": "blocker", "engine": engine,
+            "rule_name": kw.pop("rule_name", "fv_conservation"), "cik": "0001849894",
+            "report_date": "2025-03-31", "mechanism": kw.pop("mechanism", ""),
+            "confidence": "medium", "fv_at_risk_m": "1.5"}
+    base.update(kw)
+    return base
+
+
+def test_discover_builds_deferred_source_recon_bundles(tmp_path, monkeypatch):
+    """A source_recon-only discover must produce bundles (via the richer
+    bdc_cik_review generator), not a worklist with dead bundle paths."""
+    d = _dirs(tmp_path)
+    queue = tmp_path / "review_queue.csv"
+    rid = "BDCSRC_0001849894_2025-03-31_BLOCKING_SOURCE_PCT_LEAF_PARSER_MISMATCH_ab12cd34ef"
+    _write_queue(queue, [_queue_row(rid, "source_recon", rule_name="blocking_source_pct_leaf_parser_mismatch",
+                                    mechanism="blocking_source_pct_leaf_parser_mismatch")])
+
+    generic_calls = []
+    monkeypatch.setattr(run_review, "build_review_bundles",
+                        lambda **kw: generic_calls.append(kw) or {"bundles": 0})
+
+    def _fake_rich(*, output_dir, review_ids=None, overwrite=False, **kw):
+        worklist = list(csv.DictReader(open(output_dir / "worklist.csv", encoding="utf-8-sig")))
+        (output_dir / "bundles").mkdir(parents=True, exist_ok=True)
+        for row in worklist:
+            (output_dir / "bundles" / f"{row['review_id']}.json").write_text(
+                json.dumps({"review_id": row["review_id"], "mechanism": row["mechanism"]}),
+                encoding="utf-8")
+        return [{"review_id": r["review_id"]} for r in worklist]
+
+    monkeypatch.setattr(run_review.bdc_cik_review, "build_bundles", _fake_rich)
+
+    res = run_review.discover("D1", base_dir=d["base_dir"], queue_path=queue,
+                              bundles_dir=d["bundles_dir"])
+    assert res["n_items"] == 1
+    # the deferred row went through the rich generator and landed in bundles_dir
+    assert (d["bundles_dir"] / f"{rid}.json").exists()
+    # the generic builder was NOT invoked (no rows for it -> no manifest wipe)
+    assert generic_calls == []
+    # worklist bundle_path resolves to the file just built
+    wl = list(csv.DictReader(open(d["base_dir"] / "batch" / "D1" / "worklist.csv", encoding="utf-8")))
+    assert wl[0]["review_id"] == rid
+    assert wl[0]["bundle_path"].endswith(f"{rid}.json")
+
+
+def test_discover_splits_generic_and_deferred(tmp_path, monkeypatch):
+    d = _dirs(tmp_path)
+    queue = tmp_path / "review_queue.csv"
+    rid_src = "BDCSRC_0001849894_2025-03-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_ab12cd34ef"
+    rid_gen = "RVQ_BLK_aaa111bbb222"
+    _write_queue(queue, [
+        _queue_row(rid_gen, "conservation"),
+        _queue_row(rid_src, "source_recon", rule_name="blocking_source_short_plain_unresolved",
+                   mechanism="blocking_source_short_plain_unresolved"),
+    ])
+
+    generic_calls = []
+    monkeypatch.setattr(run_review, "build_review_bundles",
+                        lambda **kw: generic_calls.append(kw) or {"bundles": 1})
+    monkeypatch.setattr(run_review.bdc_cik_review, "build_bundles",
+                        lambda *, output_dir, **kw: (
+                            (output_dir / "bundles").mkdir(parents=True, exist_ok=True),
+                            (output_dir / "bundles" / f"{rid_src}.json").write_text("{}", encoding="utf-8"),
+                            [],
+                        )[-1])
+
+    res = run_review.discover("D2", base_dir=d["base_dir"], queue_path=queue,
+                              bundles_dir=d["bundles_dir"])
+    assert res["n_items"] == 2
+    # generic path called exactly once, with ONLY the non-deferred id
+    assert len(generic_calls) == 1
+    assert generic_calls[0]["review_ids"] == {rid_gen}
+    # deferred bundle copied into the shared bundles dir
+    assert (d["bundles_dir"] / f"{rid_src}.json").exists()
+
+
 def test_review_lock_roundtrip(tmp_path, monkeypatch):
     from scripts.agent_b import review_lock
     monkeypatch.setattr(review_lock, "LOCK_DIR", tmp_path / "locks")

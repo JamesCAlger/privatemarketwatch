@@ -18,12 +18,15 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import shutil
 import sys
 from collections import defaultdict
 from pathlib import Path
 
 from pipeline import config, verdict_leaf
-from pipeline.review_bundles import build_review_bundles
+from pipeline import bdc_cik_review
+from pipeline.review_bundles import build_review_bundles, DEFERRED_ENGINES
+from pipeline.review_queue import bdc_worklist_projection
 from pipeline.bdc_cik_review import read_csv_rows, normalize_text
 from scripts.agent_b import review_lock
 
@@ -85,14 +88,22 @@ def discover(
     if not selected:
         raise ValueError("no queue items matched the discover filters")
 
-    chosen_ids = {normalize_text(r.get("review_id")) for r in selected}
-    # Build bundles into the shared review_queue bundle dir for exactly these ids.
-    build_review_bundles(
-        queue_path=queue_path,
-        output_dir=bundles_dir.parent,
-        review_ids=chosen_ids,
-        overwrite=True,
-    )
+    batch_dir = _batch_dir(base_dir, batch_id)
+    # review_bundles defers source_recon by design (its bundles come from the richer
+    # bdc_cik_review generator) -- split the selection so BOTH kinds get built.
+    deferred_rows = [r for r in selected if normalize_text(r.get("engine")) in DEFERRED_ENGINES]
+    generic_ids = {normalize_text(r.get("review_id")) for r in selected} - {
+        normalize_text(r.get("review_id")) for r in deferred_rows}
+    if generic_ids:
+        # Build bundles into the shared review_queue bundle dir for exactly these ids.
+        build_review_bundles(
+            queue_path=queue_path,
+            output_dir=bundles_dir.parent,
+            review_ids=generic_ids,
+            overwrite=True,
+        )
+    if deferred_rows:
+        _build_deferred_bundles(deferred_rows, bundles_dir=bundles_dir, batch_dir=batch_dir)
 
     worklist = []
     for r in selected:
@@ -110,13 +121,31 @@ def discover(
             "bundle_path": f"{_display(bundles_dir)}/{rid}.json",
         })
 
-    batch_dir = _batch_dir(base_dir, batch_id)
     out = batch_dir / "worklist.csv"
     with open(out, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=WORKLIST_COLUMNS)
         w.writeheader()
         w.writerows(worklist)
     return {"batch_id": batch_id, "n_items": len(worklist), "worklist": str(out)}
+
+
+def _build_deferred_bundles(rows: list[dict], *, bundles_dir: Path, batch_dir: Path) -> None:
+    """Build source_recon bundles via the richer bdc_cik_review generator and place
+    them in the shared bundles dir the worklist's bundle_path points at."""
+    work_dir = batch_dir / "bundle_build"
+    work_dir.mkdir(parents=True, exist_ok=True)
+    projection = bdc_worklist_projection(items=rows)
+    cols = ["review_id", "cik", "entity_name", "report_date", "mechanism",
+            "affected_source_fair_value", "confidence"]
+    with open(work_dir / "worklist.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=cols)
+        w.writeheader()
+        for r in projection:
+            w.writerow({c: r.get(c, "") for c in cols})
+    bdc_cik_review.build_bundles(output_dir=work_dir, overwrite=True)
+    bundles_dir.mkdir(parents=True, exist_ok=True)
+    for built in sorted((work_dir / "bundles").glob("*.json")):
+        shutil.copy2(built, bundles_dir / built.name)
 
 
 def _display(p: Path) -> str:
