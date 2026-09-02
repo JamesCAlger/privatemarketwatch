@@ -9210,6 +9210,67 @@ maps to a measured Q4 incident; plan approved by owner; commits e9a726f..HEAD).
   - 0001634452 dedup: honest confidence drop (0.68 -> 0.42) -- the dedup contract has no
     row_selector, so the key cannot scope to the two grounded row_ids; documented that other
     same-term groups may collapse. Template-expressiveness gap to fix before round 4.
+
+---
+
+## 2026-09-02 - B2 escalation-driven fixes shipped (plan: b2-escalation-fixes)
+
+### Root causes addressed (one commit per item)
+
+- **T1 undershoot tolerance** (3eaed24): gate no_over_deletion gained band-relative undershoot
+  margin -- rejected non-deletions no longer fire when the undershoot is within the band
+  tolerance; prevents false gate failures on advisory-only corrections.
+- **T2 NONE-tier gate short-circuit** (d1fecfc): anchor_validated gate now treats a single
+  NONE-tier anchor_validated=False result as a soft failure rather than a hard block; prevents
+  loop stalls on targets where validation cannot be measured.
+- **T3 loop stops on escalation** (3640f78): investigation loop exits after iteration 1 if an
+  escalation has been raised; prevents infinite retries on structurally unresolvable packets.
+- **T4 escalation dedup + idempotency** (a03a5e2, 274dd93): dedupe_escalations keyed on
+  (quarter, category) so repeated loop iterations cannot stack duplicate escalation records;
+  apply() count consistency fix co-committed.
+- **T5 escalation routing CLI** (faf73c0): scripts/agent_investigate/route_escalations.py
+  (new) routes escalation_routing.csv into anchor_lane / extraction_review / human_review
+  buckets; live smoke: 40 files -> 24 distinct, routing counts anchor_lane=7 /
+  extraction_review=9 / human_review=8.
+- **T6 prep bundle precondition** (3c27c14): prep stage blocks dispatch when no cached filing
+  bundle exists for the target; --allow-missing-bundle override available; prevents worker
+  invocations on unbundled packets.
+- **T7 conservation scope overrides** (d2bd1e0, 77a5d1f): per-CIK scope override config added;
+  CIK 1905824 given in-anchor cash carve-out for FHLB rows; scope_quarters guard is fail-closed;
+  carve-out computed once per engine run and shared by agent_rule.value_sum_by_quarter and
+  shadow_conservation_engine.
+- **T8 growth-aware anchor band** (41ee1c5, 5fb3b94): QoQ-continuity rescue approved by owner
+  2026-09-02; band is AND-composition of median x qoq_fold=2.0; FP CIKs 1918712 / 2031750 /
+  1902649 / 1954360 / 1495584 rescued; sporadic-TP preserved; both regime tests use full real
+  series from fund_financials.csv.
+
+### Owner decision
+
+Growth-aware anchor band (AND-composition median x QoQ, qoq_fold=2.0) approved 2026-09-02.
+
+### Test counts (step-1 touched-suite run)
+
+142 passed (tests/test_agent_b_held_out.py + tests/test_agent_rule.py +
+tests/test_investigation_orchestration.py + tests/test_conservation_scope.py +
+tests/test_agent_promoted.py + tests/test_anchor_validation.py). Trailing PermissionError
+atexit line is known environmental noise, not a test failure.
+
+### Effect notes
+
+- CIK 1905824 conservation-scope override and the new QoQ anchor band take production effect
+  at the next pass rebuild + battery run.
+- Operator chain must treat prep's blocked_no_bundle status as skip-and-queue (not a fatal
+  dispatch error).
+- Operator should run the new route_escalations.py CLI at each pass close-out to route
+  accumulated escalations before the next battery.
+
+### Remaining out-of-scope work (not in this plan)
+
+- Staging extraction fix for dropped cash/short-term rows: separate plan required.
+- Reauthor of the 3 inert rules pulled into _pulled_inert_frame_divergence_2026-09-02/ by the
+  concurrent session.
+- Operator-skill wiring for blocked_no_bundle handling and escalation routing step in the
+  quarter-pass-operator skill.
   - All five leaves now select by rebuild-stable row_id where the contract allows (the
     current holdings frame carries row_id; prompt identifier lists show 1:1 matches).
 - Cost: analyst workers ~280-710K tokens and 14-21 tool calls each (vs ~26-54K tokens and
