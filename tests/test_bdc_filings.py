@@ -2838,6 +2838,25 @@ class TestCashAxisContexts:
         assert "c_generic_member" not in by_ctx
         assert "c_undimensioned" not in by_ctx
 
+    def test_mmf_concept_variants_map_to_fair_value_and_cost(self):
+        # 1899996 tags its State Street MMF sweep with MoneyMarketFundsAt*
+        # concepts instead of InvestmentOwnedAt* (verified in accession
+        # 000119312526214221, context C_5f128ccb, FV 26,887,322).
+        from pipeline.bdc_filings import _extract_investment_facts
+        xml = _CASH_AXIS_XML.replace(
+            '<us-gaap:InvestmentOwnedAtFairValue contextRef="c_dreyfus" unitRef="usd" decimals="-3">36885000</us-gaap:InvestmentOwnedAtFairValue>',
+            '<test:MoneyMarketFundsAtFairValue contextRef="c_dreyfus" unitRef="usd" decimals="0">26887322</test:MoneyMarketFundsAtFairValue>',
+        ).replace(
+            '<us-gaap:InvestmentOwnedAtCost contextRef="c_dreyfus" unitRef="usd" decimals="-3">36885000</us-gaap:InvestmentOwnedAtCost>',
+            '<us-gaap:MoneyMarketFundsAtCarryingValue contextRef="c_dreyfus" unitRef="usd" decimals="0">26887322</us-gaap:MoneyMarketFundsAtCarryingValue>',
+        )
+        tree, ctxs = self._parse(xml)
+        facts = _extract_investment_facts(tree, ctxs)
+        by_ctx = {f["_context_id"]: f for f in facts}
+        assert "c_dreyfus" in by_ctx
+        assert by_ctx["c_dreyfus"]["fair_value"] == 26887322
+        assert by_ctx["c_dreyfus"]["cost"] == 26887322
+
     def test_identifier_axis_context_still_wins_over_cash_axis(self):
         # A context carrying BOTH an investment-identifier dim and a cash-axis
         # dim must keep the identifier-axis value.

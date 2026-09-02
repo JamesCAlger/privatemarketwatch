@@ -46,9 +46,14 @@ CONCEPT_MAP: list[tuple[str, str]] = [
     # Fair value
     ("investmentownedatfairvalue", "fair_value"),
     ("investmentownedfairvalue", "fair_value"),
+    # MMF sweep variants: some filers (1899996) tag cash-axis schedule rows
+    # with MoneyMarketFundsAt* concepts instead of InvestmentOwnedAt*.  Only
+    # read from is_investment contexts, so balance-sheet facts never match.
+    ("moneymarketfundsatfairvalue", "fair_value"),
     # Cost basis
     ("investmentownedatcost", "cost"),
     ("investmentownedcost", "cost"),
+    ("moneymarketfundsatcarryingvalue", "cost"),
     # Principal / par / face
     ("investmentownedbalanceprincipalamount", "principal_amount"),
     ("investmentownedbalancesharesornumberofcontractsorprincipalamount", "principal_amount"),
