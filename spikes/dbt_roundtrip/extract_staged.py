@@ -70,7 +70,7 @@ def main() -> int:
     con.register("bdc_part", bdc)
     sources = [r[0] for r in con.execute(
         "SELECT DISTINCT source FROM bdc_part").fetchall()]
-    assert sources == ["bdc"], f"expected bdc-only staged frame, got {sources}"
+    assert set(sources) == {"bdc"}, f"expected bdc-only staged frame, got {sources}"
 
     print("[2/5] Ranking CIKs by duplicate-dimension rows ...")
     con.execute(f"""
