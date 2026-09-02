@@ -10783,3 +10783,89 @@ Two descriptions in the d177253 changelog entry were inaccurate:
   full-history credential scan clean). Do not add self-hosted runners (public repo, fork-PR risk).
   Full-cache tests stay local. Known residual: SyntaxWarning invalid escape `\s`
   pipeline/source_reconciliation.py:3399 (pre-existing).
+
+---
+
+## 2026-09-02 - Cash-axis extraction fix: reconcile gate clears (q1p3 now 6/7); Q4 reattest regression caught and healed
+
+Operator session finalizing Q1-2026. Full pytest suite over the combined branch first:
+4801 passed, 13 skipped, 2 xfailed in 2h44m; zero production writes (mtime audit clean).
+
+### Extraction fix (plan: docs/superpowers/plans/2026-09-02-cash-axis-extraction-fix.md)
+
+Root cause #1 from the escalation deep-dive is FIXED at the parser layer, not by row_adds:
+
+- pipeline/bdc_filings.py: _parse_xbrl_contexts accepts CashAndCashEquivalentsAxis
+  contexts whose member is a FILER-EXTENSION QName (us-gaap: generic members = category
+  aggregates, rejected); identifier = _humanize_member_local_name(member). CONCEPT_MAP
+  gains MoneyMarketFundsAtFairValue/AtCarryingValue + CashEquivalentsAtFairValue/
+  AtCarryingValue (1899996/1772704/1715933 tag cash rows with these).
+- pipeline/staging_bdc.py CTE 9: dimensions_raw containing cashandcashequivalent forces
+  asset_category=CASH (filer tagging beats name keywords; protects passing funds from
+  overshoot; "First American Government Obligation Fund" matches no cash keyword).
+- pipeline/source_reconciliation.py: _SOURCE_FACT_EXTRACTION_VERSION 2 -> 3 (shared
+  parser change invalidates the per-accession cache; v2 keyword-gated liquid-fund
+  admission superseded -- it missed no-keyword names (1916608) and filer typos
+  (1646614 "Mone Market"), creating pipeline_only blockers).
+- Conservation carve-outs with exact-arithmetic evidence: 1950976 (+36.885M Dreyfus),
+  1899996 (+26.887M State Street), 1772704 (+122.393M GS Financial Square),
+  1916608 (+5.325M First American). All four reconcile to ~0 residual.
+- Rebuilds: cohort-scoped then FULL --bdc-holdings re-extraction (1,184,697 rows,
+  3,037 filings, cache-only), two batteries.
+
+### Q4-2025 reattest regression (stop-and-report, then healed same session)
+
+reattest_quarters check flipped 2025-12-31 PASS -> FAIL (reconcile 95.455 -> 87.9,
+3 -> 8 conservation fails). Attribution: ALL FIVE carve-outs (the four new + the
+owner-approved 1905824) were scoped "all" quarters on Q1-only evidence; Q4 anchors
+(companyfacts) EXCLUDE cash while the Q1 anchors (agent-promoted schedule totals)
+INCLUDE it -- Q4 overshoots matched the Q4 cash-row values per fund. Fix: quarter
+scoping IMPLEMENTED in pipeline/conservation_scope.py (scope_quarters now accepts
+ISO-date lists; fail-closed on anything else), wired into BOTH sum implementations
+(agent_rule.value_sum_by_quarter, shadow build_cash_filter); all five carve-outs
+scoped to ["2026-03-31"]. NOTE for owner: this narrows the owner-approved 1905824
+"all" scope -- justified because Q4 was attested with no carve-out in effect.
+After fix: 2025-12-31 PASS -> PASS, no check flips (ledger updated). Q1 unchanged.
+
+### Gate state after this session (pass q1p3_20260831, thresholds v2)
+
+6/7 PASS (was 5/7): fund_coverage 69, reconcile_rate 89.706 -> 95.588 PASS (65/68;
+healed 1950976, 1899996, 1772704, 1916608), flagged_fv 8.593 -> 7.276 PASS,
+source_blocking 0.262 PASS, drift 0, health 0, 176 rules clean.
+verified_fv 66.478 -> 67.708 FAIL (bar 70; 50 verified funds). Cohort FV
+380,780.9M -> 382,025.4M (+1.24B, +0.33% -- the ingested cash rows; public headline
+FV will rise by this at next export; flag at sign-off).
+Conservation fails remaining (3): 1838126 HPS (+6.315, re-scope pending), 1715933
+TCW VII (-18.253; its cash row is 13.9M vs 226M gap -- Treasury/affiliation
+structural set, honest non-heal), 1905824 (-4.420; no cash-axis rows in its filing;
+its 8.759M short-term gap is tagged elsewhere or untagged).
+
+### verified_fv endgame (the ONE remaining gate; +2.292pp = ~8.76B needed)
+
+Every big under_review fund passes conservation and is held by source_recon blocker
+packets; any ONE of these flips the quarter:
+- 1812554 Blue Owl 35.5B: one blocking_source_position_like_parser_mismatch packet
+  (527.83M at risk) -> +9.3pp.
+- 1920145 GS PCC 17.2B: blocking_pipeline_only_position, 2 rows (Auctane 193M +
+  Tiger 156M, concatenated no-delimiter identifiers) -> +4.5pp.
+- 1930087 Golub 9.9B: 3 pipeline-only "Maverick Bidco | Senior secured 1/2/3" rows
+  (98.4M; look like dedupe-axis-split disambiguation artifacts the recon matcher
+  cannot pair) -> +2.6pp.
+Smaller: 1920453 Fidelity (Central Fund 179.5M + MMF Investor Class 16.9M),
+1603480 (its two AUDITED B2 row_adds incl. the 321.17M T-bill are XBRL-untagged, so
+recon can never see them -- needs an excusal mechanism for audited row_adds, owner
+decision), 1766037 DigiCert 7.3M, 2006758 SEKO 11.2M.
+These need B1 adjudication (or matcher/excusal decisions) -- NOT dispatched this
+session: scripts/agent_b/run_review.py carries another session's uncommitted BDCSRC
+discover work, and resolving the packets involves validation-semantics judgment.
+
+### Also this session
+
+- Escalation routing CLI run at close-out: 40 files -> 24 distinct
+  (anchor_lane 7 / extraction_review 9 / human_review 8); the 9 extraction_review
+  items are the class fixed above.
+- Tests updated/added: 10 parser + 1 concept-variant + 1 dimension-CASH +
+  1 CASH-classification lock + 2 source-recon v3 symmetry + 2 quarter-scope
+  (conservation_scope 8, agent_rule 48 file-total green). Commits 0bc4e91, cc3f67a,
+  8a4b052, eaa9ba5 (+ plan doc).
+- Scratch: scratch/2026-09-02_q1p3_signoff/ (2 row-limited DuckDB diagnostics).
