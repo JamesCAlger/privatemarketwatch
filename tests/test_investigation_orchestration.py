@@ -195,10 +195,35 @@ def test_prep_prompt_lists_existing_escalations(tmp_path, monkeypatch):
          "summary": "missing cash row", "evidence": [{"source": "query", "quote": "x"}],
          "why_no_vocab_fits": "w", "suggested_applier": "s", "confidence": 0.9}),
         encoding="utf-8")
-    ri.prep("999", "2026-03-31", iteration=2)
+    ri.prep("999", "2026-03-31", iteration=2, allow_missing_bundle=True)
     prompt = (tmp_path / "999" / "prompt.md").read_text(encoding="utf-8")
     assert "missing cash row" in prompt
     assert "do not re-author" in prompt.lower()
+
+
+# --- bundle precondition (Task 6) ---------------------------------------------------
+
+def test_prep_blocks_without_bundle(tmp_path, monkeypatch):
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["999"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    res = ri.prep("999", "2026-03-31")
+    assert res["status"] == "blocked_no_bundle"
+    assert not (tmp_path / "999" / "prompt.md").exists()
+
+
+def test_prep_allow_missing_bundle_overrides(tmp_path, monkeypatch):
+    # same monkeypatching as above
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["999"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    res = ri.prep("999", "2026-03-31", allow_missing_bundle=True)
+    assert (tmp_path / "999" / "prompt.md").exists()
+    assert res.get("bundle") == ""
 
 
 # --- apply() escalation count consistency: n_escalations=deduped, n_escalation_files=raw ----

@@ -437,7 +437,15 @@ def _resolved_anchor(cik: str, target_quarter: str):
     return anchor, av.tier, reason
 
 
-def prep(cik: str, target_quarter: str, iteration: int = 1) -> dict:
+def prep(cik: str, target_quarter: str, iteration: int = 1,
+         allow_missing_bundle: bool = False) -> dict:
+    bundle = _find_bundle(cik, target_quarter)          # give the worker the FILING, not just data
+    if bundle is None and not allow_missing_bundle:
+        return {"cik": _norm(cik), "target_quarter": target_quarter,
+                "status": "blocked_no_bundle",
+                "reason": "no cached filing bundle; queue bundle build before dispatch "
+                          "(bundle-less investigations can only refuse)"}
+    bundle_path = bundle.as_posix() if bundle else ""
     anchors = load_anchors(cik)
     out = BASE / _norm(cik)
     rules_out = out / "rules"
@@ -459,8 +467,6 @@ def prep(cik: str, target_quarter: str, iteration: int = 1) -> dict:
     if resolved is not None:
         anchors_display[str(target_quarter)] = resolved
     state = _measure(cik, target_quarter) if iteration > 1 else None
-    bundle = _find_bundle(cik, target_quarter)          # give the worker the FILING, not just data
-    bundle_path = bundle.as_posix() if bundle else ""
     existing_escalations = dedupe_escalations(load_escalations(out / "escalations"))
     prompt_path = out / "prompt.md"
     prompt_path.write_text(_prompt(cik, target_quarter, anchors_display, rules_out, iteration, state,
@@ -698,13 +704,17 @@ def main(argv=None) -> int:
             p.add_argument("--target-quarter", required=True)
         if m in ("prep", "status"):
             p.add_argument("--iteration", type=int, default=1)
+        if m == "prep":
+            p.add_argument("--allow-missing-bundle", action="store_true",
+                           help="Skip bundle-present check (use only when filing bundle is genuinely unavailable).")
     # escalations subcommand: no --cik; scans all CIK dirs
     p_esc = sub.add_parser("escalations")
     p_esc.add_argument("--out-dir", type=Path, default=None,
                        help="Output directory for escalation_routing.csv (default: <base>/routing)")
     args = ap.parse_args(argv)
     if args.mode == "prep":
-        print(json.dumps(prep(args.cik, args.target_quarter, args.iteration), indent=2, default=str))
+        print(json.dumps(prep(args.cik, args.target_quarter, args.iteration,
+                              allow_missing_bundle=args.allow_missing_bundle), indent=2, default=str))
     elif args.mode == "apply":
         print(json.dumps(apply(args.cik), indent=2, default=str))
     elif args.mode == "gate":
