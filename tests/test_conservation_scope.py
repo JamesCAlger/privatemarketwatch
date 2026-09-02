@@ -49,3 +49,25 @@ def test_missing_scope_quarters_is_ignored_fail_closed(tmp_path, monkeypatch):
     }), encoding="utf-8")
     monkeypatch.setattr(conservation_scope, "SCOPE_DIR", d)
     assert conservation_scope.included_categories_for("300") == frozenset()
+
+
+def test_invalid_structure_empty_categories_or_missing_evidence(tmp_path, monkeypatch):
+    """Empty include_asset_categories or missing evidence -> frozenset() and no crash (fold-in minor)."""
+    d = tmp_path / "conservation_scope"
+    d.mkdir()
+    monkeypatch.setattr(conservation_scope, "SCOPE_DIR", d)
+
+    # Empty include_asset_categories list -> invalid -> frozenset()
+    d.joinpath("401.json").write_text(json.dumps({
+        "cik": "401", "include_asset_categories": [],
+        "scope_quarters": ["all"], "evidence": [{"source": "filing", "quote": "x"}],
+        "rationale": "r", "confidence": 0.9,
+    }), encoding="utf-8")
+    assert conservation_scope.included_categories_for("401") == frozenset()
+
+    # Missing evidence key entirely -> invalid -> frozenset()
+    d.joinpath("402.json").write_text(json.dumps({
+        "cik": "402", "include_asset_categories": ["CASH"],
+        "scope_quarters": ["all"], "rationale": "r", "confidence": 0.9,
+    }), encoding="utf-8")
+    assert conservation_scope.included_categories_for("402") == frozenset()

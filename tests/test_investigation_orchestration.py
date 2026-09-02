@@ -6,6 +6,7 @@ import json
 import pandas as pd
 
 import scripts.agent_investigate.run_investigation as ri
+from pipeline import config as pipeline_config
 from scripts.agent_investigate.run_investigation import _discover_targets, loop_decision, promote
 
 
@@ -303,3 +304,142 @@ def test_route_escalations_by_category(tmp_path):
     routes = {r["cik"]: r["route"] for r in rows}
     assert routes == {"111": "anchor_lane", "222": "extraction_review", "333": "human_review"}
     assert rows[[r["cik"] for r in rows].index("222")]["n_duplicate_files"] == "2"
+
+
+# --- F1: stale cross-quarter escalations must not pollute current-quarter counts -----
+# A prior-quarter escalation surviving on disk made _measure count it in n_escalations
+# (stopping a NEW quarter's investigation at iter 2) and prep listed it in the prompt.
+# Fix: filter to target_quarter before dedup/count in both _measure and prep.
+
+def test_measure_escalation_count_scoped_to_target_quarter(tmp_path, monkeypatch):
+    """Stale escalation from a prior quarter must not count toward the current
+    quarter's n_escalations (F1: cross-quarter escalation lifecycle)."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["555"], "report_date": ["2026-03-31"], "fair_value": [1.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    out = tmp_path / "555"
+    out.mkdir(parents=True)
+    esc_dir = out / "escalations"
+    esc_dir.mkdir()
+    current_q = "2026-03-31"
+    stale_q = "2025-12-31"
+    esc_cur = {
+        "target_quarter": current_q, "category": "vocab",
+        "kind": "proposed_mechanism", "summary": "current finding",
+        "evidence": [{"source": "query", "quote": "x"}],
+        "why_no_vocab_fits": "w", "suggested_applier": "s", "confidence": 0.8,
+    }
+    esc_stale = dict(esc_cur, target_quarter=stale_q, summary="stale prior quarter")
+    esc_dir.joinpath("cur.json").write_text(json.dumps(esc_cur), encoding="utf-8")
+    esc_dir.joinpath("stale.json").write_text(json.dumps(esc_stale), encoding="utf-8")
+    m = ri._measure("555", current_q)
+    # Only the current-quarter escalation should count
+    assert m["n_escalations"] == 1, (
+        f"expected 1 current-quarter escalation, got {m['n_escalations']} "
+        f"(stale quarter must not be counted)")
+    assert m["n_escalation_files"] == 1, (
+        f"expected n_escalation_files==1 (current only), got {m['n_escalation_files']}"
+    )
+
+
+# --- F3: gate band must match the production reconcile band --------------------------
+# gate_rules defaults threshold_pct=1.0; production flags at FV_CONSERVATION_BAND_PCT=0.5.
+# A 0.7% undershoot trial must fail/flag through ri.gate and ri._measure (not pass at
+# the 1.0% default while production still flags). Both call sites must pass config.FV_CONSERVATION_BAND_PCT.
+
+def test_gate_uses_production_band_not_default_1pct(tmp_path, monkeypatch):
+    """A 0.7% undershoot (between 0.5% and 1.0%) must FAIL via ri.gate so trial and
+    production use the same band (F3).  We capture the threshold_pct kwarg passed to
+    gate_rules and assert it equals config.FV_CONSERVATION_BAND_PCT (0.5)."""
+    from pipeline.agent_rule import GateResult
+    captured = {}
+
+    def _fake_gate_rules(*args, threshold_pct=1.0, **kwargs):
+        captured["threshold_pct"] = threshold_pct
+        r = GateResult(cik="777", target_quarter="2026-03-31")
+        return r
+
+    monkeypatch.setattr(ri, "gate_rules", _fake_gate_rules)
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["777"], "report_date": ["2026-03-31"], "fair_value": [100.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: (
+        {"2026-03-31": {"companyfacts_fv": 100.0}}, {}))
+    out = tmp_path / "777"
+    out.mkdir(parents=True)
+    # Create a minimal rule file so gate_rules gets called (not the no-rules path)
+    rules_dir = out / "rules"
+    rules_dir.mkdir()
+    import json as _json
+    (rules_dir / "stub.json").write_text(_json.dumps({
+        "cik": "777", "rule_id": "stub", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Nobody'", "scope": {"quarters": ["all"]},
+        "evidence": ["x"], "rationale": "test", "confidence": 0.9,
+    }), encoding="utf-8")
+    (out / f"corrected_holdings.777.csv").write_text(
+        df.to_csv(index=False), encoding="utf-8")
+    ri.gate("777", "2026-03-31")
+    assert "threshold_pct" in captured, "gate_rules was not called"
+    assert captured["threshold_pct"] == pipeline_config.FV_CONSERVATION_BAND_PCT, (
+        f"gate called gate_rules with threshold_pct={captured['threshold_pct']} "
+        f"but production band is {pipeline_config.FV_CONSERVATION_BAND_PCT} -- "
+        "trial-vs-production divergence (F3)")
+
+
+def test_measure_gate_uses_production_band(tmp_path, monkeypatch):
+    """_measure's gate_rules call must also use config.FV_CONSERVATION_BAND_PCT (F3 second site)."""
+    from pipeline.agent_rule import GateResult
+    import json as _json
+    captured = {}
+
+    def _fake_gate_rules(*args, threshold_pct=1.0, **kwargs):
+        captured["threshold_pct"] = threshold_pct
+        return GateResult(cik="778", target_quarter="2026-03-31")
+
+    monkeypatch.setattr(ri, "gate_rules", _fake_gate_rules)
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame({"cik": ["778"], "report_date": ["2026-03-31"], "fair_value": [100.0]})
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: (
+        {"2026-03-31": {"companyfacts_fv": 100.0}}, {}))
+    monkeypatch.setattr(ri, "load_anchors", lambda cik, **kw: {})
+    out = tmp_path / "778"
+    rules_dir = out / "rules"
+    rules_dir.mkdir(parents=True)
+    (rules_dir / "stub.json").write_text(_json.dumps({
+        "cik": "778", "rule_id": "stub", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Nobody'", "scope": {"quarters": ["all"]},
+        "evidence": ["x"], "rationale": "test", "confidence": 0.9,
+    }), encoding="utf-8")
+    ri._measure("778", "2026-03-31")
+    assert "threshold_pct" in captured
+    assert captured["threshold_pct"] == pipeline_config.FV_CONSERVATION_BAND_PCT, (
+        f"_measure called gate_rules with threshold_pct={captured['threshold_pct']} "
+        f"but production band is {pipeline_config.FV_CONSERVATION_BAND_PCT}")
+
+
+def test_prep_prompt_excludes_stale_quarter_escalation(tmp_path, monkeypatch):
+    """prep's 'Existing escalations' listing must not include a stale-quarter escalation (F1)."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    monkeypatch.setattr(ri, "_load_holdings", lambda cik: pd.DataFrame(
+        {"cik": ["666"], "report_date": ["2026-03-31"], "fair_value": [1.0]}))
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter", lambda cik: ({}, {}))
+    monkeypatch.setattr(ri, "_find_bundle", lambda cik, q: None)
+    esc_dir = tmp_path / "666" / "escalations"
+    esc_dir.mkdir(parents=True)
+    current_q = "2026-03-31"
+    stale_q = "2025-12-31"
+    esc_cur = {
+        "target_quarter": current_q, "category": "vocab",
+        "kind": "proposed_mechanism", "summary": "current finding in prompt",
+        "evidence": [{"source": "query", "quote": "x"}],
+        "why_no_vocab_fits": "w", "suggested_applier": "s", "confidence": 0.8,
+    }
+    esc_stale = dict(esc_cur, target_quarter=stale_q, summary="stale prior quarter finding")
+    esc_dir.joinpath("cur.json").write_text(json.dumps(esc_cur), encoding="utf-8")
+    esc_dir.joinpath("stale.json").write_text(json.dumps(esc_stale), encoding="utf-8")
+    ri.prep("666", current_q, iteration=2, allow_missing_bundle=True)
+    prompt = (tmp_path / "666" / "prompt.md").read_text(encoding="utf-8")
+    assert "current finding in prompt" in prompt
+    assert "stale prior quarter finding" not in prompt

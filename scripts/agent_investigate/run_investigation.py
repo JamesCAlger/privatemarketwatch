@@ -396,11 +396,13 @@ def _measure(cik: str, target_quarter: str) -> dict:
     vs = value_sum_by_quarter(corrected, cik=cik).get(tq, 0.0)
     residual_pct = round((vs - anchor) / anchor * 100.0, 3) if anchor else None
     g = (gate_rules(base, corrected, cik=cik, target_quarter=target_quarter,
-                    anchor_candidates=candidates) if rules else None)
+                    anchor_candidates=candidates,
+                    threshold_pct=config.FV_CONSERVATION_BAND_PCT) if rules else None)
     noop_rules = [a.get("rule_id") for a in audits if a.get("noop")]
     invalid_rules = [{"rule_id": a.get("rule_id"), "errors": a.get("errors")}
                      for a in audits if a.get("status") == "invalid"]
-    raw_escalations = load_escalations(out / "escalations")
+    raw_escalations = [e for e in load_escalations(out / "escalations")
+                       if str(e.get("target_quarter")) == str(target_quarter)]
     escalations = dedupe_escalations(raw_escalations)
     noop = None if rules else _noop_gate_verdict(residual_pct, av.tier)
     return {"cik": _norm(cik), "target_quarter": target_quarter, "n_rules": len(rules),
@@ -467,7 +469,10 @@ def prep(cik: str, target_quarter: str, iteration: int = 1,
     if resolved is not None:
         anchors_display[str(target_quarter)] = resolved
     state = _measure(cik, target_quarter) if iteration > 1 else None
-    existing_escalations = dedupe_escalations(load_escalations(out / "escalations"))
+    existing_escalations = dedupe_escalations(
+        [e for e in load_escalations(out / "escalations")
+         if str(e.get("target_quarter")) == str(target_quarter)]
+    )
     prompt_path = out / "prompt.md"
     prompt_path.write_text(_prompt(cik, target_quarter, anchors_display, rules_out, iteration, state,
                                    anchor_tier=tier, anchor_reason=reason, bundle_path=bundle_path,
@@ -530,7 +535,8 @@ def gate(cik: str, target_quarter: str) -> dict:
                     "anchor_reason": anchor_reason,
                     "checks": {"noop_reconciled": True}, "reasons": noop["reasons"]}
     g = gate_rules(base, corrected, cik=cik, target_quarter=target_quarter,
-                   anchor_candidates=candidates)
+                   anchor_candidates=candidates,
+                   threshold_pct=config.FV_CONSERVATION_BAND_PCT)
     return {"cik": _norm(cik), "target_quarter": target_quarter, "verdict": g.verdict,
             "anchor_tier": av.tier, "anchor_reason": anchor_reason,
             "checks": g.checks, "reasons": g.reasons}
@@ -624,6 +630,12 @@ def route_escalations(base_dir=BASE, out_dir=None) -> dict:
     Routes: anchor -> anchor_lane, vocab -> extraction_review, else -> human_review.
     Writes <out_dir>/escalation_routing.csv.
     Returns {n_files, n_distinct, by_route, csv}.
+
+    CSV columns:
+      n_duplicate_files -- raw FILE count for this (target_quarter, category) key; 1 means
+                           no duplicates for that key, >1 means re-statements were collapsed.
+      escalation_path   -- the escalations DIRECTORY for this CIK (not a single file path;
+                           deduped rows have no single canonical file).
     """
     base_dir = Path(base_dir)
     if out_dir is None:
