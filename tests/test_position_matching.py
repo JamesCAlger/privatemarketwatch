@@ -1639,6 +1639,7 @@ class TestFvRatioGuards:
 
     @pytest.mark.slow
     @pytest.mark.integration
+    @pytest.mark.needs_cache
     def test_tier_b1_rejects_extreme_fv_ratio(self):
         """Tier B1 (CUSIP) rejects pair with >50x FV ratio."""
         unified = _make_unified([
@@ -1661,6 +1662,7 @@ class TestFvRatioGuards:
 
     @pytest.mark.slow
     @pytest.mark.integration
+    @pytest.mark.needs_cache
     def test_tier_b2_rejects_extreme_fv_ratio(self):
         """Tier B2 (exact name) rejects pair with >50x FV ratio."""
         unified = _make_unified([

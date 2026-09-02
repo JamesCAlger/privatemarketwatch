@@ -22,6 +22,7 @@ def _write_leaf(path, grand_total, *, method="sum_of_schedules"):
         "rationale": "grand total", "confidence": 0.9}), encoding="utf-8")
 
 
+@pytest.mark.needs_cache
 def test_verify_accepts_real_grand_total(tmp_path, monkeypatch):
     # real 1715933 2025-06-30: total_assets ~1.098B. A ~1.094B grand total closes -> HIGH.
     monkeypatch.setattr(run_anchor, "BASE", tmp_path / "agent_anchor")
@@ -58,6 +59,7 @@ def test_verify_rejects_subtotal(tmp_path, monkeypatch):
     assert not res["ok"] and res["tier"] == "NONE"
 
 
+@pytest.mark.needs_cache
 def test_promote_writes_override_only_when_verified(tmp_path, monkeypatch):
     monkeypatch.setattr(run_anchor, "BASE", tmp_path / "agent_anchor")
     monkeypatch.setattr(run_anchor, "ANCHOR_OVERRIDES", tmp_path / "overrides")
@@ -86,6 +88,7 @@ def test_override_feeds_back_into_anchor_candidates(tmp_path, monkeypatch):
     assert classify_anchors(q).tier == "MEDIUM"   # single verified strong anchor
 
 
+@pytest.mark.needs_cache
 def test_override_agreeing_with_companyfacts_yields_high(tmp_path, monkeypatch):
     monkeypatch.setattr(run_investigation, "ANCHOR_OVERRIDES", tmp_path / "ov")
     # an override that AGREES with companyfacts (692M) -> keep both -> HIGH (corroborated)

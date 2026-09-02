@@ -10753,3 +10753,23 @@ Two descriptions in the d177253 changelog entry were inaccurate:
   scripts/agent_investigate/run_investigation.py (BASE, prep, loop_decision,
   route_escalations). Not pressure-tested; GREEN check is the next operator
   session or a status-mode dry run on an escalated CIK (e.g. 1743415).
+
+## 2026-09-02: CI bring-up (needs_cache split) + R2 backup tooling
+
+- **What changed**: First GitHub Actions CI (`.github/workflows/ci.yml`): cache-free pytest
+  (`-m "not needs_cache"`, timeout 150m) + frontend build, on push to main/ensemble-fp-experiment
+  and PRs. New `needs_cache` marker (pytest.ini) with conftest auto-skip when `data/raw` absent.
+  New conftest isolation: GICS label cache redirected to tmp_path per test (fixes 44 cacheless
+  failures; no test depends on real cache contents), `OPENAI_API_KEY` dummy default (clients are
+  mocked; real key comes from .env locally). 6 tests marked `needs_cache` (3 anchor_adjudicator,
+  2 position_matching FvRatioGuards, 1 interval_source_review). New `scripts/backup_raw_to_r2.ps1`
+  + `docs/reference/cloud_backup_setup.md` (raw cache 121GB -> Cloudflare R2; owner does one-time
+  account setup).
+- **Validation**: full suite in cacheless worktree (CI simulation): 53 failures found -> after
+  fixes, previously-failing files 345 passed / 6 deselected / 0 failed. With cache present: GICS
+  files 202 passed (redirect regression check). Cacheless full-suite baseline: 4759 passed /
+  15 skipped / 2 xfailed in 1h46m.
+- **Contracts**: repo settings hardened (secret scanning + push protection + Dependabot enabled;
+  full-history credential scan clean). Do not add self-hosted runners (public repo, fork-PR risk).
+  Full-cache tests stay local. Known residual: SyntaxWarning invalid escape `\s`
+  pipeline/source_reconciliation.py:3399 (pre-existing).

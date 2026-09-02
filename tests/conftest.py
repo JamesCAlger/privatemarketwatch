@@ -58,6 +58,44 @@ io.open = _guarded_io_open
 import pytest
 
 
+# Tests never call the real OpenAI API (clients are mocked), but some construct
+# a client, which raises at init when no key is set. Local runs get the real key
+# from .env; cacheless environments (CI, fresh clones) get this dummy.
+os.environ.setdefault("OPENAI_API_KEY", "ci-dummy-key-tests-mock-all-calls")
+
+_CACHE_PRESENT = (PROJECT_ROOT / "data" / "raw").is_dir()
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip needs_cache tests when the local data cache is absent.
+
+    CI runners and fresh clones have only tracked files, so data/raw does not
+    exist there. CI additionally deselects via -m "not needs_cache"; this hook
+    is the fallback so a bare `pytest` on a cacheless checkout skips instead
+    of erroring.
+    """
+    if _CACHE_PRESENT:
+        return
+    skip_marker = pytest.mark.skip(reason="local data/ cache not available (needs_cache)")
+    for item in items:
+        if item.get_closest_marker("needs_cache"):
+            item.add_marker(skip_marker)
+
+
+@pytest.fixture(autouse=True)
+def _isolate_gics_label_cache(monkeypatch, tmp_path):
+    """Point the GICS label cache at a per-test path.
+
+    gics_mapping reads/creates data/output/gics_label_cache.csv via a
+    module-level binding; on a cacheless checkout the create hits the
+    production-write guard. Tests that patch the path themselves simply
+    re-patch over this. No test depends on real cache contents (verified via
+    cacheless worktree run 2026-09-02).
+    """
+    monkeypatch.setattr("pipeline.gics_mapping.GICS_LABEL_CACHE_FILE",
+                        tmp_path / "gics_label_cache.csv", raising=True)
+
+
 @pytest.fixture(autouse=True)
 def _isolate_promoted_agent_stores(request, monkeypatch, tmp_path):
     """Point the promoted agent-fix stores (gap 1) at empty per-test dirs.

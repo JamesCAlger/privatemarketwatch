@@ -144,6 +144,7 @@ def test_private_source_only_blocks_public_and_cash_do_not(tmp_path):
 
 @pytest.mark.slow
 @pytest.mark.integration
+@pytest.mark.needs_cache
 def test_build_bundle_includes_ncsr_html_and_entity_context(tmp_path, monkeypatch):
     output = tmp_path / "output"
     review_dir = output / "interval_source_review"
