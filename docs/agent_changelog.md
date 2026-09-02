@@ -10539,3 +10539,53 @@ Owner-directed scope: cohort-only, Q1-2026 only, ALL shadow-ledger rules (both l
   row-keyed rule bundles lack issuer/identifier context.
 - Ledger: NOT dry (14,946 actionable; 839 lifecycle transitions this pass; 9 real
   errors resolved_upstream). Worker scratch swept (0.3 GB).
+
+## 2026-09-02 - q1p3 residual tooling fixes (non-admin session): B1 wave manifests, bundle row context, PASS_NOOP gate, Layer C row_id JIT, promote audit guard
+
+Five code fixes addressing q1p3_20260831 residuals; no fleet dispatch, no rebuilds, no
+rule reauthoring. All TDD; 133 tests green across the six touched files; semantic diff
+confirmed zero artifact drift from this session (the large baseline diff is the
+in-flight q1p3 pass state from the 06:04-06:14 close-out battery).
+
+- B1 wave-stamped manifests (ports ebb62e4 from B2): scripts/agent_b/dispatch_preflight.py
+  now writes manifest.NNN.json per wave + manifest.json latest pointer;
+  run_review.finalize aggregates across wave files (later waves win on review_id
+  collision; legacy single-manifest fallback kept). Fixes the q1p3 defect where finalize
+  routed only 150 of 743 packets. +2 tests (15 in test_agent_b_preflight.py).
+- Row context on row-keyed validation issues: column_validation ISSUE_COLUMNS +
+  _issue_query now carry row_id, issuer_name, bdc_investment_identifier (blank on
+  adapter-produced aggregate issues; _prepare_df tolerates missing row_id). Fixes the
+  top B1 ambiguity driver (C30x/C207 bundles carried only the positional row_key).
+  NOTE: lands in review bundles only after row_validation_issues.csv is next rebuilt
+  (validate step of the next pass preflight). +2 tests (42 in test_column_validation.py).
+- PASS_NOOP gate short-circuit (2083477 false-FAIL root cause): run_investigation now
+  returns PASS_NOOP when a ZERO-rule investigation has a validated anchor (HIGH/MEDIUM)
+  and baseline residual within the conservation band -- held_out_coverage was
+  unconditionally failing first-time filers with one anchored quarter and nothing to
+  fix, and loop_decision had no success path for NO_RULES (burned 5 iterations).
+  Over-band or unvalidated-anchor no-ops still FAIL (worker gave up != clean quarter).
+  promote() on PASS_NOOP returns no_rules_to_promote. Gate CLI exits 0 on PASS_NOOP.
+  Diagnosis note: NO "unaddressed B1 findings" predicate exists in the gate; that
+  hypothesis is disconfirmed. 2083477 has one FV-neutral classification real_error
+  (RVQ_REV_a34bb97c3d16) needing the classification channel, unrelated to this gate.
+- Layer C JIT row_id (heals 3 of 6 q1p3 inert rules WITHOUT reauthoring):
+  apply_promoted_rules materializes row_id on the per-CIK sub-frame when a promoted
+  rule predicate references it (mid-build frame lacks row_id, assigned at build end;
+  authoring/gate ran on the published frame which has it). Ports the Layer B stage2
+  JIT patch (2026-08-21). 1287750/1916608/1925309 Binder errors resolve at next
+  rebuild. Transient column dropped before concat. (39 tests in test_agent_promoted.py.)
+- promote() audit guard (Fiesta blind spot): refuses rule-sets containing
+  validate_rule-invalid rules (refused_invalid_rules) or published-frame-noop rules
+  (refused_noop_rules) even when the gate PASSes -- an FV-neutral invalid rule sailed
+  through a residual-already-zero gate in q1p3 (1869453 dedup on position_key, not in
+  DEDUP_KEY_FIELDS). (11 tests in test_investigation_orchestration.py.)
+
+Remaining from the inert-rule diagnosis (NOT fixed here, needs reauthor or frame
+normalization): 1841514 exclude_equity_subtotal + 1913724 exclude_twin_brook_rollforward
+noop because `instrument_description IS NULL` is true on the published frame (CSV
+round-trip turns '' into NULL) but false mid-build (staging_bdc.py:2012 sets '').
+Recommended predicate reauthor: `COALESCE(instrument_description, '') = ''` (matches
+both frames). 1869453 Fiesta needs full reauthor as row_exclusion (see diagnosis in
+scratch/2026-08-31_q1p3_dispatch/ + this entry). Systemic option to evaluate: normalize
+'' -> NULL on string columns before Layer C so published-frame-authored predicates are
+faithful.
