@@ -55,6 +55,30 @@ class TestColumnContracts:
         assert len(issues[issues["severity"] == SEVERITY_FAIL]) == 0
         assert not metrics.empty
 
+    def test_issue_rows_carry_row_context(self):
+        """Row-keyed issues (C30x/C207) must carry issuer/identifier/row_id so a
+        blinded reviewer can map the flag to a filing row. In the q1p3 B1 fleet
+        the bare internal row_key was the top ambiguity driver."""
+        df = _make_unified_df([{"index_classification": "BOGUS"}])
+        df["row_id"] = ["abc123"]
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "C301")
+        assert len(result) == 1
+        row = result.iloc[0]
+        assert row["issuer_name"] == "Acme Corp"
+        assert row["bdc_investment_identifier"] == "Acme Corp - First Lien Loan"
+        assert row["row_id"] == "abc123"
+
+    def test_issue_rows_tolerate_missing_row_id_column(self):
+        """row_id is appended to the saved artifact after the build; frames
+        without it (in-flight SQL schema) must not crash the validator."""
+        df = _make_unified_df([{"index_classification": "BOGUS"}])
+        assert "row_id" not in df.columns
+        issues, _ = validate_column_contracts(df)
+        result = _issues_by_rule(issues, "C301")
+        assert len(result) == 1
+        assert result.iloc[0]["row_id"] == ""
+
     def test_invalid_enum_produces_fail(self):
         df = _make_unified_df([{"source": "bad"}])
         issues, _ = validate_column_contracts(df)

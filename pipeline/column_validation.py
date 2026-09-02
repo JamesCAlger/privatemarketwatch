@@ -41,6 +41,11 @@ ISSUE_COLUMNS = [
     "dataset", "source", "cik", "report_date", "row_key", "column",
     "rule_id", "severity", "evidence_strength", "status", "action",
     "value", "message", "evidence",
+    # Row context (2026-09-02): row_key is a positional index that means nothing
+    # outside the run; blinded reviewers need issuer/identifier/row_id to map a
+    # row-keyed flag (C30x/C207 etc.) back to the filing row. Adapter-produced
+    # issues without row grain leave these blank.
+    "row_id", "issuer_name", "bdc_investment_identifier",
 ]
 
 METRIC_COLUMNS = [
@@ -136,6 +141,10 @@ def _prepare_df(df: pd.DataFrame) -> pd.DataFrame:
     for col in REQUIRED_COLUMNS:
         if col not in prepared.columns:
             prepared[col] = ""
+    # row_id is appended to the saved artifact after the build (see
+    # unified_holdings.UNIFIED_COLUMNS note); in-flight frames may lack it.
+    if "row_id" not in prepared.columns:
+        prepared["row_id"] = ""
     prepared["_row_key"] = range(len(prepared))
     return prepared
 
@@ -227,7 +236,10 @@ def _issue_query(
             '{action}' AS action,
             CAST({value} AS VARCHAR) AS value,
             '{esc_message}' AS message,
-            '{esc_evidence}' AS evidence
+            '{esc_evidence}' AS evidence,
+            {_value_sql('row_id')} AS row_id,
+            {_value_sql('issuer_name')} AS issuer_name,
+            {_value_sql('bdc_investment_identifier')} AS bdc_investment_identifier
         FROM h
         WHERE {condition}
     """
