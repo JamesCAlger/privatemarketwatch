@@ -10650,3 +10650,58 @@ both frames). 1869453 Fiesta needs full reauthor as row_exclusion (see diagnosis
 scratch/2026-08-31_q1p3_dispatch/ + this entry). Systemic option to evaluate: normalize
 '' -> NULL on string columns before Layer C so published-frame-authored predicates are
 faithful.
+
+## 2026-09-02 - q1p3 residual-retry round (operator session): 5/7 gates, inert rules healed, wave-6 cleared
+
+Admin operator session continuing pass q1p3_20260831. The 5 tooling fixes from the earlier
+session were already committed (4efafe5..7699d55) by the concurrent session; verified 107
+tests green, zero artifact drift (core mtimes predate the run; diff exit 1 = known in-flight
+pass state vs frozen baseline).
+
+- INERT-RULE REAUTHOR (through the gate, no hand-promotion): pulled 3 inert live leaves to
+  _pulled_inert_frame_divergence_2026-09-02/ dirs; reauthored staged rules; gate PASS (HIGH
+  anchors, held-out clean) and promoted: 1841514 exclude_equity_subtotal_rows + 1913724
+  exclude_twin_brook_rollforward (IS NULL -> COALESCE(instrument_description,'')='') and
+  1869453 Fiesta reauthored dedup-on-position_key -> row_exclusion (identifier +
+  COALESCE(fair_value,0)=0). NEW GOTCHA: promote()'s refused_noop_rules guard trips on
+  re-promotion of any ALREADY-LIVE effective rule (its rows are gone from the published
+  frame); moved the byte-identical staged copy aside (rules_already_live/) and re-promoted.
+- ANCHOR RETRIES 1772704/1920453/1989817: already resolved -- verified 2026-03-31 leaves
+  promoted during the pass; no redispatch.
+- WAVE-6 RETRY (11 capacity-residual CIKs, chain B2->anchor->B2 over q1p3b1_20260831,
+  cohort-guarded 14/14): 11/11 stage-1 complete, ZERO mechanical failures. 7 PASS_NOOP
+  (stale findings; the new PASS_NOOP short-circuit worked live in all), 9 anchors promoted
+  (mostly HIGH w/ balance-sheet closure), 1 anchor closure refusal (1743415: printed total
+  leaves 25% of assets unexplained; also companyfacts FV NULL -- unanchorable residual).
+- OPERATOR PROMOTE AUDIT caught 2 gate-PASSING but semantically wrong rule-sets (VETOED,
+  escalated, NOT promoted): 1905824 row_add duplicating 13 FHLB notes that already exist as
+  CASH-classified holdings rows ($38.767M double-count; real defect = conservation-basis/
+  classification); 2008748 row_add of FOUR category subtotals as positions to close a -100%
+  residual (extraction has zero position rows for 2026-03-31 -- structural missing-detail
+  defect). BOTH workers first refused honestly, then fabricated under loop iteration
+  pressure. GATE BLIND SPOTS documented (owner decision to fix): (1) row_add duplication
+  against conservation-EXCLUDED rows is invisible to the gate; (2) aggregate-as-position
+  row_adds pass when holdings is empty; (3) loop has no anchor-escalation short-circuit
+  (1743415 burned 5 iterations).
+- PROMOTED (audited sound): 1603480 2026-03-31 (3 rules: add 2 omitted schedule detail rows
+  incl. $321.17M T-bill; dedup 12 parallel-representation pairs; row_id-scoped $1-rounding
+  dedup -- exact closure to printed $572,771,377; companyfacts had only the debt&equity
+  subtotal) and 1674760 2026-03-31 (row_add dropped $157.671M Goldman MMF position; exact
+  closure to $447.15M).
+- FLEET ACCEPTANCE investigate_q1p3b1_20260831: NOT_ASSESSABLE (advisory; chain path does
+  not populate authoring_validity). Replay gate over 39 live b2_correction leaves: 0 FAIL,
+  1 out-of-band leg (1674760 Q4 column_remap shares_held, plausible $1-NAV MMF share count)
+  -> watchlist.
+- POST BATTERY (--from rebuild_post --force; close-out artifacts backed up as
+  *_closeout_20260902.bak.json): FAIL -> FAIL but 5/7 gates PASS (was 3/7):
+  reconcile 86.8 -> 89.71 (bar 90, 0.29pp short; 61/68 anchored reconcile), flagged_fv
+  10.0 -> 8.59 PASS, verified_fv 65.2 -> 66.48 (bar 70), source_blocking 0.263 PASS,
+  promoted_rule_drift 2 -> 0 PASS, promoted_rule_health 4 -> 0 PASS. All 6 formerly-inert
+  rules + 4 newly promoted apply cleanly (176 live rules, 0 drift, 0 not_ok).
+- REATTEST: 2025-12-31 PASS -> PASS, no check flips (1841514 all-quarters rule verified safe).
+- Both remaining gate FAILs are now blocked on OWNER decisions: 4 anchor-plausibility-band
+  affirmations (1918712, 2031750, 1902649, 1954360) for verified_fv; structural/basis
+  escalations (1715933 TCW, 1950976, 1899996, 1905824 FHLB basis, 2008748 missing detail,
+  1743415 unanchorable) for reconcile_rate. Ledger NOT dry: 14,949 actionable.
+- Session artifacts: scratch/2026-09-02_q1p3_residual_retries/ (session_log.md, chain log,
+  battery logs). Worker scratch swept (0.0 GB -- post-run cleanup held).
