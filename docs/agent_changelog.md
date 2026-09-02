@@ -10504,3 +10504,38 @@ adjudication_checks.py output.
 - BDCSRC deferred-bundle schema ('bdc-cik-review-bundle.v1') remains unsupported by
   the preflight bundle validator + B1 prompt contract; 7 source_recon packets
   deferred by owner decision (residual log: scratch/2026-08-31_q1p3_dispatch/).
+
+## 2026-09-02 - Pass q1p3_20260831: full cohort-Q1 shadow-rule dispatch (largest fleets to date); flagged-FV gate now PASSING
+
+Owner-directed scope: cohort-only, Q1-2026 only, ALL shadow-ledger rules (both lanes).
+
+- B1 adjudication: 743/743 packets (750 minus 7 deferred BDCSRC), 5 FV-ranked waves
+  + 6 retry rounds; all mechanical failures were the known 1326 logon race (~6-11%
+  per wave at MaxParallel 2, 100% recovered by serialized retries) or transient
+  model-capacity errors. Finalize routing: 347 false_alarm / 302 real_error /
+  60 human-ambiguous / 34 evidence-backlog (no-source).
+- B2 remediation: 6 FV-ranked CIK waves through run_full_remediation_canary
+  (B2 -> anchor -> B2). ~24 anchor overrides promoted (2026-03-31), 48 CIK-quarter
+  investigation rule-sets promoted (+28 net live rules). Wave-6 tail (11 small-FV
+  CIKs) lost to a prolonged upstream model-capacity event -- documented capacity
+  residuals, retry next round.
+- MEASURED EFFECT (acceptance pre -> post): reconcile_rate 73.5 -> 86.8 (bar 90);
+  flagged_fv_share 29.3 -> 10.0 PASS (-$74.3B); verified_fv_share 66.8 -> 65.2
+  (bar 70); source_blocking 0.26 PASS. Verdict FAIL 4/7 -- remaining fails:
+  reconcile_rate, verified_fv_share, promoted_rule_drift(2), promoted_rule_health(4).
+- Rule health fails are 6 INERT promoted rules (0 production rows; 4 apply-error,
+  2 selector-noop) -- trial-vs-production frame divergence; pull + diagnose +
+  reauthor next round (rule ids in scratch/2026-08-31_q1p3_dispatch/residuals.md).
+- Systemic finding: anchor plausibility band (0.33x-3x CIK median) false-positives
+  on ramp-up funds -- 4 escalations (1918712, 2031750, 1902649, 1954360) where
+  holdings match fund_financials/companyfacts exactly. Recommend growth-aware band.
+- Structural escalations (human): 1715933 TCW DL VII (exact arithmetic: $582.2M
+  missing cash/short-term + $355.9M affiliation-axis duplicates = $226.2M
+  undershoot; needs row_add + layer_exclusion), 1950976 (Level-1 investments
+  outside SOI), 1899996 (money-market position missing from extraction).
+- Tooling defects (this entry + 2026-09-01 entry): B1 per-wave manifest overwrite;
+  b3_gate_summary_stage3.csv overwritten per chain run (recover from per-CIK
+  b3_gate.*.json); chain does not promote investigation rules (operator step);
+  row-keyed rule bundles lack issuer/identifier context.
+- Ledger: NOT dry (14,946 actionable; 839 lifecycle transitions this pass; 9 real
+  errors resolved_upstream). Worker scratch swept (0.3 GB).
