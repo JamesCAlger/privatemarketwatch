@@ -4237,7 +4237,12 @@ def _write_csv_atomic(df: pd.DataFrame, path: Path, columns: Optional[list[str]]
 # per-accession source-fact parquet cache is re-extracted instead of silently
 # reused with stale extraction semantics.
 # v2: liquid-fund/cash-equivalent member admission (CashAndCashEquivalentsAxis).
-_SOURCE_FACT_EXTRACTION_VERSION = "2"
+# v3: shared parser (_parse_xbrl_contexts) now marks filer-extension
+#     CashAndCashEquivalentsAxis contexts is_investment, and _match_concept
+#     gained MoneyMarketFundsAt*/CashEquivalentsAt* mappings -- cash rows enter
+#     through the regular investment path with no keyword gate (fixes the two
+#     v2 admission misses: no-'money market'-keyword names and filer typos).
+_SOURCE_FACT_EXTRACTION_VERSION = "3"
 
 
 def _filing_metadata_hash(filing: dict[str, Any]) -> str:

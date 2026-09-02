@@ -422,20 +422,29 @@ def test_liquid_fund_custom_money_market_concepts_mapped(tmp_path):
     assert row["shares_held"] == 19087624.0
 
 
-def test_non_money_market_cash_member_not_admitted(tmp_path):
-    # Admission is gated on the money-market keyword list; an arbitrary cash
-    # member cannot become a source row (it could only turn into a NEW
-    # missing_from_pipeline blocker, never a documented exclusion).
+def test_non_money_market_cash_member_admitted_via_investment_path(tmp_path):
+    # v3: filer-extension cash-axis members are full investment contexts in
+    # the SHARED parser -- no money-market keyword gate. The v2 gate caused
+    # real pipeline_only blockers on names without a keyword ("First American
+    # Government Obligation Fund") and filer typos ("Mone Market"). Symmetry
+    # with pipeline.bdc_filings keeps both sides consistent: whatever the
+    # pipeline ingests, the source side sees too, so admission cannot create
+    # one-sided blockers.
     body = _cash_equivalents_context("ctx_ops", "OperatingCashAccountMember") + (
         '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx_ops" unitRef="usd" decimals="0">123456</us-gaap:InvestmentOwnedAtFairValue>'
     )
 
     rows = _extract(tmp_path, body)
 
-    assert rows == []
+    assert len(rows) == 1
+    assert rows[0]["investment_identifier"] == "Operating Cash Account"
+    assert rows[0]["fair_value"] == 123456.0
 
 
-def test_zero_fair_value_liquid_fund_member_not_admitted(tmp_path):
+def test_zero_fair_value_liquid_fund_member_admitted(tmp_path):
+    # v3: zero-FV cash rows are admitted like any investment-context row; the
+    # pipeline side ingests the same context through the same parser, so both
+    # sides stay symmetric (zero-FV BDC rows are a known, retained class).
     body = _cash_equivalents_context(
         "ctx_zero", "DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember"
     ) + (
@@ -444,7 +453,8 @@ def test_zero_fair_value_liquid_fund_member_not_admitted(tmp_path):
 
     rows = _extract(tmp_path, body)
 
-    assert rows == []
+    assert len(rows) == 1
+    assert rows[0]["fair_value"] == 0.0
 
 
 def test_footnote_only_money_market_mention_not_admitted(tmp_path):
