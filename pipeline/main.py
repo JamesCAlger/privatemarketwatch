@@ -839,6 +839,8 @@ def main() -> None:
             # Re-save with enriched fields
             unified_df.to_csv(OUTPUT_DIR / "private_markets_holdings.csv",
                               index=False)
+            from pipeline.utils import write_parquet_companion
+            write_parquet_companion(OUTPUT_DIR / "private_markets_holdings.csv")
         except Exception as exc:
             logger.error("Identifier extraction failed: %s", exc,
                          exc_info=True)
@@ -873,6 +875,8 @@ def main() -> None:
             cache = _load_cache()
             unified_df = _apply_gics_to_holdings(unified_df, cache)
             unified_df.to_csv(OUTPUT_DIR / "private_markets_holdings.csv", index=False)
+            from pipeline.utils import write_parquet_companion
+            write_parquet_companion(OUTPUT_DIR / "private_markets_holdings.csv")
         except Exception as exc:
             logger.error("GICS web search failed: %s", exc, exc_info=True)
         logger.info("GICS web search step completed in %.1f s",

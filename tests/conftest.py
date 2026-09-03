@@ -96,6 +96,65 @@ def _isolate_gics_label_cache(monkeypatch, tmp_path):
                         tmp_path / "gics_label_cache.csv", raising=True)
 
 
+# ---------------------------------------------------------------------------
+# Native-IO write backstop.
+#
+# The open() guard above cannot see writes made through native (C++) IO —
+# DuckDB COPY TO and pyarrow bypass builtins.open entirely. Since the phase-1
+# Parquet companions introduced DuckDB writers into the pipeline, this
+# session-level check is the enforcement backstop: snapshot (mtime_ns, size)
+# for every file under the protected roots at session start, re-walk at
+# session end, and fail the run loudly on any created/changed/deleted path.
+# ---------------------------------------------------------------------------
+
+_FS_MANIFEST: dict[str, tuple[int, int]] = {}
+
+
+def _walk_protected() -> dict[str, tuple[int, int]]:
+    manifest: dict[str, tuple[int, int]] = {}
+    for root in PROTECTED_OUTPUT_ROOTS:
+        if not root.is_dir():
+            continue
+        for dirpath, _dirnames, filenames in os.walk(root):
+            for fn in filenames:
+                p = Path(dirpath) / fn
+                try:
+                    st = p.stat()
+                except OSError:
+                    # ACL-denied leftovers (e.g. sandboxed scratch); the open()
+                    # guard still covers them, and unreadable-both-walks means
+                    # unchanged-for-our-purposes.
+                    continue
+                manifest[str(p)] = (st.st_mtime_ns, st.st_size)
+    return manifest
+
+
+def pytest_sessionstart(session):
+    _FS_MANIFEST.update(_walk_protected())
+
+
+def pytest_sessionfinish(session, exitstatus):
+    after = _walk_protected()
+    created = sorted(set(after) - set(_FS_MANIFEST))
+    deleted = sorted(set(_FS_MANIFEST) - set(after))
+    changed = sorted(
+        p for p in set(after) & set(_FS_MANIFEST) if after[p] != _FS_MANIFEST[p]
+    )
+    if created or deleted or changed:
+        tr = session.config.pluginmanager.get_plugin("terminalreporter")
+        lines = ["PRODUCTION OUTPUT MODIFIED DURING PYTEST (native-IO backstop):"]
+        for label, paths in (("created", created), ("deleted", deleted), ("changed", changed)):
+            for p in paths[:20]:
+                lines.append(f"  {label}: {p}")
+            if len(paths) > 20:
+                lines.append(f"  ... and {len(paths) - 20} more {label}")
+        message = "\n".join(lines)
+        if tr is not None:
+            tr.write_sep("=", "protected-output backstop FAILED", red=True)
+            tr.write_line(message)
+        session.exitstatus = 3
+
+
 @pytest.fixture(autouse=True)
 def _isolate_promoted_agent_stores(request, monkeypatch, tmp_path):
     """Point the promoted agent-fix stores (gap 1) at empty per-test dirs.

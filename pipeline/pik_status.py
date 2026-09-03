@@ -291,6 +291,8 @@ def build_position_pik_status(
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     status.to_csv(output_path, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(output_path)
     transitions_path.parent.mkdir(parents=True, exist_ok=True)
     transitions.to_csv(transitions_path, index=False)
 

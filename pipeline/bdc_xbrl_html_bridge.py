@@ -1369,6 +1369,8 @@ def extract_bdc_ixbrl_field_status(
         out_df["in_unified"] = out_df.pop("_u").fillna(False)
 
     out_df.to_csv(out, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(out)
     logger.info("Wrote %d iXBRL field-status rows (%d in_unified) -> %s",
                 len(out_df), int(out_df["in_unified"].sum()), out)
     return out

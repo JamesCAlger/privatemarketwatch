@@ -147,6 +147,8 @@ def _write_position_id_edges(edges: list[dict]) -> None:
     edges_df = _sort_existing(edges_df, POSITION_ID_EDGE_COLUMNS)
     POSITION_ID_EDGES_FILE.parent.mkdir(parents=True, exist_ok=True)
     edges_df.to_csv(POSITION_ID_EDGES_FILE, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(POSITION_ID_EDGES_FILE)
 
 
 def _validate_unique_position_ids(unified_df: pd.DataFrame) -> None:
@@ -1898,6 +1900,8 @@ def match_positions(
     _out_file = output_file or POSITION_MATCHES_FILE
     _out_file.parent.mkdir(parents=True, exist_ok=True)
     result.to_csv(_out_file, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(_out_file)
     elapsed = time.time() - t0
     logger.info("Position matching complete: %d pairs in %.1f s", len(result), elapsed)
     if _out_file.exists():

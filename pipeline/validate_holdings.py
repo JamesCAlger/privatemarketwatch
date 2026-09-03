@@ -2023,6 +2023,8 @@ def validate_holdings(
         residual_summary = quality_reports["validate_all_residual_summary"]
 
         row_issues.to_csv(ROW_VALIDATION_ISSUES_FILE, index=False)
+        from pipeline.utils import write_parquet_companion
+        write_parquet_companion(ROW_VALIDATION_ISSUES_FILE)
         logger.info("  Saved %s", ROW_VALIDATION_ISSUES_FILE.name)
         column_metrics.to_csv(COLUMN_QUALITY_METRICS_FILE, index=False)
         logger.info("  Saved %s", COLUMN_QUALITY_METRICS_FILE.name)

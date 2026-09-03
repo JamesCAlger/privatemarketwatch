@@ -384,6 +384,8 @@ def compute_returns(
 
     # Save position returns
     position_returns.to_csv(POSITION_RETURNS_FILE, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(POSITION_RETURNS_FILE)
     logger.info("Saved position returns to %s", POSITION_RETURNS_FILE.name)
 
     # Register for index aggregation

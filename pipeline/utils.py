@@ -147,17 +147,103 @@ def hungarian_assignment(
     return ([], [])
 
 
-def write_parquet_companion(csv_file: Path) -> Path | None:
-    """Write a Parquet copy alongside a CSV for faster DuckDB reads.
+def _contract_cast_expr(col: str, dtype: str) -> str:
+    """CAST expression for one contract column read as VARCHAR from CSV."""
+    quoted = '"' + col.replace('"', '""') + '"'
+    if dtype == "VARCHAR":
+        return quoted
+    if dtype == "BIGINT":
+        # pandas emits "1.0" for nullable-int columns; cast through DOUBLE.
+        # Deliberately CAST (not TRY_CAST): garbage must hard-error, not null.
+        return f"CAST(CAST({quoted} AS DOUBLE) AS BIGINT) AS {quoted}"
+    return f"CAST({quoted} AS {dtype}) AS {quoted}"
 
-    Returns the Parquet path on success, None on failure.
+
+def write_parquet_companion(csv_file: Path, strict: bool | None = None) -> Path | None:
+    """Write a Parquet copy alongside a CSV.
+
+    For artifacts with a schema contract in ``pipeline.output_schemas``
+    (matched by filename), the Parquet is TYPED: the CSV is re-read
+    all-VARCHAR and every column CAST to its contract type, so the Parquet is
+    a typed rendering of exactly what the CSV persisted. Column drift
+    (missing/extra/reordered vs the contract) or a failing cast raises
+    ``OutputSchemaError`` when strict.
+
+    ``strict=None`` (default) auto-resolves: strict only when writing into the
+    real ``OUTPUT_DIR`` (production artifacts); tests writing contract-named
+    fixtures into tmp dirs fall back to the legacy untyped path instead of
+    tripping the contract.
+
+    Non-contract files keep the legacy behavior: untyped all-VARCHAR copy,
+    failures logged and swallowed. Returns the Parquet path, or None on
+    (legacy-path) failure.
     """
     import duckdb
 
+    from pipeline.config import OUTPUT_DIR
+    from pipeline.output_schemas import OUTPUT_SCHEMAS, OutputSchemaError
+
     parquet_file = csv_file.with_suffix(".parquet")
+    csv_path = str(csv_file).replace("\\", "/")
+    pq_path = str(parquet_file).replace("\\", "/")
+
+    contract = OUTPUT_SCHEMAS.get(csv_file.name)
+    if strict is None:
+        try:
+            in_output_dir = csv_file.resolve().parent == OUTPUT_DIR.resolve()
+        except OSError:
+            in_output_dir = False
+        strict = contract is not None and in_output_dir
+
+    if contract is not None and strict:
+        con = duckdb.connect()
+        try:
+            actual_cols = [
+                r[0] for r in con.execute(
+                    "DESCRIBE SELECT * FROM read_csv_auto(?, header=true, "
+                    "all_varchar=true)",
+                    [csv_path],
+                ).fetchall()
+            ]
+            expected_cols = list(contract.keys())
+            if actual_cols != expected_cols:
+                missing = [c for c in expected_cols if c not in actual_cols]
+                extra = [c for c in actual_cols if c not in expected_cols]
+                raise OutputSchemaError(
+                    f"{csv_file.name}: columns diverge from contract "
+                    f"(missing={missing}, extra={extra}, "
+                    f"order_changed={not missing and not extra})"
+                )
+            select = ", ".join(
+                _contract_cast_expr(c, t) for c, t in contract.items()
+            )
+            try:
+                con.execute(
+                    f"COPY (SELECT {select} FROM read_csv_auto('{csv_path}', "
+                    f"header=true, all_varchar=true)) "
+                    f"TO '{pq_path}' (FORMAT 'parquet')"
+                )
+            except duckdb.Error as exc:
+                # A failed COPY can leave a truncated file that crashes any
+                # later read_parquet; never leave partial output behind.
+                try:
+                    parquet_file.unlink(missing_ok=True)
+                except OSError:
+                    pass
+                raise OutputSchemaError(
+                    f"{csv_file.name}: contract cast failed: {exc}"
+                ) from exc
+        finally:
+            con.close()
+        csv_mb = csv_file.stat().st_size / (1024 * 1024)
+        pq_mb = parquet_file.stat().st_size / (1024 * 1024)
+        logger.info(
+            "Typed Parquet companion: %s (%.1f MB -> %.1f MB, %d cols)",
+            parquet_file.name, csv_mb, pq_mb, len(contract),
+        )
+        return parquet_file
+
     try:
-        csv_path = str(csv_file).replace("\\", "/")
-        pq_path = str(parquet_file).replace("\\", "/")
         con = duckdb.connect()
         con.execute(
             f"COPY (SELECT * FROM read_csv_auto('{csv_path}', "

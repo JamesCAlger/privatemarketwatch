@@ -559,6 +559,8 @@ def build_ledger(
 
     ledger_path = out_dir / "provenance_ledger.csv"
     ledger.to_csv(ledger_path, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(ledger_path)
 
     # Summary: aggregate over fair_value rows only for FV buckets.
     fv = ledger[ledger["field"] == "fair_value"].copy()

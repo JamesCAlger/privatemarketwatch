@@ -4503,6 +4503,8 @@ def _assemble_legacy_reconciliation_outputs(detail: pd.DataFrame, metrics: pd.Da
     source_only_md = build_source_only_blocker_markdown(source_only_detail, source_only_clusters)
 
     detail.to_csv(SOURCE_RECONCILIATION_DETAIL_FILE, index=False)
+    from pipeline.utils import write_parquet_companion
+    write_parquet_companion(SOURCE_RECONCILIATION_DETAIL_FILE)
     metrics.to_csv(SOURCE_RECONCILIATION_METRICS_FILE, index=False)
     source_recon_review.to_csv(SOURCE_RECONCILIATION_CALIBRATION_REVIEW_FILE, index=False)
     residual.to_csv(SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE, index=False)
