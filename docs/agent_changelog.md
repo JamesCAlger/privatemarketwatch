@@ -6,6 +6,25 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-09-03 - Match-quality Phase 0 shipped
+
+- **New modules:** `pipeline/match_quality.py` (deterministic metrics: chain_continuity_rate, singleton_decomposition, edge_fv_jump_rate, drift_break_candidate_pairs, entity_coverage_rate/entity_cross_fund_count); `scripts/match_gold/build_packets.py` (blinded adjudication packet builder); `scripts/match_gold/score_gold.py` (Wilson-interval scorer); verdict schema validator (`pipeline/match_verdict_leaf.py`); operator runbook (docs/match_quality_runbook.md).
+- **Rebuild wiring:** `scripts/rebuild_outputs.py --match-quality` added; calls `build_match_quality_metrics()`.
+- **Bugfixes applied this session:** Both `build_match_quality_metrics()` (pipeline/match_quality.py) and `build_packets.py main()` lacked a `row_id` column fallback when loading real `private_markets_holdings.csv` (artifact pre-dates column). Added synthesis: `"RID-" + str(i)` after cohort filter in both locations. Tests use injected DataFrames so were unaffected.
+- **Baseline metric values (2026-09-03, cohort-filtered 266,214 BDC rows):**
+  - chain_continuity_rate ALL: 140,725 / 197,624 = 71.2%
+  - singleton_decomposition: 72,300 total -- interior_suspicious 22,500 (31.1%), negative_fv 20,993 (29.0%), zero_or_null_fv 17,652 (24.4%), terminal_quarter 8,229 (11.4%), first_quarter 2,926 (4.0%)
+  - drift_break_candidate_pairs: 40,244
+  - entity_coverage_rate: 251,012 / 266,214 = 94.3%
+  - entity_cross_fund_count: 3,404
+  - edge_fv_jump_rate C_normalized_name: 16.5% (flagged signal vs 2-3% for other tiers)
+- **mg1 packet batch:** 560 total (tier_random 268, within_fund_name_cluster 60, entity_merge_verify 60, cross_fund_near_miss 52, interior_singleton/fv_jump/drift_break 40 each); 332/560 has_cached_filing=False (pre-fetch required before fleet dispatch); blinding verified on 2 spot-checked packets.
+- **Targeted test pass:** 33/33 PASS (test_match_quality, test_match_verdict_leaf, test_match_gold_packets, test_match_gold_score).
+- **Full suite:** Three concurrent pytest suites inadvertently spawned during background task output capture; all still running at commit time (~2 hr elapsed, 3x resource contention). Pre-existing lastfailed cache (16:25 timestamp) has 27 failures on this branch unrelated to match-quality work. Full suite results pending operator inspection of .pytest_cache after processes complete.
+- **NOT run:** Fleet dispatch (operator-gated per runbook); baseline refresh (prohibited per controller ruling).
+
+---
+
 ## 2026-09-02 - dbt round-trip spike executed (phase 2 go/no-go)
 
 - Spike code: spikes/dbt_roundtrip/ (2 dbt models, boundary test with store_failures, packet converter + equality proof). Report: docs/production_stack/dbt_spike_report.md.
