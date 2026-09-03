@@ -36,3 +36,36 @@ def test_no_duplicate_packet_for_same_pid_and_stratum():
     s = bp.sample_chains(holdings, edges, per_tier=5, n_fv_jump=5,
                          n_interior_singleton=5, n_drift_break=5)
     assert not s.duplicated(["stratum", "position_id"]).any()
+
+
+def test_sample_entities_near_miss_pair():
+    holdings = _holdings([
+        _row("0000000001", "2025-06-30", "Acme Corp", 10.0, "POS-1", "ROW-a"),
+        _row("0000000002", "2025-06-30", "Acme Co", 20.0, "POS-2", "ROW-b"),  # near-miss variant, different fund (JW=0.9556)
+        _row("0000000001", "2025-06-30", "Zebra Partners", 10.0, "POS-3", "ROW-c"),
+    ])
+    s = bp.sample_entities(holdings)
+    near = s[s["stratum"] == "cross_fund_near_miss"]
+    assert len(near) == 1
+    assert near.iloc[0]["ciks"] == "0000000001;0000000002"
+
+
+def test_sample_entities_merge_verify_cross_fund_cluster():
+    holdings = _holdings([
+        _row("0000000001", "2025-06-30", "Acme Corp", 10.0, "POS-1", "ROW-a",
+             entity_id="ENT-1"),
+        _row("0000000002", "2025-06-30", "Acme Corporation", 20.0, "POS-2", "ROW-b",
+             entity_id="ENT-1"),
+    ])
+    s = bp.sample_entities(holdings)
+    mv = s[s["stratum"] == "entity_merge_verify"]
+    assert list(mv["cluster_key"]) == ["ENT-1"]
+
+
+def test_sample_entities_deterministic():
+    holdings = _holdings([
+        _row("0000000001", "2025-06-30", "Acme Corp", 10.0, "POS-1", "ROW-a"),
+        _row("0000000002", "2025-06-30", "Acme Co", 20.0, "POS-2", "ROW-b"),
+    ])
+    pd.testing.assert_frame_equal(bp.sample_entities(holdings),
+                                  bp.sample_entities(holdings))
