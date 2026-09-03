@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-      - run: pip install -r requirements.txt pytest
+      - run: pip install -r requirements-ci.lock
       - name: Run cache-free test suite
         run: pytest tests/ -m "not needs_cache" -q --durations=20
 
