@@ -11,8 +11,9 @@ export function generateStaticParams() {
   return getFundDetailCiks().map((cik) => ({ cik }));
 }
 
-export function generateMetadata({ params }: { params: { cik: string } }) {
-  const fund = getFundDetail(params.cik);
+export async function generateMetadata({ params }: { params: Promise<{ cik: string }> }) {
+  const { cik } = await params;
+  const fund = getFundDetail(cik);
   if (!fund) return { title: 'Fund Not Found' };
   const fundName = getFundNameParts(fund.name, fund.ticker).displayName;
   return {
@@ -25,8 +26,9 @@ export function generateMetadata({ params }: { params: { cik: string } }) {
 // Page
 // ---------------------------------------------------------------------------
 
-export default function FundPage({ params }: { params: { cik: string } }) {
-  const fund = getFundDetail(params.cik);
+export default async function FundPage({ params }: { params: Promise<{ cik: string }> }) {
+  const { cik } = await params;
+  const fund = getFundDetail(cik);
   if (!fund) notFound();
 
   // Use the most recent *complete* reporting period for the snapshot. A freshly

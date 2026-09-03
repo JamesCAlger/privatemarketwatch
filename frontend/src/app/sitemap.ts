@@ -1,6 +1,9 @@
 import { MetadataRoute } from 'next';
 import { getFundDetailCiks } from '@/lib/data';
 
+// Next 15 requires this explicitly for metadata routes under output: 'export'
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = 'https://www.metrislens.com';
 
