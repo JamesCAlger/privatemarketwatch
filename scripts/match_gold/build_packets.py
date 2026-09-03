@@ -10,7 +10,9 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import sys
+from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -305,14 +307,20 @@ def _safe_str(v: Any) -> str | None:
     """Return None for pandas/numpy NA-like values, else str."""
     if v is None:
         return None
-    import math
+    # Handle pandas NA / pd.NaT / numpy NaN scalars before str() mangling them
+    try:
+        import pandas as _pd
+        if _pd.isna(v):
+            return None
+    except (TypeError, ValueError):
+        pass
     try:
         if math.isnan(float(v)):  # type: ignore[arg-type]
             return None
     except (TypeError, ValueError):
         pass
     s = str(v)
-    return None if s.lower() == "nan" else s
+    return None if s.lower() in ("nan", "<na>", "nat") else s
 
 
 def _row_to_dict(row: Any, con: duckdb.DuckDBPyConnection) -> dict:
@@ -324,40 +332,37 @@ def _row_to_dict(row: Any, con: duckdb.DuckDBPyConnection) -> dict:
 
 
 def _pull_chain_rows(holdings_df: pd.DataFrame, position_id: str,
-                     con: duckdb.DuckDBPyConnection) -> list[dict]:
-    """Pull up to 12 most-recent report_date rows for a position_id, sorted ASC."""
+                     con: duckdb.DuckDBPyConnection) -> tuple[list[dict], bool]:
+    """Pull up to 12 most-recent report_date rows for a position_id, sorted ASC.
+
+    Returns (rows, truncated) where truncated is True when the position has
+    more than 12 distinct report_dates (not row count).
+    """
+    n_dates = con.execute("""
+        SELECT COUNT(DISTINCT report_date) AS n
+        FROM h WHERE position_id = ?
+    """, [position_id]).fetchone()[0]
+    truncated = n_dates > 12
+
     rows = con.execute("""
-        WITH dated AS (
-            SELECT *, ROW_NUMBER() OVER (
-                PARTITION BY report_date
-                ORDER BY row_id
-            ) AS rn_date
-            FROM h WHERE position_id = ?
-        ),
-        top12 AS (
+        WITH top12 AS (
             SELECT DISTINCT report_date
-            FROM dated
+            FROM h WHERE position_id = ?
             ORDER BY report_date DESC
             LIMIT 12
         )
-        SELECT d.*
-        FROM dated d JOIN top12 t ON d.report_date = t.report_date
-        ORDER BY d.report_date ASC, d.row_id ASC
-    """, [position_id]).df()
-    result = []
-    for r in rows.itertuples(index=False):
-        d: dict = {}
-        for f in PACKET_ROW_FIELDS:
-            d[f] = _safe_str(getattr(r, f, None))
-        result.append(d)
-    return result
+        SELECT h.*
+        FROM h JOIN top12 t ON h.report_date = t.report_date
+        WHERE h.position_id = ?
+        ORDER BY h.report_date ASC, h.row_id ASC
+    """, [position_id, position_id]).df()
+    return [_row_to_dict(r, con) for r in rows.itertuples(index=False)], truncated
 
 
 def _resolve_edges(edges_df: pd.DataFrame, position_id: str,
                    rows: list[dict]) -> list[dict]:
     """Resolve edge row (begin/end report dates) to row_ids from the rows list."""
     # Build lookup: report_date -> list of {row_id, fair_value}
-    from collections import defaultdict
     date_rows: dict[str, list[dict]] = defaultdict(list)
     for r in rows:
         date_rows[r["report_date"]].append(r)
@@ -421,13 +426,7 @@ def _pull_candidate_rows(holdings_df: pd.DataFrame, cik: str,
         LIMIT 8
     """, [cik, singleton_date, singleton_date, cik, singleton_fv]).df()
 
-    result = []
-    for r in candidates.itertuples(index=False):
-        d: dict = {}
-        for f in PACKET_ROW_FIELDS:
-            d[f] = _safe_str(getattr(r, f, None))
-        result.append(d)
-    return result
+    return [_row_to_dict(r, con) for r in candidates.itertuples(index=False)]
 
 
 def _pull_entity_rows(holdings_df: pd.DataFrame, ciks: list[str],
@@ -457,11 +456,13 @@ def _pull_entity_rows(holdings_df: pd.DataFrame, ciks: list[str],
         parts = cluster_key.split("||", 1)
         name_a = parts[0] if parts else ""
         name_b = parts[1] if len(parts) > 1 else ""
-        cik_str = "','".join(ciks)
-        df = con.execute(f"""
+        # Register ciks as a small table to avoid f-string data interpolation
+        ciks_df = pd.DataFrame({"cik": ciks})
+        con.register("_entity_ciks", ciks_df)
+        df = con.execute("""
             WITH variants AS (
                 SELECT DISTINCT issuer_name FROM h
-                WHERE cik IN ('{cik_str}')
+                WHERE cik IN (SELECT cik FROM _entity_ciks)
                   AND (LOWER(TRIM(issuer_name)) = ? OR LOWER(TRIM(issuer_name)) = ?)
             ),
             ranked AS (
@@ -470,19 +471,14 @@ def _pull_entity_rows(holdings_df: pd.DataFrame, ciks: list[str],
                     ORDER BY h.report_date DESC, h.row_id ASC
                 ) AS rn
                 FROM h JOIN variants v ON LOWER(TRIM(h.issuer_name)) = LOWER(TRIM(v.issuer_name))
-                WHERE h.cik IN ('{cik_str}')
+                WHERE h.cik IN (SELECT cik FROM _entity_ciks)
             )
             SELECT * FROM ranked WHERE rn <= 8
             ORDER BY issuer_name, report_date DESC, row_id ASC
         """, [name_a, name_b]).df()
+        con.unregister("_entity_ciks")
 
-    result = []
-    for r in df.itertuples(index=False):
-        d: dict = {}
-        for f in PACKET_ROW_FIELDS:
-            d[f] = _safe_str(getattr(r, f, None))
-        result.append(d)
-    return result
+    return [_row_to_dict(r, con) for r in df.itertuples(index=False)]
 
 
 def _has_cached_filing(cik: str, accession: str) -> bool:
@@ -559,22 +555,19 @@ def write_batch(
         position_id = str(sr.position_id) if hasattr(sr, "position_id") else ""
 
         # Build rows + edges
+        pkt_rows: list[dict] = []
+        candidate_rows: list[dict] = []
+        truncated = False
+
         if stratum == "drift_break":
-            dropped_rid = position_id  # packet_id was built from dropped_row_id
-            # For drift_break, position_id in sample is the dropped_row_id
-            # (see sample_chains: position_id = pid_of.get(r.dropped_row_id, ""))
-            # but we stored the dropped_row_id separately; recover from _drift_map
-            # We need to find the dropped_row_id for this packet:
-            # packet_id = _packet_id("chain", "drift_break", dropped_row_id)
-            # So we reverse-search _drift_map by packet_id
-            pkt_rows: list[dict] = []
-            candidate_rows: list[dict] = []
+            # Reverse-search _drift_map by packet_id to find the dropped_row_id
             for d_rid, (dr_dict, st_dict) in _drift_map.items():
                 if _packet_id("chain", "drift_break", d_rid) == pid:
                     pkt_rows = [r for r in [dr_dict, st_dict] if r]
                     break
+            # candidate_rows stays [] for drift_break
         elif stratum == "interior_singleton":
-            all_pos_rows = _pull_chain_rows(holdings_df, position_id, con)
+            all_pos_rows, truncated = _pull_chain_rows(holdings_df, position_id, con)
             # singleton: should be just one row
             pkt_rows = all_pos_rows[:1]
             candidate_rows = _pull_candidate_rows(holdings_df, cik,
@@ -582,11 +575,7 @@ def write_batch(
                                                    con)
         else:
             # tier_random or fv_jump: full chain rows
-            pkt_rows = _pull_chain_rows(holdings_df, position_id, con)
-            candidate_rows = []
-
-        # Truncation flag
-        truncated = len(pkt_rows) >= 12
+            pkt_rows, truncated = _pull_chain_rows(holdings_df, position_id, con)
 
         # Resolve edges (not for singleton/drift_break)
         if stratum in ("interior_singleton", "drift_break"):
