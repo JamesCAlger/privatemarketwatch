@@ -10898,3 +10898,30 @@ discover work, and resolving the packets involves validation-semantics judgment.
   pre-existing q1p3-era drift vs the post-Phase-6 baseline, not from this change.
 
 **Counts:** data/output top-level CSVs 149 -> 131; footprint 7.19 GB -> ~4.9 GB.
+
+## 2026-09-03: Phase-1 PR-1 — typed Parquet companions live for 11 core artifacts
+
+**What changed:**
+- `pipeline/output_schemas.py` (new): typed schema contracts for the 11 phase-1
+  artifacts (383 columns). `pipeline/utils.write_parquet_companion` upgraded from
+  all-VARCHAR speed cache to contract-typed strict writes (drift/cast failure
+  raises `OutputSchemaError`; partial parquet cleaned up on failure; legacy path
+  kept for non-contract files). 10 writer sites newly wired (all 15 sites now
+  emit companions). `scripts/parquet_csv_parity.py` (new): CSV-vs-Parquet parity
+  checker. `tests/conftest.py`: native-IO write backstop (session-level
+  mtime+size manifest of data/output + frontend/public/data — DuckDB/pyarrow
+  bypass the open() guard).
+- Plan: `docs/production_stack/phase1_parquet_migration_plan.md`. Ordering
+  decision: PR-1/PR-2 proceed before the R2 gate; PR-3 waits.
+
+**Validation:**
+- 14 new tests + 391 regression tests (pik_status, position_matching,
+  index_returns, validate_holdings, provenance_reverify) green.
+- Companions regenerated from current production CSVs; parity PASS 11/11
+  (7.9M rows total). Full-data casts corrected two sniffed contracts:
+  `row_validation_issues.value` and `.row_key` are mixed-content -> VARCHAR.
+- NOTE: `data/output/*.parquet` for the 11 artifacts are now TYPED (previously
+  all-VARCHAR). Consumers of `bdc_holdings.parquet` (agent_b2_diagnose) get
+  real types.
+
+**Counts:** test suite +14 (test_output_schemas.py).
