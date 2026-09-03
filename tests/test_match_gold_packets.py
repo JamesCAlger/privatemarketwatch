@@ -69,3 +69,52 @@ def test_sample_entities_deterministic():
     ])
     pd.testing.assert_frame_equal(bp.sample_entities(holdings),
                                   bp.sample_entities(holdings))
+
+
+import json
+
+
+def test_write_batch_layout(tmp_path):
+    holdings, edges = _chain_fixture()
+    holdings["accession_number"] = "0000000001-25-000001"
+    holdings["instrument_description"] = "First Lien Term Loan"
+    holdings["bdc_investment_identifier"] = holdings["issuer_name"]
+    holdings["principal_amount"] = 100.0
+    holdings["basis_spread"] = 5.0
+    chain_sample = bp.sample_chains(holdings, edges, per_tier=5, n_fv_jump=5,
+                                    n_interior_singleton=5, n_drift_break=5)
+    entity_sample = bp.sample_entities(holdings)
+    stats = bp.write_batch(holdings, edges, chain_sample, entity_sample, tmp_path)
+    assert stats["n_packets"] == len(chain_sample) + len(entity_sample)
+    wl = pd.read_csv(tmp_path / "worklist.csv")
+    assert set(wl.columns) >= {"packet_id", "packet_type", "stratum",
+                               "prompt_path", "packet_path", "verdict_path"}
+    pid = wl.iloc[0]["packet_id"]
+    packet = json.loads((tmp_path / "packets" / f"{pid}.json").read_text("utf-8"))
+    assert packet["schema_version"] == "match-gold-packet.v1"
+    # blinding: tier never appears in packet or prompt
+    raw = (tmp_path / "packets" / f"{pid}.json").read_text("utf-8")
+    prompt = (tmp_path / "prompts" / f"{pid}.md").read_text("utf-8")
+    for banned in ("match_method", "B2_exact_name", "D_fuzzy", "match_score"):
+        assert banned not in raw and banned not in prompt
+    # sidecar has the tier for the scorer
+    meta = json.loads((tmp_path / "packets_meta" / f"{pid}.json").read_text("utf-8"))
+    assert "stratum" in meta
+
+
+def test_chain_packet_edges_resolve_to_row_ids(tmp_path):
+    holdings, edges = _chain_fixture()
+    holdings["accession_number"] = "0000000001-25-000001"
+    holdings["instrument_description"] = ""
+    holdings["bdc_investment_identifier"] = holdings["issuer_name"]
+    holdings["principal_amount"] = None
+    holdings["basis_spread"] = None
+    chain_sample = bp.sample_chains(holdings, edges, per_tier=5, n_fv_jump=5,
+                                    n_interior_singleton=5, n_drift_break=5)
+    bp.write_batch(holdings, edges, chain_sample, entity_sample=pd.DataFrame(
+        columns=["packet_id", "packet_type", "stratum", "cluster_key", "ciks"]),
+        batch_dir=tmp_path)
+    pos1 = chain_sample[chain_sample["position_id"] == "POS-1"].iloc[0]["packet_id"]
+    packet = json.loads((tmp_path / "packets" / f"{pos1}.json").read_text("utf-8"))
+    edge = packet["edges"][0]
+    assert edge["begin_row_id"] == "ROW-a" and edge["end_row_id"] == "ROW-b"

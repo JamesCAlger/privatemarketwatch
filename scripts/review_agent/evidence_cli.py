@@ -39,6 +39,7 @@ _ENGINE_SOURCE = {
     "row_validation": "BDC", "oracle": "BDC", "gav_recon": "BDC",
     "aggregate_header": "BDC", "fund_financials": "BDC",
     "agentA": "BDC",   # Agent A identifier-grammar induction roams the same cached BDC SOI
+    "match_gold": "BDC",  # match-quality gold-set adjudication packets
 }
 
 # generic SOI words dropped when extracting a distinctive issuer search token
