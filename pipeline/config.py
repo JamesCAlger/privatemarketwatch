@@ -274,6 +274,8 @@ POSITION_MATCHES_FILE = OUTPUT_DIR / "position_matches.csv"
 POSITION_RETURNS_FILE = OUTPUT_DIR / "position_returns.csv"
 INDEX_RETURNS_FILE = OUTPUT_DIR / "index_returns.csv"
 POSITION_ID_EDGES_FILE = OUTPUT_DIR / "position_id_edges.csv"
+MATCH_QUALITY_METRICS_FILE = OUTPUT_DIR / "match_quality_metrics.csv"
+MATCH_GOLD_DIR = OUTPUT_DIR / "match_quality" / "gold"
 # Stable identifier registry (opt-in; see docs/position_id_stable_identifier_design.md).
 # Stateful artifact: lives under OVERRIDES_DIR (governed, NOT a rebuild target),
 # so `rebuild_outputs.py --clean` and output snapshots never wipe it.
