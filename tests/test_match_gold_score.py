@@ -85,3 +85,26 @@ def test_audit_slice_nonempty_per_stratum(tmp_path):
     sg.score_batch(tmp_path)
     audit = pd.read_csv(tmp_path / "audit_slice.csv")
     assert len(audit) >= 1
+
+
+def test_score_batch_all_missing(tmp_path):
+    """Test batch where every packet has MISSING verdict file."""
+    meta1 = {"packet_id": "MGP-miss-1", "packet_type": "chain",
+             "stratum": "tier_random",
+             "edges": [{"edge_index": 0, "match_method": "A_within_filing"}]}
+    _mk_batch(tmp_path, [("MGP-miss-1", meta1, None)])
+    stats = sg.score_batch(tmp_path)
+    # Verify counts
+    assert stats["n_missing"] == 1
+    assert stats["n_verdicts"] == 0
+    assert stats["n_invalid"] == 0
+    # Verify gold_set.csv exists with GOLD_COLS header and 0 rows
+    gold = pd.read_csv(tmp_path / "gold_set.csv")
+    assert len(gold) == 0
+    assert list(gold.columns) == sg.GOLD_COLS
+    # Verify summary.md lists the MISSING packet
+    summary = (tmp_path / "summary.md").read_text(encoding="utf-8")
+    assert "MISSING MGP-miss-1" in summary
+    # Verify no exception is raised
+    assert (tmp_path / "precision_by_tier.csv").exists()
+    assert (tmp_path / "audit_slice.csv").exists()

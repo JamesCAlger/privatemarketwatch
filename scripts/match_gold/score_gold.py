@@ -21,6 +21,13 @@ sys.path.insert(0, str(REPO))
 from pipeline.match_verdict_leaf import validate_match_verdict  # noqa: E402
 
 
+# Exact column order for gold_set.csv output
+GOLD_COLS = [
+    "packet_id", "packet_type", "stratum", "unit", "edge_index",
+    "tier", "verdict", "confidence", "valid", "audit_flag"
+]
+
+
 def wilson_interval(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
     if n == 0:
         return (0.0, 1.0)
@@ -69,8 +76,11 @@ def score_batch(batch_dir: Path) -> dict:
                           "tier": "", "verdict": doc.get("verdict"),
                           "confidence": doc.get("confidence")})
 
-    gold = pd.DataFrame(gold_rows).sort_values(
-        ["packet_id", "unit", "edge_index"], na_position="last")
+    # Construct DataFrame with explicit columns to handle empty gold_rows gracefully
+    gold = pd.DataFrame(gold_rows, columns=GOLD_COLS)
+    if not gold.empty:
+        gold = gold.sort_values(
+            ["packet_id", "unit", "edge_index"], na_position="last")
     gold.to_csv(batch_dir / "gold_set.csv", index=False)
 
     edges = gold[(gold["unit"] == "edge") & gold["valid"]]
@@ -92,14 +102,18 @@ def score_batch(batch_dir: Path) -> dict:
     prec_df.to_csv(batch_dir / "precision_by_tier.csv", index=False)
 
     audit = gold[gold["audit_flag"] & (gold["unit"] == "packet")]
-    for (ptype, verdict), grp in gold[gold["unit"] == "packet"].groupby(
-            ["packet_type", "verdict"]):
-        if not grp["audit_flag"].any():
-            fallback = grp.assign(_o=grp["packet_id"].map(
-                lambda x: hashlib.md5(x.encode()).hexdigest()))
-            fallback = fallback.sort_values("_o").head(1).drop(columns="_o")
-            audit = pd.concat([audit, fallback])
-    audit.sort_values("packet_id").to_csv(batch_dir / "audit_slice.csv", index=False)
+    packet_rows = gold[gold["unit"] == "packet"]
+    if not packet_rows.empty:
+        for (ptype, verdict), grp in packet_rows.groupby(
+                ["packet_type", "verdict"]):
+            if not grp["audit_flag"].any():
+                fallback = grp.assign(_o=grp["packet_id"].map(
+                    lambda x: hashlib.md5(x.encode()).hexdigest()))
+                fallback = fallback.sort_values("_o").head(1).drop(columns="_o")
+                audit = pd.concat([audit, fallback])
+    if not audit.empty:
+        audit = audit.sort_values("packet_id")
+    audit.to_csv(batch_dir / "audit_slice.csv", index=False)
 
     stats = {"n_verdicts": int(worklist.shape[0] - len(missing)),
              "n_invalid": len(invalid), "n_missing": len(missing)}
