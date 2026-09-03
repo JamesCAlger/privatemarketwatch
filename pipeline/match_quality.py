@@ -118,3 +118,129 @@ def singleton_decomposition(holdings_df: pd.DataFrame) -> pd.DataFrame:
     classes["scope_type"] = "singleton_class"
     classes["denominator"] = int(classes["numerator"].sum())
     return _finish(classes, "singleton_decomposition")
+
+
+FV_JUMP_RATIO = 4.0
+DRIFT_FV_LO, DRIFT_FV_HI = 0.5, 2.0
+DRIFT_RATE_TOL = 0.5          # percentage points
+DRIFT_MAX_GAP_DAYS = 100      # adjacent quarters only
+
+
+def edge_anomalies(edges_df: pd.DataFrame) -> pd.DataFrame:
+    """Per-tier share of chain edges with an FV jump beyond FV_JUMP_RATIO."""
+    con = duckdb.connect()
+    con.register("e", edges_df)
+    out = con.execute(f"""
+        WITH pairs AS (
+            SELECT match_method,
+                   TRY_CAST(begin_fair_value AS DOUBLE) AS bfv,
+                   TRY_CAST(end_fair_value AS DOUBLE) AS efv
+            FROM e
+            WHERE TRY_CAST(begin_fair_value AS DOUBLE) > 0
+              AND TRY_CAST(end_fair_value AS DOUBLE) > 0
+        )
+        SELECT match_method AS scope,
+               SUM(CASE WHEN GREATEST(bfv, efv) / LEAST(bfv, efv)
+                        > {FV_JUMP_RATIO} THEN 1 ELSE 0 END) AS numerator,
+               COUNT(*) AS denominator
+        FROM pairs GROUP BY 1 ORDER BY 1
+    """).df()
+    out["scope_type"] = "tier"
+    return _finish(out, "edge_fv_jump_rate")
+
+
+def drift_break_candidates(holdings_df: pd.DataFrame) -> pd.DataFrame:
+    """Unchained row pairs that look like the same instrument under a renamed
+    issuer: chain ends at q, new chain starts at the next quarter, same CIK and
+    classification, FV ratio in [0.5, 2.0], and same maturity or rate within
+    0.5pp -- but names differ and no position_id link."""
+    con = _con(holdings_df)
+    return con.execute(f"""
+        WITH rows_q AS ({_BDC_POSITIVE}),
+        ends AS (   -- last appearance of each position_id, not CIK-terminal
+            SELECT r.* FROM rows_q r
+            JOIN (SELECT position_id, MAX(report_date) AS last_d
+                  FROM rows_q GROUP BY position_id) l
+              ON r.position_id = l.position_id AND r.report_date = l.last_d
+            JOIN (SELECT cik, MAX(report_date) AS max_d FROM rows_q GROUP BY cik) m
+              ON r.cik = m.cik AND r.report_date < m.max_d
+        ),
+        starts AS (  -- first appearance of each position_id, not CIK-initial
+            SELECT r.* FROM rows_q r
+            JOIN (SELECT position_id, MIN(report_date) AS first_d
+                  FROM rows_q GROUP BY position_id) f
+              ON r.position_id = f.position_id AND r.report_date = f.first_d
+            JOIN (SELECT cik, MIN(report_date) AS min_d FROM rows_q GROUP BY cik) m
+              ON r.cik = m.cik AND r.report_date > m.min_d
+        )
+        SELECT d.cik,
+               d.row_id AS dropped_row_id, d.issuer_name AS dropped_issuer,
+               d.report_date AS dropped_date,
+               s.row_id AS start_row_id, s.issuer_name AS start_issuer,
+               s.report_date AS start_date,
+               s.fv / d.fv AS fv_ratio
+        FROM ends d
+        JOIN starts s
+          ON s.cik = d.cik
+         AND s.position_id <> d.position_id
+         AND DATEDIFF('day', TRY_CAST(d.report_date AS DATE),
+                      TRY_CAST(s.report_date AS DATE))
+             BETWEEN 1 AND {DRIFT_MAX_GAP_DAYS}
+         AND s.index_classification = d.index_classification
+         AND s.fv / d.fv BETWEEN {DRIFT_FV_LO} AND {DRIFT_FV_HI}
+         AND LOWER(TRIM(s.issuer_name)) <> LOWER(TRIM(d.issuer_name))
+         AND ( (s.maturity_date IS NOT NULL AND s.maturity_date = d.maturity_date)
+               OR (s.rate IS NOT NULL AND d.rate IS NOT NULL
+                   AND ABS(s.rate - d.rate) <= {DRIFT_RATE_TOL}) )
+        ORDER BY d.cik, d.row_id, s.row_id
+    """).df()
+
+
+def drift_break_metric(holdings_df: pd.DataFrame) -> pd.DataFrame:
+    cands = drift_break_candidates(holdings_df)
+    n_pairs = len(cands)
+    total = pd.DataFrame([{
+        "scope": "ALL", "scope_type": "ALL",
+        "numerator": n_pairs, "denominator": max(n_pairs, 1),
+    }])
+    out = _finish(total, "drift_break_candidate_pairs")
+    out.loc[out["metric"] == "drift_break_candidate_pairs", "value"] = float(n_pairs)
+    return out
+
+
+def entity_stats(holdings_df: pd.DataFrame) -> pd.DataFrame:
+    con = _con(holdings_df)
+    cov = con.execute("""
+        SELECT SUM(CASE WHEN entity_id IS NOT NULL AND entity_id <> ''
+                        THEN 1 ELSE 0 END) AS numerator,
+               COUNT(*) AS denominator
+        FROM h WHERE source = 'bdc'
+    """).df()
+    cov["scope"] = "ALL"
+    cov["scope_type"] = "ALL"
+    cov = _finish(cov, "entity_coverage_rate")
+    xf = con.execute("""
+        SELECT COUNT(*) AS numerator FROM (
+            SELECT entity_id FROM h
+            WHERE entity_id IS NOT NULL AND entity_id <> ''
+            GROUP BY entity_id HAVING COUNT(DISTINCT cik) > 1
+        )
+    """).df()
+    xf["denominator"] = 1
+    xf["scope"] = "ALL"
+    xf["scope_type"] = "ALL"
+    xf = _finish(xf, "entity_cross_fund_count")
+    xf["value"] = xf["numerator"].astype(float)
+    return pd.concat([cov, xf], ignore_index=True)
+
+
+def compute_all(holdings_df: pd.DataFrame, edges_df: pd.DataFrame) -> pd.DataFrame:
+    parts = [
+        chain_continuity(holdings_df),
+        singleton_decomposition(holdings_df),
+        edge_anomalies(edges_df),
+        drift_break_metric(holdings_df),
+        entity_stats(holdings_df),
+    ]
+    out = pd.concat(parts, ignore_index=True)
+    return out.sort_values(["metric", "scope_type", "scope"]).reset_index(drop=True)
