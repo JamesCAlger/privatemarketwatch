@@ -1514,6 +1514,47 @@ class TestPositionIds:
         assert edges.iloc[0]["edge_type"] == "match_pair"
         assert edges.iloc[0]["match_method"] == "B1_cusip"
 
+    def test_row_id_and_row_id_basis_survive_assign_position_ids(self):
+        """Provenance columns appended by _assign_row_ids must not be stripped.
+
+        assign_position_ids reindexes unified_df to UNIFIED_COLUMNS at the
+        end. row_id and row_id_basis are intentionally NOT in UNIFIED_COLUMNS
+        (they are appended later by _assign_row_ids), so a naive reindex drops
+        them. Regression test for the silent-strip defect found 2026-09-03.
+        """
+        from pipeline.unified_holdings import UNIFIED_COLUMNS
+        bdc_raw = _make_bdc_raw([])
+        unified = _make_unified([
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-03-31", "issuer_name": "Preserve Corp",
+             "fair_value": "1000000"},
+            {"source": "nport", "cik": "300", "entity_name": "Fund1",
+             "report_date": "2024-06-30", "issuer_name": "Preserve Corp",
+             "fair_value": "1010000"},
+        ])
+        # Simulate _assign_row_ids appending provenance columns
+        unified["row_id"] = ["ROW-aaa0001", "ROW-aaa0002"]
+        unified["row_id_basis"] = ["src_anchor", "src_anchor"]
+
+        matches = match_positions(unified_df=unified, bdc_raw_df=bdc_raw)
+        unified_out, _ = assign_position_ids(unified, matches)
+
+        # Core contract: both provenance columns survive
+        assert "row_id" in unified_out.columns, "row_id was stripped by assign_position_ids"
+        assert "row_id_basis" in unified_out.columns, "row_id_basis was stripped"
+
+        # Values must be intact (not blanked or reordered)
+        assert set(unified_out["row_id"].tolist()) == {"ROW-aaa0001", "ROW-aaa0002"}
+        assert all(v == "src_anchor" for v in unified_out["row_id_basis"].tolist())
+
+        # UNIFIED_COLUMNS subset is still present
+        for col in UNIFIED_COLUMNS:
+            assert col in unified_out.columns
+
+        # position_id also present (baseline correctness)
+        assert "position_id" in unified_out.columns
+        assert unified_out["position_id"].iloc[0].startswith("POS-")
+
 
 class TestPositionMatchReconciliation:
     def test_reports_short_and_any_span_coverage_and_residual_bucket(self):

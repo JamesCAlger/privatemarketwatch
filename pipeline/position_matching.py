@@ -2416,13 +2416,16 @@ def assign_position_ids(
             matches_df["position_id"].astype(str).str.strip() != ""
         ].copy()
 
-    # Ensure column order matches UNIFIED_COLUMNS
+    # Ensure column order matches UNIFIED_COLUMNS, but preserve appended
+    # provenance columns (row_id, row_id_basis) that _assign_row_ids appends
+    # AFTER building UNIFIED_COLUMNS -- they are intentionally not in that list.
     from pipeline.unified_holdings import UNIFIED_COLUMNS
-    unified_df = unified_df[[c for c in UNIFIED_COLUMNS if c in unified_df.columns]]
+    _appended = [c for c in ("row_id", "row_id_basis") if c in unified_df.columns]
+    unified_df = unified_df[[c for c in UNIFIED_COLUMNS if c in unified_df.columns] + _appended]
     for col in UNIFIED_COLUMNS:
         if col not in unified_df.columns:
             unified_df[col] = ""
-    unified_df = unified_df[UNIFIED_COLUMNS]
+    unified_df = unified_df[UNIFIED_COLUMNS + _appended]
     unified_df = _sort_existing(unified_df, UNIFIED_SORT_COLUMNS)
     matches_df = _sort_existing(matches_df, MATCH_SORT_COLUMNS)
 
