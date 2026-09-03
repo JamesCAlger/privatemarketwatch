@@ -150,6 +150,31 @@ class TestDriftBreakCandidates:
         ])
         assert len(mq.drift_break_candidates(df)) == 0
 
+    def test_fanout_bounded_to_best_fv_ratio(self):
+        """Dropped row with TWO qualifying starts must yield exactly 1 candidate pair
+        (the one with FV ratio closest to 1.0)."""
+        df = _holdings([
+            # chain POS-1 stops at q1 under name "Acme Corp" at FV 100
+            _row("0000000001", "2025-03-31", "Acme Corp", 100.0, "POS-1", "ROW-a",
+                 interest_rate=10.0, maturity_date="2029-01-15"),
+            # q2: two starts with same CIK, classification, maturity, interest_rate
+            # Start 1: "Acme Holdings" at FV 98 (ratio 0.98, BEST match to 1.0)
+            _row("0000000001", "2025-06-30", "Acme Holdings", 98.0, "POS-2", "ROW-b",
+                 interest_rate=10.0, maturity_date="2029-01-15"),
+            # Start 2: "Acme Inc" at FV 120 (ratio 1.20, worse match)
+            _row("0000000001", "2025-06-30", "Acme Inc", 120.0, "POS-3", "ROW-c",
+                 interest_rate=10.0, maturity_date="2029-01-15"),
+            # unrelated stable chain so q2 is not terminal-only noise
+            _row("0000000001", "2025-03-31", "Beta LLC", 50.0, "POS-4", "ROW-d"),
+            _row("0000000001", "2025-06-30", "Beta LLC", 51.0, "POS-4", "ROW-e"),
+        ])
+        cands = mq.drift_break_candidates(df)
+        assert len(cands) == 1, f"Expected 1 candidate, got {len(cands)}"
+        assert cands.iloc[0]["dropped_row_id"] == "ROW-a"
+        assert cands.iloc[0]["start_row_id"] == "ROW-b", \
+            "Should pick ROW-b (FV 98, ratio 0.98 closest to 1.0)"
+        assert cands.iloc[0]["fv_ratio"] == pytest.approx(0.98)
+
 
 class TestEntityStats:
     def test_coverage_and_cross_fund(self):

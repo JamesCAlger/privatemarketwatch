@@ -172,27 +172,35 @@ def drift_break_candidates(holdings_df: pd.DataFrame) -> pd.DataFrame:
               ON r.position_id = f.position_id AND r.report_date = f.first_d
             JOIN (SELECT cik, MIN(report_date) AS min_d FROM rows_q GROUP BY cik) m
               ON r.cik = m.cik AND r.report_date > m.min_d
+        ),
+        candidates AS (
+            SELECT d.cik,
+                   d.row_id AS dropped_row_id, d.issuer_name AS dropped_issuer,
+                   d.report_date AS dropped_date,
+                   s.row_id AS start_row_id, s.issuer_name AS start_issuer,
+                   s.report_date AS start_date,
+                   s.fv / d.fv AS fv_ratio,
+                   ROW_NUMBER() OVER (PARTITION BY d.row_id
+                                      ORDER BY ABS(s.fv / d.fv - 1.0), s.row_id) AS rn
+            FROM ends d
+            JOIN starts s
+              ON s.cik = d.cik
+             AND s.position_id <> d.position_id
+             AND DATEDIFF('day', TRY_CAST(d.report_date AS DATE),
+                          TRY_CAST(s.report_date AS DATE))
+                 BETWEEN 1 AND {DRIFT_MAX_GAP_DAYS}
+             AND s.index_classification = d.index_classification
+             AND s.fv / d.fv BETWEEN {DRIFT_FV_LO} AND {DRIFT_FV_HI}
+             AND LOWER(TRIM(s.issuer_name)) <> LOWER(TRIM(d.issuer_name))
+             AND ( (s.maturity_date IS NOT NULL AND s.maturity_date = d.maturity_date)
+                   OR (s.rate IS NOT NULL AND d.rate IS NOT NULL
+                       AND ABS(s.rate - d.rate) <= {DRIFT_RATE_TOL}) )
         )
-        SELECT d.cik,
-               d.row_id AS dropped_row_id, d.issuer_name AS dropped_issuer,
-               d.report_date AS dropped_date,
-               s.row_id AS start_row_id, s.issuer_name AS start_issuer,
-               s.report_date AS start_date,
-               s.fv / d.fv AS fv_ratio
-        FROM ends d
-        JOIN starts s
-          ON s.cik = d.cik
-         AND s.position_id <> d.position_id
-         AND DATEDIFF('day', TRY_CAST(d.report_date AS DATE),
-                      TRY_CAST(s.report_date AS DATE))
-             BETWEEN 1 AND {DRIFT_MAX_GAP_DAYS}
-         AND s.index_classification = d.index_classification
-         AND s.fv / d.fv BETWEEN {DRIFT_FV_LO} AND {DRIFT_FV_HI}
-         AND LOWER(TRIM(s.issuer_name)) <> LOWER(TRIM(d.issuer_name))
-         AND ( (s.maturity_date IS NOT NULL AND s.maturity_date = d.maturity_date)
-               OR (s.rate IS NOT NULL AND d.rate IS NOT NULL
-                   AND ABS(s.rate - d.rate) <= {DRIFT_RATE_TOL}) )
-        ORDER BY d.cik, d.row_id, s.row_id
+        SELECT cik, dropped_row_id, dropped_issuer, dropped_date,
+               start_row_id, start_issuer, start_date, fv_ratio
+        FROM candidates
+        WHERE rn = 1
+        ORDER BY cik, dropped_row_id, start_row_id
     """).df()
 
 
@@ -201,10 +209,9 @@ def drift_break_metric(holdings_df: pd.DataFrame) -> pd.DataFrame:
     n_pairs = len(cands)
     total = pd.DataFrame([{
         "scope": "ALL", "scope_type": "ALL",
-        "numerator": n_pairs, "denominator": max(n_pairs, 1),
+        "numerator": n_pairs, "denominator": 1,
     }])
     out = _finish(total, "drift_break_candidate_pairs")
-    out.loc[out["metric"] == "drift_break_candidate_pairs", "value"] = float(n_pairs)
     return out
 
 
