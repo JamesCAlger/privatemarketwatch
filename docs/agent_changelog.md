@@ -6,6 +6,17 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-09-04 - Fix-round-2: row_id/row_id_basis preservation through assign_position_ids
+
+- **Root-cause fix** (`pipeline/position_matching.py` `assign_position_ids`): Reindex to UNIFIED_COLUMNS at end of function was silently stripping `row_id` and `row_id_basis` (appended by `_assign_row_ids` after UNIFIED_COLUMNS is finalized). Fixed by stashing appended provenance columns before reindex and restoring them after.
+- **Regression test added** (`tests/test_position_matching.py` `TestPositionIds.test_row_id_and_row_id_basis_survive_assign_position_ids`): Verifies both provenance columns survive, values are intact, and UNIFIED_COLUMNS subset is still present. 98/98 tests pass in targeted run.
+- **Data chain completed in order:** (1) `--unified` rebuild (2621s) -- restored row_id/row_id_basis to 782,797-row holdings CSV (88 columns); (2) `--returns` rebuild (539s) -- fixed code preserves all 88 columns through assign_position_ids; (3) `--match-quality` rebuild (16s) -- 84 rows; (4) diff_outputs --semantic -- 13/7/11/8/3 semantic deltas in holdings/matches/position_returns/index_returns/fund_financials (pre-existing branch drift); (5) mg1 gold packets deleted + rebuilt -- 563 packets, 271 tier_random + 60 entity_merge_verify + 60 within_fund_name_cluster + 52 cross_fund_near_miss + 40 each interior_singleton/fv_jump/drift_break; 233 has_cached_filing=True, 330 False; blinding verified on 2 spot-checked packets (real ROW- IDs, no pipeline internals).
+- **Baseline metrics (post-fix, real row_id values):** chain_continuity_rate ALL 141003/197975=71.2%; drift_break_candidate_pairs 38531; entity_coverage_rate 251665/266872=94.30%; edge_fv_jump_rate C_normalized 17.27% vs 0.60-3.55% other tiers; singleton_decomposition 72496 total: interior_suspicious 31.1%, negative_fv 29.0%, zero_or_null_fv 24.5%, terminal_quarter 11.4%, first_quarter 4.0%.
+- **Full suite:** 4865 passed, 13 skipped, 2 xfailed in 9212s (2h33m). Zero new failures vs pre-existing state (prior lastfailed cache of 27 failures all cleared -- those were pre-existing branch failures already fixed by other agents). Benign Windows atexit symlink PermissionError caused exit code 3 -- not a test failure.
+- **Commit:** `89bb387` on branch `ensemble-fp-experiment` (staged: pipeline/position_matching.py + tests/test_position_matching.py only).
+
+---
+
 ## 2026-09-03 - Match-quality Phase 0 shipped
 
 - **New modules:** `pipeline/match_quality.py` (deterministic metrics: chain_continuity_rate, singleton_decomposition, edge_fv_jump_rate, drift_break_candidate_pairs, entity_coverage_rate/entity_cross_fund_count); `scripts/match_gold/build_packets.py` (blinded adjudication packet builder); `scripts/match_gold/score_gold.py` (Wilson-interval scorer); verdict schema validator (`pipeline/match_verdict_leaf.py`); operator runbook (docs/match_quality_runbook.md).
