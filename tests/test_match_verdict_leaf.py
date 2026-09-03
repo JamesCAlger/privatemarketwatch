@@ -1,5 +1,3 @@
-import pytest
-
 from pipeline.match_verdict_leaf import validate_match_verdict
 
 
@@ -52,4 +50,21 @@ def test_insufficient_evidence_needs_rationale_only():
 def test_entity_packet_wrong_merge_needs_citation():
     d = _base(packet_type="entity", verdict="WRONG_MERGE", edge_verdicts=[])
     errs = validate_match_verdict(d, expected_edges=[])
+    assert any("citation" in e for e in errs)
+
+
+def test_duplicate_edge_index_rejected():
+    d = _base(edge_verdicts=[
+        {"edge_index": 0, "verdict": "CONFIRMED", "evidence": []},
+        {"edge_index": 0, "verdict": "CONFIRMED", "evidence": []}
+    ])
+    errs = validate_match_verdict(d, expected_edges=[0])
+    assert any("duplicate edge_index" in e for e in errs)
+
+
+def test_wrong_edge_with_non_dict_citation():
+    d = _base(verdict="WRONG_MERGE",
+              edge_verdicts=[{"edge_index": 0, "verdict": "WRONG",
+                            "evidence": ["not a dict"]}])
+    errs = validate_match_verdict(d, expected_edges=[0])
     assert any("citation" in e for e in errs)

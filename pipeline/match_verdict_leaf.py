@@ -41,6 +41,11 @@ def validate_match_verdict(doc: dict, *, expected_edges: list[int]) -> list[str]
         if sorted(seen) != sorted(expected_edges):
             errs.append(
                 f"edge coverage mismatch: expected {sorted(expected_edges)}, got {sorted(seen)}")
+        # Check for duplicate edge_index
+        if len(seen) != len(set(seen)):
+            for idx in set(seen):
+                if seen.count(idx) > 1:
+                    errs.append(f"duplicate edge_index: {idx}")
         for e in edge_verdicts:
             if e.get("verdict") not in EDGE_VERDICTS:
                 errs.append(f"unknown edge verdict: {e.get('verdict')}")
