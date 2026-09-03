@@ -248,7 +248,7 @@ def _prepare_nport(nport_input: Union[pd.DataFrame, Path, str]) -> pd.DataFrame:
             NULL AS pik_rate,
             CASE WHEN TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
                       AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
-                 THEN maturity_date ELSE '' END AS maturity_date,
+                 THEN CAST(maturity_date AS VARCHAR) ELSE '' END AS maturity_date,
             CASE WHEN TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
                       AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
                  THEN 'nport' ELSE '' END AS maturity_date_source,
