@@ -10873,3 +10873,28 @@ discover work, and resolving the packets involves validation-semantics judgment.
   Fixes en route: requirements gained bs4/numpy/urllib3/pyarrow + pandas pinned >=2.2,<3.0
   (21 tests fail under pandas 3.x -- known deferred migration). Ruleset 22149712 on main:
   required checks python-tests + frontend-build, no force-push/deletion, admin bypass enabled.
+
+## 2026-09-03: data/output CSV triage — 18 stale files removed/archived, baseline manifest pruned
+
+**What changed:**
+- Triaged all 149 top-level `data/output/*.csv` against every code/doc reference
+  (12,046 refs; two-hop: config-constant resolution + dynamic-filename stems).
+  Full method + per-file verdicts: `scratch/2026-09-03_csv_triage/triage_report.md`.
+- 131 KEEP (real consumers). Removed: `nport_holdings_with_excluded.csv` (2.25 GB
+  orphan, no writer/reader since ~May, pre-exclusion variant); 13 stale Apr–Jun
+  investigation snapshots zipped to scratch (`archived_stale_snapshots.zip`);
+  3 `scratch_sweep_manifest_*.csv` moved to scratch per scratch policy.
+- Baseline governance kept coherent: same 14 files pruned from
+  `data/snapshots/baseline/data/output/` and `docs/refactoring/baseline_manifest.json`
+  (37,213 -> 37,199 entries). These were never rebuild products — the snapshot
+  inherited them as debris; no rebuild-produced artifact touched.
+- NOT touched: `fund_strategy_correction_candidates.pinned.csv` (operator pin
+  from q1p3 window, flagged for owner).
+
+**Validation:**
+- `python scripts/diff_outputs.py` post-change: zero failures attributable to the
+  triage — all 34 "missing" entries are pre-existing baseline staleness
+  (`_pytest_cache/`, `agent_a/proposals/`); 1,784 content divergences are
+  pre-existing q1p3-era drift vs the post-Phase-6 baseline, not from this change.
+
+**Counts:** data/output top-level CSVs 149 -> 131; footprint 7.19 GB -> ~4.9 GB.

@@ -23,14 +23,6 @@
     },
     {
       "artifact_class": "data_output",
-      "path": "data/output/_gics_worklist.csv",
-      "sha256": "4cdc91d3f12a109a9eb8b5aa9c9e7b9421b764307fa01b75b7ef35810b5d6f30",
-      "size_bytes": 333693,
-      "snapshot_path": "data/snapshots/baseline/data/output/_gics_worklist.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
       "path": "data/output/_pytest_cache/.gitignore",
       "sha256": "e7c6bb30148cf667606dcd63e7ca77acaa3cfb0c8303bf09e6419e1e1669dc6d",
       "size_bytes": 39,
@@ -158119,14 +158111,6 @@
     },
     {
       "artifact_class": "data_output",
-      "path": "data/output/bdc_cik_validation_triage.csv",
-      "sha256": "0e32b4772ca43dbc1c230c041a67d0de64dfb004cec802bf3238be56b5d43055",
-      "size_bytes": 516246,
-      "snapshot_path": "data/snapshots/baseline/data/output/bdc_cik_validation_triage.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
       "path": "data/output/bdc_cik_validation_triage.md",
       "reason": "investigation note, not a deterministic data artifact",
       "sha256": "42ccf4df4818b77da88f50fc48455295cb2a0533eb1070c33d85346d83de32a9",
@@ -158243,14 +158227,6 @@
       "sha256": "69e176c47dcdff5a8b5f07f240cb88c283754c433e7bd4e0c49556efd143a0be",
       "size_bytes": 96655,
       "snapshot_path": "data/snapshots/baseline/data/output/bdc_parse_progress.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/bdc_parse_progress_rebuild_new_logic.csv",
-      "sha256": "927b1f237d5a307e58347e57ae382a250dfb79722cc8d1a016d5c219d9c99fce",
-      "size_bytes": 89992,
-      "snapshot_path": "data/snapshots/baseline/data/output/bdc_parse_progress_rebuild_new_logic.csv",
       "status": "byte_identical"
     },
     {
@@ -194431,14 +194407,6 @@
     },
     {
       "artifact_class": "data_output",
-      "path": "data/output/classification_llm_audit.csv",
-      "sha256": "145623f1cfeba25989a8b5060356d60ec7da768e07e7383810fa13c0f511ec9e",
-      "size_bytes": 31555,
-      "snapshot_path": "data/snapshots/baseline/data/output/classification_llm_audit.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
       "path": "data/output/classification_validation.csv",
       "sha256": "fdf94bcfc20675a12b17268ba6457f104ec9cf3f50c754d7f74dc748083100ca",
       "size_bytes": 3273,
@@ -195043,14 +195011,6 @@
       "sha256": "093f97dc7a0bf27a042605ed1468024bcf36a8abc3bcbd08618211dec2f064c7",
       "size_bytes": 195,
       "snapshot_path": "data/snapshots/baseline/data/output/entity_resolution_stats.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/exhaustive_fund_universe.csv",
-      "sha256": "0fc2fad3be98fabf1cfc9d59f996bf46804b124ad0d2c586fee0367228d1d032",
-      "size_bytes": 174036,
-      "snapshot_path": "data/snapshots/baseline/data/output/exhaustive_fund_universe.csv",
       "status": "byte_identical"
     },
     {
@@ -217679,30 +217639,6 @@
     },
     {
       "artifact_class": "data_output",
-      "path": "data/output/fund_financials_schema_missing_bs_audit.csv",
-      "sha256": "a4d43d5552c13f013a17186a4d249b63160922db18bbe2386e81e410c0a2d6c2",
-      "size_bytes": 14743,
-      "snapshot_path": "data/snapshots/baseline/data/output/fund_financials_schema_missing_bs_audit.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/fund_financials_schema_nav_flags_audit.csv",
-      "sha256": "fbcee226dc8a9fd98126ca42cac34f810c69d18099543d3d93d5842126b55bb3",
-      "size_bytes": 2029,
-      "snapshot_path": "data/snapshots/baseline/data/output/fund_financials_schema_nav_flags_audit.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/fund_financials_schema_quarterly_return_flags_audit.csv",
-      "sha256": "4fdcfc86ea2dcb0d9590aa15277c94dcfa66bbf19884ac27a15db68a0382335b",
-      "size_bytes": 2373,
-      "snapshot_path": "data/snapshots/baseline/data/output/fund_financials_schema_quarterly_return_flags_audit.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
       "path": "data/output/fund_financials_validation_current.csv",
       "sha256": "145f294d0954abb7d80a6f3af9e58f94e0126011caddd09d805fb397782a71ef",
       "size_bytes": 23936944,
@@ -237279,22 +237215,6 @@
     },
     {
       "artifact_class": "data_output",
-      "path": "data/output/funds_without_nport.csv",
-      "sha256": "bdd2f2b1852d0164fe5faf8cc909fbdecf0e941a13aaa0d23d9a974437a496cd",
-      "size_bytes": 4733,
-      "snapshot_path": "data/snapshots/baseline/data/output/funds_without_nport.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/funds_without_nport_analysis.csv",
-      "sha256": "0be403171c3b3243f85362ff65f6b7751327f59397f221422e6f413d777cc50b",
-      "size_bytes": 7091,
-      "snapshot_path": "data/snapshots/baseline/data/output/funds_without_nport_analysis.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
       "path": "data/output/campaign_results/gics/gics_agent_chunk_000.txt",
       "reason": "ad-hoc validation text artifact",
       "sha256": "0afa57cc8b7b197a1f3796f52e27038a1fb52024796b4064627607da8b5ccac7",
@@ -246911,14 +246831,6 @@
     },
     {
       "artifact_class": "data_output",
-      "path": "data/output/gics_web_search_full_results.csv",
-      "sha256": "158cb6d98455c5285072e57b2184007adba967a960b2d36cd45fc6b221a9c441",
-      "size_bytes": 2251107,
-      "snapshot_path": "data/snapshots/baseline/data/output/gics_web_search_full_results.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
       "path": "data/output/gics_web_search_test_results.csv",
       "sha256": "3b6203af883c92eda183cc6090de5cd780f45135d7e6b90b14e20183985a6e59",
       "size_bytes": 54686,
@@ -246987,14 +246899,6 @@
       "sha256": "4f66ba631a87a794416ce9aaaf72ad0d2e366c50778c323ef0ff433a5e0564c3",
       "size_bytes": 48214,
       "snapshot_path": "data/snapshots/baseline/data/output/holdings_validation_report.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/html_template_extract_progress.csv",
-      "sha256": "f7c0881d141ade6f8cefb85ab47987935cadf2581db0fbe6875d0166aa98bb8a",
-      "size_bytes": 1687,
-      "snapshot_path": "data/snapshots/baseline/data/output/html_template_extract_progress.csv",
       "status": "byte_identical"
     },
     {
@@ -252291,14 +252195,6 @@
       "sha256": "e3bda63ab014ecd66d734ad44933eab88cf4085259120d7e49178b081905722a",
       "size_bytes": 45950291,
       "snapshot_path": "data/snapshots/baseline/data/output/nport_holdings.parquet",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/nport_holdings_with_excluded.csv",
-      "sha256": "e235ab6a39c3d4061fd3300e7d40beedc2cf6797b6d0c300d6cbac5086f1d07b",
-      "size_bytes": 2362442038,
-      "snapshot_path": "data/snapshots/baseline/data/output/nport_holdings_with_excluded.csv",
       "status": "byte_identical"
     },
     {
@@ -296867,14 +296763,6 @@
       "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
       "size_bytes": 2,
       "snapshot_path": "data/snapshots/baseline/data/output/wrapper_drift/0002012139/drift_violations.csv",
-      "status": "byte_identical"
-    },
-    {
-      "artifact_class": "data_output",
-      "path": "data/output/wrapper_historical_residual_audit.csv",
-      "sha256": "7c3c7883e747778af962a859511e2947e294cce196a1c8977e33b659c9e2bf1b",
-      "size_bytes": 7845,
-      "snapshot_path": "data/snapshots/baseline/data/output/wrapper_historical_residual_audit.csv",
       "status": "byte_identical"
     },
     {
