@@ -251,3 +251,39 @@ def compute_all(holdings_df: pd.DataFrame, edges_df: pd.DataFrame) -> pd.DataFra
     ]
     out = pd.concat(parts, ignore_index=True)
     return out.sort_values(["metric", "scope_type", "scope"]).reset_index(drop=True)
+
+
+def build_match_quality_metrics(
+    holdings_path=None, edges_path=None, output_path=None, cohort_ciks=None,
+) -> pd.DataFrame:
+    """Load unified holdings + position edges, filter to cohort, compute all metrics,
+    write to output_path (default MATCH_QUALITY_METRICS_FILE), and return the frame."""
+    from pipeline.config import (
+        MATCH_QUALITY_METRICS_FILE, POSITION_ID_EDGES_FILE, UNIFIED_HOLDINGS_FILE,
+    )
+    import pathlib
+    holdings_path = holdings_path or UNIFIED_HOLDINGS_FILE
+    edges_path = edges_path or POSITION_ID_EDGES_FILE
+    output_path = output_path or MATCH_QUALITY_METRICS_FILE
+    output_path = pathlib.Path(output_path)
+
+    if cohort_ciks is None:
+        from pipeline.cohort_guard import load_cohort_ciks
+        cohort_ciks = load_cohort_ciks()
+
+    con = duckdb.connect()
+    hp = str(holdings_path).replace("'", "''")
+    ep = str(edges_path).replace("'", "''")
+    holdings = con.execute(
+        f"SELECT * FROM read_csv_auto('{hp}', all_varchar=true)").df()
+    edges = con.execute(
+        f"SELECT * FROM read_csv_auto('{ep}', all_varchar=true)").df()
+
+    holdings = holdings[holdings["cik"].isin(cohort_ciks)].reset_index(drop=True)
+    edges = edges[edges["cik"].astype(str).str.zfill(10).isin(cohort_ciks)].reset_index(drop=True)
+
+    out = compute_all(holdings, edges)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    out.to_csv(output_path, index=False)
+    logger.info("Match-quality metrics: %d rows -> %s", len(out), output_path)
+    return out

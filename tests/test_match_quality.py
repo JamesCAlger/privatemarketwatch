@@ -190,3 +190,25 @@ class TestEntityStats:
         assert cov["numerator"] == 2 and cov["denominator"] == 3
         xf = out[out["metric"] == "entity_cross_fund_count"].iloc[0]
         assert xf["numerator"] == 1
+
+
+class TestBuildMetrics:
+    def test_writes_csv_to_given_path(self, tmp_path):
+        holdings = _holdings([
+            _row("0000000001", "2025-03-31", "Acme Corp", 10.0, "POS-1", "ROW-a"),
+            _row("0000000001", "2025-06-30", "Acme Corp", 11.0, "POS-1", "ROW-b"),
+            _row("0000000009", "2025-03-31", "OffCohort", 10.0, "POS-5", "ROW-x"),
+        ])
+        edges = _edges([_edge("POS-1", "B2_exact_name", 10.0, 11.0)])
+        hp = tmp_path / "holdings.csv"
+        ep = tmp_path / "edges.csv"
+        op = tmp_path / "metrics.csv"
+        holdings.to_csv(hp, index=False)
+        edges.to_csv(ep, index=False)
+        out = mq.build_match_quality_metrics(
+            holdings_path=hp, edges_path=ep, output_path=op,
+            cohort_ciks={"0000000001"})
+        assert op.exists()
+        assert list(out.columns) == mq.METRIC_COLUMNS
+        # off-cohort CIK filtered out of every scope
+        assert "0000000009" not in set(out["scope"])

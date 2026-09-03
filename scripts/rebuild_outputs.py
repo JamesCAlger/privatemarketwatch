@@ -461,6 +461,16 @@ def run_validate_all():
     return aggregate_df, detail_df
 
 
+def rebuild_match_quality():
+    """Rebuild match-quality metrics (cohort scope) from existing outputs."""
+    import time
+    from pipeline.match_quality import build_match_quality_metrics
+    logger.info("=== Rebuilding match-quality metrics ===")
+    t0 = time.time()
+    df = build_match_quality_metrics()
+    logger.info("Match-quality metrics: %d rows in %.1f s", len(df), time.time() - t0)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Rebuild pipeline outputs from cached data (no downloads)."
@@ -515,6 +525,8 @@ def main():
                         help="Run cached fund financial, holdings, and validation-rule checks")
     parser.add_argument("--rules-category", nargs="+", choices=["PC", "IDX", "T", "S", "R", "XS", "F", "M", "RI"],
                         help="Limit --validate-rules to one or more rule categories")
+    parser.add_argument("--match-quality", action="store_true",
+                        help="Rebuild match-quality metrics from position matches + unified holdings")
     args = parser.parse_args()
 
     # If no flags, rebuild everything
@@ -525,6 +537,7 @@ def main():
         or args.html or args.frontend or args.financials or args.gics
         or args.validate_rules or args.validate_all or args.sector_breakdown
         or args.tender_offers or args.prices or args.provenance or args.derivatives
+        or args.match_quality
     )
 
     t_start = time.time()
@@ -568,6 +581,9 @@ def main():
 
     if rebuild_all or args.returns:
         rebuild_returns()
+
+    if rebuild_all or args.match_quality:
+        rebuild_match_quality()
 
     if rebuild_all or args.pik_status:
         rebuild_pik_status()
