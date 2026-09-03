@@ -282,6 +282,12 @@ def build_match_quality_metrics(
     holdings = holdings[holdings["cik"].isin(cohort_ciks)].reset_index(drop=True)
     edges = edges[edges["cik"].astype(str).str.zfill(10).isin(cohort_ciks)].reset_index(drop=True)
 
+    if "row_id" not in holdings.columns:
+        raise ValueError(
+            "holdings artifact lacks row_id; run "
+            "`python scripts/rebuild_outputs.py --unified` then `--returns` first"
+        )
+
     out = compute_all(holdings, edges)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(output_path, index=False)

@@ -838,6 +838,12 @@ def main() -> None:
     cohort = load_cohort_ciks()
     holdings_df = holdings_df[holdings_df["cik"].isin(cohort)].reset_index(drop=True)
 
+    if "row_id" not in holdings_df.columns:
+        raise ValueError(
+            "holdings artifact lacks row_id; run "
+            "`python scripts/rebuild_outputs.py --unified` then `--returns` first"
+        )
+
     per_tier = args.max_chains or 40
     chain_sample = sample_chains(
         holdings_df, edges_df,
