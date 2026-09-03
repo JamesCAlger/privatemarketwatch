@@ -1,7 +1,10 @@
 # Phase 1 — Parquet Migration Plan
 
 Date: 2026-09-03
-Status: PROPOSED (blocked on phase-0 gate: R2 `rclone check` + restore drill)
+Status: IN PROGRESS (owner decision 2026-09-03: PR-1/PR-2 may proceed before
+the phase-0 R2 gate — they are additive/reversible; ONLY PR-3 (CSV retirement
++ baseline refresh) waits for R2 `rclone check` + restore drill, because that
+step actively relies on rebuild-from-raw as its safety net)
 Parent: `production_data_stack_plan.md` section 6, Phase 1
 
 ## 1. Scope
@@ -105,9 +108,12 @@ Each increment is one PR on a branch, CI green, merged via the main ruleset.
 - Full rebuilds for gates are hours-long and memory-heavy. Per AGENTS.md: check
   for running quarter-pass / pytest processes first; q1p3 work has been running
   overnight passes — gate rebuilds go in quiet windows only.
-- Phase-0 R2 gate must be green before PR-1 merges (parent plan ordering rule).
-  Writing the code before that is fine; merging the first data-affecting
-  change is not.
+- R2 ordering (owner decision 2026-09-03, supersedes the parent plan's blanket
+  phase gate): PR-1 (dual-write, purely additive) and PR-2 (reader flip,
+  git-revertible with CSVs still on disk) proceed without waiting for R2.
+  PR-3 waits for the phase-0 R2 gate (verified backup + restore drill) because
+  retiring CSV writes + refreshing the baseline is the step whose recovery
+  path is rebuild-from-raw.
 
 ## 6. Risks
 
