@@ -173,6 +173,19 @@ def test_build_bundle_includes_ncsr_html_and_entity_context(tmp_path, monkeypatc
     assert html_item["data"]["status"] == "missing_cached_html"
 
 
+def test_make_review_id_datetime_report_date_is_filename_safe():
+    """A datetime report_date ('2025-12-31 00:00:00', from the typed-parquet DATE
+    column) must not put ':' into the review_id -- it becomes a bundle filename
+    and Windows rejects ':' (Errno 22). Keep only the YYYY-MM-DD date part."""
+    rid = review.make_review_id("1735964", "", "2025-12-31 00:00:00",
+                                "interval_pipeline_only_position")
+    assert ":" not in rid and " " not in rid
+    assert "2025-12-31" in rid and "00:00:00" not in rid
+    # A clean date is unchanged (no digest churn for existing callers).
+    assert review.make_review_id("1", "S1", "2025-03-31", "m") == \
+        review.make_review_id("1", "S1", "2025-03-31", "m")
+
+
 def test_validate_verdict_rejects_html_ref_without_coordinates(tmp_path):
     output = tmp_path / "review"
     (output / "bundles").mkdir(parents=True)

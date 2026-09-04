@@ -157,8 +157,13 @@ def write_csv_rows(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]
 def make_review_id(cik: str, series_id: str, report_date: str, mechanism: str) -> str:
     series_slug = re.sub(r"[^A-Za-z0-9]+", "", normalize_text(series_id))[:16] or "NOSERIES"
     mech_slug = re.sub(r"[^A-Za-z0-9]+", "_", mechanism).strip("_").upper()[:44] or "NO_MECHANISM"
-    digest = short_hash("|".join([normalize_cik(cik), series_slug, report_date, mechanism]), 10)
-    return f"INTSRC_{normalize_cik(cik)}_{series_slug}_{report_date}_{mech_slug}_{digest}"
+    # report_date may arrive as a datetime string ('2025-12-31 00:00:00') when the
+    # holdings frame carries a DATE column (typed parquet, 2026-09-03). Keep only
+    # the 'YYYY-MM-DD' date part so the review_id is a valid filename -- Windows
+    # rejects the ':' in the time component (Errno 22).
+    date_part = str(report_date).strip()[:10]
+    digest = short_hash("|".join([normalize_cik(cik), series_slug, date_part, mechanism]), 10)
+    return f"INTSRC_{normalize_cik(cik)}_{series_slug}_{date_part}_{mech_slug}_{digest}"
 
 
 def _stable_join(values: Iterable[Any], limit: int = 8) -> str:
