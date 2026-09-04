@@ -131,6 +131,30 @@ def test_fund_quarter_fv_join(tmp_path):
     assert result["fund_fv_weighted"] == 1
 
 
+def test_equal_fv_at_risk_breaks_tie_by_fund_quarter_fv(tmp_path):
+    """Gate leverage tiebreaker (2026-09-04): among blocker packets with equal
+    FV-at-risk, the one holding the LARGER fund out of the verified tier ranks
+    first. A $0-at-risk pipeline_only packet on a $17B fund was outranked by
+    every $1M packet for 7 fleet rounds."""
+    rows = [
+        _row(engine="source_recon", rule_name="src", tier="tight", cik="0000000001",
+             period_kind="quarter", period="2025-12-31", status="fail",
+             metric="0.0", metric_name="affected_fv_m", n_units="1",
+             mechanism="blocking_pipeline_only_position"),
+        _row(engine="source_recon", rule_name="src", tier="tight", cik="0000000002",
+             period_kind="quarter", period="2025-12-31", status="fail",
+             metric="0.0", metric_name="affected_fv_m", n_units="1",
+             mechanism="blocking_pipeline_only_position"),
+    ]
+    holdings = tmp_path / "holdings.csv"
+    _write_holdings(holdings, [
+        ("1", "2025-12-31", 1_000_000.0),          # small fund
+        ("2", "2025-12-31", 17_000_000_000.0),     # big fund held under review
+    ])
+    _, items = _build(tmp_path, rows, holdings_path=holdings)
+    assert [i["cik"] for i in items] == ["0000000002", "0000000001"]
+
+
 def test_fund_quarter_fv_skipped_without_holdings(tmp_path):
     rows = [
         _row(engine="row_validation", rule_name="C107", tier="weak", cik="0001287750",

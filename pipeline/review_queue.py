@@ -257,10 +257,16 @@ def _queue_item(row: dict[str, str]) -> dict[str, Any] | None:
 def _sort_key(item: dict[str, Any]) -> tuple:
     lane_order = 0 if item["lane"] == "blocker" else 1
     has_fv = 0 if item["_sort_fv"] is None else 1
+    # Gate-leverage tiebreaker: a blocker packet holds its ENTIRE fund out of
+    # the verified tier regardless of its own at-risk FV, so among equal
+    # at-risk packets the bigger fund goes first ($0-at-risk pipeline_only
+    # packets on $B funds were unrankable before, 2026-09-04).
+    fund_fv = parse_float(item.get("fund_quarter_fv_m"))
     return (
         lane_order,
         -has_fv,
         -(item["_sort_fv"] or 0.0),
+        -fund_fv,
         -item["n_units"],
         -item["_sort_metric_abs"],
         item["cik"],

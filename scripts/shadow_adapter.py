@@ -120,7 +120,14 @@ def _source_recon_select() -> str | None:
                    CAST(mechanism AS VARCHAR) AS mechanism,
                    CAST(blocking_issue AS BOOLEAN) AS blocking,
                    CAST(confidence AS VARCHAR) AS confidence,
-                   TRY_CAST(affected_source_fair_value AS DOUBLE) AS fv
+                   -- A residual's money can sit on EITHER side: source FV for
+                   -- missing_from_pipeline, output FV for extra_in_pipeline
+                   -- (pipeline_only packets have NO source fact, so their source
+                   -- FV is 0 by definition -- reading only that side left e.g.
+                   -- Golub's 98.4M Maverick packet ranked at 0 across 7 fleet
+                   -- rounds). Take the greater side as the at-risk figure.
+                   GREATEST(COALESCE(TRY_CAST(affected_source_fair_value AS DOUBLE), 0),
+                            COALESCE(TRY_CAST(affected_output_fair_value AS DOUBLE), 0)) AS fv
             FROM read_csv_auto('{res.as_posix()}', sample_size=-1)""")
     if so.exists():
         parts.append(f"""

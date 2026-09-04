@@ -131,3 +131,71 @@ class TestProvenanceFeed:
         assert "pct_sense_check" in adp.PROV_WEAK_WARN
         assert "pct_sense_check" not in adp.PROV_TIGHT_FAIL
         assert "filing_mismatch" in adp.PROV_TIGHT_FAIL  # monetary mismatches stay blockers
+
+
+class TestSourceReconFeed:
+    """_source_recon_select FV semantics (ranking-input bug, 2026-09-04)."""
+
+    def _run(self, monkeypatch, tmp_path, res_df, so_df=None):
+        import scripts.shadow_adapter as adp
+        res = tmp_path / "source_reconciliation_residual_classification.csv"
+        res_df.to_csv(res, index=False)
+        monkeypatch.setattr(
+            adp, "SOURCE_RECONCILIATION_RESIDUAL_CLASSIFICATION_FILE", res,
+            raising=False)
+        so = tmp_path / "source_reconciliation_source_only_detail.csv"
+        if so_df is None:
+            so_df = pd.DataFrame(columns=[
+                "cik", "report_date", "mechanism", "is_blocking",
+                "confidence", "source_fair_value"])
+        so_df.to_csv(so, index=False)
+        monkeypatch.setattr(
+            adp, "SOURCE_RECONCILIATION_SOURCE_ONLY_DETAIL_FILE", so,
+            raising=False)
+        frag = adp._source_recon_select()
+        assert frag is not None
+        return duckdb.connect().execute(frag).fetchdf()
+
+    def _res_row(self, **kw):
+        base = {
+            "cik": "0001930087", "report_date": "2026-03-31",
+            "mechanism": "blocking_pipeline_only_position",
+            "blocking_issue": True, "confidence": "high",
+            "affected_source_fair_value": 0.0,
+            "affected_output_fair_value": 0.0,
+        }
+        return {**base, **kw}
+
+    def test_pipeline_only_packet_ranks_by_output_fv(self, monkeypatch, tmp_path):
+        # extra_in_pipeline packets have NO source fact: source FV is 0 by
+        # definition and the money sits in affected_output_fair_value (Golub
+        # Maverick rows, 98.395M). The ledger metric must not read 0.
+        res = pd.DataFrame([self._res_row(
+            affected_output_fair_value=98_395_000.0)])
+        out = self._run(monkeypatch, tmp_path, res)
+        row = out[out["rule_name"] == "blocking_pipeline_only_position"].iloc[0]
+        assert row["metric"] == 98.4          # $M, rounded 2dp
+
+    def test_missing_from_pipeline_packet_keeps_source_fv(self, monkeypatch, tmp_path):
+        res = pd.DataFrame([self._res_row(
+            mechanism="blocking_source_position_like_parser_mismatch",
+            affected_source_fair_value=527_833_000.0)])
+        out = self._run(monkeypatch, tmp_path, res)
+        row = out[out["rule_name"] ==
+                  "blocking_source_position_like_parser_mismatch"].iloc[0]
+        assert row["metric"] == 527.83
+
+    def test_mixed_packet_takes_greater_side(self, monkeypatch, tmp_path):
+        res = pd.DataFrame([self._res_row(
+            mechanism="blocking_fair_value_disagreement",
+            affected_source_fair_value=10_620_000.0,
+            affected_output_fair_value=4_000_000.0)])
+        out = self._run(monkeypatch, tmp_path, res)
+        row = out[out["rule_name"] == "blocking_fair_value_disagreement"].iloc[0]
+        assert row["metric"] == 10.62
+
+    def test_non_blocking_rows_excluded(self, monkeypatch, tmp_path):
+        res = pd.DataFrame([self._res_row(
+            blocking_issue=False, affected_output_fair_value=1_000_000.0)])
+        out = self._run(monkeypatch, tmp_path, res)
+        assert out.empty

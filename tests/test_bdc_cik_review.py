@@ -52,6 +52,37 @@ def _residual(
     }
 
 
+def test_worklist_ranks_pipeline_only_packets_by_output_fv(tmp_path):
+    """extra_in_pipeline packets carry their money in affected_OUTPUT_fair_value
+    (no source fact exists); ranking on the source side alone left them at 0
+    across 7 fleet rounds (Golub Maverick 98.4M, 2026-09-04). The sort must use
+    the greater of the two sides."""
+    residual = tmp_path / "source_reconciliation_residual_classification.csv"
+    out = tmp_path / "bdc_cik_review"
+    pipeline_only = _residual(cik="1", report_date="2025-03-31", mechanism="m_pipeline_only", fv="0")
+    pipeline_only["affected_output_fair_value"] = "500"
+    pipeline_only["status"] = "extra_in_pipeline"
+    _write_csv(
+        residual,
+        [
+            _residual(cik="2", report_date="2025-03-31", mechanism="m_source_side", fv="100"),
+            pipeline_only,
+        ],
+    )
+    review.build_worklist(
+        residual_path=residual,
+        metrics_path=tmp_path / "absent_metrics.csv",
+        source_only_path=tmp_path / "absent_source_only.csv",
+        gav_path=tmp_path / "absent_gav.csv",
+        holdings_path=tmp_path / "absent_holdings.csv",
+        output_dir=out,
+        top_n=10,
+        batch_size=1,
+    )
+    rows = _read_csv(out / "worklist.csv")
+    assert [row["mechanism"] for row in rows] == ["m_pipeline_only", "m_source_side"]
+
+
 def test_build_worklist_includes_only_blockers_sorts_and_stabilizes_ids(tmp_path):
     residual = tmp_path / "source_reconciliation_residual_classification.csv"
     metrics = tmp_path / "source_reconciliation_metrics.csv"

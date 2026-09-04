@@ -300,10 +300,17 @@ def build_worklist(
         row["holdings_row_count"] = summary.get("holdings_row_count", 0)
         row["holdings_fair_value"] = f"{summary.get('holdings_fair_value', 0.0):.6f}"
 
+    # Rank by the GREATER of the two FV sides: missing_from_pipeline money is
+    # source-side, extra_in_pipeline (pipeline_only) money is output-side --
+    # those packets have NO source fact, so source-side-only ranking pinned
+    # them at 0 across fleet rounds (2026-09-04).
     worklist.sort(
         key=lambda r: (
             -int(r["blocking_issue_count"]),
-            -parse_float(r["affected_source_fair_value"]),
+            -max(
+                parse_float(r["affected_source_fair_value"]),
+                parse_float(r["affected_output_fair_value"]),
+            ),
             -int(re.sub(r"\D", "", normalize_text(r["report_date"])) or "0"),
             r["cik"],
         )
