@@ -216,12 +216,20 @@ def validate_rule(obj) -> list[str]:
     return errs
 
 
+# Date-part of report_date as a 'YYYY-MM-DD' string, robust to the column being
+# a VARCHAR, DATE, or TIMESTAMP. A DATE/TIMESTAMP report_date (e.g. from the
+# typed bdc_holdings.parquet, output_schemas 2026-09-03) casts to
+# '2025-12-31 00:00:00', which broke `CAST(...) IN ('2025-12-31')` and silently
+# noop'd every quarter-scoped rule (2026-09-04 regression).
+_REPORT_DATE_KEY = "substr(CAST(report_date AS VARCHAR), 1, 10)"
+
+
 def _scope_sql(scope: dict) -> str:
     qs = (scope or {}).get("quarters") or ["all"]
     if "all" in qs:
         return "TRUE"
     quoted = ",".join("'" + str(q).replace("'", "''") + "'" for q in qs)
-    return f"CAST(report_date AS VARCHAR) IN ({quoted})"
+    return f"{_REPORT_DATE_KEY} IN ({quoted})"
 
 
 def _match_rows(work: pd.DataFrame, predicate_sql, scope) -> list:
@@ -232,7 +240,7 @@ def _match_rows(work: pd.DataFrame, predicate_sql, scope) -> list:
     if predicate_sql and str(predicate_sql).strip():
         where.append(f"({predicate_sql})")
     where.append(f"({_scope_sql(scope)})")
-    q = (f"SELECT _rid, TRY_CAST(fair_value AS DOUBLE) AS fv, CAST(report_date AS VARCHAR) AS rd "
+    q = (f"SELECT _rid, TRY_CAST(fair_value AS DOUBLE) AS fv, {_REPORT_DATE_KEY} AS rd "
          f"FROM h WHERE {' AND '.join(where)}")
     try:
         rows = conn.execute(q).fetchall()

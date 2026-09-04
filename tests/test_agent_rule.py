@@ -301,6 +301,30 @@ def test_row_add_recovers_undercount():
     assert value_sum_by_quarter(corrected)["2025q"] == 1000.0     # 600 + 400, now counted
 
 
+def test_scope_matches_datetime_typed_report_date():
+    """Quarter-scoped rules must fire when report_date is a DATE/datetime column,
+    not just a string. Root cause of the 2026-09-04 63-rule noop regression: the
+    typed bdc_holdings.parquet made report_date datetime64, and
+    CAST(report_date AS VARCHAR) yielded '2025-12-31 00:00:00' (with time), so
+    `... IN ('2025-12-31')` matched zero rows and every scoped exclusion silently
+    noop'd."""
+    df = pd.DataFrame([
+        {"cik": "1", "report_date": "2025-12-31", "fair_value": 100.0,
+         "bdc_dimensions_raw": "investmentidentifieraxis=Alt Axis Leak", "issuer_name": "x"},
+        {"cik": "1", "report_date": "2025-09-30", "fair_value": 200.0,
+         "bdc_dimensions_raw": "investmentidentifieraxis=Real Position", "issuer_name": "y"},
+    ])
+    df["report_date"] = pd.to_datetime(df["report_date"])   # DATE/datetime, as from the typed parquet
+    rule = _rule(rule_id="excl", scope={"quarters": ["2025-12-31"]},
+                 predicate_sql="bdc_dimensions_raw LIKE '%Alt Axis Leak%'")
+    corrected, audits = apply_rules(df, [rule])
+    assert audits[0]["status"] == "ok"
+    assert audits[0]["rows_excluded"] == 1                   # the 2025-12-31 row, not 0 (noop)
+    assert not audits[0]["noop"]
+    assert len(corrected) == 1
+    assert "Real Position" in str(corrected.iloc[0]["bdc_dimensions_raw"])
+
+
 def test_row_add_skips_duplicate_of_existing_row():
     """Gate blind spot 1 (1905824 FHLB veto): a row_add duplicating an EXISTING
     row is invisible to the conservation gate when the existing row is

@@ -1303,6 +1303,36 @@ class TestPrepareBdc:
         assert len(result) == 1
         assert result.iloc[0]["issuer_name"] == "Caitec, Inc."
 
+    def test_date_typed_parquet_read_as_string_report_date(self, tmp_path):
+        """A DATE-typed parquet (output_schemas typed companion, 2026-09-03) must
+        be read all-VARCHAR so report_date stays 'YYYY-MM-DD' strings. A DATE
+        report_date reaching the build noop'd every quarter-scoped promoted rule
+        (2026-09-04 regression); the whole staging + rule + conservation layer
+        assumes string dates."""
+        import duckdb
+        df = self._make_bdc_df([
+            {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",
+             "fair_value": 1000000, "report_date": "2025-12-31",
+             "filing_date": "2026-02-15", "maturity_date": "2030-01-01"},
+        ])
+        pq = tmp_path / "typed_bdc.parquet"
+        con = duckdb.connect()
+        con.register("d", df)
+        # Cast the date columns to DATE, exactly like the typed companion does.
+        con.execute(
+            f"COPY (SELECT * REPLACE (CAST(report_date AS DATE) AS report_date, "
+            f"CAST(filing_date AS DATE) AS filing_date, "
+            f"CAST(maturity_date AS DATE) AS maturity_date) FROM d) "
+            f"TO '{pq.as_posix()}' (FORMAT 'parquet')")
+        assert con.execute(
+            f"SELECT typeof(report_date) FROM read_parquet('{pq.as_posix()}') LIMIT 1"
+        ).fetchone()[0] == "DATE"
+        con.close()
+        result = _prepare_bdc(bdc_file=pq)
+        assert len(result) == 1
+        assert result["report_date"].dtype == object
+        assert str(result.iloc[0]["report_date"]) == "2025-12-31"      # no ' 00:00:00'
+
     def test_src_context_id_passes_through_bdc_staging(self):
         df = self._make_bdc_df([
             {"investment_identifier": "Acme Corp - Term Loan", "cik": "123",

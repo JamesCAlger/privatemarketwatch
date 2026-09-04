@@ -422,7 +422,16 @@ def _prepare_bdc(
     if bdc_file is not None and Path(bdc_file).exists():
         fpath = str(bdc_file).replace("\\", "/")
         if str(bdc_file).endswith(".parquet"):
-            read_expr = f"read_parquet('{fpath}')"
+            # Read all-VARCHAR to mirror the CSV path EXACTLY. The typed parquet
+            # companion (pipeline.output_schemas, 2026-09-03) renders report_date
+            # / period / *_date as DATE; the whole staging layer AND downstream
+            # promoted-rule scope filters + conservation grouping assume
+            # 'YYYY-MM-DD' STRINGS. A DATE report_date flowed into the build and
+            # silently noop'd every quarter-scoped rule (CAST(DATE AS VARCHAR) =
+            # '2025-12-31 00:00:00'), the 2026-09-04 regression. All-VARCHAR
+            # restores the invariant every prior build relied on (untyped parquet
+            # / CSV were both all-VARCHAR).
+            read_expr = f"(SELECT CAST(COLUMNS(*) AS VARCHAR) FROM read_parquet('{fpath}'))"
         else:
             read_expr = f"read_csv_auto('{fpath}', header=true, all_varchar=true)"
 
