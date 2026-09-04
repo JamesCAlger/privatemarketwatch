@@ -7,6 +7,7 @@ additive validation: it does not mutate unified holdings.
 
 from __future__ import annotations
 
+import json
 import logging
 import hashlib
 import inspect
@@ -39,6 +40,7 @@ from pipeline.bdc_identifier import (
     _INVESTMENTS_HIERARCHY_RE,
     _sql_is_bdc_aggregate,
 )
+from pipeline import config
 from pipeline.agent_promoted import load_promoted_rules
 from pipeline.bdc_xbrl_wrapper import WRAPPER_COLUMNS, add_bdc_xbrl_wrapper_columns
 from pipeline.bdc_xbrl_html_bridge import apply_html_section_bridge_wrapper_columns
@@ -208,6 +210,10 @@ DOCUMENTED_MECHANISMS = {
 }
 
 MECHANISM_RECOMMENDED_ACTIONS = {
+    "documented_audited_row_add": (
+        "Keep documented as non-blocking audited row-add recovery; re-verify via the "
+        "rule's filing evidence, not row matching."
+    ),
     "documented_comparative_period": "Keep documented as non-blocking comparative-period source fact.",
     "documented_no_fair_value": "Keep documented as non-blocking source row without fair value.",
     "documented_aggregate_candidate": "Keep documented as non-blocking aggregate/header candidate.",
@@ -255,6 +261,11 @@ MECHANISM_RECOMMENDED_ACTIONS = {
 }
 
 MECHANISM_REASONS = {
+    "documented_audited_row_add": (
+        "Pipeline row was appended by an audited promoted row_add rule; its source "
+        "fact is untagged or carries no fair value, so source reconciliation "
+        "structurally cannot match it."
+    ),
     "documented_comparative_period": "Source row is from a comparative period, not the current report date.",
     "documented_no_fair_value": "Source row has no fair-value fact available for position reconciliation.",
     "documented_aggregate_candidate": "Source row matches aggregate/category wording and is intentionally excluded from position outputs.",
@@ -3586,6 +3597,49 @@ def build_reconciliation_calibration_review(detail_df: pd.DataFrame) -> pd.DataF
     return review[columns]
 
 
+def _audited_row_add_position_keys() -> set[tuple[str, str, str, float]]:
+    """(cik10, report_date, normalized identifier, rounded FV) for every position
+    of a LIVE promoted row-add correction: Layer C ``agent_investigate_rules``
+    row_add rules plus B2 ``missing_position_add`` leaves. Pulled/quarantined
+    rules never contribute (load_promoted_rules skips ``_pulled_*`` dirs)."""
+    keys: set[tuple[str, str, str, float]] = set()
+
+    def _add(cik10: str, positions) -> None:
+        for p in positions or []:
+            if not isinstance(p, dict):
+                continue
+            ident = " ".join(
+                str(p.get("bdc_investment_identifier") or p.get("issuer_name") or "").split()
+            ).lower()
+            fv = p.get("fair_value")
+            rd = str(p.get("report_date") or "").strip()
+            if cik10 and ident and rd and isinstance(fv, (int, float)):
+                keys.add((cik10, rd, ident, round(float(fv), 2)))
+
+    try:
+        for cik10, rules in load_promoted_rules().items():
+            for r in rules:
+                if str(r.get("rule_type")) == "row_add":
+                    _add(cik10, r.get("positions"))
+    except Exception as exc:                                    # pragma: no cover
+        logger.warning("audited row-add excusal: investigate-rules load failed (%s)", exc)
+
+    b2_dir = getattr(config, "AGENT_B2_CORRECTIONS_DIR", None)
+    if b2_dir is not None and Path(b2_dir).exists():
+        for p in sorted(Path(b2_dir).glob("*/missing_position_add.json")):
+            if p.parent.name.startswith("_"):
+                continue
+            try:
+                leaf = json.loads(p.read_text(encoding="utf-8-sig"))
+            except (OSError, json.JSONDecodeError) as exc:
+                logger.warning("audited row-add excusal: unreadable B2 leaf %s (%s)", p, exc)
+                continue
+            cik10 = str(leaf.get("cik") or p.parent.name)
+            cik10 = re.sub(r"\D", "", cik10).zfill(10)
+            _add(cik10, (leaf.get("template") or {}).get("positions"))
+    return keys
+
+
 def build_source_reconciliation_residual_classification(
     detail_df: pd.DataFrame,
 ) -> pd.DataFrame:
@@ -3758,6 +3812,37 @@ def build_source_reconciliation_residual_classification(
         df["status"].astype(str).eq("missing_from_pipeline") & df["mechanism"].eq(""),
         "mechanism",
     ] = "blocking_source_unclassifiable_after_review"
+    # Audited row-add excusal (2026-09-04): pipeline rows APPENDED by a LIVE
+    # promoted row_add rule have no source-side fact BY CONSTRUCTION (the rule
+    # recovers untagged / no-FV schedule rows with filing evidence), so row
+    # matching can never pair them. Document instead of blocking -- keyed
+    # strictly to the rule's own (cik, quarter, identifier, fair_value), so an
+    # arbitrary pipeline-only row can never ride the excusal, and a pulled
+    # rule's rows stop matching automatically (load_promoted_rules skips
+    # `_pulled_*` quarantine dirs).
+    extra_unclassified = (
+        df["status"].astype(str).eq("extra_in_pipeline") & df["mechanism"].eq("")
+    )
+    if extra_unclassified.any():
+        audited_keys = _audited_row_add_position_keys()
+        if audited_keys:
+            sub = df.loc[extra_unclassified]
+            sub_cik = (
+                sub["cik"].fillna("").astype(str)
+                .str.replace(r"\D", "", regex=True).str.zfill(10)
+            )
+            sub_rd = sub["report_date"].fillna("").astype(str)
+            sub_ident = sub["raw_investment_identifier"].fillna("").astype(str).map(
+                lambda s: " ".join(s.split()).lower()
+            )
+            sub_fv = pd.to_numeric(sub["output_fair_value"], errors="coerce").round(2)
+            hit = [
+                bool(i) and pd.notna(f) and (c, r_, i, float(f)) in audited_keys
+                for c, r_, i, f in zip(sub_cik, sub_rd, sub_ident, sub_fv)
+            ]
+            excused_idx = sub.index[hit]
+            if len(excused_idx):
+                df.loc[excused_idx, "mechanism"] = "documented_audited_row_add"
     df.loc[
         df["status"].astype(str).eq("extra_in_pipeline") & df["mechanism"].eq(""),
         "mechanism",

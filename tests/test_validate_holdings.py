@@ -5262,3 +5262,77 @@ class TestOutputOnlyWrapperCashCalibration:
         assert len(cash_rows) == 1
         assert cash_rows.iloc[0]["blocking_issue"] == False  # noqa: E712
         assert cash_rows.iloc[0]["residual_class"] == "documented_exclusion"
+
+
+class TestAuditedRowAddExcusal:
+    """documented_audited_row_add: pipeline rows appended by a LIVE promoted
+    row_add rule structurally cannot match a source fact (the rule recovers
+    untagged / no-FV schedule rows). They must be documented, not blocking --
+    keyed strictly to the rule's own (cik, quarter, identifier, fair_value)."""
+
+    def _detail(self, rows):
+        from pipeline.source_reconciliation import DETAIL_COLUMNS
+        base = {"status": "extra_in_pipeline", "blocking_issue": "True",
+                "cik": "0001920145", "report_date": "2026-03-31",
+                "residual_class": "row_identity",
+                "calibrated_status": "blocking_extra_in_pipeline"}
+        made = []
+        for r in rows:
+            merged = {**base, **r}
+            made.append({col: merged.get(col, "") for col in DETAIL_COLUMNS})
+        return pd.DataFrame(made)
+
+    def _write_rule(self, tmp_path, monkeypatch, pulled=False):
+        import json as _json
+        import pipeline.config as config
+        root = tmp_path / "agent_investigate_rules"
+        d = root / ("1920145/_pulled_test_2026-09-04" if pulled else "1920145")
+        d.mkdir(parents=True)
+        rule = {"cik": "1920145", "rule_id": "restore_x", "rule_type": "row_add",
+                "action": "add", "scope": {"quarters": ["2026-03-31"]},
+                "positions": [{"report_date": "2026-03-31", "fair_value": 193000000.0,
+                               "bdc_investment_identifier": "Auctane Long Identifier",
+                               "bdc_dimensions_raw": "investmentidentifieraxis=x",
+                               "source_row_id": "C_x"}],
+                "evidence": [{"source": "query", "quote": "x"}],
+                "rationale": "r", "confidence": 0.9}
+        (d / "restore_x.json").write_text(_json.dumps(rule), encoding="utf-8")
+        monkeypatch.setattr(config, "AGENT_INVESTIGATE_RULES_DIR", root)
+        return root
+
+    def test_matching_added_row_documented_nonblocking(self, tmp_path, monkeypatch):
+        self._write_rule(tmp_path, monkeypatch)
+        detail = self._detail([
+            {"raw_investment_identifier": "Auctane Long Identifier",
+             "output_fair_value": "193000000.0"},
+            {"raw_investment_identifier": "Some Other Orphan Row",
+             "output_fair_value": "5000000.0"},
+        ])
+        out = build_source_reconciliation_residual_classification(detail)
+        by_mech = {r["mechanism"]: r for _, r in out.iterrows()}
+        assert "documented_audited_row_add" in by_mech
+        doc = by_mech["documented_audited_row_add"]
+        assert bool(doc["blocking_issue"]) is False
+        assert doc["residual_class"] == "documented_exclusion"
+        assert "blocking_pipeline_only_position" in by_mech
+        assert bool(by_mech["blocking_pipeline_only_position"]["blocking_issue"]) is True
+
+    def test_fv_mismatch_not_excused(self, tmp_path, monkeypatch):
+        # Same identifier but different FV: the row is NOT the rule's row.
+        self._write_rule(tmp_path, monkeypatch)
+        detail = self._detail([
+            {"raw_investment_identifier": "Auctane Long Identifier",
+             "output_fair_value": "1000000.0"},
+        ])
+        out = build_source_reconciliation_residual_classification(detail)
+        assert set(out["mechanism"]) == {"blocking_pipeline_only_position"}
+
+    def test_pulled_rule_rows_not_excused(self, tmp_path, monkeypatch):
+        # A pulled (vetoed) rule must stop excusing its rows immediately.
+        self._write_rule(tmp_path, monkeypatch, pulled=True)
+        detail = self._detail([
+            {"raw_investment_identifier": "Auctane Long Identifier",
+             "output_fair_value": "193000000.0"},
+        ])
+        out = build_source_reconciliation_residual_classification(detail)
+        assert set(out["mechanism"]) == {"blocking_pipeline_only_position"}
