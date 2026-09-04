@@ -551,12 +551,26 @@ def apply_promoted_rules(
             rows, fv = _applied_impact(a)
             authored_rows, authored_fv = _authoring_impact(r)
             drift = _drift(r, rows) if a.get("status") == "ok" else ""
+            message = "; ".join(a.get("errors") or []) or str(a.get("message") or "")
+            # SUPERSEDED, not drift: a row_add that added nothing ONLY because
+            # the _apply_add dup-skip guard found every position already present
+            # natively (improved extraction, 2026-09-04 cash-axis fix) is
+            # resolved, not broken -- flagging it drift would fail the
+            # promoted_rule_drift gate on a correct, redundant rule. The guard
+            # already prevented the double-count; retire the rule at leisure.
+            n_skipped = int(a.get("rows_skipped_duplicate") or 0)
+            if (drift == "noop" and str(r.get("rule_type")) == "row_add"
+                    and rows == 0 and n_skipped > 0):
+                drift = ""
+                message = (f"superseded: {n_skipped} position(s) already present "
+                           f"natively (dup-skipped); rule is redundant") + (
+                           f"; {message}" if message else "")
             audits.append({"layer": "unified_agent_rules", "cik": cik,
                            "rule_id": str(a.get("rule_id")), "rule_type": str(r.get("rule_type")),
                            "status": str(a.get("status")), "rows_changed": rows,
                            "fv_affected": fv, "authoring_rows": authored_rows,
                            "authoring_fv": authored_fv, "drift": drift,
-                           "message": "; ".join(a.get("errors") or []) or str(a.get("message") or "")})
+                           "message": message})
             if a.get("status") != "ok":
                 logger.warning("promoted rule %s (cik=%s) did not apply: %s",
                                a.get("rule_id"), cik, a.get("errors") or a.get("message"))

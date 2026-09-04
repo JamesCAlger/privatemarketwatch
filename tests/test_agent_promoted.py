@@ -276,6 +276,33 @@ def test_apply_promoted_rules_row_add_fills_identity():
     assert audits[0]["rows_changed"] == 1
 
 
+def test_apply_promoted_rules_row_add_superseded_not_drift():
+    """When improved extraction natively captures a row a row_add rule used to
+    recover, the _apply_add dup-skip guard skips it (no double-count) and the
+    rule adds 0 rows. That is SUPERSEDED, not a broken noop -- it must NOT flag
+    drift (which fails the promoted_rule_drift gate). 2026-09-04: the cash-axis
+    extraction fix made 1508655/1899017 row_adds redundant this exact way."""
+    df = pd.DataFrame([
+        {"cik": "0000000123", "source": "bdc", "report_date": "2025-06-30",
+         "issuer_name": "Now Native Co", "entity_name": "Fund A", "fair_value": 999.0,
+         "bdc_investment_identifier": "Now Native Co", "bdc_dimensions_raw": "axis=Now Native Co"},
+    ])
+    rule = _valid_rule(
+        rule_type="row_add", action="add", rule_id="recover_now_native",
+        positions=[{"report_date": "2025-06-30", "issuer_name": "Now Native Co",
+                    "fair_value": 999.0, "bdc_investment_identifier": "Now Native Co",
+                    "bdc_dimensions_raw": "axis=Now Native Co",
+                    "source_row_id": "accession 0001 table 2 row 9"}],
+        measured_impact={"2025-06-30": {"rows": 1, "fv": 999.0}})
+    del rule["predicate_sql"]
+    out, audits = ap.apply_promoted_rules(df, {"0000000123": [rule]})
+    assert len(out) == 1                       # not double-counted
+    assert audits[0]["status"] == "ok"
+    assert audits[0]["rows_changed"] == 0      # dup-skipped
+    assert audits[0]["drift"] == ""            # superseded, NOT "noop"
+    assert "superseded" in str(audits[0]["message"]).lower()
+
+
 def test_apply_promoted_rules_invalid_rule_audited_not_applied():
     df = _holdings_frame()
     rule = _valid_rule()
