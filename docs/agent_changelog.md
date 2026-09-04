@@ -10967,3 +10967,38 @@ discover work, and resolving the packets involves validation-semantics judgment.
   real types.
 
 **Counts:** test suite +14 (test_output_schemas.py).
+
+---
+
+## 2026-09-04 - Blocker ranking fix: output-side FV + fund-leverage tiebreaker (why the fleet never selected the verified_fv packets)
+
+Root-cause follow-up to the 2026-09-02 session question "why were the Blue Owl /
+GS PCC / Golub blocker packets never dispatched":
+
+1. TIMING (no code change): the packets mostly did not exist at the pass's single
+   discover snapshot -- they were created MID-PASS by the remediation itself
+   (1603480's audited row_adds are XBRL-untagged so recon can never match them;
+   Golub's "Senior secured 1/2/3" rows are dedupe-axis-split artifacts). The pass
+   loop re-discovers only at the NEXT pass.
+2. RANKING BUG (fixed): scripts/shadow_adapter.py fed the ledger metric from
+   affected_source_fair_value ONLY. extra_in_pipeline (pipeline_only) packets
+   have NO source fact by definition -- their money is in
+   affected_output_fair_value (Golub 98.4M, GS PCC 349.4M) -- so they ranked at
+   0 across 7 B1 rounds. Fix: fv = GREATEST(source, output). Same greater-side
+   rule applied to the bdc_cik_review worklist sort.
+3. LEVERAGE BLINDNESS (fixed): review_queue._sort_key now uses fund_quarter_fv_m
+   as a tiebreaker after fv_at_risk -- a blocker packet holds its ENTIRE fund out
+   of the verified tier, so among equal-at-risk packets the bigger fund ranks
+   first (a $0-at-risk packet on GS PCC's $17.2B was previously unrankable).
+
+Tests (TDD, 6 new): test_shadow_adapter.py TestSourceReconFeed (4),
+test_bdc_cik_review.py worklist output-FV ranking (1), test_review_queue.py
+fund-FV tiebreaker (1). Files green: adapter 12, cik_review 9, queue 15,
+findings_ledger 11. No gate/threshold/artifact-schema changes -- ordering only.
+
+NOTE: committed as cf25ef9 on match-quality-phase0 (the worktree's active branch
+after a concurrent session switched from ensemble-fp-experiment; all q1p3
+extraction-fix commits are ancestors of both). Live queue NOT regenerated this
+session -- takes effect at the next pass's shadow+queue build. Still open from
+the same diagnosis: within-pass re-discover after the post battery, and the
+excusal mechanism for audited row_adds of XBRL-untagged rows (owner decision).
