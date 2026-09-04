@@ -11044,3 +11044,58 @@ a repo-root read grant and `evidence_cli.py` resolves cached HTML relative to th
 them, but that is behavior, not sandbox; making it structural means moving those two out of the
 batch dir during dispatch. (2) The `[permissions...filesystem]` write grant authorizes writes,
 not the `-C` runroot boundary -- workers wrote an absolute verdicts path outside the runroot.
+
+---
+
+## 2026-09-04 - Q1-2026 (2026-03-31) reaches 7/7 TWICE-STABLE; DATE-parquet regression found + fixed
+
+Operator session. Q1-2026 pass q1p3_20260831 now PASSES all seven v2 gates on two
+independent rebuilds. Sign-off ceremony is the owner's (attest/tag/baseline).
+
+### Final gates (batteries buq241zdj + bgsj6ufuc, identical)
+
+verdict PASS. coverage 69 | reconcile 94.118 | flagged_fv 9.855 (tight vs 10) |
+source_blocking 0.264 | verified_fv 73.083 | promoted_rule_drift 0 |
+promoted_rule_health 0. 175 live rules. Reattest 2025-12-31 PASS->PASS no flips
+(both batteries). verified_fv cleared 70 with NO fleet -- the audited-row-add
+excusal (439e702) moved GS PCC / Fidelity PCF / 1603480 pipeline-only packets to
+documented, lifting verified funds to 53.
+
+### SEVERE regression found + fixed (commit 0f28433)
+
+The concurrent session's typed-parquet feature (pipeline/output_schemas.py, Sep-3)
+rewrote bdc_holdings.parquet with report_date/period/*_date as DATE.
+build_unified_holdings reads that parquet as input; agent_rule._scope_sql filtered
+quarter-scoped rules with CAST(report_date AS VARCHAR) IN ('2025-12-31'). A DATE
+casts to '2025-12-31 00:00:00', so the filter matched ZERO rows and ALL 63
+quarter-scoped promoted rules (row_exclusion/dedup/rescale/value_expression; row_add
+uses no scope filter) silently noop'd -- duplicate/subtotal rows leaked -- reconcile
+crashed 95.6->82.4, flagged FV 27.8B->101.6B, Q4-2025 reattest also regressed.
+Two-layer fix, TDD, verified end-to-end (one-CIK build fires 543 rows, was 733 noop):
+- (A) agent_rule._scope_sql + _match_rows key on substr(CAST(report_date AS VARCHAR),
+  1,10) -- robust to VARCHAR/DATE/TIMESTAMP report_date.
+- (B) staging_bdc._prepare_bdc reads the parquet all-VARCHAR
+  (CAST(COLUMNS(*) AS VARCHAR)), mirroring the CSV path so a DATE date column never
+  enters the build (staging+rules+conservation assume 'YYYY-MM-DD' strings; every
+  prior build read all-VARCHAR).
+The concurrent session had already hit + patched the same DATE-break in N-PORT
+staging (commit 3ac2a4a, maturity_date CASE) but did not cover the BDC path.
+Diagnosis: scratch/2026-09-02_q1p3_signoff/regression_diagnosis.md.
+
+### Superseded-row-add gate fix (commit fe6abfb)
+
+After 0f28433, drift=2 remained: row_adds 1508655 (Structured Credit Partners JV
+14.665M) and 1899017 (Goldman cash-equiv 18.995M) added 0 rows because the cash-axis
+extraction fix now captures those rows NATIVELY and the _apply_add dup-skip guard
+(9f05815) correctly skipped the redundant adds (no double-count; both rows verified
+present once with exact identifier+FV). agent_promoted now treats a row_add that
+dup-skipped ALL positions as SUPERSEDED (audit message says so), not drift --
+drift 2->0. The rules are redundant and can be retired at leisure.
+
+### Owner sign-off checklist (NOT done here)
+
+reattest_quarters attest --quarter 2026-03-31 --source .../acceptance_post.json ;
+git tag signoff-2026-03-31 <commit> ; snapshot_outputs.py --clean (archive prior) ;
+commit the uncommitted data/overrides/* the pass relies on. Watch: flagged_fv 9.855
+sits close to the 10 bar (HPS $26.6B overshoot dominates); the anchor/B2 lane can
+resolve a flagged fund if a future shift tips it.
