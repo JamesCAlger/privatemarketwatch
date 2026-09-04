@@ -22,7 +22,7 @@ import pandas as pd
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 
-from pipeline.match_quality import drift_break_candidates  # noqa: E402
+from pipeline.match_quality import drift_break_candidates, FV_JUMP_RATIO  # noqa: E402
 
 SEED = "20260903"
 SAMPLE_COLUMNS = ["packet_id", "packet_type", "stratum", "position_id", "cik"]
@@ -65,7 +65,7 @@ def sample_chains(holdings_df, edges_df, *, per_tier=40, n_fv_jump=40,
           AND GREATEST(TRY_CAST(begin_fair_value AS DOUBLE),
                        TRY_CAST(end_fair_value AS DOUBLE))
               / LEAST(TRY_CAST(begin_fair_value AS DOUBLE),
-                      TRY_CAST(end_fair_value AS DOUBLE)) > 4.0
+                      TRY_CAST(end_fair_value AS DOUBLE)) > {FV_JUMP_RATIO}
         ORDER BY md5(position_id || '{SEED}') LIMIT {n_fv_jump}
     """).df()
     for r in jump.itertuples(index=False):
@@ -523,18 +523,44 @@ def write_batch(
     con = duckdb.connect()
     con.register("h", holdings_df)
 
+    # Pre-build accession -> owning CIK map from holdings (vectorized, used by entity loop).
+    # For cross-fund clusters the accession belongs to a specific CIK's filing; using the
+    # wrong CIK for _has_cached_filing always misses the cache (each fund's HTML is stored
+    # under its own CIK dir). This map lets the entity loop use the correct owning CIK per
+    # accession for both cache checks and mini-bundle headers.
+    _acc_to_cik: dict[str, str] = {}
+    if "accession_number" in holdings_df.columns and "cik" in holdings_df.columns:
+        acc_cik = holdings_df[["accession_number", "cik"]].dropna(subset=["accession_number"])
+        # If multiple CIKs share an accession (shouldn't happen, but take first sorted)
+        acc_cik = acc_cik.drop_duplicates("accession_number")
+        _acc_to_cik = dict(zip(acc_cik["accession_number"].astype(str),
+                               acc_cik["cik"].astype(str)))
+
     worklist_rows: list[dict] = []
     n_missing = 0
 
     # ---- helper for drift_break row extraction using dropped_row_id ---------
-    # Build a map: dropped_row_id -> (dropped_row, start_row) from drift_break_candidates
+    # Build a map: dropped_row_id -> (dropped_row, start_row) for SAMPLED packets only.
+    # We do NOT iterate over all 38K+ drift candidates. Instead:
+    #   1. Collect the dropped_row_ids we actually need (<=40, from drift_break rows in chain_sample).
+    #   2. Compute _packet_id vectorized to find the sampled set.
+    #   3. Filter drift_df to those candidates only, then build the map (<=40 row loop is fine).
     _drift_map: dict[str, tuple[dict, dict]] = {}
     if len(chain_sample) and "drift_break" in chain_sample["stratum"].values:
         drift_df = drift_break_candidates(holdings_df)
-        row_lookup = holdings_df.set_index("row_id")
-        for dr in drift_df.itertuples(index=False):
-            dropped_rid = str(dr.dropped_row_id)
-            start_rid = str(dr.start_row_id)
+        # Sampled drift packets: mirror sample_chains' md5 sort + head(n_drift_break) selection.
+        # Compute md5 ordering vectorized (hashlib per short string over <=40K rows is the
+        # established sampler pattern; acceptable at this scale).
+        if len(drift_df):
+            drift_df = drift_df.copy()
+            drift_df["_o"] = [hashlib.md5((str(x) + SEED).encode()).hexdigest()
+                              for x in drift_df["dropped_row_id"]]
+            # Determine cap: match sample_chains' n_drift_break default (40).
+            # Use chain_sample length as an upper bound since that's what was sampled.
+            n_drift_sampled = int(chain_sample[chain_sample["stratum"] == "drift_break"].shape[0])
+            drift_sampled = drift_df.sort_values("_o").head(n_drift_sampled)
+            # Now only iterate over the <=40 sampled candidates.
+            row_lookup = holdings_df.set_index("row_id")
 
             def _row_dict(rid: str) -> dict:
                 if rid in row_lookup.index:
@@ -545,7 +571,10 @@ def write_batch(
                     return d
                 return {}
 
-            _drift_map[dropped_rid] = (_row_dict(dropped_rid), _row_dict(start_rid))
+            for dr in drift_sampled.itertuples(index=False):   # <=40 rows, fine
+                dropped_rid = str(dr.dropped_row_id)
+                start_rid = str(dr.start_row_id)
+                _drift_map[dropped_rid] = (_row_dict(dropped_rid), _row_dict(start_rid))
 
     # ---- chain packets ------------------------------------------------------
     for sr in chain_sample.itertuples(index=False):
@@ -710,7 +739,14 @@ def write_batch(
             for acc in accessions
         }
 
-        all_cached = all(_has_cached_filing(cik_repr, acc) for acc in accessions) if accessions else False
+        # Use the owning CIK for each accession (from the pre-built map) so that
+        # cross-fund entity packets check the correct cache dir per filing, not always
+        # ciks_list[0] which may be the wrong fund for some accessions.
+        # Chain packets are always single-CIK so the existing cik variable is correct there.
+        all_cached = all(
+            _has_cached_filing(_acc_to_cik.get(acc, cik_repr), acc)
+            for acc in accessions
+        ) if accessions else False
         if accessions and not all_cached:
             n_missing += 1
 
@@ -741,10 +777,13 @@ def write_batch(
             acc_rows = [r for r in pkt_rows if r.get("accession_number") == acc]
             dates = sorted({r["report_date"] for r in acc_rows if r.get("report_date")})
             rpt_date = dates[0] if dates else ""
+            # Use the owning CIK for this accession so the mini-bundle points at the
+            # correct fund's cache dir (critical for cross-fund entity packets).
+            owning_cik = _acc_to_cik.get(acc, cik_repr)
             bundle = {
                 "schema_version": "review-bundle.v1",
                 "engine": "match_gold",
-                "cik": cik_repr,
+                "cik": owning_cik,
                 "report_date": rpt_date,
                 "evidence_items": [
                     {
@@ -825,13 +864,16 @@ def main() -> None:
 
     out_dir = Path(args.out_dir) if args.out_dir else (config.MATCH_GOLD_DIR / args.batch_id)
 
-    # Load production CSVs
+    # Load production CSVs.
+    # Use POSITION_ID_EDGES_FILE (chain-truth frame with position_id, cik, match_method,
+    # begin/end fair_value) -- matches what sample_chains and metrics use. This is the
+    # canonical edge source; POSITION_MATCHES_FILE is the raw match output.
     _con = duckdb.connect()
     holdings_df = _con.execute(
         f"SELECT * FROM read_csv_auto('{config.UNIFIED_HOLDINGS_FILE}', all_varchar=true)"
     ).df()
     edges_df = _con.execute(
-        f"SELECT * FROM read_csv_auto('{config.POSITION_MATCHES_FILE}', all_varchar=true)"
+        f"SELECT * FROM read_csv_auto('{config.POSITION_ID_EDGES_FILE}', all_varchar=true)"
     ).df()
 
     # Filter to cohort CIKs

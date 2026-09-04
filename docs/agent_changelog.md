@@ -6,6 +6,18 @@ Format: `### YYYY-MM-DD — Brief title`, then bullet points describing what cha
 
 ---
 
+## 2026-09-04 - Match-gold final-fix-wave (all 7 findings)
+
+- **Finding 1 (critical):** Entity-packet cross-fund owning-CIK fix (`scripts/match_gold/build_packets.py`): built vectorized `_acc_to_cik` map from holdings before the entity loop; `_has_cached_filing` and mini-bundle `cik` now use the owning CIK per accession instead of always `ciks_list[0]`. Test added (`test_entity_packet_owning_cik_used_for_cache_check`).
+- **Finding 2 (important):** `main()` now loads `config.POSITION_ID_EDGES_FILE` (chain-truth frame, matching metrics and sample_chains) instead of `config.POSITION_MATCHES_FILE`.
+- **Finding 3 (important):** `score_gold.py` verdict JSON load wrapped in `try/except (json.JSONDecodeError, UnicodeDecodeError, OSError)` -- malformed/truncated verdicts surface as invalid with GOLD_COLS-shape row; test added (`test_score_batch_garbage_verdict_surfaces_as_invalid`).
+- **Finding 4 (important):** `_drift_map` construction vectorized -- only the sampled <=40 drift_break candidates are iterated (previously iterated all 38K+ rows). md5-sort mirrors `sample_chains` selection exactly.
+- **Finding 5 (important, docs):** `docs/reference/match_gold_dispatch.md`: added explicit blinding-protection note (workers must NOT get read grants to `packets_meta/` or `worklist.csv`); fixed metric name `chain_continuity` -> `chain_continuity_rate`.
+- **Finding 6 (docs):** UNIFIED_COLUMNS-reindex row_id-strip defect class also exists in `pipeline/gics_classification.py` (~line 739/886) and `pipeline/llm_review.py` (~line 611) -- triggered only by `--gics`/`--classify-gics`/`--llm-review` rebuild paths. The fail-loud guard in match_quality will catch it if those paths are exercised. Follow-up fix recommended before enabling those rebuild paths. Note: fix-round-2 changelog entry references `docs/match_quality_runbook.md` -- correct path is `docs/reference/match_gold_dispatch.md`.
+- **Finding 7 (minor):** fv_jump SQL in `sample_chains` now uses `FV_JUMP_RATIO` imported from `pipeline.match_quality` instead of hardcoded `4.0`.
+
+---
+
 ## 2026-09-04 - Fix-round-2: row_id/row_id_basis preservation through assign_position_ids
 
 - **Root-cause fix** (`pipeline/position_matching.py` `assign_position_ids`): Reindex to UNIFIED_COLUMNS at end of function was silently stripping `row_id` and `row_id_basis` (appended by `_assign_row_ids` after UNIFIED_COLUMNS is finalized). Fixed by stashing appended provenance columns before reindex and restoring them after.

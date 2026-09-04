@@ -6,7 +6,7 @@ after completing a match-quality cohort review and before running agents on the 
 ## 1. Prereqs
 
 - **Rebuild metrics**: `python scripts/rebuild_outputs.py --match-quality`. Check
-  `match_quality_metrics.csv` column `chain_continuity` denominator. If 0 (stale holdings), first
+  `match_quality_metrics.csv` column `chain_continuity_rate` denominator. If 0 (stale holdings), first
   run `python scripts/rebuild_outputs.py --returns` to populate position_id, then re-run
   --match-quality.
 - **Check concurrent fleet state**: No other match-gold, agent-b, or codex worker fleet should be
@@ -49,6 +49,11 @@ Follow `docs/reference/codex_worker_dispatch.md` fleet pattern:
 
 3. **Read grants**: Repo root + interpreter site-packages (use `_worker_read_dirs` from
    `scripts/dispatch_preflight.ps1`).
+   **IMPORTANT — blinding protection**: Worker read grants MUST exclude `packets_meta/` and
+   `worklist.csv`. Both files contain tier/stratum labels (match_method, stratum) that would
+   unblind adjudicators. Workers get only: their own prompt (`prompts/<pid>.md`), their packet
+   (`packets/<pid>.json`), the corresponding filing dir (`filings/<pid>/`), and write access to
+   `verdicts/`. Do NOT grant broader read on the batch directory root.
 
 4. **Sandbox traps** (baked into scripts; verify your dispatcher includes them):
    - User site-packages read grant (omit `-ReadDirs` site-packages = ImportError).

@@ -74,6 +74,79 @@ def test_sample_entities_deterministic():
 import json
 
 
+def test_entity_packet_owning_cik_used_for_cache_check(tmp_path):
+    """Cross-fund entity packet: mini-bundle cik and cache check use the filing's owning CIK.
+
+    Accession 'ACC-CIK2' belongs to CIK 0000000002 (ciks_list[1]).
+    _has_cached_filing must be called with CIK2, not CIK1 (ciks_list[0]).
+    """
+    import types
+
+    holdings = _holdings([
+        _row("0000000001", "2025-06-30", "Acme Corp", 10.0, "POS-1", "ROW-a",
+             entity_id="ENT-X"),
+        _row("0000000002", "2025-06-30", "Acme Corporation", 20.0, "POS-2", "ROW-b",
+             entity_id="ENT-X"),
+    ])
+    holdings["accession_number"] = ["ACC-CIK1", "ACC-CIK2"]
+    holdings["instrument_description"] = ""
+    holdings["bdc_investment_identifier"] = holdings["issuer_name"]
+    holdings["principal_amount"] = None
+    holdings["basis_spread"] = None
+
+    # Capture which (cik, acc) pairs _has_cached_filing is called with
+    calls: list[tuple[str, str]] = []
+
+    import scripts.match_gold.build_packets as _bp_mod
+    original_has_cached = _bp_mod._has_cached_filing
+
+    def _fake_has_cached(cik: str, acc: str) -> bool:
+        calls.append((cik, acc))
+        return True
+
+    _bp_mod._has_cached_filing = _fake_has_cached
+    try:
+        entity_sample = bp.sample_entities(holdings, n_merge_verify=5,
+                                           n_cross_fund_near_miss=5, n_within_fund=5)
+        chain_sample = pd.DataFrame(columns=bp.SAMPLE_COLUMNS)
+        stats = bp.write_batch(holdings, pd.DataFrame(columns=[
+            "edge_type", "position_id", "cik", "source", "begin_report_date",
+            "begin_quarter", "begin_issuer_name", "begin_fair_value",
+            "end_report_date", "end_quarter", "end_issuer_name",
+            "end_fair_value", "match_method", "match_key", "match_score", "span_months"
+        ]), chain_sample, entity_sample, tmp_path)
+    finally:
+        _bp_mod._has_cached_filing = original_has_cached
+
+    # The entity_merge_verify packet spans both CIKs.
+    # Cache check for ACC-CIK1 must use CIK1, for ACC-CIK2 must use CIK2.
+    acc_to_cik_used = {acc: cik for cik, acc in calls}
+    if "ACC-CIK1" in acc_to_cik_used:
+        assert acc_to_cik_used["ACC-CIK1"] == "0000000001", (
+            f"Expected CIK1 for ACC-CIK1, got {acc_to_cik_used['ACC-CIK1']}"
+        )
+    if "ACC-CIK2" in acc_to_cik_used:
+        assert acc_to_cik_used["ACC-CIK2"] == "0000000002", (
+            f"Expected CIK2 for ACC-CIK2, got {acc_to_cik_used['ACC-CIK2']}"
+        )
+
+    # Verify mini-bundle cik fields match owning CIK (not always cik_repr)
+    wl = pd.read_csv(tmp_path / "worklist.csv")
+    entity_packets = wl[wl["packet_type"] == "entity"]
+    for _, row in entity_packets.iterrows():
+        pid = row["packet_id"]
+        filing_dir = tmp_path / "filings" / pid
+        if filing_dir.exists():
+            for bundle_path in filing_dir.iterdir():
+                acc = bundle_path.stem
+                bundle = json.loads(bundle_path.read_text("utf-8"))
+                expected_cik = {"ACC-CIK1": "0000000001", "ACC-CIK2": "0000000002"}.get(acc)
+                if expected_cik is not None:
+                    assert bundle["cik"] == expected_cik, (
+                        f"mini-bundle for {acc}: expected {expected_cik}, got {bundle['cik']}"
+                    )
+
+
 def test_write_batch_layout(tmp_path):
     holdings, edges = _chain_fixture()
     holdings["accession_number"] = "0000000001-25-000001"

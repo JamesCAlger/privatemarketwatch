@@ -87,6 +87,36 @@ def test_audit_slice_nonempty_per_stratum(tmp_path):
     assert len(audit) >= 1
 
 
+def test_score_batch_garbage_verdict_surfaces_as_invalid(tmp_path):
+    """Truncated/malformed verdict JSON must appear as invalid, never crash the run."""
+    meta = {"packet_id": "MGP-bad", "packet_type": "chain", "stratum": "tier_random",
+            "edges": [{"edge_index": 0, "match_method": "B2_exact_name"}]}
+    wl_rows = [{"packet_id": "MGP-bad", "packet_type": "chain", "stratum": "tier_random",
+                "cik": "0000000001", "n_rows": 1, "n_edges": 1,
+                "prompt_path": "", "packet_path": "",
+                "verdict_path": "verdicts/MGP-bad.json", "has_cached_filing": True}]
+    (tmp_path / "packets_meta").mkdir(parents=True)
+    (tmp_path / "verdicts").mkdir()
+    (tmp_path / "packets_meta" / "MGP-bad.json").write_text(json.dumps(meta), encoding="utf-8")
+    # Write garbage (truncated JSON) as the verdict file
+    (tmp_path / "verdicts" / "MGP-bad.json").write_bytes(b'{"packet_id": "MGP-bad", TRUNCATED')
+    import pandas as pd
+    pd.DataFrame(wl_rows).to_csv(tmp_path / "worklist.csv", index=False)
+
+    stats = sg.score_batch(tmp_path)
+    # Must not raise; must count as invalid, not missing
+    assert stats["n_invalid"] == 1
+    assert stats["n_missing"] == 0
+    gold = pd.read_csv(tmp_path / "gold_set.csv")
+    row = gold[gold["packet_id"] == "MGP-bad"]
+    assert len(row) == 1
+    assert not row.iloc[0]["valid"]
+    assert row.iloc[0]["verdict"] == "" or pd.isna(row.iloc[0]["verdict"])
+    summary = (tmp_path / "summary.md").read_text(encoding="utf-8")
+    assert "INVALID MGP-bad" in summary
+    assert "unreadable verdict JSON" in summary
+
+
 def test_score_batch_all_missing(tmp_path):
     """Test batch where every packet has MISSING verdict file."""
     meta1 = {"packet_id": "MGP-miss-1", "packet_type": "chain",

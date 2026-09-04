@@ -55,7 +55,19 @@ def score_batch(batch_dir: Path) -> dict:
         if not vpath.exists():
             missing.append(pid)
             continue
-        doc = json.loads(vpath.read_text(encoding="utf-8-sig"))
+        try:
+            doc = json.loads(vpath.read_text(encoding="utf-8-sig"))
+        except (json.JSONDecodeError, UnicodeDecodeError, OSError) as exc:
+            # Truncated/malformed verdict: surface as invalid, never drop silently.
+            invalid.append({"packet_id": pid, "errors": [f"unreadable verdict JSON: {exc}"]})
+            gold_rows.append({
+                "packet_id": pid, "packet_type": meta["packet_type"],
+                "stratum": meta["stratum"], "unit": "packet",
+                "edge_index": None, "tier": "", "verdict": "",
+                "confidence": None, "valid": False,
+                "audit_flag": _audit_pick(pid),
+            })
+            continue
         expected = [e["edge_index"] for e in meta.get("edges", [])]
         errs = validate_match_verdict(doc, expected_edges=expected)
         valid = not errs
