@@ -1,4 +1,6 @@
 """Tests for scripts/match_gold/build_packets.py chain packet sampler."""
+from pathlib import Path
+
 import pandas as pd
 
 from tests.test_match_quality import _edge, _edges, _holdings, _row
@@ -274,3 +276,66 @@ def test_drift_break_packet_has_two_rows(tmp_path):
     packet = json.loads((tmp_path / "packets" / f"{pid}.json").read_text("utf-8"))
     # drift_break packet must have 1 or 2 rows, never raise NameError
     assert len(packet["rows"]) >= 1
+
+
+def test_prompt_paths_are_absolute_and_resolvable(tmp_path):
+    """A Codex worker runs `codex exec -C <scratch runroot>`, so relative prompt paths
+    resolve against nothing. Every path a prompt hands the worker must be absolute and
+    must point at a file that exists, and the evidence CLI must be named with the
+    project interpreter (a bare `python` in the sandbox lacks the deps)."""
+    import os
+    import re
+
+    holdings, edges = _chain_fixture()
+    holdings["accession_number"] = "0000000001-25-000001"
+    holdings["instrument_description"] = "First Lien Term Loan"
+    holdings["bdc_investment_identifier"] = holdings["issuer_name"]
+    holdings["principal_amount"] = 100.0
+    holdings["basis_spread"] = 5.0
+    chain_sample = bp.sample_chains(holdings, edges, per_tier=5, n_fv_jump=5,
+                                    n_interior_singleton=5, n_drift_break=5)
+    entity_sample = bp.sample_entities(holdings)
+    # Relative batch dir: write_batch must resolve it, not propagate it.
+    cwd = os.getcwd()
+    os.chdir(tmp_path)
+    try:
+        bp.write_batch(holdings, edges, chain_sample, entity_sample, Path("batch"))
+    finally:
+        os.chdir(cwd)
+    batch_dir = tmp_path / "batch"
+
+    wl = pd.read_csv(batch_dir / "worklist.csv")
+    assert len(wl) > 0
+    for pid in wl["packet_id"]:
+        prompt = (batch_dir / "prompts" / f"{pid}.md").read_text("utf-8")
+
+        # No path is relative to the batch dir any more.
+        for rel in (f"packets/{pid}.json", f"verdicts/{pid}.json", f"filings/{pid}",
+                    "python scripts/review_agent/evidence_cli.py"):
+            assert rel not in prompt, f"{pid}: relative path {rel!r} left in prompt"
+
+        # The packet the worker is told to read exists at the absolute path given.
+        packet_path = re.search(r'## Your packet\n"([^"\n]+)"\n', prompt).group(1)
+        assert Path(packet_path).is_absolute()
+        assert Path(packet_path).exists()
+
+        # The verdict target sits in the batch verdicts dir (the sandbox write grant).
+        verdict_path = re.search(r'Write EXACTLY one JSON file to: "([^"\n]+)"',
+                                 prompt).group(1)
+        assert Path(verdict_path).is_absolute()
+        assert Path(verdict_path).parent == (batch_dir / "verdicts")
+
+        # Every --bundle is absolute, exists, and is invoked via the project interpreter.
+        bundles = re.findall(r'--bundle "([^"\n]+)"', prompt)
+        packet = json.loads((batch_dir / "packets" / f"{pid}.json").read_text("utf-8"))
+        assert len(set(bundles)) == len(packet["accessions"])
+        for b in bundles:
+            assert Path(b).is_absolute()
+            assert Path(b).exists(), f"{pid}: prompt cites missing bundle {b}"
+        assert f'"{bp.WORKER_PYTHON}" "{bp.EVIDENCE_CLI}"' in prompt
+        assert bp.EVIDENCE_CLI.exists()
+
+        # filing_bundles inside the packet points at the same real files.
+        for acc, path in packet["filing_bundles"].items():
+            assert Path(path).is_absolute()
+            assert Path(path).exists()

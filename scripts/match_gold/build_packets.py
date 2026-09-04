@@ -28,6 +28,15 @@ SEED = "20260903"
 SAMPLE_COLUMNS = ["packet_id", "packet_type", "stratum", "position_id", "cik"]
 JW_LO, JW_HI = 0.86, 0.97
 
+# A sandboxed Codex worker runs `codex exec -C <scratch runroot>`, so its cwd is neither
+# the repo root nor the batch dir, and no single cwd reaches both scripts/ and the batch.
+# Every path a prompt hands the worker must therefore be ABSOLUTE, and the evidence CLI
+# must be invoked through the exact interpreter that has the project deps -- the same
+# convention as the agent_a/agent_b2 dispatchers (WORKER_PYTHON = sys.executable).
+# Verified 2026-09-04 by the 3-packet mg1 Codex dispatch canary (canary_report.md).
+WORKER_PYTHON = sys.executable
+EVIDENCE_CLI = REPO / "scripts" / "review_agent" / "evidence_cli.py"
+
 
 def _packet_id(*parts: str) -> str:
     digest = hashlib.md5(("|".join(parts) + SEED).encode("utf-8")).hexdigest()[:12]
@@ -246,12 +255,13 @@ must judge only from the packet rows and the cached SEC filings.
 {packet_path}
 
 ## How to inspect source filings (cache-only, no network)
-For each accession listed in the packet, a bundle file exists under
-{filings_dir}. Roam the filing:
+A bundle file exists under {filings_dir} for each accession in the packet.
+Roam the filing:
 
-    python scripts/review_agent/evidence_cli.py --bundle {filings_dir}/<accession>.json overview
-    python scripts/review_agent/evidence_cli.py --bundle {filings_dir}/<accession>.json roam --query "<issuer terms>"
-    python scripts/review_agent/evidence_cli.py --bundle {filings_dir}/<accession>.json grid --table N
+{roam_commands}
+All paths in this prompt are ABSOLUTE; your working directory is NOT the repo
+root. Invoke Python via the exact interpreter shown above. Shell commands are
+allowed and expected: roam the filing(s) with the evidence CLI before deciding.
 
 ## Task
 {task_text}
@@ -301,6 +311,41 @@ _TASK_TEXT = {
         "shown as separate are actually one borrower."
     ),
 }
+
+
+def _roam_commands(filings_dir: Path, accessions: list[str]) -> str:
+    """The evidence-CLI invocations for a prompt: one overview/roam/grid triple per
+    accession that actually has a bundle on disk, fully absolute and quoted.
+
+    Listing the real accessions (rather than a `<accession>` placeholder) removes the
+    worker's only remaining guess -- it can copy a command verbatim.
+    """
+    blocks: list[str] = []
+    prefix = f'    "{WORKER_PYTHON}" "{EVIDENCE_CLI}"'
+    for acc in accessions:
+        bundle = f'"{filings_dir / f"{acc}.json"}"'
+        blocks.append(
+            f"{prefix} --bundle {bundle} overview\n"
+            f'{prefix} --bundle {bundle} roam --query "<issuer terms>"\n'
+            f"{prefix} --bundle {bundle} grid --table N\n"
+        )
+    if not blocks:
+        return "    (no cached filing bundles for this packet)\n"
+    return "\n".join(blocks)
+
+
+def _render_prompt(*, packet_id: str, batch_dir: Path, filings_dir: Path,
+                   accessions: list[str], task_text: str) -> str:
+    """Render a worker prompt with ABSOLUTE paths throughout (see WORKER_PYTHON note)."""
+    return PROMPT_TEMPLATE.format(
+        packet_id=packet_id,
+        packet_path=f'"{batch_dir / "packets" / f"{packet_id}.json"}"',
+        filings_dir=filings_dir,
+        roam_commands=_roam_commands(filings_dir, accessions),
+        task_text=task_text,
+        verdict_path=f'"{batch_dir / "verdicts" / f"{packet_id}.json"}"',
+        verdict_schema=_VERDICT_SCHEMA,
+    )
 
 
 def _safe_str(v: Any) -> str | None:
@@ -505,6 +550,10 @@ def write_batch(
 
     Returns {"n_packets": int, "n_missing_filing": int, "worklist_path": str}.
     """
+    # Every path handed to a worker must be absolute (see WORKER_PYTHON note), so pin
+    # the batch root here rather than trusting the caller to pass an absolute --out-dir.
+    batch_dir = Path(batch_dir).resolve()
+
     # --- ensure required columns exist on holdings_df (for tests) -----------
     for col in PACKET_ROW_FIELDS:
         if col not in holdings_df.columns:
@@ -630,8 +679,9 @@ def write_batch(
         })
 
         # Filing bundles mapping
+        # Absolute, for the same reason the prompt paths are (worker cwd is elsewhere).
         filing_bundles = {
-            acc: f"filings/{pid}/{acc}.json"
+            acc: str(filings_dir / pid / f"{acc}.json")
             for acc in accessions
         }
 
@@ -693,14 +743,12 @@ def write_batch(
 
         # Prompt
         task_text = _TASK_TEXT.get(stratum, _TASK_TEXT["chain"])
-        filings_rel = f"filings/{pid}"
-        prompt = PROMPT_TEMPLATE.format(
+        prompt = _render_prompt(
             packet_id=pid,
-            packet_path=f"packets/{pid}.json",
-            filings_dir=filings_rel,
+            batch_dir=batch_dir,
+            filings_dir=pkt_filing_dir,
+            accessions=accessions,
             task_text=task_text,
-            verdict_path=f"verdicts/{pid}.json",
-            verdict_schema=_VERDICT_SCHEMA,
         )
         (prompts_dir / f"{pid}.md").write_text(prompt, encoding="utf-8")
 
@@ -734,8 +782,9 @@ def write_batch(
             for r in pkt_rows
             if r.get("accession_number")
         })
+        # Absolute, for the same reason the prompt paths are (worker cwd is elsewhere).
         filing_bundles = {
-            acc: f"filings/{pid}/{acc}.json"
+            acc: str(filings_dir / pid / f"{acc}.json")
             for acc in accessions
         }
 
@@ -796,14 +845,12 @@ def write_batch(
             _write_json(pkt_filing_dir / f"{acc}.json", bundle)
 
         task_text = _TASK_TEXT.get(stratum, _TASK_TEXT["entity"])
-        filings_rel = f"filings/{pid}"
-        prompt = PROMPT_TEMPLATE.format(
+        prompt = _render_prompt(
             packet_id=pid,
-            packet_path=f"packets/{pid}.json",
-            filings_dir=filings_rel,
+            batch_dir=batch_dir,
+            filings_dir=pkt_filing_dir,
+            accessions=accessions,
             task_text=task_text,
-            verdict_path=f"verdicts/{pid}.json",
-            verdict_schema=_VERDICT_SCHEMA,
         )
         (prompts_dir / f"{pid}.md").write_text(prompt, encoding="utf-8")
 

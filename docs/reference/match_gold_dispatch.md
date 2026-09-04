@@ -48,23 +48,32 @@ Follow `docs/reference/codex_worker_dispatch.md` fleet pattern:
    Workers write `verdicts/<packet_id>.json` independently.
 
 3. **Read grants**: Repo root + interpreter site-packages (use `_worker_read_dirs` from
-   `scripts/dispatch_preflight.ps1`).
-   **IMPORTANT — blinding protection**: Worker read grants MUST exclude `packets_meta/` and
-   `worklist.csv`. Both files contain tier/stratum labels (match_method, stratum) that would
-   unblind adjudicators. Workers get only: their own prompt (`prompts/<pid>.md`), their packet
-   (`packets/<pid>.json`), the corresponding filing dir (`filings/<pid>/`), and write access to
-   `verdicts/`. Do NOT grant broader read on the batch directory root.
+   `scripts/agent_b/dispatch_preflight.py`).
+   **Blinding is PROMPT-level, not filesystem-level.** `setup_codex_worker_harness.ps1`
+   hardcodes a read grant on the repo root, and `evidence_cli.py` resolves cached filing
+   HTML relative to the repo (`REPO = parents[2]`), so a repo-root read grant is
+   unavoidable — which means `packets_meta/` and `worklist.csv` (carrying `stratum` /
+   `match_method`) ARE readable by a worker. The prompts never mention them, and the
+   2026-09-04 canary's three rollout traces contain zero references, but that is
+   compliance by behavior, not by sandbox. To make it structural, move `packets_meta/`
+   and `worklist.csv` out of the batch dir for the duration of a dispatch.
 
 4. **Sandbox traps** (baked into scripts; verify your dispatcher includes them):
    - User site-packages read grant (omit `-ReadDirs` site-packages = ImportError).
-   - Runroot boundary must CONTAIN verdicts output dir.
-   - Windows MAX_PATH: keep batch-id and packet IDs short (<10 chars each).
+   - Runroot boundary: the `[permissions...filesystem]` write grant is what authorizes a
+     write, NOT the `-C` boundary. Canary-verified 2026-09-04: workers wrote to an
+     absolute verdicts path OUTSIDE the runroot via `apply_patch`. So the runroot can stay
+     a short per-worker scratch dir; it does not have to contain `verdicts/`.
+   - Windows MAX_PATH: keep batch-id and WORKER ids short (`c1`, not the 16-char MGP id).
    - Auth: copy `auth.json` into each fresh CODEX_HOME or workers 401.
 
-**Roaming during dispatch**: Workers access filings via `evidence_cli.py`:
+**Roaming during dispatch**: workers access filings via `evidence_cli.py`. `build_packets.py`
+bakes the absolute invocation into each prompt — absolute interpreter (`sys.executable` of
+the build), absolute CLI, one command triple per real accession. A worker's cwd is a scratch
+runroot, so relative paths resolve against nothing:
 ```powershell
-python scripts/review_agent/evidence_cli.py --bundle filings/<packet_id>/<accession>.json \
-  overview|roam|grid
+"<abs python.exe>" "<repo>\scripts\review_agent\evidence_cli.py" `
+  --bundle "<batch>\filings\<packet_id>\<accession>.json" overview|roam|grid
 ```
 
 The engine=match_gold is pre-registered. Workers see raw facts, not pipeline derivations.

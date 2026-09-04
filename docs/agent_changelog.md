@@ -11002,3 +11002,45 @@ extraction-fix commits are ancestors of both). Live queue NOT regenerated this
 session -- takes effect at the next pass's shadow+queue build. Still open from
 the same diagnosis: within-pass re-discover after the post battery, and the
 excusal mechanism for audited row_adds of XBRL-untagged rows (owner decision).
+
+## 2026-09-04 Match-gold prompts emit absolute paths (Codex dispatch canary)
+
+**Canary (3 packets, real Codex sandbox path).** Ran `MGP-004e0e6281c8` (chain/1 edge),
+`MGP-086589f5cbd0` (entity/cross-fund), `MGP-05032422080e` (interior singleton) through
+`setup_codex_worker_harness.ps1` + `run_codex_worker.ps1` from an elevated shell. 3/3 exit 0;
+`score_gold.py` -> `n_verdicts=3, n_invalid=0`. Verdicts agreed 3/3 with the prior
+Claude-subagent run on class, edge verdicts and proposed links; citations identical on 2 of 3
+(on the third the Codex citation was the more accurate anchor). Report:
+`data/output/match_quality/gold/mg1/canary_report.md`. None of the four sandbox traps bit.
+
+**Fix (`scripts/match_gold/build_packets.py`).** Generated prompts used paths relative to the
+batch dir (`packets/<pid>.json`, `filings/<pid>/`, `verdicts/<pid>.json`) and a repo-relative
+`python scripts/review_agent/evidence_cli.py`. A worker runs `codex exec -C <scratch runroot>`,
+so none resolve, and no single cwd reaches both `scripts/` and the batch dir. Now:
+
+- `WORKER_PYTHON = sys.executable` + `EVIDENCE_CLI` module constants (same convention as the
+  agent_a/agent_b/agent_b2/convention dispatchers).
+- New `_roam_commands()` / `_render_prompt()`; `PROMPT_TEMPLATE` takes `{roam_commands}` and
+  carries an explicit "all paths are absolute, your cwd is not the repo root" notice.
+- Prompts now list one overview/roam/grid triple per REAL accession instead of an
+  `<accession>` placeholder, so a worker can copy a command verbatim.
+- `write_batch()` resolves `batch_dir` up front; `filing_bundles` inside each packet JSON is
+  absolute too.
+- Rendered output is byte-identical to the hand-materialized prompts the canary validated,
+  apart from a two-line prose rewrap.
+
+**Contract:** every path a match-gold prompt hands a worker is absolute and points at a file
+that exists at build time.
+
+**Tests:** +1 in `tests/test_match_gold_packets.py`
+(`test_prompt_paths_are_absolute_and_resolvable`; builds from a RELATIVE batch dir and asserts
+absoluteness + existence of packet/verdict/bundle paths and the interpreter-qualified CLI).
+File now 11 tests, all passing.
+
+**Doc:** `docs/reference/match_gold_dispatch.md` corrected on two points the canary falsified.
+(1) Blinding is PROMPT-level, not filesystem-level: `setup_codex_worker_harness.ps1` hardcodes
+a repo-root read grant and `evidence_cli.py` resolves cached HTML relative to the repo, so
+`packets_meta/` and `worklist.csv` ARE readable by a worker. The traces show zero references to
+them, but that is behavior, not sandbox; making it structural means moving those two out of the
+batch dir during dispatch. (2) The `[permissions...filesystem]` write grant authorizes writes,
+not the `-C` runroot boundary -- workers wrote an absolute verdicts path outside the runroot.
