@@ -301,7 +301,90 @@ def test_row_add_recovers_undercount():
     assert value_sum_by_quarter(corrected)["2025q"] == 1000.0     # 600 + 400, now counted
 
 
+def test_row_add_skips_duplicate_of_existing_row():
+    """Gate blind spot 1 (1905824 FHLB veto): a row_add duplicating an EXISTING
+    row is invisible to the conservation gate when the existing row is
+    conservation-excluded (CASH). The applier itself must skip exact
+    (report_date, identifier, fair_value) duplicates and record them."""
+    existing = {**_h("1", "2025q", 400.0, dims="investmentidentifieraxis=FHLB Note 1"),
+                "bdc_investment_identifier": "FHLB Note 1", "asset_category": "CASH"}
+    df = pd.DataFrame([existing, {**_h("1", "2025q", 600.0),
+                                  "bdc_investment_identifier": "Real Co - TL",
+                                  "asset_category": "LOAN"}])
+    pos_dup = {"report_date": "2025q", "fair_value": 400.0,
+               "bdc_investment_identifier": "FHLB Note 1",
+               "bdc_dimensions_raw": "investmentidentifieraxis=FHLB Note 1",
+               "source_row_id": "staging:dup"}
+    pos_new = {"report_date": "2025q", "fair_value": 55.0,
+               "bdc_investment_identifier": "New Real Position",
+               "bdc_dimensions_raw": "investmentidentifieraxis=New Real Position",
+               "source_row_id": "staging:new"}
+    corrected, audits = apply_rules(df, [_addrule(positions=[pos_dup, pos_new])])
+    a = audits[0]
+    assert a["status"] == "ok"
+    assert a["rows_added"] == 1
+    assert a["rows_skipped_duplicate"] == 1
+    assert len(corrected) == 3            # 2 existing + 1 new; no double-count
+    assert not a["noop"]
+
+
+def test_row_add_empty_identifier_never_treated_as_duplicate():
+    """Fail-open: rows without an identifier cannot be judged duplicates (the
+    position validates via issuer_name; the frame row has the same FV and an
+    empty identifier)."""
+    df = pd.DataFrame([{**_h("1", "2025q", 400.0), "bdc_investment_identifier": ""}])
+    pos = {"report_date": "2025q", "fair_value": 400.0,
+           "issuer_name": "Recovered Fund",
+           "bdc_investment_identifier": "",
+           "bdc_dimensions_raw": "investmentidentifieraxis=x",
+           "source_row_id": "staging:noid"}
+    corrected, audits = apply_rules(df, [_addrule(positions=[pos])])
+    assert audits[0]["rows_added"] == 1
+    assert audits[0].get("rows_skipped_duplicate", 0) == 0
+    assert len(corrected) == 2
+
+
 # -- gate guards: anchor-sanity (delete-to-balance) + over-addition ----------------------
+
+def test_gate_fails_aggregate_row_add_on_empty_quarter():
+    """Gate blind spot 2 (2008748 veto): extraction has ZERO rows for the target
+    quarter; a row_add of category subtotals closes the -100% residual and the
+    conservation checks trivially pass. Added rows whose identifiers match the
+    canonical aggregate patterns must FAIL no_aggregate_addition."""
+    base = pd.DataFrame([_h("1", "2024-12-31", 100.0)])       # target quarter EMPTY
+    added = pd.DataFrame([
+        {**_h("1", "2025-12-31", 600.0,
+              dims="investmentidentifieraxis=Total Senior Secured Loans"),
+         "bdc_investment_identifier": "Total Senior Secured Loans"},
+        {**_h("1", "2025-12-31", 400.0,
+              dims="investmentidentifieraxis=Equity Securities"),
+         "bdc_investment_identifier": "Equity Securities"},
+    ])
+    corrected = pd.concat([base, added], ignore_index=True)
+    g = gate_rules(base, corrected, cik="1", target_quarter="2025-12-31",
+                   anchors={"2025-12-31": 1000.0, "2024-12-31": 100.0})
+    assert g.checks["no_aggregate_addition"] is False
+    assert g.verdict == "FAIL"
+    assert any("Total Senior Secured Loans" in r for r in g.reasons)
+
+
+def test_gate_allows_real_position_add_with_total_prefix_name():
+    """False-positive guard: 'Total Access Elevator, LLC' is a real company, not
+    a subtotal -- entity signals must clear the aggregate check."""
+    base = pd.DataFrame([_h("1", "2025-12-31", 600.0),
+                         _h("1", "2025-09-30", 100.0, dims="HB"),
+                         _h("1", "2024-12-31", 100.0, dims="HA")])
+    added = pd.DataFrame([
+        {**_h("1", "2025-12-31", 400.0,
+              dims="investmentidentifieraxis=Total Access Elevator, LLC - First Lien Term Loan"),
+         "bdc_investment_identifier": "Total Access Elevator, LLC - First Lien Term Loan"},
+    ])
+    corrected = pd.concat([base, added], ignore_index=True)
+    g = gate_rules(base, corrected, cik="1", target_quarter="2025-12-31",
+                   anchors={"2025-12-31": 1000.0, "2025-09-30": 100.0, "2024-12-31": 100.0})
+    assert g.checks["no_aggregate_addition"] is True
+    assert g.verdict == "PASS"
+
 
 def test_gate_flags_excessive_removal_against_bad_anchor():
     # 1743415 shape: schedule $1050, anchor $50 -> "reconcile" by deleting 95% -> anchor_sanity FAIL

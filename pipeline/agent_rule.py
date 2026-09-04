@@ -319,15 +319,44 @@ def _apply_dedup(work, r):
                  "per_quarter": _per_quarter(dropped_rows)}
 
 
+def _existing_position_keys(work) -> set[tuple[str, str, float]]:
+    """(report_date, normalized identifier, fair_value) keys of rows already in
+    the frame. Empty identifiers are unjudgeable and never key (fail-open)."""
+    if "bdc_investment_identifier" not in work.columns or len(work) == 0:
+        return set()
+    ident = work["bdc_investment_identifier"].fillna("").astype(str).str.strip().str.lower()
+    rd = work["report_date"].astype(str)
+    fv = pd.to_numeric(work.get("fair_value"), errors="coerce")
+    keys = set()
+    for i, r_, f in zip(ident, rd, fv):
+        if i and pd.notna(f):
+            keys.add((r_, i, float(f)))
+    return keys
+
+
 def _apply_add(work, r):
     """Recover under-counted positions (FV < anchor): append rows the extractor dropped, each
     grounded by a `source_row_id` (the iXBRL/staging row it recovers). Values are agent-supplied
-    from the source; `source_row_id`/evidence make it auditable and the gate checks the FV impact."""
+    from the source; `source_row_id`/evidence make it auditable and the gate checks the FV impact.
+
+    Duplicate guard (gate blind spot 1, 1905824 FHLB veto 2026-09-02): a position whose
+    (report_date, identifier, fair_value) already exists in the frame is SKIPPED, not appended --
+    a dup-add against a conservation-EXCLUDED row (CASH) is invisible to the conservation gate,
+    and a dup-add against a later-natively-extracted row would silently double-count."""
     positions = r.get("positions") or []
     cols = [c for c in work.columns if c != "_rid"]
     next_rid = (int(work["_rid"].max()) + 1) if len(work) else 0
-    new_rows, pq, ignored = [], {}, set()
+    existing = _existing_position_keys(work)
+    new_rows, pq, ignored, skipped = [], {}, set(), []
     for p in positions:
+        ident = str(p.get("bdc_investment_identifier") or "").strip().lower()
+        try:
+            fv_key = float(p.get("fair_value"))
+        except (TypeError, ValueError):
+            fv_key = None
+        if ident and fv_key is not None and (str(p.get("report_date")), ident, fv_key) in existing:
+            skipped.append(p.get("bdc_investment_identifier"))
+            continue
         row = {c: None for c in cols}
         for k, v in p.items():
             if k in cols:                       # source_row_id is metadata, not a holdings column
@@ -344,6 +373,8 @@ def _apply_add(work, r):
         work = pd.concat([work, pd.DataFrame(new_rows)], ignore_index=True)
     return work, {"rule_id": r.get("rule_id"), "rule_type": "row_add", "status": "ok",
                   "rows_added": len(new_rows), "per_quarter": pq,
+                  "rows_skipped_duplicate": len(skipped),
+                  "skipped_duplicate_identifiers": skipped,
                   "ignored_keys": sorted(ignored),     # extra position keys not in the holdings schema
                   "source_row_ids": [p.get("source_row_id") for p in positions]}
 
@@ -434,6 +465,28 @@ def build_snapshots(df: pd.DataFrame, anchors: dict[str, float], threshold_pct: 
     return out
 
 
+_AGGREGATE_ENTITY_SIGNALS = (
+    " inc", " llc", " l.l.c", " lp", " l.p", " ltd", " corp", " co.",
+    " company", " holdings", " group", " gmbh", " sarl", " plc",
+)
+
+
+def _looks_like_aggregate_identifier(text: str) -> bool:
+    """Conservative python-side mirror of the staging aggregate heuristics: an
+    identifier with an entity signal is NEVER an aggregate ("Total Access
+    Elevator, LLC" lesson); otherwise exact aggregate names, "total "-prefixed
+    labels, and the canonical leaked-subtotal patterns are."""
+    from pipeline.bdc_identifier import _BDC_AGGREGATE_EXACT, _BDC_AGGREGATE_PATTERNS
+    t = " ".join(str(text or "").lower().split())
+    if not t:
+        return False
+    if any(sig in t for sig in _AGGREGATE_ENTITY_SIGNALS):
+        return False
+    if t in _BDC_AGGREGATE_EXACT:
+        return True
+    return t.startswith("total ") or any(p in t for p in _BDC_AGGREGATE_PATTERNS)
+
+
 def gate_rules(baseline_df, corrected_df, *, cik, target_quarter, anchors=None, threshold_pct=1.0,
                max_removed_frac=0.6, anchor_candidates=None, anchor_agree_tol=None):
     """B3 over the agent's rules: baseline vs corrected snapshots -> the un-gameable verdict.
@@ -510,6 +563,34 @@ def gate_rules(baseline_df, corrected_df, *, cik, target_quarter, anchors=None, 
         res._fail("no_over_addition", f"value_sum pushed ABOVE anchor (add-to-balance) in: {over_add}")
     else:
         res._pass("no_over_addition")
+
+    # no_aggregate_addition -- rows ADDED to the target quarter must be positions, not
+    # category subtotals. Gate blind spot 2 (2008748 veto 2026-09-02): with an EMPTY
+    # extraction, adding "Total X" rows closes a -100% residual and every conservation
+    # check trivially passes. Compare frames directly so the check cannot be gamed by
+    # the rule's own audit.
+    agg_added = []
+    if "report_date" in corrected_df.columns:
+        tq = str(target_quarter)
+        base_tq = baseline_df[baseline_df["report_date"].astype(str) == tq] \
+            if "report_date" in baseline_df.columns else baseline_df.iloc[0:0]
+        base_keys = _existing_position_keys(base_tq.assign(_rid=0)) if len(base_tq) else set()
+        corr_tq = corrected_df[corrected_df["report_date"].astype(str) == tq]
+        if "bdc_investment_identifier" in corr_tq.columns:
+            ident = corr_tq["bdc_investment_identifier"].fillna("").astype(str).str.strip()
+            fv = pd.to_numeric(corr_tq.get("fair_value"), errors="coerce")
+            for i_raw, f in zip(ident, fv):
+                key = (tq, i_raw.lower(), float(f)) if (i_raw and pd.notna(f)) else None
+                is_new = key is not None and key not in base_keys
+                if is_new and _looks_like_aggregate_identifier(i_raw):
+                    agg_added.append(i_raw)
+    if agg_added:
+        empty_note = " (target quarter had ZERO baseline rows)" if len(base_tq) == 0 else ""
+        res._fail("no_aggregate_addition",
+                  f"added rows look like category subtotals, not positions{empty_note}: "
+                  f"{agg_added[:5]}")
+    else:
+        res._pass("no_aggregate_addition")
 
     # anchor_sanity -- did reconciling the target quarter require deleting too much of its FV?
     bt = base.get(str(target_quarter), {}).get("conservation")
