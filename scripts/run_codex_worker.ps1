@@ -15,7 +15,16 @@ param(
   [string] $TraceDir = '',
   # Prefix prepended to the harvested trace filename (the worker id) so traces from many
   # workers can share one TraceDir without colliding or losing attribution.
-  [string] $TracePrefix = ''
+  [string] $TracePrefix = '',
+  # Path to the OPERATOR's auth.json (the one dispatchers copy into each worker home).
+  # When Codex refreshes an expired access token inside a worker, the refresh token
+  # ROTATES and the old one is consumed server-side. Without this, the rotated
+  # credential is deleted with the rest of the worker scratch and every later worker --
+  # and the operator -- authenticates with a spent refresh token, failing
+  # 401 refresh_token_reused until a human runs `codex login` again. Short fleets never
+  # notice; anything that outlives one access token does. Pass the source path and the
+  # rotated credential is copied back before the scrub.
+  [string] $AuthSyncBack = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -136,6 +145,29 @@ try {
       Write-Warning "Rollout trace harvest failed: $($_.Exception.Message)"
     }
   }
+  # Preserve a rotated credential BEFORE the scrub deletes it (see -AuthSyncBack).
+  # Best-effort: never fail a completed worker run over credential bookkeeping.
+  if (-not [string]::IsNullOrWhiteSpace($AuthSyncBack)) {
+    try {
+      $WorkerAuth = Join-Path $WorkerHome 'auth.json'
+      if (Test-Path -LiteralPath $WorkerAuth -PathType Leaf) {
+        $rotated = $true
+        if (Test-Path -LiteralPath $AuthSyncBack -PathType Leaf) {
+          $rotated = (Get-FileHash -LiteralPath $WorkerAuth -Algorithm SHA256).Hash -ne
+                     (Get-FileHash -LiteralPath $AuthSyncBack -Algorithm SHA256).Hash
+        }
+        if ($rotated) {
+          # The dispatcher denied the sandbox users read on this file; the operator
+          # process still owns it, so the copy back succeeds.
+          Copy-Item -LiteralPath $WorkerAuth -Destination $AuthSyncBack -Force
+          Write-Warning "Synced rotated auth.json back to $AuthSyncBack"
+        }
+      }
+    } catch {
+      Write-Warning "auth.json sync-back failed: $($_.Exception.Message)"
+    }
+  }
+
   # Codex copies its full binary, plugin caches, model caches, AND the operator's
   # logged-in auth.json into every fresh CODEX_HOME. The full waste allowlist lives
   # in codex_worker_waste_allowlist.ps1 (shared with sweep_worker_scratch_waste.ps1

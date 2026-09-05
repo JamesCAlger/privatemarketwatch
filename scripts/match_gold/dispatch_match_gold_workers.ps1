@@ -53,6 +53,11 @@ param(
   # way in seconds). 0 disables.
   [int] $UsageLimitAbortThreshold = 1,
 
+  # Abort after this many workers fail with a rejected Codex credential. Unlike a
+  # sandbox-logon race this is never transient: the refresh token rotates server-side
+  # and once consumed no retry helps until a human runs `codex login`.
+  [int] $AuthAbortThreshold = 3,
+
   # Keep packets_meta/ + worklist.csv in the batch dir during dispatch (they carry the
   # tier labels the packets are blinded of). Default is to hold them outside the repo.
   [switch] $NoBlindHold,
@@ -154,6 +159,20 @@ function Test-SandboxLogonFailure {
   $text = Get-Content -LiteralPath $StderrPath -Raw -ErrorAction SilentlyContinue
   if ([string]::IsNullOrEmpty($text)) { return $false }
   return ($text -match "CreateProcessWithLogonW failed")
+}
+
+function Test-AuthFailure {
+  # The Codex credential is unusable: the refresh token was consumed (its rotation is
+  # server-side and one-shot) or the session is otherwise unauthorized. Every remaining
+  # worker will fail identically in seconds, and no retry can help -- a human has to run
+  # `codex login`. Measured 2026-09-05: this burned 46 mg3 packets before it was caught.
+  param([Parameter(Mandatory = $true)][string] $StderrPath)
+  if (-not (Test-Path -LiteralPath $StderrPath -PathType Leaf)) { return $false }
+  $text = Get-Content -LiteralPath $StderrPath -Raw -ErrorAction SilentlyContinue
+  if ([string]::IsNullOrEmpty($text)) { return $false }
+  return ($text -match "refresh_token_reused") -or
+         ($text -match "could not be refreshed") -or
+         ($text -match "401 Unauthorized")
 }
 
 function Invoke-AceSweep {
@@ -348,6 +367,8 @@ $results = @()
 $failures = @()
 $usageLimitCount = 0
 $usageLimitHit = $false
+$authFailCount = 0
+$authHit = $false
 $completed = 0
 $sinceSweep = 0
 $total = $selected.Count
@@ -392,6 +413,7 @@ try {
   -CodexBin $(Quote-ForWrapper $CodexBin) ``
   -TraceDir $(Quote-ForWrapper $logDir) ``
   -TracePrefix $(Quote-ForWrapper "${pkt}__") ``
+  -AuthSyncBack $(Quote-ForWrapper $sourceAuth) ``
   -NoSetup
 exit `$LASTEXITCODE
 "@
@@ -453,7 +475,9 @@ exit `$LASTEXITCODE
       if ($timedOut) {
         $status = "TIMEOUT"; $detail = "killed after $TimeoutMinutes minute(s)"
       } elseif ($null -ne $ec -and $ec -ne 0) {
-        if (Test-SandboxLogonFailure -StderrPath $job.Stderr) {
+        if (Test-AuthFailure -StderrPath $job.Stderr) {
+          $status = "AUTH_FAILED"; $detail = "Codex credential rejected; stderr=$($job.Stderr)"
+        } elseif (Test-SandboxLogonFailure -StderrPath $job.Stderr) {
           $status = "SANDBOX_LOGON"; $detail = "sandbox user logon failed; stderr=$($job.Stderr)"
         } else {
           $status = "WORKER_EXIT"; $detail = "exit $ec; stderr=$($job.Stderr)"
@@ -481,15 +505,29 @@ exit `$LASTEXITCODE
         }
       }
 
-      if ($status -ne "OK") {
-        if (($UsageLimitAbortThreshold -gt 0) -and (Test-UsageLimitHit -StdoutPath $job.Stdout)) {
+      if ($status -eq "OK") {
+        # Only an unbroken run of auth failures means a dead credential. An isolated one
+        # is the expected refresh race: two workers hold the same token when the access
+        # token expires, both try to refresh, and the loser sees refresh_token_reused --
+        # while the winner's rotated credential is synced back for the next launch.
+        $authFailCount = 0
+      } else {
+        if ($status -eq "AUTH_FAILED") {
+          $authFailCount++
+          if ($authFailCount -ge $AuthAbortThreshold) { $authHit = $true }
+        }
+        if (($UsageLimitAbortThreshold -gt 0) -and ($status -ne "AUTH_FAILED") -and
+            (Test-UsageLimitHit -StdoutPath $job.Stdout)) {
           $usageLimitCount++
           $status = "USAGE_LIMIT"
           if ($usageLimitCount -ge $UsageLimitAbortThreshold) { $usageLimitHit = $true }
-        } elseif ($job.Attempt -lt (& { if ($status -eq "SANDBOX_LOGON") { $MaxAttempts + 2 } else { $MaxAttempts } })) {
-          # A sandbox-logon failure is a launch race, not an adjudication failure, so it
-          # gets extra attempts; by the time it is re-dequeued the contending worker is
-          # long gone.
+        } elseif ((-not $authHit) -and
+                  ($job.Attempt -lt (& {
+                    # Launch races and token-rotation races are not adjudication
+                    # failures, so they earn extra attempts; by the time the packet is
+                    # re-dequeued the contending worker is long gone.
+                    if ($status -eq "SANDBOX_LOGON" -or $status -eq "AUTH_FAILED") { $MaxAttempts + 2 }
+                    else { $MaxAttempts } }))) {
           Write-Host ("  retry {0} (attempt {1}): {2}" -f $pkt, $job.Attempt, $status)
           $queue.Enqueue([pscustomobject]@{ Row = $job.Row; Attempt = ($job.Attempt + 1) })
           continue
@@ -529,6 +567,15 @@ exit `$LASTEXITCODE
       }
     }
 
+    if ($authHit -and -not $usageLimitHit) {
+      Write-Host "CIRCUIT BREAKER: Codex credential rejected. Aborting dispatch." -ForegroundColor Yellow
+      $queue.Clear()
+      foreach ($job in $running) {
+        if (-not $job.Process.HasExited) { Stop-TrackedProcessTree -ProcessId $job.Process.Id }
+      }
+      $running = @()
+    }
+
     if ($usageLimitHit) {
       Write-Host "CIRCUIT BREAKER: Codex usage limit hit. Aborting dispatch." -ForegroundColor Yellow
       $queue.Clear()
@@ -561,6 +608,13 @@ Write-Host ""
 Write-Host ("match-gold dispatch complete: {0}/{1} OK, {2} failed, {3} min elapsed" -f `
   $ok, $total, $failures.Count, [math]::Round(((Get-Date) - $startedAt).TotalMinutes, 1))
 
+if ($authHit) {
+  throw ("Dispatch ABORTED by circuit breaker: the Codex credential was REJECTED " +
+    "($authFailCount worker(s), 401 / refresh_token_reused). The refresh token rotates " +
+    "server-side and is single-use, so retrying cannot help. Run `codex login` in an " +
+    "operator shell, then re-run this exact command -- the $($results.Count) packet(s) " +
+    "already holding valid verdicts are skipped automatically.")
+}
 if ($usageLimitHit) {
   throw ("Dispatch ABORTED by circuit breaker: Codex USAGE LIMIT reached. This is an " +
     "account-level quota cap. Wait for the reset (time is in a worker stdout log under " +
