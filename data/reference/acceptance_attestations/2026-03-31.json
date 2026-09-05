@@ -1,0 +1,113 @@
+{
+  "attested_utc": "2026-09-05T05:45:26.148626+00:00",
+  "signoff_commit": "eed082b",
+  "source_artifact": "data\\output\\quarter_pass\\q1p3_20260831\\acceptance_post.json",
+  "acceptance": {
+    "schema_version": 1,
+    "generated_utc": "2026-09-04T20:00:24Z",
+    "target_quarter": "2026-03-31",
+    "cohort_id": "v2_70_gate_verified_wrapper_bdc",
+    "calibration": "signed_off",
+    "thresholds_version": 2,
+    "verdict": "PASS",
+    "checks": [
+      {
+        "id": "fund_coverage",
+        "metric": "cohort.funds_with_holdings",
+        "op": ">=",
+        "value": 60,
+        "actual": 69,
+        "pass": true
+      },
+      {
+        "id": "reconcile_rate",
+        "metric": "conservation.reconcile_rate_pct",
+        "op": ">=",
+        "value": 90.0,
+        "actual": 94.118,
+        "pass": true
+      },
+      {
+        "id": "flagged_fv_share",
+        "metric": "conservation.flagged_fv_share_pct",
+        "op": "<=",
+        "value": 10.0,
+        "actual": 9.855,
+        "pass": true
+      },
+      {
+        "id": "source_blocking_fv_share",
+        "metric": "source_blockers.blocking_fv_share_pct",
+        "op": "<=",
+        "value": 1.0,
+        "actual": 0.264,
+        "pass": true
+      },
+      {
+        "id": "verified_fv_share",
+        "metric": "cohort.verified_fv_share_pct",
+        "op": ">=",
+        "value": 70.0,
+        "actual": 73.083,
+        "pass": true
+      },
+      {
+        "id": "promoted_rule_drift",
+        "metric": "promoted_rules.n_drift",
+        "op": "<=",
+        "value": 0,
+        "actual": 0,
+        "pass": true
+      },
+      {
+        "id": "promoted_rule_health",
+        "metric": "promoted_rules.n_not_ok",
+        "op": "<=",
+        "value": 0,
+        "actual": 0,
+        "pass": true
+      }
+    ],
+    "metrics": {
+      "cohort": {
+        "funds": 70,
+        "funds_with_holdings": 69,
+        "cohort_fv_m": 381912.346,
+        "tiers": {
+          "verified": 53,
+          "under_review": 15,
+          "unanchored": 1,
+          "no_holdings": 1
+        },
+        "verified_fv_share_pct": 73.083
+      },
+      "conservation": {
+        "n_reconciles": 64,
+        "n_flagged": 4,
+        "n_no_anchor": 1,
+        "anchored_rate_pct": 98.551,
+        "reconcile_rate_pct": 94.118,
+        "flagged_fv_m": 37638.722,
+        "flagged_fv_share_pct": 9.855,
+        "band_pct": 0.5
+      },
+      "source_blockers": {
+        "n_funds": 11,
+        "n_items": 11,
+        "blocking_fv_m": 1007.64,
+        "blocking_fv_share_pct": 0.264
+      },
+      "promoted_rules": {
+        "n_rules": 175,
+        "n_not_ok": 0,
+        "n_drift": 0
+      }
+    },
+    "inputs": {
+      "ledger": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\shadow\\validation_results_ledger.csv",
+      "queue": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\review_queue\\review_queue.csv",
+      "audit": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\agent_fix_application_audit.csv",
+      "holdings": "C:\\Users\\alger\\Documents\\000. Projects\\005. evergreen funds platform xbrl\\data\\output\\private_markets_holdings.parquet"
+    }
+  }
+}
