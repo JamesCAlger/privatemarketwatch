@@ -50,13 +50,32 @@ def sample_chains(holdings_df, edges_df, *, per_tier=40, n_fv_jump=40,
     con.register("e", edges_df)
     rows: list[dict] = []
 
+    # Sample only edges whose position_id actually has rows in `h`.
+    #
+    # `h` arrives cohort-filtered from main(); `e` (position_id_edges.csv) does not.
+    # The tier_random and fv_jump strata used to sample raw `e`, so they drew chains
+    # from funds outside the cohort -- _pull_chain_rows then found nothing and the
+    # packet was written with zero rows and zero accessions. Measured on batch mg2
+    # (2026-09-05): 223 of 580 packets were empty, 199 of them tier_random, i.e. 70%
+    # of the stratum that carries per-tier precision. interior_singleton and
+    # drift_break were unaffected because they already sample `h`.
+    #
+    # Filtering on position_id rather than cik is the invariant that actually matters:
+    # a sampled position_id present in `h` is guaranteed to yield packet rows.
+    con.execute("""
+        CREATE OR REPLACE TEMP VIEW e_cohort AS
+        SELECT * FROM e
+        WHERE position_id IN (
+            SELECT DISTINCT position_id FROM h WHERE position_id IS NOT NULL)
+    """)
+
     tier_sample = con.execute(f"""
         WITH ranked AS (
             SELECT position_id, cik, match_method,
                    ROW_NUMBER() OVER (
                        PARTITION BY match_method
                        ORDER BY md5(position_id || '{SEED}')) AS rn
-            FROM (SELECT DISTINCT position_id, cik, match_method FROM e)
+            FROM (SELECT DISTINCT position_id, cik, match_method FROM e_cohort)
         )
         SELECT DISTINCT position_id, cik, match_method
         FROM ranked WHERE rn <= {per_tier}
@@ -68,7 +87,7 @@ def sample_chains(holdings_df, edges_df, *, per_tier=40, n_fv_jump=40,
                      "position_id": r.position_id, "cik": str(r.cik)})
 
     jump = con.execute(f"""
-        SELECT DISTINCT position_id, cik FROM e
+        SELECT DISTINCT position_id, cik FROM e_cohort
         WHERE TRY_CAST(begin_fair_value AS DOUBLE) > 0
           AND TRY_CAST(end_fair_value AS DOUBLE) > 0
           AND GREATEST(TRY_CAST(begin_fair_value AS DOUBLE),
@@ -866,6 +885,22 @@ def write_batch(
             "verdict_path": str(verdicts_dir / f"{pid}.json"),
             "has_cached_filing": all_cached,
         })
+
+    # ---- empty-packet guard -------------------------------------------------
+    # A packet with no rows has nothing to adjudicate: the worker sees an empty
+    # `rows` array, no accessions, and no filing to roam. Batch mg2 shipped 223 of
+    # these silently (sampler drew chains from outside the cohort) and they read as
+    # a cached-HTML shortfall in the worklist rather than as a build defect. Fail
+    # loud instead -- same posture as the row_id guard in this module.
+    empty = [r["packet_id"] for r in worklist_rows if int(r["n_rows"]) == 0]
+    if empty:
+        raise ValueError(
+            f"{len(empty)} packet(s) built with zero rows, e.g. {empty[:5]}. "
+            "A sampled position_id/cluster resolved to no rows in the holdings frame "
+            "-- usually a sampler reading an artifact that is not cohort-filtered "
+            "(see the e_cohort view in sample_chains). Fix the sampler; do not ship "
+            "empty packets."
+        )
 
     # ---- worklist CSV -------------------------------------------------------
     worklist_rows.sort(key=lambda r: r["packet_id"])

@@ -1,6 +1,7 @@
 """Tests for scripts/match_gold/build_packets.py chain packet sampler."""
 from pathlib import Path
 
+import pytest
 import pandas as pd
 
 from tests.test_match_quality import _edge, _edges, _holdings, _row
@@ -339,3 +340,48 @@ def test_prompt_paths_are_absolute_and_resolvable(tmp_path):
         for acc, path in packet["filing_bundles"].items():
             assert Path(path).is_absolute()
             assert Path(path).exists()
+
+
+def test_chain_sampler_ignores_edges_outside_the_holdings_frame():
+    """position_id_edges.csv is not cohort-filtered; the holdings frame is.
+
+    Sampling raw edges drew chains whose position_id has no rows in `h`, and those
+    packets were written empty (batch mg2, 2026-09-05: 223 of 580, 199 of them
+    tier_random). Every sampled position_id must resolve to rows in the holdings
+    frame that was passed in.
+    """
+    holdings, edges = _chain_fixture()
+    # POS-9 exists only in the edge frame -- the shape of an out-of-cohort fund.
+    stray = _edges([
+        _edge("POS-9", "B2_exact_name", 100.0, 101.0, cik="0000009999"),
+        _edge("POS-8", "D_fuzzy", 10.0, 900.0, cik="0000009999"),   # also an fv-jump
+    ])
+    edges = pd.concat([edges, stray], ignore_index=True)
+
+    s = bp.sample_chains(holdings, edges, per_tier=50, n_fv_jump=50,
+                         n_interior_singleton=50, n_drift_break=50)
+
+    sampled = set(s["position_id"])
+    assert "POS-9" not in sampled, "tier_random sampled an edge with no holdings rows"
+    assert "POS-8" not in sampled, "fv_jump sampled an edge with no holdings rows"
+    assert sampled <= set(holdings["position_id"].dropna())
+    # The stray fv-jump must not have displaced the real one.
+    assert "POS-2" in set(s[s["stratum"] == "fv_jump"]["position_id"])
+
+
+def test_write_batch_refuses_to_ship_empty_packets(tmp_path):
+    """An empty packet has nothing to adjudicate, and in the worklist it looks like a
+    cached-HTML shortfall rather than a build defect. Fail loud instead."""
+    holdings, edges = _chain_fixture()
+    sample = bp.sample_chains(holdings, edges, per_tier=5, n_fv_jump=5,
+                              n_interior_singleton=5, n_drift_break=5)
+    # Forge the pre-fix condition: a sampled position_id absent from the holdings frame.
+    ghost = sample.iloc[[0]].copy()
+    ghost["position_id"] = "POS-GHOST"
+    ghost["packet_id"] = "MGP-ghostghostgh"
+    sample = pd.concat([sample, ghost], ignore_index=True)
+
+    empty_entities = pd.DataFrame(columns=["packet_id", "packet_type", "stratum",
+                                           "cluster_key", "ciks"])
+    with pytest.raises(ValueError, match="zero rows"):
+        bp.write_batch(holdings, edges, sample, empty_entities, tmp_path / "batch")
