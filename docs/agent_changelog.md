@@ -11099,3 +11099,29 @@ git tag signoff-2026-03-31 <commit> ; snapshot_outputs.py --clean (archive prior
 commit the uncommitted data/overrides/* the pass relies on. Watch: flagged_fv 9.855
 sits close to the 10 bar (HPS $26.6B overshoot dominates); the anchor/B2 lane can
 resolve a flagged fund if a future shift tips it.
+
+## 2026-09-05 - Q1-2026 sign-off executed + baseline refresh (owner-authorized)
+
+- **Attested** 2026-03-31 PASS 7/7 (thresholds v2): coverage 69, reconcile 94.118,
+  flagged_fv 9.855, source_blocking 0.264, verified_fv 73.083, drift 0, health 0.
+  Attestation written to `data/reference/acceptance_attestations/2026-03-31.json`;
+  ledger row appended to `data/output/acceptance_reattestation_ledger.csv`.
+- **Tagged** `signoff-2026-03-31` -> eed082b (the code state the twice-stable
+  batteries ran on). Attestation committed d18560d.
+- **Reattest check** clean before and after: 2025-12-31 PASS->PASS, 2026-03-31
+  PASS->PASS, no flips.
+- **Baseline refreshed** (owner chose rebuild-then-refresh). Ran
+  `scripts/rebuild_outputs.py` full (6312.7 s, cached inputs, no SEC calls) for a
+  clean deterministic tree; `diff_outputs.py --semantic` documented deltas vs the
+  retired baseline (holdings -10,537 rows = cumulative subtotal/dedup + cash-axis
+  work since 2026-07-23; CASH +88 rows from this cycle's cash-axis fix;
+  index_returns +1 quarter). Prior active baseline (created 2026-07-23, git_head
+  2cfd5b5, 26,590 artifacts) ARCHIVED to
+  `data/snapshots/baseline_retired_2026-09-05/` (with RETIRED_manifest.json) before
+  refresh -- NOTE: `snapshot_outputs.py --clean` does a hard rmtree with no archive,
+  and `data/snapshots/baseline/` is gitignored, so the prior baseline was moved by
+  hand first (contract: preserve retired baseline).
+- **New baseline**: git_head d18560d, 45,989 byte-identical artifacts / 18,548
+  excluded / 64,537 total; manifest `docs/refactoring/baseline_manifest.json`.
+- Caveat carried forward: flagged_fv 9.855 is a thin margin under the <=10 bar
+  (HPS $26.6B conservation overshoot dominates).
