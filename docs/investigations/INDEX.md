@@ -77,6 +77,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 ## Agentic campaign retrospectives ([agent_campaigns.md](agent_campaigns.md))
 - 2026-07-07 - Per-fingerprint stratification retrospective re-cut of ens2 B1 adjudications
 - 2026-08-20 - B2 correction-agent Q4 2025 track record: cross-batch metrics rollup + round-4 fleet acceptance criteria
+- Match-gold batch mg3: first full-cohort position-match gold set (2026-09-05/06)
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)

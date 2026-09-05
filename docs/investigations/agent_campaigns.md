@@ -240,3 +240,105 @@ promoted uses (first uses deserve manual review); rule_scope stays human;
 fund-strategy oscillation is pinned only from the next quarter pass onward;
 the ledger's FV-at-risk accounting for non-open states is absent, so
 "cost of remaining errors in FV" is currently unmeasurable from the ledger.
+
+## Match-gold batch mg3: first full-cohort position-match gold set (2026-09-05/06)
+
+**Question:** what is per-tier position-match precision on the wrapper cohort, and
+which match/entity failures dominate?
+
+**Batch:** `mg3`, 535 blinded packets, 7 strata. 475 adjudicated by sandboxed Codex
+workers (88.8%); 60 undispatched when the Codex account quota tripped the fleet's
+circuit breaker. The missing 60 are spread evenly across strata (8.3%-17.5%,
+overall 11.2%), so the scored set is representative, not a biased tail.
+Scoring: `score_gold.py`; 475 valid, **0 invalid**.
+
+### Build defect found and fixed first
+
+`sample_chains` drew `tier_random` and `fv_jump` from `position_id_edges.csv`, which
+is not cohort-filtered, while the holdings frame is. Sampled position_ids from
+non-cohort funds resolved to no rows and the packets were written EMPTY, surfacing
+in the worklist only as `has_cached_filing=False` -- indistinguishable from a cached
+HTML shortfall. Batch mg2 had 223/580 empty (199 of them tier_random). Fixed with the
+`e_cohort` view plus a fail-loud zero-row guard in `write_batch`; mg2 -> mg3 on
+identical holdings: empty 223 -> 0, adjudicable 357 -> 535, tier_random adjudicable
+84 -> 240. Without the fix, per-tier precision would have been published on a third
+of the intended n.
+
+### Per-tier edge precision
+
+`tier_random` only (the unbiased, production-representative stratum; the other six are
+deliberately anomaly-selected and run ~10pp lower by construction). UNCERTAIN excluded
+from the denominator per the runbook.
+
+| tier | precision | 95% Wilson | n |
+|---|---|---|---|
+| SUPP_B2_unique_exact_name | 0.95 | [0.91, 0.98] | 191 |
+| B1b_position_key | 0.95 | [0.87, 0.98] | 73 |
+| B2_exact_name | 0.94 | [0.87, 0.97] | 93 |
+| A_within_filing | 0.93 | [0.84, 0.97] | 69 |
+| E_entity_fingerprint | 0.92 | [0.80, 0.97] | 39 |
+| C_normalized_name | 0.84 | [0.70, 0.93] | 38 |
+| D_fuzzy | 0.82 | [0.73, 0.89] | 84 |
+| **ALL (tier_random)** | **0.92** | **[0.89, 0.94]** | **587** |
+
+All-strata pooled (what `precision_by_tier.csv` reports) is 0.89; anomaly-selected
+strata alone are 0.82 [0.75, 0.88].
+
+**Finding:** the four identity-based tiers cluster at 0.93-0.95 and are statistically
+indistinguishable from each other. The two approximate tiers -- `C_normalized_name`
+0.84 and `D_fuzzy` 0.82 -- are ~10pp worse. Tier reliability splits on
+exact-vs-approximate, not on the assumed A > B1 > B2 > C > D ladder.
+
+**Watch item raised and withdrawn:** at 28% of the batch `A_within_filing` read 0.84
+(n=19) and looked inverted against B2. It regressed to 0.92 (n=52) at 61% and 0.93
+(n=69) at completion. Small-sample noise, correctly bracketed by the reported interval.
+
+### Two dominant defect families -- both borrower/position confusion
+
+1. **Chains hop between tranches of the same borrower.** Affects even `A_within_filing`
+   (e.g. a chain jumping from a $1.22M SOFR+5.75% tranche maturing 2037 to a separate
+   $1.40M tranche maturing 2030, same issuer). Directly violates the position-level
+   contract in AGENTS.md.
+2. **Entity clustering merges genuinely different borrowers.** Magenta Buyer (McAfee)
+   with Oranje Holdco (KnowBe4); PHC Buyer (Patriot Home Care) with Cherry Bekaert
+   Advisory; Circustrix (SkyZone, Leisure) with Intelligent Medical Objects (Health
+   Care Tech). Mechanism is measurable: WRONG_MERGE packets carry a median max
+   `issuer_name` of **201 chars** vs **70** for CONFIRMED -- unparsed
+   `bdc_investment_identifier` strings where shared category boilerplate
+   ("Debt Investments | Internet Software and Services | ...") dominates the similarity
+   and the borrower name is buried. 76 of 83 WRONG_MERGEs are on names >=60 chars.
+   Spread over 14 of 18 entity CIKs seen, top two only 44 of 83 -- **global
+   identifier-parsing defect, not a per-CIK quirk.** The fix belongs upstream of
+   entity clustering: extract the borrower from the identifier first.
+
+### Stratum yields (each stratum found what it was built to find)
+
+| stratum | headline |
+|---|---|
+| within_fund_name_cluster | **0 CONFIRMED / 54 WRONG_MERGE** |
+| cross_fund_near_miss | 1 CONFIRMED / 45 WRONG_MERGE |
+| entity_merge_verify | 37 CONFIRMED / 16 WRONG_MERGE (30% error) |
+| interior_singleton | 21/33 MISSED_LINK |
+| fv_jump | 15/35 MIXED, 2 WRONG_MERGE |
+| drift_break | 9/35 MISSED_LINK |
+| tier_random | 177/215 CONFIRMED at packet level (82%) |
+
+### Anti-fabrication check
+
+All 87 coordinate citations in the first tranche of verdicts were resolved against the
+cached filings via `evidence_cli tables`: **87/87 point at tables and rows that exist**.
+Quoted text verified verbatim cell-for-cell on spot-checks. Two workers declined to
+adjudicate rather than guess when the sandbox rejected their process spawns.
+
+### Caveats
+
+- **Single adjudicator vs the matcher, not ground truth.** These are one Codex
+  adjudicator's verdicts; the human audit slice (runbook step 5, `audit_slice.csv`)
+  is what converts this into a defensible number. Precision here is a strong proxy.
+- **Confidence is uninformative**: 0 of 475 verdicts below 0.90, median 0.99. It
+  cannot be used to filter, weight, or triage, and should not be published as a
+  quality signal.
+- 60 packets (11.2%) unscored pending quota reset; strata evenly affected.
+- Anomaly-selected strata cannot support base-rate claims by construction -- only
+  `tier_random` does.
+- Cross-quarter stability not measured; gold set versioned by batch id (mg3).

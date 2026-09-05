@@ -11125,3 +11125,55 @@ resolve a flagged fund if a future shift tips it.
   excluded / 64,537 total; manifest `docs/refactoring/baseline_manifest.json`.
 - Caveat carried forward: flagged_fv 9.855 is a thin margin under the <=10 bar
   (HPS $26.6B conservation overshoot dominates).
+
+## 2026-09-06 Match-gold batch mg3 -- first full-cohort position-match gold set
+
+- **Scored 475 of 535 packets** (88.8%), 0 invalid. 60 undispatched when the Codex
+  account quota tripped the fleet circuit breaker (reset Sep 7 10:24); the missing set
+  is evenly spread across strata (11.2% overall) so the scored set stays representative.
+- **Per-tier precision** on `tier_random` (the unbiased stratum), UNCERTAIN excluded:
+  SUPP_B2 0.95 [0.91,0.98] n=191, B1b 0.95 [0.87,0.98] n=73, B2 0.94 [0.87,0.97] n=93,
+  A_within_filing 0.93 [0.84,0.97] n=69, E_entity_fingerprint 0.92 [0.80,0.97] n=39,
+  C_normalized_name 0.84 [0.70,0.93] n=38, D_fuzzy 0.82 [0.73,0.89] n=84.
+  ALL 0.92 [0.89,0.94] n=587. All-strata pooled 0.89; anomaly strata 0.82.
+- **Tier reliability splits exact-vs-approximate**, not on the assumed A>B1>B2>C>D
+  ladder: the four identity tiers are statistically indistinguishable at 0.93-0.95;
+  C_normalized_name and D_fuzzy sit ~10pp below them.
+- **Build defect fixed before the run**: `sample_chains` sampled the non-cohort-filtered
+  `position_id_edges.csv` while the holdings frame is cohort-filtered, writing EMPTY
+  packets that read as a cached-HTML shortfall in the worklist. mg2 had 223/580 empty
+  (199 tier_random). `e_cohort` view plus a fail-loud zero-row guard in `write_batch`;
+  mg2->mg3 on identical holdings: empty 223->0, adjudicable 357->535, tier_random
+  adjudicable 84->240. Commit 3f1be21; 2 regression tests verified failing pre-fix.
+- **Two dominant defect families**, both borrower/position confusion: (1) chains hop
+  between distinct tranches of one borrower, affecting even A_within_filing;
+  (2) entity clustering merges different borrowers -- WRONG_MERGE packets have median
+  max issuer_name 201 chars vs 70 for CONFIRMED, i.e. unparsed
+  bdc_investment_identifier strings whose category boilerplate dominates similarity.
+  Spread over 14 of 18 entity CIKs -> global identifier-parsing defect, not per-CIK.
+- **Anti-fabrication**: 87/87 coordinate citations resolve to tables/rows that exist in
+  the cached filings; quoted text verified verbatim on spot-checks.
+- **New fleet tooling** (commits 22e8d71, 9e1ff88, 44a26b4): production dispatcher
+  `scripts/match_gold/dispatch_match_gold_workers.ps1` plus `validate_verdict.py`
+  (per-verdict gate and `--scan-batch` resume), `cache_coverage.py`
+  (full/partial/none/no_acc), `worker_env.py` (read grants, shared with agent_b).
+  Blinding is now structural: packets_meta/ and worklist.csv are moved outside the repo
+  during dispatch and restored on exit.
+- **Two fleet-scale traps measured and fixed**:
+  - Sandbox parallelism ceiling is 2. The Windows sandbox has two FIXED accounts
+    (CodexSandboxOffline/Online), not one per run, so concurrent workers contend for one
+    credential and the loser gets CreateProcessWithLogonW 1326 on every process spawn in
+    its turn. Measured: MaxParallel 1=1/1, 3=2/3, 6=2/8 OK.
+  - Copying one auth.json into every worker home kills the operator login: the refresh
+    token rotates server-side and is single-use, and the rotated copy was deleted with
+    the worker scratch. Burned 46 packets before detection. `run_codex_worker.ps1` gains
+    `-AuthSyncBack`; the dispatcher classifies AUTH_FAILED and aborts on 3 CONSECUTIVE
+    such failures (isolated ones are the expected rotation race and are retried).
+    Affects agent_a/agent_b/b2 equally -- they just never run long enough to hit it.
+- **Fleet run**: 455/516 workers OK, 0 invalid verdicts, 64 sandbox-logon retries all
+  recovered, 472 min elapsed at MaxParallel 2.
+- **Caveats**: single-adjudicator proxy, not ground truth -- human audit slice pending.
+  Confidence is uninformative (0/475 below 0.90, median 0.99); do not publish it as a
+  quality signal.
+- Full suite green during the run: 4887 passed, 13 skipped, 2 xfailed; 0 production
+  artifacts modified (mtime-verified across the test window).

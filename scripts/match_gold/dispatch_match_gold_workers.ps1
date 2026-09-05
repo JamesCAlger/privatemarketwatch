@@ -520,6 +520,12 @@ exit `$LASTEXITCODE
             (Test-UsageLimitHit -StdoutPath $job.Stdout)) {
           $usageLimitCount++
           $status = "USAGE_LIMIT"
+          # Overwrite the detail set by the branch above: a worker that hits the quota
+          # often ALSO logs a sandbox-logon error, and keeping that text made the
+          # failure record read "sandbox user logon failed" for what was actually an
+          # account quota (seen on the mg3 run's abort). Point at the stdout, which is
+          # where the quota message and its reset time live.
+          $detail = "Codex usage limit; stdout=$($job.Stdout)"
           if ($usageLimitCount -ge $UsageLimitAbortThreshold) { $usageLimitHit = $true }
         } elseif ((-not $authHit) -and
                   ($job.Attempt -lt (& {
