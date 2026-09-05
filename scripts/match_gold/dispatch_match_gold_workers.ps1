@@ -5,8 +5,20 @@ param(
   # Override the batch dir (default: <repo>\data\output\match_quality\gold\<BatchId>).
   [string] $BatchDir = "",
 
-  [int] $MaxParallel = 4,
+  # Do not raise without measuring. The Windows sandbox does NOT create a user per run:
+  # the machine has exactly two fixed accounts (CodexSandboxOffline / CodexSandboxOnline)
+  # and every worker of this shape uses the Offline one, so concurrent workers contend
+  # for one credential. The loser gets "CreateProcessWithLogonW failed: 1326" -- not only
+  # at launch, but on EVERY process spawn inside its turn, so it burns a full turn and
+  # writes nothing. Measured 2026-09-05 on mg3: MaxParallel 1 = 1/1 OK, 3 = 2/3 OK,
+  # 6 = 2/8 OK with 16 retries. Every other dispatcher in this repo defaults to 2 for
+  # the same reason.
+  [int] $MaxParallel = 2,
   [int] $TimeoutMinutes = 15,
+
+  # Seconds to wait between launching workers, to keep sandbox-user logons from
+  # colliding at launch. Does not help with mid-turn contention (see MaxParallel).
+  [int] $LaunchStaggerSeconds = 5,
 
   # Re-dispatch a packet whose verdict failed the deterministic gate, up to this many
   # total attempts. Adjudication is a single model turn; a second attempt costs one
@@ -131,6 +143,17 @@ function Test-UsageLimitHit {
   $text = Get-Content -LiteralPath $StdoutPath -Raw -ErrorAction SilentlyContinue
   if ([string]::IsNullOrEmpty($text)) { return $false }
   return ($text -match "usage limit")
+}
+
+function Test-SandboxLogonFailure {
+  # Codex's per-run sandbox user could not be logged on: 1326 (bad user/password) or
+  # 1223. Seen when several workers launch simultaneously, and when the operator shell
+  # is not elevated. Transient in the first case, so it earns extra retries.
+  param([Parameter(Mandatory = $true)][string] $StderrPath)
+  if (-not (Test-Path -LiteralPath $StderrPath -PathType Leaf)) { return $false }
+  $text = Get-Content -LiteralPath $StderrPath -Raw -ErrorAction SilentlyContinue
+  if ([string]::IsNullOrEmpty($text)) { return $false }
+  return ($text -match "CreateProcessWithLogonW failed")
 }
 
 function Invoke-AceSweep {
@@ -391,6 +414,11 @@ exit `$LASTEXITCODE
         Row = $row; Attempt = $item.Attempt; Slot = $slot
         Process = $proc; Started = Get-Date; Stdout = $stdout; Stderr = $stderr
       }
+
+      # Stagger the next launch so concurrent sandbox-user creation does not race.
+      if (($queue.Count -gt 0) -and ($LaunchStaggerSeconds -gt 0)) {
+        Start-Sleep -Seconds $LaunchStaggerSeconds
+      }
     }
 
     Start-Sleep -Seconds 2
@@ -425,7 +453,11 @@ exit `$LASTEXITCODE
       if ($timedOut) {
         $status = "TIMEOUT"; $detail = "killed after $TimeoutMinutes minute(s)"
       } elseif ($null -ne $ec -and $ec -ne 0) {
-        $status = "WORKER_EXIT"; $detail = "exit $ec; stderr=$($job.Stderr)"
+        if (Test-SandboxLogonFailure -StderrPath $job.Stderr) {
+          $status = "SANDBOX_LOGON"; $detail = "sandbox user logon failed; stderr=$($job.Stderr)"
+        } else {
+          $status = "WORKER_EXIT"; $detail = "exit $ec; stderr=$($job.Stderr)"
+        }
       } else {
         $gateLog = Join-Path $logDir "$pkt.validate.txt"
         $prevEap = $ErrorActionPreference
@@ -454,8 +486,11 @@ exit `$LASTEXITCODE
           $usageLimitCount++
           $status = "USAGE_LIMIT"
           if ($usageLimitCount -ge $UsageLimitAbortThreshold) { $usageLimitHit = $true }
-        } elseif ($job.Attempt -lt $MaxAttempts) {
-          Write-Host ("  retry {0} (attempt {1}/{2}): {3}" -f $pkt, $job.Attempt, $MaxAttempts, $status)
+        } elseif ($job.Attempt -lt (& { if ($status -eq "SANDBOX_LOGON") { $MaxAttempts + 2 } else { $MaxAttempts } })) {
+          # A sandbox-logon failure is a launch race, not an adjudication failure, so it
+          # gets extra attempts; by the time it is re-dequeued the contending worker is
+          # long gone.
+          Write-Host ("  retry {0} (attempt {1}): {2}" -f $pkt, $job.Attempt, $status)
           $queue.Enqueue([pscustomobject]@{ Row = $job.Row; Attempt = ($job.Attempt + 1) })
           continue
         }
