@@ -11353,3 +11353,7 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   45 days (filer day-convention drift) -> cross-filer maturity tests must be month-level.
   Scripts e10_static_ambiguous.py, e11_borrower_ids.py under
   scripts/match_gold/chain_experiments/.
+- **Addendum (E12):** legal borrower key unchanged on 96.4% of 164,646 chained
+  adjacent-quarter steps (raw name 93.1%, name_key 94.8%); the 3.6% residual is wrapper
+  parse drift concentrated in ~10 CIKs (0001899017 35%, 0001901164 22%), not alias or
+  structure variants (0.01%). Script e12_key_stability.py.

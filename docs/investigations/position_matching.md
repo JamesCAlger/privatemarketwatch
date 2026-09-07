@@ -294,6 +294,20 @@ amendment escape, but the cross-fund layer cannot.
 
 **Not run:** GLEIF name-match hit rate (external download, awaiting owner go).
 
+**E12 cross-quarter stability** (`e12_key_stability.py`; 164,646 adjacent-quarter
+chain steps on production position_ids): raw name unchanged 93.1%, name_key 94.8%,
+legal key 96.4%, structure-stripped key 96.4%. The 3.6% legal-key changes are not
+alias or structure variants (0.01%); they are wrapper parse drift -- the same position
+carries ", First lien senior secured loan" in one quarter's issuer_name and not the
+next (0001812554 at 2025q3 alone accounts for most of the largest-FV cases). Per-CIK
+change rate: 0001899017 35.5%, 0001901164 22.3%, 0001930087 18.4%, 0001899996 16.1%,
+0001901612 15.9%; most filers <5%. 10-K boundary change rate 1.9% vs 10-Q 4.4%, so the
+10-K is not the driver. **Reading:** the key is stable where the wrapper is stable;
+per-CIK key-drift rate is the metric to gate wrapper changes on. Caveats: the
+cross-fund validator covers only multi-fund names (~21% of keys); 3,499 null-issuer
+rows have no key; the strict key is a legal entity, so "all loans to X" needs the
+group layer, which is unbuilt.
+
 ### E8 / E9 status
 
 - **E8 registry determinism:** NOT re-run. `pipeline/position_id_registry.py` already
