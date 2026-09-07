@@ -352,6 +352,30 @@ FROM lot WHERE sub='WRONG_TRANCHE' GROUP BY 1 ORDER BY 1""", save="e5b_lot_class
 show("E5b: same classes for CONFIRMED edges (how often the matcher already got ambiguous blocks right)", """
 SELECT CASE WHEN blk_hard<=1 THEN 'A: unique on hard key' WHEN blk_lot<=1 THEN 'B: principal separates' ELSE 'C: identical lots' END AS cls,
        COUNT(*) AS n_confirmed FROM lot WHERE verdict='CONFIRMED' GROUP BY 1 ORDER BY 1""")
+con.execute("""
+CREATE TABLE lot_strict AS
+SELECT e5.packet_id, e5.edge_index, e5.verdict, e5.sub, e5.cik, e5.b_name, e5.b_spr, e5.e_spr, e5.b_pa, e5.e_pa,
+  (SELECT COUNT(*) FROM h x WHERE x.cik=e5.cik AND x.q=e5.b_q AND x.name_key=e5.b_key
+     AND x.mat IS NOT DISTINCT FROM e5.b_mat AND x.subtype IS NOT DISTINCT FROM e5.b_sub
+     AND x.spread IS NOT DISTINCT FROM e5.b_spr) AS blk_exact_spr,
+  (SELECT COUNT(*) FROM h x WHERE x.cik=e5.cik AND x.q=e5.b_q AND x.name_key=e5.b_key
+     AND x.mat IS NOT DISTINCT FROM e5.b_mat AND x.subtype IS NOT DISTINCT FROM e5.b_sub
+     AND x.spread IS NOT DISTINCT FROM e5.b_spr
+     AND x.pa>0 AND e5.b_pa>0 AND ABS(LN(x.pa/e5.b_pa))<=LN(1.005)) AS blk_exact_lot,
+  (SELECT COUNT(*) FROM h x WHERE x.cik=e5.cik AND x.q=e5.b_q AND x.name_key=e5.b_key
+     AND x.mat IS NOT DISTINCT FROM e5.b_mat AND x.subtype IS NOT DISTINCT FROM e5.b_sub
+     AND x.spread IS NOT DISTINCT FROM e5.b_spr
+     AND x.pa IS NOT DISTINCT FROM e5.b_pa AND x.cost IS NOT DISTINCT FROM e5.b_cost AND x.fv IS NOT DISTINCT FROM e5.b_fv) AS blk_identical
+FROM e5""")
+show("E5c: WRONG_TRANCHE by STRICT begin-side ambiguity (exact spread; principal within 0.5%; all fields identical)", """
+SELECT CASE WHEN blk_exact_spr<=1 THEN 'A: unique on name+mat+subtype+exact spread'
+            WHEN blk_exact_lot<=1 THEN 'B: siblings separable by principal (>0.5%)'
+            WHEN blk_identical<=1 THEN 'C1: principal within 0.5% but cost/FV/principal not all identical'
+            ELSE 'C2: identical on name, mat, subtype, spread, principal, cost, FV' END AS cls, COUNT(*) AS n
+FROM lot_strict WHERE sub='WRONG_TRANCHE' GROUP BY 1 ORDER BY 1""", save="e5c_strict_lot_classes.csv")
+show("E5c: the strict-C edges", """
+SELECT cik, b_name, b_spr, e_spr, b_pa, e_pa, blk_exact_spr, blk_exact_lot, blk_identical
+FROM lot_strict WHERE sub='WRONG_TRANCHE' AND blk_exact_lot>1 ORDER BY cik""")
 show("E5b: identical-lot WRONG edges -- filers", """
 SELECT cik, COUNT(*) AS n, MIN(b_name) AS example FROM lot WHERE sub='WRONG_TRANCHE' AND blk_lot>1 GROUP BY 1 ORDER BY n DESC""")
 

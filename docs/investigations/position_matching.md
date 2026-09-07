@@ -149,9 +149,26 @@ spread+-50bp, subtype):
 | C: identical lots (hard key + principal within 5%) -- undecidable from fields | 13 | 14 |
 
 Class B is the target: 38 of 62 hops sit in blocks where principal (with cost as
-tie-break) would have picked the twin. Class C is Kaseya (7 lots of ~$1.01M, 0001772704)
-and Diligent (4 x $100K, 0001287750): separate lots of the same loan with identical
-terms. The matcher gets these right at chance (14 confirmed vs 13 wrong).
+tie-break) would have picked the twin. The 50bp / 5% tolerances above overstate class
+C. **E5c strict recount** (exact spread; principal within 0.5%; then cost and FV
+identical):
+
+| strict class | WRONG_TRANCHE |
+|---|---|
+| A: unique on name + maturity + subtype + exact spread | 18 |
+| B: siblings separable by principal (>0.5%) | 35 |
+| C1: principal within 0.5% but cost / FV differ | 5 |
+| C2: identical on name, maturity, subtype, spread, principal, cost, FV | 4 |
+
+Kaseya (0001772704) is separable by exact spread and cost/FV, not an identical-lot
+case. Only Diligent (0001287750, two $100K lots) and one Apex (0001851322) edge are
+identical on every field. **Those 4 do not matter:** when two lots are identical on
+every field at both ends, any pairing yields the same per-position and aggregate
+returns, FV and counts; and if they later diverge, the two possible labelings produce
+the same pair of series. The gold rubric should score any pairing inside an
+all-fields-identical block as correct (or its own code, excluded from the tranche-hop
+rate). No grain or policy decision is needed for them. 58 of 62 hops are therefore
+fixable by veto (18) or assignment cost with exact spread, principal, cost, FV (40).
 
 ### E6. Block shapes (adjacent quarters, excluding each CIK's last quarter)
 
@@ -210,9 +227,9 @@ stratum adjudicated 26 MISSED_LINK / 8 CONFIRMED-singleton / 6 insufficient, i.e
    guards. Everything else (spread, principal, cost, ordinal) is an assignment cost
    inside a (cik, borrower, quarter-pair) block -- exactly the `contested_assignment`
    shape, which is why its A/B moved WRONG 58->29.
-3. Class C identical lots need a policy decision: chain by filer ordinal / table order,
-   or define the tranche grain as "same terms = same tranche" and aggregate lots. The
-   data cannot separate them.
+3. All-fields-identical lots (4 edges) are not an error: any pairing is observationally
+   equivalent. Score them as correct in the rubric; no grain or policy change needed.
+   Assignment costs must use exact spread and cost/FV, which separate the rest.
 4. Completeness levers, in FV order: wrapper fixes for the 3 null-issuer filers
    ($9.8B), the 7.4% hard-key-present break pool ($206B, filer-concentrated), subtype
    extraction (resolves 24% of name-duplicate ambiguity; 45% coverage today).
