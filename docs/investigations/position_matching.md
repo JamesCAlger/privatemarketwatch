@@ -241,6 +241,61 @@ manufacturing +100% / -50% lot returns out of it. This is the mechanism behind t
 class-B tranche hops (35 of 62) and is a direct, testable assignment rule: inside a
 static-identical block, assign by sorted principal, then cost, then FV.
 
+### E11. Borrower ids without external identifiers
+
+Question (owner): how to get unique company ids. Script `e11_borrower_ids.py`; cohort
+BDC rows, 2026-03-31 unless stated.
+
+**No external identifier exists in the cohort.** CUSIP, ISIN, LEI and ticker coverage
+on BDC schedule rows is 0.0% across all 69 filers. The spec's CUSIP6 -> LEI -> name
+cascade is name-only for v1. `entity_id` (fuzzy clustering) covers 97%.
+
+**E11a key cardinalities:** 14,646 raw names -> 12,006 `name_key` (ordinal/comma/fka
+stripped) -> 11,453 legal keys (legal-form suffix + punctuation stripped, structure
+words KEPT) -> 7,253 entity_ids. Under the legal key there are 17 "collision suspects"
+(>=2 name_keys and >1 entity_id) and every one is a punctuation variant the entity
+layer split (G-3 vs G 3 Chickadee; SCHP L.P. vs L.P; Ascend Buyer split across 4
+entities). The legal key has no observed true collisions; the entity layer splits 48
+legal keys and merges 2,019 into others. Stripping structure words (holdings, buyer,
+bidco, topco, parent, intermediate) collapses only 171 families (165 of 2 legal keys,
+5 of 3, 1 of 4) -- 1.5% of keys -- but those are exactly the deal-family merges
+(Denali Bidco/Holdco/Intermediate = Dun & Bradstreet). **Decision:** `borrower_id` =
+legal key; structure-word collapse is a `borrower_group_id` rule, never applied at the
+strict level.
+
+**E11b aliases:** 5.1% of rows carry a dba/fka/formerly parenthetical (4.4% dba, 0.7%
+fka); 1,239 legal keys have one across all quarters, 418 at 2026-03-31. Alias-only
+cross-fund bridges at 2026-03-31: 75 name pairs, 454 fund-pair links (Denali
+Intermediate -> Dun & Bradstreet; Edition Holdings -> Enverus; GS AcquisitionCo ->
+insightsoftware; Romulus Intermediate -> PetVet). Small but deterministic and free.
+
+**E11c cross-fund term agreement** (2,454 legal keys held by >=2 funds, $218B; 10,068
+fund pairs with maturities):
+
+| agreement test | share of fund pairs |
+|---|---|
+| exact maturity + spread | 59.5% |
+| exact maturity | 62.9% |
+| same month + spread | 88.1% |
+| maturity within 45 days | 94.4% |
+| no overlap within 45 days | 5.6% |
+
+The 30pp gap between exact and 45-day agreement is filer day-convention drift on the
+same loan (2029-06-18 vs 2029-06-30; 2031-09-10 vs 2031-09-30; 2030-12-20 vs
+2030-12-31). Per name, only 46 of 2,216 checkable multi-fund names (2.1%, $1.4B) have
+no fund pair agreeing within 45 days, and those are refinancings or genuinely different
+deals sharing a stem (Ranger Intermediate II 2030 vs 2031; Tiger Acquisition = Sabre
+Industries vs another Tiger; Dcert 2029/7.0 vs 2030/5.75). **Two consequences:** (1)
+cross-fund term agreement is a working independent validator for the name key -- 98%
+of multi-fund names pass it; (2) any maturity equality test that spans filers must be
+month-level or +-45 days. Within one filer E2 showed drift is rare (3 of 16 confirmed
+maturity changes were <=45 days), so the within-CIK veto can stay exact with the
+amendment escape, but the cross-fund layer cannot.
+
+**Not run:** GLEIF name-match hit rate (external download, awaiting owner go).
+
+### E8 / E9 status
+
 - **E8 registry determinism:** NOT re-run. `pipeline/position_id_registry.py` already
   persists ids on a drift-resistant natural key (795K keys, 82 retirements) and the
   twin-build gate covers rebuild determinism. The earlier session claim that ids

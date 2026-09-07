@@ -11342,3 +11342,14 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   persists position ids on a natural key (795K keys); ids do NOT renumber per rebuild.
   Missing is a quarter-append determinism test, not the registry.
 - Not run: E8 (registry quarter-append), E9 enlarged recall stratum (fleet, ~150 packets).
+- **Addendum (E10, E11, same day):** E10 static-ambiguous lots: 27.9% of cohort rows /
+  23.9% of FV sit in blocks identical on name+maturity+subtype+exact spread; production
+  pairing violates rank order on 10.7% of fully-chained pairs (lot return dispersion 0.70
+  vs 0.002 under rank pairing) -> assign by sorted principal/cost/FV. E11 borrower ids:
+  CUSIP/ISIN/LEI/ticker coverage is 0.0% on cohort BDC rows, so borrower_id is a
+  legal-form-only name key (11,453 keys, no observed true collisions; structure-word
+  collapse = group layer, 171 families); dba/fka aliases on 5.1% of rows add 454
+  alias-only cross-fund links; cross-fund maturity agreement 62.9% exact vs 94.4% within
+  45 days (filer day-convention drift) -> cross-filer maturity tests must be month-level.
+  Scripts e10_static_ambiguous.py, e11_borrower_ids.py under
+  scripts/match_gold/chain_experiments/.
