@@ -37,6 +37,7 @@ TOPICS = {
     "identifier_rate_semantics.md": "Identifier & rate semantics (Agent A)",
     "agent_campaigns.md": "Agentic campaign retrospectives",
     "quarter_eda.md": "Quarter-over-quarter EDA",
+    "position_matching.md": "Position matching & chain stability",
     "uncategorized.md": "Uncategorized (needs mapping)",
 }
 

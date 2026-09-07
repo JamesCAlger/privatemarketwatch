@@ -75,3 +75,4 @@ parquet_analysis.md
 # Stable position-id registry: governed, stateful local artifact. Too large
 # (~108MB) to track in git / push to GitHub. Kept on disk; back it up out-of-band.
 data/overrides/position_id_registry/registry.csv
+scripts/match_gold/chain_experiments/out/

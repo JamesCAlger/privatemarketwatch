@@ -84,3 +84,6 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)
 - 2026-07-24 (part 2) - Per-fact shadow rule-firing comparison, Q4 2025 vs Q1 2026
 
+## Position matching & chain stability ([position_matching.md](position_matching.md))
+- 2026-09-07 - Chain-stability experiments E1-E7 on the completed mg3 gold set
+

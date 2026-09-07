@@ -11316,3 +11316,29 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
 - **Next:** re-run `replay_verdicts.py` on the full 535 before publishing the
   mg4_contested comparison; dispatch `mg4_contested` (265 packets) = promotion gate for
   `contested_assignment`; human audit slice (`audit_slice.csv`); baseline refresh.
+
+## 2026-09-07 - Chain-stability experiments E1-E7 on the full mg3 gold set
+
+- New investigation topic file `docs/investigations/position_matching.md` (registered in
+  `scripts/split_investigations.py` TOPICS) with the full results; reproducible via
+  `scripts/match_gold/chain_experiments/{build_gold_edges.py,experiments.py}` (read-only,
+  ~5s; output dir gitignored).
+- Headline: on random edges tranche hopping is 6.1% and wrong-borrower 2.0%; wrong-borrower
+  comes from D_fuzzy only. 62/75 WRONG edges are same-borrower hops; 38 of those sit in
+  blocks where principal separates the siblings (assignment cost fixes them), 13 are
+  identical lots (Kaseya x7, Diligent x4) undecidable from fields.
+- Rule decisions from the sweep: maturity = veto with amendment escape (keeps 99.1% of
+  confirmed, rejects 92% of wrong-borrower); spread and principal are costs, not vetoes
+  (spread-exact loses 15% of confirmed to repricings/scale defects; principal 1.25x loses
+  11.5% to paydowns/add-ons). No 10-K boundary penalty (10-K 80.9% vs 10-Q 77.3%).
+- Completeness: 7.4% of live rows ($206B) break despite a same name+maturity+spread row
+  next quarter (likely-missed pool, filer-concentrated); 11,133 interior singletons
+  ($122B); mg3 interior_singleton stratum says ~76% of those are misses (n=34).
+- Data defects surfaced: 3,499 cohort rows with NULL issuer_name (0001954360 $2.5B,
+  0001633336 $2.2B, GSBD $5.1B; GSBD's are mojibake-dash header rows, present identically
+  in the 2026-09-05 baseline, not a regression); spread scale defects 0001837532 (325 vs
+  3.25) and 0001950803 (6.65 vs 0.0); instrument subtype coverage only 44.7%.
+- Correction to earlier session notes: `pipeline/position_id_registry.py` already
+  persists position ids on a natural key (795K keys); ids do NOT renumber per rebuild.
+  Missing is a quarter-append determinism test, not the registry.
+- Not run: E8 (registry quarter-append), E9 enlarged recall stratum (fleet, ~150 packets).
