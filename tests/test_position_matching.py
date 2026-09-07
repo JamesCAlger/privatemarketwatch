@@ -2518,3 +2518,329 @@ class TestBipartiteMatching:
             result_on["begin_issuer_name"], result_on["end_issuer_name"]
         ))
         assert off_pairs == on_pairs
+
+
+# ---------------------------------------------------------------------------
+# Contested-group assignment (mg3 replay findings, 2026-09-06)
+# ---------------------------------------------------------------------------
+
+def _u(report_date, name, fv, pa, mat="2028-01-01", bs="5.75", **kw):
+    row = {
+        "source": "bdc", "cik": "400", "entity_name": "FundX",
+        "report_date": report_date, "issuer_name": name,
+        "fair_value": str(fv), "principal_amount": str(pa),
+        "maturity_date": mat, "basis_spread": bs,
+        "index_classification": "DIRECT_LENDING", "asset_class": "PRIVATE_CREDIT",
+        "instrument_description": "First lien term loan",
+    }
+    row.update(kw)
+    return row
+
+
+def _manual_match(begin, end, method="B2_exact_name"):
+    """Build one match row in MATCH_COLUMNS shape from two unified dicts."""
+    from pipeline.position_matching import _quarter_from_date
+    row = {c: None for c in MATCH_COLUMNS}
+    row.update({
+        "cik": begin["cik"], "entity_name": begin["entity_name"],
+        "source": begin["source"],
+        "begin_quarter": _quarter_from_date(begin["report_date"]),
+        "begin_report_date": begin["report_date"],
+        "begin_issuer_name": begin["issuer_name"],
+        "begin_fair_value": begin["fair_value"],
+        "begin_principal_amount": begin["principal_amount"],
+        "end_quarter": _quarter_from_date(end["report_date"]),
+        "end_report_date": end["report_date"],
+        "end_issuer_name": end["issuer_name"],
+        "end_fair_value": end["fair_value"],
+        "end_principal_amount": end["principal_amount"],
+        "match_method": method, "match_key": begin["issuer_name"].lower(),
+        "match_score": 1.0, "span_months": 3,
+    })
+    return pd.DataFrame([row])[MATCH_COLUMNS]
+
+
+class TestContestedAssignment:
+    """When several concurrent tranches share a name, assignment must be led
+    by principal continuity, not fair-value proximity, and trailing ordinals
+    must not count as identity. Flag-gated: default behaviour unchanged."""
+
+    def test_contested_group_prefers_principal_over_fair_value(self):
+        # Begin: one funded 5.0M tranche. End: the same tranche at 4.95M par
+        # after an 82% markdown, plus a newly funded 1.0M tranche whose FV
+        # happens to sit closer to the begin FV in log space.
+        unified = _make_unified([
+            _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000),
+            _u("2024-06-30", "Acme LLC", 900_000, 4_950_000),
+            _u("2024-06-30", "Acme LLC", 1_000_000, 1_000_000),
+        ])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True)
+        b2 = matches[matches["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        assert float(b2["end_principal_amount"].iloc[0]) == 4_950_000
+
+    def test_default_flag_off_keeps_fair_value_first_ordering(self):
+        unified = _make_unified([
+            _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000),
+            _u("2024-06-30", "Acme LLC", 900_000, 4_950_000),
+            _u("2024-06-30", "Acme LLC", 1_000_000, 1_000_000),
+        ])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]))
+        b2 = matches[matches["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        assert float(b2["end_principal_amount"].iloc[0]) == 1_000_000
+
+    def test_renumbered_ordinals_are_not_identity_when_contested(self):
+        # Filer renumbers tranches between quarters: "X 1"/"X 2" swap.
+        unified = _make_unified([
+            _u("2024-03-31", "Alera Group Holdings, Inc. 1", 1_000_000, 1_000_000),
+            _u("2024-03-31", "Alera Group Holdings, Inc. 2", 5_000_000, 5_000_000),
+            _u("2024-06-30", "Alera Group Holdings, Inc. 1", 5_000_000, 4_990_000),
+            _u("2024-06-30", "Alera Group Holdings, Inc. 2", 1_000_000, 998_000),
+        ])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True)
+        b2 = matches[matches["match_method"] == "B2_exact_name"]
+        assert len(b2) == 2
+        pairs = {(float(r.begin_principal_amount), float(r.end_principal_amount))
+                 for r in b2.itertuples()}
+        assert pairs == {(1_000_000.0, 998_000.0), (5_000_000.0, 4_990_000.0)}
+
+    def test_coexistence_veto_drops_edge_when_twin_exists(self):
+        b1 = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000)
+        e1 = _u("2024-06-30", "Acme LLC", 4_990_000, 4_990_000)   # twin
+        e2 = _u("2024-06-30", "Acme LLC", 1_000_000, 1_000_000)
+        unified = _make_unified([b1, e1, e2])
+        matches = _manual_match(b1, e2)   # the wrong edge
+        unified_out, _ = assign_position_ids(unified, matches,
+                                             contested_assignment=True)
+        pid = dict(zip(unified_out["fair_value"].astype(float),
+                       unified_out["position_id"]))
+        assert pid[5_000_000.0] != pid[1_000_000.0]
+
+    def test_coexistence_veto_off_by_default(self):
+        b1 = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000)
+        e1 = _u("2024-06-30", "Acme LLC", 4_990_000, 4_990_000)
+        e2 = _u("2024-06-30", "Acme LLC", 1_000_000, 1_000_000)
+        unified = _make_unified([b1, e1, e2])
+        matches = _manual_match(b1, e2)
+        unified_out, _ = assign_position_ids(unified, matches)
+        pid = dict(zip(unified_out["fair_value"].astype(float),
+                       unified_out["position_id"]))
+        assert pid[5_000_000.0] == pid[1_000_000.0]
+
+    def test_supplementary_b2_links_contested_names_by_principal(self):
+        # No matcher edges for Acme; supplementary pass must resolve the
+        # contested group by principal instead of refusing (n != 1).
+        z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
+        z2 = _u("2024-06-30", "Zeta Corp", 101_000, 100_000)
+        rows = [
+            _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000),
+            _u("2024-03-31", "Acme LLC", 1_000_000, 1_000_000),
+            _u("2024-06-30", "Acme LLC", 4_950_000, 4_950_000),
+            _u("2024-06-30", "Acme LLC", 1_020_000, 1_020_000),
+            z1, z2,
+        ]
+        unified = _make_unified(rows)
+        matches = _manual_match(z1, z2)
+        unified_out, _ = assign_position_ids(unified, matches,
+                                             contested_assignment=True)
+        pid = dict(zip(unified_out["fair_value"].astype(float),
+                       unified_out["position_id"]))
+        assert pid[5_000_000.0] == pid[4_950_000.0]
+        assert pid[1_000_000.0] == pid[1_020_000.0]
+        assert pid[5_000_000.0] != pid[1_000_000.0]
+
+
+class TestContestedRefinements:
+    """Second pass over the mg3 A/B losses (2026-09-06 night): comma and
+    ``(fka ...)`` insensitive name key, banded principal with same-raw-name and
+    cost tie-breaks, and leftover rounds so a sibling taking the nearest
+    partner no longer orphans a revolver draw. All flag-gated."""
+
+    @staticmethod
+    def _key(name):
+        import duckdb
+        from pipeline.position_matching import _name_key_sql
+        return duckdb.connect().execute(
+            f"SELECT {_name_key_sql('?')}", [name]).fetchone()[0]
+
+    def test_name_key_ignores_commas_and_fka_parentheticals(self):
+        k = self._key
+        assert k("Al Altius US Bidco, Inc., First Lien 1") == k("Al Altius US Bidco, Inc. First Lien 1")
+        assert k("Capripack Debtco PLC, 2") == k("Capripack Debtco PLC")
+        assert k("CHG Healthcare Services, Inc., Emerald JV LP") == k("CHG Healthcare Services, Inc. Emerald JV LP")
+        assert k("Everest Clinical Research Corporation (fka 1272775 B.C. LTD.)") == k("Everest Clinical Research Corporation")
+        assert k("Acme Holdings 2") != k("Beta Holdings 2")
+
+    def test_near_tie_principal_falls_through_to_cost_before_fair_value(self):
+        # GS PMMC II "Kaseya Inc." lots: par within 0.2%, FV moves 4x quarter
+        # to quarter, cost is the only stable discriminator.
+        a1 = _u("2024-03-31", "Kaseya Inc.", 239_000, 1_012_000, cost="1000000")
+        b1 = _u("2024-03-31", "Kaseya Inc.", 60_000, 1_013_000, cost="500000")
+        a2 = _u("2024-06-30", "Kaseya Inc.", 52_000, 1_011_000, cost="1000000")
+        b2 = _u("2024-06-30", "Kaseya Inc.", 255_000, 1_013_000, cost="500000")
+        unified = _make_unified([a1, b1, a2, b2])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True)
+        m = matches[matches["match_method"].str.startswith("B2")]
+        assert len(m) == 2
+        pairs = {(float(r.begin_cost), float(r.end_cost)) for r in m.itertuples()}
+        assert pairs == {(1_000_000.0, 1_000_000.0), (500_000.0, 500_000.0)}
+
+    def test_leftover_round_links_draw_after_sibling_takes_nearest(self):
+        # Blue Owl "Ideal Image ... revolving loan 1" drew 33K -> 765K while a
+        # sibling revolver sat at 500K both quarters. Greedy 1:1 gives the
+        # sibling its own row and orphans the draw; a leftover round pairs it.
+        r1 = _u("2024-03-31", "Ideal Image, Revolving loan 1", 32_000, 33_000,
+                instrument_description="Revolving loan")
+        r2 = _u("2024-03-31", "Ideal Image, Revolving loan 2", 500_000, 500_000,
+                instrument_description="Revolving loan")
+        r1e = _u("2024-06-30", "Ideal Image, Revolving loan", 741_000, 765_000,
+                 instrument_description="Revolving loan")
+        r2e = _u("2024-06-30", "Ideal Image, Revolving loan 2", 500_000, 500_000,
+                 instrument_description="Revolving loan")
+        unified = _make_unified([r1, r2, r1e, r2e])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True)
+        m = matches[matches["match_method"].str.startswith("B2")]
+        pairs = {(float(r.begin_principal_amount), float(r.end_principal_amount))
+                 for r in m.itertuples()}
+        assert pairs == {(500_000.0, 500_000.0), (33_000.0, 765_000.0)}
+
+    def test_supplementary_identical_lots_keep_raw_name(self):
+        # Ares "Diligent ... loan 4" / "loan 5": equal par, FV, maturity; the
+        # ordinal is the only discriminator, so keep it as the last tie-break.
+        rows = [
+            _u("2024-03-31", "Diligent Corp, First lien senior secured loan 4", 100_000, 100_000),
+            _u("2024-03-31", "Diligent Corp, First lien senior secured loan 5", 100_000, 100_000),
+            _u("2024-06-30", "Diligent Corp, First lien senior secured loan 5", 100_000, 100_000),
+            _u("2024-06-30", "Diligent Corp, First lien senior secured loan 4", 100_000, 100_000),
+        ]
+        # assign_position_ids short-circuits on an empty match frame, so give
+        # it one unrelated anchor edge (Zeta) to reach the supplementary pass.
+        z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
+        z2 = _u("2024-06-30", "Zeta Corp", 101_000, 100_000)
+        unified = _make_unified(rows + [z1, z2])
+        out, _ = assign_position_ids(unified, _manual_match(z1, z2),
+                                     contested_assignment=True)
+        pid = {(r.report_date, r.issuer_name): r.position_id for r in out.itertuples()}
+        assert pid[("2024-03-31", rows[0]["issuer_name"])] == pid[("2024-06-30", rows[3]["issuer_name"])]
+        assert pid[("2024-03-31", rows[1]["issuer_name"])] == pid[("2024-06-30", rows[2]["issuer_name"])]
+
+    def test_supplementary_leftover_round_links_orphaned_draw(self):
+        r1 = _u("2024-03-31", "Ideal Image, Revolving loan 1", 32_000, 33_000,
+                instrument_description="Revolving loan")
+        r2 = _u("2024-03-31", "Ideal Image, Revolving loan 2", 500_000, 500_000,
+                instrument_description="Revolving loan")
+        r1e = _u("2024-06-30", "Ideal Image, Revolving loan", 141_000, 150_000,
+                 instrument_description="Revolving loan")
+        r2e = _u("2024-06-30", "Ideal Image, Revolving loan 2", 500_000, 500_000,
+                 instrument_description="Revolving loan")
+        z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
+        z2 = _u("2024-06-30", "Zeta Corp", 101_000, 100_000)
+        unified = _make_unified([r1, r2, r1e, r2e, z1, z2])
+        out, _ = assign_position_ids(unified, _manual_match(z1, z2),
+                                     contested_assignment=True)
+        pid = dict(zip(out["principal_amount"].astype(float), out["position_id"]))
+        assert pid[33_000.0] == pid[150_000.0]
+        assert pid[500_000.0] != pid[33_000.0]
+
+
+class TestSupplementaryPositionKeyPass:
+    """Flag-independent: rows left unlinked after every tier whose strong
+    position_key is identical and unique-per-quarter on both sides are
+    chained, even when the issuer_name is shared by several tranches.
+
+    Why: the wrapper fixes for Trinity / Silver Point / BlackRock DLC turn the
+    whole raw identifier (previously the issuer_name, unique per tranche) into
+    the real company name.  The default supplementary pass then refuses those
+    companies (n != 1) and Trinity's singleton share went 8% -> 51% in the
+    flag-off isolation run.  The tranche identity still lives in position_key.
+    """
+
+    def _rows(self):
+        k1 = "portfolio company debt securities united states orchard technologies inc secured loan investment date march 11 2021 maturity date april 1 2026"
+        k2 = "portfolio company debt securities united states orchard technologies inc secured loan investment date july 3 2022 maturity date august 1 2027"
+        a1 = _u("2024-03-31", "Orchard Technologies, Inc.", 1_000_000, 1_000_000, mat="2026-04-01", position_key=k1)
+        a2 = _u("2024-03-31", "Orchard Technologies, Inc.", 500_000, 500_000, mat="2027-08-01", position_key=k2)
+        b1 = _u("2024-06-30", "Orchard Technologies, Inc.", 980_000, 980_000, mat="2026-04-01", position_key=k1)
+        b2 = _u("2024-06-30", "Orchard Technologies, Inc.", 490_000, 490_000, mat="2027-08-01", position_key=k2)
+        z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
+        z2 = _u("2024-06-30", "Zeta Corp", 101_000, 100_000)
+        return a1, a2, b1, b2, z1, z2
+
+    def test_unique_identical_position_key_links_shared_name_rows_flag_off(self):
+        a1, a2, b1, b2, z1, z2 = self._rows()
+        unified = _make_unified([a1, a2, b1, b2, z1, z2])
+        out, _ = assign_position_ids(unified, _manual_match(z1, z2))
+        pid = dict(zip(out["fair_value"].astype(float), out["position_id"]))
+        assert pid[1_000_000.0] == pid[980_000.0]
+        assert pid[500_000.0] == pid[490_000.0]
+        assert pid[1_000_000.0] != pid[500_000.0]
+
+    def test_position_key_pass_refuses_repeated_keys(self):
+        # Same key on two rows in one quarter: not identifying, must not link.
+        a1, a2, b1, b2, z1, z2 = self._rows()
+        a2["position_key"] = a1["position_key"]
+        b2["position_key"] = b1["position_key"]
+        unified = _make_unified([a1, a2, b1, b2, z1, z2])
+        out, _ = assign_position_ids(unified, _manual_match(z1, z2))
+        pid = dict(zip(out["fair_value"].astype(float), out["position_id"]))
+        assert len({pid[1_000_000.0], pid[980_000.0], pid[500_000.0], pid[490_000.0]}) == 4
+
+    def test_position_key_pass_writes_labelled_edges(self):
+        from pipeline.position_matching import POSITION_ID_EDGES_FILE
+        a1, a2, b1, b2, z1, z2 = self._rows()
+        unified = _make_unified([a1, a2, b1, b2, z1, z2])
+        assign_position_ids(unified, _manual_match(z1, z2))
+        edges = pd.read_csv(POSITION_ID_EDGES_FILE, dtype=str)
+        assert (edges["match_method"] == "SUPP_B1b_unique_position_key").sum() == 2
+
+
+class TestLeftoverRoundsRequireEqualMaturity:
+    """Leftover rounds exist for draws on an existing facility, and a draw keeps
+    its maturity. The flag-on cohort profile (2026-09-07) showed leftover edges
+    with 20-25% maturity disagreement and median FV ratio 1.5-2.0 -- the weak
+    class -- so a leftover pair must have equal, known maturities."""
+
+    def _rows(self, mat_b1e):
+        r1 = _u("2024-03-31", "Ideal Image, Revolving loan 1", 32_000, 33_000,
+                mat="2029-02-28", instrument_description="Revolving loan")
+        r2 = _u("2024-03-31", "Ideal Image, Revolving loan 2", 500_000, 500_000,
+                mat="2029-02-28", instrument_description="Revolving loan")
+        r1e = _u("2024-06-30", "Ideal Image, Revolving loan", 141_000, 150_000,
+                 mat=mat_b1e, instrument_description="Revolving loan")
+        r2e = _u("2024-06-30", "Ideal Image, Revolving loan 2", 500_000, 500_000,
+                 mat="2029-02-28", instrument_description="Revolving loan")
+        return r1, r2, r1e, r2e
+
+    def test_b2_leftover_round_refuses_different_maturity(self):
+        r1, r2, r1e, r2e = self._rows("2031-06-30")
+        unified = _make_unified([r1, r2, r1e, r2e])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True)
+        assert (matches["match_method"] == "B2_leftover_round").sum() == 0
+
+    def test_b2_leftover_round_refuses_unknown_maturity(self):
+        r1, r2, r1e, r2e = self._rows(None)
+        unified = _make_unified([r1, r2, r1e, r2e])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True)
+        assert (matches["match_method"] == "B2_leftover_round").sum() == 0
+
+    def test_supplementary_leftover_refuses_different_maturity(self):
+        # Amounts chosen so r1's round-1 choice is r2e (within the 5x FV guard,
+        # equal maturity) and it loses that contest to r2; the only leftover
+        # candidate r1e has a different maturity and must be refused.
+        r1, r2, r1e, r2e = self._rows("2031-06-30")
+        r1["fair_value"] = "150000"; r1["principal_amount"] = "150000"
+        r1e["fair_value"] = "690000"; r1e["principal_amount"] = "700000"
+        z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
+        z2 = _u("2024-06-30", "Zeta Corp", 101_000, 100_000)
+        unified = _make_unified([r1, r2, r1e, r2e, z1, z2])
+        out, _ = assign_position_ids(unified, _manual_match(z1, z2),
+                                     contested_assignment=True)
+        pid = dict(zip(out["principal_amount"].astype(float), out["position_id"]))
+        assert pid[150_000.0] != pid[700_000.0]

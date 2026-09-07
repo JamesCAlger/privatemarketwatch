@@ -274,6 +274,170 @@ def _fv_proximity_sql(begin_fv: str, end_fv: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Contested-group assignment helpers (mg3 replay, 2026-09-06)
+#
+# When several concurrent tranches of one borrower share an issuer_name, the
+# identity tiers used to resolve the 1:1 contest by fair-value proximity.
+# Replaying the mg3 gold set showed that principal continuity picks the
+# adjudicated twin on 44 of 69 wrong edges, and that filer-side trailing
+# ordinals ("First lien senior secured loan 2") are renumbered between
+# quarters.  These helpers are only active when ``contested_assignment`` is
+# passed; the default matcher behaviour is unchanged.
+# ---------------------------------------------------------------------------
+
+def _name_key_sql(col: str) -> str:
+    """Lower-cased issuer_name with commas, an "(fka ...)" / "(f/k/a ...)" /
+    "(formerly ...)" parenthetical and a trailing ordinal (" 2", " (3)")
+    removed, whitespace collapsed.  Commas and the fka parenthetical are
+    filer-side formatting noise (mg3: "Inc., First Lien 1" vs "Inc. First
+    Lien 1"; "Corp (fka 1272775 B.C. LTD.)" vs "Corp") that kept adjudicated
+    same-position rows apart."""
+    s = f"LOWER(CAST({col} AS VARCHAR))"
+    s = f"regexp_replace({s}, '\\s*\\((?:f/?k/?a|formerly)\\s[^)]*\\)', '', 'g')"
+    s = f"regexp_replace({s}, ',', '', 'g')"
+    s = f"regexp_replace({s}, '\\s*\\(\\d+\\)\\s*$', '')"
+    s = f"regexp_replace({s}, '\\s+\\d{{1,2}}\\s*$', '')"
+    return f"TRIM(regexp_replace({s}, '\\s+', ' ', 'g'))"
+
+
+def _maturity_rank_sql(begin_alias: str, end_alias: str) -> str:
+    """0 = both maturities known and equal, 1 = either unknown, 2 = differ."""
+    b = f"TRY_CAST({begin_alias}.maturity_date AS DATE)"
+    e = f"TRY_CAST({end_alias}.maturity_date AS DATE)"
+    return (
+        f"CASE WHEN {b} IS NOT NULL AND {e} IS NOT NULL "
+        f"THEN CASE WHEN {b} = {e} THEN 0 ELSE 2 END ELSE 1 END"
+    )
+
+
+def _principal_prox_sql(begin_pa: str, end_pa: str) -> str:
+    """|ln(pa_b / pa_e)| when both principals are known and positive, else NULL
+    (sorted NULLS LAST so unknown principal never outranks a known match)."""
+    return (
+        f"CASE WHEN {begin_pa} > 0 AND {end_pa} > 0 "
+        f"THEN ABS(LN({begin_pa} / {end_pa})) END"
+    )
+
+
+# Principal log-band: pairs whose principal ratio falls in the same band are
+# treated as tied on principal and fall through to maturity, rate, the raw
+# name (ordinal) and cost.  Revolver / DDTL rows use a wide band because a
+# draw legitimately moves principal several-fold (mg3: Ideal Image 33K ->
+# 765K, Help/Systems 6.7M -> 1.7M were CONFIRMED and lost to principal-first).
+CONTESTED_PA_BAND = 1.05
+CONTESTED_PA_BAND_REVOLVER = 4.0
+# Leftover rounds: after the greedy 1:1 pass, re-run the contest on the rows
+# it left unmatched so a sibling taking the nearest partner does not orphan
+# the other tranche.  Bounded; each round only touches still-unmatched rows.
+CONTESTED_MAX_ROUNDS = 4
+
+
+def _pa_band_sql(b: str, e: str) -> str:
+    """Integer principal band for the pair (b, e); NULL when either principal
+    is unknown (sorted NULLS LAST)."""
+    wide = (
+        f"({b}._inst_subtype IN ('REVOLVER', 'DDTL') "
+        f"OR {e}._inst_subtype IN ('REVOLVER', 'DDTL'))"
+    )
+    return (
+        f"CASE WHEN {b}.pa > 0 AND {e}.pa > 0 THEN FLOOR(ABS(LN({b}.pa / {e}.pa)) / "
+        f"LN(CASE WHEN {wide} THEN {CONTESTED_PA_BAND_REVOLVER} "
+        f"ELSE {CONTESTED_PA_BAND} END)) END"
+    )
+
+
+def _cost_prox_sql(begin_cost: str, end_cost: str) -> str:
+    """|ln(cost_b / cost_e)| when both costs are known and positive, else NULL."""
+    return (
+        f"CASE WHEN {begin_cost} > 0 AND {end_cost} > 0 "
+        f"THEN ABS(LN({begin_cost} / {end_cost})) END"
+    )
+
+
+def _name_exact_sql(b: str, e: str) -> str:
+    """1 when the raw lower-cased names (ordinal included) agree, else 0."""
+    return f"CASE WHEN {b}._name_lower = {e}._name_lower THEN 1 ELSE 0 END"
+
+
+def _inst_subtype_sql(col: str) -> str:
+    """Instrument sub-type from a description column (same rules as
+    ``unified_base._inst_subtype``; RE2: no \\b, use (^|\\W)..(\\W|$))."""
+    c = f"CAST({col} AS VARCHAR)"
+    return (
+        "CASE "
+        f"WHEN regexp_matches({c}, '(?i)(^|\\W)(?:revolv(?:er|ing)|rcf|revolving credit)(\\W|$)') THEN 'REVOLVER' "
+        f"WHEN regexp_matches({c}, '(?i)(^|\\W)(?:ddtl|delayed draw)(\\W|$)') THEN 'DDTL' "
+        f"WHEN regexp_matches({c}, '(?i)(^|\\W)(?:term loan|tl[a-d]?)(\\W|$)') THEN 'TERM_LOAN' "
+        f"WHEN regexp_matches({c}, '(?i)(^|\\W)warrants?(\\W|$)') THEN 'WARRANT' "
+        f"WHEN regexp_matches({c}, '(?i)(^|\\W)(?:common (?:stock|equity|units?)|preferred (?:stock|equity|units?)|membership interest|llc interest|equity interest|class [a-c](\\W|$)|ordinary shares)(\\W|$)') THEN 'EQUITY' "
+        "ELSE NULL END"
+    )
+
+
+# Maximum principal drift for a row to count as the begin row's "twin".
+COEXISTENCE_TWIN_PA_TOLERANCE = 1.02
+
+
+def _coexistence_vetoed(
+    unified_df: pd.DataFrame,
+    edges: list[tuple[int, int]],
+) -> set[tuple[int, int]]:
+    """Return the edges (begin_uid, end_uid) that must not form a chain because
+    a better twin of the begin row exists in the end quarter.
+
+    Twin = same cik/source/name_key, same report_date as the chosen end row,
+    equal maturity (both known), principal within COEXISTENCE_TWIN_PA_TOLERANCE,
+    and not the chosen end row.  The edge is vetoed only when the chosen end
+    row's principal is NOT within that tolerance -- two identical tranches stay
+    ambiguous and untouched.  On mg3 this rule fired on 27 of 69 WRONG edges
+    and 1 of 637 CONFIRMED edges.
+    """
+    if not edges or "_uid" not in unified_df.columns:
+        return set()
+    con = duckdb.connect()
+    con.register("u", unified_df)
+    con.register("edges", pd.DataFrame(edges, columns=["a", "b"]))
+    pa_expr = (
+        "COALESCE(TRY_CAST(principal_amount_usd AS DOUBLE), "
+        "TRY_CAST(principal_amount AS DOUBLE))"
+        if "principal_amount_usd" in unified_df.columns
+        else "TRY_CAST(principal_amount AS DOUBLE)"
+    )
+    con.execute(f"""
+    CREATE OR REPLACE TEMP TABLE r AS
+    SELECT _uid,
+        CAST(cik AS VARCHAR) AS cik,
+        CAST(source AS VARCHAR) AS source,
+        CAST(report_date AS VARCHAR) AS rd,
+        {_name_key_sql('issuer_name')} AS nk,
+        TRY_CAST(fair_value AS DOUBLE) AS fv,
+        {pa_expr} AS pa,
+        TRY_CAST(maturity_date AS DATE) AS mat
+    FROM u
+    """)
+    tol = COEXISTENCE_TWIN_PA_TOLERANCE
+    df = con.execute(f"""
+    SELECT e.a, e.b
+    FROM edges e
+    JOIN r a ON a._uid = e.a
+    JOIN r b ON b._uid = e.b
+    WHERE a.mat IS NOT NULL AND a.pa > 0
+      AND (b.pa IS NULL OR b.pa <= 0
+           OR GREATEST(a.pa, b.pa) / LEAST(a.pa, b.pa) > {tol})
+      AND EXISTS (
+          SELECT 1 FROM r t
+          WHERE t.cik = a.cik AND t.source = a.source AND t.rd = b.rd
+            AND t._uid != b._uid AND t.nk = a.nk
+            AND t.fv IS NOT NULL AND t.fv != 0
+            AND t.mat = a.mat AND t.pa > 0
+            AND GREATEST(a.pa, t.pa) / LEAST(a.pa, t.pa) <= {tol}
+      )
+    """).fetchdf()
+    con.close()
+    return {(int(x), int(y)) for x, y in zip(df["a"], df["b"])}
+
+
+# ---------------------------------------------------------------------------
 # Tier A: BDC Within-Filing Comparatives
 # ---------------------------------------------------------------------------
 
@@ -464,12 +628,59 @@ def _map_tier_a_end_side_ids(con: duckdb.DuckDBPyConnection) -> None:
 # Tier B: Exact Name / CUSIP Match
 # ---------------------------------------------------------------------------
 
-def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
+def _match_exact_name(
+    con: duckdb.DuckDBPyConnection,
+    *,
+    contested: bool = False,
+) -> str:
     """Tier B: Exact CUSIP (B1) and exact issuer_name (B2) matching.
+
+    ``contested=True`` switches the B1b/B2 1:1 contest to principal-led
+    ordering (principal, maturity equality, then the legacy keys) and keys B2
+    on the ordinal-stripped ``_name_key`` instead of the raw lower-cased name.
 
     Returns the name of the result table.
     """
     next_qtr = _next_quarter_sql("b.quarter")
+    name_col = "_name_key" if contested else "_name_lower"
+    if contested:
+        # Banded principal -> maturity -> rate -> raw name (ordinal) -> cost
+        # -> FV -> continuous principal.  Cost sits before FV because cost is
+        # the stickier of the two for a lot (mg3 Kaseya: equal par, FV 4x apart
+        # quarter to quarter, cost constant).
+        poskey_order_end = (
+            "_pa_band ASC NULLS LAST, _mat_rank ASC, _rate_prox ASC, "
+            "_name_exact DESC, _cost_prox ASC NULLS LAST, _fv_prox ASC, "
+            "_pa_prox_c ASC NULLS LAST, _end_row_id ASC"
+        )
+        poskey_order_begin = (
+            "_pa_band ASC NULLS LAST, _mat_rank ASC, _rate_prox ASC, "
+            "_name_exact DESC, _cost_prox ASC NULLS LAST, _fv_prox ASC, "
+            "_pa_prox_c ASC NULLS LAST, _begin_row_id ASC"
+        )
+        name_order_end = (
+            "_pa_band ASC NULLS LAST, _mat_rank ASC, _attr_penalty ASC, "
+            "_rate_prox ASC, _name_exact DESC, _suffix_match DESC, "
+            "_cost_prox ASC NULLS LAST, _fv_prox ASC, _pa_prox_c ASC NULLS LAST, "
+            "_end_row_id ASC"
+        )
+        name_order_begin = (
+            "_pa_band ASC NULLS LAST, _mat_rank ASC, _attr_penalty ASC, "
+            "_rate_prox ASC, _name_exact DESC, _suffix_match DESC, "
+            "_cost_prox ASC NULLS LAST, _fv_prox ASC, _pa_prox_c ASC NULLS LAST, "
+            "_begin_row_id ASC"
+        )
+    else:
+        poskey_order_end = "_fv_prox ASC, _rate_prox ASC, _pa_prox ASC, _end_row_id ASC"
+        poskey_order_begin = "_fv_prox ASC, _rate_prox ASC, _pa_prox ASC, _begin_row_id ASC"
+        name_order_end = (
+            "_suffix_match DESC, _attr_penalty ASC, _fv_prox ASC, "
+            "_rate_prox ASC, _maturity_prox ASC, _pa_prox ASC, _end_row_id ASC"
+        )
+        name_order_begin = (
+            "_suffix_match DESC, _attr_penalty ASC, _fv_prox ASC, "
+            "_rate_prox ASC, _maturity_prox ASC, _pa_prox ASC, _begin_row_id ASC"
+        )
 
     sql = f"""
     CREATE OR REPLACE TEMP TABLE tier_b AS
@@ -604,7 +815,12 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
             {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
             ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
             {_fv_proximity_sql('COALESCE(b.pa, 1.0)', 'COALESCE(e.pa, 1.0)')}
-                AS _pa_prox
+                AS _pa_prox,
+            {_principal_prox_sql('b.pa', 'e.pa')} AS _pa_prox_c,
+            {_maturity_rank_sql('b', 'e')} AS _mat_rank,
+            {_pa_band_sql('b', 'e')} AS _pa_band,
+            {_cost_prox_sql('b.cost_val', 'e.cost_val')} AS _cost_prox,
+            {_name_exact_sql('b', 'e')} AS _name_exact
         FROM poskey_remaining b
         JOIN poskey_remaining e
           ON b.cik = e.cik
@@ -628,13 +844,13 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
              OR b._inst_subtype = e._inst_subtype)
     ),
-    -- B1b: 1:1 enforcement (composite tiebreaker: FV + rate + principal)
+    -- B1b: 1:1 enforcement (composite tiebreaker: FV + rate + principal,
+    -- or principal-led when contested_assignment is on)
     poskey_rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
-                    _end_row_id ASC
+                ORDER BY {poskey_order_end}
             ) AS rn_b
         FROM pairs_poskey
     ),
@@ -642,8 +858,7 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _fv_prox ASC, _rate_prox ASC, _pa_prox ASC,
-                    _begin_row_id ASC
+                ORDER BY {poskey_order_begin}
             ) AS rn_e
         FROM poskey_rn_begin WHERE rn_b = 1
     ),
@@ -664,10 +879,10 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
     ),
     -- Name multiplicity: exclude generic names appearing too often
     name_counts AS (
-        SELECT cik, quarter, _name_lower, COUNT(*) AS n
+        SELECT cik, quarter, {name_col} AS _name_lower, COUNT(*) AS n
         FROM name_remaining
-        WHERE _name_lower IS NOT NULL AND _name_lower != ''
-        GROUP BY cik, quarter, _name_lower
+        WHERE {name_col} IS NOT NULL AND {name_col} != ''
+        GROUP BY cik, quarter, {name_col}
     ),
     high_mult_names AS (
         SELECT cik, quarter, _name_lower
@@ -717,6 +932,11 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
                 TRY_CAST(b.maturity_date AS DATE),
                 TRY_CAST(e.maturity_date AS DATE)
             )), 999999) AS _maturity_prox,
+            {_principal_prox_sql('b.pa', 'e.pa')} AS _pa_prox_c,
+            {_maturity_rank_sql('b', 'e')} AS _mat_rank,
+            {_pa_band_sql('b', 'e')} AS _pa_band,
+            {_cost_prox_sql('b.cost_val', 'e.cost_val')} AS _cost_prox,
+            {_name_exact_sql('b', 'e')} AS _name_exact,
             -- Suffix coexistence: prefer matching trailing numbers
             CASE WHEN b._trailing_num IS NOT NULL
                       AND e._trailing_num IS NOT NULL
@@ -726,14 +946,14 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         JOIN name_remaining e
           ON b.cik = e.cik
          AND e.quarter = ({next_qtr})
-         AND b._name_lower = e._name_lower
-         AND b._name_lower != ''
+         AND b.{name_col} = e.{name_col}
+         AND b.{name_col} != ''
          AND b.source = e.source
-        WHERE b._name_lower NOT IN (
+        WHERE b.{name_col} NOT IN (
             SELECT _name_lower FROM high_mult_names
             WHERE cik = b.cik AND quarter = b.quarter
         )
-        AND e._name_lower NOT IN (
+        AND e.{name_col} NOT IN (
             SELECT _name_lower FROM high_mult_names
             WHERE cik = e.cik AND quarter = e.quarter
         )
@@ -747,13 +967,13 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
              OR b._inst_subtype = e._inst_subtype)
     ),
-    -- B2: 1:1 enforcement (attribute penalty + FV + rate + maturity + principal)
+    -- B2: 1:1 enforcement (attribute penalty + FV + rate + maturity + principal,
+    -- or principal-led when contested_assignment is on)
     name_rn_begin AS (
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _begin_row_id
-                ORDER BY _suffix_match DESC, _attr_penalty ASC, _fv_prox ASC,
-                    _rate_prox ASC, _maturity_prox ASC, _pa_prox ASC, _end_row_id ASC
+                ORDER BY {name_order_end}
             ) AS rn_b
         FROM pairs_name
     ),
@@ -761,8 +981,7 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT *,
             ROW_NUMBER() OVER (
                 PARTITION BY _end_row_id
-                ORDER BY _suffix_match DESC, _attr_penalty ASC, _fv_prox ASC,
-                    _rate_prox ASC, _maturity_prox ASC, _pa_prox ASC, _begin_row_id ASC
+                ORDER BY {name_order_begin}
             ) AS rn_e
         FROM name_rn_begin WHERE rn_b = 1
     ),
@@ -813,6 +1032,132 @@ def _match_exact_name(con: duckdb.DuckDBPyConnection) -> str:
 # ---------------------------------------------------------------------------
 # Tier C: Regex-Normalized Name Match
 # ---------------------------------------------------------------------------
+
+_TIER_B_COLUMNS = (
+    "cik, entity_name, source, "
+    "begin_quarter, begin_report_date, begin_issuer_name, "
+    "begin_fair_value, begin_cost, begin_principal_amount, "
+    "begin_interest_rate, begin_basis_spread, begin_shares_held, "
+    "end_quarter, end_report_date, end_issuer_name, "
+    "end_fair_value, end_cost, end_principal_amount, "
+    "end_interest_rate, end_basis_spread, end_shares_held, "
+    "match_method, match_key, match_score, span_months, "
+    "_begin_row_id, _end_row_id"
+)
+
+
+def _match_exact_name_leftover_rounds(
+    con: duckdb.DuckDBPyConnection,
+    max_rounds: int = CONTESTED_MAX_ROUNDS,
+) -> int:
+    """Contested-assignment only: re-run the B2 name-key contest on the rows
+    the greedy 1:1 pass left unmatched, up to ``max_rounds`` times.
+
+    Greedy double ROW_NUMBER lets a sibling tranche take the nearest partner
+    and leaves the other tranche (typically a revolver draw whose principal
+    moved several-fold) with no edge at all, although its only remaining
+    same-name candidate is unclaimed.  Each round considers only rows not yet
+    used by tier A or tier B and appends the new pairs to ``tier_b`` with
+    match_method ``B2_leftover_round`` so they stay auditable as a tier.
+    Returns the number of pairs added.
+    """
+    next_qtr = _next_quarter_sql("b.quarter")
+    order_end = (
+        "_pa_band ASC NULLS LAST, _mat_rank ASC, _rate_prox ASC, "
+        "_name_exact DESC, _cost_prox ASC NULLS LAST, _fv_prox ASC, "
+        "_pa_prox_c ASC NULLS LAST, _end_row_id ASC"
+    )
+    order_begin = order_end.replace("_end_row_id", "_begin_row_id")
+    sql = f"""
+    CREATE OR REPLACE TEMP TABLE b2_leftover AS
+    WITH
+    used AS (
+        SELECT _row_id FROM tier_a_unified_ids
+        UNION SELECT _begin_row_id FROM tier_b
+        UNION SELECT _end_row_id FROM tier_b
+    ),
+    remaining AS (
+        SELECT * FROM unified_base
+        WHERE _row_id NOT IN (SELECT _row_id FROM used)
+          AND _name_key IS NOT NULL AND _name_key != ''
+    ),
+    name_counts AS (
+        SELECT cik, source, quarter, _name_key, COUNT(*) AS n
+        FROM remaining GROUP BY cik, source, quarter, _name_key
+    ),
+    eligible AS (
+        SELECT r.* FROM remaining r
+        JOIN name_counts nc
+          ON r.cik = nc.cik AND r.source = nc.source
+         AND r.quarter = nc.quarter AND r._name_key = nc._name_key
+        WHERE nc.n <= {MAX_NAME_MULTIPLICITY}
+    ),
+    pairs AS (
+        SELECT
+            e.cik, e.entity_name, e.source,
+            b.quarter AS begin_quarter,
+            CAST(b.report_date AS VARCHAR) AS begin_report_date,
+            CAST(b.issuer_name AS VARCHAR) AS begin_issuer_name,
+            b.fv AS begin_fair_value, b.cost_val AS begin_cost,
+            b.pa AS begin_principal_amount, b.ir AS begin_interest_rate,
+            b.bs AS begin_basis_spread, b.sh AS begin_shares_held,
+            e.quarter AS end_quarter,
+            CAST(e.report_date AS VARCHAR) AS end_report_date,
+            CAST(e.issuer_name AS VARCHAR) AS end_issuer_name,
+            e.fv AS end_fair_value, e.cost_val AS end_cost,
+            e.pa AS end_principal_amount, e.ir AS end_interest_rate,
+            e.bs AS end_basis_spread, e.sh AS end_shares_held,
+            'B2_leftover_round' AS match_method,
+            CAST(b._name_key AS VARCHAR) AS match_key,
+            1.0 AS match_score,
+            3 AS span_months,
+            b._row_id AS _begin_row_id,
+            e._row_id AS _end_row_id,
+            {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
+            ABS(COALESCE(b.ir, 0) - COALESCE(e.ir, 0)) AS _rate_prox,
+            {_principal_prox_sql('b.pa', 'e.pa')} AS _pa_prox_c,
+            {_maturity_rank_sql('b', 'e')} AS _mat_rank,
+            {_pa_band_sql('b', 'e')} AS _pa_band,
+            {_cost_prox_sql('b.cost_val', 'e.cost_val')} AS _cost_prox,
+            {_name_exact_sql('b', 'e')} AS _name_exact
+        FROM eligible b
+        JOIN eligible e
+          ON b.cik = e.cik AND b.source = e.source
+         AND e.quarter = ({next_qtr})
+         AND b._name_key = e._name_key
+        WHERE b.fv > 0 AND e.fv > 0
+          AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+          AND (COALESCE(CAST(b.index_classification AS VARCHAR), '') = ''
+               OR COALESCE(CAST(e.index_classification AS VARCHAR), '') = ''
+               OR CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR))
+          AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
+               OR b._inst_subtype = e._inst_subtype)
+          -- A draw on an existing facility keeps its maturity: leftover pairs
+          -- need equal, known maturities (flag-on profile 2026-09-07 showed
+          -- 20-25% maturity disagreement in leftover edges without this).
+          AND {_maturity_rank_sql('b', 'e')} = 0
+    ),
+    rn_begin AS (
+        SELECT *, ROW_NUMBER() OVER (PARTITION BY _begin_row_id ORDER BY {order_end}) AS rn_b
+        FROM pairs
+    ),
+    rn_end AS (
+        SELECT *, ROW_NUMBER() OVER (PARTITION BY _end_row_id ORDER BY {order_begin}) AS rn_e
+        FROM rn_begin WHERE rn_b = 1
+    )
+    SELECT {_TIER_B_COLUMNS} FROM rn_end WHERE rn_e = 1
+    """
+    total = 0
+    for _round in range(max_rounds):
+        con.execute(sql)
+        n = con.execute("SELECT COUNT(*) FROM b2_leftover").fetchone()[0]
+        if n == 0:
+            break
+        con.execute(f"INSERT INTO tier_b SELECT {_TIER_B_COLUMNS} FROM b2_leftover")
+        total += n
+    logger.info("  Tier B leftover rounds (contested): %d pairs added", total)
+    return total
+
 
 def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
     """Tier C: Match after aggressive name normalization.
@@ -1602,6 +1947,7 @@ def match_positions(
     *,
     output_file: Optional[Path] = None,
     use_bipartite: bool = True,
+    contested_assignment: bool = False,
 ) -> pd.DataFrame:
     """Match positions across consecutive quarters.
 
@@ -1611,6 +1957,9 @@ def match_positions(
         Unified holdings (current-period only). Loaded from disk if None.
     bdc_raw_df : DataFrame, optional
         Raw BDC holdings with comparative periods. Loaded from disk if None.
+    contested_assignment : bool
+        Experimental (mg3 replay): principal-led 1:1 ordering in the identity
+        tiers and ordinal-stripped exact-name keys. Default off.
 
     Returns
     -------
@@ -1674,6 +2023,7 @@ def match_positions(
         TRY_CAST(basis_spread AS DOUBLE) AS bs,
         TRY_CAST(shares_held AS DOUBLE) AS sh,
         LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _name_lower,
+        {_name_key_sql('issuer_name')} AS _name_key,
         CAST(cusip AS VARCHAR) AS _cusip,
         CAST(position_key AS VARCHAR) AS _position_key,
         -- Instrument sub-type parsed from description (RE2: no \\b, use (^|\\W)..(\\W|$))
@@ -1721,7 +2071,9 @@ def match_positions(
 
     # --- Tier B: Exact name / CUSIP ---
     logger.info("Running Tier B: Exact name / CUSIP matching...")
-    _match_exact_name(con)
+    _match_exact_name(con, contested=contested_assignment)
+    if contested_assignment:
+        _match_exact_name_leftover_rounds(con)
     tier_b_counts = con.execute("""
         SELECT match_method, COUNT(*) AS n FROM tier_b GROUP BY match_method
     """).fetchdf()
@@ -1951,6 +2303,61 @@ def _assign_via_registry(unified_df, components_dict, registry_path,
     return res.uid_to_pid, res
 
 
+def _supplementary_position_key_pairs(unified_df: pd.DataFrame) -> list[tuple[int, int]]:
+    """Adjacent-quarter pairs whose strong ``position_key`` is identical and
+    unique per cik/source/quarter on both sides (FV ratio within MAX_FV_RATIO).
+
+    Flag-independent.  Multi-tranche filers whose issuer_name used to be the
+    whole raw identifier (Trinity, Silver Point, BlackRock DLC) got their
+    chains from the supplementary *name* pass because every tranche's "name"
+    was unique.  Once the wrappers extract the real company name, that pass
+    refuses the company (n != 1) and the tranche identity survives only in
+    position_key.  Uniqueness on both sides means no 1:1 contest is needed.
+    """
+    if "position_key" not in unified_df.columns or "_uid" not in unified_df.columns:
+        return []
+    con = duckdb.connect()
+    con.register("u", unified_df)
+    next_qtr = _next_quarter_sql("a.qtr")
+    df = con.execute(f"""
+    WITH base AS (
+        SELECT _uid,
+            CAST(cik AS VARCHAR) AS cik,
+            CAST(source AS VARCHAR) AS source,
+            {_quarter_label_sql('report_date')} AS qtr,
+            CAST(position_key AS VARCHAR) AS pk,
+            TRY_CAST(fair_value AS DOUBLE) AS fv
+        FROM u
+        WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+          AND TRY_CAST(fair_value AS DOUBLE) != 0
+          AND COALESCE(TRIM(CAST(position_key AS VARCHAR)), '') != ''
+          AND ({_strong_position_key_sql('position_key')})
+    ),
+    key_counts AS (
+        SELECT cik, source, qtr, pk, COUNT(*) AS n
+        FROM base GROUP BY cik, source, qtr, pk
+    ),
+    unique_base AS (
+        SELECT b.* FROM base b
+        JOIN key_counts kc
+          ON b.cik = kc.cik AND b.source = kc.source
+         AND b.qtr = kc.qtr AND b.pk = kc.pk
+        WHERE kc.n = 1
+    )
+    SELECT a._uid AS uid_a, b._uid AS uid_b
+    FROM unique_base a
+    JOIN unique_base b
+      ON a.cik = b.cik AND a.source = b.source
+     AND b.qtr = ({next_qtr})
+     AND a.pk = b.pk
+     AND ABS(a.fv) / GREATEST(ABS(b.fv), 1.0) BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+     AND ABS(b.fv) / GREATEST(ABS(a.fv), 1.0) BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+    ORDER BY uid_a, uid_b
+    """).fetchdf()
+    con.close()
+    return [(int(a), int(b)) for a, b in zip(df["uid_a"], df["uid_b"])]
+
+
 def assign_position_ids(
     unified_df: pd.DataFrame,
     matches_df: pd.DataFrame,
@@ -1958,8 +2365,14 @@ def assign_position_ids(
     use_registry: bool = False,
     registry_path=None,
     retirements_path=None,
+    contested_assignment: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Assign stable position_id values to unified holdings and match pairs.
+
+    ``contested_assignment=True`` (experimental, mg3 replay) applies the
+    coexistence veto to every chain-forming edge and lets the supplementary
+    exact-name pass resolve contested name groups by principal instead of
+    refusing them.
 
     Maps each match-pair side to a unified row ID via DuckDB join, then
     computes connected components over (begin_uid, end_uid) edges using
@@ -2169,16 +2582,28 @@ def assign_position_ids(
 
     n_edges = 0
     n_skipped_date_collision = 0
+    n_vetoed = 0
     used_match_midx: set[int] = set()
     used_supp_edges: set[tuple[int, int]] = set()
     spans = pd.to_numeric(matches_df["span_months"], errors="coerce").fillna(99)
+    vetoed: set[tuple[int, int]] = set()
+    if contested_assignment:
+        cand_edges = [
+            (begin_uid[m], end_uid[m]) for m in range(n_match)
+            if spans.iloc[m] <= 4 and m in begin_uid and m in end_uid
+        ]
+        vetoed = _coexistence_vetoed(unified_df, cand_edges)
     for midx in range(n_match):
         if spans.iloc[midx] > 4:
             continue
         b = begin_uid.get(midx)
         e = end_uid.get(midx)
         if b is not None and e is not None:
-            if _guarded_union(b, e):
+            if (b, e) in vetoed:
+                n_vetoed += 1
+                _register_component(b)
+                _register_component(e)
+            elif _guarded_union(b, e):
                 n_edges += 1
                 used_match_midx.add(midx)
             else:
@@ -2190,6 +2615,9 @@ def assign_position_ids(
 
     logger.info("  UF edges from match pairs (span<=4mo): %d (of %d total pairs)",
                 n_edges, n_match)
+    if n_vetoed:
+        logger.info("  Coexistence veto dropped %d match edges (twin present)",
+                    n_vetoed)
     if n_skipped_date_collision:
         logger.warning(
             "  Skipped %d match edges that would merge duplicate report-date rows",
@@ -2209,22 +2637,67 @@ def assign_position_ids(
     con2 = duckdb.connect()
     con2.register("u", unified_df)
 
-    supp_sql = f"""
+    if contested_assignment:
+        # Contested variant: comma / fka / ordinal-insensitive key, names
+        # allowed up to the generic-header multiplicity cap, 1:1 contest led
+        # by banded principal -> maturity -> raw name -> cost -> FV, instrument
+        # sub-type continuity, and leftover rounds (see
+        # _match_exact_name_leftover_rounds for the rationale).
+        supp_name_sql = _name_key_sql("issuer_name")
+        supp_mult_cond = f"nc.n <= {MAX_NAME_MULTIPLICITY}"
+        supp_order_b = (
+            "pa_band ASC NULLS LAST, mat_rank ASC, name_exact DESC, "
+            "cost_prox ASC NULLS LAST, fv_prox ASC, pa_prox ASC NULLS LAST, uid_b ASC"
+        )
+        supp_order_a = supp_order_b.replace("uid_b ASC", "uid_a ASC")
+        supp_extra_base = (
+            ", LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _raw"
+            ", TRY_CAST(cost AS DOUBLE) AS cost"
+            f", {_inst_subtype_sql('instrument_description')} AS _inst_subtype"
+        )
+        supp_extra_pairs = (
+            f", {_pa_band_sql('a', 'b')} AS pa_band"
+            f", {_cost_prox_sql('a.cost', 'b.cost')} AS cost_prox"
+            ", CASE WHEN a._raw = b._raw THEN 1 ELSE 0 END AS name_exact"
+        )
+        supp_subtype_cond = (
+            "AND (a._inst_subtype IS NULL OR b._inst_subtype IS NULL "
+            "OR a._inst_subtype = b._inst_subtype)"
+        )
+    else:
+        # Only use names that appear exactly once per CIK/quarter.
+        # Multi-tranche positions (same name, different bonds) would
+        # merge into mega-chains without a stable sub-identifier.
+        supp_name_sql = "LOWER(TRIM(CAST(issuer_name AS VARCHAR)))"
+        supp_mult_cond = "nc.n = 1"
+        supp_order_b = "fv_prox ASC, uid_b ASC"
+        supp_order_a = "fv_prox ASC, uid_a ASC"
+        supp_extra_base = ""
+        supp_extra_pairs = ""
+        supp_subtype_cond = ""
+    supp_pa_expr = (
+        "COALESCE(TRY_CAST(principal_amount_usd AS DOUBLE), "
+        "TRY_CAST(principal_amount AS DOUBLE))"
+        if "principal_amount_usd" in unified_df.columns
+        else "TRY_CAST(principal_amount AS DOUBLE)"
+    )
+
+    supp_pairs_cte = f"""
     WITH base AS (
         SELECT _uid,
             CAST(cik AS VARCHAR) AS cik,
             CAST(source AS VARCHAR) AS source,
             {_quarter_label_sql('report_date')} AS qtr,
-            LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _name,
-            TRY_CAST(fair_value AS DOUBLE) AS fv
+            {supp_name_sql} AS _name,
+            TRY_CAST(fair_value AS DOUBLE) AS fv,
+            {supp_pa_expr} AS pa,
+            TRY_CAST(maturity_date AS DATE) AS mat
+            {supp_extra_base}
         FROM u
         WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
           AND TRY_CAST(fair_value AS DOUBLE) != 0
           AND TRIM(CAST(issuer_name AS VARCHAR)) != ''
     ),
-    -- Only use names that appear exactly once per CIK/quarter.
-    -- Multi-tranche positions (same name, different bonds) would
-    -- merge into mega-chains without a stable sub-identifier.
     name_counts AS (
         SELECT cik, source, qtr, _name, COUNT(*) AS n
         FROM base GROUP BY cik, source, qtr, _name
@@ -2234,11 +2707,15 @@ def assign_position_ids(
         JOIN name_counts nc
           ON b.cik = nc.cik AND b.source = nc.source
          AND b.qtr = nc.qtr AND b._name = nc._name
-        WHERE nc.n = 1
+        WHERE {supp_mult_cond}
     ),
     pairs AS (
         SELECT a._uid AS uid_a, b._uid AS uid_b,
-            ABS(LN(GREATEST(ABS(a.fv), 1.0) / GREATEST(ABS(b.fv), 1.0))) AS fv_prox
+            ABS(LN(GREATEST(ABS(a.fv), 1.0) / GREATEST(ABS(b.fv), 1.0))) AS fv_prox,
+            CASE WHEN a.pa > 0 AND b.pa > 0 THEN ABS(LN(a.pa / b.pa)) END AS pa_prox,
+            CASE WHEN a.mat IS NOT NULL AND b.mat IS NOT NULL
+                 THEN CASE WHEN a.mat = b.mat THEN 0 ELSE 2 END ELSE 1 END AS mat_rank
+            {supp_extra_pairs}
         FROM unique_base a
         JOIN unique_base b
           ON a.cik = b.cik AND a.source = b.source
@@ -2246,25 +2723,72 @@ def assign_position_ids(
          AND a._name = b._name
          AND ABS(a.fv) / GREATEST(ABS(b.fv), 1.0) BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
          AND ABS(b.fv) / GREATEST(ABS(a.fv), 1.0) BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
-    ),
+         {supp_subtype_cond}
+    )
+    """
+    supp_select = f"""
     rn_a AS (
         SELECT *,
             ROW_NUMBER() OVER (
-                PARTITION BY uid_a ORDER BY fv_prox ASC, uid_b ASC
+                PARTITION BY uid_a ORDER BY {supp_order_b}
             ) AS rn1
-        FROM pairs
+        FROM cand
     ),
     rn_b AS (
         SELECT *,
             ROW_NUMBER() OVER (
-                PARTITION BY uid_b ORDER BY fv_prox ASC, uid_a ASC
+                PARTITION BY uid_b ORDER BY {supp_order_a}
             ) AS rn2
         FROM rn_a WHERE rn1 = 1
     )
     SELECT uid_a, uid_b FROM rn_b WHERE rn2 = 1
     """
-    supp_pairs = con2.execute(supp_sql).fetchdf()
+    if not contested_assignment:
+        supp_pairs = con2.execute(
+            supp_pairs_cte + ", cand AS (SELECT * FROM pairs), " + supp_select
+        ).fetchdf()
+    else:
+        con2.execute("CREATE OR REPLACE TEMP TABLE supp_all AS "
+                     + supp_pairs_cte + " SELECT * FROM pairs")
+        con2.execute("CREATE OR REPLACE TEMP TABLE supp_chosen (uid_a BIGINT, uid_b BIGINT)")
+        rounds: list[pd.DataFrame] = []
+        for _round in range(CONTESTED_MAX_ROUNDS):
+            round_df = con2.execute(
+                "WITH cand AS ("
+                "  SELECT * FROM supp_all"
+                "  WHERE uid_a NOT IN (SELECT uid_a FROM supp_chosen)"
+                "    AND uid_b NOT IN (SELECT uid_b FROM supp_chosen)"
+                # leftover rounds: equal, known maturity only (see
+                # _match_exact_name_leftover_rounds)
+                + ("    AND mat_rank = 0" if _round > 0 else "")
+                + "), " + supp_select
+            ).fetchdf()
+            if round_df.empty:
+                break
+            # Round 1 is the ordinary greedy contest; later rounds pair the
+            # leftovers and are labelled separately in the edge ledger so a
+            # gold stratum can score them on their own.
+            round_df["supp_round"] = _round + 1
+            con2.register("round_df", round_df)
+            con2.execute("INSERT INTO supp_chosen SELECT uid_a, uid_b FROM round_df")
+            con2.unregister("round_df")
+            rounds.append(round_df)
+        supp_pairs = (pd.concat(rounds, ignore_index=True) if rounds
+                      else pd.DataFrame(columns=["uid_a", "uid_b"]))
+        logger.info("  Supplementary contested rounds: %d (%d pairs)",
+                    len(rounds), len(supp_pairs))
     con2.close()
+    if contested_assignment and not supp_pairs.empty:
+        supp_vetoed = _coexistence_vetoed(
+            unified_df,
+            [(int(a), int(b)) for a, b in zip(supp_pairs["uid_a"], supp_pairs["uid_b"])],
+        )
+        if supp_vetoed:
+            keep = [(int(a), int(b)) not in supp_vetoed
+                    for a, b in zip(supp_pairs["uid_a"], supp_pairs["uid_b"])]
+            supp_pairs = supp_pairs[keep].reset_index(drop=True)
+            logger.info("  Coexistence veto dropped %d supplementary edges",
+                        len(supp_vetoed))
 
     n_supp = 0
     n_supp_skipped_date_collision = 0
@@ -2289,6 +2813,35 @@ def assign_position_ids(
         logger.warning(
             "  Skipped %d supplementary edges that would merge duplicate report-date rows",
             n_supp_skipped_date_collision,
+        )
+
+    # ------------------------------------------------------------------
+    # Step 3c: Supplementary position_key pass (flag-independent)
+    # ------------------------------------------------------------------
+    # Rows whose strong position_key is identical in adjacent quarters and
+    # unique per quarter on both sides.  Runs after the name pass and only
+    # fills what is still unlinked (union is a no-op inside a component; the
+    # report-date guard blocks merging two live tranches).
+    key_pairs = _supplementary_position_key_pairs(unified_df)
+    n_key = 0
+    n_key_skipped_date_collision = 0
+    used_key_edges: set[tuple[int, int]] = set()
+    for a, b in key_pairs:
+        root_a = _register_component(a)
+        root_b = _register_component(b)
+        if root_a == root_b:
+            continue
+        if not _guarded_union(a, b):
+            n_key_skipped_date_collision += 1
+            continue
+        used_key_edges.add((a, b))
+        n_key += 1
+    logger.info("  Supplementary position_key edges: %d new connections (of %d pairs)",
+                n_key, len(key_pairs))
+    if n_key_skipped_date_collision:
+        logger.warning(
+            "  Skipped %d position_key edges that would merge duplicate report-date rows",
+            n_key_skipped_date_collision,
         )
 
     # ------------------------------------------------------------------
@@ -2403,8 +2956,34 @@ def assign_position_ids(
             "end_quarter": _quarter_from_date(end.get("report_date", "")),
             "end_issuer_name": end.get("issuer_name", ""),
             "end_fair_value": end.get("fair_value", ""),
-            "match_method": "SUPP_B2_unique_exact_name",
+            "match_method": (
+                ("SUPP_B2_contested_leftover"
+                 if int(getattr(item, "supp_round", 1) or 1) > 1
+                 else "SUPP_B2_contested_name_key")
+                if contested_assignment else "SUPP_B2_unique_exact_name"
+            ),
             "match_key": str(end.get("issuer_name", "")).strip().lower(),
+            "match_score": "1.0",
+            "span_months": "3",
+        })
+    for a, b in sorted(used_key_edges):
+        begin = uid_lookup.loc[a]
+        end = uid_lookup.loc[b]
+        edge_rows.append({
+            "edge_type": "supplementary_position_key",
+            "position_id": uid_to_pid[b],
+            "cik": end.get("cik", ""),
+            "source": end.get("source", ""),
+            "begin_report_date": begin.get("report_date", ""),
+            "begin_quarter": _quarter_from_date(begin.get("report_date", "")),
+            "begin_issuer_name": begin.get("issuer_name", ""),
+            "begin_fair_value": begin.get("fair_value", ""),
+            "end_report_date": end.get("report_date", ""),
+            "end_quarter": _quarter_from_date(end.get("report_date", "")),
+            "end_issuer_name": end.get("issuer_name", ""),
+            "end_fair_value": end.get("fair_value", ""),
+            "match_method": "SUPP_B1b_unique_position_key",
+            "match_key": str(end.get("position_key", "")).strip().lower(),
             "match_score": "1.0",
             "span_months": "3",
         })

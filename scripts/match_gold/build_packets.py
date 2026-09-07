@@ -938,7 +938,19 @@ def main() -> None:
     parser.add_argument("--max-chains", type=int, default=None,
                         help="Cap on chain packets per stratum")
     parser.add_argument("--max-entities", type=int, default=None,
-                        help="Cap on entity packets total")
+                        help="Cap on entity packets total (0 = no entity packets)")
+    parser.add_argument("--holdings-file", default=None,
+                        help="Override holdings CSV (default: config.UNIFIED_HOLDINGS_FILE). "
+                             "Use to score a candidate build, e.g. a contested_assignment "
+                             "flag-on run persisted under scratch/, without touching data/output.")
+    parser.add_argument("--edges-file", default=None,
+                        help="Override position_id_edges CSV (default: config.POSITION_ID_EDGES_FILE)")
+    parser.add_argument("--strata", default=None,
+                        help="Comma-separated chain strata to keep (tier_random, fv_jump, "
+                             "interior_singleton, drift_break); default all")
+    parser.add_argument("--tiers", default=None,
+                        help="Comma-separated match_method values to keep in tier_random "
+                             "(e.g. SUPP_B2_contested_name_key,B2_leftover_round); default all")
     args = parser.parse_args()
 
     from pipeline import config
@@ -950,13 +962,16 @@ def main() -> None:
     # Use POSITION_ID_EDGES_FILE (chain-truth frame with position_id, cik, match_method,
     # begin/end fair_value) -- matches what sample_chains and metrics use. This is the
     # canonical edge source; POSITION_MATCHES_FILE is the raw match output.
+    holdings_path = Path(args.holdings_file) if args.holdings_file else config.UNIFIED_HOLDINGS_FILE
+    edges_path = Path(args.edges_file) if args.edges_file else config.POSITION_ID_EDGES_FILE
     _con = duckdb.connect()
     holdings_df = _con.execute(
-        f"SELECT * FROM read_csv_auto('{config.UNIFIED_HOLDINGS_FILE}', all_varchar=true)"
+        f"SELECT * FROM read_csv_auto('{Path(holdings_path).as_posix()}', all_varchar=true)"
     ).df()
     edges_df = _con.execute(
-        f"SELECT * FROM read_csv_auto('{config.POSITION_ID_EDGES_FILE}', all_varchar=true)"
+        f"SELECT * FROM read_csv_auto('{Path(edges_path).as_posix()}', all_varchar=true)"
     ).df()
+    print(f"holdings: {holdings_path} ({len(holdings_df)} rows); edges: {edges_path} ({len(edges_df)} rows)")
 
     # Filter to cohort CIKs
     cohort = load_cohort_ciks()
@@ -976,13 +991,27 @@ def main() -> None:
         n_interior_singleton=per_tier,
         n_drift_break=per_tier,
     )
-    n_ent = args.max_entities or 60
-    entity_sample = sample_entities(
-        holdings_df,
-        n_merge_verify=n_ent,
-        n_cross_fund_near_miss=n_ent,
-        n_within_fund=n_ent,
-    )
+    if args.strata:
+        keep = {s.strip() for s in args.strata.split(",") if s.strip()}
+        chain_sample = chain_sample[chain_sample["stratum"].isin(keep)].reset_index(drop=True)
+    if args.tiers:
+        tiers = {t.strip() for t in args.tiers.split(",") if t.strip()}
+        pids_in_tiers = set(edges_df.loc[edges_df["match_method"].isin(tiers), "position_id"])
+        is_tier = chain_sample["stratum"] == "tier_random"
+        chain_sample = chain_sample[
+            ~is_tier | chain_sample["position_id"].isin(pids_in_tiers)
+        ].reset_index(drop=True)
+    print(f"chain packets by stratum: {chain_sample['stratum'].value_counts().to_dict()}")
+    n_ent = 60 if args.max_entities is None else args.max_entities
+    if n_ent > 0:
+        entity_sample = sample_entities(
+            holdings_df,
+            n_merge_verify=n_ent,
+            n_cross_fund_near_miss=n_ent,
+            n_within_fund=n_ent,
+        )
+    else:
+        entity_sample = pd.DataFrame(columns=SAMPLE_COLUMNS)
 
     stats = write_batch(holdings_df, edges_df, chain_sample, entity_sample, out_dir)
     print(f"n_packets={stats['n_packets']}  n_missing_filing={stats['n_missing_filing']}")
