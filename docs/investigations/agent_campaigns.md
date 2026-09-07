@@ -339,9 +339,53 @@ adjudicate rather than guess when the sandbox rejected their process spawns.
   cannot be used to filter, weight, or triage, and should not be published as a
   quality signal.
 - 60 packets (11.2%) unscored pending quota reset; strata evenly affected.
+  **Resolved 2026-09-07 -- see "Completion" below.**
 - Anomaly-selected strata cannot support base-rate claims by construction -- only
   `tier_random` does.
 - Cross-quarter stability not measured; gold set versioned by batch id (mg3).
+
+### Completion 2026-09-07: 535/535 scored
+
+The 60 quota-blocked packets were dispatched at 10:26 after the Codex reset
+(`scripts/match_gold/dispatch_match_gold_workers.ps1 -BatchId mg3 -MaxParallel 2
+-MaxAttempts 3`, elevated shell): **60/60 OK, 0 failed, 72.6 min**, one sandbox-logon
+retry. `score_gold.py`: 535 valid, 0 invalid, 0 missing. Final tables
+(`scratch/2026-09-07_mg3_resume/final_tables.py` over `gold_set.csv`):
+
+`tier_random` edge precision, UNCERTAIN excluded:
+
+| tier | precision | 95% Wilson | n | was (475) |
+|---|---|---|---|---|
+| SUPP_B2_unique_exact_name | 0.96 | [0.92, 0.98] | 200 | 0.95 |
+| B1b_position_key | 0.95 | [0.89, 0.98] | 85 | 0.95 |
+| B2_exact_name | 0.94 | [0.88, 0.97] | 104 | 0.94 |
+| E_entity_fingerprint | 0.93 | [0.81, 0.98] | 42 | 0.92 |
+| A_within_filing | 0.90 | [0.82, 0.95] | 73 | 0.93 |
+| C_normalized_name | 0.86 | [0.72, 0.93] | 42 | 0.84 |
+| D_fuzzy | 0.82 | [0.74, 0.89] | 97 | 0.82 |
+| **ALL (tier_random)** | **0.92** | **[0.90, 0.94]** | **643** | 0.92 |
+
+Pooled all-strata 0.90 [0.88, 0.92] (n=769); anomaly-only 0.82 [0.74, 0.88] (n=126).
+
+**What moved:** `A_within_filing` 0.93 -> 0.90 (66/7 of 73): the last four edges
+included one more WRONG, and at n=73 one edge is 1.4pp. Still inside the interval
+reported at 475 and still indistinguishable from the other identity tiers, but the
+tranche-hopping finding in F-section of the assessment below is the mechanism -- it
+is the one identity tier that ranks tranches of the same borrower by FV proximity.
+The headline (0.92, exact-vs-approximate split) is unchanged.
+
+Final packet-level stratum yields (535): within_fund_name_cluster 0/59 CONFIRMED
+(59 WRONG_MERGE); cross_fund_near_miss 2 CONFIRMED / 51 WRONG_MERGE;
+entity_merge_verify 40 / 19 WRONG_MERGE (32%); interior_singleton 26/40 MISSED_LINK;
+drift_break 10/40 MISSED_LINK; fv_jump 15/40 MIXED, 4 WRONG_MERGE; tier_random
+198/240 CONFIRMED (82.5%), 21 INSUFFICIENT_EVIDENCE across all strata (3.9%).
+Confidence still uninformative: min 0.90, median 0.99, 0/535 below 0.90.
+
+**Note on basis:** the 2026-09-06 assessment and the contested A/B tables below were
+computed on the 475-verdict slice. The 60 additions do not change any of their
+mechanism conclusions; the per-CIK WRONG_MERGE counts in F1 are undercounts by the
+same ~11% and the replay harness should be re-run on the full 535 before the
+mg4_contested comparison is published.
 
 ## 2026-09-06 - mg3 assessment: where position-match errors come from and what to change
 

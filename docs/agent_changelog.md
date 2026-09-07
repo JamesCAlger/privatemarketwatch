@@ -11292,3 +11292,27 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   singleton share 27.6% -> 20.4%, 127,679 rows changed chain-mates. Returns and frontend
   export rerun (28 JSON files, uncommitted). Baseline not refreshed. Full table in the
   investigation entry (section 8).
+
+## 2026-09-07 - mg3 gold set completed (535/535) + overnight work committed
+
+- **Committed** the 2026-09-06/07 overnight work on `ensemble-fp-experiment` (worktree was
+  48 dirty files): `114e3e7` position_key supplementary pass + contested flag (off) +
+  replay harness, `6b4391a` five wrapper repairs (GSBD, Silver Point, BlackRock DLC,
+  Trinity, Fidelity PCCF) + 6 tests, `4fca4df` frontend export (28 JSON), `79462d0` docs.
+  Verification before commit: `tests/test_position_matching.py` + `tests/test_replay_verdicts.py`
+  120 passed; the six new wrapper tests in `tests/test_unified_holdings.py` 6 passed
+  (`-k` selected). NOT run: the full unified-holdings file (~2h25m) or the full suite.
+  Baseline NOT refreshed.
+- **mg3 remainder dispatched** at 10:26 after the Codex quota reset (elevated shell,
+  MaxParallel 2, MaxAttempts 3): 60/60 OK, 0 failed, 72.6 min, 1 sandbox-logon retry.
+  `score_gold.py`: 535 valid / 0 invalid / 0 missing.
+- **Final mg3 numbers** (`tier_random`, UNCERTAIN excluded, n=643 edges): ALL 0.92
+  [0.90, 0.94]; SUPP_B2 0.96, B1b 0.95, B2 0.94, E 0.93, A_within_filing 0.90 (was 0.93
+  at 475; 1 extra WRONG at n=73), C 0.86, D 0.82. Headline and exact-vs-approximate
+  split unchanged. Pooled all-strata 0.90 (n=769). within_fund_name_cluster 0/59
+  CONFIRMED. Confidence still uninformative (0/535 below 0.90).
+- Written up in `docs/investigations/agent_campaigns.md` ("Completion 2026-09-07"
+  subsection of the mg3 entry); INDEX reindexed. Scratch: `scratch/2026-09-07_mg3_resume/`.
+- **Next:** re-run `replay_verdicts.py` on the full 535 before publishing the
+  mg4_contested comparison; dispatch `mg4_contested` (265 packets) = promotion gate for
+  `contested_assignment`; human audit slice (`audit_slice.csv`); baseline refresh.
