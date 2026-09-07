@@ -367,3 +367,23 @@ the likely-missed pool falls by a factor of three without any wrapper work. What
 does NOT show: per-edge precision of the new production build (the gold A/B is the
 proxy: mg3 WRONG linked 52 -> 24, CONFIRMED 669 -> 660), and recall on the remaining
 singletons (mg5_recall, running). Baseline not refreshed; frontend not exported.
+
+## 2026-09-07 (night) - What still blocks the mg5 missed links
+
+`replay_verdicts.py` on the 66 adjudicated missed pairs from mg5_recall, current
+production build (post-promotion): 27 are admitted by at least one tier today (the 26
+now chained plus one lost in the 1:1 contest). The 39 that no tier admits fail on:
+
+| blocker | pairs |
+|---|---|
+| issuer name differs between the two quarters (`name_differs`, `jw<0.88`) | 38 |
+| the two rows are not in adjacent quarters (a gap quarter in between) | 12 |
+| name multiplicity cap / not unique | 13 |
+
+(Overlapping counts; most pairs fail two or three predicates.) The name-differs
+group is E12's parse drift plus genuine filer renames: the position is the same but
+the wrapper produced a different issuer name in one quarter, so no name-keyed tier
+can see it. The gap-quarter group needs a span-2 link (position absent for one filing,
+present again after), which no current tier attempts. Together these are the
+remaining completeness mechanism, and both are outside the assignment contest: one is
+extraction, the other is a new tier.

@@ -1132,3 +1132,32 @@ leftover-labelled pairs that another path now links and 16 `A_within_filing` hop
 the change does not touch. Net over all 1,866 pairs: WRONG linked 85 -> 73, CONFIRMED
 1,495 -> 1,622, MISSED recovered 27 -> 36. Consistent with the 2026-09-06 v4 A/B
 (WRONG 58 -> 29) and slightly better on WRONG with the maturity veto.
+
+## 2026-09-07 - Match-gold batch mg5_recall: random interior-singleton stratum (recall)
+
+**Question:** what share of interior singletons (chain length 1, not the fund's first
+quarter) are matcher misses, and does the contested promotion recover them?
+
+**Batch:** 100 packets sampled (frozen seed 20260903) from the interior singletons of
+the 2026-09-07 afternoon production build (post position-key pass, pre contested
+promotion); 99 with cached filings; 5 overlap mg3's interior stratum. Dispatched
+20:13-22:31 chained behind mg4_contested: **100/100 OK, 0 invalid**.
+
+| verdict | packets |
+|---|---|
+| MISSED_LINK (adjudicator found the continuation) | 46 |
+| CONFIRMED (genuine singleton) | 29 |
+| INSUFFICIENT_EVIDENCE | 25 |
+
+**Recall estimate:** 46 of 75 decidable interior singletons are misses, **61%**
+[Wilson ~0.50, 0.72]. mg3's stratum read 76% (n=34) on the pre-position-key build;
+mg4's 62.5% (n=32) on the flag-on build. Insufficient-evidence rate 25% vs 15% on mg3.
+
+**Out-of-sample recovery** (`chain_experiments/recall_check.py`): the 46 MISSED
+packets propose 66 row-id pairs. Chained in the 2026-09-05 baseline: 2 (3%). Chained
+in the post-promotion production build (rebuilt 21:41, before these verdicts existed):
+**26 (39%)**. The remaining 40 are the next completeness target; the replay harness
+run on them is recorded in position_matching.md.
+
+**Caveats:** single adjudicator; interior singletons of one build; the recovery number
+mixes the position-key pass and the contested promotion (the baseline predates both).

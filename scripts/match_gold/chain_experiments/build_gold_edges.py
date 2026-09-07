@@ -61,10 +61,14 @@ for pk_path in sorted((G / "packets").glob("*.json")):
                           "role": "row" if rid in rows else "candidate",
                           **{f: r.get(f) for f in ROW_FIELDS}})
 
-for name, data in [("gold_edges.csv", edges_out), ("gold_packets.csv", packets_out),
-                   ("gold_rows.csv", cands_out)]:
+EDGE_COLS = (["packet_id", "stratum", "cik", "edge_index", "verdict", "tier", "rationale"]
+             + [p + f for f in ROW_FIELDS for p in ("b_", "e_")])
+for name, data, cols in [("gold_edges.csv", edges_out, EDGE_COLS),
+                         ("gold_packets.csv", packets_out, None),
+                         ("gold_rows.csv", cands_out, None)]:
+    fieldnames = list(data[0].keys()) if data else cols
     with open(OUT / name, "w", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(data[0].keys()))
+        w = csv.DictWriter(fh, fieldnames=fieldnames)
         w.writeheader(); w.writerows(data)
     print(name, len(data))
 print("packets with verdicts:", n_pk)

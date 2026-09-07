@@ -11416,3 +11416,12 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   index_returns deltas follow from the re-chained pairs. Also in the diff: frontend JSON
   and quarter_acceptance artifacts changed by the other session (not this change).
   Report: `data/output/semantic_diff_report.json`.
+
+## 2026-09-07 - mg5_recall done: interior-singleton recall 61% missed; promotion recovers 39% out of sample
+
+- 100/100 packets OK, 0 invalid (20:13-22:31). 46 MISSED_LINK / 29 CONFIRMED / 25
+  INSUFFICIENT_EVIDENCE -> 61% of decidable interior singletons are matcher misses
+  (pre-promotion build). Write-up in agent_campaigns.md ("mg5_recall").
+- Of the 66 adjudicated missed pairs, the post-promotion build chains 26 (39%) vs 2 (3%)
+  in the 2026-09-05 baseline -- out of sample, the verdicts did not exist at rebuild time.
+- `build_gold_edges.py` handles edge-less batches; new `recall_check.py`.

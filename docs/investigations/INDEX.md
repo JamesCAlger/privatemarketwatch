@@ -80,6 +80,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - Match-gold batch mg3: first full-cohort position-match gold set (2026-09-05/06)
 - 2026-09-06 - mg3 assessment: where position-match errors come from and what to change
 - 2026-09-07 - Match-gold batch mg4_contested: promotion gate for the contested-assignment flag
+- 2026-09-07 - Match-gold batch mg5_recall: random interior-singleton stratum (recall)
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)
@@ -88,4 +89,5 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 ## Position matching & chain stability ([position_matching.md](position_matching.md))
 - 2026-09-07 - Chain-stability experiments E1-E7 on the completed mg3 gold set
 - 2026-09-07 (evening) - Production result of the contested promotion
+- 2026-09-07 (night) - What still blocks the mg5 missed links
 
