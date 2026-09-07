@@ -208,7 +208,38 @@ of which 36% have a hard-key twin in the next quarter. The mg3 interior_singleto
 stratum adjudicated 26 MISSED_LINK / 8 CONFIRMED-singleton / 6 insufficient, i.e. ~76%
 [Wilson ~0.60-0.88] of interior singletons are matcher misses at n=34.
 
-### E8 / E9 status
+### E10. The static-ambiguous group and rank-order pairing
+
+Question (owner): two lots identical on every static field, differing only in a
+time-varying one (FV 90/100 -> 100/110 next quarter). How to pair, and how big is the
+group? Script `e10_static_ambiguous.py`.
+
+**Rule:** pair by rank on the time-varying field (sorted matching = minimum total
+displacement). 90->100, 100->110 (returns 11% / 10%) rather than 90->110, 100->100
+(22% / 0%). Aggregates are invariant either way; rank pairing is the one consistent
+with lots of one instrument sharing a mark.
+
+**Size** (rows whose CIK-quarter block shares name_key, maturity, subtype and EXACT
+spread with another row):
+
+| scope | rows | static-ambiguous | share | FV | FV share | still ambiguous after principal | identical on all fields |
+|---|---|---|---|---|---|---|---|
+| all quarters | 262,673 | 73,216 | 27.9% | $821B | 23.9% | 10,135 (3.9%) | 1,463 (0.6%) |
+| 2026-03-31 | 29,681 | 9,454 | 31.9% | $107B | 28.2% | 1,600 | 145 |
+
+Block sizes: 51% pairs, 40% of 3-4 lots, 9% of 5+. So a quarter of cohort FV sits in
+blocks where the pairing is decided by principal, cost or FV alone.
+
+**What production does inside them:** on the 2,532 static-ambiguous blocks that are
+fully chained block-to-block (5,843 pairs), the production pairing violates FV rank
+order on 10.7% of pairs and principal rank order on 10.6%. In the 274 violating
+blocks, the dispersion of log FV returns across the lots is 0.70 under the production
+pairing and 0.002 under rank pairing. Rank pairing minimises dispersion partly by
+construction, but 0.002 means the lots move together to within a fraction of a
+percent -- the "one instrument, one mark" prior holds, and the production pairing is
+manufacturing +100% / -50% lot returns out of it. This is the mechanism behind the
+class-B tranche hops (35 of 62) and is a direct, testable assignment rule: inside a
+static-identical block, assign by sorted principal, then cost, then FV.
 
 - **E8 registry determinism:** NOT re-run. `pipeline/position_id_registry.py` already
   persists ids on a drift-resistant natural key (795K keys, 82 retirements) and the
