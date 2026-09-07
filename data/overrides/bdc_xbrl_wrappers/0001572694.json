@@ -25,7 +25,7 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^(?:I?Investment\\s+)?(?:(?:1st|2nd)\\s+Lien[^-]*?|Debt\\s+Investments?|Equity\\s+Investments?)\\s+(?:-\\s+)?\\d[\\d.]*%\\s+(.+?)\\s+(?:Industry|Interest\\s+Rate|Reference\\s+Rate|Maturity|Acquisition\\s+Date)(?:\\s|$)",
+    "hierarchy_issuer_re": "(?i)^(?:I?Investment\\s+)?(?:(?:1st|2nd)\\s+Lien[^-]*?|Debt\\s+Investments?|Equity\\s+Investments?)\\s+(?:-\\s+)?\\d[\\d.]*%\\s+(?:[^%]+?\\s+(?:-|\\x{2013}|\\x{2014}|\\x{FFFD})\\s+-?\\d[\\d.]*%\\s+)*(.+?)\\s+(?:Industry|Interest\\s+Rate|Reference\\s+Rate|Maturity|Acquisition\\s+Date)(?:\\s|$)",
     "hierarchy_instrument_re": "(?i)^(?:I?Investment\\s+)((?:1st|2nd)\\s+Lien[^-]*?(?:\\s+Debt)?|Debt\\s+Investments?|Equity\\s+Investments?)\\s+(?:-\\s+)?\\d",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^I?Investment\\s+') AND regexp_matches(_clean, '\\d[\\d.]*%\\s+\\S')",
     "extra_industry_labels": [

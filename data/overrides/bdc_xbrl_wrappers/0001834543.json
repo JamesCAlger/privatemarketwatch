@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001834543",
   "entity_name": "BlackRock Direct Lending Corp.",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "BLACKROCK_DIRECT_LENDING",
@@ -176,5 +176,13 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^(?:Debt\\s+Investments|Equity\\s+Securities|Investments?)\\s+(?:MSD_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:Instrument\\s+|First\\s+Lien|Second\\s+Lien|2nd\\s+Lien|Sr\\.?\\s+Secured|Senior\\s+Secured|Unsecured|Subordinated|Term\\s+Loan|Delayed\\s+Draw|Revolver|Warrants?\\s|Common\\s+(?:Stock|Units|Shares)|Preferred\\s+(?:Stock|Units|Shares)|Series\\s|Class\\s+[A-Z]\\b|Units\\s|Shares\\s|Ref\\s+|Maturity|Acquisition\\s+Date)",
+    "hierarchy_instrument_re": "(?i)\\s+(?:Instrument\\s+)?((?:(?:First|Second|2nd)\\s+Lien|Sr\\.?\\s+Secured|Senior\\s+Secured|Unsecured|Subordinated|Term\\s+Loan|Delayed\\s+Draw|Revolver|Warrants?(?:\\s|$)|Common\\s+(?:Stock|Units|Shares)|Preferred\\s+(?:Stock|Units|Shares)|Series\\s|Class\\s+[A-Z](?:\\s|$)).*?)(?:\\s+Ref\\s|\\s+Maturity|\\s+Acquisition\\s+Date|\\s*$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:Debt\\s+Investments|Equity\\s+Securities|Investments?)\\s') AND regexp_matches(_clean, '(?i)\\b(?:Instrument|Ref|Maturity|Warrants?|Stock|Units|Shares|Term\\s+Loan|Revolver)\\b')",
+    "extra_industry_labels": [],
+    "notes": "2026-09-06: flat 'Debt Investments <Industry> <Company> [Instrument] <instr> Ref ... Maturity' dialect; 3,020/3,028 cohort rows were unparsed (mg3 F1). Probe: 99.3% of rows extract."
   }
 }

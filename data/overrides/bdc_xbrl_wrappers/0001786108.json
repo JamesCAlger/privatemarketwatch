@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001786108",
   "entity_name": "Trinity Capital Inc.",
-  "version": 3,
+  "version": 5,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "TRINITY",
@@ -86,7 +86,12 @@
   },
   "identifier_format": {
     "delimiter": " ",
-    "field_order": ["issuer_name", "instrument_description", "rate_terms", "maturity_date"],
+    "field_order": [
+      "issuer_name",
+      "instrument_description",
+      "rate_terms",
+      "maturity_date"
+    ],
     "alternate_delimiters": []
   },
   "archetypes": {
@@ -295,7 +300,7 @@
   "invariants": {
     "fv_reconciliation": {
       "source_field": "investments_at_fair_value",
-      "tolerance_pct": 0.10,
+      "tolerance_pct": 0.1,
       "tolerance_abs": 10000000
     },
     "position_count_qoq": {
@@ -307,7 +312,15 @@
       "max_pct": 30.0
     },
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
+  },
+  "staging": {
+    "strategy": "hierarchy_extract",
+    "hierarchy_issuer_re": "(?i)^P?ortfolio\\s*Company\\s+(?:(?:Debt\\s+Securities|Equity\\s+Investments|Warrant\\s*Investments)\\s*-?\\s*)?(?:(?:United\\s+States|United\\s+Sates|United|Canada|Europe|United\\s+Kingdom|Israel|Australia),?\\s*)?(?:Software\\s+as\\s+a\\s+Service\\s+\\(\\\"?SaaS\\\"?\\)|Digital\\s+Assets\\s+Technology\\s+and\\s+Services|Food\\s+and\\s+Agriculture\\s+Technologies|Artificial\\s+Intelligence\\s+&\\s+Automation|Marketing,\\s+Media,\\s+and\\s+Entertainment|Automation\\s+&\\s+Internet\\s+of\\s+Things|Consumer\\s+Products\\s+&\\s+Services|Energy\\s+&\\s+Resource\\s+Technology|Human\\s+Resource\\s+Technology|Other\\s+Healthcare\\s+Services|Transportation\\s+Technology|Supply\\s+Chain\\s+Technology|Construction\\s+Technology|Real\\s+Estate\\s+Technology|Healthcare\\s+Technology|Education\\s+Technology|Finance\\s+and\\s+Insurance|Multi-Sector\\s+Holdings|Diagnostics\\s+&\\s+Tools|Green\\s+Technology|Space\\s+Technology|Medical\\s+Devices|Life\\s+Sciences|Biotechnology|Connectivity|Industrials|Industrial|Healthcare|SaaS),?\\s+((?:[^T\\s]|T[^y]|Ty[^p]|Typ[^e]).*?)\\s*(?:Type\\s+of\\s+Investment|Investment\\s+Date)\\b",
+    "hierarchy_instrument_re": "(?i)Type\\s+of\\s+Investment\\s+(.+?)(?:\\s+(?:Maturity|Expiration|Interest\\s+Rate)\\b|\\s*$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^P?ortfolio\\s*Company\\s') AND regexp_matches(_clean, '(?i)Type\\s+of\\s+Investment|Investment\\s+Date')",
+    "notes": "2026-09-06: 'Portfolio Company <Section>- <Region> <Industry> <Company> Type of Investment ...' dialect; 5,008/5,065 cohort rows were unparsed (mg3 F1). Industry labels are Trinity's own vocabulary derived from its identifiers (trinity_industries.py, 38 labels, cleaned to 30) and kept inline so they do not enter the global MSD_INDUSTRY_LABELS union. Probe: 99.1% of rows extract. 2026-09-07: instrument keeps 'Investment Date ...' and warrants their 'Series ...' tail (trailing_re) because several draws on one company differ only by investment date; without it 62 rows / $83.3M FV collapsed under the filing-level dedup keys in the first rebuild.",
+    "hierarchy_trailing_re": "(?i)\\s+(Series\\s+.+)$"
   }
 }

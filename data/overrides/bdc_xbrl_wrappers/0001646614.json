@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001646614",
   "entity_name": "Silver Point Specialty Credit Fund, L.P.",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "SILVER_POINT_SPECIALTY_CREDIT",
@@ -169,10 +169,10 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+(?:Secured\\s+Loans,?\\s+(?:1st|2nd)\\s+Lien\\s+(?:Term\\s+Loan|Revolver)|Secured\\s+Bonds\\s*,?\\s*Senior\\s+Secured\\s+Bonds|Subordinated\\s+Notes|Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Equities,?\\s+Common\\s+Equities|Equities|Real\\s+Estate\\s+Properties|Trust\\s+Interest),?\\s+(?:United\\s+States\\s+of\\s+America|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia),?\\s+(.+?)(?:,\\s+[^,]+,\\s+(?:Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date)|\\s+Instrument\\s+)",
-    "hierarchy_instrument_re": "(?i)^(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+(.+?)(?:,?\\s+(?:United\\s+States\\s+of\\s+America|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia)\\b)",
+    "hierarchy_issuer_re": "(?i)^(?:(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+)?(?:Secured\\s+Loans,?\\s+(?:1st|2nd)\\s+Lien\\s+(?:Term\\s+Loan|Revolver)|Secured\\s+Bonds\\s*,?\\s*Senior\\s+Secured\\s+Bonds|(?:1st|2nd)\\s+Lien/\\s?Secured\\s+Loans|Senior\\s+Secured\\s+Bonds|Unsecured\\s+Bonds|Subordinated\\s+(?:Notes|Debt)|Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Equities,?\\s+Common\\s+Equities|Equities|Warrants|Real\\s+Estate\\s+Properties|Trust\\s+Interest),?\\s+(?:United\\s+States\\s+of\\s+America|United\\s+States|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia|France|Ireland|Sweden|Spain|Italy|Switzerland|Bermuda|Jersey|Denmark|Norway|Finland|Belgium|Austria|Israel|Mexico|Brazil|India|China|Hong\\s+Kong|New\\s+Zealand|Puerto\\s+Rico),?\\s+(.+?)(?:,\\s+[^,]+,\\s+(?:Rate|[SLEP]\\+|\\d[\\d.]*%|Original\\s+Acquisition\\s+Date|Maturity\\s+Date)|\\s+Instrument\\s+)",
+    "hierarchy_instrument_re": "(?i)^(?:.*?\\s+Instrument\\s+|(?:(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+)?)(.+?)(?:\\s+Industry\\s+|,?\\s+(?:United\\s+States\\s+of\\s+America|United\\s+States|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia|France|Ireland|Sweden|Spain|Italy|Switzerland|Bermuda|Jersey|Denmark|Norway|Finland|Belgium|Austria|Israel|Mexico|Brazil|India|China|Hong\\s+Kong|New\\s+Zealand|Puerto\\s+Rico)\\b)",
     "hierarchy_trailing_re": "(?i)\\s+(Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b)",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments') AND regexp_matches(_clean, '(?i)\\b(?:1st\\s+Lien|2nd\\s+Lien|Secured\\s+Loans|Senior\\s+Secured|Subordinated|Unsecured\\s+Debt|Equities|Real\\s+Estate\\s+Properties|Trust\\s+Interest)\\b') AND regexp_matches(_clean, '(?i)\\b(?:Rate|Interest\\s+Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date|Instrument)\\b')"
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments|(?:1st|2nd)\\s+Lien/\\s?Secured\\s+Loans|Senior\\s+Secured\\s+Bonds|Unsecured\\s+Bonds|Subordinated\\s+Debt|Unsecured\\s+Debt|Equities|Warrants|Real\\s+Estate\\s+Properties|Trust\\s+Interest)') AND regexp_matches(_clean, '(?i)\\b(?:Rate|Interest\\s+Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date|Instrument)\\b')"
   },
   "archetypes": {
     "debt": {
@@ -264,7 +264,7 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
   }
 }

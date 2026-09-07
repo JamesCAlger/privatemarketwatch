@@ -2,7 +2,7 @@
   "schema_version": "bdc-xbrl-wrapper.v3",
   "cik": "0001899996",
   "entity_name": "Fidelity Private Credit Co LLC",
-  "version": 1,
+  "version": 2,
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "FIDELITY_PRIVATE_CREDIT_CENTRAL",
@@ -105,8 +105,9 @@
     ],
     "leaf_guard": {
       "type_industry_prefix_re": "(?i)^(?:(?:First|Second)\\s+Lien\\s+Debt|Debt|Equity|Preferred\\s+Equity|Common\\s+Equity)?\\s*(?:MSD_INDUSTRY_LABELS)\\s+",
-      "marker_re": "(?:term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|type\\s+(?:class\\s+[a-z0-9-]+\\s+units?|common\\s+units?|equity\\s+units?|preferred\\s+units?)|class\\s+[a-z0-9-]+\\s+(?:interest|units|shares|membership\\s+units)|common\\s+units?|preferred\\s+units?|equity\\s+interest|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|warrants?)",
-      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|par|shares?|units?|class|interest)\\b"
+      "marker_re": "(?:type\\s+)?(?:term\\s+loan|delayed\\s+draw(?:\\s+term\\s+loan)?|revolving\\s+credit\\s+facility|revolver|secured\\s+loan|convertible\\s+promissory\\s+note|maturity\\s+date|series\\s+[a-z0-9-]+\\s+preferred\\s+stock|type\\s+(?:class\\s+[a-z0-9-]+\\s+units?|common\\s+units?|equity\\s+units?|preferred\\s+units?)|class\\s+[a-z0-9-]+\\s+(?:lp\\s+)?(?:interests?|units|shares|membership\\s+units)|common\\s+units?|preferred\\s+units?|equity\\s+(?:interest|units?)|common\\s+stock|preferred\\s+stock|ordinary\\s+shares|warrants?)",
+      "evidence_re": "\\b(interest\\s+rate|reference\\s+rate|sofr|libor|euribor|maturity|due|par|shares?|units?|class|interest)\\b",
+      "notes_2026_09_07": "marker accepts an optional leading 'Type ' (filer change 2025-09-30: 283/342 current-quarter names ended in ' Type'), instrument-less 'Type Maturity Date', 'Convertible Promissory Note', 'Class A LP Units', 'Class A Interests', 'Series A Preferred Stock'."
     }
   },
   "archetypes": {
@@ -141,7 +142,7 @@
   },
   "invariants": {
     "unclassified_rate": {
-      "max_pct": 0.10
+      "max_pct": 0.1
     }
   }
 }

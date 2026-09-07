@@ -1814,6 +1814,347 @@ class TestPrepareBdc:
             f"Expected 3 equity co-investments, got {len(result)}"
         )
 
+    def test_gsbd_multilevel_pct_hierarchy_extracts_issuer(self):
+        """GSBD 3-level pct hierarchy (category - country - lien - company)
+        must yield the company, not 'United States - N% ... - N% Company'.
+
+        mg3 finding: 11 of 15 tier_random D_fuzzy WRONG edges were GSBD rows
+        whose issuer_name kept the country and lien levels with quarterly
+        changing pct-of-net-assets, so exact-name never matched across
+        quarters and Jaro-Winkler merged different borrowers.
+        """
+        df = self._make_bdc_df([
+            {
+                "cik": "0001572694",
+                "entity_name": "Goldman Sachs BDC, Inc.",
+                "accession_number": "0001572694-25-000010",
+                "report_date": "2025-03-31",
+                "investment_identifier": (
+                    "Investment Debt Investments - 212.84% United States - "
+                    "200.15% 1st Lien/Senior Secured Debt - 188.54% Volt "
+                    "Bidco, Inc. (dba Power Factors) Industry Independent "
+                    "Power and Renewable Electricity Producers Interest Rate "
+                    "10.18% Reference Rate and Spread S + 5.75% Maturity 04/23/29"
+                ),
+                "fair_value": 5_000_000,
+                "cost": 5_000_000,
+                "principal_amount": 5_000_000,
+                "interest_rate": 0.1018,
+            },
+            {
+                # en-dash rendered as U+FFFD in the cached filing
+                "cik": "0001572694",
+                "entity_name": "Goldman Sachs BDC, Inc.",
+                "accession_number": "0001572694-24-000020",
+                "report_date": "2024-06-30",
+                "investment_identifier": (
+                    "Investment Debt Investments - 216.8% United States "
+                    "� 210.4% 1st Lien/Senior Secured Debt � 195.8% "
+                    "DECA Dental Holdings LLC Industry Health Care Providers "
+                    "& Services Interest Rate 10.18% Reference Rate and Spread "
+                    "S + 5.75% Maturity 08/28/28"
+                ),
+                "fair_value": 4_000_000,
+                "cost": 4_000_000,
+                "principal_amount": 4_000_000,
+                "interest_rate": 0.1018,
+            },
+            {
+                # Legacy 1-level form must keep working
+                "cik": "0001572694",
+                "entity_name": "Goldman Sachs BDC, Inc.",
+                "accession_number": "0001572694-23-000030",
+                "report_date": "2023-06-30",
+                "investment_identifier": (
+                    "Investment 1st Lien/Senior Secured Debt - 188.54% AQ "
+                    "Helios Buyer, Inc. (dba SurePoint) Industry Software "
+                    "Interest Rate 13.26% Reference Rate and Spread S + 8.00% "
+                    "Maturity 12/05/28"
+                ),
+                "fair_value": 2_339_000,
+                "cost": 2_339_000,
+                "principal_amount": 2_339_000,
+                "interest_rate": 0.1326,
+            },
+        ])
+
+        result = _prepare_bdc(df)
+
+        assert len(result) == 3
+        names = set(result["issuer_name"])
+        assert "Volt Bidco, Inc. (dba Power Factors)" in names
+        assert "DECA Dental Holdings LLC" in names
+        assert "AQ Helios Buyer, Inc. (dba SurePoint)" in names
+        for name in names:
+            assert "United States" not in name
+            assert "%" not in name
+
+    def test_silver_point_no_prefix_hierarchy_extracts_issuer(self):
+        """Silver Point (0001646614) dropped the 'Non-Controlled/... Investments'
+        prefix from 2024 on: '1st Lien/Secured Loans United States of America
+        Mercury Bidco LLC Instrument 1st Lien Term Loan Industry ...'. The
+        wrapper regex required the prefix, so 1,599 of 1,867 cohort rows kept
+        the whole identifier as issuer_name (mg3 F1: D_fuzzy WRONG edges,
+        WRONG_MERGE entity clusters)."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0001646614",
+                "entity_name": "Silver Point Specialty Lending Fund",
+                "accession_number": "0001646614-25-000012",
+                "report_date": "2025-03-31",
+                "investment_identifier": (
+                    "1st Lien/Secured Loans United States of America Mercury "
+                    "Bidco LLC Instrument 1st Lien Term Loan Industry Technology "
+                    "Rate S+5.75%, 1.00% Floor Interest Rate 10.05 Original "
+                    "Acquisition Date 5/31/2023 Maturity Date 5/31/2030"
+                ),
+                "fair_value": 3_000_000, "cost": 3_000_000,
+                "principal_amount": 3_000_000, "interest_rate": 0.1005,
+            },
+            {
+                "cik": "0001646614",
+                "entity_name": "Silver Point Specialty Lending Fund",
+                "accession_number": "0001646614-25-000030",
+                "report_date": "2025-09-30",
+                "investment_identifier": (
+                    "1st Lien/Secured Loans Netherlands WeTransfer BV Instrument "
+                    "1st Lien Term Loan Industry Technology Rate E+5.25% Interest "
+                    "Rate 7.38% Original Acquisition Date 7/18/2025 Maturity Date 3/7/2031"
+                ),
+                "fair_value": 2_000_000, "cost": 2_000_000,
+                "principal_amount": 2_000_000, "interest_rate": 0.0738,
+            },
+            {
+                # Legacy prefixed form must keep working
+                "cik": "0001646614",
+                "entity_name": "Silver Point Specialty Lending Fund",
+                "accession_number": "0001646614-23-000020",
+                "report_date": "2023-06-30",
+                "investment_identifier": (
+                    "Non-Controlled/Affiliated Investments Unsecured Debt "
+                    "Luxembourg Takko Fashion Sarl Instrument Subordinated "
+                    "Unsecured Debt Industry Specialty Retail Rate 15.00% "
+                    "(15.00% PIK) Interest Rate 15.00 Original Acquisition Date "
+                    "2/1/2023 Maturity Date 2/1/2028"
+                ),
+                "fair_value": 1_000_000, "cost": 1_000_000,
+                "principal_amount": 1_000_000, "interest_rate": 0.15,
+            },
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 3
+        by_issuer = {r["issuer_name"]: r for _, r in result.iterrows()}
+        assert "Mercury Bidco LLC" in by_issuer
+        assert "WeTransfer BV" in by_issuer
+        assert "Takko Fashion Sarl" in by_issuer
+        assert "1st Lien Term Loan" in by_issuer["Mercury Bidco LLC"]["instrument_description"]
+
+    def test_blackrock_dlc_flat_hierarchy_extracts_issuer(self):
+        """BlackRock Direct Lending Corp (0001834543): 'Debt Investments
+        <Industry> <Company> Instrument <instr> Ref SOFR(Q) ... Maturity
+        m/d/yyyy' with no delimiters; 3,020 of 3,028 cohort rows were unparsed
+        (mg3 F1: shared section+industry boilerplate merged distinct borrowers
+        in entity resolution). Older rows omit the 'Instrument' keyword."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0001834543",
+                "entity_name": "BlackRock Direct Lending Corp.",
+                "accession_number": "0001834543-25-000040",
+                "report_date": "2025-09-30",
+                "investment_identifier": (
+                    "Debt Investments Media Streamland Media Midco, LLC Instrument "
+                    "First Lien Delayed Draw Term Loan Ref SOFR(Q) Floor 1% Spread "
+                    "5.76% Total Coupon 9.82% Maturity 3/31/2029"
+                ),
+                "fair_value": 3_000_000, "cost": 3_000_000,
+                "principal_amount": 3_000_000, "interest_rate": 0.0982,
+            },
+            {
+                "cik": "0001834543",
+                "entity_name": "BlackRock Direct Lending Corp.",
+                "accession_number": "0001834543-23-000010",
+                "report_date": "2023-03-31",
+                "investment_identifier": (
+                    "Debt Investments Software AlphaSense, Inc. First Lien Term "
+                    "Loan Ref SOFR(M) Floor 1.00% Spread 7.00% Total Coupon 12.44% "
+                    "Maturity 3/11/2027"
+                ),
+                "fair_value": 2_000_000, "cost": 2_000_000,
+                "principal_amount": 2_000_000, "interest_rate": 0.1244,
+            },
+            {
+                "cik": "0001834543",
+                "entity_name": "BlackRock Direct Lending Corp.",
+                "accession_number": "0001834543-25-000040",
+                "report_date": "2025-09-30",
+                "investment_identifier": (
+                    "Equity Securities Diversified Financial Services Worldremit "
+                    "Group Limited (United Kingdom) Instrument Warrants to Purchase "
+                    "Series D Stock Maturity/ Expiration 2/11/2031"
+                ),
+                "fair_value": 100_000, "cost": 50_000, "shares_held": 1000,
+            },
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 3
+        by_issuer = {r["issuer_name"]: r for _, r in result.iterrows()}
+        assert "Streamland Media Midco, LLC" in by_issuer
+        assert "AlphaSense, Inc." in by_issuer
+        assert "Worldremit Group Limited (United Kingdom)" in by_issuer
+        assert "Delayed Draw" in by_issuer["Streamland Media Midco, LLC"]["instrument_description"]
+
+    def test_trinity_flat_hierarchy_extracts_issuer(self):
+        """Trinity Capital (0001786108): 'Portfolio Company Debt Securities-
+        United States <Industry> <Company> Type of Investment <type>
+        Investment Date ...'; 5,008 of 5,065 cohort rows unparsed. Industry
+        vocabulary is Trinity's own (venture sectors), declared in the wrapper."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "accession_number": "0001786108-25-000050",
+                "report_date": "2025-12-31",
+                "investment_identifier": (
+                    "Portfolio Company Debt Securities- United States Finance and "
+                    "Insurance Tilt Finance, Inc. (dba Empower Financial, Inc.) Type "
+                    "of Investment Secured Loan Investment Date February 8, 2024 "
+                    "Maturity Date May 1, 2028 Interest Rate Variable interest rate "
+                    "Prime + 4.8% or Floor rate 11.5%; EOT 3.8%"
+                ),
+                "fair_value": 3_000_000, "cost": 3_000_000,
+                "principal_amount": 3_000_000, "interest_rate": 0.115,
+            },
+            {
+                # no space before 'Type', industry with parenthetical
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "accession_number": "0001786108-25-000050",
+                "report_date": "2025-12-31",
+                "investment_identifier": (
+                    "Portfolio Company Debt Securities- United States Software as a "
+                    "Service (\"SaaS\") OrgChart, LLCType of Investment Secured Loan "
+                    "Investment Date January 13, 2026 Maturity Date January 13, 2031"
+                ),
+                "fair_value": 2_000_000, "cost": 2_000_000,
+                "principal_amount": 2_000_000, "interest_rate": 0.1,
+            },
+            {
+                "cik": "0001786108",
+                "entity_name": "Trinity Capital Inc.",
+                "accession_number": "0001786108-25-000050",
+                "report_date": "2025-12-31",
+                "investment_identifier": (
+                    "Portfolio Company Warrant Investments- United States Finance "
+                    "and Insurance Under Technologies, Inc. Type of Investment "
+                    "Warrant Investment Date May 3, 2024 Expiration Date May 3, "
+                    "2034 Series Common Stock"
+                ),
+                "fair_value": 100_000, "cost": 50_000, "shares_held": 1000,
+            },
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 3
+        by_issuer = {r["issuer_name"]: r for _, r in result.iterrows()}
+        assert "Tilt Finance, Inc. (dba Empower Financial, Inc.)" in by_issuer
+        assert "OrgChart, LLC" in by_issuer
+        assert "Under Technologies, Inc." in by_issuer
+        assert "Secured Loan" in by_issuer["OrgChart, LLC"]["instrument_description"]
+
+    def test_trinity_instrument_keeps_investment_date_so_equal_draws_survive_dedup(self):
+        """Trinity reports several draws on one company as separate rows that
+        differ only by 'Investment Date'. After the issuer fix (2026-09-06 night
+        rebuild) the instrument was reduced to 'Secured Loan' and 62 rows
+        ($83.3M FV) collapsed under the filing-level affiliation / dimension
+        dedup keys (issuer + instrument + FV + cost + principal). The instrument
+        must keep the investment date, and warrants their 'Series ...' tail."""
+        common = {
+            "cik": "0001786108", "entity_name": "Trinity Capital Inc.",
+            "accession_number": "0001786108-24-000010", "report_date": "2023-12-31",
+            "fair_value": 2_528_000, "cost": 2_500_000, "principal_amount": 2_528_000,
+            "interest_rate": 0.09,
+        }
+        df = self._make_bdc_df([
+            {**common, "investment_identifier": (
+                "Portfolio Company Debt Securities- United States Transportation "
+                "Technology NextCar Holding Company, Inc. Type of Investment Secured "
+                "Loan Investment Date April 18, 2022 Maturity March 31, 2024 Interest "
+                "Rate Variable interest rate Prime + 5.8% or Floor rate 9.0%; EOT 5.3%")},
+            {**common, "investment_identifier": (
+                "Portfolio Company Debt Securities- United States Transportation "
+                "Technology NextCar Holding Company, Inc. Type of Investment Secured "
+                "Loan Investment Date February 23, 2022 Maturity March 31, 2024 Interest "
+                "Rate Variable interest rate Prime + 5.8% or Floor rate 9.0%; EOT 5.3%")},
+            {**common, "fair_value": 47_000, "cost": 30_000, "principal_amount": "",
+             "shares_held": 1000, "investment_identifier": (
+                "Portfolio Company Warrant Investments- United States Consumer Products "
+                "& Services Ogee, Inc. Type of Investment Warrant Investment Date "
+                "September 29, 2023 Expiration Date September 29, 2033 Series Preferred "
+                "Series A-3")},
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 3
+        nextcar = result[result["issuer_name"] == "NextCar Holding Company, Inc."]
+        assert len(nextcar) == 2
+        assert nextcar["instrument_description"].str.contains("Investment Date").all()
+        assert nextcar["instrument_description"].nunique() == 2
+        ogee = result[result["issuer_name"] == "Ogee, Inc."]
+        assert len(ogee) == 1
+        assert "Series Preferred" in ogee["instrument_description"].iloc[0]
+
+    def test_fidelity_central_type_keyword_does_not_leak_into_issuer(self):
+        """From 2025-09-30 Fidelity Private Credit Co inserts the word 'Type'
+        before the instrument ('... Aeron Buyer, LLC Type Term Loan ...').
+        The leaf-guard marker did not know it, so 283 of 342 current-quarter
+        issuer names ended in ' Type' and every chain broke at that quarter
+        ('Aeron Buyer, LLC' -> 'Aeron Buyer, LLC Type'). Also covers the
+        instrument-less 'Type Maturity Date' and 'Type Class A Interests' forms."""
+        df = self._make_bdc_df([
+            {
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "accession_number": "0000950170-26-000001",
+                "report_date": "2026-03-31",
+                "investment_identifier": (
+                    "Debt Aerospace & Defense Aeron Buyer, LLC Type Term Loan "
+                    "Reference Rate and Spread SOFR + 5.25% Interest Rate 8.95% "
+                    "Maturity Date 1/2/2032"
+                ),
+                "fair_value": 3_000_000, "cost": 3_000_000,
+                "principal_amount": 3_000_000, "interest_rate": 0.0895,
+            },
+            {
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "accession_number": "0000950170-26-000001",
+                "report_date": "2026-03-31",
+                "investment_identifier": (
+                    "Debt Electronic Manufacturing Services Principal Lighting "
+                    "Group Holdings, LLC Type Maturity Date 11/4/2030"
+                ),
+                "fair_value": 2_000_000, "cost": 2_000_000,
+                "principal_amount": 2_000_000, "interest_rate": 0.1,
+            },
+            {
+                "cik": "0001899996",
+                "entity_name": "Fidelity Private Credit Co LLC",
+                "accession_number": "0000950170-26-000001",
+                "report_date": "2026-03-31",
+                "investment_identifier": (
+                    "Packaged Foods & Meats Sabrosura Super Holdings LLC Type "
+                    "Class A Interests"
+                ),
+                "fair_value": 100_000, "cost": 50_000, "shares_held": 1000,
+            },
+        ])
+        result = _prepare_bdc(df)
+        assert len(result) == 3
+        names = set(result["issuer_name"])
+        assert "Aeron Buyer, LLC" in names
+        assert "Principal Lighting Group Holdings, LLC" in names
+        assert "Sabrosura Super Holdings LLC" in names
+        for name in names:
+            assert not name.endswith(" Type")
+
     def test_fidelity_central_hierarchy_extracts_issuer_and_instrument(self):
         """Fidelity Central uses the same hierarchy guard with its own CIK config."""
         df = self._make_bdc_df([
