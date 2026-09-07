@@ -79,6 +79,7 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-08-20 - B2 correction-agent Q4 2025 track record: cross-batch metrics rollup + round-4 fleet acceptance criteria
 - Match-gold batch mg3: first full-cohort position-match gold set (2026-09-05/06)
 - 2026-09-06 - mg3 assessment: where position-match errors come from and what to change
+- 2026-09-07 - Match-gold batch mg4_contested: promotion gate for the contested-assignment flag
 
 ## Quarter-over-quarter EDA ([quarter_eda.md](quarter_eda.md))
 - 2026-07-24 - Why Q1 2026 has fewer facts than Q4 2025 (quarter-over-quarter EDA)

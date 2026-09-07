@@ -40,8 +40,8 @@ WHERE LOWER(source) = 'bdc' AND cik IN ({cik_list})
 n = con.execute("SELECT COUNT(*), COUNT(DISTINCT cik), MAX(report_date) FROM h").fetchone()
 print(f"holdings cohort rows={n[0]} ciks={n[1]} max_date={n[2]} ({time.time()-t0:.0f}s)")
 
-con.execute(f"CREATE TABLE ge AS SELECT * FROM read_csv_auto('{(OUT/'gold_edges.csv').as_posix()}', all_varchar=true)")
-con.execute(f"CREATE TABLE gp AS SELECT * FROM read_csv_auto('{(OUT/'gold_packets.csv').as_posix()}', all_varchar=true)")
+con.execute(f"CREATE TABLE ge AS SELECT * FROM read_csv_auto('{(OUT/'mg3'/'gold_edges.csv').as_posix()}', all_varchar=true)")
+con.execute(f"CREATE TABLE gp AS SELECT * FROM read_csv_auto('{(OUT/'mg3'/'gold_packets.csv').as_posix()}', all_varchar=true)")
 
 # Enrich gold edges with holdings fields on both sides.
 con.execute("""

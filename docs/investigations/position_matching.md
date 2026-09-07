@@ -334,3 +334,8 @@ group layer, which is unbuilt.
    ($9.8B), the 7.4% hard-key-present break pool ($206B, filer-concentrated), subtype
    extraction (resolves 24% of name-duplicate ambiguity; 45% coverage today).
 5. The 10-K boundary is not a problem. Splits/merges are second-order.
+6. **mg4_contested gate (2026-09-07 evening, see agent_campaigns.md):** the contested
+   name-key contest scores 0.98 on 499 random edges and is promoted; the leftover
+   rounds score 0.56 / 0.71 and stay off. Flag-on precision 0.960 excluding leftovers
+   vs 0.919 production. Next: fold the E5/E10 rules into the contest, replay mg3+mg4,
+   rebuild behind the semantic diff and twin-build gates.

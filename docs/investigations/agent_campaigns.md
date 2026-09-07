@@ -1037,3 +1037,67 @@ to carry: the 3 duplicate-lot rows (keep the `One` / `Two` suffix in the instrum
 Trinity / BlackRock DLC -- Trinity's single `hierarchy_trailing_re` slot is taken by
 `Series`), the null-issuer Silver Point 2024Q2 row, and the frontend now shows the new
 names for five funds (28 JSON files rewritten, uncommitted).
+
+## 2026-09-07 - Match-gold batch mg4_contested: promotion gate for the contested-assignment flag
+
+**Question:** are the ~25K edges the `contested_assignment` flag adds precise enough to
+ship? mg3 A/B on old gold showed WRONG 58->29 but MISSED 0->30, with the new edges
+uncovered.
+
+**Batch:** 265 packets built from the flag-on v4 scratch run (225 tier_random on
+flag-on edges, 40 interior_singleton), dispatched 12:43-20:12 from an elevated shell
+(MaxParallel 2, MaxAttempts 3): 265/265 OK, 0 invalid, 0 missing. Analysis
+`scripts/match_gold/chain_experiments/mg4_analysis.py` (sub-codes via name_key /
+entity_id agreement as in E1).
+
+### Per-tier precision, tier_random, UNCERTAIN excluded
+
+| tier | n | precision | wrong | of which tranche hop |
+|---|---|---|---|---|
+| E_entity_fingerprint | 18 | 1.00 | 0 | 0 |
+| B1b_position_key | 238 | 0.99 | 2 | 2 |
+| **SUPP_B2_contested_name_key** | **499** | **0.98** | 10 | 10 |
+| D_fuzzy | 13 | 0.92 | 1 | 0 (1 borrower) |
+| A_within_filing | 109 | 0.91 | 10 | 10 |
+| SUPP_B1b_unique_position_key | 54 | 0.89 | 6 | 6 |
+| B2_exact_name | 44 | 0.84 | 7 | 7 |
+| C_normalized_name | 16 | 0.75 | 4 | 4 |
+| **SUPP_B2_contested_leftover** | **41** | **0.71** | 12 | 12 |
+| **B2_leftover_round** | **39** | **0.56** | 17 | 17 |
+| ALL | 1071 | 0.936 | 69 | 68 |
+
+Excluding the two leftover tiers: 991 edges, 40 wrong, **0.960**. Tranche-hop rate on
+the flag-on build 6.3% (mg3 production 6.1%), wrong-borrower 0.1%.
+
+### Findings
+
+1. **The contested name-key tier is the best name-based tier measured so far:** 0.98
+   on 499 edges, above B2_exact_name (0.84 here, 0.94 in mg3) and SUPP_B2 (0.95 in mg3).
+   Its 10 wrong edges are all tranche hops and all separable: 2 maturity, 4 spread, 5
+   principal >25% -- i.e. the E5 veto (maturity with amendment escape) plus exact spread
+   as a cost would remove most of them. Wrongs are spread across 8 CIKs (0001834543 3/8,
+   the rest 1 each).
+2. **The leftover rounds fail the gate.** 0.56 and 0.71. Their wrong edges are pairs
+   with principal off by orders of magnitude (4,600 vs 68,747,000; 10,804 vs
+   10,227,000 -- thousands-vs-units scale defects in the source) and spread mismatches
+   (9.0 vs 9.5, 5.0 vs 4.75). The leftover pass pairs whatever the greedy pass left,
+   after the equal-maturity guard, and maturity alone is not enough (0 of 29 leftover
+   wrongs differ on maturity). They add 80 of the 1,071 flag-on edges and 29 of the 69
+   wrongs.
+3. **Recall on the flag-on build:** interior_singleton stratum 20 MISSED_LINK / 12
+   CONFIRMED-singleton / 8 insufficient = 62.5% of interior singletons still misses
+   (mg3 production: 76%, 26/34). Directionally better, n too small to claim more; mg5
+   (100 random interior singletons on production) is running for the real estimate.
+
+### Decision
+
+Promote the contested name-key contest (SUPP_B2_contested_name_key) and keep the
+leftover rounds OFF (`CONTESTED_MAX_ROUNDS = 0` or a separate switch). Then apply the
+E5/E10 rules inside the contest: maturity veto with amendment escape first, exact
+spread and cost as tie-breaks before the principal band, rank pairing inside
+static-identical blocks. Re-run `replay_verdicts.py` on mg3 + mg4 (both are pair
+verdicts and replayable) before the production rebuild, and gate the rebuild on
+`diff_outputs.py --semantic` plus twin-build.
+
+**Caveats:** single adjudicator; the flag-on edges were sampled from a scratch build so
+16 of 1,138 edges no longer join to production rows; leftover-tier n is 39-41.

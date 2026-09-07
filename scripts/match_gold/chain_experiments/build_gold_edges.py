@@ -9,8 +9,10 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-G = REPO / "data/output/match_quality/gold/mg3"
-OUT = Path(__file__).resolve().parent / "out"
+BATCH = sys.argv[1] if len(sys.argv) > 1 else "mg3"
+G = REPO / "data/output/match_quality/gold" / BATCH
+OUT = Path(__file__).resolve().parent / "out" / BATCH
+OUT.mkdir(parents=True, exist_ok=True)
 
 ROW_FIELDS = ["row_id", "report_date", "accession_number", "issuer_name",
               "bdc_investment_identifier", "instrument_description", "maturity_date",

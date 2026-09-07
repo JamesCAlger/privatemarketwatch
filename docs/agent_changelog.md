@@ -11357,3 +11357,17 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   adjacent-quarter steps (raw name 93.1%, name_key 94.8%); the 3.6% residual is wrapper
   parse drift concentrated in ~10 CIKs (0001899017 35%, 0001901164 22%), not alias or
   structure variants (0.01%). Script e12_key_stability.py.
+
+## 2026-09-07 - mg4_contested gate result: promote contested name-key, drop leftover rounds
+
+- Fleet 265/265 OK (12:43-20:12, elevated shell, MaxParallel 2), 0 invalid. Scored;
+  analysis `scripts/match_gold/chain_experiments/mg4_analysis.py`; write-up in
+  `docs/investigations/agent_campaigns.md` ("Match-gold batch mg4_contested").
+- tier_random precision: SUPP_B2_contested_name_key 0.98 (n=499), B1b 0.99, E 1.00;
+  leftover tiers 0.56 (B2_leftover_round) / 0.71 (SUPP_B2_contested_leftover). ALL 0.936;
+  0.960 excluding leftovers. All wrongs but one are tranche hops.
+- Decision: promote the contested name-key contest, keep leftover rounds off, then fold in
+  E5/E10 rules (maturity veto w/ amendment escape, exact spread + cost tie-breaks, rank
+  pairing in static-identical blocks). Replay mg3+mg4 before any production rebuild.
+- mg5_recall (100 interior singletons, production build) dispatched 20:13, running.
+- `build_gold_edges.py` now takes a batch id; per-batch output under out/<batch>/.
