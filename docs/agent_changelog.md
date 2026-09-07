@@ -11177,3 +11177,118 @@ resolve a flagged fund if a future shift tips it.
   quality signal.
 - Full suite green during the run: 4887 passed, 13 skipped, 2 xfailed; 0 production
   artifacts modified (mtime-verified across the test window).
+
+## 2026-09-06 - mg3 replay harness, GSBD hierarchy fix, contested-assignment prototype (flag-gated)
+
+Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "mg3
+assessment" and its "Results" subsection. Scratch: `scratch/2026-09-06_mg3_replay/`.
+
+- **New `scripts/match_gold/replay_verdicts.py`** (+ `tests/test_replay_verdicts.py`, 5
+  tests): replays every mg3 gold pair through each matcher tier's guards and reports
+  ADMIT / VETO:<reason>; finds the begin row's same-name twin for WRONG edges.
+  Read-only. Finding: 44/69 WRONG edges have a twin that principal-led ordering would
+  pick; the coexistence rule fires on 27 WRONG vs 1/637 CONFIRMED; 21/24 adjacent
+  MISSED pairs are admitted by some tier and lost in the 1:1 contest.
+- **GSBD wrapper** `data/overrides/bdc_xbrl_wrappers/0001572694.json`:
+  `hierarchy_issuer_re` now skips repeated `<label> - N% ` hierarchy levels (dash,
+  en-dash, U+FFFD). Test `test_gsbd_multilevel_pct_hierarchy_extracts_issuer` in
+  `tests/test_unified_holdings.py` (RED before, GREEN after). Effect on GSBD-only
+  matching: D_fuzzy edges 2,045 -> 42, B2 593 -> 2,587; 4,845 of 5,859 cohort rows
+  change issuer_name. **Production `--unified` rebuild NOT done** (killed by the OS
+  low-memory watchdog with 5 GB free); `private_markets_holdings.csv` still the
+  2026-09-05 build. Run `python scripts/rebuild_outputs.py --unified` then
+  `--returns` and `diff_outputs.py --semantic` in a quiet window; GSBD issuer names
+  on the public site will change.
+- **`pipeline/position_matching.py`**: new keyword `contested_assignment=False` on
+  `match_positions` and `assign_position_ids` (default behaviour byte-identical;
+  `tests/test_position_matching.py` 104/104 incl. 6 new). When on: ordinal-stripped
+  `_name_key` for B2 and the supplementary pass; contested 1:1 ordering principal
+  log-ratio -> maturity rank -> legacy keys (B1b, B2, supplementary); supplementary
+  pass admits names up to `MAX_NAME_MULTIPLICITY` instead of n = 1; coexistence veto
+  (`_coexistence_vetoed`) on all chain edges. New helpers `_name_key_sql`,
+  `_maturity_rank_sql`, `_principal_prox_sql`, constant `COEXISTENCE_TWIN_PA_TOLERANCE`.
+- **A/B on the 54 gold CIKs (per-CIK, exact):** WRONG linked 58 -> 25, CONFIRMED
+  630 -> 615, MISSED recovered 0 -> 23, 0 new WRONG; singleton share 27.1% -> 16.7%,
+  edges 137,587 -> 163,164. The +25.6K edges are unadjudicated supplementary edges on
+  multi-tranche names: **do not promote the flag** until a `contested_supp` stratum is
+  scored. Known losses: revolver/DDTL draws and filers with stable ordinals + <2%
+  principal spread (Capripack). Next: band the principal cost, comma-insensitive
+  name_key, adjudicate the new edges.
+- Verification run: `tests/test_replay_verdicts.py` 5 passed; `tests/test_position_matching.py`
+  104 passed; `tests/test_unified_holdings.py` full file (see session log for result);
+  full suite NOT run. No production artifacts modified (mtime-verified).
+
+- **Addendum (evening):** production `--unified` + `--returns` rebuild COMPLETED with the flag off after the staging test classes passed (98 + 39). Semantic diff: holdings 0, matches 4, position_returns 1, index_returns 1 delta rows; row-level check confirms issuer_name and chain changes are confined to GSBD (3,959 / 3,272 rows), zero FV or principal changes anywhere. Production GSBD edges: D_fuzzy 2,045 -> 42. Baseline NOT refreshed; acceptance-artifact divergence in the diff predates today (baseline holds the 2025-12-31 versions). Details under the investigation heading "Production rebuild completed".
+
+## 2026-09-07 - overnight: contested-assignment v2, position_key supplementary pass, three wrapper fixes, flag-on packet set
+
+Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Overnight run
+2026-09-06/07". Scratch: `scratch/2026-09-06_mg3_replay/` (A/B v2/v3, `flag_on/`).
+
+- **`pipeline/position_matching.py` (flag `contested_assignment`, still default OFF):**
+  `_name_key_sql` drops commas / `(fka ...)` parentheticals / trailing ordinals; contested
+  1:1 ordering is banded principal (`CONTESTED_PA_BAND` 5%, `CONTESTED_PA_BAND_REVOLVER` 4x
+  for REVOLVER / DDTL) -> maturity -> rate -> raw-name equality -> cost -> FV; leftover
+  rounds (`CONTESTED_MAX_ROUNDS` 4) in B2 and the supplementary pass, labelled
+  `B2_leftover_round` / `SUPP_B2_contested_leftover`; contested supplementary edges are
+  `SUPP_B2_contested_name_key` and enforce instrument sub-type continuity. Gold A/B on the
+  54 mg3 CIKs, flag off -> on: WRONG linked 58 -> 29 (v1 25), CONFIRMED 630 -> 619 (v1 615),
+  MISSED recovered 0 -> 29 (v1 23), 0 new WRONG, singleton share 27.1% -> 16.1%. **Not
+  promoted** (supplementary edges still unadjudicated; packets below).
+- **`pipeline/position_matching.py` (flag-independent, production behaviour changes):** new
+  supplementary position_key pass in `assign_position_ids` -- rows with an identical strong
+  `position_key` in adjacent quarters, unique per cik/source/quarter on both sides, FV
+  ratio <= 5; edges `SUPP_B1b_unique_position_key`, edge_type
+  `supplementary_position_key`. Needed because the wrapper fixes below turn the raw
+  identifier (previously acting as a unique per-tranche "name") into the real company
+  name, and the default name pass then refuses multi-tranche companies (Trinity flag-off
+  singleton share 7.9% -> 51.0% without it; 8.8% with it). Gold A/B, flag OFF, key pass
+  alone: MISSED recovered 0 -> 22 of 32, WRONG and CONFIRMED unchanged (58 / 630), singleton
+  share 27.1% -> 18.7%, +19,283 edges on the 54 gold CIKs.
+- **Wrappers** (`data/overrides/bdc_xbrl_wrappers/`): `0001646614.json` Silver Point
+  (`hierarchy_issuer_re` / instrument / condition now accept the 2024+ no-prefix form),
+  `0001834543.json` BlackRock DLC (new `hierarchy_extract` staging block),
+  `0001786108.json` Trinity (new block, inline venture-sector industry vocabulary). Each
+  regex probed against every cohort identifier for the CIK (96.8% / 99.3% / 99.1% of rows
+  extract a clean issuer). Tests: `tests/test_unified_holdings.py::TestPrepareBdc::
+  test_{silver_point_no_prefix,blackrock_dlc_flat,trinity_flat}_hierarchy_extracts_issuer`
+  (RED then GREEN).
+- **`scripts/match_gold/build_packets.py`:** `--holdings-file`, `--edges-file`, `--strata`,
+  `--tiers`; `--max-entities 0` now means no entity packets. **Batch `mg4_contested` built**
+  (271 packets: 231 tier_random chains containing the new tiers + 40 interior_singleton,
+  from the flag-ON v3 cohort run persisted in `scratch/2026-09-06_mg3_replay/flag_on/`);
+  ready for the match-gold worker fleet. Its `SUPP_B1b_unique_position_key` verdicts also
+  score the production key pass.
+- **Wrapper `0001899996.json` Fidelity Private Credit Co:** leaf-guard `marker_re` accepts
+  the `Type` keyword the filer inserts before the instrument from 2025-09-30 (283 of 342
+  current-quarter issuer names ended in ` Type`, breaking every chain at 2025Q3) plus
+  instrument-less / equity forms. Test `test_fidelity_central_type_keyword_does_not_leak_into_issuer`.
+- **Tests:** `tests/test_position_matching.py` +8 (`TestContestedRefinements` 5,
+  `TestSupplementaryPositionKeyPass` 3) = 112 passed (+5 replay); `tests/test_unified_holdings.py`
+  +4 (all 4 GREEN, existing Fidelity tests still pass); `tests/test_match_gold_packets.py` +
+  `test_match_gold_score.py` 19 passed.
+- **Production:** chain launched 21:53 local (staging gate 137 tests -> `--unified` ->
+  `--returns` -> `diff_outputs.py --semantic` -> `--export-frontend`); flag OFF, ships the
+  four wrapper fixes and the key pass. Result recorded in a follow-up entry below.
+- Not done: flag promotion (gate: mg4 packets), Fidelity PCCF `Type` leaf-guard leak, baseline
+  refresh, commit, full pytest suite.
+- **Addendum (same night):** leftover rounds now require equal, known maturities
+  (`TestLeftoverRoundsRequireEqualMaturity`, matcher file 120 passed) after a structural
+  profile showed the leftover tiers at 17% principal agreement and 20-25% maturity
+  disagreement versus 80% / 4-8% for the exact tiers; flag-on leftover edges 1,164 -> 795,
+  gold A/B unchanged (WRONG 29 / CONFIRMED 622 / MISSED 30). `mg4_contested` rebuilt from
+  the v4 run: 265 packets. Profile table in the investigation entry.
+- **Addendum 2 (2026-09-07 00:20):** first production rebuild dropped 62 Trinity rows
+  ($83.3M FV) -- same-company draws differing only by investment date collapsed under the
+  filing-level dedup keys once the instrument lost the date. Fixed in
+  `0001786108.json` (instrument keeps `Investment Date ...`, `hierarchy_trailing_re`
+  appends `Series ...`), test `test_trinity_instrument_keeps_investment_date_so_equal_draws_survive_dedup`
+  (Trinity tests 10 passed). Rebuild rerun; result in the next entry.
+- **Production result (rebuild 2, 01:04):** 780,452 rows (baseline 780,455; the 3 missing
+  are duplicate-lot rows suffixed `One` / `Two`, $1.6M, residual), 0 FV changes, cohort
+  2026-03-31 FV unchanged at 562.012B, issuer_name changed on 14,495 rows across the five
+  wrapped CIKs, classification changed on 226 rows (Trinity / Silver Point equity),
+  production edges 467,691 -> 505,772 (`SUPP_B1b_unique_position_key` 39,869), BDC
+  singleton share 27.6% -> 20.4%, 127,679 rows changed chain-mates. Returns and frontend
+  export rerun (28 JSON files, uncommitted). Baseline not refreshed. Full table in the
+  investigation entry (section 8).
