@@ -11406,3 +11406,13 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   live-row continuation 79.3% -> 84.3%; likely-missed pool (same name+maturity+spread
   present next quarter, not chained) 7.4% / $206B -> 2.6% / $31B. Baseline NOT
   refreshed; frontend NOT exported.
+- **Semantic diff backstop (`diff_outputs.py --semantic`, 21:41-21:53, exit 1 = deltas
+  present):** holdings 7 delta rows -- all carried over from the 2026-09-06/07 wrapper
+  rebuild that the baseline predates (row count 780,455 -> 780,452 = the 3 duplicate-lot
+  rows; classification FV shifts of +-$30M on 226 Trinity / Silver Point rows) -- the
+  `--returns` step itself changes only position ids. matches: A_within_filing -2,500,
+  B2_exact_name +2,335, C_normalized_name -574, D_fuzzy -2,973, B1b +3, E +17 (the
+  name-key contest claims rows the approximate tiers used to take). position_returns /
+  index_returns deltas follow from the re-chained pairs. Also in the diff: frontend JSON
+  and quarter_acceptance artifacts changed by the other session (not this change).
+  Report: `data/output/semantic_diff_report.json`.
