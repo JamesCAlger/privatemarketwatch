@@ -310,11 +310,14 @@ group layer, which is unbuilt.
 
 ### E8 / E9 status
 
-- **E8 registry determinism:** NOT re-run. `pipeline/position_id_registry.py` already
-  persists ids on a drift-resistant natural key (795K keys, 82 retirements) and the
-  twin-build gate covers rebuild determinism. The earlier session claim that ids
-  renumber on every rebuild was wrong; what is missing is a quarter-append test (build N
-  quarters, then N+1, diff ids), not the registry itself.
+- **E8 registry determinism:** NOT re-run. `pipeline/position_id_registry.py` exists
+  (795K natural keys, 82 retirements, last written 2026-07-01) but **is not on the
+  production path**: `assign_position_ids(use_registry=False)` is the default and both
+  `scripts/rebuild_outputs.py --returns` and `pipeline.main` (without
+  `--stable-position-ids`) call it that way, so production ids are still ordinal
+  labels that renumber per rebuild (correction 2026-09-07 evening; the earlier note in
+  this file overstated it). Turning the registry on is a one-flag change with a
+  parity check already written; the quarter-append test is still the missing gate.
 - **E9 recall stratum:** not enlarged. The existing 40-packet interior_singleton stratum
   gives the estimate above; a 100-150 packet random interior-singleton batch would
   tighten it to +-8pp and is the right next fleet after `mg4_contested`.
@@ -339,3 +342,28 @@ group layer, which is unbuilt.
    rounds score 0.56 / 0.71 and stay off. Flag-on precision 0.960 excluding leftovers
    vs 0.919 production. Next: fold the E5/E10 rules into the contest, replay mg3+mg4,
    rebuild behind the semantic diff and twin-build gates.
+
+## 2026-09-07 (evening) - Production result of the contested promotion
+
+Rebuild `--returns` with `CONTESTED_ASSIGNMENT_DEFAULT = True`, leftover rounds off,
+maturity veto with amendment escape (code in `pipeline/position_matching.py`, gold
+A/B in agent_campaigns.md "mg4_contested" addendum). Cohort BDC rows, current build vs
+the 2026-09-05 baseline (`prod_chain_metrics.py`, `e10_static_ambiguous.py`,
+`experiments.py` E7b):
+
+| metric | baseline | now |
+|---|---|---|
+| singleton share (rows) | 27.2% | 15.2% |
+| singleton share (FV) | 9.5% | 3.8% |
+| cohort chain edges | 144,663 | 178,355 |
+| D_fuzzy / C_normalized_name edges | 4,277 / 824 | 1,423 / 390 |
+| rank-order violations in static-ambiguous blocks (E10c) | 10.7% | 3.7% |
+| live-row continuation to next quarter (E7b) | 79.3% | 84.3% |
+| likely-missed pool: hard key present next quarter, not chained | 7.4% / $206B | 2.6% / $31B |
+| cohort FV | $3,440.7B | $3,440.7B |
+
+The approximate tiers shrink because the name-key contest claims their rows first;
+the likely-missed pool falls by a factor of three without any wrapper work. What this
+does NOT show: per-edge precision of the new production build (the gold A/B is the
+proxy: mg3 WRONG linked 52 -> 24, CONFIRMED 669 -> 660), and recall on the remaining
+singletons (mg5_recall, running). Baseline not refreshed; frontend not exported.

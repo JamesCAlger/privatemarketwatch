@@ -949,14 +949,17 @@ def main() -> None:
         t11 = time.time()
         try:
             from pipeline.position_matching import (
-                match_positions, assign_position_ids,
+                CONTESTED_ASSIGNMENT_DEFAULT, match_positions, assign_position_ids,
             )
             from pipeline.index_returns import compute_returns
             from pipeline.match_reconciliation import (
                 build_position_match_reconciliation,
             )
 
-            matches_df = match_positions(unified_df=unified_df)
+            matches_df = match_positions(
+                unified_df=unified_df,
+                contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT,
+            )
 
             # Assign stable position IDs and re-save enriched files
             if unified_df is None:
@@ -967,6 +970,7 @@ def main() -> None:
             unified_df, matches_df = assign_position_ids(
                 unified_df, matches_df,
                 use_registry=getattr(args, "stable_position_ids", False),
+                contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT,
             )
             # assign_position_ids reorders to UNIFIED_COLUMNS, which drops the
             # appended row_id/row_id_basis -- re-derive before the re-save

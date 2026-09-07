@@ -87,4 +87,5 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 
 ## Position matching & chain stability ([position_matching.md](position_matching.md))
 - 2026-09-07 - Chain-stability experiments E1-E7 on the completed mg3 gold set
+- 2026-09-07 (evening) - Production result of the contested promotion
 

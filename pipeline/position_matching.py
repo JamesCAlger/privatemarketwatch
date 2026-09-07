@@ -329,7 +329,47 @@ CONTESTED_PA_BAND_REVOLVER = 4.0
 # Leftover rounds: after the greedy 1:1 pass, re-run the contest on the rows
 # it left unmatched so a sibling taking the nearest partner does not orphan
 # the other tranche.  Bounded; each round only touches still-unmatched rows.
-CONTESTED_MAX_ROUNDS = 4
+# OFF by default since the mg4_contested gold gate (2026-09-07): the leftover
+# tiers scored 0.56 (B2_leftover_round, n=39) and 0.71
+# (SUPP_B2_contested_leftover, n=41) against 0.98 for the first-round name-key
+# contest (n=499).  Their wrong edges pair principals that differ by orders of
+# magnitude (source scale defects) or spreads that differ, which the
+# equal-maturity guard does not catch.  The mechanism is kept behind
+# ``contested_leftover_rounds`` so a future stratum can re-test it.
+CONTESTED_LEFTOVER_ROUNDS = 0
+CONTESTED_MAX_ROUNDS = 1 + CONTESTED_LEFTOVER_ROUNDS
+# Production switch for the contested contest.  Promoted 2026-09-07 on the
+# mg4_contested gold batch: SUPP_B2_contested_name_key 0.98 on 499 random
+# edges (mg3 production baseline for the unique-name pass: 0.95), flag-on
+# tier_random precision 0.960 excluding leftover tiers vs 0.919 production.
+# See docs/investigations/agent_campaigns.md ("Match-gold batch mg4_contested").
+CONTESTED_ASSIGNMENT_DEFAULT = True
+# Maturity veto with amendment escape (experiment E5,
+# docs/investigations/position_matching.md).  On the mg3 gold set a strict
+# maturity veto loses 2.6% of confirmed edges to extensions / amendments in
+# which the lot's principal and spread are unchanged; the escape keeps 11 of
+# those 16 while still rejecting 92% of wrong-borrower and 21% of
+# wrong-tranche edges.  Contested contest only.
+CONTESTED_AMENDMENT_PA_TOLERANCE = 1.02
+CONTESTED_AMENDMENT_SPREAD_TOLERANCE = 0.01
+
+
+def _maturity_veto_sql(mat_b: str, mat_e: str, pa_b: str, pa_e: str,
+                       spr_b: str, spr_e: str) -> str:
+    """TRUE when the pair passes the maturity veto: either maturity unknown,
+    maturities equal, or the change is an amendment on the same lot (principal
+    within ``CONTESTED_AMENDMENT_PA_TOLERANCE`` and spread within
+    ``CONTESTED_AMENDMENT_SPREAD_TOLERANCE`` or unknown)."""
+    same_lot = (
+        f"(CASE WHEN {pa_b} > 0 AND {pa_e} > 0 "
+        f"THEN ABS(LN({pa_b} / {pa_e})) <= LN({CONTESTED_AMENDMENT_PA_TOLERANCE}) "
+        f"ELSE FALSE END "
+        f"AND ({spr_b} IS NULL OR {spr_e} IS NULL "
+        f"OR ABS({spr_b} - {spr_e}) <= {CONTESTED_AMENDMENT_SPREAD_TOLERANCE}))"
+    )
+    return (
+        f"({mat_b} IS NULL OR {mat_e} IS NULL OR {mat_b} = {mat_e} OR {same_lot})"
+    )
 
 
 def _pa_band_sql(b: str, e: str) -> str:
@@ -643,6 +683,14 @@ def _match_exact_name(
     """
     next_qtr = _next_quarter_sql("b.quarter")
     name_col = "_name_key" if contested else "_name_lower"
+    # Maturity veto with amendment escape on the B2 name contest (contested only).
+    name_mat_veto = (
+        "AND " + _maturity_veto_sql(
+            "TRY_CAST(b.maturity_date AS DATE)", "TRY_CAST(e.maturity_date AS DATE)",
+            "b.pa", "e.pa", "b.bs", "e.bs",
+        )
+        if contested else ""
+    )
     if contested:
         # Banded principal -> maturity -> rate -> raw name (ordinal) -> cost
         # -> FV -> continuous principal.  Cost sits before FV because cost is
@@ -966,6 +1014,7 @@ def _match_exact_name(
         -- Instrument sub-type continuity
         AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
              OR b._inst_subtype = e._inst_subtype)
+        {name_mat_veto}
     ),
     -- B2: 1:1 enforcement (attribute penalty + FV + rate + maturity + principal,
     -- or principal-led when contested_assignment is on)
@@ -1048,7 +1097,7 @@ _TIER_B_COLUMNS = (
 
 def _match_exact_name_leftover_rounds(
     con: duckdb.DuckDBPyConnection,
-    max_rounds: int = CONTESTED_MAX_ROUNDS,
+    max_rounds: int = CONTESTED_LEFTOVER_ROUNDS,
 ) -> int:
     """Contested-assignment only: re-run the B2 name-key contest on the rows
     the greedy 1:1 pass left unmatched, up to ``max_rounds`` times.
@@ -1948,6 +1997,7 @@ def match_positions(
     output_file: Optional[Path] = None,
     use_bipartite: bool = True,
     contested_assignment: bool = False,
+    contested_leftover_rounds: int = CONTESTED_LEFTOVER_ROUNDS,
 ) -> pd.DataFrame:
     """Match positions across consecutive quarters.
 
@@ -2072,8 +2122,8 @@ def match_positions(
     # --- Tier B: Exact name / CUSIP ---
     logger.info("Running Tier B: Exact name / CUSIP matching...")
     _match_exact_name(con, contested=contested_assignment)
-    if contested_assignment:
-        _match_exact_name_leftover_rounds(con)
+    if contested_assignment and contested_leftover_rounds > 0:
+        _match_exact_name_leftover_rounds(con, max_rounds=contested_leftover_rounds)
     tier_b_counts = con.execute("""
         SELECT match_method, COUNT(*) AS n FROM tier_b GROUP BY match_method
     """).fetchdf()
@@ -2366,6 +2416,7 @@ def assign_position_ids(
     registry_path=None,
     retirements_path=None,
     contested_assignment: bool = False,
+    contested_leftover_rounds: int = CONTESTED_LEFTOVER_ROUNDS,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Assign stable position_id values to unified holdings and match pairs.
 
@@ -2653,6 +2704,7 @@ def assign_position_ids(
         supp_extra_base = (
             ", LOWER(TRIM(CAST(issuer_name AS VARCHAR))) AS _raw"
             ", TRY_CAST(cost AS DOUBLE) AS cost"
+            ", TRY_CAST(basis_spread AS DOUBLE) AS bs"
             f", {_inst_subtype_sql('instrument_description')} AS _inst_subtype"
         )
         supp_extra_pairs = (
@@ -2662,7 +2714,9 @@ def assign_position_ids(
         )
         supp_subtype_cond = (
             "AND (a._inst_subtype IS NULL OR b._inst_subtype IS NULL "
-            "OR a._inst_subtype = b._inst_subtype)"
+            "OR a._inst_subtype = b._inst_subtype) "
+            # Maturity veto with amendment escape (E5), as in the B2 contest.
+            "AND " + _maturity_veto_sql("a.mat", "b.mat", "a.pa", "b.pa", "a.bs", "b.bs")
         )
     else:
         # Only use names that appear exactly once per CIK/quarter.
@@ -2752,7 +2806,7 @@ def assign_position_ids(
                      + supp_pairs_cte + " SELECT * FROM pairs")
         con2.execute("CREATE OR REPLACE TEMP TABLE supp_chosen (uid_a BIGINT, uid_b BIGINT)")
         rounds: list[pd.DataFrame] = []
-        for _round in range(CONTESTED_MAX_ROUNDS):
+        for _round in range(1 + contested_leftover_rounds):
             round_df = con2.execute(
                 "WITH cand AS ("
                 "  SELECT * FROM supp_all"

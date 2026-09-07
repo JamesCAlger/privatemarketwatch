@@ -11371,3 +11371,38 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   pairing in static-identical blocks). Replay mg3+mg4 before any production rebuild.
 - mg5_recall (100 interior singletons, production build) dispatched 20:13, running.
 - `build_gold_edges.py` now takes a batch id; per-batch output under out/<batch>/.
+
+## 2026-09-07 - Contested assignment promoted to production; leftover rounds off; maturity veto
+
+- `pipeline/position_matching.py`: `CONTESTED_ASSIGNMENT_DEFAULT = True`;
+  `CONTESTED_LEFTOVER_ROUNDS = 0` (mechanism kept behind a new
+  `contested_leftover_rounds` parameter on `match_positions` / `assign_position_ids`);
+  new `_maturity_veto_sql` (maturities unknown/equal, or principal within 2% and spread
+  within 1bp = amendment escape) applied to the contested B2 name contest and the
+  supplementary contested pass (which now also carries `basis_spread`).
+- Callers: `scripts/rebuild_outputs.py --returns` and `pipeline.main --returns` pass
+  `contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT`. Function defaults stay False so
+  existing flag-off tests are unchanged.
+- Tests: `TestContestedPromotion` (8 new); `test_leftover_round_links_draw_after_sibling_takes_nearest`
+  now opts in with `contested_leftover_rounds=1`. `tests/test_position_matching.py` +
+  `tests/test_replay_verdicts.py`: 128 passed.
+- Gold A/B before rebuild (`scripts/match_gold/ab_gold_percik.py`, new, read-only): on
+  mg3 (production-sampled) WRONG linked 52 -> 24, CONFIRMED 669 -> 660, MISSED
+  recovered 27 -> 36 (precision proxy 0.928 -> 0.965, recall flat). Table in
+  agent_campaigns.md (mg4_contested entry, addendum).
+- Correction: `position_id_registry` is NOT on the production path (`use_registry`
+  defaults False; registry last written 2026-07-01). Production ids still renumber per
+  rebuild. Fixed in position_matching.md E8 note.
+- Production `--returns` rebuild launched 21:30 with the flag on; result + semantic
+  diff recorded in the next entry. Frontend export NOT run (another session holds
+  uncommitted frontend edits from 18:07).
+- **Production result (rebuild `--returns`, 21:30-21:41, flag on):** 500,436 match
+  pairs; supplementary contested rounds 1 (leftovers off); coexistence veto dropped
+  4,136 match + 447 supplementary edges. Cohort BDC (69 CIKs, 266,198 rows, FV
+  unchanged at $3,440.7B): singleton share 27.2% -> 15.2%, singleton FV share 9.5% ->
+  3.8%; cohort edges 144,663 -> 178,355 (SUPP_B2_contested_name_key 78,292 replaces
+  SUPP_B2_unique_exact_name 47,456; D_fuzzy 4,277 -> 1,423; C_normalized_name 824 ->
+  390). E10 rank-order violations inside static-ambiguous blocks 10.7% -> 3.7%. E7b
+  live-row continuation 79.3% -> 84.3%; likely-missed pool (same name+maturity+spread
+  present next quarter, not chained) 7.4% / $206B -> 2.6% / $31B. Baseline NOT
+  refreshed; frontend NOT exported.

@@ -1101,3 +1101,34 @@ verdicts and replayable) before the production rebuild, and gate the rebuild on
 
 **Caveats:** single adjudicator; the flag-on edges were sampled from a scratch build so
 16 of 1,138 edges no longer join to production rows; leftover-tier n is 39-41.
+
+### Addendum 2026-09-07 evening: promotion implemented, gold A/B of the new code
+
+Code (`pipeline/position_matching.py`): `CONTESTED_ASSIGNMENT_DEFAULT = True` wired
+into `scripts/rebuild_outputs.py --returns` and `pipeline.main --returns`; leftover
+rounds off (`CONTESTED_LEFTOVER_ROUNDS = 0`, re-enable per call via
+`contested_leftover_rounds`); maturity veto with amendment escape
+(`_maturity_veto_sql`, principal within 2% and spread within 1bp) on the contested B2
+contest and the supplementary contested pass. Tests: `TestContestedPromotion` (8) +
+one existing leftover test now opts in explicitly; `tests/test_position_matching.py` +
+`tests/test_replay_verdicts.py` 128 passed.
+
+Per-CIK gold A/B (`scripts/match_gold/ab_gold_percik.py`, 59 CIKs, 1,866 pairs from
+mg3 + mg4_contested; A = flag off = prior production, B = new code flag on):
+
+| batch | kind | n | linked A | linked B |
+|---|---|---|---|---|
+| mg3 (production-sampled) | WRONG | 67 | 52 | **24** |
+| mg3 | CONFIRMED | 676 | 669 | 660 |
+| mg3 | MISSED | 40 | 27 | **36** |
+| mg4 (flag-on-sampled) | WRONG | 69 | 33 | 49 |
+| mg4 | CONFIRMED | 986 | 826 | 962 |
+| mg4 | MISSED | 28 | 0 | 0 |
+
+On the unbiased mg3 view: precision proxy 0.928 -> 0.965, recall proxy unchanged (9
+confirmed lost, 9 missed recovered). mg4's B column is favoured by construction (its
+edges were sampled from a flag-on build); its 49 still-linked WRONG include 12
+leftover-labelled pairs that another path now links and 16 `A_within_filing` hops
+the change does not touch. Net over all 1,866 pairs: WRONG linked 85 -> 73, CONFIRMED
+1,495 -> 1,622, MISSED recovered 27 -> 36. Consistent with the 2026-09-06 v4 A/B
+(WRONG 58 -> 29) and slightly better on WRONG with the maturity veto.

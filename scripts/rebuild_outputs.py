@@ -116,17 +116,21 @@ def rebuild_returns():
 
     from pipeline.index_returns import compute_returns
     from pipeline.match_reconciliation import build_position_match_reconciliation
-    from pipeline.position_matching import assign_position_ids, match_positions
+    from pipeline.position_matching import (
+        CONTESTED_ASSIGNMENT_DEFAULT, assign_position_ids, match_positions,
+    )
 
     logger.info("=== Rebuilding position matches ===")
     t0 = time.time()
-    matches_df = match_positions()
+    matches_df = match_positions(contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT)
     logger.info("Matches: %d pairs in %.1f s", len(matches_df), time.time() - t0)
 
     logger.info("=== Assigning position IDs ===")
     t1 = time.time()
     unified_df = pd.read_csv("data/output/private_markets_holdings.csv", dtype=str)
-    unified_df, matches_df = assign_position_ids(unified_df, matches_df)
+    unified_df, matches_df = assign_position_ids(
+        unified_df, matches_df, contested_assignment=CONTESTED_ASSIGNMENT_DEFAULT,
+    )
     # Save unified holdings with position_ids populated
     unified_df.to_csv("data/output/private_markets_holdings.csv", index=False)
     # Save matches with position_ids populated

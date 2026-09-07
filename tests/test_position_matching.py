@@ -2701,9 +2701,12 @@ class TestContestedRefinements:
                  instrument_description="Revolving loan")
         r2e = _u("2024-06-30", "Ideal Image, Revolving loan 2", 500_000, 500_000,
                  instrument_description="Revolving loan")
+        # Leftover rounds are OFF by default since the mg4_contested gate
+        # (0.56 / 0.71 precision); the mechanism stays available explicitly.
         unified = _make_unified([r1, r2, r1e, r2e])
         matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
-                                  contested_assignment=True)
+                                  contested_assignment=True,
+                                  contested_leftover_rounds=1)
         m = matches[matches["match_method"].str.startswith("B2")]
         pairs = {(float(r.begin_principal_amount), float(r.end_principal_amount))
                  for r in m.itertuples()}
@@ -2844,3 +2847,93 @@ class TestLeftoverRoundsRequireEqualMaturity:
                                      contested_assignment=True)
         pid = dict(zip(out["principal_amount"].astype(float), out["position_id"]))
         assert pid[150_000.0] != pid[700_000.0]
+
+
+class TestContestedPromotion:
+    """mg4_contested gate (2026-09-07): leftover rounds are off by default, the
+    contested B2 contest and the supplementary contested pass carry a maturity
+    veto with an amendment escape, and the production switch is on."""
+
+    def _orphan_rows(self):
+        # Greedy 1:1: A2 takes B1 (equal principal). A1 prefers B1 too and
+        # loses; its only other same-name candidate B2 (equal maturity) is
+        # unclaimed, which is exactly what a leftover round would pair.
+        a1 = _u("2024-03-31", "Acme LLC", 600_000, 600_000)
+        a2 = _u("2024-03-31", "Acme LLC", 1_000_000, 1_000_000)
+        b1 = _u("2024-06-30", "Acme LLC", 1_000_000, 1_000_000)
+        b2 = _u("2024-06-30", "Acme LLC", 1_150_000, 1_150_000)
+        return a1, a2, b1, b2
+
+    def test_leftover_rounds_off_by_default(self):
+        unified = _make_unified(list(self._orphan_rows()))
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True)
+        assert (matches["match_method"] == "B2_leftover_round").sum() == 0
+        assert (matches["match_method"] == "B2_exact_name").sum() == 1
+
+    def test_leftover_rounds_can_be_re_enabled_explicitly(self):
+        unified = _make_unified(list(self._orphan_rows()))
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  contested_assignment=True,
+                                  contested_leftover_rounds=1)
+        left = matches[matches["match_method"] == "B2_leftover_round"]
+        assert len(left) == 1
+        assert float(left["begin_principal_amount"].iloc[0]) == 600_000
+        assert float(left["end_principal_amount"].iloc[0]) == 1_150_000
+
+    def test_contested_b2_vetoes_maturity_change_with_principal_change(self):
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01")
+        x = _u("2024-06-30", "Acme LLC", 3_000_000, 3_000_000, mat="2031-01-01")
+        unified = _make_unified([a, x])
+        on = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                             contested_assignment=True)
+        assert (on["match_method"] == "B2_exact_name").sum() == 0
+        # Flag off keeps maturity as a cost only (unchanged behaviour).
+        off = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]))
+        assert (off["match_method"] == "B2_exact_name").sum() == 1
+
+    def test_contested_b2_amendment_escape_keeps_same_lot(self):
+        # Extension: maturity moves, principal and spread unchanged.
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01")
+        x = _u("2024-06-30", "Acme LLC", 4_900_000, 5_000_000, mat="2031-01-01")
+        unified = _make_unified([a, x])
+        on = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                             contested_assignment=True)
+        assert (on["match_method"] == "B2_exact_name").sum() == 1
+
+    def test_contested_b2_amendment_escape_needs_same_spread(self):
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01", bs="5.75")
+        x = _u("2024-06-30", "Acme LLC", 4_900_000, 5_000_000, mat="2031-01-01", bs="6.50")
+        unified = _make_unified([a, x])
+        on = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                             contested_assignment=True)
+        assert (on["match_method"] == "B2_exact_name").sum() == 0
+
+    def test_supplementary_contested_pass_applies_maturity_veto(self):
+        z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
+        z2 = _u("2024-06-30", "Zeta Corp", 101_000, 100_000)
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01")
+        x = _u("2024-06-30", "Acme LLC", 3_000_000, 3_000_000, mat="2031-01-01")
+        unified = _make_unified([z1, z2, a, x])
+        out, _ = assign_position_ids(unified, _manual_match(z1, z2),
+                                     contested_assignment=True)
+        pid = dict(zip(out["principal_amount"].astype(float), out["position_id"]))
+        assert pid[5_000_000.0] != pid[3_000_000.0]
+
+    def test_supplementary_contested_pass_amendment_escape(self):
+        z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
+        z2 = _u("2024-06-30", "Zeta Corp", 101_000, 100_000)
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01")
+        x = _u("2024-06-30", "Acme LLC", 4_900_000, 5_020_000, mat="2031-01-01")
+        unified = _make_unified([z1, z2, a, x])
+        out, _ = assign_position_ids(unified, _manual_match(z1, z2),
+                                     contested_assignment=True)
+        pid = dict(zip(out["principal_amount"].astype(float), out["position_id"]))
+        assert pid[5_000_000.0] == pid[5_020_000.0]
+
+    def test_production_switch_is_on(self):
+        from pipeline.position_matching import (
+            CONTESTED_ASSIGNMENT_DEFAULT, CONTESTED_LEFTOVER_ROUNDS,
+        )
+        assert CONTESTED_ASSIGNMENT_DEFAULT is True
+        assert CONTESTED_LEFTOVER_ROUNDS == 0
