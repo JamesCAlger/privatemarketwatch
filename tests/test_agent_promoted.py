@@ -276,6 +276,18 @@ def test_apply_promoted_rules_row_add_fills_identity():
     assert audits[0]["rows_changed"] == 1
 
 
+def test_apply_promoted_rules_row_add_cik_is_padded_even_when_supplied():
+    df = _holdings_frame()
+    rule = _valid_rule(
+        rule_type="row_add", action="add", predicate=None,
+        positions=[{"cik": "123", "report_date": "2025-06-30", "issuer_name": "Recovered Co",
+                    "fair_value": 999.0, "bdc_dimensions_raw": "axis=Recovered",
+                    "source_row_id": "accession 0001 table 2 row 9"}])
+    del rule["predicate_sql"]
+    out, _ = ap.apply_promoted_rules(df, {"0000000123": [rule]})
+    assert set(out["cik"].unique()) == {"0000000123", "0000000456"}
+
+
 def test_apply_promoted_rules_row_add_superseded_not_drift():
     """When improved extraction natively captures a row a row_add rule used to
     recover, the _apply_add dup-skip guard skips it (no double-count) and the

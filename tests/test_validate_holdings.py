@@ -5336,3 +5336,25 @@ class TestAuditedRowAddExcusal:
         ])
         out = build_source_reconciliation_residual_classification(detail)
         assert set(out["mechanism"]) == {"blocking_pipeline_only_position"}
+
+
+def test_check_cik_format_flags_unpadded_rows():
+    from pipeline.validate_holdings import check_cik_format
+    df = pd.DataFrame([
+        {"cik": "0001715933", "report_date": "2026-03-31", "fair_value": "100"},
+        {"cik": "1715933", "report_date": "2026-03-31", "fair_value": "5330000"},
+        {"cik": "0001715933", "report_date": "2025-12-31", "fair_value": "200"},
+    ])
+    res = check_cik_format(df)
+    assert list(res.columns) == ["cik", "n_rows", "fair_value_sum", "issue"]
+    assert len(res) == 1
+    assert res.iloc[0]["cik"] == "1715933"
+    assert res.iloc[0]["n_rows"] == 1
+    assert float(res.iloc[0]["fair_value_sum"]) == 5330000.0
+    assert res.iloc[0]["issue"] == "cik_not_10_digits"
+
+
+def test_check_cik_format_clean_frame_is_empty():
+    from pipeline.validate_holdings import check_cik_format
+    df = pd.DataFrame([{"cik": "0000000123", "report_date": "2026-03-31", "fair_value": "1"}])
+    assert check_cik_format(df).empty

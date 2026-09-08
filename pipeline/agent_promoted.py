@@ -547,6 +547,10 @@ def apply_promoted_rules(
                 if len(names):
                     corrected.loc[added & corrected["entity_name"].isna(),
                                   "entity_name"] = sorted(names.mode())[0]
+        # Structural padding: every row in this CIK's slice carries the 10-digit key, whatever
+        # a position dict supplied (agent_rule pads too; this is the production backstop).
+        corrected["cik"] = (corrected["cik"].astype(str).str.replace(r"\D", "", regex=True)
+                            .str.zfill(10))
         for r, a in zip(rules, rule_audits):
             rows, fv = _applied_impact(a)
             authored_rows, authored_fv = _authoring_impact(r)

@@ -1746,6 +1746,26 @@ def check_income_yield_consistency(
     return result
 
 
+def check_cik_format(df: pd.DataFrame) -> pd.DataFrame:
+    """Hard check: every unified row's cik must be exactly 10 digits. A single unpadded
+    row splits its fund across two keys and drops it out of every cik-joined check
+    (conservation, GAV, acceptance). Returns one row per offending cik value; empty = clean."""
+    cols = ["cik", "n_rows", "fair_value_sum", "issue"]
+    if df is None or len(df) == 0 or "cik" not in df.columns:
+        return pd.DataFrame(columns=cols)
+    cik = df["cik"].astype(str)
+    bad = ~cik.str.fullmatch(r"\d{10}")
+    if not bad.any():
+        return pd.DataFrame(columns=cols)
+    sub = df.loc[bad].copy()
+    sub["_fv"] = pd.to_numeric(sub.get("fair_value"), errors="coerce").fillna(0.0)
+    out = (sub.groupby(cik[bad], sort=True)["_fv"]
+           .agg(n_rows="size", fair_value_sum="sum").reset_index())
+    out = out.rename(columns={out.columns[0]: "cik"})
+    out["issue"] = "cik_not_10_digits"
+    return out[cols]
+
+
 def validate_holdings(
     unified_df: Optional[pd.DataFrame] = None,
     universe_df: Optional[pd.DataFrame] = None,
@@ -1812,6 +1832,15 @@ def validate_holdings(
                 if len(outliers) > 0:
                     logger.warning("  %d CIKs with outlier holdings/assets ratio",
                                    len(outliers))
+
+    # 5b. CIK format (hard check; see check_cik_format)
+    cik_bad = check_cik_format(unified_df)
+    reports["cik_format"] = cik_bad
+    if len(cik_bad) > 0:
+        logger.error("  CIK FORMAT: %d non-10-digit cik value(s) on %d rows, FV %.0f -- "
+                     "these rows are invisible to every cik-joined check",
+                     len(cik_bad), int(cik_bad["n_rows"].sum()),
+                     float(cik_bad["fair_value_sum"].sum()))
 
     # Save CSVs
     if len(summary) > 0:

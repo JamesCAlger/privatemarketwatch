@@ -368,6 +368,19 @@ def test_row_add_empty_identifier_never_treated_as_duplicate():
     assert len(corrected) == 2
 
 
+def test_row_add_pads_position_cik_to_10_digits():
+    """A row_add position that carries its own 7-digit cik must land 10-digit padded
+    (Q1 2026: one TCW Star cash row landed as '1715933' and split the fund across two keys)."""
+    df = pd.DataFrame([{**_h("0000000001", "2025q", 400.0), "bdc_investment_identifier": "A"}])
+    pos = {"cik": "1715933", "report_date": "2025q", "fair_value": 55.0,
+           "bdc_investment_identifier": "Money Market Fund",
+           "bdc_dimensions_raw": "investmentidentifieraxis=mmf",
+           "source_row_id": "staging:mmf"}
+    corrected, audits = apply_rules(df, [_addrule(positions=[pos])])
+    assert audits[0]["rows_added"] == 1
+    assert corrected.iloc[-1]["cik"] == "0001715933"
+
+
 # -- gate guards: anchor-sanity (delete-to-balance) + over-addition ----------------------
 
 def test_gate_fails_aggregate_row_add_on_empty_quarter():

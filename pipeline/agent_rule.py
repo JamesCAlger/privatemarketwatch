@@ -371,6 +371,10 @@ def _apply_add(work, r):
                 row[k] = v
             elif k != "source_row_id":          # extra source columns the holdings schema lacks
                 ignored.add(k)
+        # CIK padding (Q1 2026: a 7-digit cik on an added row split TCW Star across two keys
+        # and hid the row from the conservation join). Digits only, zero-padded to 10.
+        if "cik" in cols and row.get("cik") not in (None, ""):
+            row["cik"] = re.sub(r"\D", "", str(row["cik"])).zfill(10)
         row["_rid"] = next_rid
         next_rid += 1
         new_rows.append(row)
