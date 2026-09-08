@@ -35,6 +35,11 @@ ACTION_TRACK_ONLY = "TRACK_ONLY"
 
 GAV_BDC_FAIL_RULE = "GAV_BDC01"
 GAV_BDC_WARN_RULE = "GAV_BDC02"
+# In-band FAIL: reconciliation_status is FAIL but the ratio sits inside the extreme
+# 0.3/5.0 band, which is what a STRONG anchor (comparison_source =
+# investments_at_fair_value) outside [0.95, 1.05] produces. Without this rule such a
+# row emitted no issue at all.
+GAV_BDC_FAIL_STRONG_RULE = "GAV_BDC03"
 GAV_NPORT_SCOPE_RULE = "GAV_NPORT01"
 
 ISSUE_COLUMNS = [
@@ -1006,6 +1011,22 @@ def _adapt_gav(df: Optional[pd.DataFrame]) -> pd.DataFrame:
                 "action": ACTION_BLOCK_VERIFIED,
                 "value": str(ratio),
                 "message": "BDC GAV reconciliation ratio is extreme",
+                "evidence": evidence,
+            })
+        elif status == "FAIL":
+            # Placed before the WARN branch so an in-band FAIL (a STRONG anchor outside
+            # the tightened [0.95, 1.05] band) is never downgraded to a WARN issue.
+            rows.append({
+                "source": "bdc" if holdings_source == "bdc" else "",
+                "cik": row.get("cik", ""),
+                "report_date": row.get("report_date", ""),
+                "column": "fair_value",
+                "rule_id": GAV_BDC_FAIL_STRONG_RULE,
+                "severity": SEVERITY_FAIL,
+                "evidence_strength": EVIDENCE_STRONG,
+                "action": ACTION_BLOCK_VERIFIED,
+                "value": str(ratio),
+                "message": "BDC GAV reconciliation failed inside the extreme-ratio band",
                 "evidence": evidence,
             })
         elif ratio < 0.8 or ratio > 1.2 or (blocks_verified and status == "WARN"):

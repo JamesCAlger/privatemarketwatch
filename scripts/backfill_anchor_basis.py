@@ -72,9 +72,13 @@ def classify_leaf(leaf: dict) -> str:
     gt, cf = _num(leaf.get("grand_total")), _num(leaf.get("companyfacts_fv"))
     if gt is None or cf is None or cf <= 0:
         return ""
-    # ORDER IS LOAD-BEARING: numeric equality is tested BEFORE the label test. Real leaf 2052152
-    # ("Total Investments before Cash Equivalents", grand_total == companyfacts_fv) depends on it.
-    # Pinned by tests/test_backfill_anchor_basis.py::test_classify_leaf.
+    # The two branches are mutually exclusive by their numeric guards alone: cf > 0 here, so
+    # abs(gt - cf) <= _TOL * cf and gt > cf * (1 + _TOL) can never both hold. Branch order is
+    # therefore NOT load-bearing -- swapping them classifies every leaf identically. What
+    # tests/test_backfill_anchor_basis.py::test_classify_leaf pins is the OUTCOME for the
+    # equality-with-a-cash-label shape (real leaf 2052152, "Total Investments before Cash
+    # Equivalents", grand_total == companyfacts_fv): it must classify as investments_ex_cash,
+    # which the numeric guard below decides on its own.
     if abs(gt - cf) <= _TOL * cf:
         return "investments_ex_cash"
     labels = [str(c.get("label") or "") for c in (leaf.get("components") or [])

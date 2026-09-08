@@ -134,6 +134,46 @@ def test_validate_fund_source_flags_report_quarter_date_mismatch():
     assert f3["evidence_strength"] == "STRONG"
 
 
+def test_validate_fund_source_flags_cash_equivalents_exceeding_investments():
+    """CASH_EQUIV_EXCEEDS_INVESTMENTS guards the companyfacts_fv_plus_cash gate anchor."""
+    result = validate_fund_source(_fund_df([
+        # Flagged: companyfacts row where cash is larger than investments at fair value.
+        {"cik": "0000001001", "investments_at_fair_value": "100000",
+         "cash_equivalents_at_fair_value": "667000"},
+        # Clean: cash well below investments.
+        {"cik": "0000001002", "investments_at_fair_value": "900000",
+         "cash_equivalents_at_fair_value": "50000"},
+        # Null cash: nothing to compare, so the check skips rather than flags.
+        {"cik": "0000001003", "investments_at_fair_value": "900000",
+         "cash_equivalents_at_fair_value": ""},
+    ]))
+
+    checks = result[result["check_code"] == "CASH_EQUIV_EXCEEDS_INVESTMENTS"]
+    by_cik = {row["cik"]: row for _, row in checks.iterrows()}
+    assert len(by_cik) == 3
+    assert by_cik["0000001001"]["status"] == STATUS_FAIL
+    assert by_cik["0000001001"]["severity"] == "WARN"
+    assert by_cik["0000001001"]["evidence_strength"] == "WEAK"
+    assert by_cik["0000001002"]["status"] == STATUS_PASS
+    assert by_cik["0000001003"]["status"] == STATUS_SKIP
+
+
+def test_validate_fund_source_cash_equivalents_check_is_companyfacts_only():
+    """Non-companyfacts rows and absent columns must not produce a cash flag."""
+    result = validate_fund_source(_fund_df([{
+        "source": "nport",
+        "investments_at_fair_value": "100000",
+        "cash_equivalents_at_fair_value": "667000",
+    }]))
+    assert _status(result, "CASH_EQUIV_EXCEEDS_INVESTMENTS") == STATUS_SKIP
+
+    # Older fund_financials.csv without the Task 6 column: the check still runs, as SKIP.
+    without_column = _fund_df([{}])
+    assert "cash_equivalents_at_fair_value" not in without_column.columns
+    result = validate_fund_source(without_column)
+    assert _status(result, "CASH_EQUIV_EXCEEDS_INVESTMENTS") == STATUS_SKIP
+
+
 def test_validate_cross_level_includes_fund_holdings_reconciliation():
     fund = _fund_df([{}])
     holdings = _holdings_df([{}, {}])

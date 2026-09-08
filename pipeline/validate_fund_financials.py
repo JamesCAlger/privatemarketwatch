@@ -340,6 +340,28 @@ def validate_fund_source(df: pd.DataFrame) -> pd.DataFrame:
         "distribution rate exceeds income yield heuristic",
     )
 
+    # CASH_EQUIV_EXCEEDS_INVESTMENTS: cash_equivalents_at_fair_value feeds the
+    # companyfacts_fv_plus_cash gate anchor. A cash figure larger than the fund's own
+    # investments at fair value is implausible and silently flips that fund's anchor
+    # basis, so flag it. Informational: WARN severity, weak evidence, non-blocking.
+    if "cash_equivalents_at_fair_value" in fund.columns:
+        cash_equiv = _num(fund["cash_equivalents_at_fair_value"])
+    else:
+        cash_equiv = pd.Series(float("nan"), index=fund.index, dtype=float)
+    investments_fv = _num(fund["investments_at_fair_value"])
+    cash_missing = (
+        fund["source"].astype(str).str.strip().str.lower().ne("companyfacts")
+        | cash_equiv.isna() | investments_fv.isna()
+        | (cash_equiv <= 0) | (investments_fv <= 0)
+    )
+    cash_fail = cash_equiv > investments_fv
+    _append_threshold_results(
+        rows, fund, "CASH_EQUIV_EXCEEDS_INVESTMENTS", cash_equiv, cash_fail, cash_missing,
+        "cash_equivalents_at_fair_value <= investments_at_fair_value",
+        SEVERITY_WARN, EVIDENCE_WEAK,
+        "cash equivalents exceed investments at fair value",
+    )
+
     f18_missing = fund["vehicle_type"].str.lower().ne("bdc") | asset_coverage.isna()
     f18_fail = asset_coverage < 1.5
     _append_threshold_results(

@@ -33,6 +33,7 @@ from pipeline.config import (
     UNIFIED_HOLDINGS_FILE,
     UNIFIED_HOLDINGS_PARQUET_FILE,
 )
+from pipeline.published_basis import CIK10_SQL, REPORT_DATE_KEY_SQL
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger("shadow_conservation_engine")
@@ -211,10 +212,11 @@ def _anchor_table_sql(anchor: Anchor) -> str:
         return f"""
             SELECT f.cik, f.report_date, f.ifv + f.cash AS anchor_value
             FROM (
-                -- substr(...,1,10): _cash_rows and _sum_<rule> normalise report_date the same
-                -- way, so keep the join key 10 chars even if the column parses as TIMESTAMP.
-                SELECT CAST(cik AS VARCHAR) AS cik,
-                       substr(CAST(report_date AS VARCHAR), 1, 10) AS report_date,
+                -- Join keys come from pipeline.published_basis so this anchor, _cash_rows and
+                -- _sum_<rule> normalise cik and report_date identically even if the column
+                -- parses as TIMESTAMP or the cik loses its leading zeros.
+                SELECT {CIK10_SQL} AS cik,
+                       {REPORT_DATE_KEY_SQL} AS report_date,
                        max(TRY_CAST({anchor.column} AS DOUBLE)) AS ifv,
                        max(TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE)) AS cash
                 FROM read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1)
@@ -225,16 +227,20 @@ def _anchor_table_sql(anchor: Anchor) -> str:
             WHERE f.ifv IS NOT NULL AND f.cash IS NOT NULL
         """
     if anchor.kind == "fund_financials":
+        # Same published-basis join keys as the plus_cash branch above: without them a
+        # TIMESTAMP-typed report_date would silently match nothing in _sum_<rule>.
         return f"""
-            SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+            SELECT {CIK10_SQL} AS cik, {REPORT_DATE_KEY_SQL} AS report_date,
                    max(TRY_CAST({anchor.column} AS DOUBLE)) AS anchor_value
             FROM read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1)
             WHERE source='companyfacts' AND {anchor.column} IS NOT NULL
             GROUP BY 1, 2
         """
     if anchor.kind == "schedule_total":
+        # Same published-basis join keys as the fund_financials branches; the inner
+        # period = report_date filter stays on the raw columns (one table, one type).
         return f"""
-            SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+            SELECT {CIK10_SQL} AS cik, {REPORT_DATE_KEY_SQL} AS report_date,
                    max(TRY_CAST({anchor.column} AS DOUBLE)) AS anchor_value
             FROM (
                 SELECT cik, report_date, {anchor.column},

@@ -3,6 +3,7 @@
 import pandas as pd
 
 from pipeline.column_validation import (
+    GAV_BDC_FAIL_STRONG_RULE,
     SEVERITY_FAIL,
     SEVERITY_INFO,
     SEVERITY_WARN,
@@ -454,6 +455,50 @@ class TestReportAdapters:
         assert (_issues_by_rule(issues, "GAV_BDC02")["action"] == "BLOCK_VERIFIED").any()
         assert _issues_by_rule(issues, "GAV_NPORT01").iloc[0]["severity"] == SEVERITY_WARN
         assert len(issues) == 4
+
+    def test_gav_adapter_emits_fail_issue_for_in_band_strong_fail(self):
+        """A STRONG-anchor FAIL inside the 0.3/5.0 band must still emit a FAIL issue."""
+        gav = pd.DataFrame([
+            {
+                "cik": "0000000200",
+                "report_date": "2024-03-31",
+                "gav_ratio": "1.06",
+                "gav_ratio_adjusted": "",
+                "comparison_source": "investments_at_fair_value",
+                "holdings_source": "bdc",
+                "holdings_scope": "bdc_schedule",
+                "denominator_scope": "investment_fair_value",
+                "reconciliation_status": "FAIL",
+                "gav_rule_id": "GAV_BDC01",
+            },
+        ])
+        issues = adapt_validation_reports({"gav_reconciliation": gav})
+        strong = _issues_by_rule(issues, GAV_BDC_FAIL_STRONG_RULE)
+        assert len(strong) == 1
+        assert strong.iloc[0]["severity"] == SEVERITY_FAIL
+        assert strong.iloc[0]["value"] == "1.06"
+        # Never downgraded into the 0.8-1.2 WARN rule.
+        assert _issues_by_rule(issues, "GAV_BDC02").empty
+        assert len(issues) == 1
+
+    def test_gav_adapter_in_band_moderate_pass_emits_no_issue(self):
+        """A MODERATE anchor at the same ratio still reconciles, so no issue."""
+        gav = pd.DataFrame([
+            {
+                "cik": "0000000201",
+                "report_date": "2024-03-31",
+                "gav_ratio": "1.06",
+                "gav_ratio_adjusted": "",
+                "comparison_source": "total_assets",
+                "holdings_source": "bdc",
+                "holdings_scope": "bdc_schedule",
+                "denominator_scope": "total_assets",
+                "reconciliation_status": "PASS",
+                "gav_rule_id": "GAV_BDC01",
+            },
+        ])
+        issues = adapt_validation_reports({"gav_reconciliation": gav})
+        assert issues.empty
 
     def test_aggregate_adapter_suspects_are_warns(self):
         agg = pd.DataFrame([
