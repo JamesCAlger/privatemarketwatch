@@ -229,3 +229,24 @@ def test_write_acceptance_artifacts(tmp_path):
         rows = list(csv.DictReader(f))
     assert len(rows) == 3
     assert set(rows[0].keys()) == set(qa.FUNDS_COLUMNS)
+
+
+def test_stale_investigations_counted_for_cohort_only(tmp_path):
+    inv = tmp_path / "agent_investigate"
+    for cik, in_cohort in (("1", True), ("9", False)):
+        d = inv / cik / "rules"
+        d.mkdir(parents=True)
+        (d / "r.json").write_text("{}", encoding="utf-8")       # rules, never applied -> stale
+    kw = _setup(tmp_path, ledger_rows=[_cons_row("0000000001", "pass"),
+                                       _cons_row("0000000002", "pass"),
+                                       _cons_row("0000000003", "pass")])
+    res = qa.compute_acceptance(target_quarter=Q, investigate_dir=inv, **kw)
+    assert res["metrics"]["investigations"] == {"n_stale": 1, "stale_ciks": ["0000000001"]}
+
+
+def test_missing_investigate_dir_is_zero_stale(tmp_path):
+    kw = _setup(tmp_path, ledger_rows=[_cons_row("0000000001", "pass"),
+                                       _cons_row("0000000002", "pass"),
+                                       _cons_row("0000000003", "pass")])
+    res = qa.compute_acceptance(target_quarter=Q, investigate_dir=tmp_path / "nope", **kw)
+    assert res["metrics"]["investigations"] == {"n_stale": 0, "stale_ciks": []}

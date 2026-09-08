@@ -39,6 +39,7 @@ logger = logging.getLogger(__name__)
 LEDGER_FILE = config.OUTPUT_DIR / "shadow" / "validation_results_ledger.csv"
 QUEUE_FILE = config.OUTPUT_DIR / "review_queue" / "review_queue.csv"
 AUDIT_FILE = config.OUTPUT_DIR / "agent_fix_application_audit.csv"
+INVESTIGATE_DIR = config.OUTPUT_DIR / "agent_investigate"
 
 FUNDS_COLUMNS = [
     "cik",
@@ -129,6 +130,7 @@ def compute_acceptance(
     holdings_path: Path | None = None,
     manifest_path: Path | None = None,
     thresholds_path: Path | None = None,
+    investigate_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Compute the acceptance metrics + threshold checks for one quarter.
 
@@ -210,6 +212,13 @@ def compute_acceptance(
     else:
         logger.warning("promoted-rule audit missing, drift metrics empty: %s", audit_path)
 
+    # --- unfinished investigations (staged rules newer than their apply/gate) ---
+    from pipeline.investigation_state import stale_investigations
+    inv_dir = investigate_dir or INVESTIGATE_DIR
+    stale = stale_investigations(inv_dir, target_quarter, ciks=set(cohort)) if inv_dir.exists() else []
+    if not inv_dir.exists():
+        logger.warning("agent_investigate dir missing, stale metric empty: %s", inv_dir)
+
     # --- per-fund tiers ---
     funds: list[dict[str, Any]] = []
     tier_counts = {"verified": 0, "under_review": 0, "unanchored": 0, "no_holdings": 0}
@@ -286,6 +295,10 @@ def compute_acceptance(
             "n_not_ok": n_noop,
             "n_drift": n_drift,
         },
+        "investigations": {
+            "n_stale": len(stale),
+            "stale_ciks": [s["cik"] for s in stale],
+        },
     }
 
     checks = []
@@ -339,6 +352,7 @@ def compute_acceptance(
             "queue": str(queue_path),
             "audit": str(audit_path),
             "holdings": str(holdings_path),
+            "investigate": str(inv_dir),
         },
         "_funds": funds,  # stripped before the JSON is written (goes to the CSV)
     }
@@ -374,6 +388,7 @@ def cli(argv: list[str] | None = None) -> int:
     parser.add_argument("--audit", type=Path, default=AUDIT_FILE)
     parser.add_argument("--holdings", type=Path, default=None)
     parser.add_argument("--thresholds", type=Path, default=None)
+    parser.add_argument("--investigate-dir", type=Path, default=None)
     parser.add_argument("--out", type=Path, default=None, help="JSON output path override.")
     parser.add_argument("--funds-out", type=Path, default=None, help="Funds CSV path override.")
     args = parser.parse_args(argv)
@@ -385,6 +400,7 @@ def cli(argv: list[str] | None = None) -> int:
         audit_path=args.audit,
         holdings_path=args.holdings,
         thresholds_path=args.thresholds,
+        investigate_dir=args.investigate_dir,
     )
     verdict, quarter = result["verdict"], result["target_quarter"]
     json_path, funds_path = write_acceptance(
