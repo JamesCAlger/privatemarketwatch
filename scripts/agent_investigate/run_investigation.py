@@ -379,10 +379,14 @@ rejected, so ground every rule in the data + filing.
 
 def _measure(cik: str, target_quarter: str) -> dict:
     """Apply the rules authored so far, write corrected holdings, and measure the target-quarter
-    residual + run the gate. The loop's per-iteration assessment."""
+    residual + run the gate. The loop's per-iteration assessment. Also writes apply_audit.json
+    and the gate record (mirroring apply()/gate()'s fingerprint contract) -- status() and the
+    fleet loop call this directly without going through apply()/gate(), and without this a CIK
+    measured only through status() would read as STALE (never applied/gated) later."""
     out = BASE / _norm(cik)
     out.mkdir(parents=True, exist_ok=True)
     rules = load_rules(out / "rules")
+    fp = rules_fingerprint(out / "rules")
     base = _load_holdings(cik)
     corrected, audits = (apply_rules(base, rules) if rules else (base.copy(), []))
     corrected_path = out / f"corrected_holdings.{_norm(cik)}.csv"
@@ -406,6 +410,24 @@ def _measure(cik: str, target_quarter: str) -> dict:
                        if str(e.get("target_quarter")) == str(target_quarter)]
     escalations = dedupe_escalations(raw_escalations)
     noop = None if rules else _noop_gate_verdict(residual_pct, av.tier)
+    # Fingerprint contract (mirrors apply()): record what rules_fingerprint this measurement
+    # saw, so a subsequent gate() does not refuse it as STALE.
+    apply_audit = {"cik": _norm(cik), "n_rules": len(rules), "rows_in": int(len(base)),
+                   "rows_out": int(len(corrected)), "audits": audits,
+                   "n_escalations": len(escalations), "n_escalation_files": len(raw_escalations),
+                   "rules_fingerprint": fp, "corrected_holdings": str(corrected_path),
+                   "via": "status"}
+    (out / "apply_audit.json").write_text(json.dumps(apply_audit, indent=2), encoding="utf-8")
+    if g is not None:
+        _write_gate_record(cik, target_quarter, {
+            "cik": _norm(cik), "target_quarter": target_quarter, "verdict": g.verdict,
+            "anchor_tier": av.tier, "anchor_reason": anchor_reason, "rules_fingerprint": fp,
+            "checks": g.checks, "reasons": g.reasons})
+    elif noop:
+        _write_gate_record(cik, target_quarter, {
+            "cik": _norm(cik), "target_quarter": target_quarter, "verdict": noop["verdict"],
+            "anchor_tier": av.tier, "anchor_reason": anchor_reason, "rules_fingerprint": fp,
+            "checks": {"noop_reconciled": True}, "reasons": noop["reasons"]})
     return {"cik": _norm(cik), "target_quarter": target_quarter, "n_rules": len(rules),
             "value_sum": round(vs, 2), "anchor": anchor, "residual_pct": residual_pct,
             "anchor_tier": av.tier, "anchor_reason": anchor_reason,
@@ -539,7 +561,7 @@ def gate(cik: str, target_quarter: str) -> dict:
                            .get("rules_fingerprint") or "")
         except (OSError, json.JSONDecodeError):
             apply_fp = ""
-    if fp and fp != apply_fp:
+    if fp != apply_fp:
         return _write_gate_record(cik, target_quarter, {
             "cik": _norm(cik), "target_quarter": target_quarter, "verdict": "STALE",
             "rules_fingerprint": fp, "apply_fingerprint": apply_fp,

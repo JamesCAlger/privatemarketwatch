@@ -76,3 +76,48 @@ def test_cik_filter_and_skip_dirs(tmp_path):
     out = stale_investigations(tmp_path, "2026-03-31", ciks={"0000000111"})
     assert [o["cik"] for o in out] == ["0000000111"]
     assert stale_investigations(tmp_path, "2026-03-31", ciks={"0000000222"}) == []
+
+
+# --- F2: n_stale scoped by quarter -- a rule scoped to a different quarter is not
+# unfinished work for THIS quarter. ------------------------------------------------
+
+def _scoped_rule(path, quarters, rule_id="r1"):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"rule_id": rule_id, "rule_type": "row_exclusion",
+                                "scope": {"quarters": quarters}}), encoding="utf-8")
+
+
+def test_stale_only_when_rule_scoped_to_target_quarter(tmp_path):
+    d = tmp_path / "1111111111"
+    _scoped_rule(d / "rules" / "r0.json", ["2025-12-31"])
+    # Not in scope for 2026-03-31 -> never staged/applied for it, so not stale.
+    assert stale_investigations(tmp_path, "2026-03-31") == []
+    # In scope for its own quarter, never applied -> stale.
+    out = stale_investigations(tmp_path, "2025-12-31")
+    assert [o["cik"] for o in out] == ["1111111111"]
+
+
+def test_stale_when_any_rule_in_scope_all_alongside_other_quarter_rule(tmp_path):
+    d = tmp_path / "2222222222"
+    _scoped_rule(d / "rules" / "r0.json", ["2025-12-31"], rule_id="r0")
+    _scoped_rule(d / "rules" / "r1.json", ["all"], rule_id="r1")
+    out = stale_investigations(tmp_path, "2026-03-31")
+    assert [o["cik"] for o in out] == ["2222222222"]
+
+
+def test_reason_applied_before_fingerprinting(tmp_path):
+    q = "2026-03-31"
+    d = _cik_dir(tmp_path, "3333333333", rules=1)
+    (d / "apply_audit.json").write_text("{}", encoding="utf-8")
+    out = stale_investigations(tmp_path, q)
+    assert [o["cik"] for o in out] == ["3333333333"]
+    assert "applied before fingerprinting" in out[0]["reason"]
+
+
+def test_malformed_rule_file_still_makes_cik_stale(tmp_path):
+    q = "2026-03-31"
+    d = tmp_path / "4444444444"
+    (d / "rules").mkdir(parents=True)
+    (d / "rules" / "bad.json").write_text("{bad", encoding="utf-8")
+    out = stale_investigations(tmp_path, q)
+    assert [o["cik"] for o in out] == ["4444444444"]

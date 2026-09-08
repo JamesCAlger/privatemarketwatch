@@ -354,7 +354,11 @@ class PositionKeyIndex:
     """Rows already in the frame, keyed two ways for the duplicate-add guard:
     exact (report_date, identifier, fair_value) and fuzzy (report_date, fair_value) ->
     [(name_key, is_cash)]. Empty identifiers never key on the exact path (fail-open); the
-    fuzzy path keys on fair_value alone so an identifier-less native row is still visible."""
+    fuzzy path keys on fair_value alone so an identifier-less native row is still visible.
+    The CASH branch in contains() matches any CASH row at the same (report_date, fair_value)
+    regardless of name, so an exclude-then-add rule pair that nets to the same fair_value
+    depends on rule application order (an add rule scanning a snapshot built before its
+    matching exclude ran can still see the row it is meant to replace)."""
     DUP_JACCARD = 0.5
 
     def __init__(self, work: pd.DataFrame):
@@ -457,7 +461,10 @@ _APPLIERS = {"row_exclusion": _apply_exclusion, "value_rescale": _apply_rescale,
 
 def apply_rules(df: pd.DataFrame, rules: list[dict]) -> tuple[pd.DataFrame, list[dict]]:
     """Apply validated rules (row_exclusion / value_rescale / dedup) to one CIK's holdings, in
-    order. Pure; trial-only. Per-rule PER-QUARTER audit -- never a blanket cross-quarter number."""
+    order. Pure; trial-only. Per-rule PER-QUARTER audit -- never a blanket cross-quarter number.
+    df must already be scoped to a single CIK's rows: the row_add duplicate-add guard
+    (PositionKeyIndex) keys on (report_date, identifier/name, fair_value), not cik, so a
+    multi-CIK frame can false-positive-suppress an add whose twin exists under a different CIK."""
     work = df.reset_index(drop=True).copy()
     work["_rid"] = range(len(work))
     audits: list[dict] = []

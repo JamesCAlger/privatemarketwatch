@@ -508,6 +508,41 @@ def test_promote_refuses_stale_gate(tmp_path, monkeypatch):
     assert res["status"] == "refused" and res["gate"] == "STALE"
 
 
+def test_gate_stale_when_rules_deleted_after_apply(tmp_path, monkeypatch):
+    """F3: gate()'s STALE guard must also fire when the rule that was applied is later
+    DELETED (fp goes back to "", apply_fingerprint stays non-empty) -- not just when rules
+    change. The old `if fp and fp != apply_fp` skipped this case because fp was falsy."""
+    rules = _wire(tmp_path, monkeypatch)
+    ri.apply("888")
+    for f in rules.glob("*.json"):
+        f.unlink()
+    g = ri.gate("888", "2026-03-31")
+    assert g["verdict"] == "STALE"
+
+
+# --- F1: _measure (status()/fleet loop) must also write the fingerprint contract -----
+# _measure re-applies rules and overwrites corrected_holdings.csv but wrote no
+# apply_audit.json and no gate record -- a CIK measured only through status() then read
+# as STALE by gate() (never applied) even though its rules were faithfully applied.
+
+def test_status_measurement_leaves_gate_non_stale(tmp_path, monkeypatch):
+    rules = _wire(tmp_path, monkeypatch)
+    ri.status("888", "2026-03-31", iteration=1)
+    g = ri.gate("888", "2026-03-31")
+    assert g["verdict"] != "STALE"
+
+
+def test_status_measurement_writes_fingerprint_contract_files(tmp_path, monkeypatch):
+    from pipeline.investigation_state import rules_fingerprint
+    rules = _wire(tmp_path, monkeypatch)
+    fp = rules_fingerprint(rules)
+    ri.status("888", "2026-03-31", iteration=1)
+    gate_rec = json.loads((tmp_path / "888" / "gate.2026-03-31.json").read_text(encoding="utf-8"))
+    assert gate_rec["rules_fingerprint"] == fp
+    audit = json.loads((tmp_path / "888" / "apply_audit.json").read_text(encoding="utf-8"))
+    assert audit["rules_fingerprint"] == fp
+
+
 def test_promote_refuses_pass_noop_when_rules_exist(tmp_path, monkeypatch):
     """Silver Capital shape: a PASS_NOOP verdict ('no rules authored') must never promote a
     rules directory that has since been populated."""

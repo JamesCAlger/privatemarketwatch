@@ -48,10 +48,39 @@ def _read_json(path: Path) -> dict:
         return {}
 
 
+def _rule_in_scope(rule: dict, target_quarter: str) -> bool:
+    """A rule with no scope, or scope.quarters missing/containing "all"/containing
+    target_quarter, applies to this quarter. A malformed rule file reads back as {} from
+    _read_json, which also has no scope -- fail-closed: treat it as in scope."""
+    scope = rule.get("scope") if isinstance(rule, dict) else None
+    if not isinstance(scope, dict):
+        return True
+    quarters = scope.get("quarters")
+    if not quarters:
+        return True
+    return "all" in quarters or str(target_quarter) in quarters
+
+
+def _any_rule_in_scope(rules_dir: Path, target_quarter: str) -> bool:
+    """True if at least one staged *.json rule under rules_dir applies to target_quarter."""
+    rules_dir = Path(rules_dir)
+    if not rules_dir.exists():
+        return False
+    for p in sorted(rules_dir.glob("*.json")):
+        if _rule_in_scope(_read_json(p), target_quarter):
+            return True
+    return False
+
+
 def stale_investigations(base_dir: Path, target_quarter: str,
                          ciks: set[str] | None = None) -> list[dict]:
     """CIKs under base_dir whose staged rules do not match the fingerprint recorded by their
     last apply (apply_audit.json) or their last gate for target_quarter (gate.<q>.json).
+    A CIK counts as stale for target_quarter only if at least one staged rule is IN SCOPE for
+    that quarter (no scope, "all", or the quarter itself) -- a rule scoped solely to a different
+    quarter cannot be unfinished work for this one. The fingerprint itself is still computed
+    over ALL staged files (rules_fingerprint is unchanged); scope only gates whether staleness
+    is reported for this quarter.
     ciks: optional 10-digit filter. CIK dirs are the numeric ones (batch/, routing/ skipped)."""
     base_dir = Path(base_dir)
     out: list[dict] = []
@@ -66,12 +95,22 @@ def stale_investigations(base_dir: Path, target_quarter: str,
         fp = rules_fingerprint(child / "rules")
         if not fp:
             continue                                   # no staged rules -> nothing to be stale
-        apply_fp = str(_read_json(child / "apply_audit.json").get("rules_fingerprint") or "")
+        if not _any_rule_in_scope(child / "rules", target_quarter):
+            continue                                   # staged rules exist but none scope to this quarter
+        audit_path = child / "apply_audit.json"
+        audit_exists = audit_path.exists()
+        audit_obj = _read_json(audit_path) if audit_exists else {}
+        apply_fp = str(audit_obj.get("rules_fingerprint") or "")
         gate_rec = _read_json(child / f"gate.{target_quarter}.json")
         gate_fp = str(gate_rec.get("rules_fingerprint") or "")
         reasons = []
         if apply_fp != fp:
-            reasons.append("rules changed after last apply" if apply_fp else "never applied")
+            if not audit_exists:
+                reasons.append("never applied")
+            elif "rules_fingerprint" not in audit_obj:
+                reasons.append("applied before fingerprinting")
+            else:
+                reasons.append("rules changed after last apply")
         if gate_fp != fp:
             reasons.append("rules changed after last gate" if gate_fp else "never gated for quarter")
         if reasons:
