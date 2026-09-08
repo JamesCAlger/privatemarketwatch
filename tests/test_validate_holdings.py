@@ -4276,31 +4276,41 @@ class TestCheckGavReconciliation:
         assert result.iloc[0]["denominator_scope"] == "full_fund_assets_proxy"
         assert result.iloc[0]["gav_rule_id"] == "GAV_NPORT01"
 
-    def test_ex_sub_ratio_excludes_subsidiary(self):
-        """Adjusted ratio excludes is_subsidiary=1 positions from numerator."""
+    def test_adjusted_ratio_is_published_basis(self):
+        """Spec 2026-09-07 s.1: GAV sums every row, subsidiary rows included. The ex_sub
+        column stays informational. 8M vs 5M anchor -> 1.6 on BOTH ratios -> FAIL on a
+        STRONG anchor."""
         holdings = _make_unified_df([
-            # Parent position
             {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
              "fair_value": "5000000", "source": "bdc", "is_subsidiary": "0"},
-            # Subsidiary duplicate
             {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
              "fair_value": "3000000", "source": "bdc", "is_subsidiary": "1"},
         ])
-        ff = pd.DataFrame([{
-            "cik": "100", "report_date": "2024-03-31",
-            "investments_at_fair_value": "5000000",
-            "total_assets": "6000000",
-        }])
+        ff = pd.DataFrame([{"cik": "100", "report_date": "2024-03-31",
+                            "investments_at_fair_value": "5000000", "total_assets": "6000000"}])
         result = check_gav_reconciliation(holdings, fund_financials_df=ff)
-        assert len(result) == 1
-        # Raw ratio = (5M+3M)/5M = 1.6
-        raw_ratio = float(result.iloc[0]["gav_ratio"])
-        assert abs(raw_ratio - 1.6) < 0.01
-        # Adjusted ratio = 5M/5M = 1.0 (excludes subsidiary)
-        adj_ratio = float(result.iloc[0]["gav_ratio_adjusted"])
-        assert abs(adj_ratio - 1.0) < 0.01
-        assert result.iloc[0]["flag"] == "ok"
+        assert abs(float(result.iloc[0]["gav_ratio"]) - 1.6) < 0.01
+        assert abs(float(result.iloc[0]["gav_ratio_adjusted"]) - 1.6) < 0.01
+        assert float(result.iloc[0]["sum_holdings_fv_ex_sub"]) == 5000000.0
         assert int(result.iloc[0]["has_subsidiary_positions"]) == 1
+        assert result.iloc[0]["reconciliation_status"] == "FAIL"
+
+    def test_strong_anchor_bands_warn_2pct_fail_5pct(self):
+        def _run(fv, ifv=None, ta="10000000"):
+            holdings = _make_unified_df([
+                {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
+                 "fair_value": fv, "source": "bdc", "is_subsidiary": "0"}])
+            ffrow = {"cik": "100", "report_date": "2024-03-31", "total_assets": ta}
+            if ifv is not None:
+                ffrow["investments_at_fair_value"] = ifv
+            res = check_gav_reconciliation(holdings, fund_financials_df=pd.DataFrame([ffrow]))
+            return res.iloc[0]["comparison_confidence"], res.iloc[0]["reconciliation_status"]
+        assert _run("1010000", ifv="1000000") == ("STRONG", "PASS")     # 1.01
+        assert _run("1030000", ifv="1000000") == ("STRONG", "WARN")     # 1.03
+        assert _run("1060000", ifv="1000000") == ("STRONG", "FAIL")     # 1.06
+        assert _run("940000", ifv="1000000") == ("STRONG", "FAIL")      # 0.94
+        conf, status = _run("1060000", ta="1000000")                     # total_assets only
+        assert conf == "MODERATE" and status == "PASS"                   # 1.06 within 0.8-1.2
 
     def test_unreliable_inv_fv_falls_back(self):
         """When inv_fv is wildly different from total_assets, use total_assets."""
@@ -4387,13 +4397,15 @@ class TestCheckGavReconciliation:
         ratio = float(result.iloc[0]["gav_ratio"])
         assert abs(ratio - 0.923) < 0.01
 
-    def test_adjusted_flag_uses_adjusted_ratio(self):
-        """Flag uses adjusted ratio when subsidiary positions exist."""
+    def test_flag_uses_published_basis_with_subsidiary(self):
+        """Spec 2026-09-07 s.1: the flag is computed on the published basis, so
+        subsidiary rows are no longer netted out of the numerator.  Was
+        test_adjusted_flag_uses_adjusted_ratio, which asserted the ex-sub numerator."""
         holdings = _make_unified_df([
             # Parent: 5M
             {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
              "fair_value": "5000000", "source": "bdc", "is_subsidiary": "0"},
-            # Subsidiary: 8M (makes raw total 13M, over_coverage raw)
+            # Subsidiary: 8M (published-basis total 13M)
             {"cik": "100", "entity_name": "BDC A", "report_date": "2024-03-31",
              "fair_value": "8000000", "source": "bdc", "is_subsidiary": "1"},
         ])
@@ -4403,11 +4415,13 @@ class TestCheckGavReconciliation:
             "total_assets": "6000000",
         }])
         result = check_gav_reconciliation(holdings, fund_financials_df=ff)
-        # Raw ratio = 13M/5.5M = 2.36 -> would be over_coverage
-        # Adjusted ratio = 5M/5.5M = 0.91 -> ok
-        assert result.iloc[0]["flag"] == "ok"
+        # Published-basis ratio = 13M/5.5M = 2.36 -> over_coverage on both ratios
+        assert result.iloc[0]["flag"] == "over_coverage"
         adj_ratio = float(result.iloc[0]["gav_ratio_adjusted"])
-        assert abs(adj_ratio - 0.909) < 0.01
+        assert abs(adj_ratio - 2.364) < 0.01
+        # ex-sub numerator survives as an informational column
+        assert float(result.iloc[0]["sum_holdings_fv_ex_sub"]) == 5000000.0
+        assert result.iloc[0]["reconciliation_status"] == "FAIL"
 
     def test_no_subsidiary_passthrough(self):
         """When no subsidiary positions, adjusted ratio equals raw ratio."""

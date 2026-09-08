@@ -1326,10 +1326,9 @@ def check_gav_reconciliation(
         CASE WHEN comparison_value > 0 AND bdc_source_reconciliation_fv IS NOT NULL
              THEN ROUND(bdc_source_reconciliation_fv / comparison_value, 4)
         END AS bdc_source_reconciliation_ratio,
-        -- Adjusted ratio: use ex-sub numerator when CIK has subsidiary positions
-        CASE WHEN comparison_value > 0 AND has_subsidiary_positions = 1
-             THEN ROUND(sum_holdings_fv_ex_sub / comparison_value, 4)
-             WHEN comparison_value > 0
+        -- Published basis (spec 2026-09-07 s.1): every row counts, subsidiary
+        -- positions included.  sum_holdings_fv_ex_sub stays informational.
+        CASE WHEN comparison_value > 0
              THEN ROUND(sum_holdings_fv / comparison_value, 4)
         END AS gav_ratio_adjusted,
         CASE
@@ -1339,15 +1338,11 @@ def check_gav_reconciliation(
                  AND cik IN ({nport_non_indexable_sql})
                 THEN 'non_indexable_denominator'
             WHEN comparison_value > 0
-                 AND (CASE WHEN has_subsidiary_positions = 1
-                           THEN sum_holdings_fv_ex_sub
-                           ELSE sum_holdings_fv END)
-                     / comparison_value > 1.2 THEN 'over_coverage'
+                 AND sum_holdings_fv / comparison_value > 1.2
+                THEN 'over_coverage'
             WHEN comparison_value > 0
-                 AND (CASE WHEN has_subsidiary_positions = 1
-                           THEN sum_holdings_fv_ex_sub
-                           ELSE sum_holdings_fv END)
-                     / comparison_value < 0.3 THEN 'under_coverage'
+                 AND sum_holdings_fv / comparison_value < 0.3
+                THEN 'under_coverage'
             ELSE 'ok'
         END AS flag,
         CASE
@@ -1367,9 +1362,7 @@ def check_gav_reconciliation(
                  AND comparison_value > 0
                  AND bdc_source_reconciliation_fv IS NOT NULL
                  AND bdc_source_reconciliation_fv / comparison_value BETWEEN 0.3 AND 1.2
-                 AND (CASE WHEN has_subsidiary_positions = 1
-                           THEN sum_holdings_fv_ex_sub
-                           ELSE sum_holdings_fv END) / comparison_value < 0.3
+                 AND sum_holdings_fv / comparison_value < 0.3
                 THEN 'source_fv_present_not_indexable'
             WHEN has_bdc_positions = 1
                  AND comparison_value > 0
@@ -1395,14 +1388,8 @@ def check_gav_reconciliation(
         raw_ratio = pd.to_numeric(result.get("gav_ratio"), errors="coerce")
         ratio = ratio.fillna(raw_ratio)
         comparison = pd.to_numeric(result.get("comparison_value"), errors="coerce")
-        numerator = pd.to_numeric(result.get("sum_holdings_fv_ex_sub"), errors="coerce")
-        if "has_subsidiary_positions" in result.columns:
-            has_sub = pd.to_numeric(
-                result["has_subsidiary_positions"], errors="coerce"
-            ).fillna(0).astype(int) == 1
-            numerator = numerator.where(has_sub, pd.to_numeric(
-                result.get("sum_holdings_fv"), errors="coerce"
-            ))
+        # Published basis (spec 2026-09-07 s.1): every row counts; ex_sub is informational only.
+        numerator = pd.to_numeric(result.get("sum_holdings_fv"), errors="coerce")
         result["residual_fv"] = (numerator - comparison).round(4)
         result["residual_pct"] = ((numerator - comparison) / comparison).round(6)
 
@@ -1437,6 +1424,12 @@ def check_gav_reconciliation(
             & status.eq("PASS")
             & ((ratio < 0.8) | (ratio > 1.2))
         ] = "WARN"
+        # STRONG anchor (companyfacts investments_at_fair_value): the published-basis numerator
+        # should match a filer-tagged total tightly. WARN > 2%, FAIL > 5% (spec s.3).
+        strong = comparison_source == "investments_at_fair_value"
+        status[(holdings_source == "bdc") & strong & status.eq("PASS")
+               & ((ratio < 0.98) | (ratio > 1.02))] = "WARN"
+        status[(holdings_source == "bdc") & strong & ((ratio < 0.95) | (ratio > 1.05))] = "FAIL"
         status[
             (holdings_source == "nport")
             & comparison_source.ne("")
