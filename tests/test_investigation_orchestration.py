@@ -601,3 +601,68 @@ def test_anchor_candidates_use_basis(tmp_path, monkeypatch):
         "components": [{"label": "x", "value": 999.0, "source": "s"}],
         "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
     assert ri.load_anchor_candidates("889")[q] == {"companyfacts_fv": 500.0}
+
+
+def test_outlier_series_includes_plus_cash_quarters(tmp_path, monkeypatch):
+    """A cash-holding fund's quarters carry 'companyfacts_fv_plus_cash' INSTEAD of
+    'companyfacts_fv'. They must still reach the cross-quarter outlier series, or the guard that
+    turns a mis-extracted anchor into NONE/escalate goes dark for exactly those funds."""
+    qs = ["2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"]
+    vals = [1000.0, 1000.0, 1000.0, 10000.0]      # last quarter is a ~10x mis-extraction
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text(
+        "cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+        + "".join(f"0000000891,{q},companyfacts,{v:.0f},20\n" for q, v in zip(qs, vals)),
+        encoding="utf-8")
+    monkeypatch.setattr(pipeline_config, "FUND_FINANCIALS_FILE", ff)
+    monkeypatch.setattr(ri, "ANCHOR_OVERRIDES", tmp_path / "agent_anchor")
+    holdings = pd.DataFrame(
+        [{"cik": "891", "report_date": q, "fair_value": v, "asset_category": "LOAN"} for q, v in zip(qs, vals)]
+        + [{"cik": "891", "report_date": q, "fair_value": 20.0, "asset_category": "CASH"} for q in qs])
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: holdings)
+
+    # every quarter is upgraded to the published-rows candidate
+    assert ri.load_anchor_candidates("891") == {
+        q: {"companyfacts_fv_plus_cash": v + 20.0} for q, v in zip(qs, vals)}
+
+    candidates, flags = ri._candidates_with_outlier_filter("891")
+    assert set(flags) == set(qs)                      # all four quarters reached the series
+    assert flags[qs[-1]].flagged is True              # the 10x quarter is caught
+    assert candidates[qs[-1]] == {}                   # suspect anchor removed -> NONE -> escalate
+    assert all(not flags[q].flagged for q in qs[:-1])
+    assert candidates[qs[0]] == {"companyfacts_fv_plus_cash": 1020.0}
+
+
+def test_ex_cash_override_does_not_displace_plus_cash(tmp_path, monkeypatch):
+    """An investments_ex_cash override is a LOWER-basis anchor than the published-rows
+    companyfacts_fv_plus_cash candidate; it must not pop it. A published_rows override still does."""
+    q = "2026-03-31"
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text("cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+                  f"0000000892,{q},companyfacts,1000,100\n", encoding="utf-8")
+    monkeypatch.setattr(pipeline_config, "FUND_FINANCIALS_FILE", ff)
+    ov = tmp_path / "agent_anchor"
+    monkeypatch.setattr(ri, "ANCHOR_OVERRIDES", ov)
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: pd.DataFrame(
+        [{"cik": "892", "report_date": q, "fair_value": 1000.0, "asset_category": "LOAN"},
+         {"cik": "892", "report_date": q, "fair_value": 100.0, "asset_category": "CASH"}]))
+    assert ri.load_anchor_candidates("892")[q] == {"companyfacts_fv_plus_cash": 1100.0}
+
+    # ex-cash override, 9% below the plus-cash candidate (the cash balance) -> plus_cash SURVIVES
+    (ov / "892").mkdir(parents=True)
+    (ov / "892" / f"{q}.json").write_text(json.dumps({
+        "cik": "892", "target_quarter": q, "grand_total": 1000.0, "method": "total_row",
+        "basis": "investments_ex_cash", "companyfacts_fv": 1000.0,
+        "components": [{"label": "Total investments", "value": 1000.0, "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("892")[q] == {"companyfacts_fv_plus_cash": 1100.0,
+                                                   "verified_investments_ex_cash": 1000.0}
+
+    # a published_rows override that disagrees still drops the companyfacts candidate (unchanged)
+    (ov / "892" / f"{q}.json").write_text(json.dumps({
+        "cik": "892", "target_quarter": q, "grand_total": 1200.0, "method": "total_row",
+        "basis": "published_rows", "companyfacts_fv": 1000.0,
+        "components": [{"label": "Total investments and cash equivalents", "value": 1200.0,
+                        "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("892")[q] == {"printed_schedule_total": 1200.0}

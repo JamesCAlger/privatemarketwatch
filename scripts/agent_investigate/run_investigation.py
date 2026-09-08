@@ -195,10 +195,20 @@ def load_anchor_candidates(cik: str) -> dict[str, dict[str, float]]:
     #  - investments_ex_cash -> 'verified_investments_ex_cash'; agreeing companyfacts kept (HIGH),
     #    disagreeing companyfacts dropped (the override exists because the tag was partial).
     for rd, (gt, basis) in load_anchor_overrides(cik).items():
-        name = "printed_schedule_total" if basis == "published_rows" else "verified_investments_ex_cash"
+        published = basis == "published_rows"
+        name = "printed_schedule_total" if published else "verified_investments_ex_cash"
         slot = out.setdefault(rd, {})
         slot[name] = gt
-        for cf_name in ("companyfacts_fv", "companyfacts_fv_plus_cash"):
+        # WHICH companyfacts candidate an override may displace depends on its BASIS, and the rule
+        # is deliberately asymmetric. The accepted anchor priority puts published_rows ABOVE
+        # investments_ex_cash, so a lower-basis override must not displace a higher-basis
+        # candidate: an investments_ex_cash override differs from companyfacts_fv_plus_cash by
+        # roughly the cash balance BY CONSTRUCTION (routinely >1% for a BDC), which is the
+        # expected cross-basis gap, not evidence of a partial tag. Popping it would leave the gate
+        # reconciling published rows (cash included) against an ex-cash target.
+        droppable = (("companyfacts_fv", "companyfacts_fv_plus_cash") if published
+                     else ("companyfacts_fv",))
+        for cf_name in droppable:
             cf = slot.get(cf_name)
             if cf is not None and abs(cf - gt) > 0.01 * max(abs(cf), abs(gt)):
                 slot.pop(cf_name, None)
@@ -223,10 +233,21 @@ def load_anchor_overrides(cik: str) -> dict[str, tuple[float, str]]:
 
 
 def _candidates_with_outlier_filter(cik: str):
-    """(candidates, outlier_flags): drop any companyfacts_fv that is a cross-quarter outlier (a
-    likely mis-extracted anchor) so that quarter validates as NONE -> escalate, not reconcile."""
+    """(candidates, outlier_flags): drop any companyfacts anchor (plain or plus-cash) that is a
+    cross-quarter outlier (a likely mis-extracted anchor) so that quarter validates as
+    NONE -> escalate, not reconcile."""
     candidates = load_anchor_candidates(cik)
-    series = {q: c["companyfacts_fv"] for q, c in candidates.items() if "companyfacts_fv" in c}
+    # Read EITHER companyfacts candidate: a cash-holding quarter carries companyfacts_fv_plus_cash
+    # INSTEAD of companyfacts_fv, so keying the series on one name alone would silently drop those
+    # quarters -- biasing the median, starving MIN_OUTLIER_HISTORY, and leaving the upgraded
+    # quarters unflaggable (the guard would go dark for exactly the funds the plus-cash candidate
+    # targets). Mixing the two bases is fine here: they differ by the fund's cash equivalents,
+    # immaterial to a 3x fold test.
+    series = {}
+    for q, c in candidates.items():
+        v = c.get("companyfacts_fv_plus_cash", c.get("companyfacts_fv"))
+        if v is not None:
+            series[q] = v
     flags = flag_anchor_outliers(series)
     for q, fl in flags.items():
         if fl.flagged:
