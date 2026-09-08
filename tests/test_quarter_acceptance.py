@@ -241,15 +241,66 @@ def test_stale_investigations_counted_for_cohort_only(tmp_path):
                                        _cons_row("0000000002", "pass"),
                                        _cons_row("0000000003", "pass")])
     res = qa.compute_acceptance(target_quarter=Q, investigate_dir=inv, **kw)
-    assert res["metrics"]["investigations"] == {"n_stale": 1, "stale_ciks": ["0000000001"]}
+    assert res["metrics"]["investigations"] == {
+        "n_stale": 1, "stale_ciks": ["0000000001"], "measured": True}
 
 
-def test_missing_investigate_dir_is_zero_stale(tmp_path):
+def test_missing_investigate_dir_is_not_measured(tmp_path):
+    """A missing investigation store is UNMEASURED, not clean.
+
+    Supersedes the Plan 1 fail-open behaviour (missing dir == zero stale): under
+    thresholds v3 ``unfinished_investigations`` is a blocking check, so a metric that
+    reads 0 whenever ``data/output/agent_investigate/`` is absent is a gate anyone can
+    satisfy by renaming a directory -- which is not a gate (spec validation-layer
+    principle: the verdict must not be reachable by editing the correction layer).
+    """
     kw = _setup(tmp_path, ledger_rows=[_cons_row("0000000001", "pass"),
                                        _cons_row("0000000002", "pass"),
                                        _cons_row("0000000003", "pass")])
     res = qa.compute_acceptance(target_quarter=Q, investigate_dir=tmp_path / "nope", **kw)
-    assert res["metrics"]["investigations"] == {"n_stale": 0, "stale_ciks": []}
+    assert res["metrics"]["investigations"] == {
+        "n_stale": None, "stale_ciks": [], "measured": False}
+
+
+def test_unfinished_investigations_fails_closed_when_store_missing(tmp_path):
+    """The blocking check FAILS on an absent store rather than passing on a 0."""
+    kw = _setup(tmp_path, ledger_rows=[_cons_row("0000000001", "pass"),
+                                       _cons_row("0000000002", "pass"),
+                                       _cons_row("0000000003", "pass")])
+    kw["thresholds_path"] = _thresholds(
+        tmp_path / "t_inv.json",
+        checks=[{"id": "unfinished_investigations", "metric": "investigations.n_stale",
+                 "op": "<=", "value": 0}],
+    )
+    res = qa.compute_acceptance(target_quarter=Q, investigate_dir=tmp_path / "nope", **kw)
+    check = next(c for c in res["checks"] if c["id"] == "unfinished_investigations")
+    assert check["pass"] is False
+    assert check["actual"] is None
+    assert res["verdict"] == "FAIL"
+
+
+def test_fund_fv_uses_published_basis_on_timestamp_report_date(tmp_path):
+    """A TIMESTAMP-shaped report_date must not zero every FV metric.
+
+    Typed parquet renders report_date as '2025-12-31 00:00:00'; the acceptance sum used
+    to hand-roll CAST(report_date AS VARCHAR), so nothing equalled the target quarter and
+    cohort/flagged/over-inclusion FV all read 0 -- the v3 FV gates passed vacuously.
+    Routing through published_basis.published_fv_sum_sql keys on the 10-char date and a
+    10-digit cik, so an unpadded cik and a timestamped date both land.
+    """
+    kw = _setup(
+        tmp_path,
+        ciks=["1", "2"],
+        holdings_rows=[("1", f"{Q} 00:00:00", 100_000_000.0),
+                       ("2", f"{Q} 00:00:00", 50_000_000.0)],
+        ledger_rows=[_cons_row("0000000001", "pass"), _cons_row("0000000002", "fail", "10.0")],
+    )
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    cohort = res["metrics"]["cohort"]
+    assert cohort["cohort_fv_m"] == 150.0
+    assert cohort["funds_with_holdings"] == 2
+    assert res["metrics"]["conservation"]["flagged_fv_m"] == 50.0
+    assert res["metrics"]["conservation"]["over_inclusion_fv_m"] > 0.0
 
 
 def test_over_inclusion_metric_and_anchor_basis(tmp_path):

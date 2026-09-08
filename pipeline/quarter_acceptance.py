@@ -91,8 +91,19 @@ def _f(value, default: float = 0.0) -> float:
 
 
 def _fund_fv_by_quarter(holdings_path: Path, cohort: set[str]) -> dict[tuple[str, str], float]:
-    """(cik10, report_date) -> fund FV in USD millions, cohort only (DuckDB)."""
+    """(cik10, report_date) -> fund FV in USD millions, cohort only (DuckDB).
+
+    The sum IS the published-basis numerator (``pipeline.published_basis``): a 10-digit
+    cik, a 10-char report_date key, and no category/dimension/subsidiary filter. Routing
+    through the single definition keeps every acceptance FV metric on exactly the rows
+    the public headline publishes, and makes a TIMESTAMP-typed report_date (typed parquet
+    renders '2025-12-31 00:00:00') compare equal to the target quarter instead of
+    silently emptying cohort/flagged/over-inclusion FV and passing the gates vacuously.
+    The cohort/quarter restriction lives OUTSIDE the numerator, never inside it.
+    """
     import duckdb
+
+    from pipeline.published_basis import published_fv_sum_sql
 
     src = (
         f"read_csv_auto('{holdings_path.as_posix()}', sample_size=-1)"
@@ -103,15 +114,25 @@ def _fund_fv_by_quarter(holdings_path: Path, cohort: set[str]) -> dict[tuple[str
     con.execute("CREATE TABLE cohort(cik VARCHAR)")
     con.executemany("INSERT INTO cohort VALUES (?)", [(c,) for c in sorted(cohort)])
     rows = con.execute(
-        f"""SELECT lpad(CAST(cik AS VARCHAR), 10, '0') AS cik,
-                   CAST(report_date AS VARCHAR) AS report_date,
-                   sum(TRY_CAST(fair_value AS DOUBLE)) / 1e6 AS fv_m
-            FROM {src}
-            WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
-              AND lpad(CAST(cik AS VARCHAR), 10, '0') IN (SELECT cik FROM cohort)
-            GROUP BY 1, 2"""
+        f"""SELECT cik, report_date, value_sum / 1e6 AS fv_m
+            FROM ({published_fv_sum_sql(src)}) AS published
+            WHERE cik IN (SELECT cik FROM cohort)"""
     ).fetchall()
     return {(c, d): float(v) for c, d, v in rows if v is not None}
+
+
+def _numeric(value) -> float | None:
+    """float(value), or None if the metric is missing/unmeasured/non-numeric.
+
+    A check whose actual is not a number is not comparable, so it must fail closed
+    rather than raise: an exception here would take the whole verdict down.
+    """
+    if value is None or isinstance(value, (list, dict, tuple, set)):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def _resolve_metric(metrics: dict[str, Any], dotted: str):
@@ -230,11 +251,16 @@ def compute_acceptance(
         logger.warning("promoted-rule audit missing, drift metrics empty: %s", audit_path)
 
     # --- unfinished investigations (staged rules newer than their apply/gate) ---
+    # A gate a rename can satisfy is not a gate (spec validation-layer principle): if the
+    # investigation store is absent the metric is UNMEASURED (n_stale None), so the blocking
+    # unfinished_investigations check fails closed instead of reading a comfortable 0. This
+    # deliberately supersedes the earlier fail-open "missing dir == zero stale" behaviour.
     from pipeline.investigation_state import stale_investigations
     inv_dir = investigate_dir or INVESTIGATE_DIR
-    stale = stale_investigations(inv_dir, target_quarter, ciks=set(cohort)) if inv_dir.exists() else []
-    if not inv_dir.exists():
-        logger.warning("agent_investigate dir missing, stale metric empty: %s", inv_dir)
+    inv_measured = inv_dir.exists()
+    stale = stale_investigations(inv_dir, target_quarter, ciks=set(cohort)) if inv_measured else []
+    if not inv_measured:
+        logger.warning("agent_investigate dir missing, stale metric unmeasured: %s", inv_dir)
 
     # --- per-fund tiers ---
     funds: list[dict[str, Any]] = []
@@ -317,8 +343,9 @@ def compute_acceptance(
             "n_drift": n_drift,
         },
         "investigations": {
-            "n_stale": len(stale),
+            "n_stale": len(stale) if inv_measured else None,
             "stale_ciks": [s["cik"] for s in stale],
+            "measured": inv_measured,
         },
     }
 
@@ -327,11 +354,8 @@ def compute_acceptance(
     for spec in thresholds.get("checks", []):
         actual = _resolve_metric(metrics, spec["metric"])
         op = spec["op"]
-        ok = (
-            bool(_OPS[op](float(actual), float(spec["value"])))
-            if actual is not None and op in _OPS
-            else False
-        )
+        num = _numeric(actual)
+        ok = bool(_OPS[op](num, float(spec["value"]))) if num is not None and op in _OPS else False
         all_pass = all_pass and ok
         checks.append(
             {
@@ -339,7 +363,7 @@ def compute_acceptance(
                 "metric": spec["metric"],
                 "op": op,
                 "value": spec["value"],
-                "actual": actual,
+                "actual": actual if num is not None else None,
                 "pass": ok,
             }
         )
@@ -350,8 +374,8 @@ def compute_acceptance(
     verdict = "PASS" if (all_pass and checks) else "FAIL"
     assess = thresholds.get("assessability")
     if assess:
-        a_actual = _resolve_metric(metrics, assess["metric"])
-        if a_actual is None or float(a_actual) < float(assess["min"]):
+        a_actual = _numeric(_resolve_metric(metrics, assess["metric"]))
+        if a_actual is None or a_actual < float(assess["min"]):
             verdict = "NOT_ASSESSABLE"
 
     return {
