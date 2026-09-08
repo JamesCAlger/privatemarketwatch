@@ -893,3 +893,48 @@ def test_apply_promoted_stage2_list_form_row_selector_jit_materialized():
     assert audits[0]["status"] == "ok", audits
     assert len(out) == 2  # one duplicate dropped
     assert "row_id" not in out.columns
+
+
+def _q_rows(cik="0000000123"):
+    return pd.DataFrame([
+        {"cik": cik, "source": "bdc", "report_date": "2025-12-31", "issuer_name": "Dup Row",
+         "entity_name": "Fund A", "fair_value": 100.0, "bdc_dimensions_raw": "x=y"},
+        {"cik": cik, "source": "bdc", "report_date": "2026-03-31", "issuer_name": "Dup Row",
+         "entity_name": "Fund A", "fair_value": 355.9, "bdc_dimensions_raw": "x=y"},
+        {"cik": cik, "source": "bdc", "report_date": "2026-03-31", "issuer_name": "Keep",
+         "entity_name": "Fund A", "fair_value": 1.0, "bdc_dimensions_raw": "x=y"},
+    ])
+
+
+def test_apply_promoted_rules_scope_carryover_flagged():
+    """TCW VII Q1-26 shape: a Q4-scoped exclusion whose predicate still matches Q1 rows."""
+    rule = _valid_rule(predicate="issuer_name = 'Dup Row'", scope={"quarters": ["2025-12-31"]},
+                       measured_impact={"2025-12-31": {"rows": 1, "fv": 100.0}})
+    out, audits = ap.apply_promoted_rules(_q_rows(), {"0000000123": [rule]})
+    assert len(out) == 2                                  # only the in-scope row removed
+    assert audits[0]["drift"] == "scope_carryover"
+    assert "2026-03-31" in audits[0]["message"] and "355.9" in audits[0]["message"]
+
+
+def test_apply_promoted_rules_scope_carryover_excused_by_review():
+    rule = _valid_rule(predicate="issuer_name = 'Dup Row'", scope={"quarters": ["2025-12-31"]},
+                       measured_impact={"2025-12-31": {"rows": 1, "fv": 100.0}},
+                       carryover_reviewed={"2026-03-31": {"verdict": "not_applicable",
+                                                          "evidence": [{"source": "filing", "quote": "Q1 rows are distinct lots"}]}})
+    _, audits = ap.apply_promoted_rules(_q_rows(), {"0000000123": [rule]})
+    assert audits[0]["drift"] == ""
+
+
+def test_apply_promoted_rules_all_scope_and_row_add_exempt_from_carryover():
+    rule_all = _valid_rule(predicate="issuer_name = 'Dup Row'",
+                           measured_impact={"2025-12-31": {"rows": 2, "fv": 455.9}})
+    _, audits = ap.apply_promoted_rules(_q_rows(), {"0000000123": [rule_all]})
+    assert audits[0]["drift"] == ""
+    add = _valid_rule(rule_type="row_add", action="add", predicate=None, rule_id="add1",
+                      scope={"quarters": ["2025-12-31"]},
+                      positions=[{"report_date": "2025-12-31", "issuer_name": "New",
+                                  "fair_value": 5.0, "bdc_dimensions_raw": "a=b",
+                                  "source_row_id": "s"}])
+    del add["predicate_sql"]
+    _, audits = ap.apply_promoted_rules(_q_rows(), {"0000000123": [add]})
+    assert audits[0]["drift"] == ""

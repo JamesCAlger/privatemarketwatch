@@ -704,3 +704,30 @@ def test_position_key_index_requires_exact_fv_match():
     assert idx.contains("q", "acme tl", 100.0, "Acme Corp")
     assert not idx.contains("q", "acme tl", 100.5, "Acme Corp")
     assert not idx.contains("other-q", "acme tl", 100.0, "Acme Corp")
+
+
+from pipeline.agent_rule import match_rows_outside_scope
+
+
+def test_match_rows_outside_scope():
+    df = pd.DataFrame([
+        _h("1", "2025-12-31", 10.0, dims="x|legalentityaxis=FooCloMember"),
+        _h("1", "2026-03-31", 20.0, dims="x|legalentityaxis=FooCloMember"),
+        _h("1", "2026-03-31", 30.0),
+    ])
+    df["_rid"] = range(len(df))
+    out = match_rows_outside_scope(df, _CLO, {"quarters": ["2025-12-31"]})
+    assert [(r[1], r[2]) for r in out] == [(20.0, "2026-03-31")]
+    assert match_rows_outside_scope(df, _CLO, {"quarters": ["all"]}) == []
+    assert match_rows_outside_scope(df, None, {"quarters": ["2025-12-31"]}) == []
+
+
+def test_carryover_reviewed_shape_validated():
+    ok = _rule(scope={"quarters": ["2025-12-31"]},
+               carryover_reviewed={"2026-03-31": {"verdict": "not_applicable",
+                                                  "evidence": [{"source": "filing", "quote": "no CLO in Q1"}]}})
+    assert validate_rule(ok) == []
+    bad = _rule(carryover_reviewed={"2026-03-31": {"verdict": "fine"}})
+    assert any("carryover_reviewed" in e for e in validate_rule(bad))
+    bad2 = _rule(carryover_reviewed={"q1": {"verdict": "not_applicable", "evidence": [{"source": "x", "quote": "y"}]}})
+    assert any("carryover_reviewed" in e for e in validate_rule(bad2))

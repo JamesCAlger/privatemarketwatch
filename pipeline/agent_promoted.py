@@ -575,6 +575,27 @@ def apply_promoted_rules(
                 message = (f"superseded: {n_skipped} position(s) already present "
                            f"natively (dup-skipped); rule is redundant") + (
                            f"; {message}" if message else "")
+            # Carry-over re-test (spec 2026-09-07 s.4d): a quarter-scoped predicate rule that
+            # still matches rows OUTSIDE its scope is a rule that expired silently (TCW VII:
+            # a Q3/Q4-25 dedup matched 27 Q1-26 rows / $355.9M and did nothing). Flag as drift
+            # so promoted_rule_drift forces a decision: extend scope + re-gate, or excuse the
+            # quarter with carryover_reviewed evidence. row_add has no predicate; 'all' is exempt.
+            if (not drift and a.get("status") == "ok"
+                    and str(r.get("rule_type")) in ("row_exclusion", "dedup", "value_rescale",
+                                                    "value_expression")):
+                from pipeline.agent_rule import _per_quarter, match_rows_outside_scope
+                probe = sub.reset_index(drop=True).copy()
+                probe["_rid"] = range(len(probe))
+                pq = _per_quarter(match_rows_outside_scope(probe, r.get("predicate_sql"),
+                                                           r.get("scope")))
+                reviewed = set(str(k) for k in (r.get("carryover_reviewed") or {}))
+                pq = {q: v for q, v in pq.items() if q not in reviewed}
+                if pq:
+                    drift = "scope_carryover"
+                    n = sum(v["rows"] for v in pq.values())
+                    fv_out = round(sum(v["fv"] for v in pq.values()), 2)
+                    message = (f"scope_carryover: predicate matches {n} rows / FV {fv_out} outside "
+                               f"scope in {pq}") + (f"; {message}" if message else "")
             audits.append({"layer": "unified_agent_rules", "cik": cik,
                            "rule_id": str(a.get("rule_id")), "rule_type": str(r.get("rule_type")),
                            "status": str(a.get("status")), "rows_changed": rows,

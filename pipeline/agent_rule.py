@@ -213,6 +213,22 @@ def validate_rule(obj) -> list[str]:
                 if not (str(p.get("issuer_name") or "").strip()
                         or str(p.get("bdc_investment_identifier") or "").strip()):
                     errs.append(f"positions[{i}] needs issuer_name or bdc_investment_identifier")
+
+    # Optional carry-over excusal (spec 2026-09-07 s.4d): the reviewer states, with evidence,
+    # that a quarter OUTSIDE the rule's scope which the predicate still matches is genuinely
+    # not the same defect. Shape is validated so the excusal cannot be an empty assertion.
+    cr = obj.get("carryover_reviewed")
+    if cr is not None:
+        if not isinstance(cr, dict):
+            errs.append("carryover_reviewed must be an object {quarter: {verdict, evidence}}")
+        else:
+            for q, v in cr.items():
+                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(q)):
+                    errs.append(f"carryover_reviewed key {q!r} must be an ISO report_date")
+                if (not isinstance(v, dict) or v.get("verdict") != "not_applicable"
+                        or not isinstance(v.get("evidence"), list) or not v.get("evidence")):
+                    errs.append(f"carryover_reviewed[{q!r}] must be "
+                                "{'verdict': 'not_applicable', 'evidence': [non-empty]}")
     return errs
 
 
@@ -247,6 +263,22 @@ def _match_rows(work: pd.DataFrame, predicate_sql, scope) -> list:
     finally:
         conn.close()
     return rows
+
+
+def match_rows_outside_scope(work: pd.DataFrame, predicate_sql, scope) -> list:
+    """Rows matching the predicate in quarters NOT in scope.quarters (carry-over re-test,
+    spec 2026-09-07 s.4d). Empty for 'all' scope or no predicate. Same row tuple as _match_rows."""
+    qs = (scope or {}).get("quarters") or ["all"]
+    if "all" in qs or not (predicate_sql and str(predicate_sql).strip()):
+        return []
+    conn = duckdb.connect()
+    conn.register("h", work)
+    q = (f"SELECT _rid, TRY_CAST(fair_value AS DOUBLE) AS fv, {_REPORT_DATE_KEY} AS rd "
+         f"FROM h WHERE ({predicate_sql}) AND NOT ({_scope_sql(scope)})")
+    try:
+        return conn.execute(q).fetchall()
+    finally:
+        conn.close()
 
 
 def _per_quarter(rows) -> dict:

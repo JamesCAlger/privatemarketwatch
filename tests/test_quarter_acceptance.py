@@ -357,3 +357,14 @@ def test_thresholds_v3_file_has_nine_checks():
         "op": "<=", "value": 0.5, "note": by_id["over_inclusion_fv_share"]["note"]}
     assert by_id["unfinished_investigations"]["metric"] == "investigations.n_stale"
     assert by_id["unfinished_investigations"]["op"] == "<=" and by_id["unfinished_investigations"]["value"] == 0
+
+
+def test_scope_carryover_counts_as_drift(tmp_path):
+    kw = _setup(tmp_path, ledger_rows=[_cons_row(c, "pass") for c in
+                                       ("0000000001", "0000000002", "0000000003")],
+                audit_rows=[{"layer": "unified_agent_rules", "cik": "0000000001", "rule_id": "r",
+                             "rule_type": "row_exclusion", "status": "ok", "rows_changed": 1,
+                             "drift": "scope_carryover", "message": "m"}])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    assert res["metrics"]["promoted_rules"]["n_drift"] == 1
+    assert res["checks"][2]["pass"] is False
