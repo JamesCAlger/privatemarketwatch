@@ -379,6 +379,12 @@ def test_gate_uses_production_band_not_default_1pct(tmp_path, monkeypatch):
     }), encoding="utf-8")
     (out / f"corrected_holdings.777.csv").write_text(
         df.to_csv(index=False), encoding="utf-8")
+    # This test bypasses ri.apply() and writes corrected_holdings.csv directly, so it must
+    # also record apply_audit.json (what a real apply() call would do) or the new STALE guard
+    # (rules dir fingerprint vs apply_audit.json fingerprint) refuses before gate_rules runs.
+    from pipeline.investigation_state import rules_fingerprint
+    (out / "apply_audit.json").write_text(
+        _json.dumps({"rules_fingerprint": rules_fingerprint(rules_dir)}), encoding="utf-8")
     ri.gate("777", "2026-03-31")
     assert "threshold_pct" in captured, "gate_rules was not called"
     assert captured["threshold_pct"] == pipeline_config.FV_CONSERVATION_BAND_PCT, (
@@ -443,3 +449,72 @@ def test_prep_prompt_excludes_stale_quarter_escalation(tmp_path, monkeypatch):
     prompt = (tmp_path / "666" / "prompt.md").read_text(encoding="utf-8")
     assert "current finding in prompt" in prompt
     assert "stale prior quarter finding" not in prompt
+
+
+def _wire(tmp_path, monkeypatch, cik="888", q="2026-03-31"):
+    """BASE + holdings + a validated MEDIUM anchor so apply/gate run on a synthetic frame."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    df = pd.DataFrame([
+        {"cik": cik, "report_date": q, "fair_value": 1000.0, "bdc_dimensions_raw": "x=y",
+         "issuer_name": "Keep Co", "bdc_investment_identifier": "Keep Co"},
+        {"cik": cik, "report_date": q, "fair_value": 200.0, "bdc_dimensions_raw": "x=y",
+         "issuer_name": "Dup Co", "bdc_investment_identifier": "Dup Co"},
+    ])
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: df)
+    monkeypatch.setattr(ri, "_candidates_with_outlier_filter",
+                        lambda c: ({q: {"companyfacts_fv": 1000.0}}, {}))
+    rules = tmp_path / cik / "rules"
+    rules.mkdir(parents=True)
+    rules.joinpath("drop_dup.json").write_text(json.dumps({
+        "cik": cik, "rule_id": "drop_dup", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Dup Co'", "scope": {"quarters": ["all"]},
+        "evidence": [{"source": "filing", "quote": "x"}], "rationale": "dup", "confidence": 0.9}),
+        encoding="utf-8")
+    return rules
+
+
+def test_apply_records_rules_fingerprint(tmp_path, monkeypatch):
+    from pipeline.investigation_state import rules_fingerprint
+    rules = _wire(tmp_path, monkeypatch)
+    res = ri.apply("888")
+    audit = json.loads((tmp_path / "888" / "apply_audit.json").read_text(encoding="utf-8"))
+    assert res["rules_fingerprint"] == audit["rules_fingerprint"] == rules_fingerprint(rules)
+
+
+def test_gate_is_stale_when_rules_change_after_apply(tmp_path, monkeypatch):
+    rules = _wire(tmp_path, monkeypatch)
+    ri.apply("888")
+    rules.joinpath("second.json").write_text(json.dumps({
+        "cik": "888", "rule_id": "second", "rule_type": "row_exclusion", "action": "exclude",
+        "predicate_sql": "issuer_name = 'Nobody'", "scope": {"quarters": ["all"]},
+        "evidence": [{"source": "filing", "quote": "x"}], "rationale": "late", "confidence": 0.5}),
+        encoding="utf-8")
+    g = ri.gate("888", "2026-03-31")
+    assert g["verdict"] == "STALE"
+    assert g["rules_fingerprint"] != g["apply_fingerprint"]
+    assert "newest_rule_file" in g and g["newest_rule_file"] == "second.json"
+    rec = json.loads((tmp_path / "888" / "gate.2026-03-31.json").read_text(encoding="utf-8"))
+    assert rec["verdict"] == "STALE"
+    # re-apply clears it
+    ri.apply("888")
+    g2 = ri.gate("888", "2026-03-31")
+    assert g2["verdict"] != "STALE"
+    assert "rules_fingerprint" in g2
+
+
+def test_promote_refuses_stale_gate(tmp_path, monkeypatch):
+    monkeypatch.setattr(ri, "gate", lambda cik, q: {"verdict": "STALE", "reasons": ["rules changed"]})
+    res = promote("888", "2026-03-31", overrides_dir=tmp_path / "ov")
+    assert res["status"] == "refused" and res["gate"] == "STALE"
+
+
+def test_promote_refuses_pass_noop_when_rules_exist(tmp_path, monkeypatch):
+    """Silver Capital shape: a PASS_NOOP verdict ('no rules authored') must never promote a
+    rules directory that has since been populated."""
+    monkeypatch.setattr(ri, "BASE", tmp_path)
+    (tmp_path / "888" / "rules").mkdir(parents=True)
+    (tmp_path / "888" / "rules" / "late.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(ri, "gate", lambda cik, q: {"verdict": "PASS_NOOP", "reasons": ["noop"]})
+    res = promote("888", "2026-03-31", overrides_dir=tmp_path / "ov")
+    assert res["status"] == "refused_noop_with_rules"
+    assert not (tmp_path / "ov").exists()

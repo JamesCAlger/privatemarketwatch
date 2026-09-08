@@ -31,6 +31,7 @@ from pipeline.agent_rule import (
 )
 from pipeline.anchor_leaf import load_anchor_leaf, validate_anchor_leaf
 from pipeline.anchor_validation import classify_anchors, flag_anchor_outliers
+from pipeline.investigation_state import newest_rule_file, rules_fingerprint, stale_investigations
 
 BASE = config.OUTPUT_DIR / "agent_investigate"
 CONSERVATION = config.OUTPUT_DIR / "shadow" / "conservation_gate_results.csv"
@@ -507,8 +508,17 @@ def apply(cik: str) -> dict:
            "noop_rules": [a.get("rule_id") for a in audits if a.get("noop")],
            "n_escalations": len(deduped_escalations), "n_escalation_files": len(raw_escalations),
            "invalid_escalations": bad_esc,
+           "rules_fingerprint": rules_fingerprint(out / "rules"),
            "corrected_holdings": str(corrected_path)}
     (out / "apply_audit.json").write_text(json.dumps(res, indent=2), encoding="utf-8")
+    return res
+
+
+def _write_gate_record(cik: str, target_quarter: str, res: dict) -> dict:
+    out = BASE / _norm(cik)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / f"gate.{target_quarter}.json").write_text(json.dumps(res, indent=2, default=str),
+                                                     encoding="utf-8")
     return res
 
 
@@ -517,6 +527,26 @@ def gate(cik: str, target_quarter: str) -> dict:
     corrected_path = out / f"corrected_holdings.{_norm(cik)}.csv"
     if not corrected_path.exists():
         return {"cik": _norm(cik), "status": "no_corrected_holdings (run apply first)"}
+    # Stale-apply guard (2026-09-07): the gate evaluates the corrected frame the LAST apply
+    # wrote. If the rules directory changed since, the verdict would describe rules nobody
+    # can promote -- refuse with STALE and tell the operator to re-run apply.
+    fp = rules_fingerprint(out / "rules")
+    apply_fp = ""
+    audit_path = out / "apply_audit.json"
+    if audit_path.exists():
+        try:
+            apply_fp = str(json.loads(audit_path.read_text(encoding="utf-8-sig"))
+                           .get("rules_fingerprint") or "")
+        except (OSError, json.JSONDecodeError):
+            apply_fp = ""
+    if fp and fp != apply_fp:
+        return _write_gate_record(cik, target_quarter, {
+            "cik": _norm(cik), "target_quarter": target_quarter, "verdict": "STALE",
+            "rules_fingerprint": fp, "apply_fingerprint": apply_fp,
+            "newest_rule_file": newest_rule_file(out / "rules"),
+            "checks": {}, "reasons": [
+                "rules directory changed after the last apply; corrected holdings are stale "
+                "-- re-run apply, then gate"]})
     base = _load_holdings(cik)
     corrected = pd.read_csv(corrected_path, low_memory=False)
     candidates, flags = _candidates_with_outlier_filter(cik)
@@ -530,16 +560,18 @@ def gate(cik: str, target_quarter: str) -> dict:
                         if av.consensus else None)
         noop = _noop_gate_verdict(residual_pct, av.tier)
         if noop:
-            return {"cik": _norm(cik), "target_quarter": target_quarter,
-                    "verdict": noop["verdict"], "anchor_tier": av.tier,
-                    "anchor_reason": anchor_reason,
-                    "checks": {"noop_reconciled": True}, "reasons": noop["reasons"]}
+            return _write_gate_record(cik, target_quarter, {
+                "cik": _norm(cik), "target_quarter": target_quarter,
+                "verdict": noop["verdict"], "anchor_tier": av.tier,
+                "anchor_reason": anchor_reason, "rules_fingerprint": fp,
+                "checks": {"noop_reconciled": True}, "reasons": noop["reasons"]})
     g = gate_rules(base, corrected, cik=cik, target_quarter=target_quarter,
                    anchor_candidates=candidates,
                    threshold_pct=config.FV_CONSERVATION_BAND_PCT)
-    return {"cik": _norm(cik), "target_quarter": target_quarter, "verdict": g.verdict,
-            "anchor_tier": av.tier, "anchor_reason": anchor_reason,
-            "checks": g.checks, "reasons": g.reasons}
+    return _write_gate_record(cik, target_quarter, {
+        "cik": _norm(cik), "target_quarter": target_quarter, "verdict": g.verdict,
+        "anchor_tier": av.tier, "anchor_reason": anchor_reason, "rules_fingerprint": fp,
+        "checks": g.checks, "reasons": g.reasons})
 
 
 def _discover_targets(source_worklist, verdicts_dir) -> dict:
@@ -586,14 +618,20 @@ def promote(cik: str, target_quarter: str, *, overrides_dir=DEFAULT_OVERRIDES) -
     """Copy a CIK's gate-PASS rules to production overrides. REFUSES unless the held-out gate
     PASSes -- the un-gameable check is the promotion bar (mirrors run_remediation.promote_passes)."""
     g = gate(cik, target_quarter)
+    src = BASE / _norm(cik) / "rules"
     if g.get("verdict") == "PASS_NOOP":
-        # Clean zero-rule investigation: nothing to copy, and not a refusal.
+        # A PASS_NOOP means "no rules authored". If rules now exist the verdict describes a
+        # state that no longer holds (Silver Capital 2026-09-02: PASS_NOOP at 08:44, a row_add
+        # promoted at 10:49). Refuse; the operator must apply + gate the rules that exist.
+        if rules_fingerprint(src):
+            return {"cik": _norm(cik), "status": "refused_noop_with_rules", "gate": "PASS_NOOP",
+                    "reasons": ["PASS_NOOP verdict but rules directory is non-empty; "
+                                "run apply + gate on the staged rules"]}
         return {"cik": _norm(cik), "status": "no_rules_to_promote", "gate": "PASS_NOOP",
                 "reasons": g.get("reasons")}
     if g.get("verdict") != "PASS":
         return {"cik": _norm(cik), "status": "refused", "gate": g.get("verdict"),
                 "reasons": g.get("reasons")}
-    src = BASE / _norm(cik) / "rules"
     # Audit guard (q1p3 Fiesta dedup): the conservation gate can PASS trivially for an
     # FV-neutral rule on an already-reconciled quarter, so gate-PASS alone does not prove
     # every rule in the set is sound. An invalid or nothing-matches rule reaching
@@ -617,7 +655,8 @@ def promote(cik: str, target_quarter: str, *, overrides_dir=DEFAULT_OVERRIDES) -
         shutil.copy2(r, dst / r.name)
         copied.append(r.name)
     return {"cik": _norm(cik), "status": "promoted", "n_rules": len(copied),
-            "rules": copied, "overrides_dir": str(dst)}
+            "rules": copied, "overrides_dir": str(dst),
+            "rules_fingerprint": g.get("rules_fingerprint", "")}
 
 
 _ROUTE_MAP = {"anchor": "anchor_lane", "vocab": "extraction_review"}
@@ -703,16 +742,16 @@ def route_escalations(base_dir=BASE, out_dir=None) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Agentic investigation driver (bypasses the B2 battery).")
     sub = ap.add_subparsers(dest="mode", required=True)
-    for m in ("prep", "apply", "gate", "status", "discover", "promote"):
+    for m in ("prep", "apply", "gate", "status", "discover", "promote", "audit-stale"):
         p = sub.add_parser(m)
         if m == "discover":
             p.add_argument("batch_id")
             p.add_argument("--source-worklist", type=Path, required=True,
                            help="B1 batch worklist.csv (review_id -> cik/report_date)")
             p.add_argument("--verdicts-dir", type=Path, default=DEFAULT_VERDICTS)
-        else:
+        elif m != "audit-stale":
             p.add_argument("--cik", required=True)
-        if m in ("prep", "gate", "status", "promote"):
+        if m in ("prep", "gate", "status", "promote", "audit-stale"):
             p.add_argument("--target-quarter", required=True)
         if m in ("prep", "status"):
             p.add_argument("--iteration", type=int, default=1)
@@ -747,6 +786,11 @@ def main(argv=None) -> int:
     elif args.mode == "escalations":
         res = route_escalations(base_dir=BASE, out_dir=args.out_dir)
         print(json.dumps(res, indent=2, default=str))
+    elif args.mode == "audit-stale":
+        rows = stale_investigations(BASE, args.target_quarter)
+        print(json.dumps({"target_quarter": args.target_quarter, "n_stale": len(rows),
+                          "stale": rows}, indent=2))
+        return 0 if not rows else 1
     return 0
 
 
