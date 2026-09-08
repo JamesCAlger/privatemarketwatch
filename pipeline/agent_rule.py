@@ -492,41 +492,13 @@ def apply_rules(df: pd.DataFrame, rules: list[dict]) -> tuple[pd.DataFrame, list
     return corrected, audits
 
 
-# Categories that stay in the published holdings but are NOT "investments at fair value" and so are
-# EXCLUDED from the conservation sum (the companyfacts InvestmentOwnedAtFairValue anchor excludes them
-# in ~92% of cik-quarters). Cash-equivalents = T-bills, money-market sweeps held for cash management.
-# Without this, B2 would DROP real cash positions to reconcile to a cash-excluding anchor.
-CONSERVATION_EXCLUDED_CATEGORIES = frozenset({"CASH"})
-
-
 def value_sum_by_quarter(df: pd.DataFrame, cik=None) -> dict[str, float]:
-    """Conservation value_sum per report_date: sum(fair_value) over gate-counted rows, EXCLUDING
-    cash-equivalents (kept in holdings, not part of 'investments at fair value') and
-    is_subsidiary=1 look-through rows (retain-and-flag, 2026-08-29: the consolidated
-    anchor already contains them once, so summing them again double-counts).
-
-    When ``cik`` is given, per-CIK scope overrides (pipeline.conservation_scope) are
-    applied so asset_category values the filer's anchor INCLUDES are not excluded.
-    """
-    from pipeline import conservation_scope
-    if cik is not None:
-        included, scoped_quarters = conservation_scope.scope_override_for(cik)
-    else:
-        included, scoped_quarters = frozenset(), None
-    sub = df[df["bdc_dimensions_raw"].notna()] if "bdc_dimensions_raw" in df.columns else df
-    if "asset_category" in sub.columns:
-        cat_u = sub["asset_category"].astype(str).str.upper()
-        excluded_mask = cat_u.isin(CONSERVATION_EXCLUDED_CATEGORIES)
-        if included:
-            rescue = cat_u.isin(included)
-            if scoped_quarters is not None:
-                rescue &= sub["report_date"].astype(str).isin(scoped_quarters)
-            excluded_mask &= ~rescue
-        sub = sub[~excluded_mask]
-    if "is_subsidiary" in sub.columns:
-        sub = sub[pd.to_numeric(sub["is_subsidiary"], errors="coerce").fillna(0) != 1]
-    fv = pd.to_numeric(sub["fair_value"], errors="coerce").fillna(0)
-    return {str(k): float(v) for k, v in fv.groupby(sub["report_date"].astype(str)).sum().items()}
+    """Conservation value_sum per report_date on the PUBLISHED basis (spec 2026-09-07 s.1):
+    every row counts -- CASH, is_subsidiary=1, NULL-dimension rows included -- because the
+    public headline counts them. ``cik`` is accepted for call-site compatibility and ignored
+    (per-CIK numerator carve-outs were retired with pipeline.conservation_scope)."""
+    from pipeline.published_basis import published_fv_by_quarter
+    return published_fv_by_quarter(df)
 
 
 def build_snapshots(df: pd.DataFrame, anchors: dict[str, float], threshold_pct: float = 1.0,

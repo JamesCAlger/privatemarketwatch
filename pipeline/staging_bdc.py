@@ -2355,9 +2355,10 @@ def _prepare_bdc(
                 -- Filer-tagged cash equivalents: a CashAndCashEquivalentsAxis
                 -- dimension is the filer's own declaration that the row is a
                 -- cash-equivalent schedule position (extraction fix
-                -- 2026-09-02). Stronger than name keywords; forces CASH so
-                -- these rows stay out of conservation sums except for
-                -- carve-out CIKs (pipeline.conservation_scope).
+                -- 2026-09-02). Stronger than name keywords; forces CASH
+                -- asset_category classification. The conservation sum itself
+                -- is the published basis (pipeline.published_basis; carve-outs
+                -- retired 2026-09-07) -- it counts this row regardless of category.
                 contains(lower(COALESCE(CAST(dimensions_raw AS VARCHAR), '')),
                          'cashandcashequivalent') AS _cash_dim
             FROM with_reclass wr

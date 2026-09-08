@@ -492,9 +492,19 @@ def test_gate_passes_with_validated_medium_anchor():
 
 # -- value_sum / snapshots --------------------------------------------------------------
 
-def test_value_sum_honors_gate_filter():
-    df = pd.DataFrame([_h("1", "q", 100.0), {**_h("1", "q", 50.0), "bdc_dimensions_raw": None}])
-    assert value_sum_by_quarter(df) == {"q": 100.0}
+def test_value_sum_is_the_published_basis():
+    """Spec 2026-09-07 s.1: the gate sums exactly what the headline sums. CASH rows,
+    is_subsidiary=1 rows, and NULL-dimension rows all count. Bain Q4-25 needed the
+    subsidiary rows (0.970 -> 1.002); Q1-26 they were surplus (1.224) -- the gate decides."""
+    df = pd.DataFrame([
+        {**_h("1", "q", 1815.0), "is_subsidiary": 0, "asset_category": "LOAN"},
+        {**_h("1", "q", 406.5), "is_subsidiary": 1, "asset_category": "LOAN"},
+        {**_h("1", "q", 20.0), "is_subsidiary": None, "asset_category": "CASH"},
+        {**_h("1", "q", 5.0, dims=None), "asset_category": "LOAN"},
+    ])
+    assert value_sum_by_quarter(df)["q"] == 2246.5
+    assert value_sum_by_quarter(df, cik="1")["q"] == 2246.5     # cik arg is inert
+    assert len(df) == 4
 
 
 # -- gate (B3 over the agent's rules) ---------------------------------------------------
@@ -614,30 +624,6 @@ def test_iteration_prompt_carries_residual_and_gate_feedback():
     assert "Iteration 2" not in txt1
 
 
-def test_value_sum_excludes_cash_but_keeps_rows():
-    # cash-equivalents (T-bills/sweeps) stay in holdings but are NOT in the conservation sum
-    df = pd.DataFrame([
-        {**_h("1", "q", 1000.0), "asset_category": "LOAN"},
-        {**_h("1", "q", 200.0), "asset_category": "CASH"},
-    ])
-    assert value_sum_by_quarter(df)["q"] == 1000.0   # cash excluded from the sum
-    assert len(df) == 2                              # but the cash row is retained in the frame
-
-
-def test_value_sum_excludes_subsidiary_rows_but_keeps_them():
-    # Retain-and-flag (owner decision 2026-08-29): nonconsolidated-subsidiary /
-    # look-through rows stay in holdings, but the filing's consolidated total already
-    # contains them once -- summing them again double-counts, so the conservation
-    # frame excludes is_subsidiary=1.
-    df = pd.DataFrame([
-        {**_h("1", "q", 1815.0), "is_subsidiary": 0},
-        {**_h("1", "q", 406.0), "is_subsidiary": 1},     # look-through layer
-        {**_h("1", "q", 100.0), "is_subsidiary": None},  # unset counts as not-subsidiary
-    ])
-    assert value_sum_by_quarter(df)["q"] == 1915.0
-    assert len(df) == 3  # rows retained, only the sum is subsidiary-aware
-
-
 # -- dedupe_escalations ---------------------------------------------------------------
 
 def test_dedupe_escalations_collapses_same_quarter_category():
@@ -650,36 +636,6 @@ def test_dedupe_escalations_collapses_same_quarter_category():
     out = dedupe_escalations(escs)
     assert len(out) == 3
     assert {e["summary"] for e in out} == {"v2 restated", "a1", "other quarter"}
-
-
-def test_value_sum_respects_conservation_scope(monkeypatch):
-    from pipeline import conservation_scope
-    df = pd.DataFrame({
-        "cik": ["1905824"] * 2, "report_date": ["2026-03-31"] * 2,
-        "fair_value": [156_078_000.0, 38_767_000.0],
-        "asset_category": ["LOAN", "CASH"],
-    })
-    assert value_sum_by_quarter(df)["2026-03-31"] == 156_078_000.0   # default: CASH out
-    monkeypatch.setattr(conservation_scope, "scope_override_for",
-                        lambda cik: (frozenset({"CASH"}), None))
-    assert value_sum_by_quarter(df, cik="1905824")["2026-03-31"] == 194_845_000.0
-
-
-def test_value_sum_quarter_scoped_carveout_leaves_other_quarters(monkeypatch):
-    """A carve-out scoped to Q1-2026 must not pull CASH into the Q4-2025 sum
-    (the "all"-scope regression of the attested 2025-12-31, 2026-09-02)."""
-    from pipeline import conservation_scope
-    df = pd.DataFrame({
-        "cik": ["1950976"] * 4,
-        "report_date": ["2026-03-31", "2026-03-31", "2025-12-31", "2025-12-31"],
-        "fair_value": [1_588_604_000.0, 36_885_000.0, 1_482_846_000.0, 65_057_000.0],
-        "asset_category": ["LOAN", "CASH", "LOAN", "CASH"],
-    })
-    monkeypatch.setattr(conservation_scope, "scope_override_for",
-                        lambda cik: (frozenset({"CASH"}), frozenset({"2026-03-31"})))
-    vs = value_sum_by_quarter(df, cik="1950976")
-    assert vs["2026-03-31"] == 1_625_489_000.0   # CASH rescued in-scope
-    assert vs["2025-12-31"] == 1_482_846_000.0   # CASH still excluded out-of-scope
 
 
 from pipeline.agent_rule import name_key, PositionKeyIndex

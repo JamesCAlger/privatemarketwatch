@@ -239,13 +239,8 @@ def build_conservation_snapshots(
     snaps: dict[str, dict] = {}
     if holdings_df is None or len(holdings_df) == 0 or "report_date" not in holdings_df.columns:
         return snaps
-    # Retain-and-flag (2026-08-29): is_subsidiary=1 look-through rows stay in holdings
-    # but the consolidated anchor already contains them once -- exclude from the sum.
-    if "is_subsidiary" in holdings_df.columns:
-        holdings_df = holdings_df[
-            pd.to_numeric(holdings_df["is_subsidiary"], errors="coerce").fillna(0) != 1]
-    fv = pd.to_numeric(holdings_df.get("fair_value", pd.Series(dtype=float)), errors="coerce").fillna(0.0)
-    sums = fv.groupby(holdings_df["report_date"].astype(str)).sum()
+    from pipeline.published_basis import published_fv_by_quarter
+    sums = published_fv_by_quarter(holdings_df)
     for q, vsum in sums.items():
         snap = {"quarter": q, "flags": [], "fv_at_risk": 0.0}
         anchor = anchors.get(q)

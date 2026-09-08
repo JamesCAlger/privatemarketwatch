@@ -82,17 +82,16 @@ def test_conservation_snapshot_clears_after_removal():
     assert snaps["2024-12-31"]["flags"] == []
 
 
-def test_conservation_snapshot_excludes_subsidiary_rows():
-    # Retain-and-flag (2026-08-29): is_subsidiary=1 look-through rows stay in the frame
-    # but the consolidated anchor already contains them once -- the snapshot's
-    # value_sum must exclude them or every subsidiary-reporting fund flags forever.
+def test_conservation_snapshot_is_published_basis():
     df = _holdings([
         {"report_date": "2024-12-31", "fair_value": 1815.0, "is_subsidiary": 0},
         {"report_date": "2024-12-31", "fair_value": 406.0, "is_subsidiary": 1},
     ])
     snaps = rr.build_conservation_snapshots(df, {"2024-12-31": 1815.0})
-    assert snaps["2024-12-31"]["flags"] == [], snaps
-    assert snaps["2024-12-31"]["conservation"]["value_sum"] == 1815.0
+    assert snaps["2024-12-31"]["conservation"]["value_sum"] == 2221.0
+    assert snaps["2024-12-31"]["flags"] == ["fv_conservation"]
+    snaps2 = rr.build_conservation_snapshots(df, {"2024-12-31": 2221.0})
+    assert snaps2["2024-12-31"]["flags"] == []
 
 
 # --------------------------------------------------------------- end-to-end gate
