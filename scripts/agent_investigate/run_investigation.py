@@ -140,57 +140,83 @@ def load_anchors(cik: str, rule_name="fv_conservation") -> dict[str, float]:
 def load_anchor_candidates(cik: str) -> dict[str, dict[str, float]]:
     """Per-quarter INDEPENDENT anchor values for validation: {report_date -> {name -> value}}.
 
-    Pulls the one STRONG anchor the cache produces without a rebuild:
+    Pulls the STRONG anchors the cache produces without a rebuild:
       - ``companyfacts_fv`` -- the XBRL-tagged investments_at_fair_value, a measurement independent
-        of the schedule-of-investments extraction.
+        of the schedule-of-investments extraction (an investments_ex_cash-basis figure).
+      - ``companyfacts_fv_plus_cash`` -- REPLACES companyfacts_fv for a quarter where the fund holds
+        a CASH row (per the extracted holdings) and the filer tagged cash equivalents separately.
+        Keeping both would make two strong anchors disagree by the cash amount, since the gate sums
+        EVERY published row (published_rows basis) including cash.
+      - ``printed_schedule_total`` / ``verified_investments_ex_cash`` -- an anchor-adjudicator
+        override (see load_anchor_overrides), named by its declared basis.
     Deliberately does NOT include this repo's ``schedule_total`` (sum of the extracted staging rows):
     that is a RE-AGGREGATION of the same extraction, so its disagreement with companyfacts_fv is the
     DEFECT being fixed, not evidence the anchor is bad -- using it would make the gate escalate on
-    exactly the CIKs that have a real defect. The truly independent 2nd STRONG anchor (the filer's
-    PRINTED schedule total) is not yet structured; wiring it is the path to a HIGH FV tier. The
-    driver layers a cross-quarter outlier check on top (flag_anchor_outliers). See
-    pipeline.anchor_validation.
+    exactly the CIKs that have a real defect. The driver layers a cross-quarter outlier check on top
+    (flag_anchor_outliers). See pipeline.anchor_validation.
     """
     c = _norm(cik)
     out: dict[str, dict[str, float]] = {}
+    cash_col: dict[str, float] = {}
     ff = config.FUND_FINANCIALS_FILE
     if Path(ff).exists():
         con = duckdb.connect()
         try:
+            cols = {r[0].lower() for r in con.execute(
+                f"DESCRIBE SELECT * FROM read_csv_auto('{Path(ff).as_posix()}', sample_size=-1) LIMIT 0"
+            ).fetchall()}
+            cash_sel = ("max(TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE))"
+                        if "cash_equivalents_at_fair_value" in cols else "CAST(NULL AS DOUBLE)")
             rows = con.execute(
-                f"SELECT CAST(report_date AS VARCHAR), max(TRY_CAST(investments_at_fair_value AS DOUBLE)) "
-                f"FROM read_csv_auto('{Path(ff).as_posix()}', sample_size=-1) "
+                f"SELECT CAST(report_date AS VARCHAR), max(TRY_CAST(investments_at_fair_value AS DOUBLE)), "
+                f"{cash_sel} FROM read_csv_auto('{Path(ff).as_posix()}', sample_size=-1) "
                 f"WHERE source='companyfacts' AND ltrim(CAST(cik AS VARCHAR),'0')='{c}' "
                 f"AND investments_at_fair_value IS NOT NULL GROUP BY 1").fetchall()
         finally:
             con.close()
-        for rd, v in rows:
+        for rd, v, cash in rows:
             if v is not None:
                 out.setdefault(str(rd), {})["companyfacts_fv"] = float(v)
-    # Verified grand-total override (anchor-adjudicator): a STRONG anchor for that quarter.
-    #  - if it AGREES with companyfacts -> keep both -> classify_anchors = HIGH (corroborated).
-    #  - if it DISAGREES (the incomplete-subtotal case) -> companyfacts was the wrong/partial tag;
-    #    DROP it and keep only the verified grand total as the (MEDIUM) truth, so the loop reconciles
-    #    to the right number instead of going NONE on a two-strong-disagree.
-    for rd, gt in load_anchor_overrides(cik).items():
-        cf = out.get(rd, {}).get("companyfacts_fv")
-        out.setdefault(rd, {})["printed_schedule_total"] = gt
-        if cf is not None and abs(cf - gt) > 0.01 * max(abs(cf), abs(gt)):
-            out[rd].pop("companyfacts_fv", None)
+                if cash is not None:
+                    cash_col[str(rd)] = float(cash)
+    # Published-rows deterministic candidate (spec s.2 anchor 2): where the fund HOLDS a CASH row
+    # in that quarter and the filer tagged cash equivalents, companyfacts_fv + cash REPLACES
+    # companyfacts_fv (keeping both would make two strong anchors disagree by the cash amount).
+    if cash_col:
+        h = _load_holdings(cik)
+        if h is not None and len(h) and "asset_category" in h.columns:
+            cash_q = set(h.loc[h["asset_category"].astype(str).str.upper() == "CASH",
+                               "report_date"].astype(str).str.slice(0, 10))
+            for rd in cash_q:
+                if rd in cash_col and "companyfacts_fv" in out.get(rd, {}):
+                    out[rd]["companyfacts_fv_plus_cash"] = out[rd].pop("companyfacts_fv") + cash_col[rd]
+    # Verified overrides (anchor-adjudicator), by basis:
+    #  - published_rows -> 'printed_schedule_total'; disagreeing companyfacts (partial tag) dropped.
+    #  - investments_ex_cash -> 'verified_investments_ex_cash'; agreeing companyfacts kept (HIGH),
+    #    disagreeing companyfacts dropped (the override exists because the tag was partial).
+    for rd, (gt, basis) in load_anchor_overrides(cik).items():
+        name = "printed_schedule_total" if basis == "published_rows" else "verified_investments_ex_cash"
+        slot = out.setdefault(rd, {})
+        slot[name] = gt
+        for cf_name in ("companyfacts_fv", "companyfacts_fv_plus_cash"):
+            cf = slot.get(cf_name)
+            if cf is not None and abs(cf - gt) > 0.01 * max(abs(cf), abs(gt)):
+                slot.pop(cf_name, None)
     return out
 
 
-def load_anchor_overrides(cik: str) -> dict[str, float]:
-    """{report_date -> verified grand_total} from data/overrides/agent_anchor/<cik>/*.json."""
+def load_anchor_overrides(cik: str) -> dict[str, tuple[float, str]]:
+    """{report_date -> (verified grand_total, basis)} from data/overrides/agent_anchor/<cik>/*.json.
+    Leaves that fail validate_anchor_leaf (incl. a missing basis) are ignored."""
     d = ANCHOR_OVERRIDES / _norm(cik)
-    out: dict[str, float] = {}
+    out: dict[str, tuple[float, str]] = {}
     for p in (sorted(d.glob("*.json")) if d.exists() else []):
         leaf = load_anchor_leaf(p)
         if leaf and validate_anchor_leaf(leaf) == []:
             q = str(leaf.get("target_quarter") or "").strip()
             try:
                 if q:
-                    out[q] = float(leaf["grand_total"])
+                    out[q] = (float(leaf["grand_total"]), str(leaf["basis"]))
             except (TypeError, ValueError, KeyError):
                 pass
     return out
@@ -264,8 +290,11 @@ def _prompt(cik: str, target_quarter: str, anchors: dict, rules_out: Path,
             "2. (No filing bundle for this cik-quarter -- work from the extracted data only.)\n")
     feedback = _feedback_block(cik, {**state, "iteration": iteration}) if (state and iteration > 1) else ""
     anchor_note = (f"\nThis anchor is the VALIDATED figure the gate reconciles to (tier {anchor_tier}). "
-                   f"If an anchor-adjudicator override is in place it is the filer's GRAND total of "
-                   f"investments (not the companyfacts subtotal) -- reconcile value_sum to THIS number "
+                   f"The gate sums EVERY published row (cash equivalents and look-through rows "
+                   f"included). If the anchor's basis is investments_ex_cash and this fund holds "
+                   f"cash-equivalent rows, an overshoot equal to those rows means the ANCHOR needs a "
+                   f"published_rows adjudication -- escalate category=anchor, do NOT delete the cash "
+                   f"rows. If the anchor is a published_rows grand total, reconcile value_sum to it "
                    f"and do NOT delete real rows to reach a smaller figure. ({anchor_reason})\n"
                    if anchor_tier else "")
     esc_list = existing_escalations or []

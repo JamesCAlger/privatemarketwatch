@@ -64,7 +64,7 @@ from dataclasses import dataclass, field
 # unrecognised name -- is ignored by the agreement test (cannot fake a strong anchor via a typo).
 STRONG_ANCHORS = frozenset({
     "companyfacts_fv", "companyfacts_concept", "cf_cache_cost", "ff_investments_at_cost",
-    "printed_schedule_total",
+    "printed_schedule_total", "verified_investments_ex_cash", "companyfacts_fv_plus_cash",
 })
 
 DEFAULT_AGREE_TOL = 0.01    # 1% -- "are these the same quantity", looser than the reconcile band

@@ -203,9 +203,21 @@ line) and put it in the leaf as `total_assets` with a `total_assets_source` cita
 check will then run off the filing's balance sheet instead of companyfacts. (Filing-sourced is
 single-source, so it is capped at MEDIUM confidence -- that is expected.)
 
+## Declare the BASIS of your grand total (required)
+- `published_rows`: the total of EVERYTHING the schedule of investments lists, INCLUDING cash
+  equivalents, money-market / short-term investments, and look-through rows. Use this when the
+  filer prints a "Total investments and cash equivalents" style row, or when you sum schedules
+  that include those sections. This is the basis the gate compares to directly.
+- `investments_ex_cash`: the balance-sheet "investments at fair value" line (what companyfacts
+  InvestmentOwnedAtFairValue usually tags). Cite it only when the cash-equivalent section is
+  presented OUTSIDE the total you report.
+A published_rows total must differ from the companyfacts tag; an investments_ex_cash total must
+not exceed it by more than 0.5%. The leaf is rejected otherwise.
+
 ## Output: write ONE anchor leaf to {leaf_path.as_posix()}
 {{"cik":"{cik}","target_quarter":"{target_quarter}","grand_total":<number>,
   "method":"single_tag|total_row|sum_of_schedules",
+  "basis":"published_rows|investments_ex_cash",
   "components":[{{"label":"...","value":<number>,"source":"<cite the row/tag>"}}, ...],
   "companyfacts_fv":{cf},
   "total_assets":<number, ONLY if companyfacts total_assets is null -- read from the filing balance sheet>,

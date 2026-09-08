@@ -8,7 +8,7 @@ from pipeline.anchor_validation import (
 
 def _leaf(**kw):
     base = {"cik": "1715933", "target_quarter": "2025-06-30", "grand_total": 1_094_088_266.0,
-            "method": "sum_of_schedules",
+            "method": "sum_of_schedules", "basis": "published_rows",
             "components": [
                 {"label": "non-affiliated", "value": 691_956_192.0, "source": "companyfacts IOAFV"},
                 {"label": "affiliated", "value": 402_132_074.0, "source": "SOI affiliated total row"}],
@@ -47,8 +47,9 @@ def test_sum_of_schedules_must_reconcile():
     # components must sum to grand_total for sum_of_schedules
     bad = _leaf(grand_total=2_000_000_000.0)   # components still sum to ~1.094B
     assert any("must reconcile" in e for e in validate_anchor_leaf(bad))
-    # single_tag does not require summation
-    ok = _leaf(method="single_tag", grand_total=691_956_192.0,
+    # single_tag does not require summation. grand_total equals the companyfacts tag here, so this
+    # is an investments_ex_cash basis leaf (published_rows would trip the new mislabel check).
+    ok = _leaf(method="single_tag", basis="investments_ex_cash", grand_total=691_956_192.0,
                components=[{"label": "tag", "value": 691_956_192.0, "source": "IOAFV"}])
     assert validate_anchor_leaf(ok) == []
 
@@ -123,3 +124,27 @@ def test_closure_high_with_companyfacts_cash():
     r = verify_grand_total(402_819_000, total_assets=462_155_000,
                            companyfacts_fv=402_819_000, cash=47_218_000)
     assert r.tier == HIGH
+
+
+def test_anchor_leaf_requires_valid_basis():
+    errs = validate_anchor_leaf({k: v for k, v in _leaf().items() if k != "basis"})
+    assert any("basis" in e for e in errs)
+    assert any("basis must be one of" in e for e in validate_anchor_leaf(_leaf(basis="grand")))
+    # single_tag (not sum_of_schedules) so the reconciliation check does not also fire here --
+    # this assertion is purely about the basis/mislabel check.
+    assert validate_anchor_leaf(_leaf(basis="investments_ex_cash", method="single_tag",
+                                      grand_total=691_956_192.0,
+                                      components=[{"label": "tag", "value": 691_956_192.0,
+                                                   "source": "IOAFV"}])) == []
+
+
+def test_anchor_leaf_basis_consistent_with_companyfacts():
+    # published_rows but equal to the companyfacts tag -> mislabelled
+    errs = validate_anchor_leaf(_leaf(basis="published_rows", grand_total=691_956_192.0))
+    assert any("mislabelled" in e for e in errs)
+    # investments_ex_cash but far above the tag -> mislabelled
+    errs = validate_anchor_leaf(_leaf(basis="investments_ex_cash"))   # grand_total 1.094B vs 692M
+    assert any("mislabelled" in e for e in errs)
+    # no companyfacts_fv on the leaf -> no consistency check possible
+    leaf = _leaf(basis="published_rows"); leaf.pop("companyfacts_fv")
+    assert validate_anchor_leaf(leaf) == []

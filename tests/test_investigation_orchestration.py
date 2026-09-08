@@ -553,3 +553,51 @@ def test_promote_refuses_pass_noop_when_rules_exist(tmp_path, monkeypatch):
     res = promote("888", "2026-03-31", overrides_dir=tmp_path / "ov")
     assert res["status"] == "refused_noop_with_rules"
     assert not (tmp_path / "ov").exists()
+
+
+def test_anchor_candidates_use_basis(tmp_path, monkeypatch):
+    q = "2026-03-31"
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text("cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+                  "0000000888,2026-03-31,companyfacts,1000,20\n"
+                  "0000000889,2026-03-31,companyfacts,500,7\n"
+                  "0000000890,2026-03-31,companyfacts,300,\n", encoding="utf-8")
+    monkeypatch.setattr(pipeline_config, "FUND_FINANCIALS_FILE", ff)
+    ov = tmp_path / "agent_anchor"
+    monkeypatch.setattr(ri, "ANCHOR_OVERRIDES", ov)
+    frames = {
+        "888": pd.DataFrame([{"cik": "888", "report_date": q, "fair_value": 1000.0, "asset_category": "LOAN"},
+                             {"cik": "888", "report_date": q, "fair_value": 20.0, "asset_category": "CASH"}]),
+        "889": pd.DataFrame([{"cik": "889", "report_date": q, "fair_value": 500.0, "asset_category": "LOAN"}]),
+        "890": pd.DataFrame([{"cik": "890", "report_date": q, "fair_value": 300.0, "asset_category": "LOAN"},
+                             {"cik": "890", "report_date": q, "fair_value": 9.0, "asset_category": "CASH"}]),
+    }
+    monkeypatch.setattr(ri, "_load_holdings", lambda c: frames[str(c).lstrip("0")])
+    # 888: cash rows + cash column -> plus_cash replaces companyfacts_fv
+    assert ri.load_anchor_candidates("888")[q] == {"companyfacts_fv_plus_cash": 1020.0}
+    # 889: no cash rows -> plain companyfacts_fv
+    assert ri.load_anchor_candidates("889")[q] == {"companyfacts_fv": 500.0}
+    # 890: cash rows but the cash concept is untagged -> plain companyfacts_fv (honest overshoot later)
+    assert ri.load_anchor_candidates("890")[q] == {"companyfacts_fv": 300.0}
+    # override with published_rows basis that disagrees with companyfacts -> replaces it
+    (ov / "889").mkdir(parents=True)
+    (ov / "889" / f"{q}.json").write_text(json.dumps({
+        "cik": "889", "target_quarter": q, "grand_total": 540.0, "method": "total_row",
+        "basis": "published_rows", "companyfacts_fv": 500.0,
+        "components": [{"label": "Total investments and cash equivalents", "value": 540.0, "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("889")[q] == {"printed_schedule_total": 540.0}
+    # override with ex-cash basis agreeing with companyfacts -> both kept (HIGH)
+    (ov / "889" / f"{q}.json").write_text(json.dumps({
+        "cik": "889", "target_quarter": q, "grand_total": 501.0, "method": "total_row",
+        "basis": "investments_ex_cash", "companyfacts_fv": 500.0,
+        "components": [{"label": "Total investments", "value": 501.0, "source": "SOI"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("889")[q] == {"companyfacts_fv": 500.0,
+                                                    "verified_investments_ex_cash": 501.0}
+    # a leaf without basis is ignored
+    (ov / "889" / f"{q}.json").write_text(json.dumps({
+        "cik": "889", "target_quarter": q, "grand_total": 999.0, "method": "total_row",
+        "components": [{"label": "x", "value": 999.0, "source": "s"}],
+        "evidence": [{"source": "filing", "quote": "x"}], "confidence": 0.9}), encoding="utf-8")
+    assert ri.load_anchor_candidates("889")[q] == {"companyfacts_fv": 500.0}

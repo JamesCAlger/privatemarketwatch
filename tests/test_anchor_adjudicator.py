@@ -8,7 +8,7 @@ from scripts.agent_anchor import run_anchor
 from scripts.agent_investigate import run_investigation
 
 
-def _write_leaf(path, grand_total, *, method="sum_of_schedules"):
+def _write_leaf(path, grand_total, *, method="sum_of_schedules", basis="published_rows"):
     path.parent.mkdir(parents=True, exist_ok=True)
     comps = [{"label": "non-affiliated", "value": 691_956_192.0, "source": "companyfacts IOAFV"},
              {"label": "affiliated", "value": round(grand_total - 691_956_192.0, 2),
@@ -17,7 +17,7 @@ def _write_leaf(path, grand_total, *, method="sum_of_schedules"):
         comps = [{"label": "tag", "value": grand_total, "source": "IOAFV"}]
     path.write_text(json.dumps({
         "cik": "1715933", "target_quarter": "2025-06-30", "grand_total": grand_total,
-        "method": method, "components": comps, "companyfacts_fv": 691_956_192.0,
+        "method": method, "basis": basis, "components": comps, "companyfacts_fv": 691_956_192.0,
         "evidence": [{"source": "filing", "quote": "Total Investments"}],
         "rationale": "grand total", "confidence": 0.9}), encoding="utf-8")
 
@@ -42,6 +42,7 @@ def test_verify_uses_filing_total_assets_when_companyfacts_null(tmp_path, monkey
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps({
         "cik": "1377936", "target_quarter": "2026-02-28", "grand_total": 1000.0, "method": "single_tag",
+        "basis": "published_rows",
         "components": [{"label": "Total Investments", "value": 1000.0, "source": "SOI total row"}],
         "total_assets": 1050.0, "total_assets_source": "balance sheet Total assets line",
         "evidence": [{"source": "filing", "quote": "Total Investments 1000"}], "confidence": 0.8}),
@@ -54,7 +55,7 @@ def test_verify_uses_filing_total_assets_when_companyfacts_null(tmp_path, monkey
 def test_verify_rejects_subtotal(tmp_path, monkeypatch):
     # the WRONG anchor (692M companyfacts subtotal) proposed as grand total -> 63% invested -> reject
     monkeypatch.setattr(run_anchor, "BASE", tmp_path / "agent_anchor")
-    _write_leaf(run_anchor._leaf_path("1715933", "2025-06-30"), 691_956_192.0, method="single_tag")
+    _write_leaf(run_anchor._leaf_path("1715933", "2025-06-30"), 691_956_192.0, method="single_tag", basis="investments_ex_cash")
     res = run_anchor.verify("1715933", "2025-06-30")
     assert not res["ok"] and res["tier"] == "NONE"
 
@@ -69,7 +70,7 @@ def test_promote_writes_override_only_when_verified(tmp_path, monkeypatch):
     assert p["status"] == "promoted"
     assert (tmp_path / "overrides" / "1715933" / "2025-06-30.json").exists()
     # bad -> refused, no override written
-    _write_leaf(run_anchor._leaf_path("1715933", "2025-09-30"), 691_956_192.0, method="single_tag")
+    _write_leaf(run_anchor._leaf_path("1715933", "2025-09-30"), 691_956_192.0, method="single_tag", basis="investments_ex_cash")
     r = run_anchor.promote("1715933", "2025-09-30")
     assert r["status"] == "refused"
     assert not (tmp_path / "overrides" / "1715933" / "2025-09-30.json").exists()
@@ -93,7 +94,7 @@ def test_override_agreeing_with_companyfacts_yields_high(tmp_path, monkeypatch):
     monkeypatch.setattr(run_investigation, "ANCHOR_OVERRIDES", tmp_path / "ov")
     # an override that AGREES with companyfacts (692M) -> keep both -> HIGH (corroborated)
     leaf = tmp_path / "ov" / "1715933" / "2025-06-30.json"
-    _write_leaf(leaf, 691_956_192.0, method="single_tag")
+    _write_leaf(leaf, 691_956_192.0, method="single_tag", basis="investments_ex_cash")
     q = run_investigation.load_anchor_candidates("1715933").get("2025-06-30", {})
     from pipeline.anchor_validation import classify_anchors
     assert classify_anchors(q).tier == "HIGH"

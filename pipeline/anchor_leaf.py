@@ -14,6 +14,8 @@ Leaf (one JSON object)::
     {"cik": "1715933", "target_quarter": "2025-06-30",
      "grand_total": 1094088266.0,
      "method": "sum_of_schedules",                       # single_tag | total_row | sum_of_schedules
+     "basis": "published_rows",                           # published_rows | investments_ex_cash --
+                                                            # what the grand_total INCLUDES (see BASES)
      "components": [
        {"label": "non-affiliated", "value": 691956192.0, "source": "companyfacts InvestmentOwnedAtFairValue"},
        {"label": "affiliated",     "value": 402132074.0, "source": "SOI affiliated schedule total row (p.47)"}],
@@ -30,10 +32,16 @@ import json
 import re
 from pathlib import Path
 
-REQUIRED = ("cik", "target_quarter", "grand_total", "method", "components", "evidence", "confidence")
+REQUIRED = ("cik", "target_quarter", "grand_total", "method", "components", "evidence",
+            "confidence", "basis")
 METHODS = frozenset({"single_tag", "total_row", "sum_of_schedules"})
+# What the grand total INCLUDES (spec 2026-09-07 s.2). published_rows = everything the schedule
+# lists incl. cash equivalents / short-term investments / look-through rows -> comparable to the
+# published numerator directly. investments_ex_cash = the balance-sheet investments line.
+BASES = frozenset({"published_rows", "investments_ex_cash"})
 _CIK_RE = re.compile(r"^\d{1,10}$")
 _SUM_TOL = 0.01    # components must sum to grand_total within 1% (sum_of_schedules)
+_BASIS_TOL = 0.005   # basis-vs-companyfacts consistency: 0.5% (the conservation band)
 
 
 def _is_pos_num(x) -> bool:
@@ -58,6 +66,21 @@ def validate_anchor_leaf(obj) -> list[str]:
         errs.append("grand_total must be a positive number")
     if str(obj.get("method")) not in METHODS:
         errs.append(f"method must be one of {sorted(METHODS)}, got {obj.get('method')!r}")
+
+    basis = str(obj.get("basis") or "")
+    if basis not in BASES:
+        errs.append(f"basis must be one of {sorted(BASES)}, got {obj.get('basis')!r}")
+    cf = obj.get("companyfacts_fv")
+    if basis in BASES and _is_pos_num(obj.get("grand_total")) and _is_pos_num(cf):
+        g, c = float(obj["grand_total"]), float(cf)
+        close = abs(g - c) <= _BASIS_TOL * c
+        if basis == "published_rows" and close:
+            errs.append("basis mislabelled: published_rows but grand_total equals the companyfacts "
+                        "investments tag within 0.5% -- declare investments_ex_cash or cite the "
+                        "cash/short-term components")
+        if basis == "investments_ex_cash" and g > c * (1 + _BASIS_TOL):
+            errs.append("basis mislabelled: investments_ex_cash but grand_total exceeds the "
+                        "companyfacts investments tag by more than 0.5% -- declare published_rows")
 
     comps = obj.get("components")
     if not isinstance(comps, list) or not comps:
