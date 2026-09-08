@@ -11563,3 +11563,24 @@ attestation (generated 2026-09-05T09:20Z) against a baseline copy targeting
 2025-12-31; a `--returns` rebuild does not regenerate it, and the verdict is PASS
 on both. Refreshing the baseline remains outstanding and is the only way to make
 this gate informative again.
+
+## 2026-09-08 - AGENTS.md consolidation (owner-authorized direct edit)
+
+- Owner granted explicit permission to edit AGENTS.md directly for this pass; the
+  "do not edit AGENTS.md" protocol otherwise stands.
+- Stale content replaced: 2026-05-27 blocker accounting and the 25-bundle
+  bdc_cik_review queue; "post-Phase-6" baseline wording; 1,956-test verification
+  note (now historical; suite ~5,000 test functions / 143 files); the
+  "Best Next Discussion" track-2 sequence (done) replaced by "Current Tracks".
+- Added: Quarter Acceptance Contract section (thresholds JSON, v2 sign-off,
+  Q4-2025 + Q1-2026 sign-off tags, v3 provisional published basis, v4 on Q2);
+  quarter-pass / acceptance / reattest commands; Parquet companion note;
+  scripts table rows (run_quarter_pass, reattest_quarters,
+  shadow_validation_runner, Codex dispatch family, backup_raw_to_r2);
+  Project Skills section (4 skills); CI needs_cache caveat; native-IO mtime
+  backstop in the write-guard contract; docs/reference staleness caveat.
+- Data-semantics bullets added: interest_rate all-in decision vs cash-leg
+  storage (atomic migration), subsidiary-aware conservation (no global JV drop),
+  contested name-key matching + position_id registry NOT on prod path (pids
+  still renumber).
+- No code, data, or test changes. Nothing run beyond rg/ls/git inspection.

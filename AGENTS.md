@@ -41,14 +41,17 @@ Multiple agents may run concurrently. To keep project context fresh without race
 - Comparative-period BDC rows can be legitimate prior-period facts, not duplicates. Confirm `period`, `report_date`, accession, and dimension path before removing them.
 - PIK has two separate meanings in this repo. `pik_current_status` is strict current-payment/accrual evidence from N-PORT paid-in-kind flags or BDC position-level PIK income/accrual/capitalization facts. `pik_terms_flag` / `pik_terms_rate` is a schedule-rate proxy for disclosed PIK terms, comparable to S&P-style BDC PIK exposure, but not proof of current PIK income.
 - Do not label `pik_terms_started` as confirmed "bad PIK." It is a public-filing proxy that PIK terms appeared on an existing matched position. Confirmed bad PIK requires amendment/origination evidence showing cash-pay terms were changed because of borrower stress.
+- `interest_rate` convention is DECIDED (2026-07-12) as all-in rate with `pik_rate` carried separately, but the pipeline still stores the cash leg. Do not migrate one side alone: the storage change and the `index_returns` income formula must flip atomically.
+- Conservation sums are subsidiary-aware (retain-and-flag, 2026-08-29): JV/subsidiary rows are kept in holdings and flagged via `is_subsidiary`, and the FV-conservation gate excludes them. Do not add a global JV/subsidiary drop.
+- Position matching uses contested name-key assignment with a maturity veto (promoted 2026-09-07). `pipeline/position_id_registry.py` exists but is opt-in (`use_registry` defaults False, not on the production path), so production `position_id` values still renumber per rebuild. Do not use raw pids as cross-rebuild keys.
 
 ## Contracts
 
 These are harm-category restrictions. Violating them causes data loss, silent corruption, or external service abuse.
 
 - **No unwanted network calls.** Do not trigger SEC EDGAR downloads unless the user explicitly asks. All raw data is cached on disk. Use `scripts/rebuild_outputs.py` or call pipeline functions directly to rebuild outputs.
-- **No production data corruption.** Pytest installs a monkeypatch guard (`tests/conftest.py`) that replaces `builtins.open` and `io.open` with wrappers blocking any write-mode open (`w`, `a`, `x`, `+`) to `data/output/` or `frontend/public/data/`. This covers all standard Python write paths (`open()`, `Path.write_text()`, `pandas.to_csv()`, `json.dump()`, etc.). Verified 2026-05-18: 1,956 tests passed with zero production files modified. After running tests, run `python scripts/diff_outputs.py --semantic` as a backstop to confirm no artifact drift.
-- **Baseline governance.** The active baseline is the deterministic post-Phase-6 snapshot. Do not compare new work against `baseline_pre_phase6_stale_2026-05-16` except for historical investigation. Refresh `data/snapshots/baseline/` only after rebuilding from cached inputs, running `python scripts/diff_outputs.py --semantic`, documenting semantic deltas, and preserving the prior baseline if it is being retired.
+- **No production data corruption.** Pytest installs a monkeypatch guard (`tests/conftest.py`) that replaces `builtins.open` and `io.open` with wrappers blocking any write-mode open (`w`, `a`, `x`, `+`) to `data/output/` or `frontend/public/data/`. This covers all standard Python write paths (`open()`, `Path.write_text()`, `pandas.to_csv()`, `json.dump()`, etc.). Native-IO writers (DuckDB `COPY TO`, pyarrow) bypass `builtins.open`, so `conftest.py` also snapshots mtime/size of every file under the protected roots at session start and fails the session on any created/changed/deleted path. Historical note: verified 2026-05-18 at 1,956 tests; the suite is now ~5,000 test functions across 143 files. After running tests, run `python scripts/diff_outputs.py --semantic` as a backstop to confirm no artifact drift.
+- **Baseline governance.** The active baseline (`data/snapshots/baseline/`, gitignored) was last refreshed 2026-09-05 after the Q1-2026 sign-off (rebuild-then-refresh at git `d18560d`). The prior baseline was archived by hand to `baseline_retired_2026-09-05`. Do not compare new work against retired or `pre_*` snapshots except for historical investigation. Refresh only after rebuilding from cached inputs, running `python scripts/diff_outputs.py --semantic`, documenting semantic deltas, and archiving the prior baseline first: `snapshot_outputs.py --clean` deletes the old baseline without archiving it.
 - **No SEC rate-limit violations.** The existing `edgar_client.py` enforces 10 req/sec. Do not bypass it or add parallel request paths.
 - **No encoding crashes.** All log messages must use ASCII only — Windows cp1252 cannot render Unicode box-drawing, em-dashes, or ellipsis characters.
 - **No slow transforms on large datasets.** Avoid pandas `.apply()`, `.iterrows()`, or row-level Python loops on datasets with >10K rows — the pipeline's 800K+ row datasets will hang for minutes. Use DuckDB SQL or vectorized operations. Pandas is fine for small summaries and logging.
@@ -124,6 +127,7 @@ Choose verification proportional to the change:
 - Unified holdings change: targeted tests plus `python -m pipeline.main --unified --validate` or `python scripts/rebuild_outputs.py --unified` when practical.
 - Export change: run `python -m pipeline.main --export-frontend` and inspect changed JSON shape.
 - Frontend TypeScript/UI change: run `npm run build` in `frontend/`.
+- CI (`.github/workflows/ci.yml`) runs only the no-cache subset of the suite (`needs_cache` split). Cache-dependent tests run locally only, so a green CI is not a full-suite pass.
 
 ### Test Selection Workflow
 
@@ -194,28 +198,33 @@ Do not treat a visually plausible dashboard as evidence that the data is correct
 
 ## Current State
 
-Phases 1-6 are complete. For detailed completion summaries with metrics, see [`docs/reference/phase_history.md`](./docs/reference/phase_history.md).
+Phases 1-6 (through the 2026-05 compatibility refactor) are complete; see [`docs/reference/phase_history.md`](./docs/reference/phase_history.md). Everything after that is recorded in `docs/agent_changelog.md`, which is authoritative for anything dated after 2026-05-28.
+
+### Quarter Acceptance Contract (the live quality gate)
+
+- Thresholds are data: `data/reference/quarter_acceptance_thresholds.json`, evaluated by `pipeline/quarter_acceptance.py`. Nine checks: fund_coverage, reconcile_rate, flagged_fv_share, source_blocking_fv_share, verified_fv_share, promoted_rule_drift, promoted_rule_health, over_inclusion_fv_share, unfinished_investigations.
+- v2 signed off by the owner 2026-08-20 (reconcile >= 90, flagged <= 10, blocking <= 1, verified_fv >= 70).
+- Q4-2025 (2025-12-31) PASS 7/7 under v2, git tag `signoff-2025-12-31`. Q1-2026 (2026-03-31) PASS 7/7 twice-stable, signed off 2026-09-05, git tag `signoff-2026-03-31`.
+- v3 (2026-09-07, provisional) moves the numerator to the PUBLISHED basis and adds over_inclusion and unfinished_investigations. Q1-2026 re-run under v3 is EXPECTED to fail the FV-share checks; that is the gate seeing the ~$4B over-inclusion, not a regression. Calibrate v4 on Q2-2026 actuals.
+- Remediation cycle: `scripts/run_quarter_pass.py` (staged: rebuild, oracle, validate, provenance, shadow, queue, ledger, preflight, select) plus the `quarter-pass-operator` skill for Codex fleet dispatch and verify/promote. `scripts/reattest_quarters.py` re-attests signed-off quarters after any pipeline change; a regression there is a stop-and-report event.
 
 ### Current Blocker Accounting
 
-When asked how many "blockers" remain, use the latest source reconciliation residual artifacts as the default source of truth, not only the reviewed `bdc_cik_review` batch.
+When asked how many "blockers" remain, read the header of the latest source-reconciliation residual artifacts. Do not quote numbers from this file without re-checking.
 
 Relevant artifacts:
-- `data/output/source_reconciliation_residual_classification.md`
-- `data/output/source_reconciliation_residual_classification.csv`
-- `data/output/source_reconciliation_source_only_classification.md`
+- `data/output/source_reconciliation_source_only_classification.md` (totals in the header)
 - `data/output/source_reconciliation_source_only_detail.csv`
-- `data/output/bdc_cik_review/worklist.csv`
-- `data/output/bdc_cik_review/summary.csv`
+- `data/output/source_reconciliation_residual_classification.md` / `.csv`
+- `data/output/quarter_pass/<pass_id>/` for the per-pass battery, gate verdicts, and selected packets
 
-As of the 2026-05-27 check:
-- `bdc_cik_review` had 25 bundles, all with `PATCH_PROPOSED` verdicts.
-- That 25-bundle batch is only a reviewed slice, not the full remaining blocker pool.
-- The current source-only blocking pool was 1,156 CIK-quarter-mechanism packets and 7,337 blocking rows.
-- Broader residual blockers, including pipeline-only rows, were 1,251 blocking groups and 7,785 blocking rows.
-- Effective unreviewed source-only blockers by the existing agentic workflow were about 1,155 packets and 7,336 rows, because only one current source-only packet cleanly overlapped the old 25-bundle reviewed batch.
+At the 2026-09-08 rebuild the source-only pool was 9,335 blocking rows (of 15,338 source-only rows reviewed). The old 25-bundle `data/output/bdc_cik_review/` batch is historical only; do not regenerate a queue from it. Blocker selection now runs inside a quarter pass and ranks by output-side FV with a fund-leverage tiebreaker. Always state which artifact and timestamp/count basis you used.
 
-If the user asks to launch an agent to review blockers, regenerate or inspect the latest queue from the residual artifacts first. At the 2026-05-27 check, the top next packet was `0001849894 | MSD Investment Corp. | 2025-12-31 | blocking_source_pct_leaf_parser_mismatch | 83 rows`. Always state which artifact and timestamp/count basis you used.
+### In flight (branch `ensemble-fp-experiment`, 2026-09-08)
+
+- Published-basis gate (v3) shipped, rollout PAUSED pending owner decisions; see `docs/superpowers/specs/2026-09-07-published-basis-conservation-gate-design.md`.
+- Match-quality program: mg3 full-cohort gold set (535 packets) done, contested assignment promoted to production, chain-completeness work ongoing (`docs/superpowers/plans/2026-09-08-chain-completeness.md`).
+- Production stack: 11 typed Parquet companions live beside the CSVs (PR-1); CSV remains canonical until the reader flip (PR-2). R2 backup and dbt phase 2 planned under `docs/production_stack/`.
 
 ## Pipeline Architecture
 
@@ -226,9 +235,15 @@ python -m pipeline.main --ciks 1418076   # Holdings for specific CIKs only
 python -m pipeline.main --unified        # Build unified private markets holdings (~60s)
 python scripts/rebuild_outputs.py --pik-status  # Strict current PIK status artifacts
 python scripts/rebuild_outputs.py --pik-proxy   # S&P-style schedule-rate PIK proxy artifacts
+python scripts/run_quarter_pass.py --list                                   # list quarter-pass stages
+python scripts/run_quarter_pass.py --pass-id <id> --quarter YYYY-MM-DD      # staged remediation pass (see --from/--until/--dry-run)
+python -m pipeline.quarter_acceptance --quarter YYYY-MM-DD                  # gate verdict vs data/reference thresholds
+python scripts/reattest_quarters.py check --quarter YYYY-MM-DD              # re-attest a signed-off quarter
 ```
 
-For the full module inventory and test coverage table, see [`docs/reference/modules_and_tests.md`](./docs/reference/modules_and_tests.md).
+Outputs: CSVs under `data/output/` are canonical. Eleven core artifacts also have typed Parquet companions (`*.parquet`, same stem) written by DuckDB; readers still consume the CSV until the reader flip lands.
+
+For the module inventory and test coverage table, see [`docs/reference/modules_and_tests.md`](./docs/reference/modules_and_tests.md). That file, `data_layout.md`, and `phase_history.md` are dated 2026-05-28; for modules added since (quarter pass, shadow engines, provenance, position_id registry, match quality) use `docs/agent_changelog.md`.
 
 ## Data Layout
 
@@ -269,13 +284,33 @@ npm run build             # Static export to frontend/out/
 | `scripts/diff_outputs.py` | Compare current outputs with the active official baseline, including generated SQL and optional semantic summaries. | `python scripts/diff_outputs.py --semantic` |
 | `scripts/current_cache_phase6_parity.py` | One-off current-cache pre/post comparator for Phase 6-style refactor parity. Use named snapshots under `data/snapshots/`, not the official baseline. | `snapshot --clean --snapshot-dir ...`, `diff --semantic --snapshot-dir ...` |
 | `scripts/learn_template.py` | Manage per-CIK HTML extraction templates. Auto-detect, validate, inspect, accept, batch revalidate. | `--auto-detect <CIK>`, `--auto-detect-all`, `--validate <CIK>`, `--validate-only <CIK>`, `--next`, `--inspect <CIK>`, `--accept <CIK> --justification "..."`, `--revalidate-all`, `--add-periods <CIK\|ALL>`, `--list` |
+| `scripts/run_quarter_pass.py` | Staged quarter remediation pass: rebuild, oracle, validate, provenance re-verify, shadow rules, queue, ledger, preflight, packet selection. Writes to `data/output/quarter_pass/<pass_id>/`. | `--pass-id <id> --quarter YYYY-MM-DD [--from/--until <stage>] [--force] [--dry-run] [--list]` |
+| `scripts/reattest_quarters.py` | Record and re-check attestations for signed-off quarters. Run `check` after any pipeline change that touches cohort holdings. | `attest --quarter Q --source <battery.json>`, `check [--quarter Q]` |
+| `scripts/shadow_validation_runner.py` | Run the shadow-rule engines (conservation, identity, cross-source, weak, Agent A) and emit the disposition ledger. Invoked by the quarter pass; runnable standalone. | `python scripts/shadow_validation_runner.py` |
+| `scripts/run_codex_worker.ps1`, `scripts/dispatch_*_workers.ps1` | Sandboxed Codex worker fleets (Agent A / B / B2 / anchor / convention / investigation). Dispatch from an ADMIN PowerShell; MaxParallel ceiling is 2. See `docs/reference/codex_worker_dispatch.md`. | per-lane dispatch script |
+| `scripts/backup_raw_to_r2.ps1` | Sync the raw EDGAR cache (optionally baselines) to Cloudflare R2 via rclone. Setup in `docs/reference/cloud_backup_setup.md`. | `.\scripts\backup_raw_to_r2.ps1` |
+
+## Project Skills
+
+Skills under `.claude/skills/` (invoke by name; read the SKILL.md before use):
+
+| Skill | Purpose |
+|---|---|
+| `wrapper` | Create or update a BDC XBRL wrapper JSON for a CIK. |
+| `highlights-wrapper` | Create or validate a fund highlights wrapper JSON for a CIK. |
+| `identifier-grammar` | Induce or repair a per-CIK identifier rate-grammar and anchor dialect for Agent A. |
+| `quarter-pass-operator` | Orchestrate a quarter-pass remediation cycle (battery, Codex fleet dispatch, monitoring, verify/promote). Requires an ADMIN PowerShell and has hard escalation boundaries; do not improvise around them. |
 
 ## Files Worth Reading First
 
 - `AGENTS.md` (this file): current state, contracts, schemas, and operational warnings.
 - `docs/reference/codex_worker_dispatch.md`: how to dispatch sandboxed Codex worker fleets (the
   reusable pattern + the four sandbox traps). Read before standing up any new terminal agent set.
-- `docs/agentic_data_quality.md`: proposed agentic validation architecture.
+- `docs/agentic_data_quality.md`: the agentic validation architecture (2026-05 proposal; now largely implemented as the quarter-pass cycle).
+- `pipeline/quarter_acceptance.py` and `data/reference/quarter_acceptance_thresholds.json`: the live quality gate and its thresholds.
+- `scripts/run_quarter_pass.py`: the remediation cycle that feeds the gate.
+- `docs/production_stack/production_data_stack_plan.md`: Parquet/dbt/R2 production stack plan and phase status.
+- `docs/reference/match_gold_dispatch.md`: how position-match gold-set fleets are dispatched and scored.
 - `pipeline/unified_holdings.py`: central holdings construction and classification.
 - `pipeline/bdc_position_pik.py`: cache-only BDC XBRL extractor for position-level PIK income/accrual/capitalization evidence.
 - `pipeline/pik_status.py`: strict current PIK status, PIK schedule-rate proxy summary, and PIK terms-started transition outputs.
@@ -299,19 +334,12 @@ When refactoring does become the priority, the safest direction is:
 
 Avoid large aesthetic rewrites. The productive refactor is one that reduces silent-data-corruption risk or makes validation easier to reason about.
 
-## Best Next Discussion
+## Current Tracks
 
-After reading this file, the next conversation should decide:
+Track 2 (data quality first) was chosen and its original six-step sequence is done: the quarter acceptance contract, deterministic source reconciliation, fund-strategy validation, audited per-CIK corrections, agents scoped to residuals with escalation, and quality tiers in the shadow ledger. The open tracks as of 2026-09-08:
 
-- Whether any urgent production refactor blocks data-quality work.
-- Which validation gaps most directly affect public frontend trust.
-- Which human validation loops can be replaced by constrained agent loops.
+1. **Published-basis gate rollout.** Resume the paused v3 rollout, then calibrate v4 on Q2-2026 actuals. Ship before the Q2 fleet runs.
+2. **Production stack.** Parquet reader flip (PR-2) in a quiet window with the full suite, R2 backup once the Cloudflare setup exists, then dbt phase 2 per `docs/production_stack/`.
+3. **Match quality and chain completeness.** Continuation metric built but not dispatched; fingerprint drift classes unvalidated; null-issuer wrapper pending.
 
-If choosing track 2, the recommended sequence is:
-
-1. Define a public data-quality contract: freshness, coverage, source reconciliation, GAV reconciliation, classification confidence, and known exclusions.
-2. Build deterministic source reconciliation for BDC holdings by CIK-quarter against cached XBRL facts.
-3. Add fund-level metadata/strategy validation so holdings classification can be checked against independent fund identity signals.
-4. Introduce per-CIK corrections as audited JSON/config, not growing global keyword lists.
-5. Use agents only on validation residuals, with mandatory evidence, mechanism, confidence, and explicit escalation.
-6. Surface quality tiers in frontend data: verified, preliminary, under review, stale.
+Before starting new work, read the last few `docs/agent_changelog.md` entries: the state above moves faster than this file.
