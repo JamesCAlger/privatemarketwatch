@@ -11465,3 +11465,101 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
   read-only commands); test_validate_holdings.py -k "cik_format or gav or subsidiary" 19 passed
   (159 deselected); test_investigation_state.py + test_investigation_orchestration.py 33 passed
   together; test_quarter_acceptance.py 10 passed. Full suite NOT run (Plan 2 rollout owns it).
+
+## 2026-09-08 - Chain completeness: match universe, FV guards, gap tier, continuation metric
+
+Commits: 8c4b68e (matcher + tooling), 010e725 (index-returns positivity fix).
+Plan and evidence: `docs/superpowers/plans/2026-09-08-chain-completeness.md`,
+`docs/investigations/position_matching.md` (E13-E16 section).
+
+**What changed (pipeline/position_matching.py)**
+
+- Zero-fair-value rows now enter the match universe. The old rule
+  (`fair_value IS NOT NULL AND != 0`) made 17,655 cohort rows (6.6%) unchainable
+  by construction, which was 44% of every singleton row.
+- `_fv_scale_ok_sql` replaces the signed FV-ratio guard at all eight tier call
+  sites: fair-value MAGNITUDES within the tier cap, or both principals known,
+  positive and within 2%. The guard exists to catch unit-scale mismatches, and
+  the principal supplies that check independently.
+- `_inst_subtype_name` parses the instrument sub-type from `issuer_name` as well
+  as `instrument_description`, used ONLY to widen `CONTESTED_PA_BAND_REVOLVER`.
+  Filers who name the instrument in `issuer_name` were getting the narrow band.
+  Never used as a veto, so it cannot reject a pair that is accepted today.
+- The maturity veto's amendment escape now takes principal within 2% OR spread
+  within 1bp, instead of both. The spread-only leg is gated on the principal not
+  contradicting (`CONTESTED_AMENDMENT_SPREAD_PA_BAND = 1.5`).
+- New Tier F (`F_gap_no_filing`, `F_gap_name_absent`): span-2 links across one
+  missing filing, exact unique name both sides, maturity veto, FV guard.
+  `GAP_QUARTER_TIER_DEFAULT = False` -- ships dark until the continuation metric
+  can score it. The span<=4 cap in `assign_position_ids` now admits `F_gap_*`.
+
+**What changed (pipeline/index_returns.py)**
+
+Both fair-value legs must be strictly positive. Positivity used to be enforced
+by accident upstream (every tier required `b.fv > 0 AND e.fv > 0`); relaxing
+those guards made zero and negative legs reachable. On the first rebuild that
+added 24,809 two-negative pairs (mean total return 2.5, min -150) and 5,502
+sign-flip/zero pairs (mean -41.4, min -41,604) against 474,027 sound rows, and
+moved DIRECT_LENDING 135.4 -> 133.9. None is a price return.
+
+**New tooling**
+
+- `build_packets.py --continuation N`: samples ROWS (uniform + FV-weighted, seed
+  20260908) and asks which later row continues the position. Build-independent,
+  so ONE adjudication scores every future build.
+- `score_continuation.py`: scores any holdings artifact against such a batch --
+  correct / wrong / missing link, correct end, false link, with Wilson intervals.
+- `replay_verdicts.py --pairs-csv`: replays the tier vetoes over any pair list.
+- `chain_experiments/e13..e16`: name-drift sizing, fingerprint precision control,
+  guard diagnostics, null-issuer wrapper scoping.
+
+**Production result (cohort BDC rows, `prod_chain_metrics.py`)**
+
+| metric | baseline 2026-09-05 | after 09-07 promotion | now |
+|---|---|---|---|
+| singleton share (rows) | 27.15% | 15.2% | 12.41% |
+| singleton share (FV) | 9.54% | 3.8% | 3.60% |
+| cohort chain edges | 144,663 | 178,355 | 185,203 |
+| cohort FV | $3,440.73B | $3,440.7B | $3,440.728B |
+| zero-FV rows chained | 0 | 0 | 3,991 of 17,655 |
+| position_returns rows | - | 474,010 | 474,027 |
+| DIRECT_LENDING FV index | - | 135.4 | 135.0 |
+
+Singletons that cannot chain by construction fall from 17,717 to 66 (cash and
+derivatives only). The residual 0.4 on DIRECT_LENDING is re-assignment, not
+volume: the repricing and revolver-draw pairs the gold A/B scores as correct.
+
+**Gold A/B (mg3 + mg4_contested, 1,866 pairs, production config)**
+
+WRONG linked 73 -> 74, CONFIRMED 1,622 -> 1,625, MISSED 36 -> 37; CONFIRMED lost
+to the contest 17 -> 16. The two repricings the escape was rewritten for
+(Columbia Helicopters, Nouryon Finance) are recovered. This instrument cannot
+see the main change: its pairs were sampled from a build where zero-FV rows were
+excluded, so none involves one.
+
+**Tests:** 132 position-matching (13 new), 52 index-returns (5 new), 11
+continuation (new file `tests/test_match_gold_continuation.py`), 19 match-gold
+packets/score. Not run: the full suite (another session was committing
+concurrently).
+
+**Not done, deliberately:** the null-issuer wrapper fix (3,525 rows / $11.12B,
+94% in Crescent PCI, Crescent BDC, GS BDC, Audax -- `prefix_rules` match with
+`str.startswith` but those prefixes embed per-quarter percentages). It renames
+rows that flow into investee concentration, top constituents and entity
+resolution, so it needs its own gated pass. Baseline not refreshed; frontend not
+exported (another session holds uncommitted frontend edits).
+
+**Semantic diff (`scripts/diff_outputs.py --semantic`, log in
+`scratch/2026-09-08_completeness/diff_semantic.log`)**
+
+54 divergent artifacts of 45,993 checked; semantic delta rows: holdings 7,
+matches 7, position_returns 7, index_returns 6, fund_financials 0. The gate does
+NOT isolate this change: the active baseline is the 2026-09-05 snapshot, which
+predates the 2026-09-07 contested promotion, so its deltas carry both passes plus
+the `position_id` ordinal renumbering that every rebuild produces. Largest visible
+index move is COMMON_EQUITY 2021q1, 178 -> 177 constituents and 148.209 -> 148.252.
+`quarter_acceptance.json` differs because the on-disk copy is the Q1-2026
+attestation (generated 2026-09-05T09:20Z) against a baseline copy targeting
+2025-12-31; a `--returns` rebuild does not regenerate it, and the verdict is PASS
+on both. Refreshing the baseline remains outstanding and is the only way to make
+this gate informative again.
