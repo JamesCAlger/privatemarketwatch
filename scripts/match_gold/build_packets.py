@@ -25,7 +25,12 @@ sys.path.insert(0, str(REPO))
 from pipeline.match_quality import drift_break_candidates, FV_JUMP_RATIO  # noqa: E402
 
 SEED = "20260903"
-SAMPLE_COLUMNS = ["packet_id", "packet_type", "stratum", "position_id", "cik"]
+SAMPLE_COLUMNS = ["packet_id", "packet_type", "stratum", "position_id", "cik",
+                  "anchor_row_id"]
+# Seed for the continuation strata only, so drawing a continuation sample never
+# perturbs the frozen mg1-mg5 draws.
+CONTINUATION_SEED = "20260908"
+CONTINUATION_STRATA = ("continuation_uniform", "continuation_fv_weighted")
 JW_LO, JW_HI = 0.86, 0.97
 
 # A sandboxed Codex worker runs `codex exec -C <scratch runroot>`, so its cwd is neither
@@ -134,9 +139,120 @@ def sample_chains(holdings_df, edges_df, *, per_tier=40, n_fv_jump=40,
                 "position_id": pid_of.get(r.dropped_row_id, ""),
                 "cik": str(r.cik)})
 
-    out = pd.DataFrame(rows, columns=SAMPLE_COLUMNS)
+    out = pd.DataFrame(rows, columns=SAMPLE_COLUMNS).fillna("")
     out = out.drop_duplicates(["stratum", "position_id"])
     return out.sort_values(["stratum", "packet_id"]).reset_index(drop=True)
+
+
+def sample_continuations(holdings_df, *, n_uniform=100, n_fv_weighted=100):
+    """Sample position-quarters for the build-independent continuation metric.
+
+    Every other stratum samples something the current build produced -- an edge
+    it drew, a singleton it left -- so its answer is only meaningful for that
+    build.  This one samples ROWS, and the question put to the adjudicator
+    ("which row in a later quarter is this position's continuation, if any")
+    is a fact about the filings.  The resulting verdicts therefore score any
+    build, before or after a matcher change, without re-adjudication.
+
+    Two strata: uniform over eligible rows gives the row-level rate, FV-weighted
+    gives the dollar-weighted one.  A row in its CIK's last reported quarter is
+    excluded, since no continuation could be observed either way.
+    """
+    con = duckdb.connect()
+    con.register("h", holdings_df)
+    con.execute(f"""
+        CREATE OR REPLACE TEMP VIEW elig AS
+        WITH b AS (
+            SELECT cik, row_id, report_date, TRY_CAST(fair_value AS DOUBLE) AS fv
+            FROM h
+            WHERE source = 'bdc' AND row_id IS NOT NULL
+              AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
+        ),
+        last_q AS (SELECT cik, MAX(report_date) AS mx FROM b GROUP BY cik)
+        SELECT b.*,
+            GREATEST(CAST(hash(b.row_id || '{CONTINUATION_SEED}') AS DOUBLE)
+                     / 18446744073709551615.0, 1e-12) AS u
+        FROM b JOIN last_q l ON l.cik = b.cik
+        WHERE b.report_date < l.mx
+    """)
+    rows: list[dict] = []
+    uni = con.execute(f"""
+        SELECT row_id, cik FROM elig ORDER BY u LIMIT {int(n_uniform)}
+    """).df()
+    for r in uni.itertuples(index=False):
+        rows.append({"packet_id": _packet_id("chain", "continuation_uniform", r.row_id),
+                     "packet_type": "chain", "stratum": "continuation_uniform",
+                     "position_id": "", "cik": str(r.cik),
+                     "anchor_row_id": str(r.row_id)})
+    # Exponential race: ordering by -ln(u)/w draws without replacement with
+    # probability proportional to w.  Zero-value rows carry no dollars and are
+    # simply not part of the dollar-weighted question.
+    fvw = con.execute(f"""
+        SELECT row_id, cik FROM elig
+        WHERE ABS(fv) > 0
+        ORDER BY (-LN(u)) / ABS(fv) LIMIT {int(n_fv_weighted)}
+    """).df()
+    for r in fvw.itertuples(index=False):
+        rows.append({"packet_id": _packet_id("chain", "continuation_fv_weighted", r.row_id),
+                     "packet_type": "chain", "stratum": "continuation_fv_weighted",
+                     "position_id": "", "cik": str(r.cik),
+                     "anchor_row_id": str(r.row_id)})
+    out = pd.DataFrame(rows, columns=SAMPLE_COLUMNS)
+    out = out.drop_duplicates(["stratum", "anchor_row_id"])
+    return out.sort_values(["stratum", "packet_id"]).reset_index(drop=True)
+
+
+def _pull_continuation_candidates(cik: str, anchor: dict,
+                                  con: duckdb.DuckDBPyConnection) -> list[dict]:
+    """Candidate continuations: rows from the next two reported dates.
+
+    Ranking by fair-value proximity alone (what `_pull_candidate_rows` does for
+    singletons) is the wrong prior here -- an undrawn revolver funding from zero
+    to par is exactly the case the metric has to see -- so the list unions three
+    orderings: same issuer name, nearest principal, nearest fair value.  If the
+    true continuation is absent the adjudicator cannot cite a row_id and the
+    packet scores as insufficient evidence, so the list is deliberately generous.
+    """
+    date = anchor.get("report_date") or ""
+    try:
+        fv = float(anchor.get("fair_value") or 0)
+    except (ValueError, TypeError):
+        fv = 0.0
+    try:
+        pa = float(anchor.get("principal_amount") or 0)
+    except (ValueError, TypeError):
+        pa = 0.0
+    name = (anchor.get("issuer_name") or "").strip().lower()
+    df = con.execute("""
+        WITH dates AS (
+            SELECT DISTINCT report_date FROM h
+            WHERE cik = ? AND report_date > ?
+            ORDER BY report_date LIMIT 2
+        ),
+        pool AS (
+            SELECT h.* FROM h JOIN dates d ON h.report_date = d.report_date
+            WHERE h.cik = ? AND h.source = 'bdc'
+        ),
+        ranked AS (
+            SELECT *,
+                ROW_NUMBER() OVER (ORDER BY
+                    CASE WHEN LOWER(TRIM(issuer_name)) = ? THEN 0 ELSE 1 END,
+                    report_date, row_id) AS r_name,
+                ROW_NUMBER() OVER (ORDER BY
+                    ABS(COALESCE(TRY_CAST(principal_amount AS DOUBLE), 0) - ?),
+                    report_date, row_id) AS r_pa,
+                ROW_NUMBER() OVER (ORDER BY
+                    ABS(COALESCE(TRY_CAST(fair_value AS DOUBLE), 0) - ?),
+                    report_date, row_id) AS r_fv,
+                (LOWER(TRIM(issuer_name)) = ?) AS same_name
+            FROM pool
+        )
+        SELECT * FROM ranked
+        WHERE (same_name AND r_name <= 8) OR r_pa <= 5 OR r_fv <= 5
+        ORDER BY r_name, r_pa
+        LIMIT 15
+    """, [cik, date, cik, name, pa, fv, name]).df()
+    return [_row_to_dict(r, con) for r in df.itertuples(index=False)]
 
 
 def sample_entities(holdings_df, *, n_merge_verify=60,
@@ -322,6 +438,26 @@ _TASK_TEXT = {
         "Row 1 leaves the portfolio and row 2 appears the next "
         "quarter with similar terms. Same instrument renamed "
         "(MISSED_LINK) or genuinely different (CONFIRMED)?"
+    ),
+    "continuation": (
+        "`rows` holds ONE position as a fund reported it in one quarter. "
+        "`candidate_rows` holds rows the same fund reported in the next one or "
+        "two quarters. Decide what happened to that position, from the filings "
+        "-- not from how similar the rows look:\n"
+        "  - It continues: answer MISSED_LINK with EXACTLY ONE entry in "
+        "proposed_links, row_id_a = the packet row, row_id_b = the row that is "
+        "the same instrument in the later quarter. Cite the later filing.\n"
+        "  - It does not continue (repaid, sold, exited, converted away): "
+        "answer CONFIRMED and say in the rationale why it ended.\n"
+        "  - You cannot tell: answer INSUFFICIENT_EVIDENCE.\n"
+        "Same instrument means same borrower AND same tranche: a first lien "
+        "term loan does not continue into a second lien, a revolver, or an "
+        "equity stake. Fair value may move a long way, including from zero to "
+        "fully funded on a delayed-draw or revolving commitment, and the issuer "
+        "name may be spelled differently or change entirely after a rename. "
+        "Neither of those makes it a different position. If the true "
+        "continuation is not among `candidate_rows`, say so in the rationale "
+        "and answer INSUFFICIENT_EVIDENCE."
     ),
     "entity": (
         "Are all issuer-name variants in `rows` the same borrower "
@@ -663,6 +799,13 @@ def write_batch(
                     pkt_rows = [r for r in [dr_dict, st_dict] if r]
                     break
             # candidate_rows stays [] for drift_break
+        elif stratum in CONTINUATION_STRATA:
+            anchor_rid = str(getattr(sr, "anchor_row_id", "") or "")
+            arow = holdings_df[holdings_df["row_id"] == anchor_rid]
+            pkt_rows = ([_row_to_dict(r, con) for r in arow.itertuples(index=False)][:1]
+                        if len(arow) else [])
+            candidate_rows = (_pull_continuation_candidates(cik, pkt_rows[0], con)
+                              if pkt_rows else [])
         elif stratum == "interior_singleton":
             all_pos_rows, truncated = _pull_chain_rows(holdings_df, position_id, con)
             # singleton: should be just one row
@@ -675,7 +818,7 @@ def write_batch(
             pkt_rows, truncated = _pull_chain_rows(holdings_df, position_id, con)
 
         # Resolve edges (not for singleton/drift_break)
-        if stratum in ("interior_singleton", "drift_break"):
+        if stratum in ("interior_singleton", "drift_break") or stratum in CONTINUATION_STRATA:
             resolved_edges: list[dict] = []
             sidecar_edges: list[dict] = []
         else:
@@ -761,7 +904,9 @@ def write_batch(
             _write_json(pkt_filing_dir / f"{acc}.json", bundle)
 
         # Prompt
-        task_text = _TASK_TEXT.get(stratum, _TASK_TEXT["chain"])
+        task_text = _TASK_TEXT.get(
+            "continuation" if stratum in CONTINUATION_STRATA else stratum,
+            _TASK_TEXT["chain"])
         prompt = _render_prompt(
             packet_id=pid,
             batch_dir=batch_dir,
@@ -947,7 +1092,13 @@ def main() -> None:
                         help="Override position_id_edges CSV (default: config.POSITION_ID_EDGES_FILE)")
     parser.add_argument("--strata", default=None,
                         help="Comma-separated chain strata to keep (tier_random, fv_jump, "
-                             "interior_singleton, drift_break); default all")
+                             "interior_singleton, drift_break, continuation_uniform, "
+                             "continuation_fv_weighted); default all except continuation")
+    parser.add_argument("--continuation", type=int, default=0, metavar="N",
+                        help="Draw N continuation packets per stratum (uniform and "
+                             "FV-weighted) for the build-independent metric. These are "
+                             "sampled by row, not by anything the current build did, so "
+                             "their verdicts score any build. 0 (default) draws none.")
     parser.add_argument("--tiers", default=None,
                         help="Comma-separated match_method values to keep in tier_random "
                              "(e.g. SUPP_B2_contested_name_key,B2_leftover_round); default all")
@@ -984,13 +1135,22 @@ def main() -> None:
         )
 
     per_tier = args.max_chains or 40
-    chain_sample = sample_chains(
-        holdings_df, edges_df,
-        per_tier=per_tier,
-        n_fv_jump=per_tier,
-        n_interior_singleton=per_tier,
-        n_drift_break=per_tier,
-    )
+    if args.continuation:
+        # Continuation packets are the whole batch when asked for: mixing them
+        # with build-derived strata would blur which sample a score came from.
+        chain_sample = sample_continuations(
+            holdings_df,
+            n_uniform=args.continuation,
+            n_fv_weighted=args.continuation,
+        )
+    else:
+        chain_sample = sample_chains(
+            holdings_df, edges_df,
+            per_tier=per_tier,
+            n_fv_jump=per_tier,
+            n_interior_singleton=per_tier,
+            n_drift_break=per_tier,
+        )
     if args.strata:
         keep = {s.strip() for s in args.strata.split(",") if s.strip()}
         chain_sample = chain_sample[chain_sample["stratum"].isin(keep)].reset_index(drop=True)
@@ -1002,7 +1162,10 @@ def main() -> None:
             ~is_tier | chain_sample["position_id"].isin(pids_in_tiers)
         ].reset_index(drop=True)
     print(f"chain packets by stratum: {chain_sample['stratum'].value_counts().to_dict()}")
-    n_ent = 60 if args.max_entities is None else args.max_entities
+    if args.max_entities is None:
+        n_ent = 0 if args.continuation else 60
+    else:
+        n_ent = args.max_entities
     if n_ent > 0:
         entity_sample = sample_entities(
             holdings_df,

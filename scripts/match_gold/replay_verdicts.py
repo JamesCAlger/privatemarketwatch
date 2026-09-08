@@ -116,6 +116,32 @@ def load_gold_pairs(batch_dir: Path) -> tuple[pd.DataFrame, dict]:
     return pairs, stats
 
 
+def load_pairs_csv(path: Path) -> tuple[pd.DataFrame, dict]:
+    """Load an arbitrary candidate pool as replay pairs.
+
+    Lets the same veto explanation run over pools that were never adjudicated
+    (e.g. the E13 fingerprint candidates), so "which guard blocks this?" is
+    answerable for any pair list.  Required columns: cik and a begin/end row id
+    under either (row_a, row_b) or (b_row, e_row).  Optional: packet_id,
+    stratum, kind, tier, edge_index.
+    """
+    df = pd.read_csv(path, dtype=str).fillna("")
+    ren = {"b_row": "row_a", "e_row": "row_b", "cls": "stratum"}
+    df = df.rename(columns={k: v for k, v in ren.items()
+                            if k in df.columns and v not in df.columns})
+    missing = {"cik", "row_a", "row_b"} - set(df.columns)
+    if missing:
+        raise SystemExit(f"pairs csv is missing columns: {sorted(missing)}")
+    for col, default in (("packet_id", ""), ("stratum", ""), ("kind", "CANDIDATE"),
+                         ("tier", ""), ("edge_index", "")):
+        if col not in df.columns:
+            df[col] = default
+    df["cik"] = df["cik"].str.strip().str.zfill(10)
+    keep = df[df["row_a"].map(_valid_row_id) & df["row_b"].map(_valid_row_id)]
+    stats = {"packets": 0, "rows_in_csv": len(df), "usable_pairs": len(keep)}
+    return keep[PAIR_COLS].reset_index(drop=True), stats
+
+
 # ---------------------------------------------------------------------------
 # 2. Replay tier predicates on unified rows
 # ---------------------------------------------------------------------------
@@ -401,17 +427,31 @@ def summarize(out: pd.DataFrame) -> str:
                  + ", ".join(f"{k}={v}" for k, v in out["kind"].value_counts().items()))
     nf = (~(out["a_found"].fillna(False) & out["b_found"].fillna(False))).sum()
     lines.append(f"pairs with a row missing from holdings: {nf}")
-    missed = out[out["kind"] == "MISSED"]
-    if len(missed):
-        lines += ["", "## MISSED pairs: would any tier admit them today?",
-                  f"admitted by >=1 tier: {int(missed['any_admit'].sum())} / {len(missed)}"]
+    def _admit_block(sub: pd.DataFrame, title: str) -> list[str]:
+        block = [f"### {title}",
+                 f"admitted by >=1 tier: {int(sub['any_admit'].sum())} / {len(sub)}"]
         for t in TIERS:
-            col = missed[f"t_{t}"]
+            col = sub[f"t_{t}"]
             adm = int((col == "ADMIT").sum())
             reasons = (col[col.str.startswith("VETO:", na=False)]
                        .str.slice(5).str.split(",").explode().value_counts())
-            lines.append(f"- {t}: ADMIT {adm}; top vetoes: "
+            block.append(f"- {t}: ADMIT {adm}; top vetoes: "
                          + ", ".join(f"{k}={v}" for k, v in reasons.head(5).items()))
+        return block
+
+    missed = out[out["kind"] == "MISSED"]
+    if len(missed):
+        lines += ["", "## MISSED pairs: would any tier admit them today?"]
+        lines += _admit_block(missed, "all MISSED pairs")
+
+    cand = out[out["kind"] == "CANDIDATE"]
+    if len(cand):
+        lines += ["", "## CANDIDATE pool: which guard blocks each pair?"]
+        found = cand["a_found"].fillna(False) & cand["b_found"].fillna(False)
+        lines.append(f"rows resolved in holdings: {int(found.sum())} / {len(cand)}")
+        lines += [""] + _admit_block(cand, "whole pool")
+        for name, sub in cand.groupby("stratum"):
+            lines += [""] + _admit_block(sub, f"stratum: {name} (n={len(sub)})")
     wrong = out[out["kind"] == "WRONG"]
     if len(wrong):
         lines += ["", "## WRONG edges: produced tier and whether a twin existed"]
@@ -441,12 +481,20 @@ def summarize(out: pd.DataFrame) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--batch-dir", required=True, type=Path)
+    ap.add_argument("--batch-dir", type=Path,
+                    help="adjudicated gold batch to replay")
+    ap.add_argument("--pairs-csv", type=Path,
+                    help="arbitrary pair list to replay (cik + row_a/row_b or b_row/e_row)")
     ap.add_argument("--holdings", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
     args = ap.parse_args(argv)
+    if bool(args.batch_dir) == bool(args.pairs_csv):
+        ap.error("pass exactly one of --batch-dir or --pairs-csv")
 
-    pairs, stats = load_gold_pairs(args.batch_dir)
+    if args.pairs_csv:
+        pairs, stats = load_pairs_csv(args.pairs_csv)
+    else:
+        pairs, stats = load_gold_pairs(args.batch_dir)
     print(f"[replay] pairs={len(pairs)} stats={stats}")
     ciks = sorted(set(pairs["cik"]))
     con = duckdb.connect()

@@ -352,21 +352,49 @@ CONTESTED_ASSIGNMENT_DEFAULT = True
 # wrong-tranche edges.  Contested contest only.
 CONTESTED_AMENDMENT_PA_TOLERANCE = 1.02
 CONTESTED_AMENDMENT_SPREAD_TOLERANCE = 0.01
+# Widest principal move the spread-only amendment escape will tolerate.  Set from
+# the CONFIRMED gold pairs the strict AND escape rejected: Comar 0.66 and IXS 1.40
+# must pass, a 5.0M -> 3.0M (1.67) tranche hop must not.
+CONTESTED_AMENDMENT_SPREAD_PA_BAND = 1.5
 
 
 def _maturity_veto_sql(mat_b: str, mat_e: str, pa_b: str, pa_e: str,
                        spr_b: str, spr_e: str) -> str:
     """TRUE when the pair passes the maturity veto: either maturity unknown,
-    maturities equal, or the change is an amendment on the same lot (principal
-    within ``CONTESTED_AMENDMENT_PA_TOLERANCE`` and spread within
-    ``CONTESTED_AMENDMENT_SPREAD_TOLERANCE`` or unknown)."""
-    same_lot = (
+    maturities equal, or the change is an amendment on the same lot.
+
+    Two escapes, either of which is enough:
+
+    * principal within ``CONTESTED_AMENDMENT_PA_TOLERANCE`` -- a repricing that
+      cuts or lifts the spread and extends the maturity while the lot itself is
+      untouched.  The old rule also demanded a stable spread here, which is what
+      lost Columbia Helicopters (principal within 2%, spread 10.51 -> 11.51,
+      maturity +380d) and Nouryon Finance (principal identical, spread
+      4.00 -> 3.50, maturity +912d), both CONFIRMED gold pairs (E15, 2026-09-08).
+    * spread within ``CONTESTED_AMENDMENT_SPREAD_TOLERANCE`` and the principal
+      not actively contradicting -- unknown on a side, or within
+      ``CONTESTED_AMENDMENT_SPREAD_PA_BAND``.  Spread stability alone is a weak
+      signal because a portfolio's loans routinely share a spread, so it only
+      escapes when the principal is plausible: that admits Heritage
+      Environmental (principal unknown), Comar (0.66) and IXS (1.40) while still
+      vetoing a 5.0M -> 3.0M tranche hop.
+    """
+    pa_same = (
         f"(CASE WHEN {pa_b} > 0 AND {pa_e} > 0 "
         f"THEN ABS(LN({pa_b} / {pa_e})) <= LN({CONTESTED_AMENDMENT_PA_TOLERANCE}) "
-        f"ELSE FALSE END "
-        f"AND ({spr_b} IS NULL OR {spr_e} IS NULL "
-        f"OR ABS({spr_b} - {spr_e}) <= {CONTESTED_AMENDMENT_SPREAD_TOLERANCE}))"
+        f"ELSE FALSE END)"
     )
+    pa_not_contradicting = (
+        f"(CASE WHEN {pa_b} > 0 AND {pa_e} > 0 "
+        f"THEN ABS(LN({pa_b} / {pa_e})) <= LN({CONTESTED_AMENDMENT_SPREAD_PA_BAND}) "
+        f"ELSE TRUE END)"
+    )
+    spread_same = (
+        f"({spr_b} IS NOT NULL AND {spr_e} IS NOT NULL "
+        f"AND ABS({spr_b} - {spr_e}) <= {CONTESTED_AMENDMENT_SPREAD_TOLERANCE} "
+        f"AND {pa_not_contradicting})"
+    )
+    same_lot = f"({pa_same} OR {spread_same})"
     return (
         f"({mat_b} IS NULL OR {mat_e} IS NULL OR {mat_b} = {mat_e} OR {same_lot})"
     )
@@ -375,15 +403,62 @@ def _maturity_veto_sql(mat_b: str, mat_e: str, pa_b: str, pa_e: str,
 def _pa_band_sql(b: str, e: str) -> str:
     """Integer principal band for the pair (b, e); NULL when either principal
     is unknown (sorted NULLS LAST)."""
+    # The sub-type that drives the vetoes is parsed from instrument_description.
+    # Several filers put the instrument text in issuer_name instead and leave the
+    # description empty, so their revolvers looked like NULL sub-type and were
+    # assigned on the narrow band -- which is how "Help/Systems Holdings, Inc.,
+    # First lien senior secured revolving loan 1" (principal ratio 3.94) and
+    # "Ideal Image Development, LLC, ... revolving loan 1" (0.04) were lost
+    # despite CONTESTED_PA_BAND_REVOLVER existing for exactly that case (E15,
+    # 2026-09-08).  ``_inst_subtype_name`` is the same parse over issuer_name and
+    # is used ONLY to widen this band; the vetoes still key on the description so
+    # broadening detection cannot reject a pair that is accepted today.
+    def _sub(alias: str) -> str:
+        return f"COALESCE({alias}._inst_subtype, {alias}._inst_subtype_name)"
+
     wide = (
-        f"({b}._inst_subtype IN ('REVOLVER', 'DDTL') "
-        f"OR {e}._inst_subtype IN ('REVOLVER', 'DDTL'))"
+        f"({_sub(b)} IN ('REVOLVER', 'DDTL') "
+        f"OR {_sub(e)} IN ('REVOLVER', 'DDTL'))"
     )
     return (
         f"CASE WHEN {b}.pa > 0 AND {e}.pa > 0 THEN FLOOR(ABS(LN({b}.pa / {e}.pa)) / "
         f"LN(CASE WHEN {wide} THEN {CONTESTED_PA_BAND_REVOLVER} "
         f"ELSE {CONTESTED_PA_BAND} END)) END"
     )
+
+
+# Principal agreement that substitutes for the fair-value scale guard.  A
+# delayed-draw or revolving commitment reports a constant principal while its
+# fair value moves from zero (or a small negative mark) to fully funded, so the
+# signed FV ratio is the wrong instrument for those rows.
+_FV_SCALE_PA_TOLERANCE = 1.02
+
+
+def _fv_scale_ok_sql(b_fv: str, e_fv: str, b_pa: str, e_pa: str, cap: float) -> str:
+    """Fair-value scale guard that survives zero, negative and sign-flipped marks.
+
+    The guard exists to catch unit-scale mismatches (a filer reporting
+    thousands one quarter and units the next), not to judge economics.  The
+    original form ``b.fv / e.fv BETWEEN 1/cap AND cap`` rejected every pair in
+    which either side was zero (NULL from the division) or the sign flipped,
+    which silently made ~6.6% of cohort rows unmatchable -- 44% of all
+    singletons (E15, docs/investigations/position_matching.md).
+
+    A pair passes when the fair-value MAGNITUDES are within ``cap``, or when
+    both principal amounts are known, positive and within
+    ``_FV_SCALE_PA_TOLERANCE`` -- in which case the principal already supplies
+    the scale check the guard was there to perform.
+    """
+    mag = (
+        f"(ABS({b_fv}) > 0 AND ABS({e_fv}) > 0 "
+        f"AND ABS({b_fv}) / ABS({e_fv}) BETWEEN (1.0 / {cap}) AND {cap})"
+    )
+    pa_ok = (
+        f"(CASE WHEN {b_pa} > 0 AND {e_pa} > 0 "
+        f"THEN ABS(LN({b_pa} / {e_pa})) <= LN({_FV_SCALE_PA_TOLERANCE}) "
+        f"ELSE FALSE END)"
+    )
+    return f"({b_fv} IS NOT NULL AND {e_fv} IS NOT NULL AND ({mag} OR {pa_ok}))"
 
 
 def _cost_prox_sql(begin_cost: str, end_cost: str) -> str:
@@ -789,8 +864,7 @@ def _match_exact_name(
          AND b.clean_cusip IS NOT NULL
          AND b.clean_cusip = e.clean_cusip
          AND b.source = e.source
-        WHERE b.fv > 0 AND e.fv > 0
-          AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+        WHERE {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
     ),
     -- B1: 1:1 enforcement
     cusip_rn_begin AS (
@@ -886,8 +960,7 @@ def _match_exact_name(
             SELECT _position_key FROM high_mult_poskeys
             WHERE cik = e.cik AND source = e.source AND quarter = e.quarter
         )
-        AND b.fv > 0 AND e.fv > 0
-        AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+        AND {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
         -- Instrument sub-type continuity
         AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
              OR b._inst_subtype = e._inst_subtype)
@@ -1005,8 +1078,7 @@ def _match_exact_name(
             SELECT _name_lower FROM high_mult_names
             WHERE cik = e.cik AND quarter = e.quarter
         )
-        AND b.fv > 0 AND e.fv > 0
-        AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+        AND {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
         -- Classification flip veto: reject if both sides have a classification and they differ
         AND (COALESCE(CAST(b.index_classification AS VARCHAR), '') = ''
              OR COALESCE(CAST(e.index_classification AS VARCHAR), '') = ''
@@ -1174,8 +1246,7 @@ def _match_exact_name_leftover_rounds(
           ON b.cik = e.cik AND b.source = e.source
          AND e.quarter = ({next_qtr})
          AND b._name_key = e._name_key
-        WHERE b.fv > 0 AND e.fv > 0
-          AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+        WHERE {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
           AND (COALESCE(CAST(b.index_classification AS VARCHAR), '') = ''
                OR COALESCE(CAST(e.index_classification AS VARCHAR), '') = ''
                OR CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR))
@@ -1311,8 +1382,7 @@ def _match_normalized_name(con: duckdb.DuckDBPyConnection) -> str:
         SELECT _norm_name FROM high_mult_norm
         WHERE cik = e.cik AND quarter = e.quarter
     )
-    AND b.fv > 0 AND e.fv > 0
-    AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO_IDENTIFIER}) AND {MAX_FV_RATIO_IDENTIFIER}
+    AND {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
     -- Classification flip veto
     AND (COALESCE(CAST(b.index_classification AS VARCHAR), '') = ''
          OR COALESCE(CAST(e.index_classification AS VARCHAR), '') = ''
@@ -1481,8 +1551,7 @@ def _match_fuzzy(con: duckdb.DuckDBPyConnection) -> str:
             {_fv_proximity_sql('b_fv', 'e_fv')} AS _fv_prox
         FROM blocked
         WHERE jaro_winkler_similarity(b_norm, e_norm) >= {MIN_JW_SIMILARITY}
-          AND b_fv > 0 AND e_fv > 0
-          AND b_fv / e_fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+          AND {_fv_scale_ok_sql('b_fv', 'e_fv', 'b_pa', 'e_pa', MAX_FV_RATIO)}
           -- Classification flip veto
           AND (b_index_classification = ''
                OR e_index_classification = ''
@@ -1648,8 +1717,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND b.source = e.source
          AND b._entity_id = e._entity_id
          AND CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR)
-         AND b.fv > 0 AND e.fv > 0
-         AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+         AND {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO)}
          -- Instrument sub-type continuity
          AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
               OR b._inst_subtype = e._inst_subtype)
@@ -1706,8 +1774,7 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
          AND b._entity_id = e._entity_id
          AND CAST(b.index_classification AS VARCHAR) = CAST(e.index_classification AS VARCHAR)
          AND ABS(b._prin_bucket - e._prin_bucket) <= 1
-         AND b.fv > 0 AND e.fv > 0
-         AND b.fv / e.fv BETWEEN (1.0 / {MAX_FV_RATIO}) AND {MAX_FV_RATIO}
+         AND {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO)}
          -- Instrument sub-type continuity
          AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
               OR b._inst_subtype = e._inst_subtype)
@@ -1768,6 +1835,156 @@ def _match_entity_fingerprint(con: duckdb.DuckDBPyConnection) -> str:
     """
     con.execute(sql_dedup)
     return "tier_e"
+
+
+# ---------------------------------------------------------------------------
+# Tier F: Gap-quarter (span-2) links
+# ---------------------------------------------------------------------------
+
+# Off by default.  E13 sizes the strict population at 496 pairs / $4.7B across
+# 44 CIKs, and no adjudicated batch has scored a span-2 link yet, so the tier
+# ships dark until the joint continuation metric (step 1 of
+# docs/superpowers/plans/2026-09-08-chain-completeness.md) can score it.
+GAP_QUARTER_TIER_DEFAULT = False
+
+
+def _quarter_plus_two_sql(qtr_col: str) -> str:
+    """Quarter label two calendar quarters after ``qtr_col``."""
+    return _next_quarter_sql(_next_quarter_sql(qtr_col))
+
+
+def _match_gap_quarter(con: duckdb.DuckDBPyConnection, *, enabled: bool) -> str:
+    """Tier F: link a position across one missing filing.
+
+    Every other tier requires strictly adjacent quarters, so a position that
+    disappears from one filing and returns in the next starts a fresh chain.
+    Two shapes qualify, and both demand an exact issuer name that is unique in
+    each of the two quarters, so this can never merge tranches:
+
+    ``F_gap_no_filing``    the CIK has no rows at all in the intervening
+                           quarter -- the position could not have been
+                           reported, so absence carries no information.
+    ``F_gap_name_absent``  the CIK filed, and that issuer name is absent from
+                           the filing.  Weaker: a genuine exit and re-entry
+                           looks identical, which is why the tier is gated.
+
+    Both carry the maturity veto and the fair-value scale guard.  Creating the
+    table even when disabled keeps the downstream union unconditional.
+    """
+    if not enabled:
+        con.execute("""
+        CREATE OR REPLACE TEMP TABLE tier_f AS
+        SELECT * FROM tier_e WHERE FALSE
+        """)
+        return "tier_f"
+
+    mat_veto = _maturity_veto_sql(
+        "TRY_CAST(b.maturity_date AS DATE)", "TRY_CAST(e.maturity_date AS DATE)",
+        "b.pa", "e.pa", "b.bs", "e.bs")
+    con.execute(f"""
+    CREATE OR REPLACE TEMP TABLE tier_f_candidates AS
+    WITH all_used AS (
+        SELECT _row_id FROM tier_a_unified_ids
+        UNION SELECT _begin_row_id FROM tier_b
+        UNION SELECT _end_row_id FROM tier_b
+        UNION SELECT _begin_row_id FROM tier_c
+        UNION SELECT _end_row_id FROM tier_c
+        UNION SELECT _begin_row_id FROM tier_d
+        UNION SELECT _end_row_id FROM tier_d
+        UNION SELECT _begin_row_id FROM tier_e
+        UNION SELECT _end_row_id FROM tier_e
+    ),
+    name_counts AS (
+        SELECT cik, source, quarter, _name_lower, COUNT(*) AS n
+        FROM unified_base GROUP BY cik, source, quarter, _name_lower
+    ),
+    filed AS (SELECT DISTINCT cik, source, quarter FROM unified_base),
+    remaining AS (
+        SELECT u.* FROM unified_base u
+        WHERE u._row_id NOT IN (SELECT _row_id FROM all_used)
+          AND COALESCE(u._name_lower, '') != ''
+    )
+    SELECT
+        b.cik, b.entity_name, b.source,
+        b.quarter AS begin_quarter,
+        CAST(b.report_date AS VARCHAR) AS begin_report_date,
+        CAST(b.issuer_name AS VARCHAR) AS begin_issuer_name,
+        b.fv AS begin_fair_value, b.cost_val AS begin_cost,
+        b.pa AS begin_principal_amount, b.ir AS begin_interest_rate,
+        b.bs AS begin_basis_spread, b.sh AS begin_shares_held,
+        e.quarter AS end_quarter,
+        CAST(e.report_date AS VARCHAR) AS end_report_date,
+        CAST(e.issuer_name AS VARCHAR) AS end_issuer_name,
+        e.fv AS end_fair_value, e.cost_val AS end_cost,
+        e.pa AS end_principal_amount, e.ir AS end_interest_rate,
+        e.bs AS end_basis_spread, e.sh AS end_shares_held,
+        CASE WHEN f.quarter IS NULL THEN 'F_gap_no_filing'
+             ELSE 'F_gap_name_absent' END AS match_method,
+        CAST(b._name_lower AS VARCHAR) AS match_key,
+        0.55 AS match_score,
+        6 AS span_months,
+        b._row_id AS _begin_row_id,
+        e._row_id AS _end_row_id,
+        {_fv_proximity_sql('b.fv', 'e.fv')} AS _fv_prox,
+        {_principal_prox_sql('b.pa', 'e.pa')} AS _pa_prox
+    FROM remaining b
+    JOIN remaining e
+      ON e.cik = b.cik AND e.source = b.source
+     AND e.quarter = ({_quarter_plus_two_sql('b.quarter')})
+     AND e._name_lower = b._name_lower
+    JOIN name_counts nb
+      ON nb.cik = b.cik AND nb.source = b.source AND nb.quarter = b.quarter
+     AND nb._name_lower = b._name_lower AND nb.n = 1
+    JOIN name_counts ne
+      ON ne.cik = e.cik AND ne.source = e.source AND ne.quarter = e.quarter
+     AND ne._name_lower = e._name_lower AND ne.n = 1
+    LEFT JOIN filed f
+      ON f.cik = b.cik AND f.source = b.source
+     AND f.quarter = ({_next_quarter_sql('b.quarter')})
+    WHERE {_fv_scale_ok_sql('b.fv', 'e.fv', 'b.pa', 'e.pa', MAX_FV_RATIO_IDENTIFIER)}
+      AND {mat_veto}
+      AND (COALESCE(CAST(b.index_classification AS VARCHAR), '') = ''
+           OR COALESCE(CAST(e.index_classification AS VARCHAR), '') = ''
+           OR CAST(b.index_classification AS VARCHAR)
+              = CAST(e.index_classification AS VARCHAR))
+      AND (b._inst_subtype IS NULL OR e._inst_subtype IS NULL
+           OR b._inst_subtype = e._inst_subtype)
+      -- The position must be genuinely absent from the intervening filing.
+      AND NOT EXISTS (
+          SELECT 1 FROM unified_base m
+          WHERE m.cik = b.cik AND m.source = b.source
+            AND m.quarter = ({_next_quarter_sql('b.quarter')})
+            AND m._name_lower = b._name_lower
+      )
+    """)
+    con.execute("""
+    CREATE OR REPLACE TEMP TABLE tier_f AS
+    WITH rn_begin AS (
+        SELECT *, ROW_NUMBER() OVER (
+            PARTITION BY _begin_row_id
+            ORDER BY _fv_prox ASC, _pa_prox ASC NULLS LAST, _end_row_id ASC
+        ) AS rn_b
+        FROM tier_f_candidates
+    ),
+    rn_end AS (
+        SELECT *, ROW_NUMBER() OVER (
+            PARTITION BY _end_row_id
+            ORDER BY _fv_prox ASC, _pa_prox ASC NULLS LAST, _begin_row_id ASC
+        ) AS rn_e
+        FROM rn_begin WHERE rn_b = 1
+    )
+    SELECT cik, entity_name, source,
+        begin_quarter, begin_report_date, begin_issuer_name,
+        begin_fair_value, begin_cost, begin_principal_amount,
+        begin_interest_rate, begin_basis_spread, begin_shares_held,
+        end_quarter, end_report_date, end_issuer_name,
+        end_fair_value, end_cost, end_principal_amount,
+        end_interest_rate, end_basis_spread, end_shares_held,
+        match_method, match_key, match_score, span_months,
+        _begin_row_id, _end_row_id
+    FROM rn_end WHERE rn_e = 1
+    """)
+    return "tier_f"
 
 
 # ---------------------------------------------------------------------------
@@ -1998,6 +2215,7 @@ def match_positions(
     use_bipartite: bool = True,
     contested_assignment: bool = False,
     contested_leftover_rounds: int = CONTESTED_LEFTOVER_ROUNDS,
+    gap_quarter_tier: bool = GAP_QUARTER_TIER_DEFAULT,
 ) -> pd.DataFrame:
     """Match positions across consecutive quarters.
 
@@ -2090,6 +2308,10 @@ def match_positions(
                '(?i)(^|\\W)(?:common (?:stock|equity|units?)|preferred (?:stock|equity|units?)|membership interest|llc interest|equity interest|class [a-c](\\W|$)|ordinary shares)(\\W|$)') THEN 'EQUITY'
           ELSE NULL
         END AS _inst_subtype,
+        -- Same parse over issuer_name, for filers that carry the instrument text
+        -- there and leave instrument_description empty.  Used ONLY to widen the
+        -- contested principal band (see _pa_band_sql); never as a veto.
+        {_inst_subtype_sql('issuer_name')} AS _inst_subtype_name,
         -- Trailing number from issuer_name for suffix coexistence tiebreaker
         TRY_CAST(
           regexp_extract(CAST(issuer_name AS VARCHAR), '(\\d+)\\s*$', 1)
@@ -2097,7 +2319,14 @@ def match_positions(
         ) AS _trailing_num
     FROM unified
     WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
-      AND TRY_CAST(fair_value AS DOUBLE) != 0
+      -- A zero fair value used to be excluded here.  That made 17,655 cohort
+      -- rows (6.6%) unmatchable by construction and accounted for 44% of all
+      -- singleton rows, even where the same position appears fully funded in
+      -- the next quarter under the same issuer name (E15, 2026-09-08).  Those
+      -- rows are undrawn revolvers and delayed-draw commitments, not noise.
+      -- Chaining them does not touch the indices: index_returns.py filters
+      -- `begin_fair_value != 0` independently before computing any return, so
+      -- a pair with a zero-FV leg contributes nothing there either way.
       -- Cash and derivatives are analytics-only, never index constituents.
       -- Excluding them here (before the ROW_NUMBER _row_id assignment) keeps
       -- the matched-position universe -- and therefore index_returns and the
@@ -2160,6 +2389,15 @@ def match_positions(
     # lateral churn (6,800+ swaps in assessment) without measurable accuracy
     # improvement.  Tier E's high base error rate is better addressed by
     # tightening candidate filters than by reassigning within noisy clusters.
+
+    # --- Tier F: gap-quarter (span-2) links ---
+    _match_gap_quarter(con, enabled=gap_quarter_tier)
+    if gap_quarter_tier:
+        tier_f_mix = con.execute(
+            "SELECT match_method, COUNT(*) FROM tier_f GROUP BY 1 ORDER BY 2 DESC"
+        ).fetchall()
+        logger.info("  Tier F: %d pairs %s",
+                    sum(n for _, n in tier_f_mix), dict(tier_f_mix))
 
     # --- Combine all tiers and annotate with classification ---
     # Two separate queries to avoid conditional JOIN anti-pattern:
@@ -2248,6 +2486,8 @@ def match_positions(
         SELECT * FROM tier_d
         UNION ALL
         SELECT * FROM tier_e
+        UNION ALL
+        SELECT * FROM tier_f
     )
     SELECT {_select_cols('m')},
         {_class_cols}
@@ -2637,15 +2877,22 @@ def assign_position_ids(
     used_match_midx: set[int] = set()
     used_supp_edges: set[tuple[int, int]] = set()
     spans = pd.to_numeric(matches_df["span_months"], errors="coerce").fillna(99)
+    # The span cap keeps Tier A's 6/9/12-month comparatives out of the chain,
+    # since those restate a position the adjacent-quarter tiers already link.
+    # Tier F is the deliberate exception: it exists to cross one missing filing,
+    # so its span is 6 by construction and must be admitted.
+    is_gap = (matches_df["match_method"].astype(str)
+              .str.startswith("F_gap_").to_numpy())
+    long_span = (spans.to_numpy() > 4) & ~is_gap
     vetoed: set[tuple[int, int]] = set()
     if contested_assignment:
         cand_edges = [
             (begin_uid[m], end_uid[m]) for m in range(n_match)
-            if spans.iloc[m] <= 4 and m in begin_uid and m in end_uid
+            if not long_span[m] and m in begin_uid and m in end_uid
         ]
         vetoed = _coexistence_vetoed(unified_df, cand_edges)
     for midx in range(n_match):
-        if spans.iloc[midx] > 4:
+        if long_span[midx]:
             continue
         b = begin_uid.get(midx)
         e = end_uid.get(midx)
@@ -2706,6 +2953,7 @@ def assign_position_ids(
             ", TRY_CAST(cost AS DOUBLE) AS cost"
             ", TRY_CAST(basis_spread AS DOUBLE) AS bs"
             f", {_inst_subtype_sql('instrument_description')} AS _inst_subtype"
+            f", {_inst_subtype_sql('issuer_name')} AS _inst_subtype_name"
         )
         supp_extra_pairs = (
             f", {_pa_band_sql('a', 'b')} AS pa_band"

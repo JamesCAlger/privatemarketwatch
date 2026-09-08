@@ -2901,13 +2901,48 @@ class TestContestedPromotion:
                              contested_assignment=True)
         assert (on["match_method"] == "B2_exact_name").sum() == 1
 
-    def test_contested_b2_amendment_escape_needs_same_spread(self):
+    def test_contested_b2_amendment_escape_allows_repricing(self):
+        """Principal held, spread moved, maturity extended -- a repricing.
+
+        The escape used to require principal AND spread stability together,
+        which rejected repricings; two of them (Columbia Helicopters, Nouryon
+        Finance) were CONFIRMED gold pairs the promotion lost (E15, 2026-09-08).
+        Principal within tolerance is now sufficient on its own.
+        """
         a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01", bs="5.75")
         x = _u("2024-06-30", "Acme LLC", 4_900_000, 5_000_000, mat="2031-01-01", bs="6.50")
         unified = _make_unified([a, x])
         on = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
                              contested_assignment=True)
-        assert (on["match_method"] == "B2_exact_name").sum() == 0
+        assert (on["match_method"] == "B2_exact_name").sum() == 1
+
+    def test_contested_b2_spread_escape_needs_plausible_principal(self):
+        """Spread-only escape is gated on the principal not contradicting it.
+
+        Equal spread with a principal inside CONTESTED_AMENDMENT_SPREAD_PA_BAND
+        escapes the maturity veto; the same equal spread with a principal move
+        beyond the band does not, so a tranche hop cannot ride a shared spread.
+        """
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01", bs="5.75")
+        near = _u("2024-06-30", "Acme LLC", 3_600_000, 3_600_000,
+                  mat="2031-01-01", bs="5.75")          # ratio 1.39, inside 1.5
+        on = match_positions(unified_df=_make_unified([a, near]),
+                             bdc_raw_df=_make_bdc_raw([]), contested_assignment=True)
+        assert (on["match_method"] == "B2_exact_name").sum() == 1
+
+        far = _u("2024-06-30", "Acme LLC", 3_000_000, 3_000_000,
+                 mat="2031-01-01", bs="5.75")           # ratio 1.67, outside 1.5
+        off = match_positions(unified_df=_make_unified([a, far]),
+                              bdc_raw_df=_make_bdc_raw([]), contested_assignment=True)
+        assert (off["match_method"] == "B2_exact_name").sum() == 0
+
+    def test_contested_b2_spread_escape_allows_unknown_principal(self):
+        """Heritage Environmental shape: spread stable, principal not disclosed."""
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, None, mat="2028-01-01", bs="5.75")
+        x = _u("2024-06-30", "Acme LLC", 4_900_000, None, mat="2031-01-01", bs="5.75")
+        on = match_positions(unified_df=_make_unified([a, x]),
+                             bdc_raw_df=_make_bdc_raw([]), contested_assignment=True)
+        assert (on["match_method"] == "B2_exact_name").sum() == 1
 
     def test_supplementary_contested_pass_applies_maturity_veto(self):
         z1 = _u("2024-03-31", "Zeta Corp", 100_000, 100_000)
@@ -2937,3 +2972,152 @@ class TestContestedPromotion:
         )
         assert CONTESTED_ASSIGNMENT_DEFAULT is True
         assert CONTESTED_LEFTOVER_ROUNDS == 0
+
+
+class TestFairValueScaleGuard:
+    """Zero / negative / sign-flipped fair values must not block a chain.
+
+    `match_positions` used to drop every row with fair_value = 0 from its
+    universe and every tier then required both marks strictly positive, so an
+    undrawn revolver or an unfunded delayed-draw commitment could never chain to
+    the quarter in which it was funded.  That accounted for 44% of all singleton
+    cohort rows (E15, docs/investigations/position_matching.md, 2026-09-08).
+    """
+
+    def test_zero_fair_value_row_is_in_the_match_universe(self):
+        a = _u("2024-03-31", "Acme LLC", 0, 5_000_000)
+        x = _u("2024-06-30", "Acme LLC", 4_900_000, 5_000_000)
+        out = match_positions(unified_df=_make_unified([a, x]),
+                              bdc_raw_df=_make_bdc_raw([]))
+        assert (out["match_method"] == "B2_exact_name").sum() == 1
+
+    def test_negative_to_positive_fair_value_chains_on_equal_principal(self):
+        a = _u("2024-03-31", "Acme LLC", -157_000, 5_000_000)
+        x = _u("2024-06-30", "Acme LLC", 4_900_000, 5_000_000)
+        out = match_positions(unified_df=_make_unified([a, x]),
+                              bdc_raw_df=_make_bdc_raw([]))
+        assert (out["match_method"] == "B2_exact_name").sum() == 1
+
+    def test_both_negative_fair_values_chain(self):
+        a = _u("2024-03-31", "Acme LLC", -157_000, 5_000_000)
+        x = _u("2024-06-30", "Acme LLC", -204_000, 5_000_000)
+        out = match_positions(unified_df=_make_unified([a, x]),
+                              bdc_raw_df=_make_bdc_raw([]))
+        assert (out["match_method"] == "B2_exact_name").sum() == 1
+
+    def test_unit_scale_mismatch_is_still_rejected(self):
+        """The guard's real job: a filer switching thousands to units.
+
+        Fair values 1000x apart AND principals 1000x apart leaves no independent
+        evidence of scale, so the pair must still be refused.
+        """
+        a = _u("2024-03-31", "Acme LLC", 5_000, 5_000)
+        x = _u("2024-06-30", "Acme LLC", 5_000_000, 5_000_000)
+        out = match_positions(unified_df=_make_unified([a, x]),
+                              bdc_raw_df=_make_bdc_raw([]))
+        assert (out["match_method"] == "B2_exact_name").sum() == 0
+
+    def test_principal_agreement_rescues_a_wide_fair_value_swing(self):
+        """FV ratio far beyond the guard, but the principal is unchanged."""
+        a = _u("2024-03-31", "Acme LLC", 1_000, 5_000_000)
+        x = _u("2024-06-30", "Acme LLC", 4_900_000, 5_000_000)
+        out = match_positions(unified_df=_make_unified([a, x]),
+                              bdc_raw_df=_make_bdc_raw([]))
+        assert (out["match_method"] == "B2_exact_name").sum() == 1
+
+
+class TestRevolverPrincipalBand:
+    """The wide contested principal band must reach revolvers that filers name
+    in issuer_name and leave instrument_description empty."""
+
+    def _rows(self):
+        name = "Acme LLC, First lien senior secured revolving loan"
+        begin = _u("2024-03-31", name, 900_000, 1_000_000,
+                   mat="2028-01-01", instrument_description="")
+        drawn = _u("2024-06-30", name, 2_900_000, 3_000_000,
+                   mat="2028-01-01", instrument_description="")
+        other = _u("2024-06-30", name, 1_000_000, 1_010_000,
+                   mat="2030-06-30", instrument_description="")
+        return begin, drawn, other
+
+    def test_draw_wins_over_a_nearer_principal_with_a_different_maturity(self):
+        begin, drawn, other = self._rows()
+        out = match_positions(unified_df=_make_unified([begin, drawn, other]),
+                              bdc_raw_df=_make_bdc_raw([]),
+                              contested_assignment=True)
+        b2 = out[out["match_method"] == "B2_exact_name"]
+        assert len(b2) == 1
+        assert float(b2.iloc[0]["end_principal_amount"]) == 3_000_000.0
+
+    def test_name_derived_subtype_never_vetoes(self):
+        """issuer_name parsing widens the band only; it must not add a veto.
+
+        A revolver named in issuer_name against a row whose description says
+        term loan still matches, because the vetoes key on the description.
+        """
+        a = _u("2024-03-31", "Acme LLC, revolving loan", 900_000, 1_000_000,
+              instrument_description="")
+        x = _u("2024-06-30", "Acme LLC, revolving loan", 950_000, 1_000_000,
+              instrument_description="First lien term loan")
+        out = match_positions(unified_df=_make_unified([a, x]),
+                              bdc_raw_df=_make_bdc_raw([]),
+                              contested_assignment=True)
+        assert (out["match_method"] == "B2_exact_name").sum() == 1
+
+
+class TestGapQuarterTier:
+    """Tier F links a position across one missing filing. Off by default."""
+
+    def _three_quarters(self, middle_rows):
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000)
+        c = _u("2024-09-30", "Acme LLC", 4_900_000, 5_000_000)
+        return _make_unified([a, *middle_rows, c])
+
+    def test_off_by_default(self):
+        from pipeline.position_matching import GAP_QUARTER_TIER_DEFAULT
+        assert GAP_QUARTER_TIER_DEFAULT is False
+        other = _u("2024-06-30", "Beta Corp", 1_000_000, 1_000_000)
+        out = match_positions(unified_df=self._three_quarters([other]),
+                              bdc_raw_df=_make_bdc_raw([]))
+        assert not out["match_method"].astype(str).str.startswith("F_gap_").any()
+
+    def test_links_when_the_cik_filed_without_the_name(self):
+        other = _u("2024-06-30", "Beta Corp", 1_000_000, 1_000_000)
+        out = match_positions(unified_df=self._three_quarters([other]),
+                              bdc_raw_df=_make_bdc_raw([]), gap_quarter_tier=True)
+        assert (out["match_method"] == "F_gap_name_absent").sum() == 1
+
+    def test_labels_a_missing_filing_separately(self):
+        out = match_positions(unified_df=self._three_quarters([]),
+                              bdc_raw_df=_make_bdc_raw([]), gap_quarter_tier=True)
+        assert (out["match_method"] == "F_gap_no_filing").sum() == 1
+
+    def test_does_not_fire_when_the_name_is_present_in_between(self):
+        middle = _u("2024-06-30", "Acme LLC", 4_950_000, 5_000_000)
+        out = match_positions(unified_df=self._three_quarters([middle]),
+                              bdc_raw_df=_make_bdc_raw([]), gap_quarter_tier=True)
+        assert not out["match_method"].astype(str).str.startswith("F_gap_").any()
+
+    def test_does_not_fire_on_a_duplicated_name(self):
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000)
+        a2 = _u("2024-03-31", "Acme LLC", 2_000_000, 2_000_000, mat="2030-01-01")
+        c = _u("2024-09-30", "Acme LLC", 4_900_000, 5_000_000)
+        out = match_positions(unified_df=_make_unified([a, a2, c]),
+                              bdc_raw_df=_make_bdc_raw([]), gap_quarter_tier=True)
+        assert not out["match_method"].astype(str).str.startswith("F_gap_").any()
+
+    def test_gap_edge_reaches_the_position_id(self):
+        """A span-6 edge must survive the span cap that exists for Tier A."""
+        unified = self._three_quarters([])
+        matches = match_positions(unified_df=unified, bdc_raw_df=_make_bdc_raw([]),
+                                  gap_quarter_tier=True)
+        out, _ = assign_position_ids(unified.copy(), matches)
+        pids = dict(zip(out["report_date"], out["position_id"]))
+        assert pids["2024-03-31"] == pids["2024-09-30"]
+
+    def test_maturity_veto_applies(self):
+        a = _u("2024-03-31", "Acme LLC", 5_000_000, 5_000_000, mat="2028-01-01")
+        c = _u("2024-09-30", "Acme LLC", 3_000_000, 3_000_000, mat="2031-01-01")
+        out = match_positions(unified_df=_make_unified([a, c]),
+                              bdc_raw_df=_make_bdc_raw([]), gap_quarter_tier=True)
+        assert not out["match_method"].astype(str).str.startswith("F_gap_").any()
