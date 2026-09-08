@@ -11425,3 +11425,43 @@ Full write-up with tables: `docs/investigations/agent_campaigns.md`, heading "Ov
 - Of the 66 adjudicated missed pairs, the post-promotion build chains 26 (39%) vs 2 (3%)
   in the 2026-09-05 baseline -- out of sample, the verdicts did not exist at rebuild time.
 - `build_gold_edges.py` handles edge-less batches; new `recall_check.py`.
+
+## 2026-09-07 - Gate mechanics fixes (Plan 1 of the published-basis gate spec)
+
+- Spec: docs/superpowers/specs/2026-09-07-published-basis-conservation-gate-design.md;
+  plan: docs/superpowers/plans/2026-09-07-gate-mechanics-fixes.md.
+- `pipeline/agent_rule.py`: row_add pads cik to 10 digits; duplicate-add guard widened to
+  `PositionKeyIndex` (exact identifier key OR same report_date+fair_value with name_key
+  Jaccard >= 0.5 or a CASH counterpart). `pipeline/agent_promoted.py`: structural cik padding
+  on the corrected slice. `pipeline/validate_holdings.py`: `check_cik_format` hard check
+  (report key `cik_format`).
+- New `pipeline/investigation_state.py` (rules_fingerprint, stale_investigations).
+  `run_investigation`: apply records the fingerprint; gate returns STALE when rules changed
+  since apply and writes `<cik>/gate.<quarter>.json`; promote refuses STALE and refuses
+  PASS_NOOP with a non-empty rules dir; new `audit-stale` mode.
+- `pipeline/quarter_acceptance.py`: `investigations.n_stale` / `stale_ciks` (informational
+  until thresholds v3).
+- Live read-only checks: `audit-stale 2026-03-31` -> exit 1, n_stale=54, all with reason
+  "never applied; never gated for quarter" (includes HPS 0001838126 as expected). Full CIK
+  list (leading zeros stripped): 1278752, 1287750, 1321741, 1379785, 1383414, 1414932,
+  1422183, 1487918, 1504619, 1508655, 1512931, 1513363, 1534254, 1544206, 1552198, 1578348,
+  1603480, 1646614, 1674760, 1702510, 1742313, 1766037, 1784700, 1803498, 1812554, 1825248,
+  1838126, 1841514, 1851322, 1859919, 1869453, 1899017, 1905824, 1913724, 1916608, 1919369,
+  1920145, 1920453, 1925309, 1930087, 1930679, 1948368, 1950803, 1965934, 1975736, 1976336,
+  1985375, 1988280, 2006758, 2008748, 2011498, 2037804, 2052153, 81955. No `gate.2026-03-31.json`
+  exists yet for any of them (batch gates predate the rules), so the whole cohort is stale --
+  this is the entire Q1 investigation store, not a small residual.
+  `check_cik_format` on the production parquet (`data/output/private_markets_holdings.parquet`,
+  confirmed present) does NOT match the brief's assumed single-row TCW Star result. Measured:
+  2 rows -- cik 1916608, 1 row, fair_value_sum 5,325,046.0; cik 1954360, 1 row, fair_value_sum
+  745,000.0; both flagged `cik_not_10_digits`. Cik 1715933 / $5.33M does not appear. Recorded
+  as measured, not adjusted -- production frame has drifted from the brief's assumption (or the
+  assumption was wrong); needs owner follow-up before relying on this check's expected value.
+- Tests (each run individually, foreground): test_agent_rule.py 60 passed; test_agent_promoted.py
+  42 passed (a first run showed a transient "protected-output backstop FAILED" warning for
+  data/output/position_matches.csv and private_markets_holdings.csv mid-run, exit 0 with 42
+  passed; an immediate clean re-run passed 42/42 with no backstop warning and exit 0 -- consistent
+  with another concurrent session's activity on those gitignored output files, not this task's
+  read-only commands); test_validate_holdings.py -k "cik_format or gav or subsidiary" 19 passed
+  (159 deselected); test_investigation_state.py + test_investigation_orchestration.py 33 passed
+  together; test_quarter_acceptance.py 10 passed. Full suite NOT run (Plan 2 rollout owns it).
