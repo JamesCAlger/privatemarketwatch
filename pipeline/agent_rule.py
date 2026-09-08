@@ -327,19 +327,80 @@ def _apply_dedup(work, r):
                  "per_quarter": _per_quarter(dropped_rows)}
 
 
+# Tokens that carry no borrower identity: legal forms, share classes, generic fund words.
+_NAME_KEY_STOP = frozenset({
+    "llc", "l.l.c", "inc", "inc.", "corp", "corp.", "corporation", "co", "co.", "company",
+    "lp", "l.p", "l.p.", "llp", "ltd", "ltd.", "limited", "plc", "sa", "s.a", "gmbh", "sarl",
+    "fund", "class", "shares", "share", "institutional", "portfolio", "series", "the", "and", "of",
+})
+_NAME_KEY_SPLIT = re.compile(r"[^a-z0-9]+")
+
+
+def name_key(text) -> frozenset[str]:
+    """Order-free identity tokens of an issuer name: lower-cased, punctuation split, legal-form
+    and share-class tokens removed. Used ONLY for the duplicate-add guard (same FV + similar
+    name), never for matching or borrower resolution."""
+    toks = _NAME_KEY_SPLIT.split(str(text or "").lower())
+    return frozenset(t for t in toks if t and t not in _NAME_KEY_STOP)
+
+
+def _jaccard(a: frozenset, b: frozenset) -> float:
+    if not a or not b:
+        return 0.0
+    return len(a & b) / len(a | b)
+
+
+class PositionKeyIndex:
+    """Rows already in the frame, keyed two ways for the duplicate-add guard:
+    exact (report_date, identifier, fair_value) and fuzzy (report_date, fair_value) ->
+    [(name_key, is_cash)]. Empty identifiers never key on the exact path (fail-open); the
+    fuzzy path keys on fair_value alone so an identifier-less native row is still visible."""
+    DUP_JACCARD = 0.5
+
+    def __init__(self, work: pd.DataFrame):
+        self.exact: set[tuple[str, str, float]] = set()
+        self.by_fv: dict[tuple[str, float], list[tuple[frozenset, bool]]] = {}
+        if work is None or len(work) == 0 or "report_date" not in work.columns:
+            return
+        ident = (work["bdc_investment_identifier"].fillna("").astype(str).str.strip().str.lower()
+                 if "bdc_investment_identifier" in work.columns
+                 else pd.Series("", index=work.index))
+        name = (work["issuer_name"].fillna("").astype(str) if "issuer_name" in work.columns
+                else pd.Series("", index=work.index))
+        cat = (work["asset_category"].fillna("").astype(str).str.upper()
+               if "asset_category" in work.columns else pd.Series("", index=work.index))
+        rd = work["report_date"].astype(str)
+        fv = pd.to_numeric(work.get("fair_value"), errors="coerce")
+        for i, n, c, r_, f in zip(ident, name, cat, rd, fv):
+            if pd.isna(f):
+                continue
+            f = float(f)
+            if i:
+                self.exact.add((r_, i, f))
+            self.by_fv.setdefault((r_, f), []).append((name_key(n or i), c == "CASH"))
+
+    def contains(self, report_date, identifier, fair_value, issuer_name) -> bool:
+        try:
+            f = float(fair_value)
+        except (TypeError, ValueError):
+            return False
+        r_ = str(report_date)
+        ident = str(identifier or "").strip().lower()
+        if ident and (r_, ident, f) in self.exact:
+            return True
+        cand = name_key(issuer_name or identifier)
+        for key, is_cash in self.by_fv.get((r_, f), []):
+            if is_cash:
+                return True
+            if _jaccard(cand, key) >= self.DUP_JACCARD:
+                return True
+        return False
+
+
 def _existing_position_keys(work) -> set[tuple[str, str, float]]:
-    """(report_date, normalized identifier, fair_value) keys of rows already in
-    the frame. Empty identifiers are unjudgeable and never key (fail-open)."""
-    if "bdc_investment_identifier" not in work.columns or len(work) == 0:
-        return set()
-    ident = work["bdc_investment_identifier"].fillna("").astype(str).str.strip().str.lower()
-    rd = work["report_date"].astype(str)
-    fv = pd.to_numeric(work.get("fair_value"), errors="coerce")
-    keys = set()
-    for i, r_, f in zip(ident, rd, fv):
-        if i and pd.notna(f):
-            keys.add((r_, i, float(f)))
-    return keys
+    """Exact (report_date, normalized identifier, fair_value) keys (kept for gate_rules'
+    is-this-row-new test; the add guard uses PositionKeyIndex)."""
+    return PositionKeyIndex(work).exact
 
 
 def _apply_add(work, r):
@@ -347,23 +408,21 @@ def _apply_add(work, r):
     grounded by a `source_row_id` (the iXBRL/staging row it recovers). Values are agent-supplied
     from the source; `source_row_id`/evidence make it auditable and the gate checks the FV impact.
 
-    Duplicate guard (gate blind spot 1, 1905824 FHLB veto 2026-09-02): a position whose
-    (report_date, identifier, fair_value) already exists in the frame is SKIPPED, not appended --
-    a dup-add against a conservation-EXCLUDED row (CASH) is invisible to the conservation gate,
-    and a dup-add against a later-natively-extracted row would silently double-count."""
+    Duplicate guard (gate blind spot 1, 1905824 FHLB veto 2026-09-02; widened 2026-09-07 after
+    the Q1 cash double-count): a position is SKIPPED, not appended, when the frame already holds
+    a row with the same (report_date, identifier, fair_value) OR the same (report_date,
+    fair_value) and either a similar name_key (Jaccard >= 0.5) or a CASH counterpart. The
+    identifier-text-only key missed 56 rows / $1.32B in Q1 2026 because rule text differs
+    from filing text."""
     positions = r.get("positions") or []
     cols = [c for c in work.columns if c != "_rid"]
     next_rid = (int(work["_rid"].max()) + 1) if len(work) else 0
-    existing = _existing_position_keys(work)
+    existing = PositionKeyIndex(work)
     new_rows, pq, ignored, skipped = [], {}, set(), []
     for p in positions:
-        ident = str(p.get("bdc_investment_identifier") or "").strip().lower()
-        try:
-            fv_key = float(p.get("fair_value"))
-        except (TypeError, ValueError):
-            fv_key = None
-        if ident and fv_key is not None and (str(p.get("report_date")), ident, fv_key) in existing:
-            skipped.append(p.get("bdc_investment_identifier"))
+        if existing.contains(p.get("report_date"), p.get("bdc_investment_identifier"),
+                             p.get("fair_value"), p.get("issuer_name")):
+            skipped.append(p.get("bdc_investment_identifier") or p.get("issuer_name"))
             continue
         row = {c: None for c in cols}
         for k, v in p.items():

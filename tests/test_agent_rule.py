@@ -680,3 +680,71 @@ def test_value_sum_quarter_scoped_carveout_leaves_other_quarters(monkeypatch):
     vs = value_sum_by_quarter(df, cik="1950976")
     assert vs["2026-03-31"] == 1_625_489_000.0   # CASH rescued in-scope
     assert vs["2025-12-31"] == 1_482_846_000.0   # CASH still excluded out-of-scope
+
+
+from pipeline.agent_rule import name_key, PositionKeyIndex
+
+
+def test_name_key_strips_legal_form_and_share_class_tokens():
+    assert name_key("Goldman Sachs Financial Square Government Fund - Institutional Shares") == \
+        name_key("Goldman Sachs Financial Square Government Fund")
+    assert name_key("Acme Holdings, LLC") == frozenset({"acme", "holdings"})
+    assert name_key("") == frozenset()
+
+
+def test_row_add_skips_same_fv_and_similar_name_when_identifier_text_differs():
+    """Q1 2026 (Silver Capital, TCW DL): the promoted row_add text differed from the filing
+    text the cash-axis fix later extracted natively, so the exact-identifier guard missed it
+    and the money-market position was counted twice."""
+    native = {**_h("1", "2026-03-31", 157_700_000.0,
+                   dims="cashandcashequivalentsaxis=GoldmanSachsFinancialSquareGovernmentFundMember"),
+              "bdc_investment_identifier": "Goldman Sachs Financial Square Government Fund - Institutional Shares",
+              "issuer_name": "Goldman Sachs Financial Square Government Fund - Institutional Shares",
+              "asset_category": "CASH"}
+    df = pd.DataFrame([native, {**_h("1", "2026-03-31", 600.0),
+                                "bdc_investment_identifier": "Real Co - TL",
+                                "issuer_name": "Real Co", "asset_category": "LOAN"}])
+    pos = {"report_date": "2026-03-31", "fair_value": 157_700_000.0,
+           "bdc_investment_identifier": "GS Financial Square Government Fund",
+           "issuer_name": "Goldman Sachs Financial Square Government Fund",
+           "bdc_dimensions_raw": "investmentidentifieraxis=x", "source_row_id": "staging:mmf"}
+    corrected, audits = apply_rules(df, [_addrule(positions=[pos])])
+    assert audits[0]["rows_added"] == 0
+    assert audits[0]["rows_skipped_duplicate"] == 1
+    assert len(corrected) == 2
+
+
+def test_row_add_skips_same_fv_against_cash_row_even_with_unrelated_name():
+    native = {**_h("1", "2026-03-31", 5_330_000.0), "bdc_investment_identifier": "Cash Sweep",
+              "issuer_name": "Cash Sweep", "asset_category": "CASH"}
+    df = pd.DataFrame([native])
+    pos = {"report_date": "2026-03-31", "fair_value": 5_330_000.0,
+           "bdc_investment_identifier": "First American Govt Obligations",
+           "issuer_name": "First American Govt Obligations",
+           "bdc_dimensions_raw": "investmentidentifieraxis=x", "source_row_id": "staging:fa"}
+    _, audits = apply_rules(df, [_addrule(positions=[pos])])
+    assert audits[0]["rows_added"] == 0 and audits[0]["rows_skipped_duplicate"] == 1
+
+
+def test_row_add_appends_same_fv_unrelated_name_non_cash():
+    """False-positive guard: two different borrowers can legitimately carry identical FV
+    (E10: 28% of cohort rows sit in static-ambiguous blocks). Non-cash + dissimilar name = append."""
+    native = {**_h("1", "2026-03-31", 4_960_000.0), "bdc_investment_identifier": "KAMC Holdings TL",
+              "issuer_name": "KAMC Holdings, Inc.", "asset_category": "LOAN"}
+    df = pd.DataFrame([native])
+    pos = {"report_date": "2026-03-31", "fair_value": 4_960_000.0,
+           "bdc_investment_identifier": "Heads Up Technologies TL",
+           "issuer_name": "Heads Up Technologies, Inc.",
+           "bdc_dimensions_raw": "investmentidentifieraxis=x", "source_row_id": "staging:hut"}
+    corrected, audits = apply_rules(df, [_addrule(positions=[pos])])
+    assert audits[0]["rows_added"] == 1 and audits[0]["rows_skipped_duplicate"] == 0
+    assert len(corrected) == 2
+
+
+def test_position_key_index_requires_exact_fv_match():
+    df = pd.DataFrame([{**_h("1", "q", 100.0), "bdc_investment_identifier": "Acme TL",
+                        "issuer_name": "Acme Corp", "asset_category": "LOAN"}])
+    idx = PositionKeyIndex(df)
+    assert idx.contains("q", "acme tl", 100.0, "Acme Corp")
+    assert not idx.contains("q", "acme tl", 100.5, "Acme Corp")
+    assert not idx.contains("other-q", "acme tl", 100.0, "Acme Corp")
