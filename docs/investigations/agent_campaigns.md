@@ -1161,3 +1161,29 @@ run on them is recorded in position_matching.md.
 
 **Caveats:** single adjudicator; interior singletons of one build; the recovery number
 mixes the position-key pass and the contested promotion (the baseline predates both).
+
+### Gold A/B after the completeness changes (2026-09-08)
+
+`ab_gold_percik.py` on mg3 + mg4_contested (59 CIKs, 1,866 adjudicated pairs)
+before and after commit 8c4b68e. Column B is the production configuration
+(contested on); A is the same code with the flag off.
+
+| kind | n | linked B, 2026-09-07 | linked B, after |
+|---|---|---|---|
+| WRONG | 136 | 73 | 74 |
+| CONFIRMED | 1,662 | 1,622 | 1,625 |
+| MISSED | 68 | 36 | 37 |
+
+CONFIRMED lost to the contest fell from 17 to 16, and the two repricings the
+amendment escape was rewritten for (Columbia Helicopters, Nouryon Finance) are
+recovered: the `SUPP_B2_contested_name_key` losses go 2 -> 1 and
+`SUPP_B2_unique_exact_name` 1 -> 0.
+
+**What this A/B cannot see.** The gold pairs were sampled from a build in which
+zero-fair-value rows were excluded from the match universe, so no adjudicated
+pair involves one. The largest change in commit 8c4b68e -- 17,655 rows, 44% of
+all singletons -- is therefore invisible to this instrument, and its +1 WRONG
+/ +3 CONFIRMED / +1 MISSED understates both the benefit and the risk. That gap
+is exactly what the continuation metric (`score_continuation.py`) exists to
+close: it samples rows rather than the build's own edges, so zero-FV positions
+are in the frame.

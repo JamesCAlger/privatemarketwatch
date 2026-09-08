@@ -1230,3 +1230,52 @@ class TestFeeUplift:
         row = pos.iloc[0]
         # Fund vehicle income = cost distribution, not coupon
         assert abs(row["income_return"] - 0.05) < 0.001  # (900k-850k)/1M
+
+
+class TestNonPositiveFairValueLegsExcluded:
+    """A price observation needs a positive mark at both ends.
+
+    Until 2026-09-08 every matcher tier required both marks positive, so pairs
+    with a zero or negative leg could not exist and this filter only had to
+    name the begin leg. Relaxing those guards so undrawn revolvers and
+    delayed-draw commitments could chain made them reachable: 24,809 pairs with
+    two negative marks (mean total return 2.5, min -150) and 5,502 with a sign
+    flip or zero (mean -41.4, min -41,604), against 474,027 sound observations,
+    which moved DIRECT_LENDING from 135.4 to 133.9. A revolver repaid to zero
+    drawn is a return of principal, not a total loss of value.
+    """
+
+    def _match(self, begin_fv, end_fv):
+        return _make_matches([{
+            "cik": "100", "entity_name": "BDC1", "source": "bdc",
+            "index_classification": "DIRECT_LENDING",
+            "begin_quarter": "2024q1", "end_quarter": "2024q2",
+            "begin_report_date": "2024-03-31", "end_report_date": "2024-06-30",
+            "begin_issuer_name": "Acme Corp", "end_issuer_name": "Acme Corp",
+            "begin_fair_value": begin_fv, "end_fair_value": end_fv,
+            "begin_cost": "950000", "end_cost": "950000",
+            "begin_principal_amount": "1000000", "end_principal_amount": "1000000",
+            "begin_interest_rate": "10", "begin_basis_spread": "5.0",
+            "span_months": "3", "match_method": "B2_exact_name",
+            "asset_category": "LOAN_FIRST_LIEN",
+        }])
+
+    def test_zero_end_leg_is_excluded(self):
+        pos, _ = _compute(self._match("1000000", "0"))
+        assert len(pos) == 0
+
+    def test_zero_begin_leg_is_excluded(self):
+        pos, _ = _compute(self._match("0", "1000000"))
+        assert len(pos) == 0
+
+    def test_both_legs_valued_is_kept(self):
+        pos, _ = _compute(self._match("1000000", "990000"))
+        assert len(pos) == 1
+
+    def test_both_legs_negative_is_excluded(self):
+        pos, _ = _compute(self._match("-157000", "-204000"))
+        assert len(pos) == 0
+
+    def test_sign_flip_is_excluded(self):
+        pos, _ = _compute(self._match("-157000", "1000000"))
+        assert len(pos) == 0

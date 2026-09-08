@@ -236,9 +236,25 @@ def compute_returns(
            AND m.begin_quarter = CAST(u_fee.quarter AS VARCHAR)
         LEFT JOIN rate_convention rc
             ON LPAD(CAST(m.cik AS VARCHAR), 10, '0') = rc.cik
-        WHERE TRY_CAST(m.begin_fair_value AS DOUBLE) IS NOT NULL
-          AND TRY_CAST(m.begin_fair_value AS DOUBLE) != 0
-          AND TRY_CAST(m.end_fair_value AS DOUBLE) IS NOT NULL
+        -- A price observation needs a positive mark at BOTH ends.
+        --
+        -- This used to be enforced by accident: every matcher tier required
+        -- `b.fv > 0 AND e.fv > 0`, so a pair with a zero or negative leg could
+        -- not exist and the filter here only had to name the begin leg.  Those
+        -- guards were relaxed on 2026-09-08 so undrawn revolvers and
+        -- delayed-draw commitments could chain (E15).  Measured on the first
+        -- rebuild after that change, the newly reachable pairs were 24,809 with
+        -- two negative marks (mean total return 2.5, min -150) and 5,502 with a
+        -- sign flip or a zero (mean -41.4, min -41,604), against 474,027 sound
+        -- observations -- and they moved DIRECT_LENDING from 135.4 to 133.9.
+        --
+        -- None of them is a price return.  A revolver repaid to zero drawn is a
+        -- return OF principal; a commitment marked below par is a liability-like
+        -- mark whose ratio to a later mark means nothing.  Requiring positivity
+        -- explicitly keeps the index measuring what it always measured and
+        -- confines the chain improvement to the holdings product.
+        WHERE TRY_CAST(m.begin_fair_value AS DOUBLE) > 0
+          AND TRY_CAST(m.end_fair_value AS DOUBLE) > 0
     ),
     with_returns AS (
         SELECT *,

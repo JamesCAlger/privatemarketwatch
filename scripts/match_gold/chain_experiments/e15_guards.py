@@ -59,21 +59,32 @@ SELECT COUNT(*) AS rows,
   SUM(CASE WHEN fv < 0 THEN 1 ELSE 0 END) AS fv_neg,
   SUM(CASE WHEN ac IN ('CASH','DERIVATIVE') OR ic = 'CASH' THEN 1 ELSE 0 END) AS cash_deriv
 FROM b""").fetchone()
-excl = con.execute("""
-SELECT COUNT(*) FROM b
-WHERE fv IS NULL OR fv = 0 OR ac IN ('CASH','DERIVATIVE') OR ic = 'CASH'""").fetchone()[0]
+import inspect  # noqa: E402
+import sys  # noqa: E402
+
+sys.path.insert(0, str(REPO))
+from pipeline import position_matching as _pm  # noqa: E402
+
+_ZERO_FV_EXCLUDED = ("TRY_CAST(fair_value AS DOUBLE) != 0"
+                     in inspect.getsource(_pm.match_positions))
+# The universe rule is read from the module rather than hard-coded, so this
+# report cannot keep describing an exclusion the matcher no longer applies.
+excl_sql = ("ac IN ('CASH','DERIVATIVE') OR ic = 'CASH' OR fv IS NULL"
+            + (" OR fv = 0" if _ZERO_FV_EXCLUDED else ""))
+excl = con.execute(f"SELECT COUNT(*) FROM b WHERE {excl_sql}").fetchone()[0]
 print("cohort BDC rows                     : %d" % r[0])
 print("  fair value NULL                   : %d" % r[1])
 print("  fair value exactly 0              : %d  (%.1f%% of rows)" % (r[2], 100.0 * r[2] / r[0]))
-print("  fair value negative (in universe) : %d" % r[3])
+print("  fair value negative               : %d" % r[3])
 print("  cash / derivative                 : %d" % r[4])
-print("excluded from the match universe    : %d  (%.1f%%)" % (excl, 100.0 * excl / r[0]))
+print("excluded from the match universe    : %d  (%.1f%%)  [zero-FV excluded: %s]"
+      % (excl, 100.0 * excl / r[0], _ZERO_FV_EXCLUDED))
 
-sing = con.execute("""
+sing = con.execute(f"""
 WITH c AS (SELECT position_id, COUNT(*) AS n FROM b GROUP BY 1)
 SELECT SUM(CASE WHEN c.n = 1 THEN 1 ELSE 0 END) AS singletons,
-       SUM(CASE WHEN c.n = 1 AND (b.fv IS NULL OR b.fv = 0
-                OR b.ac IN ('CASH','DERIVATIVE') OR b.ic = 'CASH') THEN 1 ELSE 0 END) AS forced,
+       SUM(CASE WHEN c.n = 1 AND ({excl_sql.replace('ac ', 'b.ac ').replace('ic ', 'b.ic ').replace('fv ', 'b.fv ')})
+           THEN 1 ELSE 0 END) AS forced,
        COUNT(*) AS rows
 FROM b JOIN c USING (position_id)""").fetchone()
 print("\nsingleton rows                      : %d (%.1f%% of cohort rows)"
@@ -82,6 +93,13 @@ print("  of which cannot chain by design   : %d (%.1f%% of singletons)"
       % (sing[1], 100.0 * sing[1] / max(sing[0], 1)))
 print("  remaining, matcher-attributable   : %d (%.1f%% of cohort rows)"
       % (sing[0] - sing[1], 100.0 * (sing[0] - sing[1]) / sing[2]))
+zs = con.execute("""
+WITH c AS (SELECT position_id, COUNT(*) AS n FROM b GROUP BY 1)
+SELECT SUM(CASE WHEN b.fv = 0 THEN 1 ELSE 0 END) AS zero_rows,
+       SUM(CASE WHEN b.fv = 0 AND c.n > 1 THEN 1 ELSE 0 END) AS zero_chained
+FROM b JOIN c USING (position_id)""").fetchone()
+print("  zero-FV rows now chained          : %d of %d (%.1f%%)"
+      % (zs[1], zs[0], 100.0 * zs[1] / max(zs[0], 1)))
 
 # how many zero-FV rows have an obvious same-name continuation next quarter?
 z = con.execute("""

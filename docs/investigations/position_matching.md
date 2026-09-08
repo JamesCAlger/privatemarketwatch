@@ -387,3 +387,105 @@ can see it. The gap-quarter group needs a span-2 link (position absent for one f
 present again after), which no current tier attempts. Together these are the
 remaining completeness mechanism, and both are outside the assignment contest: one is
 extraction, the other is a new tier.
+
+## 2026-09-08 - E13-E16: where the remaining completeness gap actually is
+
+Diagnostics after mg5_recall, on the post-promotion production build. Scripts:
+`chain_experiments/e13_name_drift.py`, `e14_fingerprint_precision.py`,
+`e15_guards.py`, `e16_null_issuer.py`, and `replay_verdicts.py --pairs-csv`
+(new flag: replays the tier vetoes over any pair list, not just a gold batch).
+
+### E15. The match universe, not the matcher, owns 44% of the singletons
+
+`match_positions` built its universe with `fair_value IS NOT NULL AND != 0`, and
+every name tier additionally required `b.fv > 0 AND e.fv > 0` before its FV-ratio
+guard. So a row carrying a zero mark could not chain at all.
+
+| cohort BDC rows | 266,198 |
+|---|---|
+| fair value exactly 0 | 17,655 (6.6%) |
+| fair value negative (in the universe, but sign-flip pairs vetoed) | 26,737 |
+| singleton rows | 40,539 (15.2%) |
+| singletons that cannot chain by construction | 17,717 (43.7% of singletons) |
+| singleton rate attributable to the matcher | 8.6% |
+
+5,943 zero-FV rows have a same-name, non-zero-FV row in the very next quarter,
+across 53 CIKs: undrawn revolvers and delayed-draw commitments being funded.
+`index_returns.py` filters `begin_fair_value != 0` independently (line 239), so
+chaining them cannot move any index.
+
+### E13/E14. The terms fingerprint: accurate where it agrees with the name, unproven where it does not
+
+E13 finds 11,323 adjacent-quarter break/new pairs, unique on both sides, agreeing
+on maturity + classification + principal band + spread ($77.1B). E14 replays that
+rule against 160,384 pairs the build chained by exact name:
+
+| fingerprint on the control | n |
+|---|---|
+| fires with exactly one candidate | 84,611 (52.8%) |
+| picks the exact-name answer | 83,652 (0.989) |
+| picks a different row | 959 (0.011), of which 772 have a different name |
+
+Every different-name pick is wrong **by construction** -- the control's truth is a
+same-name pair. An availability gate ("fire only where the begin row has no
+same-name row next quarter") suppresses all 959, and also the entire control, so
+it certifies nothing about drift. **The drift population cannot be validated
+offline.** Adjudication is the only instrument for it.
+
+Replaying the pool through the tier vetoes splits it cleanly:
+
+| class | pairs | FV | lien | instr | industry | what blocks it |
+|---|---|---|---|---|---|---|
+| same name, zero/neg begin FV | 3,053 | $1.7B | 0.998 | 0.996 | 0.996 | `fv_nonpositive`, sole cause, 0 admitted |
+| null issuer name | 1,472 | $6.6B | 1.000 | 0.984 | 1.000 | name multiplicity, 0 admitted |
+| same name, other | 658 | $1.4B | 0.994 | 0.798 | 0.988 | `fv_nonpositive`, `inst_subtype` |
+| wrapper containment | 2,326 | $21.5B | 0.995 | 0.936 | 0.917 | `name_differs`; 1,012 already admitted by D/E |
+| unrelated names | 3,814 | $46.0B | 0.946 | 0.955 | 0.928 | `name_differs`; 1,613 already admitted by D/E |
+
+Corroboration columns are fields the fingerprint does not key on. Interest-rate
+agreement runs 0.35-0.49 everywhere because SOFR resets quarterly; it is not a
+discriminator. The first three classes are mechanically explained; the last two
+carry the FV and are the drift population above.
+
+### E13(b). Gap quarters
+
+496 span-2 pairs, $4.7B, 44 CIKs, on the strict definition (same name, same
+maturity, principal band, and that name absent from the intervening filing).
+None of the mg5 gap pairs are among them: those drifted in name as well.
+
+### E15(2). What the contested promotion cost, and why
+
+The 17 CONFIRMED gold pairs lost to the promotion have two causes. Seven hit the
+maturity veto: five also moved principal beyond 2%, three moved spread, so the
+escape (which demanded principal AND spread stability) could not fire. Columbia
+Helicopters (principal within 2%, spread 10.51 -> 11.51, maturity +380d) and
+Nouryon Finance (principal identical, spread 4.00 -> 3.50, +912d) are textbook
+repricings the rule was written to keep. The other ten lost the 1:1 contest with
+principal ratios a revolver produces legitimately: 3.94, 2.52, 0.24, 0.13, 0.04,
+0.001. Their names say "revolving loan" but `instrument_description` is empty, so
+`_inst_subtype` was NULL and `CONTESTED_PA_BAND_REVOLVER` never applied.
+
+### E16. Null issuer names are a wrapper defect
+
+3,525 cohort rows, $11.12B, and 94% sit in four filers: Crescent Private Credit
+(1,229), Crescent Capital BDC (924), Goldman Sachs BDC (886), Audax (259). Every
+one retains a raw identifier that still contains the borrower, e.g.
+`Investment Debt Investments - 216.4% United States - 205.6% 1st Lien/Senior
+Secured Debt - 195.3% Xactly Corporation IT Services Interest Rate 10.55%`.
+The wrapper's `prefix_rules` match with `str.startswith` on fixed strings, and
+these prefixes embed percentages that change every quarter, so no rule fires.
+`fallback_family_patterns` already accepts regexes, which is the mechanism a fix
+would use. Not attempted here: it renames $11.1B of rows and would flow into
+investee concentration, top constituents and entity resolution, so it deserves
+its own gated pass rather than riding along with a matcher rebuild.
+
+### What shipped (commit 8c4b68e)
+
+1. Zero-FV rows join the match universe.
+2. `_fv_scale_ok_sql`: magnitude comparison plus a principal-agreement escape,
+   replacing the signed ratio at all eight tier call sites.
+3. `_inst_subtype_name` widens the contested principal band for filers who name
+   the instrument in `issuer_name`; never used as a veto.
+4. The amendment escape takes principal OR spread, with the spread-only leg gated
+   on the principal not contradicting (band 1.5, fitted to the lost gold pairs).
+5. Tier F gap-quarter links, and the continuation metric, both off by default.

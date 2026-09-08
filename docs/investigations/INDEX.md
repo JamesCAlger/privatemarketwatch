@@ -90,4 +90,5 @@ GENERATED -- do not edit by hand. Rebuild: python scripts/split_investigations.p
 - 2026-09-07 - Chain-stability experiments E1-E7 on the completed mg3 gold set
 - 2026-09-07 (evening) - Production result of the contested promotion
 - 2026-09-07 (night) - What still blocks the mg5 missed links
+- 2026-09-08 - E13-E16: where the remaining completeness gap actually is
 
