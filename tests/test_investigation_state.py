@@ -121,3 +121,15 @@ def test_malformed_rule_file_still_makes_cik_stale(tmp_path):
     (d / "rules" / "bad.json").write_text("{bad", encoding="utf-8")
     out = stale_investigations(tmp_path, q)
     assert [o["cik"] for o in out] == ["4444444444"]
+
+
+def test_non_list_scope_quarters_fails_closed(tmp_path):
+    """A staged rule with a truthy non-list scope.quarters (e.g. 2026) must not raise --
+    stale_investigations feeds the acceptance run, so it fails CLOSED (rule in scope)."""
+    d = tmp_path / "5555555555"
+    (d / "rules").mkdir(parents=True)
+    (d / "rules" / "r0.json").write_text(
+        json.dumps({"rule_id": "r0", "rule_type": "row_exclusion", "scope": {"quarters": 2026}}),
+        encoding="utf-8")
+    out = stale_investigations(tmp_path, "2026-03-31")
+    assert [o["cik"] for o in out] == ["5555555555"]

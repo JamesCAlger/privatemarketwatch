@@ -47,6 +47,8 @@ FUNDS_COLUMNS = [
     "fund_fv_m",
     "conservation_status",
     "conservation_residual_pct",
+    "over_inclusion_fv_m",
+    "anchor_basis",
     "n_blockers",
     "blocker_fv_m",
     "tier",
@@ -156,7 +158,9 @@ def compute_acceptance(
     cohort_fv_m = sum(fv_in_quarter.values())
 
     # --- conservation (shadow ledger; engine artifacts the agents cannot edit) ---
-    cons_status: dict[str, tuple[str, float | None]] = {}
+    # cik -> (status, residual_pct, anchor_basis). The ledger's conservation mechanism is
+    # "<anchor_used>:<anchor_basis>", so the basis is the last colon-separated segment.
+    cons_status: dict[str, tuple[str, float | None, str]] = {}
     if ledger_path.exists():
         for row in _read_rows(ledger_path):
             if (
@@ -170,16 +174,29 @@ def compute_acceptance(
                     cons_status[cik] = (
                         str(row.get("status") or ""),
                         _f(metric) if metric not in (None, "") else None,
+                        str(row.get("mechanism") or "").split(":")[-1],
                     )
     else:
         logger.warning("shadow ledger missing, conservation metrics empty: %s", ledger_path)
 
-    n_pass = sum(1 for s, _ in cons_status.values() if s == "pass")
-    n_fail = sum(1 for s, _ in cons_status.values() if s == "fail")
-    n_skip = sum(1 for s, _ in cons_status.values() if s == "skip")
+    n_pass = sum(1 for s, _, _ in cons_status.values() if s == "pass")
+    n_fail = sum(1 for s, _, _ in cons_status.values() if s == "fail")
+    n_skip = sum(1 for s, _, _ in cons_status.values() if s == "skip")
     flagged_fv_m = sum(
-        fv_in_quarter.get(c, 0.0) for c, (s, _) in cons_status.items() if s == "fail"
+        fv_in_quarter.get(c, 0.0) for c, (s, _, _) in cons_status.items() if s == "fail"
     )
+
+    # Over-inclusion (spec 2026-09-07 s.3): FV above the anchor across failed funds. With the
+    # published-basis numerator, value_sum == fund FV, so over = fv - fv / (1 + r/100).
+    def _over(c: str) -> float:
+        s, r, _ = cons_status.get(c, ("", None, ""))
+        fv = fv_in_quarter.get(c, 0.0)
+        if s == "fail" and r is not None and r > 0 and fv > 0:
+            return fv - fv / (1.0 + r / 100.0)
+        return 0.0
+
+    over_by_fund = {c: _over(c) for c in cons_status}
+    over_inclusion_fv_m = sum(over_by_fund.values())
 
     # --- source-reconciliation blockers (review queue, blocker lane) ---
     blockers: dict[str, dict[str, float]] = {}
@@ -224,7 +241,7 @@ def compute_acceptance(
     tier_counts = {"verified": 0, "under_review": 0, "unanchored": 0, "no_holdings": 0}
     for cik in sorted(cohort):
         fv_m = fv_in_quarter.get(cik)
-        status, residual = cons_status.get(cik, ("", None))
+        status, residual, basis = cons_status.get(cik, ("", None, ""))
         n_blk = int(blockers.get(cik, {}).get("n", 0))
         blk_fv = float(blockers.get(cik, {}).get("fv_m", 0.0))
         if fv_m is None:
@@ -243,6 +260,8 @@ def compute_acceptance(
                 "fund_fv_m": "" if fv_m is None else f"{fv_m:.6f}",
                 "conservation_status": status,
                 "conservation_residual_pct": "" if residual is None else f"{residual:.3f}",
+                "over_inclusion_fv_m": f"{over_by_fund.get(cik, 0.0):.6f}",
+                "anchor_basis": basis,
                 "n_blockers": n_blk,
                 "blocker_fv_m": f"{blk_fv:.6f}",
                 "tier": tier,
@@ -282,6 +301,8 @@ def compute_acceptance(
             else 0.0,
             "flagged_fv_m": round(flagged_fv_m, 3),
             "flagged_fv_share_pct": _share(flagged_fv_m),
+            "over_inclusion_fv_m": round(over_inclusion_fv_m, 3),
+            "over_inclusion_fv_share_pct": _share(over_inclusion_fv_m),
             "band_pct": config.FV_CONSERVATION_BAND_PCT,
         },
         "source_blockers": {

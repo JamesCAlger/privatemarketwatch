@@ -250,3 +250,59 @@ def test_missing_investigate_dir_is_zero_stale(tmp_path):
                                        _cons_row("0000000003", "pass")])
     res = qa.compute_acceptance(target_quarter=Q, investigate_dir=tmp_path / "nope", **kw)
     assert res["metrics"]["investigations"] == {"n_stale": 0, "stale_ciks": []}
+
+
+def test_over_inclusion_metric_and_anchor_basis(tmp_path):
+    """Bain Q1-26 shape: fund FV 2221.6M at +22.4% residual -> 406.5M over-included.
+    An undershoot contributes 0. Share is against cohort FV."""
+    ciks = ["0000000001", "0000000002", "0000000003"]
+    kw = _setup(tmp_path, ciks=ciks,
+                holdings_rows=[("0000000001", Q, 2_221_600_000.0),
+                               ("0000000002", Q, 1_000_000_000.0),
+                               ("0000000003", Q, 778_400_000.0)],
+                ledger_rows=[
+                    {**_cons_row("0000000001", "fail", "22.4"), "mechanism": "verified_override:published_rows"},
+                    {**_cons_row("0000000002", "fail", "-3.0"), "mechanism": "companyfacts_fv:investments_ex_cash"},
+                    {**_cons_row("0000000003", "pass", "0.1"), "mechanism": "companyfacts_fv_plus_cash:published_rows"},
+                ])
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    m = res["metrics"]["conservation"]
+    assert abs(m["over_inclusion_fv_m"] - 406.5) < 0.2
+    assert abs(m["over_inclusion_fv_share_pct"] - 100 * 406.5 / 4000.0) < 0.01
+    funds = {f["cik"]: f for f in res["_funds"]}
+    assert abs(float(funds["0000000001"]["over_inclusion_fv_m"]) - 406.5) < 0.2
+    assert float(funds["0000000002"]["over_inclusion_fv_m"]) == 0.0
+    assert funds["0000000001"]["anchor_basis"] == "published_rows"
+    assert funds["0000000002"]["anchor_basis"] == "investments_ex_cash"
+    assert funds["0000000003"]["anchor_basis"] == "published_rows"
+
+
+def test_over_inclusion_gate_from_thresholds(tmp_path):
+    ciks = ["0000000001", "0000000002"]
+    checks = [{"id": "over_inclusion_fv_share", "metric": "conservation.over_inclusion_fv_share_pct",
+               "op": "<=", "value": 0.5}]
+    kw = _setup(tmp_path, ciks=ciks,
+                holdings_rows=[("0000000001", Q, 1_010_000_000.0), ("0000000002", Q, 990_000_000.0)],
+                ledger_rows=[_cons_row("0000000001", "fail", "1.01"), _cons_row("0000000002", "pass")])
+    kw["thresholds_path"] = _thresholds(tmp_path / "t3.json", checks=checks)
+    res = qa.compute_acceptance(target_quarter=Q, **kw)
+    # over-inclusion = 1010 - 1010/1.0101 = 10.1M of 2000M = 0.505% -> FAIL at 0.5
+    assert res["checks"][0]["pass"] is False and res["verdict"] == "FAIL"
+    kw["thresholds_path"] = _thresholds(tmp_path / "t4.json", checks=[{**checks[0], "value": 0.51}])
+    assert qa.compute_acceptance(target_quarter=Q, **kw)["verdict"] == "PASS"
+
+
+def test_thresholds_v3_file_has_nine_checks():
+    from pipeline import config
+    t = json.loads(config.QUARTER_ACCEPTANCE_THRESHOLDS_FILE.read_text(encoding="utf-8-sig"))
+    ids = [c["id"] for c in t["checks"]]
+    assert t["version"] == 3
+    assert ids == ["fund_coverage", "reconcile_rate", "flagged_fv_share", "source_blocking_fv_share",
+                   "verified_fv_share", "promoted_rule_drift", "promoted_rule_health",
+                   "over_inclusion_fv_share", "unfinished_investigations"]
+    by_id = {c["id"]: c for c in t["checks"]}
+    assert by_id["over_inclusion_fv_share"] == {
+        "id": "over_inclusion_fv_share", "metric": "conservation.over_inclusion_fv_share_pct",
+        "op": "<=", "value": 0.5, "note": by_id["over_inclusion_fv_share"]["note"]}
+    assert by_id["unfinished_investigations"]["metric"] == "investigations.n_stale"
+    assert by_id["unfinished_investigations"]["op"] == "<=" and by_id["unfinished_investigations"]["value"] == 0

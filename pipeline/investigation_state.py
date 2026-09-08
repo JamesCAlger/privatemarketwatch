@@ -58,6 +58,8 @@ def _rule_in_scope(rule: dict, target_quarter: str) -> bool:
     quarters = scope.get("quarters")
     if not quarters:
         return True
+    if not isinstance(quarters, (list, tuple)):
+        return True  # malformed scope (e.g. quarters: 2026) -- fail closed, do not raise
     return "all" in quarters or str(target_quarter) in quarters
 
 
