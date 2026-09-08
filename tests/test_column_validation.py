@@ -481,6 +481,31 @@ class TestReportAdapters:
         assert _issues_by_rule(issues, "GAV_BDC02").empty
         assert len(issues) == 1
 
+    def test_gav_adapter_strong_fail_outside_warn_band_replaces_warn_issue(self):
+        """A STRONG-anchor FAIL at 1.3 was GAV_BDC02/WARN; it is now GAV_BDC03/FAIL."""
+        gav = pd.DataFrame([
+            {
+                "cik": "0000000202",
+                "report_date": "2024-03-31",
+                "gav_ratio": "1.3",
+                "gav_ratio_adjusted": "",
+                "comparison_source": "investments_at_fair_value",
+                "holdings_source": "bdc",
+                "holdings_scope": "bdc_schedule",
+                "denominator_scope": "investment_fair_value",
+                "reconciliation_status": "FAIL",
+                "blocks_verified": True,
+                "gav_rule_id": "GAV_BDC01",
+            },
+        ])
+        issues = adapt_validation_reports({"gav_reconciliation": gav})
+        strong = _issues_by_rule(issues, GAV_BDC_FAIL_STRONG_RULE)
+        assert len(strong) == 1
+        assert strong.iloc[0]["severity"] == SEVERITY_FAIL
+        assert strong.iloc[0]["value"] == "1.3"
+        assert _issues_by_rule(issues, "GAV_BDC02").empty
+        assert len(issues) == 1
+
     def test_gav_adapter_in_band_moderate_pass_emits_no_issue(self):
         """A MODERATE anchor at the same ratio still reconciles, so no issue."""
         gav = pd.DataFrame([

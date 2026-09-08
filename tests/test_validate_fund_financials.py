@@ -146,16 +146,27 @@ def test_validate_fund_source_flags_cash_equivalents_exceeding_investments():
         # Null cash: nothing to compare, so the check skips rather than flags.
         {"cik": "0000001003", "investments_at_fair_value": "900000",
          "cash_equivalents_at_fair_value": ""},
+        # Boundary: equality does NOT flag (the guard is a strict >).
+        {"cik": "0000001004", "investments_at_fair_value": "900000",
+         "cash_equivalents_at_fair_value": "900000"},
+        # Non-positive on either side is uncomparable, so it skips rather than flags.
+        {"cik": "0000001005", "investments_at_fair_value": "900000",
+         "cash_equivalents_at_fair_value": "0"},
+        {"cik": "0000001006", "investments_at_fair_value": "0",
+         "cash_equivalents_at_fair_value": "50000"},
     ]))
 
     checks = result[result["check_code"] == "CASH_EQUIV_EXCEEDS_INVESTMENTS"]
     by_cik = {row["cik"]: row for _, row in checks.iterrows()}
-    assert len(by_cik) == 3
+    assert len(by_cik) == 6
     assert by_cik["0000001001"]["status"] == STATUS_FAIL
     assert by_cik["0000001001"]["severity"] == "WARN"
     assert by_cik["0000001001"]["evidence_strength"] == "WEAK"
     assert by_cik["0000001002"]["status"] == STATUS_PASS
     assert by_cik["0000001003"]["status"] == STATUS_SKIP
+    assert by_cik["0000001004"]["status"] == STATUS_PASS
+    assert by_cik["0000001005"]["status"] == STATUS_SKIP
+    assert by_cik["0000001006"]["status"] == STATUS_SKIP
 
 
 def test_validate_fund_source_cash_equivalents_check_is_companyfacts_only():

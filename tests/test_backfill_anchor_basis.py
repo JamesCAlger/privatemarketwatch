@@ -23,10 +23,13 @@ def test_classify_leaf():
     assert classify_leaf(_leaf(1093.5, 692.0, labels=("Total Investments",))) == ""      # wider, no cash label
     assert classify_leaf(_leaf(1093.5, None)) == ""                                      # no companyfacts
     assert classify_leaf(_leaf(500.0, 692.0)) == ""                                      # below the tag
-    # Branch order is load-bearing: numeric equality is tested BEFORE the cash-label test, which is
-    # what keeps real leaf 2052152 ("Total Investments before Cash Equivalents", grand_total ==
-    # companyfacts_fv) on investments_ex_cash. A genuine cash label is used here so the negated-cash
-    # guard cannot be what makes this pass -- only the ordering can.
+    # Branch order is NOT load-bearing: the two branches are mutually exclusive by their numeric
+    # guards alone (cf > 0, so abs(gt - cf) <= 0.005*cf and gt > cf*1.005 cannot both hold), so
+    # swapping them classifies this leaf identically. What the assertion below pins is the OUTCOME
+    # for the equality-with-a-cash-label shape (real leaf 2052152, "Total Investments before Cash
+    # Equivalents", grand_total == companyfacts_fv): it must stay investments_ex_cash. A genuine
+    # cash label is used so the negated-cash guard cannot be what makes it pass -- the numeric
+    # equality guard decides it on its own.
     assert classify_leaf(_leaf(1000.0, 1000.0,
                                labels=("Total Investments and Cash Equivalents",))) \
         == "investments_ex_cash"

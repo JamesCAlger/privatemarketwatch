@@ -35,10 +35,14 @@ ACTION_TRACK_ONLY = "TRACK_ONLY"
 
 GAV_BDC_FAIL_RULE = "GAV_BDC01"
 GAV_BDC_WARN_RULE = "GAV_BDC02"
-# In-band FAIL: reconciliation_status is FAIL but the ratio sits inside the extreme
-# 0.3/5.0 band, which is what a STRONG anchor (comparison_source =
-# investments_at_fair_value) outside [0.95, 1.05] produces. Without this rule such a
-# row emitted no issue at all.
+# Every BDC reconciliation_status FAIL not already caught by the extreme 0.3/5.0
+# branch lands here. Inside [0.3, 5.0] validate_holdings only produces FAIL via the
+# STRONG-anchor clause (comparison_source = investments_at_fair_value outside
+# [0.95, 1.05]), so this rule covers two previously different shapes:
+#   - ratio inside [0.8, 1.2] (e.g. 1.06): emitted NO issue at all before this rule;
+#   - ratio outside [0.8, 1.2] (e.g. 1.3): emitted GAV_BDC02/WARN before this rule,
+#     which understated a hard reconciliation failure as advisory in the ledger
+#     (tier weak/warn -> tight/fail).
 GAV_BDC_FAIL_STRONG_RULE = "GAV_BDC03"
 GAV_NPORT_SCOPE_RULE = "GAV_NPORT01"
 
@@ -1023,6 +1027,10 @@ def _adapt_gav(df: Optional[pd.DataFrame]) -> pd.DataFrame:
                 "column": "fair_value",
                 "rule_id": GAV_BDC_FAIL_STRONG_RULE,
                 "severity": SEVERITY_FAIL,
+                # STRONG only because validate_holdings produces a BDC FAIL inside
+                # [0.3, 5.0] exclusively via its STRONG-anchor clause. If that clause
+                # ever gains a weaker-anchor sibling, derive this from
+                # comparison_source instead of hardcoding it.
                 "evidence_strength": EVIDENCE_STRONG,
                 "action": ACTION_BLOCK_VERIFIED,
                 "value": str(ratio),
