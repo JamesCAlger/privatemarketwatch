@@ -73,8 +73,8 @@ SHADOW_DIR = OUTPUT_DIR / "shadow"
 #   cost_conservation_fail : sum(position cost) vs companyfacts InvestmentOwnedAtCost
 #                          (independent fund-level total, 88% coverage) -> a real tight
 #                          check, non-redundant with gav_recon (gav has no cost side)
-#   cons_superseded      : fv_conservation fail -> retired from surfacing; gav_recon is
-#                          the FV-reconciliation authority (engine was ~80% FP)
+#   fv_conservation_fail : published-basis FV conservation fail (numerator == headline) -> surfaced
+#   cons_superseded      : any other conservation fail (none expected)
 #   xs_highlights_unreliable : cross_source check vs the broken bdc_fund_highlights -> not surfaced
 #   scope_caveat         : rule is known definitional/scope-heavy -> suppress
 #   lone_weak            : weak warn, no corroboration -> low confidence (noise)
@@ -251,6 +251,7 @@ def main(argv: list[str] | None = None) -> int:
                                   'source_blocking_high','source_blocking_medium',
                                   'row_block_verified','row_fail_strong','row_fail_moderate',
                                   'ffv_fail_strong','cost_conservation_fail',
+                                  'fv_conservation_fail',
                                   'gav_fail_strong','gav_fail_moderate','gav_over_coverage',
                                   'agg_header_high','agg_header_medium',
                                   'derivative_role_high','derivative_role_medium')) AS surface
@@ -268,9 +269,12 @@ def main(argv: list[str] | None = None) -> int:
                     -- real cost mismatch (positions can't sum to >2x the reported total).
                     WHEN l.engine='conservation' AND l.rule_name='cost_conservation' AND l.status='fail'
                          THEN 'cost_conservation_anchor_bad'
-                    -- fv_conservation is superseded by gav_recon (the mature FV reconciliation
-                    -- with subsidiary/multi-denominator scope); assessment 2026-06-16 found it
-                    -- ~80% false-positive. Retired from surfacing (kept in ledger as advisory).
+                    -- fv_conservation on the PUBLISHED basis (2026-09-07): the numerator now
+                    -- equals the headline, so a fail is a headline defect. Surfaced (advisory
+                    -- lane). The 2026-06-16 "~80% false positive" assessment was made on the
+                    -- excluding basis and is re-measured in the rollout.
+                    WHEN l.engine='conservation' AND l.rule_name='fv_conservation' AND l.status='fail'
+                         THEN 'fv_conservation_fail'
                     WHEN l.engine='conservation' AND l.status='fail' THEN 'cons_superseded'
                     -- source_reconciliation classifies its own residuals (blocking_issue +
                     -- mechanism + confidence); defer to it rather than the bootstrap heuristic.
