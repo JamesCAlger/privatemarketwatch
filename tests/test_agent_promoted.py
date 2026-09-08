@@ -63,13 +63,19 @@ def test_normalize_cik10():
     assert ap.normalize_cik10("") == ""
 
 
-def test_load_anchor_overrides_reads_and_pads(tmp_path):
+def test_load_anchor_overrides_reads_pads_and_requires_basis(tmp_path):
     _write_json(tmp_path / "1715933" / "2025-06-30.json",
                 {"cik": "1715933", "target_quarter": "2025-06-30",
-                 "grand_total": 1093518278.0, "method": "total_row"})
+                 "grand_total": 1093518278.0, "method": "total_row", "basis": "published_rows"})
+    _write_json(tmp_path / "1715933" / "2025-09-30.json",
+                {"cik": "1715933", "target_quarter": "2025-09-30",
+                 "grand_total": 5.0, "method": "total_row"})              # no basis -> skipped
+    _write_json(tmp_path / "1715933" / "2025-12-31.json",
+                {"cik": "1715933", "target_quarter": "2025-12-31",
+                 "grand_total": 6.0, "method": "total_row", "basis": "grand"})  # bad enum -> skipped
     out = ap.load_anchor_overrides(tmp_path)
     assert out == [{"cik": "0001715933", "report_date": "2025-06-30",
-                    "anchor_value": 1093518278.0}]
+                    "anchor_value": 1093518278.0, "basis": "published_rows"}]
 
 
 def test_load_anchor_overrides_skips_malformed(tmp_path):
@@ -78,7 +84,8 @@ def test_load_anchor_overrides_skips_malformed(tmp_path):
     bad.parent.mkdir(parents=True)
     bad.write_text("{not json", encoding="utf-8")
     _write_json(tmp_path / "333" / "2025-12-31.json",
-                {"cik": "333", "target_quarter": "2025-12-31", "grand_total": 5.0})
+                {"cik": "333", "target_quarter": "2025-12-31", "grand_total": 5.0,
+                 "basis": "investments_ex_cash"})
     out = ap.load_anchor_overrides(tmp_path)
     assert [o["cik"] for o in out] == ["0000000333"]
 
@@ -349,11 +356,16 @@ def test_write_application_audit(tmp_path):
 
 # --------------------------------------------------------------------------- Layer D
 
-def test_fv_conservation_verified_override_is_top_priority():
+def test_fv_conservation_anchor_priority_and_bases():
     import scripts.shadow_conservation_engine as sce
     fv = next(r for r in sce.RULES if r.name == "fv_conservation")
-    assert fv.anchors[0].kind == "verified_override"
-    assert fv.anchors[0].label == "verified_override"
+    assert [(a.kind, a.basis) for a in fv.anchors] == [
+        ("verified_override", "published_rows"),
+        ("verified_override", "investments_ex_cash"),
+        ("fund_financials_plus_cash", "published_rows"),
+        ("fund_financials", "investments_ex_cash"),
+        ("schedule_total", "investments_ex_cash"),
+    ]
 
 
 def test_engine_prefers_verified_override(monkeypatch, tmp_path):
@@ -363,7 +375,7 @@ def test_engine_prefers_verified_override(monkeypatch, tmp_path):
     anchor_dir = tmp_path / "agent_anchor"
     _write_json(anchor_dir / "1715933" / "2025-06-30.json",
                 {"cik": "1715933", "target_quarter": "2025-06-30",
-                 "grand_total": 1000.0})
+                 "grand_total": 1000.0, "basis": "published_rows"})
     monkeypatch.setattr(cfg, "AGENT_ANCHOR_OVERRIDES_DIR", anchor_dir)
 
     con = duckdb.connect()
@@ -392,23 +404,21 @@ def test_engine_prefers_verified_override(monkeypatch, tmp_path):
 
     rule = sce.ConservationRule(
         name="fv_test", value_column="fair_value",
-        anchors=(sce.Anchor("verified_override", "verified_override", "grand_total"),
-                 sce.Anchor("schedule_total", "schedule_total", "fair_value")))
+        anchors=(sce.Anchor("verified_override", "verified_override", "grand_total", basis="published_rows"),
+                 sce.Anchor("schedule_total", "schedule_total", "fair_value", basis="investments_ex_cash")))
     sce.run_rule(con, rule)
     rows = {r[0]: r for r in con.execute(
-        "SELECT cik, anchor_value, anchor_used, status FROM result_fv_test").fetchall()}
+        "SELECT cik, anchor_value, anchor_used, status, anchor_basis FROM result_fv_test").fetchall()}
     # CIK with an adjudicated grand total: override wins over the schedule total.
-    assert rows["0001715933"][1:] == (1000.0, "verified_override", "reconciles")
+    assert rows["0001715933"][1:] == (1000.0, "verified_override", "reconciles", "published_rows")
     # CIK without an override falls through to the schedule total.
-    assert rows["0000000456"][1:] == (500.0, "schedule_total", "reconciles")
+    assert rows["0000000456"][1:] == (500.0, "schedule_total", "reconciles", "investments_ex_cash")
 
 
-def test_engine_conservation_sum_excludes_subsidiary_rows(monkeypatch):
-    """Retain-and-flag (owner decision 2026-08-29): the conservation value_sum excludes
-    is_subsidiary=1 look-through rows -- the consolidated anchor already contains them
-    once. A parent 1000 + subsidiary-layer 400 frame must reconcile against a 1000
-    anchor, not overshoot at 1400. Frames WITHOUT the column keep working (the other
-    engine tests pin that)."""
+def test_engine_conservation_sum_is_published_basis(monkeypatch):
+    """Spec 2026-09-07 s.1: the engine sums every row (CASH, is_subsidiary=1, NULL dims).
+    Parent 600+400, subsidiary layer 400, cash 20 -> 1420 vs a 1000 schedule total = overshoot.
+    That overshoot is the gate DOING ITS JOB (Bain Q1-26); Bain Q4-25 reconciles the same way."""
     import scripts.shadow_conservation_engine as sce
 
     con = duckdb.connect()
@@ -418,7 +428,8 @@ def test_engine_conservation_sum_excludes_subsidiary_rows(monkeypatch):
         CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
             ('0001899017', '2026-03-31', 600.0, 'x=y', 'LOAN', 0),
             ('0001899017', '2026-03-31', 400.0, 'x=y', 'LOAN', 0),
-            ('0001899017', '2026-03-31', 400.0, 'nonconsolidatedsubsidiaryaxis=SLP', 'LOAN', 1)
+            ('0001899017', '2026-03-31', 400.0, 'nonconsolidatedsubsidiaryaxis=SLP', 'LOAN', 1),
+            ('0001899017', '2026-03-31', 20.0, NULL, 'CASH', NULL)
         ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category, is_subsidiary)
     """)
     con.execute("""
@@ -428,14 +439,73 @@ def test_engine_conservation_sum_excludes_subsidiary_rows(monkeypatch):
     """)
     monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
     monkeypatch.setattr(sce, "_bdc", lambda: "bdc_tbl")
-
     rule = sce.ConservationRule(
-        name="fv_sub_test", value_column="fair_value",
-        anchors=(sce.Anchor("schedule_total", "schedule_total", "fair_value"),))
+        name="fv_pub_test", value_column="fair_value",
+        anchors=(sce.Anchor("schedule_total", "schedule_total", "fair_value",
+                            basis="investments_ex_cash"),))
     sce.run_rule(con, rule)
-    row = con.execute(
-        "SELECT value_sum, anchor_value, status FROM result_fv_sub_test").fetchone()
-    assert row == (1000.0, 1000.0, "reconciles"), row
+    row = con.execute("SELECT value_sum, n_rows, anchor_value, status FROM result_fv_pub_test").fetchone()
+    assert row == (1420.0, 4, 1000.0, "overshoot"), row
+
+
+def test_engine_companyfacts_plus_cash_only_where_cash_rows_exist(monkeypatch, tmp_path):
+    """Deterministic published-rows anchor: investments_at_fair_value + tagged cash equivalents,
+    used ONLY for cik-quarters that hold a CASH row. Fund A (has cash) anchors at 1000+20;
+    fund B (no cash rows) falls through to plain companyfacts."""
+    import scripts.shadow_conservation_engine as sce
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text(
+        "cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value\n"
+        "0000000001,2026-03-31,companyfacts,1000,20\n"
+        "0000000002,2026-03-31,companyfacts,500,7\n", encoding="utf-8")
+    monkeypatch.setattr(sce, "FUND_FINANCIALS_FILE", ff)
+    con = duckdb.connect()
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    con.executemany("INSERT INTO wrapped VALUES (?)", [("0000000001",), ("0000000002",)])
+    con.execute("""
+        CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
+            ('0000000001', '2026-03-31', 1000.0, 'x=y', 'LOAN'),
+            ('0000000001', '2026-03-31', 20.0, 'cashandcashequivalentsaxis=MMF', 'CASH'),
+            ('0000000002', '2026-03-31', 500.0, 'x=y', 'LOAN')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category)
+    """)
+    monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
+    rule = sce.ConservationRule(
+        name="fv_cash_test", value_column="fair_value",
+        anchors=(sce.Anchor("fund_financials_plus_cash", "companyfacts_fv_plus_cash",
+                            "investments_at_fair_value", basis="published_rows"),
+                 sce.Anchor("fund_financials", "companyfacts_fv", "investments_at_fair_value",
+                            basis="investments_ex_cash")))
+    sce.run_rule(con, rule)
+    rows = {r[0]: r[1:] for r in con.execute(
+        "SELECT cik, anchor_value, anchor_used, anchor_basis, status FROM result_fv_cash_test").fetchall()}
+    assert rows["0000000001"] == (1020.0, "companyfacts_fv_plus_cash", "published_rows", "reconciles")
+    assert rows["0000000002"] == (500.0, "companyfacts_fv", "investments_ex_cash", "reconciles")
+
+
+def test_engine_companyfacts_plus_cash_skipped_when_column_absent(monkeypatch, tmp_path):
+    import scripts.shadow_conservation_engine as sce
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text("cik,report_date,source,investments_at_fair_value\n"
+                  "0000000001,2026-03-31,companyfacts,1000\n", encoding="utf-8")
+    monkeypatch.setattr(sce, "FUND_FINANCIALS_FILE", ff)
+    con = duckdb.connect()
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    con.execute("INSERT INTO wrapped VALUES ('0000000001')")
+    con.execute("""CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
+        ('0000000001', '2026-03-31', 1000.0, 'x=y', 'LOAN'),
+        ('0000000001', '2026-03-31', 20.0, 'c=MMF', 'CASH')
+        ) AS t(cik, report_date, fair_value, bdc_dimensions_raw, asset_category)""")
+    monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
+    rule = sce.ConservationRule(
+        name="fv_nocol", value_column="fair_value",
+        anchors=(sce.Anchor("fund_financials_plus_cash", "companyfacts_fv_plus_cash",
+                            "investments_at_fair_value", basis="published_rows"),
+                 sce.Anchor("fund_financials", "companyfacts_fv", "investments_at_fair_value",
+                            basis="investments_ex_cash")))
+    sce.run_rule(con, rule)
+    row = con.execute("SELECT anchor_used, anchor_basis, status FROM result_fv_nocol").fetchone()
+    assert row == ("companyfacts_fv", "investments_ex_cash", "overshoot")
 
 
 # --------------------------------------------------------------------------- integration

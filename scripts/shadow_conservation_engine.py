@@ -59,9 +59,15 @@ _SCHEDULE_TOTAL_SQL = (
 @dataclass(frozen=True)
 class Anchor:
     """Where to get the independent fund-level total for one CIK-quarter."""
-    kind: str            # 'verified_override' | 'fund_financials' | 'schedule_total' | 'companyfacts_concept'
+    kind: str            # 'verified_override' | 'fund_financials' | 'fund_financials_plus_cash'
+                         # | 'schedule_total' | 'companyfacts_concept'
     label: str           # tier label recorded in output (e.g. 'companyfacts_fv')
     column: str          # fund_financials column, OR the value column for a schedule total row
+    # What the anchor INCLUDES (spec 2026-09-07 s.2): 'published_rows' = everything the schedule
+    # lists incl. cash equivalents and look-through rows (directly comparable to the published
+    # numerator); 'investments_ex_cash' = the balance-sheet investments line. For
+    # verified_override this selects which leaves the anchor reads.
+    basis: str = ""
 
 
 @dataclass(frozen=True)
@@ -82,13 +88,22 @@ RULES: list[ConservationRule] = [
         name="fv_conservation",
         value_column="fair_value",
         anchors=(
-            # TOP priority: Anchor-Adjudicator grand totals (data/overrides/agent_anchor/),
-            # each verified by the deterministic balance-sheet closure check. Without this,
-            # quarters whose companyfacts FV is an incomplete subtotal keep re-flagging
-            # after adjudication (gap 1 Layer D).
-            Anchor("verified_override", "verified_override", "grand_total"),
-            Anchor("fund_financials", "companyfacts_fv", "investments_at_fair_value"),
-            Anchor("schedule_total", "schedule_total", "fair_value"),
+            # Priority (spec s.2, plan deviation 1): a verified override exists precisely because
+            # companyfacts was partial, so BOTH override bases outrank companyfacts. The
+            # published_rows override is directly comparable to the published numerator; an
+            # ex-cash override on a cash-holding fund flags an overshoot equal to its cash rows,
+            # which is the honest signal that the anchor lane must upgrade its basis.
+            Anchor("verified_override", "verified_override", "grand_total", basis="published_rows"),
+            Anchor("verified_override", "verified_override_ex_cash", "grand_total",
+                   basis="investments_ex_cash"),
+            # Deterministic published-rows candidate: companyfacts FV + the filer's tagged cash
+            # equivalents (fund_financials.cash_equivalents_at_fair_value), only for cik-quarters
+            # that hold a CASH row in unified.
+            Anchor("fund_financials_plus_cash", "companyfacts_fv_plus_cash",
+                   "investments_at_fair_value", basis="published_rows"),
+            Anchor("fund_financials", "companyfacts_fv", "investments_at_fair_value",
+                   basis="investments_ex_cash"),
+            Anchor("schedule_total", "schedule_total", "fair_value", basis="investments_ex_cash"),
         ),
     ),
     ConservationRule(
@@ -101,9 +116,12 @@ RULES: list[ConservationRule] = [
             # path. FALLBACK: the direct companyfacts-cache read (ensure_companyfacts_cost),
             # in case fund_financials' quarterly-dedup dropped a report_date. LAST: schedule
             # total. (Was schedule-only at 0.5% before 2026-06-16; coverage 17% -> ~88%.)
-            Anchor("fund_financials", "ff_investments_at_cost", "investments_at_cost"),
-            Anchor("companyfacts_concept", "cf_cache_cost", "InvestmentOwnedAtCost"),
-            Anchor("schedule_total", "schedule_total_cost", "cost"),
+            # Cost anchors are ex-cash by construction; the basis is informational here.
+            Anchor("fund_financials", "ff_investments_at_cost", "investments_at_cost",
+                   basis="investments_ex_cash"),
+            Anchor("companyfacts_concept", "cf_cache_cost", "InvestmentOwnedAtCost",
+                   basis="investments_ex_cash"),
+            Anchor("schedule_total", "schedule_total_cost", "cost", basis="investments_ex_cash"),
         ),
         # 5% band: cost-vs-companyfacts has inherent scope/timing noise, and the unified cost
         # numerator includes ~13% cost-proxy fills (cost==fair_value). 0.5% is unrealistic.
@@ -164,15 +182,15 @@ def ensure_companyfacts_cost(con: duckdb.DuckDBPyConnection) -> int:
 
 
 def ensure_anchor_overrides(con: duckdb.DuckDBPyConnection) -> int:
-    """Build TEMP TABLE _anchor_override(cik, report_date, anchor_value) from the
-    promoted Anchor-Adjudicator grand totals. Must be called before running any rule
-    with a verified_override anchor."""
+    """TEMP TABLE _anchor_override(cik, report_date, anchor_value, basis) from the promoted
+    Anchor-Adjudicator leaves that declare a basis (leaves without one are ignored upstream)."""
     from pipeline.agent_promoted import load_anchor_overrides
-    rows = [(o["cik"], o["report_date"], o["anchor_value"]) for o in load_anchor_overrides()]
+    rows = [(o["cik"], o["report_date"], o["anchor_value"], o["basis"])
+            for o in load_anchor_overrides()]
     con.execute("CREATE OR REPLACE TEMP TABLE _anchor_override("
-                "cik VARCHAR, report_date VARCHAR, anchor_value DOUBLE)")
+                "cik VARCHAR, report_date VARCHAR, anchor_value DOUBLE, basis VARCHAR)")
     if rows:
-        con.executemany("INSERT INTO _anchor_override VALUES (?, ?, ?)", rows)
+        con.executemany("INSERT INTO _anchor_override VALUES (?, ?, ?, ?)", rows)
     return len(rows)
 
 
@@ -180,7 +198,29 @@ def _anchor_table_sql(anchor: Anchor) -> str:
     """SQL returning (cik, report_date, anchor_value) for one anchor kind."""
     if anchor.kind == "verified_override":
         # Reads the table built by ensure_anchor_overrides() (promoted adjudications).
-        return "SELECT cik, report_date, anchor_value FROM _anchor_override"
+        b = anchor.basis.replace("'", "''")
+        return f"SELECT cik, report_date, anchor_value FROM _anchor_override WHERE basis = '{b}'"
+    if anchor.kind == "fund_financials_plus_cash":
+        # Column probe: fund_financials.cash_equivalents_at_fair_value lands with Task 6; an
+        # older CSV simply yields no rows for this anchor (falls through to the next).
+        cols = {r[0].lower() for r in duckdb.connect().execute(
+            f"DESCRIBE SELECT * FROM read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1) LIMIT 0"
+        ).fetchall()}
+        if "cash_equivalents_at_fair_value" not in cols:
+            return "SELECT CAST(NULL AS VARCHAR) AS cik, CAST(NULL AS VARCHAR) AS report_date, CAST(NULL AS DOUBLE) AS anchor_value WHERE false"
+        return f"""
+            SELECT f.cik, f.report_date, f.ifv + f.cash AS anchor_value
+            FROM (
+                SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+                       max(TRY_CAST({anchor.column} AS DOUBLE)) AS ifv,
+                       max(TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE)) AS cash
+                FROM read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1)
+                WHERE source='companyfacts'
+                GROUP BY 1, 2
+            ) f
+            JOIN _cash_rows c USING (cik, report_date)
+            WHERE f.ifv IS NOT NULL AND f.cash IS NOT NULL
+        """
     if anchor.kind == "fund_financials":
         return f"""
             SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
@@ -209,82 +249,40 @@ def _anchor_table_sql(anchor: Anchor) -> str:
     raise ValueError(f"unknown anchor kind: {anchor.kind}")
 
 
-def build_cash_filter() -> str:
-    """Build the asset_category cash-exclusion SQL fragment, incorporating any
-    per-CIK conservation-scope carve-outs.  Reads SCOPE_DIR once -- callers
-    should compute this once per engine run and pass it to run_rule()."""
-    from pipeline.conservation_scope import SCOPE_DIR, scope_override_for
-    carve = []
-    for p in (sorted(SCOPE_DIR.glob("*.json")) if SCOPE_DIR.exists() else []):
-        cats, quarters = scope_override_for(p.stem)
-        if cats:
-            in_list = ",".join("'" + c.replace("'", "''") + "'" for c in sorted(cats))
-            clause = (
-                "(LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0')"
-                f" = '{p.stem.zfill(10)}' AND upper(COALESCE(CAST(asset_category AS VARCHAR), ''))"
-                f" IN ({in_list})")
-            if quarters is not None:
-                q_list = ",".join("'" + q.replace("'", "''") + "'" for q in sorted(quarters))
-                clause += f" AND CAST(report_date AS VARCHAR) IN ({q_list})"
-            carve.append(clause + ")")
-    base = "upper(COALESCE(CAST(asset_category AS VARCHAR), '')) <> 'CASH'"
-    if carve:
-        return f"({base} OR {' OR '.join(carve)})"
-    return base
-
-
-def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule,
-             cash_filter: str | None = None) -> None:
-    """Run one conservation rule into a per-(cik,report_date) result table
-    named result_<rule>.
-
-    cash_filter: pre-built SQL fragment from build_cash_filter().  If None
-    (e.g. direct call from tests), it is computed here so existing call sites
-    keep working without change.
-    """
-    if cash_filter is None:
-        cash_filter = build_cash_filter()
-    # Retain-and-flag (owner decision 2026-08-29): is_subsidiary=1 look-through rows
-    # (nonconsolidated-subsidiary / equity-method dimensions) stay in holdings, but the
-    # consolidated anchor already contains them once -- summing them again double-counts
-    # every subsidiary-reporting fund into a permanent overshoot. Probe the column so
-    # older frames/fixtures without it keep working.
-    src_cols = {r[0].lower() for r in
-                con.execute(f"DESCRIBE SELECT * FROM {_unified()} LIMIT 0").fetchall()}
-    sub_filter = ("AND COALESCE(TRY_CAST(is_subsidiary AS INT), 0) <> 1"
-                  if "is_subsidiary" in src_cols else "")
-    # Production quantity: sum of the value column over unified BDC rows.
+def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
+    """Run one conservation rule into result_<rule>: the PUBLISHED-basis sum of value_column
+    over every unified row of each wrapped CIK-quarter (spec 2026-09-07 s.1 -- no cash,
+    subsidiary, or dimension filter; what the headline sums is what the gate sums) against
+    the first available anchor in priority order."""
+    from pipeline.published_basis import published_fv_sum_sql
+    con.execute(
+        f"CREATE OR REPLACE TEMP TABLE _sum_{rule.name} AS "
+        + published_fv_sum_sql(_unified(),
+                               f"lpad(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') "
+                               f"IN (SELECT cik FROM wrapped)")
+        .replace("TRY_CAST(fair_value AS DOUBLE)", f"TRY_CAST({rule.value_column} AS DOUBLE)")
+    )
+    # cik-quarters holding at least one CASH row (gates the companyfacts_fv_plus_cash anchor)
     con.execute(
         f"""
-        CREATE OR REPLACE TEMP TABLE _sum_{rule.name} AS
-        SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
-               sum(TRY_CAST({rule.value_column} AS DOUBLE)) AS value_sum,
-               count(*) AS n_rows
+        CREATE OR REPLACE TEMP TABLE _cash_rows AS
+        SELECT DISTINCT lpad(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') AS cik,
+               substr(CAST(report_date AS VARCHAR), 1, 10) AS report_date
         FROM {_unified()}
-        WHERE bdc_dimensions_raw IS NOT NULL
-          AND CAST(cik AS VARCHAR) IN (SELECT cik FROM wrapped)
-          -- cash-equivalents (T-bills, money-market sweeps) stay in holdings but are NOT 'investments
-          -- at fair value'; the companyfacts anchor excludes them, so the conservation sum must too.
-          -- Per-CIK overrides in pipeline.conservation_scope carve out exceptions for filers whose
-          -- anchor INCLUDES cash-like instruments in their printed Total Investments.
-          AND {cash_filter}
-          {sub_filter}
-        GROUP BY 1, 2
+        WHERE upper(COALESCE(CAST(asset_category AS VARCHAR), '')) = 'CASH'
         """
     )
-    # Priority-ordered anchors: first one present wins (COALESCE), with its label.
-    anchor_ctes, coalesce_val, coalesce_label = [], [], []
+    anchor_ctes, coalesce_val, coalesce_label, coalesce_basis = [], [], [], []
     for i, a in enumerate(rule.anchors):
         con.execute(f"CREATE OR REPLACE TEMP TABLE _a{i}_{rule.name} AS {_anchor_table_sql(a)}")
-        anchor_ctes.append(
-            f"LEFT JOIN _a{i}_{rule.name} a{i} USING (cik, report_date)"
-        )
+        anchor_ctes.append(f"LEFT JOIN _a{i}_{rule.name} a{i} USING (cik, report_date)")
         coalesce_val.append(f"a{i}.anchor_value")
         coalesce_label.append(f"WHEN a{i}.anchor_value IS NOT NULL THEN '{a.label}'")
+        coalesce_basis.append(f"WHEN a{i}.anchor_value IS NOT NULL THEN '{a.basis}'")
     val_expr = "COALESCE(" + ", ".join(coalesce_val) + ")"
     label_expr = "CASE " + " ".join(coalesce_label) + " ELSE 'none' END"
+    basis_expr = "CASE " + " ".join(coalesce_basis) + " ELSE '' END"
     tol = rule.tolerance_pct
-
     con.execute(
         f"""
         CREATE OR REPLACE TABLE result_{rule.name} AS
@@ -297,6 +295,7 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule,
             s.value_sum,
             {val_expr} AS anchor_value,
             {label_expr} AS anchor_used,
+            {basis_expr} AS anchor_basis,
             CASE WHEN {val_expr} IS NOT NULL AND {val_expr} <> 0
                  THEN round(100.0*(s.value_sum - {val_expr})/{val_expr}, 3) END AS residual_pct,
             CASE
@@ -325,9 +324,8 @@ def main(argv: list[str] | None = None) -> int:
                 "%d verified anchor overrides",
                 len(ciks), len(RULES), n_cf, n_ov)
 
-    cash_filter = build_cash_filter()
     for rule in RULES:
-        run_rule(con, rule, cash_filter=cash_filter)
+        run_rule(con, rule)
 
     SHADOW_DIR.mkdir(parents=True, exist_ok=True)
     out = SHADOW_DIR / "conservation_gate_results.csv"

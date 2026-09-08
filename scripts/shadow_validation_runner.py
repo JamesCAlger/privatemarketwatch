@@ -132,7 +132,8 @@ SELECT 'conservation' AS engine, rule_name, tier, enforcement, cik,
        CASE status WHEN 'reconciles' THEN 'pass'
                    WHEN 'no_anchor'  THEN 'skip' ELSE 'fail' END AS status,
        residual_pct AS metric, 'residual_pct' AS metric_name, 1 AS n_units,
-       CAST(NULL AS VARCHAR) AS mechanism, CAST(NULL AS VARCHAR) AS src_confidence
+       anchor_used || ':' || COALESCE(anchor_basis, '') AS mechanism,
+       CAST(NULL AS VARCHAR) AS src_confidence
 FROM result_{name}
 """
 _XS = """

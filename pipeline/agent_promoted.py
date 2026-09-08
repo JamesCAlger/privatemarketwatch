@@ -188,11 +188,13 @@ def normalize_cik10(raw) -> str:
 # --------------------------------------------------------------------------- anchors (Layer D)
 
 def load_anchor_overrides(overrides_dir: Optional[Path] = None) -> list[dict]:
-    """Adjudicated grand totals: [{cik, report_date, anchor_value}] (cik 10-digit).
+    """Adjudicated grand totals: [{cik, report_date, anchor_value, basis}] (cik 10-digit).
 
     Files live at ``<dir>/<cik>/<quarter>.json`` with fields ``cik``,
-    ``target_quarter``, ``grand_total`` (see scripts/agent_anchor/run_anchor.py
-    promote). Malformed files are skipped with a WARN, never guessed at.
+    ``target_quarter``, ``grand_total``, ``basis`` (see scripts/agent_anchor/run_anchor.py
+    promote). ``basis`` must be ``published_rows`` or ``investments_ex_cash`` (spec
+    2026-09-07 s.2); leaves missing it or with an unrecognized value are skipped with a
+    WARN, never guessed at. Malformed files are likewise skipped with a WARN.
     """
     base = Path(overrides_dir) if overrides_dir is not None else config.AGENT_ANCHOR_OVERRIDES_DIR
     out: list[dict] = []
@@ -209,7 +211,11 @@ def load_anchor_overrides(overrides_dir: Optional[Path] = None) -> list[dict]:
         if not cik or not quarter or not isinstance(total, (int, float)):
             logger.warning("anchor override missing cik/target_quarter/grand_total, skipped: %s", p)
             continue
-        out.append({"cik": cik, "report_date": quarter, "anchor_value": float(total)})
+        basis = str(leaf.get("basis") or "").strip()
+        if basis not in ("published_rows", "investments_ex_cash"):
+            logger.warning("anchor override has no valid basis (spec 2026-09-07 s.2), skipped: %s", p)
+            continue
+        out.append({"cik": cik, "report_date": quarter, "anchor_value": float(total), "basis": basis})
     return out
 
 
