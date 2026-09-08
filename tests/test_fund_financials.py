@@ -1842,6 +1842,7 @@ class TestExtendedConcepts:
             "unfunded_commitments", "unrealized_appreciation",
             "unrealized_depreciation", "debt_weighted_avg_rate",
             "investments_at_cost",
+            "cash_equivalents_at_fair_value",
         }
         assert expected == set(_EXTENDED_FIELDS)
 

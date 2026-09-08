@@ -211,7 +211,10 @@ def _anchor_table_sql(anchor: Anchor) -> str:
         return f"""
             SELECT f.cik, f.report_date, f.ifv + f.cash AS anchor_value
             FROM (
-                SELECT CAST(cik AS VARCHAR) AS cik, CAST(report_date AS VARCHAR) AS report_date,
+                -- substr(...,1,10): _cash_rows and _sum_<rule> normalise report_date the same
+                -- way, so keep the join key 10 chars even if the column parses as TIMESTAMP.
+                SELECT CAST(cik AS VARCHAR) AS cik,
+                       substr(CAST(report_date AS VARCHAR), 1, 10) AS report_date,
                        max(TRY_CAST({anchor.column} AS DOUBLE)) AS ifv,
                        max(TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE)) AS cash
                 FROM read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1)

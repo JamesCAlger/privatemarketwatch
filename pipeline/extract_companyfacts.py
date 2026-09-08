@@ -383,6 +383,15 @@ _PORTFOLIO_CONCEPTS = {
         "fallback": [],
         "unit": "USD", "instant": True,
     },
+    # Fund-level cash equivalents the filer tags separately from investments (money-market
+    # sweeps, T-bills held for cash management). With investments_at_fair_value this forms the
+    # deterministic PUBLISHED-ROWS anchor (spec 2026-09-07 s.2). No fallback on purpose:
+    # CashAndCashEquivalentsAtCarryingValue includes bank cash and would overstate.
+    "cash_equivalents_at_fair_value": {
+        "exact": ["CashEquivalentsAtCarryingValue", "MoneyMarketFundsAtCarryingValue"],
+        "fallback": [],
+        "unit": "USD", "instant": True,
+    },
     "debt_weighted_avg_rate": {
         "exact": ["DebtWeightedAverageInterestRate"],
         "fallback": [],

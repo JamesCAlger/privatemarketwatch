@@ -45,6 +45,7 @@ OUTPUT_COLUMNS = [
     "report_quarter", "report_date",
     "total_assets", "net_assets", "total_liabilities", "investments_at_fair_value",
     "investments_at_cost",
+    "cash_equivalents_at_fair_value",
     "nav_per_share", "shares_outstanding", "borrowings",
     "total_investment_income", "net_investment_income",
     "management_fee", "incentive_fee", "interest_expense", "total_expenses",
