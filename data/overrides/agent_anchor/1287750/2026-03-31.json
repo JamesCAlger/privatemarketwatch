@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The final Total Investments row of the filing's schedule of investments reports exact fair value of $29,499.3 million. The balance sheet independently presents the same grand total rounded to $29,499 million and identifies its three included classes: non-controlled/non-affiliate, non-controlled affiliate, and controlled affiliate. Thus the companyfacts value captured the full grand total, not only a non-affiliated subtotal. The result equals companyfacts, is below total assets, and represents about 96.16% of total assets, leaving a plausible non-investment remainder of about $1.180 billion.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

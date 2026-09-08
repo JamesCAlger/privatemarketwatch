@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The filing contains an explicit total row tagged us-gaap:InvestmentOwnedAtFairValue for InvestmentHoldingsAndCashEquivalentsMember at 211749000, so the grand total is taken directly from that row. The companyfacts value of 192754000 captures the non-controlled/non-affiliate investments plus Legacy Corporate Lending HoldCo rows, but excludes the separately presented controlled affiliate cash-equivalent investment of 18995000. The resulting grand total is below total assets and represents about 94.6% of total assets, a plausible BDC balance-sheet close.",
-  "confidence": 0.96
+  "confidence": 0.96,
+  "basis": "published_rows"
 }

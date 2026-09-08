@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing provides an explicit Investments Total row after all three investment classifications. Its market value is $1,815,082 thousand, exactly equal to the sum of the three schedule subtotals ($1,735,938 + $28,222 + $50,922 thousand) and to the three investment lines on the balance sheet. It also equals the companyfacts investments-at-fair-value tag, showing that the tag captured the complete portfolio rather than only the non-affiliated schedule. The total is 86.9% of total assets, a plausible balance-sheet closure for a BDC; cash and other assets explain the remainder.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

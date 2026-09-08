@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing provides an explicit final Total investments row, so total_row is the appropriate method. The row includes non-controlled non-affiliated, non-controlled affiliated, and controlled affiliated investments. Its fair value is 1,694,770,000, exactly matching companyfacts. The companyfacts tag therefore captured the full investment total, not only the non-affiliated subtotal. The result is 96.05% of total assets of 1,764,592,000, leaving a plausible non-investment remainder of 69,822,000.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

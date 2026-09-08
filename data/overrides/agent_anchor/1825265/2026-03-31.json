@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing's final Schedule of Investments row is the grand total at fair value. It equals debt and equity investments of $1,309,653,222 plus cash equivalents of $601,251, yielding $1,310,254,473. The companyfacts tag captured only Total Debt & Equity Investments and omitted the separately presented cash-equivalents investment. The grand total is 94.89% of total assets and exceeds the companyfacts subtotal by exactly $601,251.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

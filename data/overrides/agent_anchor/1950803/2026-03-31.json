@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The March 31, 2026 schedule of investments contains a single final Total Investments row with fair value of $3,313,853 thousand. The same amount appears on the balance sheet as investments in securities of unaffiliated issuers at fair value, so the companyfacts tag captured the complete portfolio rather than a partial schedule. The total is 96.25% of total assets of $3,442,769 thousand and leaves a plausible non-investment asset remainder of $128,916 thousand.",
-  "confidence": 0.98
+  "confidence": 0.98,
+  "basis": "investments_ex_cash"
 }

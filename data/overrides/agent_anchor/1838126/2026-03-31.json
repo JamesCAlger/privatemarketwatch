@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The Schedule of Investments has an explicit final Total Investment Portfolio row of $25.007853 billion, after the non-controlled/non-affiliated, non-controlled/affiliated, and controlled/affiliated sections. The same amount appears on the balance sheet as total investments at fair value and exactly matches the companyfacts tag. It is 95.12% of total assets, leaving a plausible $1.282047 billion of non-investment assets.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

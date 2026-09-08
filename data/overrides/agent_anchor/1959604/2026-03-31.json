@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing presents one investment category on the balance sheet: non-controlled/non-affiliated investments at fair value of $1,780,072 thousand. The schedule's final total matches that amount exactly, and no affiliated or controlled investment schedule or balance-sheet category is presented. Thus the companyfacts tag captured the full investments-at-fair-value balance, not a partial subtotal. The amount is 94.05% of total assets and leaves a plausible $112.646 million of cash, restricted cash, receivables, deferred costs, and other assets.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

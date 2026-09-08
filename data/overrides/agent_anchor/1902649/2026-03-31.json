@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The final Total Investments row in the March 31, 2026 Schedule of Investments reports fair value of 2,354,502,240. The balance sheet independently reports the same amount for non-controlled, non-affiliated investments and for total investments, showing that there is no separately presented affiliated or controlled schedule to add. The fair-value hierarchy also totals to the same amount. The companyfacts tag therefore captured the complete investment total. The grand total is 88.20% of total assets of 2,669,525,524, leaving a plausible non-investment remainder of 315,023,284.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The Schedule of Investments presents a single final Total Investment Portfolio row whose fair-value column is $2,487,588,823. A separate investments summary independently reports the same current-period total at 100.0%. The amount equals the companyfacts investments-at-fair-value tag and is 97.31% of total assets, leaving a plausible $68,809,692 of non-investment assets. The companyfacts tag therefore captured the complete portfolio, including the non-controlled/non-affiliate and non-controlled/affiliate schedules, rather than only a subtotal.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

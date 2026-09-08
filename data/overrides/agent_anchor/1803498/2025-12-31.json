@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing contains an undimensioned balance-sheet XBRL fact for total investments at fair value of 82,199,346 thousand. The separately presented investment schedule subtotals reconcile exactly to the same amount, so the companyfacts value captured the grand total rather than only a non-affiliated subtotal. The grand total is below total assets of 85,992,162,000 and represents about 95.6% of total assets, which is plausible for this BDC.",
-  "confidence": 0.98
+  "confidence": 0.98,
+  "basis": "investments_ex_cash"
 }

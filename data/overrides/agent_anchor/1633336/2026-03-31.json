@@ -22,5 +22,6 @@
     }
   ],
   "rationale": "The filing's single investments-at-fair-value fact is the grand total. It equals the companyfacts value and represents 96.59% of total assets, leaving $55,184,000 of non-investment assets, which is plausible for a BDC. The extracted holdings sum of $1,546,856,000 undershoots this filing anchor by $15,614,000 and therefore is incomplete; the companyfacts tag did not capture merely a schedule subtotal.",
-  "confidence": 0.96
+  "confidence": 0.96,
+  "basis": "investments_ex_cash"
 }

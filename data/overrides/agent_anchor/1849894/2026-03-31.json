@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing's investments-at-fair-value amount is a complete single-tag grand total, not a schedule subtotal. It exactly equals the sum of all 217 extracted holding fair values. It is 97.33% of total assets and leaves $187,190,000 of non-investment assets, a plausible balance-sheet remainder. The companyfacts tag therefore captured the full investment portfolio.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

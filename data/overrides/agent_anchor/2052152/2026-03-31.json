@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing presents one investment schedule and identifies the portfolio entirely as non-controlled/non-affiliated. Its final investment row reports fair value of $1,495,157 thousand, independently repeated by the fair value hierarchy and the balance sheet. The separately shown $31,431 thousand money market fund is classified as a cash equivalent and is excluded from Total Investments. The grand total equals 96.34% of total assets; the $56.871 million remainder exactly reconciles to cash and cash equivalents, due from counterparties, interest receivable, and other assets. The companyfacts tag therefore captured the complete investment total, not a subtotal.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

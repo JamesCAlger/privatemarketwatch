@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The final Schedule of Investments row explicitly reports total investments at fair value of $1,730,366 thousand, including $1,687,345 thousand of non-controlled/non-affiliated investments and $43,021 thousand of short-term investments. The balance sheet independently repeats the same investment total. After scaling from thousands, $1,730,366,000 equals the companyfacts value and is 97.43% of total assets, leaving a plausible $45,634,000 non-investment remainder. The companyfacts tag therefore captured the complete grand total.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

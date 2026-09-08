@@ -22,5 +22,6 @@
     }
   ],
   "rationale": "The undimensioned companyfacts investments_at_fair_value tag is the grand total. It is greater than the extracted holding-row subtotal and closes plausibly to companyfacts total assets: 9913408000.0 / 10209714000.0 = 97.1%, leaving about 296.3 million of non-investment assets. The lower row-level extraction is incomplete for anchoring and does not indicate an additional affiliated or controlled schedule to add; adding any material separate schedule to the companyfacts tag would fail the total-assets ceiling.",
-  "confidence": 0.9
+  "confidence": 0.9,
+  "basis": "investments_ex_cash"
 }

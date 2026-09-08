@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The final aggregation row of the March 31, 2026 Schedule of Investments reports Total Portfolio Investments at market value of $402,522,665. The schedule separately shows $402,507,665 for Audax Credit BDC, Inc. and $15,000 for Audax Credit BDC Equity, LLC, which aggregate to the final row, so neither intermediate Total Investments row is the grand total by itself. The balance sheet identifies the entire investment amount as non-control/non-affiliate investments; therefore the companyfacts tag captured the full portfolio, not a subtotal. The grand total is 96.59% of total assets and leaves $14,188,293 for cash and other assets, consistent with the balance sheet.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

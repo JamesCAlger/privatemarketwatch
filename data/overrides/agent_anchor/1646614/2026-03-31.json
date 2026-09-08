@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The final Total Investments row in the March 31, 2026 Schedule of Investments is the grand total. It equals the sum of the non-controlled/non-affiliated, non-controlled/affiliated, and controlled schedule subtotals and is independently repeated on the balance sheet and in the fair-value hierarchy. The companyfacts tag captured the complete grand total, not merely a subtotal. The amount is 94.79% of total assets of 1,216,719,402, leaving a plausible non-investment remainder of 63,306,075.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

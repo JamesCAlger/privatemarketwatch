@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The final Total Investments row in the March 31, 2026 Schedule of Investments reports fair value of $624.289 million. The same amount appears on the balance sheet and equals the sum of all 123 extracted positions, so the companyfacts tag captured the complete investment total, including any affiliated investments within the schedule. It is 97.89% of total assets of $637.752 million and leaves a plausible $13.463 million of non-investment assets.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing presents a single explicit Total investments at fair value row of 7,019,058 thousand. It agrees exactly with the schedule subtotal and the balance-sheet investment line, and it equals the companyfacts value of 7,019,058,000. No separately presented affiliated or controlled investment schedule or balance-sheet line is present. The total is 94.5% of total assets, leaving a plausible 406,395,000 of non-investment assets.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

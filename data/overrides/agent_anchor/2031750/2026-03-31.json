@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing presents an explicit grand-total row after both investment categories, so total_row is the appropriate method. The total equals $3,128,225,000 of non-controlled/non-affiliated investments plus $338,429,000 of controlled/affiliated investments and matches the companyfacts value. It is 79.4% of total assets; the $898,950,000 remainder is plausible because the balance sheet separately reports $865,013,000 of cash and cash equivalents.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

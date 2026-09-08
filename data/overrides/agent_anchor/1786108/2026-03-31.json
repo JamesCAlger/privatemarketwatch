@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The filing presents a single explicit Total Investments at fair value row of $2,483,554,000. The same amount appears as Total investments on the balance sheet and equals the companyfacts value, so companyfacts captured the full grand total rather than a schedule subtotal. The amount is 97.17% of total assets and leaves a plausible $72,278,000 non-investment remainder.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

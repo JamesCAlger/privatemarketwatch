@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The final Total Investments row in the filing reports fair value of 352,232,987, equal to the preceding Total Non-controlled/non-affiliated Investments row because the filing presents no separate affiliated or controlled investment schedule. The fair value hierarchy independently reconciles Level 2 fair value of 79,494,423 plus Level 3 fair value of 272,738,564 to the same grand total. The companyfacts tag therefore captured the complete investment schedule. The grand total is 90.93% of total assets of 387,387,898 and leaves a plausible non-investment remainder of 35,154,911.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

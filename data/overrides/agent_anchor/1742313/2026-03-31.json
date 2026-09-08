@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing's final Schedule of Investments row explicitly reports TOTAL INVESTMENTS at fair value of $5,804,557 thousand, and the balance sheet independently reports the same total. It equals the companyfacts value and is 94.21% of total assets, leaving a plausible $356.634 million for cash and other assets. The apparent $322.187 million excess from summing extracted holdings is not a separate affiliated or controlled schedule; the filing's schedule already includes both non-controlled/non-affiliate company investments ($5,478.700 million) and non-controlled/affiliate company investments ($325.857 million), which sum to the reported grand total. The extraction excess reflects duplicated/incomplete-axis position rows, not additional investments.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

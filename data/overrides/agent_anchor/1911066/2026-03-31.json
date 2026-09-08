@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The current-period Schedule of Investments has a single final Total Investments row with fair value of $2,415,980 thousand. The balance sheet identifies the same amount as non-controlled/non-affiliate company investments at fair value, and the 666 current-period extracted position values sum exactly to it. The filer presents no affiliated or controlled investment schedule requiring an additional subtotal. Thus the companyfacts tag captured the full investment total, not a partial schedule. The total is 96.10% of total assets, leaving a plausible $97.998 million non-investment remainder.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

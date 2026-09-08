@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The last Schedule of Investments row is an explicit grand total covering non-controlled/non-affiliated, non-controlled/affiliated, and controlled/affiliated investments. Its fair value of $5,217,369 thousand agrees exactly with the balance-sheet investments-at-fair-value line and the companyfacts value. It is 95.93% of total assets, leaving a plausible $221.390 million non-investment remainder. The companyfacts tag captured the complete grand total, not merely a schedule subtotal.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

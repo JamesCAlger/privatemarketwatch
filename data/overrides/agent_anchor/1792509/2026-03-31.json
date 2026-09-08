@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The consolidated schedule has one explicit final portfolio-wide total row, so no separate affiliated or controlled schedule subtotals need to be added. Its Fair Value column reports $385.098 million, exactly matching the companyfacts value. The total is 96.31% of $399.853 million in total assets, leaving a plausible $14.755 million for cash and other assets. Therefore the companyfacts tag captured the filing's grand total rather than a partial schedule.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

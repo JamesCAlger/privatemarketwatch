@@ -34,5 +34,6 @@
     }
   ],
   "rationale": "The final Schedule of Investments total row reports fair value of $825.525 million and incorporates both the $653.893 million non-controlled/non-affiliated subtotal and the $171.632 million controlled subtotal. It agrees with the balance-sheet investments-at-fair-value line and companyfacts. The total is 95.79% of $861.863 million total assets, leaving a plausible $36.338 million non-investment remainder. Companyfacts captured the complete investment total, not only one schedule.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

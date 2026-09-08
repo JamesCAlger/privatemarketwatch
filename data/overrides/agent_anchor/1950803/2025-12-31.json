@@ -34,5 +34,6 @@
     }
   ],
   "rationale": "The annual filing contains a single December 31, 2025 Total investments row whose fair value is $3,008,628 thousand, equal to 3008628000.0. The same amount appears on the balance sheet as investments in securities of unaffiliated issuers at fair value and is below total assets of 3198869000.0, leaving a plausible non-investment asset remainder of 190241000.0. The companyfacts fair-value tag captured this same grand total rather than a partial subtotal; the schedule total includes first lien senior secured, second lien senior secured, subordinated notes, preferred equity, and limited partnership interests.",
-  "confidence": 0.94
+  "confidence": 0.94,
+  "basis": "investments_ex_cash"
 }

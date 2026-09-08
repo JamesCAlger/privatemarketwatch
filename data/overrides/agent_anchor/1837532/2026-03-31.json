@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The filing presents only non-controlled/non-affiliated investments on the balance sheet; no affiliated or controlled investment schedule is present. The undimensioned balance-sheet amount of $25,149,083 thousand agrees exactly with the schedule's final Total Investments before Cash Equivalents fair-value amount and with companyfacts. Cash equivalents of $159,399 thousand are presented separately and are excluded. The grand total is 93.37% of total assets, leaving a plausible non-investment remainder of $1,784,835 thousand.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

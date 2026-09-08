@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing's final portfolio-wide Total Investments row reports fair value of $21,332,903.9 thousand, or $21,332,903,900. This agrees with the balance-sheet investments line after rounding to thousands and exactly equals the companyfacts value. It is 95.44% of total assets of $22,350,746,000, leaving a plausible $1,017,842,100 non-investment remainder. Therefore the companyfacts tag captured the grand total, not merely a non-affiliated subtotal.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

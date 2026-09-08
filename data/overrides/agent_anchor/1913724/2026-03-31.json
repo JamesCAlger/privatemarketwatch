@@ -30,5 +30,6 @@
     }
   ],
   "rationale": "The filing presents a single explicit Total investments row after both the non-controlled/non-affiliated subtotal and the non-controlled/affiliated subtotal. Its fair value is $4,481,018 thousand, or $4,481,018,000. The same amount appears in the filing's investment summary and equals the companyfacts tag, so companyfacts captured the grand total rather than only one schedule. The result is 96.12% of total assets of $4,662,060,000 and leaves a plausible $181,042,000 of non-investment assets.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

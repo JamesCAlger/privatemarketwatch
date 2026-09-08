@@ -26,5 +26,6 @@
     }
   ],
   "rationale": "The filing presents an explicit March 31, 2026 total row, corroborated by the investment summary. The balance-sheet affiliation classes sum exactly to 35,500,450 thousand: 33,607,175 + 15,961 + 1,877,314. Thus the companyfacts value captured the complete grand total, not merely the non-controlled/non-affiliated subtotal. The grand total is 96.19% of total assets and leaves 1,407,521 thousand of non-investment assets, which closes plausibly.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "investments_ex_cash"
 }

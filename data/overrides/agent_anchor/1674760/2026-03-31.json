@@ -34,5 +34,6 @@
     }
   ],
   "rationale": "The final Schedule of Investments row explicitly combines Total Investments fair value of $289.479 million with the separately presented affiliated money market fund fair value of $157.671 million, yielding the grand total of $447.150 million. The companyfacts tag captured only the $289.479 million Total Investments subtotal and excluded the affiliated money market fund. The grand total is 93.1% of total assets of $480.412 million, leaving a plausible $33.262 million non-investment remainder.",
-  "confidence": 0.99
+  "confidence": 0.99,
+  "basis": "published_rows"
 }
