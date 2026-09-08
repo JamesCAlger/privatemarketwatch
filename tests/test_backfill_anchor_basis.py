@@ -23,6 +23,36 @@ def test_classify_leaf():
     assert classify_leaf(_leaf(1093.5, 692.0, labels=("Total Investments",))) == ""      # wider, no cash label
     assert classify_leaf(_leaf(1093.5, None)) == ""                                      # no companyfacts
     assert classify_leaf(_leaf(500.0, 692.0)) == ""                                      # below the tag
+    # Branch order is load-bearing: numeric equality is tested BEFORE the cash-label test, which is
+    # what keeps real leaf 2052152 ("Total Investments before Cash Equivalents", grand_total ==
+    # companyfacts_fv) on investments_ex_cash. A genuine cash label is used here so the negated-cash
+    # guard cannot be what makes this pass -- only the ordering can.
+    assert classify_leaf(_leaf(1000.0, 1000.0,
+                               labels=("Total Investments and Cash Equivalents",))) \
+        == "investments_ex_cash"
+
+
+def test_classify_leaf_negated_cash_label_is_not_cash_inclusive():
+    # A cash word negated by before/excluding/excl/ex/net of/prior to does NOT make the leaf
+    # cash-inclusive; a wider grand_total with only such a label stays unresolved.
+    for label in ("Total Investments before Cash Equivalents - fair value",
+                  "Total investments excluding cash equivalents",
+                  "Total investments excl. money market funds",
+                  "Total investments, ex cash",
+                  "Total investments ex-short-term investments",
+                  "Total investments net of cash and cash equivalents",
+                  "Total investments prior to treasury bills"):
+        assert classify_leaf(_leaf(1093.5, 692.0, labels=(label,))) == "", label
+    # A genuine cash label still classifies published_rows.
+    assert classify_leaf(_leaf(1093.5, 692.0, labels=("Total Cash Equivalents",))) == "published_rows"
+    # Both a negated and a genuine cash phrase -> still cash-inclusive.
+    assert classify_leaf(_leaf(1093.5, 692.0,
+                               labels=("Total Investments before Cash Equivalents, plus Cash "
+                                       "Equivalents",))) == "published_rows"
+    # A negator ending one label must not negate the next label's cash word.
+    assert classify_leaf(_leaf(1093.5, 692.0,
+                               labels=("Total investments excluding", "Total Cash Equivalents"))) \
+        == "published_rows"
 
 
 def test_backfill_writes_and_reports(tmp_path):
@@ -42,7 +72,11 @@ def test_backfill_writes_and_reports(tmp_path):
     counts = backfill(ov, out_csv, write=True)
     assert counts == {"published_rows": 1, "investments_ex_cash": 1, "unresolved": 1,
                       "already_set": 1, "invalid": 1}
-    assert json.loads((ov / "0" / "2026-03-31.json").read_text(encoding="utf-8"))["basis"] == "investments_ex_cash"
+    written = (ov / "0" / "2026-03-31.json").read_text(encoding="utf-8")
+    # Existing leaves end with a newline; the backfill must keep one so the live run reformats
+    # nothing (a missing trailing newline would dirty every tracked leaf it touches).
+    assert written.endswith("\n")
+    assert json.loads(written)["basis"] == "investments_ex_cash"
     assert json.loads((ov / "1" / "2026-03-31.json").read_text(encoding="utf-8"))["basis"] == "published_rows"
     assert "basis" not in json.loads((ov / "2" / "2026-03-31.json").read_text(encoding="utf-8"))
     rows = list(csv.DictReader(out_csv.open(encoding="utf-8")))
